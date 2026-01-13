@@ -1,3 +1,16 @@
+/**
+ * Deep Tree Echo Bot - Main Export Module
+ * 
+ * This module exports all Deep Tree Echo components including:
+ * - Core bot functionality
+ * - Cognitive modules (memory, personality, belief propagation, etc.)
+ * - Chat management (programmatic chat control)
+ * - UI bridge (React integration)
+ * - Proactive messaging (autonomous communication)
+ * - Settings and configuration
+ * - Test utilities
+ */
+
 // Core cognitive modules
 import { HyperDimensionalMemory } from './HyperDimensionalMemory'
 import { AdaptivePersonality } from './AdaptivePersonality'
@@ -14,6 +27,40 @@ import { PersonaCore } from './PersonaCore'
 import { RAGMemoryStore } from './RAGMemoryStore'
 import { SelfReflection } from './SelfReflection'
 import { ChatOrchestrator } from './ChatOrchestrator'
+
+// Import chat management modules (NEW)
+import { 
+  DeepTreeEchoChatManager, 
+  chatManager,
+  ChatSummary,
+  ActiveChatState,
+  ScheduledMessage,
+  ChatWatchCallback,
+} from './DeepTreeEchoChatManager'
+
+// Import UI bridge (NEW)
+import {
+  DeepTreeEchoUIBridge,
+  uiBridge,
+  UIView,
+  DialogType,
+  UIState,
+  ChatContextInterface,
+  DialogContextInterface,
+  UIBridgeEvent,
+  UIBridgeEventListener,
+} from './DeepTreeEchoUIBridge'
+
+// Import proactive messaging (NEW)
+import {
+  ProactiveMessaging,
+  proactiveMessaging,
+  TriggerType,
+  EventType,
+  ProactiveTrigger,
+  QueuedMessage,
+  ProactiveConfig,
+} from './ProactiveMessaging'
 
 // Import unified cognitive bridge (@deltecho/cognitive integration)
 import {
@@ -32,14 +79,34 @@ import type {
   UnifiedCognitiveState,
   CognitiveEvent,
 } from './CognitiveBridge'
+
+// Import UI components
 import BotSettings from './BotSettings'
 import DeepTreeEchoSettingsScreen from './DeepTreeEchoSettingsScreen'
+
+// Import integration functions
 import {
   initDeepTreeEchoBot,
   saveBotSettings,
   getBotInstance,
   cleanupBot,
+  // New exports for proactive features
+  registerChatContext,
+  registerDialogContext,
+  registerComposer,
+  getChatManager,
+  getUIBridge,
+  getProactiveMessaging,
+  sendProactiveMessage,
+  scheduleMessage,
+  openChat,
+  createChat,
+  initiateConversation,
+  listChats,
+  getUnreadChats,
 } from './DeepTreeEchoIntegration'
+
+// Import test utilities
 import {
   DeepTreeEchoTestUtil,
   createTestGroup,
@@ -49,21 +116,37 @@ import {
   cleanup as cleanupTestUtil,
 } from './DeepTreeEchoTestUtil'
 
+// ============================================================
+// MAIN EXPORTS
+// ============================================================
+
 export {
+  // Core bot
   DeepTreeEchoBot,
+  
+  // UI Components
   BotSettings,
   DeepTreeEchoSettingsScreen,
+  
+  // Services
   LLMService,
   PersonaCore,
   RAGMemoryStore,
   SelfReflection,
   CognitiveFunctionType,
-  // Export integration functions
+  
+  // Integration functions
   initDeepTreeEchoBot,
   saveBotSettings,
   getBotInstance,
   cleanupBot,
-  // Export test utilities
+  
+  // Context registration (for React components)
+  registerChatContext,
+  registerDialogContext,
+  registerComposer,
+  
+  // Test utilities
   DeepTreeEchoTestUtil,
   createTestGroup,
   sendTestMessage,
@@ -77,7 +160,10 @@ export type { DeepTreeEchoBotOptions }
 // Export the main component as default
 export default DeepTreeEchoBot
 
-// Export the cognitive modules for advanced usage
+// ============================================================
+// COGNITIVE MODULES
+// ============================================================
+
 export {
   HyperDimensionalMemory,
   AdaptivePersonality,
@@ -87,7 +173,79 @@ export {
   ChatOrchestrator,
 }
 
-// Export unified cognitive framework integration
+// ============================================================
+// CHAT MANAGEMENT (NEW)
+// ============================================================
+
+export {
+  // Chat Manager class and singleton
+  DeepTreeEchoChatManager,
+  chatManager,
+  getChatManager,
+  
+  // Convenience functions
+  openChat,
+  createChat,
+  listChats,
+  getUnreadChats,
+  initiateConversation,
+}
+
+export type {
+  ChatSummary,
+  ActiveChatState,
+  ScheduledMessage as ChatScheduledMessage,
+  ChatWatchCallback,
+}
+
+// ============================================================
+// UI BRIDGE (NEW)
+// ============================================================
+
+export {
+  // UI Bridge class and singleton
+  DeepTreeEchoUIBridge,
+  uiBridge,
+  getUIBridge,
+}
+
+export type {
+  UIView,
+  DialogType,
+  UIState,
+  ChatContextInterface,
+  DialogContextInterface,
+  UIBridgeEvent,
+  UIBridgeEventListener,
+}
+
+// ============================================================
+// PROACTIVE MESSAGING (NEW)
+// ============================================================
+
+export {
+  // Proactive Messaging class and singleton
+  ProactiveMessaging,
+  proactiveMessaging,
+  getProactiveMessaging,
+  
+  // Convenience functions
+  sendProactiveMessage,
+  scheduleMessage,
+}
+
+export type {
+  TriggerType,
+  EventType,
+  ProactiveTrigger,
+  QueuedMessage as ProactiveQueuedMessage,
+  ProactiveConfig,
+}
+
+// ============================================================
+// UNIFIED COGNITIVE FRAMEWORK
+// ============================================================
+
 export {
   initCognitiveOrchestrator,
   getOrchestrator,
