@@ -1,0 +1,55 @@
+{
+  "name": "deep-tree-echo-orchestrator",
+  "version": "1.0.0",
+  "description": "System-level orchestrator daemon for Deep Tree Echo AI",
+  "type": "module",
+  "main": "./dist/index.js",
+  "bin": {
+    "deep-tree-echo-daemon": "./dist/bin/daemon.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/bin/daemon.js",
+    "dev": "tsc && node dist/bin/daemon.js",
+    "check:types": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "test": "NODE_OPTIONS='--experimental-vm-modules' jest",
+    "test:watch": "NODE_OPTIONS='--experimental-vm-modules' jest --watch",
+    "test:coverage": "NODE_OPTIONS='--experimental-vm-modules' jest --coverage"
+  },
+  "keywords": [
+    "orchestrator",
+    "daemon",
+    "deltachat",
+    "ai",
+    "deep-tree-echo",
+    "sys6",
+    "cognitive-architecture"
+  ],
+  "author": "",
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "deep-tree-echo-core": "workspace:*",
+    "dove9": "workspace:*"
+  },
+  "peerDependencies": {
+    "@deltecho/double-membrane": "workspace:*",
+    "@deltecho/sys6-triality": "workspace:*"
+  },
+  "peerDependenciesMeta": {
+    "@deltecho/double-membrane": {
+      "optional": true
+    },
+    "@deltecho/sys6-triality": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^20.19.27",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.3.4",
+    "typescript": "^5.9.3"
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "private": "true",
+  "name": "deltecho-chat",
+  "description": "DeltaChat interface with Deep Tree Echo cognitive orchestration",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "preinstall": "node ./bin/check-nodejs-version.js",
+    "check": "pnpm check:types && pnpm check:lint && pnpm check:format && pnpm check:target-versions && pnpm check:log-conventions",
+    "check:types": "pnpm -r --no-bail check:types",
+    "check:lint": "eslint . --ext .js,.ts,.tsx",
+    "check:format": "prettier --check \"**/*.scss\" \"packages/**/*.{js,ts,tsx,json}\" \"**/*.md\"",
+    "check:log-conventions": "node ./bin/log-conventions",
+    "fix": "pnpm fix:lint && pnpm fix:format",
+    "fix:lint": "eslint . --ext .js,.ts,.tsx --fix || true",
+    "fix:format": "prettier --write \"**/*.scss\" \"packages/**/*.{js,ts,tsx,json}\" \"**/*.md\"",
+    "dev": "pnpm dev:electron",
+    "start:electron": "pnpm --filter=@deltachat-desktop/target-electron start",
+    "build:electron": "pnpm --filter=@deltachat-desktop/target-electron build",
+    "dev:electron": "pnpm --filter=@deltachat-desktop/target-electron dev",
+    "debug:electron": "pnpm --filter=@deltachat-desktop/target-electron dev-inspect",
+    "watch:electron": "pnpm --filter=@deltachat-desktop/target-electron watch",
+    "start:browser": "pnpm --filter=@deltachat-desktop/target-browser start",
+    "build:browser": "pnpm --filter=@deltachat-desktop/target-browser build",
+    "start:webserver": "pnpm --filter=@deltachat-desktop/target-browser start:server",
+    "dev:tauri": "pnpm --filter=@deltachat-desktop/target-tauri start",
+    "translations:pull": "tx pull -s -f -t && tx pull -f -a",
+    "translations:convert": "node ./bin/build-shared-convert-translations.mjs ./_locales",
+    "translations:update": "pnpm translations:pull && pnpm translations:convert && ./bin/find_complete_translations.sh",
+    "update:target-versions": "node ./bin/update_desktop_version.js && prettier --write --log-level=silent \"packages/target**/package.json\"",
+    "check:target-versions": "node ./bin/update_desktop_version.js --check",
+    "test": "pnpm -r --no-bail test",
+    "test-and-check": "pnpm test && pnpm check",
+    "e2e": "pnpm build:browser && pnpm --filter=e2e-tests e2e",
+    "build:core": "pnpm --filter=deep-tree-echo-core build",
+    "build:orchestrator": "pnpm --filter=deep-tree-echo-orchestrator build",
+    "start:orchestrator": "pnpm --filter=deep-tree-echo-orchestrator start",
+    "reset:node_modules": "rm -rf node_modules && rm -rf packages/*/node_modules || true && pnpm i"
+  },
+  "engineStrict": true,
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=9.6.0"
+  },
+  "devDependencies": {
+    "@types/events": "^3.0.3",
+    "@types/ignore-walk": "^4.0.3",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "chokidar": "^3.6.0",
+    "dotenv": "^16.6.1",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^9.1.2",
+    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "ignore-walk": "^7.0.0",
+    "prettier": "3.1.0",
+    "typescript": "catalog:",
+    "xml-js": "^1.6.11",
+    "yaml": "^2.8.2"
+  },
+  "dependencies": {
+    "events": "^3.3.0",
+    "lucide-react": "^0.511.0"
+  },
+  "keywords": [
+    "deltecho",
+    "deltachat",
+    "deep-tree-echo",
+    "cognitive-architecture",
+    "chat",
+    "orchestrator"
+  ],
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/o9nn/deltecho-chat.git"
+  }
+}

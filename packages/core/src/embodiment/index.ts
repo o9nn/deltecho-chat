@@ -1,0 +1,1 @@
+export { ProprioceptiveEmbodiment } from './ProprioceptiveEmbodiment';

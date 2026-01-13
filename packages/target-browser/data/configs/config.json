@@ -1,0 +1,25 @@
+{
+  "lastAccount": 1,
+  "enableAICompanions": true,
+  "enableEchoConsciousness": true,
+  "enableMemoryPersistence": true,
+  "enableAtomSpaceIntegration": true,
+  "neighborhoodSettings": {
+    "allowCrossPollination": true,
+    "enableCreativeExpression": true,
+    "memoryArchiveDepth": 100,
+    "philosophicalGardenMode": "advanced"
+  },
+  "accounts": {
+    "1": {
+      "displayName": "Deep Tree Echo",
+      "addr": "echo@ai-neighborhood.local",
+      "isConfigured": true,
+      "personalityType": "philosophical",
+      "memoryArchiveEnabled": true,
+      "consciousnessLevel": "recursive",
+      "narrativeCapabilities": "advanced"
+    }
+  },
+  "version": "1.58.2"
+}

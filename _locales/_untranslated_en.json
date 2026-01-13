@@ -1,0 +1,83 @@
+{
+  "no_account_selected": {
+    "message": "No profile selected"
+  },
+  "pref_background_sync_disabled": {
+    "message": "Only Synchronize Selected Profile"
+  },
+  "explain_background_sync_disabled": {
+    "message": "Other profiles will be deactivated and get no notifications."
+  },
+  "background_sync_disabled_explaination": {
+    "message": "Background sync disabled, profile is only synced when selected"
+  },
+  "pref_all_accounts": {
+    "message": "All Profiles"
+  },
+  "pref_current_account": {
+    "message": "Current Profile"
+  },
+  "webxdc_beforeunload_dialog_title": {
+    "message": "Close app?"
+  },
+  "webxdc_beforeunload_dialog_message": {
+    "message": "This app is asking you to confirm that you want to close it.\nChanges you made may not be saved."
+  },
+  "camera_access_failed": {
+    "message": "Could not access video camera. You might want to check your video permissions or if the camera is used already by another program"
+  },
+  "search_in": {
+    "message": "Search in %1$s"
+  },
+  "read_by": {
+    "message": "Read by"
+  },
+  "join_group": {
+    "message": "Join Group"
+  },
+  "explain_desktop_browser_disabled_tray_pref": {
+    "message": "Tray icon does exist in the web version, install the full version from https://get.delta.chat"
+  },
+  "react_more_emojis": {
+    "message": "More emojis…"
+  },
+  "contact_is_blocked": {
+    "message": "This contact is blocked"
+  },
+  "multidevice_connection_takes_too_long": {
+    "message": "This takes longer than expected 🐌 make sure both devices are on the same Wi-Fi or network and check troubleshooting"
+  },
+  "search_result_for_x": {
+    "message": "Result for \"%s\""
+  },
+  "reset_encryption": {
+    "message": "Reset Encryption"
+  },
+  "reset_encryption_confirm": {
+    "message": "Forget encryption key for this contact."
+  },
+  "voice_send": {
+    "message": "Record a voice message"
+  },
+  "stop_recording": {
+    "message": "Finish recording"
+  },
+  "pref_autostart": {
+    "message": "Autostart"
+  },
+  "pref_autostart_registered": {
+    "message": "Delta Chat is currently registered to startup with the system"
+  },
+  "pref_autostart_not_registered": {
+    "message": "Delta Chat is not registered to startup with the system"
+  },
+  "pref_autostart_not_supported": {
+    "message": "Autostart is not supported on this system"
+  },
+  "need_to_be_logged_in": {
+    "message": "Please log in first"
+  },
+  "need_to_be_logged_out": {
+    "message": "Please log out first"
+  }
+}

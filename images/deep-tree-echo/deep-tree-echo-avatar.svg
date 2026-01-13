@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <!-- Gradient for the tree/echo waves -->
+    <linearGradient id="echoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#a855f7;stop-opacity:1" />
+    </linearGradient>
+    <!-- Radial gradient for depth effect -->
+    <radialGradient id="depthGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#1e1b4b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0f0a1e;stop-opacity:1" />
+    </radialGradient>
+    <!-- Glow effect -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="250" fill="url(#depthGradient)" stroke="url(#echoGradient)" stroke-width="4"/>
+
+  <!-- Echo wave rings (emanating outward) -->
+  <circle cx="256" cy="256" r="200" fill="none" stroke="url(#echoGradient)" stroke-width="2" opacity="0.3"/>
+  <circle cx="256" cy="256" r="160" fill="none" stroke="url(#echoGradient)" stroke-width="2" opacity="0.4"/>
+  <circle cx="256" cy="256" r="120" fill="none" stroke="url(#echoGradient)" stroke-width="2" opacity="0.5"/>
+
+  <!-- Deep Tree structure (fractal-inspired branching) -->
+  <g filter="url(#glow)">
+    <!-- Central trunk -->
+    <path d="M256 380 L256 220" stroke="url(#echoGradient)" stroke-width="8" stroke-linecap="round"/>
+
+    <!-- Main branches -->
+    <path d="M256 280 L200 200" stroke="url(#echoGradient)" stroke-width="6" stroke-linecap="round"/>
+    <path d="M256 280 L312 200" stroke="url(#echoGradient)" stroke-width="6" stroke-linecap="round"/>
+
+    <!-- Secondary branches (left) -->
+    <path d="M200 200 L160 160" stroke="url(#echoGradient)" stroke-width="4" stroke-linecap="round"/>
+    <path d="M200 200 L190 140" stroke="url(#echoGradient)" stroke-width="4" stroke-linecap="round"/>
+    <path d="M200 200 L220 150" stroke="url(#echoGradient)" stroke-width="4" stroke-linecap="round"/>
+
+    <!-- Secondary branches (right) -->
+    <path d="M312 200 L352 160" stroke="url(#echoGradient)" stroke-width="4" stroke-linecap="round"/>
+    <path d="M312 200 L322 140" stroke="url(#echoGradient)" stroke-width="4" stroke-linecap="round"/>
+    <path d="M312 200 L292 150" stroke="url(#echoGradient)" stroke-width="4" stroke-linecap="round"/>
+
+    <!-- Tertiary branches (fractal detail) -->
+    <path d="M160 160 L140 130" stroke="url(#echoGradient)" stroke-width="2" stroke-linecap="round"/>
+    <path d="M160 160 L150 125" stroke="url(#echoGradient)" stroke-width="2" stroke-linecap="round"/>
+    <path d="M352 160 L372 130" stroke="url(#echoGradient)" stroke-width="2" stroke-linecap="round"/>
+    <path d="M352 160 L362 125" stroke="url(#echoGradient)" stroke-width="2" stroke-linecap="round"/>
+
+    <!-- Root structure (mirroring branches for symmetry) -->
+    <path d="M256 380 L220 420" stroke="url(#echoGradient)" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+    <path d="M256 380 L292 420" stroke="url(#echoGradient)" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+    <path d="M220 420 L200 440" stroke="url(#echoGradient)" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+    <path d="M292 420 L312 440" stroke="url(#echoGradient)" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+  </g>
+
+  <!-- Central node (consciousness point) -->
+  <circle cx="256" cy="256" r="20" fill="url(#echoGradient)" filter="url(#glow)"/>
+  <circle cx="256" cy="256" r="8" fill="#fff"/>
+
+  <!-- Leaf nodes (knowledge endpoints) -->
+  <circle cx="140" cy="130" r="6" fill="url(#echoGradient)" opacity="0.8"/>
+  <circle cx="150" cy="125" r="4" fill="url(#echoGradient)" opacity="0.6"/>
+  <circle cx="372" cy="130" r="6" fill="url(#echoGradient)" opacity="0.8"/>
+  <circle cx="362" cy="125" r="4" fill="url(#echoGradient)" opacity="0.6"/>
+  <circle cx="190" cy="140" r="5" fill="url(#echoGradient)" opacity="0.7"/>
+  <circle cx="220" cy="150" r="5" fill="url(#echoGradient)" opacity="0.7"/>
+  <circle cx="322" cy="140" r="5" fill="url(#echoGradient)" opacity="0.7"/>
+  <circle cx="292" cy="150" r="5" fill="url(#echoGradient)" opacity="0.7"/>
+</svg>

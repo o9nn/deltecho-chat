@@ -1,0 +1,111 @@
+// Using BEM syntax explained here: https://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/
+
+// import node_module dependencies (without ".css" means include)
+@use '../node_modules/normalize.css/normalize';
+
+// Global Settings, Variables, and Mixins
+@use 'variables';
+@use 'mixins';
+@use 'global';
+
+// Components
+@use 'emoji';
+
+// Chat
+@use 'chat/_chat-list-item';
+@use 'chat/_chat-list';
+
+// Composer
+@use 'composer/_composer';
+@use 'composer/_emoji-sticker-picker';
+
+// Contact
+@use 'contact/_contact-list';
+@use 'contact/_contact';
+
+// Gallery (media view)
+@use 'gallery/attachment-view';
+@use 'gallery/_media-attachment';
+@use 'gallery/media';
+
+// Dialogs
+@use 'dialogs/_about';
+@use 'dialogs/_audit_log';
+@use 'dialogs/_autocrypt_setup.scss';
+@use 'dialogs/_select-chat';
+@use 'dialogs/_group-styles';
+@use 'dialogs/_settings';
+@use 'dialogs/_qr-code';
+
+// Login
+@use 'login/_login.scss';
+
+// MainScreen
+@use 'main_screen/main_screen';
+
+// Message
+@use 'message/_message-attachment';
+@use 'message/_message-detail';
+@use 'message/_message-list';
+@use 'message/_message';
+@use 'message/_metadata';
+@use 'message/_status-icon';
+@use 'message/_message-calls';
+@use 'message/_message-markdown';
+
+// misc
+@use 'misc/_avatar.scss';
+@use 'misc/_context_menu.scss';
+@use 'misc/_keyboard_hint_box.scss';
+@use 'misc/_search-input.scss';
+@use 'misc/react-window-list-reset.scss';
+
+// ConnectivityToast
+@use '_connectivity-toast';
+
+// Icons
+@use '_icons';
+
+// Re-usable generic UI components
+@use 'components/_radios';
+
+// Components that don't exist - commenting out to fix build
+// @import 'components/account_list_sidebar';
+// @import 'components/account_setup_screen';
+// @import 'components/audio_player';
+// @import 'components/avatar';
+// @import 'components/chat';
+// @import 'components/chat_list';
+// @import 'components/chat_map';
+// @import 'components/chat_list_item';
+// @import 'components/composer';
+// @import 'components/message_list';
+// @import 'components/profile_image';
+// @import 'components/dialogs';
+// @import 'components/dc_img';
+// @import 'components/emoji_sticker_picker';
+// @import 'components/gallery';
+// @import 'components/connectivity';
+// @import 'components/connectivity_toast';
+// @import 'components/context_menu';
+// @import 'components/info_panel';
+// @import 'components/contact_card';
+// @import 'components/qr';
+// @import 'components/search_input';
+// @import 'components/spinner';
+// @import 'components/verify_contact';
+// @import 'components/map';
+// @import 'components/global_gallery';
+// @import 'components/unread_message_tracker';
+// @import 'components/welcome_screen';
+// @import 'components/main_screen';
+// @import 'components/device_chat_media';
+// @import 'components/call_invites';
+
+// Existing component styles
+@import 'components/bot_settings';
+@import 'components/deep-tree-echo';
+@import 'components/ai_neighborhood_dashboard';
+
+// @import './chat/chat';
+// @import 'message/message';

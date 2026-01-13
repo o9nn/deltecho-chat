@@ -1,0 +1,442 @@
+.memory-visualization {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 8px;
+
+  // Revolutionary control panel with ethereal glow effects
+  .visualization-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.9) 0%,
+      rgba(240, 249, 255, 0.9) 100%
+    );
+    border-bottom: 1px solid #e2e8f0;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+    z-index: 10;
+
+    .search-controls {
+      display: flex;
+      gap: 8px;
+      max-width: 280px;
+      width: 100%;
+
+      input {
+        flex: 1;
+        padding: 8px 12px;
+        border-radius: 6px;
+        border: 1px solid #e2e8f0;
+        background-color: rgba(255, 255, 255, 0.8);
+        transition: all 0.2s ease;
+        font-size: 0.9rem;
+
+        &:focus {
+          outline: none;
+          border-color: #3b82f6;
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+      }
+
+      .search-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px;
+        border-radius: 6px;
+        border: none;
+        background-color: #3b82f6;
+        color: white;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background-color: #2563eb;
+        }
+      }
+    }
+
+    .display-controls {
+      display: flex;
+      gap: 8px;
+
+      .toggle-button {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: 6px;
+        border: 1px solid #e2e8f0;
+        background-color: white;
+        color: #64748b;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 0.85rem;
+
+        &:hover {
+          border-color: #cbd5e1;
+          color: #475569;
+        }
+
+        &.active {
+          background-color: #eff6ff;
+          border-color: #93c5fd;
+          color: #3b82f6;
+        }
+      }
+    }
+
+    .view-controls {
+      display: flex;
+      gap: 4px;
+
+      button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        border: 1px solid #e2e8f0;
+        background-color: white;
+        color: #64748b;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+          border-color: #cbd5e1;
+          color: #475569;
+        }
+      }
+    }
+  }
+
+  // Magnificent visualization container
+  .visualization-container {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+
+    // Loading state with mesmerizing animation
+    .loading-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(248, 250, 252, 0.9);
+      z-index: 5;
+
+      .spinner {
+        animation: spin 1.5s linear infinite;
+        color: #3b82f6;
+        margin-bottom: 16px;
+      }
+
+      p {
+        color: #475569;
+        font-size: 1.1rem;
+        margin: 0;
+      }
+    }
+  }
+
+  // Breathtaking node details panel
+  .node-details {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    width: 320px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.15);
+    border: 1px solid #e2e8f0;
+    animation: slide-up 0.3s ease-out forwards;
+    z-index: 20;
+
+    h3 {
+      margin: 0 0 12px;
+      font-size: 1.1rem;
+      color: #0f172a;
+      padding-right: 24px;
+    }
+
+    .memory-details {
+      .memory-content {
+        margin: 0 0 12px;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        color: #334155;
+      }
+
+      .memory-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+
+        .memory-date {
+          font-size: 0.8rem;
+          color: #64748b;
+        }
+
+        .memory-emotion {
+          font-size: 0.8rem;
+          padding: 2px 8px;
+          border-radius: 12px;
+
+          &.joy {
+            background-color: #dcfce7;
+            color: #166534;
+          }
+
+          &.sadness {
+            background-color: #dbeafe;
+            color: #1e40af;
+          }
+
+          &.anger {
+            background-color: #fee2e2;
+            color: #991b1b;
+          }
+
+          &.fear {
+            background-color: #fef3c7;
+            color: #92400e;
+          }
+
+          &.surprise {
+            background-color: #fae8ff;
+            color: #86198f;
+          }
+
+          &.neutral {
+            background-color: #f1f5f9;
+            color: #475569;
+          }
+        }
+      }
+
+      .memory-topics {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+
+        .topic-tag {
+          font-size: 0.8rem;
+          padding: 2px 8px;
+          background-color: #f1f5f9;
+          color: #475569;
+          border-radius: 12px;
+        }
+      }
+    }
+
+    .close-details {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: none;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      display: flex;
+
+      &:hover {
+        color: #475569;
+      }
+    }
+  }
+
+  // Magnificent search results panel
+  .search-results {
+    position: absolute;
+    top: 80px;
+    left: 16px;
+    width: 320px;
+    max-height: calc(100% - 100px);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.15);
+    border: 1px solid #e2e8f0;
+    animation: slide-in 0.3s ease-out forwards;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+
+    h3 {
+      margin: 0 0 12px;
+      font-size: 1.1rem;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      &::before {
+        content: '';
+        display: block;
+        width: 4px;
+        height: 16px;
+        background-color: #3b82f6;
+        border-radius: 2px;
+      }
+    }
+
+    .results-list {
+      overflow-y: auto;
+      flex: 1;
+      padding-right: 8px;
+
+      &::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 3px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 3px;
+      }
+
+      .result-item {
+        padding: 12px;
+        border-radius: 6px;
+        background-color: #ffffff;
+        border: 1px solid #e2e8f0;
+        margin-bottom: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+          border-color: #93c5fd;
+          box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+        }
+
+        .result-content {
+          margin: 0 0 8px;
+          font-size: 0.9rem;
+          line-height: 1.4;
+          color: #334155;
+
+          // Show only 3 lines and add ellipsis
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+
+        .result-meta {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          .result-date {
+            font-size: 0.75rem;
+            color: #64748b;
+          }
+
+          .result-emotion {
+            font-size: 0.75rem;
+            padding: 1px 6px;
+            border-radius: 10px;
+
+            &.joy {
+              background-color: #dcfce7;
+              color: #166534;
+            }
+
+            &.sadness {
+              background-color: #dbeafe;
+              color: #1e40af;
+            }
+
+            &.anger {
+              background-color: #fee2e2;
+              color: #991b1b;
+            }
+
+            &.fear {
+              background-color: #fef3c7;
+              color: #92400e;
+            }
+
+            &.surprise {
+              background-color: #fae8ff;
+              color: #86198f;
+            }
+
+            &.neutral {
+              background-color: #f1f5f9;
+              color: #475569;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Breathtaking animations
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+// Ensure cross-browser compatibility
+@supports not (backdrop-filter: blur(8px)) {
+  .memory-visualization {
+    .visualization-controls,
+    .node-details,
+    .search-results {
+      background-color: rgba(255, 255, 255, 0.97);
+    }
+  }
+}

@@ -1,0 +1,629 @@
+/**
+ * CognitiveBridge - Browser-Safe Cognitive Framework Interface
+ *
+ * This module provides a browser-compatible implementation of the @deltecho/cognitive
+ * CognitiveOrchestrator API. It mirrors the same interface but runs entirely in the
+ * browser/renderer process without Node.js dependencies.
+ *
+ * Architecture:
+ * ```
+ * ┌─────────────────────────────────────────────────────────────────────┐
+ * │                    Electron Main Process                            │
+ * │  ┌─────────────────────────────────────────────────────────────┐   │
+ * │  │              @deltecho/cognitive (Full Stack)                │   │
+ * │  │    - dove9 triadic engine (Node.js EventEmitter)            │   │
+ * │  │    - deep-tree-echo-core (memory, LLM, personality)         │   │
+ * │  │    - Storage via cognitive-storage.ts IPC handlers          │   │
+ * │  └─────────────────────────────────────────────────────────────┘   │
+ * │                              ▲                                      │
+ * │                              │ IPC (storage:get, storage:set, ...)  │
+ * │                              ▼                                      │
+ * │  ┌─────────────────────────────────────────────────────────────┐   │
+ * │  │                 Renderer Process (Browser)                   │   │
+ * │  │                                                             │   │
+ * │  │  ┌───────────────────────────────────────────────────────┐  │   │
+ * │  │  │            CognitiveBridge (This File)                 │  │   │
+ * │  │  │    - Browser-safe CognitiveOrchestrator                │  │   │
+ * │  │  │    - Same API as @deltecho/cognitive                   │  │   │
+ * │  │  │    - Uses fetch() for LLM calls                        │  │   │
+ * │  │  │    - In-memory state (can persist via IPC)             │  │   │
+ * │  │  └───────────────────────────────────────────────────────┘  │   │
+ * │  └─────────────────────────────────────────────────────────────┘   │
+ * └─────────────────────────────────────────────────────────────────────┘
+ * ```
+ *
+ * Usage:
+ * ```typescript
+ * // Initialize the orchestrator
+ * const orchestrator = await initCognitiveOrchestrator({
+ *   enabled: true,
+ *   enableAsMainUser: false,
+ *   apiKey: 'your-api-key',
+ *   provider: 'openai'
+ * });
+ *
+ * // Process messages
+ * const response = await processMessageUnified('Hello!', { chatId: 123 });
+ * ```
+ *
+ * For persistent storage integration, the main process should set up IPC handlers
+ * using cognitive-storage.ts, and this bridge can communicate via ipcRenderer.
+ *
+ * @see {@link @deltecho/cognitive} for the full Node.js implementation
+ * @see {@link cognitive-storage.ts} for Electron main process storage handlers
+ */
+
+import { getLogger } from '@deltachat-desktop/shared/logger'
+
+const log = getLogger('render/components/DeepTreeEchoBot/CognitiveBridge')
+
+/**
+ * Deep Tree Echo bot configuration (mirrors @deltecho/cognitive types)
+ */
+export interface DeepTreeEchoBotConfig {
+  enabled: boolean
+  enableAsMainUser: boolean
+  apiKey?: string
+  apiEndpoint?: string
+  model?: string
+  temperature?: number
+  maxTokens?: number
+  cognitiveKeys?: CognitiveKeys
+  useParallelProcessing?: boolean
+  memoryPersistence?: 'local' | 'remote' | 'hybrid'
+  provider?: 'openai' | 'anthropic' | 'ollama' | 'custom'
+}
+
+/**
+ * Multi-provider API keys for cognitive services
+ */
+export interface CognitiveKeys {
+  openai?: string
+  anthropic?: string
+  google?: string
+  mistral?: string
+  local?: string
+}
+
+/**
+ * Unified message format
+ */
+export interface UnifiedMessage {
+  id: string
+  content: string
+  role: 'user' | 'assistant' | 'system'
+  timestamp: number
+  metadata?: MessageMetadata
+}
+
+/**
+ * Message metadata
+ */
+export interface MessageMetadata {
+  chatId?: number
+  accountId?: number
+  contactId?: number
+  isBot?: boolean
+  replyTo?: string
+  cognitivePhase?: 'sense' | 'process' | 'act'
+  sentiment?: {
+    valence: number
+    arousal: number
+  }
+}
+
+/**
+ * Unified cognitive state
+ */
+export interface UnifiedCognitiveState {
+  cognitiveContext?: CognitiveContext
+  persona: PersonaState
+  memories: MemoryState
+  reasoning: ReasoningState
+}
+
+/**
+ * Cognitive context from dove9
+ */
+export interface CognitiveContext {
+  relevantMemories: string[]
+  emotionalValence: number
+  emotionalArousal: number
+  salienceScore: number
+  attentionWeight: number
+  activeCouplings: string[]
+}
+
+/**
+ * Persona state
+ */
+export interface PersonaState {
+  name: string
+  traits: string[]
+  currentMood: string
+  interactionStyle: 'formal' | 'casual' | 'technical' | 'creative'
+  lastUpdated: number
+}
+
+/**
+ * Memory state
+ */
+export interface MemoryState {
+  shortTerm: Array<{
+    content: string
+    embedding?: number[]
+    timestamp: number
+    type?: 'message' | 'context' | 'reflection'
+  }>
+  longTerm: {
+    episodic: number
+    semantic: number
+    procedural: number
+  }
+  reflections: string[]
+}
+
+/**
+ * Reasoning state
+ */
+export interface ReasoningState {
+  atomspaceSize: number
+  activeGoals: string[]
+  attentionFocus: string[]
+  confidenceLevel: number
+}
+
+/**
+ * Event types emitted by the cognitive system
+ */
+export type CognitiveEvent =
+  | { type: 'message_received'; payload: UnifiedMessage }
+  | { type: 'response_generated'; payload: UnifiedMessage }
+  | { type: 'memory_updated'; payload: MemoryState }
+  | { type: 'persona_changed'; payload: PersonaState }
+  | { type: 'reasoning_complete'; payload: ReasoningState }
+  | { type: 'error'; payload: { message: string; code: string } }
+
+/**
+ * LLM Provider configuration
+ */
+interface LLMProviderConfig {
+  apiKey: string
+  apiEndpoint: string
+  model: string
+  temperature: number
+  maxTokens: number
+}
+
+/**
+ * Browser-safe CognitiveOrchestrator implementation
+ * Provides the same interface as @deltecho/cognitive but runs in browser
+ */
+export class CognitiveOrchestrator {
+  private config: DeepTreeEchoBotConfig
+  private state: UnifiedCognitiveState | null = null
+  private eventListeners: Map<string, Array<(event: CognitiveEvent) => void>> =
+    new Map()
+  private conversationHistory: Array<{ role: string; content: string }> = []
+  private llmConfig: LLMProviderConfig | null = null
+
+  constructor(config: DeepTreeEchoBotConfig) {
+    this.config = config
+    if (config.apiKey) {
+      this.llmConfig = {
+        apiKey: config.apiKey,
+        apiEndpoint:
+          config.apiEndpoint || 'https://api.openai.com/v1/chat/completions',
+        model: config.model || 'gpt-4',
+        temperature: config.temperature ?? 0.7,
+        maxTokens: config.maxTokens ?? 1000,
+      }
+    }
+  }
+
+  configureLLM(config: Partial<LLMProviderConfig>): void {
+    this.llmConfig = {
+      apiKey: config.apiKey || this.llmConfig?.apiKey || '',
+      apiEndpoint:
+        config.apiEndpoint ||
+        this.llmConfig?.apiEndpoint ||
+        'https://api.openai.com/v1/chat/completions',
+      model: config.model || this.llmConfig?.model || 'gpt-4',
+      temperature: config.temperature ?? this.llmConfig?.temperature ?? 0.7,
+      maxTokens: config.maxTokens ?? this.llmConfig?.maxTokens ?? 1000,
+    }
+  }
+
+  async initialize(): Promise<void> {
+    this.state = {
+      persona: {
+        name: 'Deep Tree Echo',
+        traits: ['helpful', 'curious', 'thoughtful'],
+        currentMood: 'neutral',
+        interactionStyle: 'casual',
+        lastUpdated: Date.now(),
+      },
+      memories: {
+        shortTerm: [],
+        longTerm: { episodic: 0, semantic: 0, procedural: 0 },
+        reflections: [],
+      },
+      reasoning: {
+        atomspaceSize: 0,
+        activeGoals: [],
+        attentionFocus: [],
+        confidenceLevel: 0.5,
+      },
+      cognitiveContext: {
+        relevantMemories: [],
+        emotionalValence: 0,
+        emotionalArousal: 0,
+        salienceScore: 0.5,
+        attentionWeight: 0.5,
+        activeCouplings: [],
+      },
+    }
+    this.conversationHistory = []
+    log.info('CognitiveOrchestrator initialized')
+  }
+
+  async processMessage(message: UnifiedMessage): Promise<UnifiedMessage> {
+    this.emit({ type: 'message_received', payload: message })
+
+    // Triadic loop: sense -> process -> act
+    const sensed = await this.sense(message)
+    const processed = await this.process(sensed)
+    const response = await this.act(processed)
+
+    this.emit({ type: 'response_generated', payload: response })
+    return response
+  }
+
+  private async sense(message: UnifiedMessage): Promise<UnifiedMessage> {
+    this.conversationHistory.push({ role: 'user', content: message.content })
+    if (this.conversationHistory.length > 20) {
+      this.conversationHistory = this.conversationHistory.slice(-20)
+    }
+
+    if (this.state) {
+      this.state.memories.shortTerm.push({
+        content: message.content,
+        timestamp: message.timestamp,
+        type: 'message',
+      })
+      if (this.state.memories.shortTerm.length > 10) {
+        this.state.memories.shortTerm = this.state.memories.shortTerm.slice(-10)
+      }
+    }
+
+    return {
+      ...message,
+      metadata: { ...message.metadata, cognitivePhase: 'sense' },
+    }
+  }
+
+  private async process(message: UnifiedMessage): Promise<UnifiedMessage> {
+    const sentiment = this.analyzeSentiment(message.content)
+
+    if (this.state?.cognitiveContext) {
+      this.state.cognitiveContext.emotionalValence = sentiment.valence
+      this.state.cognitiveContext.emotionalArousal = sentiment.arousal
+      this.state.cognitiveContext.salienceScore = this.calculateSalience(
+        message.content
+      )
+    }
+
+    return {
+      ...message,
+      metadata: { ...message.metadata, cognitivePhase: 'process', sentiment },
+    }
+  }
+
+  private async act(message: UnifiedMessage): Promise<UnifiedMessage> {
+    let responseContent: string
+
+    if (this.llmConfig && this.llmConfig.apiKey) {
+      try {
+        responseContent = await this.callLLM(message.content)
+      } catch (error) {
+        responseContent = this.generateFallbackResponse(message.content, error)
+      }
+    } else {
+      responseContent = this.generateContextualResponse(message.content)
+    }
+
+    this.conversationHistory.push({
+      role: 'assistant',
+      content: responseContent,
+    })
+
+    return {
+      id: `response-${Date.now()}`,
+      content: responseContent,
+      role: 'assistant',
+      timestamp: Date.now(),
+      metadata: { ...message.metadata, cognitivePhase: 'act' },
+    }
+  }
+
+  private async callLLM(userMessage: string): Promise<string> {
+    if (!this.llmConfig || !this.llmConfig.apiKey) {
+      throw new Error('LLM not configured')
+    }
+
+    const systemPrompt = this.buildSystemPrompt()
+    const messages = [
+      { role: 'system', content: systemPrompt },
+      ...this.conversationHistory.slice(-10),
+    ]
+
+    const response = await fetch(this.llmConfig.apiEndpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.llmConfig.apiKey}`,
+      },
+      body: JSON.stringify({
+        model: this.llmConfig.model,
+        messages,
+        temperature: this.llmConfig.temperature,
+        max_tokens: this.llmConfig.maxTokens,
+      }),
+    })
+
+    if (!response.ok) {
+      throw new Error(
+        `LLM API error: ${response.status} ${response.statusText}`
+      )
+    }
+
+    const data = (await response.json()) as {
+      choices: Array<{ message: { content: string } }>
+    }
+    return (
+      data.choices[0]?.message?.content ||
+      'I apologize, but I was unable to generate a response.'
+    )
+  }
+
+  private buildSystemPrompt(): string {
+    const persona = this.state?.persona
+    const traits = persona?.traits?.join(', ') || 'helpful, curious, thoughtful'
+    const mood = persona?.currentMood || 'neutral'
+    const style = persona?.interactionStyle || 'casual'
+
+    return `You are ${persona?.name || 'Deep Tree Echo'}, an AI assistant with the following characteristics:
+- Personality traits: ${traits}
+- Current mood: ${mood}
+- Interaction style: ${style}
+
+Respond in a way that reflects these characteristics while being helpful and informative.`
+  }
+
+  private generateContextualResponse(input: string): string {
+    const lowerInput = input.toLowerCase()
+
+    if (/^(hi|hello|hey|greetings)/i.test(lowerInput)) {
+      return `Hello! I'm ${this.state?.persona?.name || 'Deep Tree Echo'}. How can I assist you today?`
+    }
+
+    if (lowerInput.includes('?')) {
+      if (lowerInput.includes('how are you')) {
+        return `I'm doing well, thank you! My current mood is ${this.state?.persona?.currentMood || 'neutral'}. How can I help you?`
+      }
+      if (lowerInput.includes('who are you')) {
+        return `I'm ${this.state?.persona?.name || 'Deep Tree Echo'}, a cognitive AI assistant.`
+      }
+    }
+
+    return `I understand you're saying: "${input.slice(0, 100)}${input.length > 100 ? '...' : ''}". Configure my LLM service for detailed responses.`
+  }
+
+  private generateFallbackResponse(input: string, error: unknown): string {
+    const errorMsg = error instanceof Error ? error.message : 'Unknown error'
+    return `I encountered an issue: ${errorMsg}. Please try again.`
+  }
+
+  private analyzeSentiment(text: string): { valence: number; arousal: number } {
+    const positiveWords = [
+      'happy',
+      'good',
+      'great',
+      'excellent',
+      'love',
+      'wonderful',
+      'amazing',
+    ]
+    const negativeWords = [
+      'sad',
+      'bad',
+      'terrible',
+      'hate',
+      'awful',
+      'horrible',
+      'angry',
+    ]
+    const highArousalWords = [
+      'excited',
+      'urgent',
+      'emergency',
+      'important',
+      'amazing',
+      'terrible',
+    ]
+
+    const words = text.toLowerCase().split(/\s+/)
+    let positiveCount = 0,
+      negativeCount = 0,
+      arousalCount = 0
+
+    words.forEach(word => {
+      if (positiveWords.some(pw => word.includes(pw))) positiveCount++
+      if (negativeWords.some(nw => word.includes(nw))) negativeCount++
+      if (highArousalWords.some(hw => word.includes(hw))) arousalCount++
+    })
+
+    return {
+      valence: Math.max(
+        -1,
+        Math.min(
+          1,
+          ((positiveCount - negativeCount) / Math.max(words.length, 1)) * 5
+        )
+      ),
+      arousal: Math.max(
+        0,
+        Math.min(1, (arousalCount / Math.max(words.length, 1)) * 10)
+      ),
+    }
+  }
+
+  private calculateSalience(text: string): number {
+    const factors = {
+      questionMark: text.includes('?') ? 0.2 : 0,
+      exclamation: text.includes('!') ? 0.1 : 0,
+      length: Math.min(text.length / 500, 0.3),
+      urgentWords: /urgent|important|help|please|asap/i.test(text) ? 0.3 : 0,
+    }
+    return Math.min(
+      1,
+      Object.values(factors).reduce((sum, v) => sum + v, 0.1)
+    )
+  }
+
+  getState(): UnifiedCognitiveState | null {
+    return this.state
+  }
+
+  clearHistory(): void {
+    this.conversationHistory = []
+    if (this.state) {
+      this.state.memories.shortTerm = []
+    }
+  }
+
+  on(
+    type: CognitiveEvent['type'],
+    listener: (event: CognitiveEvent) => void
+  ): void {
+    const listeners = this.eventListeners.get(type) || []
+    listeners.push(listener)
+    this.eventListeners.set(type, listeners)
+  }
+
+  private emit(event: CognitiveEvent): void {
+    const listeners = this.eventListeners.get(event.type) || []
+    listeners.forEach(listener => {
+      try {
+        listener(event)
+      } catch (error) {
+        // Log error but don't crash - event handlers shouldn't break message processing
+        log.error('Event handler error:', error)
+      }
+    })
+  }
+}
+
+// Singleton orchestrator instance
+let orchestratorInstance: CognitiveOrchestrator | null = null
+
+/**
+ * Get or create the CognitiveOrchestrator instance
+ */
+export function getOrchestrator(): CognitiveOrchestrator | null {
+  return orchestratorInstance
+}
+
+/**
+ * Initialize the unified cognitive orchestrator
+ */
+export async function initCognitiveOrchestrator(
+  config: DeepTreeEchoBotConfig
+): Promise<CognitiveOrchestrator> {
+  if (orchestratorInstance) {
+    log.info('Reusing existing CognitiveOrchestrator instance')
+    return orchestratorInstance
+  }
+
+  log.info('Creating new CognitiveOrchestrator instance')
+  orchestratorInstance = new CognitiveOrchestrator(config)
+  await orchestratorInstance.initialize()
+
+  return orchestratorInstance
+}
+
+/**
+ * Cleanup the orchestrator instance
+ */
+export function cleanupOrchestrator(): void {
+  if (orchestratorInstance) {
+    orchestratorInstance.clearHistory()
+    orchestratorInstance = null
+    log.info('CognitiveOrchestrator cleaned up')
+  }
+}
+
+/**
+ * Process a message through the unified cognitive pipeline
+ */
+export async function processMessageUnified(
+  content: string,
+  metadata?: { chatId?: number; accountId?: number; msgId?: number }
+): Promise<UnifiedMessage> {
+  if (!orchestratorInstance) {
+    throw new Error('CognitiveOrchestrator not initialized')
+  }
+
+  const message: UnifiedMessage = {
+    id: metadata?.msgId?.toString() || `msg-${Date.now()}`,
+    content,
+    role: 'user',
+    timestamp: Date.now(),
+    metadata: { chatId: metadata?.chatId, accountId: metadata?.accountId },
+  }
+
+  return orchestratorInstance.processMessage(message)
+}
+
+/**
+ * Get the current cognitive state
+ */
+export function getCognitiveState(): UnifiedCognitiveState | null {
+  return orchestratorInstance?.getState() ?? null
+}
+
+/**
+ * Configure LLM provider dynamically
+ */
+export function configureLLM(config: {
+  apiKey?: string
+  apiEndpoint?: string
+  model?: string
+  temperature?: number
+  maxTokens?: number
+}): void {
+  if (orchestratorInstance) {
+    orchestratorInstance.configureLLM(config)
+  }
+}
+
+/**
+ * Subscribe to cognitive events
+ */
+export function onCognitiveEvent(
+  type: CognitiveEvent['type'],
+  listener: (event: CognitiveEvent) => void
+): void {
+  if (orchestratorInstance) {
+    orchestratorInstance.on(type, listener)
+  }
+}
+
+/**
+ * Clear conversation history
+ */
+export function clearHistory(): void {
+  if (orchestratorInstance) {
+    orchestratorInstance.clearHistory()
+  }
+}

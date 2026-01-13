@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../parse_mailto.ts"],
+  "sourcesContent": ["export function parseMailto(mailtoURL: string): {\n  to?: string | null\n  subject?: string\n  body?: string\n} {\n  const mailto_url = new URL(mailtoURL)\n\n  if (mailto_url.protocol.toLowerCase() !== 'mailto:') {\n    throw new Error(\n      \"not a mailto link, doesn't start with 'mailto:': \" + mailtoURL\n    )\n  }\n\n  const query: URLSearchParams = mailto_url.searchParams\n  const address = mailto_url.pathname || query.get('to') || null\n\n  return {\n    to: address && decodeURIComponent(address).trim(),\n    subject: query.get('subject') || undefined,\n    body: query.get('body') || undefined,\n  }\n}\n"],
+  "mappings": ";AAAO,gBAAS,YAAY,WAI1B;AACA,QAAM,aAAa,IAAI,IAAI,SAAS;AAEpC,MAAI,WAAW,SAAS,YAAY,MAAM,WAAW;AACnD,UAAM,IAAI;AAAA,MACR,sDAAsD;AAAA,IACxD;AAAA,EACF;AAEA,QAAM,QAAyB,WAAW;AAC1C,QAAM,UAAU,WAAW,YAAY,MAAM,IAAI,IAAI,KAAK;AAE1D,SAAO;AAAA,IACL,IAAI,WAAW,mBAAmB,OAAO,EAAE,KAAK;AAAA,IAChD,SAAS,MAAM,IAAI,SAAS,KAAK;AAAA,IACjC,MAAM,MAAM,IAAI,MAAM,KAAK;AAAA,EAC7B;AACF;",
+  "names": []
+}

@@ -1,0 +1,803 @@
+/* Deep Tree Echo Bot Styling - Celestial Consciousness Interface */
+@use 'sass:color';
+
+/* Mesmerizing Toggle Switch Styling */
+.toggle-switch-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .toggle-switch {
+    position: relative;
+    width: 60px;
+    height: 30px;
+    border-radius: 15px;
+    background: linear-gradient(145deg, #1e2327, #2c343c);
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    overflow: hidden;
+
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        90deg,
+        rgba(59, 173, 227, 0.1),
+        rgba(87, 111, 230, 0.1)
+      );
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      border-radius: 15px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    &:after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 10px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.08),
+        transparent
+      );
+      top: 50%;
+      transform: translateY(-50%) translateX(-100%);
+      transition: transform 1.5s ease-in-out;
+    }
+
+    &:hover:after {
+      transform: translateY(-50%) translateX(100%);
+    }
+
+    &.active {
+      background: linear-gradient(145deg, #152c42, #1e4976);
+      box-shadow:
+        inset 0 2px 5px rgba(0, 0, 0, 0.5),
+        0 0 15px rgba(87, 111, 230, 0.4);
+
+      &:before {
+        opacity: 1;
+      }
+
+      .toggle-slider {
+        transform: translateX(30px);
+        background: linear-gradient(145deg, #5bb9ff, #4a94f9);
+        box-shadow: 0 0 8px rgba(91, 185, 255, 0.8);
+      }
+    }
+
+    input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 3px;
+      left: 3px;
+      width: 24px;
+      height: 24px;
+      background: linear-gradient(145deg, #d0d0d0, #f5f5f5);
+      border-radius: 50%;
+      transition:
+        transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+        background 0.4s ease;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      z-index: 2;
+
+      &.radiant-glow {
+        &:after {
+          content: '';
+          position: absolute;
+          width: 16px;
+          height: 16px;
+          top: 4px;
+          left: 4px;
+          border-radius: 50%;
+          background: radial-gradient(
+            circle,
+            rgba(255, 255, 255, 0.9) 0%,
+            rgba(255, 255, 255, 0.2) 60%,
+            transparent 70%
+          );
+          opacity: 0.4;
+          transition: opacity 0.4s ease;
+        }
+      }
+    }
+  }
+
+  .test-toggle-btn {
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 4px;
+    background: linear-gradient(145deg, #2c343c, #242b32);
+    color: #d0d0d0;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: linear-gradient(145deg, #323c45, #282f37);
+      color: white;
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.deep-tree-echo-settings-screen {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1.5rem;
+
+  .settings-header {
+    margin-bottom: 2rem;
+
+    h2 {
+      font-size: 1.8rem;
+      margin-bottom: 0.75rem;
+      color: var(--primaryColor);
+    }
+
+    .settings-description {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: var(--primaryText);
+      opacity: 0.85;
+    }
+  }
+
+  .save-message {
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 4px;
+    font-weight: 500;
+    background-color: var(--successColor);
+    color: white;
+
+    &.saving {
+      background-color: var(--primaryColor);
+    }
+  }
+
+  .bot-status {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    border-radius: 4px;
+    background-color: rgba(var(--primaryColorRgb), 0.1);
+
+    p {
+      margin: 0;
+      font-size: 0.9rem;
+    }
+  }
+
+  .settings-footer {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(var(--primaryColorRgb), 0.2);
+
+    .privacy-note {
+      font-size: 0.8rem;
+      color: var(--secondaryText);
+      line-height: 1.5;
+    }
+  }
+}
+
+.deep-tree-echo-settings {
+  .setting-section {
+    margin-bottom: 2rem;
+    background-color: var(--bgPrimary);
+    border-radius: 6px;
+    padding: 1.25rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+    h4 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+      color: var(--primaryColor);
+    }
+
+    .setting-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+
+      h4 {
+        margin: 0;
+      }
+
+      .toggle-advanced-button {
+        font-size: 0.85rem;
+        padding: 0.4rem 0.8rem;
+        border-radius: 4px;
+        background-color: transparent;
+        border: 1px solid var(--primaryColor);
+        color: var(--primaryColor);
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background-color: rgba(var(--primaryColorRgb), 0.1);
+        }
+      }
+    }
+
+    .setting-item {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 1.25rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .setting-label {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+
+        input[type='checkbox'] {
+          margin-left: auto;
+        }
+      }
+
+      .setting-description {
+        font-size: 0.85rem;
+        color: var(--secondaryText);
+        margin-top: 0.5rem;
+      }
+
+      input[type='text'],
+      input[type='password'],
+      textarea {
+        padding: 0.75rem 1rem;
+        border-radius: 4px;
+        border: 1px solid rgba(var(--primaryColorRgb), 0.2);
+        background-color: var(--bgSecondary);
+        color: var(--primaryText);
+        font-family: inherit;
+        font-size: 0.9rem;
+        width: 100%;
+
+        &:focus {
+          outline: none;
+          border-color: var(--primaryColor);
+          box-shadow: 0 0 0 2px rgba(var(--primaryColorRgb), 0.2);
+        }
+
+        &:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+      }
+
+      textarea {
+        min-height: 100px;
+        resize: vertical;
+      }
+    }
+  }
+
+  .cognitive-keys-section {
+    .cognitive-keys-intro {
+      margin-bottom: 1.5rem;
+
+      p {
+        font-size: 0.9rem;
+        line-height: 1.5;
+        margin-bottom: 1rem;
+      }
+
+      .service-status {
+        padding: 0.75rem;
+        background-color: rgba(var(--primaryColorRgb), 0.05);
+        border-radius: 4px;
+        font-size: 0.85rem;
+      }
+
+      .architecture-note {
+        margin-top: 1.5rem;
+        padding: 1rem;
+        border-radius: 4px;
+        background-color: rgba(var(--primaryColorRgb), 0.05);
+
+        h5 {
+          margin-top: 0;
+          margin-bottom: 0.75rem;
+          font-size: 1rem;
+          color: var(--primaryColor);
+        }
+
+        p {
+          margin-bottom: 0.75rem;
+        }
+
+        ul {
+          margin: 0.5rem 0 1rem;
+          padding-left: 1.5rem;
+
+          li {
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+          }
+        }
+      }
+    }
+
+    .cognitive-function-group {
+      margin-bottom: 2rem;
+
+      h5 {
+        margin-bottom: 1rem;
+        font-size: 1rem;
+        color: var(--primaryColor);
+      }
+
+      .cognitive-function-item {
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        border-radius: 4px;
+        background-color: rgba(var(--primaryColorRgb), 0.05);
+
+        .cognitive-function-header {
+          margin-bottom: 1rem;
+
+          h6 {
+            margin: 0 0 0.5rem;
+            font-size: 0.95rem;
+          }
+
+          .cognitive-function-description {
+            font-size: 0.85rem;
+            color: var(--secondaryText);
+          }
+        }
+
+        .cognitive-function-inputs {
+          .input-group {
+            margin-bottom: 1rem;
+
+            &:last-child {
+              margin-bottom: 0;
+            }
+
+            label {
+              display: block;
+              margin-bottom: 0.5rem;
+              font-size: 0.85rem;
+              font-weight: 500;
+            }
+
+            input {
+              width: 100%;
+              padding: 0.75rem;
+              border-radius: 4px;
+              border: 1px solid rgba(var(--primaryColorRgb), 0.2);
+              background-color: var(--bgSecondary);
+              color: var(--primaryText);
+              font-size: 0.85rem;
+
+              &:focus {
+                outline: none;
+                border-color: var(--primaryColor);
+              }
+
+              &:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/* Advanced Deep Tree Echo Bot Component Styling */
+
+// Base variables for Deep Tree Echo Bot theme
+$echo-primary-color: #2e7bcf;
+$echo-secondary-color: #76c9f5;
+$echo-accent-color: #ff8a5c;
+$echo-dark-color: #2c3e50;
+$echo-light-color: #ecf0f1;
+
+$echo-memory-color: #9b59b6;
+$echo-personality-color: #3498db;
+$echo-belief-color: #2ecc71;
+$echo-emotional-color: #e74c3c;
+$echo-security-color: #f1c40f;
+
+// Animation keyframes for cognitive state indicators
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 0.6;
+    transform: scale(0.98);
+  }
+}
+
+@keyframes thinking {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+// Main Deep Tree Echo Bot container
+.deep-tree-echo-bot {
+  position: relative;
+  font-family: 'Open Sans', system-ui, sans-serif;
+  border-radius: 12px;
+  background-color: rgba(color.adjust($echo-dark-color, $lightness: 65%), 0.8);
+  padding: 20px;
+  margin: 10px 0;
+  box-shadow: 0 4px 12px rgba($echo-dark-color, 0.1);
+  transition: all 0.3s ease;
+
+  // Subtle neural network pattern background
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.05;
+    background-image: radial-gradient(
+        circle at 25px 25px,
+        $echo-primary-color 2px,
+        transparent 0
+      ),
+      radial-gradient(
+        circle at 75px 75px,
+        $echo-secondary-color 2px,
+        transparent 0
+      );
+    background-size: 100px 100px;
+    z-index: -1;
+    border-radius: inherit;
+  }
+
+  // Bot header with status
+  .bot-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+
+    .bot-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      margin-right: 12px;
+      background: linear-gradient(
+        120deg,
+        $echo-primary-color,
+        $echo-secondary-color
+      );
+
+      &::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-image: linear-gradient(
+          120deg,
+          rgba($echo-accent-color, 0.2),
+          rgba($echo-secondary-color, 0.2)
+        );
+        animation: thinking 3s ease infinite;
+        background-size: 200% 200%;
+      }
+    }
+
+    .bot-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: $echo-dark-color;
+      margin: 0;
+    }
+  }
+
+  // Cognitive state indicator
+  .bot-state-indicator {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: white;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    // State-specific styling
+    &.idle {
+      background-color: $echo-secondary-color;
+    }
+
+    &.processing {
+      background-color: $echo-primary-color;
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    &.responding {
+      background-color: $echo-accent-color;
+    }
+
+    &.reflecting {
+      background-color: $echo-memory-color;
+      animation: pulse 3s infinite ease-in-out;
+    }
+
+    &.learning {
+      background-color: $echo-belief-color;
+    }
+
+    &.error {
+      background-color: #e74c3c;
+    }
+  }
+
+  // Bot response container
+  .bot-response {
+    position: relative;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: white;
+    margin-top: 10px;
+    box-shadow: 0 2px 5px rgba($echo-dark-color, 0.05);
+    line-height: 1.5;
+    color: $echo-dark-color;
+
+    // Left-pointing triangle indicator
+    &::before {
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: 20px;
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-bottom: 8px solid white;
+    }
+  }
+
+  // Cognitive modules visualization
+  .cognitive-modules {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+
+    .module {
+      flex: 1;
+      height: 6px;
+      border-radius: 3px;
+      margin: 0 3px;
+      position: relative;
+      overflow: hidden;
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 0;
+        transition: width 0.5s ease;
+      }
+
+      &.memory {
+        background-color: rgba($echo-memory-color, 0.2);
+        &::after {
+          background-color: $echo-memory-color;
+        }
+      }
+
+      &.personality {
+        background-color: rgba($echo-personality-color, 0.2);
+        &::after {
+          background-color: $echo-personality-color;
+        }
+      }
+
+      &.belief {
+        background-color: rgba($echo-belief-color, 0.2);
+        &::after {
+          background-color: $echo-belief-color;
+        }
+      }
+
+      &.emotional {
+        background-color: rgba($echo-emotional-color, 0.2);
+        &::after {
+          background-color: $echo-emotional-color;
+        }
+      }
+
+      &.security {
+        background-color: rgba($echo-security-color, 0.2);
+        &::after {
+          background-color: $echo-security-color;
+        }
+      }
+
+      &.active::after {
+        width: 100%;
+      }
+    }
+  }
+
+  // Command interface styling
+  .command-interface {
+    margin-top: 15px;
+
+    .command-button {
+      display: inline-block;
+      padding: 6px 12px;
+      margin-right: 8px;
+      margin-bottom: 8px;
+      border-radius: 15px;
+      font-size: 12px;
+      font-weight: 500;
+      color: white;
+      background-color: $echo-primary-color;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background-color: darken($echo-primary-color, 10%);
+        transform: translateY(-2px);
+      }
+
+      &.identity {
+        background-color: $echo-dark-color;
+      }
+      &.memory {
+        background-color: $echo-memory-color;
+      }
+      &.belief {
+        background-color: $echo-belief-color;
+      }
+      &.emotional {
+        background-color: $echo-emotional-color;
+      }
+      &.security {
+        background-color: $echo-security-color;
+      }
+    }
+  }
+
+  // Bot message styling
+  .bot-message {
+    margin-bottom: 10px;
+
+    &.user-message {
+      text-align: right;
+
+      .message-content {
+        background-color: $echo-primary-color;
+        color: white;
+        border-radius: 18px 18px 4px 18px;
+        padding: 10px 15px;
+        display: inline-block;
+        max-width: 80%;
+        text-align: left;
+      }
+    }
+
+    &.bot-message {
+      text-align: left;
+
+      .message-content {
+        background-color: white;
+        color: $echo-dark-color;
+        border-radius: 18px 18px 18px 4px;
+        padding: 10px 15px;
+        display: inline-block;
+        max-width: 80%;
+      }
+    }
+
+    .message-time {
+      font-size: 10px;
+      color: rgba($echo-dark-color, 0.5);
+      margin-top: 4px;
+    }
+  }
+}
+
+// Reflection mode overlay
+.reflection-mode {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba($echo-dark-color, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+
+  .reflection-content {
+    width: 400px;
+    background-color: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(black, 0.3);
+
+    .reflection-title {
+      color: $echo-memory-color;
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    .reflection-progress {
+      height: 6px;
+      background-color: rgba($echo-memory-color, 0.2);
+      border-radius: 3px;
+      margin-bottom: 20px;
+      overflow: hidden;
+
+      .progress-bar {
+        height: 100%;
+        width: 0;
+        background-color: $echo-memory-color;
+        transition: width 0.5s ease;
+
+        &.active {
+          animation: thinking 2s ease infinite;
+          background: linear-gradient(
+            90deg,
+            $echo-memory-color,
+            $echo-belief-color,
+            $echo-personality-color
+          );
+          background-size: 200% 200%;
+        }
+      }
+    }
+  }
+}

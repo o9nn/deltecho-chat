@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../themes.ts"],
+  "sourcesContent": ["export function parseThemeMetaData(rawTheme: string): {\n  name: string\n  description: string\n} {\n  const meta_data_block =\n    /.theme-meta ?{([^]*)}/gm.exec(rawTheme)?.[1].trim() || ''\n\n  const regex = /--(\\w*): ?['\"]([^]*?)['\"];?/gi\n\n  const meta: { [key: string]: string } = {}\n\n  let last_result: any = true\n\n  while (last_result) {\n    last_result = regex.exec(meta_data_block)\n    if (last_result) {\n      meta[last_result[1]] = last_result[2]\n    }\n  }\n\n  // check if name and description are defined\n  if (!meta.name || !meta.description) {\n    throw new Error(\n      'The meta variables meta.name and meta.description must be defined'\n    )\n  }\n\n  return <any>meta\n}\n\nexport const HIDDEN_THEME_PREFIX = 'dev_'\n"],
+  "mappings": ";AAAO,gBAAS,mBAAmB,UAGjC;AACA,QAAM,kBACJ,0BAA0B,KAAK,QAAQ,IAAI,CAAC,EAAE,KAAK,KAAK;AAE1D,QAAM,QAAQ;AAEd,QAAM,OAAkC,CAAC;AAEzC,MAAI,cAAmB;AAEvB,SAAO,aAAa;AAClB,kBAAc,MAAM,KAAK,eAAe;AACxC,QAAI,aAAa;AACf,WAAK,YAAY,CAAC,CAAC,IAAI,YAAY,CAAC;AAAA,IACtC;AAAA,EACF;AAGA,MAAI,CAAC,KAAK,QAAQ,CAAC,KAAK,aAAa;AACnC,UAAM,IAAI;AAAA,MACR;AAAA,IACF;AAAA,EACF;AAEA,SAAY;AACd;AAEO,aAAM,sBAAsB;",
+  "names": []
+}
