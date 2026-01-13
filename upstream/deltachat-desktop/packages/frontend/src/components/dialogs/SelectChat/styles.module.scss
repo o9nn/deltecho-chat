@@ -1,0 +1,21 @@
+// We need to force the dialog to full height to make `AutoSizer` work
+.selectChatDialog {
+  height: 100%;
+}
+
+.selectChatDialogBody {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 0px;
+
+  // This prevents constantly flickering scrollbars caused by <AutoSizer>
+  // on certain DPR (zoom) levels.
+  // It's fine to apply `overflow: hidden;` because we do not expect
+  // the dialog to overflow: the stuff inside of it is scrollable anyway.
+  overflow: hidden;
+}
+
+.header {
+  // long title should not make dialog scroll sidewards
+  word-break: break-all;
+}

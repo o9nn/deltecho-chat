@@ -1,0 +1,98 @@
+// AI Neighborhood Navigation Button Styles
+// A magnificent portal to our revolutionary AI ecosystem
+
+.ai-neighborhood-nav {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+
+  .ai-neighborhood-button {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    padding: 0.75rem 1.25rem;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.5);
+    overflow: hidden;
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 0.3) 0%,
+        rgba(255, 255, 255, 0) 70%
+      );
+      opacity: 0;
+      transform: scale(0.5);
+      transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(102, 126, 234, 0.7);
+
+      &::before {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    &:active {
+      transform: translateY(1px);
+      box-shadow: 0 2px 10px rgba(102, 126, 234, 0.4);
+    }
+
+    &.active {
+      background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+      box-shadow: 0 2px 15px rgba(118, 75, 162, 0.6);
+    }
+
+    svg {
+      filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.4));
+      animation: pulse-gentle 2s infinite;
+    }
+
+    span {
+      font-size: 1rem;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
+@keyframes pulse-gentle {
+  0%,
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.4));
+  }
+  50% {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.6));
+  }
+}
+
+// Media query for smaller screens
+@media (max-width: 768px) {
+  .ai-neighborhood-nav {
+    .ai-neighborhood-button {
+      padding: 0.65rem 1rem;
+
+      span {
+        display: none;
+      }
+    }
+  }
+}

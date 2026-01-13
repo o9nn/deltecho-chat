@@ -1,0 +1,2696 @@
+{
+  "app_name": {
+    "message": "Delta Chat"
+  },
+  "ok": {
+    "message": "OK"
+  },
+  "cancel": {
+    "message": "Anuluj"
+  },
+  "clear_search": {
+    "message": "Wyczyść wyszukiwanie"
+  },
+  "link": {
+    "message": "Link"
+  },
+  "scan": {
+    "message": "Skanuj"
+  },
+  "yes": {
+    "message": "Tak"
+  },
+  "no": {
+    "message": "Nie"
+  },
+  "select": {
+    "message": "Zaznacz"
+  },
+  "on": {
+    "message": "Włączone"
+  },
+  "off": {
+    "message": "Wyłączone"
+  },
+  "def": {
+    "message": "Domyślne"
+  },
+  "default_value": {
+    "message": "Domyślny (%1$s)"
+  },
+  "default_value_as_above": {
+    "message": "Domyślna (taka sama jak powyżej)"
+  },
+  "custom": {
+    "message": "Własne"
+  },
+  "none": {
+    "message": "Brak"
+  },
+  "automatic": {
+    "message": "Automatyczne"
+  },
+  "strict": {
+    "message": "Dokładne"
+  },
+  "open": {
+    "message": "Otwórz"
+  },
+  "download": {
+    "message": "Pobierz"
+  },
+  "downloading": {
+    "message": "Pobieranie…"
+  },
+  "open_attachment": {
+    "message": "Otwórz załącznik"
+  },
+  "join": {
+    "message": "Dołącz"
+  },
+  "rejoin": {
+    "message": "Dołącz ponownie"
+  },
+  "delete": {
+    "message": "Usuń"
+  },
+  "delete_for_me": {
+    "message": "Usuń u mnie"
+  },
+  "delete_for_everyone": {
+    "message": "Usuń u wszystkich"
+  },
+  "info": {
+    "message": "Informacje"
+  },
+  "update": {
+    "message": "Aktualizacja"
+  },
+  "emoji": {
+    "message": "Emoji"
+  },
+  "attachment": {
+    "message": "Załącznik"
+  },
+  "back": {
+    "message": "Wróć"
+  },
+  "close": {
+    "message": "Zamknij"
+  },
+  "close_window": {
+    "message": "Zamknij okno"
+  },
+  "forward": {
+    "message": "Przekaż"
+  },
+  "create": {
+    "message": "Utwórz"
+  },
+  "reset": {
+    "message": "Zresetuj"
+  },
+  "later": {
+    "message": "Później"
+  },
+  "resend": {
+    "message": "Wyślij ponownie"
+  },
+  "edited": {
+    "message": "Edytowana"
+  },
+  "edit_message": {
+    "message": "Edytuj wiadomość"
+  },
+  "archive": {
+    "message": "Archiwizuj"
+  },
+  "unarchive": {
+    "message": "Przywróć z archiwum"
+  },
+  "mute": {
+    "message": "Wyłącz powiadomienia"
+  },
+  "muted": {
+    "message": "Wyciszony"
+  },
+  "ephemeral_messages": {
+    "message": "Znikające wiadomości"
+  },
+  "ephemeral_messages_hint": {
+    "message": "Dotyczy wszystkich członków tego czatu. Nadal mogą kopiować, zapisywać i przesyłać wiadomości."
+  },
+  "save": {
+    "message": "Zapisz"
+  },
+  "chat": {
+    "message": "Czat"
+  },
+  "media": {
+    "message": "Multimedia"
+  },
+  "profile": {
+    "message": "Profil"
+  },
+  "main_menu": {
+    "message": "Menu główne"
+  },
+  "start_chat": {
+    "message": "Rozpocznij czat"
+  },
+  "show_full_message": {
+    "message": "Pokaż całą wiadomość…"
+  },
+  "mark_all_as_read": {
+    "message": "Wszys. przeczyt."
+  },
+  "mark_as_read": {
+    "message": "Oznacz jako przeczytane"
+  },
+  "mark_as_read_short": {
+    "message": "Przeczytane"
+  },
+  "loading": {
+    "message": "Ładowanie…"
+  },
+  "hide": {
+    "message": "Ukryj"
+  },
+  "activate": {
+    "message": "Aktywuj"
+  },
+  "load_remote_content": {
+    "message": "Załaduj zdalne obrazy"
+  },
+  "load_remote_content_ask": {
+    "message": "Obrazy zdalne mogą służyć do śledzenia użytkownika.\n\nTo ustawienie umożliwia również ładowanie czcionek i innych treści. Nawet jeśli jest wyłączone, nadal możesz widzieć obrazy osadzone lub zapisane w pamięci podręcznej.\n\nZaładować zdalne obrazy?"
+  },
+  "always": {
+    "message": "Zawsze"
+  },
+  "always_load_remote_images": {
+    "message": "Zawsze wczytuj zdalne obrazy"
+  },
+  "once": {
+    "message": "Jeden raz"
+  },
+  "show_warning": {
+    "message": "Pokaż ostrzeżenie"
+  },
+  "show_password": {
+    "message": "Pokaż hasło"
+  },
+  "hide_password": {
+    "message": "Ukryj hasło"
+  },
+  "not_now": {
+    "message": "Nie teraz"
+  },
+  "never": {
+    "message": "Nigdy"
+  },
+  "one_moment": {
+    "message": "Jedną chwilę…"
+  },
+  "done": {
+    "message": "Gotowe"
+  },
+  "undo": {
+    "message": "Cofnij"
+  },
+  "offline": {
+    "message": "Offline"
+  },
+  "next": {
+    "message": "Dalej"
+  },
+  "error": {
+    "message": "Błąd"
+  },
+  "error_x": {
+    "message": "Błąd: %1$s"
+  },
+  "no_app_to_handle_data": {
+    "message": "Nie można znaleźć aplikacji do obsługi tego typu danych."
+  },
+  "no_browser_installed": {
+    "message": "Nie zainstalowano przeglądarki."
+  },
+  "file_not_found": {
+    "message": "Nie znaleziono pliku %1$s."
+  },
+  "copied_to_clipboard": {
+    "message": "Skopiowano do schowka"
+  },
+  "contacts_headline": {
+    "message": "Kontakty"
+  },
+  "email_address": {
+    "message": "Adres e-mail"
+  },
+  "bad_email_address": {
+    "message": "Zły adres e-mail"
+  },
+  "password": {
+    "message": "Hasło"
+  },
+  "existing_password": {
+    "message": "Istniejące hasło"
+  },
+  "now": {
+    "message": "Teraz"
+  },
+  "danger": {
+    "message": "Uwaga"
+  },
+  "today": {
+    "message": "Dzisiaj"
+  },
+  "yesterday": {
+    "message": "Wczoraj"
+  },
+  "this_week": {
+    "message": "Ten tydzień"
+  },
+  "this_month": {
+    "message": "Ten miesiąc"
+  },
+  "last_week": {
+    "message": "Ostatni tydzień"
+  },
+  "last_month": {
+    "message": "Ostatni miesiąc"
+  },
+  "last_seen_at": {
+    "message": "Ostatnio widziano %1$s"
+  },
+  "last_seen_relative": {
+    "message": "Ostatnio widziano %1$s"
+  },
+  "last_seen_unknown": {
+    "message": "Ostatnio widziano: nie wiadomo"
+  },
+  "self": {
+    "message": "Ja"
+  },
+  "draft": {
+    "message": "Szkic"
+  },
+  "image": {
+    "message": "Obraz"
+  },
+  "reply_noun": {
+    "message": "Odpowiedz"
+  },
+  "gif": {
+    "message": "Gif"
+  },
+  "sticker": {
+    "message": "Naklejka"
+  },
+  "add_to_sticker_collection": {
+    "message": "Dodaj do kolekcji naklejek"
+  },
+  "add_stickers_instructions": {
+    "message": "Aby dodać naklejki, dotknij „Otwórz folder naklejek”, utwórz podfolder dla swojego pakietu naklejek i przeciągnij do niego pliki obrazów i naklejek"
+  },
+  "open_sticker_folder": {
+    "message": "Otwórz folder naklejek"
+  },
+  "images": {
+    "message": "Obrazy"
+  },
+  "audio": {
+    "message": "Audio"
+  },
+  "voice_message": {
+    "message": "Wiadomość głosowa"
+  },
+  "forwarded": {
+    "message": "Przekazana"
+  },
+  "forwarded_message": {
+    "message": "Przekazano wiadomość"
+  },
+  "forwarded_by": {
+    "message": "Przekazana przez %1$s"
+  },
+  "video": {
+    "message": "Wideo"
+  },
+  "documents": {
+    "message": "Dokumenty"
+  },
+  "contact": {
+    "message": "Kontakt"
+  },
+  "bot": {
+    "message": "Bot"
+  },
+  "camera": {
+    "message": "Kamera"
+  },
+  "capture": {
+    "message": "Zrób to"
+  },
+  "switch_camera": {
+    "message": "Przełącz kamerę"
+  },
+  "toggle_fullscreen": {
+    "message": "Przełącz na tryb pełnoekranowy"
+  },
+  "location": {
+    "message": "Lokalizacja"
+  },
+  "locations": {
+    "message": "Lokalizacje"
+  },
+  "gallery": {
+    "message": "Galeria"
+  },
+  "images_and_videos": {
+    "message": "Obrazy i wideo"
+  },
+  "file": {
+    "message": "Plik"
+  },
+  "files": {
+    "message": "Pliki"
+  },
+  "webxdc_app": {
+    "message": "Prywatna aplikacja"
+  },
+  "webxdc_apps": {
+    "message": "Prywatne aplikacje"
+  },
+  "webxdc_store_url": {
+    "message": "Adres URL selektora aplikacji"
+  },
+  "webxdc_store_url_explain": {
+    "message": "Jeśli ustawiony, adres URL będzie używany jako selektor aplikacji zamiast domyślnego"
+  },
+  "home": {
+    "message": "Główna"
+  },
+  "games": {
+    "message": "Gry"
+  },
+  "tools": {
+    "message": "Narzędzia"
+  },
+  "app_size": {
+    "message": "Rozmiar"
+  },
+  "app_date_published": {
+    "message": "Opublikowany"
+  },
+  "add_to_chat": {
+    "message": "Dodaj do czatu"
+  },
+  "browse": {
+    "message": "Przeglądaj"
+  },
+  "unknown": {
+    "message": "Nieznany"
+  },
+  "green": {
+    "message": "Zielony"
+  },
+  "red": {
+    "message": "Czerwony"
+  },
+  "blue": {
+    "message": "Niebieski"
+  },
+  "orange": {
+    "message": "Pomarańczowy"
+  },
+  "cyan": {
+    "message": "Cyan"
+  },
+  "purple": {
+    "message": "Fioletowy"
+  },
+  "magenta": {
+    "message": "Magenta"
+  },
+  "white": {
+    "message": "Biały"
+  },
+  "zoom": {
+    "message": "Powiększenie"
+  },
+  "extra_small": {
+    "message": "Bardzo małe"
+  },
+  "small": {
+    "message": "Małe"
+  },
+  "normal": {
+    "message": "Normalne"
+  },
+  "large": {
+    "message": "Duże"
+  },
+  "extra_large": {
+    "message": "Bardzo duże"
+  },
+  "fast": {
+    "message": "Szybkie"
+  },
+  "slow": {
+    "message": "Wolne"
+  },
+  "menu_new_contact": {
+    "message": "Nowy kontakt"
+  },
+  "menu_new_classic_contact": {
+    "message": "Dodaj kontakt ręcznie"
+  },
+  "new_classic_contact_explain": {
+    "message": "Ręcznie dodane kontakty mogą być używane do wysyłania tekstu w klasycznych e-mailach i nie ma gwarancji, że będą one szyfrowane metodą end-to-end."
+  },
+  "menu_new_chat": {
+    "message": "Nowy czat"
+  },
+  "menu_new_group": {
+    "message": "Nowa grupa"
+  },
+  "chat_with": {
+    "message": "Czat z…"
+  },
+  "clone_chat": {
+    "message": "Klonuj czat"
+  },
+  "broadcast_list": {
+    "message": "Lista rozgłoszeniowa"
+  },
+  "broadcast_lists": {
+    "message": "Lista rozgłoszeniowa"
+  },
+  "new_broadcast_list": {
+    "message": "Nowa lista rozgłoszeniowa"
+  },
+  "add_recipients": {
+    "message": "Dodaj odbiorców"
+  },
+  "edit_broadcast_list": {
+    "message": "Edytuj listę rozgłoszeniową"
+  },
+  "broadcast_list_name": {
+    "message": "Nazwa listy rozgłoszeniowej"
+  },
+  "please_enter_broadcast_list_name": {
+    "message": "Wpisz nazwę listy rozgłoszeniowej"
+  },
+  "menu_send": {
+    "message": "Wyślij"
+  },
+  "menu_toggle_keyboard": {
+    "message": "Przełącz klawiaturę emoji"
+  },
+  "menu_edit_group": {
+    "message": "Edytuj grupę"
+  },
+  "menu_group_name_and_image": {
+    "message": "Nazwa grupy i obraz"
+  },
+  "menu_show_global_map": {
+    "message": "Wszystkie lokalizacje"
+  },
+  "menu_archive_chat": {
+    "message": "Archiwizuj czat"
+  },
+  "menu_unarchive_chat": {
+    "message": "Przywróć czat z archiwum"
+  },
+  "menu_add_attachment": {
+    "message": "Dodaj załącznik"
+  },
+  "menu_leave_group": {
+    "message": "Opuść grupę"
+  },
+  "menu_delete_chat": {
+    "message": "Usuń czat"
+  },
+  "clear_chat": {
+    "message": "Wyczyść czat"
+  },
+  "delete_contact": {
+    "message": "Usuń kontakt"
+  },
+  "menu_delete_location": {
+    "message": "Usunąć tę lokalizację?"
+  },
+  "menu_message_details": {
+    "message": "Szczegóły wiadomości"
+  },
+  "menu_copy_to_clipboard": {
+    "message": "Kopiuj do schowka"
+  },
+  "share_invite_link": {
+    "message": "Udostępnij link zaproszenia"
+  },
+  "share_invite_link_explain": {
+    "message": "Każdy, kto ma ten link, może zobaczyć twój profil i rozpocząć z tobą czat. Udostępniaj go tylko osobom, którym ufasz."
+  },
+  "invite_friends": {
+    "message": "Zaproś znajomych"
+  },
+  "invite_friends_text": {
+    "message": "Skontaktuj się ze mną przez Delta Chat:\n%1$s"
+  },
+  "menu_copy_selection_to_clipboard": {
+    "message": "Kopiuj zaznaczenie"
+  },
+  "menu_copy_link_to_clipboard": {
+    "message": "Kopiuj link"
+  },
+  "menu_copy_text_to_clipboard": {
+    "message": "Kopiuj tekst"
+  },
+  "menu_copy_image_to_clipboard": {
+    "message": "Kopiuj obraz"
+  },
+  "menu_copy_email_to_clipboard": {
+    "message": "Kopiuj e-mail"
+  },
+  "paste_from_clipboard": {
+    "message": "Wklej ze schowka"
+  },
+  "ask_copy_unopenable_link_to_clipboard": {
+    "message": "Linku „%1$d” nie można otworzyć w przeglądarce internetowej. Czy zamiast tego chcesz skopiować link do schowka?"
+  },
+  "menu_forward": {
+    "message": "Przekaż wiadomość"
+  },
+  "menu_reply": {
+    "message": "Odpowiedz na wiadomość"
+  },
+  "menu_mute": {
+    "message": "Wyłącz powiadomienia"
+  },
+  "menu_unmute": {
+    "message": "Wyłącz powiadomienia"
+  },
+  "menu_export_attachment": {
+    "message": "Eksportuj załącznik"
+  },
+  "menu_export_attachments": {
+    "message": "Eksportuj załączniki"
+  },
+  "menu_all_media": {
+    "message": "Wszystkie multimedia"
+  },
+  "show_in_chat": {
+    "message": "Pokaż w czacie"
+  },
+  "show_app_in_chat": {
+    "message": "Pokaż aplikację w czacie"
+  },
+  "menu_share": {
+    "message": "Udostępnij"
+  },
+  "block": {
+    "message": "Zablokuj"
+  },
+  "menu_block_contact": {
+    "message": "Blokuj kontakt"
+  },
+  "menu_unblock_contact": {
+    "message": "Odblokuj kontakt"
+  },
+  "accept": {
+    "message": "Akceptuj"
+  },
+  "menu_play": {
+    "message": "Odtwarzaj"
+  },
+  "menu_pause": {
+    "message": "Wstrzymaj"
+  },
+  "menu_scroll_to_bottom": {
+    "message": "Przewiń na dołu"
+  },
+  "menu_scroll_to_top": {
+    "message": "Przewiń na górę"
+  },
+  "menu_help": {
+    "message": "Pomoc"
+  },
+  "what_is_webxdc": {
+    "message": "Co to jest Webxdc?"
+  },
+  "privacy_policy": {
+    "message": "Polityka prywatności"
+  },
+  "menu_select_all": {
+    "message": "Zaznacz wszystko"
+  },
+  "select_chat": {
+    "message": "Zaznacz czat"
+  },
+  "select_more": {
+    "message": "Zaznacz więcej"
+  },
+  "menu_edit_name": {
+    "message": "Edytuj nazwę"
+  },
+  "edit_name_explain": {
+    "message": "Ustaw nazwę, która będzie wyświetlana zamiast „%1$s”. Pozostaw puste pole, aby użyć wybranej nazwy kontaktu."
+  },
+  "edit_name_placeholder": {
+    "message": "Nazwa dla „%1$s”"
+  },
+  "menu_settings": {
+    "message": "Ustawienia"
+  },
+  "menu_advanced": {
+    "message": "Zaawansowane"
+  },
+  "menu_view_profile": {
+    "message": "Pokaż profil"
+  },
+  "menu_zoom_in": {
+    "message": "Powiększ"
+  },
+  "menu_zoom_out": {
+    "message": "Pomniejsz"
+  },
+  "menu_save_log": {
+    "message": "Zapisz log"
+  },
+  "menu_more_options": {
+    "message": "Więcej opcji"
+  },
+  "menu_learn_spelling": {
+    "message": "Naucz się pisowni"
+  },
+  "menu_chat_audit_log": {
+    "message": "Dziennik audytu czatu"
+  },
+  "jump_to_message": {
+    "message": "Przejdź do wiadomości"
+  },
+  "jump_to_original_message": {
+    "message": "Przejdź do oryginalnej wiadomości"
+  },
+  "copy_json": {
+    "message": "Kopiuj JSON"
+  },
+  "replace_draft": {
+    "message": "Zastąp szkic"
+  },
+  "title_share_location": {
+    "message": "Udostępnij lokalizację dla wszystki czlonków grup"
+  },
+  "device_talk": {
+    "message": "Komunikaty urządzenia"
+  },
+  "device_talk_subtitle": {
+    "message": "Wiadomości generowane lokalnie"
+  },
+  "device_talk_explain": {
+    "message": "Wiadomości w tym czacie są generowane lokalnie przez twoją aplikację Delta Chat. Twórcy używają go do informowania o aktualizacjach aplikacji i problemach podczas użytkowania."
+  },
+  "device_talk_welcome_message2": {
+    "message": "Skontaktuj się!\n\n🙌 Dotknij „Kod QR” na ekranie głównym obu urządzeń. Wybierz opcję „Zeskanuj kod QR” na jednym urządzeniu i skieruj go na drugie\n\n🌍 Jeśli nie znajdujesz się w tym samym pokoju, zeskanuj kod podczas rozmowy wideo lub udostępnij link z zaproszeniem w sekcji „Zeskanuj kod QR”\n\nNastępnie: korzystaj z komunikatora za pośrednictwem największej zdecentralizowanej sieci, jaka kiedykolwiek istniała: e-mail. W przeciwieństwie do innych popularnych aplikacji bez centralnej kontroli, śledzenia lub sprzedawania Ciebie, znajomych, współpracowników lub rodziny dużym organizacjom."
+  },
+  "edit_contact": {
+    "message": "Edytuj kontakt"
+  },
+  "pin_chat": {
+    "message": "Przypnij czat"
+  },
+  "unpin_chat": {
+    "message": "Odepnij czat"
+  },
+  "pin": {
+    "message": "Przypnij"
+  },
+  "unpin": {
+    "message": "Odepnij"
+  },
+  "ConversationFragment_quoted_message_not_found": {
+    "message": "Nie znaleziono oryginalnej wiadomości"
+  },
+  "reply_privately": {
+    "message": "Odpowiedz prywatnie "
+  },
+  "source_code": {
+    "message": "Kod źródłowy"
+  },
+  "add_to_home_screen": {
+    "message": "Dodaj do ekranu głównego"
+  },
+  "donate": {
+    "message": "Wspomóż"
+  },
+  "mute_for_one_hour": {
+    "message": "Wyłącz na 1 godzinę"
+  },
+  "mute_for_eight_hours": {
+    "message": "Wyłącz na 8 godzin"
+  },
+  "mute_for_one_day": {
+    "message": "Wyłącz na 1 dzień"
+  },
+  "mute_for_seven_days": {
+    "message": "Wyłącz na 7 dni"
+  },
+  "mute_forever": {
+    "message": "Wyłącz na zawsze"
+  },
+  "share_location_for_5_minutes": {
+    "message": "na 5 minut"
+  },
+  "share_location_for_30_minutes": {
+    "message": "na 30 mninut"
+  },
+  "share_location_for_one_hour": {
+    "message": "na 1 godzinę"
+  },
+  "share_location_for_two_hours": {
+    "message": "na 2 godziny"
+  },
+  "share_location_for_six_hours": {
+    "message": "na 6 godzin"
+  },
+  "file_saved_to": {
+    "message": "Plik zapisany w „%1$s"
+  },
+  "videochat": {
+    "message": "Czat wideo"
+  },
+  "videochat_invite_user_to_videochat": {
+    "message": "Zaprosić %1$s do czatu wideo?"
+  },
+  "videochat_invite_user_hint": {
+    "message": "Wymaga to kompatybilnej aplikacji lub kompatybilnej przeglądarki po obu stronach."
+  },
+  "videochat_contact_invited_hint": {
+    "message": "Użytkownik %1$s zaprosił na czat wideo."
+  },
+  "videochat_you_invited_hint": {
+    "message": "Zaprosiłeś do czatu wideo."
+  },
+  "videochat_tap_to_join": {
+    "message": "Dotknij, aby dołączyć"
+  },
+  "videochat_tap_to_open": {
+    "message": "Dotknij, aby otworzyć"
+  },
+  "videochat_instance": {
+    "message": "Instancja czatu wideo"
+  },
+  "videochat_instance_placeholder": {
+    "message": "Twoja instancja czatu wideo"
+  },
+  "videochat_instance_example": {
+    "message": "Przykład: https://meet.jit.si/$ROOM lub basicwebrtc:https://your-server"
+  },
+  "videochat_instance_explain_2": {
+    "message": "Jeśli czat wideo jest włączony, możesz rozpocząć rozmowę wideo z każdego czatu indywidualnego. Czaty wideo wymagają kompatybilnej aplikacji lub kompatybilnej przeglądarki po obu stronach."
+  },
+  "videochat_instance_from_qr": {
+    "message": "Czy użyć „%1$s”, aby zaprosić innych do czatów wideo?\n\nPo ustawieniu możesz rozpocząć czat wideo z każdego czatu indywidualnego. Spowoduje to zastąpienie poprzedniego ustawienia czatów wideo, jeśli takie istnieją."
+  },
+  "videochat_invitation": {
+    "message": "Zaproszenie do czatu wideo"
+  },
+  "videochat_invitation_body": {
+    "message": "Masz zaproszenie do czatu wideo, naciśnij %1$s, aby dołączyć."
+  },
+  "ask_leave_group": {
+    "message": "Czy na pewno chcesz opuścić tę grupę?"
+  },
+  "ask_delete_named_chat": {
+    "message": "Usunąć czat „%1$s” ze wszystkich urządzeń?"
+  },
+  "ask_delete_message": {
+    "message": "Usunąć tę wiadomość ze wszystkich urządzeń?"
+  },
+  "ask_forward": {
+    "message": "Przekazać wiadomości do użytkownika %1$s?"
+  },
+  "ask_forward_multiple": {
+    "message": "Przekazać wiadomości do %1$d czatów?"
+  },
+  "ask_export_attachment": {
+    "message": "Eksportować załącznik? Eksportowanie załączników umożliwi dostęp do nich wszystkim aplikacjom na urządzeniu.\n\nKontynuować?"
+  },
+  "ask_block_contact": {
+    "message": "Zablokować ten kontakt? Nie będziesz już odbierać wiadomości od tego kontaktu."
+  },
+  "ask_unblock_contact": {
+    "message": "Odblokować ten kontakt? Ponownie będzie można odbierać wiadomości od tego kontaktu."
+  },
+  "ask_delete_contacts": {
+    "message": "Usunąć kontakty? Spowoduje to trwałe usunięcie wybranych kontaktów.\n\nKontaktów z trwającymi rozmowami i kontaktów z książki adresowej systemu nie można trwale usunąć."
+  },
+  "ask_delete_contact": {
+    "message": "Usunąć trwale kontakt %1$s?\n\nKontaktów z trwającymi czatami i kontaktów z książki adresowej systemu nie można trwale usunąć."
+  },
+  "ask_start_chat_with": {
+    "message": "Rozpocząć czat z %1$s?"
+  },
+  "ask_remove_members": {
+    "message": "Usunąć %1$s z grupy?"
+  },
+  "ask_remove_from_broadcast": {
+    "message": "Usunąć odbiorcę %1$s z listy rozgłoszeniowej?"
+  },
+  "open_url_confirmation": {
+    "message": "Czy chcesz otworzyć ten link?"
+  },
+  "contacts_title": {
+    "message": "Kontakty"
+  },
+  "contacts_enter_name_or_email": {
+    "message": "Podaj nazwę lub adres e-mail"
+  },
+  "contacts_type_email_above": {
+    "message": "Wpisz adres e-mail powyżej"
+  },
+  "contacts_empty_hint": {
+    "message": "Nie ma kontaktów."
+  },
+  "chat_archived_chats_title": {
+    "message": "Zarchiwizowane czaty"
+  },
+  "chat_please_enter_message": {
+    "message": "Napisz wiadomość."
+  },
+  "chat_camera_unavailable": {
+    "message": "Aparat niedostępny."
+  },
+  "chat_unable_to_record_audio": {
+    "message": "Nie można nagrać dźwięku."
+  },
+  "chat_new_one_to_one_hint": {
+    "message": "Wyślij wiadomość do %1$s."
+  },
+  "chat_new_broadcast_hint": {
+    "message": "Na liście rozgłoszeniowej odbiorcy będą otrzymywać wiadomości w czacie tylko do odczytu."
+  },
+  "chat_new_group_hint": {
+    "message": "Napisz pierwszą wiadomość, by inni mogli odpowiedzieć w tej grupie.\n\n• Nie ma problemu, jeśli nie wszyscy członkowie korzystają z Delta Chat.\n\n• Dostarczenie pierwszej wiadomości może chwilę potrwać."
+  },
+  "chat_record_slide_to_cancel": {
+    "message": "PRZESUŃ, BY ANULOWAĆ"
+  },
+  "chat_record_explain": {
+    "message": "Dotknij i przytrzymaj, aby nagrać wiadomość głosową, zwolnij, aby wysłać"
+  },
+  "chat_no_chats_yet_title": {
+    "message": "Pusta skrzynka odbiorcza.\nNaciśnij \"+\" aby rozpocząć nowy czat."
+  },
+  "chat_all_archived": {
+    "message": "Wszystkie czaty zarchiwizowane.\nNaciśnij „+” aby rozpocząć nowy czat."
+  },
+  "chat_share_with_title": {
+    "message": "Udostępnij"
+  },
+  "chat_input_placeholder": {
+    "message": "Wiadomość"
+  },
+  "chat_archived_label": {
+    "message": "Zarchiwizowane"
+  },
+  "chat_request_label": {
+    "message": "Prośba"
+  },
+  "chat_no_messages": {
+    "message": "Brak wiadomości."
+  },
+  "chat_self_talk_subtitle": {
+    "message": "Wiadomości wysłane do siebie"
+  },
+  "archive_empty_hint": {
+    "message": "Jeśli zarchiwizujesz czaty, zostaną one pokazane tutaj."
+  },
+  "saved_messages": {
+    "message": "Zapisane wiadomości"
+  },
+  "saved_messages_explain": {
+    "message": "• Przesyłaj tu wiadomości, aby mieć je pod ręką\n\n• Rób notatki lub notatki głosowe\n\n• Dołączaj media, aby je zachować"
+  },
+  "saved": {
+    "message": "Zapisana"
+  },
+  "save_as": {
+    "message": "Zapisz jako"
+  },
+  "retry_send": {
+    "message": "Spróbuj ponownie wysłać wiadomość"
+  },
+  "messaging_disabled_not_in_group": {
+    "message": "Nie możesz pisać, ponieważ nie jesteś w tej grupie. Aby dołączyć, poproś innego członka."
+  },
+  "messaging_disabled_mailing_list": {
+    "message": "Wysyłanie wiadomości w listach mailingowych nie jest jeszcze obsługiwane"
+  },
+  "cannot_display_unsuported_file_type": {
+    "message": "Nie można wyświetlić tego typu pliku: %s"
+  },
+  "attachment_failed_to_load": {
+    "message": "Nie udało się załadować załącznika"
+  },
+  "lock_recording": {
+    "message": "Zablokuj nagrywanie"
+  },
+  "mailing_list": {
+    "message": "Lista mailingowa"
+  },
+  "mailing_list_profile_info": {
+    "message": "Zmiany nazwy i obrazu listy adresowej dotyczą tylko tego urządzenia."
+  },
+  "start_app": {
+    "message": "Uruchom…"
+  },
+  "accept_request_first": {
+    "message": "Najpierw zaakceptuj prośbę o czat."
+  },
+  "send_file_to": {
+    "message": "Wyślij „%1$s” do…"
+  },
+  "send_message_to": {
+    "message": "Wyślij wiadomość do…"
+  },
+  "enable_realtime": {
+    "message": "Aplikacje w czasie rzeczywistym"
+  },
+  "enable_realtime_explain": {
+    "message": "Włącz połączenia w czasie rzeczywistym dla aplikacji udostępnianych na czatach. Jeśli ta opcja jest włączona, partnerzy czatu mogą być w stanie wykryć twój adres IP, gdy uruchamiasz aplikację."
+  },
+  "filter_map_on_time": {
+    "message": "Pokaż lokalizacje w ramach czasowych"
+  },
+  "show_location_traces": {
+    "message": "Pokaż ślady"
+  },
+  "add_poi": {
+    "message": "Wyślij interesujący punkt"
+  },
+  "chat_audit_log_empty_message": {
+    "message": "Tutaj pojawią się wiadomości systemowe z tego czatu"
+  },
+  "chat_audit_log_title": {
+    "message": "Dziennik audytu czatu dla %1$s"
+  },
+  "chat_audit_log_description": {
+    "message": "Ten widok pokazuje tylko komunikaty systemowe i informacyjne. Przydatne do wyszukiwania ostatnich działań na czacie bez przewijania wielu zwykłych wiadomości."
+  },
+  "open_external_url_trust_domain": {
+    "message": "Nie pytaj ponownie dla %1$s"
+  },
+  "puny_code_warning_header": {
+    "message": "Wykryto podejrzany link"
+  },
+  "puny_code_warning_question": {
+    "message": "Czy na pewno chcesz odwiedzić %1$s?"
+  },
+  "puny_code_warning_description": {
+    "message": "Wybrano link, który może przekłamywać znaki poprzez użycie podobnie wyglądających znaków z różnych alfabetów. Podążanie za linkiem oznaczonym %1$s doprowadzi do %2$s, co jest normalne dla znaków niełacińskich. Jeśli nie spodziewałeś się takich znaków, ten link może być szkodliwy."
+  },
+  "search": {
+    "message": "Szukaj"
+  },
+  "search_in_chat": {
+    "message": "Wyszukaj w czacie"
+  },
+  "search_files": {
+    "message": "Szukaj plików"
+  },
+  "search_explain": {
+    "message": "Wyszukaj czaty, kontakty i wiadomości"
+  },
+  "search_no_result_for_x": {
+    "message": "Nie znaleziono wyników dla „%s"
+  },
+  "search_unread": {
+    "message": "Nieprzeczytane"
+  },
+  "group_name": {
+    "message": "Nazwa grupy"
+  },
+  "group_avatar": {
+    "message": "Obraz grupy"
+  },
+  "remove_group_image": {
+    "message": "Usuń obraz grupy"
+  },
+  "change_group_image": {
+    "message": "Zmień obraz grupy"
+  },
+  "group_create_button": {
+    "message": "Utwórz grupę"
+  },
+  "group_please_enter_group_name": {
+    "message": "Podaj nazwę dla grupy"
+  },
+  "group_add_members": {
+    "message": "Dodaj członków"
+  },
+  "group_self_not_in_group": {
+    "message": "Musisz być członkiem grupy, aby wykonać tę czynność."
+  },
+  "profile_encryption": {
+    "message": "Szyfrowanie"
+  },
+  "profile_shared_chats": {
+    "message": "Wspólne czaty"
+  },
+  "related_chats": {
+    "message": "Powiązane czaty"
+  },
+  "past_members": {
+    "message": "Byli członkowie"
+  },
+  "tab_contact": {
+    "message": "Kontakt"
+  },
+  "tab_group": {
+    "message": "Grupa"
+  },
+  "tab_gallery": {
+    "message": "Galeria"
+  },
+  "tab_docs": {
+    "message": "Dokumenty"
+  },
+  "tab_links": {
+    "message": "Linki"
+  },
+  "tab_map": {
+    "message": "Mapa"
+  },
+  "tab_gallery_empty_hint": {
+    "message": "Tutaj pojawią się zdjęcia i filmy udostępnione na tym czacie."
+  },
+  "tab_docs_empty_hint": {
+    "message": "Tutaj pojawią się dokumenty, muzyka i inne pliki udostępnione na tym czacie."
+  },
+  "tab_image_empty_hint": {
+    "message": "Tutaj pojawią się zdjęcia udostępnione w tym czacie."
+  },
+  "tab_video_empty_hint": {
+    "message": "Tutaj pojawią się filmy udostępnione w tym czacie."
+  },
+  "tab_audio_empty_hint": {
+    "message": "Tutaj pojawią się pliki dźwiękowe i wiadomości głosowe udostępnione w tym czacie."
+  },
+  "tab_webxdc_empty_hint": {
+    "message": "Tutaj pojawią się prywatne aplikacje udostępnione na tym czacie."
+  },
+  "tab_all_media_empty_hint": {
+    "message": "Tutaj pojawią się multimedia udostępnione w dowolnym czacie."
+  },
+  "all_files_empty_hint": {
+    "message": "Tutaj pojawią się dokumenty, muzyka i inne pliki udostępnione w dowolnym czacie."
+  },
+  "all_apps_empty_hint": {
+    "message": "Tutaj pojawią się prywatne aplikacje otrzymane lub wysłane w dowolnym czacie."
+  },
+  "media_preview": {
+    "message": "Podgląd multimediów"
+  },
+  "aspect_ratio_grid": {
+    "message": "Siatka proporcjonalna"
+  },
+  "square_grid": {
+    "message": "Siatka kwadratowa"
+  },
+  "send_message": {
+    "message": "Wyślij wiadomość"
+  },
+  "aeap_addr_changed": {
+    "message": "%1$s zmieniła swój adres z %2$s na %3$s"
+  },
+  "aeap_explanation": {
+    "message": "Zmieniłeś swój adres e-mail z %1$s na %2$s.\n\nJeśli teraz wyślesz wiadomość do zweryfikowanej grupy, kontakty tam zawarte automatycznie zastąpią stary adres Twoim nowym.\n\nBardzo zalecane jest, aby ustawić swojego starego dostawcę emaila tak, aby przekazywał wszystkie emaile na Twój nowy adres email. W przeciwnym razie możesz przegapić wiadomości od kontaktów, które jeszcze nie dostały Twojego nowego adresu."
+  },
+  "multidevice_title": {
+    "message": "Dodaj kolejne urządzenie"
+  },
+  "multidevice_same_network_hint": {
+    "message": "Upewnij się, że oba urządzenia są połączone z tym samym Wi-Fi lub siecią"
+  },
+  "multidevice_this_creates_a_qr_code": {
+    "message": "Spowoduje to utworzenie kodu QR, który kolejne urządzenie może zeskanować w celu skopiowania konta."
+  },
+  "multidevice_install_dc_on_other_device": {
+    "message": "Zainstaluj Delta Chat na swoim kolejnym urządzeniu (https://get.delta.chat)"
+  },
+  "multidevice_tap_scan_on_other_device": {
+    "message": "Uruchom Delta Chat, dotknij „Mam już profil / Dodaj jako kolejne urządzenie” i zeskanuj pokazany tutaj kod"
+  },
+  "multidevice_qr_subtitle": {
+    "message": "Zeskanuj, aby skonfigurować kolejne urządzenie dla %1$s"
+  },
+  "multidevice_receiver_title": {
+    "message": "Dodaj jako kolejne urządzenie"
+  },
+  "multidevice_open_settings_on_other_device": {
+    "message": "Na pierwszym urządzeniu przejdź do „Ustawienia » Dodaj kolejne urządzenie” i zeskanuj wyświetlony tam kod"
+  },
+  "multidevice_receiver_scanning_ask": {
+    "message": "Skopiować konto z innego urządzenia na to urządzenie?"
+  },
+  "multidevice_receiver_needs_update": {
+    "message": "Profil, który chcesz zaimportować, pochodzi z nowszej wersji aplikacji Delta Chat.\n\nAby kontynuować konfigurowanie drugiego urządzenia, zaktualizuj to urządzenie do najnowszej wersji aplikacji Delta Chat."
+  },
+  "multidevice_abort": {
+    "message": "Przerwać konfigurowanie kolejnego urządzenia?"
+  },
+  "multidevice_abort_will_invalidate_copied_qr": {
+    "message": "Spowoduje to unieważnienie kodu QR skopiowanego do schowka."
+  },
+  "multidevice_transfer_done_devicemsg": {
+    "message": "ℹ️ Konto przeniesione na twoje kolejne urządzenie."
+  },
+  "preparing_account": {
+    "message": "Przygotowywanie konta…"
+  },
+  "transferring": {
+    "message": "Przenoszenie…"
+  },
+  "troubleshooting": {
+    "message": "Rozwiązywanie problemów"
+  },
+  "incoming_messages": {
+    "message": "Wiadomości przychodzące"
+  },
+  "outgoing_messages": {
+    "message": "Wiadomości wychodzące"
+  },
+  "storage_on_domain": {
+    "message": "Zajętość skrzynki %1$s"
+  },
+  "connectivity": {
+    "message": "Łączność"
+  },
+  "connectivity_not_connected": {
+    "message": "Nie połączony"
+  },
+  "connectivity_connecting": {
+    "message": "Łączenie…"
+  },
+  "connectivity_updating": {
+    "message": "Aktualizowanie…"
+  },
+  "connectivity_connected": {
+    "message": "Połączony"
+  },
+  "sending": {
+    "message": "Wysyłanie…"
+  },
+  "last_msg_sent_successfully": {
+    "message": "Twoja ostatnia wiadomość została pomyślnie wysłana"
+  },
+  "not_supported_by_provider": {
+    "message": "Nieobsługiwane przez twojego dostawcę."
+  },
+  "messages": {
+    "message": "Wiadomości"
+  },
+  "part_of_total_used": {
+    "message": "%1$s z %2$s "
+  },
+  "onboarding_create_instant_account": {
+    "message": "Utwórz nowy profil"
+  },
+  "onboarding_alternative_logins": {
+    "message": "Mam już profil"
+  },
+  "manual_account_setup_option": {
+    "message": "Klasyczne logowanie e-mail"
+  },
+  "instant_onboarding_title": {
+    "message": "Twój profil"
+  },
+  "instant_onboarding_agree_default2": {
+    "message": "Polityka prywatności na %1$s"
+  },
+  "instant_onboarding_agree_instance": {
+    "message": "O profilach na %1$s"
+  },
+  "instant_onboarding_create": {
+    "message": "Zgadzam się i Utwórz profil"
+  },
+  "instant_onboarding_show_more_instances": {
+    "message": "Użyj innego serwera"
+  },
+  "instant_onboarding_other_server": {
+    "message": "Lista serwerów Chatmail"
+  },
+  "instant_onboarding_group_info": {
+    "message": "Tworzy profil, aby dołączyć do grupy „%1$s”."
+  },
+  "instant_onboarding_contact_info": {
+    "message": "Tworzy profil, aby rozmawiać z „%1$s”."
+  },
+  "instant_onboarding_confirm_contact": {
+    "message": "Chcesz utworzyć nowy profil i rozpocząć rozmowę z %1$s?"
+  },
+  "instant_onboarding_confirm_group": {
+    "message": "Chcesz utworzyć nowy profil i dołączyć do grupy „%1$s”?"
+  },
+  "welcome_chat_over_email": {
+    "message": "Bezpieczny zdecentralizowany czat"
+  },
+  "scan_invitation_code": {
+    "message": "Zeskanuj kod zaproszenia"
+  },
+  "login_title": {
+    "message": "Zaloguj się"
+  },
+  "login_header": {
+    "message": "Zaloguj się na swoje konto e-mail"
+  },
+  "login_explain": {
+    "message": "Zaloguj się przy użyciu istniejącego konta e-mail"
+  },
+  "login_subheader": {
+    "message": "Dla znanych dostawców usług poczty elektronicznej poniższe ustawienia są ustawiane automatycznie. Czasami IMAP musi być włączony w interfejsie WWW. O pomoc należy zwrócić się do usługodawcy e-mail lub znajomych."
+  },
+  "login_no_servers_hint": {
+    "message": "Nie ma serwerów Delta Chat, Twoje dane pozostają na Twoim urządzeniu!"
+  },
+  "login_inbox": {
+    "message": "Skrzynka odbiorcza"
+  },
+  "login_imap_login": {
+    "message": "Nazwa użytkownika IMAP"
+  },
+  "login_imap_server": {
+    "message": "Serwer IMAP"
+  },
+  "login_imap_port": {
+    "message": "Port IMAP"
+  },
+  "login_imap_security": {
+    "message": "Bezpieczeństwo IMAP"
+  },
+  "login_outbox": {
+    "message": "Skrzynka nadawcza"
+  },
+  "login_smtp_login": {
+    "message": "Nazwa użytkownika SMTP"
+  },
+  "login_smtp_password": {
+    "message": "Hasło SMTP"
+  },
+  "login_smtp_server": {
+    "message": "Serwer SMTP"
+  },
+  "login_smtp_port": {
+    "message": "Port SMTP"
+  },
+  "login_smtp_security": {
+    "message": "Bezpieczeństwo SMTP"
+  },
+  "login_auth_method": {
+    "message": "Metoda autoryzacji"
+  },
+  "proxy_settings": {
+    "message": "Proxy"
+  },
+  "proxy_use_proxy": {
+    "message": "Użyj proxy"
+  },
+  "proxy_add": {
+    "message": "Dodaj proxy"
+  },
+  "proxy_add_explain": {
+    "message": "Obsługiwane typy serwerów proxy: HTTP(S), SOCKS5 i Shadowsocks."
+  },
+  "proxy_add_url_hint": {
+    "message": "Wpisz tu link proxy"
+  },
+  "proxy_invalid": {
+    "message": "Nieprawidłowe lub nieobsługiwane proxy"
+  },
+  "proxy_list_header": {
+    "message": "Zapisane proxy"
+  },
+  "proxy_delete": {
+    "message": "Usuń proxy"
+  },
+  "proxy_delete_explain": {
+    "message": "Na pewno chcesz usunąć „%1$s”?"
+  },
+  "proxy_use_proxy_confirm": {
+    "message": "Chcesz użyć proxy „%1$s”?"
+  },
+  "proxy_share_explain": {
+    "message": "Twoi znajomi mogą dodać ten serwer proxy, skanując kod QR."
+  },
+  "proxy_share_link": {
+    "message": "Udostępnij link"
+  },
+  "login_info_oauth2_title": {
+    "message": "Kontynuuj w uproszczonej konfiguracji?"
+  },
+  "login_info_oauth2_text": {
+    "message": "Wprowadzony adres e-mail obsługuje uproszczoną konfigurację (OAuth2.0).\n\nW następnym kroku zezwól Delta Chat na wysyłanie i odbieranie wiadomości.\n\nNie ma serwerów Delta Chat, Twoje dane pozostają na Twoim urządzeniu!"
+  },
+  "login_certificate_checks": {
+    "message": "Sprawdzanie certyfikatów"
+  },
+  "login_error_mail": {
+    "message": "Podaj ważny adres e-mail"
+  },
+  "login_error_server": {
+    "message": "Wprowadź poprawny adres serwera / IP"
+  },
+  "login_error_port": {
+    "message": "Podaj poprawny numer portu (1–65535)"
+  },
+  "login_error_required_fields": {
+    "message": "Podaj ważny adres e-mail i hasło"
+  },
+  "import_backup_title": {
+    "message": "Przywróć z kopii zapasowej"
+  },
+  "import_backup_ask": {
+    "message": "Delta Chat znalazł kopię zapasową w katalogu „%1$s.\n\nCzy chcesz zaimportować i używać wszystkich danych i ustawień z tej kopii zapasowej?"
+  },
+  "import_backup_no_backup_found": {
+    "message": "Nie znaleziono kopii zapasowej.\n\nSkopiuj kopię zapasową do katalogu „%1$s i spróbuj ponownie. Alternatywnie dotknij \"Uruchom komunikator\", aby rozpocząć normalny proces instalacji."
+  },
+  "login_error_cannot_login": {
+    "message": "Nie można się zalogować jako „%1$s. Sprawdź, czy adres i hasło są poprawne."
+  },
+  "accept_invalid_certificates": {
+    "message": "Zaakceptuj nieprawidłowe certyfikaty"
+  },
+  "switch_account": {
+    "message": "Przełącz konto"
+  },
+  "add_account": {
+    "message": "Dodaj konto"
+  },
+  "profile_tag": {
+    "message": "Etykieta profilu"
+  },
+  "profile_tag_hint": {
+    "message": "np. Praca, Rodzina"
+  },
+  "profile_tag_explain": {
+    "message": "Ustaw etykietę widoczną tylko dla ciebie; pomoże ci to odróżnić twoje profile."
+  },
+  "move_to_top": {
+    "message": "Przenieś na górę"
+  },
+  "delete_account": {
+    "message": "Usuń konto"
+  },
+  "delete_account_ask": {
+    "message": "Czy na pewno chcesz usunąć dane swojego konta?"
+  },
+  "delete_account_explain_with_name": {
+    "message": "Wszystkie dane konta „%s” na tym urządzeniu zostaną usunięte, w tym konfiguracja szyfrowania end-to-end, kontakty, czaty, wiadomości i multimedia. Tej operacji nie można cofnąć."
+  },
+  "unconfigured_account": {
+    "message": "Nieskonfigurowane konto"
+  },
+  "unconfigured_account_hint": {
+    "message": "Otwórz konto, aby je skonfigurować"
+  },
+  "try_connect_now": {
+    "message": "Spróbuj się teraz połączyć"
+  },
+  "sync_all": {
+    "message": "Synchronizuj wszystkie"
+  },
+  "configuration_failed_with_error": {
+    "message": "Konfiguracja nie powiodła się. Błąd: %1$s"
+  },
+  "forward_to": {
+    "message": "Przekaż do…"
+  },
+  "ask_send_files_to_chat": {
+    "message": "Wysłać %1$d pliki do „%2$s”?"
+  },
+  "ask_send_files_to_selected_chats": {
+    "message": "Wysłać %1$d pliki do %2$d czatów?"
+  },
+  "videos_sent_without_recoding": {
+    "message": "(Filmy są wysyłane jako oryginalne, duże pliki. Aby wysłać filmy jako mniejsze pliki, dołącz je osobno)"
+  },
+  "share_text_multiple_chats": {
+    "message": "Wysłać ten tekst do %1$d czatów?\n\n\"%2$s\""
+  },
+  "share_abort": {
+    "message": "Udostępnianie zostało przerwane z powodu brakujących uprawnień."
+  },
+  "pref_using_custom": {
+    "message": "Używanie niestandardowe: %s"
+  },
+  "pref_using_default": {
+    "message": "Użyj domyślne: %s"
+  },
+  "pref_profile_info_headline": {
+    "message": "Twój profil"
+  },
+  "pref_profile_photo": {
+    "message": "Zdjęcie profilowe"
+  },
+  "pref_blocked_contacts": {
+    "message": "Zablokowane kontakty"
+  },
+  "blocked_empty_hint": {
+    "message": "Zablokowane kontakty, zostaną pokazane tutaj."
+  },
+  "pref_password_and_account_settings": {
+    "message": "Hasło i konto"
+  },
+  "pref_who_can_see_profile_explain": {
+    "message": "Twoje zdjęcie profilowe i nazwa będą wyświetlane wraz z wiadomościami podczas komunikacji z innymi użytkownikami. Już wysłanych informacji nie można skasować ani usunąć."
+  },
+  "pref_your_name": {
+    "message": "Twoja nazwa"
+  },
+  "pref_default_status_label": {
+    "message": "Tekst podpisu"
+  },
+  "pref_enter_sends": {
+    "message": "Enter wysyła"
+  },
+  "pref_enter_sends_explain": {
+    "message": "Naciśnięcie Enter wysyła wiadomości tekstowe"
+  },
+  "pref_outgoing_media_quality": {
+    "message": "Jakość mediów wychodzących"
+  },
+  "pref_outgoing_balanced": {
+    "message": "Zrównoważona"
+  },
+  "pref_outgoing_worse": {
+    "message": "Gorsza jakość, mały rozmiar"
+  },
+  "pref_vibrate": {
+    "message": "Wibracje"
+  },
+  "pref_screen_security": {
+    "message": "Zabezpieczenie ekranu"
+  },
+  "pref_screen_security_explain": {
+    "message": "Poproś o zablokowanie zrzutów ekranu na liście ostatnich i wewnątrz aplikacji"
+  },
+  "pref_screen_security_please_restart_hint": {
+    "message": "Aby zastosować ustawienia bezpieczeństwa ekranu, uruchom ponownie aplikację."
+  },
+  "pref_notifications": {
+    "message": "Powiadomienia"
+  },
+  "pref_mention_notifications": {
+    "message": "Wzmianki"
+  },
+  "pref_mention_notifications_explain": {
+    "message": "W wyciszonych grupach powiadamiaj o wiadomościach skierowanych do ciebie, takich jak odpowiedzi lub reakcje"
+  },
+  "pref_notifications_show": {
+    "message": "Pokaż"
+  },
+  "pref_notifications_priority": {
+    "message": "Priorytet"
+  },
+  "pref_notifications_explain": {
+    "message": "Włącz powiadomienia systemowe o nowych wiadomościach"
+  },
+  "pref_show_notification_content": {
+    "message": "Pokaż treść wiadomości w powiadomieniu"
+  },
+  "pref_show_notification_content_explain": {
+    "message": "Pokaż nadawcę i pierwsze słowa wiadomości w powiadomieniach"
+  },
+  "pref_led_color": {
+    "message": "Kolor LED-a"
+  },
+  "pref_sound": {
+    "message": "Dźwięk"
+  },
+  "pref_silent": {
+    "message": "Cichy"
+  },
+  "pref_privacy": {
+    "message": "Prywatność"
+  },
+  "pref_chats_and_media": {
+    "message": "Czaty i media"
+  },
+  "pref_system_default": {
+    "message": "Domyślny systemu"
+  },
+  "pref_light_theme": {
+    "message": "Jasny"
+  },
+  "pref_dark_theme": {
+    "message": "Ciemny"
+  },
+  "pref_appearance": {
+    "message": "Wygląd"
+  },
+  "pref_theme": {
+    "message": "Motyw"
+  },
+  "pref_language": {
+    "message": "Język"
+  },
+  "pref_use_system_ui_font": {
+    "message": "Użyj czcionki systemowej"
+  },
+  "pref_incognito_keyboard": {
+    "message": "Klawiatura incognito"
+  },
+  "pref_incognito_keyboard_explain": {
+    "message": "Poproś klawiaturę o wyłączenie spersonalizowanej nauki"
+  },
+  "pref_read_receipts": {
+    "message": "Potwierdzenie odczytu"
+  },
+  "pref_read_receipts_explain": {
+    "message": "Jeśli potwierdzenia odczytu zostaną wyłączone, nie będzie można zobaczyć potwierdzeń odczytu od innych osób."
+  },
+  "pref_server": {
+    "message": "Serwer"
+  },
+  "pref_encryption": {
+    "message": "Szyfrowanie"
+  },
+  "pref_manage_keys": {
+    "message": "Zarządzaj prywatnymi kluczami"
+  },
+  "pref_use_system_emoji": {
+    "message": "Użyj emoji systemowych"
+  },
+  "pref_use_system_emoji_explain": {
+    "message": "Wyłącza wbudowaną obsługę emoji Delta Chat"
+  },
+  "pref_show_system_contacts": {
+    "message": "Odczytaj systemową książkę adresową"
+  },
+  "pref_show_system_contacts_explain": {
+    "message": "Zaproponuj tworzenie czatów z kontaktami z książki adresowej."
+  },
+  "pref_app_access": {
+    "message": "Dostęp do aplikacji"
+  },
+  "pref_chats": {
+    "message": "Czaty"
+  },
+  "pref_in_chat_sounds": {
+    "message": "Dźwięki w czacie"
+  },
+  "pref_view_log": {
+    "message": "Wyświetl dziennik"
+  },
+  "pref_saved_log": {
+    "message": "Zapisano dziennik w folderze Pobrane"
+  },
+  "pref_save_log_failed": {
+    "message": "Nie udało się zapisać dziennika"
+  },
+  "pref_log_header": {
+    "message": "Dziennik"
+  },
+  "pref_other": {
+    "message": "Inne"
+  },
+  "pref_backup": {
+    "message": "Kopia zapasowa"
+  },
+  "pref_backup_explain": {
+    "message": "Wykonaj kopię zapasową czatów na pamięci zewnętrznej"
+  },
+  "pref_backup_export_explain": {
+    "message": "Kopia zapasowa pomaga skonfigurować nową instalację na tym lub na innym urządzeniu.\n\nKopia zapasowa będzie zawierała wszystkie wiadomości, kontakty i czaty oraz pełną konfigurację  funkcji automatycznego szyfrowania typu end-to-end. Przechowuj plik kopii zapasowej w bezpiecznym miejscu lub usuń go jak najszybciej."
+  },
+  "pref_backup_export_x": {
+    "message": "Eksportuj %1$s"
+  },
+  "pref_backup_export_all": {
+    "message": "Eksportuj wszystkie %1$d konta"
+  },
+  "pref_backup_export_start_button": {
+    "message": "Utwórz kopię"
+  },
+  "pref_backup_written_to_x": {
+    "message": "Kopia zapasowa została pomyślnie zapisana do %1$s"
+  },
+  "pref_managekeys_menu_title": {
+    "message": "Zarządzaj prywatnymi kluczami"
+  },
+  "pref_managekeys_export_secret_keys": {
+    "message": "Eksportuj prywatne klucze"
+  },
+  "pref_managekeys_export_explain": {
+    "message": "Wyeksportować prywatne klucze do „%1$s”?"
+  },
+  "pref_managekeys_import_secret_keys": {
+    "message": "Importuj tajne klucze"
+  },
+  "pref_managekeys_import_explain": {
+    "message": "Zaimportować prywatne klucze z „%1$s”?\n\n• Istniejące prywatne klucze nie są usuwane\n\n• Ostatni zaimportowany klucz zostanie użyty jako nowy klucz domyślny, chyba że w nazwie pliku znajduje się słowo legacy”."
+  },
+  "pref_managekeys_secret_keys_exported_to_x": {
+    "message": "Prywatne klucze zapisano pomyślnie do „%1$s”."
+  },
+  "pref_managekeys_secret_keys_imported_from_x": {
+    "message": "Prywatne klucze zaimportowano z „%1$s”."
+  },
+  "pref_background": {
+    "message": "Tło"
+  },
+  "pref_background_btn_default": {
+    "message": "Użyj domyślnego obrazu"
+  },
+  "pref_background_btn_gallery": {
+    "message": "Wybierz z galerii"
+  },
+  "pref_imap_folder_handling": {
+    "message": "Obsługa folderów IMAP"
+  },
+  "pref_imap_folder_warn_disable_defaults": {
+    "message": "Jeśli wyłączysz tę opcję, upewnij się, że twój serwer i inni klienci są odpowiednio skonfigurowani.\n\nW przeciwnym razie wszystko może w ogóle nie działać."
+  },
+  "pref_watch_sent_folder": {
+    "message": "Pokaż katalog Wysłane"
+  },
+  "pref_send_copy_to_self": {
+    "message": "Wyślij kopię do siebie"
+  },
+  "pref_send_copy_to_self_explain": {
+    "message": "Wymagane kiedy korzystasz z tego konta na wielu urządzeniach."
+  },
+  "pref_auto_folder_moves": {
+    "message": "Automatyczne przenoszenie do folderu DeltaChat"
+  },
+  "pref_auto_folder_moves_explain": {
+    "message": "Rozmowy na czacie są przenoszone, aby nie zaśmiecać folderu Skrzynka odbiorcza"
+  },
+  "pref_only_fetch_mvbox_title": {
+    "message": "Pobieraj tylko z folderu DeltaChat"
+  },
+  "pref_only_fetch_mvbox_explain": {
+    "message": "Zignoruj inne foldery. Wymaga, aby twój serwer przenosił wiadomości czatu do folderu DeltaChat."
+  },
+  "pref_show_emails": {
+    "message": "Pokaż klasyczne e-maile"
+  },
+  "pref_show_emails_no": {
+    "message": "Nie, tylko czaty"
+  },
+  "pref_show_emails_accepted_contacts": {
+    "message": "Dla zaakceptowanych kontaktów"
+  },
+  "pref_show_emails_all": {
+    "message": "Wszystkie"
+  },
+  "pref_experimental_features": {
+    "message": "Funkcje eksperymentalne"
+  },
+  "pref_on_demand_location_streaming": {
+    "message": "Przesyłanie strumieniowe lokalizacji na żądanie"
+  },
+  "pref_developer_mode": {
+    "message": "Tryb programisty"
+  },
+  "pref_developer_mode_explain": {
+    "message": "Aktywuje opcje debugowania i może spowodować, że aplikacja będzie mniej stabilna. Tylko dla programistów."
+  },
+  "pref_background_default": {
+    "message": "Domyślne tło"
+  },
+  "pref_background_default_color": {
+    "message": "Domyślny kolor"
+  },
+  "pref_background_custom_image": {
+    "message": "Własny obraz"
+  },
+  "pref_background_custom_color": {
+    "message": "Własny kolor"
+  },
+  "export_aborted": {
+    "message": "Eksport przerwany."
+  },
+  "auto_download_messages": {
+    "message": "Automatyczne pobieranie wiadomości"
+  },
+  "up_to_x": {
+    "message": "Do %1$s"
+  },
+  "up_to_x_most_worse_quality_images": {
+    "message": "Do %1$s, większ. obrazów gorszej jakości"
+  },
+  "up_to_x_most_balanced_quality_images": {
+    "message": "Do %1$s, obrazy zrównoważonej jakości"
+  },
+  "download_failed": {
+    "message": "Pobieranie nie udane"
+  },
+  "n_bytes_message": {
+    "message": "Wiadomość %1$s"
+  },
+  "download_max_available_until": {
+    "message": "Maksymalna ilość do pobrania dostępna do %1$s"
+  },
+  "profile_image_select": {
+    "message": "Wybierz zdjęcie profilowe"
+  },
+  "select_your_new_profile_image": {
+    "message": "Wybierz nowe zdjęcie profilowe"
+  },
+  "profile_image_delete": {
+    "message": "Usuń zdjęcie profilowe"
+  },
+  "pref_show_tray_icon": {
+    "message": "Pokaż ikonę w obszarze powiadomień"
+  },
+  "pref_edit_profile": {
+    "message": "Edytuj profil"
+  },
+  "disable_imap_idle": {
+    "message": "Wyłącz IMAP IDLE"
+  },
+  "disable_imap_idle_explain": {
+    "message": "Nie używaj rozszerzenia IMAP IDLE, nawet jeśli serwer je obsługuje. Włączenie tej opcji opóźni pobieranie wiadomości, włącz ją tylko na testy."
+  },
+  "send_stats_to_devs": {
+    "message": "Wyślij statystyki do programistów Delta Chat"
+  },
+  "emoji_search_results": {
+    "message": "Wyniki wyszukiwania"
+  },
+  "emoji_not_found": {
+    "message": "Nie znaleziono emoji"
+  },
+  "emoji_recent": {
+    "message": "Ostatnio używane"
+  },
+  "emoji_people": {
+    "message": "Ludzie i buźki"
+  },
+  "emoji_nature": {
+    "message": "Zwierzęta i Natura"
+  },
+  "emoji_foods": {
+    "message": "Jedzenie i Picie"
+  },
+  "emoji_activity": {
+    "message": "Aktywność"
+  },
+  "emoji_places": {
+    "message": "Podróże i Miejsca"
+  },
+  "emoji_objects": {
+    "message": "Obiekty"
+  },
+  "emoji_symbols": {
+    "message": "Symbole"
+  },
+  "emoji_flags": {
+    "message": "Flagi"
+  },
+  "reactions": {
+    "message": "Reakcje"
+  },
+  "react": {
+    "message": "Zareaguj"
+  },
+  "reaction_by_you": {
+    "message": "Zareagowano %1$s na „%2$s”"
+  },
+  "reaction_by_other": {
+    "message": "Użytkownik %1$s zareagował %2$s na „%3$s”"
+  },
+  "delete_old_messages": {
+    "message": "Usuwanie starych wiadomości"
+  },
+  "autodel_device_title": {
+    "message": "Usuń wiadomości z urządzenia"
+  },
+  "autodel_server_title": {
+    "message": "Usuń wiadomości z serwera"
+  },
+  "autodel_device_ask": {
+    "message": "Czy chcesz teraz usunąć %1$d wiadomości i wszystkie nowo pobrane wiadomości w przyszłości „%2$s”?\n\n• Obejmuje to wszystkie multimedia\n\n• Wiadomości zostaną usunięte niezależnie od tego, czy były widoczne, czy nie\n\n• „Zapisane wiadomości” zostaną pominięte podczas lokalnego usuwania"
+  },
+  "autodel_server_ask": {
+    "message": "Czy chcesz teraz usunąć %1$d wiadomości i wszystkie nowo pobrane wiadomości w przyszłości „%2$s”?\n\n⚠️ Obejmuje to e-maile, multimedia i „Zapisane wiadomości” we wszystkich folderach na serwerze.\n\n⚠️ Nie używaj tej funkcji, jeśli chcesz zachować dane na serwerze\n\n⚠️ Nie używaj tej funkcji, jeśli chcesz zachować dane na serwerze lub korzystasz także z klasycznych klientów poczty e-mail"
+  },
+  "autodel_server_enabled_hint": {
+    "message": "Obejmuje to e-maile, multimedia i „Zapisane wiadomości” we wszystkich folderach na serwerze. Nie używaj tej funkcji, jeśli chcesz zachować dane na serwerze lub jeśli używasz klasycznych klientów poczty e-mail"
+  },
+  "autodel_server_warn_multi_device_title": {
+    "message": "Włącz natychmiastowe usuwanie"
+  },
+  "autodel_server_warn_multi_device": {
+    "message": "Jeśli włączysz natychmiastowe usuwanie, nie będzie można używać wielu urządzeń w tym profilu."
+  },
+  "autodel_confirm": {
+    "message": "Rozumiem, usuń te wszystkie wiadomości"
+  },
+  "autodel_at_once": {
+    "message": "Od razu po pobraniu"
+  },
+  "after_30_seconds": {
+    "message": "Po 30 sekundach"
+  },
+  "after_1_minute": {
+    "message": "Po 1 minucie"
+  },
+  "after_5_minutes": {
+    "message": "Po 5 minutach"
+  },
+  "after_30_minutes": {
+    "message": "Po 30 minutach"
+  },
+  "autodel_after_1_hour": {
+    "message": "Po 1 godzinie"
+  },
+  "autodel_after_1_day": {
+    "message": "Po 1 dniu"
+  },
+  "autodel_after_1_week": {
+    "message": "Po 1 tygodniu"
+  },
+  "after_5_weeks": {
+    "message": "Po 5 tygodniach"
+  },
+  "autodel_after_1_year": {
+    "message": "Po 1 roku"
+  },
+  "autocrypt_send_asm_title": {
+    "message": "Wyślij wiadomość konfiguracyjną Autocrypt"
+  },
+  "autocrypt_send_asm_explain_before": {
+    "message": "Wiadomość konfiguracyjna automatycznego szyfrowania bezpiecznie udostępnia twoją konfigurację end-to-end innym aplikacjom zgodnym z Autocrypt. Jeśli używasz Delta Chat również na innym urządzeniu, użyj opcji „Ustawienia » Dodaj kolejne urządzenie”."
+  },
+  "autocrypt_send_asm_button": {
+    "message": "Wyślij wiadomość konfiguracyjną Autocrypt"
+  },
+  "autocrypt_send_asm_explain_after": {
+    "message": "Klucz został wysłany do ciebie. Przejdź do innego urządzenia i otwórz wiadomość konfiguracyjną. Zostanie wyświetlona prośba o podanie kodu konfiguracyjnego. Wpisz następujące cyfry w podpowiedzi.\n\nGdy skończysz, drugie urządzenie będzie gotowe do użycia funkcji automatycznego szyfrowania."
+  },
+  "autocrypt_prefer_e2ee": {
+    "message": "Preferuj szyfrowanie typu end-to-end"
+  },
+  "autocrypt_asm_subject": {
+    "message": "Wiadomość konfiguracyjna automatycznego szyfrowania"
+  },
+  "autocrypt_asm_general_body": {
+    "message": "Jest to wiadomość konfiguracyjna automatycznego szyfrowania typu end-to-end służąca do przesyłania klucza między klientami.\n\nAby odszyfrować i użyć klucza, otwórz wiadomość w kliencie zgodnym z automatycznym szyfrowaniem i wprowadź kod konfiguracyjny przedstawiony na urządzeniu generującym."
+  },
+  "systemmsg_cannot_decrypt": {
+    "message": "Tej wiadomości nie można odszyfrować.\n\n• Możesz teraz pomóc odpowiadając po prostu na tą wiadomość i poprosić nadawcę o ponowne wysłanie wiadomości.\n\n• Jeśli właśnie ponownie zainstalowałeś Delta Chat, najlepiej będzie, jeśli ponownie skonfigurujesz Delta Chat teraz i wybierzesz „Dodaj jako drugie urządzenie” lub zaimportujesz kopię zapasową."
+  },
+  "systemmsg_unknown_sender_for_chat": {
+    "message": "Nieznany nadawca tego czatu. Więcej szczegółów znajdziesz w sekcji „Informacje”."
+  },
+  "systemmsg_subject_for_new_contact": {
+    "message": "Wiadomość od %1$s"
+  },
+  "systemmsg_failed_sending_to": {
+    "message": "Nie udało się wysłać wiadomości do %1$s."
+  },
+  "group_name_changed_by_you": {
+    "message": "Zmieniono nazwę grupy z „%1$s“ na „%2$s“."
+  },
+  "group_name_changed_by_other": {
+    "message": "Nazwa grupy zmieniona z „%1$s“ na „%2$s“ przez %3$s."
+  },
+  "group_image_changed_by_you": {
+    "message": "Zmieniono obraz grupy."
+  },
+  "group_image_changed_by_other": {
+    "message": "Obraz grupy zmieniony przez %1$s."
+  },
+  "member_x_added": {
+    "message": "Dodano członka %1$s."
+  },
+  "add_member_by_you": {
+    "message": "Dodano członka %1$s."
+  },
+  "add_member_by_other": {
+    "message": "Użytkownik %2$s dodał członka %1$s."
+  },
+  "remove_member_by_you": {
+    "message": "Usunięto członka %1$s."
+  },
+  "remove_member_by_other": {
+    "message": "Użytkownik %2$s usunął członka %1$s."
+  },
+  "group_left_by_you": {
+    "message": "Opuszczono grupę"
+  },
+  "group_left_by_other": {
+    "message": "Grupa opuszczona przez %1$s."
+  },
+  "group_image_deleted_by_you": {
+    "message": "Usunięto obraz grupy."
+  },
+  "group_image_deleted_by_other": {
+    "message": "Użytkownik %1$s usunął obraz grupy."
+  },
+  "location_enabled_by_you": {
+    "message": "Włączono strumieniowanie lokalizacji."
+  },
+  "location_enabled_by_other": {
+    "message": "Strumieniowanie lokalizacji włączone przez %1$s."
+  },
+  "ephemeral_timer_disabled_by_you": {
+    "message": "Wyłączono zegar znikających wiadomości."
+  },
+  "ephemeral_timer_disabled_by_other": {
+    "message": "Zegar znikających wiadomości został wyłączony przez %1$s."
+  },
+  "ephemeral_timer_seconds_by_you": {
+    "message": "Ustawiono zegar znikających wiadomości na %1$s s."
+  },
+  "ephemeral_timer_seconds_by_other": {
+    "message": "Użytkownik %2$s ustawił zegar znikających wiadomości na %1$s s."
+  },
+  "ephemeral_timer_1_minute_by_you": {
+    "message": "Ustawiono zegar znikających wiadomości na 1 minutę."
+  },
+  "ephemeral_timer_1_minute_by_other": {
+    "message": "Użytkownik %1$s ustawił zegar znikających wiadomości na 1 minutę."
+  },
+  "ephemeral_timer_1_hour_by_you": {
+    "message": "Ustawiono zegar znikających wiadomości na 1 godzinę."
+  },
+  "ephemeral_timer_1_hour_by_other": {
+    "message": "Użytkownik %1$s ustawił zegar znikających wiadomości na 1 godzinę."
+  },
+  "ephemeral_timer_1_day_by_you": {
+    "message": "Ustawiono zegar znikających wiadomości na 1 dzień."
+  },
+  "ephemeral_timer_1_day_by_other": {
+    "message": "Użytkownik %1$s ustawił zegar znikających wiadomości na 1 dzień."
+  },
+  "ephemeral_timer_1_week_by_you": {
+    "message": "Ustawiono zegar znikających wiadomości na 1 tydzień."
+  },
+  "ephemeral_timer_1_week_by_other": {
+    "message": "Użytkownik %1$s ustawił zegar znikających wiadomości na 1 tydzień."
+  },
+  "ephemeral_timer_minutes_by_you": {
+    "message": "Ustawiono zegar znikających wiadomości na %1$s min."
+  },
+  "ephemeral_timer_minutes_by_other": {
+    "message": "Użytkownik %2$s ustawił zegar znikających wiadomości na %1$s min."
+  },
+  "ephemeral_timer_hours_by_you": {
+    "message": "Ustawiono zegar znikających wiadomości na %1$s godz."
+  },
+  "ephemeral_timer_hours_by_other": {
+    "message": "Użytkownik %2$s ustawił zegar znikających wiadomości na %1$s godz."
+  },
+  "ephemeral_timer_days_by_you": {
+    "message": "Ustawiono zegar znikających wiadomości na %1$s dni."
+  },
+  "ephemeral_timer_days_by_other": {
+    "message": " Użytkownik %2$s ustawił zegar znikających wiadomości na %1$s dni."
+  },
+  "ephemeral_timer_weeks_by_you": {
+    "message": "Ustawiono zegar znikających wiadomości na %1$s tyg."
+  },
+  "ephemeral_timer_weeks_by_other": {
+    "message": " Użytkownik %2$s ustawił zegar znikających wiadomości na %1$s tyg."
+  },
+  "chat_protection_broken": {
+    "message": "Użytkownik %1$s wysłał wiadomość z innego urządzenia."
+  },
+  "chat_protection_enabled_tap_to_learn_more": {
+    "message": "Od teraz gwarantujemy, że wiadomości będą szyfrowane metodą end-to-end. Dotknij, aby przeczytać więcej."
+  },
+  "chat_protection_enabled_explanation": {
+    "message": "Teraz gwarantujemy, że wszystkie wiadomości w tym czacie są szyfrowane metodą end-to-end.\n\nSzyfrowanie end-to-end zapewnia prywatność wiadomości między tobą a twoimi partnerami czatów. Nawet serwery, dostawcy i pośrednicy nie są w stanie ich odczytać."
+  },
+  "chat_protection_broken_tap_to_learn_more": {
+    "message": "Użytkownik %1$s wysłał wiadomość z innego urządzenia. Dotknij, aby przeczytać więcej."
+  },
+  "chat_protection_broken_explanation": {
+    "message": "Nie można już zagwarantować szyfrowania end-to-end, prawdopodobnie z powodu ponownej instalacji Delta Chat przez %1$s lub wysłania wiadomości z innego urządzenia.\n\nMożesz spotkać się z tą osobą osobiście i ponownie zeskanować jej kod QR, aby przywrócić gwarantowane szyfrowanie end-to-end."
+  },
+  "invalid_unencrypted_tap_to_learn_more": {
+    "message": "⚠️ %1$s wymaga szyfrowania end-to-end, które nie zostało jeszcze skonfigurowane dla tego czatu. Dotknij, aby dowiedzieć się więcej."
+  },
+  "invalid_unencrypted_explanation": {
+    "message": "Aby ustanowić szyfrowanie end-to-end, możesz spotkać się z kontaktami osobiście i zeskanować ich kod QR, żeby ich wprowadzić."
+  },
+  "learn_more": {
+    "message": "Czytaj więcej"
+  },
+  "devicemsg_self_deleted": {
+    "message": "Usunięto czat „Zapisane wiadomości”.\n\nℹ️ Aby ponownie użyć funkcji „Zapisane wiadomości”, utwórz nowy czat ze sobą."
+  },
+  "devicemsg_storage_exceeding": {
+    "message": "⚠️ Limit pamięci u twojego dostawcy wkrótce zostanie przekroczony, wykorzystano już %1$s%%.\n\nMożesz nie być w stanie otrzymywać wiadomości, gdy pamięć jest pełna.\n\n👉 Sprawdzić, czy możesz usunąć stare dane w interfejsie internetowym dostawcy i rozważyć włączenie opcji \"Ustawienia » Czaty i media » Usuwanie starych wiadomości\". W dowolnym momencie możesz sprawdzić swoje bieżące wykorzystanie pamięci w \"Ustawienia » Łączność\"."
+  },
+  "devicemsg_bad_time": {
+    "message": "⚠️ Data lub godzina urządzenia wydaje się być niedokładna (%1$s).\n\nDostosuj zegar ⏰🔧, aby upewnić się, że wiadomości są prawidłowo odbierane."
+  },
+  "devicemsg_update_reminder": {
+    "message": "⚠️ Twoja wersja Delta Chat może być nieaktualna.\n\nMoże to powodować problemy, ponieważ Twoi partnerzy czatu korzystają z nowszych wersji, a Ty nie masz najnowszych funkcji 😳\nSprawdź aktualizacje na stronie https://get.delta.chat lub w sklepie z aplikacjami."
+  },
+  "enter_system_secret_to_continue": {
+    "message": "Aby kontynuować, wprowadź swój tajny kod zdefiniowany w systemie."
+  },
+  "qr_code": {
+    "message": "Kod QR"
+  },
+  "load_qr_code_as_image": {
+    "message": "Załaduj kod QR jako obraz"
+  },
+  "qrscan_title": {
+    "message": "Skanuj kod QR"
+  },
+  "qrscan_hint": {
+    "message": "Umieść aparat nad kodem QR"
+  },
+  "qrscan_hint_desktop": {
+    "message": "Przysuń kod QR do kamery"
+  },
+  "qrscan_failed": {
+    "message": "Nie udało się zdekodować kodu QR"
+  },
+  "qrscan_ask_join_group": {
+    "message": "Czy chcesz dołączyć do grupy „%1$s?"
+  },
+  "qrscan_fingerprint_mismatch": {
+    "message": "Zeskanowany odcisk palca nie pasuje do odcisku palca ostatnio widzianego u %1$s"
+  },
+  "qrscan_no_addr_found": {
+    "message": "Ten kod QR zawiera odcisk palca, ale nie zawiera adresu.\n\nW celu weryfikacji poza zasadniczym pasmem należy najpierw nawiązać szyfrowane połączenie z odbiorcą."
+  },
+  "qrscan_contains_text": {
+    "message": "Zeskanowany kod QR zawiera następujący tekst:\n\n%1$s"
+  },
+  "qrscan_contains_url": {
+    "message": "Zeskanowany kod QR zawiera następujący adres:\n\n%1$s"
+  },
+  "qrscan_fingerprint_label": {
+    "message": "Odciski palca"
+  },
+  "withdraw_verifycontact_explain": {
+    "message": "Ten kod QR może zostać zeskanowany przez inne osoby w celu skontaktowania się z Tobą.\n\nTutaj możesz dezaktywować kod QR i ponownie go aktywować poprzez zeskanowanie."
+  },
+  "withdraw_verifygroup_explain": {
+    "message": "Ten kod QR może zostać zeskanowany przez inne osoby, aby dołączyć do grupy „%1$s”.\n\nTutaj możesz dezaktywować kod QR i ponownie go aktywować poprzez zeskanowanie."
+  },
+  "withdraw_qr_code": {
+    "message": "Dezaktywuj kod QR"
+  },
+  "revive_verifycontact_explain": {
+    "message": "Ten kod QR mógł być skanowany przez inne osoby w celu skontaktowania się z Tobą.\n\nKod QR nie jest już aktywny na tym urządzeniu."
+  },
+  "revive_verifygroup_explain": {
+    "message": "Ten kod QR mógł być skanowany przez inne osoby, aby dołączyć do grupy „%1$s”.\n\nKod QR nie jest już aktywny na tym urządzeniu."
+  },
+  "revive_qr_code": {
+    "message": "Aktywuj kod QR"
+  },
+  "qrshow_title": {
+    "message": "Kod QR zaproszenia"
+  },
+  "qrshow_x_joining": {
+    "message": "%1$s dołącza."
+  },
+  "qrshow_x_verified": {
+    "message": "Zweryfikowano %1$s"
+  },
+  "qrshow_x_has_joined_group": {
+    "message": "Użytkownik %1$s dołączył do grupy. "
+  },
+  "qrshow_join_group_title": {
+    "message": "Kod QR zaproszenia"
+  },
+  "qrshow_join_group_hint": {
+    "message": "Zeskanuj go, aby dołączyć do grupy „%1$s”."
+  },
+  "qrshow_join_contact_title": {
+    "message": "Kod QR zaproszenia"
+  },
+  "qrshow_join_contact_hint": {
+    "message": "Zeskanuj go w celu skonfigurowania kontaktu z %1$s"
+  },
+  "qrshow_join_contact_no_connection_toast": {
+    "message": "Brak połączenia z Internetem, nie można przeprowadzić konfiguracji kodu QR."
+  },
+  "qraccount_ask_create_and_login": {
+    "message": "Utworzyć nowy adres e-mail „%1$s” i się zalogować?"
+  },
+  "qraccount_ask_create_and_login_another": {
+    "message": "Utworzyć nowy adres e-mail „%1$s” i się zalogować?\n\nTwoje istniejące konto nie zostanie usunięte. Użyj opcji „Przełącz konto”, aby przełączać się między kontami."
+  },
+  "set_name_and_avatar_explain": {
+    "message": "Ustaw nazwę, którą rozpoznają twoje kontakty. Możesz także ustawić zdjęcie profilowe."
+  },
+  "please_enter_name": {
+    "message": "Wpisz nazwę."
+  },
+  "qraccount_qr_code_cannot_be_used": {
+    "message": "Zeskanowanego kodu QR nie można użyć do założenia nowego konta."
+  },
+  "qrlogin_ask_login": {
+    "message": "Zalogować się do „%1$s”?"
+  },
+  "qrlogin_ask_login_another": {
+    "message": "Zalogować się do „%1$s”?\n\nTwoje istniejące konto nie zostanie usunięte. Użyj opcji „Przełącz konto”, aby przełączyć się między swoimi kontami."
+  },
+  "secure_join_started": {
+    "message": "Użytkownik %1$s zaprosił cię do dołączenia do tej grupy.\n\nCzekam na odpowiedź urządzenia %2$s…"
+  },
+  "secure_join_replies": {
+    "message": "Użytkownik %1$s odpowiedział, czekając na dodanie do grupy…"
+  },
+  "secure_join_wait": {
+    "message": "Ustanawiam gwarantowane szyfrowanie typu end-to-end, proszę czekać…"
+  },
+  "secure_join_wait_timeout": {
+    "message": "Nie można jeszcze ustanowić gwarantowanego szyfrowania typu end-to-end, ale być może już wysłałeś wiadomość."
+  },
+  "secure_join_takes_longer": {
+    "message": "Wydaje się, że to trwa dłużej, może kontakt lub ty jesteś offline.\n\nJednak proces trwa w tle, możesz zrobić coś innego…"
+  },
+  "contact_verified": {
+    "message": "Kontakt %1$s zweryfikowany."
+  },
+  "contact_not_verified": {
+    "message": "Nie można zweryfikować szyfrowania typu end-to-end %1$s"
+  },
+  "verified_by": {
+    "message": "Zweryfikowano przez %1$s"
+  },
+  "verified_by_you": {
+    "message": "Zweryfikowane przez ciebie"
+  },
+  "contact_setup_changed": {
+    "message": "Zmieniono konfigurację dla %1$s"
+  },
+  "verified_contact_required_explain": {
+    "message": "Aby zagwarantować szyfrowanie end-to-end, do tej grupy możesz dodawać wyłącznie kontakty oznaczone zielonym znacznikiem wyboru.\n\nMożesz spotkać się z kontaktami osobiście i zeskanować ich kod QR, aby je przedstawić."
+  },
+  "copy_qr_data_success": {
+    "message": "Skopiowano adres kodu QR do schowka"
+  },
+  "mailto_dialog_header_select_chat": {
+    "message": "Wybierz czat, do którego chcesz wysłać wiadomość"
+  },
+  "confirm_replace_draft": {
+    "message": "Na czacie %1$s jest już wersja robocza wiadomości, czy chcesz ją zastąpić?"
+  },
+  "mailto_link_could_not_be_decoded": {
+    "message": "link mailto nie mógł zostać odszyfrowany: %1$s"
+  },
+  "notify_reply_button": {
+    "message": "Odpowiedz"
+  },
+  "notify_new_message": {
+    "message": "Nowa wiadomość"
+  },
+  "notify_background_connection_enabled": {
+    "message": "Połączenie w tle włączone"
+  },
+  "notify_priority_high": {
+    "message": "Wysoki"
+  },
+  "notify_priority_max": {
+    "message": "Maksymalny"
+  },
+  "notify_name_and_message": {
+    "message": "Nazwa i wiadomość"
+  },
+  "notify_name_only": {
+    "message": "Tylko nazwa"
+  },
+  "notify_no_name_or_message": {
+    "message": "Brak nazwy lub wiadomości"
+  },
+  "notifications_disabled": {
+    "message": "Powiadomienia wyłączone"
+  },
+  "new_messages": {
+    "message": "Nowe wiadomości"
+  },
+  "new_messages_body": {
+    "message": "Masz nowe wiadomości"
+  },
+  "n_messages_in_m_chats": {
+    "message": "%1$d wiadomości w %2$d czatach"
+  },
+  "perm_required_title": {
+    "message": "Wymagane zezwolenie"
+  },
+  "perm_continue": {
+    "message": "Kontynuuj"
+  },
+  "perm_explain_access_to_camera_denied": {
+    "message": "Delta Chat wymaga pozwolenia na używanie aparatu, aby robić zdjęcia lub nagrywać filmy, ale zostało ono trwale odrzucone. Przejdź do menu ustawień aplikacji, wybierz „Uprawnienia” i włącz „Aparat”."
+  },
+  "perm_explain_access_to_mic_denied": {
+    "message": "Delta Chat wymaga zezwolenia użycia mikrofonu, aby wysyłać wiadomości audio, ale zostało ono trwale odrzucone. Przejdź do ustawień aplikacji, wybierz „Uprawnienia” i włącz „Mikrofon”."
+  },
+  "perm_explain_access_to_storage_denied": {
+    "message": "Delta Chat wymaga uprawnienia do przechowywania, aby dołączyć lub wyeksportować zdjęcia, filmy lub dźwięk, ale zostało ono trwale odrzucone. Przejdź do menu ustawień aplikacji, wybierz „Uprawnienia” i włącz „Pamięć”."
+  },
+  "perm_explain_access_to_location_denied": {
+    "message": "Delta Chat wymaga zezwolenia na lokalizację, aby dołączyć lokalizację, ale zostało ono trwale odrzucone. Przejdź do menu ustawień aplikacji, wybierz „Uprawnienia” i włącz „Lokalizacja”."
+  },
+  "perm_explain_access_to_notifications_denied": {
+    "message": "Aby odbierać powiadomienia, przejdź do „Ustawienia » Aplikacje » Delta Chat” i włącz „Powiadomienia”."
+  },
+  "ImageEditorHud_draw_anywhere_to_blur": {
+    "message": "Rysuj gdziekolwiek, aby rozmyć"
+  },
+  "ImageEditorHud_add_text": {
+    "message": "Dodaj tekst"
+  },
+  "ImageEditorHud_blur": {
+    "message": "Rozmycie"
+  },
+  "ImageEditorHud_brush_marker": {
+    "message": "Marker"
+  },
+  "ImageEditorHud_brush_highlight": {
+    "message": "Podkreślacz"
+  },
+  "ImageEditorHud_crop": {
+    "message": "Przytnij"
+  },
+  "ImageEditorHud_flip": {
+    "message": "Przełącz"
+  },
+  "ImageEditorHud_rotate": {
+    "message": "Obróć"
+  },
+  "encrypted_message": {
+    "message": "Zaszyfrowana wiadomość"
+  },
+  "about_offical_app_desktop": {
+    "message": "To jest oficjalna aplikacja Delta Chat Desktop."
+  },
+  "about_licensed_under_desktop": {
+    "message": "To oprogramowanie jest objęte licencją GNU GPL w wersji 3, a kod źródłowy jest dostępny na GitHub."
+  },
+  "welcome_desktop": {
+    "message": "Witaj w Delta Chat"
+  },
+  "global_menu_preferences_language_desktop": {
+    "message": "Wybierz język"
+  },
+  "global_menu_file_desktop": {
+    "message": "Plik"
+  },
+  "global_menu_file_quit_desktop": {
+    "message": "Zamknij"
+  },
+  "global_menu_edit_desktop": {
+    "message": "Edycja"
+  },
+  "global_menu_edit_undo_desktop": {
+    "message": "Cofnij"
+  },
+  "global_menu_edit_redo_desktop": {
+    "message": "Przywróć"
+  },
+  "global_menu_edit_cut_desktop": {
+    "message": "Wytnij"
+  },
+  "global_menu_edit_copy_desktop": {
+    "message": "Kopiuj"
+  },
+  "global_menu_edit_paste_desktop": {
+    "message": "Wklej"
+  },
+  "global_menu_view_desktop": {
+    "message": "Wyświetl"
+  },
+  "global_menu_view_floatontop_desktop": {
+    "message": "Przenieś do góry"
+  },
+  "global_menu_view_developer_desktop": {
+    "message": "Programista"
+  },
+  "global_menu_view_developer_tools_desktop": {
+    "message": "Narzędzia Programisty"
+  },
+  "global_menu_help_desktop": {
+    "message": "Pomoc"
+  },
+  "delta_chat_homepage": {
+    "message": "Strona Delta Chat"
+  },
+  "contribute": {
+    "message": "Wsparcie"
+  },
+  "global_menu_help_report_desktop": {
+    "message": "Zgłoś problem"
+  },
+  "global_menu_help_about_desktop": {
+    "message": "O Delta Chat"
+  },
+  "global_menu_file_open_desktop": {
+    "message": "Otwórz Delta Chat"
+  },
+  "global_menu_minimize_to_tray": {
+    "message": "Minimalizuj"
+  },
+  "no_chat_selected_suggestion_desktop": {
+    "message": "Wybierz czat lub utwórz nowy czat"
+  },
+  "write_message_desktop": {
+    "message": "Napisz wiadomość"
+  },
+  "encryption_info_title_desktop": {
+    "message": "Informacje o szyfrowaniu"
+  },
+  "delete_message_desktop": {
+    "message": "Usuń wiadomość"
+  },
+  "more_info_desktop": {
+    "message": "Więcej informacji"
+  },
+  "timestamp_format_m_desktop": {
+    "message": "D MMM"
+  },
+  "remove_desktop": {
+    "message": "Usuń"
+  },
+  "save_desktop": {
+    "message": "Zapisz"
+  },
+  "unsave": {
+    "message": "Przywróć"
+  },
+  "name_desktop": {
+    "message": "Nazwa"
+  },
+  "select_group_image_desktop": {
+    "message": "Wybierz obraz grupy"
+  },
+  "export_backup_desktop": {
+    "message": "Eksport kopii zapasowej"
+  },
+  "autocrypt_correct_desktop": {
+    "message": "Pomyślnie przetransferowano konfigurację Autocrypt!"
+  },
+  "forget_login_confirmation_desktop": {
+    "message": "Usunąć ten profil? Wszystko zostanie usunięte, w tym kompletna konfiguracja end-to-end, kontakty, czaty, wiadomości i multimedia. Ta akcja jest ostateczna i nie można jej odwrócić."
+  },
+  "message_detail_sent_desktop": {
+    "message": "wysłane"
+  },
+  "message_detail_received_desktop": {
+    "message": "odebrane"
+  },
+  "menu.view.developer.open.log.folder": {
+    "message": "Otwórz folder dziennika"
+  },
+  "menu.view.developer.open.current.log.file": {
+    "message": "Otwórz bieżący plik dziennika"
+  },
+  "explain_desktop_minimized_disabled_tray_pref": {
+    "message": "Ikona w zasobniku nie może być wyłączona, ponieważ Delta Chat został uruchomiony z opcją --minimized."
+  },
+  "no_spellcheck_suggestions_found": {
+    "message": "Nie znaleziono propozycji pisowni."
+  },
+  "show_window": {
+    "message": "Pokaż okno"
+  },
+  "keybindings": {
+    "message": "Przypisanie klawiszy"
+  },
+  "switch_between_chats": {
+    "message": "Przełącz się między czatami"
+  },
+  "scroll_messages": {
+    "message": "Przewiń wiadomości"
+  },
+  "focus_search_input": {
+    "message": "Szukaj"
+  },
+  "focus_message_input": {
+    "message": "Napisz wiadomość"
+  },
+  "force_refresh_network": {
+    "message": "Wymuś odświeżenie sieci"
+  },
+  "insert_newline": {
+    "message": "Wstaw nową linię"
+  },
+  "a11y_delivery_status_error": {
+    "message": "Status dostawy: Błąd"
+  },
+  "a11y_encryption_padlock": {
+    "message": "Kłódka szyfrowania"
+  },
+  "a11y_delivery_status_sending": {
+    "message": "Status dostawy: Wysyłanie"
+  },
+  "a11y_delivery_status_draft": {
+    "message": "Status dostawy: Szkic"
+  },
+  "a11y_delivery_status_delivered": {
+    "message": "Status dostawy: Dostarczone"
+  },
+  "a11y_delivery_status_read": {
+    "message": "Status dostawy: Przeczytane"
+  },
+  "a11y_delivery_status_invalid": {
+    "message": "Nieprawidłowy status dostawy"
+  },
+  "a11y_message_context_menu_btn_label": {
+    "message": "Działania na wiadomości"
+  },
+  "a11y_background_preview_label": {
+    "message": "Podgląd tła"
+  },
+  "a11y_disappearing_messages_activated": {
+    "message": "Aktywowano znikające wiadomości"
+  },
+  "stop_sharing_location": {
+    "message": "Zatrzymaj udostępnianie lokalizacji"
+  },
+  "a11y_voice_message_hint_ios": {
+    "message": "Po nagraniu dotknij dwukrotnie, aby wysłać. Aby odrzucić nagranie, przeciągnij dwoma palcami."
+  },
+  "a11y_connectivity_hint": {
+    "message": "Naciśnij dwukrotnie, aby wyświetlić szczegóły połączenia."
+  },
+  "login_error_no_internet_connection": {
+    "message": "Brak połączenia internetowego, logowanie nie powiodło się."
+  },
+  "share_account_not_configured": {
+    "message": "Konto nie jest skonfigurowane."
+  },
+  "cannot_play_audio_file": {
+    "message": "Nie można odtworzyć pliku audio."
+  },
+  "perm_ios_explain_access_to_camera_denied": {
+    "message": "Aby robić zdjęcia, nagrywać filmy lub używać skanera kodów QR, otwórz ustawienia systemowe i włącz „Aparat”."
+  },
+  "open_settings": {
+    "message": "Otwórz ustawienia"
+  },
+  "import_device_contacts": {
+    "message": "Importuj kontakty z urządzenia"
+  },
+  "import_device_contacts_hint": {
+    "message": "Aby rozmawiać z kontaktami ze swojego urządzenia, otwórz ustawienia i włącz „Kontakty”."
+  },
+  "disabled_in_dc": {
+    "message": "Wyłącz w Delta Chat"
+  },
+  "disabled_in_system_settings": {
+    "message": "Wyłącz w ustawieniach systemu"
+  },
+  "bg_app_refresh_disabled": {
+    "message": "„Odświeżanie aplikacji w tle” wyłączone w ustawieniach systemu"
+  },
+  "delayed": {
+    "message": "Opóźniony"
+  },
+  "notifications_avg_minutes": {
+    "message": "Średnio co %1$d min."
+  },
+  "notifications_avg_hours": {
+    "message": "Średnio co %1$d godz."
+  },
+  "last_check_at": {
+    "message": "Sprawdzono o %1$s"
+  },
+  "system_settings": {
+    "message": "Ustawienia systemowe"
+  },
+  "system_settings_notify_explain_ios": {
+    "message": "Edytuj typ, plakietki, podgląd i więcej"
+  },
+  "shortcuts_widget_title": {
+    "message": "Skróty"
+  },
+  "shortcuts_widget_description": {
+    "message": "Użyj „Dodaj do widżetu” w Delta Chat, aby dodać elementy"
+  },
+  "remove_from_widget": {
+    "message": "Usuń z widżetu"
+  },
+  "add_to_widget": {
+    "message": "Dodaj do widżetu"
+  },
+  "InfoPlist_NSCameraUsageDescription": {
+    "message": "Delta Chat używa aparatu do robienia i wysyłania zdjęć i filmów oraz do skanowania kodów QR."
+  },
+  "InfoPlist_NSContactsUsageDescription": {
+    "message": "Delta Chat używa twoich kontaktów, aby pokazać listę adresów, do których możesz pisać. Delta Chat nie ma serwera, twoje kontakty nie są nigdzie wysyłane."
+  },
+  "InfoPlist_NSLocationAlwaysAndWhenInUseUsageDescription": {
+    "message": "Delta Chat potrzebuje pozwolenia na lokalizację, aby udostępniać twoją lokalizację w okresie, w którym włączono udostępnianie lokalizacji."
+  },
+  "InfoPlist_NSLocationWhenInUseUsageDescription": {
+    "message": "Delta Chat potrzebuje pozwolenia na lokalizację, aby udostępniać twoją lokalizację w okresie, w którym włączono udostępnianie lokalizacji."
+  },
+  "InfoPlist_NSMicrophoneUsageDescription": {
+    "message": "Zezwolenie na dostęp do mikrofonu pozwala nagrywać dźwięk."
+  },
+  "InfoPlist_NSPhotoLibraryUsageDescription": {
+    "message": "Zezwolenie na dostęp do biblioteki zdjęć umożliwia przesyłanie z niej zdjęć."
+  },
+  "InfoPlist_NSPhotoLibraryAddUsageDescription": {
+    "message": "Delta Chat chce zapisać obrazy w twojej bibliotece zdjęć."
+  },
+  "InfoPlist_NSFaceIDUsageDescription": {
+    "message": "Delta Chat może używać Face ID do ochrony twojego lokalnego profilu, tworzenia kopii zapasowych i konfiguracji drugiego urządzenia."
+  },
+  "pref_instant_delivery": {
+    "message": "Natychmiastowe dostarczenie"
+  },
+  "pref_background_notifications": {
+    "message": "Użyj połączenia w tle"
+  },
+  "pref_background_notifications_explain": {
+    "message": "Wymaga zignorowania optymalizacji baterii. Użyj, jeśli usługa Push jest niedostępna"
+  },
+  "pref_reliable_service": {
+    "message": "Wymuś połączenie w tle"
+  },
+  "pref_reliable_service_explain": {
+    "message": "Powoduje trwałe powiadomienie"
+  },
+  "pref_background_notifications_rationale": {
+    "message": "Aby utrzymać połączenie z i odbierać wiadomości w tle, zignoruj optymalizacje baterii w następnym kroku.\n\nDelta Chat zużywa niewiele zasobów i dba o to, aby nie wyczerpać baterii."
+  },
+  "perm_enable_bg_reminder_title": {
+    "message": "Dotknij tutaj, aby odbierać wiadomości, podczas gdy Delta Chat działa w tle."
+  },
+  "perm_enable_bg_already_done": {
+    "message": "Pozwolono już Delta Chat na odbieranie wiadomości w tle.\n\nJeśli wiadomości nadal nie docierają w tle, sprawdź też ustawienia systemu."
+  },
+  "update_1_50_android": {
+    "message": "Co nowego?\n\n❤️‍🔥 Nowy selektor emoji z większą liczbą emoji\n\n🎮 Ulepszone aplikacje czatu: Otrzymuj powiadomienia i otwieraj aplikacje pomocnicze w kontekście, np. otwieraj dodany wpis kalendarza bezpośrednio\n\n👍 Otrzymuj powiadomienia o reakcjach na swoje wiadomości\n\n... 🛠️ POPRAWKI i JESZCZE WIĘCEJ na %1$s"
+  },
+  "update_switch_profile_placement": {
+    "message": "ℹ️ Opcja „Przełącz profil” została przeniesiona: Dotknij swojego zdjęcia profilowego w górnym rogu ekranu głównego, aby dodać lub przełączyć profile 💡"
+  },
+  "n_minutes": {
+    "one": "%d min",
+    "few": "%d min",
+    "many": "%d min",
+    "other": "%d min"
+  },
+  "n_hours": {
+    "one": "%d godzina",
+    "few": "%d godziny",
+    "many": "%d godzin",
+    "other": "%d godzin"
+  },
+  "n_chats": {
+    "one": "%d czat",
+    "few": "%d czaty",
+    "many": "%d czatów",
+    "other": "%d czatów"
+  },
+  "n_contacts": {
+    "one": "%d kontakt",
+    "few": "%d kontakty",
+    "many": "%d kontaktów",
+    "other": "%d kontaktów"
+  },
+  "n_messages": {
+    "one": "%d wiadomość",
+    "few": "%d wiadomości",
+    "many": "%d wiadomości",
+    "other": "%d wiadomości "
+  },
+  "n_reactions": {
+    "one": "%d reakcja",
+    "few": "%d reakcje",
+    "many": "%d reakcji",
+    "other": "%d reakcji"
+  },
+  "n_members": {
+    "one": "%d członek",
+    "few": "%d członków ",
+    "many": "%d członków",
+    "other": "%d członków"
+  },
+  "n_recipients": {
+    "one": "%d odbiorca",
+    "few": "%d odbiorców",
+    "many": "%d odbiorców",
+    "other": "%d odbiorcy"
+  },
+  "n_selected": {
+    "one": "Wybrano %d",
+    "few": "Wybrano %d",
+    "many": "Wybrano %d",
+    "other": "Wybrano %d"
+  },
+  "ask_send_following_n_files_to": {
+    "one": "Wysłać plik do %s?",
+    "few": "Wysłać %d pliki do %s?",
+    "many": "Wysłać %d plików do %s?",
+    "other": "Wysłać %d pliku do %s?"
+  },
+  "ask_delete_chat": {
+    "one": "Usunąć %d czat ze wszystkich urządzeń?",
+    "few": "Usunąć %d czaty ze wszystkich urządzeń?",
+    "many": "Usunąć %d czatów ze wszystkich urządzeń?",
+    "other": "Usunąć %d czatu ze wszystkich urządzeń?"
+  },
+  "ask_delete_messages": {
+    "one": "Usunąć %d wiadomość ze wszystkich urządzeń?",
+    "few": "Usunąć %d wiadomości ze wszystkich urządzeń?",
+    "many": "Usunąć %d wiadomości ze wszystkich urządzeń?",
+    "other": "Usunąć %d wiadomości ze wszystkich urządzeń?"
+  },
+  "ask_delete_messages_simple": {
+    "one": "Usunąć %d wiadomość?",
+    "few": "Usunąć %d wiadomości?",
+    "many": "Usunąć %d wiadomości?",
+    "other": "Usunąć %d wiadomości?"
+  },
+  "chat_archived": {
+    "one": "%d czat zarchiwizowany",
+    "few": "%dczaty zarchiwizowane",
+    "many": "%dczatów zarchiwizowanych",
+    "other": "%d czatu zarchiwizowanego"
+  },
+  "chat_unarchived": {
+    "one": "Przywrócono %dczat z archiwum",
+    "few": "Przywrócono %d czaty z archiwum",
+    "many": "Przywrócono %d czatów z archiwum",
+    "other": "Przywrócono %d czatu z archiwum"
+  },
+  "chat_n_new_messages": {
+    "one": "%d nowa wiadomość",
+    "few": "%d nowe wiadomości",
+    "many": "%d nowe wiadomości",
+    "other": "%d nowych wiadomości"
+  }
+}

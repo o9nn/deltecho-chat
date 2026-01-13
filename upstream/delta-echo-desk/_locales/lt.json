@@ -1,0 +1,1994 @@
+{
+  "app_name": {
+    "message": "Delta Chat"
+  },
+  "ok": {
+    "message": "Gerai"
+  },
+  "cancel": {
+    "message": "Atsisakyti"
+  },
+  "clear_search": {
+    "message": "Išvalyti paiešką"
+  },
+  "yes": {
+    "message": "Taip"
+  },
+  "no": {
+    "message": "Ne"
+  },
+  "on": {
+    "message": "Įjungta"
+  },
+  "off": {
+    "message": "Išjungta"
+  },
+  "def": {
+    "message": "Pagal numatymą"
+  },
+  "default_value": {
+    "message": "Numatytasis (%1$s)"
+  },
+  "default_value_as_above": {
+    "message": "Numatytasis (toks pats kaip aukščiau)"
+  },
+  "custom": {
+    "message": "Tinkintas"
+  },
+  "none": {
+    "message": "Nėra"
+  },
+  "automatic": {
+    "message": "Automatinis"
+  },
+  "strict": {
+    "message": "Griežtas"
+  },
+  "open": {
+    "message": "Atverti"
+  },
+  "download": {
+    "message": "Atsisiųsti"
+  },
+  "downloading": {
+    "message": "Atsisiunčiama…"
+  },
+  "open_attachment": {
+    "message": "Atverti priedą"
+  },
+  "join": {
+    "message": "Prisijungti"
+  },
+  "rejoin": {
+    "message": "Prisijungti iš naujo"
+  },
+  "delete": {
+    "message": "Ištrinti"
+  },
+  "delete_for_me": {
+    "message": "Ištrinti man"
+  },
+  "delete_for_everyone": {
+    "message": "Ištrinti visiems"
+  },
+  "info": {
+    "message": "Informacija"
+  },
+  "update": {
+    "message": "Atnaujinti"
+  },
+  "attachment": {
+    "message": "Priedas"
+  },
+  "back": {
+    "message": "Atgal"
+  },
+  "close": {
+    "message": "Užverti"
+  },
+  "close_window": {
+    "message": "Užverti langą"
+  },
+  "forward": {
+    "message": "Persiųsti"
+  },
+  "create": {
+    "message": "Sukurti"
+  },
+  "reset": {
+    "message": "Atstatyti"
+  },
+  "later": {
+    "message": "Vėliau"
+  },
+  "resend": {
+    "message": "Siųsti iš naujo"
+  },
+  "archive": {
+    "message": "Archyvuoti"
+  },
+  "unarchive": {
+    "message": "Išarchyvuoti"
+  },
+  "ephemeral_messages": {
+    "message": "Išnykstančios žinutės"
+  },
+  "ephemeral_messages_hint": {
+    "message": "Šie nustatymai taikomi visiems Delta Chat besinaudojantiems dalyviams. Vis dėlto, jie gali kopijuoti, įrašyti ir persiųsti žinutes arba naudoti kitas el. pašto kliento programas."
+  },
+  "save": {
+    "message": "Įrašyti"
+  },
+  "media": {
+    "message": "Medija"
+  },
+  "profile": {
+    "message": "Profilis"
+  },
+  "main_menu": {
+    "message": "Pagrindinis meniu"
+  },
+  "start_chat": {
+    "message": "Pradėti pokalbį"
+  },
+  "show_full_message": {
+    "message": "Rodyti visą žinutę…"
+  },
+  "loading": {
+    "message": "Įkeliama…"
+  },
+  "hide": {
+    "message": "Slėpti"
+  },
+  "activate": {
+    "message": "Aktyvuoti"
+  },
+  "load_remote_content": {
+    "message": "Įkelti nuotolinius paveikslus"
+  },
+  "load_remote_content_ask": {
+    "message": "Nuotoliniai paveikslai gali būti naudojami, kad būtumėte sekami.\n\nŠis nustatymas taip pat leidžia šriftų įkėlimą ir kitą turinį. Netgi, jeigu jis yra išjungtas, gali būti, kad vis tiek matysite įterptus paveikslus ar paveikslus iš podėlio.\n\nĮkelti nuotolinius paveikslus?"
+  },
+  "always": {
+    "message": "Visada"
+  },
+  "always_load_remote_images": {
+    "message": "Visada įkelti nuotolinius paveikslus"
+  },
+  "once": {
+    "message": "Vieną kartą"
+  },
+  "show_warning": {
+    "message": "Rodyti įspėjimą"
+  },
+  "show_password": {
+    "message": "Rodyti slaptažodį"
+  },
+  "hide_password": {
+    "message": "Slėpti slaptažodį"
+  },
+  "not_now": {
+    "message": "Ne dabar"
+  },
+  "never": {
+    "message": "Niekada"
+  },
+  "one_moment": {
+    "message": "Minutėlę…"
+  },
+  "done": {
+    "message": "Atlikta"
+  },
+  "undo": {
+    "message": "Atšaukti"
+  },
+  "next": {
+    "message": "Kitas"
+  },
+  "error": {
+    "message": "Klaida"
+  },
+  "error_x": {
+    "message": "Klaida: %1$s"
+  },
+  "no_app_to_handle_data": {
+    "message": "Nepavyksta rasti programėlės, kuri apdorotų šį duomenų tipą."
+  },
+  "no_browser_installed": {
+    "message": "Neįdiegta jokia naršyklė."
+  },
+  "file_not_found": {
+    "message": "Nepavyko rasti %1$s."
+  },
+  "copied_to_clipboard": {
+    "message": "Nukopijuota į iškarpinę."
+  },
+  "contacts_headline": {
+    "message": "Adresatai"
+  },
+  "email_address": {
+    "message": "El. pašto adresas"
+  },
+  "bad_email_address": {
+    "message": "Blogas el. pašto adresas."
+  },
+  "password": {
+    "message": "Slaptažodis"
+  },
+  "existing_password": {
+    "message": "Esamas slaptažodis"
+  },
+  "now": {
+    "message": "Dabar"
+  },
+  "danger": {
+    "message": "Dėmesio"
+  },
+  "today": {
+    "message": "Šiandien"
+  },
+  "yesterday": {
+    "message": "Vakar"
+  },
+  "this_week": {
+    "message": "Šią savaitę"
+  },
+  "this_month": {
+    "message": "Šį mėnesį"
+  },
+  "last_week": {
+    "message": "Praeitą savaitę"
+  },
+  "last_month": {
+    "message": "Praeitą mėnesį"
+  },
+  "self": {
+    "message": "Aš"
+  },
+  "draft": {
+    "message": "Juodraštis"
+  },
+  "image": {
+    "message": "Paveikslas"
+  },
+  "reply_noun": {
+    "message": "Atsakymas"
+  },
+  "gif": {
+    "message": "GIF"
+  },
+  "sticker": {
+    "message": "Lipdukas"
+  },
+  "add_to_sticker_collection": {
+    "message": "Pridėti į lipdukų rinkinį"
+  },
+  "add_stickers_instructions": {
+    "message": "Norėdami pridėti lipdukų, bakstelėkite „Atverti lipdukų aplanką“, sukurkite savo lipdukų paketui poaplankį ir tempkite į jį paveikslų ir lipdukų failus"
+  },
+  "open_sticker_folder": {
+    "message": "Atverti lipdukų aplanką"
+  },
+  "images": {
+    "message": "Paveikslai"
+  },
+  "audio": {
+    "message": "Garso įrašai"
+  },
+  "voice_message": {
+    "message": "Balso žinutė"
+  },
+  "forwarded_message": {
+    "message": "Persiųsta žinutė"
+  },
+  "forwarded_by": {
+    "message": "Persiuntė %1$s"
+  },
+  "video": {
+    "message": "Vaizdo įrašai"
+  },
+  "documents": {
+    "message": "Dokumentai"
+  },
+  "contact": {
+    "message": "Adresatas"
+  },
+  "camera": {
+    "message": "Kamera"
+  },
+  "switch_camera": {
+    "message": "Perjungti kamerą"
+  },
+  "toggle_fullscreen": {
+    "message": "Perjungti viso ekrano veikseną"
+  },
+  "location": {
+    "message": "Vieta"
+  },
+  "locations": {
+    "message": "Vietos"
+  },
+  "gallery": {
+    "message": "Galerija"
+  },
+  "images_and_videos": {
+    "message": "Paveikslai ir vaizdo įrašai"
+  },
+  "file": {
+    "message": "Failas"
+  },
+  "files": {
+    "message": "Failai"
+  },
+  "webxdc_app": {
+    "message": "Privati programėlė"
+  },
+  "webxdc_apps": {
+    "message": "Privačios programėlės"
+  },
+  "games": {
+    "message": "Žaidimai"
+  },
+  "app_size": {
+    "message": "Dydis"
+  },
+  "browse": {
+    "message": "Naršyti"
+  },
+  "unknown": {
+    "message": "Nežinoma"
+  },
+  "green": {
+    "message": "Žalia"
+  },
+  "red": {
+    "message": "Raudona"
+  },
+  "blue": {
+    "message": "Mėlyna"
+  },
+  "orange": {
+    "message": "Oranžinė"
+  },
+  "cyan": {
+    "message": "Žalsvai mėlyna"
+  },
+  "purple": {
+    "message": "Purpurinė"
+  },
+  "magenta": {
+    "message": "Rausvai raudona"
+  },
+  "white": {
+    "message": "Balta"
+  },
+  "zoom": {
+    "message": "Mastelis"
+  },
+  "extra_small": {
+    "message": "Labai mažas"
+  },
+  "small": {
+    "message": "Mažas"
+  },
+  "normal": {
+    "message": "Normalus"
+  },
+  "large": {
+    "message": "Didelis"
+  },
+  "extra_large": {
+    "message": "Labai didelis"
+  },
+  "fast": {
+    "message": "Greitas"
+  },
+  "slow": {
+    "message": "Lėtas"
+  },
+  "menu_new_contact": {
+    "message": "Naujas adresatas"
+  },
+  "menu_new_classic_contact": {
+    "message": "Pridėti adresatą rankiniu būdu"
+  },
+  "menu_new_chat": {
+    "message": "Naujas pokalbis"
+  },
+  "menu_new_group": {
+    "message": "Nauja grupė"
+  },
+  "add_recipients": {
+    "message": "Pridėti gavėjus"
+  },
+  "menu_send": {
+    "message": "Siųsti"
+  },
+  "menu_toggle_keyboard": {
+    "message": "Perjungti šypsniukų klaviatūrą"
+  },
+  "menu_edit_group": {
+    "message": "Taisyti grupę"
+  },
+  "menu_group_name_and_image": {
+    "message": "Grupės pavadinimas ir paveikslas"
+  },
+  "menu_show_global_map": {
+    "message": "Rodyti visas vietas"
+  },
+  "menu_archive_chat": {
+    "message": "Archyvuoti pokalbį"
+  },
+  "menu_unarchive_chat": {
+    "message": "Išarchyvuoti pokalbį"
+  },
+  "menu_add_attachment": {
+    "message": "Pridėti priedą"
+  },
+  "menu_leave_group": {
+    "message": "Išeiti iš grupės"
+  },
+  "menu_delete_chat": {
+    "message": "Ištrinti pokalbį"
+  },
+  "clear_chat": {
+    "message": "Išvalyti pokalbį"
+  },
+  "delete_contact": {
+    "message": "Ištrinti adresatą"
+  },
+  "menu_delete_location": {
+    "message": "Ištrinti šią vietą?"
+  },
+  "menu_message_details": {
+    "message": "Išsamesnė žinutės informacija"
+  },
+  "menu_copy_to_clipboard": {
+    "message": "Kopijuoti į iškarpinę"
+  },
+  "menu_copy_selection_to_clipboard": {
+    "message": "Kopijuoti žymėjimą"
+  },
+  "menu_copy_link_to_clipboard": {
+    "message": "Kopijuoti nuorodą"
+  },
+  "menu_copy_text_to_clipboard": {
+    "message": "Kopijuoti tekstą"
+  },
+  "menu_copy_image_to_clipboard": {
+    "message": "Kopijuoti paveikslą"
+  },
+  "menu_copy_email_to_clipboard": {
+    "message": "Kopijuoti el. paštą"
+  },
+  "paste_from_clipboard": {
+    "message": "Įdėti iš iškarpinės"
+  },
+  "ask_copy_unopenable_link_to_clipboard": {
+    "message": "Nuoroda „%1$d“ negali būti atverta saityno naršyklėje. Ar norite, vietoj to, nukopijuoti nurodą į iškarpinę?"
+  },
+  "menu_forward": {
+    "message": "Persiųsti žinutę"
+  },
+  "menu_reply": {
+    "message": "Atsakyti į žinutę"
+  },
+  "menu_mute": {
+    "message": "Išjungti pranešimus"
+  },
+  "menu_unmute": {
+    "message": "Įjungti pranešimus"
+  },
+  "menu_export_attachment": {
+    "message": "Eksportuoti priedą"
+  },
+  "menu_export_attachments": {
+    "message": "Eksportuoti priedus"
+  },
+  "menu_all_media": {
+    "message": "Visa medija"
+  },
+  "show_in_chat": {
+    "message": "Rodyti pokalbyje"
+  },
+  "menu_share": {
+    "message": "Bendrinti"
+  },
+  "block": {
+    "message": "Užblokuoti"
+  },
+  "menu_block_contact": {
+    "message": "Užblokuoti adresatą"
+  },
+  "menu_unblock_contact": {
+    "message": "Atblokuoti adresatą"
+  },
+  "accept": {
+    "message": "Priimti"
+  },
+  "menu_play": {
+    "message": "Atkurti"
+  },
+  "menu_pause": {
+    "message": "Pristabdyti"
+  },
+  "menu_scroll_to_bottom": {
+    "message": "Slinkti į apačią"
+  },
+  "menu_scroll_to_top": {
+    "message": "Slinkti į viršų"
+  },
+  "menu_help": {
+    "message": "Žinynas"
+  },
+  "what_is_webxdc": {
+    "message": "Kas yra „Webxdc“?"
+  },
+  "privacy_policy": {
+    "message": "Privatumo politika"
+  },
+  "menu_select_all": {
+    "message": "Žymėti viską"
+  },
+  "menu_edit_name": {
+    "message": "Taisyti vardą"
+  },
+  "menu_settings": {
+    "message": "Nustatymai"
+  },
+  "menu_advanced": {
+    "message": "Išplėstiniai"
+  },
+  "menu_view_profile": {
+    "message": "Rodyti profilį"
+  },
+  "menu_zoom_in": {
+    "message": "Didinti"
+  },
+  "menu_zoom_out": {
+    "message": "Mažinti"
+  },
+  "menu_save_log": {
+    "message": "Įrašyti žurnalą"
+  },
+  "menu_more_options": {
+    "message": "Daugiau parinkčių"
+  },
+  "menu_chat_audit_log": {
+    "message": "Pokalbių audito žurnalas"
+  },
+  "copy_json": {
+    "message": "Kopijuoti JSON"
+  },
+  "replace_draft": {
+    "message": "Pakeisti juodraštį"
+  },
+  "title_share_location": {
+    "message": "Bendrinti savo vietą su visais grupės dalyviais"
+  },
+  "device_talk": {
+    "message": "Įrenginio žinutės"
+  },
+  "device_talk_subtitle": {
+    "message": "Vietiniu mastu sugeneruotos žinutės"
+  },
+  "device_talk_explain": {
+    "message": "Šiame pokalbyje esančios žinutės yra generuojamos jūsų įrenginyje, kad naudojimosi metu būtumėte informuoti apie programėlės atnaujinimus ir problemas."
+  },
+  "edit_contact": {
+    "message": "Taisyti adresatą"
+  },
+  "pin_chat": {
+    "message": "Prisegti pokalbį"
+  },
+  "unpin_chat": {
+    "message": "Atsegti pokalbį"
+  },
+  "pin": {
+    "message": "Prisegti"
+  },
+  "unpin": {
+    "message": "Atsegti"
+  },
+  "ConversationFragment_quoted_message_not_found": {
+    "message": "Pradinė žinutė nerasta"
+  },
+  "reply_privately": {
+    "message": "Atsakyti privačiai"
+  },
+  "source_code": {
+    "message": "Pirminis kodas"
+  },
+  "donate": {
+    "message": "Paaukoti"
+  },
+  "mute_for_one_hour": {
+    "message": "Išjungti 1 valandai"
+  },
+  "mute_for_eight_hours": {
+    "message": "Išjungti 8 valandoms"
+  },
+  "mute_for_one_day": {
+    "message": "Išjungti 1 dienai"
+  },
+  "mute_for_seven_days": {
+    "message": "Išjungti 7 dienoms"
+  },
+  "mute_forever": {
+    "message": "Išjungti visam laikui"
+  },
+  "share_location_for_5_minutes": {
+    "message": "5 minutėms"
+  },
+  "share_location_for_30_minutes": {
+    "message": "30 minučių"
+  },
+  "share_location_for_one_hour": {
+    "message": "1 valandai"
+  },
+  "share_location_for_two_hours": {
+    "message": "2 valandoms"
+  },
+  "share_location_for_six_hours": {
+    "message": "6 valandoms"
+  },
+  "file_saved_to": {
+    "message": "Failas įrašytas į „%1$s“."
+  },
+  "videochat": {
+    "message": "Vaizdo pokalbis"
+  },
+  "videochat_invite_user_to_videochat": {
+    "message": "Pakviesti %1$s į vaizdo pokalbį?"
+  },
+  "videochat_invite_user_hint": {
+    "message": "Tai reikalauja, kad abu pašnekovai turėtų suderinamą programėlę ar suderinamą naršyklę."
+  },
+  "videochat_contact_invited_hint": {
+    "message": "%1$s pakvietė į vaizdo pokalbį."
+  },
+  "videochat_you_invited_hint": {
+    "message": "Jūs pakvietėte į vaizdo pokalbį."
+  },
+  "videochat_tap_to_join": {
+    "message": "Bakstelėkite norėdami prisijungti"
+  },
+  "videochat_tap_to_open": {
+    "message": "Bakstelėkite norėdami atverti"
+  },
+  "videochat_instance": {
+    "message": "Vaizdo pokalbio egzempliorius"
+  },
+  "videochat_instance_placeholder": {
+    "message": "Jūsų vaizdo pokalbio egzempliorius"
+  },
+  "videochat_instance_example": {
+    "message": "Pavyzdys: https://jūsų-serveris.org/$KAMBARYS"
+  },
+  "videochat_invitation": {
+    "message": "Pakvietimas į vaizdo pokalbį"
+  },
+  "videochat_invitation_body": {
+    "message": "Jūs esate kviečiami į vaizdo pokalbį. Spustelėkite %1$s jei norite prisijungti."
+  },
+  "ask_leave_group": {
+    "message": "Ar tikrai norite išeiti iš šios grupės?"
+  },
+  "ask_forward": {
+    "message": "Persiųsti žinutes %1$s?"
+  },
+  "ask_export_attachment": {
+    "message": "Eksportuoti priedą? Priedų eksportavimas leis bet kurioms kitoms programėlėms jūsų įrenginyje turėti prieigą prie šių priedų.\n\nTęsti?"
+  },
+  "ask_block_contact": {
+    "message": "Užblokuoti šį adresatą? Jūs daugiau nebegausite žinučių nuo šio adresato."
+  },
+  "ask_unblock_contact": {
+    "message": "Atblokuoti šį adresatą? Jūs ir vėl galėsite gauti žinutes nuo šio adresato."
+  },
+  "ask_start_chat_with": {
+    "message": "Pradėti pokalbį su %1$s?"
+  },
+  "ask_remove_members": {
+    "message": "Pašalinti %1$s iš grupės?"
+  },
+  "open_url_confirmation": {
+    "message": "Ar norite atverti šią nuorodą?"
+  },
+  "contacts_title": {
+    "message": "Adresatai"
+  },
+  "contacts_enter_name_or_email": {
+    "message": "Įveskite vardą ar el. pašto adresą"
+  },
+  "contacts_type_email_above": {
+    "message": "Aukščiau įrašykite el. pašto adresą"
+  },
+  "contacts_empty_hint": {
+    "message": "Adresatų nėra."
+  },
+  "chat_archived_chats_title": {
+    "message": "Archyvuoti pokalbiai"
+  },
+  "chat_please_enter_message": {
+    "message": "Įveskite žinutę."
+  },
+  "chat_camera_unavailable": {
+    "message": "Kamera neprieinama."
+  },
+  "chat_unable_to_record_audio": {
+    "message": "Nepavyko įrašyti garso."
+  },
+  "chat_new_group_hint": {
+    "message": "Rašykite pirmąją žinutę, taip leisdami kitiems atsakyti šioje grupėje..\n\n• Nieko tokio, jei ne visi dalyviai naudoja Delta Chat.\n\n• Pirmosios žinutės pristatymas gali šiek tiek užtrukti."
+  },
+  "chat_record_slide_to_cancel": {
+    "message": "Perbraukite, norėdami atsisakyti"
+  },
+  "chat_record_explain": {
+    "message": "Bakstelėkite ir laikykite, norėdami įrašyti balso žinutę. Atleiskite, norėdami išsiųsti"
+  },
+  "chat_all_archived": {
+    "message": "Visi pokalbiai archyvuoti.\nPaspauskite „+“ norėdami pradėti naują pokalbį."
+  },
+  "chat_share_with_title": {
+    "message": "Bendrinti su"
+  },
+  "chat_input_placeholder": {
+    "message": "Žinutė"
+  },
+  "chat_archived_label": {
+    "message": "Archyvuotas"
+  },
+  "chat_no_messages": {
+    "message": "Žinučių nėra."
+  },
+  "chat_self_talk_subtitle": {
+    "message": "Žinutės, kurias siunčiu asmeniškai sau"
+  },
+  "archive_empty_hint": {
+    "message": "Jei archyvuosite pokalbius, jie bus rodomi čia."
+  },
+  "saved_messages": {
+    "message": "Įrašytos žinutės"
+  },
+  "saved_messages_explain": {
+    "message": "• Persiųskite žinutes čia, kad lengvai jas pasiektumėte\n\n• Rašykitės pastabas ar įrašinėkite balso žinutes\n\n• Pridėkite mediją, norėdami ją išsaugoti"
+  },
+  "saved": {
+    "message": "Įrašyta"
+  },
+  "save_as": {
+    "message": "Įrašyti kaip"
+  },
+  "messaging_disabled_not_in_group": {
+    "message": "Jūs negalite rašyti, nes nesate šioje grupėje. Norėdami prisijungti, paprašykite kito nario."
+  },
+  "cannot_display_unsuported_file_type": {
+    "message": "Nepavyksta atvaizduoti šio failo tipo: %s"
+  },
+  "attachment_failed_to_load": {
+    "message": "Nepavyko įkelti priedo"
+  },
+  "start_app": {
+    "message": "Pradėti…"
+  },
+  "chat_audit_log_empty_message": {
+    "message": "Čia atsiras šio pokalbio sisteminės žinutės"
+  },
+  "chat_audit_log_title": {
+    "message": "Pokalbio audito žurnalas, skirtas %1$s"
+  },
+  "chat_audit_log_description": {
+    "message": "Šiame rodinyje yra rodomi tik sisteminiai ir informaciniai pranešimai. Naudinga, jei norite rasti paskiausius pokalbio veiksmus, be būtinybės slinkti per daugelį įprastų žinučių."
+  },
+  "puny_code_warning_header": {
+    "message": "Aptikta įtartina nuoroda"
+  },
+  "puny_code_warning_question": {
+    "message": "Ar tikrai norite apsilankyti %1$s?"
+  },
+  "search": {
+    "message": "Ieškoti"
+  },
+  "search_in_chat": {
+    "message": "Ieškoti pokalbyje"
+  },
+  "search_files": {
+    "message": "Ieškoti failų"
+  },
+  "search_explain": {
+    "message": "Ieškokite pokalbių, adresatų ir žinučių"
+  },
+  "search_no_result_for_x": {
+    "message": "Nerasta jokių rezultatų pagal užklausą \"%s\""
+  },
+  "group_name": {
+    "message": "Grupės pavadinimas"
+  },
+  "group_avatar": {
+    "message": "Grupės avataras"
+  },
+  "remove_group_image": {
+    "message": "Šalinti grupės paveikslą"
+  },
+  "change_group_image": {
+    "message": "Keisti grupės paveikslą"
+  },
+  "group_create_button": {
+    "message": "Sukurti grupę"
+  },
+  "group_please_enter_group_name": {
+    "message": "Įveskite grupės pavadinimą."
+  },
+  "group_add_members": {
+    "message": "Pridėti dalyvius"
+  },
+  "group_self_not_in_group": {
+    "message": "Norėdami atlikti šį veiksmą, privalote būti grupės dalyviu."
+  },
+  "profile_encryption": {
+    "message": "Šifravimas"
+  },
+  "profile_shared_chats": {
+    "message": "Bendrinami pokalbiai"
+  },
+  "related_chats": {
+    "message": "Susiję pokalbiai"
+  },
+  "tab_contact": {
+    "message": "Adresatas"
+  },
+  "tab_group": {
+    "message": "Grupė"
+  },
+  "tab_gallery": {
+    "message": "Galerija"
+  },
+  "tab_docs": {
+    "message": "Dokumentai"
+  },
+  "tab_links": {
+    "message": "Nuorodos"
+  },
+  "tab_map": {
+    "message": "Žemėlapis"
+  },
+  "tab_gallery_empty_hint": {
+    "message": "Čia bus rodomi šiame pokalbyje bendrinami paveikslai ir vaizdo įrašai."
+  },
+  "tab_docs_empty_hint": {
+    "message": "Čia bus rodomi šiame pokalbyje bendrinami dokumentai, muzika ir kiti failai."
+  },
+  "tab_image_empty_hint": {
+    "message": "Čia bus rodomi šiame pokalbyje bendrinti paveikslai."
+  },
+  "tab_video_empty_hint": {
+    "message": "Čia bus rodomi šiame pokalbyje bendrinti vaizdo įrašai."
+  },
+  "tab_audio_empty_hint": {
+    "message": "Čia bus rodomi šiame pokalbyje bendrinti garso įrašų failai ir balso žinutės."
+  },
+  "tab_webxdc_empty_hint": {
+    "message": "Čia bus rodomos šiame pokalbyje bendrintos privačios programėlės."
+  },
+  "tab_all_media_empty_hint": {
+    "message": "Čia bus rodoma bet kuriame pokalbyje bendrinama medija."
+  },
+  "media_preview": {
+    "message": "Medijos peržiūra"
+  },
+  "send_message": {
+    "message": "Siųsti žinutę"
+  },
+  "aeap_addr_changed": {
+    "message": "%1$s pasikeitė adresą iš %2$s į %3$s"
+  },
+  "multidevice_title": {
+    "message": "Pridėti antrąjį įrenginį"
+  },
+  "multidevice_same_network_hint": {
+    "message": "Įsitikinkite, kad abu įrenginiai yra prisijungę prie to pačio belaidžio (Wi-Fi) arba laidinio tinklo"
+  },
+  "multidevice_receiver_title": {
+    "message": "Pridėti kaip antrąjį įrenginį"
+  },
+  "multidevice_open_settings_on_other_device": {
+    "message": "Pirmajame įrenginyje pereikite į „Nustatymai / Pridėti antrąjį įrenginį“ ir nuskenuokite ten rodomą kodą"
+  },
+  "preparing_account": {
+    "message": "Ruošiama paskyra…"
+  },
+  "troubleshooting": {
+    "message": "Nesklandumų šalinimas"
+  },
+  "incoming_messages": {
+    "message": "Gaunamosios žinutės"
+  },
+  "outgoing_messages": {
+    "message": "Siunčiamosios žinutės"
+  },
+  "connectivity": {
+    "message": "Jungiamumas"
+  },
+  "connectivity_not_connected": {
+    "message": "Neprisijungta"
+  },
+  "connectivity_connecting": {
+    "message": "Jungiamasi…"
+  },
+  "connectivity_updating": {
+    "message": "Atnaujinama…"
+  },
+  "connectivity_connected": {
+    "message": "Prisijungta"
+  },
+  "sending": {
+    "message": "Siunčiama…"
+  },
+  "last_msg_sent_successfully": {
+    "message": "Paskutinė žinutė sėkmingai išsiųsta."
+  },
+  "messages": {
+    "message": "Žinutės"
+  },
+  "onboarding_create_instant_account": {
+    "message": "Sukurti naują profilį"
+  },
+  "onboarding_alternative_logins": {
+    "message": "Aš jau turiu profilį"
+  },
+  "instant_onboarding_title": {
+    "message": "Jūsų profilis"
+  },
+  "instant_onboarding_agree_default2": {
+    "message": "%1$s privatumo politika"
+  },
+  "instant_onboarding_show_more_instances": {
+    "message": "Naudoti kitą serverį"
+  },
+  "scan_invitation_code": {
+    "message": "Skenuoti pakvietimo kodą"
+  },
+  "login_title": {
+    "message": "Prisijungti"
+  },
+  "login_header": {
+    "message": "Prisijungti prie savo serverio"
+  },
+  "login_explain": {
+    "message": "Prisijungti naudojant esamą el. pašto paskyrą"
+  },
+  "login_subheader": {
+    "message": "Žinomiems el. pašto teikėjams papildomi nustatymai yra nustatomi automatiškai. Kartais, IMAP turi būti įjungtas prisijungus per naršyklę. Išsamesnės pagalbos teiraukitės savo el. pašto teikėjo ar draugų."
+  },
+  "login_no_servers_hint": {
+    "message": "Nėra jokių Delta Chat serverių, jūsų duomenys išlieka jūsų įrenginyje!"
+  },
+  "login_inbox": {
+    "message": "Gauta"
+  },
+  "login_imap_login": {
+    "message": "IMAP prisijungimo vardas"
+  },
+  "login_imap_server": {
+    "message": "IMAP serveris"
+  },
+  "login_imap_port": {
+    "message": "IMAP prievadas"
+  },
+  "login_imap_security": {
+    "message": "IMAP saugumas"
+  },
+  "login_outbox": {
+    "message": "Išsiųsta"
+  },
+  "login_smtp_login": {
+    "message": "SMTP prisijungimo vardas"
+  },
+  "login_smtp_password": {
+    "message": "SMTP slaptažodis"
+  },
+  "login_smtp_server": {
+    "message": "SMTP serveris"
+  },
+  "login_smtp_port": {
+    "message": "SMTP prievadas"
+  },
+  "login_smtp_security": {
+    "message": "SMTP saugumas"
+  },
+  "login_auth_method": {
+    "message": "Įgaliojimų suteikimo metodas"
+  },
+  "proxy_settings": {
+    "message": "Įgaliotasis serveris"
+  },
+  "proxy_use_proxy": {
+    "message": "Naudoti įgaliotąjį serverį"
+  },
+  "proxy_add": {
+    "message": "Pridėti įgaliotąjį serverį"
+  },
+  "proxy_add_explain": {
+    "message": "Palaikomi įgaliotųjų serverių tipai: HTTP(S), SOCKS5 ir Shadowsocks."
+  },
+  "proxy_list_header": {
+    "message": "Įrašyti įgaliotieji serveriai"
+  },
+  "proxy_delete": {
+    "message": "Ištrinti įgaliotąjį serverį"
+  },
+  "proxy_delete_explain": {
+    "message": "Ar tikrai norite ištrinti „%1$s“?"
+  },
+  "proxy_use_proxy_confirm": {
+    "message": "Ar norite naudoti įgaliotąjį serverį „%1$s“?"
+  },
+  "login_info_oauth2_title": {
+    "message": "Tęsti naudojant supaprastintą sąranką?"
+  },
+  "login_certificate_checks": {
+    "message": "Liudijimų patikrinimai"
+  },
+  "login_error_mail": {
+    "message": "Įveskite teisingą el. pašto adresą."
+  },
+  "login_error_server": {
+    "message": "Įveskite teisingą serverį / IP adresą"
+  },
+  "login_error_port": {
+    "message": "Įveskite teisingą prievadą (1–65535)"
+  },
+  "login_error_required_fields": {
+    "message": "Įveskite teisingą el. pašto adresą ir slaptažodį"
+  },
+  "import_backup_title": {
+    "message": "Importuoti atsarginę kopiją"
+  },
+  "import_backup_ask": {
+    "message": "Atsarginė kopija rasta ties \"%1$s\".\n\nAr norite iš jos importuoti ir naudoti visus duomenis ir nustatymus?"
+  },
+  "import_backup_no_backup_found": {
+    "message": "Nerasta jokių atsarginių kopijų.\n\nNukopijuokite atsarginę kopiją į \"%1$s\" ir bandykite dar kartą. Priešingu atveju, paspauskite \"Pradėti susirašinėjimą\", kad pereitumėte į įprastą sąrankos procesą."
+  },
+  "login_error_cannot_login": {
+    "message": "Nepavyksta prisijungti kaip \"%1$s\". Patikrinkite ar el. pašto adresas ir slaptažodis yra teisingi."
+  },
+  "accept_invalid_certificates": {
+    "message": "Priimti negaliojančius liudijimus"
+  },
+  "switch_account": {
+    "message": "Perjungti paskyrą"
+  },
+  "add_account": {
+    "message": "Pridėti paskyrą"
+  },
+  "profile_tag": {
+    "message": "Profilio etiketė"
+  },
+  "profile_tag_hint": {
+    "message": "pvz., Darbas, Šeima"
+  },
+  "delete_account": {
+    "message": "Ištrinti paskyrą"
+  },
+  "delete_account_ask": {
+    "message": "Ar tikrai norite ištrinti savo paskyros duomenis?"
+  },
+  "delete_account_explain_with_name": {
+    "message": "Visi „%s“ paskyros duomenys šiame įrenginyje bus ištrinti, įskaitant jūsų ištisinio šifravimo sąranką, adresatus, pokalbius, žinutes ir mediją. Šį veiksmą nebeįmanoma bus atšaukti."
+  },
+  "unconfigured_account": {
+    "message": "Nesukonfigūruota paskyra"
+  },
+  "unconfigured_account_hint": {
+    "message": "Atverkite paskyrą norėdami ją konfigūruoti."
+  },
+  "sync_all": {
+    "message": "Sinchronizuoti visas"
+  },
+  "configuration_failed_with_error": {
+    "message": "Konfigūracija patyrė nesėkmę. Klaida: %1$s"
+  },
+  "forward_to": {
+    "message": "Kam persiųsti …"
+  },
+  "share_abort": {
+    "message": "Bendrinimas nutrauktas dėl trūkstamų leidimų."
+  },
+  "pref_profile_info_headline": {
+    "message": "Jūsų profilio informacija"
+  },
+  "pref_profile_photo": {
+    "message": "Profilio nuotrauka"
+  },
+  "pref_blocked_contacts": {
+    "message": "Užblokuoti adresatai"
+  },
+  "blocked_empty_hint": {
+    "message": "Jei užblokuosite adresatus, jie bus rodomi čia."
+  },
+  "pref_password_and_account_settings": {
+    "message": "Slaptažodis ir paskyra"
+  },
+  "pref_who_can_see_profile_explain": {
+    "message": "Bendraujant su kitais naudotojais, jūsų profilio paveikslas ir vardas bus rodomi kartu su jūsų žinutėmis. Jau išsiųsta informacija negalės būti ištrinta ar pašalinta."
+  },
+  "pref_your_name": {
+    "message": "Jūsų vardas"
+  },
+  "pref_default_status_label": {
+    "message": "Parašo tekstas"
+  },
+  "pref_enter_sends": {
+    "message": "Įvedimo (Enter) klavišas išsiunčia"
+  },
+  "pref_enter_sends_explain": {
+    "message": "Paspaudus įvedimo (Enter) klavišą, bus išsiunčiamos tekstinės žinutės"
+  },
+  "pref_outgoing_media_quality": {
+    "message": "Išsiunčiamos medijos kokybė"
+  },
+  "pref_outgoing_balanced": {
+    "message": "Subalansuota"
+  },
+  "pref_outgoing_worse": {
+    "message": "Blogesnė kokybė, mažas dydis"
+  },
+  "pref_vibrate": {
+    "message": "Vibruoti"
+  },
+  "pref_screen_security": {
+    "message": "Ekrano saugumas"
+  },
+  "pref_screen_security_explain": {
+    "message": "Prašyti blokuoti ekrano kopijas paskiausiųjų sąraše ir programėlės viduje"
+  },
+  "pref_screen_security_please_restart_hint": {
+    "message": "Norėdami pritaikyti ekrano saugumo nustatymą, paleiskite programėlę iš naujo."
+  },
+  "pref_notifications": {
+    "message": "Pranešimai"
+  },
+  "pref_notifications_show": {
+    "message": "Rodyti"
+  },
+  "pref_notifications_priority": {
+    "message": "Pirmenybė"
+  },
+  "pref_notifications_explain": {
+    "message": "Įjungti sistemos pranešimus apie naujas žinutes"
+  },
+  "pref_show_notification_content": {
+    "message": "Rodyti pranešime žinutės turinį"
+  },
+  "pref_show_notification_content_explain": {
+    "message": "Rodyti pranešimuose siuntėjo vardą ir pirmuosius žinutės žodžius"
+  },
+  "pref_led_color": {
+    "message": "Šviesos diodo spalva"
+  },
+  "pref_sound": {
+    "message": "Garsas"
+  },
+  "pref_privacy": {
+    "message": "Privatumas"
+  },
+  "pref_chats_and_media": {
+    "message": "Pokalbiai ir medija"
+  },
+  "pref_system_default": {
+    "message": "Sistemos numatytoji"
+  },
+  "pref_light_theme": {
+    "message": "Šviesus"
+  },
+  "pref_dark_theme": {
+    "message": "Tamsus"
+  },
+  "pref_appearance": {
+    "message": "Išvaizda"
+  },
+  "pref_theme": {
+    "message": "Apipavidalinimas"
+  },
+  "pref_language": {
+    "message": "Kalba"
+  },
+  "pref_incognito_keyboard": {
+    "message": "Inkognito klaviatūra"
+  },
+  "pref_incognito_keyboard_explain": {
+    "message": "Prašyti klaviatūros išjungti suasmenintą mokymąsi"
+  },
+  "pref_read_receipts": {
+    "message": "Pranešimai apie skaitymą"
+  },
+  "pref_read_receipts_explain": {
+    "message": "Jei pranešimai apie skaitymą yra išjungti, jūs negalėsite matyti pranešimų apie skaitymą iš kitų žmonių."
+  },
+  "pref_server": {
+    "message": "Serveris"
+  },
+  "pref_encryption": {
+    "message": "Šifravimas"
+  },
+  "pref_manage_keys": {
+    "message": "Tvarkyti raktus"
+  },
+  "pref_use_system_emoji": {
+    "message": "Naudoti sistemos šypsniukus"
+  },
+  "pref_use_system_emoji_explain": {
+    "message": "Išjungti Delta Chat įtaisytąjį šypsniukų palaikymą"
+  },
+  "pref_app_access": {
+    "message": "Prieiga prie programėlės"
+  },
+  "pref_chats": {
+    "message": "Pokalbiai"
+  },
+  "pref_in_chat_sounds": {
+    "message": "Garsai pokalbiuose"
+  },
+  "pref_view_log": {
+    "message": "Rodyti žurnalą"
+  },
+  "pref_saved_log": {
+    "message": "Žurnalas įrašytas į „Atsiuntimų“ aplanką"
+  },
+  "pref_save_log_failed": {
+    "message": "Nepavyko įrašyti žurnalo"
+  },
+  "pref_log_header": {
+    "message": "Žurnalas"
+  },
+  "pref_other": {
+    "message": "Kita"
+  },
+  "pref_backup": {
+    "message": "Atsarginė kopija"
+  },
+  "pref_backup_explain": {
+    "message": "Padaro atsarginę pokalbių kopiją į išorinę saugyklą"
+  },
+  "pref_backup_export_explain": {
+    "message": "Atsarginė kopija padeda jums nusistatyti naują diegimą šiame ar kitame įrenginyje.\n\nAtsarginėje kopijoje bus visos žinutės, adresatai ir pokalbiai bei jūsų ištisinė Autocrypt sąranka. Atsarginės kopijos failą laikykite saugioje vietoje arba kaip įmanoma greičiau jį ištrinkite."
+  },
+  "pref_backup_export_x": {
+    "message": "Eksportuoti %1$s"
+  },
+  "pref_backup_export_all": {
+    "message": "Eksportuoti visas %1$d paskyras"
+  },
+  "pref_backup_export_start_button": {
+    "message": "Pradėti daryti atsarginę kopiją"
+  },
+  "pref_backup_written_to_x": {
+    "message": "Atsarginė kopija sėkmingai įrašyta į %1$s"
+  },
+  "pref_managekeys_menu_title": {
+    "message": "Tvarkykite raktus"
+  },
+  "pref_managekeys_export_secret_keys": {
+    "message": "Eksportuoti slaptus raktus"
+  },
+  "pref_managekeys_export_explain": {
+    "message": "Eksportuoti slaptus raktus į \"%1$s\"?"
+  },
+  "pref_managekeys_import_secret_keys": {
+    "message": "Importuoti slaptus raktus"
+  },
+  "pref_managekeys_import_explain": {
+    "message": "Importuoti slaptus raktus iš \"%1$s\"?\n\n• Esami raktai nebus ištrinti\n\n• Paskutinis importuotas raktas bus naudojamas kaip naujas numatytasis raktas, nebent jo failo pavadinime bus žodis \"legacy\""
+  },
+  "pref_managekeys_secret_keys_exported_to_x": {
+    "message": "Slapti raktai sėkmingai įrašyti į \"%1$s\"."
+  },
+  "pref_managekeys_secret_keys_imported_from_x": {
+    "message": "Slapti raktai importuoti iš \"%1$s\"."
+  },
+  "pref_background": {
+    "message": "Fonas"
+  },
+  "pref_background_btn_default": {
+    "message": "Naudoti numatytąjį paveikslą"
+  },
+  "pref_background_btn_gallery": {
+    "message": "Pasirinkti iš galerijos"
+  },
+  "pref_imap_folder_handling": {
+    "message": "IMAP aplanko apdorojimas"
+  },
+  "pref_imap_folder_warn_disable_defaults": {
+    "message": "Jeigu išjungiate šį parametrą, įsitikinkite, kad jūsų serveris ir kiti klientai yra sukonfigūruoti atitinkamai.\n\nPriešingu atveju, tai gali iš viso neveikti."
+  },
+  "pref_watch_sent_folder": {
+    "message": "Stebėti išsiųstųjų aplanką"
+  },
+  "pref_send_copy_to_self": {
+    "message": "Siųsti kopiją sau pačiam"
+  },
+  "pref_auto_folder_moves": {
+    "message": "Automatiniai perkėlimai į DeltaChat aplanką"
+  },
+  "pref_auto_folder_moves_explain": {
+    "message": "Pokalbiai yra perkeliami, kad nebūtų sujauktas Gautųjų aplankas"
+  },
+  "pref_show_emails": {
+    "message": "Rodyti klasikinius el. laiškus"
+  },
+  "pref_show_emails_no": {
+    "message": "Ne, tik pokalbius"
+  },
+  "pref_show_emails_accepted_contacts": {
+    "message": "Iš priimtų adresatų"
+  },
+  "pref_show_emails_all": {
+    "message": "Iš visų"
+  },
+  "pref_experimental_features": {
+    "message": "Eksperimentinės ypatybės"
+  },
+  "pref_developer_mode": {
+    "message": "Plėtotojo veiksena"
+  },
+  "pref_developer_mode_explain": {
+    "message": "Aktyvuoja derinimo parinktis ir gali paversti programą mažiau stabilią. Tik plėtotojams."
+  },
+  "pref_background_default": {
+    "message": "Numatytasis fonas"
+  },
+  "pref_background_default_color": {
+    "message": "Numatytoji spalva"
+  },
+  "pref_background_custom_image": {
+    "message": "Tinkintas paveikslas"
+  },
+  "pref_background_custom_color": {
+    "message": "Tinkinta spalva"
+  },
+  "export_aborted": {
+    "message": "Eksportavimas nutrauktas."
+  },
+  "auto_download_messages": {
+    "message": "Automatinis žinučių atsisiuntimas"
+  },
+  "up_to_x": {
+    "message": "Iki %1$s"
+  },
+  "up_to_x_most_worse_quality_images": {
+    "message": "Iki %1$s, iš esmės, blogos kokybės paveikslus"
+  },
+  "up_to_x_most_balanced_quality_images": {
+    "message": "Iki %1$s, iš esmės, subalansuotos kokybės paveikslus"
+  },
+  "download_failed": {
+    "message": "Atsiuntimas nepavyko"
+  },
+  "n_bytes_message": {
+    "message": "%1$s žinutė"
+  },
+  "profile_image_delete": {
+    "message": "Ištrinti profilio paveikslą"
+  },
+  "pref_show_tray_icon": {
+    "message": "Rodyti dėklo piktogramą"
+  },
+  "pref_edit_profile": {
+    "message": "Taisyti profilį"
+  },
+  "send_stats_to_devs": {
+    "message": "Siųsti statistiką Delta Chat plėtotojams"
+  },
+  "emoji_search_results": {
+    "message": "Paieškos rezultatai"
+  },
+  "emoji_not_found": {
+    "message": "Nerasta jokių šypsniukų"
+  },
+  "emoji_recent": {
+    "message": "Paskiausi"
+  },
+  "emoji_people": {
+    "message": "Žmonės ir kūnas"
+  },
+  "emoji_nature": {
+    "message": "Gyvūnai ir gamta"
+  },
+  "emoji_foods": {
+    "message": "Maistas ir gėrimai"
+  },
+  "emoji_activity": {
+    "message": "Veikla"
+  },
+  "emoji_places": {
+    "message": "Kelionės ir vietos"
+  },
+  "emoji_objects": {
+    "message": "Objektai"
+  },
+  "emoji_symbols": {
+    "message": "Simboliai"
+  },
+  "emoji_flags": {
+    "message": "Vėliavos"
+  },
+  "reactions": {
+    "message": "Reakcijos"
+  },
+  "react": {
+    "message": "Reaguoti"
+  },
+  "delete_old_messages": {
+    "message": "Ištrinti senas žinutes"
+  },
+  "autodel_device_title": {
+    "message": "Ištrinti žinutes iš įrenginio"
+  },
+  "autodel_server_title": {
+    "message": "Ištrinti žinutes iš serverio"
+  },
+  "autodel_confirm": {
+    "message": "Aš suprantu, ištrinti visas šias žinutes"
+  },
+  "autodel_at_once": {
+    "message": "Iš karto"
+  },
+  "after_30_seconds": {
+    "message": "Po 30 sekundžių"
+  },
+  "after_1_minute": {
+    "message": "Po 1 minutės"
+  },
+  "after_5_minutes": {
+    "message": "Po 5 minučių"
+  },
+  "after_30_minutes": {
+    "message": "Po 30 minučių"
+  },
+  "autodel_after_1_hour": {
+    "message": "Po 1 valandos"
+  },
+  "autodel_after_1_day": {
+    "message": "Po 1 dienos"
+  },
+  "autodel_after_1_week": {
+    "message": "Po 1 savaitės"
+  },
+  "after_5_weeks": {
+    "message": "Po 5 savaičių"
+  },
+  "autodel_after_1_year": {
+    "message": "Po 1 metų"
+  },
+  "autocrypt_send_asm_title": {
+    "message": "Siųsti Autocrypt sąrankos žinutę"
+  },
+  "autocrypt_send_asm_explain_before": {
+    "message": "\"Autocrypt sąrankos žinutė\" saugiai bendrina jūsų ištisinę sąranką su kitomis su Autocrypt suderinamomis programomis.\n\nSąranka bus užšifruota sąrankos kodu, kuris yra rodomas čia ir privalės būti įvestas kitame įrenginyje."
+  },
+  "autocrypt_send_asm_button": {
+    "message": "Siųsti Autocrypt sąrankos žinutę"
+  },
+  "autocrypt_send_asm_explain_after": {
+    "message": "Jūsų sąranka buvo išsiųsta jums. Persijukite į kitą įrenginį ir atverkite sąrankos žinutę. Jūsų turėtų būti paprašyta sąrankos kodo. Į užklausą įrašykite šiuos skaitmenis.\n\nJums užbaigus, kitas įrenginys bus paruoštas naudoti Autocrypt."
+  },
+  "autocrypt_prefer_e2ee": {
+    "message": "Teikti pirmenybę ištisiniam šifravimui"
+  },
+  "autocrypt_asm_subject": {
+    "message": "Autocrypt sąrankos žinutė"
+  },
+  "autocrypt_asm_general_body": {
+    "message": "Tai yra Autocrypt sąrankos žinutė, kuri yra naudojama perduoti jūsų ištisinę sąranką tarp klientų.\n\nNorėdami iššifruoti ir naudoti savo sąranką, atverkite žinutę su Autocrypt suderinamame kliente ir įveskite generuojančiame įrenginyje rodomą sąrankos kodą."
+  },
+  "systemmsg_subject_for_new_contact": {
+    "message": "Žinutė nuo %1$s"
+  },
+  "group_name_changed_by_you": {
+    "message": "Jūs pakeitėte grupės pavadinimą iš „%1$s“ į „%2$s“."
+  },
+  "group_name_changed_by_other": {
+    "message": "%3$s pakeitė grupės pavadinimą iš „%1$s“ į „%2$s“."
+  },
+  "group_left_by_you": {
+    "message": "Jūs išėjote iš grupės."
+  },
+  "group_left_by_other": {
+    "message": "%1$s išėjo iš grupės."
+  },
+  "group_image_deleted_by_you": {
+    "message": "Jūs ištrynėte grupės paveikslą."
+  },
+  "group_image_deleted_by_other": {
+    "message": "%1$s ištrynė grupės paveikslą."
+  },
+  "ephemeral_timer_disabled_by_you": {
+    "message": "Jūs išjungėte išnykstančių žinučių laikmatį."
+  },
+  "ephemeral_timer_disabled_by_other": {
+    "message": "%1$s išjungė išnykstančių žinučių laikmatį."
+  },
+  "ephemeral_timer_seconds_by_you": {
+    "message": "Jūs nustatėte išnykstančių žinučių laikmatį į %1$s sek."
+  },
+  "ephemeral_timer_seconds_by_other": {
+    "message": "%2$s nustatė išnykstančių žinučių laikmatį į %1$s sek."
+  },
+  "ephemeral_timer_1_minute_by_you": {
+    "message": "Jūs nustatėte išnykstančių žinučių laikmatį į 1 minutę."
+  },
+  "ephemeral_timer_1_minute_by_other": {
+    "message": "%1$s nustatė išnykstančių žinučių laikmatį į 1 minutę. "
+  },
+  "ephemeral_timer_1_hour_by_you": {
+    "message": "Jūs nustatėte išnykstančių žinučių laikmatį į 1 valandą."
+  },
+  "ephemeral_timer_1_hour_by_other": {
+    "message": "%1$s nustatė išnykstančių žinučių laikmatį į 1 valandą."
+  },
+  "ephemeral_timer_1_day_by_you": {
+    "message": "Jūs nustatėte išnykstančių žinučių laikmatį į 1 dieną."
+  },
+  "ephemeral_timer_1_day_by_other": {
+    "message": "%1$s nustatė išnykstančių žinučių laikmatį į 1 dieną."
+  },
+  "ephemeral_timer_1_week_by_you": {
+    "message": "Jūs nustatėte išnykstančių žinučių laikmatį į 1 savaitę."
+  },
+  "ephemeral_timer_1_week_by_other": {
+    "message": "%1$s nustatė išnykstančių žinučių laikmatį į 1 savaitę."
+  },
+  "ephemeral_timer_minutes_by_you": {
+    "message": "Jūs nustatėte išnykstančių žinučių laikmatį į %1$s min."
+  },
+  "ephemeral_timer_minutes_by_other": {
+    "message": "%2$s nustatė išnykstančių žinučių laikmatį į %1$s min. "
+  },
+  "ephemeral_timer_hours_by_you": {
+    "message": "Jūs nustatėte išnykstančių žinučių laikmatį į %1$s val."
+  },
+  "ephemeral_timer_hours_by_other": {
+    "message": "%2$s nustatė išnykstančių žinučių laikmatį į %1$s val. "
+  },
+  "ephemeral_timer_days_by_you": {
+    "message": "Jūs nustatėte išnykstančių žinučių laikmatį į %1$s d."
+  },
+  "ephemeral_timer_days_by_other": {
+    "message": "%2$s nustatė išnykstančių žinučių laikmatį į %1$s d. "
+  },
+  "ephemeral_timer_weeks_by_you": {
+    "message": "Jūs nustatėte išnykstančių žinučių laikmatį į %1$s sav."
+  },
+  "ephemeral_timer_weeks_by_other": {
+    "message": "%2$s nustatė išnykstančių žinučių laikmatį į %1$s sav. "
+  },
+  "chat_protection_broken": {
+    "message": "%1$s išsiuntė žinutę iš kito įrenginio."
+  },
+  "chat_protection_broken_tap_to_learn_more": {
+    "message": "%1$s išsiuntė žinutę iš kito įrenginio. Bakstelėkite norėdami sužinoti daugiau."
+  },
+  "learn_more": {
+    "message": "Sužinoti daugiau"
+  },
+  "devicemsg_bad_time": {
+    "message": "⚠️ Atrodo, kad jūsų įrenginyje yra nustatyta netiksli data ar laikas (%1$s).\n\nSuderinkite savo laikrodį ⏰🔧 kad užtikrintumėte, jog žinutės bus gaunamos teisingai."
+  },
+  "enter_system_secret_to_continue": {
+    "message": "Atrakinkite, norėdami tęsti"
+  },
+  "qr_code": {
+    "message": "QR kodas"
+  },
+  "load_qr_code_as_image": {
+    "message": "Įkelti QR kodą kaip paveikslą"
+  },
+  "qrscan_title": {
+    "message": "Nuskenuoti QR kodą"
+  },
+  "qrscan_hint": {
+    "message": "Laikykite savo kamerą virš QR kodo"
+  },
+  "qrscan_failed": {
+    "message": "Nepavyko dekoduoti QR kodo"
+  },
+  "qrscan_ask_join_group": {
+    "message": "Ar norite prisijungti prie grupės \"%1$s\"?"
+  },
+  "qrscan_contains_text": {
+    "message": "Nuskenuoto QR kodo tekstas:\n\n%1$s"
+  },
+  "qrscan_contains_url": {
+    "message": "Nuskenuoto QR kodo URL:\n\n%1$s"
+  },
+  "qrscan_fingerprint_label": {
+    "message": "Kontrolinis kodas"
+  },
+  "withdraw_qr_code": {
+    "message": "Pasyvinti QR kodą"
+  },
+  "revive_qr_code": {
+    "message": "Aktyvuoti QR kodą"
+  },
+  "qrshow_title": {
+    "message": "QR pakvietimo kodas"
+  },
+  "qrshow_x_verified": {
+    "message": "%1$s patvirtintas."
+  },
+  "qrshow_x_has_joined_group": {
+    "message": "%1$s prisijungė prie grupės."
+  },
+  "qrshow_join_group_title": {
+    "message": "QR pakvietimo kodas"
+  },
+  "qrshow_join_group_hint": {
+    "message": "Nuskenuokite tai, norėdami prisijungti prie \"%1$s\" grupės."
+  },
+  "qrshow_join_contact_title": {
+    "message": "QR pakvietimo kodas"
+  },
+  "qrshow_join_contact_hint": {
+    "message": "Nuskenuokite tai, norėdami užmegzti kontaktą su %1$s"
+  },
+  "qrshow_join_contact_no_connection_toast": {
+    "message": "Nėra interneto ryšio, nepavyksta atlikti QR kodo sąrankos."
+  },
+  "qraccount_ask_create_and_login": {
+    "message": "Sukurti naują el. pašto adresą ties „%1$s“ ir prisijungti ten?"
+  },
+  "please_enter_name": {
+    "message": "Įrašykite vardą."
+  },
+  "qraccount_qr_code_cannot_be_used": {
+    "message": "Nuskenuotas QR kodas negali būti naudojamas naujos paskyros nustatymui."
+  },
+  "qrlogin_ask_login": {
+    "message": "Prisijungti prie „%1$s“?"
+  },
+  "contact_verified": {
+    "message": "%1$s patvirtintas."
+  },
+  "contact_not_verified": {
+    "message": "Nepavyksta patvirtinti %1$s"
+  },
+  "contact_setup_changed": {
+    "message": "Pakeista sąranka, skirta %1$s."
+  },
+  "copy_qr_data_success": {
+    "message": "QR kodo URL adresas nukopijuotas į iškarpinę"
+  },
+  "mailto_dialog_header_select_chat": {
+    "message": "Pasirinkite pokalbį, į kurį siųsti žinutę"
+  },
+  "mailto_link_could_not_be_decoded": {
+    "message": "nepavyko dekoduoti mailto nuorodos: %1$s"
+  },
+  "notify_reply_button": {
+    "message": "Atsakyti"
+  },
+  "notify_new_message": {
+    "message": "Nauja žinutė"
+  },
+  "notify_background_connection_enabled": {
+    "message": "Foninis ryšys įjungtas"
+  },
+  "notify_priority_high": {
+    "message": "Didelė"
+  },
+  "notify_priority_max": {
+    "message": "Didžiausia"
+  },
+  "notify_name_and_message": {
+    "message": "Vardą ir žinutę"
+  },
+  "notify_name_only": {
+    "message": "Tik vardą"
+  },
+  "notify_no_name_or_message": {
+    "message": "Jokio vardo ar žinutės"
+  },
+  "notifications_disabled": {
+    "message": "Pranešimai išjungti"
+  },
+  "new_messages": {
+    "message": "Naujos žinutės"
+  },
+  "new_messages_body": {
+    "message": "Yra naujų žinučių"
+  },
+  "perm_required_title": {
+    "message": "Reikalingas leidimas"
+  },
+  "perm_continue": {
+    "message": "Tęsti"
+  },
+  "ImageEditorHud_draw_anywhere_to_blur": {
+    "message": "Pieškite ten, kur norite sulieti"
+  },
+  "ImageEditorHud_add_text": {
+    "message": "Pridėti tekstą"
+  },
+  "ImageEditorHud_blur": {
+    "message": "Sulieti"
+  },
+  "ImageEditorHud_crop": {
+    "message": "Apkirpti"
+  },
+  "ImageEditorHud_flip": {
+    "message": "Apversti"
+  },
+  "ImageEditorHud_rotate": {
+    "message": "Pasukti"
+  },
+  "encrypted_message": {
+    "message": "Šifruota žinutė"
+  },
+  "about_licensed_under_desktop": {
+    "message": "Ši programinė įranga yra licencijuota pagal GNU GPL versiją 3, o pirminis kodas yra prieinamas „GitHub“ internetinėje svetainėje."
+  },
+  "welcome_desktop": {
+    "message": "Sveiki atvykę į Delta Chat"
+  },
+  "global_menu_preferences_language_desktop": {
+    "message": "Pasirinkti kalbą..."
+  },
+  "global_menu_file_desktop": {
+    "message": "Failas"
+  },
+  "global_menu_file_quit_desktop": {
+    "message": "Išeiti"
+  },
+  "global_menu_edit_desktop": {
+    "message": "Taisa"
+  },
+  "global_menu_edit_undo_desktop": {
+    "message": "Atšaukti"
+  },
+  "global_menu_edit_redo_desktop": {
+    "message": "Grąžinti"
+  },
+  "global_menu_edit_cut_desktop": {
+    "message": "Iškirpti"
+  },
+  "global_menu_edit_copy_desktop": {
+    "message": "Kopijuoti"
+  },
+  "global_menu_edit_paste_desktop": {
+    "message": "Įdėti"
+  },
+  "global_menu_view_desktop": {
+    "message": "Rodinys"
+  },
+  "global_menu_view_floatontop_desktop": {
+    "message": "Plaukioti viršuje"
+  },
+  "global_menu_view_developer_desktop": {
+    "message": "Plėtotojas"
+  },
+  "global_menu_view_developer_tools_desktop": {
+    "message": "Plėtotojo įrankiai"
+  },
+  "global_menu_help_desktop": {
+    "message": "Žinynas"
+  },
+  "global_menu_help_report_desktop": {
+    "message": "Pranešti apie klaidą"
+  },
+  "global_menu_help_about_desktop": {
+    "message": "Apie Delta Chat"
+  },
+  "global_menu_file_open_desktop": {
+    "message": "Atverti Delta Chat"
+  },
+  "global_menu_minimize_to_tray": {
+    "message": "Suskleisti"
+  },
+  "no_chat_selected_suggestion_desktop": {
+    "message": "Pasirinkite arba sukurkite naują pokalbį"
+  },
+  "write_message_desktop": {
+    "message": "Rašykite žinutę"
+  },
+  "encryption_info_title_desktop": {
+    "message": "Šifravimo informacija"
+  },
+  "delete_message_desktop": {
+    "message": "Ištrinti žinutę"
+  },
+  "more_info_desktop": {
+    "message": "Daugiau informacijos"
+  },
+  "timestamp_format_m_desktop": {
+    "message": "MMM D"
+  },
+  "remove_desktop": {
+    "message": "Šalinti"
+  },
+  "save_desktop": {
+    "message": "Išsaugoti"
+  },
+  "name_desktop": {
+    "message": "Vardas"
+  },
+  "select_group_image_desktop": {
+    "message": "Pasirinkti grupės paveikslą"
+  },
+  "export_backup_desktop": {
+    "message": "Eksportuoti atsarginę kopiją"
+  },
+  "autocrypt_correct_desktop": {
+    "message": "Autocrypt sąranka sėkmingai perduota!"
+  },
+  "forget_login_confirmation_desktop": {
+    "message": "Ištrinti šį prisijungimą? Viskas bus ištrinta, įskaitant jūsų ištisinę sąranką, adresatus, pokalbius, žinutes ir mediją. Šis veiksmas yra galutinis ir negalės būti panaikintas."
+  },
+  "message_detail_sent_desktop": {
+    "message": "išsiųsta"
+  },
+  "message_detail_received_desktop": {
+    "message": "gauta"
+  },
+  "menu.view.developer.open.log.folder": {
+    "message": "Atverti žurnalų aplanką"
+  },
+  "menu.view.developer.open.current.log.file": {
+    "message": "Atverti dabartinio žurnalo failą"
+  },
+  "explain_desktop_minimized_disabled_tray_pref": {
+    "message": "Dėklo piktograma negali būti išjungta, nes Delta Chat buvo paleista naudojant --minimized parinktį."
+  },
+  "no_spellcheck_suggestions_found": {
+    "message": "Nerasta jokių rašybos pasiūlymų."
+  },
+  "show_window": {
+    "message": "Rodyti langą"
+  },
+  "switch_between_chats": {
+    "message": "Perjungti tarp pokalbių"
+  },
+  "a11y_delivery_status_error": {
+    "message": "Pristatymo būsena: Klaida"
+  },
+  "a11y_encryption_padlock": {
+    "message": "Šifravimo spyna"
+  },
+  "a11y_delivery_status_sending": {
+    "message": "Pristatymo būsena: Siunčiama"
+  },
+  "a11y_delivery_status_draft": {
+    "message": "Pristatymo būsena: Juodraštis"
+  },
+  "a11y_delivery_status_delivered": {
+    "message": "Pristatymo būsena: Pristatyta"
+  },
+  "a11y_delivery_status_read": {
+    "message": "Pristatymo būsena: Perskaityta"
+  },
+  "a11y_delivery_status_invalid": {
+    "message": "Neteisinga pristatymo būsena"
+  },
+  "a11y_background_preview_label": {
+    "message": "Fono peržiūra"
+  },
+  "a11y_disappearing_messages_activated": {
+    "message": "Išnykstančios žinutės aktyvuotos"
+  },
+  "a11y_connectivity_hint": {
+    "message": "Bakstelėkite du kartus norėdami pamatyti išsamesnę informaciją apie jungiamumą."
+  },
+  "login_error_no_internet_connection": {
+    "message": "Nėra interneto ryšio, nepavyko prisijungti."
+  },
+  "share_account_not_configured": {
+    "message": "Paskyra nėra sukonfigūruota."
+  },
+  "cannot_play_audio_file": {
+    "message": "Garso įrašo failas negali būti atkurtas."
+  },
+  "open_settings": {
+    "message": "Atverti nustatymus"
+  },
+  "import_device_contacts": {
+    "message": "Importuoti įrenginio adresatus"
+  },
+  "disabled_in_dc": {
+    "message": "Išjungta Delta Chat programėlėje"
+  },
+  "disabled_in_system_settings": {
+    "message": "Išjungta sistemos nustatymuose"
+  },
+  "InfoPlist_NSMicrophoneUsageDescription": {
+    "message": "Delta Chat naudoja mikrofoną, kad įrašytų ir siųstų balso žinutes bei vaizdo įrašus su garsu."
+  },
+  "InfoPlist_NSPhotoLibraryUsageDescription": {
+    "message": "Delta Chat leis jums pasirinkti, kurias nuotraukas iš savo kolekcijos išsiųsti."
+  },
+  "InfoPlist_NSPhotoLibraryAddUsageDescription": {
+    "message": "Delta Chat nori įrašyti paveikslus į jūsų nuotraukų kolekciją."
+  },
+  "pref_background_notifications_rationale": {
+    "message": "Norėdami palaikyti ryšį su savo el. pašto serveriu ir gauti žinutes fone, kitame žingsnyje nepaisykite akumuliatoriaus optimizavimų (leiskite vykdyti programą fone).\n\nDelta Chat naudoja nedaug išteklių ir rūpinasi, kad neeikvotų jūsų akumuliatoriaus energijos."
+  },
+  "perm_enable_bg_reminder_title": {
+    "message": "Bakstelėkite čia, norėdami gauti žinutes, kol Delta Chat veikia fone."
+  },
+  "perm_enable_bg_already_done": {
+    "message": "Jūs jau leidote Delta Chat gauti žinutes fone.\n\nJei žinutės vis tiek nepristatomos fone, patikrinkite taip pat savo sistemos nustatymus."
+  },
+  "n_minutes": {
+    "one": "%d min.",
+    "few": "%d min.",
+    "many": "%d min.",
+    "other": "%d min."
+  },
+  "n_hours": {
+    "one": "%d val.",
+    "few": "%d val.",
+    "many": "%d val.",
+    "other": "%d val."
+  },
+  "n_chats": {
+    "one": "%d pokalbis",
+    "few": "%d pokalbiai",
+    "many": "%d pokalbių",
+    "other": "%d pokalbis"
+  },
+  "n_contacts": {
+    "one": "%d adresatas",
+    "few": "%d adresatai",
+    "many": "%d adresatų",
+    "other": "%d adresatas"
+  },
+  "n_messages": {
+    "one": "%d žinutė",
+    "few": "%d žinutės",
+    "many": "%d žinučių",
+    "other": "%d žinutė"
+  },
+  "n_reactions": {
+    "one": "%d reakcija",
+    "few": "%d reakcijos",
+    "many": "%d reakcijų",
+    "other": "%d reakcija"
+  },
+  "n_members": {
+    "one": "%d dalyvis",
+    "few": "%d dalyviai",
+    "many": "%d dalyvių",
+    "other": "%d dalyvis"
+  },
+  "n_recipients": {
+    "one": "%d gavėjas",
+    "few": "%d gavėjai",
+    "many": "%d gavėjų",
+    "other": "%d gavėjas"
+  },
+  "ask_delete_messages_simple": {
+    "one": "Ištrinti %d žinutę?",
+    "few": "Ištrinti %d žinutes?",
+    "many": "Ištrinti %d žinučių?",
+    "other": "Ištrinti %d žinutę?"
+  },
+  "chat_archived": {
+    "one": "Archyvuotas %d pokalbis",
+    "few": "Archyvuoti %d pokalbiai",
+    "many": "Archyvuota %d pokalbių",
+    "other": "Archyvuotas %d pokalbis"
+  },
+  "chat_unarchived": {
+    "one": "Išarchyvuotas %d pokalbis",
+    "few": "Išarchyvuoti %d pokalbiai",
+    "many": "Išarchyvuota %d pokalbių",
+    "other": "Išarchyvuotas %d pokalbis"
+  },
+  "chat_n_new_messages": {
+    "one": "%d nauja žinutė",
+    "few": "%d naujos žinutės",
+    "many": "%d naujų žinučių",
+    "other": "%d nauja žinutė"
+  }
+}

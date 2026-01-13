@@ -1,0 +1,1313 @@
+{
+  "app_name": {
+    "message": "Delta Chat"
+  },
+  "ok": {
+    "message": "Ados"
+  },
+  "cancel": {
+    "message": "Utzi"
+  },
+  "yes": {
+    "message": "Bai"
+  },
+  "no": {
+    "message": "Ez"
+  },
+  "on": {
+    "message": "Bai"
+  },
+  "off": {
+    "message": "Ez"
+  },
+  "def": {
+    "message": "Lehenetsita"
+  },
+  "custom": {
+    "message": "Pertsonalizatua"
+  },
+  "none": {
+    "message": "Bat ere ez"
+  },
+  "automatic": {
+    "message": "Automatikoa"
+  },
+  "strict": {
+    "message": "Zorrotza"
+  },
+  "open": {
+    "message": "Ireki"
+  },
+  "delete": {
+    "message": "Ezabatu"
+  },
+  "info": {
+    "message": "Informazioa"
+  },
+  "update": {
+    "message": "Eguneratu"
+  },
+  "emoji": {
+    "message": "Emojia"
+  },
+  "attachment": {
+    "message": "Eranskina"
+  },
+  "back": {
+    "message": "Atzera"
+  },
+  "close": {
+    "message": "Itxi"
+  },
+  "forward": {
+    "message": "Birbidali"
+  },
+  "archive": {
+    "message": "Artxibatu"
+  },
+  "unarchive": {
+    "message": "Berreskuratu artxibotik"
+  },
+  "mute": {
+    "message": "Isilarazi"
+  },
+  "ephemeral_messages": {
+    "message": "Mezuen desagerpena"
+  },
+  "save": {
+    "message": "Gorde"
+  },
+  "chat": {
+    "message": "Txata"
+  },
+  "media": {
+    "message": "Multimedia"
+  },
+  "main_menu": {
+    "message": "Menu nagusia"
+  },
+  "start_chat": {
+    "message": "Hasi txata"
+  },
+  "show_password": {
+    "message": "Erakutsi pasahitza"
+  },
+  "hide_password": {
+    "message": "Ezkutatu pasahitza"
+  },
+  "not_now": {
+    "message": "Orain ez"
+  },
+  "never": {
+    "message": "Inoiz ez"
+  },
+  "one_moment": {
+    "message": "Unetxo bat..."
+  },
+  "done": {
+    "message": "Egina"
+  },
+  "undo": {
+    "message": "Desegin"
+  },
+  "next": {
+    "message": "Hurrengoa"
+  },
+  "error": {
+    "message": "Errorea"
+  },
+  "error_x": {
+    "message": "Errorea: %1$s"
+  },
+  "no_app_to_handle_data": {
+    "message": "Ezin izan da datu mota hau kudeatzeko aplikaziorik."
+  },
+  "no_browser_installed": {
+    "message": "Ez dago nabigatzailerik instalatuta."
+  },
+  "file_not_found": {
+    "message": "Ezin izan da %1$s aurkitu."
+  },
+  "copied_to_clipboard": {
+    "message": "Arbelera kopiatuta."
+  },
+  "contacts_headline": {
+    "message": "Kontaktuak"
+  },
+  "email_address": {
+    "message": "E-mail helbidea"
+  },
+  "bad_email_address": {
+    "message": "E-mail helbide okerra."
+  },
+  "password": {
+    "message": "Pasahitza"
+  },
+  "existing_password": {
+    "message": "Oraingo pasahitza"
+  },
+  "now": {
+    "message": "Orain"
+  },
+  "danger": {
+    "message": "Arriskua"
+  },
+  "today": {
+    "message": "Gaur"
+  },
+  "yesterday": {
+    "message": "Atzo"
+  },
+  "this_week": {
+    "message": "Aste honetan"
+  },
+  "this_month": {
+    "message": "Hilabete honetan"
+  },
+  "last_week": {
+    "message": "Azken astea"
+  },
+  "last_month": {
+    "message": "Azken hilabetea"
+  },
+  "self": {
+    "message": "Ni"
+  },
+  "draft": {
+    "message": "Zirriborroa"
+  },
+  "image": {
+    "message": "Irudia"
+  },
+  "gif": {
+    "message": "Gif-a"
+  },
+  "images": {
+    "message": "Irudiak"
+  },
+  "audio": {
+    "message": "Audioa"
+  },
+  "voice_message": {
+    "message": "Ahots-mezua"
+  },
+  "forwarded_message": {
+    "message": "Birbidalitako mezua"
+  },
+  "video": {
+    "message": "Bideoa"
+  },
+  "documents": {
+    "message": "Dokumentuak"
+  },
+  "contact": {
+    "message": "Kontaktua"
+  },
+  "camera": {
+    "message": "Kamera"
+  },
+  "location": {
+    "message": "Kokalekua"
+  },
+  "gallery": {
+    "message": "Galeria"
+  },
+  "file": {
+    "message": "Fitxategia"
+  },
+  "unknown": {
+    "message": "Ezezaguna"
+  },
+  "green": {
+    "message": "Berdea"
+  },
+  "red": {
+    "message": "Gorria"
+  },
+  "blue": {
+    "message": "Urdina"
+  },
+  "orange": {
+    "message": "Laranja"
+  },
+  "cyan": {
+    "message": "Ziana"
+  },
+  "purple": {
+    "message": "Morea"
+  },
+  "magenta": {
+    "message": "Magenta"
+  },
+  "white": {
+    "message": "Zuria"
+  },
+  "small": {
+    "message": "Txikia"
+  },
+  "normal": {
+    "message": "Arrunta"
+  },
+  "large": {
+    "message": "Handia"
+  },
+  "extra_large": {
+    "message": "Oso handia"
+  },
+  "fast": {
+    "message": "Azkarra"
+  },
+  "slow": {
+    "message": "Motela"
+  },
+  "menu_new_contact": {
+    "message": "Kontaktu berria"
+  },
+  "menu_new_chat": {
+    "message": "Txat berria"
+  },
+  "menu_new_group": {
+    "message": "Talde berria"
+  },
+  "menu_send": {
+    "message": "Bidali"
+  },
+  "menu_toggle_keyboard": {
+    "message": "Txandakatu emoji teklatua"
+  },
+  "menu_edit_group": {
+    "message": "Editatu taldea"
+  },
+  "menu_group_name_and_image": {
+    "message": "Taldearen izena eta irudia"
+  },
+  "menu_show_global_map": {
+    "message": "Erakutsi kokaleku guztiak"
+  },
+  "menu_archive_chat": {
+    "message": "Artxibatu txata"
+  },
+  "menu_unarchive_chat": {
+    "message": "Berreskuratu txata artxibotik"
+  },
+  "menu_add_attachment": {
+    "message": "Gehitu eranskina"
+  },
+  "menu_leave_group": {
+    "message": "Atera taldetik"
+  },
+  "menu_delete_chat": {
+    "message": "Ezabatu txata"
+  },
+  "menu_delete_location": {
+    "message": "Ezabatu kokaleku hau?"
+  },
+  "menu_message_details": {
+    "message": "Mezuaren xehetasunak"
+  },
+  "menu_copy_to_clipboard": {
+    "message": "Kopiatu arbelera"
+  },
+  "menu_forward": {
+    "message": "Birbidali mezua"
+  },
+  "menu_reply": {
+    "message": "Erantzun mezuari"
+  },
+  "menu_mute": {
+    "message": "Mututu jakinarazpenak"
+  },
+  "menu_unmute": {
+    "message": "Utzi mututzeari"
+  },
+  "menu_export_attachment": {
+    "message": "Esportatu eranskina"
+  },
+  "menu_all_media": {
+    "message": "Multimedia guztia"
+  },
+  "menu_share": {
+    "message": "Partekatu"
+  },
+  "menu_block_contact": {
+    "message": "Blokeatu kontaktuak"
+  },
+  "menu_unblock_contact": {
+    "message": "Desblokeatu kontaktua"
+  },
+  "menu_play": {
+    "message": "Erreproduzitu"
+  },
+  "menu_pause": {
+    "message": "Pausatu"
+  },
+  "menu_scroll_to_bottom": {
+    "message": "Korritu behealdera"
+  },
+  "menu_scroll_to_top": {
+    "message": "Korritu goialdera"
+  },
+  "menu_help": {
+    "message": "Laguntza"
+  },
+  "menu_select_all": {
+    "message": "Hautatu guztiak"
+  },
+  "menu_edit_name": {
+    "message": "Editatu izena"
+  },
+  "menu_settings": {
+    "message": "Ezarpenak"
+  },
+  "menu_advanced": {
+    "message": "Aurreratua"
+  },
+  "menu_view_profile": {
+    "message": "Ikusi profila"
+  },
+  "menu_zoom_in": {
+    "message": "Hurbildu zooma"
+  },
+  "menu_zoom_out": {
+    "message": "Urrundu zooma"
+  },
+  "menu_save_log": {
+    "message": "Gorde egunkaria"
+  },
+  "title_share_location": {
+    "message": "Partekatu kokalekua taldeko kide guztiak"
+  },
+  "device_talk": {
+    "message": "Gailuaren mezuak"
+  },
+  "device_talk_subtitle": {
+    "message": "Lokalki sortutako mezuak"
+  },
+  "device_talk_explain": {
+    "message": "Txat honetako mezuak zure Delta Chat aplikazioak sortu ditu lokalki. Egileek aplikazioaren eguneraketei buruz eta erabileran arazoei buruz informatzeko erabiltzen dute."
+  },
+  "edit_contact": {
+    "message": "Editatu kontaktua"
+  },
+  "pin_chat": {
+    "message": "Finkatu txata"
+  },
+  "unpin_chat": {
+    "message": "Desfinkatu txata"
+  },
+  "pin": {
+    "message": "Finkatu"
+  },
+  "unpin": {
+    "message": "Desfinkatu"
+  },
+  "mute_for_one_hour": {
+    "message": "Mututu ordubete"
+  },
+  "mute_for_eight_hours": {
+    "message": "Mututu 8 ordu"
+  },
+  "mute_for_one_day": {
+    "message": "Mututu egun bat"
+  },
+  "mute_for_seven_days": {
+    "message": "Mututu 7 egun"
+  },
+  "mute_forever": {
+    "message": "Mututu betirako"
+  },
+  "share_location_for_5_minutes": {
+    "message": "5 minutuz"
+  },
+  "share_location_for_30_minutes": {
+    "message": "30 minutuz"
+  },
+  "share_location_for_one_hour": {
+    "message": "Ordu 1"
+  },
+  "share_location_for_two_hours": {
+    "message": "2 orduz"
+  },
+  "share_location_for_six_hours": {
+    "message": "6 orduz"
+  },
+  "file_saved_to": {
+    "message": "Fitxategia \"%1$s\" helbidean gordeta"
+  },
+  "ask_leave_group": {
+    "message": "Ziur talde honetatik atera nahi duzula?"
+  },
+  "ask_forward": {
+    "message": "Birbidali mezuak %1$s erabiltzaileari?"
+  },
+  "ask_export_attachment": {
+    "message": "Esportatu eranskina? Eranskinak esportatzeak zure beste gailuko beste aplikazioek atzitzea ahalbidetuko du.\n\nJarraitu?"
+  },
+  "ask_block_contact": {
+    "message": "Blokeatu kontaktu hau? Ez dituzu kontaktu honen mezu gehiago jasoko."
+  },
+  "ask_unblock_contact": {
+    "message": "Desblokeatu kontaktu hau? Berriro jaso ahal izango dituzu kontaktu honen mezuak."
+  },
+  "ask_delete_contacts": {
+    "message": "Ezabatu kontaktuak? Honek behin betiko ezabatuko ditu hautatutako kontaktuak.\n\nTxaten bat abian duten eta sistemako helbide liburuan dauden kontaktuak ezin dira behin betiko ezabatu."
+  },
+  "ask_delete_contact": {
+    "message": "Ezabatu %1$s kontaktua behin betiko?\n\nAbian dauden txatak dituzten kontaktuak eta sistemaren helbide liburuan dauden kontaktuak ezin dira behin betiko ezabatu."
+  },
+  "ask_start_chat_with": {
+    "message": "Txateatu %1$s erabiltzailearekin?"
+  },
+  "ask_remove_members": {
+    "message": "Kendu %1$s taldetik?"
+  },
+  "contacts_title": {
+    "message": "Kontaktuak"
+  },
+  "contacts_enter_name_or_email": {
+    "message": "Sartu izena edo e-mail helbidea"
+  },
+  "contacts_type_email_above": {
+    "message": "Idatzi e-mail helbidea goian"
+  },
+  "contacts_empty_hint": {
+    "message": "Kontakturik ez"
+  },
+  "chat_archived_chats_title": {
+    "message": "Artxibatutako txatak"
+  },
+  "chat_please_enter_message": {
+    "message": "Idatzi mezu bat."
+  },
+  "chat_camera_unavailable": {
+    "message": "Kamera ez dago eskuragarri."
+  },
+  "chat_unable_to_record_audio": {
+    "message": "Ezin izan da audioa grabatu."
+  },
+  "chat_new_group_hint": {
+    "message": "Idatzi lehen mezua, besteek taldera erantzutea baimenduz\n\n• Ez du axola denek ez badute Delta Chat erabiltzen.\n\n• Lehen mezua bidaltzeko denbora bat behar daiteke."
+  },
+  "chat_record_slide_to_cancel": {
+    "message": "Irristatu ezeztatzeko"
+  },
+  "chat_record_explain": {
+    "message": "Sakatu eta mantendu ahots-mezu bat grabatzeko, askatu bidaltzeko."
+  },
+  "chat_no_chats_yet_title": {
+    "message": "Sarrera-ontzi hutsa.\nSakatu \"+\" txat berria hasteko."
+  },
+  "chat_all_archived": {
+    "message": "Txat guztiak artxibatuta.\nSakatu \"+\" txat berri bat hasteko."
+  },
+  "chat_share_with_title": {
+    "message": "Partekatu honekin"
+  },
+  "chat_input_placeholder": {
+    "message": "Mezua"
+  },
+  "chat_archived_label": {
+    "message": "Artxibatuta"
+  },
+  "chat_no_messages": {
+    "message": "Mezurik ez."
+  },
+  "chat_self_talk_subtitle": {
+    "message": "Nire buruari bidalitako mezuak"
+  },
+  "saved_messages": {
+    "message": "Gordetako mezuak"
+  },
+  "saved_messages_explain": {
+    "message": "• Birbidali mezuak hona eskura izateko\n\n• Hartu oharrak edo ahots mezuak\n\n• Gehitu multimedia horietara"
+  },
+  "retry_send": {
+    "message": "Saiatu berriro mezua bidaltzen"
+  },
+  "filter_map_on_time": {
+    "message": "Erakutsi kokalekuak denbora markoan"
+  },
+  "show_location_traces": {
+    "message": "Erakutsi lorratzak"
+  },
+  "add_poi": {
+    "message": "Bidali interesezko puntua"
+  },
+  "search": {
+    "message": "Bilatu"
+  },
+  "search_explain": {
+    "message": "Bilatu txatak, kontaktuak, eta mezuak."
+  },
+  "search_no_result_for_x": {
+    "message": "Ez da emaitzarik aurkitu \"%s\" bilaketarentzat"
+  },
+  "group_name": {
+    "message": "Taldearen izena"
+  },
+  "group_avatar": {
+    "message": "Taldearen abatarra"
+  },
+  "group_create_button": {
+    "message": "Sortu taldea"
+  },
+  "group_please_enter_group_name": {
+    "message": "Idatzi izen bat taldearentzat."
+  },
+  "group_add_members": {
+    "message": "Gehitu kideak"
+  },
+  "group_self_not_in_group": {
+    "message": "Taldeko kidea izan behar zara ekintza hau burutzeko."
+  },
+  "profile_encryption": {
+    "message": "Zifratzea"
+  },
+  "profile_shared_chats": {
+    "message": "Partekatutako txatak"
+  },
+  "tab_contact": {
+    "message": "Kontaktua"
+  },
+  "tab_group": {
+    "message": "Taldea"
+  },
+  "tab_gallery": {
+    "message": "Galeria"
+  },
+  "tab_docs": {
+    "message": "Dokumentuak"
+  },
+  "tab_links": {
+    "message": "Estekak"
+  },
+  "tab_map": {
+    "message": "Mapa"
+  },
+  "tab_gallery_empty_hint": {
+    "message": "Txat honetan partekatutako irudi eta bideoak agertuko dira hemen"
+  },
+  "tab_docs_empty_hint": {
+    "message": "Txat honetan partekatutako dokumentuak, musika, eta bestelako fitxategiak agertuko dira hemen"
+  },
+  "media_preview": {
+    "message": "Multimediaren aurrebista"
+  },
+  "send_message": {
+    "message": "Bidali mezua"
+  },
+  "login_title": {
+    "message": "Hasi saioa"
+  },
+  "login_header": {
+    "message": "Hasi saioa zure zerbitzarian"
+  },
+  "login_explain": {
+    "message": "Badagoen e-mail kontu batekin saioa hasten"
+  },
+  "login_subheader": {
+    "message": "E-mail hornitzaile ezagunentzat ezarpen gehigarriak automatikoki sortzen dira. Batzuetan IMAP gaitu behar da web interfazearen bidez. Kontsultatu zure e-mail hornitzaileari edo eskatu laguntza lagunei."
+  },
+  "login_no_servers_hint": {
+    "message": "Ez dago Delta Chat zerbitzaririk, zure datuak zure gailuan mantentzen dira!"
+  },
+  "login_inbox": {
+    "message": "Sarrera ontzia"
+  },
+  "login_imap_login": {
+    "message": "IMAP erabiltzaile-izena"
+  },
+  "login_imap_server": {
+    "message": "IMAP zerbitzaria"
+  },
+  "login_imap_port": {
+    "message": "IMAP ataka"
+  },
+  "login_imap_security": {
+    "message": "IMAP segurtasuna"
+  },
+  "login_outbox": {
+    "message": "Irteera ontzia"
+  },
+  "login_smtp_login": {
+    "message": "SMTP erabiltzaile-izena"
+  },
+  "login_smtp_password": {
+    "message": "SMTP pasahitza"
+  },
+  "login_smtp_server": {
+    "message": "SMTP zerbitzaria"
+  },
+  "login_smtp_port": {
+    "message": "SMTP ataka"
+  },
+  "login_smtp_security": {
+    "message": "SMTP segurtasuna"
+  },
+  "login_auth_method": {
+    "message": "Baimentze metodoa"
+  },
+  "login_info_oauth2_title": {
+    "message": "Jarraitu ezarpen sinplifikatuarekin"
+  },
+  "login_info_oauth2_text": {
+    "message": "Sartu duzun e-mail helbideak ezarpen sinplifikatua onartzen du (OAuth2).\n\nHurrengo urratsean, baimendu Detla Chat zure e-mail bidezko txat aplikazio gisa erabili ahal izateko.\n\nEz dago Delta Chat zerbitzaririk, zure datuak zure gailuan mantentzen dira!"
+  },
+  "login_certificate_checks": {
+    "message": "Ziurtagiri-egiaztaketak"
+  },
+  "login_error_mail": {
+    "message": "Sartu baliozko e-mail helbide bat"
+  },
+  "login_error_server": {
+    "message": "Sartu baliozko zerbitzari / IP helbide bat"
+  },
+  "login_error_port": {
+    "message": "Sartu baliozko ataka bat  (1–65535)"
+  },
+  "login_error_required_fields": {
+    "message": "Sartu baliozko e-mail helbidea eta pasahitza"
+  },
+  "import_backup_title": {
+    "message": "Inportatu babes-kopia"
+  },
+  "import_backup_ask": {
+    "message": "Babes-kopia aurkitu da:  \"%1$s\".\n\nInportatu nahi duzu eta bertako datu eta ezarpenak erabili?"
+  },
+  "import_backup_no_backup_found": {
+    "message": "Ez da babes-kopiarik aurkitu.\n\nKopiatu babes-kopia \"%1$s\" karpetan eta saiatu berriro. Bestela, sakatu \"Hasi txateatzen\" ezarpen arruntarekin aurrera egiteko."
+  },
+  "login_error_cannot_login": {
+    "message": "Ezin da \"%1$s\" bezala saioa hasi. Egiaztatu E-mail helbidea eta pasahitza zuzenak diren."
+  },
+  "accept_invalid_certificates": {
+    "message": "Onartu ziurtagiri baliogabeak"
+  },
+  "switch_account": {
+    "message": "Aldatu kontua"
+  },
+  "add_account": {
+    "message": "Gehitu kontua"
+  },
+  "delete_account": {
+    "message": "Ezabatu kontua"
+  },
+  "delete_account_ask": {
+    "message": "Ziur al zaude zure kontuaren datuak ezabatu nahi dituzula?"
+  },
+  "forward_to": {
+    "message": "Birbidali honi …"
+  },
+  "share_abort": {
+    "message": "Partekatzea eten da baimenak falta direlako."
+  },
+  "pref_using_custom": {
+    "message": "Pertsonalizatua erabiltzen: %s"
+  },
+  "pref_using_default": {
+    "message": "Lehenetsia erabiltzen: %s"
+  },
+  "pref_profile_info_headline": {
+    "message": "Zure profileko informazioa"
+  },
+  "pref_profile_photo": {
+    "message": "Profileko argazkia"
+  },
+  "pref_blocked_contacts": {
+    "message": "Blokeatutako kontaktuak"
+  },
+  "pref_password_and_account_settings": {
+    "message": "Pasahitza eta kontua"
+  },
+  "pref_who_can_see_profile_explain": {
+    "message": "Zure profileko argazkia eta izena zure mezuekin batera erakutsiko dira beste erabiltzaileekin komunikatzen zarenean. Informazioa behin bidalita ezin da ezabatu edo kendu."
+  },
+  "pref_your_name": {
+    "message": "Zure izena"
+  },
+  "pref_default_status_label": {
+    "message": "Sinaduraren testua"
+  },
+  "pref_enter_sends": {
+    "message": "Enter teklarekin bidali"
+  },
+  "pref_enter_sends_explain": {
+    "message": "Enter tekla sakatzeak mezua bidaliko du"
+  },
+  "pref_outgoing_media_quality": {
+    "message": "Bidalitako multimediaren kalitatea"
+  },
+  "pref_outgoing_balanced": {
+    "message": "Orekatua"
+  },
+  "pref_outgoing_worse": {
+    "message": "Kalitate txarragoa, tamaina txikia"
+  },
+  "pref_vibrate": {
+    "message": "Bibratu"
+  },
+  "pref_screen_security": {
+    "message": "Pantaila segurtasuna"
+  },
+  "pref_screen_security_explain": {
+    "message": "Eskatu pantaila-argazkiak blokeatzea azkenak zerrendan eta aplikazio barruan."
+  },
+  "pref_screen_security_please_restart_hint": {
+    "message": "Pantailaren segurtasun ezarpenak aplikatzeko berrabiarazi aplikazioa."
+  },
+  "pref_notifications": {
+    "message": "Jakinarazpenak"
+  },
+  "pref_notifications_show": {
+    "message": "Erakutsi"
+  },
+  "pref_notifications_priority": {
+    "message": "Lehentasuna"
+  },
+  "pref_led_color": {
+    "message": "LED kolorea"
+  },
+  "pref_sound": {
+    "message": "Soinua"
+  },
+  "pref_silent": {
+    "message": "Isila"
+  },
+  "pref_privacy": {
+    "message": "Pribatutasuna"
+  },
+  "pref_chats_and_media": {
+    "message": "Txatak eta multimedia"
+  },
+  "pref_system_default": {
+    "message": "Sisteman lehenetsia"
+  },
+  "pref_light_theme": {
+    "message": "Argia"
+  },
+  "pref_dark_theme": {
+    "message": "Iluna"
+  },
+  "pref_appearance": {
+    "message": "Itxura"
+  },
+  "pref_theme": {
+    "message": "Azala"
+  },
+  "pref_language": {
+    "message": "Hizkuntza"
+  },
+  "pref_incognito_keyboard": {
+    "message": "Teklatu pribatua"
+  },
+  "pref_incognito_keyboard_explain": {
+    "message": "Eskatu teklatuari pertsonalizatutako ikasketa desgaitzea"
+  },
+  "pref_read_receipts": {
+    "message": "Irakurragiriak"
+  },
+  "pref_read_receipts_explain": {
+    "message": "Irakurragiriak desgaituta badaude, ezin izango dituzu besteen irakurragiriak ikusi."
+  },
+  "pref_manage_keys": {
+    "message": "Kudeatu gakoak"
+  },
+  "pref_use_system_emoji": {
+    "message": "Erabili sistemako emojiak"
+  },
+  "pref_use_system_emoji_explain": {
+    "message": "Desgaitu Delta Chat-en barne emoji euskarria"
+  },
+  "pref_app_access": {
+    "message": "Aplikazio sarbidea"
+  },
+  "pref_chats": {
+    "message": "Txatak"
+  },
+  "pref_in_chat_sounds": {
+    "message": "Txat bitarteko soinuak"
+  },
+  "pref_view_log": {
+    "message": "Ikusi egunkaria"
+  },
+  "pref_saved_log": {
+    "message": "Egunkaria deskargen karpetan gorde da"
+  },
+  "pref_save_log_failed": {
+    "message": "Huts egin du egunkaria gordetzean"
+  },
+  "pref_log_header": {
+    "message": "Egunkaria"
+  },
+  "pref_other": {
+    "message": "Bestelakoa"
+  },
+  "pref_backup": {
+    "message": "Babeskopia"
+  },
+  "pref_backup_explain": {
+    "message": "Egin txaten babes-kopia kanpo biltegian"
+  },
+  "pref_backup_export_explain": {
+    "message": "Babes-kopia batek instalazio berri bat ezartzen laguntzen dizu, bai gailu honetan zein beste batean.\n\nBabes-kopiak mezu guztiak, kontaktuak eta txatak, eta zure Autocrypt ezarpena daramatza. Gorde babes-kopiaren fitxategia toki seguruan edo ezabatu ahalik eta lasterren."
+  },
+  "pref_backup_export_start_button": {
+    "message": "Hasi babes-kopia"
+  },
+  "pref_backup_written_to_x": {
+    "message": "Babes-kopia ongi idatzi da hemen: %1$s"
+  },
+  "pref_managekeys_menu_title": {
+    "message": "Kudeatu gakoak"
+  },
+  "pref_managekeys_export_secret_keys": {
+    "message": "Esportatu gako sekretuak"
+  },
+  "pref_managekeys_export_explain": {
+    "message": "Esportatu gako sekretuak \"%1$s\"-ra?"
+  },
+  "pref_managekeys_import_secret_keys": {
+    "message": "Inportatu gako sekretuak"
+  },
+  "pref_managekeys_import_explain": {
+    "message": "Inportatu gako sekretuak \"%1$s\"-tik?\n\n• Dauden gako sekretuak ez dira ezabatuko\n\n• Inportatutako azken gakoa lehenetsitako gako berri gisa erabiliko da fitxategiaren izenean \"legacy\" ez badu."
+  },
+  "pref_managekeys_secret_keys_exported_to_x": {
+    "message": "Gako sekretuak ongi idatzi dira hemen: \"%1$s\"."
+  },
+  "pref_managekeys_secret_keys_imported_from_x": {
+    "message": "Gako sekretuak hemendik inportatu dira: \"%1$s\"."
+  },
+  "pref_background": {
+    "message": "Atzealdea"
+  },
+  "pref_background_btn_default": {
+    "message": "Erabili lehenetsitako irudia"
+  },
+  "pref_background_btn_gallery": {
+    "message": "Hautatu galeriatik"
+  },
+  "pref_imap_folder_handling": {
+    "message": "IMAP karpeten kudeaketa"
+  },
+  "pref_imap_folder_warn_disable_defaults": {
+    "message": "Aukera hau desaktibatuz gero, egiaztatu zure zerbitzaria eta beste bezeroen konfigurazioa bat datorrela.\n\nBestela agian gauzak ez dabiltza."
+  },
+  "pref_watch_sent_folder": {
+    "message": "Begiztatu bidalitakoak karpeta"
+  },
+  "pref_send_copy_to_self": {
+    "message": "Bidali kopia norberari"
+  },
+  "pref_auto_folder_moves": {
+    "message": "Automatikoki mugitzen du DeltaChat karpetara"
+  },
+  "pref_auto_folder_moves_explain": {
+    "message": "Txat elkarrizketak lekuz aldatzen dira sarrera ontzian enbarazu ez egiteko"
+  },
+  "pref_show_emails": {
+    "message": "Erakutsi ohiko e-mailak"
+  },
+  "pref_show_emails_no": {
+    "message": "Ez, txatak besterik ez"
+  },
+  "pref_show_emails_accepted_contacts": {
+    "message": "Onartutako kontaktuena"
+  },
+  "pref_show_emails_all": {
+    "message": "Denak"
+  },
+  "pref_experimental_features": {
+    "message": "Ezaugarri esperimentalak"
+  },
+  "pref_on_demand_location_streaming": {
+    "message": "Eskaera bidezko kokalekuaren hedapena"
+  },
+  "pref_background_default": {
+    "message": "Lehenetsitako atzealdea"
+  },
+  "pref_background_default_color": {
+    "message": "Lehenetsitako kolorea"
+  },
+  "pref_background_custom_image": {
+    "message": "Irudi pertsonalizatua"
+  },
+  "pref_background_custom_color": {
+    "message": "Kolore pertsonalizatua"
+  },
+  "autodel_device_title": {
+    "message": "Ezabatu mezuak gailutik"
+  },
+  "autodel_server_title": {
+    "message": "Ezabatu mezuak zerbitzaritik"
+  },
+  "autodel_device_ask": {
+    "message": "%1$d mezu ezabatu nahi dituzu orain eta \"%2$s\" etorkizunean jasotako mezuak ere?\n\n• Honek multimedia ere barne hartzen du\n\n• Mezuak ikusi ala ez ezabatuko dira\n\n• \"Gordetako mezuak\" ez dira lokalki ezabatuko"
+  },
+  "autodel_confirm": {
+    "message": "Ulertzen dut, ezabatu mezuk guzti hauek"
+  },
+  "autodel_at_once": {
+    "message": "Berehala"
+  },
+  "autodel_after_1_hour": {
+    "message": "Ordubete eta gero"
+  },
+  "autodel_after_1_day": {
+    "message": "Egun bat eta gero"
+  },
+  "autodel_after_1_week": {
+    "message": "Aste bat eta gero"
+  },
+  "autodel_after_1_year": {
+    "message": "Urtebete eta gero"
+  },
+  "autocrypt_send_asm_title": {
+    "message": "Bidali Autocrypt ezarpen mezua"
+  },
+  "autocrypt_send_asm_explain_before": {
+    "message": "\"Autocrypt ezarpen mezua\" batek modu seguruan partekatzen du zure muturretik muturrerako ezarpena Autocryptekin bateragarriak diren beste aplikazioekin. Ezarpena hemen bistaratutako ezarpen kodearekin zifratuko  da, eta beste gailuan kode hau sartu beharko da."
+  },
+  "autocrypt_send_asm_button": {
+    "message": "Bidali Autocrypt ezarpen mezua"
+  },
+  "autocrypt_send_asm_explain_after": {
+    "message": "Zure ezarpena zuri bidali zaizu. Aldatu beste gailura eta ireki ezarpen mezua. Ezarpen kode bat eskatuko zaizu, Idatzi honako zenbaki hauek han.\n\nBehin bukatuta, zure beste gailua Autocrypt erabiltzeko prest egongo da."
+  },
+  "autocrypt_prefer_e2ee": {
+    "message": "Hobetsi muturretik muturrerako zifratzea"
+  },
+  "autocrypt_asm_subject": {
+    "message": "Autocrypt ezarpen mezua"
+  },
+  "autocrypt_asm_general_body": {
+    "message": "Hau Autocrypt ezarpen mezua da, zure muturretik muturrerako ezarpena bezeroen artean pasatzeko erabilia.\n\n Zure ezarpena deszifratu eta erabiltzeko, ireki mezua Autocrypt onartzen duen bezero batean eta sartu gailu sortzailean agertutako ezarpen kodea."
+  },
+  "group_name_changed_by_you": {
+    "message": "Nik: Taldearen izena \"%1$s\" izatetik \"%2$s\" izatera aldatu da"
+  },
+  "group_name_changed_by_other": {
+    "message": "%3$s(e)k: Taldearen izena \"%1$s\" izatetik \"%2$s\" izatera aldatu da"
+  },
+  "group_image_changed_by_you": {
+    "message": "Nik: Taldearen irudia aldatuta"
+  },
+  "group_image_changed_by_other": {
+    "message": "%1$s(e)k: Taldearen irudia aldatuta"
+  },
+  "add_member_by_you": {
+    "message": "Nik: %1$s kidea gehituta"
+  },
+  "add_member_by_other": {
+    "message": "%2$s(e)k: %1$s kidea gehituta"
+  },
+  "remove_member_by_you": {
+    "message": "Nik: %1$s kidea kenduta"
+  },
+  "remove_member_by_other": {
+    "message": "%2$s(e)k: %1$s kidea kenduta"
+  },
+  "group_image_deleted_by_you": {
+    "message": "Nik: Taldearen irudia ezabatuta"
+  },
+  "group_image_deleted_by_other": {
+    "message": "%1$s(e)k: Taldearen irudia ezabatuta"
+  },
+  "qr_code": {
+    "message": "QR kodea"
+  },
+  "qrscan_title": {
+    "message": "Eskaneatu QR kodea"
+  },
+  "qrscan_hint": {
+    "message": "Kokatu zure kamera QR kodearen gainean"
+  },
+  "qrscan_ask_join_group": {
+    "message": "\"%1$s\" taldera elkartu nahi duzu?"
+  },
+  "qrscan_fingerprint_mismatch": {
+    "message": "Eskaneatutako hatz-marka eta %1$s erabiltzaileari ikusitako azken hatz-marka ez datoz bat."
+  },
+  "qrscan_no_addr_found": {
+    "message": "QR kode honek hatz-marka bat du baina ez e-mail helbidea.\n\nBandaz kanpoko egiaztaketa baterako, ezarri zifratutako konexio bat hartzailearekin aurretik."
+  },
+  "qrscan_contains_text": {
+    "message": "Eskaneatutako QR kodearen testua:\n\n%1$s"
+  },
+  "qrscan_contains_url": {
+    "message": "Eskaneatutako QR kodearen URL-a:\n\n%1$s"
+  },
+  "qrscan_fingerprint_label": {
+    "message": "Hatz-marka"
+  },
+  "qrshow_title": {
+    "message": "QR gonbidapen-kodea"
+  },
+  "qrshow_x_joining": {
+    "message": "%1$s elkartu da."
+  },
+  "qrshow_x_verified": {
+    "message": "%1$s egiaztatuta."
+  },
+  "qrshow_x_has_joined_group": {
+    "message": "%1$s taldera elkartu da."
+  },
+  "qrshow_join_group_title": {
+    "message": "QR gonbidapen-kodea"
+  },
+  "qrshow_join_group_hint": {
+    "message": "Eskaneatu hau \"%1$s\" taldera elkartzeko."
+  },
+  "qrshow_join_contact_title": {
+    "message": "QR gonbidapen-kodea"
+  },
+  "qrshow_join_contact_hint": {
+    "message": "Eskaneatu hau %1$s erabiltzailearen kontaktua ezartzeko"
+  },
+  "qrshow_join_contact_no_connection_toast": {
+    "message": "Ez dago Internet konexiorik, ezin da QR kode bidezko ezarpena aplikatu"
+  },
+  "qraccount_ask_create_and_login": {
+    "message": "Sortu kontu berria \"%1$s\" zerbitzarian eta saioa han hasi?"
+  },
+  "qraccount_qr_code_cannot_be_used": {
+    "message": "Eskaneatutako QR kodea ezin da kontu berri bat ezartzeko erabili."
+  },
+  "contact_verified": {
+    "message": "%1$s egiaztatuta."
+  },
+  "contact_not_verified": {
+    "message": "Ezin da %1$s egiaztatu"
+  },
+  "contact_setup_changed": {
+    "message": "Aldatu %1$s(r)en ezarpena"
+  },
+  "notify_reply_button": {
+    "message": "Erantzun"
+  },
+  "notify_new_message": {
+    "message": "Mezu berria"
+  },
+  "notify_background_connection_enabled": {
+    "message": "Bigarren planoko konexioa gaituta"
+  },
+  "notify_priority_high": {
+    "message": "Altua"
+  },
+  "notify_priority_max": {
+    "message": "Maximoa"
+  },
+  "notify_name_and_message": {
+    "message": "Izena eta mezua"
+  },
+  "notify_name_only": {
+    "message": "Izena besterik ez"
+  },
+  "notify_no_name_or_message": {
+    "message": "Izenik edo mezurik ez"
+  },
+  "perm_required_title": {
+    "message": "Baimena behar da"
+  },
+  "perm_continue": {
+    "message": "Jarraitu"
+  },
+  "perm_explain_access_to_camera_denied": {
+    "message": "Delta Chat-ek kamerara sarbidea behar du argazkiak edo bideoak ateratzeko, baina behin betiko ukatu zaio. Joan aplikazioaren ezarpen menura, hautatu \"Baimenak\" eta gaitu \"Kamera\"."
+  },
+  "perm_explain_access_to_mic_denied": {
+    "message": "Delta Chat-ek mikrofonoa erabiltzeko baimena behar du ahots-mezuak bidali ahal izateko, baina behin betiko ukatu zaio. Joan aplikazioaren ezarpenetara, hautatu \"Baimenak\" eta gaitu \"Mikrofonoa\"."
+  },
+  "perm_explain_access_to_storage_denied": {
+    "message": "Delta Chat-ek biltegiratze baimena behar du argazkiak, bideoak edo audioa erantsi edo esportatzeko, baina behin betiko ukatu zaio. Joan aplikazioaren ezarpen menura, hautatu \"baimenak\", eta gaitu \"Biltegiratzea\""
+  },
+  "perm_explain_access_to_location_denied": {
+    "message": "Delta Chat-ek kokaleku aatzitzeko baimena behar du kokalekua eransteko, baina behin betiko ukatu zaio. Joan aplikazioaren ezarpen menura, hautatu \"baimenak\", eta gaitu \"Kokalekua\"."
+  },
+  "encrypted_message": {
+    "message": "Zifratutako mezua"
+  },
+  "welcome_desktop": {
+    "message": "Ongi etorri Delta Chat-era"
+  },
+  "global_menu_preferences_language_desktop": {
+    "message": "Hautatu hizkuntza..."
+  },
+  "global_menu_file_desktop": {
+    "message": "Fitxategia"
+  },
+  "global_menu_file_quit_desktop": {
+    "message": "Irten"
+  },
+  "global_menu_edit_desktop": {
+    "message": "Editatu"
+  },
+  "global_menu_edit_undo_desktop": {
+    "message": "Desegin"
+  },
+  "global_menu_edit_redo_desktop": {
+    "message": "Berregin"
+  },
+  "global_menu_edit_cut_desktop": {
+    "message": "Moztu"
+  },
+  "global_menu_edit_copy_desktop": {
+    "message": "Kopiatu"
+  },
+  "global_menu_edit_paste_desktop": {
+    "message": "Itsatsi"
+  },
+  "global_menu_view_desktop": {
+    "message": "Ikusi"
+  },
+  "global_menu_view_floatontop_desktop": {
+    "message": "Flotatu gainean"
+  },
+  "global_menu_view_developer_desktop": {
+    "message": "Garatzailea"
+  },
+  "global_menu_view_developer_tools_desktop": {
+    "message": "Garatzaile-tresnak"
+  },
+  "global_menu_help_desktop": {
+    "message": "Laguntza"
+  },
+  "global_menu_help_report_desktop": {
+    "message": "Eman arazo baten berri"
+  },
+  "global_menu_help_about_desktop": {
+    "message": "Delta Chat-i buruz"
+  },
+  "no_chat_selected_suggestion_desktop": {
+    "message": "Hautatu txat bat edo sortu txat berri bat"
+  },
+  "write_message_desktop": {
+    "message": "Idatzi mezu bat"
+  },
+  "encryption_info_title_desktop": {
+    "message": "Zifratzeari buruzko informazioa"
+  },
+  "delete_message_desktop": {
+    "message": "Ezabatu mezua"
+  },
+  "more_info_desktop": {
+    "message": "Informazio gehiago"
+  },
+  "timestamp_format_m_desktop": {
+    "message": "MMM D"
+  },
+  "remove_desktop": {
+    "message": "Kendu"
+  },
+  "save_desktop": {
+    "message": "Gorde"
+  },
+  "name_desktop": {
+    "message": "Izena"
+  },
+  "select_group_image_desktop": {
+    "message": "Hautatu taldearen irudia"
+  },
+  "export_backup_desktop": {
+    "message": "Esportatu babes-kopia"
+  },
+  "autocrypt_correct_desktop": {
+    "message": "Ongi igorri da Autocrypt ezarpena!"
+  },
+  "forget_login_confirmation_desktop": {
+    "message": "Ezabatu erabiltzaile-izen hau? Dena ezabatuko da, muturretik muturrerako ezarpena, txatak, mezuak eta multimedia barne. Ekintza hau behin betikoa da eta ezin da desegin."
+  },
+  "message_detail_sent_desktop": {
+    "message": "bidalita"
+  },
+  "message_detail_received_desktop": {
+    "message": "jasota"
+  },
+  "menu.view.developer.open.log.folder": {
+    "message": "Ireki egunkarien karpeta"
+  },
+  "menu.view.developer.open.current.log.file": {
+    "message": "Ireki uneko egunkari-fitxategia"
+  },
+  "a11y_delivery_status_error": {
+    "message": "Bidalketa-egoera: Errorea"
+  },
+  "a11y_encryption_padlock": {
+    "message": "Zifratze giltzarrapoa"
+  },
+  "a11y_delivery_status_sending": {
+    "message": "Bidalketa-egoera: Bidaltzen"
+  },
+  "a11y_delivery_status_draft": {
+    "message": "Bidalketa-egoera: Zirriborroa"
+  },
+  "a11y_delivery_status_delivered": {
+    "message": "Bidalketa-egoera: Bidalita"
+  },
+  "a11y_delivery_status_read": {
+    "message": "Bidalketa-egoera: Irakurrita"
+  },
+  "a11y_delivery_status_invalid": {
+    "message": "Bidalketa-egoera baliogabea"
+  },
+  "a11y_message_context_menu_btn_label": {
+    "message": "Mezu-ekintzak"
+  },
+  "a11y_background_preview_label": {
+    "message": "Atzealdearen aurrebista"
+  },
+  "InfoPlist_NSCameraUsageDescription": {
+    "message": "Kamera atzitzeko baimena emateak argazkiak eta bideoak ateratzea ahalbidetzen dizu."
+  },
+  "InfoPlist_NSContactsUsageDescription": {
+    "message": "Kontaktuen liburua atzitzeko baimena emateak zure gailuko kontaktuekin txateatzea ahalbidetzen dizu."
+  },
+  "InfoPlist_NSMicrophoneUsageDescription": {
+    "message": "Mikrofonoa  atzitzeko baimena emateak audioa grabatzea ahalbidetzen dizu."
+  },
+  "InfoPlist_NSPhotoLibraryUsageDescription": {
+    "message": "Argazkien bilduma atzitzeko baimena emateak bertatik argazkiak igotzea ahalbidetzen dizu."
+  },
+  "perm_enable_bg_reminder_title": {
+    "message": "Sakatu hemen mezuak jasotzeko Delta Chat bigarren planoan dagoenean."
+  },
+  "perm_enable_bg_already_done": {
+    "message": "Dagoeneko baimendu diozu Delta Chat aplikazioari bigarren planoan mezuak jasotzea,\n\nOraindik ere mezuak heltzen ez badira, egiaztatu ere zure sistemaren ezarpenak."
+  },
+  "n_minutes": {
+    "one": "min %d",
+    "other": "%d min"
+  },
+  "n_hours": {
+    "one": "ordu %d",
+    "other": "%d ordu"
+  },
+  "n_chats": {
+    "one": "Txat %d",
+    "other": "%d txat "
+  },
+  "n_contacts": {
+    "one": "Kontaktu %d",
+    "other": "%dkontaktu "
+  },
+  "n_messages": {
+    "one": "Mezu %d",
+    "other": "%d mezu"
+  },
+  "n_members": {
+    "one": "Kide %d",
+    "other": "%d kide"
+  },
+  "chat_archived": {
+    "one": " Txat %d artxibatuta",
+    "other": "%d txat artxibatuta"
+  },
+  "chat_unarchived": {
+    "one": "Txat %dartxibotik atera dira",
+    "other": "%d txat artxibotik atera dira"
+  },
+  "chat_n_new_messages": {
+    "one": "Mezu berri %d",
+    "other": "%d mezu berri"
+  }
+}

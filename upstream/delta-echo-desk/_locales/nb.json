@@ -1,0 +1,998 @@
+{
+  "app_name": {
+    "message": "Delta Chat"
+  },
+  "ok": {
+    "message": "OK"
+  },
+  "cancel": {
+    "message": "Avbryt"
+  },
+  "yes": {
+    "message": "Ja"
+  },
+  "no": {
+    "message": "Nei"
+  },
+  "select": {
+    "message": "Velg"
+  },
+  "on": {
+    "message": "På"
+  },
+  "off": {
+    "message": "Av"
+  },
+  "def": {
+    "message": "Forvalg"
+  },
+  "custom": {
+    "message": "Egendefinert"
+  },
+  "none": {
+    "message": "Ingen"
+  },
+  "automatic": {
+    "message": "Automatisk"
+  },
+  "strict": {
+    "message": "Streng"
+  },
+  "open": {
+    "message": "Åpne"
+  },
+  "join": {
+    "message": "Bli med"
+  },
+  "rejoin": {
+    "message": "Bli med igjen"
+  },
+  "delete": {
+    "message": "Slett"
+  },
+  "info": {
+    "message": "Info"
+  },
+  "update": {
+    "message": "Oppdater"
+  },
+  "emoji": {
+    "message": "Emoji"
+  },
+  "attachment": {
+    "message": "Vedlegg"
+  },
+  "back": {
+    "message": "Forrige"
+  },
+  "close": {
+    "message": "Lukk"
+  },
+  "forward": {
+    "message": "Videresend"
+  },
+  "archive": {
+    "message": "Arkiver"
+  },
+  "unarchive": {
+    "message": "Fjern fra arkiv"
+  },
+  "mute": {
+    "message": "Demp"
+  },
+  "ephemeral_messages": {
+    "message": "Forsvinnende meldinger"
+  },
+  "ephemeral_messages_hint": {
+    "message": "Disse innstillingene gjelder alle deltakerne som bruker Delta Chat. Men de kan kopiere, lagre og videresende meldinger eller bruke annen e-postklient."
+  },
+  "save": {
+    "message": "Lagre"
+  },
+  "chat": {
+    "message": "Chat"
+  },
+  "media": {
+    "message": "Media"
+  },
+  "main_menu": {
+    "message": "Hovedmeny"
+  },
+  "start_chat": {
+    "message": "Start chat"
+  },
+  "show_password": {
+    "message": "Vis passord"
+  },
+  "hide_password": {
+    "message": "Skjul passord"
+  },
+  "not_now": {
+    "message": "Ikke nå"
+  },
+  "never": {
+    "message": "Aldri"
+  },
+  "one_moment": {
+    "message": "Et øyeblikk…"
+  },
+  "done": {
+    "message": "Ferdig"
+  },
+  "undo": {
+    "message": "Angre"
+  },
+  "next": {
+    "message": "Neste"
+  },
+  "error": {
+    "message": "Feil"
+  },
+  "error_x": {
+    "message": "Feil: %1$s"
+  },
+  "no_app_to_handle_data": {
+    "message": "Kan ikke finne en app som kan handtere denne typen data."
+  },
+  "no_browser_installed": {
+    "message": "Ingen nettleser installert"
+  },
+  "file_not_found": {
+    "message": "Filen %1$s ble ikke funnet."
+  },
+  "copied_to_clipboard": {
+    "message": "Kopiert til utklippstavle"
+  },
+  "contacts_headline": {
+    "message": "Kontakter"
+  },
+  "email_address": {
+    "message": "E-postadresse"
+  },
+  "bad_email_address": {
+    "message": "Feilaktig e-postadresse."
+  },
+  "password": {
+    "message": "Passord"
+  },
+  "existing_password": {
+    "message": "Eksisterende passord"
+  },
+  "now": {
+    "message": "Nå"
+  },
+  "danger": {
+    "message": "Fare"
+  },
+  "today": {
+    "message": "I dag"
+  },
+  "yesterday": {
+    "message": "I går"
+  },
+  "this_week": {
+    "message": "Denne uken"
+  },
+  "this_month": {
+    "message": "Denne måneden"
+  },
+  "last_week": {
+    "message": "Forrige uken"
+  },
+  "last_month": {
+    "message": "Forrige måneden"
+  },
+  "self": {
+    "message": "Meg"
+  },
+  "draft": {
+    "message": "Kladd"
+  },
+  "image": {
+    "message": "Bilde"
+  },
+  "gif": {
+    "message": "Gif"
+  },
+  "images": {
+    "message": "Bilder"
+  },
+  "audio": {
+    "message": "Lyd"
+  },
+  "voice_message": {
+    "message": "Stemmemelding"
+  },
+  "forwarded_message": {
+    "message": "Videresendt melding"
+  },
+  "video": {
+    "message": "Video"
+  },
+  "documents": {
+    "message": "Dokumenter"
+  },
+  "contact": {
+    "message": "Kontakt"
+  },
+  "camera": {
+    "message": "Kamera"
+  },
+  "location": {
+    "message": "Posisjon"
+  },
+  "gallery": {
+    "message": "Galleri"
+  },
+  "images_and_videos": {
+    "message": "Bilder og videoer"
+  },
+  "file": {
+    "message": "Fil"
+  },
+  "files": {
+    "message": "Filer"
+  },
+  "unknown": {
+    "message": "Ukjent"
+  },
+  "green": {
+    "message": "Grønn"
+  },
+  "red": {
+    "message": "Rød"
+  },
+  "blue": {
+    "message": "Blå"
+  },
+  "orange": {
+    "message": "Oransje"
+  },
+  "cyan": {
+    "message": "Cyan"
+  },
+  "purple": {
+    "message": "Purple"
+  },
+  "magenta": {
+    "message": "Magenta"
+  },
+  "white": {
+    "message": "Hvit"
+  },
+  "small": {
+    "message": "Liten"
+  },
+  "normal": {
+    "message": "Normal"
+  },
+  "large": {
+    "message": "Stor"
+  },
+  "extra_large": {
+    "message": "Ekstra stor"
+  },
+  "fast": {
+    "message": "Raskt"
+  },
+  "slow": {
+    "message": "Langsomt"
+  },
+  "menu_new_contact": {
+    "message": "Ny kontakt"
+  },
+  "menu_new_chat": {
+    "message": "Ny chat"
+  },
+  "menu_new_group": {
+    "message": "Ny gruppe"
+  },
+  "menu_send": {
+    "message": "Send"
+  },
+  "menu_toggle_keyboard": {
+    "message": "Slå på/av emoji-tastatur"
+  },
+  "menu_edit_group": {
+    "message": "Rediger gruppe"
+  },
+  "menu_group_name_and_image": {
+    "message": "Gruppenavn og bilde"
+  },
+  "menu_show_global_map": {
+    "message": "Vis alle posisjoner"
+  },
+  "menu_archive_chat": {
+    "message": "Arkiver chat"
+  },
+  "menu_unarchive_chat": {
+    "message": "Fjern chat fra arkiv"
+  },
+  "menu_add_attachment": {
+    "message": "Legg ved filer"
+  },
+  "menu_leave_group": {
+    "message": "Forlat gruppe"
+  },
+  "menu_delete_chat": {
+    "message": "Slett sludring"
+  },
+  "menu_delete_location": {
+    "message": "Slett på dette stedet?"
+  },
+  "menu_message_details": {
+    "message": "Meldingsdetaljer"
+  },
+  "menu_copy_to_clipboard": {
+    "message": "Kopier til utklippstavle"
+  },
+  "menu_forward": {
+    "message": "Videresend melding"
+  },
+  "menu_reply": {
+    "message": "Svar på melding"
+  },
+  "menu_mute": {
+    "message": "Demp merknader"
+  },
+  "menu_unmute": {
+    "message": "Fjern demping"
+  },
+  "menu_export_attachment": {
+    "message": "Eksporter vedlegg"
+  },
+  "menu_all_media": {
+    "message": "Alle medier"
+  },
+  "menu_share": {
+    "message": "Del"
+  },
+  "menu_block_contact": {
+    "message": "Blokker kontakt"
+  },
+  "menu_unblock_contact": {
+    "message": "Fjern blokkering av kontakt"
+  },
+  "menu_play": {
+    "message": "Spill av"
+  },
+  "menu_pause": {
+    "message": "Pause"
+  },
+  "menu_scroll_to_bottom": {
+    "message": "Rull til bunnen"
+  },
+  "menu_scroll_to_top": {
+    "message": "Rull til toppen"
+  },
+  "menu_help": {
+    "message": "Hjelp"
+  },
+  "menu_select_all": {
+    "message": "Velg alle"
+  },
+  "menu_edit_name": {
+    "message": "Rediger navn"
+  },
+  "menu_settings": {
+    "message": "Innstillinger"
+  },
+  "menu_advanced": {
+    "message": "Avanserte innstillinger"
+  },
+  "menu_view_profile": {
+    "message": "Vis profil"
+  },
+  "menu_zoom_in": {
+    "message": "Zoome in"
+  },
+  "menu_zoom_out": {
+    "message": "Zoome ut"
+  },
+  "menu_save_log": {
+    "message": "Lagre logg"
+  },
+  "title_share_location": {
+    "message": "Del beliggenhet med alle gruppemedlemmer"
+  },
+  "device_talk": {
+    "message": "Enhetsmeldinger"
+  },
+  "device_talk_subtitle": {
+    "message": "Lokalt genererte meldinger"
+  },
+  "device_talk_explain": {
+    "message": "Meldinger i denne chatten blir generert lokalt av Delta Chat-appen. Produsentene bruker den for å informere om appoppdateringer og problemer under bruk."
+  },
+  "edit_contact": {
+    "message": "Rediger kontakt"
+  },
+  "pin_chat": {
+    "message": "Fest chat"
+  },
+  "unpin_chat": {
+    "message": "Løsne chat"
+  },
+  "pin": {
+    "message": "Fest"
+  },
+  "unpin": {
+    "message": "Løsn"
+  },
+  "mute_for_one_hour": {
+    "message": "Demp i 1 time"
+  },
+  "mute_for_eight_hours": {
+    "message": "Demp i 8 timer"
+  },
+  "mute_for_one_day": {
+    "message": "Demp i 1 dag"
+  },
+  "mute_for_seven_days": {
+    "message": "Demp i 7 dager"
+  },
+  "mute_forever": {
+    "message": "Alltid dempet"
+  },
+  "share_location_for_5_minutes": {
+    "message": "i 5 minutter"
+  },
+  "share_location_for_30_minutes": {
+    "message": "i 30 minutter"
+  },
+  "share_location_for_one_hour": {
+    "message": "i 1 time"
+  },
+  "share_location_for_two_hours": {
+    "message": "i 2 timer"
+  },
+  "share_location_for_six_hours": {
+    "message": "i 6 timer"
+  },
+  "file_saved_to": {
+    "message": "Lagre fil til \"%1$s\"."
+  },
+  "videochat": {
+    "message": "Videochat"
+  },
+  "videochat_invite_user_to_videochat": {
+    "message": "Inviter %1$s til en videochat?"
+  },
+  "videochat_invite_user_hint": {
+    "message": "Dette krever en kompatibel app, eller en kompatible nettleser i begge ender."
+  },
+  "videochat_contact_invited_hint": {
+    "message": "%1$s inviterte til en videochat."
+  },
+  "videochat_you_invited_hint": {
+    "message": "Du inviterte til en videochat."
+  },
+  "videochat_tap_to_join": {
+    "message": "Trykk for å bli med"
+  },
+  "videochat_tap_to_open": {
+    "message": "Trykk for å åpne"
+  },
+  "videochat_instance": {
+    "message": "Videochatteinstans"
+  },
+  "videochat_instance_placeholder": {
+    "message": "Din videochatteinstans"
+  },
+  "videochat_instance_from_qr": {
+    "message": "Bruk \"%1$s\" til å invitere andre til videochatter?\n\nNår satt, kan dere starte videochatter til hverandre en-til-en. Dette vil erstatte, eventuelle, tidligere innstillinger for videochatter."
+  },
+  "videochat_invitation": {
+    "message": "Videochatinvitasjon"
+  },
+  "videochat_invitation_body": {
+    "message": "Du er invitert til en videochat, klikk %1$s for å bli med."
+  },
+  "ask_leave_group": {
+    "message": "Er du sikker på at du vil forlate denne gruppen?"
+  },
+  "ask_forward": {
+    "message": "Videresend meldinger til %1$s?"
+  },
+  "ask_forward_multiple": {
+    "message": "Videresend meldinger til %1$d chatter?"
+  },
+  "ask_export_attachment": {
+    "message": "Eksporter vedlegg? Eksport av vedlegg vil gi andre apper på din enhet tilgang til dem\n\nFortsett?"
+  },
+  "ask_block_contact": {
+    "message": "Blokkere denne kontakten? Du vil ikke lenger motta meldinger fra kontakten."
+  },
+  "ask_unblock_contact": {
+    "message": "Fjern blokkering av denne kontakten? Du vil igjen kunne motta meldinger fra kontakten."
+  },
+  "ask_delete_contacts": {
+    "message": "Slett kontakter?\n\nKontakter med pågående chatter og kontakter fra systemet adressebok kan ikke bli slettet permanent."
+  },
+  "ask_delete_contact": {
+    "message": "Slett kontakter %1$s?\n\nKontakter med pågående chatter og kontakter fra systemets adressebok, kan ikke slettes permanent."
+  },
+  "ask_start_chat_with": {
+    "message": "Begynn å sludre med %1$s?"
+  },
+  "ask_remove_members": {
+    "message": "Fjern %1$s fra gruppen?"
+  },
+  "contacts_title": {
+    "message": "Kontakter"
+  },
+  "contacts_enter_name_or_email": {
+    "message": "Skriv navn eller e-postadresse"
+  },
+  "contacts_type_email_above": {
+    "message": "Skriv e-postadresse over"
+  },
+  "contacts_empty_hint": {
+    "message": "Ingen kontakter."
+  },
+  "chat_archived_chats_title": {
+    "message": "Arkiverte sludringer"
+  },
+  "chat_please_enter_message": {
+    "message": "Vennligst skiv en melding."
+  },
+  "chat_camera_unavailable": {
+    "message": "Kamera ikke tilgjengelig."
+  },
+  "chat_unable_to_record_audio": {
+    "message": "Ikke mulig å ta opp lyd."
+  },
+  "chat_new_group_hint": {
+    "message": "Forfatt den første meldingen, noe som lar andre svare i gruppen.\n\n• Det er greit at ikke alle medlemmer bruker Delta Chat.\n\n• Levering av den første meldingen kan ta sin tid."
+  },
+  "chat_record_slide_to_cancel": {
+    "message": "Dra for å avbryte"
+  },
+  "chat_record_explain": {
+    "message": "Trykk og hold for å ta opp en melding, slipp for å sende"
+  },
+  "chat_no_chats_yet_title": {
+    "message": "Tøm innboksen.\nTrykk \"+\" for å starte en ny chat."
+  },
+  "chat_all_archived": {
+    "message": "Alle chatter er arkivert\nTrykk \"+\" for å starte en ny chat."
+  },
+  "chat_share_with_title": {
+    "message": "Del med"
+  },
+  "chat_input_placeholder": {
+    "message": "Melding"
+  },
+  "chat_archived_label": {
+    "message": "Arkivert"
+  },
+  "chat_no_messages": {
+    "message": "Ingen meldinger."
+  },
+  "chat_self_talk_subtitle": {
+    "message": "Meldinger jeg har sendt til meg selv"
+  },
+  "saved_messages": {
+    "message": "Lagrede meldinger"
+  },
+  "search": {
+    "message": "Søk"
+  },
+  "group_name": {
+    "message": "Gruppenavn"
+  },
+  "group_create_button": {
+    "message": "Lag gruppe"
+  },
+  "group_add_members": {
+    "message": "Legg til medlem"
+  },
+  "profile_encryption": {
+    "message": "Kryptering"
+  },
+  "profile_shared_chats": {
+    "message": "Delte sludringer"
+  },
+  "tab_contact": {
+    "message": "Kontakt"
+  },
+  "tab_group": {
+    "message": "Gruppe"
+  },
+  "tab_gallery": {
+    "message": "Galleri"
+  },
+  "tab_docs": {
+    "message": "Dokumenter"
+  },
+  "media_preview": {
+    "message": "Forhåndsvisning av medier"
+  },
+  "login_title": {
+    "message": "Logg inn"
+  },
+  "login_inbox": {
+    "message": "Innboks"
+  },
+  "login_imap_login": {
+    "message": "IMAP-innloggingsnavn"
+  },
+  "login_imap_server": {
+    "message": "IMAP-tjener"
+  },
+  "login_imap_port": {
+    "message": "IMAP-port"
+  },
+  "login_imap_security": {
+    "message": "IMAP-sikkerhet"
+  },
+  "login_outbox": {
+    "message": "Utboks"
+  },
+  "login_smtp_login": {
+    "message": "SMTP-innloggingsnavn"
+  },
+  "login_smtp_password": {
+    "message": "SMTP-passord"
+  },
+  "login_smtp_server": {
+    "message": "SMTP-tjener"
+  },
+  "login_smtp_port": {
+    "message": "SMTP-port"
+  },
+  "login_smtp_security": {
+    "message": "SMTP-sikkerhet"
+  },
+  "login_auth_method": {
+    "message": "Autoriseringsmetode"
+  },
+  "login_certificate_checks": {
+    "message": "Sertifikat sjekker"
+  },
+  "import_backup_title": {
+    "message": "Importer sikkerhetskopi"
+  },
+  "import_backup_no_backup_found": {
+    "message": "Fant ingen sikkerhetskopier.\n\nKopier sikkerhetskopien til %1$s og prøv igjen. Alternativt, trykk \"Start meldingsforsendelse\" for normal oppsettsprosess."
+  },
+  "forward_to": {
+    "message": "Videresend til…"
+  },
+  "pref_profile_info_headline": {
+    "message": "Din profilinfo"
+  },
+  "pref_profile_photo": {
+    "message": "Profilbilde"
+  },
+  "pref_blocked_contacts": {
+    "message": "Blokkerte kontakter"
+  },
+  "pref_password_and_account_settings": {
+    "message": "Kontoinnstillinger"
+  },
+  "pref_your_name": {
+    "message": "Mitt navn"
+  },
+  "pref_default_status_label": {
+    "message": "Signaturtekst"
+  },
+  "pref_enter_sends": {
+    "message": "Send med \"Enter\""
+  },
+  "pref_vibrate": {
+    "message": "Vibrer"
+  },
+  "pref_screen_security": {
+    "message": "Skjermsikkerhet"
+  },
+  "pref_screen_security_explain": {
+    "message": "Blokker skjermbilder i sist brukte-liste og i programmet"
+  },
+  "pref_notifications": {
+    "message": "Merknader"
+  },
+  "pref_notifications_show": {
+    "message": "Vis"
+  },
+  "pref_notifications_priority": {
+    "message": "Prioritet"
+  },
+  "pref_led_color": {
+    "message": "LED-farge"
+  },
+  "pref_sound": {
+    "message": "Lyd"
+  },
+  "pref_silent": {
+    "message": "Stille"
+  },
+  "pref_privacy": {
+    "message": "Personvern"
+  },
+  "pref_chats_and_media": {
+    "message": "Sludringer og medier"
+  },
+  "pref_system_default": {
+    "message": "System standard"
+  },
+  "pref_light_theme": {
+    "message": "Lys"
+  },
+  "pref_dark_theme": {
+    "message": "Mørk"
+  },
+  "pref_appearance": {
+    "message": "Utseende"
+  },
+  "pref_theme": {
+    "message": "Tema"
+  },
+  "pref_language": {
+    "message": "Språk"
+  },
+  "pref_incognito_keyboard": {
+    "message": "Inkognito-tastatur"
+  },
+  "pref_incognito_keyboard_explain": {
+    "message": "Be tastatur om å slå av lærefunksjon"
+  },
+  "pref_read_receipts": {
+    "message": "Meldingskvitteringer"
+  },
+  "pref_read_receipts_explain": {
+    "message": "Hvis du slår av lesebekreftelser, får du heller ikke se lesebekreftelser fra andre."
+  },
+  "pref_manage_keys": {
+    "message": "Behandle nøkler"
+  },
+  "pref_use_system_emoji": {
+    "message": "Bruk systemets emoji"
+  },
+  "pref_use_system_emoji_explain": {
+    "message": "Slå av innebygd emoji-støtte i Delta Chat"
+  },
+  "pref_app_access": {
+    "message": "Programtilgang"
+  },
+  "pref_chats": {
+    "message": "Sludringer"
+  },
+  "pref_in_chat_sounds": {
+    "message": "Merknader i programmet"
+  },
+  "pref_view_log": {
+    "message": "Vis logg"
+  },
+  "pref_log_header": {
+    "message": "Logg"
+  },
+  "pref_other": {
+    "message": "Annet"
+  },
+  "pref_backup": {
+    "message": "Sikkerhetskopi"
+  },
+  "pref_managekeys_menu_title": {
+    "message": "Behandle nøkler"
+  },
+  "pref_managekeys_export_secret_keys": {
+    "message": "Eksporter private nøkler"
+  },
+  "pref_managekeys_import_secret_keys": {
+    "message": "Importer private nøkler"
+  },
+  "pref_managekeys_import_explain": {
+    "message": "Importer private nøkler fra %1$s?\n\n• Eksisterende private nøkler blir ikke slettet\n\n• Den sist importerte nøkkelen vil bli brukt som ny forvalgt nøkkel"
+  },
+  "pref_background": {
+    "message": "Sludrebakgrunn"
+  },
+  "autocrypt_send_asm_title": {
+    "message": "Igangsett Autocrypt-nøkkeloverføring"
+  },
+  "autocrypt_send_asm_explain_before": {
+    "message": "The Autocrypt-nøkkeloverføring krever at e-postklienten på den andre enheten er Autocrypt-kompatibel.\n\nDu kan så sende din hemmelige nøkkel til deg selv. Nøkkelen vil bli kryptert av en oppsettskode som vises her og må skrives inn på den andre enheten."
+  },
+  "autocrypt_send_asm_button": {
+    "message": "Igangsett Autocrypt-nøkkeloverføring"
+  },
+  "autocrypt_send_asm_explain_after": {
+    "message": "Nøkkelen din har blitt sendt til deg selv. Bytt til den andre enheten og åpne oppsettsmeldingen. Du bør bli forespurt om å oppgi en oppsettskode. Skriv in følgende siffer.\n\nNår du er ferdig, vil din andre enhet også kunne bruke Autocrypt."
+  },
+  "autocrypt_prefer_e2ee": {
+    "message": "Foretrekk ende-til-ende -kryptering"
+  },
+  "autocrypt_asm_subject": {
+    "message": "Autocrypt-nøkkeloverføring"
+  },
+  "autocrypt_asm_general_body": {
+    "message": "Dette er Autocrypt-oppsettsmeldingen brukt til å overføre nøkkelen din mellom klienter.\n\nFor å dekryptere å bruke din nøkkel, åpne meldingen i en Autocrypt-kompatibel klient og skriv inn oppsettskoden som vises på enheten som genererer den."
+  },
+  "group_name_changed_by_you": {
+    "message": "Gruppenavn endret fra \"%1$s\" til \"%2$s\" av meg."
+  },
+  "group_name_changed_by_other": {
+    "message": "Gruppenavn endret fra \"%1$s\" til \"%2$s\" av %3$s."
+  },
+  "group_image_changed_by_you": {
+    "message": "Gruppebilde endret av meg."
+  },
+  "group_image_changed_by_other": {
+    "message": "Gruppebilde endret av %1$s."
+  },
+  "add_member_by_you": {
+    "message": "Medlem %1$s lagt til av meg."
+  },
+  "add_member_by_other": {
+    "message": "Medlem %1$s lagt til av %2$s."
+  },
+  "remove_member_by_you": {
+    "message": "Medlem %1$s fjernet av meg."
+  },
+  "remove_member_by_other": {
+    "message": "Medlem %1$s fjernet av %2$s."
+  },
+  "group_image_deleted_by_you": {
+    "message": "Gruppebilde slettet av meg."
+  },
+  "group_image_deleted_by_other": {
+    "message": "Gruppebilde slettet av %1$s."
+  },
+  "qr_code": {
+    "message": "QR-kode"
+  },
+  "qrscan_title": {
+    "message": "Skann QR-kode"
+  },
+  "qrscan_hint": {
+    "message": "Beveg kameraet over QR-koden."
+  },
+  "qrscan_fingerprint_mismatch": {
+    "message": "Det skannede fingeravtrykket stemmer ikke overens med sist sette fingeravtrukk for %1$s."
+  },
+  "qrscan_no_addr_found": {
+    "message": "QR-koden inneholder et fingeravtrykk, men ingen e-postadresse.\n\nFor bekreftelse utenfor programmet, etabler en kryptert tilkobling til mottakeren først."
+  },
+  "qrscan_contains_text": {
+    "message": "Den skannede QR-koden inneholder følgende tekst:\n\n%1$s"
+  },
+  "qrscan_contains_url": {
+    "message": "Den skannede QR-koden inneholder følgende lenke:\n\n%1$s"
+  },
+  "qrscan_fingerprint_label": {
+    "message": "Fingeravtrykk"
+  },
+  "qrshow_title": {
+    "message": "QR-invitasjonskode"
+  },
+  "qrshow_x_joining": {
+    "message": "%1$s tar del."
+  },
+  "qrshow_x_verified": {
+    "message": "%1$s bekreftet."
+  },
+  "qrshow_join_group_title": {
+    "message": "QR-invitasjonskode"
+  },
+  "qrshow_join_group_hint": {
+    "message": "Skann denne for å ta del i den gruppen %1$s."
+  },
+  "qrshow_join_contact_title": {
+    "message": "QR-invitasjonskode"
+  },
+  "qrshow_join_contact_hint": {
+    "message": "Skann dette for å bekrefte en kontakt med %1$s."
+  },
+  "contact_verified": {
+    "message": "%1$s bekreftet."
+  },
+  "notify_reply_button": {
+    "message": "Svar"
+  },
+  "notify_new_message": {
+    "message": "Ny meldin"
+  },
+  "notify_priority_high": {
+    "message": "Høy"
+  },
+  "notify_priority_max": {
+    "message": "Maks"
+  },
+  "notify_name_and_message": {
+    "message": "Navn og melding"
+  },
+  "notify_name_only": {
+    "message": "Bare navn"
+  },
+  "notify_no_name_or_message": {
+    "message": "Ingen navn eller melding"
+  },
+  "perm_required_title": {
+    "message": "Tillatelse kreves"
+  },
+  "perm_continue": {
+    "message": "Fortsett"
+  },
+  "encrypted_message": {
+    "message": "Kryptert melding"
+  },
+  "welcome_desktop": {
+    "message": "Velkommen til Delta Chat"
+  },
+  "global_menu_preferences_language_desktop": {
+    "message": "Språk"
+  },
+  "global_menu_edit_desktop": {
+    "message": "Rediger"
+  },
+  "global_menu_edit_copy_desktop": {
+    "message": "Kopier"
+  },
+  "global_menu_view_desktop": {
+    "message": "Vis"
+  },
+  "global_menu_help_desktop": {
+    "message": "Hjelp"
+  },
+  "global_menu_help_about_desktop": {
+    "message": "Om Delta Chat"
+  },
+  "encryption_info_title_desktop": {
+    "message": "Krypteringsinfo"
+  },
+  "delete_message_desktop": {
+    "message": "Slett melding"
+  },
+  "more_info_desktop": {
+    "message": "Mer informasjon"
+  },
+  "remove_desktop": {
+    "message": "Fjerne"
+  },
+  "save_desktop": {
+    "message": "Lagre"
+  },
+  "name_desktop": {
+    "message": "Navn"
+  },
+  "export_backup_desktop": {
+    "message": "Eksporter sikkerhetskopi"
+  },
+  "n_minutes": {
+    "one": "%d minutt",
+    "other": "%d minutter"
+  },
+  "n_hours": {
+    "one": "%d time",
+    "other": "%d timer"
+  },
+  "n_chats": {
+    "one": "%d sludring",
+    "other": "%d chatter"
+  },
+  "n_contacts": {
+    "one": "%d kontakt",
+    "other": "%d kontakter"
+  },
+  "n_messages": {
+    "one": "%d melding",
+    "other": "%d meldinger"
+  },
+  "n_members": {
+    "one": "%d medlem",
+    "other": "%d medlemmer"
+  },
+  "chat_archived": {
+    "one": "%d chatter ",
+    "other": "%d chatter arkivert"
+  },
+  "chat_unarchived": {
+    "one": "%d chatter fjernet fra arkivet",
+    "other": "%d chatter fjernet fra arkivet"
+  },
+  "chat_n_new_messages": {
+    "one": "%d ny melding",
+    "other": "%d nye meldinger"
+  }
+}

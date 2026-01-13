@@ -1,0 +1,1175 @@
+{
+  "app_name": {
+    "message": "Delta Chat"
+  },
+  "ok": {
+    "message": "AB"
+  },
+  "cancel": {
+    "message": "Annulla"
+  },
+  "yes": {
+    "message": "Eja"
+  },
+  "no": {
+    "message": "Nono"
+  },
+  "select": {
+    "message": "Ischerta"
+  },
+  "on": {
+    "message": "Allutu"
+  },
+  "off": {
+    "message": "Istudadu"
+  },
+  "def": {
+    "message": "Predefinidu"
+  },
+  "default_value": {
+    "message": "Predefinidu (%1$s)"
+  },
+  "default_value_as_above": {
+    "message": "Predefinidu (comente in subra)"
+  },
+  "custom": {
+    "message": "Personalizadu"
+  },
+  "none": {
+    "message": "Perunu"
+  },
+  "automatic": {
+    "message": "Automàticu"
+  },
+  "strict": {
+    "message": "Astrintu"
+  },
+  "open": {
+    "message": "Aberi"
+  },
+  "join": {
+    "message": "Auni·ti"
+  },
+  "rejoin": {
+    "message": "Torra a t'aunire"
+  },
+  "delete": {
+    "message": "Iscantzella"
+  },
+  "info": {
+    "message": "Informatziones"
+  },
+  "update": {
+    "message": "Agiorna"
+  },
+  "emoji": {
+    "message": "Emoji"
+  },
+  "attachment": {
+    "message": "Allegadu"
+  },
+  "back": {
+    "message": "In palas"
+  },
+  "close": {
+    "message": "Serra"
+  },
+  "forward": {
+    "message": "Inoltra"
+  },
+  "archive": {
+    "message": "Archìvia"
+  },
+  "unarchive": {
+    "message": "Riprìstina"
+  },
+  "mute": {
+    "message": "Boga su sonu"
+  },
+  "ephemeral_messages": {
+    "message": "Messàgios chi isparessent"
+  },
+  "ephemeral_messages_hint": {
+    "message": "Custas impostatziones s'àplicant a totu sos partetzipantes chi impreant Delta Chat. Nointames custu podent copiare, sarvare e torrare a imbiare messàgios o impreare àteros clientes de posta eletrònica."
+  },
+  "save": {
+    "message": "Sarva"
+  },
+  "chat": {
+    "message": "Tzarrada"
+  },
+  "media": {
+    "message": "Cuntenutu multimediale"
+  },
+  "profile": {
+    "message": "Profilu"
+  },
+  "main_menu": {
+    "message": "Menù printzipale"
+  },
+  "start_chat": {
+    "message": "Faghe incumintzare una tzarrada"
+  },
+  "show_password": {
+    "message": "Ammustra sa crae de intrada"
+  },
+  "hide_password": {
+    "message": "Cua sa crae de intrada"
+  },
+  "not_now": {
+    "message": "Como nono"
+  },
+  "never": {
+    "message": "Mai"
+  },
+  "one_moment": {
+    "message": "Unu momentu..."
+  },
+  "done": {
+    "message": "Fatu"
+  },
+  "undo": {
+    "message": "Annulla"
+  },
+  "offline": {
+    "message": "Non in lìnia"
+  },
+  "next": {
+    "message": "Sighi"
+  },
+  "error": {
+    "message": "Faddina"
+  },
+  "error_x": {
+    "message": "Faddina: %1$s"
+  },
+  "no_app_to_handle_data": {
+    "message": "No apo agatadu un'aplicatzione pro amministrare custa casta de datos."
+  },
+  "no_browser_installed": {
+    "message": "Non b'at perunu navigadore/esploradore (browser) instaladu."
+  },
+  "file_not_found": {
+    "message": "%1$s no agatadu."
+  },
+  "copied_to_clipboard": {
+    "message": "Copiadu in punta de billete."
+  },
+  "contacts_headline": {
+    "message": "Cuntatos"
+  },
+  "email_address": {
+    "message": "Indiritzu de posta eletrònica"
+  },
+  "bad_email_address": {
+    "message": "Indiritzu non vàlidu."
+  },
+  "password": {
+    "message": "Crae de intrada"
+  },
+  "existing_password": {
+    "message": "Crae chi b'at"
+  },
+  "now": {
+    "message": "Como"
+  },
+  "danger": {
+    "message": "Perìgulu"
+  },
+  "today": {
+    "message": "Oe"
+  },
+  "yesterday": {
+    "message": "Eris"
+  },
+  "this_week": {
+    "message": "Custa chida"
+  },
+  "this_month": {
+    "message": "Custu mese"
+  },
+  "last_week": {
+    "message": "Ùrtima chida"
+  },
+  "last_month": {
+    "message": "Ùrtimu mese"
+  },
+  "self": {
+    "message": "Deo"
+  },
+  "draft": {
+    "message": "Abbotzu"
+  },
+  "image": {
+    "message": "Immàgine"
+  },
+  "reply_noun": {
+    "message": "Risponde"
+  },
+  "gif": {
+    "message": "Gif"
+  },
+  "images": {
+    "message": "Immàgines"
+  },
+  "audio": {
+    "message": "Àudio"
+  },
+  "voice_message": {
+    "message": "Messàgiu sonoru"
+  },
+  "forwarded_message": {
+    "message": "Messàgiu inoltradu"
+  },
+  "video": {
+    "message": "Vìdeu"
+  },
+  "documents": {
+    "message": "Documentos editàbiles"
+  },
+  "contact": {
+    "message": "Cuntatu"
+  },
+  "camera": {
+    "message": "Fotocàmera"
+  },
+  "location": {
+    "message": "Positzione"
+  },
+  "gallery": {
+    "message": "Galleria"
+  },
+  "images_and_videos": {
+    "message": "Immàgines e vìdeos"
+  },
+  "file": {
+    "message": "Documentu"
+  },
+  "files": {
+    "message": "Documentos"
+  },
+  "unknown": {
+    "message": "Disconnotu"
+  },
+  "green": {
+    "message": "Birde"
+  },
+  "red": {
+    "message": "Ruju"
+  },
+  "blue": {
+    "message": "Biaitu"
+  },
+  "orange": {
+    "message": "Arantzu"
+  },
+  "cyan": {
+    "message": "Cianu"
+  },
+  "purple": {
+    "message": "Pùrpura"
+  },
+  "magenta": {
+    "message": "Magenta"
+  },
+  "white": {
+    "message": "Biancu"
+  },
+  "zoom": {
+    "message": "Ismànnia"
+  },
+  "extra_small": {
+    "message": "Minore meda"
+  },
+  "small": {
+    "message": "Minore"
+  },
+  "normal": {
+    "message": "Normale"
+  },
+  "large": {
+    "message": "Largu"
+  },
+  "extra_large": {
+    "message": "Largu meda"
+  },
+  "fast": {
+    "message": "Lestru"
+  },
+  "slow": {
+    "message": "Lentu"
+  },
+  "menu_new_contact": {
+    "message": "Cuntatu nou"
+  },
+  "menu_new_chat": {
+    "message": "Tzarrada noa"
+  },
+  "menu_new_group": {
+    "message": "Grupu nou"
+  },
+  "menu_send": {
+    "message": "Imbiadu"
+  },
+  "menu_toggle_keyboard": {
+    "message": "Alterna sa tastiera emoji"
+  },
+  "menu_edit_group": {
+    "message": "Modìfica su grupu"
+  },
+  "menu_group_name_and_image": {
+    "message": "Nùmene e immàgine de su grupu"
+  },
+  "menu_show_global_map": {
+    "message": "Ammustra totu sas positziones"
+  },
+  "menu_archive_chat": {
+    "message": "Archìvia sa tzarrada"
+  },
+  "menu_unarchive_chat": {
+    "message": "Riprìstina sa tzarrada"
+  },
+  "menu_add_attachment": {
+    "message": "Annanghe un'allegadu"
+  },
+  "menu_leave_group": {
+    "message": "Lassa su grupu"
+  },
+  "menu_delete_chat": {
+    "message": "Iscantzella sa tzarrada"
+  },
+  "menu_delete_location": {
+    "message": "Iscantzellare custa positzione?"
+  },
+  "menu_message_details": {
+    "message": "Detàllios de su messàgiu"
+  },
+  "menu_copy_to_clipboard": {
+    "message": "Còpia in punta de billete"
+  },
+  "menu_forward": {
+    "message": "Inoltra su messàgiu"
+  },
+  "menu_reply": {
+    "message": "Risponde a su messàgiu"
+  },
+  "menu_mute": {
+    "message": "Istuda sas notìficas"
+  },
+  "menu_unmute": {
+    "message": "Allughe sas notìficas"
+  },
+  "menu_export_attachment": {
+    "message": "Esposta s'allegadu"
+  },
+  "menu_all_media": {
+    "message": "Totu sos mèdios"
+  },
+  "menu_share": {
+    "message": "Cumpartzi"
+  },
+  "menu_block_contact": {
+    "message": "Bloca su cuntatu"
+  },
+  "menu_unblock_contact": {
+    "message": "Isbloca su cuntatu"
+  },
+  "menu_play": {
+    "message": "Riprodui"
+  },
+  "menu_pause": {
+    "message": "Pàusa"
+  },
+  "menu_scroll_to_bottom": {
+    "message": "Iscurre a fundu"
+  },
+  "menu_scroll_to_top": {
+    "message": "Iscurre a pitzus"
+  },
+  "menu_help": {
+    "message": "Agiudu"
+  },
+  "menu_select_all": {
+    "message": "Ischerta totu"
+  },
+  "menu_edit_name": {
+    "message": "Modìfica su nùmene"
+  },
+  "menu_settings": {
+    "message": "Impostatziones"
+  },
+  "menu_advanced": {
+    "message": "Avantzadas"
+  },
+  "menu_view_profile": {
+    "message": "Pòmpia su profilu"
+  },
+  "menu_zoom_in": {
+    "message": "Ismànnia"
+  },
+  "menu_zoom_out": {
+    "message": "Mìnima"
+  },
+  "menu_save_log": {
+    "message": "Sarva su registru"
+  },
+  "title_share_location": {
+    "message": "Cumpartzi sa positzione cun totu sos membros de su grupu"
+  },
+  "device_talk": {
+    "message": "Messàgios de su dispositivu"
+  },
+  "device_talk_subtitle": {
+    "message": "Messàgios ingendrados localmente"
+  },
+  "device_talk_explain": {
+    "message": "Sos messàgios in custa tzarrada benint ingendrados localmente dae s'aplicatzone Delta Chat tua. Sos isvilupadores los impreant pro informare a pitzu de sos agiornamentos de s'aplicatzione e de problemas durante s'impreu."
+  },
+  "edit_contact": {
+    "message": "Modìfica su cuntatu"
+  },
+  "pin_chat": {
+    "message": "Apica sa tzarrada"
+  },
+  "unpin_chat": {
+    "message": "Isbloca sa tzarrada"
+  },
+  "pin": {
+    "message": "Apica"
+  },
+  "unpin": {
+    "message": "Isbloca"
+  },
+  "mute_for_one_hour": {
+    "message": "A sa muda pro 1 ora"
+  },
+  "mute_for_eight_hours": {
+    "message": "A sa muda pro 8 oras"
+  },
+  "mute_for_one_day": {
+    "message": "A sa muda pro 1 die"
+  },
+  "mute_for_seven_days": {
+    "message": "A sa muda pro 7 dies"
+  },
+  "mute_forever": {
+    "message": "A sa muda pro semper"
+  },
+  "share_location_for_5_minutes": {
+    "message": "pro 5 minutos"
+  },
+  "share_location_for_30_minutes": {
+    "message": "pro 30 minutos"
+  },
+  "share_location_for_one_hour": {
+    "message": "pro 1 ora"
+  },
+  "share_location_for_two_hours": {
+    "message": "pro 2 oras"
+  },
+  "share_location_for_six_hours": {
+    "message": "pro 6 oras"
+  },
+  "file_saved_to": {
+    "message": "Documentu sarvadu in \"%1$s\"."
+  },
+  "videochat": {
+    "message": "Vìdeu-tzarrada"
+  },
+  "videochat_invite_user_to_videochat": {
+    "message": "Cheres invitare %1$s a una vìdeu-tzarrada?"
+  },
+  "videochat_invite_user_hint": {
+    "message": "Custu bisòngiat de un'aplicatzione cumpatìbile o unu navigadore cumpatìbile dae ambas alas."
+  },
+  "videochat_contact_invited_hint": {
+    "message": "%1$s t'at invitadu a una vìdeu-tzarrada."
+  },
+  "videochat_you_invited_hint": {
+    "message": "As invitadu a una vìdeu-tzarrada."
+  },
+  "videochat_tap_to_join": {
+    "message": "Toca pro bi pigare parte"
+  },
+  "videochat_tap_to_open": {
+    "message": "Toca pro abèrrere"
+  },
+  "videochat_instance": {
+    "message": "Istàntzia de vìdeu-tzarrada"
+  },
+  "videochat_instance_placeholder": {
+    "message": "S'istàntzia de vìdeu-tzarrada tua"
+  },
+  "videochat_instance_from_qr": {
+    "message": "Cheres impreare \"%1$s\" pro invitare calicun'àteru a sa vìdeu-tzarrada?\n\nA pustis de s'impostatzione, podes fàghere incumentzare una vìdeu-tzarrada dae cada tzarrada unu-a-unu. Custu at a remplasare sas impostatziones antepostas pro sas vìdeu-tzarradas, si bi nde fiant."
+  },
+  "videochat_invitation": {
+    "message": "Invitu a sa vìdeu-tzarrada"
+  },
+  "videochat_invitation_body": {
+    "message": "Ses invitadu a una vìdeu-tzarrada. Incarca %1$s pro bi pigare parte."
+  },
+  "ask_leave_group": {
+    "message": "Ses seguru de chèrrere lassare custu grupu?"
+  },
+  "ask_forward": {
+    "message": "Inoltrare su messàgiu a %1$s?"
+  },
+  "ask_forward_multiple": {
+    "message": "Inoltrare messàgios a %1$d tzarradas?"
+  },
+  "ask_export_attachment": {
+    "message": "Esportare sos allegados? S'esportatzione de sos allegados at a permìtere a cale si siat àtera aplicatzione in su dispositivu tuo de b'atzèdere.\n\nSighire?"
+  },
+  "ask_block_contact": {
+    "message": "Blocare custu cuntatu? No as a retzire prus messàgios dae custu cuntatu."
+  },
+  "ask_unblock_contact": {
+    "message": "Isblocare custu cuntatu? As a torrare a pòdere retzire messàgios dae custu cuntatu."
+  },
+  "ask_delete_contacts": {
+    "message": "Iscantzellare sos cuntatos?\n\nSos cuntatos cun tzarradas ativas e cussos de sa rubrica de su dispositivu non podent èssere iscantzellados definitivamente."
+  },
+  "ask_delete_contact": {
+    "message": "Cheres iscantzellare a %1$s pro semper?\n\nSos cuntatos cun tzarradas ativas e cussos de sa rubrica de su dispositivu non podent èssere iscantzellados definitivamente."
+  },
+  "ask_start_chat_with": {
+    "message": "Cheres tzarrare cun %1$s?"
+  },
+  "ask_remove_members": {
+    "message": "Cheres bogare %1$sdae su grupu?"
+  },
+  "open_url_confirmation": {
+    "message": "Cheres abèrrere custu ligàmene?"
+  },
+  "contacts_title": {
+    "message": "Cuntatos"
+  },
+  "contacts_enter_name_or_email": {
+    "message": "Inserta su nùmene o s'indiritzu de posta eletrònica"
+  },
+  "contacts_type_email_above": {
+    "message": "Inserta s'indiritzu de posta eletrònica inoghe in subra"
+  },
+  "contacts_empty_hint": {
+    "message": "Perunu cuntatu."
+  },
+  "chat_archived_chats_title": {
+    "message": "Tzarradas archiviadas"
+  },
+  "chat_please_enter_message": {
+    "message": "Pro praghere inserta unu messàgiu."
+  },
+  "chat_camera_unavailable": {
+    "message": "Fotocàmera non disponìbile"
+  },
+  "chat_unable_to_record_audio": {
+    "message": "Registratzione de su sonu fallida"
+  },
+  "chat_new_group_hint": {
+    "message": "Imbia su primu messàgiu, permitende a sos àteros de ti rispòndere in intro de custu grupu.\n\n•Lu podes fàghere fintzas si non totu sos membros impreant Delta Chat.Sa cunsinna de su primu messàgiu diat pòdere pigare un'agigu de tempus."
+  },
+  "chat_record_slide_to_cancel": {
+    "message": "Iscurre pro annulare"
+  },
+  "chat_record_explain": {
+    "message": "Incarca e mantene incarcadu pro registrare unu messàgiu vocale, lassa pro imbiare"
+  },
+  "chat_no_chats_yet_title": {
+    "message": "Cartella de intrada bòida.\nIncarca \"+\" pro abèrrere una tzarrada noa."
+  },
+  "chat_all_archived": {
+    "message": "Tzarradas archiviadas.\nIncarca \"+\" pro abèrrere una tzarrada noa."
+  },
+  "chat_share_with_title": {
+    "message": "Cumpartzi cun"
+  },
+  "chat_input_placeholder": {
+    "message": "Messàgiu"
+  },
+  "chat_archived_label": {
+    "message": "Archiviadu"
+  },
+  "chat_no_messages": {
+    "message": "Perunu messàgiu."
+  },
+  "chat_self_talk_subtitle": {
+    "message": "Messàgios chi m'apo imbiadu a sa sola"
+  },
+  "saved_messages": {
+    "message": "Messàgios sarvados"
+  },
+  "saved_messages_explain": {
+    "message": "• Inoltra sos messàgios inoghe pro bi pòdere atzèdere in manera lestra\n\n• Sarva notas iscritas o sonoras\n\n• Allega mèdios pro los sarvare"
+  },
+  "saved": {
+    "message": "Sarvadu"
+  },
+  "retry_send": {
+    "message": "Torra a proare a imbiare su messàgiu"
+  },
+  "messaging_disabled_not_in_group": {
+    "message": "Non podes iscrìere ca non ses in custu grupu. Pro b'intrare pedi a un'àteru membru."
+  },
+  "cannot_display_unsuported_file_type": {
+    "message": "Impossìbile ammustrare custa casta de documentu: %s"
+  },
+  "filter_map_on_time": {
+    "message": "Ammustra sas positziones in su tempus"
+  },
+  "show_location_traces": {
+    "message": "Ammustra sas rastas"
+  },
+  "add_poi": {
+    "message": "Imbia puntu de interesse"
+  },
+  "search": {
+    "message": "Chirca"
+  },
+  "search_explain": {
+    "message": "Chirca in sas tzarradas, sos cuntatos e sos messàgios"
+  },
+  "search_no_result_for_x": {
+    "message": "Perunu resurtadu pro \"%s\""
+  },
+  "group_name": {
+    "message": "Nùmene de su grupu"
+  },
+  "group_avatar": {
+    "message": "Avatar de su grupu"
+  },
+  "remove_group_image": {
+    "message": "Boga s'immàgine de su grupu"
+  },
+  "change_group_image": {
+    "message": "Càmbia s'immàgine de su grupu"
+  },
+  "group_create_button": {
+    "message": "Crea unu grupu"
+  },
+  "group_please_enter_group_name": {
+    "message": "Inserta unu nùmene pro su grupu."
+  },
+  "group_add_members": {
+    "message": "Annanghe mambros"
+  },
+  "group_self_not_in_group": {
+    "message": "Depes èssre unu membru de su grupu pro fàghere cust'atzione."
+  },
+  "profile_encryption": {
+    "message": "Tzifradura"
+  },
+  "profile_shared_chats": {
+    "message": "Tzarradas cumpartzidas"
+  },
+  "tab_contact": {
+    "message": "Cuntatu"
+  },
+  "tab_group": {
+    "message": "Grupu"
+  },
+  "tab_gallery": {
+    "message": "Galleria"
+  },
+  "tab_docs": {
+    "message": "Documentos"
+  },
+  "tab_links": {
+    "message": "Ligàmenes"
+  },
+  "tab_map": {
+    "message": "Mapa"
+  },
+  "tab_gallery_empty_hint": {
+    "message": "Sas immàgines e sos vìdeos cumpartzidos in custa tzarrada ant a èssere ammustrados inoghe."
+  },
+  "tab_docs_empty_hint": {
+    "message": "Sos documentos editàbiles, cussos musicales e totu sas àteras castas de documentos cumpartzidos in custa tzarrada ant a èssere ammustrados inoghe."
+  },
+  "media_preview": {
+    "message": "Anteprima de su documentu multimediale"
+  },
+  "send_message": {
+    "message": "Imbia messàgiu"
+  },
+  "login_title": {
+    "message": "Intra"
+  },
+  "login_header": {
+    "message": "Intra in su servidore tuo"
+  },
+  "login_explain": {
+    "message": "Intra cun un'indiritzu de posta eletrònica chi esistat"
+  },
+  "login_subheader": {
+    "message": "Pro sos frunidores de posta eletrònica connotos sas impostatziones additzionales benint impostadas in automàticu. Cada tantu s'IMAP cheret abilitadu in sas impostatziones web. Si ti serbit agiudu pedi a su frunidore de posta eletrònica tuo o a sos amigos tuos."
+  },
+  "login_no_servers_hint": {
+    "message": "No esistint serbidores de Delta Chat, sos datos tuos abarrant in su dispositivu tuo."
+  },
+  "login_inbox": {
+    "message": "In arrivu"
+  },
+  "login_imap_login": {
+    "message": "Nùmene impreadore IMAP"
+  },
+  "login_imap_server": {
+    "message": "Serbidore IMAP"
+  },
+  "login_imap_port": {
+    "message": "Ghenna IMAP"
+  },
+  "login_imap_security": {
+    "message": "Seguresa IMAP"
+  },
+  "login_outbox": {
+    "message": "In essida"
+  },
+  "login_smtp_login": {
+    "message": "Nùmene impreadore SMTP"
+  },
+  "login_smtp_password": {
+    "message": "Crae de intrada SMTP"
+  },
+  "login_smtp_server": {
+    "message": "Serbidore SMTP"
+  },
+  "login_smtp_port": {
+    "message": "Ghenna SMTP"
+  },
+  "login_smtp_security": {
+    "message": "Seguresa SMTP"
+  },
+  "login_auth_method": {
+    "message": "Manera de autenticatzione"
+  },
+  "login_info_oauth2_title": {
+    "message": "Cheres sighire cun s'impostatzione semplificada?"
+  },
+  "login_info_oauth2_text": {
+    "message": "S'indiritzu de posta eletrònica insertadu suportat un'impostztione semplificada (OAuth 2.0).\n\n In su passu chi sighet, pro praghere, permite a Delta Chat de operare che a aplicatzione de tzarrada pro mèdiu de posta eletrònica.\n\nNon bi sunt serbidores de Delta Chat, abarrat totu in su dispositivu tuo."
+  },
+  "login_certificate_checks": {
+    "message": "Verìficas de su tzertificadu"
+  },
+  "login_error_mail": {
+    "message": "Inserta un'indiritzu de posta eletrònica bàlidu"
+  },
+  "login_error_server": {
+    "message": "Inserta un'indiritzu de serbidore / IP bàlidu"
+  },
+  "login_error_port": {
+    "message": "Inserta una ghenna bàlida (1–65535)"
+  },
+  "login_error_required_fields": {
+    "message": "Inserta un'indiritzu de posta eletrònica e una crae de intrada bàlidos"
+  },
+  "import_backup_title": {
+    "message": "Importa una còpia de seguresa"
+  },
+  "import_backup_ask": {
+    "message": "Còpia de seguresa agatada in \"%1$s\".\n\nCheres a l'importare e a impreare totu sos datos e sas impostatziones dae cue?"
+  },
+  "import_backup_no_backup_found": {
+    "message": "Peruna còpia de seguresa agatada.\n\nCòpia sa còpia de seguresa in \"%1$s\" e torra a proare. Si nono, incarca. Asinuncas, incarca \"Incumintza a messagiare\" pro sighire cun su protzessu de impostatzione normale."
+  },
+  "login_error_cannot_login": {
+    "message": "Impossìbile atzèdere comente \"%1$s\". pro paghere verìfica si s'indiritzu de posta eletrònica e sa crae de intrada sunt curretos."
+  },
+  "accept_invalid_certificates": {
+    "message": "Atzetat tzertificados non vàlidos"
+  },
+  "switch_account": {
+    "message": "Càmbia contu"
+  },
+  "add_account": {
+    "message": "Annanghe unu contu"
+  },
+  "delete_account": {
+    "message": "Iscantzella su contu"
+  },
+  "delete_account_ask": {
+    "message": "Ses seguru de chèrrere iscantzellare sos datos de su contu tuo?"
+  },
+  "try_connect_now": {
+    "message": "Proa a ti collegare como"
+  },
+  "configuration_failed_with_error": {
+    "message": "Configuratzione fallida. Errore: %1$s"
+  },
+  "forward_to": {
+    "message": "Inoltra a..."
+  },
+  "ask_send_files_to_selected_chats": {
+    "message": "Cheres imbiare %1$d documentu(os) a %2$d tzarradas?"
+  },
+  "share_text_multiple_chats": {
+    "message": "Cheres inviare custu testu a %1$d tzarradas?\n\n\"%2$s\""
+  },
+  "share_abort": {
+    "message": "Cumpartzidura annullada pro permissos chi mancant."
+  },
+  "pref_using_custom": {
+    "message": "Personalizatziones impreadas: %s"
+  },
+  "pref_using_default": {
+    "message": "Predefinidos impreados: %s"
+  },
+  "pref_profile_info_headline": {
+    "message": "Sas informatziones de profilu tuas"
+  },
+  "pref_profile_photo": {
+    "message": "Fotografia de profilu"
+  },
+  "pref_blocked_contacts": {
+    "message": "Cuntatos blocados"
+  },
+  "blocked_empty_hint": {
+    "message": "Si as a blocare cuntatos ant a èssere allistados inoghe."
+  },
+  "pref_password_and_account_settings": {
+    "message": "Crae de intrada e contu"
+  },
+  "pref_who_can_see_profile_explain": {
+    "message": "S'immàgine de profilu tua e su nùmene tuo ant a èssere ammustrados in paris cun sos messàgios tuos cando ses comunichende cun àteros impreadores. Sas informatziones giai imbiadas non podent èssere iscantzelladas o bogadas."
+  },
+  "pref_your_name": {
+    "message": "Su nùmene tuo"
+  },
+  "pref_default_status_label": {
+    "message": "Firma"
+  },
+  "pref_enter_sends": {
+    "message": "Imbia cun \"Imbiu\""
+  },
+  "pref_enter_sends_explain": {
+    "message": "Incarchende sa tecla Imbiu as a imbiare sos messàgios"
+  },
+  "pref_outgoing_media_quality": {
+    "message": "Calidade de sos documentos multimediales in essida"
+  },
+  "pref_outgoing_balanced": {
+    "message": "Bilantziada"
+  },
+  "pref_outgoing_worse": {
+    "message": "Calidade pègius, mannària minore"
+  },
+  "pref_vibrate": {
+    "message": "Vibratzione"
+  },
+  "pref_screen_security": {
+    "message": "Seguresa de s'ischermu"
+  },
+  "pref_screen_security_explain": {
+    "message": "Pedi de blocare sas ischermadas in sa lista de sos reghentes e in intro de s'aplicatzione"
+  },
+  "pref_screen_security_please_restart_hint": {
+    "message": "Pro aplicare s'impostatzione de seguresa de s'ischermu torra a allùghere s'aplicatzione."
+  },
+  "pref_notifications": {
+    "message": "Notìficas"
+  },
+  "pref_notifications_show": {
+    "message": "Ammustra"
+  },
+  "pref_notifications_priority": {
+    "message": "Prioridade"
+  },
+  "pref_notifications_explain": {
+    "message": "Abìlita sas notìficas de sistema pro sos messàgios noos"
+  },
+  "pref_show_notification_content": {
+    "message": "Ammustra su cuntenutu de su messàgiu in sa notìfica"
+  },
+  "pref_led_color": {
+    "message": "Colore LED"
+  },
+  "pref_sound": {
+    "message": "Sonu"
+  },
+  "pref_silent": {
+    "message": "Istuda su sonu"
+  },
+  "pref_privacy": {
+    "message": "Riservadesa"
+  },
+  "pref_chats_and_media": {
+    "message": "Tzarradas e mèdios"
+  },
+  "pref_system_default": {
+    "message": "Predefinidu de sistema"
+  },
+  "pref_light_theme": {
+    "message": "Craru"
+  },
+  "pref_dark_theme": {
+    "message": "Iscuru"
+  },
+  "pref_appearance": {
+    "message": "Aparèntzia"
+  },
+  "pref_theme": {
+    "message": "Tema"
+  },
+  "pref_language": {
+    "message": "Limba"
+  },
+  "pref_incognito_keyboard": {
+    "message": "Tastiera anònima"
+  },
+  "pref_incognito_keyboard_explain": {
+    "message": "Pedi a sa tastiera de disabilitare s'imparu personalizadu"
+  },
+  "pref_read_receipts": {
+    "message": "Retzidas de leghidura"
+  },
+  "pref_read_receipts_explain": {
+    "message": "Si sas retzidas de leghidura sunt disabilitadas, no as a pòdere bìdere sas retzidas de leghidura de àtere."
+  },
+  "pref_manage_keys": {
+    "message": "Amministra sas craes"
+  },
+  "pref_use_system_emoji": {
+    "message": "Imprea sas emoji de sistema"
+  },
+  "pref_use_system_emoji_explain": {
+    "message": "Istuda su suportu de sas emoji incorporadu in Delta Chat"
+  },
+  "pref_app_access": {
+    "message": "Atzessu a s'aplicatzione"
+  },
+  "pref_chats": {
+    "message": "Tzarradas"
+  },
+  "pref_in_chat_sounds": {
+    "message": "Sonos in sa tzarrada"
+  },
+  "pref_view_log": {
+    "message": "Pòmpia su registru"
+  },
+  "pref_saved_log": {
+    "message": "Registru sarvadu in sa cartella \"Iscarrigamentos\""
+  },
+  "pref_save_log_failed": {
+    "message": "Sarvatàgiu de su registru fallidu"
+  },
+  "pref_log_header": {
+    "message": "Registru"
+  },
+  "pref_other": {
+    "message": "Àteru"
+  },
+  "pref_backup": {
+    "message": "Còpia de seguresa"
+  },
+  "pref_backup_explain": {
+    "message": "Faghe una còpia de seguresa in sa memòria esterna"
+  },
+  "pref_backup_export_explain": {
+    "message": "Una còpia de seguresa t'agiudat a impostare un'installatzione noa in custu o in un'àteru dispositivu.\n\nSa còpia de seguresa ant a cuntènnere totu sos messàgios, sos cuntatos, sas tzarradas e s'impostatzione de sa tzifradura a nodu terminale (end-to-end) de Autocrypt. Mantene su documentu in unu logu seguru o iscantzellalu in su primu momentu chi podes."
+  },
+  "pref_backup_export_start_button": {
+    "message": "Incumintza sa còpia de seguresa"
+  },
+  "pref_backup_written_to_x": {
+    "message": "Còpia de seguresa sarvada in \"%1$s\"chene problemas."
+  },
+  "pref_managekeys_menu_title": {
+    "message": "Amministra sas craes"
+  },
+  "pref_managekeys_export_secret_keys": {
+    "message": "Esporta sas craes segretas"
+  },
+  "pref_managekeys_export_explain": {
+    "message": "Esportare sas craes segretas in \"%1$s\"?"
+  },
+  "pref_managekeys_import_secret_keys": {
+    "message": "Importa sas craes segretas"
+  },
+  "pref_managekeys_import_explain": {
+    "message": "Cheres importare sas craes segretas dae \"%1$s\"?\n\n• Sas craes de como no ant a èssere iscantzelladas\n\n• S'ùrtima crae importada at a èssere impreada comente crae predefinida francu chi tèngiat sa paràula \"legacy\" in su nùmene de su documentu suo."
+  },
+  "pref_managekeys_secret_keys_exported_to_x": {
+    "message": "Craes segretas sarvadas in \"%1$s\" chene problemas."
+  },
+  "pref_managekeys_secret_keys_imported_from_x": {
+    "message": "Craes segredas importadas dae \"%1$s\"."
+  },
+  "pref_background": {
+    "message": "Isfundu"
+  },
+  "pref_background_btn_default": {
+    "message": "Imprea s'immàgine predefinida"
+  },
+  "pref_background_btn_gallery": {
+    "message": "Ischerta dae sa galleria"
+  },
+  "pref_imap_folder_handling": {
+    "message": "Amministratzione de sa cartella IMAP"
+  },
+  "pref_imap_folder_warn_disable_defaults": {
+    "message": "Si disabìlitas custa opztione assegura·ti chi su serbidore tuo e totu sos àteros clientes siant cunfigurados in sa matessi manera\n\nSi nono sas cosas diant pòdere non funtzionare pro nudda."
+  },
+  "pref_watch_sent_folder": {
+    "message": "Pòmpia sa cartella de sos imbiados"
+  },
+  "pref_send_copy_to_self": {
+    "message": "Imbia·ti·nche una còpia"
+  },
+  "pref_auto_folder_moves": {
+    "message": "Tramudòngios automàticos a sa cartella DeltaChat"
+  },
+  "pref_auto_folder_moves_explain": {
+    "message": "Sos arresonos de sas tzarradas benint tramudados pro evitare su prenamentu de sa cartella de intrada"
+  },
+  "pref_show_emails": {
+    "message": "Ammustra sas lìteras traditzionales"
+  },
+  "pref_show_emails_no": {
+    "message": "Nono, tzarradas ebbia"
+  },
+  "pref_show_emails_accepted_contacts": {
+    "message": "Pro sos cuntatos atzetados"
+  },
+  "pref_show_emails_all": {
+    "message": "Totus"
+  },
+  "pref_experimental_features": {
+    "message": "Funtzionalidades isperimentales"
+  },
+  "pref_on_demand_location_streaming": {
+    "message": "Trasmissione de sa positzione suta dimanda"
+  },
+  "pref_background_default": {
+    "message": "Isfundu predefinidu"
+  },
+  "pref_background_default_color": {
+    "message": "Colore predefinidu"
+  },
+  "pref_background_custom_image": {
+    "message": "Immàgine personalizada"
+  },
+  "pref_background_custom_color": {
+    "message": "Colore personalizadu"
+  },
+  "export_aborted": {
+    "message": "Esportatzione annullada."
+  },
+  "profile_image_select": {
+    "message": "Ischerta s'immàgine de profilu"
+  },
+  "select_your_new_profile_image": {
+    "message": "Ischerta s'immàgine de profilu noa tua"
+  },
+  "profile_image_delete": {
+    "message": "Iscantzella s'immàgine de profilu"
+  },
+  "emoji_search_results": {
+    "message": "Resurtados de sa chirca"
+  },
+  "emoji_not_found": {
+    "message": "Peruna emoji agatada"
+  },
+  "delete_old_messages": {
+    "message": "Iscantzella sos messàgios betzos"
+  },
+  "autodel_device_title": {
+    "message": "Iscantzella sos messàgios dae su dispositivu"
+  },
+  "autodel_server_title": {
+    "message": "Iscantzella sos messàgios dae su servidore"
+  },
+  "autodel_device_ask": {
+    "message": "Cheres iscantzellare%1$d messàgios como e totu sos messàgios arribados \"%2$s\" in su tempus benidore?\n\n• Custu at a incluire totu sos documentos multimediales\n\n• Sos messàgios ant a èssere iscantzellados fintzas si no ant a èssere istados lèghidos\n\n• Sos \"Messàgios sarvados\" ant a èssere esclùdidos dae s'iscantzellamentu locale"
+  },
+  "autodel_confirm": {
+    "message": "Apo cumpresu, iscantzella totu sos messàgios"
+  },
+  "autodel_at_once": {
+    "message": "Una borta"
+  },
+  "after_30_seconds": {
+    "message": "A pustis de 30 segundos"
+  },
+  "after_1_minute": {
+    "message": "A pustis de 1 minutu"
+  },
+  "autodel_after_1_hour": {
+    "message": "A pustis de 1 ora"
+  },
+  "autodel_after_1_day": {
+    "message": "A pustis de 1 die"
+  },
+  "autodel_after_1_week": {
+    "message": "A pustis de 1 chida"
+  },
+  "autodel_after_1_year": {
+    "message": "A pustis de 1 annu"
+  },
+  "autocrypt_send_asm_title": {
+    "message": "Imbia unu messàgiu de impostatzione de Autocrypt"
+  },
+  "autocrypt_send_asm_explain_before": {
+    "message": "Unu 'Messàgiu de configuratzione Autocrypt' cumpartzit sa configuratzione a nodu terminale (end-to-end) cun àteras aplicatziones cumpatìbiles cun Autocrypt.\n\nSa configuratzione ant a èssere tzifradas cun unu còdighe ammustradu inoghe chi depet èssere insertadu in s'àteru dispositivu. "
+  },
+  "autocrypt_send_asm_button": {
+    "message": "Imbia unu messàgiu de impostatzione de Autocrypt"
+  },
+  "autocrypt_send_asm_explain_after": {
+    "message": "Ti ses imbiadu sa configuratzione tua. Cola a s'àteru dispositivu e aberi su messàgiu de configuratzione. Ti diat dèpere èssere pedidu unu còdighe de configuratzione. Inserta custas tzifras:"
+  },
+  "autocrypt_prefer_e2ee": {
+    "message": "Preferi sa tzifradura a nodu terminale (end-to-end)"
+  },
+  "autocrypt_asm_subject": {
+    "message": "Messàgiu de configuratzione de Autocrypt"
+  },
+  "write_message_desktop": {
+    "message": "Iscrie unu messàgiu"
+  },
+  "encryption_info_title_desktop": {
+    "message": "Informatziones de tzifradura"
+  },
+  "more_info_desktop": {
+    "message": "Àteras informatziones"
+  },
+  "a11y_encryption_padlock": {
+    "message": "Luchete de tzifradura"
+  },
+  "n_minutes": {
+    "one": "%d min",
+    "other": "%d min"
+  },
+  "n_hours": {
+    "one": "%d ora",
+    "other": "%d oras"
+  },
+  "n_chats": {
+    "one": "%d tzarrada",
+    "other": "%d tzarradas"
+  },
+  "n_contacts": {
+    "one": "%d contatu",
+    "other": "%d contatos"
+  },
+  "n_messages": {
+    "one": "%d messàgiu",
+    "other": "%d messàgios"
+  },
+  "n_members": {
+    "one": "%d membru",
+    "other": "%d membros"
+  },
+  "chat_archived": {
+    "one": "%d tzarrada archiviada",
+    "other": "%d tzarradas archiviadas"
+  },
+  "chat_unarchived": {
+    "one": "%d tzarrada ripristinada",
+    "other": "%d tzarradas ripristinadas"
+  },
+  "chat_n_new_messages": {
+    "one": "%d messàgiu nou",
+    "other": "%dmessàgios noos"
+  }
+}

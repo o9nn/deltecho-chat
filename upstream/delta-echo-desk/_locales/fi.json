@@ -1,0 +1,2439 @@
+{
+  "app_name": {
+    "message": "Delta Chat"
+  },
+  "ok": {
+    "message": "OK"
+  },
+  "cancel": {
+    "message": "Peruuta"
+  },
+  "clear_search": {
+    "message": "Tyhjennä haku"
+  },
+  "yes": {
+    "message": "Kyllä"
+  },
+  "no": {
+    "message": "Ei"
+  },
+  "select": {
+    "message": "Valitse"
+  },
+  "on": {
+    "message": "Päällä"
+  },
+  "off": {
+    "message": "Pois"
+  },
+  "def": {
+    "message": "Oletus"
+  },
+  "default_value": {
+    "message": "Oletus (%1$s)"
+  },
+  "default_value_as_above": {
+    "message": "Oletus (sama kuin yllä)"
+  },
+  "custom": {
+    "message": "Mukautettu"
+  },
+  "none": {
+    "message": "Ei mitään"
+  },
+  "automatic": {
+    "message": "Automaattinen"
+  },
+  "strict": {
+    "message": "Tiukka"
+  },
+  "open": {
+    "message": "Avoin"
+  },
+  "download": {
+    "message": "Lataa"
+  },
+  "downloading": {
+    "message": "Ladataan"
+  },
+  "open_attachment": {
+    "message": "Avaa liite"
+  },
+  "join": {
+    "message": "Liity"
+  },
+  "rejoin": {
+    "message": "Liity uudelleen"
+  },
+  "delete": {
+    "message": "Poista"
+  },
+  "info": {
+    "message": "Lisätietoja"
+  },
+  "update": {
+    "message": "Päivitä"
+  },
+  "emoji": {
+    "message": "Emoji"
+  },
+  "attachment": {
+    "message": "Liite"
+  },
+  "back": {
+    "message": "Takaisin"
+  },
+  "close": {
+    "message": "Sulje"
+  },
+  "close_window": {
+    "message": "Sulje ikkuna"
+  },
+  "forward": {
+    "message": "Eteenpäin"
+  },
+  "create": {
+    "message": "Luo"
+  },
+  "later": {
+    "message": "Myöhemmin"
+  },
+  "resend": {
+    "message": "Lähetä uudelleen"
+  },
+  "archive": {
+    "message": "Arkistoi"
+  },
+  "unarchive": {
+    "message": "Poista arkistosta"
+  },
+  "mute": {
+    "message": "Mykistä"
+  },
+  "ephemeral_messages": {
+    "message": "Katoavat viestit"
+  },
+  "ephemeral_messages_hint": {
+    "message": "Nämä asetukset pätevät kaikkiin Delta Chat -käyttäjiin. He voivat kuitenkin kopioida, tallentaa ja välittää viestejä tai käyttää toisia sähköpostisovelluksia."
+  },
+  "save": {
+    "message": "Tallenna"
+  },
+  "chat": {
+    "message": "Keskustelu"
+  },
+  "media": {
+    "message": "Media"
+  },
+  "profile": {
+    "message": "Profiili"
+  },
+  "main_menu": {
+    "message": "Päävalikko"
+  },
+  "start_chat": {
+    "message": "Aloita keskustelu"
+  },
+  "show_full_message": {
+    "message": "Näytä koko viesti..."
+  },
+  "mark_all_as_read": {
+    "message": "Merkitse luetuksi"
+  },
+  "mark_as_read_short": {
+    "message": "Luettu"
+  },
+  "loading": {
+    "message": "Ladataan..."
+  },
+  "hide": {
+    "message": "Piilota"
+  },
+  "activate": {
+    "message": "Aktivoi"
+  },
+  "load_remote_content": {
+    "message": "Lataa kuvat verkosta"
+  },
+  "load_remote_content_ask": {
+    "message": "Verkosta ladattujen kuvien avulla sinua voidaan seurata.\n\nAsetus mahdollistaa myös fonttien ja muun sisällön lataamisen. Voit nähdä upotettuja kuvia, vaikka asetus ei olisi käytössä.\n\nLataa kuvat verkosta?"
+  },
+  "always": {
+    "message": "Aina"
+  },
+  "always_load_remote_images": {
+    "message": "Lataa aina kuvat verkosta"
+  },
+  "once": {
+    "message": "Kerran"
+  },
+  "show_warning": {
+    "message": "Näytä varoitus"
+  },
+  "show_password": {
+    "message": "Näytä salasana"
+  },
+  "hide_password": {
+    "message": "Piilota salasana"
+  },
+  "not_now": {
+    "message": "Ei nyt"
+  },
+  "never": {
+    "message": "Ei koskaan"
+  },
+  "one_moment": {
+    "message": "Hetki..."
+  },
+  "done": {
+    "message": "Valmis"
+  },
+  "undo": {
+    "message": "Peru"
+  },
+  "offline": {
+    "message": "Ei verkkoyhteyttä"
+  },
+  "next": {
+    "message": "Seuraava"
+  },
+  "error": {
+    "message": "Virhe"
+  },
+  "error_x": {
+    "message": "Virhe: %1$s"
+  },
+  "no_app_to_handle_data": {
+    "message": "Tiedoston avaamiseen sopivaa sovellusta ei löydetty."
+  },
+  "no_browser_installed": {
+    "message": "Selainta ei asennettu."
+  },
+  "file_not_found": {
+    "message": "%1$s ei löytynyt. "
+  },
+  "copied_to_clipboard": {
+    "message": "Kopioitu leikepöydälle"
+  },
+  "contacts_headline": {
+    "message": "Yhteystiedot"
+  },
+  "email_address": {
+    "message": "Sähköpostiosoite"
+  },
+  "bad_email_address": {
+    "message": "Virheellinen sähköpostiosoite"
+  },
+  "password": {
+    "message": "Salasana"
+  },
+  "existing_password": {
+    "message": "Olemassa oleva salasana"
+  },
+  "now": {
+    "message": "Heti"
+  },
+  "danger": {
+    "message": "Varoitus"
+  },
+  "today": {
+    "message": "Tänään"
+  },
+  "yesterday": {
+    "message": "Eilen"
+  },
+  "this_week": {
+    "message": "Tällä viikolla"
+  },
+  "this_month": {
+    "message": "Tässä kuussa"
+  },
+  "last_week": {
+    "message": "Viime viikolla"
+  },
+  "last_month": {
+    "message": "Viime kuussa"
+  },
+  "last_seen_at": {
+    "message": "Nähty viimeksi %1$s"
+  },
+  "last_seen_relative": {
+    "message": "Nähty viimeksi %1$s"
+  },
+  "last_seen_unknown": {
+    "message": "Nähty viimeksi: ei tiedossa"
+  },
+  "self": {
+    "message": "Minä"
+  },
+  "draft": {
+    "message": "Luonnos"
+  },
+  "image": {
+    "message": "Kuva"
+  },
+  "reply_noun": {
+    "message": "Vastaus"
+  },
+  "gif": {
+    "message": "GIF"
+  },
+  "sticker": {
+    "message": "Tarra"
+  },
+  "add_to_sticker_collection": {
+    "message": "Lisää tarrakokoelmaan"
+  },
+  "add_stickers_instructions": {
+    "message": "Saat lisättyä tarroja valitsemalla \"Avaa tarrakansio\", luomalla alikansion tarrakokoelmallesi ja raahaamalla tarratiedostosi sinne"
+  },
+  "open_sticker_folder": {
+    "message": "Avaa tarrakansio"
+  },
+  "images": {
+    "message": "Kuvat"
+  },
+  "audio": {
+    "message": "Äänite"
+  },
+  "voice_message": {
+    "message": "Ääniviesti"
+  },
+  "forwarded": {
+    "message": "Välitetty"
+  },
+  "forwarded_message": {
+    "message": "Välitetty viesti"
+  },
+  "forwarded_by": {
+    "message": "Välittäjä: %1$s"
+  },
+  "video": {
+    "message": "Video"
+  },
+  "documents": {
+    "message": "Asiakirjat"
+  },
+  "contact": {
+    "message": "Yhteystieto"
+  },
+  "camera": {
+    "message": "Kamera"
+  },
+  "capture": {
+    "message": "Kuvaa"
+  },
+  "switch_camera": {
+    "message": "Vaihda kameraa"
+  },
+  "toggle_fullscreen": {
+    "message": "Koko näytön tila"
+  },
+  "location": {
+    "message": "Sijainti"
+  },
+  "locations": {
+    "message": "Sijainnit"
+  },
+  "gallery": {
+    "message": "Galleria"
+  },
+  "images_and_videos": {
+    "message": "Kuvat ja videot"
+  },
+  "file": {
+    "message": "Tiedosto"
+  },
+  "files": {
+    "message": "Tiedostot"
+  },
+  "webxdc_app": {
+    "message": "Sovellus"
+  },
+  "webxdc_apps": {
+    "message": "Sovellukset"
+  },
+  "unknown": {
+    "message": "Tuntematon"
+  },
+  "green": {
+    "message": "Vihreä"
+  },
+  "red": {
+    "message": "Punainen"
+  },
+  "blue": {
+    "message": "Sininen"
+  },
+  "orange": {
+    "message": "Oranssi"
+  },
+  "cyan": {
+    "message": "Syaani"
+  },
+  "purple": {
+    "message": "Violetti"
+  },
+  "magenta": {
+    "message": "Magenta"
+  },
+  "white": {
+    "message": "Valkoinen"
+  },
+  "zoom": {
+    "message": "Suurennos"
+  },
+  "extra_small": {
+    "message": "Erittäin pieni"
+  },
+  "small": {
+    "message": "Pieni"
+  },
+  "normal": {
+    "message": "Tavallinen"
+  },
+  "large": {
+    "message": "Suuri"
+  },
+  "extra_large": {
+    "message": "Erittäin suuri"
+  },
+  "fast": {
+    "message": "Nopea"
+  },
+  "slow": {
+    "message": "Hidas"
+  },
+  "menu_new_contact": {
+    "message": "Uusi yhteystieto"
+  },
+  "menu_new_classic_contact": {
+    "message": "Lisää yhteystieto manuaalisesti"
+  },
+  "new_classic_contact_explain": {
+    "message": "Manuaalisesti lisättyjä yhteystietoja voidaan käyttää tavanomaisiin sähköposteihin ja niiden päästä-päähän salausta ei ole taattu."
+  },
+  "menu_new_chat": {
+    "message": "Uusi keskustelu"
+  },
+  "menu_new_group": {
+    "message": "Uusi ryhmä"
+  },
+  "clone_chat": {
+    "message": "Kloonaa keskustelu"
+  },
+  "broadcast_list": {
+    "message": "Kuulutuslista"
+  },
+  "broadcast_lists": {
+    "message": "Kuulutuslistat"
+  },
+  "new_broadcast_list": {
+    "message": "Uusi kuulutuslista"
+  },
+  "add_recipients": {
+    "message": "Lisää vastaanottajia"
+  },
+  "edit_broadcast_list": {
+    "message": "Muokkaa kuulutuslistaa"
+  },
+  "broadcast_list_name": {
+    "message": "Kuulutuslistan nimi"
+  },
+  "please_enter_broadcast_list_name": {
+    "message": "Anna kuulutuslistalle nimi."
+  },
+  "menu_send": {
+    "message": "Lähetä"
+  },
+  "menu_toggle_keyboard": {
+    "message": "Näytä emoji-näppäimistö"
+  },
+  "menu_edit_group": {
+    "message": "Muokkaa ryhmää"
+  },
+  "menu_group_name_and_image": {
+    "message": "Ryhmän nimi ja kuva"
+  },
+  "menu_show_global_map": {
+    "message": "Näytä kaikki sijainnit"
+  },
+  "menu_archive_chat": {
+    "message": "Arkistoi keskustelu"
+  },
+  "menu_unarchive_chat": {
+    "message": "Siirrä keskustelu pois arkistosta"
+  },
+  "menu_add_attachment": {
+    "message": "Lisää liite"
+  },
+  "menu_leave_group": {
+    "message": "Poistu ryhmästä"
+  },
+  "menu_delete_chat": {
+    "message": "Poista keskustelu"
+  },
+  "clear_chat": {
+    "message": "Tyhjennä keskustelu"
+  },
+  "delete_contact": {
+    "message": "Poista yhteystieto"
+  },
+  "menu_delete_location": {
+    "message": "Poista tämä sijainti?"
+  },
+  "menu_message_details": {
+    "message": "Viestin tiedot"
+  },
+  "menu_copy_to_clipboard": {
+    "message": "Kopioi leikepöydälle"
+  },
+  "menu_copy_selection_to_clipboard": {
+    "message": "Kopioi valinta"
+  },
+  "menu_copy_link_to_clipboard": {
+    "message": "Kopioi linkki"
+  },
+  "menu_copy_text_to_clipboard": {
+    "message": "Kopioi teksti"
+  },
+  "menu_copy_image_to_clipboard": {
+    "message": "Kopioi kuva"
+  },
+  "menu_copy_email_to_clipboard": {
+    "message": "Kopioi sähköpostiosoite"
+  },
+  "paste_from_clipboard": {
+    "message": "Liitä leikepöydältä"
+  },
+  "ask_copy_unopenable_link_to_clipboard": {
+    "message": "Linkkiä \"%1$d\" ei voida avata verkkoselaimessa. Haluatko sen sijaan kopioida sen leikepöydälle?"
+  },
+  "menu_forward": {
+    "message": "Välitä viesti"
+  },
+  "menu_reply": {
+    "message": "Vastaa viestiin"
+  },
+  "menu_mute": {
+    "message": "Mykistä ilmoitukset"
+  },
+  "menu_unmute": {
+    "message": "Poista mykistys"
+  },
+  "menu_export_attachment": {
+    "message": "Vie liite"
+  },
+  "menu_export_attachments": {
+    "message": "Vie liitteet"
+  },
+  "menu_all_media": {
+    "message": "Kaikki media"
+  },
+  "show_in_chat": {
+    "message": "Näytä keskustelussa"
+  },
+  "show_app_in_chat": {
+    "message": "Näytä sovellus keskustelussa"
+  },
+  "menu_share": {
+    "message": "Jaa"
+  },
+  "block": {
+    "message": "Estä"
+  },
+  "menu_block_contact": {
+    "message": "Estä yhteystieto"
+  },
+  "menu_unblock_contact": {
+    "message": "Salli yhteystieto"
+  },
+  "accept": {
+    "message": "Hyväksy"
+  },
+  "menu_play": {
+    "message": "Soita"
+  },
+  "menu_pause": {
+    "message": "Tauko"
+  },
+  "menu_scroll_to_bottom": {
+    "message": "Vieritä alas"
+  },
+  "menu_scroll_to_top": {
+    "message": "Vieritä ylös"
+  },
+  "menu_help": {
+    "message": "Ohje"
+  },
+  "what_is_webxdc": {
+    "message": "Mikä on Webxdc?"
+  },
+  "privacy_policy": {
+    "message": "Yksityisyyskäytäntö"
+  },
+  "menu_select_all": {
+    "message": "Valitse kaikki"
+  },
+  "select_chat": {
+    "message": "Valitse keskustelu"
+  },
+  "select_more": {
+    "message": "Valitse lisää"
+  },
+  "menu_edit_name": {
+    "message": "Muokkaa nimeä"
+  },
+  "menu_settings": {
+    "message": "Asetukset"
+  },
+  "menu_advanced": {
+    "message": "Edistyneet"
+  },
+  "menu_view_profile": {
+    "message": "Näytä profiili"
+  },
+  "menu_zoom_in": {
+    "message": "Suurenna"
+  },
+  "menu_zoom_out": {
+    "message": "Pienennä"
+  },
+  "menu_save_log": {
+    "message": "Tallenna loki"
+  },
+  "menu_more_options": {
+    "message": "Lisää asetuksia"
+  },
+  "menu_learn_spelling": {
+    "message": "Opi tavaus"
+  },
+  "menu_chat_audit_log": {
+    "message": "Keskustelun tarkastusloki"
+  },
+  "jump_to_message": {
+    "message": "Siirry viestiin"
+  },
+  "copy_json": {
+    "message": "Kopioi JSON"
+  },
+  "replace_draft": {
+    "message": "Korvaa luonnos"
+  },
+  "title_share_location": {
+    "message": "Jaa sijainti kaikille ryhmän jäsenille"
+  },
+  "device_talk": {
+    "message": "Laitteen viestit"
+  },
+  "device_talk_subtitle": {
+    "message": "Paikallisesti luodut viestit"
+  },
+  "device_talk_explain": {
+    "message": "Viestit tässä keskustelussa luodaan paikallisesti Delta Chat -sovelluksessa. Kehittäjät ilmoittavat niiden avulla sovelluksen päivityksistä ja mahdollisista ongelmista."
+  },
+  "device_talk_welcome_message2": {
+    "message": "Aloita keskustelu!\n\n🙌 Täppää \"QR koodi\" päänäkymässä molemmilla laitteilla. Valitse \"Skannaa QR koodi\" toisella laitteella, ja osoita sillä toista\n\n🌍 Jos ette ole samassa huoneessa, skannaa vaikkapa videopuhelun yli tai jaa kutsulinkki \"Skannaa QR koodi\" -sivulta\n\nSitten voit nauttia pikaviestittelystä suurimmassa hajautetussa sosiaalisessa verkostossa mitä on koskaan ollut olemassa: eli sähköpostissa. Kontrastina toisiin suosittuihin sovelluksiin, ilman keskitettyä tahoa kontrolloimassa, keräämässä massadataa tai myymässä sinua, ystäviäsi, kollegojasi tai perhettäsi suurille organisaatioille."
+  },
+  "edit_contact": {
+    "message": "Muokkaa yhteystietoa"
+  },
+  "pin_chat": {
+    "message": "Kiinnitä keskustelu"
+  },
+  "unpin_chat": {
+    "message": "Irrota keskustelu"
+  },
+  "pin": {
+    "message": "Kiinnitä"
+  },
+  "unpin": {
+    "message": "Irrota"
+  },
+  "ConversationFragment_quoted_message_not_found": {
+    "message": "Alkuperäistä viestiä ei löydy"
+  },
+  "reply_privately": {
+    "message": "Vastaa yksityisesti"
+  },
+  "source_code": {
+    "message": "Lähdekoodi"
+  },
+  "add_to_home_screen": {
+    "message": "Lisää aloitusnäytölle"
+  },
+  "donate": {
+    "message": "Lahjoita"
+  },
+  "mute_for_one_hour": {
+    "message": "Mykistä 1 tunniksi"
+  },
+  "mute_for_eight_hours": {
+    "message": "Mykistä 8 tunniksi"
+  },
+  "mute_for_one_day": {
+    "message": "Mykistä 1 päiväksi"
+  },
+  "mute_for_seven_days": {
+    "message": "Mykistä 7 päiväksi"
+  },
+  "mute_forever": {
+    "message": "Mykistä ikuisesti"
+  },
+  "share_location_for_5_minutes": {
+    "message": "5 minuutiksi"
+  },
+  "share_location_for_30_minutes": {
+    "message": "30 minuutiksi"
+  },
+  "share_location_for_one_hour": {
+    "message": "1 tunniksi"
+  },
+  "share_location_for_two_hours": {
+    "message": "2 tunniksi"
+  },
+  "share_location_for_six_hours": {
+    "message": "6 tunniksi"
+  },
+  "file_saved_to": {
+    "message": "Tiedosto tallennettu \"%1$s\"."
+  },
+  "videochat": {
+    "message": "Videokeskustelu"
+  },
+  "videochat_invite_user_to_videochat": {
+    "message": "Kutsu %1$s videokeskusteluun?"
+  },
+  "videochat_invite_user_hint": {
+    "message": "Tämä vaatii molemmilta yhteensopivan sovelluksen tai selaimen."
+  },
+  "videochat_contact_invited_hint": {
+    "message": "%1$s kutsui sinut videokeskusteluun."
+  },
+  "videochat_you_invited_hint": {
+    "message": "Lähetit kutsun videokeskusteluun."
+  },
+  "videochat_tap_to_join": {
+    "message": "Napauta liittyäksesi"
+  },
+  "videochat_tap_to_open": {
+    "message": "Napauta avataksesi"
+  },
+  "videochat_instance": {
+    "message": "Videokeskustelun tarjoaja"
+  },
+  "videochat_instance_placeholder": {
+    "message": "Videokeskustelusi tarjoaja"
+  },
+  "videochat_instance_example": {
+    "message": "Esimerkkejä: https://meet.jit.si/$ROOM tai basicwebrtc:https://sinun-palvelimesi"
+  },
+  "videochat_instance_explain_2": {
+    "message": "Jos videokeskustelu on kytketty päälle, voit aloittaa videokeskustelun mistä tahansa keskustelusta. Videokeskustelu vaatii molemmilta yhteensopivan sovelluksen tai selaimen."
+  },
+  "videochat_instance_from_qr": {
+    "message": "Käytä \"%1$s\" videokeskustelupyyntöihin?\n\nTämän jälkeen voit aloittaa videokeskustelun mistä tahansa keskustelusta. Tämä korvaa edellisen videokeskusteluasetuksen, jos sellainen on."
+  },
+  "videochat_invitation": {
+    "message": "Videokeskustelukutsu"
+  },
+  "videochat_invitation_body": {
+    "message": "Sinut on kutsuttu videokeskusteluun, klikkaa %1$s liittyäksesi."
+  },
+  "ask_leave_group": {
+    "message": "Haluatko varmasti poistua tästä ryhmästä?"
+  },
+  "ask_forward": {
+    "message": "Välitä viestit yhteystiedolle %1$s?"
+  },
+  "ask_forward_multiple": {
+    "message": "Välitä viestit %1$d keskustelulle?"
+  },
+  "ask_export_attachment": {
+    "message": "Liitteiden vieminen antaa muille laitteen sovelluksille mahdollisuuden lukea niitä.\n\nJatka?"
+  },
+  "ask_block_contact": {
+    "message": "Estä tämä yhteystieto? Et enää saa viestejä tästä osoitteesta."
+  },
+  "ask_unblock_contact": {
+    "message": "Poista yhteystiedon esto? Saat taas viestejä tältä yhteystiedolta."
+  },
+  "ask_delete_contacts": {
+    "message": "Poista yhteystiedot?\n\nEt voi poistaa yhteystietoja, joiden kanssa sinulla on aktiivinen keskustelu tai jotka on noudettu laitteen osoitekirjasta."
+  },
+  "ask_delete_contact": {
+    "message": "Poista yhteystieto %1$s?\n\nEt voi poistaa yhteystietoja, joiden kanssa sinulla on aktiivinen keskustelu tai jotka on noudettu laitteen osoitekirjasta."
+  },
+  "ask_start_chat_with": {
+    "message": "Aloita keskustelu yhteystiedon %1$s kanssa?"
+  },
+  "ask_remove_members": {
+    "message": "Poista %1$s ryhmästä?"
+  },
+  "ask_remove_from_broadcast": {
+    "message": "Poista %1$s kuulutuslistalta?"
+  },
+  "open_url_confirmation": {
+    "message": "Haluatko avata tämän linkin?"
+  },
+  "contacts_title": {
+    "message": "Yhteystiedot"
+  },
+  "contacts_enter_name_or_email": {
+    "message": "Anna nimi tai sähköpostiosoite"
+  },
+  "contacts_type_email_above": {
+    "message": "Kirjoita sähköpostiosoite ylle"
+  },
+  "contacts_empty_hint": {
+    "message": "Ei yhteystietoja"
+  },
+  "chat_archived_chats_title": {
+    "message": "Arkistoidut keskustelut"
+  },
+  "chat_please_enter_message": {
+    "message": "Kirjoita viesti."
+  },
+  "chat_camera_unavailable": {
+    "message": "Kamera ei saatavilla."
+  },
+  "chat_unable_to_record_audio": {
+    "message": "Äänen tallentaminen ei onnistunut."
+  },
+  "chat_new_one_to_one_hint": {
+    "message": "Lähetä viesti. Ei haittaa, vaikka %1$s ei käyttäisi Delta Chatia."
+  },
+  "chat_new_broadcast_hint": {
+    "message": "Kuulutuslistalla vastaanottajat saavat viestit keskusteluna kanssasi, jossa heillä on vain lukuoikeus."
+  },
+  "chat_new_group_hint": {
+    "message": "Muut näkevät ryhmän vasta, kun lähetät ensimmäisen viestin."
+  },
+  "chat_record_slide_to_cancel": {
+    "message": "Pyyhkäise peruuttaaksesi"
+  },
+  "chat_record_explain": {
+    "message": "Pidä painettuna nauhoittaaksesi ääniviestin, irrota lähettääksesi"
+  },
+  "chat_no_chats_yet_title": {
+    "message": "Saapuneet-kansio on tyhjä\nPaina \"+\" aloittaaksesi uuden keskustelun."
+  },
+  "chat_all_archived": {
+    "message": "Kaikki keskustelut arkistoitu.\nPaina \"+\" aloittaaksesi uuden keskustelun."
+  },
+  "chat_share_with_title": {
+    "message": "Jaa"
+  },
+  "chat_input_placeholder": {
+    "message": "Viesti"
+  },
+  "chat_archived_label": {
+    "message": "Arkistoitu"
+  },
+  "chat_request_label": {
+    "message": "Pyyntö"
+  },
+  "chat_no_messages": {
+    "message": "Ei viestejä"
+  },
+  "chat_self_talk_subtitle": {
+    "message": "Viestit, jotka lähetin itselleni"
+  },
+  "archive_empty_hint": {
+    "message": "Arkistoimasi keskustelut näkyvät täällä"
+  },
+  "saved_messages": {
+    "message": "Tallennetut viestit"
+  },
+  "saved_messages_explain": {
+    "message": "• Välitä viestejä tänne helppoa pääsyä varten\n\n• Kirjoita tai äänitä muistiinpanoja\n\n• Liitä mediaa tallentaaksesi ne"
+  },
+  "saved": {
+    "message": "Tallennettu"
+  },
+  "save_as": {
+    "message": "Tallenna nimellä"
+  },
+  "retry_send": {
+    "message": "Yritä uudelleen lähettääksesi viestin"
+  },
+  "messaging_disabled_not_in_group": {
+    "message": "Et voi kirjoittaa, koska et ole ryhmän jäsen. Liittyäksesi pyydä, että joku jäsen liittää sinut ryhmään."
+  },
+  "messaging_disabled_mailing_list": {
+    "message": "Sähköpostilistoille vastaamista ei vielä tueta"
+  },
+  "cannot_display_unsuported_file_type": {
+    "message": "Tiedostotyypin näyttäminen epäonnistui: %s"
+  },
+  "attachment_failed_to_load": {
+    "message": "Liitteiden lataaminen epäonnistui"
+  },
+  "lock_recording": {
+    "message": "Lukitse äänitys"
+  },
+  "mailing_list": {
+    "message": "Sähköpostilista"
+  },
+  "mailing_list_profile_info": {
+    "message": "Muutokset sähköpostilistan nimeen ja kuvaan tallentuvat vain tähän laitteeseen."
+  },
+  "start_app": {
+    "message": "Aloita..."
+  },
+  "accept_request_first": {
+    "message": "Hyväksy keskustelupyyntö ensin."
+  },
+  "send_file_to": {
+    "message": "Lähetä \"%1$s\" kohteeseen..."
+  },
+  "send_message_to": {
+    "message": "Lähetä viesti kohteeseen..."
+  },
+  "filter_map_on_time": {
+    "message": "Näytä sijainnit aikajanalla"
+  },
+  "show_location_traces": {
+    "message": "Näytä jäljet"
+  },
+  "add_poi": {
+    "message": "Lähetä erikseen valittu piste"
+  },
+  "chat_audit_log_empty_message": {
+    "message": "Keskustelun järjestelmäviestit näkyvät tässä"
+  },
+  "chat_audit_log_title": {
+    "message": "Keskustelun tarkastusloki yhteystiedolle %1$s"
+  },
+  "chat_audit_log_description": {
+    "message": "Tässä näytetään vain järjestelmä- ja ohjeviestit. Tämä näkymä helpottaa viimeisimpien tapahtumien löytämistä tavallisten viestien joukosta."
+  },
+  "open_external_url_trust_domain": {
+    "message": "Älä kysy enää osoitteelle %1$s"
+  },
+  "puny_code_warning_header": {
+    "message": "Epäilyttävä linkki havaittu"
+  },
+  "puny_code_warning_question": {
+    "message": "Haluatko varmasti vierailla osoitteessa %1$s?"
+  },
+  "puny_code_warning_description": {
+    "message": "Seurasit linkkiä, joka saattaa näyttää toisten aakkostojen merkkejä huijaussivustolle johtamiseen. Linkin teksti %1$s johtaa osoitteeseen %2$s, mikä on tavallista ei-latinalaisille merkistöille. Jos et odottanut tätä, tämä linkki voi olla vahingollinen."
+  },
+  "search": {
+    "message": "Etsi"
+  },
+  "search_in_chat": {
+    "message": "Hae keskustelussa"
+  },
+  "search_files": {
+    "message": "Hae tiedostoja"
+  },
+  "search_explain": {
+    "message": "Etsi keskusteluja, yhteystietoja ja viestejä"
+  },
+  "search_no_result_for_x": {
+    "message": "Ei tuloksia haulle \"%s\""
+  },
+  "group_name": {
+    "message": "Ryhmän nimi"
+  },
+  "group_avatar": {
+    "message": "Ryhmän kuva"
+  },
+  "remove_group_image": {
+    "message": "Poista ryhmän kuva"
+  },
+  "change_group_image": {
+    "message": "Muuta ryhmän kuvaa"
+  },
+  "group_create_button": {
+    "message": "Luo ryhmä"
+  },
+  "group_please_enter_group_name": {
+    "message": "Anna ryhmän nimi"
+  },
+  "group_add_members": {
+    "message": "Lisää jäseniä"
+  },
+  "group_self_not_in_group": {
+    "message": "Sinun täytyy olla ryhmän jäsen suorittaaksesi tämän toiminnon."
+  },
+  "profile_encryption": {
+    "message": "Salaus"
+  },
+  "profile_shared_chats": {
+    "message": "Jaetut keskustelut"
+  },
+  "related_chats": {
+    "message": "Liittyvät keskustelut"
+  },
+  "tab_contact": {
+    "message": "Yhteystieto"
+  },
+  "tab_group": {
+    "message": "Ryhmä"
+  },
+  "tab_gallery": {
+    "message": "Galleria"
+  },
+  "tab_docs": {
+    "message": "Asiakirjat"
+  },
+  "tab_links": {
+    "message": "Linkit"
+  },
+  "tab_map": {
+    "message": "Kartta"
+  },
+  "tab_gallery_empty_hint": {
+    "message": "Tässä keskustelussa jaetut kuvat ja videot näkyvät tässä."
+  },
+  "tab_docs_empty_hint": {
+    "message": "Tässä keskustelussa jaetut asiakirjat, musiikki ja muut tiedostot näkyvät tässä."
+  },
+  "tab_image_empty_hint": {
+    "message": "Tässä keskustelussa jaetut kuvat näkyvät tässä."
+  },
+  "tab_video_empty_hint": {
+    "message": "Tässä keskustelussa jaetut videot näkyvät tässä."
+  },
+  "tab_audio_empty_hint": {
+    "message": "Tässä keskustelussa jaetut äänitiedostot ja -viestit näkyvät tässä."
+  },
+  "tab_webxdc_empty_hint": {
+    "message": "Keskustelussa jaetut yksityiset sovellukset näkyvät tässä."
+  },
+  "tab_all_media_empty_hint": {
+    "message": "Kun keskusteluissa jaetaan mediaa, se tulee näkymään täällä."
+  },
+  "all_apps_empty_hint": {
+    "message": "Kaikissa keskusteluissa jaetut yksityiset sovellukset näkyvät tässä."
+  },
+  "media_preview": {
+    "message": "Median esikatselu"
+  },
+  "aspect_ratio_grid": {
+    "message": "Kuvasuhteen mukainen ruudukko"
+  },
+  "square_grid": {
+    "message": "Neliöruudukko"
+  },
+  "send_message": {
+    "message": "Lähetä viesti"
+  },
+  "aeap_addr_changed": {
+    "message": "%1$s vaihtui osoitteesta %2$s osoitteeksi %3$s"
+  },
+  "aeap_explanation": {
+    "message": "Vaihdoit sähköpostiosoitteesi osoitteesta %1$s osoitteeksi %2$s.\n\nJos lähetät viestin vahvistettuun ryhmään, ryhmän jäsenet saavat automaattisesti uuden osoitteesi.\n\nOn suositeltavaa asettaa vanha tilisi välittämään kaikki viestit uuteen osoitteeseesi. Muuten et välttämättä saa viestejä niiltä yhteystiedoiltasi, joilla ei ole uutta osoitettasi."
+  },
+  "multidevice_title": {
+    "message": "Lisää toinen laite"
+  },
+  "multidevice_same_network_hint": {
+    "message": "Varmista että molemmat laitteet ovat samassa Wi-Fi verkossa"
+  },
+  "multidevice_this_creates_a_qr_code": {
+    "message": "Tämä luo QR koodin, jolla toinen laite saa ladattua kopion profiilista."
+  },
+  "multidevice_install_dc_on_other_device": {
+    "message": "Lataa Delta Chat toiselle laitteellesi (https://get.delta.chat)"
+  },
+  "multidevice_tap_scan_on_other_device": {
+    "message": "Avaa Delta Chat, valitse \"Minulla on jo profiili / Lisää toiseksi laitteeksi\" ja skannaa täällä näkyvä koodi"
+  },
+  "multidevice_qr_subtitle": {
+    "message": "Lisää toiseksi laitteeksi profiilille %1$s"
+  },
+  "multidevice_receiver_title": {
+    "message": "Lisää toiseksi laitteeksi"
+  },
+  "multidevice_open_settings_on_other_device": {
+    "message": "Avaa \"Asetukset / Lisää toinen laite\" ensimmäisellä laitteella ja skannaa tässä oleva koodi"
+  },
+  "multidevice_receiver_scanning_ask": {
+    "message": "Kopioidaanko profiili toiselta laitteelta tälle laitteelle?"
+  },
+  "multidevice_abort": {
+    "message": "Hylätäänkö toisen laitteen käyttöönotto?"
+  },
+  "multidevice_abort_will_invalidate_copied_qr": {
+    "message": "Tämä mitätöi QR koodin joka on kopioituna leikepöydälle."
+  },
+  "multidevice_transfer_done_devicemsg": {
+    "message": "ℹ️ Profiili siirretty toiselle laitteellesi."
+  },
+  "preparing_account": {
+    "message": "Valmistellaan profiilia..."
+  },
+  "transferring": {
+    "message": "Siirretään..."
+  },
+  "troubleshooting": {
+    "message": "Vianetsintä"
+  },
+  "incoming_messages": {
+    "message": "Saapuvat viestit"
+  },
+  "outgoing_messages": {
+    "message": "Lähtevät viestit"
+  },
+  "storage_on_domain": {
+    "message": "Tallennustila palvelimella %1$s"
+  },
+  "connectivity": {
+    "message": "Yhteys"
+  },
+  "connectivity_not_connected": {
+    "message": "Ei yhdistetty"
+  },
+  "connectivity_connecting": {
+    "message": "Yhdistetään..."
+  },
+  "connectivity_updating": {
+    "message": "Päivitetään..."
+  },
+  "connectivity_connected": {
+    "message": "Yhdistetty"
+  },
+  "sending": {
+    "message": "Lähetetään"
+  },
+  "last_msg_sent_successfully": {
+    "message": "Viimeinen viesti lähetetty onnistuneesti."
+  },
+  "not_supported_by_provider": {
+    "message": "Ei tuettu palveluntarjoajallasi."
+  },
+  "messages": {
+    "message": "Viestit"
+  },
+  "part_of_total_used": {
+    "message": "%1$s / %2$s käytössä"
+  },
+  "onboarding_create_instant_account": {
+    "message": "Luo uusi profiili"
+  },
+  "onboarding_alternative_logins": {
+    "message": "Minulla on jo profiili"
+  },
+  "manual_account_setup_option": {
+    "message": "Tavanomainen sähköpostikirjautuminen"
+  },
+  "instant_onboarding_title": {
+    "message": "Profiilisi"
+  },
+  "instant_onboarding_agree_default2": {
+    "message": "Yksityisyydensuojaseloste %1$s"
+  },
+  "instant_onboarding_agree_instance": {
+    "message": "Tietoja profiileista kohteessa %1$s"
+  },
+  "instant_onboarding_create": {
+    "message": "Hyväksy & luo profiili"
+  },
+  "instant_onboarding_show_more_instances": {
+    "message": "Käytä toista palvelinta"
+  },
+  "instant_onboarding_other_server": {
+    "message": "Listaa chatmail -palvelimet"
+  },
+  "instant_onboarding_group_info": {
+    "message": "Liity ryhmään \"%1$s\" luomalla profiili."
+  },
+  "instant_onboarding_contact_info": {
+    "message": "Keskustele %1$s kanssa luomalla profiili."
+  },
+  "instant_onboarding_confirm_contact": {
+    "message": "Haluatko luoda uuden profiilin ja aloittaa keskustelun %1$s kanssa?"
+  },
+  "instant_onboarding_confirm_group": {
+    "message": "Haluatko luoda uuden profiilin ja liittyä ryhmään \"%1$s\"?"
+  },
+  "welcome_chat_over_email": {
+    "message": "Turvallinen hajautettu keskustelu"
+  },
+  "scan_invitation_code": {
+    "message": "Skannaa kutsukoodi"
+  },
+  "login_title": {
+    "message": "Kirjaudu sisään"
+  },
+  "login_header": {
+    "message": "Kirjaudu sähköpostitilillesi"
+  },
+  "login_explain": {
+    "message": "Kirjaudu olemassa olevalla sähköpostitilillä"
+  },
+  "login_subheader": {
+    "message": "Sähköpostiasetukset määritetään automaattisesti tunnetuille palvelimille. Joskus verkkoasetuksista täytyy ottaa käyttöön IMAP. Kysy apua palveluntarjoajaltasi tai ystäviltäsi."
+  },
+  "login_no_servers_hint": {
+    "message": "Delta Chat ei kerää käyttäjädataa, kaikki tallennetaan vain laitteellesi."
+  },
+  "login_inbox": {
+    "message": "Saapuvan postin laatikko"
+  },
+  "login_imap_login": {
+    "message": "IMAP -kirjautumistunnus"
+  },
+  "login_imap_server": {
+    "message": "IMAP -palvelin"
+  },
+  "login_imap_port": {
+    "message": "IMAP -portti"
+  },
+  "login_imap_security": {
+    "message": "IMAP -turvallisuus"
+  },
+  "login_outbox": {
+    "message": "Lähtevän postin laatikko"
+  },
+  "login_smtp_login": {
+    "message": "SMTP -kirjautumistunnus"
+  },
+  "login_smtp_password": {
+    "message": "SMTP -salasana"
+  },
+  "login_smtp_server": {
+    "message": "SMTP -palvelin"
+  },
+  "login_smtp_port": {
+    "message": "SMTP -portti"
+  },
+  "login_smtp_security": {
+    "message": "SMTP -turvallisuusprotokolla"
+  },
+  "login_auth_method": {
+    "message": "Kirjautumismenetelmä"
+  },
+  "login_info_oauth2_title": {
+    "message": "Jatka yksinkertaistetulla käyttöönotolla?"
+  },
+  "login_info_oauth2_text": {
+    "message": "Annettu sähköpostiosoite tukee yksinkertaista käyttöönottoa (OAuth 2.0).\n\nSeuraavassa vaiheessa sinun tulisi antaa Delta Chatille oikeus toimia keskustelusovelluksena sähköpostia hyödyntäen.\n\nDelta Chat ei kerää käyttäjädataa, kaikki tallennetaan vain laitteellesi."
+  },
+  "login_certificate_checks": {
+    "message": "Varmenteiden tarkastus"
+  },
+  "login_error_mail": {
+    "message": "Anna kelvollinen sähköpostiosoite"
+  },
+  "login_error_server": {
+    "message": "Anna kelvollinen palvelin tai IP-osoite"
+  },
+  "login_error_port": {
+    "message": "Anna kelvollinen portti (1-65535)"
+  },
+  "login_error_required_fields": {
+    "message": "Anna kelvollinen sähköpostiosoite ja salasana"
+  },
+  "import_backup_title": {
+    "message": "Palauta varmuuskopiosta"
+  },
+  "import_backup_ask": {
+    "message": "Varmuuskopio löydetty sijainnista \"%1$s\".\n\nHaluatko tuoda sen ja käyttää sen asetuksia?"
+  },
+  "import_backup_no_backup_found": {
+    "message": "Varmuuskopioita ei löytynyt.\n\nKopioi varmuuskopio kohteeseen \"%1$s\" ja yritä uudelleen. Voit myös vaihtoehtoisesti jatkaa tavanomaista käyttöönottoa valitsemalla \"Aloita viestittely\"."
+  },
+  "login_error_cannot_login": {
+    "message": "Osoitteella \"%1$s\" kirjautuminen epäonnistui. Tarkistathan että sähköpostiosoite ja salasana ovat oikeinkirjoitettuja."
+  },
+  "accept_invalid_certificates": {
+    "message": "Hyväksy rikkinäiset varmenteet"
+  },
+  "switch_account": {
+    "message": "Vaihda profiilia"
+  },
+  "add_account": {
+    "message": "Lisää profiili"
+  },
+  "delete_account": {
+    "message": "Poista profiili"
+  },
+  "delete_account_ask": {
+    "message": "Haluatko varmasti poistaa profiilisi tiedot?"
+  },
+  "delete_account_explain_with_name": {
+    "message": "Profiilin \"%s\" kaikki tiedot tullaan poistamaan tältä laitteelta, sisältäen päästä-päähän salauksen asetukset, yhteystiedot, keskustelut, viestit ja median. Tätä toimenpidettä ei voi peruuttaa."
+  },
+  "unconfigured_account": {
+    "message": "Määrittämätön profiili"
+  },
+  "unconfigured_account_hint": {
+    "message": "Avaa tili luodaksesi asetukset"
+  },
+  "try_connect_now": {
+    "message": "Yritä nyt yhdistämistä"
+  },
+  "sync_all": {
+    "message": "Synkronoi kaikki"
+  },
+  "configuration_failed_with_error": {
+    "message": "Asetusten määritys epäonnistui. Virhe: %1$s"
+  },
+  "forward_to": {
+    "message": "Välitä..."
+  },
+  "ask_send_files_to_selected_chats": {
+    "message": "Lähetä %1$d tiedosto(a) %2$d keskusteluun?"
+  },
+  "share_text_multiple_chats": {
+    "message": "Lähetä tämä teksti %1$d keskusteluun?\n\n\"%2$s\""
+  },
+  "share_abort": {
+    "message": "Jakaminen keskeytetty puuttuvien käyttöoikeuksien vuoksi."
+  },
+  "pref_using_custom": {
+    "message": "Käytetään mukautettua: %s"
+  },
+  "pref_using_default": {
+    "message": "Käytetään oletusta: %s"
+  },
+  "pref_profile_info_headline": {
+    "message": "Profiilisi"
+  },
+  "pref_profile_photo": {
+    "message": "Profiilikuva"
+  },
+  "pref_blocked_contacts": {
+    "message": "Estetyt yhteystiedot"
+  },
+  "blocked_empty_hint": {
+    "message": "Estämäsi yhteystiedot näkyvät tässä"
+  },
+  "pref_password_and_account_settings": {
+    "message": "Salasana ja tili"
+  },
+  "pref_who_can_see_profile_explain": {
+    "message": "Kun kommunikoit muiden käyttäjien kanssa, profiilikuvasi, nimesi ja biosi lähetetään viestiesi ohessa."
+  },
+  "pref_your_name": {
+    "message": "Nimesi"
+  },
+  "pref_default_status_label": {
+    "message": "Bio"
+  },
+  "pref_enter_sends": {
+    "message": "Lähetä Enter -näppäimellä"
+  },
+  "pref_enter_sends_explain": {
+    "message": "Enter-näppäimen painaminen lähettää viestin"
+  },
+  "pref_outgoing_media_quality": {
+    "message": "Lähtevän median laatu"
+  },
+  "pref_outgoing_balanced": {
+    "message": "Tasapainotettu"
+  },
+  "pref_outgoing_worse": {
+    "message": "Huonompi laatu, pienempi koko"
+  },
+  "pref_vibrate": {
+    "message": "Värinä"
+  },
+  "pref_screen_security": {
+    "message": "Näytön turvallisuus"
+  },
+  "pref_screen_security_explain": {
+    "message": "Pyydä järjestelmää estämään näyttökuvien ottaminen sovelluksessa ja äskettäiset -näkymässä"
+  },
+  "pref_screen_security_please_restart_hint": {
+    "message": "Näyttölukon käyttöönotto vaatii sovelluksen uudelleenkäynnistyksen."
+  },
+  "pref_notifications": {
+    "message": "Ilmoitukset"
+  },
+  "pref_notifications_show": {
+    "message": "Näytä"
+  },
+  "pref_notifications_priority": {
+    "message": "Prioriteetti"
+  },
+  "pref_notifications_explain": {
+    "message": "Ota järjestelmäilmoitukset käyttöön uusista viesteistä"
+  },
+  "pref_show_notification_content": {
+    "message": "Näytä viestien sisältö ilmoituksissa"
+  },
+  "pref_show_notification_content_explain": {
+    "message": "Näytä lähettäjä ja viestin ensimmäiset sanat ilmoituksissa"
+  },
+  "pref_led_color": {
+    "message": "LEDin väri"
+  },
+  "pref_sound": {
+    "message": "Ääni"
+  },
+  "pref_silent": {
+    "message": "Äänetön"
+  },
+  "pref_privacy": {
+    "message": "Yksityisyys"
+  },
+  "pref_chats_and_media": {
+    "message": "Keskustelut ja media"
+  },
+  "pref_system_default": {
+    "message": "Järjestelmän oletus"
+  },
+  "pref_light_theme": {
+    "message": "Vaalea"
+  },
+  "pref_dark_theme": {
+    "message": "Tumma"
+  },
+  "pref_appearance": {
+    "message": "Ulkonäkö"
+  },
+  "pref_theme": {
+    "message": "Teema"
+  },
+  "pref_language": {
+    "message": "Kieli"
+  },
+  "pref_incognito_keyboard": {
+    "message": "Yksityinen näppäimistö"
+  },
+  "pref_incognito_keyboard_explain": {
+    "message": "Pyydä näppäimistöä poistamaan henkilökohtaistettu oppiminen käytöstä"
+  },
+  "pref_read_receipts": {
+    "message": "Lukukuittaukset"
+  },
+  "pref_read_receipts_explain": {
+    "message": "Jos lukukuittaukset eivät ole päällä, et näe niitä muiltakaan."
+  },
+  "pref_server": {
+    "message": "Palvelin"
+  },
+  "pref_encryption": {
+    "message": "Salaus"
+  },
+  "pref_manage_keys": {
+    "message": "Hallinnoi avaimia"
+  },
+  "pref_use_system_emoji": {
+    "message": "Käytä järjestelmän emojeja"
+  },
+  "pref_use_system_emoji_explain": {
+    "message": "Poista Delta Chatin sisäänrakennettu emoji -tuki käytöstä"
+  },
+  "pref_show_system_contacts": {
+    "message": "Lue laitteen osoitekirja"
+  },
+  "pref_show_system_contacts_explain": {
+    "message": "Tarjoa keskustelujen avaamista yhteystietojen perusteella. Jotkin palveluntarjoajat vaativat ensin päästä-päähän salauksen käyttöönottoa. "
+  },
+  "pref_app_access": {
+    "message": "Sovelluksen pääsy"
+  },
+  "pref_chats": {
+    "message": "Keskustelut"
+  },
+  "pref_in_chat_sounds": {
+    "message": "Keskustelunaikaiset äänet"
+  },
+  "pref_view_log": {
+    "message": "Näytä loki"
+  },
+  "pref_saved_log": {
+    "message": "Tallenna loki \"Lataukset\" -kansioon"
+  },
+  "pref_save_log_failed": {
+    "message": "Lokin tallennus epäonnistui"
+  },
+  "pref_log_header": {
+    "message": "Loki"
+  },
+  "pref_other": {
+    "message": "Muu"
+  },
+  "pref_backup": {
+    "message": "Varmuuskopiointi"
+  },
+  "pref_backup_explain": {
+    "message": "Varmuuskopioi keskustelut ulkoiseen tallennustilaan"
+  },
+  "pref_backup_export_explain": {
+    "message": "Varmuuskopio auttaa siirtämään asennuksen tälle tai toiselle laitteelle.\n\nVarmuuskopio sisältää kaikki viestit, yhteystiedot ja keskustelut sekä päästä-päähän salauksen Autocrypt -tiedot. Pidä varmuuskopiotiedosto turvallisessa paikassa tai poista se heti kun mahdollista."
+  },
+  "pref_backup_export_x": {
+    "message": "Vie %1$s"
+  },
+  "pref_backup_export_all": {
+    "message": "Vie kaikki %1$d profiilia"
+  },
+  "pref_backup_export_start_button": {
+    "message": "Aloita varmuuskopiointi"
+  },
+  "pref_backup_written_to_x": {
+    "message": "Varmuuskopio kirjoitettu onnistuneesti kohteeseen \"%1$s\"."
+  },
+  "pref_managekeys_menu_title": {
+    "message": "Hallinnoi avaimia"
+  },
+  "pref_managekeys_export_secret_keys": {
+    "message": "Vie salaiset avaimet"
+  },
+  "pref_managekeys_export_explain": {
+    "message": "Vie salaiset avaimet kohteeseen \"%1$s\"?"
+  },
+  "pref_managekeys_import_secret_keys": {
+    "message": "Tuo salaiset avaimet"
+  },
+  "pref_managekeys_import_explain": {
+    "message": "Tuo salaiset avaimet kohteesta \"%1$s\"?\n\n• Olemassa olevia salaisia avaimia ei poisteta\n\n• Viimeisimpänä tuotua avainta käytetään oletusavaimena, paitsi jos sen tiedostonimessä on sana \"legacy\"."
+  },
+  "pref_managekeys_secret_keys_exported_to_x": {
+    "message": "Salaiset avaimet kirjoitettu onnistuneesti kohteeseen \"%1$s\"."
+  },
+  "pref_managekeys_secret_keys_imported_from_x": {
+    "message": "Salaiset avaimet tuotu kohteesta \"%1$s\"."
+  },
+  "pref_background": {
+    "message": "Taustakuva"
+  },
+  "pref_background_btn_default": {
+    "message": "Käytä oletuskuvaa"
+  },
+  "pref_background_btn_gallery": {
+    "message": "Valitse galleriasta"
+  },
+  "pref_imap_folder_handling": {
+    "message": "IMAP -kansioiden käsittely"
+  },
+  "pref_imap_folder_warn_disable_defaults": {
+    "message": "Jos muutat tätä asetusta, varmista että palvelimesi ja muut päätelaitteesi ovat määritetty vastaavasti.\n\nMuutoin ne eivät ehkä toimi lainkaan."
+  },
+  "pref_watch_sent_folder": {
+    "message": "Tarkkaile Lähetetyt -kansiota"
+  },
+  "pref_send_copy_to_self": {
+    "message": "Lähetä kopio itselle"
+  },
+  "pref_send_copy_to_self_explain": {
+    "message": "Vaaditaan käytettäessä tiliä usealla laitteella."
+  },
+  "pref_auto_folder_moves": {
+    "message": "Siirrä automaattisesti DeltaChat -kansioon"
+  },
+  "pref_auto_folder_moves_explain": {
+    "message": "Saapuneet -kansion täyttämisen välttämiseksi, pikaviestikeskustelut siirretään "
+  },
+  "pref_only_fetch_mvbox_title": {
+    "message": "Hae vain DeltaChat -kansiosta"
+  },
+  "pref_only_fetch_mvbox_explain": {
+    "message": "Älä huomioi muita kansioita. Vaatii että palvelimesi siirtää pikaviestit DeltaChat -kansioon."
+  },
+  "pref_show_emails": {
+    "message": "Näytä tavanomaiset sähköpostiviestit"
+  },
+  "pref_show_emails_no": {
+    "message": "Ei, vain pikaviestit"
+  },
+  "pref_show_emails_accepted_contacts": {
+    "message": "Hyväksytyille yhteystiedoille"
+  },
+  "pref_show_emails_all": {
+    "message": "Kaikki"
+  },
+  "pref_experimental_features": {
+    "message": "Kokeelliset ominaisuudet"
+  },
+  "pref_on_demand_location_streaming": {
+    "message": "Tarvittaessa sijainnin jatkuva jakaminen"
+  },
+  "pref_developer_mode": {
+    "message": "Kehittäjätila"
+  },
+  "pref_developer_mode_explain": {
+    "message": "Kytkee päälle debuggausvaihtoehdot ja saattaa tehdä sovelluksesta epävakaan. Vain kehittäjille."
+  },
+  "pref_background_default": {
+    "message": "Oletuskuva"
+  },
+  "pref_background_default_color": {
+    "message": "Oletusväri"
+  },
+  "pref_background_custom_image": {
+    "message": "Mukautettu kuva"
+  },
+  "pref_background_custom_color": {
+    "message": "Mukautettu väri"
+  },
+  "export_aborted": {
+    "message": "Vienti keskeytetty."
+  },
+  "auto_download_messages": {
+    "message": "Lataa viestit automaattisesti"
+  },
+  "up_to_x": {
+    "message": "Korkeintaan %1$s"
+  },
+  "up_to_x_most_worse_quality_images": {
+    "message": "Korkeintaan %1$s, suurin osa alhaisen laadun kuvista"
+  },
+  "up_to_x_most_balanced_quality_images": {
+    "message": "Korkeintaan %1$s, suurin osa tasapainoisen laadun kuvista"
+  },
+  "download_failed": {
+    "message": "Lataus epäonnistui"
+  },
+  "n_bytes_message": {
+    "message": "%1$s viesti"
+  },
+  "download_max_available_until": {
+    "message": "Latauksen yläraja saatavilla %1$s asti"
+  },
+  "profile_image_select": {
+    "message": "Valitse profiilikuva"
+  },
+  "select_your_new_profile_image": {
+    "message": "Valitse uusi profiilikuvasi"
+  },
+  "profile_image_delete": {
+    "message": "Poista profiilikuva"
+  },
+  "pref_show_tray_icon": {
+    "message": "Näytä työkalupalkin kuvake"
+  },
+  "pref_edit_profile": {
+    "message": "Muokkaa profiilia"
+  },
+  "disable_imap_idle": {
+    "message": "Poista IMAP IDLE käytöstä"
+  },
+  "disable_imap_idle_explain": {
+    "message": "Älä käytä IMAP IDLE -laajennusta vaikka palvelin tukisi sitä. Toiminnon käyttöönotto hidastaa viestien hakua, käytä vain testaamiseen."
+  },
+  "send_stats_to_devs": {
+    "message": "Lähetä tilastotietoja Delta Chatin kehittäjille"
+  },
+  "emoji_search_results": {
+    "message": "Hakutulokset"
+  },
+  "emoji_not_found": {
+    "message": "Emojeja ei löytynyt"
+  },
+  "emoji_recent": {
+    "message": "Viimeksi käytetyt"
+  },
+  "emoji_people": {
+    "message": "Ihmiset & Keho"
+  },
+  "emoji_nature": {
+    "message": "Eläimet & Luonto"
+  },
+  "emoji_foods": {
+    "message": "Ruoka & Juoma"
+  },
+  "emoji_activity": {
+    "message": "Aktiviteetit"
+  },
+  "emoji_places": {
+    "message": "Matkailu & Paikat"
+  },
+  "emoji_objects": {
+    "message": "Esineet"
+  },
+  "emoji_symbols": {
+    "message": "Symbolit"
+  },
+  "emoji_flags": {
+    "message": "Liput"
+  },
+  "reactions": {
+    "message": "Reaktiot"
+  },
+  "react": {
+    "message": "Reagoi"
+  },
+  "reaction_by_you": {
+    "message": "Reagoit %1$s \"%2$s\""
+  },
+  "reaction_by_other": {
+    "message": "%1$s reagoi %2$s viestiin \"%3$s\""
+  },
+  "delete_old_messages": {
+    "message": "Poista vanhat viestit"
+  },
+  "autodel_device_title": {
+    "message": "Poista viestit laitteelta"
+  },
+  "autodel_server_title": {
+    "message": "Poista viestit palvelimelta"
+  },
+  "autodel_device_ask": {
+    "message": "Haluatko poistaa %1$d viestiä heti ja kaikki uudet viestit \"%2$s\" jatkossa?\n\n• Tämä sisältää kaiken median\n\n• Viestit poistetaan riippumatta siitä onko ne nähty vai ei\n\n• \"Tallennetut viestit\" jätetään paikalliselle laitteelle"
+  },
+  "autodel_server_ask": {
+    "message": "Haluatko poistaa %1$d viestiä heti ja kaikki uudet viestit \"%2$s\" jatkossa?\n\n⚠️ Tämä sisältää sähköpostiviestit, median ja kaikki \"Tallennetut viestit\" kaikissa palvelimen kansioissa\n\n⚠️ Älä käytä tätä toimintoa, jos haluat säilyttää tiedot palvelimella\n\n⚠️ Älä käytä tätä toimintoa, jos käytät muita sähköpostisovelluksia Delta Chatin lisäksi"
+  },
+  "autodel_server_enabled_hint": {
+    "message": "Tämä sisältää sähköpostit, median ja \"Tallennetut viestit\" kaikissa palvelimen kansioissa. Älä käytä tätä toimintoa, jos haluat pitää tietosi palvelimella tai jos käytät muita sähköpostisovelluksia Delta Chatin lisäksi."
+  },
+  "autodel_confirm": {
+    "message": "Ymmärrän, poista kaikki nämä viestit"
+  },
+  "autodel_at_once": {
+    "message": "Heti"
+  },
+  "after_30_seconds": {
+    "message": "30 sekunnin päästä"
+  },
+  "after_1_minute": {
+    "message": "1 minuutin päästä"
+  },
+  "after_5_minutes": {
+    "message": "5 minuutin päästä"
+  },
+  "after_30_minutes": {
+    "message": "30 minuutin päästä"
+  },
+  "autodel_after_1_hour": {
+    "message": "1 tunnin päästä"
+  },
+  "autodel_after_1_day": {
+    "message": "1 päivän päästä"
+  },
+  "autodel_after_1_week": {
+    "message": "1 viikon päästä"
+  },
+  "after_5_weeks": {
+    "message": "5 viikon päästä"
+  },
+  "autodel_after_1_year": {
+    "message": "1 vuoden päästä"
+  },
+  "autocrypt_send_asm_title": {
+    "message": "Lähetä Autocrypt -käyttöönottoviesti"
+  },
+  "autocrypt_send_asm_explain_before": {
+    "message": "Autocrypt -käyttöönottoviesti jakaa turvallisesti päästä-päähän -salauksen asetukset toisten Autocrypt-yhteensopivien sovellusten kanssa.\n\nMäärittely salataan tässä näytettävällä käyttöönottokoodilla, joka on syötettävä toisella laittella."
+  },
+  "autocrypt_send_asm_button": {
+    "message": "Lähetä Autocrypt -käyttöönottoviesti"
+  },
+  "autocrypt_send_asm_explain_after": {
+    "message": "Käyttöönottoviesti on lähetetty sinulle itsellesi. Avaa viesti toisella laitteella. Sinulta pyydetään käyttöönottokoodia. Anna seuraavat numerot:"
+  },
+  "autocrypt_prefer_e2ee": {
+    "message": "Suosi päästä-päähän -salausta"
+  },
+  "autocrypt_asm_subject": {
+    "message": "Autocrypt -käyttöönottoviesti"
+  },
+  "autocrypt_asm_general_body": {
+    "message": "Tätä Autocrypt -käyttöönottoviestiä käytetään päästä-päähän -salauksen asetusten siirtämiseksi toiselle laitteelle.\n\nSaat purettua salauksia ja käytettyä määrittelyä avaamalla viestin Autocrypt -yhteensopivassa päätesovelluksessa, generoivalla laitteella näytetyn pin koodin syöttämisen jälkeen."
+  },
+  "systemmsg_cannot_decrypt": {
+    "message": "Viestin salausta ei voitu purkaa.\n\n• Voi olla että vastaamalla tähän ja pyytämällä lähettäjää lähettämään viesti uudelleen ongelma ratkeaa.\n\n• Jos juuri uudelleenasensit Delta Chatin, lienee parasta että otat sovelluksen uudelleen käyttöön ja valitset \"Lisää toisena laitteena\" tai palauta varmuuskopiosta."
+  },
+  "systemmsg_unknown_sender_for_chat": {
+    "message": "Tuntematon lähettäjä. Katso \"lisätietoja\"."
+  },
+  "systemmsg_subject_for_new_contact": {
+    "message": "Viesti lähettäjältä %1$s"
+  },
+  "systemmsg_failed_sending_to": {
+    "message": "Viestin lähettäminen kohteeseen %1$s epäonnistui."
+  },
+  "group_name_changed_by_you": {
+    "message": "Ryhmän nimi vaihdettu: \"%1$s\" --> \"%2$s\" minun toimestani."
+  },
+  "group_name_changed_by_other": {
+    "message": "Ryhmän nimi vaihdettu: \"%1$s\" --> \"%2$s\" käyttäjän %3$s toimesta."
+  },
+  "group_image_changed_by_you": {
+    "message": "Ryhmän kuva vaihdettu minun toimestani."
+  },
+  "group_image_changed_by_other": {
+    "message": "Ryhmän kuva vaihdettu käyttäjän %1$s toimesta."
+  },
+  "member_x_added": {
+    "message": "%1$s lisätty."
+  },
+  "add_member_by_you": {
+    "message": "Jäsen %1$s lisätty minun toimestani."
+  },
+  "add_member_by_other": {
+    "message": "Jäsen %1$s lisätty käyttäjän %2$s toimesta."
+  },
+  "remove_member_by_you": {
+    "message": "Jäsen %1$s poistettu minun toimestani."
+  },
+  "remove_member_by_other": {
+    "message": "Jäsen %1$s poistettu käyttäjän %2$s toimesta."
+  },
+  "group_left_by_you": {
+    "message": "Poistuit ryhmästä."
+  },
+  "group_left_by_other": {
+    "message": "%1$s poistui ryhmästä."
+  },
+  "group_image_deleted_by_you": {
+    "message": "Ryhmän kuva poistettu minun toimestani."
+  },
+  "group_image_deleted_by_other": {
+    "message": "Ryhmän kuva poistettu käyttäjän %1$s toimesta."
+  },
+  "location_enabled_by_you": {
+    "message": "Aloitit sijainnin jakamisen."
+  },
+  "location_enabled_by_other": {
+    "message": "%1$s aloitti sijainnin jakamisen."
+  },
+  "ephemeral_timer_disabled_by_you": {
+    "message": "Katoavien viestien ajastin poistettiin minun toimestani."
+  },
+  "ephemeral_timer_disabled_by_other": {
+    "message": "Katoavien viestien ajastin poistettiin käyttäjän %1$s toimesta."
+  },
+  "ephemeral_timer_seconds_by_you": {
+    "message": "Katoavien viestien ajastin asetettu %1$s sekuntiin minun toimestani."
+  },
+  "ephemeral_timer_seconds_by_other": {
+    "message": "Katoavien viestien ajastin asetettu %1$s sekuntiin käyttäjän %2$s toimesta."
+  },
+  "ephemeral_timer_1_minute_by_you": {
+    "message": "Katoavien viestien ajastin asetettu 1 minuuttiin minun toimestani."
+  },
+  "ephemeral_timer_1_minute_by_other": {
+    "message": "Katoavien viestien ajastin asetettu 1 minuuttiin käyttäjän %1$s toimesta."
+  },
+  "ephemeral_timer_1_hour_by_you": {
+    "message": "Katoavien viestien ajastin asetettu 1 tuntiin minun toimestani."
+  },
+  "ephemeral_timer_1_hour_by_other": {
+    "message": "Katoavien viestien ajastin asetettu 1 tuntiin käyttäjän %1$s toimesta."
+  },
+  "ephemeral_timer_1_day_by_you": {
+    "message": "Katoavien viestien ajastin asetettu 1 päivään minun toimestani."
+  },
+  "ephemeral_timer_1_day_by_other": {
+    "message": "Katoavien viestien ajastin asetettu 1 päivään käyttäjän %1$s toimesta."
+  },
+  "ephemeral_timer_1_week_by_you": {
+    "message": "Katoavien viestien ajastin asetettu 1 viikkoon minun toimestani."
+  },
+  "ephemeral_timer_1_week_by_other": {
+    "message": "Katoavien viestien ajastin asetettu 1 viikkoon käyttäjän %1$s toimesta."
+  },
+  "ephemeral_timer_minutes_by_you": {
+    "message": "Katoavien viestien ajastin asetettu %1$s minuuttiin minun toimestani."
+  },
+  "ephemeral_timer_minutes_by_other": {
+    "message": "Katoavien viestien ajastin asetettu %1$s minuuttiin käyttäjän %2$s toimesta."
+  },
+  "ephemeral_timer_hours_by_you": {
+    "message": "Katoavien viestien ajastin asetettu %1$s tuntiin minun toimestani."
+  },
+  "ephemeral_timer_hours_by_other": {
+    "message": "Katoavien viestien ajastin asetettu %1$s tuntiin käyttäjän %2$s toimesta."
+  },
+  "ephemeral_timer_days_by_you": {
+    "message": "Katoavien viestien ajastin asetettu %1$s päivään minun toimestani."
+  },
+  "ephemeral_timer_days_by_other": {
+    "message": "Katoavien viestien ajastin asetettu %1$s päivään käyttäjän %2$s toimesta."
+  },
+  "ephemeral_timer_weeks_by_you": {
+    "message": "Katoavien viestien ajastin asetettu %1$s viikkoon minun toimestani."
+  },
+  "ephemeral_timer_weeks_by_other": {
+    "message": "Katoavien viestien ajastin asetettu %1$s viikkoon käyttäjän %2$s toimesta."
+  },
+  "chat_protection_broken": {
+    "message": "%1$s lähetti viestin toiselta laitteelta."
+  },
+  "chat_protection_enabled_tap_to_learn_more": {
+    "message": "Tästä eteenpäin viestit on taatusti päästä-päähän salattuja. Lisätietoja napauttamalla."
+  },
+  "chat_protection_enabled_explanation": {
+    "message": "Kaikki viestit tässä keskustelussa ovat taatusti päästä-päähän salattuja.\n\nPäästä-päähän -salaus pitää viestisi sinun ja keskustelukumppanisi välillä. Edes sähköpostipalveluntarjoaja ei pysty niitä lukemaan."
+  },
+  "chat_protection_broken_tap_to_learn_more": {
+    "message": "%1$s lähetti viestin toiselta laitteelta. Lue lisää napauttamalla."
+  },
+  "chat_protection_broken_explanation": {
+    "message": "Päästä päähän salausta ei voida enää taata, todennäköisesti koska %1$s uudelleenasensi Delta Chatin tai lähetti viestin toiselta laitteelta.\n\nTapaamalla hänet voit skannata hänen QR -koodinsa uudelleen päästä-päähän salauksen palauttamiseksi."
+  },
+  "invalid_unencrypted_tap_to_learn_more": {
+    "message": "⚠️ %1$s vaatii päästä-päähän -salausta joka ei enää ole käytössä tässä keskustelussa. Lue lisää napauttamalla."
+  },
+  "invalid_unencrypted_explanation": {
+    "message": "Päästä-päähän salauksen saat käyttöön tapaamalla yhteystietosi ja skannaamalla hänen QR -koodinsa."
+  },
+  "learn_more": {
+    "message": "Lue lisää"
+  },
+  "devicemsg_self_deleted": {
+    "message": "Poistit \"Tallennetut viestit\" -keskustelun.\n\nℹ️ Aloita uusi keskustelu itsesi kanssa, niin voit jälleen käyttää \"Tallennetut viestit\" -ominaisuutta."
+  },
+  "devicemsg_storage_exceeding": {
+    "message": "⚠️ Palveluntarjoajasi tallennuskiintiö ylitetään pian, käytössä on jo %1$s / %%.\n\nEt välttämättä enää voi vastaanottaa viestejäsi, kun 100 %% on käytössä.\n\n👉 Kokeile poistaa viestejä palveluntarjoajasi internetkäyttöliittymästä. Kannattaa myös ehkä kytkeä päälle \"Asetukset / Poista vanhat viestit\". Voit tarkistaa tämän hetkisen tallennustilan käytön \"Asetukset / Yhteys\"."
+  },
+  "devicemsg_bad_time": {
+    "message": "⚠️ Laitteesi päivämäärä tai aika vaikuttaa olevan väärässä (%1$s).\n\nAseta kellonaika ⏰🔧 varmistaaksesi, että viestin vastaanottaminen onnistuu."
+  },
+  "devicemsg_update_reminder": {
+    "message": "⚠️ Delta Chat -versio saattaa olla vanhentunut.\n\nTämä saattaa aiheuttaa ongelmia, koska muut käyttävät uudempia versioita - ja saatat jäädä paitsi uusista ominaisuuksista. 😳\nTarkista uudet päivitykset sovelluskaupastasi tai https://get.delta.chat"
+  },
+  "enter_system_secret_to_continue": {
+    "message": "Avaa lukitus jatkaaksesi"
+  },
+  "qr_code": {
+    "message": "QR-koodi"
+  },
+  "load_qr_code_as_image": {
+    "message": "Lataa QR-koodi kuvana"
+  },
+  "qrscan_title": {
+    "message": "Skannaa QR-koodi"
+  },
+  "qrscan_hint": {
+    "message": "Näytä QR-koodia kameraan"
+  },
+  "qrscan_hint_desktop": {
+    "message": "Siirrä QR koodi kameraan"
+  },
+  "qrscan_failed": {
+    "message": "QR-koodia ei voitu selvittää"
+  },
+  "qrscan_ask_join_group": {
+    "message": "Haluatko liittyä ryhmään \"%1$s\"?"
+  },
+  "qrscan_fingerprint_mismatch": {
+    "message": "Skannattu sormenjälki ei vastaa viimeksi nähtyä %1$s."
+  },
+  "qrscan_no_addr_found": {
+    "message": "Tämä QR-koodi sisältää sormenjäljen mutta ei sähköpostiosoitetta.\n\nOffline-varmentamista varten tulee ensin luoda salattu yhteys vastaanottajaan."
+  },
+  "qrscan_contains_text": {
+    "message": "Skannattu QR-koodin teksti:\n\n%1$s"
+  },
+  "qrscan_contains_url": {
+    "message": "Skannattu QR-koodin URL:\n\n%1$s"
+  },
+  "qrscan_fingerprint_label": {
+    "message": "Sormenjälki"
+  },
+  "withdraw_verifycontact_explain": {
+    "message": "Muut voivat skannata tämän QR-koodin ottaakseen yhteyttä sinuun.\n\nVoit kytkeä QR-koodin pois täällä ja aktivoida sen uudelleen skannaamalla uudestaan."
+  },
+  "withdraw_verifygroup_explain": {
+    "message": "Muut voivat skannata tämän QR-koodin liittyäkseen ryhmään \"%1$s\".\n\nVoit kytkeä QR-koodin pois täällä ja aktivoida sen uudelleen skannaamalla."
+  },
+  "withdraw_qr_code": {
+    "message": "Kytke QR-koodi pois käytöstä"
+  },
+  "revive_verifycontact_explain": {
+    "message": "Muut voivat skannata tämän QR-koodin ottaakseen yhteyttä sinuun.\n\nQR-koodi ei ole aktiivinen tällä laitteella."
+  },
+  "revive_verifygroup_explain": {
+    "message": "Muut voivat skannata tämän QR-koodin liittyäkseen ryhmään \"%1$s\".\n\nQR-koodi ei ole aktiivinen tällä laitteella."
+  },
+  "revive_qr_code": {
+    "message": "Aktivoi QR-koodi"
+  },
+  "qrshow_title": {
+    "message": "QR-kutsukoodi"
+  },
+  "qrshow_x_joining": {
+    "message": "%1$s liittyy"
+  },
+  "qrshow_x_verified": {
+    "message": "%1$s varmistettu"
+  },
+  "qrshow_x_has_joined_group": {
+    "message": "%1$s liittyi ryhmään."
+  },
+  "qrshow_join_group_title": {
+    "message": "QR-kutsukoodi"
+  },
+  "qrshow_join_group_hint": {
+    "message": "Skannaa liittyäksesi ryhmään \"%1$s\""
+  },
+  "qrshow_join_contact_title": {
+    "message": "QR-kutsukoodi"
+  },
+  "qrshow_join_contact_hint": {
+    "message": "Skannaa aloittaaksesi keskustelun käyttäjän %1$s kanssa"
+  },
+  "qrshow_join_contact_no_connection_toast": {
+    "message": "Ei internetyhteyttä, QR-koodin luominen ei onnistu."
+  },
+  "qraccount_ask_create_and_login": {
+    "message": "Luo uusi sähköpostiosoite palvelimella \"%1$s\" ja kirjaudu sisään?"
+  },
+  "qraccount_ask_create_and_login_another": {
+    "message": "Luo uusi sähköpostiosoite palvelimella \"%1$s\" ja kirjaudu sisään?\n\nNykyistä tiliäsi ei poisteta. Käytä valintaa \"Vaihda tiliä\" vaihtaaksesi tilien välillä."
+  },
+  "set_name_and_avatar_explain": {
+    "message": "Aseta nimi jonka yhteystietosi tunnistavat. Voit myös asettaa profiilikuvan."
+  },
+  "please_enter_name": {
+    "message": "Syötä nimi."
+  },
+  "qraccount_qr_code_cannot_be_used": {
+    "message": "Uutta tiliä ei voida luoda skannatulla QR-koodilla."
+  },
+  "qrlogin_ask_login": {
+    "message": "Haluatko kirjautua osoitteella \"%1$s\"?"
+  },
+  "qrlogin_ask_login_another": {
+    "message": "Haluatko kirjautua osoitteella \"%1$s\"?\n\nNykyistä tiliäsi ei poisteta. Käytä \"Vaihda tiliä\" -kohtaa vaihtaaksesi tiliesi välillä."
+  },
+  "secure_join_started": {
+    "message": "%1$s kutsui sinut tähän ryhmään.\n\nOdotetaan vastausta yhteystiedon %2$s laitteelta..."
+  },
+  "secure_join_replies": {
+    "message": "Vastaus saatu käyttäjältä %1$s, odotetaan lisäystä ryhmään..."
+  },
+  "secure_join_wait": {
+    "message": "Otetaan taattua päästä-päähän salausta käyttöön, odota..."
+  },
+  "secure_join_wait_timeout": {
+    "message": "Taattua päästä päähän salausta ei vielä voitu ottaa käyttöön, mutta voit jo lähettää viestin."
+  },
+  "contact_verified": {
+    "message": "%1$s varmistettu."
+  },
+  "contact_not_verified": {
+    "message": "Keskustelun päästä-päähän -salausta ei voida taata henkilön %1$s kanssa."
+  },
+  "verified_by": {
+    "message": "%1$s lisäsi"
+  },
+  "verified_by_you": {
+    "message": "Lisäämäni"
+  },
+  "contact_setup_changed": {
+    "message": "Asetukset muutettu kohteessa %1$s."
+  },
+  "verified_contact_required_explain": {
+    "message": "Päästä-päähän -salauksen takaamiseksi, voit lisätä ryhmään ainoastaan yhteystietoja joilla on vihreä \"oikein\" -merkki.\n\nVoit tavata yhteystietoja kasvotusten ja skannata heidän QR -koodinsa niin saat lisättyä salauksen käyttöön"
+  },
+  "copy_qr_data_success": {
+    "message": "QR -osoite kopioitu leikepöydälle"
+  },
+  "mailto_dialog_header_select_chat": {
+    "message": "Valitse keskustelu viestien lähettämiseen"
+  },
+  "confirm_replace_draft": {
+    "message": "Keskustelussa %1$s on jo luonnos. Haluatko korvata sen?"
+  },
+  "mailto_link_could_not_be_decoded": {
+    "message": "mailto-linkkiä ei voitu selvittää: %1$s"
+  },
+  "notify_reply_button": {
+    "message": "Vastaa"
+  },
+  "notify_new_message": {
+    "message": "Uusi viesti"
+  },
+  "notify_background_connection_enabled": {
+    "message": "Yhteys käynnissä taustalla"
+  },
+  "notify_priority_high": {
+    "message": "Korkea"
+  },
+  "notify_priority_max": {
+    "message": "Maksimi"
+  },
+  "notify_name_and_message": {
+    "message": "Nimi ja viesti"
+  },
+  "notify_name_only": {
+    "message": "Pelkkä nimi"
+  },
+  "notify_no_name_or_message": {
+    "message": "Ei nimeä eikä viestiä"
+  },
+  "notifications_disabled": {
+    "message": "Ilmoitukset poistettu käytöstä"
+  },
+  "new_messages": {
+    "message": "Uusia viestejä"
+  },
+  "new_messages_body": {
+    "message": "Sinulle on uusia viestejä"
+  },
+  "n_messages_in_m_chats": {
+    "message": "%1$d viestiä %2$d:ssä keskustelussa"
+  },
+  "perm_required_title": {
+    "message": "Pääsylupa vaaditaan"
+  },
+  "perm_continue": {
+    "message": "Jatka"
+  },
+  "perm_explain_access_to_camera_denied": {
+    "message": "Ottaaksesi kuvia tai videoita mene sovelluksen asetuksiin, valitse \"Käyttöluvat\" ja kytke päälle \"Kamera\"."
+  },
+  "perm_explain_access_to_mic_denied": {
+    "message": "Lähettääksesi ääniviestin mene sovelluksen asetuksiin, valitse \"Käyttöluvat\" ja kytke päälle \"Mikrofoni\"."
+  },
+  "perm_explain_access_to_storage_denied": {
+    "message": "Lähettääksesi tai vastaanottaaksesi tiedostoja mene sovelluksen asetuksiin, valitse \"Käyttöluvat\" ja kytke päälle \"Tallennustila\"."
+  },
+  "perm_explain_access_to_location_denied": {
+    "message": "Jakaaksesi sijaintisi mene sovelluksen asetuksiin, valitse \"Käyttöluvat\" ja kytke päälle \"Sijainti\"."
+  },
+  "perm_explain_access_to_notifications_denied": {
+    "message": "Voit ottaa \"Ilmoitukset\" käyttöön navigoimalla kohteeseen \"Järjestelmäasetukset / Sovellukset / Delta Chat\""
+  },
+  "ImageEditorHud_draw_anywhere_to_blur": {
+    "message": "Piirrää sumentaaksesi"
+  },
+  "ImageEditorHud_add_text": {
+    "message": "Lisää teksti"
+  },
+  "ImageEditorHud_blur": {
+    "message": "Sumennus"
+  },
+  "ImageEditorHud_brush_marker": {
+    "message": "Merkkaustussi"
+  },
+  "ImageEditorHud_brush_highlight": {
+    "message": "Korostuskynä"
+  },
+  "ImageEditorHud_crop": {
+    "message": "Rajaa"
+  },
+  "ImageEditorHud_flip": {
+    "message": "Käännä"
+  },
+  "ImageEditorHud_rotate": {
+    "message": "Pyöritä"
+  },
+  "encrypted_message": {
+    "message": "Salattu viesti"
+  },
+  "about_offical_app_desktop": {
+    "message": "Tämä on virallinen Delta Chat -työpöytäsovellus."
+  },
+  "about_licensed_under_desktop": {
+    "message": "Tämä ohjelmisto on GNU GPL v3 -lisensoitu, ja lähdekoodi on saatavilla GitHubissa."
+  },
+  "welcome_desktop": {
+    "message": "Tervetuloa Delta Chatiin"
+  },
+  "global_menu_preferences_language_desktop": {
+    "message": "Kieli"
+  },
+  "global_menu_file_desktop": {
+    "message": "Tiedosto"
+  },
+  "global_menu_file_quit_desktop": {
+    "message": "Sulje"
+  },
+  "global_menu_edit_desktop": {
+    "message": "Muokkaa"
+  },
+  "global_menu_edit_undo_desktop": {
+    "message": "Kumoa"
+  },
+  "global_menu_edit_redo_desktop": {
+    "message": "Tee uudelleen"
+  },
+  "global_menu_edit_cut_desktop": {
+    "message": "Leikkaa"
+  },
+  "global_menu_edit_copy_desktop": {
+    "message": "Kopioi"
+  },
+  "global_menu_edit_paste_desktop": {
+    "message": "Liitä"
+  },
+  "global_menu_view_desktop": {
+    "message": "Näytä"
+  },
+  "global_menu_view_floatontop_desktop": {
+    "message": "Pidä päällimmäisenä"
+  },
+  "global_menu_view_developer_desktop": {
+    "message": "Kehittäjä"
+  },
+  "global_menu_view_developer_tools_desktop": {
+    "message": "Kehittäjätyökalut"
+  },
+  "global_menu_help_desktop": {
+    "message": "Ohje"
+  },
+  "global_menu_help_report_desktop": {
+    "message": "Ilmoita ongelma"
+  },
+  "global_menu_help_about_desktop": {
+    "message": "Tietoja Delta Chatista"
+  },
+  "global_menu_file_open_desktop": {
+    "message": "Avaa Delta Chat"
+  },
+  "global_menu_minimize_to_tray": {
+    "message": "Pienennä"
+  },
+  "no_chat_selected_suggestion_desktop": {
+    "message": "Valitse tai luo keskustelu"
+  },
+  "write_message_desktop": {
+    "message": "Kirjoita viesti"
+  },
+  "encryption_info_title_desktop": {
+    "message": "Salaustiedot"
+  },
+  "delete_message_desktop": {
+    "message": "Poista viesti"
+  },
+  "more_info_desktop": {
+    "message": "Lisätietoja"
+  },
+  "timestamp_format_m_desktop": {
+    "message": "MMM D"
+  },
+  "remove_desktop": {
+    "message": "Poista"
+  },
+  "save_desktop": {
+    "message": "Tallenna"
+  },
+  "name_desktop": {
+    "message": "Nimi"
+  },
+  "select_group_image_desktop": {
+    "message": "Valitse ryhmän kuva"
+  },
+  "export_backup_desktop": {
+    "message": "Vie varmuuskopio"
+  },
+  "autocrypt_correct_desktop": {
+    "message": "Autocrypt-asetukset siirretty."
+  },
+  "forget_login_confirmation_desktop": {
+    "message": "Poista tämä kirjautuminen? Kaikki tiedot poistetaan, mukaan lukien päästä-päähän-salauksen asetukset, yhteystiedot, keskustelut, viestit ja media. Tämä toiminto on peruuttamaton."
+  },
+  "message_detail_sent_desktop": {
+    "message": "lähetetty"
+  },
+  "message_detail_received_desktop": {
+    "message": "vastaanotettu"
+  },
+  "menu.view.developer.open.log.folder": {
+    "message": "Avaa lokikansio"
+  },
+  "menu.view.developer.open.current.log.file": {
+    "message": "Avaa nykyinen lokitiedosto"
+  },
+  "explain_desktop_minimized_disabled_tray_pref": {
+    "message": "Työkalupalkin kuvaketta ei voida poistaa, koska Delta Chat käynnistettiin \"Käynnistä pienennettynä\" -valinnalla."
+  },
+  "no_spellcheck_suggestions_found": {
+    "message": "Oikeinkirjoitusehdotusta ei löydy."
+  },
+  "show_window": {
+    "message": "Näytä ikkuna"
+  },
+  "keybindings": {
+    "message": "Näppäinkomennot"
+  },
+  "switch_between_chats": {
+    "message": "Siirry keskustelusta toiseen"
+  },
+  "scroll_messages": {
+    "message": "Selaa viestejä"
+  },
+  "focus_search_input": {
+    "message": "Keskitä hakuun"
+  },
+  "focus_message_input": {
+    "message": "Keskitä tekstinsyöttöön"
+  },
+  "force_refresh_network": {
+    "message": "Pakota verkon virkistys"
+  },
+  "insert_newline": {
+    "message": "Aseta rivinvaihto"
+  },
+  "a11y_delivery_status_error": {
+    "message": "Toimituksen tila: virhe"
+  },
+  "a11y_encryption_padlock": {
+    "message": "Salauksen lukko"
+  },
+  "a11y_delivery_status_sending": {
+    "message": "Toimituksen tila: lähetetään"
+  },
+  "a11y_delivery_status_draft": {
+    "message": "Toimituksen tila: luonnos"
+  },
+  "a11y_delivery_status_delivered": {
+    "message": "Toimituksen tila: toimitettu"
+  },
+  "a11y_delivery_status_read": {
+    "message": "Toimituksen tila: luettu"
+  },
+  "a11y_delivery_status_invalid": {
+    "message": "Toimituksen tila virheellinen"
+  },
+  "a11y_message_context_menu_btn_label": {
+    "message": "Viestin toiminnot"
+  },
+  "a11y_background_preview_label": {
+    "message": "Esikatselu taustalla"
+  },
+  "a11y_disappearing_messages_activated": {
+    "message": "Viestien katoaminen päällä"
+  },
+  "stop_sharing_location": {
+    "message": "Lopeta sijainnin jakaminen"
+  },
+  "a11y_voice_message_hint_ios": {
+    "message": "Nauhoittamisen jälkeen napauta kahdesti lähettääksesi. Hylätäksesi nauhoitteen pyyhkäise vasemmalta oikealle kahdella sormella."
+  },
+  "a11y_connectivity_hint": {
+    "message": "Napauta kahdesti nähdäksesi yksityiskohtia yhteydestä."
+  },
+  "login_error_no_internet_connection": {
+    "message": "Ei internet-yhteyttä, sisäänkirjaus epäonnistui."
+  },
+  "share_account_not_configured": {
+    "message": "Tiliä ei ole määritetty."
+  },
+  "cannot_play_audio_file": {
+    "message": "Äänitiedostoa ei voi toistaa."
+  },
+  "perm_ios_explain_access_to_camera_denied": {
+    "message": "Avaa järjestelmäasetukset ja kytke päälle \"Kamera\" ottaaksesi kuvia tai videoita tai käyttääksesi QR-koodinlukijaa."
+  },
+  "open_settings": {
+    "message": "Avaa asetukset"
+  },
+  "import_device_contacts": {
+    "message": "Tuo laitteen yhteystiedot"
+  },
+  "import_device_contacts_hint": {
+    "message": "Avaa asetukset ja kytke päälle \"Yhteystiedot\" viestiäksesi laitteen yhteystietojen kanssa."
+  },
+  "disabled_in_dc": {
+    "message": "Kytketty pois Delta Chatissa"
+  },
+  "disabled_in_system_settings": {
+    "message": "Kytketty pois järjestelmäasetuksissa"
+  },
+  "bg_app_refresh_disabled": {
+    "message": "Taustasovelluksen päivitys kytketty pois järjestelmäasetuksissa"
+  },
+  "delayed": {
+    "message": "Viivästynyt"
+  },
+  "notifications_avg_minutes": {
+    "message": "Keskimäärin%1$d minuutin välein"
+  },
+  "notifications_avg_hours": {
+    "message": "Keskimäärin %1$d tunnin välein"
+  },
+  "last_check_at": {
+    "message": "Tarkistettu %1$s"
+  },
+  "InfoPlist_NSCameraUsageDescription": {
+    "message": "Delta Chat käyttää kameraa kuvien ja videoiden kuvaamiseen ja lähettämiseen sekä QR-koodien skannaamiseen."
+  },
+  "InfoPlist_NSContactsUsageDescription": {
+    "message": "Delta Chat käyttää yhteystietojasi näyttämään listan sähköpostiosoitteista, joihin voit kirjoittaa. Delta Chatilla ei ole palvelimia, eikä yhteystietojasi lähetetä mihinkään."
+  },
+  "InfoPlist_NSLocationAlwaysAndWhenInUseUsageDescription": {
+    "message": "Delta Chat tarvitsee oikeuden sijainnin tarkasteluun jakaakseen sijaintisi sallimallasi aikavälillä."
+  },
+  "InfoPlist_NSLocationWhenInUseUsageDescription": {
+    "message": "Delta Chat tarvitsee oikeuden sijainnin tarkasteluun jakaakseen sijaintisi sallimallasi aikavälillä."
+  },
+  "InfoPlist_NSMicrophoneUsageDescription": {
+    "message": "Delta Chat käyttää mikrofonia ääniviestien ja äänellisten videoiden tallentamiseen ja lähettämiseen."
+  },
+  "InfoPlist_NSPhotoLibraryUsageDescription": {
+    "message": "Delta Chat antaa sinun valita, mitkä kuvat kirjastostasi haluat lähettää."
+  },
+  "InfoPlist_NSPhotoLibraryAddUsageDescription": {
+    "message": "Delta Chat haluaa tallentaa kuvia kirjastoosi."
+  },
+  "pref_instant_delivery": {
+    "message": "Välitön toimitus"
+  },
+  "pref_background_notifications": {
+    "message": "Käytä taustayhteyttä"
+  },
+  "pref_background_notifications_explain": {
+    "message": "Vaatii akun optimoinnin käytöstä poistoa, käytä jos push -palvelu ei ole saatavilla"
+  },
+  "pref_reliable_service": {
+    "message": "Pakota yhteys taustalla"
+  },
+  "pref_reliable_service_explain": {
+    "message": "Aiheuttaa pysyvän ilmoituksen"
+  },
+  "pref_background_notifications_rationale": {
+    "message": "Yhteyden ylläpitämiseksi sähköpostipalvelimen kanssa ja viestien vastaanottamiseksi taustalla, poista akun käytön optimointi käytöstä seuraavassa vaiheessa.\n\nDelta Chat käyttää vain vähän laitteen suorituskyvystä, eikä juurikaan kuluta akkua."
+  },
+  "perm_enable_bg_reminder_title": {
+    "message": "Napauta vastaanottaaksesi viestejä, kun Delta Chat on taustalla."
+  },
+  "perm_enable_bg_already_done": {
+    "message": "Annoit jo luvan viestien vastaanottamiselle taustalla.\n\nJos et saa viestejä taustalla, tarkista myös järjestelmäasetukset."
+  },
+  "n_minutes": {
+    "one": "%d minuutti",
+    "other": "%d min"
+  },
+  "n_hours": {
+    "one": "%d tunti",
+    "other": "%d tuntia"
+  },
+  "n_chats": {
+    "one": "%d keskustelu",
+    "other": "%d keskustelua"
+  },
+  "n_contacts": {
+    "one": "%d yhteystieto",
+    "other": "%d yhteystietoa"
+  },
+  "n_messages": {
+    "one": "%d viesti",
+    "other": "%d viestiä"
+  },
+  "n_members": {
+    "one": "%d jäsen",
+    "other": "%d jäsentä"
+  },
+  "n_recipients": {
+    "one": "%d vastaanottaja",
+    "other": "%d vastaanottajaa"
+  },
+  "n_selected": {
+    "one": "%d valittu",
+    "other": "%d valittu"
+  },
+  "ask_send_following_n_files_to": {
+    "one": "Lähetä seuraava tiedosto yhteystiedolle%s?",
+    "other": "Lähetä seuraavat %dtiedostot yhteystiedolle%s?"
+  },
+  "ask_delete_messages_simple": {
+    "one": "Poista %d viesti?",
+    "other": "Poista %d viestiä?"
+  },
+  "chat_archived": {
+    "one": "%d keskustelu arkistoitu",
+    "other": "%d keskustelua arkistoitu"
+  },
+  "chat_unarchived": {
+    "one": "%d keskustelu siirretty pois arkistosta",
+    "other": "%d keskustelua siirretty pois arkistosta"
+  },
+  "chat_n_new_messages": {
+    "one": "%d uusi viesti",
+    "other": "%d uutta viestiä"
+  }
+}

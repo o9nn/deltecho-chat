@@ -1,0 +1,614 @@
+{
+  "app_name": {
+    "message": "Delta Chat"
+  },
+  "ok": {
+    "message": "OK"
+  },
+  "cancel": {
+    "message": "Otkaži"
+  },
+  "yes": {
+    "message": "Da"
+  },
+  "no": {
+    "message": "Ne"
+  },
+  "on": {
+    "message": "Uključeno"
+  },
+  "off": {
+    "message": "Isključeno"
+  },
+  "def": {
+    "message": "Zadano"
+  },
+  "custom": {
+    "message": "Prilagođeno"
+  },
+  "none": {
+    "message": "Ništa"
+  },
+  "automatic": {
+    "message": "Automatski"
+  },
+  "strict": {
+    "message": "Strog"
+  },
+  "open": {
+    "message": "Otvori"
+  },
+  "delete": {
+    "message": "Obriši"
+  },
+  "info": {
+    "message": "Info"
+  },
+  "update": {
+    "message": "Ažuriranje"
+  },
+  "attachment": {
+    "message": "Privitak"
+  },
+  "back": {
+    "message": "Nazad"
+  },
+  "close": {
+    "message": "Zatvori"
+  },
+  "forward": {
+    "message": "Proslijedi"
+  },
+  "archive": {
+    "message": "Arhiviraj"
+  },
+  "unarchive": {
+    "message": "Dearhiviraj"
+  },
+  "mute": {
+    "message": "Prigušiti"
+  },
+  "ephemeral_messages": {
+    "message": "Nestajuće poruke"
+  },
+  "save": {
+    "message": "Spremi"
+  },
+  "media": {
+    "message": "Medij"
+  },
+  "main_menu": {
+    "message": "Glavni izbornik"
+  },
+  "show_password": {
+    "message": "Prikaži lozinku"
+  },
+  "hide_password": {
+    "message": "Sakrij lozinku"
+  },
+  "not_now": {
+    "message": "Ne sada"
+  },
+  "never": {
+    "message": "Nikada"
+  },
+  "one_moment": {
+    "message": "Samo trenutak..."
+  },
+  "next": {
+    "message": "Dalje"
+  },
+  "error": {
+    "message": "Greška"
+  },
+  "error_x": {
+    "message": "Greška: %1$s"
+  },
+  "file_not_found": {
+    "message": "%1$s nije pronađeno."
+  },
+  "copied_to_clipboard": {
+    "message": "Kopirano u međuspremnik."
+  },
+  "contacts_headline": {
+    "message": "Kontakti"
+  },
+  "password": {
+    "message": "Lozinka"
+  },
+  "now": {
+    "message": "Sada"
+  },
+  "danger": {
+    "message": "Oprez"
+  },
+  "today": {
+    "message": "Danas"
+  },
+  "yesterday": {
+    "message": "Jučer"
+  },
+  "this_week": {
+    "message": "Ovaj tjedan"
+  },
+  "this_month": {
+    "message": "Ovog mjeseca"
+  },
+  "last_week": {
+    "message": "Prošli tjedan"
+  },
+  "last_month": {
+    "message": "Prošlog mjeseca"
+  },
+  "self": {
+    "message": "Ja"
+  },
+  "draft": {
+    "message": "Skica"
+  },
+  "image": {
+    "message": "Slika"
+  },
+  "gif": {
+    "message": "Gif"
+  },
+  "images": {
+    "message": "Slike"
+  },
+  "video": {
+    "message": "Video"
+  },
+  "documents": {
+    "message": "Dokumenti"
+  },
+  "contact": {
+    "message": "Kontakt"
+  },
+  "camera": {
+    "message": "Kamera"
+  },
+  "location": {
+    "message": "Lokacija"
+  },
+  "gallery": {
+    "message": "Galerija"
+  },
+  "file": {
+    "message": "Datoteka"
+  },
+  "unknown": {
+    "message": "Nepoznato"
+  },
+  "green": {
+    "message": "Zeleno"
+  },
+  "red": {
+    "message": "Crveno"
+  },
+  "blue": {
+    "message": "Plavo"
+  },
+  "orange": {
+    "message": "Narančasta"
+  },
+  "cyan": {
+    "message": "Cijan"
+  },
+  "magenta": {
+    "message": "Magenta"
+  },
+  "white": {
+    "message": "Bijelo"
+  },
+  "small": {
+    "message": "Mala"
+  },
+  "normal": {
+    "message": "Normalna"
+  },
+  "large": {
+    "message": "Velika"
+  },
+  "extra_large": {
+    "message": "Ekstra velika"
+  },
+  "fast": {
+    "message": "Brzo"
+  },
+  "slow": {
+    "message": "Sporo"
+  },
+  "menu_new_contact": {
+    "message": "Novi kontakt"
+  },
+  "menu_new_group": {
+    "message": "Nova grupa"
+  },
+  "menu_send": {
+    "message": "Pošalji"
+  },
+  "menu_edit_group": {
+    "message": "Uredi grupu"
+  },
+  "menu_show_global_map": {
+    "message": "Prikaži sve lokacije"
+  },
+  "menu_add_attachment": {
+    "message": "Dodaj privitak"
+  },
+  "menu_leave_group": {
+    "message": "Napusti grupu"
+  },
+  "menu_delete_location": {
+    "message": "Obrisati ovu lokaciju?"
+  },
+  "menu_message_details": {
+    "message": "Detalji poruke"
+  },
+  "menu_copy_to_clipboard": {
+    "message": "Kopiraj u međuspremnik"
+  },
+  "menu_forward": {
+    "message": "Proslijedi poruku"
+  },
+  "menu_reply": {
+    "message": "Odgovori na poruku"
+  },
+  "menu_mute": {
+    "message": "Utišaj obavijesti"
+  },
+  "menu_unmute": {
+    "message": "Ukloni utišanje"
+  },
+  "menu_all_media": {
+    "message": "Svi mediji"
+  },
+  "menu_share": {
+    "message": "Podijeli"
+  },
+  "menu_help": {
+    "message": "Pomoć"
+  },
+  "menu_select_all": {
+    "message": "Označi sve"
+  },
+  "menu_settings": {
+    "message": "Postavke"
+  },
+  "menu_advanced": {
+    "message": "Napredno"
+  },
+  "mute_for_one_hour": {
+    "message": "Utišaj na 1 sat"
+  },
+  "mute_for_eight_hours": {
+    "message": "Utišaj na 8 sata"
+  },
+  "mute_for_one_day": {
+    "message": "Utišaj na 1 dan"
+  },
+  "mute_for_seven_days": {
+    "message": "Utišaj na 7 dana"
+  },
+  "contacts_title": {
+    "message": "Kontakti"
+  },
+  "contacts_empty_hint": {
+    "message": "Nema kontakata."
+  },
+  "chat_please_enter_message": {
+    "message": "Molimo unesite poruku."
+  },
+  "chat_camera_unavailable": {
+    "message": "Kamera nije dostupna."
+  },
+  "chat_record_slide_to_cancel": {
+    "message": "Kliznite za otkazivanje"
+  },
+  "chat_record_explain": {
+    "message": "Pritisnite i držite kako biste snimili glasovnu poruku, pustite za slanje"
+  },
+  "chat_share_with_title": {
+    "message": "Podijeli sa"
+  },
+  "chat_input_placeholder": {
+    "message": "Poruka"
+  },
+  "chat_archived_label": {
+    "message": "Arhivirano"
+  },
+  "chat_no_messages": {
+    "message": "Nema poruka."
+  },
+  "saved_messages": {
+    "message": "Sačuvane poruke"
+  },
+  "search": {
+    "message": "Traži"
+  },
+  "search_no_result_for_x": {
+    "message": "Nema pronađenih rezultata za \"%s\""
+  },
+  "group_name": {
+    "message": "Naziv grupe"
+  },
+  "group_avatar": {
+    "message": "Grupni avatar"
+  },
+  "group_add_members": {
+    "message": "Dodaj članove"
+  },
+  "profile_encryption": {
+    "message": "Šifriranje"
+  },
+  "tab_contact": {
+    "message": "Kontakt"
+  },
+  "tab_group": {
+    "message": "Grupa"
+  },
+  "tab_gallery": {
+    "message": "Galerija"
+  },
+  "tab_map": {
+    "message": "Mapa"
+  },
+  "media_preview": {
+    "message": "Prikaz medija"
+  },
+  "login_imap_server": {
+    "message": "IMAP server"
+  },
+  "login_smtp_password": {
+    "message": "SMTP lozinka"
+  },
+  "login_smtp_server": {
+    "message": "SMTP server"
+  },
+  "login_error_server": {
+    "message": "Molimo unesite valjan server / IP adresu"
+  },
+  "delete_account": {
+    "message": "Obriši račun"
+  },
+  "forward_to": {
+    "message": "Proslijedi do..."
+  },
+  "pref_profile_photo": {
+    "message": "Profilna slika"
+  },
+  "pref_blocked_contacts": {
+    "message": "Blokirani kontakti"
+  },
+  "pref_password_and_account_settings": {
+    "message": "Lozinka i račun"
+  },
+  "pref_your_name": {
+    "message": "Vaše ime"
+  },
+  "pref_enter_sends": {
+    "message": "Enter šalje poruku"
+  },
+  "pref_enter_sends_explain": {
+    "message": "Pritisak na Enter će poslati tekst poruku"
+  },
+  "pref_vibrate": {
+    "message": "Vibracija"
+  },
+  "pref_screen_security": {
+    "message": "Sigurnost ekrana"
+  },
+  "pref_screen_security_explain": {
+    "message": "Onemogući snimanje ekrana na popisu nedavnih i unutar aplikacije"
+  },
+  "pref_notifications": {
+    "message": "Obavijesti"
+  },
+  "pref_notifications_show": {
+    "message": "Prikaži"
+  },
+  "pref_notifications_priority": {
+    "message": "Prioritet"
+  },
+  "pref_led_color": {
+    "message": "Boja LED"
+  },
+  "pref_sound": {
+    "message": "Zvuk"
+  },
+  "pref_silent": {
+    "message": "Tiho"
+  },
+  "pref_privacy": {
+    "message": "Privatnost"
+  },
+  "pref_chats_and_media": {
+    "message": "Razgovori i media"
+  },
+  "pref_system_default": {
+    "message": "Sustavno zadano"
+  },
+  "pref_light_theme": {
+    "message": "Svijetlo"
+  },
+  "pref_dark_theme": {
+    "message": "Tamno"
+  },
+  "pref_appearance": {
+    "message": "Izgled"
+  },
+  "pref_theme": {
+    "message": "Tema"
+  },
+  "pref_language": {
+    "message": "Jezik"
+  },
+  "pref_incognito_keyboard": {
+    "message": "Inkognito tipkovnica"
+  },
+  "pref_incognito_keyboard_explain": {
+    "message": "Zahtijevaj od tipkovnice da onemogući personalizirano učenje"
+  },
+  "pref_read_receipts": {
+    "message": "Potvrde čitanja"
+  },
+  "pref_read_receipts_explain": {
+    "message": "Ukoliko ste onemogućili potvrdu čitanja kod sebe, nećete moći vidjeti potvrde čitanja od drugih."
+  },
+  "pref_use_system_emoji": {
+    "message": "Koristi emotikone sustava"
+  },
+  "pref_use_system_emoji_explain": {
+    "message": "Onemogući ugrađenu Delta Chat podršku za emotikone"
+  },
+  "pref_app_access": {
+    "message": "Pristup aplikaciji"
+  },
+  "pref_chats": {
+    "message": "Razgovori"
+  },
+  "pref_in_chat_sounds": {
+    "message": "Zvuk unutar razgovora"
+  },
+  "pref_other": {
+    "message": "Ostalo"
+  },
+  "pref_backup": {
+    "message": "Sigurnosna kopija"
+  },
+  "pref_background": {
+    "message": "Pozadina"
+  },
+  "pref_background_btn_gallery": {
+    "message": "Odaberi iz galerije"
+  },
+  "pref_show_emails_all": {
+    "message": "Sve"
+  },
+  "pref_background_default": {
+    "message": "Zadana pozadina"
+  },
+  "pref_background_default_color": {
+    "message": "Zadana boja"
+  },
+  "qr_code": {
+    "message": "QR kod"
+  },
+  "qrscan_fingerprint_label": {
+    "message": "Otisak prsta"
+  },
+  "notify_reply_button": {
+    "message": "Odgovori"
+  },
+  "notify_new_message": {
+    "message": "Nova poruka"
+  },
+  "notify_priority_high": {
+    "message": "Visoko"
+  },
+  "notify_priority_max": {
+    "message": "Maks"
+  },
+  "notify_name_and_message": {
+    "message": "Ime i poruka"
+  },
+  "notify_name_only": {
+    "message": "Samo ime"
+  },
+  "notify_no_name_or_message": {
+    "message": "Bez imena ili poruke"
+  },
+  "perm_required_title": {
+    "message": "Potrebna je dozvola"
+  },
+  "perm_continue": {
+    "message": "Nastavi"
+  },
+  "welcome_desktop": {
+    "message": "Dobro došli u Delta Chat"
+  },
+  "global_menu_preferences_language_desktop": {
+    "message": "Jezik"
+  },
+  "global_menu_file_desktop": {
+    "message": "Datoteka"
+  },
+  "global_menu_file_quit_desktop": {
+    "message": "Izlaz"
+  },
+  "global_menu_edit_desktop": {
+    "message": "Uredi"
+  },
+  "global_menu_edit_undo_desktop": {
+    "message": "Vrati"
+  },
+  "global_menu_edit_copy_desktop": {
+    "message": "Kopiraj"
+  },
+  "global_menu_edit_paste_desktop": {
+    "message": "Zalijepi"
+  },
+  "global_menu_view_desktop": {
+    "message": "Pogledaj"
+  },
+  "global_menu_help_desktop": {
+    "message": "Pomoć"
+  },
+  "global_menu_help_report_desktop": {
+    "message": "Prijavite problem"
+  },
+  "delete_message_desktop": {
+    "message": "Obriši poruku"
+  },
+  "more_info_desktop": {
+    "message": "Više informacija"
+  },
+  "timestamp_format_m_desktop": {
+    "message": "MMM D"
+  },
+  "remove_desktop": {
+    "message": "Ukloni"
+  },
+  "save_desktop": {
+    "message": "Spremi"
+  },
+  "name_desktop": {
+    "message": "Ime"
+  },
+  "message_detail_sent_desktop": {
+    "message": "poslano"
+  },
+  "message_detail_received_desktop": {
+    "message": "primljeno"
+  },
+  "n_minutes": {
+    "one": "%d min",
+    "few": "%d min",
+    "other": "%d min"
+  },
+  "n_hours": {
+    "one": "%d sat",
+    "few": "%d sata",
+    "other": "%d sati"
+  },
+  "n_contacts": {
+    "one": "%d kontakt",
+    "few": "%d kontakta",
+    "other": "%d kontakata"
+  },
+  "n_messages": {
+    "one": "%d poruka",
+    "few": "%d poruke",
+    "other": "%d poruka"
+  },
+  "n_members": {
+    "one": "%d član",
+    "few": "%d člana",
+    "other": "%d članova"
+  },
+  "chat_n_new_messages": {
+    "one": "%d nova poruka",
+    "few": "%d nove poruke",
+    "other": "%d novih poruka"
+  }
+}

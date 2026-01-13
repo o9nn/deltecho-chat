@@ -1,0 +1,2463 @@
+{
+  "app_name": {
+    "message": "Delta Chat"
+  },
+  "ok": {
+    "message": "OK"
+  },
+  "cancel": {
+    "message": "Avbryt"
+  },
+  "clear_search": {
+    "message": "Rensa sök"
+  },
+  "yes": {
+    "message": "Ja"
+  },
+  "no": {
+    "message": "Nej"
+  },
+  "select": {
+    "message": "Välj"
+  },
+  "on": {
+    "message": "På"
+  },
+  "off": {
+    "message": "Av"
+  },
+  "def": {
+    "message": "Standard"
+  },
+  "default_value": {
+    "message": "Standard (%1$s)"
+  },
+  "default_value_as_above": {
+    "message": "Standard (samma som ovan)"
+  },
+  "custom": {
+    "message": "Anpassat"
+  },
+  "none": {
+    "message": "Ingen"
+  },
+  "automatic": {
+    "message": "Automatiskt"
+  },
+  "strict": {
+    "message": "Sträng"
+  },
+  "open": {
+    "message": "Öppna"
+  },
+  "download": {
+    "message": "Ladda ner"
+  },
+  "downloading": {
+    "message": "Laddar ner..."
+  },
+  "open_attachment": {
+    "message": "Öppna bilaga"
+  },
+  "join": {
+    "message": "Anslut"
+  },
+  "rejoin": {
+    "message": "Återanslut"
+  },
+  "delete": {
+    "message": "Ta bort"
+  },
+  "info": {
+    "message": "Info"
+  },
+  "update": {
+    "message": "Uppdatera"
+  },
+  "emoji": {
+    "message": "Emoji"
+  },
+  "attachment": {
+    "message": "Bilaga"
+  },
+  "back": {
+    "message": "Tillbaka"
+  },
+  "close": {
+    "message": "Stäng"
+  },
+  "close_window": {
+    "message": "Stäng fönster"
+  },
+  "forward": {
+    "message": "Vidarebefordra"
+  },
+  "create": {
+    "message": "Skapa"
+  },
+  "later": {
+    "message": "Senare"
+  },
+  "resend": {
+    "message": "Skicka igen"
+  },
+  "archive": {
+    "message": "Arkivera"
+  },
+  "unarchive": {
+    "message": "Avarkivera"
+  },
+  "mute": {
+    "message": "Tyst"
+  },
+  "ephemeral_messages": {
+    "message": "Försvinnande meddelanden"
+  },
+  "ephemeral_messages_hint": {
+    "message": "Dessa inställningar tillämpas för alla deltagare som använder Delta Chat. De kan dock kopiera, spara och vidarebefordra meddelanden eller använda andra e-postklienter."
+  },
+  "save": {
+    "message": "Spara"
+  },
+  "chat": {
+    "message": "Chatt"
+  },
+  "media": {
+    "message": "Media"
+  },
+  "profile": {
+    "message": "Profil"
+  },
+  "main_menu": {
+    "message": "Huvudmeny"
+  },
+  "start_chat": {
+    "message": "Starta chatt"
+  },
+  "show_full_message": {
+    "message": "Visa hela meddelandet..."
+  },
+  "mark_all_as_read": {
+    "message": "Markera alla som lästa"
+  },
+  "mark_as_read": {
+    "message": "Markera som läst"
+  },
+  "mark_as_read_short": {
+    "message": "Läst"
+  },
+  "loading": {
+    "message": "Laddar..."
+  },
+  "hide": {
+    "message": "Dölj"
+  },
+  "activate": {
+    "message": "Aktivera"
+  },
+  "load_remote_content": {
+    "message": "Läs in fjärrbilder"
+  },
+  "load_remote_content_ask": {
+    "message": "Fjärrbilder kan användas för att spåra dig.\n\nInställningen att fonter och annat innehåll laddas in. Även om inställningen är inaktiverad kan eventuellt inbäddade eller cachade fjärrbilder visas.\n\nLadda in fjärrbilder?"
+  },
+  "always": {
+    "message": "Alltid"
+  },
+  "always_load_remote_images": {
+    "message": "Läs alltid in fjärrbilder"
+  },
+  "once": {
+    "message": "en gång"
+  },
+  "show_warning": {
+    "message": "Visa varning"
+  },
+  "show_password": {
+    "message": "Visa lösenord"
+  },
+  "hide_password": {
+    "message": "Dölj lösenord"
+  },
+  "not_now": {
+    "message": "Inte nu"
+  },
+  "never": {
+    "message": "Aldrig"
+  },
+  "one_moment": {
+    "message": "Ett ögonblick..."
+  },
+  "done": {
+    "message": "Klart"
+  },
+  "undo": {
+    "message": "Ångra"
+  },
+  "offline": {
+    "message": "Offline"
+  },
+  "next": {
+    "message": "Nästa"
+  },
+  "error": {
+    "message": "Fel"
+  },
+  "error_x": {
+    "message": "Fel: %1$s"
+  },
+  "no_app_to_handle_data": {
+    "message": "Kan inte hitta någon app som hanterar denna typ av data."
+  },
+  "no_browser_installed": {
+    "message": "Ingen webbläsare installerad."
+  },
+  "file_not_found": {
+    "message": "Kunde inte hitta %1$s."
+  },
+  "copied_to_clipboard": {
+    "message": "Kopierad till urklipp."
+  },
+  "contacts_headline": {
+    "message": "Kontakter"
+  },
+  "email_address": {
+    "message": "E-postadress"
+  },
+  "bad_email_address": {
+    "message": "Felaktig e-postadress."
+  },
+  "password": {
+    "message": "Lösenord"
+  },
+  "existing_password": {
+    "message": "Befintligt lösenord"
+  },
+  "now": {
+    "message": "Nu"
+  },
+  "danger": {
+    "message": "Fara"
+  },
+  "today": {
+    "message": "Idag"
+  },
+  "yesterday": {
+    "message": "Igår"
+  },
+  "this_week": {
+    "message": "Denna vecka"
+  },
+  "this_month": {
+    "message": "Denna månad"
+  },
+  "last_week": {
+    "message": "Förra veckan"
+  },
+  "last_month": {
+    "message": "Förra månaden"
+  },
+  "last_seen_at": {
+    "message": "Sågs senast %1$s"
+  },
+  "last_seen_relative": {
+    "message": "Sågs senast %1$s"
+  },
+  "last_seen_unknown": {
+    "message": "Sågs senast: Okänt"
+  },
+  "self": {
+    "message": "Jag"
+  },
+  "draft": {
+    "message": "Utkast"
+  },
+  "image": {
+    "message": "Bild"
+  },
+  "reply_noun": {
+    "message": "Svara"
+  },
+  "gif": {
+    "message": "GIF"
+  },
+  "sticker": {
+    "message": "Dekal"
+  },
+  "add_to_sticker_collection": {
+    "message": "Lägg till i dekalsamling"
+  },
+  "add_stickers_instructions": {
+    "message": "För att lägga till dekaler trycker du på \"Öppna dekalmapp\", skapar en undermapp för ditt dekalpaket och drar bild- och dekalfiler dit."
+  },
+  "open_sticker_folder": {
+    "message": "Öppna dekalmapp"
+  },
+  "images": {
+    "message": "Bilder"
+  },
+  "audio": {
+    "message": "Ljud"
+  },
+  "voice_message": {
+    "message": "Röstmeddelande"
+  },
+  "forwarded": {
+    "message": "Vidarebefodrat"
+  },
+  "forwarded_message": {
+    "message": "Vidarebefordrat meddelande"
+  },
+  "forwarded_by": {
+    "message": "Vidarebefordrad av %1$s"
+  },
+  "video": {
+    "message": "Video"
+  },
+  "documents": {
+    "message": "Dokument"
+  },
+  "contact": {
+    "message": "Kontakt"
+  },
+  "bot": {
+    "message": "Bot"
+  },
+  "camera": {
+    "message": "Kamera"
+  },
+  "capture": {
+    "message": "Fånga"
+  },
+  "switch_camera": {
+    "message": "Växla kamera"
+  },
+  "toggle_fullscreen": {
+    "message": "Växla fullskärm"
+  },
+  "location": {
+    "message": "Plats"
+  },
+  "locations": {
+    "message": "Platser"
+  },
+  "gallery": {
+    "message": "Galleri"
+  },
+  "images_and_videos": {
+    "message": "Bilder och videor"
+  },
+  "file": {
+    "message": "Arkiv"
+  },
+  "files": {
+    "message": "Filer"
+  },
+  "webxdc_app": {
+    "message": "App"
+  },
+  "webxdc_apps": {
+    "message": "Appar"
+  },
+  "unknown": {
+    "message": "Okänd"
+  },
+  "green": {
+    "message": "Grön"
+  },
+  "red": {
+    "message": "Röd"
+  },
+  "blue": {
+    "message": "Blå"
+  },
+  "orange": {
+    "message": "Orange"
+  },
+  "cyan": {
+    "message": "Cyan"
+  },
+  "purple": {
+    "message": "Lila"
+  },
+  "magenta": {
+    "message": "Magenta"
+  },
+  "white": {
+    "message": "Vit"
+  },
+  "zoom": {
+    "message": "Zoom"
+  },
+  "extra_small": {
+    "message": "Extra liten"
+  },
+  "small": {
+    "message": "Liten"
+  },
+  "normal": {
+    "message": "Normal"
+  },
+  "large": {
+    "message": "Stor"
+  },
+  "extra_large": {
+    "message": "Extra stor"
+  },
+  "fast": {
+    "message": "Snabb"
+  },
+  "slow": {
+    "message": "Långsam"
+  },
+  "menu_new_contact": {
+    "message": "Ny kontakt"
+  },
+  "menu_new_classic_contact": {
+    "message": "Lägg till kontakt manuellt"
+  },
+  "new_classic_contact_explain": {
+    "message": "Manuellt tillagda kontakter kan användas för att sms:a till klassisk e-post och är inte garanterat totalsträckskrypterat."
+  },
+  "menu_new_chat": {
+    "message": "Ny chatt"
+  },
+  "menu_new_group": {
+    "message": "Ny grupp"
+  },
+  "clone_chat": {
+    "message": "Klona chatt"
+  },
+  "broadcast_list": {
+    "message": "Sändlista"
+  },
+  "broadcast_lists": {
+    "message": "Sändlistor"
+  },
+  "new_broadcast_list": {
+    "message": "Ny sändlista"
+  },
+  "add_recipients": {
+    "message": "Lägg till mottagare"
+  },
+  "edit_broadcast_list": {
+    "message": "Redigera sändlista"
+  },
+  "broadcast_list_name": {
+    "message": "Sändlistans namn"
+  },
+  "please_enter_broadcast_list_name": {
+    "message": "Ange ett namn på sändlistan"
+  },
+  "menu_send": {
+    "message": "Skicka"
+  },
+  "menu_toggle_keyboard": {
+    "message": "Byt emoji-tangentbord"
+  },
+  "menu_edit_group": {
+    "message": "Redigera grupp"
+  },
+  "menu_group_name_and_image": {
+    "message": "Gruppnamn och bild"
+  },
+  "menu_show_global_map": {
+    "message": "Visa alla platser"
+  },
+  "menu_archive_chat": {
+    "message": "Arkivera chatt"
+  },
+  "menu_unarchive_chat": {
+    "message": "Avarkivera chatt"
+  },
+  "menu_add_attachment": {
+    "message": "Lägg till bilaga"
+  },
+  "menu_leave_group": {
+    "message": "Lämna grupp"
+  },
+  "menu_delete_chat": {
+    "message": "Ta bort chatt"
+  },
+  "clear_chat": {
+    "message": "Rensa chatt"
+  },
+  "delete_contact": {
+    "message": "Ta bort kontakt"
+  },
+  "menu_delete_location": {
+    "message": "Ta bort denna plats?"
+  },
+  "menu_message_details": {
+    "message": "Meddelandedetaljer"
+  },
+  "menu_copy_to_clipboard": {
+    "message": "Kopiera till urklipp"
+  },
+  "share_invite_link": {
+    "message": "Dela inbjudningslänk"
+  },
+  "invite_friends": {
+    "message": "Bjud in vänner"
+  },
+  "invite_friends_text": {
+    "message": "Kontakta mig på Delta Chat:\n%1$s"
+  },
+  "menu_copy_selection_to_clipboard": {
+    "message": "Kopiera urval"
+  },
+  "menu_copy_link_to_clipboard": {
+    "message": "Kopiera länk"
+  },
+  "menu_copy_text_to_clipboard": {
+    "message": "Kopiera text"
+  },
+  "menu_copy_image_to_clipboard": {
+    "message": "Kopiera bild"
+  },
+  "menu_copy_email_to_clipboard": {
+    "message": "Kopiera e-postadress"
+  },
+  "paste_from_clipboard": {
+    "message": "Klistra in från urklipp"
+  },
+  "ask_copy_unopenable_link_to_clipboard": {
+    "message": "Länken \"%1$d\" kan inte öppnas i webbläsaren. Vill du kopiera länken till urklipp istället?"
+  },
+  "menu_forward": {
+    "message": "Vidarebefordra meddelande"
+  },
+  "menu_reply": {
+    "message": "Svara på meddelandet"
+  },
+  "menu_mute": {
+    "message": "Stäng av avisering"
+  },
+  "menu_unmute": {
+    "message": "Slå på"
+  },
+  "menu_export_attachment": {
+    "message": "Exportera bilaga"
+  },
+  "menu_export_attachments": {
+    "message": "Exportera bilaga"
+  },
+  "menu_all_media": {
+    "message": "All media"
+  },
+  "show_in_chat": {
+    "message": "Visa i chatten"
+  },
+  "show_app_in_chat": {
+    "message": "Visa app i chatt"
+  },
+  "menu_share": {
+    "message": "Dela"
+  },
+  "block": {
+    "message": "Blockera"
+  },
+  "menu_block_contact": {
+    "message": "Blockera kontakt"
+  },
+  "menu_unblock_contact": {
+    "message": "Avblockera kontakten"
+  },
+  "accept": {
+    "message": "Acceptera"
+  },
+  "menu_play": {
+    "message": "Spela upp"
+  },
+  "menu_pause": {
+    "message": "Paus"
+  },
+  "menu_scroll_to_bottom": {
+    "message": "Skrolla till botten"
+  },
+  "menu_scroll_to_top": {
+    "message": "Bläddra till toppen"
+  },
+  "menu_help": {
+    "message": "Hjälp"
+  },
+  "what_is_webxdc": {
+    "message": "Vad är Webxdc?"
+  },
+  "privacy_policy": {
+    "message": "Integritetspolicy"
+  },
+  "menu_select_all": {
+    "message": "Markera alla"
+  },
+  "select_chat": {
+    "message": "Välj chatt"
+  },
+  "select_more": {
+    "message": "Välj flera"
+  },
+  "menu_edit_name": {
+    "message": "Redigera namn"
+  },
+  "menu_settings": {
+    "message": "Inställningar"
+  },
+  "menu_advanced": {
+    "message": "Avancerat"
+  },
+  "menu_view_profile": {
+    "message": "Visa profil"
+  },
+  "menu_zoom_in": {
+    "message": "Zooma in"
+  },
+  "menu_zoom_out": {
+    "message": "Zooma ut"
+  },
+  "menu_save_log": {
+    "message": "Spara logg"
+  },
+  "menu_more_options": {
+    "message": "Mer alternativ"
+  },
+  "menu_learn_spelling": {
+    "message": "Lär stavning"
+  },
+  "menu_chat_audit_log": {
+    "message": "Granskningslogg av chatt"
+  },
+  "jump_to_message": {
+    "message": "Hoppa till meddelande"
+  },
+  "copy_json": {
+    "message": "Kopiera JSON"
+  },
+  "replace_draft": {
+    "message": "Ersätt utkast"
+  },
+  "title_share_location": {
+    "message": "Dela plats med alla gruppmedlemmar"
+  },
+  "device_talk": {
+    "message": "Enhetsmeddelanden"
+  },
+  "device_talk_subtitle": {
+    "message": "Lokalt genererade meddelanden"
+  },
+  "device_talk_explain": {
+    "message": "Meddelanden i denna chatt är lokalt genererade av din Delta Chat-app. Dess skapare använder den för att informera om app-uppdateringar och problem vid användning."
+  },
+  "device_talk_welcome_message2": {
+    "message": "Ta kontakt!\n\n🙌 Tryck på \"QR-kod\" på huvudskärmen på båda enheterna. Välj \"Skanna QR-kod\" på en enhet och rikta den mot den andra\n\n🌍 Om du inte är i samma rum kan du skanna via videosamtal eller dela en inbjudningslänk från \"Skanna QR-kod\"\n\nEfter det: Njut av din meddelandeupplevelse via det största decentraliserade nätverket som någonsin har funnits. E-post! Och i motsats till andra populära appar, utan central kontroll eller spårning eller att sälja ut dig, vänner, kollegor eller familj till stora organisationer."
+  },
+  "edit_contact": {
+    "message": "Redigera kontakt"
+  },
+  "pin_chat": {
+    "message": "Fäst chatten"
+  },
+  "unpin_chat": {
+    "message": "Lösgör chatten"
+  },
+  "pin": {
+    "message": "Fäst"
+  },
+  "unpin": {
+    "message": "Lösgör"
+  },
+  "ConversationFragment_quoted_message_not_found": {
+    "message": "Original meddelandet hittas inte"
+  },
+  "reply_privately": {
+    "message": "Svara säkert"
+  },
+  "source_code": {
+    "message": "Källkod"
+  },
+  "add_to_home_screen": {
+    "message": "Lägg till på hemskärmen"
+  },
+  "donate": {
+    "message": "Donera"
+  },
+  "mute_for_one_hour": {
+    "message": "Tysta 1 timma"
+  },
+  "mute_for_eight_hours": {
+    "message": "Tysta 8 timmar"
+  },
+  "mute_for_one_day": {
+    "message": "Tysta 1 dag"
+  },
+  "mute_for_seven_days": {
+    "message": "Tysta 7 dagar"
+  },
+  "mute_forever": {
+    "message": "Tysta för evigt"
+  },
+  "share_location_for_5_minutes": {
+    "message": "i 5 minuter"
+  },
+  "share_location_for_30_minutes": {
+    "message": "i 30 minuter"
+  },
+  "share_location_for_one_hour": {
+    "message": "i 1 timma"
+  },
+  "share_location_for_two_hours": {
+    "message": "i 2 timmar"
+  },
+  "share_location_for_six_hours": {
+    "message": "i 6 timmar"
+  },
+  "file_saved_to": {
+    "message": "Filen är sparad i \"%1$s\"."
+  },
+  "videochat": {
+    "message": "Videochatt"
+  },
+  "videochat_invite_user_to_videochat": {
+    "message": "Vill du bjuda in %1$s till en videochatt?"
+  },
+  "videochat_invite_user_hint": {
+    "message": "Detta kräver ett kompatibelt program eller en kompatibel webbläsare i bägge ändar."
+  },
+  "videochat_contact_invited_hint": {
+    "message": "%1$s bjöd in till en videochatt"
+  },
+  "videochat_you_invited_hint": {
+    "message": "Du bjöd in till en videochatt"
+  },
+  "videochat_tap_to_join": {
+    "message": "Tryck för att ansluta"
+  },
+  "videochat_tap_to_open": {
+    "message": "Tryck för att öppna"
+  },
+  "videochat_instance": {
+    "message": "Videochattinstans"
+  },
+  "videochat_instance_placeholder": {
+    "message": "Din videochattinstans"
+  },
+  "videochat_instance_example": {
+    "message": "Exempel: https://din-server.org/$RUM"
+  },
+  "videochat_instance_explain_2": {
+    "message": "Om det är aktiverat kan du starta en videochatt från varje chatt. Kräver en kompatibel app eller en webbläsare på båda sidor."
+  },
+  "videochat_instance_from_qr": {
+    "message": "Vill du använda \"%1$s\" för att bjuda in andra till videochattar?\n\nNär det väl är inställt kan du starta en videochatt från vilken en-till-en-chatt som helst. Detta ersätter den tidigare inställningen för eventuella videochattar."
+  },
+  "videochat_invitation": {
+    "message": "Videochattinbjudan"
+  },
+  "videochat_invitation_body": {
+    "message": "Du är inbjuden till en videochatt, klicka på %1$s för att ansluta."
+  },
+  "ask_leave_group": {
+    "message": "Är du säker på att du vill lämna den här gruppen?"
+  },
+  "ask_forward": {
+    "message": "Vidarebefordra meddelanden till %1$s?"
+  },
+  "ask_forward_multiple": {
+    "message": "Vill du vidarebefordra meddelanden till %1$d chattar?"
+  },
+  "ask_export_attachment": {
+    "message": "Exportera bilagor? Exporterade bilagor tillåter andra appar på din enhet att komma åt dem.\n\nVill du fortsätta?"
+  },
+  "ask_block_contact": {
+    "message": "Blockera den här kontakten? Du kommer inte att få fler meddelanden från den här kontakten."
+  },
+  "ask_unblock_contact": {
+    "message": "Avblockera den här kontakten? Du kommer återigen att kunna ta emot meddelanden från den här kontakten."
+  },
+  "ask_delete_contacts": {
+    "message": "Ta bort kontakter? Detta kommer att ta bort de valda kontakterna permanent.\n\nKontakter med pågående chattar och kontakter från systemets adressbok kan inte tas bort permanent."
+  },
+  "ask_delete_contact": {
+    "message": "Ta bort kontakten %1$s?\n\nKontakter med pågående chattar och kontakter från systemets adressbok kan inte tas bort permanent. "
+  },
+  "ask_start_chat_with": {
+    "message": "Chatta med %1$s ?"
+  },
+  "ask_remove_members": {
+    "message": "Ta bort %1$s från gruppen?"
+  },
+  "ask_remove_from_broadcast": {
+    "message": "Vill du ta bort %1$s från sändlistan?"
+  },
+  "open_url_confirmation": {
+    "message": "Vill du öppna denna länk?"
+  },
+  "contacts_title": {
+    "message": "Kontakter"
+  },
+  "contacts_enter_name_or_email": {
+    "message": "Ange namn eller e-postadress"
+  },
+  "contacts_type_email_above": {
+    "message": "Skriv in e-postadressen ovan"
+  },
+  "contacts_empty_hint": {
+    "message": "Inga kontakter."
+  },
+  "chat_archived_chats_title": {
+    "message": "Arkiverade chattar"
+  },
+  "chat_please_enter_message": {
+    "message": "Skriv ett meddelande."
+  },
+  "chat_camera_unavailable": {
+    "message": "Kamera otillgänglig."
+  },
+  "chat_unable_to_record_audio": {
+    "message": "Det går inte att spela in ljud."
+  },
+  "chat_new_one_to_one_hint": {
+    "message": "Skicka ett meddelande till %1$s."
+  },
+  "chat_new_broadcast_hint": {
+    "message": "I en sändlista kommer mottagarna att få meddelanden i en skrivskyddad chatt med dig."
+  },
+  "chat_new_group_hint": {
+    "message": "Komponera det första meddelandet, så att andra kan svara inom denna grupp.\n\n• Det är okej om inte alla medlemmar använder Delta Chat.\n\n• Det kan ta en stund innan det första meddelandet levereras."
+  },
+  "chat_record_slide_to_cancel": {
+    "message": "Svep för att avbryta"
+  },
+  "chat_record_explain": {
+    "message": "Tryck och håll ner för att spela in ett röstmeddelande, släpp för att skicka."
+  },
+  "chat_no_chats_yet_title": {
+    "message": "Tom inkorg.\nTryck på \"+\" för att starta en ny chatt."
+  },
+  "chat_all_archived": {
+    "message": "Alla chattar arkiverade.\nTryck på \"+\" för att starta en ny chatt."
+  },
+  "chat_share_with_title": {
+    "message": "Dela med"
+  },
+  "chat_input_placeholder": {
+    "message": "Meddelande"
+  },
+  "chat_archived_label": {
+    "message": "Arkiverat"
+  },
+  "chat_request_label": {
+    "message": "Efterfråga"
+  },
+  "chat_no_messages": {
+    "message": "Inga meddelanden."
+  },
+  "chat_self_talk_subtitle": {
+    "message": "Meddelanden jag skickat till mig själv"
+  },
+  "archive_empty_hint": {
+    "message": "Arkiverde chattar kommer att visas här."
+  },
+  "saved_messages": {
+    "message": "Sparade meddelanden"
+  },
+  "saved_messages_explain": {
+    "message": "• Vidarebefordra meddelanden här för enkel åtkomst\n\n• Spara anteckningar eller röstmemon\n\n• Bifoga mediafiler för att spara dom"
+  },
+  "saved": {
+    "message": "Sparad"
+  },
+  "save_as": {
+    "message": "Spara som"
+  },
+  "retry_send": {
+    "message": "Skicka om meddelandet"
+  },
+  "messaging_disabled_not_in_group": {
+    "message": "Du kan inte skriva eftersom du inte är med i denna grupp. Be en medlem bjuda in dig, för att gå med"
+  },
+  "messaging_disabled_mailing_list": {
+    "message": "Att skicka meddelande till e-postlistor stöds inte ännu"
+  },
+  "cannot_display_unsuported_file_type": {
+    "message": "Denna filtyp kan inte visas: %s"
+  },
+  "attachment_failed_to_load": {
+    "message": "Bilagan kunde inte visas"
+  },
+  "lock_recording": {
+    "message": "Lås inspelning"
+  },
+  "mailing_list": {
+    "message": "Mejllista"
+  },
+  "mailing_list_profile_info": {
+    "message": "Ändringar av namn och på e-postlistan bild, gäller endast för den här enheten."
+  },
+  "start_app": {
+    "message": "Start..."
+  },
+  "accept_request_first": {
+    "message": "Acceptera chattbegäran först."
+  },
+  "send_file_to": {
+    "message": "Skicka \"%1$s\" till..."
+  },
+  "send_message_to": {
+    "message": "Skicka meddelande till..."
+  },
+  "filter_map_on_time": {
+    "message": "Visa platser inom tidsramen"
+  },
+  "show_location_traces": {
+    "message": "Visa spår"
+  },
+  "add_poi": {
+    "message": "Skicka intressant plats"
+  },
+  "chat_audit_log_empty_message": {
+    "message": "Systemmeddelanden för denna chatt visas här"
+  },
+  "chat_audit_log_title": {
+    "message": "Chattgranskningslogg för %1$s"
+  },
+  "chat_audit_log_description": {
+    "message": "Visar endast system- och informationsmeddelanden; användbart för att hitta de senaste chattåtgärderna utan att skrolla igenom många meddelanden."
+  },
+  "open_external_url_trust_domain": {
+    "message": "Fråga inte igen för %1$s"
+  },
+  "puny_code_warning_header": {
+    "message": "Misstänkt länk identifierad"
+  },
+  "puny_code_warning_question": {
+    "message": "Är du säker på att du vill besöka %1$s?"
+  },
+  "puny_code_warning_description": {
+    "message": "Denna länk kan förvränga tecken med liknande utseende från olika alfabet. Om du följer länken som är märkt %1$s kommer du till %2$s, vilket är normalt för icke-latinska tecken. Om du inte förväntade dig sådana tecken kan den här länken vara skadlig."
+  },
+  "search": {
+    "message": "Sök"
+  },
+  "search_in_chat": {
+    "message": "Sök i chatten"
+  },
+  "search_files": {
+    "message": "Sök filer"
+  },
+  "search_explain": {
+    "message": "Sök efter chattar, kontakter och meddelanden"
+  },
+  "search_no_result_for_x": {
+    "message": "Inga resultat hittades för \" %s \""
+  },
+  "group_name": {
+    "message": "Gruppnamn"
+  },
+  "group_avatar": {
+    "message": "Gruppbild"
+  },
+  "remove_group_image": {
+    "message": "Ta bort gruppbild"
+  },
+  "change_group_image": {
+    "message": "Ändra gruppbild"
+  },
+  "group_create_button": {
+    "message": "Skapa grupp"
+  },
+  "group_please_enter_group_name": {
+    "message": "Ange ett namn för gruppen."
+  },
+  "group_add_members": {
+    "message": "Lägg till medlemmar"
+  },
+  "group_self_not_in_group": {
+    "message": "Du måste vara medlem i gruppen för att utföra denna åtgärd."
+  },
+  "profile_encryption": {
+    "message": "Kryptering"
+  },
+  "profile_shared_chats": {
+    "message": "Delade chattar"
+  },
+  "related_chats": {
+    "message": "Relaterade chattar"
+  },
+  "tab_contact": {
+    "message": "Kontakt"
+  },
+  "tab_group": {
+    "message": "Grupp"
+  },
+  "tab_gallery": {
+    "message": "Galleri"
+  },
+  "tab_docs": {
+    "message": "Dokument"
+  },
+  "tab_links": {
+    "message": "Länkar"
+  },
+  "tab_map": {
+    "message": "Karta"
+  },
+  "tab_gallery_empty_hint": {
+    "message": "Bilder och videor delade i denna chatt kommer att visas här."
+  },
+  "tab_docs_empty_hint": {
+    "message": "Dokument, musik och andra filer som delas i denna chatt kommer att visas här."
+  },
+  "tab_image_empty_hint": {
+    "message": "Bilder delade i denna chatt kommer att visas här."
+  },
+  "tab_video_empty_hint": {
+    "message": "Videor delade i denna chatt kommer att visas här."
+  },
+  "tab_audio_empty_hint": {
+    "message": "Ljudfiler och röstmeddelanden delade i denna chatt kommer att visas här."
+  },
+  "tab_webxdc_empty_hint": {
+    "message": "Appar delade i denna chatt kommer att visas här."
+  },
+  "tab_all_media_empty_hint": {
+    "message": "Media delad i någon chatt kommer att visas här."
+  },
+  "all_apps_empty_hint": {
+    "message": "Appar som tas emot eller skickas i en chatt visas här."
+  },
+  "media_preview": {
+    "message": "Förhandsvisning av media"
+  },
+  "aspect_ratio_grid": {
+    "message": "Rutnät för bildförhållande"
+  },
+  "square_grid": {
+    "message": "Kvadratiskt rutnät"
+  },
+  "send_message": {
+    "message": "Skicka meddelande"
+  },
+  "aeap_addr_changed": {
+    "message": "%1$s ändrade sin adress från %2$s till %3$s"
+  },
+  "aeap_explanation": {
+    "message": "Du har ändrat din e-postadress från %1$s till %2$s.\n\nOm du nu skickar ett meddelande till en verifierad grupp kommer kontakterna där automatiskt att ersätta den gamla med din nya adress. Vi rekommenderar starkt att du ställer in din gamla e-postleverantör så att den vidarebefordrar alla e-postmeddelanden till din nya e-postadress. Annars kan du missa meddelanden från kontakter som inte har fått din nya adress ännu."
+  },
+  "multidevice_title": {
+    "message": "Lägg till en andra enhet"
+  },
+  "multidevice_same_network_hint": {
+    "message": "Tillse att bägge enheterna är på samma WiFi eller nätverk"
+  },
+  "multidevice_this_creates_a_qr_code": {
+    "message": "Detta skapar en QR-kod som den andra enheten kan skanna för att kopiera profilen."
+  },
+  "multidevice_install_dc_on_other_device": {
+    "message": "Installera Delta Chat på din andra enhet (https://get.delta.chat)"
+  },
+  "multidevice_tap_scan_on_other_device": {
+    "message": "Starta Delta Chat, tryck på \"Jag har redan en profil / Lägg till som andra enhet\" och skanna koden som visas här."
+  },
+  "multidevice_qr_subtitle": {
+    "message": "Skanna för att ställa in en andra enhet för %1$s"
+  },
+  "multidevice_receiver_title": {
+    "message": "Lägg till som andra enhet"
+  },
+  "multidevice_open_settings_on_other_device": {
+    "message": "På den första enheten går du till \"Inställningar / Lägg till en andra enhet\" och skannar koden som visas där"
+  },
+  "multidevice_receiver_scanning_ask": {
+    "message": "Vill du kopiera profilen från den andra enheten till den här enheten?"
+  },
+  "multidevice_abort": {
+    "message": "Vill du avbryta konfigurationen av den andra enheten?"
+  },
+  "multidevice_abort_will_invalidate_copied_qr": {
+    "message": "Detta kommer att ogiltigförklara QR-koden som kopierats till urklipp."
+  },
+  "multidevice_transfer_done_devicemsg": {
+    "message": "ℹ️ Profilen överförd till din andra enhet."
+  },
+  "preparing_account": {
+    "message": "Förbereder profil..."
+  },
+  "transferring": {
+    "message": "Överför..."
+  },
+  "troubleshooting": {
+    "message": "Felsökning"
+  },
+  "incoming_messages": {
+    "message": "Inkommande meddelanden"
+  },
+  "outgoing_messages": {
+    "message": "Utgående meddelanden"
+  },
+  "storage_on_domain": {
+    "message": "Lagring på %1$s"
+  },
+  "connectivity": {
+    "message": "Anslutning"
+  },
+  "connectivity_not_connected": {
+    "message": "Inte ansluten"
+  },
+  "connectivity_connecting": {
+    "message": "Ansluter..."
+  },
+  "connectivity_updating": {
+    "message": "Uppdaterar..."
+  },
+  "connectivity_connected": {
+    "message": "Ansluten"
+  },
+  "sending": {
+    "message": "Skickar..."
+  },
+  "last_msg_sent_successfully": {
+    "message": "Senaste meddelandet skickat felfritt."
+  },
+  "not_supported_by_provider": {
+    "message": "Stöds ej av din leverantör."
+  },
+  "messages": {
+    "message": "Meddelanden"
+  },
+  "part_of_total_used": {
+    "message": "%1$s av %2$s används"
+  },
+  "onboarding_create_instant_account": {
+    "message": "Skapa ny profil"
+  },
+  "onboarding_alternative_logins": {
+    "message": "Jag har redan en profil"
+  },
+  "manual_account_setup_option": {
+    "message": "Klassisk e-postinloggning"
+  },
+  "instant_onboarding_title": {
+    "message": "Din profil"
+  },
+  "instant_onboarding_agree_default2": {
+    "message": "Integritetspolicy för %1$s"
+  },
+  "instant_onboarding_agree_instance": {
+    "message": "Om profiler på %1$s"
+  },
+  "instant_onboarding_create": {
+    "message": "Godkänn & Skapa profil"
+  },
+  "instant_onboarding_show_more_instances": {
+    "message": "Använd annan server"
+  },
+  "instant_onboarding_other_server": {
+    "message": "Lista chatmail-servrar"
+  },
+  "instant_onboarding_group_info": {
+    "message": "Skapa en profil för att ansluta till gruppen \"%1$s\"."
+  },
+  "instant_onboarding_contact_info": {
+    "message": "Skapa en profil för att chatta med %1$s."
+  },
+  "instant_onboarding_confirm_contact": {
+    "message": "Vill du skapa en ny profil och börja chatta med %1$s?"
+  },
+  "instant_onboarding_confirm_group": {
+    "message": "Vill du skapa en ny profil och gå med i chattgruppen \"%1$s\"?"
+  },
+  "welcome_chat_over_email": {
+    "message": "Säker decentraliserad chatt"
+  },
+  "scan_invitation_code": {
+    "message": "Skanna inbjudningskod"
+  },
+  "login_title": {
+    "message": "Logga in"
+  },
+  "login_header": {
+    "message": "Logga in på din server"
+  },
+  "login_explain": {
+    "message": "Logga in med ett befintligt e-postkonto"
+  },
+  "login_subheader": {
+    "message": "För kända e-postleverantörer installeras ytterligare inställningar automatiskt. Ibland måste IMAP aktiveras i webbinställningarna. Kontakta din e-postleverantör eller vänner för hjälp."
+  },
+  "login_no_servers_hint": {
+    "message": "Det finns ingen Delta Chat-server, din data stannar på din enhet."
+  },
+  "login_inbox": {
+    "message": "Inkorg"
+  },
+  "login_imap_login": {
+    "message": "IMAP inloggningsnamn"
+  },
+  "login_imap_server": {
+    "message": "IMAP server"
+  },
+  "login_imap_port": {
+    "message": "IMAP port"
+  },
+  "login_imap_security": {
+    "message": "IMAP säkerhet"
+  },
+  "login_outbox": {
+    "message": "Utkorg"
+  },
+  "login_smtp_login": {
+    "message": "SMTP inloggningsnamn"
+  },
+  "login_smtp_password": {
+    "message": "SMTP lösenord"
+  },
+  "login_smtp_server": {
+    "message": "SMTP server"
+  },
+  "login_smtp_port": {
+    "message": "SMTP port"
+  },
+  "login_smtp_security": {
+    "message": "SMTP säkerhet"
+  },
+  "login_auth_method": {
+    "message": "Auktoriseringsmetod"
+  },
+  "login_info_oauth2_title": {
+    "message": "Fortsätta med förenklad installation?"
+  },
+  "login_info_oauth2_text": {
+    "message": "Den angivna e-postadressen stödjer förenklad inställning (OAuth 2.0).\n\nLåt Delta Chat agera som ditt chatt-över-epost-program, i nästa steg.\n\nDet finns ingen Delta Chat-server, din data stannar på din enhet."
+  },
+  "login_certificate_checks": {
+    "message": "Certifikatkontroller"
+  },
+  "login_error_mail": {
+    "message": "Ange en giltig e-postadress"
+  },
+  "login_error_server": {
+    "message": "Ange en giltig server/IP-adress"
+  },
+  "login_error_port": {
+    "message": "Ange en giltig port (1–65535)"
+  },
+  "login_error_required_fields": {
+    "message": "Ange en giltig e-postadress och ett lösenord"
+  },
+  "import_backup_title": {
+    "message": "Importera säkerhetskopia"
+  },
+  "import_backup_ask": {
+    "message": "Säkerhetskopia hittades på %1$s.\n\n Vill du importera och använda all data och alla inställningar från den?"
+  },
+  "import_backup_no_backup_found": {
+    "message": "Inga säkerhetskopior hittades.\n\nKopiera säkerhetskopian till \"%1$s\" och försök igen. Alternativt, tryck \"Börja chatta\" för att fortsätta den normala inställningsprocessen."
+  },
+  "login_error_cannot_login": {
+    "message": "Kan inte logga in som \"%1$s\". Kontrollera om e-postadressen och lösenordet är korrekt."
+  },
+  "accept_invalid_certificates": {
+    "message": "Acceptera ogiltiga certifikat"
+  },
+  "switch_account": {
+    "message": "Byt konto"
+  },
+  "add_account": {
+    "message": "Lägg till konto"
+  },
+  "delete_account": {
+    "message": "Ta bort konto"
+  },
+  "delete_account_ask": {
+    "message": "Är du säker på att du vill ta bort din kontodata?"
+  },
+  "delete_account_explain_with_name": {
+    "message": "Alla profildata för \"%s\" på den här enheten kommer att raderas, inklusive dina inställningar för totalsträckskryptering, kontakter, chattar, meddelanden och media. Denna åtgärd kan inte ångras."
+  },
+  "unconfigured_account": {
+    "message": "Ej konfigurerad profil"
+  },
+  "unconfigured_account_hint": {
+    "message": "Öppna profilen för att konfigurera den."
+  },
+  "try_connect_now": {
+    "message": "Försök ansluta nu"
+  },
+  "sync_all": {
+    "message": "Synkronisera alla"
+  },
+  "configuration_failed_with_error": {
+    "message": "Konfiguration misslyckades. Fel: %1$s"
+  },
+  "forward_to": {
+    "message": "Vidarebefordra till..."
+  },
+  "ask_send_files_to_selected_chats": {
+    "message": "Vill du skicka %1$d fil(er) till %2$d chattar?"
+  },
+  "share_text_multiple_chats": {
+    "message": "Vill du skicka denna text till %1$d chattar?\n\n\"%2$s\""
+  },
+  "share_abort": {
+    "message": "Delningen avbröts på grund av saknad behörighet."
+  },
+  "pref_using_custom": {
+    "message": "Använder anpassat: %s"
+  },
+  "pref_using_default": {
+    "message": "Använder standard: %s"
+  },
+  "pref_profile_info_headline": {
+    "message": "Din profilinformation"
+  },
+  "pref_profile_photo": {
+    "message": "Profilbild"
+  },
+  "pref_blocked_contacts": {
+    "message": "Blockerade kontakter"
+  },
+  "blocked_empty_hint": {
+    "message": "Blockerade kontakter kommer att visas här."
+  },
+  "pref_password_and_account_settings": {
+    "message": "Lösenord och konto"
+  },
+  "pref_who_can_see_profile_explain": {
+    "message": "Din profilbild och ditt namn visas tillsammans med dina meddelanden när du kommunicerar med andra användare. Information som redan skickats kan inte tas bort eller flyttas."
+  },
+  "pref_your_name": {
+    "message": "Ditt namn"
+  },
+  "pref_default_status_label": {
+    "message": "Signaturtext"
+  },
+  "pref_enter_sends": {
+    "message": "Returtangenten skickar"
+  },
+  "pref_enter_sends_explain": {
+    "message": "Tryck på returtangenten för att skicka textmeddelanden"
+  },
+  "pref_outgoing_media_quality": {
+    "message": "Utgående ljudkvalitet"
+  },
+  "pref_outgoing_balanced": {
+    "message": "Balanserad"
+  },
+  "pref_outgoing_worse": {
+    "message": "Sämre kvalitet, mindre storlek"
+  },
+  "pref_vibrate": {
+    "message": "Vibrera"
+  },
+  "pref_screen_security": {
+    "message": "Skärmsäkerhet"
+  },
+  "pref_screen_security_explain": {
+    "message": "Blockera skärmklipp i tidigare-listan samt inuti programmet"
+  },
+  "pref_screen_security_please_restart_hint": {
+    "message": "Starta om programmet för att tillämpa skärmsäkerhetsinställningarna"
+  },
+  "pref_notifications": {
+    "message": "Avisering"
+  },
+  "pref_notifications_show": {
+    "message": "Visa"
+  },
+  "pref_notifications_priority": {
+    "message": "Prioritet"
+  },
+  "pref_notifications_explain": {
+    "message": "Aktivera systemavisering för nya meddelanden"
+  },
+  "pref_show_notification_content": {
+    "message": "Visa meddelandeinnehåll i avisering"
+  },
+  "pref_show_notification_content_explain": {
+    "message": "Visar avsändare och de första orden i meddelandet, i aviseringen."
+  },
+  "pref_led_color": {
+    "message": "Färg på ljusindikator"
+  },
+  "pref_sound": {
+    "message": "Ljud"
+  },
+  "pref_silent": {
+    "message": "Tyst"
+  },
+  "pref_privacy": {
+    "message": "Integritet"
+  },
+  "pref_chats_and_media": {
+    "message": "Chattar och media"
+  },
+  "pref_system_default": {
+    "message": "Systemets standardinställning"
+  },
+  "pref_light_theme": {
+    "message": "Ljust"
+  },
+  "pref_dark_theme": {
+    "message": "Mörkt"
+  },
+  "pref_appearance": {
+    "message": "Utseende"
+  },
+  "pref_theme": {
+    "message": "Tema"
+  },
+  "pref_language": {
+    "message": "Språk"
+  },
+  "pref_incognito_keyboard": {
+    "message": "Inkognito-tangentbord"
+  },
+  "pref_incognito_keyboard_explain": {
+    "message": "Begär att tangentbordet stänger av personlig inlärning"
+  },
+  "pref_read_receipts": {
+    "message": "Returkvitto"
+  },
+  "pref_read_receipts_explain": {
+    "message": "Om läskvittenser är avstängda kan du inte se läskvittenser från andra."
+  },
+  "pref_server": {
+    "message": "Server"
+  },
+  "pref_encryption": {
+    "message": "Kryptering"
+  },
+  "pref_manage_keys": {
+    "message": "Hantera nycklar"
+  },
+  "pref_use_system_emoji": {
+    "message": "Använd systemets emojier"
+  },
+  "pref_use_system_emoji_explain": {
+    "message": "Inaktivera Delta Chat's inbyggda emojier"
+  },
+  "pref_show_system_contacts": {
+    "message": "Läs systemets adressbok"
+  },
+  "pref_show_system_contacts_explain": {
+    "message": "Erbjud att skapa chattar med kontakter från adressboken. Vissa leverantörer behöver först konfigureras för totalsträckskryptering."
+  },
+  "pref_app_access": {
+    "message": "Programåtkomst"
+  },
+  "pref_chats": {
+    "message": "Chattar"
+  },
+  "pref_in_chat_sounds": {
+    "message": "Ljud i konversationer"
+  },
+  "pref_view_log": {
+    "message": "Visa logg"
+  },
+  "pref_saved_log": {
+    "message": "Sparade loggen i mappen \"Nedladdningar\""
+  },
+  "pref_save_log_failed": {
+    "message": "Kunde inte spara loggen"
+  },
+  "pref_log_header": {
+    "message": "Logg"
+  },
+  "pref_other": {
+    "message": "Övrigt"
+  },
+  "pref_backup": {
+    "message": "Säkerhetskopiering"
+  },
+  "pref_backup_explain": {
+    "message": "Säkerhetskopiera chattar till extern lagring"
+  },
+  "pref_backup_export_explain": {
+    "message": "En säkerhetskopia hjälper dig att ställa in en ny installation på denna eller någon annan enhet.\n\nSäkerhetskopian innehåller alla meddelanden, kontakter och chattar, liksom din autokrypterade slutpunkt-till-slutpunkt-inställning. Förvara säkerhetskopian på ett säkert ställe eller ta bort den så fort som möjligt."
+  },
+  "pref_backup_export_x": {
+    "message": "Exportera %1$s"
+  },
+  "pref_backup_export_all": {
+    "message": "Exportera all %1$d profiler"
+  },
+  "pref_backup_export_start_button": {
+    "message": "Starta säkerhetskopiering"
+  },
+  "pref_backup_written_to_x": {
+    "message": "Säkerhetskopia korrekt skriven till \"%1$s\"."
+  },
+  "pref_managekeys_menu_title": {
+    "message": "Hantera nycklar"
+  },
+  "pref_managekeys_export_secret_keys": {
+    "message": "Exportera säkerhetsnycklar"
+  },
+  "pref_managekeys_export_explain": {
+    "message": "Exportera säkerhetsnycklar till \"%1$s\"?"
+  },
+  "pref_managekeys_import_secret_keys": {
+    "message": "Importera säkerhetsnycklar"
+  },
+  "pref_managekeys_import_explain": {
+    "message": "Importera säkerhetsnycklar från \"%1$s\"?\n\n• Befintliga säkerhetsnycklar kommer inte att tas bort\n\n• Den senast importerade nyckeln kommer att användas som ny standardnyckel, om den inte har ordet \"legacy\" i sitt filnamn."
+  },
+  "pref_managekeys_secret_keys_exported_to_x": {
+    "message": "Säkerhetsnycklar korrekt skrivna till \"%1$s\"."
+  },
+  "pref_managekeys_secret_keys_imported_from_x": {
+    "message": "Säkerhetsnycklar importerade från \"%1$s\"."
+  },
+  "pref_background": {
+    "message": "Bakgrund"
+  },
+  "pref_background_btn_default": {
+    "message": "Använd standardbild"
+  },
+  "pref_background_btn_gallery": {
+    "message": "Välj från galleriet"
+  },
+  "pref_imap_folder_handling": {
+    "message": "IMAP mapphantering"
+  },
+  "pref_imap_folder_warn_disable_defaults": {
+    "message": "Om du inaktiverar det här alternativet, tillse att servern och dina andra klienter är konfigurerade i enlighet med detta.\n\nAnnars kanske saker och ting inte fungerar alls."
+  },
+  "pref_watch_sent_folder": {
+    "message": "Övervaka mappen \"Skickat\""
+  },
+  "pref_send_copy_to_self": {
+    "message": "Skicka kopia till mig själv"
+  },
+  "pref_send_copy_to_self_explain": {
+    "message": "Krävs när du använder detta konto på flera enheter."
+  },
+  "pref_auto_folder_moves": {
+    "message": "Flyttas automatiskt till DeltaChat-mappen"
+  },
+  "pref_auto_folder_moves_explain": {
+    "message": "Chattkonversationer flyttas automatiskt för att undvika att inkorgen belamras"
+  },
+  "pref_only_fetch_mvbox_title": {
+    "message": "Hämta endast från DeltaChat-mappen"
+  },
+  "pref_only_fetch_mvbox_explain": {
+    "message": "Ignorera andra mappar. Kräver att din server flyttar chattmeddelanden till DeltaChat-mappen."
+  },
+  "pref_show_emails": {
+    "message": "Visa vanliga e-postmeddelanden"
+  },
+  "pref_show_emails_no": {
+    "message": "Nej, bara chattar"
+  },
+  "pref_show_emails_accepted_contacts": {
+    "message": "För godkända kontakter"
+  },
+  "pref_show_emails_all": {
+    "message": "Alla"
+  },
+  "pref_experimental_features": {
+    "message": "Experimentella funktioner"
+  },
+  "pref_on_demand_location_streaming": {
+    "message": "På-begäran platsströmning"
+  },
+  "pref_developer_mode": {
+    "message": "Utvecklarläge"
+  },
+  "pref_developer_mode_explain": {
+    "message": "Aktiverar felsökningsalternativ och kan göra appen mindre stabil. Endast för utvecklare."
+  },
+  "pref_background_default": {
+    "message": "Standardbakgrund"
+  },
+  "pref_background_default_color": {
+    "message": "Standardfärg"
+  },
+  "pref_background_custom_image": {
+    "message": "Anpassad bild"
+  },
+  "pref_background_custom_color": {
+    "message": "Anpassad färg"
+  },
+  "export_aborted": {
+    "message": "Exporten avbruten"
+  },
+  "auto_download_messages": {
+    "message": "Ladda ner meddelanden automatiskt"
+  },
+  "up_to_x": {
+    "message": "Upp till %1$s"
+  },
+  "up_to_x_most_worse_quality_images": {
+    "message": "Upp till %1$s, sämst bildkvalitet"
+  },
+  "up_to_x_most_balanced_quality_images": {
+    "message": "Upp till %1$s, balanserad bildkvalitet"
+  },
+  "download_failed": {
+    "message": "Nerladdning misslyckades"
+  },
+  "n_bytes_message": {
+    "message": "%1$s meddelande"
+  },
+  "download_max_available_until": {
+    "message": "Ladda ner max tillgängligt till %1$s"
+  },
+  "profile_image_select": {
+    "message": "Välj profilbild"
+  },
+  "select_your_new_profile_image": {
+    "message": "Välj din nya profilbild"
+  },
+  "profile_image_delete": {
+    "message": "Ta bort profilbild"
+  },
+  "pref_show_tray_icon": {
+    "message": "Visa systemfältsikon"
+  },
+  "pref_edit_profile": {
+    "message": "Redigera profil"
+  },
+  "disable_imap_idle": {
+    "message": "Avaktivera IMAP IDLE"
+  },
+  "disable_imap_idle_explain": {
+    "message": "Använd inte IMAP IDLE-tillägget även om servern stöder det. Om du aktiverar det här alternativet kommer hämtningen av meddelanden att fördröjas, aktivera det endast för testning."
+  },
+  "send_stats_to_devs": {
+    "message": "Skicka statistik till Delta Chats utvecklare"
+  },
+  "emoji_search_results": {
+    "message": "Sökresultat"
+  },
+  "emoji_not_found": {
+    "message": "Inga emoji hittades"
+  },
+  "emoji_recent": {
+    "message": "Nyligen använt"
+  },
+  "emoji_people": {
+    "message": "Människor & Kropp"
+  },
+  "emoji_nature": {
+    "message": "Djur & Natur"
+  },
+  "emoji_foods": {
+    "message": "Mat & Dryck"
+  },
+  "emoji_activity": {
+    "message": "Aktivitet"
+  },
+  "emoji_places": {
+    "message": "Resa & Platser"
+  },
+  "emoji_objects": {
+    "message": "Objekt"
+  },
+  "emoji_symbols": {
+    "message": "Symboler"
+  },
+  "emoji_flags": {
+    "message": "Flaggor"
+  },
+  "reactions": {
+    "message": "Reaktioner"
+  },
+  "react": {
+    "message": "Reagera"
+  },
+  "reaction_by_you": {
+    "message": "Du reagerade med %1$s till \"%2$s\""
+  },
+  "reaction_by_other": {
+    "message": "%1$s reagerade med %2$s till \"%3$s\""
+  },
+  "delete_old_messages": {
+    "message": "Ta bort gamla meddelanden"
+  },
+  "autodel_device_title": {
+    "message": "Ta bort meddelanden från enheten"
+  },
+  "autodel_server_title": {
+    "message": "Ta bort meddelanden från servern"
+  },
+  "autodel_device_ask": {
+    "message": "Vill du ta bort %1$d meddelanden nu och alla kommande meddelanden \"%2$s\" i framtiden?\n\n• Detta inkluderar all mediafiler.\n\n• Meddelanden kommer att tas bort oavsett om de har lästs eller inte.\n\n• \"Sparade meddelanden\" undantas från lokal borttagning."
+  },
+  "autodel_server_ask": {
+    "message": "Vill du ta bort %1$d meddelanden nu och alla nyligen hämtade meddelanden \"%2$s\" i framtiden?\n\n⚠️ Detta inkluderar e-post, media och \"Sparade meddelanden\" i alla servermappar\n\n⚠️ Använd inte den här funktionen om du vill behålla data på servern\n\n⚠️ Använd inte den här funktionen om du använder andra e-postklienter än Delta Chat"
+  },
+  "autodel_server_enabled_hint": {
+    "message": "Detta inkluderar e-post, media och \"Sparade meddelanden\" i alla servermappar. Använd inte den här funktionen om du vill spara data på servern eller om du använder andra e-postklienter än Delta Chat."
+  },
+  "autodel_server_warn_multi_device_title": {
+    "message": "Slå på direktborttagning"
+  },
+  "autodel_server_warn_multi_device": {
+    "message": "Om du aktiverar direktborttagning kan du inte använda flera enheter på den här profilen."
+  },
+  "autodel_confirm": {
+    "message": "Jag förstår! Ta bort alla dessa meddelanden."
+  },
+  "autodel_at_once": {
+    "message": "Nu genast"
+  },
+  "after_30_seconds": {
+    "message": "Efter 30 sekunder"
+  },
+  "after_1_minute": {
+    "message": "Efter 1 minut"
+  },
+  "after_5_minutes": {
+    "message": "Efter 5 minuter"
+  },
+  "after_30_minutes": {
+    "message": "Efter 30 minuter"
+  },
+  "autodel_after_1_hour": {
+    "message": "Efter 1 timma"
+  },
+  "autodel_after_1_day": {
+    "message": "Efter 1 dag"
+  },
+  "autodel_after_1_week": {
+    "message": "Efter 1 vecka"
+  },
+  "after_5_weeks": {
+    "message": "Efter 5 veckor"
+  },
+  "autodel_after_1_year": {
+    "message": "Efter 1 år"
+  },
+  "autocrypt_send_asm_title": {
+    "message": "Skicka Autocrypt inställningsmeddelande"
+  },
+  "autocrypt_send_asm_explain_before": {
+    "message": "Ett meddelande för att ställa in Autocrypt, delar den informationen med andra Autocrypt-anpassade program på ett säkert sätt. Informationen krypteras med en kod som visas här och som måste matas in på den mottagande enheten."
+  },
+  "autocrypt_send_asm_button": {
+    "message": "Skicka Autocrypt inställningsmeddelande"
+  },
+  "autocrypt_send_asm_explain_after": {
+    "message": "Dina inställningar har skickats till dig själv. Byt till den andra enheten och öppna inställningsmeddelandet. Du kommer att tillfrågas om en inställningskod. Ange följande siffror:"
+  },
+  "autocrypt_prefer_e2ee": {
+    "message": "Föredra slutpunkt-till-slutpunkt-kryptering"
+  },
+  "autocrypt_asm_subject": {
+    "message": "Inställningsmeddelande för Autocrypt"
+  },
+  "autocrypt_asm_general_body": {
+    "message": "Detta är inställningsmeddelandet för Autocrypt som används för att skicka nycklar mellan klienter.\n\nFör att kunna avkryptera och använda din nyckel, öppnar du meddelandet i en Autocrypt-kompatibel klient och skriver in inställningskoden som visats på den genererande enheten."
+  },
+  "systemmsg_cannot_decrypt": {
+    "message": "Det här meddelandet kan inte dekrypteras.\n\n- Det kan hjälpa att helt enkelt svara på det här meddelandet och be avsändaren att skicka meddelandet igen.\n\n- Om du just har installerat om Delta Chat är det bäst om du konfigurerar om Delta Chat nu och väljer \"Lägg till som en andra enhet\" eller importerar en säkerhetskopia."
+  },
+  "systemmsg_unknown_sender_for_chat": {
+    "message": "Okänd avsändare för denna chatt. Se info för fler detaljer."
+  },
+  "systemmsg_subject_for_new_contact": {
+    "message": "Meddelande från %1$s"
+  },
+  "systemmsg_failed_sending_to": {
+    "message": "Kunde inte skicka meddelande till %1$s."
+  },
+  "group_name_changed_by_you": {
+    "message": "Gruppnamnet ändrades från \"%1$s\" till \"%2$s\" av mig."
+  },
+  "group_name_changed_by_other": {
+    "message": "Gruppnamnet ändrades från \"%1$s\" till \"%2$s\" av %3$s."
+  },
+  "group_image_changed_by_you": {
+    "message": "Gruppbilden ändrades av mig."
+  },
+  "group_image_changed_by_other": {
+    "message": "Gruppbilden ändrades av %1$s."
+  },
+  "member_x_added": {
+    "message": "Medlemmen %1$s lades till."
+  },
+  "add_member_by_you": {
+    "message": "Medlemmen %1$s lades till av mig."
+  },
+  "add_member_by_other": {
+    "message": "Medlemmen %1$s lades till av %2$s."
+  },
+  "remove_member_by_you": {
+    "message": "Medlemmen %1$s togs bort av mig."
+  },
+  "remove_member_by_other": {
+    "message": "Medlemmen %1$s togs bort av %2$s."
+  },
+  "group_left_by_you": {
+    "message": "Du lämnade gruppen."
+  },
+  "group_left_by_other": {
+    "message": "Gruppen lämnades av %1$s."
+  },
+  "group_image_deleted_by_you": {
+    "message": "Gruppbilden togs bort av mig."
+  },
+  "group_image_deleted_by_other": {
+    "message": "Gruppbilden togs bort av %1$s."
+  },
+  "location_enabled_by_you": {
+    "message": "Du aktiverade platsströmning."
+  },
+  "location_enabled_by_other": {
+    "message": "Platsströmning aktiverad av %1$s."
+  },
+  "ephemeral_timer_disabled_by_you": {
+    "message": "Tiduret för meddelandeborttagning är inaktiverat av mig."
+  },
+  "ephemeral_timer_disabled_by_other": {
+    "message": "Tiduret för meddelandeborttagning är inaktiverat av %1$s."
+  },
+  "ephemeral_timer_seconds_by_you": {
+    "message": "Tiduret för meddelandeborttagning är satt till %1$s s av mig."
+  },
+  "ephemeral_timer_seconds_by_other": {
+    "message": "Tiduret för meddelandeborttagning är satt till %1$s s av %2$s."
+  },
+  "ephemeral_timer_1_minute_by_you": {
+    "message": "Tiduret för meddelandeborttagning är satt till 1 minut av mig."
+  },
+  "ephemeral_timer_1_minute_by_other": {
+    "message": "Tiduret för meddelandeborttagning är satt till 1 minut av %1$s."
+  },
+  "ephemeral_timer_1_hour_by_you": {
+    "message": "Tiduret för meddelandeborttagning är satt till 1 timma av mig."
+  },
+  "ephemeral_timer_1_hour_by_other": {
+    "message": "Tiduret för meddelandeborttagning är satt till 1 timma av %1$s."
+  },
+  "ephemeral_timer_1_day_by_you": {
+    "message": "Tiduret för meddelandeborttagning är satt till 1 dag av mig."
+  },
+  "ephemeral_timer_1_day_by_other": {
+    "message": "Tiduret för meddelandeborttagning är satt till 1 dag av %1$s."
+  },
+  "ephemeral_timer_1_week_by_you": {
+    "message": "Du satte tiduret för meddelandeborttagning till 1 vecka."
+  },
+  "ephemeral_timer_1_week_by_other": {
+    "message": "Tiduret för meddelandeborttagning är satt till 1 vecka av %1$s."
+  },
+  "ephemeral_timer_minutes_by_you": {
+    "message": "Du satte tiduret för meddelandeborttagning till %1$s minuter."
+  },
+  "ephemeral_timer_minutes_by_other": {
+    "message": "Tiduret för meddelandeborttagning är satt till %1$s minuter av %2$s."
+  },
+  "ephemeral_timer_hours_by_you": {
+    "message": "Du satte tiduret för meddelandeborttagning till %1$s timmar."
+  },
+  "ephemeral_timer_hours_by_other": {
+    "message": "Tiduret för meddelandeborttagning är satt till %1$s timmar av %2$s."
+  },
+  "ephemeral_timer_days_by_you": {
+    "message": "Du satte tiduret för meddelandeborttagning till %1$s dagar."
+  },
+  "ephemeral_timer_days_by_other": {
+    "message": "Tiduret för meddelandeborttagning är satt till %1$s dagar av %2$s."
+  },
+  "ephemeral_timer_weeks_by_you": {
+    "message": "Du satte tiduret för meddelandeborttagning till %1$s veckor."
+  },
+  "ephemeral_timer_weeks_by_other": {
+    "message": "Tiduret för meddelandeborttagning är satt till %1$s veckor av %2$s."
+  },
+  "chat_protection_broken": {
+    "message": "%1$s skickade ett meddelande från en annan enhet."
+  },
+  "chat_protection_enabled_tap_to_learn_more": {
+    "message": "Meddelanden är garanterat totalsträckskrypterade från och med nu. Tryck för att få veta mer."
+  },
+  "chat_protection_enabled_explanation": {
+    "message": "Det är nu garanterat att alla meddelanden i den här chatten är totalsträckskrypterade.\n\nTotalsträckskryptering håller meddelanden privata mellan dig och dina chattpartners. Inte ens din e-postleverantör kan läsa dem."
+  },
+  "chat_protection_broken_tap_to_learn_more": {
+    "message": "%1$s skickade ett meddelande från en annan enhet. Tryck för att läsa mer."
+  },
+  "chat_protection_broken_explanation": {
+    "message": "Totalsträckskryptering kan inte garanteras längre, troligen för att %1$s installerade om Delta Chat eller skickade ett meddelande från en annan enhet.\n\nDu kan träffa dem personligen och skanna deras QR-kod igen för att återupprätta garanterad totalsträckskryptering."
+  },
+  "invalid_unencrypted_tap_to_learn_more": {
+    "message": "⚠️ %1$s kräver totalsträckskryptering som inte är kofigurerad för den här chatten ännu. Tryck för att lära dig mer."
+  },
+  "invalid_unencrypted_explanation": {
+    "message": "För att skapa totalsträckskryptering kan du träffa kontakter personligen och skanna deras QR-kod för att introducera dem."
+  },
+  "learn_more": {
+    "message": "Lär dig mer"
+  },
+  "devicemsg_self_deleted": {
+    "message": "Du har tagit bort chatten \"Sparade meddelanden\".\n\nℹ️ Om du vill använda funktionen \"Sparade meddelanden\" igen skapar du en ny chatt med dig själv."
+  },
+  "devicemsg_storage_exceeding": {
+    "message": "⚠️ Din leverantörs lagringsutrymme är snart slut: %1$s%% är redan använt.\n\nDu kanske inte kan ta emot meddelanden om lagringsutrymmet är fullt.\n\n👉 Kontrollera om du kan radera gammal data i leverantörens webbgränssnitt och överväg att aktivera \"Inställningar / Chattar och media / Ta bort gamla meddelanden\". Du kan kontrollera din aktuella lagringsanvändning när som helst under \"Inställningar / Anslutning\"."
+  },
+  "devicemsg_bad_time": {
+    "message": "⚠️ Datum eller tid på din enhet verkar vara felaktigt (%1$s).\n\nJustera din klocka ⏰🔧 för att säkerställa att dina meddelanden tas emot korrekt."
+  },
+  "devicemsg_update_reminder": {
+    "message": "⚠️ Din Delta Chat-version kan vara föråldrad.\n\nDetta kan orsaka problem eftersom dina chattpartners använder nyare versioner - och du saknar de senaste funktionerna 😳\nSök efter uppdateringar på https://get.delta.chat eller i din appbutik."
+  },
+  "enter_system_secret_to_continue": {
+    "message": "Lås upp för att fortsätta"
+  },
+  "qr_code": {
+    "message": "QR-kod"
+  },
+  "load_qr_code_as_image": {
+    "message": "Läs in QR-kod som bild"
+  },
+  "qrscan_title": {
+    "message": "Skanna QR-kod"
+  },
+  "qrscan_hint": {
+    "message": "Håll kameran över QR-koden."
+  },
+  "qrscan_hint_desktop": {
+    "message": "Flytta QR-koden till kameran"
+  },
+  "qrscan_failed": {
+    "message": "QR-koden kunde inte avkodas"
+  },
+  "qrscan_ask_join_group": {
+    "message": "Vill du ansluta till gruppen \"%1$s\"?"
+  },
+  "qrscan_fingerprint_mismatch": {
+    "message": "Det skannade fingeravtrycket stämmer inte med senast sedda för %1$s."
+  },
+  "qrscan_no_addr_found": {
+    "message": "QR-koden innehåller ett fingeravtryck men ingen e-postadress.\n\nUpprätta först en krypterad anslutning till mottagaren, för en utanför-bandet-verifiering."
+  },
+  "qrscan_contains_text": {
+    "message": "Skannad QR-kod-text:\n\n%1$s"
+  },
+  "qrscan_contains_url": {
+    "message": "Skannad QR-kod-URL:\n\n%1$s"
+  },
+  "qrscan_fingerprint_label": {
+    "message": "Fingeravtryck"
+  },
+  "withdraw_verifycontact_explain": {
+    "message": "Denna QR-kod kan skannas av andra för att kontakta dig.\n\nDu kan avaktivera QR-koden här och återaktivera den genom att skanna den igen."
+  },
+  "withdraw_verifygroup_explain": {
+    "message": "Denna QR-kod kan skannas av andra för att gå med i gruppen \"%1$s\".\n\nDu kan avaktivera QR-koden här och återaktivera den genom att skanna den igen."
+  },
+  "withdraw_qr_code": {
+    "message": "Avaktivera QR-kod"
+  },
+  "revive_verifycontact_explain": {
+    "message": "Den här QR-koden kan skannas av andra för att kontakta dig.\n\nQR-koden är inte aktiv på den här enheten."
+  },
+  "revive_verifygroup_explain": {
+    "message": "Den här QR-koden kan skannas av andra för att gå med i gruppen \"%1$s\".\n\nQR-koden är inte aktiv på den här enheten."
+  },
+  "revive_qr_code": {
+    "message": "Aktivera QR-kod"
+  },
+  "qrshow_title": {
+    "message": "QR-kod för inbjudan"
+  },
+  "qrshow_x_joining": {
+    "message": "%1$s anslutna."
+  },
+  "qrshow_x_verified": {
+    "message": "%1$s verifierad."
+  },
+  "qrshow_x_has_joined_group": {
+    "message": "%1$s anslöt till gruppen."
+  },
+  "qrshow_join_group_title": {
+    "message": "QR-kod för inbjudan"
+  },
+  "qrshow_join_group_hint": {
+    "message": "Skanna det här för att ansluta till gruppen \"%1$s\"."
+  },
+  "qrshow_join_contact_title": {
+    "message": "QR-kod för inbjudan"
+  },
+  "qrshow_join_contact_hint": {
+    "message": "Skanna det här för att få kontakt med %1$s."
+  },
+  "qrshow_join_contact_no_connection_toast": {
+    "message": "Ingen internetanslutning, kan inte utföra QR-kod-inställning."
+  },
+  "qraccount_ask_create_and_login": {
+    "message": "Skapa ny e-postadress på \"%1$s\" och logga in där?"
+  },
+  "qraccount_ask_create_and_login_another": {
+    "message": "Vill du skapa en ny e-postadress på \"%1$s\" och logga in där?\n\nDitt befintliga konto kommer inte att tas bort. Använd \"Byt konto\" för att växla mellan dina konton."
+  },
+  "set_name_and_avatar_explain": {
+    "message": "Ange ett namn som dina kontakter kommer att känna igen. Du kan också ange en profilbild."
+  },
+  "please_enter_name": {
+    "message": "Ange ett namn."
+  },
+  "qraccount_qr_code_cannot_be_used": {
+    "message": "Den skannade QR-koden kan inte användas för att konfigurera ett nytt konto."
+  },
+  "qrlogin_ask_login": {
+    "message": "Vill du logga in på \"%1$s\"?"
+  },
+  "qrlogin_ask_login_another": {
+    "message": "Vill du logga in på \"%1$s\"?\n\nDin befintliga profil kommer inte att raderas. Använd alternativet \"Byt profil\" för att växla mellan dina profiler."
+  },
+  "secure_join_started": {
+    "message": "%1$s bjöd in dig att gå med i den här gruppen.\n\nVäntar på att enheten hos %2$s ska svara..."
+  },
+  "secure_join_replies": {
+    "message": "%1$s svarade och väntar på att bli tillagd i gruppen..."
+  },
+  "secure_join_wait": {
+    "message": "Upprättar garanterad totalsträckskryptering, vänligen vänta..."
+  },
+  "secure_join_wait_timeout": {
+    "message": "Kunde ännu inte upprätta garanterad totalsträckskryptering, men du kan redan skicka ett meddelande."
+  },
+  "contact_verified": {
+    "message": "%1$s verifierad."
+  },
+  "contact_not_verified": {
+    "message": "Kan inte verifiera %1$s."
+  },
+  "verified_by": {
+    "message": "Introducerad av %1$s"
+  },
+  "verified_by_you": {
+    "message": "Introducerad av mig"
+  },
+  "contact_setup_changed": {
+    "message": "Ändrade inställningarna för %1$s."
+  },
+  "verified_contact_required_explain": {
+    "message": "För att garantera totalsträckskryptering  kan du bara lägga till kontakter med en grön bock i den här gruppen.\n\nDu kan träffa kontakter personligen och skanna deras QR-kod för att introducera dem."
+  },
+  "copy_qr_data_success": {
+    "message": "Kopierade QR-URL till urklipp."
+  },
+  "mailto_dialog_header_select_chat": {
+    "message": "Välj chatt för att skicka meddelandet till"
+  },
+  "confirm_replace_draft": {
+    "message": "%1$s redan har ett utkast till meddelande, vill du ersätta det?"
+  },
+  "mailto_link_could_not_be_decoded": {
+    "message": "mailto-länken kunde inte avkodas: %1$s"
+  },
+  "notify_reply_button": {
+    "message": "Svara"
+  },
+  "notify_new_message": {
+    "message": "Nytt meddelande"
+  },
+  "notify_background_connection_enabled": {
+    "message": "Bakgrundsanslutning aktiverad"
+  },
+  "notify_priority_high": {
+    "message": "Hög"
+  },
+  "notify_priority_max": {
+    "message": "Max"
+  },
+  "notify_name_and_message": {
+    "message": "Namn och meddelande"
+  },
+  "notify_name_only": {
+    "message": "Endast namn"
+  },
+  "notify_no_name_or_message": {
+    "message": "Inget namn eller meddelande"
+  },
+  "notifications_disabled": {
+    "message": "Avisering avaktiverad"
+  },
+  "new_messages": {
+    "message": "Nya meddelanden"
+  },
+  "new_messages_body": {
+    "message": "Du har nya meddelanden"
+  },
+  "n_messages_in_m_chats": {
+    "message": "%1$d meddelanden i %2$d chattar"
+  },
+  "perm_required_title": {
+    "message": "Behörighet krävs"
+  },
+  "perm_continue": {
+    "message": "Fortsätt"
+  },
+  "perm_explain_access_to_camera_denied": {
+    "message": "Gå till programinställningarna och aktivera \"Kamera\" under \"Behörighet\", för att ta foton eller filma."
+  },
+  "perm_explain_access_to_mic_denied": {
+    "message": "Gå till programinställningarna och aktivera \"Mikrofon\" under \"Behörighet\", för att skicka röstmeddelanden."
+  },
+  "perm_explain_access_to_storage_denied": {
+    "message": "Gå till programinställningarna och aktivera \"Lagring\" under \"Behörighet\", för att ta emot eller skicka filer."
+  },
+  "perm_explain_access_to_location_denied": {
+    "message": "Gå till programinställningarna och aktivera \"Plats\" under \"Behörighet\", för att bifoga en plats."
+  },
+  "perm_explain_access_to_notifications_denied": {
+    "message": "För att få meddelanden, gå till \"Systeminställningar / Appar / Delta Chat\" och aktivera \"Meddelanden\"."
+  },
+  "ImageEditorHud_draw_anywhere_to_blur": {
+    "message": "Rita var som helst för att smeta ut"
+  },
+  "ImageEditorHud_add_text": {
+    "message": "Lägg till text"
+  },
+  "ImageEditorHud_blur": {
+    "message": "Oskärpa"
+  },
+  "ImageEditorHud_brush_marker": {
+    "message": "Markeringspensel"
+  },
+  "ImageEditorHud_brush_highlight": {
+    "message": "Överstrykningspenna"
+  },
+  "ImageEditorHud_crop": {
+    "message": "Beskär"
+  },
+  "ImageEditorHud_flip": {
+    "message": "Vänd"
+  },
+  "ImageEditorHud_rotate": {
+    "message": "Rotera"
+  },
+  "encrypted_message": {
+    "message": "Krypterat meddelande"
+  },
+  "about_offical_app_desktop": {
+    "message": "Detta är den officiella Delta Chat skrivbordsappen."
+  },
+  "about_licensed_under_desktop": {
+    "message": "Denna programvara är licensierad enligt GNU GPL version 3 och källkoden finns tillgänglig på GitHub."
+  },
+  "welcome_desktop": {
+    "message": "Välkommen till Delta Chat"
+  },
+  "global_menu_preferences_language_desktop": {
+    "message": "Språk"
+  },
+  "global_menu_file_desktop": {
+    "message": "Arkiv"
+  },
+  "global_menu_file_quit_desktop": {
+    "message": "Avsluta"
+  },
+  "global_menu_edit_desktop": {
+    "message": "Redigera"
+  },
+  "global_menu_edit_undo_desktop": {
+    "message": "Ångra"
+  },
+  "global_menu_edit_redo_desktop": {
+    "message": "Upprepa"
+  },
+  "global_menu_edit_cut_desktop": {
+    "message": "Klipp ut"
+  },
+  "global_menu_edit_copy_desktop": {
+    "message": "Kopiera"
+  },
+  "global_menu_edit_paste_desktop": {
+    "message": "Klistra in"
+  },
+  "global_menu_view_desktop": {
+    "message": "Visa"
+  },
+  "global_menu_view_floatontop_desktop": {
+    "message": "Visa alltid överst"
+  },
+  "global_menu_view_developer_desktop": {
+    "message": "Utvecklare"
+  },
+  "global_menu_view_developer_tools_desktop": {
+    "message": "Utvecklingsverktyg"
+  },
+  "global_menu_help_desktop": {
+    "message": "Hjälp"
+  },
+  "global_menu_help_report_desktop": {
+    "message": "Rapportera ett ärende"
+  },
+  "global_menu_help_about_desktop": {
+    "message": "Om Delta Chat"
+  },
+  "global_menu_file_open_desktop": {
+    "message": "Öppna Delta Chat"
+  },
+  "global_menu_minimize_to_tray": {
+    "message": "Minimera"
+  },
+  "no_chat_selected_suggestion_desktop": {
+    "message": "Välj en chatt eller skapa en ny"
+  },
+  "write_message_desktop": {
+    "message": "Skriv ett meddelande"
+  },
+  "encryption_info_title_desktop": {
+    "message": "Krypteringsinfo"
+  },
+  "delete_message_desktop": {
+    "message": "Ta bort meddelande"
+  },
+  "more_info_desktop": {
+    "message": "Mer information"
+  },
+  "timestamp_format_m_desktop": {
+    "message": "MMM D"
+  },
+  "remove_desktop": {
+    "message": "Ta bort"
+  },
+  "save_desktop": {
+    "message": "Save"
+  },
+  "name_desktop": {
+    "message": "Namn"
+  },
+  "select_group_image_desktop": {
+    "message": "Välj en gruppbild"
+  },
+  "export_backup_desktop": {
+    "message": "Exportera säkerhetskopia"
+  },
+  "autocrypt_correct_desktop": {
+    "message": "Autocrypt-inställning överförd."
+  },
+  "forget_login_confirmation_desktop": {
+    "message": "Ta bort den här inloggningen? Allt kommer att raderas, inklusive din slutpunkt-till-slutpunkt-inställning, dina kontakter, media och meddelanden. Denna åtgärd kan inte ångras."
+  },
+  "message_detail_sent_desktop": {
+    "message": "skickat"
+  },
+  "message_detail_received_desktop": {
+    "message": "mottaget"
+  },
+  "menu.view.developer.open.log.folder": {
+    "message": "Öppna loggmappen"
+  },
+  "menu.view.developer.open.current.log.file": {
+    "message": "Öppna aktuell loggfil"
+  },
+  "explain_desktop_minimized_disabled_tray_pref": {
+    "message": "Systemfältsikonen kan inte inaktiveras eftersom Delta Chat startades med alternativet --minimized."
+  },
+  "no_spellcheck_suggestions_found": {
+    "message": "Inga stavningsförslag hittades."
+  },
+  "show_window": {
+    "message": "Visa fönster"
+  },
+  "keybindings": {
+    "message": "Tangentbindningar"
+  },
+  "switch_between_chats": {
+    "message": "Växla mellan chattar"
+  },
+  "scroll_messages": {
+    "message": "Skrolla meddelanden"
+  },
+  "focus_search_input": {
+    "message": "Fokusera sök"
+  },
+  "focus_message_input": {
+    "message": "Fokusera meddelandefält"
+  },
+  "force_refresh_network": {
+    "message": "Tvinga nätverksuppdatering"
+  },
+  "insert_newline": {
+    "message": "Infoga ny rad"
+  },
+  "a11y_delivery_status_error": {
+    "message": "Leveransstatus: Fel"
+  },
+  "a11y_encryption_padlock": {
+    "message": "Hänglås för kryptering"
+  },
+  "a11y_delivery_status_sending": {
+    "message": "Leveransstatus: Skickar"
+  },
+  "a11y_delivery_status_draft": {
+    "message": "Leveransstatus: Utkast"
+  },
+  "a11y_delivery_status_delivered": {
+    "message": "Leveransstatus: Levererat"
+  },
+  "a11y_delivery_status_read": {
+    "message": "Leveransstatus: Läst"
+  },
+  "a11y_delivery_status_invalid": {
+    "message": "Ogiltig leveransstatus"
+  },
+  "a11y_message_context_menu_btn_label": {
+    "message": "Meddelandeåtgärder"
+  },
+  "a11y_background_preview_label": {
+    "message": "Förhandsvisning i bakgrunden"
+  },
+  "a11y_disappearing_messages_activated": {
+    "message": "Försvinnande meddelanden aktiverat"
+  },
+  "stop_sharing_location": {
+    "message": "Sluta dela plats"
+  },
+  "a11y_voice_message_hint_ios": {
+    "message": "Efter inspelningen dubbelklickar du för att skicka. För att förkasta inspelningen, skrubba med två fingrar."
+  },
+  "a11y_connectivity_hint": {
+    "message": "Dubbeltryck för att visa anslutningsdetaljer."
+  },
+  "login_error_no_internet_connection": {
+    "message": "Ingen internetanslutning, inloggning misslyckades."
+  },
+  "share_account_not_configured": {
+    "message": "Profilen är inte konfigurerad."
+  },
+  "cannot_play_audio_file": {
+    "message": "Ljudfilen kan inte spelas upp."
+  },
+  "perm_ios_explain_access_to_camera_denied": {
+    "message": "För att ta bilder, spela in videor eller använda QR-kodläsaren, öppna systeminställningarna och aktivera \"Kamera\"."
+  },
+  "open_settings": {
+    "message": "Öppna inställningar"
+  },
+  "import_device_contacts": {
+    "message": "Importera enhetens kontakter"
+  },
+  "import_device_contacts_hint": {
+    "message": "Om du vill chatta med kontakter från din enhet öppnar du Inställningar och aktiverar \"Kontakter\"."
+  },
+  "disabled_in_dc": {
+    "message": "Inaktiverad i Delta Chat"
+  },
+  "disabled_in_system_settings": {
+    "message": "Inaktiverad i systeminställningarna"
+  },
+  "bg_app_refresh_disabled": {
+    "message": "\"Appuppdatering i bakgrunden\" inaktiverad i systeminställningarna"
+  },
+  "delayed": {
+    "message": "Fördröjd"
+  },
+  "notifications_avg_minutes": {
+    "message": "I genomsnitt var %1$d minut"
+  },
+  "notifications_avg_hours": {
+    "message": "I genomsnitt var %1$d:e timma"
+  },
+  "last_check_at": {
+    "message": "Kontrollerad %1$s"
+  },
+  "InfoPlist_NSCameraUsageDescription": {
+    "message": "Delta Chat använder din kamera för att ta och skicka foton och filmer, och för att skanna QR-koder."
+  },
+  "InfoPlist_NSContactsUsageDescription": {
+    "message": "Delta Chat använder dina kontakter för att visa en lista över e-postadresser som du kan skriva till.m Delta Chat har ingen server, dina kontakter skickas inte någonstans."
+  },
+  "InfoPlist_NSLocationAlwaysAndWhenInUseUsageDescription": {
+    "message": "Delta Chat behöver tillstånd för att dela din plats under den tidsperiod som du har aktiverat platsdelning."
+  },
+  "InfoPlist_NSLocationWhenInUseUsageDescription": {
+    "message": "Delta Chat behöver tillstånd för att dela din plats under den tidsperiod som du har aktiverat platsdelning."
+  },
+  "InfoPlist_NSMicrophoneUsageDescription": {
+    "message": "Delta Chat använder din mikrofon för att spela in och skicka röstmeddelanden, och filmer med ljud."
+  },
+  "InfoPlist_NSPhotoLibraryUsageDescription": {
+    "message": "Delta Chat låter dig välja vilka bilder från ditt galleri som du vill skicka."
+  },
+  "InfoPlist_NSPhotoLibraryAddUsageDescription": {
+    "message": "Delta Chat vill spara bilder i ditt fotogalleri."
+  },
+  "pref_instant_delivery": {
+    "message": "Omedelbar leverans"
+  },
+  "pref_background_notifications": {
+    "message": "Använd bakgrundsanslutning"
+  },
+  "pref_background_notifications_explain": {
+    "message": "Kräver ignorerade batterioptimeringar, använd om aviseringar inte kommer i tid"
+  },
+  "pref_reliable_service": {
+    "message": "Tvinga fram bakgrundsanslutning"
+  },
+  "pref_reliable_service_explain": {
+    "message": "Orsakar en permanent avisering"
+  },
+  "pref_background_notifications_rationale": {
+    "message": "För att behålla anslutningen till din e-postserver och fortsätta ta emot meddelanden i bakgrunden, behöver du skippa batterioptimeringen i nästa steg.\n\nDelta Chat använder små resurser och ser till att inte dra ur ditt batteri."
+  },
+  "perm_enable_bg_reminder_title": {
+    "message": "Tryck här för att ta emot meddelanden medan Delta Chat är i bakgrunden."
+  },
+  "perm_enable_bg_already_done": {
+    "message": "Du har redan gett Delta Chatt tillstånd att ta emot meddelanden i bakgrunden.\n\nKontrollera dina systeminställningar också, om det fortfarande inte kommer några meddelanden i bakgrunden."
+  },
+  "update_switch_profile_placement": {
+    "message": "ℹ️ Alternativet \"Byt profil\" har flyttats: Tryck på din profilbild i det övre hörnet av huvudskärmen för att lägga till eller byta profil 💡"
+  },
+  "n_minutes": {
+    "one": "%d min",
+    "other": "%d min"
+  },
+  "n_hours": {
+    "one": "%d timme",
+    "other": "%d timmar"
+  },
+  "n_chats": {
+    "one": "%d chatt",
+    "other": "%d chattar"
+  },
+  "n_contacts": {
+    "one": "%d kontakt",
+    "other": "%d kontakter"
+  },
+  "n_messages": {
+    "one": "%d meddelande",
+    "other": "%d meddelanden"
+  },
+  "n_members": {
+    "one": "%d medlem",
+    "other": "%d medlemmar"
+  },
+  "n_recipients": {
+    "one": "%d mottagare",
+    "other": "%d mottagare"
+  },
+  "n_selected": {
+    "one": "%dmarkerade",
+    "other": "%d markerad"
+  },
+  "ask_send_following_n_files_to": {
+    "one": "Skicka följande fil till %s?",
+    "other": "Skicka de följande filerna %d till %s ?"
+  },
+  "ask_delete_messages_simple": {
+    "one": "Vill du ta bort %d meddelande?",
+    "other": "Vill du ta bort %d meddelanden?"
+  },
+  "chat_archived": {
+    "one": "%d chatt arkiverad",
+    "other": "%d chattar arkiverade"
+  },
+  "chat_unarchived": {
+    "one": "%d chatt ur arkivet",
+    "other": "%d chattar avarkiverade"
+  },
+  "chat_n_new_messages": {
+    "one": "%d nytt meddelande",
+    "other": "%d nya meddelanden"
+  }
+}

@@ -1,0 +1,1148 @@
+{
+  "app_name": {
+    "message": "Delta Chat"
+  },
+  "ok": {
+    "message": "OK"
+  },
+  "cancel": {
+    "message": "Imtina"
+  },
+  "yes": {
+    "message": "Bəli"
+  },
+  "no": {
+    "message": "Xeyir"
+  },
+  "on": {
+    "message": "Açıq"
+  },
+  "off": {
+    "message": "Bağlı"
+  },
+  "def": {
+    "message": "Cari olan"
+  },
+  "custom": {
+    "message": "Xüsusi"
+  },
+  "none": {
+    "message": "Yoxdur"
+  },
+  "automatic": {
+    "message": "Avtomatik"
+  },
+  "strict": {
+    "message": "Mıtin"
+  },
+  "open": {
+    "message": "Açıq"
+  },
+  "delete": {
+    "message": "Sil"
+  },
+  "info": {
+    "message": "məlumat"
+  },
+  "update": {
+    "message": "Yeniləmə"
+  },
+  "emoji": {
+    "message": "Emojilər"
+  },
+  "attachment": {
+    "message": "Fayllar"
+  },
+  "back": {
+    "message": "Geri"
+  },
+  "close": {
+    "message": "Bağla"
+  },
+  "forward": {
+    "message": "Başqasına göndərmə"
+  },
+  "archive": {
+    "message": "Arxivləşmə"
+  },
+  "unarchive": {
+    "message": "Arxivdən çıxarma"
+  },
+  "mute": {
+    "message": "Səssiz"
+  },
+  "ephemeral_messages": {
+    "message": "Yox olan mesajlar"
+  },
+  "save": {
+    "message": "Saxla"
+  },
+  "chat": {
+    "message": "Çat"
+  },
+  "media": {
+    "message": "Mediafayllar"
+  },
+  "main_menu": {
+    "message": "Əsas menyu"
+  },
+  "start_chat": {
+    "message": "Çata başla"
+  },
+  "not_now": {
+    "message": "İndi deyil"
+  },
+  "never": {
+    "message": "Heç vaxt"
+  },
+  "one_moment": {
+    "message": "Gözləyin..."
+  },
+  "done": {
+    "message": "Hazır"
+  },
+  "undo": {
+    "message": "Geri qaytar"
+  },
+  "error": {
+    "message": "Xəta"
+  },
+  "error_x": {
+    "message": "Xəta: %1$s"
+  },
+  "no_app_to_handle_data": {
+    "message": "Bu tip məlumatları idarə etmək üçün bir tətbiq tapılmadı."
+  },
+  "no_browser_installed": {
+    "message": "Heç bir brauzer quraşdırılıb."
+  },
+  "file_not_found": {
+    "message": "Tapa bilmədim %1$s."
+  },
+  "copied_to_clipboard": {
+    "message": "Panoya kopyalandı."
+  },
+  "contacts_headline": {
+    "message": "Kontaktlar"
+  },
+  "email_address": {
+    "message": "Email ünvanı"
+  },
+  "bad_email_address": {
+    "message": "Səhv e-mail ünvanı."
+  },
+  "password": {
+    "message": "Parol"
+  },
+  "now": {
+    "message": "Indi"
+  },
+  "today": {
+    "message": "Bugün"
+  },
+  "yesterday": {
+    "message": "Dünən"
+  },
+  "this_week": {
+    "message": "Bu həftə"
+  },
+  "this_month": {
+    "message": "Bu ay"
+  },
+  "last_week": {
+    "message": "Keçən həftə"
+  },
+  "last_month": {
+    "message": "Keçən ay"
+  },
+  "self": {
+    "message": "Mənə"
+  },
+  "draft": {
+    "message": "Laihə"
+  },
+  "image": {
+    "message": "Şəkil"
+  },
+  "gif": {
+    "message": "Gif"
+  },
+  "images": {
+    "message": "Şəkillər"
+  },
+  "audio": {
+    "message": "Audio"
+  },
+  "voice_message": {
+    "message": "Səsli mesaj"
+  },
+  "forwarded_message": {
+    "message": "Köçürülmüş mesaj"
+  },
+  "video": {
+    "message": "Video"
+  },
+  "documents": {
+    "message": "Sənədlər"
+  },
+  "contact": {
+    "message": "Kontakt"
+  },
+  "camera": {
+    "message": "Kamera"
+  },
+  "location": {
+    "message": "Yer"
+  },
+  "gallery": {
+    "message": "Qalereya"
+  },
+  "file": {
+    "message": "Fayl"
+  },
+  "unknown": {
+    "message": "Naməlum"
+  },
+  "green": {
+    "message": "Yaşıl"
+  },
+  "red": {
+    "message": "Qırmızı"
+  },
+  "blue": {
+    "message": "Mavi"
+  },
+  "orange": {
+    "message": "Narıncı"
+  },
+  "cyan": {
+    "message": "Sian"
+  },
+  "purple": {
+    "message": "Purpur"
+  },
+  "magenta": {
+    "message": "Açıq fırfır"
+  },
+  "white": {
+    "message": "Ağ"
+  },
+  "small": {
+    "message": "Kiçik"
+  },
+  "normal": {
+    "message": "Normal"
+  },
+  "large": {
+    "message": "Böyük"
+  },
+  "extra_large": {
+    "message": "Çox böyük"
+  },
+  "fast": {
+    "message": "Sürətli"
+  },
+  "slow": {
+    "message": "Ləng"
+  },
+  "menu_new_contact": {
+    "message": "Yeni kontakt"
+  },
+  "menu_new_chat": {
+    "message": "Yeni çat"
+  },
+  "menu_new_group": {
+    "message": "Yeni qrup"
+  },
+  "menu_send": {
+    "message": "Göndər"
+  },
+  "menu_toggle_keyboard": {
+    "message": "Emoji klaviatura keçidi"
+  },
+  "menu_edit_group": {
+    "message": "Qrupu dəyiş"
+  },
+  "menu_group_name_and_image": {
+    "message": "Qrupun adı və şəkili"
+  },
+  "menu_show_global_map": {
+    "message": "Bütün yerləşmə yerləri göstər"
+  },
+  "menu_archive_chat": {
+    "message": "Çatın xəzinəsi"
+  },
+  "menu_unarchive_chat": {
+    "message": "Çat xəzinəsini aç"
+  },
+  "menu_add_attachment": {
+    "message": "Fayl əlavə et"
+  },
+  "menu_leave_group": {
+    "message": "Qrupu tərk et"
+  },
+  "menu_delete_chat": {
+    "message": "Çatı sil"
+  },
+  "menu_delete_location": {
+    "message": "Bu yerləşməni silmək? "
+  },
+  "menu_message_details": {
+    "message": "Mesaj məlumatları"
+  },
+  "menu_copy_to_clipboard": {
+    "message": "Panoya kopyalamaq"
+  },
+  "menu_forward": {
+    "message": "Növbəti mesaj"
+  },
+  "menu_reply": {
+    "message": "Mesaja cavab"
+  },
+  "menu_mute": {
+    "message": "Bildirişləri söndürmək"
+  },
+  "menu_unmute": {
+    "message": "Səs vermək"
+  },
+  "menu_export_attachment": {
+    "message": "Fayl exportu"
+  },
+  "menu_all_media": {
+    "message": "Bütün fayllar"
+  },
+  "menu_share": {
+    "message": "Göndər"
+  },
+  "menu_block_contact": {
+    "message": "Kontaktı blokla"
+  },
+  "menu_unblock_contact": {
+    "message": "Kontaktı blokdan aç"
+  },
+  "menu_play": {
+    "message": "İşə sal"
+  },
+  "menu_pause": {
+    "message": "Dayandır"
+  },
+  "menu_scroll_to_bottom": {
+    "message": "Altına keçin"
+  },
+  "menu_scroll_to_top": {
+    "message": "Yuxarı qalxmaq"
+  },
+  "menu_help": {
+    "message": "Kömək"
+  },
+  "menu_select_all": {
+    "message": "Hamısını səç"
+  },
+  "menu_edit_name": {
+    "message": "Adı dəyişdir"
+  },
+  "menu_settings": {
+    "message": "Tənzimləmə"
+  },
+  "menu_advanced": {
+    "message": "Ətraflı"
+  },
+  "menu_view_profile": {
+    "message": "Profilə bax"
+  },
+  "menu_zoom_in": {
+    "message": "Yaxınlaşdırmaq"
+  },
+  "menu_zoom_out": {
+    "message": "Uzaqlaşdırmaq"
+  },
+  "menu_save_log": {
+    "message": "Loqu saxlamaq"
+  },
+  "title_share_location": {
+    "message": "Qrup üzvlərinə yerləşdiyin yerini göndər"
+  },
+  "edit_contact": {
+    "message": "Kontakta dəyişiklik"
+  },
+  "mute_for_one_hour": {
+    "message": "1 saatlıq söndür"
+  },
+  "mute_for_eight_hours": {
+    "message": "8 saatlıq söndür"
+  },
+  "mute_for_one_day": {
+    "message": "1 günlük söndür"
+  },
+  "mute_for_seven_days": {
+    "message": "7 günlük söndür"
+  },
+  "mute_forever": {
+    "message": "Həmişə səssiz"
+  },
+  "share_location_for_5_minutes": {
+    "message": "5 dəqiqə üçün"
+  },
+  "share_location_for_30_minutes": {
+    "message": "30 qəqiqə üçün"
+  },
+  "share_location_for_one_hour": {
+    "message": "1 saat üçün"
+  },
+  "share_location_for_two_hours": {
+    "message": "2 saat üçün "
+  },
+  "share_location_for_six_hours": {
+    "message": "6 saat üçün"
+  },
+  "ask_leave_group": {
+    "message": "Bu qrupu tərk etmək istədiyinizə əminsiniz?"
+  },
+  "ask_forward": {
+    "message": "Mesajları yönləndirin %1$sə-?"
+  },
+  "ask_export_attachment": {
+    "message": "Faylı ixrac etmək? Faylların ixracı cihazınızdakı hər hansı digər tətbiqlərə daxil olmağa imkan verəcəkdir. \n\n Razısan?"
+  },
+  "ask_block_contact": {
+    "message": "Bu kontaktı bloklamaq? Bu kontaktdan artıq mesaj qəbul etməyəcəksiniz."
+  },
+  "ask_unblock_contact": {
+    "message": "Bu kontaktı blokdan çıxarmaq istəyirsiniz? Nəticədə kontaktdan mesajlar ala bilərsiniz."
+  },
+  "ask_delete_contacts": {
+    "message": "Kontaktları silmək? Bu əməliyyat seçilmiş kontaktları daimi olaraq silməyəcək. \n\n Sistem kontakt kitabından davam edən söhbətlər və kontaktlar ilə əlaqə saxlanıla bilməz."
+  },
+  "ask_start_chat_with": {
+    "message": "%1$s ilə çat? "
+  },
+  "ask_remove_members": {
+    "message": "%1$s qrupdan silmək? "
+  },
+  "contacts_title": {
+    "message": "Kontaktlar"
+  },
+  "contacts_enter_name_or_email": {
+    "message": "Ad ya e-poçt daxil et"
+  },
+  "contacts_type_email_above": {
+    "message": "E-poçt ünvanını yazın"
+  },
+  "contacts_empty_hint": {
+    "message": "Kontakt yoxdur."
+  },
+  "chat_archived_chats_title": {
+    "message": "Çatlar saxlanıldı"
+  },
+  "chat_please_enter_message": {
+    "message": "Mesajı daxıl edin"
+  },
+  "chat_camera_unavailable": {
+    "message": "Camera əlçatmazdır."
+  },
+  "chat_unable_to_record_audio": {
+    "message": "Səs yaza bilmir."
+  },
+  "chat_new_group_hint": {
+    "message": "Başqalarının bu qrup daxilində cavab verməsinə imkan verən ilk mesajı yaradın. \n\n• Bütün üzvlər Delta Chat istifadə etsələr daha yaxşıdır. \n\n• İlk mesajı çatdırmaq bir müddət ala bilər."
+  },
+  "chat_record_slide_to_cancel": {
+    "message": "Ləğv etmək üçün sürüşdürün"
+  },
+  "chat_record_explain": {
+    "message": "Bir səsli mesajı yazmaq üçün toxunun və saxlayın, göndərmək üçün buraxın"
+  },
+  "chat_no_chats_yet_title": {
+    "message": "Qutu boşdur.\nYeni çata başlamaq üçün \"+\" işarəsinə toxunun. "
+  },
+  "chat_all_archived": {
+    "message": "Bütün çatlar saxlanıldı.\nYeni çata başlamaq üçün \"+\" işarəsinə toxunun. "
+  },
+  "chat_share_with_title": {
+    "message": "Göndər "
+  },
+  "chat_input_placeholder": {
+    "message": "Mesaj"
+  },
+  "chat_archived_label": {
+    "message": "Xəzinələndi"
+  },
+  "chat_no_messages": {
+    "message": "Mesaj yoxdur"
+  },
+  "chat_self_talk_subtitle": {
+    "message": "Özümə göndərdiyim mesajlar"
+  },
+  "saved_messages": {
+    "message": "Saxlanılmış mesajlar"
+  },
+  "retry_send": {
+    "message": "Mesaji yenidən göndərməyə cəht et"
+  },
+  "filter_map_on_time": {
+    "message": "Vaxt məhdudiyyəti ilə yerləşmə yerləri göstərin"
+  },
+  "show_location_traces": {
+    "message": "İzləri göstərmək"
+  },
+  "add_poi": {
+    "message": "Maraq nöqtəsini göndərin"
+  },
+  "search": {
+    "message": "Axtarış"
+  },
+  "search_explain": {
+    "message": "Çatlar, kontaktlar və mesajlar axtar"
+  },
+  "search_no_result_for_x": {
+    "message": "\"%s\" üçün heç bir nəticə tapılmadı"
+  },
+  "group_name": {
+    "message": "Qrup adı"
+  },
+  "group_avatar": {
+    "message": "Qrupun şəkili"
+  },
+  "group_create_button": {
+    "message": "Qrup yarat"
+  },
+  "group_please_enter_group_name": {
+    "message": "Xahiş edirik qrup üçün bir ad daxil et."
+  },
+  "group_add_members": {
+    "message": "Üzv elavə et"
+  },
+  "group_self_not_in_group": {
+    "message": "Bunu etmək üçün qrupun üzvü olmalısan."
+  },
+  "profile_encryption": {
+    "message": "Şifrələmə"
+  },
+  "profile_shared_chats": {
+    "message": "Çatlar göndərildi"
+  },
+  "tab_contact": {
+    "message": "Kontakt"
+  },
+  "tab_group": {
+    "message": "Qrup"
+  },
+  "tab_gallery": {
+    "message": "Şəkillər"
+  },
+  "tab_docs": {
+    "message": "Sənədlər"
+  },
+  "tab_links": {
+    "message": "Linklər"
+  },
+  "tab_map": {
+    "message": "Xəritə"
+  },
+  "tab_gallery_empty_hint": {
+    "message": "Bu çatda paylaşılan şəkillər və videolar burada nümayiş olunacaq."
+  },
+  "tab_docs_empty_hint": {
+    "message": "Bu söhbətdə paylaşılan sənədlər, musiqi və digər fayllar burada göstəriləcək."
+  },
+  "media_preview": {
+    "message": "Fayllara baxmaq"
+  },
+  "login_title": {
+    "message": "Daxil ol"
+  },
+  "login_header": {
+    "message": "Serverinə daxil ol"
+  },
+  "login_explain": {
+    "message": "Mövcud e-mail hesabı ilə daxil olun"
+  },
+  "login_subheader": {
+    "message": "Məlum elektron poçt provayderləri üçün əlavə parametrlər avtomatik olaraq quraşdırılır. Bəzən IMAP-ın web məkanında aktiv olması lazımdır. Yardım üçün e-poçt provayderinizə və ya dostlarınıza müraciət edin."
+  },
+  "login_no_servers_hint": {
+    "message": "Delta Chat serverləri yoxdur, məlumatlarınız cihazınızda qalır!"
+  },
+  "login_inbox": {
+    "message": "Gələn"
+  },
+  "login_imap_login": {
+    "message": "IMAP logini"
+  },
+  "login_imap_server": {
+    "message": "IMAP server"
+  },
+  "login_imap_port": {
+    "message": "IMAP port"
+  },
+  "login_imap_security": {
+    "message": "IMAP təhlükəsizliyi"
+  },
+  "login_outbox": {
+    "message": "Çıxan"
+  },
+  "login_smtp_login": {
+    "message": "SMTP login"
+  },
+  "login_smtp_password": {
+    "message": "SMTP parolu"
+  },
+  "login_smtp_server": {
+    "message": "SMTP server"
+  },
+  "login_smtp_port": {
+    "message": "SMTP port"
+  },
+  "login_smtp_security": {
+    "message": "SMTP təhlükəsizliyi"
+  },
+  "login_auth_method": {
+    "message": "Yetkiləndirmə metodu"
+  },
+  "login_info_oauth2_title": {
+    "message": "Sadələşdirilmiş tənzimləmə ilə davam edirsiniz?"
+  },
+  "login_info_oauth2_text": {
+    "message": "Daxil edilmiş e-poçt ünvanı sadələşdirilmiş bir quraşdırma (OAuth2) dəstəkləyir. \n\nNövbəti addımda Delta Chat e-poçt tətbiqinizlə söhbət etməyə icazə verin. \n\n Delta Chat serverləri, cihazınızda qalır!"
+  },
+  "login_certificate_checks": {
+    "message": "Sertifikat yoxlanmaları"
+  },
+  "login_error_mail": {
+    "message": "Xahiş edirik düzgün bir e-poçt ünvanı daxil et"
+  },
+  "login_error_server": {
+    "message": "Xahiş edirik, düzgün bir server / IP ünvanı daxil et"
+  },
+  "login_error_port": {
+    "message": "Xahiş edirik, düzgün bir port (1-65535) daxil et"
+  },
+  "login_error_required_fields": {
+    "message": "Xahiş edirik düzgün bir e-poçt ünvanı və parol daxil et"
+  },
+  "import_backup_title": {
+    "message": "Nüsxənin importu"
+  },
+  "import_backup_ask": {
+    "message": "\"%1$s\" - də ehtiyat nüsxəsi tapıldı.\n\nİndi bütün məlumatları və parametrləri idxal etmək və istifadə etmək istəyirsiniz?"
+  },
+  "login_error_cannot_login": {
+    "message": " \"%1$s\" kimi giriş alınmadı. E-poçt ünvanı və parolun düzgün olub olmadığını yoxlayın."
+  },
+  "forward_to": {
+    "message": "İrəli ..."
+  },
+  "share_abort": {
+    "message": "İcazə olmadığına görə göndərmə kəsildi"
+  },
+  "pref_using_custom": {
+    "message": ":Xüsusi istifadə %s"
+  },
+  "pref_using_default": {
+    "message": "Varsayılan istifadə: %s"
+  },
+  "pref_profile_info_headline": {
+    "message": "Profil məlumatınız"
+  },
+  "pref_profile_photo": {
+    "message": "Profil şəkili"
+  },
+  "pref_blocked_contacts": {
+    "message": "Bloklanmış kontaktlar"
+  },
+  "pref_who_can_see_profile_explain": {
+    "message": "Digər istifadəçilərlə ünsiyyət qurarkən profil şəkliniz və adınız mesajlarınızla birlikdə göstərilir. Zatən göndərilən məlumat silinməyəcək. "
+  },
+  "pref_your_name": {
+    "message": "Adın"
+  },
+  "pref_default_status_label": {
+    "message": "Yazını mətni"
+  },
+  "pref_enter_sends": {
+    "message": "Enter açarı ilə göndərmək"
+  },
+  "pref_enter_sends_explain": {
+    "message": "Enter düyməsini basaraq mətn mesajları göndərəcək"
+  },
+  "pref_outgoing_media_quality": {
+    "message": "Göndərilən medianın keyfiyyatı"
+  },
+  "pref_outgoing_balanced": {
+    "message": "Balanslıdır"
+  },
+  "pref_outgoing_worse": {
+    "message": "Daha pis keyfiyyət, kiçik ölçülü"
+  },
+  "pref_vibrate": {
+    "message": "Vibrasiya"
+  },
+  "pref_screen_security": {
+    "message": "Ekran təhlükəsizliyi"
+  },
+  "pref_screen_security_explain": {
+    "message": "Son proqramlar siyahısında və proqramın daxilində ekran çəkməyi qadağan etmə"
+  },
+  "pref_screen_security_please_restart_hint": {
+    "message": "Ekranın təhlükəsizlik tənzimləmələrini tətbiq etmək üçün proqramı yenidən başladın."
+  },
+  "pref_notifications": {
+    "message": "Bildirişlər"
+  },
+  "pref_notifications_show": {
+    "message": "Göstərmək"
+  },
+  "pref_notifications_priority": {
+    "message": "Öndəmdə olan"
+  },
+  "pref_led_color": {
+    "message": "LED rəng"
+  },
+  "pref_sound": {
+    "message": "Səs"
+  },
+  "pref_silent": {
+    "message": "Səssiz"
+  },
+  "pref_privacy": {
+    "message": "Gizlilik"
+  },
+  "pref_chats_and_media": {
+    "message": "Çatlar və faillar"
+  },
+  "pref_light_theme": {
+    "message": "Açıq"
+  },
+  "pref_dark_theme": {
+    "message": "Tünd"
+  },
+  "pref_appearance": {
+    "message": "Görünüş"
+  },
+  "pref_theme": {
+    "message": "Tema"
+  },
+  "pref_language": {
+    "message": "Dillər"
+  },
+  "pref_incognito_keyboard": {
+    "message": "Məxfi klaviatura"
+  },
+  "pref_incognito_keyboard_explain": {
+    "message": "Klaviaturanın personal öyrənməyini söndürmək"
+  },
+  "pref_read_receipts": {
+    "message": "Qəbul olunanları oxuyun"
+  },
+  "pref_read_receipts_explain": {
+    "message": "Bildirişlər aradan qaldırılırsa, başqalarının oxuduğu bildirişləri görə bilməyəcəksiniz."
+  },
+  "pref_manage_keys": {
+    "message": "Açar edarəetməsi"
+  },
+  "pref_use_system_emoji": {
+    "message": "Sistem emojisini istifadə edin"
+  },
+  "pref_use_system_emoji_explain": {
+    "message": "Emoji Delta chat üçün daxili dəstəyi bağlayın. "
+  },
+  "pref_app_access": {
+    "message": "Daxil oldu"
+  },
+  "pref_chats": {
+    "message": "Çatlar"
+  },
+  "pref_in_chat_sounds": {
+    "message": "Çatda olan səslər"
+  },
+  "pref_view_log": {
+    "message": "Log-a bax"
+  },
+  "pref_saved_log": {
+    "message": "Loqi Yükləmələr qovluğuna saxlanıldı"
+  },
+  "pref_save_log_failed": {
+    "message": "Loqu saxlaya bilmədi"
+  },
+  "pref_log_header": {
+    "message": "Loq"
+  },
+  "pref_other": {
+    "message": "Başqa"
+  },
+  "pref_backup": {
+    "message": "Nüsxə"
+  },
+  "pref_backup_explain": {
+    "message": "Daxili yaddaşa mesaj nüsxəsi"
+  },
+  "pref_backup_export_explain": {
+    "message": "Ehtiyat nüsxəsi bu və ya digər bir cihazda yeni bir quraşdırma qurmağa kömək edir. \n\nNüsxədə bütün mesajlar, kontaktlar, çatlar və son ucdan uca avtoşifrələmə quraşdırmaınız olacaq. Nüsxə faylını təhlükəsiz yerdə saxlayın və ya mümkün qədər tez silin."
+  },
+  "pref_backup_export_start_button": {
+    "message": "Nüsxəyə başla"
+  },
+  "pref_backup_written_to_x": {
+    "message": "Ehtiyat nüsxə %1$s- ə uğurla yazılmışdır"
+  },
+  "pref_managekeys_menu_title": {
+    "message": "Açar idarəetməsi"
+  },
+  "pref_managekeys_export_secret_keys": {
+    "message": "Gizli açar ixracı"
+  },
+  "pref_managekeys_export_explain": {
+    "message": " \"%1$s\" - ə gizli açar ixracı?"
+  },
+  "pref_managekeys_import_secret_keys": {
+    "message": "Gizli açar idxalı"
+  },
+  "pref_managekeys_secret_keys_exported_to_x": {
+    "message": "Ehtiyat nüsxə %1$s- ə uğurla yazılmışdır"
+  },
+  "pref_managekeys_secret_keys_imported_from_x": {
+    "message": " \"%1$s\" - dən gizli açar idxalı?"
+  },
+  "pref_background": {
+    "message": "Fon"
+  },
+  "pref_background_btn_default": {
+    "message": "Hal hazırdaki şəkili istifadə edin"
+  },
+  "pref_background_btn_gallery": {
+    "message": "Fotoalbomdan götürün"
+  },
+  "pref_imap_folder_handling": {
+    "message": "IMAP qovluqunun idarə edilməsi"
+  },
+  "pref_imap_folder_warn_disable_defaults": {
+    "message": "Bu seçimi ləğv etsəniz, serverinizin və digər müştərilərinizin müvafiq olaraq konfiqurasiya olunduğundan əmin olun. \n\nAyrıca şeylər işləməyəcəkdir."
+  },
+  "pref_watch_sent_folder": {
+    "message": "Göndərilmişlərin qovluğunu izləyin"
+  },
+  "pref_send_copy_to_self": {
+    "message": "Özünə kopya göndər"
+  },
+  "pref_auto_folder_moves": {
+    "message": "DeltaChat qovluğuna avtomatik keçid"
+  },
+  "pref_auto_folder_moves_explain": {
+    "message": "Çat söhbətləri Daxil olanlar qovluğunun yığılmaması üçün taşınır"
+  },
+  "pref_show_emails": {
+    "message": "Klassik e-poçtları göstər"
+  },
+  "pref_show_emails_no": {
+    "message": "Xeyir, ancaq çatlar"
+  },
+  "pref_show_emails_accepted_contacts": {
+    "message": "Qəbul edilən kontaktlar üçün"
+  },
+  "pref_show_emails_all": {
+    "message": "Hamısı"
+  },
+  "pref_background_default": {
+    "message": "Özünəməxsus arxa fon"
+  },
+  "pref_background_default_color": {
+    "message": "Özünəməxsus rəng"
+  },
+  "pref_background_custom_image": {
+    "message": "Şəkil"
+  },
+  "pref_background_custom_color": {
+    "message": "Rəng"
+  },
+  "autocrypt_send_asm_title": {
+    "message": "Autocrypt mesaj ayarı göndər"
+  },
+  "autocrypt_send_asm_explain_before": {
+    "message": "Autocrypt Setup Message digər Autocrypt-uyğun proqramlarla təhlükəsiz şəkildə bölüşür. \n\nSizin buradakı quraşdırma koduyla şifrələnir və digər qurğuda yazılmalıdır."
+  },
+  "autocrypt_send_asm_button": {
+    "message": "Autocrypt Setup Message-ı göndər"
+  },
+  "autocrypt_send_asm_explain_after": {
+    "message": "Sizin açarınız sizə göndərildi. Başqa bir cihaza keçin və mesajın ayarını açın. Siz quraşdırma kodu daxil etməlisiniz. Orada aşağıdakı rəqəmləri daxil edin. Bitirən zaman, başqa bir cihazda Autocrypt istifadə üçün hazır olacaq."
+  },
+  "autocrypt_prefer_e2ee": {
+    "message": "Ucdan-uca şifrələmə üstünlük təşkil edir"
+  },
+  "autocrypt_asm_subject": {
+    "message": "Autocrypt mesaj ayarı"
+  },
+  "autocrypt_asm_general_body": {
+    "message": "Bu, müvəqqəti quraşdırma üçün müştərilər arasında köçürmək üçün istifadə edilən Autocrypt Setup Mesajıdır. \n\nSenfikanızı çözmək və istifadə etmək üçün autocrypt uyğun müştəri içərisində mesajı açın və yaradan cihazda göstərilən quraşdırma kodunu daxil edin."
+  },
+  "group_name_changed_by_you": {
+    "message": "Qrupun adı \"%1$s\" - dən \"%2$s\" - yə deyişildi məndən. "
+  },
+  "group_name_changed_by_other": {
+    "message": "Qrupun adı \"%1$s\" - dən \"%2$s\" - yə deyişildi ilə %3$s."
+  },
+  "group_image_changed_by_you": {
+    "message": "Qrup şəkili dəyişildi məndən. "
+  },
+  "group_image_changed_by_other": {
+    "message": "Qrup şəkili dəyişildi ilə %1$s."
+  },
+  "add_member_by_you": {
+    "message": "Üzv %1$s əlavə olundu məndən. "
+  },
+  "add_member_by_other": {
+    "message": "Üzv %1$s əlavə olundu ilə %2$s."
+  },
+  "remove_member_by_you": {
+    "message": "%1$s üzv silindi məndən. "
+  },
+  "remove_member_by_other": {
+    "message": "%1$s üzv silindi ilə %2$s."
+  },
+  "group_image_deleted_by_you": {
+    "message": "Qrupun şəkili silindi məndən. "
+  },
+  "group_image_deleted_by_other": {
+    "message": "Qrupun şəkili silindi ilə %1$s."
+  },
+  "qrscan_title": {
+    "message": "Qr kodu skan edin"
+  },
+  "qrscan_hint": {
+    "message": "QR kodu kamera ilə izləyin"
+  },
+  "qrscan_ask_join_group": {
+    "message": "\"%1$s\" qrupa qoşulmaq istəyirsinizmi?"
+  },
+  "qrscan_fingerprint_mismatch": {
+    "message": "%1$süçün skan olunan barmaq izi son görüldüyü barmaq izinə uyğun deyil"
+  },
+  "qrscan_no_addr_found": {
+    "message": "QR kodu iz ehtiva edir, lakin heç bir e-poçt ünvanı yoxdur.\n\nƏlaqə qurmaq üçün əvvəlcə abonentlə şifrəli bir əlaqə qurun."
+  },
+  "qrscan_contains_text": {
+    "message": "QR kod mətni skan olundu:\n\n%1$s"
+  },
+  "qrscan_contains_url": {
+    "message": "QR kod linki skan olundu:\n\n%1$s"
+  },
+  "qrscan_fingerprint_label": {
+    "message": "İz"
+  },
+  "qrshow_title": {
+    "message": "QR dəvət kodu"
+  },
+  "qrshow_x_joining": {
+    "message": "%1$s qoşulur."
+  },
+  "qrshow_x_verified": {
+    "message": "%1$s yoxlanıldı."
+  },
+  "qrshow_x_has_joined_group": {
+    "message": "%1$s qrupa qoşuldu."
+  },
+  "qrshow_join_group_title": {
+    "message": "Dəvət QR-kodu"
+  },
+  "qrshow_join_group_hint": {
+    "message": " \"%1$s\" qrupuna qoşulmaq üçün bunu skan edin. "
+  },
+  "qrshow_join_contact_title": {
+    "message": "Dəvət QR-kodu"
+  },
+  "qrshow_join_contact_hint": {
+    "message": "%1$silə əlaqə qurmaq üçün bunu skan edin"
+  },
+  "qrshow_join_contact_no_connection_toast": {
+    "message": "İnternet bağlantısı yoxdur, QR kodunu qura bilmir."
+  },
+  "contact_verified": {
+    "message": "%1$s yoxlanıldı."
+  },
+  "contact_not_verified": {
+    "message": "%1$sDoğrula bilmir"
+  },
+  "contact_setup_changed": {
+    "message": "%1$süçün quraşdırma dəyişdirildi"
+  },
+  "notify_reply_button": {
+    "message": "Cavab ver"
+  },
+  "notify_new_message": {
+    "message": "Yeni mesaj"
+  },
+  "notify_background_connection_enabled": {
+    "message": "Arxa fon əlaqəsi aktivdir"
+  },
+  "notify_priority_high": {
+    "message": "Yüksək"
+  },
+  "notify_priority_max": {
+    "message": "Maksimal"
+  },
+  "notify_name_and_message": {
+    "message": "Ad və mesaj"
+  },
+  "notify_name_only": {
+    "message": "Ancaq ad"
+  },
+  "notify_no_name_or_message": {
+    "message": "Adı və ya mesaj yoxdur"
+  },
+  "perm_required_title": {
+    "message": "İzin tələb olunur"
+  },
+  "perm_continue": {
+    "message": "Davam edin"
+  },
+  "perm_explain_access_to_camera_denied": {
+    "message": "Delta Chat şəkillər və ya video çəkmək üçün kamera icazə tələb edir, lakin bu, əbədi imtina edilmişdir. Proqramın sistem ayarlarına gedib \"İcazələr\"-i seçin və \"kamera\" izni verin."
+  },
+  "perm_explain_access_to_mic_denied": {
+    "message": "Delta Chat yer əlavə etmək üçün yer icazə tələb edir, lakin daimi olaraq rədd edilmişdir. \"İcazələr\"-i seçin və\"Yerləşmə\" izni verin. "
+  },
+  "perm_explain_access_to_storage_denied": {
+    "message": "Delta Chat, fotoşəkilləri, videoları və ya səsləri əlavə etmək və ya ixrac etmək üçün saxlama icazəsini tələb edir, lakin bu daimi olaraq rədd edildi. Xahiş edirik tətbiq ayarları menyusuna davam edin, \"İzinlər\" seçin və \"Yaddaş\" funksiyasını aktivləşdirin."
+  },
+  "perm_explain_access_to_location_denied": {
+    "message": "Delta Chat yer əlavə etmək üçün yer icazə tələb edir, lakin daimi olaraq rədd edilmişdir. \"İcazələr\"-i seçin və\"Yerləşmə\" izni verin. "
+  },
+  "encrypted_message": {
+    "message": "Şifrələnmiş mesaj"
+  },
+  "global_menu_preferences_language_desktop": {
+    "message": "Dil səç"
+  },
+  "global_menu_file_desktop": {
+    "message": "Fayl"
+  },
+  "global_menu_file_quit_desktop": {
+    "message": "Çıxış"
+  },
+  "global_menu_edit_desktop": {
+    "message": "Düzəliş et"
+  },
+  "global_menu_edit_undo_desktop": {
+    "message": "Geri qaytar"
+  },
+  "global_menu_edit_redo_desktop": {
+    "message": "Hazır"
+  },
+  "global_menu_edit_cut_desktop": {
+    "message": "Kəs"
+  },
+  "global_menu_edit_copy_desktop": {
+    "message": "Kopyala"
+  },
+  "global_menu_edit_paste_desktop": {
+    "message": "Əlavə et"
+  },
+  "global_menu_view_desktop": {
+    "message": "Baxmaq"
+  },
+  "global_menu_view_floatontop_desktop": {
+    "message": "Üstə çıxın"
+  },
+  "global_menu_view_developer_desktop": {
+    "message": "İnkişaf etdirici"
+  },
+  "global_menu_view_developer_tools_desktop": {
+    "message": "İnkişaf etdirici alətləri"
+  },
+  "global_menu_help_desktop": {
+    "message": "Kömək"
+  },
+  "global_menu_help_report_desktop": {
+    "message": "Problemi bildirin"
+  },
+  "no_chat_selected_suggestion_desktop": {
+    "message": "Bir çat seçin və ya yeni bir çat yaradın"
+  },
+  "write_message_desktop": {
+    "message": "Bir mesaj yazın"
+  },
+  "encryption_info_title_desktop": {
+    "message": "Şifrələmə məlumatları"
+  },
+  "delete_message_desktop": {
+    "message": "Mesajı sil"
+  },
+  "more_info_desktop": {
+    "message": "Daha çox məlumat"
+  },
+  "timestamp_format_m_desktop": {
+    "message": "MMM D"
+  },
+  "remove_desktop": {
+    "message": "Sil"
+  },
+  "save_desktop": {
+    "message": "Saxla"
+  },
+  "name_desktop": {
+    "message": "Ad"
+  },
+  "select_group_image_desktop": {
+    "message": "Qrup şəklini seç"
+  },
+  "export_backup_desktop": {
+    "message": "Ehtiyat nüsxəsinin ixracı"
+  },
+  "autocrypt_correct_desktop": {
+    "message": "Autocrypt ayarı müvəffəqiyyətlə köçürüldü!"
+  },
+  "forget_login_confirmation_desktop": {
+    "message": "Bu giriş silmək istəyirsiniz? Hər şey, sizin \"sondan sona\" quraşdırma, kontaktlar, söhbətlər, mesajlar və daşıyıcıları daxil olmaqla silinəcəkdir. Bu hərəkət son və ləğv edilə bilməz."
+  },
+  "message_detail_sent_desktop": {
+    "message": "Göndər"
+  },
+  "message_detail_received_desktop": {
+    "message": "qəbul olundu"
+  },
+  "menu.view.developer.open.log.folder": {
+    "message": "Loq mələfini açın"
+  },
+  "menu.view.developer.open.current.log.file": {
+    "message": "Loq-faylı açın"
+  },
+  "perm_enable_bg_reminder_title": {
+    "message": "Delta Chat arxa fonda mesajları almaq üçün bura toxunun."
+  },
+  "n_minutes": {
+    "one": "%d dəqiqə",
+    "other": "%d dəqiqə"
+  },
+  "n_hours": {
+    "one": "%d saat",
+    "other": "%d saat"
+  },
+  "n_chats": {
+    "one": "%d çat",
+    "other": "%d çat"
+  },
+  "n_contacts": {
+    "one": "%d kontakt",
+    "other": "%d kontakt"
+  },
+  "n_messages": {
+    "one": "%d mesaj",
+    "other": "%d mesaj"
+  },
+  "n_members": {
+    "one": "%d üzv",
+    "other": "%d üzv"
+  },
+  "chat_archived": {
+    "one": "%d çat arxiv olundu",
+    "other": "%d chats archived"
+  },
+  "chat_unarchived": {
+    "one": "%d çat arxivdən çıxarıldı",
+    "other": "%d chats unarchived"
+  },
+  "chat_n_new_messages": {
+    "one": "%d yeni messaj",
+    "other": "%d yeni messaj"
+  }
+}

@@ -1,0 +1,872 @@
+{
+  "app_name": {
+    "message": "دلتا چت"
+  },
+  "ok": {
+    "message": "خا"
+  },
+  "cancel": {
+    "message": "رڌ"
+  },
+  "clear_search": {
+    "message": "روفتن پیتینیڌن"
+  },
+  "yes": {
+    "message": "هری"
+  },
+  "no": {
+    "message": "ن"
+  },
+  "select": {
+    "message": "پسند"
+  },
+  "on": {
+    "message": "رۊشن"
+  },
+  "off": {
+    "message": "کۊر"
+  },
+  "def": {
+    "message": "پؽش فرز"
+  },
+  "default_value": {
+    "message": "پؽش فرز (%1$s)"
+  },
+  "default_value_as_above": {
+    "message": "پؽش فرز (جۊر روء)"
+  },
+  "custom": {
+    "message": "سفارشی"
+  },
+  "none": {
+    "message": "هیچکویکی"
+  },
+  "automatic": {
+    "message": "خوتکار"
+  },
+  "strict": {
+    "message": "سختگر"
+  },
+  "open": {
+    "message": "گۊشیڌن"
+  },
+  "download": {
+    "message": "دانلود"
+  },
+  "downloading": {
+    "message": "هونی دانلود ابۊ..."
+  },
+  "open_attachment": {
+    "message": "گۊشیڌن زمینه"
+  },
+  "join": {
+    "message": "ٱووڌن"
+  },
+  "rejoin": {
+    "message": "ز نۊ ٱووڌن"
+  },
+  "delete": {
+    "message": "پاک کردن"
+  },
+  "info": {
+    "message": "زبار"
+  },
+  "update": {
+    "message": "ورۊ کردن"
+  },
+  "emoji": {
+    "message": "ایموجی"
+  },
+  "attachment": {
+    "message": "زمینه"
+  },
+  "back": {
+    "message": "وورگشتن"
+  },
+  "close": {
+    "message": "بستن"
+  },
+  "resend": {
+    "message": "ز نۊ بفشن"
+  },
+  "archive": {
+    "message": "بایگۊوی"
+  },
+  "unarchive": {
+    "message": "و در زیڌن ز بایگۊوی"
+  },
+  "mute": {
+    "message": "بؽ دونگ"
+  },
+  "save": {
+    "message": "زفت کردن"
+  },
+  "chat": {
+    "message": "گوفت ۉ لوفت"
+  },
+  "media": {
+    "message": "وارسگر"
+  },
+  "profile": {
+    "message": "پوروفایل"
+  },
+  "main_menu": {
+    "message": "نومگه ٱسلی"
+  },
+  "start_chat": {
+    "message": "ناڌن پا گوفت ۉ لوفت"
+  },
+  "show_full_message": {
+    "message": "نشۉ داڌن پیوم کامل..."
+  },
+  "mark_all_as_read": {
+    "message": "پوی ن خونده بیڌه بزݩ"
+  },
+  "mark_as_read_short": {
+    "message": "علامت و عونوان خونده بیڌه"
+  },
+  "loading": {
+    "message": "هونی بار اونه..."
+  },
+  "hide": {
+    "message": "بؽڌار کردن"
+  },
+  "activate": {
+    "message": "فعال کردن"
+  },
+  "load_remote_content": {
+    "message": "بار ونی شؽواتا ز در"
+  },
+  "always": {
+    "message": "همیشه"
+  },
+  "once": {
+    "message": "هیم ی کرت"
+  },
+  "show_warning": {
+    "message": "نشۉ داڌن هوشدار"
+  },
+  "show_password": {
+    "message": "نشۉ داڌن رزم"
+  },
+  "hide_password": {
+    "message": "بؽڌار کردن رزم"
+  },
+  "not_now": {
+    "message": "سکو ن"
+  },
+  "never": {
+    "message": "هیچ"
+  },
+  "one_moment": {
+    "message": "ی دمۉ..."
+  },
+  "done": {
+    "message": "ٱنجوم وابی"
+  },
+  "offline": {
+    "message": "آفلاین"
+  },
+  "next": {
+    "message": "نیایی"
+  },
+  "error": {
+    "message": "ختا"
+  },
+  "error_x": {
+    "message": "ختا: %1$s"
+  },
+  "file_not_found": {
+    "message": "%1$s ن نجوست."
+  },
+  "copied_to_clipboard": {
+    "message": "من ویرگه لف گیری وابی."
+  },
+  "contacts_headline": {
+    "message": "هومدنگۉݩ"
+  },
+  "email_address": {
+    "message": "نشۊوی ایمیل"
+  },
+  "password": {
+    "message": "رزم"
+  },
+  "existing_password": {
+    "message": "رزم مۉجۊڌ"
+  },
+  "now": {
+    "message": "سکو"
+  },
+  "danger": {
+    "message": "بپا"
+  },
+  "today": {
+    "message": "ٱمرۊ"
+  },
+  "yesterday": {
+    "message": "دۊش"
+  },
+  "this_week": {
+    "message": "ای هفته"
+  },
+  "this_month": {
+    "message": "ای ما"
+  },
+  "last_week": {
+    "message": "هفته زیتری"
+  },
+  "last_month": {
+    "message": "ما زیتری"
+  },
+  "last_seen_at": {
+    "message": "ریتور دیندایی من %1$s"
+  },
+  "last_seen_relative": {
+    "message": "ریتور دیندایی %1$s"
+  },
+  "last_seen_unknown": {
+    "message": "ریتور دیندایی: دیار نؽ"
+  },
+  "self": {
+    "message": "مو"
+  },
+  "draft": {
+    "message": "پؽش هؽل"
+  },
+  "image": {
+    "message": "شؽوات"
+  },
+  "reply_noun": {
+    "message": "ولوم"
+  },
+  "gif": {
+    "message": "گیف"
+  },
+  "sticker": {
+    "message": "استیکر"
+  },
+  "images": {
+    "message": "شؽواتا"
+  },
+  "audio": {
+    "message": "دونگ"
+  },
+  "voice_message": {
+    "message": "پیوم دونگ"
+  },
+  "video": {
+    "message": "فیلم"
+  },
+  "documents": {
+    "message": "سندا"
+  },
+  "contact": {
+    "message": "هومدنگ"
+  },
+  "camera": {
+    "message": "شؽواتگر"
+  },
+  "capture": {
+    "message": "گرؽڌن"
+  },
+  "switch_camera": {
+    "message": "آلشت شؽواتگر"
+  },
+  "toggle_fullscreen": {
+    "message": "آلشت وزیت پوی بلگه"
+  },
+  "location": {
+    "message": "جاگه"
+  },
+  "locations": {
+    "message": "جاگه یل"
+  },
+  "gallery": {
+    "message": "شؽوات مال"
+  },
+  "images_and_videos": {
+    "message": "شؽواتا وو فیلما"
+  },
+  "file": {
+    "message": "فایل"
+  },
+  "files": {
+    "message": "فایلا"
+  },
+  "webxdc_app": {
+    "message": "برنومه"
+  },
+  "webxdc_apps": {
+    "message": "برنومه یل"
+  },
+  "unknown": {
+    "message": "ناشناس"
+  },
+  "green": {
+    "message": "سوز"
+  },
+  "red": {
+    "message": "سوئر"
+  },
+  "blue": {
+    "message": "کوۊ"
+  },
+  "purple": {
+    "message": "بنوش"
+  },
+  "white": {
+    "message": "اسبؽڌ"
+  },
+  "zoom": {
+    "message": "گپ کردن"
+  },
+  "extra_small": {
+    "message": "قلوه کۊچیر"
+  },
+  "small": {
+    "message": "کۊچیر"
+  },
+  "normal": {
+    "message": "عادی"
+  },
+  "large": {
+    "message": "گپ"
+  },
+  "extra_large": {
+    "message": "قلوه گپ"
+  },
+  "fast": {
+    "message": "زل"
+  },
+  "slow": {
+    "message": "هووار"
+  },
+  "menu_new_contact": {
+    "message": "هومدنگ نۊ"
+  },
+  "menu_new_chat": {
+    "message": "گوفت ۉ لوفت نۊ"
+  },
+  "menu_new_group": {
+    "message": "جرگه نۊ"
+  },
+  "broadcast_list": {
+    "message": "نومگه Broadcast"
+  },
+  "broadcast_lists": {
+    "message": "نومگه یل Broadcast"
+  },
+  "new_broadcast_list": {
+    "message": "نومگه Broadcast نۊ"
+  },
+  "menu_send": {
+    "message": "فشناڌن"
+  },
+  "menu_edit_group": {
+    "message": "آلشت جرگه"
+  },
+  "menu_group_name_and_image": {
+    "message": "نوم وو شؽوات جرگه"
+  },
+  "menu_archive_chat": {
+    "message": "بایگۊوی گوفت ۉ لوفت"
+  },
+  "menu_unarchive_chat": {
+    "message": "و در زیڌن گوفت ۉ لوفت ز بایگۊوی"
+  },
+  "menu_add_attachment": {
+    "message": "ازاف کردن زمینه"
+  },
+  "menu_leave_group": {
+    "message": "رئڌن ز جرگه"
+  },
+  "menu_delete_chat": {
+    "message": "پاک کردن گوفت ۉ لوفت"
+  },
+  "clear_chat": {
+    "message": "روفتن ویرگار گوفت ۉ لوفت"
+  },
+  "delete_contact": {
+    "message": "پاک کردن هومدنگ"
+  },
+  "menu_delete_location": {
+    "message": "ای جاگه پاک بۊ؟"
+  },
+  "menu_copy_to_clipboard": {
+    "message": "لف گیری من ویرگه"
+  },
+  "menu_copy_link_to_clipboard": {
+    "message": "لف گیری لینک"
+  },
+  "menu_copy_text_to_clipboard": {
+    "message": "لف گیری هؽل"
+  },
+  "menu_copy_image_to_clipboard": {
+    "message": "لف گیری شؽوات"
+  },
+  "menu_copy_email_to_clipboard": {
+    "message": "لف گیری ایمیل"
+  },
+  "paste_from_clipboard": {
+    "message": "جا وندن ز ویرگه"
+  },
+  "menu_reply": {
+    "message": "ولوم ب پیوم"
+  },
+  "menu_mute": {
+    "message": "بؽ دونگ کردن وارسۊویا"
+  },
+  "menu_unmute": {
+    "message": "وا دونگ کردن"
+  },
+  "menu_all_media": {
+    "message": "پوی وارسگرا"
+  },
+  "show_in_chat": {
+    "message": "نشۉ داڌن من گوفت ۉ لوفت"
+  },
+  "menu_share": {
+    "message": "یک رسۊوی"
+  },
+  "accept": {
+    "message": "قوۊل"
+  },
+  "menu_play": {
+    "message": "پشک"
+  },
+  "menu_pause": {
+    "message": "واڌاشتن"
+  },
+  "menu_scroll_to_bottom": {
+    "message": "رئڌن ب لم"
+  },
+  "menu_scroll_to_top": {
+    "message": "رئڌن ب روء"
+  },
+  "menu_help": {
+    "message": "هیاری"
+  },
+  "menu_select_all": {
+    "message": "پسند پوی"
+  },
+  "select_chat": {
+    "message": "پسند گوفت ۉ لوفت"
+  },
+  "select_more": {
+    "message": "پسند بیشتر"
+  },
+  "menu_edit_name": {
+    "message": "آلشت نوم"
+  },
+  "menu_settings": {
+    "message": "سامووا"
+  },
+  "menu_advanced": {
+    "message": "پؽش رئڌه"
+  },
+  "menu_view_profile": {
+    "message": "نیشتن پوروفایل"
+  },
+  "menu_zoom_in": {
+    "message": "گپ کردن"
+  },
+  "menu_zoom_out": {
+    "message": "کۊچیر کردن"
+  },
+  "menu_save_log": {
+    "message": "زفت کردن گوزارش"
+  },
+  "menu_more_options": {
+    "message": "گۊزینیل بیشتر"
+  },
+  "jump_to_message": {
+    "message": "رئڌن ب پیوم"
+  },
+  "device_talk": {
+    "message": "پیوما دسگا"
+  },
+  "device_talk_subtitle": {
+    "message": "پیوما منی"
+  },
+  "edit_contact": {
+    "message": "آلشت هومدنگ"
+  },
+  "pin_chat": {
+    "message": "دیسنیڌن گوفت ۉ لوفت"
+  },
+  "pin": {
+    "message": "دیسنیڌن"
+  },
+  "source_code": {
+    "message": "کود بونچک"
+  },
+  "mute_for_one_hour": {
+    "message": "بؽ دونگ کردن سی 1 ساعت"
+  },
+  "mute_for_eight_hours": {
+    "message": "بؽ دونگ کردن سی 8 ساعت"
+  },
+  "mute_for_one_day": {
+    "message": "بؽ دونگ کردن سی 1 رۊ"
+  },
+  "mute_for_seven_days": {
+    "message": "بؽ دونگ کردن سی 7 رۊ"
+  },
+  "mute_forever": {
+    "message": "بؽ دونگ کردن سی همیشه"
+  },
+  "share_location_for_5_minutes": {
+    "message": "سی 5 دؽقه"
+  },
+  "share_location_for_30_minutes": {
+    "message": "سی 30 دؽقه"
+  },
+  "share_location_for_one_hour": {
+    "message": "سی 1 ساعت"
+  },
+  "share_location_for_two_hours": {
+    "message": "سی 2 ساعت"
+  },
+  "share_location_for_six_hours": {
+    "message": "سی 6 ساعت"
+  },
+  "file_saved_to": {
+    "message": "فایل من «%1$s» زفت وابی."
+  },
+  "videochat": {
+    "message": "گوفت ۉ لوفت ویدیویی"
+  },
+  "videochat_invitation": {
+    "message": "موکش و گوفت ۉ لوفت ویدیویی"
+  },
+  "ask_start_chat_with": {
+    "message": "گوفت ۉ لوفت وا %1$s؟"
+  },
+  "ask_remove_members": {
+    "message": "پاک کردن %1$s ز جرگه؟"
+  },
+  "ask_remove_from_broadcast": {
+    "message": "%1$s ز نومگه Broadcast پاک بۊ؟"
+  },
+  "open_url_confirmation": {
+    "message": "اخۊی ای لینگن بۊگۊشی؟"
+  },
+  "contacts_title": {
+    "message": "هومدنگۉݩ"
+  },
+  "contacts_empty_hint": {
+    "message": "بؽ هومدنگ."
+  },
+  "chat_please_enter_message": {
+    "message": "ی پیوم بزݩ."
+  },
+  "chat_record_slide_to_cancel": {
+    "message": "سی رڌ کردن بکشس."
+  },
+  "chat_share_with_title": {
+    "message": "یک رسۊوی وا"
+  },
+  "chat_input_placeholder": {
+    "message": "پیوم"
+  },
+  "chat_request_label": {
+    "message": "درخاست"
+  },
+  "chat_no_messages": {
+    "message": "پیومؽ نؽ."
+  },
+  "chat_self_talk_subtitle": {
+    "message": "پیومایی ک سی خوم فشنام."
+  },
+  "saved_messages": {
+    "message": "پیوما زفت بیڌه"
+  },
+  "saved": {
+    "message": "زفت وابی"
+  },
+  "save_as": {
+    "message": "زفت و عونوان"
+  },
+  "retry_send": {
+    "message": "ز نۊ سی فشناڌن پیوم تقلا کوݩ"
+  },
+  "mailing_list": {
+    "message": "نومگه پوستی"
+  },
+  "send_file_to": {
+    "message": "فشناڌن \"%1$s\" و..."
+  },
+  "send_message_to": {
+    "message": "فشناڌن پیوم و..."
+  },
+  "show_location_traces": {
+    "message": "نشۉ داڌن جا پا"
+  },
+  "search": {
+    "message": "پیتینیڌن"
+  },
+  "group_name": {
+    "message": "نوم جرگه"
+  },
+  "group_avatar": {
+    "message": "شؽوات جرگه"
+  },
+  "remove_group_image": {
+    "message": "پاک کردن شؽوات جرگه"
+  },
+  "change_group_image": {
+    "message": "آلشت شؽوات جرگه"
+  },
+  "group_create_button": {
+    "message": "وورکل جرگه"
+  },
+  "group_add_members": {
+    "message": "ٱووردن منتور"
+  },
+  "tab_contact": {
+    "message": "هومدنگ"
+  },
+  "tab_group": {
+    "message": "جرگه"
+  },
+  "tab_gallery": {
+    "message": "شؽوات مال"
+  },
+  "tab_docs": {
+    "message": "سندا"
+  },
+  "tab_links": {
+    "message": "لینگا"
+  },
+  "tab_map": {
+    "message": "نقشه"
+  },
+  "media_preview": {
+    "message": "نشۉ داڌن وارسگر"
+  },
+  "send_message": {
+    "message": "فشناڌن پیوم"
+  },
+  "storage_on_domain": {
+    "message": "زفت کردن من %1$s"
+  },
+  "connectivity_connecting": {
+    "message": "هونی منپیز ابۊ..."
+  },
+  "connectivity_updating": {
+    "message": "هونی ورۊ ابۊ..."
+  },
+  "connectivity_connected": {
+    "message": "منپیز وابی"
+  },
+  "sending": {
+    "message": "هونی افشنه..."
+  },
+  "messages": {
+    "message": "پیوما"
+  },
+  "sync_all": {
+    "message": "ورۊ کردن پوی"
+  },
+  "pref_your_name": {
+    "message": "نوم ایسا"
+  },
+  "pref_notifications_show": {
+    "message": "نشۉ داڌن"
+  },
+  "pref_language": {
+    "message": "زۉݩ"
+  },
+  "pref_chats": {
+    "message": "گوفت ۉ لوفتا"
+  },
+  "pref_log_header": {
+    "message": "گوزارش"
+  },
+  "pref_background_btn_gallery": {
+    "message": "پسند ز شؽوات مال"
+  },
+  "pref_show_emails_all": {
+    "message": "پوی"
+  },
+  "up_to_x": {
+    "message": "تا سقف %1$s"
+  },
+  "n_bytes_message": {
+    "message": "پیوم %1$s"
+  },
+  "profile_image_select": {
+    "message": "پسند شؽوات پوروفایل"
+  },
+  "profile_image_delete": {
+    "message": "پاک کردن شؽوات پوروفایل"
+  },
+  "pref_edit_profile": {
+    "message": "آلشت پوروفایل"
+  },
+  "emoji_search_results": {
+    "message": "نتیجیل پیتینیڌن"
+  },
+  "emoji_symbols": {
+    "message": "نمادا"
+  },
+  "emoji_flags": {
+    "message": "بیرقا"
+  },
+  "delete_old_messages": {
+    "message": "پاک کردن پیوما قڌیمی"
+  },
+  "autodel_device_title": {
+    "message": "پاک کردن پیوما ز دسگا"
+  },
+  "autodel_server_title": {
+    "message": "پاک کردن پیوما ز سرور"
+  },
+  "autodel_at_once": {
+    "message": "ی کرت دیندا دانلود"
+  },
+  "after_30_seconds": {
+    "message": "دیندا 30 سانیه"
+  },
+  "after_1_minute": {
+    "message": "دیندا 1 دؽقه"
+  },
+  "after_5_minutes": {
+    "message": "دیندا 5 دؽقه"
+  },
+  "after_30_minutes": {
+    "message": "دیندا 30 دؽقه"
+  },
+  "autodel_after_1_hour": {
+    "message": "دیندا 1 ساعت"
+  },
+  "autodel_after_1_day": {
+    "message": "دیندا 1 رۊ"
+  },
+  "autodel_after_1_week": {
+    "message": "دیندا 1 هفته"
+  },
+  "after_5_weeks": {
+    "message": "دیندا 5 هفته"
+  },
+  "autodel_after_1_year": {
+    "message": "دیندا 1 سال"
+  },
+  "group_left_by_other": {
+    "message": "%1$s ز جرگه رئڌ."
+  },
+  "qrshow_x_joining": {
+    "message": "%1$s ٱووڌ."
+  },
+  "qrshow_x_verified": {
+    "message": "%1$s تاییڌ وابی."
+  },
+  "contact_verified": {
+    "message": "%1$s تاییڌ وابی."
+  },
+  "verified_by": {
+    "message": "تاییڌ وابیڌه و دس %1$s"
+  },
+  "notify_reply_button": {
+    "message": "ولوم"
+  },
+  "notify_new_message": {
+    "message": "پیوم نۊ"
+  },
+  "notify_name_and_message": {
+    "message": "نوم وو پیوم"
+  },
+  "notify_name_only": {
+    "message": "تینا نوم"
+  },
+  "notify_no_name_or_message": {
+    "message": "بؽ نوم یا پیوم"
+  },
+  "global_menu_preferences_language_desktop": {
+    "message": "زۉݩ"
+  },
+  "global_menu_file_desktop": {
+    "message": "فایل"
+  },
+  "global_menu_file_quit_desktop": {
+    "message": "و در زیڌن"
+  },
+  "global_menu_edit_desktop": {
+    "message": "آلشت"
+  },
+  "global_menu_edit_cut_desktop": {
+    "message": "جا گورو"
+  },
+  "global_menu_edit_copy_desktop": {
+    "message": "لف گیری"
+  },
+  "global_menu_edit_paste_desktop": {
+    "message": "جا وندن"
+  },
+  "global_menu_file_open_desktop": {
+    "message": "گۊشیڌن دلتا چت"
+  },
+  "delete_message_desktop": {
+    "message": "پاک کردن پیوم"
+  },
+  "remove_desktop": {
+    "message": "پاک کردن"
+  },
+  "save_desktop": {
+    "message": "زفت"
+  },
+  "name_desktop": {
+    "message": "نوم"
+  },
+  "select_group_image_desktop": {
+    "message": "پسند شؽوات جرگه"
+  },
+  "message_detail_sent_desktop": {
+    "message": "فشناڌ"
+  },
+  "message_detail_received_desktop": {
+    "message": "گرؽڌه وابی"
+  },
+  "show_window": {
+    "message": "نشۉ داڌن نیمدری"
+  },
+  "open_settings": {
+    "message": "گۊشیڌن سامووا"
+  },
+  "n_minutes": {
+    "one": "%d دؽقه",
+    "other": "%d دؽقه"
+  },
+  "n_hours": {
+    "one": "%d ساعت",
+    "other": "%d ساعت"
+  },
+  "n_chats": {
+    "one": "%d چت",
+    "other": "%d چت"
+  },
+  "n_contacts": {
+    "one": "%d هومدنگ",
+    "other": "%d هومدنگ"
+  },
+  "n_messages": {
+    "one": "%d پیوم",
+    "other": "%d پیوم"
+  },
+  "n_members": {
+    "one": "%d منتور",
+    "other": "%d منتور"
+  },
+  "n_selected": {
+    "one": "%d تا پسند وابی",
+    "other": "%d تا پسند وابی"
+  },
+  "ask_delete_messages_simple": {
+    "one": "êxuy %d payom pāk bu?",
+    "other": "اخۊی %d پیوم پاک بۊ؟"
+  },
+  "chat_n_new_messages": {
+    "one": "%d پیوم نۊ",
+    "other": "%d پیوم نۊ"
+  }
+}

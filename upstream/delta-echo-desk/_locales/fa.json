@@ -1,0 +1,2563 @@
+{
+  "app_name": {
+    "message": "دلتاچت"
+  },
+  "ok": {
+    "message": "تأیید"
+  },
+  "cancel": {
+    "message": "لغو"
+  },
+  "clear_search": {
+    "message": "پاک کردن جست‌وجو"
+  },
+  "link": {
+    "message": "پیوند"
+  },
+  "scan": {
+    "message": "اسکن"
+  },
+  "yes": {
+    "message": "بله"
+  },
+  "no": {
+    "message": "خیر"
+  },
+  "select": {
+    "message": "انتخاب"
+  },
+  "on": {
+    "message": "روشن"
+  },
+  "off": {
+    "message": "خاموش"
+  },
+  "def": {
+    "message": "پیش‌فرض"
+  },
+  "default_value": {
+    "message": "پیش‌فرض (%1$s)"
+  },
+  "default_value_as_above": {
+    "message": "پیش‌فرض (مانند بالا)"
+  },
+  "custom": {
+    "message": "سفارشی"
+  },
+  "none": {
+    "message": "هیچ‌کدام"
+  },
+  "automatic": {
+    "message": "خودکار"
+  },
+  "strict": {
+    "message": "سخت‌گیرانه"
+  },
+  "open": {
+    "message": "گشودن"
+  },
+  "download": {
+    "message": "بارگیری"
+  },
+  "downloading": {
+    "message": "در حال بارگیری…"
+  },
+  "open_attachment": {
+    "message": "گشودن پیوست"
+  },
+  "join": {
+    "message": "پیوستن"
+  },
+  "rejoin": {
+    "message": "پیوستن مجدد"
+  },
+  "delete": {
+    "message": "حذف"
+  },
+  "delete_for_me": {
+    "message": "حذف برای من"
+  },
+  "delete_for_everyone": {
+    "message": "حذف برای همه"
+  },
+  "info": {
+    "message": "درباره"
+  },
+  "update": {
+    "message": "به‌‌روزرسانی"
+  },
+  "emoji": {
+    "message": "شکلک"
+  },
+  "attachment": {
+    "message": "پیوست"
+  },
+  "back": {
+    "message": "بازگشت"
+  },
+  "close": {
+    "message": "بستن"
+  },
+  "close_window": {
+    "message": "بستن پنجره"
+  },
+  "forward": {
+    "message": "هدایت"
+  },
+  "create": {
+    "message": "ایجاد"
+  },
+  "later": {
+    "message": "بعدا"
+  },
+  "resend": {
+    "message": "ارسال مجدد"
+  },
+  "edited": {
+    "message": "ویرایش‌شده"
+  },
+  "edit_message": {
+    "message": "ویرایش پیام"
+  },
+  "archive": {
+    "message": "بایگانی"
+  },
+  "unarchive": {
+    "message": "خروج از بایگانی"
+  },
+  "mute": {
+    "message": "سکوت"
+  },
+  "muted": {
+    "message": "بی‌صدا"
+  },
+  "ephemeral_messages": {
+    "message": "پیام‌های ناپدید شونده"
+  },
+  "ephemeral_messages_hint": {
+    "message": "روی تمام اعضای این گپ، اگر از دلتاچت استفاده کنند، اعمال می‌شود؛ ولی همچنان می‌توانند پیام‌ها را رونوشت، ذخیره و هدایت کنند یا از کارخواه‌های رایانامهٔ دیگر استفاده کنند."
+  },
+  "save": {
+    "message": "ذخیره"
+  },
+  "chat": {
+    "message": "گپ"
+  },
+  "media": {
+    "message": "رسانه"
+  },
+  "profile": {
+    "message": "نمایه"
+  },
+  "main_menu": {
+    "message": "فهرست اصلی"
+  },
+  "start_chat": {
+    "message": "شروع گپ"
+  },
+  "show_full_message": {
+    "message": "نمایش پیام کامل..."
+  },
+  "mark_all_as_read": {
+    "message": "همه را خوانده شده بزن"
+  },
+  "mark_as_read": {
+    "message": "علامت زدن به عنوان خوانده شده"
+  },
+  "mark_as_read_short": {
+    "message": "علامت زدن به عنوان خوانده شده"
+  },
+  "loading": {
+    "message": "در حال بارگیری..."
+  },
+  "hide": {
+    "message": "مخفی کردن"
+  },
+  "activate": {
+    "message": "فعال کردن"
+  },
+  "load_remote_content": {
+    "message": "بارگیری تصاویر از بیرون"
+  },
+  "load_remote_content_ask": {
+    "message": "تصاویر مربوط به نشانی‌های اینترنتی دیگر می‌توانند برای ردیابی شما استفاده شوند. \n\n این تنظیم‌ها همچنین برای بارگیری فونت‌ها و دیگر محتواها استفاده می‌شوند. اگر غیرفعال باشد ممکن است همچنان تصویر‌های درون پیام و تصویر‌های بارگیری شده را ببینید. \n\n آيا تصاویر خارجی بارگیری شوند؟"
+  },
+  "always": {
+    "message": "همیشه"
+  },
+  "always_load_remote_images": {
+    "message": "تصاویر دوردست همیشه بار شوند"
+  },
+  "once": {
+    "message": "همین یک بار"
+  },
+  "show_warning": {
+    "message": "نمایش هشدار"
+  },
+  "show_password": {
+    "message": "نمایش رمزعبور"
+  },
+  "hide_password": {
+    "message": "مخفی کردن رمز عبور"
+  },
+  "not_now": {
+    "message": "اکنون نه"
+  },
+  "never": {
+    "message": "هرگز"
+  },
+  "one_moment": {
+    "message": "یک لحظه..."
+  },
+  "done": {
+    "message": "انجام شد"
+  },
+  "undo": {
+    "message": "واگرد"
+  },
+  "offline": {
+    "message": "آفلاین"
+  },
+  "next": {
+    "message": "بعدی"
+  },
+  "error": {
+    "message": "خطا"
+  },
+  "error_x": {
+    "message": "خطا: %1$s"
+  },
+  "no_app_to_handle_data": {
+    "message": "نرم‌افزاری برای باز کردن این نوع داده یافت نشد"
+  },
+  "no_browser_installed": {
+    "message": "هیچ مرورگری نصب نیست."
+  },
+  "file_not_found": {
+    "message": "عدم یافتن %1$s"
+  },
+  "copied_to_clipboard": {
+    "message": "در حافظه کپی شد."
+  },
+  "contacts_headline": {
+    "message": "مخاطبین"
+  },
+  "email_address": {
+    "message": "نشانی رایانامه"
+  },
+  "bad_email_address": {
+    "message": "نشانی رایانامه ایراد دارد."
+  },
+  "password": {
+    "message": "رمزعبور"
+  },
+  "existing_password": {
+    "message": "رمزعبور موجود"
+  },
+  "now": {
+    "message": "اکنون"
+  },
+  "danger": {
+    "message": "خطر"
+  },
+  "today": {
+    "message": "امروز"
+  },
+  "yesterday": {
+    "message": "دیروز"
+  },
+  "this_week": {
+    "message": "این هفته"
+  },
+  "this_month": {
+    "message": "این ماه"
+  },
+  "last_week": {
+    "message": "هفته گذشته"
+  },
+  "last_month": {
+    "message": "ماه گذشته"
+  },
+  "last_seen_at": {
+    "message": "آخرین بار در %1$s دیده شده"
+  },
+  "last_seen_relative": {
+    "message": "آخرین بار دیده‌شده در %1$s"
+  },
+  "last_seen_unknown": {
+    "message": "آخرین زمان مشاهده: نامشخص"
+  },
+  "self": {
+    "message": "من"
+  },
+  "draft": {
+    "message": "پیش‌نویس"
+  },
+  "image": {
+    "message": "تصویر"
+  },
+  "reply_noun": {
+    "message": "پاسخ"
+  },
+  "gif": {
+    "message": "Gif"
+  },
+  "sticker": {
+    "message": "استیکر"
+  },
+  "add_to_sticker_collection": {
+    "message": "افزودن به مجموعه استیکر"
+  },
+  "add_stickers_instructions": {
+    "message": "برای اضافه کردن برچسب روی «بازکردن پوشهٔ برچسب» بزنید، یک زیرپوشه برای دستهٔ برچسب خود درست کنید و برچسب‌ها را به آن‌جا بکشید"
+  },
+  "open_sticker_folder": {
+    "message": "بازکردن پوشه استیکر"
+  },
+  "images": {
+    "message": "تصاویر"
+  },
+  "audio": {
+    "message": "صدا"
+  },
+  "voice_message": {
+    "message": "پیام صوتی"
+  },
+  "forwarded": {
+    "message": "هدایت"
+  },
+  "forwarded_message": {
+    "message": "پیام هدایت شده"
+  },
+  "forwarded_by": {
+    "message": "توسط %1$s هدایت شده است"
+  },
+  "video": {
+    "message": "فیلم"
+  },
+  "documents": {
+    "message": "اسناد"
+  },
+  "contact": {
+    "message": "مخاطب"
+  },
+  "bot": {
+    "message": "ربات"
+  },
+  "camera": {
+    "message": "دوربین"
+  },
+  "capture": {
+    "message": "گرفتن"
+  },
+  "switch_camera": {
+    "message": "تغییر دوربین"
+  },
+  "toggle_fullscreen": {
+    "message": "تغییر وضعیت تمام صفحه"
+  },
+  "location": {
+    "message": "موقعیت مکانی"
+  },
+  "locations": {
+    "message": "مکان‌ها"
+  },
+  "gallery": {
+    "message": "گالری"
+  },
+  "images_and_videos": {
+    "message": "تصاویر و فیلم‌ها"
+  },
+  "file": {
+    "message": "پوشه"
+  },
+  "files": {
+    "message": "پرونده‌ها"
+  },
+  "webxdc_app": {
+    "message": "برنامه"
+  },
+  "webxdc_apps": {
+    "message": "برنامه‌ها"
+  },
+  "home": {
+    "message": "خانه"
+  },
+  "games": {
+    "message": "بازی‌ها"
+  },
+  "tools": {
+    "message": "ابزار"
+  },
+  "app_size": {
+    "message": "اندازه"
+  },
+  "app_date_published": {
+    "message": "انتشار"
+  },
+  "add_to_chat": {
+    "message": "افزودن به گفتگو"
+  },
+  "browse": {
+    "message": "جستجو"
+  },
+  "unknown": {
+    "message": "ناشناس"
+  },
+  "green": {
+    "message": "سبز"
+  },
+  "red": {
+    "message": "قرمز"
+  },
+  "blue": {
+    "message": "آبی"
+  },
+  "orange": {
+    "message": "نارنجی"
+  },
+  "cyan": {
+    "message": "یشمی"
+  },
+  "purple": {
+    "message": "بنفش"
+  },
+  "magenta": {
+    "message": "سرخابی"
+  },
+  "white": {
+    "message": "سفید"
+  },
+  "zoom": {
+    "message": "بزرگ نمایی"
+  },
+  "extra_small": {
+    "message": "بسیار کوچک"
+  },
+  "small": {
+    "message": "کوچک"
+  },
+  "normal": {
+    "message": "عادی"
+  },
+  "large": {
+    "message": "بزرگ"
+  },
+  "extra_large": {
+    "message": "خیلی بزرگ"
+  },
+  "fast": {
+    "message": "سریع"
+  },
+  "slow": {
+    "message": "آهسته"
+  },
+  "menu_new_contact": {
+    "message": "مخاطب جدید"
+  },
+  "menu_new_classic_contact": {
+    "message": "اضافه کردن مخاطب به صورت دستی"
+  },
+  "new_classic_contact_explain": {
+    "message": "مخاطبینی که دستی اضافه شده‌اند می توانند برای ارسال پیام به حساب ایمیل معمولی\n استفاده شوند و رمزگذاری سراسری برای آن‌ها تضمین نمی‌شود."
+  },
+  "menu_new_chat": {
+    "message": "گپ جدید"
+  },
+  "menu_new_group": {
+    "message": "گروه جدید"
+  },
+  "chat_with": {
+    "message": "شروع گفتگو با..."
+  },
+  "clone_chat": {
+    "message": "درست کردن گپ جدید از این گپ"
+  },
+  "broadcast_list": {
+    "message": "لیست Broadcast"
+  },
+  "broadcast_lists": {
+    "message": "لیست‌های Broadcast"
+  },
+  "new_broadcast_list": {
+    "message": "لیست Broadcast جدید"
+  },
+  "add_recipients": {
+    "message": "افزودن گیرنده"
+  },
+  "edit_broadcast_list": {
+    "message": "ویرایش فهرست Broadcast"
+  },
+  "broadcast_list_name": {
+    "message": "نام فهرست BroadCast"
+  },
+  "please_enter_broadcast_list_name": {
+    "message": "وارد کردن نام برای فهرست Broadcast."
+  },
+  "menu_send": {
+    "message": "ارسال"
+  },
+  "menu_toggle_keyboard": {
+    "message": "تعییر صفحه کلید شکلک‌ها"
+  },
+  "menu_edit_group": {
+    "message": "ویرایش گروه"
+  },
+  "menu_group_name_and_image": {
+    "message": "نام و تصویر گروه"
+  },
+  "menu_show_global_map": {
+    "message": "نمایش همه موقعیت‌های مکانی"
+  },
+  "menu_archive_chat": {
+    "message": "بایگانی گپ"
+  },
+  "menu_unarchive_chat": {
+    "message": "خروج چت از بایگانی"
+  },
+  "menu_add_attachment": {
+    "message": "افزودن ضمیمه"
+  },
+  "menu_leave_group": {
+    "message": "ترک گروه"
+  },
+  "menu_delete_chat": {
+    "message": "حذف گپ"
+  },
+  "clear_chat": {
+    "message": "پاک کردن چت"
+  },
+  "delete_contact": {
+    "message": "پاک کردن مخاطب"
+  },
+  "menu_delete_location": {
+    "message": "حذف این موقعیت مکانی؟"
+  },
+  "menu_message_details": {
+    "message": "جزئیات پیام"
+  },
+  "menu_copy_to_clipboard": {
+    "message": "رونوشت‌برداری در حافظه"
+  },
+  "share_invite_link": {
+    "message": "اشتراک پیوند دعوت"
+  },
+  "share_invite_link_explain": {
+    "message": "هرکس با استفاده از این پیوند می‌تواند نمایهٔ شما را ببییند و یک گپ را با شما شروع کند. این را تنها به کسانی که اعتماد دارید بدهید."
+  },
+  "invite_friends": {
+    "message": "دعوت دوستان"
+  },
+  "invite_friends_text": {
+    "message": "تماس گرفتن با من در دلتاچت:\n\n%1$s"
+  },
+  "menu_copy_selection_to_clipboard": {
+    "message": "رونوشت برداری از انتخاب شده"
+  },
+  "menu_copy_link_to_clipboard": {
+    "message": "رونوشت برداری از لینک"
+  },
+  "menu_copy_text_to_clipboard": {
+    "message": "رونوشت گرفتن از متن"
+  },
+  "menu_copy_image_to_clipboard": {
+    "message": "رونوشت گرفتن از تصویر"
+  },
+  "menu_copy_email_to_clipboard": {
+    "message": "کپی کردن رایانامه"
+  },
+  "paste_from_clipboard": {
+    "message": "چسباندن از حافظه"
+  },
+  "ask_copy_unopenable_link_to_clipboard": {
+    "message": "نمی توان پیوند \"%1$d\" را در مرورگر باز کرد. آیا می‌خواهید در عوض از پیوند یک رونوشت بگیرید؟"
+  },
+  "menu_forward": {
+    "message": "هدایت پیام"
+  },
+  "menu_reply": {
+    "message": "پاسخ به پیام"
+  },
+  "menu_mute": {
+    "message": "ساکت کردن اعلان"
+  },
+  "menu_unmute": {
+    "message": "صدا دار کردن"
+  },
+  "menu_export_attachment": {
+    "message": "صادر کردن ضمیمه"
+  },
+  "menu_export_attachments": {
+    "message": "صادر کردن ضمیمه"
+  },
+  "menu_all_media": {
+    "message": "همه رسانه‌ها"
+  },
+  "show_in_chat": {
+    "message": "نمایش در گپ"
+  },
+  "show_app_in_chat": {
+    "message": "نمایش برنامه در گفتگو"
+  },
+  "menu_share": {
+    "message": "اشتراک"
+  },
+  "block": {
+    "message": "مسدود کردن"
+  },
+  "menu_block_contact": {
+    "message": "انسداد مخاطب"
+  },
+  "menu_unblock_contact": {
+    "message": "لغو انسداد مخاطب"
+  },
+  "accept": {
+    "message": "پذیرش"
+  },
+  "menu_play": {
+    "message": "اجرا"
+  },
+  "menu_pause": {
+    "message": "توقف"
+  },
+  "menu_scroll_to_bottom": {
+    "message": "رفتن به پایین"
+  },
+  "menu_scroll_to_top": {
+    "message": "رفن تا بالا"
+  },
+  "menu_help": {
+    "message": "کمک"
+  },
+  "what_is_webxdc": {
+    "message": "Webxdc چیست؟"
+  },
+  "privacy_policy": {
+    "message": "خط مشی رازداری"
+  },
+  "menu_select_all": {
+    "message": "انتخاب همه"
+  },
+  "select_chat": {
+    "message": "انتخاب چت"
+  },
+  "select_more": {
+    "message": "انتخاب بیشتر"
+  },
+  "menu_edit_name": {
+    "message": "ویرایش نام"
+  },
+  "edit_name_explain": {
+    "message": "به شما یک نام مستعار به جای «%1$s» نمایش می‌دهد. برای نمایش نام انتخابی خود مخاطب، این را خالی بگذارید."
+  },
+  "edit_name_placeholder": {
+    "message": "نام مستعار برای «%1$s»"
+  },
+  "menu_settings": {
+    "message": "تنظیم‌ها"
+  },
+  "menu_advanced": {
+    "message": "پیشرفته"
+  },
+  "menu_view_profile": {
+    "message": "نمایش نمایه"
+  },
+  "menu_zoom_in": {
+    "message": "درشت نمایی"
+  },
+  "menu_zoom_out": {
+    "message": "کوچک نمایی"
+  },
+  "menu_save_log": {
+    "message": "ذخیره گزارش"
+  },
+  "menu_more_options": {
+    "message": "گزینه‌های بیشتر"
+  },
+  "menu_learn_spelling": {
+    "message": "یادگرفتن املا "
+  },
+  "menu_chat_audit_log": {
+    "message": "گزارش بررسی گپ"
+  },
+  "jump_to_message": {
+    "message": "رفتن به پیام"
+  },
+  "copy_json": {
+    "message": "JSON رونوشت برداری از "
+  },
+  "replace_draft": {
+    "message": "جایگزین کردن پیش‌نویس"
+  },
+  "title_share_location": {
+    "message": "اشتراک موقعیت مکانی با همه اعضای گروه"
+  },
+  "device_talk": {
+    "message": "پیام‌های دستگاه"
+  },
+  "device_talk_subtitle": {
+    "message": "پیام‌های  داخلی"
+  },
+  "device_talk_explain": {
+    "message": "پیام‌ها در این گپ به صورت داخلی و توسط نرم‌افزار دلتاچت تولید شده‌اند. سازنده‌ها از این محل برای اعلان به روز‌رسانی‌ها و مشکلات پیش آمده حین کار استفاده می‌کنند. "
+  },
+  "device_talk_welcome_message2": {
+    "message": "برقراری مکالمه!\n\n\nروی «کد QR» در صفحهٔ اصلی هر دو دستگاه بزنید. روی یکی از دستگاه‌ها «اسکن کد QR» را انتخاب کنید و با آن روی دستگاه دیگر بگیرید\n\nاگر در یک مکان نیستید، از طریق تماس تصویری اسکن کنید یا این‌که یک پیوند دعوت از «اسکن کد QR» به اشتراک بگذارید.\n\n.سپس از تجربه کردن پیام‌رسان بر روی بزرگترین شبکهٔ نامتمرکزی که تا به حال وجود داشته یعنی رایانامه لذت ببرید. در مقایسه با دیگر پیام‌رسان‌های محبوب، دلتاچت هیچ کنترل مرکزی‌ای ندارد. و شما، دوستهایتان، همکارهایتان یا خانواده‌هایتان را ردیابی نمی‌کند یا این‌که به سازمان‌های بزرگ نمی‌فروشد."
+  },
+  "edit_contact": {
+    "message": "ویرایش مخاطب"
+  },
+  "pin_chat": {
+    "message": "سنجاق کردن گپ"
+  },
+  "unpin_chat": {
+    "message": "کندن گپ از سنجاق"
+  },
+  "pin": {
+    "message": "سنجاق‌کردن"
+  },
+  "unpin": {
+    "message": "سنجاق برداری"
+  },
+  "ConversationFragment_quoted_message_not_found": {
+    "message": "پیام اصلی یافت نشد"
+  },
+  "reply_privately": {
+    "message": "پاسخ دادن به صورت خصوصی"
+  },
+  "source_code": {
+    "message": "کد منبع"
+  },
+  "add_to_home_screen": {
+    "message": "افزودن به صفحه خانه"
+  },
+  "donate": {
+    "message": "حمایت مالی"
+  },
+  "mute_for_one_hour": {
+    "message": "ساکت کردن به مدت۱ ساعت"
+  },
+  "mute_for_eight_hours": {
+    "message": "بی‌صدا کردن به مدت ۸ ساعت"
+  },
+  "mute_for_one_day": {
+    "message": "ساکت کردن به مدت ۱ روز"
+  },
+  "mute_for_seven_days": {
+    "message": "ساکت کردن به مدت۷ روز"
+  },
+  "mute_forever": {
+    "message": "ساکت کردن دائمی"
+  },
+  "share_location_for_5_minutes": {
+    "message": "به مدت ۵ دقیقه"
+  },
+  "share_location_for_30_minutes": {
+    "message": "به مدت ۳۰ دقیقه"
+  },
+  "share_location_for_one_hour": {
+    "message": "به مدت ۱ ساعت"
+  },
+  "share_location_for_two_hours": {
+    "message": "به مدت ۲ ساعت"
+  },
+  "share_location_for_six_hours": {
+    "message": "به مدت ۶ ساعت"
+  },
+  "file_saved_to": {
+    "message": "پرونده  در «%1$s» ذخیره شد."
+  },
+  "videochat": {
+    "message": "گپ تصویری"
+  },
+  "videochat_invite_user_to_videochat": {
+    "message": "دعوت کردن %1$sبه گپ تصویری"
+  },
+  "videochat_invite_user_hint": {
+    "message": "این عمل، به نرم افزار یا مرورگر سازگار برای هردوطرف مکالمه نیاز دارد. "
+  },
+  "videochat_contact_invited_hint": {
+    "message": "%1$s دعوت به تماس تصویری  "
+  },
+  "videochat_you_invited_hint": {
+    "message": "شما به تماس تصویری دعوت شده‌اید."
+  },
+  "videochat_tap_to_join": {
+    "message": "برای پیوستن ضربه بزنید. "
+  },
+  "videochat_tap_to_open": {
+    "message": "برای باز کردن ضربه بزنید. "
+  },
+  "videochat_instance": {
+    "message": "جلسه تماس تصویری"
+  },
+  "videochat_instance_placeholder": {
+    "message": "جلسه تماس تصویری شما"
+  },
+  "videochat_instance_example": {
+    "message": "مثال‌: \nhttps://meet.jit.si/$ROOM \nیا\n basicwebrtc:https://your-server"
+  },
+  "videochat_instance_explain_2": {
+    "message": "اگر به کا بیفتد، می‌توانید یک مکالمهٔ تصویری را در هر گپ شروع کنید. نیازمند نرم‌افزار مورد نیاز یا مرورگر در هر دو طرف است. "
+  },
+  "videochat_instance_from_qr": {
+    "message": "می‌خواهید از «%1$s» برای دعوت دیگران به گپ تصویری استفاده کنید؟/n/n وقتی تعیین شد، می‌توانید در هر گپ فرد به فرد یک مکالمهٔ تصویری شروع کنید. این کار، تنظیم‌ها قبلی تماس تصویری را تغییر می‌دهد."
+  },
+  "videochat_invitation": {
+    "message": "دعوت به مکالمه تصویری."
+  },
+  "videochat_invitation_body": {
+    "message": "شما به مکالمه تصویری دعوت شده اید برای پیوستن%1$s را بزنید."
+  },
+  "ask_leave_group": {
+    "message": "مطمئن هستید می‌خواهید این گروه را ترک کنید؟"
+  },
+  "ask_delete_named_chat": {
+    "message": "حذف گفتگو «%1$s» از همه‌ی دستگاه‌های شما؟"
+  },
+  "ask_delete_message": {
+    "message": "می‌خواهید این پیام را از همه‌ی دستگاه‌هایتان حذف کنید؟"
+  },
+  "ask_forward": {
+    "message": "پیام‌ها به %1$sهدایت شوند؟"
+  },
+  "ask_forward_multiple": {
+    "message": "انتقال پیام‌ها به %1$d گپ؟"
+  },
+  "ask_export_attachment": {
+    "message": "ضمیمه صادر شود؟ صادر کردن ضمیمه باعث می‌شود دیگر نرم‌افزارهای روی دستگاه شما بتوانند به آن دسترسی داشته باشند. \n\nادامه می‌دهید؟"
+  },
+  "ask_block_contact": {
+    "message": "مخاطب مسدود شود؟ شما دیگر پیامی از این مخاطب دریافت نخواهید کرد."
+  },
+  "ask_unblock_contact": {
+    "message": "رفع مسدودیت مخاطب؟ دوباره قادر خواهید بود پیام‌های ارسال شده توسط این مخاطب را دریافت کنید."
+  },
+  "ask_delete_contacts": {
+    "message": "مخاطبین حذف شوند؟\n\nمخاطبینی که گپ فعال دارند و مخاطبینی که در دفتر تلفن سامانه هستند را نمی‌توان به صورت دائمی حذف کرد. "
+  },
+  "ask_delete_contact": {
+    "message": "حذف مخاطب %1$s؟ \n\nمخاطبین با گپ فعال و مخاطبینی که در دفتر تلفن سامانه هستند را نمی‌توان به صورت دائمی حذف کرد. "
+  },
+  "ask_start_chat_with": {
+    "message": "گپ زدن با %1$s؟"
+  },
+  "ask_remove_members": {
+    "message": "حذف %1$s از گروه؟"
+  },
+  "ask_remove_from_broadcast": {
+    "message": "آيا%1$s از لیست Broadcast پاک شود؟ "
+  },
+  "open_url_confirmation": {
+    "message": "آیا می‌خواهید این لینک را باز کنید؟"
+  },
+  "contacts_title": {
+    "message": "مخاطبین"
+  },
+  "contacts_enter_name_or_email": {
+    "message": "نام یا نشانی رایانامه را وارد کنید"
+  },
+  "contacts_type_email_above": {
+    "message": "نشانی رایانامه را در بخش بالا وارد کنید"
+  },
+  "contacts_empty_hint": {
+    "message": "بدون مخاطب."
+  },
+  "chat_archived_chats_title": {
+    "message": "گپ‌های بایگانی شده"
+  },
+  "chat_please_enter_message": {
+    "message": "لطفا یک پیام وارد کنید."
+  },
+  "chat_camera_unavailable": {
+    "message": "دوربین در دسترس نیست"
+  },
+  "chat_unable_to_record_audio": {
+    "message": "ضبط صدا ممکن نیست. "
+  },
+  "chat_new_one_to_one_hint": {
+    "message": "ارسال پیام. مشکلی نیست اگر %1$s از دلتاچت استفاده نمی‌کند."
+  },
+  "chat_new_broadcast_hint": {
+    "message": "در یک فهرست Broadcast گیرنده‌ها در یک گپ فقط خواندنی با شما، پیام‌ها را دریافت می‌کنند."
+  },
+  "chat_new_group_hint": {
+    "message": "نوشتن اولین پیام به دیگران امکان می‌دهد در این گروه پاسخ دهند. \n\n• مشکلی نیست اگر همه اعضا از دلتاچت استفاده نکنند\n\n• دریافت اولین پیام ممکن است به زمان بیشتری نیاز داشته باشد. "
+  },
+  "chat_record_slide_to_cancel": {
+    "message": "برای لغو بکشید."
+  },
+  "chat_record_explain": {
+    "message": "برای ضبط پیام صوتی فشار داده و نگهدارید، برای ارسال رها کنید. "
+  },
+  "chat_no_chats_yet_title": {
+    "message": "گفتگویی وجود ندارد.\nبرای شروع گفتگو جدید دکمه «+» را فشار دهید."
+  },
+  "chat_all_archived": {
+    "message": "تمام گپ‌ها بایگانی شده‌اند. /n برای شروع گپ جدید، «+» را فشار دهید. "
+  },
+  "chat_share_with_title": {
+    "message": "اشتراک گذاری با"
+  },
+  "chat_input_placeholder": {
+    "message": "پیام"
+  },
+  "chat_archived_label": {
+    "message": "بایگانی شد"
+  },
+  "chat_request_label": {
+    "message": "درخواست"
+  },
+  "chat_no_messages": {
+    "message": "پیامی نیست. "
+  },
+  "chat_self_talk_subtitle": {
+    "message": "پیام‌هایی که برای خودم  ارسال کرده‌ام. "
+  },
+  "archive_empty_hint": {
+    "message": "اگر گپ‌ها را بایگانی کنید در اینجا نمایش داده می‌شوند. "
+  },
+  "saved_messages": {
+    "message": "پیام‌های ذخیره شده. "
+  },
+  "saved_messages_explain": {
+    "message": "برای دسترسی راحت‌تر پیام‌ها را به اینجا هدایت کنید\n\n• می‌توانید یادداشت متنی یا صوتی تهیه کنید\n\n• برای ذخیره رسانه‌ آن را ضمیمه کنید. "
+  },
+  "saved": {
+    "message": "ذخیره شد"
+  },
+  "save_as": {
+    "message": "ذخیره به عنوان"
+  },
+  "retry_send": {
+    "message": "برای ارسال پیام دوباره تلاش کنید. "
+  },
+  "messaging_disabled_not_in_group": {
+    "message": "نمی‌توانید بنویسید چرا که در این گروه نیستید. برای عضو شدن از یکی از اعضا درخواست کنید. "
+  },
+  "messaging_disabled_mailing_list": {
+    "message": "ارسال پیام در فهرست‌های پستی فعلاً پشتیبانی نمی‌شود."
+  },
+  "cannot_display_unsuported_file_type": {
+    "message": "امکان نمایش این نوع پرونده وجود ندارد: %s"
+  },
+  "attachment_failed_to_load": {
+    "message": "ناموفق در بارگیری ضمیمه"
+  },
+  "lock_recording": {
+    "message": "قفل کردن ضبط کردن"
+  },
+  "mailing_list": {
+    "message": "فهرست پستی"
+  },
+  "mailing_list_profile_info": {
+    "message": "تغییرات انجام شده روی نام و تصویر فهست پستی فقط در این دستگاه اعمال شود."
+  },
+  "start_app": {
+    "message": "شروع..."
+  },
+  "accept_request_first": {
+    "message": "لطفاً اول درخواست گپ را قبول کنید."
+  },
+  "send_file_to": {
+    "message": "ارسال \"%1$s\" به..."
+  },
+  "send_message_to": {
+    "message": "ارسال پیام به..."
+  },
+  "enable_realtime": {
+    "message": "برنامه‌های بلادرنگ"
+  },
+  "enable_realtime_explain": {
+    "message": "فعال‌سازی اتصال‌های بلادرنگ برای برنامه‌های به اشتراک گذاشته‌شده در گپ‌ها. در صورت فعال‌سازی، زمانی که برنامه را باز می‌کنید، دیگر اعضای گپ ممکن است بتوانند نشانی اینترنتی شما را شناسایی کنند."
+  },
+  "filter_map_on_time": {
+    "message": "نمایش موقعیت‌های مکانی در چارچوب زمان"
+  },
+  "show_location_traces": {
+    "message": "نمایش ردپاها"
+  },
+  "add_poi": {
+    "message": "ارسال نقطه توجه"
+  },
+  "chat_audit_log_empty_message": {
+    "message": "پیام‌های سامانه‌ای این گپ اینجا نمایش داده خواهند شد"
+  },
+  "chat_audit_log_title": {
+    "message": "گزارش حسابرسی گپ برای %1$s"
+  },
+  "chat_audit_log_description": {
+    "message": "فقط سامانه و پیام‌های اطلاع‌رسانی را نشان می‌دهد. برای یافتن آخرین کنش‌های گپ بدون لغزش میان بسیاری پیام مفید است."
+  },
+  "open_external_url_trust_domain": {
+    "message": "دوباره درمورد %1$s سوال نشود"
+  },
+  "puny_code_warning_header": {
+    "message": "لینک مشکوک شناسایی شد"
+  },
+  "puny_code_warning_question": {
+    "message": "مطمئن هستید می‌خواهید به %1$s مراجعه کنید؟"
+  },
+  "puny_code_warning_description": {
+    "message": "شما لینکی را دنبال کرده‌اید که با نمایش حروفی که از نظر ظاهری شباهت دارند ممکن است شما را به جای دیگری ببرد. دنبال کردن لینک با برچسب %1$s شما را به %2$s خواهد برد که حالت عادی برای حروف انگلیسی است. اگر انتظار این حروف را نداشتید ممکن است لینک مورد نظر مضر باشد. "
+  },
+  "search": {
+    "message": "جستجو"
+  },
+  "search_in_chat": {
+    "message": "جستجو در گفتگو"
+  },
+  "search_files": {
+    "message": "جستجوی پرونده‌ها"
+  },
+  "search_explain": {
+    "message": "جست‌وجو برای گپ‌ها، مخاطبان و پیام‌ها"
+  },
+  "search_no_result_for_x": {
+    "message": "نتیجه‌ای برای \"%s\" پیدا نشد"
+  },
+  "search_unread": {
+    "message": "خوانده نشده"
+  },
+  "group_name": {
+    "message": "نام گروه"
+  },
+  "group_avatar": {
+    "message": "تصویر گروه"
+  },
+  "remove_group_image": {
+    "message": "حذف تصویر گروه"
+  },
+  "change_group_image": {
+    "message": "حذف تصویر گروه"
+  },
+  "group_create_button": {
+    "message": "ایجاد گروه"
+  },
+  "group_please_enter_group_name": {
+    "message": "لطفا نامی برای گروه وارد کنید. "
+  },
+  "group_add_members": {
+    "message": "افزودن اعضا"
+  },
+  "group_self_not_in_group": {
+    "message": "برای این کار باید عضو گروه باشید."
+  },
+  "profile_encryption": {
+    "message": "رمزگذاری"
+  },
+  "profile_shared_chats": {
+    "message": "گپ‌های هم‌رسانده"
+  },
+  "related_chats": {
+    "message": "گفتگوهای مرتبط"
+  },
+  "tab_contact": {
+    "message": "مخاطب"
+  },
+  "tab_group": {
+    "message": "گروه"
+  },
+  "tab_gallery": {
+    "message": "گالری"
+  },
+  "tab_docs": {
+    "message": "اسناد"
+  },
+  "tab_links": {
+    "message": "لینک‌ها"
+  },
+  "tab_map": {
+    "message": "نقشه"
+  },
+  "tab_gallery_empty_hint": {
+    "message": "تصاویر و ویدیوهای هم‌رسانده در این گپ اینجا نمایش داده می‌شوند."
+  },
+  "tab_docs_empty_hint": {
+    "message": "اسناد و پرونده‌های هم‌رساندهٔ دیگر در این گپ اینجا نمایش داده می‌شوند."
+  },
+  "tab_image_empty_hint": {
+    "message": "تصاویر هم‌رسانده در این گپ اینجا نمایش داده می‌شوند."
+  },
+  "tab_video_empty_hint": {
+    "message": "ویدیوهای هم‌رسانده در این گپ اینجا نمایش داده می‌شوند."
+  },
+  "tab_audio_empty_hint": {
+    "message": "پرونده‌های صوتی و پیام‌های صوتی هم‌رسانده در این گپ اینجا نمایش داده می‌شوند."
+  },
+  "tab_webxdc_empty_hint": {
+    "message": "برنامه‌هایی که در این چت به اشتراک گذاشته شده‌اند، این‌جا نمایش داده خواهند شد."
+  },
+  "tab_all_media_empty_hint": {
+    "message": "رسانه‌های به اشتراک گذاشته شده همه چت‌ها در اینجا ظاهر می‌شود."
+  },
+  "all_apps_empty_hint": {
+    "message": "برنامه‌هایی که در هر گفتگویی ارسال شده باشند در اینجا ظاهر خواهند شد."
+  },
+  "media_preview": {
+    "message": "نمایش رسانه"
+  },
+  "aspect_ratio_grid": {
+    "message": "حفظ مقیاس تصویر"
+  },
+  "square_grid": {
+    "message": "جدول مربعی"
+  },
+  "send_message": {
+    "message": "ارسال پیام"
+  },
+  "aeap_addr_changed": {
+    "message": "مخاطب %1$s نشانی خود را از %2$s به %3$s تغییر داده است.  "
+  },
+  "aeap_explanation": {
+    "message": "شما نشانی رایانامهٔ خود را از %1$s به %2$s تغییر دادید.\n\nاگر به یک گروه تأیید شده پیام بفرستید، مخاطبان آن به صورت خودکار نشانی جدید را جایگزین نشانی پیشین می‌کنند.\n\nبه شدت توصیه می‌شود که نشانی رایانامهٔ پیشین خود را به نحوی تنظیم کنید که تمام رایانامه‌ها را به نشانی جدید شما هدایت کند؛ در غیر این صورت ممکن است پیام‌های مخاطبانی که از تغییر نشانی شما مطلع نشده‌اند را از دست بدهید. "
+  },
+  "multidevice_title": {
+    "message": "افزودن دستگاه دوم"
+  },
+  "multidevice_same_network_hint": {
+    "message": "مطمئن شوید هر دو دستگاه در یک وای‌فای یا شبکه هستند"
+  },
+  "multidevice_this_creates_a_qr_code": {
+    "message": "این یک کد کیوآر ایجاد می‌کند که دستگاه دوم می‌تواند برای کپی حساب اسکن کند."
+  },
+  "multidevice_install_dc_on_other_device": {
+    "message": "دلتاچت را روی دستگاه دیگر خود نصب کنید (https://get.delta.chat)"
+  },
+  "multidevice_tap_scan_on_other_device": {
+    "message": "دلتاچت را باز کنید، روی «افزودن به عنوان دستگاه دوم» بزنید و کد نشان داده شده در اینجا را اسکن کنید"
+  },
+  "multidevice_qr_subtitle": {
+    "message": "برای راه اندازی دستگاه دوم برای %1$s اسکن کنید"
+  },
+  "multidevice_receiver_title": {
+    "message": "افزودن به عنوان دستگاه دوم"
+  },
+  "multidevice_open_settings_on_other_device": {
+    "message": "در دستگاه اول، به \"تنظیم‌ها / افزودن دستگاه دوم\" بروید و کد نشان داده شده در آنجا را اسکن کنید"
+  },
+  "multidevice_receiver_scanning_ask": {
+    "message": "از حساب دستگاه دیگر رونوشتی برای این دستگاه گرفته شود؟"
+  },
+  "multidevice_abort": {
+    "message": "راه اندازی دستگاه دوم لغو شود؟"
+  },
+  "multidevice_abort_will_invalidate_copied_qr": {
+    "message": "این کار رمزینهٔ پاس رونوشت شده در تخته‌گیره را باطل می کند."
+  },
+  "multidevice_transfer_done_devicemsg": {
+    "message": "ℹ️ حساب به دستگاه دوم شما منتقل شد."
+  },
+  "preparing_account": {
+    "message": "در حال آماده سازی حساب…"
+  },
+  "transferring": {
+    "message": "در حال انتقال…"
+  },
+  "troubleshooting": {
+    "message": "عیب‌یابی"
+  },
+  "incoming_messages": {
+    "message": "پیام‌های ورودی"
+  },
+  "outgoing_messages": {
+    "message": "پیام‌های خروجی"
+  },
+  "storage_on_domain": {
+    "message": "ذخیره کردن در %1$s"
+  },
+  "connectivity": {
+    "message": "اتصال‌ها"
+  },
+  "connectivity_not_connected": {
+    "message": "متصل نیست"
+  },
+  "connectivity_connecting": {
+    "message": "در حال اتصال"
+  },
+  "connectivity_updating": {
+    "message": "درحال به روز رسانی..."
+  },
+  "connectivity_connected": {
+    "message": "متصل شد"
+  },
+  "sending": {
+    "message": "در حال ارسال..."
+  },
+  "last_msg_sent_successfully": {
+    "message": "آخرین پیام با موفقیت ارسال شد."
+  },
+  "not_supported_by_provider": {
+    "message": "ارائه دهنده شما از این پشتیبانی نمی‌کند"
+  },
+  "messages": {
+    "message": "پیام‌ها"
+  },
+  "part_of_total_used": {
+    "message": "مقدار %1$s از %2$s استفاده شده است. "
+  },
+  "onboarding_create_instant_account": {
+    "message": "ایجاد حساب کاربری جدید"
+  },
+  "onboarding_alternative_logins": {
+    "message": "از قبل یک حساب کاربری دارم"
+  },
+  "manual_account_setup_option": {
+    "message": "ساخت حساب کاربری با حساب رایانامه معمولی"
+  },
+  "instant_onboarding_title": {
+    "message": "نمایه شما"
+  },
+  "instant_onboarding_agree_default2": {
+    "message": "سیاست حریم خصوصی برای %1$s"
+  },
+  "instant_onboarding_agree_instance": {
+    "message": "دربارهٔ نمایه‌ها در %1$s"
+  },
+  "instant_onboarding_create": {
+    "message": "قبول کردن و ایجاد نمایه"
+  },
+  "instant_onboarding_show_more_instances": {
+    "message": "استفاده از یک کارساز دیگر"
+  },
+  "instant_onboarding_other_server": {
+    "message": "فهرست کارسازهای Chatmail"
+  },
+  "instant_onboarding_group_info": {
+    "message": "ایجاد نمایه برای وارد شدن به گپ «%1$s»."
+  },
+  "instant_onboarding_contact_info": {
+    "message": "برای گفتگو با %1$s یک حساب کاربری ایجاد کنید."
+  },
+  "instant_onboarding_confirm_contact": {
+    "message": "می‌خواهید یک نمایهٔ جدید درست کنید و با %1$sشروع به گپ زدن کنید؟"
+  },
+  "instant_onboarding_confirm_group": {
+    "message": "می‌خواهید یک نمایهٔ جدید درست کنید و به گروه «%1$s» ملحق شوید؟"
+  },
+  "welcome_chat_over_email": {
+    "message": "گفتگو غیرمتمرکز و ایمن"
+  },
+  "scan_invitation_code": {
+    "message": "اسکن کردن کد دعوت"
+  },
+  "login_title": {
+    "message": "ورود"
+  },
+  "login_header": {
+    "message": "به سرور خود وارد شوید"
+  },
+  "login_explain": {
+    "message": "ورود با یک رایانامه موجود"
+  },
+  "login_subheader": {
+    "message": "برای ارائه‌دهندگان شناخته شده تنظبمات اضافه به صورت خودکار انجام می‌شود. گاهی اوقات IMAP باید در تنظیم‌ها رایانامهٔ شما فعال شود. از ارائه‌دهندهٔ رایانامه یا دوستانتان در این مورد کمک بگیرید."
+  },
+  "login_no_servers_hint": {
+    "message": "دلتاچت هیچ سروری ندارد، داده‌های شما در دستگاه شما باقی می‌ماند."
+  },
+  "login_inbox": {
+    "message": "ورودی"
+  },
+  "login_imap_login": {
+    "message": "IMAP Login Name"
+  },
+  "login_imap_server": {
+    "message": "IMAP Server"
+  },
+  "login_imap_port": {
+    "message": "IMAP port "
+  },
+  "login_imap_security": {
+    "message": "IMAP Security"
+  },
+  "login_outbox": {
+    "message": "خروجی"
+  },
+  "login_smtp_login": {
+    "message": "SMTP Login Name"
+  },
+  "login_smtp_password": {
+    "message": "SMTP Password"
+  },
+  "login_smtp_server": {
+    "message": "SMTP Server"
+  },
+  "login_smtp_port": {
+    "message": "SMTP Port"
+  },
+  "login_smtp_security": {
+    "message": "SMTP Security"
+  },
+  "login_auth_method": {
+    "message": "Authorization Method"
+  },
+  "proxy_settings": {
+    "message": "پروکسی"
+  },
+  "proxy_use_proxy": {
+    "message": "استفاده از پروکسی"
+  },
+  "proxy_add": {
+    "message": "اضافه کردن پروکسی"
+  },
+  "proxy_add_explain": {
+    "message": "پشتیبانی از پروکسی‌های: HTTP، HTTPS، SOCKS5 و Shadowsocks"
+  },
+  "proxy_add_url_hint": {
+    "message": "ویرایش پیوند پروکسی"
+  },
+  "proxy_invalid": {
+    "message": "پروکسی نامعتبر است یا پشتیبانی از پروکسی وجود ندارد"
+  },
+  "proxy_list_header": {
+    "message": "پروکسی‌های ذخیره شده"
+  },
+  "proxy_delete": {
+    "message": "حذف پروکسی"
+  },
+  "proxy_delete_explain": {
+    "message": "مطمئنید می‌خواهید «%1$s» را حذف کنید؟"
+  },
+  "proxy_use_proxy_confirm": {
+    "message": "می‌خواهید از پروکسی «%1$s» استفاده کنید؟"
+  },
+  "proxy_share_explain": {
+    "message": "دوست‌هایتان می‌توانند با اسکن کردن کد QR این پروکسی را اضافه کنند."
+  },
+  "proxy_share_link": {
+    "message": "اشتراک گذاشتن پیوند"
+  },
+  "login_info_oauth2_title": {
+    "message": "با تنظیم‌ها ساده‌ شده ادامه می‌دهید؟"
+  },
+  "login_info_oauth2_text": {
+    "message": "نشانی رایانامه وارد شده از تنظیم‌های ساده پشتیبانی می‌کند\n(OAuth 2.0).\n\nIn\n لطفا در مرحله بعد، به دلتاچت اجازه دهید که به عنوان نرم‌افزار رایانامه شما عمل نماید\n\n دلتاچت سرور ندارد؛ داده‌های شما در دستگاه خودتان باقی می‌ماند. "
+  },
+  "login_certificate_checks": {
+    "message": "بررسی‌های گواهینامه"
+  },
+  "login_error_mail": {
+    "message": "لطفاً یک نشانی رایانامهٔ معتبر وارد کنید"
+  },
+  "login_error_server": {
+    "message": "لطفا یک کارساز / نشانی آی‌پی صحیح وارد کنید"
+  },
+  "login_error_port": {
+    "message": "لظفا یک پورت صحیح وارد کنید(1–65535)"
+  },
+  "login_error_required_fields": {
+    "message": "لطفاً یک نشانی رایانامه و گذرواژهٔ معتبر وارد کنید"
+  },
+  "import_backup_title": {
+    "message": "وارد کردن نسخه پشتیبانی"
+  },
+  "import_backup_ask": {
+    "message": "نسخه پشتیبانی در\"%1$s\" پیدا شد.\n\n آیا می‌خواهید همه داده‌ها و تنظیم‌ها از آن وارد شود؟"
+  },
+  "import_backup_no_backup_found": {
+    "message": "نسخه پشتیبانی پیدا نشد.\n\n نسخه پشتیبانی را در\"%1$s\" کپی کرده و دوباره امتحان کنید. در غیر این صورت می‌توانید \"شروع پیام‌رسانی\" را فشار دهید دا فرایند به صورت عادی ادامه یابد. "
+  },
+  "login_error_cannot_login": {
+    "message": "نتوانست به عنوان «%1$s» وارد شود. لطفاً صحت نشانی رایانامه و گذرواژه را بررسی کنید. "
+  },
+  "accept_invalid_certificates": {
+    "message": "پذیرش گواهینامه‌های نامعتبر"
+  },
+  "switch_account": {
+    "message": "تغییر حساب کاربری"
+  },
+  "add_account": {
+    "message": "افزودن حساب کاربری"
+  },
+  "profile_tag_hint": {
+    "message": "مثل «کار» یا «خانواده»"
+  },
+  "delete_account": {
+    "message": "حذف حساب کاربری"
+  },
+  "delete_account_ask": {
+    "message": "آیا از حذف حساب کاربری اطمینان دارید؟"
+  },
+  "delete_account_explain_with_name": {
+    "message": "همه اطلاعات حساب مربوط به «%s» روی این دستگاه پاک می‌شود. این شامل تنظیم‌های رمزگذاری سراسری، مخاطبین، گفتگوها، پیام‌ها و رسانه‌ها می‌شود. این عمل قابل بازگردانی نیست."
+  },
+  "unconfigured_account": {
+    "message": "حساب تنظیم نشده"
+  },
+  "unconfigured_account_hint": {
+    "message": "بازکردن حساب برای تنظیم آن"
+  },
+  "try_connect_now": {
+    "message": "اکنون برای اتصال تلاش کنید"
+  },
+  "sync_all": {
+    "message": "به روزرسانی همه "
+  },
+  "configuration_failed_with_error": {
+    "message": "پیکربندی ناموفق. خطا:‌%1$s"
+  },
+  "forward_to": {
+    "message": "هدایت به..."
+  },
+  "ask_send_files_to_chat": {
+    "message": "ارسال %1$dپرونده به «%2$s»؟"
+  },
+  "ask_send_files_to_selected_chats": {
+    "message": "ارسال %1$dپرونده به %2$d گپ؟"
+  },
+  "videos_sent_without_recoding": {
+    "message": "(فیلم‌ها به صورت پرونده‌های بزرگ بدون تغییر ارسال می‌شوند. برای ارسال فیلم‌ها به عنوان پرونده‌های کوچک‌تر، آن‌ها را به صورت جدا پیوست کنید)"
+  },
+  "share_text_multiple_chats": {
+    "message": "ارسال این متن به %1$d گپ؟n/n/«%2$s»"
+  },
+  "share_abort": {
+    "message": "اشتراک گذاری به دلیل نبود مجوز‌ها متوقف شد."
+  },
+  "pref_using_custom": {
+    "message": "استفاده از ترجیحی: %s"
+  },
+  "pref_using_default": {
+    "message": "استفاده از پیش‌فرض: %s"
+  },
+  "pref_profile_info_headline": {
+    "message": "اطلاعات نمایهٔ شما"
+  },
+  "pref_profile_photo": {
+    "message": "تصویر نمایه"
+  },
+  "pref_blocked_contacts": {
+    "message": "مخاطبین مسدود شده"
+  },
+  "blocked_empty_hint": {
+    "message": "اگر مخاطبی را مسدود کنید اینجا نمایش داده می‌شود"
+  },
+  "pref_password_and_account_settings": {
+    "message": "رمزعبور و حساب کاربری"
+  },
+  "pref_who_can_see_profile_explain": {
+    "message": "وقتی با دیگر کاربران گپ می‌زنید، تصویر نمایه، نام و امضایتان در کنار پیام‌هایتان فرستاده می‌شوند."
+  },
+  "pref_your_name": {
+    "message": "اسم شما"
+  },
+  "pref_default_status_label": {
+    "message": "متن امضا"
+  },
+  "pref_enter_sends": {
+    "message": "ورود کلیدهای ارسال"
+  },
+  "pref_enter_sends_explain": {
+    "message": "فشاردادن کلید اینتر پیام‌ها را ارسال می‌کند"
+  },
+  "pref_outgoing_media_quality": {
+    "message": "کیفیت رسانه خروجی"
+  },
+  "pref_outgoing_balanced": {
+    "message": "متعادل"
+  },
+  "pref_outgoing_worse": {
+    "message": "بدترین‌ کیفیت، حجم کم"
+  },
+  "pref_vibrate": {
+    "message": "لرزش"
+  },
+  "pref_screen_security": {
+    "message": "امنیت صفحه"
+  },
+  "pref_screen_security_explain": {
+    "message": "درخواست مسدود کردن عکس گرفتن از صفحه در لیست اخیر و درون نرم‌افزار"
+  },
+  "pref_screen_security_please_restart_hint": {
+    "message": "برای اعمال کردن تنظیم‌های امنیت صفحه لطفا نرم‌افزار را بسته و دوباره باز کنید."
+  },
+  "pref_notifications": {
+    "message": "اعلان‌ها"
+  },
+  "pref_notifications_show": {
+    "message": "نمایش"
+  },
+  "pref_notifications_priority": {
+    "message": "اولویت"
+  },
+  "pref_notifications_explain": {
+    "message": "فعال کردن اعلان‌های سیستم برای پیام‌های جدید"
+  },
+  "pref_show_notification_content": {
+    "message": "نمایش محتوای پیام در اعلان"
+  },
+  "pref_show_notification_content_explain": {
+    "message": "نمایش ارسال کننده و اولین کلمات پیام در اعلان"
+  },
+  "pref_led_color": {
+    "message": " LED رنگ"
+  },
+  "pref_sound": {
+    "message": "صدا"
+  },
+  "pref_silent": {
+    "message": "سکوت"
+  },
+  "pref_privacy": {
+    "message": "حریم خصوصی"
+  },
+  "pref_chats_and_media": {
+    "message": "گپ‌ها و رسانه"
+  },
+  "pref_system_default": {
+    "message": "پیش‌فرض سیستم"
+  },
+  "pref_light_theme": {
+    "message": "روشن"
+  },
+  "pref_dark_theme": {
+    "message": "تاریک"
+  },
+  "pref_appearance": {
+    "message": "ظاهر"
+  },
+  "pref_theme": {
+    "message": "قالب"
+  },
+  "pref_language": {
+    "message": "زبان"
+  },
+  "pref_use_system_ui_font": {
+    "message": "استفاده از فونت سیستم"
+  },
+  "pref_incognito_keyboard": {
+    "message": "صفحه کلید ناشناس"
+  },
+  "pref_incognito_keyboard_explain": {
+    "message": "درخواست دهید که صفحه کلید رفتارهای شخصی شما را یاد نگیرد"
+  },
+  "pref_read_receipts": {
+    "message": "رسید خوانده شدن"
+  },
+  "pref_read_receipts_explain": {
+    "message": "اگر رسید خوانده شدن غیرفعال باشد، نمی‌توانید اعلام خوانده شدن توسط دیگران را ببینید."
+  },
+  "pref_server": {
+    "message": "کارساز"
+  },
+  "pref_encryption": {
+    "message": "رمزگذاری"
+  },
+  "pref_manage_keys": {
+    "message": "مدیریت کلیدها"
+  },
+  "pref_use_system_emoji": {
+    "message": "استفاده از شکلک‌های سیستم"
+  },
+  "pref_use_system_emoji_explain": {
+    "message": "غیرفعال کردن شکلک‌های داخلی دلتاچت"
+  },
+  "pref_show_system_contacts": {
+    "message": "خواندن دفترچه آدرس دستگاه"
+  },
+  "pref_app_access": {
+    "message": "دسترسی نرم‌افزار"
+  },
+  "pref_chats": {
+    "message": "گپ‌ها"
+  },
+  "pref_in_chat_sounds": {
+    "message": "صداهای درون‌گپی"
+  },
+  "pref_view_log": {
+    "message": "نمایش گزارش"
+  },
+  "pref_saved_log": {
+    "message": "گزارش را در پوشه\"دانلودها\" ذخیره کن "
+  },
+  "pref_save_log_failed": {
+    "message": "ذخیره گزارش ناموفق بود"
+  },
+  "pref_log_header": {
+    "message": "گزارش"
+  },
+  "pref_other": {
+    "message": "دیگر"
+  },
+  "pref_backup": {
+    "message": "نسخه پشتیبان"
+  },
+  "pref_backup_explain": {
+    "message": "تهیهٔ پشتیبان از گپ‌ها در ذخیره‌گاه خارجی"
+  },
+  "pref_backup_export_explain": {
+    "message": "تهیهٔ پشتیبان به شما  کمک می‌کند روی این دستگاه یا دستگاه دیگر نرم‌افزار را دوباره نصب کنید.\n\nپشتیبان حاوی تمام پیام‌ها، مخاطبین، گپ‌ها و برپاسازی اتوکریپت سرتاسر شما خواهد بود. پروندهٔ پشتیبانی را در یک جای امن نگه دارید و در اسرع وقت آن را پاک کنید."
+  },
+  "pref_backup_export_x": {
+    "message": "برون‌ریزی%1$s"
+  },
+  "pref_backup_export_all": {
+    "message": "برون‌ریزی همه%1$d حساب ها"
+  },
+  "pref_backup_export_start_button": {
+    "message": "شروع تهیه نسخه پشتیبان"
+  },
+  "pref_backup_written_to_x": {
+    "message": "نسخه پشتیبان با موفقیت در\"%1$s\" ذخیره شد."
+  },
+  "pref_managekeys_menu_title": {
+    "message": "مدیریت کلیدها"
+  },
+  "pref_managekeys_export_secret_keys": {
+    "message": "صادر کردن کلید خصوصی"
+  },
+  "pref_managekeys_export_explain": {
+    "message": "صادر کردن کلیدهای خصوصی به\"%1$s\"؟"
+  },
+  "pref_managekeys_import_secret_keys": {
+    "message": "وارد کردن کلیدهای خصوصی"
+  },
+  "pref_managekeys_import_explain": {
+    "message": "وارد کردن کلیدهای خصوصی از «%1$s»؟\n\n• کلیدهای خصوصی موجود پاک نخواهند شد\n\n•  آخرین کلید وارد شده به عنوان کلید پیش‌فرض جدید استفاده می شود مگر اینکه در نام پرونده کلمهٔ «Legacy» وجود داشته باشد. "
+  },
+  "pref_managekeys_secret_keys_exported_to_x": {
+    "message": "کلیدهای خصوصی با موفقیت در\"%1$s\" ذخیره شدند. "
+  },
+  "pref_managekeys_secret_keys_imported_from_x": {
+    "message": "کلیدهای خصوصی از \"%1$s\" وارد شدند. "
+  },
+  "pref_background": {
+    "message": "پس‌زمینه"
+  },
+  "pref_background_btn_default": {
+    "message": "استفاده از تصویر پیش‌فرض"
+  },
+  "pref_background_btn_gallery": {
+    "message": "انتخاب از گالری"
+  },
+  "pref_imap_folder_handling": {
+    "message": "IMAP نحوه مدیریت پوشه "
+  },
+  "pref_imap_folder_warn_disable_defaults": {
+    "message": "اگر این گزینه را غیر فعال می‌کنید از اینکه سرور شما و حساب‌هایتان هم بر این اساس تنظیم شده باشند.\n\n در غیر این صورت ممکن است هیچ چیز کار نکند. "
+  },
+  "pref_watch_sent_folder": {
+    "message": "پوشه ارسال شده‌ها را نگاه کن"
+  },
+  "pref_send_copy_to_self": {
+    "message": "ارسال رونوشت به خودم"
+  },
+  "pref_send_copy_to_self_explain": {
+    "message": "درصورت استفاده از این حساب در چند دستگاه مورد نیاز است. "
+  },
+  "pref_auto_folder_moves": {
+    "message": "انتقال خودکار به پوشه دلتاچت"
+  },
+  "pref_auto_folder_moves_explain": {
+    "message": "گپ‌ها برای جلوگیری از پر شدن صندوق ورودی جابه‌جا شدند"
+  },
+  "pref_only_fetch_mvbox_title": {
+    "message": "فقط پوشه دلتاچت را بررسی کن"
+  },
+  "pref_only_fetch_mvbox_explain": {
+    "message": "چشم‌پوشی از بقیهٔ پوشه‌ها. لازم است کارساز شما پیام‌ها را به پوشهٔ دلتاچت انتقال دهد."
+  },
+  "pref_show_emails": {
+    "message": "نمایش رایانامه‌های معمولی"
+  },
+  "pref_show_emails_no": {
+    "message": "نه، فقط گپ‌ها"
+  },
+  "pref_show_emails_accepted_contacts": {
+    "message": "برای مخاطبین پذیرفته شده"
+  },
+  "pref_show_emails_all": {
+    "message": "همه"
+  },
+  "pref_experimental_features": {
+    "message": "ویژگی‌های آزمایشی"
+  },
+  "pref_on_demand_location_streaming": {
+    "message": "هم‌رسانی زندهٔ به‌فرمان مکان"
+  },
+  "pref_developer_mode": {
+    "message": "حالت برنامه نویسی"
+  },
+  "pref_developer_mode_explain": {
+    "message": "تنظیم‌های عیب‌یابی را فعال می‌کند که موجب کاهش پایداری نرم‌افزار می‌شوند.  فقط جهت استفاده توسعه دهندگان"
+  },
+  "pref_background_default": {
+    "message": "پس‌زمینه پیش‌فرض"
+  },
+  "pref_background_default_color": {
+    "message": "رنگ پیش‌فرض"
+  },
+  "pref_background_custom_image": {
+    "message": "تصویر ترجیحی"
+  },
+  "pref_background_custom_color": {
+    "message": "رنگ ترجیحی"
+  },
+  "export_aborted": {
+    "message": "فرایند صدور متوقف شد."
+  },
+  "auto_download_messages": {
+    "message": "بارگیری خودکار پیام‌ها"
+  },
+  "up_to_x": {
+    "message": "تا سقف %1$s"
+  },
+  "up_to_x_most_worse_quality_images": {
+    "message": "تا سقف %1$s، بدترین کیفیت تصویر"
+  },
+  "up_to_x_most_balanced_quality_images": {
+    "message": "تا سقف %1$s، متعادل‌ترین کیفیت تصویر"
+  },
+  "download_failed": {
+    "message": "بارگیری ناموفق"
+  },
+  "n_bytes_message": {
+    "message": "پیام %1$s "
+  },
+  "download_max_available_until": {
+    "message": "سقف دانلود تا %1$s فعال خواهد بود"
+  },
+  "profile_image_select": {
+    "message": "انتخاب تصویر نمایه"
+  },
+  "select_your_new_profile_image": {
+    "message": "تصویر نمایهٔ جدیدتان را برگزینید"
+  },
+  "profile_image_delete": {
+    "message": "حذف تصویر نمایه"
+  },
+  "pref_show_tray_icon": {
+    "message": "نمایش نمادک در زیر صفحه"
+  },
+  "pref_edit_profile": {
+    "message": "ویرایش نمایه"
+  },
+  "disable_imap_idle": {
+    "message": "غیر فعال‌سازی IMAP IDLE"
+  },
+  "send_stats_to_devs": {
+    "message": "ارسال آمار برای توسعه‌دهندگان دلتاچت"
+  },
+  "emoji_search_results": {
+    "message": "نتایج جستجو"
+  },
+  "emoji_not_found": {
+    "message": "شکلکی پیدا نشد"
+  },
+  "emoji_recent": {
+    "message": "اخیرا استفاده شده"
+  },
+  "emoji_people": {
+    "message": "افراد و بدن"
+  },
+  "emoji_nature": {
+    "message": "حیوانات و  طبیعت"
+  },
+  "emoji_foods": {
+    "message": "غذا و  نوشیدنی"
+  },
+  "emoji_activity": {
+    "message": "فعالیت"
+  },
+  "emoji_places": {
+    "message": "مسافرت و مکان‌ها"
+  },
+  "emoji_objects": {
+    "message": "اشیاء"
+  },
+  "emoji_symbols": {
+    "message": "نمادها"
+  },
+  "emoji_flags": {
+    "message": "پرچم‌ها"
+  },
+  "reactions": {
+    "message": "واکنش‌ها"
+  },
+  "react": {
+    "message": "واکنش"
+  },
+  "reaction_by_you": {
+    "message": "شما به «%2$s» واکنش %1$s را نشان دادید"
+  },
+  "reaction_by_other": {
+    "message": "%1$s به «%3$s» واکنش %2$s را نشان داد"
+  },
+  "delete_old_messages": {
+    "message": "پاک کردن پیام‌های قدیمی"
+  },
+  "autodel_device_title": {
+    "message": "پاک کردن پیام‌ها از دستگاه"
+  },
+  "autodel_server_title": {
+    "message": "پاک کردن پیام‌ها از سرور"
+  },
+  "autodel_device_ask": {
+    "message": "آیا می‌خواهید %1$d پیام جدید و دریافت شده را در زمان%2$s در آینده پاک کنید؟\n\n• این شامل همه رسانه‌ها هم می‌شود\n\n•  پیام‌ها جدای از اینکه دیده شده باشند یا نه پاک می‌شوند. \"پیام های ذخیره شده\" شامل این پاک کردن محلی نمی‌شوند. "
+  },
+  "autodel_server_ask": {
+    "message": "آیا می‌خواهید %1$dپیام را اکنون و تمام پیام‌های آیندهٔ «%2$s»  را پاک کنید؟/n/n⚠️ این شامل رایانامه‌ها، رسانه و «پیام‌های ذخیره شده» در همه پوشه‌های کارساز می‌شود/n/n⚠️ اگر می‌خواهید داده‌ها در کارساز باقی بمانند از این قابلیت استفاده نکنید/n/n⚠️ اگر به‌جز دلتاچت از دیگر نرم‌افزارهای رایانامه هم استفاده می‌کنید این قابلیت را به کار نگیرید."
+  },
+  "autodel_server_enabled_hint": {
+    "message": "این شامل رایانامه‌ها، رسانه و «پیام‌های ذخیره شده» در تمام پوشه‌های کارساز می‌شود. اگر می‌خواهید داده‌ها را در کارساز نگه دارید از این قابلیت استفاده نکنید. اگر از دیگر نرم‌افزارهای رایانامه به‌جز دلتاچت استفاده می‌کنید از این قابلیت استفاده نکنید."
+  },
+  "autodel_confirm": {
+    "message": "متوجه هستم، همه پیام‌ها حذف شوند"
+  },
+  "autodel_at_once": {
+    "message": "یک بار بعد از بارگیری"
+  },
+  "after_30_seconds": {
+    "message": "بعد از ۳۰ ثانیه"
+  },
+  "after_1_minute": {
+    "message": "بعد از ۱ دقیقه"
+  },
+  "after_5_minutes": {
+    "message": "بعد از ۵ دقیقه"
+  },
+  "after_30_minutes": {
+    "message": "بعد از ۳۰ دقیقه"
+  },
+  "autodel_after_1_hour": {
+    "message": "بعد از ۱ ساعت"
+  },
+  "autodel_after_1_day": {
+    "message": "بعد از ۱  روز"
+  },
+  "autodel_after_1_week": {
+    "message": "بعد از ۱ هفته"
+  },
+  "after_5_weeks": {
+    "message": "بعد از ۵ هفته"
+  },
+  "autodel_after_1_year": {
+    "message": "بعد از ۱ سال"
+  },
+  "autocrypt_send_asm_title": {
+    "message": "ارسال پیام برپاسازی اتوکریپت"
+  },
+  "autocrypt_send_asm_explain_before": {
+    "message": "پیام برپاسازی اتوکریپت تنظیم‌های رمزگذاری سرتاسر شما را به شکلی امن با دیگر برنامه‌ها به اشتراک می‌گذارد.\n\n تنظیم‌ها با یک کد برپاسازی که در اینجا نمایش داده می‌شود رمزگذاری می‌شوند و باید در دستگاه دیگر تایپ شود. "
+  },
+  "autocrypt_send_asm_button": {
+    "message": "ارسال پیام برپاسازی اتوکریپت"
+  },
+  "autocrypt_send_asm_explain_after": {
+    "message": "تنظیم‌های شما برای خودتان ارسال شدند. پیام تنظیم‌ها را در دستگاه دیگر باز کنید. یک کد نصب از شما خواسته می‌شود. این ارقام را وارد کنید"
+  },
+  "autocrypt_prefer_e2ee": {
+    "message": "ترجیح رمزگذاری گیرنده به گیرنده"
+  },
+  "autocrypt_asm_subject": {
+    "message": "پیام برپاسازی اتوکریپت"
+  },
+  "autocrypt_asm_general_body": {
+    "message": "این پیام برپاسازی اتوکریپت است و تنظیم‌های مربوط به رمزگذاری سرتاسر شما را بین دستگاه‌ها جابه‌جا می‌کند.\n\n برای رمزگشایی و استفاده از آن، پیام را در یک سامانه که با اتوکریپت همخوانی دارد باز کنید و کد برپاسازی که در دستگاه تولیدکنندهٔ پیام، به شما داده می‌شود را وارد نمایید. "
+  },
+  "systemmsg_cannot_decrypt": {
+    "message": "این پیام قابل رمزگشایی نیست.\nمی‌توانید با پاسخ به این پیام از فرستنده درخواست کنید پیام را مجدد ارسال کند.\nاگر دلتاچت را به تازگی دوباره نصب کرده‌اید بهتر است آن را مجدد راه‌اندازی کرده و از گزینه‌ی «افزودن به عنوان دستگاه دوم» استفاده کنید یا از نسخه‌ی پشتیبان بازیابی کنید."
+  },
+  "systemmsg_unknown_sender_for_chat": {
+    "message": "فرستنده در این گفت و گو ناشناس است. برای جزئیات بیشتر به \"اطلاعات\" مراجعه کنید."
+  },
+  "systemmsg_subject_for_new_contact": {
+    "message": "پیام از%1$s"
+  },
+  "systemmsg_failed_sending_to": {
+    "message": "ارسال ناموفق پیام به %1$s."
+  },
+  "group_name_changed_by_you": {
+    "message": "شما نام گروه را از «%1$s» به «%2$s»  تغییر دادید. "
+  },
+  "group_name_changed_by_other": {
+    "message": "نام گروه توسط %3$s از «%1$s» به «%2$s » تغییر کرد. "
+  },
+  "group_image_changed_by_you": {
+    "message": "شما تصویر گروه را تغییر دادید. "
+  },
+  "group_image_changed_by_other": {
+    "message": "تصویر گروه توسط %1$s تغییر کرد. "
+  },
+  "member_x_added": {
+    "message": "%1$s عضو شد."
+  },
+  "add_member_by_you": {
+    "message": "شما %1$s را به عنوان عضو جدید اضافه کردید. "
+  },
+  "add_member_by_other": {
+    "message": "عضو جدید با نام %1$s توسط %2$s افزوده شد. "
+  },
+  "remove_member_by_you": {
+    "message": "شما عضو گروه، %1$s، را حذف کردید.  "
+  },
+  "remove_member_by_other": {
+    "message": "عضو گروه، %1$s، توسط %2$s حذف شد. "
+  },
+  "group_left_by_you": {
+    "message": "شما گروه را ترک کردید."
+  },
+  "group_left_by_other": {
+    "message": "ترک گروه توسط %1$s."
+  },
+  "group_image_deleted_by_you": {
+    "message": "شما تصویر گروه را حذف کردید."
+  },
+  "group_image_deleted_by_other": {
+    "message": "تصویر گروه توسط %1$s حذف شد."
+  },
+  "location_enabled_by_you": {
+    "message": "هم‌رسانی زندهٔ مکان را به کار انداختید."
+  },
+  "location_enabled_by_other": {
+    "message": "هم‌رسانی زندهٔ مکان توسط %1$s به کار افتاد."
+  },
+  "ephemeral_timer_disabled_by_you": {
+    "message": "زمان‌سنج ناپدید شدن پیام‌ها را غیرفعال کردید."
+  },
+  "ephemeral_timer_disabled_by_other": {
+    "message": "زمان‌سنج ناپدید شدن پیام‌ها توسط %1$s غیرفعال شد."
+  },
+  "ephemeral_timer_seconds_by_you": {
+    "message": "زمان‌سنج ناپدید شدن پیام‌ها را روی %1$s ثانیه تنظیم کردید"
+  },
+  "ephemeral_timer_seconds_by_other": {
+    "message": "زمان‌سنج ناپدید شدن پیام‌ها توسط %2$s روی %1$s ثانیه تنظیم شد."
+  },
+  "ephemeral_timer_1_minute_by_you": {
+    "message": "زمان‌سنج ناپدید شدن پیام‌ها را روی 1 دقیقه تنظیم کرده‌اید."
+  },
+  "ephemeral_timer_1_minute_by_other": {
+    "message": "زمان‌سنج ناپدید شدن پیام‌ها توسط %1$s روی 1 دقیقه تنظیم شد."
+  },
+  "ephemeral_timer_1_hour_by_you": {
+    "message": "زمان‌سنج ناپدید شدن پیام‌ها را روی 1 ساعت تنظیم کرده‌اید."
+  },
+  "ephemeral_timer_1_hour_by_other": {
+    "message": "زمان‌سنج ناپدید شدن پیام‌ها توسط %1$s روی 1 ساعت تنظیم شد."
+  },
+  "ephemeral_timer_1_day_by_you": {
+    "message": "زمان‌سنج ناپدید شدن پیام‌ها را روی 1 روز تنظیم کرده‌اید."
+  },
+  "ephemeral_timer_1_day_by_other": {
+    "message": "زمان‌سنج ناپدید شدن پیام‌ها توسط %1$s روی 1 روز تنظیم شد."
+  },
+  "ephemeral_timer_1_week_by_you": {
+    "message": "زمان‌سنج ناپدید شدن پیام‌ها را روی 1 هفته تنظیم کرده‌اید."
+  },
+  "ephemeral_timer_1_week_by_other": {
+    "message": "زمان‌سنج ناپدید شدن پیام‌ها توسط %1$s روی 1 هفته تنظیم شد."
+  },
+  "ephemeral_timer_minutes_by_you": {
+    "message": "زمان‌سنج ناپدید شدن پیام‌ها را روی %1$s دقیقه تنظیم کردید."
+  },
+  "ephemeral_timer_minutes_by_other": {
+    "message": "زمان‌سنج ناپدید شدن پیام‌ها توسط %2$s روی %1$s دقیقه تنظیم شد."
+  },
+  "ephemeral_timer_hours_by_you": {
+    "message": "زمان‌سنج ناپدید شدن پیام‌ها را روی %1$s ساعت تنظیم کردید."
+  },
+  "ephemeral_timer_hours_by_other": {
+    "message": "زمان‌سنج ناپدید شدن پیام‌ها توسط %2$s روی %1$s ساعت تنظیم شد."
+  },
+  "ephemeral_timer_days_by_you": {
+    "message": "زمان‌سنج ناپدید شدن پیام‌ها را روی %1$s روز تنظیم کردید."
+  },
+  "ephemeral_timer_days_by_other": {
+    "message": "زمان‌سنج ناپدید شدن پیام‌ها توسط %2$s روی %1$s روز تنظیم شد."
+  },
+  "ephemeral_timer_weeks_by_you": {
+    "message": "زمان‌سنج ناپدید شدن پیام‌ها را روی %1$s هفته تنظیم کردید."
+  },
+  "ephemeral_timer_weeks_by_other": {
+    "message": "زمان‌سنج ناپدید شدن پیام‌ها توسط %2$s روی %1$s هفته تنظیم شد."
+  },
+  "chat_protection_broken": {
+    "message": "%1$s پیامی را از دستگاه دیگری ارسال کرد."
+  },
+  "chat_protection_enabled_tap_to_learn_more": {
+    "message": "رمزنگاری سرتاسر پیام ها از این به بعد تضمین می شود. برای اطلاعات بیشتر ضربه بزنید."
+  },
+  "chat_protection_enabled_explanation": {
+    "message": "رمزنگاری سراسری پیام‌های این گفتگو اکنون تضمین می‌شود. رمزنگاری سراسری باعث می‌شود پیام‌هایتان بین شما و مخاطبین شما محرمانه بماند. حتی ارائه‌دهنده رایانامه شما هم نمی‌تواند آن‌ها را بخواند."
+  },
+  "chat_protection_broken_tap_to_learn_more": {
+    "message": "%1$s پیامی را از دستگاه دیگری ارسال کرد. برای اطلاعات بیشتر ضربه بزنید."
+  },
+  "invalid_unencrypted_tap_to_learn_more": {
+    "message": "⚠️ %1$s به رمزنگاری سراسری نیاز دارد که هنوز برای این گپ پیکره‌بندی نشده است. برای یادگیری بیش‌تر این‌جا بزنید."
+  },
+  "learn_more": {
+    "message": "بیشتر بدانید"
+  },
+  "devicemsg_self_deleted": {
+    "message": "شما گپ «پیام‌های ذخیره شده» را پاک کردید.\n\nℹ️ برای استفادهٔ دوباره از «پیام‌های ذخیره شده» کافی است یک گپ جدید با خودتان درست کنید. "
+  },
+  "devicemsg_storage_exceeding": {
+    "message": "هشدار⚠️، میزان فضای در دسترس کارساز رایانامه شما در حال تمام شدن است. %1$s از %% استفاده شده است. \nاگر فضا کاملا پر شده باشد دیگر امکان دریافت پیام را نخواهید داشت.  \n👈 لطفا پیام‌های قدیمی در رایانامه خود را از طریق نسخه وب رایانامه پاک کنید. همچنین می‌توانید گزینه پاک کردن پیام‌های قدیمی در دلتاچت را فعال نمایید. هروقت خواستید می‌توانید فضای در دسترس را از تنظیم‌ها/اتصال‌ها بررسی کنید. "
+  },
+  "devicemsg_bad_time": {
+    "message": "هشدار⚠️ به نظر می‌رسد زمان و تاریخ دستگاه شما دقیق نیست(%1$s).\nساعت دستگاه خود را تنظیم کنید ⏰🔧 تا پیام‌ها به درستی دریافت شوند. "
+  },
+  "devicemsg_update_reminder": {
+    "message": "هشدار⚠️ ممکن است نسخه دلتاچت مورد استفاده قدیمی شده باشد. \nاین موضوع ممکن است مشکلاتی ایجاد کند چون مخاطبین شما از نسخه‌های جدیدتر استفاده می‌کنند. همچنین قابلیت‌های جدید را هم از دست می‌دهید😳\nلطفا برای دریافت نسخه جدید به app store یا https://get.delta.chat مراجعه کنید. "
+  },
+  "enter_system_secret_to_continue": {
+    "message": "برای ادامه، لطفا رمز تعیین شده توسط سیستم خود را وارد کنید"
+  },
+  "qr_code": {
+    "message": "کد QR"
+  },
+  "load_qr_code_as_image": {
+    "message": "بارگیری کیو آر کد به صورت تصویر"
+  },
+  "qrscan_title": {
+    "message": "اسکن کردن کد کیو آر"
+  },
+  "qrscan_hint": {
+    "message": "دوربین خود را روی کد کیوآر نگه دارید. "
+  },
+  "qrscan_failed": {
+    "message": "امکان رمزگشایی کد کیوآر وجود ندارد"
+  },
+  "qrscan_ask_join_group": {
+    "message": "آیا می خواهید به گروه\"%1$s\" ملحق شوید؟"
+  },
+  "qrscan_fingerprint_mismatch": {
+    "message": "اثرانگشت اسکن شده با انچه که برای %1$sمشاهده شده بود انطباق ندارد. "
+  },
+  "qrscan_no_addr_found": {
+    "message": "این کیوآر حاوی یک شناساگر است ولی ادرس رایانامه‌ای در آن نیست. \n\n برای یک تأییدیه به روش‌های دیگر لطفا ابتدا یک ارتباط رمزگذاری شده با دریافت کننده برقرار کنید. "
+  },
+  "qrscan_contains_text": {
+    "message": "کیوآر کد اسکن شده:\n\n %1$s"
+  },
+  "qrscan_contains_url": {
+    "message": "آدرس اینترنتی کیوآر اسکن شده:\n\n %1$s"
+  },
+  "qrscan_fingerprint_label": {
+    "message": "اثر انگشت"
+  },
+  "withdraw_verifycontact_explain": {
+    "message": "دیگران برای ارتباط با شما می‌توانند این کد کیوآر را اسکن کنند. \n\n می‌توان کد کیوآر را در اینجا غیر فعال کنید و با اسکن کردن مجدد، آن را فعال کنید. "
+  },
+  "withdraw_verifygroup_explain": {
+    "message": "این کد کیوآر می‌تواند توسط دیگران و برای پیوستن به گروه \"%1$s\" اسکن شود.\n\n شما می‌تواند این کد کیوآر را در اینجا غیرفعال کنید و با اسکن کردن مجدد، آن را فعال نمایید. "
+  },
+  "withdraw_qr_code": {
+    "message": "غیرفعال کردن کد کیوآر"
+  },
+  "revive_verifycontact_explain": {
+    "message": "دیگران برای تماس با شما می‌توانند این کد کیوآر را اسکن کنند. \n\n این کد کیوآر در این دستگاه فعال نیست. "
+  },
+  "revive_verifygroup_explain": {
+    "message": "دیگران می‌توانند برای پیوستن به گروه \"%1$s\" این کد کیوآر را اسکن کنند. این کد کیوآر روی این دستگاه فعال نیست. "
+  },
+  "revive_qr_code": {
+    "message": "فعال کردن کد کیوآر"
+  },
+  "qrshow_title": {
+    "message": "کد دعوت کیوآر"
+  },
+  "qrshow_x_joining": {
+    "message": "%1$sعضو شد."
+  },
+  "qrshow_x_verified": {
+    "message": "%1$s تأیید شد."
+  },
+  "qrshow_x_has_joined_group": {
+    "message": "%1$sعضو گروه شد. "
+  },
+  "qrshow_join_group_title": {
+    "message": "کد دعوت کیوآر"
+  },
+  "qrshow_join_group_hint": {
+    "message": "برای عضو شدن در گروه\"%1$s\" این را اسکن کنید."
+  },
+  "qrshow_join_contact_title": {
+    "message": "کد دعوت کیوآر"
+  },
+  "qrshow_join_contact_hint": {
+    "message": "برای ارتباط با %1$s این را اسکن کنید."
+  },
+  "qrshow_join_contact_no_connection_toast": {
+    "message": "اتصال اینترنت نیست. نمیتوان نصب کد کیوآر را انجام داد. "
+  },
+  "qraccount_ask_create_and_login": {
+    "message": "ایجاد رایانامهٔ جدید روی «%1$s» و ورود به آنجا؟"
+  },
+  "qraccount_ask_create_and_login_another": {
+    "message": "نشانی جدید رایانامه روی «%1$s» ایجاد شده  و به آن وارد شود؟\n حساب فعلی شما پاک نمی‌شود. از بخش «تغییر حساب کاربری» برای جابجایی بین حساب‌ها استفاده کنید"
+  },
+  "set_name_and_avatar_explain": {
+    "message": "اسمی انتخاب کنید که مخاطبینتان با آن شما را بشناسند. می توانید برای خود عکسی هم انتخاب کنید."
+  },
+  "please_enter_name": {
+    "message": "لطفا یک نام وارد کنید."
+  },
+  "qraccount_qr_code_cannot_be_used": {
+    "message": "این کد کیوآر اسکن شده را نمی‌توان برای راه‌اندازی حساب جدید استفاده کرد. "
+  },
+  "qrlogin_ask_login": {
+    "message": "آیا به \"%1$s\" وارد شوید؟"
+  },
+  "qrlogin_ask_login_another": {
+    "message": "آیا به «%1$s» وارد شوید؟\n\nحساب موجود شما حذف نخواهد شد. برای جابه‌جایی میان حساب‌هایتان از «تغییر حساب» استفاده کنید."
+  },
+  "secure_join_started": {
+    "message": "کاربر %1$s شما را دعوت کرده است تا عضو این گروه شوید.\nدر انتظار دستگاه %2$s برای پاسخگویی..."
+  },
+  "secure_join_replies": {
+    "message": "کاربر %1$s پاسخ داد، در انتظار اضافه شدن به گروه..."
+  },
+  "secure_join_wait": {
+    "message": "در حال برقراری رمزگذاری سراسری تضمین‌شده، لطفا صبر کنید..."
+  },
+  "secure_join_wait_timeout": {
+    "message": "اکنون نمی توانیم رمزگذاری سراسری تضمین‌شده را برقرار کنیم. با این وجود می‌توانید پیام ارسال کنید."
+  },
+  "contact_verified": {
+    "message": "%1$s تأیید شد."
+  },
+  "contact_not_verified": {
+    "message": "امکان تایید رمزگذاری در مبدا، برای %1$sوجود ندارد."
+  },
+  "verified_by": {
+    "message": "احراز هویت شده توسط %1$s"
+  },
+  "verified_by_you": {
+    "message": "تأیید شده توسط من"
+  },
+  "contact_setup_changed": {
+    "message": "تنظیم‌ها برای %1$s تغییر کرد. "
+  },
+  "verified_contact_required_explain": {
+    "message": "برای تضمین رمزنگاری سراسری شما تنها می‌توانید مخاطب‌هایی که یک تیک سبز دارند به این گروه اضافه کنید.\n\nمی‌توانید با مخاطب‌هایتان حضوری ملاقات کنید و برای معرفی، کد QR آن‌ها را اسکن کنید."
+  },
+  "copy_qr_data_success": {
+    "message": "آدرس کیوآر در حافظه ذخیر شد"
+  },
+  "mailto_dialog_header_select_chat": {
+    "message": "گپ را برای ارسال پیام انتخاب کنید"
+  },
+  "confirm_replace_draft": {
+    "message": "%1$s هم‌اکنون هم یک پیام پیش‌نویس دارد؛ آیا می‌خواهید آن را جایگزین کنید؟"
+  },
+  "mailto_link_could_not_be_decoded": {
+    "message": "امکان کدگشایی پیوند mailto وجود ندارد: %1$s"
+  },
+  "notify_reply_button": {
+    "message": "پاسخ"
+  },
+  "notify_new_message": {
+    "message": "پیام جدید"
+  },
+  "notify_background_connection_enabled": {
+    "message": "اتصال‌ها پیش زمینه فعال شد"
+  },
+  "notify_priority_high": {
+    "message": "زیاد"
+  },
+  "notify_priority_max": {
+    "message": "حداکثر"
+  },
+  "notify_name_and_message": {
+    "message": "نام و پیام"
+  },
+  "notify_name_only": {
+    "message": "فقط نام"
+  },
+  "notify_no_name_or_message": {
+    "message": "بدون نام یا پیام"
+  },
+  "notifications_disabled": {
+    "message": "اعلان‌ها غیرفعال شد"
+  },
+  "new_messages": {
+    "message": "پیام‌های جدید"
+  },
+  "new_messages_body": {
+    "message": "شما پیام‌های جدیدی دارید"
+  },
+  "n_messages_in_m_chats": {
+    "message": "%1$d پیام در %2$d گفتگو"
+  },
+  "perm_required_title": {
+    "message": "مجوز لازم است"
+  },
+  "perm_continue": {
+    "message": "ادامه"
+  },
+  "perm_explain_access_to_camera_denied": {
+    "message": "برای گرفتن فیلم و عکس به\n app settings \nبروید و \n\"Permissions\"  \nرا انتخاب کرده و \n\"Camera\" \nرا فعال کنید.  "
+  },
+  "perm_explain_access_to_mic_denied": {
+    "message": "برای ارسال پیام صوتی به تنظیم‌های نرم‌افزار رفته و پس از انتخاب «دسترسی‌ها»\n گزینه «میکروفن»\n را فعال نمایید. "
+  },
+  "perm_explain_access_to_storage_denied": {
+    "message": "برای دریافت یا ارسال پرونده به تنظیم‌های برنامه بروید، «اجازه‌ها» را برگزینید و «ذخیره‌گاه» را به کار بیندازید."
+  },
+  "perm_explain_access_to_location_denied": {
+    "message": "برای افزودن موقعیت مکانی به تنظیم‌های نرم‌افزار رفته و از \n«دسترسی‌ها» \nگزینه\n«موقعیت مکانی» \nرا فعال نمایید."
+  },
+  "perm_explain_access_to_notifications_denied": {
+    "message": "برای دریافت اعلان‌ها به «تنظیمات دستگاه > برنامه‌ها > دلتاچت» بروید و «اعلان‌ها» را فعال کنید."
+  },
+  "ImageEditorHud_draw_anywhere_to_blur": {
+    "message": "هر کجا مایلید شروع به رسم کردن کنید تا مات شود."
+  },
+  "ImageEditorHud_add_text": {
+    "message": "افزودن متن"
+  },
+  "ImageEditorHud_blur": {
+    "message": "مات کردن"
+  },
+  "ImageEditorHud_brush_marker": {
+    "message": "قلم‌ علامت گذاری"
+  },
+  "ImageEditorHud_brush_highlight": {
+    "message": "قلم  هایلایت"
+  },
+  "ImageEditorHud_crop": {
+    "message": "بریدن"
+  },
+  "ImageEditorHud_flip": {
+    "message": "برعکس کردن"
+  },
+  "ImageEditorHud_rotate": {
+    "message": "چرخاندن"
+  },
+  "encrypted_message": {
+    "message": "پیام رمزگذاری شده"
+  },
+  "about_offical_app_desktop": {
+    "message": "این نرم‌افزار رسمی دلتاچت در محیط رایانه است."
+  },
+  "about_licensed_under_desktop": {
+    "message": "این نرم افزار تحت مجوز \nGNU GPL ورژن ۳\n منتشر شده و کد منبع در\n GitHub\n در دسترس است."
+  },
+  "welcome_desktop": {
+    "message": "به دلتاچت خوش‌آمدید"
+  },
+  "global_menu_preferences_language_desktop": {
+    "message": "زبان"
+  },
+  "global_menu_file_desktop": {
+    "message": "پرونده"
+  },
+  "global_menu_file_quit_desktop": {
+    "message": "خروج"
+  },
+  "global_menu_edit_desktop": {
+    "message": "ویرایش"
+  },
+  "global_menu_edit_undo_desktop": {
+    "message": "بازگردانی"
+  },
+  "global_menu_edit_redo_desktop": {
+    "message": "دوباره انجام دادن"
+  },
+  "global_menu_edit_cut_desktop": {
+    "message": "بریدن"
+  },
+  "global_menu_edit_copy_desktop": {
+    "message": "کپی"
+  },
+  "global_menu_edit_paste_desktop": {
+    "message": "چسباندن"
+  },
+  "global_menu_view_desktop": {
+    "message": "نمایش"
+  },
+  "global_menu_view_floatontop_desktop": {
+    "message": "شناور در بالا"
+  },
+  "global_menu_view_developer_desktop": {
+    "message": "برنامه‌نویس"
+  },
+  "global_menu_view_developer_tools_desktop": {
+    "message": "ابزار برنامه نویس"
+  },
+  "global_menu_help_desktop": {
+    "message": "کمک"
+  },
+  "global_menu_help_report_desktop": {
+    "message": "گزارش یک مشکل"
+  },
+  "global_menu_help_about_desktop": {
+    "message": "درباره دلتاچت"
+  },
+  "global_menu_file_open_desktop": {
+    "message": "بازکردن دلتاچت"
+  },
+  "global_menu_minimize_to_tray": {
+    "message": "بردن زیر صفحه"
+  },
+  "no_chat_selected_suggestion_desktop": {
+    "message": "یک گپ را انتخاب کرده یا یک گپ ایجاد نمایید"
+  },
+  "write_message_desktop": {
+    "message": "نوشتن پیام"
+  },
+  "encryption_info_title_desktop": {
+    "message": "مشخصات رمزگذاری"
+  },
+  "delete_message_desktop": {
+    "message": "حذف پیام"
+  },
+  "more_info_desktop": {
+    "message": "جزئیات بیشتر "
+  },
+  "timestamp_format_m_desktop": {
+    "message": "MMM D"
+  },
+  "remove_desktop": {
+    "message": "حذف"
+  },
+  "save_desktop": {
+    "message": "ذخیره"
+  },
+  "name_desktop": {
+    "message": "نام"
+  },
+  "select_group_image_desktop": {
+    "message": "انتخاب تصویر گروه"
+  },
+  "export_backup_desktop": {
+    "message": "صادر کردن نسخه پشتیبان"
+  },
+  "autocrypt_correct_desktop": {
+    "message": "برپاسازی اتوکریپت انتقال یافت."
+  },
+  "forget_login_confirmation_desktop": {
+    "message": "پاک کردن این حساب؟ همه‌چیز پاک می‌شود که شامل رمزگذاری سراسری، مخاطبین، گپ‌ها، پیام‌ها و رسانه‌ها می‌شود. این عملیات قابل بازگردانی نیست."
+  },
+  "message_detail_sent_desktop": {
+    "message": "ارسال شد"
+  },
+  "message_detail_received_desktop": {
+    "message": "دریافت شد"
+  },
+  "menu.view.developer.open.log.folder": {
+    "message": "پوشه گزارش را باز کن"
+  },
+  "menu.view.developer.open.current.log.file": {
+    "message": "پوشه گزارش فعلی را باز کن"
+  },
+  "explain_desktop_minimized_disabled_tray_pref": {
+    "message": "چون دلتاچت با تنظیم‌ها --زیرصفحه شروع به کار کرده است نمی‌توان نمادک زیر صفحه را غیر فعال کرد. "
+  },
+  "no_spellcheck_suggestions_found": {
+    "message": "هیچ پیشنهادی برای املا پیدا نشد"
+  },
+  "show_window": {
+    "message": "نمایش پنجره"
+  },
+  "keybindings": {
+    "message": "کلیدهای میانبر"
+  },
+  "switch_between_chats": {
+    "message": "جابه‌جا شدن میان گپ‌ها"
+  },
+  "scroll_messages": {
+    "message": "حرکت کردن میان پیام‌ها"
+  },
+  "focus_search_input": {
+    "message": "تمرکز نشانگر بر بخش جستجو"
+  },
+  "focus_message_input": {
+    "message": "تمرکز نشانگر بر بخش پیام"
+  },
+  "force_refresh_network": {
+    "message": "تازه کردن اجباری شبکه"
+  },
+  "insert_newline": {
+    "message": "افزودن خط جدید"
+  },
+  "a11y_delivery_status_error": {
+    "message": "وضعیت ارسال: خطا"
+  },
+  "a11y_encryption_padlock": {
+    "message": "قفل رمزگذاری"
+  },
+  "a11y_delivery_status_sending": {
+    "message": "وضعیت ارسال: درحال ارسال"
+  },
+  "a11y_delivery_status_draft": {
+    "message": "وضعیت ارسال: پیش نویس"
+  },
+  "a11y_delivery_status_delivered": {
+    "message": "وضعیت ارسال: دریافت شد"
+  },
+  "a11y_delivery_status_read": {
+    "message": "وضعیت ارسال: خوانده شد"
+  },
+  "a11y_delivery_status_invalid": {
+    "message": "وضعیت ارسال نامعتبر"
+  },
+  "a11y_message_context_menu_btn_label": {
+    "message": "عملیات‌های پیام"
+  },
+  "a11y_background_preview_label": {
+    "message": "پیش‌نمایش پس‌زمینه"
+  },
+  "a11y_disappearing_messages_activated": {
+    "message": "پیام‌های ناپدید شونده فعال شدند"
+  },
+  "stop_sharing_location": {
+    "message": "توقف اشتراک موقعیت مکانی"
+  },
+  "a11y_voice_message_hint_ios": {
+    "message": "پس از ضبط کردن برای ارسال دوبار ضربه بزنید. برای حذف و رد ضبط کردن با دو انگشت خود بکشید. "
+  },
+  "a11y_connectivity_hint": {
+    "message": "برای مشاهده اطلاعات اتصال دوبار ضربه بزنید"
+  },
+  "login_error_no_internet_connection": {
+    "message": "بدون اتصال اینترنت. ورود ناموفق"
+  },
+  "share_account_not_configured": {
+    "message": "حساب تنظیم نشده است"
+  },
+  "cannot_play_audio_file": {
+    "message": "امکان پخش کردن پروندهٔ صوتی وجود ندارد."
+  },
+  "perm_ios_explain_access_to_camera_denied": {
+    "message": "برای عکس یا فیلم گرفتن یا اسکن کردن کد کیو آر، وارد تنظیم‌های سیستم شده و دسترسی به دوربین را فعال کنید. "
+  },
+  "open_settings": {
+    "message": "تنظیم‌ها را باز کنید"
+  },
+  "import_device_contacts": {
+    "message": "وارد کردن مخاطبین"
+  },
+  "import_device_contacts_hint": {
+    "message": "برای شروع گپ با مخاطبین دستگاه خود، تنظیم‌ها را باز کرده و «مخاطبین» را به کار بیندازید."
+  },
+  "disabled_in_dc": {
+    "message": "در دلتاچت غیر فعال شده است. "
+  },
+  "disabled_in_system_settings": {
+    "message": "در تنظیم‌های سیستم غیر فعال شده است. "
+  },
+  "bg_app_refresh_disabled": {
+    "message": "گزینه «بازخوانی نرم‌افزار در پس‌زمینه» در تنظیم‌های سیستم غیر فعال شده است. "
+  },
+  "delayed": {
+    "message": "دارای تاخیر"
+  },
+  "notifications_avg_minutes": {
+    "message": "به صورت متوسط هر%1$d دقیقه"
+  },
+  "notifications_avg_hours": {
+    "message": "به صورت متوسط هر %1$d ساعت"
+  },
+  "last_check_at": {
+    "message": "بررسی شده در %1$s"
+  },
+  "shortcuts_widget_title": {
+    "message": "میانبرها"
+  },
+  "InfoPlist_NSCameraUsageDescription": {
+    "message": "دلتاچت برای گرفتن و ارسال عکس و فیلم و برای اسکن کردن کیوآر کد از دوربین شما استفاده می‌کند. "
+  },
+  "InfoPlist_NSContactsUsageDescription": {
+    "message": "دلتاچت از مخاطبین شما برای نمایش فهرست رایانامه‌هایی که می‌توانید برایشان پیام ارسال کنید استفاده می‌کند. دلتاچت کارساز ندارد، مخاطبین شما به جایی ارسال نمی‌شوند. "
+  },
+  "InfoPlist_NSLocationAlwaysAndWhenInUseUsageDescription": {
+    "message": "دلتاچت برای  هم‌رسانی مکان شما در زمانی که آن به کار انداخته‌اید، به مجوز نیاز دارد. "
+  },
+  "InfoPlist_NSLocationWhenInUseUsageDescription": {
+    "message": "دلتاچت برای اشتراک موقعیت مکانی شما در زمانی که اشتراک موقعیت مکانی را فعال کرده‌ باشید به مجوز نیاز دارد. "
+  },
+  "InfoPlist_NSMicrophoneUsageDescription": {
+    "message": "دلتاچت از میکروفون برای ذخیره و ارسال پیام صوتی یا فیلم دارای صدا استفاده می‌کند."
+  },
+  "InfoPlist_NSPhotoLibraryUsageDescription": {
+    "message": "دلتاچت به شما اجازه می دهد تصویر موردنظر برای ارسال را انتخاب کنید."
+  },
+  "InfoPlist_NSPhotoLibraryAddUsageDescription": {
+    "message": "دلتاچت میخواهد تصاویر را در آلبوم شما ذخیره کند."
+  },
+  "pref_instant_delivery": {
+    "message": "تحویل آنی"
+  },
+  "pref_background_notifications": {
+    "message": "استفاده از اتصال پس‌زمینه"
+  },
+  "pref_background_notifications_explain": {
+    "message": "برای استفاده باید «نادیده گرفتن بهینه‌سازی‌های باتری» فعال باشد. اگر اعلان‌ها به موقع نمی‌رسند، این را فعال کنید."
+  },
+  "pref_reliable_service": {
+    "message": "اجبار کردن اتصال پس‌زمینه"
+  },
+  "pref_reliable_service_explain": {
+    "message": "اعلانی دائمی نشان می‌دهد"
+  },
+  "pref_background_notifications_rationale": {
+    "message": "برای حفظ ارتباطتان با سرور رایانامه و دریافت پیامها در پیش زمینه، در گام بعدی، تنظیم‌های بهینه سازی باتری را نادیده بگیرید. \n\n دلتاچت از منابع کمی استفاده میکند و مراقب است باتری شما را بیش از حد مصرف نکند. "
+  },
+  "perm_enable_bg_reminder_title": {
+    "message": "برای دریافت پیام‌ها به صورت پس زمینه در دلتاچت این جا را ضربه بزنید. "
+  },
+  "perm_enable_bg_already_done": {
+    "message": "قبلا اجازه دسترسی به فعالیت در پس زمینه را به دلتاچت داده‌اید. \n\n اگر پیام‌ها هنوز هم در شرایط پس زمینه نمی‌آمد لطفا تنظیم‌های سیستم را نیز بررسی نمایید. "
+  },
+  "n_minutes": {
+    "one": "%d دقیقه",
+    "other": "%d دقیقه"
+  },
+  "n_hours": {
+    "one": "%d ساعت",
+    "other": "%d ساعت"
+  },
+  "n_chats": {
+    "one": "%d چت",
+    "other": "%d گپ"
+  },
+  "n_contacts": {
+    "one": "%d مخاطب",
+    "other": "%d مخاطب"
+  },
+  "n_messages": {
+    "one": "%d پیام",
+    "other": "%d پیام"
+  },
+  "n_reactions": {
+    "one": "%dواکنش",
+    "other": "%dواکنش"
+  },
+  "n_members": {
+    "one": "%d عضو",
+    "other": "%d عضو"
+  },
+  "n_recipients": {
+    "one": "%d گیرنده",
+    "other": "%d گیرنده‌ "
+  },
+  "n_selected": {
+    "one": "تعداد %d انتخاب شده است",
+    "other": "تعداد  %dانتخاب شده است"
+  },
+  "ask_send_following_n_files_to": {
+    "one": "ارسال این پرونده به %s؟",
+    "other": "ارسال این %d پرونده به %s؟"
+  },
+  "ask_delete_messages_simple": {
+    "one": "می‌خواهید %dپیام پاک شود؟",
+    "other": "می‌خواهید %d پیام پاک شود؟"
+  },
+  "chat_archived": {
+    "one": "%d گپ بایگانی شد",
+    "other": "%d گپ بایگانی شدند"
+  },
+  "chat_unarchived": {
+    "one": "%d گپ از بایگانی خارج شد",
+    "other": "%d گپ از بایگانی خارج شدند"
+  },
+  "chat_n_new_messages": {
+    "one": "%dپیام جدید",
+    "other": "%d پیام جدید"
+  }
+}

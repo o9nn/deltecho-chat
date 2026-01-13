@@ -1,0 +1,602 @@
+{
+  "app_name": {
+    "message": "Delta Chat"
+  },
+  "ok": {
+    "message": "சரி"
+  },
+  "cancel": {
+    "message": "ரத்து செய்"
+  },
+  "yes": {
+    "message": "ஆம்"
+  },
+  "no": {
+    "message": "இல்லை"
+  },
+  "on": {
+    "message": "இயக்கு"
+  },
+  "off": {
+    "message": "நிறுத்தவும்"
+  },
+  "def": {
+    "message": "இயல்புநிலை"
+  },
+  "custom": {
+    "message": "விருப்ப"
+  },
+  "none": {
+    "message": "எதுவும் இல்லை"
+  },
+  "automatic": {
+    "message": "தானியங்கி"
+  },
+  "strict": {
+    "message": "கண்டிப்பான"
+  },
+  "open": {
+    "message": "திற"
+  },
+  "delete": {
+    "message": "நீக்கவும் "
+  },
+  "info": {
+    "message": "தகவல்"
+  },
+  "update": {
+    "message": "புதுப்பிக்கப்பட்டது"
+  },
+  "emoji": {
+    "message": "ஈமோஜியைப்"
+  },
+  "attachment": {
+    "message": "இணைப்பு"
+  },
+  "back": {
+    "message": "மீண்டும்"
+  },
+  "close": {
+    "message": "நெருக்கமான"
+  },
+  "forward": {
+    "message": "முன்னோக்கு"
+  },
+  "archive": {
+    "message": "காப்பகத்தை"
+  },
+  "unarchive": {
+    "message": "மீட்டெடுக்கலாம்"
+  },
+  "mute": {
+    "message": "ஓசையற்ற"
+  },
+  "ephemeral_messages": {
+    "message": "காணாமல் போகும் செய்திகள்"
+  },
+  "save": {
+    "message": "சேமி"
+  },
+  "chat": {
+    "message": "அரட்டை"
+  },
+  "media": {
+    "message": "ஊடகம்"
+  },
+  "main_menu": {
+    "message": "முதன்மை பட்டியல்"
+  },
+  "start_chat": {
+    "message": "அரட்டை தொடங்கவும்"
+  },
+  "not_now": {
+    "message": "இப்போது இல்லை"
+  },
+  "never": {
+    "message": "எப்போதும் இல்லை"
+  },
+  "one_moment": {
+    "message": "ஒரு நிமிடம் காத்திருக்கவும் ..."
+  },
+  "done": {
+    "message": "முடிந்தது"
+  },
+  "next": {
+    "message": "அடுத்தது"
+  },
+  "error": {
+    "message": "பிழை"
+  },
+  "error_x": {
+    "message": "பிழை: %1$s"
+  },
+  "contacts_headline": {
+    "message": "தொடர்புகள்"
+  },
+  "email_address": {
+    "message": "மின் அஞ்சல் முகவரி"
+  },
+  "bad_email_address": {
+    "message": "தவறான மின் அஞ்சல் முகவரி"
+  },
+  "password": {
+    "message": "கடவுச்சொல்"
+  },
+  "now": {
+    "message": "இப்போது"
+  },
+  "danger": {
+    "message": "ஆபத்து"
+  },
+  "today": {
+    "message": "இன்று"
+  },
+  "yesterday": {
+    "message": "நேற்று"
+  },
+  "this_week": {
+    "message": "இந்த வாரம்"
+  },
+  "this_month": {
+    "message": "இந்த மாதம்"
+  },
+  "self": {
+    "message": "நான்"
+  },
+  "draft": {
+    "message": "வரைவு"
+  },
+  "image": {
+    "message": "படம்"
+  },
+  "gif": {
+    "message": "GIF"
+  },
+  "images": {
+    "message": "புகைப்படங்கள்"
+  },
+  "audio": {
+    "message": "ஒலி"
+  },
+  "voice_message": {
+    "message": "குரல் செய்தி"
+  },
+  "forwarded_message": {
+    "message": "மேல அனுப்பப்பட்ட சேதி"
+  },
+  "video": {
+    "message": "காணொளி"
+  },
+  "documents": {
+    "message": "ஆவணங்கள்"
+  },
+  "contact": {
+    "message": "தொடர்பு"
+  },
+  "camera": {
+    "message": "புகைப்படக்கருவி"
+  },
+  "location": {
+    "message": "இடம்"
+  },
+  "gallery": {
+    "message": "காட்சி கூடம்"
+  },
+  "file": {
+    "message": "கோப்பு"
+  },
+  "unknown": {
+    "message": "முன் தெரிந்திராத"
+  },
+  "green": {
+    "message": "பச்சை"
+  },
+  "red": {
+    "message": "சிவப்பு"
+  },
+  "blue": {
+    "message": "நீலம்"
+  },
+  "orange": {
+    "message": "ஆரஞ்சு"
+  },
+  "cyan": {
+    "message": "சியான்"
+  },
+  "purple": {
+    "message": "ஊதா"
+  },
+  "magenta": {
+    "message": "கருநீலம்"
+  },
+  "white": {
+    "message": "வெள்ளை"
+  },
+  "small": {
+    "message": "சிறிய"
+  },
+  "normal": {
+    "message": "சாதாரணமாக"
+  },
+  "large": {
+    "message": "பெரிய"
+  },
+  "extra_large": {
+    "message": "கூடுதல் பெரியது"
+  },
+  "fast": {
+    "message": "வேகமாக"
+  },
+  "slow": {
+    "message": "மெதுவாக"
+  },
+  "menu_new_contact": {
+    "message": "புதிய தொடர்பு"
+  },
+  "menu_new_chat": {
+    "message": "புது அரட்டை"
+  },
+  "menu_new_group": {
+    "message": "புதிய குழு"
+  },
+  "menu_send": {
+    "message": "அனுப்பு"
+  },
+  "menu_edit_group": {
+    "message": "குழுவைத் திருத்து"
+  },
+  "menu_add_attachment": {
+    "message": "கோப்புகளை இணைக்கவும்"
+  },
+  "menu_leave_group": {
+    "message": "குழுவில் இருந்து வெளியேறு"
+  },
+  "menu_delete_chat": {
+    "message": "அரட்டையை நீக்கு"
+  },
+  "menu_message_details": {
+    "message": "செய்தி விவரங்கள்"
+  },
+  "menu_copy_to_clipboard": {
+    "message": "பிடிப்பு பலகை"
+  },
+  "menu_forward": {
+    "message": "செய்தியை முன்னோக்கியனுப்பு"
+  },
+  "menu_reply": {
+    "message": "செய்திக்கு பதில்"
+  },
+  "menu_mute": {
+    "message": "அறிவிப்புகளை ஊமையாக்கு"
+  },
+  "menu_unmute": {
+    "message": "ஊமையாக்குதலை தவிர்க்கவும்"
+  },
+  "menu_all_media": {
+    "message": "அனைத்து ஊடகங்களும்"
+  },
+  "menu_share": {
+    "message": "பகிர்"
+  },
+  "menu_block_contact": {
+    "message": "தொடர்பை தடுக்கவும்"
+  },
+  "menu_unblock_contact": {
+    "message": "தொடர்பு தடுப்பினை நீக்கவும்"
+  },
+  "menu_help": {
+    "message": "உதவி"
+  },
+  "menu_select_all": {
+    "message": "அனைத்தையும்  தேர்வுசெய்"
+  },
+  "menu_edit_name": {
+    "message": "பெயரை திருத்தவும்"
+  },
+  "menu_settings": {
+    "message": "அமைப்புகள்"
+  },
+  "menu_advanced": {
+    "message": "மேம்பட்ட அமைப்புகள்"
+  },
+  "menu_view_profile": {
+    "message": "சுயவிவரத்தை காண்பி"
+  },
+  "mute_for_one_hour": {
+    "message": "1 மணி இதற்காக ஊமையாக்கு"
+  },
+  "mute_for_eight_hours": {
+    "message": "8 மணிகள் இதற்காக ஊமையாக்கு"
+  },
+  "mute_for_one_day": {
+    "message": "1 நாள் இதற்காக ஊமையாக்கு"
+  },
+  "mute_for_seven_days": {
+    "message": "7 நாட்கள் இதற்காக ஊமையாக்கு"
+  },
+  "mute_forever": {
+    "message": "எப்போதுமே ஊமையாக்கு"
+  },
+  "share_location_for_5_minutes": {
+    "message": "5 நிமிடங்கள் "
+  },
+  "share_location_for_30_minutes": {
+    "message": "30 நிமிடங்கள் "
+  },
+  "share_location_for_one_hour": {
+    "message": "1 மணி"
+  },
+  "share_location_for_two_hours": {
+    "message": "2 மணிகள்"
+  },
+  "share_location_for_six_hours": {
+    "message": "6 மணிகள்"
+  },
+  "ask_leave_group": {
+    "message": "இந்த குழுவில் இருந்து வெளியேறவா ?"
+  },
+  "ask_forward": {
+    "message": "தேர்வு செய்யப்பட்ட செய்திகளை இவற்றுக்கு %1$s முன்னோக்கி அனுப்பவா ?"
+  },
+  "ask_block_contact": {
+    "message": "இந்த தொடர்பை முடக்கவா ?"
+  },
+  "contacts_title": {
+    "message": "தொடர்புகள்"
+  },
+  "contacts_empty_hint": {
+    "message": "எந்த தொடர்புகளும் இல்லை"
+  },
+  "chat_record_slide_to_cancel": {
+    "message": "ரத்து செய்ய திரையில் சறுக்கவும்"
+  },
+  "chat_share_with_title": {
+    "message": "பகிர்"
+  },
+  "chat_input_placeholder": {
+    "message": "சேதி"
+  },
+  "chat_archived_label": {
+    "message": "ஆவண காக்கப்படுத்தப்பட்டது"
+  },
+  "chat_no_messages": {
+    "message": "சேதிகள் இல்லை"
+  },
+  "chat_self_talk_subtitle": {
+    "message": "தங்களுக்கே அனுப்பி கொண்ட செய்திகள்"
+  },
+  "search": {
+    "message": "தேடு"
+  },
+  "group_name": {
+    "message": "குழுவின் பெயர்"
+  },
+  "group_please_enter_group_name": {
+    "message": "குழுவிற்கு ஒரு பெயரை சூட்டவும்"
+  },
+  "group_add_members": {
+    "message": "உறுப்பினர்களை சேர்க்க"
+  },
+  "profile_encryption": {
+    "message": "மறைகுறியாக்கம்"
+  },
+  "tab_contact": {
+    "message": "தொடர்பு"
+  },
+  "tab_gallery": {
+    "message": "காட்சி கூடம்"
+  },
+  "login_subheader": {
+    "message": "அறியப்பட்ட மின் அஞ்சல் வழங்குநர்களுக்கு மற்ற அமைப்புகள் தானாக தீர்மானிக்கப்படும் "
+  },
+  "login_inbox": {
+    "message": "உட்பெட்டி"
+  },
+  "login_outbox": {
+    "message": "வெளிப்பெட்டி"
+  },
+  "login_smtp_login": {
+    "message": "SMTP க் கான உள் நுழைவு பெயர்"
+  },
+  "login_smtp_password": {
+    "message": "SMTP க்கான கடவுச்சொல்"
+  },
+  "login_smtp_server": {
+    "message": "SMTP க்கான சேவகன்"
+  },
+  "login_smtp_port": {
+    "message": "SMTP போர்ட்"
+  },
+  "pref_profile_info_headline": {
+    "message": "உங்கள் சுயவிவரத் தகவல்"
+  },
+  "pref_blocked_contacts": {
+    "message": "தடுக்கபட்ட தொடர்புகள்"
+  },
+  "pref_password_and_account_settings": {
+    "message": "கணக்கு அமைப்புகள்"
+  },
+  "pref_your_name": {
+    "message": "எனது பெயர்"
+  },
+  "pref_enter_sends": {
+    "message": "\"enter\" மூலம் அனுப்பவும்"
+  },
+  "pref_vibrate": {
+    "message": "அதிர்வு உண்டாக்கு"
+  },
+  "pref_screen_security": {
+    "message": "திரை பாதுகாப்பு"
+  },
+  "pref_screen_security_explain": {
+    "message": "அண்மை பட்டியல் மற்றும் மென்பொருளுக்கு உள்ளே திரையை படம் எடுப்பதை தடுக்கவும்"
+  },
+  "pref_notifications": {
+    "message": "அறிவிப்புகள்"
+  },
+  "pref_notifications_show": {
+    "message": "காட்டு"
+  },
+  "pref_notifications_priority": {
+    "message": "முன்னுரிமை"
+  },
+  "pref_led_color": {
+    "message": "LED நிறம்"
+  },
+  "pref_sound": {
+    "message": "ஓசை"
+  },
+  "pref_silent": {
+    "message": "அமைதி"
+  },
+  "pref_privacy": {
+    "message": "தனியுரிமை"
+  },
+  "pref_chats_and_media": {
+    "message": "அரட்டைகள் மற்றும் ஊடகங்கள்"
+  },
+  "pref_system_default": {
+    "message": "கருவி இயல்புநிலை"
+  },
+  "pref_light_theme": {
+    "message": "வெளிச்சமிக்க"
+  },
+  "pref_dark_theme": {
+    "message": "இருள்கொண்ட"
+  },
+  "pref_appearance": {
+    "message": "தோற்றம்"
+  },
+  "pref_theme": {
+    "message": "நிறவடிவமைப்பு"
+  },
+  "pref_language": {
+    "message": "மொழி"
+  },
+  "pref_incognito_keyboard": {
+    "message": "மறைநிலை விசைப்பலகை"
+  },
+  "pref_incognito_keyboard_explain": {
+    "message": "தனிப்பயனாக்கப்பட்ட கற்றலை முடக்க விசைப்பலகை கோருங்கள்"
+  },
+  "pref_read_receipts": {
+    "message": "ரசீதுகளைப் படியுங்கள்"
+  },
+  "pref_read_receipts_explain": {
+    "message": "வாசிப்பு ரசீதுகள் முடக்கப்பட்டிருந்தால், மற்றவர்களிடமிருந்து வாசிப்பு ரசீதுகளை நீங்கள் "
+  },
+  "pref_use_system_emoji": {
+    "message": "கணினி ஈமோஜியைப் பயன்படுத்தவும்"
+  },
+  "pref_use_system_emoji_explain": {
+    "message": "Delta Chat உள்ளமைக்கப்பட்ட ஈமோஜி ஆதரவை முடக்கு"
+  },
+  "pref_app_access": {
+    "message": "பயன்பாடு அணுகல்"
+  },
+  "pref_chats": {
+    "message": "அரட்டைகள்"
+  },
+  "pref_in_chat_sounds": {
+    "message": "௨ள்ளார்ந்த செயலி அறிவிப்புகள்"
+  },
+  "pref_other": {
+    "message": "மற்றவை"
+  },
+  "pref_backup": {
+    "message": "காப்பு நகல்"
+  },
+  "pref_background": {
+    "message": "அரட்டை பின்புலம்"
+  },
+  "qrscan_fingerprint_label": {
+    "message": "கைரேகைகள்"
+  },
+  "notify_reply_button": {
+    "message": "மறுமொழி"
+  },
+  "notify_new_message": {
+    "message": "புதிய செய்தி"
+  },
+  "notify_priority_high": {
+    "message": "உயர்"
+  },
+  "notify_priority_max": {
+    "message": "மேக்ஸ்"
+  },
+  "notify_name_and_message": {
+    "message": "பெயரும் செய்தியும்"
+  },
+  "notify_name_only": {
+    "message": "பெயர் மட்டும்"
+  },
+  "notify_no_name_or_message": {
+    "message": "பெயர் அல்லது செய்தி இல்லை"
+  },
+  "perm_required_title": {
+    "message": "அனுமதி தேவை"
+  },
+  "perm_continue": {
+    "message": "தொடர்"
+  },
+  "encrypted_message": {
+    "message": "மறைகுறியாக்கப்பட்ட செய்தி"
+  },
+  "welcome_desktop": {
+    "message": "Delta Chat க்கு வரவேற்கிறது."
+  },
+  "global_menu_preferences_language_desktop": {
+    "message": "நிறவடிவமைப்பு"
+  },
+  "global_menu_file_desktop": {
+    "message": "கோப்பு"
+  },
+  "global_menu_edit_desktop": {
+    "message": "திருத்து"
+  },
+  "global_menu_view_desktop": {
+    "message": "பார்வை"
+  },
+  "global_menu_help_desktop": {
+    "message": "உதவி"
+  },
+  "global_menu_help_about_desktop": {
+    "message": "Delta Chat பற்றி"
+  },
+  "more_info_desktop": {
+    "message": "மேலும் தகவல்"
+  },
+  "remove_desktop": {
+    "message": "நீக்கு"
+  },
+  "save_desktop": {
+    "message": "சேமி"
+  },
+  "name_desktop": {
+    "message": "பெயர்"
+  },
+  "n_hours": {
+    "one": "%d மணி",
+    "other": "%d மணிகள்"
+  },
+  "n_chats": {
+    "one": "%d அரட்டை",
+    "other": "%d அரட்டைகள்"
+  },
+  "n_contacts": {
+    "one": "%d தொடர்புகள்",
+    "other": "%d தொடர்புகள்"
+  },
+  "n_messages": {
+    "one": "%d செய்திகள்",
+    "other": "%d செய்திகள்"
+  },
+  "n_members": {
+    "one": " %d உறுப்பினர்கள்",
+    "other": " %d உறுப்பினர்கள்"
+  },
+  "chat_n_new_messages": {
+    "one": "%d புதிய செய்திகள்",
+    "other": "%d புதிய செய்திகள்"
+  }
+}

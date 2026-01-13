@@ -1,0 +1,1096 @@
+{
+  "app_name": {
+    "message": "Delta Chat"
+  },
+  "ok": {
+    "message": "Bone"
+  },
+  "cancel": {
+    "message": "Nuligi"
+  },
+  "clear_search": {
+    "message": "Forviŝi Serĉon"
+  },
+  "yes": {
+    "message": "Jes"
+  },
+  "no": {
+    "message": "Ne"
+  },
+  "select": {
+    "message": "Elekti"
+  },
+  "on": {
+    "message": "Ŝaltita"
+  },
+  "off": {
+    "message": "Malŝaltita"
+  },
+  "def": {
+    "message": "Defaŭlta"
+  },
+  "custom": {
+    "message": "Propran"
+  },
+  "none": {
+    "message": "Neniu"
+  },
+  "automatic": {
+    "message": "Aŭtomata"
+  },
+  "strict": {
+    "message": "Strikta"
+  },
+  "open": {
+    "message": "Malferma"
+  },
+  "download": {
+    "message": "Elŝuti"
+  },
+  "downloading": {
+    "message": "Elŝutado..."
+  },
+  "open_attachment": {
+    "message": "Malfermu aldonaĵon"
+  },
+  "join": {
+    "message": "Aliĝi"
+  },
+  "rejoin": {
+    "message": "Realiĝi"
+  },
+  "delete": {
+    "message": "Forigi"
+  },
+  "info": {
+    "message": "Informoj"
+  },
+  "update": {
+    "message": "Ĝisdatigi"
+  },
+  "emoji": {
+    "message": "Emoji"
+  },
+  "attachment": {
+    "message": "Aldonaĵo"
+  },
+  "back": {
+    "message": "Reen"
+  },
+  "close": {
+    "message": "Fermi"
+  },
+  "forward": {
+    "message": "Plusendi"
+  },
+  "resend": {
+    "message": "Resendi"
+  },
+  "archive": {
+    "message": "Arĥivi"
+  },
+  "unarchive": {
+    "message": "Malarĥivi"
+  },
+  "mute": {
+    "message": "Muta sciigoj"
+  },
+  "ephemeral_messages": {
+    "message": "Memviŝontaj mesaĝoj"
+  },
+  "ephemeral_messages_hint": {
+    "message": "Aplikebla al ĉiuj anoj de tiu ĉi babilejo kiuj uzas Delta Chat; ili ankoraŭ povas kopii, konservi kaj plusendi mesaĝojn, kaj uzi aliajn retpoŝtajn klientojn."
+  },
+  "save": {
+    "message": "Konservi"
+  },
+  "chat": {
+    "message": "Babilo"
+  },
+  "media": {
+    "message": "Aŭdovidaĵoj"
+  },
+  "profile": {
+    "message": "Profilo"
+  },
+  "main_menu": {
+    "message": "Ĉefa menuo"
+  },
+  "start_chat": {
+    "message": "Komenci Babiladon"
+  },
+  "show_full_message": {
+    "message": "Afiŝu la tutan mesaĝon..."
+  },
+  "mark_all_as_read": {
+    "message": "Marki ĉiujn legitaj"
+  },
+  "mark_as_read_short": {
+    "message": "Legi"
+  },
+  "loading": {
+    "message": "Ŝarĝado..."
+  },
+  "hide": {
+    "message": "Kaŝi"
+  },
+  "activate": {
+    "message": "Aktivigi"
+  },
+  "load_remote_content": {
+    "message": "Ŝargu forajn bildojn "
+  },
+  "load_remote_content_ask": {
+    "message": "La foraj bildoj povas spuri vin.\n\nTiu ĉi agordo povas ankaŭ ŝargi tiparojn kaj aliajn enhavojn. Malŝaltite, enkorpigitaj aŭ kaŝmemorigitaj bildoj povas aperi.\n\nŜargu forajn bildojn? "
+  },
+  "always": {
+    "message": "Ĉiam"
+  },
+  "always_load_remote_images": {
+    "message": "Ĉiam ŝargu forajn bildojn"
+  },
+  "once": {
+    "message": "Unufoje"
+  },
+  "show_warning": {
+    "message": "Afiŝu averton"
+  },
+  "show_password": {
+    "message": "Montri pasvorton"
+  },
+  "hide_password": {
+    "message": "Kaŝi pasvorton"
+  },
+  "not_now": {
+    "message": "Ne nun"
+  },
+  "never": {
+    "message": "Neniam"
+  },
+  "one_moment": {
+    "message": "Unu momenton…"
+  },
+  "done": {
+    "message": "Farita"
+  },
+  "undo": {
+    "message": "Malfari"
+  },
+  "offline": {
+    "message": "Nekonektite"
+  },
+  "next": {
+    "message": "Sekva"
+  },
+  "error": {
+    "message": "Eraro"
+  },
+  "error_x": {
+    "message": "Eraro: %1$s"
+  },
+  "no_app_to_handle_data": {
+    "message": "Ne povas trovi aplikaĵon por trakti tiun ĉi tipon de datumo."
+  },
+  "no_browser_installed": {
+    "message": "Neniu retumilo instalita."
+  },
+  "file_not_found": {
+    "message": "Ne povis trovi %1$s."
+  },
+  "copied_to_clipboard": {
+    "message": "Kopiita al tondujo"
+  },
+  "contacts_headline": {
+    "message": "Kontaktoj"
+  },
+  "email_address": {
+    "message": "Retadreso"
+  },
+  "bad_email_address": {
+    "message": "Malbona retadreso."
+  },
+  "password": {
+    "message": "Pasvorto"
+  },
+  "existing_password": {
+    "message": "Estanta Pasvorto"
+  },
+  "now": {
+    "message": "Nun"
+  },
+  "danger": {
+    "message": "Danĝero"
+  },
+  "today": {
+    "message": "Hodiaŭ"
+  },
+  "yesterday": {
+    "message": "Hieraŭ"
+  },
+  "this_week": {
+    "message": "Ĉi-semajne"
+  },
+  "this_month": {
+    "message": "Ĉi-monate"
+  },
+  "last_week": {
+    "message": "Pasint-semajne"
+  },
+  "last_month": {
+    "message": "Pasint-monate"
+  },
+  "last_seen_at": {
+    "message": "Laste vidita je%1$s"
+  },
+  "last_seen_relative": {
+    "message": "Laste vidita %1$s"
+  },
+  "last_seen_unknown": {
+    "message": "Laste vidita: nedisponebla informo"
+  },
+  "self": {
+    "message": "Mi"
+  },
+  "draft": {
+    "message": "Malneto"
+  },
+  "image": {
+    "message": "Bildo"
+  },
+  "reply_noun": {
+    "message": "Respondi"
+  },
+  "gif": {
+    "message": "Gif"
+  },
+  "sticker": {
+    "message": "Glumarko"
+  },
+  "images": {
+    "message": "Bildoj"
+  },
+  "audio": {
+    "message": "Sonaĵo"
+  },
+  "voice_message": {
+    "message": "Voĉmesaĝo"
+  },
+  "forwarded": {
+    "message": "Plusendita"
+  },
+  "forwarded_message": {
+    "message": "Plusendita mesaĝo"
+  },
+  "forwarded_by": {
+    "message": "Plusendita de %1$s"
+  },
+  "video": {
+    "message": "Filmo"
+  },
+  "documents": {
+    "message": "Dokumentoj"
+  },
+  "contact": {
+    "message": "Kontakto"
+  },
+  "camera": {
+    "message": "Fotilo"
+  },
+  "capture": {
+    "message": "Kapti"
+  },
+  "switch_camera": {
+    "message": "Elektu alian kameraon"
+  },
+  "toggle_fullscreen": {
+    "message": "Baskulu el/al la plena ekrano"
+  },
+  "location": {
+    "message": "Loko"
+  },
+  "locations": {
+    "message": "Lokoj"
+  },
+  "gallery": {
+    "message": "Galerio"
+  },
+  "images_and_videos": {
+    "message": "Bildoj kaj videoj"
+  },
+  "file": {
+    "message": "Dosiero"
+  },
+  "files": {
+    "message": "Dosieroj"
+  },
+  "webxdc_app": {
+    "message": "Apo"
+  },
+  "webxdc_apps": {
+    "message": "Apoj"
+  },
+  "unknown": {
+    "message": "Nekonata"
+  },
+  "green": {
+    "message": "Verda"
+  },
+  "red": {
+    "message": "Ruĝa"
+  },
+  "blue": {
+    "message": "Blua"
+  },
+  "orange": {
+    "message": "Oranĝkolora"
+  },
+  "cyan": {
+    "message": "Cejana"
+  },
+  "purple": {
+    "message": "Purpura"
+  },
+  "magenta": {
+    "message": "Malva"
+  },
+  "white": {
+    "message": "Blanka"
+  },
+  "zoom": {
+    "message": "Grandeco"
+  },
+  "extra_small": {
+    "message": "Ege malgranda"
+  },
+  "small": {
+    "message": "Malgranda"
+  },
+  "normal": {
+    "message": "Normala"
+  },
+  "large": {
+    "message": "Granda"
+  },
+  "extra_large": {
+    "message": "Tre granda"
+  },
+  "fast": {
+    "message": "Rapida"
+  },
+  "slow": {
+    "message": "Malrapida"
+  },
+  "menu_new_contact": {
+    "message": "Nova kontakto"
+  },
+  "menu_new_chat": {
+    "message": "Nova babilo"
+  },
+  "menu_new_group": {
+    "message": "Nova grupo"
+  },
+  "broadcast_list": {
+    "message": "Elsenda Listo"
+  },
+  "broadcast_lists": {
+    "message": "Elsendaj Listoj"
+  },
+  "new_broadcast_list": {
+    "message": "Nova Elsenda Listo"
+  },
+  "add_recipients": {
+    "message": "Aldoni Ricevantojn"
+  },
+  "menu_send": {
+    "message": "Sendi"
+  },
+  "menu_toggle_keyboard": {
+    "message": "Baskuligi emoĝian klavaron"
+  },
+  "menu_edit_group": {
+    "message": "Redakti grupon"
+  },
+  "menu_group_name_and_image": {
+    "message": "Grup-nomo kaj bildo"
+  },
+  "menu_show_global_map": {
+    "message": "Montri ĉiujn lokojn"
+  },
+  "menu_archive_chat": {
+    "message": "Enarĥivigi babilon"
+  },
+  "menu_unarchive_chat": {
+    "message": "Elarĥivigi babilon"
+  },
+  "menu_add_attachment": {
+    "message": "Aldoni kunsendaĵon"
+  },
+  "menu_leave_group": {
+    "message": "Forlasi grupon"
+  },
+  "menu_delete_chat": {
+    "message": "Forigi babilon"
+  },
+  "clear_chat": {
+    "message": "Viŝi la babilejon"
+  },
+  "delete_contact": {
+    "message": "Forviŝi Kontakton"
+  },
+  "menu_delete_location": {
+    "message": "Ĉu forigi tiun ĉi lokon?"
+  },
+  "menu_message_details": {
+    "message": "Mesaĝ-detaloj"
+  },
+  "menu_copy_to_clipboard": {
+    "message": "Kopii al tondujo"
+  },
+  "menu_copy_selection_to_clipboard": {
+    "message": "Kopii tion, kion vi elstarigis"
+  },
+  "menu_copy_link_to_clipboard": {
+    "message": "Kopii Ligilon"
+  },
+  "menu_copy_text_to_clipboard": {
+    "message": "Kopii Tekston"
+  },
+  "menu_copy_image_to_clipboard": {
+    "message": "Kopii Bildon"
+  },
+  "menu_copy_email_to_clipboard": {
+    "message": "Kopii retpoŝtaĵon"
+  },
+  "paste_from_clipboard": {
+    "message": "Alglui el la tondujo"
+  },
+  "menu_forward": {
+    "message": "Plusendi mesaĝon"
+  },
+  "menu_reply": {
+    "message": "Respondi al mesaĝo"
+  },
+  "menu_mute": {
+    "message": "Silentigi sciigojn"
+  },
+  "menu_unmute": {
+    "message": "Malsilentigi"
+  },
+  "menu_export_attachment": {
+    "message": "Eksporti aldonaĵon"
+  },
+  "menu_export_attachments": {
+    "message": "Eksporti aldonaĵojn"
+  },
+  "menu_all_media": {
+    "message": "Ĉiuj aŭvidaĵoj"
+  },
+  "show_in_chat": {
+    "message": "Afiŝu en la babilejo"
+  },
+  "menu_share": {
+    "message": "Kunhavigi"
+  },
+  "block": {
+    "message": "Bloki"
+  },
+  "menu_block_contact": {
+    "message": "Bloki kontakton"
+  },
+  "menu_unblock_contact": {
+    "message": "Malbloki kontakton"
+  },
+  "accept": {
+    "message": "Akcepti"
+  },
+  "menu_play": {
+    "message": "Ludi"
+  },
+  "menu_pause": {
+    "message": "Paŭzigi"
+  },
+  "menu_scroll_to_bottom": {
+    "message": "Rulumi al la malsupro"
+  },
+  "menu_scroll_to_top": {
+    "message": "Rulumi al la supro"
+  },
+  "menu_help": {
+    "message": "Helpo"
+  },
+  "privacy_policy": {
+    "message": "Politiko pri privateco"
+  },
+  "menu_select_all": {
+    "message": "Elekti ĉion"
+  },
+  "select_chat": {
+    "message": "Elektu babilejon"
+  },
+  "select_more": {
+    "message": "Elekti pli"
+  },
+  "menu_edit_name": {
+    "message": "Redakti nomon"
+  },
+  "menu_settings": {
+    "message": "Agordoj"
+  },
+  "menu_advanced": {
+    "message": "Speciala"
+  },
+  "menu_view_profile": {
+    "message": "Vidi profilon"
+  },
+  "menu_zoom_in": {
+    "message": "Zomi"
+  },
+  "menu_zoom_out": {
+    "message": "Malzomi"
+  },
+  "menu_save_log": {
+    "message": "Konservi protokolon"
+  },
+  "menu_more_options": {
+    "message": "Pli da ebloj"
+  },
+  "menu_learn_spelling": {
+    "message": "Lernu la ortografion"
+  },
+  "jump_to_message": {
+    "message": "Iru al mesaĝo"
+  },
+  "copy_json": {
+    "message": "Kopiu JSON"
+  },
+  "title_share_location": {
+    "message": "Konigi lokon al ĉiuj grupanoj"
+  },
+  "device_talk": {
+    "message": "Aparataj mesaĝoj"
+  },
+  "device_talk_subtitle": {
+    "message": "Loke generitaj mesaĝoj"
+  },
+  "device_talk_explain": {
+    "message": "Mesaĝoj en tiu ĉi babilo estas surloke generataj de via Delta Chat apo. Ĝiaj kreintoj uzas ilin por informi pri apaj ĝisdatigoj kaj problemoj dum uzado."
+  },
+  "edit_contact": {
+    "message": "Redakti kontakton"
+  },
+  "pin_chat": {
+    "message": "Alpingli babilon"
+  },
+  "unpin_chat": {
+    "message": "Depingli babilon"
+  },
+  "pin": {
+    "message": "Alpingli"
+  },
+  "unpin": {
+    "message": "Depingli"
+  },
+  "mute_for_one_hour": {
+    "message": "Silentigi por 1 horo"
+  },
+  "mute_for_eight_hours": {
+    "message": "Silentigi por 8 horoj"
+  },
+  "mute_for_one_day": {
+    "message": "Silentigi por 1 tago"
+  },
+  "mute_for_seven_days": {
+    "message": "Silentigi por 7 tagoj"
+  },
+  "mute_forever": {
+    "message": "Silentigi por ĉiam"
+  },
+  "share_location_for_5_minutes": {
+    "message": "por 5 minutoj"
+  },
+  "share_location_for_30_minutes": {
+    "message": "por 30 minutoj"
+  },
+  "share_location_for_one_hour": {
+    "message": "por 1 horo"
+  },
+  "share_location_for_two_hours": {
+    "message": "por 2 horoj"
+  },
+  "share_location_for_six_hours": {
+    "message": "por 6 horoj"
+  },
+  "file_saved_to": {
+    "message": "Dosiero konservita kiel \"%1$s\"."
+  },
+  "ask_leave_group": {
+    "message": "Ĉu vi estas certa, ke vi volas forlasi tiun ĉi grupon?"
+  },
+  "ask_forward": {
+    "message": "Plusendi mesaĝojn al %1$s?"
+  },
+  "ask_start_chat_with": {
+    "message": "Babili kun %1$s?"
+  },
+  "ask_remove_members": {
+    "message": "Forigi %1$sel la grupo?"
+  },
+  "contacts_title": {
+    "message": "Kontaktoj"
+  },
+  "contacts_enter_name_or_email": {
+    "message": "Enigi nomon aŭ retadreson"
+  },
+  "contacts_type_email_above": {
+    "message": "Enigu retadreson supren"
+  },
+  "contacts_empty_hint": {
+    "message": "Neniu kontakto."
+  },
+  "chat_archived_chats_title": {
+    "message": "Enarĥivigitaj babiloj"
+  },
+  "chat_please_enter_message": {
+    "message": "Bonvolu enigi mesaĝon."
+  },
+  "chat_camera_unavailable": {
+    "message": "Fotilo neatingebla."
+  },
+  "chat_unable_to_record_audio": {
+    "message": "Ne povas registri aŭdaĵon."
+  },
+  "chat_record_slide_to_cancel": {
+    "message": "Gliti por nuligi"
+  },
+  "chat_record_explain": {
+    "message": "Tuŝadi por registri voĉan mesaĝon, maltuŝadi por sendi"
+  },
+  "chat_all_archived": {
+    "message": "Ĉiuj babiloj enarĥivigitaj.\nPremu \"+\" por komenci novan babilon."
+  },
+  "chat_share_with_title": {
+    "message": "Kunhavigi kun"
+  },
+  "chat_input_placeholder": {
+    "message": "Mesaĝo"
+  },
+  "chat_archived_label": {
+    "message": "Enarĥivigitaj"
+  },
+  "chat_no_messages": {
+    "message": "Neniu mesaĝo."
+  },
+  "chat_self_talk_subtitle": {
+    "message": "Mesaĝoj senditaj al mi mem"
+  },
+  "saved_messages": {
+    "message": "Konservitaj mesaĝoj"
+  },
+  "retry_send": {
+    "message": "Reprovi sendi mesaĝon"
+  },
+  "show_location_traces": {
+    "message": "Montri spurojn"
+  },
+  "add_poi": {
+    "message": "Sendi punkton de intereso"
+  },
+  "search": {
+    "message": "Serĉi"
+  },
+  "search_explain": {
+    "message": "Serĉi babilojn, kontaktojn, kaj mesaĝojn"
+  },
+  "search_no_result_for_x": {
+    "message": "Neniu rezulto trovita por \"%s\""
+  },
+  "group_name": {
+    "message": "Grup-nomo"
+  },
+  "group_avatar": {
+    "message": "Bildo de la grupo"
+  },
+  "group_create_button": {
+    "message": "Krei grupon"
+  },
+  "group_please_enter_group_name": {
+    "message": "Bonvolu enigi nomon por la grupo."
+  },
+  "group_add_members": {
+    "message": "Aldoni anojn"
+  },
+  "group_self_not_in_group": {
+    "message": "Vi devas esti grupano por fari tion."
+  },
+  "profile_encryption": {
+    "message": "Ĉifrado"
+  },
+  "profile_shared_chats": {
+    "message": "Kunhavigitaj babiloj"
+  },
+  "tab_contact": {
+    "message": "Kontakto"
+  },
+  "tab_group": {
+    "message": "Grupo"
+  },
+  "tab_gallery": {
+    "message": "Galerio"
+  },
+  "tab_docs": {
+    "message": "Dokumentoj"
+  },
+  "tab_links": {
+    "message": "Ligiloj"
+  },
+  "tab_map": {
+    "message": "Mapo"
+  },
+  "media_preview": {
+    "message": "Aŭdvida antaŭrigardo"
+  },
+  "send_message": {
+    "message": "Sendi mesaĝon"
+  },
+  "login_title": {
+    "message": "Ensaluti"
+  },
+  "login_header": {
+    "message": "Ensaluti al via servilo"
+  },
+  "login_inbox": {
+    "message": "Ricevujo"
+  },
+  "login_imap_login": {
+    "message": "IMAP salutnomo"
+  },
+  "login_imap_server": {
+    "message": "IMAP servilo"
+  },
+  "login_imap_port": {
+    "message": "IMAP pordo"
+  },
+  "login_imap_security": {
+    "message": "IMAP sekureco"
+  },
+  "login_outbox": {
+    "message": "Senditujo"
+  },
+  "login_smtp_login": {
+    "message": "SMTP salutnomo"
+  },
+  "login_smtp_password": {
+    "message": "SMTP pasvorto"
+  },
+  "login_smtp_server": {
+    "message": "SMTP servilo"
+  },
+  "login_smtp_port": {
+    "message": "SMTP pordo"
+  },
+  "login_smtp_security": {
+    "message": "SMTP sekureco"
+  },
+  "login_auth_method": {
+    "message": "Metodo de rajtigado"
+  },
+  "login_info_oauth2_title": {
+    "message": "Ĉu daŭri kun faciligitaj agordoj?"
+  },
+  "login_certificate_checks": {
+    "message": "Atestilaj kontroloj"
+  },
+  "login_error_mail": {
+    "message": "Bonvolu enigi validan retadreson"
+  },
+  "login_error_server": {
+    "message": "Bonvolu enigi validan servilon / IP adreson"
+  },
+  "login_error_port": {
+    "message": "Bonvolu enigi validan pordon (1-65535)"
+  },
+  "login_error_required_fields": {
+    "message": "Bonvolu enigi validan retadreson kaj pasvorton"
+  },
+  "import_backup_title": {
+    "message": "Importi savkopion"
+  },
+  "accept_invalid_certificates": {
+    "message": "Akcepti nevalidajn atestilojn"
+  },
+  "delete_account": {
+    "message": "Forigi konton"
+  },
+  "delete_account_ask": {
+    "message": "Ĉu vi certas, ke vi volas forigi ĉiujn datumojn de vi konto?"
+  },
+  "forward_to": {
+    "message": "Plusendi al…"
+  },
+  "share_abort": {
+    "message": "Kunhavigado ĉesis pro manko de permesoj."
+  },
+  "pref_profile_photo": {
+    "message": "Profilbildo"
+  },
+  "pref_blocked_contacts": {
+    "message": "Blokitaj kontaktoj"
+  },
+  "pref_password_and_account_settings": {
+    "message": "Pasvorto kaj konto"
+  },
+  "pref_your_name": {
+    "message": "Via nomo"
+  },
+  "pref_enter_sends": {
+    "message": "La Eniga klavo kaŭzas sendon"
+  },
+  "pref_enter_sends_explain": {
+    "message": "Premado de la Eniga klavo sendos mesaĝojn"
+  },
+  "pref_vibrate": {
+    "message": "Vibrado"
+  },
+  "pref_screen_security": {
+    "message": "Ekrana sekureco"
+  },
+  "pref_screen_security_explain": {
+    "message": "Neebligi ekrankopiojn en la listo de ĵus uzitaj aplikaĵoj kaj ene de la aplikaĵo mem"
+  },
+  "pref_notifications": {
+    "message": "Sciigoj"
+  },
+  "pref_notifications_show": {
+    "message": "Montri"
+  },
+  "pref_notifications_priority": {
+    "message": "Prioritato"
+  },
+  "pref_led_color": {
+    "message": "LED-a koloro"
+  },
+  "pref_sound": {
+    "message": "Sono"
+  },
+  "pref_silent": {
+    "message": "Silenta"
+  },
+  "pref_privacy": {
+    "message": "Privateco"
+  },
+  "pref_chats_and_media": {
+    "message": "Interparoloj kaj aŭdvidaĵoj"
+  },
+  "pref_system_default": {
+    "message": "Sistema defaŭlto"
+  },
+  "pref_light_theme": {
+    "message": "Hela"
+  },
+  "pref_dark_theme": {
+    "message": "Malhela"
+  },
+  "pref_appearance": {
+    "message": "Aspekto"
+  },
+  "pref_theme": {
+    "message": "Etoso"
+  },
+  "pref_language": {
+    "message": "Lingvo"
+  },
+  "pref_incognito_keyboard": {
+    "message": "Inkognita klavaro"
+  },
+  "pref_incognito_keyboard_explain": {
+    "message": "Peti al la klavaro malŝalti personan lernadon"
+  },
+  "pref_read_receipts": {
+    "message": "Legokonfirmoj"
+  },
+  "pref_read_receipts_explain": {
+    "message": "Se legokonfirmoj ne estas ŝaltitaj, vi ne vidos aliulajn legokonfirmojn."
+  },
+  "pref_manage_keys": {
+    "message": "Administri ŝlosilojn"
+  },
+  "pref_use_system_emoji": {
+    "message": "Uzi sisteman emoĝiaron"
+  },
+  "pref_use_system_emoji_explain": {
+    "message": "Malebligi emoĝiaron de Delta Chat"
+  },
+  "pref_app_access": {
+    "message": "Aliro al aplikaĵo"
+  },
+  "pref_chats": {
+    "message": "Interparoloj"
+  },
+  "pref_in_chat_sounds": {
+    "message": "Sonoj dum interparolado"
+  },
+  "pref_view_log": {
+    "message": "Vidi protokolon"
+  },
+  "pref_saved_log": {
+    "message": "Konservis protokolon al la elŝuta dosierujo"
+  },
+  "pref_save_log_failed": {
+    "message": "Malsukcesis konservi protokolon"
+  },
+  "pref_log_header": {
+    "message": "Protokolo"
+  },
+  "pref_other": {
+    "message": "Alia"
+  },
+  "pref_backup": {
+    "message": "Savkopio"
+  },
+  "pref_backup_explain": {
+    "message": "Savkopii babilojn al ekstera memorilo"
+  },
+  "pref_backup_export_start_button": {
+    "message": "Komenci savkopiadon"
+  },
+  "pref_backup_written_to_x": {
+    "message": "Savkopio sukcese konservita al \"%1$s\"."
+  },
+  "pref_managekeys_menu_title": {
+    "message": "Administri ŝlosilojn"
+  },
+  "pref_managekeys_export_secret_keys": {
+    "message": "Eksporti sekretajn ŝlosilojn"
+  },
+  "pref_managekeys_export_explain": {
+    "message": "Ĉu eksporti sekretajn ŝlosilojn al \"%1$s\"?"
+  },
+  "pref_managekeys_import_secret_keys": {
+    "message": "Importi sekretajn ŝlosilojn"
+  },
+  "pref_background": {
+    "message": "Fono"
+  },
+  "pref_background_btn_default": {
+    "message": "Uzi defaŭltan bildon"
+  },
+  "pref_background_btn_gallery": {
+    "message": "Elekti el galerio"
+  },
+  "pref_imap_folder_handling": {
+    "message": "IMAP dosieruja traktado"
+  },
+  "pref_watch_sent_folder": {
+    "message": "Kontroli senditujon"
+  },
+  "pref_send_copy_to_self": {
+    "message": "Sendi kopion al mi mem"
+  },
+  "pref_show_emails_all": {
+    "message": "Ĉiuj"
+  },
+  "autocrypt_prefer_e2ee": {
+    "message": "Preferi tutvojan ĉifradon"
+  },
+  "notify_reply_button": {
+    "message": "Respondi"
+  },
+  "notify_new_message": {
+    "message": "Nova mesaĝo"
+  },
+  "notify_priority_high": {
+    "message": "Alta"
+  },
+  "notify_priority_max": {
+    "message": "Maksimuma"
+  },
+  "notify_name_and_message": {
+    "message": "Nomon kaj mesaĝon"
+  },
+  "notify_name_only": {
+    "message": "Nur nomon"
+  },
+  "notify_no_name_or_message": {
+    "message": "Nek nomon aŭ mesaĝon"
+  },
+  "perm_required_title": {
+    "message": "Permeso bezonata"
+  },
+  "perm_continue": {
+    "message": "Daŭrigi"
+  },
+  "welcome_desktop": {
+    "message": "Bonvenon al Delta Chat"
+  },
+  "global_menu_preferences_language_desktop": {
+    "message": "Lingvo"
+  },
+  "global_menu_file_desktop": {
+    "message": "Dosiero"
+  },
+  "global_menu_edit_desktop": {
+    "message": "Modifi"
+  },
+  "global_menu_edit_undo_desktop": {
+    "message": "Malfari"
+  },
+  "global_menu_help_desktop": {
+    "message": "Helpo"
+  },
+  "more_info_desktop": {
+    "message": "Plia informo"
+  },
+  "timestamp_format_m_desktop": {
+    "message": "MMM D"
+  },
+  "remove_desktop": {
+    "message": "Forviŝi"
+  },
+  "save_desktop": {
+    "message": "Konservi"
+  },
+  "n_minutes": {
+    "one": "%d min",
+    "other": "%d min"
+  },
+  "n_hours": {
+    "one": "%d horo",
+    "other": "%d horoj"
+  },
+  "n_chats": {
+    "one": "%d Parolado",
+    "other": "%d babiloj"
+  },
+  "n_contacts": {
+    "one": "%d kontakto",
+    "other": "%d kontaktoj"
+  },
+  "n_messages": {
+    "one": "%dmesaĝo",
+    "other": "%d mesaĝoj"
+  },
+  "n_members": {
+    "one": "%d ano",
+    "other": "%d anoj "
+  },
+  "n_recipients": {
+    "one": "%dricevonto",
+    "other": "%dricevontoj"
+  },
+  "n_selected": {
+    "one": "%delektitaj",
+    "other": "%delektita"
+  },
+  "chat_archived": {
+    "one": "%d babilo enarĥivigita",
+    "other": "%d babiloj enarĥivigitaj"
+  },
+  "chat_unarchived": {
+    "one": "%d babilo elarĥivigita",
+    "other": "%d babiloj elarĥivigitaj"
+  },
+  "chat_n_new_messages": {
+    "one": "%d nova mesaĝo",
+    "other": "%d novaj mesaĝoj"
+  }
+}

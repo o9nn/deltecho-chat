@@ -1,0 +1,2661 @@
+{
+  "app_name": {
+    "message": "Delta Chat"
+  },
+  "ok": {
+    "message": "D'acord"
+  },
+  "cancel": {
+    "message": "Cancel·la"
+  },
+  "clear_search": {
+    "message": "Neteja la cerca"
+  },
+  "link": {
+    "message": "Enllaç"
+  },
+  "scan": {
+    "message": "Escaneja"
+  },
+  "yes": {
+    "message": "Sí"
+  },
+  "no": {
+    "message": "No"
+  },
+  "select": {
+    "message": "Selecciona"
+  },
+  "on": {
+    "message": "Activat"
+  },
+  "off": {
+    "message": "Desactivat"
+  },
+  "def": {
+    "message": "Per defecte"
+  },
+  "default_value": {
+    "message": "Per defecte (%1$s)"
+  },
+  "default_value_as_above": {
+    "message": "Per defecte (igual que a dalt)"
+  },
+  "custom": {
+    "message": "Personalitzat"
+  },
+  "none": {
+    "message": "Cap"
+  },
+  "automatic": {
+    "message": "Automàtic"
+  },
+  "strict": {
+    "message": "Estricte"
+  },
+  "open": {
+    "message": "Obre"
+  },
+  "download": {
+    "message": "Baixa"
+  },
+  "downloading": {
+    "message": "S'està baixant..."
+  },
+  "open_attachment": {
+    "message": "Obre l'adjunt"
+  },
+  "join": {
+    "message": "Uneix-te"
+  },
+  "rejoin": {
+    "message": "Torna a unir-te"
+  },
+  "delete": {
+    "message": "Esborra"
+  },
+  "delete_for_me": {
+    "message": "Esborra per a Mi"
+  },
+  "delete_for_everyone": {
+    "message": "Esborra per a Tothom"
+  },
+  "info": {
+    "message": "Info"
+  },
+  "update": {
+    "message": "Actualitza"
+  },
+  "emoji": {
+    "message": "Emojis"
+  },
+  "attachment": {
+    "message": "Adjunt"
+  },
+  "back": {
+    "message": "Enrere"
+  },
+  "close": {
+    "message": "Tanca"
+  },
+  "close_window": {
+    "message": "Tanca la finestra"
+  },
+  "forward": {
+    "message": "Reenvia"
+  },
+  "create": {
+    "message": "Crea"
+  },
+  "reset": {
+    "message": "Reinicialitza"
+  },
+  "later": {
+    "message": "Després"
+  },
+  "resend": {
+    "message": "Torna-ho a enviar"
+  },
+  "edited": {
+    "message": "Editat"
+  },
+  "edit_message": {
+    "message": "Edita el missatge"
+  },
+  "archive": {
+    "message": "Arxiva"
+  },
+  "unarchive": {
+    "message": "Treu de l'arxiu"
+  },
+  "mute": {
+    "message": "Silencia"
+  },
+  "muted": {
+    "message": "Silenciat"
+  },
+  "ephemeral_messages": {
+    "message": "Missatges efímers"
+  },
+  "ephemeral_messages_hint": {
+    "message": "Aquestes opcions s'apliquen a tots els integrants del xat que usin Delta Chat. Tot i això, poden copiar, desar o reenviar missatges o utilitzar altres clients de correu."
+  },
+  "save": {
+    "message": "Desa"
+  },
+  "chat": {
+    "message": "Xat"
+  },
+  "media": {
+    "message": "Multimèdia"
+  },
+  "profile": {
+    "message": "Perfil"
+  },
+  "main_menu": {
+    "message": "Menú principal"
+  },
+  "start_chat": {
+    "message": "Inicia un xat"
+  },
+  "show_full_message": {
+    "message": "Mostra el missatge sencer..."
+  },
+  "mark_all_as_read": {
+    "message": "Marca-ho tot com a llegit"
+  },
+  "mark_as_read": {
+    "message": "Marca-ho com a llegit"
+  },
+  "mark_as_read_short": {
+    "message": "Llegit"
+  },
+  "loading": {
+    "message": "S'està carregant..."
+  },
+  "hide": {
+    "message": "Amaga"
+  },
+  "activate": {
+    "message": "Activa-ho"
+  },
+  "load_remote_content": {
+    "message": "Carrega les imatges remotes"
+  },
+  "load_remote_content_ask": {
+    "message": "Les imatges remotes es poden usar per rastrejar-vos.\n\nEl paràmetre també pot permetre la càrrega de fonts i altre contingut. Fins i tot desactivat, encara podríeu veure imatges incrustades o en memòria cau.\n\nVoleu carregar les imatges remotes?"
+  },
+  "always": {
+    "message": "Sempre"
+  },
+  "always_load_remote_images": {
+    "message": "Carrega sempre les imatges remotes"
+  },
+  "once": {
+    "message": "Una vegada"
+  },
+  "show_warning": {
+    "message": "Mostra l'advertiment"
+  },
+  "show_password": {
+    "message": "Mostra la contrasenya"
+  },
+  "hide_password": {
+    "message": "Amaga la contrasenya"
+  },
+  "not_now": {
+    "message": "Ara no"
+  },
+  "never": {
+    "message": "Mai"
+  },
+  "one_moment": {
+    "message": "Espereu..."
+  },
+  "done": {
+    "message": "Fet"
+  },
+  "undo": {
+    "message": "Desfés"
+  },
+  "offline": {
+    "message": "Fora de línia"
+  },
+  "next": {
+    "message": "Següent"
+  },
+  "error": {
+    "message": "Error"
+  },
+  "error_x": {
+    "message": "Error: %1$s"
+  },
+  "no_app_to_handle_data": {
+    "message": "No sé trobar cap aplicació per a gestionar aquest tipus de dades."
+  },
+  "no_browser_installed": {
+    "message": "No hi ha instal·lat cap navegador."
+  },
+  "file_not_found": {
+    "message": "No s'ha trobat %1$s."
+  },
+  "copied_to_clipboard": {
+    "message": "Copiat al porta-retalls."
+  },
+  "contacts_headline": {
+    "message": "Contactes"
+  },
+  "email_address": {
+    "message": "Adreça de correu electrònic"
+  },
+  "bad_email_address": {
+    "message": "Adreça de correu electrònic errònia."
+  },
+  "password": {
+    "message": "Contrasenya"
+  },
+  "existing_password": {
+    "message": "Ja existeix aquesta contrasenya"
+  },
+  "now": {
+    "message": "Ara"
+  },
+  "danger": {
+    "message": "Perill"
+  },
+  "today": {
+    "message": "Avui"
+  },
+  "yesterday": {
+    "message": "Ahir"
+  },
+  "this_week": {
+    "message": "Aquesta setmana"
+  },
+  "this_month": {
+    "message": "Aquest mes"
+  },
+  "last_week": {
+    "message": "La setmana passada"
+  },
+  "last_month": {
+    "message": "El mes passat"
+  },
+  "last_seen_at": {
+    "message": "Vist per darrer cop: %1$s"
+  },
+  "last_seen_relative": {
+    "message": "Vist per darrer cop: %1$s"
+  },
+  "last_seen_unknown": {
+    "message": "Vist per darrer cop: desconegut"
+  },
+  "self": {
+    "message": "Jo"
+  },
+  "draft": {
+    "message": "Esborrany"
+  },
+  "image": {
+    "message": "Imatge"
+  },
+  "reply_noun": {
+    "message": "Respon"
+  },
+  "gif": {
+    "message": "GÌF"
+  },
+  "sticker": {
+    "message": "Adhesiu"
+  },
+  "add_to_sticker_collection": {
+    "message": "Afegeix a la col·lecció d'adhesius"
+  },
+  "add_stickers_instructions": {
+    "message": "Per a afegir adhesius: premeu \"Obre la carpeta d'adhesius\", creeu una subcarpeta per a la vostra col·lecció d'adhesius i arrossegueu-hi la imatge i els fitxers d'adhesius."
+  },
+  "open_sticker_folder": {
+    "message": "Obre la carpeta d'adhesius"
+  },
+  "images": {
+    "message": "Imatges"
+  },
+  "audio": {
+    "message": "Àudio"
+  },
+  "voice_message": {
+    "message": "Missatge de veu"
+  },
+  "forwarded": {
+    "message": "Reenviat"
+  },
+  "forwarded_message": {
+    "message": "Missatge reenviat"
+  },
+  "forwarded_by": {
+    "message": "Reenviat per %1$s"
+  },
+  "video": {
+    "message": "Vídeo"
+  },
+  "documents": {
+    "message": "Documents"
+  },
+  "contact": {
+    "message": "Contacte"
+  },
+  "bot": {
+    "message": "Bot"
+  },
+  "camera": {
+    "message": "Càmera"
+  },
+  "capture": {
+    "message": "Captura"
+  },
+  "switch_camera": {
+    "message": "Canvia la càmera"
+  },
+  "toggle_fullscreen": {
+    "message": "Alterna el mode de pantalla completa"
+  },
+  "location": {
+    "message": "Ubicació"
+  },
+  "locations": {
+    "message": "Ubicacions"
+  },
+  "gallery": {
+    "message": "Galeria"
+  },
+  "images_and_videos": {
+    "message": "Imatges i vídeos"
+  },
+  "file": {
+    "message": "Fitxer"
+  },
+  "files": {
+    "message": "Fitxers"
+  },
+  "webxdc_app": {
+    "message": "App"
+  },
+  "webxdc_apps": {
+    "message": "Apps"
+  },
+  "webxdc_store_url": {
+    "message": "URL del selector d'aplicacions"
+  },
+  "webxdc_store_url_explain": {
+    "message": "Si està definit, s'usarà l'URL com a selector d'aplicacions en comptes del predeterminat"
+  },
+  "home": {
+    "message": "Inici"
+  },
+  "games": {
+    "message": "Jocs"
+  },
+  "tools": {
+    "message": "Eines"
+  },
+  "app_size": {
+    "message": "Mida"
+  },
+  "app_date_published": {
+    "message": "Publicat"
+  },
+  "add_to_chat": {
+    "message": "Afegeix al xat"
+  },
+  "browse": {
+    "message": "Explora"
+  },
+  "unknown": {
+    "message": "Desconegut"
+  },
+  "green": {
+    "message": "Verd"
+  },
+  "red": {
+    "message": "Vermell"
+  },
+  "blue": {
+    "message": "Blau"
+  },
+  "orange": {
+    "message": "Taronja"
+  },
+  "cyan": {
+    "message": "Cian"
+  },
+  "purple": {
+    "message": "Morat"
+  },
+  "magenta": {
+    "message": "Magenta"
+  },
+  "white": {
+    "message": "Blanc"
+  },
+  "zoom": {
+    "message": "Zoom"
+  },
+  "extra_small": {
+    "message": "Molt petit"
+  },
+  "small": {
+    "message": "Petit"
+  },
+  "normal": {
+    "message": "Normal"
+  },
+  "large": {
+    "message": "Gran"
+  },
+  "extra_large": {
+    "message": "Molt gran"
+  },
+  "fast": {
+    "message": "Ràpid"
+  },
+  "slow": {
+    "message": "Lent"
+  },
+  "menu_new_contact": {
+    "message": "Contacte nou"
+  },
+  "menu_new_classic_contact": {
+    "message": "Afegeix un contacte de forma manual"
+  },
+  "new_classic_contact_explain": {
+    "message": "Els contactes afegits manualment es poden usar per a enviar correus electrònics clàssics i no es garanteix que se xifrin d'extrem a extrem."
+  },
+  "menu_new_chat": {
+    "message": "Xat nou"
+  },
+  "menu_new_group": {
+    "message": "Grup nou"
+  },
+  "chat_with": {
+    "message": "Xateja amb…"
+  },
+  "clone_chat": {
+    "message": "Clona el xat"
+  },
+  "broadcast_list": {
+    "message": "Llista de difusió"
+  },
+  "broadcast_lists": {
+    "message": "Llistes de difusió"
+  },
+  "new_broadcast_list": {
+    "message": "Llista de difusió nova"
+  },
+  "add_recipients": {
+    "message": "Afegeix destinataris"
+  },
+  "edit_broadcast_list": {
+    "message": "Edita la llista de difusió"
+  },
+  "broadcast_list_name": {
+    "message": "Nom de la llista de difusió"
+  },
+  "please_enter_broadcast_list_name": {
+    "message": "Poseu el nom de la llista de difusió."
+  },
+  "menu_send": {
+    "message": "Envia"
+  },
+  "menu_toggle_keyboard": {
+    "message": "Canvia al teclat d'emojis"
+  },
+  "menu_edit_group": {
+    "message": "Edita el grup"
+  },
+  "menu_group_name_and_image": {
+    "message": "Nom i imatge del grup"
+  },
+  "menu_show_global_map": {
+    "message": "Totes les ubicacions"
+  },
+  "menu_archive_chat": {
+    "message": "Arxiva el xat"
+  },
+  "menu_unarchive_chat": {
+    "message": "Desarxiva el xat"
+  },
+  "menu_add_attachment": {
+    "message": "Afegeix un adjunt"
+  },
+  "menu_leave_group": {
+    "message": "Deixa el grup"
+  },
+  "menu_delete_chat": {
+    "message": "Esborra el xat"
+  },
+  "clear_chat": {
+    "message": "Buida el xat"
+  },
+  "delete_contact": {
+    "message": "Esborra el contacte"
+  },
+  "menu_delete_location": {
+    "message": "Voleu esborrar aquesta ubicació?"
+  },
+  "menu_message_details": {
+    "message": "Informació del missatge"
+  },
+  "menu_copy_to_clipboard": {
+    "message": "Copia al porta-retalls"
+  },
+  "share_invite_link": {
+    "message": "Comparteix l'enllaç d'invitació"
+  },
+  "share_invite_link_explain": {
+    "message": "Qualsevol amb aquest enllaç pot veure el vostre perfil i començar un xat amb vós. Compartiu-lo només amb qui tingueu confiança."
+  },
+  "invite_friends": {
+    "message": "Convida amics"
+  },
+  "invite_friends_text": {
+    "message": "Contacta amb mi a Delta Chat:\n%1$s"
+  },
+  "menu_copy_selection_to_clipboard": {
+    "message": "Copia la selecció"
+  },
+  "menu_copy_link_to_clipboard": {
+    "message": "Copia l'enllaç"
+  },
+  "menu_copy_text_to_clipboard": {
+    "message": "Copia el text"
+  },
+  "menu_copy_image_to_clipboard": {
+    "message": "Copia la imatge"
+  },
+  "menu_copy_email_to_clipboard": {
+    "message": "Copia el correu electrònic"
+  },
+  "paste_from_clipboard": {
+    "message": "Enganxa des del porta-retalls"
+  },
+  "ask_copy_unopenable_link_to_clipboard": {
+    "message": "L'enllaç «%1$d» no es pot obrir al navegador web. Voleu copiar l'enllaç al porta-retalls?"
+  },
+  "menu_forward": {
+    "message": "Reenvia el missatge"
+  },
+  "menu_reply": {
+    "message": "Respon el missatge"
+  },
+  "menu_mute": {
+    "message": "Silencia les notificacions"
+  },
+  "menu_unmute": {
+    "message": "Activa el so"
+  },
+  "menu_export_attachment": {
+    "message": "Exporta l'adjunt"
+  },
+  "menu_export_attachments": {
+    "message": "Exporta els adjunts"
+  },
+  "menu_all_media": {
+    "message": "Tots els multimèdia"
+  },
+  "show_in_chat": {
+    "message": "Mostra al xat"
+  },
+  "show_app_in_chat": {
+    "message": "Mostra l'aplicació al xat"
+  },
+  "menu_share": {
+    "message": "Comparteix"
+  },
+  "block": {
+    "message": "Bloca"
+  },
+  "menu_block_contact": {
+    "message": "Bloca el contacte"
+  },
+  "menu_unblock_contact": {
+    "message": "Desbloca el contacte"
+  },
+  "accept": {
+    "message": "Accepto"
+  },
+  "menu_play": {
+    "message": "Reprodueix"
+  },
+  "menu_pause": {
+    "message": "Pausa"
+  },
+  "menu_scroll_to_bottom": {
+    "message": "Desplaça't al final"
+  },
+  "menu_scroll_to_top": {
+    "message": "Desplaça't a l'inici"
+  },
+  "menu_help": {
+    "message": "Ajuda"
+  },
+  "what_is_webxdc": {
+    "message": "Què és Webxdc?"
+  },
+  "privacy_policy": {
+    "message": "Política de privadesa"
+  },
+  "menu_select_all": {
+    "message": "Selecciona-ho tot"
+  },
+  "select_chat": {
+    "message": "Selecciona el xat"
+  },
+  "select_more": {
+    "message": "Selecciona'n més"
+  },
+  "menu_edit_name": {
+    "message": "Edita el nom"
+  },
+  "edit_name_explain": {
+    "message": "Indiqueu un sobrenom que se us mostrarà en comptes de «%1$s». Deixeu-ho buit per a usar el nom triat pel contacte."
+  },
+  "edit_name_placeholder": {
+    "message": "Sobrenom per a  «%1$s»"
+  },
+  "menu_settings": {
+    "message": "Preferències"
+  },
+  "menu_advanced": {
+    "message": "Avançat"
+  },
+  "menu_view_profile": {
+    "message": "Veure el perfil"
+  },
+  "menu_zoom_in": {
+    "message": "Apropa"
+  },
+  "menu_zoom_out": {
+    "message": "Allunya"
+  },
+  "menu_save_log": {
+    "message": "Desa el registre"
+  },
+  "menu_more_options": {
+    "message": "Més opcions"
+  },
+  "menu_learn_spelling": {
+    "message": "Aprèn l'ortografia"
+  },
+  "menu_chat_audit_log": {
+    "message": "Registre de l'auditoria de xat"
+  },
+  "jump_to_message": {
+    "message": "Ves al missatge"
+  },
+  "jump_to_original_message": {
+    "message": "Vés al Missatge Original"
+  },
+  "copy_json": {
+    "message": "Copia el JSON"
+  },
+  "replace_draft": {
+    "message": "Substitueix l'esborrany"
+  },
+  "title_share_location": {
+    "message": "Comparteix la ubicació amb tots els membres del grup"
+  },
+  "device_talk": {
+    "message": "Missatges del dispositiu"
+  },
+  "device_talk_subtitle": {
+    "message": "Missatges generats localment"
+  },
+  "device_talk_explain": {
+    "message": "Els missatges d'aquest xat són generats en el vostre dispositiu per a informar-vos sobre actualitzacions de l'aplicació o de problemes durant el seu ús."
+  },
+  "device_talk_welcome_message2": {
+    "message": "Esteu en contacte!\n\n🙌 Toqueu «Codi QR» en la finestra principal d'ambdós dispositius. Trieu «Escaneja codi QR» en un dispositiu, i apunteu cap a l'altre\n\n🌍 Si no esteu en la mateixa sala, podeu escanejar o compartir un enllaç d'invitació des de «Escaneja codi QR»\n\nDesprés: gaudiu de l'experiència de missatgeria sobre la xarxa descentralitzada més gran que ha existit mai: el correu electrònic. I, en contrast amb altres aplicacions populars, sense control central, seguiment ni comercialització de vós, amics, col·legues o familiars amb grans organitzacions."
+  },
+  "edit_contact": {
+    "message": "Edita el contacte"
+  },
+  "pin_chat": {
+    "message": "Fixa el xat"
+  },
+  "unpin_chat": {
+    "message": "Desfixa el xat"
+  },
+  "pin": {
+    "message": "Fixa"
+  },
+  "unpin": {
+    "message": "Desfixa"
+  },
+  "ConversationFragment_quoted_message_not_found": {
+    "message": "No s'ha trobat el missatge original"
+  },
+  "reply_privately": {
+    "message": "Respon en privat"
+  },
+  "source_code": {
+    "message": "Codi font"
+  },
+  "add_to_home_screen": {
+    "message": "Afegeix a la pantalla d'inici"
+  },
+  "donate": {
+    "message": "Feu un donatiu"
+  },
+  "mute_for_one_hour": {
+    "message": "Silencia 1 hora"
+  },
+  "mute_for_eight_hours": {
+    "message": "Silencia 8 hores"
+  },
+  "mute_for_one_day": {
+    "message": "Silencia 1 dia"
+  },
+  "mute_for_seven_days": {
+    "message": "Silencia 7 dies"
+  },
+  "mute_forever": {
+    "message": "Sempre silenciat"
+  },
+  "share_location_for_5_minutes": {
+    "message": "Durant 5 minuts"
+  },
+  "share_location_for_30_minutes": {
+    "message": "Durant 30 minuts"
+  },
+  "share_location_for_one_hour": {
+    "message": "Durant 1 hora"
+  },
+  "share_location_for_two_hours": {
+    "message": "Durant 2 hores"
+  },
+  "share_location_for_six_hours": {
+    "message": "Durant 6 hores"
+  },
+  "file_saved_to": {
+    "message": "El fitxer s'ha desat a «%1$s»."
+  },
+  "videochat": {
+    "message": "Xat de vídeo"
+  },
+  "videochat_invite_user_to_videochat": {
+    "message": "Voleu convidar %1$s a un xat de vídeo?"
+  },
+  "videochat_invite_user_hint": {
+    "message": "Això requereix una aplicació o navegador compatible en ambdós extrems."
+  },
+  "videochat_contact_invited_hint": {
+    "message": "%1$s ha estat convidat a un xat de vídeo."
+  },
+  "videochat_you_invited_hint": {
+    "message": "Heu enviat una invitació de xat de video."
+  },
+  "videochat_tap_to_join": {
+    "message": "Toca per a afegir-t'hi"
+  },
+  "videochat_tap_to_open": {
+    "message": "Toca per a obrir-ho"
+  },
+  "videochat_instance": {
+    "message": "Instància de xat de vídeo"
+  },
+  "videochat_instance_placeholder": {
+    "message": "La vostra instància de xat de vídeo"
+  },
+  "videochat_instance_example": {
+    "message": "Exemple: https://el-vostre-servidor.org/$SALA"
+  },
+  "videochat_instance_explain_2": {
+    "message": "Si està activada, podeu iniciar un xat de video des de cada xat. Necessita una aplicació o navegador compatible en ambdós extrems."
+  },
+  "videochat_instance_from_qr": {
+    "message": "Voleu usar «%1$s» per a convidar altres participants a xats de video?\n\nUna vegada definit, podeu iniciar un xat de vídeo des de cada xat. Això substitueix la configuració anterior per a xats de video."
+  },
+  "videochat_invitation": {
+    "message": "Invitació a un xat de vídeo"
+  },
+  "videochat_invitation_body": {
+    "message": "Us han convidat a un xat de vídeo, feu clic a %1$s per unir-vos-hi."
+  },
+  "ask_leave_group": {
+    "message": "Segur que voleu deixar aquest grup?"
+  },
+  "ask_delete_named_chat": {
+    "message": "¿Esborrar xat \"%1$s\" de tots els teus dispositius?"
+  },
+  "ask_delete_message": {
+    "message": "¿Esborra aquest missatge de tots els teus dispositius?"
+  },
+  "ask_forward": {
+    "message": "Reenvia missatges a %1$s?"
+  },
+  "ask_forward_multiple": {
+    "message": "Voleu reenviar els missatges a %1$d xats?"
+  },
+  "ask_export_attachment": {
+    "message": "En exportar els adjunts permetreu que altres aplicacions del dispositiu hi puguin accedir.\n\nVoleu continuar?"
+  },
+  "ask_block_contact": {
+    "message": "Voleu blocar aquest contacte?\n\nNo podreu veure els missatges directes o grups creats pels contactes blocats.\n\nAltres grups amb contactes blocats els continuareu veient."
+  },
+  "ask_unblock_contact": {
+    "message": "Voleu desblocar aquest contacte?"
+  },
+  "ask_delete_contacts": {
+    "message": "Voleu esborrar els contactes?\n\nEls contactes amb xats actius i els que estiguin al vostre directori d'adreces no es poden eliminar definitivament. "
+  },
+  "ask_delete_contact": {
+    "message": "Voleu esborrar el contacte %1$s?\n\nEls contactes dels xats actius o de la llibreta d'adreces del sistema no es poden esborrar permanentment."
+  },
+  "ask_start_chat_with": {
+    "message": "Voleu xatejar amb %1$s?"
+  },
+  "ask_remove_members": {
+    "message": "Voleu eliminar %1$s del grup?"
+  },
+  "ask_remove_from_broadcast": {
+    "message": "Voleu eliminar %1$s de la llista de difusió?"
+  },
+  "open_url_confirmation": {
+    "message": "Voleu obrir aquest enllaç?"
+  },
+  "contacts_title": {
+    "message": "Llista de contactes"
+  },
+  "contacts_enter_name_or_email": {
+    "message": "Introduïu el vostre nom o la vostra adreça de correu electrònic"
+  },
+  "contacts_type_email_above": {
+    "message": "Escriviu l'adreça d'email superior"
+  },
+  "contacts_empty_hint": {
+    "message": "Cap contacte."
+  },
+  "chat_archived_chats_title": {
+    "message": "Xats arxivats"
+  },
+  "chat_please_enter_message": {
+    "message": "Si us plau, escriviu un missatge"
+  },
+  "chat_camera_unavailable": {
+    "message": "La càmera no és disponible."
+  },
+  "chat_unable_to_record_audio": {
+    "message": "No es pot gravar so."
+  },
+  "chat_new_one_to_one_hint": {
+    "message": "Envia un missatge a %1$s."
+  },
+  "chat_new_broadcast_hint": {
+    "message": "En una llista de difusió, els destinataris rebran missatges en mode de només lectura en un xat amb tu."
+  },
+  "chat_new_group_hint": {
+    "message": "Els altres membres només veuran aquest grup després que hi envieu el primer missatge."
+  },
+  "chat_record_slide_to_cancel": {
+    "message": "Llisca per cancel·lar"
+  },
+  "chat_record_explain": {
+    "message": "Mantingues premut per gravar un missatge de veu i deixa anar per enviar-lo"
+  },
+  "chat_no_chats_yet_title": {
+    "message": "No hi ha cap xat.\nPrem «+» per a començar un xat nou."
+  },
+  "chat_all_archived": {
+    "message": "Tots els xats s'han arxivat.\nPrem «+» per a començar-ne un de nou."
+  },
+  "chat_share_with_title": {
+    "message": "Comparteix amb"
+  },
+  "chat_input_placeholder": {
+    "message": "Missatge"
+  },
+  "chat_archived_label": {
+    "message": "Arxivat"
+  },
+  "chat_request_label": {
+    "message": "Sol·licitud"
+  },
+  "chat_no_messages": {
+    "message": "Cap missatge."
+  },
+  "chat_self_talk_subtitle": {
+    "message": "Missatges enviats a mi mateix/a"
+  },
+  "archive_empty_hint": {
+    "message": "Si arxiveu xats, els voreu aquí."
+  },
+  "saved_messages": {
+    "message": "Missatges desats"
+  },
+  "saved_messages_explain": {
+    "message": "• Reenvieu missatges aquí per a un accés ràpid\n\n• Preneu notes de text o de veu\n\n• Adjunteu multimedia per a desar-la"
+  },
+  "saved": {
+    "message": "Desat"
+  },
+  "save_as": {
+    "message": "Desa com"
+  },
+  "retry_send": {
+    "message": "Torna a provar d'enviar el missatge"
+  },
+  "messaging_disabled_not_in_group": {
+    "message": "No hi podeu escriure perquè no sou en aquest grup. Per ser-hi, demaneu-ho a un altre membre."
+  },
+  "messaging_disabled_mailing_list": {
+    "message": "L'enviament de missatges a una llista de correu encara no funciona"
+  },
+  "cannot_display_unsuported_file_type": {
+    "message": "Aquest tipus de fitxer: %s no es pot mostrar"
+  },
+  "attachment_failed_to_load": {
+    "message": "La càrrega de l'adjunt ha fallat"
+  },
+  "lock_recording": {
+    "message": "Bloqueja la gravació"
+  },
+  "mailing_list": {
+    "message": "Llista de correu"
+  },
+  "mailing_list_profile_info": {
+    "message": "Els canvis al nom i la imatge de la llista de correu només s'aplicaran en aquest dispositiu."
+  },
+  "start_app": {
+    "message": "Comença..."
+  },
+  "accept_request_first": {
+    "message": "Si us plau accepteu primer el requeriment del xat."
+  },
+  "send_file_to": {
+    "message": "Envia \"%1$s\" a…"
+  },
+  "send_message_to": {
+    "message": "Envia el missatge a..."
+  },
+  "enable_realtime": {
+    "message": "Aplicacions en temps real"
+  },
+  "enable_realtime_explain": {
+    "message": "Activa connexions en temps real per a aplicacions compartides als xats. Si està activada, els companys de xat poden descobrir la vostra IP en iniciar una aplicació."
+  },
+  "filter_map_on_time": {
+    "message": "Mostra les ubicacions al llarg del temps"
+  },
+  "show_location_traces": {
+    "message": "Mostra el rastre"
+  },
+  "add_poi": {
+    "message": "Envia el punt d'interès"
+  },
+  "chat_audit_log_empty_message": {
+    "message": "Els missatges de sistema d'aquest xat es mostraran aquí"
+  },
+  "chat_audit_log_title": {
+    "message": "Registre de l'auditoria del xat per %1$s"
+  },
+  "chat_audit_log_description": {
+    "message": "Només mostra els missatges del sistema i informació. Això és útil per a trobar les últimes accions al xat sense desplaçar-se entre massa missatges."
+  },
+  "open_external_url_trust_domain": {
+    "message": "No em tornis a demanar per %1$s"
+  },
+  "puny_code_warning_header": {
+    "message": "S'ha detectat un enllaç sospitós"
+  },
+  "puny_code_warning_question": {
+    "message": "Esteu segur de voler visitar %1$s?"
+  },
+  "puny_code_warning_description": {
+    "message": "Aquest enllaç usa caràcters amb un aspecte similar però de diferents alfabets. Si seguiu l'enllaç %1$sus enviarà a %2$s, que és normal per a caràcters no llatins. Si no espereu aquests caràcters, l'enllaç podria ser maliciós. "
+  },
+  "search": {
+    "message": "Busca"
+  },
+  "search_in_chat": {
+    "message": "Busca al xat"
+  },
+  "search_files": {
+    "message": "Busca els fitxers"
+  },
+  "search_explain": {
+    "message": "Busca als xats, contactes i missatges"
+  },
+  "search_no_result_for_x": {
+    "message": "No s'han trobat resultats per \"%s\""
+  },
+  "search_unread": {
+    "message": "Sense llegir"
+  },
+  "group_name": {
+    "message": "Nom del grup"
+  },
+  "group_avatar": {
+    "message": "Imatge del grup"
+  },
+  "remove_group_image": {
+    "message": "Elimina la imatge del grup"
+  },
+  "change_group_image": {
+    "message": "Canvia la imatge del grup"
+  },
+  "group_create_button": {
+    "message": "Crea el grup"
+  },
+  "group_please_enter_group_name": {
+    "message": "Si us plau, poseu nom al grup."
+  },
+  "group_add_members": {
+    "message": "Afegiu-hi membres"
+  },
+  "group_self_not_in_group": {
+    "message": "Has de ser membre del grup per poder fer això."
+  },
+  "profile_encryption": {
+    "message": "Encriptació"
+  },
+  "profile_shared_chats": {
+    "message": "Xats compartits"
+  },
+  "related_chats": {
+    "message": "Xats relacionats"
+  },
+  "past_members": {
+    "message": "Antics membres"
+  },
+  "tab_contact": {
+    "message": "Contacte"
+  },
+  "tab_group": {
+    "message": "Grup"
+  },
+  "tab_gallery": {
+    "message": "Galeria"
+  },
+  "tab_docs": {
+    "message": "Docs"
+  },
+  "tab_links": {
+    "message": "Enllaços"
+  },
+  "tab_map": {
+    "message": "Mapa"
+  },
+  "tab_gallery_empty_hint": {
+    "message": "Les imatges i els vídeos compartits en aquest xat sortiran aquí."
+  },
+  "tab_docs_empty_hint": {
+    "message": "Els documents i d'altres fitxers compartits en aquest xat sortiran aquí."
+  },
+  "tab_image_empty_hint": {
+    "message": "Les imatges compartides en aquest xat sortiran aquí."
+  },
+  "tab_video_empty_hint": {
+    "message": "Els vídeos compartits en aquest xat sortiran aquí."
+  },
+  "tab_audio_empty_hint": {
+    "message": "Els fitxers d'àudio i els missatges de veu compartits en aquest xat sortiran aquí."
+  },
+  "tab_webxdc_empty_hint": {
+    "message": "Les apps compartides en aquest xat sortiran aquí."
+  },
+  "tab_all_media_empty_hint": {
+    "message": "Els fitxers multimèdia compartits en aquest xat sortiran aquí."
+  },
+  "all_files_empty_hint": {
+    "message": "Els documents i altres fitxers compartits en qualsevol xat apareixeran aquí."
+  },
+  "all_apps_empty_hint": {
+    "message": "Les aplicacions compartides en qualsevol xat apareixeran aquí."
+  },
+  "media_preview": {
+    "message": "Previsualització multimèdia"
+  },
+  "aspect_ratio_grid": {
+    "message": "Graella d'aspecte proporcinal"
+  },
+  "square_grid": {
+    "message": "Graella quadrada"
+  },
+  "send_message": {
+    "message": "Envia el missatge"
+  },
+  "aeap_addr_changed": {
+    "message": "%1$s ha canviat la seva adreça de %2$s a %3$s"
+  },
+  "aeap_explanation": {
+    "message": "Heu canviat la vostra adreça de correu electrònic de %1$s a %2$s.\n\nSi ara envieu un missatge a un grup verificat, els contactes del grup canviaran de forma automàtica l'adreça antiga per la nova.\n\nUs recomanem que configureu el compte antic a fi que us reenvïi els missatges a l'adreça nova. Si no ho feu, podríeu perdre missatges de contactes que encara no hagin actualitzat la vostra adreça."
+  },
+  "multidevice_title": {
+    "message": "Afegeix un segon dispositiu"
+  },
+  "multidevice_same_network_hint": {
+    "message": "Assegureu-vos que els dos dispositius estan a la mateixa Wi-Fi o xarxa"
+  },
+  "multidevice_this_creates_a_qr_code": {
+    "message": "Això crea codi QR que es pot escanejar en el segon dispositiu per a copiar el perfil."
+  },
+  "multidevice_install_dc_on_other_device": {
+    "message": "Instal·leu Delta Chat en el vostre altre dispositiu (https://get.delta.chat)"
+  },
+  "multidevice_tap_scan_on_other_device": {
+    "message": "Inicieu Delta Chat, toqueu  «Ja tinc un perfil / Afegeix un segon dispositiu» i escanegeu el codi que es mostra aquí."
+  },
+  "multidevice_qr_subtitle": {
+    "message": "Escanegeu-lo per configurar un segon dispositiu per a %1$s"
+  },
+  "multidevice_receiver_title": {
+    "message": "Afegeix com a segon dispositiu"
+  },
+  "multidevice_open_settings_on_other_device": {
+    "message": "En el primer dispositiu, aneu a «Configuració / Afegeix un segon dispositiu» i escanegeu el codi que es mostra allà."
+  },
+  "multidevice_receiver_scanning_ask": {
+    "message": "Voleu copiar el perfil de l'altre dispositiu en aquest?"
+  },
+  "multidevice_receiver_needs_update": {
+    "message": "El perfil que vols importar prové d'una versió més recent de Delta Chat.\n\nPer continuar configurant el segon dispositiu, actualitza aquest dispositiu a l'última versió de Delta Chat."
+  },
+  "multidevice_abort": {
+    "message": "Voleu cancel·lar la configuració d'un segon dispositiu?"
+  },
+  "multidevice_abort_will_invalidate_copied_qr": {
+    "message": "Això invalidarà el codi QR copiat al porta-retalls."
+  },
+  "multidevice_transfer_done_devicemsg": {
+    "message": "ℹ️ El perfil s'ha transferit al segon dispositiu."
+  },
+  "preparing_account": {
+    "message": "S'està preparant el perfil..."
+  },
+  "transferring": {
+    "message": "S'està transferint..."
+  },
+  "troubleshooting": {
+    "message": "Resolució de problemes"
+  },
+  "incoming_messages": {
+    "message": "Missatges entrants"
+  },
+  "outgoing_messages": {
+    "message": "Missatges sortints"
+  },
+  "storage_on_domain": {
+    "message": "Emmagatzematge a %1$s."
+  },
+  "connectivity": {
+    "message": "Connectivitat"
+  },
+  "connectivity_not_connected": {
+    "message": "Desconnectat"
+  },
+  "connectivity_connecting": {
+    "message": "Connectant..."
+  },
+  "connectivity_updating": {
+    "message": "Actualitzant..."
+  },
+  "connectivity_connected": {
+    "message": "Connectat"
+  },
+  "sending": {
+    "message": "Enviant..."
+  },
+  "last_msg_sent_successfully": {
+    "message": "Últim missatge enviat bé."
+  },
+  "not_supported_by_provider": {
+    "message": "No suportat pel vostre proveïdor."
+  },
+  "messages": {
+    "message": "Missatges"
+  },
+  "part_of_total_used": {
+    "message": "%1$s de %2$s usats"
+  },
+  "onboarding_create_instant_account": {
+    "message": "Crea un perfil nou"
+  },
+  "onboarding_alternative_logins": {
+    "message": "Ja tinc un perfil"
+  },
+  "manual_account_setup_option": {
+    "message": "Inici de sessió correu-e clàssic"
+  },
+  "instant_onboarding_title": {
+    "message": "El vostre perfil"
+  },
+  "instant_onboarding_agree_default2": {
+    "message": "Política de privadesa de %1$s"
+  },
+  "instant_onboarding_agree_instance": {
+    "message": "Quant als perfils en %1$s"
+  },
+  "instant_onboarding_create": {
+    "message": "D'acord i crea el perfil"
+  },
+  "instant_onboarding_show_more_instances": {
+    "message": "Usa un altre servidor"
+  },
+  "instant_onboarding_other_server": {
+    "message": "Llista els servidors chatmail"
+  },
+  "instant_onboarding_group_info": {
+    "message": "Creeu un perfil per unir-vos al grup \"%1$s\"."
+  },
+  "instant_onboarding_contact_info": {
+    "message": "Crea un perfil per a xatejar amb %1$s"
+  },
+  "instant_onboarding_confirm_contact": {
+    "message": "Voleu crear un perfil nou i començar a xatejar amb %1$s?"
+  },
+  "instant_onboarding_confirm_group": {
+    "message": "Voleu crear un perfil nou i unir-vos al grup de xat «%1$s»?"
+  },
+  "welcome_chat_over_email": {
+    "message": "Xat segur i descentralitzat"
+  },
+  "scan_invitation_code": {
+    "message": "Escaneja el Codi d'Invitació"
+  },
+  "login_title": {
+    "message": "Identifiqueu-vos"
+  },
+  "login_header": {
+    "message": "Identifiqueu-vos al vostre servidor"
+  },
+  "login_explain": {
+    "message": "Inicia sessió amb un compte de correu electrònic existent"
+  },
+  "login_subheader": {
+    "message": "Als proveïdors de mail coneguts els paràmetres es configuren automàticament. De vegades l'IMAP s'ha d'activar a la interfície web. Consulta el teu proveïdor de correu electrònic o a un amic perquè t'ajudi. "
+  },
+  "login_no_servers_hint": {
+    "message": "No hi ha servidors de Delta Chat: les vostres dades es queden al vostre dispositiu!"
+  },
+  "login_inbox": {
+    "message": "Safata d'entrada"
+  },
+  "login_imap_login": {
+    "message": "Nom d'identificació IMAP"
+  },
+  "login_imap_server": {
+    "message": "Servidor IMAP"
+  },
+  "login_imap_port": {
+    "message": "Port IMAP"
+  },
+  "login_imap_security": {
+    "message": "Seguretat IMAP"
+  },
+  "login_outbox": {
+    "message": "Safata de sortida"
+  },
+  "login_smtp_login": {
+    "message": "Nom d'identificació SMTP"
+  },
+  "login_smtp_password": {
+    "message": "Contrasenya SMTP"
+  },
+  "login_smtp_server": {
+    "message": "Servidor SMTP"
+  },
+  "login_smtp_port": {
+    "message": "Port SMTP"
+  },
+  "login_smtp_security": {
+    "message": "Seguretat SMTP"
+  },
+  "login_auth_method": {
+    "message": "Mètode d'autorització"
+  },
+  "proxy_settings": {
+    "message": "Servidor intermediari"
+  },
+  "proxy_use_proxy": {
+    "message": "Usa un servidor intermediari"
+  },
+  "proxy_add": {
+    "message": "Afegeix un servidor intermediari"
+  },
+  "proxy_add_explain": {
+    "message": "Tipus de servidors intermediaris suportats: HTTP(S), SOCK5 i Shadowsocks."
+  },
+  "proxy_add_url_hint": {
+    "message": "Introduïu l'enllaç del servidor intermediari aquí"
+  },
+  "proxy_invalid": {
+    "message": "Servidor intermediari no compatible o invàlid"
+  },
+  "proxy_list_header": {
+    "message": "Proxies desats"
+  },
+  "proxy_delete": {
+    "message": "Esborra el proxy"
+  },
+  "proxy_delete_explain": {
+    "message": "Esteu segur de voler esborrar «%1$s»?"
+  },
+  "proxy_use_proxy_confirm": {
+    "message": "Voleu utilitzar el proxy \"%1$s\"?"
+  },
+  "proxy_share_explain": {
+    "message": "Els vostres amics poden afegir aquest servidor intermediari escanejant el codi QR."
+  },
+  "proxy_share_link": {
+    "message": "Comparteix l'enllaç"
+  },
+  "login_info_oauth2_title": {
+    "message": "Voleu continuar amb la configuració simplificada?"
+  },
+  "login_info_oauth2_text": {
+    "message": "L’adreça electrònica que heu introduït admet una configuració simplificada. (OAuth2).\n\nEn el pas següent, permeteu que Delta Chat actuï com a xat amb l'aplicació de correu electrònic..\n\nNo hi ha servidors de Delta Chat, les vostres dades romanen al vostre dispositiu!"
+  },
+  "login_certificate_checks": {
+    "message": "El certificat coincideix"
+  },
+  "login_error_mail": {
+    "message": "Si us plau poseu una adreça d'email vàlida"
+  },
+  "login_error_server": {
+    "message": "Si us plau poseu un servidor / adreça IP vàlida"
+  },
+  "login_error_port": {
+    "message": "Si us plau poseu un  port vàlid (1-65535)"
+  },
+  "login_error_required_fields": {
+    "message": "Si us plau poseu una adreça i contrasenya vàlids"
+  },
+  "import_backup_title": {
+    "message": "Importa una còpia de seguretat"
+  },
+  "import_backup_ask": {
+    "message": "S'ha trobat una còpia de seguretat a \"%1$s\".\n\nVoleu importar-la i fer-ne servir les dades i els paràmetres de configuració?"
+  },
+  "import_backup_no_backup_found": {
+    "message": "No s'han trobat còpies de seguretat.\n\nCopieu la còpia de seguretat a \"%1$s\" i torneu-ho a provar. Com a alternativa, premeu \"Comença a escriure\" per encetar el procés de configuració habitual."
+  },
+  "login_error_cannot_login": {
+    "message": "No es pot iniciar la sessió com a \"%1$s\". Comproveu que l'adreça electrònica i la contrasenya són correctes."
+  },
+  "accept_invalid_certificates": {
+    "message": "Accepta certificats no vàlids"
+  },
+  "switch_account": {
+    "message": "Canvia el perfil"
+  },
+  "add_account": {
+    "message": "Afegeix un compte"
+  },
+  "profile_tag": {
+    "message": "Etiqueta de Perfil"
+  },
+  "profile_tag_hint": {
+    "message": "p.ex. treball, família"
+  },
+  "profile_tag_explain": {
+    "message": "Configureu una etiqueta visible només per a vosaltres; ajudant-vos a diferir entre els vostres perfils."
+  },
+  "move_to_top": {
+    "message": "Desplaçat a l'inici"
+  },
+  "delete_account": {
+    "message": "Esborra el perfil"
+  },
+  "delete_account_ask": {
+    "message": "Esteu segur de voler esborrar les dades del vostre perfil?"
+  },
+  "delete_account_explain_with_name": {
+    "message": "S'esborraran totes les dades del perfil «%s» en aquest dispositiu, incloent-hi la configuració de xifratge d'extrem a extrem, contactes, xats, missatges i contingut multimèdia. Aquesta acció no es pot desfer."
+  },
+  "unconfigured_account": {
+    "message": "Perfil sense configurar"
+  },
+  "unconfigured_account_hint": {
+    "message": "Obriu el per perfil per a configurar-lo."
+  },
+  "try_connect_now": {
+    "message": "Prova de connectar-hi ara"
+  },
+  "sync_all": {
+    "message": "Sincronitza-ho tot"
+  },
+  "configuration_failed_with_error": {
+    "message": "La configuració ha fallat. Error:%1$s"
+  },
+  "forward_to": {
+    "message": "Reenvia a ..."
+  },
+  "ask_send_files_to_chat": {
+    "message": "Voleu enviar %1$d fitxers a \"%2$s\"?"
+  },
+  "ask_send_files_to_selected_chats": {
+    "message": "Voleu enviar %1$d fitxer(s) a %2$d xats?"
+  },
+  "videos_sent_without_recoding": {
+    "message": "(Els vídeos s'envien en el format original, fitxers grans. Per a enviar vídeos en fitxers més petits, adjunteu-los per separat)"
+  },
+  "share_text_multiple_chats": {
+    "message": "Voleu enviar aquest text a %1$d xats?\n\n«%2$s»"
+  },
+  "share_abort": {
+    "message": "S'ha avortat la compartició per falta de permisos."
+  },
+  "pref_using_custom": {
+    "message": "Ús personalitzat: %s"
+  },
+  "pref_using_default": {
+    "message": "Ús per defecte: %s"
+  },
+  "pref_profile_info_headline": {
+    "message": "El vostre perfil"
+  },
+  "pref_profile_photo": {
+    "message": "Fotografia de perfil"
+  },
+  "pref_blocked_contacts": {
+    "message": "Contactes bloquejats"
+  },
+  "blocked_empty_hint": {
+    "message": "Els contactes blocats apareixeran aquí."
+  },
+  "pref_password_and_account_settings": {
+    "message": "Contrasenya i compte"
+  },
+  "pref_who_can_see_profile_explain": {
+    "message": "La vostra imatge de perfil, el vostre nom i també la biografia s'enviaran amb els missatges que envieu als altres usuaris."
+  },
+  "pref_your_name": {
+    "message": "El vostre nom"
+  },
+  "pref_default_status_label": {
+    "message": "Signatura"
+  },
+  "pref_enter_sends": {
+    "message": "La tecla «Retorn» envia"
+  },
+  "pref_enter_sends_explain": {
+    "message": "Els missatges s'enviaran prement la tecla «Retorn»"
+  },
+  "pref_outgoing_media_quality": {
+    "message": "Qualitat del contingut multimèdia sortint"
+  },
+  "pref_outgoing_balanced": {
+    "message": "Balancejat"
+  },
+  "pref_outgoing_worse": {
+    "message": "Pitjor qualitat, mida petita"
+  },
+  "pref_vibrate": {
+    "message": "Vibració"
+  },
+  "pref_screen_security": {
+    "message": "Seguretat de la pantalla"
+  },
+  "pref_screen_security_explain": {
+    "message": "Demana de bloquejar les captures de pantalla al llistat de recents i dins de l'app "
+  },
+  "pref_screen_security_please_restart_hint": {
+    "message": "Per fer efectiva la configuració de seguretat de la pantalla, torneu a iniciar l’aplicació."
+  },
+  "pref_notifications": {
+    "message": "Notificacions"
+  },
+  "pref_mention_notifications": {
+    "message": "Mencions"
+  },
+  "pref_mention_notifications_explain": {
+    "message": "En els grups silenciats, notifica els missatges dirigits a vós, com ara respostes i reaccions"
+  },
+  "pref_notifications_show": {
+    "message": "Mostra"
+  },
+  "pref_notifications_priority": {
+    "message": "Prioritat"
+  },
+  "pref_notifications_explain": {
+    "message": "Habilita les notificacions del sistema per als missatges nous"
+  },
+  "pref_show_notification_content": {
+    "message": "Mostra el contingut del missatge en la notificació"
+  },
+  "pref_show_notification_content_explain": {
+    "message": "Mostra el remitent i les primeres paraules del missatge en les notificacions"
+  },
+  "pref_led_color": {
+    "message": "Color LED"
+  },
+  "pref_sound": {
+    "message": "So"
+  },
+  "pref_silent": {
+    "message": "Silenci"
+  },
+  "pref_privacy": {
+    "message": "Privacitat"
+  },
+  "pref_chats_and_media": {
+    "message": "Xats i multimèdia"
+  },
+  "pref_system_default": {
+    "message": "Per defecte del sistema"
+  },
+  "pref_light_theme": {
+    "message": "Clar"
+  },
+  "pref_dark_theme": {
+    "message": "Fosc"
+  },
+  "pref_appearance": {
+    "message": "Aspecte"
+  },
+  "pref_theme": {
+    "message": "Plantilla"
+  },
+  "pref_language": {
+    "message": "Idioma"
+  },
+  "pref_use_system_ui_font": {
+    "message": "Usa la lletra del sistema"
+  },
+  "pref_incognito_keyboard": {
+    "message": "Teclat d'incògnit"
+  },
+  "pref_incognito_keyboard_explain": {
+    "message": "Sol·licita al teclat que deshabiliti l'aprenentatge personalitzat"
+  },
+  "pref_read_receipts": {
+    "message": "Confirmació de lectura"
+  },
+  "pref_read_receipts_explain": {
+    "message": "Si desactiveu la confirmació de lectura dels vostres missatges, tampoc no rebreu la dels altres usuaris."
+  },
+  "pref_server": {
+    "message": "Servidor"
+  },
+  "pref_encryption": {
+    "message": "Xifratge"
+  },
+  "pref_manage_keys": {
+    "message": "Gestió de les claus"
+  },
+  "pref_use_system_emoji": {
+    "message": "Usa els emojis del sistema"
+  },
+  "pref_use_system_emoji_explain": {
+    "message": "Desactiva el suport de sèrie per emojis a Delta Chat"
+  },
+  "pref_show_system_contacts": {
+    "message": "Llegeix la llibreta d'adreces del sistema"
+  },
+  "pref_show_system_contacts_explain": {
+    "message": "Ofereix de crear xats amb els contactes de la llibreta d'adreces. Alguns proveïdors necessiten de configurar abans el xifratge d'extrem a extrem."
+  },
+  "pref_app_access": {
+    "message": "Accés a l'aplicació"
+  },
+  "pref_chats": {
+    "message": "Xats"
+  },
+  "pref_in_chat_sounds": {
+    "message": "Sons d'entrada"
+  },
+  "pref_view_log": {
+    "message": "Mostra el registre"
+  },
+  "pref_saved_log": {
+    "message": "El registre s'ha desat a la carpeta «Baixades»"
+  },
+  "pref_save_log_failed": {
+    "message": "No s'ha pogut desar el registre"
+  },
+  "pref_log_header": {
+    "message": "Registre"
+  },
+  "pref_other": {
+    "message": "Altres"
+  },
+  "pref_backup": {
+    "message": "Còpia de seguretat"
+  },
+  "pref_backup_explain": {
+    "message": "Copia els xats a un magatzem extern"
+  },
+  "pref_backup_export_explain": {
+    "message": "La còpia de seguretat és útil a l'hora de reinstal·lar l'aplicació en aquest dispositiu o en un altre.\n\nLa còpia tindrà tot els missatges, contactes i xats i la configuració d'extrem a extrem d'Autocrypt. Conserveu el fitxer de la còpia en un lloc segur o esborreu-lo tan aviat com pugueu."
+  },
+  "pref_backup_export_x": {
+    "message": "Exporta %1$s"
+  },
+  "pref_backup_export_all": {
+    "message": "Exporta tots %1$d perfils"
+  },
+  "pref_backup_export_start_button": {
+    "message": "Inicia la còpia de seguretat"
+  },
+  "pref_backup_written_to_x": {
+    "message": "La còpia de seguretat s'ha escrit correctament a %1$s"
+  },
+  "pref_managekeys_menu_title": {
+    "message": "Gestiona les claus"
+  },
+  "pref_managekeys_export_secret_keys": {
+    "message": "Exporta les claus secretes"
+  },
+  "pref_managekeys_export_explain": {
+    "message": "Exporto les claus secretes a \"%1$s\"?"
+  },
+  "pref_managekeys_import_secret_keys": {
+    "message": "Importa les claus secretes"
+  },
+  "pref_managekeys_import_explain": {
+    "message": "Importo les claus secretes de \"%1$s\"?\n\n• Les claus secretes existents no s'esborraran\n\n• L'última clau importada s'usarà com la nova clau per defecte a menys que tingui la paraula \"legacy\" en el nom de l'arxiu"
+  },
+  "pref_managekeys_secret_keys_exported_to_x": {
+    "message": "Les claus secretes s'han copiat correctament a \"%1$s\"."
+  },
+  "pref_managekeys_secret_keys_imported_from_x": {
+    "message": "Claus secretes importades de \"%1$s\"."
+  },
+  "pref_background": {
+    "message": "Fons"
+  },
+  "pref_background_btn_default": {
+    "message": "Usa la imatge per defecte"
+  },
+  "pref_background_btn_gallery": {
+    "message": "Trieu de la galeria"
+  },
+  "pref_imap_folder_handling": {
+    "message": "Gestió de carpetes IMAP"
+  },
+  "pref_imap_folder_warn_disable_defaults": {
+    "message": "Si desactiveu aquesta opció, assegureu-vos que el vostre servidor i els altres programes estiguin configurats de la mateixa manera.\n\nAltrament podeu tenir problemes de funcionament."
+  },
+  "pref_watch_sent_folder": {
+    "message": "Mostra la safata de sortida"
+  },
+  "pref_send_copy_to_self": {
+    "message": "Envia'n una còpia a mi mateix"
+  },
+  "pref_send_copy_to_self_explain": {
+    "message": "Imprescindible quan s'utilitza aquest compte en diversos dispositius."
+  },
+  "pref_auto_folder_moves": {
+    "message": "Moure automàticament a la carpeta de Delta Chat"
+  },
+  "pref_auto_folder_moves_explain": {
+    "message": "Les converses de xat s'han mogut per no atapeir la safata d’entrada"
+  },
+  "pref_only_fetch_mvbox_title": {
+    "message": "Agafa només de la carpeta de DeltaChat"
+  },
+  "pref_only_fetch_mvbox_explain": {
+    "message": "Ignora les altres carpetes. Requereix que el vostre servidor mogui els missatges de xat a la carpeta DeltaChat."
+  },
+  "pref_show_emails": {
+    "message": "Mostra els correus clàssics"
+  },
+  "pref_show_emails_no": {
+    "message": "No, només xats"
+  },
+  "pref_show_emails_accepted_contacts": {
+    "message": "Per a contactes acceptats"
+  },
+  "pref_show_emails_all": {
+    "message": "Tot"
+  },
+  "pref_experimental_features": {
+    "message": "Funcionalitats experimentals"
+  },
+  "pref_on_demand_location_streaming": {
+    "message": "Difusió de la ubicació sota demanda"
+  },
+  "pref_developer_mode": {
+    "message": "Mode de desenvolupador"
+  },
+  "pref_developer_mode_explain": {
+    "message": "Activa les opcions de depuració i pot fer que l'aplicació sigui menys estable. Només per a desenvolupadors."
+  },
+  "pref_background_default": {
+    "message": "Imatge per defecte"
+  },
+  "pref_background_default_color": {
+    "message": "Color per defecte"
+  },
+  "pref_background_custom_image": {
+    "message": "Imatge personalitzada"
+  },
+  "pref_background_custom_color": {
+    "message": "Color personalitzat"
+  },
+  "export_aborted": {
+    "message": "S'ha cancel·lat l'exportació."
+  },
+  "auto_download_messages": {
+    "message": "Baixa els missatges automàticament"
+  },
+  "up_to_x": {
+    "message": "Fins a %1$s"
+  },
+  "up_to_x_most_worse_quality_images": {
+    "message": "Fins a %1$s, les imatges de pitjor qualitat"
+  },
+  "up_to_x_most_balanced_quality_images": {
+    "message": "Fins a %1$s, imatges de qualitat la majoria de vegades."
+  },
+  "download_failed": {
+    "message": "La baixada ha fallat"
+  },
+  "n_bytes_message": {
+    "message": "%1$s missatge"
+  },
+  "download_max_available_until": {
+    "message": "Baixa el màxim disponible fins a %1$s"
+  },
+  "profile_image_select": {
+    "message": "Trieu la imatge de perfil"
+  },
+  "select_your_new_profile_image": {
+    "message": "Trieu la imatge nova de perfil"
+  },
+  "profile_image_delete": {
+    "message": "Esborra la imatge del perfil"
+  },
+  "pref_show_tray_icon": {
+    "message": "Mostra la icona de la safata"
+  },
+  "pref_edit_profile": {
+    "message": "Edita el perfil"
+  },
+  "disable_imap_idle": {
+    "message": "Desactiva IMAP IDLE"
+  },
+  "disable_imap_idle_explain": {
+    "message": "No usis l'extensió IMAP IDLE encara que el servidor la permeti. Activar aquesta opció endarreria l'obtenció de missatges, activeu-ho només per a proves."
+  },
+  "send_stats_to_devs": {
+    "message": "Envia estadístiques als desenvolupadors del Delta Chat"
+  },
+  "emoji_search_results": {
+    "message": "Resultats de la cerca"
+  },
+  "emoji_not_found": {
+    "message": "No s'ha trobat cap emoji"
+  },
+  "emoji_recent": {
+    "message": "Usats recentment"
+  },
+  "emoji_people": {
+    "message": "Persones i cos"
+  },
+  "emoji_nature": {
+    "message": "Animals i natura"
+  },
+  "emoji_foods": {
+    "message": "Menjar i begudes"
+  },
+  "emoji_activity": {
+    "message": "Activitat"
+  },
+  "emoji_places": {
+    "message": "Viatges i llocs"
+  },
+  "emoji_objects": {
+    "message": "Objectes"
+  },
+  "emoji_symbols": {
+    "message": "Simbols"
+  },
+  "emoji_flags": {
+    "message": "Banderes"
+  },
+  "reactions": {
+    "message": "Reaccions"
+  },
+  "react": {
+    "message": "Reacciona"
+  },
+  "reaction_by_you": {
+    "message": "Heu reaccionat amb %1$s a «%2$s»"
+  },
+  "reaction_by_other": {
+    "message": "%1$sha reaccionat %2$s a «%3$s»"
+  },
+  "delete_old_messages": {
+    "message": "Esborra els missatges antics"
+  },
+  "autodel_device_title": {
+    "message": "Esborra els missatges del dispositiu"
+  },
+  "autodel_server_title": {
+    "message": "Esborra els missatges del servidor"
+  },
+  "autodel_device_ask": {
+    "message": "Voleu esborrar ara %1$d missatges i tots els missatges \"%2$s\" futurs?\n\n• Això inclou tot el contingut multimèdia\n\n• S'esborraran els missatges fins i tot si no s'han llegit\n\n• Els \"Missatges desats\" no s'esborraran de l'emmagatzematge local"
+  },
+  "autodel_server_ask": {
+    "message": "Voleu esborrar ara %1$d missatges i tots els missatges nous \"%2$s\" futurs?\n\n⚠️ Això inclou els correus, contingut multimèdia i \"Missatges desats\" a totes les carpetes del servidor\n\n⚠️ No utilitzeu aquesta funció si voleu conservar les dades al servidor\n\n⚠️ No utilitzeu aquesta funció si feu servir un client de correu diferent del Delta Chat"
+  },
+  "autodel_server_enabled_hint": {
+    "message": "Això inclou els correus electrònics, contingut multimèdia i «Missatges desats» en totes les carpetes del servidor. No useu aquesta funció si voleu conservar dades al servidor o si useu altres clients de correu més enllà de Delta Chat."
+  },
+  "autodel_server_warn_multi_device_title": {
+    "message": "Activa l'esborrament immediat"
+  },
+  "autodel_server_warn_multi_device": {
+    "message": "Si habiliteu l'esborrament immediat no podeu usar múltiples dispositius en aquest perfil."
+  },
+  "autodel_confirm": {
+    "message": "Ho entenc, esborra tots aquests missatges"
+  },
+  "autodel_at_once": {
+    "message": "Immediatament després de baixar"
+  },
+  "after_30_seconds": {
+    "message": "Després de 30 segons"
+  },
+  "after_1_minute": {
+    "message": "Després d'1 minut"
+  },
+  "after_5_minutes": {
+    "message": "Després de 5 minuts"
+  },
+  "after_30_minutes": {
+    "message": "Després de 30 minuts"
+  },
+  "autodel_after_1_hour": {
+    "message": "Després d'1 hora"
+  },
+  "autodel_after_1_day": {
+    "message": "Després d'1 dia"
+  },
+  "autodel_after_1_week": {
+    "message": "Després d'1 setmana"
+  },
+  "after_5_weeks": {
+    "message": "Després de 5 setmanes"
+  },
+  "autodel_after_1_year": {
+    "message": "Després d'1 any"
+  },
+  "autocrypt_send_asm_title": {
+    "message": "Envia el missatge de configuració Autocrypt"
+  },
+  "autocrypt_send_asm_explain_before": {
+    "message": "Un \"missatge de configuració Autocrypt\" comparteix de forma segura la vostra configuració d'extrem a extrem amb altres aplicacions compatibles amb Autocrypt.\n\nLa configuració es xifrarà amb un codi de configuració que es mostrarà aquí i que haureu d'escriure a l’altre dispositiu."
+  },
+  "autocrypt_send_asm_button": {
+    "message": "Envia el missatge de configuració Autocrypt"
+  },
+  "autocrypt_send_asm_explain_after": {
+    "message": "Se us ha enviat la vostra configuració. Canvieu a l'altre dispositiu i obriu el missatge de configuració. Se us demanarà un codi de configuració. Introduïu els dígits següents a l'indicador.\n\nUn cop fet, l'altre dispositiu estarà llest per utilitzar Autocrypt."
+  },
+  "autocrypt_prefer_e2ee": {
+    "message": "Prefereix l'encriptació d'extrem a extrem"
+  },
+  "autocrypt_asm_subject": {
+    "message": "Missatge de configuració Autocrypt"
+  },
+  "autocrypt_asm_general_body": {
+    "message": "Aquest és el missatge de configuració Autocrypt que s’usa per a transferir la vostra configuració d'extrem a extrem entre dispositius.\n\nPer a desxifrar i usar aquesta configuració, obriu el missatge en un dispositiu compatible amb Autocript i introduïu el codi de configuració que apareix al dispositiu primari."
+  },
+  "systemmsg_cannot_decrypt": {
+    "message": "Aquest missatge no es pot desxifrar.\n\n• Potser pot ajudar de respondre el missatge i demanar a l'emissor que torni a enviar-lo,\n\n• Si acabeu de reinstal·lar Delta Chat, aleshores és millor de reconfigurar Delta Chat ara i triar «Afegeix un segon dispositiu» o importar una còpia de seguretat."
+  },
+  "systemmsg_unknown_sender_for_chat": {
+    "message": "Remitent desconegut per a aquest xat. Vegeu «informació» per a més detalls."
+  },
+  "systemmsg_subject_for_new_contact": {
+    "message": "Missatge de %1$s"
+  },
+  "systemmsg_failed_sending_to": {
+    "message": "No s'ha pogut enviar el missatge a %1$s."
+  },
+  "group_name_changed_by_you": {
+    "message": "Heu canviat el nom del grup de «%1$s»  a «%2$s»."
+  },
+  "group_name_changed_by_other": {
+    "message": "Nom del grup \"%1$s\" canviat a \"%2$s\" per %3$s."
+  },
+  "group_image_changed_by_you": {
+    "message": "Heu canviat la imatge de grup."
+  },
+  "group_image_changed_by_other": {
+    "message": "Imatge de grup canviada per %1$s."
+  },
+  "member_x_added": {
+    "message": "S'ha afegit el membre %1$s."
+  },
+  "add_member_by_you": {
+    "message": "Heu afegit el membre %1$s."
+  },
+  "add_member_by_other": {
+    "message": "Membre %1$s afegit per %2$s."
+  },
+  "remove_member_by_you": {
+    "message": "Heu eliminat el membre %1$s."
+  },
+  "remove_member_by_other": {
+    "message": "Membre %1$s eliminat per %2$s."
+  },
+  "group_left_by_you": {
+    "message": "Heu abandonat el grup."
+  },
+  "group_left_by_other": {
+    "message": "%1$sha abandonat el grup"
+  },
+  "group_image_deleted_by_you": {
+    "message": "Heu esborrat la imatge de grup."
+  },
+  "group_image_deleted_by_other": {
+    "message": "%1$s ha esborrat la imatge de grup."
+  },
+  "location_enabled_by_you": {
+    "message": "Heu habilitat la difusió de la ubicació."
+  },
+  "location_enabled_by_other": {
+    "message": "%1$sha habilitat la difusió de la ubicació."
+  },
+  "ephemeral_timer_disabled_by_you": {
+    "message": "Heu desactivat el temporitzador dels missatges efímers."
+  },
+  "ephemeral_timer_disabled_by_other": {
+    "message": "%1$s ha desactivat el temporitzador dels missatges efímers."
+  },
+  "ephemeral_timer_seconds_by_you": {
+    "message": "Heu definit el temporitzador dels missatges efímers a %1$s segons."
+  },
+  "ephemeral_timer_seconds_by_other": {
+    "message": "%2$s ha definit el temporitzador dels missatges efímers a %1$s segons."
+  },
+  "ephemeral_timer_1_minute_by_you": {
+    "message": "Heu definit el temporitzador dels missatges fonedissos a 1 segon."
+  },
+  "ephemeral_timer_1_minute_by_other": {
+    "message": "%1$s ha definit el temporitzador dels missatges efímers a 1  minut."
+  },
+  "ephemeral_timer_1_hour_by_you": {
+    "message": "Heu definit el temporitzador dels missatges fonedissos a 1 hora."
+  },
+  "ephemeral_timer_1_hour_by_other": {
+    "message": "%1$s ha definit el temporitzador dels missatges efímers a 1 hora."
+  },
+  "ephemeral_timer_1_day_by_you": {
+    "message": "Heu definit el temporitzador dels missatges fonedissos a 1 dia."
+  },
+  "ephemeral_timer_1_day_by_other": {
+    "message": "%1$s ha definit el temporitzador dels missatges efímers a 1 dia."
+  },
+  "ephemeral_timer_1_week_by_you": {
+    "message": "Heu definit el temporitzador dels missatges fonedissos a 1 setmana"
+  },
+  "ephemeral_timer_1_week_by_other": {
+    "message": "%1$s ha definit el temporitzador dels missatges efímers a 1 setmana."
+  },
+  "ephemeral_timer_minutes_by_you": {
+    "message": "Heu definit el temporitzador dels missatges fonedissos a %1$s minuts."
+  },
+  "ephemeral_timer_minutes_by_other": {
+    "message": "%2$s ha definit el temporitzador dels missatges efímers a %1$s minuts."
+  },
+  "ephemeral_timer_hours_by_you": {
+    "message": "Heu definit el temporitzador dels missatges fonedissos a %1$s hores."
+  },
+  "ephemeral_timer_hours_by_other": {
+    "message": "%2$s ha definit el temporitzador dels missatges efímers a %1$s hores."
+  },
+  "ephemeral_timer_days_by_you": {
+    "message": "Heu definit el temporitzador dels missatges fonedissos a %1$s dies."
+  },
+  "ephemeral_timer_days_by_other": {
+    "message": "%2$s ha definit el temporitzador dels missatges efímers a %1$s dies."
+  },
+  "ephemeral_timer_weeks_by_you": {
+    "message": "Heu definit el temporitzador dels missatges fonedissos a %1$s setmanes."
+  },
+  "ephemeral_timer_weeks_by_other": {
+    "message": "%2$s ha definit el temporitzador dels missatges efímers a %1$s setmanes."
+  },
+  "chat_protection_broken": {
+    "message": "%1$s ha enviat un missatge des d'un altre dispositiu."
+  },
+  "chat_protection_enabled_tap_to_learn_more": {
+    "message": "Us garantim que a partir d'ara els missatges són xifrats d'extrem a extrem. Toqueu per a obtenir més informació."
+  },
+  "chat_protection_enabled_explanation": {
+    "message": "Ara es garanteix que tots els missatges d'aquest xat són xifrats d'extrem a extrem.\n\nEl xifratge d'extrem a extrem manté privats els missatges entre vós i els companys de xat. Ni tan sols el vostre proveïdor de correu electrònic pot llegir-los."
+  },
+  "chat_protection_broken_tap_to_learn_more": {
+    "message": "%1$s ha enviat un missatge des d'un altre dispositiu. Toqueu per a obtenir més informació."
+  },
+  "chat_protection_broken_explanation": {
+    "message": "No es pot garantir el xifrat d'extrem a extrem, probablement perquè %1$s ha reinstal·lat Delta Chat o ha enviat un missatge des d'un altre dispositiu.\n\n Podeu trobar-vos físicament amb la persona i tornar a escanejar el seu codi QR per tomar-hi a tenir xifrat d'extrem a extrem."
+  },
+  "invalid_unencrypted_tap_to_learn_more": {
+    "message": "%1$srequereix xifratge d'extrem a extrem, que encara no s'ha configurat per a aquest xat. Toqueu per a obtenir més informació."
+  },
+  "invalid_unencrypted_explanation": {
+    "message": "Per a establir xifratge d'extrem a extrem, heu de trobar-vos amb els contactes en persona i escanejar el seu codi QR per a poder afegir-los."
+  },
+  "learn_more": {
+    "message": "Més informació"
+  },
+  "devicemsg_self_deleted": {
+    "message": "Heu esborrat el xat «Missatges desats».\n\nℹ️ Per a usar altre cop la funcionalitat de «Missatges desats», creeu un xat nou amb vós mateix."
+  },
+  "devicemsg_storage_exceeding": {
+    "message": "⚠️ Esteu a punt de quedar-vos sense espai d'emmagatzematge al vostre proveïdor: ja esteu utilitzant %1$s%% .\n\nPodríeu deixar de rebre missatges si s'emplena.\n\n👉 Reviseu a la interfície web del proveïdor si podeu esborrar dades antigues i considereu habilitar \"Preferències / Xats i multimèdia / Esborra els missatges antics\". Podeu veure sempre el nivell d'ocupació a \"Preferències / Connectivitat\"."
+  },
+  "devicemsg_bad_time": {
+    "message": "⚠️ La data o l'hora del vostre dispositiu no semblen correctes (%1$s).\n\nAdjusteu el rellotge ⏰🔧 per a assegurar que els missatges es reben correctament."
+  },
+  "devicemsg_update_reminder": {
+    "message": "⚠️ Delta Chat podría no estar actualitzat.\n\n Això us podria causar problemes perquè els vostres companys de xat utilitzen versions més noves i no teniu les últimes funcionalitats 😳\nComproveu a https://get.delta.chat o a la vostra botiga d'aplicacions si hi ha actualitzacions."
+  },
+  "enter_system_secret_to_continue": {
+    "message": "Desbloca per a continuar"
+  },
+  "qr_code": {
+    "message": "Codi QR"
+  },
+  "load_qr_code_as_image": {
+    "message": "Carrega el codi QR com a imatge"
+  },
+  "qrscan_title": {
+    "message": "Escaneja codi QR"
+  },
+  "qrscan_hint": {
+    "message": "Poseu la càmera davant del codi QR"
+  },
+  "qrscan_hint_desktop": {
+    "message": "Mou el codi QR a la càmera"
+  },
+  "qrscan_failed": {
+    "message": "No s'ha pogut descodificar el codi QR"
+  },
+  "qrscan_ask_join_group": {
+    "message": "Voleu unir-vos al grup «%1$s»?"
+  },
+  "qrscan_fingerprint_mismatch": {
+    "message": "L'empremta escanejada no coincideix amb l'última empremta de %1$s"
+  },
+  "qrscan_no_addr_found": {
+    "message": "Aquest codi QR conté una empremta digital, però no hi ha cap adreça de correu electrònic.\n\nPer a una verificació fora de banda, establiu primer una connexió xifrada amb el destinatari."
+  },
+  "qrscan_contains_text": {
+    "message": "Text del codi QR escanejat:\n\n%1$s"
+  },
+  "qrscan_contains_url": {
+    "message": "URL del codi QR escanejat:\n\n%1$s"
+  },
+  "qrscan_fingerprint_label": {
+    "message": "Empremta"
+  },
+  "withdraw_verifycontact_explain": {
+    "message": "Altres persones que vulguin contactar amb vós poden escanejar aquest codi QR.\n\nPodeu reinicialitzar-lo, de manera que el codi QR o enllaç actual existent ja no servirà."
+  },
+  "withdraw_verifygroup_explain": {
+    "message": "Altres poden escanejar aquest codi QR per a unir-se al grup «%1$s».\n\nPodeu reinicialitzar-lo, de manera que el codi QR existent, o l'enllaç d'invitació, deixarà de funcionar."
+  },
+  "withdraw_qr_code": {
+    "message": "Reinicialitza el codi QR"
+  },
+  "revive_verifycontact_explain": {
+    "message": "Aquest codi QR s'ha reinicialitzat i ja no és actiu."
+  },
+  "revive_verifygroup_explain": {
+    "message": "Aquest codi QR per a unir-se al grup «%1$s» s'ha reinicialitzat i ja no és actiu."
+  },
+  "revive_qr_code": {
+    "message": "Activa el codi QR"
+  },
+  "qrshow_title": {
+    "message": "Codi QR d'invitació"
+  },
+  "qrshow_x_joining": {
+    "message": "%1$s s'uneix."
+  },
+  "qrshow_x_verified": {
+    "message": "%1$s verificat."
+  },
+  "qrshow_x_has_joined_group": {
+    "message": "%1$s s'ha unit al grup."
+  },
+  "qrshow_join_group_title": {
+    "message": "Codi QR d'invitació"
+  },
+  "qrshow_join_group_hint": {
+    "message": "Escanegeu això per unir-vos al grup \"%1$s\"."
+  },
+  "qrshow_join_contact_title": {
+    "message": "Codi QR d'invitació"
+  },
+  "qrshow_join_contact_hint": {
+    "message": "Escanegeu això per establir contacte amb %1$s"
+  },
+  "qrshow_join_contact_no_connection_toast": {
+    "message": "No hi ha connexió a internet, no es pot fer la configuració amb codi QR."
+  },
+  "qraccount_ask_create_and_login": {
+    "message": "Voleu crear un perfil nou a «%1$s» i iniciar sessió allà?"
+  },
+  "qraccount_ask_create_and_login_another": {
+    "message": "Voleu crear un perfil nou a «%1$s» i iniciar-hi sessió?\n\nEl vostre perfil existent no s'esborrarà. Useu l'element «Canvia el perfil» per a canviar entre els vostres perfils."
+  },
+  "set_name_and_avatar_explain": {
+    "message": "Indiqueu un nom que els vostres contactes puguin reconèixer. També podeu establir una imatge de perfil."
+  },
+  "please_enter_name": {
+    "message": "Introduïu un nom"
+  },
+  "qraccount_qr_code_cannot_be_used": {
+    "message": "El codi QR escanejat no es pot usar per a configurar un perfil nou."
+  },
+  "qrlogin_ask_login": {
+    "message": "Voleu iniciar sessió a «%1$s»?"
+  },
+  "qrlogin_ask_login_another": {
+    "message": "Voleu iniciar «%1$s»?\n\nNo s'esborrarà el perfil existent. Useu l'element «Canvia el perfil» per a canviar entre els vostres perfils."
+  },
+  "secure_join_started": {
+    "message": "%1$s us ha convidat a unir-vos a aquest grup.\n\nS'està esperant el dispositiu de %2$s per a respondre..."
+  },
+  "secure_join_replies": {
+    "message": "%1$s ha respost, espereu per a ser afegit al grup..."
+  },
+  "secure_join_wait": {
+    "message": "S'està establint el xifratge d'extrem a extrem garantit, espereu..."
+  },
+  "secure_join_wait_timeout": {
+    "message": "Encara no es pot garantir el xifrat punt-a-punt, però ja podeu enviar un missatge."
+  },
+  "contact_verified": {
+    "message": "%1$s verificat."
+  },
+  "contact_not_verified": {
+    "message": "No es pot verificar%1$s"
+  },
+  "verified_by": {
+    "message": "Afegit per %1$s"
+  },
+  "verified_by_you": {
+    "message": "Afegit per mi"
+  },
+  "contact_setup_changed": {
+    "message": "Configuració canviada per %1$s"
+  },
+  "verified_contact_required_explain": {
+    "message": "Per a garantir el xifrat extrem a extrem, només podeu afegir a aquest grup contactes que tinguin la marca verda.\n\nPodeu trobar-vos en persona amb els contactes per a escanejar els seus codis QR i poder-los afegir. "
+  },
+  "copy_qr_data_success": {
+    "message": "S'ha copiat l'URL del codi QR al porta-retalls"
+  },
+  "mailto_dialog_header_select_chat": {
+    "message": "Trieu el xat on enviar el missatge"
+  },
+  "confirm_replace_draft": {
+    "message": "%1$s ja té un missatge d'esborrany, voleu substituir-lo?"
+  },
+  "mailto_link_could_not_be_decoded": {
+    "message": "No s'ha pogut desxifrar l'enllaç mailto: %1$s"
+  },
+  "notify_reply_button": {
+    "message": "Respondre"
+  },
+  "notify_new_message": {
+    "message": "Missatge nou"
+  },
+  "notify_background_connection_enabled": {
+    "message": "Connexió habilitada en segon pla"
+  },
+  "notify_priority_high": {
+    "message": "Alta"
+  },
+  "notify_priority_max": {
+    "message": "Max"
+  },
+  "notify_name_and_message": {
+    "message": "Nom i missatge"
+  },
+  "notify_name_only": {
+    "message": "Només nom"
+  },
+  "notify_no_name_or_message": {
+    "message": "Ni nom ni missatge"
+  },
+  "notifications_disabled": {
+    "message": "Notificacions desactivades"
+  },
+  "new_messages": {
+    "message": "Missatges nous"
+  },
+  "new_messages_body": {
+    "message": "Teniu missatges nous"
+  },
+  "n_messages_in_m_chats": {
+    "message": "%1$d missatges en %2$d xats"
+  },
+  "perm_required_title": {
+    "message": "Es requereix permís"
+  },
+  "perm_continue": {
+    "message": "Continua"
+  },
+  "perm_explain_access_to_camera_denied": {
+    "message": "Delta Chat demana accés a la càmera per poder fer fotos o vídeos, però li ha estat denegat. Sisplau, vés al menú de configuració de l'app, busca-hi els \"Permisos\" i habilita'n la \"Càmera\"."
+  },
+  "perm_explain_access_to_mic_denied": {
+    "message": "Delta Chat demana accés al micròfon per poder enviar missatges d'àudio, però li ha estat denegat. Sisplau, vés al menú de configuració de l'app, busca-hi els \"Permisos\" i habilita'n el \"Micròfon\"."
+  },
+  "perm_explain_access_to_storage_denied": {
+    "message": "Per a rebre o enviar fitxers, aneu a la configuració de l'aplicació, seleccioneu «Permisos» i activeu «Emmagatzematge»."
+  },
+  "perm_explain_access_to_location_denied": {
+    "message": "Per a adjuntar la ubicació, aneu a la configuració de l'aplicació, trieu «Permisos» i activeu la «Ubicació»."
+  },
+  "perm_explain_access_to_notifications_denied": {
+    "message": "Per a rebre les notificacions, aneu a «Configuració del sistema / Aplicacions / Delta Chat» i activeu «Notificacions»"
+  },
+  "ImageEditorHud_draw_anywhere_to_blur": {
+    "message": "Dibuixeu a qualsevol lloc per a difuminar-lo"
+  },
+  "ImageEditorHud_add_text": {
+    "message": "Afegeix text"
+  },
+  "ImageEditorHud_blur": {
+    "message": "Difumina"
+  },
+  "ImageEditorHud_brush_marker": {
+    "message": "Pinzell de marcatge"
+  },
+  "ImageEditorHud_brush_highlight": {
+    "message": "Pinzell de ressaltat"
+  },
+  "ImageEditorHud_crop": {
+    "message": "Retalla"
+  },
+  "ImageEditorHud_flip": {
+    "message": "Capgira"
+  },
+  "ImageEditorHud_rotate": {
+    "message": "Gira"
+  },
+  "encrypted_message": {
+    "message": "Missatge encriptat"
+  },
+  "about_offical_app_desktop": {
+    "message": "Aquesta és l'aplicació d'escriptori oficial de Delta Chat."
+  },
+  "about_licensed_under_desktop": {
+    "message": "Aquest programari és llicenciat amb la llicència GNU GPL versió 3 i el codi font és disponible a GitHub"
+  },
+  "welcome_desktop": {
+    "message": "Us donem la benvinguda al Delta Chat"
+  },
+  "global_menu_preferences_language_desktop": {
+    "message": "Trieu l'idioma..."
+  },
+  "global_menu_file_desktop": {
+    "message": "Arxiva"
+  },
+  "global_menu_file_quit_desktop": {
+    "message": "Surt"
+  },
+  "global_menu_edit_desktop": {
+    "message": "Modifica"
+  },
+  "global_menu_edit_undo_desktop": {
+    "message": "Desfés"
+  },
+  "global_menu_edit_redo_desktop": {
+    "message": "Refés"
+  },
+  "global_menu_edit_cut_desktop": {
+    "message": "Retalla"
+  },
+  "global_menu_edit_copy_desktop": {
+    "message": "Copia"
+  },
+  "global_menu_edit_paste_desktop": {
+    "message": "Enganxa"
+  },
+  "global_menu_view_desktop": {
+    "message": "Mostra"
+  },
+  "global_menu_view_floatontop_desktop": {
+    "message": "Flota a dalt"
+  },
+  "global_menu_view_developer_desktop": {
+    "message": "Desenvolupador"
+  },
+  "global_menu_view_developer_tools_desktop": {
+    "message": "Eines de desenvolupador"
+  },
+  "global_menu_help_desktop": {
+    "message": "Ajuda"
+  },
+  "delta_chat_homepage": {
+    "message": "Lloc web de Delta Chat"
+  },
+  "contribute": {
+    "message": "Col·laboreu"
+  },
+  "global_menu_help_report_desktop": {
+    "message": "Informa d'un problema"
+  },
+  "global_menu_help_about_desktop": {
+    "message": "Quant al Delta Chat"
+  },
+  "global_menu_file_open_desktop": {
+    "message": "Obre el Delta Chat"
+  },
+  "global_menu_minimize_to_tray": {
+    "message": "Minimitza"
+  },
+  "no_chat_selected_suggestion_desktop": {
+    "message": "Trieu un xat o creeu-ne un de nou"
+  },
+  "write_message_desktop": {
+    "message": "Escriu un missatge"
+  },
+  "encryption_info_title_desktop": {
+    "message": "Informació de xifratge"
+  },
+  "delete_message_desktop": {
+    "message": "Esborra el missatge"
+  },
+  "more_info_desktop": {
+    "message": "Més informació"
+  },
+  "timestamp_format_m_desktop": {
+    "message": "D MMM"
+  },
+  "remove_desktop": {
+    "message": "Elimina"
+  },
+  "save_desktop": {
+    "message": "Desa"
+  },
+  "unsave": {
+    "message": "No desis"
+  },
+  "name_desktop": {
+    "message": "Nom"
+  },
+  "select_group_image_desktop": {
+    "message": "Trieu una imatge de grup"
+  },
+  "export_backup_desktop": {
+    "message": "Exporta la còpia de seguretat"
+  },
+  "autocrypt_correct_desktop": {
+    "message": "S'ha transferit correctament la configuració Autocrypt!"
+  },
+  "forget_login_confirmation_desktop": {
+    "message": "Voleu esborrar aquest perfil? S'esborrarà tot, incloent-hi la configuració, els contactes, els xats, els missatges i el contingut multimèdia. Aquesta acció és definitiva i no es pot desfer."
+  },
+  "message_detail_sent_desktop": {
+    "message": "enviat"
+  },
+  "message_detail_received_desktop": {
+    "message": "rebut"
+  },
+  "menu.view.developer.open.log.folder": {
+    "message": "Obre la carpeta de registre"
+  },
+  "menu.view.developer.open.current.log.file": {
+    "message": "Obre el fitxer de registre actual"
+  },
+  "explain_desktop_minimized_disabled_tray_pref": {
+    "message": "La icona de la safata no es pot desactivar perquè Delta Chat s'ha iniciat amb l'opció --minimized"
+  },
+  "no_spellcheck_suggestions_found": {
+    "message": "No s'ha trobat cap suggeriment ortogràfic."
+  },
+  "show_window": {
+    "message": "Mostra la finestra"
+  },
+  "keybindings": {
+    "message": "Dreceres de teclat"
+  },
+  "switch_between_chats": {
+    "message": "Canvia entre xats"
+  },
+  "scroll_messages": {
+    "message": "Desplaça els missatges"
+  },
+  "focus_search_input": {
+    "message": "Focus al camp de cerca"
+  },
+  "focus_message_input": {
+    "message": "Focus a l'entrada de text del missatge"
+  },
+  "force_refresh_network": {
+    "message": "Força l'actualització de la xarxa"
+  },
+  "insert_newline": {
+    "message": "Insereix un salt de línia"
+  },
+  "a11y_delivery_status_error": {
+    "message": "Estat d'entrega: error"
+  },
+  "a11y_encryption_padlock": {
+    "message": "Cadenat de xifratge"
+  },
+  "a11y_delivery_status_sending": {
+    "message": "Estat d'entrega: enviant-se"
+  },
+  "a11y_delivery_status_draft": {
+    "message": "Estat d'entrega: esborrany"
+  },
+  "a11y_delivery_status_delivered": {
+    "message": "Estat d'entrega: entregat"
+  },
+  "a11y_delivery_status_read": {
+    "message": "Estat d'entrega: llegit"
+  },
+  "a11y_delivery_status_invalid": {
+    "message": "Estat d'entrega no vàlid"
+  },
+  "a11y_message_context_menu_btn_label": {
+    "message": "Accions de missatge"
+  },
+  "a11y_background_preview_label": {
+    "message": "Previsualització del fons de pantalla"
+  },
+  "a11y_disappearing_messages_activated": {
+    "message": "S'han activat els missatges efímers"
+  },
+  "stop_sharing_location": {
+    "message": "Deixa de compartir la ubicació"
+  },
+  "a11y_voice_message_hint_ios": {
+    "message": "Després d'enregistrar, feu doble toc per a enviar-lo. Per a descartar l'enregistrament, fregueu amb dos dits."
+  },
+  "a11y_connectivity_hint": {
+    "message": "Feu doble toc per a veure els detalls de connectivitat."
+  },
+  "login_error_no_internet_connection": {
+    "message": "No hi ha connexió a internet, l'inici de sessió ha fallat."
+  },
+  "share_account_not_configured": {
+    "message": "No s'ha configurat el perfil."
+  },
+  "cannot_play_audio_file": {
+    "message": "No es pot reproduir l'`audio."
+  },
+  "perm_ios_explain_access_to_camera_denied": {
+    "message": "Per a fer fotos, capturar vídeos o usar l'escàner de codis QR, obriu la configuració del sistema i activeu «Càmera»."
+  },
+  "open_settings": {
+    "message": "Obre la configuració"
+  },
+  "import_device_contacts": {
+    "message": "Importa els contactes del dispositiu"
+  },
+  "import_device_contacts_hint": {
+    "message": "Per a xatejar amb contactes des del vostre dispositiu, obriu Configuració i activeu «Contactes»."
+  },
+  "disabled_in_dc": {
+    "message": "Desactivat a Delta Chat"
+  },
+  "disabled_in_system_settings": {
+    "message": "Desactivat a la configuració del sistema"
+  },
+  "bg_app_refresh_disabled": {
+    "message": "El \"Refresc en segon pla d'aplicacions\" està deshabilitat als paràmetres del sistema"
+  },
+  "delayed": {
+    "message": "Ajornat"
+  },
+  "notifications_avg_minutes": {
+    "message": "De mitjana, cada %1$d minuts"
+  },
+  "notifications_avg_hours": {
+    "message": "De mitjana, cada %1$d hores"
+  },
+  "last_check_at": {
+    "message": "Comprovat a les %1$s"
+  },
+  "system_settings": {
+    "message": "Paràmetres del sistema"
+  },
+  "system_settings_notify_explain_ios": {
+    "message": "Edita'n el tipus, les insígnies, la previsualització i més"
+  },
+  "shortcuts_widget_title": {
+    "message": "Dreceres"
+  },
+  "shortcuts_widget_description": {
+    "message": "Useu «Afegeix al giny» de Delta Chat per a afegir elements"
+  },
+  "remove_from_widget": {
+    "message": "Elimina del giny"
+  },
+  "add_to_widget": {
+    "message": "Afegeix al giny"
+  },
+  "InfoPlist_NSCameraUsageDescription": {
+    "message": "Delta Chat usa la càmera per a fer i enviar fotos i vídeos i per a escanejar codis QR."
+  },
+  "InfoPlist_NSContactsUsageDescription": {
+    "message": "Delta Chat usa els vostres contactes per a mostrar una llista d'adreces electròniques on podeu escriure. Delta Chat no té cap servidor, els contactes no s'envien enlloc."
+  },
+  "InfoPlist_NSLocationAlwaysAndWhenInUseUsageDescription": {
+    "message": "Delta Chat necessita permisos per a compartir la vostra ubicació durant el temps que heu habilitat la compartició de la ubicació."
+  },
+  "InfoPlist_NSLocationWhenInUseUsageDescription": {
+    "message": "Delta Chat necessita permisos per a compartir la vostra ubicació durant el temps que heu habilitat la compartició de la ubicació."
+  },
+  "InfoPlist_NSMicrophoneUsageDescription": {
+    "message": "Delta Chat usa el vostre micròfon per a enregistrar i enviar missatges de veu i vídeos amb so."
+  },
+  "InfoPlist_NSPhotoLibraryUsageDescription": {
+    "message": "Delta Chat us permetrà triar quines fotos de la biblioteca s'han d'enviar."
+  },
+  "InfoPlist_NSPhotoLibraryAddUsageDescription": {
+    "message": "Delta Chat vol desar imatges a la biblioteca de fotografies."
+  },
+  "InfoPlist_NSFaceIDUsageDescription": {
+    "message": "Delta Chat pot usar Face ID per a protegir el vostre perfil local, la creació de còpies de seguretat i la configuració d'un segon dispositiu."
+  },
+  "pref_instant_delivery": {
+    "message": "Entrega immediata"
+  },
+  "pref_background_notifications": {
+    "message": "Usa la connexió en segon pla"
+  },
+  "pref_background_notifications_explain": {
+    "message": "Requereix optimitzacions de bateria que s'han ignorat. Utilitzeu-les si les notificacions arriben tard"
+  },
+  "pref_reliable_service": {
+    "message": "Força la connexió en segon pla"
+  },
+  "pref_reliable_service_explain": {
+    "message": "Causa una notificació permanent"
+  },
+  "pref_background_notifications_rationale": {
+    "message": "Per a mantenir la connexió amb el vostre servidor de correu i rebre missatges en segon pla, ignoreu les optimitzacions de bateria del següent pas.\n\nDelta Chat utilitza pocs recursos i té cura de no buidar-vos la bateria."
+  },
+  "perm_enable_bg_reminder_title": {
+    "message": "Prem aquí per rebre missatges mentre Delta Chat és en segon pla."
+  },
+  "perm_enable_bg_already_done": {
+    "message": "Ja heu autoritzat Delta Chat a rebre missatges en segon pla.\n\nSi encara no us arriben els missatge, reviseu els paràmetres de sistema."
+  },
+  "update_1_50_android": {
+    "message": "Què hi ha de nou?\n\n❤️‍🔥 Un selector d'emojis nou amb més emojis\n\n🎮 Aplicacions al xat millorades: rebeu notificacions i obriu les aplicacions suportades segons el context. P. ex. obriu una entrada afegida al calendari directament.\n\n👍 Rebeu notificacions de les reaccions dels vostres missatges\n\n... 🛠️ Correccions i moltes coses més a %1$s"
+  },
+  "update_switch_profile_placement": {
+    "message": "ℹ️ S'ha mogut l'opció «Canvia el perfil»: toqueu en la vostra imatge de perfil en la cantonada superior de la finestra principal per a afegir o canviar perfils 💡"
+  },
+  "n_minutes": {
+    "one": "%d min",
+    "other": "%d min"
+  },
+  "n_hours": {
+    "one": "%d hora",
+    "other": "%d hores"
+  },
+  "n_chats": {
+    "one": "%d xat",
+    "other": "%d xats"
+  },
+  "n_contacts": {
+    "one": "%d contacte",
+    "other": "%d contactes"
+  },
+  "n_messages": {
+    "one": "%d missatge",
+    "other": "%d missatges"
+  },
+  "n_reactions": {
+    "one": "%d reacció",
+    "other": "%d reaccions"
+  },
+  "n_members": {
+    "one": "%d membre",
+    "other": "%d membres"
+  },
+  "n_recipients": {
+    "one": "%d destinatari",
+    "other": "%d destinataris"
+  },
+  "n_selected": {
+    "one": "%d triat",
+    "other": "%d seleccionats"
+  },
+  "ask_send_following_n_files_to": {
+    "one": "Voleu enviar el següent fitxer a %s?",
+    "other": "Voleu enviar els següents %d fitxers a %s?"
+  },
+  "ask_delete_chat": {
+    "one": "¿Esborrar %d xat de tots els teus dispositius?",
+    "other": "¿Esborrar %d xats de tots els teus dispositius?"
+  },
+  "ask_delete_messages": {
+    "one": "¿Esborra %d missatge de tots els teus dispositius?",
+    "other": "¿Esborra %d missatges de tots els teus dispositius?"
+  },
+  "ask_delete_messages_simple": {
+    "one": "Vols esborrar %d missatge?",
+    "other": "Voleu esborrar %d missatges?"
+  },
+  "chat_archived": {
+    "one": "%d xat arxivat",
+    "other": "%d xats arxivats"
+  },
+  "chat_unarchived": {
+    "one": "%d xat arxivat",
+    "other": "%d xats desarxivats"
+  },
+  "chat_n_new_messages": {
+    "one": "%d nou missatge",
+    "other": "%d missatges nous"
+  }
+}

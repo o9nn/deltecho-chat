@@ -1,0 +1,2696 @@
+{
+  "app_name": {
+    "message": "Delta Chat"
+  },
+  "ok": {
+    "message": "OK"
+  },
+  "cancel": {
+    "message": "Zrušit"
+  },
+  "clear_search": {
+    "message": "Zrušit vyhledávání"
+  },
+  "link": {
+    "message": "Odkaz"
+  },
+  "scan": {
+    "message": "Naskenovat"
+  },
+  "yes": {
+    "message": "Ano"
+  },
+  "no": {
+    "message": "Ne"
+  },
+  "select": {
+    "message": "Vybrat"
+  },
+  "on": {
+    "message": "Zapnuto"
+  },
+  "off": {
+    "message": "Vypnuto"
+  },
+  "def": {
+    "message": "Výchozí"
+  },
+  "default_value": {
+    "message": "Výchozí (%1$s)"
+  },
+  "default_value_as_above": {
+    "message": "Výchozí (jako výše)"
+  },
+  "custom": {
+    "message": "Vlastní"
+  },
+  "none": {
+    "message": "Žádný"
+  },
+  "automatic": {
+    "message": "Automaticky"
+  },
+  "strict": {
+    "message": "Přísný"
+  },
+  "open": {
+    "message": "Otevřít"
+  },
+  "download": {
+    "message": "Stáhnout"
+  },
+  "downloading": {
+    "message": "Stahování..."
+  },
+  "open_attachment": {
+    "message": "Otevřít přílohu"
+  },
+  "join": {
+    "message": "Připojit se"
+  },
+  "rejoin": {
+    "message": "Znovu se připojit"
+  },
+  "delete": {
+    "message": "Smazat"
+  },
+  "delete_for_me": {
+    "message": "Smazat pro mě"
+  },
+  "delete_for_everyone": {
+    "message": "Smazat pro všechny"
+  },
+  "info": {
+    "message": "Informace"
+  },
+  "update": {
+    "message": "Aktualizovat"
+  },
+  "emoji": {
+    "message": "Emoji"
+  },
+  "attachment": {
+    "message": "Příloha"
+  },
+  "back": {
+    "message": "Zpět"
+  },
+  "close": {
+    "message": "Zavřít"
+  },
+  "close_window": {
+    "message": "Zavřít okno"
+  },
+  "forward": {
+    "message": "Přeposlat"
+  },
+  "create": {
+    "message": "Vytvořit"
+  },
+  "reset": {
+    "message": "Obnovit výchozí"
+  },
+  "later": {
+    "message": "Později"
+  },
+  "resend": {
+    "message": "Poslat znovu"
+  },
+  "edited": {
+    "message": "Upraveno"
+  },
+  "edit_message": {
+    "message": "Upravit zprávu"
+  },
+  "archive": {
+    "message": "Archivovat"
+  },
+  "unarchive": {
+    "message": "Vyjmout z archivu"
+  },
+  "mute": {
+    "message": "Ztlumit"
+  },
+  "muted": {
+    "message": "Ztlumeno"
+  },
+  "ephemeral_messages": {
+    "message": "Mizející zprávy"
+  },
+  "ephemeral_messages_hint": {
+    "message": "Volba platí pro všechny členy tohoto chatu, kteří používají Delta Chat; stále ale mohou kopírovat, ukládat a přeposílat zprávy nebo používat jiné e-mailové klienty, které tuto volbu nerespektují."
+  },
+  "save": {
+    "message": "Uložit"
+  },
+  "chat": {
+    "message": "Chat"
+  },
+  "media": {
+    "message": "Multimédia"
+  },
+  "profile": {
+    "message": "Profil"
+  },
+  "main_menu": {
+    "message": "Hlavní nabídka"
+  },
+  "start_chat": {
+    "message": "Chatovat"
+  },
+  "show_full_message": {
+    "message": "Zobrazit celou zprávu…"
+  },
+  "mark_all_as_read": {
+    "message": "Označit vše jako přečtené"
+  },
+  "mark_as_read": {
+    "message": "Označit jako přečtené"
+  },
+  "mark_as_read_short": {
+    "message": "Přečteno"
+  },
+  "loading": {
+    "message": "Načítání..."
+  },
+  "hide": {
+    "message": "Skrýt"
+  },
+  "activate": {
+    "message": "Aktivovat"
+  },
+  "load_remote_content": {
+    "message": "Načíst vzdálené obrázky"
+  },
+  "load_remote_content_ask": {
+    "message": "Vzdálené obrázky vás mohou sledovat.\n\nTato volba povolí i stahování dalšího obsahu, jako jsou například písma. Obrázky z vyrovnávací paměti nebo ty, které jsou součástí zprávy, se zobrazí, i když je tato volba vypnuta.\n\nPřejete si načíst vzdálené obrázky?"
+  },
+  "always": {
+    "message": "Vždy"
+  },
+  "always_load_remote_images": {
+    "message": "Vždy načítat vzdálené obrázky"
+  },
+  "once": {
+    "message": "Jednou"
+  },
+  "show_warning": {
+    "message": "Zobrazovat varování"
+  },
+  "show_password": {
+    "message": "Zobrazit heslo"
+  },
+  "hide_password": {
+    "message": "Skrýt heslo"
+  },
+  "not_now": {
+    "message": "Teď ne"
+  },
+  "never": {
+    "message": "Nikdy"
+  },
+  "one_moment": {
+    "message": "Okamžik..."
+  },
+  "done": {
+    "message": "Hotovo"
+  },
+  "undo": {
+    "message": "Zpět"
+  },
+  "offline": {
+    "message": "Offline"
+  },
+  "next": {
+    "message": "Další"
+  },
+  "error": {
+    "message": "Chyba"
+  },
+  "error_x": {
+    "message": "Chyba: %1$s"
+  },
+  "no_app_to_handle_data": {
+    "message": "Aplikace pro tento typ dat nenalezena."
+  },
+  "no_browser_installed": {
+    "message": "Není nainstalován žádný prohlížeč."
+  },
+  "file_not_found": {
+    "message": "Nelze najít %1$s."
+  },
+  "copied_to_clipboard": {
+    "message": "Zkopírováno do schránky."
+  },
+  "contacts_headline": {
+    "message": "Kontakty"
+  },
+  "email_address": {
+    "message": "E-mailová adresa"
+  },
+  "bad_email_address": {
+    "message": "Neplatná e-mailová adresa."
+  },
+  "password": {
+    "message": "Heslo"
+  },
+  "existing_password": {
+    "message": "Stávající heslo"
+  },
+  "now": {
+    "message": "Nyní"
+  },
+  "danger": {
+    "message": "Pozor"
+  },
+  "today": {
+    "message": "Dnes"
+  },
+  "yesterday": {
+    "message": "Včera"
+  },
+  "this_week": {
+    "message": "Tento týden"
+  },
+  "this_month": {
+    "message": "Tento měsíc"
+  },
+  "last_week": {
+    "message": "Minulý týden"
+  },
+  "last_month": {
+    "message": "Minulý měsíc"
+  },
+  "last_seen_at": {
+    "message": "Naposledy viděni v %1$s"
+  },
+  "last_seen_relative": {
+    "message": "Naposledy viděni %1$s"
+  },
+  "last_seen_unknown": {
+    "message": "Naposledy viděni: Neznámo"
+  },
+  "self": {
+    "message": "Já"
+  },
+  "draft": {
+    "message": "Rozepsané"
+  },
+  "image": {
+    "message": "Obrázek"
+  },
+  "reply_noun": {
+    "message": "Odpověď"
+  },
+  "gif": {
+    "message": "GIF"
+  },
+  "sticker": {
+    "message": "Nálepka"
+  },
+  "add_to_sticker_collection": {
+    "message": "Přidat do sbírky nálepek"
+  },
+  "add_stickers_instructions": {
+    "message": "Přejete-li si přidat nálepky, klepněte na „Otevřít složku nálepek“, vytvořte podsložku pro balíček nálepek a přetáhněte do ní soubory obrázků a nálepek"
+  },
+  "open_sticker_folder": {
+    "message": "Otevřít složku nálepek"
+  },
+  "images": {
+    "message": "Obrázky"
+  },
+  "audio": {
+    "message": "Zvukové záznamy"
+  },
+  "voice_message": {
+    "message": "Hlasová zpráva"
+  },
+  "forwarded": {
+    "message": "Přeposlané"
+  },
+  "forwarded_message": {
+    "message": "Přeposlaná zpráva"
+  },
+  "forwarded_by": {
+    "message": "Přeposláno uživatelem %1$s"
+  },
+  "video": {
+    "message": "Videa"
+  },
+  "documents": {
+    "message": "Dokumenty"
+  },
+  "contact": {
+    "message": "Kontakt"
+  },
+  "bot": {
+    "message": "Robot"
+  },
+  "camera": {
+    "message": "Fotoaparát"
+  },
+  "capture": {
+    "message": "Spoušť"
+  },
+  "switch_camera": {
+    "message": "Přepnout kameru"
+  },
+  "toggle_fullscreen": {
+    "message": "Přepnout režim celé obrazovky"
+  },
+  "location": {
+    "message": "Poloha"
+  },
+  "locations": {
+    "message": "Polohy"
+  },
+  "gallery": {
+    "message": "Galerie"
+  },
+  "images_and_videos": {
+    "message": "Obrázky a videa"
+  },
+  "file": {
+    "message": "Soubor"
+  },
+  "files": {
+    "message": "Soubory"
+  },
+  "webxdc_app": {
+    "message": "Aplikace"
+  },
+  "webxdc_apps": {
+    "message": "Aplikace"
+  },
+  "webxdc_store_url": {
+    "message": "Adresa URL výběru aplikací"
+  },
+  "webxdc_store_url_explain": {
+    "message": "Pokud je nastavena, tato URL adresa bude použita pro výběr aplikací namísto té výchozí"
+  },
+  "home": {
+    "message": "Domů"
+  },
+  "games": {
+    "message": "Hry"
+  },
+  "tools": {
+    "message": "Nástroje"
+  },
+  "app_size": {
+    "message": "Velikost"
+  },
+  "app_date_published": {
+    "message": "Zveřejněno"
+  },
+  "add_to_chat": {
+    "message": "Přidat do chatu"
+  },
+  "browse": {
+    "message": "Procházet"
+  },
+  "unknown": {
+    "message": "Neznámá"
+  },
+  "green": {
+    "message": "Zelená"
+  },
+  "red": {
+    "message": "Červená"
+  },
+  "blue": {
+    "message": "Modrá"
+  },
+  "orange": {
+    "message": "Oranžová"
+  },
+  "cyan": {
+    "message": "Tyrkysová"
+  },
+  "purple": {
+    "message": "Purpurová"
+  },
+  "magenta": {
+    "message": "Fialová"
+  },
+  "white": {
+    "message": "Bílá"
+  },
+  "zoom": {
+    "message": "Zvětšit"
+  },
+  "extra_small": {
+    "message": "Velmi malá"
+  },
+  "small": {
+    "message": "Malá"
+  },
+  "normal": {
+    "message": "Normální"
+  },
+  "large": {
+    "message": "Velká"
+  },
+  "extra_large": {
+    "message": "Velmi velká"
+  },
+  "fast": {
+    "message": "Rychle"
+  },
+  "slow": {
+    "message": "Pomalu"
+  },
+  "menu_new_contact": {
+    "message": "Nový kontakt"
+  },
+  "menu_new_classic_contact": {
+    "message": "Přidat kontakt ručně"
+  },
+  "new_classic_contact_explain": {
+    "message": "Ručně přidané kontakty lze použít k posílání zpráv klasickým e-mailem bez garance koncového šifrování."
+  },
+  "menu_new_chat": {
+    "message": "Nový chat"
+  },
+  "menu_new_group": {
+    "message": "Nová skupina"
+  },
+  "chat_with": {
+    "message": "Chatovat s..."
+  },
+  "clone_chat": {
+    "message": "Klonovat chat"
+  },
+  "broadcast_list": {
+    "message": "Seznam vysílání"
+  },
+  "broadcast_lists": {
+    "message": "Seznamy vysílání"
+  },
+  "new_broadcast_list": {
+    "message": "Nový seznam vysílání"
+  },
+  "add_recipients": {
+    "message": "Přidat příjemce"
+  },
+  "edit_broadcast_list": {
+    "message": "Upravit seznam vysílání"
+  },
+  "broadcast_list_name": {
+    "message": "Název seznamu vysílání"
+  },
+  "please_enter_broadcast_list_name": {
+    "message": "Prosím, zadejte název seznamu vysílání."
+  },
+  "menu_send": {
+    "message": "Odeslat"
+  },
+  "menu_toggle_keyboard": {
+    "message": "Přepnout emoji klávesnici"
+  },
+  "menu_edit_group": {
+    "message": "Upravit skupinu"
+  },
+  "menu_group_name_and_image": {
+    "message": "Název a obrázek skupiny"
+  },
+  "menu_show_global_map": {
+    "message": "Všechny polohy"
+  },
+  "menu_archive_chat": {
+    "message": "Archivovat chat"
+  },
+  "menu_unarchive_chat": {
+    "message": "Obnovit chat z archivu"
+  },
+  "menu_add_attachment": {
+    "message": "Přidat přílohu"
+  },
+  "menu_leave_group": {
+    "message": "Opustit skupinu"
+  },
+  "menu_delete_chat": {
+    "message": "Smazat chat"
+  },
+  "clear_chat": {
+    "message": "Vyprázdnit chat"
+  },
+  "delete_contact": {
+    "message": "Smazat kontakt"
+  },
+  "menu_delete_location": {
+    "message": "Přejete si smazat tuto polohu?"
+  },
+  "menu_message_details": {
+    "message": "Informace o zprávě"
+  },
+  "menu_copy_to_clipboard": {
+    "message": "Kopírovat do schránky"
+  },
+  "share_invite_link": {
+    "message": "Sdílet odkaz s pozvánkou"
+  },
+  "share_invite_link_explain": {
+    "message": "Kdokoli s tímto odkazem si může zobrazit váš profil a začít s vámi chatovat. Sdílejte jej pouze s lidmi, kterým důvěřujete."
+  },
+  "invite_friends": {
+    "message": "Pozvat přátele"
+  },
+  "invite_friends_text": {
+    "message": "Kontaktujte mě na Delta Chatu:\n%1$s"
+  },
+  "menu_copy_selection_to_clipboard": {
+    "message": "Kopírovat výběr"
+  },
+  "menu_copy_link_to_clipboard": {
+    "message": "Kopírovat odkaz"
+  },
+  "menu_copy_text_to_clipboard": {
+    "message": "Kopírovat text"
+  },
+  "menu_copy_image_to_clipboard": {
+    "message": "Kopírovat obrázek"
+  },
+  "menu_copy_email_to_clipboard": {
+    "message": "Kopírovat e-mail"
+  },
+  "paste_from_clipboard": {
+    "message": "Vložit ze schránky"
+  },
+  "ask_copy_unopenable_link_to_clipboard": {
+    "message": "Odkaz \"%1$d\" nelze otevřít ve webovém prohlížeči. Přejete si jej zkopírovat do schránky? "
+  },
+  "menu_forward": {
+    "message": "Přeposlat zprávu"
+  },
+  "menu_reply": {
+    "message": "Odpovědět na zprávu"
+  },
+  "menu_mute": {
+    "message": "Ztlumit upozornění"
+  },
+  "menu_unmute": {
+    "message": "Obnovit upozornění"
+  },
+  "menu_export_attachment": {
+    "message": "Exportovat přílohu"
+  },
+  "menu_export_attachments": {
+    "message": "Exportovat přílohy"
+  },
+  "menu_all_media": {
+    "message": "Všechna multimédia"
+  },
+  "show_in_chat": {
+    "message": "Ukázat v chatu"
+  },
+  "show_app_in_chat": {
+    "message": "Zobrazit aplikaci v chatu"
+  },
+  "menu_share": {
+    "message": "Sdílet"
+  },
+  "block": {
+    "message": "Zablokovat"
+  },
+  "menu_block_contact": {
+    "message": "Zablokovat kontakt"
+  },
+  "menu_unblock_contact": {
+    "message": "Odblokovat kontakt"
+  },
+  "accept": {
+    "message": "Přijmout"
+  },
+  "menu_play": {
+    "message": "Přehrát"
+  },
+  "menu_pause": {
+    "message": "Pozastavit"
+  },
+  "menu_scroll_to_bottom": {
+    "message": "Přejet dolů"
+  },
+  "menu_scroll_to_top": {
+    "message": "Přejet nahoru"
+  },
+  "menu_help": {
+    "message": "Nápověda"
+  },
+  "what_is_webxdc": {
+    "message": "Co je Webxdc?"
+  },
+  "privacy_policy": {
+    "message": "Zásady ochrany osobních údajů"
+  },
+  "menu_select_all": {
+    "message": "Vybrat vše"
+  },
+  "select_chat": {
+    "message": "Vybrat chat"
+  },
+  "select_more": {
+    "message": "Vybrat další"
+  },
+  "menu_edit_name": {
+    "message": "Upravit jméno"
+  },
+  "edit_name_explain": {
+    "message": "Nastavte přezdívku, která se vám bude zobrazovat místo \"%1$s\". Chcete-li použít původní jméno kontaktu, ponechte prázdné."
+  },
+  "edit_name_placeholder": {
+    "message": "Přezdívka pro \"%1$s\""
+  },
+  "menu_settings": {
+    "message": "Nastavení"
+  },
+  "menu_advanced": {
+    "message": "Pokročilé"
+  },
+  "menu_view_profile": {
+    "message": "Zobrazit profil"
+  },
+  "menu_zoom_in": {
+    "message": "Přiblížit"
+  },
+  "menu_zoom_out": {
+    "message": "Oddálit"
+  },
+  "menu_save_log": {
+    "message": "Uložit protokol"
+  },
+  "menu_more_options": {
+    "message": "Další možnosti"
+  },
+  "menu_learn_spelling": {
+    "message": "Naučte se pravopis"
+  },
+  "menu_chat_audit_log": {
+    "message": "Auditní protokol chatu"
+  },
+  "jump_to_message": {
+    "message": "Přejít na zprávu"
+  },
+  "jump_to_original_message": {
+    "message": "Přejít na původní zprávu"
+  },
+  "copy_json": {
+    "message": "Kopírovat JSON"
+  },
+  "replace_draft": {
+    "message": "Nahradit rozepsanou zprávu"
+  },
+  "title_share_location": {
+    "message": "Sdílet polohu se všemi členy skupiny"
+  },
+  "device_talk": {
+    "message": "Zprávy v zařízení"
+  },
+  "device_talk_subtitle": {
+    "message": "Lokálně vygenerované zprávy"
+  },
+  "device_talk_explain": {
+    "message": "Zprávy v tomto chatu jsou generovány na vašem zařízení. Obsahují informace o aktualizacích a potížích při používání."
+  },
+  "device_talk_welcome_message2": {
+    "message": "Spojte se!\n\n🙌 Stiskněte \"QR kód\" na hlavní obrazovcé obou zařízení. Vyberte \"Naskenovat QR kód\" na jednom zařízení a namiřte jej na druhé\n\n🌍 Nejste-li ve stejné místnosti, naskenujte kód přes videohovor nebo nasdílejte odkaz z obrazovky \"Naskenovat QR kód\"\n\nPoté už si jen užívejte posílání zpráv na největší decentralizované síti všech dob: e-mailu. A navíc - narozdíl od jiných populárních aplikací - bez centralizované kontroly, sledování, či zaprodávání vás a vašich přátel, kolegů či rodin velkým organizacím."
+  },
+  "edit_contact": {
+    "message": "Upravit kontakt"
+  },
+  "pin_chat": {
+    "message": "Připnout chat"
+  },
+  "unpin_chat": {
+    "message": "Odepnout chat"
+  },
+  "pin": {
+    "message": "Připnout"
+  },
+  "unpin": {
+    "message": "Odepnout"
+  },
+  "ConversationFragment_quoted_message_not_found": {
+    "message": "Původní zpráva nenalezena"
+  },
+  "reply_privately": {
+    "message": "Odpovědět soukromě"
+  },
+  "source_code": {
+    "message": "Zdrojový kód"
+  },
+  "add_to_home_screen": {
+    "message": "Přidat na domovskou obrazovku"
+  },
+  "donate": {
+    "message": "Darovat"
+  },
+  "mute_for_one_hour": {
+    "message": "Ztlumit na 1 hodinu"
+  },
+  "mute_for_eight_hours": {
+    "message": "Ztlumit na 8 hodin"
+  },
+  "mute_for_one_day": {
+    "message": "Ztlumit na 1 den"
+  },
+  "mute_for_seven_days": {
+    "message": "Ztlumit na 7 dní"
+  },
+  "mute_forever": {
+    "message": "Ztlumit navždy"
+  },
+  "share_location_for_5_minutes": {
+    "message": "Na 5 minut"
+  },
+  "share_location_for_30_minutes": {
+    "message": "Na 30 minut"
+  },
+  "share_location_for_one_hour": {
+    "message": "Na 1 hodinu"
+  },
+  "share_location_for_two_hours": {
+    "message": "Na 2 hodiny"
+  },
+  "share_location_for_six_hours": {
+    "message": "Na 6 hodin"
+  },
+  "file_saved_to": {
+    "message": "Soubor uložen do \"%1$s\"."
+  },
+  "videochat": {
+    "message": "Videohovor"
+  },
+  "videochat_invite_user_to_videochat": {
+    "message": "Pozvat uživatele %1$s k videohovoru?"
+  },
+  "videochat_invite_user_hint": {
+    "message": "Toto vyžaduje kompatibilní aplikaci či prohlížeč na obou stranách."
+  },
+  "videochat_contact_invited_hint": {
+    "message": "Uživatel %1$s pozván k videohovoru."
+  },
+  "videochat_you_invited_hint": {
+    "message": "Odeslali jste pozvánku k videohovoru."
+  },
+  "videochat_tap_to_join": {
+    "message": "Připojit se stisknutím"
+  },
+  "videochat_tap_to_open": {
+    "message": "Otevřít stisknutím"
+  },
+  "videochat_instance": {
+    "message": "Instance pro videohovory"
+  },
+  "videochat_instance_placeholder": {
+    "message": "Vaše instance pro videohovory"
+  },
+  "videochat_instance_example": {
+    "message": "Příklad: https://your-server.org/$ROOM"
+  },
+  "videochat_instance_explain_2": {
+    "message": "Je-li tato volba povolena, můžete ve všech chatech spouštět videohovory. Vyžaduje kompatibilní aplikaci nebo prohlížeč na obou stranách."
+  },
+  "videochat_instance_from_qr": {
+    "message": "Použít \"%1$s\" ke zvaní na videohovory?\n\nJakmile je volba nastavena, můžete ve všech chatech spouštět videohovory. Předchozí hodnota bude tímto přepsána."
+  },
+  "videochat_invitation": {
+    "message": "Pozvánka k videohovoru"
+  },
+  "videochat_invitation_body": {
+    "message": "Byli jste pozváni k videohovoru, připojte se stisknutím %1$s"
+  },
+  "ask_leave_group": {
+    "message": "Opravdu si přejete opustit tuto skupinu?"
+  },
+  "ask_delete_named_chat": {
+    "message": "Smazat chat \"%1$s\" ze všech vašich zařízení?"
+  },
+  "ask_delete_message": {
+    "message": "Smazat tuto zprávu ze všech vašich zařízení?"
+  },
+  "ask_forward": {
+    "message": "Přejete si přeposlat zprávy do chatu %1$s?"
+  },
+  "ask_forward_multiple": {
+    "message": "Přejete si přeposlat zprávy do %1$d chatů?"
+  },
+  "ask_export_attachment": {
+    "message": "Uložením příloh je zpřístupníte ostatním aplikacím na tomto zařízení.\n\nPřejete si pokračovat?"
+  },
+  "ask_block_contact": {
+    "message": "Přejete si zablokovat tento kontakt?\n\nSoukromé zprávy a skupiny vytvořené zablokovanými kontakty budou skryty.\n\nV ostatních skupinách, ve kterých se zablokované kontakty nacházejí, se jejich zprávy budou zobrazovat i nadále."
+  },
+  "ask_unblock_contact": {
+    "message": "Přejete si odblokovat tento kontakt?"
+  },
+  "ask_delete_contacts": {
+    "message": "Přejete si smazat kontakty?\n\nKontakty s probíhajícími chaty a kontakty ze systémového adresáře nelze smazat permanentně."
+  },
+  "ask_delete_contact": {
+    "message": "Přejete si smazat kontakt %1$s?\n\nKontakty s probíhajícími chaty a kontakty ze systémového adresáře nelze smazat permanentně."
+  },
+  "ask_start_chat_with": {
+    "message": "Přejete si chatovat s uživatelem %1$s?"
+  },
+  "ask_remove_members": {
+    "message": "Přejete si odstranit uživatele %1$s ze skupiny?"
+  },
+  "ask_remove_from_broadcast": {
+    "message": "Přejete si odstranit uživatele %1$s ze seznamu vysílání?"
+  },
+  "open_url_confirmation": {
+    "message": "Přejete si otevřít tento odkaz?"
+  },
+  "contacts_title": {
+    "message": "Kontakty"
+  },
+  "contacts_enter_name_or_email": {
+    "message": "Zadejte jméno nebo e-mail"
+  },
+  "contacts_type_email_above": {
+    "message": "Zadejte e-mail výše"
+  },
+  "contacts_empty_hint": {
+    "message": "Žádné kontakty."
+  },
+  "chat_archived_chats_title": {
+    "message": "Archivované chaty"
+  },
+  "chat_please_enter_message": {
+    "message": "Zadejte zprávu, prosím."
+  },
+  "chat_camera_unavailable": {
+    "message": "Fotoaparát je nedostupný."
+  },
+  "chat_unable_to_record_audio": {
+    "message": "Nelze nahrávat zvuk."
+  },
+  "chat_new_one_to_one_hint": {
+    "message": "Poslat zprávu uživateli %1$s."
+  },
+  "chat_new_broadcast_hint": {
+    "message": "Seznam vysílání slouží k posílání zpráv příjemcům v chatu, který je pro ně pouze pro čtení."
+  },
+  "chat_new_group_hint": {
+    "message": "Ostatní tuto skupinu uvidí až poté, co odešlete první zprávu."
+  },
+  "chat_record_slide_to_cancel": {
+    "message": "Zrušit tahem"
+  },
+  "chat_record_explain": {
+    "message": "Pro nahrání hlasové zprávy stiskněte a držte ikonu mikrofonu; uvolněte pro odeslání."
+  },
+  "chat_no_chats_yet_title": {
+    "message": "Žádné chaty.\nStiskem \"+\" založte nový chat."
+  },
+  "chat_all_archived": {
+    "message": "Všechny chaty jsou archivovány.\nStiskem \"+\" založte nový chat."
+  },
+  "chat_share_with_title": {
+    "message": "Sdílet s"
+  },
+  "chat_input_placeholder": {
+    "message": "Zpráva"
+  },
+  "chat_archived_label": {
+    "message": "Archivováno"
+  },
+  "chat_request_label": {
+    "message": "Žádost"
+  },
+  "chat_no_messages": {
+    "message": "Žádné zprávy."
+  },
+  "chat_self_talk_subtitle": {
+    "message": "Zprávy poslané sobě"
+  },
+  "archive_empty_hint": {
+    "message": "Zde se zobrazí archivované chaty."
+  },
+  "saved_messages": {
+    "message": "Uložené zprávy"
+  },
+  "saved_messages_explain": {
+    "message": "Sem si můžete:\n\n• přeposílat zprávy pro rychlý přístup,\n\n• zapisovat textové i hlasové poznámky,\n\n• ukládat multimédia"
+  },
+  "saved": {
+    "message": "Uložené"
+  },
+  "save_as": {
+    "message": "Uložit jako"
+  },
+  "retry_send": {
+    "message": "Opakovat pokus o zaslání zprávy"
+  },
+  "messaging_disabled_not_in_group": {
+    "message": "Abyste mohli poslat zprávu, musíte být členem této skupiny. Požádejte jiného člena, aby vás přidal."
+  },
+  "messaging_disabled_mailing_list": {
+    "message": "Posílání zpráv do e-mailových seznamů zatím není podporováno"
+  },
+  "cannot_display_unsuported_file_type": {
+    "message": "Nelze zobrazit tento typ souboru: %s"
+  },
+  "attachment_failed_to_load": {
+    "message": "Načtení přílohy se nezdařilo"
+  },
+  "lock_recording": {
+    "message": "Uzamknout nahrávání"
+  },
+  "mailing_list": {
+    "message": "E-mailový seznam"
+  },
+  "mailing_list_profile_info": {
+    "message": "Změny názvu a obrázku e-mailového seznamu se projeví pouze na tomto zařízení."
+  },
+  "start_app": {
+    "message": "Spustit..."
+  },
+  "accept_request_first": {
+    "message": "Nejprve prosím přijměte žádost o chat."
+  },
+  "send_file_to": {
+    "message": "Odeslat \"%1$s\"..."
+  },
+  "send_message_to": {
+    "message": "Odeslat zprávu..."
+  },
+  "enable_realtime": {
+    "message": "Real-time aplikace"
+  },
+  "enable_realtime_explain": {
+    "message": "Umožnit aplikacím sdíleným v chatech, aby navazovaly spojení v reálném čase. Tato volba umožní vašim kontaktům zjistit vaši IP adresu, když nějakou aplikaci spustíte."
+  },
+  "filter_map_on_time": {
+    "message": "Zobrazit polohy v časovém úseku"
+  },
+  "show_location_traces": {
+    "message": "Zobrazit trasy"
+  },
+  "add_poi": {
+    "message": "Odeslat bod zájmu"
+  },
+  "chat_audit_log_empty_message": {
+    "message": "Zde se zobrazují systémové zprávy pro tento chat"
+  },
+  "chat_audit_log_title": {
+    "message": "Auditní protokol pro chat %1$s"
+  },
+  "chat_audit_log_description": {
+    "message": "Zobrazuje pouze systémové a informační zprávy; užitečné pro nalezení posledních akcí v chatu bez procházení mnoha zpráv."
+  },
+  "open_external_url_trust_domain": {
+    "message": "U %1$s se již znovu neptat"
+  },
+  "puny_code_warning_header": {
+    "message": "Byl nalezen podezřelý odkaz"
+  },
+  "puny_code_warning_question": {
+    "message": "Opravdu si přejete navštívit stránku %1$s?"
+  },
+  "puny_code_warning_description": {
+    "message": "Tento odkaz může obsahovat znaky zaměněné za podobně vypadající znaky z cizích abeced. Odkaz označený jako %1$s vás navede na stránku %2$s, což je normální pro znaky mimo anglickou latinku. Pokud neočekáváte adresu s takovýmito znaky, odkaz může být škodlivý."
+  },
+  "search": {
+    "message": "Hledat"
+  },
+  "search_in_chat": {
+    "message": "Hledat v chatu"
+  },
+  "search_files": {
+    "message": "Hledat soubory"
+  },
+  "search_explain": {
+    "message": "Hledat chaty, kontakty a zprávy"
+  },
+  "search_no_result_for_x": {
+    "message": "Žádný výsledek pro \"%s\""
+  },
+  "search_unread": {
+    "message": "Nepřečtené"
+  },
+  "group_name": {
+    "message": "Název skupiny"
+  },
+  "group_avatar": {
+    "message": "Obrázek skupiny"
+  },
+  "remove_group_image": {
+    "message": "Odstranit obrázek skupiny"
+  },
+  "change_group_image": {
+    "message": "Změnit obrázek skupiny"
+  },
+  "group_create_button": {
+    "message": "Vytvořit skupinu"
+  },
+  "group_please_enter_group_name": {
+    "message": "Prosím, vložte název pro tuto skupinu."
+  },
+  "group_add_members": {
+    "message": "Přidat členy"
+  },
+  "group_self_not_in_group": {
+    "message": "Pro tuto akci je nutné být členem této skupiny."
+  },
+  "profile_encryption": {
+    "message": "Šifrování"
+  },
+  "profile_shared_chats": {
+    "message": "Sdílené chaty"
+  },
+  "related_chats": {
+    "message": "Související chaty"
+  },
+  "past_members": {
+    "message": "Bývalí členové"
+  },
+  "tab_contact": {
+    "message": "Kontakt"
+  },
+  "tab_group": {
+    "message": "Skupina"
+  },
+  "tab_gallery": {
+    "message": "Galerie"
+  },
+  "tab_docs": {
+    "message": "Dokumenty"
+  },
+  "tab_links": {
+    "message": "Odkazy"
+  },
+  "tab_map": {
+    "message": "Mapa"
+  },
+  "tab_gallery_empty_hint": {
+    "message": "Zde se zobrazí obrázky a videa sdílené v tomto chatu."
+  },
+  "tab_docs_empty_hint": {
+    "message": "Zde se zobrazí dokumenty, hudba a další soubory sdílené v tomto chatu."
+  },
+  "tab_image_empty_hint": {
+    "message": "Zde se zobrazí obrázky sdílené v tomto chatu."
+  },
+  "tab_video_empty_hint": {
+    "message": "Zde se zobrazí videa sdílená v tomto chatu."
+  },
+  "tab_audio_empty_hint": {
+    "message": "Zde se zobrazí zvukové soubory a hlasové zprávy sdílené v tomto chatu."
+  },
+  "tab_webxdc_empty_hint": {
+    "message": "Zde se zobrazí aplikace sdílené v tomto chatu."
+  },
+  "tab_all_media_empty_hint": {
+    "message": "Zde se zobrazí multimédia sdílená v jakémkoli chatu."
+  },
+  "all_files_empty_hint": {
+    "message": "Zde se zobrazí dokumenty a další soubory sdílené v jakémkoli chatu."
+  },
+  "all_apps_empty_hint": {
+    "message": "Zde se zobrazí aplikace sdílené v jakémkoli chatu."
+  },
+  "media_preview": {
+    "message": "Náhled multimédia"
+  },
+  "aspect_ratio_grid": {
+    "message": "Mřížka zachovávající poměry stran"
+  },
+  "square_grid": {
+    "message": "Mřížka čtverců"
+  },
+  "send_message": {
+    "message": "Odeslat zprávu"
+  },
+  "aeap_addr_changed": {
+    "message": "Uživatel %1$s změnil svou adresu z %2$s na %3$s"
+  },
+  "aeap_explanation": {
+    "message": "Změnili jste svou e-mailovou adresu z %1$s na %2$s.\n\nPokud nyní pošlete zprávu ověřené skupině, všem kontaktům v ní se vaše adresa aktualizuje na novou.\n\nJe důrazně doporučeno, abyste u svého starého poskytovatele nastavili přesměrování všech e-mailů na novou adresu, jinak byste mohli přijít o zprávy od kontaktů, které vaši novou adresu dosud nedostaly. "
+  },
+  "multidevice_title": {
+    "message": "Přidat další zařízení"
+  },
+  "multidevice_same_network_hint": {
+    "message": "Ujistěte se, že jsou obě zařízení na stejné Wi-Fi či síti"
+  },
+  "multidevice_this_creates_a_qr_code": {
+    "message": "Tímto bude vytvořen QR kód, který můžete naskenovat dalším zařízením ke zkopírování profilu.\n\nUjistěte se, že následující obrazovku neuvidí žádný nechtěný přihlížející či kamera."
+  },
+  "multidevice_install_dc_on_other_device": {
+    "message": "Nainstalujte si Delta Chat do druhého zařízení (https://get.delta.chat)"
+  },
+  "multidevice_tap_scan_on_other_device": {
+    "message": "Spusťte Delta Chat, klepněte na „Již mám svůj profil / Přidat jako další zařízení“ a naskenujte následující kód"
+  },
+  "multidevice_qr_subtitle": {
+    "message": "Pro připojení zařízení k %1$s naskenujte"
+  },
+  "multidevice_receiver_title": {
+    "message": "Přidat jako další zařízení"
+  },
+  "multidevice_open_settings_on_other_device": {
+    "message": "Na hlavním zařízení, otevřete \"Nastavení / Přidat další zařízení\" a naskenujte kód, který se na něm zobrazí"
+  },
+  "multidevice_receiver_scanning_ask": {
+    "message": "Přejete si zkopírovat profil z jiného zařízení na toto?"
+  },
+  "multidevice_receiver_needs_update": {
+    "message": "Profil, který se chystáte importovat, je z novější verze aplikace Delta Chat.\n\nAby bylo možné pokračovat v nastavování tohoto zařízení, aktualizujte na něm prosím Delta Chat na nejnovější verzi."
+  },
+  "multidevice_abort": {
+    "message": "Přerušit nastavování dalšího zařízení?"
+  },
+  "multidevice_abort_will_invalidate_copied_qr": {
+    "message": "Tímto bude zneplatněn QR kód zkopírovaný ve schránce."
+  },
+  "multidevice_transfer_done_devicemsg": {
+    "message": "ℹ️ Profil byl přenesen na další zařízení."
+  },
+  "preparing_account": {
+    "message": "Připravování profilu..."
+  },
+  "transferring": {
+    "message": "Přenášení..."
+  },
+  "troubleshooting": {
+    "message": "Řešení problémů"
+  },
+  "incoming_messages": {
+    "message": "Příchozí zprávy"
+  },
+  "outgoing_messages": {
+    "message": "Odchozí zprávy"
+  },
+  "storage_on_domain": {
+    "message": "Úložiště na %1$s"
+  },
+  "connectivity": {
+    "message": "Připojení"
+  },
+  "connectivity_not_connected": {
+    "message": "Nepřipojeno"
+  },
+  "connectivity_connecting": {
+    "message": "Připojování..."
+  },
+  "connectivity_updating": {
+    "message": "Aktualizace..."
+  },
+  "connectivity_connected": {
+    "message": "Připojeno"
+  },
+  "sending": {
+    "message": "Odesílání..."
+  },
+  "last_msg_sent_successfully": {
+    "message": "Poslední zpráva úspěšně odeslána."
+  },
+  "not_supported_by_provider": {
+    "message": "Nepodporováno vaším poskytovatelem."
+  },
+  "messages": {
+    "message": "Zprávy"
+  },
+  "part_of_total_used": {
+    "message": "Zaplněno %1$s z %2$s"
+  },
+  "onboarding_create_instant_account": {
+    "message": "Vytvořit nový profil"
+  },
+  "onboarding_alternative_logins": {
+    "message": "Již mám svůj profil"
+  },
+  "manual_account_setup_option": {
+    "message": "Přihlášení ke klasickému e-mailu"
+  },
+  "instant_onboarding_title": {
+    "message": "Váš profil"
+  },
+  "instant_onboarding_agree_default2": {
+    "message": "Zásady ochrany osobních údajů pro %1$s"
+  },
+  "instant_onboarding_agree_instance": {
+    "message": "O profilech na %1$s"
+  },
+  "instant_onboarding_create": {
+    "message": "Souhlasím, vytvořit profil"
+  },
+  "instant_onboarding_show_more_instances": {
+    "message": "Použít jiný server"
+  },
+  "instant_onboarding_other_server": {
+    "message": "Seznam chatmail serverů"
+  },
+  "instant_onboarding_group_info": {
+    "message": "Založit profil k připojení ke skupině \"%1$s\"."
+  },
+  "instant_onboarding_contact_info": {
+    "message": "Založit profil k chatování s uživatelem %1$s."
+  },
+  "instant_onboarding_confirm_contact": {
+    "message": "Přejete si založit nový profil a začít chatovat s uživatelem %1$s?"
+  },
+  "instant_onboarding_confirm_group": {
+    "message": "Přejete si založit nový profil a připojit se k chatovací skupině \"%1$s\"?"
+  },
+  "welcome_chat_over_email": {
+    "message": "Zabezpečený decentralizovaný chat"
+  },
+  "scan_invitation_code": {
+    "message": "Naskenovat kód pozvánky"
+  },
+  "login_title": {
+    "message": "Přihlaš se"
+  },
+  "login_header": {
+    "message": "Přihlašte se ke svému e-mailovému účtu"
+  },
+  "login_explain": {
+    "message": "Přihlásit se se stávajícím účtem pro e-mail."
+  },
+  "login_subheader": {
+    "message": "Pro standardní poskytovatele jsou nastavení dopněna automaticky. Někdy je potřeba povolit IMAP ve webovém rozhraní. Potřebujete-li pomoc, obraťte se na svého poskytovatele e-mailu nebo přátele."
+  },
+  "login_no_servers_hint": {
+    "message": "Delta Chat nesbírá uživatelská data, vše zůstává na vašem zařízení."
+  },
+  "login_inbox": {
+    "message": "Příchozí"
+  },
+  "login_imap_login": {
+    "message": "IMAP uživatelské jméno"
+  },
+  "login_imap_server": {
+    "message": "IMAP server"
+  },
+  "login_imap_port": {
+    "message": "IMAP port"
+  },
+  "login_imap_security": {
+    "message": "IMAP zabezpečení"
+  },
+  "login_outbox": {
+    "message": "Odchozí"
+  },
+  "login_smtp_login": {
+    "message": "SMTP uživatelské jméno"
+  },
+  "login_smtp_password": {
+    "message": "SMTP heslo"
+  },
+  "login_smtp_server": {
+    "message": "SMTP server"
+  },
+  "login_smtp_port": {
+    "message": "SMTP port"
+  },
+  "login_smtp_security": {
+    "message": "SMTP zabezpečení"
+  },
+  "login_auth_method": {
+    "message": "Metoda autorizace"
+  },
+  "proxy_settings": {
+    "message": "Proxy server"
+  },
+  "proxy_use_proxy": {
+    "message": "Použít proxy server"
+  },
+  "proxy_add": {
+    "message": "Přidat proxy server"
+  },
+  "proxy_add_explain": {
+    "message": "Podporované typy proxy serverů: HTTP(S), SOCKS5 a Shadowsocks."
+  },
+  "proxy_add_url_hint": {
+    "message": "Sem vložte odkaz na proxy server"
+  },
+  "proxy_invalid": {
+    "message": "Neplatný nebo nepodporovaný proxy server"
+  },
+  "proxy_list_header": {
+    "message": "Uložené proxy servery"
+  },
+  "proxy_delete": {
+    "message": "Odstranit proxy server"
+  },
+  "proxy_delete_explain": {
+    "message": "Opravdu si přejete odstranit \"%1$s\"?"
+  },
+  "proxy_use_proxy_confirm": {
+    "message": "Přejete si použít proxy server \"%1$s\"?"
+  },
+  "proxy_share_explain": {
+    "message": "Vaši přátele si mohou tento proxy server přidat naskenováním tohoto QR kódu."
+  },
+  "proxy_share_link": {
+    "message": "Sdílet odkaz"
+  },
+  "login_info_oauth2_title": {
+    "message": "Pokračovat se zjednodušeným nastavením?"
+  },
+  "login_info_oauth2_text": {
+    "message": "Zadaný e-mail podporuje zjednodušené nastavení (OAuth 2.0).\n\nV následujícím kroku, prosíme, povolte Delta Chatu chovat se jako aplikace typu Chat přes e-mail.\n\nDelta Chat nesbírá uživatelská data, vše zůstává na vašem zařízení."
+  },
+  "login_certificate_checks": {
+    "message": "Kontroly certifikátu"
+  },
+  "login_error_mail": {
+    "message": "Prosím, zadejte platnou e-mailovou adresu"
+  },
+  "login_error_server": {
+    "message": "Prosím, zadejte platný server / IP adresu"
+  },
+  "login_error_port": {
+    "message": "Prosím, zadejte platný port (1–65535)"
+  },
+  "login_error_required_fields": {
+    "message": "Prosím, zadejte platnou e-mailovou adresu a heslo"
+  },
+  "import_backup_title": {
+    "message": "Obnovit ze zálohy"
+  },
+  "import_backup_ask": {
+    "message": "Záloha nalezena v \"%1$s\"\n\nPřejete si soubor načíst a použít všechna jeho data a nastavení?"
+  },
+  "import_backup_no_backup_found": {
+    "message": "Žádná záloha nebyla nalezena. \n\nZkopírujte zálohu do \"%1$s\" a zkuste to znovu. Můžete také stisknout \"Začít...\"  a pokračovat běžným postupem pro nastavení aplikace."
+  },
+  "login_error_cannot_login": {
+    "message": "Přihlášení jako \"%1$s\" selhalo. Zkontrolujte si prosím ještě jednou e-mail a heslo."
+  },
+  "accept_invalid_certificates": {
+    "message": "Přijmout neplatné certifikáty"
+  },
+  "switch_account": {
+    "message": "Přepni účet"
+  },
+  "add_account": {
+    "message": "Přidej účet"
+  },
+  "profile_tag": {
+    "message": "Značka profilu"
+  },
+  "profile_tag_hint": {
+    "message": "např. práce, nebo rodina"
+  },
+  "profile_tag_explain": {
+    "message": "Nastavte si značku, kterou uvidíte pouze vy; pro snazší rozlišování mezi vašimi profily."
+  },
+  "move_to_top": {
+    "message": "Přesunout nahoru"
+  },
+  "delete_account": {
+    "message": "Smazat účet"
+  },
+  "delete_account_ask": {
+    "message": "Opravdu si přejete smazat data svého účtu?"
+  },
+  "delete_account_explain_with_name": {
+    "message": "Všechna data účtu \"%s\" budou z tohoto zařízení smazána, včetně nastavení koncového šifrování, kontaktů, hovorů, zpráv a multimédií. Tuto akci nelze vrátit zpět."
+  },
+  "unconfigured_account": {
+    "message": "Nenakonfigurovaný profil"
+  },
+  "unconfigured_account_hint": {
+    "message": "Otevřete profil, abyste jej mohli nakonfigurovat."
+  },
+  "try_connect_now": {
+    "message": "Nyní se zkuste připojit"
+  },
+  "sync_all": {
+    "message": "Synchronizovat vše"
+  },
+  "configuration_failed_with_error": {
+    "message": "Nastavení selhalo. Chyba: %1$s"
+  },
+  "forward_to": {
+    "message": "Přeposlat..."
+  },
+  "ask_send_files_to_chat": {
+    "message": "Poslat %1$d soubory do chatu \"%2$s\"?"
+  },
+  "ask_send_files_to_selected_chats": {
+    "message": "Poslat %1$d soubor(y) do %2$d chatu?"
+  },
+  "videos_sent_without_recoding": {
+    "message": "(Videa se posílají jako původní velké soubory. Pokud si přejete posílat videa jako menší soubory, přiložte je odděleně)"
+  },
+  "share_text_multiple_chats": {
+    "message": "Poslat tento text do %1$d chatů?\n\n\"%2$s\""
+  },
+  "share_abort": {
+    "message": "Sdílení přerušeno kvůli chybějícím oprávnění."
+  },
+  "pref_using_custom": {
+    "message": "Nastaven vlastní: %s"
+  },
+  "pref_using_default": {
+    "message": "Nastaven výchozí: %s"
+  },
+  "pref_profile_info_headline": {
+    "message": "Přehled účtu"
+  },
+  "pref_profile_photo": {
+    "message": "Profilový obrázek"
+  },
+  "pref_blocked_contacts": {
+    "message": "Blokované kontakty"
+  },
+  "blocked_empty_hint": {
+    "message": "Zablokované kontakty se zobrazí zde."
+  },
+  "pref_password_and_account_settings": {
+    "message": "Heslo a účet"
+  },
+  "pref_who_can_see_profile_explain": {
+    "message": "Váš profilový obrázek, jméno a bio budou odeslány společně s vašimi zprávami ostatním uživatelům."
+  },
+  "pref_your_name": {
+    "message": "Vaše jméno"
+  },
+  "pref_default_status_label": {
+    "message": "Bio"
+  },
+  "pref_enter_sends": {
+    "message": "Enter odesílá"
+  },
+  "pref_enter_sends_explain": {
+    "message": "Stisk klávesy Enter odešle zprávu"
+  },
+  "pref_outgoing_media_quality": {
+    "message": "Kvalita odesílaných multimédií"
+  },
+  "pref_outgoing_balanced": {
+    "message": "Vyvážená"
+  },
+  "pref_outgoing_worse": {
+    "message": "Horší kvalita, malá velikost"
+  },
+  "pref_vibrate": {
+    "message": "Vibrace"
+  },
+  "pref_screen_security": {
+    "message": "Zabezpečení obrazovky"
+  },
+  "pref_screen_security_explain": {
+    "message": "Požádat systém o blokování snímků obrazovky v seznamu nedávných aplikací a uvnitř aplikace"
+  },
+  "pref_screen_security_please_restart_hint": {
+    "message": "Aby se volba zabezpečení obrazovky projevila, restartujte prosím aplikaci."
+  },
+  "pref_notifications": {
+    "message": "Oznámení"
+  },
+  "pref_mention_notifications": {
+    "message": "Zmínky"
+  },
+  "pref_mention_notifications_explain": {
+    "message": "Ve ztlumených skupinách oznamovat zprávy směřované na vás, např. odpovědi či reakce"
+  },
+  "pref_notifications_show": {
+    "message": "Zobrazit"
+  },
+  "pref_notifications_priority": {
+    "message": "Priorita"
+  },
+  "pref_notifications_explain": {
+    "message": "Povolit systémová oznámení nových zpráv"
+  },
+  "pref_show_notification_content": {
+    "message": "Zobrazit obsah zprávy uvnitř oznámení"
+  },
+  "pref_show_notification_content_explain": {
+    "message": "Zobrazit odesílatele a první slova zprávy uvnitř oznámení"
+  },
+  "pref_led_color": {
+    "message": "Barva diody"
+  },
+  "pref_sound": {
+    "message": "Zvuk"
+  },
+  "pref_silent": {
+    "message": "Ticho"
+  },
+  "pref_privacy": {
+    "message": "Soukromí"
+  },
+  "pref_chats_and_media": {
+    "message": "Chaty a multimédia"
+  },
+  "pref_system_default": {
+    "message": "Podle systému"
+  },
+  "pref_light_theme": {
+    "message": "Světlý"
+  },
+  "pref_dark_theme": {
+    "message": "Tmavý"
+  },
+  "pref_appearance": {
+    "message": "Vzhled"
+  },
+  "pref_theme": {
+    "message": "Téma vzhledu"
+  },
+  "pref_language": {
+    "message": "Jazyk"
+  },
+  "pref_use_system_ui_font": {
+    "message": "Použít systémové písmo"
+  },
+  "pref_incognito_keyboard": {
+    "message": "Chráněná klávesnice"
+  },
+  "pref_incognito_keyboard_explain": {
+    "message": "Požádat systém o použití klávesnice s vypnutým učením slov"
+  },
+  "pref_read_receipts": {
+    "message": "Potvrzení o přečtení"
+  },
+  "pref_read_receipts_explain": {
+    "message": "Při vypnutém čtení potvrzení se nezobrazí potvrzení o příjetí od ostatních."
+  },
+  "pref_server": {
+    "message": "Server"
+  },
+  "pref_encryption": {
+    "message": "Šifrování"
+  },
+  "pref_manage_keys": {
+    "message": "Správa klíčů"
+  },
+  "pref_use_system_emoji": {
+    "message": "Používat systémová emoji"
+  },
+  "pref_use_system_emoji_explain": {
+    "message": "Vypnout vestavěná emoji Data Chatu"
+  },
+  "pref_show_system_contacts": {
+    "message": "Čtení systémových kontaktů"
+  },
+  "pref_show_system_contacts_explain": {
+    "message": "Nabízet vytváření chatů s kontakty z adresáře. Pro některé poskytovatele je nejprve nutné nastavit koncové šifrování."
+  },
+  "pref_app_access": {
+    "message": "Přístup aplikace"
+  },
+  "pref_chats": {
+    "message": "Chaty"
+  },
+  "pref_in_chat_sounds": {
+    "message": "Zvuky v rámci chatu"
+  },
+  "pref_view_log": {
+    "message": "Zobrazit protokol"
+  },
+  "pref_saved_log": {
+    "message": "Protokol uložen do složky \"Downloads\""
+  },
+  "pref_save_log_failed": {
+    "message": "Uložení protokolu selhalo"
+  },
+  "pref_log_header": {
+    "message": "Protokol"
+  },
+  "pref_other": {
+    "message": "Ostatní"
+  },
+  "pref_backup": {
+    "message": "Záloha"
+  },
+  "pref_backup_explain": {
+    "message": "Zálohovat chaty na externí úložiště"
+  },
+  "pref_backup_export_explain": {
+    "message": "Záloha vám pomůže s novou instalací na tomto či jiném zařízení.\n\nZáloha bude obsahovat všechny zprávy, kontakty a chaty, a nastavení automatického koncového šifrování. Soubor se zálohou uchovávejte na bezpečném místě, nebo jej co nejdříve smažte."
+  },
+  "pref_backup_export_x": {
+    "message": "Exportovat %1$s"
+  },
+  "pref_backup_export_all": {
+    "message": "Exportovat všech %1$d profilů"
+  },
+  "pref_backup_export_start_button": {
+    "message": "Spustit zálohu"
+  },
+  "pref_backup_written_to_x": {
+    "message": "Záloha úspěšně zapsána v \"%1$s\""
+  },
+  "pref_managekeys_menu_title": {
+    "message": "Správa klíčů"
+  },
+  "pref_managekeys_export_secret_keys": {
+    "message": "Exportovat tajné klíče"
+  },
+  "pref_managekeys_export_explain": {
+    "message": "Exportovat tajné klíče do \"%1$s\"?"
+  },
+  "pref_managekeys_import_secret_keys": {
+    "message": "Importovat tajné klíče"
+  },
+  "pref_managekeys_import_explain": {
+    "message": "Načíst tajné klíče z \"%1$s\"?\n\n• Stávající klíče nebudou smazány\n\n• Klíč načtený jako poslední bude použit jako výchozí, pokud název souboru nebsahuje slovo \"legacy\"."
+  },
+  "pref_managekeys_secret_keys_exported_to_x": {
+    "message": "Tajné klíče úspěšně zapsány v \"%1$s\"."
+  },
+  "pref_managekeys_secret_keys_imported_from_x": {
+    "message": "Tajné klíče načteny z \"%1$s\"."
+  },
+  "pref_background": {
+    "message": "Pozadí"
+  },
+  "pref_background_btn_default": {
+    "message": "Použít výchozí obrázek"
+  },
+  "pref_background_btn_gallery": {
+    "message": "Vybrat z galerie"
+  },
+  "pref_imap_folder_handling": {
+    "message": "Použití složek z IMAP"
+  },
+  "pref_imap_folder_warn_disable_defaults": {
+    "message": "Při změně této volby se ujistěte, že váš server a ostatní klientské aplikace mají odpovídající nastavení.\n\nJinak může vše přestat fungovat."
+  },
+  "pref_watch_sent_folder": {
+    "message": "Sledovat složku Odeslané"
+  },
+  "pref_send_copy_to_self": {
+    "message": "Posílat si kopie"
+  },
+  "pref_send_copy_to_self_explain": {
+    "message": "Tato volba je potřebná, pokud je tento účet používán na více zařízeních."
+  },
+  "pref_auto_folder_moves": {
+    "message": "Automaticky přesouvat do složky DeltaChat "
+  },
+  "pref_auto_folder_moves_explain": {
+    "message": "Zprávy chatů jsou přesouvány, aby nezahlcovaly složku Doručené"
+  },
+  "pref_only_fetch_mvbox_title": {
+    "message": "Načítat pouze ze složky DeltaChat"
+  },
+  "pref_only_fetch_mvbox_explain": {
+    "message": "Ignorovat ostatní složky. Vyžaduje, aby váš server přesouval zprávy chatu do složky DeltaChat."
+  },
+  "pref_show_emails": {
+    "message": "Zobrazovat běžné e-maily"
+  },
+  "pref_show_emails_no": {
+    "message": "Ne, pouze chaty"
+  },
+  "pref_show_emails_accepted_contacts": {
+    "message": "Pro přijaté kontakty"
+  },
+  "pref_show_emails_all": {
+    "message": "Vše"
+  },
+  "pref_experimental_features": {
+    "message": "Experimentální funkce "
+  },
+  "pref_on_demand_location_streaming": {
+    "message": "Streamování polohy na vyžádání"
+  },
+  "pref_developer_mode": {
+    "message": "Vývojový režim"
+  },
+  "pref_developer_mode_explain": {
+    "message": "Povolí debugovací volby a může aplikaci učinit méně stabilní. Pouze pro vývojáře."
+  },
+  "pref_background_default": {
+    "message": "Výchozí obrázek"
+  },
+  "pref_background_default_color": {
+    "message": "Výchozí barva"
+  },
+  "pref_background_custom_image": {
+    "message": "Vlastní obrázek"
+  },
+  "pref_background_custom_color": {
+    "message": "Vlastní barva"
+  },
+  "export_aborted": {
+    "message": "Export přerušen."
+  },
+  "auto_download_messages": {
+    "message": "Automatické stahování zpráv"
+  },
+  "up_to_x": {
+    "message": "Do %1$s"
+  },
+  "up_to_x_most_worse_quality_images": {
+    "message": "Do %1$s, většina obrázků horší kvality"
+  },
+  "up_to_x_most_balanced_quality_images": {
+    "message": "Do %1$s, většina obrázků vyvážené kvality"
+  },
+  "download_failed": {
+    "message": "Stahování selhalo"
+  },
+  "n_bytes_message": {
+    "message": "%1$s zpráva"
+  },
+  "download_max_available_until": {
+    "message": "Stahovat dostupné maximum do %1$s"
+  },
+  "profile_image_select": {
+    "message": "Vybrat profilový obrázek"
+  },
+  "select_your_new_profile_image": {
+    "message": "Vyberte si svůj nový profilový obrázek"
+  },
+  "profile_image_delete": {
+    "message": "Smazat profilový obrázek"
+  },
+  "pref_show_tray_icon": {
+    "message": "Zobrazit ikonu v oznamovací oblasti"
+  },
+  "pref_edit_profile": {
+    "message": "Upravit profil"
+  },
+  "disable_imap_idle": {
+    "message": "Zakázat IMAP IDLE"
+  },
+  "disable_imap_idle_explain": {
+    "message": "Nepoužívat rozšíření IMAP IDLE ani když jej server podporuje. Zapnutí této volby zvýší prodlevu při získávání zpráv, použijte ji jen pro testování."
+  },
+  "send_stats_to_devs": {
+    "message": "Odeslat statistiky vývojářům Delta Chatu"
+  },
+  "emoji_search_results": {
+    "message": "Výsledky hledání"
+  },
+  "emoji_not_found": {
+    "message": "Emoji nenalezeno"
+  },
+  "emoji_recent": {
+    "message": "Nedávno použité"
+  },
+  "emoji_people": {
+    "message": "Lidé a tělo"
+  },
+  "emoji_nature": {
+    "message": "Zvířata a příroda"
+  },
+  "emoji_foods": {
+    "message": "Jídlo a pití"
+  },
+  "emoji_activity": {
+    "message": "Aktivity"
+  },
+  "emoji_places": {
+    "message": "Cestování a místa"
+  },
+  "emoji_objects": {
+    "message": "Objekty"
+  },
+  "emoji_symbols": {
+    "message": "Symboly"
+  },
+  "emoji_flags": {
+    "message": "Vlajky"
+  },
+  "reactions": {
+    "message": "Reakce"
+  },
+  "react": {
+    "message": "Reagovat"
+  },
+  "reaction_by_you": {
+    "message": "Dali jste %1$s na \"%2$s\""
+  },
+  "reaction_by_other": {
+    "message": "Uživatel %1$s dal %2$s na \"%3$s\""
+  },
+  "delete_old_messages": {
+    "message": "Mazat staré zprávy"
+  },
+  "autodel_device_title": {
+    "message": "Mazat zprávy ze zařízení"
+  },
+  "autodel_server_title": {
+    "message": "Mazat zprávy ze serveru"
+  },
+  "autodel_device_ask": {
+    "message": "Skutečně smazat %1$d zpráv a všechny v budoucnu stažené zprávy \"%2$s\"?\n\n• Toto zahrnuje všechna multimédia\n\n• Zprávy budou smazány bez ohledu na jejich přečtení\n\n• \"Uložené zprávy\" budou ponechány"
+  },
+  "autodel_server_ask": {
+    "message": "Skutečně smazat %1$d zprávy a všechny v budoucnu stažené zprávy \"%2$s\"?\n\n⚠️ Toto zahrnuje e-maily, multimédia a \"Uložené zprávy\" ve všech složkách na serveru\n\n⚠️ Nepoužívejte tuto funkci, pokud si přejete ponechat data na serveru\n\n⚠️ Nepoužívejte tuto funkci, pokud používáte i jiné e-mailové klienty mimo Delta Chat"
+  },
+  "autodel_server_enabled_hint": {
+    "message": "Toto zahrnuje e-maily, multimédia a \"Uložené zprávy\" ve všech složkách na serveru. Nepoužívejte tuto funkci, pokud chcete ponechat data na serveru, nebo pokud používáte i jiné e-mailové programy mimo Delta Chat"
+  },
+  "autodel_server_warn_multi_device_title": {
+    "message": "Zapnout okamžité mazání"
+  },
+  "autodel_server_warn_multi_device": {
+    "message": "Pokud zapnete okamžité mazání, nemůžete tento profil používat na více zařízeních."
+  },
+  "autodel_confirm": {
+    "message": "Rozumím. Smazat všechny tyto zprávy"
+  },
+  "autodel_at_once": {
+    "message": "Ihned po stažení"
+  },
+  "after_30_seconds": {
+    "message": "Po 30 sekundách"
+  },
+  "after_1_minute": {
+    "message": "Po 1 minutě"
+  },
+  "after_5_minutes": {
+    "message": "Po 5 minutách"
+  },
+  "after_30_minutes": {
+    "message": "Po 30 minutách"
+  },
+  "autodel_after_1_hour": {
+    "message": "Po 1 hodině"
+  },
+  "autodel_after_1_day": {
+    "message": "Po 1 dni"
+  },
+  "autodel_after_1_week": {
+    "message": "Po 1 týdnu"
+  },
+  "after_5_weeks": {
+    "message": "Po 5 týdnech"
+  },
+  "autodel_after_1_year": {
+    "message": "Po 1 roce"
+  },
+  "autocrypt_send_asm_title": {
+    "message": "Odeslat zprávu s nastavením Autocryptu"
+  },
+  "autocrypt_send_asm_explain_before": {
+    "message": "Pomocí zprávy s nastavením Autocryptu lze sdílet vaše nastavení koncového šifrování s dalšími aplikacemi využívajícími Autocrypt.\n\nNastavení je zašifrované zobrazeným kódem, který musí být zadán na zařízení, na které si přejete nastavení přenést."
+  },
+  "autocrypt_send_asm_button": {
+    "message": "Odeslat nastavení Autocryptu"
+  },
+  "autocrypt_send_asm_explain_after": {
+    "message": "Vaše nastavení bylo odesláno. Vezměte si zařízení, kam si přejete nastavení přenést, a zprávu na něm otevřete. Mělo by se objevit pole pro zadání kódu. Do něj vložte následující číslice:"
+  },
+  "autocrypt_prefer_e2ee": {
+    "message": "Upřednostňovat koncové šifrování"
+  },
+  "autocrypt_asm_subject": {
+    "message": "Zpráva s nastavením Autocryptu"
+  },
+  "autocrypt_asm_general_body": {
+    "message": "Tato zpráva obsahuje nastavení Autocryptu. S její pomocí lze přenést nastavení koncového šifrování mezi klienty.\n\nK dešifrování a použití nastavení otevřete klient podporující Autocrypt a zadejte do něj kód zobrazený na zařízení, které zprávu vygenerovalo."
+  },
+  "systemmsg_cannot_decrypt": {
+    "message": "Tuto zprávu nelze dešifrovat.\n\n• Již nyní by mohlo pomoci jednoduše odpovědět na tuto zprávu a požádat odesílatele, aby ji odeslal znovu.\n\n• Pokud jste právě přeinstalovali Delta Chat, bude nejlepší, když jej znovu nastavíte a zvolíte \"Přidat jako další zařízení\" nebo importujete zálohu."
+  },
+  "systemmsg_unknown_sender_for_chat": {
+    "message": "Chat má neznámého odesílatele. Podrobnosti naleznete v části „informace“."
+  },
+  "systemmsg_subject_for_new_contact": {
+    "message": "Zpráva od uživatele %1$s"
+  },
+  "systemmsg_failed_sending_to": {
+    "message": "Odeslání zprávy uživateli %1$s selhalo."
+  },
+  "group_name_changed_by_you": {
+    "message": "Změnili jste název skupiny z \"%1$s\" na \"%2$s\"."
+  },
+  "group_name_changed_by_other": {
+    "message": "Uživatel %3$s změnil název skupiny z \"%1$s\" na \"%2$s\"."
+  },
+  "group_image_changed_by_you": {
+    "message": "Změnili jste obrázek skupiny."
+  },
+  "group_image_changed_by_other": {
+    "message": "Uživatel %1$s změnil obrázek skupiny."
+  },
+  "member_x_added": {
+    "message": "Člen %1$s byl přidán."
+  },
+  "add_member_by_you": {
+    "message": "Přidali jste člena %1$s."
+  },
+  "add_member_by_other": {
+    "message": "Člen %1$s byl přidán uživatelem %2$s."
+  },
+  "remove_member_by_you": {
+    "message": "Odebrali jste člena %1$s."
+  },
+  "remove_member_by_other": {
+    "message": "Člen %1$s byl odebrán uživatelem %2$s."
+  },
+  "group_left_by_you": {
+    "message": "Opustili jste skupinu."
+  },
+  "group_left_by_other": {
+    "message": "Uživatel %1$s opustil skupinu."
+  },
+  "group_image_deleted_by_you": {
+    "message": "Smazali jste obrázek skupiny."
+  },
+  "group_image_deleted_by_other": {
+    "message": "Uživatel %1$s smazal obrázek skupiny."
+  },
+  "location_enabled_by_you": {
+    "message": "Spustili jste vysílání polohy."
+  },
+  "location_enabled_by_other": {
+    "message": "Uživatel %1$s spustil vysílání polohy."
+  },
+  "ephemeral_timer_disabled_by_you": {
+    "message": "Vypnuli jste časovač mizejících zpráv."
+  },
+  "ephemeral_timer_disabled_by_other": {
+    "message": "Uživatel %1$s vypnul časovač mizejících zpráv."
+  },
+  "ephemeral_timer_seconds_by_you": {
+    "message": "Nastavili jste časovač mizejících zpráv na %1$s sekund."
+  },
+  "ephemeral_timer_seconds_by_other": {
+    "message": "Uživatel %2$s nastavil časovač mizejících zpráv na %1$s sekund."
+  },
+  "ephemeral_timer_1_minute_by_you": {
+    "message": "Nastavili jste časovač mizejících zpráv na 1 minutu."
+  },
+  "ephemeral_timer_1_minute_by_other": {
+    "message": "Uživatel %1$s změnil časovač mizejících zpráv na 1 minutu."
+  },
+  "ephemeral_timer_1_hour_by_you": {
+    "message": "Nastavili jste časovač mizejících zpráv na 1 hodinu."
+  },
+  "ephemeral_timer_1_hour_by_other": {
+    "message": "Uživatel %1$s změnil časovač mizejících zpráv na 1 hodinu."
+  },
+  "ephemeral_timer_1_day_by_you": {
+    "message": "Nastavili jste časovač mizejících zpráv na 1 den."
+  },
+  "ephemeral_timer_1_day_by_other": {
+    "message": "Uživatel %1$s změnil časovač mizejících zpráv na 1 den."
+  },
+  "ephemeral_timer_1_week_by_you": {
+    "message": "Nastavili jste časovač mizejících zpráv na 1 týden."
+  },
+  "ephemeral_timer_1_week_by_other": {
+    "message": "Uživatel %1$s změnil časovač mizejících zpráv na 1 týden."
+  },
+  "ephemeral_timer_minutes_by_you": {
+    "message": "Nastavili jste časovač mizejících zpráv na %1$s minut."
+  },
+  "ephemeral_timer_minutes_by_other": {
+    "message": "Uživatel %2$s změnil časovač mizejících zpráv na %1$s minut."
+  },
+  "ephemeral_timer_hours_by_you": {
+    "message": "Samomazací zprávy vyprší po %1$s hodinách ode mě."
+  },
+  "ephemeral_timer_hours_by_other": {
+    "message": "Uživatel %2$s změnil časovač mizejících zpráv na %1$s hodin."
+  },
+  "ephemeral_timer_days_by_you": {
+    "message": "Samomazací zprávy vyprší po %1$s dnech ode mě."
+  },
+  "ephemeral_timer_days_by_other": {
+    "message": "Uživatel %2$s změnil časovač mizejících zpráv na %1$s dní."
+  },
+  "ephemeral_timer_weeks_by_you": {
+    "message": "Samomazací zprávy vyprší po %1$s týdnech ode mě."
+  },
+  "ephemeral_timer_weeks_by_other": {
+    "message": "Uživatel %2$s změnil časovač mizejících zpráv na %1$s týdnů."
+  },
+  "chat_protection_broken": {
+    "message": "Uživatel %1$s odeslal zprávu z jiného zařízení."
+  },
+  "chat_protection_enabled_tap_to_learn_more": {
+    "message": "Nyní je garantováno koncové šifrování vašich zpráv. Stiskněte pro více informací."
+  },
+  "chat_protection_enabled_explanation": {
+    "message": "Nyní je garantováno, že všechny zprávy v tomto chatu jsou koncově šifrovány.\n\nKoncové šifrování zajišťuje soukromí mezi vámi a vašimi kontakty. Nedokáže je přečíst ani váš poskytovatel e-mailu."
+  },
+  "chat_protection_broken_tap_to_learn_more": {
+    "message": "Uživatel %1$s odeslal zprávu z jiného zařízení. Stiskněte pro více informací."
+  },
+  "chat_protection_broken_explanation": {
+    "message": "Koncové šifrování již nemůže být garantováno, pravděpodobně protože uživatel %1$s přeinstaloval Delta Chat nebo odeslal zprávu z jiného zařízení.\n\nPro obnovení garantovaného koncového šifrování se sejděte osobně a naskenujte si své QR kódy."
+  },
+  "invalid_unencrypted_tap_to_learn_more": {
+    "message": "⚠️%1$s vyžaduje koncové šifrování, které pro tento chat ještě není nastaveno. Stiskněte pro více informací. "
+  },
+  "invalid_unencrypted_explanation": {
+    "message": "Pro navázání koncově šifrovaného spojení se můžete se svými kontakty setkat osobně a naskenovat jejich QR kódy."
+  },
+  "learn_more": {
+    "message": "Další informace"
+  },
+  "devicemsg_self_deleted": {
+    "message": "Smazali jste chat „Uložené zprávy“.\n\nℹ️ Chcete-li znovu použít funkci „Uložené zprávy“, založte nový chat sami se sebou."
+  },
+  "devicemsg_storage_exceeding": {
+    "message": "⚠️ Úložiště u vašeho poskytovatele je téměř vyčerpané: %1$s %% je již využito.\n\nPokud se úložiště zaplní, nebudete moci přijímat zprávy.\n\n👉 Zkuste smazat stará data ve webovém prostředí poskytovatele a zvažte povolení volby \"Nastavení / Chaty a multimédia / Mazat staré zprávy\". Aktuální využití úložiště můžete kdykoliv zkontrolovat v \"Nastavení / Připojení\"."
+  },
+  "devicemsg_bad_time": {
+    "message": "⚠️ Datum a čas na vašem zařízení se zdají být nepřesné (%1$s).\n\nUpravte si čas ⏰🔧, abyste mohli přijímat své zprávy."
+  },
+  "devicemsg_update_reminder": {
+    "message": "⚠️ Vaše verze Delta Chatu může být zastaralá.\n\nTo může způsobit problémy, protože vaši partneři v chatu používají novější verze – a vám chybí nejnovější funkce 😳\nAktualizace najdete na https://get.delta.chat nebo v obchodě s aplikacemi."
+  },
+  "enter_system_secret_to_continue": {
+    "message": "Pro pokračování odemkněte"
+  },
+  "qr_code": {
+    "message": "QR kód"
+  },
+  "load_qr_code_as_image": {
+    "message": "Načíst QR kód z obrázku"
+  },
+  "qrscan_title": {
+    "message": "Naskenovat QR kód"
+  },
+  "qrscan_hint": {
+    "message": "Namiřte kameru na QR kód"
+  },
+  "qrscan_hint_desktop": {
+    "message": "Přibližte QR kód ke kameře"
+  },
+  "qrscan_failed": {
+    "message": "QR kód nelze přečíst"
+  },
+  "qrscan_ask_join_group": {
+    "message": "Přejete si přidat ke skupině \"%1$s\"?"
+  },
+  "qrscan_fingerprint_mismatch": {
+    "message": "Rozpoznaný otisk uživatele %1$s neodpovídá jeho poslednímu otisku."
+  },
+  "qrscan_no_addr_found": {
+    "message": "Tento QR kód obsahuje otisk, ale žádný e-mail.\n\nK ověření nezávislou cestou nejprve vytvořte šifrované připojení k příjemci."
+  },
+  "qrscan_contains_text": {
+    "message": "Text z QR kódu:\n\n%1$s"
+  },
+  "qrscan_contains_url": {
+    "message": "Adresa URL z QR kódu:\n\n%1$s"
+  },
+  "qrscan_fingerprint_label": {
+    "message": "Otisk"
+  },
+  "withdraw_verifycontact_explain": {
+    "message": "Tento QR kód mohou ostatní uživatelé použít, aby vás kontaktovali.\n\nMůžete také vygenerovat nový, čímž dosavadní QR kód či odkaz s pozvánkou zneplatníte."
+  },
+  "withdraw_verifygroup_explain": {
+    "message": "Tento QR kód mohou ostatní uživatelé použít k připojení ke skupině \"%1$s\".\n\nMůžete také vygenerovat nový, čímž dosavadní QR kód či odkaz s pozvánkou zneplatníte."
+  },
+  "withdraw_qr_code": {
+    "message": "Vygenerovat nový QR kód"
+  },
+  "revive_verifycontact_explain": {
+    "message": "Tento QR kód již není aktivní, protože byl vygenerován nový."
+  },
+  "revive_verifygroup_explain": {
+    "message": "Tento QR kód k připojení ke skupině \"%1$s\" již není aktivní, protože byl vygenerován nový."
+  },
+  "revive_qr_code": {
+    "message": "Aktivovat QR kód"
+  },
+  "qrshow_title": {
+    "message": "QR kód s pozvánkou"
+  },
+  "qrshow_x_joining": {
+    "message": "Uživatel %1$s se připojil."
+  },
+  "qrshow_x_verified": {
+    "message": "Uživatel %1$s ověřen."
+  },
+  "qrshow_x_has_joined_group": {
+    "message": "Uživatel %1$s se připojil ke skupině."
+  },
+  "qrshow_join_group_title": {
+    "message": "QR kód s pozvánkou"
+  },
+  "qrshow_join_group_hint": {
+    "message": "Naskenujte k připojení ke skupině \"%1$s\""
+  },
+  "qrshow_join_contact_title": {
+    "message": "QR kód s pozvánkou"
+  },
+  "qrshow_join_contact_hint": {
+    "message": "Naskenujte k navázání spojení s uživatelem %1$s"
+  },
+  "qrshow_join_contact_no_connection_toast": {
+    "message": "Žádné připojení k Internetu. Zprovoznění QR kódem nelze provést."
+  },
+  "qraccount_ask_create_and_login": {
+    "message": "Přejete si vytvořit nový profil na \"%1$s\" a připojit se k němu?"
+  },
+  "qraccount_ask_create_and_login_another": {
+    "message": "Přejete si vytvořit nový profil na \"%1$s\" a přihlásit se k němu?\n\nVáš stávající profil nebude smazán. K přepínání mezi profily můžete využít volbu \"Přepnout profil\"."
+  },
+  "set_name_and_avatar_explain": {
+    "message": "Nastavte si jméno, podle kterého vás ostatní poznají. Můžete si také nastavit profilový obrázek."
+  },
+  "please_enter_name": {
+    "message": "Prosím, zadejte jméno."
+  },
+  "qraccount_qr_code_cannot_be_used": {
+    "message": "Tento QR kód neumožňuje nastavení nového účtu."
+  },
+  "qrlogin_ask_login": {
+    "message": "Přejete si přihlásit k \"%1$s\"?"
+  },
+  "qrlogin_ask_login_another": {
+    "message": "Přejete si přihlásit k \"%1$s\"?\n\nVáš stávající profil nebude smazán. K přepínání mezi profily můžete využít volbu \"Přepnout profil\"."
+  },
+  "secure_join_started": {
+    "message": "Uživatel %1$s vás pozval do této skupiny.\n\nČekání na odpověď od zařízení uživatele %2$s..."
+  },
+  "secure_join_replies": {
+    "message": "Uživatel %1$s odpověděl, čekání na přidání do skupiny..."
+  },
+  "secure_join_wait": {
+    "message": "Navazování koncově šifrovaného spojení, prosím, čekejte..."
+  },
+  "secure_join_wait_timeout": {
+    "message": "Zatím nebylo navázáno koncově šifrované spojení, ale již nyní můžete posílat zprávy."
+  },
+  "secure_join_takes_longer": {
+    "message": "Vypadá to, že to trvá trochu déle. Možná jste vy nebo váš kontakt offline.\n\nProces však pokračuje na pozadí. Zatím můžete dělat něco jiného..."
+  },
+  "contact_verified": {
+    "message": "Uživatel %1$s ověřen."
+  },
+  "contact_not_verified": {
+    "message": "Navázání garantovaného koncově šifrovaného spojení s uživatelem %1$s selhalo."
+  },
+  "verified_by": {
+    "message": "Ověřeni uživatelem %1$s."
+  },
+  "verified_by_you": {
+    "message": "Ověřeni mnou"
+  },
+  "contact_setup_changed": {
+    "message": "Nastavení pro uživatele %1$s změněno."
+  },
+  "verified_contact_required_explain": {
+    "message": "Aby mohlo být garantováno koncové šifrování, můžete do této skupiny přidávat pouze uživatele se zeleným zaškrtávátkem.\n\nSe svými kontakty se můžete setkat osobně a naskenovat jejich QR kód, abyste je ověřili."
+  },
+  "copy_qr_data_success": {
+    "message": "Adresa URL z QR kódu zkopírována do schránky"
+  },
+  "mailto_dialog_header_select_chat": {
+    "message": "Vyberte chat, do kterého chcete zprávu poslat"
+  },
+  "confirm_replace_draft": {
+    "message": "%1$s již obsahuje rozepsanou zprávu, přejete si ji přepsat?"
+  },
+  "mailto_link_could_not_be_decoded": {
+    "message": "Odkaz typu mailto nebyl rozpoznán: %1$s"
+  },
+  "notify_reply_button": {
+    "message": "Odpovědět"
+  },
+  "notify_new_message": {
+    "message": "Nová zpráva"
+  },
+  "notify_background_connection_enabled": {
+    "message": "Spojení na pozadí je zapnuto"
+  },
+  "notify_priority_high": {
+    "message": "Vysoká"
+  },
+  "notify_priority_max": {
+    "message": "Nejvyšší"
+  },
+  "notify_name_and_message": {
+    "message": "Jméno a zpráva"
+  },
+  "notify_name_only": {
+    "message": "Pouze jméno"
+  },
+  "notify_no_name_or_message": {
+    "message": "Ani jméno ani zpráva"
+  },
+  "notifications_disabled": {
+    "message": "Oznámení vypnuta"
+  },
+  "new_messages": {
+    "message": "Nové zprávy"
+  },
+  "new_messages_body": {
+    "message": "Máte nové zprávy"
+  },
+  "n_messages_in_m_chats": {
+    "message": "%1$d zprávy v %2$d chatech "
+  },
+  "perm_required_title": {
+    "message": "Oprávnění vyžadováno"
+  },
+  "perm_continue": {
+    "message": "Pokračovat"
+  },
+  "perm_explain_access_to_camera_denied": {
+    "message": "Pro focení a natáčení přejděte do nastavení aplikace, vyberte \"Oprávnění\" a povolte oprávnění \"Fotoaparát\"."
+  },
+  "perm_explain_access_to_mic_denied": {
+    "message": "Pro posílání zvukových zpráv přejděte do nastavení aplikace, vyberte \"Oprávnění\" a povolte oprávnění \"Mikrofon\"."
+  },
+  "perm_explain_access_to_storage_denied": {
+    "message": "Pro příjem a posílání souborů přejděte do nastavení aplikace, vyberte \"Oprávnění\" a povolte oprávnění \"Fotky a videa\"."
+  },
+  "perm_explain_access_to_location_denied": {
+    "message": "Pro posílání polohy přejděte do nastavení aplikace, vyberte \"Oprávnění\" a povolte oprávnění \"Poloha\"."
+  },
+  "perm_explain_access_to_notifications_denied": {
+    "message": "Chcete-li dostávat oznámení, přejděte na „Nastavení systému / Aplikace / Delta Chat“ a povolte „Oznámení“."
+  },
+  "ImageEditorHud_draw_anywhere_to_blur": {
+    "message": "Kreslením rozmazávejte"
+  },
+  "ImageEditorHud_add_text": {
+    "message": "Přidat text"
+  },
+  "ImageEditorHud_blur": {
+    "message": "Rozmazání"
+  },
+  "ImageEditorHud_brush_marker": {
+    "message": "Pero"
+  },
+  "ImageEditorHud_brush_highlight": {
+    "message": "Zvýrazňovač"
+  },
+  "ImageEditorHud_crop": {
+    "message": "Ořez"
+  },
+  "ImageEditorHud_flip": {
+    "message": "Zrcadlení"
+  },
+  "ImageEditorHud_rotate": {
+    "message": "Otočení"
+  },
+  "encrypted_message": {
+    "message": "Šifrovaná zpráva"
+  },
+  "about_offical_app_desktop": {
+    "message": "Toto je oficiální aplikace Delta Chat Desktop."
+  },
+  "about_licensed_under_desktop": {
+    "message": "Tento software je distribuován pod licencí GNU GPL verze 3 a jeho zdrojový kód je k dispozici na GitHubu."
+  },
+  "welcome_desktop": {
+    "message": "Vítejte v aplikaci Delta Chat"
+  },
+  "global_menu_preferences_language_desktop": {
+    "message": "Jazyk"
+  },
+  "global_menu_file_desktop": {
+    "message": "Soubor"
+  },
+  "global_menu_file_quit_desktop": {
+    "message": "Ukončit"
+  },
+  "global_menu_edit_desktop": {
+    "message": "Upravit"
+  },
+  "global_menu_edit_undo_desktop": {
+    "message": "Vrátit zpět"
+  },
+  "global_menu_edit_redo_desktop": {
+    "message": "Zopakovat"
+  },
+  "global_menu_edit_cut_desktop": {
+    "message": "Vyjmout"
+  },
+  "global_menu_edit_copy_desktop": {
+    "message": "Kopírovat"
+  },
+  "global_menu_edit_paste_desktop": {
+    "message": "Vložit"
+  },
+  "global_menu_view_desktop": {
+    "message": "Zobrazení"
+  },
+  "global_menu_view_floatontop_desktop": {
+    "message": "Vždy na vrchu"
+  },
+  "global_menu_view_developer_desktop": {
+    "message": "Vývoj"
+  },
+  "global_menu_view_developer_tools_desktop": {
+    "message": "Nástroje pro vývojáře"
+  },
+  "global_menu_help_desktop": {
+    "message": "Nápověda"
+  },
+  "delta_chat_homepage": {
+    "message": "Domovská stránka Delta Chat"
+  },
+  "contribute": {
+    "message": "Přispět"
+  },
+  "global_menu_help_report_desktop": {
+    "message": "Nahlásit problém"
+  },
+  "global_menu_help_about_desktop": {
+    "message": "O aplikaci Delta Chat"
+  },
+  "global_menu_file_open_desktop": {
+    "message": "Otevřít Delta Chat"
+  },
+  "global_menu_minimize_to_tray": {
+    "message": "Minimalizovat"
+  },
+  "no_chat_selected_suggestion_desktop": {
+    "message": "Vybrat chat nebo vytvořit nový"
+  },
+  "write_message_desktop": {
+    "message": "Napište zprávu"
+  },
+  "encryption_info_title_desktop": {
+    "message": "Informace o šifrování"
+  },
+  "delete_message_desktop": {
+    "message": "Smazat zprávu"
+  },
+  "more_info_desktop": {
+    "message": "Podrobnosti"
+  },
+  "timestamp_format_m_desktop": {
+    "message": "D MMM"
+  },
+  "remove_desktop": {
+    "message": "Odstranit"
+  },
+  "save_desktop": {
+    "message": "Uložit"
+  },
+  "unsave": {
+    "message": "Zrušit uložení"
+  },
+  "name_desktop": {
+    "message": "Jméno"
+  },
+  "select_group_image_desktop": {
+    "message": "Vybrat obrázek skupiny"
+  },
+  "export_backup_desktop": {
+    "message": "Exportovat zálohu"
+  },
+  "autocrypt_correct_desktop": {
+    "message": "Nastavení Autocryptu přeneseno."
+  },
+  "forget_login_confirmation_desktop": {
+    "message": "Opravdu si přejete smazat tento profil? Všechna data budou smazána, včetně nastavení koncového šifrování, kontaktů, hovorů, zpráv a multimédií. Tuto akci nelze vrátit zpět."
+  },
+  "message_detail_sent_desktop": {
+    "message": "odesláno"
+  },
+  "message_detail_received_desktop": {
+    "message": "přijato"
+  },
+  "menu.view.developer.open.log.folder": {
+    "message": "Otevřít složku protokolu"
+  },
+  "menu.view.developer.open.current.log.file": {
+    "message": "Otevřít stávající soubor s protokolem"
+  },
+  "explain_desktop_minimized_disabled_tray_pref": {
+    "message": "Ikonu na panelu nelze deaktivovat, protože Delta Chat byl spuštěn s volbou --minimized."
+  },
+  "no_spellcheck_suggestions_found": {
+    "message": "Žádné pravopisné návrhy."
+  },
+  "show_window": {
+    "message": "Zobrazit okno"
+  },
+  "keybindings": {
+    "message": "Klávesové zkratky"
+  },
+  "switch_between_chats": {
+    "message": "Přepínání mezi chaty"
+  },
+  "scroll_messages": {
+    "message": "Posouvat zprávy"
+  },
+  "focus_search_input": {
+    "message": "Označit vyhledávací pole"
+  },
+  "focus_message_input": {
+    "message": "Označit pole pro zprávu"
+  },
+  "force_refresh_network": {
+    "message": "Vynutit obnovení sítě"
+  },
+  "insert_newline": {
+    "message": "Vložit nový řádek"
+  },
+  "a11y_delivery_status_error": {
+    "message": "Stav doručení: Chyba"
+  },
+  "a11y_encryption_padlock": {
+    "message": "Zámek šifrování"
+  },
+  "a11y_delivery_status_sending": {
+    "message": "Stav doručení: Odesílání"
+  },
+  "a11y_delivery_status_draft": {
+    "message": "Stav doručení: Rozepsané"
+  },
+  "a11y_delivery_status_delivered": {
+    "message": "Stav doručení: Doručeno"
+  },
+  "a11y_delivery_status_read": {
+    "message": "Stav doručení: Přečteno"
+  },
+  "a11y_delivery_status_invalid": {
+    "message": "Neplatný stav doručení"
+  },
+  "a11y_message_context_menu_btn_label": {
+    "message": "Akce zprávy"
+  },
+  "a11y_background_preview_label": {
+    "message": "Náhled tapety"
+  },
+  "a11y_disappearing_messages_activated": {
+    "message": "Mizející zprávy jsou zapnuty"
+  },
+  "stop_sharing_location": {
+    "message": "Přestat sdílet polohu"
+  },
+  "a11y_voice_message_hint_ios": {
+    "message": "Po ukončení nahrávání stiskněte dvakrát pro odeslání. Pro zahození nahrané zprávy, přejeďte dvěma prsty."
+  },
+  "a11y_connectivity_hint": {
+    "message": "Stiskněte dvakrát pro zobrazení detailů připojení."
+  },
+  "login_error_no_internet_connection": {
+    "message": "Žádné připojení k internetu, přihlášení selhalo."
+  },
+  "share_account_not_configured": {
+    "message": "Profil není nakonfigurovaný."
+  },
+  "cannot_play_audio_file": {
+    "message": "Zvukový soubor nemohl být přehrán."
+  },
+  "perm_ios_explain_access_to_camera_denied": {
+    "message": "Pro focení, natáčení a skenování QR kódů, otevřete systémová nastavení a povolte \"Fotoaparát\"."
+  },
+  "open_settings": {
+    "message": "Otevřít nastavení"
+  },
+  "import_device_contacts": {
+    "message": "Importovat kontakty ze zařízení"
+  },
+  "import_device_contacts_hint": {
+    "message": "Chcete-li chatovat s kontakty ze svého zařízení, otevřete Nastavení a povolte „Kontakty“."
+  },
+  "disabled_in_dc": {
+    "message": "Zakázáno aplikací Delta Chat"
+  },
+  "disabled_in_system_settings": {
+    "message": "Zakázáno v systémovém nastavení"
+  },
+  "bg_app_refresh_disabled": {
+    "message": "\"Aktualizace aplikací na pozadí\" jsou vypnuty v systémovém nastavení"
+  },
+  "delayed": {
+    "message": "Odložené"
+  },
+  "notifications_avg_minutes": {
+    "message": "Průměrně jednou za %1$d minut"
+  },
+  "notifications_avg_hours": {
+    "message": "Průměrně jednou za %1$d hodin"
+  },
+  "last_check_at": {
+    "message": "Naposledy zkontrolováno %1$s"
+  },
+  "system_settings": {
+    "message": "Systémová nastavení"
+  },
+  "system_settings_notify_explain_ios": {
+    "message": "Upravit typ, odznaky, náhledy a další"
+  },
+  "shortcuts_widget_title": {
+    "message": "Zkratky"
+  },
+  "shortcuts_widget_description": {
+    "message": "K přidání položek použijte volbu \"Přidat na widget\" v aplikaci Delta Chat"
+  },
+  "remove_from_widget": {
+    "message": "Odstranit z widgetu"
+  },
+  "add_to_widget": {
+    "message": "Přidat na widget"
+  },
+  "InfoPlist_NSCameraUsageDescription": {
+    "message": "Delta Chat využívá fotoaparát k focení, natáčení videí a snímání QR kódů."
+  },
+  "InfoPlist_NSContactsUsageDescription": {
+    "message": "Delta Chat používá vaše kontakty k zobrazení e-mailů, na které můžete psát. Delta Chat nemá žádné vlastní servery - vaše kontakty se nikam neodesílají."
+  },
+  "InfoPlist_NSLocationAlwaysAndWhenInUseUsageDescription": {
+    "message": "Delta Chat potřebuje oprávnění ke sdílení vaší polohy po dobu, po kterou je povoleno sdílení polohy."
+  },
+  "InfoPlist_NSLocationWhenInUseUsageDescription": {
+    "message": "Delta Chat potřebuje oprávnění ke sdílení vaší polohy po dobu, po kterou je povoleno sdílení polohy."
+  },
+  "InfoPlist_NSMicrophoneUsageDescription": {
+    "message": "Delta Chat používá mikrofon k nahrávání hlasových zpráv a natáčení videí se zvukem."
+  },
+  "InfoPlist_NSPhotoLibraryUsageDescription": {
+    "message": "Delta Chat vás nechá vybrat, které fotky z galerie si přejete poslat."
+  },
+  "InfoPlist_NSPhotoLibraryAddUsageDescription": {
+    "message": "Delta Chat ukládá obrázky do vaší galerie."
+  },
+  "InfoPlist_NSFaceIDUsageDescription": {
+    "message": "Delta Chat umí využívat Face ID k ochraně vašeho lokálního profilu, vytváření záloh a přidávání dalších zařízení."
+  },
+  "pref_instant_delivery": {
+    "message": "Okamžité doručení"
+  },
+  "pref_background_notifications": {
+    "message": "Používat připojení na pozadí"
+  },
+  "pref_background_notifications_explain": {
+    "message": "Vyžaduje vypnutí optimalizací baterie; použijte, pokud oznámení nechodí včas"
+  },
+  "pref_reliable_service": {
+    "message": "Vynutit připojení na pozadí"
+  },
+  "pref_reliable_service_explain": {
+    "message": "Zobrazí stálé oznámení"
+  },
+  "pref_background_notifications_rationale": {
+    "message": "K udržení spojení s e-mailovým serverem a přijímání zpráv na pozadí v následujícím kroku zvolte, aby byly ignorovány optimalizace baterie.\n\nDelta Chat používá jen málo zdrojů a snaží se neplýtvat baterií."
+  },
+  "perm_enable_bg_reminder_title": {
+    "message": "Stiskem nastavíte přijímání zpráv, když je aplikace Delta Chat na pozadí."
+  },
+  "perm_enable_bg_already_done": {
+    "message": "Přijímání zpráv na pozadí jste již aplikaci Delta Chat povolili.\n\nV případě, že vám zprávy na pozadí stále nechodí, prosím zkontrolujte svá systémová nastavení."
+  },
+  "update_1_50_android": {
+    "message": "Co je nového?\n\n❤️‍🔥 Nová nabídka emoji s více druhy emoji\n\n🎮 Vylepšené aplikace v chatu: Oznámení a podpůrné aplikace přímo v kontextu chatu, např. odkaz na novou nové položky z kalendáři\n\n👍 Oznámení o reakcích na zprávy\n\n... 🛠️ OPRAVY a DALŠÍ na %1$s"
+  },
+  "update_switch_profile_placement": {
+    "message": "ℹ️ Volba \"Přepnout profil\" byla přesunuta: Pro přidávání či přepínání profilů stiskněte svůj profilový obrázek v horním rohu hlavní obrazovky."
+  },
+  "n_minutes": {
+    "one": "%d min.",
+    "few": "%d min.",
+    "many": "%d min.",
+    "other": "%d min."
+  },
+  "n_hours": {
+    "one": "%d hod.",
+    "few": "%d hod.",
+    "many": "%d hod.",
+    "other": "%d hod."
+  },
+  "n_chats": {
+    "one": "%d chat",
+    "few": "%d chaty",
+    "many": "%d chatů",
+    "other": "%d chatů"
+  },
+  "n_contacts": {
+    "one": "%d kontakt",
+    "few": "%d kontakty",
+    "many": "%d kontaktů",
+    "other": "%d kontaktů"
+  },
+  "n_messages": {
+    "one": "%d zpráva",
+    "few": "%d zprávy",
+    "many": "%d zpráv",
+    "other": "%d zpráv"
+  },
+  "n_reactions": {
+    "one": "%d reakce",
+    "few": "%d reakce",
+    "many": "%d reakcí",
+    "other": "%d reakcí"
+  },
+  "n_members": {
+    "one": "%d člen",
+    "few": "%d členové",
+    "many": "%d členů",
+    "other": "%d členů"
+  },
+  "n_recipients": {
+    "one": "%d příjemce",
+    "few": "%d příjemci",
+    "many": "%d příjemců",
+    "other": "%d příjemců"
+  },
+  "n_selected": {
+    "one": "%d vybrána",
+    "few": "%d vybrány",
+    "many": "%d vybráno",
+    "other": "%d vybráno"
+  },
+  "ask_send_following_n_files_to": {
+    "one": "Odeslat následující soubor do chatu %s?",
+    "few": "Odeslat následující %d soubory do chatu %s?",
+    "many": "Odeslat následujících %d souborů do chatu %s?",
+    "other": "Odeslat následujících %d souborů do chatu %s?"
+  },
+  "ask_delete_chat": {
+    "one": "Smazat %d chat ze všech vašich zařízení?",
+    "few": "Smazat %d chaty ze všech vašich zařízení?",
+    "many": "Smazat %d chatů ze všech vašich zařízení?",
+    "other": "Smazat %d chatů ze všech vašich zařízení?"
+  },
+  "ask_delete_messages": {
+    "one": "Smazat %d zprávu ze všech Vašich zařízení?",
+    "few": "Smazat %d zprávy ze všech Vašich zařízení?",
+    "many": "Smazat %d zpráv ze všech Vašich zařízení?",
+    "other": "Smazat %d zpráv ze všech vašich zařízení?"
+  },
+  "ask_delete_messages_simple": {
+    "one": "Smazat %d zprávu?",
+    "few": "Smazat %d zprávy?",
+    "many": "Smazat %d zpráv?",
+    "other": "Smazat %d zpráv?"
+  },
+  "chat_archived": {
+    "one": "%d chat archivován",
+    "few": "%d chaty archivovány",
+    "many": "%d chatů archivováno",
+    "other": "%d chatů archivováno"
+  },
+  "chat_unarchived": {
+    "one": "%d chat obnoven z archivu",
+    "few": "%d chaty obnoveny z archivu",
+    "many": "%d chatů obnoveno z archivu",
+    "other": "%d chatů obnoveno z archivu"
+  },
+  "chat_n_new_messages": {
+    "one": "%d nová zpráva",
+    "few": "%d nové zprávy",
+    "many": "%d nových zpráv",
+    "other": "%d nových zpráv"
+  }
+}

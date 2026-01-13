@@ -1,0 +1,2045 @@
+{
+  "app_name": {
+    "message": "Delta Chat"
+  },
+  "ok": {
+    "message": "확인"
+  },
+  "cancel": {
+    "message": "취소"
+  },
+  "clear_search": {
+    "message": "검색 지우기"
+  },
+  "yes": {
+    "message": "예"
+  },
+  "no": {
+    "message": "아니오"
+  },
+  "select": {
+    "message": "선택"
+  },
+  "on": {
+    "message": "켜짐"
+  },
+  "off": {
+    "message": "꺼짐"
+  },
+  "def": {
+    "message": "기본값"
+  },
+  "default_value": {
+    "message": "기본 (%1$s)"
+  },
+  "default_value_as_above": {
+    "message": "기본 (위와 동일함)"
+  },
+  "custom": {
+    "message": "커스텀"
+  },
+  "none": {
+    "message": "없음"
+  },
+  "automatic": {
+    "message": "자동"
+  },
+  "strict": {
+    "message": "엄격한"
+  },
+  "open": {
+    "message": "열기"
+  },
+  "download": {
+    "message": "다운로드"
+  },
+  "downloading": {
+    "message": "다운로드 중..."
+  },
+  "open_attachment": {
+    "message": "첨부 파일 열기"
+  },
+  "join": {
+    "message": "참가"
+  },
+  "rejoin": {
+    "message": "다시 참가"
+  },
+  "delete": {
+    "message": "삭제"
+  },
+  "info": {
+    "message": "정보"
+  },
+  "update": {
+    "message": "업데이트"
+  },
+  "emoji": {
+    "message": "이모티콘"
+  },
+  "attachment": {
+    "message": "첨부 파일"
+  },
+  "back": {
+    "message": "뒤"
+  },
+  "close": {
+    "message": "닫기"
+  },
+  "forward": {
+    "message": "전달"
+  },
+  "resend": {
+    "message": "재전송"
+  },
+  "archive": {
+    "message": "아카이브"
+  },
+  "unarchive": {
+    "message": "보관 취소"
+  },
+  "mute": {
+    "message": "음소거"
+  },
+  "ephemeral_messages": {
+    "message": "사라지는 메시지"
+  },
+  "ephemeral_messages_hint": {
+    "message": "Delta Chat을 사용하는 경우 이 대화의 모든 구성원에게 적용되며, 메시지를 복사, 저장 및 회송하거나 다른 전자우편 클라이언트를 사용할 수 있습니다."
+  },
+  "save": {
+    "message": "저장"
+  },
+  "chat": {
+    "message": "채팅"
+  },
+  "media": {
+    "message": "매체"
+  },
+  "profile": {
+    "message": "프로필"
+  },
+  "main_menu": {
+    "message": "메인 메뉴"
+  },
+  "start_chat": {
+    "message": "채팅 시작"
+  },
+  "show_full_message": {
+    "message": "전체 메시지 보기..."
+  },
+  "loading": {
+    "message": "로딩 중..."
+  },
+  "hide": {
+    "message": "숨기기"
+  },
+  "activate": {
+    "message": "활성화"
+  },
+  "load_remote_content": {
+    "message": "원격 이미지 불러오기"
+  },
+  "load_remote_content_ask": {
+    "message": "원격 이미지는 당신을 추적하기 위해 사용될 수 있습니다.\n\n이 설정은 폰트와 다른 콘텐츠를 불러오는 것도 허용합니다. 만약 비활성화되어도, 내장 또는 캐시된 이미지를 볼 수 있습니다.\n\n원격 이미지를 불러올까요?"
+  },
+  "always": {
+    "message": "항상"
+  },
+  "once": {
+    "message": "한 번만"
+  },
+  "show_password": {
+    "message": "비밀번호 보이기"
+  },
+  "hide_password": {
+    "message": "비밀번호 숨기기"
+  },
+  "not_now": {
+    "message": "나중에"
+  },
+  "never": {
+    "message": "절대"
+  },
+  "one_moment": {
+    "message": "잠시만 기다려 주세요…"
+  },
+  "done": {
+    "message": "완료됨"
+  },
+  "undo": {
+    "message": "실행 취소"
+  },
+  "offline": {
+    "message": "오프라인"
+  },
+  "next": {
+    "message": "다음"
+  },
+  "error": {
+    "message": "오류"
+  },
+  "error_x": {
+    "message": "오류: %1$s"
+  },
+  "no_app_to_handle_data": {
+    "message": "이 데이터 타입을 다루는 어플을 찾지 못했습니다."
+  },
+  "no_browser_installed": {
+    "message": "설치된 브라우저가 없습니다."
+  },
+  "file_not_found": {
+    "message": "%1$s 찾을 수 없음."
+  },
+  "copied_to_clipboard": {
+    "message": "클립보드에 복사했습니다."
+  },
+  "contacts_headline": {
+    "message": "연락처"
+  },
+  "email_address": {
+    "message": "이메일 주소"
+  },
+  "bad_email_address": {
+    "message": "잘못된 이메일 주소"
+  },
+  "password": {
+    "message": "비밀번호"
+  },
+  "existing_password": {
+    "message": "존재하는 비밀번호"
+  },
+  "now": {
+    "message": "지금"
+  },
+  "danger": {
+    "message": "위험"
+  },
+  "today": {
+    "message": "오늘"
+  },
+  "yesterday": {
+    "message": "어제"
+  },
+  "this_week": {
+    "message": "이번주"
+  },
+  "this_month": {
+    "message": "이번달"
+  },
+  "last_week": {
+    "message": "저번 주"
+  },
+  "last_month": {
+    "message": "저번 달"
+  },
+  "last_seen_at": {
+    "message": "%1$s에 마지막 접속 "
+  },
+  "last_seen_unknown": {
+    "message": "마지막 접속: 알 수 없음"
+  },
+  "self": {
+    "message": "나"
+  },
+  "draft": {
+    "message": "임시 저장"
+  },
+  "image": {
+    "message": "이미지"
+  },
+  "reply_noun": {
+    "message": "답장"
+  },
+  "gif": {
+    "message": "GIF"
+  },
+  "sticker": {
+    "message": "스티커"
+  },
+  "images": {
+    "message": "이미지"
+  },
+  "audio": {
+    "message": "오디오"
+  },
+  "voice_message": {
+    "message": "음성 메시지"
+  },
+  "forwarded": {
+    "message": "전달됨"
+  },
+  "forwarded_message": {
+    "message": "전달된 메시지"
+  },
+  "forwarded_by": {
+    "message": "%1$s에 의해 전달됨"
+  },
+  "video": {
+    "message": "동영상"
+  },
+  "documents": {
+    "message": "문서"
+  },
+  "contact": {
+    "message": "연락처"
+  },
+  "camera": {
+    "message": "카메라"
+  },
+  "capture": {
+    "message": "캡쳐"
+  },
+  "switch_camera": {
+    "message": "카메라 전환"
+  },
+  "toggle_fullscreen": {
+    "message": "전체 화면 모드 전환"
+  },
+  "location": {
+    "message": "위치"
+  },
+  "gallery": {
+    "message": "갤러리"
+  },
+  "images_and_videos": {
+    "message": "이미지와 동영상"
+  },
+  "file": {
+    "message": "파일"
+  },
+  "files": {
+    "message": "파일"
+  },
+  "webxdc_app": {
+    "message": "개인 앱"
+  },
+  "webxdc_apps": {
+    "message": "개인 앱"
+  },
+  "unknown": {
+    "message": "알 수 없음"
+  },
+  "green": {
+    "message": "초록"
+  },
+  "red": {
+    "message": "빨강"
+  },
+  "blue": {
+    "message": "파랑"
+  },
+  "orange": {
+    "message": "주황"
+  },
+  "cyan": {
+    "message": "청록"
+  },
+  "purple": {
+    "message": "보라"
+  },
+  "magenta": {
+    "message": "자홍"
+  },
+  "white": {
+    "message": "흰색"
+  },
+  "zoom": {
+    "message": "줌"
+  },
+  "extra_small": {
+    "message": "더 작게"
+  },
+  "small": {
+    "message": "작게"
+  },
+  "normal": {
+    "message": "보통"
+  },
+  "large": {
+    "message": "크게"
+  },
+  "extra_large": {
+    "message": "더 크게"
+  },
+  "fast": {
+    "message": "빠르게"
+  },
+  "slow": {
+    "message": "느리게"
+  },
+  "menu_new_contact": {
+    "message": "대화상대 추가"
+  },
+  "menu_new_chat": {
+    "message": "채팅 시작"
+  },
+  "menu_new_group": {
+    "message": "새 그룹"
+  },
+  "broadcast_list": {
+    "message": "방송 목록"
+  },
+  "broadcast_lists": {
+    "message": "방송 목록"
+  },
+  "new_broadcast_list": {
+    "message": "새 방송 목록"
+  },
+  "add_recipients": {
+    "message": "수신자 추가"
+  },
+  "menu_send": {
+    "message": "보내기"
+  },
+  "menu_toggle_keyboard": {
+    "message": "이모티콘 키보드 전환"
+  },
+  "menu_edit_group": {
+    "message": "그룹 편집"
+  },
+  "menu_group_name_and_image": {
+    "message": "그룹 이름과 이미지"
+  },
+  "menu_show_global_map": {
+    "message": "모든 위치 보기"
+  },
+  "menu_archive_chat": {
+    "message": "채팅 보관"
+  },
+  "menu_unarchive_chat": {
+    "message": "보관되지 않은 채팅"
+  },
+  "menu_add_attachment": {
+    "message": "첨부 파일 추가"
+  },
+  "menu_leave_group": {
+    "message": "그룹 나가기"
+  },
+  "menu_delete_chat": {
+    "message": "채팅 삭제"
+  },
+  "delete_contact": {
+    "message": "연락처 삭제"
+  },
+  "menu_delete_location": {
+    "message": "이 위치를 삭제하시겠습니까?"
+  },
+  "menu_message_details": {
+    "message": "메시지 세부정보"
+  },
+  "menu_copy_to_clipboard": {
+    "message": "클립보드에 복사하기"
+  },
+  "menu_copy_selection_to_clipboard": {
+    "message": "선택 복사"
+  },
+  "menu_copy_link_to_clipboard": {
+    "message": "링크 복사"
+  },
+  "menu_copy_text_to_clipboard": {
+    "message": "텍스트 복사"
+  },
+  "menu_copy_image_to_clipboard": {
+    "message": "이미지 복사"
+  },
+  "menu_copy_email_to_clipboard": {
+    "message": "이메일 복사"
+  },
+  "paste_from_clipboard": {
+    "message": "클립보드에서 붙여넣기"
+  },
+  "menu_forward": {
+    "message": "메시지 전달"
+  },
+  "menu_reply": {
+    "message": "메시지 답장"
+  },
+  "menu_mute": {
+    "message": "알림 음소거"
+  },
+  "menu_unmute": {
+    "message": "음소거 해제"
+  },
+  "menu_export_attachment": {
+    "message": "첨부 파일 내보내기"
+  },
+  "menu_export_attachments": {
+    "message": "첨부 파일 내보내기"
+  },
+  "menu_all_media": {
+    "message": "모든 미디어"
+  },
+  "show_in_chat": {
+    "message": "채팅에서 보기"
+  },
+  "menu_share": {
+    "message": "공유하기"
+  },
+  "block": {
+    "message": "차단하기"
+  },
+  "menu_block_contact": {
+    "message": "차단"
+  },
+  "menu_unblock_contact": {
+    "message": "차단 해제"
+  },
+  "accept": {
+    "message": "수락"
+  },
+  "menu_play": {
+    "message": "재생"
+  },
+  "menu_pause": {
+    "message": "일시정지"
+  },
+  "menu_scroll_to_bottom": {
+    "message": "맨 밑으로 스크롤"
+  },
+  "menu_scroll_to_top": {
+    "message": "맨 위로 스크롤"
+  },
+  "menu_help": {
+    "message": "도움"
+  },
+  "privacy_policy": {
+    "message": "개인 정보 보호 정책"
+  },
+  "menu_select_all": {
+    "message": "모두 선택"
+  },
+  "select_more": {
+    "message": "추가 선택"
+  },
+  "menu_edit_name": {
+    "message": "이름 편집"
+  },
+  "menu_settings": {
+    "message": "설정"
+  },
+  "menu_advanced": {
+    "message": "고급 설정"
+  },
+  "menu_view_profile": {
+    "message": "프로필 보기"
+  },
+  "menu_zoom_in": {
+    "message": "확대"
+  },
+  "menu_zoom_out": {
+    "message": "축소"
+  },
+  "menu_save_log": {
+    "message": "로그 저장"
+  },
+  "menu_more_options": {
+    "message": "더 많은 옵션"
+  },
+  "menu_learn_spelling": {
+    "message": "맞춤법 배우기"
+  },
+  "menu_chat_audit_log": {
+    "message": "채팅 로그 검사"
+  },
+  "jump_to_message": {
+    "message": "메시지로 이동"
+  },
+  "copy_json": {
+    "message": "JSON 복사"
+  },
+  "replace_draft": {
+    "message": "초안 대체"
+  },
+  "title_share_location": {
+    "message": "그룹 구성원과 위치 공유하기"
+  },
+  "device_talk": {
+    "message": "기기 메시지"
+  },
+  "device_talk_subtitle": {
+    "message": "로컬에서 생성된 메시지"
+  },
+  "device_talk_explain": {
+    "message": "이 채팅의 메시지는 델타 채팅 앱에서 로컬로 생성됩니다. 제작자는 이것을 앱 업데이트와 사용 중 발생하는 문제에 대해 알리기 위해 사용한다."
+  },
+  "edit_contact": {
+    "message": "연락처 수정"
+  },
+  "pin_chat": {
+    "message": "채팅 고정"
+  },
+  "unpin_chat": {
+    "message": "채팅 고정 해제"
+  },
+  "pin": {
+    "message": "고정"
+  },
+  "unpin": {
+    "message": "고정 해제"
+  },
+  "ConversationFragment_quoted_message_not_found": {
+    "message": "원본 메시지를 찾을 수 없음"
+  },
+  "reply_privately": {
+    "message": "비공개로 응답"
+  },
+  "source_code": {
+    "message": "소스 코드"
+  },
+  "add_to_home_screen": {
+    "message": "홈 스크린에 추가"
+  },
+  "mute_for_one_hour": {
+    "message": "1시간 동안 알림 끄기"
+  },
+  "mute_for_eight_hours": {
+    "message": "8시간 동안 알림 끄기"
+  },
+  "mute_for_one_day": {
+    "message": "1일 동안 알림 끄기"
+  },
+  "mute_for_seven_days": {
+    "message": "7일 동안 알림 끄기"
+  },
+  "mute_forever": {
+    "message": "영구히 음소거"
+  },
+  "share_location_for_5_minutes": {
+    "message": "5분 동안"
+  },
+  "share_location_for_30_minutes": {
+    "message": "30분 동안"
+  },
+  "share_location_for_one_hour": {
+    "message": "1시간 동안"
+  },
+  "share_location_for_two_hours": {
+    "message": "2시간 동안"
+  },
+  "share_location_for_six_hours": {
+    "message": "6시간 동안"
+  },
+  "file_saved_to": {
+    "message": "파일 \"%1$s\"에 저장됨."
+  },
+  "videochat": {
+    "message": "비디오 채팅"
+  },
+  "videochat_invite_user_to_videochat": {
+    "message": "%1$s를 비디오 채팅에 초대하시겠습니까?"
+  },
+  "videochat_contact_invited_hint": {
+    "message": "%1$s이 비디오 채팅에 초대함"
+  },
+  "videochat_you_invited_hint": {
+    "message": "영상 채팅에 초대되었습니다."
+  },
+  "videochat_tap_to_join": {
+    "message": "참여를 위해 탭하기"
+  },
+  "videochat_tap_to_open": {
+    "message": "열기 위해 탭하기"
+  },
+  "videochat_instance": {
+    "message": "비디오 채팅 인스턴스"
+  },
+  "videochat_instance_placeholder": {
+    "message": "당신의 비디오 채팅 인스턴스"
+  },
+  "videochat_instance_example": {
+    "message": "예시: https://meet.jit.si/$ROOM 또는 basicwebrtc:https://your-server"
+  },
+  "videochat_instance_explain_2": {
+    "message": "비디오 채팅을 사용할 수 있는 경우 각 채팅에서 비디오 채팅을 시작할 수 있습니다. 화상 채팅을 하려면 호환되는 앱 또는 호환 가능한 브라우저가 양쪽 끝에 필요합니다."
+  },
+  "videochat_instance_from_qr": {
+    "message": "\"%1$s\"를 사용하여 다른 사람을 화상 채팅에 초대하시겠습니까?\n\n설정되면 각 채팅에서 비디오 채팅을 시작할 수 있습니다. 이것은 비디오 채팅에 대한 이전 설정을 대체합니다."
+  },
+  "videochat_invitation": {
+    "message": "비디오 채팅 초대"
+  },
+  "videochat_invitation_body": {
+    "message": "당신은 비디오 채팅에 초대되었습니다. 참여를 위해 %1$s를 클릭하세요."
+  },
+  "ask_leave_group": {
+    "message": "이 그룹에서 나가시겠습니까?"
+  },
+  "ask_forward": {
+    "message": "%1$s님에게 메시지를 전달할까요?"
+  },
+  "ask_forward_multiple": {
+    "message": "%1$d 채팅으로 메시지를 전달하시겠습니까?"
+  },
+  "ask_export_attachment": {
+    "message": "첨부 파일을 내보내면 단말기의 다른 앱에서 해당 첨부 파일에 액세스할 수 있습니다.\n\n계속하시겠습니까?"
+  },
+  "ask_block_contact": {
+    "message": "이 연락처를 차단하시겠습니까? 이 연락처로부터 더 이상 메시지를 받지 않습니다."
+  },
+  "ask_unblock_contact": {
+    "message": "연락처 차단을 해제하시겠습니까? 이 연락처로부터 다시 메시지를 받을 수 있습니다."
+  },
+  "ask_delete_contacts": {
+    "message": "연락처를 삭제하시겠습니까?\n\n시스템 주소록에서 진행 중인 채팅 및 연락처가 있는 연락처는 영구적으로 삭제할 수 없습니다."
+  },
+  "ask_delete_contact": {
+    "message": "%1$s 연락처를 삭제하시겠습니까?\n\n시스템 주소록에서 진행 중인 채팅 및 연락처가 있는 연락처는 영구적으로 삭제할 수 없습니다."
+  },
+  "ask_start_chat_with": {
+    "message": "%1$s와 채팅하시겠습니까?"
+  },
+  "ask_remove_members": {
+    "message": "그룹에서 %1$s을/를 제거하시겠습니까?"
+  },
+  "ask_remove_from_broadcast": {
+    "message": "브로드 캐스트 목록에서 %1$s을/를 제거하시겠습니까?"
+  },
+  "open_url_confirmation": {
+    "message": "이 링크를 여시겠습니까?"
+  },
+  "contacts_title": {
+    "message": "연락처"
+  },
+  "contacts_enter_name_or_email": {
+    "message": "이름 또는 이메일 주소를 입력하세요."
+  },
+  "contacts_type_email_above": {
+    "message": "위에 이메일 주소를 입력하세요."
+  },
+  "contacts_empty_hint": {
+    "message": "대화상대가 없습니다"
+  },
+  "chat_archived_chats_title": {
+    "message": "보관된 채팅"
+  },
+  "chat_please_enter_message": {
+    "message": "메시지를 입력하세요."
+  },
+  "chat_camera_unavailable": {
+    "message": "카메라를 사용할 수 없습니다."
+  },
+  "chat_unable_to_record_audio": {
+    "message": "오디오를 녹음할 수 없습니다."
+  },
+  "chat_new_one_to_one_hint": {
+    "message": "%1$s에게 메시지를 보냅니다."
+  },
+  "chat_new_group_hint": {
+    "message": "당신이 첫 번째 메시지를 보낸 후에만 다른 사용자들이 이 그룹을 볼 것입니다."
+  },
+  "chat_record_slide_to_cancel": {
+    "message": "밀어서 취소"
+  },
+  "chat_record_explain": {
+    "message": "꾹 눌러 음성 메시지를 녹음하고, 떼서 보내시오"
+  },
+  "chat_no_chats_yet_title": {
+    "message": "받은 편지함을 비웁니다.\n새 채팅을 시작하려면 \"+\"를 누르시오."
+  },
+  "chat_all_archived": {
+    "message": "모든 대화가 보관되었습니다.\n새 채팅을 시작하려면 \"+\"를 누르시오."
+  },
+  "chat_share_with_title": {
+    "message": "공유 대상"
+  },
+  "chat_input_placeholder": {
+    "message": "메시지"
+  },
+  "chat_archived_label": {
+    "message": "보관됨"
+  },
+  "chat_request_label": {
+    "message": "요청"
+  },
+  "chat_no_messages": {
+    "message": "메시지가 없습니다…"
+  },
+  "chat_self_talk_subtitle": {
+    "message": "나에게 보낸 메시지"
+  },
+  "archive_empty_hint": {
+    "message": "보관된 채팅이 여기에 표시됩니다."
+  },
+  "saved_messages": {
+    "message": "저장된 메시지"
+  },
+  "saved_messages_explain": {
+    "message": "• 쉽게 액세스할 수 있도록 메시지 전달\n\n• 메모 또는 음성 메모\n\n• 미디어를 첨부하여 저장"
+  },
+  "saved": {
+    "message": "저장됨"
+  },
+  "save_as": {
+    "message": "~로 저장"
+  },
+  "retry_send": {
+    "message": "메시지 전송 다시 시도"
+  },
+  "messaging_disabled_not_in_group": {
+    "message": "이 그룹에 속해 있지 않기 때문에 쓸 수 없습니다. 가입하려면, 다른 구성원에게 문의하십시오."
+  },
+  "messaging_disabled_mailing_list": {
+    "message": "메일링 목록의 메시지 발송은 아직 지원되지 않습니다."
+  },
+  "cannot_display_unsuported_file_type": {
+    "message": "파일 형식을 표시할 수 없습니다: %s"
+  },
+  "attachment_failed_to_load": {
+    "message": "첨부 파일을 불러오지 못했습니다."
+  },
+  "mailing_list": {
+    "message": "메일 목록"
+  },
+  "mailing_list_profile_info": {
+    "message": "메일링 목록 이름 및 이미지의 변경 사항은 이 장치에만 적용됩니다."
+  },
+  "start_app": {
+    "message": "시작..."
+  },
+  "accept_request_first": {
+    "message": "채팅 요청을 먼저 수락하십시오."
+  },
+  "filter_map_on_time": {
+    "message": "시간 범위 내 위치 표시"
+  },
+  "show_location_traces": {
+    "message": "기록 보기"
+  },
+  "add_poi": {
+    "message": "관심 지점 전송"
+  },
+  "chat_audit_log_empty_message": {
+    "message": "이 채팅의 시스템 메시지가 여기에 나타납니다."
+  },
+  "chat_audit_log_description": {
+    "message": "시스템 및 정보 메시지만 표시합니다. 많은 메시지를 스크롤하지 않고 마지막 채팅 작업을 찾을 때 유용합니다."
+  },
+  "open_external_url_trust_domain": {
+    "message": "%1$s에 대해 다시 묻지 마시오"
+  },
+  "puny_code_warning_header": {
+    "message": "의심되는 링크가 탐지됨"
+  },
+  "puny_code_warning_question": {
+    "message": "정말 %1$s에 방문하시겠습니까?"
+  },
+  "puny_code_warning_description": {
+    "message": "이 링크는 서로 다른 알파벳의 유사하게 생긴 문자를 잘못 전달할 수 있습니다. %1$s 링크를 따라가면 라틴어가 아닌 문자의 경우 정상적인 %2$s로 이어집니다. 이러한 문자를 예상하지 못한 경우 이 링크는 안전하지 않을 수 있습니다."
+  },
+  "search": {
+    "message": "검색"
+  },
+  "search_explain": {
+    "message": "채팅, 연락, 메시지를 찾으시오"
+  },
+  "search_no_result_for_x": {
+    "message": "\"%s\"에 대한 검색 결과가 없음"
+  },
+  "group_name": {
+    "message": "그룹 이름"
+  },
+  "group_avatar": {
+    "message": "그룹 이미지"
+  },
+  "remove_group_image": {
+    "message": "그룹 이미지 제거"
+  },
+  "change_group_image": {
+    "message": "그룹 이미지 변경"
+  },
+  "group_create_button": {
+    "message": "그룹 만들기"
+  },
+  "group_please_enter_group_name": {
+    "message": "그룹 이름을 입력하시오"
+  },
+  "group_add_members": {
+    "message": "대화상대 추가"
+  },
+  "group_self_not_in_group": {
+    "message": "실행을 위해선 그룹의 멤버가 되어야 합니다."
+  },
+  "profile_encryption": {
+    "message": "암호화"
+  },
+  "profile_shared_chats": {
+    "message": "공유 채팅"
+  },
+  "tab_contact": {
+    "message": "연락처"
+  },
+  "tab_group": {
+    "message": "그룹"
+  },
+  "tab_gallery": {
+    "message": "갤러리"
+  },
+  "tab_docs": {
+    "message": "문서"
+  },
+  "tab_links": {
+    "message": "링크"
+  },
+  "tab_gallery_empty_hint": {
+    "message": "이 채팅에서 공유된 이미지와 비디오가 여기에 나타납니다."
+  },
+  "tab_docs_empty_hint": {
+    "message": "이 채팅에서 공유된 문서와 다른 파일들이 여기에 나타납니다."
+  },
+  "tab_image_empty_hint": {
+    "message": "채팅에 공유된 이미지가 여기에 나타납니다."
+  },
+  "tab_video_empty_hint": {
+    "message": "채팅에 공유된 비디오가 여기에 나타납니다."
+  },
+  "tab_audio_empty_hint": {
+    "message": "이 채팅에서 공유된 오디오 파일과 음성 메시지가 여기에 나타납니다."
+  },
+  "tab_webxdc_empty_hint": {
+    "message": "이 채팅에서 공유된 개인 앱이 여기에 나타납니다."
+  },
+  "all_apps_empty_hint": {
+    "message": "채팅에서 보내거나 받은 개인 앱들이 여기에 나타납니다."
+  },
+  "media_preview": {
+    "message": "미디어 미리보기"
+  },
+  "send_message": {
+    "message": "메시지 전송"
+  },
+  "aeap_addr_changed": {
+    "message": "%1$s의 주소가 %2$s에서 %3$s로 변경됨."
+  },
+  "aeap_explanation": {
+    "message": "이메일 주소를 %1$s에서 %2$s로 바꿨습니다.\n\n확인된 그룹으로 메시지를 보내면 해당 그룹의 연락처가 자동으로 이전 주소를 새 주소로 대체합니다.\n\n모든 이메일을 새 이메일 주소로 전달하도록 이전 이메일 공급자를 설정하는 것이 좋습니다. 그렇지 않으면 새 주소를 받지 못한 연락처의 메시지를 놓칠 수 있습니다."
+  },
+  "incoming_messages": {
+    "message": "수신 메시지"
+  },
+  "outgoing_messages": {
+    "message": "발신 메시지"
+  },
+  "storage_on_domain": {
+    "message": "%1$s에 저장됨"
+  },
+  "connectivity": {
+    "message": "연결"
+  },
+  "connectivity_not_connected": {
+    "message": "연결되지 않음"
+  },
+  "connectivity_connecting": {
+    "message": "연결중..."
+  },
+  "connectivity_updating": {
+    "message": "업데이트중..."
+  },
+  "connectivity_connected": {
+    "message": "연결됨"
+  },
+  "sending": {
+    "message": "전송중..."
+  },
+  "last_msg_sent_successfully": {
+    "message": "마지막 메시지 전송됨."
+  },
+  "not_supported_by_provider": {
+    "message": "공급자가 지원하지 않습니다."
+  },
+  "messages": {
+    "message": "메시지"
+  },
+  "part_of_total_used": {
+    "message": "%2$s중 %1$s 사용됨"
+  },
+  "scan_invitation_code": {
+    "message": "초대 코드 스캔"
+  },
+  "login_title": {
+    "message": "로그인"
+  },
+  "login_header": {
+    "message": "이메일 계정으로 로그인하시오"
+  },
+  "login_explain": {
+    "message": "존재하는 이메일 계정으로 로그인하시오"
+  },
+  "login_subheader": {
+    "message": "알려진 이메일 공급자의 경우 추가 설정이 자동으로 설정됩니다. 웹 설정에서 IMAP을 사용 가능으로 설정해야 하는 경우가 있습니다. 도움이 필요하면 전자 메일 공급자나 친구에게 문의하십시오."
+  },
+  "login_no_servers_hint": {
+    "message": "Delta Chat은 서버가 없고, 당신의 데이터는 장치에 남아 있습니다."
+  },
+  "login_inbox": {
+    "message": "받은 편지함"
+  },
+  "login_imap_login": {
+    "message": "IMAP 로그인 이름"
+  },
+  "login_imap_server": {
+    "message": "IMAP 서버"
+  },
+  "login_imap_port": {
+    "message": "IMAP 포트"
+  },
+  "login_imap_security": {
+    "message": "IMAP 보안"
+  },
+  "login_outbox": {
+    "message": "보낸 편지함"
+  },
+  "login_smtp_login": {
+    "message": "SMTP 로그인 이름"
+  },
+  "login_smtp_password": {
+    "message": "SMTP 비밀번호"
+  },
+  "login_smtp_server": {
+    "message": "SMTP 서버"
+  },
+  "login_smtp_port": {
+    "message": "SMTP 포트"
+  },
+  "login_smtp_security": {
+    "message": "SMTP 보안"
+  },
+  "login_auth_method": {
+    "message": "권한 부여 방법"
+  },
+  "login_info_oauth2_title": {
+    "message": "간소화된 설치를 계속하시겠습니까?"
+  },
+  "login_info_oauth2_text": {
+    "message": "입력한 이메일 주소는 단순화된 설정(OAuth 2.0)을 지원합니다.\n\n다음 단계에서는 Delta Chat 이 이메일을 통한 채팅 앱 역할을 하도록 허용하십시오.\n\nDelta 채팅 서버가 없으며 데이터가 장치에 남아 있습니다."
+  },
+  "login_certificate_checks": {
+    "message": "인증서 확인"
+  },
+  "login_error_mail": {
+    "message": "유효한 이메일 주소를 입력하시오"
+  },
+  "login_error_server": {
+    "message": "유효한 서버 / IP 주소를 입력하시오"
+  },
+  "login_error_port": {
+    "message": "올바른 포트(1-65535)를 입력하십시오."
+  },
+  "login_error_required_fields": {
+    "message": "유효한 이메일 주소와 비밀번호를 입력하시오"
+  },
+  "import_backup_title": {
+    "message": "백업 불러오기"
+  },
+  "import_backup_ask": {
+    "message": "\"%1$s\"에서 백업을 찾았습니다.\n\n모든 데이터와 설정을 가져오시겠습니까?"
+  },
+  "import_backup_no_backup_found": {
+    "message": "백업을 찾을 수 없습니다.\n\n\"%1$s\"에 백업을 복사하고 다시 시도하십시오. 또는 \"메시징 시작\"을 눌러 일반 설정을 계속하십시오."
+  },
+  "login_error_cannot_login": {
+    "message": "\"%1$s\"에 로그인 할 수 없음. 이메일 주소와 비밀번호가 맞는지 확인하시오."
+  },
+  "switch_account": {
+    "message": "계정 전환"
+  },
+  "add_account": {
+    "message": "계정 추가"
+  },
+  "delete_account": {
+    "message": "계정 삭제"
+  },
+  "delete_account_ask": {
+    "message": "정말 계정을 삭제하시겠습니까?"
+  },
+  "delete_account_explain_with_name": {
+    "message": "모든 암호화 설정, 연락처, 채팅, 메시지 및 미디어를 포함하여 이 장치에 있는 \"%s\"의 모든 계정 데이터가 삭제됩니다. 이 작업은 취소할 수 없습니다."
+  },
+  "unconfigured_account": {
+    "message": "존재하지 않는 계정"
+  },
+  "unconfigured_account_hint": {
+    "message": "설정을 위해 계정을 여시오"
+  },
+  "try_connect_now": {
+    "message": "연결을 하시오"
+  },
+  "sync_all": {
+    "message": "모두 동기화"
+  },
+  "configuration_failed_with_error": {
+    "message": "구성 실패. 에러: %1$s"
+  },
+  "forward_to": {
+    "message": "채팅방 선택"
+  },
+  "ask_send_files_to_selected_chats": {
+    "message": "%1$d 파일을 %2$d 채팅으로 보내시겠습니까?"
+  },
+  "share_text_multiple_chats": {
+    "message": "\"%2$s\"를 %1$d 채팅에 보내시겠습니까?"
+  },
+  "share_abort": {
+    "message": "권한이 없어 공유가 중단되었습니다."
+  },
+  "pref_using_custom": {
+    "message": "사용자 정의 사용: %s"
+  },
+  "pref_using_default": {
+    "message": "기본값 사용: %s"
+  },
+  "pref_profile_info_headline": {
+    "message": "내 프로필"
+  },
+  "pref_profile_photo": {
+    "message": "프로필 사진"
+  },
+  "pref_blocked_contacts": {
+    "message": "차단 목록"
+  },
+  "blocked_empty_hint": {
+    "message": "차단된 연락처가 여기에 나타납니다."
+  },
+  "pref_password_and_account_settings": {
+    "message": "계정 설정"
+  },
+  "pref_who_can_see_profile_explain": {
+    "message": "다른 사용자와 통신할 때 프로필 이미지, 이름 및 서명이 메시지와 함께 전송됩니다."
+  },
+  "pref_your_name": {
+    "message": "내 이름"
+  },
+  "pref_default_status_label": {
+    "message": "서명 텍스트"
+  },
+  "pref_enter_sends": {
+    "message": "엔터키로 메시지 전송"
+  },
+  "pref_enter_sends_explain": {
+    "message": "Enter 키를 누르면 문자 메시지가 전송됩니다."
+  },
+  "pref_outgoing_media_quality": {
+    "message": "발신 미디어 품질"
+  },
+  "pref_outgoing_worse": {
+    "message": "저화질, 작은 크기"
+  },
+  "pref_vibrate": {
+    "message": "진동"
+  },
+  "pref_screen_security": {
+    "message": "화면 보안"
+  },
+  "pref_screen_security_explain": {
+    "message": "최근 사용 목록/개요 및 앱 안에서 스크린샷 차단"
+  },
+  "pref_screen_security_please_restart_hint": {
+    "message": "화면 보안 설정을 적용하려면 앱을 다시 시작하십시오."
+  },
+  "pref_notifications": {
+    "message": "알림"
+  },
+  "pref_notifications_show": {
+    "message": "보이기"
+  },
+  "pref_notifications_priority": {
+    "message": "우선순위"
+  },
+  "pref_notifications_explain": {
+    "message": "새 메시지에 대한 시스템 알림 활성화"
+  },
+  "pref_show_notification_content": {
+    "message": "알림에 메시지 내용 표시"
+  },
+  "pref_show_notification_content_explain": {
+    "message": "알림에서 메시지를 보낸 사람과 첫 번째 단어를 표시합니다."
+  },
+  "pref_led_color": {
+    "message": "LED 색상"
+  },
+  "pref_sound": {
+    "message": "알림음"
+  },
+  "pref_silent": {
+    "message": "무음"
+  },
+  "pref_privacy": {
+    "message": "개인정보 보호"
+  },
+  "pref_chats_and_media": {
+    "message": "대화 및 미디어"
+  },
+  "pref_system_default": {
+    "message": "시스템 기본값"
+  },
+  "pref_light_theme": {
+    "message": "밝게"
+  },
+  "pref_dark_theme": {
+    "message": "어둡게"
+  },
+  "pref_appearance": {
+    "message": "모양"
+  },
+  "pref_theme": {
+    "message": "테마"
+  },
+  "pref_language": {
+    "message": "언어"
+  },
+  "pref_incognito_keyboard": {
+    "message": "사생활 보호 키보드"
+  },
+  "pref_incognito_keyboard_explain": {
+    "message": "개인 맞춤화를 사용하지 않도록 키보드에 요청합니다"
+  },
+  "pref_read_receipts": {
+    "message": "열람 안내"
+  },
+  "pref_read_receipts_explain": {
+    "message": "열람 안내 기능이 꺼져 있다면, 다른 사람이 메시지를 열람했는지의 여부 또한 볼 수 없습니다."
+  },
+  "pref_manage_keys": {
+    "message": "키 관리"
+  },
+  "pref_use_system_emoji": {
+    "message": "시스템 이모티콘 사용"
+  },
+  "pref_use_system_emoji_explain": {
+    "message": "Delta Chat 이모티콘 사용 중지"
+  },
+  "pref_app_access": {
+    "message": "앱 접근"
+  },
+  "pref_chats": {
+    "message": "채팅"
+  },
+  "pref_in_chat_sounds": {
+    "message": "앱 내 알림"
+  },
+  "pref_view_log": {
+    "message": "로그 보기"
+  },
+  "pref_saved_log": {
+    "message": "로그를 \"다운로드\" 폴더에 저장했습니다."
+  },
+  "pref_save_log_failed": {
+    "message": "로그 저장을 실패했습니다."
+  },
+  "pref_log_header": {
+    "message": "로그"
+  },
+  "pref_other": {
+    "message": "기타"
+  },
+  "pref_backup": {
+    "message": "백업"
+  },
+  "pref_backup_explain": {
+    "message": "외부 저장소에 채팅 백업"
+  },
+  "pref_backup_export_explain": {
+    "message": "백업을 사용하면 이 장치 또는 다른 장치에 새 설치를 설정할 수 있습니다.\n\n백업에는 모든 메시지, 연락처 및 채팅과 모든 자동 암호화 설정이 포함됩니다. 백업 파일을 안전한 장소에 보관하거나 가능한 한 빨리 삭제하십시오."
+  },
+  "pref_backup_export_start_button": {
+    "message": "백업 시작"
+  },
+  "pref_backup_written_to_x": {
+    "message": "백업이 \"%1$s\"에 기록되었습니다."
+  },
+  "pref_managekeys_menu_title": {
+    "message": "키 관리"
+  },
+  "pref_managekeys_export_secret_keys": {
+    "message": "암호 키 내보내기"
+  },
+  "pref_managekeys_export_explain": {
+    "message": "암호 키를 \"%1$s\"로 내보내시겠습니까?"
+  },
+  "pref_managekeys_import_secret_keys": {
+    "message": "암호 키 가져오기"
+  },
+  "pref_managekeys_import_explain": {
+    "message": "\"%1$s\"에서 암호 키를 가져오시겠습니까?\n\n• 기존 개인 키는 삭제되지 않습니다\n\n• 마지막으로 가져온 키는 파일 이름에 \"레거시\"라는 단어가 없는 한 새 기본 키로 사용됩니다."
+  },
+  "pref_managekeys_secret_keys_exported_to_x": {
+    "message": "암호 키가 \"%1$s\"에 기록되었습니다."
+  },
+  "pref_managekeys_secret_keys_imported_from_x": {
+    "message": "암호 키를 \"%1$s\"에서 가져왔습니다."
+  },
+  "pref_background": {
+    "message": "채팅방 배경화면"
+  },
+  "pref_background_btn_default": {
+    "message": "기본 이미지 사용"
+  },
+  "pref_background_btn_gallery": {
+    "message": "갤러리에서 선택됨"
+  },
+  "pref_imap_folder_handling": {
+    "message": "IMAP 폴더 처리"
+  },
+  "pref_imap_folder_warn_disable_defaults": {
+    "message": "이 선택사항을 변경할 경우, 서버와 다른 클라이언트가 적절하게 구성되어 있는지 확인하십시오.\n\n그렇지 않으면 상황이 전혀 작동하지 않을 수 있습니다."
+  },
+  "pref_watch_sent_folder": {
+    "message": "보낸 폴더 보기"
+  },
+  "pref_send_copy_to_self": {
+    "message": "복사본 내게 보내기"
+  },
+  "pref_send_copy_to_self_explain": {
+    "message": "여러 장치에서 이 계정을 사용할 때 필요합니다."
+  },
+  "pref_auto_folder_moves": {
+    "message": "DeltaChat 폴더로 자동 이동"
+  },
+  "pref_auto_folder_moves_explain": {
+    "message": "받은 문서가 복잡해지지 않도록 대화 내용이 이동됩니다."
+  },
+  "pref_only_fetch_mvbox_title": {
+    "message": "DeltaChat 폴더에서만 가져오기"
+  },
+  "pref_only_fetch_mvbox_explain": {
+    "message": "다른 폴더는 무시합니다. 서버에서 채팅 메시지를 DeltaChat 폴더로 이동해야 합니다."
+  },
+  "pref_show_emails_no": {
+    "message": "아뇨, 오직 채팅만"
+  },
+  "pref_show_emails_accepted_contacts": {
+    "message": "승인된 연락처의 경우"
+  },
+  "pref_show_emails_all": {
+    "message": "전부"
+  },
+  "pref_on_demand_location_streaming": {
+    "message": "주문형 위치 스트리밍"
+  },
+  "pref_developer_mode": {
+    "message": "개발 모드"
+  },
+  "pref_developer_mode_explain": {
+    "message": "디버깅 옵션을 활성화하여 앱의 안정성을 떨어뜨릴 수 있습니다. 개발자 전용."
+  },
+  "pref_background_default": {
+    "message": "기본 배경"
+  },
+  "pref_background_default_color": {
+    "message": "기본 색"
+  },
+  "pref_background_custom_image": {
+    "message": "커스텀 이미지"
+  },
+  "pref_background_custom_color": {
+    "message": "커스텀 색"
+  },
+  "export_aborted": {
+    "message": "내보내기가 중단되었습니다."
+  },
+  "auto_download_messages": {
+    "message": "메시지 자동 다운로드"
+  },
+  "up_to_x": {
+    "message": "%1$s까지 "
+  },
+  "download_failed": {
+    "message": "다운로드 실패"
+  },
+  "n_bytes_message": {
+    "message": "%1$s 메시지"
+  },
+  "download_max_available_until": {
+    "message": "%1$s까지 최대 다운로드 가능"
+  },
+  "profile_image_select": {
+    "message": "프로필 이미지 선택"
+  },
+  "select_your_new_profile_image": {
+    "message": "새로운 프로필 이미지 선택"
+  },
+  "profile_image_delete": {
+    "message": "프로필 이미지 삭제"
+  },
+  "pref_show_tray_icon": {
+    "message": "트레이 아이콘 표시"
+  },
+  "pref_edit_profile": {
+    "message": "프로필 편집"
+  },
+  "emoji_search_results": {
+    "message": "결과 검색"
+  },
+  "emoji_not_found": {
+    "message": "이모티콘을 찾을 수 없습니다."
+  },
+  "emoji_recent": {
+    "message": "최근에 사용됨"
+  },
+  "emoji_people": {
+    "message": "사람 및 몸통"
+  },
+  "emoji_nature": {
+    "message": "동물 및 자연"
+  },
+  "emoji_foods": {
+    "message": "음식 및 음료"
+  },
+  "emoji_activity": {
+    "message": "활동"
+  },
+  "emoji_places": {
+    "message": "여행 및 장소"
+  },
+  "delete_old_messages": {
+    "message": "오래된 메시지 삭제"
+  },
+  "autodel_device_title": {
+    "message": "기기에서 메시지 삭제"
+  },
+  "autodel_server_title": {
+    "message": "서버에서 메시지 삭제"
+  },
+  "autodel_device_ask": {
+    "message": "%1$d 메시지와 새로 가져온 모든 메시지 \"%2$s\"를 나중에 삭제하시겠습니까?\n\n• 여기에는 모든 미디어가 포함됩니다.\n\n• 메시지가 표시되었는지 여부에 관계없이 삭제됩니다.\n\n• \"저장된 메시지\"는 로컬 삭제에서 건너뜁니다."
+  },
+  "autodel_server_enabled_hint": {
+    "message": "여기에는 모든 서버 폴더에 있는 전자 메일, 미디어 및 \"저장된 메시지\"가 포함됩니다. 서버에 데이터를 보관하거나 Delta Chat 외에 다른 이메일 클라이언트를 사용하는 경우 이 기능을 사용하지 마십시오."
+  },
+  "autodel_confirm": {
+    "message": "알겠습니다. 모든 메시지를 삭제하세요."
+  },
+  "autodel_at_once": {
+    "message": "한 번에"
+  },
+  "after_30_seconds": {
+    "message": "30초 후"
+  },
+  "after_1_minute": {
+    "message": "1분 후"
+  },
+  "after_5_minutes": {
+    "message": "5분 후"
+  },
+  "after_30_minutes": {
+    "message": "30분 후"
+  },
+  "autodel_after_1_hour": {
+    "message": "1시간 후"
+  },
+  "autodel_after_1_day": {
+    "message": "1일 후"
+  },
+  "autodel_after_1_week": {
+    "message": "1주 후"
+  },
+  "after_5_weeks": {
+    "message": "5주 후"
+  },
+  "autodel_after_1_year": {
+    "message": "1년 후"
+  },
+  "autocrypt_send_asm_title": {
+    "message": "자동 암호화 설정된 메시지 전송"
+  },
+  "autocrypt_send_asm_explain_before": {
+    "message": "자동 암호화 설치 메시지는 사용자의 설정을 다른 자동 암호화 호환 앱과 안전하게 공유합니다.\n\n설치는 여기에 표시된 설치 코드에 의해 암호화되며 다른 장치에 입력해야 합니다."
+  },
+  "autocrypt_send_asm_button": {
+    "message": "자동 암호화 설정된 메시지 전송"
+  },
+  "autocrypt_send_asm_explain_after": {
+    "message": "설정이 사용자 자신에게 전송되었습니다. 다른 장치로 전환하고 설정 메시지를 엽니다. 설정 코드를 입력하라는 메시지가 표시됩니다. 다음 숫자를 입력합니다."
+  },
+  "autocrypt_asm_subject": {
+    "message": "자동 암호화 설정 메시지"
+  },
+  "autocrypt_asm_general_body": {
+    "message": "클라이언트 간에 종단 간 설정을 전송하는 데 사용되는 자동 암호화 설정 메시지입니다.\n\n설치를 해독하고 사용하려면 자동 암호화 호환 클라이언트에서 메시지를 열고 생성 장치에 표시된 설치 코드를 입력하십시오."
+  },
+  "systemmsg_unknown_sender_for_chat": {
+    "message": "이 채팅의 발신자를 알 수 없습니다. 자세한 내용은 'info'를 확인하세요."
+  },
+  "systemmsg_subject_for_new_contact": {
+    "message": "%1$s가 보낸 메시지"
+  },
+  "systemmsg_failed_sending_to": {
+    "message": "%1$s에게 메시지를 보내지 못했습니다."
+  },
+  "group_name_changed_by_you": {
+    "message": "그룹 이름을 \"%1$s\"에서 \"%2$s\"로 변경함."
+  },
+  "group_name_changed_by_other": {
+    "message": "%3$s이 그룹 이름을 \"%1$s\"에서 \"%2$s\"로 변경함."
+  },
+  "group_image_changed_by_you": {
+    "message": "그룹 이미지를 바꿨습니다."
+  },
+  "group_image_changed_by_other": {
+    "message": "%1$s이 그룹 이미지를 변경함."
+  },
+  "add_member_by_you": {
+    "message": "%1$s를 멤버로 추가함."
+  },
+  "add_member_by_other": {
+    "message": "%2$s가 %1$s를 멤버로 추가함"
+  },
+  "remove_member_by_you": {
+    "message": "%1$s를 멤버에서 제거함."
+  },
+  "remove_member_by_other": {
+    "message": "%2$s가 %1$s를 멤버에서 제거함."
+  },
+  "group_left_by_you": {
+    "message": "그룹을 나갔습니다."
+  },
+  "group_image_deleted_by_you": {
+    "message": "그룹 이미지를 지움."
+  },
+  "group_image_deleted_by_other": {
+    "message": "%1$s이 그룹 이미지를 지움."
+  },
+  "location_enabled_by_you": {
+    "message": "위치 스트리밍을 활성화했습니다."
+  },
+  "location_enabled_by_other": {
+    "message": "%1$s에 의해 위치 스트리밍이 활성화되었습니다."
+  },
+  "ephemeral_timer_disabled_by_you": {
+    "message": "사라지는 메시지 타이머를 비활성화했습니다."
+  },
+  "ephemeral_timer_disabled_by_other": {
+    "message": "사라지는 메시지 타이머가 %1$s에 의해 비활성화되었습니다."
+  },
+  "ephemeral_timer_seconds_by_you": {
+    "message": "사라지는 메시지 타이머를 %1$s초로 설정함."
+  },
+  "ephemeral_timer_seconds_by_other": {
+    "message": "%2$s가 사라지는 메시지 타이머를 %1$s초로 설정함."
+  },
+  "ephemeral_timer_1_minute_by_you": {
+    "message": "사라지는 메시지 타이머를 1분으로 설정함."
+  },
+  "ephemeral_timer_1_minute_by_other": {
+    "message": "%1$s가 사라지는 메시지 타이머를 1분으로 설정함."
+  },
+  "ephemeral_timer_1_hour_by_you": {
+    "message": "사라지는 메시지 타이머를 1시간으로 설정함."
+  },
+  "ephemeral_timer_1_hour_by_other": {
+    "message": "%1$s가 사라지는 메시지 타이머를 1시간으로 설정함."
+  },
+  "ephemeral_timer_1_day_by_you": {
+    "message": "사라지는 메시지 타이머를 1일로 설정함."
+  },
+  "ephemeral_timer_1_day_by_other": {
+    "message": "%1$s가 사라지는 메시지 타이머를 1일로 설정함."
+  },
+  "ephemeral_timer_1_week_by_you": {
+    "message": "사라지는 메시지 타이머를 1주로 설정함."
+  },
+  "ephemeral_timer_1_week_by_other": {
+    "message": "%1$s가 사라지는 메시지 타이머를 1주로 설정함."
+  },
+  "ephemeral_timer_minutes_by_you": {
+    "message": "사라지는 메시지 타이머를 %1$s분으로 설정함."
+  },
+  "ephemeral_timer_minutes_by_other": {
+    "message": "%2$s가 사라지는 메시지 타이머를 %1$s분으로 설정함."
+  },
+  "ephemeral_timer_hours_by_you": {
+    "message": "사라지는 메시지 타이머를 %1$s시간으로 설정함."
+  },
+  "ephemeral_timer_hours_by_other": {
+    "message": "%2$s가 사라지는 메시지 타이머를 %1$s시간으로 설정함."
+  },
+  "ephemeral_timer_days_by_you": {
+    "message": "사라지는 메시지 타이머를 %1$s일로 설정함."
+  },
+  "ephemeral_timer_days_by_other": {
+    "message": "%2$s가 사라지는 메시지 타이머를 %1$s일로 설정함."
+  },
+  "ephemeral_timer_weeks_by_you": {
+    "message": "사라지는 메시지 타이머를 %1$s주로 설정함."
+  },
+  "ephemeral_timer_weeks_by_other": {
+    "message": "%2$s가 사라지는 메시지 타이머를 %1$s주로 설정함."
+  },
+  "devicemsg_self_deleted": {
+    "message": "저장된 메시지 대화를 삭제했습니다.\n\nℹ️\"저장된 메시지\" 기능을 다시 사용하려면 자신과의 대화를 새로 만드십시오."
+  },
+  "devicemsg_storage_exceeding": {
+    "message": "⚠️ 공급자의 저장공간이 곧 고갈될 예정입니다. %1$s%%가 이미 사용 중입니다.\n\n저장공간이 가득 찬 경우 메시지를 수신하지 못할 수 있습니다.\n\n👉 공급자의 웹 인터페이스에서 이전 데이터를 삭제할 수 있는지 확인하고 \"설정 / 이전 메시지 삭제\"를 활성화하는 것을 고려하십시오. \"설정/연결\"에서 언제든지 현재 저장공간 사용량을 확인할 수 있습니다."
+  },
+  "devicemsg_bad_time": {
+    "message": "⚠️ 장치의 날짜 또는 시간이 정확하지 않은 것 같습니다(%1$s).\n\n메시지가 올바르게 수신되도록 시계 ⏰🔧를 조정하세요."
+  },
+  "devicemsg_update_reminder": {
+    "message": "⚠️ 델타 채팅 버전이 오래되었을 수 있습니다.\n\n채팅 파트너가 최신 버전을 사용하기 때문에 문제가 발생할 수 있습니다.  당신은 최신 기능이 없습니다. 😳\n https://get.delta.chat 또는 앱 스토어에서 업데이트를 확인하십시오."
+  },
+  "enter_system_secret_to_continue": {
+    "message": "계속하려면 시스템 정의 암호를 입력하십시오."
+  },
+  "qr_code": {
+    "message": "QR 코드"
+  },
+  "load_qr_code_as_image": {
+    "message": "QR 코드를 이미지로 로드"
+  },
+  "qrscan_title": {
+    "message": "QR코드를 스캔하세요"
+  },
+  "qrscan_hint": {
+    "message": "QR 코드 위에 카메라를 갖다 대시오."
+  },
+  "qrscan_failed": {
+    "message": "QR 코드를 디코딩할 수 없습니다."
+  },
+  "qrscan_ask_join_group": {
+    "message": "\"%1$s\" 그룹에 참여하시겠습니까?"
+  },
+  "qrscan_fingerprint_mismatch": {
+    "message": "스캔한 지문이 %1$s에 대해 마지막으로 표시된 지문과 일치하지 않습니다."
+  },
+  "qrscan_no_addr_found": {
+    "message": "이 QR 코드에는 지문이 포함되어 있지만 이메일 주소는 없습니다.\n\n대역 외 확인의 경우 먼저 수신자에 대한 암호화된 연결을 설정하십시오."
+  },
+  "qrscan_contains_text": {
+    "message": "스캔한 QR 코드 텍스트:\n\n%1$s"
+  },
+  "qrscan_contains_url": {
+    "message": "스캔한 QR 코드 URL:\n\n%1$s"
+  },
+  "qrscan_fingerprint_label": {
+    "message": "지문"
+  },
+  "withdraw_verifycontact_explain": {
+    "message": "이 QR 코드는 다른 사용자가 스캔하여 사용자에게 연락할 수 있습니다.\n\n여기서 QR 코드를 비활성화하고 다시 스캔하여 다시 활성화할 수 있습니다."
+  },
+  "withdraw_verifygroup_explain": {
+    "message": "이 QR 코드는 다른 사용자가 스캔하여 \"%1$s\" 그룹에 가입할 수 있습니다.\n\n여기서 QR 코드를 비활성화하고 다시 스캔하여 다시 활성화할 수 있습니다."
+  },
+  "withdraw_qr_code": {
+    "message": "QR 코드 비활성화"
+  },
+  "revive_verifycontact_explain": {
+    "message": "이 QR 코드는 다른 사용자가 스캔하여 사용자에게 연락할 수 있습니다.\n\nQR 코드가 이 장치에서 활성화되지 않았습니다."
+  },
+  "revive_verifygroup_explain": {
+    "message": "이 QR 코드는 다른 사람이 스캔하여 그룹 \"%1$s\"에 가입할 수 있다.\n\nQR 코드가 이 장치에서 활성화되지 않았습니다."
+  },
+  "revive_qr_code": {
+    "message": "QR 코드 활성화"
+  },
+  "qrshow_title": {
+    "message": "QR 초대 코드"
+  },
+  "qrshow_x_joining": {
+    "message": "%1$s가 가입함."
+  },
+  "qrshow_x_verified": {
+    "message": "%1$s가 확인됨."
+  },
+  "qrshow_x_has_joined_group": {
+    "message": "%1$s가 그룹에 가입함."
+  },
+  "qrshow_join_group_title": {
+    "message": "QR 초대 코드"
+  },
+  "qrshow_join_group_hint": {
+    "message": "\"%1$s\" 그룹 참여를 위해 스캔하시오"
+  },
+  "qrshow_join_contact_title": {
+    "message": "QR 초대 코드"
+  },
+  "qrshow_join_contact_hint": {
+    "message": "%1$s과 채팅을 하려면 스캔하시오"
+  },
+  "qrshow_join_contact_no_connection_toast": {
+    "message": "인터넷에 연결되어 있지 않아 QR 코드 설정을 수행할 수 없습니다."
+  },
+  "qraccount_ask_create_and_login": {
+    "message": "\"%1$s\"에서 새 이메일 주소를 만들고 로그인하시겠습니까?"
+  },
+  "qraccount_ask_create_and_login_another": {
+    "message": "\"%1$s\"에서 새 이메일 주소를 만들고 로그인하시겠습니까?\n\n기존 계정은 삭제되지 않습니다. 계정 전환 항목을 사용하여 계정 간을 전환합니다."
+  },
+  "qraccount_qr_code_cannot_be_used": {
+    "message": "스캔한 QR 코드를 사용하여 새 계정을 설정할 수 없습니다."
+  },
+  "qrlogin_ask_login": {
+    "message": "\"%1$s\"에 로그인하시겠습니까?"
+  },
+  "qrlogin_ask_login_another": {
+    "message": "\"%1$s\"에 로그인하시겠습니까?\n\n기존 계정은 삭제되지 않습니다. 계정 전환 항목을 사용하여 계정 간을 전환합니다."
+  },
+  "secure_join_started": {
+    "message": "%1$s이 그룹에 가입하도록 초대했습니다.\n\n%2$s의 장치가 응답하기를 기다리는 중입니다..."
+  },
+  "secure_join_replies": {
+    "message": "%1$s이 응하여, 그룹에 추가되기를 기다리는 중입니다..."
+  },
+  "contact_verified": {
+    "message": "%1$s이 확인됨"
+  },
+  "contact_not_verified": {
+    "message": "%1$s 확인할 수 없음"
+  },
+  "contact_setup_changed": {
+    "message": "%1$s에 대한 설정이 변경되었습니다."
+  },
+  "copy_qr_data_success": {
+    "message": "QR url을 클립보드에 복사했습니다"
+  },
+  "mailto_dialog_header_select_chat": {
+    "message": "메시지를 보내려면 채팅을 선택하십시오"
+  },
+  "confirm_replace_draft": {
+    "message": "%1$s에 이미 임시 저장된 메시지가 있습니다. 바꾸시겠습니까?"
+  },
+  "mailto_link_could_not_be_decoded": {
+    "message": "링크로 보내는 메일을 디코딩할 수 없습니다: %1$s"
+  },
+  "notify_reply_button": {
+    "message": "답장하기"
+  },
+  "notify_new_message": {
+    "message": "새 메시지"
+  },
+  "notify_background_connection_enabled": {
+    "message": "백그라운드 연결 사용"
+  },
+  "notify_priority_high": {
+    "message": "높게"
+  },
+  "notify_priority_max": {
+    "message": "최대"
+  },
+  "notify_name_and_message": {
+    "message": "이름과 메시지"
+  },
+  "notify_name_only": {
+    "message": "이름만"
+  },
+  "notify_no_name_or_message": {
+    "message": "이름이나 메시지 표시하지 않음"
+  },
+  "perm_required_title": {
+    "message": "권한 필요"
+  },
+  "perm_continue": {
+    "message": "계속"
+  },
+  "perm_explain_access_to_camera_denied": {
+    "message": "사진을 찍거나 동영상을 캡처하려면 앱 설정으로 이동하여 \"권한\"을 선택하고 \"카메라\"를 활성화하십시오."
+  },
+  "perm_explain_access_to_mic_denied": {
+    "message": "오디오 메시지를 보내려면 앱 설정으로 이동하여 \"권한\"을 선택하고 \"마이크\"를 활성화하십시오."
+  },
+  "perm_explain_access_to_storage_denied": {
+    "message": "파일을 수신하거나 보내려면 앱 설정으로 이동하여 \"사용 권한\"을 선택하고 \"스토리지\"를 활성화하십시오."
+  },
+  "perm_explain_access_to_location_denied": {
+    "message": "위치를 첨부하려면 앱 설정으로 이동하여 \"권한\"을 선택하고 \"위치\"를 활성화하십시오."
+  },
+  "ImageEditorHud_draw_anywhere_to_blur": {
+    "message": "흐릿하게 보이게 하려면 아무 데나 그리시오"
+  },
+  "ImageEditorHud_add_text": {
+    "message": "텍스트 추가"
+  },
+  "ImageEditorHud_blur": {
+    "message": "흐리기"
+  },
+  "ImageEditorHud_brush_marker": {
+    "message": "마커 브러시"
+  },
+  "ImageEditorHud_brush_highlight": {
+    "message": "하이라이트 브러쉬"
+  },
+  "ImageEditorHud_crop": {
+    "message": "자르기"
+  },
+  "ImageEditorHud_flip": {
+    "message": "뒤집기"
+  },
+  "ImageEditorHud_rotate": {
+    "message": "돌리기"
+  },
+  "encrypted_message": {
+    "message": "암호화된 메시지"
+  },
+  "about_offical_app_desktop": {
+    "message": "이것은 Delta Chat 데스크톱 공식 앱입니다."
+  },
+  "about_licensed_under_desktop": {
+    "message": "이 소프트웨어는 GNU GPL 버전 3에 따라 라이센스가 부여되며 소스 코드는 GitHub에서 사용할 수 있습니다."
+  },
+  "welcome_desktop": {
+    "message": "Delta Chat에 오신 것을 환영합니다."
+  },
+  "global_menu_preferences_language_desktop": {
+    "message": "언어"
+  },
+  "global_menu_file_desktop": {
+    "message": "파일"
+  },
+  "global_menu_file_quit_desktop": {
+    "message": "그만두기"
+  },
+  "global_menu_edit_desktop": {
+    "message": "편집"
+  },
+  "global_menu_edit_undo_desktop": {
+    "message": "되돌리기"
+  },
+  "global_menu_edit_redo_desktop": {
+    "message": "재실행"
+  },
+  "global_menu_edit_cut_desktop": {
+    "message": "잘라내기"
+  },
+  "global_menu_edit_copy_desktop": {
+    "message": "복사하기"
+  },
+  "global_menu_edit_paste_desktop": {
+    "message": "붙여넣기"
+  },
+  "global_menu_view_desktop": {
+    "message": "우선순위"
+  },
+  "global_menu_view_floatontop_desktop": {
+    "message": "맨 위에 띄우기"
+  },
+  "global_menu_view_developer_desktop": {
+    "message": "개발자"
+  },
+  "global_menu_view_developer_tools_desktop": {
+    "message": "개발자 도구"
+  },
+  "global_menu_help_desktop": {
+    "message": "도움말"
+  },
+  "global_menu_help_report_desktop": {
+    "message": "문제 보고"
+  },
+  "global_menu_help_about_desktop": {
+    "message": "Delta Chat에 대해"
+  },
+  "global_menu_file_open_desktop": {
+    "message": "Delta Chat 열기"
+  },
+  "global_menu_minimize_to_tray": {
+    "message": "최소화"
+  },
+  "no_chat_selected_suggestion_desktop": {
+    "message": "채팅 선택 또는 새로운 채팅 생성"
+  },
+  "write_message_desktop": {
+    "message": "메시지 작성"
+  },
+  "delete_message_desktop": {
+    "message": "메시지 삭제"
+  },
+  "more_info_desktop": {
+    "message": "더 많은 정보"
+  },
+  "remove_desktop": {
+    "message": "삭제"
+  },
+  "save_desktop": {
+    "message": "저장"
+  },
+  "name_desktop": {
+    "message": "이름"
+  },
+  "select_group_image_desktop": {
+    "message": "그룹 이미지 선택"
+  },
+  "export_backup_desktop": {
+    "message": "백업 내보내기"
+  },
+  "autocrypt_correct_desktop": {
+    "message": "자동 암호화 설정이 전송되었습니다."
+  },
+  "forget_login_confirmation_desktop": {
+    "message": "이 로그인을 삭제하시겠습니까? 모든 설정, 연락처, 채팅, 메시지 및 미디어를 포함한 모든 것이 삭제됩니다. 이 작업은 취소할 수 없습니다."
+  },
+  "message_detail_sent_desktop": {
+    "message": "보냄"
+  },
+  "message_detail_received_desktop": {
+    "message": "받음"
+  },
+  "menu.view.developer.open.log.folder": {
+    "message": "로그 폴더 열기"
+  },
+  "menu.view.developer.open.current.log.file": {
+    "message": "현재 로그 파일 열기"
+  },
+  "no_spellcheck_suggestions_found": {
+    "message": "맞춤법 제안을 찾을 수 없습니다."
+  },
+  "show_window": {
+    "message": "창 보이기"
+  },
+  "keybindings": {
+    "message": "키 바인딩"
+  },
+  "switch_between_chats": {
+    "message": "채팅 간 전환"
+  },
+  "scroll_messages": {
+    "message": "메시지 스크롤"
+  },
+  "focus_search_input": {
+    "message": "집중 탐색"
+  },
+  "insert_newline": {
+    "message": "줄바꿈 삽입"
+  },
+  "a11y_delivery_status_error": {
+    "message": "전송 상태: 오류"
+  },
+  "a11y_delivery_status_sending": {
+    "message": "전송 상태: 전송 중"
+  },
+  "a11y_delivery_status_draft": {
+    "message": "전송 상태: 임시 저장"
+  },
+  "a11y_delivery_status_delivered": {
+    "message": "전송 상태: 전송됨"
+  },
+  "a11y_delivery_status_read": {
+    "message": "전송 상태: 읽음"
+  },
+  "a11y_delivery_status_invalid": {
+    "message": "잘못된 전송 상태"
+  },
+  "a11y_background_preview_label": {
+    "message": "배경 미리보기"
+  },
+  "a11y_disappearing_messages_activated": {
+    "message": "사라지는 메시지 활성화됨"
+  },
+  "stop_sharing_location": {
+    "message": "위치 공유 중지"
+  },
+  "a11y_voice_message_hint_ios": {
+    "message": "녹화가 끝나면 두 번 눌러 전송합니다. 기록을 삭제하려면 두 손가락으로 문지르십시오."
+  },
+  "a11y_connectivity_hint": {
+    "message": "자세한 연결 정보를 보려면 더블 탭 하시오."
+  },
+  "login_error_no_internet_connection": {
+    "message": "인터넷 연결 없음, 로그인 실패"
+  },
+  "share_account_not_configured": {
+    "message": "존재하지 않는 계정입니다."
+  },
+  "cannot_play_audio_file": {
+    "message": "오디오 파일을 재생할 수 없습니다."
+  },
+  "perm_ios_explain_access_to_camera_denied": {
+    "message": "사진 찍기, 비디오 캡쳐 혹은 QR-Code 스캐너를 이용하려면, 환경설정에서 \"카메라\"를 활성화하시오."
+  },
+  "open_settings": {
+    "message": "설정 열기"
+  },
+  "import_device_contacts": {
+    "message": "장치 연락처 가져오기"
+  },
+  "import_device_contacts_hint": {
+    "message": "단말기에서 연락처와 대화하려면 설정을 열고 \"연락처\"를 활성화합니다."
+  },
+  "disabled_in_dc": {
+    "message": "Delta Chat에서 비활성화됨"
+  },
+  "disabled_in_system_settings": {
+    "message": "환경설정에서 비활성화됨"
+  },
+  "bg_app_refresh_disabled": {
+    "message": "시스템 설정에서 \"백그라운드 앱 새로 고침\"이 비활성화됨"
+  },
+  "delayed": {
+    "message": "지연됨"
+  },
+  "notifications_avg_minutes": {
+    "message": "평균적으로 %1$d분마다"
+  },
+  "notifications_avg_hours": {
+    "message": "평균적으로 %1$d시간마다"
+  },
+  "last_check_at": {
+    "message": "%1$s에 확인됨"
+  },
+  "InfoPlist_NSCameraUsageDescription": {
+    "message": "Delta Chat은 카메라를 사용하여 사진과 비디오를 찍고 전송하고 QR 코드를 스캔합니다."
+  },
+  "InfoPlist_NSContactsUsageDescription": {
+    "message": "Delta Chat 은 연락처를 사용하여 쓸 수 있는 이메일 주소 목록을 표시합니다. Delta Chat 에는 서버가 없으며 연락처는 아무 곳에도 전송되지 않습니다."
+  },
+  "InfoPlist_NSLocationAlwaysAndWhenInUseUsageDescription": {
+    "message": "Delta Chat 에서는 위치 공유를 사용하도록 설정한 기간 동안 사용자의 위치를 공유할 수 있는 권한이 필요합니다."
+  },
+  "InfoPlist_NSLocationWhenInUseUsageDescription": {
+    "message": "Delta Chat 에서는 위치 공유를 사용하도록 설정한 기간 동안 사용자의 위치를 공유할 수 있는 권한이 필요합니다."
+  },
+  "InfoPlist_NSMicrophoneUsageDescription": {
+    "message": "Delta Chat 은 마이크를 사용하여 음성 메시지와 비디오를 소리와 함께 녹음하고 전송합니다."
+  },
+  "InfoPlist_NSPhotoLibraryUsageDescription": {
+    "message": "Delta Chat 을 통해 라이브러리에서 보낼 사진을 선택할 수 있습니다."
+  },
+  "InfoPlist_NSPhotoLibraryAddUsageDescription": {
+    "message": "Delta Chat 에서 사진 라이브러리에 이미지를 저장하려고 합니다."
+  },
+  "pref_background_notifications_rationale": {
+    "message": "이메일 서버에 대한 연결을 유지하고 백그라운드에서 메시지를 수신하려면 다음 단계에서 배터리 최적화를 무시하십시오.\n\nDelta Chat은 리소스를 거의 사용하지 않으며 배터리가 소모되지 않도록 주의합니다."
+  },
+  "perm_enable_bg_reminder_title": {
+    "message": "Delta Chat이 백그라운드에 있는 동안 메시지를 받으려면 여기를 누르십시오."
+  },
+  "perm_enable_bg_already_done": {
+    "message": "이미 Delta Chat 에서 백그라운드로 메시지를 수신하도록 허용했습니다.\n\n메시지가 여전히 백그라운드로 도착하지 않으면 시스템 설정도 확인하십시오."
+  },
+  "n_minutes": {
+    "other": "%d 분"
+  },
+  "n_hours": {
+    "other": "%d시간"
+  },
+  "n_chats": {
+    "other": "%d개의 채팅"
+  },
+  "n_contacts": {
+    "other": "%d명의 대화 상대"
+  },
+  "n_messages": {
+    "other": "새 메시지 %d건"
+  },
+  "n_members": {
+    "other": "대화상대 %d명"
+  },
+  "n_recipients": {
+    "other": "%d 수신자"
+  },
+  "n_selected": {
+    "other": "%d 선택됨"
+  },
+  "ask_send_following_n_files_to": {
+    "other": "%s에게 %d파일을 보낼까요?"
+  },
+  "ask_delete_messages_simple": {
+    "other": "%d개의 메시지를 삭제하시겠습니까?"
+  },
+  "chat_archived": {
+    "other": "%d개의 채팅이 보관됨"
+  },
+  "chat_unarchived": {
+    "other": "%d개의 채팅이 보관되지 않음"
+  },
+  "chat_n_new_messages": {
+    "other": "새 메시지 %d건"
+  }
+}

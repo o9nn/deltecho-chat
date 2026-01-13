@@ -1,0 +1,2164 @@
+{
+  "app_name": {
+    "message": "Delta Chat"
+  },
+  "ok": {
+    "message": "У реду"
+  },
+  "cancel": {
+    "message": "Откажи"
+  },
+  "clear_search": {
+    "message": "Избриши претрагу"
+  },
+  "yes": {
+    "message": "Да"
+  },
+  "no": {
+    "message": "Не"
+  },
+  "select": {
+    "message": "Изабери"
+  },
+  "on": {
+    "message": "Укључено"
+  },
+  "off": {
+    "message": "Искључено"
+  },
+  "def": {
+    "message": "Подразумевано"
+  },
+  "default_value": {
+    "message": "Задато (%1$s)"
+  },
+  "default_value_as_above": {
+    "message": "Задато (исто као изнад)"
+  },
+  "custom": {
+    "message": "Посебно"
+  },
+  "none": {
+    "message": "Ништа"
+  },
+  "automatic": {
+    "message": "Аутоматски"
+  },
+  "strict": {
+    "message": "Строг"
+  },
+  "open": {
+    "message": "Отвори"
+  },
+  "download": {
+    "message": "Преузми"
+  },
+  "downloading": {
+    "message": "Преузимање..."
+  },
+  "open_attachment": {
+    "message": "Отвори прилог"
+  },
+  "join": {
+    "message": "Придружи се"
+  },
+  "rejoin": {
+    "message": "Придружи се поново"
+  },
+  "delete": {
+    "message": "Обриши"
+  },
+  "info": {
+    "message": "Инфо"
+  },
+  "update": {
+    "message": "Ажурирање"
+  },
+  "emoji": {
+    "message": "Емоџи"
+  },
+  "attachment": {
+    "message": "Прилог"
+  },
+  "back": {
+    "message": "Назад"
+  },
+  "close": {
+    "message": "Затвори"
+  },
+  "forward": {
+    "message": "Проследи"
+  },
+  "resend": {
+    "message": "Пошаљи поново"
+  },
+  "archive": {
+    "message": "Архивирај"
+  },
+  "unarchive": {
+    "message": "Деархивирај"
+  },
+  "mute": {
+    "message": "Утишај"
+  },
+  "ephemeral_messages": {
+    "message": "Нестајуће поруке"
+  },
+  "ephemeral_messages_hint": {
+    "message": "Односи се на све чланове овог ћаскања ако користе Delta Chat; и даље могу да копирају, сниме и прослеђују поруке или да користе друге клијенте за е-пошту."
+  },
+  "save": {
+    "message": "Сачувај"
+  },
+  "chat": {
+    "message": "Ћаскање"
+  },
+  "media": {
+    "message": "Медији"
+  },
+  "profile": {
+    "message": "Профил"
+  },
+  "main_menu": {
+    "message": "Главни мени"
+  },
+  "start_chat": {
+    "message": "Започните ћаскање"
+  },
+  "show_full_message": {
+    "message": "Прикажи поруку у њеној целости..."
+  },
+  "mark_all_as_read": {
+    "message": "Означи све као прочитано"
+  },
+  "mark_as_read_short": {
+    "message": "Прочитано"
+  },
+  "loading": {
+    "message": "Учитавање..."
+  },
+  "hide": {
+    "message": "Сакриј"
+  },
+  "activate": {
+    "message": "Активирај"
+  },
+  "load_remote_content": {
+    "message": "Учитај слике са сервера"
+  },
+  "load_remote_content_ask": {
+    "message": "Слике са сервера могу да вас прате\n\nОво подешавање такође може да учита додатне фонтове и други садржај. Ако је онемогућено, могу се појавити уграђене или ускладиштене слике.\n\nДа ли желите да учитате слике са сервера?"
+  },
+  "always": {
+    "message": "Увек"
+  },
+  "always_load_remote_images": {
+    "message": "Увек учитај слике са сервера"
+  },
+  "once": {
+    "message": "Само једном"
+  },
+  "show_password": {
+    "message": "Прикажи лозинку"
+  },
+  "hide_password": {
+    "message": "Сакри лозинку"
+  },
+  "not_now": {
+    "message": "Не сада"
+  },
+  "never": {
+    "message": "Никад"
+  },
+  "one_moment": {
+    "message": "Тренутак..."
+  },
+  "done": {
+    "message": "Завршено"
+  },
+  "undo": {
+    "message": "Опозови"
+  },
+  "offline": {
+    "message": "Ван мреже"
+  },
+  "next": {
+    "message": "Следећи"
+  },
+  "error": {
+    "message": "Грешка"
+  },
+  "error_x": {
+    "message": "Грешка: %1$s"
+  },
+  "no_app_to_handle_data": {
+    "message": "Нема апликације која обрађује ову врсту података."
+  },
+  "no_browser_installed": {
+    "message": "Прегледач није инсталиран."
+  },
+  "file_not_found": {
+    "message": "Не могу да нађем %1$s."
+  },
+  "copied_to_clipboard": {
+    "message": "Копирано у клипборд."
+  },
+  "contacts_headline": {
+    "message": "Контакти"
+  },
+  "email_address": {
+    "message": "Е-адреса"
+  },
+  "bad_email_address": {
+    "message": "Лоша е-адреса."
+  },
+  "password": {
+    "message": "Лозинка"
+  },
+  "existing_password": {
+    "message": "Постојећа лозинка"
+  },
+  "now": {
+    "message": "Сада"
+  },
+  "danger": {
+    "message": "Опасност"
+  },
+  "today": {
+    "message": "Данас"
+  },
+  "yesterday": {
+    "message": "Јуче"
+  },
+  "this_week": {
+    "message": "Ове недеље"
+  },
+  "this_month": {
+    "message": "Овог месеца"
+  },
+  "last_week": {
+    "message": "Прошле недеље"
+  },
+  "last_month": {
+    "message": "Прошлог месеца"
+  },
+  "last_seen_at": {
+    "message": "Последњи пут виђен %1$s"
+  },
+  "last_seen_relative": {
+    "message": "Последњи пут виђен %1$s"
+  },
+  "last_seen_unknown": {
+    "message": "Последњи пут виђен: Непознато"
+  },
+  "self": {
+    "message": "Ја"
+  },
+  "draft": {
+    "message": "Нацрт"
+  },
+  "image": {
+    "message": "Слика"
+  },
+  "reply_noun": {
+    "message": "Одговор"
+  },
+  "gif": {
+    "message": "ГИФ"
+  },
+  "sticker": {
+    "message": "Налепница"
+  },
+  "images": {
+    "message": "Слике"
+  },
+  "audio": {
+    "message": "Звук"
+  },
+  "voice_message": {
+    "message": "Гласовна порука"
+  },
+  "forwarded": {
+    "message": "Прослеђено"
+  },
+  "forwarded_message": {
+    "message": "Прослеђена порука"
+  },
+  "forwarded_by": {
+    "message": "Проследи %1$s"
+  },
+  "video": {
+    "message": "Видео"
+  },
+  "documents": {
+    "message": "Документи"
+  },
+  "contact": {
+    "message": "Особа"
+  },
+  "camera": {
+    "message": "Камера"
+  },
+  "capture": {
+    "message": "Сними"
+  },
+  "switch_camera": {
+    "message": "Промени камеру"
+  },
+  "toggle_fullscreen": {
+    "message": "Обрће режим пуног екрана"
+  },
+  "location": {
+    "message": "Локација"
+  },
+  "locations": {
+    "message": "Локације"
+  },
+  "gallery": {
+    "message": "Галерија"
+  },
+  "images_and_videos": {
+    "message": "Слике и видео записи"
+  },
+  "file": {
+    "message": "Фајл"
+  },
+  "files": {
+    "message": "Фајлови"
+  },
+  "webxdc_app": {
+    "message": "Приватна апликација"
+  },
+  "webxdc_apps": {
+    "message": "Приватне апликације"
+  },
+  "unknown": {
+    "message": "Непознато"
+  },
+  "green": {
+    "message": "Зелена"
+  },
+  "red": {
+    "message": "Црвена"
+  },
+  "blue": {
+    "message": "Плава"
+  },
+  "orange": {
+    "message": "Наранџаста"
+  },
+  "cyan": {
+    "message": "Тиркизна"
+  },
+  "purple": {
+    "message": "Пурпурна"
+  },
+  "magenta": {
+    "message": "Љубичаста"
+  },
+  "white": {
+    "message": "Бела"
+  },
+  "zoom": {
+    "message": "Увеличање"
+  },
+  "extra_small": {
+    "message": "Малецка"
+  },
+  "small": {
+    "message": "Мала"
+  },
+  "normal": {
+    "message": "Нормална"
+  },
+  "large": {
+    "message": "Велика"
+  },
+  "extra_large": {
+    "message": "Огромна"
+  },
+  "fast": {
+    "message": "Брзо"
+  },
+  "slow": {
+    "message": "Споро"
+  },
+  "menu_new_contact": {
+    "message": "Нови контакт"
+  },
+  "menu_new_chat": {
+    "message": "Ново ћаскање"
+  },
+  "menu_new_group": {
+    "message": "Нова група"
+  },
+  "broadcast_list": {
+    "message": "Листа за емитовање"
+  },
+  "broadcast_lists": {
+    "message": "Листе за емитовање"
+  },
+  "new_broadcast_list": {
+    "message": "Нова листа за емитовање"
+  },
+  "add_recipients": {
+    "message": "Додај примаоце"
+  },
+  "menu_send": {
+    "message": "Пошаљи"
+  },
+  "menu_toggle_keyboard": {
+    "message": "Емоџи тастатура"
+  },
+  "menu_edit_group": {
+    "message": "Уреди групу"
+  },
+  "menu_group_name_and_image": {
+    "message": "Назив и слика групе"
+  },
+  "menu_show_global_map": {
+    "message": "Прикажи све положаје"
+  },
+  "menu_archive_chat": {
+    "message": "Архивирај ћаскање"
+  },
+  "menu_unarchive_chat": {
+    "message": "Деархивирај ћаскање"
+  },
+  "menu_add_attachment": {
+    "message": "Додај прилог"
+  },
+  "menu_leave_group": {
+    "message": "Напусти групу"
+  },
+  "menu_delete_chat": {
+    "message": "Обриши ћаскање"
+  },
+  "clear_chat": {
+    "message": "Обриши ћаскање"
+  },
+  "delete_contact": {
+    "message": "Избриши контакт"
+  },
+  "menu_delete_location": {
+    "message": "Избриши овај положај?"
+  },
+  "menu_message_details": {
+    "message": "Детаљи поруке"
+  },
+  "menu_copy_to_clipboard": {
+    "message": "Копирај у клипборд"
+  },
+  "menu_copy_selection_to_clipboard": {
+    "message": "Копирај одабрано"
+  },
+  "menu_copy_link_to_clipboard": {
+    "message": "Копирај линк"
+  },
+  "menu_copy_text_to_clipboard": {
+    "message": "Копирај текст"
+  },
+  "menu_copy_image_to_clipboard": {
+    "message": "Копирај слику"
+  },
+  "menu_copy_email_to_clipboard": {
+    "message": "Копирај е-адресу"
+  },
+  "paste_from_clipboard": {
+    "message": "Налепи из клипборда"
+  },
+  "menu_forward": {
+    "message": "Проследи поруку"
+  },
+  "menu_reply": {
+    "message": "Одговори на поруку"
+  },
+  "menu_mute": {
+    "message": "Утишај обавештења"
+  },
+  "menu_unmute": {
+    "message": "Укључи"
+  },
+  "menu_export_attachment": {
+    "message": "Изевезите прилог"
+  },
+  "menu_export_attachments": {
+    "message": "Извезите прилоге"
+  },
+  "menu_all_media": {
+    "message": "Сви медији"
+  },
+  "show_in_chat": {
+    "message": "Прикажите у ћаскању"
+  },
+  "menu_share": {
+    "message": "Подели"
+  },
+  "block": {
+    "message": "Блокирај"
+  },
+  "menu_block_contact": {
+    "message": "Блокирај контакт"
+  },
+  "menu_unblock_contact": {
+    "message": "Деблокирај контакт"
+  },
+  "accept": {
+    "message": "Прихвати"
+  },
+  "menu_play": {
+    "message": "Одсвирај"
+  },
+  "menu_pause": {
+    "message": "Заустави"
+  },
+  "menu_scroll_to_bottom": {
+    "message": "Дођите до дна"
+  },
+  "menu_scroll_to_top": {
+    "message": "Дођите до врха"
+  },
+  "menu_help": {
+    "message": "Помоћ"
+  },
+  "privacy_policy": {
+    "message": "Политика приватности"
+  },
+  "menu_select_all": {
+    "message": "Изабери све"
+  },
+  "select_chat": {
+    "message": "Изабери ћаскање"
+  },
+  "select_more": {
+    "message": "Изабери још"
+  },
+  "menu_edit_name": {
+    "message": "Уреди назив"
+  },
+  "menu_settings": {
+    "message": "Поставке"
+  },
+  "menu_advanced": {
+    "message": "Напредно"
+  },
+  "menu_view_profile": {
+    "message": "Прикажи профил"
+  },
+  "menu_zoom_in": {
+    "message": "Увеличати"
+  },
+  "menu_zoom_out": {
+    "message": "Умањи"
+  },
+  "menu_save_log": {
+    "message": "Сними дневник"
+  },
+  "menu_more_options": {
+    "message": "Више опција"
+  },
+  "menu_learn_spelling": {
+    "message": "Научи правопис"
+  },
+  "menu_chat_audit_log": {
+    "message": "Дневник ревизије ћаскања"
+  },
+  "jump_to_message": {
+    "message": "Иди на поруку"
+  },
+  "copy_json": {
+    "message": "Копирај JSON"
+  },
+  "replace_draft": {
+    "message": "Замени нацрт"
+  },
+  "title_share_location": {
+    "message": "Подели положај са свим члановима групе"
+  },
+  "device_talk": {
+    "message": "Поруке уређаја"
+  },
+  "device_talk_subtitle": {
+    "message": "Поруке генерисане на уређају"
+  },
+  "device_talk_explain": {
+    "message": "Поруке у овом ћаскању се генеришу на вашем уређају да обавештавају о ажурирањима апликација и проблемима током коришћења."
+  },
+  "edit_contact": {
+    "message": "Измени контакт"
+  },
+  "pin_chat": {
+    "message": "Закачи ћаскање"
+  },
+  "unpin_chat": {
+    "message": "Откачи ћаскање"
+  },
+  "pin": {
+    "message": "Закачи"
+  },
+  "unpin": {
+    "message": "Откачи"
+  },
+  "ConversationFragment_quoted_message_not_found": {
+    "message": "Оригинална порука није пронађена"
+  },
+  "reply_privately": {
+    "message": "Одговори у приватној поруци"
+  },
+  "source_code": {
+    "message": "Изворни код"
+  },
+  "add_to_home_screen": {
+    "message": "Додај на главни екран"
+  },
+  "mute_for_one_hour": {
+    "message": "Утишај на 1 сат"
+  },
+  "mute_for_eight_hours": {
+    "message": "Утишај на 8 сата"
+  },
+  "mute_for_one_day": {
+    "message": "Утишај на 1 дан"
+  },
+  "mute_for_seven_days": {
+    "message": "Утишај на 7 дана"
+  },
+  "mute_forever": {
+    "message": "Утишај заувек"
+  },
+  "share_location_for_5_minutes": {
+    "message": "на 5 минута"
+  },
+  "share_location_for_30_minutes": {
+    "message": "За 30 минута"
+  },
+  "share_location_for_one_hour": {
+    "message": "За 1 сат"
+  },
+  "share_location_for_two_hours": {
+    "message": "За 2 сата"
+  },
+  "share_location_for_six_hours": {
+    "message": "За 6 сати"
+  },
+  "file_saved_to": {
+    "message": "Фајл је снимљен у „%1$s“."
+  },
+  "videochat": {
+    "message": "Видео ћаскање"
+  },
+  "videochat_invite_user_to_videochat": {
+    "message": "Позови %1$sу видео ћаскање?"
+  },
+  "videochat_invite_user_hint": {
+    "message": "Ово захтева компатибилну апликацију или прегледач на оба краја."
+  },
+  "videochat_contact_invited_hint": {
+    "message": "%1$sје позван у видео ћаскање."
+  },
+  "videochat_you_invited_hint": {
+    "message": "Послали сте позив за видео ћаскање."
+  },
+  "videochat_tap_to_join": {
+    "message": "Додирни да се придружиш"
+  },
+  "videochat_tap_to_open": {
+    "message": "Додирни да отвориш"
+  },
+  "videochat_instance": {
+    "message": "Инстанца видео ћаскања"
+  },
+  "videochat_instance_placeholder": {
+    "message": "Ваша инстанца видео ћаскања"
+  },
+  "videochat_instance_example": {
+    "message": "Примери: https://meet.jit.si/$ROOM или basicwebrtc:https://your-server"
+  },
+  "videochat_instance_explain_2": {
+    "message": "Ако је омогућено, можете започети видео ћаскање из сваког ћаскања. Ово захтева компатибилну апликацију или прегледач на оба краја."
+  },
+  "videochat_instance_from_qr": {
+    "message": "Да ли желите да користите „%1$s“ да позовете друге у видео ћаскање?\n\nКада ово поставите, можете да започнете видео ћаскање из сваког ћаскања. Ово замењује све претходне поставке за видео ћаскање."
+  },
+  "videochat_invitation": {
+    "message": "Позив за видео ћаскање"
+  },
+  "videochat_invitation_body": {
+    "message": "Позвани сте у видео ћаскање, кликни %1$sда придружиш."
+  },
+  "ask_leave_group": {
+    "message": "Да ли заиста желите да напустите ову групу?"
+  },
+  "ask_forward": {
+    "message": "Да ли желите да проследите поруке %1$s?"
+  },
+  "ask_forward_multiple": {
+    "message": "Да ли желите да проследим поруке за %1$dћаскања?"
+  },
+  "ask_export_attachment": {
+    "message": "Извоз прилога ће омогућити другим апликацијама на вашем уређају да им приступе.\n\nДа ли желите ли да наставите?"
+  },
+  "ask_block_contact": {
+    "message": "Да ли желите да блокирајте овај контакт? Ви више нећете примати поруке од њих."
+  },
+  "ask_unblock_contact": {
+    "message": "Да ли желите да деблокирате овај контакт? Биће вам омогућено да опет примате поруке од њих."
+  },
+  "ask_delete_contacts": {
+    "message": "Да ли желите да избришете контакте?\n\nКонтакти са ћаскањима у току или из системског адресара се не могу трајно избрисати."
+  },
+  "ask_delete_contact": {
+    "message": "Да ли желите да избришете %1$s контакт?\n\nКонтакти са ћаскањима у току или из системског адресара се не могу трајно избрисати."
+  },
+  "ask_start_chat_with": {
+    "message": "Да ли желите да ћаскате са %1$s?"
+  },
+  "ask_remove_members": {
+    "message": "Да ли желите да уклонитите %1$s из групе?"
+  },
+  "ask_remove_from_broadcast": {
+    "message": "Да ли желите да уклоните %1$s са листе за емитовање?"
+  },
+  "open_url_confirmation": {
+    "message": "Да ли желите да отворите ову везу?"
+  },
+  "contacts_title": {
+    "message": "Контакти"
+  },
+  "contacts_enter_name_or_email": {
+    "message": "Унесите име или е-адресу"
+  },
+  "contacts_type_email_above": {
+    "message": "Унесите е-адресу изнад"
+  },
+  "contacts_empty_hint": {
+    "message": "Још нема контаката."
+  },
+  "chat_archived_chats_title": {
+    "message": "Архивирана ћаскања"
+  },
+  "chat_please_enter_message": {
+    "message": "Унесите поруку."
+  },
+  "chat_camera_unavailable": {
+    "message": "Камера није доступна."
+  },
+  "chat_unable_to_record_audio": {
+    "message": "Није могуће снимити звук."
+  },
+  "chat_new_one_to_one_hint": {
+    "message": "Пошаљи поруку %1$s; они је могу примити и ако немају Delta Chat."
+  },
+  "chat_new_group_hint": {
+    "message": "Остали учесници ће видети ову групу само када пошаљете прву поруку."
+  },
+  "chat_record_slide_to_cancel": {
+    "message": "Превуците за отказивање"
+  },
+  "chat_record_explain": {
+    "message": "Додирните и држите за снимање гласовне поруке, пустите за слање"
+  },
+  "chat_no_chats_yet_title": {
+    "message": "Сандуче је празно.\nПритисните „+“ да почнете ново ћаскање."
+  },
+  "chat_all_archived": {
+    "message": "Сва ћаскања су архивирана.\nПритисните „+“ да почнете ново ћаскање."
+  },
+  "chat_share_with_title": {
+    "message": "Подели са"
+  },
+  "chat_input_placeholder": {
+    "message": "Порука"
+  },
+  "chat_archived_label": {
+    "message": "Архивирано"
+  },
+  "chat_request_label": {
+    "message": "Захтев"
+  },
+  "chat_no_messages": {
+    "message": "Нема порука."
+  },
+  "chat_self_talk_subtitle": {
+    "message": "Поруке које сам слао себи"
+  },
+  "archive_empty_hint": {
+    "message": "Архивирана ћаскања ће се појавити овде."
+  },
+  "saved_messages": {
+    "message": "Сачуване поруке"
+  },
+  "saved_messages_explain": {
+    "message": "• Проследи поруке овде за лакши приступ\n\n• Направите текстуалне или звучне белешке\n\n• Приложите медиј  да би га снимили"
+  },
+  "saved": {
+    "message": "Снимљено"
+  },
+  "save_as": {
+    "message": "Сними као"
+  },
+  "retry_send": {
+    "message": "Покушај поново да пошаљеш поруку"
+  },
+  "messaging_disabled_not_in_group": {
+    "message": "Морате бити у овој групи да би сте послали поруку. Да се придружите групи, питајте неког члана групе за позивницу."
+  },
+  "messaging_disabled_mailing_list": {
+    "message": "Слање порука на списак имејл адреса још увек није подржано"
+  },
+  "cannot_display_unsuported_file_type": {
+    "message": "Тип фајла %sне може бити приказан"
+  },
+  "attachment_failed_to_load": {
+    "message": "Учитавање прилога је неуспешно"
+  },
+  "lock_recording": {
+    "message": "Закључај снимање"
+  },
+  "mailing_list": {
+    "message": "Списак имејл адреса"
+  },
+  "mailing_list_profile_info": {
+    "message": "Промене имена и слике са листе за слање примењују се само на овом уређају."
+  },
+  "start_app": {
+    "message": "Покретање..."
+  },
+  "accept_request_first": {
+    "message": "Прво прихватите захтев за ћаскање."
+  },
+  "filter_map_on_time": {
+    "message": "Прикажи положаје у временском периоду?"
+  },
+  "show_location_traces": {
+    "message": "Прикажи трагове"
+  },
+  "add_poi": {
+    "message": "Пошаљи интересантно место"
+  },
+  "chat_audit_log_empty_message": {
+    "message": "Поруке оперативног система за ово ћаскање ће се појавити овде."
+  },
+  "chat_audit_log_title": {
+    "message": "Дневник ревизије ћаскања за %1$s"
+  },
+  "chat_audit_log_description": {
+    "message": "Приказује само информативне и поруке оперативног система; корисно за проналажење последњих радњи ћаскања без листања кроз много порука."
+  },
+  "open_external_url_trust_domain": {
+    "message": "Не питај поново за %1$s"
+  },
+  "puny_code_warning_header": {
+    "message": "Детектован је сумњив линк"
+  },
+  "puny_code_warning_question": {
+    "message": "Јесте ли сигурни да желите да приступите %1$s?"
+  },
+  "puny_code_warning_description": {
+    "message": "Ова веза може погрешно приказати знакове са сличним изгледом из различитих алфабета. Праћење означене везе %1$s ће довести до %2$s што је нормално за нелатинске знакове. Ако нисте очекивали такве ликове, ова веза би могла бити штетна."
+  },
+  "search": {
+    "message": "Претрага"
+  },
+  "search_explain": {
+    "message": "Претражи ћаскања, контакте и поруке"
+  },
+  "search_no_result_for_x": {
+    "message": "Нема резултата за „%s“"
+  },
+  "group_name": {
+    "message": "Назив групе"
+  },
+  "group_avatar": {
+    "message": "Слика групе"
+  },
+  "remove_group_image": {
+    "message": "Уклони слику групе"
+  },
+  "change_group_image": {
+    "message": "Промени слику групе"
+  },
+  "group_create_button": {
+    "message": "Направи групу"
+  },
+  "group_please_enter_group_name": {
+    "message": "Унесите назив групе"
+  },
+  "group_add_members": {
+    "message": "Додајте чланове"
+  },
+  "group_self_not_in_group": {
+    "message": "Морате бити члан групе да бисте извршили ову радњу."
+  },
+  "profile_encryption": {
+    "message": "Шифровање"
+  },
+  "profile_shared_chats": {
+    "message": "Дељена ћаскања"
+  },
+  "tab_contact": {
+    "message": "Контакт"
+  },
+  "tab_group": {
+    "message": "Група"
+  },
+  "tab_gallery": {
+    "message": "Галерија"
+  },
+  "tab_docs": {
+    "message": "Документи"
+  },
+  "tab_links": {
+    "message": "Везе"
+  },
+  "tab_map": {
+    "message": "Мапа"
+  },
+  "tab_gallery_empty_hint": {
+    "message": "Слике и видео записи подељени у овом ћаскању ће се појавити овде."
+  },
+  "tab_docs_empty_hint": {
+    "message": "Документи и други фајлови подељене у овом ћаскању ће се појавити овде."
+  },
+  "tab_image_empty_hint": {
+    "message": "Слике подељене у овом ћаскању ће се појавити овде."
+  },
+  "tab_video_empty_hint": {
+    "message": "Видео записи подељени у овом ћаскању ће се појавити овде."
+  },
+  "tab_audio_empty_hint": {
+    "message": "Звучне поруке и записи подељене у овом ћаскању ће се појавити овде."
+  },
+  "tab_webxdc_empty_hint": {
+    "message": "Приватне апликације подељене у овом ћаскању ће се појавити овде."
+  },
+  "all_apps_empty_hint": {
+    "message": "Приватне апликације примљене или послате у било ком ћаскању ће се појавити овде."
+  },
+  "media_preview": {
+    "message": "Преглед медијума"
+  },
+  "send_message": {
+    "message": "Пошаљи поруку"
+  },
+  "aeap_addr_changed": {
+    "message": "%1$sје променио њихову адресу %2$sу %3$s"
+  },
+  "aeap_explanation": {
+    "message": "Ви сте променили вашу имејл адресу %1$sу %2$s.\n\nАко сада пошаљете поруку провереној групи, тамошњи контакти ће аутоматски заменити стару адресу новом.\n\nПрепоручљиво је да подесите свог предходног имејл провајдера да прослеђује све имејл поруке на вашу нову имејл адресу. У супротном бисте могли да пропустите поруке од контаката који још нису добили вашу нову адресу."
+  },
+  "incoming_messages": {
+    "message": "Долазеће поруке"
+  },
+  "outgoing_messages": {
+    "message": "Одлазеће поруке"
+  },
+  "storage_on_domain": {
+    "message": "Складиштење на %1$s"
+  },
+  "connectivity": {
+    "message": "Повезаност"
+  },
+  "connectivity_not_connected": {
+    "message": "Нисте повезани"
+  },
+  "connectivity_connecting": {
+    "message": "Повезивање..."
+  },
+  "connectivity_updating": {
+    "message": "Ажурирање..."
+  },
+  "connectivity_connected": {
+    "message": "Повезани"
+  },
+  "sending": {
+    "message": "Слање..."
+  },
+  "last_msg_sent_successfully": {
+    "message": "Последња порука је успешно послата."
+  },
+  "not_supported_by_provider": {
+    "message": "Није подржано од вашег провајдера."
+  },
+  "messages": {
+    "message": "Поруке"
+  },
+  "part_of_total_used": {
+    "message": "%1$sод %2$sискоришћени"
+  },
+  "scan_invitation_code": {
+    "message": "Скенирај код позива за приступ."
+  },
+  "login_title": {
+    "message": "Пријави се"
+  },
+  "login_header": {
+    "message": "Пријавите се у ваш налог е-поште"
+  },
+  "login_explain": {
+    "message": "Пријавите се преко постојећег налога е-поште"
+  },
+  "login_subheader": {
+    "message": "За познате пружаоце услуге е-поште, додатне поставке се одређују аутоматски. Каткад, морате омогућити ИМАП у поставкама на веб сучељу ваше е-поште.\n\nПосаветујте се са пружаоцем услуге е-поште или пријатељима ако наиђете на проблеме."
+  },
+  "login_no_servers_hint": {
+    "message": "Не постоји сервер Делта ћаскања. Апликација користи само сервер ваше е-поште."
+  },
+  "login_inbox": {
+    "message": "Пријем"
+  },
+  "login_imap_login": {
+    "message": "Корисничко име за ИМАП"
+  },
+  "login_imap_server": {
+    "message": "ИМАП сервер"
+  },
+  "login_imap_port": {
+    "message": "ИМАП сервер"
+  },
+  "login_imap_security": {
+    "message": "ИМАП безбедност"
+  },
+  "login_outbox": {
+    "message": "Отпрем"
+  },
+  "login_smtp_login": {
+    "message": "Корисничко име за СМТП"
+  },
+  "login_smtp_password": {
+    "message": "Лозинка за СМТП"
+  },
+  "login_smtp_server": {
+    "message": "СМТП сервер"
+  },
+  "login_smtp_port": {
+    "message": "СМТП порт"
+  },
+  "login_smtp_security": {
+    "message": "СМТП безбедност"
+  },
+  "login_auth_method": {
+    "message": "Начин овлашћења"
+  },
+  "login_info_oauth2_title": {
+    "message": "Наставите са поједностављеним поставкама?"
+  },
+  "login_info_oauth2_text": {
+    "message": "Унета е-адреса подржава поједностављено подешавање (OAuth 2.0).\n\nУ следећем кораку, дозволите Delta Chat-у да  да дејствује као ваша апликација за ћаскање преко е-поште.\n\nDelta Chat нема сервере и ваши подаци остају на вашем уређају."
+  },
+  "login_certificate_checks": {
+    "message": "Провери сертификате"
+  },
+  "login_error_mail": {
+    "message": "Унесите важећу е-адресу"
+  },
+  "login_error_server": {
+    "message": "Унесите важеће име сервера или ИП адресу"
+  },
+  "login_error_port": {
+    "message": "Унесите важећи порт (1-65535)"
+  },
+  "login_error_required_fields": {
+    "message": "Унесите важећу е-адресу и лозинку"
+  },
+  "import_backup_title": {
+    "message": "Увези резервну копију"
+  },
+  "import_backup_ask": {
+    "message": "Резервна копија пронађена у „%1$s“.\n\nЖелите ли да увезете и користите све њене податке и поставке?"
+  },
+  "import_backup_no_backup_found": {
+    "message": "Нема резервних копија.\n\nКопирајте резервну копију у „%1$s“ и покушајте поново. Ако не желите, тапните „Почни ћаскање“ да бисте почели уобичајени процес поставке."
+  },
+  "login_error_cannot_login": {
+    "message": "Не могу да се пријавим као „%1$s“. Проверите да ли су е-адреса и лозинка тачни."
+  },
+  "accept_invalid_certificates": {
+    "message": "Прихватите и неважеће сертификате"
+  },
+  "switch_account": {
+    "message": "Промени налог"
+  },
+  "add_account": {
+    "message": "Додај налог"
+  },
+  "delete_account": {
+    "message": "Избриши налог"
+  },
+  "delete_account_ask": {
+    "message": "Да ли сте сигурни да желите да избришете све податке са вашег налога?"
+  },
+  "delete_account_explain_with_name": {
+    "message": "Сви подаци о налогу за „%s“ на овом уређају ће бити избрисани, укључујући подешавања  с-краја-на-крај шифровања, контакте, ћаскања, поруке и медије. Ако се ова радња изврши, она се касније не може поништити."
+  },
+  "unconfigured_account": {
+    "message": "Налог није конфигурисан"
+  },
+  "unconfigured_account_hint": {
+    "message": "Отворите налог да би сте га конфигурисали."
+  },
+  "try_connect_now": {
+    "message": "Пробај да се повежеш сада"
+  },
+  "sync_all": {
+    "message": "Синхронизуј све"
+  },
+  "configuration_failed_with_error": {
+    "message": "Конфигурисање није успело. Грешка: %1$s"
+  },
+  "forward_to": {
+    "message": "Проследи за…"
+  },
+  "ask_send_files_to_selected_chats": {
+    "message": "Пошаљи %1$d фајл(ове) у %2$d ћаскања?"
+  },
+  "share_text_multiple_chats": {
+    "message": "Пошаљи овај текст %1$dиз ћаскања?\n\n„%2$s“"
+  },
+  "share_abort": {
+    "message": "Дељење прекинуто због неодговарајуће дозволе."
+  },
+  "pref_using_custom": {
+    "message": "Користи поручен: %s"
+  },
+  "pref_using_default": {
+    "message": "Користи уобичајено: %s"
+  },
+  "pref_profile_info_headline": {
+    "message": "Подаци вашег профила"
+  },
+  "pref_profile_photo": {
+    "message": "Слика профила"
+  },
+  "pref_blocked_contacts": {
+    "message": "Блокирани контакти"
+  },
+  "blocked_empty_hint": {
+    "message": "Блокирани контакти ће се појавити овде."
+  },
+  "pref_password_and_account_settings": {
+    "message": "Лозинка и налог"
+  },
+  "pref_who_can_see_profile_explain": {
+    "message": "Слика вашег профила, име и потпис ће бити послан заједно са вашом поруком када комуницирате са другим корисницима."
+  },
+  "pref_your_name": {
+    "message": "Ваше име"
+  },
+  "pref_default_status_label": {
+    "message": "Текст потписа"
+  },
+  "pref_enter_sends": {
+    "message": "Шаљи ЕНТЕР тастером"
+  },
+  "pref_enter_sends_explain": {
+    "message": "Притиском на ЕНТЕР тастер тексутале поруке ће бити послате"
+  },
+  "pref_outgoing_media_quality": {
+    "message": "Квалитет медија за слање"
+  },
+  "pref_outgoing_balanced": {
+    "message": "Уравнотежен"
+  },
+  "pref_outgoing_worse": {
+    "message": "Лошији квалитет, мања величина"
+  },
+  "pref_vibrate": {
+    "message": "Вибрирање"
+  },
+  "pref_screen_security": {
+    "message": "Безбедност екрана"
+  },
+  "pref_screen_security_explain": {
+    "message": "Блокирање снимка екрана у списку недавних апликација и унутар апликације"
+  },
+  "pref_screen_security_please_restart_hint": {
+    "message": "Да би применили сигурносне поставке морате покренути поново апликацију."
+  },
+  "pref_notifications": {
+    "message": "Обавештења"
+  },
+  "pref_notifications_show": {
+    "message": "Прикажи"
+  },
+  "pref_notifications_priority": {
+    "message": "Приоритет"
+  },
+  "pref_notifications_explain": {
+    "message": "Дозволи обавештења за нове поруке преко оперативног система"
+  },
+  "pref_show_notification_content": {
+    "message": "Прикажи садржај поруке у обавештењима."
+  },
+  "pref_show_notification_content_explain": {
+    "message": "Прикажи пошиљаоца и првих пар речи поруке у обавештењима"
+  },
+  "pref_led_color": {
+    "message": "Боја ЛЕД светла"
+  },
+  "pref_sound": {
+    "message": "Звук"
+  },
+  "pref_silent": {
+    "message": "Без звука"
+  },
+  "pref_privacy": {
+    "message": "Приватност"
+  },
+  "pref_chats_and_media": {
+    "message": "Ћаскања и медији"
+  },
+  "pref_system_default": {
+    "message": "Подразумеване поставке оперативног система"
+  },
+  "pref_light_theme": {
+    "message": "Светла"
+  },
+  "pref_dark_theme": {
+    "message": "Тамна"
+  },
+  "pref_appearance": {
+    "message": "Изглед"
+  },
+  "pref_theme": {
+    "message": "Тема"
+  },
+  "pref_language": {
+    "message": "Језик"
+  },
+  "pref_incognito_keyboard": {
+    "message": "Тајна тастатура"
+  },
+  "pref_incognito_keyboard_explain": {
+    "message": "Затражи од тастатуре да онемогући персонализовано учење"
+  },
+  "pref_read_receipts": {
+    "message": "Примај и шаљи поруке читања"
+  },
+  "pref_read_receipts_explain": {
+    "message": "Уколико су извештаји читања онемогућени, нећете видети када неко прочита ваше поруке."
+  },
+  "pref_manage_keys": {
+    "message": "Управљај кључевима"
+  },
+  "pref_use_system_emoji": {
+    "message": "Користи системски емоџи"
+  },
+  "pref_use_system_emoji_explain": {
+    "message": "Искључи уграђене Delta Chat-ове емоџије"
+  },
+  "pref_app_access": {
+    "message": "Приступ апликацији"
+  },
+  "pref_chats": {
+    "message": "Ћаскања"
+  },
+  "pref_in_chat_sounds": {
+    "message": "Звуци ћаскања"
+  },
+  "pref_view_log": {
+    "message": "Погледај дневник"
+  },
+  "pref_saved_log": {
+    "message": "Дневник је снимљен у „Downloads“ директоријум"
+  },
+  "pref_save_log_failed": {
+    "message": "Снимање дневника је било неуспешно"
+  },
+  "pref_log_header": {
+    "message": "Дневник"
+  },
+  "pref_other": {
+    "message": "Остало"
+  },
+  "pref_backup": {
+    "message": "Резервна копија"
+  },
+  "pref_backup_explain": {
+    "message": "Направи резервну копију ћаскања на спољашњем складишту меморије."
+  },
+  "pref_backup_export_explain": {
+    "message": "Резервна копија вам помаже да подесите нову инсталацију на овом или другом уређају.\n\nРезервна копија ће садржати све поруке, контакте и ћаскања и ваше комплетно подешавање аутоматског шифровања. Чувајте резервну копију на безбедном месту или је избришите што је пре могуће."
+  },
+  "pref_backup_export_start_button": {
+    "message": "Покрени складиштење резервне копије"
+  },
+  "pref_backup_written_to_x": {
+    "message": "Записивање резервне копије је успешно до „%1$s“."
+  },
+  "pref_managekeys_menu_title": {
+    "message": "Управљај кључевима"
+  },
+  "pref_managekeys_export_secret_keys": {
+    "message": "Извези тајне кључеве"
+  },
+  "pref_managekeys_export_explain": {
+    "message": "Извези тајне кључеве на „%1$s“?"
+  },
+  "pref_managekeys_import_secret_keys": {
+    "message": "Увези тајне кључеве"
+  },
+  "pref_managekeys_import_explain": {
+    "message": "Да увезем тајне кључеве из „%1$s“?\n\n• Постојећи тајни кључеви неће бити обрисани\n\n• Последњи увезени кључ ће бити коришћен као нови подразумевани кључ ако у имену фајла не буде имао реч „legacy“."
+  },
+  "pref_managekeys_secret_keys_exported_to_x": {
+    "message": "Записивање тајних кључева је успешно до „%1$s“."
+  },
+  "pref_managekeys_secret_keys_imported_from_x": {
+    "message": "Тајни кључеви су увезени из „%1$s“."
+  },
+  "pref_background": {
+    "message": "Позадина"
+  },
+  "pref_background_btn_default": {
+    "message": "Користи дату слику"
+  },
+  "pref_background_btn_gallery": {
+    "message": "Изабери из галерије"
+  },
+  "pref_imap_folder_handling": {
+    "message": "ИМАП руковање директоријумом"
+  },
+  "pref_imap_folder_warn_disable_defaults": {
+    "message": "Ако промените ову опцију, морате проверити да су ваш сервер и ваши други клијенти конфигурисани у складу са тим.\n\nУ супротном апликација можда уопште неће функционисати."
+  },
+  "pref_watch_sent_folder": {
+    "message": "Посматрај директоријум са пошиљкама"
+  },
+  "pref_send_copy_to_self": {
+    "message": "Пошаљи копију поруке себи"
+  },
+  "pref_send_copy_to_self_explain": {
+    "message": "Обавезно када користите овај налог на више уређаја."
+  },
+  "pref_auto_folder_moves": {
+    "message": "Аутоматски премести у DeltaChat директоријум"
+  },
+  "pref_auto_folder_moves_explain": {
+    "message": "Ћаскања се померају да би се избегло затрпавање пријемног сандучета"
+  },
+  "pref_only_fetch_mvbox_title": {
+    "message": "Примај поруке само из DeltaChat директоријума"
+  },
+  "pref_only_fetch_mvbox_explain": {
+    "message": "Игнориши остале директоријуме. Захтева да ваш сервер премести поруке у DeltaChat директоријум."
+  },
+  "pref_show_emails": {
+    "message": "Прикажи обичне поруке е-поште"
+  },
+  "pref_show_emails_no": {
+    "message": "Не, само ћаскања"
+  },
+  "pref_show_emails_accepted_contacts": {
+    "message": "За прихваћене контакте"
+  },
+  "pref_show_emails_all": {
+    "message": "Сви"
+  },
+  "pref_experimental_features": {
+    "message": "Експерименталне могућности"
+  },
+  "pref_on_demand_location_streaming": {
+    "message": "Проток положаја на захтев"
+  },
+  "pref_developer_mode": {
+    "message": "Режим програмера"
+  },
+  "pref_developer_mode_explain": {
+    "message": "Активира опције за отклањање грешака и може учинити апликацију мање стабилном. Само за програмере."
+  },
+  "pref_background_default": {
+    "message": "Подразумевана позадина"
+  },
+  "pref_background_default_color": {
+    "message": "Подразумевана боја"
+  },
+  "pref_background_custom_image": {
+    "message": "Прилагођена слика"
+  },
+  "pref_background_custom_color": {
+    "message": "Прилагођена боја"
+  },
+  "export_aborted": {
+    "message": "Извоз је прекинут."
+  },
+  "auto_download_messages": {
+    "message": "Аутоматско преузимање порука"
+  },
+  "up_to_x": {
+    "message": "Повећано на %1$s"
+  },
+  "up_to_x_most_worse_quality_images": {
+    "message": "Повећано на %1$s, најлошији квалитет слика"
+  },
+  "up_to_x_most_balanced_quality_images": {
+    "message": "Повећано на %1$s, уравнотежен квалитет слика"
+  },
+  "download_failed": {
+    "message": "Преузимање није успело"
+  },
+  "n_bytes_message": {
+    "message": "%1$s поруке"
+  },
+  "download_max_available_until": {
+    "message": "Преузмите максимално доступно до %1$s"
+  },
+  "profile_image_select": {
+    "message": "Изабери слику за профил"
+  },
+  "select_your_new_profile_image": {
+    "message": "Изаберите нову слику за ваш профил"
+  },
+  "profile_image_delete": {
+    "message": "Избриши слику профила"
+  },
+  "pref_show_tray_icon": {
+    "message": "Прикажи иконицу на системској касети"
+  },
+  "pref_edit_profile": {
+    "message": "Уреди профил"
+  },
+  "emoji_search_results": {
+    "message": "Резултати претраге"
+  },
+  "emoji_not_found": {
+    "message": "Није пронађен ниједан емоџи"
+  },
+  "emoji_recent": {
+    "message": "Недавно коришћено"
+  },
+  "emoji_people": {
+    "message": "Људи и тело"
+  },
+  "emoji_nature": {
+    "message": "Животиње и природа"
+  },
+  "emoji_foods": {
+    "message": "Храна и пиће"
+  },
+  "emoji_activity": {
+    "message": "Активности"
+  },
+  "emoji_places": {
+    "message": "Путовања и одредишта"
+  },
+  "emoji_objects": {
+    "message": "Предмети"
+  },
+  "emoji_symbols": {
+    "message": "Симболи"
+  },
+  "emoji_flags": {
+    "message": "Заставе"
+  },
+  "delete_old_messages": {
+    "message": "Избриши старе поруке"
+  },
+  "autodel_device_title": {
+    "message": "Избриши поруке са уређаја"
+  },
+  "autodel_server_title": {
+    "message": "Избриши поруке са сервера"
+  },
+  "autodel_device_ask": {
+    "message": "Да ли желите да избришете %1$d поруке сада и све новопреузете поруке „%2$s“ у будућности?\n\n• Ово укључује све медије\n\n• Поруке ће бити избрисане без обзира да ли су виђене или не\n\n• \"Сачуване поруке\" неће бити избрисане на уређају"
+  },
+  "autodel_server_ask": {
+    "message": "Да ли желите да избришете %1$d поруке сада и све новопреузете поруке „%2$s“ у будућности?\n\n⚠️ Ово укључује све поруке е-поште, медије и „Сачуване поруке“ у свим директоријумима на серверу\n\n⚠️ Немојте користити ову функцију ако користите било које друге клијенте е-поште осим Delta Chat-а"
+  },
+  "autodel_server_enabled_hint": {
+    "message": "Ово укључује све поруке е-поште, медије и „Сачуване поруке“ у свим директоријумима на серверу. Немојте користити ову функцију ако користите било које друге клијенте е-поште осим Delta Chat-а."
+  },
+  "autodel_confirm": {
+    "message": "Разумем и желим да избришем све ове поруке"
+  },
+  "autodel_at_once": {
+    "message": "Одмах"
+  },
+  "after_30_seconds": {
+    "message": "За 30 секунди"
+  },
+  "after_1_minute": {
+    "message": "За 1 минут"
+  },
+  "after_5_minutes": {
+    "message": "За 5 минута"
+  },
+  "after_30_minutes": {
+    "message": "За 30 минута"
+  },
+  "autodel_after_1_hour": {
+    "message": "За 1 сат"
+  },
+  "autodel_after_1_day": {
+    "message": "За 1 дан"
+  },
+  "autodel_after_1_week": {
+    "message": "За 1 недељу"
+  },
+  "after_5_weeks": {
+    "message": "За 5 недеља"
+  },
+  "autodel_after_1_year": {
+    "message": "За 1 годину"
+  },
+  "autocrypt_send_asm_title": {
+    "message": "Пошаљите поруку поставки за аутошифровање"
+  },
+  "autocrypt_send_asm_explain_before": {
+    "message": "Порука о подешавању аутоматског шифровања безбедно дели ваше комплетно подешавање са другим апликацијама које су компатибилне са аутоматским шифровањем.\n\nПодешавање ће бити шифровано кодом за подешавање приказаним овде и мора се унети на другом уређају."
+  },
+  "autocrypt_send_asm_button": {
+    "message": "Пошаљите поруку поставки за аутошифровање"
+  },
+  "autocrypt_send_asm_explain_after": {
+    "message": "Ваше подешавање вам је послато. Пређите на други уређај и отворите поруку за подешавање. На другом уређају од се вас очекује да унесете код за подешавање. Унесите следеће цифре:"
+  },
+  "autocrypt_prefer_e2ee": {
+    "message": "Преферирај с-краја-на-крај шифровање"
+  },
+  "autocrypt_asm_subject": {
+    "message": "Порука поставки за аутошфровање"
+  },
+  "autocrypt_asm_general_body": {
+    "message": "Ово је порука подешавања аутоматског шифровања која се користи за пренос вашег с-краја-на-крај подешавања између клијената.\n\nДа бисте дешифровали и користили своје подешавање, отворите поруку на клијенту који је компатибилан са аутоматским шифровањем и унесите кôд за подешавање приказан на уређају који га је генерисао."
+  },
+  "systemmsg_unknown_sender_for_chat": {
+    "message": "Непознати пошиљалац за ово ћаскање. Погледајте „информације“ за више детаља."
+  },
+  "systemmsg_subject_for_new_contact": {
+    "message": "Поруке од %1$s"
+  },
+  "systemmsg_failed_sending_to": {
+    "message": "Слање поруке %1$s је било неуспешно."
+  },
+  "group_name_changed_by_you": {
+    "message": "Назив групе је измењен из „%1$s“ у „%2$s“ од мене."
+  },
+  "group_name_changed_by_other": {
+    "message": "Назив групе је измењен из „%1$s“ у „%2$s“ од стране %3$s."
+  },
+  "group_image_changed_by_you": {
+    "message": "Слика групе је промењена од мене."
+  },
+  "group_image_changed_by_other": {
+    "message": "Слика групе је промењена од стране %1$s."
+  },
+  "add_member_by_you": {
+    "message": "Члан %1$s је додат од мене."
+  },
+  "add_member_by_other": {
+    "message": "Члан %1$s је додат од стране %2$s."
+  },
+  "remove_member_by_you": {
+    "message": "Члан %1$s је уклоњен од мене."
+  },
+  "remove_member_by_other": {
+    "message": "Члан %1$s је уклоњен од стране %2$s."
+  },
+  "group_left_by_you": {
+    "message": "Напустили сте групу."
+  },
+  "group_left_by_other": {
+    "message": "%1$s је напустио групу."
+  },
+  "group_image_deleted_by_you": {
+    "message": "Ви сте обрисали слику групе."
+  },
+  "group_image_deleted_by_other": {
+    "message": "Слика групе је обрисана од стране %1$s."
+  },
+  "location_enabled_by_you": {
+    "message": "Ви сте омогућили проток положаја."
+  },
+  "location_enabled_by_other": {
+    "message": "Проток положаја омогућен од %1$s."
+  },
+  "ephemeral_timer_disabled_by_you": {
+    "message": "Онемогућили сте хронометар за нестајуће поруке."
+  },
+  "ephemeral_timer_disabled_by_other": {
+    "message": "%1$s је онемогућио нестајуће поруке."
+  },
+  "ephemeral_timer_seconds_by_you": {
+    "message": "Ви сте подесили хронометар за нестајуће поруке на %1$s секунде"
+  },
+  "ephemeral_timer_seconds_by_other": {
+    "message": "%2$s је подесио хронометар за нестајуће поруке на %1$s секунде."
+  },
+  "ephemeral_timer_1_minute_by_you": {
+    "message": "Ви сте подесили хронометар за нестајуће поруке на 1 минут."
+  },
+  "ephemeral_timer_1_minute_by_other": {
+    "message": "%1$s је подесио хронометар за нестајуће поруке на 1 минут."
+  },
+  "ephemeral_timer_1_hour_by_you": {
+    "message": "Ви сте подесили хронометар за нестајуће поруке на 1 сат."
+  },
+  "ephemeral_timer_1_hour_by_other": {
+    "message": "%1$sје подесио хронометар за нестајуће поруке на 1 сат."
+  },
+  "ephemeral_timer_1_day_by_you": {
+    "message": "Ви сте подесили хронометар за нестајуће поруке на 1 дан."
+  },
+  "ephemeral_timer_1_day_by_other": {
+    "message": "%1$s је подесио хронометар за нестајуће поруке на 1 дан."
+  },
+  "ephemeral_timer_1_week_by_you": {
+    "message": "Ви сте подесили хронометар за нестајуће поруке на 1 недељу."
+  },
+  "ephemeral_timer_1_week_by_other": {
+    "message": "%1$s је подесио хронометар за нестајуће поруке на 1 недељу."
+  },
+  "ephemeral_timer_minutes_by_you": {
+    "message": "Ви сте подесили хронометар за нестајуће поруке на %1$s минутa."
+  },
+  "ephemeral_timer_minutes_by_other": {
+    "message": "%2$s је подесио хронометар за нестајуће поруке на %1$s минута."
+  },
+  "ephemeral_timer_hours_by_you": {
+    "message": "Ви сте подесили хронометар за нестајуће поруке на %1$s сати."
+  },
+  "ephemeral_timer_hours_by_other": {
+    "message": "%2$s је подесио хронометар за нестајуће поруке на %1$s сата."
+  },
+  "ephemeral_timer_days_by_you": {
+    "message": "Ви сте подесили хронометар за нестајуће поруке на %1$s дана."
+  },
+  "ephemeral_timer_days_by_other": {
+    "message": "%2$s је подесио хронометар за нестајуће поруке на %1$s дана."
+  },
+  "ephemeral_timer_weeks_by_you": {
+    "message": "Ви сте подесили хронометар за нестајуће поруке на %1$s недеља."
+  },
+  "ephemeral_timer_weeks_by_other": {
+    "message": "%2$s је подесио хронометар за нестајуће поруке на %1$s недеље."
+  },
+  "devicemsg_self_deleted": {
+    "message": "Обрисали сте ћаскање „Сачуване поруке“.\n\nℹ️ Ако желите да користите „Сачуване поруке“ могућност поново, направите ново ћаскање са самим собом."
+  },
+  "devicemsg_storage_exceeding": {
+    "message": "⚠️ Складишни простор вашег имејл провајдера ће ускоро да понестане: %1$s%% већ се користи.\n\nМожда нећете моћи да примате поруке ако је складиште пунo.\n\n👉 Проверите да ли можете да избришете старе податке у веб интерфејсу провајдера и размислите да омогућите „Подешавања / Избриши старе поруке“ опцију. Можете да проверите тренутну употребу меморијског простора у било ком тренутку у „Подешавања / Повезивање“."
+  },
+  "devicemsg_bad_time": {
+    "message": "⚠️ Изгледа да датум или време на вашем уређају нису тачни (%1$s).\n\nПодесите сат ⏰🔧 да бисте били сигурни да ће ваше поруке бити правилно примљене."
+  },
+  "devicemsg_update_reminder": {
+    "message": "⚠️ Ваша Delta Chat верзија је можда застарела.\n\nОво може да изазове проблеме јер ваши контакти за ћаскање користе новије верзије - а вама недостају најновије функционалности 😳\nДа би ажурирали апликацију проверите https://get.delta.chat или продавницу за апликација."
+  },
+  "enter_system_secret_to_continue": {
+    "message": "Унесите своју системску тајну да бисте наставили."
+  },
+  "qr_code": {
+    "message": "Бар-кôд"
+  },
+  "load_qr_code_as_image": {
+    "message": "Учитај бар-кôд као слику"
+  },
+  "qrscan_title": {
+    "message": "Очитај бар-кôд"
+  },
+  "qrscan_hint": {
+    "message": "Поставите камеру изнад бар-кôда"
+  },
+  "qrscan_failed": {
+    "message": "Бар-кôд не може бити декодиран"
+  },
+  "qrscan_ask_join_group": {
+    "message": "Да ли желите да се придружите групи „%1$s“?"
+  },
+  "qrscan_fingerprint_mismatch": {
+    "message": "Очитани отисак не одговара последње виђеном отиску за %1$s."
+  },
+  "qrscan_no_addr_found": {
+    "message": "Овај бар-кôд садржи отисак али нема е-адресу.\n\nЗа потврду преко других канала, најпре установите шифровану везу са примаоцем."
+  },
+  "qrscan_contains_text": {
+    "message": "Очитани текст бар-кôда:\n\n%1$s"
+  },
+  "qrscan_contains_url": {
+    "message": "Очитани бар-кôда везе:\n\n%1$s"
+  },
+  "qrscan_fingerprint_label": {
+    "message": "Отисак"
+  },
+  "withdraw_verifycontact_explain": {
+    "message": "Други могу да очитају овај бар-кôд да би вас контактирали.\n\nОвде можете да деактивирате бар-кôд и поново га активирате тако што ћете га поново oчитати."
+  },
+  "withdraw_verifygroup_explain": {
+    "message": "Други могу да очитају овај бар-кôд да би приступили групи „%1$s“.\n\nОвде можете да деактивирате бар-кôд и поново га активирате тако што ћете га поново oчитати."
+  },
+  "withdraw_qr_code": {
+    "message": "Деактивирај бар-кôд"
+  },
+  "revive_verifycontact_explain": {
+    "message": "Други могу да очитају овај бар-кôд да би вас контактирали.\n\nОвај бар-кôд није активан на овом уређају."
+  },
+  "revive_verifygroup_explain": {
+    "message": "Други могу да очитају овај бар-кôд да би приступили групи „%1$s“.\n\nОвај бар-кôд није активан на овом уређају."
+  },
+  "revive_qr_code": {
+    "message": "Активирај бар-кôд"
+  },
+  "qrshow_title": {
+    "message": "Бар-кôд за потврду"
+  },
+  "qrshow_x_joining": {
+    "message": "%1$s се придружи."
+  },
+  "qrshow_x_verified": {
+    "message": "%1$s потврђен."
+  },
+  "qrshow_x_has_joined_group": {
+    "message": "%1$s се безбедно придружи групи."
+  },
+  "qrshow_join_group_title": {
+    "message": "Бар-кôд за потврду"
+  },
+  "qrshow_join_group_hint": {
+    "message": "Скенирај да се придружиш групи „%1$s“"
+  },
+  "qrshow_join_contact_title": {
+    "message": "Бар-кôд за потврду"
+  },
+  "qrshow_join_contact_hint": {
+    "message": "Очитај да ћаскате са %1$s"
+  },
+  "qrshow_join_contact_no_connection_toast": {
+    "message": "Нисте повезани на интернет, није могуће подесити бар-кôд."
+  },
+  "qraccount_ask_create_and_login": {
+    "message": "Направите нову е-адресу на „%1$s“ и приступите јој тамо?"
+  },
+  "qraccount_ask_create_and_login_another": {
+    "message": "Направите нову е-адресу на „%1$s“ и приступите јој тамо?\n\nВаш постојећи налог неће бити избрисан. Користите „Промени налог“ да пређете са једног налога на други."
+  },
+  "qraccount_qr_code_cannot_be_used": {
+    "message": "Очитани бар-кôд не може бити коришћен да подеси нови налог."
+  },
+  "qrlogin_ask_login": {
+    "message": "Пријави се у „%1$s“?"
+  },
+  "qrlogin_ask_login_another": {
+    "message": "Пријави се у „%1$s“? Ваш постојећи налог неће бити избрисан. Користите „Промени налог“ опцију да прелазите са једног на други налог."
+  },
+  "secure_join_started": {
+    "message": "%1$sвас је позвао да се придружите групи.\n\nЧекамо да уређај од %2$sодговори..."
+  },
+  "secure_join_replies": {
+    "message": "%1$s је одговорио и чека да буде додат у групу..."
+  },
+  "contact_verified": {
+    "message": "%1$s потврђен."
+  },
+  "contact_not_verified": {
+    "message": "Немогуће је проверити %1$s."
+  },
+  "verified_by": {
+    "message": "Проверено од %1$s"
+  },
+  "contact_setup_changed": {
+    "message": "Подешавања су се променила за %1$s."
+  },
+  "copy_qr_data_success": {
+    "message": "Бар-кôд везе је копиран у клипборд"
+  },
+  "mailto_dialog_header_select_chat": {
+    "message": "Изабери ћаскање у које желите да пошаљете поруку"
+  },
+  "confirm_replace_draft": {
+    "message": "%1$s већ има нацрт поруке, да ли желите да је замените?"
+  },
+  "mailto_link_could_not_be_decoded": {
+    "message": "mailto веза не може бити декодирана: %1$s"
+  },
+  "notify_reply_button": {
+    "message": "Одговори"
+  },
+  "notify_new_message": {
+    "message": "Нова порука"
+  },
+  "notify_background_connection_enabled": {
+    "message": "Веза у позадини је омогућена"
+  },
+  "notify_priority_high": {
+    "message": "Висок"
+  },
+  "notify_priority_max": {
+    "message": "Највиши"
+  },
+  "notify_name_and_message": {
+    "message": "Име и поруку"
+  },
+  "notify_name_only": {
+    "message": "Само име"
+  },
+  "notify_no_name_or_message": {
+    "message": "Ни име ни поруку"
+  },
+  "perm_required_title": {
+    "message": "Дозвола је потребна"
+  },
+  "perm_continue": {
+    "message": "Настави"
+  },
+  "perm_explain_access_to_camera_denied": {
+    "message": "Да бисте снимили фотографије или видео снимке, идите на подешавања апликације, изаберите „Дозволе“ и омогућите „Камеру“."
+  },
+  "perm_explain_access_to_mic_denied": {
+    "message": "Да бисте послали звучне записе, идите на подешавања апликације, изаберите „Дозволе“ и омогућите „Микрофон“."
+  },
+  "perm_explain_access_to_storage_denied": {
+    "message": "Да бисте примали или слали датотеке, идите на подешавања апликације, изаберите „Дозволе“ и омогућите „Складиштење“."
+  },
+  "perm_explain_access_to_location_denied": {
+    "message": "Да приложите положај, идите у подешавања апликације и изаберите „Дозволе“ и омогућите „Положај/Локацију“."
+  },
+  "ImageEditorHud_draw_anywhere_to_blur": {
+    "message": "Цртајте било где да би сте замутили"
+  },
+  "ImageEditorHud_add_text": {
+    "message": "Додај текст"
+  },
+  "ImageEditorHud_blur": {
+    "message": "Замути"
+  },
+  "ImageEditorHud_brush_marker": {
+    "message": "Четкица за маркирање"
+  },
+  "ImageEditorHud_brush_highlight": {
+    "message": "Четкица за истицање"
+  },
+  "ImageEditorHud_crop": {
+    "message": "Одрежи"
+  },
+  "ImageEditorHud_flip": {
+    "message": "Окрени"
+  },
+  "ImageEditorHud_rotate": {
+    "message": "Обрни"
+  },
+  "encrypted_message": {
+    "message": "Шифрована порука"
+  },
+  "about_offical_app_desktop": {
+    "message": "Ово је званична Delta Chat апликација за рачунар."
+  },
+  "about_licensed_under_desktop": {
+    "message": "Овај програм је лиценциран под ГНУ ГПЛ верзија 3 лиценцом и изворни код је доступан на Гитхабу."
+  },
+  "welcome_desktop": {
+    "message": "Добродошли у Delta Chat."
+  },
+  "global_menu_preferences_language_desktop": {
+    "message": "Језик"
+  },
+  "global_menu_file_desktop": {
+    "message": "Фајл"
+  },
+  "global_menu_file_quit_desktop": {
+    "message": "Излаз"
+  },
+  "global_menu_edit_desktop": {
+    "message": "Уреди"
+  },
+  "global_menu_edit_undo_desktop": {
+    "message": "Поништи урађено"
+  },
+  "global_menu_edit_redo_desktop": {
+    "message": "Уради поново"
+  },
+  "global_menu_edit_cut_desktop": {
+    "message": "Исеци"
+  },
+  "global_menu_edit_copy_desktop": {
+    "message": "Копирај"
+  },
+  "global_menu_edit_paste_desktop": {
+    "message": "Налепи"
+  },
+  "global_menu_view_desktop": {
+    "message": "Погледај"
+  },
+  "global_menu_view_floatontop_desktop": {
+    "message": "Прикажи преко свега"
+  },
+  "global_menu_view_developer_desktop": {
+    "message": "Програмер"
+  },
+  "global_menu_view_developer_tools_desktop": {
+    "message": "Алати за развој"
+  },
+  "global_menu_help_desktop": {
+    "message": "Помоћ"
+  },
+  "global_menu_help_report_desktop": {
+    "message": "Пријавите проблем"
+  },
+  "global_menu_help_about_desktop": {
+    "message": "О Delta Chat"
+  },
+  "global_menu_file_open_desktop": {
+    "message": "Отвори Delta Chat"
+  },
+  "global_menu_minimize_to_tray": {
+    "message": "Минимизуј"
+  },
+  "no_chat_selected_suggestion_desktop": {
+    "message": "Изабери ћаскање или направи ново ћаскање"
+  },
+  "write_message_desktop": {
+    "message": "Напишите поруку"
+  },
+  "encryption_info_title_desktop": {
+    "message": "Подаци о шифровању"
+  },
+  "delete_message_desktop": {
+    "message": "Избриши поруку"
+  },
+  "more_info_desktop": {
+    "message": "Више података"
+  },
+  "timestamp_format_m_desktop": {
+    "message": "MMM D"
+  },
+  "remove_desktop": {
+    "message": "Уклони"
+  },
+  "save_desktop": {
+    "message": "Сачувај"
+  },
+  "name_desktop": {
+    "message": "Име"
+  },
+  "select_group_image_desktop": {
+    "message": "Изабери слику групе"
+  },
+  "export_backup_desktop": {
+    "message": "Извези резервну копију"
+  },
+  "autocrypt_correct_desktop": {
+    "message": "Поставке за аутошифровање су послате."
+  },
+  "forget_login_confirmation_desktop": {
+    "message": "Да ли желите да избришете овај налог? Све ће бити избрисано, укључујући и ваше подешавање с-краја-на-крај шифровања, контакти, ћаскања, поруке и медији. Ова радња се не може опозвати."
+  },
+  "message_detail_sent_desktop": {
+    "message": "послато"
+  },
+  "message_detail_received_desktop": {
+    "message": "примљено"
+  },
+  "menu.view.developer.open.log.folder": {
+    "message": "Отвори директоријум где се налазе дневници"
+  },
+  "menu.view.developer.open.current.log.file": {
+    "message": "Отвори тренутни дневник"
+  },
+  "explain_desktop_minimized_disabled_tray_pref": {
+    "message": "Иконица на системској касети не може да се онемогући јер је Delta Chat покренут са --minimized опцијом."
+  },
+  "no_spellcheck_suggestions_found": {
+    "message": "Нема предлога за исправке правописа."
+  },
+  "show_window": {
+    "message": "Прикажи прозор"
+  },
+  "keybindings": {
+    "message": "Комбинације тастера"
+  },
+  "switch_between_chats": {
+    "message": "Пребацивање између ћаскања"
+  },
+  "scroll_messages": {
+    "message": "Листај поруке"
+  },
+  "focus_search_input": {
+    "message": "Фокус на претрагу"
+  },
+  "focus_message_input": {
+    "message": "Фокус на унос поруке"
+  },
+  "force_refresh_network": {
+    "message": "Принуди на освежавање мреже"
+  },
+  "insert_newline": {
+    "message": "Додај нову линију"
+  },
+  "a11y_delivery_status_error": {
+    "message": "Статус испоруке: Грешка"
+  },
+  "a11y_encryption_padlock": {
+    "message": "Катанац за шифровање"
+  },
+  "a11y_delivery_status_sending": {
+    "message": "Статус испоруке: Шаљем"
+  },
+  "a11y_delivery_status_draft": {
+    "message": "Статус испоруке: Нацрт"
+  },
+  "a11y_delivery_status_delivered": {
+    "message": "Статус испоруке: Примљено"
+  },
+  "a11y_delivery_status_read": {
+    "message": "Статус испоруке: Прочитано"
+  },
+  "a11y_delivery_status_invalid": {
+    "message": "Неважећи статус испоруке"
+  },
+  "a11y_message_context_menu_btn_label": {
+    "message": "Радње над порукама"
+  },
+  "a11y_background_preview_label": {
+    "message": "Провири у позадини"
+  },
+  "a11y_disappearing_messages_activated": {
+    "message": "Нестајуће поруке су активиране"
+  },
+  "stop_sharing_location": {
+    "message": "Престаните са дељењем положаја"
+  },
+  "a11y_voice_message_hint_ios": {
+    "message": "Након снимања, двапут додирните да бисте послали. Да бисте одбацили снимак, трљајте га са два прста."
+  },
+  "a11y_connectivity_hint": {
+    "message": "Двапут додирните да прегледате детаље о повезивању."
+  },
+  "login_error_no_internet_connection": {
+    "message": "Неуспешна пријава на налог, нисте повезани на интернет."
+  },
+  "share_account_not_configured": {
+    "message": "Налог није још конфигурисан."
+  },
+  "cannot_play_audio_file": {
+    "message": "Овај звучни запис не може репродуковати."
+  },
+  "perm_ios_explain_access_to_camera_denied": {
+    "message": "Да би направили фотографије, видео записе или читач бар-кôда, отворите поставке на оперативном систему и омогућите приступу камери."
+  },
+  "open_settings": {
+    "message": "Отвори поставке"
+  },
+  "import_device_contacts": {
+    "message": "Увезите контакте са уређаја"
+  },
+  "import_device_contacts_hint": {
+    "message": "Да би ћаскали са контактима са вашег уређаја отворите поставке и омогућите приступ контактима."
+  },
+  "disabled_in_dc": {
+    "message": "Онемогућено у Delta Chat"
+  },
+  "disabled_in_system_settings": {
+    "message": "Онемогућено у поставкама оперативног система"
+  },
+  "bg_app_refresh_disabled": {
+    "message": "„Освежавање апликације у позадини“ је онемогућено у поставкама оперативног система"
+  },
+  "delayed": {
+    "message": "Одложено"
+  },
+  "notifications_avg_minutes": {
+    "message": "У просеку сваких %1$dминута"
+  },
+  "notifications_avg_hours": {
+    "message": "У просеку сваких %1$dсати"
+  },
+  "last_check_at": {
+    "message": "Проверено у %1$s"
+  },
+  "InfoPlist_NSCameraUsageDescription": {
+    "message": "Delta Chat користи вашу камеру за снимање и слање фотографија и видео записа и за очитавање бар-кôда."
+  },
+  "InfoPlist_NSContactsUsageDescription": {
+    "message": "Delta Chat користи ваше контакте да прикаже листу е-адреса на које можете слати поруке. Delta Chat нема сервер и ваши контакти се не шаљу нигде."
+  },
+  "InfoPlist_NSLocationAlwaysAndWhenInUseUsageDescription": {
+    "message": "Delta Chat захтева дозволу за дељење вашег положаја током периода у коме сте омогућили дељење положаја."
+  },
+  "InfoPlist_NSLocationWhenInUseUsageDescription": {
+    "message": "Delta Chat захтева дозволу за дељење вашег положаја током периода у коме сте омогућили дељење положаја."
+  },
+  "InfoPlist_NSMicrophoneUsageDescription": {
+    "message": "Delta Chat користи микрофон да снима и шаље звучне поруке и видео записе са звуком."
+  },
+  "InfoPlist_NSPhotoLibraryUsageDescription": {
+    "message": "Delta Chat ће вам дозволити да изаберете које од слика из вашег фото албума желите да пошаљете."
+  },
+  "InfoPlist_NSPhotoLibraryAddUsageDescription": {
+    "message": "Delta Chat жели да сними слике у ваш фото албум."
+  },
+  "pref_background_notifications_rationale": {
+    "message": "Да би сте одржавали везу са вашим сервером за е-пошту и да би сте примали поруке у позадини, игноришите оптимизације ефикасности батерије у следећем кораку.\n\nDelta Chat не користи много енергије и води рачуна да вам не испразни батерију."
+  },
+  "perm_enable_bg_reminder_title": {
+    "message": "Додирните овде да би примали поруке када је Delta Chat у позадини."
+  },
+  "perm_enable_bg_already_done": {
+    "message": "Ви сте већ омогућили Delta Chat-у достављање порука у позадини.\n\nАко поруке и даље не стижу у позадини, погледајте поставке у оперативном систему."
+  },
+  "n_minutes": {
+    "one": "%d мин",
+    "few": "%d мин",
+    "other": "%d мин"
+  },
+  "n_hours": {
+    "one": "%d сат",
+    "few": "%d сата",
+    "other": "%d сати"
+  },
+  "n_chats": {
+    "one": "%d ћаскање",
+    "few": "%d ћаскања",
+    "other": "%d ћаскања"
+  },
+  "n_contacts": {
+    "one": "%d контакт",
+    "few": "%d контакта",
+    "other": "%d контаката"
+  },
+  "n_messages": {
+    "one": "%d порука",
+    "few": "%d поруке",
+    "other": "%d порука"
+  },
+  "n_members": {
+    "one": "%d члан",
+    "few": "%d члана",
+    "other": "%d чланова"
+  },
+  "n_recipients": {
+    "one": "%d прималац",
+    "few": "%d примаоца",
+    "other": "%d примаоца"
+  },
+  "n_selected": {
+    "one": "означено: %d",
+    "few": "означено: %d",
+    "other": "означено: %d"
+  },
+  "ask_send_following_n_files_to": {
+    "one": "Пошаљи датотеку %s?",
+    "few": "Пошаљи %d датотеке %s?",
+    "other": "Пошаљи %d датотеке %s?"
+  },
+  "ask_delete_messages_simple": {
+    "one": "Да ли желите да избришите %d поруку?",
+    "few": "Да ли желите да избришите %d поруке?",
+    "other": "Да ли желите да избришите %d поруке?"
+  },
+  "chat_archived": {
+    "one": "%dћаскање архивирано",
+    "few": "%dћаскања архивирано",
+    "other": "%dћаскања архивирано"
+  },
+  "chat_unarchived": {
+    "one": "%d ћаскање је извађено из архиве",
+    "few": "%d ћаскања је извађено из архиве",
+    "other": "%d ћаскања је извађено из архиве"
+  },
+  "chat_n_new_messages": {
+    "one": "%d нова порука",
+    "few": "%d нове поруке",
+    "other": "%d нових порука"
+  }
+}

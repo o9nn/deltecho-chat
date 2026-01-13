@@ -1,0 +1,1354 @@
+{
+  "app_name": {
+    "message": "Delta Chat"
+  },
+  "ok": {
+    "message": "OK"
+  },
+  "cancel": {
+    "message": "Anulați"
+  },
+  "clear_search": {
+    "message": "Stergere Căutare"
+  },
+  "yes": {
+    "message": "Da"
+  },
+  "no": {
+    "message": "Nu"
+  },
+  "select": {
+    "message": "Selectați"
+  },
+  "on": {
+    "message": "Deschis"
+  },
+  "off": {
+    "message": "Închideți"
+  },
+  "def": {
+    "message": "Implicit"
+  },
+  "default_value": {
+    "message": "Implicit (%1$s)"
+  },
+  "default_value_as_above": {
+    "message": "Implicit (la fel ca mai sus)"
+  },
+  "custom": {
+    "message": "Personalizat"
+  },
+  "none": {
+    "message": "Nici unul"
+  },
+  "automatic": {
+    "message": "Automat"
+  },
+  "strict": {
+    "message": "Strict"
+  },
+  "open": {
+    "message": "Deschideți"
+  },
+  "download": {
+    "message": "Descărcați"
+  },
+  "downloading": {
+    "message": "Descărcarea…"
+  },
+  "open_attachment": {
+    "message": "Deschideți Atașamentul"
+  },
+  "join": {
+    "message": "Alăturați-vă"
+  },
+  "rejoin": {
+    "message": "Reînscrieți-vă la"
+  },
+  "delete": {
+    "message": "Ștergeți"
+  },
+  "info": {
+    "message": "Informații"
+  },
+  "update": {
+    "message": "Actualizare"
+  },
+  "emoji": {
+    "message": "Emoticon"
+  },
+  "attachment": {
+    "message": "Atașament"
+  },
+  "back": {
+    "message": "Înapoi"
+  },
+  "close": {
+    "message": "Închideți"
+  },
+  "forward": {
+    "message": "Redirecţionare"
+  },
+  "resend": {
+    "message": "Retrimite"
+  },
+  "archive": {
+    "message": "Arhivare"
+  },
+  "unarchive": {
+    "message": "Dezarhivare"
+  },
+  "mute": {
+    "message": "Silențios"
+  },
+  "ephemeral_messages": {
+    "message": "Mesaje dispărute"
+  },
+  "ephemeral_messages_hint": {
+    "message": "Se aplică tuturor membrilor acestui chat dacă folosesc Delta Chat; aceștia pot în continuare să copieze, să salveze și să redirecționeze mesajele sau să utilizeze alți clienți de e-mail."
+  },
+  "save": {
+    "message": "Salvați"
+  },
+  "chat": {
+    "message": "Chat"
+  },
+  "media": {
+    "message": "Media"
+  },
+  "profile": {
+    "message": "Profil"
+  },
+  "main_menu": {
+    "message": "Meniul Principal"
+  },
+  "start_chat": {
+    "message": "Începeți chat-ul"
+  },
+  "show_full_message": {
+    "message": "Afișați mesajul complet..."
+  },
+  "mark_all_as_read": {
+    "message": "Marcați toate ca fiind citite"
+  },
+  "mark_as_read_short": {
+    "message": "Citiți"
+  },
+  "loading": {
+    "message": "Încărcare…"
+  },
+  "hide": {
+    "message": "Ascundeți"
+  },
+  "activate": {
+    "message": "Activați"
+  },
+  "load_remote_content": {
+    "message": "Încărcați imagini la distanță"
+  },
+  "load_remote_content_ask": {
+    "message": "Imaginile de la distanță vă pot urmări.\n\nAceastă setare poate, de asemenea, să încarce fonturi și alt conținut. Dacă este dezactivată, pot apărea imagini încorporate sau în cache.\n\nÎncărcare imagini la distanță?"
+  },
+  "always": {
+    "message": "Întotdeauna"
+  },
+  "always_load_remote_images": {
+    "message": "Încărcați întotdeauna imagini la distanță"
+  },
+  "once": {
+    "message": "Odată ce"
+  },
+  "show_warning": {
+    "message": "Afișați avertismentul"
+  },
+  "show_password": {
+    "message": "Afișați parola"
+  },
+  "hide_password": {
+    "message": "Ascundeți parola"
+  },
+  "not_now": {
+    "message": "Nu acum"
+  },
+  "never": {
+    "message": "Niciodata"
+  },
+  "one_moment": {
+    "message": "Un moment..."
+  },
+  "done": {
+    "message": "Realizat"
+  },
+  "undo": {
+    "message": "Anulați"
+  },
+  "offline": {
+    "message": "Nu este conectat"
+  },
+  "next": {
+    "message": "Următorul"
+  },
+  "error": {
+    "message": "Eroare"
+  },
+  "error_x": {
+    "message": "Eroare: %1$s"
+  },
+  "no_app_to_handle_data": {
+    "message": "Nu pot găsi un app care să se ocupe de acest tip de date."
+  },
+  "no_browser_installed": {
+    "message": "Nu este instalat niciun browser."
+  },
+  "file_not_found": {
+    "message": "Nu a putut fi găsit %1$s."
+  },
+  "copied_to_clipboard": {
+    "message": "Copiat în clipboard."
+  },
+  "contacts_headline": {
+    "message": "Contacte"
+  },
+  "email_address": {
+    "message": "Adresă de e-mail"
+  },
+  "bad_email_address": {
+    "message": "Adresă de e-mail greșită."
+  },
+  "password": {
+    "message": "Parolă"
+  },
+  "existing_password": {
+    "message": "Parolă existentă"
+  },
+  "now": {
+    "message": "Acum"
+  },
+  "danger": {
+    "message": "Pericol"
+  },
+  "today": {
+    "message": "Azi"
+  },
+  "yesterday": {
+    "message": "Ieri"
+  },
+  "this_week": {
+    "message": "Săptămâna aceasta"
+  },
+  "this_month": {
+    "message": "Luna aceasta"
+  },
+  "last_week": {
+    "message": "Săptămâna trecută"
+  },
+  "last_month": {
+    "message": "Luna trecută"
+  },
+  "last_seen_at": {
+    "message": "Ultima dată văzut la %1$s"
+  },
+  "last_seen_unknown": {
+    "message": "Ultima dată a fost văzut: Necunoscut"
+  },
+  "self": {
+    "message": "Eu"
+  },
+  "draft": {
+    "message": "Schiță"
+  },
+  "image": {
+    "message": "Imagine"
+  },
+  "reply_noun": {
+    "message": "Răspundeți"
+  },
+  "gif": {
+    "message": "GIF"
+  },
+  "sticker": {
+    "message": "Abțibild"
+  },
+  "images": {
+    "message": "Imagini"
+  },
+  "audio": {
+    "message": "Audio"
+  },
+  "voice_message": {
+    "message": "Mesaj vocal"
+  },
+  "forwarded": {
+    "message": "Redirecționat"
+  },
+  "forwarded_message": {
+    "message": "Mesaj redirecționat"
+  },
+  "forwarded_by": {
+    "message": "Redirecționat de %1$s"
+  },
+  "video": {
+    "message": "Video"
+  },
+  "documents": {
+    "message": "Documente"
+  },
+  "contact": {
+    "message": "Contact"
+  },
+  "camera": {
+    "message": "Cameră"
+  },
+  "capture": {
+    "message": "Captură"
+  },
+  "switch_camera": {
+    "message": "Comutați camera"
+  },
+  "toggle_fullscreen": {
+    "message": "Comutarea modului ecran complet"
+  },
+  "location": {
+    "message": "Locație"
+  },
+  "gallery": {
+    "message": "Galerie"
+  },
+  "images_and_videos": {
+    "message": "Imagini și videoclipuri"
+  },
+  "file": {
+    "message": "Fișier"
+  },
+  "files": {
+    "message": "Fișiere"
+  },
+  "webxdc_app": {
+    "message": "App"
+  },
+  "webxdc_apps": {
+    "message": "App-uri"
+  },
+  "unknown": {
+    "message": "Necunoscut"
+  },
+  "green": {
+    "message": "Verde"
+  },
+  "red": {
+    "message": "Roșu"
+  },
+  "blue": {
+    "message": "Albastru"
+  },
+  "orange": {
+    "message": "Portocaliu"
+  },
+  "cyan": {
+    "message": "Cian"
+  },
+  "purple": {
+    "message": "Purpuriu"
+  },
+  "magenta": {
+    "message": "Magenta"
+  },
+  "white": {
+    "message": "Alb"
+  },
+  "zoom": {
+    "message": "Zoom"
+  },
+  "extra_small": {
+    "message": "Foarte mic"
+  },
+  "small": {
+    "message": "Mic"
+  },
+  "normal": {
+    "message": "Normal"
+  },
+  "large": {
+    "message": "Mare"
+  },
+  "extra_large": {
+    "message": "Foarte mare"
+  },
+  "fast": {
+    "message": "Rapid"
+  },
+  "slow": {
+    "message": "Lent"
+  },
+  "menu_new_contact": {
+    "message": "Contact Nou"
+  },
+  "menu_new_chat": {
+    "message": "Chat Nou"
+  },
+  "menu_new_group": {
+    "message": "Grup Nou"
+  },
+  "broadcast_list": {
+    "message": "Listă de difuzare"
+  },
+  "broadcast_lists": {
+    "message": "Liste de difuzare"
+  },
+  "new_broadcast_list": {
+    "message": "Noua Listă de Difuzare"
+  },
+  "add_recipients": {
+    "message": "Adăugați Destinatari"
+  },
+  "menu_send": {
+    "message": "Trimiteți"
+  },
+  "menu_toggle_keyboard": {
+    "message": "Comutați Tastatura Emoji"
+  },
+  "menu_edit_group": {
+    "message": "Editați grupul"
+  },
+  "menu_group_name_and_image": {
+    "message": "Numele și imaginea grupului"
+  },
+  "menu_show_global_map": {
+    "message": "Afișați toate locațiile"
+  },
+  "menu_archive_chat": {
+    "message": "Arhivă Chat"
+  },
+  "menu_unarchive_chat": {
+    "message": "Chat Dezarhivat"
+  },
+  "menu_add_attachment": {
+    "message": "Adăugați Atașament"
+  },
+  "menu_leave_group": {
+    "message": "Părăsiți Grupul"
+  },
+  "menu_delete_chat": {
+    "message": "Ștergeți Chat-ul"
+  },
+  "clear_chat": {
+    "message": "Curăță Chat-ul"
+  },
+  "delete_contact": {
+    "message": "Ștergeți Contactul"
+  },
+  "menu_delete_location": {
+    "message": "Ștergeți această locație?"
+  },
+  "menu_message_details": {
+    "message": "Detalii Mesaj"
+  },
+  "menu_copy_to_clipboard": {
+    "message": "Copiați în clipboard"
+  },
+  "menu_copy_selection_to_clipboard": {
+    "message": "Selecție de copiere"
+  },
+  "menu_copy_link_to_clipboard": {
+    "message": "Copiați link-ul"
+  },
+  "menu_copy_text_to_clipboard": {
+    "message": "Copiați textul"
+  },
+  "menu_copy_image_to_clipboard": {
+    "message": "Copiați imaginea"
+  },
+  "menu_copy_email_to_clipboard": {
+    "message": "Copiați E-mailul"
+  },
+  "paste_from_clipboard": {
+    "message": "Copiere din clipboard"
+  },
+  "menu_forward": {
+    "message": "Redirecționați Mesajul"
+  },
+  "menu_reply": {
+    "message": "Răspundeți la Mesaj"
+  },
+  "menu_mute": {
+    "message": "Dezactivarea Notificărilor"
+  },
+  "menu_unmute": {
+    "message": "Dezactivați"
+  },
+  "menu_export_attachment": {
+    "message": "Exportați atașamentul"
+  },
+  "menu_export_attachments": {
+    "message": "Exportați Atașamentele"
+  },
+  "menu_all_media": {
+    "message": "Toate Mediile"
+  },
+  "show_in_chat": {
+    "message": "Afișați în Chat"
+  },
+  "menu_share": {
+    "message": "Împărtășiți"
+  },
+  "block": {
+    "message": "Bloc"
+  },
+  "menu_block_contact": {
+    "message": "Blocare Contact"
+  },
+  "menu_unblock_contact": {
+    "message": "Deblocare Contact"
+  },
+  "accept": {
+    "message": "Acceptați"
+  },
+  "menu_play": {
+    "message": "Joacă"
+  },
+  "menu_pause": {
+    "message": "Pauză"
+  },
+  "menu_scroll_to_bottom": {
+    "message": "Derulați până jos"
+  },
+  "menu_scroll_to_top": {
+    "message": "Derulați până Sus"
+  },
+  "menu_help": {
+    "message": "Ajutor"
+  },
+  "privacy_policy": {
+    "message": "Politica de confidențialitate"
+  },
+  "menu_select_all": {
+    "message": "Selectați toate"
+  },
+  "select_more": {
+    "message": "Selectați mai mult"
+  },
+  "menu_edit_name": {
+    "message": "Editați Numele"
+  },
+  "menu_settings": {
+    "message": "Setări"
+  },
+  "menu_advanced": {
+    "message": "Avansată"
+  },
+  "menu_view_profile": {
+    "message": "Vizualizați profilul"
+  },
+  "menu_zoom_in": {
+    "message": "Zoom Interior"
+  },
+  "menu_zoom_out": {
+    "message": "Zoom Exterior"
+  },
+  "menu_save_log": {
+    "message": "Salvați Jurnalul"
+  },
+  "menu_more_options": {
+    "message": "Mai multe opțiuni"
+  },
+  "menu_learn_spelling": {
+    "message": "Învățați Ortografia"
+  },
+  "menu_chat_audit_log": {
+    "message": "Jurnal de Audit pentru Chat"
+  },
+  "jump_to_message": {
+    "message": "Sari la Mesaj"
+  },
+  "copy_json": {
+    "message": " Copiați JSON"
+  },
+  "replace_draft": {
+    "message": "Înlocuiți proiectul"
+  },
+  "title_share_location": {
+    "message": "Partajați locația cu toți membrii grupului"
+  },
+  "device_talk": {
+    "message": "Mesajele Dispozitivului"
+  },
+  "device_talk_subtitle": {
+    "message": "Mesaje generate la nivel local"
+  },
+  "device_talk_explain": {
+    "message": "Mesajele din acest chat sunt generate pe dispozitivul dumneavoastră pentru a vă informa cu privire la actualizările app-ului și la problemele apărute în timpul utilizării."
+  },
+  "edit_contact": {
+    "message": "Editați Contactul"
+  },
+  "pin_chat": {
+    "message": "Fixați Chat"
+  },
+  "unpin_chat": {
+    "message": "Desprindeți Chat-ul"
+  },
+  "pin": {
+    "message": "Fixați"
+  },
+  "unpin": {
+    "message": "Desprindeți"
+  },
+  "ConversationFragment_quoted_message_not_found": {
+    "message": "Mesajul original nu a fost găsit"
+  },
+  "reply_privately": {
+    "message": "Răspundeți în Privat"
+  },
+  "source_code": {
+    "message": "Codul Sursă"
+  },
+  "add_to_home_screen": {
+    "message": "Adăugați la ecranul principal"
+  },
+  "mute_for_one_hour": {
+    "message": "Silențios timp de 1 oră"
+  },
+  "mute_for_eight_hours": {
+    "message": "Silențios timp de 8 ore"
+  },
+  "mute_for_one_day": {
+    "message": "Silențios pentru 1 zi"
+  },
+  "mute_for_seven_days": {
+    "message": "Silențios timp de 7 zile"
+  },
+  "mute_forever": {
+    "message": "Silențios pentru totdeauna"
+  },
+  "share_location_for_5_minutes": {
+    "message": "Timp de 5 minute"
+  },
+  "share_location_for_30_minutes": {
+    "message": "Timp de 30 de minute"
+  },
+  "share_location_for_one_hour": {
+    "message": "Timp de 1 oră"
+  },
+  "share_location_for_two_hours": {
+    "message": "Timp de 2 ore"
+  },
+  "share_location_for_six_hours": {
+    "message": "Timp de 6 ore"
+  },
+  "file_saved_to": {
+    "message": "Fișier salvat la \"%1$s\"."
+  },
+  "videochat": {
+    "message": "Chat video"
+  },
+  "videochat_invite_user_to_videochat": {
+    "message": "Invitați %1$s la un chat video?"
+  },
+  "videochat_invite_user_hint": {
+    "message": "Acest lucru necesită o aplicație sau un browser compatibil la ambele capete."
+  },
+  "videochat_contact_invited_hint": {
+    "message": "%1$s invitat la o discuție video."
+  },
+  "videochat_you_invited_hint": {
+    "message": "Ați trimis o invitație de videochat."
+  },
+  "videochat_tap_to_join": {
+    "message": "Atingeți pentru a vă alătura"
+  },
+  "videochat_tap_to_open": {
+    "message": "Atingeți pentru a deschide"
+  },
+  "videochat_instance": {
+    "message": "Instanță de Videochat"
+  },
+  "videochat_instance_placeholder": {
+    "message": "Instanța Dumneavoastră de Videochat"
+  },
+  "videochat_instance_example": {
+    "message": "Exemple: https://meet.jit.si/$ROOM ori basicwebrtc:https://your-server"
+  },
+  "videochat_instance_explain_2": {
+    "message": "Dacă este activată, puteți începe un chat video din fiecare chat. Necesită un app compatibil sau un browser la ambele capete."
+  },
+  "videochat_instance_from_qr": {
+    "message": "Folosiți \"%1$s\" pentru a invita alte persoane la chat-uri video?\n\nOnce setat, puteți începe un chat video din fiecare chat. Acest lucru înlocuiește orice setare anterioară pentru chat-urile video."
+  },
+  "videochat_invitation": {
+    "message": "Invitație la chat video"
+  },
+  "videochat_invitation_body": {
+    "message": "Sunteți invitat la un chat video, faceți clic %1$s pentru a vă alătura."
+  },
+  "ask_leave_group": {
+    "message": "Ești sigur că vrei să părăsești acest grup?"
+  },
+  "ask_forward": {
+    "message": "Transmiteți mesajele către %1$s?"
+  },
+  "ask_forward_multiple": {
+    "message": "Transmiteți mesajele către %1$d chat-uri?"
+  },
+  "ask_export_attachment": {
+    "message": "Exportul atașamentelor va permite altor aplicații de pe dispozitivul dumneavoastră să le acceseze them.\n\nContinue?"
+  },
+  "ask_block_contact": {
+    "message": "Să blochez acest contact? Nu veți mai primi mesaje de la această persoană."
+  },
+  "ask_unblock_contact": {
+    "message": "Deblocați acest contact? Astfel, veți putea primi mesaje de la această persoană."
+  },
+  "ask_delete_contacts": {
+    "message": "Ștergerea contacts?\n\nContacts cu discuții în curs sau din agenda de adrese a sistemului nu pot fi șterse definitiv."
+  },
+  "ask_delete_contact": {
+    "message": "Ștergerea contactului %1$s?\n\nContacts cu discuții în curs sau din agenda de adrese a sistemului nu pot fi șterse definitiv."
+  },
+  "ask_start_chat_with": {
+    "message": "Chat cu %1$s?"
+  },
+  "ask_remove_members": {
+    "message": "Scoateți  %1$s din grup?"
+  },
+  "ask_remove_from_broadcast": {
+    "message": "Eliminați %1$s din lista de difuzare?"
+  },
+  "open_url_confirmation": {
+    "message": "Doriți să deschideți acest link?"
+  },
+  "contacts_title": {
+    "message": "Contacte"
+  },
+  "contacts_enter_name_or_email": {
+    "message": "Introduceți numele sau adresa de e-mail"
+  },
+  "contacts_type_email_above": {
+    "message": "Introduceți adresa de e-mail de mai sus"
+  },
+  "contacts_empty_hint": {
+    "message": "Fără contacte."
+  },
+  "chat_archived_chats_title": {
+    "message": "Chat-uri Arhivate"
+  },
+  "chat_please_enter_message": {
+    "message": "Vă rugăm să introduceți un mesaj."
+  },
+  "chat_camera_unavailable": {
+    "message": "Cameră indisponibilă."
+  },
+  "chat_unable_to_record_audio": {
+    "message": "Nu se poate înregistra audio."
+  },
+  "chat_new_one_to_one_hint": {
+    "message": "Trimiteți un mesaj către %1$s."
+  },
+  "chat_new_group_hint": {
+    "message": "Ceilalți vor vedea acest grup numai după ce ați trimis un prim mesaj."
+  },
+  "chat_record_slide_to_cancel": {
+    "message": "Glisați pentru a anula"
+  },
+  "chat_record_explain": {
+    "message": "Atingeți continuu pentru a înregistra un mesaj vocal, apoi eliberați-l pentru a-l trimite"
+  },
+  "chat_no_chats_yet_title": {
+    "message": "Goliți inbox.\nPress \"+\" pentru a începe un nou chat."
+  },
+  "chat_all_archived": {
+    "message": "Toate chat-urile sunt archived.\nPress \"+\" pentru a începe un nou chat."
+  },
+  "chat_share_with_title": {
+    "message": "Împărtășiți cu"
+  },
+  "chat_input_placeholder": {
+    "message": "Mesaj"
+  },
+  "chat_archived_label": {
+    "message": "Arhivat"
+  },
+  "chat_request_label": {
+    "message": "Cerere"
+  },
+  "chat_no_messages": {
+    "message": "Nu există mesaje."
+  },
+  "chat_self_talk_subtitle": {
+    "message": "Mesaje către sine"
+  },
+  "archive_empty_hint": {
+    "message": "Chat-urile arhivate vor apărea aici."
+  },
+  "saved_messages": {
+    "message": "Mesaje salvate"
+  },
+  "saved_messages_explain": {
+    "message": "• Redirecționați mesajele aici pentru acces ușor\n\n• Luați notițe sau notițe vocale\n\n\n• Atașați fișiere media pentru a le salva"
+  },
+  "saved": {
+    "message": "Salvat"
+  },
+  "save_as": {
+    "message": "Salvați ca"
+  },
+  "retry_send": {
+    "message": "Reîncercarea de a trimite mesajul"
+  },
+  "messaging_disabled_not_in_group": {
+    "message": "Trebuie să fiți în acest grup pentru a posta un mesaj. Pentru a vă alătura, întrebați un alt membru."
+  },
+  "messaging_disabled_mailing_list": {
+    "message": "Trimiterea de mesaje în listele de discuții nu este încă acceptată."
+  },
+  "cannot_display_unsuported_file_type": {
+    "message": "Nu se poate afișa acest tip de fișier: %s"
+  },
+  "attachment_failed_to_load": {
+    "message": "Nu s-a reușit încărcarea atașamentului"
+  },
+  "lock_recording": {
+    "message": "Blocarea înregistrării"
+  },
+  "mailing_list": {
+    "message": "Lista de corespondență"
+  },
+  "mailing_list_profile_info": {
+    "message": "Modificările aduse numelui și imaginii listei de corespondență se aplică numai pe acest dispozitiv."
+  },
+  "start_app": {
+    "message": "Start…"
+  },
+  "accept_request_first": {
+    "message": "Vă rugăm să acceptați mai întâi cererea de chat."
+  },
+  "filter_map_on_time": {
+    "message": "Afișați locațiile în intervalul de timp"
+  },
+  "show_location_traces": {
+    "message": "Afișați urme"
+  },
+  "add_poi": {
+    "message": "Trimiteți punctul de interes"
+  },
+  "chat_audit_log_empty_message": {
+    "message": "Mesajele de sistem pentru acest chat apar aici"
+  },
+  "chat_audit_log_title": {
+    "message": "Jurnal de audit de chat pentru %1$s"
+  },
+  "chat_audit_log_description": {
+    "message": "Afișează numai mesajele de sistem și cele informative; este util pentru a găsi ultimele acțiuni de chat fără a derula prin multe mesaje. "
+  },
+  "open_external_url_trust_domain": {
+    "message": "Nu cereți din nou %1$s"
+  },
+  "puny_code_warning_header": {
+    "message": "Link suspect detectat"
+  },
+  "puny_code_warning_question": {
+    "message": "Ești sigur că vrei să vizitezi  %1$s?"
+  },
+  "puny_code_warning_description": {
+    "message": "Acest link poate denatura caracterele cu caractere asemănătoare din diferite alfabete. Urmând linkul etichetat %1$s va duce la %2$s ceea ce este normal pentru caracterele non-latine. Dacă nu v-ați așteptat la astfel de caractere, acest link ar putea fi dăunător."
+  },
+  "search": {
+    "message": "Căutați"
+  },
+  "search_explain": {
+    "message": "Căutați chat-uri, contacte și mesaje"
+  },
+  "search_no_result_for_x": {
+    "message": "Nu s-au găsit rezultate pentru \"%s\""
+  },
+  "group_name": {
+    "message": "Numele Grup"
+  },
+  "group_avatar": {
+    "message": "Imagine de Grup"
+  },
+  "remove_group_image": {
+    "message": "Eliminați Imaginea Grupului"
+  },
+  "change_group_image": {
+    "message": "Schimbarea Imaginii Grupului"
+  },
+  "group_create_button": {
+    "message": "Creați un Grup"
+  },
+  "group_please_enter_group_name": {
+    "message": "Vă rugăm să introduceți un nume pentru grup."
+  },
+  "group_add_members": {
+    "message": "Adăugați Membri"
+  },
+  "group_self_not_in_group": {
+    "message": "Trebuie să fiți membru al grupului pentru a efectua această acțiune."
+  },
+  "profile_encryption": {
+    "message": "Criptare"
+  },
+  "profile_shared_chats": {
+    "message": "Chat-uri Partajate"
+  },
+  "tab_contact": {
+    "message": "Contact"
+  },
+  "tab_group": {
+    "message": "Grup"
+  },
+  "tab_gallery": {
+    "message": "Galerie"
+  },
+  "tab_docs": {
+    "message": "Documente"
+  },
+  "tab_links": {
+    "message": "Link-uri"
+  },
+  "tab_map": {
+    "message": "Hartă"
+  },
+  "tab_gallery_empty_hint": {
+    "message": "Imaginile și videoclipurile partajate în acest chat vor apărea aici."
+  },
+  "tab_docs_empty_hint": {
+    "message": "Documentele și alte fișiere partajate în acest chat vor apărea aici."
+  },
+  "tab_image_empty_hint": {
+    "message": "Imaginile partajate în acest chat vor apărea aici."
+  },
+  "tab_video_empty_hint": {
+    "message": "Videoclipurile partajate în acest chat vor apărea aici."
+  },
+  "tab_audio_empty_hint": {
+    "message": "Fișierele audio și mesajele vocale partajate în acest chat vor apărea aici."
+  },
+  "tab_webxdc_empty_hint": {
+    "message": "App-urile partajate în acest chat vor apărea aici."
+  },
+  "tab_all_media_empty_hint": {
+    "message": "Materialele media partajate în orice chat vor apărea aici."
+  },
+  "media_preview": {
+    "message": "Previzualizare Media"
+  },
+  "send_message": {
+    "message": "Trimiteți Mesaj"
+  },
+  "aeap_addr_changed": {
+    "message": "%1$s și-au schimbat adresa de la %2$s la %3$s"
+  },
+  "aeap_explanation": {
+    "message": "V-ați schimbat adresa de e-mail de la %1$s la %2$s.\n\nDacă trimiteți acum un mesaj către un grup verificat, contactele de acolo vor înlocui automat vechea adresă cu noua dumneavoastră adresă.\n\nSe recomandă să vă configurați vechiul furnizor de e-mail pentru a redirecționa toate e-mailurile către noua dumneavoastră adresă de e-mail. În caz contrar, s-ar putea să pierdeți mesaje ale contactelor care nu au primit încă noua dumneavoastră adresă."
+  },
+  "multidevice_title": {
+    "message": "Adăugați un al doilea dispozitiv"
+  },
+  "multidevice_same_network_hint": {
+    "message": "Asigurați-vă că ambele dispozitive se află în aceeași rețea Wi-Fi sau în aceeași rețea"
+  },
+  "multidevice_this_creates_a_qr_code": {
+    "message": "Astfel se creează un cod QR pe care cel de-al doilea dispozitiv îl poate scana pentru a copia contul."
+  },
+  "multidevice_install_dc_on_other_device": {
+    "message": "Instalați Delta Chat pe celălalt dispozitiv (https://get.delta.chat)"
+  },
+  "multidevice_tap_scan_on_other_device": {
+    "message": "Porniți Delta Chat, atingeți \" Adăugați ca al doilea dispozitiv\" și scanați codul afișat aici"
+  },
+  "multidevice_qr_subtitle": {
+    "message": "Scanare pentru a configura un al doilea dispozitiv pentru %1$s"
+  },
+  "multidevice_receiver_title": {
+    "message": "Adăugați ca Dispozitiv Secundar"
+  },
+  "multidevice_open_settings_on_other_device": {
+    "message": "Pe primul dispozitiv, mergeți la \" Setări / Adaugă Dispozitivul Secundar \" și scanați codul afișat acolo."
+  },
+  "multidevice_receiver_scanning_ask": {
+    "message": "Copiați contul de pe celălalt dispozitiv pe acest dispozitiv?"
+  },
+  "multidevice_abort": {
+    "message": "Abandonați configurarea celui de-al doilea dispozitiv?"
+  },
+  "multidevice_abort_will_invalidate_copied_qr": {
+    "message": "Acest lucru va invalida codul QR copiat în clipboard."
+  },
+  "multidevice_transfer_done_devicemsg": {
+    "message": "ℹ️ Contul a fost transferat pe dispozitivul secundar."
+  },
+  "preparing_account": {
+    "message": "Pregătirea contului..."
+  },
+  "transferring": {
+    "message": "Transferul..."
+  },
+  "troubleshooting": {
+    "message": "Depanare"
+  },
+  "incoming_messages": {
+    "message": "Mesaje primite"
+  },
+  "outgoing_messages": {
+    "message": "Mesaje de ieșire"
+  },
+  "storage_on_domain": {
+    "message": "Depozitarea pe %1$s"
+  },
+  "connectivity": {
+    "message": "Conectivitate"
+  },
+  "connectivity_not_connected": {
+    "message": "Nu este conectat"
+  },
+  "connectivity_connecting": {
+    "message": "Conectare..."
+  },
+  "connectivity_updating": {
+    "message": "Actualizare..."
+  },
+  "connectivity_connected": {
+    "message": "Conectat"
+  },
+  "sending": {
+    "message": "Trimitere…"
+  },
+  "last_msg_sent_successfully": {
+    "message": "Ultimul mesaj a fost trimis cu succes."
+  },
+  "not_supported_by_provider": {
+    "message": "Nu este suportat de furnizorul dumneavoastră."
+  },
+  "messages": {
+    "message": "Mesaje"
+  },
+  "part_of_total_used": {
+    "message": "%1$s de %2$s folosit"
+  },
+  "scan_invitation_code": {
+    "message": "Scanați Codul Invitației"
+  },
+  "login_title": {
+    "message": "Autentificare"
+  },
+  "login_header": {
+    "message": "Autentificați-vă în contul dumneavoastră de e-mail"
+  },
+  "login_explain": {
+    "message": "Conectați-vă cu un cont de e-mail existent"
+  },
+  "login_subheader": {
+    "message": "În cazul furnizorilor de e-mail cunoscuți, setările suplimentare sunt configurate automat. Uneori, IMAP trebuie să fie activat în setările web. Consultați furnizorul dumneavoastră de e-mail sau prietenii pentru ajutor."
+  },
+  "login_no_servers_hint": {
+    "message": "Nu există servere Delta Chat, datele tale rămân pe dispozitivul tău."
+  },
+  "login_inbox": {
+    "message": "Inbox"
+  },
+  "login_imap_login": {
+    "message": "Nume de autentificare IMAP"
+  },
+  "login_imap_server": {
+    "message": "Serverul IMAP"
+  },
+  "login_imap_port": {
+    "message": "Portul IMAP"
+  },
+  "login_imap_security": {
+    "message": "Securitate IMAP "
+  },
+  "login_outbox": {
+    "message": "Outbox"
+  },
+  "login_smtp_login": {
+    "message": "Nume de autentificare SMTP"
+  },
+  "login_smtp_password": {
+    "message": "Parolă SMTP"
+  },
+  "login_smtp_server": {
+    "message": "Serverul SMTP "
+  },
+  "login_smtp_port": {
+    "message": "Portul SMTP "
+  },
+  "login_smtp_security": {
+    "message": "Securitate SMTP"
+  },
+  "login_auth_method": {
+    "message": "Metoda de autorizare"
+  },
+  "login_info_oauth2_title": {
+    "message": "Continuați cu configurația simplificată?"
+  },
+  "login_info_oauth2_text": {
+    "message": "Adresa de e-mail introdusă suportă o configurare simplificată (OAuth 2.0).\n\nÎn pasul următor, vă rugăm să permiteți ca Delta Chat să acționeze ca aplicație de chat prin e-mail.\n\nNu există servere Delta Chat, datele voastre rămân pe dispozitivul dumneavoastră."
+  },
+  "login_certificate_checks": {
+    "message": "Verificări de certificate"
+  },
+  "login_error_mail": {
+    "message": "Vă rugăm să introduceți o adresă de e-mail validă"
+  },
+  "login_error_server": {
+    "message": "Vă rugăm să introduceți un server / o adresă IP validă"
+  },
+  "login_error_port": {
+    "message": "Vă rugăm să introduceți un port valid (1-65535)"
+  },
+  "login_error_required_fields": {
+    "message": "Vă rugăm să introduceți o adresă de e-mail validă și o parolă"
+  },
+  "import_backup_title": {
+    "message": "Restaurarea din copia de rezervă"
+  },
+  "import_backup_ask": {
+    "message": "Backup găsit la \"%1$s\".\n\nDoriți să importați și să utilizați toate datele și setările din acesta?"
+  },
+  "import_backup_no_backup_found": {
+    "message": "Nu s-au găsit copii de rezervă.\n\nCopiază copia de rezervă pe \"%1$s\" și încercați din nou. Alternativ, apăsați \"Start messaging\" pentru a continua procesul normal de configurare."
+  },
+  "login_error_cannot_login": {
+    "message": "Nu se poate autentifica ca \"%1$s\". Vă rugăm să verificați dacă adresa de e-mail și parola sunt corecte."
+  },
+  "accept_invalid_certificates": {
+    "message": "Acceptarea certificatelor nevalabile"
+  },
+  "switch_account": {
+    "message": "Schimbați contul"
+  },
+  "add_account": {
+    "message": "Adăugați un cont"
+  },
+  "delete_account": {
+    "message": "Ștergeți Contul"
+  },
+  "delete_account_ask": {
+    "message": "Sunteți sigur că doriți să ștergeți datele contului dumneavoastră?"
+  },
+  "delete_account_explain_with_name": {
+    "message": "Toate datele de cont ale \"%s\" de pe acest dispozitiv vor fi șterse, inclusiv configurația de criptare end-to-end, contactele, chat-urile, mesajele și mediile. Această acțiune nu poate fi anulată."
+  },
+  "unconfigured_account": {
+    "message": "Cont neconfigurat"
+  },
+  "unconfigured_account_hint": {
+    "message": "Deschideți contul pentru a-l configura."
+  },
+  "try_connect_now": {
+    "message": "Încercați să vă conectați acum"
+  },
+  "sync_all": {
+    "message": "Sincronizare Toate"
+  },
+  "configuration_failed_with_error": {
+    "message": "Configurarea a eșuat. Eroare: %1$s"
+  },
+  "forward_to": {
+    "message": "Înainte spre..."
+  },
+  "ask_send_files_to_selected_chats": {
+    "message": "Trimiteți %1$d fișier(e) la %2$d chat?"
+  },
+  "share_text_multiple_chats": {
+    "message": "Trimiteți acest text la %1$d chats?\n\n\"%2$s\""
+  },
+  "share_abort": {
+    "message": "Partajarea a fost întreruptă din cauza permisiunilor lipsă."
+  },
+  "pref_using_custom": {
+    "message": "Folosind o comandă personalizată: %s"
+  },
+  "pref_using_default": {
+    "message": "Utilizarea implicită: %s"
+  },
+  "pref_profile_info_headline": {
+    "message": "Informații despre profilul dumneavoastră"
+  },
+  "pref_profile_photo": {
+    "message": "Imagine de profil"
+  },
+  "pref_blocked_contacts": {
+    "message": "Contacte blocate"
+  },
+  "blocked_empty_hint": {
+    "message": "Contactele blocate vor apărea aici."
+  },
+  "pref_password_and_account_settings": {
+    "message": "Parolă și cont"
+  },
+  "pref_who_can_see_profile_explain": {
+    "message": "Imaginea de profil, numele și semnătura dumneavoastră vor fi trimise împreună cu mesajele dumneavoastră atunci când comunicați cu alți utilizatori."
+  },
+  "pref_your_name": {
+    "message": "Numele dumneavoastră"
+  },
+  "pref_default_status_label": {
+    "message": "Semnătură Text"
+  },
+  "pref_enter_sends": {
+    "message": "Tasta Enter trimite"
+  },
+  "pref_enter_sends_explain": {
+    "message": "Apăsarea tastei Enter va trimite mesaje text"
+  },
+  "pref_outgoing_media_quality": {
+    "message": "Calitatea Mediilor de Ieșire"
+  },
+  "pref_outgoing_balanced": {
+    "message": "Echilibrată"
+  },
+  "pref_outgoing_worse": {
+    "message": "Calitate mai proastă, dimensiuni mici"
+  },
+  "pref_vibrate": {
+    "message": "Vibrație"
+  },
+  "pref_screen_security": {
+    "message": "Ecran Securitate"
+  },
+  "pref_screen_security_explain": {
+    "message": "Solicitarea de a bloca capturile de ecran în lista de amintiri și în interiorul aplicației"
+  },
+  "pref_screen_security_please_restart_hint": {
+    "message": "Pentru a aplica setările de securitate a ecranului, vă rugăm să reporniți app-ul."
+  },
+  "pref_notifications": {
+    "message": "Notificări"
+  },
+  "pref_notifications_show": {
+    "message": "Afișați"
+  },
+  "pref_notifications_priority": {
+    "message": "Prioritate"
+  },
+  "pref_notifications_explain": {
+    "message": "Activați notificările de sistem pentru mesajele noi"
+  },
+  "pref_show_notification_content": {
+    "message": "Afișați conținutul mesajului în notificare"
+  },
+  "pref_show_notification_content_explain": {
+    "message": "Afișează expeditorul și primele cuvinte ale mesajului în notificări"
+  },
+  "pref_led_color": {
+    "message": "Culoare LED"
+  },
+  "pref_sound": {
+    "message": "Sunet"
+  },
+  "pref_silent": {
+    "message": "Silențios"
+  },
+  "pref_privacy": {
+    "message": "Confidențialitate"
+  },
+  "pref_chats_and_media": {
+    "message": "Discuții și mass-media"
+  },
+  "pref_system_default": {
+    "message": "Sistem implicit"
+  },
+  "pref_light_theme": {
+    "message": "Lumină"
+  },
+  "pref_dark_theme": {
+    "message": "Întuneric"
+  },
+  "pref_appearance": {
+    "message": "Aspect"
+  },
+  "pref_theme": {
+    "message": "Temă"
+  },
+  "pref_language": {
+    "message": "Limbă"
+  },
+  "pref_incognito_keyboard": {
+    "message": "Tastatura Incognito"
+  },
+  "pref_incognito_keyboard_explain": {
+    "message": "Solicitați tastatura pentru a dezactiva învățarea personalizată"
+  },
+  "pref_read_receipts": {
+    "message": "Citiți Chitanțele"
+  },
+  "pref_read_receipts_explain": {
+    "message": "Dacă sunt dezactivate chitanțele de citire, nu veți putea vedea chitanțele de citire de la alte persoane."
+  },
+  "pref_manage_keys": {
+    "message": "Gestionați Cheile"
+  },
+  "pref_use_system_emoji": {
+    "message": "Utilizați emoji de sistem"
+  },
+  "pref_use_system_emoji_explain": {
+    "message": "Dezactivați suportul emoji încorporat în Delta Chat"
+  },
+  "n_minutes": {
+    "one": "%d minut",
+    "few": "%d minute",
+    "other": "%d de minute"
+  },
+  "n_hours": {
+    "one": "%d oră",
+    "few": "%d ore",
+    "other": "%d de ore"
+  },
+  "n_chats": {
+    "one": "%d chat",
+    "few": "%d chat-uri",
+    "other": "%d de chat-uri"
+  },
+  "n_contacts": {
+    "one": "%d contact",
+    "few": "%d contacte",
+    "other": "%d de contacte"
+  },
+  "n_messages": {
+    "one": "%d mesaj",
+    "few": "%d mesaje",
+    "other": "%d de mesaje"
+  },
+  "n_members": {
+    "one": "%d membru",
+    "few": "%d membrii",
+    "other": "%d de membrii"
+  },
+  "n_recipients": {
+    "one": "%d recipient",
+    "few": "%d recipiente",
+    "other": "%d de recipiente"
+  },
+  "n_selected": {
+    "one": "%d Selectată",
+    "few": "%d Selectate",
+    "other": "%d De Selecții"
+  },
+  "ask_send_following_n_files_to": {
+    "one": "Trimiteți următorul fișier la %s?",
+    "few": "Trimiteți următoarele %d fișiere la %s?",
+    "other": "Trimiteți următoarele %d de fișiere la %s?"
+  },
+  "ask_delete_messages_simple": {
+    "one": "Ștergeți %d mesaj?",
+    "few": "Ștergeți %d mesaje?",
+    "other": "Ștergeți %d de mesaje?"
+  },
+  "chat_archived": {
+    "one": "%d chat arhivat",
+    "few": "%d  chat-uri arhivate",
+    "other": "%d de chat-uri arhivate"
+  },
+  "chat_unarchived": {
+    "one": "%d chat nearhivat",
+    "few": "%d chat-uri nearhivate",
+    "other": "%d de chat-uri nearhivate"
+  },
+  "chat_n_new_messages": {
+    "one": "%d nou mesaj",
+    "few": "%d mesaje noi",
+    "other": "%d de mesaje noi"
+  }
+}

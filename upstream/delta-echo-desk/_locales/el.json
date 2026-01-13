@@ -1,0 +1,2127 @@
+{
+  "app_name": {
+    "message": "Delta Chat"
+  },
+  "ok": {
+    "message": "Εντάξει"
+  },
+  "cancel": {
+    "message": "Ακύρωση"
+  },
+  "clear_search": {
+    "message": "Αναζήτηση"
+  },
+  "yes": {
+    "message": "Ναι"
+  },
+  "no": {
+    "message": "Όχι"
+  },
+  "select": {
+    "message": "Επιλογή"
+  },
+  "on": {
+    "message": "Ενεργοποιημένο"
+  },
+  "off": {
+    "message": "Απενεργοποιημένο"
+  },
+  "def": {
+    "message": "Προεπιλογή"
+  },
+  "default_value": {
+    "message": "Προεπιλογή(%1$s)"
+  },
+  "default_value_as_above": {
+    "message": "Προκαθορισμένο (Ίδιο με το παραπάνω)"
+  },
+  "custom": {
+    "message": "Προσαρμογή"
+  },
+  "none": {
+    "message": "Κανένα"
+  },
+  "automatic": {
+    "message": "Αυτόματα"
+  },
+  "strict": {
+    "message": "Αυστηρός"
+  },
+  "open": {
+    "message": "Άνοιγμα"
+  },
+  "download": {
+    "message": "Λήψη"
+  },
+  "downloading": {
+    "message": "Λήψη..."
+  },
+  "open_attachment": {
+    "message": "Άνοιγμα Συνημένου"
+  },
+  "join": {
+    "message": "Μπες"
+  },
+  "rejoin": {
+    "message": "Επανασύνδεση"
+  },
+  "delete": {
+    "message": "Διαγραφή"
+  },
+  "info": {
+    "message": "Πληροφορίες"
+  },
+  "update": {
+    "message": "Ενημέρωση"
+  },
+  "emoji": {
+    "message": "Emoji"
+  },
+  "attachment": {
+    "message": "Συνημένο"
+  },
+  "back": {
+    "message": "Πίσω"
+  },
+  "close": {
+    "message": "Κλείσιμο"
+  },
+  "forward": {
+    "message": "Προώθηση"
+  },
+  "resend": {
+    "message": "Επανάληψη Αποστολής"
+  },
+  "archive": {
+    "message": "Αρχειοθέτηση"
+  },
+  "unarchive": {
+    "message": "Αποαρχειοθ"
+  },
+  "mute": {
+    "message": "Σίγαση"
+  },
+  "ephemeral_messages": {
+    "message": "Μηνύματα που εξαφανίζονται"
+  },
+  "ephemeral_messages_hint": {
+    "message": "Ισχύει για όλα τα μέλη της συνομιλίας αν χρησιμοποιούν Delta Chat: έχουν την δυνατότητα αντιγραφής, αποθήκευσης, και κοινοποίησης μηνυμάτων ή χρήση άλλων  e-mail πελατών."
+  },
+  "save": {
+    "message": "Αποθήκευση"
+  },
+  "chat": {
+    "message": "Συνομιλία"
+  },
+  "media": {
+    "message": "Πολυμέσα"
+  },
+  "profile": {
+    "message": "Προφίλ"
+  },
+  "main_menu": {
+    "message": "Κύριο Μενού"
+  },
+  "start_chat": {
+    "message": "Ξεκινήστε Συνομιλία"
+  },
+  "show_full_message": {
+    "message": "Εμφάνιση Πλήρους Μηνύματος"
+  },
+  "loading": {
+    "message": "Φόρτωση…"
+  },
+  "hide": {
+    "message": "Απόκρυψη"
+  },
+  "activate": {
+    "message": "Ενεργοποίηση"
+  },
+  "load_remote_content": {
+    "message": "Φόρτωση Εικόνας"
+  },
+  "load_remote_content_ask": {
+    "message": "Εικόνες μπορούν να σας εντοπίσουν.\n\nΑυτή η ρύθμιση μπορεί να φορτώσει γραμματοσειρές και αλλά περιεχόμενα. Αν απενεργοποιηθεί, ενδέχεται να εμφανιστούν ενσωματωμένες ή προσωρινές εικόνες.\n\nΦόρτωση εικόνων;"
+  },
+  "always": {
+    "message": "Πάντα"
+  },
+  "once": {
+    "message": "Μία φορά"
+  },
+  "show_password": {
+    "message": "Εμφάνιση Κωδικού"
+  },
+  "hide_password": {
+    "message": "Απόκριψη Κωδικού"
+  },
+  "not_now": {
+    "message": "Όχι τώρα"
+  },
+  "never": {
+    "message": "Ποτέ"
+  },
+  "one_moment": {
+    "message": "Μια στιγμή..."
+  },
+  "done": {
+    "message": "Τέλος"
+  },
+  "undo": {
+    "message": "Αναίρεση"
+  },
+  "offline": {
+    "message": "Εκτός Σύνδεσης"
+  },
+  "next": {
+    "message": "Επόμενο"
+  },
+  "error": {
+    "message": "Σφάλμα"
+  },
+  "error_x": {
+    "message": "Σφάλμα: %1$s"
+  },
+  "no_app_to_handle_data": {
+    "message": "Αδυναμία εύρεσης κατάλληλης εφαρμογής για την διαχείρηση του συγκεκριμένου τύπου δεδομένων."
+  },
+  "no_browser_installed": {
+    "message": "Δεν υπάρχει εγκατεστημένος φυλλομετρητής"
+  },
+  "file_not_found": {
+    "message": "Αδυναμία Εύρεσης %1$s."
+  },
+  "copied_to_clipboard": {
+    "message": "Αντιγράφηκε στο πρόχειρο"
+  },
+  "contacts_headline": {
+    "message": "Επαφές"
+  },
+  "email_address": {
+    "message": "Διεύθυνση E-mail"
+  },
+  "bad_email_address": {
+    "message": "Κακή διεύθυνση e-mail."
+  },
+  "password": {
+    "message": "Συνθηματικό"
+  },
+  "existing_password": {
+    "message": "Υπάρχον Κωδικός"
+  },
+  "now": {
+    "message": "Τώρα"
+  },
+  "danger": {
+    "message": "Προσοχή"
+  },
+  "today": {
+    "message": "Σήμερα"
+  },
+  "yesterday": {
+    "message": "Χθες"
+  },
+  "this_week": {
+    "message": "Αυτήν την εβδομάδα"
+  },
+  "this_month": {
+    "message": "Αυτόν το μήνα"
+  },
+  "last_week": {
+    "message": "Προηγούμενη εβδομάδα"
+  },
+  "last_month": {
+    "message": "Προηγούμενος μήνας"
+  },
+  "last_seen_at": {
+    "message": "Τελευταία προβολή στις %1$s"
+  },
+  "last_seen_unknown": {
+    "message": "Τελευταία προβολή: Άγνωστο"
+  },
+  "self": {
+    "message": "Εγώ"
+  },
+  "draft": {
+    "message": "Πρόχειρο"
+  },
+  "image": {
+    "message": "Εικόνα"
+  },
+  "reply_noun": {
+    "message": "Απάντηση"
+  },
+  "gif": {
+    "message": "GIF"
+  },
+  "sticker": {
+    "message": "Αυτοκόλλητο"
+  },
+  "images": {
+    "message": "Εικόνες"
+  },
+  "audio": {
+    "message": "Ήχοι"
+  },
+  "voice_message": {
+    "message": "Μήνυμα φωνής"
+  },
+  "forwarded": {
+    "message": "Κοινοποίηση"
+  },
+  "forwarded_message": {
+    "message": "Κοινοποίηση Μηνύματος"
+  },
+  "forwarded_by": {
+    "message": "Κοινοποίηση από %1$s"
+  },
+  "video": {
+    "message": "Βίντεο"
+  },
+  "documents": {
+    "message": "Αρχεία"
+  },
+  "contact": {
+    "message": "Επαφή"
+  },
+  "camera": {
+    "message": "Κάμερα"
+  },
+  "capture": {
+    "message": "Λήψη"
+  },
+  "switch_camera": {
+    "message": "Αλλαγή κάμερας"
+  },
+  "toggle_fullscreen": {
+    "message": "Εναλλαγή Λειτουργίας Πλήρους Οθόνης"
+  },
+  "location": {
+    "message": "Τοποθεσία"
+  },
+  "gallery": {
+    "message": "Πινακοθήκη"
+  },
+  "images_and_videos": {
+    "message": "Εικόνες και Βίντεο"
+  },
+  "file": {
+    "message": "Αρχείο"
+  },
+  "files": {
+    "message": "Αρχεία"
+  },
+  "webxdc_app": {
+    "message": "Ιδιωτική Εφαρμογή"
+  },
+  "webxdc_apps": {
+    "message": "Ιδιωτικές Εφαρμογές"
+  },
+  "unknown": {
+    "message": "Άγνωστο"
+  },
+  "green": {
+    "message": "Πράσινο"
+  },
+  "red": {
+    "message": "Κόκκινο"
+  },
+  "blue": {
+    "message": "Μπλε"
+  },
+  "orange": {
+    "message": "Πορτοκαλί"
+  },
+  "cyan": {
+    "message": "Γαλάζιο"
+  },
+  "purple": {
+    "message": "Μωβ"
+  },
+  "magenta": {
+    "message": "Φούξια"
+  },
+  "white": {
+    "message": "Λευκό"
+  },
+  "zoom": {
+    "message": "Μεγέθυνση"
+  },
+  "extra_small": {
+    "message": "Πολύ μικρό"
+  },
+  "small": {
+    "message": "Μικρό"
+  },
+  "normal": {
+    "message": "Κανονικό"
+  },
+  "large": {
+    "message": "Μεγάλο"
+  },
+  "extra_large": {
+    "message": "Πολύ μεγάλο"
+  },
+  "fast": {
+    "message": "Γρήγορο"
+  },
+  "slow": {
+    "message": "Αργό"
+  },
+  "menu_new_contact": {
+    "message": "Νέα Επαφή"
+  },
+  "menu_new_chat": {
+    "message": "Νέα Συνομιλία"
+  },
+  "menu_new_group": {
+    "message": "Νέα ομάδα"
+  },
+  "broadcast_list": {
+    "message": "Λίστα Μέσων"
+  },
+  "broadcast_lists": {
+    "message": "Λίστες Μέσων"
+  },
+  "new_broadcast_list": {
+    "message": "Νέα Λίστα Μέσων"
+  },
+  "add_recipients": {
+    "message": "Προσθήκη Παραλήπτη"
+  },
+  "menu_send": {
+    "message": "Αποστολή"
+  },
+  "menu_toggle_keyboard": {
+    "message": "Εναλλαγή πληκτρολογίου emoji"
+  },
+  "menu_edit_group": {
+    "message": "Επεξεργασία ομάδας"
+  },
+  "menu_group_name_and_image": {
+    "message": "Όνομα Ομάδας και Εικόνα"
+  },
+  "menu_show_global_map": {
+    "message": "Εμφάνιση όλων των Τοποθεσιών"
+  },
+  "menu_archive_chat": {
+    "message": "Αρχείο Συνομιλίας"
+  },
+  "menu_unarchive_chat": {
+    "message": "Κατάργηση Αρχειοθέτησης Συνομιλίας"
+  },
+  "menu_add_attachment": {
+    "message": "Προσθήκη συνημμένου"
+  },
+  "menu_leave_group": {
+    "message": "Αποχώρηση απ' την ομάδα"
+  },
+  "menu_delete_chat": {
+    "message": "Διαγραφή Συνομιλίας"
+  },
+  "delete_contact": {
+    "message": "Διαγραφή Επαφής"
+  },
+  "menu_delete_location": {
+    "message": "Διαγραφή αυτής της τοποθεσίας;"
+  },
+  "menu_message_details": {
+    "message": "Στοιχεία μηνύματος"
+  },
+  "menu_copy_to_clipboard": {
+    "message": "Αντιγραφή στο πρόχειρο"
+  },
+  "menu_copy_selection_to_clipboard": {
+    "message": "Αντιγραφή Επιλεγμένων"
+  },
+  "menu_copy_link_to_clipboard": {
+    "message": "Αντιγραφή Συνδέσμου"
+  },
+  "menu_copy_text_to_clipboard": {
+    "message": "Αντιγραφή κειμένου"
+  },
+  "menu_copy_image_to_clipboard": {
+    "message": "Αντιγραφή Εικόνας"
+  },
+  "menu_copy_email_to_clipboard": {
+    "message": "Αντιγραφή E-Mail"
+  },
+  "paste_from_clipboard": {
+    "message": "Επικόλληση από το Πρόχειρο"
+  },
+  "menu_forward": {
+    "message": "Προώθηση μηνύματος"
+  },
+  "menu_reply": {
+    "message": "Απάντηση στο μήνυμα"
+  },
+  "menu_mute": {
+    "message": "Σίγαση ειδοποιήσεων"
+  },
+  "menu_unmute": {
+    "message": "Αποσίγαση"
+  },
+  "menu_export_attachment": {
+    "message": "Εξαγωγή Συνημμένου"
+  },
+  "menu_export_attachments": {
+    "message": "Εξαγωγή Συνημμένων"
+  },
+  "menu_all_media": {
+    "message": "Όλα τα πολυμέσα"
+  },
+  "show_in_chat": {
+    "message": "Εμφάνιση στη Συνομιλία"
+  },
+  "menu_share": {
+    "message": "Μοιράσου"
+  },
+  "block": {
+    "message": "Φραγή"
+  },
+  "menu_block_contact": {
+    "message": "Αποκλεισμός Επαφής"
+  },
+  "menu_unblock_contact": {
+    "message": "Ξεμπλοκάρισμα Επαφής"
+  },
+  "accept": {
+    "message": "Αποδοχή"
+  },
+  "menu_play": {
+    "message": "Αναπαραγωγή"
+  },
+  "menu_pause": {
+    "message": "Παύση"
+  },
+  "menu_scroll_to_bottom": {
+    "message": "Πήγαινε στο τέρμα"
+  },
+  "menu_scroll_to_top": {
+    "message": "Μετακίνηση στην Κορυφή"
+  },
+  "menu_help": {
+    "message": "Βοήθεια"
+  },
+  "privacy_policy": {
+    "message": "Πολιτική Απορρήτου"
+  },
+  "menu_select_all": {
+    "message": "Επιλογή όλων"
+  },
+  "select_more": {
+    "message": "Επιλογή Περισσότερων"
+  },
+  "menu_edit_name": {
+    "message": "Επεξεργασία Ονόματος"
+  },
+  "menu_settings": {
+    "message": "Ρυθμίσεις"
+  },
+  "menu_advanced": {
+    "message": "Για προχωρημένους"
+  },
+  "menu_view_profile": {
+    "message": "Εμφάνιση Προφίλ"
+  },
+  "menu_zoom_in": {
+    "message": "Μεγέθυνση"
+  },
+  "menu_zoom_out": {
+    "message": "Σμίκρυνση"
+  },
+  "menu_save_log": {
+    "message": "Αποθήκευση"
+  },
+  "menu_more_options": {
+    "message": "Περισσότερες Επιλογές"
+  },
+  "menu_learn_spelling": {
+    "message": "Μάθε Ορθογραφία"
+  },
+  "menu_chat_audit_log": {
+    "message": "Αρχείο Καταγραφής Ελέγχου Συνομιλίας"
+  },
+  "jump_to_message": {
+    "message": "Μετακίνηση στη Συνομιλία"
+  },
+  "copy_json": {
+    "message": "Αντιγραφή JSON"
+  },
+  "replace_draft": {
+    "message": "Αντικατάσταση Σχεδίου"
+  },
+  "title_share_location": {
+    "message": "Διαμοιρασμός τοποθεσίας με όλα τα μέλη της ομάδας"
+  },
+  "device_talk": {
+    "message": "Μηνύματα Συσκευής"
+  },
+  "device_talk_subtitle": {
+    "message": "Τοπικά Μηνύματα"
+  },
+  "device_talk_explain": {
+    "message": "Τα μηνύματα σε αυτήν τη συνομιλία δημιουργούνται στη συσκευή σας για την ενημέρωση σχετικά με ενημερώσεις και προβλήματα κατά τη χρήση της εφαρμογής"
+  },
+  "edit_contact": {
+    "message": "Επεξεργασία Επαφής"
+  },
+  "pin_chat": {
+    "message": "Καρφίτσωμα Συνομιλίας"
+  },
+  "unpin_chat": {
+    "message": "Ξεκαρφίτσωμα Συνομιλίας"
+  },
+  "pin": {
+    "message": "Καρφίτσωμα"
+  },
+  "unpin": {
+    "message": "Ξεκαρφίτσωμα"
+  },
+  "ConversationFragment_quoted_message_not_found": {
+    "message": "Το αρχικό μήνυμα δεν βρέθηκε"
+  },
+  "reply_privately": {
+    "message": "Ιδιωτική Απάντηση"
+  },
+  "source_code": {
+    "message": "Πηγαίος Κώδικας"
+  },
+  "add_to_home_screen": {
+    "message": "Προσθήκη στην κεντρική οθόνη"
+  },
+  "mute_for_one_hour": {
+    "message": "Σίγαση για 1 ώρα"
+  },
+  "mute_for_eight_hours": {
+    "message": "Σίγαση για 8 ώρες"
+  },
+  "mute_for_one_day": {
+    "message": "Σίγαση για 1 ημέρα"
+  },
+  "mute_for_seven_days": {
+    "message": "Σίγαση για 7 ημέρες"
+  },
+  "mute_forever": {
+    "message": "Μόνιμη Σίγαση"
+  },
+  "share_location_for_5_minutes": {
+    "message": "Για 5 λεπτά"
+  },
+  "share_location_for_30_minutes": {
+    "message": "Για 30 λεπτά"
+  },
+  "share_location_for_one_hour": {
+    "message": "Για 1 ώρα"
+  },
+  "share_location_for_two_hours": {
+    "message": "Για 2 ώρες"
+  },
+  "share_location_for_six_hours": {
+    "message": "Για 6 ώρες"
+  },
+  "file_saved_to": {
+    "message": "Αποθήκευση στο \"%1$s\"."
+  },
+  "videochat": {
+    "message": "Βιντεοκλήση"
+  },
+  "videochat_invite_user_to_videochat": {
+    "message": "Πρόσκληση %1$s σε βιντεοκλήση;"
+  },
+  "videochat_invite_user_hint": {
+    "message": "Αυτό απαιτεί μια συμβατή εφαρμογή ή πρόγραμμα περιήγησης και στις δύο άκρες."
+  },
+  "videochat_contact_invited_hint": {
+    "message": "%1$s καλέστηκε σε βινετοκλήση."
+  },
+  "videochat_you_invited_hint": {
+    "message": "Στείλατε πρόσκληση σε βινετοκλήση."
+  },
+  "videochat_tap_to_join": {
+    "message": "Πατήστε για Συμμετοχή"
+  },
+  "videochat_tap_to_open": {
+    "message": "Πατήστε για Άνοιγμα"
+  },
+  "videochat_instance": {
+    "message": "Παρουσία στη Βιντεοκλήση"
+  },
+  "videochat_instance_placeholder": {
+    "message": "Η παρουσία σας στη βιντεοκλήση"
+  },
+  "videochat_instance_example": {
+    "message": "Παράδειγμα: https://meet.jit.si/$ROOM ή basicwebrtc:https://your-server"
+  },
+  "videochat_instance_explain_2": {
+    "message": "Αν είναι ενεργοποιημένο, μπορείτε να ξεκινήσετε μια συνομιλία μέσω βίντεο από κάθε συνομιλία. Απαιτεί μια συμβατή εφαρμογή ή ένα πρόγραμμα περιήγησης και στα δύο άκρα."
+  },
+  "videochat_instance_from_qr": {
+    "message": "Χρήση \"%1$s\" για να προσκαλέσετε άλλους στη βιντεοκλήση;\n\nΑφού ρυθμιστεί, μπορείτε να ξεκινήσετε μια συνομιλία μέσω βίντεο από κάθε συνομιλία. Αυτό αντικαθιστά οποιαδήποτε προηγούμενη ρύθμιση για συνομιλίες μέσω βίντεο."
+  },
+  "videochat_invitation": {
+    "message": "Πρόσκληση Βιντεοκλήσης"
+  },
+  "videochat_invitation_body": {
+    "message": "Έχετε προσκληθεί σε βινετοκλήση, πατήστε %1$s για να συμμετέχετε"
+  },
+  "ask_leave_group": {
+    "message": "Είστε σίγουρος/-η ότι θέλετε να βγείτε από αυτή την ομάδα;"
+  },
+  "ask_forward": {
+    "message": "Κοινοποίηση μηνύματος στο %1$s;"
+  },
+  "ask_forward_multiple": {
+    "message": "Κοινοποίηση μηνύματος σε %1$d συνομιλίες;"
+  },
+  "ask_export_attachment": {
+    "message": "Η εξαγωγή συνημμένων θα επιτρέψει σε άλλες εφαρμογές της συσκευής σας να έχουν πρόσβαση σε αυτά.\n\nΣυνέχεια;"
+  },
+  "ask_block_contact": {
+    "message": "Αποκλεισμός αυτής της επαφής; Δεν θα λαμβάνετε πλέον μηνύματα από αυτούς."
+  },
+  "ask_unblock_contact": {
+    "message": "Κατάργηση αποκλεισμού αυτής της επαφής; Θα μπορείτε να λαμβάνετε μηνύματα από αυτούς."
+  },
+  "ask_delete_contacts": {
+    "message": "Διαγραφή επαφών;\n\nΟι επαφές με συνομιλίες που βρίσκονται σε εξέλιξη ή από το βιβλίο διευθύνσεων του συστήματος δεν μπορούν να διαγραφούν οριστικά."
+  },
+  "ask_delete_contact": {
+    "message": "Διαγραφή επαφής %1$s;\n\nΟι επαφές με συνομιλίες που βρίσκονται σε εξέλιξη ή από το βιβλίο διευθύνσεων του συστήματος δεν μπορούν να διαγραφούν οριστικά."
+  },
+  "ask_start_chat_with": {
+    "message": "Συνομιλία με %1$s;"
+  },
+  "ask_remove_members": {
+    "message": "Αφαίρεση του/της %1$s από την ομάδα;"
+  },
+  "ask_remove_from_broadcast": {
+    "message": "Αφαίρεση %1$s από την λίστα εκπομπών;"
+  },
+  "open_url_confirmation": {
+    "message": "Θέλετε να ανοίξετε αυτό τον σύνδεσμό;"
+  },
+  "contacts_title": {
+    "message": "Επαφές"
+  },
+  "contacts_enter_name_or_email": {
+    "message": "Εισάγετε όνομα ή διεύθυνση e-mail"
+  },
+  "contacts_type_email_above": {
+    "message": "Εισάγετε την διεύθυνση e-mail παραπάνω"
+  },
+  "contacts_empty_hint": {
+    "message": "Δεν υπάρχουν επαφές."
+  },
+  "chat_archived_chats_title": {
+    "message": "Αρχειοθετημένες Συνομιλίες"
+  },
+  "chat_please_enter_message": {
+    "message": "Εισάγετε ένα μήνυμα."
+  },
+  "chat_camera_unavailable": {
+    "message": "Η κάμερα δεν είναι διαθέσιμη."
+  },
+  "chat_unable_to_record_audio": {
+    "message": "Αδυναμία εγγραφής ήχου."
+  },
+  "chat_new_one_to_one_hint": {
+    "message": "Στείλτε ένα μήνυμα σε %1$s."
+  },
+  "chat_new_group_hint": {
+    "message": "Οι άλλοι θα δουν αυτήν την ομάδα μόνο αφού στείλετε ένα πρώτο μήνυμα."
+  },
+  "chat_record_slide_to_cancel": {
+    "message": "Σύρε για ακύρωση"
+  },
+  "chat_record_explain": {
+    "message": "Πάτα και κράτα πατημένο για να ηχογραφήσεις ένα φωνητικό μήνυμα, άφησε το κουμπί για αποστολή"
+  },
+  "chat_no_chats_yet_title": {
+    "message": "Αδειάστε τα εισερχόμενα.\nΠατήστε \"+\" για να ξεκινήσετε μια νέα συνομιλία."
+  },
+  "chat_all_archived": {
+    "message": "Όλες οι συνομιλίες αρχειοθετήθηκαν.\nΠατήστε \"+\" για να ξεκινήσετε μια νέα συνομιλία."
+  },
+  "chat_share_with_title": {
+    "message": "Μοιράσου με"
+  },
+  "chat_input_placeholder": {
+    "message": "Μήνυμα"
+  },
+  "chat_archived_label": {
+    "message": "Αρχειοθετημένα"
+  },
+  "chat_request_label": {
+    "message": "Αίτημα"
+  },
+  "chat_no_messages": {
+    "message": "Κανένα μήνυμα."
+  },
+  "chat_self_talk_subtitle": {
+    "message": "Μηνύματα προς τον εαυτό σας"
+  },
+  "archive_empty_hint": {
+    "message": "Οι αρχειοθετημένες συνομιλίες θα εμφανίζονται εδώ."
+  },
+  "saved_messages": {
+    "message": "Αποθηκευμένα Μηνύματα"
+  },
+  "saved_messages_explain": {
+    "message": "• Προώθηση μηνυμάτων εδώ για εύκολη πρόσβαση\n\n• Κρατήστε σημειώσεις ή φωνητικά σημειώματα\n\n• Επισυνάψτε μέσα για να τα αποθηκεύσετε"
+  },
+  "saved": {
+    "message": "Αποθηκεύτηκε"
+  },
+  "save_as": {
+    "message": "Αποθήκευση ως"
+  },
+  "retry_send": {
+    "message": "Ξαναπροσπαθήστε να στείλετε μήνυμα"
+  },
+  "messaging_disabled_not_in_group": {
+    "message": "Πρέπει να είστε σε αυτήν την ομάδα για να δημοσιεύσετε ένα μήνυμα. Για να συμμετέχετε, ζητήστε από ένα άλλο μέλος."
+  },
+  "messaging_disabled_mailing_list": {
+    "message": "Η αποστολή μηνυμάτων σε λίστες αλληλογραφίας δεν υποστηρίζεται ακόμη"
+  },
+  "cannot_display_unsuported_file_type": {
+    "message": "Δεν είναι δυνατή η εμφάνιση αυτού του τύπου αρχείου: %s"
+  },
+  "attachment_failed_to_load": {
+    "message": "Αποτυχία φόρτωσης συνημμένου"
+  },
+  "lock_recording": {
+    "message": "Κλείδωμα Εγγραφής"
+  },
+  "mailing_list": {
+    "message": "Λίστα Αλληλογραφίας"
+  },
+  "mailing_list_profile_info": {
+    "message": "Οι αλλαγές στο όνομα και την εικόνα της λίστας αλληλογραφίας ισχύουν μόνο σε αυτήν τη συσκευή."
+  },
+  "start_app": {
+    "message": "Εκκίνηση…"
+  },
+  "accept_request_first": {
+    "message": "Αποδεχτείτε πρώτα το αίτημα συνομιλίας."
+  },
+  "filter_map_on_time": {
+    "message": "Εμφάνιση τοποθεσιών σε χρονικό πλαίσιο"
+  },
+  "show_location_traces": {
+    "message": "Εμφάνιση ιχνών"
+  },
+  "add_poi": {
+    "message": "Αποστολή σημείου ενδιαφέροντος"
+  },
+  "chat_audit_log_empty_message": {
+    "message": "Τα μηνύματα συστήματος για αυτήν τη συνομιλία εμφανίζονται εδώ"
+  },
+  "chat_audit_log_title": {
+    "message": "Καταγραφή ελέγχου συνομιλίας για %1$s"
+  },
+  "chat_audit_log_description": {
+    "message": "Εμφανίζει μόνο μηνύματα συστήματος και πληροφοριών. Είναι χρήσιμο για την εύρεση των τελευταίων ενεργειών συνομιλίας χωρίς κύλιση σε πολλά μηνύματα."
+  },
+  "open_external_url_trust_domain": {
+    "message": "Μην ξαναρωτήθω για %1$s"
+  },
+  "puny_code_warning_header": {
+    "message": "Εντοπίστηκε ύποπτος σύνδεσμος"
+  },
+  "puny_code_warning_question": {
+    "message": "Είστε σίγουροι ότι θέλετε να επισκεφθείτε %1$s;"
+  },
+  "puny_code_warning_description": {
+    "message": "Αυτός ο σύνδεσμος μπορεί να παραποιεί χαρακτήρες με παρόμοια εμφάνιση από διαφορετικά αλφάβητα. Ακολουθώντας τον σύνδεσμο με την ετικέτα %1$s θα οδηγήσει σε %2$s κάτι που είναι φυσιολογικό για μη λατινικούς χαρακτήρες. Αν δεν περιμένατε τέτοιους χαρακτήρες, αυτός ο σύνδεσμος θα μπορούσε να είναι επιβλαβής."
+  },
+  "search": {
+    "message": "Αναζήτηση"
+  },
+  "search_explain": {
+    "message": "Αναζήτηση για συνομιλίες, επαφές, και μηνύματα"
+  },
+  "search_no_result_for_x": {
+    "message": "Δε βρέθηκαν αποτελέσματα για \"%s\""
+  },
+  "group_name": {
+    "message": "Όνομα ομάδας"
+  },
+  "group_avatar": {
+    "message": "Εικόνα Ομάδας"
+  },
+  "remove_group_image": {
+    "message": "Αφαίρεση φωτογραφίας ομάδας;"
+  },
+  "change_group_image": {
+    "message": "Αλλαγή Εικόνας Ομάδας"
+  },
+  "group_create_button": {
+    "message": "Δημιουργία ομάδας"
+  },
+  "group_please_enter_group_name": {
+    "message": "Εισάγετε ένα όνομα για αυτή την ομάδα."
+  },
+  "group_add_members": {
+    "message": "Προσθήκη μελών"
+  },
+  "group_self_not_in_group": {
+    "message": "Πρέπει να είστε μέλος της ομάδας για να εκτελέσετε αυτήν την ενέργεια."
+  },
+  "profile_encryption": {
+    "message": "Κρυπτογράφηση"
+  },
+  "profile_shared_chats": {
+    "message": "Κοινόχρηστες συνομιλίες"
+  },
+  "tab_contact": {
+    "message": "Επαφή"
+  },
+  "tab_group": {
+    "message": "Ομάδα"
+  },
+  "tab_gallery": {
+    "message": "Εικόνα ή βίντεο"
+  },
+  "tab_docs": {
+    "message": "Έγγραφα"
+  },
+  "tab_links": {
+    "message": "Σύνδεσμοι"
+  },
+  "tab_map": {
+    "message": "Χάρτης"
+  },
+  "tab_gallery_empty_hint": {
+    "message": "Οι εικόνες και τα βίντεο που κοινοποιούνται σε αυτήν τη συνομιλία θα εμφανίζονται εδώ."
+  },
+  "tab_docs_empty_hint": {
+    "message": "Έγγραφα και άλλα αρχεία που κοινοποιούνται σε αυτήν τη συνομιλία θα εμφανίζονται εδώ."
+  },
+  "tab_image_empty_hint": {
+    "message": "Οι εικόνες που κοινοποιούνται σε αυτήν τη συνομιλία θα εμφανίζονται εδώ."
+  },
+  "tab_video_empty_hint": {
+    "message": "Τα βίντεο που κοινοποιούνται σε αυτήν τη συνομιλία θα εμφανίζονται εδώ."
+  },
+  "tab_audio_empty_hint": {
+    "message": "Τα αρχεία ήχου και τα φωνητικά μηνύματα που κοινοποιούνται σε αυτήν τη συνομιλία θα εμφανίζονται εδώ."
+  },
+  "tab_webxdc_empty_hint": {
+    "message": "Οι ιδιωτικές εφαρμογές που κοινοποιούνται σε αυτήν τη συνομιλία θα εμφανίζονται εδώ."
+  },
+  "all_apps_empty_hint": {
+    "message": "Οι ιδιωτικές εφαρμογές που λαμβάνονται ή αποστέλλονται σε οποιαδήποτε συνομιλία θα εμφανίζονται εδώ."
+  },
+  "media_preview": {
+    "message": "Προεπισκόπιση"
+  },
+  "send_message": {
+    "message": "Αποστολή μηνύματος"
+  },
+  "aeap_addr_changed": {
+    "message": "%1$s άλλαξαν την διεύθυνσή τους από %2$s σε %3$s"
+  },
+  "aeap_explanation": {
+    "message": "Αλλάξατε την διεύθυνσή σας από %1$s σε %2$s.\n\nΤώρα, εάν στείλετε ένα μήνυμα σε μια επαληθευμένη ομάδα, οι επαφές εκεί θα αντικαταστήσουν αυτόματα την παλιά με τη νέα σας διεύθυνση.\n\nΣυνιστάται ιδιαίτερα να ρυθμίσετε τον παλιό σας πάροχο email ώστε να προωθεί όλα τα μηνύματα ηλεκτρονικού ταχυδρομείου στη νέα σας διεύθυνση ηλεκτρονικού ταχυδρομείου. Διαφορετικά, ενδέχεται να χάσετε μηνύματα επαφών που δεν έχουν λάβει ακόμη τη νέα σας διεύθυνση."
+  },
+  "incoming_messages": {
+    "message": "Εισερχόμενα Μηνύματα"
+  },
+  "outgoing_messages": {
+    "message": "Εξερχόμενα Μηνύματα"
+  },
+  "storage_on_domain": {
+    "message": "Αποθήκευση στο %1$s"
+  },
+  "connectivity": {
+    "message": "Συνδεσιμότητα"
+  },
+  "connectivity_not_connected": {
+    "message": "Μη συνδεδεμένο"
+  },
+  "connectivity_connecting": {
+    "message": "Συνδέεται…"
+  },
+  "connectivity_updating": {
+    "message": "Ενημέρωση…"
+  },
+  "connectivity_connected": {
+    "message": "Συνδεδεμένο"
+  },
+  "sending": {
+    "message": "Στέλνεται…"
+  },
+  "last_msg_sent_successfully": {
+    "message": "Το τελευταίο μήνυμα στάλθηκε με επιτυχία."
+  },
+  "not_supported_by_provider": {
+    "message": "Δεν υποστηρίζεται από τον πάροχο σας."
+  },
+  "messages": {
+    "message": "Μηνύματα"
+  },
+  "part_of_total_used": {
+    "message": "%1$s από %2$s χρησιμοποιείται"
+  },
+  "scan_invitation_code": {
+    "message": "Σάρωση Κωδικού Πρόσκλησης"
+  },
+  "login_title": {
+    "message": "Σύνδεση"
+  },
+  "login_header": {
+    "message": "Συνδεθείτε στον λογαριασμό σας E-Mail"
+  },
+  "login_explain": {
+    "message": "Συνδεθείτε με έναν υπάρχοντα λογαριασμό e-mail"
+  },
+  "login_subheader": {
+    "message": "Για γνωστούς παρόχους email ρυθμίζονται αυτόματα πρόσθετες ρυθμίσεις. Μερικές φορές το IMAP πρέπει να είναι ενεργοποιημένο στις ρυθμίσεις Ιστού. Συμβουλευτείτε τον πάροχο e-mail ή τους φίλους σας για βοήθεια."
+  },
+  "login_no_servers_hint": {
+    "message": "Δεν υπάρχουν διακομιστές Delta Chat, τα δεδομένα σας παραμένουν στη συσκευή σας."
+  },
+  "login_inbox": {
+    "message": "Εισερχόμενα"
+  },
+  "login_imap_login": {
+    "message": "Όνομα Σύνδεσης IMAP"
+  },
+  "login_imap_server": {
+    "message": "Διακομιστής IMAP"
+  },
+  "login_imap_port": {
+    "message": "Θύρα IMAP"
+  },
+  "login_imap_security": {
+    "message": "Ασφάλεια IMAP"
+  },
+  "login_outbox": {
+    "message": "Εξερχόμενα"
+  },
+  "login_smtp_login": {
+    "message": "Όνομα σύνδεσης SMTP"
+  },
+  "login_smtp_password": {
+    "message": "Κωδικός πρόσβασης SMTP"
+  },
+  "login_smtp_server": {
+    "message": "Διακομιστής SMTP"
+  },
+  "login_smtp_port": {
+    "message": "Θύρα SMTP"
+  },
+  "login_smtp_security": {
+    "message": "Ασφάλεια SMTP"
+  },
+  "login_auth_method": {
+    "message": "Μέθοδος Πιστοποίησης"
+  },
+  "login_info_oauth2_title": {
+    "message": "Συνέχεια με την απλοποιημένη ρύθμιση;"
+  },
+  "login_info_oauth2_text": {
+    "message": "Η εισαγόμενη διεύθυνση e-mail υποστηρίζει μια απλοποιημένη ρύθμιση (OAuth 2.0).\n\nΣτο επόμενο βήμα, επιτρέψτε στο Delta Chat να λειτουργεί ως η εφαρμογή Chat μέσω ηλεκτρονικού ταχυδρομείου.\n\nΔεν υπάρχουν διακομιστές Delta Chat, τα δεδομένα σας παραμένει στη συσκευή σας."
+  },
+  "login_certificate_checks": {
+    "message": "Έλεγχοι Πιστοποιητικών"
+  },
+  "login_error_mail": {
+    "message": "Παρακαλώ εισάγετε μια έγκυρη διεύθυνση e-mail"
+  },
+  "login_error_server": {
+    "message": "Εισαγάγετε έναν έγκυρο διακομιστή / διεύθυνση IP"
+  },
+  "login_error_port": {
+    "message": "Εισαγάγετε μια έγκυρη θύρα (1–65535)"
+  },
+  "login_error_required_fields": {
+    "message": "Εισαγάγετε μια έγκυρη διεύθυνση e-mail και έναν κωδικό πρόσβασης"
+  },
+  "import_backup_title": {
+    "message": "Επαναφορά από το Aντίγραφο Aσφαλείας"
+  },
+  "import_backup_ask": {
+    "message": "Το αντίγραφο ασφαλείας βρέθηκε στο \"%1$s\".\n\nΘέλετε να εισαγάγετε και να χρησιμοποιήσετε όλα τα δεδομένα και τις ρυθμίσεις από αυτό;"
+  },
+  "import_backup_no_backup_found": {
+    "message": "Δεν βρέθηκαν αντίγραφα ασφαλείας.\n\nΑντιγράψτε το αντίγραφο ασφαλείας στο \"%1$s\" και δοκιμάστε ξανά. Εναλλακτικά, πατήστε \"Έναρξη μηνυμάτων\" για να συνεχίσετε με την κανονική διαδικασία εγκατάστασης."
+  },
+  "login_error_cannot_login": {
+    "message": "Δεν είναι δυνατή η είσοδος ως \"%1$s\". Ελέγξτε εάν η διεύθυνση e-mail και ο κωδικός πρόσβασης είναι σωστά."
+  },
+  "accept_invalid_certificates": {
+    "message": "Αποδοχή μη έγκυρων πιστοποιητικών"
+  },
+  "switch_account": {
+    "message": "Αλλαγή λογαριασμού"
+  },
+  "add_account": {
+    "message": "Προσθήκη Λογαριασμού"
+  },
+  "delete_account": {
+    "message": "Διαγραφή Λογαριασμού"
+  },
+  "delete_account_ask": {
+    "message": "Είστε βέβαιοι ότι θέλετε να διαγράψετε τα δεδομένα του λογαριασμού σας;"
+  },
+  "delete_account_explain_with_name": {
+    "message": "Όλα τα δεδομένα λογαριασμού του \"%s\" σε αυτήν τη συσκευή θα διαγραφούν, συμπεριλαμβανομένων των ρυθμίσεων κρυπτογράφησης από άκρο σε άκρο, των επαφών, των συνομιλιών, των μηνυμάτων και των πολυμέσων. Αυτή η πράξη δε μπορεί να αναιρεθεί."
+  },
+  "unconfigured_account": {
+    "message": "Μη διαμορφωμένος λογαριασμός"
+  },
+  "unconfigured_account_hint": {
+    "message": "Ανοίξτε λογαριασμό για να τον διαμορφώσετε."
+  },
+  "try_connect_now": {
+    "message": "Προσπαθήστε να συνδεθείτε τώρα"
+  },
+  "sync_all": {
+    "message": "Συγχρονισμός Όλων"
+  },
+  "configuration_failed_with_error": {
+    "message": "Η διαμόρφωση απέτυχε. Λάθος: %1$s"
+  },
+  "forward_to": {
+    "message": "Κοινοποίηση σε..."
+  },
+  "ask_send_files_to_selected_chats": {
+    "message": "Αποστολή %1$d αρχείου(-ων) σε %2$d συνομιλίες;"
+  },
+  "share_text_multiple_chats": {
+    "message": "Αποστολή αυτού του κειμένου σε %1$d συνομιλίες;\n\n\"%2$s\""
+  },
+  "share_abort": {
+    "message": "Η κοινή χρήση ματαιώθηκε λόγω έλλειψης αδειών."
+  },
+  "pref_using_custom": {
+    "message": "Χρήση προσαρμοσμένου: %s"
+  },
+  "pref_using_default": {
+    "message": "Χρήση προεπιλογής: %s"
+  },
+  "pref_profile_info_headline": {
+    "message": "Πληροφορίες Προφίλ"
+  },
+  "pref_profile_photo": {
+    "message": "Εικόνα Προφίλ"
+  },
+  "pref_blocked_contacts": {
+    "message": "Αποκλεισμένες Επαφές"
+  },
+  "blocked_empty_hint": {
+    "message": "Οι αποκλεισμένες επαφές θα εμφανίζονται εδώ."
+  },
+  "pref_password_and_account_settings": {
+    "message": "Κωδικός και Λογαριασμός"
+  },
+  "pref_who_can_see_profile_explain": {
+    "message": "Η εικόνα του προφίλ, το όνομα και η υπογραφή σας θα αποστέλλονται μαζί με τα μηνύματά σας κατά την επικοινωνία με άλλους χρήστες."
+  },
+  "pref_your_name": {
+    "message": "Το όνομά σου"
+  },
+  "pref_default_status_label": {
+    "message": "Υπογραφή"
+  },
+  "pref_enter_sends": {
+    "message": "Το Enter στέλνει"
+  },
+  "pref_enter_sends_explain": {
+    "message": "Τα μηνύματα θα στέλνονται με το πάτημα του Enter"
+  },
+  "pref_outgoing_media_quality": {
+    "message": "Ποιότητα Εξερχόμενων Μέσων"
+  },
+  "pref_outgoing_balanced": {
+    "message": "Ισορροπημένο"
+  },
+  "pref_outgoing_worse": {
+    "message": "Χειρότερη ποιότητα, μικρό μέγεθος"
+  },
+  "pref_vibrate": {
+    "message": "Δόνηση"
+  },
+  "pref_screen_security": {
+    "message": "Ασφάλεια οθόνης"
+  },
+  "pref_screen_security_explain": {
+    "message": "Να μην επιτρέπεται η καταγραφή της οθόνης (screenshots) στη λίστα με τα πρόσφατα και μέσα στην εφαρμογή"
+  },
+  "pref_screen_security_please_restart_hint": {
+    "message": "Για να εφαρμόσετε τη ρύθμιση ασφάλειας οθόνης, επανεκκινήστε την εφαρμογή."
+  },
+  "pref_notifications": {
+    "message": "Ειδοποιήσεις"
+  },
+  "pref_notifications_show": {
+    "message": "Εμφάνιση"
+  },
+  "pref_notifications_priority": {
+    "message": "Προτεραιότητα"
+  },
+  "pref_notifications_explain": {
+    "message": "Ενεργοποιήστε τις ειδοποιήσεις συστήματος για νέα μηνύματα"
+  },
+  "pref_show_notification_content": {
+    "message": "Εμφάνιση περιεχομένου μηνύματος στην ειδοποίηση"
+  },
+  "pref_show_notification_content_explain": {
+    "message": "Εμφανίζει τον αποστολέα και τις πρώτες λέξεις του μηνύματος στις ειδοποιήσεις"
+  },
+  "pref_led_color": {
+    "message": "Χρώμα LED"
+  },
+  "pref_sound": {
+    "message": "Ήχος"
+  },
+  "pref_silent": {
+    "message": "Σε σίγαση"
+  },
+  "pref_privacy": {
+    "message": "Ιδιωτικότητα"
+  },
+  "pref_chats_and_media": {
+    "message": "Συνομιλίες και Πολυμέσα"
+  },
+  "pref_system_default": {
+    "message": "Προκαθορισμένο του συστήματος"
+  },
+  "pref_light_theme": {
+    "message": "Φωτεινό"
+  },
+  "pref_dark_theme": {
+    "message": "Σκοτεινό"
+  },
+  "pref_appearance": {
+    "message": "Εμφάνιση"
+  },
+  "pref_theme": {
+    "message": "Θέμα"
+  },
+  "pref_language": {
+    "message": "Γλώσσα"
+  },
+  "pref_incognito_keyboard": {
+    "message": "Κρυφό πληκτρολόγιο"
+  },
+  "pref_incognito_keyboard_explain": {
+    "message": "Αίτηση πληκτρολογίου για να απενεργοποιηθεί η προσωποποιημένη εκμάθηση"
+  },
+  "pref_read_receipts": {
+    "message": "Αποδεικτικά ανάγνωσης"
+  },
+  "pref_read_receipts_explain": {
+    "message": "Αν τα αποδεικτικά ανάγνωσης είναι απενεργοποιημένα, δε θα μπορείς να δεις αποδεικτικά ανάγνωσης από άλλους/ες."
+  },
+  "pref_manage_keys": {
+    "message": "Διαχείριση Κλειδιών"
+  },
+  "pref_use_system_emoji": {
+    "message": "Χρήση emoji συστήματος"
+  },
+  "pref_use_system_emoji_explain": {
+    "message": "Απενεργοποίηση της ενσωματωμένης υποστήριξης για emoji του Delta Chat"
+  },
+  "pref_app_access": {
+    "message": "Πρόσβαση εφαρμογής"
+  },
+  "pref_chats": {
+    "message": "Συνομιλίες"
+  },
+  "pref_in_chat_sounds": {
+    "message": "Ήχοι μέσα στη συνομιλία"
+  },
+  "pref_view_log": {
+    "message": "Προβολή Αρχείου Καταγραφής"
+  },
+  "pref_saved_log": {
+    "message": "ΤΟ αρχείο καταγραφής αποθηκεύτηκε στο φάκελο \"Λήψεις\"."
+  },
+  "pref_save_log_failed": {
+    "message": "Αποτυχία αποθήκευσης του αρχείου καταγραφής"
+  },
+  "pref_log_header": {
+    "message": "Αρχείο Καταγραφής"
+  },
+  "pref_other": {
+    "message": "Άλλο"
+  },
+  "pref_backup": {
+    "message": "Αντίγραφο Ασφαλείας"
+  },
+  "pref_backup_explain": {
+    "message": "Δημιουργία αντίγραφου ασφαλείας συνομιλιών στην εξωτερική μνήμη"
+  },
+  "pref_backup_export_explain": {
+    "message": "Ένα αντίγραφο ασφαλείας σάς βοηθά να ρυθμίσετε μια νέα εγκατάσταση σε αυτήν ή σε άλλη συσκευή.\n\nΤο αντίγραφο ασφαλείας θα περιέχει όλα τα μηνύματα, τις επαφές και τις συνομιλίες και τη ρύθμιση αυτόματης κρυπτογράφησης από άκρο σε άκρο. Φυλάξτε το αρχείο αντιγράφου ασφαλείας σε ασφαλές μέρος ή διαγράψτε το το συντομότερο δυνατό."
+  },
+  "pref_backup_export_start_button": {
+    "message": "Ξεκινήστε τη δημιουργία αντιγράφου ασφαλείας"
+  },
+  "pref_backup_written_to_x": {
+    "message": "Το αντίγραφο ασφαλείας γράφτηκε με επιτυχία στο \"%1$s\"."
+  },
+  "pref_managekeys_menu_title": {
+    "message": "Διαχείριση Κλειδιών"
+  },
+  "pref_managekeys_export_secret_keys": {
+    "message": "Εξαγωγή Μυστικών Κλειδιών"
+  },
+  "pref_managekeys_export_explain": {
+    "message": "Εξαγωγή μυστικών κλειδιών στο \"%1$s\";"
+  },
+  "pref_managekeys_import_secret_keys": {
+    "message": "Εισαγωγή Μυστικών Κλειδιών"
+  },
+  "pref_managekeys_import_explain": {
+    "message": "Εισαγωγή μυστικών κλειδιών από το \"%1$s\";\n\n• Τα υπάρχοντα μυστικά κλειδιά δεν θα διαγραφούν\n\n• Το κλειδί που εισήχθη τελευταία θα χρησιμοποιηθεί ως το νέο προεπιλεγμένο κλειδί, εκτός εάν έχει τη λέξη \"legacy\" στο όνομα του αρχείου του."
+  },
+  "pref_managekeys_secret_keys_exported_to_x": {
+    "message": "Τα μυστικά κλειδιά γράφτηκαν με επιτυχία στο \"%1$s\"."
+  },
+  "pref_managekeys_secret_keys_imported_from_x": {
+    "message": "Τα μυστικά κλειδιά εισήχθησαν από το \"%1$s\"."
+  },
+  "pref_background": {
+    "message": "Ταπετσαρία συνομιλίας"
+  },
+  "pref_background_btn_default": {
+    "message": "Χρήση προκαθορισμένου"
+  },
+  "pref_background_btn_gallery": {
+    "message": "Επιλογή"
+  },
+  "pref_imap_folder_handling": {
+    "message": "Χειρισμός Φακέλων IMAP"
+  },
+  "pref_imap_folder_warn_disable_defaults": {
+    "message": "Εάν αλλάξετε αυτήν την επιλογή, βεβαιωθείτε ότι ο διακομιστής σας και οι άλλοι πελάτες σας έχουν διαμορφωθεί ανάλογα.\n\nΔιαφορετικά, τα πράγματα ενδέχεται να μην λειτουργούν καθόλου."
+  },
+  "pref_watch_sent_folder": {
+    "message": "Παρακολουθήστε τον Απεσταλμένο Φάκελο"
+  },
+  "pref_send_copy_to_self": {
+    "message": "Αποστολή Αντιγράφου στον Εαυτό"
+  },
+  "pref_send_copy_to_self_explain": {
+    "message": "Απαιτείται κατά τη χρήση αυτού του λογαριασμού σε πολλές συσκευές."
+  },
+  "pref_auto_folder_moves": {
+    "message": "Μετακίνηση αυτόματα στον φάκελο DeltaChat"
+  },
+  "pref_auto_folder_moves_explain": {
+    "message": "Οι συνομιλίες συνομιλίας μετακινούνται για να αποφευχθεί η ακαταστασία των Εισερχομένων"
+  },
+  "pref_only_fetch_mvbox_title": {
+    "message": "Λήψη μόνο από τον φάκελο DeltaChat"
+  },
+  "pref_only_fetch_mvbox_explain": {
+    "message": "Αγνοήστε άλλους φακέλους. Απαιτεί τον διακομιστή σας να μετακινήσει μηνύματα συνομιλίας στο φάκελο DeltaChat."
+  },
+  "pref_show_emails": {
+    "message": "Εμφάνιση κλασικών E-Mails"
+  },
+  "pref_show_emails_no": {
+    "message": "Όχι, μόνο συνομιλίες"
+  },
+  "pref_show_emails_accepted_contacts": {
+    "message": "Για αποδεκτές επαφές"
+  },
+  "pref_show_emails_all": {
+    "message": "Όλα"
+  },
+  "pref_experimental_features": {
+    "message": "Πειραματικά Χαρακτηριστικά"
+  },
+  "pref_on_demand_location_streaming": {
+    "message": "Ροή τοποθεσίας κατ' απαίτηση"
+  },
+  "pref_developer_mode": {
+    "message": "Λειτουργία για Προγραμματιστές"
+  },
+  "pref_developer_mode_explain": {
+    "message": "Ενεργοποιεί τις επιλογές εντοπισμού σφαλμάτων και μπορεί να κάνει την εφαρμογή λιγότερο σταθερή. Μόνο για προγραμματιστές."
+  },
+  "pref_background_default": {
+    "message": "Προεπιλεγμένο φόντο"
+  },
+  "pref_background_default_color": {
+    "message": "Προεπιλεγμένο χρώμα"
+  },
+  "pref_background_custom_image": {
+    "message": "Προσαρμοσμένη εικόνα"
+  },
+  "pref_background_custom_color": {
+    "message": "Προσαρμοσμένο χρώμα"
+  },
+  "export_aborted": {
+    "message": "Η εξαγωγή ματαιώθηκε."
+  },
+  "auto_download_messages": {
+    "message": "Αυτόματη Λήψη Μηνυμάτων"
+  },
+  "up_to_x": {
+    "message": "Μέχρι και %1$s"
+  },
+  "up_to_x_most_worse_quality_images": {
+    "message": "Έως και %1$s, τις περισσότερες εικόνες χειρότερης ποιότητας"
+  },
+  "up_to_x_most_balanced_quality_images": {
+    "message": "Έως %1$s, εικόνες πιο ισορροπημένης ποιότητας"
+  },
+  "download_failed": {
+    "message": "Αποτυχία Λήψης"
+  },
+  "n_bytes_message": {
+    "message": "%1$s μήνυμα"
+  },
+  "download_max_available_until": {
+    "message": "Μέγιστη διαθέσιμη λήψη μέχρι %1$s"
+  },
+  "profile_image_select": {
+    "message": "Επιλογή Εικόνας Προφίλ"
+  },
+  "select_your_new_profile_image": {
+    "message": "Επιλογή Νέας Εικόνας Προφίλ"
+  },
+  "profile_image_delete": {
+    "message": "Διαγραφή Εικόνας Προφίλ"
+  },
+  "pref_show_tray_icon": {
+    "message": "Εμφάνιση Εικονιδίου Δίσκου"
+  },
+  "pref_edit_profile": {
+    "message": "Επεξεργασία Προφίλ"
+  },
+  "emoji_search_results": {
+    "message": "Αποτελέσματα Αναζήτησης"
+  },
+  "emoji_not_found": {
+    "message": "Δεν βρέθηκε emoji"
+  },
+  "emoji_recent": {
+    "message": "Χρησιμοποιήθηκαν Πρόσφατα"
+  },
+  "emoji_people": {
+    "message": "Άνθρωποι & Σώμα"
+  },
+  "emoji_nature": {
+    "message": "Ζώα & Φύση"
+  },
+  "emoji_foods": {
+    "message": "Τρόφιμα & Ποτά"
+  },
+  "emoji_activity": {
+    "message": "Δραστηριότητα"
+  },
+  "emoji_places": {
+    "message": "Ταξίδια & Μέρη"
+  },
+  "emoji_objects": {
+    "message": "Αντικείμενα"
+  },
+  "emoji_symbols": {
+    "message": "Σύμβολα"
+  },
+  "emoji_flags": {
+    "message": "Σημαίες"
+  },
+  "delete_old_messages": {
+    "message": "Διαγραφή Παλιών Μηνυμάτων"
+  },
+  "autodel_device_title": {
+    "message": "Διαγραφή Μηνυμάτων από Συσκευή"
+  },
+  "autodel_server_title": {
+    "message": "Διαγραφή Μηνυμάτων από Διακομιστή"
+  },
+  "autodel_device_ask": {
+    "message": "Θέλετε να διαγράψετε %1$d μηνύματα τώρα και όλα τα πρόσφατα ληφθέντα μηνύματα \"%2$s\" στο μέλλον;\n\n• Αυτό περιλαμβάνει όλα τα μέσα\n\n• Τα μηνύματα θα διαγραφούν είτε εμφανίστηκαν είτε όχι\n\n• \"Αποθηκευμένα μηνύματα \" θα παραλειφθεί από την τοπική διαγραφή"
+  },
+  "autodel_server_ask": {
+    "message": "Θέλετε να διαγράψετε %1$d μηνύματα τώρα και όλα τα πρόσφατα ληφθέντα μηνύματα \"%2$s\" στο μέλλον;\n\n⚠️ Αυτό περιλαμβάνει μηνύματα ηλεκτρονικού ταχυδρομείου, πολυμέσα και τα \"Αποθηκευμένα μηνύματα\" σε όλους τους φακέλους διακομιστή\n\n⚠️ Μην χρησιμοποιείτε αυτήν τη λειτουργία εάν θέλετε να διατηρήσετε δεδομένα στο διακομιστή\n\n⚠️ Μην χρησιμοποιείτε αυτήν τη λειτουργία εάν χρησιμοποιείτε άλλους πελάτες ηλεκτρονικού ταχυδρομείου εκτός από το Delta Chat"
+  },
+  "autodel_server_enabled_hint": {
+    "message": "Αυτό περιλαμβάνει e-mail, πολυμέσα και \"Αποθηκευμένα μηνύματα\" σε όλους τους φακέλους διακομιστή. Μην χρησιμοποιείτε αυτήν τη λειτουργία εάν θέλετε να διατηρήσετε δεδομένα στο διακομιστή ή εάν χρησιμοποιείτε άλλα προγράμματα-πελάτες ηλεκτρονικού ταχυδρομείου εκτός από το Delta Chat."
+  },
+  "autodel_confirm": {
+    "message": "Καταλαβαίνω, διαγράψτε όλα αυτά τα μηνύματα"
+  },
+  "autodel_at_once": {
+    "message": "Με τη μία"
+  },
+  "after_30_seconds": {
+    "message": "Μετά από 30 δευτερόλεπτα"
+  },
+  "after_1_minute": {
+    "message": "Μετά από 1 λεπτό"
+  },
+  "after_5_minutes": {
+    "message": "Μετά από 5 λεπτά"
+  },
+  "after_30_minutes": {
+    "message": "Μετά από 30 λεπτά"
+  },
+  "autodel_after_1_hour": {
+    "message": "Μετά από 1 ώρα"
+  },
+  "autodel_after_1_day": {
+    "message": "Μετά από 1 μέρα"
+  },
+  "autodel_after_1_week": {
+    "message": "Μετά από 1 εβδομάδα"
+  },
+  "after_5_weeks": {
+    "message": "Μετά από 5 εβδομάδες"
+  },
+  "autodel_after_1_year": {
+    "message": "Μετά από 1 χρόνο"
+  },
+  "autocrypt_send_asm_title": {
+    "message": "Αποστολή μηνύματος ρύθμισης αυτόματης κρυπτογράφησης"
+  },
+  "autocrypt_send_asm_explain_before": {
+    "message": "Ένα μήνυμα ρύθμισης αυτόματης κρυπτογράφησης κοινοποιεί με ασφάλεια τη ρύθμισή σας από άκρο σε άκρο με άλλες εφαρμογές συμβατές με την Αυτόματη κρυπτογράφηση.\n\nΗ ρύθμιση θα κρυπτογραφηθεί από έναν κωδικό ρύθμισης που εμφανίζεται εδώ και θα πρέπει να πληκτρολογηθεί στην άλλη συσκευή."
+  },
+  "autocrypt_send_asm_button": {
+    "message": "Αποστολή μηνύματος ρύθμισης αυτόματης κρυπτογράφησης"
+  },
+  "autocrypt_send_asm_explain_after": {
+    "message": "Η ρύθμισή σας έχει σταλεί στον εαυτό σας. Μεταβείτε στην άλλη συσκευή και ανοίξτε το μήνυμα ρύθμισης. Θα πρέπει να σας ζητηθεί κωδικός ρύθμισης. Εισαγάγετε τα ακόλουθα ψηφία:"
+  },
+  "autocrypt_prefer_e2ee": {
+    "message": "Προτιμήστε την κρυπτογράφηση από άκρο σε άκρο"
+  },
+  "autocrypt_asm_subject": {
+    "message": "Μήνυμα ρύθμισης αυτόματης κρυπτογράφησης"
+  },
+  "autocrypt_asm_general_body": {
+    "message": "Αυτό είναι το μήνυμα ρύθμισης αυτόματης κρυπτογράφησης που χρησιμοποιείται για τη μεταφορά της ρύθμισής σας από άκρο σε άκρο μεταξύ πελατών.\n\nΓια να αποκρυπτογραφήσετε και να χρησιμοποιήσετε τη ρύθμισή σας, ανοίξτε το μήνυμα σε ένα πρόγραμμα-πελάτη συμβατό με Αυτόματη κρυπτογράφηση και εισαγάγετε τον κωδικό ρύθμισης που παρουσιάζεται στη συσκευή δημιουργίας."
+  },
+  "systemmsg_unknown_sender_for_chat": {
+    "message": "Άγνωστος αποστολέας για αυτήν τη συνομιλία. Δείτε \"πληροφορίες\" για περισσότερες λεπτομέρειες."
+  },
+  "systemmsg_subject_for_new_contact": {
+    "message": "Μήνυμα από τον/την %1$s"
+  },
+  "systemmsg_failed_sending_to": {
+    "message": "Αποτυχία αποστολής μηνύματος σε %1$s."
+  },
+  "group_name_changed_by_you": {
+    "message": "Αλλάξατε το όνομα της ομάδας από \"%1$s\" σε \"%2$s\"."
+  },
+  "group_name_changed_by_other": {
+    "message": "Το όνομα της ομάδας άλλαξε από \"%1$s\" σε \"%2$s\" από %3$s."
+  },
+  "group_image_changed_by_you": {
+    "message": "Άλλαξες το εικονίδιο της ομάδας."
+  },
+  "group_image_changed_by_other": {
+    "message": "Ο/Η %1$s άλλαξε το εικονίδιο της ομάδας."
+  },
+  "add_member_by_you": {
+    "message": "Πρόσθεσες τον/την %1$s."
+  },
+  "add_member_by_other": {
+    "message": "Ο/Η %2$s πρόσθεσε τον/την %1$s."
+  },
+  "remove_member_by_you": {
+    "message": "Αφαίρεσες τον/την %1$s."
+  },
+  "remove_member_by_other": {
+    "message": "Ο/Η %2$s αφαίρεσε τον/την %1$s."
+  },
+  "group_left_by_you": {
+    "message": "Έφυγες απ' την ομάδα."
+  },
+  "group_left_by_other": {
+    "message": "Ο/Η %1$s έφυγε απ' την ομαδα."
+  },
+  "group_image_deleted_by_you": {
+    "message": "Διαγράψατε την εικόνα της ομάδας."
+  },
+  "group_image_deleted_by_other": {
+    "message": "Η εικόνα ομάδας διαγράφηκε από %1$s."
+  },
+  "location_enabled_by_you": {
+    "message": "Ενεργοποιήσατε την αναμετάδωση τοποθεσίας."
+  },
+  "location_enabled_by_other": {
+    "message": "Η αναμετάδωση τοποθεσίας ενεργοποιήθηκε από %1$s."
+  },
+  "ephemeral_timer_disabled_by_you": {
+    "message": "Απενεργοποίησες τα μηνύματα που εξαφανίζονται."
+  },
+  "ephemeral_timer_disabled_by_other": {
+    "message": "Ο/Η %1$s απενεργοποίησε τα μηνύματα που εξαφανίζονται."
+  },
+  "ephemeral_timer_seconds_by_you": {
+    "message": "Όρισες το χρόνο εξαφάνισης των μηνυμάτων σε %1$s δευτερόλεπτα."
+  },
+  "ephemeral_timer_seconds_by_other": {
+    "message": "Ο/Η %2$s όρισε το χρόνο εξαφάνισης των μηνυμάτων σε %1$s δευτερόλεπτα."
+  },
+  "ephemeral_timer_1_minute_by_you": {
+    "message": "Όρισες το χρόνο εξαφάνισης των μηνυμάτων σε 1 λεπτό."
+  },
+  "ephemeral_timer_1_minute_by_other": {
+    "message": "Ο/Η %1$s όρισε το χρόνο εξαφάνισης των μηνυμάτων σε 1 λεπτό."
+  },
+  "ephemeral_timer_1_hour_by_you": {
+    "message": "Όρισες το χρόνο εξαφάνισης των μηνυμάτων σε 1 ώρα."
+  },
+  "ephemeral_timer_1_hour_by_other": {
+    "message": "Ο/Η %1$s όρισε το χρόνο εξαφάνισης των μηνυμάτων σε 1 ώρα."
+  },
+  "ephemeral_timer_1_day_by_you": {
+    "message": "Όρισες το χρόνο εξαφάνισης των μηνυμάτων σε 1 ημέρα."
+  },
+  "ephemeral_timer_1_day_by_other": {
+    "message": "Ο/Η %1$s όρισε το χρόνο εξαφάνισης των μηνυμάτων σε 1 ημέρα."
+  },
+  "ephemeral_timer_1_week_by_you": {
+    "message": "Όρισες το χρόνο εξαφάνισης των μηνυμάτων σε 1 εβδομάδα."
+  },
+  "ephemeral_timer_1_week_by_other": {
+    "message": "Ο/Η %1$s όρισε το χρόνο εξαφάνισης των μηνυμάτων σε 1 εβδομάδα."
+  },
+  "ephemeral_timer_minutes_by_you": {
+    "message": "Όρισες το χρόνο εξαφάνισης των μηνυμάτων σε %1$s  λεπτά."
+  },
+  "ephemeral_timer_minutes_by_other": {
+    "message": "Ο/Η %2$s όρισε το χρόνο εξαφάνισης των μηνυμάτων σε %1$s λεπτά."
+  },
+  "ephemeral_timer_hours_by_you": {
+    "message": "Όρισες το χρόνο εξαφάνισης των μηνυμάτων σε %1$s ώρες."
+  },
+  "ephemeral_timer_hours_by_other": {
+    "message": "Ο/Η %2$s όρισε το χρόνο εξαφάνισης των μηνυμάτων σε %1$s ώρες."
+  },
+  "ephemeral_timer_days_by_you": {
+    "message": "Όρισες το χρόνο εξαφάνισης των μηνυμάτων σε %1$s ημέρες."
+  },
+  "ephemeral_timer_days_by_other": {
+    "message": "Ο/Η %2$s όρισε το χρόνο εξαφάνισης των μηνυμάτων σε %1$s ημέρες."
+  },
+  "ephemeral_timer_weeks_by_you": {
+    "message": "Όρισες το χρόνο εξαφάνισης των μηνυμάτων σε %1$s εβδομάδες."
+  },
+  "ephemeral_timer_weeks_by_other": {
+    "message": "Ο/Η %2$s όρισε το χρόνο εξαφάνισης των μηνυμάτων σε %1$s εβδομάδες."
+  },
+  "devicemsg_self_deleted": {
+    "message": "Διαγράψατε τη συνομιλία \"Αποθηκευμένα μηνύματα\".\n\nℹ️ Για να χρησιμοποιήσετε ξανά τη λειτουργία \"Αποθηκευμένα μηνύματα\", δημιουργήστε μια νέα συνομιλία με τον εαυτό σας."
+  },
+  "devicemsg_storage_exceeding": {
+    "message": "⚠️ Ο αποθηκευτικός χώρος του παρόχου σας πρόκειται να εξαντληθεί: %1$s %% χρησιμοποιούνται ήδη.\n\nΕνδέχεται να μην μπορείτε να λαμβάνετε μηνύματα εάν ο χώρος αποθήκευσης είναι πλήρης.\n\n👉 Ελέγξτε εάν μπορείτε να διαγράψετε παλιά δεδομένα στη διεπαφή ιστού του παρόχου και εξετάστε το ενδεχόμενο ενεργοποίηση \"Ρυθμίσεις / Διαγραφή παλαιών μηνυμάτων\". Μπορείτε να ελέγξετε την τρέχουσα χρήση αποθηκευτικού χώρου ανά πάσα στιγμή στις \"Ρυθμίσεις / Συνδεσιμότητα\"."
+  },
+  "devicemsg_bad_time": {
+    "message": "⚠️ Η ημερομηνία ή η ώρα στη συσκευή σας φαίνεται να είναι μην είναι ακριβής (%1$s).\n\nΠροσαρμόστε το ρολόι σας ⏰🔧 για να βεβαιωθείτε ότι τα μηνύματά σας λαμβάνονται σωστά."
+  },
+  "devicemsg_update_reminder": {
+    "message": "⚠️ Η έκδοση Delta Chat μπορεί να είναι παλιά.\n\nΑυτό μπορεί να προκαλέσει προβλήματα επειδή οι συνεργάτες συνομιλίας σας χρησιμοποιούν νεότερες εκδόσεις - και δεν έχετε τις πιο πρόσφατες λειτουργίες 😳\nΕλέγξτε τη https://get.delta.chat ή το κατάστημα εφαρμογών σας για ενημερώσεις ."
+  },
+  "enter_system_secret_to_continue": {
+    "message": "Εισαγάγετε το μυστικό που έχει οριστεί από το σύστημά σας για να συνεχίσετε."
+  },
+  "qr_code": {
+    "message": "Κωδικός QR"
+  },
+  "load_qr_code_as_image": {
+    "message": "Φορτώστε τον κωδικό QR ως εικόνα"
+  },
+  "qrscan_title": {
+    "message": "Σκανάρισμα κωδικού QR"
+  },
+  "qrscan_hint": {
+    "message": "Κρατήστε την κάμερά σας πάνω από τον κωδικό QR."
+  },
+  "qrscan_failed": {
+    "message": "Αδυναμια αποκωδικοποίησης του κωδικού QR"
+  },
+  "qrscan_ask_join_group": {
+    "message": "Θέλετε να συμμετέχετε στην ομάδα \"%1$s\";"
+  },
+  "qrscan_fingerprint_mismatch": {
+    "message": "Το δακτυλικό αποτύπωμα δεν ταιριάζει με το τελευταίο που είδαμε για %1$s."
+  },
+  "qrscan_no_addr_found": {
+    "message": "Αυτός ο κωδικός QR περιέχει δακτυλικό αποτύπωμα αλλά όχι διεύθυνση e-mail.\n\nΓια επαλήθευση εκτός ζώνης, δημιουργήστε πρώτα μια κρυπτογραφημένη σύνδεση με τον παραλήπτη."
+  },
+  "qrscan_contains_text": {
+    "message": "Σαρωμένο κείμενο κωδικού QR:\n\n%1$s"
+  },
+  "qrscan_contains_url": {
+    "message": "Διεύθυνση URL σαρωμένου κωδικού QR:\n\n%1$s"
+  },
+  "qrscan_fingerprint_label": {
+    "message": "Δακτυλικό αποτύπωμα"
+  },
+  "withdraw_verifycontact_explain": {
+    "message": "Αυτός ο κωδικός QR μπορεί να σαρωθεί από άλλους για να επικοινωνήσουν μαζί σας.\n\nΜπορείτε να απενεργοποιήσετε τον κωδικό QR εδώ και να τον ξαναενεργοποιήσετε ξανασαρώνοντάς τον."
+  },
+  "withdraw_verifygroup_explain": {
+    "message": "Αυτός ο κωδικός QR μπορεί να σαρωθεί από άλλους για να συμμετάσχουν στην ομάδα \"%1$s\".\n\nΜπορείτε να απενεργοποιήσετε τον κωδικό QR εδώ και να τον ξαναενεργοποιήσετε ξανασαρώνοντάς τον."
+  },
+  "withdraw_qr_code": {
+    "message": "Απενεργοποίηση του κωδικού QR"
+  },
+  "revive_verifycontact_explain": {
+    "message": "Αυτός ο κωδικός QR θα μπορούσε να σαρωθεί από άλλους για να επικοινωνήσουν μαζί σας.\n\nΟ κωδικός QR δεν είναι ενεργός σε αυτήν τη συσκευή."
+  },
+  "revive_verifygroup_explain": {
+    "message": "Αυτός ο κωδικός QR θα μπορούσε να σαρωθεί από άλλους για να συμμετάσχουν στην ομάδα \"%1$s\".\n\nΟ κωδικός QR δεν είναι ενεργός σε αυτήν τη συσκευή."
+  },
+  "revive_qr_code": {
+    "message": "Ενεργοποίηση του κωδικού QR"
+  },
+  "qrshow_title": {
+    "message": "Κωδικός Πρόσκλησης QR"
+  },
+  "qrshow_x_joining": {
+    "message": "%1$s συνδέθηκε."
+  },
+  "qrshow_x_verified": {
+    "message": "%1$s επαληθεύτηκε."
+  },
+  "qrshow_x_has_joined_group": {
+    "message": "%1$s εντάχθηκε στην ομάδα."
+  },
+  "qrshow_join_group_title": {
+    "message": "Κωδικός Πρόσκλησης QR"
+  },
+  "qrshow_join_group_hint": {
+    "message": "Σάρωση για συμμετοχή στην ομάδα \"%1$s\""
+  },
+  "qrshow_join_contact_title": {
+    "message": "Κωδικός Πρόσκλησης QR"
+  },
+  "qrshow_join_contact_hint": {
+    "message": "Σάρωση για συνομιλία με %1$s"
+  },
+  "qrshow_join_contact_no_connection_toast": {
+    "message": "Δεν υπάρχει σύνδεση στο διαδίκτυο, δεν είναι δυνατή η ρύθμιση κωδικού QR."
+  },
+  "qraccount_ask_create_and_login": {
+    "message": "Δημιουργήστε νέα διεύθυνση e-mail στο \"%1$s\" και συνδεθείτε εκεί;"
+  },
+  "qraccount_ask_create_and_login_another": {
+    "message": "Δημιουργήστε νέα διεύθυνση e-mail στο \"%1$s\" και συνδεθείτε εκεί;\n\nΟ υπάρχων λογαριασμός σας δεν θα διαγραφεί. Χρησιμοποιήστε τη λειτουργία \"Εναλλαγή λογαριασμού\" για εναλλαγή μεταξύ των λογαριασμών σας."
+  },
+  "qraccount_qr_code_cannot_be_used": {
+    "message": "Ο σαρωμένος κωδικός QR δεν μπορεί να χρησιμοποιηθεί για τη δημιουργία νέου λογαριασμού."
+  },
+  "qrlogin_ask_login": {
+    "message": "Σύνδεση στο \"%1$s\";"
+  },
+  "qrlogin_ask_login_another": {
+    "message": "Σύνδεση στο \"%1$s\";\n\nΟ υπάρχων λογαριασμός σας δεν θα διαγραφεί. Χρησιμοποιήστε τη λειτουργία \"Εναλλαγή λογαριασμού\" για εναλλαγή μεταξύ των λογαριασμών σας."
+  },
+  "secure_join_started": {
+    "message": "%1$s σας προσκάλεσε να συμμετάσχετε σε αυτήν την ομάδα.\n\nΑναμονή για απάντηση από τη συσκευή του %2$s…"
+  },
+  "secure_join_replies": {
+    "message": "%1$s απάντησε, αναμονή για να προστεθεί στην ομάδα…"
+  },
+  "contact_verified": {
+    "message": "%1$s επαληθεύτηκε."
+  },
+  "contact_not_verified": {
+    "message": "Αδυναμία επαλήθευσης %1$s."
+  },
+  "contact_setup_changed": {
+    "message": "Άλλαξε η ρύθμιση για %1$s."
+  },
+  "copy_qr_data_success": {
+    "message": "Αντιγράφηκε το QR url στο πρόχειρο"
+  },
+  "mailto_dialog_header_select_chat": {
+    "message": "Επιλέξτε συνομιλία για να στείλετε το μήνυμα"
+  },
+  "confirm_replace_draft": {
+    "message": "%1$s έχει ήδη ένα πρόχειρο μήνυμα, θέλετε να το αντικαταστήσετε;"
+  },
+  "mailto_link_could_not_be_decoded": {
+    "message": "Αδυναμία αποκωδικοποίησης του συνδέσμου mailto: %1$s"
+  },
+  "notify_reply_button": {
+    "message": "Απάντηση"
+  },
+  "notify_new_message": {
+    "message": "Νέο μήνυμα"
+  },
+  "notify_background_connection_enabled": {
+    "message": "Η σύνδεση στο παρασκήνιο ενεργοποιήθηκε"
+  },
+  "notify_priority_high": {
+    "message": "Υψηλή"
+  },
+  "notify_priority_max": {
+    "message": "Μέγιστη"
+  },
+  "notify_name_and_message": {
+    "message": "Όνομα και μήνυμα"
+  },
+  "notify_name_only": {
+    "message": "Μόνο όνομα"
+  },
+  "notify_no_name_or_message": {
+    "message": "Χωρίς όνομα ή μήνυμα"
+  },
+  "perm_required_title": {
+    "message": "Χρειάζονται δικαιώματα πρόσβασης"
+  },
+  "perm_continue": {
+    "message": "Συνέχεια"
+  },
+  "perm_explain_access_to_camera_denied": {
+    "message": "Για να τραβήξετε φωτογραφίες ή να τραβήξετε βίντεο, μεταβείτε στις ρυθμίσεις της εφαρμογής, επιλέξτε \"Άδειες\" και ενεργοποιήστε την \"Κάμερα\"."
+  },
+  "perm_explain_access_to_mic_denied": {
+    "message": "Για να στείλετε μηνύματα ήχου, μεταβείτε στις ρυθμίσεις της εφαρμογής, επιλέξτε \"Άδειες\" και ενεργοποιήστε το \"Μικρόφωνο\"."
+  },
+  "perm_explain_access_to_storage_denied": {
+    "message": "Για να λάβετε ή να στείλετε αρχεία, μεταβείτε στις ρυθμίσεις της εφαρμογής, επιλέξτε \"Άδειες\" και ενεργοποιήστε την \"Αποθήκευση\"."
+  },
+  "perm_explain_access_to_location_denied": {
+    "message": "Για να επισυνάψετε μια τοποθεσία, μεταβείτε στις ρυθμίσεις της εφαρμογής, επιλέξτε \"Άδειες\" και ενεργοποιήστε την \"Τοποθεσία\"."
+  },
+  "ImageEditorHud_draw_anywhere_to_blur": {
+    "message": "Ζωγράφισε οπουδήποτε για να θολώσεις"
+  },
+  "ImageEditorHud_add_text": {
+    "message": "Σύνταξη κειμένου"
+  },
+  "ImageEditorHud_blur": {
+    "message": "Θόλωμα"
+  },
+  "ImageEditorHud_brush_marker": {
+    "message": "Μαρκαδόρος"
+  },
+  "ImageEditorHud_brush_highlight": {
+    "message": "Υπογράμμιση"
+  },
+  "ImageEditorHud_crop": {
+    "message": "Περικοπή"
+  },
+  "ImageEditorHud_flip": {
+    "message": "Εναλλαγή"
+  },
+  "ImageEditorHud_rotate": {
+    "message": "Περιστροφή"
+  },
+  "encrypted_message": {
+    "message": "Κρυπτογραφημένο μήνυμα"
+  },
+  "about_offical_app_desktop": {
+    "message": "Αυτή είναι η επίσημη εφαρμογή Delta Chat Desktop."
+  },
+  "about_licensed_under_desktop": {
+    "message": "Αυτό το λογισμικό έχει άδεια χρήσης σύμφωνα με την GNU GPL έκδοση 3 και ο πηγαίος κώδικας είναι διαθέσιμος στο GitHub."
+  },
+  "welcome_desktop": {
+    "message": "Καλώς ήρθατε στο Delta Chat"
+  },
+  "global_menu_preferences_language_desktop": {
+    "message": "Γλώσσα"
+  },
+  "global_menu_file_desktop": {
+    "message": "Αρχείο"
+  },
+  "global_menu_file_quit_desktop": {
+    "message": "Κλείσιμο"
+  },
+  "global_menu_edit_desktop": {
+    "message": "Eπεξεργασία"
+  },
+  "global_menu_edit_undo_desktop": {
+    "message": "Αναίρεση"
+  },
+  "global_menu_edit_redo_desktop": {
+    "message": "Επανάληψη"
+  },
+  "global_menu_edit_cut_desktop": {
+    "message": "Αποκοπή"
+  },
+  "global_menu_edit_copy_desktop": {
+    "message": "Αντιγραφή"
+  },
+  "global_menu_edit_paste_desktop": {
+    "message": "Επικόλληση"
+  },
+  "global_menu_view_desktop": {
+    "message": "Εμφάνιση"
+  },
+  "global_menu_view_floatontop_desktop": {
+    "message": "Μετακίνηση στην κορυφή"
+  },
+  "global_menu_view_developer_desktop": {
+    "message": "Προγραμματιστής"
+  },
+  "global_menu_view_developer_tools_desktop": {
+    "message": "Εργαλεία Προγραμματιστή"
+  },
+  "global_menu_help_desktop": {
+    "message": "Βοήθεια"
+  },
+  "global_menu_help_report_desktop": {
+    "message": "Αναφέρετε ένα πρόβλημα"
+  },
+  "global_menu_help_about_desktop": {
+    "message": "Για το Delta Chat"
+  },
+  "global_menu_file_open_desktop": {
+    "message": "Ανοίξτε το Delta Chat"
+  },
+  "global_menu_minimize_to_tray": {
+    "message": "Ελαχιστοποίηση"
+  },
+  "no_chat_selected_suggestion_desktop": {
+    "message": "Επιλέξτε μια συνομιλία ή δημιουργήστε μια νέα συνομιλία"
+  },
+  "write_message_desktop": {
+    "message": "Γράψτε ένα μήνυμα"
+  },
+  "encryption_info_title_desktop": {
+    "message": "Πληροφορίες Κρυπτογράφησης"
+  },
+  "delete_message_desktop": {
+    "message": "Διαγραφή μηνύματος"
+  },
+  "more_info_desktop": {
+    "message": "Περισσότερες πληροφορίες"
+  },
+  "timestamp_format_m_desktop": {
+    "message": "MMM D"
+  },
+  "remove_desktop": {
+    "message": "Αφαίρεση"
+  },
+  "save_desktop": {
+    "message": "Αποθήκευση"
+  },
+  "name_desktop": {
+    "message": "Όνομα"
+  },
+  "select_group_image_desktop": {
+    "message": "Επιλέξτε Εικόνας Ομάδας"
+  },
+  "export_backup_desktop": {
+    "message": "Εξαγωγή Αντιγράφων Ασφαλείας"
+  },
+  "autocrypt_correct_desktop": {
+    "message": "Η ρύθμιση αυτόματης κρυπτογράφησης μεταφέρθηκε."
+  },
+  "forget_login_confirmation_desktop": {
+    "message": "Διαγραφή αυτής της σύνδεσης; Τα πάντα θα διαγραφούν, συμπεριλαμβανομένων των ρυθμίσεων από άκρο σε άκρο, επαφών, συνομιλιών, μηνυμάτων και πολυμέσων. Αυτή η πράξη δε μπορεί να αναιρεθεί."
+  },
+  "message_detail_sent_desktop": {
+    "message": "Στάλθηκε"
+  },
+  "message_detail_received_desktop": {
+    "message": "Παραλήφθηκε"
+  },
+  "menu.view.developer.open.log.folder": {
+    "message": "Άνοιγμα του φακέλου καταγραφής"
+  },
+  "menu.view.developer.open.current.log.file": {
+    "message": "Άνοιγμα του τρέχον αρχείου καταγραφής"
+  },
+  "explain_desktop_minimized_disabled_tray_pref": {
+    "message": "Το εικονίδιο του δίσκου δεν μπορεί να απενεργοποιηθεί καθώς το Delta Chat ξεκίνησε με την επιλογή --ελαχιστοποιημένη."
+  },
+  "no_spellcheck_suggestions_found": {
+    "message": "Δεν βρέθηκαν προτάσεις ορθογραφίας."
+  },
+  "show_window": {
+    "message": "Εμφάνιση παραθύρου"
+  },
+  "keybindings": {
+    "message": "Keybindings"
+  },
+  "switch_between_chats": {
+    "message": "Εναλλαγή μεταξύ συνομιλιών"
+  },
+  "scroll_messages": {
+    "message": "Κύλιση Μηνυμάτων"
+  },
+  "focus_search_input": {
+    "message": "Εστίαση Αναζήτησης"
+  },
+  "focus_message_input": {
+    "message": "Εστίαση Εισαγωγής Μηνύματος"
+  },
+  "force_refresh_network": {
+    "message": "Αναγκαστική Ανανέωση Δικτύου"
+  },
+  "insert_newline": {
+    "message": "Εισαγωγή Νέας Γραμμής"
+  },
+  "a11y_delivery_status_error": {
+    "message": "Κατάσταση παράδοσης: Σφάλμα"
+  },
+  "a11y_encryption_padlock": {
+    "message": "Λουκέτο κρυπτογράφησης"
+  },
+  "a11y_delivery_status_sending": {
+    "message": "Κατάσταση παράδοσης: Αποστολή"
+  },
+  "a11y_delivery_status_draft": {
+    "message": "Κατάσταση παράδοσης: Πρόχειρο"
+  },
+  "a11y_delivery_status_delivered": {
+    "message": "Κατάσταση παράδοσης: Παραδόθηκε"
+  },
+  "a11y_delivery_status_read": {
+    "message": "Κατάσταση παράδοσης: Διαβάστηκε"
+  },
+  "a11y_delivery_status_invalid": {
+    "message": "Μη έγκυρη κατάσταση παράδοσης"
+  },
+  "a11y_message_context_menu_btn_label": {
+    "message": "Ενέργειες μηνυμάτων"
+  },
+  "a11y_background_preview_label": {
+    "message": "Προεπισκόπηση φόντου"
+  },
+  "a11y_disappearing_messages_activated": {
+    "message": "Τα εξαφανιζόμενα μηνύματα ενεργοποιήθηκαν"
+  },
+  "stop_sharing_location": {
+    "message": "Διακοπή κοινής χρήσης τοποθεσίας"
+  },
+  "a11y_voice_message_hint_ios": {
+    "message": "Μετά την εγγραφή, πατήστε δύο φορές για αποστολή. Για να απορρίψετε την εγγραφή, τρίψτε με δύο δάχτυλα."
+  },
+  "a11y_connectivity_hint": {
+    "message": "Πατήστε δύο φορές για να δείτε λεπτομέρειες συνδεσιμότητας."
+  },
+  "login_error_no_internet_connection": {
+    "message": "Δεν υπάρχει σύνδεση στο Διαδίκτυο, η σύνδεση απέτυχε."
+  },
+  "share_account_not_configured": {
+    "message": "Ο λογαριασμός δεν έχει ρυθμιστεί."
+  },
+  "cannot_play_audio_file": {
+    "message": "Δεν είναι δυνατή η αναπαραγωγή του αρχείου ήχου."
+  },
+  "perm_ios_explain_access_to_camera_denied": {
+    "message": "Για να τραβήξετε φωτογραφίες, να τραβήξετε βίντεο ή να χρησιμοποιήσετε το σαρωτή QR-Code, ανοίξτε τις ρυθμίσεις συστήματος και ενεργοποιήστε την \"Κάμερα\"."
+  },
+  "open_settings": {
+    "message": "Άνοιγμα Ρυθμίσεων"
+  },
+  "import_device_contacts": {
+    "message": "Εισαγωγή επαφών από συσκευή"
+  },
+  "import_device_contacts_hint": {
+    "message": "Για να συνομιλήσετε με επαφές από τη συσκευή σας, ανοίξτε τις Ρυθμίσεις και ενεργοποιήστε τις \"Επαφές\"."
+  },
+  "disabled_in_dc": {
+    "message": "Απενεργοποιήθηκε στο Delta Chat"
+  },
+  "disabled_in_system_settings": {
+    "message": "Απενεργοποιήθηκε στις ρυθμίσεις συστήματος"
+  },
+  "bg_app_refresh_disabled": {
+    "message": "Η \"Ανανέωση εφαρμογών στο παρασκήνιο\" απενεργοποιήθηκε στις ρυθμίσεις συστήματος"
+  },
+  "delayed": {
+    "message": "Καθυστέρηση"
+  },
+  "notifications_avg_minutes": {
+    "message": "Κατά μέσο όρο κάθε %1$d λεπτά"
+  },
+  "notifications_avg_hours": {
+    "message": "Κατά μέσο όρο κάθε %1$d ώρες"
+  },
+  "last_check_at": {
+    "message": "Έλεγχος στις %1$s"
+  },
+  "InfoPlist_NSCameraUsageDescription": {
+    "message": "Το Delta Chat χρησιμοποιεί την κάμερά σας για λήψη και αποστολή φωτογραφιών και βίντεο και για σάρωση κωδικών QR."
+  },
+  "InfoPlist_NSContactsUsageDescription": {
+    "message": "Το Delta Chat χρησιμοποιεί τις επαφές σας για να εμφανίσει μια λίστα με διευθύνσεις e-mail στις οποίες μπορείτε να γράψετε. Το Delta Chat δεν έχει διακομιστή, οι επαφές σας δεν αποστέλλονται πουθενά."
+  },
+  "InfoPlist_NSLocationAlwaysAndWhenInUseUsageDescription": {
+    "message": "Το Delta Chat χρειάζεται άδεια για να μοιραστεί την τοποθεσία σας για το χρονικό διάστημα που έχετε ενεργοποιήσει την κοινή χρήση τοποθεσίας."
+  },
+  "InfoPlist_NSLocationWhenInUseUsageDescription": {
+    "message": "Το Delta Chat χρειάζεται άδεια για να μοιραστεί την τοποθεσία σας για το χρονικό διάστημα που έχετε ενεργοποιήσει την κοινή χρήση τοποθεσίας."
+  },
+  "InfoPlist_NSMicrophoneUsageDescription": {
+    "message": "Το Delta Chat χρησιμοποιεί το μικρόφωνό σας για εγγραφή και αποστολή φωνητικών μηνυμάτων και βίντεο με ήχο."
+  },
+  "InfoPlist_NSPhotoLibraryUsageDescription": {
+    "message": "Το Delta Chat θα σας επιτρέψει να επιλέξετε ποιες φωτογραφίες από τη βιβλιοθήκη σας θα στείλετε."
+  },
+  "InfoPlist_NSPhotoLibraryAddUsageDescription": {
+    "message": "Το Delta Chat θέλει να αποθηκεύσει εικόνες στη συλλογή φωτογραφιών σας."
+  },
+  "pref_background_notifications_rationale": {
+    "message": "Για να διατηρήσετε τη σύνδεση με τον διακομιστή e-mail σας και να λαμβάνετε μηνύματα στο παρασκήνιο, αγνοήστε τις βελτιστοποιήσεις μπαταρίας στο επόμενο βήμα.\n\nΤο Delta Chat χρησιμοποιεί λίγους πόρους και φροντίζει να μην εξαντλήσει την μπαταρία σας."
+  },
+  "perm_enable_bg_reminder_title": {
+    "message": "Πατήστε εδώ για να λαμβάνετε μηνύματα ενώ το Delta Chat είναι στο παρασκήνιο."
+  },
+  "perm_enable_bg_already_done": {
+    "message": "Επιτρέψατε ήδη στο Delta Chat να λαμβάνει μηνύματα στο παρασκήνιο.\n\nΕάν τα μηνύματα εξακολουθούν να μην φτάνουν στο παρασκήνιο, ελέγξτε τις ρυθμίσεις του συστήματός σας."
+  },
+  "n_minutes": {
+    "one": "%d λεπτό",
+    "other": "%d λεπτά"
+  },
+  "n_hours": {
+    "one": "%d ώρα",
+    "other": "%d ώρες"
+  },
+  "n_chats": {
+    "one": "%d συνομιλία",
+    "other": "%d συνομιλίες"
+  },
+  "n_contacts": {
+    "one": "%d επαφή",
+    "other": "%d επαφές"
+  },
+  "n_messages": {
+    "one": "%d μήνυμα",
+    "other": "%d μηνύματα"
+  },
+  "n_members": {
+    "one": "%d μέλος",
+    "other": "%d μέλη"
+  },
+  "n_recipients": {
+    "one": "%d παραλήπτης",
+    "other": "%d παραλήπτες"
+  },
+  "n_selected": {
+    "one": "%d επιλεγμένο",
+    "other": "%d επιλεγμένα"
+  },
+  "ask_send_following_n_files_to": {
+    "one": "Αποστολή του παρακάτω αρχείου στο %s;",
+    "other": "Αποστολή των παρακάτω %d αρχείων στο %s;"
+  },
+  "ask_delete_messages_simple": {
+    "one": "Διαγραφή %d μηνύματος;",
+    "other": "Διαγραφή %d μηνυμάτων;"
+  },
+  "chat_archived": {
+    "one": "%d συνομιλία αρχειοθετήθηκε",
+    "other": "%d συνομιλίες αρχειοθετήθηκαν"
+  },
+  "chat_unarchived": {
+    "one": "%d συνομιλία καταργήθηκε από την αρχειοθέτηση",
+    "other": "%d συνομιλίες καταργήθηκαν από την αρχειοθέτηση"
+  },
+  "chat_n_new_messages": {
+    "one": "%d νέο μήνυμα",
+    "other": "%d νέα μηνύματα"
+  }
+}

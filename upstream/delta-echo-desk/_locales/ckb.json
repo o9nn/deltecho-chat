@@ -1,0 +1,1434 @@
+{
+  "app_name": {
+    "message": "دێڵتا چات"
+  },
+  "ok": {
+    "message": "باشە"
+  },
+  "cancel": {
+    "message": "وازبێنە"
+  },
+  "yes": {
+    "message": "بەڵێ"
+  },
+  "no": {
+    "message": "نا"
+  },
+  "select": {
+    "message": "هەڵبژاردن"
+  },
+  "on": {
+    "message": "چالاک"
+  },
+  "off": {
+    "message": "ناچالاک"
+  },
+  "def": {
+    "message": "بنەڕەتی"
+  },
+  "default_value": {
+    "message": "بنەڕەتی (%1$s)"
+  },
+  "default_value_as_above": {
+    "message": "بنەڕەتی (وەکوو سەرەوە)"
+  },
+  "custom": {
+    "message": "دڵخواز"
+  },
+  "none": {
+    "message": "هیچیان"
+  },
+  "automatic": {
+    "message": "خۆکار"
+  },
+  "open": {
+    "message": "کردنەوە"
+  },
+  "open_attachment": {
+    "message": "کردنەوەی پێوەلکاو"
+  },
+  "join": {
+    "message": "بەشداربوون"
+  },
+  "rejoin": {
+    "message": "دیسان بەشداربوونەوە"
+  },
+  "delete": {
+    "message": "بیسڕەوە"
+  },
+  "info": {
+    "message": "زانیاری"
+  },
+  "update": {
+    "message": "نوێ کردنەوە"
+  },
+  "emoji": {
+    "message": "وێنۆچکە"
+  },
+  "attachment": {
+    "message": "پێوەلکاو"
+  },
+  "back": {
+    "message": "گەڕانەوە"
+  },
+  "close": {
+    "message": "داخستن"
+  },
+  "forward": {
+    "message": "بڵاو کردنەوە"
+  },
+  "archive": {
+    "message": "ئەرشیڤ کردن"
+  },
+  "unarchive": {
+    "message": "دەرهێنان لە ئەرشیڤ"
+  },
+  "mute": {
+    "message": "بێدەنگ کردن"
+  },
+  "ephemeral_messages": {
+    "message": "ئەو پەیامانەی بزر دەبن"
+  },
+  "ephemeral_messages_hint": {
+    "message": "ئەم ڕێکخستنانە بۆ هەموو بەکارهێنەرانی دێڵتا چات دەبن. ئەگەرچی ئەوان دەتوانن پەیامەکان کۆپی بکەن، پاشەکەوتیان بکەن و بڵاویان بکەنەوە یان لە پۆستێکی ئەلیکترۆنی دیکە کەڵک بگرن."
+  },
+  "save": {
+    "message": "پاشەکەوتی بکە"
+  },
+  "chat": {
+    "message": "چات"
+  },
+  "media": {
+    "message": "ڕەنگاڵە"
+  },
+  "profile": {
+    "message": "لادیمەن"
+  },
+  "main_menu": {
+    "message": "پێڕستی سەرەکی"
+  },
+  "start_chat": {
+    "message": "وتووێژ دەست پێبکە"
+  },
+  "show_full_message": {
+    "message": "هەموو پەیامەکە پیشان بدە..."
+  },
+  "always": {
+    "message": "هەمیشە"
+  },
+  "once": {
+    "message": "یەکجار"
+  },
+  "show_password": {
+    "message": "تێپەڕوشەکە پیشان بدە"
+  },
+  "hide_password": {
+    "message": "تێپەڕوشەکە بشارەوە"
+  },
+  "not_now": {
+    "message": "ئێستا نا"
+  },
+  "never": {
+    "message": "قەت"
+  },
+  "done": {
+    "message": "ئەنجام بوو"
+  },
+  "undo": {
+    "message": "گەڕاندنەوە"
+  },
+  "offline": {
+    "message": "دەرهێڵ"
+  },
+  "next": {
+    "message": "پاشوو"
+  },
+  "error": {
+    "message": "هەڵە"
+  },
+  "error_x": {
+    "message": "هەڵە: %1$s"
+  },
+  "no_app_to_handle_data": {
+    "message": "نەرمامێرێک نەدۆزرایەوە کە ئەم چەشنە داتایە بخوێنێتەوە."
+  },
+  "no_browser_installed": {
+    "message": "هیچ وێبگەڕێک دانەمەزراوە"
+  },
+  "file_not_found": {
+    "message": "%1$s نەدۆزرایەوە."
+  },
+  "copied_to_clipboard": {
+    "message": "ڕوونووس کرا"
+  },
+  "contacts_headline": {
+    "message": "بەردەنگەکان"
+  },
+  "email_address": {
+    "message": "پۆستی ئەلیکترۆنی"
+  },
+  "bad_email_address": {
+    "message": "پۆستی ئەلیکترۆنی بێکەڵک"
+  },
+  "password": {
+    "message": "تێپەڕوشە"
+  },
+  "existing_password": {
+    "message": "دووپات کردنەوەی تێپەڕوشە"
+  },
+  "now": {
+    "message": "ئێستا"
+  },
+  "danger": {
+    "message": "مەترسی"
+  },
+  "today": {
+    "message": "ئەمڕۆ"
+  },
+  "yesterday": {
+    "message": "دوێنێ"
+  },
+  "this_week": {
+    "message": "ئەم حەوتەیە"
+  },
+  "this_month": {
+    "message": "ئەم مانگە"
+  },
+  "last_week": {
+    "message": "حەوتەی ڕابردوو"
+  },
+  "last_month": {
+    "message": "مانگی ڕابردوو"
+  },
+  "self": {
+    "message": "من"
+  },
+  "draft": {
+    "message": "ڕەشنووس"
+  },
+  "image": {
+    "message": "وێنە"
+  },
+  "reply_noun": {
+    "message": "وەڵام دانەوە"
+  },
+  "gif": {
+    "message": "گیف"
+  },
+  "images": {
+    "message": "وێنەکان"
+  },
+  "audio": {
+    "message": "دەنگ"
+  },
+  "voice_message": {
+    "message": "پەیامی دەنگی"
+  },
+  "forwarded_message": {
+    "message": "پەیامی هاوبەشکراو"
+  },
+  "forwarded_by": {
+    "message": "هاوبەشکراو لە لایەن%1$s"
+  },
+  "video": {
+    "message": "ڤیدیۆ"
+  },
+  "documents": {
+    "message": "بەڵگەکان"
+  },
+  "contact": {
+    "message": "بەردەنگ"
+  },
+  "camera": {
+    "message": "کامێرا"
+  },
+  "location": {
+    "message": "شوێن"
+  },
+  "gallery": {
+    "message": "پیشانگا"
+  },
+  "images_and_videos": {
+    "message": "وێنە و ڤیدیۆکان"
+  },
+  "file": {
+    "message": "پەڕگە"
+  },
+  "files": {
+    "message": "پەڕگەکان"
+  },
+  "unknown": {
+    "message": "نەناسراو"
+  },
+  "green": {
+    "message": "سەوز"
+  },
+  "red": {
+    "message": "سوور"
+  },
+  "blue": {
+    "message": "شین"
+  },
+  "orange": {
+    "message": "نارنجی"
+  },
+  "cyan": {
+    "message": "سەوزی شینباو"
+  },
+  "purple": {
+    "message": "ئەرخەوانی"
+  },
+  "magenta": {
+    "message": "سووری ئەرخەوانی"
+  },
+  "white": {
+    "message": "سپی"
+  },
+  "zoom": {
+    "message": "نزیک کردنەوە"
+  },
+  "extra_small": {
+    "message": "زۆر بچووک"
+  },
+  "small": {
+    "message": "بچووک"
+  },
+  "normal": {
+    "message": "ئاسایی"
+  },
+  "large": {
+    "message": "گەورە"
+  },
+  "extra_large": {
+    "message": "زۆر گەورە"
+  },
+  "fast": {
+    "message": "خێرا"
+  },
+  "slow": {
+    "message": "خاو"
+  },
+  "menu_new_contact": {
+    "message": "بەردەنگی نوێ"
+  },
+  "menu_new_chat": {
+    "message": "وتووێژی نوێ"
+  },
+  "menu_new_group": {
+    "message": "کۆڕی نوێ"
+  },
+  "menu_send": {
+    "message": "بینێرە"
+  },
+  "menu_edit_group": {
+    "message": "دەستکاری کۆڕ"
+  },
+  "menu_group_name_and_image": {
+    "message": "ناو و وێنەی کۆڕ"
+  },
+  "menu_show_global_map": {
+    "message": "پیشاندانی هەموو شوێنەکان"
+  },
+  "menu_archive_chat": {
+    "message": "ئەرشیڤ کردنی وتووێژ"
+  },
+  "menu_unarchive_chat": {
+    "message": "دەرهێنانی وتووێژ لە ئەرشیڤ"
+  },
+  "menu_add_attachment": {
+    "message": "زیاد کردنی پێوەلکاو"
+  },
+  "menu_leave_group": {
+    "message": "بەجێهێشتنی کۆڕ"
+  },
+  "menu_delete_chat": {
+    "message": "سڕینەوەی وتووێژ"
+  },
+  "delete_contact": {
+    "message": "سڕینەوەی بەردەنگ"
+  },
+  "menu_delete_location": {
+    "message": "ئەم شوێنە دەسڕیتەوە؟"
+  },
+  "menu_message_details": {
+    "message": "وردەکارییەکانی پەیامەکە"
+  },
+  "menu_copy_to_clipboard": {
+    "message": "ڕوونووس کردن"
+  },
+  "menu_copy_selection_to_clipboard": {
+    "message": "هەڵبژێردراوەکان ڕوونووس بکە"
+  },
+  "menu_copy_link_to_clipboard": {
+    "message": "بەستەر کۆپی بکە"
+  },
+  "paste_from_clipboard": {
+    "message": "ڕوونووسەکە بلکێنە"
+  },
+  "menu_forward": {
+    "message": "هاوبەش کردنی پەیام"
+  },
+  "menu_reply": {
+    "message": "وەڵام دانەوە بە پەیام"
+  },
+  "menu_mute": {
+    "message": "بێدەنگ کردنی وریاکەرەوەکان"
+  },
+  "menu_unmute": {
+    "message": "دەنگدار کردن"
+  },
+  "menu_export_attachment": {
+    "message": "هەناردە کردنی پێوەلکاو"
+  },
+  "menu_all_media": {
+    "message": "هەموو ڕەنگاڵەکان"
+  },
+  "show_in_chat": {
+    "message": "لە نێو وتووێژەکەدا پیشانی بدە"
+  },
+  "menu_share": {
+    "message": "هاوبەش کردن"
+  },
+  "block": {
+    "message": "ئاستەنگ کردن"
+  },
+  "menu_block_contact": {
+    "message": "ئاستەنگ کردنی بەردەنگ"
+  },
+  "menu_unblock_contact": {
+    "message": "لابردنی ئاستەنگ"
+  },
+  "menu_play": {
+    "message": "خستنەسەر"
+  },
+  "menu_pause": {
+    "message": "وەستان"
+  },
+  "menu_scroll_to_bottom": {
+    "message": "ڕۆیشتن بەرەو خوار"
+  },
+  "menu_scroll_to_top": {
+    "message": "ڕۆیشتن بەرەو ژوور"
+  },
+  "menu_help": {
+    "message": "یارمەتی"
+  },
+  "menu_select_all": {
+    "message": "هەمووی هەڵبژێرە"
+  },
+  "select_more": {
+    "message": "هەڵبژاردنی زۆرتر"
+  },
+  "menu_edit_name": {
+    "message": "دەستکاری ناو"
+  },
+  "menu_settings": {
+    "message": "ڕێکخستنەکان"
+  },
+  "menu_advanced": {
+    "message": "پێشکەوتوو"
+  },
+  "menu_view_profile": {
+    "message": "دیتنی پرۆفایل"
+  },
+  "menu_zoom_in": {
+    "message": "نێزیک کردنەوە"
+  },
+  "menu_zoom_out": {
+    "message": "دوور کردنەوە"
+  },
+  "menu_save_log": {
+    "message": "پاشەکەوت کردن"
+  },
+  "title_share_location": {
+    "message": "هاوبەشکردنی شوێن لەگەڵ هەموو ئەندامانی کۆڕەکەدا"
+  },
+  "device_talk": {
+    "message": "پەیامەکانی ئامێرەکە"
+  },
+  "device_talk_subtitle": {
+    "message": "پەیامە درووستکراوە ناوخۆییەکان"
+  },
+  "device_talk_explain": {
+    "message": "پەیامەکانی نێو ئەم وتووێژە بە شێوازی ناوخۆیی لەلایەن نەرمامێری دێڵتاچاتەکەتەوە درووست کراون. درووستکەرانی نەرمامێرەکە کەڵکی لێ دەگرن بۆ ئاگادار کردنەوەی بەکارهێنەران سەبارەت بە وەشانە نوێکانی نەرمامێرەکە و کێشە و گرفتەکانی."
+  },
+  "edit_contact": {
+    "message": "دەستکاری بەردەنگ"
+  },
+  "pin_chat": {
+    "message": "دەرزیلەکردنی چات"
+  },
+  "unpin_chat": {
+    "message": "لابردنی دەرزیلە"
+  },
+  "pin": {
+    "message": "دەرزیلە بکە"
+  },
+  "unpin": {
+    "message": "دەرزیلە لابە"
+  },
+  "ConversationFragment_quoted_message_not_found": {
+    "message": "پەیامە ڕەسەنەکە نەدۆزرایەوە"
+  },
+  "reply_privately": {
+    "message": "وەڵامدانەوەی نهێنی"
+  },
+  "mute_for_one_hour": {
+    "message": "بێدەنگ کردن بۆ ماوەی 1 کاتژمێر"
+  },
+  "mute_for_eight_hours": {
+    "message": "بێدەنگ کردن بۆ ماوەی 8 کاتژمێر"
+  },
+  "mute_for_one_day": {
+    "message": "بێدەنگ کردن بۆ ماوەی 1 ڕۆژ"
+  },
+  "mute_for_seven_days": {
+    "message": "بێدەنگ کردن بۆ ماوەی 7 ڕۆژ"
+  },
+  "mute_forever": {
+    "message": "بێدەنگ کردن بۆ هەمیشە"
+  },
+  "share_location_for_5_minutes": {
+    "message": "بۆ ماوەی 5 خولەک"
+  },
+  "share_location_for_30_minutes": {
+    "message": "بۆ ماوەی 30 خولەک"
+  },
+  "share_location_for_one_hour": {
+    "message": "بۆ ماوەی 1 کاتژمێر"
+  },
+  "share_location_for_two_hours": {
+    "message": "بۆ ماوەی 2 کاتژمێر"
+  },
+  "share_location_for_six_hours": {
+    "message": "بۆ ماوەی 6 کاتژمێر"
+  },
+  "file_saved_to": {
+    "message": "پەڕگەکە پاشەکەوت کرا لە \"%1$s\"."
+  },
+  "videochat": {
+    "message": "وتووێژی ڤیدیۆیی"
+  },
+  "videochat_invite_user_to_videochat": {
+    "message": "بانگهێشتی %1$s دەکەی بۆ وتووێژی ڤیدیۆیی؟"
+  },
+  "videochat_invite_user_hint": {
+    "message": "نەرمامێر یان وێبگەڕێکی گونجاو، لەلایەن هەردووکتانەوە، پێویستە."
+  },
+  "videochat_contact_invited_hint": {
+    "message": "%1$s بانگێشت کرا بۆ وتووێژی ڤیدیۆیی."
+  },
+  "videochat_you_invited_hint": {
+    "message": "بانگهێشت کراوی بۆ وتووێژێکی ڤیدیۆیی"
+  },
+  "videochat_tap_to_join": {
+    "message": "بۆ بەشدار بوون کرتە بکە."
+  },
+  "videochat_tap_to_open": {
+    "message": "بۆ کردنەوە کرتە بکە."
+  },
+  "videochat_instance": {
+    "message": "نموونەی وتووێژی ڤیدیۆیی"
+  },
+  "videochat_instance_placeholder": {
+    "message": "نموونەی وتووێژی ڤیدیۆییەکەت"
+  },
+  "videochat_instance_from_qr": {
+    "message": "%1$s بەکار دەهێنی بۆ بانگهێشتی کەسانی دیکە بۆ وتووێژی ڤیدیۆیی؟\n\n بەم چەشنە، دەتوانیت لە هەموو وتووێژێکی دووقۆڵیدا وتووێژێکی ڤیدیۆیی دەستپێبکەیت. ئەمە جێگای ڕێکخستنەکانی پێشووتر، لەسەر وتووێژی ڤیدیۆیی، دەگرێتەوە. ئەگەر ڕێکخستنێک بووبێت."
+  },
+  "videochat_invitation": {
+    "message": "بانگهێشتی وتووێژی ڤیدیۆیی"
+  },
+  "videochat_invitation_body": {
+    "message": "تۆ بانگهێشت کراوی بۆ وتووێژێکی ڤیدیۆیی، بۆ بەشدار بوون لەسەر %1$s کرتە بکە."
+  },
+  "ask_leave_group": {
+    "message": "دڵنیای دەتەوێت ئەم کۆڕە بەجێ بێڵیت؟"
+  },
+  "ask_forward": {
+    "message": "ئەو پەیامانە دەنێریت بۆ %1$s؟"
+  },
+  "ask_forward_multiple": {
+    "message": "ئەو پەیامانە دەنێریت بۆ نێو %1$dوتووێژ؟"
+  },
+  "ask_export_attachment": {
+    "message": "پێوەلکاوەکە هەناردە دەکەیت؟ هەناردەکردنی پێوەلکاوەکان وادەکات نەرمامێرەکانی دیکەی سەر مۆبایلەکەت بتوانن دەستیان بەو بەڵگە هەناردەکراوە بگات.\n\n بەردەوام دەبیت؟"
+  },
+  "ask_block_contact": {
+    "message": "ئەم بەردەنگە ئاستەنگ دەکەیت؟ ئیدی هیچ پەیامێک لەلایەن ئەم بەردەنگەوە بە تۆ ناگات."
+  },
+  "ask_unblock_contact": {
+    "message": "ئاستەنگ لەسەر ئەم بەردەنگە لادەبەیت؟ دیسان پەیامەکانی ئەم بەردەنگەت پێ دەگات."
+  },
+  "ask_delete_contacts": {
+    "message": "بەردەنگەکان دەسڕیتەوە؟\n\n ئەو بەردەنگانەی هێشتا وتووێژی چالاکتان پێکەوە هەیە و ئەو بەردەنگانەی کە لەنێو تێنووسی سیستەمدان، بۆ هەتاهەتایی ناسڕدرێنەوە."
+  },
+  "ask_delete_contact": {
+    "message": "%1$s لە بەردەنگەکانت دەسڕیتەوە؟ \n\n ئەو بەردەنگانەی هێشتا وتووێژی چالاکتان پێکەوە هەیە و ئەو بەردەنگانەی کە لەنێو تێنووسی سیستەمدان، بۆ هەتاهەتایی ناسڕدرێنەوە."
+  },
+  "ask_start_chat_with": {
+    "message": "وتووێژ لەگەڵ %1$s؟"
+  },
+  "ask_remove_members": {
+    "message": "%1$sلە کۆڕ دەخەیتەدەر؟"
+  },
+  "open_url_confirmation": {
+    "message": "دەتەوێت ئەم بەستەرە بکەیتەوە؟"
+  },
+  "contacts_title": {
+    "message": "بەردەنگەکان"
+  },
+  "contacts_enter_name_or_email": {
+    "message": "ناو یان ئیمەیل بنووسە"
+  },
+  "contacts_type_email_above": {
+    "message": "ئیمەیلەکە لە سەرەوە بنووسە"
+  },
+  "contacts_empty_hint": {
+    "message": "هیچ بەردەنگێک نییە"
+  },
+  "chat_archived_chats_title": {
+    "message": "وتووێژە ئەرشیڤکراوەکان"
+  },
+  "chat_please_enter_message": {
+    "message": "تکایە پەیامێک بنووسە"
+  },
+  "chat_camera_unavailable": {
+    "message": "کامێرا بەردەست نییە"
+  },
+  "chat_unable_to_record_audio": {
+    "message": "دەنگ تۆمار ناکرێ"
+  },
+  "chat_new_group_hint": {
+    "message": "پەیامی یەکەم بنێرە، ئیدی کەسانی دیکەش دەتوانن لەنێو ئەم کۆڕەدا وتووێژ بکەن. \n\n• کێشە نییە ئەگەر هەموو ئەندامان دێڵتا چات بەکارنەهێنن.\n\n• لەوانەیە گەیشتنی یەکەمین پەیام هەندێک کات ببات."
+  },
+  "chat_record_slide_to_cancel": {
+    "message": "بیخشێنە بۆ وازهێنان"
+  },
+  "chat_record_explain": {
+    "message": "کرتە بکە و دەست لەسەری ڕابگرە بۆ تۆمارکردنی پەیامێکی دەنگی، پاشان دەستبەردە بۆ هەناردنی."
+  },
+  "chat_no_chats_yet_title": {
+    "message": "هاتنگە بەتاڵە. \n \"+\" لێبدە بۆ دەستپێکی وتووێژێکی نوێ."
+  },
+  "chat_all_archived": {
+    "message": "هەموو وتووێژەکان ئەرشیڤ کران. \n بۆ دەستپێکردنی وتووێژێکی نوێ، \"+\" لێبدە."
+  },
+  "chat_share_with_title": {
+    "message": "هاوبەش کردن لەگەڵ"
+  },
+  "chat_input_placeholder": {
+    "message": "بنووسە"
+  },
+  "chat_archived_label": {
+    "message": "ئەرشیڤ کرا"
+  },
+  "chat_no_messages": {
+    "message": "هیچ پەیامێک نییە"
+  },
+  "chat_self_talk_subtitle": {
+    "message": "ئەو پەیامانەی ناردوومن بۆ خۆم"
+  },
+  "saved_messages": {
+    "message": "کانگای نامەکان"
+  },
+  "saved_messages_explain": {
+    "message": "• پەیامەکان بنێرە ئێرە تاکوو بەئاسانی لەبەردەست بن\n\n• ڕەشنووسی دەق یان دەنگی دابنە\n\n• ڕەنگاڵە پەیوەست بکە تاکوو پاشەکەوت بکرێن"
+  },
+  "saved": {
+    "message": "پاشەکەوت کرا"
+  },
+  "retry_send": {
+    "message": "دیسان هەوڵ بدەوە بۆ هەناردنی پەیامەکە"
+  },
+  "messaging_disabled_not_in_group": {
+    "message": "تۆ ناتوانیت لێرە بنووسیت چونکە لەم کۆڕەدا بەشدار نیت. بۆ بەشدار بوون لە ئەندامێکی کۆڕەکە داوابکە بەشدارت بکات."
+  },
+  "cannot_display_unsuported_file_type": {
+    "message": "ئەم چەشنە پەڕگەیە پیشان نادرێت: %s"
+  },
+  "attachment_failed_to_load": {
+    "message": "پێوەلکاوەکە دانەگیرا"
+  },
+  "mailing_list": {
+    "message": "لیستەی ئیمەیلەکان"
+  },
+  "filter_map_on_time": {
+    "message": "شوێنەکان لە نێو چوارچێوەی کاتدا پیشان بدرێت؟"
+  },
+  "show_location_traces": {
+    "message": "پیشاندانی شوێنپێ"
+  },
+  "search": {
+    "message": "گەڕان"
+  },
+  "search_explain": {
+    "message": "بگەڕە بۆ وتووێژەکان و بەردەنگەکان و پەیامەکان"
+  },
+  "search_no_result_for_x": {
+    "message": "هیچ ئەنجامێک نەدۆزرایەوە بۆ \"%s\""
+  },
+  "group_name": {
+    "message": "ناوی کۆڕ"
+  },
+  "group_avatar": {
+    "message": "وێنەی کۆڕ"
+  },
+  "remove_group_image": {
+    "message": "سڕینەوەی وێنەی کۆڕ"
+  },
+  "change_group_image": {
+    "message": "گۆڕینی ناوی کۆڕ"
+  },
+  "group_create_button": {
+    "message": "کۆڕێک درووست بکە"
+  },
+  "group_please_enter_group_name": {
+    "message": "تکایە ناوێک بنووسە بۆ کۆڕەکە."
+  },
+  "group_add_members": {
+    "message": "ئەندام زیاد بکە"
+  },
+  "group_self_not_in_group": {
+    "message": "بۆ ئەم کردارە دەبێت ئەندامی کۆڕەکە بیت."
+  },
+  "profile_encryption": {
+    "message": "شفرەکردن"
+  },
+  "profile_shared_chats": {
+    "message": "وتووێژە هاوبەشکراوەکان"
+  },
+  "tab_contact": {
+    "message": "بەردەنگ"
+  },
+  "tab_group": {
+    "message": "کۆڕ"
+  },
+  "tab_gallery": {
+    "message": "پیشانگە"
+  },
+  "tab_docs": {
+    "message": "بەڵگەکان"
+  },
+  "tab_links": {
+    "message": "بەستەرەکان"
+  },
+  "tab_map": {
+    "message": "نەخشە"
+  },
+  "tab_gallery_empty_hint": {
+    "message": "وێنە و ڤیدیۆ هاوبەشکراوەکانی نێو ئەم وتووێژە، لێرەدا پیشان دەدرێن."
+  },
+  "tab_docs_empty_hint": {
+    "message": "بەڵگە و مۆسیقا و هەموو پەڕگە هاوبەشکراوەکانی نێو ئەم وتووێژە، لێرەدا پیشان دەدرێن."
+  },
+  "media_preview": {
+    "message": "پێشدیتنی ڕەنگاڵە"
+  },
+  "send_message": {
+    "message": "پەیام بنێرە"
+  },
+  "login_title": {
+    "message": "بچۆ ژوورەوە"
+  },
+  "login_header": {
+    "message": "بچۆ ژوورەوە بۆ سێرڤێرەکەی خۆت"
+  },
+  "login_explain": {
+    "message": "بچۆ ژوورەوە بە ناونیشانی ئیمەیلێکەوە"
+  },
+  "login_subheader": {
+    "message": "بۆ دابینکەرە ناسراوەکانی ئیمەیلەکان، ڕێکخستنە زیادییەکان خۆکارانە ڕێکدەخرێن. هەندێجار دەبێت IMAP لەنێو ڕێکخستنەکانی وێبدا چالاک بکرێنەوە. بۆ ڕێنمایی وەرگرتن، لەگەڵ دابینکەری ئیمەیلەکەتان یان هاوڕێکانتان ڕاوێژ بکەن."
+  },
+  "login_no_servers_hint": {
+    "message": "دێڵتاچات هیچ سێرڤەرێکی نییە، داتاکانتان لەسەر ئامرێکەتان دەمێنێتەوە."
+  },
+  "login_inbox": {
+    "message": "هاتنگە"
+  },
+  "login_imap_login": {
+    "message": "ناوی چوونەژوورەوەی IMAP"
+  },
+  "login_imap_server": {
+    "message": "سێرڤەری IMAP"
+  },
+  "login_imap_port": {
+    "message": "پۆرتی IMAP"
+  },
+  "login_imap_security": {
+    "message": "ئاسایشی IMAP"
+  },
+  "login_outbox": {
+    "message": "ناردنگە"
+  },
+  "login_smtp_login": {
+    "message": "ناوی چوونەژوورەوەی SMTP"
+  },
+  "login_smtp_password": {
+    "message": "تێپەڕوشەی SMTP"
+  },
+  "login_smtp_server": {
+    "message": "سێرڤەری SMTP"
+  },
+  "login_smtp_port": {
+    "message": "پۆرتی SMTP"
+  },
+  "login_smtp_security": {
+    "message": "ئاسایشی SMTP"
+  },
+  "login_auth_method": {
+    "message": "شێوازی پشتڕاشتکردنەوە"
+  },
+  "login_info_oauth2_title": {
+    "message": "بە ڕێکخستنە ئاسانکراوەکەوە بەردەوام دەبیت؟"
+  },
+  "login_error_mail": {
+    "message": "تکایە ئیمەیلێکی ڕاست بنووسە"
+  },
+  "login_error_server": {
+    "message": "تکایە سێرڤەرێکی / شوێنەواری ئای پی ڕەوا بنووسە."
+  },
+  "login_error_port": {
+    "message": "تکایە پۆرتێکی (1-65535) درووست بنووسە"
+  },
+  "login_error_required_fields": {
+    "message": "تکایە ئیمەیلێکی درووست و تێپەڕوشەیەک بنووسە"
+  },
+  "import_backup_title": {
+    "message": "هاوردەکردنی یەدەک"
+  },
+  "import_backup_ask": {
+    "message": "یەدەکەکە لە \"%1$s\"دا دۆزرایەوە.\n\n دەتەوێت هەموو داتا و ڕێکخستنەکانی هاوردە بکەیت و بەکاریان بێنیت؟"
+  },
+  "import_backup_no_backup_found": {
+    "message": "هیچ یەدەکێک نەدۆزرایەوە.\n\n یەدەکەکە کۆپی بکە بۆ\"%1$s\" و دیسان هەوڵبدەوە. یان بۆ بەردەوامبوون لەسەر پرۆسەی ئاسایی دامەزراندنەکە، دەستبنە بە \"دەستپێکی نامەنووسین\"دا ."
+  },
+  "login_error_cannot_login": {
+    "message": "\"%1$s\" ناتوانێت بچێتە ژوورەوە. سەرنج بدە بزانە ئیمەیل و تێپەڕوشەکە درووستە."
+  },
+  "switch_account": {
+    "message": "گۆڕینی هەژمار"
+  },
+  "add_account": {
+    "message": "زیادکردنی هەژمار"
+  },
+  "delete_account": {
+    "message": "سڕینەوەی هەژمار"
+  },
+  "delete_account_ask": {
+    "message": "دڵنیای دەتەوێت داتاکانی هەژمارەکەت بسڕیتەوە؟"
+  },
+  "delete_account_explain_with_name": {
+    "message": "هەموو داتاکانی هەژماری \"%s\" لەسەر ئەم ئامێرەدا دەسڕدرێتەوە؛ هەموو ڕێکخستنەکانی شفرەی ئەمسەر-ئەوسەر و هەموو بەردەنگ و وتووێژ و پەیام و ڕەنگاڵەکان و ئیدی ناگەڕێنەوە."
+  },
+  "try_connect_now": {
+    "message": "هەوڵدان بۆ گرێدان"
+  },
+  "forward_to": {
+    "message": "هەناردن بۆ..."
+  },
+  "share_text_multiple_chats": {
+    "message": "ئەم دەقە دەنێریت بۆ %1$d وتووێژ؟n\n\"%2$s\""
+  },
+  "pref_using_custom": {
+    "message": "بەکارهێنانی دڵخواز: %s"
+  },
+  "pref_using_default": {
+    "message": "بەکارهێنانی بنەڕەتی: %s"
+  },
+  "pref_profile_info_headline": {
+    "message": "زانیارییەکانی پرۆفایلەکەت"
+  },
+  "pref_profile_photo": {
+    "message": "وێنەی لادیمەن"
+  },
+  "pref_blocked_contacts": {
+    "message": "هەژمارە ئاستەنگکراوەکان"
+  },
+  "blocked_empty_hint": {
+    "message": "ئەگەر هەژمارێک ئاستەنگ بکەیت، لێرەدا پیشان دەدرێت."
+  },
+  "pref_password_and_account_settings": {
+    "message": "هەژمار و تێپەڕوشە"
+  },
+  "pref_your_name": {
+    "message": "ناو"
+  },
+  "pref_default_status_label": {
+    "message": "دەقی واژۆ"
+  },
+  "pref_enter_sends": {
+    "message": "کلیلی \"ئینتەر\" بنێرێت"
+  },
+  "pref_enter_sends_explain": {
+    "message": "دەستنان بە کلیلی \"ئینتەر\"دا، پەیامەکان دەنێرێت."
+  },
+  "pref_outgoing_media_quality": {
+    "message": "چۆنێتی ڕەنگاڵە هەناردنییەکان"
+  },
+  "pref_outgoing_balanced": {
+    "message": "وەکوو خۆی"
+  },
+  "pref_outgoing_worse": {
+    "message": "نزمترین چۆنێتی، قەبارەی بچووک"
+  },
+  "pref_vibrate": {
+    "message": "لەرزینەوە"
+  },
+  "pref_screen_security": {
+    "message": "پاراستنی شاشە"
+  },
+  "pref_notifications": {
+    "message": "ئاگادارییەکان"
+  },
+  "pref_notifications_show": {
+    "message": "پیشاندان"
+  },
+  "pref_notifications_priority": {
+    "message": "پێشترێتی"
+  },
+  "pref_notifications_explain": {
+    "message": "وریاکەرەوەکانی سیستەم بۆ پەیامە نوێکان چالاک بکە"
+  },
+  "pref_show_notification_content": {
+    "message": "دەقی پەیامەکە لەنێو وریاکەرەوەکاندا پیشان بدە"
+  },
+  "pref_show_notification_content_explain": {
+    "message": "ناوی پەیامنێرەکە و وشە سەرەتاییەکانی دەقی پەیامەکە لەناو وریاکەرەوەکەدا پیشان بدە"
+  },
+  "pref_led_color": {
+    "message": "ڕەنگی چرای LED"
+  },
+  "pref_sound": {
+    "message": "دەنگ"
+  },
+  "pref_silent": {
+    "message": "بێدەنگ"
+  },
+  "pref_privacy": {
+    "message": "پاراستنی تاکەکەسی"
+  },
+  "pref_chats_and_media": {
+    "message": "وتووێژ و ڕەنگاڵەکان"
+  },
+  "pref_system_default": {
+    "message": "بنەڕەتی سیستەم"
+  },
+  "pref_light_theme": {
+    "message": "ڕووناک"
+  },
+  "pref_dark_theme": {
+    "message": "تاریک"
+  },
+  "pref_appearance": {
+    "message": "ڕوواڵەت"
+  },
+  "pref_theme": {
+    "message": "ڕووکار"
+  },
+  "pref_language": {
+    "message": "زمان"
+  },
+  "pref_incognito_keyboard": {
+    "message": "تەختەکلیلی شاراوە"
+  },
+  "pref_incognito_keyboard_explain": {
+    "message": "داخوازی بۆ ئەوەی کە تەختەکلیلەکە فێربوون و لەبەرگرتنەوەی نووسراوەکانت ناچالاک بکات."
+  },
+  "pref_read_receipts": {
+    "message": "وەرگرنامەی خوێندنەوە"
+  },
+  "pref_read_receipts_explain": {
+    "message": "ئەگەر \"وەرگرنامەی خوێندن\" ناچالاک بێت، ئیدی تۆش نایبینیت کە ئاخۆ کەسانی دی پەیامەکەتیان خوێندووەتەوە یان نا."
+  },
+  "pref_manage_keys": {
+    "message": "بەڕێوەبردنی کلیلەکان"
+  },
+  "pref_use_system_emoji": {
+    "message": "بەکارهێنانی وێنۆچکەکانی سیستەم"
+  },
+  "pref_use_system_emoji_explain": {
+    "message": "ئیمۆجییە ناوخۆییەکانی دێڵتا چات، ناچالاک دەبێتەوە."
+  },
+  "pref_app_access": {
+    "message": "ڕێگەپێدان"
+  },
+  "pref_chats": {
+    "message": "وتووێژەکان"
+  },
+  "pref_in_chat_sounds": {
+    "message": "دەنگەکانی نێو-وتووێژی"
+  },
+  "pref_other": {
+    "message": "کەسانی دی"
+  },
+  "pref_backup": {
+    "message": "یەدەک"
+  },
+  "pref_backup_explain": {
+    "message": "یەدەک گرتن لە وتووێژەکان و دانانی لەسەر بیرگەی دەرەکی"
+  },
+  "pref_backup_export_explain": {
+    "message": "یەدەک یارمەتیت دەدات تاکوو نەرمامێرەکە لەسەر ئەم ئامێرە یان ئامێرێکی دیکە دەبمەزرێنیتەوە.\n\n یەدەکەکە بریتی دەبێت لە هەموو پەیامەکان و بەردەنگەکان و وتووێژەکان و ڕێکخستنی ئۆتۆکریپتی ئەمسەر-ئەوسەر. پەڕگەی یەدەکەکە لە شوێنێکی قایمدا بپارێزە یان بە زووترین کات بیسڕەوە."
+  },
+  "pref_backup_export_start_button": {
+    "message": "دەستپێبکە"
+  },
+  "pref_backup_written_to_x": {
+    "message": "یەدەک بە سەرکەوتوویی لە \"%1$s\"دا  پاشەکەوت کرا."
+  },
+  "pref_managekeys_menu_title": {
+    "message": "بەڕێوەبردنی کلیلەکان"
+  },
+  "pref_managekeys_export_secret_keys": {
+    "message": "هەناردەکردنی کلیلە نهێنییەکان"
+  },
+  "pref_managekeys_export_explain": {
+    "message": "کلیلە نهێنییەکان دەنێریت بۆ \"%1$s\"؟"
+  },
+  "pref_managekeys_import_secret_keys": {
+    "message": "هاوردەکردنی کلیلە نهێنییەکان"
+  },
+  "pref_managekeys_secret_keys_exported_to_x": {
+    "message": "کلیلە نهێنییەکان لە \"%1$s\"دا پاشەکەوت کران."
+  },
+  "pref_managekeys_secret_keys_imported_from_x": {
+    "message": "کلیلە نهێنییەکان لە \"%1$s\" هاوردەکران."
+  },
+  "pref_background": {
+    "message": "پشتخان"
+  },
+  "pref_background_btn_default": {
+    "message": "بەکارهێنانی وێنەی بنەڕەتی"
+  },
+  "pref_background_btn_gallery": {
+    "message": "هەڵبژاردن لە پیشانگا"
+  },
+  "pref_watch_sent_folder": {
+    "message": "دیتنی بوخچەی هەنێردراوەکان"
+  },
+  "pref_send_copy_to_self": {
+    "message": "هەناردنی ڕوونووسێک بۆ خۆت"
+  },
+  "pref_auto_folder_moves": {
+    "message": "هەناردنی خۆکار بۆ بوخچەی دێڵتاچات"
+  },
+  "pref_show_emails": {
+    "message": "پیشاندانی ئیمەیلە کلاسیکەکان"
+  },
+  "pref_show_emails_no": {
+    "message": "نا، بەس چاتەکان"
+  },
+  "pref_show_emails_accepted_contacts": {
+    "message": "بۆ بەردەنگە پەسندکراوەکان"
+  },
+  "pref_show_emails_all": {
+    "message": "هەموو"
+  },
+  "pref_experimental_features": {
+    "message": "ئەو تایبەتمەندییانەی بۆ تاقی کردنەوەن"
+  },
+  "pref_background_default": {
+    "message": "پشتخانی بنەڕەتی"
+  },
+  "pref_background_default_color": {
+    "message": "ڕەنگی بنەڕەتی"
+  },
+  "pref_background_custom_image": {
+    "message": "وێنەی دڵخواز"
+  },
+  "pref_background_custom_color": {
+    "message": "ڕەنگی دڵخواز"
+  },
+  "export_aborted": {
+    "message": "هەناردەکردن ڕاوەستا"
+  },
+  "profile_image_select": {
+    "message": "هەڵبژاردنی وێنەی لادیمەن"
+  },
+  "select_your_new_profile_image": {
+    "message": "وێنەی لادیمەنە نوێکەت هەڵبژێرە"
+  },
+  "profile_image_delete": {
+    "message": "سڕینەوەی وێنەی لادیمەن"
+  },
+  "emoji_search_results": {
+    "message": "ئەنجامی گەڕان"
+  },
+  "emoji_not_found": {
+    "message": "هیچ وێنۆچکەیەک نەدۆزرایەوە"
+  },
+  "emoji_recent": {
+    "message": "دوایین بەکارهێنراوەکان"
+  },
+  "emoji_people": {
+    "message": "خەڵک & جەستە"
+  },
+  "emoji_nature": {
+    "message": "ئاژەڵان & سرووشت"
+  },
+  "emoji_foods": {
+    "message": "چێشت & خواردنەوە"
+  },
+  "emoji_activity": {
+    "message": "چالاکی"
+  },
+  "emoji_places": {
+    "message": "گەشتیاری & شوێنەکان"
+  },
+  "emoji_objects": {
+    "message": "شتومەک"
+  },
+  "emoji_symbols": {
+    "message": "هێماکان"
+  },
+  "emoji_flags": {
+    "message": "ئاڵاکان"
+  },
+  "delete_old_messages": {
+    "message": "سڕینەوەی پەیامە کۆنەکان"
+  },
+  "autodel_device_title": {
+    "message": "سڕینەوەی پەیامەکان لەسەر مۆبایەلەکت"
+  },
+  "autodel_server_title": {
+    "message": "سڕینەوەی پەیامەکان لەسەر سێرڤەر"
+  },
+  "autodel_confirm": {
+    "message": "تێگەیشتم، هەموو ئەم پەیامانە بسڕەوە"
+  },
+  "autodel_at_once": {
+    "message": "بەیەکجاری"
+  },
+  "after_30_seconds": {
+    "message": "پاش 30 چرکە"
+  },
+  "after_1_minute": {
+    "message": "پاش 1 خولەک"
+  },
+  "after_5_minutes": {
+    "message": "پاش 5 خولەک"
+  },
+  "after_30_minutes": {
+    "message": "پاش 30 خولەک"
+  },
+  "autodel_after_1_hour": {
+    "message": "پاش 1 کاتژمێر"
+  },
+  "autodel_after_1_day": {
+    "message": "پاش 1 ڕۆژ"
+  },
+  "autodel_after_1_week": {
+    "message": "پاش 1 حەوتە"
+  },
+  "after_5_weeks": {
+    "message": "پاش 5 حەوتە"
+  },
+  "autodel_after_1_year": {
+    "message": "پاش 1 ساڵ"
+  },
+  "autocrypt_send_asm_title": {
+    "message": "هەناردنی پەیامی ڕێکخستنی ئۆتۆکریپت"
+  },
+  "autocrypt_prefer_e2ee": {
+    "message": "هەڵبژاردنی شفرەکردنی ئەمسەر-ئەوسەر"
+  },
+  "autocrypt_asm_subject": {
+    "message": "پەیامی ڕێکخستنی ئۆتۆکریپت"
+  },
+  "systemmsg_unknown_sender_for_chat": {
+    "message": "پەیامنێری ئەم وتووێژە نەناسراوە. بۆ وردەکاری زۆرتر سەیری 'زانیارییەکان' بکە."
+  },
+  "systemmsg_subject_for_new_contact": {
+    "message": "پەیام لەلایەن %1$s"
+  },
+  "systemmsg_failed_sending_to": {
+    "message": "هەناردنی پەیام بۆ %1$s سەرنەکەوت"
+  },
+  "qr_code": {
+    "message": "کۆدی QR"
+  },
+  "load_qr_code_as_image": {
+    "message": "کۆدی QR وەکوو وێنەیەک بار بکە."
+  },
+  "qrscan_title": {
+    "message": "سکان کردنی کۆدی QR"
+  },
+  "qrscan_hint": {
+    "message": "کامێراکەت لەسەر کۆدی QRەکە ڕابگرە."
+  },
+  "qrscan_failed": {
+    "message": "کۆدی QR نەخوێندرایەوە."
+  },
+  "qrscan_ask_join_group": {
+    "message": "دەتوێت بەشداری کۆڕی \"%1$s\" ببیت؟"
+  },
+  "qrscan_contains_text": {
+    "message": "دەقی کۆدی QRە سکانکراوەکە:\n\n%1$s"
+  },
+  "qrscan_contains_url": {
+    "message": "ناونیشانی وێبی کۆدی QRە سکانکراوەکە:\n\n%1$s"
+  },
+  "qrscan_fingerprint_label": {
+    "message": "پەنجەمۆر"
+  },
+  "qrshow_title": {
+    "message": "کۆدی QRی بانگهێشت کردن"
+  },
+  "qrshow_x_joining": {
+    "message": "%1$s بەشداربوو"
+  },
+  "qrshow_x_verified": {
+    "message": "%1$s پشتڕاست کرایەوە"
+  },
+  "qrshow_x_has_joined_group": {
+    "message": "%1$s بەشداری کۆڕ بوو"
+  },
+  "qrshow_join_group_title": {
+    "message": "کۆدی QRی بانگهێشت کردن"
+  },
+  "qrshow_join_group_hint": {
+    "message": "بۆ بەشداربوون لە کۆڕ ئەمە سکان بکە: \"%1$s\""
+  },
+  "qrshow_join_contact_title": {
+    "message": "کۆدی QRی بانگهێشت کردن"
+  },
+  "qrshow_join_contact_hint": {
+    "message": "بۆ ڕێکخستنی پێوەندی لەگەڵ %1$s، ئەم کۆدە سکان بکە. "
+  },
+  "qrshow_join_contact_no_connection_toast": {
+    "message": "هێڵی ئینتەرنێت بەردەست نییە، ڕێکخستنی کۆدی QR جێبەجێ ناکرێ."
+  },
+  "qraccount_ask_create_and_login": {
+    "message": "دەتەوێت ناونیشانی ئیمەیلێکی نوێ لەسەر \"%1$s\" درووست بکەیت و لەوێ بچیتە ژوورەوە؟"
+  },
+  "qraccount_qr_code_cannot_be_used": {
+    "message": "ناتوانی لە کۆدی QRە سکان کراوەکە کەڵک بگریت بۆ پێکهێنانی هەژمارێکی نوێ."
+  },
+  "contact_verified": {
+    "message": "%1$s پشتڕاست کرایەوە"
+  },
+  "contact_not_verified": {
+    "message": "%1$s پشتڕاست ناکرێتەوە."
+  },
+  "contact_setup_changed": {
+    "message": "ڕێکخستن بۆ %1$s گۆڕا."
+  },
+  "copy_qr_data_success": {
+    "message": "ناونیشانی وێبی QRەکە ڕوونووس کرا."
+  },
+  "notify_reply_button": {
+    "message": "وەڵام دانەوە"
+  },
+  "notify_new_message": {
+    "message": "پەیامی نوێ"
+  },
+  "notify_background_connection_enabled": {
+    "message": "پەیوەندی پشتخان چالاک کرا"
+  },
+  "notify_priority_high": {
+    "message": "زۆر"
+  },
+  "notify_priority_max": {
+    "message": "زۆرترین"
+  },
+  "notify_name_and_message": {
+    "message": "ناو و پەیام"
+  },
+  "notify_name_only": {
+    "message": "بەس ناو"
+  },
+  "notify_no_name_or_message": {
+    "message": "نە ناو و نە پەیام"
+  },
+  "perm_required_title": {
+    "message": "ڕێدان پێویستە"
+  },
+  "perm_continue": {
+    "message": "بەردەوامبوون"
+  },
+  "perm_explain_access_to_camera_denied": {
+    "message": "بۆ فلیم و وێنە گرتن، بچۆ بەشی ڕێکخستنەکانی نەرمامێرەکە، لە بەشی \"ڕێگەپێدان\"دا، \"کامێرا\" چالاک بکەوە."
+  },
+  "perm_explain_access_to_mic_denied": {
+    "message": "بۆ هەناردنی پەیامی دەنگی، بچۆ بەشی ڕێکخستنەکانی نەرمامێرەکە، لە بەشی \"ڕێگەپێدان\"دا، \"مایک\" چالاک بکەوە."
+  },
+  "perm_explain_access_to_storage_denied": {
+    "message": "بۆ هەناردن و وەرگرتنی پەڕگەکان، بچۆ بەشی ڕێکخستنەکانی نەرمامێرەکە، لە بەشی \"ڕێگەپێدان\"دا، \"بیرگە\" چالاک بکەوە."
+  },
+  "perm_explain_access_to_location_denied": {
+    "message": "بۆ لکاندنی شوێنێک، بچۆ بەشی ڕێکخستنەکانی نەرمامێرەکە، لە بەشی \"ڕێگەپێدان\"دا، \"شوێن\" چالاک بکەوە."
+  },
+  "encrypted_message": {
+    "message": "پەیامی شفرەکراو"
+  },
+  "about_offical_app_desktop": {
+    "message": "ئەمە نەرمامێری فەرمی دێڵتا چاتە بۆ کۆمپووتەری ڕوومێز."
+  },
+  "welcome_desktop": {
+    "message": "بەخێر بێن بۆ دێڵتا چات"
+  },
+  "global_menu_preferences_language_desktop": {
+    "message": "زمان"
+  },
+  "global_menu_file_desktop": {
+    "message": "پەڕگە"
+  },
+  "global_menu_file_quit_desktop": {
+    "message": "چوونەدەرەوە"
+  },
+  "global_menu_edit_desktop": {
+    "message": "دەستکاری کردن"
+  },
+  "global_menu_edit_undo_desktop": {
+    "message": "گەڕاندنەوە"
+  },
+  "global_menu_edit_redo_desktop": {
+    "message": "هێنانەوە"
+  },
+  "global_menu_edit_cut_desktop": {
+    "message": "بڕین"
+  },
+  "global_menu_edit_copy_desktop": {
+    "message": "ڕوونووس"
+  },
+  "global_menu_edit_paste_desktop": {
+    "message": "لکاندن"
+  },
+  "global_menu_view_desktop": {
+    "message": "دیتن"
+  },
+  "global_menu_help_desktop": {
+    "message": "یارمەتی"
+  },
+  "global_menu_help_report_desktop": {
+    "message": "کێشەیەک گوزارشت بکە"
+  },
+  "global_menu_help_about_desktop": {
+    "message": "سەبارەت بە دێڵتا چات"
+  },
+  "no_chat_selected_suggestion_desktop": {
+    "message": "وتووێژێک هەڵبژێرە یان وتووێژێکی نوێ درووست بکە"
+  },
+  "write_message_desktop": {
+    "message": "پەیامێک بنووسە"
+  },
+  "encryption_info_title_desktop": {
+    "message": "زانیاری شفرەکردن"
+  },
+  "delete_message_desktop": {
+    "message": "سڕینەوەی پەیام"
+  },
+  "more_info_desktop": {
+    "message": "زانیاری زۆرتر"
+  },
+  "remove_desktop": {
+    "message": "سڕینەوە"
+  },
+  "save_desktop": {
+    "message": "پاشەکەوت کردن"
+  },
+  "name_desktop": {
+    "message": "ناو"
+  },
+  "select_group_image_desktop": {
+    "message": "هەڵبژاردنی وێنەی کۆڕ"
+  },
+  "export_backup_desktop": {
+    "message": "هەناردەکردنی یەدەک"
+  },
+  "message_detail_sent_desktop": {
+    "message": "هەنێردراو"
+  },
+  "message_detail_received_desktop": {
+    "message": "وەرگیراو"
+  },
+  "a11y_delivery_status_error": {
+    "message": "دۆخی گەیشتن: هەڵە"
+  },
+  "a11y_encryption_padlock": {
+    "message": "قفڵی شفرەکردن"
+  },
+  "a11y_delivery_status_sending": {
+    "message": "دۆخی گەیشتن: هەناردن"
+  },
+  "a11y_delivery_status_draft": {
+    "message": "دۆخی گەیشتن: ڕەشنووس"
+  },
+  "a11y_delivery_status_delivered": {
+    "message": "دۆخی گەیشتن: گەیشت"
+  },
+  "a11y_delivery_status_read": {
+    "message": "دۆخی گەیشتن: خوێندرایەوە"
+  },
+  "a11y_delivery_status_invalid": {
+    "message": "دۆخی گەیشتن ناڕەوایە"
+  },
+  "a11y_message_context_menu_btn_label": {
+    "message": "چالاکییەکانی پەیام"
+  },
+  "a11y_disappearing_messages_activated": {
+    "message": "پەیامە خۆشارەوەکان چالاک کرا"
+  },
+  "InfoPlist_NSCameraUsageDescription": {
+    "message": "دێڵتا چات بۆ گرتن و هەناردنی وێنە و فلیم و سکان کردنی کۆدی QR، کامێراکەت بەکاردەهێنێت."
+  },
+  "InfoPlist_NSContactsUsageDescription": {
+    "message": "دێڵتا چات لە بەردەنگەکانت کەڵک دەگرێت بۆ ئەوەی لیستەیەک لە ئیمەیلەکانت پیشان بدات کە دەتوانیت نامەیان بۆ بنێریت. دێڵتا چات هیچ سێرڤەرێکی نییە و بەردەنگەکانت بۆ هیچ کوێ نانێردرێن."
+  },
+  "InfoPlist_NSMicrophoneUsageDescription": {
+    "message": "دێڵتا چات بۆ تۆمار کردن و هەناردنی دەنگ و هەروەها ڤیدیۆی دەنگدار، مایکەکەت بەکاردەهێنێت."
+  },
+  "InfoPlist_NSPhotoLibraryUsageDescription": {
+    "message": "دێڵتا چات ڕێگە دەدات خۆت هەڵیبژێری کە کام وێنە لە پیشانگاکەتەوە بنێردرێت."
+  },
+  "InfoPlist_NSPhotoLibraryAddUsageDescription": {
+    "message": "دێڵتا چات دەیەوێت وێنە پاشەکەوت بکاتە نێو پیشانگاکەت."
+  },
+  "perm_enable_bg_reminder_title": {
+    "message": "بۆ وەرگرتنی پەیامەکان لەو کاتانەدا کە دێڵتا چات لە پشتخانەوەیە، لێرە کرتە بکە."
+  },
+  "perm_enable_bg_already_done": {
+    "message": "تۆ ئێستا ڕێگەت بە دێڵتا چات دا کە لە پشتخانەوە پەیامەکان وەربگرێت.\n\n ئەگەر هێشتا لە پشخاندا پەیامەکان نایەن، سەرنجێکیش لە ڕێکخستنەکانی سیستەم بدەوە."
+  },
+  "n_minutes": {
+    "one": "%dخولەک",
+    "other": "%dخولەک"
+  },
+  "n_hours": {
+    "one": "%dکاتژمێر",
+    "other": "%dکاتژمێر"
+  },
+  "n_chats": {
+    "one": "%dوتووێژ",
+    "other": "%dوتووێژ"
+  },
+  "n_contacts": {
+    "one": "%dبەردەنگ",
+    "other": "%dبەردەنگ"
+  },
+  "n_messages": {
+    "one": "%dپەیام",
+    "other": "%dپەیام"
+  },
+  "n_members": {
+    "one": "%dئەندام",
+    "other": "%dئەندام"
+  },
+  "ask_send_following_n_files_to": {
+    "one": "ئەم پەڕگەیە دەنێریت بۆ %s؟",
+    "other": "ئەم %d پەڕگەیە دەنێریت بۆ %s؟"
+  },
+  "chat_archived": {
+    "one": "%dوتووێژ ئەرشیڤ کرا",
+    "other": "%d وتووێژ ئەرشیڤ کران"
+  },
+  "chat_unarchived": {
+    "one": "%d وتووێژ لە ئەرشیڤ دەرهێنرا",
+    "other": "%d وتووێژ لە ئەرشیڤ دەرهێنران"
+  },
+  "chat_n_new_messages": {
+    "one": "%d پەیامی نوێ",
+    "other": "%d پەیامی نوێ"
+  }
+}

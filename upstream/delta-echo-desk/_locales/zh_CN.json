@@ -1,0 +1,2648 @@
+{
+  "app_name": {
+    "message": "Delta Chat"
+  },
+  "ok": {
+    "message": "确定"
+  },
+  "cancel": {
+    "message": "取消"
+  },
+  "clear_search": {
+    "message": "清除搜索"
+  },
+  "link": {
+    "message": "链接"
+  },
+  "scan": {
+    "message": "扫描"
+  },
+  "yes": {
+    "message": "是"
+  },
+  "no": {
+    "message": "否"
+  },
+  "select": {
+    "message": "选择"
+  },
+  "on": {
+    "message": "开"
+  },
+  "off": {
+    "message": "关"
+  },
+  "def": {
+    "message": "默认"
+  },
+  "default_value": {
+    "message": "默认值（%1$s）"
+  },
+  "default_value_as_above": {
+    "message": "默认值（与上面相同）"
+  },
+  "custom": {
+    "message": "自定义"
+  },
+  "none": {
+    "message": "无"
+  },
+  "automatic": {
+    "message": "自动"
+  },
+  "strict": {
+    "message": "严格"
+  },
+  "open": {
+    "message": "打开"
+  },
+  "download": {
+    "message": "下载"
+  },
+  "downloading": {
+    "message": "下载中…"
+  },
+  "open_attachment": {
+    "message": "打开附件"
+  },
+  "join": {
+    "message": "加入"
+  },
+  "rejoin": {
+    "message": "重新加入"
+  },
+  "delete": {
+    "message": "删除"
+  },
+  "delete_for_me": {
+    "message": "为我删除"
+  },
+  "delete_for_everyone": {
+    "message": "为所有人删除"
+  },
+  "info": {
+    "message": "信息"
+  },
+  "update": {
+    "message": "更新"
+  },
+  "emoji": {
+    "message": "Emoji"
+  },
+  "attachment": {
+    "message": "附件"
+  },
+  "back": {
+    "message": "返回"
+  },
+  "close": {
+    "message": "关闭"
+  },
+  "close_window": {
+    "message": "关闭窗口"
+  },
+  "forward": {
+    "message": "转发"
+  },
+  "create": {
+    "message": "创建"
+  },
+  "reset": {
+    "message": "重置"
+  },
+  "later": {
+    "message": "稍后"
+  },
+  "resend": {
+    "message": "重新发送"
+  },
+  "edited": {
+    "message": "已编辑"
+  },
+  "edit_message": {
+    "message": "编辑消息"
+  },
+  "archive": {
+    "message": "归档"
+  },
+  "unarchive": {
+    "message": "取消归档"
+  },
+  "mute": {
+    "message": "静音"
+  },
+  "muted": {
+    "message": "已静音"
+  },
+  "ephemeral_messages": {
+    "message": "消息定时销毁"
+  },
+  "ephemeral_messages_hint": {
+    "message": "适用于此聊天内使用 Delta Chat 的所有成员；这些成员仍然可以复制、保存和转发消息，或使用其他电子邮件客户端。"
+  },
+  "save": {
+    "message": "保存"
+  },
+  "chat": {
+    "message": "聊天"
+  },
+  "media": {
+    "message": "媒体"
+  },
+  "profile": {
+    "message": "账号"
+  },
+  "main_menu": {
+    "message": "主菜单"
+  },
+  "start_chat": {
+    "message": "开始聊天"
+  },
+  "show_full_message": {
+    "message": "显示完整消息…"
+  },
+  "mark_all_as_read": {
+    "message": "将所有标记为已读"
+  },
+  "mark_as_read": {
+    "message": "标记为已读"
+  },
+  "mark_as_read_short": {
+    "message": "已读"
+  },
+  "loading": {
+    "message": "加载中…"
+  },
+  "hide": {
+    "message": "隐藏"
+  },
+  "activate": {
+    "message": "激活"
+  },
+  "load_remote_content": {
+    "message": "加载远程图像"
+  },
+  "load_remote_content_ask": {
+    "message": "远程图像可以被用于追踪您。\n\n该设置可能还会加载字体以及其他内容。禁用状态下，您仍可能会看到嵌入的图像和缓存中的图像。\n\n要加载远程图像吗？"
+  },
+  "always": {
+    "message": "总是"
+  },
+  "always_load_remote_images": {
+    "message": "始终加载远程图像"
+  },
+  "once": {
+    "message": "仅一次"
+  },
+  "show_warning": {
+    "message": "显示警告"
+  },
+  "show_password": {
+    "message": "显示密码"
+  },
+  "hide_password": {
+    "message": "隐藏密码"
+  },
+  "not_now": {
+    "message": "现在不"
+  },
+  "never": {
+    "message": "从不"
+  },
+  "one_moment": {
+    "message": "稍等片刻…"
+  },
+  "done": {
+    "message": "已完成"
+  },
+  "undo": {
+    "message": "撤销"
+  },
+  "offline": {
+    "message": "离线"
+  },
+  "next": {
+    "message": "下一步"
+  },
+  "error": {
+    "message": "错误"
+  },
+  "error_x": {
+    "message": "错误：%1$s"
+  },
+  "no_app_to_handle_data": {
+    "message": "找不到用于处理此类数据的应用。"
+  },
+  "no_browser_installed": {
+    "message": "没有安装浏览器。"
+  },
+  "file_not_found": {
+    "message": "无法找到 %1$s。"
+  },
+  "copied_to_clipboard": {
+    "message": "已复制到剪贴板。"
+  },
+  "contacts_headline": {
+    "message": "联系人"
+  },
+  "email_address": {
+    "message": "电子邮件地址"
+  },
+  "bad_email_address": {
+    "message": "错误的电子邮件地址。"
+  },
+  "password": {
+    "message": "密码"
+  },
+  "existing_password": {
+    "message": "现有密码"
+  },
+  "now": {
+    "message": "现在"
+  },
+  "danger": {
+    "message": "危险"
+  },
+  "today": {
+    "message": "今天"
+  },
+  "yesterday": {
+    "message": "昨天"
+  },
+  "this_week": {
+    "message": "本周"
+  },
+  "this_month": {
+    "message": "本月"
+  },
+  "last_week": {
+    "message": "上周"
+  },
+  "last_month": {
+    "message": "上个月"
+  },
+  "last_seen_at": {
+    "message": "最后上线于：%1$s"
+  },
+  "last_seen_relative": {
+    "message": "最后上线 %1$s"
+  },
+  "last_seen_unknown": {
+    "message": "最后上线：未知"
+  },
+  "self": {
+    "message": "我"
+  },
+  "draft": {
+    "message": "草稿"
+  },
+  "image": {
+    "message": "图像"
+  },
+  "reply_noun": {
+    "message": "回复"
+  },
+  "gif": {
+    "message": "Gif"
+  },
+  "sticker": {
+    "message": "贴纸"
+  },
+  "add_to_sticker_collection": {
+    "message": "添加到贴纸收藏集"
+  },
+  "add_stickers_instructions": {
+    "message": "要添加贴纸，请点击“打开贴纸文件夹”，为贴纸包创建一个子文件夹，然后将图片和贴纸文件拖动到那里"
+  },
+  "open_sticker_folder": {
+    "message": "打开贴纸文件夹"
+  },
+  "images": {
+    "message": "图像"
+  },
+  "audio": {
+    "message": "音频"
+  },
+  "voice_message": {
+    "message": "语音消息"
+  },
+  "forwarded": {
+    "message": "转发了"
+  },
+  "forwarded_message": {
+    "message": "转发的消息"
+  },
+  "forwarded_by": {
+    "message": "转发人 %1$s"
+  },
+  "video": {
+    "message": "视频"
+  },
+  "documents": {
+    "message": "文档"
+  },
+  "contact": {
+    "message": "联系人"
+  },
+  "bot": {
+    "message": "机器人"
+  },
+  "camera": {
+    "message": "相机"
+  },
+  "capture": {
+    "message": "捕获"
+  },
+  "switch_camera": {
+    "message": "切换摄像头"
+  },
+  "toggle_fullscreen": {
+    "message": "切换全屏模式"
+  },
+  "location": {
+    "message": "位置"
+  },
+  "locations": {
+    "message": "位置"
+  },
+  "gallery": {
+    "message": "图库"
+  },
+  "images_and_videos": {
+    "message": "图像和视频"
+  },
+  "file": {
+    "message": "文件"
+  },
+  "files": {
+    "message": "文件"
+  },
+  "webxdc_app": {
+    "message": "私人应用"
+  },
+  "webxdc_apps": {
+    "message": "私人应用"
+  },
+  "webxdc_store_url": {
+    "message": "\"应用选择器“ URL"
+  },
+  "webxdc_store_url_explain": {
+    "message": "设置后，该 URL 而不是默认的 URL 将被用作“应用选择器”"
+  },
+  "home": {
+    "message": "首页"
+  },
+  "games": {
+    "message": "游戏"
+  },
+  "tools": {
+    "message": "工具"
+  },
+  "app_size": {
+    "message": "尺寸"
+  },
+  "app_date_published": {
+    "message": "已发布"
+  },
+  "add_to_chat": {
+    "message": "添加到聊天"
+  },
+  "browse": {
+    "message": "浏览"
+  },
+  "unknown": {
+    "message": "未知"
+  },
+  "green": {
+    "message": "绿色"
+  },
+  "red": {
+    "message": "红色"
+  },
+  "blue": {
+    "message": "蓝色"
+  },
+  "orange": {
+    "message": "橘黄色"
+  },
+  "cyan": {
+    "message": "蓝绿色"
+  },
+  "purple": {
+    "message": "紫色"
+  },
+  "magenta": {
+    "message": "洋红色"
+  },
+  "white": {
+    "message": "白色"
+  },
+  "zoom": {
+    "message": "缩放"
+  },
+  "extra_small": {
+    "message": "特小"
+  },
+  "small": {
+    "message": "小"
+  },
+  "normal": {
+    "message": "正常"
+  },
+  "large": {
+    "message": "大"
+  },
+  "extra_large": {
+    "message": "特大"
+  },
+  "fast": {
+    "message": "快"
+  },
+  "slow": {
+    "message": "慢"
+  },
+  "menu_new_contact": {
+    "message": "新建联系人"
+  },
+  "menu_new_classic_contact": {
+    "message": "手动添加联系人"
+  },
+  "new_classic_contact_explain": {
+    "message": "手动添加的联系人可用于向传统电子邮件发送文本，并且不能保证端到端加密。"
+  },
+  "menu_new_chat": {
+    "message": "新建聊天"
+  },
+  "menu_new_group": {
+    "message": "新建群组"
+  },
+  "chat_with": {
+    "message": "聊天…"
+  },
+  "clone_chat": {
+    "message": "克隆聊天"
+  },
+  "broadcast_list": {
+    "message": "广播列表"
+  },
+  "broadcast_lists": {
+    "message": "广播列表"
+  },
+  "new_broadcast_list": {
+    "message": "新建广播列表"
+  },
+  "add_recipients": {
+    "message": "添加接收者"
+  },
+  "edit_broadcast_list": {
+    "message": "编辑广播列表"
+  },
+  "broadcast_list_name": {
+    "message": "广播列表名称"
+  },
+  "please_enter_broadcast_list_name": {
+    "message": "请属于广播列表的名称"
+  },
+  "menu_send": {
+    "message": "发送"
+  },
+  "menu_toggle_keyboard": {
+    "message": "切换 emoji 键盘"
+  },
+  "menu_edit_group": {
+    "message": "编辑群组"
+  },
+  "menu_group_name_and_image": {
+    "message": "群组名称和图像"
+  },
+  "menu_show_global_map": {
+    "message": "显示所有位置"
+  },
+  "menu_archive_chat": {
+    "message": "归档聊天"
+  },
+  "menu_unarchive_chat": {
+    "message": "取消归档聊天"
+  },
+  "menu_add_attachment": {
+    "message": "添加附件"
+  },
+  "menu_leave_group": {
+    "message": "离开群组"
+  },
+  "menu_delete_chat": {
+    "message": "删除聊天"
+  },
+  "clear_chat": {
+    "message": "清空聊天记录"
+  },
+  "delete_contact": {
+    "message": "删除联系人"
+  },
+  "menu_delete_location": {
+    "message": "删除此位置？"
+  },
+  "menu_message_details": {
+    "message": "消息详情"
+  },
+  "menu_copy_to_clipboard": {
+    "message": "复制到剪贴板"
+  },
+  "share_invite_link": {
+    "message": "分享邀请链接"
+  },
+  "share_invite_link_explain": {
+    "message": "任何有此链接的人都可查看你的个人资料并开始和你聊天。请只和你信任的人分享它。"
+  },
+  "invite_friends": {
+    "message": "邀请好友"
+  },
+  "invite_friends_text": {
+    "message": "在 Delta Chat 上联系我：\n%1$s"
+  },
+  "menu_copy_selection_to_clipboard": {
+    "message": "复制所选内容"
+  },
+  "menu_copy_link_to_clipboard": {
+    "message": "复制链接"
+  },
+  "menu_copy_text_to_clipboard": {
+    "message": "复制文本"
+  },
+  "menu_copy_image_to_clipboard": {
+    "message": "复制图像"
+  },
+  "menu_copy_email_to_clipboard": {
+    "message": "复制电子邮件"
+  },
+  "paste_from_clipboard": {
+    "message": "从剪贴板粘贴"
+  },
+  "ask_copy_unopenable_link_to_clipboard": {
+    "message": "无法在浏览器中打开链接 “%1$d”。你要将链接复制到剪贴板吗？"
+  },
+  "menu_forward": {
+    "message": "转发消息"
+  },
+  "menu_reply": {
+    "message": "回复消息"
+  },
+  "menu_mute": {
+    "message": "通知静音"
+  },
+  "menu_unmute": {
+    "message": "取消静音"
+  },
+  "menu_export_attachment": {
+    "message": "导出附件"
+  },
+  "menu_export_attachments": {
+    "message": "导出附件"
+  },
+  "menu_all_media": {
+    "message": "所有媒体"
+  },
+  "show_in_chat": {
+    "message": "在聊天中显示"
+  },
+  "show_app_in_chat": {
+    "message": "在聊天中显示应用"
+  },
+  "menu_share": {
+    "message": "分享"
+  },
+  "block": {
+    "message": "屏蔽"
+  },
+  "menu_block_contact": {
+    "message": "屏蔽联系人"
+  },
+  "menu_unblock_contact": {
+    "message": "取消屏蔽联系人"
+  },
+  "accept": {
+    "message": "接受"
+  },
+  "menu_play": {
+    "message": "播放"
+  },
+  "menu_pause": {
+    "message": "暂停"
+  },
+  "menu_scroll_to_bottom": {
+    "message": "滚动至底部"
+  },
+  "menu_scroll_to_top": {
+    "message": "滚动至顶部"
+  },
+  "menu_help": {
+    "message": "帮助"
+  },
+  "what_is_webxdc": {
+    "message": "Webxdc 是什么？"
+  },
+  "privacy_policy": {
+    "message": "隐私政策"
+  },
+  "menu_select_all": {
+    "message": "全选"
+  },
+  "select_chat": {
+    "message": "选择聊天"
+  },
+  "select_more": {
+    "message": "选择更多"
+  },
+  "menu_edit_name": {
+    "message": "编辑名称"
+  },
+  "edit_name_explain": {
+    "message": "设置将显示给您的昵称，而不是“%1$s”。留空可使用联系人选择的名称。"
+  },
+  "edit_name_placeholder": {
+    "message": "“%1$s”的昵称"
+  },
+  "menu_settings": {
+    "message": "设置"
+  },
+  "menu_advanced": {
+    "message": "高级"
+  },
+  "menu_view_profile": {
+    "message": "查看账号"
+  },
+  "menu_zoom_in": {
+    "message": "放大"
+  },
+  "menu_zoom_out": {
+    "message": "缩小"
+  },
+  "menu_save_log": {
+    "message": "保存日志"
+  },
+  "menu_more_options": {
+    "message": "更多选项"
+  },
+  "menu_learn_spelling": {
+    "message": "学习拼写"
+  },
+  "menu_chat_audit_log": {
+    "message": "聊天审计日志"
+  },
+  "jump_to_message": {
+    "message": "跳转到消息"
+  },
+  "jump_to_original_message": {
+    "message": "跳转到原始消息"
+  },
+  "copy_json": {
+    "message": "复制 JSON"
+  },
+  "replace_draft": {
+    "message": "替换草稿"
+  },
+  "title_share_location": {
+    "message": "与所有群组成员共享位置"
+  },
+  "device_talk": {
+    "message": "设备消息"
+  },
+  "device_talk_subtitle": {
+    "message": "本地生成的消息"
+  },
+  "device_talk_explain": {
+    "message": "此聊天中的消息是由 Delta Chat 应用本地生成的。 它的制作者使用它来通知应用更新和使用过程中出现的问题。"
+  },
+  "device_talk_welcome_message2": {
+    "message": "取得联系！\n\n🙌 轻按两台设备主屏上的“二维码”。 在其中一台设备上选择“扫描二维码”，并将其对准另一台设备上显示的二维码\n\n🌍 如果双方不在同一个房间内，可以通过视频通话进行扫描，或从“扫描二维码”那里分享一个邀请链接\n\n接下来： 通过有史以来存在的最大去中心化网络：电子邮件来享受收发消息。和其他流行的即时聊天应用相比，DeltaChat 没有中央控制，不跟踪您本人、您的好友、同事或家人，也不售卖你们的数据给大型组织。"
+  },
+  "edit_contact": {
+    "message": "编辑联系人"
+  },
+  "pin_chat": {
+    "message": "固定聊天"
+  },
+  "unpin_chat": {
+    "message": "取消固定聊天"
+  },
+  "pin": {
+    "message": "固定"
+  },
+  "unpin": {
+    "message": "取消固定"
+  },
+  "ConversationFragment_quoted_message_not_found": {
+    "message": "原消息未找到"
+  },
+  "reply_privately": {
+    "message": "私下回复"
+  },
+  "source_code": {
+    "message": "源代码"
+  },
+  "add_to_home_screen": {
+    "message": "添加到主屏幕"
+  },
+  "donate": {
+    "message": "捐赠"
+  },
+  "mute_for_one_hour": {
+    "message": "静音 1 小时"
+  },
+  "mute_for_eight_hours": {
+    "message": "静音 8 小时"
+  },
+  "mute_for_one_day": {
+    "message": "静音 1 天"
+  },
+  "mute_for_seven_days": {
+    "message": "静音 7 天"
+  },
+  "mute_forever": {
+    "message": "永久静音"
+  },
+  "share_location_for_5_minutes": {
+    "message": "5 分钟"
+  },
+  "share_location_for_30_minutes": {
+    "message": "30 分钟"
+  },
+  "share_location_for_one_hour": {
+    "message": "1 小时"
+  },
+  "share_location_for_two_hours": {
+    "message": "2 小时"
+  },
+  "share_location_for_six_hours": {
+    "message": "6 小时"
+  },
+  "file_saved_to": {
+    "message": "文件已保存到 “%1$s”。"
+  },
+  "videochat": {
+    "message": "视频聊天"
+  },
+  "videochat_invite_user_to_videochat": {
+    "message": "邀请 %1$s 参加视频聊天？"
+  },
+  "videochat_invite_user_hint": {
+    "message": "需要双方均装有兼容的应用或浏览器。"
+  },
+  "videochat_contact_invited_hint": {
+    "message": "%1$s 发出了视频聊天邀请。"
+  },
+  "videochat_you_invited_hint": {
+    "message": "您发出了视频聊天邀请。"
+  },
+  "videochat_tap_to_join": {
+    "message": "点击来加入"
+  },
+  "videochat_tap_to_open": {
+    "message": "点击来打开"
+  },
+  "videochat_instance": {
+    "message": "视频聊天实例"
+  },
+  "videochat_instance_placeholder": {
+    "message": "您的视频聊天实例"
+  },
+  "videochat_instance_example": {
+    "message": "示例： https://meet.jit.si/$ROOM 或 basicwebrtc:https://your-server"
+  },
+  "videochat_instance_explain_2": {
+    "message": "启用视频聊天后，您便可以在所有聊天中发起视频聊天。需要双方均装有兼容的应用或浏览器。"
+  },
+  "videochat_instance_from_qr": {
+    "message": "使用“%1$s”邀请其他人参加视频聊天吗？\n\n设置好后，您就可以在聊天里发起视频聊天了。 这会取代之前的视频聊天设置。"
+  },
+  "videochat_invitation": {
+    "message": "视频聊天邀请"
+  },
+  "videochat_invitation_body": {
+    "message": "您被邀请参加视频聊天，点击 %1$s 来加入。"
+  },
+  "ask_leave_group": {
+    "message": "您确定要离开此群组吗？"
+  },
+  "ask_delete_named_chat": {
+    "message": "是否删除所有设备上的聊天“%1$s”？"
+  },
+  "ask_delete_message": {
+    "message": "是否在所有设备上删除此消息？"
+  },
+  "ask_forward": {
+    "message": "将消息转发给 %1$s？"
+  },
+  "ask_forward_multiple": {
+    "message": "转发消息到 %1$d 个聊天？"
+  },
+  "ask_export_attachment": {
+    "message": "导出附件将允许您设备上的其他应用程序访问这些附件。\n\n是否继续？"
+  },
+  "ask_block_contact": {
+    "message": "屏蔽此联系人？您将不再收到此联系人的消息。"
+  },
+  "ask_unblock_contact": {
+    "message": "取消屏蔽此联系人？您将再次能收到此联系人的消息。"
+  },
+  "ask_delete_contacts": {
+    "message": "删除联系人？\n\n仍有在进行中的聊天的联系人和在系统通讯录中的联系人无法被永久删除。"
+  },
+  "ask_delete_contact": {
+    "message": "删除联系人 %1$s?\n\n仍有在进行中的聊天的联系人和在系统通讯录中的联系人无法被永久删除。"
+  },
+  "ask_start_chat_with": {
+    "message": "与 %1$s 聊天？"
+  },
+  "ask_remove_members": {
+    "message": "将 %1$s 从群组中移除？"
+  },
+  "ask_remove_from_broadcast": {
+    "message": "从广播列表中移除 %1$s？"
+  },
+  "open_url_confirmation": {
+    "message": "您要打开此链接吗？"
+  },
+  "contacts_title": {
+    "message": "联系人"
+  },
+  "contacts_enter_name_or_email": {
+    "message": "输入名称或电子邮件地址"
+  },
+  "contacts_type_email_above": {
+    "message": "在上方输入电子邮件地址"
+  },
+  "contacts_empty_hint": {
+    "message": "没有联系人。"
+  },
+  "chat_archived_chats_title": {
+    "message": "已归档聊天"
+  },
+  "chat_please_enter_message": {
+    "message": "请输入消息。"
+  },
+  "chat_camera_unavailable": {
+    "message": "相机不可用。"
+  },
+  "chat_unable_to_record_audio": {
+    "message": "无法录制音频。"
+  },
+  "chat_new_one_to_one_hint": {
+    "message": "发一条消息给 %1$s。"
+  },
+  "chat_new_broadcast_hint": {
+    "message": "在广播列表中，收件人会在和你进行的只读聊天中收到消息"
+  },
+  "chat_new_group_hint": {
+    "message": "在您发出第一条消息后，其他人才会看到此群组。"
+  },
+  "chat_record_slide_to_cancel": {
+    "message": "滑动来取消"
+  },
+  "chat_record_explain": {
+    "message": "按住来录制语音消息，松开来发送"
+  },
+  "chat_no_chats_yet_title": {
+    "message": "收件箱为空。\n按“+”来开始新聊天。"
+  },
+  "chat_all_archived": {
+    "message": "所有聊天已归档。\n按“+”来开始新聊天。"
+  },
+  "chat_share_with_title": {
+    "message": "分享给"
+  },
+  "chat_input_placeholder": {
+    "message": "输入消息…"
+  },
+  "chat_archived_label": {
+    "message": "已归档"
+  },
+  "chat_request_label": {
+    "message": "请求"
+  },
+  "chat_no_messages": {
+    "message": "没有消息。"
+  },
+  "chat_self_talk_subtitle": {
+    "message": "发给自己的消息"
+  },
+  "archive_empty_hint": {
+    "message": "已归档的聊天将显示在此处。"
+  },
+  "saved_messages": {
+    "message": "保存的消息"
+  },
+  "saved_messages_explain": {
+    "message": "• 转发消息于此以便于访问\n\n• 做笔记或语音备忘录\n\n• 附加媒体以保存它们"
+  },
+  "saved": {
+    "message": "已保存"
+  },
+  "save_as": {
+    "message": "另存为"
+  },
+  "retry_send": {
+    "message": "尝试重发消息"
+  },
+  "messaging_disabled_not_in_group": {
+    "message": "您必须在此群组之中才能发送消息。要加入，请询问其他成员。"
+  },
+  "messaging_disabled_mailing_list": {
+    "message": "尚不支持在邮件列表中发送消息"
+  },
+  "cannot_display_unsuported_file_type": {
+    "message": "无法显示此类文件：%s"
+  },
+  "attachment_failed_to_load": {
+    "message": "加载附件失败"
+  },
+  "lock_recording": {
+    "message": "锁定录音"
+  },
+  "mailing_list": {
+    "message": "邮件列表"
+  },
+  "mailing_list_profile_info": {
+    "message": "邮件列表名称和图像的更改仅适用于此设备。 "
+  },
+  "start_app": {
+    "message": "开始…"
+  },
+  "accept_request_first": {
+    "message": "请先接受聊天请求"
+  },
+  "send_file_to": {
+    "message": "发送“%1$s\"到..."
+  },
+  "send_message_to": {
+    "message": "发送消息到..."
+  },
+  "enable_realtime": {
+    "message": "实时应用"
+  },
+  "enable_realtime_explain": {
+    "message": "为聊天中共享的应用启用实时连接。如果启用，聊天伙伴可能能够在您启动应用时发现您的 IP 地址。"
+  },
+  "filter_map_on_time": {
+    "message": "显示时间范围内的位置"
+  },
+  "show_location_traces": {
+    "message": "显示轨迹"
+  },
+  "add_poi": {
+    "message": "发送兴趣点"
+  },
+  "chat_audit_log_empty_message": {
+    "message": "此聊天的系统消息会出现在这里"
+  },
+  "chat_audit_log_title": {
+    "message": "%1$s 的聊天审计日志"
+  },
+  "chat_audit_log_description": {
+    "message": "仅显示系统消息和信息类消息。可用于查找最后的聊天操作而无需滚动许多普通消息。"
+  },
+  "open_external_url_trust_domain": {
+    "message": "不再询问 %1$s"
+  },
+  "puny_code_warning_header": {
+    "message": "检测到可疑链接"
+  },
+  "puny_code_warning_question": {
+    "message": "您确定要访问 %1$s 吗？"
+  },
+  "puny_code_warning_description": {
+    "message": "你将被转到一个链接，该链接可能通过使用来自不同字母表的相似字符对自己进行了伪装。打开标记为 %1$s 的链接将把你带到以 ascii 码编码的 %2$s 。如果这样的字符出乎你的意料，那么这个链接可能是有害的。"
+  },
+  "search": {
+    "message": "搜索"
+  },
+  "search_in_chat": {
+    "message": "搜索聊天"
+  },
+  "search_files": {
+    "message": "搜索文件"
+  },
+  "search_explain": {
+    "message": "搜索聊天、联系人和消息"
+  },
+  "search_no_result_for_x": {
+    "message": "没有找到有关\"%s\"的结果"
+  },
+  "search_unread": {
+    "message": "未读"
+  },
+  "group_name": {
+    "message": "群组名称"
+  },
+  "group_avatar": {
+    "message": "群组图像"
+  },
+  "remove_group_image": {
+    "message": "移除群组图像"
+  },
+  "change_group_image": {
+    "message": "更改群组图像"
+  },
+  "group_create_button": {
+    "message": "创建群组"
+  },
+  "group_please_enter_group_name": {
+    "message": "请输入群组名称。"
+  },
+  "group_add_members": {
+    "message": "添加成员"
+  },
+  "group_self_not_in_group": {
+    "message": "为了执行此操作，您必须是群组成员。"
+  },
+  "profile_encryption": {
+    "message": "加密"
+  },
+  "profile_shared_chats": {
+    "message": "共有聊天"
+  },
+  "related_chats": {
+    "message": "相关聊天"
+  },
+  "past_members": {
+    "message": "过去成员"
+  },
+  "tab_contact": {
+    "message": "联系人"
+  },
+  "tab_group": {
+    "message": "群组"
+  },
+  "tab_gallery": {
+    "message": "图库"
+  },
+  "tab_docs": {
+    "message": "文档"
+  },
+  "tab_links": {
+    "message": "链接"
+  },
+  "tab_map": {
+    "message": "地图"
+  },
+  "tab_gallery_empty_hint": {
+    "message": "在此聊天中分享的图像和视频将显示于此。"
+  },
+  "tab_docs_empty_hint": {
+    "message": "在此聊天中分享的文档、音乐和其他文件将显示于此。"
+  },
+  "tab_image_empty_hint": {
+    "message": "此聊天中分享的图片将显示在这里"
+  },
+  "tab_video_empty_hint": {
+    "message": "此聊天中分享的视频将显示在这里"
+  },
+  "tab_audio_empty_hint": {
+    "message": "此聊天中分享的音频文件和语音消息将显示在这里。"
+  },
+  "tab_webxdc_empty_hint": {
+    "message": "在此聊天中分享的私人应用会出现在这里"
+  },
+  "tab_all_media_empty_hint": {
+    "message": "任何聊天中分享的媒体文件都将出现在这里"
+  },
+  "all_files_empty_hint": {
+    "message": "在任何聊天中分享的文档和其他文件会出现在这里。"
+  },
+  "all_apps_empty_hint": {
+    "message": "任何聊天中接收或发送的私人应用都会出现在这里。"
+  },
+  "media_preview": {
+    "message": "媒体预览"
+  },
+  "aspect_ratio_grid": {
+    "message": "宽高比网格"
+  },
+  "square_grid": {
+    "message": "方形网格"
+  },
+  "send_message": {
+    "message": "发送消息"
+  },
+  "aeap_addr_changed": {
+    "message": "%1$s 将邮箱从 %2$s 更改为 %3$s"
+  },
+  "aeap_explanation": {
+    "message": "你将邮箱从 %1$s 改为了 %2$s。\n\n如果你现在发送一条消息到已验证群组，那里的联系人将自动用你的新邮箱替换旧邮箱。\n\n我们建议你将旧邮箱配置为转发所有邮件到新邮箱。否则，你可能收不到还不知道你新邮箱的联系人发过来的消息。"
+  },
+  "multidevice_title": {
+    "message": "添加第二台设备"
+  },
+  "multidevice_same_network_hint": {
+    "message": "让两台设备连接相同的 Wi-Fi 或网络"
+  },
+  "multidevice_this_creates_a_qr_code": {
+    "message": "这将创建第二台设备可以扫描用于复制此账号的二维码。"
+  },
+  "multidevice_install_dc_on_other_device": {
+    "message": "在你的其他设备上安装 Delta Chat (https://get.delta.chat)"
+  },
+  "multidevice_tap_scan_on_other_device": {
+    "message": "启动 Delta Chat，点击“我已有账号/添加为第二台设备”，扫描此处显示的二维码"
+  },
+  "multidevice_qr_subtitle": {
+    "message": "扫描此处为 %1$s 设置第二台设备"
+  },
+  "multidevice_receiver_title": {
+    "message": "添加为第二台设备"
+  },
+  "multidevice_open_settings_on_other_device": {
+    "message": "在第一台设备上，转到“设置/添加第二台设备”并扫描显示的二维码"
+  },
+  "multidevice_receiver_scanning_ask": {
+    "message": "是否将账号从其他设备复制到此设备？"
+  },
+  "multidevice_receiver_needs_update": {
+    "message": "你想导入的配置文件来自较新的 Delta Chat 版本。\n\n要继续设置第二台设备，请更新此设备上的 Delta Chat 到最新版。"
+  },
+  "multidevice_abort": {
+    "message": "中止第二台设备的设置吗？"
+  },
+  "multidevice_abort_will_invalidate_copied_qr": {
+    "message": "这会让复制到剪贴板的二维码失效。"
+  },
+  "multidevice_transfer_done_devicemsg": {
+    "message": "ℹ️ 账号已传输到您的第二台设备。"
+  },
+  "preparing_account": {
+    "message": "正在准备账号…"
+  },
+  "transferring": {
+    "message": "传输中…"
+  },
+  "troubleshooting": {
+    "message": "故障排除"
+  },
+  "incoming_messages": {
+    "message": "消息接收"
+  },
+  "outgoing_messages": {
+    "message": "消息发送"
+  },
+  "storage_on_domain": {
+    "message": "%1$s 上的存储空间"
+  },
+  "connectivity": {
+    "message": "连接状态"
+  },
+  "connectivity_not_connected": {
+    "message": "未连接"
+  },
+  "connectivity_connecting": {
+    "message": "连接中…"
+  },
+  "connectivity_updating": {
+    "message": "更新中…"
+  },
+  "connectivity_connected": {
+    "message": "已连接"
+  },
+  "sending": {
+    "message": "发送中…"
+  },
+  "last_msg_sent_successfully": {
+    "message": "最后一条消息已成功发送。"
+  },
+  "not_supported_by_provider": {
+    "message": "不被您的邮件提供商支持。"
+  },
+  "messages": {
+    "message": "消息"
+  },
+  "part_of_total_used": {
+    "message": "已使用 %1$s，共 %2$s"
+  },
+  "onboarding_create_instant_account": {
+    "message": "创建新账号"
+  },
+  "onboarding_alternative_logins": {
+    "message": "我已有账号"
+  },
+  "manual_account_setup_option": {
+    "message": "传统电子邮件登录"
+  },
+  "instant_onboarding_title": {
+    "message": "个人资料"
+  },
+  "instant_onboarding_agree_default2": {
+    "message": "%1$s 的隐私政策"
+  },
+  "instant_onboarding_agree_instance": {
+    "message": "关于 %1$s 上的个人资料"
+  },
+  "instant_onboarding_create": {
+    "message": "同意并创建账号"
+  },
+  "instant_onboarding_show_more_instances": {
+    "message": "使用其他服务器"
+  },
+  "instant_onboarding_other_server": {
+    "message": "列出聊天邮件服务器"
+  },
+  "instant_onboarding_group_info": {
+    "message": "创建个人资料加入“%1$s” 群。"
+  },
+  "instant_onboarding_contact_info": {
+    "message": "创建个人资料和 %1$s 聊天"
+  },
+  "instant_onboarding_confirm_contact": {
+    "message": "你想新建个人资料并开始和 %1$s 聊天吗？"
+  },
+  "instant_onboarding_confirm_group": {
+    "message": "你想新建个人资料并加入 \"%1$s\" 聊天群吗？"
+  },
+  "welcome_chat_over_email": {
+    "message": "安全的去中心化聊天"
+  },
+  "scan_invitation_code": {
+    "message": "扫描邀请码"
+  },
+  "login_title": {
+    "message": "登录"
+  },
+  "login_header": {
+    "message": "登录您的电子邮件账号"
+  },
+  "login_explain": {
+    "message": "使用现有电子邮件账号登录"
+  },
+  "login_subheader": {
+    "message": "对于已知的电子邮件提供商，附加设置会被自动设置。有时 IMAP 需要在网页版设置里启用。 请咨询您的电子邮件提供商或朋友来寻求帮助。"
+  },
+  "login_no_servers_hint": {
+    "message": "不存在 Delta Chat 服务器，您的数据保留于您的设备！"
+  },
+  "login_inbox": {
+    "message": "收件箱"
+  },
+  "login_imap_login": {
+    "message": "IMAP 登录名"
+  },
+  "login_imap_server": {
+    "message": "IMAP 服务器"
+  },
+  "login_imap_port": {
+    "message": "IMAP 端口"
+  },
+  "login_imap_security": {
+    "message": "IMAP 安全类型"
+  },
+  "login_outbox": {
+    "message": "发件箱"
+  },
+  "login_smtp_login": {
+    "message": "SMTP 登录名"
+  },
+  "login_smtp_password": {
+    "message": "SMTP 密码"
+  },
+  "login_smtp_server": {
+    "message": "SMTP 服务器"
+  },
+  "login_smtp_port": {
+    "message": "SMTP 端口"
+  },
+  "login_smtp_security": {
+    "message": "SMTP 安全类型"
+  },
+  "login_auth_method": {
+    "message": "认证方法"
+  },
+  "proxy_settings": {
+    "message": "代理"
+  },
+  "proxy_use_proxy": {
+    "message": "使用代理"
+  },
+  "proxy_add": {
+    "message": "添加代理"
+  },
+  "proxy_add_explain": {
+    "message": "支持的代理类型：HTTP(S)、SOCKS5 和 Shadowsocks."
+  },
+  "proxy_add_url_hint": {
+    "message": "在此输入代理链接"
+  },
+  "proxy_invalid": {
+    "message": "无效或不受支持的代理"
+  },
+  "proxy_list_header": {
+    "message": "已保存的代理"
+  },
+  "proxy_delete": {
+    "message": "删除代理"
+  },
+  "proxy_delete_explain": {
+    "message": "你确定要删除 \"%1$s\"吗？"
+  },
+  "proxy_use_proxy_confirm": {
+    "message": "你想使用代理“%1$s”吗？"
+  },
+  "proxy_share_explain": {
+    "message": "你的好友可以扫描二维码添加此代理"
+  },
+  "proxy_share_link": {
+    "message": "分享链接"
+  },
+  "login_info_oauth2_title": {
+    "message": "使用简易设置继续？"
+  },
+  "login_info_oauth2_text": {
+    "message": "输入的电子邮件地址支持简化设置（OAuth 2.0）。\n\n在下一步中，请允许 Delta Chat 充当您的“通过电子邮件聊天”应用程序。\n\n不存在 Delta Chat 服务器，您的数据保留于您的设备！"
+  },
+  "login_certificate_checks": {
+    "message": "证书检查"
+  },
+  "login_error_mail": {
+    "message": "请输入有效的电子邮件地址"
+  },
+  "login_error_server": {
+    "message": "请输入有效的服务器 / IP 地址"
+  },
+  "login_error_port": {
+    "message": "请输入有效的端口（1-65535）"
+  },
+  "login_error_required_fields": {
+    "message": "请输入有效的电子邮件地址和密码"
+  },
+  "import_backup_title": {
+    "message": "从备份恢复"
+  },
+  "import_backup_ask": {
+    "message": "在“%1$s”找到备份。\n\n您要导入并使用其中的全部数据与设置吗？"
+  },
+  "import_backup_no_backup_found": {
+    "message": "未找到备份。\n\n将备份复制到“%1$s”，然后重试。或者按“开始发送消息”来进行常规设置流程。"
+  },
+  "login_error_cannot_login": {
+    "message": "无法作为“%1$s”登录。请检查电子邮件地址和密码是否正确。"
+  },
+  "accept_invalid_certificates": {
+    "message": "接受无效的证书"
+  },
+  "switch_account": {
+    "message": "切换账号"
+  },
+  "add_account": {
+    "message": "添加账号"
+  },
+  "profile_tag": {
+    "message": "账号标签"
+  },
+  "profile_tag_hint": {
+    "message": "如工作、家庭"
+  },
+  "profile_tag_explain": {
+    "message": "设置仅对您可见的标签，帮助区分您的账号。"
+  },
+  "move_to_top": {
+    "message": "移到顶部"
+  },
+  "delete_account": {
+    "message": "删除账号"
+  },
+  "delete_account_ask": {
+    "message": "是否确定要删除您的账号数据？"
+  },
+  "delete_account_explain_with_name": {
+    "message": "将会删除此设备上“%s”的所有账号数据，包括您的端到端加密设置、联系人、聊天、消息和媒体。此操作无法撤销。"
+  },
+  "unconfigured_account": {
+    "message": "未配置的账号"
+  },
+  "unconfigured_account_hint": {
+    "message": "打开账号来配置它"
+  },
+  "try_connect_now": {
+    "message": "立即尝试连接"
+  },
+  "sync_all": {
+    "message": "同步所有"
+  },
+  "configuration_failed_with_error": {
+    "message": "配置失败。错误：%1$s"
+  },
+  "forward_to": {
+    "message": "转发给…"
+  },
+  "ask_send_files_to_chat": {
+    "message": "发送 %1$d 个文件到“%2$s”？"
+  },
+  "ask_send_files_to_selected_chats": {
+    "message": "发送 %1$d 个文件到 %2$d 个聊天？"
+  },
+  "videos_sent_without_recoding": {
+    "message": "（视频以未经处理的大文件形式发送。要发送较小的视频文件，请分别附加它们）"
+  },
+  "share_text_multiple_chats": {
+    "message": "发送这段文字到 %1$d 个聊天？\n\n\"%2$s“"
+  },
+  "share_abort": {
+    "message": "由于缺少权限，分享中止。"
+  },
+  "pref_using_custom": {
+    "message": "使用自定义值： %s"
+  },
+  "pref_using_default": {
+    "message": "使用默认值： %s"
+  },
+  "pref_profile_info_headline": {
+    "message": "您的个人资料"
+  },
+  "pref_profile_photo": {
+    "message": "个人资料图片"
+  },
+  "pref_blocked_contacts": {
+    "message": "已屏蔽的联系人"
+  },
+  "blocked_empty_hint": {
+    "message": "被您屏蔽的联系人将显示于此。"
+  },
+  "pref_password_and_account_settings": {
+    "message": "密码和账号"
+  },
+  "pref_who_can_see_profile_explain": {
+    "message": "在与其他用户交流时，您的个人资料图片和名称将与您的消息一起发送。"
+  },
+  "pref_your_name": {
+    "message": "您的名称"
+  },
+  "pref_default_status_label": {
+    "message": "签名档"
+  },
+  "pref_enter_sends": {
+    "message": "Enter 键发送"
+  },
+  "pref_enter_sends_explain": {
+    "message": "按 Enter 键发送文本消息"
+  },
+  "pref_outgoing_media_quality": {
+    "message": "发出媒体质量"
+  },
+  "pref_outgoing_balanced": {
+    "message": "平衡"
+  },
+  "pref_outgoing_worse": {
+    "message": "体积小，但质量更差"
+  },
+  "pref_vibrate": {
+    "message": "振动"
+  },
+  "pref_screen_security": {
+    "message": "屏幕安全"
+  },
+  "pref_screen_security_explain": {
+    "message": "请求系统在最近任务列表中和本应用内阻止截屏"
+  },
+  "pref_screen_security_please_restart_hint": {
+    "message": "要应用屏幕安全设置，请重新启动本应用。"
+  },
+  "pref_notifications": {
+    "message": "通知"
+  },
+  "pref_mention_notifications": {
+    "message": "提及"
+  },
+  "pref_mention_notifications_explain": {
+    "message": "在静音群中，通知直接与你相关的消息，比如回复或回应"
+  },
+  "pref_notifications_show": {
+    "message": "显示"
+  },
+  "pref_notifications_priority": {
+    "message": "优先级"
+  },
+  "pref_notifications_explain": {
+    "message": "为新消息启用系统通知"
+  },
+  "pref_show_notification_content": {
+    "message": "在通知中显示消息内容"
+  },
+  "pref_show_notification_content_explain": {
+    "message": "在通知中显示发送者和消息开头部分"
+  },
+  "pref_led_color": {
+    "message": "LED 颜色"
+  },
+  "pref_sound": {
+    "message": "声音"
+  },
+  "pref_silent": {
+    "message": "无声"
+  },
+  "pref_privacy": {
+    "message": "隐私"
+  },
+  "pref_chats_and_media": {
+    "message": "聊天与媒体"
+  },
+  "pref_system_default": {
+    "message": "系统默认"
+  },
+  "pref_light_theme": {
+    "message": "明亮"
+  },
+  "pref_dark_theme": {
+    "message": "黑暗"
+  },
+  "pref_appearance": {
+    "message": "外观"
+  },
+  "pref_theme": {
+    "message": "主题"
+  },
+  "pref_language": {
+    "message": "语言"
+  },
+  "pref_use_system_ui_font": {
+    "message": "使用系统字体"
+  },
+  "pref_incognito_keyboard": {
+    "message": "无痕键盘"
+  },
+  "pref_incognito_keyboard_explain": {
+    "message": "请求输入法禁用个性化学习"
+  },
+  "pref_read_receipts": {
+    "message": "已读回执"
+  },
+  "pref_read_receipts_explain": {
+    "message": "禁用已读回执后，您将无法看到其他人的已读回执。"
+  },
+  "pref_server": {
+    "message": "服务器"
+  },
+  "pref_encryption": {
+    "message": "加密"
+  },
+  "pref_manage_keys": {
+    "message": "管理密钥"
+  },
+  "pref_use_system_emoji": {
+    "message": "使用系统 emoji"
+  },
+  "pref_use_system_emoji_explain": {
+    "message": "关闭 Delta Chat 内置 emoji 支持"
+  },
+  "pref_show_system_contacts": {
+    "message": "读取系统通讯录"
+  },
+  "pref_show_system_contacts_explain": {
+    "message": "从通讯录建立和联系人的聊天。一些邮件服务商需要先行设置才能进行端到端加密的聊天。"
+  },
+  "pref_app_access": {
+    "message": "应用程序访问"
+  },
+  "pref_chats": {
+    "message": "聊天"
+  },
+  "pref_in_chat_sounds": {
+    "message": "聊天音"
+  },
+  "pref_view_log": {
+    "message": "查看日志"
+  },
+  "pref_saved_log": {
+    "message": "已将日志保存至“下载”文件夹"
+  },
+  "pref_save_log_failed": {
+    "message": "保存日志失败"
+  },
+  "pref_log_header": {
+    "message": "日志"
+  },
+  "pref_other": {
+    "message": "其他"
+  },
+  "pref_backup": {
+    "message": "备份"
+  },
+  "pref_backup_explain": {
+    "message": "将聊天备份至外部存储"
+  },
+  "pref_backup_export_explain": {
+    "message": "备份可帮助您在此设备或另一台设备上设置全新安装的本应用。\n\n备份将包含所有消息、联系人、聊天以及端到端的 Autocrypt 设置。请将备份文件保存在安全的地方，或尽快将其删除。"
+  },
+  "pref_backup_export_x": {
+    "message": "导出 %1$s"
+  },
+  "pref_backup_export_all": {
+    "message": "导出全部 %1$d 个账号"
+  },
+  "pref_backup_export_start_button": {
+    "message": "开始备份"
+  },
+  "pref_backup_written_to_x": {
+    "message": "备份已成功写入到“%1$s”。"
+  },
+  "pref_managekeys_menu_title": {
+    "message": "管理密钥"
+  },
+  "pref_managekeys_export_secret_keys": {
+    "message": "导出密钥"
+  },
+  "pref_managekeys_export_explain": {
+    "message": "导出密钥到“%1$s”？"
+  },
+  "pref_managekeys_import_secret_keys": {
+    "message": "导入密钥"
+  },
+  "pref_managekeys_import_explain": {
+    "message": "从“%1$s”导入密钥？\n\n• 现有密钥不会被删除。\n\n• 除非最后导入的密钥文件名中带有单词\"legacy\"，否则它将会被用作新的默认密钥。"
+  },
+  "pref_managekeys_secret_keys_exported_to_x": {
+    "message": "密钥已成功写入至\"%1$s\"。"
+  },
+  "pref_managekeys_secret_keys_imported_from_x": {
+    "message": "密钥已从\"%1$s\"导入。"
+  },
+  "pref_background": {
+    "message": "背景"
+  },
+  "pref_background_btn_default": {
+    "message": "使用默认图像"
+  },
+  "pref_background_btn_gallery": {
+    "message": "从图库中选择"
+  },
+  "pref_imap_folder_handling": {
+    "message": "IMAP 文件夹处理"
+  },
+  "pref_imap_folder_warn_disable_defaults": {
+    "message": "若要更改此选项，请您务必调整服务器以及其他客户端的相应设置。\n\n否则软件可能无法正常工作。"
+  },
+  "pref_watch_sent_folder": {
+    "message": "监视已发送文件夹"
+  },
+  "pref_send_copy_to_self": {
+    "message": "给自己发送副本"
+  },
+  "pref_send_copy_to_self_explain": {
+    "message": "在多台设备上使用此账号时，这是必需的。"
+  },
+  "pref_auto_folder_moves": {
+    "message": "自动移动至 DeltaChat 文件夹"
+  },
+  "pref_auto_folder_moves_explain": {
+    "message": "移动聊天对话以免弄乱收件箱"
+  },
+  "pref_only_fetch_mvbox_title": {
+    "message": "只从 DeltaChat 文件夹获取"
+  },
+  "pref_only_fetch_mvbox_explain": {
+    "message": "忽略其他文件夹。需要你的服务器将聊天消息移动到 DeltaChat 文件夹。"
+  },
+  "pref_show_emails": {
+    "message": "显示传统电子邮件"
+  },
+  "pref_show_emails_no": {
+    "message": "不显示，仅聊天"
+  },
+  "pref_show_emails_accepted_contacts": {
+    "message": "已接受的联系人"
+  },
+  "pref_show_emails_all": {
+    "message": "全部"
+  },
+  "pref_experimental_features": {
+    "message": "实验性功能"
+  },
+  "pref_on_demand_location_streaming": {
+    "message": "按需位置流"
+  },
+  "pref_developer_mode": {
+    "message": "开发者模式"
+  },
+  "pref_developer_mode_explain": {
+    "message": "激活调试选项。这会降低应用程序稳定性。仅供开发人员使用。"
+  },
+  "pref_background_default": {
+    "message": "默认背景"
+  },
+  "pref_background_default_color": {
+    "message": "默认颜色"
+  },
+  "pref_background_custom_image": {
+    "message": "自定义图像"
+  },
+  "pref_background_custom_color": {
+    "message": "自定义颜色"
+  },
+  "export_aborted": {
+    "message": "导出已中止。"
+  },
+  "auto_download_messages": {
+    "message": "自动下载消息"
+  },
+  "up_to_x": {
+    "message": "%1$s 以下"
+  },
+  "up_to_x_most_worse_quality_images": {
+    "message": "%1$s 以下，最差的图像质量"
+  },
+  "up_to_x_most_balanced_quality_images": {
+    "message": "%1$s 以下，均衡的图像质量"
+  },
+  "download_failed": {
+    "message": "下载失败"
+  },
+  "n_bytes_message": {
+    "message": "%1$s 消息"
+  },
+  "download_max_available_until": {
+    "message": "下载最晚于 %1$s 前可用"
+  },
+  "profile_image_select": {
+    "message": "选择个人资料图片"
+  },
+  "select_your_new_profile_image": {
+    "message": "选择新的个人资料图片"
+  },
+  "profile_image_delete": {
+    "message": "删除个人资料图片"
+  },
+  "pref_show_tray_icon": {
+    "message": "显示托盘图标"
+  },
+  "pref_edit_profile": {
+    "message": "编辑个人资料"
+  },
+  "disable_imap_idle": {
+    "message": "禁用 IMAP IDLE"
+  },
+  "disable_imap_idle_explain": {
+    "message": "即便服务器支持，也不要使用 IMAP IDLE 扩展。启用后会造成消息获取延迟，请仅出于测试目的启用该功能。"
+  },
+  "send_stats_to_devs": {
+    "message": "发送统计数据给 Delta Chat 开发者"
+  },
+  "emoji_search_results": {
+    "message": "搜索结果"
+  },
+  "emoji_not_found": {
+    "message": "未找到 emoji"
+  },
+  "emoji_recent": {
+    "message": "最近使用"
+  },
+  "emoji_people": {
+    "message": "人物与身体"
+  },
+  "emoji_nature": {
+    "message": "动物与自然"
+  },
+  "emoji_foods": {
+    "message": "食品与饮料"
+  },
+  "emoji_activity": {
+    "message": "活动"
+  },
+  "emoji_places": {
+    "message": "出行与地点"
+  },
+  "emoji_objects": {
+    "message": "物品"
+  },
+  "emoji_symbols": {
+    "message": "符号"
+  },
+  "emoji_flags": {
+    "message": "旗帜"
+  },
+  "reactions": {
+    "message": "回应"
+  },
+  "react": {
+    "message": "回应"
+  },
+  "reaction_by_you": {
+    "message": "你对 “%2$s” 回应了 %1$s"
+  },
+  "reaction_by_other": {
+    "message": "%1$s 对 “%3$s” 回应了 %2$s"
+  },
+  "delete_old_messages": {
+    "message": "删除旧消息"
+  },
+  "autodel_device_title": {
+    "message": "从设备删除消息"
+  },
+  "autodel_server_title": {
+    "message": "从服务器删除消息"
+  },
+  "autodel_device_ask": {
+    "message": "您是否要立即删除 %1$d 条消息，并在之后于消息收到 %2$s 删除它们？\n\n• 这包括所有媒体文件\n\n• 无论消息是否被浏览过，它们都将被删除\n\n• 在本地删除中，“保存的消息”将被跳过"
+  },
+  "autodel_server_ask": {
+    "message": "您是否要立即删除 %1$d 条消息，并在之后于消息收到 %2$s 删除它们？\n\n⚠️ 这包括服务器所有文件夹中的电子邮件、媒体和“保存的消息”\n\n⚠️ 如果您想在服务器上保留数据，请不要使用此功能\n\n⚠️ 如果您正在使用 Delta Chat 之外的电子邮件客户端，请不要使用此功能"
+  },
+  "autodel_server_enabled_hint": {
+    "message": "这包括所有服务器文件夹中的电子邮件、媒体和\"保存的消息\"。如果您想在服务器上保存数据，或者您正在使用除 Delta Chat 之外的其他电子邮件客户端，请不要使用此功能。"
+  },
+  "autodel_server_warn_multi_device_title": {
+    "message": "开启一次性删除"
+  },
+  "autodel_server_warn_multi_device": {
+    "message": "如果您启用一次删除，则无法在此配置文件中使用多个设备。"
+  },
+  "autodel_confirm": {
+    "message": "我了解，将这些消息全部删除"
+  },
+  "autodel_at_once": {
+    "message": "下载后立即"
+  },
+  "after_30_seconds": {
+    "message": "30 秒后"
+  },
+  "after_1_minute": {
+    "message": "1 分钟后"
+  },
+  "after_5_minutes": {
+    "message": "5 分钟后"
+  },
+  "after_30_minutes": {
+    "message": "30 分钟后"
+  },
+  "autodel_after_1_hour": {
+    "message": "1 小时后"
+  },
+  "autodel_after_1_day": {
+    "message": "1 天后"
+  },
+  "autodel_after_1_week": {
+    "message": "1 周后"
+  },
+  "after_5_weeks": {
+    "message": "5 周后"
+  },
+  "autodel_after_1_year": {
+    "message": "1 年后"
+  },
+  "autocrypt_send_asm_title": {
+    "message": "发送 Autocrypt 设置消息"
+  },
+  "autocrypt_send_asm_explain_before": {
+    "message": "Autocrypt 设置消息安全地共享您的端到端设置至其他兼容 Autocrypt 的应用程序。\n\n该设置将通过在此显示的、必须在另一台设备上输入的设置码进行加密。"
+  },
+  "autocrypt_send_asm_button": {
+    "message": "发送 Autocrypt 设置消息"
+  },
+  "autocrypt_send_asm_explain_after": {
+    "message": "您的设置已发送给您自己。切换到另一台设备并打开该设置消息。 您将被要求输入设置码。 输入以下数字："
+  },
+  "autocrypt_prefer_e2ee": {
+    "message": "优先使用端到端加密"
+  },
+  "autocrypt_asm_subject": {
+    "message": "Autocrypt 设置消息"
+  },
+  "autocrypt_asm_general_body": {
+    "message": "这是用于在客户端之间传输端到端设置的 Autocrypt 设置消息。\n\n要解密并使用您的设置，请在兼容 Autocrypt 的客户端中打开本消息，然后输入生成设备上显示的设置码。"
+  },
+  "systemmsg_cannot_decrypt": {
+    "message": "无法解密此消息。\n\n• 简化对此消息的回复并请求发送方再次发送消息可能会有帮助。\n\n•  如果你刚重新安装 Delta Chat，你最好立即重新设置 Delta Chat 并选择“添加为第二台设备”或导入备份文件。"
+  },
+  "systemmsg_unknown_sender_for_chat": {
+    "message": "此聊天发送者未知。查看“信息”来获取更多详情。"
+  },
+  "systemmsg_subject_for_new_contact": {
+    "message": "来自 %1$s 的消息"
+  },
+  "systemmsg_failed_sending_to": {
+    "message": "发送消息给 %1$s 失败。"
+  },
+  "group_name_changed_by_you": {
+    "message": "你已将群组名称从“%1$s”更改为“%2$s”"
+  },
+  "group_name_changed_by_other": {
+    "message": "%3$s已将群组名称从“%1$s”更改为“%2$s”"
+  },
+  "group_image_changed_by_you": {
+    "message": "你更改了群组图像"
+  },
+  "group_image_changed_by_other": {
+    "message": "%1$s 更改了群组图像"
+  },
+  "member_x_added": {
+    "message": "添加了成员 %1$s 。"
+  },
+  "add_member_by_you": {
+    "message": "你添加了成员 %1$s"
+  },
+  "add_member_by_other": {
+    "message": "%2$s 添加了成员 %1$s"
+  },
+  "remove_member_by_you": {
+    "message": "你移除了成员 %1$s"
+  },
+  "remove_member_by_other": {
+    "message": "%2$s 移除了成员 %1$s"
+  },
+  "group_left_by_you": {
+    "message": "你退出了群组"
+  },
+  "group_left_by_other": {
+    "message": "%1$s 退出了群组"
+  },
+  "group_image_deleted_by_you": {
+    "message": "你删除了群组图像"
+  },
+  "group_image_deleted_by_other": {
+    "message": "%1$s 删除了群组图像"
+  },
+  "location_enabled_by_you": {
+    "message": "你开启了位置流"
+  },
+  "location_enabled_by_other": {
+    "message": "%1$s 开启了位置流"
+  },
+  "ephemeral_timer_disabled_by_you": {
+    "message": "你禁用了消息定时销毁计时器"
+  },
+  "ephemeral_timer_disabled_by_other": {
+    "message": "%1$s 禁用了消息定时销毁计时器"
+  },
+  "ephemeral_timer_seconds_by_you": {
+    "message": "你将消息定时销毁计时器设置为 %1$s 秒"
+  },
+  "ephemeral_timer_seconds_by_other": {
+    "message": "%2$s 将消息定时销毁计时器设为 %1$s 秒"
+  },
+  "ephemeral_timer_1_minute_by_you": {
+    "message": "你将消息定时销毁计时器设为 1 分钟"
+  },
+  "ephemeral_timer_1_minute_by_other": {
+    "message": "%1$s 将消息定时销毁计时器设为 1 分钟"
+  },
+  "ephemeral_timer_1_hour_by_you": {
+    "message": "你将消息定时销毁计时器设为 1 小时"
+  },
+  "ephemeral_timer_1_hour_by_other": {
+    "message": "%1$s 将消息定时销毁计时器设为 1 小时"
+  },
+  "ephemeral_timer_1_day_by_you": {
+    "message": "你将消息定时销毁计时器设为 1 天"
+  },
+  "ephemeral_timer_1_day_by_other": {
+    "message": "%1$s 将消息定时销毁计时器设为 1 天"
+  },
+  "ephemeral_timer_1_week_by_you": {
+    "message": "你将消息定时销毁计时器设为 1 周"
+  },
+  "ephemeral_timer_1_week_by_other": {
+    "message": "%1$s 将消息定时销毁计时器设为 1 天"
+  },
+  "ephemeral_timer_minutes_by_you": {
+    "message": "你将消息定时销毁计时器设为 %1$s 分钟"
+  },
+  "ephemeral_timer_minutes_by_other": {
+    "message": "%2$s 将消息定时销毁计时器设为 %1$s 分钟"
+  },
+  "ephemeral_timer_hours_by_you": {
+    "message": "你将消息定时销毁计时器设为 %1$s 小时"
+  },
+  "ephemeral_timer_hours_by_other": {
+    "message": "%2$s 将消息定时销毁计时器设为 %1$s 小时。"
+  },
+  "ephemeral_timer_days_by_you": {
+    "message": "你将消息定时销毁计时器设为 %1$s 天"
+  },
+  "ephemeral_timer_days_by_other": {
+    "message": "%2$s 将消息定时销毁计时器设为 %1$s 天"
+  },
+  "ephemeral_timer_weeks_by_you": {
+    "message": "你将消息定时销毁计时器设为 %1$s 周"
+  },
+  "ephemeral_timer_weeks_by_other": {
+    "message": "%2$s 将消息定时销毁计时器设为 %1$s 周"
+  },
+  "chat_protection_broken": {
+    "message": "%1$s 从另一台设备发送了消息"
+  },
+  "chat_protection_enabled_tap_to_learn_more": {
+    "message": "从现在起，消息保证都是端到端加密。轻按了解更多。"
+  },
+  "chat_protection_enabled_explanation": {
+    "message": "现在此聊天中的所有消息保证都是端到端加密的。\n\n端到端加密使消息保持私密状态，只有你和你的聊天伙伴知道内容。即便是你的电子邮件服务提供商也无法读取它们。"
+  },
+  "chat_protection_broken_tap_to_learn_more": {
+    "message": "%1$s 从另一台设备发送了一则消息。轻按了解更多。"
+  },
+  "chat_protection_broken_explanation": {
+    "message": "无法再确保端到端加密，可能的原因是 %1$s 重新安装了 Delta Chat 或从其他设备发送了一则消息。\n\n你可以和联系人线下见面并再次扫描联系人的二维码重新建立端到端加密的通信。"
+  },
+  "invalid_unencrypted_tap_to_learn_more": {
+    "message": "⚠️ %1$s要求端到端加密，而此聊天尚未建立端到端加密。轻按了解更多。"
+  },
+  "invalid_unencrypted_explanation": {
+    "message": "要建立端到端加密，你可以亲自和联系人碰面并扫描联系人的二维码"
+  },
+  "learn_more": {
+    "message": "了解更多"
+  },
+  "devicemsg_self_deleted": {
+    "message": "您已删除“保存的消息”聊天。\n\nℹ️要再次使用“保存的消息”功能，请创建一个与自己的新聊天。"
+  },
+  "devicemsg_storage_exceeding": {
+    "message": "⚠️邮件服务商提供的存储空间快满了，已使用 %1$s%%。\n\n如果存储空间用光，您可能无法接收消息。\n\n👉请检查是否可以在提供商的网页界面上删除旧数据，或考虑启用“设置/删除旧消息”。您可以在“设置/连接状态”中查看当前的存储使用情况。"
+  },
+  "devicemsg_bad_time": {
+    "message": "⚠️设备的日期或时间似乎不准确 （%1$s）。\n\n请调整时钟⏰🔧以确保能够正确接收消息。"
+  },
+  "devicemsg_update_reminder": {
+    "message": "⚠️您的 Delta Chat 版本可能过时了。\n\n这可能会在您的聊天伙伴使用更新的版本时造成问题。并且您缺失了最新功能😳\n请浏览 https://get.delta.chat 或应用商店来获取更新。"
+  },
+  "enter_system_secret_to_continue": {
+    "message": "解锁以继续"
+  },
+  "qr_code": {
+    "message": "二维码"
+  },
+  "load_qr_code_as_image": {
+    "message": "从图像加载二维码"
+  },
+  "qrscan_title": {
+    "message": "扫描二维码"
+  },
+  "qrscan_hint": {
+    "message": "将摄像头对准二维码。"
+  },
+  "qrscan_hint_desktop": {
+    "message": "移动二维码到相机"
+  },
+  "qrscan_failed": {
+    "message": "二维码无法被解码"
+  },
+  "qrscan_ask_join_group": {
+    "message": "您要加入群组“%1$s”吗？"
+  },
+  "qrscan_fingerprint_mismatch": {
+    "message": "扫描到的指纹与上次见到的 %1$s 的指纹不匹配。"
+  },
+  "qrscan_no_addr_found": {
+    "message": "此二维码包含指纹但没有电子邮件地址。\n\n对于带外验证，请先与接收者建立加密连接。"
+  },
+  "qrscan_contains_text": {
+    "message": "已扫描到的二维码文本：\n\n%1$s"
+  },
+  "qrscan_contains_url": {
+    "message": "已扫描到的二维码 URL：\n\n%1$s"
+  },
+  "qrscan_fingerprint_label": {
+    "message": "指纹"
+  },
+  "withdraw_verifycontact_explain": {
+    "message": "其他人可以扫描此二维码与您联系。\n\n您可以在此处停用二维码并通过再次扫描来重新激活它。"
+  },
+  "withdraw_verifygroup_explain": {
+    "message": "其他人可以扫描此二维码加入群组 “%1$s”。\n\n您可以在此处停用二维码并通过再次扫描来重新激活它。"
+  },
+  "withdraw_qr_code": {
+    "message": "重置二维码"
+  },
+  "revive_verifycontact_explain": {
+    "message": "其他人可扫描此二维码以与您联系。\n\n此设备上的二维码未激活。"
+  },
+  "revive_verifygroup_explain": {
+    "message": "其他人可扫描此二维码加入群组“%1$s”。\n\n此设备上的二维码未激活。"
+  },
+  "revive_qr_code": {
+    "message": "激活二维码"
+  },
+  "qrshow_title": {
+    "message": "邀请二维码"
+  },
+  "qrshow_x_joining": {
+    "message": "添加 %1$s。"
+  },
+  "qrshow_x_verified": {
+    "message": "%1$s 已验证。"
+  },
+  "qrshow_x_has_joined_group": {
+    "message": "%1$s 已加入群组。"
+  },
+  "qrshow_join_group_title": {
+    "message": "邀请二维码"
+  },
+  "qrshow_join_group_hint": {
+    "message": "扫描此处来加入群组“%1$s”"
+  },
+  "qrshow_join_contact_title": {
+    "message": "邀请二维码"
+  },
+  "qrshow_join_contact_hint": {
+    "message": "扫描此处来与 %1$s 聊天。"
+  },
+  "qrshow_join_contact_no_connection_toast": {
+    "message": "没有互联网连接，无法进行二维码设置。"
+  },
+  "qraccount_ask_create_and_login": {
+    "message": "在“%1$s”创建新的电子邮件地址并登录？"
+  },
+  "qraccount_ask_create_and_login_another": {
+    "message": "在“%1$s”创建新账号并登录？\n\n不会删除您现有的账号。使用“切换账号”在账号之间切换。"
+  },
+  "set_name_and_avatar_explain": {
+    "message": "设置联系人可以识别的名称，您还可以设置个人资料图片。"
+  },
+  "please_enter_name": {
+    "message": "请输入名称。"
+  },
+  "qraccount_qr_code_cannot_be_used": {
+    "message": "扫描的二维码不能用于创建新账号。"
+  },
+  "qrlogin_ask_login": {
+    "message": "登录 \"%1$s\"吗？"
+  },
+  "qrlogin_ask_login_another": {
+    "message": "是否登录“%1$s”？\n\n不会删除您现有的账号。使用“切换账号”在账号之间切换。"
+  },
+  "secure_join_started": {
+    "message": "%1$s 邀请你加入此群组。\n\n等待 %2$s 的设备回复…"
+  },
+  "secure_join_replies": {
+    "message": "%1$s 已回复，等待被加入群组…"
+  },
+  "secure_join_wait": {
+    "message": "正在建立有保证的端到端加密，请稍候…"
+  },
+  "secure_join_wait_timeout": {
+    "message": "无法建立有保证的端到端加密，但您可能已经发送了一条消息。"
+  },
+  "secure_join_takes_longer": {
+    "message": "这可能需要较长时间，可能是对方或您已离线。\n\n但该过程仍在后台继续，您可以先做其他事情…"
+  },
+  "contact_verified": {
+    "message": "%1$s 已验证。"
+  },
+  "contact_not_verified": {
+    "message": "无法与 %1$s 建立有保证的端到端加密。"
+  },
+  "verified_by": {
+    "message": "验证人 %1$s"
+  },
+  "verified_by_you": {
+    "message": "由您验证"
+  },
+  "contact_setup_changed": {
+    "message": "%1$s 的加密设置已更改。"
+  },
+  "verified_contact_required_explain": {
+    "message": "要确保端到端加密，你只能将带有绿色验证标识的联系人到此群中。\n\n你可以亲自和未验证联系人线下碰面并扫描联系人二维码来验证。"
+  },
+  "copy_qr_data_success": {
+    "message": "已复制二维码链接到剪贴板"
+  },
+  "mailto_dialog_header_select_chat": {
+    "message": "选择要发送消息的聊天"
+  },
+  "confirm_replace_draft": {
+    "message": "%1$s 已经有一条草稿信息，要替换它吗？"
+  },
+  "mailto_link_could_not_be_decoded": {
+    "message": "无法解码 mailto 链接：%1$s"
+  },
+  "notify_reply_button": {
+    "message": "回复"
+  },
+  "notify_new_message": {
+    "message": "新消息"
+  },
+  "notify_background_connection_enabled": {
+    "message": "已启用后台连接"
+  },
+  "notify_priority_high": {
+    "message": "高"
+  },
+  "notify_priority_max": {
+    "message": "最高"
+  },
+  "notify_name_and_message": {
+    "message": "名称和消息"
+  },
+  "notify_name_only": {
+    "message": "仅名称"
+  },
+  "notify_no_name_or_message": {
+    "message": "不显示名称或消息"
+  },
+  "notifications_disabled": {
+    "message": "已禁用通知"
+  },
+  "new_messages": {
+    "message": "新消息"
+  },
+  "new_messages_body": {
+    "message": "你有新消息"
+  },
+  "n_messages_in_m_chats": {
+    "message": "%1$d 条消息，位于 %2$d 个聊天内"
+  },
+  "perm_required_title": {
+    "message": "需要权限"
+  },
+  "perm_continue": {
+    "message": "继续"
+  },
+  "perm_explain_access_to_camera_denied": {
+    "message": "要拍照或录像，请转至应用设置，选择“权限”，然后启用“相机”。"
+  },
+  "perm_explain_access_to_mic_denied": {
+    "message": "要发送音频消息，请转至应用设置，选择“权限”，然后启用“麦克风”。"
+  },
+  "perm_explain_access_to_storage_denied": {
+    "message": "要发送或接收文件，请转至应用设置，选择“权限”，然后启用“存储”。"
+  },
+  "perm_explain_access_to_location_denied": {
+    "message": "要附加位置，请转至应用设置，选择“权限”，然后启用“位置”。"
+  },
+  "perm_explain_access_to_notifications_denied": {
+    "message": "要接收通知，请转到“系统设置/应用/Delta Chat\"并开启”通知“。"
+  },
+  "ImageEditorHud_draw_anywhere_to_blur": {
+    "message": "对任意地方涂抹以进行模糊"
+  },
+  "ImageEditorHud_add_text": {
+    "message": "添加文字"
+  },
+  "ImageEditorHud_blur": {
+    "message": "模糊"
+  },
+  "ImageEditorHud_brush_marker": {
+    "message": "记号笔"
+  },
+  "ImageEditorHud_brush_highlight": {
+    "message": "荧光笔"
+  },
+  "ImageEditorHud_crop": {
+    "message": "裁剪"
+  },
+  "ImageEditorHud_flip": {
+    "message": "翻转"
+  },
+  "ImageEditorHud_rotate": {
+    "message": "旋转"
+  },
+  "encrypted_message": {
+    "message": "加密的消息"
+  },
+  "about_offical_app_desktop": {
+    "message": "这是 Delta Chat 官方桌面应用。"
+  },
+  "about_licensed_under_desktop": {
+    "message": "本软件在 GNU GPL 版本 3 下获得授权，其源代码可从 GitHub 获得。"
+  },
+  "welcome_desktop": {
+    "message": "欢迎使用 Delta Chat"
+  },
+  "global_menu_preferences_language_desktop": {
+    "message": "语言"
+  },
+  "global_menu_file_desktop": {
+    "message": "文件"
+  },
+  "global_menu_file_quit_desktop": {
+    "message": "退出"
+  },
+  "global_menu_edit_desktop": {
+    "message": "编辑"
+  },
+  "global_menu_edit_undo_desktop": {
+    "message": "撤销"
+  },
+  "global_menu_edit_redo_desktop": {
+    "message": "重做"
+  },
+  "global_menu_edit_cut_desktop": {
+    "message": "剪切"
+  },
+  "global_menu_edit_copy_desktop": {
+    "message": "复制"
+  },
+  "global_menu_edit_paste_desktop": {
+    "message": "粘贴"
+  },
+  "global_menu_view_desktop": {
+    "message": "视图"
+  },
+  "global_menu_view_floatontop_desktop": {
+    "message": "浮于顶层"
+  },
+  "global_menu_view_developer_desktop": {
+    "message": "开发者"
+  },
+  "global_menu_view_developer_tools_desktop": {
+    "message": "开发者工具"
+  },
+  "global_menu_help_desktop": {
+    "message": "帮助"
+  },
+  "delta_chat_homepage": {
+    "message": "Delta Chat 主页"
+  },
+  "contribute": {
+    "message": "贡献"
+  },
+  "global_menu_help_report_desktop": {
+    "message": "报告问题"
+  },
+  "global_menu_help_about_desktop": {
+    "message": "关于 Delta Chat"
+  },
+  "global_menu_file_open_desktop": {
+    "message": "打开 Delta Chat"
+  },
+  "global_menu_minimize_to_tray": {
+    "message": "最小化"
+  },
+  "no_chat_selected_suggestion_desktop": {
+    "message": "选择聊天或创建新聊天"
+  },
+  "write_message_desktop": {
+    "message": "输入消息…"
+  },
+  "encryption_info_title_desktop": {
+    "message": "加密信息"
+  },
+  "delete_message_desktop": {
+    "message": "删除消息"
+  },
+  "more_info_desktop": {
+    "message": "更多信息"
+  },
+  "timestamp_format_m_desktop": {
+    "message": "MMM D"
+  },
+  "remove_desktop": {
+    "message": "移除"
+  },
+  "save_desktop": {
+    "message": "保存"
+  },
+  "unsave": {
+    "message": "取消保存"
+  },
+  "name_desktop": {
+    "message": "名称"
+  },
+  "select_group_image_desktop": {
+    "message": "选择群组图像"
+  },
+  "export_backup_desktop": {
+    "message": "导出备份"
+  },
+  "autocrypt_correct_desktop": {
+    "message": "Autocrypt 设置已传输 。"
+  },
+  "forget_login_confirmation_desktop": {
+    "message": "删除此登录？所有内容都将会删除，包括您的端到端设置、联系人、聊天、消息和媒体。此操作无法撤销。"
+  },
+  "message_detail_sent_desktop": {
+    "message": "发送于"
+  },
+  "message_detail_received_desktop": {
+    "message": "接收于"
+  },
+  "menu.view.developer.open.log.folder": {
+    "message": "打开日志文件夹"
+  },
+  "menu.view.developer.open.current.log.file": {
+    "message": "打开当前日志文件"
+  },
+  "explain_desktop_minimized_disabled_tray_pref": {
+    "message": "在 Delta Chat 带 --minimized 参数启动时，无法禁用托盘图标。"
+  },
+  "no_spellcheck_suggestions_found": {
+    "message": "未找到拼写建议"
+  },
+  "show_window": {
+    "message": "显示窗口"
+  },
+  "keybindings": {
+    "message": "按键绑定"
+  },
+  "switch_between_chats": {
+    "message": "在不同聊天间切换"
+  },
+  "scroll_messages": {
+    "message": "滚动消息"
+  },
+  "focus_search_input": {
+    "message": "聚焦搜索"
+  },
+  "focus_message_input": {
+    "message": "聚焦消息输入"
+  },
+  "force_refresh_network": {
+    "message": "强制刷新网络"
+  },
+  "insert_newline": {
+    "message": "插入新行"
+  },
+  "a11y_delivery_status_error": {
+    "message": "发送状态：错误"
+  },
+  "a11y_encryption_padlock": {
+    "message": "加密挂锁"
+  },
+  "a11y_delivery_status_sending": {
+    "message": "发送状态：发送中"
+  },
+  "a11y_delivery_status_draft": {
+    "message": "发送状态：草稿"
+  },
+  "a11y_delivery_status_delivered": {
+    "message": "发送状态：已投递"
+  },
+  "a11y_delivery_status_read": {
+    "message": "发送状态：已读"
+  },
+  "a11y_delivery_status_invalid": {
+    "message": "无效的发送状态"
+  },
+  "a11y_message_context_menu_btn_label": {
+    "message": "消息操作"
+  },
+  "a11y_background_preview_label": {
+    "message": "背景预览"
+  },
+  "a11y_disappearing_messages_activated": {
+    "message": "消息定时销毁已激活"
+  },
+  "stop_sharing_location": {
+    "message": "停止共享位置"
+  },
+  "a11y_voice_message_hint_ios": {
+    "message": "录音后轻按两次发送。要丢弃录音，用两根手指左右滑动。"
+  },
+  "a11y_connectivity_hint": {
+    "message": "轻按两次查看连接详情"
+  },
+  "login_error_no_internet_connection": {
+    "message": "无互联网连接，登录失败。"
+  },
+  "share_account_not_configured": {
+    "message": "账号未配置。"
+  },
+  "cannot_play_audio_file": {
+    "message": "无法播放音频文件。"
+  },
+  "perm_ios_explain_access_to_camera_denied": {
+    "message": "要拍照、拍摄视频或扫描二维码，请打开系统设置并启用“相机”。"
+  },
+  "open_settings": {
+    "message": "打开设置"
+  },
+  "import_device_contacts": {
+    "message": "导入设备联系人"
+  },
+  "import_device_contacts_hint": {
+    "message": "要与你设备中的联系人聊天，请打开“设置”并启用“联系人”。"
+  },
+  "disabled_in_dc": {
+    "message": "在 Delta Chat 中被禁用"
+  },
+  "disabled_in_system_settings": {
+    "message": "在系统设置中被禁用"
+  },
+  "bg_app_refresh_disabled": {
+    "message": "“后台应用刷新”在系统设置中被禁用"
+  },
+  "delayed": {
+    "message": "延迟"
+  },
+  "notifications_avg_minutes": {
+    "message": "平均每 %1$d 分钟"
+  },
+  "notifications_avg_hours": {
+    "message": "平均每 %1$d 小时"
+  },
+  "last_check_at": {
+    "message": "检查于 %1$s"
+  },
+  "system_settings": {
+    "message": "系统设置"
+  },
+  "system_settings_notify_explain_ios": {
+    "message": "编辑类型、徽章、预览等"
+  },
+  "shortcuts_widget_title": {
+    "message": "快捷方式"
+  },
+  "shortcuts_widget_description": {
+    "message": "使用 Delta Chat 的“添加到微件”添加项目"
+  },
+  "remove_from_widget": {
+    "message": "从微件中移除"
+  },
+  "add_to_widget": {
+    "message": "添加到微件"
+  },
+  "InfoPlist_NSCameraUsageDescription": {
+    "message": "Delta Chat 使用相机来拍摄、发送照片和视频以及扫描二维码。"
+  },
+  "InfoPlist_NSContactsUsageDescription": {
+    "message": "Delta Chat 使用您的联系人来显示您可以写信到的电子邮件地址列表。 Delta Chat 没有服务器，您的联系人不会被发送到任何地方。"
+  },
+  "InfoPlist_NSLocationAlwaysAndWhenInUseUsageDescription": {
+    "message": "Delta Chat 需要位置权限，以便在你启用位置共享的时间范围内共享你的位置。"
+  },
+  "InfoPlist_NSLocationWhenInUseUsageDescription": {
+    "message": "Delta Chat 需要位置权限，以便在你启用位置共享的时间范围内共享你的位置。"
+  },
+  "InfoPlist_NSMicrophoneUsageDescription": {
+    "message": "Delta Chat 使用麦克风来录制、发送语音消息和带有声音的视频。"
+  },
+  "InfoPlist_NSPhotoLibraryUsageDescription": {
+    "message": "Delta Chat 将让您选择要从图库中发送哪些照片。"
+  },
+  "InfoPlist_NSPhotoLibraryAddUsageDescription": {
+    "message": "Delta Chat 想将图像保存到图库。"
+  },
+  "InfoPlist_NSFaceIDUsageDescription": {
+    "message": "Delta Chat 可以使用 Face ID 保护你的本地配置文件，备份创建和第二台设备设置。"
+  },
+  "pref_instant_delivery": {
+    "message": "即时传送"
+  },
+  "pref_background_notifications": {
+    "message": "使用后台连接"
+  },
+  "pref_background_notifications_explain": {
+    "message": "需要忽略电池优化，请在推送服务不可用时使用它"
+  },
+  "pref_reliable_service": {
+    "message": "强制后台连接"
+  },
+  "pref_reliable_service_explain": {
+    "message": "会形成永久通知"
+  },
+  "pref_background_notifications_rationale": {
+    "message": "要保持到电子邮件服务器的连接并在后台接收消息，请在下一步中忽略电池优化。\n\nDelta Chat 仅使用少量的资源并且会注意不去耗尽电池电量。"
+  },
+  "perm_enable_bg_reminder_title": {
+    "message": "点击此处以在 Delta Chat 处于后台时接收消息。"
+  },
+  "perm_enable_bg_already_done": {
+    "message": "您已允许 Delta Chat 在后台接收消息。\n\n若 Delta Chat 在后台时消息仍未到达，请检查系统设置。"
+  },
+  "update_1_50_android": {
+    "message": "有什么新功能？\n\n❤️‍🔥 新的表情符号选择器，包含更多表情符号\n\n🎮 增强的聊天应用：获取通知并在上下文中打开支持应用，即直接打开添加的日历条目\n\n👍 收到有关对您的消息的回应的通知\n\n…🛠️ %1$s 上的修复和更多内容"
+  },
+  "update_switch_profile_placement": {
+    "message": "ℹ️ “切换账号”选项已移动：点击主屏幕上角的个人资料图片以添加或切换账号 💡"
+  },
+  "n_minutes": {
+    "other": "%d 分钟"
+  },
+  "n_hours": {
+    "other": "%d 小时"
+  },
+  "n_chats": {
+    "other": "%d 个聊天"
+  },
+  "n_contacts": {
+    "other": "%d 个联系人"
+  },
+  "n_messages": {
+    "other": "%d 条消息"
+  },
+  "n_reactions": {
+    "other": "%d 个回应"
+  },
+  "n_members": {
+    "other": "%d 个成员"
+  },
+  "n_recipients": {
+    "other": "%d 位接收者"
+  },
+  "n_selected": {
+    "other": "%d 已选择"
+  },
+  "ask_send_following_n_files_to": {
+    "other": "将以下 %d 个文件发送给 %s？"
+  },
+  "ask_delete_chat": {
+    "other": "是否删除所有设备上的 %d 个聊天？"
+  },
+  "ask_delete_messages": {
+    "other": "是否删除所有设备上的 %d 条消息？"
+  },
+  "ask_delete_messages_simple": {
+    "other": "删除 %d 条消息吗？"
+  },
+  "chat_archived": {
+    "other": "已归档 %d 个聊天"
+  },
+  "chat_unarchived": {
+    "other": "已取消归档 %d 个聊天"
+  },
+  "chat_n_new_messages": {
+    "other": "%d 条新消息"
+  }
+}

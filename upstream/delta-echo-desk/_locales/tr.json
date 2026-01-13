@@ -1,0 +1,2664 @@
+{
+  "app_name": {
+    "message": "Delta Chat"
+  },
+  "ok": {
+    "message": "Tamam"
+  },
+  "cancel": {
+    "message": "İptal"
+  },
+  "clear_search": {
+    "message": "Aramayı Temizle"
+  },
+  "link": {
+    "message": "Bağlantı"
+  },
+  "scan": {
+    "message": "Tara"
+  },
+  "yes": {
+    "message": "Evet"
+  },
+  "no": {
+    "message": "Hayır"
+  },
+  "select": {
+    "message": "Seç"
+  },
+  "on": {
+    "message": "Açık"
+  },
+  "off": {
+    "message": "Kapalı"
+  },
+  "def": {
+    "message": "Varsayılan"
+  },
+  "default_value": {
+    "message": "Varsayılan (%1$s)"
+  },
+  "default_value_as_above": {
+    "message": "Varsayılan (yukarıdakinin aynısı)"
+  },
+  "custom": {
+    "message": "Özel"
+  },
+  "none": {
+    "message": "Yok"
+  },
+  "automatic": {
+    "message": "Otomatik"
+  },
+  "strict": {
+    "message": "Katı"
+  },
+  "open": {
+    "message": "Aç"
+  },
+  "download": {
+    "message": "İndir"
+  },
+  "downloading": {
+    "message": "İndiriliyor…"
+  },
+  "open_attachment": {
+    "message": "İlişiği Aç"
+  },
+  "join": {
+    "message": "Katıl"
+  },
+  "rejoin": {
+    "message": "Yeniden Katıl"
+  },
+  "delete": {
+    "message": "Sil"
+  },
+  "delete_for_me": {
+    "message": "Benim için Sil"
+  },
+  "delete_for_everyone": {
+    "message": "Herkes için Sil"
+  },
+  "info": {
+    "message": "Bilgi"
+  },
+  "update": {
+    "message": "Güncelleştir"
+  },
+  "emoji": {
+    "message": "Emoji"
+  },
+  "attachment": {
+    "message": "İlişik"
+  },
+  "back": {
+    "message": "Geri"
+  },
+  "close": {
+    "message": "Kapat"
+  },
+  "close_window": {
+    "message": "Pencereyi Kapat"
+  },
+  "forward": {
+    "message": "İlet"
+  },
+  "create": {
+    "message": "Oluştur"
+  },
+  "reset": {
+    "message": "Sıfırla"
+  },
+  "later": {
+    "message": "Daha Sonra"
+  },
+  "resend": {
+    "message": "Yeniden Gönder"
+  },
+  "edited": {
+    "message": "Düzenlendi"
+  },
+  "edit_message": {
+    "message": "İletiyi Düzenle"
+  },
+  "archive": {
+    "message": "Arşivle"
+  },
+  "unarchive": {
+    "message": "Arşivleme"
+  },
+  "mute": {
+    "message": "Sessize Al"
+  },
+  "muted": {
+    "message": "Sessize alındı"
+  },
+  "ephemeral_messages": {
+    "message": "Kaybolan İletiler"
+  },
+  "ephemeral_messages_hint": {
+    "message": "Bu sohbetin tüm üyelerine uygulanır; onlar hâlâ iletileri kopyalayabilir, kaydedebilir ve iletebilir."
+  },
+  "save": {
+    "message": "Kaydet"
+  },
+  "chat": {
+    "message": "Sohbet"
+  },
+  "media": {
+    "message": "Ortam"
+  },
+  "profile": {
+    "message": "Profil"
+  },
+  "main_menu": {
+    "message": "Ana Menü"
+  },
+  "start_chat": {
+    "message": "Sohbet Başlat"
+  },
+  "show_full_message": {
+    "message": "Tam İletiyi Göster…"
+  },
+  "mark_all_as_read": {
+    "message": "Tümünü Okundu Olarak İmle"
+  },
+  "mark_as_read": {
+    "message": "Okundu Olarak İmle"
+  },
+  "mark_as_read_short": {
+    "message": "Okundu İmi"
+  },
+  "loading": {
+    "message": "Yükleniyor…"
+  },
+  "hide": {
+    "message": "Gizle"
+  },
+  "activate": {
+    "message": "Etkinleştir"
+  },
+  "load_remote_content": {
+    "message": "Uzak Görselleri Yükle"
+  },
+  "load_remote_content_ask": {
+    "message": "Uzak görseller sizi izleyebilir.\n\nBu ayar, yazı tiplerini ve diğer içeriği de yükler. Etkisizleştirilirse, katıştırılan ya da önbelleklenen görselleri görebilirsiniz.\n\nUzak görseller yüklensin mi?"
+  },
+  "always": {
+    "message": "Her zaman"
+  },
+  "always_load_remote_images": {
+    "message": "Her Zaman Uzak Görselleri Yükle"
+  },
+  "once": {
+    "message": "Bir kez"
+  },
+  "show_warning": {
+    "message": "Uyarı Göster"
+  },
+  "show_password": {
+    "message": "Parolayı Göster"
+  },
+  "hide_password": {
+    "message": "Parolayı Gizle"
+  },
+  "not_now": {
+    "message": "Şimdi değil"
+  },
+  "never": {
+    "message": "Hiçbir zaman"
+  },
+  "one_moment": {
+    "message": "Bir dakika…"
+  },
+  "done": {
+    "message": "Bitti"
+  },
+  "undo": {
+    "message": "Geri Al"
+  },
+  "offline": {
+    "message": "Çevrimdışı"
+  },
+  "next": {
+    "message": "Sonraki"
+  },
+  "error": {
+    "message": "Hata"
+  },
+  "error_x": {
+    "message": "Hata: %1$s"
+  },
+  "no_app_to_handle_data": {
+    "message": "Bu veri türünü işleyen bir uygulama bulunamıyor."
+  },
+  "no_browser_installed": {
+    "message": "Kurulu tarayıcı yok."
+  },
+  "file_not_found": {
+    "message": "%1$s bulunamadı."
+  },
+  "copied_to_clipboard": {
+    "message": "Panoya kopyalandı."
+  },
+  "contacts_headline": {
+    "message": "Kişiler"
+  },
+  "email_address": {
+    "message": "E-Posta Adresi"
+  },
+  "bad_email_address": {
+    "message": "Yanlış e-posta adresi."
+  },
+  "password": {
+    "message": "Parola"
+  },
+  "existing_password": {
+    "message": "Varolan Parola"
+  },
+  "now": {
+    "message": "Şimdi"
+  },
+  "danger": {
+    "message": "Tehlikeli"
+  },
+  "today": {
+    "message": "Bugün"
+  },
+  "yesterday": {
+    "message": "Dün"
+  },
+  "this_week": {
+    "message": "Bu hafta"
+  },
+  "this_month": {
+    "message": "Bu ay"
+  },
+  "last_week": {
+    "message": "Geçen hafta"
+  },
+  "last_month": {
+    "message": "Geçen ay"
+  },
+  "last_seen_at": {
+    "message": "Son görülme %1$s"
+  },
+  "last_seen_relative": {
+    "message": "Son görülme %1$s"
+  },
+  "last_seen_unknown": {
+    "message": "Son görülme: Bilinmeyen"
+  },
+  "self": {
+    "message": "Ben"
+  },
+  "draft": {
+    "message": "Taslak"
+  },
+  "image": {
+    "message": "Görsel"
+  },
+  "reply_noun": {
+    "message": "Yanıt"
+  },
+  "gif": {
+    "message": "GIF"
+  },
+  "sticker": {
+    "message": "Çıkartma"
+  },
+  "add_to_sticker_collection": {
+    "message": "Çıkartma Toplamasına Ekle"
+  },
+  "add_stickers_instructions": {
+    "message": "Çıkartmalar eklemek için “Çıkartma Klasörünü Aç”a dokunun, çıkartma paketiniz için bir alt klasör oluşturun ve görseli ve çıkartma dosyalarını oraya sürükleyin"
+  },
+  "open_sticker_folder": {
+    "message": "Çıkartma Klasörünü Aç"
+  },
+  "images": {
+    "message": "Görseller"
+  },
+  "audio": {
+    "message": "Ses"
+  },
+  "voice_message": {
+    "message": "Sesli İleti"
+  },
+  "forwarded": {
+    "message": "İletildi"
+  },
+  "forwarded_message": {
+    "message": "İletilen İleti"
+  },
+  "forwarded_by": {
+    "message": "%1$s tarafından iletildi"
+  },
+  "video": {
+    "message": "Video"
+  },
+  "documents": {
+    "message": "Belgeler"
+  },
+  "contact": {
+    "message": "Kişi"
+  },
+  "bot": {
+    "message": "Bot"
+  },
+  "camera": {
+    "message": "Kamera"
+  },
+  "capture": {
+    "message": "Yakala"
+  },
+  "switch_camera": {
+    "message": "Kamerayı Değiştir"
+  },
+  "toggle_fullscreen": {
+    "message": "Tam Ekran Moduna Geç"
+  },
+  "location": {
+    "message": "Konum"
+  },
+  "locations": {
+    "message": "Konumlar"
+  },
+  "gallery": {
+    "message": "Galeri"
+  },
+  "images_and_videos": {
+    "message": "Görseller ve Videolar"
+  },
+  "file": {
+    "message": "Dosya"
+  },
+  "files": {
+    "message": "Dosyalar"
+  },
+  "webxdc_app": {
+    "message": "Uygulama"
+  },
+  "webxdc_apps": {
+    "message": "Uygulamalar"
+  },
+  "webxdc_store_url": {
+    "message": "Uygulama Seçici URL'si"
+  },
+  "webxdc_store_url_explain": {
+    "message": "Ayarlanırsa URL, varsayılan birinin yerine Uygulama Seçici olarak kullanılacak"
+  },
+  "home": {
+    "message": "Ana Sayfa"
+  },
+  "games": {
+    "message": "Oyunlar"
+  },
+  "tools": {
+    "message": "Araçlar"
+  },
+  "app_size": {
+    "message": "Boyut"
+  },
+  "app_date_published": {
+    "message": "Yayımlanma"
+  },
+  "add_to_chat": {
+    "message": "Sohbete Ekle"
+  },
+  "browse": {
+    "message": "Gözat"
+  },
+  "unknown": {
+    "message": "Bilinmeyen"
+  },
+  "green": {
+    "message": "Yeşil"
+  },
+  "red": {
+    "message": "Kırmızı"
+  },
+  "blue": {
+    "message": "Mavi"
+  },
+  "orange": {
+    "message": "Turuncu"
+  },
+  "cyan": {
+    "message": "Camgöbeği"
+  },
+  "purple": {
+    "message": "Mor"
+  },
+  "magenta": {
+    "message": "Eflatun"
+  },
+  "white": {
+    "message": "Beyaz"
+  },
+  "zoom": {
+    "message": "Yakınlaştır"
+  },
+  "extra_small": {
+    "message": "Çok küçük"
+  },
+  "small": {
+    "message": "Küçük"
+  },
+  "normal": {
+    "message": "Normal"
+  },
+  "large": {
+    "message": "Büyük"
+  },
+  "extra_large": {
+    "message": "Çok büyük"
+  },
+  "fast": {
+    "message": "Hızlı"
+  },
+  "slow": {
+    "message": "Yavaş"
+  },
+  "menu_new_contact": {
+    "message": "Yeni Kişi"
+  },
+  "menu_new_classic_contact": {
+    "message": "Elle Kişi Ekle"
+  },
+  "new_classic_contact_explain": {
+    "message": "Elle eklenen kişiler, klasik e-postaya metin göndermede kullanılabilir ve uçtan uca şifreleme güvencelenmez."
+  },
+  "menu_new_chat": {
+    "message": "Yeni Sohbet"
+  },
+  "menu_new_group": {
+    "message": "Yeni Öbek"
+  },
+  "chat_with": {
+    "message": "Sohbet et…"
+  },
+  "clone_chat": {
+    "message": "Sohbeti Çoğalt"
+  },
+  "broadcast_list": {
+    "message": "Yayın Listesi"
+  },
+  "broadcast_lists": {
+    "message": "Yayın Listeleri"
+  },
+  "new_broadcast_list": {
+    "message": "Yeni Yayın Listesi"
+  },
+  "add_recipients": {
+    "message": "Alıcılar Ekle"
+  },
+  "edit_broadcast_list": {
+    "message": "Yayın Listesini Düzenle"
+  },
+  "broadcast_list_name": {
+    "message": "Yayın Listesi Adı"
+  },
+  "please_enter_broadcast_list_name": {
+    "message": "Lütfen yayın listesi için bir ad girin."
+  },
+  "menu_send": {
+    "message": "Gönder"
+  },
+  "menu_toggle_keyboard": {
+    "message": "Emoji Klavyesine Geç"
+  },
+  "menu_edit_group": {
+    "message": "Öbeği Düzenle"
+  },
+  "menu_group_name_and_image": {
+    "message": "Öbek Adı ve Görseli"
+  },
+  "menu_show_global_map": {
+    "message": "Tüm Konumlar"
+  },
+  "menu_archive_chat": {
+    "message": "Sohbeti Arşivle"
+  },
+  "menu_unarchive_chat": {
+    "message": "Sohbeti Arşivleme"
+  },
+  "menu_add_attachment": {
+    "message": "İlişik Ekle"
+  },
+  "menu_leave_group": {
+    "message": "Öbekten Ayrıl"
+  },
+  "menu_delete_chat": {
+    "message": "Sohbeti Sil"
+  },
+  "clear_chat": {
+    "message": "Sohbeti Temizle"
+  },
+  "delete_contact": {
+    "message": "Kişiyi Sil"
+  },
+  "menu_delete_location": {
+    "message": "Bu Konumu Sil"
+  },
+  "menu_message_details": {
+    "message": "İleti Bilgisi"
+  },
+  "menu_copy_to_clipboard": {
+    "message": "Panoya Kopyala"
+  },
+  "share_invite_link": {
+    "message": "Çağırma Bağlantısı Paylaş"
+  },
+  "share_invite_link_explain": {
+    "message": "Herhangi birisi bu bağlantıyla profilinizi görüntüleyebilir ve sizinle bir sohbet başlatabilir. Onu yalnızca güvendiğiniz insanlarla paylaşın."
+  },
+  "invite_friends": {
+    "message": "Arkadaşları Çağır"
+  },
+  "invite_friends_text": {
+    "message": "Delta Chat üzerinden bana ulaşın:\n%1$s"
+  },
+  "menu_copy_selection_to_clipboard": {
+    "message": "Seçimi Kopyala"
+  },
+  "menu_copy_link_to_clipboard": {
+    "message": "Bağlantıyı Kopyala"
+  },
+  "menu_copy_text_to_clipboard": {
+    "message": "Metni Kopyala"
+  },
+  "menu_copy_image_to_clipboard": {
+    "message": "Görseli Kopyala"
+  },
+  "menu_copy_email_to_clipboard": {
+    "message": "E-Postayı Kopyala"
+  },
+  "paste_from_clipboard": {
+    "message": "Panodan Yapıştır"
+  },
+  "ask_copy_unopenable_link_to_clipboard": {
+    "message": "“%1$d” bağlantısı web tarayıcısında açılamıyor. Bunun yerine bağlantıyı panoya kopyalamak istiyor musunuz?"
+  },
+  "menu_forward": {
+    "message": "İletiyi İlet"
+  },
+  "menu_reply": {
+    "message": "İletiye Yanıt Ver"
+  },
+  "menu_mute": {
+    "message": "Bildirimleri Sessize Al"
+  },
+  "menu_unmute": {
+    "message": "Sessize Alma"
+  },
+  "menu_export_attachment": {
+    "message": "İlişiği Dışa Aktar"
+  },
+  "menu_export_attachments": {
+    "message": "İlişikleri Dışa Aktar"
+  },
+  "menu_all_media": {
+    "message": "Tüm Ortamlar"
+  },
+  "show_in_chat": {
+    "message": "Sohbette Göster"
+  },
+  "show_app_in_chat": {
+    "message": "Uygulamayı Sohbette Göster"
+  },
+  "menu_share": {
+    "message": "Paylaş"
+  },
+  "block": {
+    "message": "Engelle"
+  },
+  "menu_block_contact": {
+    "message": "Kişiyi Engelle"
+  },
+  "menu_unblock_contact": {
+    "message": "Kişiyi Engelleme"
+  },
+  "accept": {
+    "message": "Kabul Et"
+  },
+  "menu_play": {
+    "message": "Oynat"
+  },
+  "menu_pause": {
+    "message": "Duraklat"
+  },
+  "menu_scroll_to_bottom": {
+    "message": "En Alta Kaydır"
+  },
+  "menu_scroll_to_top": {
+    "message": "En Üste Kaydır"
+  },
+  "menu_help": {
+    "message": "Yardım"
+  },
+  "what_is_webxdc": {
+    "message": "Webxdc nedir?"
+  },
+  "privacy_policy": {
+    "message": "Gizlilik İlkesi"
+  },
+  "menu_select_all": {
+    "message": "Tümünü Seç"
+  },
+  "select_chat": {
+    "message": "Sohbet Seç"
+  },
+  "select_more": {
+    "message": "Daha fazlasını seç"
+  },
+  "menu_edit_name": {
+    "message": "Adı Düzenle"
+  },
+  "edit_name_explain": {
+    "message": "“%1$s” yerine size gösterilecek bir takma ad ayarlayın. Kişinin seçilen adını kullanmak için boş bırakın."
+  },
+  "edit_name_placeholder": {
+    "message": "“%1$s” için Takma Ad"
+  },
+  "menu_settings": {
+    "message": "Ayarlar"
+  },
+  "menu_advanced": {
+    "message": "Gelişmiş"
+  },
+  "menu_view_profile": {
+    "message": "Profili Görüntüle"
+  },
+  "menu_zoom_in": {
+    "message": "Yakınlaştır"
+  },
+  "menu_zoom_out": {
+    "message": "Uzaklaştır"
+  },
+  "menu_save_log": {
+    "message": "Günlüğü Kaydet"
+  },
+  "menu_more_options": {
+    "message": "Daha Fazla Seçenek"
+  },
+  "menu_learn_spelling": {
+    "message": "Yazımı Öğrenin"
+  },
+  "menu_chat_audit_log": {
+    "message": "Sohbet Denetim Günlüğü"
+  },
+  "jump_to_message": {
+    "message": "İletiye Atla"
+  },
+  "jump_to_original_message": {
+    "message": "Özgün İletiye Atla"
+  },
+  "copy_json": {
+    "message": "JSON kopyala"
+  },
+  "replace_draft": {
+    "message": "Taslağı Değiştir"
+  },
+  "title_share_location": {
+    "message": "Tüm öbek üyeleriyle konum paylaş"
+  },
+  "device_talk": {
+    "message": "Aygıt İletileri"
+  },
+  "device_talk_subtitle": {
+    "message": "Yerel olarak oluşturulan iletiler"
+  },
+  "device_talk_explain": {
+    "message": "Bu sohbetteki iletiler, uygulama güncelleştirmeleri ve kullanım sırasındaki sorunlar hakkında bilgilendirmek için aygıtınızda oluşturulur."
+  },
+  "device_talk_welcome_message2": {
+    "message": "İletişime geçin!\n\n🙌 Her iki aygıtın ana ekranındaki “QR Kodu”na dokunun. Bir aygıtta “QR Kodunu Tara”yı seçin ve onu diğerine doğrultun\n\n🌍 Aynı odada değilse, video araması aracılığıyla tarayın ya da “QR Kodu”ndan bir çağırma bağlantısı paylaşın\n\nDaha sonra: Şimdiye kadar varolan en büyük merkezi olmayan ağ üzerinden ulak deneyiminizin keyfini çıkarın: E-posta. Ve diğer yaygın uygulamaların tersine, merkezi denetim ya da izleme olmayan ya da sizi, arkadaşlarınızı, iş arkadaşlarınızı ya da ailenizi büyük kuruluşlara satmayan."
+  },
+  "edit_contact": {
+    "message": "Kişiyi Düzenle"
+  },
+  "pin_chat": {
+    "message": "Sohbeti Sabitle"
+  },
+  "unpin_chat": {
+    "message": "Sohbeti Sabitleme"
+  },
+  "pin": {
+    "message": "Sabitle"
+  },
+  "unpin": {
+    "message": "Sabitleme"
+  },
+  "ConversationFragment_quoted_message_not_found": {
+    "message": "Özgün ileti bulunamadı"
+  },
+  "reply_privately": {
+    "message": "Özel Olarak Yanıtla"
+  },
+  "source_code": {
+    "message": "Kaynak Kodu"
+  },
+  "add_to_home_screen": {
+    "message": "Ana Ekrana Ekle"
+  },
+  "donate": {
+    "message": "Bağış"
+  },
+  "mute_for_one_hour": {
+    "message": "1 saatliğine sessize al"
+  },
+  "mute_for_eight_hours": {
+    "message": "8 saatliğine sessize al"
+  },
+  "mute_for_one_day": {
+    "message": "1 günlüğüne sessize al"
+  },
+  "mute_for_seven_days": {
+    "message": "7 günlüğüne sessize al"
+  },
+  "mute_forever": {
+    "message": "Sonsuza dek sessize al"
+  },
+  "share_location_for_5_minutes": {
+    "message": "5 dakikalığına"
+  },
+  "share_location_for_30_minutes": {
+    "message": "30 dakikalığına"
+  },
+  "share_location_for_one_hour": {
+    "message": "1 saatliğine"
+  },
+  "share_location_for_two_hours": {
+    "message": "2 saatliğine"
+  },
+  "share_location_for_six_hours": {
+    "message": "6 saatliğine"
+  },
+  "file_saved_to": {
+    "message": "Dosya “%1$s” üzerine kaydedildi."
+  },
+  "videochat": {
+    "message": "Video Sohbeti"
+  },
+  "videochat_invite_user_to_videochat": {
+    "message": "%1$s bir video sohbetine çağrılsın mı?"
+  },
+  "videochat_invite_user_hint": {
+    "message": "Bu, her iki uçta da uyumlu bir uygulama ya da tarayıcı gerektirir."
+  },
+  "videochat_contact_invited_hint": {
+    "message": "%1$s bir video sohbetine çağrıldı."
+  },
+  "videochat_you_invited_hint": {
+    "message": "Bir video sohbeti çağrısı gönderdiniz."
+  },
+  "videochat_tap_to_join": {
+    "message": "Katılmak için Dokunun"
+  },
+  "videochat_tap_to_open": {
+    "message": "Açmak için Dokunun"
+  },
+  "videochat_instance": {
+    "message": "Video Sohbeti Örneği"
+  },
+  "videochat_instance_placeholder": {
+    "message": "Video Sohbeti Örneğiniz"
+  },
+  "videochat_instance_example": {
+    "message": "Örnek: https://your-server.org/$ROOM"
+  },
+  "videochat_instance_explain_2": {
+    "message": "Etkinleştirilirse, her sohbetten video sohbeti başlatabilirsiniz. Her iki uçta da uyumlu bir uygulama ya da bir tarayıcı gerektirir."
+  },
+  "videochat_instance_from_qr": {
+    "message": "“%1$s” diğerlerini video sohbetlerine çağırmak için kullanılsın mı?\n\nBir kez ayarlandığında, her sohbetten video sohbeti başlatabilirsiniz. Bu, video sohbetleri için herhangi bir önceki ayarın yerini alır."
+  },
+  "videochat_invitation": {
+    "message": "Video sohbeti çağrısı"
+  },
+  "videochat_invitation_body": {
+    "message": "Bir video sohbetine çağrıldınız; katılmak için %1$s öğesini tıklayın."
+  },
+  "ask_leave_group": {
+    "message": "Bu öbekten ayrılmak istediğinizden emin misiniz?"
+  },
+  "ask_delete_named_chat": {
+    "message": "Tüm aygıtlarınızdaki “%1$s” sohbeti silinsin mi?"
+  },
+  "ask_delete_message": {
+    "message": "Tüm aygıtlarınızdaki bu ileti silinsin mi?"
+  },
+  "ask_forward": {
+    "message": "İletiler %1$s kişisine iletilsin mi?"
+  },
+  "ask_forward_multiple": {
+    "message": "İletiler %1$d sohbete iletilsin mi?"
+  },
+  "ask_export_attachment": {
+    "message": "İlişikleri dışa aktarmak, aygıtınızdaki diğer uygulamaların onlara erişmesine izin verir.\n\nSürdürülsün mü?"
+  },
+  "ask_block_contact": {
+    "message": "Bu kişi engellensin mi?\n\nEngellenen kişiler tarafından oluşturulan doğrudan iletiler ya da öbekler gösterilmeyecek.\n\nEngellenen kişilerle olan diğer öbekler, onların iletilerini gösterecek."
+  },
+  "ask_unblock_contact": {
+    "message": "Bu kişi engellenmesin mi?"
+  },
+  "ask_delete_contacts": {
+    "message": "Kişiler silinsin mi?\n\nSohbetlerin sürdüğü ya da sistem adres defterinden gelen kişiler kalıcı olarak silinemez."
+  },
+  "ask_delete_contact": {
+    "message": "%1$s kişisi silinsin mi?\n\nSohbetlerin sürdüğü ya da sistem adres defterinden gelen kişiler kalıcı olarak silinemez."
+  },
+  "ask_start_chat_with": {
+    "message": "%1$s ile sohbet edilsin mi?"
+  },
+  "ask_remove_members": {
+    "message": "%1$s öbekten kaldırılsın mı?"
+  },
+  "ask_remove_from_broadcast": {
+    "message": "%1$s yayın listesinden kaldırılsın mı?"
+  },
+  "open_url_confirmation": {
+    "message": "Bu bağlantıyı açmak istiyor musunuz?"
+  },
+  "contacts_title": {
+    "message": "Kişiler"
+  },
+  "contacts_enter_name_or_email": {
+    "message": "Ad ya da e-posta adresi girin"
+  },
+  "contacts_type_email_above": {
+    "message": "Yukarıya e-posta adresi yazın"
+  },
+  "contacts_empty_hint": {
+    "message": "Kişi yok."
+  },
+  "chat_archived_chats_title": {
+    "message": "Arşivlenen Sohbetler"
+  },
+  "chat_please_enter_message": {
+    "message": "Lütfen bir ileti girin."
+  },
+  "chat_camera_unavailable": {
+    "message": "Kamera kullanım dışı."
+  },
+  "chat_unable_to_record_audio": {
+    "message": "Ses kaydedilemiyor."
+  },
+  "chat_new_one_to_one_hint": {
+    "message": "%1$s kişisine bir ileti gönderin."
+  },
+  "chat_new_broadcast_hint": {
+    "message": "Bir yayın listesinde, alıcılar sizinle salt okunur bir sohbette iletiler alacak."
+  },
+  "chat_new_group_hint": {
+    "message": "Diğerleri, yalnızca siz bir ilk ileti gönderdikten sonra bu öbeği görecek."
+  },
+  "chat_record_slide_to_cancel": {
+    "message": "İptal etmek için kaydırın"
+  },
+  "chat_record_explain": {
+    "message": "Bir sesli ileti kaydetmek için dokunun ve basılı tutun, göndermek için bırakın"
+  },
+  "chat_no_chats_yet_title": {
+    "message": "Sohbet yok.\nYeni bir sohbet başlatmak için “+” simgesine basın."
+  },
+  "chat_all_archived": {
+    "message": "Tüm sohbetler arşivlendi.\nYeni bir sohbet başlatmak için “+” simgesine basın."
+  },
+  "chat_share_with_title": {
+    "message": "Paylaş"
+  },
+  "chat_input_placeholder": {
+    "message": "İleti"
+  },
+  "chat_archived_label": {
+    "message": "Arşivlenen"
+  },
+  "chat_request_label": {
+    "message": "İstek"
+  },
+  "chat_no_messages": {
+    "message": "İleti yok."
+  },
+  "chat_self_talk_subtitle": {
+    "message": "Kendime İletiler"
+  },
+  "archive_empty_hint": {
+    "message": "Arşivlenen sohbetler burada görünecek."
+  },
+  "saved_messages": {
+    "message": "Kaydedilen İletiler"
+  },
+  "saved_messages_explain": {
+    "message": "• Kolay erişim için iletileri buraya iletin\n\n• Notlar ya da sesli notlar alın\n\n• Onları kaydetmek için ortamlar iliştirin"
+  },
+  "saved": {
+    "message": "Kaydedilen"
+  },
+  "save_as": {
+    "message": "Farklı Kaydet"
+  },
+  "retry_send": {
+    "message": "İletiyi göndermeyi yeniden dene"
+  },
+  "messaging_disabled_not_in_group": {
+    "message": "Bir ileti göndermek için bu öbekte olmalısınız. Katılmak için başka bir üyeye sorun."
+  },
+  "messaging_disabled_mailing_list": {
+    "message": "Posta listelerine iletiler gönderme henüz desteklenmiyor"
+  },
+  "cannot_display_unsuported_file_type": {
+    "message": "Bu dosya türü görüntülenemiyor: %s"
+  },
+  "attachment_failed_to_load": {
+    "message": "İlişiği yükleme başarısız"
+  },
+  "lock_recording": {
+    "message": "Kaydı Kilitle"
+  },
+  "mailing_list": {
+    "message": "Posta Listesi"
+  },
+  "mailing_list_profile_info": {
+    "message": "Posta listesi adındaki ve görselindeki değişiklikler yalnızca bu aygıtta uygulanır."
+  },
+  "start_app": {
+    "message": "Başlat…"
+  },
+  "accept_request_first": {
+    "message": "Lütfen önce sohbet isteğini kabul edin."
+  },
+  "send_file_to": {
+    "message": "“%1$s” dosyasını gönder…"
+  },
+  "send_message_to": {
+    "message": "İletiyi gönder…"
+  },
+  "enable_realtime": {
+    "message": "Gerçek Zamanlı Uygulamalar"
+  },
+  "enable_realtime_explain": {
+    "message": "Sohbetlerde paylaşılan uygulamalar için gerçek zamanlı bağlantıları etkinleştirin. Etkinleştirilirse, bir uygulama başlattığınızda sohbet ortakları IP adresinizi bulabilir."
+  },
+  "filter_map_on_time": {
+    "message": "Konumları zaman çerçevesinde göster"
+  },
+  "show_location_traces": {
+    "message": "İzleri göster"
+  },
+  "add_poi": {
+    "message": "İlgi çekici noktayı gönder"
+  },
+  "chat_audit_log_empty_message": {
+    "message": "Bu sohbet için sistem iletileri burada görünür"
+  },
+  "chat_audit_log_title": {
+    "message": "%1$s için Sohbet Denetim Günlüğü"
+  },
+  "chat_audit_log_description": {
+    "message": "Yalnızca sistem ve bilgi iletilerini gösterir; birçok ileti arasında kaydırmadan son sohbet eylemlerini bulmak için kullanışlıdır."
+  },
+  "open_external_url_trust_domain": {
+    "message": "%1$s için yeniden sorma"
+  },
+  "puny_code_warning_header": {
+    "message": "Kuşkulu bağlantı algılandı"
+  },
+  "puny_code_warning_question": {
+    "message": "%1$s bağlantısını ziyaret etmek istediğinizden emin misiniz?"
+  },
+  "puny_code_warning_description": {
+    "message": "Farklı abecelerden benzer görünen karakterleri kullanarak karakterleri yanlış temsil edebilecek bir bağlantı izlediniz. Aşağıdaki %1$s etiketli bağlantıyı izlemek, Latin olmayan karakterler için normal olan %2$s dönüşümüyle sonuçlanacak. Böyle karakterleri beklemediyseniz, bu bağlantı zararlı olabilir."
+  },
+  "search": {
+    "message": "Ara"
+  },
+  "search_in_chat": {
+    "message": "Sohbette Ara"
+  },
+  "search_files": {
+    "message": "Dosyalar Ara"
+  },
+  "search_explain": {
+    "message": "Sohbetleri, kişileri ve iletileri ara"
+  },
+  "search_no_result_for_x": {
+    "message": "“%s” için sonuç bulunamadı"
+  },
+  "search_unread": {
+    "message": "Okunmayan"
+  },
+  "group_name": {
+    "message": "Öbek Adı"
+  },
+  "group_avatar": {
+    "message": "Öbek Görseli"
+  },
+  "remove_group_image": {
+    "message": "Öbek Görselini Kaldır"
+  },
+  "change_group_image": {
+    "message": "Öbek Görselini Değiştir"
+  },
+  "group_create_button": {
+    "message": "Öbek Oluştur"
+  },
+  "group_please_enter_group_name": {
+    "message": "Lütfen öbek için bir ad girin."
+  },
+  "group_add_members": {
+    "message": "Üyeler Ekle"
+  },
+  "group_self_not_in_group": {
+    "message": "Bu eylemi gerçekleştirmek için öbeğin bir üyesi olmalısınız."
+  },
+  "profile_encryption": {
+    "message": "Şifreleme"
+  },
+  "profile_shared_chats": {
+    "message": "Paylaşılan Sohbetler"
+  },
+  "related_chats": {
+    "message": "İlgili Sohbetler"
+  },
+  "past_members": {
+    "message": "Geçmişteki Üyeler"
+  },
+  "tab_contact": {
+    "message": "Kişi"
+  },
+  "tab_group": {
+    "message": "Öbek"
+  },
+  "tab_gallery": {
+    "message": "Galeri"
+  },
+  "tab_docs": {
+    "message": "Belgeler"
+  },
+  "tab_links": {
+    "message": "Bağlantılar"
+  },
+  "tab_map": {
+    "message": "Harita"
+  },
+  "tab_gallery_empty_hint": {
+    "message": "Bu sohbette paylaşılan görseller ve videolar burada görünecek."
+  },
+  "tab_docs_empty_hint": {
+    "message": "Bu sohbette paylaşılan belgeler ve diğer dosyalar burada görünecek."
+  },
+  "tab_image_empty_hint": {
+    "message": "Bu sohbette paylaşılan görseller burada görünecek."
+  },
+  "tab_video_empty_hint": {
+    "message": "Bu sohbette paylaşılan videolar burada görünecek."
+  },
+  "tab_audio_empty_hint": {
+    "message": "Bu sohbette paylaşılan ses dosyaları ve sesli iletiler burada görünecek."
+  },
+  "tab_webxdc_empty_hint": {
+    "message": "Bu sohbette paylaşılan uygulamalar burada görünecek."
+  },
+  "tab_all_media_empty_hint": {
+    "message": "Herhangi bir sohbette paylaşılan ortamlar burada görünecek."
+  },
+  "all_files_empty_hint": {
+    "message": "Herhangi bir sohbette paylaşılan belgeler ve diğer dosyalar burada görünecek."
+  },
+  "all_apps_empty_hint": {
+    "message": "Herhangi bir sohbette paylaşılan uygulamalar burada görünecek."
+  },
+  "media_preview": {
+    "message": "Ortam Önizlemesi"
+  },
+  "aspect_ratio_grid": {
+    "message": "En Boy Oranı Izgarası"
+  },
+  "square_grid": {
+    "message": "Kare Izgara"
+  },
+  "send_message": {
+    "message": "İleti Gönder"
+  },
+  "aeap_addr_changed": {
+    "message": "%1$s, %2$s adresini %3$s olarak değiştirdi"
+  },
+  "aeap_explanation": {
+    "message": "%1$s e-posta adresinizi %2$s olarak değiştirdiniz.\n\nŞimdi bir doğrulanan öbeğe ileti gönderirseniz, oradaki kişiler yeni adresinizle eskisini otomatik olarak değiştirecek.\n\nTüm e-postaları yeni e-posta adresinize iletmek için eski e-posta sağlayıcınızı ayarlamanız önemle önerilir. Yoksa henüz yeni adresinizi almamış olan kişilerin iletilerini kaçırabilirsiniz."
+  },
+  "multidevice_title": {
+    "message": "İkinci Aygıt Ekle"
+  },
+  "multidevice_same_network_hint": {
+    "message": "Her iki aygıtın da aynı Wi-Fi'da ya da ağda olduğundan emin olun"
+  },
+  "multidevice_this_creates_a_qr_code": {
+    "message": "Bu, ikinci aygıtın profili kopyalamak için tarayabileceği bir QR kodu oluşturur.\n\nİstenmeyen gözlemcinin ya da kameranın aşağıdaki ekranı göremediğinden emin olun."
+  },
+  "multidevice_install_dc_on_other_device": {
+    "message": "Delta Chat'i diğer aygıtınıza kurun (https://get.delta.chat)"
+  },
+  "multidevice_tap_scan_on_other_device": {
+    "message": "Delta Chat'i başlatın, “Zaten Bir Profilim Var / İkinci Aygıt Olarak Ekle”ye dokunun ve burada gösterilen kodu tarayın"
+  },
+  "multidevice_qr_subtitle": {
+    "message": "%1$s için ikinci aygıtı ayarlamak üzere tarayın"
+  },
+  "multidevice_receiver_title": {
+    "message": "İkinci Aygıt Olarak Ayarla"
+  },
+  "multidevice_open_settings_on_other_device": {
+    "message": "Birinci aygıtta “Ayarlar / İkinci Aygıt Ekle”ye gidin ve orada gösterilen kodu tarayın"
+  },
+  "multidevice_receiver_scanning_ask": {
+    "message": "Diğer aygıttan gelen profil bu aygıta kopyalansın mı?"
+  },
+  "multidevice_receiver_needs_update": {
+    "message": "İçe aktarmak istediğiniz profil daha yeni bir Delta Chat sürümünden geliyor.\n\nİkinci aygıtı ayarlamayı sürdürmek için lütfen bu aygıtı Delta Chat'in en son sürümüne güncelleştirin."
+  },
+  "multidevice_abort": {
+    "message": "İkinci aygıtı ayarlamadan vazgeçilsin mi?"
+  },
+  "multidevice_abort_will_invalidate_copied_qr": {
+    "message": "Bu, panoya kopyalanan QR kodunu geçersizleştirecek."
+  },
+  "multidevice_transfer_done_devicemsg": {
+    "message": "ℹ️ Profil, ikinci aygıtınıza aktarıldı."
+  },
+  "preparing_account": {
+    "message": "Profil hazırlanıyor…"
+  },
+  "transferring": {
+    "message": "Aktarılıyor…"
+  },
+  "troubleshooting": {
+    "message": "Sorun Giderme"
+  },
+  "incoming_messages": {
+    "message": "Gelen İletiler"
+  },
+  "outgoing_messages": {
+    "message": "Giden İletiler"
+  },
+  "storage_on_domain": {
+    "message": "%1$s Üzerinde Depolama"
+  },
+  "connectivity": {
+    "message": "Bağlanabilirlik"
+  },
+  "connectivity_not_connected": {
+    "message": "Bağlı değil"
+  },
+  "connectivity_connecting": {
+    "message": "Bağlanıyor…"
+  },
+  "connectivity_updating": {
+    "message": "Güncelleştiriliyor…"
+  },
+  "connectivity_connected": {
+    "message": "Bağlı"
+  },
+  "sending": {
+    "message": "Gönderiliyor…"
+  },
+  "last_msg_sent_successfully": {
+    "message": "Son ileti başarıyla gönderildi."
+  },
+  "not_supported_by_provider": {
+    "message": "Sağlayıcınız tarafından desteklenmiyor."
+  },
+  "messages": {
+    "message": "İletiler"
+  },
+  "part_of_total_used": {
+    "message": "%1$s / %2$s kullanıldı"
+  },
+  "onboarding_create_instant_account": {
+    "message": "Yeni Profil Oluştur"
+  },
+  "onboarding_alternative_logins": {
+    "message": "Zaten Bir Profilim Var"
+  },
+  "manual_account_setup_option": {
+    "message": "Klasik E-Posta Girişi"
+  },
+  "instant_onboarding_title": {
+    "message": "Profiliniz"
+  },
+  "instant_onboarding_agree_default2": {
+    "message": "%1$s için Gizlilik İlkesi"
+  },
+  "instant_onboarding_agree_instance": {
+    "message": "%1$s üzerindeki profiller hakkında"
+  },
+  "instant_onboarding_create": {
+    "message": "Kabul Et & Profil Oluştur"
+  },
+  "instant_onboarding_show_more_instances": {
+    "message": "Diğer Sunucuyu Kullan"
+  },
+  "instant_onboarding_other_server": {
+    "message": "Chatmail Sunucularını Listele"
+  },
+  "instant_onboarding_group_info": {
+    "message": "“%1$s” öbeğine katılmak için bir profil oluşturun."
+  },
+  "instant_onboarding_contact_info": {
+    "message": "%1$s ile sohbet etmek için bir profil oluşturun."
+  },
+  "instant_onboarding_confirm_contact": {
+    "message": "Yeni bir profil oluşturmak ve %1$s ile sohbet başlatmak istiyor musunuz?"
+  },
+  "instant_onboarding_confirm_group": {
+    "message": "Yeni bir profil oluşturmak ve “%1$s” sohbet öbeğine katılmak istiyor musunuz?"
+  },
+  "welcome_chat_over_email": {
+    "message": "Güvenli Merkezi Olmayan Sohbet"
+  },
+  "scan_invitation_code": {
+    "message": "Çağrı Kodunu Tara"
+  },
+  "login_title": {
+    "message": "Giriş Yap"
+  },
+  "login_header": {
+    "message": "E-Posta Hesabınıza Giriş Yapın"
+  },
+  "login_explain": {
+    "message": "Varolan bir e-posta hesabıyla giriş yapın"
+  },
+  "login_subheader": {
+    "message": "Bilinen e-posta sağlayıcıları için ek ayarlar otomatik olarak ayarlanır. Bazen IMAP'in web ayarlarından etkinleştirilmesi gerekir. Yardım için e-posta sağlayıcınıza ya da arkadaşlarınıza danışın."
+  },
+  "login_no_servers_hint": {
+    "message": "Delta Chat kullanıcı verisi toplamaz; her şey aygıtınızda kalır."
+  },
+  "login_inbox": {
+    "message": "Gelen Kutusu"
+  },
+  "login_imap_login": {
+    "message": "IMAP Giriş Adı"
+  },
+  "login_imap_server": {
+    "message": "IMAP Sunucusu"
+  },
+  "login_imap_port": {
+    "message": "IMAP Bağlantı Noktası"
+  },
+  "login_imap_security": {
+    "message": "IMAP Güvenliği"
+  },
+  "login_outbox": {
+    "message": "Giden Kutusu"
+  },
+  "login_smtp_login": {
+    "message": "SMTP Giriş Adı"
+  },
+  "login_smtp_password": {
+    "message": "SMTP Parolası"
+  },
+  "login_smtp_server": {
+    "message": "SMTP Sunucusu"
+  },
+  "login_smtp_port": {
+    "message": "SMTP Bağlantı Noktası"
+  },
+  "login_smtp_security": {
+    "message": "SMTP Güvenliği"
+  },
+  "login_auth_method": {
+    "message": "Yetkilendirme Yöntemi"
+  },
+  "proxy_settings": {
+    "message": "Proxy"
+  },
+  "proxy_use_proxy": {
+    "message": "Proxy Kullan"
+  },
+  "proxy_add": {
+    "message": "Proxy Ekle"
+  },
+  "proxy_add_explain": {
+    "message": "Desteklenen proxy türleri: HTTP(S), SOCKS5 ve Shadowsocks."
+  },
+  "proxy_add_url_hint": {
+    "message": "Buraya proxy bağlantısı girin"
+  },
+  "proxy_invalid": {
+    "message": "Geçersiz ya da desteklenmeyen proxy"
+  },
+  "proxy_list_header": {
+    "message": "Kaydedilen Proxy'ler"
+  },
+  "proxy_delete": {
+    "message": "Proxy'yi Sil"
+  },
+  "proxy_delete_explain": {
+    "message": "“%1$s” proxy'sini silmek istediğinizden emin misiniz?"
+  },
+  "proxy_use_proxy_confirm": {
+    "message": "“%1$s” proxy'sini kullanmak istiyor musunuz?"
+  },
+  "proxy_share_explain": {
+    "message": "Arkadaşlarınız, QR kodunu tarayarak bu proxy'yi ekleyebilir."
+  },
+  "proxy_share_link": {
+    "message": "Bağlantı Paylaş"
+  },
+  "login_info_oauth2_title": {
+    "message": "Basitleştirilen ayarlamayla sürdürülsün mü?"
+  },
+  "login_info_oauth2_text": {
+    "message": "Girilen e-posta adresi basitleştirilen bir ayarlamayı (OAuth 2.0) destekliyor.\n\nSonraki adımda, lütfen Delta Chat'e iletiler gönderme ve alma izni verin.\n\nDelta Chat kullanıcı verisi toplamaz; her şey aygıtınızda kalır."
+  },
+  "login_certificate_checks": {
+    "message": "Sertifika Denetimleri"
+  },
+  "login_error_mail": {
+    "message": "Lütfen geçerli bir e-posta adresi girin"
+  },
+  "login_error_server": {
+    "message": "Lütfen geçerli bir sunucu / IP adresi girin"
+  },
+  "login_error_port": {
+    "message": "Lütfen geçerli bir bağlantı noktası (1–65535) girin"
+  },
+  "login_error_required_fields": {
+    "message": "Lütfen geçerli bir e-posta adresi ve bir parola girin"
+  },
+  "import_backup_title": {
+    "message": "Yedekten Geri Yükle"
+  },
+  "import_backup_ask": {
+    "message": "“%1$s” üzerinde yedek bulundu.\n\nİçe aktarmak ve ondan gelen tüm verileri ve ayarları kullanmak istiyor musunuz?"
+  },
+  "import_backup_no_backup_found": {
+    "message": "Yedek bulunamadı.\n\nYedeği “%1$s” üzerine kopyalayın ve yeniden deneyin. Ek olarak, normal ayarlama işlemiyle sürdürmek için “İletileşmeye başla”ya basın."
+  },
+  "login_error_cannot_login": {
+    "message": "“%1$s” olarak giriş yapılamıyor. Lütfen adresin ve parolanın doğru olup olmadığını denetleyin."
+  },
+  "accept_invalid_certificates": {
+    "message": "Geçersiz sertifikaları kabul et"
+  },
+  "switch_account": {
+    "message": "Profili Değiştir"
+  },
+  "add_account": {
+    "message": "Profil Ekle"
+  },
+  "profile_tag": {
+    "message": "Profil Etiketi"
+  },
+  "profile_tag_hint": {
+    "message": "ör. İş, Aile"
+  },
+  "profile_tag_explain": {
+    "message": "Yalnızca sizin için görünebilir bir etiket ayarlayın; profilleriniz arasındaki farkı anlamanıza yardımcı olur."
+  },
+  "move_to_top": {
+    "message": "En Üste Taşı"
+  },
+  "delete_account": {
+    "message": "Profili Sil"
+  },
+  "delete_account_ask": {
+    "message": "Profil verilerinizi silmek istediğinizden emin misiniz?"
+  },
+  "delete_account_explain_with_name": {
+    "message": "Uçtan uca şifreleme ayarlamanızı, kişilerinizi, sohbetlerinizi, iletilerinizi ve ortamlarınızı kapsayarak “%s” profilinin bu aygıttaki verilerinin tümü silinecek. Bu eylem geri alınamaz."
+  },
+  "unconfigured_account": {
+    "message": "Yapılandırılmayan profil"
+  },
+  "unconfigured_account_hint": {
+    "message": "Yapılandırmak için profili açın."
+  },
+  "try_connect_now": {
+    "message": "Şimdi bağlanmayı dene"
+  },
+  "sync_all": {
+    "message": "Tümünü Eşzamanla"
+  },
+  "configuration_failed_with_error": {
+    "message": "Yapılandırma başarısız. Hata: %1$s"
+  },
+  "forward_to": {
+    "message": "İlet…"
+  },
+  "ask_send_files_to_chat": {
+    "message": "%1$d dosya “%2$s” sohbetine gönderilsin mi?"
+  },
+  "ask_send_files_to_selected_chats": {
+    "message": "%1$d dosya %2$d sohbete gönderilsin mi?"
+  },
+  "videos_sent_without_recoding": {
+    "message": "(Videolar özgün, büyük dosyalar olarak gönderilir. Videoları daha küçük dosyalar olarak göndermek için onları ayrı ayrı iliştirin)"
+  },
+  "share_text_multiple_chats": {
+    "message": "Bu metin %1$d sohbete gönderilsin mi?\n\n“%2$s”"
+  },
+  "share_abort": {
+    "message": "Eksik izinlerden dolayı paylaşımdan vazgeçildi."
+  },
+  "pref_using_custom": {
+    "message": "Özel kullanılıyor: %s"
+  },
+  "pref_using_default": {
+    "message": "Varsayılan kullanılıyor: %s"
+  },
+  "pref_profile_info_headline": {
+    "message": "Profiliniz"
+  },
+  "pref_profile_photo": {
+    "message": "Profil Görseli"
+  },
+  "pref_blocked_contacts": {
+    "message": "Engellenen Kişiler"
+  },
+  "blocked_empty_hint": {
+    "message": "Engellenen kişiler burada görünecek."
+  },
+  "pref_password_and_account_settings": {
+    "message": "Parola ve Hesap"
+  },
+  "pref_who_can_see_profile_explain": {
+    "message": "Profil görseliniz, adınız ve biyografiniz diğer kullanıcılarla iletişim kurulurken iletilerinizle birlikte gönderilecek."
+  },
+  "pref_your_name": {
+    "message": "Adınız"
+  },
+  "pref_default_status_label": {
+    "message": "Biyografi"
+  },
+  "pref_enter_sends": {
+    "message": "Enter Tuşu Göndersin"
+  },
+  "pref_enter_sends_explain": {
+    "message": "Enter tuşuna basma, metin iletileri gönderecek"
+  },
+  "pref_outgoing_media_quality": {
+    "message": "Giden Ortam Kalitesi"
+  },
+  "pref_outgoing_balanced": {
+    "message": "Dengeli"
+  },
+  "pref_outgoing_worse": {
+    "message": "Daha kötü kalite, küçük boyut"
+  },
+  "pref_vibrate": {
+    "message": "Titret"
+  },
+  "pref_screen_security": {
+    "message": "Ekran Güvenliği"
+  },
+  "pref_screen_security_explain": {
+    "message": "Son listesinde ve uygulamanın içinde ekran görüntülerinin engellenmesini iste"
+  },
+  "pref_screen_security_please_restart_hint": {
+    "message": "Ekran güvenliği ayarını uygulamak için lütfen uygulamayı yeniden başlatın."
+  },
+  "pref_notifications": {
+    "message": "Bildirimler"
+  },
+  "pref_mention_notifications": {
+    "message": "Anmalar"
+  },
+  "pref_mention_notifications_explain": {
+    "message": "Sessize alınan öbeklerde, yanıtlar ya da tepkiler gibi size yönlendirilen iletileri bildirin"
+  },
+  "pref_notifications_show": {
+    "message": "Göster"
+  },
+  "pref_notifications_priority": {
+    "message": "Öncelik"
+  },
+  "pref_notifications_explain": {
+    "message": "Yeni iletiler için sistem bildirimlerini etkinleştir"
+  },
+  "pref_show_notification_content": {
+    "message": "Bildirimde ileti içeriğini göster"
+  },
+  "pref_show_notification_content_explain": {
+    "message": "Bildirimlerde iletinin gönderenini ve ilk sözcüklerini gösterir"
+  },
+  "pref_led_color": {
+    "message": "LED Rengi"
+  },
+  "pref_sound": {
+    "message": "Ses"
+  },
+  "pref_silent": {
+    "message": "Sessiz"
+  },
+  "pref_privacy": {
+    "message": "Gizlilik"
+  },
+  "pref_chats_and_media": {
+    "message": "Sohbetler ve Ortamlar"
+  },
+  "pref_system_default": {
+    "message": "Sistem varsayılanı"
+  },
+  "pref_light_theme": {
+    "message": "Açık"
+  },
+  "pref_dark_theme": {
+    "message": "Koyu"
+  },
+  "pref_appearance": {
+    "message": "Görünüm"
+  },
+  "pref_theme": {
+    "message": "Tema"
+  },
+  "pref_language": {
+    "message": "Dil"
+  },
+  "pref_use_system_ui_font": {
+    "message": "Sistem Yazı Tipini Kullan"
+  },
+  "pref_incognito_keyboard": {
+    "message": "Gizli Klavye"
+  },
+  "pref_incognito_keyboard_explain": {
+    "message": "Kişiselleştirilen öğrenmeyi etkisizleştirmek için klavye iste"
+  },
+  "pref_read_receipts": {
+    "message": "Okundu Onayları"
+  },
+  "pref_read_receipts_explain": {
+    "message": "Okundu onayları etkisizleştirilirse, diğerlerinden gelen okundu onaylarını göremeyeceksiniz."
+  },
+  "pref_server": {
+    "message": "Sunucu"
+  },
+  "pref_encryption": {
+    "message": "Şifreleme"
+  },
+  "pref_manage_keys": {
+    "message": "Anahtarları Yönet"
+  },
+  "pref_use_system_emoji": {
+    "message": "Sistem Emojisini Kullan"
+  },
+  "pref_use_system_emoji_explain": {
+    "message": "Delta Chat'in gömülü emoji desteğini kapat"
+  },
+  "pref_show_system_contacts": {
+    "message": "Sistem Adres Defterini Oku"
+  },
+  "pref_show_system_contacts_explain": {
+    "message": "Adres defterinden gelen kişilerle sohbetler oluşturmayı teklif edin."
+  },
+  "pref_app_access": {
+    "message": "Uygulama Erişimi"
+  },
+  "pref_chats": {
+    "message": "Sohbetler"
+  },
+  "pref_in_chat_sounds": {
+    "message": "Sohbet İçi Sesler"
+  },
+  "pref_view_log": {
+    "message": "Günlüğü Görüntüle"
+  },
+  "pref_saved_log": {
+    "message": "Günlüğü “İndirilenler” klasörüne kaydet"
+  },
+  "pref_save_log_failed": {
+    "message": "Günlüğü kaydetme başarısız"
+  },
+  "pref_log_header": {
+    "message": "Günlük"
+  },
+  "pref_other": {
+    "message": "Diğer"
+  },
+  "pref_backup": {
+    "message": "Yedekleme"
+  },
+  "pref_backup_explain": {
+    "message": "Sohbetleri Dış Depolamaya Yedekle"
+  },
+  "pref_backup_export_explain": {
+    "message": "Bir yedek, bu ya da başka bir aygıtta yeni bir kurulum ayarlamanıza yardımcı olur.\n\nYedek; tüm iletileri, kişileri ve sohbetleri ve uçtan uca Autocrypt ayarlamanızı içerecek. Yedek dosyasını güvenli bir yerde tutun ya da olanaklıysa en kısa sürede silin."
+  },
+  "pref_backup_export_x": {
+    "message": "%1$s hesabını dışa aktar"
+  },
+  "pref_backup_export_all": {
+    "message": "Tüm %1$d profili dışa aktar"
+  },
+  "pref_backup_export_start_button": {
+    "message": "Yedeklemeyi Başlat"
+  },
+  "pref_backup_written_to_x": {
+    "message": "Yedek “%1$s” üzerine başarıyla yazıldı."
+  },
+  "pref_managekeys_menu_title": {
+    "message": "Anahtarları Yönet"
+  },
+  "pref_managekeys_export_secret_keys": {
+    "message": "Sır Anahtarları Dışa Aktar"
+  },
+  "pref_managekeys_export_explain": {
+    "message": "Sır anahtarlar “%1$s” üzerinde dışa aktarılsın mı?"
+  },
+  "pref_managekeys_import_secret_keys": {
+    "message": "Sır Anahtarları İçe Aktar"
+  },
+  "pref_managekeys_import_explain": {
+    "message": "Sır anahtarlar “%1$s” üzerinden içe aktarılsın mı?\n\n• Varolan sır anahtarlar silinmeyecek\n\n• Son içe aktarılan anahtar, dosya adında “legacy” sözcüğü olmadıkça yeni varsayılan anahtar olarak kullanılacak."
+  },
+  "pref_managekeys_secret_keys_exported_to_x": {
+    "message": "Sır anahtarlar “%1$s” üzerine başarıyla yazıldı."
+  },
+  "pref_managekeys_secret_keys_imported_from_x": {
+    "message": "Sır anahtarlar “%1$s” üzerinden içe aktarıldı."
+  },
+  "pref_background": {
+    "message": "Duvar Kâğıdı"
+  },
+  "pref_background_btn_default": {
+    "message": "Varsayılan Görseli Kullan"
+  },
+  "pref_background_btn_gallery": {
+    "message": "Galeriden Seç"
+  },
+  "pref_imap_folder_handling": {
+    "message": "IMAP Klasör İşleme"
+  },
+  "pref_imap_folder_warn_disable_defaults": {
+    "message": "Bu seçeneği değiştirirseniz, sunucunuzun ve diğer istemcilerinizin uygun olarak yapılandırıldığından emin olun.\n\nDeğilse özellikler hiç çalışmayabilir."
+  },
+  "pref_watch_sent_folder": {
+    "message": "Gönderilen Klasörünü İzle"
+  },
+  "pref_send_copy_to_self": {
+    "message": "Kendime Kopya Gönder"
+  },
+  "pref_send_copy_to_self_explain": {
+    "message": "Bu hesap çoklu aygıtlarda kullanılırken gereklidir."
+  },
+  "pref_auto_folder_moves": {
+    "message": "DeltaChat Klasörüne Otomatik Olarak Taşı"
+  },
+  "pref_auto_folder_moves_explain": {
+    "message": "Sohbet görüşmeleri, Gelen Kutusu'ndaki dağınıklığı önlemek için taşınır"
+  },
+  "pref_only_fetch_mvbox_title": {
+    "message": "Yalnızca DeltaChat Klasöründen Getir"
+  },
+  "pref_only_fetch_mvbox_explain": {
+    "message": "Diğer klasörleri yok sayar. Sunucunuzun sohbet iletilerini DeltaChat klasörüne taşımasını gerektirir."
+  },
+  "pref_show_emails": {
+    "message": "Klasik E-Postaları Göster"
+  },
+  "pref_show_emails_no": {
+    "message": "Hayır, yalnızca sohbetler"
+  },
+  "pref_show_emails_accepted_contacts": {
+    "message": "Kabul edilen kişiler için"
+  },
+  "pref_show_emails_all": {
+    "message": "Tümü"
+  },
+  "pref_experimental_features": {
+    "message": "Deneysel Özellikler"
+  },
+  "pref_on_demand_location_streaming": {
+    "message": "İsteğe Bağlı Konum Akışı"
+  },
+  "pref_developer_mode": {
+    "message": "Geliştirici Modu"
+  },
+  "pref_developer_mode_explain": {
+    "message": "Hata ayıklama seçeneklerini etkinleştirir ve uygulamayı daha az kararlı yapabilir. Yalnızca geliştiriciler içindir."
+  },
+  "pref_background_default": {
+    "message": "Varsayılan görsel"
+  },
+  "pref_background_default_color": {
+    "message": "Varsayılan renk"
+  },
+  "pref_background_custom_image": {
+    "message": "Özel görsel"
+  },
+  "pref_background_custom_color": {
+    "message": "Özel renk"
+  },
+  "export_aborted": {
+    "message": "Dışa aktarmadan vazgeçildi."
+  },
+  "auto_download_messages": {
+    "message": "İletileri Otomatik İndir"
+  },
+  "up_to_x": {
+    "message": "%1$s kadar"
+  },
+  "up_to_x_most_worse_quality_images": {
+    "message": "%1$s kadar, en kötü kaliteli görseller"
+  },
+  "up_to_x_most_balanced_quality_images": {
+    "message": "%1$s kadar, en dengeli kaliteli görseller"
+  },
+  "download_failed": {
+    "message": "İndirme başarısız"
+  },
+  "n_bytes_message": {
+    "message": "%1$s ileti"
+  },
+  "download_max_available_until": {
+    "message": "İndirme en fazla %1$s zamanına kadar kullanılabilir"
+  },
+  "profile_image_select": {
+    "message": "Profil Görseli Seç"
+  },
+  "select_your_new_profile_image": {
+    "message": "Yeni profil görselinizi seçin"
+  },
+  "profile_image_delete": {
+    "message": "Profil Görselini Sil"
+  },
+  "pref_show_tray_icon": {
+    "message": "Tepsi Simgesi Göster"
+  },
+  "pref_edit_profile": {
+    "message": "Profili Düzenle"
+  },
+  "disable_imap_idle": {
+    "message": "IMAP IDLE'ı Etkisizleştir"
+  },
+  "disable_imap_idle_explain": {
+    "message": "Sunucu desteklese bile IMAP IDLE uzantısını kullanmayın. Bu seçeneği etkinleştirmek ileti getirmeyi geciktirecek; yalnızca sınama için etkinleştirin."
+  },
+  "send_stats_to_devs": {
+    "message": "Delta Chat'in geliştiricilerine istatistikleri gönder"
+  },
+  "emoji_search_results": {
+    "message": "Arama Sonuçları"
+  },
+  "emoji_not_found": {
+    "message": "Emoji bulunamadı"
+  },
+  "emoji_recent": {
+    "message": "Son Kullanılan"
+  },
+  "emoji_people": {
+    "message": "İnsanlar & Beden"
+  },
+  "emoji_nature": {
+    "message": "Hayvanlar & Doğa"
+  },
+  "emoji_foods": {
+    "message": "Yiyecek & İçecek"
+  },
+  "emoji_activity": {
+    "message": "Etkinlik"
+  },
+  "emoji_places": {
+    "message": "Seyahat & Yerler"
+  },
+  "emoji_objects": {
+    "message": "Nesneler"
+  },
+  "emoji_symbols": {
+    "message": "Semboller"
+  },
+  "emoji_flags": {
+    "message": "Bayraklar"
+  },
+  "reactions": {
+    "message": "Tepkiler"
+  },
+  "react": {
+    "message": "Tepki Ver"
+  },
+  "reaction_by_you": {
+    "message": "“%2$s” öğesine %1$s tepkisi verdiniz"
+  },
+  "reaction_by_other": {
+    "message": "%1$s, “%3$s” öğesine %2$s tepkisi verdi"
+  },
+  "delete_old_messages": {
+    "message": "Eski İletileri Sil"
+  },
+  "autodel_device_title": {
+    "message": "İletileri Aygıttan Sil"
+  },
+  "autodel_server_title": {
+    "message": "İletileri Sunucudan Sil"
+  },
+  "autodel_device_ask": {
+    "message": "%1$d iletiyi şimdi ve gelecekte yeni getirilen tüm iletileri “%2$s” silmek istiyor musunuz?\n\n• Bu, tüm ortamları kapsar\n\n• İletiler görülse de görülmese de silinecek\n\n• “Kaydedilen İletiler” yerel silmeden atlanacak"
+  },
+  "autodel_server_ask": {
+    "message": "%1$d iletiyi şimdi ve gelecekte yeni getirilen tüm iletileri “%2$s” silmek istiyor musunuz?\n\n⚠️ Bu, tüm sunucu klasörlerindeki e-postaları, ortamları ve “Kaydedilen İletiler”i kapsar\n\n⚠️ Verileri sunucuda tutmak istiyorsanız ya da klasik e-posta istemcilerini de kullanıyorsanız bu işlevi kullanmayın"
+  },
+  "autodel_server_enabled_hint": {
+    "message": "Bu, tüm sunucu klasörlerindeki e-postaları, ortamları ve “Kaydedilen İletiler”i kapsar. Verileri sunucuda tutmak istiyorsanız ya da klasik e-posta istemcilerini de kullanıyorsanız bu işlevi kullanmayın"
+  },
+  "autodel_server_warn_multi_device_title": {
+    "message": "Bir kerede silmeyi aç"
+  },
+  "autodel_server_warn_multi_device": {
+    "message": "Bir kerede silmeyi etkinleştirirseniz, bu profilde çoklu aygıtları kullanamazsınız."
+  },
+  "autodel_confirm": {
+    "message": "Anladım, tüm bu iletileri sil"
+  },
+  "autodel_at_once": {
+    "message": "İndirdikten sonra bir kerede"
+  },
+  "after_30_seconds": {
+    "message": "30 saniye sonra"
+  },
+  "after_1_minute": {
+    "message": "1 dakika sonra"
+  },
+  "after_5_minutes": {
+    "message": "5 dakika sonra"
+  },
+  "after_30_minutes": {
+    "message": "30 dakika sonra"
+  },
+  "autodel_after_1_hour": {
+    "message": "1 saat sonra"
+  },
+  "autodel_after_1_day": {
+    "message": "1 gün sonra"
+  },
+  "autodel_after_1_week": {
+    "message": "1 hafta sonra"
+  },
+  "after_5_weeks": {
+    "message": "5 hafta sonra"
+  },
+  "autodel_after_1_year": {
+    "message": "1 yıl sonra"
+  },
+  "autocrypt_send_asm_title": {
+    "message": "Autocrypt Ayarlama İletisi Gönder"
+  },
+  "autocrypt_send_asm_explain_before": {
+    "message": "Bir Autocrypt Ayarlama İletisi, uçtan uca ayarlamanızı diğer Autocrypt uyumlu uygulamalarla güvenli olarak paylaşır.\n\nAyarlama, burada görüntülenen ve diğer aygıtta yazılması gereken bir ayarlama kodu tarafından şifrelenecek."
+  },
+  "autocrypt_send_asm_button": {
+    "message": "Autocrypt Ayarlama İletisi Gönder"
+  },
+  "autocrypt_send_asm_explain_after": {
+    "message": "Ayarlamanız kendinize gönderildi. Diğer aygıta geçin ve ayarlama iletisini açın. Size bir ayarlama kodu sorulmalı. Aşağıdaki sayıları girin:"
+  },
+  "autocrypt_prefer_e2ee": {
+    "message": "Uçtan Uca Şifrelemeyi Yeğle"
+  },
+  "autocrypt_asm_subject": {
+    "message": "Autocrypt Ayarlama İletisi"
+  },
+  "autocrypt_asm_general_body": {
+    "message": "Bu, uçtan uca ayarlamanızı istemciler arasında aktarmak için kullanılan Autocrypt Ayarlama İletisi'dir.\n\nŞifreyi çözmek ve ayarlamanızı kullanmak için iletiyi Autocrypt uyumlu bir istemcide açın ve oluşturan aygıtta sunulan ayarlama kodunu girin."
+  },
+  "systemmsg_cannot_decrypt": {
+    "message": "Bu ileti şifresi çözülemiyor.\n\n• Bu iletiye basitçe yanıt vermek ve gönderenden iletiyi yeniden göndermesini istemek zaten yardımcı olabilir.\n\n• Delta Chat'i yeni kurduysanız, Delta Chat'i şimdi yeniden ayarlayıp “İkinci Aygıt Olarak Ekle”yi seçmeniz ya da bir yedeği içe aktarmanız en iyisidir."
+  },
+  "systemmsg_unknown_sender_for_chat": {
+    "message": "Bu sohbet için bilinmeyen gönderen. Daha fazla ayrıntı için 'bilgi'ye bakın."
+  },
+  "systemmsg_subject_for_new_contact": {
+    "message": "%1$s kişisinden gelen ileti"
+  },
+  "systemmsg_failed_sending_to": {
+    "message": "%1$s kişisine ileti gönderme başarısız."
+  },
+  "group_name_changed_by_you": {
+    "message": "“%1$s” öbek adını “%2$s” olarak değiştirdiniz."
+  },
+  "group_name_changed_by_other": {
+    "message": "%3$s tarafından “%1$s” öbek adı “%2$s” olarak değiştirildi."
+  },
+  "group_image_changed_by_you": {
+    "message": "Öbek görselini değiştirdiniz."
+  },
+  "group_image_changed_by_other": {
+    "message": "%1$s tarafından öbek görseli değiştirildi."
+  },
+  "member_x_added": {
+    "message": "%1$s üyesi eklendi."
+  },
+  "add_member_by_you": {
+    "message": "%1$s üyesini eklediniz."
+  },
+  "add_member_by_other": {
+    "message": "%2$s tarafından %1$s üyesi eklendi."
+  },
+  "remove_member_by_you": {
+    "message": "%1$s üyesini kaldırdınız."
+  },
+  "remove_member_by_other": {
+    "message": "%2$s tarafından %1$s üyesi kaldırıldı."
+  },
+  "group_left_by_you": {
+    "message": "Öbekten ayrıldınız."
+  },
+  "group_left_by_other": {
+    "message": "%1$s tarafından öbekten ayrılındı."
+  },
+  "group_image_deleted_by_you": {
+    "message": "Öbek görselini sildiniz."
+  },
+  "group_image_deleted_by_other": {
+    "message": "%1$s tarafından öbek görseli silindi."
+  },
+  "location_enabled_by_you": {
+    "message": "Konum akışını etkinleştirdiniz."
+  },
+  "location_enabled_by_other": {
+    "message": "%1$s tarafından konum akışı etkinleştirildi."
+  },
+  "ephemeral_timer_disabled_by_you": {
+    "message": "Kaybolan iletiler zamanlayıcısını etkisizleştirdiniz."
+  },
+  "ephemeral_timer_disabled_by_other": {
+    "message": "%1$s tarafından kaybolan iletiler zamanlayıcısı etkisizleştirildi."
+  },
+  "ephemeral_timer_seconds_by_you": {
+    "message": "Kaybolan iletiler zamanlayıcısını %1$s saniye olarak ayarladınız."
+  },
+  "ephemeral_timer_seconds_by_other": {
+    "message": "%2$s tarafından kaybolan iletiler zamanlayıcısı %1$s saniye olarak ayarlandı."
+  },
+  "ephemeral_timer_1_minute_by_you": {
+    "message": "Kaybolan iletiler zamanlayıcısını 1 dakika olarak ayarladınız."
+  },
+  "ephemeral_timer_1_minute_by_other": {
+    "message": "%1$s tarafından kaybolan iletiler zamanlayıcısı 1 dakika olarak ayarlandı."
+  },
+  "ephemeral_timer_1_hour_by_you": {
+    "message": "Kaybolan iletiler zamanlayıcısını 1 saat olarak ayarladınız."
+  },
+  "ephemeral_timer_1_hour_by_other": {
+    "message": "%1$s tarafından kaybolan iletiler zamanlayıcısı 1 saat olarak ayarlandı."
+  },
+  "ephemeral_timer_1_day_by_you": {
+    "message": "Kaybolan iletiler zamanlayıcısını 1 gün olarak ayarladınız."
+  },
+  "ephemeral_timer_1_day_by_other": {
+    "message": "%1$s tarafından kaybolan iletiler zamanlayıcısı 1 gün olarak ayarlandı."
+  },
+  "ephemeral_timer_1_week_by_you": {
+    "message": "Kaybolan iletiler zamanlayıcısını 1 hafta olarak ayarladınız."
+  },
+  "ephemeral_timer_1_week_by_other": {
+    "message": "%1$s tarafından kaybolan iletiler zamanlayıcısı 1 hafta olarak ayarlandı."
+  },
+  "ephemeral_timer_minutes_by_you": {
+    "message": "Kaybolan iletiler zamanlayıcısını %1$s dakika olarak ayarladınız."
+  },
+  "ephemeral_timer_minutes_by_other": {
+    "message": "%2$s tarafından kaybolan iletiler zamanlayıcısı %1$s dakika olarak ayarlandı."
+  },
+  "ephemeral_timer_hours_by_you": {
+    "message": "Kaybolan iletiler zamanlayıcısını %1$s saat olarak ayarladınız."
+  },
+  "ephemeral_timer_hours_by_other": {
+    "message": "%2$s tarafından kaybolan iletiler zamanlayıcısı %1$s saat olarak ayarlandı."
+  },
+  "ephemeral_timer_days_by_you": {
+    "message": "Kaybolan iletiler zamanlayıcısını %1$s gün olarak ayarladınız."
+  },
+  "ephemeral_timer_days_by_other": {
+    "message": "%2$s tarafından kaybolan iletiler zamanlayıcısı %1$s gün olarak ayarlandı."
+  },
+  "ephemeral_timer_weeks_by_you": {
+    "message": "Kaybolan iletiler zamanlayıcısını %1$s hafta olarak ayarladınız."
+  },
+  "ephemeral_timer_weeks_by_other": {
+    "message": "%2$s tarafından kaybolan iletiler zamanlayıcısı %1$s hafta olarak ayarlandı."
+  },
+  "chat_protection_broken": {
+    "message": "%1$s başka bir aygıttan bir ileti gönderdi."
+  },
+  "chat_protection_enabled_tap_to_learn_more": {
+    "message": "Bundan böyle iletiler uçtan uca şifreleme güvencelidir. Daha fazlasını öğrenmek için dokunun."
+  },
+  "chat_protection_enabled_explanation": {
+    "message": "Artık bu sohbetteki tüm iletiler uçtan uca şifreleme güvencelidir.\n\nUçtan uca şifreleme, iletilerinizi sizin ve sohbet ortaklarınızın arasında özel tutar. Sunucular, sağlayıcılar ya da aktarıcılar bile onları okuyamaz."
+  },
+  "chat_protection_broken_tap_to_learn_more": {
+    "message": "%1$s başka bir aygıttan bir ileti gönderdi. Daha fazlasını öğrenmek için dokunun."
+  },
+  "chat_protection_broken_explanation": {
+    "message": "Uçtan uca şifreleme artık güvencelenemiyor; çünkü büyük olasılıkla %1$s Delta Chat'i yeniden yükledi ya da başka bir aygıttan ileti gönderdi.\n\nOnlarla kişisel olarak tanışabilir ve güvenceli uçtan uca şifrelemeyi yeniden kurmak için onların QR kodunu yeniden tarayabilirsiniz."
+  },
+  "invalid_unencrypted_tap_to_learn_more": {
+    "message": "⚠️ %1$s, bu sohbet için henüz ayarlanmayan uçtan uca şifrelemeyi gerektirir. Daha fazlasını öğrenmek için dokunun."
+  },
+  "invalid_unencrypted_explanation": {
+    "message": "Uçtan uca şifrelemeyi kurmak için kişilerle kişisel olarak tanışabilir ve onları tanıtmak için onların QR kodunu tarayabilirsiniz."
+  },
+  "learn_more": {
+    "message": "Daha Fazlasını Öğrenin"
+  },
+  "devicemsg_self_deleted": {
+    "message": "“Kaydedilen İletiler” sohbetini sildiniz.\n\nℹ️ “Kaydedilen İletiler” özelliğini yeniden kullanmak için kendinizle yeni bir sohbet oluşturun."
+  },
+  "devicemsg_storage_exceeding": {
+    "message": "⚠️ Sağlayıcınızın depolaması dolmak üzere: %1$s%% zaten kullanımda.\n\nDepolama tam dolduğunda iletileri alamayabilirsiniz.\n\n👉 Lütfen sağlayıcınızın web arabiriminden eski verileri silip silemeyeceğinizi denetleyin ve “Ayarlar / Sohbetler ve Ortamlar / Eski İletileri Sil”i etkinleştirmeyi düşünün. Herhangi bir zamanda şu anki depolama kullanımınızı “Ayarlar / Bağlanabilirlik”ten denetleyebilirsiniz."
+  },
+  "devicemsg_bad_time": {
+    "message": "⚠️ Aygıtınızdaki tarih ya da saat yanlış görünüyor (%1$s).\n\nİletilerinizin doğru şekilde alınmasını sağlamak için saatinizi ⏰🔧 ayarlayın."
+  },
+  "devicemsg_update_reminder": {
+    "message": "⚠️ Delta Chat sürümünüz eski olabilir.\n\nBu, sorunlara neden olabilir; çünkü sohbet ortaklarınız daha yeni sürümleri kullanıyor - ve en yeni özellikleri kaybediyorsunuz 😳\nGüncelleştirmeler için lütfen https://get.delta.chat ya da uygulama mağazanızı denetleyin."
+  },
+  "enter_system_secret_to_continue": {
+    "message": "Sürdürmek için kilidi açın"
+  },
+  "qr_code": {
+    "message": "QR Kodu"
+  },
+  "load_qr_code_as_image": {
+    "message": "QR Kodunu Görsel Olarak Yükle"
+  },
+  "qrscan_title": {
+    "message": "QR Kodu Tara"
+  },
+  "qrscan_hint": {
+    "message": "Kameranızı QR kodunun üzerinde tutun"
+  },
+  "qrscan_hint_desktop": {
+    "message": "QR kodunu kameraya taşıyın"
+  },
+  "qrscan_failed": {
+    "message": "QR kodu çözülemedi"
+  },
+  "qrscan_ask_join_group": {
+    "message": "“%1$s” öbeğine katılmak istiyor musunuz?"
+  },
+  "qrscan_fingerprint_mismatch": {
+    "message": "Taranan parmak izi, %1$s için son görülenle eşleşmiyor."
+  },
+  "qrscan_no_addr_found": {
+    "message": "Bu QR kodu bir parmak izi içeriyor ama adres yok.\n\nBir bant dışı doğrulama için lütfen önce alıcıya şifrelenen bir bağlantı kurun."
+  },
+  "qrscan_contains_text": {
+    "message": "Taranan QR kodu metni:\n\n%1$s"
+  },
+  "qrscan_contains_url": {
+    "message": "Taranan QR kodu URL'si:\n\n%1$s"
+  },
+  "qrscan_fingerprint_label": {
+    "message": "Parmak izi"
+  },
+  "withdraw_verifycontact_explain": {
+    "message": "Bu QR kodu, size ulaşmak için diğerleri tarafından taranabilir.\n\nOnu sıfırlayabilirsiniz; böylece varolan QR kodu ya da çağırma bağlantısı artık çalışmayacaktır."
+  },
+  "withdraw_verifygroup_explain": {
+    "message": "Bu QR kodu, “%1$s” öbeğine katılmak için diğerleri tarafından taranabilir.\n\nOnu sıfırlayabilirsiniz; böylece varolan QR kodu ya da çağırma bağlantısı artık çalışmayacaktır."
+  },
+  "withdraw_qr_code": {
+    "message": "QR Kodunu Sıfırla"
+  },
+  "revive_verifycontact_explain": {
+    "message": "Bu QR kodu sıfırlandı ve artık etkin değil."
+  },
+  "revive_verifygroup_explain": {
+    "message": "“%1$s” öbeğine katılmak için taranan bu QR kodu sıfırlandı ve artık etkin değil."
+  },
+  "revive_qr_code": {
+    "message": "QR Kodunu Etkinleştir"
+  },
+  "qrshow_title": {
+    "message": "QR Çağrı Kodu"
+  },
+  "qrshow_x_joining": {
+    "message": "%1$s katılıyor."
+  },
+  "qrshow_x_verified": {
+    "message": "%1$s tanıtıldı."
+  },
+  "qrshow_x_has_joined_group": {
+    "message": "%1$s öbeğe katıldı."
+  },
+  "qrshow_join_group_title": {
+    "message": "QR Çağrı Kodu"
+  },
+  "qrshow_join_group_hint": {
+    "message": "“%1$s” öbeğine katılmak için bunu tarayın"
+  },
+  "qrshow_join_contact_title": {
+    "message": "QR Çağrı Kodu"
+  },
+  "qrshow_join_contact_hint": {
+    "message": "%1$s ile sohbet etmek için bunu tarayın"
+  },
+  "qrshow_join_contact_no_connection_toast": {
+    "message": "Internet bağlantısı yok; QR kodu ayarlaması gerçekleştirilemiyor."
+  },
+  "qraccount_ask_create_and_login": {
+    "message": "“%1$s” üzerinde yeni profil oluşturulsun ve orada giriş yapılsın mı?"
+  },
+  "qraccount_ask_create_and_login_another": {
+    "message": "“%1$s” üzerinde yeni profil oluşturulsun ve orada giriş yapılsın mı?\n\nVarolan profiliniz silinmeyecek. Profilleriniz arasında geçiş yapmak için “Profili Değiştir” öğesini kullanın."
+  },
+  "set_name_and_avatar_explain": {
+    "message": "Kişilerinizin tanıyacağı bir ad ayarlayın. Bir profil görseli de ayarlayabilirsiniz."
+  },
+  "please_enter_name": {
+    "message": "Lütfen bir ad girin."
+  },
+  "qraccount_qr_code_cannot_be_used": {
+    "message": "Taranan QR kodu, yeni bir profil ayarlamak için kullanılamıyor."
+  },
+  "qrlogin_ask_login": {
+    "message": "“%1$s” adresine giriş yapılsın mı?"
+  },
+  "qrlogin_ask_login_another": {
+    "message": "“%1$s” adresine giriş yapılsın mı?\n\nVarolan profiliniz silinmeyecek. Profilleriniz arasında geçiş yapmak için “Profili Değiştir” öğesini kullanın."
+  },
+  "secure_join_started": {
+    "message": "%1$s sizi bu öbeğe katılmaya çağırdı.\n\n%2$s kişisinin aygıtının yanıt vermesi bekleniyor…"
+  },
+  "secure_join_replies": {
+    "message": "%1$s yanıtladı; öbeğe eklenmesi bekleniyor…"
+  },
+  "secure_join_wait": {
+    "message": "Güvencelenen uçtan uca şifreleme kuruluyor, lütfen bekleyin…"
+  },
+  "secure_join_wait_timeout": {
+    "message": "Henüz güvencelenen uçtan uca şifreleme kurulamadı; ama zaten bir ileti gönderebilirsiniz."
+  },
+  "secure_join_takes_longer": {
+    "message": "Bu daha uzun sürüyor gibi görünüyor, belki kişi ya da siz çevrimdışısınız.\n\nAncak işlem arka planda sürüyor, başka bir şey yapabilirsiniz…"
+  },
+  "contact_verified": {
+    "message": "%1$s tanıtıldı."
+  },
+  "contact_not_verified": {
+    "message": "%1$s ile güvencelenen uçtan uca şifreleme kurulamıyor."
+  },
+  "verified_by": {
+    "message": "%1$s tarafından tanıtıldı"
+  },
+  "verified_by_you": {
+    "message": "Benim tarafımdan tanıtıldı"
+  },
+  "contact_setup_changed": {
+    "message": "%1$s için ayarlama değiştirildi."
+  },
+  "verified_contact_required_explain": {
+    "message": "Uçtan uca şifrelemeyi güvencelemek için bu öbeğe yalnızca yeşil bir onay imi olan kişileri ekleyebilirsiniz.\n\nDoğrulanmayan kişilerle kişisel olarak tanışabilir ve onları tanıtmak için onların QR kodunu tarayabilirsiniz."
+  },
+  "copy_qr_data_success": {
+    "message": "QR URL'si panoya kopyalandı"
+  },
+  "mailto_dialog_header_select_chat": {
+    "message": "İletiyi göndermek için sohbet seçin"
+  },
+  "confirm_replace_draft": {
+    "message": "%1$s zaten bir taslak ileti; onu değiştirmek istiyor musunuz?"
+  },
+  "mailto_link_could_not_be_decoded": {
+    "message": "mailto bağlantısının kodu çözülemedi: %1$s"
+  },
+  "notify_reply_button": {
+    "message": "Yanıtla"
+  },
+  "notify_new_message": {
+    "message": "Yeni ileti"
+  },
+  "notify_background_connection_enabled": {
+    "message": "Arka plan bağlantısı etkinleştirildi"
+  },
+  "notify_priority_high": {
+    "message": "Yüksek"
+  },
+  "notify_priority_max": {
+    "message": "En yüksek"
+  },
+  "notify_name_and_message": {
+    "message": "Ad ve ileti"
+  },
+  "notify_name_only": {
+    "message": "Yalnızca ad"
+  },
+  "notify_no_name_or_message": {
+    "message": "Ad ya da ileti yok"
+  },
+  "notifications_disabled": {
+    "message": "Bildirimler etkisizleştirildi"
+  },
+  "new_messages": {
+    "message": "Yeni iletiler"
+  },
+  "new_messages_body": {
+    "message": "Yeni iletileriniz var"
+  },
+  "n_messages_in_m_chats": {
+    "message": "%2$d sohbette %1$d ileti"
+  },
+  "perm_required_title": {
+    "message": "İzin gerekli"
+  },
+  "perm_continue": {
+    "message": "Sürdür"
+  },
+  "perm_explain_access_to_camera_denied": {
+    "message": "Fotoğraflar çekmek ya da videolar yakalamak için uygulama ayarlarına gidin, “İzinler”i seçin ve “Kamera”yı etkinleştirin."
+  },
+  "perm_explain_access_to_mic_denied": {
+    "message": "Sesli iletiler göndermek için uygulama ayarlarına gidin, “İzinler”i seçin ve “Mikrofon”u etkinleştirin."
+  },
+  "perm_explain_access_to_storage_denied": {
+    "message": "Dosyalar almak ya da göndermek için uygulama ayarlarına gidin, “İzinler”i seçin ve “Depolama”yı etkinleştirin."
+  },
+  "perm_explain_access_to_location_denied": {
+    "message": "Bir konum iliştirmek için uygulama ayarlarına gidin, “İzinler”i seçin ve “Konum”u etkinleştirin."
+  },
+  "perm_explain_access_to_notifications_denied": {
+    "message": "Bildirimler almak için “Sistem Ayarları / Uygulamalar / Delta Chat”e gidin ve “Bildirimler”i etkinleştirin."
+  },
+  "ImageEditorHud_draw_anywhere_to_blur": {
+    "message": "Bulanıklaştırmak için herhangi bir yere çizin"
+  },
+  "ImageEditorHud_add_text": {
+    "message": "Metin Ekle"
+  },
+  "ImageEditorHud_blur": {
+    "message": "Bulanıklaştır"
+  },
+  "ImageEditorHud_brush_marker": {
+    "message": "İşaretleyici Fırçası"
+  },
+  "ImageEditorHud_brush_highlight": {
+    "message": "Fırçayı Vurgula"
+  },
+  "ImageEditorHud_crop": {
+    "message": "Kırp"
+  },
+  "ImageEditorHud_flip": {
+    "message": "Çevir"
+  },
+  "ImageEditorHud_rotate": {
+    "message": "Döndür"
+  },
+  "encrypted_message": {
+    "message": "Şifrelenen ileti"
+  },
+  "about_offical_app_desktop": {
+    "message": "Bu, resmî Delta Chat Masaüstü uygulamasıdır."
+  },
+  "about_licensed_under_desktop": {
+    "message": "Bu yazılım, GNU GPL sürüm 3 altında lisanslıdır ve kaynak kodu GitHub'da kullanılabilir."
+  },
+  "welcome_desktop": {
+    "message": "Delta Chat'e hoş geldiniz"
+  },
+  "global_menu_preferences_language_desktop": {
+    "message": "Dil"
+  },
+  "global_menu_file_desktop": {
+    "message": "Dosya"
+  },
+  "global_menu_file_quit_desktop": {
+    "message": "Çık"
+  },
+  "global_menu_edit_desktop": {
+    "message": "Düzenle"
+  },
+  "global_menu_edit_undo_desktop": {
+    "message": "Geri Al"
+  },
+  "global_menu_edit_redo_desktop": {
+    "message": "Yinele"
+  },
+  "global_menu_edit_cut_desktop": {
+    "message": "Kes"
+  },
+  "global_menu_edit_copy_desktop": {
+    "message": "Kopyala"
+  },
+  "global_menu_edit_paste_desktop": {
+    "message": "Yapıştır"
+  },
+  "global_menu_view_desktop": {
+    "message": "Görünüm"
+  },
+  "global_menu_view_floatontop_desktop": {
+    "message": "En Üstte Yüzdür"
+  },
+  "global_menu_view_developer_desktop": {
+    "message": "Geliştirici"
+  },
+  "global_menu_view_developer_tools_desktop": {
+    "message": "Geliştirici Araçları"
+  },
+  "global_menu_help_desktop": {
+    "message": "Yardım"
+  },
+  "delta_chat_homepage": {
+    "message": "Delta Chat Ana Sayfası"
+  },
+  "contribute": {
+    "message": "Katkıda Bulunun"
+  },
+  "global_menu_help_report_desktop": {
+    "message": "Bir Sorun Raporla"
+  },
+  "global_menu_help_about_desktop": {
+    "message": "Delta Chat hakkında"
+  },
+  "global_menu_file_open_desktop": {
+    "message": "Delta Chat'i Aç"
+  },
+  "global_menu_minimize_to_tray": {
+    "message": "Küçült"
+  },
+  "no_chat_selected_suggestion_desktop": {
+    "message": "Bir sohbet seçin ya da yeni bir sohbet oluşturun"
+  },
+  "write_message_desktop": {
+    "message": "Bir ileti yazın"
+  },
+  "encryption_info_title_desktop": {
+    "message": "Şifreleme Bilgisi"
+  },
+  "delete_message_desktop": {
+    "message": "İletiyi Sil"
+  },
+  "more_info_desktop": {
+    "message": "Daha Fazla Bilgi"
+  },
+  "timestamp_format_m_desktop": {
+    "message": "MMM D"
+  },
+  "remove_desktop": {
+    "message": "Kaldır"
+  },
+  "save_desktop": {
+    "message": "Kaydet"
+  },
+  "unsave": {
+    "message": "Kaydetme"
+  },
+  "name_desktop": {
+    "message": "Ad"
+  },
+  "select_group_image_desktop": {
+    "message": "Öbek Görseli Seç"
+  },
+  "export_backup_desktop": {
+    "message": "Yedeği Dışa Aktar"
+  },
+  "autocrypt_correct_desktop": {
+    "message": "Autocrypt ayarlaması aktarıldı."
+  },
+  "forget_login_confirmation_desktop": {
+    "message": "Bu profil silinsin mi? Uçtan uca ayarlamanızı, kişilerinizi, sohbetlerinizi, iletilerinizi ve ortamlarınızı kapsayarak her şey silinecek. Bu eylem geri alınamaz."
+  },
+  "message_detail_sent_desktop": {
+    "message": "gönderilme"
+  },
+  "message_detail_received_desktop": {
+    "message": "alınma"
+  },
+  "menu.view.developer.open.log.folder": {
+    "message": "Günlük Klasörünü Aç"
+  },
+  "menu.view.developer.open.current.log.file": {
+    "message": "Şu Anki Günlük Dosyasını Aç"
+  },
+  "explain_desktop_minimized_disabled_tray_pref": {
+    "message": "Delta Chat --minimized seçeneğiyle başlatıldığından tepsi simgesi etkisizleştirilemez."
+  },
+  "no_spellcheck_suggestions_found": {
+    "message": "Yazım önerileri bulunamadı."
+  },
+  "show_window": {
+    "message": "Pencereyi Göster"
+  },
+  "keybindings": {
+    "message": "Tuş Bağları"
+  },
+  "switch_between_chats": {
+    "message": "Sohbetler Arasında Geçiş Yap"
+  },
+  "scroll_messages": {
+    "message": "İletileri Kaydır"
+  },
+  "focus_search_input": {
+    "message": "Aramaya Odaklan"
+  },
+  "focus_message_input": {
+    "message": "İleti Girişine Odaklan"
+  },
+  "force_refresh_network": {
+    "message": "Ağı Yenilemeye Zorla"
+  },
+  "insert_newline": {
+    "message": "Yeni Satır Ekle"
+  },
+  "a11y_delivery_status_error": {
+    "message": "Teslimat durumu: Hata"
+  },
+  "a11y_encryption_padlock": {
+    "message": "Şifreleme asma kilidi"
+  },
+  "a11y_delivery_status_sending": {
+    "message": "Teslimat durumu: Gönderiliyor"
+  },
+  "a11y_delivery_status_draft": {
+    "message": "Teslimat durumu: Taslak"
+  },
+  "a11y_delivery_status_delivered": {
+    "message": "Teslimat durumu: Teslim edildi"
+  },
+  "a11y_delivery_status_read": {
+    "message": "Teslimat durumu: Okundu"
+  },
+  "a11y_delivery_status_invalid": {
+    "message": "Geçersiz teslimat durumu"
+  },
+  "a11y_message_context_menu_btn_label": {
+    "message": "İleti eylemleri"
+  },
+  "a11y_background_preview_label": {
+    "message": "Duvar kâğıdı önizlemesi"
+  },
+  "a11y_disappearing_messages_activated": {
+    "message": "Kaybolan iletiler etkinleştirildi"
+  },
+  "stop_sharing_location": {
+    "message": "Konum paylaşımını durdur"
+  },
+  "a11y_voice_message_hint_ios": {
+    "message": "Kaydettikten sonra göndermek için çift dokunun. Kaydı atmak için iki parmakla sarın."
+  },
+  "a11y_connectivity_hint": {
+    "message": "Bağlanabilirlik ayrıntılarını görüntülemek için çift dokunun."
+  },
+  "login_error_no_internet_connection": {
+    "message": "Internet bağlantısı yok; giriş başarısız."
+  },
+  "share_account_not_configured": {
+    "message": "Profil yapılandırılmadı."
+  },
+  "cannot_play_audio_file": {
+    "message": "Ses dosyası oynatılamıyor."
+  },
+  "perm_ios_explain_access_to_camera_denied": {
+    "message": "Fotoğraflar çekmek, videolar yakalamak ya da QR Kodu tarayıcısını kullanmak için sistem ayarlarını açın ve “Kamera”yı etkinleştirin."
+  },
+  "open_settings": {
+    "message": "Ayarlar'ı Aç"
+  },
+  "import_device_contacts": {
+    "message": "Aygıt kişilerini içe aktar"
+  },
+  "import_device_contacts_hint": {
+    "message": "Aygıtınızdan gelen kişilerle sohbet etmek için Ayarlar'ı açın ve “Kişiler”i etkinleştirin."
+  },
+  "disabled_in_dc": {
+    "message": "Delta Chat'ten etkisizleştirildi"
+  },
+  "disabled_in_system_settings": {
+    "message": "Sistem ayarlarından etkisizleştirildi"
+  },
+  "bg_app_refresh_disabled": {
+    "message": "“Arka Planda Uygulama Yenileme” sistem ayarlarından etkisizleştirildi"
+  },
+  "delayed": {
+    "message": "Gecikmeli"
+  },
+  "notifications_avg_minutes": {
+    "message": "Ortalama olarak her %1$d dakikada bir"
+  },
+  "notifications_avg_hours": {
+    "message": "Ortalama olarak her %1$d saatte bir"
+  },
+  "last_check_at": {
+    "message": "Denetleme %1$s"
+  },
+  "system_settings": {
+    "message": "Sistem Ayarları"
+  },
+  "system_settings_notify_explain_ios": {
+    "message": "Türü, rozetleri, önizlemeyi ve daha fazlasını düzenle"
+  },
+  "shortcuts_widget_title": {
+    "message": "Kısayollar"
+  },
+  "shortcuts_widget_description": {
+    "message": "Öğeleri eklemek için Delta Chat'in “Widget'a Ekle” öğesini kullanın"
+  },
+  "remove_from_widget": {
+    "message": "Widget'tan Kaldır"
+  },
+  "add_to_widget": {
+    "message": "Widget'a Ekle"
+  },
+  "InfoPlist_NSCameraUsageDescription": {
+    "message": "Delta Chat, fotoğraflar ve videolar çekmek ve göndermek için ve QR kodlarını taramak için kameranızı kullanır."
+  },
+  "InfoPlist_NSContactsUsageDescription": {
+    "message": "Delta Chat, yazabileceğiniz adreslerin bir listesini göstermek için kişilerinizi kullanır. Delta Chat'in sunucusu yoktur; kişileriniz herhangi bir yere gönderilmez."
+  },
+  "InfoPlist_NSLocationAlwaysAndWhenInUseUsageDescription": {
+    "message": "Konum paylaşımını etkinleştirdiğiniz zaman aralığında konumunuzu paylaşmak için Delta Chat'e izin gerekir."
+  },
+  "InfoPlist_NSLocationWhenInUseUsageDescription": {
+    "message": "Konum paylaşımını etkinleştirdiğiniz zaman aralığında konumunuzu paylaşmak için Delta Chat'e izin gerekir."
+  },
+  "InfoPlist_NSMicrophoneUsageDescription": {
+    "message": "Delta Chat, sesli iletiler ve sesli videolar kaydetmek ve göndermek için mikrofonunuzu kullanır."
+  },
+  "InfoPlist_NSPhotoLibraryUsageDescription": {
+    "message": "Delta Chat, kitaplığınızdan hangi fotoğrafların gönderileceğini seçmenize izin verir."
+  },
+  "InfoPlist_NSPhotoLibraryAddUsageDescription": {
+    "message": "Delta Chat, görselleri fotoğraf kitaplığınıza kaydetmek istiyor."
+  },
+  "InfoPlist_NSFaceIDUsageDescription": {
+    "message": "Delta Chat; yerel profilinizi korumak, yedek oluşturmak ve ikinci aygıt ayarlaması için Face ID'yi kullanabilir."
+  },
+  "pref_instant_delivery": {
+    "message": "Anında Teslimat"
+  },
+  "pref_background_notifications": {
+    "message": "Arka Plan Bağlantısı Kullan"
+  },
+  "pref_background_notifications_explain": {
+    "message": "Pil iyileştirmelerinin yok sayılmasını gerektirir, bildirimler zamanında gelmezse kullanın"
+  },
+  "pref_reliable_service": {
+    "message": "Arka Plan Bağlantısını Zorla"
+  },
+  "pref_reliable_service_explain": {
+    "message": "Kalıcı bir bildirime neden olur"
+  },
+  "pref_background_notifications_rationale": {
+    "message": "Bağlantıyı sürdürmek ve arka planda iletileri almak için sonraki adımda pil iyileştirmelerini yok sayın.\n\nDelta Chat, az kaynak kullanır ve pilinizi boşaltmamaya özen gösterir."
+  },
+  "perm_enable_bg_reminder_title": {
+    "message": "Delta Chat arka plandayken iletileri almak için buraya dokunun."
+  },
+  "perm_enable_bg_already_done": {
+    "message": "Delta Chat'in arka planda iletileri almasına zaten izin verdiniz.\n\nİletiler arka planda hâlâ gelmiyorsa, lütfen sistem ayarlarınızı da denetleyin."
+  },
+  "update_1_50_android": {
+    "message": "Ne yeni?\n\n❤️‍🔥 Daha fazla emojiyle yeni emoji seçicisi\n\n🎮 Geliştirilen sohbet içi uygulamalar: Bildirimler alın ve destekleyen uygulamaları bağlamda açın, yani eklenen bir takvim girdisini doğrudan açın\n\n👍 İletilerinize verilen tepkiler hakkında bildirimler alın\n\n... 🛠️ DÜZELTMELER ve HATTA DAHA FAZLASI için %1$s"
+  },
+  "update_switch_profile_placement": {
+    "message": "ℹ️ “Profili Değiştir” seçeneği taşındı: Yeni profil eklemek ya da profilleri değiştirmek için ana ekranın üst köşesindeki profil görselinize dokunun 💡"
+  },
+  "n_minutes": {
+    "one": "%d dk",
+    "other": "%d dk"
+  },
+  "n_hours": {
+    "one": "%d saat",
+    "other": "%d saat"
+  },
+  "n_chats": {
+    "one": "%d sohbet",
+    "other": "%d sohbet"
+  },
+  "n_contacts": {
+    "one": "%d kişi",
+    "other": "%d kişi"
+  },
+  "n_messages": {
+    "one": "%d ileti",
+    "other": "%d ileti"
+  },
+  "n_reactions": {
+    "one": "%d tepki",
+    "other": "%d tepki"
+  },
+  "n_members": {
+    "one": "%d üye",
+    "other": "%d üye"
+  },
+  "n_recipients": {
+    "one": "%d alıcı",
+    "other": "%d alıcı"
+  },
+  "n_selected": {
+    "one": "%d Seçildi",
+    "other": "%d Seçildi"
+  },
+  "ask_send_following_n_files_to": {
+    "one": "Aşağıdaki dosya %s kişisine gönderilsin mi?",
+    "other": "Aşağıdaki %d dosya %s kişisine gönderilsin mi?"
+  },
+  "ask_delete_chat": {
+    "one": "Tüm aygıtlarınızdaki %d sohbet silinsin mi?",
+    "other": "Tüm aygıtlarınızdaki %d sohbet silinsin mi?"
+  },
+  "ask_delete_messages": {
+    "one": "Tüm aygıtlarınızdaki %d ileti silinsin mi?",
+    "other": "Tüm aygıtlarınızdaki %d ileti silinsin mi?"
+  },
+  "ask_delete_messages_simple": {
+    "one": "%d ileti silinsin mi?",
+    "other": "%d ileti silinsin mi?"
+  },
+  "chat_archived": {
+    "one": "%d sohbet arşivlendi",
+    "other": "%d sohbet arşivlendi"
+  },
+  "chat_unarchived": {
+    "one": "%d sohbet arşivlenmedi",
+    "other": "%d sohbet arşivlenmedi"
+  },
+  "chat_n_new_messages": {
+    "one": "%d yeni ileti",
+    "other": "%d yeni ileti"
+  }
+}

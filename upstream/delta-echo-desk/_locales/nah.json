@@ -1,0 +1,133 @@
+{
+  "app_name": {
+    "message": "Delta Chat"
+  },
+  "ok": {
+    "message": "Kwalli"
+  },
+  "cancel": {
+    "message": "Axkanah"
+  },
+  "clear_search": {
+    "message": "Xikixpolo"
+  },
+  "yes": {
+    "message": "Kena"
+  },
+  "no": {
+    "message": "Amo"
+  },
+  "select": {
+    "message": "Xikpehpena"
+  },
+  "on": {
+    "message": "Tlikwitok"
+  },
+  "off": {
+    "message": "Sewtok"
+  },
+  "info": {
+    "message": "Itechpa"
+  },
+  "emoji": {
+    "message": "Emoji"
+  },
+  "always": {
+    "message": "Nochipa"
+  },
+  "now": {
+    "message": "Naman"
+  },
+  "gif": {
+    "message": "GIF"
+  },
+  "images": {
+    "message": "Tlaixkopinalli"
+  },
+  "audio": {
+    "message": "Kakistli"
+  },
+  "voice_message": {
+    "message": "Tlahtolkopinalli"
+  },
+  "video": {
+    "message": "Tlamawisolli"
+  },
+  "gallery": {
+    "message": "Ixkopinpamitl"
+  },
+  "file": {
+    "message": "Amatl"
+  },
+  "files": {
+    "message": "Amatinih"
+  },
+  "green": {
+    "message": "Xoxowik"
+  },
+  "red": {
+    "message": "Chichiltik"
+  },
+  "blue": {
+    "message": "Asoltik"
+  },
+  "orange": {
+    "message": "Chilkostik"
+  },
+  "purple": {
+    "message": "Kamohtik"
+  },
+  "white": {
+    "message": "Chipawak"
+  },
+  "menu_new_group": {
+    "message": "Yankwik nechikolli"
+  },
+  "tab_group": {
+    "message": "Nechikolli"
+  },
+  "tab_gallery": {
+    "message": "Ixkopinpamitl"
+  },
+  "tab_docs": {
+    "message": "Amatinih"
+  },
+  "pref_appearance": {
+    "message": "Iixneska"
+  },
+  "pref_language": {
+    "message": "Tlahtolli"
+  },
+  "pref_other": {
+    "message": "Seyok"
+  },
+  "pref_show_emails_all": {
+    "message": "Nochi"
+  },
+  "qrscan_fingerprint_label": {
+    "message": "Mahpilixmachiyotilli"
+  },
+  "notify_new_message": {
+    "message": "Yankwik ehekatlahkwilolli"
+  },
+  "global_menu_preferences_language_desktop": {
+    "message": "Tlahtolli"
+  },
+  "global_menu_file_desktop": {
+    "message": "Amatl"
+  },
+  "global_menu_edit_desktop": {
+    "message": "Xikpatla"
+  },
+  "name_desktop": {
+    "message": "Tokaitl"
+  },
+  "n_hours": {
+    "one": "%d kawitl",
+    "other": "%d kawitl"
+  },
+  "n_members": {
+    "one": "%d masewalli",
+    "other": "%d masewalmeh"
+  }
+}

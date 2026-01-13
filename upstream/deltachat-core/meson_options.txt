@@ -1,0 +1,18 @@
+option(
+  'monolith',
+  type: 'boolean',
+  value: false,
+  description: 'Build a libdeltachat.so with minimal external dependencies'
+)
+option(
+  'force-etpan-fallback',
+  type: 'boolean',
+  value: false,
+  description: 'Use bundled libetpan, as it ignores --wrap-mode=forcefallback'
+)
+option(
+  'rpgp',
+  type: 'boolean',
+  value: false,
+  description: '[experimental] Build with rpgp instead of netpgp'
+)

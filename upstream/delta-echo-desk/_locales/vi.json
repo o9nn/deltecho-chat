@@ -1,0 +1,2312 @@
+{
+  "app_name": {
+    "message": "Delta Chat"
+  },
+  "ok": {
+    "message": "OK"
+  },
+  "cancel": {
+    "message": "Hủy"
+  },
+  "clear_search": {
+    "message": "Dọn dẹp tìm kiếm"
+  },
+  "yes": {
+    "message": "Có"
+  },
+  "no": {
+    "message": "Không"
+  },
+  "select": {
+    "message": "Chọn"
+  },
+  "on": {
+    "message": "Bật"
+  },
+  "off": {
+    "message": "Tắt"
+  },
+  "def": {
+    "message": "Mặc định"
+  },
+  "default_value": {
+    "message": "Mặc định (%1$s)"
+  },
+  "default_value_as_above": {
+    "message": "Mặc định (giống như trên)"
+  },
+  "custom": {
+    "message": "Tùy chỉnh"
+  },
+  "none": {
+    "message": "Không"
+  },
+  "automatic": {
+    "message": "Tự động"
+  },
+  "strict": {
+    "message": "Nghiêm ngặt"
+  },
+  "open": {
+    "message": "Mở"
+  },
+  "download": {
+    "message": "Tải xuống"
+  },
+  "downloading": {
+    "message": "Đang tải xuống…"
+  },
+  "open_attachment": {
+    "message": "Mở tệp đính kèm"
+  },
+  "join": {
+    "message": "Tham gia"
+  },
+  "rejoin": {
+    "message": "Tham gia lại"
+  },
+  "delete": {
+    "message": "Xóa"
+  },
+  "info": {
+    "message": "Thông tin"
+  },
+  "update": {
+    "message": "Cập nhật"
+  },
+  "emoji": {
+    "message": "Emoji"
+  },
+  "attachment": {
+    "message": "Tệp đính kèm"
+  },
+  "back": {
+    "message": "Quay lại"
+  },
+  "close": {
+    "message": "Đóng"
+  },
+  "close_window": {
+    "message": "Đóng cửa sổ"
+  },
+  "forward": {
+    "message": "Chuyển tiếp"
+  },
+  "create": {
+    "message": "Tạo"
+  },
+  "later": {
+    "message": "Sau"
+  },
+  "resend": {
+    "message": "Gửi lại"
+  },
+  "archive": {
+    "message": "Lưu trữ"
+  },
+  "unarchive": {
+    "message": "Hủy lưu trữ"
+  },
+  "mute": {
+    "message": "Tắt tiếng"
+  },
+  "ephemeral_messages": {
+    "message": "Tin nhắn biến mất"
+  },
+  "ephemeral_messages_hint": {
+    "message": "Áp dụng cho tất cả thành viên của cuộc trò chuyện này nếu họ sử dụng Delta Chat; họ vẫn có thể sao chép, lưu và chuyển tiếp thư hoặc sử dụng các ứng dụng e-mail khác."
+  },
+  "save": {
+    "message": "Lưu"
+  },
+  "chat": {
+    "message": "Trò chuyện"
+  },
+  "media": {
+    "message": "Phương tiện"
+  },
+  "profile": {
+    "message": "Hồ sơ"
+  },
+  "main_menu": {
+    "message": "Menu chính"
+  },
+  "start_chat": {
+    "message": "Bắt đầu trò chuyện"
+  },
+  "show_full_message": {
+    "message": "Hiển thị toàn bộ tin nhắn…"
+  },
+  "mark_all_as_read": {
+    "message": "Đánh dấu tất cả là đã đọc"
+  },
+  "mark_as_read_short": {
+    "message": "Đọc"
+  },
+  "loading": {
+    "message": "Đang tải…"
+  },
+  "hide": {
+    "message": "Ẩn"
+  },
+  "activate": {
+    "message": "Kích hoạt"
+  },
+  "load_remote_content": {
+    "message": "Tải hình ảnh từ xa"
+  },
+  "load_remote_content_ask": {
+    "message": "Hình ảnh từ xa có thể theo dõi bạn.\n\nThiết đặt này cũng có thể tải phông chữ và nội dung khác. Nếu bị tắt, hình ảnh được nhúng hoặc được lưu vào bộ nhớ đệm có thể xuất hiện.\n\nTải hình ảnh từ xa?"
+  },
+  "always": {
+    "message": "Luôn luôn"
+  },
+  "always_load_remote_images": {
+    "message": "Luôn tải hình ảnh từ xa"
+  },
+  "once": {
+    "message": "Một lần"
+  },
+  "show_warning": {
+    "message": "Hiển thị cảnh báo"
+  },
+  "show_password": {
+    "message": "Hiển thị mật khẩu"
+  },
+  "hide_password": {
+    "message": "Ẩn mật khẩu"
+  },
+  "not_now": {
+    "message": "Không phải bây giờ"
+  },
+  "never": {
+    "message": "Không bao giờ"
+  },
+  "one_moment": {
+    "message": "Một lát…"
+  },
+  "done": {
+    "message": "Xong"
+  },
+  "undo": {
+    "message": "Hoàn tác"
+  },
+  "offline": {
+    "message": "Ngoại tuyến"
+  },
+  "next": {
+    "message": "Tiếp theo"
+  },
+  "error": {
+    "message": "Lỗi"
+  },
+  "error_x": {
+    "message": "Lỗi: %1$s"
+  },
+  "no_app_to_handle_data": {
+    "message": "Không thể tìm thấy ứng dụng để xử lý loại dữ liệu này."
+  },
+  "no_browser_installed": {
+    "message": "Không có trình duyệt nào đã cài đặt."
+  },
+  "file_not_found": {
+    "message": "Không thể tìm thấy %1$s."
+  },
+  "copied_to_clipboard": {
+    "message": "Đã chép vào clipboard."
+  },
+  "contacts_headline": {
+    "message": "Danh bạ"
+  },
+  "email_address": {
+    "message": "Địa chỉ E-mail"
+  },
+  "bad_email_address": {
+    "message": "Địa chỉ e-mail xấu."
+  },
+  "password": {
+    "message": "Mật khẩu"
+  },
+  "existing_password": {
+    "message": "Mật khẩu hiện tại"
+  },
+  "now": {
+    "message": "Bây giờ"
+  },
+  "danger": {
+    "message": "Nguy hiểm"
+  },
+  "today": {
+    "message": "Hôm nay"
+  },
+  "yesterday": {
+    "message": "Hôm qua"
+  },
+  "this_week": {
+    "message": "Tuần này"
+  },
+  "this_month": {
+    "message": "Tháng này"
+  },
+  "last_week": {
+    "message": "Tuần trước"
+  },
+  "last_month": {
+    "message": "Tháng trước"
+  },
+  "last_seen_at": {
+    "message": "Nhìn thấy lần cuối lúc %1$s"
+  },
+  "last_seen_relative": {
+    "message": "Nhìn thấy lần cuối %1$s"
+  },
+  "last_seen_unknown": {
+    "message": "Nhìn thấy lần cuối: Không rõ"
+  },
+  "self": {
+    "message": "Tôi"
+  },
+  "draft": {
+    "message": "Bản nháp"
+  },
+  "image": {
+    "message": "Hình ảnh"
+  },
+  "reply_noun": {
+    "message": "Trả lời"
+  },
+  "gif": {
+    "message": "GIF"
+  },
+  "sticker": {
+    "message": "Hình dán"
+  },
+  "add_to_sticker_collection": {
+    "message": "Thêm vào Bộ sưu tập Hình dán"
+  },
+  "add_stickers_instructions": {
+    "message": "Để thêm nhãn dán, hãy nhấn vào \"Mở thư mục nhãn dán\", tạo thư mục con cho gói nhãn dán của bạn rồi kéo tệp hình ảnh và nhãn dán vào đó"
+  },
+  "open_sticker_folder": {
+    "message": "Mở thư mục nhãn dán"
+  },
+  "images": {
+    "message": "Hình ảnh"
+  },
+  "audio": {
+    "message": "Âm thanh"
+  },
+  "voice_message": {
+    "message": "Tin nhắn thoại"
+  },
+  "forwarded": {
+    "message": "Đã chuyển tiếp"
+  },
+  "forwarded_message": {
+    "message": "Tin nhắn đã chuyển tiếp"
+  },
+  "forwarded_by": {
+    "message": "Được chuyển tiếp bởi %1$s"
+  },
+  "video": {
+    "message": "Video"
+  },
+  "documents": {
+    "message": "Tài liệu"
+  },
+  "contact": {
+    "message": "Liên hệ"
+  },
+  "camera": {
+    "message": "Máy ảnh"
+  },
+  "capture": {
+    "message": "Chụp"
+  },
+  "switch_camera": {
+    "message": "Chuyển đổi máy ảnh"
+  },
+  "toggle_fullscreen": {
+    "message": "Chuyển đổi Chế độ toàn màn hình"
+  },
+  "location": {
+    "message": "Vị trí"
+  },
+  "locations": {
+    "message": "Vị trí"
+  },
+  "gallery": {
+    "message": "Phòng trưng bày"
+  },
+  "images_and_videos": {
+    "message": "Hình ảnh và Video"
+  },
+  "file": {
+    "message": "Tập tin"
+  },
+  "files": {
+    "message": "Tập tin"
+  },
+  "webxdc_app": {
+    "message": "Ứng dụng"
+  },
+  "webxdc_apps": {
+    "message": "Ứng dụng"
+  },
+  "unknown": {
+    "message": "Không rõ"
+  },
+  "green": {
+    "message": "Xanh"
+  },
+  "red": {
+    "message": "Đỏ"
+  },
+  "blue": {
+    "message": "Lam"
+  },
+  "orange": {
+    "message": "Cam"
+  },
+  "cyan": {
+    "message": "Lục lam"
+  },
+  "purple": {
+    "message": "Tím"
+  },
+  "magenta": {
+    "message": "Đỏ tươi"
+  },
+  "white": {
+    "message": "Trắng"
+  },
+  "zoom": {
+    "message": "Thu phóng"
+  },
+  "extra_small": {
+    "message": "Cực nhỏ"
+  },
+  "small": {
+    "message": "Nhỏ"
+  },
+  "normal": {
+    "message": "Bình thường"
+  },
+  "large": {
+    "message": "Lớn"
+  },
+  "extra_large": {
+    "message": "Cực lớn"
+  },
+  "fast": {
+    "message": "Nhanh"
+  },
+  "slow": {
+    "message": "Chậm"
+  },
+  "menu_new_contact": {
+    "message": "Liên hệ mới"
+  },
+  "menu_new_chat": {
+    "message": "Trò chuyện mới"
+  },
+  "menu_new_group": {
+    "message": "Nhóm mới"
+  },
+  "clone_chat": {
+    "message": "Sao chép cuộc trò chuyện"
+  },
+  "broadcast_list": {
+    "message": "Danh sách phát sóng"
+  },
+  "broadcast_lists": {
+    "message": "Danh sách phát sóng"
+  },
+  "new_broadcast_list": {
+    "message": "Danh sách phát sóng mới"
+  },
+  "add_recipients": {
+    "message": "Thêm người nhận"
+  },
+  "edit_broadcast_list": {
+    "message": "Chỉnh sửa danh sách phát sóng"
+  },
+  "broadcast_list_name": {
+    "message": "Tên danh sách phát sóng"
+  },
+  "please_enter_broadcast_list_name": {
+    "message": "Vui lòng nhập tên cho danh sách phát sóng."
+  },
+  "menu_send": {
+    "message": "Gửi"
+  },
+  "menu_toggle_keyboard": {
+    "message": "Chuyển đổi Bàn phím Emoji"
+  },
+  "menu_edit_group": {
+    "message": "Chỉnh sửa nhóm"
+  },
+  "menu_group_name_and_image": {
+    "message": "Tên nhóm và hình ảnh"
+  },
+  "menu_show_global_map": {
+    "message": "Tất cả vị trí"
+  },
+  "menu_archive_chat": {
+    "message": "Lưu trữ cuộc trò chuyện"
+  },
+  "menu_unarchive_chat": {
+    "message": "Hủy lưu trữ cuộc trò chuyện"
+  },
+  "menu_add_attachment": {
+    "message": "Thêm tệp đính kèm"
+  },
+  "menu_leave_group": {
+    "message": "Rời khỏi nhóm"
+  },
+  "menu_delete_chat": {
+    "message": "Xóa cuộc trò chuyện"
+  },
+  "clear_chat": {
+    "message": "Xóa cuộc trò chuyện"
+  },
+  "delete_contact": {
+    "message": "Xóa liên hệ"
+  },
+  "menu_delete_location": {
+    "message": "Xóa vị trí này?"
+  },
+  "menu_message_details": {
+    "message": "Chi tiết tin nhắn"
+  },
+  "menu_copy_to_clipboard": {
+    "message": "Sao chép vào Clipboard"
+  },
+  "menu_copy_selection_to_clipboard": {
+    "message": "Sao chép lựa chọn"
+  },
+  "menu_copy_link_to_clipboard": {
+    "message": "Sao chép liên kết"
+  },
+  "menu_copy_text_to_clipboard": {
+    "message": "Sao chép văn bản"
+  },
+  "menu_copy_image_to_clipboard": {
+    "message": "Sao chép hình ảnh"
+  },
+  "menu_copy_email_to_clipboard": {
+    "message": "Sao chép E-mail"
+  },
+  "paste_from_clipboard": {
+    "message": "Dán từ Clipboard"
+  },
+  "ask_copy_unopenable_link_to_clipboard": {
+    "message": "Không thể mở liên kết \"%1$d\" trong trình duyệt web. Thay vào đó, bạn có muốn sao chép liên kết vào clipboard không?"
+  },
+  "menu_forward": {
+    "message": "Chuyển tiếp tin nhắn"
+  },
+  "menu_reply": {
+    "message": "Trả lời tin nhắn"
+  },
+  "menu_mute": {
+    "message": "Ẩn thông báo"
+  },
+  "menu_unmute": {
+    "message": "Bật tiếng"
+  },
+  "menu_export_attachment": {
+    "message": "Xuất tệp đính kèm"
+  },
+  "menu_export_attachments": {
+    "message": "Xuất tệp đính kèm"
+  },
+  "menu_all_media": {
+    "message": "Tất cả phương tiện"
+  },
+  "show_in_chat": {
+    "message": "Hiển thị trong Trò chuyện"
+  },
+  "show_app_in_chat": {
+    "message": "Hiển thị ứng dụng trong trò chuyện"
+  },
+  "menu_share": {
+    "message": "Chia sẻ"
+  },
+  "block": {
+    "message": "Chặn"
+  },
+  "menu_block_contact": {
+    "message": "Chặn liên hệ"
+  },
+  "menu_unblock_contact": {
+    "message": "Bỏ chặn liên hệ"
+  },
+  "accept": {
+    "message": "Chấp nhận"
+  },
+  "menu_play": {
+    "message": "Phát"
+  },
+  "menu_pause": {
+    "message": "Tạm dừng"
+  },
+  "menu_scroll_to_bottom": {
+    "message": "Cuộn xuống dưới cùng"
+  },
+  "menu_scroll_to_top": {
+    "message": "Cuộn lên trên cùng"
+  },
+  "menu_help": {
+    "message": "Trợ giúp"
+  },
+  "what_is_webxdc": {
+    "message": "Webxdc là gì?"
+  },
+  "privacy_policy": {
+    "message": "Chính sách quyền riêng tư"
+  },
+  "menu_select_all": {
+    "message": "Chọn tất cả"
+  },
+  "select_chat": {
+    "message": "Chọn Trò chuyện"
+  },
+  "select_more": {
+    "message": "Chọn thêm"
+  },
+  "menu_edit_name": {
+    "message": "Chỉnh sửa tên"
+  },
+  "menu_settings": {
+    "message": "Cài đặt"
+  },
+  "menu_advanced": {
+    "message": "Nâng cao"
+  },
+  "menu_view_profile": {
+    "message": "Xem hồ sơ"
+  },
+  "menu_zoom_in": {
+    "message": "Phóng to"
+  },
+  "menu_zoom_out": {
+    "message": "Thu nhỏ"
+  },
+  "menu_save_log": {
+    "message": "Lưu nhật ký"
+  },
+  "menu_more_options": {
+    "message": "Tùy chọn khác"
+  },
+  "menu_learn_spelling": {
+    "message": "Học đánh vần"
+  },
+  "menu_chat_audit_log": {
+    "message": "Nhật ký kiểm tra trò chuyện"
+  },
+  "jump_to_message": {
+    "message": "Chuyển tới tin nhắn"
+  },
+  "copy_json": {
+    "message": "Sao chép JSON"
+  },
+  "replace_draft": {
+    "message": "Thay thế bản nháp"
+  },
+  "title_share_location": {
+    "message": "Chia sẻ vị trí với tất cả thành viên nhóm"
+  },
+  "device_talk": {
+    "message": "Tin nhắn thiết bị"
+  },
+  "device_talk_subtitle": {
+    "message": "Tin nhắn được tạo cục bộ"
+  },
+  "device_talk_explain": {
+    "message": "Tin nhắn trong cuộc trò chuyện này được tạo trên thiết bị của bạn để thông báo về các bản cập nhật ứng dụng và sự cố trong quá trình sử dụng."
+  },
+  "edit_contact": {
+    "message": "Chỉnh sửa liên hệ"
+  },
+  "pin_chat": {
+    "message": "Ghim trò chuyện"
+  },
+  "unpin_chat": {
+    "message": "Bỏ ghim cuộc trò chuyện"
+  },
+  "pin": {
+    "message": "Ghim"
+  },
+  "unpin": {
+    "message": "Bỏ ghim"
+  },
+  "ConversationFragment_quoted_message_not_found": {
+    "message": "Không tìm thấy tin nhắn gốc"
+  },
+  "reply_privately": {
+    "message": "Trả lời riêng"
+  },
+  "source_code": {
+    "message": "Mã nguồn"
+  },
+  "add_to_home_screen": {
+    "message": "Thêm vào Màn hình chính"
+  },
+  "donate": {
+    "message": "Quyên tặng"
+  },
+  "mute_for_one_hour": {
+    "message": "Tắt tiếng trong 1 giờ"
+  },
+  "mute_for_eight_hours": {
+    "message": "Tắt tiếng trong 8 giờ"
+  },
+  "mute_for_one_day": {
+    "message": "Tắt tiếng trong 1 ngày"
+  },
+  "mute_for_seven_days": {
+    "message": "Tắt tiếng trong 7 ngày"
+  },
+  "mute_forever": {
+    "message": "Tắt tiếng vĩnh viễn"
+  },
+  "share_location_for_5_minutes": {
+    "message": "Trong 5 phút"
+  },
+  "share_location_for_30_minutes": {
+    "message": "Trong 30 phút"
+  },
+  "share_location_for_one_hour": {
+    "message": "Trong 1 giờ"
+  },
+  "share_location_for_two_hours": {
+    "message": "Trong 2 giờ"
+  },
+  "share_location_for_six_hours": {
+    "message": "Trong 6 giờ"
+  },
+  "file_saved_to": {
+    "message": "Tệp đã được lưu vào \"%1$s\"."
+  },
+  "videochat": {
+    "message": "Trò chuyện video"
+  },
+  "videochat_invite_user_to_videochat": {
+    "message": "Mời %1$s trò chuyện video?"
+  },
+  "videochat_invite_user_hint": {
+    "message": "Điều này yêu cầu ứng dụng hoặc trình duyệt tương thích ở cả hai đầu."
+  },
+  "videochat_contact_invited_hint": {
+    "message": "%1$s được mời tham gia trò chuyện video."
+  },
+  "videochat_you_invited_hint": {
+    "message": "Bạn đã gửi lời mời trò chuyện video."
+  },
+  "videochat_tap_to_join": {
+    "message": "Nhấn để tham gia"
+  },
+  "videochat_tap_to_open": {
+    "message": "Nhấn để mở"
+  },
+  "videochat_instance": {
+    "message": "Phiên bản trò chuyện video"
+  },
+  "videochat_instance_placeholder": {
+    "message": "Phiên bản trò chuyện video của bạn"
+  },
+  "videochat_instance_example": {
+    "message": "Ví dụ: https://your-server.org/$ROOM"
+  },
+  "videochat_instance_explain_2": {
+    "message": "Nếu được bật, bạn có thể bắt đầu trò chuyện video từ mỗi cuộc trò chuyện. Yêu cầu ứng dụng tương thích hoặc trình duyệt ở cả hai đầu."
+  },
+  "videochat_instance_from_qr": {
+    "message": "Sử dụng \"%1$s\" để mời người khác trò chuyện video?\n\nSau khi thiết lập, bạn có thể bắt đầu trò chuyện video từ mỗi cuộc trò chuyện. Điều này sẽ thay thế mọi cài đặt trước đó cho trò chuyện video."
+  },
+  "videochat_invitation": {
+    "message": "Lời mời trò chuyện video"
+  },
+  "videochat_invitation_body": {
+    "message": "Bạn được mời tham gia cuộc trò chuyện video, hãy nhấp vào %1$s để tham gia."
+  },
+  "ask_leave_group": {
+    "message": "Bạn có chắc chắn muốn rời khỏi nhóm này không?"
+  },
+  "ask_forward": {
+    "message": "Chuyển tiếp tin nhắn tới %1$s?"
+  },
+  "ask_forward_multiple": {
+    "message": "Chuyển tiếp tin nhắn tới %1$d cuộc trò chuyện?"
+  },
+  "ask_export_attachment": {
+    "message": "Xuất tệp đính kèm sẽ cho phép các ứng dụng khác trên thiết bị của bạn truy cập chúng.\n\nTiếp tục?"
+  },
+  "ask_block_contact": {
+    "message": "Chặn liên hệ này? Bạn sẽ không còn nhận được tin nhắn từ họ nữa."
+  },
+  "ask_unblock_contact": {
+    "message": "Bỏ chặn liên hệ này? Sau đó bạn sẽ có thể nhận tin nhắn từ họ."
+  },
+  "ask_delete_contacts": {
+    "message": "Xóa liên hệ?\n\nKhông thể xóa vĩnh viễn các liên hệ đang trò chuyện hoặc khỏi sổ địa chỉ hệ thống."
+  },
+  "ask_delete_contact": {
+    "message": "Xóa liên hệ %1$s?\n\nKhông thể xóa vĩnh viễn các liên hệ đang trò chuyện hoặc khỏi sổ địa chỉ hệ thống."
+  },
+  "ask_start_chat_with": {
+    "message": "Trò chuyện với %1$s?"
+  },
+  "ask_remove_members": {
+    "message": "Loại %1$s khỏi nhóm?"
+  },
+  "ask_remove_from_broadcast": {
+    "message": "Loại %1$s khỏi danh sách phát sóng?"
+  },
+  "open_url_confirmation": {
+    "message": "Bạn có muốn mở liên kết này không?"
+  },
+  "contacts_title": {
+    "message": "Danh bạ"
+  },
+  "contacts_enter_name_or_email": {
+    "message": "Nhập tên hoặc địa chỉ e-mail"
+  },
+  "contacts_type_email_above": {
+    "message": "Nhập địa chỉ e-mail ở trên"
+  },
+  "contacts_empty_hint": {
+    "message": "Không có liên hệ nào."
+  },
+  "chat_archived_chats_title": {
+    "message": "Cuộc trò chuyện đã lưu trữ"
+  },
+  "chat_please_enter_message": {
+    "message": "Vui lòng nhập tin nhắn."
+  },
+  "chat_camera_unavailable": {
+    "message": "Máy ảnh không có sẵn."
+  },
+  "chat_unable_to_record_audio": {
+    "message": "Không thể ghi âm."
+  },
+  "chat_new_one_to_one_hint": {
+    "message": "Gửi tin nhắn tới %1$s."
+  },
+  "chat_new_broadcast_hint": {
+    "message": "Trong danh sách phát sóng, người nhận sẽ nhận được tin nhắn trong cuộc trò chuyện chỉ đọc với bạn."
+  },
+  "chat_new_group_hint": {
+    "message": "Những người khác sẽ chỉ nhìn thấy nhóm này sau khi bạn gửi tin nhắn đầu tiên."
+  },
+  "chat_record_slide_to_cancel": {
+    "message": "Trượt để hủy"
+  },
+  "chat_record_explain": {
+    "message": "Nhấn và giữ để ghi tin nhắn thoại, thả ra để gửi"
+  },
+  "chat_no_chats_yet_title": {
+    "message": "Hộp thư đến trống.\nNhấn \"+\" để bắt đầu cuộc trò chuyện mới."
+  },
+  "chat_all_archived": {
+    "message": "Tất cả các cuộc trò chuyện đã được lưu trữ.\nNhấn \"+\" để bắt đầu cuộc trò chuyện mới."
+  },
+  "chat_share_with_title": {
+    "message": "Chia sẻ với"
+  },
+  "chat_input_placeholder": {
+    "message": "Tin nhắn"
+  },
+  "chat_archived_label": {
+    "message": "Đã lưu trữ"
+  },
+  "chat_request_label": {
+    "message": "Yêu cầu"
+  },
+  "chat_no_messages": {
+    "message": "Không có tin nhắn."
+  },
+  "chat_self_talk_subtitle": {
+    "message": "Tin nhắn cho bản thân"
+  },
+  "archive_empty_hint": {
+    "message": "Các cuộc trò chuyện đã lưu trữ sẽ xuất hiện ở đây."
+  },
+  "saved_messages": {
+    "message": "Tin nhắn đã lưu"
+  },
+  "saved_messages_explain": {
+    "message": "• Chuyển tiếp tin nhắn tại đây để dễ dàng truy cập\n\n• Ghi chú hoặc ghi nhớ giọng nói\n\n• Đính kèm phương tiện để lưu chúng"
+  },
+  "saved": {
+    "message": "Đã lưu"
+  },
+  "save_as": {
+    "message": "Lưu dưới dạng"
+  },
+  "retry_send": {
+    "message": "Thử gửi lại tin nhắn"
+  },
+  "messaging_disabled_not_in_group": {
+    "message": "Bạn phải ở trong nhóm này để gửi tin nhắn. Để tham gia, hãy hỏi thành viên khác."
+  },
+  "messaging_disabled_mailing_list": {
+    "message": "Gửi tin nhắn trong danh sách gửi thư chưa được hỗ trợ"
+  },
+  "cannot_display_unsuported_file_type": {
+    "message": "Không thể hiển thị loại tệp này: %s"
+  },
+  "attachment_failed_to_load": {
+    "message": "Không tải được tệp đính kèm"
+  },
+  "lock_recording": {
+    "message": "Khóa ghi âm"
+  },
+  "mailing_list": {
+    "message": "Danh sách gửi thư"
+  },
+  "mailing_list_profile_info": {
+    "message": "Những thay đổi về tên và hình ảnh danh sách gửi thư chỉ áp dụng trên thiết bị này."
+  },
+  "start_app": {
+    "message": "Bắt đầu…"
+  },
+  "accept_request_first": {
+    "message": "Vui lòng chấp nhận yêu cầu trò chuyện trước."
+  },
+  "send_file_to": {
+    "message": "Gửi \"%1$s\" tới…"
+  },
+  "send_message_to": {
+    "message": "Gửi tin nhắn tới…"
+  },
+  "filter_map_on_time": {
+    "message": "Hiển thị vị trí trong khung thời gian"
+  },
+  "show_location_traces": {
+    "message": "Hiển thị dấu vết"
+  },
+  "add_poi": {
+    "message": "Gửi điểm ưa thích"
+  },
+  "chat_audit_log_empty_message": {
+    "message": "Tin nhắn hệ thống cho cuộc trò chuyện này xuất hiện ở đây"
+  },
+  "chat_audit_log_title": {
+    "message": "Nhật ký kiểm tra trò chuyện cho %1$s"
+  },
+  "chat_audit_log_description": {
+    "message": "Chỉ hiển thị thông báo hệ thống và thông tin; hữu ích cho việc tìm kiếm các hành động trò chuyện cuối cùng mà không cần phải cuộn qua nhiều tin nhắn."
+  },
+  "open_external_url_trust_domain": {
+    "message": "Đừng hỏi lại %1$s"
+  },
+  "puny_code_warning_header": {
+    "message": "Đã phát hiện liên kết đáng ngờ"
+  },
+  "puny_code_warning_question": {
+    "message": "Bạn có chắc chắn muốn ghé thăm %1$s không?"
+  },
+  "puny_code_warning_description": {
+    "message": "Liên kết này có thể trình bày sai các ký tự có hình dáng tương tự từ các bảng chữ cái khác nhau. Đi theo liên kết có nhãn %1$s sẽ dẫn đến %2$s, điều này là bình thường đối với các ký tự không phải Latinh. Nếu bạn không mong đợi những ký tự như vậy thì liên kết này có thể có hại."
+  },
+  "search": {
+    "message": "Tìm kiếm"
+  },
+  "search_in_chat": {
+    "message": "Tìm kiếm trong Trò chuyện"
+  },
+  "search_files": {
+    "message": "Tìm kiếm tập tin"
+  },
+  "search_explain": {
+    "message": "Tìm kiếm cuộc trò chuyện, danh bạ và tin nhắn"
+  },
+  "search_no_result_for_x": {
+    "message": "Không tìm thấy kết quả nào cho \"%s\""
+  },
+  "group_name": {
+    "message": "Tên nhóm"
+  },
+  "group_avatar": {
+    "message": "Hình ảnh nhóm"
+  },
+  "remove_group_image": {
+    "message": "Xóa hình ảnh nhóm"
+  },
+  "change_group_image": {
+    "message": "Thay đổi hình ảnh nhóm"
+  },
+  "group_create_button": {
+    "message": "Tạo nhóm"
+  },
+  "group_please_enter_group_name": {
+    "message": "Vui lòng nhập tên cho nhóm."
+  },
+  "group_add_members": {
+    "message": "Thêm thành viên"
+  },
+  "group_self_not_in_group": {
+    "message": "Bạn phải là thành viên của nhóm để thực hiện hành động này."
+  },
+  "profile_encryption": {
+    "message": "Mã hóa"
+  },
+  "profile_shared_chats": {
+    "message": "Cuộc trò chuyện được chia sẻ"
+  },
+  "related_chats": {
+    "message": "Cuộc trò chuyện liên quan"
+  },
+  "tab_contact": {
+    "message": "Liên hệ"
+  },
+  "tab_group": {
+    "message": "Nhóm"
+  },
+  "tab_gallery": {
+    "message": "Thư viện"
+  },
+  "tab_docs": {
+    "message": "Tài liệu"
+  },
+  "tab_links": {
+    "message": "Liên kết"
+  },
+  "tab_map": {
+    "message": "Bản đồ"
+  },
+  "tab_gallery_empty_hint": {
+    "message": "Hình ảnh và video được chia sẻ trong cuộc trò chuyện này sẽ xuất hiện ở đây."
+  },
+  "tab_docs_empty_hint": {
+    "message": "Tài liệu và các tệp khác được chia sẻ trong cuộc trò chuyện này sẽ xuất hiện ở đây."
+  },
+  "tab_image_empty_hint": {
+    "message": "Hình ảnh được chia sẻ trong cuộc trò chuyện này sẽ xuất hiện ở đây."
+  },
+  "tab_video_empty_hint": {
+    "message": "Video được chia sẻ trong cuộc trò chuyện này sẽ xuất hiện ở đây."
+  },
+  "tab_audio_empty_hint": {
+    "message": "Các tệp âm thanh và tin nhắn thoại được chia sẻ trong cuộc trò chuyện này sẽ xuất hiện ở đây."
+  },
+  "tab_webxdc_empty_hint": {
+    "message": "Các ứng dụng được chia sẻ trong cuộc trò chuyện này sẽ xuất hiện ở đây."
+  },
+  "tab_all_media_empty_hint": {
+    "message": "Phương tiện được chia sẻ trong bất kỳ cuộc trò chuyện nào sẽ xuất hiện ở đây."
+  },
+  "all_apps_empty_hint": {
+    "message": "Các ứng dụng được nhận hoặc gửi trong bất kỳ cuộc trò chuyện nào sẽ xuất hiện ở đây."
+  },
+  "media_preview": {
+    "message": "Xem trước phương tiện"
+  },
+  "aspect_ratio_grid": {
+    "message": "Lưới tỷ lệ khung hình"
+  },
+  "square_grid": {
+    "message": "Lưới vuông"
+  },
+  "send_message": {
+    "message": "Gửi tin nhắn"
+  },
+  "aeap_addr_changed": {
+    "message": "%1$s đã thay đổi địa chỉ của họ từ %2$s thành %3$s"
+  },
+  "aeap_explanation": {
+    "message": "Bạn đã thay đổi địa chỉ email của mình từ %1$s thành %2$s.\n\nNếu bây giờ bạn gửi thư đến một nhóm đã được xác minh, những người liên hệ ở đó sẽ tự động thay thế địa chỉ cũ bằng địa chỉ mới của bạn.\n\nĐiều đó thật tuyệt vời khuyên bạn nên thiết lập nhà cung cấp email cũ để chuyển tiếp tất cả email đến địa chỉ email mới của bạn. Nếu không, bạn có thể bỏ lỡ tin nhắn của những người chưa nhận được địa chỉ mới của bạn."
+  },
+  "multidevice_title": {
+    "message": "Thêm thiết bị thứ hai"
+  },
+  "multidevice_same_network_hint": {
+    "message": "Đảm bảo cả hai thiết bị đều sử dụng cùng một Wi-Fi hoặc mạng"
+  },
+  "multidevice_this_creates_a_qr_code": {
+    "message": "Thao tác này sẽ tạo mã QR mà thiết bị thứ hai có thể quét để sao chép tài khoản."
+  },
+  "multidevice_install_dc_on_other_device": {
+    "message": "Cài đặt Delta Chat trên thiết bị khác của bạn (https://get.delta.chat)"
+  },
+  "multidevice_tap_scan_on_other_device": {
+    "message": "Bắt đầu Delta Chat, nhấn vào “Thêm làm thiết bị thứ hai” và quét mã được hiển thị ở đây"
+  },
+  "multidevice_qr_subtitle": {
+    "message": "Quét để thiết lập thiết bị thứ hai cho %1$s"
+  },
+  "multidevice_receiver_title": {
+    "message": "Thêm làm thiết bị thứ hai"
+  },
+  "multidevice_open_settings_on_other_device": {
+    "message": "Trên thiết bị đầu tiên, hãy đi tới “Cài đặt / Thêm thiết bị thứ hai” và quét mã hiển thị ở đó"
+  },
+  "multidevice_receiver_scanning_ask": {
+    "message": "Sao chép tài khoản từ thiết bị kia sang thiết bị này?"
+  },
+  "multidevice_abort": {
+    "message": "Hủy thiết lập thiết bị thứ hai?"
+  },
+  "multidevice_abort_will_invalidate_copied_qr": {
+    "message": "Điều này sẽ làm mất hiệu lực mã QR được sao chép vào clipboard."
+  },
+  "multidevice_transfer_done_devicemsg": {
+    "message": "ℹ️ Tài khoản đã được chuyển sang thiết bị thứ hai của bạn."
+  },
+  "preparing_account": {
+    "message": "Đang chuẩn bị tài khoản…"
+  },
+  "transferring": {
+    "message": "Đang chuyển…"
+  },
+  "troubleshooting": {
+    "message": "Khắc phục sự cố"
+  },
+  "incoming_messages": {
+    "message": "Tin nhắn đến"
+  },
+  "outgoing_messages": {
+    "message": "Tin nhắn đi"
+  },
+  "storage_on_domain": {
+    "message": "Lưu trữ trên %1$s"
+  },
+  "connectivity": {
+    "message": "Kết nối"
+  },
+  "connectivity_not_connected": {
+    "message": "Không được kết nối"
+  },
+  "connectivity_connecting": {
+    "message": "Đang kết nối…"
+  },
+  "connectivity_updating": {
+    "message": "Đang cập nhật…"
+  },
+  "connectivity_connected": {
+    "message": "Đã kết nối"
+  },
+  "sending": {
+    "message": "Đang gửi…"
+  },
+  "last_msg_sent_successfully": {
+    "message": "Tin nhắn cuối cùng được gửi thành công."
+  },
+  "not_supported_by_provider": {
+    "message": "Không được nhà cung cấp của bạn hỗ trợ."
+  },
+  "messages": {
+    "message": "Tin nhắn"
+  },
+  "part_of_total_used": {
+    "message": "%1$s trong tổng số %2$s đã được sử dụng"
+  },
+  "scan_invitation_code": {
+    "message": "Quét mã mời"
+  },
+  "login_title": {
+    "message": "Đăng nhập"
+  },
+  "login_header": {
+    "message": "Đăng nhập vào tài khoản E-Mail của bạn"
+  },
+  "login_explain": {
+    "message": "Đăng nhập bằng tài khoản e-mail hiện có"
+  },
+  "login_subheader": {
+    "message": "Đối với các nhà cung cấp e-mail đã biết, cài đặt bổ sung sẽ được thiết lập tự động. Đôi khi IMAP cần được bật trong cài đặt web. Hãy tham khảo nhà cung cấp e-mail hoặc bạn bè của bạn để được trợ giúp."
+  },
+  "login_no_servers_hint": {
+    "message": "Không có máy chủ Delta Chat, dữ liệu của bạn vẫn còn trên thiết bị của bạn."
+  },
+  "login_inbox": {
+    "message": "Hộp thư đến"
+  },
+  "login_imap_login": {
+    "message": "Tên đăng nhập IMAP"
+  },
+  "login_imap_server": {
+    "message": "Máy chủ IMAP"
+  },
+  "login_imap_port": {
+    "message": "Cổng IMAP"
+  },
+  "login_imap_security": {
+    "message": "Bảo mật IMAP"
+  },
+  "login_outbox": {
+    "message": "Hộp thư đi"
+  },
+  "login_smtp_login": {
+    "message": "Tên đăng nhập SMTP"
+  },
+  "login_smtp_password": {
+    "message": "Mật khẩu SMTP"
+  },
+  "login_smtp_server": {
+    "message": "Máy chủ SMTP"
+  },
+  "login_smtp_port": {
+    "message": "Cổng SMTP"
+  },
+  "login_smtp_security": {
+    "message": "Bảo mật SMTP"
+  },
+  "login_auth_method": {
+    "message": "Phương thức ủy quyền"
+  },
+  "login_info_oauth2_title": {
+    "message": "Tiếp tục với thiết lập đơn giản hóa?"
+  },
+  "login_info_oauth2_text": {
+    "message": "Địa chỉ e-mail đã nhập hỗ trợ thiết lập đơn giản hóa (OAuth 2.0).\n\nTrong bước tiếp theo, vui lòng cho phép Delta Chat hoạt động như ứng dụng Trò chuyện qua E-mail của bạn.\n\nKhông có máy chủ Delta Chat, dữ liệu của bạn vẫn ở trên thiết bị của bạn."
+  },
+  "login_certificate_checks": {
+    "message": "Kiểm tra chứng chỉ"
+  },
+  "login_error_mail": {
+    "message": "Vui lòng nhập địa chỉ e-mail hợp lệ"
+  },
+  "login_error_server": {
+    "message": "Vui lòng nhập địa chỉ máy chủ / IP hợp lệ"
+  },
+  "login_error_port": {
+    "message": "Vui lòng nhập cổng hợp lệ (1–65535)"
+  },
+  "login_error_required_fields": {
+    "message": "Vui lòng nhập địa chỉ email hợp lệ và mật khẩu"
+  },
+  "import_backup_title": {
+    "message": "Khôi phục từ bản sao lưu"
+  },
+  "import_backup_ask": {
+    "message": "Đã tìm thấy bản sao lưu tại \"%1$s\".\n\nBạn có muốn nhập và sử dụng tất cả dữ liệu cũng như cài đặt từ nó không?"
+  },
+  "import_backup_no_backup_found": {
+    "message": "Không tìm thấy bản sao lưu nào.\n\nSao chép bản sao lưu vào \"%1$s\" và thử lại. Ngoài ra, hãy nhấn \"Bắt đầu nhắn tin\" để tiếp tục quá trình thiết lập thông thường."
+  },
+  "login_error_cannot_login": {
+    "message": "Không thể đăng nhập với tên \"%1$s\". Vui lòng kiểm tra xem địa chỉ e-mail và mật khẩu có đúng không."
+  },
+  "accept_invalid_certificates": {
+    "message": "Chấp nhận chứng chỉ không hợp lệ"
+  },
+  "switch_account": {
+    "message": "Chuyển đổi tài khoản"
+  },
+  "add_account": {
+    "message": "Thêm tài khoản"
+  },
+  "delete_account": {
+    "message": "Xóa tài khoản"
+  },
+  "delete_account_ask": {
+    "message": "Bạn có chắc chắn muốn xóa dữ liệu tài khoản của mình không?"
+  },
+  "delete_account_explain_with_name": {
+    "message": "Tất cả dữ liệu tài khoản của \"%s\" trên thiết bị này sẽ bị xóa, bao gồm thiết lập mã hóa hai đầu, danh bạ, cuộc trò chuyện, tin nhắn và phương tiện của bạn. Hành động này không thể hoàn tác được."
+  },
+  "unconfigured_account": {
+    "message": "Tài khoản chưa được định cấu hình"
+  },
+  "unconfigured_account_hint": {
+    "message": "Mở tài khoản để cấu hình nó."
+  },
+  "try_connect_now": {
+    "message": "Hãy thử kết nối ngay bây giờ"
+  },
+  "sync_all": {
+    "message": "Đồng bộ hóa tất cả"
+  },
+  "configuration_failed_with_error": {
+    "message": "Cấu hình không thành công. Lỗi: %1$s"
+  },
+  "forward_to": {
+    "message": "Chuyển tiếp tới…"
+  },
+  "ask_send_files_to_selected_chats": {
+    "message": "Gửi %1$d tệp tới %2$d cuộc trò chuyện?"
+  },
+  "share_text_multiple_chats": {
+    "message": "Gửi văn bản này tới %1$d cuộc trò chuyện?\n\n\"%2$s\""
+  },
+  "share_abort": {
+    "message": "Chia sẻ bị hủy do thiếu quyền."
+  },
+  "pref_using_custom": {
+    "message": "Sử dụng tùy chỉnh: %s"
+  },
+  "pref_using_default": {
+    "message": "Sử dụng mặc định: %s"
+  },
+  "pref_profile_info_headline": {
+    "message": "Thông tin hồ sơ của bạn"
+  },
+  "pref_profile_photo": {
+    "message": "Ảnh hồ sơ"
+  },
+  "pref_blocked_contacts": {
+    "message": "Liên hệ bị chặn"
+  },
+  "blocked_empty_hint": {
+    "message": "Các liên hệ bị chặn sẽ xuất hiện ở đây."
+  },
+  "pref_password_and_account_settings": {
+    "message": "Mật khẩu và tài khoản"
+  },
+  "pref_who_can_see_profile_explain": {
+    "message": "Ảnh hồ sơ, tên và chữ ký của bạn sẽ được gửi cùng với tin nhắn của bạn khi giao tiếp với người dùng khác."
+  },
+  "pref_your_name": {
+    "message": "Tên của bạn"
+  },
+  "pref_default_status_label": {
+    "message": "Văn bản chữ ký"
+  },
+  "pref_enter_sends": {
+    "message": "Nhập khóa gửi"
+  },
+  "pref_enter_sends_explain": {
+    "message": "Nhấn phím Enter sẽ gửi tin nhắn văn bản"
+  },
+  "pref_outgoing_media_quality": {
+    "message": "Chất lượng phương tiện truyền thông đi"
+  },
+  "pref_outgoing_balanced": {
+    "message": "Cân bằng"
+  },
+  "pref_outgoing_worse": {
+    "message": "Chất lượng kém hơn, kích thước nhỏ"
+  },
+  "pref_vibrate": {
+    "message": "Rung"
+  },
+  "pref_screen_security": {
+    "message": "Bảo mật màn hình"
+  },
+  "pref_screen_security_explain": {
+    "message": "Yêu cầu chặn ảnh chụp màn hình trong danh sách gần đây và bên trong ứng dụng"
+  },
+  "pref_screen_security_please_restart_hint": {
+    "message": "Để áp dụng cài đặt bảo mật màn hình, vui lòng khởi động lại ứng dụng."
+  },
+  "pref_notifications": {
+    "message": "Thông báo"
+  },
+  "pref_notifications_show": {
+    "message": "Hiển thị"
+  },
+  "pref_notifications_priority": {
+    "message": "Ưu tiên"
+  },
+  "pref_notifications_explain": {
+    "message": "Bật thông báo hệ thống cho tin nhắn mới"
+  },
+  "pref_show_notification_content": {
+    "message": "Hiển thị nội dung tin nhắn trong thông báo"
+  },
+  "pref_show_notification_content_explain": {
+    "message": "Hiển thị người gửi và từ đầu tiên của tin nhắn trong thông báo"
+  },
+  "pref_led_color": {
+    "message": "Màu LED"
+  },
+  "pref_sound": {
+    "message": "Âm thanh"
+  },
+  "pref_silent": {
+    "message": "Im lặng"
+  },
+  "pref_privacy": {
+    "message": "Quyền riêng tư"
+  },
+  "pref_chats_and_media": {
+    "message": "Trò chuyện và Phương tiện"
+  },
+  "pref_system_default": {
+    "message": "Mặc định hệ thống"
+  },
+  "pref_light_theme": {
+    "message": "Ánh sáng"
+  },
+  "pref_dark_theme": {
+    "message": "Tối"
+  },
+  "pref_appearance": {
+    "message": "Ngoại hình"
+  },
+  "pref_theme": {
+    "message": "Chủ đề"
+  },
+  "pref_language": {
+    "message": "Ngôn ngữ"
+  },
+  "pref_incognito_keyboard": {
+    "message": "Bàn phím ẩn danh"
+  },
+  "pref_incognito_keyboard_explain": {
+    "message": "Yêu cầu bàn phím tắt tính năng học tập được cá nhân hóa"
+  },
+  "pref_read_receipts": {
+    "message": "Đã đọc Biên lai"
+  },
+  "pref_read_receipts_explain": {
+    "message": "Nếu thông báo xác nhận đã đọc bị tắt, bạn sẽ không thể xem thông báo xác nhận đã đọc từ người khác."
+  },
+  "pref_manage_keys": {
+    "message": "Quản lý khóa"
+  },
+  "pref_use_system_emoji": {
+    "message": "Sử dụng Emoji hệ thống"
+  },
+  "pref_use_system_emoji_explain": {
+    "message": "Tắt tính năng hỗ trợ emoji tích hợp của Delta Chat"
+  },
+  "pref_app_access": {
+    "message": "Quyền truy cập ứng dụng"
+  },
+  "pref_chats": {
+    "message": "Trò chuyện"
+  },
+  "pref_in_chat_sounds": {
+    "message": "Âm thanh trong cuộc trò chuyện"
+  },
+  "pref_view_log": {
+    "message": "Xem nhật ký"
+  },
+  "pref_saved_log": {
+    "message": "Đã lưu nhật ký vào thư mục \"Tải xuống\""
+  },
+  "pref_save_log_failed": {
+    "message": "Không lưu được nhật ký"
+  },
+  "pref_log_header": {
+    "message": "Nhật ký"
+  },
+  "pref_other": {
+    "message": "Khác"
+  },
+  "pref_backup": {
+    "message": "Sao lưu"
+  },
+  "pref_backup_explain": {
+    "message": "Sao lưu cuộc trò chuyện vào bộ nhớ ngoài"
+  },
+  "pref_backup_export_explain": {
+    "message": "Bản sao lưu giúp bạn thiết lập cài đặt mới trên thiết bị này hoặc trên thiết bị khác.\n\nBản sao lưu sẽ chứa tất cả tin nhắn, danh bạ và cuộc trò chuyện cũng như thiết lập Autocrypt hai đầu của bạn. Giữ tập tin sao lưu ở nơi an toàn hoặc xóa nó càng sớm càng tốt."
+  },
+  "pref_backup_export_x": {
+    "message": "Xuất %1$s"
+  },
+  "pref_backup_export_all": {
+    "message": "Xuất tất cả tài khoản %1$d"
+  },
+  "pref_backup_export_start_button": {
+    "message": "Bắt đầu sao lưu"
+  },
+  "pref_backup_written_to_x": {
+    "message": "Sao lưu được ghi thành công vào \"%1$s\"."
+  },
+  "pref_managekeys_menu_title": {
+    "message": "Quản lý khóa"
+  },
+  "pref_managekeys_export_secret_keys": {
+    "message": "Xuất khóa bí mật"
+  },
+  "pref_managekeys_export_explain": {
+    "message": "Xuất khóa bí mật sang \"%1$s\"?"
+  },
+  "pref_managekeys_import_secret_keys": {
+    "message": "Nhập khóa bí mật"
+  },
+  "pref_managekeys_import_explain": {
+    "message": "Nhập khóa bí mật từ \"%1$s\"?\n\n• Các khóa bí mật hiện có sẽ không bị xóa\n\n• Khóa được nhập cuối cùng sẽ được sử dụng làm khóa mặc định mới trừ khi nó có từ \"cũ \" trong tên tệp của nó."
+  },
+  "pref_managekeys_secret_keys_exported_to_x": {
+    "message": "Khóa bí mật được ghi thành công vào \"%1$s\"."
+  },
+  "pref_managekeys_secret_keys_imported_from_x": {
+    "message": "Khóa bí mật được nhập từ \"%1$s\"."
+  },
+  "pref_background": {
+    "message": "Hình nền"
+  },
+  "pref_background_btn_default": {
+    "message": "Sử dụng hình ảnh mặc định"
+  },
+  "pref_background_btn_gallery": {
+    "message": "Chọn từ thư viện"
+  },
+  "pref_imap_folder_handling": {
+    "message": "Xử lý thư mục IMAP"
+  },
+  "pref_imap_folder_warn_disable_defaults": {
+    "message": "Nếu bạn thay đổi tùy chọn này, hãy đảm bảo rằng máy chủ và các máy khách khác của bạn được cấu hình tương ứng.\n\nNếu không, mọi thứ có thể không hoạt động."
+  },
+  "pref_watch_sent_folder": {
+    "message": "Xem thư mục đã gửi"
+  },
+  "pref_send_copy_to_self": {
+    "message": "Gửi bản sao cho chính mình"
+  },
+  "pref_send_copy_to_self_explain": {
+    "message": "Bắt buộc khi sử dụng tài khoản này trên nhiều thiết bị."
+  },
+  "pref_auto_folder_moves": {
+    "message": "Tự động di chuyển đến Thư mục DeltaChat"
+  },
+  "pref_auto_folder_moves_explain": {
+    "message": "Các cuộc trò chuyện được di chuyển để tránh làm lộn xộn Hộp thư đến"
+  },
+  "pref_only_fetch_mvbox_title": {
+    "message": "Chỉ tìm nạp từ thư mục DeltaChat"
+  },
+  "pref_only_fetch_mvbox_explain": {
+    "message": "Bỏ qua các thư mục khác. Yêu cầu máy chủ của bạn di chuyển tin nhắn trò chuyện vào thư mục DeltaChat."
+  },
+  "pref_show_emails": {
+    "message": "Hiển thị E-mail cổ điển"
+  },
+  "pref_show_emails_no": {
+    "message": "Không, chỉ trò chuyện"
+  },
+  "pref_show_emails_accepted_contacts": {
+    "message": "Đối với các liên hệ được chấp nhận"
+  },
+  "pref_show_emails_all": {
+    "message": "Tất cả"
+  },
+  "pref_experimental_features": {
+    "message": "Tính năng thử nghiệm"
+  },
+  "pref_on_demand_location_streaming": {
+    "message": "Truyền phát vị trí theo yêu cầu"
+  },
+  "pref_developer_mode": {
+    "message": "Chế độ nhà phát triển"
+  },
+  "pref_developer_mode_explain": {
+    "message": "Kích hoạt các tùy chọn gỡ lỗi và có thể làm cho ứng dụng kém ổn định hơn. Chỉ dành cho nhà phát triển."
+  },
+  "pref_background_default": {
+    "message": "Hình ảnh mặc định"
+  },
+  "pref_background_default_color": {
+    "message": "Màu mặc định"
+  },
+  "pref_background_custom_image": {
+    "message": "Hình ảnh tùy chỉnh"
+  },
+  "pref_background_custom_color": {
+    "message": "Màu tùy chỉnh"
+  },
+  "export_aborted": {
+    "message": "Quá trình xuất bị hủy bỏ."
+  },
+  "auto_download_messages": {
+    "message": "Tự động tải xuống tin nhắn"
+  },
+  "up_to_x": {
+    "message": "Lên tới %1$s"
+  },
+  "up_to_x_most_worse_quality_images": {
+    "message": "Lên đến %1$s, hầu hết các hình ảnh có chất lượng kém hơn"
+  },
+  "up_to_x_most_balanced_quality_images": {
+    "message": "Lên đến %1$s, hình ảnh có chất lượng cân bằng nhất"
+  },
+  "download_failed": {
+    "message": "Tải xuống không thành công"
+  },
+  "n_bytes_message": {
+    "message": "%1$s tin nhắn"
+  },
+  "download_max_available_until": {
+    "message": "Tải xuống tối đa có sẵn cho đến %1$s"
+  },
+  "profile_image_select": {
+    "message": "Chọn ảnh hồ sơ"
+  },
+  "select_your_new_profile_image": {
+    "message": "Chọn hình ảnh hồ sơ mới của bạn"
+  },
+  "profile_image_delete": {
+    "message": "Xóa ảnh hồ sơ"
+  },
+  "pref_show_tray_icon": {
+    "message": "Hiển thị biểu tượng khay"
+  },
+  "pref_edit_profile": {
+    "message": "Chỉnh sửa hồ sơ"
+  },
+  "disable_imap_idle": {
+    "message": "Tắt IMAP IDLE"
+  },
+  "disable_imap_idle_explain": {
+    "message": "Không sử dụng tiện ích mở rộng IMAP IDLE ngay cả khi máy chủ hỗ trợ nó. Bật tùy chọn này sẽ trì hoãn việc truy xuất tin nhắn, chỉ bật nó để kiểm tra."
+  },
+  "emoji_search_results": {
+    "message": "Kết quả tìm kiếm"
+  },
+  "emoji_not_found": {
+    "message": "Không tìm thấy emoji nào"
+  },
+  "emoji_recent": {
+    "message": "Được sử dụng gần đây"
+  },
+  "emoji_people": {
+    "message": "Mọi người & Cơ thể"
+  },
+  "emoji_nature": {
+    "message": "Động vật & Thiên nhiên"
+  },
+  "emoji_foods": {
+    "message": "Thực phẩm & Uống"
+  },
+  "emoji_activity": {
+    "message": "Hoạt động"
+  },
+  "emoji_places": {
+    "message": "Du lịch & Địa điểm"
+  },
+  "emoji_objects": {
+    "message": "Đối tượng"
+  },
+  "emoji_symbols": {
+    "message": "Ký hiệu"
+  },
+  "emoji_flags": {
+    "message": "Cờ"
+  },
+  "reactions": {
+    "message": "Phản ứng"
+  },
+  "delete_old_messages": {
+    "message": "Xóa tin nhắn cũ"
+  },
+  "autodel_device_title": {
+    "message": "Xóa tin nhắn khỏi thiết bị"
+  },
+  "autodel_server_title": {
+    "message": "Xóa tin nhắn khỏi máy chủ"
+  },
+  "autodel_device_ask": {
+    "message": "Bạn có muốn xóa %1$d tin nhắn ngay bây giờ và tất cả các tin nhắn mới được tìm nạp \"%2$s\" trong tương lai không?\n\n• Điều này bao gồm tất cả phương tiện\n\n• Tin nhắn sẽ bị xóa dù chúng có được nhìn thấy hay không\n\n• \"Tin nhắn đã lưu\" sẽ bị bỏ qua khỏi quá trình xóa cục bộ"
+  },
+  "autodel_server_ask": {
+    "message": "Bạn có muốn xóa %1$d tin nhắn ngay bây giờ và tất cả các tin nhắn mới được tìm nạp \"%2$s\" trong tương lai không?\n\n⚠️ Điều này bao gồm e-mail, phương tiện và \"Tin nhắn đã lưu\" trong tất cả máy chủ thư mục\n\n⚠️ Không sử dụng chức năng này nếu bạn muốn giữ dữ liệu trên máy chủ\n\n⚠️ Không sử dụng chức năng này nếu bạn đang sử dụng các ứng dụng e-mail khác ngoài Delta Chat"
+  },
+  "autodel_server_enabled_hint": {
+    "message": "Điều này bao gồm e-mail, phương tiện và \"Tin nhắn đã lưu\" trong tất cả các thư mục máy chủ. Không sử dụng chức năng này nếu bạn muốn giữ dữ liệu trên máy chủ hoặc nếu bạn đang sử dụng các ứng dụng e-mail khác ngoài Delta Chat."
+  },
+  "autodel_confirm": {
+    "message": "Tôi hiểu, hãy xóa tất cả những tin nhắn này"
+  },
+  "autodel_at_once": {
+    "message": "Ngay lập tức"
+  },
+  "after_30_seconds": {
+    "message": "Sau 30 giây"
+  },
+  "after_1_minute": {
+    "message": "Sau 1 phút"
+  },
+  "after_5_minutes": {
+    "message": "Sau 5 phút"
+  },
+  "after_30_minutes": {
+    "message": "Sau 30 phút"
+  },
+  "autodel_after_1_hour": {
+    "message": "Sau 1 giờ"
+  },
+  "autodel_after_1_day": {
+    "message": "Sau 1 ngày"
+  },
+  "autodel_after_1_week": {
+    "message": "Sau 1 tuần"
+  },
+  "after_5_weeks": {
+    "message": "Sau 5 tuần"
+  },
+  "autodel_after_1_year": {
+    "message": "Sau 1 năm"
+  },
+  "autocrypt_send_asm_title": {
+    "message": "Gửi tin nhắn thiết lập Autocrypt"
+  },
+  "autocrypt_send_asm_explain_before": {
+    "message": "Thông báo thiết lập Autocrypt chia sẻ an toàn thiết lập end-to-end của bạn với các ứng dụng tương thích Autocrypt khác.\n\nThiết lập sẽ được mã hóa bằng mã thiết lập được hiển thị ở đây và phải được nhập trên thiết bị kia."
+  },
+  "autocrypt_send_asm_button": {
+    "message": "Gửi tin nhắn thiết lập Autocrypt"
+  },
+  "autocrypt_send_asm_explain_after": {
+    "message": "Thiết lập của bạn đã được gửi cho chính bạn. Chuyển sang thiết bị khác và mở thông báo thiết lập. Bạn sẽ được yêu cầu nhập mã thiết lập. Nhập các chữ số sau:"
+  },
+  "autocrypt_prefer_e2ee": {
+    "message": "Ưu tiên mã hóa đầu cuối"
+  },
+  "autocrypt_asm_subject": {
+    "message": "Thông báo thiết lập Autocrypt"
+  },
+  "autocrypt_asm_general_body": {
+    "message": "Đây là Thông báo Thiết lập Autocrypt được sử dụng để truyền thiết lập hai đầu của bạn giữa các máy khách.\n\nĐể giải mã và sử dụng thiết lập của bạn, hãy mở tin nhắn trong một ứng dụng khách tương thích với Autocrypt và nhập mã thiết lập được trình bày trên thiết bị tạo."
+  },
+  "systemmsg_cannot_decrypt": {
+    "message": "Không thể giải mã tin nhắn này.\n\n• Bạn chỉ cần trả lời tin nhắn này và yêu cầu người gửi gửi lại tin nhắn là đủ.\n\n• Nếu bạn vừa cài đặt lại Delta Chat thì tốt nhất bạn nên cài đặt lại thiết lập lại Delta Chat ngay bây giờ và chọn \"Thêm làm thiết bị thứ hai\" hoặc nhập bản sao lưu."
+  },
+  "systemmsg_unknown_sender_for_chat": {
+    "message": "Người gửi không xác định cho cuộc trò chuyện này. Xem 'thông tin' để biết thêm chi tiết."
+  },
+  "systemmsg_subject_for_new_contact": {
+    "message": "Tin nhắn từ %1$s"
+  },
+  "systemmsg_failed_sending_to": {
+    "message": "Không gửi được tin nhắn tới %1$s."
+  },
+  "group_name_changed_by_you": {
+    "message": "Bạn đã đổi tên nhóm từ \"%1$s\" thành \"%2$s\"."
+  },
+  "group_name_changed_by_other": {
+    "message": "Tên nhóm đã thay đổi từ \"%1$s\" thành \"%2$s\" bởi %3$s."
+  },
+  "group_image_changed_by_you": {
+    "message": "Bạn đã thay đổi hình ảnh nhóm."
+  },
+  "group_image_changed_by_other": {
+    "message": "Hình ảnh nhóm đã được thay đổi bởi %1$s."
+  },
+  "member_x_added": {
+    "message": "Đã thêm thành viên %1$s."
+  },
+  "add_member_by_you": {
+    "message": "Bạn đã thêm thành viên %1$s."
+  },
+  "add_member_by_other": {
+    "message": "Thành viên %1$s được thêm bởi %2$s."
+  },
+  "remove_member_by_you": {
+    "message": "Bạn đã loại bỏ thành viên %1$s."
+  },
+  "remove_member_by_other": {
+    "message": "Thành viên %1$s đã bị xóa bởi %2$s."
+  },
+  "group_left_by_you": {
+    "message": "Bạn đã rời nhóm."
+  },
+  "group_left_by_other": {
+    "message": "Nhóm bỏ lại bởi %1$s."
+  },
+  "group_image_deleted_by_you": {
+    "message": "Bạn đã xóa hình ảnh nhóm."
+  },
+  "group_image_deleted_by_other": {
+    "message": "Hình ảnh nhóm đã bị xóa bởi %1$s."
+  },
+  "location_enabled_by_you": {
+    "message": "Bạn đã bật tính năng truyền phát vị trí."
+  },
+  "location_enabled_by_other": {
+    "message": "Tính năng phát trực tuyến vị trí được bật bởi %1$s."
+  },
+  "ephemeral_timer_disabled_by_you": {
+    "message": "Bạn đã tắt tính năng hẹn giờ cho tin nhắn biến mất."
+  },
+  "ephemeral_timer_disabled_by_other": {
+    "message": "Bộ hẹn giờ tin nhắn biến mất đã bị tắt bởi %1$s."
+  },
+  "ephemeral_timer_seconds_by_you": {
+    "message": "Bạn đặt bộ hẹn giờ cho tin nhắn biến mất thành %1$s giây"
+  },
+  "ephemeral_timer_seconds_by_other": {
+    "message": "Bộ hẹn giờ tin nhắn biến mất được %2$s đặt thành %1$s giây."
+  },
+  "ephemeral_timer_1_minute_by_you": {
+    "message": "Bạn đặt bộ hẹn giờ cho tin nhắn biến mất thành 1 phút."
+  },
+  "ephemeral_timer_1_minute_by_other": {
+    "message": "Bộ hẹn giờ cho tin nhắn biến mất được %1$s đặt thành 1 phút."
+  },
+  "ephemeral_timer_1_hour_by_you": {
+    "message": "Bạn đặt bộ hẹn giờ cho tin nhắn biến mất thành 1 giờ."
+  },
+  "ephemeral_timer_1_hour_by_other": {
+    "message": "Bộ hẹn giờ cho tin nhắn biến mất được %1$s đặt thành 1 giờ."
+  },
+  "ephemeral_timer_1_day_by_you": {
+    "message": "Bạn đặt bộ hẹn giờ cho tin nhắn biến mất thành 1 ngày."
+  },
+  "ephemeral_timer_1_day_by_other": {
+    "message": "Bộ hẹn giờ cho tin nhắn biến mất được %1$s đặt thành 1 ngày."
+  },
+  "ephemeral_timer_1_week_by_you": {
+    "message": "Bạn đặt bộ hẹn giờ cho tin nhắn biến mất là 1 tuần."
+  },
+  "ephemeral_timer_1_week_by_other": {
+    "message": "Bộ hẹn giờ cho tin nhắn biến mất được %1$s đặt thành 1 tuần."
+  },
+  "ephemeral_timer_minutes_by_you": {
+    "message": "Bạn đặt bộ hẹn giờ cho tin nhắn biến mất thành %1$s phút."
+  },
+  "ephemeral_timer_minutes_by_other": {
+    "message": "Bộ hẹn giờ tin nhắn biến mất được đặt thành %1$s phút theo %2$s."
+  },
+  "ephemeral_timer_hours_by_you": {
+    "message": "Bạn đặt bộ hẹn giờ cho tin nhắn biến mất thành %1$s giờ."
+  },
+  "ephemeral_timer_hours_by_other": {
+    "message": "Bộ hẹn giờ tin nhắn biến mất được đặt thành %1$s giờ theo %2$s."
+  },
+  "ephemeral_timer_days_by_you": {
+    "message": "Bạn đặt bộ hẹn giờ cho tin nhắn biến mất thành %1$s ngày."
+  },
+  "ephemeral_timer_days_by_other": {
+    "message": "Bộ hẹn giờ tin nhắn biến mất được %2$s đặt thành %1$s ngày."
+  },
+  "ephemeral_timer_weeks_by_you": {
+    "message": "Bạn đặt bộ hẹn giờ cho tin nhắn biến mất thành %1$s tuần."
+  },
+  "ephemeral_timer_weeks_by_other": {
+    "message": "Bộ hẹn giờ cho tin nhắn biến mất được %2$s đặt thành %1$s tuần."
+  },
+  "chat_protection_broken": {
+    "message": "%1$s đã gửi tin nhắn từ một thiết bị khác."
+  },
+  "chat_protection_enabled_tap_to_learn_more": {
+    "message": "Tin nhắn được đảm bảo sẽ được mã hóa hai đầu kể từ bây giờ. Nhấn để tìm hiểu thêm."
+  },
+  "chat_protection_enabled_explanation": {
+    "message": "Hiện tại, chúng tôi đảm bảo rằng tất cả tin nhắn trong cuộc trò chuyện này đều được mã hóa hai đầu.\n\nMã hóa hai đầu giúp giữ tin nhắn giữa bạn và đối tác trò chuyện của bạn ở chế độ riêng tư. Ngay cả nhà cung cấp email của bạn cũng không thể đọc được chúng."
+  },
+  "chat_protection_broken_tap_to_learn_more": {
+    "message": "%1$s đã gửi tin nhắn từ một thiết bị khác. Nhấn để tìm hiểu thêm."
+  },
+  "chat_protection_broken_explanation": {
+    "message": "Mã hóa hai đầu không còn được đảm bảo nữa, có thể vì %1$s đã cài đặt lại Delta Chat hoặc đã gửi tin nhắn từ một thiết bị khác.\n\nBạn có thể gặp trực tiếp họ và quét lại mã QR của họ để thiết lập lại tính năng mã hóa hai đầu được đảm bảo kết thúc mã hóa."
+  },
+  "learn_more": {
+    "message": "Tìm hiểu thêm"
+  },
+  "devicemsg_self_deleted": {
+    "message": "Bạn đã xóa cuộc trò chuyện \"Tin nhắn đã lưu\".\n\nℹ️ Để sử dụng lại tính năng \"Tin nhắn đã lưu\", hãy tạo một cuộc trò chuyện mới với chính bạn."
+  },
+  "devicemsg_storage_exceeding": {
+    "message": "⚠️ Bộ nhớ nhà cung cấp của bạn sắp hết: %1$s%% đã được sử dụng.\n\nBạn có thể không nhận được tin nhắn nếu bộ nhớ đầy.\n\n 👉 Vui lòng kiểm tra xem bạn có thể xóa không dữ liệu cũ trong giao diện web của nhà cung cấp và cân nhắc bật \"Cài đặt / Xóa tin nhắn cũ\". Bạn có thể kiểm tra mức sử dụng bộ nhớ hiện tại của mình bất kỳ lúc nào tại \"Cài đặt / Kết nối\"."
+  },
+  "devicemsg_bad_time": {
+    "message": "⚠️ Ngày hoặc giờ trên thiết bị của bạn có vẻ không chính xác (%1$s).\n\nĐiều chỉnh đồng hồ của bạn ⏰🔧 để đảm bảo tin nhắn của bạn được nhận chính xác."
+  },
+  "devicemsg_update_reminder": {
+    "message": "⚠️ Phiên bản Delta Chat của bạn có thể đã lỗi thời.\n\nĐiều này có thể gây ra sự cố vì đối tác trò chuyện của bạn sử dụng các phiên bản mới hơn - và bạn đang thiếu các tính năng mới nhất 😳\nVui lòng kiểm tra https://get.delta.chat hoặc cửa hàng ứng dụng của bạn để biết thông tin cập nhật ."
+  },
+  "enter_system_secret_to_continue": {
+    "message": "Mở khóa để tiếp tục"
+  },
+  "qr_code": {
+    "message": "Mã QR"
+  },
+  "load_qr_code_as_image": {
+    "message": "Tải mã QR dưới dạng hình ảnh"
+  },
+  "qrscan_title": {
+    "message": "Quét mã QR"
+  },
+  "qrscan_hint": {
+    "message": "Giữ máy ảnh của bạn phía trên mã QR."
+  },
+  "qrscan_failed": {
+    "message": "Mã QR không thể giải mã được"
+  },
+  "qrscan_ask_join_group": {
+    "message": "Bạn có muốn tham gia nhóm \"%1$s\" không?"
+  },
+  "qrscan_fingerprint_mismatch": {
+    "message": "Dấu vân tay được quét không khớp với dấu vân tay được nhìn thấy lần cuối trong %1$s."
+  },
+  "qrscan_no_addr_found": {
+    "message": "Mã QR này chứa dấu vân tay nhưng không có địa chỉ email.\n\nĐể xác minh ngoài băng tần, trước tiên vui lòng thiết lập kết nối được mã hóa với người nhận."
+  },
+  "qrscan_contains_text": {
+    "message": "Văn bản mã QR được quét:\n\n%1$s"
+  },
+  "qrscan_contains_url": {
+    "message": "URL mã QR được quét:\n\n%1$s"
+  },
+  "qrscan_fingerprint_label": {
+    "message": "Dấu vân tay"
+  },
+  "withdraw_verifycontact_explain": {
+    "message": "Người khác có thể quét mã QR này để liên hệ với bạn.\n\nBạn có thể tắt mã QR tại đây và kích hoạt lại bằng cách quét lại."
+  },
+  "withdraw_verifygroup_explain": {
+    "message": "Những người khác có thể quét mã QR này để tham gia nhóm \"%1$s\".\n\nBạn có thể tắt mã QR tại đây và kích hoạt lại bằng cách quét lại."
+  },
+  "withdraw_qr_code": {
+    "message": "Vô hiệu hóa mã QR"
+  },
+  "revive_verifycontact_explain": {
+    "message": "Mã QR này có thể được người khác quét để liên hệ với bạn.\n\nMã QR không hoạt động trên thiết bị này."
+  },
+  "revive_verifygroup_explain": {
+    "message": "Những người khác có thể quét mã QR này để tham gia nhóm \"%1$s\".\n\nMã QR không hoạt động trên thiết bị này."
+  },
+  "revive_qr_code": {
+    "message": "Kích hoạt mã QR"
+  },
+  "qrshow_title": {
+    "message": "Mã mời QR"
+  },
+  "qrshow_x_joining": {
+    "message": "%1$s tham gia."
+  },
+  "qrshow_x_verified": {
+    "message": "%1$s đã được giới thiệu."
+  },
+  "qrshow_x_has_joined_group": {
+    "message": "%1$s đã tham gia nhóm."
+  },
+  "qrshow_join_group_title": {
+    "message": "Mã mời QR"
+  },
+  "qrshow_join_group_hint": {
+    "message": "Quét để tham gia nhóm \"%1$s\""
+  },
+  "qrshow_join_contact_title": {
+    "message": "Mã mời QR"
+  },
+  "qrshow_join_contact_hint": {
+    "message": "Quét để trò chuyện với %1$s"
+  },
+  "qrshow_join_contact_no_connection_toast": {
+    "message": "Không có kết nối internet, không thể thực hiện thiết lập mã QR."
+  },
+  "qraccount_ask_create_and_login": {
+    "message": "Tạo địa chỉ email mới trên \"%1$s\" và đăng nhập vào đó?"
+  },
+  "qraccount_ask_create_and_login_another": {
+    "message": "Tạo địa chỉ email mới trên \"%1$s\" và đăng nhập vào đó?\n\nTài khoản hiện tại của bạn sẽ không bị xóa. Sử dụng mục \"Chuyển tài khoản\" để chuyển đổi giữa các tài khoản của bạn."
+  },
+  "qraccount_qr_code_cannot_be_used": {
+    "message": "Mã QR được quét không thể được sử dụng để thiết lập tài khoản mới."
+  },
+  "qrlogin_ask_login": {
+    "message": "Đăng nhập vào \"%1$s\"?"
+  },
+  "qrlogin_ask_login_another": {
+    "message": "Đăng nhập vào \"%1$s\"?\n\nTài khoản hiện tại của bạn sẽ không bị xóa. Sử dụng mục \"Chuyển tài khoản\" để chuyển đổi giữa các tài khoản của bạn."
+  },
+  "secure_join_started": {
+    "message": "%1$s đã mời bạn tham gia nhóm này.\n\nĐang chờ thiết bị của %2$s trả lời…"
+  },
+  "secure_join_replies": {
+    "message": "%1$s đã trả lời, đang chờ được thêm vào nhóm…"
+  },
+  "contact_verified": {
+    "message": "%1$s đã được giới thiệu."
+  },
+  "contact_not_verified": {
+    "message": "Không thể thiết lập mã hóa đầu cuối được đảm bảo với %1$s."
+  },
+  "verified_by": {
+    "message": "Được giới thiệu bởi %1$s"
+  },
+  "verified_by_you": {
+    "message": "Được tôi giới thiệu"
+  },
+  "contact_setup_changed": {
+    "message": "Đã thay đổi thiết lập cho %1$s."
+  },
+  "verified_contact_required_explain": {
+    "message": "Để đảm bảo mã hóa hai đầu, bạn chỉ có thể thêm những người liên hệ có dấu kiểm màu xanh lục vào nhóm này.\n\nBạn có thể gặp trực tiếp những người liên hệ và quét Mã QR của họ để giới thiệu họ."
+  },
+  "copy_qr_data_success": {
+    "message": "Đã sao chép url QR vào clipboard"
+  },
+  "mailto_dialog_header_select_chat": {
+    "message": "Chọn trò chuyện để gửi tin nhắn tới"
+  },
+  "confirm_replace_draft": {
+    "message": "%1$s đã có tin nhắn nháp, bạn có muốn thay thế nó không?"
+  },
+  "mailto_link_could_not_be_decoded": {
+    "message": "không thể giải mã được liên kết mailto: %1$s"
+  },
+  "notify_reply_button": {
+    "message": "Trả lời"
+  },
+  "notify_new_message": {
+    "message": "Tin nhắn mới"
+  },
+  "notify_background_connection_enabled": {
+    "message": "Đã bật kết nối nền"
+  },
+  "notify_priority_high": {
+    "message": "Cao"
+  },
+  "notify_priority_max": {
+    "message": "Tối đa"
+  },
+  "notify_name_and_message": {
+    "message": "Tên và tin nhắn"
+  },
+  "notify_name_only": {
+    "message": "Chỉ tên thôi"
+  },
+  "notify_no_name_or_message": {
+    "message": "Không có tên hoặc tin nhắn"
+  },
+  "notifications_disabled": {
+    "message": "Đã tắt thông báo"
+  },
+  "new_messages": {
+    "message": "Tin nhắn mới"
+  },
+  "n_messages_in_m_chats": {
+    "message": "%1$d tin nhắn trong %2$d cuộc trò chuyện"
+  },
+  "perm_required_title": {
+    "message": "Cần có sự cho phép"
+  },
+  "perm_continue": {
+    "message": "Tiếp tục"
+  },
+  "perm_explain_access_to_camera_denied": {
+    "message": "Để chụp ảnh hoặc quay video, hãy chuyển tới cài đặt ứng dụng, chọn \"Quyền\" và bật \"Máy ảnh\"."
+  },
+  "perm_explain_access_to_mic_denied": {
+    "message": "Để gửi tin nhắn âm thanh, hãy chuyển tới cài đặt ứng dụng, chọn \"Quyền\" và bật \"Micrô\"."
+  },
+  "perm_explain_access_to_storage_denied": {
+    "message": "Để nhận hoặc gửi tệp, hãy đi tới cài đặt ứng dụng, chọn \"Quyền\" và bật \"Bộ nhớ\"."
+  },
+  "perm_explain_access_to_location_denied": {
+    "message": "Để đính kèm một vị trí, hãy đi tới cài đặt ứng dụng, chọn \"Quyền\" và bật \"Vị trí\"."
+  },
+  "perm_explain_access_to_notifications_denied": {
+    "message": "Để nhận thông báo, hãy đi tới \"Cài đặt hệ thống / Ứng dụng / Delta Chat\" và bật \"Thông báo\"."
+  },
+  "ImageEditorHud_draw_anywhere_to_blur": {
+    "message": "Vẽ bất cứ nơi nào để làm mờ"
+  },
+  "ImageEditorHud_add_text": {
+    "message": "Thêm văn bản"
+  },
+  "ImageEditorHud_blur": {
+    "message": "Làm mờ"
+  },
+  "ImageEditorHud_brush_marker": {
+    "message": "Cọ đánh dấu"
+  },
+  "ImageEditorHud_brush_highlight": {
+    "message": "Cọ đánh dấu"
+  },
+  "ImageEditorHud_crop": {
+    "message": "Cắt"
+  },
+  "ImageEditorHud_flip": {
+    "message": "Lật"
+  },
+  "ImageEditorHud_rotate": {
+    "message": "Xoay"
+  },
+  "encrypted_message": {
+    "message": "Tin nhắn được mã hóa"
+  },
+  "about_offical_app_desktop": {
+    "message": "Đây là ứng dụng Delta Chat Desktop chính thức."
+  },
+  "about_licensed_under_desktop": {
+    "message": "Phần mềm này được cấp phép theo GNU GPL phiên bản 3 và mã nguồn có sẵn trên GitHub."
+  },
+  "welcome_desktop": {
+    "message": "Chào mừng đến với Delta Chat"
+  },
+  "global_menu_preferences_language_desktop": {
+    "message": "Ngôn ngữ"
+  },
+  "global_menu_file_desktop": {
+    "message": "Tập tin"
+  },
+  "global_menu_file_quit_desktop": {
+    "message": "Thoát"
+  },
+  "global_menu_edit_desktop": {
+    "message": "Chỉnh sửa"
+  },
+  "global_menu_edit_undo_desktop": {
+    "message": "Hoàn tác"
+  },
+  "global_menu_edit_redo_desktop": {
+    "message": "Làm lại"
+  },
+  "global_menu_edit_cut_desktop": {
+    "message": "Cắt"
+  },
+  "global_menu_edit_copy_desktop": {
+    "message": "Sao chép"
+  },
+  "global_menu_edit_paste_desktop": {
+    "message": "Dán"
+  },
+  "global_menu_view_desktop": {
+    "message": "Xem"
+  },
+  "global_menu_view_floatontop_desktop": {
+    "message": "Nổi trên cùng"
+  },
+  "global_menu_view_developer_desktop": {
+    "message": "Nhà phát triển"
+  },
+  "global_menu_view_developer_tools_desktop": {
+    "message": "Công cụ dành cho nhà phát triển"
+  },
+  "global_menu_help_desktop": {
+    "message": "Trợ giúp"
+  },
+  "global_menu_help_report_desktop": {
+    "message": "Báo cáo sự cố"
+  },
+  "global_menu_help_about_desktop": {
+    "message": "Giới thiệu về Delta Chat"
+  },
+  "global_menu_file_open_desktop": {
+    "message": "Mở Delta Chat"
+  },
+  "global_menu_minimize_to_tray": {
+    "message": "Giảm thiểu"
+  },
+  "no_chat_selected_suggestion_desktop": {
+    "message": "Chọn một cuộc trò chuyện hoặc tạo một cuộc trò chuyện mới"
+  },
+  "write_message_desktop": {
+    "message": "Viết tin nhắn"
+  },
+  "encryption_info_title_desktop": {
+    "message": "Thông tin mã hóa"
+  },
+  "delete_message_desktop": {
+    "message": "Xóa tin nhắn"
+  },
+  "more_info_desktop": {
+    "message": "Thông tin thêm"
+  },
+  "timestamp_format_m_desktop": {
+    "message": "MMM D"
+  },
+  "remove_desktop": {
+    "message": "Xóa"
+  },
+  "save_desktop": {
+    "message": "Lưu"
+  },
+  "name_desktop": {
+    "message": "Tên"
+  },
+  "select_group_image_desktop": {
+    "message": "Chọn hình ảnh nhóm"
+  },
+  "export_backup_desktop": {
+    "message": "Xuất bản sao lưu"
+  },
+  "autocrypt_correct_desktop": {
+    "message": "Đã chuyển thiết lập Autocrypt."
+  },
+  "forget_login_confirmation_desktop": {
+    "message": "Xóa thông tin đăng nhập này? Mọi thứ sẽ bị xóa, bao gồm thiết lập đầu cuối, danh bạ, cuộc trò chuyện, tin nhắn và phương tiện của bạn. Hành động này không thể hoàn tác được."
+  },
+  "message_detail_sent_desktop": {
+    "message": "đã gửi"
+  },
+  "message_detail_received_desktop": {
+    "message": "đã nhận được"
+  },
+  "menu.view.developer.open.log.folder": {
+    "message": "Mở thư mục nhật ký"
+  },
+  "menu.view.developer.open.current.log.file": {
+    "message": "Mở tệp nhật ký hiện tại"
+  },
+  "explain_desktop_minimized_disabled_tray_pref": {
+    "message": "Không thể tắt biểu tượng khay vì Delta Chat đã được bắt đầu bằng tùy chọn --giảm-thiểu."
+  },
+  "no_spellcheck_suggestions_found": {
+    "message": "Không tìm thấy gợi ý chính tả."
+  },
+  "show_window": {
+    "message": "Hiển thị cửa sổ"
+  },
+  "keybindings": {
+    "message": "Tổ hợp phím"
+  },
+  "switch_between_chats": {
+    "message": "Chuyển đổi giữa các cuộc trò chuyện"
+  },
+  "scroll_messages": {
+    "message": "Cuộn tin nhắn"
+  },
+  "focus_search_input": {
+    "message": "Tìm kiếm tập trung"
+  },
+  "focus_message_input": {
+    "message": "Nhập tin nhắn tập trung"
+  },
+  "force_refresh_network": {
+    "message": "Buộc làm mới mạng"
+  },
+  "insert_newline": {
+    "message": "Chèn dòng mới"
+  },
+  "a11y_delivery_status_error": {
+    "message": "Trạng thái vận chuyển: Lỗi"
+  },
+  "a11y_encryption_padlock": {
+    "message": "Ổ khóa mã hóa"
+  },
+  "a11y_delivery_status_sending": {
+    "message": "Trạng thái vận chuyển: Đang gửi"
+  },
+  "a11y_delivery_status_draft": {
+    "message": "Trạng thái vận chuyển: Bản nháp"
+  },
+  "a11y_delivery_status_delivered": {
+    "message": "Trạng thái vận chuyển: Đã chuyển xong"
+  },
+  "a11y_delivery_status_read": {
+    "message": "Trạng thái vận chuyển: Đã đọc"
+  },
+  "a11y_delivery_status_invalid": {
+    "message": "Trạng thái vận chuyển không hợp lệ"
+  },
+  "a11y_message_context_menu_btn_label": {
+    "message": "Hành động tin nhắn"
+  },
+  "a11y_background_preview_label": {
+    "message": "Xem trước hình nền"
+  },
+  "a11y_disappearing_messages_activated": {
+    "message": "Đã kích hoạt tin nhắn biến mất"
+  },
+  "stop_sharing_location": {
+    "message": "Dừng chia sẻ vị trí"
+  },
+  "a11y_voice_message_hint_ios": {
+    "message": "Sau khi ghi, nhấn đúp để gửi. Để loại bỏ bản ghi, hãy chà bằng hai ngón tay."
+  },
+  "a11y_connectivity_hint": {
+    "message": "Nhấn đúp để xem chi tiết kết nối."
+  },
+  "login_error_no_internet_connection": {
+    "message": "Không có kết nối internet, đăng nhập không thành công."
+  },
+  "share_account_not_configured": {
+    "message": "Tài khoản chưa được định cấu hình."
+  },
+  "cannot_play_audio_file": {
+    "message": "Không thể phát tệp âm thanh."
+  },
+  "perm_ios_explain_access_to_camera_denied": {
+    "message": "Để chụp ảnh, quay video hoặc sử dụng trình quét Mã QR, hãy mở cài đặt hệ thống và bật \"Camera\"."
+  },
+  "open_settings": {
+    "message": "Mở Cài đặt"
+  },
+  "import_device_contacts": {
+    "message": "Nhập danh bạ thiết bị"
+  },
+  "import_device_contacts_hint": {
+    "message": "Để trò chuyện với các liên hệ từ thiết bị của bạn, hãy mở Cài đặt và bật \"Danh bạ\"."
+  },
+  "disabled_in_dc": {
+    "message": "Đã tắt trong Delta Chat"
+  },
+  "disabled_in_system_settings": {
+    "message": "Đã tắt trong cài đặt hệ thống"
+  },
+  "bg_app_refresh_disabled": {
+    "message": "\"Làm mới ứng dụng nền\" bị tắt trong cài đặt hệ thống"
+  },
+  "delayed": {
+    "message": "Bị trì hoãn"
+  },
+  "notifications_avg_minutes": {
+    "message": "Trung bình cứ sau %1$d phút"
+  },
+  "notifications_avg_hours": {
+    "message": "Trung bình cứ sau %1$d giờ"
+  },
+  "last_check_at": {
+    "message": "Đã kiểm tra lúc %1$s"
+  },
+  "InfoPlist_NSCameraUsageDescription": {
+    "message": "Delta Chat sử dụng máy ảnh của bạn để chụp và gửi ảnh cũng như video cũng như quét mã QR."
+  },
+  "InfoPlist_NSContactsUsageDescription": {
+    "message": "Delta Chat sử dụng danh bạ của bạn để hiển thị danh sách các địa chỉ email mà bạn có thể viết thư vào. Delta Chat không có máy chủ, danh bạ của bạn sẽ không được gửi đi đâu cả."
+  },
+  "InfoPlist_NSLocationAlwaysAndWhenInUseUsageDescription": {
+    "message": "Delta Chat cần có quyền chia sẻ vị trí của bạn trong khoảng thời gian bạn đã bật tính năng chia sẻ vị trí."
+  },
+  "InfoPlist_NSLocationWhenInUseUsageDescription": {
+    "message": "Delta Chat cần có quyền chia sẻ vị trí của bạn trong khoảng thời gian bạn đã bật tính năng chia sẻ vị trí."
+  },
+  "InfoPlist_NSMicrophoneUsageDescription": {
+    "message": "Delta Chat sử dụng micrô của bạn để ghi và gửi tin nhắn thoại cũng như video có âm thanh."
+  },
+  "InfoPlist_NSPhotoLibraryUsageDescription": {
+    "message": "Delta Chat sẽ cho phép bạn chọn ảnh từ thư viện để gửi."
+  },
+  "InfoPlist_NSPhotoLibraryAddUsageDescription": {
+    "message": "Delta Chat muốn lưu hình ảnh vào thư viện ảnh của bạn."
+  },
+  "pref_background_notifications_rationale": {
+    "message": "Để duy trì kết nối với máy chủ e-mail của bạn và nhận tin nhắn ở chế độ nền, hãy bỏ qua tối ưu hóa pin trong bước tiếp theo.\n\nDelta Chat sử dụng ít tài nguyên và chú ý không làm tiêu hao pin của bạn."
+  },
+  "perm_enable_bg_reminder_title": {
+    "message": "Nhấn vào đây để nhận tin nhắn khi Delta Chat ở chế độ nền."
+  },
+  "perm_enable_bg_already_done": {
+    "message": "Bạn đã cho phép Delta Chat nhận tin nhắn trong nền.\n\nNếu tin nhắn vẫn không đến trong nền, vui lòng kiểm tra cài đặt hệ thống của bạn."
+  },
+  "n_minutes": {
+    "other": "%d phút"
+  },
+  "n_hours": {
+    "other": "%d giờ"
+  },
+  "n_chats": {
+    "other": "%d chats"
+  },
+  "n_contacts": {
+    "other": "%d liên hệ"
+  },
+  "n_messages": {
+    "other": "%d tin nhắn"
+  },
+  "n_members": {
+    "other": "%d thành viên"
+  },
+  "n_recipients": {
+    "other": "%d người nhận"
+  },
+  "n_selected": {
+    "other": "%d đã chọn"
+  },
+  "ask_send_following_n_files_to": {
+    "other": "Gửi tập tin sau tới %s?"
+  },
+  "ask_delete_messages_simple": {
+    "other": "Xóa %d tin nhắn?"
+  },
+  "chat_archived": {
+    "other": "đã lưu trữ %d cuộc trò chuyện"
+  },
+  "chat_unarchived": {
+    "other": "đã hủy lưu trữ %d cuộc trò chuyện"
+  },
+  "chat_n_new_messages": {
+    "other": "%d tin nhắn mới"
+  }
+}
