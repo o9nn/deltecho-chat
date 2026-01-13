@@ -36,6 +36,9 @@ export enum KeybindAction {
   ChatList_ExitSearch = 'chatlist:exit-search',
   // ChatList_SearchSelectFirstChat = 'chatlist:search-select-first-chat',
 
+  // AI Neighborhood
+  AINeighborhood_Toggle = 'ai-neighborhood:toggle',
+
   // Debug
   Debug_MaybeNetwork = 'debug:maybe_network',
 }
@@ -47,7 +50,7 @@ export namespace ActionEmitter {
     if (!Array.isArray(handlers[action])) {
       handlers[action] = []
     }
-    ;(handlers[action] as any[]).push(handler)
+    ; (handlers[action] as any[]).push(handler)
   }
 
   export function unRegisterHandler(
@@ -65,7 +68,7 @@ export namespace ActionEmitter {
       return
     }
     log.debug('fire action', action, 'handlers:', handlers[action])
-    ;(handlers[action] as any[]).forEach(handler => handler())
+      ; (handlers[action] as any[]).forEach(handler => handler())
   }
 }
 
@@ -152,6 +155,12 @@ export function keyDownEvent2Action(
       if ((ev.target as HTMLElement)?.id === 'composer-textarea') {
         return KeybindAction.MessageList_PageDown
       }
+    } else if (
+      (ev.metaKey || ev.ctrlKey) &&
+      ev.shiftKey &&
+      (ev.key === 'a' || ev.key === 'A' || ev.code === 'KeyA')
+    ) {
+      return KeybindAction.AINeighborhood_Toggle
     } else if (
       (ev.metaKey || ev.ctrlKey) &&
       (ev.key === '/' || ev.code === 'Slash')

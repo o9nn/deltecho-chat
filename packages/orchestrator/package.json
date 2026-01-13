@@ -29,20 +29,7 @@
   "author": "",
   "license": "GPL-3.0-or-later",
   "dependencies": {
-    "deep-tree-echo-core": "workspace:*",
-    "dove9": "workspace:*"
-  },
-  "peerDependencies": {
-    "@deltecho/double-membrane": "workspace:*",
-    "@deltecho/sys6-triality": "workspace:*"
-  },
-  "peerDependenciesMeta": {
-    "@deltecho/double-membrane": {
-      "optional": true
-    },
-    "@deltecho/sys6-triality": {
-      "optional": true
-    }
+    "deep-tree-echo-core": "workspace:*"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",

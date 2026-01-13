@@ -1,4 +1,4 @@
-import React, { createContext, useEffect } from 'react'
+import React, { createContext, useContext, useEffect } from 'react'
 
 import {
   ActionEmitter,
@@ -8,6 +8,7 @@ import {
 import useKeyBindingAction from '../hooks/useKeyBindingAction'
 import useDialog from '../hooks/dialog/useDialog'
 import { Screens } from '../ScreenController'
+import { ScreenContext } from './ScreenContext'
 import KeybindingCheatSheet from '../components/dialogs/KeybindingCheatSheet'
 import Settings from '../components/Settings'
 
@@ -20,6 +21,7 @@ export const KeybindingsContextProvider = ({
   children,
 }: PropsWithChildren<{}>) => {
   const { openDialog } = useDialog()
+  const { changeScreen, screen } = useContext(ScreenContext)
 
   // @TODO: This probably needs another place
   useKeyBindingAction(KeybindAction.Settings_Open, () => {
@@ -44,6 +46,13 @@ export const KeybindingsContextProvider = ({
   useKeyBindingAction(KeybindAction.AboutDialog_Open, () => {
     if (!window.__aboutDialogOpened) {
       openDialog(About)
+    }
+  })
+
+  // AI Neighborhood toggle - Ctrl+Shift+A
+  useKeyBindingAction(KeybindAction.AINeighborhood_Toggle, () => {
+    if (window.__screen === Screens.Main || window.__screen === Screens.AINeighborhood) {
+      changeScreen(screen === Screens.AINeighborhood ? Screens.Main : Screens.AINeighborhood)
     }
   })
 

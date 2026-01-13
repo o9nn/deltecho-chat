@@ -1,6 +1,6 @@
 // AINavigation.tsx - A magnificent navigation component for the AI Companion Neighborhood
 import React from 'react'
-import { Brain, Globe, Sparkles } from 'lucide-react'
+import { Brain, Globe, Sparkles, ArrowLeft } from 'lucide-react'
 import { Screens } from '../ScreenController'
 
 type AINavigationProps = {
@@ -14,12 +14,30 @@ const AINavigation: React.FC<AINavigationProps> = ({
 }) => {
   const isActive = currentScreen === Screens.AINeighborhood
 
+  // When on AI Neighborhood, show a "Back to Chat" button instead
+  if (isActive) {
+    return (
+      <div className='ai-neighborhood-navigation ai-neighborhood-navigation-back'>
+        <button
+          className='ai-neighborhood-button ai-back-button'
+          onClick={() => changeScreen(Screens.Main)}
+          title='Return to Chat (Ctrl+Shift+A)'
+        >
+          <div className='ai-button-icon-container'>
+            <ArrowLeft size={20} className='ai-button-icon primary' />
+          </div>
+          <span className='ai-button-text'>Back to Chat</span>
+        </button>
+      </div>
+    )
+  }
+
   return (
     <div className='ai-neighborhood-navigation'>
       <button
         className={`ai-neighborhood-button ${isActive ? 'active' : ''}`}
         onClick={() => changeScreen(Screens.AINeighborhood)}
-        title='Enter AI Companion Neighborhood'
+        title='Enter AI Companion Neighborhood (Ctrl+Shift+A)'
       >
         <div className='ai-button-icon-container'>
           <Brain size={24} className='ai-button-icon primary' />
@@ -44,6 +62,11 @@ if (typeof document !== 'undefined') {
       transition: transform 0.3s ease;
     }
 
+    .ai-neighborhood-navigation-back {
+      left: 88px;
+      right: auto;
+    }
+
     .ai-neighborhood-button {
       display: flex;
       align-items: center;
@@ -60,6 +83,12 @@ if (typeof document !== 'undefined') {
       transition: all 0.3s ease;
       box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
       backdrop-filter: blur(8px);
+    }
+
+    .ai-back-button {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(99, 102, 241, 0.15) 100%);
+      border-image: linear-gradient(135deg, #6366f1, #3b82f6) 1;
+      padding: 10px 14px;
     }
 
     .ai-neighborhood-button:hover {
@@ -81,6 +110,11 @@ if (typeof document !== 'undefined') {
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+
+    .ai-back-button .ai-button-icon-container {
+      width: 24px;
+      height: 24px;
     }
 
     .ai-button-icon {
@@ -128,6 +162,11 @@ if (typeof document !== 'undefined') {
       .ai-neighborhood-navigation {
         bottom: 16px;
         right: 16px;
+      }
+      
+      .ai-neighborhood-navigation-back {
+        left: 16px;
+        right: auto;
       }
       
       .ai-button-text {

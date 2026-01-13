@@ -26,14 +26,15 @@ Transform DeltaChat Desktop from a traditional messaging app into a revolutionar
 
 ### 🔄 In Progress
 
-- [ ] Integrate AI Neighborhood into main app navigation
+- [x] Integrate AI Neighborhood into main app navigation ✅
 - [ ] Add dependency management for new packages
 - [ ] Create settings interface for AI configuration
 - [ ] Build memory persistence layer
 
 ### 📋 TODO This Phase
 
-- [ ] Wire up screen navigation to show AI Neighborhood
+- [x] Wire up screen navigation to show AI Neighborhood ✅
+- [x] Add keyboard shortcut (Ctrl+Shift+A) for AI Neighborhood ✅
 - [ ] Implement API key management UI
 - [ ] Create personality customization controls
 - [ ] Add basic memory search functionality

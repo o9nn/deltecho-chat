@@ -7,6 +7,7 @@ import React, {
   useState,
 } from 'react'
 import { debounce } from 'debounce'
+import { Brain, Sparkles } from 'lucide-react'
 
 import AccountHoverInfo from './AccountHoverInfo'
 import AccountItem from './AccountItem'
@@ -51,7 +52,7 @@ export default function AccountListSidebar({
   const [accounts, setAccounts] = useState<number[]>([])
   const [{ accounts: noficationSettings }] = useAccountNotificationStore()
 
-  const { smallScreenMode } = useContext(ScreenContext)
+  const { smallScreenMode, changeScreen, screen } = useContext(ScreenContext)
   const { chatId } = useChat()
 
   const shouldBeHidden = smallScreenMode && chatId !== undefined
@@ -168,8 +169,26 @@ export default function AccountListSidebar({
         </RovingTabindexProvider>
       </div>
       {/* The condition is the same as in https://github.com/deltachat/deltachat-desktop/blob/63af023437ff1828a27de2da37bf94ab180ec528/src/renderer/contexts/KeybindingsContext.tsx#L26 */}
-      {window.__screen === Screens.Main && (
+      {(window.__screen === Screens.Main || window.__screen === Screens.AINeighborhood) && (
         <div className={styles.buttonsContainer}>
+          {/* AI Neighborhood Button */}
+          <button
+            aria-label={screen === Screens.AINeighborhood ? 'Return to Chat' : 'AI Companion Neighborhood'}
+            className={classNames(styles.aiNeighborhoodButton, {
+              [styles.aiNeighborhoodButtonActive]: screen === Screens.AINeighborhood,
+            })}
+            onClick={() => changeScreen(screen === Screens.AINeighborhood ? Screens.Main : Screens.AINeighborhood)}
+            data-testid='ai-neighborhood-button'
+            title={screen === Screens.AINeighborhood ? 'Return to Chat (Ctrl+Shift+A)' : 'AI Neighborhood (Ctrl+Shift+A)'}
+          >
+            <div className={styles.aiNeighborhoodIconContainer}>
+              <Brain size={22} className={styles.aiNeighborhoodIcon} />
+              {screen !== Screens.AINeighborhood && (
+                <Sparkles size={10} className={styles.aiNeighborhoodSparkle} />
+              )}
+            </div>
+          </button>
+          {/* Settings Button */}
           <button
             aria-label={tx('menu_settings')}
             className={styles.settingsButton}
