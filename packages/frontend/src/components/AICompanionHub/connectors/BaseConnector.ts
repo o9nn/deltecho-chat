@@ -39,6 +39,7 @@ export interface AIConnectorConfig {
 export enum AICapability {
   TEXT_GENERATION = 'text_generation',
   IMAGE_GENERATION = 'image_generation',
+  IMAGE_ANALYSIS = 'image_analysis',
   CODE_GENERATION = 'code_generation',
   TEXT_TO_SPEECH = 'text_to_speech',
   SPEECH_TO_TEXT = 'speech_to_text',

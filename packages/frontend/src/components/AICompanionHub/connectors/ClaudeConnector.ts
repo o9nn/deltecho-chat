@@ -15,12 +15,18 @@ export interface ClaudeConfig extends AIConnectorConfig {
   // Anthropic-specific parameters
   apiVersion?: string
   modelName:
+    // Claude 4 models (latest)
+    | 'claude-opus-4-5-20251101'
+    | 'claude-sonnet-4-20250514'
+    // Claude 3.5 models
+    | 'claude-3-5-sonnet-20241022'
+    | 'claude-3-5-haiku-20241022'
+    // Claude 3 models (legacy)
     | 'claude-3-opus-20240229'
     | 'claude-3-sonnet-20240229'
     | 'claude-3-haiku-20240307'
-    | 'claude-2.1'
-    | 'claude-2.0'
-    | 'claude-instant-1.2'
+    // Custom model string for newer releases
+    | string
   maxTokens?: number
   topP?: number
   anthropicVersion?: string
@@ -81,15 +87,16 @@ export class ClaudeConnector extends BaseConnector {
     // Set default values for Claude-specific configuration
     const defaultConfig: Partial<ClaudeConfig> = {
       apiVersion: '2023-06-01',
-      modelName: 'claude-3-sonnet-20240229',
-      maxTokens: 1024,
+      modelName: 'claude-3-5-sonnet-20241022',
+      maxTokens: 4096,
       defaultTemperature: 0.7,
-      anthropicVersion: 'bedrock-2023-05-31',
+      anthropicVersion: '2023-06-01',
       capabilities: [
         AICapability.TEXT_GENERATION,
         AICapability.CODE_GENERATION,
         AICapability.STRUCTURED_OUTPUT,
         AICapability.FUNCTION_CALLING,
+        AICapability.IMAGE_ANALYSIS,
       ],
       personalityTraits: {
         thoughtfulness: 0.9,
@@ -126,7 +133,7 @@ export class ClaudeConnector extends BaseConnector {
             'Content-Type': 'application/json',
             'x-api-key': this.claudeConfig.apiKey,
             'anthropic-version':
-              this.claudeConfig.anthropicVersion || 'bedrock-2023-05-31',
+              this.claudeConfig.anthropicVersion || '2023-06-01',
           },
           body: JSON.stringify({
             model: this.claudeConfig.modelName,
@@ -259,7 +266,7 @@ export class ClaudeConnector extends BaseConnector {
           'Content-Type': 'application/json',
           'x-api-key': this.claudeConfig.apiKey || '',
           'anthropic-version':
-            this.claudeConfig.anthropicVersion || 'bedrock-2023-05-31',
+            this.claudeConfig.anthropicVersion || '2023-06-01',
         },
         body: JSON.stringify(requestBody),
       })

@@ -19,6 +19,7 @@ import {
   Music,
   Mic,
   Bot,
+  Eye,
 } from 'lucide-react'
 import { AICompanionProvider, useAICompanion } from './AICompanionController'
 import { AICapability } from './connectors/BaseConnector'
@@ -100,6 +101,7 @@ const AVAILABLE_CAPABILITIES: {
   text_generation: { name: 'Text Generation', icon: MessageSquare },
   code_generation: { name: 'Code Generation', icon: Code },
   image_generation: { name: 'Image Creation', icon: Image },
+  image_analysis: { name: 'Image Analysis', icon: Eye },
   function_calling: { name: 'Function Calling', icon: Globe },
   structured_output: { name: 'Structured Data', icon: Database },
   embeddings: { name: 'Memory & Embeddings', icon: Brain },

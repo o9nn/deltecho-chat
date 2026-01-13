@@ -519,7 +519,7 @@ export class DeepTreeEchoUIBridge {
    * Focus chat list
    */
   public focusChatList(): void {
-    ActionEmitter.emitAction(KeybindAction.ChatList_FocusChatList)
+    ActionEmitter.emitAction(KeybindAction.ChatList_FocusItems)
   }
 
   /**

@@ -4,6 +4,7 @@ import { throttle } from '@deltachat-desktop/shared/util.js'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
 import { getLogger } from '../../../../shared/logger'
 import { DialogContext } from '../../contexts/DialogContext'
+import { uiBridge } from '../DeepTreeEchoBot/DeepTreeEchoUIBridge'
 
 const log = getLogger('renderer/composer/ComposerMessageInput')
 
@@ -74,10 +75,16 @@ export default class ComposerMessageInput extends React.Component<
 
   componentDidMount() {
     ActionEmitter.registerHandler(KeybindAction.Composer_Focus, this.focus)
+    // Register composer with Deep Tree Echo UIBridge for AI-driven interactions
+    if (this.textareaRef.current) {
+      uiBridge.registerComposer(this.textareaRef.current)
+    }
   }
 
   componentWillUnmount() {
     ActionEmitter.unRegisterHandler(KeybindAction.Composer_Focus, this.focus)
+    // Unregister composer from UIBridge
+    uiBridge.registerComposer(null)
   }
 
   static getDerivedStateFromProps(

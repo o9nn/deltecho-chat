@@ -30,6 +30,10 @@ import useOpenViewGroupDialog from '../../../hooks/dialog/useOpenViewGroupDialog
 import useOpenViewProfileDialog from '../../../hooks/dialog/useOpenViewProfileDialog'
 import useSelectLastChat from '../../../hooks/chat/useSelectLastChat'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
+import {
+  useDeepTreeEchoChatIntegration,
+  useDeepTreeEchoDialogIntegration,
+} from '../../../hooks/useDeepTreeEchoIntegration'
 import { KeybindAction } from '../../../keybindings'
 import { selectedAccountId } from '../../../ScreenController'
 import { openMapWebxdc } from '../../../system-integration/webxdc'
@@ -54,6 +58,7 @@ export default function MainScreen({ accountId }: Props) {
   const [queryStr, setQueryStr] = useState('')
   const [queryChatId, setQueryChatId] = useState<null | number>(null)
   const [archivedChatsSelected, setArchivedChatsSelected] = useState(false)
+  const chatContext = useChat()
   const {
     activeView,
     chatId,
@@ -61,8 +66,13 @@ export default function MainScreen({ accountId }: Props) {
     alternativeView,
     selectChat,
     unselectChat,
-  } = useChat()
+  } = chatContext
   const { smallScreenMode } = useContext(ScreenContext)
+  const { openDialog } = useDialog()
+
+  // Integrate Deep Tree Echo with chat context for AI-driven UI interactions
+  useDeepTreeEchoChatIntegration(chatContext, accountId)
+  useDeepTreeEchoDialogIntegration(openDialog)
 
   // Small hack/misuse of keyBindingAction to setArchivedChatsSelected from
   // other components (especially ViewProfile when selecting a shared chat/group)
@@ -144,7 +154,6 @@ export default function MainScreen({ accountId }: Props) {
     handleSearchClear()
   })
 
-  const { openDialog } = useDialog()
   useKeyBindingAction(KeybindAction.NewChat_Open, () => {
     // Same as `onCreateChat` in ChatList.
     openDialog(CreateChat)
@@ -220,9 +229,9 @@ export default function MainScreen({ accountId }: Props) {
               onClick={() => changeScreen(Screens.AINeighborhood)}
               className='navbar-button'
               style={{ marginLeft: '8px' }}
-              title='Visit the AI Companion Neighborhood'
+              title='AI Companion Neighborhood - Meet your AI friends'
             >
-              <Icon icon='settings' size={20} />
+              <Icon icon='forum' size={20} />
             </Button>
           )}
         </nav>
