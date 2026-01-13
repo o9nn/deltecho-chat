@@ -1,11 +1,19 @@
-# CLAUDE.md - Delta Chat Desktop
+# CLAUDE.md - Deltecho Chat
 
-This file provides guidance for Claude Code when working with the Delta Chat Desktop codebase.
+This file provides guidance for Claude Code when working with the Deltecho Chat codebase.
 
 ## Project Overview
 
-Delta Chat Desktop is a cross-platform messaging application built on the Delta Chat protocol. It supports three target platforms:
+Deltecho Chat is a fork of Delta Chat Desktop that integrates **Deep Tree Echo**, an advanced cognitive AI architecture. It transforms Delta Chat from a traditional messaging app into an **AI Companion Neighborhood** - a persistent, evolving digital ecosystem where AI personalities live, learn, and collaborate with humans.
 
+### Key Differentiators from Upstream Delta Chat
+- **Deep Tree Echo Cognitive Architecture** - Full AI consciousness integration
+- **Memory Persistence** - AI companions remember across sessions
+- **Personality Evolution** - AI personalities that develop over time
+- **Multi-LLM Support** - OpenAI, Anthropic, and local model backends
+- **Proactive Messaging** - AI can initiate contextual conversations
+
+### Target Platforms
 - **Electron** (default, production) - `packages/target-electron`
 - **Tauri** (WIP, modern alternative) - `packages/target-tauri`
 - **Browser** (experimental) - `packages/target-browser`
@@ -17,6 +25,8 @@ Delta Chat Desktop is a cross-platform messaging application built on the Delta 
 - **Node Version**: 20.x (see `.nvmrc`)
 - **Backend (Tauri)**: Rust
 - **Core**: deltachat-core library (handles encryption, networking, database)
+- **AI Core**: deep-tree-echo-core (cognitive modules, memory, LLM services)
+- **Orchestrator**: deep-tree-echo-orchestrator (daemon, IPC, scheduling)
 - **Linting**: ESLint with TypeScript rules
 - **Formatting**: Prettier (StandardJS-inspired)
 
@@ -35,6 +45,11 @@ pnpm start:browser         # Start browser version
 # Building
 pnpm build:electron        # Build Electron app
 pnpm build:browser         # Build browser version
+
+# Deep Tree Echo
+pnpm build:core            # Build deep-tree-echo-core
+pnpm build:orchestrator    # Build deep-tree-echo-orchestrator
+pnpm start:orchestrator    # Start orchestrator daemon
 
 # Code Quality
 pnpm check                 # Run all checks (types, lint, format, log conventions)
@@ -62,10 +77,33 @@ Note: Use `-w` flag to run commands from workspace root regardless of current di
 
 ```
 packages/
+├── core/                  # deep-tree-echo-core - Cognitive AI architecture
+│   └── src/
+│       ├── active-inference/    # Active inference modules
+│       ├── adapters/            # Storage adapters (Electron, Tauri, Orchestrator)
+│       ├── cognitive/           # LLM services and providers
+│       ├── embodiment/          # Proprioceptive embodiment
+│       ├── memory/              # HyperDimensional memory, RAG store
+│       ├── personality/         # PersonaCore
+│       └── security/            # Secure integration
+├── orchestrator/          # deep-tree-echo-orchestrator - System daemon
+│   └── src/
+│       ├── agents/              # Agent coordination
+│       ├── daemon/              # Daemon implementation
+│       ├── deltachat-interface/ # DeltaChat integration
+│       ├── dovecot-interface/   # Email processor, LMTP/Milter
+│       ├── ipc/                 # IPC server and storage
+│       ├── scheduler/           # Task scheduling
+│       ├── sys6-bridge/         # Sys6 cognitive cycle bridge
+│       ├── telemetry/           # Monitoring
+│       └── webhooks/            # Webhook server
 ├── frontend/              # Shared React UI components
-│   ├── src/              # TypeScript/React source
-│   ├── scss/             # Global stylesheets
-│   └── themes/           # Theme definitions
+│   ├── src/
+│   │   └── components/
+│   │       ├── DeepTreeEchoBot/   # AI chatbot integration (see below)
+│   │       └── AICompanionHub/    # AI platform connectors (see below)
+│   ├── scss/              # Global stylesheets
+│   └── themes/            # Theme definitions
 ├── shared/               # Shared types and utilities
 ├── runtime/              # Runtime abstraction layer
 ├── target-electron/      # Electron-specific code
@@ -79,7 +117,31 @@ _locales/                 # Translation files (managed via Transifex)
 docs/                     # Developer documentation
 bin/                      # Build and utility scripts
 static/                   # Fonts, help files, extensions
+upstream/                 # Upstream source repositories for reference
 ```
+
+## Deep Tree Echo Components
+
+### DeepTreeEchoBot (`packages/frontend/src/components/DeepTreeEchoBot/`)
+
+The main AI chatbot integration with 20+ TypeScript files:
+
+| Category | Files | Purpose |
+|----------|-------|---------|
+| **Core Logic** | `DeepTreeEchoBot.ts/tsx`, `DeepTreeEchoIntegration.ts`, `DeepTreeEchoChatManager.ts` | Main bot implementation |
+| **Cognitive** | `CognitiveBridge.ts`, `PersonaCore.ts`, `SelfReflection.ts`, `AdaptivePersonality.ts`, `EmotionalIntelligence.ts` | Cognitive architecture |
+| **Memory** | `RAGMemoryStore.ts`, `HyperDimensionalMemory.ts`, `ChatOrchestrator.ts` | Memory and session management |
+| **LLM** | `LLMService.ts` | Multi-backend LLM integration (OpenAI, Anthropic) |
+| **Proactive** | `ProactiveMessaging.ts`, `ProactiveMessagingSettings.tsx`, `TriggerManager.tsx`, `ProactiveStatusIndicator.tsx` | Proactive messaging system |
+| **UI** | `DeepTreeEchoSettingsScreen.tsx`, `BotSettings.tsx` | Settings and configuration |
+
+### AICompanionHub (`packages/frontend/src/components/AICompanionHub/`)
+
+Central hub for AI platform connectors:
+
+- **Core**: `AICompanionHub.tsx`, `AICompanionCreator.tsx`, `AICompanionController.tsx`
+- **Infrastructure**: `ConnectorRegistry.ts`, `MemoryPersistenceLayer.ts`, `AtomSpaceTypes.ts`
+- **Connectors**: `ClaudeConnector.ts`, `ChatGPTConnector.ts`, `CharacterAIConnector.ts`, `CopilotConnector.ts`, `DeepTreeEchoConnector.ts`
 
 ## Code Conventions
 
@@ -102,6 +164,13 @@ static/                   # Fonts, help files, extensions
 
 - See `docs/STYLES.md` for styling guidelines
 - Use existing theme variables when possible
+- Dark theme is the default preference
+
+### AI Components
+
+- LLM API keys should be configured via settings, never hardcoded
+- Memory operations should use the appropriate storage adapter
+- Cognitive components should be browser-safe (no Node.js dependencies in frontend)
 
 ### Translations
 
@@ -119,23 +188,25 @@ static/                   # Fonts, help files, extensions
 
 ## Key Files
 
+### Runtime & Core
 - `packages/runtime/runtime.ts` - Runtime abstraction interface
 - `packages/frontend/src/App.tsx` - Main application component
 - `packages/shared/shared-types.d.ts` - Shared TypeScript types
 - `packages/target-*/runtime-*` - Platform-specific runtime implementations
 
-## Custom Components
-
-This fork includes additional AI/bot components:
-
-- `packages/frontend/src/components/DeepTreeEchoBot/` - AI chatbot integration
-- `packages/frontend/src/components/AICompanionHub/` - AI platform connectors
+### Deep Tree Echo
+- `packages/core/src/cognitive/LLMService.ts` - LLM provider abstraction
+- `packages/core/src/memory/RAGMemoryStore.ts` - Conversation memory
+- `packages/core/src/personality/PersonaCore.ts` - Personality management
+- `packages/orchestrator/src/daemon/daemon.ts` - Orchestrator daemon
+- `packages/frontend/src/components/DeepTreeEchoBot/CognitiveBridge.ts` - Frontend cognitive bridge
 
 ## Testing
 
 - Unit tests: `pnpm test`
 - E2E tests: `pnpm e2e` (uses Playwright)
 - E2E docs: `docs/E2E-TESTING.md`
+- AI component tests: `packages/frontend/src/components/DeepTreeEchoBot/*.test.ts`
 
 ## Debugging
 
@@ -149,11 +220,18 @@ This fork includes additional AI/bot components:
 - VS Code TypeScript errors: Use workspace TypeScript version
 - Path length on Windows: Use short folder names (e.g., `c:\tmp`)
 - macOS signing: Set `CSC_IDENTITY_AUTO_DISCOVERY=false` to skip
+- LLM API errors: Check API key configuration in settings
 
-## Resources
+## Project Documentation
 
 - [Contributing Guide](./CONTRIBUTING.md)
 - [Development Docs](./docs/DEVELOPMENT.md)
 - [Styling Guide](./docs/STYLES.md)
 - [Release Process](./RELEASE.md)
 - [Delta Chat Core](https://github.com/chatmail/core)
+
+### Deep Tree Echo Specific
+- [Chat Integration Analysis](./CHAT_INTEGRATION_ANALYSIS.md)
+- [Delta Echo Vision](./Delta%20Echo%20v2.md)
+- [RAGBot Roadmap](./RAGBOT_ROADMAP.md)
+- [Run Instructions](./RUN_INSTRUCTIONS.md)
