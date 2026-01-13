@@ -8,6 +8,7 @@
  * - UI bridge (React integration)
  * - Proactive messaging (autonomous communication)
  * - Settings and configuration
+ * - UI components for proactive messaging
  * - Test utilities
  */
 
@@ -83,6 +84,9 @@ import type {
 // Import UI components
 import BotSettings from './BotSettings'
 import DeepTreeEchoSettingsScreen from './DeepTreeEchoSettingsScreen'
+import ProactiveMessagingSettings from './ProactiveMessagingSettings'
+import TriggerManager from './TriggerManager'
+import ProactiveStatusIndicator from './ProactiveStatusIndicator'
 
 // Import integration functions
 import {
@@ -127,6 +131,9 @@ export {
   // UI Components
   BotSettings,
   DeepTreeEchoSettingsScreen,
+  ProactiveMessagingSettings,
+  TriggerManager,
+  ProactiveStatusIndicator,
   
   // Services
   LLMService,

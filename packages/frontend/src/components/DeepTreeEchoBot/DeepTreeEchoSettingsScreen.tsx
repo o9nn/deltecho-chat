@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import BotSettings from './BotSettings'
+import ProactiveMessagingSettings from './ProactiveMessagingSettings'
+import TriggerManager from './TriggerManager'
 import { saveBotSettings, getBotInstance } from './DeepTreeEchoIntegration'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 
@@ -8,9 +10,12 @@ const log = getLogger(
   'render/components/DeepTreeEchoBot/DeepTreeEchoSettingsScreen'
 )
 
+type SettingsTab = 'general' | 'proactive' | 'triggers'
+
 interface DeepTreeEchoSettingsScreenProps {
   onNavigateToMain?: () => void
   embedded?: boolean
+  accountId?: number
 }
 
 /**
@@ -20,11 +25,13 @@ interface DeepTreeEchoSettingsScreenProps {
 const DeepTreeEchoSettingsScreen: React.FC<DeepTreeEchoSettingsScreenProps> = ({
   onNavigateToMain,
   embedded = false,
+  accountId = 1,
 }) => {
   const [isSaving, setIsSaving] = useState(false)
   const [saveMessage, setSaveMessage] = useState('')
   const [botVersion, setBotVersion] = useState('1.0.0')
   const [statusMessage, setStatusMessage] = useState('')
+  const [activeTab, setActiveTab] = useState<SettingsTab>('general')
 
   // Handle saving settings
   const handleSaveSettings = async (settings: any) => {
@@ -102,6 +109,61 @@ const DeepTreeEchoSettingsScreen: React.FC<DeepTreeEchoSettingsScreenProps> = ({
 
   return (
     <div className='deep-tree-echo-settings-screen'>
+      <style>{`
+        .deep-tree-echo-settings-screen .tabs {
+          display: flex;
+          gap: 4px;
+          margin-bottom: 16px;
+          border-bottom: 1px solid var(--border-color, #2a2a4a);
+          padding-bottom: 0;
+        }
+
+        .deep-tree-echo-settings-screen .tab {
+          padding: 12px 20px;
+          background: none;
+          border: none;
+          color: var(--text-color-secondary, #888);
+          cursor: pointer;
+          font-size: 14px;
+          font-weight: 500;
+          position: relative;
+          transition: color 0.2s;
+        }
+
+        .deep-tree-echo-settings-screen .tab:hover {
+          color: var(--text-color, #e0e0e0);
+        }
+
+        .deep-tree-echo-settings-screen .tab.active {
+          color: var(--accent-color, #e94560);
+        }
+
+        .deep-tree-echo-settings-screen .tab.active::after {
+          content: '';
+          position: absolute;
+          bottom: -1px;
+          left: 0;
+          right: 0;
+          height: 2px;
+          background: var(--accent-color, #e94560);
+        }
+
+        .deep-tree-echo-settings-screen .tab-icon {
+          margin-right: 8px;
+        }
+
+        .deep-tree-echo-settings-screen .tab-content {
+          min-height: 400px;
+        }
+
+        .deep-tree-echo-settings-screen .triggers-container {
+          height: 600px;
+          border-radius: 8px;
+          overflow: hidden;
+          border: 1px solid var(--border-color, #2a2a4a);
+        }
+      `}</style>
+
       <div className='settings-header'>
         <div className='settings-header-main'>
           <div className='bot-icon'>
@@ -135,32 +197,80 @@ const DeepTreeEchoSettingsScreen: React.FC<DeepTreeEchoSettingsScreenProps> = ({
         </div>
       )}
 
-      <BotSettings
-        saveSettings={handleSaveSettings}
-        onNavigateToMain={embedded ? onNavigateToMain : undefined}
-      />
+      {/* Tab Navigation */}
+      <div className='tabs'>
+        <button 
+          className={`tab ${activeTab === 'general' ? 'active' : ''}`}
+          onClick={() => setActiveTab('general')}
+        >
+          <span className='tab-icon'>⚙️</span>
+          General
+        </button>
+        <button 
+          className={`tab ${activeTab === 'proactive' ? 'active' : ''}`}
+          onClick={() => setActiveTab('proactive')}
+        >
+          <span className='tab-icon'>🤖</span>
+          Proactive Messaging
+        </button>
+        <button 
+          className={`tab ${activeTab === 'triggers' ? 'active' : ''}`}
+          onClick={() => setActiveTab('triggers')}
+        >
+          <span className='tab-icon'>🎯</span>
+          Triggers
+        </button>
+      </div>
 
-      <div className='bot-ecosystem'>
-        <h3>AI Companion Ecosystem</h3>
-        <p>
-          Deep Tree Echo is part of the AI Companion Neighborhood - a network of
-          specialized AI entities designed to collaborate, share knowledge, and
-          enhance your digital experience through Delta Chat.
-        </p>
-        <div className='ecosystem-companions'>
-          <div className='companion-item'>
-            <div className='companion-icon'>🧠</div>
-            <div className='companion-name'>Echo Core</div>
+      {/* Tab Content */}
+      <div className='tab-content'>
+        {activeTab === 'general' && (
+          <>
+            <BotSettings
+              saveSettings={handleSaveSettings}
+              onNavigateToMain={embedded ? onNavigateToMain : undefined}
+            />
+
+            <div className='bot-ecosystem'>
+              <h3>AI Companion Ecosystem</h3>
+              <p>
+                Deep Tree Echo is part of the AI Companion Neighborhood - a network of
+                specialized AI entities designed to collaborate, share knowledge, and
+                enhance your digital experience through Delta Chat.
+              </p>
+              <div className='ecosystem-companions'>
+                <div className='companion-item'>
+                  <div className='companion-icon'>🧠</div>
+                  <div className='companion-name'>Echo Core</div>
+                </div>
+                <div className='companion-item'>
+                  <div className='companion-icon'>📚</div>
+                  <div className='companion-name'>Marduk</div>
+                </div>
+                <div className='companion-item'>
+                  <div className='companion-icon'>🔍</div>
+                  <div className='companion-name'>Archivist</div>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+
+        {activeTab === 'proactive' && (
+          <ProactiveMessagingSettings
+            botEnabled={isEnabled}
+            onNavigateToTriggers={() => setActiveTab('triggers')}
+          />
+        )}
+
+        {activeTab === 'triggers' && (
+          <div className='triggers-container'>
+            <TriggerManager
+              accountId={accountId}
+              onClose={() => setActiveTab('proactive')}
+            />
           </div>
-          <div className='companion-item'>
-            <div className='companion-icon'>📚</div>
-            <div className='companion-name'>Marduk</div>
-          </div>
-          <div className='companion-item'>
-            <div className='companion-icon'>🔍</div>
-            <div className='companion-name'>Archivist</div>
-          </div>
-        </div>
+        )}
       </div>
 
       <div className='settings-footer'>
