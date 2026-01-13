@@ -10,8 +10,8 @@
 
 import React, { useState, useEffect, useCallback } from 'react'
 import { getLogger } from '../../../../shared/logger'
-import { 
-  proactiveMessaging, 
+import {
+  proactiveMessaging,
   ProactiveTrigger,
   QueuedMessage,
 } from './ProactiveMessaging'
@@ -50,10 +50,10 @@ const ProactiveStatusIndicator: React.FC<ProactiveStatusIndicatorProps> = ({
 
       // Get triggers relevant to this chat
       const allTriggers = proactiveMessaging.getTriggers()
-      const relevantTriggers = allTriggers.filter(t => 
+      const relevantTriggers = allTriggers.filter(t =>
         t.enabled && (
           t.targetType === 'all_chats' ||
-          t.targetType === 'active_chats' ||
+          t.targetType === 'unread_chats' ||
           (t.targetType === 'specific_chat' && t.targetChatId === chatId)
         )
       )
@@ -116,7 +116,7 @@ const ProactiveStatusIndicator: React.FC<ProactiveStatusIndicatorProps> = ({
   const formatTimeRemaining = (scheduledTime: number): string => {
     const diff = scheduledTime - Date.now()
     if (diff < 0) return 'Now'
-    
+
     const minutes = Math.floor(diff / 60000)
     const hours = Math.floor(minutes / 60)
     const days = Math.floor(hours / 24)
@@ -133,7 +133,7 @@ const ProactiveStatusIndicator: React.FC<ProactiveStatusIndicatorProps> = ({
   if (compact) {
     // Compact mode - just show an indicator
     return (
-      <div 
+      <div
         className='proactive-status-compact'
         onClick={() => setIsExpanded(!isExpanded)}
         title='Proactive messaging active'
@@ -443,7 +443,7 @@ const ProactiveStatusIndicator: React.FC<ProactiveStatusIndicatorProps> = ({
           <span className='pulse'></span>
           Proactive Messaging
         </h4>
-        <button 
+        <button
           className='toggle-expand'
           onClick={() => setIsExpanded(!isExpanded)}
         >
@@ -507,13 +507,13 @@ const ProactiveStatusIndicator: React.FC<ProactiveStatusIndicatorProps> = ({
                   <div className='queued-info'>
                     <div className='queued-message'>{msg.message}</div>
                     <div className='queued-time'>
-                      {msg.scheduledTime 
+                      {msg.scheduledTime
                         ? `In ${formatTimeRemaining(msg.scheduledTime)}`
                         : 'Pending'
                       }
                     </div>
                   </div>
-                  <button 
+                  <button
                     className='cancel-btn'
                     onClick={() => handleCancelQueued(msg.id)}
                     title='Cancel'
@@ -539,14 +539,14 @@ const ProactiveStatusIndicator: React.FC<ProactiveStatusIndicatorProps> = ({
                 onChange={(e) => setQuickMessage(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && !showScheduler && handleQuickSend()}
               />
-              <button 
+              <button
                 className='schedule-btn'
                 onClick={() => setShowScheduler(!showScheduler)}
                 title='Schedule'
               >
                 📅
               </button>
-              <button 
+              <button
                 className='send-btn'
                 onClick={handleQuickSend}
                 disabled={!quickMessage.trim()}
@@ -565,7 +565,7 @@ const ProactiveStatusIndicator: React.FC<ProactiveStatusIndicatorProps> = ({
                     onChange={(e) => setScheduleTime(e.target.value)}
                     min={new Date().toISOString().slice(0, 16)}
                   />
-                  <button 
+                  <button
                     className='send-btn'
                     onClick={handleSchedule}
                     disabled={!quickMessage.trim() || !scheduleTime}

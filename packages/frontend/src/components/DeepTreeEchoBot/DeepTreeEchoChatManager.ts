@@ -92,14 +92,14 @@ export type ChatWatchCallback = (
  */
 export class DeepTreeEchoChatManager {
   private static instance: DeepTreeEchoChatManager | null = null
-  
+
   // State
   private activeChat: ActiveChatState | null = null
   private chatCache: Map<string, ChatSummary[]> = new Map() // accountId -> chats
   private watchedChats: Map<string, ChatWatchCallback[]> = new Map() // chatKey -> callbacks
   private scheduledMessages: ScheduledMessage[] = []
   private schedulerInterval: NodeJS.Timeout | null = null
-  
+
   // UI Bridge reference (set externally)
   private uiBridge: any = null
 
@@ -136,7 +136,8 @@ export class DeepTreeEchoChatManager {
    */
   public async listChats(accountId: number): Promise<ChatSummary[]> {
     try {
-      const chatListEntries = await BackendRemote.rpc.getChatlistEntries(
+      // getChatlistEntries returns number[] - array of chat IDs
+      const chatListIds = await BackendRemote.rpc.getChatlistEntries(
         accountId,
         0, // listFlags - 0 for normal chats
         null, // queryStr
@@ -145,33 +146,31 @@ export class DeepTreeEchoChatManager {
 
       const summaries: ChatSummary[] = []
 
-      for (const entry of chatListEntries) {
-        if (entry.kind === 'ChatListItem') {
-          try {
-            const chatInfo = await BackendRemote.rpc.getBasicChatInfo(accountId, entry.id)
-            const lastMsg = await this.getLastMessage(accountId, entry.id)
-            
-            summaries.push({
-              id: entry.id,
-              name: chatInfo.name,
-              isGroup: chatInfo.chatType === 'Group' || chatInfo.chatType === 'Broadcast',
-              isArchived: chatInfo.archived,
-              isMuted: chatInfo.isMuted,
-              unreadCount: 0, // Will be updated from chat list item
-              lastMessageTimestamp: lastMsg?.timestamp || 0,
-              lastMessagePreview: lastMsg?.text?.slice(0, 100) || '',
-              contactIds: [],
-              profileImage: chatInfo.profileImage || undefined,
-            })
-          } catch (err) {
-            log.warn(`Failed to get info for chat ${entry.id}:`, err)
-          }
+      for (const chatId of chatListIds) {
+        try {
+          const chatInfo = await BackendRemote.rpc.getBasicChatInfo(accountId, chatId)
+          const lastMsg = await this.getLastMessage(accountId, chatId)
+
+          summaries.push({
+            id: chatId,
+            name: chatInfo.name,
+            isGroup: chatInfo.chatType === 'Group' || chatInfo.chatType === 'Broadcast',
+            isArchived: chatInfo.archived,
+            isMuted: chatInfo.isMuted,
+            unreadCount: 0, // Will be updated from chat list item
+            lastMessageTimestamp: lastMsg?.timestamp || 0,
+            lastMessagePreview: lastMsg?.text?.slice(0, 100) || '',
+            contactIds: [],
+            profileImage: chatInfo.profileImage || undefined,
+          })
+        } catch (err) {
+          log.warn(`Failed to get info for chat ${chatId}:`, err)
         }
       }
 
       // Cache the results
       this.chatCache.set(accountId.toString(), summaries)
-      
+
       log.info(`Listed ${summaries.length} chats for account ${accountId}`)
       return summaries
     } catch (error) {
@@ -208,7 +207,8 @@ export class DeepTreeEchoChatManager {
    */
   public async searchChats(accountId: number, query: string): Promise<ChatSummary[]> {
     try {
-      const chatListEntries = await BackendRemote.rpc.getChatlistEntries(
+      // getChatlistEntries returns number[] - array of chat IDs
+      const chatListIds = await BackendRemote.rpc.getChatlistEntries(
         accountId,
         0,
         query, // queryStr
@@ -216,11 +216,11 @@ export class DeepTreeEchoChatManager {
       )
 
       const summaries: ChatSummary[] = []
-      for (const entry of chatListEntries) {
-        if (entry.kind === 'ChatListItem') {
-          const chatInfo = await BackendRemote.rpc.getBasicChatInfo(accountId, entry.id)
+      for (const chatId of chatListIds) {
+        try {
+          const chatInfo = await BackendRemote.rpc.getBasicChatInfo(accountId, chatId)
           summaries.push({
-            id: entry.id,
+            id: chatId,
             name: chatInfo.name,
             isGroup: chatInfo.chatType === 'Group' || chatInfo.chatType === 'Broadcast',
             isArchived: chatInfo.archived,
@@ -230,6 +230,8 @@ export class DeepTreeEchoChatManager {
             lastMessagePreview: '',
             contactIds: [],
           })
+        } catch (err) {
+          log.warn(`Failed to get info for chat ${chatId}:`, err)
         }
       }
 
@@ -256,7 +258,7 @@ export class DeepTreeEchoChatManager {
 
       // Get full chat info
       const fullChat = await BackendRemote.rpc.getFullChatById(accountId, chatId)
-      
+
       this.activeChat = {
         accountId,
         chatId,
@@ -322,7 +324,7 @@ export class DeepTreeEchoChatManager {
 
       // Create chat with contact
       const chatId = await BackendRemote.rpc.createChatByContactId(accountId, contactId)
-      
+
       log.info(`Created chat ${chatId} with contact ${contactEmail}`)
       return chatId
     } catch (error) {
@@ -405,7 +407,7 @@ export class DeepTreeEchoChatManager {
     reason: string
   ): string {
     const id = `scheduled-${Date.now()}-${Math.random().toString(36).slice(2)}`
-    
+
     this.scheduledMessages.push({
       id,
       accountId,
@@ -509,7 +511,7 @@ export class DeepTreeEchoChatManager {
   ): Promise<number | null> {
     // Open the chat first
     await this.openChat(accountId, chatId)
-    
+
     // Send response
     return this.sendMessage(accountId, chatId, response)
   }
@@ -523,15 +525,15 @@ export class DeepTreeEchoChatManager {
    */
   public watchChat(accountId: number, chatId: number, callback: ChatWatchCallback): () => void {
     const key = `${accountId}:${chatId}`
-    
+
     if (!this.watchedChats.has(key)) {
       this.watchedChats.set(key, [])
     }
-    
+
     this.watchedChats.get(key)!.push(callback)
-    
+
     log.info(`Started watching chat ${chatId}`)
-    
+
     // Return unwatch function
     return () => {
       const callbacks = this.watchedChats.get(key)
@@ -552,15 +554,15 @@ export class DeepTreeEchoChatManager {
    */
   public watchAllChats(accountId: number, callback: ChatWatchCallback): () => void {
     const key = `${accountId}:*`
-    
+
     if (!this.watchedChats.has(key)) {
       this.watchedChats.set(key, [])
     }
-    
+
     this.watchedChats.get(key)!.push(callback)
-    
+
     log.info(`Started watching all chats for account ${accountId}`)
-    
+
     return () => {
       const callbacks = this.watchedChats.get(key)
       if (callbacks) {
@@ -634,7 +636,7 @@ export class DeepTreeEchoChatManager {
    */
   private async processScheduledMessages(): Promise<void> {
     const now = Date.now()
-    
+
     for (const msg of this.scheduledMessages) {
       if (msg.status === 'pending' && msg.scheduledTime <= now) {
         try {

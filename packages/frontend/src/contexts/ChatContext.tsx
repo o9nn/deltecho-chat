@@ -4,9 +4,15 @@ import { ActionEmitter, KeybindAction } from '../keybindings'
 import useKeyBindingAction from '../hooks/useKeyBindingAction'
 import { markChatAsSeen, saveLastChatId } from '../backend/chat'
 import { BackendRemote } from '../backend-com'
+import { getLogger } from '@deltachat-desktop/shared/logger'
+
+// Deep Tree Echo UI Bridge integration
+import { registerChatContext } from '../components/DeepTreeEchoBot/DeepTreeEchoIntegration'
 
 import type { MutableRefObject, PropsWithChildren } from 'react'
 import type { T } from '@deltachat/jsonrpc-client'
+
+const log = getLogger('renderer/contexts/ChatContext')
 
 export type AlternativeView = 'global-gallery' | null
 
@@ -204,6 +210,28 @@ export const ChatProvider = ({
     unselectChat()
     setAlternativeView('global-gallery')
   })
+
+  // Register with Deep Tree Echo UI Bridge for AI chat orchestration
+  // This allows Deep Tree Echo to interact with chats like a normal user
+  useEffect(() => {
+    if (accountId) {
+      try {
+        registerChatContext(
+          {
+            selectChat,
+            unselectChat,
+            chatId,
+            chatWithLinger,
+          },
+          accountId
+        )
+        log.info('ChatContext registered with Deep Tree Echo UI Bridge')
+      } catch (error) {
+        // Log but don't crash if Deep Tree Echo isn't available
+        log.warn('Failed to register ChatContext with Deep Tree Echo:', error)
+      }
+    }
+  }, [accountId, chatId, chatWithLinger, selectChat, unselectChat])
 
   // Subscribe to events coming from the core
   useEffect(() => {

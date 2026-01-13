@@ -44,7 +44,7 @@ const log = getLogger('render/components/DeepTreeEchoBot/DeepTreeEchoUIBridge')
 /**
  * UI View types
  */
-export type UIView = 
+export type UIView =
   | 'chat-list'
   | 'chat-view'
   | 'settings'
@@ -117,12 +117,12 @@ export type UIBridgeEventListener = (event: UIBridgeEvent) => void
  */
 export class DeepTreeEchoUIBridge {
   private static instance: DeepTreeEchoUIBridge | null = null
-  
+
   // Context references (set by React components)
   private chatContext: ChatContextInterface | null = null
   private dialogContext: DialogContextInterface | null = null
   private accountId: number | null = null
-  
+
   // State
   private currentState: UIState = {
     currentView: 'chat-list',
@@ -133,10 +133,10 @@ export class DeepTreeEchoUIBridge {
     composerText: '',
     isComposerFocused: false,
   }
-  
+
   // Event listeners
   private eventListeners: UIBridgeEventListener[] = []
-  
+
   // Composer reference
   private composerRef: HTMLTextAreaElement | null = null
 
@@ -165,12 +165,12 @@ export class DeepTreeEchoUIBridge {
     this.chatContext = context
     this.accountId = accountId
     this.currentState.activeAccountId = accountId
-    
+
     if (context.chatId) {
       this.currentState.activeChatId = context.chatId
       this.currentState.currentView = 'chat-view'
     }
-    
+
     log.info('ChatContext registered with UI Bridge')
   }
 
@@ -212,13 +212,13 @@ export class DeepTreeEchoUIBridge {
 
     try {
       const result = await this.chatContext.selectChat(accountId, chatId)
-      
+
       if (result) {
         this.currentState.activeChatId = chatId
         this.currentState.currentView = 'chat-view'
         this.emit({ type: 'chat_selected', chatId, accountId })
       }
-      
+
       return result
     } catch (error) {
       log.error('Error selecting chat:', error)
@@ -280,7 +280,7 @@ export class DeepTreeEchoUIBridge {
         ActionEmitter.emitAction(KeybindAction.GlobalGallery_Open)
         break
     }
-    
+
     this.currentState.currentView = view
     this.emit({ type: 'view_changed', view })
   }
@@ -475,7 +475,7 @@ export class DeepTreeEchoUIBridge {
    */
   public on(listener: UIBridgeEventListener): () => void {
     this.eventListeners.push(listener)
-    
+
     return () => {
       const index = this.eventListeners.indexOf(listener)
       if (index > -1) {
@@ -519,7 +519,7 @@ export class DeepTreeEchoUIBridge {
    * Focus chat list
    */
   public focusChatList(): void {
-    ActionEmitter.emitAction(KeybindAction.ChatList_FocusChatList)
+    ActionEmitter.emitAction(KeybindAction.ChatList_FocusItems)
   }
 
   /**

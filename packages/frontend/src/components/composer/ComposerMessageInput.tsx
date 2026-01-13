@@ -4,6 +4,7 @@ import { throttle } from '@deltachat-desktop/shared/util.js'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
 import { getLogger } from '../../../../shared/logger'
 import { DialogContext } from '../../contexts/DialogContext'
+import { registerComposer } from '../DeepTreeEchoBot/DeepTreeEchoIntegration'
 
 const log = getLogger('renderer/composer/ComposerMessageInput')
 
@@ -74,10 +75,19 @@ export default class ComposerMessageInput extends React.Component<
 
   componentDidMount() {
     ActionEmitter.registerHandler(KeybindAction.Composer_Focus, this.focus)
+
+    // Register composer with Deep Tree Echo for AI interaction
+    if (this.textareaRef.current) {
+      registerComposer(this.textareaRef.current)
+      log.debug('Composer registered with Deep Tree Echo UI Bridge')
+    }
   }
 
   componentWillUnmount() {
     ActionEmitter.unRegisterHandler(KeybindAction.Composer_Focus, this.focus)
+
+    // Unregister composer from Deep Tree Echo
+    registerComposer(null)
   }
 
   static getDerivedStateFromProps(
@@ -164,7 +174,7 @@ export default class ComposerMessageInput extends React.Component<
     if (this.textareaRef.current == null) {
       log.warn(
         'Tried to move the cursor position to the end, ' +
-          'but textareaRef.current is',
+        'but textareaRef.current is',
         this.textareaRef.current
       )
       return

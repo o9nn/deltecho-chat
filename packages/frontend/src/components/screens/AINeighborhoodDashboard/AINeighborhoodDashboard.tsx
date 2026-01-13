@@ -17,6 +17,10 @@ import {
   Zap,
   Heart,
   BookOpen,
+  Search,
+  Loader2,
+  Clock,
+  Tag,
 } from 'lucide-react'
 import {
   DeepTreeEchoConnector,
@@ -189,9 +193,8 @@ const AINeighborhoodDashboard: React.FC = () => {
             {aiHomes.map(home => (
               <div
                 key={home.id}
-                className={`ai-home ${
-                  selectedHome === home.id ? 'selected' : ''
-                }`}
+                className={`ai-home ${selectedHome === home.id ? 'selected' : ''
+                  }`}
                 onClick={() => handleHomeClick(home.id)}
                 style={{ borderColor: home.color }}
               >

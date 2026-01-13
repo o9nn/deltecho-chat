@@ -314,3 +314,22 @@ interface UnifiedMessage {
 ---
 
 *This task list is derived from INTEGRATION_FRAGMENTS.md and should be updated as integration progresses.*
+
+---
+
+## External Repository Components
+
+See [EXTERNAL_REPO_COMPONENTS.md](./EXTERNAL_REPO_COMPONENTS.md) for detailed analysis of:
+
+| Repository | Key Value | Priority |
+|------------|-----------|----------|
+| **moeru-ai/airi** | AI companion framework, real-time voice, game interaction | 🔴 High |
+| **Live2D/Cubism** | Avatar animation SDK for visual AI representation | 🔴 High |
+| **DaedalOS** | Web desktop environment, UI patterns | 🟡 Medium |
+| **ARM NN / ACL** | Neural network inference on ARM devices | 🟡 Medium |
+| **dovecot/core** | Mail server integration patterns | 🟢 Low |
+
+### Recommended New Packages
+
+- [ ] `packages/avatar` - Live2D Cubism integration for Deep Tree Echo visualization
+- [ ] `packages/voice` - Voice synthesis/recognition from airi patterns

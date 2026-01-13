@@ -11,8 +11,8 @@
 
 import React, { useState, useEffect, useCallback } from 'react'
 import { getLogger } from '../../../../shared/logger'
-import { 
-  proactiveMessaging, 
+import {
+  proactiveMessaging,
   ProactiveTrigger,
   TriggerType,
   EventType,
@@ -37,13 +37,15 @@ interface TriggerFormData {
   intervalMinutes?: number
   // Event
   eventType?: EventType
-  // Condition
-  conditionType?: string
-  conditionValue?: number
+  // Condition - structure to match ProactiveTrigger
+  condition?: {
+    type: 'unread_count' | 'silence_duration' | 'custom'
+    threshold?: number
+  }
   // Follow-up
   followUpDelayMinutes?: number
-  // Target
-  targetType: 'all_chats' | 'specific_chat' | 'new_contacts' | 'active_chats'
+  // Target - must match ProactiveTrigger.targetType
+  targetType: 'specific_chat' | 'all_chats' | 'unread_chats' | 'new_contacts'
   targetChatId?: number
   targetAccountId?: number
   // Message
@@ -96,7 +98,7 @@ const TriggerManager: React.FC<TriggerManagerProps> = ({ accountId, onClose }) =
   }
 
   // Filter triggers by search
-  const filteredTriggers = triggers.filter(t => 
+  const filteredTriggers = triggers.filter(t =>
     t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     t.description.toLowerCase().includes(searchQuery.toLowerCase())
   )
@@ -127,14 +129,12 @@ const TriggerManager: React.FC<TriggerManagerProps> = ({ accountId, onClose }) =
       scheduledTime: trigger.scheduledTime,
       intervalMinutes: trigger.intervalMinutes,
       eventType: trigger.eventType,
-      conditionType: trigger.conditionType,
-      conditionValue: trigger.conditionValue,
-      followUpDelayMinutes: trigger.followUpDelayMinutes,
+      condition: trigger.condition,
       targetType: trigger.targetType,
       targetChatId: trigger.targetChatId,
       targetAccountId: trigger.targetAccountId,
       messageTemplate: trigger.messageTemplate,
-      useAI: trigger.useAI,
+      useAI: trigger.useAI ?? false,
       aiPrompt: trigger.aiPrompt,
       maxTriggers: trigger.maxTriggers,
       cooldownMinutes: trigger.cooldownMinutes,
@@ -697,7 +697,7 @@ const TriggerManager: React.FC<TriggerManagerProps> = ({ accountId, onClose }) =
                 <>
                   <div className='form-section'>
                     <div className='form-section-title'>Basic Information</div>
-                    
+
                     <div className='form-group'>
                       <label className='form-label'>Name</label>
                       <input
@@ -726,11 +726,11 @@ const TriggerManager: React.FC<TriggerManagerProps> = ({ accountId, onClose }) =
                           Enable or disable this trigger
                         </div>
                       </div>
-                      <div 
+                      <div
                         className={`toggle-switch ${formData.enabled ? 'active' : ''}`}
                         onClick={() => handleFormChange('enabled', !formData.enabled)}
                       >
-                        <input type='checkbox' checked={formData.enabled} onChange={() => {}} />
+                        <input type='checkbox' checked={formData.enabled} onChange={() => { }} />
                         <div className='toggle-slider'></div>
                       </div>
                     </div>
@@ -738,7 +738,7 @@ const TriggerManager: React.FC<TriggerManagerProps> = ({ accountId, onClose }) =
 
                   <div className='form-section'>
                     <div className='form-section-title'>Trigger Type</div>
-                    
+
                     <div className='type-selector'>
                       {(['scheduled', 'interval', 'event', 'condition', 'follow_up', 'greeting'] as TriggerType[]).map(type => (
                         <div
@@ -810,7 +810,7 @@ const TriggerManager: React.FC<TriggerManagerProps> = ({ accountId, onClose }) =
 
                   <div className='form-section'>
                     <div className='form-section-title'>Target</div>
-                    
+
                     <div className='form-group'>
                       <label className='form-label'>Target Type</label>
                       <select
@@ -844,7 +844,7 @@ const TriggerManager: React.FC<TriggerManagerProps> = ({ accountId, onClose }) =
 
                   <div className='form-section'>
                     <div className='form-section-title'>Message</div>
-                    
+
                     <div className='form-group'>
                       <label className='form-label'>Message Template</label>
                       <textarea
@@ -862,11 +862,11 @@ const TriggerManager: React.FC<TriggerManagerProps> = ({ accountId, onClose }) =
                           Use AI to generate contextual messages
                         </div>
                       </div>
-                      <div 
+                      <div
                         className={`toggle-switch ${formData.useAI ? 'active' : ''}`}
                         onClick={() => handleFormChange('useAI', !formData.useAI)}
                       >
-                        <input type='checkbox' checked={formData.useAI} onChange={() => {}} />
+                        <input type='checkbox' checked={formData.useAI} onChange={() => { }} />
                         <div className='toggle-slider'></div>
                       </div>
                     </div>
@@ -886,7 +886,7 @@ const TriggerManager: React.FC<TriggerManagerProps> = ({ accountId, onClose }) =
 
                   <div className='form-section'>
                     <div className='form-section-title'>Limits</div>
-                    
+
                     <div className='form-row'>
                       <div className='form-group'>
                         <label className='form-label'>Max Triggers (0 = unlimited)</label>
@@ -946,9 +946,12 @@ const TriggerManager: React.FC<TriggerManagerProps> = ({ accountId, onClose }) =
                         </div>
                       )}
                       <div className='detail-row'>
-                        <span className='detail-label'>Created</span>
+                        <span className='detail-label'>Last Triggered</span>
                         <span className='detail-value'>
-                          {new Date(selectedTrigger.createdAt).toLocaleString()}
+                          {selectedTrigger.lastTriggered
+                            ? new Date(selectedTrigger.lastTriggered).toLocaleString()
+                            : 'Never'
+                          }
                         </span>
                       </div>
                     </div>
@@ -980,11 +983,11 @@ const TriggerManager: React.FC<TriggerManagerProps> = ({ accountId, onClose }) =
                           Enable or disable this trigger
                         </div>
                       </div>
-                      <div 
+                      <div
                         className={`toggle-switch ${selectedTrigger.enabled ? 'active' : ''}`}
                         onClick={() => handleToggleEnabled(selectedTrigger.id, !selectedTrigger.enabled)}
                       >
-                        <input type='checkbox' checked={selectedTrigger.enabled} onChange={() => {}} />
+                        <input type='checkbox' checked={selectedTrigger.enabled} onChange={() => { }} />
                         <div className='toggle-slider'></div>
                       </div>
                     </div>
