@@ -37,6 +37,8 @@ import {
   ActiveChatState,
   ScheduledMessage,
   ChatWatchCallback,
+  ContactSummary,
+  MessageSummary,
 } from './DeepTreeEchoChatManager'
 
 // Import UI bridge (NEW)
@@ -216,6 +218,8 @@ export type {
   ActiveChatState,
   ScheduledMessage as ChatScheduledMessage,
   ChatWatchCallback,
+  ContactSummary,
+  MessageSummary,
 }
 
 // ============================================================

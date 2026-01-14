@@ -78,6 +78,38 @@ export interface ScheduledMessage {
 }
 
 /**
+ * Contact summary for Deep Tree Echo's awareness
+ */
+export interface ContactSummary {
+  id: number
+  email: string
+  name: string
+  displayName: string
+  profileImage?: string
+  lastSeen?: number
+  isBlocked: boolean
+  isVerified: boolean
+  status?: string
+}
+
+/**
+ * Message summary for chat history
+ */
+export interface MessageSummary {
+  id: number
+  text: string
+  fromId: number
+  fromName: string
+  timestamp: number
+  isOutgoing: boolean
+  isInfo: boolean
+  hasAttachment: boolean
+  chatId?: number
+  file?: string
+  html?: string
+}
+
+/**
  * Chat watch callback
  */
 export type ChatWatchCallback = (
@@ -653,6 +685,346 @@ export class DeepTreeEchoChatManager {
     this.scheduledMessages = this.scheduledMessages.filter(
       m => m.status === 'pending' || (m.status === 'sent' && now - m.scheduledTime < 3600000)
     )
+  }
+
+  // ============================================================
+  // CONTACT MANAGEMENT (NEW)
+  // ============================================================
+
+  /**
+   * List all contacts for an account
+   */
+  public async listContacts(accountId: number): Promise<ContactSummary[]> {
+    try {
+      // Get all contact IDs first (much faster)
+      const contactIds = await BackendRemote.rpc.getContactIds(accountId, 0, null)
+
+      // Then get contact details
+      const contacts = await BackendRemote.rpc.getContactsByIds(accountId, contactIds)
+
+      const contactSummaries: ContactSummary[] = []
+
+      for (const [id, contact] of Object.entries(contacts)) {
+        if (contact) {
+          contactSummaries.push({
+            id: parseInt(id, 10),
+            email: contact.address,
+            name: contact.name,
+            displayName: contact.displayName,
+            profileImage: contact.profileImage || undefined,
+            lastSeen: contact.lastSeen,
+            isBlocked: contact.isBlocked,
+            isVerified: contact.isVerified,
+          })
+        }
+      }
+
+      log.info(`Listed ${contactSummaries.length} contacts for account ${accountId}`)
+      return contactSummaries
+    } catch (error) {
+      log.error('Error listing contacts:', error)
+      return []
+    }
+  }
+
+  /**
+   * Get detailed contact information
+   */
+  public async getContactInfo(accountId: number, contactId: number): Promise<{
+    id: number
+    email: string
+    name: string
+    displayName: string
+    profileImage?: string
+    lastSeen?: number
+    isBlocked: boolean
+    isVerified: boolean
+    status?: string
+  } | null> {
+    try {
+      const contact = await BackendRemote.rpc.getContact(accountId, contactId)
+
+      return {
+        id: contactId,
+        email: contact.address,
+        name: contact.name,
+        displayName: contact.displayName,
+        profileImage: contact.profileImage || undefined,
+        lastSeen: contact.lastSeen,
+        isBlocked: contact.isBlocked,
+        isVerified: contact.isVerified,
+        status: contact.status || undefined,
+      }
+    } catch (error) {
+      log.error(`Error getting contact ${contactId}:`, error)
+      return null
+    }
+  }
+
+  /**
+   * Create a new contact
+   */
+  public async createContact(accountId: number, email: string, name?: string): Promise<number | null> {
+    try {
+      const contactId = await BackendRemote.rpc.createContact(accountId, email, name || '')
+      log.info(`Created contact ${contactId} for ${email}`)
+      return contactId
+    } catch (error) {
+      log.error(`Error creating contact for ${email}:`, error)
+      return null
+    }
+  }
+
+  /**
+   * Search for contacts by name or email
+   */
+  public async searchContacts(accountId: number, query: string): Promise<{
+    id: number
+    email: string
+    name: string
+    displayName: string
+  }[]> {
+    try {
+      // Get contact IDs matching query
+      const contactIds = await BackendRemote.rpc.getContactIds(accountId, 0, query)
+
+      // Get contact details
+      const contacts = await BackendRemote.rpc.getContactsByIds(accountId, contactIds)
+
+      const results: { id: number; email: string; name: string; displayName: string }[] = []
+
+      for (const [id, contact] of Object.entries(contacts)) {
+        if (contact) {
+          results.push({
+            id: parseInt(id, 10),
+            email: contact.address,
+            name: contact.name,
+            displayName: contact.displayName,
+          })
+        }
+      }
+
+      return results
+    } catch (error) {
+      log.error('Error searching contacts:', error)
+      return []
+    }
+  }
+
+  // ============================================================
+  // CHAT HISTORY ACCESS (NEW)
+  // ============================================================
+
+  /**
+   * Get chat history (recent messages)
+   */
+  public async getChatHistory(
+    accountId: number,
+    chatId: number,
+    limit: number = 50,
+    beforeMessageId?: number
+  ): Promise<MessageSummary[]> {
+    try {
+      // Get message IDs for the chat
+      const messageIds = await BackendRemote.rpc.getMessageIds(
+        accountId,
+        chatId,
+        false, // include info/special messages
+        false  // include markers
+      )
+
+      // Limit the messages (most recent first)
+      let idsToFetch: number[]
+
+      if (beforeMessageId) {
+        // Find the index of beforeMessageId and take messages before it
+        const beforeIndex = messageIds.indexOf(beforeMessageId)
+        if (beforeIndex > 0) {
+          idsToFetch = messageIds.slice(Math.max(0, beforeIndex - limit), beforeIndex)
+        } else {
+          idsToFetch = messageIds.slice(-limit)
+        }
+      } else {
+        // Take the most recent messages
+        idsToFetch = messageIds.slice(-limit)
+      }
+
+      const messages = []
+
+      for (const msgId of idsToFetch) {
+        try {
+          const msg = await BackendRemote.rpc.getMessage(accountId, msgId)
+
+          // Get sender info
+          let fromName = 'Unknown'
+          if (msg.fromId) {
+            try {
+              const contact = await BackendRemote.rpc.getContact(accountId, msg.fromId)
+              fromName = contact.displayName || contact.name || contact.address
+            } catch {
+              // Use default
+            }
+          }
+
+          messages.push({
+            id: msgId,
+            text: msg.text || '',
+            fromId: msg.fromId,
+            fromName,
+            timestamp: msg.timestamp,
+            isOutgoing: msg.fromId === 1,  // fromId 1 is the logged-in user
+            isInfo: msg.isInfo || false,
+            hasAttachment: !!(msg.file || msg.webxdcInfo),
+          })
+        } catch (err) {
+          log.warn(`Failed to get message ${msgId}:`, err)
+        }
+      }
+
+      log.info(`Retrieved ${messages.length} messages from chat ${chatId}`)
+      return messages
+    } catch (error) {
+      log.error(`Error getting chat history for ${chatId}:`, error)
+      return []
+    }
+  }
+
+  /**
+   * Search within a specific chat
+   */
+  public async searchInChat(
+    accountId: number,
+    chatId: number,
+    query: string,
+    limit: number = 20
+  ): Promise<{
+    id: number
+    text: string
+    fromName: string
+    timestamp: number
+    matchCount: number
+  }[]> {
+    try {
+      // Get all message IDs
+      const messageIds = await BackendRemote.rpc.getMessageIds(accountId, chatId, false, false)
+
+      const results = []
+      const queryLower = query.toLowerCase()
+
+      for (const msgId of messageIds) {
+        if (results.length >= limit) break
+
+        try {
+          const msg = await BackendRemote.rpc.getMessage(accountId, msgId)
+
+          if (msg.text && msg.text.toLowerCase().includes(queryLower)) {
+            // Get sender info
+            let fromName = 'Unknown'
+            if (msg.fromId) {
+              try {
+                const contact = await BackendRemote.rpc.getContact(accountId, msg.fromId)
+                fromName = contact.displayName || contact.name || contact.address
+              } catch {
+                // Use default
+              }
+            }
+
+            // Count matches
+            const regex = new RegExp(query, 'gi')
+            const matches = msg.text.match(regex)
+
+            results.push({
+              id: msgId,
+              text: msg.text,
+              fromName,
+              timestamp: msg.timestamp,
+              matchCount: matches ? matches.length : 0,
+            })
+          }
+        } catch (err) {
+          // Skip messages that can't be read
+        }
+      }
+
+      log.info(`Found ${results.length} messages matching "${query}" in chat ${chatId}`)
+      return results
+    } catch (error) {
+      log.error(`Error searching in chat ${chatId}:`, error)
+      return []
+    }
+  }
+
+  /**
+   * Get a specific message by ID
+   */
+  public async getMessageById(accountId: number, messageId: number): Promise<{
+    id: number
+    text: string
+    fromId: number
+    fromName: string
+    timestamp: number
+    isOutgoing: boolean
+    chatId: number
+    file?: string
+  } | null> {
+    try {
+      const msg = await BackendRemote.rpc.getMessage(accountId, messageId)
+
+      // Get sender info
+      let fromName = 'Unknown'
+      if (msg.fromId) {
+        try {
+          const contact = await BackendRemote.rpc.getContact(accountId, msg.fromId)
+          fromName = contact.displayName || contact.name || contact.address
+        } catch {
+          // Use default
+        }
+      }
+
+      return {
+        id: messageId,
+        text: msg.text || '',
+        fromId: msg.fromId,
+        fromName,
+        timestamp: msg.timestamp,
+        isOutgoing: msg.fromId === 1,  // fromId 1 is the logged-in user
+        chatId: msg.chatId,
+        file: msg.file || undefined,
+      }
+    } catch (error) {
+      log.error(`Error getting message ${messageId}:`, error)
+      return null
+    }
+  }
+
+  /**
+   * Get conversation context (for AI processing)
+   * Returns recent messages formatted for LLM context
+   */
+  public async getConversationContext(
+    accountId: number,
+    chatId: number,
+    messageCount: number = 20
+  ): Promise<string> {
+    try {
+      const messages = await this.getChatHistory(accountId, chatId, messageCount)
+
+      if (messages.length === 0) {
+        return 'No previous messages in this conversation.'
+      }
+
+      // Format messages for context
+      const formatted = messages.map(msg => {
+        const timestamp = new Date(msg.timestamp * 1000).toLocaleTimeString()
+        const direction = msg.isOutgoing ? '[You]' : `[${msg.fromName}]`
+        return `${timestamp} ${direction}: ${msg.text}`
+      })
+
+      return formatted.join('\n')
+    } catch (error) {
+      log.error(`Error getting conversation context for ${chatId}:`, error)
+      return 'Unable to retrieve conversation context.'
+    }
   }
 
   /**

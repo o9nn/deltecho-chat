@@ -73,17 +73,27 @@
 
 ### Task 4.1: Contact List Access
 
-- [ ] **Status**: ⬜ TODO
+- [x] **Status**: ✅ Complete
 - **File**: `DeepTreeEchoChatManager.ts`
 - **Effort**: 1 hour
-- Add `listContacts()`, `getContactInfo()`, `createContact()`
+- **Methods Added**:
+  - `listContacts(accountId)` - List all contacts with details
+  - `getContactInfo(accountId, contactId)` - Get detailed contact info
+  - `createContact(accountId, email, name)` - Create new contact
+  - `searchContacts(accountId, query)` - Search contacts by name/email
+- **Completed**: 2026-01-14
 
 ### Task 4.2: Chat History Access
 
-- [ ] **Status**: ⬜ TODO
+- [x] **Status**: ✅ Complete
 - **File**: `DeepTreeEchoChatManager.ts`
 - **Effort**: 45 minutes
-- Add `getChatHistory()`, `searchInChat()`
+- **Methods Added**:
+  - `getChatHistory(accountId, chatId, limit, beforeMsgId)` - Get recent messages
+  - `searchInChat(accountId, chatId, query, limit)` - Search within chat
+  - `getMessageById(accountId, messageId)` - Get specific message
+  - `getConversationContext(accountId, chatId, count)` - Get LLM-formatted context
+- **Completed**: 2026-01-14
 
 ---
 
@@ -94,8 +104,8 @@
 | Phase 1 | 2 | 2 | 100% |
 | Phase 2 | 2 | 2 | 100% |
 | Phase 3 | 2 | 0 | 0% |
-| Phase 4 | 2 | 0 | 0% |
-| **Total** | **8** | **4** | **50%** |
+| Phase 4 | 2 | 2 | 100% |
+| **Total** | **8** | **6** | **75%** |
 
 ---
 
@@ -109,6 +119,8 @@
 | 2026-01-14 | Task 2.1 | Created DialogAdapter for type-to-component mapping |
 | 2026-01-14 | Task 2.2 | Added keyboard navigation methods to UI Bridge |
 | 2026-01-14 | External Analysis | Created EXTERNAL_REPO_ANALYSIS.md with airi/moeru-ai features |
+| 2026-01-14 | Task 4.1 | Added contact management: listContacts, getContactInfo, createContact, searchContacts |
+| 2026-01-14 | Task 4.2 | Added chat history: getChatHistory, searchInChat, getMessageById, getConversationContext |
 
 ---
 
