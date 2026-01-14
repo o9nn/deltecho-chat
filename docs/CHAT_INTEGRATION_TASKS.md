@@ -37,9 +37,19 @@
 
 ### Task 2.2: Verify Keyboard Navigation
 
-- [ ] **Status**: ⬜ TODO
+- [x] **Status**: ✅ Complete
 - **Effort**: 30 minutes
-- Test all keyboard actions via UI Bridge
+- Added keyboard action convenience methods to UI Bridge
+- **New Methods Added**:
+  - `openNewChat()` - Opens new chat dialog
+  - `openSettings()` - Opens settings panel
+  - `toggleAINeighborhood()` - Shows/hides AI Neighborhood
+  - `openKeyboardShortcuts()` - Shows keyboard shortcuts cheatsheet
+  - `messageListPageUp/Down()` - Scrolls message list
+  - `searchInChat()` - Searches within current chat
+  - `exitSearch()` - Clears search and returns to composer
+  - `getAvailableKeyboardActions()` - Returns list of all available actions
+- **Completed**: 2026-01-14
 
 ---
 
@@ -82,10 +92,10 @@
 | Phase | Tasks | Complete | Percentage |
 |-------|-------|----------|------------|
 | Phase 1 | 2 | 2 | 100% |
-| Phase 2 | 2 | 1 | 50% |
+| Phase 2 | 2 | 2 | 100% |
 | Phase 3 | 2 | 0 | 0% |
 | Phase 4 | 2 | 0 | 0% |
-| **Total** | **8** | **3** | **37.5%** |
+| **Total** | **8** | **4** | **50%** |
 
 ---
 
@@ -97,6 +107,8 @@
 | 2026-01-14 | Task 1.1 | Registered DialogContext with UI Bridge |
 | 2026-01-14 | Task 1.2 | Found already implemented in ComposerMessageInput |
 | 2026-01-14 | Task 2.1 | Created DialogAdapter for type-to-component mapping |
+| 2026-01-14 | Task 2.2 | Added keyboard navigation methods to UI Bridge |
+| 2026-01-14 | External Analysis | Created EXTERNAL_REPO_ANALYSIS.md with airi/moeru-ai features |
 
 ---
 

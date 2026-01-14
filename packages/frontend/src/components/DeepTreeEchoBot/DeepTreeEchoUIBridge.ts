@@ -536,6 +536,86 @@ export class DeepTreeEchoUIBridge {
     ActionEmitter.emitAction(KeybindAction.ChatList_SelectPreviousChat)
   }
 
+  /**
+   * Open new chat dialog
+   */
+  public openNewChat(): void {
+    ActionEmitter.emitAction(KeybindAction.NewChat_Open)
+  }
+
+  /**
+   * Open settings
+   */
+  public openSettings(): void {
+    ActionEmitter.emitAction(KeybindAction.Settings_Open)
+  }
+
+  /**
+   * Toggle AI Neighborhood view
+   */
+  public toggleAINeighborhood(): void {
+    ActionEmitter.emitAction(KeybindAction.AINeighborhood_Toggle)
+  }
+
+  /**
+   * Open keyboard shortcuts cheatsheet
+   */
+  public openKeyboardShortcuts(): void {
+    ActionEmitter.emitAction(KeybindAction.KeybindingCheatSheet_Open)
+  }
+
+  /**
+   * Page up in message list
+   */
+  public messageListPageUp(): void {
+    ActionEmitter.emitAction(KeybindAction.MessageList_PageUp)
+  }
+
+  /**
+   * Page down in message list
+   */
+  public messageListPageDown(): void {
+    ActionEmitter.emitAction(KeybindAction.MessageList_PageDown)
+  }
+
+  /**
+   * Search within current chat
+   */
+  public searchInChat(): void {
+    ActionEmitter.emitAction(KeybindAction.ChatList_SearchInChat)
+  }
+
+  /**
+   * Clear search and return to composer
+   */
+  public exitSearch(): void {
+    ActionEmitter.emitAction(KeybindAction.ChatList_ExitSearch)
+  }
+
+  /**
+   * Get all available keyboard actions
+   * (Useful for AI to discover capabilities)
+   */
+  public getAvailableKeyboardActions(): string[] {
+    return [
+      'openSearch',
+      'focusChatList',
+      'selectNextChat',
+      'selectPreviousChat',
+      'openNewChat',
+      'openSettings',
+      'toggleAINeighborhood',
+      'openKeyboardShortcuts',
+      'messageListPageUp',
+      'messageListPageDown',
+      'searchInChat',
+      'exitSearch',
+      'focusComposer',
+      'showArchivedChats',
+      'showNormalChats',
+    ]
+  }
+
   // ============================================================
   // CLEANUP
   // ============================================================
