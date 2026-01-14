@@ -59,5 +59,26 @@ export {
     type LifecycleEvent,
 } from './integration/lifecycle.js';
 
+// Transport layer
+export {
+    // Types
+    type TransportMode,
+    type TransportConfig,
+    type MCPRequest,
+    type MCPResponse,
+    type MCPError,
+    type Transport,
+    ErrorCodes,
+    // Protocol handler
+    ProtocolHandler,
+    createProtocolHandler,
+    // Transports
+    StdioTransport,
+    createStdioTransport,
+    runStdioServer,
+    type StdioTransportConfig,
+} from './transport/index.js';
+
 // Types
 export * from './types.js';
+

@@ -5,11 +5,18 @@
     "type": "module",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
+    "bin": {
+        "deep-tree-echo-mcp": "./dist/bin/mcp-server.js"
+    },
     "scripts": {
         "build": "tsc",
         "dev": "tsc --watch",
         "test": "vitest",
-        "lint": "eslint src"
+        "test:run": "vitest run",
+        "test:coverage": "vitest run --coverage",
+        "lint": "eslint src",
+        "start": "node dist/bin/mcp-server.js",
+        "start:stdio": "node dist/bin/mcp-server.js --stdio"
     },
     "dependencies": {
         "@modelcontextprotocol/sdk": "^1.0.0",
@@ -21,5 +28,18 @@
         "@types/node": "^20.10.0",
         "typescript": "^5.3.0",
         "vitest": "^1.1.0"
-    }
+    },
+    "files": [
+        "dist",
+        "README.md"
+    ],
+    "keywords": [
+        "mcp",
+        "model-context-protocol",
+        "aar",
+        "agent",
+        "arena",
+        "relation",
+        "deep-tree-echo"
+    ]
 }
