@@ -8,31 +8,72 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { AgentMCPServer, createAgentMCPServer } from '../../agent-mcp/index.js';
 import type { AgentMembrane } from 'deep-tree-echo-orchestrator/aar';
 
-// Create a mock AgentMembrane
+// Create a mock AgentMembrane with complete state shape
 function createMockAgentMembrane(): AgentMembrane {
+    const socialMemoryMap = new Map([
+        ['user-1', {
+            name: 'User One',
+            relationship: 'friend',
+            trustLevel: 0.8,
+            familiarity: 0.7,
+            observedTraits: ['curious', 'thoughtful'],
+            interactionSummary: 'Several meaningful conversations',
+            lastInteraction: Date.now() - 100000,
+        }],
+    ]);
+
     return {
         getState: vi.fn(() => ({
             dominantFacet: 'wisdom',
             facets: {
-                wisdom: 0.8,
-                playfulness: 0.6,
-                nurturing: 0.7,
-                analytical: 0.5,
-                creative: 0.65,
+                wisdom: { activation: 0.8, behaviors: ['thoughtful', 'reflective'] },
+                curiosity: { activation: 0.6, behaviors: ['questioning', 'exploring'] },
+                compassion: { activation: 0.7, behaviors: ['empathetic', 'caring'] },
+                playfulness: { activation: 0.5, behaviors: ['light', 'humorous'] },
+                determination: { activation: 0.4, behaviors: ['focused', 'persistent'] },
+                authenticity: { activation: 0.65, behaviors: ['genuine', 'honest'] },
+                protector: { activation: 0.3, behaviors: ['careful', 'vigilant'] },
+                transcendence: { activation: 0.4, behaviors: ['spiritual', 'connected'] },
+            },
+            emotionalState: {
+                valence: 0.5,
+                arousal: 0.4,
+                dominance: 0.6,
             },
             engagementLevel: 0.75,
-            identity: {
-                name: 'DeepTreeEcho',
-                coreValues: ['truth', 'curiosity', 'compassion'],
-                voiceStyle: 'thoughtful and warm',
+            characterGrowth: {
+                experiencePoints: 100,
+                wisdomGained: 10,
+                connectionsFormed: 5,
+                narrativesContributed: 3,
             },
-            socialMemory: new Map([
-                ['user-1', { trust: 0.8, history: [], rapport: 0.7 }],
-            ]),
-            transactions: [
-                { id: 'tx-1', type: 'dialogue', timestamp: Date.now() },
+            socialMemory: socialMemoryMap,
+            transactionalMemory: [
+                { id: 'tx-1', type: 'dialogue', status: 'fulfilled', timestamp: Date.now() },
             ],
         })),
+        getIdentity: vi.fn(() => ({
+            name: 'DeepTreeEcho',
+            soulSignature: 'echo-soul-001',
+            energy: 0.85,
+            coherence: 0.80,
+            coreValues: ['truth', 'curiosity', 'compassion'],
+            voiceStyle: 'thoughtful and warm',
+        })),
+        getSocialMemory: vi.fn((participantId: string) => {
+            if (participantId === 'user-1') {
+                return {
+                    name: 'User One',
+                    relationship: 'friend',
+                    trustLevel: 0.8,
+                    familiarity: 0.7,
+                    observedTraits: ['curious', 'thoughtful'],
+                    interactionSummary: 'Several meaningful conversations',
+                    lastInteraction: Date.now() - 100000,
+                };
+            }
+            return null;
+        }),
         activateFacet: vi.fn(),
         evolve: vi.fn(),
         participate: vi.fn().mockResolvedValue({
@@ -43,13 +84,9 @@ function createMockAgentMembrane(): AgentMembrane {
             socialUpdates: new Map(),
         }),
         updateSocialMemory: vi.fn(),
-        getIdentity: vi.fn(() => ({
-            name: 'DeepTreeEcho',
-            coreValues: ['truth', 'curiosity', 'compassion'],
-        })),
         getFacets: vi.fn(() => ({
-            wisdom: 0.8,
-            playfulness: 0.6,
+            wisdom: { activation: 0.8, behaviors: ['thoughtful', 'reflective'] },
+            curiosity: { activation: 0.6, behaviors: ['questioning', 'exploring'] },
         })),
     } as unknown as AgentMembrane;
 }
@@ -91,12 +128,12 @@ describe('AgentMCPServer', () => {
 
     describe('Virtual Models (Inverted Mirror)', () => {
         it('should have a virtual agent model (Vi)', () => {
-            const vi = server.getVirtualAgent();
+            const virtualAgent = server.getVirtualAgent();
 
-            expect(vi).toBeDefined();
-            expect(vi.selfStory).toBeDefined();
-            expect(vi.selfImage).toBeDefined();
-            expect(vi.perceivedCapabilities).toBeDefined();
+            expect(virtualAgent).toBeDefined();
+            expect(virtualAgent.selfStory).toBeDefined();
+            expect(virtualAgent.selfImage).toBeDefined();
+            expect(virtualAgent.perceivedCapabilities).toBeDefined();
         });
 
         it('should have virtual arena inside virtual agent (Vo inside Vi)', () => {

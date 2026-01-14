@@ -9,32 +9,82 @@ import { ArenaMCPServer, createArenaMCPServer } from '../../arena-mcp/index.js';
 import type { ArenaMembrane } from 'deep-tree-echo-orchestrator/aar';
 import type { AgentReference } from '../../types.js';
 
-// Create a mock ArenaMembrane
+// Create a mock ArenaMembrane with complete state shape
 function createMockArenaMembrane(): ArenaMembrane {
     return {
         getState: vi.fn(() => ({
             phases: {
-                engagement: { intensity: 0.8, duration: 1000 },
-                exploration: { intensity: 0.5, duration: 500 },
-                resolution: { intensity: 0.2, duration: 200 },
+                origin: { intensity: 0.3, storyElements: ['beginning'], name: 'Origin' },
+                journey: { intensity: 0.4, storyElements: ['travel'], name: 'Journey' },
+                arrival: { intensity: 0.5, storyElements: ['destination'], name: 'Arrival' },
+                situation: { intensity: 0.6, storyElements: ['context'], name: 'Situation' },
+                engagement: { intensity: 0.8, storyElements: ['action'], name: 'Engagement' },
+                culmination: { intensity: 0.4, storyElements: ['peak'], name: 'Culmination' },
+                possibility: { intensity: 0.5, storyElements: ['options'], name: 'Possibility' },
+                trajectory: { intensity: 0.6, storyElements: ['direction'], name: 'Trajectory' },
+                destiny: { intensity: 0.3, storyElements: ['fate'], name: 'Destiny' },
             },
             coherence: 0.75,
-            frames: [
-                { id: 'frame-1', content: 'Test frame', timestamp: Date.now() },
+            yggdrasilReservoir: [
+                { id: 'lore-1', content: 'Test lore', category: 'wisdom', weight: 0.8, tags: ['test'] },
             ],
-            reservoir: {
-                entries: [
-                    { id: 'lore-1', content: 'Test lore', tags: ['test'] },
-                ],
+            globalThreads: ['Main thread'],
+            currentFrameId: 'frame-1',
+            gestaltProgress: {
+                patternsRecognized: 5,
+                emergentInsights: 3,
+                narrativeIntegration: 0.7,
             },
-            threads: [
-                { id: 'thread-1', participants: ['agent-1'], messages: [] },
-            ],
         })),
+        getActiveFrames: vi.fn(() => [
+            {
+                frameId: 'frame-1',
+                title: 'Test Frame',
+                messageCount: 5,
+                status: 'active',
+                timestamp: Date.now(),
+                participants: ['user', 'agent'],
+                narrativeContext: {
+                    activePhases: ['engagement'],
+                    storyThreads: [],
+                    thematicElements: [],
+                },
+            },
+        ]),
         transitionPhase: vi.fn(),
-        createFrame: vi.fn().mockReturnValue({ id: 'new-frame', timestamp: Date.now() }),
-        addLore: vi.fn(),
-        getFrame: vi.fn((id: string) => ({ id, content: 'Frame content', timestamp: Date.now() })),
+        createFrame: vi.fn().mockReturnValue({
+            frameId: 'new-frame',
+            title: 'New Frame',
+            timestamp: Date.now(),
+            participants: [],
+            narrativeContext: {
+                activePhases: ['engagement'],
+                storyThreads: [],
+                thematicElements: [],
+            },
+        }),
+        forkFrame: vi.fn().mockReturnValue({
+            frameId: 'forked-frame',
+            title: 'Forked Frame',
+            parentFrameId: 'frame-1',
+        }),
+        addLore: vi.fn().mockReturnValue({
+            id: 'new-lore',
+            category: 'wisdom',
+            content: 'New wisdom',
+            timestamp: Date.now(),
+        }),
+        getFrame: vi.fn((id: string) => ({
+            frameId: id,
+            title: 'Frame content',
+            timestamp: Date.now(),
+            participants: [],
+            narrativeContext: {
+                activePhases: ['engagement'],
+                storyThreads: [],
+                thematicElements: [],
+            },
+        })),
         searchReservoir: vi.fn(() => []),
         getThreads: vi.fn(() => []),
     } as unknown as ArenaMembrane;
@@ -219,16 +269,16 @@ describe('ArenaMCPServer', () => {
             expect(orchestrateTool).toBeDefined();
         });
 
-        it('should include createSessionFrame tool', () => {
+        it('should include createFrame tool', () => {
             const tools = server.listTools();
-            const frameTool = tools.find((t) => t.name === 'createSessionFrame');
+            const frameTool = tools.find((t) => t.name === 'createFrame');
 
             expect(frameTool).toBeDefined();
         });
 
-        it('should include transitionNarrativePhase tool', () => {
+        it('should include transitionPhase tool', () => {
             const tools = server.listTools();
-            const transitionTool = tools.find((t) => t.name === 'transitionNarrativePhase');
+            const transitionTool = tools.find((t) => t.name === 'transitionPhase');
 
             expect(transitionTool).toBeDefined();
         });

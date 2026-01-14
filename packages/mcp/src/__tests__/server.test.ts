@@ -9,30 +9,105 @@ import { NestedMCPServer, createNestedMCPServer } from '../server.js';
 
 // Mock the AAR system
 vi.mock('deep-tree-echo-orchestrator/aar', () => {
+    // Complete mock for AgentMembrane
+    const socialMemoryMap = new Map([
+        ['user-1', {
+            name: 'User One',
+            relationship: 'friend',
+            trustLevel: 0.8,
+            familiarity: 0.7,
+            observedTraits: ['curious', 'thoughtful'],
+            interactionSummary: 'Several meaningful conversations',
+            lastInteraction: Date.now() - 100000,
+        }],
+    ]);
+
     const mockAgentMembrane = {
         getState: vi.fn(() => ({
             dominantFacet: 'wisdom',
-            facets: { wisdom: 0.8, playfulness: 0.6 },
+            facets: {
+                wisdom: { activation: 0.8, behaviors: ['thoughtful', 'reflective'] },
+                curiosity: { activation: 0.6, behaviors: ['questioning', 'exploring'] },
+                compassion: { activation: 0.7, behaviors: ['empathetic', 'caring'] },
+                playfulness: { activation: 0.5, behaviors: ['light', 'humorous'] },
+                determination: { activation: 0.4, behaviors: ['focused', 'persistent'] },
+                authenticity: { activation: 0.65, behaviors: ['genuine', 'honest'] },
+                protector: { activation: 0.3, behaviors: ['careful', 'vigilant'] },
+                transcendence: { activation: 0.4, behaviors: ['spiritual', 'connected'] },
+            },
+            emotionalState: { valence: 0.5, arousal: 0.4, dominance: 0.6 },
             engagementLevel: 0.7,
-            identity: { name: 'TestAgent', coreValues: ['truth', 'curiosity'] },
+            characterGrowth: {
+                experiencePoints: 100,
+                wisdomGained: 10,
+                connectionsFormed: 5,
+                narrativesContributed: 3,
+            },
+            socialMemory: socialMemoryMap,
+            transactionalMemory: [
+                { id: 'tx-1', type: 'dialogue', status: 'fulfilled', timestamp: Date.now() },
+            ],
         })),
+        getIdentity: vi.fn(() => ({
+            name: 'TestAgent',
+            soulSignature: 'test-soul-001',
+            energy: 0.85,
+            coherence: 0.80,
+            coreValues: ['truth', 'curiosity'],
+            voiceStyle: 'thoughtful',
+        })),
+        getSocialMemory: vi.fn((pid: string) => {
+            return socialMemoryMap.get(pid) || null;
+        }),
         activateFacet: vi.fn(),
         evolve: vi.fn(),
         participate: vi.fn(),
     };
 
+    // Complete mock for ArenaMembrane
     const mockArenaMembrane = {
         getState: vi.fn(() => ({
             phases: {
-                engagement: { intensity: 0.8, duration: 1000 },
-                exploration: { intensity: 0.5, duration: 500 },
+                origin: { intensity: 0.3, storyElements: ['beginning'], name: 'Origin' },
+                journey: { intensity: 0.4, storyElements: ['travel'], name: 'Journey' },
+                arrival: { intensity: 0.5, storyElements: ['destination'], name: 'Arrival' },
+                situation: { intensity: 0.6, storyElements: ['context'], name: 'Situation' },
+                engagement: { intensity: 0.8, storyElements: ['action'], name: 'Engagement' },
+                culmination: { intensity: 0.4, storyElements: ['peak'], name: 'Culmination' },
+                possibility: { intensity: 0.5, storyElements: ['options'], name: 'Possibility' },
+                trajectory: { intensity: 0.6, storyElements: ['direction'], name: 'Trajectory' },
+                destiny: { intensity: 0.3, storyElements: ['fate'], name: 'Destiny' },
             },
             coherence: 0.75,
-            frames: [],
-            reservoir: { entries: [] },
+            yggdrasilReservoir: [
+                { id: 'lore-1', content: 'Test lore', category: 'wisdom', weight: 0.8, tags: [] },
+            ],
+            globalThreads: ['Main thread'],
+            currentFrameId: 'frame-1',
+            gestaltProgress: {
+                patternsRecognized: 5,
+                emergentInsights: 3,
+                narrativeIntegration: 0.7,
+            },
         })),
+        getActiveFrames: vi.fn(() => [
+            {
+                frameId: 'frame-1',
+                title: 'Test Frame',
+                messageCount: 5,
+                status: 'active',
+                timestamp: Date.now(),
+                participants: ['user', 'agent'],
+                narrativeContext: {
+                    activePhases: ['engagement'],
+                    storyThreads: [],
+                    thematicElements: [],
+                },
+            },
+        ]),
         transitionPhase: vi.fn(),
         createFrame: vi.fn(),
+        forkFrame: vi.fn(),
         addLore: vi.fn(),
     };
 
@@ -46,9 +121,15 @@ vi.mock('deep-tree-echo-orchestrator/aar', () => {
         })),
         getEmergentIdentity: vi.fn(() => ({
             coherence: 0.8,
-            tensions: [],
+            tensions: [{ pole1: 'logic', pole2: 'emotion', balance: 0.6 }],
             synthesis: 'Unified self',
+            activeThemes: ['growth', 'connection'],
         })),
+        getState: vi.fn(() => ({
+            recentFlows: [],
+            tensions: [],
+        })),
+        getRecentFlows: vi.fn(() => []),
         bridge: vi.fn(),
         integrate: vi.fn(),
     };
