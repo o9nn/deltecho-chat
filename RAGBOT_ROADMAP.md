@@ -38,7 +38,7 @@ Transform DeltaChat Desktop from a traditional messaging app into a revolutionar
 - [ ] Implement API key management UI
 - [ ] Create personality customization controls
 - [ ] Add basic memory search functionality
-- [ ] Add feature flags for heavy components (TensorFlow.js, etc.)
+- [x] Add feature flags for heavy components (TensorFlow.js, etc.) ✅
 - [ ] Move TensorFlow.js to Web Worker for better performance
 
 ## Phase 2: AI Integration (Next 2-4 weeks)

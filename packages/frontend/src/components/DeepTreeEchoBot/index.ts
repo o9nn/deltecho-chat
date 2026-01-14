@@ -30,8 +30,8 @@ import { SelfReflection } from './SelfReflection'
 import { ChatOrchestrator } from './ChatOrchestrator'
 
 // Import chat management modules (NEW)
-import { 
-  DeepTreeEchoChatManager, 
+import {
+  DeepTreeEchoChatManager,
   chatManager,
   ChatSummary,
   ActiveChatState,
@@ -51,6 +51,19 @@ import {
   UIBridgeEvent,
   UIBridgeEventListener,
 } from './DeepTreeEchoUIBridge'
+
+// Import dialog adapter (NEW)
+import {
+  openDialogByType,
+  createDialogOpener,
+  showConfirmation,
+  showAlert,
+  isValidDialogType,
+} from './DialogAdapter'
+import type {
+  ConfirmDialogProps,
+  AlertDialogProps,
+} from './DialogAdapter'
 
 // Import proactive messaging (NEW)
 import {
@@ -127,32 +140,32 @@ import {
 export {
   // Core bot
   DeepTreeEchoBot,
-  
+
   // UI Components
   BotSettings,
   DeepTreeEchoSettingsScreen,
   ProactiveMessagingSettings,
   TriggerManager,
   ProactiveStatusIndicator,
-  
+
   // Services
   LLMService,
   PersonaCore,
   RAGMemoryStore,
   SelfReflection,
   CognitiveFunctionType,
-  
+
   // Integration functions
   initDeepTreeEchoBot,
   saveBotSettings,
   getBotInstance,
   cleanupBot,
-  
+
   // Context registration (for React components)
   registerChatContext,
   registerDialogContext,
   registerComposer,
-  
+
   // Test utilities
   DeepTreeEchoTestUtil,
   createTestGroup,
@@ -189,7 +202,7 @@ export {
   DeepTreeEchoChatManager,
   chatManager,
   getChatManager,
-  
+
   // Convenience functions
   openChat,
   createChat,
@@ -227,6 +240,24 @@ export type {
 }
 
 // ============================================================
+// DIALOG ADAPTER (NEW)
+// ============================================================
+
+export {
+  // Dialog helper functions
+  openDialogByType,
+  createDialogOpener,
+  showConfirmation,
+  showAlert,
+  isValidDialogType,
+}
+
+export type {
+  ConfirmDialogProps,
+  AlertDialogProps,
+}
+
+// ============================================================
 // PROACTIVE MESSAGING (NEW)
 // ============================================================
 
@@ -235,7 +266,7 @@ export {
   ProactiveMessaging,
   proactiveMessaging,
   getProactiveMessaging,
-  
+
   // Convenience functions
   sendProactiveMessage,
   scheduleMessage,
