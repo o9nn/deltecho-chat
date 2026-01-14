@@ -1,0 +1,695 @@
+/* ===========================================
+   Deep Tree Echo Avatar Demo Styles
+   =========================================== */
+
+/* CSS Variables - Design System */
+:root {
+    /* Colors */
+    --color-bg-primary: #0a0a1a;
+    --color-bg-secondary: #12122a;
+    --color-bg-card: #1a1a3a;
+    --color-bg-card-hover: #222250;
+
+    --color-text-primary: #ffffff;
+    --color-text-secondary: #a0a0c0;
+    --color-text-muted: #606080;
+
+    --color-accent-primary: #8b5cf6;
+    --color-accent-secondary: #6366f1;
+    --color-accent-glow: rgba(139, 92, 246, 0.3);
+
+    --color-success: #22c55e;
+    --color-warning: #f59e0b;
+    --color-error: #ef4444;
+
+    /* Avatar Colors */
+    --avatar-skin: #ffecd2;
+    --avatar-skin-shadow: #e8cdb5;
+    --avatar-eye-white: #ffffff;
+    --avatar-iris: #6366f1;
+    --avatar-pupil: #1a1a2e;
+    --avatar-blush: rgba(255, 150, 150, 0.3);
+    --avatar-mouth: #e85d75;
+
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+
+    /* Border Radius */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --radius-full: 9999px;
+
+    /* Shadows */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.4);
+    --shadow-glow: 0 0 30px var(--color-accent-glow);
+
+    /* Transitions */
+    --transition-fast: 150ms ease;
+    --transition-normal: 300ms ease;
+    --transition-slow: 500ms ease;
+}
+
+/* Reset & Base */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+/* Layout */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--spacing-lg);
+}
+
+/* Header */
+.header {
+    text-align: center;
+    margin-bottom: var(--spacing-2xl);
+    padding: var(--spacing-xl) 0;
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: var(--spacing-sm);
+}
+
+.subtitle {
+    color: var(--color-text-secondary);
+    font-size: 1.1rem;
+}
+
+/* Main Layout */
+.main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xl);
+}
+
+@media (max-width: 1000px) {
+    .main {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Avatar Section */
+.avatar-section {
+    grid-column: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.avatar-container {
+    background: var(--color-bg-card);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-lg);
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+}
+
+.avatar-display {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    margin: 0 auto var(--spacing-lg);
+    background: linear-gradient(135deg, #2a2a5a, #3a3a7a);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-glow);
+    transition: transform var(--transition-normal);
+}
+
+.avatar-display:hover {
+    transform: scale(1.02);
+}
+
+/* Avatar Face */
+.avatar-face {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    background: var(--avatar-skin);
+    border-radius: 50%;
+    box-shadow: inset 0 -10px 30px var(--avatar-skin-shadow);
+    transition: all var(--transition-normal);
+}
+
+/* Eyes */
+.eyes {
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 40px;
+}
+
+.eye {
+    position: relative;
+    width: 35px;
+    height: 35px;
+    background: var(--avatar-eye-white);
+    border-radius: 50%;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.iris {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle at 30% 30%, var(--avatar-iris), #4338ca);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: all var(--transition-fast);
+}
+
+.iris::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: var(--avatar-pupil);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.iris::before {
+    content: '';
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: white;
+    border-radius: 50%;
+    top: 25%;
+    left: 25%;
+}
+
+.eyelid {
+    position: absolute;
+    width: 100%;
+    height: 0;
+    background: var(--avatar-skin);
+    top: 0;
+    left: 0;
+    transition: height 100ms ease;
+}
+
+.eyelid.blinking {
+    height: 100%;
+}
+
+/* Eyebrows */
+.eyebrows {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 60px;
+}
+
+.eyebrow {
+    width: 30px;
+    height: 4px;
+    background: #8b6b5a;
+    border-radius: var(--radius-full);
+    transition: all var(--transition-normal);
+}
+
+.eyebrow.left {
+    transform-origin: right center;
+}
+
+.eyebrow.right {
+    transform-origin: left center;
+}
+
+/* Mouth */
+.mouth-container {
+    position: absolute;
+    bottom: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.mouth {
+    width: 40px;
+    height: 15px;
+    background: var(--avatar-mouth);
+    border-radius: 0 0 20px 20px;
+    transition: all var(--transition-normal);
+}
+
+.mouth.speaking {
+    animation: speaking 200ms infinite alternate;
+}
+
+@keyframes speaking {
+    0% {
+        height: 10px;
+        width: 35px;
+    }
+
+    100% {
+        height: 20px;
+        width: 45px;
+    }
+}
+
+/* Cheeks */
+.cheek {
+    position: absolute;
+    width: 25px;
+    height: 15px;
+    background: var(--avatar-blush);
+    border-radius: 50%;
+    top: 50%;
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+}
+
+.cheek.left {
+    left: 15%;
+}
+
+.cheek.right {
+    right: 15%;
+}
+
+/* Breathing Indicator */
+.breathing-indicator {
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--color-accent-primary), transparent);
+    border-radius: var(--radius-full);
+    opacity: 0.5;
+    animation: breathe 3.5s infinite ease-in-out;
+}
+
+@keyframes breathe {
+
+    0%,
+    100% {
+        transform: translateX(-50%) scaleX(0.8);
+        opacity: 0.3;
+    }
+
+    50% {
+        transform: translateX(-50%) scaleX(1.2);
+        opacity: 0.8;
+    }
+}
+
+/* Avatar Info */
+.avatar-info {
+    margin-top: var(--spacing-md);
+}
+
+.avatar-info p {
+    color: var(--color-text-secondary);
+    margin: var(--spacing-xs) 0;
+}
+
+.expression-label,
+.intensity-label {
+    font-weight: 600;
+    color: var(--color-accent-primary);
+}
+
+/* Controls Section */
+.controls-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.controls-panel {
+    background: var(--color-bg-card);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
+}
+
+.controls-panel h2 {
+    font-size: 1.2rem;
+    margin-bottom: var(--spacing-md);
+    color: var(--color-text-primary);
+}
+
+.controls-panel h3 {
+    font-size: 0.9rem;
+    margin: var(--spacing-md) 0 var(--spacing-sm);
+    color: var(--color-text-secondary);
+}
+
+/* Emotion Sliders */
+.emotion-sliders {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.slider-group {
+    display: grid;
+    grid-template-columns: 100px 1fr 50px;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.slider-group label {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+}
+
+.emotion-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-full);
+    outline: none;
+    cursor: pointer;
+}
+
+.emotion-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--color-accent-primary);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4);
+    transition: transform var(--transition-fast);
+}
+
+.emotion-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+.slider-value {
+    font-size: 0.9rem;
+    color: var(--color-accent-primary);
+    text-align: right;
+}
+
+/* Preset Buttons */
+.preset-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+}
+
+.preset-btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-accent-primary);
+    border-radius: var(--radius-md);
+    color: var(--color-text-primary);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.preset-btn:hover {
+    background: var(--color-accent-primary);
+    transform: translateY(-2px);
+}
+
+/* Toggle Controls */
+.toggle-group {
+    margin-bottom: var(--spacing-md);
+}
+
+.toggle-label {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    cursor: pointer;
+    color: var(--color-text-secondary);
+}
+
+.toggle-label input {
+    display: none;
+}
+
+.toggle-switch {
+    width: 44px;
+    height: 24px;
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-full);
+    position: relative;
+    transition: background var(--transition-fast);
+}
+
+.toggle-switch::after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    background: var(--color-text-primary);
+    border-radius: 50%;
+    top: 3px;
+    left: 3px;
+    transition: transform var(--transition-fast);
+}
+
+.toggle-label input:checked+.toggle-switch {
+    background: var(--color-accent-primary);
+}
+
+.toggle-label input:checked+.toggle-switch::after {
+    transform: translateX(20px);
+}
+
+/* Action Buttons */
+.action-btn,
+.motion-btn {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-secondary));
+    border: none;
+    border-radius: var(--radius-md);
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    box-shadow: var(--shadow-sm);
+}
+
+.action-btn:hover,
+.motion-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.motion-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+.speaking-toggle {
+    margin-top: var(--spacing-md);
+}
+
+/* History Section */
+.history-section {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-lg);
+}
+
+@media (max-width: 800px) {
+    .history-section {
+        grid-template-columns: 1fr;
+    }
+}
+
+.history-panel,
+.state-panel {
+    background: var(--color-bg-card);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
+}
+
+.history-panel h2,
+.state-panel h2 {
+    font-size: 1.1rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.history-list {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.history-item {
+    display: flex;
+    gap: var(--spacing-md);
+    padding: var(--spacing-sm);
+    border-bottom: 1px solid var(--color-bg-secondary);
+}
+
+.history-time {
+    color: var(--color-text-muted);
+    font-family: monospace;
+    font-size: 0.85rem;
+}
+
+.history-expression {
+    color: var(--color-accent-primary);
+    font-weight: 500;
+}
+
+.state-display {
+    background: var(--color-bg-secondary);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-sm);
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    overflow-x: auto;
+    max-height: 200px;
+    white-space: pre-wrap;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    margin-top: var(--spacing-2xl);
+    padding: var(--spacing-lg);
+    color: var(--color-text-muted);
+}
+
+/* Expression States */
+.avatar-face.happy .mouth {
+    border-radius: 0 0 30px 30px;
+    height: 20px;
+}
+
+.avatar-face.happy .cheek {
+    opacity: 1;
+}
+
+.avatar-face.sad .mouth {
+    border-radius: 30px 30px 0 0;
+    height: 10px;
+    margin-top: 10px;
+}
+
+.avatar-face.sad .eyebrow.left {
+    transform: rotate(15deg);
+}
+
+.avatar-face.sad .eyebrow.right {
+    transform: rotate(-15deg);
+}
+
+.avatar-face.angry .eyebrow.left {
+    transform: rotate(-25deg);
+}
+
+.avatar-face.angry .eyebrow.right {
+    transform: rotate(25deg);
+}
+
+.avatar-face.angry .mouth {
+    width: 30px;
+    height: 8px;
+    border-radius: 0;
+}
+
+.avatar-face.surprised .eye {
+    width: 40px;
+    height: 40px;
+}
+
+.avatar-face.surprised .mouth {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+}
+
+.avatar-face.surprised .eyebrow {
+    transform: translateY(-8px);
+}
+
+.avatar-face.focused .eyebrow.left {
+    transform: rotate(-10deg);
+}
+
+.avatar-face.focused .eyebrow.right {
+    transform: rotate(10deg);
+}
+
+.avatar-face.focused .mouth {
+    width: 20px;
+    height: 6px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-accent-primary);
+    border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-accent-secondary);
+}

@@ -38,3 +38,15 @@ export {
     StubCubismRenderer,
     CubismAdapter,
 } from './adapters/cubism-adapter';
+
+// Idle Animation System
+export {
+    IdleAnimationSystem,
+    createIdleAnimationSystem,
+    IdleAnimationConfig,
+    DEFAULT_IDLE_CONFIG,
+    IdleAnimationState,
+    IdleAnimationEventType,
+    IdleAnimationEvent,
+    IdleAnimationEventListener,
+} from './idle-animation';

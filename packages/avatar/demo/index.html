@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep Tree Echo - Avatar Demo</title>
+    <meta name="description" content="Interactive avatar expression mapping demonstration for Deep Tree Echo AI">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🌳 Deep Tree Echo</h1>
+            <p class="subtitle">Avatar Expression Demo</p>
+        </header>
+
+        <main class="main">
+            <!-- Avatar Display -->
+            <section class="avatar-section">
+                <div class="avatar-container">
+                    <div class="avatar-display" id="avatar-display">
+                        <div class="avatar-face" id="avatar-face">
+                            <!-- Eyes -->
+                            <div class="eyes">
+                                <div class="eye left" id="eye-left">
+                                    <div class="iris" id="iris-left"></div>
+                                    <div class="eyelid" id="eyelid-left"></div>
+                                </div>
+                                <div class="eye right" id="eye-right">
+                                    <div class="iris" id="iris-right"></div>
+                                    <div class="eyelid" id="eyelid-right"></div>
+                                </div>
+                            </div>
+                            <!-- Eyebrows -->
+                            <div class="eyebrows">
+                                <div class="eyebrow left" id="eyebrow-left"></div>
+                                <div class="eyebrow right" id="eyebrow-right"></div>
+                            </div>
+                            <!-- Mouth -->
+                            <div class="mouth-container">
+                                <div class="mouth" id="mouth"></div>
+                            </div>
+                            <!-- Cheeks (for blush) -->
+                            <div class="cheek left" id="cheek-left"></div>
+                            <div class="cheek right" id="cheek-right"></div>
+                        </div>
+                        <!-- Breathing indicator -->
+                        <div class="breathing-indicator" id="breathing-indicator"></div>
+                    </div>
+                    <div class="avatar-info">
+                        <p>Expression: <span class="expression-label" id="expression-label">neutral</span></p>
+                        <p>Intensity: <span class="intensity-label" id="intensity-label">0%</span></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Controls -->
+            <section class="controls-section">
+                <div class="controls-panel">
+                    <h2>🎭 Emotion Controls</h2>
+
+                    <div class="emotion-sliders">
+                        <div class="slider-group">
+                            <label for="joy-slider">😊 Joy</label>
+                            <input type="range" id="joy-slider" min="0" max="100" value="0" class="emotion-slider"
+                                data-emotion="joy">
+                            <span class="slider-value" id="joy-value">0%</span>
+                        </div>
+
+                        <div class="slider-group">
+                            <label for="sadness-slider">😢 Sadness</label>
+                            <input type="range" id="sadness-slider" min="0" max="100" value="0" class="emotion-slider"
+                                data-emotion="sadness">
+                            <span class="slider-value" id="sadness-value">0%</span>
+                        </div>
+
+                        <div class="slider-group">
+                            <label for="anger-slider">😠 Anger</label>
+                            <input type="range" id="anger-slider" min="0" max="100" value="0" class="emotion-slider"
+                                data-emotion="anger">
+                            <span class="slider-value" id="anger-value">0%</span>
+                        </div>
+
+                        <div class="slider-group">
+                            <label for="fear-slider">😨 Fear</label>
+                            <input type="range" id="fear-slider" min="0" max="100" value="0" class="emotion-slider"
+                                data-emotion="fear">
+                            <span class="slider-value" id="fear-value">0%</span>
+                        </div>
+
+                        <div class="slider-group">
+                            <label for="surprise-slider">😲 Surprise</label>
+                            <input type="range" id="surprise-slider" min="0" max="100" value="0" class="emotion-slider"
+                                data-emotion="surprise">
+                            <span class="slider-value" id="surprise-value">0%</span>
+                        </div>
+
+                        <div class="slider-group">
+                            <label for="interest-slider">🤔 Interest</label>
+                            <input type="range" id="interest-slider" min="0" max="100" value="0" class="emotion-slider"
+                                data-emotion="interest">
+                            <span class="slider-value" id="interest-value">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="preset-buttons">
+                        <h3>Quick Presets</h3>
+                        <button class="preset-btn" data-preset="happy">😊 Happy</button>
+                        <button class="preset-btn" data-preset="sad">😢 Sad</button>
+                        <button class="preset-btn" data-preset="angry">😠 Angry</button>
+                        <button class="preset-btn" data-preset="surprised">😲 Surprised</button>
+                        <button class="preset-btn" data-preset="focused">🤔 Focused</button>
+                        <button class="preset-btn" data-preset="neutral">😐 Neutral</button>
+                    </div>
+                </div>
+
+                <div class="controls-panel">
+                    <h2>✨ Idle Animation</h2>
+
+                    <div class="toggle-group">
+                        <label class="toggle-label">
+                            <input type="checkbox" id="idle-toggle" checked>
+                            <span class="toggle-switch"></span>
+                            Enable Idle Animation
+                        </label>
+                    </div>
+
+                    <div class="toggle-group">
+                        <label class="toggle-label">
+                            <input type="checkbox" id="breathing-toggle" checked>
+                            <span class="toggle-switch"></span>
+                            Breathing
+                        </label>
+                    </div>
+
+                    <div class="toggle-group">
+                        <label class="toggle-label">
+                            <input type="checkbox" id="blink-toggle" checked>
+                            <span class="toggle-switch"></span>
+                            Auto Blink
+                        </label>
+                    </div>
+
+                    <div class="toggle-group">
+                        <label class="toggle-label">
+                            <input type="checkbox" id="micro-toggle" checked>
+                            <span class="toggle-switch"></span>
+                            Micro Movements
+                        </label>
+                    </div>
+
+                    <button id="manual-blink-btn" class="action-btn">👁️ Trigger Blink</button>
+                </div>
+
+                <div class="controls-panel">
+                    <h2>🎬 Motion Controls</h2>
+
+                    <div class="motion-buttons">
+                        <button class="motion-btn" data-motion="nod">👍 Nod</button>
+                        <button class="motion-btn" data-motion="shake">👎 Shake</button>
+                        <button class="motion-btn" data-motion="tilt">🤔 Tilt</button>
+                        <button class="motion-btn" data-motion="bounce">🎉 Bounce</button>
+                    </div>
+
+                    <div class="speaking-toggle">
+                        <button id="speaking-btn" class="action-btn">🗣️ Toggle Speaking</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Expression History -->
+            <section class="history-section">
+                <div class="history-panel">
+                    <h2>📜 Expression History</h2>
+                    <div class="history-list" id="history-list">
+                        <div class="history-item">
+                            <span class="history-time">--:--:--</span>
+                            <span class="history-expression">neutral</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="state-panel">
+                    <h2>📊 Current State</h2>
+                    <pre id="state-display" class="state-display">{}</pre>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>Deep Tree Echo Avatar System • Built with 💜</p>
+        </footer>
+    </div>
+
+    <script src="avatar-demo.js"></script>
+</body>
+
+</html>

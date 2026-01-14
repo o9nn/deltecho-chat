@@ -71,3 +71,16 @@ export {
     LipSyncEvent,
     LipSyncEventListener,
 } from './lip-sync';
+
+// Real-Time Audio Pipeline
+export {
+    AudioPipeline,
+    createAudioPipeline,
+    AudioPipelineConfig,
+    DEFAULT_PIPELINE_CONFIG,
+    PipelineState,
+    PipelineEventType,
+    PipelineEvent,
+    PipelineEventListener,
+    LLMProcessor,
+} from './audio-pipeline';

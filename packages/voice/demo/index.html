@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep Tree Echo - Voice Demo</title>
+    <meta name="description" content="Interactive voice chat demonstration for Deep Tree Echo AI">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🌳 Deep Tree Echo</h1>
+            <p class="subtitle">Voice Chat Demo</p>
+        </header>
+
+        <main class="main">
+            <!-- Voice Visualization -->
+            <section class="voice-section">
+                <div class="visualizer-container">
+                    <div class="status-indicator" id="status-indicator">
+                        <div class="status-dot"></div>
+                        <span class="status-text" id="status-text">Idle</span>
+                    </div>
+
+                    <div class="waveform-container" id="waveform-container">
+                        <canvas id="waveform-canvas" width="400" height="100"></canvas>
+                    </div>
+
+                    <div class="audio-level-container">
+                        <div class="audio-level-bar">
+                            <div class="audio-level-fill" id="audio-level-fill"></div>
+                        </div>
+                        <span class="audio-level-text" id="audio-level-text">0%</span>
+                    </div>
+
+                    <div class="vad-indicator" id="vad-indicator">
+                        <span class="vad-label">Voice Detected:</span>
+                        <span class="vad-status" id="vad-status">No</span>
+                    </div>
+                </div>
+
+                <div class="lip-sync-container">
+                    <h3>👄 Lip-Sync Preview</h3>
+                    <div class="mouth-display" id="mouth-display">
+                        <div class="mouth-shape" id="mouth-shape"></div>
+                    </div>
+                    <div class="phoneme-display">
+                        <span>Current Phoneme:</span>
+                        <span class="phoneme-value" id="phoneme-value">X</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Controls -->
+            <section class="controls-section">
+                <div class="controls-panel">
+                    <h2>🎤 Input Controls</h2>
+
+                    <div class="input-mode-toggle">
+                        <button class="mode-btn active" id="vad-mode-btn" data-mode="vad">
+                            🎙️ VAD Mode
+                        </button>
+                        <button class="mode-btn" id="ptt-mode-btn" data-mode="ptt">
+                            🔘 Push-to-Talk
+                        </button>
+                    </div>
+
+                    <div class="ptt-control" id="ptt-control" style="display: none;">
+                        <button class="ptt-btn" id="ptt-btn">
+                            🎤 Hold to Speak
+                        </button>
+                    </div>
+
+                    <div class="vad-control" id="vad-control">
+                        <button class="start-btn" id="start-listening-btn">
+                            ▶️ Start Listening
+                        </button>
+                        <button class="stop-btn" id="stop-listening-btn" disabled>
+                            ⏹️ Stop
+                        </button>
+                    </div>
+
+                    <div class="vad-settings">
+                        <h3>VAD Sensitivity</h3>
+                        <div class="slider-group">
+                            <label for="threshold-slider">Threshold</label>
+                            <input type="range" id="threshold-slider" min="1" max="50" value="15">
+                            <span id="threshold-value">0.015</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="controls-panel">
+                    <h2>📝 Transcription</h2>
+
+                    <div class="transcript-container">
+                        <div class="transcript-interim" id="transcript-interim"></div>
+                        <div class="transcript-final" id="transcript-final"></div>
+                    </div>
+
+                    <div class="transcript-actions">
+                        <button class="action-btn" id="clear-transcript-btn">🗑️ Clear</button>
+                    </div>
+                </div>
+
+                <div class="controls-panel">
+                    <h2>🎭 Detected Emotion</h2>
+
+                    <div class="emotion-display">
+                        <div class="emotion-icon" id="emotion-icon">😐</div>
+                        <div class="emotion-info">
+                            <span class="emotion-name" id="emotion-name">Neutral</span>
+                            <div class="emotion-confidence">
+                                <div class="confidence-bar">
+                                    <div class="confidence-fill" id="emotion-confidence-fill"></div>
+                                </div>
+                                <span id="emotion-confidence-text">0%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="emotion-breakdown" id="emotion-breakdown">
+                        <!-- Dynamic emotion bars -->
+                    </div>
+                </div>
+
+                <div class="controls-panel">
+                    <h2>🔊 Speech Synthesis</h2>
+
+                    <div class="synthesis-input">
+                        <textarea id="synthesis-text"
+                            placeholder="Enter text to speak...">Hello! I am Deep Tree Echo, your AI companion.</textarea>
+                    </div>
+
+                    <div class="emotion-select">
+                        <label for="synthesis-emotion">Emotion:</label>
+                        <select id="synthesis-emotion">
+                            <option value="neutral">😐 Neutral</option>
+                            <option value="happy">😊 Happy</option>
+                            <option value="sad">😢 Sad</option>
+                            <option value="angry">😠 Angry</option>
+                            <option value="fearful">😨 Fearful</option>
+                            <option value="surprised">😲 Surprised</option>
+                        </select>
+                    </div>
+
+                    <div class="voice-settings">
+                        <div class="slider-group">
+                            <label for="rate-slider">Rate</label>
+                            <input type="range" id="rate-slider" min="0.5" max="2" step="0.1" value="1">
+                            <span id="rate-value">1.0</span>
+                        </div>
+                        <div class="slider-group">
+                            <label for="pitch-slider">Pitch</label>
+                            <input type="range" id="pitch-slider" min="0.5" max="2" step="0.1" value="1">
+                            <span id="pitch-value">1.0</span>
+                        </div>
+                        <div class="slider-group">
+                            <label for="volume-slider">Volume</label>
+                            <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="1">
+                            <span id="volume-value">1.0</span>
+                        </div>
+                    </div>
+
+                    <div class="synthesis-controls">
+                        <button class="speak-btn" id="speak-btn">🗣️ Speak</button>
+                        <button class="stop-speak-btn" id="stop-speak-btn" disabled>⏹️ Stop</button>
+                    </div>
+
+                    <div class="modulated-params" id="modulated-params">
+                        <h4>Modulated Parameters</h4>
+                        <pre id="modulated-display">{}</pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pipeline Status -->
+            <section class="pipeline-section">
+                <div class="pipeline-panel">
+                    <h2>🔄 Audio Pipeline Status</h2>
+
+                    <div class="pipeline-flow">
+                        <div class="pipeline-stage" id="stage-vad">
+                            <div class="stage-icon">🎤</div>
+                            <div class="stage-name">VAD</div>
+                            <div class="stage-status">Idle</div>
+                        </div>
+                        <div class="pipeline-arrow">→</div>
+                        <div class="pipeline-stage" id="stage-stt">
+                            <div class="stage-icon">📝</div>
+                            <div class="stage-name">STT</div>
+                            <div class="stage-status">Idle</div>
+                        </div>
+                        <div class="pipeline-arrow">→</div>
+                        <div class="pipeline-stage" id="stage-llm">
+                            <div class="stage-icon">🧠</div>
+                            <div class="stage-name">Process</div>
+                            <div class="stage-status">Idle</div>
+                        </div>
+                        <div class="pipeline-arrow">→</div>
+                        <div class="pipeline-stage" id="stage-tts">
+                            <div class="stage-icon">🔊</div>
+                            <div class="stage-name">TTS</div>
+                            <div class="stage-status">Idle</div>
+                        </div>
+                    </div>
+
+                    <div class="pipeline-events" id="pipeline-events">
+                        <h4>Recent Events</h4>
+                        <div class="events-list" id="events-list"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>Deep Tree Echo Voice System • Built with 💜</p>
+        </footer>
+    </div>
+
+    <script src="voice-demo.js"></script>
+</body>
+
+</html>
