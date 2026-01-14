@@ -270,7 +270,7 @@ export class AARPersonaBridge {
         // Calculate facet adjustments from emotional state
         const facetAdjustments: Partial<Record<keyof CharacterFacets, number>> = {};
 
-        for (const [emotion, value] of Object.entries(emotionalState)) {
+        for (const [emotion, value] of Object.entries(emotionalState) as [string, number][]) {
             const mappings = EMOTION_TO_FACET_MAP[emotion] || [];
 
             for (const mapping of mappings) {

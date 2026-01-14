@@ -11,6 +11,7 @@ import { getLogger } from 'deep-tree-echo-core';
 import { AgentMembrane } from './agent-membrane.js';
 import { ArenaMembrane } from './arena-membrane.js';
 import { RelationInterface } from './relation-interface.js';
+import { AARPersistence, type AARPersistenceConfig } from './persistence.js';
 import type {
     AARState,
     AARConfig,
@@ -100,6 +101,7 @@ export class AARSystem extends EventEmitter {
     private cycle: number = 0;
     private lastSyncTime: number = 0;
     private syncInterval?: NodeJS.Timeout;
+    private persistence?: AARPersistence;
 
     constructor(config: Partial<AARConfig> = {}) {
         super();
@@ -161,9 +163,24 @@ export class AARSystem extends EventEmitter {
 
         log.info('Starting AAR System...');
 
-        // Load persisted state if path provided
+        // Initialize and load persisted state if path provided
         if (this.config.storagePath) {
+            this.persistence = new AARPersistence({
+                storagePath: this.config.storagePath,
+                autoSaveIntervalMs: 60000, // Auto-save every minute
+                verbose: this.config.verbose,
+            });
+            await this.persistence.initialize();
             await this.loadState();
+
+            // Start auto-save
+            this.persistence.startAutoSave(() => ({
+                agent: this.agent,
+                arena: this.arena,
+                relation: this.relation,
+                cycle: this.cycle,
+                instanceName: this.config.instanceName,
+            }));
         }
 
         // Start sync cycle
@@ -186,12 +203,17 @@ export class AARSystem extends EventEmitter {
 
         log.info('Stopping AAR System...');
 
+        // Stop auto-save
+        if (this.persistence) {
+            this.persistence.stopAutoSave();
+        }
+
         if (this.syncInterval) {
             clearInterval(this.syncInterval);
             this.syncInterval = undefined;
         }
 
-        // Save state if path provided
+        // Save state before stopping
         if (this.config.storagePath) {
             await this.saveState();
         }
@@ -595,18 +617,19 @@ Active Themes: ${relationState.emergentIdentity.activeThemes.join(', ')}`;
      * Save state to storage
      */
     async saveState(): Promise<void> {
-        if (!this.config.storagePath) return;
+        if (!this.persistence) {
+            log.debug('No persistence configured, skipping save');
+            return;
+        }
 
         try {
-            const state = {
-                agent: this.agent.serialize(),
-                arena: this.arena.serialize(),
-                relation: this.relation.serialize(),
-                cycle: this.cycle,
-                savedAt: Date.now(),
-            };
-
-            // In a real implementation, this would write to disk
+            await this.persistence.save(
+                this.agent,
+                this.arena,
+                this.relation,
+                this.cycle,
+                this.config.instanceName
+            );
             log.info(`AAR state saved (cycle ${this.cycle})`);
         } catch (error) {
             log.error('Failed to save AAR state:', error);
@@ -617,14 +640,89 @@ Active Themes: ${relationState.emergentIdentity.activeThemes.join(', ')}`;
      * Load state from storage
      */
     async loadState(): Promise<void> {
-        if (!this.config.storagePath) return;
+        if (!this.persistence) {
+            log.debug('No persistence configured, skipping load');
+            return;
+        }
 
         try {
-            // In a real implementation, this would read from disk
-            log.info('AAR state loaded');
+            const loaded = await this.persistence.load();
+
+            if (loaded) {
+                this.agent = loaded.agent;
+                this.arena = loaded.arena;
+                this.relation = loaded.relation;
+                this.cycle = loaded.meta.cycle;
+
+                // Re-wire event forwarding for new instances
+                this.setupEventForwarding();
+
+                log.info(`AAR state loaded (cycle ${this.cycle})`);
+            } else {
+                log.info('No saved state found, starting fresh');
+            }
         } catch (error) {
             log.warn('Could not load AAR state, starting fresh:', error);
         }
+    }
+
+    /**
+     * Force save state now
+     */
+    async forceSave(): Promise<void> {
+        await this.saveState();
+    }
+
+    /**
+     * Export state to a file
+     */
+    async exportState(exportPath: string): Promise<void> {
+        if (!this.persistence) {
+            // Create temporary persistence for export
+            const tempPersistence = new AARPersistence({ storagePath: './temp' });
+            await tempPersistence.exportState(
+                this.agent,
+                this.arena,
+                this.relation,
+                this.cycle,
+                this.config.instanceName,
+                exportPath
+            );
+        } else {
+            await this.persistence.exportState(
+                this.agent,
+                this.arena,
+                this.relation,
+                this.cycle,
+                this.config.instanceName,
+                exportPath
+            );
+        }
+    }
+
+    /**
+     * Import state from a file
+     */
+    async importState(importPath: string): Promise<void> {
+        const tempPersistence = new AARPersistence({ storagePath: './temp' });
+        const imported = await tempPersistence.importState(importPath);
+
+        this.agent = imported.agent;
+        this.arena = imported.arena;
+        this.relation = imported.relation;
+        this.cycle = imported.meta.cycle;
+
+        // Re-wire event forwarding for new instances
+        this.setupEventForwarding();
+
+        log.info(`State imported from ${importPath}`);
+    }
+
+    /**
+     * Get persistence stats
+     */
+    getPersistenceStats(): { initialized: boolean; lastSaveTime: number; storagePath: string; autoSaveEnabled: boolean } | null {
+        return this.persistence?.getStats() ?? null;
     }
 
     // ==========================================================================
@@ -655,4 +753,5 @@ export { AgentMembrane } from './agent-membrane.js';
 export { ArenaMembrane } from './arena-membrane.js';
 export { RelationInterface } from './relation-interface.js';
 export { AARPersonaBridge, createAARPersonaBridge, type AARPersonaBridgeConfig } from './persona-bridge.js';
+export { AARPersistence, createAARPersistence, type AARPersistenceConfig } from './persistence.js';
 export * from './types.js';

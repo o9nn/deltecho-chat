@@ -4,9 +4,18 @@
  * This module provides cognitive orchestration for chat sessions,
  * integrating the Deep Tree Echo cognitive architecture with the
  * DeltaChat messaging interface.
+ * 
+ * Enhanced with AAR (Agent-Arena-Relation) nested membrane architecture
+ * for deeper character and narrative integration.
  */
 
 import type { Message, Contact, Chat } from '../../types';
+import {
+  AARFrontendIntegration,
+  type AARStateSnapshot,
+  type AARContext,
+  createAARFrontendIntegration,
+} from './AARIntegration';
 
 /**
  * Cognitive state for a chat session
@@ -21,6 +30,9 @@ interface CognitiveState {
   activeIntents: Intent[];
   sys6Phase: number;
   lastUpdate: number;
+  // AAR integration
+  aarSnapshot?: AARStateSnapshot;
+  aarContext?: AARContext;
 }
 
 /**
@@ -96,41 +108,104 @@ export class ChatOrchestrator {
   private sessions: Map<string, CognitiveState> = new Map();
   private sys6CycleInterval: number = 30; // 30-step cycle
   private syncEventsPerCycle: number = 42;
-  
+  private aarIntegration: AARFrontendIntegration;
+
   constructor(
     private config: OrchestratorConfig = defaultConfig
-  ) {}
+  ) {
+    // Initialize AAR integration
+    this.aarIntegration = createAARFrontendIntegration({
+      enabled: true,
+      verbose: config.verbose || false,
+    });
+
+    // Subscribe to AAR state updates
+    this.aarIntegration.onStateUpdate((state) => {
+      this.onAARStateUpdate(state);
+    });
+  }
+
+  /**
+   * Start the orchestrator (including AAR integration)
+   */
+  start(): void {
+    this.aarIntegration.start();
+    console.log('[ChatOrchestrator] Started with AAR integration');
+  }
+
+  /**
+   * Stop the orchestrator
+   */
+  shutdown(): void {
+    this.aarIntegration.stop();
+    console.log('[ChatOrchestrator] Stopped');
+  }
+
+  /**
+   * Handle AAR state updates from backend
+   */
+  private onAARStateUpdate(state: AARStateSnapshot): void {
+    // Update all active sessions with new AAR state
+    for (const [sessionId, session] of this.sessions) {
+      session.aarSnapshot = state;
+      session.aarContext = this.aarIntegration.generateContext() || undefined;
+    }
+    console.log(`[ChatOrchestrator] AAR state updated (cycle ${state.meta.cycle})`);
+  }
+
+  /**
+   * Inject AAR state from backend (for IPC handler)
+   */
+  injectAARState(state: AARStateSnapshot): void {
+    this.aarIntegration.injectState(state);
+  }
+
+  /**
+   * Get AAR integration for direct access
+   */
+  getAARIntegration(): AARFrontendIntegration {
+    return this.aarIntegration;
+  }
 
   /**
    * Initialize a new chat session
    */
   async initSession(chatId: number, contact: Contact): Promise<string> {
     const sessionId = `session_${chatId}_${Date.now()}`;
-    
+
+    // Get current AAR state if available
+    const aarSnapshot = this.aarIntegration.getState() || undefined;
+    const aarContext = this.aarIntegration.generateContext() || undefined;
+
     const initialState: CognitiveState = {
       sessionId,
       chatId,
       contextWindow: [],
       emotionalTone: {
-        valence: 0,
-        arousal: 0.3,
+        valence: aarSnapshot?.agent.emotionalValence ?? 0,
+        arousal: aarSnapshot?.agent.emotionalArousal ?? 0.3,
         dominance: 0.5,
-        confidence: 0.5
+        confidence: aarSnapshot?.meta.coherence ?? 0.5
       },
       topicGraph: [],
       memoryAnchors: [],
       activeIntents: [],
       sys6Phase: 0,
-      lastUpdate: Date.now()
+      lastUpdate: Date.now(),
+      aarSnapshot,
+      aarContext,
     };
 
     this.sessions.set(sessionId, initialState);
-    
+
     // Initialize memory anchors from contact history if available
     await this.loadContactMemory(sessionId, contact);
-    
+
+    console.log(`[ChatOrchestrator] Session ${sessionId} initialized with AAR state`);
+
     return sessionId;
   }
+
 
   /**
    * Process an incoming message
@@ -169,7 +244,7 @@ export class ChatOrchestrator {
 
     // Generate response decision
     const shouldRespond = this.shouldGenerateResponse(state, message);
-    
+
     let response: string | undefined;
     if (shouldRespond) {
       response = await this.generateResponse(state, message, memoryRetrieval);
@@ -195,26 +270,26 @@ export class ChatOrchestrator {
    */
   private async analyzeEmotion(message: Message): Promise<EmotionalTone> {
     const text = message.text || '';
-    
+
     // Simple heuristic analysis (would be replaced with ML model)
     const positiveWords = ['happy', 'great', 'love', 'thanks', 'good', 'wonderful', 'amazing'];
     const negativeWords = ['sad', 'bad', 'hate', 'angry', 'terrible', 'awful', 'upset'];
     const excitedWords = ['!', 'wow', 'amazing', 'incredible', 'excited'];
-    
+
     const words = text.toLowerCase().split(/\s+/);
-    
+
     let positiveCount = 0;
     let negativeCount = 0;
     let excitedCount = 0;
-    
+
     for (const word of words) {
       if (positiveWords.some(p => word.includes(p))) positiveCount++;
       if (negativeWords.some(n => word.includes(n))) negativeCount++;
       if (excitedWords.some(e => word.includes(e))) excitedCount++;
     }
-    
+
     const total = Math.max(words.length, 1);
-    
+
     return {
       valence: (positiveCount - negativeCount) / total,
       arousal: Math.min(excitedCount / total + (text.includes('!') ? 0.2 : 0), 1),
@@ -232,11 +307,11 @@ export class ChatOrchestrator {
   ): Promise<TopicNode[]> {
     const text = message.text || '';
     const words = text.split(/\s+/).filter(w => w.length > 3);
-    
+
     // Simple keyword extraction (would use NLP in production)
     const topics: TopicNode[] = [];
     const stopWords = new Set(['this', 'that', 'with', 'from', 'have', 'been']);
-    
+
     for (const word of words) {
       const normalized = word.toLowerCase().replace(/[^a-z]/g, '');
       if (normalized.length > 3 && !stopWords.has(normalized)) {
@@ -256,7 +331,7 @@ export class ChatOrchestrator {
         }
       }
     }
-    
+
     return topics;
   }
 
@@ -269,10 +344,10 @@ export class ChatOrchestrator {
   ): Promise<Intent[]> {
     const text = message.text || '';
     const intents: Intent[] = [];
-    
+
     // Question detection
     if (text.includes('?') || text.toLowerCase().startsWith('what') ||
-        text.toLowerCase().startsWith('how') || text.toLowerCase().startsWith('why')) {
+      text.toLowerCase().startsWith('how') || text.toLowerCase().startsWith('why')) {
       intents.push({
         id: `intent_${Date.now()}`,
         type: 'question',
@@ -282,10 +357,10 @@ export class ChatOrchestrator {
         createdAt: Date.now()
       });
     }
-    
+
     // Request detection
     if (text.toLowerCase().includes('please') || text.toLowerCase().includes('can you') ||
-        text.toLowerCase().includes('could you')) {
+      text.toLowerCase().includes('could you')) {
       intents.push({
         id: `intent_${Date.now()}`,
         type: 'request',
@@ -295,7 +370,7 @@ export class ChatOrchestrator {
         createdAt: Date.now()
       });
     }
-    
+
     // Emotion expression
     if (state.emotionalTone.valence < -0.3 || state.emotionalTone.valence > 0.3) {
       intents.push({
@@ -307,7 +382,7 @@ export class ChatOrchestrator {
         createdAt: Date.now()
       });
     }
-    
+
     return intents;
   }
 
@@ -322,7 +397,7 @@ export class ChatOrchestrator {
     const messageWords = new Set(
       (message.text || '').toLowerCase().split(/\s+/)
     );
-    
+
     return state.memoryAnchors
       .map(anchor => {
         const anchorWords = new Set(anchor.content.toLowerCase().split(/\s+/));
@@ -346,22 +421,22 @@ export class ChatOrchestrator {
     if (state.activeIntents.some(i => i.type === 'question' && !i.resolved)) {
       return true;
     }
-    
+
     // Respond to requests
     if (state.activeIntents.some(i => i.type === 'request' && !i.resolved)) {
       return true;
     }
-    
+
     // Respond if emotional support might be needed
     if (state.emotionalTone.valence < -0.5) {
       return true;
     }
-    
+
     // Respond based on Sys6 phase (creative phases)
     if (state.sys6Phase % 10 < 3) {
       return true;
     }
-    
+
     return false;
   }
 
@@ -374,25 +449,69 @@ export class ChatOrchestrator {
     relevantMemory: MemoryAnchor[]
   ): Promise<string> {
     // This would integrate with LLM service in production
-    // For now, return a placeholder that acknowledges the cognitive state
-    
+    // Now enhanced with AAR context for character-appropriate responses
+
     const intent = state.activeIntents.find(i => !i.resolved);
-    const emotionAck = state.emotionalTone.valence < -0.3 
-      ? "I sense you might be feeling down. "
-      : state.emotionalTone.valence > 0.3
-        ? "I can feel your positive energy! "
-        : "";
-    
+
+    // Build emotion acknowledgment based on AAR emotional state
+    let emotionAck = '';
+    if (state.aarSnapshot) {
+      const valence = state.aarSnapshot.agent.emotionalValence;
+      if (valence < -0.3) {
+        emotionAck = "I sense you might be feeling down. ";
+      } else if (valence > 0.3) {
+        emotionAck = "I can feel your positive energy! ";
+      }
+    } else if (state.emotionalTone.valence < -0.3) {
+      emotionAck = "I sense you might be feeling down. ";
+    } else if (state.emotionalTone.valence > 0.3) {
+      emotionAck = "I can feel your positive energy! ";
+    }
+
+    // Apply AAR character facet guidance
+    let characterPrefix = '';
+    if (state.aarContext) {
+      // Use facet-specific response style
+      const facet = state.aarSnapshot?.agent.dominantFacet;
+      switch (facet) {
+        case 'wisdom':
+          characterPrefix = 'Reflecting on this, ';
+          break;
+        case 'curiosity':
+          characterPrefix = 'How fascinating! ';
+          break;
+        case 'compassion':
+          characterPrefix = 'I really hear you. ';
+          break;
+        case 'playfulness':
+          characterPrefix = 'Oh, this is fun! ';
+          break;
+        case 'determination':
+          characterPrefix = 'Let\'s focus on this. ';
+          break;
+        case 'authenticity':
+          characterPrefix = 'To be honest, ';
+          break;
+        case 'protector':
+          characterPrefix = 'First, let me make sure I understand. ';
+          break;
+        case 'transcendence':
+          characterPrefix = 'Looking at the bigger picture, ';
+          break;
+      }
+    }
+
     if (intent?.type === 'question') {
-      return `${emotionAck}That's an interesting question. Let me think about that...`;
+      return `${emotionAck}${characterPrefix}That's an interesting question. Let me think about that...`;
     }
-    
+
     if (intent?.type === 'request') {
-      return `${emotionAck}I'd be happy to help with that.`;
+      return `${emotionAck}${characterPrefix}I'd be happy to help with that.`;
     }
-    
-    return `${emotionAck}I understand. Tell me more.`;
+
+    return `${emotionAck}${characterPrefix}I understand. Tell me more.`;
   }
+
 
   /**
    * Generate suggested actions
@@ -402,7 +521,7 @@ export class ChatOrchestrator {
     message: Message
   ): SuggestedAction[] {
     const actions: SuggestedAction[] = [];
-    
+
     // Suggest clarification if intent is unclear
     if (state.activeIntents.length === 0) {
       actions.push({
@@ -411,7 +530,7 @@ export class ChatOrchestrator {
         priority: 0.5
       });
     }
-    
+
     // Suggest remembering important information
     if (state.topicGraph.some(t => t.weight > 3)) {
       actions.push({
@@ -420,7 +539,7 @@ export class ChatOrchestrator {
         priority: 0.7
       });
     }
-    
+
     return actions;
   }
 
@@ -448,14 +567,14 @@ export class ChatOrchestrator {
     newTopics: TopicNode[]
   ): TopicNode[] {
     const merged = [...current];
-    
+
     for (const topic of newTopics) {
       const existing = merged.find(t => t.label === topic.label);
       if (!existing) {
         merged.push(topic);
       }
     }
-    
+
     // Decay old topics
     const now = Date.now();
     return merged
@@ -488,7 +607,7 @@ export class ChatOrchestrator {
       state.memoryAnchors.length > 0 ? 0.8 : 0.5,
       state.topicGraph.length > 0 ? 0.7 : 0.4
     ];
-    
+
     return factors.reduce((a, b) => a + b, 0) / factors.length;
   }
 
@@ -506,7 +625,7 @@ export class ChatOrchestrator {
       timestamp: message.timestamp || Date.now(),
       type: 'episodic'
     });
-    
+
     // Keep memory bounded
     if (state.memoryAnchors.length > this.config.maxMemoryAnchors) {
       // Remove least important memories
@@ -553,12 +672,16 @@ interface OrchestratorConfig {
   maxContextWindow: number;
   maxMemoryAnchors: number;
   responseThreshold: number;
+  /** Enable verbose logging for debugging */
+  verbose?: boolean;
 }
 
 const defaultConfig: OrchestratorConfig = {
   maxContextWindow: 50,
   maxMemoryAnchors: 100,
-  responseThreshold: 0.5
+  responseThreshold: 0.5,
+  verbose: false,
 };
+
 
 export default ChatOrchestrator;

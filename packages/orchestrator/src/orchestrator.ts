@@ -342,7 +342,7 @@ export class Orchestrator {
 
       // Get chat info for group detection
       const chat = await this.deltachatInterface.getChat(accountId, chatId);
-      const isGroup = chat?.type === 'group' || (chat?.contacts?.length ?? 0) > 2;
+      const isGroup = chat?.chatType === 'Group' || chat?.chatType === 'Mailinglist' || chat?.chatType === 'Broadcast';
 
       // Process the message through cognitive system
       const response = await this.processMessage(
