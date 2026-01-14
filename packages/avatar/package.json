@@ -15,8 +15,8 @@
         "build": "tsc",
         "check:types": "tsc --noEmit",
         "clean": "rm -rf dist",
-        "test": "NODE_OPTIONS='--experimental-vm-modules' jest",
-        "test:coverage": "NODE_OPTIONS='--experimental-vm-modules' jest --coverage"
+        "test": "jest",
+        "test:coverage": "jest --coverage"
     },
     "keywords": [
         "avatar",
@@ -28,7 +28,7 @@
     "author": "",
     "license": "GPL-3.0-or-later",
     "peerDependencies": {
-        "deep-tree-echo-core": "^1.0.0"
+        "deep-tree-echo-core": "workspace:*"
     },
     "devDependencies": {
         "@types/jest": "^29.5.14",

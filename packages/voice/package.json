@@ -15,8 +15,8 @@
         "build": "tsc",
         "check:types": "tsc --noEmit",
         "clean": "rm -rf dist",
-        "test": "NODE_OPTIONS='--experimental-vm-modules' jest",
-        "test:coverage": "NODE_OPTIONS='--experimental-vm-modules' jest --coverage"
+        "test": "jest",
+        "test:coverage": "jest --coverage"
     },
     "keywords": [
         "voice",
