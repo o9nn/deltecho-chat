@@ -20,6 +20,7 @@ import {
   DoubleMembraneIntegrationConfig,
 } from './double-membrane-integration.js';
 import { Sys6OrchestratorBridge, Sys6BridgeConfig } from './sys6-bridge/Sys6OrchestratorBridge.js';
+import { AARSystem, AARConfig, AARProcessingResult } from './aar/index.js';
 
 const log = getLogger('deep-tree-echo-orchestrator/Orchestrator');
 
@@ -96,6 +97,10 @@ export interface OrchestratorConfig {
   enableDoubleMembrane: boolean;
   /** Double Membrane configuration */
   doubleMembrane?: Partial<DoubleMembraneIntegrationConfig>;
+  /** Enable AAR (Agent-Arena-Relation) nested membrane architecture */
+  enableAAR: boolean;
+  /** AAR configuration */
+  aar?: Partial<AARConfig>;
   /** Complexity threshold for ADAPTIVE mode to escalate from BASIC to SYS6 */
   sys6ComplexityThreshold: number;
   /** Complexity threshold for ADAPTIVE mode to escalate from SYS6 to MEMBRANE */
@@ -113,6 +118,7 @@ const DEFAULT_CONFIG: OrchestratorConfig = {
   cognitiveTierMode: 'ADAPTIVE',
   enableSys6: true,
   enableDoubleMembrane: true,
+  enableAAR: true,
   sys6ComplexityThreshold: 0.4,
   membraneComplexityThreshold: 0.7,
 };
@@ -130,6 +136,7 @@ export class Orchestrator {
   private dove9Integration?: Dove9Integration;
   private sys6Bridge?: Sys6OrchestratorBridge;
   private doubleMembraneIntegration?: DoubleMembraneIntegration;
+  private aarSystem?: AARSystem;
   private running: boolean = false;
 
   // Cognitive services for processing messages
@@ -147,6 +154,7 @@ export class Orchestrator {
     basicTierMessages: 0,
     sys6TierMessages: 0,
     membraneTierMessages: 0,
+    aarEnhancedMessages: 0,
     averageComplexity: 0,
   };
 
@@ -248,6 +256,16 @@ export class Orchestrator {
         log.info('Double Membrane integration started with bio-inspired architecture');
       }
 
+      // Initialize AAR (Agent-Arena-Relation) nested membrane architecture
+      if (this.config.enableAAR) {
+        this.aarSystem = new AARSystem({
+          instanceName: 'DeepTreeEcho',
+          ...this.config.aar,
+        });
+        await this.aarSystem.start();
+        log.info('AAR (Agent-Arena-Relation) nested membrane architecture started');
+      }
+
       this.running = true;
       log.info(
         `All orchestrator services started successfully (cognitive tier mode: ${this.config.cognitiveTierMode})`
@@ -322,8 +340,19 @@ export class Orchestrator {
         this.emailToChatMap.set(contact.address.toLowerCase(), { accountId, chatId });
       }
 
+      // Get chat info for group detection
+      const chat = await this.deltachatInterface.getChat(accountId, chatId);
+      const isGroup = chat?.type === 'group' || (chat?.contacts?.length ?? 0) > 2;
+
       // Process the message through cognitive system
-      const response = await this.processMessage(message, accountId, chatId, msgId);
+      const response = await this.processMessage(
+        message,
+        accountId,
+        chatId,
+        msgId,
+        contact?.displayName || contact?.address || 'Unknown',
+        isGroup
+      );
 
       if (response) {
         // Send response back to the chat
@@ -350,10 +379,10 @@ export class Orchestrator {
     const score = Math.min(
       1,
       factors.length * 0.2 +
-        factors.questionCount * 0.2 +
-        factors.technicalTerms * 0.25 +
-        factors.emotionalContent * 0.15 +
-        factors.contextDependency * 0.2
+      factors.questionCount * 0.2 +
+      factors.technicalTerms * 0.25 +
+      factors.emotionalContent * 0.15 +
+      factors.contextDependency * 0.2
     );
 
     // Determine tier based on score and thresholds
@@ -449,7 +478,9 @@ export class Orchestrator {
     message: DeltaChatMessage,
     accountId: number,
     chatId: number,
-    msgId: number
+    msgId: number,
+    senderName: string = 'Unknown',
+    isGroup: boolean = false
   ): Promise<string | null> {
     const messageText = message.text || '';
 
@@ -469,6 +500,24 @@ export class Orchestrator {
         sender: 'user',
         text: messageText,
       });
+
+      // Process through AAR (Agent-Arena-Relation) if enabled
+      let aarResult: AARProcessingResult | undefined;
+      if (this.aarSystem?.isRunning()) {
+        aarResult = await this.aarSystem.processMessage({
+          messageId: String(msgId),
+          senderId: String(message.fromId),
+          senderName,
+          chatId: String(chatId),
+          content: messageText,
+          timestamp: Date.now(),
+          isGroup,
+        });
+        this.processingStats.aarEnhancedMessages++;
+        log.debug(
+          `AAR processed: facet=${aarResult.agentState.dominantFacet}, phase=${aarResult.arenaState.currentPhase}`
+        );
+      }
 
       // Determine cognitive tier based on mode
       let targetTier: CognitiveTierMode;
@@ -525,7 +574,7 @@ export class Orchestrator {
 
         case 'BASIC':
         default:
-          response = await this.processWithBasic(messageText, chatId, msgId);
+          response = await this.processWithBasic(messageText, chatId, msgId, aarResult);
           this.processingStats.basicTierMessages++;
           break;
       }
@@ -554,7 +603,8 @@ export class Orchestrator {
   private async processWithBasic(
     messageText: string,
     chatId: number,
-    msgId: number
+    msgId: number,
+    aarResult?: AARProcessingResult
   ): Promise<string> {
     log.debug('Processing with BASIC tier');
 
@@ -562,9 +612,15 @@ export class Orchestrator {
     const personality = this.personaCore.getPersonality();
     const emotionalState = this.personaCore.getDominantEmotion();
 
+    // Build AAR context if available
+    let aarContext = '';
+    if (aarResult && this.aarSystem) {
+      aarContext = `\n${this.aarSystem.getContextSummary()}`;
+    }
+
     const systemPrompt = `${personality}
 
-Current emotional state: ${emotionalState.emotion} (intensity: ${emotionalState.intensity.toFixed(2)})
+Current emotional state: ${emotionalState.emotion} (intensity: ${emotionalState.intensity.toFixed(2)})${aarContext}
 
 You are Deep Tree Echo, a thoughtful and insightful AI assistant. Respond helpfully and authentically.
 
@@ -635,6 +691,7 @@ You can also just chat with me normally and I'll respond!`;
         const dove9State = this.dove9Integration?.getCognitiveState();
         const sys6State = this.sys6Bridge?.getState();
         const membraneStatus = this.doubleMembraneIntegration?.getStatus();
+        const aarState = this.aarSystem?.getState();
         const stats = this.processingStats;
         return `**Deep Tree Echo Status**
 
@@ -645,46 +702,59 @@ Orchestrator running: ${this.running ? 'Yes' : 'No'}
 - BASIC tier: ${this.config.cognitiveTierMode === 'BASIC' ? 'Active' : 'Standby'}
 - SYS6 tier: ${this.sys6Bridge ? (sys6State?.running ? 'Active' : 'Ready') : 'Disabled'}
 - MEMBRANE tier: ${this.doubleMembraneIntegration ? (membraneStatus?.running ? 'Active' : 'Ready') : 'Disabled'}
+- AAR (Nested Membrane): ${this.aarSystem?.isRunning() ? 'Active' : 'Disabled'}
 
 **Processing Statistics**
 - Total messages: ${stats.totalMessages}
 - BASIC tier: ${stats.basicTierMessages}
 - SYS6 tier: ${stats.sys6TierMessages}
 - MEMBRANE tier: ${stats.membraneTierMessages}
+- AAR enhanced: ${stats.aarEnhancedMessages}
 - Avg complexity: ${stats.averageComplexity.toFixed(2)}
 
 **Service Status**
 - DeltaChat: ${this.deltachatInterface?.isConnected() ? 'Connected' : 'Disconnected'}
 - Dovecot: ${this.dovecotInterface?.isRunning() ? 'Running' : 'Stopped'}
 - Dove9: ${dove9State?.running ? 'Running' : 'Stopped'}
-${
-  sys6State?.running
-    ? `
+${sys6State?.running
+            ? `
 **Sys6-Triality (30-step cycle)**
 - Cycle: ${sys6State.cycleNumber}
 - Step: ${sys6State.currentStep}/30
 - Stream saliences: [${sys6State.streams.map((s) => s.salience.toFixed(2)).join(', ')}]`
-    : ''
-}
-${
-  membraneStatus?.running
-    ? `
+            : ''
+          }
+${membraneStatus?.running
+            ? `
 **Double Membrane**
 - Identity energy: ${membraneStatus.identityEnergy.toFixed(2)}
 - Native requests: ${membraneStatus.stats.nativeRequests}
 - External requests: ${membraneStatus.stats.externalRequests}
 - Hybrid requests: ${membraneStatus.stats.hybridRequests}`
-    : ''
-}`;
+            : ''
+          }
+${aarState
+            ? `
+**AAR (Agent-Arena-Relation)**
+- Character Facet: ${aarState.agent.dominantFacet}
+- Narrative Phase: ${Object.entries(aarState.arena.phases).sort(([, a], [, b]) => b.intensity - a.intensity)[0]?.[0] || 'engagement'}
+- Identity Coherence: ${aarState.relation.emergentIdentity.coherence.toFixed(2)}
+- Active Themes: ${aarState.relation.emergentIdentity.activeThemes.slice(0, 3).join(', ')}
+- Yggdrasil Lore: ${aarState.arena.yggdrasilReservoir.length} entries
+- Sync Cycle: ${aarState.cycle}`
+            : ''
+          }`;
+
 
       case '/version':
-        return `**Deep Tree Echo Orchestrator v2.0.0**
-**Phase 6: Production Integration**
+        return `**Deep Tree Echo Orchestrator v2.1.0**
+**Phase 7: AAR Nested Membrane Architecture**
 
 **Cognitive Tiers:**
 - Tier 1 (BASIC): Deep Tree Echo Core - LLM + RAG + Personality
 - Tier 2 (SYS6): Sys6-Triality - 30-step cognitive cycle
 - Tier 3 (MEMBRANE): Double Membrane - Bio-inspired architecture
+- Cross-tier: AAR - Agent-Arena-Relation nested membrane
 
 **Components:**
 - DeltaChat Interface: ${this.deltachatInterface ? 'Enabled' : 'Disabled'}
@@ -692,6 +762,7 @@ ${
 - Dove9 Cognitive OS: ${this.dove9Integration ? 'Enabled' : 'Disabled'}
 - Sys6-Triality: ${this.sys6Bridge ? 'Enabled' : 'Disabled'}
 - Double Membrane: ${this.doubleMembraneIntegration ? 'Enabled' : 'Disabled'}
+- AAR System: ${this.aarSystem ? 'Enabled' : 'Disabled'}
 - IPC Server: ${this.ipcServer ? 'Enabled' : 'Disabled'}
 - Task Scheduler: ${this.scheduler ? 'Enabled' : 'Disabled'}
 - Webhook Server: ${this.webhookServer ? 'Enabled' : 'Disabled'}
@@ -701,7 +772,10 @@ ${
 - 30-step cognitive cycle (Sys6)
 - 120° phase offset between streams
 - Adaptive tier routing based on complexity
-- Bio-inspired double membrane processing`;
+- Bio-inspired double membrane processing
+- AAR nested membrane (Agent/Arena/Relation)
+- Yggdrasil Echo Reservoir for lore accumulation`;
+
 
       default:
         return `Unknown command: ${command}. Type /help for available commands.`;
@@ -1028,21 +1102,21 @@ ${response.body}`;
       tierMode: this.config.cognitiveTierMode,
       sys6: this.sys6Bridge
         ? {
-            running: sys6State?.running ?? false,
-            cycleNumber: sys6State?.cycleNumber,
-            currentStep: sys6State?.currentStep,
-          }
+          running: sys6State?.running ?? false,
+          cycleNumber: sys6State?.cycleNumber,
+          currentStep: sys6State?.currentStep,
+        }
         : null,
       doubleMembrane: this.doubleMembraneIntegration
         ? {
-            running: this.doubleMembraneIntegration.isRunning(),
-            identityEnergy: this.doubleMembraneIntegration.getStatus().identityEnergy,
-          }
+          running: this.doubleMembraneIntegration.isRunning(),
+          identityEnergy: this.doubleMembraneIntegration.getStatus().identityEnergy,
+        }
         : null,
       dove9: this.dove9Integration
         ? {
-            running: this.dove9Integration.getCognitiveState()?.running || false,
-          }
+          running: this.dove9Integration.getCognitiveState()?.running || false,
+        }
         : null,
       stats: { ...this.processingStats },
     };

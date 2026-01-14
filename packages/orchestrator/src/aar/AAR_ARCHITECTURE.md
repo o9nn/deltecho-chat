@@ -138,6 +138,7 @@ SessionFrame := {
 - [x] Session Frame Manager (part of Arena)
 - [x] Yggdrasil Reservoir (part of Arena)
 - [x] Integration Tests
-- [ ] Integration with Orchestrator message flow
-- [ ] Integration with PersonaCore
-- [ ] Integration with ChatOrchestrator
+- [x] Integration with Orchestrator message flow
+- [x] Integration with PersonaCore (AARPersonaBridge)
+- [ ] Integration with ChatOrchestrator (for frontend)
+- [ ] Persistence layer for state

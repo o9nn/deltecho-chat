@@ -654,4 +654,5 @@ export function createAARSystem(config: Partial<AARConfig> = {}): AARSystem {
 export { AgentMembrane } from './agent-membrane.js';
 export { ArenaMembrane } from './arena-membrane.js';
 export { RelationInterface } from './relation-interface.js';
+export { AARPersonaBridge, createAARPersonaBridge, type AARPersonaBridgeConfig } from './persona-bridge.js';
 export * from './types.js';
