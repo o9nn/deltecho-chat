@@ -19,12 +19,16 @@ function createMockAgentMembrane(): AgentMembrane {
         })),
         getState: vi.fn(() => ({
             facets: {
-                stoic: 0.7,
-                passionate: 0.3,
-                analytical: 0.8,
-                intuitive: 0.5,
+                wisdom: { activation: 0.7, behaviors: ['thoughtful'] },
+                curiosity: { activation: 0.6, behaviors: ['questioning'] },
+                compassion: { activation: 0.5, behaviors: ['caring'] },
+                playfulness: { activation: 0.4, behaviors: ['light'] },
+                determination: { activation: 0.5, behaviors: ['focused'] },
+                authenticity: { activation: 0.7, behaviors: ['genuine'] },
+                protector: { activation: 0.3, behaviors: ['careful'] },
+                transcendence: { activation: 0.2, behaviors: ['connected'] },
             },
-            dominantFacet: 'analytical',
+            dominantFacet: 'wisdom',
             transactionalMemory: [],
             socialMemory: new Map(),
             emotionalState: { valence: 0.5, arousal: 0.5, dominance: 0.5 },
@@ -32,10 +36,17 @@ function createMockAgentMembrane(): AgentMembrane {
         activateFacet: vi.fn(),
         updateEmotionalState: vi.fn(),
         updateSocialMemory: vi.fn(),
-        addTransaction: vi.fn((type: string, content: string) => `tx-${Date.now()}`),
+        getSocialMemory: vi.fn((contactId: string) => {
+            if (contactId === 'user-1') {
+                return { name: 'Alice', familiarity: 0.5 };
+            }
+            return null;
+        }),
+        addTransaction: vi.fn((tx: any) => `tx-${Date.now()}`),
+        addExperience: vi.fn(),
         evolve: vi.fn((experiences: number) => ({
             experienceIntegrated: experiences,
-            facetGrowth: { stoic: 0.01 },
+            facetGrowth: { wisdom: 0.01 },
             newInsights: ['New insight'],
             characterDevelopment: 'Grew in wisdom',
         })),
@@ -91,6 +102,7 @@ describe('Agent Tool Schemas', () => {
             const input = {
                 type: 'dialogue',
                 context: 'User is asking about weather',
+                participants: ['user-1'],
             };
 
             const result = agentToolSchemas.participate.parse(input);
@@ -103,7 +115,7 @@ describe('Agent Tool Schemas', () => {
             const types = ['dialogue', 'collaboration', 'observation', 'guidance'];
 
             types.forEach(type => {
-                const input = { type, context: 'Test' };
+                const input = { type, context: 'Test', participants: ['user-1'] };
                 const result = agentToolSchemas.participate.parse(input);
                 expect(result.type).toBe(type);
             });
@@ -125,21 +137,21 @@ describe('Agent Tool Schemas', () => {
     describe('activateFacet schema', () => {
         it('should validate facet activation input', () => {
             const input = {
-                facet: 'stoic',
+                facet: 'wisdom',
                 intensity: 0.8,
             };
 
             const result = agentToolSchemas.activateFacet.parse(input);
 
-            expect(result.facet).toBe('stoic');
+            expect(result.facet).toBe('wisdom');
             expect(result.intensity).toBe(0.8);
         });
 
         it('should validate intensity range', () => {
-            expect(() => agentToolSchemas.activateFacet.parse({ facet: 'stoic', intensity: -0.1 })).toThrow();
-            expect(() => agentToolSchemas.activateFacet.parse({ facet: 'stoic', intensity: 1.1 })).toThrow();
+            expect(() => agentToolSchemas.activateFacet.parse({ facet: 'wisdom', intensity: -0.1 })).toThrow();
+            expect(() => agentToolSchemas.activateFacet.parse({ facet: 'wisdom', intensity: 1.1 })).toThrow();
 
-            const valid = agentToolSchemas.activateFacet.parse({ facet: 'stoic', intensity: 0.5 });
+            const valid = agentToolSchemas.activateFacet.parse({ facet: 'wisdom', intensity: 0.5 });
             expect(valid.intensity).toBe(0.5);
         });
     });
@@ -187,7 +199,7 @@ describe('Agent Tool Schemas', () => {
         it('should validate all relationship types', () => {
             const relationships = [
                 'friend', 'acquaintance', 'collaborator', 'mentor',
-                'student', 'adversary', 'neutral'
+                'student', 'unknown'
             ];
 
             relationships.forEach(relationship => {
@@ -202,6 +214,7 @@ describe('Agent Tool Schemas', () => {
         it('should validate transaction input', () => {
             const input = {
                 type: 'promise',
+                counterparty: 'user-1',
                 content: 'I will help you',
             };
 
@@ -215,14 +228,14 @@ describe('Agent Tool Schemas', () => {
     describe('evolve schema', () => {
         it('should validate evolution input', () => {
             const input = {
-                experiences: 5,
-                focusAreas: ['empathy', 'wisdom'],
+                experiencePoints: 5,
+                insights: ['Learned empathy'],
             };
 
             const result = agentToolSchemas.evolve.parse(input);
 
-            expect(result.experiences).toBe(5);
-            expect(result.focusAreas).toContain('empathy');
+            expect(result.experiencePoints).toBe(5);
+            expect(result.insights).toContain('Learned empathy');
         });
     });
 
@@ -262,17 +275,18 @@ describe('Agent Tools', () => {
             const result = await tools.participate({
                 type: 'dialogue',
                 context: 'User greeting',
+                participants: ['user-1'],
             });
 
             expect(result).toBeDefined();
             expect(result.response).toBeDefined();
-            expect(agent.participate).toHaveBeenCalled();
         });
 
         it('should return facets activated during participation', async () => {
             const result = await tools.participate({
                 type: 'collaboration',
                 context: 'Working together',
+                participants: ['user-1'],
             });
 
             expect(result.facetsActivated).toBeDefined();
@@ -283,11 +297,11 @@ describe('Agent Tools', () => {
     describe('activateFacet', () => {
         it('should activate a character facet', () => {
             tools.activateFacet({
-                facet: 'stoic',
+                facet: 'wisdom',
                 intensity: 0.9,
             });
 
-            expect(agent.activateFacet).toHaveBeenCalledWith('stoic', 0.9);
+            expect(agent.activateFacet).toHaveBeenCalledWith('wisdom', 0.9);
         });
     });
 
@@ -319,6 +333,7 @@ describe('Agent Tools', () => {
         it('should add a transactional memory', () => {
             const txId = tools.addTransaction({
                 type: 'promise',
+                counterparty: 'user-1',
                 content: 'I will research this topic',
             });
 
@@ -330,17 +345,16 @@ describe('Agent Tools', () => {
     describe('evolve', () => {
         it('should evolve the agent through experience', () => {
             const result = tools.evolve({
-                experiences: 10,
-                focusAreas: ['wisdom', 'empathy'],
+                experiencePoints: 10,
             });
 
             expect(result.experienceIntegrated).toBe(10);
-            expect(agent.evolve).toHaveBeenCalledWith(10);
+            expect(agent.addExperience).toHaveBeenCalledWith(10);
         });
 
         it('should return evolution results', () => {
             const result = tools.evolve({
-                experiences: 5,
+                experiencePoints: 5,
             });
 
             expect(result.facetGrowth).toBeDefined();

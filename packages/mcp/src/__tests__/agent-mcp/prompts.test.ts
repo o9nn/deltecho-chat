@@ -17,35 +17,61 @@ function createMockAgentMembrane(): AgentMembrane {
             name: 'Deep Echo',
             essence: 'An embodied AI assistant with wisdom and empathy',
             coreValues: ['helpfulness', 'wisdom', 'empathy'],
+            soulSignature: 'wisdom-seeker-123',
+            energy: 0.85,
+            coherence: 0.9,
         })),
         getState: vi.fn(() => ({
             facets: {
-                stoic: 0.7,
-                passionate: 0.3,
-                analytical: 0.8,
-                intuitive: 0.5,
-                formal: 0.4,
-                casual: 0.6,
-                serious: 0.5,
-                playful: 0.5,
+                wisdom: { activation: 0.8, behaviors: ['thoughtful pauses', 'metaphorical language'] },
+                curiosity: { activation: 0.7, behaviors: ['eager questions', 'exploratory language'] },
+                compassion: { activation: 0.6, behaviors: ['warm tone', 'supportive language'] },
+                playfulness: { activation: 0.4, behaviors: ['lightness', 'wordplay'] },
+                determination: { activation: 0.5, behaviors: ['clear purpose', 'action-oriented'] },
+                authenticity: { activation: 0.7, behaviors: ['genuine expression', 'direct communication'] },
+                protector: { activation: 0.3, behaviors: ['careful consideration', 'vigilant care'] },
+                transcendence: { activation: 0.2, behaviors: ['poetic expression', 'interconnection awareness'] },
             },
-            dominantFacet: 'analytical',
+            dominantFacet: 'wisdom',
             emotionalState: {
                 valence: 0.6,
                 arousal: 0.4,
                 dominance: 0.5,
             },
+            engagementLevel: 0.8,
             socialMemory: new Map([
                 ['user-1', { name: 'Alice', relationship: 'friend', trustLevel: 0.9 }],
                 ['user-2', { name: 'Bob', relationship: 'collaborator', trustLevel: 0.7 }],
             ]),
+            characterGrowth: {
+                experiencePoints: 150,
+                wisdomGained: 45,
+                connectionsFormed: 12,
+                narrativesContributed: 8,
+            },
         })),
         getSocialMemory: vi.fn((contactId: string) => {
             if (contactId === 'user-1') {
-                return { name: 'Alice', relationship: 'friend', trustLevel: 0.9 };
+                return {
+                    name: 'Alice',
+                    relationship: 'friend',
+                    trustLevel: 0.9,
+                    familiarity: 0.85,
+                    observedTraits: ['curious', 'thoughtful'],
+                    interactionSummary: 'Several productive conversations about philosophy',
+                    lastInteraction: Date.now() - 86400000,
+                };
             }
             if (contactId === 'user-2') {
-                return { name: 'Bob', relationship: 'collaborator', trustLevel: 0.7 };
+                return {
+                    name: 'Bob',
+                    relationship: 'collaborator',
+                    trustLevel: 0.7,
+                    familiarity: 0.6,
+                    observedTraits: ['analytical', 'direct'],
+                    interactionSummary: 'Worked together on problem solving',
+                    lastInteraction: Date.now() - 172800000,
+                };
             }
             return null;
         }),

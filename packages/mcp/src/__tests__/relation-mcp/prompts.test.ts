@@ -18,6 +18,9 @@ function createMockRelation(): RelationInterface {
             perceivedRole: 'Helper and guide',
             growthDirection: 'Towards wisdom',
             lastReflection: Date.now(),
+            authenticityScore: 0.85,
+            activeQuestions: ['How can I grow?', 'What am I learning?'],
+            recentInsights: ['Clear communication matters', 'Patience helps'],
         })),
         getRecentFlows: vi.fn(() => [
             { direction: 'agent-to-arena', content: 'Response', timestamp: Date.now() },
@@ -27,11 +30,18 @@ function createMockRelation(): RelationInterface {
             coherence: 0.85,
             dominantFlow: 'analytical',
             activeThemes: ['helpfulness', 'curiosity'],
+            currentExpression: 'thoughtful helper',
+            evolutionVector: 'growth',
+            tensions: [{ pole1: 'stoic', pole2: 'passionate', balance: 0.5 }],
         })),
         getCoherence: vi.fn(() => 0.82),
         getState: vi.fn(() => ({
-            recentFlows: [],
+            recentFlows: [
+                { direction: 'agent-to-arena', content: 'Test', timestamp: Date.now() },
+            ],
             insights: ['Clear communication matters'],
+            reflexiveAwareness: 0.75,
+            activeBridges: ['experience', 'insight'],
         })),
     } as unknown as RelationInterface;
 }
@@ -52,6 +62,9 @@ function createMockAgent(): AgentMembrane {
             },
             dominantFacet: 'analytical',
             emotionalState: { valence: 0.6, arousal: 0.4, dominance: 0.5 },
+            engagementLevel: 0.8,
+            socialMemory: new Map([['user-1', { name: 'User' }]]),
+            characterGrowth: { experiencePoints: 100, level: 2 },
         })),
     } as unknown as AgentMembrane;
 }
@@ -65,6 +78,8 @@ function createMockArena(): ArenaMembrane {
             },
             coherence: 0.75,
             globalThreads: ['Learning journey', 'Problem solving'],
+            currentFrameId: 'frame-1',
+            yggdrasilReservoir: ['lore-1', 'lore-2'],
         })),
         getActiveFrames: vi.fn(() => [
             { frameId: 'frame-1', title: 'Current Session', messageCount: 15 },

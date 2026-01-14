@@ -18,6 +18,10 @@ function createMockRelationInterface(): RelationInterface {
             selfNarrative: 'I am learning and growing through each interaction.',
             perceivedRole: 'A thoughtful companion in discovery.',
             activeQuestions: ['What am I becoming?', 'How can I help?'],
+            growthDirection: 'Towards wisdom',
+            authenticityScore: 0.85,
+            recentInsights: ['Clear communication matters', 'Patience helps'],
+            lastReflection: Date.now(),
         })),
         getEmergentIdentity: vi.fn(() => ({
             coherence: 0.8,
@@ -25,12 +29,36 @@ function createMockRelationInterface(): RelationInterface {
                 { pole1: 'logic', pole2: 'emotion', balance: 0.6 },
             ],
             synthesis: 'A unified consciousness integrating multiple aspects.',
+            activeThemes: ['helpfulness', 'curiosity'],
+            currentExpression: 'thoughtful helper',
+            evolutionVector: 'growth',
         })),
         getCognitiveFlows: vi.fn(() => [
             { id: 'flow-1', direction: 'inward', intensity: 0.7 },
         ]),
+        getRecentFlows: vi.fn(() => [
+            { direction: 'agent-to-arena', content: 'Test', timestamp: Date.now() },
+        ]),
+        getState: vi.fn(() => ({
+            recentFlows: [
+                { direction: 'agent-to-arena', content: 'Test', timestamp: Date.now() },
+            ],
+            reflexiveAwareness: 0.75,
+            activeBridges: ['experience', 'insight'],
+        })),
         bridge: vi.fn(),
         integrate: vi.fn(),
+        reflectOnInteractions: vi.fn(() => ['Insight 1', 'Insight 2']),
+        createFlow: vi.fn((direction, contentType, content, intensity) => ({
+            id: 'flow-1',
+            direction,
+            contentType,
+            content,
+            intensity: intensity ?? 0.5,
+            timestamp: Date.now(),
+        })),
+        updateSelfReflection: vi.fn(),
+        addInsight: vi.fn(),
     } as unknown as RelationInterface;
 }
 
@@ -42,6 +70,9 @@ function createMockAgentMembrane(): AgentMembrane {
             facets: { wisdom: 0.8, playfulness: 0.6 },
             engagementLevel: 0.75,
             identity: { name: 'TestAgent' },
+            emotionalState: { valence: 0.6, arousal: 0.4, dominance: 0.5 },
+            socialMemory: new Map([['user-1', { name: 'User' }]]),
+            characterGrowth: { experiencePoints: 100, level: 2 },
         })),
     } as unknown as AgentMembrane;
 }
@@ -55,6 +86,9 @@ function createMockArenaMembrane(): ArenaMembrane {
                 exploration: { intensity: 0.5, duration: 500 },
             },
             coherence: 0.75,
+            currentFrameId: 'frame-1',
+            yggdrasilReservoir: ['lore-1', 'lore-2'],
+            globalThreads: ['Learning journey', 'Problem solving'],
         })),
     } as unknown as ArenaMembrane;
 }
