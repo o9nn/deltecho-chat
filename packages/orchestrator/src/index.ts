@@ -100,3 +100,31 @@ export {
   type DoubleMembraneResponse,
   type IntegrationStatus,
 } from './double-membrane-integration.js';
+
+// AAR (Agent-Arena-Relation) - Nested Membrane Architecture
+export {
+  AARSystem,
+  createAARSystem,
+  AgentMembrane,
+  ArenaMembrane,
+  RelationInterface,
+  type AARState,
+  type AARConfig,
+  type AAREvent,
+  type AAREventType,
+  type MessageContext,
+  type AARProcessingResult,
+  type CoreIdentity,
+  type AgentState,
+  type ArenaState,
+  type RelationState,
+  type SessionFrame,
+  type LoreEntry,
+  type CharacterFacets,
+  type NarrativePhases,
+  type CognitiveFlow,
+  type SocialMemory,
+  type TransactionalMemory,
+  type EmergentIdentity,
+  type SelfReflectionState,
+} from './aar/index.js';
