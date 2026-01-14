@@ -1,3 +1,5 @@
+Deep Tree Echo MCP / [Exports](modules.md)
+
 # Deep Tree Echo MCP Package
 
 Multi-layer nested MCP server implementing the AAR (Agent-Arena-Relation) architecture with the inverted mirror pattern.
