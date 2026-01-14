@@ -62,7 +62,11 @@ export type AvatarMotion =
     | 'nodding'
     | 'shaking_head'
     | 'tilting_head'
-    | 'breathing';
+    | 'breathing'
+    | 'wave'
+    | 'nod'
+    | 'shake'
+    | 'thinking';
 
 /**
  * Animation request for avatar motion

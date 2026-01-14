@@ -1,8 +1,8 @@
 /**
  * Voice Package for Deep Tree Echo
  *
- * Provides speech synthesis, recognition, and emotion detection
- * using Web Speech API and audio analysis.
+ * Provides speech synthesis, recognition, voice activity detection,
+ * and emotion detection using Web Speech API and audio analysis.
  */
 
 // Types
@@ -43,3 +43,31 @@ export {
     AudioAnalyzer,
     createEmotionDetector,
 } from './emotion-detector';
+
+// Voice Activity Detection (VAD)
+export {
+    VoiceActivityDetector,
+    StubVoiceActivityDetector,
+    createVAD,
+    VADConfig,
+    DEFAULT_VAD_CONFIG,
+    VADEventType,
+    VADEvent,
+    VADEventListener,
+    VADState,
+} from './vad';
+
+// Lip-Sync Generation
+export {
+    LipSyncGenerator,
+    createLipSyncGenerator,
+    phonemeToMouthShape,
+    Phoneme,
+    PhonemeEntry,
+    LipSyncData,
+    LipSyncConfig,
+    DEFAULT_LIPSYNC_CONFIG,
+    LipSyncEventType,
+    LipSyncEvent,
+    LipSyncEventListener,
+} from './lip-sync';
