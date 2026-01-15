@@ -1,0 +1,41 @@
+{
+    "name": "@deltecho/dove9",
+    "version": "1.0.0",
+    "description": "Dove9 Triadic Engine - 3-stream cognitive processing with 120-degree phase offset",
+    "type": "module",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        }
+    },
+    "scripts": {
+        "build": "tsc",
+        "check:types": "tsc --noEmit",
+        "clean": "rm -rf dist",
+        "test": "jest",
+        "test:coverage": "jest --coverage"
+    },
+    "keywords": [
+        "dove9",
+        "triadic",
+        "cognitive",
+        "engine",
+        "deep-tree-echo"
+    ],
+    "author": "",
+    "license": "GPL-3.0-or-later",
+    "dependencies": {
+        "@deltecho/cognitive": "workspace:*",
+        "@deltecho/sys6-triality": "workspace:*"
+    },
+    "devDependencies": {
+        "@types/jest": "^29.5.14",
+        "@types/node": "^22.10.6",
+        "jest": "^29.7.0",
+        "ts-jest": "^29.4.6",
+        "typescript": "^5.7.3"
+    }
+}
