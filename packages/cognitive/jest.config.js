@@ -5,6 +5,8 @@ export default {
     extensionsToTreatAsEsm: ['.ts'],
     moduleNameMapper: {
         '^(\\.{1,2}/.*)\\.js$': '$1',
+        '^@deltecho/sys6-triality$': '<rootDir>/../sys6-triality/src/index.ts',
+        '^@deltecho/dove9$': '<rootDir>/../dove9/src/index.ts',
     },
     transform: {
         '^.+\\.tsx?$': [

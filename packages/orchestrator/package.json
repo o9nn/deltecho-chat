@@ -29,7 +29,8 @@
   "author": "",
   "license": "GPL-3.0-or-later",
   "dependencies": {
-    "deep-tree-echo-core": "workspace:*"
+    "deep-tree-echo-core": "workspace:*",
+    "@deltecho/cognitive": "workspace:*"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",

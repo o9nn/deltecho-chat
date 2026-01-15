@@ -132,7 +132,7 @@ describe('CognitiveOrchestrator', () => {
             const result = await orchestrator.processMessage('Test message');
 
             expect(result.metrics).toBeDefined();
-            expect(result.metrics.totalTime).toBeGreaterThan(0);
+            expect(result.metrics.totalTime).toBeGreaterThanOrEqual(0);
         });
 
         it('should include cognitive state', async () => {

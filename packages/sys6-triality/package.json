@@ -27,9 +27,7 @@
     ],
     "author": "",
     "license": "GPL-3.0-or-later",
-    "dependencies": {
-        "@deltecho/cognitive": "workspace:*"
-    },
+    "dependencies": {},
     "devDependencies": {
         "@types/jest": "^29.5.14",
         "@types/node": "^22.10.6",

@@ -16,6 +16,8 @@ import {
     CognitiveEvent,
     CognitiveEventListener,
 } from './types';
+import { LCMSynchronizer, OperadicState } from '@deltecho/sys6-triality';
+import { Dove9Engine, Dove9State } from '@deltecho/dove9';
 
 /**
  * Configuration for cognitive state manager
@@ -53,10 +55,31 @@ export class CognitiveStateManager extends EventEmitter {
     private phaseIntervalId: ReturnType<typeof setInterval> | null = null;
     private streamCleanupId: ReturnType<typeof setInterval> | null = null;
 
+    // Formal engines
+    private sys6Synchronizer: LCMSynchronizer;
+    private dove9Engine: Dove9Engine;
+
     constructor(config: Partial<CognitiveStateConfig> = {}) {
         super();
         this.config = { ...DEFAULT_STATE_CONFIG, ...config };
-        this.state = this.createInitialState();
+
+        this.sys6Synchronizer = new LCMSynchronizer();
+        this.dove9Engine = new Dove9Engine();
+
+        const initialSys6 = this.sys6Synchronizer.tick();
+        const initialDove9 = this.dove9Engine.tick();
+
+        this.state = {
+            activeStreams: [],
+            memoryContext: null,
+            reasoningState: null,
+            emotionalState: { ...DEFAULT_EMOTIONAL_VECTOR },
+            currentPhase: initialSys6.cycleStep,
+            sys6State: initialSys6,
+            dove9State: initialDove9,
+            lastUpdated: Date.now(),
+            cognitiveLoad: 0,
+        };
     }
 
     /**
@@ -122,13 +145,25 @@ export class CognitiveStateManager extends EventEmitter {
      * Advance to next phase in Sys6 cycle
      */
     advancePhase(): void {
-        this.state.currentPhase = (this.state.currentPhase + 1) % 30;
+        const sys6State = this.sys6Synchronizer.tick();
+        const dove9State = this.dove9Engine.tick();
+
+        this.state.currentPhase = sys6State.cycleStep;
+        this.state.sys6State = sys6State;
+        this.state.dove9State = dove9State;
         this.state.lastUpdated = Date.now();
+
+        // Sync state with formal engines
+        // In a more complex implementation, we'd store the whole sys6State and dove9State
 
         // Apply emotional decay
         this.applyEmotionalDecay();
 
-        this.emitEvent('state_updated', { phase: this.state.currentPhase });
+        this.emitEvent('state_updated', {
+            phase: this.state.currentPhase,
+            sys6State,
+            dove9State
+        });
     }
 
     /**

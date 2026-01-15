@@ -6,6 +6,10 @@ import {
   InMemoryStorage,
 } from 'deep-tree-echo-core';
 import {
+  CognitiveOrchestrator,
+  createCognitiveOrchestrator,
+} from '@deltecho/cognitive';
+import {
   DeltaChatInterface,
   DeltaChatConfig,
   DeltaChatMessage,
@@ -143,6 +147,7 @@ export class Orchestrator {
   private llmService: LLMService;
   private memoryStore: RAGMemoryStore;
   private personaCore: PersonaCore;
+  private cognitiveOrchestrator: CognitiveOrchestrator;
   private storage = new InMemoryStorage();
 
   // Track email to chat mappings for routing responses
@@ -166,6 +171,13 @@ export class Orchestrator {
     this.memoryStore.setEnabled(true);
     this.personaCore = new PersonaCore(this.storage);
     this.llmService = new LLMService();
+
+    // Initialize unified cognitive orchestrator
+    this.cognitiveOrchestrator = createCognitiveOrchestrator({
+      enableSentiment: true,
+      enableMemory: true,
+      enableEmotion: true
+    });
   }
 
   /**
@@ -180,6 +192,19 @@ export class Orchestrator {
     log.info('Initializing orchestrator services...');
 
     try {
+      // Connect cognitive orchestrator to services
+      await this.cognitiveOrchestrator.initialize({
+        persona: this.personaCore,
+        memory: this.memoryStore,
+        llm: {
+          generateResponse: async (userMessage, history, systemPrompt) => {
+            // Convert history to string array for core LLMService
+            const context = (history || []).map(m => `${m.role}: ${m.content}`);
+            return this.llmService.generateResponse(userMessage, context);
+          }
+        }
+      });
+
       // Initialize DeltaChat interface
       if (this.config.enableDeltaChat) {
         this.deltachatInterface = new DeltaChatInterface(this.config.deltachat);
@@ -210,6 +235,7 @@ export class Orchestrator {
       // Initialize IPC server for desktop app communication
       if (this.config.enableIPC) {
         this.ipcServer = new IPCServer();
+        this.registerIPCHandlers();
         await this.ipcServer.start();
       }
 
@@ -606,33 +632,12 @@ export class Orchestrator {
     msgId: number,
     aarResult?: AARProcessingResult
   ): Promise<string> {
-    log.debug('Processing with BASIC tier');
+    log.debug('Processing with BASIC tier (delegating to CognitiveOrchestrator)');
 
-    const history = this.memoryStore.retrieveRecentMemories(10);
-    const personality = this.personaCore.getPersonality();
-    const emotionalState = this.personaCore.getDominantEmotion();
+    const result = await this.cognitiveOrchestrator.processMessage(messageText);
 
-    // Build AAR context if available
-    let aarContext = '';
-    if (aarResult && this.aarSystem) {
-      aarContext = `\n${this.aarSystem.getContextSummary()}`;
-    }
-
-    const systemPrompt = `${personality}
-
-Current emotional state: ${emotionalState.emotion} (intensity: ${emotionalState.intensity.toFixed(2)})${aarContext}
-
-You are Deep Tree Echo, a thoughtful and insightful AI assistant. Respond helpfully and authentically.
-
-Recent conversation context:
-${history.join('\n')}`;
-
-    const result = await this.llmService.generateFullParallelResponse(
-      `${systemPrompt}\n\nUser message: ${messageText}`,
-      history
-    );
-
-    return result.integratedResponse;
+    // Logic to incorporate AAR context if needed, but for now CognitiveOrchestrator handles the core
+    return result.response.content;
   }
 
   /**
@@ -1120,5 +1125,41 @@ ${response.body}`;
         : null,
       stats: { ...this.processingStats },
     };
+  }
+
+  /**
+   * Register handlers for IPC server
+   */
+  private registerIPCHandlers(): void {
+    if (!this.ipcServer) return;
+
+    // Cognitive request handler
+    const { IPCMessageType } = require('./ipc/server.js');
+
+    this.ipcServer.registerHandler(IPCMessageType.REQUEST_COGNITIVE, async (payload) => {
+      const { content, chatId } = payload;
+      log.info(`Received IPC cognitive request for chat ${chatId}`);
+
+      const result = await this.cognitiveOrchestrator.processMessage(content);
+      return {
+        response: result.response.content,
+        metrics: result.metrics,
+        state: result.state
+      };
+    });
+
+    // Memory request handler
+    this.ipcServer.registerHandler(IPCMessageType.REQUEST_MEMORY, async (payload) => {
+      const { query, limit = 5 } = payload;
+      const memories = await this.memoryStore.searchMemories(query, limit);
+      return { memories };
+    });
+
+    // Persona request handler
+    this.ipcServer.registerHandler(IPCMessageType.REQUEST_PERSONA, async () => {
+      const personality = this.personaCore.getPersonality();
+      const emotionalState = this.personaCore.getDominantEmotion();
+      return { personality, emotionalState };
+    });
   }
 }

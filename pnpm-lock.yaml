@@ -112,6 +112,12 @@ importers:
 
   packages/cognitive:
     dependencies:
+      '@deltecho/dove9':
+        specifier: workspace:*
+        version: link:../dove9
+      '@deltecho/sys6-triality':
+        specifier: workspace:*
+        version: link:../sys6-triality
       deep-tree-echo-core:
         specifier: workspace:*
         version: link:../core
@@ -152,9 +158,6 @@ importers:
 
   packages/dove9:
     dependencies:
-      '@deltecho/cognitive':
-        specifier: workspace:*
-        version: link:../cognitive
       '@deltecho/sys6-triality':
         specifier: workspace:*
         version: link:../sys6-triality
@@ -389,6 +392,9 @@ importers:
 
   packages/orchestrator:
     dependencies:
+      '@deltecho/cognitive':
+        specifier: workspace:*
+        version: link:../cognitive
       deep-tree-echo-core:
         specifier: workspace:*
         version: link:../core
@@ -475,10 +481,6 @@ importers:
         version: 10.8.2
 
   packages/sys6-triality:
-    dependencies:
-      '@deltecho/cognitive':
-        specifier: workspace:*
-        version: link:../cognitive
     devDependencies:
       '@types/jest':
         specifier: ^29.5.14

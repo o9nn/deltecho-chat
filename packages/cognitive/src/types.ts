@@ -147,6 +147,10 @@ export interface UnifiedCognitiveState {
     emotionalState: EmotionalVector;
     /** Current phase in Sys6 30-step cycle (0-29) */
     currentPhase: number;
+    /** Optional formal Sys6 operadic state */
+    sys6State?: any;
+    /** Optional formal Dove9 engine state */
+    dove9State?: any;
     /** Timestamp of last update */
     lastUpdated: number;
     /** Cognitive load (0-1) */

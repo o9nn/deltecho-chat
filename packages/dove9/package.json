@@ -28,7 +28,6 @@
     "author": "",
     "license": "GPL-3.0-or-later",
     "dependencies": {
-        "@deltecho/cognitive": "workspace:*",
         "@deltecho/sys6-triality": "workspace:*"
     },
     "devDependencies": {
