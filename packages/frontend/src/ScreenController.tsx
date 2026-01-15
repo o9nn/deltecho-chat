@@ -140,7 +140,7 @@ export default class ScreenController extends Component {
     if (accountId !== this.selectedAccountId) {
       await this.unSelectAccount()
       this.selectedAccountId = accountId
-      ;(window.__selectedAccountId as number) = accountId
+        ; (window.__selectedAccountId as number) = accountId
       // forcing to load settings here so when we for example switch to Settings
       // from context menu they're already present and we avoid crashing
       SettingsStoreInstance.effect.load()
@@ -190,7 +190,7 @@ export default class ScreenController extends Component {
     }
 
     runtime.setDesktopSetting('lastAccount', undefined)
-    ;(window.__selectedAccountId as any) = this.selectedAccountId = undefined
+      ; (window.__selectedAccountId as any) = this.selectedAccountId = undefined
   }
 
   async addAndSelectAccount(): Promise<number> {
@@ -336,15 +336,16 @@ export default class ScreenController extends Component {
   }
 
   componentDidMount() {
-    // Initialize the Memory Persistence Layer for AI Companions
-    const memoryLayer = MemoryPersistenceLayer.getInstance()
-    memoryLayer.initialize().catch(error => {
-      console.error('Failed to initialize Memory Persistence Layer:', error)
-      this.userFeedback({
-        type: 'error',
-        text: 'Failed to initialize AI Companion Memory System',
-      })
-    })
+    // Temporarily disable Memory Persistence Layer to debug blank screen
+    // TODO: Re-enable after fixing initialization
+    // const memoryLayer = MemoryPersistenceLayer.getInstance()
+    // memoryLayer.initialize().catch(error => {
+    //   console.error('Failed to initialize Memory Persistence Layer:', error)
+    //   this.userFeedback({
+    //     type: 'error',
+    //     text: 'Failed to initialize AI Companion Memory System',
+    //   })
+    // })
 
     BackendRemote.on('Error', this.onError)
 

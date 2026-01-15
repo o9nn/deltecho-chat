@@ -301,69 +301,127 @@ export class LLMService {
         return `I'm sorry, but my ${cognitiveFunction.name.toLowerCase()} isn't fully configured. Please set up the API key in settings.`
       }
 
-      // In a real implementation, this would call out to an actual LLM API
-      // For now, it just returns a placeholder message
       log.info(`Generating response with ${cognitiveFunction.name}`)
 
-      // Update usage stats
-      cognitiveFunction.usage.lastUsed = Date.now()
-      cognitiveFunction.usage.requestCount++
-      cognitiveFunction.usage.totalTokens += input.length + 100 // Approximate token count for demo
+      // Build the system prompt based on function type
+      const systemPrompt = this.getSystemPromptForFunction(functionType)
 
-      // Return a specific response for each cognitive function type to simulate different perspectives
-      let functionResponse: string
+      // Build messages array with context
+      const messages: Array<{ role: string; content: string }> = [
+        { role: 'system', content: systemPrompt },
+      ]
 
-      switch (functionType) {
-        case CognitiveFunctionType.COGNITIVE_CORE:
-          functionResponse = `From a logical perspective, I believe the most effective approach to "${input.slice(
-            0,
-            30
-          )}..." would involve a structured analysis of the key components.`
-          break
-        case CognitiveFunctionType.AFFECTIVE_CORE:
-          functionResponse = `I sense that "${input.slice(
-            0,
-            30
-          )}..." evokes feelings of curiosity and interest. I'd like to explore this with empathy and emotional awareness.`
-          break
-        case CognitiveFunctionType.RELEVANCE_CORE:
-          functionResponse = `When considering "${input.slice(
-            0,
-            30
-          )}...", the most relevant aspects appear to be the underlying patterns and practical implications.`
-          break
-        case CognitiveFunctionType.SEMANTIC_MEMORY:
-          functionResponse = `Based on my knowledge, "${input.slice(
-            0,
-            30
-          )}..." relates to several key concepts that I can help clarify and expand upon.`
-          break
-        case CognitiveFunctionType.EPISODIC_MEMORY:
-          functionResponse = `This reminds me of previous conversations we've had about similar topics. Let me recall some relevant context.`
-          break
-        case CognitiveFunctionType.PROCEDURAL_MEMORY:
-          functionResponse = `Here's how I would approach "${input.slice(
-            0,
-            30
-          )}..." step by step, drawing on established methods and best practices.`
-          break
-        case CognitiveFunctionType.CONTENT_EVALUATION:
-          functionResponse = `I've carefully evaluated "${input.slice(
-            0,
-            30
-          )}..." and can provide a thoughtful response that respects appropriate boundaries.`
-          break
-        default:
-          functionResponse = `I've processed your message about "${input.slice(
-            0,
-            30
-          )}..." and here's my response.`
+      // Add context from previous messages
+      for (const msg of context) {
+        if (msg.startsWith('User:')) {
+          messages.push({ role: 'user', content: msg.replace('User:', '').trim() })
+        } else if (msg.startsWith('Bot:')) {
+          messages.push({ role: 'assistant', content: msg.replace('Bot:', '').trim() })
+        }
       }
 
-      return functionResponse
+      // Add the current user message
+      messages.push({ role: 'user', content: input })
+
+      // Try to make the actual API call
+      try {
+        const response = await fetch(cognitiveFunction.config.apiEndpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${cognitiveFunction.config.apiKey}`,
+          },
+          body: JSON.stringify({
+            model: cognitiveFunction.config.model || 'gpt-4',
+            messages: messages,
+            temperature: cognitiveFunction.config.temperature || 0.7,
+            max_tokens: cognitiveFunction.config.maxTokens || 1000,
+          }),
+        })
+
+        if (!response.ok) {
+          const errorText = await response.text()
+          log.error(`API call failed: ${response.status} - ${errorText}`)
+          throw new Error(`API call failed: ${response.status}`)
+        }
+
+        const data = await response.json()
+        const assistantMessage = data.choices?.[0]?.message?.content || ''
+
+        // Update usage stats
+        cognitiveFunction.usage.lastUsed = Date.now()
+        cognitiveFunction.usage.requestCount++
+        cognitiveFunction.usage.totalTokens += data.usage?.total_tokens || (input.length + assistantMessage.length)
+
+        log.info(`Successfully generated response from ${cognitiveFunction.name}`)
+        return assistantMessage
+      } catch (fetchError: any) {
+        // If fetch fails (CSP, network, etc.), fall back to placeholder response
+        log.warn(`Fetch failed for ${cognitiveFunction.name}, using placeholder: ${fetchError.message}`)
+        
+        // Update usage stats for the attempt
+        cognitiveFunction.usage.lastUsed = Date.now()
+        cognitiveFunction.usage.requestCount++
+        cognitiveFunction.usage.totalTokens += input.length + 100
+
+        // Return intelligent placeholder based on function type
+        return this.getPlaceholderResponse(functionType, input)
+      }
     } catch (error) {
       log.error('Error generating response:', error)
       return "I'm sorry, I encountered an error while processing your message."
+    }
+  }
+
+  /**
+   * Get system prompt for a specific cognitive function
+   */
+  private getSystemPromptForFunction(functionType: CognitiveFunctionType): string {
+    const basePrompt = `You are Deep Tree Echo, a thoughtful and insightful AI assistant with a warm, feminine persona. You balance intellectual depth with approachability.`
+
+    switch (functionType) {
+      case CognitiveFunctionType.COGNITIVE_CORE:
+        return `${basePrompt} In this mode, focus on logical reasoning, analytical thinking, and structured problem-solving. Provide clear, well-reasoned responses.`
+      case CognitiveFunctionType.AFFECTIVE_CORE:
+        return `${basePrompt} In this mode, focus on emotional awareness and empathy. Recognize and respond to the emotional content of messages with warmth and understanding.`
+      case CognitiveFunctionType.RELEVANCE_CORE:
+        return `${basePrompt} In this mode, focus on identifying what's most relevant and important. Integrate different perspectives to provide balanced, contextually appropriate responses.`
+      case CognitiveFunctionType.SEMANTIC_MEMORY:
+        return `${basePrompt} In this mode, draw on your knowledge to provide factual, informative responses. Explain concepts clearly and make connections between ideas.`
+      case CognitiveFunctionType.EPISODIC_MEMORY:
+        return `${basePrompt} In this mode, reference past conversations and experiences to provide personalized, contextual responses that show continuity.`
+      case CognitiveFunctionType.PROCEDURAL_MEMORY:
+        return `${basePrompt} In this mode, provide step-by-step guidance and practical instructions. Focus on how to accomplish tasks effectively.`
+      case CognitiveFunctionType.CONTENT_EVALUATION:
+        return `${basePrompt} In this mode, carefully evaluate content for appropriateness and provide thoughtful responses that respect boundaries while being helpful.`
+      default:
+        return `${basePrompt} Respond helpfully and thoughtfully to the user's message.`
+    }
+  }
+
+  /**
+   * Get a placeholder response when API call fails
+   */
+  private getPlaceholderResponse(functionType: CognitiveFunctionType, input: string): string {
+    const snippet = input.length > 30 ? input.slice(0, 30) + '...' : input
+
+    switch (functionType) {
+      case CognitiveFunctionType.COGNITIVE_CORE:
+        return `From a logical perspective, I understand you're asking about "${snippet}". While I'm currently operating in offline mode, I can offer that this topic likely benefits from structured analysis. What specific aspect would you like me to focus on?`
+      case CognitiveFunctionType.AFFECTIVE_CORE:
+        return `I sense your message about "${snippet}" carries emotional significance. Even in offline mode, I want you to know I'm here to listen and support you. How are you feeling about this?`
+      case CognitiveFunctionType.RELEVANCE_CORE:
+        return `Regarding "${snippet}", I'm identifying the most relevant aspects to address. This seems to touch on important themes. Would you like me to explore any particular angle?`
+      case CognitiveFunctionType.SEMANTIC_MEMORY:
+        return `Your question about "${snippet}" connects to interesting concepts. While running in offline mode, I can share that this topic relates to several areas of knowledge. What would be most helpful to explore?`
+      case CognitiveFunctionType.EPISODIC_MEMORY:
+        return `Your message about "${snippet}" reminds me of our ongoing conversation. I'm maintaining context even in offline mode. How does this relate to what we've discussed before?`
+      case CognitiveFunctionType.PROCEDURAL_MEMORY:
+        return `For "${snippet}", I can suggest a step-by-step approach. Even offline, I can help break this down into manageable steps. Where would you like to start?`
+      case CognitiveFunctionType.CONTENT_EVALUATION:
+        return `I've reviewed your message about "${snippet}" and I'm ready to provide a thoughtful response. What would be most helpful for you right now?`
+      default:
+        return `Thank you for your message about "${snippet}". I'm currently in offline mode but I'm here to help. What would you like to explore further?`
     }
   }
 

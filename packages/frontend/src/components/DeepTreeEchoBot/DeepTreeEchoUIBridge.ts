@@ -39,7 +39,14 @@ import { getLogger } from '@deltachat-desktop/shared/logger'
 import { BackendRemote, Type as T } from '../../backend-com'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
 
-const log = getLogger('render/components/DeepTreeEchoBot/DeepTreeEchoUIBridge')
+// Lazy logger to avoid initialization before logger handler is ready
+let _log: ReturnType<typeof getLogger> | null = null
+function log() {
+  if (!_log) {
+    _log = getLogger('render/components/DeepTreeEchoBot/DeepTreeEchoUIBridge')
+  }
+  return _log
+}
 
 /**
  * UI View types
@@ -141,7 +148,7 @@ export class DeepTreeEchoUIBridge {
   private composerRef: HTMLTextAreaElement | null = null
 
   private constructor() {
-    log.info('DeepTreeEchoUIBridge initialized')
+    log().info('DeepTreeEchoUIBridge initialized')
   }
 
   /**
@@ -171,7 +178,7 @@ export class DeepTreeEchoUIBridge {
       this.currentState.currentView = 'chat-view'
     }
 
-    log.info('ChatContext registered with UI Bridge')
+    log().info('ChatContext registered with UI Bridge')
   }
 
   /**
@@ -179,7 +186,7 @@ export class DeepTreeEchoUIBridge {
    */
   public registerDialogContext(context: DialogContextInterface): void {
     this.dialogContext = context
-    log.info('DialogContext registered with UI Bridge')
+    log().info('DialogContext registered with UI Bridge')
   }
 
   /**
@@ -206,7 +213,7 @@ export class DeepTreeEchoUIBridge {
    */
   public async selectChat(accountId: number, chatId: number): Promise<boolean> {
     if (!this.chatContext) {
-      log.warn('ChatContext not registered, cannot select chat')
+      log().warn('ChatContext not registered, cannot select chat')
       return false
     }
 
@@ -221,7 +228,7 @@ export class DeepTreeEchoUIBridge {
 
       return result
     } catch (error) {
-      log.error('Error selecting chat:', error)
+      log().error('Error selecting chat:', error)
       return false
     }
   }
@@ -231,7 +238,7 @@ export class DeepTreeEchoUIBridge {
    */
   public unselectChat(): void {
     if (!this.chatContext) {
-      log.warn('ChatContext not registered, cannot unselect chat')
+      log().warn('ChatContext not registered, cannot unselect chat')
       return
     }
 
@@ -290,7 +297,7 @@ export class DeepTreeEchoUIBridge {
    */
   public scrollToMessage(msgId: number, highlight: boolean = true): void {
     if (!this.chatContext?.chatId || !this.accountId) {
-      log.warn('No chat selected, cannot scroll to message')
+      log().warn('No chat selected, cannot scroll to message')
       return
     }
 
@@ -338,7 +345,7 @@ export class DeepTreeEchoUIBridge {
       this.currentState.composerText = text
       this.emit({ type: 'composer_changed', text })
     } else {
-      log.warn('Composer not registered, cannot set text')
+      log().warn('Composer not registered, cannot set text')
     }
   }
 
@@ -383,7 +390,7 @@ export class DeepTreeEchoUIBridge {
    */
   public openDialog(type: DialogType, props?: any): void {
     if (!this.dialogContext) {
-      log.warn('DialogContext not registered, cannot open dialog')
+      log().warn('DialogContext not registered, cannot open dialog')
       return
     }
 
@@ -492,7 +499,7 @@ export class DeepTreeEchoUIBridge {
       try {
         listener(event)
       } catch (error) {
-        log.error('Error in UI Bridge event listener:', error)
+        log().error('Error in UI Bridge event listener:', error)
       }
     })
   }
@@ -628,7 +635,7 @@ export class DeepTreeEchoUIBridge {
     this.dialogContext = null
     this.composerRef = null
     this.eventListeners = []
-    log.info('UI Bridge cleaned up')
+    log().info('UI Bridge cleaned up')
   }
 }
 
@@ -649,5 +656,18 @@ declare global {
   }
 }
 
-// Export singleton instance
-export const uiBridge = DeepTreeEchoUIBridge.getInstance()
+// Export lazy singleton getter (avoids initialization before logger is ready)
+let _uiBridgeInstance: DeepTreeEchoUIBridge | null = null
+export function getUIBridge(): DeepTreeEchoUIBridge {
+  if (!_uiBridgeInstance) {
+    _uiBridgeInstance = DeepTreeEchoUIBridge.getInstance()
+  }
+  return _uiBridgeInstance
+}
+
+// Use Proxy for backward compatibility - lazily initializes on first access
+export const uiBridge: DeepTreeEchoUIBridge = new Proxy({} as DeepTreeEchoUIBridge, {
+  get(_target, prop) {
+    return (getUIBridge() as any)[prop]
+  }
+})

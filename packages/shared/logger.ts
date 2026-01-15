@@ -118,18 +118,17 @@ function log(
 ) {
   const variant = LoggerVariants[level]
   if (!handler) {
+    // Handler not initialized yet - just log to console and return
+    // This can happen during module initialization before runtime.initialize() is called
     /* ignore-console-log */
-    console.log('Failed to log message - Handler not initialized yet')
-    /* ignore-console-log */
-    console.log(`Log Message: ${channel} ${level} ${args.join(' ')}`)
-    throw Error('Failed to log message - Handler not initialized yet')
+    variant.log(`[early] ${channel}:`, ...args)
+    return // Don't throw - just gracefully continue
   }
   handler(channel, variant.level, stacktrace, ...args)
   if (rc['log-to-console']) {
     if (isMainProcess) {
-      const beginning = `${Math.round((Date.now() - startTime) / 100) / 10}s ${
-        LoggerVariants[level].symbol
-      }${grey(channel)}:`
+      const beginning = `${Math.round((Date.now() - startTime) / 100) / 10}s ${LoggerVariants[level].symbol
+        }${grey(channel)}:`
       if (!stacktrace) {
         variant.log(beginning, ...args)
       } else {

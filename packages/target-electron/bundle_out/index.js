@@ -50,9 +50,9 @@ var init_cjs_shim = __esm({
   }
 });
 
-// ../../../node_modules/.pnpm/ini@1.3.8/node_modules/ini/ini.js
+// ../../node_modules/.pnpm/ini@1.3.8/node_modules/ini/ini.js
 var require_ini = __commonJS({
-  "../../../node_modules/.pnpm/ini@1.3.8/node_modules/ini/ini.js"(exports) {
+  "../../node_modules/.pnpm/ini@1.3.8/node_modules/ini/ini.js"(exports) {
     init_cjs_shim();
     exports.parse = exports.decode = decode;
     exports.stringify = exports.encode = encode;
@@ -213,9 +213,9 @@ var require_ini = __commonJS({
   }
 });
 
-// ../../../node_modules/.pnpm/strip-json-comments@2.0.1/node_modules/strip-json-comments/index.js
+// ../../node_modules/.pnpm/strip-json-comments@2.0.1/node_modules/strip-json-comments/index.js
 var require_strip_json_comments = __commonJS({
-  "../../../node_modules/.pnpm/strip-json-comments@2.0.1/node_modules/strip-json-comments/index.js"(exports, module) {
+  "../../node_modules/.pnpm/strip-json-comments@2.0.1/node_modules/strip-json-comments/index.js"(exports, module) {
     "use strict";
     init_cjs_shim();
     var singleComment = 1;
@@ -281,9 +281,9 @@ var require_strip_json_comments = __commonJS({
   }
 });
 
-// ../../../node_modules/.pnpm/rc@1.2.8/node_modules/rc/lib/utils.js
+// ../../node_modules/.pnpm/rc@1.2.8/node_modules/rc/lib/utils.js
 var require_utils = __commonJS({
-  "../../../node_modules/.pnpm/rc@1.2.8/node_modules/rc/lib/utils.js"(exports) {
+  "../../node_modules/.pnpm/rc@1.2.8/node_modules/rc/lib/utils.js"(exports) {
     "use strict";
     init_cjs_shim();
     var fs2 = __require("fs");
@@ -356,9 +356,9 @@ var require_utils = __commonJS({
   }
 });
 
-// ../../../node_modules/.pnpm/deep-extend@0.6.0/node_modules/deep-extend/lib/deep-extend.js
+// ../../node_modules/.pnpm/deep-extend@0.6.0/node_modules/deep-extend/lib/deep-extend.js
 var require_deep_extend = __commonJS({
-  "../../../node_modules/.pnpm/deep-extend@0.6.0/node_modules/deep-extend/lib/deep-extend.js"(exports, module) {
+  "../../node_modules/.pnpm/deep-extend@0.6.0/node_modules/deep-extend/lib/deep-extend.js"(exports, module) {
     "use strict";
     init_cjs_shim();
     function isSpecificValue(val) {
@@ -439,56 +439,24 @@ var require_deep_extend = __commonJS({
   }
 });
 
-// ../../../node_modules/.pnpm/minimist@1.2.8/node_modules/minimist/index.js
+// ../../node_modules/.pnpm/minimist@1.2.6/node_modules/minimist/index.js
 var require_minimist = __commonJS({
-  "../../../node_modules/.pnpm/minimist@1.2.8/node_modules/minimist/index.js"(exports, module) {
-    "use strict";
+  "../../node_modules/.pnpm/minimist@1.2.6/node_modules/minimist/index.js"(exports, module) {
     init_cjs_shim();
-    function hasKey(obj, keys) {
-      var o = obj;
-      keys.slice(0, -1).forEach(function(key2) {
-        o = o[key2] || {};
-      });
-      var key = keys[keys.length - 1];
-      return key in o;
-    }
-    function isNumber(x) {
-      if (typeof x === "number") {
-        return true;
-      }
-      if (/^0x[0-9a-f]+$/i.test(x)) {
-        return true;
-      }
-      return /^[-+]?(?:\d+(?:\.\d*)?|\.\d+)(e[-+]?\d+)?$/.test(x);
-    }
-    function isConstructorOrProto(obj, key) {
-      return key === "constructor" && typeof obj[key] === "function" || key === "__proto__";
-    }
     module.exports = function(args, opts) {
-      if (!opts) {
-        opts = {};
+      if (!opts) opts = {};
+      var flags = { bools: {}, strings: {}, unknownFn: null };
+      if (typeof opts["unknown"] === "function") {
+        flags.unknownFn = opts["unknown"];
       }
-      var flags = {
-        bools: {},
-        strings: {},
-        unknownFn: null
-      };
-      if (typeof opts.unknown === "function") {
-        flags.unknownFn = opts.unknown;
-      }
-      if (typeof opts.boolean === "boolean" && opts.boolean) {
+      if (typeof opts["boolean"] === "boolean" && opts["boolean"]) {
         flags.allBools = true;
       } else {
-        [].concat(opts.boolean).filter(Boolean).forEach(function(key2) {
+        [].concat(opts["boolean"]).filter(Boolean).forEach(function(key2) {
           flags.bools[key2] = true;
         });
       }
       var aliases = {};
-      function aliasIsBoolean(key2) {
-        return aliases[key2].some(function(x) {
-          return flags.bools[x];
-        });
-      }
       Object.keys(opts.alias || {}).forEach(function(key2) {
         aliases[key2] = [].concat(opts.alias[key2]);
         aliases[key2].forEach(function(x) {
@@ -500,64 +468,11 @@ var require_minimist = __commonJS({
       [].concat(opts.string).filter(Boolean).forEach(function(key2) {
         flags.strings[key2] = true;
         if (aliases[key2]) {
-          [].concat(aliases[key2]).forEach(function(k) {
-            flags.strings[k] = true;
-          });
+          flags.strings[aliases[key2]] = true;
         }
       });
-      var defaults2 = opts.default || {};
+      var defaults2 = opts["default"] || {};
       var argv = { _: [] };
-      function argDefined(key2, arg2) {
-        return flags.allBools && /^--[^=]+$/.test(arg2) || flags.strings[key2] || flags.bools[key2] || aliases[key2];
-      }
-      function setKey(obj, keys, value2) {
-        var o = obj;
-        for (var i2 = 0; i2 < keys.length - 1; i2++) {
-          var key2 = keys[i2];
-          if (isConstructorOrProto(o, key2)) {
-            return;
-          }
-          if (o[key2] === void 0) {
-            o[key2] = {};
-          }
-          if (o[key2] === Object.prototype || o[key2] === Number.prototype || o[key2] === String.prototype) {
-            o[key2] = {};
-          }
-          if (o[key2] === Array.prototype) {
-            o[key2] = [];
-          }
-          o = o[key2];
-        }
-        var lastKey = keys[keys.length - 1];
-        if (isConstructorOrProto(o, lastKey)) {
-          return;
-        }
-        if (o === Object.prototype || o === Number.prototype || o === String.prototype) {
-          o = {};
-        }
-        if (o === Array.prototype) {
-          o = [];
-        }
-        if (o[lastKey] === void 0 || flags.bools[lastKey] || typeof o[lastKey] === "boolean") {
-          o[lastKey] = value2;
-        } else if (Array.isArray(o[lastKey])) {
-          o[lastKey].push(value2);
-        } else {
-          o[lastKey] = [o[lastKey], value2];
-        }
-      }
-      function setArg(key2, val, arg2) {
-        if (arg2 && flags.unknownFn && !argDefined(key2, arg2)) {
-          if (flags.unknownFn(arg2) === false) {
-            return;
-          }
-        }
-        var value2 = !flags.strings[key2] && isNumber(val) ? Number(val) : val;
-        setKey(argv, key2.split("."), value2);
-        (aliases[key2] || []).forEach(function(x) {
-          setKey(argv, x.split("."), value2);
-        });
-      }
       Object.keys(flags.bools).forEach(function(key2) {
         setArg(key2, defaults2[key2] === void 0 ? false : defaults2[key2]);
       });
@@ -566,30 +481,68 @@ var require_minimist = __commonJS({
         notFlags = args.slice(args.indexOf("--") + 1);
         args = args.slice(0, args.indexOf("--"));
       }
+      function argDefined(key2, arg2) {
+        return flags.allBools && /^--[^=]+$/.test(arg2) || flags.strings[key2] || flags.bools[key2] || aliases[key2];
+      }
+      function setArg(key2, val, arg2) {
+        if (arg2 && flags.unknownFn && !argDefined(key2, arg2)) {
+          if (flags.unknownFn(arg2) === false) return;
+        }
+        var value2 = !flags.strings[key2] && isNumber(val) ? Number(val) : val;
+        setKey(argv, key2.split("."), value2);
+        (aliases[key2] || []).forEach(function(x) {
+          setKey(argv, x.split("."), value2);
+        });
+      }
+      function setKey(obj, keys, value2) {
+        var o = obj;
+        for (var i2 = 0; i2 < keys.length - 1; i2++) {
+          var key2 = keys[i2];
+          if (isConstructorOrProto(o, key2)) return;
+          if (o[key2] === void 0) o[key2] = {};
+          if (o[key2] === Object.prototype || o[key2] === Number.prototype || o[key2] === String.prototype) o[key2] = {};
+          if (o[key2] === Array.prototype) o[key2] = [];
+          o = o[key2];
+        }
+        var key2 = keys[keys.length - 1];
+        if (isConstructorOrProto(o, key2)) return;
+        if (o === Object.prototype || o === Number.prototype || o === String.prototype) o = {};
+        if (o === Array.prototype) o = [];
+        if (o[key2] === void 0 || flags.bools[key2] || typeof o[key2] === "boolean") {
+          o[key2] = value2;
+        } else if (Array.isArray(o[key2])) {
+          o[key2].push(value2);
+        } else {
+          o[key2] = [o[key2], value2];
+        }
+      }
+      function aliasIsBoolean(key2) {
+        return aliases[key2].some(function(x) {
+          return flags.bools[x];
+        });
+      }
       for (var i = 0; i < args.length; i++) {
         var arg = args[i];
-        var key;
-        var next;
         if (/^--.+=/.test(arg)) {
           var m = arg.match(/^--([^=]+)=([\s\S]*)$/);
-          key = m[1];
+          var key = m[1];
           var value = m[2];
           if (flags.bools[key]) {
             value = value !== "false";
           }
           setArg(key, value, arg);
         } else if (/^--no-.+/.test(arg)) {
-          key = arg.match(/^--no-(.+)/)[1];
+          var key = arg.match(/^--no-(.+)/)[1];
           setArg(key, false, arg);
         } else if (/^--.+/.test(arg)) {
-          key = arg.match(/^--(.+)/)[1];
-          next = args[i + 1];
-          if (next !== void 0 && !/^(-|--)[^-]/.test(next) && !flags.bools[key] && !flags.allBools && (aliases[key] ? !aliasIsBoolean(key) : true)) {
+          var key = arg.match(/^--(.+)/)[1];
+          var next = args[i + 1];
+          if (next !== void 0 && !/^-/.test(next) && !flags.bools[key] && !flags.allBools && (aliases[key] ? !aliasIsBoolean(key) : true)) {
             setArg(key, next, arg);
-            i += 1;
+            i++;
           } else if (/^(true|false)$/.test(next)) {
             setArg(key, next === "true", arg);
-            i += 1;
+            i++;
           } else {
             setArg(key, flags.strings[key] ? "" : true, arg);
           }
@@ -597,13 +550,13 @@ var require_minimist = __commonJS({
           var letters = arg.slice(1, -1).split("");
           var broken = false;
           for (var j = 0; j < letters.length; j++) {
-            next = arg.slice(j + 2);
+            var next = arg.slice(j + 2);
             if (next === "-") {
               setArg(letters[j], next, arg);
               continue;
             }
-            if (/[A-Za-z]/.test(letters[j]) && next[0] === "=") {
-              setArg(letters[j], next.slice(1), arg);
+            if (/[A-Za-z]/.test(letters[j]) && /=/.test(next)) {
+              setArg(letters[j], next.split("=")[1], arg);
               broken = true;
               break;
             }
@@ -620,21 +573,23 @@ var require_minimist = __commonJS({
               setArg(letters[j], flags.strings[letters[j]] ? "" : true, arg);
             }
           }
-          key = arg.slice(-1)[0];
+          var key = arg.slice(-1)[0];
           if (!broken && key !== "-") {
             if (args[i + 1] && !/^(-|--)[^-]/.test(args[i + 1]) && !flags.bools[key] && (aliases[key] ? !aliasIsBoolean(key) : true)) {
               setArg(key, args[i + 1], arg);
-              i += 1;
+              i++;
             } else if (args[i + 1] && /^(true|false)$/.test(args[i + 1])) {
               setArg(key, args[i + 1] === "true", arg);
-              i += 1;
+              i++;
             } else {
               setArg(key, flags.strings[key] ? "" : true, arg);
             }
           }
         } else {
           if (!flags.unknownFn || flags.unknownFn(arg) !== false) {
-            argv._.push(flags.strings._ || !isNumber(arg) ? arg : Number(arg));
+            argv._.push(
+              flags.strings["_"] || !isNumber(arg) ? arg : Number(arg)
+            );
           }
           if (opts.stopEarly) {
             argv._.push.apply(argv._, args.slice(i + 1));
@@ -642,29 +597,48 @@ var require_minimist = __commonJS({
           }
         }
       }
-      Object.keys(defaults2).forEach(function(k) {
-        if (!hasKey(argv, k.split("."))) {
-          setKey(argv, k.split("."), defaults2[k]);
-          (aliases[k] || []).forEach(function(x) {
-            setKey(argv, x.split("."), defaults2[k]);
+      Object.keys(defaults2).forEach(function(key2) {
+        if (!hasKey(argv, key2.split("."))) {
+          setKey(argv, key2.split("."), defaults2[key2]);
+          (aliases[key2] || []).forEach(function(x) {
+            setKey(argv, x.split("."), defaults2[key2]);
           });
         }
       });
       if (opts["--"]) {
-        argv["--"] = notFlags.slice();
+        argv["--"] = new Array();
+        notFlags.forEach(function(key2) {
+          argv["--"].push(key2);
+        });
       } else {
-        notFlags.forEach(function(k) {
-          argv._.push(k);
+        notFlags.forEach(function(key2) {
+          argv._.push(key2);
         });
       }
       return argv;
     };
+    function hasKey(obj, keys) {
+      var o = obj;
+      keys.slice(0, -1).forEach(function(key2) {
+        o = o[key2] || {};
+      });
+      var key = keys[keys.length - 1];
+      return key in o;
+    }
+    function isNumber(x) {
+      if (typeof x === "number") return true;
+      if (/^0x[0-9a-f]+$/i.test(x)) return true;
+      return /^[-+]?(?:\d+(?:\.\d*)?|\.\d+)(e[-+]?\d+)?$/.test(x);
+    }
+    function isConstructorOrProto(obj, key) {
+      return key === "constructor" && typeof obj[key] === "function" || key === "__proto__";
+    }
   }
 });
 
-// ../../../node_modules/.pnpm/rc@1.2.8/node_modules/rc/index.js
+// ../../node_modules/.pnpm/rc@1.2.8/node_modules/rc/index.js
 var require_rc = __commonJS({
-  "../../../node_modules/.pnpm/rc@1.2.8/node_modules/rc/index.js"(exports, module) {
+  "../../node_modules/.pnpm/rc@1.2.8/node_modules/rc/index.js"(exports, module) {
     init_cjs_shim();
     var cc = require_utils();
     var join18 = __require("path").join;
@@ -714,9 +688,9 @@ var require_rc = __commonJS({
   }
 });
 
-// ../../../node_modules/.pnpm/stackframe@1.3.4/node_modules/stackframe/stackframe.js
+// ../../node_modules/.pnpm/stackframe@1.3.4/node_modules/stackframe/stackframe.js
 var require_stackframe = __commonJS({
-  "../../../node_modules/.pnpm/stackframe@1.3.4/node_modules/stackframe/stackframe.js"(exports, module) {
+  "../../node_modules/.pnpm/stackframe@1.3.4/node_modules/stackframe/stackframe.js"(exports, module) {
     init_cjs_shim();
     (function(root, factory) {
       "use strict";
@@ -845,9 +819,9 @@ var require_stackframe = __commonJS({
   }
 });
 
-// ../../../node_modules/.pnpm/error-stack-parser@2.1.4/node_modules/error-stack-parser/error-stack-parser.js
+// ../../node_modules/.pnpm/error-stack-parser@2.1.4/node_modules/error-stack-parser/error-stack-parser.js
 var require_error_stack_parser = __commonJS({
-  "../../../node_modules/.pnpm/error-stack-parser@2.1.4/node_modules/error-stack-parser/error-stack-parser.js"(exports, module) {
+  "../../node_modules/.pnpm/error-stack-parser@2.1.4/node_modules/error-stack-parser/error-stack-parser.js"(exports, module) {
     init_cjs_shim();
     (function(root, factory) {
       "use strict";
@@ -1014,9 +988,9 @@ var require_error_stack_parser = __commonJS({
   }
 });
 
-// ../../../node_modules/.pnpm/dotenv@16.6.1/node_modules/dotenv/package.json
+// ../../node_modules/.pnpm/dotenv@16.6.1/node_modules/dotenv/package.json
 var require_package = __commonJS({
-  "../../../node_modules/.pnpm/dotenv@16.6.1/node_modules/dotenv/package.json"(exports, module) {
+  "../../node_modules/.pnpm/dotenv@16.6.1/node_modules/dotenv/package.json"(exports, module) {
     module.exports = {
       name: "dotenv",
       version: "16.6.1",
@@ -1082,9 +1056,9 @@ var require_package = __commonJS({
   }
 });
 
-// ../../../node_modules/.pnpm/dotenv@16.6.1/node_modules/dotenv/lib/main.js
+// ../../node_modules/.pnpm/dotenv@16.6.1/node_modules/dotenv/lib/main.js
 var require_main = __commonJS({
-  "../../../node_modules/.pnpm/dotenv@16.6.1/node_modules/dotenv/lib/main.js"(exports, module) {
+  "../../node_modules/.pnpm/dotenv@16.6.1/node_modules/dotenv/lib/main.js"(exports, module) {
     init_cjs_shim();
     var fs2 = __require("fs");
     var path4 = __require("path");
@@ -1373,26 +1347,26 @@ var require_main = __commonJS({
   }
 });
 
-// ../../../node_modules/.pnpm/application-config-path@0.1.1/node_modules/application-config-path/index.js
+// ../../node_modules/.pnpm/application-config-path@0.1.0/node_modules/application-config-path/index.js
 var require_application_config_path = __commonJS({
-  "../../../node_modules/.pnpm/application-config-path@0.1.1/node_modules/application-config-path/index.js"(exports, module) {
+  "../../node_modules/.pnpm/application-config-path@0.1.0/node_modules/application-config-path/index.js"(exports, module) {
     init_cjs_shim();
     var os = __require("os");
     var path4 = __require("path");
     function darwin(name) {
-      return path4.join(process.env.HOME, "Library", "Application Support", name);
+      return path4.join(process.env["HOME"], "Library", "Application Support", name);
     }
-    function xdg(name) {
-      if (process.env.XDG_CONFIG_HOME) {
-        return path4.join(process.env.XDG_CONFIG_HOME, name);
+    function linux(name) {
+      if (process.env["XDG_CONFIG_HOME"]) {
+        return path4.join(process.env["XDG_CONFIG_HOME"], name);
       }
-      return path4.join(process.env.HOME, ".config", name);
+      return path4.join(process.env["HOME"], ".config", name);
     }
     function win32(name) {
-      if (process.env.LOCALAPPDATA) {
-        return path4.join(process.env.LOCALAPPDATA, name);
+      if (process.env["LOCALAPPDATA"]) {
+        return path4.join(process.env["LOCALAPPDATA"], name);
       }
-      return path4.join(process.env.USERPROFILE, "Local Settings", "Application Data", name);
+      return path4.join(process.env["USERPROFILE"], "Local Settings", "Application Data", name);
     }
     function applicationConfigPath(name) {
       if (typeof name !== "string") {
@@ -1401,10 +1375,8 @@ var require_application_config_path = __commonJS({
       switch (os.platform()) {
         case "darwin":
           return darwin(name);
-        case "freebsd":
-        case "openbsd":
         case "linux":
-          return xdg(name);
+          return linux(name);
         case "win32":
           return win32(name);
       }
@@ -1414,9 +1386,9 @@ var require_application_config_path = __commonJS({
   }
 });
 
-// ../../../node_modules/.pnpm/mkdirp@0.5.6/node_modules/mkdirp/index.js
+// ../../node_modules/.pnpm/mkdirp@0.5.6/node_modules/mkdirp/index.js
 var require_mkdirp = __commonJS({
-  "../../../node_modules/.pnpm/mkdirp@0.5.6/node_modules/mkdirp/index.js"(exports, module) {
+  "../../node_modules/.pnpm/mkdirp@0.5.6/node_modules/mkdirp/index.js"(exports, module) {
     init_cjs_shim();
     var path4 = __require("path");
     var fs2 = __require("fs");
@@ -1503,9 +1475,9 @@ var require_mkdirp = __commonJS({
   }
 });
 
-// ../../../node_modules/.pnpm/application-config@1.0.1/node_modules/application-config/index.js
+// ../../node_modules/.pnpm/application-config@1.0.1/node_modules/application-config/index.js
 var require_application_config = __commonJS({
-  "../../../node_modules/.pnpm/application-config@1.0.1/node_modules/application-config/index.js"(exports, module) {
+  "../../node_modules/.pnpm/application-config@1.0.1/node_modules/application-config/index.js"(exports, module) {
     init_cjs_shim();
     var fs2 = __require("fs");
     var path4 = __require("path");
@@ -1564,9 +1536,9 @@ var require_application_config = __commonJS({
   }
 });
 
-// ../../../node_modules/.pnpm/debounce@1.2.1/node_modules/debounce/index.js
+// ../../node_modules/.pnpm/debounce@1.2.1/node_modules/debounce/index.js
 var require_debounce = __commonJS({
-  "../../../node_modules/.pnpm/debounce@1.2.1/node_modules/debounce/index.js"(exports, module) {
+  "../../node_modules/.pnpm/debounce@1.2.1/node_modules/debounce/index.js"(exports, module) {
     init_cjs_shim();
     function debounce3(func, wait, immediate) {
       var timeout, args, context, timestamp, result;
@@ -1753,9 +1725,8 @@ function setLogHandler(LogHandler3, rcObject) {
 function log({ channel, isMainProcess }, level, stacktrace, args) {
   const variant = LoggerVariants[level];
   if (!handler) {
-    console.log("Failed to log message - Handler not initialized yet");
-    console.log(`Log Message: ${channel} ${level} ${args.join(" ")}`);
-    throw Error("Failed to log message - Handler not initialized yet");
+    variant.log(`[early] ${channel}:`, ...args);
+    return;
   }
   handler(channel, variant.level, stacktrace, ...args);
   if (rc2["log-to-console"]) {
@@ -1991,7 +1962,7 @@ if (process.env.NODE_ENV !== "production") {
     console.error("Failed to load .env file", e);
   }
 }
-var appConfig = (0, import_application_config.default)("DeltaChat");
+var appConfig = (0, import_application_config.default)("DeltEcho");
 import { join } from "path";
 if (process.env.DC_TEST_DIR) {
   appConfig.filePath = join(process.env.DC_TEST_DIR, "config.json");
@@ -1999,7 +1970,7 @@ if (process.env.DC_TEST_DIR) {
   console.log("Running in Portable Mode", process.env.PORTABLE_EXECUTABLE_DIR);
   appConfig.filePath = join(
     process.env.PORTABLE_EXECUTABLE_DIR,
-    "DeltaChatData",
+    "DeltEchoData",
     "config.json"
   );
 }
@@ -2059,7 +2030,7 @@ function getCustomThemesPath() {
   return join2(getConfigPath(), "custom-themes");
 }
 function getDraftTempDir() {
-  return join2(app.getPath("temp"), "chat.delta.desktop-draft");
+  return join2(app.getPath("temp"), "chat.deltecho.desktop-draft");
 }
 var supportedURISchemes = [
   "OPENPGP4FPR:",
@@ -5247,7 +5218,7 @@ init_cjs_shim();
 
 // src/get-build-info.ts
 init_cjs_shim();
-var BuildInfo = JSON.parse('{"VERSION":"1.58.2","BUILD_TIMESTAMP":1767509940636,"GIT_REF":"vv1.0.0-alpha.1-35-g02165f7"}');
+var BuildInfo = JSON.parse('{"VERSION":"1.0.0","BUILD_TIMESTAMP":1768446617483,"GIT_REF":"07d93b7"}');
 
 // src/deltachat/stdio_server.ts
 import { spawn } from "child_process";

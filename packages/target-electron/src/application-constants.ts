@@ -68,7 +68,7 @@ export function getCustomThemesPath() {
 // this is used for temporary files (because core expects file paths, can not accept blobs directly yet)
 // used when sending file from webxdc and when pasting a file from clipboard
 export function getDraftTempDir() {
-  return join(app.getPath('temp'), 'chat.delta.desktop-draft')
+  return join(app.getPath('temp'), 'chat.deltecho.desktop-draft')
 }
 
 export const supportedURISchemes = [

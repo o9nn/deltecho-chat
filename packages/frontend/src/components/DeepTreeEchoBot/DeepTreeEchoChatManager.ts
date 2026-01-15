@@ -36,7 +36,14 @@
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { BackendRemote, Type as T } from '../../backend-com'
 
-const log = getLogger('render/components/DeepTreeEchoBot/DeepTreeEchoChatManager')
+// Lazy logger to avoid initialization before logger handler is ready
+let _log: ReturnType<typeof getLogger> | null = null
+function log() {
+  if (!_log) {
+    _log = getLogger('render/components/DeepTreeEchoBot/DeepTreeEchoChatManager')
+  }
+  return _log
+}
 
 /**
  * Chat summary for Deep Tree Echo's awareness
@@ -138,7 +145,7 @@ export class DeepTreeEchoChatManager {
   private constructor() {
     this.initializeEventListeners()
     this.startScheduler()
-    log.info('DeepTreeEchoChatManager initialized')
+    log().info('DeepTreeEchoChatManager initialized')
   }
 
   /**
@@ -156,7 +163,7 @@ export class DeepTreeEchoChatManager {
    */
   public setUIBridge(bridge: any): void {
     this.uiBridge = bridge
-    log.info('UI Bridge connected to ChatManager')
+    log().info('UI Bridge connected to ChatManager')
   }
 
   // ============================================================
@@ -196,17 +203,17 @@ export class DeepTreeEchoChatManager {
             profileImage: chatInfo.profileImage || undefined,
           })
         } catch (err) {
-          log.warn(`Failed to get info for chat ${chatId}:`, err)
+          log().warn(`Failed to get info for chat ${chatId}:`, err)
         }
       }
 
       // Cache the results
       this.chatCache.set(accountId.toString(), summaries)
 
-      log.info(`Listed ${summaries.length} chats for account ${accountId}`)
+      log().info(`Listed ${summaries.length} chats for account ${accountId}`)
       return summaries
     } catch (error) {
-      log.error('Error listing chats:', error)
+      log().error('Error listing chats:', error)
       return []
     }
   }
@@ -263,13 +270,13 @@ export class DeepTreeEchoChatManager {
             contactIds: [],
           })
         } catch (err) {
-          log.warn(`Failed to get info for chat ${chatId}:`, err)
+          log().warn(`Failed to get info for chat ${chatId}:`, err)
         }
       }
 
       return summaries
     } catch (error) {
-      log.error('Error searching chats:', error)
+      log().error('Error searching chats:', error)
       return []
     }
   }
@@ -301,10 +308,10 @@ export class DeepTreeEchoChatManager {
       // Mark as seen
       await BackendRemote.rpc.markseenMsgs(accountId, [])
 
-      log.info(`Opened chat ${chatId} for account ${accountId}`)
+      log().info(`Opened chat ${chatId} for account ${accountId}`)
       return true
     } catch (error) {
-      log.error('Error opening chat:', error)
+      log().error('Error opening chat:', error)
       return false
     }
   }
@@ -324,7 +331,7 @@ export class DeepTreeEchoChatManager {
       this.uiBridge.unselectChat()
     }
     this.activeChat = null
-    log.info('Closed active chat')
+    log().info('Closed active chat')
   }
 
   /**
@@ -357,10 +364,10 @@ export class DeepTreeEchoChatManager {
       // Create chat with contact
       const chatId = await BackendRemote.rpc.createChatByContactId(accountId, contactId)
 
-      log.info(`Created chat ${chatId} with contact ${contactEmail}`)
+      log().info(`Created chat ${chatId} with contact ${contactEmail}`)
       return chatId
     } catch (error) {
-      log.error('Error creating chat:', error)
+      log().error('Error creating chat:', error)
       return null
     }
   }
@@ -383,14 +390,14 @@ export class DeepTreeEchoChatManager {
           const contactId = await BackendRemote.rpc.createContact(accountId, email, email.split('@')[0])
           await BackendRemote.rpc.addContactToChat(accountId, chatId, contactId)
         } catch (err) {
-          log.warn(`Failed to add ${email} to group:`, err)
+          log().warn(`Failed to add ${email} to group:`, err)
         }
       }
 
-      log.info(`Created group chat ${chatId} with ${memberEmails.length} members`)
+      log().info(`Created group chat ${chatId} with ${memberEmails.length} members`)
       return chatId
     } catch (error) {
-      log.error('Error creating group chat:', error)
+      log().error('Error creating group chat:', error)
       return null
     }
   }
@@ -409,10 +416,10 @@ export class DeepTreeEchoChatManager {
   ): Promise<number | null> {
     try {
       const msgId = await BackendRemote.rpc.miscSendTextMessage(accountId, chatId, text)
-      log.info(`Sent message to chat ${chatId}: "${text.slice(0, 50)}..."`)
+      log().info(`Sent message to chat ${chatId}: "${text.slice(0, 50)}..."`)
       return msgId
     } catch (error) {
-      log.error('Error sending message:', error)
+      log().error('Error sending message:', error)
       return null
     }
   }
@@ -422,7 +429,7 @@ export class DeepTreeEchoChatManager {
    */
   public async sendToActiveChat(text: string): Promise<number | null> {
     if (!this.activeChat) {
-      log.warn('No active chat to send message to')
+      log().warn('No active chat to send message to')
       return null
     }
     return this.sendMessage(this.activeChat.accountId, this.activeChat.chatId, text)
@@ -450,7 +457,7 @@ export class DeepTreeEchoChatManager {
       status: 'pending',
     })
 
-    log.info(`Scheduled message for ${new Date(scheduledTime).toISOString()}: "${text.slice(0, 50)}..."`)
+    log().info(`Scheduled message for ${new Date(scheduledTime).toISOString()}: "${text.slice(0, 50)}..."`)
     return id
   }
 
@@ -497,7 +504,7 @@ export class DeepTreeEchoChatManager {
       }
 
       if (!chatId) {
-        log.error('Could not create or find chat for:', contactEmail)
+        log().error('Could not create or find chat for:', contactEmail)
         return null
       }
 
@@ -510,10 +517,10 @@ export class DeepTreeEchoChatManager {
         return null
       }
 
-      log.info(`Initiated conversation with ${contactEmail}`)
+      log().info(`Initiated conversation with ${contactEmail}`)
       return { chatId, msgId }
     } catch (error) {
-      log.error('Error initiating conversation:', error)
+      log().error('Error initiating conversation:', error)
       return null
     }
   }
@@ -564,7 +571,7 @@ export class DeepTreeEchoChatManager {
 
     this.watchedChats.get(key)!.push(callback)
 
-    log.info(`Started watching chat ${chatId}`)
+    log().info(`Started watching chat ${chatId}`)
 
     // Return unwatch function
     return () => {
@@ -593,7 +600,7 @@ export class DeepTreeEchoChatManager {
 
     this.watchedChats.get(key)!.push(callback)
 
-    log.info(`Started watching all chats for account ${accountId}`)
+    log().info(`Started watching all chats for account ${accountId}`)
 
     return () => {
       const callbacks = this.watchedChats.get(key)
@@ -631,7 +638,7 @@ export class DeepTreeEchoChatManager {
       this.notifyWatchers(accountId, chatId, 'read', {})
     })
 
-    log.info('Event listeners initialized')
+    log().info('Event listeners initialized')
   }
 
   /**
@@ -674,9 +681,9 @@ export class DeepTreeEchoChatManager {
         try {
           await this.sendMessage(msg.accountId, msg.chatId, msg.text)
           msg.status = 'sent'
-          log.info(`Sent scheduled message: ${msg.id}`)
+          log().info(`Sent scheduled message: ${msg.id}`)
         } catch (error) {
-          log.error(`Failed to send scheduled message ${msg.id}:`, error)
+          log().error(`Failed to send scheduled message ${msg.id}:`, error)
         }
       }
     }
@@ -719,10 +726,10 @@ export class DeepTreeEchoChatManager {
         }
       }
 
-      log.info(`Listed ${contactSummaries.length} contacts for account ${accountId}`)
+      log().info(`Listed ${contactSummaries.length} contacts for account ${accountId}`)
       return contactSummaries
     } catch (error) {
-      log.error('Error listing contacts:', error)
+      log().error('Error listing contacts:', error)
       return []
     }
   }
@@ -756,7 +763,7 @@ export class DeepTreeEchoChatManager {
         status: contact.status || undefined,
       }
     } catch (error) {
-      log.error(`Error getting contact ${contactId}:`, error)
+      log().error(`Error getting contact ${contactId}:`, error)
       return null
     }
   }
@@ -767,10 +774,10 @@ export class DeepTreeEchoChatManager {
   public async createContact(accountId: number, email: string, name?: string): Promise<number | null> {
     try {
       const contactId = await BackendRemote.rpc.createContact(accountId, email, name || '')
-      log.info(`Created contact ${contactId} for ${email}`)
+      log().info(`Created contact ${contactId} for ${email}`)
       return contactId
     } catch (error) {
-      log.error(`Error creating contact for ${email}:`, error)
+      log().error(`Error creating contact for ${email}:`, error)
       return null
     }
   }
@@ -806,7 +813,7 @@ export class DeepTreeEchoChatManager {
 
       return results
     } catch (error) {
-      log.error('Error searching contacts:', error)
+      log().error('Error searching contacts:', error)
       return []
     }
   }
@@ -877,14 +884,14 @@ export class DeepTreeEchoChatManager {
             hasAttachment: !!(msg.file || msg.webxdcInfo),
           })
         } catch (err) {
-          log.warn(`Failed to get message ${msgId}:`, err)
+          log().warn(`Failed to get message ${msgId}:`, err)
         }
       }
 
-      log.info(`Retrieved ${messages.length} messages from chat ${chatId}`)
+      log().info(`Retrieved ${messages.length} messages from chat ${chatId}`)
       return messages
     } catch (error) {
-      log.error(`Error getting chat history for ${chatId}:`, error)
+      log().error(`Error getting chat history for ${chatId}:`, error)
       return []
     }
   }
@@ -946,10 +953,10 @@ export class DeepTreeEchoChatManager {
         }
       }
 
-      log.info(`Found ${results.length} messages matching "${query}" in chat ${chatId}`)
+      log().info(`Found ${results.length} messages matching "${query}" in chat ${chatId}`)
       return results
     } catch (error) {
-      log.error(`Error searching in chat ${chatId}:`, error)
+      log().error(`Error searching in chat ${chatId}:`, error)
       return []
     }
   }
@@ -992,7 +999,7 @@ export class DeepTreeEchoChatManager {
         file: msg.file || undefined,
       }
     } catch (error) {
-      log.error(`Error getting message ${messageId}:`, error)
+      log().error(`Error getting message ${messageId}:`, error)
       return null
     }
   }
@@ -1022,7 +1029,7 @@ export class DeepTreeEchoChatManager {
 
       return formatted.join('\n')
     } catch (error) {
-      log.error(`Error getting conversation context for ${chatId}:`, error)
+      log().error(`Error getting conversation context for ${chatId}:`, error)
       return 'Unable to retrieve conversation context.'
     }
   }
@@ -1037,9 +1044,22 @@ export class DeepTreeEchoChatManager {
     this.watchedChats.clear()
     this.chatCache.clear()
     this.scheduledMessages = []
-    log.info('ChatManager cleaned up')
+    log().info('ChatManager cleaned up')
   }
 }
 
-// Export singleton instance
-export const chatManager = DeepTreeEchoChatManager.getInstance()
+// Export lazy singleton getter (avoids initialization before logger is ready)
+let _chatManagerInstance: DeepTreeEchoChatManager | null = null
+export function getChatManager(): DeepTreeEchoChatManager {
+  if (!_chatManagerInstance) {
+    _chatManagerInstance = DeepTreeEchoChatManager.getInstance()
+  }
+  return _chatManagerInstance
+}
+
+// Use Proxy for backward compatibility - lazily initializes on first access
+export const chatManager: DeepTreeEchoChatManager = new Proxy({} as DeepTreeEchoChatManager, {
+  get(_target, prop) {
+    return (getChatManager() as any)[prop]
+  }
+})

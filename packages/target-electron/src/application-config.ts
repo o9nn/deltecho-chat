@@ -10,7 +10,9 @@ if (process.env.NODE_ENV !== 'production') {
   }
 }
 
-const appConfig = applicationConfig('DeltaChat')
+// Use 'DeltEcho' instead of 'DeltaChat' to have separate data directory
+// This prevents conflicts with regular DeltaChat installations
+const appConfig = applicationConfig('DeltEcho')
 
 import { join } from 'path'
 
@@ -21,7 +23,7 @@ if (process.env.DC_TEST_DIR) {
   console.log('Running in Portable Mode', process.env.PORTABLE_EXECUTABLE_DIR)
   appConfig.filePath = join(
     process.env.PORTABLE_EXECUTABLE_DIR,
-    'DeltaChatData',
+    'DeltEchoData',
     'config.json'
   )
 }

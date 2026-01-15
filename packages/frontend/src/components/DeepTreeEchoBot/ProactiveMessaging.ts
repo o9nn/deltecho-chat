@@ -46,7 +46,14 @@ import { BackendRemote } from '../../backend-com'
 import { chatManager, ChatSummary } from './DeepTreeEchoChatManager'
 import { uiBridge } from './DeepTreeEchoUIBridge'
 
-const log = getLogger('render/components/DeepTreeEchoBot/ProactiveMessaging')
+// Lazy logger to avoid initialization before logger handler is ready
+let _log: ReturnType<typeof getLogger> | null = null
+function log() {
+  if (!_log) {
+    _log = getLogger('render/components/DeepTreeEchoBot/ProactiveMessaging')
+  }
+  return _log
+}
 
 // ============================================================
 // TYPES & INTERFACES
@@ -85,32 +92,32 @@ export interface ProactiveTrigger {
   name: string
   description: string
   enabled: boolean
-  
+
   // Timing (for scheduled/interval)
   scheduledTime?: number      // Unix timestamp
   intervalMinutes?: number    // For interval triggers
   lastTriggered?: number      // Last trigger time
-  
+
   // Event (for event triggers)
   eventType?: EventType
-  
+
   // Condition (for condition triggers)
   condition?: {
     type: 'unread_count' | 'silence_duration' | 'custom'
     threshold?: number
     customCheck?: () => boolean
   }
-  
+
   // Target
   targetType: 'specific_chat' | 'all_chats' | 'unread_chats' | 'new_contacts'
   targetChatId?: number
   targetAccountId?: number
-  
+
   // Message
   messageTemplate: string
   useAI?: boolean             // Generate message with LLM
   aiPrompt?: string           // Prompt for AI generation
-  
+
   // Limits
   maxTriggers?: number        // Maximum times to trigger
   triggerCount: number        // Current trigger count
@@ -158,7 +165,7 @@ export interface ProactiveConfig {
  */
 export class ProactiveMessaging {
   private static instance: ProactiveMessaging | null = null
-  
+
   // Configuration
   private config: ProactiveConfig = {
     enabled: true,
@@ -169,30 +176,30 @@ export class ProactiveMessaging {
     respectMutedChats: true,
     respectArchivedChats: true,
   }
-  
+
   // Triggers
   private triggers: Map<string, ProactiveTrigger> = new Map()
-  
+
   // Message queue
   private messageQueue: QueuedMessage[] = []
-  
+
   // Rate limiting
   private messagesSentThisHour: number = 0
   private messagesSentToday: number = 0
   private lastHourReset: number = Date.now()
   private lastDayReset: number = Date.now()
-  
+
   // Intervals
   private triggerCheckInterval: NodeJS.Timeout | null = null
   private queueProcessInterval: NodeJS.Timeout | null = null
-  
+
   // LLM service reference
   private llmService: any = null
 
   private constructor() {
     this.initializeDefaultTriggers()
     this.startProcessing()
-    log.info('ProactiveMessaging initialized')
+    log().info('ProactiveMessaging initialized')
   }
 
   /**
@@ -221,7 +228,7 @@ export class ProactiveMessaging {
    */
   public updateConfig(config: Partial<ProactiveConfig>): void {
     this.config = { ...this.config, ...config }
-    log.info('ProactiveMessaging config updated')
+    log().info('ProactiveMessaging config updated')
   }
 
   /**
@@ -236,7 +243,7 @@ export class ProactiveMessaging {
    */
   public setEnabled(enabled: boolean): void {
     this.config.enabled = enabled
-    log.info(`ProactiveMessaging ${enabled ? 'enabled' : 'disabled'}`)
+    log().info(`ProactiveMessaging ${enabled ? 'enabled' : 'disabled'}`)
   }
 
   // ============================================================
@@ -248,16 +255,16 @@ export class ProactiveMessaging {
    */
   public addTrigger(trigger: Omit<ProactiveTrigger, 'id' | 'triggerCount'>): string {
     const id = `trigger-${Date.now()}-${Math.random().toString(36).slice(2)}`
-    
+
     const fullTrigger: ProactiveTrigger = {
       ...trigger,
       id,
       triggerCount: 0,
     }
-    
+
     this.triggers.set(id, fullTrigger)
-    log.info(`Added trigger: ${trigger.name} (${id})`)
-    
+    log().info(`Added trigger: ${trigger.name} (${id})`)
+
     return id
   }
 
@@ -267,7 +274,7 @@ export class ProactiveMessaging {
   public removeTrigger(id: string): boolean {
     const result = this.triggers.delete(id)
     if (result) {
-      log.info(`Removed trigger: ${id}`)
+      log().info(`Removed trigger: ${id}`)
     }
     return result
   }
@@ -279,7 +286,7 @@ export class ProactiveMessaging {
     const trigger = this.triggers.get(id)
     if (trigger) {
       trigger.enabled = enabled
-      log.info(`Trigger ${id} ${enabled ? 'enabled' : 'disabled'}`)
+      log().info(`Trigger ${id} ${enabled ? 'enabled' : 'disabled'}`)
     }
   }
 
@@ -347,7 +354,7 @@ export class ProactiveMessaging {
       maxTriggers: 1, // Only once
     })
 
-    log.info('Default triggers initialized')
+    log().info('Default triggers initialized')
   }
 
   /**
@@ -357,11 +364,11 @@ export class ProactiveMessaging {
     const now = new Date()
     const target = new Date()
     target.setHours(hour, 0, 0, 0)
-    
+
     if (target <= now) {
       target.setDate(target.getDate() + 1)
     }
-    
+
     return target.getTime()
   }
 
@@ -388,7 +395,7 @@ export class ProactiveMessaging {
       this.resetRateLimits()
     }, 60000)
 
-    log.info('Started trigger and queue processing')
+    log().info('Started trigger and queue processing')
   }
 
   /**
@@ -408,7 +415,7 @@ export class ProactiveMessaging {
           await this.executeTrigger(trigger)
         }
       } catch (error) {
-        log.error(`Error checking trigger ${trigger.id}:`, error)
+        log().error(`Error checking trigger ${trigger.id}:`, error)
       }
     }
   }
@@ -484,7 +491,7 @@ export class ProactiveMessaging {
    * Execute a trigger
    */
   private async executeTrigger(trigger: ProactiveTrigger): Promise<void> {
-    log.info(`Executing trigger: ${trigger.name}`)
+    log().info(`Executing trigger: ${trigger.name}`)
 
     try {
       const accounts = await BackendRemote.rpc.getAllAccounts()
@@ -521,7 +528,7 @@ export class ProactiveMessaging {
       }
 
     } catch (error) {
-      log.error(`Error executing trigger ${trigger.id}:`, error)
+      log().error(`Error executing trigger ${trigger.id}:`, error)
     }
   }
 
@@ -564,7 +571,7 @@ export class ProactiveMessaging {
         )
         return response
       } catch (error) {
-        log.warn('Failed to generate AI message, using template')
+        log().warn('Failed to generate AI message, using template')
       }
     }
 
@@ -628,7 +635,7 @@ export class ProactiveMessaging {
     this.messageQueue.push(queuedMessage)
     this.sortQueue()
 
-    log.info(`Queued message ${id} for chat ${params.chatId}`)
+    log().info(`Queued message ${id} for chat ${params.chatId}`)
     return id
   }
 
@@ -637,12 +644,12 @@ export class ProactiveMessaging {
    */
   private sortQueue(): void {
     const priorityOrder = { high: 0, normal: 1, low: 2 }
-    
+
     this.messageQueue.sort((a, b) => {
       // First by priority
       const priorityDiff = priorityOrder[a.priority] - priorityOrder[b.priority]
       if (priorityDiff !== 0) return priorityDiff
-      
+
       // Then by scheduled time
       return a.scheduledTime - b.scheduledTime
     })
@@ -675,10 +682,10 @@ export class ProactiveMessaging {
         this.messagesSentThisHour++
         this.messagesSentToday++
 
-        log.info(`Sent queued message ${msg.id}`)
+        log().info(`Sent queued message ${msg.id}`)
       } catch (error) {
-        log.error(`Failed to send message ${msg.id}:`, error)
-        
+        log().error(`Failed to send message ${msg.id}:`, error)
+
         if (msg.attempts >= msg.maxAttempts) {
           msg.status = 'failed'
           msg.error = error instanceof Error ? error.message : 'Unknown error'
@@ -690,8 +697,8 @@ export class ProactiveMessaging {
 
     // Clean up old messages
     this.messageQueue = this.messageQueue.filter(
-      m => m.status === 'queued' || 
-           (m.status === 'sent' && Date.now() - (m.sentAt || 0) < 3600000)
+      m => m.status === 'queued' ||
+        (m.status === 'sent' && Date.now() - (m.sentAt || 0) < 3600000)
     )
   }
 
@@ -733,13 +740,13 @@ export class ProactiveMessaging {
    */
   private resetRateLimits(): void {
     const now = Date.now()
-    
+
     // Reset hourly limit
     if (now - this.lastHourReset >= 3600000) {
       this.messagesSentThisHour = 0
       this.lastHourReset = now
     }
-    
+
     // Reset daily limit
     if (now - this.lastDayReset >= 86400000) {
       this.messagesSentToday = 0
@@ -756,7 +763,7 @@ export class ProactiveMessaging {
     }
 
     const hour = new Date().getHours()
-    
+
     if (this.config.quietHoursStart < this.config.quietHoursEnd) {
       // Normal range (e.g., 22-8 means 22:00 to 08:00)
       return hour >= this.config.quietHoursStart || hour < this.config.quietHoursEnd
@@ -783,7 +790,7 @@ export class ProactiveMessaging {
       this.messagesSentToday++
       return true
     } catch (error) {
-      log.error('Failed to send immediate message:', error)
+      log().error('Failed to send immediate message:', error)
       return false
     }
   }
@@ -851,9 +858,22 @@ export class ProactiveMessaging {
     }
     this.triggers.clear()
     this.messageQueue = []
-    log.info('ProactiveMessaging cleaned up')
+    log().info('ProactiveMessaging cleaned up')
   }
 }
 
-// Export singleton instance
-export const proactiveMessaging = ProactiveMessaging.getInstance()
+// Export lazy singleton getter (avoids initialization before logger is ready)
+let _proactiveMessagingInstance: ProactiveMessaging | null = null
+export function getProactiveMessaging(): ProactiveMessaging {
+  if (!_proactiveMessagingInstance) {
+    _proactiveMessagingInstance = ProactiveMessaging.getInstance()
+  }
+  return _proactiveMessagingInstance
+}
+
+// Use Proxy for backward compatibility - lazily initializes on first access
+export const proactiveMessaging: ProactiveMessaging = new Proxy({} as ProactiveMessaging, {
+  get(_target, prop) {
+    return (getProactiveMessaging() as any)[prop]
+  }
+})
