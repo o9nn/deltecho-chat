@@ -412,6 +412,31 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
 
+  packages/reasoning:
+    dependencies:
+      '@deltecho/cognitive':
+        specifier: workspace:*
+        version: link:../cognitive
+      deep-tree-echo-core:
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      '@types/jest':
+        specifier: ^29.5.14
+        version: 29.5.14
+      '@types/node':
+        specifier: ^22.10.6
+        version: 22.19.3
+      jest:
+        specifier: ^29.7.0
+        version: 29.7.0(@types/node@22.19.3)(ts-node@10.9.1(@types/node@22.19.3)(typescript@5.9.3))
+      ts-jest:
+        specifier: ^29.4.6
+        version: 29.4.6(@babel/core@7.27.1)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.27.1))(jest-util@29.7.0)(jest@29.7.0(@types/node@22.19.3)(ts-node@10.9.1(@types/node@22.19.3)(typescript@5.9.3)))(typescript@5.9.3)
+      typescript:
+        specifier: ^5.7.3
+        version: 5.9.3
+
   packages/runtime:
     dependencies:
       '@deltachat-desktop/shared':
