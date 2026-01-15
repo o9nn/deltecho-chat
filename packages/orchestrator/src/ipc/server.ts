@@ -4,52 +4,12 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { EventEmitter } from 'events';
 import { StorageManager } from './storage-manager.js';
+import {
+  IPCMessageType,
+  type IPCMessage,
+} from '@deltecho/ipc';
 
 const log = getLogger('deep-tree-echo-orchestrator/IPCServer');
-
-/**
- * IPC message types
- */
-export enum IPCMessageType {
-  // Request types
-  REQUEST_COGNITIVE = 'request_cognitive',
-  REQUEST_MEMORY = 'request_memory',
-  REQUEST_PERSONA = 'request_persona',
-  REQUEST_STATUS = 'request_status',
-  REQUEST_CONFIG = 'request_config',
-
-  // Storage request types
-  REQUEST_STORAGE_GET = 'request_storage_get',
-  REQUEST_STORAGE_SET = 'request_storage_set',
-  REQUEST_STORAGE_DELETE = 'request_storage_delete',
-  REQUEST_STORAGE_CLEAR = 'request_storage_clear',
-  REQUEST_STORAGE_KEYS = 'request_storage_keys',
-
-  // Response types
-  RESPONSE_SUCCESS = 'response_success',
-  RESPONSE_ERROR = 'response_error',
-
-  // Event types
-  EVENT_MESSAGE = 'event_message',
-  EVENT_STATE_CHANGE = 'event_state_change',
-  EVENT_ERROR = 'event_error',
-
-  // Control types
-  PING = 'ping',
-  PONG = 'pong',
-  SUBSCRIBE = 'subscribe',
-  UNSUBSCRIBE = 'unsubscribe',
-}
-
-/**
- * IPC message structure
- */
-export interface IPCMessage {
-  id: string;
-  type: IPCMessageType;
-  payload?: any;
-  timestamp: number;
-}
 
 /**
  * IPC request handler function type
@@ -81,7 +41,7 @@ export class IPCServer extends EventEmitter {
   private config: IPCServerConfig;
   private server: net.Server | null = null;
   private clients: Map<string, net.Socket> = new Map();
-  private handlers: Map<IPCMessageType, IPCRequestHandler> = new Map();
+  private handlers: Map<IPCMessageType | string, IPCRequestHandler> = new Map();
   private subscriptions: Map<string, Set<string>> = new Map(); // eventType -> clientIds
   private running: boolean = false;
   private clientIdCounter: number = 0;
@@ -100,62 +60,88 @@ export class IPCServer extends EventEmitter {
   private setupDefaultHandlers(): void {
     // Ping handler
     this.registerHandler(IPCMessageType.PING, async () => {
-      return { status: 'ok', timestamp: Date.now() };
+      return { pong: true, timestamp: Date.now() };
     });
 
-    // Status handler
-    this.registerHandler(IPCMessageType.REQUEST_STATUS, async () => {
+    // Status handler (System Status)
+    this.registerHandler(IPCMessageType.SYSTEM_STATUS, async () => {
+      // Basic status, will be overridden by orchestrator with full status
       return {
         running: this.running,
-        clients: this.clients.size,
         uptime: process.uptime(),
+        version: '2.1.0',
+        components: {
+          ipc: { status: this.running ? 'running' : 'stopped', clientCount: this.clients.size }
+        },
+        processingStats: {
+          totalMessages: 0,
+          basicTierMessages: 0,
+          sys6TierMessages: 0,
+          membraneTierMessages: 0,
+          aarEnhancedMessages: 0,
+          averageComplexity: 0
+        }
       };
     });
 
     // Subscribe handler
-    this.registerHandler(IPCMessageType.SUBSCRIBE, async (payload) => {
-      const { clientId, eventType } = payload;
-      if (!this.subscriptions.has(eventType)) {
-        this.subscriptions.set(eventType, new Set());
+    this.registerHandler(IPCMessageType.SUBSCRIBE, async (payload: any) => {
+      const { clientId, eventTypes } = payload;
+      const subscribed: string[] = [];
+
+      const types = Array.isArray(eventTypes) ? eventTypes : [eventTypes]; // Handle single or array
+
+      for (const type of types) {
+        if (!this.subscriptions.has(type)) {
+          this.subscriptions.set(type, new Set());
+        }
+        this.subscriptions.get(type)!.add(clientId);
+        subscribed.push(type);
       }
-      this.subscriptions.get(eventType)!.add(clientId);
-      return { subscribed: true, eventType };
+      return { subscribed };
     });
 
     // Unsubscribe handler
-    this.registerHandler(IPCMessageType.UNSUBSCRIBE, async (payload) => {
-      const { clientId, eventType } = payload;
-      this.subscriptions.get(eventType)?.delete(clientId);
-      return { unsubscribed: true, eventType };
+    this.registerHandler(IPCMessageType.UNSUBSCRIBE, async (payload: any) => {
+      const { clientId, eventTypes } = payload;
+      const unsubscribed: string[] = [];
+
+      const types = Array.isArray(eventTypes) ? eventTypes : [eventTypes];
+
+      for (const type of types) {
+        this.subscriptions.get(type)?.delete(clientId);
+        unsubscribed.push(type);
+      }
+      return { unsubscribed };
     });
 
     // Storage handlers
-    this.registerHandler(IPCMessageType.REQUEST_STORAGE_GET, async (payload) => {
+    this.registerHandler(IPCMessageType.STORAGE_GET, async (payload: any) => {
       const { key } = payload;
       const value = await this.storageManager.get(key);
-      return { value };
+      return { value, exists: value !== undefined };
     });
 
-    this.registerHandler(IPCMessageType.REQUEST_STORAGE_SET, async (payload) => {
+    this.registerHandler(IPCMessageType.STORAGE_SET, async (payload: any) => {
       const { key, value } = payload;
       await this.storageManager.set(key, value);
       return { success: true };
     });
 
-    this.registerHandler(IPCMessageType.REQUEST_STORAGE_DELETE, async (payload) => {
+    this.registerHandler(IPCMessageType.STORAGE_DELETE, async (payload: any) => {
       const { key } = payload;
       await this.storageManager.delete(key);
       return { success: true };
     });
 
-    this.registerHandler(IPCMessageType.REQUEST_STORAGE_CLEAR, async (payload) => {
-      const { prefix } = payload;
+    this.registerHandler(IPCMessageType.STORAGE_CLEAR, async (payload: any) => {
+      const { prefix } = payload || {};
       await this.storageManager.clear(prefix);
       return { success: true };
     });
 
-    this.registerHandler(IPCMessageType.REQUEST_STORAGE_KEYS, async (payload) => {
-      const { prefix } = payload;
+    this.registerHandler(IPCMessageType.STORAGE_KEYS, async (payload: any) => {
+      const { prefix } = payload || {};
       const keys = await this.storageManager.keys(prefix);
       return { keys };
     });
@@ -164,7 +150,7 @@ export class IPCServer extends EventEmitter {
   /**
    * Register a request handler
    */
-  public registerHandler(type: IPCMessageType, handler: IPCRequestHandler): void {
+  public registerHandler(type: IPCMessageType | string, handler: IPCRequestHandler): void {
     this.handlers.set(type, handler);
     log.info(`Registered handler for ${type}`);
   }
@@ -304,7 +290,7 @@ export class IPCServer extends EventEmitter {
     }
 
     try {
-      const result = await handler({ ...message.payload, clientId });
+      const result = await handler({ ...(message.payload || {}), clientId });
       this.sendResponse(socket, message.id, IPCMessageType.RESPONSE_SUCCESS, result);
     } catch (error) {
       log.error(`Handler error for ${message.type}:`, error);
@@ -346,7 +332,7 @@ export class IPCServer extends EventEmitter {
 
     const message: IPCMessage = {
       id: `broadcast_${Date.now()}`,
-      type: IPCMessageType.EVENT_MESSAGE,
+      type: IPCMessageType.EVENT,
       payload: { eventType, data: payload },
       timestamp: Date.now(),
     };

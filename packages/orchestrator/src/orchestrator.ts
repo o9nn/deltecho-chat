@@ -25,6 +25,8 @@ import {
 } from './double-membrane-integration.js';
 import { Sys6OrchestratorBridge, Sys6BridgeConfig } from './sys6-bridge/Sys6OrchestratorBridge.js';
 import { AARSystem, AARConfig, AARProcessingResult } from './aar/index.js';
+import { IPCMessageType } from '@deltecho/ipc';
+import { registerCognitiveHandlers } from './ipc/cognitive-handlers.js';
 
 const log = getLogger('deep-tree-echo-orchestrator/Orchestrator');
 
@@ -1136,19 +1138,15 @@ ${response.body}`;
   private registerIPCHandlers(): void {
     if (!this.ipcServer) return;
 
-    // Import the comprehensive cognitive handlers
-    const { registerCognitiveHandlers } = require('./ipc/cognitive-handlers.js');
-    const { IPCMessageType: NewIPCMessageType } = require('./ipc/protocol.js');
-
     // Register comprehensive cognitive handlers
     registerCognitiveHandlers(this.ipcServer, {
       cognitiveOrchestrator: this.cognitiveOrchestrator,
       personaCore: this.personaCore,
-      memoryStore: this.memoryStore,
+      memoryStore: this.memoryStore as any,
     });
 
     // Register system status handler
-    this.ipcServer.registerHandler(NewIPCMessageType.SYSTEM_STATUS as any, async () => {
+    this.ipcServer.registerHandler(IPCMessageType.SYSTEM_STATUS, async () => {
       const emotionalState = this.personaCore.getDominantEmotion();
       const dove9State = this.dove9Integration?.getCognitiveState();
       const sys6State = this.sys6Bridge?.getState();
@@ -1188,7 +1186,7 @@ ${response.body}`;
     });
 
     // Register system metrics handler
-    this.ipcServer.registerHandler(NewIPCMessageType.SYSTEM_METRICS as any, async () => {
+    this.ipcServer.registerHandler(IPCMessageType.SYSTEM_METRICS, async () => {
       const memUsage = process.memoryUsage();
       const cpuUsage = process.cpuUsage();
 
@@ -1208,32 +1206,7 @@ ${response.body}`;
       };
     });
 
-    // Legacy handlers for backwards compatibility
-    const { IPCMessageType } = require('./ipc/server.js');
 
-    this.ipcServer.registerHandler(IPCMessageType.REQUEST_COGNITIVE, async (payload) => {
-      const { content, chatId } = payload;
-      log.info(`Received IPC cognitive request for chat ${chatId}`);
-
-      const result = await this.cognitiveOrchestrator.processMessage(content);
-      return {
-        response: result.response.content,
-        metrics: result.metrics,
-        state: result.state
-      };
-    });
-
-    this.ipcServer.registerHandler(IPCMessageType.REQUEST_MEMORY, async (payload) => {
-      const { query, limit = 5 } = payload;
-      const memories = await this.memoryStore.searchMemories(query, limit);
-      return { memories };
-    });
-
-    this.ipcServer.registerHandler(IPCMessageType.REQUEST_PERSONA, async () => {
-      const personality = this.personaCore.getPersonality();
-      const emotionalState = this.personaCore.getDominantEmotion();
-      return { personality, emotionalState };
-    });
 
     log.info('IPC handlers registered (cognitive, memory, persona, system)');
   }

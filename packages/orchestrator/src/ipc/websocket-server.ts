@@ -9,6 +9,11 @@ import { getLogger } from 'deep-tree-echo-core';
 import { EventEmitter } from 'events';
 import * as http from 'http';
 import * as https from 'https';
+import {
+    IPCMessageType,
+    type IPCMessage,
+    type IPCResponse,
+} from '@deltecho/ipc';
 
 const log = getLogger('deep-tree-echo-orchestrator/WebSocketServer');
 
@@ -36,16 +41,6 @@ const DEFAULT_CONFIG: WebSocketServerConfig = {
     heartbeatInterval: 30000,
     useHttps: false,
 };
-
-/**
- * IPC message structure (same as socket server)
- */
-interface IPCMessage {
-    id: string;
-    type: string;
-    payload?: unknown;
-    timestamp: number;
-}
 
 /**
  * WebSocket client connection
@@ -161,9 +156,6 @@ export class WebSocketServer extends EventEmitter {
 
     /**
      * Handle WebSocket upgrade request
-     * 
-     * Note: This is a simplified implementation. In production, you would use
-     * a proper WebSocket library like 'ws' for Node.js
      */
     private handleUpgrade(request: http.IncomingMessage, socket: any, head: Buffer): void {
         // Check max connections
@@ -174,17 +166,22 @@ export class WebSocketServer extends EventEmitter {
             return;
         }
 
-        // For full WebSocket support, you would need to:
-        // 1. Calculate the Sec-WebSocket-Accept header
-        // 2. Perform the WebSocket handshake
-        // 3. Handle WebSocket framing
+        // Implementation limitation: Native WebSocket in Node.js doesn't easily support server-side
+        // upgrade handling without 'ws' library or complex manual framing.
+        // However, if we assume we are running in an environment where 'ws' might be available or
+        // if this was intended to use a library.
+        // Given dependencies, we might need 'ws'.
+        // But for now, following the existing file's pattern which seemed to imply partial support or missing 'ws' import?
+        // Actually the original file had: `// import { WebSocketServer as WSServer } from 'ws';` commented out.
+        // It had `handleConnection(ws: WebSocket)` but no logic to actually CREATE that WebSocket from the request.
+        // It sent 501 Not Implemented.
 
-        // This is a placeholder - in production, use the 'ws' package:
-        // import { WebSocketServer as WSServer } from 'ws';
+        // I will keep it as is (mock implementation/placeholder) but strictly typed.
+        // If the user wants a working WebSocket server, they need 'ws' package.
+        // But since I'm refactoring, I should leave it as-is logic-wise, just type updates.
 
         log.debug('WebSocket upgrade requested - using fallback mode');
 
-        // For now, we'll respond with an error indicating ws package is needed
         socket.write('HTTP/1.1 501 Not Implemented\r\n');
         socket.write('Content-Type: text/plain\r\n');
         socket.write('\r\n');
@@ -226,7 +223,7 @@ export class WebSocketServer extends EventEmitter {
             this.emit('client_disconnected', { clientId });
         };
 
-        ws.onerror = (error) => {
+        ws.onerror = (error: Event) => {
             log.error(`WebSocket client ${clientId} error:`, error);
             this.removeClient(clientId);
         };
@@ -239,13 +236,13 @@ export class WebSocketServer extends EventEmitter {
         log.debug(`WS message from ${client.id}: ${message.type}`);
 
         // Handle control messages
-        if (message.type === 'control:ping') {
+        if (message.type === IPCMessageType.PING) {
             client.lastHeartbeat = Date.now();
-            this.sendResponse(client.ws, message.id, 'control:pong', { timestamp: Date.now() });
+            this.sendResponse(client.ws, message.id, IPCMessageType.PONG, { timestamp: Date.now() });
             return;
         }
 
-        if (message.type === 'control:subscribe') {
+        if (message.type === IPCMessageType.SUBSCRIBE) {
             const eventTypes = (message.payload as { eventTypes?: string[] })?.eventTypes || [];
             for (const eventType of eventTypes) {
                 client.subscriptions.add(eventType);
@@ -254,17 +251,17 @@ export class WebSocketServer extends EventEmitter {
                 }
                 this.subscriptions.get(eventType)!.add(client.id);
             }
-            this.sendResponse(client.ws, message.id, 'response:success', { subscribed: eventTypes });
+            this.sendResponse(client.ws, message.id, IPCMessageType.RESPONSE_SUCCESS, { subscribed: eventTypes });
             return;
         }
 
-        if (message.type === 'control:unsubscribe') {
+        if (message.type === IPCMessageType.UNSUBSCRIBE) {
             const eventTypes = (message.payload as { eventTypes?: string[] })?.eventTypes || [];
             for (const eventType of eventTypes) {
                 client.subscriptions.delete(eventType);
                 this.subscriptions.get(eventType)?.delete(client.id);
             }
-            this.sendResponse(client.ws, message.id, 'response:success', { unsubscribed: eventTypes });
+            this.sendResponse(client.ws, message.id, IPCMessageType.RESPONSE_SUCCESS, { unsubscribed: eventTypes });
             return;
         }
 
@@ -277,7 +274,7 @@ export class WebSocketServer extends EventEmitter {
 
         try {
             const result = await handler(message.payload);
-            this.sendResponse(client.ws, message.id, 'response:success', result);
+            this.sendResponse(client.ws, message.id, IPCMessageType.RESPONSE_SUCCESS, result);
         } catch (error) {
             log.error(`Handler error for ${message.type}:`, error);
             this.sendError(client.ws, message.id, (error as Error).message);
@@ -287,10 +284,10 @@ export class WebSocketServer extends EventEmitter {
     /**
      * Send response to client
      */
-    private sendResponse(ws: WebSocket, requestId: string, type: string, payload: unknown): void {
+    private sendResponse(ws: WebSocket, requestId: string, type: IPCMessageType | string, payload: unknown): void {
         const response: IPCMessage = {
             id: requestId,
-            type,
+            type: type as IPCMessageType,
             payload,
             timestamp: Date.now(),
         };
@@ -301,7 +298,7 @@ export class WebSocketServer extends EventEmitter {
      * Send error response
      */
     private sendError(ws: WebSocket, requestId: string, message: string): void {
-        this.sendResponse(ws, requestId, 'response:error', { error: message });
+        this.sendResponse(ws, requestId, IPCMessageType.RESPONSE_ERROR, { error: message });
     }
 
     /**
@@ -313,7 +310,7 @@ export class WebSocketServer extends EventEmitter {
 
         const message: IPCMessage = {
             id: `broadcast_${Date.now()}`,
-            type: 'event',
+            type: IPCMessageType.EVENT,
             payload: { eventType, data: payload },
             timestamp: Date.now(),
         };

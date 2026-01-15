@@ -38,7 +38,7 @@ export {
   type IPCMessage,
   type IPCRequestHandler,
   type IPCServerConfig,
-} from './ipc/server.js';
+} from './ipc/index.js';
 export { StorageManager } from './ipc/storage-manager.js';
 
 // Task Scheduler

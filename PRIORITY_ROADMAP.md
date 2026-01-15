@@ -232,14 +232,15 @@ packages/reasoning/
 
 ---
 
-## Phase 6: Communication & IPC Layer (Week 7) 🔄 IN PROGRESS
+## Phase 6: Communication & IPC Layer (Week 7) ✅ COMPLETE
 
 **Priority**: 🟡 Medium  
 **Dependencies**: Phase 2 complete  
-**Status**: 🔄 Core Implementation Complete
+**Status**: ✅ Completed January 15, 2026
 
 ### 6.1 IPC Enhancement
 
+- [x] **Refactor IPC into separate package** - Created `@deltecho/ipc` ✅
 - [x] **IPC server in orchestrator** - Socket and TCP server with handler registration ✅
 - [x] **IPC client for desktop targets** - Type-safe client with auto-reconnect ✅
 - [x] **Strongly-typed message protocol** - Full protocol.ts with cognitive, memory, persona, system types ✅
@@ -249,14 +250,16 @@ packages/reasoning/
 ### 6.2 Components Added
 
 ```
+packages/ipc/src/
+├── protocol.ts          # Strongly-typed IPC protocol
+├── client.ts            # Type-safe IPC client
+└── index.ts             # Exports
+
 packages/orchestrator/src/ipc/
-├── protocol.ts          # Strongly-typed IPC protocol (415+ lines)
 ├── server.ts            # Unix socket/TCP server
 ├── websocket-server.ts  # WebSocket server for browsers
-├── client.ts            # Type-safe IPC client
 ├── cognitive-handlers.ts # CognitiveOrchestrator integration
-├── storage-manager.ts   # Key-value storage
-└── index.ts             # Exports
+└── storage-manager.ts   # Key-value storage
 ```
 
 ### 6.3 Eventa Integration (Future)

@@ -30,7 +30,7 @@ import {
     type MemoryContextResponse,
     type PersonaInfo,
     type PersonaUpdateRequest,
-} from './protocol.js';
+} from '@deltecho/ipc';
 
 const log = getLogger('deep-tree-echo-orchestrator/CognitiveHandlers');
 
@@ -110,7 +110,7 @@ export function registerCognitiveHandlers(
      * Process a message through the cognitive system
      */
     ipcServer.registerHandler(
-        IPCMessageType.COGNITIVE_PROCESS as any,
+        IPCMessageType.COGNITIVE_PROCESS,
         async (payload: CognitiveProcessRequest): Promise<CognitiveProcessResponse> => {
             log.debug(`Processing message: ${payload.message.substring(0, 50)}...`);
 
@@ -169,7 +169,7 @@ export function registerCognitiveHandlers(
      * Quick process - returns just the response text
      */
     ipcServer.registerHandler(
-        IPCMessageType.COGNITIVE_QUICK_PROCESS as any,
+        IPCMessageType.COGNITIVE_QUICK_PROCESS,
         async (payload: CognitiveQuickProcessRequest): Promise<{ response: string }> => {
             if (payload.chatId) {
                 cognitiveOrchestrator.setChatId(payload.chatId);
@@ -184,7 +184,7 @@ export function registerCognitiveHandlers(
      * Get current cognitive state
      */
     ipcServer.registerHandler(
-        IPCMessageType.COGNITIVE_GET_STATE as any,
+        IPCMessageType.COGNITIVE_GET_STATE,
         async (): Promise<CognitiveStateSnapshot> => {
             const state = cognitiveOrchestrator.getState();
             const emotionalState = cognitiveOrchestrator.getEmotionalState();
@@ -196,7 +196,7 @@ export function registerCognitiveHandlers(
      * Get emotional state
      */
     ipcServer.registerHandler(
-        IPCMessageType.COGNITIVE_GET_EMOTIONAL_STATE as any,
+        IPCMessageType.COGNITIVE_GET_EMOTIONAL_STATE,
         async (): Promise<EmotionalStateSnapshot> => {
             const emotionalState = cognitiveOrchestrator.getEmotionalState();
             return toEmotionalStateSnapshot(emotionalState);
@@ -207,7 +207,7 @@ export function registerCognitiveHandlers(
      * Update emotional state
      */
     ipcServer.registerHandler(
-        IPCMessageType.COGNITIVE_UPDATE_EMOTIONAL_STATE as any,
+        IPCMessageType.COGNITIVE_UPDATE_EMOTIONAL_STATE,
         async (payload: EmotionalStateUpdateRequest): Promise<EmotionalStateSnapshot> => {
             cognitiveOrchestrator.updateEmotionalState(payload.emotions);
             const emotionalState = cognitiveOrchestrator.getEmotionalState();
@@ -219,7 +219,7 @@ export function registerCognitiveHandlers(
      * Get message history
      */
     ipcServer.registerHandler(
-        IPCMessageType.COGNITIVE_GET_HISTORY as any,
+        IPCMessageType.COGNITIVE_GET_HISTORY,
         async (payload: GetHistoryRequest): Promise<GetHistoryResponse> => {
             const history = cognitiveOrchestrator.getMessageHistory();
             const limit = payload.limit || 100;
@@ -242,7 +242,7 @@ export function registerCognitiveHandlers(
      * Clear message history
      */
     ipcServer.registerHandler(
-        IPCMessageType.COGNITIVE_CLEAR_HISTORY as any,
+        IPCMessageType.COGNITIVE_CLEAR_HISTORY,
         async (): Promise<{ cleared: boolean }> => {
             cognitiveOrchestrator.clearHistory();
             return { cleared: true };
@@ -253,7 +253,7 @@ export function registerCognitiveHandlers(
      * Export conversation
      */
     ipcServer.registerHandler(
-        IPCMessageType.COGNITIVE_EXPORT as any,
+        IPCMessageType.COGNITIVE_EXPORT,
         async (_payload: ExportConversationRequest): Promise<ExportConversationResponse> => {
             const exported = cognitiveOrchestrator.exportConversation();
             const state = cognitiveOrchestrator.getState();
@@ -277,7 +277,7 @@ export function registerCognitiveHandlers(
      * Import conversation
      */
     ipcServer.registerHandler(
-        IPCMessageType.COGNITIVE_IMPORT as any,
+        IPCMessageType.COGNITIVE_IMPORT,
         async (payload: ImportConversationRequest): Promise<{ imported: boolean }> => {
             // Convert protocol messages to internal format
             const messagesToImport = payload.messages.map((msg, idx) => ({
@@ -300,7 +300,7 @@ export function registerCognitiveHandlers(
      * Get cognitive statistics
      */
     ipcServer.registerHandler(
-        IPCMessageType.COGNITIVE_GET_STATISTICS as any,
+        IPCMessageType.COGNITIVE_GET_STATISTICS,
         async (): Promise<CognitiveStatistics> => {
             const stats = cognitiveOrchestrator.getStatistics();
             return {
@@ -322,7 +322,7 @@ export function registerCognitiveHandlers(
          * Search memories
          */
         ipcServer.registerHandler(
-            IPCMessageType.MEMORY_SEARCH as any,
+            IPCMessageType.MEMORY_SEARCH,
             async (payload: MemorySearchRequest): Promise<MemorySearchResponse> => {
                 const results = memoryStore.searchMemories(payload.query, payload.limit || 10);
                 return {
@@ -342,7 +342,7 @@ export function registerCognitiveHandlers(
          * Store memory
          */
         ipcServer.registerHandler(
-            IPCMessageType.MEMORY_STORE as any,
+            IPCMessageType.MEMORY_STORE,
             async (payload: MemoryStoreRequest): Promise<MemoryStoreResponse> => {
                 await memoryStore.storeMemory({
                     chatId: payload.chatId || 0,
@@ -360,7 +360,7 @@ export function registerCognitiveHandlers(
          * Get memory context
          */
         ipcServer.registerHandler(
-            IPCMessageType.MEMORY_GET_CONTEXT as any,
+            IPCMessageType.MEMORY_GET_CONTEXT,
             async (payload: MemoryContextRequest): Promise<MemoryContextResponse> => {
                 const context = payload.chatId
                     ? memoryStore.getConversationContext(payload.chatId)
@@ -377,7 +377,7 @@ export function registerCognitiveHandlers(
          * Clear memories
          */
         ipcServer.registerHandler(
-            IPCMessageType.MEMORY_CLEAR as any,
+            IPCMessageType.MEMORY_CLEAR,
             async (): Promise<{ cleared: boolean }> => {
                 // Note: Full clear not implemented in current memory store
                 return { cleared: true };
@@ -394,7 +394,7 @@ export function registerCognitiveHandlers(
          * Get persona info
          */
         ipcServer.registerHandler(
-            IPCMessageType.PERSONA_GET as any,
+            IPCMessageType.PERSONA_GET,
             async (): Promise<PersonaInfo> => {
                 const emotionalState = personaCore.getEmotionalState();
                 const cognitiveState = personaCore.getCognitiveState();
@@ -430,7 +430,7 @@ export function registerCognitiveHandlers(
          * Update persona
          */
         ipcServer.registerHandler(
-            IPCMessageType.PERSONA_UPDATE as any,
+            IPCMessageType.PERSONA_UPDATE,
             async (_payload: PersonaUpdateRequest): Promise<PersonaInfo> => {
                 // Note: PersonaCore doesn't have update methods exposed yet
                 // This would need to be added to PersonaCore
@@ -468,7 +468,7 @@ export function registerCognitiveHandlers(
          * Get persona emotional state
          */
         ipcServer.registerHandler(
-            IPCMessageType.PERSONA_GET_EMOTIONAL_STATE as any,
+            IPCMessageType.PERSONA_GET_EMOTIONAL_STATE,
             async (): Promise<EmotionalStateSnapshot> => {
                 const emotionalState = personaCore.getEmotionalState();
                 const dominant = personaCore.getDominantEmotion();
@@ -493,7 +493,7 @@ export function registerCognitiveHandlers(
          * Get persona cognitive state
          */
         ipcServer.registerHandler(
-            IPCMessageType.PERSONA_GET_COGNITIVE_STATE as any,
+            IPCMessageType.PERSONA_GET_COGNITIVE_STATE,
             async (): Promise<{ creativity: number; analyticalDepth: number; empathy: number; curiosity: number }> => {
                 const cognitiveState = personaCore.getCognitiveState();
                 return {
