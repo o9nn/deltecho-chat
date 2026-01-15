@@ -30,7 +30,9 @@
     "license": "GPL-3.0-or-later",
     "dependencies": {
         "@deltecho/cognitive": "workspace:*",
-        "deep-tree-echo-core": "workspace:*"
+        "deep-tree-echo-core": "workspace:*",
+        "@duckdb/duckdb-wasm": "^1.28.0",
+        "apache-arrow": "^17.0.0"
     },
     "devDependencies": {
         "@types/jest": "^29.5.14",

@@ -4,3 +4,5 @@ export * from './atomspace/index.js';
 export * from './atomspace/pattern-matcher.js';
 export * from './reasoning/pln-engine.js';
 export * from './motivation/open-psi.js';
+export * from './learning/moses.js';
+export * from './memory/index.js';
