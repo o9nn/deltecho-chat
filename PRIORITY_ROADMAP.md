@@ -1,7 +1,7 @@
 # 🚀 DELTECHO-CHAT PRIORITY ROADMAP
 
 **Created**: January 15, 2026  
-**Last Updated**: January 15, 2026  
+**Last Updated**: January 16, 2026  
 **Status**: Active Development
 
 ---
@@ -283,9 +283,9 @@ packages/orchestrator/src/ipc/
 > Reference: `proj-airi/duckdb-wasm`
 
 - [x] Add DuckDB WASM to @deltecho/reasoning
-- [ ] Create SQL-based memory queries
-- [ ] Implement Drizzle ORM integration
-- [ ] Add persistent storage layer
+- [x] Create SQL-based memory queries
+- [x] Implement Drizzle ORM integration
+- [x] Add persistent storage layer
 
 ---
 
