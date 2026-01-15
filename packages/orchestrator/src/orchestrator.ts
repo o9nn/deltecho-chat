@@ -1129,11 +1129,86 @@ ${response.body}`;
 
   /**
    * Register handlers for IPC server
+   * 
+   * Registers comprehensive handlers for cognitive, memory, persona, and system operations.
+   * Uses the strongly-typed protocol from ./ipc/protocol.ts
    */
   private registerIPCHandlers(): void {
     if (!this.ipcServer) return;
 
-    // Cognitive request handler
+    // Import the comprehensive cognitive handlers
+    const { registerCognitiveHandlers } = require('./ipc/cognitive-handlers.js');
+    const { IPCMessageType: NewIPCMessageType } = require('./ipc/protocol.js');
+
+    // Register comprehensive cognitive handlers
+    registerCognitiveHandlers(this.ipcServer, {
+      cognitiveOrchestrator: this.cognitiveOrchestrator,
+      personaCore: this.personaCore,
+      memoryStore: this.memoryStore,
+    });
+
+    // Register system status handler
+    this.ipcServer.registerHandler(NewIPCMessageType.SYSTEM_STATUS as any, async () => {
+      const emotionalState = this.personaCore.getDominantEmotion();
+      const dove9State = this.dove9Integration?.getCognitiveState();
+      const sys6State = this.sys6Bridge?.getState();
+      const membraneStatus = this.doubleMembraneIntegration?.getStatus();
+      const aarState = this.aarSystem?.getState();
+
+      return {
+        running: this.running,
+        uptime: process.uptime(),
+        version: '2.1.0',
+        components: {
+          cognitive: {
+            status: this.cognitiveOrchestrator.isReady() ? 'ready' : 'initializing',
+            ready: this.cognitiveOrchestrator.isReady(),
+          },
+          memory: {
+            status: this.memoryStore.isEnabled() ? 'enabled' : 'disabled',
+            entryCount: 0, // Would need method to get count
+          },
+          persona: {
+            status: 'active',
+            dominantEmotion: emotionalState.emotion,
+          },
+          ipc: {
+            status: this.ipcServer?.isRunning() ? 'running' : 'stopped',
+            clientCount: this.ipcServer?.getClientCount() || 0,
+          },
+          deltachat: {
+            status: this.deltachatInterface?.isConnected() ? 'connected' : 'disconnected',
+          },
+          dovecot: {
+            status: this.dovecotInterface?.isRunning() ? 'running' : 'stopped',
+          },
+        },
+        processingStats: this.processingStats,
+      };
+    });
+
+    // Register system metrics handler
+    this.ipcServer.registerHandler(NewIPCMessageType.SYSTEM_METRICS as any, async () => {
+      const memUsage = process.memoryUsage();
+      const cpuUsage = process.cpuUsage();
+
+      return {
+        cpu: {
+          usage: (cpuUsage.user + cpuUsage.system) / 1000000, // Convert to seconds
+          cores: require('os').cpus().length,
+        },
+        memory: {
+          used: memUsage.rss,
+          total: require('os').totalmem(),
+          heapUsed: memUsage.heapUsed,
+          heapTotal: memUsage.heapTotal,
+        },
+        uptime: process.uptime(),
+        clientsConnected: this.ipcServer?.getClientCount() || 0,
+      };
+    });
+
+    // Legacy handlers for backwards compatibility
     const { IPCMessageType } = require('./ipc/server.js');
 
     this.ipcServer.registerHandler(IPCMessageType.REQUEST_COGNITIVE, async (payload) => {
@@ -1148,18 +1223,18 @@ ${response.body}`;
       };
     });
 
-    // Memory request handler
     this.ipcServer.registerHandler(IPCMessageType.REQUEST_MEMORY, async (payload) => {
       const { query, limit = 5 } = payload;
       const memories = await this.memoryStore.searchMemories(query, limit);
       return { memories };
     });
 
-    // Persona request handler
     this.ipcServer.registerHandler(IPCMessageType.REQUEST_PERSONA, async () => {
       const personality = this.personaCore.getPersonality();
       const emotionalState = this.personaCore.getDominantEmotion();
       return { personality, emotionalState };
     });
+
+    log.info('IPC handlers registered (cognitive, memory, persona, system)');
   }
 }
