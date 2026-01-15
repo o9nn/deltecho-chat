@@ -15,6 +15,9 @@ import {
     SynthesisEventListener,
 } from './types';
 
+// Re-export types for convenience
+export { SynthesisEvent, SynthesisEventListener, VoiceConfig };
+
 /**
  * Check if running in browser with Web Speech API
  */

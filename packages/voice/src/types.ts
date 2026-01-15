@@ -47,6 +47,7 @@ export interface EmotionVoiceModulation {
  * Predefined emotion modulations
  */
 export const EMOTION_MODULATIONS: Record<string, EmotionVoiceModulation> = {
+    // Primary emotion names
     joy: { rateAdjust: 0.1, pitchAdjust: 0.15, volumeAdjust: 0.1 },
     sadness: { rateAdjust: -0.2, pitchAdjust: -0.1, volumeAdjust: -0.15 },
     anger: { rateAdjust: 0.15, pitchAdjust: 0.1, volumeAdjust: 0.2 },
@@ -54,6 +55,12 @@ export const EMOTION_MODULATIONS: Record<string, EmotionVoiceModulation> = {
     surprise: { rateAdjust: 0.15, pitchAdjust: 0.25, volumeAdjust: 0.15 },
     interest: { rateAdjust: 0.05, pitchAdjust: 0.1, volumeAdjust: 0 },
     neutral: { rateAdjust: 0, pitchAdjust: 0, volumeAdjust: 0 },
+    // Aliases for common naming conventions
+    happy: { rateAdjust: 0.1, pitchAdjust: 0.15, volumeAdjust: 0.1 },
+    sad: { rateAdjust: -0.2, pitchAdjust: -0.1, volumeAdjust: -0.15 },
+    angry: { rateAdjust: 0.15, pitchAdjust: 0.1, volumeAdjust: 0.2 },
+    fearful: { rateAdjust: 0.2, pitchAdjust: 0.2, volumeAdjust: -0.1 },
+    surprised: { rateAdjust: 0.15, pitchAdjust: 0.25, volumeAdjust: 0.15 },
 };
 
 /**

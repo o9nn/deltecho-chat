@@ -14,6 +14,9 @@ import {
     RecognitionResult,
 } from './types';
 
+// Re-export types for convenience
+export { RecognitionEvent, RecognitionEventListener, RecognitionResult, RecognitionConfig };
+
 // Type declarations for Web Speech API
 interface SpeechRecognitionEvent extends Event {
     resultIndex: number;
