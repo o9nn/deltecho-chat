@@ -1,5 +1,30 @@
 import '@testing-library/jest-dom'
 
+// Mock the runtime interface globally for tests
+jest.mock('@deltachat-desktop/runtime-interface', () => {
+  const mockEmitter = {
+    on: jest.fn(),
+    off: jest.fn(),
+    emit: jest.fn(),
+  }
+
+  return {
+    runtime: {
+      createDeltaChatConnection: jest.fn(() => ({
+        rpc: new Proxy({}, {
+          get: () => jest.fn().mockResolvedValue({})
+        }),
+        on: jest.fn(),
+        off: jest.fn(),
+        getContextEvents: jest.fn(() => mockEmitter),
+      })),
+      getDesktopSettings: jest.fn().mockResolvedValue({}),
+      setDesktopSetting: jest.fn().mockResolvedValue(true),
+      deleteWebxdcAccountData: jest.fn(),
+    }
+  }
+})
+
 // Set up global type definitions for testing
 declare global {
   namespace jest {

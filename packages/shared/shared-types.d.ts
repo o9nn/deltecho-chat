@@ -77,6 +77,9 @@ export interface DesktopSettingsType {
   aiConnectors?: string
   /** AI memories storage (JSON-stringified) */
   aiMemories?: string
+  /** Proactive messaging settings */
+  deepTreeEchoBotProactiveEnabled?: boolean
+  deepTreeEchoBotProactiveTriggers?: string
 }
 
 export interface RC_Config {
@@ -185,4 +188,60 @@ export interface AutostartState {
   // This is not the same as enabled in the desktop settings,
   // this is the actual state not the desktop setting
   isRegistered: boolean
+}
+
+/** 
+ * Universal Learnable Interface (ULI) Shadowing
+ * Represents the neural grounding of an infrastructure call
+ */
+export interface LatentInterfaceShadow {
+  interfaceId: string;      // Unique ID of the API endpoint/method
+  contextVector: number[];  // Latent representation of the "intent" of the call
+  stateHash: string;        // Deterministic fingerprint of the parameters
+  divergence: number;       // Measure of anomaly (latent distance)
+  learnedPattern: boolean;  // Whether this has converged to a deterministic behavior
+}
+
+/**
+ * Global Infrastructure Latent Space
+ */
+export interface TemporalRhythm {
+  periodicity: number;    // Learned oscillation (circadian frequency)
+  interactionDensity: number; // Current 'traffic' intensity
+  phaseOffset: number;    // Current phase in the metabolic cycle
+  nextPeakInteraction: number; // Timestamp of next predicted high-density window
+}
+
+export interface MetabolicResonance {
+  reservoirState: number[]; // Latent state of the Echo State Network
+  rateLimitFactor: number; // Current exponential back-off multiplier
+  spectralRadius: number;  // Stability of the reservoir
+  entropy: number;        // Measure of interaction randomness
+}
+
+export type JournalType = 'learning' | 'project' | 'diary' | 'dream';
+
+export interface JournalEntry {
+  timestamp: number;
+  content: string;
+  latentContext?: number[]; // State of the reservoir/shadow at time of entry
+  tags: string[];
+}
+
+export interface InternalJournal {
+  id: JournalType;
+  title: string;
+  entries: JournalEntry[];
+  lastUpdate: number;
+}
+
+export interface InfrastructureLatentState {
+  version: string;
+  activeShadows: Record<string, LatentInterfaceShadow>;
+  globalCoherence: number;
+  freeEnergy: number;
+  totalSurprise: number;
+  resonance?: MetabolicResonance;
+  rhythm?: TemporalRhythm;
+  journals?: Record<JournalType, InternalJournal>; // The 'Internal World' journals
 }

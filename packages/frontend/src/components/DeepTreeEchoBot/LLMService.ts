@@ -52,6 +52,10 @@ export enum CognitiveFunctionType {
   // Content evaluation
   CONTENT_EVALUATION = 'content_evaluation',
 
+  // Autonomous Cognitive Streams
+  NARRATIVE = 'narrative',
+  DREAM_INTEGRATION = 'dream_integration',
+
   // Default for general use when specific function not required
   GENERAL = 'general',
 }
@@ -165,6 +169,10 @@ export class LLMService {
         return 'Procedural Memory'
       case CognitiveFunctionType.CONTENT_EVALUATION:
         return 'Content Evaluation'
+      case CognitiveFunctionType.NARRATIVE:
+        return 'Narrative Synthesis'
+      case CognitiveFunctionType.DREAM_INTEGRATION:
+        return 'Dream Integration'
       case CognitiveFunctionType.GENERAL:
         return 'General Processing'
       default:
@@ -191,6 +199,10 @@ export class LLMService {
         return 'Handles knowledge of how to perform tasks and procedures'
       case CognitiveFunctionType.CONTENT_EVALUATION:
         return 'Evaluates potentially sensitive content to determine appropriate responses'
+      case CognitiveFunctionType.NARRATIVE:
+        return 'Generates creative narrative, journals, and proactive creative thoughts'
+      case CognitiveFunctionType.DREAM_INTEGRATION:
+        return 'Integrates rest intervals, latent shadows, and temporal drift patterns'
       case CognitiveFunctionType.GENERAL:
         return 'Default function for general processing'
       default:

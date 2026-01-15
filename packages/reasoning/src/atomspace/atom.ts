@@ -17,11 +17,13 @@ export abstract class Atom {
     public readonly type: AtomType;
     public truthValue: TruthValue;
     public attention: number = 0; // STI/LTI equivalent
+    public latentVector?: number[]; // Neural Grounding (ML embeddings)
 
-    constructor(id: string, type: AtomType, tv: TruthValue = createTruthValue()) {
+    constructor(id: string, type: AtomType, tv: TruthValue = createTruthValue(), vector?: number[]) {
         this.id = id;
         this.type = type;
         this.truthValue = tv;
+        this.latentVector = vector;
     }
 
     public abstract isNode(): this is Node;
@@ -31,8 +33,8 @@ export abstract class Atom {
 export class Node extends Atom {
     public readonly name: string;
 
-    constructor(name: string, type: AtomType = AtomType.ConceptNode, tv: TruthValue = createTruthValue()) {
-        super(`${type}:${name}`, type, tv);
+    constructor(name: string, type: AtomType = AtomType.ConceptNode, tv: TruthValue = createTruthValue(), vector?: number[]) {
+        super(`${type}:${name}`, type, tv, vector);
         this.name = name;
     }
 

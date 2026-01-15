@@ -19,6 +19,9 @@ import { DeepTreeEchoBot, DeepTreeEchoBotOptions } from './DeepTreeEchoBot'
 import { chatManager, DeepTreeEchoChatManager } from './DeepTreeEchoChatManager'
 import { uiBridge, DeepTreeEchoUIBridge, ChatContextInterface } from './DeepTreeEchoUIBridge'
 import { proactiveMessaging, ProactiveMessaging } from './ProactiveMessaging'
+import { interfaceShadowing } from './InterfaceShadowing'
+import { proactiveActionKernel } from './ProactiveActionKernel'
+import { internalJournalManager } from './InternalJournalManager'
 
 const log = getLogger(
   'render/components/DeepTreeEchoBot/DeepTreeEchoIntegration'
@@ -94,6 +97,12 @@ export async function initDeepTreeEchoBot(): Promise<void> {
     // Trigger app startup event for proactive messaging
     proactiveMessaging.handleEvent('app_startup')
 
+    // Activate Universal Learnable Interface Shadowing
+    interfaceShadowing.shadowRpcInterface()
+
+    // Start the Proactive Action Kernel (Continuous Consciousness Heartbeat)
+    proactiveActionKernel.start()
+
     isInitialized = true
     log.info('Deep Tree Echo fully initialized with all subsystems')
   } catch (error) {
@@ -107,7 +116,7 @@ export async function initDeepTreeEchoBot(): Promise<void> {
 function initializeChatManager(): void {
   // Connect UI Bridge to Chat Manager
   chatManager.setUIBridge(uiBridge)
-  
+
   log.info('Chat Manager initialized')
 }
 
@@ -125,7 +134,7 @@ function initializeProactiveMessaging(): void {
 
   // Load proactive messaging settings
   loadProactiveSettings()
-  
+
   log.info('Proactive Messaging initialized')
 }
 
@@ -135,7 +144,7 @@ function initializeProactiveMessaging(): void {
 async function loadProactiveSettings(): Promise<void> {
   try {
     const desktopSettings = await runtime.getDesktopSettings()
-    
+
     // Check for proactive messaging settings
     const proactiveEnabled = (desktopSettings as any).deepTreeEchoBotProactiveEnabled
     if (proactiveEnabled !== undefined) {
@@ -334,9 +343,8 @@ export async function saveBotSettings(settings: any): Promise<void> {
     // Update desktop settings for all other properties
     for (const [key, value] of Object.entries(settings)) {
       // Convert from camelCase to snake_case with prefix
-      const settingKey = `deepTreeEchoBot${
-        key.charAt(0).toUpperCase() + key.slice(1)
-      }` as any
+      const settingKey = `deepTreeEchoBot${key.charAt(0).toUpperCase() + key.slice(1)
+        }` as any
       await runtime.setDesktopSetting(settingKey, value as string | number | boolean | undefined)
     }
 
@@ -391,7 +399,7 @@ export function cleanupBot(): void {
   chatManager.cleanup()
   uiBridge.cleanup()
   proactiveMessaging.cleanup()
-  
+
   botInstance = null
   isInitialized = false
   log.info('Bot resources cleaned up')

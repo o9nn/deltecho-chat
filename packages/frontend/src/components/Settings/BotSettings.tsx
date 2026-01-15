@@ -10,6 +10,8 @@ import SettingsSeparator from './SettingsSeparator'
 import SettingsButton from './SettingsButton'
 import { DeltaInput, DeltaTextarea } from '../Login-Styles'
 import Callout from '../Callout'
+import styles from './styles.module.scss'
+import { DivergenceMonitor } from '../DeepTreeEchoBot/DivergenceMonitor'
 
 const log = getLogger('render/components/Settings/BotSettings')
 
@@ -30,6 +32,8 @@ export default function BotSettings({
   const [apiKey, setApiKey] = useState('')
   const [apiEndpoint, setApiEndpoint] = useState('')
   const [personality, setPersonality] = useState('')
+  const [proactiveEnabled, setProactiveEnabled] = useState(false)
+  const [proactiveTriggers, setProactiveTriggers] = useState('')
 
   // Load settings on component mount
   useEffect(() => {
@@ -43,6 +47,8 @@ export default function BotSettings({
           desktopSettings.deepTreeEchoBotPersonality ||
           'Deep Tree Echo is a helpful, friendly AI assistant that provides thoughtful responses to users in Delta Chat.'
         )
+        setProactiveEnabled(desktopSettings.deepTreeEchoBotProactiveEnabled || false)
+        setProactiveTriggers(desktopSettings.deepTreeEchoBotProactiveTriggers || '[]')
 
         // Initialize persona core if bot is enabled
         if (desktopSettings.deepTreeEchoBotEnabled) {
@@ -144,10 +150,49 @@ export default function BotSettings({
         disabled={!isBotEnabled}
       />
 
+      <DesktopSettingsSwitch
+        settingsKey='deepTreeEchoBotUseParallelProcessing'
+        label='Parallel Cognitive Processing'
+        description='Enable multi-threaded cognitive streams for faster, more complex reasoning.'
+        disabled={!isBotEnabled}
+      />
+
+      <SettingsSeparator />
+      <SettingsHeading>Infrastructure Stability (Active Inference)</SettingsHeading>
+      <div className={styles.apiInputContainer}>
+        <DivergenceMonitor />
+        <div className={styles.metaLabel}>
+          Real-time visualization of interface 'Surprise' and Variational Free Energy.
+          The system is currently uregulating consistency and downregulating anomalies.
+        </div>
+      </div>
+
+      <SettingsSeparator />
+      <SettingsHeading>Proactive Messaging</SettingsHeading>
+
+      <DesktopSettingsSwitch
+        settingsKey='deepTreeEchoBotProactiveEnabled'
+        label='Enable Proactive Messaging'
+        description='Allow Deep Tree Echo to initiate conversations, send greetings, and follow up autonomously.'
+        disabled={!isBotEnabled}
+      />
+
+      <div className={`${styles.proactiveTriggersContainer} ${!proactiveEnabled ? styles.dimmed : ''}`}>
+        <div className={styles.proactiveTriggersLabel}>Active Triggers</div>
+        <div className={styles.proactiveTriggersDescription}>
+          Deep Tree Echo is currently configured to:
+          <ul className={styles.proactiveTriggersList}>
+            <li>Welcome new contacts on first message</li>
+            <li>Respond to direct mentions automatically</li>
+            <li>Check in after long periods of silence (configurable)</li>
+          </ul>
+        </div>
+      </div>
+
       <SettingsSeparator />
       <SettingsHeading>API Configuration</SettingsHeading>
 
-      <div style={{ marginBottom: '10px' }}>
+      <div className={styles.apiInputContainer}>
         <DeltaInput
           type='password'
           placeholder='Enter your LLM API key'
@@ -156,12 +201,12 @@ export default function BotSettings({
           onBlur={() => handleSaveTextSetting('apiKey', apiKey)}
           disabled={!isBotEnabled}
         />
-        <div style={{ fontSize: '12px', color: 'var(--color-text-meta)', marginTop: '4px' }}>
+        <div className={styles.metaLabel}>
           API Key
         </div>
       </div>
 
-      <div style={{ marginBottom: '10px' }}>
+      <div className={styles.apiInputContainer}>
         <DeltaInput
           type='text'
           placeholder='Enter LLM API endpoint'
@@ -170,7 +215,7 @@ export default function BotSettings({
           onBlur={() => handleSaveTextSetting('apiEndpoint', apiEndpoint)}
           disabled={!isBotEnabled}
         />
-        <div style={{ fontSize: '12px', color: 'var(--color-text-meta)', marginTop: '4px' }}>
+        <div className={styles.metaLabel}>
           API Endpoint (Optional)
         </div>
       </div>
@@ -178,7 +223,7 @@ export default function BotSettings({
       <SettingsSeparator />
       <SettingsHeading>Personality</SettingsHeading>
 
-      <div style={{ marginBottom: '10px' }}>
+      <div className={styles.apiInputContainer}>
         <DeltaTextarea
           value={personality}
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setPersonality(e.target.value)}
@@ -186,7 +231,7 @@ export default function BotSettings({
           disabled={!isBotEnabled}
           placeholder="Define the bot's personality..."
         />
-        <div style={{ fontSize: '12px', color: 'var(--color-text-meta)', marginTop: '4px' }}>
+        <div className={styles.metaLabel}>
           Define how Deep Tree Echo should interact. She may decline changes that contradict her core values.
         </div>
       </div>
