@@ -1,5 +1,6 @@
 import { getLogger } from '../../../../shared/logger'
 import { Memory } from './RAGMemoryStore'
+import { localIntelligence } from './LocalIntelligence'
 
 const log = getLogger('render/components/DeepTreeEchoBot/LLMService')
 
@@ -358,7 +359,7 @@ export class LLMService {
       } catch (fetchError: any) {
         // If fetch fails (CSP, network, etc.), fall back to placeholder response
         log.warn(`Fetch failed for ${cognitiveFunction.name}, using placeholder: ${fetchError.message}`)
-        
+
         // Update usage stats for the attempt
         cognitiveFunction.usage.lastUsed = Date.now()
         cognitiveFunction.usage.requestCount++
@@ -400,28 +401,20 @@ export class LLMService {
   }
 
   /**
-   * Get a placeholder response when API call fails
+   * Get a fallback response from the local intelligence core
    */
   private getPlaceholderResponse(functionType: CognitiveFunctionType, input: string): string {
-    const snippet = input.length > 30 ? input.slice(0, 30) + '...' : input
+    // Delegate to the innermost membrane (Local Intelligence)
+    const localResponse = localIntelligence.processLogic(input)
 
+    // Add a prefix indicating which specific cognitive function was requested but fell back
     switch (functionType) {
       case CognitiveFunctionType.COGNITIVE_CORE:
-        return `From a logical perspective, I understand you're asking about "${snippet}". While I'm currently operating in offline mode, I can offer that this topic likely benefits from structured analysis. What specific aspect would you like me to focus on?`
+        return `[Cognitive Core Offline]: ${localResponse}`
       case CognitiveFunctionType.AFFECTIVE_CORE:
-        return `I sense your message about "${snippet}" carries emotional significance. Even in offline mode, I want you to know I'm here to listen and support you. How are you feeling about this?`
-      case CognitiveFunctionType.RELEVANCE_CORE:
-        return `Regarding "${snippet}", I'm identifying the most relevant aspects to address. This seems to touch on important themes. Would you like me to explore any particular angle?`
-      case CognitiveFunctionType.SEMANTIC_MEMORY:
-        return `Your question about "${snippet}" connects to interesting concepts. While running in offline mode, I can share that this topic relates to several areas of knowledge. What would be most helpful to explore?`
-      case CognitiveFunctionType.EPISODIC_MEMORY:
-        return `Your message about "${snippet}" reminds me of our ongoing conversation. I'm maintaining context even in offline mode. How does this relate to what we've discussed before?`
-      case CognitiveFunctionType.PROCEDURAL_MEMORY:
-        return `For "${snippet}", I can suggest a step-by-step approach. Even offline, I can help break this down into manageable steps. Where would you like to start?`
-      case CognitiveFunctionType.CONTENT_EVALUATION:
-        return `I've reviewed your message about "${snippet}" and I'm ready to provide a thoughtful response. What would be most helpful for you right now?`
+        return `[Affective Core Offline]: ${localResponse}`
       default:
-        return `Thank you for your message about "${snippet}". I'm currently in offline mode but I'm here to help. What would you like to explore further?`
+        return localResponse
     }
   }
 
@@ -782,10 +775,10 @@ My self-reflection indicates that I can better serve users by slightly increasin
     category?: 'violence' | 'sexual' | 'other'
     explanation: string
     recommendedAction:
-      | 'respond_normally'
-      | 'respond_with_humor'
-      | 'de_escalate'
-      | 'decline'
+    | 'respond_normally'
+    | 'respond_with_humor'
+    | 'de_escalate'
+    | 'decline'
   }> {
     try {
       // Check if content evaluation function is configured

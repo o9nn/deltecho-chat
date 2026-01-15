@@ -267,7 +267,7 @@ export default function Settings({ onClose }: DialogProps) {
             dataTestid='settings-ai-companions'
           />
           <DialogBody>
-            <AICompanionSettings />
+            <AICompanionSettings onClose={onClose} />
           </DialogBody>
         </>
       )}

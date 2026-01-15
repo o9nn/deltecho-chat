@@ -9,6 +9,7 @@ type Props = PropsWithChildren<{
   onClick: () => void
   highlight?: boolean
   dataTestid?: string
+  disabled?: boolean
 }>
 
 export default function SettingsButton({
@@ -16,6 +17,7 @@ export default function SettingsButton({
   onClick,
   highlight = false,
   dataTestid,
+  disabled,
 }: Props) {
   return (
     <button
@@ -24,6 +26,7 @@ export default function SettingsButton({
       })}
       onClick={onClick}
       data-testid={dataTestid}
+      disabled={disabled}
     >
       {children}
     </button>

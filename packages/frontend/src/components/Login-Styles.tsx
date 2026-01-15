@@ -45,6 +45,9 @@ export const DeltaTextarea = React.memo(
         event: React.FormEvent<HTMLElement> &
           React.ChangeEvent<HTMLTextAreaElement>
       ) => void
+      onBlur?: (
+        event: React.FormEvent<HTMLElement> & React.FocusEvent<HTMLTextAreaElement>
+      ) => void
     }>
   ) => {
     const defaultId = useRef(`delta-textarea-${Math.random()}`)
@@ -64,6 +67,7 @@ export const DeltaTextarea = React.memo(
         </label>
         <textarea
           onChange={props.onChange}
+          onBlur={props.onBlur}
           value={props.value}
           id={id}
           disabled={props.disabled}
