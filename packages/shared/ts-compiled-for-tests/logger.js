@@ -91,9 +91,8 @@ export function setLogHandler(LogHandler, rcObject) {
 function log({ channel, isMainProcess }, level, stacktrace, args) {
   const variant = LoggerVariants[level];
   if (!handler) {
-    console.log("Failed to log message - Handler not initialized yet");
-    console.log(`Log Message: ${channel} ${level} ${args.join(" ")}`);
-    throw Error("Failed to log message - Handler not initialized yet");
+    variant.log(`[early] ${channel}:`, ...args);
+    return;
   }
   handler(channel, variant.level, stacktrace, ...args);
   if (rc["log-to-console"]) {
