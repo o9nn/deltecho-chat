@@ -2121,6 +2121,9 @@ function getDefaultState() {
     deepTreeEchoBotMemories: "",
     deepTreeEchoBotReflections: "",
     deepTreeEchoBotCognitiveKeys: "",
+    deepTreeEchoBotUseParallelProcessing: true,
+    deepTreeEchoBotProactiveEnabled: true,
+    deepTreeEchoBotAvatarEnabled: true,
     galleryImageKeepAspectRatio: false,
     useSystemUIFont: false,
     contentProtectionEnabled: false,
@@ -5218,7 +5221,7 @@ init_cjs_shim();
 
 // src/get-build-info.ts
 init_cjs_shim();
-var BuildInfo = JSON.parse('{"VERSION":"1.0.0","BUILD_TIMESTAMP":1768536721571,"GIT_REF":"180c553"}');
+var BuildInfo = JSON.parse('{"VERSION":"1.0.0","BUILD_TIMESTAMP":1768565555421,"GIT_REF":"42994ea"}');
 
 // src/deltachat/stdio_server.ts
 import { spawn } from "child_process";

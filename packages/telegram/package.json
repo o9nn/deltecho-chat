@@ -23,6 +23,7 @@
     "peerDependencies": {
         "@deltecho/cognitive": "workspace:*",
         "@deltecho/eventa": "workspace:*",
+        "@deltecho/voice": "workspace:*",
         "deep-tree-echo-core": "workspace:*"
     },
     "devDependencies": {

@@ -97,3 +97,47 @@ export type {
     WebGPUEngineEventListener,
     PromptTemplate,
 } from './webgpu/index.js';
+
+// Cross-Platform exports
+export {
+    // Presence Management
+    UnifiedPresenceManager,
+    createPresenceManager,
+    Platform,
+    PresenceStatus,
+    ActivityType,
+    // Conversation Continuity
+    ConversationContinuityManager,
+    createConversationManager,
+    // Shared Memory
+    SharedMemoryManager,
+    createSharedMemoryManager,
+    MemoryType,
+    InMemoryStoreBackend,
+} from './cross-platform/index.js';
+export type {
+    // Presence types
+    PlatformPresence,
+    UnifiedPresence,
+    PresenceUpdate,
+    PresenceEventType,
+    PresenceEvent,
+    PresenceAdapter,
+    // Conversation types
+    Participant,
+    CrossPlatformMessage,
+    CrossPlatformConversation,
+    ConversationContext,
+    UserMapping,
+    LinkConversationRequest,
+    ConversationEventType,
+    ConversationEvent,
+    MessageAttachment,
+    // Memory types
+    MemoryEntry,
+    MemoryQuery,
+    MemorySearchResult,
+    MemoryStoreBackend,
+    MemoryEventType,
+    MemoryEvent,
+} from './cross-platform/index.js';

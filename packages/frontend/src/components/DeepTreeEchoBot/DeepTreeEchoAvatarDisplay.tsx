@@ -16,7 +16,7 @@ import type {
 import { getOrchestrator } from './CognitiveBridge'
 import type { UnifiedCognitiveState } from './CognitiveBridge'
 import { useDeepTreeEchoAvatarOptional, AvatarProcessingState as BotProcessingState } from './DeepTreeEchoAvatarContext'
-import './DeepTreeEchoAvatarDisplay.scss'
+// Styles are in scss/components/_deep-tree-echo-avatar.scss
 
 export interface DeepTreeEchoAvatarDisplayProps {
     /** Width in pixels */
