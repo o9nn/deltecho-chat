@@ -4,6 +4,14 @@ import { LLMService, CognitiveFunctionType } from './LLMService'
 import { RAGMemoryStore } from './RAGMemoryStore'
 import { PersonaCore } from './PersonaCore'
 import { SelfReflection } from './SelfReflection'
+import {
+  setAvatarListening,
+  setAvatarThinking,
+  setAvatarResponding,
+  setAvatarIdle,
+  setAvatarError,
+  stopLipSync,
+} from './AvatarStateManager'
 
 const log = getLogger('render/components/DeepTreeEchoBot/DeepTreeEchoBot')
 
@@ -128,11 +136,16 @@ export class DeepTreeEchoBot {
     if (!this.isEnabled()) return
 
     try {
+      // Set avatar to listening state when message is received
+      setAvatarListening()
+
       const messageText = message.text || ''
 
       // Check if this is a command
       if (messageText.startsWith('/')) {
         await this.processCommand(accountId, chatId, messageText, message)
+        // Reset avatar to idle after processing command
+        setAvatarIdle()
         return
       }
 
@@ -155,6 +168,9 @@ export class DeepTreeEchoBot {
       )
     } catch (error) {
       log.error('Error processing message:', error)
+      // Set avatar to error state
+      setAvatarError()
+      setTimeout(() => setAvatarIdle(), 3000)
     }
   }
 
@@ -272,21 +288,16 @@ export class DeepTreeEchoBot {
 Available commands:
 
 - **/help** - Display this help message
-- **/vision [image]** - Analyze attached images ${
-      this.options.visionEnabled ? '' : '(disabled)'
-    }
-- **/search [query]** - Search the web ${
-      this.options.webAutomationEnabled ? '' : '(disabled)'
-    }
-- **/screenshot [url]** - Capture website screenshots ${
-      this.options.webAutomationEnabled ? '' : '(disabled)'
-    }
-- **/memory [status|clear|search]** - Manage conversation memory ${
-      this.options.memoryEnabled ? '' : '(disabled)'
-    }
-- **/embodiment [start|stop|status|evaluate]** - Physical awareness training ${
-      this.options.embodimentEnabled ? '' : '(disabled)'
-    }
+- **/vision [image]** - Analyze attached images ${this.options.visionEnabled ? '' : '(disabled)'
+      }
+- **/search [query]** - Search the web ${this.options.webAutomationEnabled ? '' : '(disabled)'
+      }
+- **/screenshot [url]** - Capture website screenshots ${this.options.webAutomationEnabled ? '' : '(disabled)'
+      }
+- **/memory [status|clear|search]** - Manage conversation memory ${this.options.memoryEnabled ? '' : '(disabled)'
+      }
+- **/embodiment [start|stop|status|evaluate]** - Physical awareness training ${this.options.embodimentEnabled ? '' : '(disabled)'
+      }
 - **/reflect [aspect]** - Ask me to reflect on an aspect of myself
 - **/cognitive [status]** - Show status of my cognitive functions
 - **/version** - Display bot version information
@@ -314,9 +325,8 @@ You can also just chat with me normally and I'll respond!
         let statusMessage = `
 **Cognitive Function Status**
 
-Parallel processing: ${
-          this.options.useParallelProcessing ? 'Enabled' : 'Disabled'
-        }
+Parallel processing: ${this.options.useParallelProcessing ? 'Enabled' : 'Disabled'
+          }
 Active cognitive functions: ${activeFunctions.length}
 
 `
@@ -425,15 +435,13 @@ Active cognitive functions: ${activeFunctions.length}
         const statusMessage = `
 **Memory Status**
 
-I currently have memory capabilities ${
-          this.options.memoryEnabled ? 'enabled' : 'disabled'
-        }.
+I currently have memory capabilities ${this.options.memoryEnabled ? 'enabled' : 'disabled'
+          }.
 Recent memories:
-${
-  recentMemories.length > 0
-    ? recentMemories.join('\n')
-    : 'No recent memories stored.'
-}
+${recentMemories.length > 0
+            ? recentMemories.join('\n')
+            : 'No recent memories stored.'
+          }
         `
         await this.sendMessage(accountId, chatId, statusMessage)
         break
@@ -462,19 +470,18 @@ ${
         const resultsMessage = `
 **Memory Search Results for "${searchQuery}"**
 
-${
-  searchResults.length > 0
-    ? searchResults
-        .map(
-          m =>
-            `- [${new Date(m.timestamp).toLocaleString()}] ${m.text.substring(
-              0,
-              100
-            )}${m.text.length > 100 ? '...' : ''}`
-        )
-        .join('\n')
-    : 'No matching memories found.'
-}
+${searchResults.length > 0
+            ? searchResults
+              .map(
+                m =>
+                  `- [${new Date(m.timestamp).toLocaleString()}] ${m.text.substring(
+                    0,
+                    100
+                  )}${m.text.length > 100 ? '...' : ''}`
+              )
+              .join('\n')
+            : 'No matching memories found.'
+          }
         `
         await this.sendMessage(accountId, chatId, resultsMessage)
         break
@@ -558,14 +565,13 @@ Memory: ${this.options.memoryEnabled ? 'Enabled' : 'Disabled'}
 Vision: ${this.options.visionEnabled ? 'Enabled' : 'Disabled'}
 Web Automation: ${this.options.webAutomationEnabled ? 'Enabled' : 'Disabled'}
 Embodiment: ${this.options.embodimentEnabled ? 'Enabled' : 'Disabled'}
-Parallel processing: ${
-      this.options.useParallelProcessing ? 'Enabled' : 'Disabled'
-    }
+Parallel processing: ${this.options.useParallelProcessing ? 'Enabled' : 'Disabled'
+      }
 Active cognitive functions: ${activeFunctions.length}
 
 Current mood: ${dominantEmotion.emotion} (${Math.round(
-      dominantEmotion.intensity * 100
-    )}%)
+        dominantEmotion.intensity * 100
+      )}%)
 Self-perception: ${this.personaCore.getSelfPerception()}
 Communication style: ${preferences.communicationTone || 'balanced'}
 
@@ -585,6 +591,9 @@ I'm here to assist you with various tasks and engage in meaningful conversations
     message: any
   ): Promise<void> {
     try {
+      // Set avatar to thinking state
+      setAvatarThinking()
+
       // Get conversation context if memory is enabled
       let context: string[] = []
       if (this.options.memoryEnabled) {
@@ -605,8 +614,7 @@ I'm here to assist you with various tasks and engage in meaningful conversations
         response = result.integratedResponse
 
         log.info(
-          `Generated response using parallel processing with ${
-            Object.keys(result.processing).length
+          `Generated response using parallel processing with ${Object.keys(result.processing).length
           } functions`
         )
       } else {
@@ -615,8 +623,8 @@ I'm here to assist you with various tasks and engage in meaningful conversations
         log.info('Generated response using general processing')
       }
 
-      // Send typing indicator (simulate thinking)
-      await this.sendMessage(accountId, chatId, '*Thinking...*')
+      // Set avatar to responding state before sending
+      setAvatarResponding()
 
       // Send the response
       await this.sendMessage(accountId, chatId, response)
@@ -632,13 +640,21 @@ I'm here to assist you with various tasks and engage in meaningful conversations
       }
 
       log.info(`Sent response to chat ${chatId}`)
+
+      // Stop lip sync and return to idle after a short delay
+      setTimeout(() => {
+        stopLipSync()
+        setAvatarIdle()
+      }, 1000)
     } catch (error) {
       log.error('Error generating response:', error)
+      setAvatarError()
       await this.sendMessage(
         accountId,
         chatId,
         "I'm sorry, I had a problem generating a response. Please try again."
       )
+      setTimeout(() => setAvatarIdle(), 3000)
     }
   }
 

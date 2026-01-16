@@ -103,6 +103,32 @@ import ProactiveMessagingSettings from './ProactiveMessagingSettings'
 import TriggerManager from './TriggerManager'
 import ProactiveStatusIndicator from './ProactiveStatusIndicator'
 
+// Import avatar state components (cherry-picked from upstream)
+import { DeepTreeEchoAvatarDisplay } from './DeepTreeEchoAvatarDisplay'
+import {
+  DeepTreeEchoAvatarProvider,
+  useDeepTreeEchoAvatar,
+  useDeepTreeEchoAvatarOptional,
+  AvatarProcessingState,
+} from './DeepTreeEchoAvatarContext'
+import type {
+  AvatarConfig,
+  AvatarState,
+  AvatarContextValue,
+} from './DeepTreeEchoAvatarContext'
+import {
+  registerAvatarStateControl,
+  setAvatarProcessingState,
+  setAvatarSpeaking,
+  setAvatarAudioLevel,
+  setAvatarIdle,
+  setAvatarListening,
+  setAvatarThinking,
+  setAvatarResponding,
+  setAvatarError,
+  stopLipSync,
+} from './AvatarStateManager'
+
 // Import integration functions
 import {
   initDeepTreeEchoBot,
@@ -150,6 +176,23 @@ export {
   TriggerManager,
   ProactiveStatusIndicator,
 
+  // Avatar Components (cherry-picked from upstream)
+  DeepTreeEchoAvatarDisplay,
+  DeepTreeEchoAvatarProvider,
+  useDeepTreeEchoAvatar,
+  useDeepTreeEchoAvatarOptional,
+  AvatarProcessingState,
+  registerAvatarStateControl,
+  setAvatarProcessingState,
+  setAvatarSpeaking,
+  setAvatarAudioLevel,
+  setAvatarIdle,
+  setAvatarListening,
+  setAvatarThinking,
+  setAvatarResponding,
+  setAvatarError,
+  stopLipSync,
+
   // Services
   LLMService,
   PersonaCore,
@@ -178,6 +221,9 @@ export {
 }
 
 export type { DeepTreeEchoBotOptions }
+
+// Avatar types (cherry-picked from upstream)
+export type { AvatarConfig, AvatarState, AvatarContextValue }
 
 // Export the main component as default
 export default DeepTreeEchoBot

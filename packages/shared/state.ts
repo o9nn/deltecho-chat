@@ -43,6 +43,7 @@ export function getDefaultState(): DesktopSettingsType {
     deepTreeEchoBotCognitiveKeys: '',
     deepTreeEchoBotUseParallelProcessing: true,
     deepTreeEchoBotProactiveEnabled: true,
+    deepTreeEchoBotAvatarEnabled: true,
     galleryImageKeepAspectRatio: false,
     useSystemUIFont: false,
     contentProtectionEnabled: false,

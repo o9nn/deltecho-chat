@@ -80,6 +80,8 @@ export interface DesktopSettingsType {
   /** Proactive messaging settings */
   deepTreeEchoBotProactiveEnabled?: boolean
   deepTreeEchoBotProactiveTriggers?: string
+  /** Avatar display settings */
+  deepTreeEchoBotAvatarEnabled?: boolean
 }
 
 export interface RC_Config {

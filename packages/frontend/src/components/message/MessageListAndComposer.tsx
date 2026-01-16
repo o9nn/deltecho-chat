@@ -14,6 +14,7 @@ import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
 import { ReactionsBarProvider } from '../ReactionsBar'
 import useDialog from '../../hooks/dialog/useDialog'
 import useMessage from '../../hooks/chat/useMessage'
+import { DeepTreeEchoAvatarDisplay } from '../DeepTreeEchoBot/DeepTreeEchoAvatarDisplay'
 
 const log = getLogger('renderer/MessageListAndComposer')
 
@@ -348,6 +349,10 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
           clearDraftStateButKeepTextareaValue
         }
       />
+      {settingsStore?.desktopSettings?.deepTreeEchoBotEnabled &&
+        settingsStore?.desktopSettings?.deepTreeEchoBotAvatarEnabled !== false && (
+          <DeepTreeEchoAvatarDisplay position="floating" />
+        )}
     </div>
   )
 }
