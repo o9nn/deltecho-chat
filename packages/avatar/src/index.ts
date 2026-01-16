@@ -50,3 +50,22 @@ export {
     IdleAnimationEvent,
     IdleAnimationEventListener,
 } from './idle-animation';
+
+// PixiJS Live2D Renderer
+export {
+    PixiLive2DRenderer,
+    PixiLive2DConfig,
+    createPixiLive2DRenderer,
+    PARAM_IDS,
+} from './adapters/pixi-live2d-renderer';
+
+// Live2D Avatar Manager
+export {
+    Live2DAvatarProps,
+    Live2DAvatarState,
+    Live2DAvatarController,
+    Live2DAvatarManager,
+    createLive2DAvatarManager,
+    SAMPLE_MODELS,
+    DEFAULT_MODEL_CONFIG,
+} from './adapters/live2d-avatar';

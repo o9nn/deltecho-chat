@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep Tree Echo - Live2D Avatar Demo</title>
+    <meta name="description" content="Production Live2D avatar demonstration for Deep Tree Echo AI">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #ec4899;
+            --bg-dark: #0f0f23;
+            --bg-card: #1a1a2e;
+            --bg-hover: #252542;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border: #2d2d4a;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Avatar Display Section */
+        .avatar-section {
+            background: var(--bg-card);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .avatar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.1));
+        }
+
+        .avatar-header h2 {
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .status-badge.loading {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+        }
+
+        .status-badge.ready {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        .status-badge.error {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--error);
+        }
+
+        .avatar-canvas-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1;
+            background: radial-gradient(circle at center, #1e1e3f 0%, var(--bg-dark) 100%);
+        }
+
+        #avatar-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .avatar-fallback {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .avatar-fallback.hidden {
+            display: none;
+        }
+
+        .avatar-fallback svg {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .avatar-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            padding: 1rem;
+            gap: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-top: 0.25rem;
+        }
+
+        /* Controls Section */
+        .controls-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .control-panel {
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            padding: 1.25rem;
+        }
+
+        .control-panel h3 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Model Selector */
+        .model-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .model-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--bg-hover);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+
+        .model-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        .model-presets {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .preset-btn {
+            padding: 0.5rem 1rem;
+            background: var(--bg-hover);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+        }
+
+        .preset-btn:hover {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: var(--primary);
+        }
+
+        .preset-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .load-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .load-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+        }
+
+        .load-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Expression Controls */
+        .expression-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+
+        .expression-btn {
+            padding: 0.75rem;
+            background: var(--bg-hover);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .expression-btn:hover {
+            background: rgba(99, 102, 241, 0.15);
+            border-color: var(--primary);
+        }
+
+        .expression-btn.active {
+            background: rgba(99, 102, 241, 0.25);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Motion Controls */
+        .motion-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .motion-btn {
+            flex: 1;
+            min-width: calc(50% - 0.25rem);
+            padding: 0.6rem 0.75rem;
+            background: var(--bg-hover);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+        }
+
+        .motion-btn:hover {
+            background: rgba(236, 72, 153, 0.15);
+            border-color: var(--secondary);
+        }
+
+        .motion-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Lip Sync Controls */
+        .lip-sync-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .audio-level-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .audio-level-slider {
+            flex: 1;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 8px;
+            background: var(--bg-hover);
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .audio-level-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .audio-level-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .audio-level-value {
+            min-width: 3rem;
+            text-align: center;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .speak-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+        }
+
+        .speak-toggle input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+        }
+
+        /* Info Section */
+        .info-section {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .info-section h3 {
+            margin-bottom: 1rem;
+        }
+
+        .info-section p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-section code {
+            background: var(--bg-hover);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .info-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .info-list li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: var(--text-muted);
+        }
+
+        .info-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--success);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 3rem;
+            text-align: center;
+            padding: 1.5rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>🌳 Deep Tree Echo</h1>
+            <p>Live2D Avatar Production Demo</p>
+        </header>
+
+        <div class="main-content">
+            <!-- Avatar Display -->
+            <div class="avatar-section">
+                <div class="avatar-header">
+                    <h2>🎭 Avatar Preview</h2>
+                    <span id="status-badge" class="status-badge loading">Loading...</span>
+                </div>
+                <div class="avatar-canvas-container">
+                    <canvas id="avatar-canvas"></canvas>
+                    <div id="avatar-fallback" class="avatar-fallback">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                        </svg>
+                        <p id="fallback-message">Enter a model path and click "Load Model" to display a Live2D avatar.
+                        </p>
+                    </div>
+                </div>
+                <div class="avatar-stats">
+                    <div class="stat-item">
+                        <div class="stat-label">Expression</div>
+                        <div id="stat-expression" class="stat-value">-</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Speaking</div>
+                        <div id="stat-speaking" class="stat-value">No</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Audio Level</div>
+                        <div id="stat-audio" class="stat-value">0%</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="controls-section">
+                <!-- Model Section -->
+                <div class="control-panel">
+                    <h3>📦 Model</h3>
+                    <div class="model-selector">
+                        <input type="text" id="model-path" class="model-input" placeholder="Path to model3.json file..."
+                            value="https://cdn.jsdelivr.net/gh/guansss/pixi-live2d-display/test/assets/shizuku/shizuku.model.json">
+                        <div class="model-presets">
+                            <button class="preset-btn active" data-model="shizuku">Shizuku</button>
+                            <button class="preset-btn" data-model="haru">Haru</button>
+                        </div>
+                        <button id="load-btn" class="load-btn">Load Model</button>
+                    </div>
+                </div>
+
+                <!-- Expression Section -->
+                <div class="control-panel">
+                    <h3>😊 Expression</h3>
+                    <div class="expression-grid">
+                        <button class="expression-btn active" data-expression="neutral">😐 Neutral</button>
+                        <button class="expression-btn" data-expression="happy">😊 Happy</button>
+                        <button class="expression-btn" data-expression="surprised">😲 Surprised</button>
+                        <button class="expression-btn" data-expression="curious">🤔 Curious</button>
+                        <button class="expression-btn" data-expression="concerned">😟 Concerned</button>
+                        <button class="expression-btn" data-expression="focused">🎯 Focused</button>
+                    </div>
+                </div>
+
+                <!-- Motion Section -->
+                <div class="control-panel">
+                    <h3>🎬 Motion</h3>
+                    <div class="motion-grid">
+                        <button class="motion-btn" data-motion="idle">💤 Idle</button>
+                        <button class="motion-btn" data-motion="nod">👍 Nod</button>
+                        <button class="motion-btn" data-motion="shake">👎 Shake</button>
+                        <button class="motion-btn" data-motion="wave">👋 Wave</button>
+                    </div>
+                </div>
+
+                <!-- Lip Sync Section -->
+                <div class="control-panel">
+                    <h3>🗣️ Lip Sync</h3>
+                    <div class="lip-sync-controls">
+                        <div class="audio-level-container">
+                            <span>Level:</span>
+                            <input type="range" id="audio-level" class="audio-level-slider" min="0" max="100" value="0"
+                                aria-label="Audio level for lip sync">
+                            <span id="audio-level-value" class="audio-level-value">0%</span>
+                        </div>
+                        <label class="speak-toggle">
+                            <input type="checkbox" id="auto-speak">
+                            <span>Auto oscillate (simulate speech)</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Section -->
+        <div class="info-section">
+            <h3>📖 About Live2D Integration</h3>
+            <p>
+                This demo showcases the <code>PixiLive2DRenderer</code> integration for Deep Tree Echo.
+                It uses the <code>pixi-live2d-display</code> library to render Live2D Cubism models in the browser.
+            </p>
+            <p>
+                To use your own models, you can:
+            </p>
+            <ul class="info-list">
+                <li>Download sample models from <a href="https://www.live2d.com/en/download/sample-data/"
+                        target="_blank" rel="noopener">Live2D Sample Data</a></li>
+                <li>Create your own models with <a href="https://www.live2d.com/en/download/cubism/" target="_blank"
+                        rel="noopener">Cubism
+                        Editor</a></li>
+                <li>Host model files on a CDN or your own server</li>
+                <li>Reference models by URL or local path</li>
+            </ul>
+        </div>
+
+        <footer>
+            <p>Deep Tree Echo Avatar System • Live2D Integration • Built with 💜</p>
+        </footer>
+    </div>
+
+    <script type="module">
+        // Import PixiJS and pixi-live2d-display from CDN
+        import * as PIXI from 'https://cdn.jsdelivr.net/npm/pixi.js@7.4.2/+esm';
+        import { Live2DModel } from 'https://cdn.jsdelivr.net/npm/pixi-live2d-display@0.4.0/+esm';
+
+        // Register PIXI to the window for pixi-live2d-display
+        window.PIXI = PIXI;
+
+        // DOM Elements
+        const canvas = document.getElementById('avatar-canvas');
+        const statusBadge = document.getElementById('status-badge');
+        const fallback = document.getElementById('avatar-fallback');
+        const fallbackMessage = document.getElementById('fallback-message');
+        const modelPathInput = document.getElementById('model-path');
+        const loadBtn = document.getElementById('load-btn');
+        const audioLevelSlider = document.getElementById('audio-level');
+        const audioLevelValue = document.getElementById('audio-level-value');
+        const autoSpeakCheckbox = document.getElementById('auto-speak');
+
+        // Stats
+        const statExpression = document.getElementById('stat-expression');
+        const statSpeaking = document.getElementById('stat-speaking');
+        const statAudio = document.getElementById('stat-audio');
+
+        // State
+        let app = null;
+        let model = null;
+        let currentExpression = 'neutral';
+        let lipSyncValue = 0;
+        let autoSpeakInterval = null;
+
+        // Model presets
+        const MODEL_PRESETS = {
+            shizuku: 'https://cdn.jsdelivr.net/gh/guansss/pixi-live2d-display/test/assets/shizuku/shizuku.model.json',
+            haru: 'https://cdn.jsdelivr.net/gh/guansss/pixi-live2d-display/test/assets/haru/haru_greeter_t03.model3.json',
+        };
+
+        // Initialize PixiJS Application
+        async function initApp() {
+            if (app) {
+                app.destroy(true);
+            }
+
+            const container = canvas.parentElement;
+            app = new PIXI.Application({
+                view: canvas,
+                backgroundAlpha: 0,
+                resolution: window.devicePixelRatio ?? 1,
+                autoDensity: true,
+                width: container.clientWidth,
+                height: container.clientHeight,
+            });
+
+            // Register ticker for Live2D updates
+            Live2DModel.registerTicker(app.ticker);
+        }
+
+        // Load a model
+        async function loadModel(modelUrl) {
+            setStatus('loading', 'Loading...');
+            fallback.classList.remove('hidden');
+            fallbackMessage.textContent = 'Loading model...';
+
+            try {
+                // Remove existing model
+                if (model) {
+                    model.destroy();
+                    model = null;
+                }
+
+                // Initialize app if needed
+                if (!app) {
+                    await initApp();
+                }
+
+                // Load the model
+                model = await Live2DModel.from(modelUrl);
+
+                // Position the model
+                const container = canvas.parentElement;
+                model.anchor.set(0.5, 0.5);
+                model.x = container.clientWidth / 2;
+                model.y = container.clientHeight / 2;
+
+                // Scale to fit
+                const scale = Math.min(
+                    container.clientWidth / model.width,
+                    container.clientHeight / model.height
+                ) * 0.8;
+                model.scale.set(scale);
+
+                // Add to stage
+                app.stage.addChild(model);
+
+                // Success
+                fallback.classList.add('hidden');
+                setStatus('ready', 'Ready');
+                updateStats();
+
+                console.log('[Live2DDemo] Model loaded:', modelUrl);
+            } catch (error) {
+                console.error('[Live2DDemo] Failed to load model:', error);
+                setStatus('error', 'Error');
+                fallbackMessage.textContent = `Failed to load model: ${error.message}`;
+            }
+        }
+
+        // Set expression
+        function setExpression(expression) {
+            if (!model) return;
+
+            currentExpression = expression;
+
+            // Try to set expression (may not exist on all models)
+            try {
+                model.expression(expression);
+            } catch (e) {
+                console.log('[Live2DDemo] Expression not available:', expression);
+            }
+
+            // Update UI
+            document.querySelectorAll('.expression-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.expression === expression);
+            });
+
+            updateStats();
+        }
+
+        // Play motion
+        function playMotion(motionType) {
+            if (!model) return;
+
+            // Map motion types to groups
+            const motionMap = {
+                idle: { group: 'idle', index: 0 },
+                nod: { group: 'tap_body', index: 0 },
+                shake: { group: 'shake', index: 0 },
+                wave: { group: 'flick_head', index: 0 },
+            };
+
+            const motion = motionMap[motionType];
+            if (motion) {
+                try {
+                    model.motion(motion.group, motion.index, 2);
+                } catch (e) {
+                    console.log('[Live2DDemo] Motion not available:', motionType);
+                }
+            }
+        }
+
+        // Update lip sync
+        function updateLipSync(level) {
+            if (!model?.internalModel?.coreModel) return;
+
+            lipSyncValue = level / 100;
+
+            try {
+                model.internalModel.coreModel.setParameterValueById('ParamMouthOpenY', lipSyncValue);
+            } catch (e) {
+                // Parameter might not exist
+            }
+
+            updateStats();
+        }
+
+        // Auto speak oscillation
+        function startAutoSpeak() {
+            let phase = 0;
+            autoSpeakInterval = setInterval(() => {
+                // Create natural-looking mouth movement
+                const value = Math.sin(phase) * 0.5 + 0.5;
+                const noise = Math.random() * 0.2;
+                const level = Math.floor((value * 0.8 + noise * 0.2) * 100);
+
+                audioLevelSlider.value = level;
+                audioLevelValue.textContent = `${level}%`;
+                updateLipSync(level);
+
+                phase += 0.3;
+            }, 50);
+        }
+
+        function stopAutoSpeak() {
+            if (autoSpeakInterval) {
+                clearInterval(autoSpeakInterval);
+                autoSpeakInterval = null;
+            }
+            audioLevelSlider.value = 0;
+            audioLevelValue.textContent = '0%';
+            updateLipSync(0);
+        }
+
+        // Set status badge
+        function setStatus(status, text) {
+            statusBadge.className = `status-badge ${status}`;
+            statusBadge.textContent = text;
+        }
+
+        // Update stats display
+        function updateStats() {
+            statExpression.textContent = currentExpression;
+            statSpeaking.textContent = autoSpeakInterval ? 'Yes' : 'No';
+            statAudio.textContent = `${Math.round(lipSyncValue * 100)}%`;
+        }
+
+        // Event Listeners
+        loadBtn.addEventListener('click', () => {
+            const url = modelPathInput.value.trim();
+            if (url) {
+                loadModel(url);
+            }
+        });
+
+        // Model presets
+        document.querySelectorAll('.preset-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const preset = btn.dataset.model;
+                if (MODEL_PRESETS[preset]) {
+                    modelPathInput.value = MODEL_PRESETS[preset];
+                    document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                }
+            });
+        });
+
+        // Expression buttons
+        document.querySelectorAll('.expression-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                setExpression(btn.dataset.expression);
+            });
+        });
+
+        // Motion buttons
+        document.querySelectorAll('.motion-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                playMotion(btn.dataset.motion);
+            });
+        });
+
+        // Audio level slider
+        audioLevelSlider.addEventListener('input', (e) => {
+            const level = parseInt(e.target.value);
+            audioLevelValue.textContent = `${level}%`;
+            updateLipSync(level);
+        });
+
+        // Auto speak toggle
+        autoSpeakCheckbox.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                startAutoSpeak();
+            } else {
+                stopAutoSpeak();
+            }
+            updateStats();
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (app && model) {
+                const container = canvas.parentElement;
+                app.renderer.resize(container.clientWidth, container.clientHeight);
+                model.x = container.clientWidth / 2;
+                model.y = container.clientHeight / 2;
+            }
+        });
+
+        // Initialize app on load
+        initApp().then(() => {
+            setStatus('ready', 'Ready');
+            fallbackMessage.textContent = 'Enter a model path and click "Load Model" to display a Live2D avatar.';
+        });
+    </script>
+</body>
+
+</html>
