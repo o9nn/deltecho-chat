@@ -25,6 +25,8 @@ import { ConnectorInfo, ConnectorRegistryEvent } from './ConnectorRegistry'
 import { AIMemory } from './MemoryPersistenceLayer'
 import MemoryVisualization from './MemoryVisualization'
 import AICompanionCreator from './AICompanionCreator'
+import { CognitiveStateVisualizer, MemoryBrowser } from '@deltecho/ui-components'
+import type { UnifiedCognitiveState, Atom } from '@deltecho/cognitive'
 
 // Companion Card Component
 const CompanionCard: React.FC<{
@@ -122,9 +124,9 @@ const CompanionCard: React.FC<{
                     : capability === 'structured_output'
                       ? 'Data'
                       : capability
-                          .split('_')
-                          .map(w => w.charAt(0).toUpperCase() + w.slice(1))
-                          .join(' ')}
+                        .split('_')
+                        .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+                        .join(' ')}
           </span>
         ))}
         {companion.capabilities.length > 3 && (
@@ -192,9 +194,96 @@ const AICompanionHubContent: React.FC = () => {
   const [chatInput, setChatInput] = useState('')
   const [isSending, setIsSending] = useState(false)
   const [view, setView] = useState<
-    'chat' | 'memories' | 'settings' | 'visualization' | 'create'
+    'chat' | 'memories' | 'settings' | 'visualization' | 'create' | 'cognitive'
   >('chat')
   const [isCreatingCompanion, setIsCreatingCompanion] = useState(false)
+  const [cognitiveState, setCognitiveState] = useState<UnifiedCognitiveState | null>(null)
+  const [atoms, setAtoms] = useState<Atom[]>([])
+
+  // Simulate real-time cognitive state updates
+  useEffect(() => {
+    // Initialize with mock data
+    const mockCognitiveState: UnifiedCognitiveState = {
+      emotionalState: {
+        joy: 0.7,
+        sadness: 0.1,
+        anger: 0.05,
+        fear: 0.1,
+        surprise: 0.3,
+        interest: 0.8,
+        disgust: 0.05,
+        contempt: 0.02,
+        dominant: 'joy',
+        valence: 0.7,
+        arousal: 0.5,
+      },
+      currentPhase: 0,
+      activeStreams: [
+        {
+          id: 'stream-1',
+          phase: 'sense' as const,
+          data: { input: 'Processing user message' },
+          timestamp: Date.now(),
+          priority: 0.8,
+          status: 'active' as const,
+        },
+        {
+          id: 'stream-2',
+          phase: 'process' as const,
+          data: { analysis: 'Analyzing sentiment and context' },
+          timestamp: Date.now(),
+          priority: 0.7,
+          status: 'active' as const,
+        },
+      ],
+      cognitiveLoad: 0.45,
+      lastUpdated: Date.now(),
+      memoryContext: null,
+      reasoningState: null,
+    }
+
+    const mockAtoms: Atom[] = [
+      {
+        id: 'atom-1',
+        name: 'User Greeting',
+        type: 'concept' as const,
+        truthValue: 0.95,
+        confidence: 0.9,
+        attention: 0.85,
+      },
+      {
+        id: 'atom-2',
+        name: 'Conversation Context',
+        type: 'predicate' as const,
+        truthValue: 0.85,
+        confidence: 0.85,
+        attention: 0.75,
+      },
+      {
+        id: 'atom-3',
+        name: 'Emotional Response',
+        type: 'schema' as const,
+        truthValue: 0.75,
+        confidence: 0.8,
+        attention: 0.7,
+      },
+    ]
+
+    setCognitiveState(mockCognitiveState)
+    setAtoms(mockAtoms)
+
+    // Simulate periodic updates
+    const interval = setInterval(() => {
+      setCognitiveState((prev: UnifiedCognitiveState | null) => prev ? {
+        ...prev,
+        currentPhase: (prev.currentPhase + 1) % 30,
+        cognitiveLoad: Math.random() * 0.8 + 0.2,
+        lastUpdated: Date.now(),
+      } : null)
+    }, 3000)
+
+    return () => clearInterval(interval)
+  }, [])
 
   // Get current conversation messages
   const currentMessages =
@@ -373,6 +462,13 @@ const AICompanionHubContent: React.FC = () => {
                     <span>Memories</span>
                   </button>
                   <button
+                    className={`tab ${view === 'cognitive' ? 'active' : ''}`}
+                    onClick={() => setView('cognitive')}
+                  >
+                    <Brain size={18} />
+                    <span>Cognitive State</span>
+                  </button>
+                  <button
                     className='tab'
                     onClick={() => setView('visualization')}
                   >
@@ -506,6 +602,20 @@ const AICompanionHubContent: React.FC = () => {
               <div className='settings-form'>
                 {/* Settings form will be implemented in a future update */}
                 <p>Advanced settings coming soon...</p>
+              </div>
+            </div>
+          ) : view === 'cognitive' ? (
+            <div className='cognitive-view'>
+              <div className='cognitive-state-section'>
+                <h3>Cognitive State</h3>
+                <CognitiveStateVisualizer state={cognitiveState} />
+              </div>
+              <div className='memory-browser-section'>
+                <h3>AtomSpace Browser</h3>
+                <MemoryBrowser
+                  atoms={atoms}
+                  onSelectAtom={(atom: Atom) => console.log('Selected atom:', atom)}
+                />
               </div>
             </div>
           ) : null}

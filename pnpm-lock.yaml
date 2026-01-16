@@ -204,6 +204,12 @@ importers:
       '@deltachat/message_parser_wasm':
         specifier: ^0.13.0
         version: 0.13.0
+      '@deltecho/cognitive':
+        specifier: workspace:*
+        version: link:../cognitive
+      '@deltecho/ui-components':
+        specifier: workspace:*
+        version: link:../ui-components
       '@emoji-mart/data':
         specifier: ^1.2.1
         version: 1.2.1
