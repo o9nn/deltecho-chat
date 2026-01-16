@@ -500,9 +500,10 @@
                     <h3>📦 Model</h3>
                     <div class="model-selector">
                         <input type="text" id="model-path" class="model-input" placeholder="Path to model3.json file..."
-                            value="https://cdn.jsdelivr.net/gh/guansss/pixi-live2d-display/test/assets/shizuku/shizuku.model.json">
+                            value="./assets/miara/runtime/miara_pro_t03.model3.json">
                         <div class="model-presets">
-                            <button class="preset-btn active" data-model="shizuku">Shizuku</button>
+                            <button class="preset-btn active" data-model="miara">Miara (Local)</button>
+                            <button class="preset-btn" data-model="shizuku">Shizuku</button>
                             <button class="preset-btn" data-model="haru">Haru</button>
                         </div>
                         <button id="load-btn" class="load-btn">Load Model</button>
@@ -578,6 +579,9 @@
         </footer>
     </div>
 
+    <!-- Local Cubism Core -->
+    <script src="./lib/live2dcubismcore.min.js"></script>
+
     <script type="module">
         // Import PixiJS and pixi-live2d-display from CDN
         import * as PIXI from 'https://cdn.jsdelivr.net/npm/pixi.js@7.4.2/+esm';
@@ -611,6 +615,7 @@
 
         // Model presets
         const MODEL_PRESETS = {
+            miara: './assets/miara/runtime/miara_pro_t03.model3.json',
             shizuku: 'https://cdn.jsdelivr.net/gh/guansss/pixi-live2d-display/test/assets/shizuku/shizuku.model.json',
             haru: 'https://cdn.jsdelivr.net/gh/guansss/pixi-live2d-display/test/assets/haru/haru_greeter_t03.model3.json',
         };

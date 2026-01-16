@@ -18,6 +18,7 @@ import {
   Zap,
   User,
   HomeIcon,
+  Video,
   X as XIcon,
 } from 'lucide-react'
 
@@ -26,6 +27,7 @@ import { ConnectorInfo, ConnectorRegistryEvent } from './ConnectorRegistry'
 import { AIMemory } from './MemoryPersistenceLayer'
 import MemoryVisualization from './MemoryVisualization'
 import AICompanionCreator from './AICompanionCreator'
+import { VideoCalibrationLab } from './VideoCalibrationLab'
 import { CognitiveStateVisualizer, MemoryBrowser } from '@deltecho/ui-components'
 import type { UnifiedCognitiveState, Atom } from '@deltecho/cognitive'
 import { Live2DAvatar, useLive2DController } from './Live2DAvatar'
@@ -198,7 +200,7 @@ const AICompanionHubContent: React.FC = () => {
   const [chatInput, setChatInput] = useState('')
   const [isSending, setIsSending] = useState(false)
   const [view, setView] = useState<
-    'chat' | 'memories' | 'settings' | 'visualization' | 'create' | 'cognitive' | 'avatar'
+    'chat' | 'memories' | 'settings' | 'visualization' | 'create' | 'cognitive' | 'avatar' | 'calibration'
   >('chat')
   const [isCreatingCompanion, setIsCreatingCompanion] = useState(false)
   const [cognitiveState, setCognitiveState] = useState<UnifiedCognitiveState | null>(null)
@@ -484,6 +486,13 @@ const AICompanionHubContent: React.FC = () => {
                     <span>Avatar</span>
                   </button>
                   <button
+                    className={`tab ${view === 'calibration' ? 'active' : ''}`}
+                    onClick={() => setView('calibration')}
+                  >
+                    <Video size={18} />
+                    <span>Calibration</span>
+                  </button>
+                  <button
                     className='tab'
                     onClick={() => setView('visualization')}
                   >
@@ -715,6 +724,8 @@ const AICompanionHubContent: React.FC = () => {
                 </div>
               </div>
             </div>
+          ) : view === 'calibration' ? (
+            <VideoCalibrationLab />
           ) : null}
         </div>
       </div>

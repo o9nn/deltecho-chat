@@ -1,0 +1,178 @@
+.video-calibration-lab {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+    background-color: #f8fafc;
+    overflow: hidden;
+
+    .lab-header {
+        margin-bottom: 20px;
+
+        h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            color: #1e293b;
+            margin: 0 0 5px 0;
+        }
+
+        p {
+            color: #64748b;
+            margin: 0;
+        }
+    }
+
+    .lab-workspace {
+        display: grid;
+        grid-template-columns: 1fr 300px 1fr;
+        gap: 20px;
+        flex: 1;
+        min-height: 0;
+
+        .video-panel {
+            background: #fff;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+
+            .video-container {
+                flex: 1;
+                background: #000;
+                border-radius: 8px;
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                video {
+                    max-width: 100%;
+                    max-height: 100%;
+                    width: auto;
+                    height: auto;
+                }
+            }
+
+            .video-controls {
+                margin-top: 15px;
+                display: flex;
+                gap: 10px;
+
+                .video-selector {
+                    flex: 1;
+                    padding: 8px;
+                    border: 1px solid #e2e8f0;
+                    border-radius: 6px;
+                    font-size: 0.9rem;
+                }
+
+                .play-btn {
+                    padding: 8px 12px;
+                    background: #3b82f6;
+                    color: white;
+                    border: none;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    &:hover {
+                        background: #2563eb;
+                    }
+                }
+            }
+        }
+
+        .metrics-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+
+            .metric-card {
+                background: #fff;
+                padding: 15px;
+                border-radius: 12px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+                h4 {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    margin: 0 0 10px 0;
+                    font-size: 0.9rem;
+                    color: #475569;
+                }
+
+                .meter-container {
+                    height: 8px;
+                    background: #e2e8f0;
+                    border-radius: 4px;
+                    overflow: hidden;
+                    margin-bottom: 5px;
+
+                    .meter-bar {
+                        width: var(--progress, 0%);
+                        height: 100%;
+                        background: linear-gradient(90deg, #22c55e, #eab308, #ef4444);
+                        transition: width 0.1s ease;
+                    }
+                }
+
+                .metric-value {
+                    font-family: monospace;
+                    font-size: 1.2rem;
+                    font-weight: bold;
+                    color: #0f172a;
+                }
+
+                .status-badge {
+                    padding: 6px 10px;
+                    border-radius: 6px;
+                    font-size: 0.8rem;
+                    font-weight: 600;
+                    text-align: center;
+                    background: #e2e8f0;
+                    color: #64748b;
+                    transition: all 0.2s ease;
+
+                    &.active {
+                        background: #dcfce7;
+                        color: #166534;
+                        box-shadow: 0 0 0 2px #22c55e inset;
+                    }
+                }
+            }
+        }
+
+        .avatar-panel {
+            background: #fff;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            .avatar-container {
+                flex: 1;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 100%);
+                border-radius: 8px;
+                margin-bottom: 10px;
+            }
+
+            .avatar-label {
+                font-weight: 600;
+                color: #334155;
+            }
+        }
+    }
+}
