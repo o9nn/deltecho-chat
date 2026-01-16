@@ -10,8 +10,17 @@
     "strict": true,
     "resolveJsonModule": true,
     "moduleResolution": "NodeNext",
+    "skipLibCheck": true,
     "types": []
   },
-  "include": ["./**/*.ts", "./**/*.js", "../../_locales/*.json"],
-  "exclude": ["./ts-compiled-for-tests", "**/*.test.ts", "**/__tests__"]
+  "include": [
+    "./**/*.ts",
+    "./**/*.js",
+    "../../_locales/*.json"
+  ],
+  "exclude": [
+    "./ts-compiled-for-tests",
+    "**/*.test.ts",
+    "**/__tests__"
+  ]
 }

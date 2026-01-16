@@ -384,6 +384,7 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
             {chat.isProtected && <InlineVerifiedIcon />}
             {chat.ephemeralTimer !== 0 && (
               <div
+                role="img"
                 className={'disapearing-messages-icon'}
                 aria-label={tx('a11y_disappearing_messages_activated')}
               />

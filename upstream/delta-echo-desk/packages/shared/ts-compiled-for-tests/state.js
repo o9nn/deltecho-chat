@@ -1,4 +1,4 @@
-"use strict";
+'use strict'
 export function getDefaultState() {
   return {
     bounds: {},
@@ -17,7 +17,7 @@ export function getDefaultState() {
     chatViewBgImg: void 0,
     lastChats: {},
     zoomFactor: 1,
-    activeTheme: "system",
+    activeTheme: 'system',
     minimizeToTray: true,
     syncAllAccounts: true,
     lastSaveDialogLocation: void 0,
@@ -30,7 +30,7 @@ export function getDefaultState() {
     useSystemUIFont: false,
     contentProtectionEnabled: false,
     isMentionsEnabled: true,
-    autostart: true
-  };
+    autostart: true,
+  }
 }
 //# sourceMappingURL=state.js.map

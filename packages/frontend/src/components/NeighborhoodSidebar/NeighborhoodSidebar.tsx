@@ -164,8 +164,6 @@ export default function NeighborhoodSidebar({
                     role='tablist'
                     aria-orientation='vertical'
                 >
-                    {/* Native tab element for ARIA static analysis - actual tabs are in NeighborItem */}
-                    <span role='tab' aria-hidden='true' className={styles.visuallyHidden} />
                     <RovingTabindexProvider wrapperElementRef={accountsListRef}>
                         {accounts.map(id => (
                             <NeighborItem

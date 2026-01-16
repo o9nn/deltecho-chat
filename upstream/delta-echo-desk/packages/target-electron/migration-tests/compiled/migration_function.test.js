@@ -1,177 +1,226 @@
-const __create = Object.create;
-const __defProp = Object.defineProperty;
-const __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-const __getOwnPropNames = Object.getOwnPropertyNames;
-const __getProtoOf = Object.getPrototypeOf;
-const __hasOwnProp = Object.prototype.hasOwnProperty;
-const __commonJS = (cb, mod) => function __require() {
-  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-};
+const __create = Object.create
+const __defProp = Object.defineProperty
+const __getOwnPropDesc = Object.getOwnPropertyDescriptor
+const __getOwnPropNames = Object.getOwnPropertyNames
+const __getProtoOf = Object.getPrototypeOf
+const __hasOwnProp = Object.prototype.hasOwnProperty
+const __commonJS = (cb, mod) =>
+  function __require() {
+    return (
+      mod ||
+        (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod),
+      mod.exports
+    )
+  }
 const __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
+  if ((from && typeof from === 'object') || typeof from === 'function') {
     for (const key of __getOwnPropNames(from))
       if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+        __defProp(to, key, {
+          get: () => from[key],
+          enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable,
+        })
   }
-  return to;
-};
-const __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
+  return to
+}
+const __toESM = (mod, isNodeMode, target) => (
+  (target = mod != null ? __create(__getProtoOf(mod)) : {}),
+  __copyProps(
+    // If the importer is in node compatibility mode or this is not an ESM
+    // file that has been converted to a CommonJS file using a Babel-
+    // compatible transform (i.e. "__esModule" has not been set), then set
+    // "default" to the CommonJS "module.exports" for node compatibility.
+    isNodeMode || !mod || !mod.__esModule
+      ? __defProp(target, 'default', { value: mod, enumerable: true })
+      : target,
+    mod
+  )
+)
 
 // ../../node_modules/.pnpm/stackframe@1.3.4/node_modules/stackframe/stackframe.js
 const require_stackframe = __commonJS({
-  "../../node_modules/.pnpm/stackframe@1.3.4/node_modules/stackframe/stackframe.js"(exports, module) {
-    (function(root, factory) {
-      "use strict";
-      if (typeof define === "function" && define.amd) {
-        define("stackframe", [], factory);
-      } else if (typeof exports === "object") {
-        module.exports = factory();
+  '../../node_modules/.pnpm/stackframe@1.3.4/node_modules/stackframe/stackframe.js'(
+    exports,
+    module
+  ) {
+    ;(function (root, factory) {
+      'use strict'
+      if (typeof define === 'function' && define.amd) {
+        define('stackframe', [], factory)
+      } else if (typeof exports === 'object') {
+        module.exports = factory()
       } else {
-        root.StackFrame = factory();
+        root.StackFrame = factory()
       }
-    })(exports, function() {
-      "use strict";
+    })(exports, function () {
+      'use strict'
       function _isNumber(n) {
-        return !isNaN(parseFloat(n)) && isFinite(n);
+        return !isNaN(parseFloat(n)) && isFinite(n)
       }
       function _capitalize(str) {
-        return str.charAt(0).toUpperCase() + str.substring(1);
+        return str.charAt(0).toUpperCase() + str.substring(1)
       }
       function _getter(p) {
-        return function() {
-          return this[p];
-        };
+        return function () {
+          return this[p]
+        }
       }
-      const booleanProps = ["isConstructor", "isEval", "isNative", "isToplevel"];
-      const numericProps = ["columnNumber", "lineNumber"];
-      const stringProps = ["fileName", "functionName", "source"];
-      const arrayProps = ["args"];
-      const objectProps = ["evalOrigin"];
-      const props = booleanProps.concat(numericProps, stringProps, arrayProps, objectProps);
+      const booleanProps = ['isConstructor', 'isEval', 'isNative', 'isToplevel']
+      const numericProps = ['columnNumber', 'lineNumber']
+      const stringProps = ['fileName', 'functionName', 'source']
+      const arrayProps = ['args']
+      const objectProps = ['evalOrigin']
+      const props = booleanProps.concat(
+        numericProps,
+        stringProps,
+        arrayProps,
+        objectProps
+      )
       function StackFrame(obj) {
-        if (!obj)
-          return;
+        if (!obj) return
         for (let i2 = 0; i2 < props.length; i2++) {
           if (obj[props[i2]] !== void 0) {
-            this["set" + _capitalize(props[i2])](obj[props[i2]]);
+            this['set' + _capitalize(props[i2])](obj[props[i2]])
           }
         }
       }
       StackFrame.prototype = {
-        getArgs: function() {
-          return this.args;
+        getArgs: function () {
+          return this.args
         },
-        setArgs: function(v) {
-          if (Object.prototype.toString.call(v) !== "[object Array]") {
-            throw new TypeError("Args must be an Array");
+        setArgs: function (v) {
+          if (Object.prototype.toString.call(v) !== '[object Array]') {
+            throw new TypeError('Args must be an Array')
           }
-          this.args = v;
+          this.args = v
         },
-        getEvalOrigin: function() {
-          return this.evalOrigin;
+        getEvalOrigin: function () {
+          return this.evalOrigin
         },
-        setEvalOrigin: function(v) {
+        setEvalOrigin: function (v) {
           if (v instanceof StackFrame) {
-            this.evalOrigin = v;
+            this.evalOrigin = v
           } else if (v instanceof Object) {
-            this.evalOrigin = new StackFrame(v);
+            this.evalOrigin = new StackFrame(v)
           } else {
-            throw new TypeError("Eval Origin must be an Object or StackFrame");
+            throw new TypeError('Eval Origin must be an Object or StackFrame')
           }
         },
-        toString: function() {
-          const fileName = this.getFileName() || "";
-          const lineNumber = this.getLineNumber() || "";
-          const columnNumber = this.getColumnNumber() || "";
-          const functionName = this.getFunctionName() || "";
+        toString: function () {
+          const fileName = this.getFileName() || ''
+          const lineNumber = this.getLineNumber() || ''
+          const columnNumber = this.getColumnNumber() || ''
+          const functionName = this.getFunctionName() || ''
           if (this.getIsEval()) {
             if (fileName) {
-              return "[eval] (" + fileName + ":" + lineNumber + ":" + columnNumber + ")";
+              return (
+                '[eval] (' +
+                fileName +
+                ':' +
+                lineNumber +
+                ':' +
+                columnNumber +
+                ')'
+              )
             }
-            return "[eval]:" + lineNumber + ":" + columnNumber;
+            return '[eval]:' + lineNumber + ':' + columnNumber
           }
           if (functionName) {
-            return functionName + " (" + fileName + ":" + lineNumber + ":" + columnNumber + ")";
+            return (
+              functionName +
+              ' (' +
+              fileName +
+              ':' +
+              lineNumber +
+              ':' +
+              columnNumber +
+              ')'
+            )
           }
-          return fileName + ":" + lineNumber + ":" + columnNumber;
-        }
-      };
+          return fileName + ':' + lineNumber + ':' + columnNumber
+        },
+      }
       StackFrame.fromString = function StackFrame$$fromString(str) {
-        const argsStartIndex = str.indexOf("(");
-        const argsEndIndex = str.lastIndexOf(")");
-        const functionName = str.substring(0, argsStartIndex);
-        const args = str.substring(argsStartIndex + 1, argsEndIndex).split(",");
-        const locationString = str.substring(argsEndIndex + 1);
-        if (locationString.indexOf("@") === 0) {
-          const parts = /@(.+?)(?::(\d+))?(?::(\d+))?$/.exec(locationString, "");
-          var fileName = parts[1];
-          var lineNumber = parts[2];
-          var columnNumber = parts[3];
+        const argsStartIndex = str.indexOf('(')
+        const argsEndIndex = str.lastIndexOf(')')
+        const functionName = str.substring(0, argsStartIndex)
+        const args = str.substring(argsStartIndex + 1, argsEndIndex).split(',')
+        const locationString = str.substring(argsEndIndex + 1)
+        if (locationString.indexOf('@') === 0) {
+          const parts = /@(.+?)(?::(\d+))?(?::(\d+))?$/.exec(locationString, '')
+          var fileName = parts[1]
+          var lineNumber = parts[2]
+          var columnNumber = parts[3]
         }
         return new StackFrame({
           functionName,
           args: args || void 0,
           fileName,
           lineNumber: lineNumber || void 0,
-          columnNumber: columnNumber || void 0
-        });
-      };
+          columnNumber: columnNumber || void 0,
+        })
+      }
       for (let i = 0; i < booleanProps.length; i++) {
-        StackFrame.prototype["get" + _capitalize(booleanProps[i])] = _getter(booleanProps[i]);
-        StackFrame.prototype["set" + _capitalize(booleanProps[i])] = /* @__PURE__ */ function(p) {
-          return function(v) {
-            this[p] = Boolean(v);
-          };
-        }(booleanProps[i]);
+        StackFrame.prototype['get' + _capitalize(booleanProps[i])] = _getter(
+          booleanProps[i]
+        )
+        StackFrame.prototype['set' + _capitalize(booleanProps[i])] =
+          /* @__PURE__ */ (function (p) {
+            return function (v) {
+              this[p] = Boolean(v)
+            }
+          })(booleanProps[i])
       }
       for (let j = 0; j < numericProps.length; j++) {
-        StackFrame.prototype["get" + _capitalize(numericProps[j])] = _getter(numericProps[j]);
-        StackFrame.prototype["set" + _capitalize(numericProps[j])] = /* @__PURE__ */ function(p) {
-          return function(v) {
-            if (!_isNumber(v)) {
-              throw new TypeError(p + " must be a Number");
+        StackFrame.prototype['get' + _capitalize(numericProps[j])] = _getter(
+          numericProps[j]
+        )
+        StackFrame.prototype['set' + _capitalize(numericProps[j])] =
+          /* @__PURE__ */ (function (p) {
+            return function (v) {
+              if (!_isNumber(v)) {
+                throw new TypeError(p + ' must be a Number')
+              }
+              this[p] = Number(v)
             }
-            this[p] = Number(v);
-          };
-        }(numericProps[j]);
+          })(numericProps[j])
       }
       for (let k = 0; k < stringProps.length; k++) {
-        StackFrame.prototype["get" + _capitalize(stringProps[k])] = _getter(stringProps[k]);
-        StackFrame.prototype["set" + _capitalize(stringProps[k])] = /* @__PURE__ */ function(p) {
-          return function(v) {
-            this[p] = String(v);
-          };
-        }(stringProps[k]);
+        StackFrame.prototype['get' + _capitalize(stringProps[k])] = _getter(
+          stringProps[k]
+        )
+        StackFrame.prototype['set' + _capitalize(stringProps[k])] =
+          /* @__PURE__ */ (function (p) {
+            return function (v) {
+              this[p] = String(v)
+            }
+          })(stringProps[k])
       }
-      return StackFrame;
-    });
-  }
-});
+      return StackFrame
+    })
+  },
+})
 
 // ../../node_modules/.pnpm/error-stack-parser@2.1.4/node_modules/error-stack-parser/error-stack-parser.js
 const require_error_stack_parser = __commonJS({
-  "../../node_modules/.pnpm/error-stack-parser@2.1.4/node_modules/error-stack-parser/error-stack-parser.js"(exports, module) {
-    (function(root, factory) {
-      "use strict";
-      if (typeof define === "function" && define.amd) {
-        define("error-stack-parser", ["stackframe"], factory);
-      } else if (typeof exports === "object") {
-        module.exports = factory(require_stackframe());
+  '../../node_modules/.pnpm/error-stack-parser@2.1.4/node_modules/error-stack-parser/error-stack-parser.js'(
+    exports,
+    module
+  ) {
+    ;(function (root, factory) {
+      'use strict'
+      if (typeof define === 'function' && define.amd) {
+        define('error-stack-parser', ['stackframe'], factory)
+      } else if (typeof exports === 'object') {
+        module.exports = factory(require_stackframe())
       } else {
-        root.ErrorStackParser = factory(root.StackFrame);
+        root.ErrorStackParser = factory(root.StackFrame)
       }
     })(exports, function ErrorStackParser(StackFrame) {
-      "use strict";
-      const FIREFOX_SAFARI_STACK_REGEXP = /(^|@)\S+:\d+/;
-      const CHROME_IE_STACK_REGEXP = /^\s*at .*(\S+:\d+|\(native\))/m;
-      const SAFARI_NATIVE_CODE_REGEXP = /^(eval@)?(\[native code])?$/;
+      'use strict'
+      const FIREFOX_SAFARI_STACK_REGEXP = /(^|@)\S+:\d+/
+      const CHROME_IE_STACK_REGEXP = /^\s*at .*(\S+:\d+|\(native\))/m
+      const SAFARI_NATIVE_CODE_REGEXP = /^(eval@)?(\[native code])?$/
       return {
         /**
          * Given an Error object, extract the most information from it.
@@ -180,496 +229,558 @@ const require_error_stack_parser = __commonJS({
          * @return {Array} of StackFrames
          */
         parse: function ErrorStackParser$$parse(error) {
-          if (typeof error.stacktrace !== "undefined" || typeof error["opera#sourceloc"] !== "undefined") {
-            return this.parseOpera(error);
+          if (
+            typeof error.stacktrace !== 'undefined' ||
+            typeof error['opera#sourceloc'] !== 'undefined'
+          ) {
+            return this.parseOpera(error)
           } else if (error.stack && error.stack.match(CHROME_IE_STACK_REGEXP)) {
-            return this.parseV8OrIE(error);
+            return this.parseV8OrIE(error)
           } else if (error.stack) {
-            return this.parseFFOrSafari(error);
+            return this.parseFFOrSafari(error)
           } else {
-            throw new Error("Cannot parse given Error object");
+            throw new Error('Cannot parse given Error object')
           }
         },
         // Separate line and column numbers from a string of the form: (URI:Line:Column)
         extractLocation: function ErrorStackParser$$extractLocation(urlLike) {
-          if (urlLike.indexOf(":") === -1) {
-            return [urlLike];
+          if (urlLike.indexOf(':') === -1) {
+            return [urlLike]
           }
-          const regExp = /(.+?)(?::(\d+))?(?::(\d+))?$/;
-          const parts = regExp.exec(urlLike.replace(/[()]/g, ""));
-          return [parts[1], parts[2] || void 0, parts[3] || void 0];
+          const regExp = /(.+?)(?::(\d+))?(?::(\d+))?$/
+          const parts = regExp.exec(urlLike.replace(/[()]/g, ''))
+          return [parts[1], parts[2] || void 0, parts[3] || void 0]
         },
         parseV8OrIE: function ErrorStackParser$$parseV8OrIE(error) {
-          const filtered = error.stack.split("\n").filter(function(line) {
-            return !!line.match(CHROME_IE_STACK_REGEXP);
-          }, this);
-          return filtered.map(function(line) {
-            if (line.indexOf("(eval ") > -1) {
-              line = line.replace(/eval code/g, "eval").replace(/(\(eval at [^()]*)|(,.*$)/g, "");
+          const filtered = error.stack.split('\n').filter(function (line) {
+            return !!line.match(CHROME_IE_STACK_REGEXP)
+          }, this)
+          return filtered.map(function (line) {
+            if (line.indexOf('(eval ') > -1) {
+              line = line
+                .replace(/eval code/g, 'eval')
+                .replace(/(\(eval at [^()]*)|(,.*$)/g, '')
             }
-            let sanitizedLine = line.replace(/^\s+/, "").replace(/\(eval code/g, "(").replace(/^.*?\s+/, "");
-            const location = sanitizedLine.match(/ (\(.+\)$)/);
-            sanitizedLine = location ? sanitizedLine.replace(location[0], "") : sanitizedLine;
-            const locationParts = this.extractLocation(location ? location[1] : sanitizedLine);
-            const functionName = location && sanitizedLine || void 0;
-            const fileName = ["eval", "<anonymous>"].indexOf(locationParts[0]) > -1 ? void 0 : locationParts[0];
+            let sanitizedLine = line
+              .replace(/^\s+/, '')
+              .replace(/\(eval code/g, '(')
+              .replace(/^.*?\s+/, '')
+            const location = sanitizedLine.match(/ (\(.+\)$)/)
+            sanitizedLine = location
+              ? sanitizedLine.replace(location[0], '')
+              : sanitizedLine
+            const locationParts = this.extractLocation(
+              location ? location[1] : sanitizedLine
+            )
+            const functionName = (location && sanitizedLine) || void 0
+            const fileName =
+              ['eval', '<anonymous>'].indexOf(locationParts[0]) > -1
+                ? void 0
+                : locationParts[0]
             return new StackFrame({
               functionName,
               fileName,
               lineNumber: locationParts[1],
               columnNumber: locationParts[2],
-              source: line
-            });
-          }, this);
+              source: line,
+            })
+          }, this)
         },
         parseFFOrSafari: function ErrorStackParser$$parseFFOrSafari(error) {
-          const filtered = error.stack.split("\n").filter(function(line) {
-            return !line.match(SAFARI_NATIVE_CODE_REGEXP);
-          }, this);
-          return filtered.map(function(line) {
-            if (line.indexOf(" > eval") > -1) {
-              line = line.replace(/ line (\d+)(?: > eval line \d+)* > eval:\d+:\d+/g, ":$1");
+          const filtered = error.stack.split('\n').filter(function (line) {
+            return !line.match(SAFARI_NATIVE_CODE_REGEXP)
+          }, this)
+          return filtered.map(function (line) {
+            if (line.indexOf(' > eval') > -1) {
+              line = line.replace(
+                / line (\d+)(?: > eval line \d+)* > eval:\d+:\d+/g,
+                ':$1'
+              )
             }
-            if (line.indexOf("@") === -1 && line.indexOf(":") === -1) {
+            if (line.indexOf('@') === -1 && line.indexOf(':') === -1) {
               return new StackFrame({
-                functionName: line
-              });
+                functionName: line,
+              })
             } else {
-              const functionNameRegex = /((.*".+"[^@]*)?[^@]*)(?:@)/;
-              const matches = line.match(functionNameRegex);
-              const functionName = matches && matches[1] ? matches[1] : void 0;
-              const locationParts = this.extractLocation(line.replace(functionNameRegex, ""));
+              const functionNameRegex = /((.*".+"[^@]*)?[^@]*)(?:@)/
+              const matches = line.match(functionNameRegex)
+              const functionName = matches && matches[1] ? matches[1] : void 0
+              const locationParts = this.extractLocation(
+                line.replace(functionNameRegex, '')
+              )
               return new StackFrame({
                 functionName,
                 fileName: locationParts[0],
                 lineNumber: locationParts[1],
                 columnNumber: locationParts[2],
-                source: line
-              });
+                source: line,
+              })
             }
-          }, this);
+          }, this)
         },
         parseOpera: function ErrorStackParser$$parseOpera(e) {
-          if (!e.stacktrace || e.message.indexOf("\n") > -1 && e.message.split("\n").length > e.stacktrace.split("\n").length) {
-            return this.parseOpera9(e);
+          if (
+            !e.stacktrace ||
+            (e.message.indexOf('\n') > -1 &&
+              e.message.split('\n').length > e.stacktrace.split('\n').length)
+          ) {
+            return this.parseOpera9(e)
           } else if (!e.stack) {
-            return this.parseOpera10(e);
+            return this.parseOpera10(e)
           } else {
-            return this.parseOpera11(e);
+            return this.parseOpera11(e)
           }
         },
         parseOpera9: function ErrorStackParser$$parseOpera9(e) {
-          const lineRE = /Line (\d+).*script (?:in )?(\S+)/i;
-          const lines = e.message.split("\n");
-          const result = [];
+          const lineRE = /Line (\d+).*script (?:in )?(\S+)/i
+          const lines = e.message.split('\n')
+          const result = []
           for (let i = 2, len = lines.length; i < len; i += 2) {
-            const match = lineRE.exec(lines[i]);
+            const match = lineRE.exec(lines[i])
             if (match) {
-              result.push(new StackFrame({
-                fileName: match[2],
-                lineNumber: match[1],
-                source: lines[i]
-              }));
+              result.push(
+                new StackFrame({
+                  fileName: match[2],
+                  lineNumber: match[1],
+                  source: lines[i],
+                })
+              )
             }
           }
-          return result;
+          return result
         },
         parseOpera10: function ErrorStackParser$$parseOpera10(e) {
-          const lineRE = /Line (\d+).*script (?:in )?(\S+)(?:: In function (\S+))?$/i;
-          const lines = e.stacktrace.split("\n");
-          const result = [];
+          const lineRE =
+            /Line (\d+).*script (?:in )?(\S+)(?:: In function (\S+))?$/i
+          const lines = e.stacktrace.split('\n')
+          const result = []
           for (let i = 0, len = lines.length; i < len; i += 2) {
-            const match = lineRE.exec(lines[i]);
+            const match = lineRE.exec(lines[i])
             if (match) {
               result.push(
                 new StackFrame({
                   functionName: match[3] || void 0,
                   fileName: match[2],
                   lineNumber: match[1],
-                  source: lines[i]
+                  source: lines[i],
                 })
-              );
+              )
             }
           }
-          return result;
+          return result
         },
         // Opera 10.65+ Error.stack very similar to FF/Safari
         parseOpera11: function ErrorStackParser$$parseOpera11(error) {
-          const filtered = error.stack.split("\n").filter(function(line) {
-            return !!line.match(FIREFOX_SAFARI_STACK_REGEXP) && !line.match(/^Error created at/);
-          }, this);
-          return filtered.map(function(line) {
-            const tokens = line.split("@");
-            const locationParts = this.extractLocation(tokens.pop());
-            const functionCall = tokens.shift() || "";
-            const functionName = functionCall.replace(/<anonymous function(: (\w+))?>/, "$2").replace(/\([^)]*\)/g, "") || void 0;
-            let argsRaw;
+          const filtered = error.stack.split('\n').filter(function (line) {
+            return (
+              !!line.match(FIREFOX_SAFARI_STACK_REGEXP) &&
+              !line.match(/^Error created at/)
+            )
+          }, this)
+          return filtered.map(function (line) {
+            const tokens = line.split('@')
+            const locationParts = this.extractLocation(tokens.pop())
+            const functionCall = tokens.shift() || ''
+            const functionName =
+              functionCall
+                .replace(/<anonymous function(: (\w+))?>/, '$2')
+                .replace(/\([^)]*\)/g, '') || void 0
+            let argsRaw
             if (functionCall.match(/\(([^)]*)\)/)) {
-              argsRaw = functionCall.replace(/^[^(]+\(([^)]*)\)$/, "$1");
+              argsRaw = functionCall.replace(/^[^(]+\(([^)]*)\)$/, '$1')
             }
-            const args = argsRaw === void 0 || argsRaw === "[arguments not available]" ? void 0 : argsRaw.split(",");
+            const args =
+              argsRaw === void 0 || argsRaw === '[arguments not available]'
+                ? void 0
+                : argsRaw.split(',')
             return new StackFrame({
               functionName,
               args,
               fileName: locationParts[0],
               lineNumber: locationParts[1],
               columnNumber: locationParts[2],
-              source: line
-            });
-          }, this);
-        }
-      };
-    });
-  }
-});
+              source: line,
+            })
+          }, this)
+        },
+      }
+    })
+  },
+})
 
 // migration-tests/migration_function.test.ts
-import { describe } from "mocha";
-import { expect } from "chai";
-import { existsSync as existsSync2, mkdtempSync } from "fs";
-import { join as join2, dirname } from "path";
-import { fileURLToPath } from "url";
-import AdmZip from "adm-zip";
-import { tmpdir } from "os";
-import { readdir as readdir2 } from "fs/promises";
+import { describe } from 'mocha'
+import { expect } from 'chai'
+import { existsSync as existsSync2, mkdtempSync } from 'fs'
+import { join as join2, dirname } from 'path'
+import { fileURLToPath } from 'url'
+import AdmZip from 'adm-zip'
+import { tmpdir } from 'os'
+import { readdir as readdir2 } from 'fs/promises'
 
 // src/deltachat/migration.ts
-import { startDeltaChat } from "@deltachat/stdio-rpc-server";
-import { existsSync, lstatSync } from "fs";
-import { join } from "path";
-import { mkdir, readdir, rename, rm, rmdir, stat } from "fs/promises";
-async function migrateAccountsIfNeeded(cwd, log3, treatFailedMigrationAsError = false) {
-  let tmpDC;
-  const eventLogger = (accountId, event) => log3.debug("core-event", { accountId, ...event });
+import { startDeltaChat } from '@deltachat/stdio-rpc-server'
+import { existsSync, lstatSync } from 'fs'
+import { join } from 'path'
+import { mkdir, readdir, rename, rm, rmdir, stat } from 'fs/promises'
+async function migrateAccountsIfNeeded(
+  cwd,
+  log3,
+  treatFailedMigrationAsError = false
+) {
+  let tmpDC
+  const eventLogger = (accountId, event) =>
+    log3.debug('core-event', { accountId, ...event })
   try {
-    const new_accounts_format = existsSync(join(cwd, "accounts.toml"));
+    const new_accounts_format = existsSync(join(cwd, 'accounts.toml'))
     if (new_accounts_format) {
-      log3.debug("migration not needed: accounts.toml already exists");
-      return false;
+      log3.debug('migration not needed: accounts.toml already exists')
+      return false
     }
-    log3.debug("accounts.toml not found, checking if there is previous data");
-    const configPath = join(cwd, "..");
+    log3.debug('accounts.toml not found, checking if there is previous data')
+    const configPath = join(cwd, '..')
     const accountFoldersFormat1 = (await readdir(configPath)).filter(
-      (folderName) => {
-        const path = join(configPath, folderName);
+      folderName => {
+        const path = join(configPath, folderName)
         try {
-          const db_path = join(path, "db.sqlite");
-          return lstatSync(path).isDirectory() && existsSync(db_path) && lstatSync(db_path).isFile() && !lstatSync(path).isSymbolicLink();
+          const db_path = join(path, 'db.sqlite')
+          return (
+            lstatSync(path).isDirectory() &&
+            existsSync(db_path) &&
+            lstatSync(db_path).isFile() &&
+            !lstatSync(path).isSymbolicLink()
+          )
         } catch (error) {
-          log3.debug("error while testing if folder is account", error);
-          return false;
+          log3.debug('error while testing if folder is account', error)
+          return false
         }
       }
-    );
-    const migrateFromFormat1 = accountFoldersFormat1.length !== 0;
-    const migrateFromFormat2 = existsSync(cwd);
+    )
+    const migrateFromFormat1 = accountFoldersFormat1.length !== 0
+    const migrateFromFormat2 = existsSync(cwd)
     if (!migrateFromFormat1 && !migrateFromFormat2) {
-      log3.info("migration not needed: nothing to migrate");
-      return false;
+      log3.info('migration not needed: nothing to migrate')
+      return false
     }
-    const path_accounts = join(cwd, "..", "accounts");
-    const pathAccountsOld = join(cwd, "..", "accounts_old");
+    const path_accounts = join(cwd, '..', 'accounts')
+    const pathAccountsOld = join(cwd, '..', 'accounts_old')
     if (migrateFromFormat2) {
-      log3.info(`found old some accounts (format 2), we need to migrate...`);
-      await rename(path_accounts, pathAccountsOld);
+      log3.info(`found old some accounts (format 2), we need to migrate...`)
+      await rename(path_accounts, pathAccountsOld)
     }
     tmpDC = await startDeltaChat(path_accounts, {
-      muteStdErr: false
-    });
-    tmpDC.on("ALL", eventLogger);
-    const oldFoldersToDelete = [];
+      muteStdErr: false,
+    })
+    tmpDC.on('ALL', eventLogger)
+    const oldFoldersToDelete = []
     if (migrateFromFormat1) {
       log3.info(
         `found old ${accountFoldersFormat1.length} legacy accounts (1), we need to migrate...`
-      );
+      )
       for (const folder of accountFoldersFormat1) {
-        log3.debug(`migrating legacy account "${folder}"`);
-        const pathDBFile = join(configPath, folder, "db.sqlite");
-        const blobsFolder = join(configPath, folder, "db.sqlite-blobs");
+        log3.debug(`migrating legacy account "${folder}"`)
+        const pathDBFile = join(configPath, folder, 'db.sqlite')
+        const blobsFolder = join(configPath, folder, 'db.sqlite-blobs')
         if (!existsSync(blobsFolder)) {
-          await mkdir(blobsFolder, { recursive: true });
+          await mkdir(blobsFolder, { recursive: true })
         }
         try {
-          await tmpDC.rpc.migrateAccount(pathDBFile);
-          oldFoldersToDelete.push(folder);
+          await tmpDC.rpc.migrateAccount(pathDBFile)
+          oldFoldersToDelete.push(folder)
         } catch (error) {
-          log3.error(`Failed to migrate account at path "${pathDBFile}"`, error);
+          log3.error(`Failed to migrate account at path "${pathDBFile}"`, error)
           if (treatFailedMigrationAsError) {
-            throw error;
+            throw error
           }
         }
       }
     }
     if (migrateFromFormat2) {
       for (const entry of await readdir(pathAccountsOld)) {
-        const stat_result = await stat(join(pathAccountsOld, entry));
-        if (!stat_result.isDirectory())
-          continue;
-        log3.debug(`migrating account "${join(pathAccountsOld, entry)}"`);
-        const path_dbfile = join(pathAccountsOld, entry, "db.sqlite");
+        const stat_result = await stat(join(pathAccountsOld, entry))
+        if (!stat_result.isDirectory()) continue
+        log3.debug(`migrating account "${join(pathAccountsOld, entry)}"`)
+        const path_dbfile = join(pathAccountsOld, entry, 'db.sqlite')
         if (!existsSync(path_dbfile)) {
           log3.warn(
-            "found an old accounts folder without a db.sqlite file, skipping"
-          );
-          continue;
+            'found an old accounts folder without a db.sqlite file, skipping'
+          )
+          continue
         }
-        const blobsFolder = join(pathAccountsOld, entry, "db.sqlite-blobs");
+        const blobsFolder = join(pathAccountsOld, entry, 'db.sqlite-blobs')
         if (!existsSync(blobsFolder)) {
-          await mkdir(blobsFolder, { recursive: true });
+          await mkdir(blobsFolder, { recursive: true })
         }
         try {
-          const account_id = await tmpDC.rpc.migrateAccount(path_dbfile);
-          const old_sticker_folder = join(pathAccountsOld, entry, "stickers");
+          const account_id = await tmpDC.rpc.migrateAccount(path_dbfile)
+          const old_sticker_folder = join(pathAccountsOld, entry, 'stickers')
           if (existsSync(old_sticker_folder)) {
-            log3.debug("found stickers, migrating them", old_sticker_folder);
+            log3.debug('found stickers, migrating them', old_sticker_folder)
             try {
-              const blobdir = await tmpDC.rpc.getBlobDir(account_id);
+              const blobdir = await tmpDC.rpc.getBlobDir(account_id)
               if (!blobdir) {
-                throw new Error("blobdir is undefined");
+                throw new Error('blobdir is undefined')
               }
-              const new_sticker_folder = join(blobdir, "../stickers");
-              await rename(old_sticker_folder, new_sticker_folder);
+              const new_sticker_folder = join(blobdir, '../stickers')
+              await rename(old_sticker_folder, new_sticker_folder)
             } catch (error) {
-              log3.error("stickers migration failed", old_sticker_folder, error);
+              log3.error('stickers migration failed', old_sticker_folder, error)
               if (treatFailedMigrationAsError) {
-                throw error;
+                throw error
               }
             }
           }
-          oldFoldersToDelete.push(join(pathAccountsOld, entry));
+          oldFoldersToDelete.push(join(pathAccountsOld, entry))
         } catch (error) {
           log3.error(
             `Failed to migrate account at path "${path_dbfile}":`,
             error
-          );
+          )
         }
       }
     }
-    tmpDC.off("ALL", eventLogger);
-    tmpDC.close();
-    for (const oldFolder of oldFoldersToDelete.map((f) => join(configPath, f))) {
+    tmpDC.off('ALL', eventLogger)
+    tmpDC.close()
+    for (const oldFolder of oldFoldersToDelete.map(f => join(configPath, f))) {
       try {
         try {
-          await rm(join(oldFolder, ".DS_Store"));
-        } catch (error) {
-        }
-        await rmdir(oldFolder);
+          await rm(join(oldFolder, '.DS_Store'))
+        } catch (error) {}
+        await rmdir(oldFolder)
       } catch (error) {
-        log3.error("Failed to cleanup old folder:", oldFolder, error);
+        log3.error('Failed to cleanup old folder:', oldFolder, error)
       }
     }
-    log3.info("migration completed");
-    return true;
+    log3.info('migration completed')
+    return true
   } catch (err) {
-    tmpDC?.off("ALL", eventLogger);
-    tmpDC?.close();
-    throw err;
+    tmpDC?.off('ALL', eventLogger)
+    tmpDC?.close()
+    throw err
   }
 }
 
 // ../shared/logger.ts
-const import_error_stack_parser = __toESM(require_error_stack_parser(), 1);
-const startTime = Date.now();
-const colorize = (light, code) => (str) => "\x1B[" + light + ";" + code + "m" + str + "\x1B[0m";
-const blue = colorize(1, 34);
-const red = colorize(1, 31);
-const yellow = colorize(1, 33);
-const grey = colorize(0, 37);
-const green = colorize(1, 37);
-const cyan = colorize(1, 36);
-const emojiFontCss = 'font-family: Roboto, "Apple Color Emoji", NotoEmoji, "Helvetica Neue", Arial, Helvetica, NotoMono, sans-serif !important;';
+const import_error_stack_parser = __toESM(require_error_stack_parser(), 1)
+const startTime = Date.now()
+const colorize = (light, code) => str =>
+  '\x1B[' + light + ';' + code + 'm' + str + '\x1B[0m'
+const blue = colorize(1, 34)
+const red = colorize(1, 31)
+const yellow = colorize(1, 33)
+const grey = colorize(0, 37)
+const green = colorize(1, 37)
+const cyan = colorize(1, 36)
+const emojiFontCss =
+  'font-family: Roboto, "Apple Color Emoji", NotoEmoji, "Helvetica Neue", Arial, Helvetica, NotoMono, sans-serif !important;'
 const LoggerVariants = [
   {
     log: console.debug,
-    level: "DEBUG" /* DEBUG */,
-    emoji: "\u{1F578}\uFE0F",
-    symbol: "[D]"
+    level: 'DEBUG' /* DEBUG */,
+    emoji: '\u{1F578}\uFE0F',
+    symbol: '[D]',
   },
   {
     log: console.info,
-    level: "INFO" /* INFO */,
-    emoji: "\u2139\uFE0F",
-    symbol: blue("[i]")
+    level: 'INFO' /* INFO */,
+    emoji: '\u2139\uFE0F',
+    symbol: blue('[i]'),
   },
   {
     log: console.warn,
-    level: "WARNING" /* WARNING */,
-    emoji: "\u26A0\uFE0F",
-    symbol: yellow("[w]")
+    level: 'WARNING' /* WARNING */,
+    emoji: '\u26A0\uFE0F',
+    symbol: yellow('[w]'),
   },
   {
     log: console.error,
-    level: "ERROR" /* ERROR */,
-    emoji: "\u{1F6A8}",
-    symbol: red("[E]")
+    level: 'ERROR' /* ERROR */,
+    emoji: '\u{1F6A8}',
+    symbol: red('[E]'),
   },
   {
     log: console.error,
-    level: "CRITICAL" /* CRITICAL */,
-    emoji: "\u{1F6A8}\u{1F6A8}",
-    symbol: red("[C]")
-  }
-];
-let handler;
-let rc = {};
+    level: 'CRITICAL' /* CRITICAL */,
+    emoji: '\u{1F6A8}\u{1F6A8}',
+    symbol: red('[C]'),
+  },
+]
+let handler
+let rc = {}
 function setLogHandler(LogHandler, rcObject) {
-  handler = LogHandler;
-  rc = rcObject;
+  handler = LogHandler
+  rc = rcObject
 }
 function log({ channel, isMainProcess }, level, stacktrace, args) {
-  const variant = LoggerVariants[level];
+  const variant = LoggerVariants[level]
   if (!handler) {
-    console.log("Failed to log message - Handler not initialized yet");
-    console.log(`Log Message: ${channel} ${level} ${args.join(" ")}`);
-    throw Error("Failed to log message - Handler not initialized yet");
+    console.log('Failed to log message - Handler not initialized yet')
+    console.log(`Log Message: ${channel} ${level} ${args.join(' ')}`)
+    throw Error('Failed to log message - Handler not initialized yet')
   }
-  handler(channel, variant.level, stacktrace, ...args);
-  if (rc["log-to-console"]) {
+  handler(channel, variant.level, stacktrace, ...args)
+  if (rc['log-to-console']) {
     if (isMainProcess) {
-      const beginning = `${Math.round((Date.now() - startTime) / 100) / 10}s ${LoggerVariants[level].symbol}${grey(channel)}:`;
+      const beginning = `${Math.round((Date.now() - startTime) / 100) / 10}s ${
+        LoggerVariants[level].symbol
+      }${grey(channel)}:`
       if (!stacktrace) {
-        variant.log(beginning, ...args);
+        variant.log(beginning, ...args)
       } else {
         variant.log(
           beginning,
           ...args,
           red(
-            Array.isArray(stacktrace) ? stacktrace.map((s) => `
-${s.toString()}`).join() : stacktrace
+            Array.isArray(stacktrace)
+              ? stacktrace
+                  .map(
+                    s => `
+${s.toString()}`
+                  )
+                  .join()
+              : stacktrace
           )
-        );
+        )
       }
     } else {
-      const prefix = `%c${variant.emoji}%c${channel}`;
-      const prefixStyle = [emojiFontCss, "color:blueviolet;"];
+      const prefix = `%c${variant.emoji}%c${channel}`
+      const prefixStyle = [emojiFontCss, 'color:blueviolet;']
       if (stacktrace) {
-        variant.log(prefix, ...prefixStyle, stacktrace, ...args);
+        variant.log(prefix, ...prefixStyle, stacktrace, ...args)
       } else {
-        variant.log(prefix, ...prefixStyle, ...args);
+        variant.log(prefix, ...prefixStyle, ...args)
       }
     }
   }
 }
 const Logger = class {
   constructor(channel) {
-    this.channel = channel;
+    this.channel = channel
     //@ts-ignore
-    this.isMainProcess = typeof window === "undefined";
-    if (channel === "core/event") {
-      this.getStackTrace = () => "";
+    this.isMainProcess = typeof window === 'undefined'
+    if (channel === 'core/event') {
+      this.getStackTrace = () => ''
     }
   }
   getStackTrace() {
     const rawStack = import_error_stack_parser.default.parse(
-      new Error("Get Stacktrace")
-    );
-    const stack = rawStack.slice(2, rawStack.length);
-    return rc["machine-readable-stacktrace"] ? stack : stack.map((s) => `
-${s.toString()}`).join();
+      new Error('Get Stacktrace')
+    )
+    const stack = rawStack.slice(2, rawStack.length)
+    return rc['machine-readable-stacktrace']
+      ? stack
+      : stack
+          .map(
+            s => `
+${s.toString()}`
+          )
+          .join()
   }
   debug(...args) {
-    if (!rc["log-debug"])
-      return;
-    log(this, 0, "", args);
+    if (!rc['log-debug']) return
+    log(this, 0, '', args)
   }
   info(...args) {
-    log(this, 1, "", args);
+    log(this, 1, '', args)
   }
   warn(...args) {
-    log(this, 2, this.getStackTrace(), args);
+    log(this, 2, this.getStackTrace(), args)
   }
   error(...args) {
-    log(this, 3, this.getStackTrace(), args);
+    log(this, 3, this.getStackTrace(), args)
   }
   /** use this when you know that the stacktrace is not relevant */
   errorWithoutStackTrace(...args) {
-    log(this, 3, [], args);
+    log(this, 3, [], args)
   }
   critical(...args) {
-    log(this, 4, this.getStackTrace(), args);
+    log(this, 4, this.getStackTrace(), args)
   }
-};
-function getLogger(channel) {
-  return new Logger(channel);
 }
-if (!("toJSON" in Error.prototype))
-  Object.defineProperty(Error.prototype, "toJSON", {
-    value: function() {
-      const alt = {};
-      Object.getOwnPropertyNames(this).forEach(function(key) {
-        alt[key] = this[key];
-      }, this);
-      return alt;
+function getLogger(channel) {
+  return new Logger(channel)
+}
+if (!('toJSON' in Error.prototype))
+  Object.defineProperty(Error.prototype, 'toJSON', {
+    value: function () {
+      const alt = {}
+      Object.getOwnPropertyNames(this).forEach(function (key) {
+        alt[key] = this[key]
+      }, this)
+      return alt
     },
     configurable: true,
-    writable: true
-  });
+    writable: true,
+  })
 
 // migration-tests/migration_function.test.ts
-import { startDeltaChat as startDeltaChat2 } from "@deltachat/stdio-rpc-server";
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const log2 = getLogger("test");
+import { startDeltaChat as startDeltaChat2 } from '@deltachat/stdio-rpc-server'
+const __dirname = dirname(fileURLToPath(import.meta.url))
+const log2 = getLogger('test')
 before(async () => {
-  if (process.env["DEBUG"]) {
+  if (process.env['DEBUG']) {
     setLogHandler(console.debug, {
-      "log-debug": process.env["DEBUG"] == "2"
-    });
+      'log-debug': process.env['DEBUG'] == '2',
+    })
   } else {
-    setLogHandler(() => {
-    }, {});
+    setLogHandler(() => {}, {})
   }
-});
-const zip = new AdmZip(join2(__dirname, "../test_data/migration-test-data.zip"));
-const testEnvironment = mkdtempSync(join2(tmpdir(), "deltachat-migration-test-"));
-zip.extractAllTo(testEnvironment);
-log2.debug({ testEnvironment });
-const versions = await readdir2(testEnvironment);
+})
+const zip = new AdmZip(join2(__dirname, '../test_data/migration-test-data.zip'))
+const testEnvironment = mkdtempSync(
+  join2(tmpdir(), 'deltachat-migration-test-')
+)
+zip.extractAllTo(testEnvironment)
+log2.debug({ testEnvironment })
+const versions = await readdir2(testEnvironment)
 const BROKEN_TEST_DATA = [
-  "DeltaChat-1.3.1.AppImage",
-  "DeltaChat-1.3.3.AppImage"
-];
-describe("/electron/main/account-migration", async () => {
+  'DeltaChat-1.3.1.AppImage',
+  'DeltaChat-1.3.3.AppImage',
+]
+describe('/electron/main/account-migration', async () => {
   for (const version of versions) {
-    const versionPath = join2(testEnvironment, version);
+    const versionPath = join2(testEnvironment, version)
     if (BROKEN_TEST_DATA.includes(version)) {
-      continue;
+      continue
     }
     it(`migration from ${version} works`, async () => {
-      const targetFolder = join2(versionPath, "DeltaChat/accounts");
-      log2.info({ targetFolder });
+      const targetFolder = join2(versionPath, 'DeltaChat/accounts')
+      log2.info({ targetFolder })
       log2.debug(
         { targetFolder },
         await readdir2(versionPath, { recursive: true })
-      );
-      if (!existsSync2(join2(targetFolder, "accounts.toml"))) {
-        const migrated = await migrateAccountsIfNeeded(targetFolder, log2, true);
-        expect(migrated).to.be.true;
+      )
+      if (!existsSync2(join2(targetFolder, 'accounts.toml'))) {
+        const migrated = await migrateAccountsIfNeeded(targetFolder, log2, true)
+        expect(migrated).to.be.true
       } else {
         log2.debug(
-          "accounts.toml already exists, the migration from absolute paths to relative ones should happen on normal start"
-        );
+          'accounts.toml already exists, the migration from absolute paths to relative ones should happen on normal start'
+        )
       }
-      const eventLogger = (accountId, event) => log2.debug("core-event", { accountId, ...event });
+      const eventLogger = (accountId, event) =>
+        log2.debug('core-event', { accountId, ...event })
       const tmpDC = await startDeltaChat2(targetFolder, {
         disableEnvPath: true,
-        muteStdErr: process.env["DEBUG"] === void 0 || process.env["RUST_LOG"] === void 0
-      });
-      tmpDC.on("ALL", eventLogger);
+        muteStdErr:
+          process.env['DEBUG'] === void 0 || process.env['RUST_LOG'] === void 0,
+      })
+      tmpDC.on('ALL', eventLogger)
       after(() => {
-        tmpDC.off("ALL", eventLogger);
-        tmpDC.close();
-      });
-      log2.debug("test if migration worked");
-      const accounts = await tmpDC.rpc.getAllAccounts();
+        tmpDC.off('ALL', eventLogger)
+        tmpDC.close()
+      })
+      log2.debug('test if migration worked')
+      const accounts = await tmpDC.rpc.getAllAccounts()
       const configured_accounts = accounts.filter(
-        (acc) => acc.kind === "Configured"
-      );
-      expect(configured_accounts).to.have.length(2);
+        acc => acc.kind === 'Configured'
+      )
+      expect(configured_accounts).to.have.length(2)
       expect(
-        configured_accounts.map((acc) => acc.kind === "Configured" && acc.addr)
-      ).to.have.members(["tmpy.mh3we@testrun.org", "tmpy.3ftgt@testrun.org"]);
-      log2.debug("test done");
-    });
+        configured_accounts.map(acc => acc.kind === 'Configured' && acc.addr)
+      ).to.have.members(['tmpy.mh3we@testrun.org', 'tmpy.3ftgt@testrun.org'])
+      log2.debug('test done')
+    })
   }
-});
+})
 //# sourceMappingURL=migration_function.test.js.map

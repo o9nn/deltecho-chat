@@ -381,7 +381,7 @@ class MessageListStore extends Store<MessageListState> {
           // `this.state.oldestFetchedMessageListItemIndex`.
           //
           // The same applies to the other `this.__jumpToMessage()` below
-          return await this.__jumpToMessage(...(jumpArgs as any))
+          return await this.__jumpToMessage(jumpArgs[0])
         }
 
         const firstUnreadMsgIdP = BackendRemote.rpc.getFirstUnreadMessageOfChat(

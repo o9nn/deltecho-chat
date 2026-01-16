@@ -2,15 +2,14 @@
 
 .ConnectivityToast {
   position: fixed;
-
   bottom: 15px;
   margin-left: 8px;
-  text-align: center;
-  background-color: var(--contextMenuBg);
-  border: 1px solid var(--contextMenuBorder);
   padding: 5px;
+  border: 1px solid var(--contextMenuBorder);
   border-radius: 4px;
+  background-color: var(--contextMenuBg);
   color: var(--contextMenuText);
+  text-align: center;
   -webkit-user-select: none;
   user-select: none;
 
