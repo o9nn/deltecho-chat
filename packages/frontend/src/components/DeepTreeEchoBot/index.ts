@@ -22,6 +22,7 @@ import { SecureIntegration } from './SecureIntegration'
 
 // Import main component and its types
 import { DeepTreeEchoBot, DeepTreeEchoBotOptions } from './DeepTreeEchoBot'
+import { DeepTreeEchoBot as DeepTreeEchoBotComponent } from './DeepTreeEchoBotComponent'
 
 // Import utility modules
 import { LLMService, CognitiveFunctionType } from './LLMService'
@@ -184,6 +185,7 @@ import {
 export {
   // Core bot
   DeepTreeEchoBot,
+  DeepTreeEchoBotComponent,
 
   // UI Components
   BotSettings,
