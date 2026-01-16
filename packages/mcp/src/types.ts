@@ -145,6 +145,17 @@ export interface OrchestrationResult {
 }
 
 /**
+ * Callbacks for App Control / Admin Tools (Scope Window)
+ */
+export interface AppControlCallbacks {
+    selectHome?: (homeId: string) => Promise<void>;
+    getHomes?: () => Promise<string[]>;
+    createHome?: (name?: string) => Promise<void>;
+    openSettings?: () => Promise<void>;
+    navigate?: (view: 'main' | 'neighborhood') => Promise<void>;
+}
+
+/**
  * Agent-MCP layer configuration
  */
 export interface AgentMCPConfig {

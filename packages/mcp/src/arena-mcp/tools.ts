@@ -13,6 +13,7 @@ import type {
     LoreEntry,
     AgentReference,
     OrchestrationResult,
+    AppControlCallbacks,
 } from '../types.js';
 
 /**
@@ -74,6 +75,29 @@ export const arenaToolSchemas = {
     deregisterAgent: z.object({
         agentId: z.string(),
     }),
+
+    /**
+     * App Admin / Scope Window Control Tools
+     */
+    selectHome: z.object({
+        homeId: z.string().describe('ID of the home (account) to select'),
+    }),
+
+    getHomes: z.object({
+        /* No input needed */
+    }),
+
+    createHome: z.object({
+        name: z.string().optional(),
+    }),
+
+    openSettings: z.object({
+        /* No input needed */
+    }),
+
+    navigate: z.object({
+        view: z.enum(['main', 'neighborhood']).describe('View to navigate to'),
+    }),
 };
 
 /**
@@ -85,7 +109,8 @@ export function createArenaTools(
     onOrchestrate?: (
         agents: string[],
         directive: string
-    ) => Promise<Map<string, string>>
+    ) => Promise<Map<string, string>>,
+    appControl?: AppControlCallbacks
 ) {
     return {
         /**
@@ -219,6 +244,49 @@ export function createArenaTools(
         ): boolean => {
             return agentRegistry.delete(input.agentId);
         },
+
+        // ============================================
+        // App Control (Scope Window) Tools
+        // ============================================
+
+        selectHome: async (input: z.infer<typeof arenaToolSchemas.selectHome>): Promise<string> => {
+            if (appControl && appControl.selectHome) {
+                await appControl.selectHome(input.homeId);
+                return `Selected home: ${input.homeId}`;
+            }
+            return 'App control (selectHome) not available in this context';
+        },
+
+        getHomes: async (): Promise<string[]> => {
+            if (appControl && appControl.getHomes) {
+                return await appControl.getHomes();
+            }
+            return [];
+        },
+
+        createHome: async (input: z.infer<typeof arenaToolSchemas.createHome>): Promise<string> => {
+            if (appControl && appControl.createHome) {
+                await appControl.createHome(input.name);
+                return `Created home: ${input.name || 'unnamed'}`;
+            }
+            return 'App control (createHome) not available';
+        },
+
+        openSettings: async (): Promise<string> => {
+            if (appControl && appControl.openSettings) {
+                await appControl.openSettings();
+                return 'Settings opened';
+            }
+            return 'App control (openSettings) not available';
+        },
+
+        navigate: async (input: z.infer<typeof arenaToolSchemas.navigate>): Promise<string> => {
+            if (appControl && appControl.navigate) {
+                await appControl.navigate(input.view as 'main' | 'neighborhood');
+                return `Navigated to ${input.view}`;
+            }
+            return 'App control (navigate) not available';
+        },
     };
 }
 
@@ -266,6 +334,31 @@ export function listArenaTools(): Array<{
             name: 'deregisterAgent',
             description: 'Remove an agent from this arena',
             schema: arenaToolSchemas.deregisterAgent,
+        },
+        {
+            name: 'selectHome',
+            description: 'Select a specific Home/Account (Scope Window)',
+            schema: arenaToolSchemas.selectHome,
+        },
+        {
+            name: 'getHomes',
+            description: 'Get list of available Homes/Accounts',
+            schema: arenaToolSchemas.getHomes,
+        },
+        {
+            name: 'createHome',
+            description: 'Create a new Home/Account',
+            schema: arenaToolSchemas.createHome,
+        },
+        {
+            name: 'openSettings',
+            description: 'Open the App Settings dialog',
+            schema: arenaToolSchemas.openSettings,
+        },
+        {
+            name: 'navigate',
+            description: 'Navigate to a top-level view (Main or Neighborhood)',
+            schema: arenaToolSchemas.navigate,
         },
     ];
 }

@@ -16,7 +16,7 @@ import {
 } from './resources.js';
 import { createArenaTools, listArenaTools, arenaToolSchemas } from './tools.js';
 import { arenaPrompts, listArenaPrompts } from './prompts.js';
-import type { ArenaMCPConfig, AgentReference, ArenaMCPResourceUri } from '../types.js';
+import type { ArenaMCPConfig, AgentReference, ArenaMCPResourceUri, AppControlCallbacks } from '../types.js';
 
 /**
  * Default configuration
@@ -44,6 +44,7 @@ export class ArenaMCPServer extends EventEmitter {
         agents: string[],
         directive: string
     ) => Promise<Map<string, string>>;
+    private appControlProxy: AppControlCallbacks = {};
 
     constructor(arena: ArenaMembrane, config: Partial<ArenaMCPConfig> = {}) {
         super();
@@ -59,7 +60,8 @@ export class ArenaMCPServer extends EventEmitter {
                     return this.orchestrationCallback(agents, directive);
                 }
                 return new Map();
-            }
+            },
+            this.appControlProxy
         );
     }
 
@@ -213,6 +215,13 @@ export class ArenaMCPServer extends EventEmitter {
         callback: (agents: string[], directive: string) => Promise<Map<string, string>>
     ): void {
         this.orchestrationCallback = callback;
+    }
+
+    /**
+     * Set App Control callbacks
+     */
+    setAppControlCallbacks(callbacks: AppControlCallbacks): void {
+        Object.assign(this.appControlProxy, callbacks);
     }
 
     // =========================================================================
