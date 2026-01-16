@@ -208,7 +208,7 @@ export default function NeighborItem({
             role='tab'
             aria-selected={isSelected ? 'true' : 'false'}
             aria-busy={account ? 'false' : 'true'}
-            aria-label={account ? `${account.displayName}${unreadCount > 0 ? `, ${tx('chat_n_new_messages', String(unreadCount), { quantity: unreadCount })}` : ''}` : tx('loading')}
+            aria-label={account ? `${account.kind === 'Configured' ? account.displayName : tx('unconfigured_account')}${unreadCount > 0 ? `, ${tx('chat_n_new_messages', String(unreadCount), { quantity: unreadCount })}` : ''}` : tx('loading')}
             onClick={() => onSelectAccount(accountId)}
             onContextMenu={onContextMenu}
             onMouseEnter={() => account && updateAccountForHoverInfo(account, true)}

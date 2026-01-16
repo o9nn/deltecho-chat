@@ -130,6 +130,7 @@ function simulateLipSync(): void {
             clearInterval(lipSyncInterval)
             lipSyncInterval = null
         }
+        setAvatarAudioLevel(0)
     }, 3000)
 }
 
