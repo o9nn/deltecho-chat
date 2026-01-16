@@ -12,10 +12,12 @@
   border-radius: 4px;
   color: var(--contextMenuText);
   user-select: none;
+  -webkit-user-select: none;
 
   a {
     font-weight: bold;
     color: var(--globalText);
+
     &:hover {
       cursor: unset;
       text-decoration: unset;
@@ -38,6 +40,7 @@
     color: var(--colorPrimary);
     margin-left: 4px;
     cursor: pointer;
+    position: relative;
 
     &:hover,
     &:focus {

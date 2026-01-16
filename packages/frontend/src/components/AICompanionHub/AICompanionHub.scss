@@ -94,6 +94,37 @@
       border-style: solid;
     }
 
+    &.type-claude.selected {
+      background-color: rgba(139, 92, 246, 0.2);
+      border-color: #8b5cf6;
+    }
+
+    &.type-chatgpt.selected {
+      background-color: rgba(59, 130, 246, 0.2);
+      border-color: #3b82f6;
+    }
+
+    &.type-character-ai.selected {
+      background-color: rgba(236, 72, 153, 0.2);
+      border-color: #ec4899;
+    }
+
+    &.type-copilot.selected {
+      background-color: rgba(245, 158, 11, 0.2);
+      border-color: #f59e0b;
+    }
+
+    &.type-deep-tree-echo.selected {
+      background-color: rgba(34, 197, 94, 0.2);
+      border-color: #22c55e;
+    }
+
+    // Default fallback
+    &.selected:not([class*="type-"]) {
+      background-color: rgba(100, 116, 139, 0.2);
+      border-color: #64748b;
+    }
+
     .companion-avatar {
       display: flex;
       align-items: center;

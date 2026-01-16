@@ -14,7 +14,7 @@ import { updateTimestamps } from './components/conversations/Timestamp'
 import { ScreenContext } from './contexts/ScreenContext'
 import { KeybindingsContextProvider } from './contexts/KeybindingsContext'
 import { DialogContextProvider } from './contexts/DialogContext'
-import AccountListSidebar from './components/AccountListSidebar/AccountListSidebar'
+import NeighborhoodSidebar from './components/NeighborhoodSidebar/NeighborhoodSidebar'
 import SettingsStoreInstance from './stores/settings'
 import { NoAccountSelectedScreen } from './components/screens/NoAccountSelectedScreen/NoAccountSelectedScreen'
 import AccountDeletionScreen from './components/screens/AccountDeletionScreen/AccountDeletionScreen'
@@ -25,7 +25,7 @@ import { InstantOnboardingProvider } from './contexts/InstantOnboardingContext'
 import { SmallScreenModeMacOSTitleBar } from './components/SmallScreenModeMacOSTitleBar'
 import DeepTreeEchoBot from './components/chat/DeepTreeEchoBot'
 import AINeighborhoodDashboard from './components/screens/AINeighborhoodDashboard/AINeighborhoodDashboard'
-import AINavigation from './components/AINavigation'
+
 import { MemoryPersistenceLayer } from './components/AICompanionHub/MemoryPersistenceLayer'
 
 const log = getLogger('renderer/ScreenController')
@@ -381,10 +381,7 @@ export default class ScreenController extends Component {
           </div>
         )}
         {/* Enhanced AI Neighborhood Navigation */}
-        <AINavigation
-          currentScreen={this.state.screen}
-          changeScreen={this.changeScreen}
-        />
+
         <ScreenContext.Provider
           value={{
             userFeedback: this.userFeedback,
@@ -412,7 +409,7 @@ export default class ScreenController extends Component {
                           <SmallScreenModeMacOSTitleBar />
                         )}
                       <div className='main-container'>
-                        <AccountListSidebar
+                        <NeighborhoodSidebar
                           selectedAccountId={this.selectedAccountId}
                           onAddAccount={this.addAndSelectAccount}
                           onSelectAccount={this.selectAccount.bind(this)}

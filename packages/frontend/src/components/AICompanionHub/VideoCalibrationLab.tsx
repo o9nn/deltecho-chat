@@ -21,6 +21,8 @@ const VIDEO_FILES = [
 
 export const VideoCalibrationLab: React.FC = () => {
     const [selectedVideo, setSelectedVideo] = useState(VIDEO_FILES[0]);
+
+
     const [isPlaying, setIsPlaying] = useState(false);
     const [audioLevel, setAudioLevel] = useState(0);
     const [avatarController, setAvatarController] = useState<Live2DAvatarController | null>(null);
@@ -29,6 +31,13 @@ export const VideoCalibrationLab: React.FC = () => {
     const analyserRef = useRef<AnalyserNode | null>(null);
     const sourceRef = useRef<MediaElementAudioSourceNode | null>(null);
     const animationFrameRef = useRef<number | null>(null);
+    const meterRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (meterRef.current) {
+            meterRef.current.style.setProperty('--progress', `${audioLevel * 100}%`);
+        }
+    }, [audioLevel]);
 
     useEffect(() => {
         // Initialize AudioContext on user interaction/mount
@@ -160,16 +169,18 @@ export const VideoCalibrationLab: React.FC = () => {
                 </div>
 
                 <div className="metrics-panel">
+
                     <div className="metric-card">
                         <h4><Volume2 size={16} /> Audio Energy</h4>
                         <div className="meter-container">
                             <div
+                                ref={meterRef}
                                 className="meter-bar"
-                                style={{ '--progress': `${audioLevel * 100}%` } as React.CSSProperties}
                             ></div>
                         </div>
                         <span className="metric-value">{(audioLevel * 100).toFixed(0)}%</span>
                     </div>
+
                     <div className="metric-card">
                         <h4><Activity size={16} /> VAD Status</h4>
                         <div className={`status-badge ${audioLevel > 0.1 ? 'active' : 'inactive'}`}>
@@ -177,20 +188,20 @@ export const VideoCalibrationLab: React.FC = () => {
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div className="avatar-panel">
-                    <div className="avatar-container">
-                        <Live2DAvatar
-                            model="shizuku"
-                            width={400}
-                            height={400}
-                            scale={0.35}
-                            audioLevel={audioLevel}
-                            onControllerReady={setAvatarController}
-                        />
-                    </div>
-                    <div className="avatar-label">Real-time Lip Sync</div>
+            <div className="avatar-panel">
+                <div className="avatar-container">
+                    <Live2DAvatar
+                        model="shizuku"
+                        width={400}
+                        height={400}
+                        scale={0.35}
+                        audioLevel={audioLevel}
+                        onControllerReady={setAvatarController}
+                    />
                 </div>
+                <div className="avatar-label">Real-time Lip Sync</div>
             </div>
         </div>
     );

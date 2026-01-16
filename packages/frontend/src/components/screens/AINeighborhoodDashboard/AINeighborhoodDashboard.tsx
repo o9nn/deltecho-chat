@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
+import classNames from 'classnames'
 import {
   Brain,
   Home,
@@ -193,16 +194,15 @@ const AINeighborhoodDashboard: React.FC = () => {
             {aiHomes.map(home => (
               <div
                 key={home.id}
-                className={`ai-home ${selectedHome === home.id ? 'selected' : ''
-                  }`}
+                className={classNames('ai-home', `home-${home.id}`, {
+                  selected: selectedHome === home.id,
+                })}
                 onClick={() => handleHomeClick(home.id)}
-                style={{ borderColor: home.color }}
               >
                 <div
                   className='home-header'
-                  style={{ backgroundColor: home.color + '20' }}
                 >
-                  <home.icon size={32} style={{ color: home.color }} />
+                  <home.icon size={32} color={home.color} />
                   <span className={`status-indicator ${home.status}`} />
                 </div>
                 <h3>{home.name}</h3>
@@ -297,13 +297,12 @@ const AINeighborhoodDashboard: React.FC = () => {
             {aiHomes.map(home => (
               <div
                 key={home.id}
-                className='website-preview'
-                style={{ borderColor: home.color }}
+                className={classNames('website-preview', `home-${home.id}`)}
               >
                 <iframe
                   src={`about:blank`}
                   title={`${home.name} Website`}
-                  style={{ pointerEvents: 'none' }}
+                  className='preview-iframe'
                 />
                 <div className='preview-overlay'>
                   <BookOpen size={24} />
@@ -376,7 +375,7 @@ const AICompanionChat: React.FC<{ connector: AIPlatformConnector }> = ({
           onKeyPress={e => e.key === 'Enter' && sendMessage()}
           placeholder='Share your thoughts...'
         />
-        <button onClick={sendMessage} disabled={isThinking}>
+        <button onClick={sendMessage} disabled={isThinking} aria-label="Send message">
           <Zap size={20} />
         </button>
       </div>

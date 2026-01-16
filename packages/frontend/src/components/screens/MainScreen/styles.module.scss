@@ -7,6 +7,7 @@
     display: none;
   }
 }
+
 :global(.main-screen.small-screen:not(.chat-view-open)) {
   .chatAndNavbar {
     display: none;
@@ -48,6 +49,7 @@
     }
   }
 }
+
 .chatAndNavbar {
   // Otherwise e.g. the contents of the gallery view
   // (tabs, sepcifically) will refuse to shrink,
@@ -73,9 +75,11 @@
       width: 0;
       flex-grow: 1;
     }
+
     :global(.navbar-heading--button) {
       @include mixins.button-reset;
     }
+
     :global(.navbar-heading) {
       // See `.chatNavbarHeadingWrapper`.
       max-width: 100%;
@@ -102,6 +106,7 @@
       padding: 0;
       width: 40px;
       border-radius: 0;
+
       &:hover {
         background-color: var(--navBarButtonHover);
       }
@@ -110,6 +115,21 @@
     :global(#three-dot-menu-button) {
       height: 40px;
       border-radius: 100%;
+    }
+
+    .threeDotMenuContainer {
+      margin-left: 0;
+      margin-right: 3px;
+
+      &.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+    }
+
+    .chatTitleContainer {
+      margin-left: 7px;
+      overflow: hidden;
     }
   }
 }

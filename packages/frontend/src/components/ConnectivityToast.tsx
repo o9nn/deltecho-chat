@@ -179,8 +179,7 @@ export default function ConnectivityToast() {
             className='tryNowButton'
             onClick={onTryReconnectClick}
             disabled={!tryConnectCooldown}
-            // See comment above
-            style={{ position: 'relative' }}
+          // See comment above
           >
             {tx('try_connect_now')}
           </button>

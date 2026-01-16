@@ -40,23 +40,7 @@ const CompanionCard: React.FC<{
   isSelected: boolean
   onClick: () => void
 }> = ({ companion, isSelected, onClick }) => {
-  // Generate background color with 20% opacity from companion type
-  const getBgColor = () => {
-    switch (companion.type) {
-      case 'claude':
-        return '#8b5cf620'
-      case 'chatgpt':
-        return '#3b82f620'
-      case 'character-ai':
-        return '#ec489920'
-      case 'copilot':
-        return '#f59e0b20'
-      case 'deep-tree-echo':
-        return '#22c55e20'
-      default:
-        return '#64748b20'
-    }
-  }
+
 
   // Generate icon based on companion type
   const getIcon = () => {
@@ -78,24 +62,8 @@ const CompanionCard: React.FC<{
 
   return (
     <div
-      className={`companion-card ${isSelected ? 'selected' : ''}`}
+      className={`companion-card ${isSelected ? 'selected' : ''} type-${companion.type}`}
       onClick={onClick}
-      style={{
-        backgroundColor: isSelected ? getBgColor() : 'transparent',
-        borderColor: isSelected
-          ? companion.type === 'claude'
-            ? '#8b5cf6'
-            : companion.type === 'chatgpt'
-              ? '#3b82f6'
-              : companion.type === 'character-ai'
-                ? '#ec4899'
-                : companion.type === 'copilot'
-                  ? '#f59e0b'
-                  : companion.type === 'deep-tree-echo'
-                    ? '#22c55e'
-                    : '#64748b'
-          : 'transparent',
-      }}
     >
       <div className='companion-avatar'>
         {companion.avatarUrl ? (

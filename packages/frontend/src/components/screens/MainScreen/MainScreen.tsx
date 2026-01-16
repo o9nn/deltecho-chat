@@ -267,15 +267,9 @@ export default function MainScreen({ accountId }: Props) {
           {chatWithLinger && <ChatNavButtons />}
           {(chatWithLinger || alternativeView === 'global-gallery') && (
             <span
-              style={{
-                marginLeft: 0,
-                marginRight: '3px',
-                ...(threeDotMenuHidden
-                  ? { opacity: 0, pointerEvents: 'none' }
-                  : {}),
-              }}
+              className={`${styles.threeDotMenuContainer} ${threeDotMenuHidden ? styles.hidden : ''}`}
               data-no-drag-region
-              aria-disabled={threeDotMenuHidden}
+              aria-disabled={threeDotMenuHidden ? 'true' : 'false'}
             >
               <Button
                 id='three-dot-menu-button'
@@ -384,7 +378,7 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
         // because we display the chat name below.
         aria-hidden={true}
       />
-      <div style={{ marginLeft: '7px', overflow: 'hidden' }}>
+      <div className={styles.chatTitleContainer}>
         <div className='navbar-chat-name'>
           <div className='truncated'>{chat.name}</div>
           <div className='chat_property_icons'>
@@ -448,6 +442,7 @@ function ChatNavButtons() {
           // Yes, this is not marked as `role='tab'`.
           // I'm not sure if this is alright.
           <Button
+            role='tab'
             onClick={() => {
               const accountId = maybeSelectedAccountId()
               if (accountId !== undefined) openMapWebxdc(accountId, chatId)

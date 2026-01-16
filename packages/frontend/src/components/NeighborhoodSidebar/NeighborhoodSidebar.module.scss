@@ -1,0 +1,266 @@
+@use 'sass:map';
+@use '../../../scss/variables';
+@use '../../../scss/mixins';
+
+.neighborhoodSidebar {
+    --sidebarBg: #18181b;
+    --sidebarItemSize: 48px;
+    --sidebarItemMargin: 8px;
+
+    background-color: var(--sidebarBg);
+    display: flex;
+    flex-direction: column;
+    min-width: 72px;
+    width: 72px;
+    height: 100%;
+    overflow: hidden;
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    margin-bottom: 8px;
+}
+
+.homesList {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow-y: scroll;
+    padding-top: 2px;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        width: 0;
+    }
+}
+
+.footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    gap: 8px;
+}
+
+// Avatar
+.avatar {
+    height: 42px;
+    width: 42px;
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 3px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    position: relative;
+    background-color: #27272a;
+
+    div.content,
+    img.content {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    div.content {
+        color: #e4e4e7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 18px;
+    }
+}
+
+// Account Item
+.account {
+    border: none;
+    background: none;
+    padding: 0;
+    height: var(--sidebarItemSize);
+    width: var(--sidebarItemSize);
+    margin-bottom: var(--sidebarItemMargin);
+    margin-top: var(--sidebarItemMargin);
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
+
+    &:hover .avatar {
+        border-radius: 10px;
+        transform: scale(1.05);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+}
+
+// Modifiers (Top Level for explicit JS import)
+.active {
+    .avatar {
+        opacity: 1;
+        border-radius: 10px;
+        box-shadow: 0 0 0 2px #8b5cf6;
+    }
+
+    &::before {
+        content: '';
+        position: absolute;
+        left: -4px;
+        top: 12px;
+        bottom: 12px;
+        width: 4px;
+        background-color: #8b5cf6;
+        border-radius: 0 4px 4px 0;
+        pointer-events: none;
+    }
+}
+
+.context-menu-active {
+    .avatar {
+        opacity: 1;
+    }
+}
+
+.isSticky {
+    position: sticky;
+    bottom: var(--sidebarItemMargin);
+    top: var(--sidebarItemMargin);
+    z-index: 20;
+
+    .avatar {
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+    }
+}
+
+.bgSyncDisabled {
+    background-color: #71717a;
+}
+
+.muted {
+    background-color: #71717a;
+}
+
+// Buttons
+.overviewButton {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(59, 130, 246, 0.15) 100%);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: 12px;
+    cursor: pointer;
+    height: 44px;
+    width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    color: #a78bfa;
+    margin-bottom: 8px;
+
+    &:hover {
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.25) 0%, rgba(59, 130, 246, 0.25) 100%);
+        box-shadow: 0 0 12px rgba(139, 92, 246, 0.3);
+        transform: scale(1.05);
+        color: #fff;
+    }
+
+    &.active {
+        background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+        border-color: transparent;
+        color: white;
+        box-shadow: 0 0 16px rgba(139, 92, 246, 0.5);
+    }
+}
+
+.settingsButton,
+.addButton {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #a1a1aa;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+}
+
+.addButton {
+    font-size: 24px;
+    font-weight: 300;
+    color: #22c55e;
+    border-color: rgba(34, 197, 94, 0.2);
+
+    &:hover {
+        background: rgba(34, 197, 94, 0.1);
+        color: #4ade80;
+        border-color: #4ade80;
+    }
+}
+
+// Badges & Icons
+.accountBadge {
+    position: absolute;
+    bottom: -4px;
+    right: -4px;
+    background-color: #ef4444;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    height: 18px;
+    min-width: 18px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border: 2px solid #18181b;
+    z-index: 15;
+}
+
+.accountBadgeIcon {
+    background: inherit;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.accountMutedIconShadow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 15;
+    filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.8));
+}
+
+.accountMutedIcon {
+    color: #d4d4d8;
+    background-color: #18181b;
+    border-radius: 50%;
+    padding: 2px;
+}
+
+.macOSTrafficLightBackground {
+    height: 20px;
+    flex-shrink: 0;
+    width: 100%;
+}
+
+.accountHoverInfoContainer {
+    position: absolute;
+    z-index: 1000;
+}
