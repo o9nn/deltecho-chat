@@ -56,6 +56,7 @@ export {
     VADEventListener,
     VADState,
 } from './vad';
+export { NodeVoiceActivityDetector } from './node-vad';
 
 // Lip-Sync Generation
 export {
