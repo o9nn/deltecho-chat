@@ -1,7 +1,7 @@
 import { DeepTreeEchoBot } from '../DeepTreeEchoBot'
 
 // Mock dependencies
-jest.mock('../../../../shared/logger', () => ({
+jest.mock('@deltachat-desktop/shared/logger', () => ({
   getLogger: jest.fn(() => ({
     info: jest.fn(),
     error: jest.fn(),
@@ -10,28 +10,81 @@ jest.mock('../../../../shared/logger', () => ({
   })),
 }))
 
+jest.mock('../../../backend-com', () => ({
+  BackendRemote: {
+    rpc: {
+      miscSendTextMessage: jest.fn().mockResolvedValue(undefined),
+    },
+  },
+}))
+
 jest.mock('../RAGMemoryStore', () => {
+  const mockInstance = {
+    storeMemory: jest.fn().mockResolvedValue({ id: 'test-memory-id' }),
+    setEnabled: jest.fn(),
+    retrieveRecentMemories: jest.fn().mockReturnValue([]),
+    getConversationContext: jest.fn().mockReturnValue([]),
+    getMemoriesByChatId: jest.fn().mockReturnValue([]),
+    getLatestChatMemories: jest.fn().mockReturnValue([]),
+    searchMemories: jest.fn().mockReturnValue([]),
+    clearChatMemories: jest.fn().mockResolvedValue(undefined),
+    getStats: jest.fn().mockReturnValue({ totalMemories: 10, chatCount: 2 }),
+  }
   return {
-    RAGMemoryStore: jest.fn().mockImplementation(() => ({
-      addMemory: jest.fn().mockResolvedValue({ id: 'test-memory-id' }),
-      getMemoriesByChatId: jest.fn().mockReturnValue([]),
-      getLatestChatMemories: jest.fn().mockReturnValue([]),
-      searchMemories: jest.fn().mockReturnValue([]),
-      deleteChatMemories: jest.fn().mockResolvedValue(undefined),
-      getStats: jest.fn().mockReturnValue({ totalMemories: 10, chatCount: 2 }),
-    })),
+    RAGMemoryStore: {
+      getInstance: jest.fn(() => mockInstance),
+    },
   }
 })
 
 jest.mock('../LLMService', () => {
+  const mockInstance = {
+    getCompletion: jest.fn().mockResolvedValue({ content: 'Test response' }),
+    generateResponse: jest.fn().mockResolvedValue('Test response'),
+    generateFullParallelResponse: jest.fn().mockResolvedValue({
+      integratedResponse: 'Test parallel response',
+      processing: {},
+    }),
+    setConfig: jest.fn(),
+    setFunctionConfig: jest.fn(),
+    getActiveFunctions: jest.fn().mockReturnValue([]),
+    updateOptions: jest.fn(),
+  }
   return {
-    LLMService: jest.fn().mockImplementation(() => ({
-      getCompletion: jest.fn().mockResolvedValue({ content: 'Test response' }),
-      generateResponseFromMemories: jest
-        .fn()
-        .mockResolvedValue({ content: 'Test response from memories' }),
-      updateOptions: jest.fn(),
-    })),
+    LLMService: {
+      getInstance: jest.fn(() => mockInstance),
+    },
+    CognitiveFunctionType: {
+      GENERAL: 'general',
+      REASONING: 'reasoning',
+      CREATIVE: 'creative',
+      ANALYSIS: 'analysis',
+      MEMORY: 'memory',
+    },
+  }
+})
+
+jest.mock('../PersonaCore', () => {
+  const mockInstance = {
+    getPreferences: jest.fn().mockReturnValue({ communicationTone: 'balanced' }),
+    getDominantEmotion: jest.fn().mockReturnValue({ emotion: 'neutral', intensity: 0.5 }),
+    getSelfPerception: jest.fn().mockReturnValue('I am a helpful assistant'),
+  }
+  return {
+    PersonaCore: {
+      getInstance: jest.fn(() => mockInstance),
+    },
+  }
+})
+
+jest.mock('../SelfReflection', () => {
+  const mockInstance = {
+    reflectOnAspect: jest.fn().mockResolvedValue('This is my reflection on the topic.'),
+  }
+  return {
+    SelfReflection: {
+      getInstance: jest.fn(() => mockInstance),
+    },
   }
 })
 
@@ -169,7 +222,7 @@ describe('DeepTreeEchoBot', () => {
 
     it('should handle errors gracefully', async () => {
       // Force an error
-      jest.spyOn(console, 'error').mockImplementation(() => {})
+      jest.spyOn(console, 'error').mockImplementation(() => { })
 
       const message = {
         id: 123,
