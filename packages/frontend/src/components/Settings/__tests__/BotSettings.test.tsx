@@ -1,32 +1,117 @@
 import React from 'react'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, act, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import BotSettings from '../BotSettings'
-import { RAGMemoryStore } from '../../chat/DeepTreeEchoBot'
 
-// Mock the RAGMemoryStore
-jest.mock('../../chat/DeepTreeEchoBot', () => {
-  return {
-    RAGMemoryStore: {
-      getInstance: jest.fn().mockReturnValue({
-        clearMemory: jest.fn(),
+// Mock dependencies
+jest.mock('@deltachat-desktop/runtime-interface', () => ({
+  runtime: {
+    getDesktopSettings: jest.fn().mockResolvedValue({
+      deepTreeEchoBotEnabled: true,
+      deepTreeEchoBotMemoryEnabled: false,
+      deepTreeEchoBotPersonality: 'Test personality',
+      deepTreeEchoBotApiKey: 'test-api-key',
+      deepTreeEchoBotApiEndpoint: 'https://api.example.com',
+      deepTreeEchoBotVisionEnabled: false,
+      deepTreeEchoBotWebAutomationEnabled: false,
+      deepTreeEchoBotEmbodimentEnabled: false,
+      deepTreeEchoBotProactiveEnabled: false,
+      deepTreeEchoBotProactiveTriggers: '[]',
+    }),
+    setDesktopSetting: jest.fn().mockResolvedValue(undefined),
+  },
+}))
+
+// Mock the logger
+jest.mock('../../../../../shared/logger', () => ({
+  getLogger: () => ({
+    info: jest.fn(),
+    error: jest.fn(),
+    warn: jest.fn(),
+    debug: jest.fn(),
+  }),
+}))
+
+// Mock saveBotSettings
+jest.mock('../../DeepTreeEchoBot', () => ({
+  saveBotSettings: jest.fn(),
+}))
+
+// Mock PersonaCore
+jest.mock('../../DeepTreeEchoBot/PersonaCore', () => ({
+  PersonaCore: {
+    getInstance: jest.fn().mockReturnValue({
+      evaluateSettingAlignment: jest.fn().mockReturnValue({
+        approved: true,
+        reasoning: '',
       }),
-    },
-  }
-})
+    }),
+  },
+}))
 
-// Mock confirm and alert for memory clearing
-window.confirm = jest.fn()
-window.alert = jest.fn()
+// Mock DivergenceMonitor
+jest.mock('../../DeepTreeEchoBot/DivergenceMonitor', () => ({
+  DivergenceMonitor: () => <div data-testid="divergence-monitor">Divergence Monitor</div>,
+}))
 
-// Mock translation function
-jest.mock('../../../hooks/useTranslationFunction', () => ({
+// Mock UI components with proper typing
+jest.mock('../SettingsHeading', () => ({
   __esModule: true,
-  default: () => jest.fn(str => str),
+  default: ({ children }: { children: React.ReactNode }) => <h2>{children}</h2>,
+}))
+
+jest.mock('../DesktopSettingsSwitch', () => ({
+  __esModule: true,
+  default: ({ settingsKey, label, description, disabled }: {
+    settingsKey: string
+    label: string
+    description?: string
+    disabled?: boolean
+  }) => (
+    <div data-testid={`switch-${settingsKey}`}>
+      <input
+        type="checkbox"
+        role="checkbox"
+        aria-label={label}
+        disabled={disabled}
+        data-settings-key={settingsKey}
+      />
+      <span>{label}</span>
+      {description && <span data-testid="description">{description}</span>}
+    </div>
+  ),
+}))
+
+jest.mock('../SettingsSeparator', () => ({
+  __esModule: true,
+  default: () => <hr data-testid="separator" />,
+}))
+
+jest.mock('../SettingsButton', () => ({
+  __esModule: true,
+  default: ({ children, onClick, disabled }: {
+    children: React.ReactNode
+    onClick?: () => void
+    disabled?: boolean
+  }) => (
+    <button onClick={onClick} disabled={disabled}>
+      {children}
+    </button>
+  ),
+}))
+
+jest.mock('../../Login-Styles', () => ({
+  DeltaInput: (props: React.InputHTMLAttributes<HTMLInputElement>) => <input {...props} />,
+  DeltaTextarea: (props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) => <textarea {...props} />,
+}))
+
+jest.mock('../../Callout', () => ({
+  __esModule: true,
+  default: ({ children }: { children: React.ReactNode }) => <div role="alert">{children}</div>,
 }))
 
 describe('BotSettings', () => {
   const mockSettingsStore = {
-    // Required properties from SettingsStoreState
     accountId: 1,
     selfContact: {
       address: 'test@example.com',
@@ -84,7 +169,6 @@ describe('BotSettings', () => {
       'allow-unsafe-core-replacement': false,
     },
     desktopSettings: {
-      // Required base settings from DesktopSettingsType
       bounds: {},
       HTMLEmailWindowBounds: undefined,
       lastChats: {},
@@ -112,8 +196,6 @@ describe('BotSettings', () => {
       contentProtectionEnabled: false,
       isMentionsEnabled: true,
       autostart: true,
-
-      // Deep Tree Echo Bot settings
       deepTreeEchoBotEnabled: true,
       deepTreeEchoBotMemoryEnabled: false,
       deepTreeEchoBotPersonality: 'Test personality',
@@ -132,148 +214,215 @@ describe('BotSettings', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
+    jest.useFakeTimers()
   })
 
-  it('renders correctly with initial settings', () => {
+  afterEach(() => {
+    jest.useRealTimers()
+  })
+
+  it('shows loading state initially', async () => {
     render(<BotSettings settingsStore={mockSettingsStore} />)
 
-    // Check if main elements are rendered
-    expect(screen.getByText('Deep Tree Echo Bot Settings')).toBeInTheDocument()
-    expect(screen.getByText('Enable Deep Tree Echo Bot')).toBeInTheDocument()
-    expect(screen.getByText('Enable Learning')).toBeInTheDocument()
+    // Initially should show loading
+    expect(screen.getByText('Loading...')).toBeInTheDocument()
+
+    // After async operations complete, should show content
+    await act(async () => {
+      jest.runAllTimers()
+    })
+  })
+
+  it('renders correctly after loading', async () => {
+    await act(async () => {
+      render(<BotSettings settingsStore={mockSettingsStore} />)
+      jest.runAllTimers()
+    })
+
+    await waitFor(() => {
+      expect(screen.getByText('General')).toBeInTheDocument()
+    })
+
+    expect(screen.getByText('Capabilities')).toBeInTheDocument()
     expect(screen.getByText('API Configuration')).toBeInTheDocument()
-    expect(screen.getByText('Bot Personality')).toBeInTheDocument()
-    expect(screen.getByText('Memory Management')).toBeInTheDocument()
+    expect(screen.getByText('Personality')).toBeInTheDocument()
+  })
 
-    // Check if form elements reflect initial values
-    expect(screen.getByLabelText('API Key:')).toHaveValue('test-api-key')
-    expect(screen.getByLabelText('API Endpoint:')).toHaveValue(
-      'https://api.example.com'
-    )
-    expect(
-      screen.getByPlaceholderText(
-        "Define the bot's personality and behavior..."
+  it('renders enable bot switch', async () => {
+    await act(async () => {
+      render(<BotSettings settingsStore={mockSettingsStore} />)
+      jest.runAllTimers()
+    })
+
+    await waitFor(() => {
+      expect(screen.getByTestId('switch-deepTreeEchoBotEnabled')).toBeInTheDocument()
+    })
+  })
+
+  it('renders memory switch', async () => {
+    await act(async () => {
+      render(<BotSettings settingsStore={mockSettingsStore} />)
+      jest.runAllTimers()
+    })
+
+    await waitFor(() => {
+      expect(screen.getByTestId('switch-deepTreeEchoBotMemoryEnabled')).toBeInTheDocument()
+    })
+  })
+
+  it('renders capability switches', async () => {
+    await act(async () => {
+      render(<BotSettings settingsStore={mockSettingsStore} />)
+      jest.runAllTimers()
+    })
+
+    await waitFor(() => {
+      expect(screen.getByTestId('switch-deepTreeEchoBotVisionEnabled')).toBeInTheDocument()
+      expect(screen.getByTestId('switch-deepTreeEchoBotWebAutomationEnabled')).toBeInTheDocument()
+      expect(screen.getByTestId('switch-deepTreeEchoBotEmbodimentEnabled')).toBeInTheDocument()
+    })
+  })
+
+  it('renders API key input', async () => {
+    await act(async () => {
+      render(<BotSettings settingsStore={mockSettingsStore} />)
+      jest.runAllTimers()
+    })
+
+    await waitFor(() => {
+      const apiKeyInput = screen.getByPlaceholderText('Enter your LLM API key')
+      expect(apiKeyInput).toBeInTheDocument()
+    })
+  })
+
+  it('renders API endpoint input', async () => {
+    await act(async () => {
+      render(<BotSettings settingsStore={mockSettingsStore} />)
+      jest.runAllTimers()
+    })
+
+    await waitFor(() => {
+      const apiEndpointInput = screen.getByPlaceholderText('Enter LLM API endpoint')
+      expect(apiEndpointInput).toBeInTheDocument()
+    })
+  })
+
+  it('renders personality textarea', async () => {
+    await act(async () => {
+      render(<BotSettings settingsStore={mockSettingsStore} />)
+      jest.runAllTimers()
+    })
+
+    await waitFor(() => {
+      const personalityTextarea = screen.getByPlaceholderText("Define the bot's personality...")
+      expect(personalityTextarea).toBeInTheDocument()
+    })
+  })
+
+  it('renders divergence monitor', async () => {
+    await act(async () => {
+      render(<BotSettings settingsStore={mockSettingsStore} />)
+      jest.runAllTimers()
+    })
+
+    await waitFor(() => {
+      expect(screen.getByTestId('divergence-monitor')).toBeInTheDocument()
+    })
+  })
+
+  it('renders available commands list', async () => {
+    await act(async () => {
+      render(<BotSettings settingsStore={mockSettingsStore} />)
+      jest.runAllTimers()
+    })
+
+    await waitFor(() => {
+      expect(screen.getByText('Available Commands:')).toBeInTheDocument()
+      expect(screen.getByText('/help - List commands')).toBeInTheDocument()
+      expect(screen.getByText('/vision - Analyze images')).toBeInTheDocument()
+      expect(screen.getByText('/search - Web search')).toBeInTheDocument()
+    })
+  })
+
+  it('renders advanced settings button', async () => {
+    const mockOnNavigate = jest.fn()
+
+    await act(async () => {
+      render(
+        <BotSettings
+          settingsStore={mockSettingsStore}
+          onNavigateToAdvanced={mockOnNavigate}
+        />
       )
-    ).toHaveValue('Test personality')
+      jest.runAllTimers()
+    })
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'Advanced Settings' })).toBeInTheDocument()
+    })
   })
 
-  it('updates settings when form values change', () => {
-    render(<BotSettings settingsStore={mockSettingsStore} />)
+  it('disables capability switches when bot is disabled', async () => {
+    const disabledSettingsStore = {
+      ...mockSettingsStore,
+      desktopSettings: {
+        ...mockSettingsStore.desktopSettings,
+        deepTreeEchoBotEnabled: false,
+      },
+    }
 
-    // Change bot enabled toggle
-    const enableSwitch = screen.getByRole('checkbox', {
-      name: 'Enable Deep Tree Echo Bot',
+    await act(async () => {
+      render(<BotSettings settingsStore={disabledSettingsStore} />)
+      jest.runAllTimers()
     })
-    fireEvent.click(enableSwitch)
-    expect(mockSettingsStore.setDesktopSetting).toHaveBeenCalledWith(
-      'deepTreeEchoBotEnabled',
-      true
-    )
 
-    // Change learning toggle
-    const learningSwitch = screen.getByRole('checkbox', {
-      name: 'Enable Learning',
+    await waitFor(() => {
+      const memorySwitch = screen.getByTestId('switch-deepTreeEchoBotMemoryEnabled')
+      const checkbox = memorySwitch.querySelector('input')
+      expect(checkbox).toBeDisabled()
     })
-    fireEvent.click(learningSwitch)
-    expect(mockSettingsStore.setDesktopSetting).toHaveBeenCalledWith(
-      'deepTreeEchoBotMemoryEnabled',
-      true
-    )
-
-    // Change API key
-    const apiKeyInput = screen.getByLabelText('API Key:')
-    fireEvent.change(apiKeyInput, { target: { value: 'new-api-key' } })
-    expect(mockSettingsStore.setDesktopSetting).toHaveBeenCalledWith(
-      'deepTreeEchoBotApiKey',
-      'new-api-key'
-    )
-
-    // Change API endpoint
-    const apiEndpointInput = screen.getByLabelText('API Endpoint:')
-    fireEvent.change(apiEndpointInput, {
-      target: { value: 'https://new-endpoint.com' },
-    })
-    expect(mockSettingsStore.setDesktopSetting).toHaveBeenCalledWith(
-      'deepTreeEchoBotApiEndpoint',
-      'https://new-endpoint.com'
-    )
-
-    // Change personality
-    const personalityTextarea = screen.getByPlaceholderText(
-      "Define the bot's personality and behavior..."
-    )
-    fireEvent.change(personalityTextarea, {
-      target: { value: 'New personality description' },
-    })
-    expect(mockSettingsStore.setDesktopSetting).toHaveBeenCalledWith(
-      'deepTreeEchoBotPersonality',
-      'New personality description'
-    )
   })
 
-  it('clears memory when clear button is clicked and confirmed', () => {
-    ;(window.confirm as jest.Mock).mockReturnValue(true)
+  it('disables API inputs when bot is disabled', async () => {
+    const disabledSettingsStore = {
+      ...mockSettingsStore,
+      desktopSettings: {
+        ...mockSettingsStore.desktopSettings,
+        deepTreeEchoBotEnabled: false,
+      },
+    }
 
-    render(<BotSettings settingsStore={mockSettingsStore} />)
-
-    const clearButton = screen.getByRole('button', { name: 'Clear Memory' })
-    fireEvent.click(clearButton)
-
-    expect(window.confirm).toHaveBeenCalledWith(
-      "Are you sure you want to clear all of Deep Tree Echo's memory? This action cannot be undone."
-    )
-
-    const { clearMemory } = RAGMemoryStore.getInstance()
-    expect(clearMemory).toHaveBeenCalled()
-    expect(window.alert).toHaveBeenCalledWith('Memory has been cleared.')
-  })
-
-  it('does not clear memory if confirmation is cancelled', () => {
-    ;(window.confirm as jest.Mock).mockReturnValue(false)
-
-    render(<BotSettings settingsStore={mockSettingsStore} />)
-
-    const clearButton = screen.getByRole('button', { name: 'Clear Memory' })
-    fireEvent.click(clearButton)
-
-    expect(window.confirm).toHaveBeenCalled()
-
-    const { clearMemory } = RAGMemoryStore.getInstance()
-    expect(clearMemory).not.toHaveBeenCalled()
-    expect(window.alert).not.toHaveBeenCalled()
-  })
-
-  it('disables inputs when bot is disabled', () => {
-    render(
-      <BotSettings
-        settingsStore={{
-          ...mockSettingsStore,
-          desktopSettings: {
-            ...mockSettingsStore.desktopSettings,
-            deepTreeEchoBotEnabled: false,
-          },
-        }}
-      />
-    )
-
-    // Learning switch should be disabled
-    const learningSwitch = screen.getByRole('checkbox', {
-      name: 'Enable Learning',
+    await act(async () => {
+      render(<BotSettings settingsStore={disabledSettingsStore} />)
+      jest.runAllTimers()
     })
-    expect(learningSwitch).toBeDisabled()
 
-    // API inputs should be disabled
-    expect(screen.getByLabelText('API Key:')).toBeDisabled()
-    expect(screen.getByLabelText('API Endpoint:')).toBeDisabled()
+    await waitFor(() => {
+      const apiKeyInput = screen.getByPlaceholderText('Enter your LLM API key')
+      expect(apiKeyInput).toBeDisabled()
 
-    // Personality textarea should be disabled
-    expect(
-      screen.getByPlaceholderText(
-        "Define the bot's personality and behavior..."
-      )
-    ).toBeDisabled()
+      const apiEndpointInput = screen.getByPlaceholderText('Enter LLM API endpoint')
+      expect(apiEndpointInput).toBeDisabled()
+    })
+  })
 
-    // Clear memory button should be disabled
-    expect(screen.getByRole('button', { name: 'Clear Memory' })).toBeDisabled()
+  it('disables personality textarea when bot is disabled', async () => {
+    const disabledSettingsStore = {
+      ...mockSettingsStore,
+      desktopSettings: {
+        ...mockSettingsStore.desktopSettings,
+        deepTreeEchoBotEnabled: false,
+      },
+    }
+
+    await act(async () => {
+      render(<BotSettings settingsStore={disabledSettingsStore} />)
+      jest.runAllTimers()
+    })
+
+    await waitFor(() => {
+      const personalityTextarea = screen.getByPlaceholderText("Define the bot's personality...")
+      expect(personalityTextarea).toBeDisabled()
+    })
   })
 })

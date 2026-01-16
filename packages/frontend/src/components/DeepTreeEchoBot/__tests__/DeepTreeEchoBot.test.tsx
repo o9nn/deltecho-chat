@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen } from '@testing-library/react'
+import { render, screen, act, waitFor } from '@testing-library/react'
 import DeepTreeEchoBot from '../DeepTreeEchoBot'
 
 // Mock the cognitive modules to avoid complex initializations in tests
@@ -96,25 +96,68 @@ jest.mock('../SecureIntegration', () => ({
   },
 }))
 
-describe('DeepTreeEchoBot', () => {
-  it('renders the bot with idle state by default', () => {
-    render(<DeepTreeEchoBot />)
+// Mock jsonrpc-client
+jest.mock('@deltachat/jsonrpc-client', () => ({
+  C: {},
+}))
+
+describe('DeepTreeEchoBot Component', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+    // Use fake timers to handle any setTimeout/setInterval in the component
+    jest.useFakeTimers()
+  })
+
+  afterEach(() => {
+    jest.useRealTimers()
+  })
+
+  it('renders the bot with idle state by default', async () => {
+    await act(async () => {
+      render(<DeepTreeEchoBot />)
+    })
 
     // Check for the bot state indicator
     const statusElement = screen.getByText(/idle/i, { exact: false })
     expect(statusElement).toBeInTheDocument()
   })
 
-  it('has no pending response by default', () => {
-    render(<DeepTreeEchoBot />)
+  it('renders the bot-state-indicator element', async () => {
+    await act(async () => {
+      render(<DeepTreeEchoBot />)
+    })
+
+    // Check for the container class
+    const container = document.querySelector('.deep-tree-echo-bot')
+    expect(container).toBeInTheDocument()
+  })
+
+  it('has no pending response by default', async () => {
+    await act(async () => {
+      render(<DeepTreeEchoBot />)
+    })
 
     // The bot response element should not exist initially
-    const responseElement = screen.queryByTestId('bot-response')
+    const responseElement = document.querySelector('.bot-response')
     expect(responseElement).not.toBeInTheDocument()
   })
 
-  // More tests would be added here for command processing, message handling, etc.
-  // These would use act() and waitFor() to test asynchronous operations
-})
+  it('displays Status text in the indicator', async () => {
+    await act(async () => {
+      render(<DeepTreeEchoBot />)
+    })
 
-// Additional unit tests would be written for each cognitive module
+    // Check for the Status label
+    expect(screen.getByText(/Status:/)).toBeInTheDocument()
+  })
+
+  it('initializes with cognitive state "idle"', async () => {
+    await act(async () => {
+      render(<DeepTreeEchoBot />)
+    })
+
+    // Find the status indicator and verify it shows "idle"
+    const statusIndicator = document.querySelector('.bot-state-indicator')
+    expect(statusIndicator).toHaveTextContent('idle')
+  })
+})
