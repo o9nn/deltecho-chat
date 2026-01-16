@@ -7,6 +7,7 @@
  * - Chat management (programmatic chat control)
  * - UI bridge (React integration)
  * - Proactive messaging (autonomous communication)
+ * - Agentic capabilities (tool use following deltecho-bot-smol.js pattern)
  * - Settings and configuration
  * - UI components for proactive messaging
  * - Test utilities
@@ -28,6 +29,21 @@ import { PersonaCore } from './PersonaCore'
 import { RAGMemoryStore } from './RAGMemoryStore'
 import { SelfReflection } from './SelfReflection'
 import { ChatOrchestrator } from './ChatOrchestrator'
+
+// Import agentic modules (NEW - following deltecho-bot-smol.js pattern)
+import {
+  AgenticLLMService,
+  getAgenticLLMService,
+  AgenticResponse,
+  LLMProviderConfig,
+} from './AgenticLLMService'
+import {
+  AgentToolExecutor,
+  getAgentToolExecutor,
+  AgentTool,
+  ToolResult,
+  ToolCall,
+} from './AgentToolExecutor'
 
 // Import chat management modules (NEW)
 import {
@@ -350,4 +366,26 @@ export type {
   UnifiedMessage,
   UnifiedCognitiveState,
   CognitiveEvent,
+}
+
+// ============================================================
+// AGENTIC AUTONOMY (NEW - following deltecho-bot-smol.js pattern)
+// ============================================================
+
+export {
+  // Agentic LLM Service
+  AgenticLLMService,
+  getAgenticLLMService,
+
+  // Tool Executor
+  AgentToolExecutor,
+  getAgentToolExecutor,
+}
+
+export type {
+  AgenticResponse,
+  LLMProviderConfig,
+  AgentTool,
+  ToolResult,
+  ToolCall,
 }

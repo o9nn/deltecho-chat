@@ -4,6 +4,8 @@ import { LLMService, CognitiveFunctionType } from './LLMService'
 import { RAGMemoryStore } from './RAGMemoryStore'
 import { PersonaCore } from './PersonaCore'
 import { SelfReflection } from './SelfReflection'
+import { AgenticLLMService } from './AgenticLLMService'
+import { AgentToolExecutor } from './AgentToolExecutor'
 import {
   setAvatarListening,
   setAvatarThinking,
@@ -29,6 +31,10 @@ export interface DeepTreeEchoBotOptions {
   embodimentEnabled: boolean
   cognitiveKeys?: Record<string, { apiKey: string; apiEndpoint?: string }>
   useParallelProcessing?: boolean
+  /** Enable agentic mode with tool use (following deltecho-bot-smol.js pattern) */
+  useAgenticMode?: boolean
+  /** LLM provider for agentic mode: 'anthropic' | 'openai' | 'openrouter' | 'local' */
+  agenticProvider?: 'anthropic' | 'openai' | 'openrouter' | 'local'
 }
 
 /**
@@ -40,6 +46,8 @@ export class DeepTreeEchoBot {
   private memoryStore: RAGMemoryStore
   private personaCore: PersonaCore
   private selfReflection: SelfReflection
+  private agenticService: AgenticLLMService
+  private toolExecutor: AgentToolExecutor
 
   constructor(options: DeepTreeEchoBotOptions) {
     // Set default options, then override with provided options
@@ -50,6 +58,8 @@ export class DeepTreeEchoBot {
       webAutomationEnabled: false,
       embodimentEnabled: false,
       useParallelProcessing: true,
+      useAgenticMode: false,
+      agenticProvider: 'anthropic',
       apiKey: '',
       apiEndpoint: '',
     }
@@ -60,6 +70,8 @@ export class DeepTreeEchoBot {
     this.memoryStore = RAGMemoryStore.getInstance()
     this.personaCore = PersonaCore.getInstance()
     this.selfReflection = SelfReflection.getInstance()
+    this.agenticService = AgenticLLMService.getInstance()
+    this.toolExecutor = AgentToolExecutor.getInstance()
 
     // Configure components based on options
     this.memoryStore.setEnabled(this.options.memoryEnabled)
@@ -72,6 +84,16 @@ export class DeepTreeEchoBot {
           this.options.apiEndpoint ||
           'https://api.openai.com/v1/chat/completions',
       })
+
+      // Also configure the agentic service if agentic mode is enabled
+      if (this.options.useAgenticMode) {
+        this.agenticService.configure({
+          provider: this.options.agenticProvider || 'anthropic',
+          apiKey: this.options.apiKey,
+          apiEndpoint: this.options.apiEndpoint,
+        })
+        log.info('Agentic mode enabled with provider:', this.options.agenticProvider)
+      }
     }
 
     // Configure specialized cognitive function keys if provided
@@ -102,12 +124,21 @@ export class DeepTreeEchoBot {
       webAutomationEnabled: this.options.webAutomationEnabled,
       embodimentEnabled: this.options.embodimentEnabled,
       useParallelProcessing: this.options.useParallelProcessing,
+      useAgenticMode: this.options.useAgenticMode,
+      agenticProvider: this.options.agenticProvider,
       hasApiKey: !!this.options.apiKey,
       hasApiEndpoint: !!this.options.apiEndpoint,
       configuredCognitiveKeys: this.options.cognitiveKeys
         ? Object.keys(this.options.cognitiveKeys).length
         : 0,
     })
+  }
+
+  /**
+   * Check if agentic mode is enabled
+   */
+  public isAgenticMode(): boolean {
+    return this.options.useAgenticMode || false
   }
 
   /**
@@ -603,9 +634,35 @@ I'm here to assist you with various tasks and engage in meaningful conversations
         )
       }
 
-      // Decide between parallel processing and regular processing
       let response: string
-      if (this.options.useParallelProcessing) {
+      let toolsUsed: string[] = []
+
+      // Check if agentic mode is enabled (following deltecho-bot-smol.js pattern)
+      if (this.options.useAgenticMode && this.agenticService.isConfigured()) {
+        // Use agentic processing with tool execution
+        log.info(`[Chat ${chatId}] 🤖 Using agentic mode for response generation`)
+
+        const agenticResult = await this.agenticService.generateAgenticResponse(
+          chatId,
+          messageText,
+          accountId,
+          0 // Initial recursion depth
+        )
+
+        response = agenticResult.response
+        toolsUsed = agenticResult.toolsUsed
+
+        log.info(`[Chat ${chatId}] Agentic response generated`, {
+          toolsUsed: toolsUsed.length,
+          recursionDepth: agenticResult.recursionDepth,
+          metadata: agenticResult.metadata
+        })
+
+        // If tools were used, add a note about actions taken
+        if (toolsUsed.length > 0) {
+          log.info(`[Chat ${chatId}] 🔧 Actions executed: ${toolsUsed.join(', ')}`)
+        }
+      } else if (this.options.useParallelProcessing) {
         // Use parallel processing with all available cognitive functions
         const result = await this.llmService.generateFullParallelResponse(
           messageText,
@@ -636,7 +693,8 @@ I'm here to assist you with various tasks and engage in meaningful conversations
           messageId: 0, // We don't have the message ID until after sending
           sender: 'bot',
           text: response,
-        })
+          metadata: toolsUsed.length > 0 ? { toolsUsed } : undefined,
+        } as any)
       }
 
       log.info(`Sent response to chat ${chatId}`)
