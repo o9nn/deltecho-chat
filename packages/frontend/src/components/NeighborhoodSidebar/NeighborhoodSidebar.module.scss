@@ -34,10 +34,12 @@
     flex-grow: 1;
     overflow-y: scroll;
     padding-top: 2px;
-    scrollbar-width: none;
+    -ms-overflow-style: none;
+    /* IE and Edge */
 
     &::-webkit-scrollbar {
         width: 0;
+        display: none;
     }
 }
 

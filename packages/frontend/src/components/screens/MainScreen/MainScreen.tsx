@@ -269,7 +269,6 @@ export default function MainScreen({ accountId }: Props) {
             <span
               className={`${styles.threeDotMenuContainer} ${threeDotMenuHidden ? styles.hidden : ''}`}
               data-no-drag-region
-              aria-disabled={threeDotMenuHidden ? 'true' : 'false'}
             >
               <Button
                 id='three-dot-menu-button'

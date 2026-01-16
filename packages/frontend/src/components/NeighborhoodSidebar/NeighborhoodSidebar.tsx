@@ -159,29 +159,32 @@ export default function NeighborhoodSidebar({
                 ref={accountsListRef}
                 className={styles.homesList}
                 onScroll={updateHoverInfoPosition}
-                role='tablist'
-                aria-orientation='vertical'
             >
-                <RovingTabindexProvider wrapperElementRef={accountsListRef}>
-                    {accounts.map(id => (
-                        <NeighborItem
-                            key={id}
-                            accountId={id}
-                            isSelected={selectedAccountId === id && !isOverviewActive}
-                            onSelectAccount={(id) => {
-                                if (screen === Screens.AINeighborhood) {
-                                    changeScreen(Screens.Main);
-                                }
-                                selectAccount(id);
-                            }}
-                            openAccountDeletionScreen={openAccountDeletionScreen}
-                            updateAccountForHoverInfo={updateAccountForHoverInfo}
-                            syncAllAccounts={syncAllAccounts}
-                            muted={noficationSettings[id]?.muted || false}
-                        />
-                    ))}
-                    <AddHomeButton onClick={onAddAccount} />
-                </RovingTabindexProvider>
+                <div
+                    role='tablist'
+                    aria-orientation='vertical'
+                >
+                    <RovingTabindexProvider wrapperElementRef={accountsListRef}>
+                        {accounts.map(id => (
+                            <NeighborItem
+                                key={id}
+                                accountId={id}
+                                isSelected={selectedAccountId === id && !isOverviewActive}
+                                onSelectAccount={(id) => {
+                                    if (screen === Screens.AINeighborhood) {
+                                        changeScreen(Screens.Main);
+                                    }
+                                    selectAccount(id);
+                                }}
+                                openAccountDeletionScreen={openAccountDeletionScreen}
+                                updateAccountForHoverInfo={updateAccountForHoverInfo}
+                                syncAllAccounts={syncAllAccounts}
+                                muted={noficationSettings[id]?.muted || false}
+                            />
+                        ))}
+                    </RovingTabindexProvider>
+                </div>
+                <AddHomeButton onClick={onAddAccount} />
             </div>
 
             <div className={styles.footer}>

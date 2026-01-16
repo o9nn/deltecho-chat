@@ -206,8 +206,8 @@ export default function NeighborItem({
                 'unconfigured-account': account?.kind !== 'Configured',
             })}
             role='tab'
-            aria-selected={isSelected}
-            aria-busy={!account}
+            aria-selected={isSelected ? 'true' : 'false'}
+            aria-busy={account ? 'false' : 'true'}
             onClick={() => onSelectAccount(accountId)}
             onContextMenu={onContextMenu}
             onMouseEnter={() => account && updateAccountForHoverInfo(account, true)}
