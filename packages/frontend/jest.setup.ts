@@ -1,5 +1,15 @@
 import '@testing-library/jest-dom'
 
+// Mock the message_parser_wasm module globally (virtual module - may not exist in node_modules)
+jest.mock(
+  '@deltachat/message_parser_wasm',
+  () => ({
+    get_first_emoji: jest.fn().mockReturnValue(null),
+    parse_text: jest.fn().mockReturnValue([]),
+  }),
+  { virtual: true }
+)
+
 // Mock the runtime interface globally for tests
 jest.mock('@deltachat-desktop/runtime-interface', () => {
   const mockEmitter = {
