@@ -6,6 +6,7 @@
  */
 
 import React, { useRef, useEffect, useState, useCallback } from 'react'
+import { ResponsiveSpriteAvatar } from './ResponsiveSpriteAvatar'
 
 // Local types that are compatible with both @deltecho/avatar and @deltecho/cognitive
 export type Expression =
@@ -49,6 +50,7 @@ export interface Live2DAvatarController {
 
 // CDN-hosted sample models for demo
 const CDN_MODELS = {
+    miara: '/static/models/miara/miara_pro_t03.model3.json',
     shizuku: 'https://cdn.jsdelivr.net/gh/guansss/pixi-live2d-display/test/assets/shizuku/shizuku.model.json',
     haru: 'https://cdn.jsdelivr.net/gh/guansss/pixi-live2d-display/test/assets/haru/haru_greeter_t03.model3.json',
 }
@@ -80,6 +82,8 @@ export interface Live2DAvatarComponentProps {
     showError?: boolean
     /** Controller ref callback for external control */
     onControllerReady?: (controller: Live2DAvatarController) => void
+    /** Rendering mode */
+    mode?: 'live2d' | 'sprite'
 }
 
 export interface Live2DAvatarState {
@@ -93,7 +97,7 @@ export interface Live2DAvatarState {
  * Live2D Avatar Component for the AI Companion Hub
  */
 export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
-    model = 'shizuku',
+    model = 'miara',
     width = 400,
     height = 400,
     scale = 0.25,
@@ -106,6 +110,7 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
     showLoading = true,
     showError = true,
     onControllerReady,
+    mode = 'live2d',
 }) => {
     const containerRef = useRef<HTMLDivElement>(null)
     const managerRef = useRef<any>(null)
@@ -205,7 +210,30 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
         controllerRef.current.updateLipSync(audioLevel ?? 0)
     }, [audioLevel, state.isLoaded])
 
-    // Render loading state
+    // Render sprite mode if selected or if loading/error
+    if (mode === 'sprite' || (!state.isLoaded && !showLoading)) {
+        return (
+            <div
+                className={`live2d-avatar-container ${className || ''}`}
+                style={{ width, height, position: 'relative' }}
+            >
+                <ResponsiveSpriteAvatar
+                    emotionalState={emotionalState}
+                    isSpeaking={isSpeaking}
+                    width={width}
+                    height={height}
+                />
+                {/* Optional: Show loading overlay if we are actually trying to load live2d in background */}
+                {showLoading && state.isLoading && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/50 text-white text-xs">
+                        Loading Live2D...
+                    </div>
+                )}
+            </div>
+        )
+    }
+
+    // Render loading state for Live2D
     if (showLoading && state.isLoading) {
         return (
             <div
@@ -221,18 +249,21 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
         )
     }
 
-    // Render error state
+    // Render error state -> Fallback to Sprite
     if (showError && state.error) {
         return (
             <div
-                className={`live2d-avatar live2d-error ${className || ''}`}
-                data-width={width}
-                data-height={height}
+                className={`live2d-avatar-container ${className || ''}`}
+                style={{ width, height }}
             >
-                <div className='live2d-error-content'>
-                    <span className='live2d-error-icon'>⚠️</span>
-                    <span>Failed to load avatar</span>
-                    <small>{state.error.message}</small>
+                <ResponsiveSpriteAvatar
+                    emotionalState={emotionalState}
+                    isSpeaking={isSpeaking}
+                    width={width}
+                    height={height}
+                />
+                <div className="live2d-error-overlay" title={state.error.message}>
+                    ⚠️ Live2D Failed
                 </div>
             </div>
         )
@@ -274,12 +305,17 @@ export function useLive2DController() {
         controllerRef.current?.triggerBlink()
     }, [])
 
+    const setParameter = useCallback((paramId: string, value: number) => {
+        controllerRef.current?.setParameter(paramId, value)
+    }, [])
+
     return {
         setController,
         setExpression,
         playMotion,
         updateLipSync,
         triggerBlink,
+        setParameter,
         controller: controllerRef.current,
     }
 }
