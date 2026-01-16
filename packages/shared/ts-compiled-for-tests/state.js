@@ -38,6 +38,8 @@ export function getDefaultState() {
     deepTreeEchoBotMemories: "",
     deepTreeEchoBotReflections: "",
     deepTreeEchoBotCognitiveKeys: "",
+    deepTreeEchoBotUseParallelProcessing: true,
+    deepTreeEchoBotProactiveEnabled: true,
     galleryImageKeepAspectRatio: false,
     useSystemUIFont: false,
     contentProtectionEnabled: false,

@@ -29,54 +29,58 @@
  * ```
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-
 // Mock BackendRemote
-vi.mock('../../../backend-com', () => ({
+jest.mock('../../../backend-com', () => ({
+    C: {
+        DC_CHAT_TYPE_SINGLE: 100,
+        DC_CHAT_TYPE_GROUP: 120,
+        DC_CHAT_TYPE_BROADCAST: 160,
+        DC_CHAT_TYPE_MAILINGLIST: 140,
+    },
     BackendRemote: {
         rpc: {
-            getFullChatById: vi.fn().mockResolvedValue({
+            getFullChatById: jest.fn().mockResolvedValue({
                 id: 1,
                 name: 'Test Chat',
                 contactIds: [1, 2],
                 archived: false,
                 isMuted: false,
             }),
-            getChatlistEntries: vi.fn().mockResolvedValue([1, 2, 3]),
-            getBasicChatInfo: vi.fn().mockResolvedValue({
+            getChatlistEntries: jest.fn().mockResolvedValue([1, 2, 3]),
+            getBasicChatInfo: jest.fn().mockResolvedValue({
                 name: 'Test Chat',
-                chatType: 'Single',
+                chatType: 100, // DC_CHAT_TYPE_SINGLE
                 archived: false,
                 isMuted: false,
             }),
-            getMessage: vi.fn().mockResolvedValue({
+            getMessage: jest.fn().mockResolvedValue({
                 id: 1,
                 text: 'Hello',
                 fromId: 2,
                 timestamp: Date.now(),
             }),
-            getMessageIds: vi.fn().mockResolvedValue([1, 2, 3]),
-            miscSendTextMessage: vi.fn().mockResolvedValue(100),
+            getMessageIds: jest.fn().mockResolvedValue([1, 2, 3]),
+            miscSendTextMessage: jest.fn().mockResolvedValue(100),
         },
-        on: vi.fn(),
-        off: vi.fn(),
+        on: jest.fn(),
+        off: jest.fn(),
     },
 }))
 
 // Mock logger
-vi.mock('@deltachat-desktop/shared/logger', () => ({
+jest.mock('@deltachat-desktop/shared/logger', () => ({
     getLogger: () => ({
-        info: vi.fn(),
-        warn: vi.fn(),
-        error: vi.fn(),
-        debug: vi.fn(),
+        info: jest.fn(),
+        warn: jest.fn(),
+        error: jest.fn(),
+        debug: jest.fn(),
     }),
 }))
 
 // Mock keybindings with all necessary actions
-vi.mock('../../../keybindings', () => ({
+jest.mock('../../../keybindings', () => ({
     ActionEmitter: {
-        emitAction: vi.fn(),
+        emitAction: jest.fn(),
     },
     KeybindAction: {
         Settings_Open: 'Settings_Open',
@@ -103,7 +107,7 @@ describe('DeepTreeEchoUIBridge Integration', () => {
     let ActionEmitter: any
 
     beforeEach(async () => {
-        vi.resetModules()
+        jest.resetModules()
         const module = await import('../DeepTreeEchoUIBridge')
         uiBridge = module.uiBridge
 
@@ -113,14 +117,14 @@ describe('DeepTreeEchoUIBridge Integration', () => {
 
     afterEach(() => {
         uiBridge.cleanup()
-        vi.clearAllMocks()
+        jest.clearAllMocks()
     })
 
     describe('DialogContext Integration', () => {
         it('should register dialog context successfully', () => {
             const mockDialogContext = {
-                openDialog: vi.fn(),
-                closeDialog: vi.fn(),
+                openDialog: jest.fn(),
+                closeDialog: jest.fn(),
             }
 
             // This should not throw
@@ -132,8 +136,8 @@ describe('DeepTreeEchoUIBridge Integration', () => {
 
         it('should use dialog context for opening dialogs', async () => {
             const mockDialogContext = {
-                openDialog: vi.fn().mockReturnValue('dialog-123'),
-                closeDialog: vi.fn(),
+                openDialog: jest.fn().mockReturnValue('dialog-123'),
+                closeDialog: jest.fn(),
             }
 
             uiBridge.registerDialogContext(mockDialogContext)
@@ -150,8 +154,8 @@ describe('DeepTreeEchoUIBridge Integration', () => {
 
         it('should handle dialog context close operations', () => {
             const mockDialogContext = {
-                openDialog: vi.fn(),
-                closeDialog: vi.fn(),
+                openDialog: jest.fn(),
+                closeDialog: jest.fn(),
             }
 
             uiBridge.registerDialogContext(mockDialogContext)
@@ -210,7 +214,7 @@ describe('DeepTreeEchoUIBridge Integration', () => {
 
         it('should focus composer', () => {
             uiBridge.registerComposer(mockTextarea)
-            const focusSpy = vi.spyOn(mockTextarea, 'focus')
+            const focusSpy = jest.spyOn(mockTextarea, 'focus')
 
             uiBridge.focusComposer()
 
@@ -240,8 +244,8 @@ describe('DeepTreeEchoUIBridge Integration', () => {
     describe('Full Message Flow', () => {
         it('should support complete message lifecycle', async () => {
             const mockChatContext = {
-                selectChat: vi.fn().mockResolvedValue(true),
-                unselectChat: vi.fn(),
+                selectChat: jest.fn().mockResolvedValue(true),
+                unselectChat: jest.fn(),
                 chatId: 100,
             }
 
@@ -278,12 +282,12 @@ describe('DeepTreeEchoUIBridge Integration', () => {
         })
 
         it('should emit events throughout message flow', async () => {
-            const eventListener = vi.fn()
+            const eventListener = jest.fn()
             const unsubscribe = uiBridge.on(eventListener)
 
             const mockChatContext = {
-                selectChat: vi.fn().mockResolvedValue(true),
-                unselectChat: vi.fn(),
+                selectChat: jest.fn().mockResolvedValue(true),
+                unselectChat: jest.fn(),
             }
 
             uiBridge.registerChatContext(mockChatContext, 1)
@@ -327,8 +331,8 @@ describe('DeepTreeEchoUIBridge Integration', () => {
 
         it('should update state when chat is selected', async () => {
             const mockChatContext = {
-                selectChat: vi.fn().mockResolvedValue(true),
-                unselectChat: vi.fn(),
+                selectChat: jest.fn().mockResolvedValue(true),
+                unselectChat: jest.fn(),
                 chatId: 100,
             }
 
@@ -342,8 +346,8 @@ describe('DeepTreeEchoUIBridge Integration', () => {
 
         it('should clear selected chat on unselect', async () => {
             const mockChatContext = {
-                selectChat: vi.fn().mockResolvedValue(true),
-                unselectChat: vi.fn(),
+                selectChat: jest.fn().mockResolvedValue(true),
+                unselectChat: jest.fn(),
                 chatId: 100,
             }
 
@@ -409,7 +413,7 @@ describe('DeepTreeEchoUIBridge Integration', () => {
 
     describe('Event System', () => {
         it('should allow subscribing to events', () => {
-            const listener = vi.fn()
+            const listener = jest.fn()
             const unsubscribe = uiBridge.on(listener)
 
             expect(typeof unsubscribe).toBe('function')
@@ -418,15 +422,15 @@ describe('DeepTreeEchoUIBridge Integration', () => {
         })
 
         it('should notify multiple listeners', async () => {
-            const listener1 = vi.fn()
-            const listener2 = vi.fn()
+            const listener1 = jest.fn()
+            const listener2 = jest.fn()
 
             uiBridge.on(listener1)
             uiBridge.on(listener2)
 
             const mockChatContext = {
-                selectChat: vi.fn().mockResolvedValue(true),
-                unselectChat: vi.fn(),
+                selectChat: jest.fn().mockResolvedValue(true),
+                unselectChat: jest.fn(),
             }
 
             uiBridge.registerChatContext(mockChatContext, 1)
@@ -437,14 +441,14 @@ describe('DeepTreeEchoUIBridge Integration', () => {
         })
 
         it('should unsubscribe correctly', async () => {
-            const listener = vi.fn()
+            const listener = jest.fn()
             const unsubscribe = uiBridge.on(listener)
 
             unsubscribe()
 
             const mockChatContext = {
-                selectChat: vi.fn().mockResolvedValue(true),
-                unselectChat: vi.fn(),
+                selectChat: jest.fn().mockResolvedValue(true),
+                unselectChat: jest.fn(),
             }
 
             uiBridge.registerChatContext(mockChatContext, 1)
@@ -465,8 +469,8 @@ describe('DeepTreeEchoUIBridge Integration', () => {
     describe('Error Handling', () => {
         it('should handle chat selection failure gracefully', async () => {
             const mockChatContext = {
-                selectChat: vi.fn().mockRejectedValue(new Error('Selection failed')),
-                unselectChat: vi.fn(),
+                selectChat: jest.fn().mockRejectedValue(new Error('Selection failed')),
+                unselectChat: jest.fn(),
             }
 
             uiBridge.registerChatContext(mockChatContext, 1)
@@ -493,13 +497,13 @@ describe('DeepTreeEchoUIBridge Integration', () => {
 
         it('should handle multiple account contexts', async () => {
             const mockContext1 = {
-                selectChat: vi.fn().mockResolvedValue(true),
-                unselectChat: vi.fn(),
+                selectChat: jest.fn().mockResolvedValue(true),
+                unselectChat: jest.fn(),
             }
 
             const mockContext2 = {
-                selectChat: vi.fn().mockResolvedValue(true),
-                unselectChat: vi.fn(),
+                selectChat: jest.fn().mockResolvedValue(true),
+                unselectChat: jest.fn(),
             }
 
             // Register with account 1
@@ -517,7 +521,7 @@ describe('DeepTreeEchoUIBridge Integration', () => {
 
 describe('DialogAdapter Integration', () => {
     beforeEach(() => {
-        vi.resetModules()
+        jest.resetModules()
     })
 
     it('should export dialog adapter functions', async () => {
@@ -542,7 +546,7 @@ describe('DialogAdapter Integration', () => {
     it('should create dialog opener function', async () => {
         const { createDialogOpener } = await import('../DialogAdapter')
 
-        const mockOpenDialog = vi.fn().mockReturnValue('dialog-id')
+        const mockOpenDialog = jest.fn().mockReturnValue('dialog-id')
         const opener = createDialogOpener(mockOpenDialog)
 
         expect(typeof opener).toBe('function')
@@ -551,7 +555,7 @@ describe('DialogAdapter Integration', () => {
     it('should reject invalid dialog types', async () => {
         const { createDialogOpener } = await import('../DialogAdapter')
 
-        const mockOpenDialog = vi.fn()
+        const mockOpenDialog = jest.fn()
         const opener = createDialogOpener(mockOpenDialog)
 
         const result = opener('invalid-type', {})
@@ -561,7 +565,7 @@ describe('DialogAdapter Integration', () => {
     it('should handle confirmation dialog promise', async () => {
         const { showConfirmation } = await import('../DialogAdapter')
 
-        const mockOpenDialog = vi.fn((component: any, props: any) => {
+        const mockOpenDialog = jest.fn((component: any, props: any) => {
             // Immediately call the callback with confirmed=true
             setTimeout(() => {
                 if (props.cb) props.cb(true)
@@ -580,7 +584,7 @@ describe('DialogAdapter Integration', () => {
     it('should handle alert dialog promise', async () => {
         const { showAlert } = await import('../DialogAdapter')
 
-        const mockOpenDialog = vi.fn((component: any, props: any) => {
+        const mockOpenDialog = jest.fn((component: any, props: any) => {
             // Immediately call the callback
             setTimeout(() => {
                 if (props.cb) props.cb()
@@ -599,7 +603,7 @@ describe('ChatManager to UIBridge Integration', () => {
     let uiBridge: any
 
     beforeEach(async () => {
-        vi.resetModules()
+        jest.resetModules()
 
         const chatModule = await import('../DeepTreeEchoChatManager')
         const bridgeModule = await import('../DeepTreeEchoUIBridge')
@@ -622,8 +626,8 @@ describe('ChatManager to UIBridge Integration', () => {
 
     it('should open chat through connected bridge', async () => {
         const mockChatContext = {
-            selectChat: vi.fn().mockResolvedValue(true),
-            unselectChat: vi.fn(),
+            selectChat: jest.fn().mockResolvedValue(true),
+            unselectChat: jest.fn(),
         }
 
         // Set up the bridge
@@ -641,8 +645,8 @@ describe('ChatManager to UIBridge Integration', () => {
 
     it('should handle chat close through connected bridge', async () => {
         const mockChatContext = {
-            selectChat: vi.fn().mockResolvedValue(true),
-            unselectChat: vi.fn(),
+            selectChat: jest.fn().mockResolvedValue(true),
+            unselectChat: jest.fn(),
         }
 
         uiBridge.registerChatContext(mockChatContext, 1)

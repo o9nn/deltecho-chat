@@ -9,7 +9,7 @@
  * for deeper character and narrative integration.
  */
 
-import type { Message, Contact, Chat } from '../../types';
+import { Type as T } from '../../backend-com';
 import {
   AARFrontendIntegration,
   type AARStateSnapshot,
@@ -23,7 +23,7 @@ import {
 interface CognitiveState {
   sessionId: string;
   chatId: number;
-  contextWindow: Message[];
+  contextWindow: T.Message[];
   emotionalTone: EmotionalTone;
   topicGraph: TopicNode[];
   memoryAnchors: MemoryAnchor[];
@@ -170,7 +170,7 @@ export class ChatOrchestrator {
   /**
    * Initialize a new chat session
    */
-  async initSession(chatId: number, contact: Contact): Promise<string> {
+  async initSession(chatId: number, contact: T.Contact): Promise<string> {
     const sessionId = `session_${chatId}_${Date.now()}`;
 
     // Get current AAR state if available
@@ -212,7 +212,7 @@ export class ChatOrchestrator {
    */
   async processMessage(
     sessionId: string,
-    message: Message
+    message: T.Message
   ): Promise<OrchestrationResult> {
     const state = this.sessions.get(sessionId);
     if (!state) {
@@ -268,7 +268,7 @@ export class ChatOrchestrator {
   /**
    * Analyze emotional content of a message
    */
-  private async analyzeEmotion(message: Message): Promise<EmotionalTone> {
+  private async analyzeEmotion(message: T.Message): Promise<EmotionalTone> {
     const text = message.text || '';
 
     // Simple heuristic analysis (would be replaced with ML model)
@@ -302,7 +302,7 @@ export class ChatOrchestrator {
    * Extract topics from message
    */
   private async extractTopics(
-    message: Message,
+    message: T.Message,
     state: CognitiveState
   ): Promise<TopicNode[]> {
     const text = message.text || '';
@@ -339,7 +339,7 @@ export class ChatOrchestrator {
    * Detect intents in message
    */
   private async detectIntents(
-    message: Message,
+    message: T.Message,
     state: CognitiveState
   ): Promise<Intent[]> {
     const text = message.text || '';
@@ -390,7 +390,7 @@ export class ChatOrchestrator {
    * Retrieve relevant memory for context
    */
   private async retrieveRelevantMemory(
-    message: Message,
+    message: T.Message,
     state: CognitiveState
   ): Promise<MemoryAnchor[]> {
     // Simple relevance scoring based on keyword overlap
@@ -415,7 +415,7 @@ export class ChatOrchestrator {
    */
   private shouldGenerateResponse(
     state: CognitiveState,
-    message: Message
+    message: T.Message
   ): boolean {
     // Always respond to questions
     if (state.activeIntents.some(i => i.type === 'question' && !i.resolved)) {
@@ -445,7 +445,7 @@ export class ChatOrchestrator {
    */
   private async generateResponse(
     state: CognitiveState,
-    message: Message,
+    message: T.Message,
     relevantMemory: MemoryAnchor[]
   ): Promise<string> {
     // This would integrate with LLM service in production
@@ -518,7 +518,7 @@ export class ChatOrchestrator {
    */
   private generateSuggestedActions(
     state: CognitiveState,
-    message: Message
+    message: T.Message
   ): SuggestedAction[] {
     const actions: SuggestedAction[] = [];
 
@@ -616,7 +616,7 @@ export class ChatOrchestrator {
    */
   private async archiveToMemory(
     state: CognitiveState,
-    message: Message
+    message: T.Message
   ): Promise<void> {
     state.memoryAnchors.push({
       id: `memory_${Date.now()}`,
@@ -639,7 +639,7 @@ export class ChatOrchestrator {
    */
   private async loadContactMemory(
     sessionId: string,
-    contact: Contact
+    contact: T.Contact
   ): Promise<void> {
     // This would load from persistent storage in production
     console.log(`Loading memory for contact ${contact.id} in session ${sessionId}`);

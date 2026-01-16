@@ -6,7 +6,7 @@
  * and inject AAR context into chat sessions.
  */
 
-import type { Message, Contact, Chat } from '../../types';
+
 
 /**
  * AAR State snapshot from backend

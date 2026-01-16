@@ -40,6 +40,14 @@ interface MessageListState {
   loaded: boolean
 }
 
+export interface JumpToMessageParams {
+  msgId: number | undefined
+  highlight?: boolean
+  focus: boolean
+  addMessageIdToStack?: number
+  scrollIntoViewArg?: Parameters<HTMLElement['scrollIntoView']>[0]
+}
+
 const defaultState = () =>
   ({
     messageListItems: [],
@@ -297,8 +305,8 @@ class MessageListStore extends Store<MessageListState> {
         // Those are actual messages, but we don't render them
         this.log.warn(
           `setMessageState called for message ${messageId}, ` +
-            `state ${messageState}, but it's not loaded. ` +
-            "Ignoring, in hopes that we'll automatically load it later."
+          `state ${messageState}, but it's not loaded. ` +
+          "Ignoring, in hopes that we'll automatically load it later."
         )
         return
       }
@@ -356,7 +364,7 @@ class MessageListStore extends Store<MessageListState> {
         // FYI there is similar code in `MessageList.tsx`.
         if (
           window.__internal_jump_to_message_asap?.accountId ===
-            this.accountId &&
+          this.accountId &&
           window.__internal_jump_to_message_asap.chatId === this.chatId
         ) {
           const jumpArgs =
@@ -373,7 +381,7 @@ class MessageListStore extends Store<MessageListState> {
           // `this.state.oldestFetchedMessageListItemIndex`.
           //
           // The same applies to the other `this.__jumpToMessage()` below
-          return await this.__jumpToMessage(...jumpArgs)
+          return await this.__jumpToMessage(...(jumpArgs as any))
         }
 
         const firstUnreadMsgIdP = BackendRemote.rpc.getFirstUnreadMessageOfChat(
@@ -672,16 +680,16 @@ class MessageListStore extends Store<MessageListState> {
         last_item === undefined
           ? -1
           : messageListItems.findIndex(item => {
-              if (last_item.kind !== item.kind) {
-                return false
+            if (last_item.kind !== item.kind) {
+              return false
+            } else {
+              if (item.kind === 'message') {
+                return item.msg_id === (last_item as any).msg_id
               } else {
-                if (item.kind === 'message') {
-                  return item.msg_id === (last_item as any).msg_id
-                } else {
-                  return item.timestamp === (last_item as any).timestamp
-                }
+                return item.timestamp === (last_item as any).timestamp
               }
-            })
+            }
+          })
 
       // check if there is an intersection
       if (indexStart !== -1 && messageListItems[indexStart + 1]) {
@@ -818,13 +826,7 @@ class MessageListStore extends Store<MessageListState> {
     focus,
     addMessageIdToStack,
     scrollIntoViewArg,
-  }: {
-    msgId: number | undefined
-    highlight?: boolean
-    focus: boolean
-    addMessageIdToStack?: undefined | number
-    scrollIntoViewArg?: Parameters<HTMLElement['scrollIntoView']>[0]
-  }) {
+  }: JumpToMessageParams) {
     const startTime = performance.now()
 
     this.log.debug('jumpToMessage with messageId: ', jumpToMessageId)
@@ -902,10 +904,10 @@ class MessageListStore extends Store<MessageListState> {
     if (!isMessageInCurrentChat) {
       this.log.error(
         'Tried to show messages from a different chat.\n' +
-          `this.accountId === ${this.accountId}, ` +
-          `this.chatId === ${this.chatId}, ` +
-          `target IDs: ${accountId}, ${chatId}. ` +
-          `jumpToMessageId === ${jumpToMessageId}`
+        `this.accountId === ${this.accountId}, ` +
+        `this.chatId === ${this.chatId}, ` +
+        `target IDs: ${accountId}, ${chatId}. ` +
+        `jumpToMessageId === ${jumpToMessageId}`
       )
     }
 
@@ -914,9 +916,9 @@ class MessageListStore extends Store<MessageListState> {
       if (jumpToMessageId == undefined) {
         return messageListItems.length > 0
           ? // The last `messageListItems` item is guaranteed to be _not_
-            // a daymarker, so we can safely return it without checking
-            // `m.kind === 'message'`.
-            messageListItems.length - 1
+          // a daymarker, so we can safely return it without checking
+          // `m.kind === 'message'`.
+          messageListItems.length - 1
           : undefined
         // Maybe it would make sense to also set `jumpToMessageId` here.
       }
@@ -961,7 +963,7 @@ class MessageListStore extends Store<MessageListState> {
       if (jumpToMessageId != undefined) {
         this.log.error(
           `Tried to jumpToMessage ${jumpToMessageId}, but messageListItems ` +
-            `is empty. Anyways, proceeding.`
+          `is empty. Anyways, proceeding.`
         )
       }
 
@@ -977,9 +979,9 @@ class MessageListStore extends Store<MessageListState> {
         // and not all state has updated, but this is super rare.
         this.log.error(
           `messageListItems is not empty, but jumpToMessageIndex ` +
-            `is still undefined? Does msgId ${jumpToMessageId} ` +
-            `even belong to chat ${chatId}? Or did the message get deleted?\n` +
-            `Anyways, falling back to jumping to the last message.`
+          `is still undefined? Does msgId ${jumpToMessageId} ` +
+          `even belong to chat ${chatId}? Or did the message get deleted?\n` +
+          `Anyways, falling back to jumping to the last message.`
         )
         jumpToMessageIndex = messageListItems.length - 1
       }
@@ -1002,13 +1004,13 @@ class MessageListStore extends Store<MessageListState> {
       if (countMessagesOnNewerSide < half_page_size) {
         oldestFetchedMessageListItemIndex = Math.max(
           oldestFetchedMessageListItemIndex -
-            (half_page_size - countMessagesOnNewerSide),
+          (half_page_size - countMessagesOnNewerSide),
           0
         )
       } else if (countMessagesOnOlderSide < half_page_size) {
         newestFetchedMessageListItemIndex = Math.min(
           newestFetchedMessageListItemIndex +
-            (half_page_size - countMessagesOnOlderSide),
+          (half_page_size - countMessagesOnOlderSide),
           messageListItems.length - 1
         )
       }
@@ -1142,7 +1144,7 @@ async function loadMessages(
   if (view.length > 100) {
     log.error(
       `loadMessages is loading too many (${view.length}) messages. ` +
-        'This is bad for performance.'
+      'This is bad for performance.'
     )
   }
 

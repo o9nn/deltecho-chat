@@ -196,7 +196,9 @@ export class DeepTreeEchoTelegramBot {
         const commandContext: CommandContext = {
             reply: async (text, options) => {
                 await ctx.reply(text, {
-                    reply_to_message_id: options?.replyToMessageId,
+                    reply_parameters: options?.replyToMessageId
+                        ? { message_id: options.replyToMessageId }
+                        : undefined,
                     parse_mode: options?.parseMode,
                     link_preview_options: options?.disableLinkPreview
                         ? { is_disabled: true }
@@ -277,13 +279,13 @@ export class DeepTreeEchoTelegramBot {
             // Send response(s)
             for (const chunk of chunks) {
                 await ctx.reply(chunk, {
-                    reply_to_message_id: msg.message_id,
+                    reply_parameters: { message_id: msg.message_id },
                 });
             }
         } catch (error) {
             console.error('[Telegram Bot] Error processing message:', error);
             await ctx.reply('I encountered an error processing your message. Please try again.', {
-                reply_to_message_id: msg.message_id,
+                reply_parameters: { message_id: msg.message_id },
             });
         }
     }
@@ -312,12 +314,12 @@ export class DeepTreeEchoTelegramBot {
             // TODO: Process voice with speech recognition
             await ctx.reply(
                 '🎤 I received your voice message. Voice processing is coming soon!',
-                { reply_to_message_id: msg.message_id }
+                { reply_parameters: { message_id: msg.message_id } }
             );
         } catch (error) {
             console.error('[Telegram Bot] Error processing voice:', error);
             await ctx.reply('I couldn\'t process your voice message.', {
-                reply_to_message_id: msg.message_id,
+                reply_parameters: { message_id: msg.message_id },
             });
         }
     }
@@ -347,12 +349,12 @@ export class DeepTreeEchoTelegramBot {
             // TODO: Process image with vision
             await ctx.reply(
                 '📷 I received your image. Image analysis is coming soon!',
-                { reply_to_message_id: msg.message_id }
+                { reply_parameters: { message_id: msg.message_id } }
             );
         } catch (error) {
             console.error('[Telegram Bot] Error processing photo:', error);
             await ctx.reply('I couldn\'t process your image.', {
-                reply_to_message_id: msg.message_id,
+                reply_parameters: { message_id: msg.message_id },
             });
         }
     }

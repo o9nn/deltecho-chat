@@ -52,7 +52,7 @@ const onWindowFocus = (accountId: number) => {
       rect.top >= 0 &&
       rect.left >= 0 &&
       rect.bottom <=
-        (window.innerHeight || document.documentElement.clientHeight) &&
+      (window.innerHeight || document.documentElement.clientHeight) &&
       rect.right <= (window.innerWidth || document.documentElement.clientWidth)
     )
   })
@@ -230,7 +230,10 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
       window.__internal_jump_to_message_asap?.accountId === accountId &&
       window.__internal_jump_to_message_asap.chatId === chat.id
     ) {
-      jumpToMessage(...window.__internal_jump_to_message_asap.jumpToMessageArgs)
+      const jumpArgs = window.__internal_jump_to_message_asap.jumpToMessageArgs
+      if (jumpArgs && jumpArgs.length > 0) {
+        jumpToMessage(jumpArgs[0])
+      }
       window.__internal_jump_to_message_asap = undefined
     }
   }
@@ -364,8 +367,8 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
       // the smooth scroll finishes.
       log.debug(
         'New viewState received, but a previous programmatic smooth scroll ' +
-          "is pending. Let's finish the pending one immediately. " +
-          `Scrolling to ${pendingProgrammaticSmoothScrollTo.current}`
+        "is pending. Let's finish the pending one immediately. " +
+        `Scrolling to ${pendingProgrammaticSmoothScrollTo.current}`
       )
       messageListRef.current.scrollTop =
         pendingProgrammaticSmoothScrollTo.current
@@ -414,7 +417,7 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
       ) {
         log.warn(
           `scrollTo: scrollToMessage, found an element with ` +
-            `id=${scrollTo.msgId}, but it's not a message:`,
+          `id=${scrollTo.msgId}, but it's not a message:`,
           domElement
         )
       }
@@ -428,7 +431,7 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
         if (!focusEl) {
           log.error(
             'scrollTo: failed to focus element:' +
-              'no child element with class "roving-tabindex" found',
+            'no child element with class "roving-tabindex" found',
             domElement
           )
         } else {
@@ -472,9 +475,9 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
 
       log.debug(
         'scrollTo type: scrollToLastKnownPosition; lastKnownScrollHeight: ' +
-          scrollTo.lastKnownScrollHeight +
-          '; lastKnownScrollTop: ' +
-          scrollTo.lastKnownScrollTop
+        scrollTo.lastKnownScrollHeight +
+        '; lastKnownScrollTop: ' +
+        scrollTo.lastKnownScrollTop
       )
 
       if (scrollTo.appendedOn === 'top') {
@@ -541,7 +544,7 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
 
               console.warn(
                 'Smooth scroll: scrollend did not fire before timeout.\n' +
-                  'Did the user scroll, or did the smooth scroll take so long?'
+                'Did the user scroll, or did the smooth scroll take so long?'
               )
             },
             smoothScrollMaxDuration
@@ -657,8 +660,8 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
         // it works it's fine I guess.
         log.debug(
           `Message list resized, and distance to bottom was` +
-            ` ${scrollDistanceToBottomBeforeResize} before the resize.` +
-            ` Scrolling to bottom.`
+          ` ${scrollDistanceToBottomBeforeResize} before the resize.` +
+          ` Scrolling to bottom.`
         )
       }
 
@@ -919,7 +922,7 @@ export const MessageListInner = React.memo(
       prevProps.activeView === nextProps.activeView &&
       prevProps.messageCache === nextProps.messageCache &&
       prevProps.oldestFetchedMessageIndex ===
-        nextProps.oldestFetchedMessageIndex &&
+      nextProps.oldestFetchedMessageIndex &&
       prevProps.onScroll === nextProps.onScroll
     return areEqual
   }

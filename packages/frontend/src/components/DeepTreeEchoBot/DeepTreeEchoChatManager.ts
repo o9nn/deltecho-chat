@@ -34,7 +34,7 @@
  */
 
 import { getLogger } from '@deltachat-desktop/shared/logger'
-import { BackendRemote, Type as T } from '../../backend-com'
+import { BackendRemote, Type as T, C } from '../../backend-com'
 
 // Lazy logger to avoid initialization before logger handler is ready
 let _log: ReturnType<typeof getLogger> | null = null
@@ -193,7 +193,7 @@ export class DeepTreeEchoChatManager {
           summaries.push({
             id: chatId,
             name: chatInfo.name,
-            isGroup: chatInfo.chatType === 'Group' || chatInfo.chatType === 'Broadcast',
+            isGroup: chatInfo.chatType === C.DC_CHAT_TYPE_GROUP || chatInfo.chatType === C.DC_CHAT_TYPE_BROADCAST,
             isArchived: chatInfo.archived,
             isMuted: chatInfo.isMuted,
             unreadCount: 0, // Will be updated from chat list item
@@ -261,7 +261,7 @@ export class DeepTreeEchoChatManager {
           summaries.push({
             id: chatId,
             name: chatInfo.name,
-            isGroup: chatInfo.chatType === 'Group' || chatInfo.chatType === 'Broadcast',
+            isGroup: chatInfo.chatType === C.DC_CHAT_TYPE_GROUP || chatInfo.chatType === C.DC_CHAT_TYPE_BROADCAST,
             isArchived: chatInfo.archived,
             isMuted: chatInfo.isMuted,
             unreadCount: 0,

@@ -21,8 +21,8 @@ declare global {
     __enterEditMessageMode: ((messageToEdit: T.Message) => void) | null
     __reloadDraft: (() => void) | null
     __chatlistSetSearch:
-      | ((searchTerm: string, chatId: number | null) => void)
-      | undefined
+    | ((searchTerm: string, chatId: number | null) => void)
+    | undefined
     __refetchChatlist: undefined | (() => void)
     /**
      * Setting this will make the MessageList component `jumpToMessage`
@@ -42,9 +42,7 @@ declare global {
     __internal_jump_to_message_asap?: {
       accountId: number
       chatId: number
-      jumpToMessageArgs: Parameters<
-        ReturnType<typeof useMessageList>['store']['effect']['jumpToMessage']
-      >
+      jumpToMessageArgs: [import('./stores/messagelist').JumpToMessageParams]
     }
     /**
      * Makes the MessageList component check the value of

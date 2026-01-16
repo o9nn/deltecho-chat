@@ -639,22 +639,7 @@ export class DeepTreeEchoUIBridge {
   }
 }
 
-// Declare global window properties for message jumping
-declare global {
-  interface Window {
-    __internal_jump_to_message_asap?: {
-      accountId: number
-      chatId: number
-      jumpToMessageArgs: Array<{
-        msgId: number | undefined
-        highlight: boolean
-        focus: boolean
-        addMessageIdToStack: undefined
-      }>
-    }
-    __internal_check_jump_to_message?: () => void
-  }
-}
+
 
 // Export lazy singleton getter (avoids initialization before logger is ready)
 let _uiBridgeInstance: DeepTreeEchoUIBridge | null = null
