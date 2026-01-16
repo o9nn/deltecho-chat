@@ -3,7 +3,7 @@ import { C } from '@deltachat/jsonrpc-client'
 
 import SettingsIconButton from './SettingsIconButton'
 import { BackendRemote, onDCEvent } from '../../backend-com'
-import { selectedAccountId } from '../../ScreenController'
+import { maybeSelectedAccountId } from '../../ScreenController'
 import ConnectivityDialog from '../dialogs/ConnectivityDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/dialog/useDialog'
@@ -11,10 +11,11 @@ import useDialog from '../../hooks/dialog/useDialog'
 export default function ConnectivityButton() {
   const { openDialog } = useDialog()
   const [connectivityString, setConnectivityString] = useState('')
-  const accountId = selectedAccountId()
+  const accountId = maybeSelectedAccountId()
   const tx = useTranslationFunction()
 
   const updateConnectivity = useCallback(async () => {
+    if (accountId === undefined) return
     const connectivity = await BackendRemote.rpc.getConnectivity(accountId)
 
     let connectivityString = ''
@@ -35,9 +36,15 @@ export default function ConnectivityButton() {
   }, [accountId])
 
   useEffect(() => {
+    if (accountId === undefined) return
     updateConnectivity()
     return onDCEvent(accountId, 'ConnectivityChanged', updateConnectivity)
   }, [updateConnectivity, accountId])
+
+  // Don't render when no account is selected
+  if (accountId === undefined) {
+    return null
+  }
 
   return (
     <SettingsIconButton
@@ -48,3 +55,4 @@ export default function ConnectivityButton() {
     </SettingsIconButton>
   )
 }
+

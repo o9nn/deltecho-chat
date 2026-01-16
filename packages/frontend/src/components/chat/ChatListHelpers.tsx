@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useRef } from 'react'
 import { getLogger } from '../../../../shared/logger'
 import { debounce } from 'debounce'
 import { BackendRemote, onDCEvent } from '../../backend-com'
-import { selectedAccountId } from '../../ScreenController'
+import { maybeSelectedAccountId } from '../../ScreenController'
 
 const log = getLogger('renderer/helpers/ChatList')
 
@@ -32,8 +32,10 @@ export function useMessageResults(
   const debouncedSearchMessages = useMemo(
     () =>
       debounceWithInit((queryStr: string | undefined) => {
+        const accountId = maybeSelectedAccountId()
+        if (accountId === undefined) return
         BackendRemote.rpc
-          .searchMessages(selectedAccountId(), queryStr || '', chatId)
+          .searchMessages(accountId, queryStr || '', chatId)
           .then(ids => {
             if (chatId) {
               // in-chat search results need to be be ordered by newest first
@@ -99,10 +101,11 @@ export function useChatList(
   queryStr?: string,
   queryContactId?: number
 ) {
-  if (window.__selectedAccountId === undefined) {
-    throw new Error('no context selected')
-  }
   const accountId = window.__selectedAccountId
+  // Return empty chat list if no account is selected yet
+  if (accountId === undefined) {
+    return { chatListIds: [] }
+  }
   if (!queryStr) queryStr = ''
 
   const initialListFlags = useRef(listFlags)
@@ -181,12 +184,12 @@ export function useChatList(
   if (areQueryParamsInitial) {
     log.debug(
       "useChatList: query params are initial, we'll use " +
-        'the cached version of the chat list'
+      'the cached version of the chat list'
     )
   } else {
     log.debug(
       "useChatList: query params are non-initial, we'll use a " +
-        'freshly fetched chat list'
+      'freshly fetched chat list'
     )
   }
   return {

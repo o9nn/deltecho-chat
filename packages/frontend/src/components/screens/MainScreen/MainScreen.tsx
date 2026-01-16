@@ -31,7 +31,7 @@ import useOpenViewProfileDialog from '../../../hooks/dialog/useOpenViewProfileDi
 import useSelectLastChat from '../../../hooks/chat/useSelectLastChat'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { KeybindAction } from '../../../keybindings'
-import { selectedAccountId } from '../../../ScreenController'
+import { maybeSelectedAccountId } from '../../../ScreenController'
 import { openMapWebxdc } from '../../../system-integration/webxdc'
 import { ChatView } from '../../../contexts/ChatContext'
 import { ScreenContext } from '../../../contexts/ScreenContext'
@@ -169,9 +169,9 @@ export default function MainScreen({ accountId }: Props) {
   const updatethreeDotMenuHidden = useCallback(() => {
     setthreeDotMenuHidden(
       (alternativeView === 'global-gallery' || activeView === ChatView.Media) &&
-        !['images', 'video'].includes(
-          galleryRef.current?.state.currentTab || ''
-        )
+      !['images', 'video'].includes(
+        galleryRef.current?.state.currentTab || ''
+      )
     )
   }, [activeView, alternativeView])
   useEffect(() => {
@@ -183,9 +183,8 @@ export default function MainScreen({ accountId }: Props) {
 
   return (
     <div
-      className={`main-screen ${smallScreenMode ? 'small-screen' : ''} ${
-        !messageSectionShouldBeHidden ? 'chat-view-open' : ''
-      }`}
+      className={`main-screen ${smallScreenMode ? 'small-screen' : ''} ${!messageSectionShouldBeHidden ? 'chat-view-open' : ''
+        }`}
     >
       <section className={styles.chatListAndNavbar}>
         <nav className={styles.chatListNavbar} data-tauri-drag-region>
@@ -344,7 +343,7 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
   const { openDialog } = useDialog()
   const openViewGroupDialog = useOpenViewGroupDialog()
   const openViewProfileDialog = useOpenViewProfileDialog()
-  const accountId = selectedAccountId()
+  const accountId = maybeSelectedAccountId()
 
   const onTitleClick = () => {
     if (!chat) {
@@ -359,7 +358,7 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
     ) {
       openViewGroupDialog(chat)
     } else {
-      if (chat.contactIds && chat.contactIds[0]) {
+      if (chat.contactIds && chat.contactIds[0] && accountId !== undefined) {
         openViewProfileDialog(accountId, chat.contactIds[0])
       }
     }
@@ -449,7 +448,10 @@ function ChatNavButtons() {
           // Yes, this is not marked as `role='tab'`.
           // I'm not sure if this is alright.
           <Button
-            onClick={() => openMapWebxdc(selectedAccountId(), chatId)}
+            onClick={() => {
+              const accountId = maybeSelectedAccountId()
+              if (accountId !== undefined) openMapWebxdc(accountId, chatId)
+            }}
             aria-label={tx('tab_map')}
             className='navbar-button'
           >

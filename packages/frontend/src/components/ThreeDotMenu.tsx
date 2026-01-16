@@ -12,7 +12,7 @@ import useDialog from '../hooks/dialog/useDialog'
 import useTranslationFunction from '../hooks/useTranslationFunction'
 import DisappearingMessages from './dialogs/DisappearingMessages'
 import { ContextMenuContext } from '../contexts/ContextMenuContext'
-import { selectedAccountId } from '../ScreenController'
+import { maybeSelectedAccountId } from '../ScreenController'
 import { unmuteChat } from '../backend/chat'
 
 import type { T } from '@deltachat/jsonrpc-client'
@@ -25,7 +25,7 @@ export function useThreeDotMenu(
   const { openContextMenu } = useContext(ContextMenuContext)
   const [settingsStore] = useSettingsStore()
   const tx = useTranslationFunction()
-  const accountId = selectedAccountId()
+  const accountId = maybeSelectedAccountId()
   const { unselectChat } = useChat()
   const {
     openBlockFirstContactOfChatDialog,
@@ -34,6 +34,13 @@ export function useThreeDotMenu(
     openLeaveChatDialog,
     openClearChatDialog,
   } = useChatDialog()
+
+  // Return early if no account is selected
+  if (accountId === undefined) {
+    return (_event: React.MouseEvent<any, MouseEvent>) => {
+      // No-op when no account is selected
+    }
+  }
 
   let menu: (ContextMenuItem | false)[] = [false]
   if (selectedChat && selectedChat.id) {
@@ -83,115 +90,115 @@ export function useThreeDotMenu(
         },
       },
       canSend &&
-        selectedChat.chatType !== C.DC_CHAT_TYPE_MAILINGLIST && {
-          label: tx('ephemeral_messages'),
-          action: onDisappearingMessages,
-        },
+      selectedChat.chatType !== C.DC_CHAT_TYPE_MAILINGLIST && {
+        label: tx('ephemeral_messages'),
+        action: onDisappearingMessages,
+      },
       !(isSelfTalk || isDeviceChat) &&
-        settingsStore !== null &&
-        settingsStore.desktopSettings.enableChatAuditLog && {
-          label: tx('menu_chat_audit_log'),
-          action: onChatAudit,
-        },
+      settingsStore !== null &&
+      settingsStore.desktopSettings.enableChatAuditLog && {
+        label: tx('menu_chat_audit_log'),
+        action: onChatAudit,
+      },
       { type: 'separator' },
       !selectedChat.isMuted
         ? {
-            label: tx('menu_mute'),
-            subitems: [
-              {
-                label: tx('mute_for_one_hour'),
-                action: () => {
-                  BackendRemote.rpc.setChatMuteDuration(
-                    accountId,
-                    selectedChat.id,
-                    {
-                      kind: 'Until',
-                      duration: Timespans.ONE_HOUR_IN_SECONDS,
-                    }
-                  )
-                },
+          label: tx('menu_mute'),
+          subitems: [
+            {
+              label: tx('mute_for_one_hour'),
+              action: () => {
+                BackendRemote.rpc.setChatMuteDuration(
+                  accountId,
+                  selectedChat.id,
+                  {
+                    kind: 'Until',
+                    duration: Timespans.ONE_HOUR_IN_SECONDS,
+                  }
+                )
               },
-              {
-                label: tx('mute_for_eight_hours'),
-                action: () => {
-                  BackendRemote.rpc.setChatMuteDuration(
-                    accountId,
-                    selectedChat.id,
-                    {
-                      kind: 'Until',
-                      duration: Timespans.ONE_HOUR_IN_SECONDS * 8,
-                    }
-                  )
-                },
+            },
+            {
+              label: tx('mute_for_eight_hours'),
+              action: () => {
+                BackendRemote.rpc.setChatMuteDuration(
+                  accountId,
+                  selectedChat.id,
+                  {
+                    kind: 'Until',
+                    duration: Timespans.ONE_HOUR_IN_SECONDS * 8,
+                  }
+                )
               },
-              {
-                label: tx('mute_for_one_day'),
-                action: () => {
-                  BackendRemote.rpc.setChatMuteDuration(
-                    accountId,
-                    selectedChat.id,
-                    {
-                      kind: 'Until',
-                      duration: Timespans.ONE_DAY_IN_SECONDS,
-                    }
-                  )
-                },
+            },
+            {
+              label: tx('mute_for_one_day'),
+              action: () => {
+                BackendRemote.rpc.setChatMuteDuration(
+                  accountId,
+                  selectedChat.id,
+                  {
+                    kind: 'Until',
+                    duration: Timespans.ONE_DAY_IN_SECONDS,
+                  }
+                )
               },
-              {
-                label: tx('mute_for_seven_days'),
-                action: () => {
-                  BackendRemote.rpc.setChatMuteDuration(
-                    accountId,
-                    selectedChat.id,
-                    {
-                      kind: 'Until',
-                      duration: Timespans.ONE_WEEK_IN_SECONDS,
-                    }
-                  )
-                },
+            },
+            {
+              label: tx('mute_for_seven_days'),
+              action: () => {
+                BackendRemote.rpc.setChatMuteDuration(
+                  accountId,
+                  selectedChat.id,
+                  {
+                    kind: 'Until',
+                    duration: Timespans.ONE_WEEK_IN_SECONDS,
+                  }
+                )
               },
-              {
-                label: tx('mute_forever'),
-                action: () => {
-                  BackendRemote.rpc.setChatMuteDuration(
-                    accountId,
-                    selectedChat.id,
-                    { kind: 'Forever' }
-                  )
-                },
+            },
+            {
+              label: tx('mute_forever'),
+              action: () => {
+                BackendRemote.rpc.setChatMuteDuration(
+                  accountId,
+                  selectedChat.id,
+                  { kind: 'Forever' }
+                )
               },
-            ],
-          }
+            },
+          ],
+        }
         : {
-            label: tx('menu_unmute'),
-            action: onUnmuteChat,
-          },
+          label: tx('menu_unmute'),
+          action: onUnmuteChat,
+        },
       selectedChat.archived
         ? {
-            label: tx('menu_unarchive_chat'),
-            action: () => {
-              BackendRemote.rpc.setChatVisibility(accountId, chatId, 'Normal')
-              unselectChat()
-            },
-          }
-        : {
-            label: tx('menu_archive_chat'),
-            action: () => {
-              BackendRemote.rpc.setChatVisibility(accountId, chatId, 'Archived')
-              unselectChat()
-            },
+          label: tx('menu_unarchive_chat'),
+          action: () => {
+            BackendRemote.rpc.setChatVisibility(accountId, chatId, 'Normal')
+            unselectChat()
           },
+        }
+        : {
+          label: tx('menu_archive_chat'),
+          action: () => {
+            BackendRemote.rpc.setChatVisibility(accountId, chatId, 'Archived')
+            unselectChat()
+          },
+        },
       { type: 'separator' },
       !isGroup &&
-        !(isSelfTalk || isDeviceChat) && {
-          label: tx('menu_block_contact'),
-          action: onBlockContact,
-        },
+      !(isSelfTalk || isDeviceChat) && {
+        label: tx('menu_block_contact'),
+        action: onBlockContact,
+      },
       isGroup &&
-        selfInGroup && {
-          label: tx('menu_leave_group'),
-          action: onLeaveGroup,
-        },
+      selfInGroup && {
+        label: tx('menu_leave_group'),
+        action: onLeaveGroup,
+      },
       {
         label: tx('clear_chat'),
         action: onClearChat,

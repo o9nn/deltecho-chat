@@ -441,3 +441,11 @@ export function selectedAccountId(): number {
   }
   return selectedAccountId
 }
+
+/**
+ * Returns the selected account ID or undefined if none is selected.
+ * Use this in components that may render before account selection.
+ */
+export function maybeSelectedAccountId(): number | undefined {
+  return window.__selectedAccountId
+}
