@@ -143,6 +143,141 @@ Central hub for AI platform connectors:
 - **Infrastructure**: `ConnectorRegistry.ts`, `MemoryPersistenceLayer.ts`, `AtomSpaceTypes.ts`
 - **Connectors**: `ClaudeConnector.ts`, `ChatGPTConnector.ts`, `CharacterAIConnector.ts`, `CopilotConnector.ts`, `DeepTreeEchoConnector.ts`
 
+## Deep Tree Echo Autonomy
+
+Deep Tree Echo achieves **autonomous operation** through a standalone bot that runs independently of the desktop UI. This enables AI companions to operate 24/7, respond to messages, and execute tasks even when no human is actively using the application.
+
+### Architecture Overview
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    Autonomous Bot Runtime                        │
+├─────────────────────────────────────────────────────────────────┤
+│  ┌─────────────┐    ┌──────────────┐    ┌─────────────────┐    │
+│  │  DeltaChat  │───▶│  Conversation │───▶│  Claude API     │    │
+│  │  RPC Server │    │  Manager      │    │  (Anthropic)    │    │
+│  └─────────────┘    └──────────────┘    └─────────────────┘    │
+│         │                   │                    │               │
+│         ▼                   ▼                    ▼               │
+│  ┌─────────────┐    ┌──────────────┐    ┌─────────────────┐    │
+│  │  Email/SMTP │    │  Per-Chat    │    │  Tool Execution │    │
+│  │  Protocol   │    │  History     │    │  (Bash, etc.)   │    │
+│  └─────────────┘    └──────────────┘    └─────────────────┘    │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Key Capabilities
+
+| Capability | Description |
+|------------|-------------|
+| **Persistent Operation** | Runs as a daemon, responding to messages 24/7 |
+| **Email-Native** | Uses DeltaChat's encrypted email protocol |
+| **Tool Use** | Claude can execute bash commands to help with tasks |
+| **Per-Chat Memory** | Maintains separate conversation history per chat |
+| **Safety Limits** | Recursion depth limits prevent infinite tool loops |
+| **E2EE** | End-to-end encryption via Autocrypt |
+
+### Running the Autonomous Bot
+
+```bash
+# Required environment variables
+export ANTHROPIC_KEY="sk-ant-..."           # Claude API key (required)
+
+# Account configuration (choose one method):
+# Method 1: Email credentials
+export ADDR="bot@example.com"
+export MAIL_PW="your-password"
+
+# Method 2: Chatmail QR code
+export CHATMAIL_QR="dcaccount:..."
+
+# Start the bot
+pnpm start:bot                              # Or: npx ts-node bin/deltecho-bot.ts
+```
+
+### Reference Implementation
+
+Location: `bin/deltecho-bot.ts`
+
+```typescript
+// Core dependencies
+import Anthropic from '@anthropic-ai/sdk';
+import { startDeltaChat } from "@deltachat/stdio-rpc-server";
+import { C } from "@deltachat/jsonrpc-client";
+
+// Key components:
+// 1. Anthropic client for Claude API
+// 2. DeltaChat RPC for email messaging
+// 3. Conversation history map (per-chat persistence)
+// 4. Tool definitions (bash execution)
+// 5. Recursion limits (MAX_TOOL_RECURSION = 5)
+
+// Message flow:
+// IncomingMsg event → callClaude() → Tool execution (if needed) → Send response
+```
+
+### Tool Schema
+
+The autonomous bot exposes tools to Claude for task execution:
+
+```typescript
+tools: [{
+  name: 'bash',
+  description: 'Execute bash commands',
+  input_schema: {
+    type: 'object',
+    properties: { command: { type: 'string' } },
+    required: ['command']
+  }
+}]
+```
+
+### Safety Features
+
+| Feature | Implementation |
+|---------|----------------|
+| **Recursion Limit** | `MAX_TOOL_RECURSION = 5` prevents infinite loops |
+| **Timeout** | 30-second timeout on command execution |
+| **Buffer Limit** | 10MB max output buffer |
+| **Chat Type Filter** | Only responds to direct messages (1:1 chats) |
+| **Error Recovery** | Graceful error messages sent to user |
+
+### Extending the Bot
+
+To add new tools or capabilities:
+
+1. Add tool definition to the `tools` array in `callClaude()`
+2. Handle tool execution in the tool use loop
+3. Return results via `tool_result` message type
+
+Example adding a file read tool:
+
+```typescript
+tools: [
+  { name: 'bash', /* ... */ },
+  {
+    name: 'read_file',
+    description: 'Read contents of a file',
+    input_schema: {
+      type: 'object',
+      properties: { path: { type: 'string' } },
+      required: ['path']
+    }
+  }
+]
+```
+
+### Integration with Orchestrator
+
+The autonomous bot can be managed by the Deep Tree Echo Orchestrator:
+
+- **Startup**: Orchestrator launches bot as child process
+- **Health Checks**: Periodic ping via IPC
+- **Scheduling**: Proactive messages via scheduler
+- **Telemetry**: Metrics exported to monitoring
+
+See `packages/orchestrator/src/deltachat-interface/` for integration code.
+
 ## Code Conventions
 
 ### General
