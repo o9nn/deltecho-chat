@@ -35,7 +35,9 @@ let logJsonrpcConnection = false
 
 class BrowserTransport extends WebsocketTransport {
   constructor(private callCounterFunction: (label: string) => void) {
-    super('wss://localhost:3000/ws/dc')
+    // Use ws:// for HTTP and wss:// for HTTPS
+    const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
+    super(`${wsProtocol}//${window.location.host}/ws/dc`)
   }
 
   protected _onmessage(message: yerpc.Message): void {
@@ -82,7 +84,9 @@ class BrowserRuntime implements Runtime {
   socket: WebSocket
   private rc_config: RC_Config | null = null
   constructor() {
-    this.socket = new WebSocket('wss://localhost:3000/ws/backend')
+    // Use ws:// for HTTP and wss:// for HTTPS
+    const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
+    this.socket = new WebSocket(`${wsProtocol}//${window.location.host}/ws/backend`)
 
     this.socket.addEventListener('open', () => {
       /* ignore-console-log */
@@ -127,9 +131,9 @@ class BrowserRuntime implements Runtime {
 
   onWebxdcSendToChat:
     | ((
-        file: { file_name: string; file_content: string } | null,
-        text: string | null
-      ) => void)
+      file: { file_name: string; file_content: string } | null,
+      text: string | null
+    ) => void)
     | undefined
   onThemeUpdate: (() => void) | undefined //!!!TODO!!!
 
@@ -189,8 +193,15 @@ class BrowserRuntime implements Runtime {
   ): void {
     this.log.critical('Method not implemented.')
   }
-  notifyWebxdcMessageChanged(_accountId: number, _instanceId: number): void {
-    this.log.critical('Method not implemented.')
+  notifyWebxdcMessageChanged(accountId: number, instanceId: number): void {
+    // This method is called when webxdc status updates, but we don't need to do anything critical in browser runtime for now
+    this.log.debug(`notifyWebxdcMessageChanged called for account ${accountId}, instance ${instanceId}`)
+  }
+
+  getWebxdcIconURL(_accountId: number, _msgId: number): string {
+    // Return a placeholder or empty string instead of throwing/logging critical error
+    // The UI tries to fetch this URL, so returning "not-implemented" causes 404
+    return ''
   }
   notifyWebxdcInstanceDeleted(_accountId: number, _instanceId: number): void {
     this.log.critical('Method not implemented.')
@@ -509,10 +520,7 @@ class BrowserRuntime implements Runtime {
     }
     return config
   }
-  getWebxdcIconURL(_accountId: number, _msgId: number): string {
-    this.log.critical('getWebxdcIconURL Method not implemented.')
-    return 'not-implemented'
-  }
+
   openWebxdc(_msgId: number, _params: DcOpenWebxdcParameters): void {
     throw new Error('Method not implemented.')
   }
@@ -535,8 +543,8 @@ class BrowserRuntime implements Runtime {
       window
         .open(
           this.transformBlobURL(pathToSource) +
-            '?download_with_filename=' +
-            encodeURIComponent(filename),
+          '?download_with_filename=' +
+          encodeURIComponent(filename),
           '_blank'
         )
         ?.focus()
@@ -816,4 +824,4 @@ class BrowserRuntime implements Runtime {
   }
 }
 
-;(window as any).r = new BrowserRuntime()
+; (window as any).r = new BrowserRuntime()

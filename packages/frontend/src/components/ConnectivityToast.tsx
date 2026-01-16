@@ -6,7 +6,7 @@ import { getLogger } from '../../../shared/logger'
 import { KeybindAction } from '../keybindings'
 import { debounceWithInit } from './chat/ChatListHelpers'
 import { BackendRemote, onDCEvent } from '../backend-com'
-import { selectedAccountId } from '../ScreenController'
+import { maybeSelectedAccountId } from '../ScreenController'
 import ConnectivityDialog from './dialogs/ConnectivityDialog'
 import useDialog from '../hooks/dialog/useDialog'
 import useTranslationFunction from '../hooks/useTranslationFunction'
@@ -28,12 +28,17 @@ export default function ConnectivityToast() {
   ])
   const [tryConnectCooldown, setTryConnectCooldown] = useState(true)
 
-  const accountId = selectedAccountId()
+  const accountId = maybeSelectedAccountId()
 
   const maybeNetwork = useMemo(
     () => debounce(() => BackendRemote.rpc.maybeNetwork(), 140, true),
     []
   )
+
+  // Don't render when no account is selected
+  if (accountId === undefined) {
+    return null
+  }
 
   const onBrowserOffline = () => {
     log.debug("Browser knows we're offline")

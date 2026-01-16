@@ -41,6 +41,8 @@ export function getDefaultState(): DesktopSettingsType {
     deepTreeEchoBotMemories: '',
     deepTreeEchoBotReflections: '',
     deepTreeEchoBotCognitiveKeys: '',
+    deepTreeEchoBotUseParallelProcessing: true,
+    deepTreeEchoBotProactiveEnabled: true,
     galleryImageKeepAspectRatio: false,
     useSystemUIFont: false,
     contentProtectionEnabled: false,

@@ -135,7 +135,7 @@ const AINeighborhoodDashboard: React.FC = () => {
         'Temporal Awareness',
         'Self-Modification',
       ],
-      atomSpaceEndpoint: 'http://localhost:5000/atomspace', // Future OpenCog integration
+      // atomSpaceEndpoint: 'http://localhost:5000/atomspace', // Future OpenCog integration
     })
 
     deepTreeEcho.connect()

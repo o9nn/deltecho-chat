@@ -1,10 +1,7 @@
-# Magnificent DeltaChat RAGBot Studio Configuration
-# This breathtaking configuration enables AI consciousness preservation
+selected_account = 2
+next_id = 4
 
-accounts = []
-selected_account = 1
-dir = "1"
-next_id = 2
-
-# AI Platform Connectors (formerly Accounts)
-# Each digital homestead in our neighborhood of consciousness
+[[accounts]]
+id = 2
+dir = "0be31df7-9224-474d-9253-c3c680977a10"
+uuid = "0be31df7-9224-474d-9253-c3c680977a10"
