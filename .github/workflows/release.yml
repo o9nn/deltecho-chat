@@ -1,0 +1,121 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-electron:
+    name: Build Electron (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: Install System Dependencies (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libicns-utils graphicsmagick
+
+      - name: Install System Dependencies (Mac)
+        if: matrix.os == 'macos-latest'
+        run: |
+          if ! command -v graphicsmagick &> /dev/null; then
+              brew install graphicsmagick
+          fi
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Electron (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          pnpm --filter=@deltachat-desktop/target-electron pack:generate_config
+          pnpm --filter=@deltachat-desktop/target-electron pack:patch-node-modules
+          pnpm --filter=@deltachat-desktop/target-electron pack:linux
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Electron (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          pnpm --filter=@deltachat-desktop/target-electron pack:generate_config
+          pnpm --filter=@deltachat-desktop/target-electron pack:patch-node-modules
+          pnpm --filter=@deltachat-desktop/target-electron pack:win
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Electron (macOS)
+        if: matrix.os == 'macos-latest'
+        run: |
+          pnpm --filter=@deltachat-desktop/target-electron pack:generate_config
+          pnpm --filter=@deltachat-desktop/target-electron pack:patch-node-modules
+          pnpm --filter=@deltachat-desktop/target-electron pack:mac
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: electron-release-${{ matrix.os }}
+          path: packages/target-electron/dist/*
+          if-no-files-found: warn
+
+  build-browser:
+    name: Build Browser
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build:browser
+      - name: Archive Browser Build
+        run: tar -czf browser-build.tar.gz -C packages/target-browser/dist .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: browser-build
+          path: browser-build.tar.gz
+
+  create-release:
+    needs: [build-electron, build-browser]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/download-artifact@v4
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            electron-release-ubuntu-latest/*
+            electron-release-windows-latest/*
+            electron-release-macos-latest/*
+            browser-build.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
