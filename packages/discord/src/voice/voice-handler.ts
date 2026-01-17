@@ -142,7 +142,7 @@ export class DiscordVoiceHandler extends EventEmitter {
         const connection = joinVoiceChannel({
             channelId: channel.id,
             guildId: channel.guild.id,
-            adapterCreator: channel.guild.voiceAdapterCreator,
+            adapterCreator: channel.guild.voiceAdapterCreator as any,
             selfDeaf: false,
             selfMute: false,
         });
