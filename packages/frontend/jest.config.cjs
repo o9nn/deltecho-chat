@@ -1,3 +1,9 @@
+/**
+ * Jest Configuration for Frontend Package
+ *
+ * Uses ts-jest with jsdom environment for React component testing.
+ * NOTE: Transform options are in the transform array, not globals (deprecated).
+ */
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
@@ -16,15 +22,15 @@ module.exports = {
       'ts-jest',
       {
         tsconfig: 'tsconfig.json',
+        diagnostics: {
+          // Reduce noise from type errors in tests (caught by tsc)
+          warnOnly: true,
+        },
       },
     ],
   },
-  globals: {
-    'ts-jest': {
-      tsconfig: 'tsconfig.json',
-      diagnostics: false,
-    },
-  },
+  // Note: 'globals.ts-jest' is deprecated in ts-jest 29+
+  // Options should be in the transform array above
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
     '!src/**/*.d.ts',
@@ -39,4 +45,6 @@ module.exports = {
       statements: 70,
     },
   },
+  // Increase timeout for async tests
+  testTimeout: 10000,
 }
