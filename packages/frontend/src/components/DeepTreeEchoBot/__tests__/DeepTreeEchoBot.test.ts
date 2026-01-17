@@ -14,7 +14,18 @@ jest.mock('../../../backend-com', () => ({
   BackendRemote: {
     rpc: {
       miscSendTextMessage: jest.fn().mockResolvedValue(undefined),
+      getChatlistEntries: jest.fn().mockResolvedValue([]),
+      getChatlistItemsByEntries: jest.fn().mockResolvedValue([]),
+      getMessageIds: jest.fn().mockResolvedValue([]),
+      getMessage: jest.fn().mockResolvedValue(null),
+      getMessageListItems: jest.fn().mockResolvedValue([]),
+      getContact: jest.fn().mockResolvedValue(null),
+      createChatByContactId: jest.fn().mockResolvedValue(1),
+      createContact: jest.fn().mockResolvedValue(1),
+      lookupContactIdByAddr: jest.fn().mockResolvedValue(0),
     },
+    on: jest.fn().mockReturnValue(() => {}),
+    off: jest.fn(),
   },
 }))
 
