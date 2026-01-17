@@ -22,10 +22,16 @@ import { proactiveMessaging, ProactiveMessaging } from './ProactiveMessaging'
 import { interfaceShadowing } from './InterfaceShadowing'
 import { proactiveActionKernel } from './ProactiveActionKernel'
 import { internalJournalManager } from './InternalJournalManager'
+import { getCubismAvatarBridge, CubismAvatarBridge, disposeCubismAvatarBridge, initializeCubismAvatarBridge } from './CubismAvatarBridge'
+import { getVisionCapabilities, disposeVisionCapabilities } from './VisionCapabilities'
+import type { Live2DAvatarController } from '../AICompanionHub/Live2DAvatar'
 
 const log = getLogger(
   'render/components/DeepTreeEchoBot/DeepTreeEchoIntegration'
 )
+
+// Avatar bridge instance
+let avatarBridge: CubismAvatarBridge | null = null
 
 // Bot instance (singleton)
 let botInstance: DeepTreeEchoBot | null = null
@@ -400,9 +406,82 @@ export function cleanupBot(): void {
   uiBridge.cleanup()
   proactiveMessaging.cleanup()
 
+  // Cleanup avatar bridge
+  if (avatarBridge) {
+    disposeCubismAvatarBridge()
+    avatarBridge = null
+  }
+
+  // Cleanup vision capabilities
+  disposeVisionCapabilities()
+
   botInstance = null
   isInitialized = false
   log.info('Bot resources cleaned up')
+}
+
+// ============================================================
+// AVATAR INTEGRATION FUNCTIONS
+// ============================================================
+
+/**
+ * Register the avatar controller with Deep Tree Echo
+ * This should be called when the Live2D avatar component is ready
+ */
+export function registerAvatarController(controller: Live2DAvatarController): CubismAvatarBridge {
+  avatarBridge = initializeCubismAvatarBridge(controller)
+  log.info('Avatar controller registered with Deep Tree Echo')
+  return avatarBridge
+}
+
+/**
+ * Get the avatar bridge instance
+ */
+export function getAvatarBridge(): CubismAvatarBridge | null {
+  return avatarBridge
+}
+
+/**
+ * Notify the avatar of a chat event
+ */
+export function notifyAvatarChatEvent(event: 'user_typing' | 'message_sent' | 'message_received' | 'error', data?: any): void {
+  if (avatarBridge) {
+    avatarBridge.onChatEvent(event, data)
+  }
+}
+
+/**
+ * Have the avatar speak with lip-sync
+ */
+export function avatarSpeak(text: string, emotion?: string): void {
+  if (avatarBridge) {
+    const expr = emotion as any || 'neutral'
+    avatarBridge.speakWithLipSync(text, expr)
+  }
+}
+
+/**
+ * Play a VTuber gesture on the avatar
+ */
+export function playAvatarGesture(gesture: string): void {
+  if (avatarBridge) {
+    avatarBridge.playGesture(gesture as any)
+  }
+}
+
+/**
+ * Analyze an image and trigger avatar reaction
+ */
+export async function analyzeImageForAvatar(imageData: string | Blob): Promise<void> {
+  const vision = getVisionCapabilities()
+  const result = await vision.analyzeImage(imageData)
+
+  if (avatarBridge && result.suggestedExpression) {
+    avatarBridge.setExpression(result.suggestedExpression, 0.7)
+    if (result.suggestedGesture) {
+      avatarBridge.playGesture(result.suggestedGesture)
+    }
+  }
 }
 
 // ============================================================

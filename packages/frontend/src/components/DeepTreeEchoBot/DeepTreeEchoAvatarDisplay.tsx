@@ -16,6 +16,7 @@ import type {
 import { getOrchestrator } from './CognitiveBridge'
 import type { UnifiedCognitiveState } from './CognitiveBridge'
 import { useDeepTreeEchoAvatarOptional, AvatarProcessingState as BotProcessingState } from './DeepTreeEchoAvatarContext'
+import { registerAvatarController, getAvatarBridge } from './DeepTreeEchoIntegration'
 // Styles are in scss/components/_deep-tree-echo-avatar.scss
 
 export interface DeepTreeEchoAvatarDisplayProps {
@@ -175,6 +176,8 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
                 avatarController.current = controller
                 // Register controller with context if available
                 avatarContext?.setController(controller)
+                // Register with Deep Tree Echo integration for TTS, gestures, and vision
+                registerAvatarController(controller)
                 onReady?.()
             },
             [onReady, avatarContext]

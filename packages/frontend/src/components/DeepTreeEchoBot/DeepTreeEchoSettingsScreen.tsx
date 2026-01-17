@@ -3,6 +3,7 @@ import { getLogger } from '@deltachat-desktop/shared/logger'
 import BotSettings from './BotSettings'
 import ProactiveMessagingSettings from './ProactiveMessagingSettings'
 import TriggerManager from './TriggerManager'
+import AvatarSettings from './AvatarSettings'
 import { saveBotSettings, getBotInstance } from './DeepTreeEchoIntegration'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 
@@ -10,7 +11,7 @@ const log = getLogger(
   'render/components/DeepTreeEchoBot/DeepTreeEchoSettingsScreen'
 )
 
-type SettingsTab = 'general' | 'proactive' | 'triggers'
+type SettingsTab = 'general' | 'avatar' | 'proactive' | 'triggers'
 
 interface DeepTreeEchoSettingsScreenProps {
   onNavigateToMain?: () => void
@@ -199,21 +200,28 @@ const DeepTreeEchoSettingsScreen: React.FC<DeepTreeEchoSettingsScreenProps> = ({
 
       {/* Tab Navigation */}
       <div className='tabs'>
-        <button 
+        <button
           className={`tab ${activeTab === 'general' ? 'active' : ''}`}
           onClick={() => setActiveTab('general')}
         >
           <span className='tab-icon'>⚙️</span>
           General
         </button>
-        <button 
+        <button
+          className={`tab ${activeTab === 'avatar' ? 'active' : ''}`}
+          onClick={() => setActiveTab('avatar')}
+        >
+          <span className='tab-icon'>🎭</span>
+          Avatar
+        </button>
+        <button
           className={`tab ${activeTab === 'proactive' ? 'active' : ''}`}
           onClick={() => setActiveTab('proactive')}
         >
           <span className='tab-icon'>🤖</span>
           Proactive Messaging
         </button>
-        <button 
+        <button
           className={`tab ${activeTab === 'triggers' ? 'active' : ''}`}
           onClick={() => setActiveTab('triggers')}
         >
@@ -254,6 +262,10 @@ const DeepTreeEchoSettingsScreen: React.FC<DeepTreeEchoSettingsScreenProps> = ({
               </div>
             </div>
           </>
+        )}
+
+        {activeTab === 'avatar' && (
+          <AvatarSettings />
         )}
 
         {activeTab === 'proactive' && (
