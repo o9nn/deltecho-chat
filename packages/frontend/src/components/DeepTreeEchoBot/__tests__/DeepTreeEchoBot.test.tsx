@@ -140,4 +140,69 @@ describe('DeepTreeEchoBot Component', () => {
     const { SecureIntegration } = require('../SecureIntegration')
     expect(SecureIntegration).toHaveBeenCalled()
   })
+  it('processes commands correctly via testHooks', async () => {
+    let hooks: any = {};
+    await act(async () => {
+      render(<DeepTreeEchoBot testHooks={hooks} />)
+    })
+
+    expect(hooks.processCommand).toBeDefined();
+
+    // Test /help command
+    const helpResponse = await hooks.processCommand('help', '', 1);
+    expect(helpResponse).toContain('Deep Tree Echo Bot Commands');
+
+    // Test /identity command
+    const identityResponse = await hooks.processCommand('identity', '', 1);
+    expect(identityResponse).toContain('I am Deep Tree Echo');
+
+    // Test /memory command
+    const memoryResponse = await hooks.processCommand('memory', '', 1);
+    expect(memoryResponse).toContain("I don't have any relevant memories yet");
+  })
+
+  it('processes messages and triggers cognitive systems', async () => {
+    let hooks: any = {};
+    await act(async () => {
+      render(<DeepTreeEchoBot testHooks={hooks} />)
+    })
+
+    expect(hooks.processMessage).toBeDefined();
+
+    // Test processing a message
+    await act(async () => {
+      await hooks.processMessage(1, 100, "Hello, who are you?");
+    });
+
+    // Verify cognitive modules were called
+    const { HyperDimensionalMemory } = require('../HyperDimensionalMemory');
+    const mockMemory = HyperDimensionalMemory.mock.results[0].value;
+    expect(mockMemory.storeMemory).toHaveBeenCalled();
+
+    const { EmotionalIntelligence } = require('../EmotionalIntelligence');
+    const mockEmotional = EmotionalIntelligence.mock.results[0].value;
+    expect(mockEmotional.analyzeEmotion).toHaveBeenCalledWith("Hello, who are you?");
+  })
+
+  it('handles security checks during message processing', async () => {
+    let hooks: any = {};
+    await act(async () => {
+      render(<DeepTreeEchoBot testHooks={hooks} />)
+    })
+
+    // Mock SecureIntegration to deny processing
+    const { SecureIntegration } = require('../SecureIntegration');
+    const mockSecure = SecureIntegration.mock.results[0].value;
+    mockSecure.handleUserRequest.mockResolvedValueOnce({
+      canProcess: false,
+      requiresVerification: true
+    });
+
+    await act(async () => {
+      await hooks.processMessage(1, 100, "Secret message");
+    });
+
+    // Should verify that secureSystem.handleUserRequest was called
+    expect(mockSecure.handleUserRequest).toHaveBeenCalled();
+  })
 })

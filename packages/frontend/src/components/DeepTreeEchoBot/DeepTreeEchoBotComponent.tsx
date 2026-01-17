@@ -85,7 +85,22 @@ interface DeepTreeEchoBotCore {
  * modules into a cohesive AI personality that can interact with
  * DeltaChat messages.
  */
-const DeepTreeEchoBot: React.FC = () => {
+interface DeepTreeEchoBotProps {
+  testHooks?: {
+    processMessage?: (chatId: number, senderId: number, messageText: string) => Promise<void>;
+    processCommand?: (command: string, args: string, chatId: number) => Promise<string>;
+    loadBotState?: () => Promise<void>;
+  };
+}
+
+/**
+ * Deep Tree Echo Bot Component
+ *
+ * This is the main React component that integrates all the cognitive
+ * modules into a cohesive AI personality that can interact with
+ * DeltaChat messages.
+ */
+const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ testHooks }) => {
   // Cognitive module instances
   const hyperMemory = useRef<HyperDimensionalMemory>(
     new HyperDimensionalMemory()
@@ -156,6 +171,13 @@ const DeepTreeEchoBot: React.FC = () => {
    * Initialize the bot on first render
    */
   useEffect(() => {
+    // Expose methods for testing if testHooks is provided
+    if (testHooks) {
+      testHooks.processMessage = processMessage;
+      testHooks.processCommand = processCommand;
+      testHooks.loadBotState = loadBotState;
+    }
+
     // Load bot state from secure storage
     loadBotState()
 
@@ -407,7 +429,7 @@ const DeepTreeEchoBot: React.FC = () => {
     if (responseParams.empathyLevel > 0.6 && lastUserMessage) {
       response +=
         responseParams.suggestedPhrases[
-          Math.floor(Math.random() * responseParams.suggestedPhrases.length)
+        Math.floor(Math.random() * responseParams.suggestedPhrases.length)
         ] + '. '
     }
 
@@ -583,8 +605,8 @@ Security Status:
 Encryption level: ${securityInfo.encryptionState}
 Identity export allowed: ${securityInfo.canExportIdentity ? 'Yes' : 'No'}
 Data types stored: ${Object.entries(securityInfo.dataTypeStats)
-          .map(([type, count]) => `${type} (${count})`)
-          .join(', ')}
+            .map(([type, count]) => `${type} (${count})`)
+            .join(', ')}
 
 Your conversations with me are protected with end-to-end encryption, and my cognitive systems are secured with multiple layers of protection.
         `
@@ -717,11 +739,10 @@ Self-reflection complete:
 - Personality stability: ${(personalityAnalysis.stabilityScore * 100).toFixed(
         0
       )}%
-- Emotional patterns: ${
-        emotionalTrends.patterns.length > 0
+- Emotional patterns: ${emotionalTrends.patterns.length > 0
           ? emotionalTrends.patterns.join(', ')
           : 'None detected'
-      }
+        }
 - Belief coherence: ${(beliefCoherence.overallCoherence * 100).toFixed(0)}%
 - Contradictions: ${beliefCoherence.contradictions.length}
       `

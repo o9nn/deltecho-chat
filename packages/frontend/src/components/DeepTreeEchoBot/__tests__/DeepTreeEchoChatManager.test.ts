@@ -1,7 +1,7 @@
 import { DeepTreeEchoChatManager } from '../DeepTreeEchoChatManager';
-import { BackendRemote } from '../../backend-com';
+import { BackendRemote } from '../../../backend-com';
 
-jest.mock('../../backend-com', () => ({
+jest.mock('../../../backend-com', () => ({
     BackendRemote: {
         rpc: {
             getChatlistEntries: jest.fn(),
