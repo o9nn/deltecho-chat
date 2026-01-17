@@ -144,7 +144,32 @@ import {
   setAvatarResponding,
   setAvatarError,
   stopLipSync,
+  // Streaming lip-sync support (NEW)
+  startStreamingLipSync,
+  stopStreamingLipSync,
+  updateStreamingMouthShape,
+  onMouthShapeUpdate,
+  offMouthShapeUpdate,
+  getCurrentMouthShape,
+  isStreamingLipSyncActive,
+  createAvatarLipSyncReceiver,
 } from './AvatarStateManager'
+import type { MouthShape } from './AvatarStateManager'
+
+// Import streaming avatar service (NEW - enables progressive LLM response lip-sync)
+import {
+  StreamingAvatarService,
+  getStreamingAvatarService,
+  createStreamingAvatarService,
+} from './StreamingAvatarService'
+import type {
+  StreamingAvatarConfig,
+  StreamingAvatarEvent,
+  StreamingAvatarEventType,
+  StreamChunk,
+  ChatMessage as StreamingChatMessage,
+  StreamingLLMProvider,
+} from './StreamingAvatarService'
 
 // Import integration functions
 import {
@@ -390,4 +415,35 @@ export type {
   AgentTool,
   ToolResult,
   ToolCall,
+}
+
+// ============================================================
+// STREAMING AVATAR SERVICE (NEW - enables progressive LLM response lip-sync)
+// ============================================================
+
+export {
+  // Streaming Avatar Service
+  StreamingAvatarService,
+  getStreamingAvatarService,
+  createStreamingAvatarService,
+
+  // Streaming lip-sync state management
+  startStreamingLipSync,
+  stopStreamingLipSync,
+  updateStreamingMouthShape,
+  onMouthShapeUpdate,
+  offMouthShapeUpdate,
+  getCurrentMouthShape,
+  isStreamingLipSyncActive,
+  createAvatarLipSyncReceiver,
+}
+
+export type {
+  StreamingAvatarConfig,
+  StreamingAvatarEvent,
+  StreamingAvatarEventType,
+  StreamChunk,
+  StreamingChatMessage,
+  StreamingLLMProvider,
+  MouthShape,
 }

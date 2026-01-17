@@ -3,6 +3,10 @@
  *
  * This module provides functions to control the avatar state from the
  * DeepTreeEchoIntegration and other bot components.
+ *
+ * Enhanced with streaming lip-sync support for real-time LLM response
+ * visualization - allows the avatar to start speaking incrementally as
+ * tokens arrive from the LLM.
  */
 
 import { AvatarProcessingState } from './DeepTreeEchoAvatarContext'
@@ -10,13 +14,39 @@ import { getLogger } from '@deltachat-desktop/shared/logger'
 
 const log = getLogger('render/components/DeepTreeEchoBot/AvatarStateManager')
 
+/**
+ * Mouth shape interface for streaming lip-sync
+ */
+export interface MouthShape {
+    mouthOpen: number    // 0-1, vertical opening
+    mouthWide: number    // 0-1, horizontal width
+    lipRound: number     // 0-1, lip rounding (for O sounds)
+    timestamp: number
+}
+
+/**
+ * Streaming lip-sync state
+ */
+interface StreamingLipSyncState {
+    isActive: boolean
+    currentMouthShape: MouthShape
+    onMouthShapeUpdate?: (shape: MouthShape) => void
+}
+
 // Singleton reference to the avatar context setter functions
 // These will be set when the context is initialized
 let avatarStateSetter: {
     setProcessingState?: (state: AvatarProcessingState) => void
     setIsSpeaking?: (speaking: boolean) => void
     setAudioLevel?: (level: number) => void
+    setMouthShape?: (shape: MouthShape) => void
 } = {}
+
+// Streaming lip-sync state
+const streamingState: StreamingLipSyncState = {
+    isActive: false,
+    currentMouthShape: { mouthOpen: 0, mouthWide: 0, lipRound: 0, timestamp: 0 },
+}
 
 /**
  * Register avatar state control functions
@@ -25,12 +55,14 @@ let avatarStateSetter: {
 export function registerAvatarStateControl(
     setProcessingState: (state: AvatarProcessingState) => void,
     setIsSpeaking: (speaking: boolean) => void,
-    setAudioLevel: (level: number) => void
+    setAudioLevel: (level: number) => void,
+    setMouthShape?: (shape: MouthShape) => void
 ): void {
     avatarStateSetter = {
         setProcessingState,
         setIsSpeaking,
         setAudioLevel,
+        setMouthShape,
     }
     log.info('Avatar state control registered')
 }
@@ -143,4 +175,118 @@ export function stopLipSync(): void {
         lipSyncInterval = null
     }
     setAvatarAudioLevel(0)
+    stopStreamingLipSync()
+}
+
+// ============================================================
+// STREAMING LIP-SYNC SUPPORT
+// ============================================================
+
+/**
+ * Start streaming lip-sync mode
+ * Use this when processing streaming LLM responses
+ */
+export function startStreamingLipSync(): void {
+    streamingState.isActive = true
+    setAvatarProcessingState(AvatarProcessingState.RESPONDING)
+    setAvatarSpeaking(true)
+    log.info('Streaming lip-sync started')
+}
+
+/**
+ * Stop streaming lip-sync mode
+ */
+export function stopStreamingLipSync(): void {
+    streamingState.isActive = false
+    streamingState.currentMouthShape = { mouthOpen: 0, mouthWide: 0, lipRound: 0, timestamp: 0 }
+    if (avatarStateSetter.setMouthShape) {
+        avatarStateSetter.setMouthShape(streamingState.currentMouthShape)
+    }
+    log.info('Streaming lip-sync stopped')
+}
+
+/**
+ * Update mouth shape from streaming lip-sync controller
+ * This is called at high frequency (30fps) during streaming
+ */
+export function updateStreamingMouthShape(shape: MouthShape): void {
+    if (!streamingState.isActive) {
+        return
+    }
+
+    streamingState.currentMouthShape = shape
+
+    // Update via mouth shape setter if available
+    if (avatarStateSetter.setMouthShape) {
+        avatarStateSetter.setMouthShape(shape)
+    }
+
+    // Also update audio level for backward compatibility with existing avatar
+    // Convert mouth shape to a single audio level value
+    const audioLevel = Math.max(shape.mouthOpen, shape.mouthWide * 0.7, shape.lipRound * 0.5)
+    setAvatarAudioLevel(audioLevel)
+
+    // Call external listener if registered
+    if (streamingState.onMouthShapeUpdate) {
+        streamingState.onMouthShapeUpdate(shape)
+    }
+}
+
+/**
+ * Register a callback for mouth shape updates
+ * Useful for external components that need real-time lip-sync data
+ */
+export function onMouthShapeUpdate(callback: (shape: MouthShape) => void): void {
+    streamingState.onMouthShapeUpdate = callback
+}
+
+/**
+ * Unregister mouth shape update callback
+ */
+export function offMouthShapeUpdate(): void {
+    streamingState.onMouthShapeUpdate = undefined
+}
+
+/**
+ * Get current mouth shape
+ */
+export function getCurrentMouthShape(): MouthShape {
+    return { ...streamingState.currentMouthShape }
+}
+
+/**
+ * Check if streaming lip-sync is active
+ */
+export function isStreamingLipSyncActive(): boolean {
+    return streamingState.isActive
+}
+
+/**
+ * Create an AvatarLipSyncReceiver interface for the streaming handler
+ * This bridges the streaming handler to the avatar state manager
+ */
+export function createAvatarLipSyncReceiver(): {
+    updateLipSync: (mouthShape: MouthShape) => void
+    setSpeaking: (speaking: boolean) => void
+    setThinking: (thinking: boolean) => void
+    setExpression?: (expression: string, intensity?: number) => void
+} {
+    return {
+        updateLipSync: (mouthShape: MouthShape) => {
+            updateStreamingMouthShape(mouthShape)
+        },
+        setSpeaking: (speaking: boolean) => {
+            setAvatarSpeaking(speaking)
+            if (speaking) {
+                setAvatarProcessingState(AvatarProcessingState.RESPONDING)
+            }
+        },
+        setThinking: (thinking: boolean) => {
+            if (thinking) {
+                setAvatarThinking()
+            }
+        },
+        // Expression support can be added when avatar supports it
+        setExpression: undefined,
+    }
 }

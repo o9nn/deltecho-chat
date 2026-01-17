@@ -85,3 +85,30 @@ export {
     PipelineEventListener,
     LLMProcessor,
 } from './audio-pipeline';
+
+// Streaming Lip-Sync (for real-time LLM response visualization)
+export {
+    StreamingLipSyncController,
+    createStreamingLipSyncController,
+    StreamingLipSyncConfig,
+    DEFAULT_STREAMING_CONFIG,
+    StreamingLipSyncEventType,
+    StreamingLipSyncEvent,
+    StreamingTextChunk,
+    MouthShape,
+} from './streaming-lip-sync';
+
+// Streaming Response Handler (bridges LLM streaming to avatar)
+export {
+    StreamingResponseHandler,
+    createStreamingResponseHandler,
+    createAvatarStreamingHandler,
+    StreamingHandlerConfig,
+    DEFAULT_HANDLER_CONFIG,
+    StreamingHandlerEventType,
+    StreamingHandlerEvent,
+    LLMStreamChunk,
+    TTSProvider,
+    TTSSpeakOptions,
+    AvatarLipSyncReceiver,
+} from './streaming-response-handler';
