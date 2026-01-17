@@ -64,8 +64,8 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
-    "@deltachat/jsonrpc-client": "^1.161.1",
-    "@deltachat/stdio-rpc-server": "^1.161.1",
+    "@deltachat/jsonrpc-client": "^1.160.0",
+    "@deltachat/stdio-rpc-server": "^1.160.0",
     "events": "^3.3.0",
     "lucide-react": "^0.511.0"
   },
