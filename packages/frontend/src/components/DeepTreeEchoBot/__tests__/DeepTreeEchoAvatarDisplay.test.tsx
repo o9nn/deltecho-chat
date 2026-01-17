@@ -4,6 +4,7 @@
  * Tests for the avatar display component UI rendering and state display.
  */
 
+import '@testing-library/jest-dom'
 import React from 'react'
 import { render, screen, waitFor, act } from '@testing-library/react'
 import { DeepTreeEchoAvatarDisplay } from '../DeepTreeEchoAvatarDisplay'

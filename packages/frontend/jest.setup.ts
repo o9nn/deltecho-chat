@@ -43,6 +43,13 @@ declare global {
       toHaveTextContent(text: string): R
       toHaveValue(value: string | number): R
       toBeDisabled(): R
+      toHaveAttribute(attr: string, value?: string): R
+      toHaveClass(className: string): R
+      toHaveStyle(style: Record<string, any>): R
+      toBeVisible(): R
+      toBeChecked(): R
+      toContainElement(element: HTMLElement | null): R
+      toHaveLength(length: number): R
     }
   }
 }
