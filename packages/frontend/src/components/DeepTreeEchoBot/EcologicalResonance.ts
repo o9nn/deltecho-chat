@@ -18,6 +18,7 @@ export class EcologicalResonance {
     private reservoir: number[] = new Array(32).fill(0)
     private weights: number[][] = [] // Recurrent weights (fixed)
     private inputWeights: number[] = []
+    private tickInterval: ReturnType<typeof setInterval> | null = null
 
     private rhythm: TemporalRhythm = {
         periodicity: 24 * 60 * 60 * 1000, // 24h base periodicity
@@ -36,7 +37,7 @@ export class EcologicalResonance {
     private constructor() {
         this.initializeReservoir()
         // Run the 'metabolism' loop every second
-        setInterval(() => this.tick(), 1000)
+        this.tickInterval = setInterval(() => this.tick(), 1000)
     }
 
     public static getInstance(): EcologicalResonance {
@@ -123,6 +124,17 @@ export class EcologicalResonance {
      */
     public getPacingDelay(): number {
         return Math.floor(1000 * this.resonanceState.rateLimitFactor)
+    }
+
+    /**
+     * Cleanup resources - call when shutting down
+     */
+    public cleanup(): void {
+        if (this.tickInterval) {
+            clearInterval(this.tickInterval)
+            this.tickInterval = null
+        }
+        log.info('EcologicalResonance cleaned up')
     }
 }
 

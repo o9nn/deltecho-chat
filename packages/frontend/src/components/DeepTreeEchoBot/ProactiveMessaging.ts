@@ -192,6 +192,7 @@ export class ProactiveMessaging {
   // Intervals
   private triggerCheckInterval: NodeJS.Timeout | null = null
   private queueProcessInterval: NodeJS.Timeout | null = null
+  private rateLimitResetInterval: NodeJS.Timeout | null = null
 
   // LLM service reference
   private llmService: any = null
@@ -393,17 +394,22 @@ export class ProactiveMessaging {
    */
   private startProcessing(): void {
     // Check triggers every minute
+    // Note: async callbacks in setInterval must handle errors internally
     this.triggerCheckInterval = setInterval(() => {
-      this.checkTriggers()
+      this.checkTriggers().catch(err => {
+        log().error('Error in trigger check interval:', err)
+      })
     }, 60000)
 
     // Process queue every 5 seconds
     this.queueProcessInterval = setInterval(() => {
-      this.processQueue()
+      this.processQueue().catch(err => {
+        log().error('Error in queue process interval:', err)
+      })
     }, 5000)
 
-    // Reset rate limits
-    setInterval(() => {
+    // Reset rate limits - store reference for cleanup
+    this.rateLimitResetInterval = setInterval(() => {
       this.resetRateLimits()
     }, 60000)
 
@@ -864,9 +870,15 @@ export class ProactiveMessaging {
   public cleanup(): void {
     if (this.triggerCheckInterval) {
       clearInterval(this.triggerCheckInterval)
+      this.triggerCheckInterval = null
     }
     if (this.queueProcessInterval) {
       clearInterval(this.queueProcessInterval)
+      this.queueProcessInterval = null
+    }
+    if (this.rateLimitResetInterval) {
+      clearInterval(this.rateLimitResetInterval)
+      this.rateLimitResetInterval = null
     }
     this.triggers.clear()
     this.messageQueue = []
