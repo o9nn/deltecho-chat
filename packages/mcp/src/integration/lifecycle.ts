@@ -245,7 +245,7 @@ export class LifecycleCoordinator extends EventEmitter {
             cycleNumber: cycleId,
             phase: 'perception',
             stateChanges: {
-                agentDelta: { perceived: true },
+                agentDelta: {},
                 arenaDelta: {},
                 virtualAgentDelta: {},
                 virtualArenaDelta: {},
@@ -307,7 +307,7 @@ export class LifecycleCoordinator extends EventEmitter {
             stateChanges: {
                 agentDelta: {},
                 arenaDelta: {},
-                virtualAgentDelta: { updated: true },
+                virtualAgentDelta: {},
                 virtualArenaDelta: {},
             },
             coherenceAfter: relation.getCoherence(),
@@ -353,7 +353,7 @@ export class LifecycleCoordinator extends EventEmitter {
                 agentDelta: {},
                 arenaDelta: {},
                 virtualAgentDelta: {},
-                virtualArenaDelta: { mirrored: true },
+                virtualArenaDelta: {},
             },
             coherenceAfter: this.relationMCP.getRelation().getCoherence(),
             timestamp: Date.now(),
@@ -379,7 +379,7 @@ export class LifecycleCoordinator extends EventEmitter {
             phase: 'enaction',
             stateChanges: {
                 agentDelta: {},
-                arenaDelta: { enacted: true },
+                arenaDelta: {},
                 virtualAgentDelta: {},
                 virtualArenaDelta: {},
             },

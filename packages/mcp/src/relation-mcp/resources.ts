@@ -42,10 +42,10 @@ export const relationResources = {
             relation: RelationInterface,
             params: { limit?: number; direction?: string }
         ): CognitiveFlow[] => {
-            let flows = relation.getRecentFlows();
+            let flows = relation.getState().recentFlows;
 
             if (params.direction && params.direction !== 'all') {
-                flows = flows.filter(f => f.direction === params.direction);
+                flows = flows.filter((f: any) => f.direction === params.direction);
             }
 
             return flows.slice(0, params.limit || 50);

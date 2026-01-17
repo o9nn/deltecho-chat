@@ -175,7 +175,10 @@ export function createArenaTools(
                 title: input.title,
                 participants: input.participants,
                 parentFrameId: input.parentFrameId,
-                narrativeContext: input.narrativeContext || {
+                narrativeContext: (input.narrativeContext ? {
+                    ...input.narrativeContext,
+                    activePhases: input.narrativeContext.activePhases as any // Cast for now to satisfy keyof NarrativePhases
+                } : undefined) || {
                     activePhases: ['engagement'],
                     storyThreads: [],
                     thematicElements: [],
@@ -189,7 +192,11 @@ export function createArenaTools(
         forkFrame: (
             input: z.infer<typeof arenaToolSchemas.forkFrame>
         ): SessionFrame | null => {
-            return arena.forkFrame(input.sourceFrameId, input.title);
+            const result = arena.forkFrame(input.sourceFrameId, {
+                title: input.title,
+                reason: 'fork'
+            });
+            return result === undefined ? null : result;
         },
 
         /**
@@ -216,6 +223,7 @@ export function createArenaTools(
                 contributors: ['system'],
                 weight: input.weight || 0.5,
                 tags: input.tags || [],
+                connections: [],
             });
         },
 

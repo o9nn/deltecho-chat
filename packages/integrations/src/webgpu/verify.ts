@@ -33,8 +33,8 @@ async function verify() {
     const config: WebGPUConfig = {
         model: {
             id: 'test-model',
-            path: 'simulated://test',
-            type: 'gemma-2b'
+            url: 'simulated://test',
+            type: 'gemma2'
         },
         debug: true
     };

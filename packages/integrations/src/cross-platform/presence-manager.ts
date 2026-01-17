@@ -120,11 +120,20 @@ export class UnifiedPresenceManager extends EventEmitter {
     private platforms = new Map<Platform, PlatformPresence>();
     private adapters = new Map<Platform, PresenceAdapter>();
     private syncInterval: NodeJS.Timeout | null = null;
+    private lastUpdateMap = new Map<Platform, number>();
+    private pendingUpdates = new Map<Platform, NodeJS.Timeout>();
+    private minUpdateIntervalMs: number;
     private debug: boolean;
 
-    constructor(options: { debug?: boolean; syncIntervalMs?: number } = {}) {
+    constructor(options: {
+        debug?: boolean;
+        syncIntervalMs?: number;
+        minUpdateIntervalMs?: number;
+    } = {}) {
         super();
         this.debug = options.debug ?? false;
+        // Default to 12000ms (5 per minute) to be safe for Discord
+        this.minUpdateIntervalMs = options.minUpdateIntervalMs ?? 12000;
 
         // Start periodic sync if interval specified
         if (options.syncIntervalMs) {
@@ -171,18 +180,10 @@ export class UnifiedPresenceManager extends EventEmitter {
         this.platforms.set(update.platform, newState);
 
         // Update adapter if available
+        // Update adapter with rate limiting
         const adapter = this.adapters.get(update.platform);
         if (adapter) {
-            try {
-                if (update.status) {
-                    await adapter.setStatus(update.status);
-                }
-                if (update.activity) {
-                    await adapter.setActivity(update.activity, update.activityDescription);
-                }
-            } catch (error) {
-                this.log(`Failed to update adapter for ${update.platform}: ${error}`);
-            }
+            this.scheduleAdapterUpdate(update.platform);
         }
 
         // Emit event
@@ -392,6 +393,55 @@ export class UnifiedPresenceManager extends EventEmitter {
         }
     }
 
+    /**
+     * Schedule an adapter update respecting rate limits
+     */
+    private scheduleAdapterUpdate(platform: Platform): void {
+        const now = Date.now();
+        const lastUpdate = this.lastUpdateMap.get(platform) || 0;
+        const timeSinceLast = now - lastUpdate;
+
+        // If there is already a pending update, do nothing (the pending one will pick up the latest state)
+        if (this.pendingUpdates.has(platform)) {
+            return;
+        }
+
+        if (timeSinceLast >= this.minUpdateIntervalMs) {
+            // Safe to update immediately
+            this.executeAdapterUpdate(platform);
+        } else {
+            // Schedule for later
+            const delay = this.minUpdateIntervalMs - timeSinceLast;
+            this.log(`Rate limiting ${platform}, blocking for ${delay}ms`);
+
+            const timeout = setTimeout(() => {
+                this.pendingUpdates.delete(platform);
+                this.executeAdapterUpdate(platform);
+            }, delay);
+
+            this.pendingUpdates.set(platform, timeout);
+        }
+    }
+
+    /**
+     * Execute the actual adapter update
+     */
+    private async executeAdapterUpdate(platform: Platform): Promise<void> {
+        this.lastUpdateMap.set(platform, Date.now());
+        const adapter = this.adapters.get(platform);
+        const state = this.platforms.get(platform);
+
+        if (!adapter || !state) return;
+
+        try {
+            await adapter.setStatus(state.status);
+            await adapter.setActivity(state.activity, state.activityDescription);
+            this.log(`Pushed update to ${platform} adapter`);
+        } catch (error) {
+            this.log(`Failed to update adapter for ${platform}: ${error}`);
+        }
+    }
+
     private log(message: string): void {
         if (this.debug) {
             console.log(`[Presence Manager] ${message}`);
@@ -403,7 +453,7 @@ export class UnifiedPresenceManager extends EventEmitter {
  * Create unified presence manager
  */
 export function createPresenceManager(
-    options?: { debug?: boolean; syncIntervalMs?: number }
+    options?: { debug?: boolean; syncIntervalMs?: number; minUpdateIntervalMs?: number }
 ): UnifiedPresenceManager {
     return new UnifiedPresenceManager(options);
 }

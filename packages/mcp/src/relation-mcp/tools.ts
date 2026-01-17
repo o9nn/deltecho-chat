@@ -70,6 +70,16 @@ export const relationToolSchemas = {
     }),
 
     measureDivergence: z.object({}),
+
+    getRecentFlows: z.object({
+        limit: z.number().optional().default(10),
+    }),
+
+    createFlow: z.object({
+        type: z.enum(['agent-to-arena', 'arena-to-agent', 'bidirectional']),
+        content: z.any(),
+        intensity: z.number().optional().default(0.5),
+    }),
 };
 
 /**
@@ -93,7 +103,7 @@ export function createRelationTools(
             relation.synthesize(agent.getState(), arena.getState());
 
             const emergentIdentity = relation.getEmergentIdentity();
-            const flows = relation.getRecentFlows().slice(-10);
+            const flows = relation.getState().recentFlows.slice(-10);
 
             return {
                 coherence: relation.getCoherence(),
@@ -104,10 +114,19 @@ export function createRelationTools(
         },
 
         /**
+         * Get recent cognitive flows
+         */
+        getRecentFlows: (input: z.infer<typeof relationToolSchemas.getRecentFlows>): any[] => {
+            const flows = relation.getState().recentFlows;
+            return flows.slice(-(input.limit || 10));
+        },
+
+        /**
          * Reflect on interactions to generate insights
          */
         reflect: (input: z.infer<typeof relationToolSchemas.reflect>): string[] => {
-            const insights = relation.reflectOnInteractions(input.interactions);
+            relation.reflectOnInteractions(input.interactions);
+            const insights = relation.getSelfReflection().recentInsights || [];
 
             // Depth affects how many insights we generate/return
             const depthMultiplier = { shallow: 1, medium: 2, deep: 3 };
@@ -117,15 +136,27 @@ export function createRelationTools(
         },
 
         /**
+         * Create a new cognitive flow
+         */
+        createFlow: (input: z.infer<typeof relationToolSchemas.createFlow>): string => {
+            return relation.recordFlow({
+                direction: input.type as any,
+                contentType: 'reflection', // Default content type as it is generic
+                content: input.content,
+                intensity: input.intensity
+            }).id;
+        },
+
+        /**
          * Bridge content between Agent and Arena membranes
          */
         bridge: (input: z.infer<typeof relationToolSchemas.bridge>): CognitiveFlow => {
-            return relation.createFlow(
-                input.direction,
-                input.contentType,
-                input.content,
-                input.intensity
-            );
+            return relation.recordFlow({
+                direction: input.direction,
+                contentType: input.contentType,
+                content: input.content,
+                intensity: input.intensity
+            });
         },
 
         /**
@@ -222,11 +253,9 @@ export function createRelationTools(
         updateSelfNarrative: (
             input: z.infer<typeof relationToolSchemas.updateSelfNarrative>
         ): void => {
-            relation.updateSelfReflection({
-                selfNarrative: input.narrative,
-                perceivedRole: input.perceivedRole,
-                growthDirection: input.growthDirection,
-            });
+            if (input.narrative) relation.updateSelfNarrative(input.narrative);
+            if (input.perceivedRole) relation.updatePerceivedRole(input.perceivedRole);
+            if (input.growthDirection) relation.updateGrowthDirection(input.growthDirection);
         },
 
         /**
@@ -379,6 +408,16 @@ export function listRelationTools(): Array<{
             name: 'measureDivergence',
             description: 'Measure divergence between Actual and Virtual models',
             schema: relationToolSchemas.measureDivergence,
+        },
+        {
+            name: 'getRecentFlows',
+            description: 'Get recent cognitive flows',
+            schema: relationToolSchemas.getRecentFlows,
+        },
+        {
+            name: 'createFlow',
+            description: 'Create a new cognitive flow',
+            schema: relationToolSchemas.createFlow,
         },
     ];
 }

@@ -12,6 +12,7 @@ import {
     createAudioPlayer,
     createAudioResource,
     entersState,
+    EndBehaviorType,
     getVoiceConnection,
     joinVoiceChannel,
     NoSubscriberBehavior,
@@ -19,6 +20,8 @@ import {
     VoiceConnection,
     VoiceConnectionStatus,
 } from '@discordjs/voice';
+// @ts-ignore
+import prism from 'prism-media';
 import { VoiceBasedChannel } from 'discord.js';
 import { EventEmitter } from 'events';
 import { Readable, PassThrough } from 'stream';
@@ -383,16 +386,47 @@ export class DiscordVoiceHandler extends EventEmitter {
     /**
      * Set up audio receiver for listening to users
      */
+    /**
+     * Set up audio receiver for listening to users
+     */
     private setupReceiver(connection: VoiceConnection, guildId: string): void {
         const receiver = connection.receiver;
 
-        // Track speaking users
-        const activeUsers = new Map<string, Buffer[]>();
+        // Track speaking users and their audio streams
+        // Map<userId, { chunks: Buffer[], decoder?: any, subscription?: any }>
+        const activeStreams = new Map<string, { chunks: Buffer[], subscription: any }>();
 
         receiver.speaking.on('start', (userId) => {
             this.log(`User ${userId} started speaking in ${guildId}`);
 
-            activeUsers.set(userId, []);
+            // Subscribe to the audio stream
+            const subscription = receiver.subscribe(userId, {
+                end: {
+                    behavior: EndBehaviorType.AfterSilence,
+                    duration: 100,
+                },
+            });
+
+            const chunks: Buffer[] = [];
+
+            // Decode Opus to PCM (Signed 16-bit little-endian, stereo, 48kHz)
+            const decoder = new prism.opus.Decoder({
+                rate: 48000,
+                channels: 2,
+                frameSize: 960,
+            });
+
+            subscription.pipe(decoder);
+
+            decoder.on('data', (chunk: Buffer) => {
+                chunks.push(chunk);
+            });
+
+            decoder.on('error', (error: Error) => {
+                this.log(`Audio decode error for ${userId}: ${error.message}`);
+            });
+
+            activeStreams.set(userId, { chunks, subscription });
 
             this.emitEvent({
                 type: VoiceEventType.USER_SPEAKING,
@@ -404,41 +438,44 @@ export class DiscordVoiceHandler extends EventEmitter {
         receiver.speaking.on('end', async (userId) => {
             this.log(`User ${userId} stopped speaking in ${guildId}`);
 
-            this.emitEvent({
-                type: VoiceEventType.USER_STOPPED,
-                guildId,
-                userId,
-            });
+            const streamData = activeStreams.get(userId);
+            if (streamData) {
+                // Stop the subscription if not already declared ended
+                // (EndBehaviorType.AfterSilence might have already ended it, but good to be sure)
+                streamData.subscription.destroy();
+                activeStreams.delete(userId);
 
-            // Process collected audio if we have an audio processor
-            const audioChunks = activeUsers.get(userId);
-            activeUsers.delete(userId);
+                this.emitEvent({
+                    type: VoiceEventType.USER_STOPPED,
+                    guildId,
+                    userId,
+                });
 
-            if (audioChunks && audioChunks.length > 0 && this.audioProcessor) {
-                try {
-                    const fullBuffer = Buffer.concat(audioChunks);
-                    const transcription = await this.audioProcessor.processAudio(
-                        fullBuffer,
-                        userId
-                    );
+                // Process collected audio
+                if (streamData.chunks.length > 0 && this.audioProcessor) {
+                    try {
+                        const fullBuffer = Buffer.concat(streamData.chunks);
+                        this.log(`Processing ${fullBuffer.length} bytes of audio from ${userId}`);
 
-                    if (transcription) {
-                        this.emitEvent({
-                            type: VoiceEventType.TRANSCRIPTION,
-                            guildId,
-                            userId,
-                            data: transcription,
-                        });
+                        const transcription = await this.audioProcessor.processAudio(
+                            fullBuffer,
+                            userId
+                        );
+
+                        if (transcription) {
+                            this.emitEvent({
+                                type: VoiceEventType.TRANSCRIPTION,
+                                guildId,
+                                userId,
+                                data: transcription,
+                            });
+                        }
+                    } catch (error) {
+                        this.log(`Error processing audio from ${userId}: ${error}`);
                     }
-                } catch (error) {
-                    this.log(`Error processing audio from ${userId}: ${error}`);
                 }
             }
         });
-
-        // Subscribe to audio from all users
-        // Note: This requires additional setup with opus streams
-        // The discord.js voice system provides opus-encoded audio
     }
 
     /**

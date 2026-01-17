@@ -184,11 +184,12 @@ export function createAgentTools(
          * Add a transactional memory
          */
         addTransaction: (input: z.infer<typeof agentToolSchemas.addTransaction>): string => {
-            return agent.addTransaction({
+            return agent.recordTransaction({
                 type: input.type,
                 counterparty: input.counterparty,
                 content: input.content,
                 importance: input.importance || 0.5,
+                status: 'pending',
             });
         },
 

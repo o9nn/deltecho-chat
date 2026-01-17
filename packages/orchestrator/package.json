@@ -4,6 +4,17 @@
   "description": "System-level orchestrator daemon for Deep Tree Echo AI",
   "type": "module",
   "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./aar": {
+      "types": "./dist/aar/index.d.ts",
+      "default": "./dist/aar/index.js"
+    }
+  },
   "bin": {
     "deep-tree-echo-daemon": "./dist/bin/daemon.js"
   },
