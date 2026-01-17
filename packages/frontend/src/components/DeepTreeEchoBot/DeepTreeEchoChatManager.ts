@@ -166,6 +166,18 @@ export class DeepTreeEchoChatManager {
     log().info('UI Bridge connected to ChatManager')
   }
 
+  /**
+   * Reset singleton instance (for tests)
+   */
+  public static resetInstance(): void {
+    if (DeepTreeEchoChatManager.instance) {
+      DeepTreeEchoChatManager.instance.cleanup()
+      DeepTreeEchoChatManager.instance = null
+    }
+    _log = null
+    _chatManagerInstance = null
+  }
+
   // ============================================================
   // CHAT LISTING & DISCOVERY
   // ============================================================

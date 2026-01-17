@@ -1,69 +1,73 @@
 /**
  * Deep Tree Echo Bot - Main Export Module
  * 
- * This module exports all Deep Tree Echo components including:
- * - Core bot functionality
- * - Cognitive modules (memory, personality, belief propagation, etc.)
- * - Chat management (programmatic chat control)
- * - UI bridge (React integration)
- * - Proactive messaging (autonomous communication)
- * - Agentic capabilities (tool use following deltecho-bot-smol.js pattern)
- * - Settings and configuration
- * - UI components for proactive messaging
- * - Test utilities
+ * This module exports all Deep Tree Echo components.
  */
 
 // Core cognitive modules
-import { HyperDimensionalMemory } from './HyperDimensionalMemory'
-import { AdaptivePersonality } from './AdaptivePersonality'
-import { QuantumBeliefPropagation } from './QuantumBeliefPropagation'
-import { EmotionalIntelligence } from './EmotionalIntelligence'
-import { SecureIntegration } from './SecureIntegration'
+export { HyperDimensionalMemory } from './HyperDimensionalMemory'
+export { AdaptivePersonality } from './AdaptivePersonality'
+export { QuantumBeliefPropagation } from './QuantumBeliefPropagation'
+export { EmotionalIntelligence } from './EmotionalIntelligence'
+export { SecureIntegration } from './SecureIntegration'
 
-// Import main component and its types
-import { DeepTreeEchoBot, DeepTreeEchoBotOptions } from './DeepTreeEchoBot'
-import { DeepTreeEchoBot as DeepTreeEchoBotComponent } from './DeepTreeEchoBotComponent'
+// Core bot
+export { DeepTreeEchoBot } from './DeepTreeEchoBot'
+export type { DeepTreeEchoBotOptions } from './DeepTreeEchoBot'
+export { DeepTreeEchoBot as DeepTreeEchoBotComponent } from './DeepTreeEchoBotComponent'
 
-// Import utility modules
-import { LLMService, CognitiveFunctionType } from './LLMService'
-import { PersonaCore } from './PersonaCore'
-import { RAGMemoryStore } from './RAGMemoryStore'
-import { SelfReflection } from './SelfReflection'
-import { ChatOrchestrator } from './ChatOrchestrator'
+// Services
+export { LLMService } from './LLMService'
+export type { CognitiveFunctionType } from './LLMService'
+export { PersonaCore } from './PersonaCore'
+export { RAGMemoryStore } from './RAGMemoryStore'
+export { SelfReflection } from './SelfReflection'
+export { ChatOrchestrator } from './ChatOrchestrator'
 
-// Import agentic modules (NEW - following deltecho-bot-smol.js pattern)
-import {
+// Agentic modules
+export {
   AgenticLLMService,
   getAgenticLLMService,
+} from './AgenticLLMService'
+export type {
   AgenticResponse,
   LLMProviderConfig,
 } from './AgenticLLMService'
-import {
+
+export {
   AgentToolExecutor,
   getAgentToolExecutor,
+} from './AgentToolExecutor'
+export type {
   AgentTool,
   ToolResult,
   ToolCall,
 } from './AgentToolExecutor'
 
-// Import chat management modules (NEW)
-import {
+// Chat management
+export {
   DeepTreeEchoChatManager,
   chatManager,
+  getChatManager,
+} from './DeepTreeEchoChatManager'
+export type {
   ChatSummary,
   ActiveChatState,
-  ScheduledMessage,
+  ScheduledMessage as ChatScheduledMessage,
   ChatWatchCallback,
   ContactSummary,
   MessageSummary,
 } from './DeepTreeEchoChatManager'
 
-// Import UI bridge (NEW)
-import {
+// UI bridge
+export {
   DeepTreeEchoUIBridge,
   uiBridge,
+  getUIBridge,
+} from './DeepTreeEchoUIBridge'
+export type {
   UIView,
-  DialogType,
+  DialogType as UIDialogType,
   UIState,
   ChatContextInterface,
   DialogContextInterface,
@@ -71,32 +75,35 @@ import {
   UIBridgeEventListener,
 } from './DeepTreeEchoUIBridge'
 
-// Import dialog adapter (NEW)
-import {
+// Dialog adapter
+export {
   openDialogByType,
   createDialogOpener,
   showConfirmation,
   showAlert,
   isValidDialogType,
 } from './DialogAdapter'
-import type {
+export type {
   ConfirmDialogProps,
   AlertDialogProps,
 } from './DialogAdapter'
 
-// Import proactive messaging (NEW)
-import {
+// Proactive messaging
+export {
   ProactiveMessaging,
   proactiveMessaging,
+  getProactiveMessaging,
+} from './ProactiveMessaging'
+export type {
   TriggerType,
   EventType,
   ProactiveTrigger,
-  QueuedMessage,
+  QueuedMessage as ProactiveQueuedMessage,
   ProactiveConfig,
 } from './ProactiveMessaging'
 
-// Import unified cognitive bridge (@deltecho/cognitive integration)
-import {
+// Unified cognitive bridge
+export {
   initCognitiveOrchestrator,
   getOrchestrator,
   cleanupOrchestrator,
@@ -106,84 +113,23 @@ import {
   onCognitiveEvent,
   clearHistory,
 } from './CognitiveBridge'
-import type {
+export type {
   DeepTreeEchoBotConfig as UnifiedBotConfig,
   UnifiedMessage,
   UnifiedCognitiveState,
   CognitiveEvent,
 } from './CognitiveBridge'
 
-// Import UI components
-import BotSettings from './BotSettings'
-import DeepTreeEchoSettingsScreen from './DeepTreeEchoSettingsScreen'
-import ProactiveMessagingSettings from './ProactiveMessagingSettings'
-import TriggerManager from './TriggerManager'
-import ProactiveStatusIndicator from './ProactiveStatusIndicator'
-
-// Import avatar state components (cherry-picked from upstream)
-import { DeepTreeEchoAvatarDisplay } from './DeepTreeEchoAvatarDisplay'
-import {
-  DeepTreeEchoAvatarProvider,
-  useDeepTreeEchoAvatar,
-  useDeepTreeEchoAvatarOptional,
-  AvatarProcessingState,
-} from './DeepTreeEchoAvatarContext'
-import type {
-  AvatarConfig,
-  AvatarState,
-  AvatarContextValue,
-} from './DeepTreeEchoAvatarContext'
-import {
-  registerAvatarStateControl,
-  setAvatarProcessingState,
-  setAvatarSpeaking,
-  setAvatarAudioLevel,
-  setAvatarIdle,
-  setAvatarListening,
-  setAvatarThinking,
-  setAvatarResponding,
-  setAvatarError,
-  stopLipSync,
-  // Streaming lip-sync support (NEW)
-  startStreamingLipSync,
-  stopStreamingLipSync,
-  updateStreamingMouthShape,
-  onMouthShapeUpdate,
-  offMouthShapeUpdate,
-  getCurrentMouthShape,
-  isStreamingLipSyncActive,
-  createAvatarLipSyncReceiver,
-} from './AvatarStateManager'
-import type { MouthShape } from './AvatarStateManager'
-
-// Import streaming avatar service (NEW - enables progressive LLM response lip-sync)
-import {
-  StreamingAvatarService,
-  getStreamingAvatarService,
-  createStreamingAvatarService,
-} from './StreamingAvatarService'
-import type {
-  StreamingAvatarConfig,
-  StreamingAvatarEvent,
-  StreamingAvatarEventType,
-  StreamChunk,
-  ChatMessage as StreamingChatMessage,
-  StreamingLLMProvider,
-} from './StreamingAvatarService'
-
-// Import integration functions
-import {
+// Integration functions
+export {
   initDeepTreeEchoBot,
   saveBotSettings,
   getBotInstance,
   cleanupBot,
-  // New exports for proactive features
+  resetBotInstance,
   registerChatContext,
   registerDialogContext,
   registerComposer,
-  getChatManager,
-  getUIBridge,
-  getProactiveMessaging,
   sendProactiveMessage,
   scheduleMessage,
   openChat,
@@ -193,38 +139,28 @@ import {
   getUnreadChats,
 } from './DeepTreeEchoIntegration'
 
-// Import test utilities
-import {
-  DeepTreeEchoTestUtil,
-  createTestGroup,
-  sendTestMessage,
-  processMessageWithBot,
-  runDemo,
-  cleanup as cleanupTestUtil,
-} from './DeepTreeEchoTestUtil'
+// UI components
+export { default as BotSettings } from './BotSettings'
+export { default as DeepTreeEchoSettingsScreen } from './DeepTreeEchoSettingsScreen'
+export { default as ProactiveMessagingSettings } from './ProactiveMessagingSettings'
+export { default as TriggerManager } from './TriggerManager'
+export { default as ProactiveStatusIndicator } from './ProactiveStatusIndicator'
 
-// ============================================================
-// MAIN EXPORTS
-// ============================================================
-
+// Avatar Components
+export { DeepTreeEchoAvatarDisplay } from './DeepTreeEchoAvatarDisplay'
 export {
-  // Core bot
-  DeepTreeEchoBot,
-  DeepTreeEchoBotComponent,
-
-  // UI Components
-  BotSettings,
-  DeepTreeEchoSettingsScreen,
-  ProactiveMessagingSettings,
-  TriggerManager,
-  ProactiveStatusIndicator,
-
-  // Avatar Components (cherry-picked from upstream)
-  DeepTreeEchoAvatarDisplay,
   DeepTreeEchoAvatarProvider,
   useDeepTreeEchoAvatar,
   useDeepTreeEchoAvatarOptional,
   AvatarProcessingState,
+} from './DeepTreeEchoAvatarContext'
+export type {
+  AvatarConfig,
+  AvatarState,
+  AvatarContextValue,
+} from './DeepTreeEchoAvatarContext'
+
+export {
   registerAvatarStateControl,
   setAvatarProcessingState,
   setAvatarSpeaking,
@@ -235,199 +171,6 @@ export {
   setAvatarResponding,
   setAvatarError,
   stopLipSync,
-
-  // Services
-  LLMService,
-  PersonaCore,
-  RAGMemoryStore,
-  SelfReflection,
-  CognitiveFunctionType,
-
-  // Integration functions
-  initDeepTreeEchoBot,
-  saveBotSettings,
-  getBotInstance,
-  cleanupBot,
-
-  // Context registration (for React components)
-  registerChatContext,
-  registerDialogContext,
-  registerComposer,
-
-  // Test utilities
-  DeepTreeEchoTestUtil,
-  createTestGroup,
-  sendTestMessage,
-  processMessageWithBot,
-  runDemo,
-  cleanupTestUtil,
-}
-
-export type { DeepTreeEchoBotOptions }
-
-// Avatar types (cherry-picked from upstream)
-export type { AvatarConfig, AvatarState, AvatarContextValue }
-
-// Export the main component as default
-export default DeepTreeEchoBot
-
-// ============================================================
-// COGNITIVE MODULES
-// ============================================================
-
-export {
-  HyperDimensionalMemory,
-  AdaptivePersonality,
-  QuantumBeliefPropagation,
-  EmotionalIntelligence,
-  SecureIntegration,
-  ChatOrchestrator,
-}
-
-// ============================================================
-// CHAT MANAGEMENT (NEW)
-// ============================================================
-
-export {
-  // Chat Manager class and singleton
-  DeepTreeEchoChatManager,
-  chatManager,
-  getChatManager,
-
-  // Convenience functions
-  openChat,
-  createChat,
-  listChats,
-  getUnreadChats,
-  initiateConversation,
-}
-
-export type {
-  ChatSummary,
-  ActiveChatState,
-  ScheduledMessage as ChatScheduledMessage,
-  ChatWatchCallback,
-  ContactSummary,
-  MessageSummary,
-}
-
-// ============================================================
-// UI BRIDGE (NEW)
-// ============================================================
-
-export {
-  // UI Bridge class and singleton
-  DeepTreeEchoUIBridge,
-  uiBridge,
-  getUIBridge,
-}
-
-export type {
-  UIView,
-  DialogType,
-  UIState,
-  ChatContextInterface,
-  DialogContextInterface,
-  UIBridgeEvent,
-  UIBridgeEventListener,
-}
-
-// ============================================================
-// DIALOG ADAPTER (NEW)
-// ============================================================
-
-export {
-  // Dialog helper functions
-  openDialogByType,
-  createDialogOpener,
-  showConfirmation,
-  showAlert,
-  isValidDialogType,
-}
-
-export type {
-  ConfirmDialogProps,
-  AlertDialogProps,
-}
-
-// ============================================================
-// PROACTIVE MESSAGING (NEW)
-// ============================================================
-
-export {
-  // Proactive Messaging class and singleton
-  ProactiveMessaging,
-  proactiveMessaging,
-  getProactiveMessaging,
-
-  // Convenience functions
-  sendProactiveMessage,
-  scheduleMessage,
-}
-
-export type {
-  TriggerType,
-  EventType,
-  ProactiveTrigger,
-  QueuedMessage as ProactiveQueuedMessage,
-  ProactiveConfig,
-}
-
-// ============================================================
-// UNIFIED COGNITIVE FRAMEWORK
-// ============================================================
-
-export {
-  initCognitiveOrchestrator,
-  getOrchestrator,
-  cleanupOrchestrator,
-  processMessageUnified,
-  getCognitiveState,
-  configureLLM,
-  onCognitiveEvent,
-  clearHistory,
-}
-
-export type {
-  UnifiedBotConfig,
-  UnifiedMessage,
-  UnifiedCognitiveState,
-  CognitiveEvent,
-}
-
-// ============================================================
-// AGENTIC AUTONOMY (NEW - following deltecho-bot-smol.js pattern)
-// ============================================================
-
-export {
-  // Agentic LLM Service
-  AgenticLLMService,
-  getAgenticLLMService,
-
-  // Tool Executor
-  AgentToolExecutor,
-  getAgentToolExecutor,
-}
-
-export type {
-  AgenticResponse,
-  LLMProviderConfig,
-  AgentTool,
-  ToolResult,
-  ToolCall,
-}
-
-// ============================================================
-// STREAMING AVATAR SERVICE (NEW - enables progressive LLM response lip-sync)
-// ============================================================
-
-export {
-  // Streaming Avatar Service
-  StreamingAvatarService,
-  getStreamingAvatarService,
-  createStreamingAvatarService,
-
-  // Streaming lip-sync state management
   startStreamingLipSync,
   stopStreamingLipSync,
   updateStreamingMouthShape,
@@ -436,14 +179,34 @@ export {
   getCurrentMouthShape,
   isStreamingLipSyncActive,
   createAvatarLipSyncReceiver,
-}
+} from './AvatarStateManager'
+export type { MouthShape } from './AvatarStateManager'
 
+// Streaming Avatar Service
+export {
+  StreamingAvatarService,
+  getStreamingAvatarService,
+  createStreamingAvatarService,
+} from './StreamingAvatarService'
 export type {
   StreamingAvatarConfig,
   StreamingAvatarEvent,
   StreamingAvatarEventType,
   StreamChunk,
-  StreamingChatMessage,
+  ChatMessage as StreamingChatMessage,
   StreamingLLMProvider,
-  MouthShape,
-}
+} from './StreamingAvatarService'
+
+// Test utilities
+export {
+  DeepTreeEchoTestUtil,
+  createTestGroup,
+  sendTestMessage,
+  processMessageWithBot,
+  runDemo,
+  cleanup as cleanupTestUtil,
+} from './DeepTreeEchoTestUtil'
+
+// Default export
+import { DeepTreeEchoBot } from './DeepTreeEchoBot'
+export default DeepTreeEchoBot

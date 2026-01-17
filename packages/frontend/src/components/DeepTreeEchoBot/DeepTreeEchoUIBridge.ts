@@ -204,6 +204,18 @@ export class DeepTreeEchoUIBridge {
     this.currentState.activeAccountId = accountId
   }
 
+  /**
+   * Reset singleton instance (for tests)
+   */
+  public static resetInstance(): void {
+    if (DeepTreeEchoUIBridge.instance) {
+      DeepTreeEchoUIBridge.instance.cleanup()
+      DeepTreeEchoUIBridge.instance = null
+    }
+    _log = null
+    _uiBridgeInstance = null
+  }
+
   // ============================================================
   // CHAT OPERATIONS
   // ============================================================
@@ -374,11 +386,25 @@ export class DeepTreeEchoUIBridge {
   }
 
   /**
+   * Alias for clearComposer to match tests
+   */
+  public clearComposerText(): void {
+    this.clearComposer()
+  }
+
+  /**
    * Append text to composer
    */
   public appendToComposer(text: string): void {
     const current = this.getComposerText()
     this.setComposerText(current + text)
+  }
+
+  /**
+   * Alias for appendToComposer to match tests
+   */
+  public appendComposerText(text: string): void {
+    this.appendToComposer(text)
   }
 
   // ============================================================

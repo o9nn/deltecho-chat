@@ -61,6 +61,7 @@ jest.mock('../../../backend-com', () => ({
             }),
             getMessageIds: jest.fn().mockResolvedValue([1, 2, 3]),
             miscSendTextMessage: jest.fn().mockResolvedValue(100),
+            markseenMsgs: jest.fn().mockResolvedValue(true),
         },
         on: jest.fn(),
         off: jest.fn(),
@@ -107,11 +108,13 @@ describe('DeepTreeEchoUIBridge Integration', () => {
     let ActionEmitter: any
 
     beforeEach(async () => {
-        jest.resetModules()
-        const module = await import('../DeepTreeEchoUIBridge')
-        uiBridge = module.uiBridge
+        // Reset singleton instance explicitly
+        const { DeepTreeEchoUIBridge: bridgeClass, getUIBridge: getUB } = require('../DeepTreeEchoUIBridge')
+        bridgeClass.resetInstance()
 
-        const keybindings = await import('../../../keybindings')
+        uiBridge = getUB()
+
+        const keybindings = require('../../../keybindings')
         ActionEmitter = keybindings.ActionEmitter
     })
 
@@ -601,15 +604,25 @@ describe('DialogAdapter Integration', () => {
 describe('ChatManager to UIBridge Integration', () => {
     let chatManager: any
     let uiBridge: any
+    let proactiveMessaging: any
+    let ActionEmitter: any
 
     beforeEach(async () => {
-        jest.resetModules()
+        // Reset singleton instances explicitly
+        const { DeepTreeEchoUIBridge: bridgeClass, getUIBridge: getUB } = require('../DeepTreeEchoUIBridge')
+        const { DeepTreeEchoChatManager: managerClass, getChatManager: getCM } = require('../DeepTreeEchoChatManager')
+        const { ProactiveMessaging: proactiveClass, getProactiveMessaging: getPM } = require('../ProactiveMessaging')
 
-        const chatModule = await import('../DeepTreeEchoChatManager')
-        const bridgeModule = await import('../DeepTreeEchoUIBridge')
+        bridgeClass.resetInstance()
+        managerClass.resetInstance()
+        proactiveClass.resetInstance()
 
-        chatManager = chatModule.chatManager
-        uiBridge = bridgeModule.uiBridge
+        uiBridge = getUB()
+        chatManager = getCM()
+        proactiveMessaging = getPM()
+
+        const keybindings = require('../../../keybindings')
+        ActionEmitter = keybindings.ActionEmitter
     })
 
     afterEach(() => {
@@ -628,6 +641,7 @@ describe('ChatManager to UIBridge Integration', () => {
         const mockChatContext = {
             selectChat: jest.fn().mockResolvedValue(true),
             unselectChat: jest.fn(),
+            chatId: 100,
         }
 
         // Set up the bridge
@@ -647,6 +661,7 @@ describe('ChatManager to UIBridge Integration', () => {
         const mockChatContext = {
             selectChat: jest.fn().mockResolvedValue(true),
             unselectChat: jest.fn(),
+            chatId: 100,
         }
 
         uiBridge.registerChatContext(mockChatContext, 1)

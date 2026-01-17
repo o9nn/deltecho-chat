@@ -246,6 +246,18 @@ export class ProactiveMessaging {
     log().info(`ProactiveMessaging ${enabled ? 'enabled' : 'disabled'}`)
   }
 
+  /**
+   * Reset singleton instance (for tests)
+   */
+  public static resetInstance(): void {
+    if (ProactiveMessaging.instance) {
+      ProactiveMessaging.instance.cleanup()
+      ProactiveMessaging.instance = null
+    }
+    _log = null
+    _proactiveMessagingInstance = null
+  }
+
   // ============================================================
   // TRIGGER MANAGEMENT
   // ============================================================

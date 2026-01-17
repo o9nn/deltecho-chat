@@ -37,11 +37,11 @@ jest.mock('../../../backend-com', () => ({
       }),
       getMessageIds: jest.fn().mockResolvedValue([1, 2, 3]),
       miscSendTextMessage: jest.fn().mockResolvedValue(100),
+      markseenMsgs: jest.fn().mockResolvedValue(true), // Updated mock
       createContact: jest.fn().mockResolvedValue(1),
       createChatByContactId: jest.fn().mockResolvedValue(1),
       createGroupChat: jest.fn().mockResolvedValue(1),
       addContactToChat: jest.fn().mockResolvedValue(undefined),
-      markseenMsgs: jest.fn().mockResolvedValue(undefined),
       getAllAccounts: jest.fn().mockResolvedValue([{ id: 1 }]),
     },
     on: jest.fn(),
@@ -79,10 +79,12 @@ describe('DeepTreeEchoChatManager', () => {
   let chatManager: any
 
   beforeEach(async () => {
-    // Reset modules to get fresh instances
-    jest.resetModules()
-    const module = await import('../DeepTreeEchoChatManager')
-    chatManager = module.chatManager
+    // Reset singleton instance explicitly
+    const { DeepTreeEchoChatManager, getChatManager: getCM } = require('../DeepTreeEchoChatManager')
+    DeepTreeEchoChatManager.resetInstance()
+
+    // Use the actual instance instead of Proxy
+    chatManager = getCM()
   })
 
   afterEach(() => {
@@ -184,11 +186,19 @@ describe('DeepTreeEchoChatManager', () => {
 
 describe('DeepTreeEchoUIBridge', () => {
   let uiBridge: any
+  let mockContext: any
 
   beforeEach(async () => {
-    jest.resetModules()
-    const module = await import('../DeepTreeEchoUIBridge')
-    uiBridge = module.uiBridge
+    // Reset singleton instance explicitly
+    const { DeepTreeEchoUIBridge, getUIBridge: getUB } = require('../DeepTreeEchoUIBridge')
+    DeepTreeEchoUIBridge.resetInstance()
+
+    uiBridge = getUB()
+    mockContext = {
+      selectChat: jest.fn().mockResolvedValue(true),
+      unselectChat: jest.fn(),
+      chatId: 100,
+    }
   })
 
   afterEach(() => {
@@ -197,12 +207,6 @@ describe('DeepTreeEchoUIBridge', () => {
 
   describe('registerChatContext', () => {
     it('should register a chat context', () => {
-      const mockContext = {
-        selectChat: jest.fn().mockResolvedValue(true),
-        unselectChat: jest.fn(),
-        chatId: 100,
-      }
-
       uiBridge.registerChatContext(mockContext, 1)
 
       const selected = uiBridge.getSelectedChat()
@@ -272,10 +276,17 @@ describe('ProactiveMessaging', () => {
   let proactiveMessaging: any
 
   beforeEach(async () => {
-    jest.resetModules()
+    // Reset singleton instance explicitly
+    const { ProactiveMessaging, getProactiveMessaging: getPM } = require('../ProactiveMessaging')
+    const { DeepTreeEchoChatManager } = require('../DeepTreeEchoChatManager')
+    const { DeepTreeEchoUIBridge } = require('../DeepTreeEchoUIBridge')
+
+    ProactiveMessaging.resetInstance()
+    DeepTreeEchoChatManager.resetInstance()
+    DeepTreeEchoUIBridge.resetInstance()
+
+    proactiveMessaging = getPM()
     jest.useFakeTimers()
-    const module = await import('../ProactiveMessaging')
-    proactiveMessaging = module.proactiveMessaging
   })
 
   afterEach(() => {
@@ -481,7 +492,7 @@ describe('ProactiveMessaging', () => {
 
 describe('Integration', () => {
   it('should export all required functions', async () => {
-    const module = await import('../index')
+    const module = require('../index')
 
     // Chat Manager exports
     expect(module.chatManager).toBeDefined()

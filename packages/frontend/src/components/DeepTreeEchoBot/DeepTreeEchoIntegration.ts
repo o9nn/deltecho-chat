@@ -371,6 +371,13 @@ export function getBotInstance(): DeepTreeEchoBot | null {
 }
 
 /**
+ * Reset the bot instance (for tests)
+ */
+export function resetBotInstance(): void {
+  cleanupBot()
+}
+
+/**
  * Get the chat manager instance
  */
 export function getChatManager(): DeepTreeEchoChatManager {
@@ -471,5 +478,8 @@ export async function getUnreadChats(accountId: number) {
   return chatManager.getUnreadChats(accountId)
 }
 
-// Automatically initialize the bot when this module is imported
-initDeepTreeEchoBot()
+// Automatically initialize the bot when this module is imported, 
+// unless we are in a test environment
+if (typeof process !== 'undefined' && process.env.NODE_ENV !== 'test') {
+  initDeepTreeEchoBot()
+}
