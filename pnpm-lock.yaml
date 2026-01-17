@@ -528,9 +528,15 @@ importers:
       '@deltecho/cognitive':
         specifier: workspace:*
         version: link:../cognitive
+      '@deltecho/dove9':
+        specifier: workspace:*
+        version: link:../dove9
       '@deltecho/ipc':
         specifier: workspace:*
         version: link:../ipc
+      '@deltecho/sys6-triality':
+        specifier: workspace:*
+        version: link:../sys6-triality
       deep-tree-echo-core:
         specifier: workspace:*
         version: link:../core

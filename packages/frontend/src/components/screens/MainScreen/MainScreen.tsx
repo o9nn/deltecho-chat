@@ -39,6 +39,7 @@ import { Screens } from '../../../ScreenController'
 
 import type { T } from '@deltachat/jsonrpc-client'
 import CreateChat from '../../dialogs/CreateChat'
+import { getUIBridge } from '../../DeepTreeEchoBot/DeepTreeEchoUIBridge'
 
 type Props = {
   accountId?: number
@@ -62,6 +63,20 @@ export default function MainScreen({ accountId }: Props) {
     selectChat,
     unselectChat,
   } = useChat()
+
+  // Register ChatContext with Deep Tree Echo UI Bridge
+  useEffect(() => {
+    if (accountId) {
+      const bridge = getUIBridge()
+      bridge.registerChatContext({
+        selectChat,
+        unselectChat,
+        chatId,
+        chatWithLinger: chatWithLinger || undefined
+      }, accountId)
+    }
+  }, [accountId, chatId, chatWithLinger, selectChat, unselectChat])
+
   const { smallScreenMode } = useContext(ScreenContext)
 
   // Small hack/misuse of keyBindingAction to setArchivedChatsSelected from

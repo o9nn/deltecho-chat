@@ -31,7 +31,9 @@
   "dependencies": {
     "deep-tree-echo-core": "workspace:*",
     "@deltecho/cognitive": "workspace:*",
-    "@deltecho/ipc": "workspace:*"
+    "@deltecho/dove9": "workspace:*",
+    "@deltecho/ipc": "workspace:*",
+    "@deltecho/sys6-triality": "workspace:*"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",

@@ -4,6 +4,8 @@ import { selectedAccountId } from '../../ScreenController'
 import { useSettingsStore } from '../../stores/settings'
 import { getLogger } from '../../../../shared/logger'
 import useMessage from '../../hooks/chat/useMessage'
+import useDialog from '../../hooks/dialog/useDialog'
+import { getUIBridge } from '../DeepTreeEchoBot/DeepTreeEchoUIBridge'
 import { LLMService } from '../../utils/LLMService'
 // Import conditionally
 // import { VisionCapabilities } from './VisionCapabilities'
@@ -95,7 +97,20 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ enabled }) => {
   const { sendMessage } = useMessage()
   const settingsStore = useSettingsStore()[0]
   const memory = RAGMemoryStore.getInstance()
+
   const llmService = LLMService.getInstance()
+
+  // Dialog Context for UI Bridge
+  const dialogContext = useDialog()
+
+  // Register DialogContext with UI Bridge
+  useEffect(() => {
+    if (accountId) {
+      const bridge = getUIBridge()
+      bridge.registerDialogContext(dialogContext as any)
+    }
+  }, [accountId, dialogContext])
+
   // Don't create instance until needed
   // const visionCapabilities = VisionCapabilities.getInstance()
   const playwrightAutomation = PlaywrightAutomation.getInstance()

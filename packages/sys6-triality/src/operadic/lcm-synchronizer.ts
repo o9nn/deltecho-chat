@@ -44,4 +44,20 @@ export class LCMSynchronizer {
     public reset(): void {
         this.currentStep = 0;
     }
+
+    public getState(): OperadicState {
+        const cycleStep = (this.currentStep % this.CYCLE_LENGTH) as Sys6CyclePhase;
+        const delegation = this.delegator.computeDelegation(this.currentStep);
+
+        return {
+            globalStep: this.currentStep,
+            cycleStep,
+            primePhase: {
+                [PrimeModality.Dyadic]: cycleStep % 2,
+                [PrimeModality.Triadic]: cycleStep % 3,
+                [PrimeModality.Pentadic]: cycleStep % 5
+            },
+            delegation
+        };
+    }
 }
