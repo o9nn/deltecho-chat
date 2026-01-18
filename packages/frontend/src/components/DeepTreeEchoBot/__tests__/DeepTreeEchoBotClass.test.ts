@@ -34,7 +34,8 @@ jest.mock('../RAGMemoryStore', () => ({
     RAGMemoryStore: {
         getInstance: jest.fn().mockReturnValue({
             setEnabled: jest.fn(),
-            storeMemory: jest.fn()
+            storeMemory: jest.fn(),
+            getConversationContext: jest.fn().mockReturnValue([]) // Add this
         })
     }
 }));
@@ -154,7 +155,6 @@ describe('DeepTreeEchoBot Class', () => {
         // Verify LLMService was called TWICE: 
         // 1. For the main response
         // 2. For the visual analysis
-        console.log('generateResponse calls:', mockLLMService.generateResponse.mock.calls.length);
         expect(mockLLMService.generateResponse).toHaveBeenCalledTimes(2);
 
         // Find the call that used the analysis prompt

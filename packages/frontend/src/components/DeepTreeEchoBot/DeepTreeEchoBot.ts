@@ -826,30 +826,22 @@ I'm here to assist you with various tasks and engage in meaningful conversations
    * Analyze images and store a descriptive memory
    */
   private async analyzeAndStoreVisualMemory(chatId: number, images: string[]): Promise<void> {
-    console.log('[DEBUG-VS] analyzeAndStoreVisualMemory called');
-    console.log('[DEBUG-VS] memoryEnabled:', this.options.memoryEnabled);
-    console.log('[DEBUG-VS] visionEnabled:', this.options.visionEnabled);
-
     if (!this.options.memoryEnabled || !this.options.visionEnabled) {
-      console.log('[DEBUG-VS] Skipping because option disabled');
       return;
     }
 
     try {
       log.info(`[VisualMemory] Analyzing ${images.length} images for chat ${chatId}`);
-      console.log(`[VisualMemory] Analyzing ${images.length} images for chat ${chatId}`);
 
       // Construct a specific prompt for image analysis
       const analysisPrompt = "Analyze these images and provide a detailed, objective description of their content. Focus on visible elements, text, colors, and context. This description will be stored in long-term memory for future reference. Do not answer any specific user query, just describe what you see.";
 
       const visionMessage = VisionProcessor.constructVisionMessage(analysisPrompt, images);
 
-      console.log('[DEBUG-VS] Calling LLMService');
       // Generate description using LLM
       // We put this in a separate array to not pollute the main context
       const response = await this.llmService.generateResponse([visionMessage] as any);
 
-      console.log(`[VisualMemory] Generated description: ${response.substring(0, 50)}...`);
       log.info(`[VisualMemory] Generated description: ${response.substring(0, 50)}...`);
 
       // Store in RAG memory with metadata
@@ -866,7 +858,6 @@ I'm here to assist you with various tasks and engage in meaningful conversations
       });
 
     } catch (error) {
-      console.error('[DEBUG-VS] Error:', error);
       log.error('[VisualMemory] Failed to analyze images:', error);
     }
   }
