@@ -1,33 +1,56 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import classNames from 'classnames'
 import {
-  Brain,
-  Home,
-  MessageSquare,
-  Activity,
-  Cloud,
-  Users,
-  Sparkles,
-  TreePine,
-  Code,
-  Palette,
-  Theater,
-  Wrench,
-  Globe,
-  Database,
-  Zap,
-  Heart,
-  BookOpen,
-  Search,
-  Loader2,
-  Clock,
-  Tag,
+  Brain as _Brain,
+  Home as _Home,
+  MessageSquare as _MessageSquare,
+  Activity as _Activity,
+  Cloud as _Cloud,
+  Users as _Users,
+  Sparkles as _Sparkles,
+  TreePine as _TreePine,
+  Code as _Code,
+  Palette as _Palette,
+  Theater as _Theater,
+  Wrench as _Wrench,
+  Globe as _Globe,
+  Database as _Database,
+  Zap as _Zap,
+  Heart as _Heart,
+  BookOpen as _BookOpen,
+  Search as _Search,
+  Loader2 as _Loader2,
+  Clock as _Clock,
+  Tag as _Tag,
 } from 'lucide-react'
+
+const Brain = _Brain as any;
+const Home = _Home as any;
+const MessageSquare = _MessageSquare as any;
+const Activity = _Activity as any;
+const Cloud = _Cloud as any;
+const Users = _Users as any;
+const Sparkles = _Sparkles as any;
+const TreePine = _TreePine as any;
+const Code = _Code as any;
+const Palette = _Palette as any;
+const Theater = _Theater as any;
+const Wrench = _Wrench as any;
+const Globe = _Globe as any;
+const Database = _Database as any;
+const Zap = _Zap as any;
+const Heart = _Heart as any;
+const BookOpen = _BookOpen as any;
+const Search = _Search as any;
+const Loader2 = _Loader2 as any;
+const Clock = _Clock as any;
+const Tag = _Tag as any;
 import {
   DeepTreeEchoConnector,
   AIPlatformConnector,
   AICompanionConfig,
 } from '../../AICompanionHub/AIPlatformConnector'
+import DeepTreeEchoHub from '../DeepTreeEchoHub/DeepTreeEchoHub';
 
 interface AICompanionHome {
   id: string
@@ -232,7 +255,11 @@ const AINeighborhoodDashboard: React.FC = () => {
               <Sparkles className='inline-icon' /> {selectedHomeData.name}
             </h2>
             <div className='home-interface'>
-              {selectedHomeData.connector ? (
+              {selectedHome === 'deep-tree-echo' ? (
+                <div className='hub-wrapper'>
+                  <DeepTreeEchoHub />
+                </div>
+              ) : selectedHomeData.connector ? (
                 <div className='ai-chat-interface'>
                   <AICompanionChat connector={selectedHomeData.connector} />
                 </div>

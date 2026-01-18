@@ -38,6 +38,8 @@ export interface AgentTool {
             type: string
             description: string
             enum?: string[]
+            items?: { type: string }
+            default?: any
         }>
         required: string[]
     }
@@ -77,13 +79,36 @@ export class AgentToolExecutor {
     private uiBridge: DeepTreeEchoUIBridge | null = null
     private isElectron: boolean
 
+    // Reasoning Core
+    private atomSpace: AtomSpace
+    private plnEngine: PLNEngine
+    private db: DuckDBAdapter
+
+    // Event Listeners for Visualization
+    private listeners: ((event: any) => void)[] = []
+
     private constructor() {
         this.chatManager = DeepTreeEchoChatManager.getInstance()
         this.isElectron = typeof window !== 'undefined' &&
             (window as any).__TAURI__ === undefined &&
             (window as any).electron !== undefined
 
+        // Initialize Reasoning Core
+        this.atomSpace = new AtomSpace()
+        this.plnEngine = new PLNEngine(this.atomSpace)
+
+        // Initialize Persistence
+        this.db = new DuckDBAdapter()
+        this.db.initialize().catch(err => {
+            log.error('Failed to initialize DuckDB persistence', err)
+        })
+
         log.info('AgentToolExecutor initialized', { isElectron: this.isElectron })
+
+        // Expose to window for UI components to access
+        if (typeof window !== 'undefined') {
+            (window as any).deepTreeEchoExecutor = this
+        }
     }
 
     /**
@@ -102,6 +127,30 @@ export class AgentToolExecutor {
     public setUIBridge(bridge: DeepTreeEchoUIBridge): void {
         this.uiBridge = bridge
         log.info('UI Bridge connected to AgentToolExecutor')
+    }
+
+    /**
+     * Subscribe to cognitive state updates
+     */
+    public subscribe(listener: (event: any) => void): () => void {
+        this.listeners.push(listener)
+        // Send initial state immediately
+        // simplified initial state
+        listener({
+            type: 'init',
+            data: {
+                atomCount: 0 // Placeholder
+            }
+        })
+
+        return () => {
+            this.listeners = this.listeners.filter(l => l !== listener)
+        }
+    }
+
+    private emitUpdate(type: string, data: any) {
+        const event = { type, timestamp: Date.now(), data }
+        this.listeners.forEach(l => l(event))
     }
 
     /**
@@ -356,6 +405,87 @@ export class AgentToolExecutor {
                     properties: {},
                     required: []
                 }
+            },
+            {
+                name: 'read_web_page',
+                description: 'Read the content of a web page. Useful for researching topics, reading documentation, or getting latest news.',
+                parameters: {
+                    type: 'object',
+                    properties: {
+                        url: {
+                            type: 'string',
+                            description: 'The URL to read (must start with http:// or https://)'
+                        }
+                    },
+                    required: ['url']
+                }
+            },
+
+            // ===========================================
+            // REASONING TOOLS (Scientific Genius / Knowledge)
+            // ===========================================
+            {
+                name: 'store_knowledge',
+                description: 'Store a fact or relationship in the AtomSpace knowledge base. Example: (ConceptNode "Socrates") (InheritanceLink "Socrates" "Mortal")',
+                parameters: {
+                    type: 'object',
+                    properties: {
+                        type: {
+                            type: 'string',
+                            description: 'The type of Atom (ConceptNode, InheritanceLink, SimilarityLink, etc.)',
+                            enum: ['ConceptNode', 'InheritanceLink', 'SimilarityLink', 'EvaluationLink', 'ListLink']
+                        },
+                        name: {
+                            type: 'string',
+                            description: 'For Nodes: the name/value. For Links: unused (leave empty)'
+                        },
+                        outgoing: {
+                            type: 'array',
+                            description: 'For Links: List of target atom names/IDs. For Nodes: unused.',
+                            items: { type: 'string' }
+                        },
+                        confidence: {
+                            type: 'number',
+                            description: 'Confidence score (0.0 to 1.0)',
+                            default: 1.0
+                        }
+                    },
+                    required: ['type']
+                }
+            },
+            {
+                name: 'query_knowledge',
+                description: 'Query the AtomSpace for knowledge by type or name.',
+                parameters: {
+                    type: 'object',
+                    properties: {
+                        queryType: {
+                            type: 'string',
+                            description: 'Type of query: by_name, by_type, incoming, outgoing',
+                            enum: ['by_name', 'by_type', 'incoming']
+                        },
+                        target: {
+                            type: 'string',
+                            description: 'The name or type to search for'
+                        }
+                    },
+                    required: ['queryType', 'target']
+                }
+            },
+            {
+                name: 'perform_reasoning',
+                description: 'Run a reasoning cycle (forward chaining) to deduce new facts from existing knowledge.',
+                parameters: {
+                    type: 'object',
+                    properties: {
+                        steps: {
+                            type: 'number',
+                            description: 'Number of inference steps to run (default: 1)',
+                            default: 1
+                        }
+                    },
+                    required: []
+                }
             }
         ]
 
@@ -395,6 +525,7 @@ export class AgentToolExecutor {
         accountId: number
     ): Promise<ToolResult> {
         log.info(`Executing tool: ${toolCall.name}`, toolCall.input)
+        this.emitUpdate('tool_execution', { name: toolCall.name, input: toolCall.input })
 
         try {
             switch (toolCall.name) {
@@ -600,6 +731,180 @@ export class AgentToolExecutor {
                 }
 
                 // ===========================================
+                // WEB RESEARCH (Ai: Agent Interface)
+                // ===========================================
+                case 'read_web_page': {
+                    if (!this.isElectron) {
+                        return {
+                            success: false,
+                            output: 'Web reading is currently only available in the Desktop application.',
+                            error: 'Environment not supported'
+                        }
+                    }
+
+                    try {
+                        const ipcRenderer = (window as any).electron?.ipcRenderer
+                        if (!ipcRenderer) {
+                            return {
+                                success: false,
+                                output: 'IPC bridge not available.',
+                                error: 'IPC Error'
+                            }
+                        }
+
+                        const result = await ipcRenderer.invoke('perform-web-request', toolCall.input.url)
+
+                        if (result.success) {
+                            return {
+                                success: true,
+                                output: `Title: ${result.title}\n\nContent: ${result.content}`,
+                                metadata: result.metadata
+                            }
+                        } else {
+                            return {
+                                success: false,
+                                output: `Failed to read page: ${result.error}`,
+                                error: result.error
+                            }
+                        }
+                    } catch (error: any) {
+                        return {
+                            success: false,
+                            output: `Error performing web request: ${error.message}`,
+                            error: error.message
+                        }
+                    }
+                }
+
+                // ===========================================
+                // REASONING EXECUTION
+                // ===========================================
+                case 'store_knowledge': {
+                    const { type, name, outgoing, confidence = 1.0 } = toolCall.input
+
+                    try {
+                        let atom
+                        const tv = createTruthValue(1.0, confidence)
+
+                        if (type === 'ConceptNode') {
+                            atom = this.atomSpace.node(name || 'Anonymous', AtomType.ConceptNode, tv)
+                        } else {
+                            // Link type
+                            const atomType = AtomType[type as keyof typeof AtomType] || AtomType.InheritanceLink
+
+                            // Resolve outgoing atoms (assumes they are ConceptNodes for simplicity if just strings)
+                            const outAtoms = (outgoing || []).map((n: string) => {
+                                // Try to find existing or create new ConceptNode
+                                const existing = this.atomSpace.getAtom(n) // Simplified lookup
+                                return existing || this.atomSpace.node(n)
+                            })
+
+                            atom = this.atomSpace.link(atomType, outAtoms, tv)
+                        }
+
+                        // Persist to DuckDB
+                        const atomAny = atom as any;
+                        const atomName = atomAny.name || undefined;
+                        // specific check for truth value object
+                        const storedTv = atomAny.tv || atomAny.truthValue;
+                        const atomStrength = storedTv ? (storedTv as any).strength : 1.0;
+                        const atomConfidence = storedTv ? (storedTv as any).confidence : 1.0;
+
+                        await this.db.storeAtom({
+                            id: atom.id,
+                            type: atom.type,
+                            name: atomName,
+                            strength: atomStrength,
+                            confidence: atomConfidence,
+                            metadata: { outgoing: outgoing }
+                        })
+
+                        const result = {
+                            success: true,
+                            output: `Stored atom: ${atom.toString()}`,
+                            metadata: { id: atom.id, type: atom.type }
+                        }
+
+                        this.emitUpdate('knowledge_stored', { atom: atom.toString(), type: type })
+                        return result
+                    } catch (error: any) {
+                        return {
+                            success: false,
+                            output: `Failed to store knowledge: ${error.message}`,
+                            error: error.message
+                        }
+                    }
+                }
+
+                case 'query_knowledge': {
+                    const { queryType, target } = toolCall.input
+                    let results: any[] = []
+
+                    try {
+                        if (queryType === 'by_type') {
+                            results = await this.db.findAtoms(target);
+                        } else if (queryType === 'by_name') {
+                            // Use DB findAtoms with name pattern
+                            results = await this.db.findAtoms(undefined, target);
+                        } else if (queryType === 'incoming') {
+                            // For complex queries like incoming, we might need SQL if adapter doesn't support it directly
+                            // Or fallback to AtomSpace if synced
+                            // Using SQL via db.query for flexibility
+                            // Assuming 'links' table has handle_list which likely contains IDs or Names. 
+                            // This is a simplification. Real incoming requires traversing the graph.
+                            // For now, let's look for links where metadata contains the target name in 'outgoing'
+                            // This relies on how we stored it in metadata above
+                            const query = `SELECT * FROM atoms WHERE json_extract_string(metadata, '$.outgoing') LIKE '%${target}%'`;
+                            try {
+                                results = await this.db.query(query);
+                            } catch (e) {
+                                // Fallback or empty if JSON query fails
+                                results = [];
+                            }
+                        }
+
+                        return {
+                            success: true,
+                            output: `Found ${results.length} atoms:\n${results.map(a => `${a.type}: ${a.name || a.id}`).join('\n')}`,
+                            metadata: { count: results.length }
+                        }
+                    } catch (err: any) {
+                        return {
+                            success: false,
+                            output: `Query failed: ${err.message}`,
+                            error: err.message
+                        }
+                    }
+                }
+
+                case 'perform_reasoning': {
+                    const steps = toolCall.input.steps || 1
+                    try {
+                        let totalNew = 0
+                        for (let i = 0; i < steps; i++) {
+                            totalNew += this.plnEngine.deduce()
+                        }
+
+                        // TODO: Persist new deductions to DB?
+                        // complex since we need to know which are new. 
+                        // For now, we leave them in-memory only basically, 
+                        // unless we iterate and save all.
+
+                        return {
+                            success: true,
+                            output: `Reasoning completed. Deduced ${totalNew} new facts.`,
+                            metadata: { newFacts: totalNew }
+                        }
+                    } catch (error: any) {
+                        return {
+                            success: false,
+                            output: `Reasoning failed: ${error.message}`,
+                            error: error.message
+                        }
+                    }
+                }
+
+                // ===========================================
                 // SCHEDULING
                 // ===========================================
                 case 'schedule_message': {
@@ -729,7 +1034,18 @@ export class AgentToolExecutor {
     }
 }
 
+// Reasoning Imports
+import {
+    AtomSpace,
+    PLNEngine,
+    AtomType,
+    createTruthValue, // Ensure this is available
+    DuckDBAdapter,
+    Node as ReasoningNode // Alias to avoid DOM Node conflict
+} from '@deltecho/reasoning'
+
 // Export singleton getter
 export function getAgentToolExecutor(): AgentToolExecutor {
     return AgentToolExecutor.getInstance()
 }
+

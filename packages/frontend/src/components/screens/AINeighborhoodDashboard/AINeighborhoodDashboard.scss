@@ -213,7 +213,14 @@
     }
 
     .home-interface {
-      height: 400px;
+      min-height: 400px;
+
+      .hub-wrapper {
+        height: 600px;
+        border: 1px solid #374151;
+        border-radius: 0.5rem;
+        overflow: hidden;
+      }
 
       .ai-chat-interface {
         height: 100%;

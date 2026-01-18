@@ -8,6 +8,7 @@ import {
   shell,
   NativeImage,
   systemPreferences,
+  net,
 } from 'electron'
 import path, {
   basename,
@@ -23,6 +24,7 @@ import { platform } from 'os'
 import { existsSync } from 'fs'
 import { versions } from 'process'
 import { fileURLToPath } from 'url'
+import * as cheerio from 'cheerio'
 
 import { getLogger } from '../../shared/logger.js'
 import {
@@ -379,6 +381,87 @@ export async function init(cwd: string, logHandler: LogHandler) {
       )
     }
   )
+
+  ipcMain.handle('perform-web-request', async (_ev, url: string) => {
+    try {
+      log.info(`Performing web request to: ${url}`)
+
+      // Basic validation
+      try {
+        const urlObj = new URL(url)
+        if (!['http:', 'https:'].includes(urlObj.protocol)) {
+          throw new Error('Invalid protocol')
+        }
+      } catch (e) {
+        throw new Error(`Invalid URL: ${url}`)
+      }
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'User-Agent': 'DeepTreeEcho/1.0 (Electron; Bot)'
+        }
+      })
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error: ${response.status} ${response.statusText}`)
+      }
+
+      const html = await response.text()
+      const $ = cheerio.load(html)
+
+      // Remove scripts, styles, and other non-content elements
+      $('script').remove()
+      $('style').remove()
+      $('nav').remove()
+      $('footer').remove()
+      $('iframe').remove()
+      $('noscript').remove()
+
+      const title = $('title').text().trim()
+
+      // Extract main text content
+      // Try to find main content area
+      let content = ''
+      const mainSelectors = ['main', 'article', '#content', '.content', '.post', '.article']
+      let foundMain = false
+
+      for (const selector of mainSelectors) {
+        if ($(selector).length > 0) {
+          content = $(selector).text().trim()
+          foundMain = true
+          break
+        }
+      }
+
+      // Fallback to body if no main content found
+      if (!foundMain) {
+        content = $('body').text().trim()
+      }
+
+      // Clean up whitespace
+      content = content.replace(/\s+/g, ' ').slice(0, 20000) // Limit content size
+
+      const metadata = {
+        url,
+        status: response.status,
+        contentType: response.headers.get('content-type')
+      }
+
+      return {
+        success: true,
+        title,
+        content,
+        metadata
+      }
+    } catch (error: any) {
+      log.error(`Web request failed: ${error.message}`)
+      return {
+        success: false,
+        error: error.message
+      }
+    }
+  })
 
   return () => {
     // the shutdown function

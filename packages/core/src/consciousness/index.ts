@@ -71,7 +71,7 @@ export interface ConsciousnessState {
 }
 
 import { recursiveSelfModel } from './RecursiveSelfModel.js';
-import { qualiaEmergenceLayer } from './QualiaEmergenceLayer.js';
+import { qualiaEmergenceLayer, type ExperienceMoment } from './QualiaEmergenceLayer.js';
 import { temporalConsciousnessStream } from './TemporalConsciousnessStream.js';
 
 /**

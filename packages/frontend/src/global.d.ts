@@ -71,5 +71,6 @@ declare global {
      */
     __internal_current_message_list_instance_id?: symbol
     __updateAccountListSidebar: (() => void) | undefined
+    deepTreeEchoExecutor?: import('./components/DeepTreeEchoBot/AgentToolExecutor').AgentToolExecutor
   }
 }
