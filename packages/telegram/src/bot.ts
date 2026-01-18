@@ -291,7 +291,7 @@ export class DeepTreeEchoTelegramBot {
     }
 
     /**
-     * Handle voice messages
+     * Handle voice messages with speech-to-text processing
      */
     private async handleVoiceMessage(ctx: Context): Promise<void> {
         const msg = ctx.message as Message.VoiceMessage;
@@ -304,18 +304,60 @@ export class DeepTreeEchoTelegramBot {
         }
 
         this.log(`Received voice message from ${messageContext.firstName}`);
+        this.activeChats.add(messageContext.chatId);
+        this.state.messagesProcessed++;
 
         try {
             await ctx.sendChatAction('typing');
 
-            // Get file link
+            // Get file link and download audio
             const fileLink = await ctx.telegram.getFileLink(msg.voice.file_id);
+            const audioResponse = await fetch(fileLink.href);
+            const audioBuffer = Buffer.from(await audioResponse.arrayBuffer());
 
-            // TODO: Process voice with speech recognition
-            await ctx.reply(
-                '🎤 I received your voice message. Voice processing is coming soon!',
-                { reply_parameters: { message_id: msg.message_id } }
-            );
+            // Try to use MultiModalProcessor for STT
+            try {
+                const { multiModalProcessor } = await import('deep-tree-echo-core/multimodal');
+                const capabilities = multiModalProcessor.getCapabilities();
+
+                if (capabilities.stt) {
+                    const result = await multiModalProcessor.speechToText(audioBuffer);
+
+                    if (result.text) {
+                        this.log(`Transcribed: "${result.text.substring(0, 50)}..."`);
+
+                        // Process transcribed text through cognitive system
+                        if (this.processor) {
+                            const response = await this.processor.processMessage(
+                                result.text,
+                                messageContext
+                            );
+                            await this.sendResponse(ctx, response, msg.message_id);
+                        } else {
+                            await ctx.reply(
+                                `🎤 I heard: "${result.text}"`,
+                                { reply_parameters: { message_id: msg.message_id } }
+                            );
+                        }
+                    } else {
+                        await ctx.reply(
+                            '🎤 I couldn\'t understand the audio clearly. Could you try again?',
+                            { reply_parameters: { message_id: msg.message_id } }
+                        );
+                    }
+                } else {
+                    await ctx.reply(
+                        '🎤 Voice processing requires an OpenAI API key to be configured.',
+                        { reply_parameters: { message_id: msg.message_id } }
+                    );
+                }
+            } catch {
+                // Fallback if multimodal module not available
+                await ctx.reply(
+                    '🎤 Voice message received. Speech processing is not configured.',
+                    { reply_parameters: { message_id: msg.message_id } }
+                );
+            }
         } catch (error) {
             console.error('[Telegram Bot] Error processing voice:', error);
             await ctx.reply('I couldn\'t process your voice message.', {
@@ -325,7 +367,7 @@ export class DeepTreeEchoTelegramBot {
     }
 
     /**
-     * Handle photo messages
+     * Handle photo messages with vision analysis
      */
     private async handlePhotoMessage(ctx: Context): Promise<void> {
         const msg = ctx.message as Message.PhotoMessage;
@@ -338,6 +380,8 @@ export class DeepTreeEchoTelegramBot {
         }
 
         this.log(`Received photo from ${messageContext.firstName}`);
+        this.activeChats.add(messageContext.chatId);
+        this.state.messagesProcessed++;
 
         try {
             await ctx.sendChatAction('typing');
@@ -346,15 +390,66 @@ export class DeepTreeEchoTelegramBot {
             const photo = msg.photo[msg.photo.length - 1];
             const fileLink = await ctx.telegram.getFileLink(photo.file_id);
 
-            // TODO: Process image with vision
-            await ctx.reply(
-                '📷 I received your image. Image analysis is coming soon!',
-                { reply_parameters: { message_id: msg.message_id } }
-            );
+            // Download image
+            const imageResponse = await fetch(fileLink.href);
+            const imageBuffer = Buffer.from(await imageResponse.arrayBuffer());
+
+            // Get caption if provided
+            const caption = msg.caption;
+
+            // Try to use MultiModalProcessor for vision
+            try {
+                const { multiModalProcessor } = await import('deep-tree-echo-core/multimodal');
+                const capabilities = multiModalProcessor.getCapabilities();
+
+                if (capabilities.vision) {
+                    const result = await multiModalProcessor.processImageMessage(
+                        imageBuffer,
+                        {
+                            caption,
+                            detailedAnalysis: true,
+                            responseGenerator: this.processor
+                                ? async (analysis) => {
+                                    const prompt = caption
+                                        ? `The user sent an image with caption: "${caption}"\n\nImage analysis: ${analysis.description}`
+                                        : `The user sent an image.\n\nImage analysis: ${analysis.description}`;
+                                    return this.processor!.processMessage(prompt, messageContext);
+                                }
+                                : undefined,
+                        }
+                    );
+
+                    const response = result.response || `📷 ${result.analysis.description}`;
+                    await this.sendResponse(ctx, response, msg.message_id);
+                } else {
+                    await ctx.reply(
+                        '📷 Image analysis requires an Anthropic API key to be configured.',
+                        { reply_parameters: { message_id: msg.message_id } }
+                    );
+                }
+            } catch {
+                // Fallback if multimodal module not available
+                await ctx.reply(
+                    '📷 Image received. Vision processing is not configured.',
+                    { reply_parameters: { message_id: msg.message_id } }
+                );
+            }
         } catch (error) {
             console.error('[Telegram Bot] Error processing photo:', error);
             await ctx.reply('I couldn\'t process your image.', {
                 reply_parameters: { message_id: msg.message_id },
+            });
+        }
+    }
+
+    /**
+     * Send a response, splitting if necessary
+     */
+    private async sendResponse(ctx: Context, response: string, replyToId: number): Promise<void> {
+        const chunks = this.splitResponse(response);
+        for (const chunk of chunks) {
+            await ctx.reply(chunk, {
+                reply_parameters: { message_id: replyToId },
             });
         }
     }
