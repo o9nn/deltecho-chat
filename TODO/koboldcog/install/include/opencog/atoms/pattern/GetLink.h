@@ -24,31 +24,29 @@
 
 #include <opencog/atoms/pattern/MeetLink.h>
 
-namespace opencog
-{
+namespace opencog {
 /** \addtogroup grp_atomspace
  *  @{
  */
-class GetLink : public MeetLink
-{
+class GetLink : public MeetLink {
 protected:
-	void init(void);
+  void init(void);
 
 public:
-	GetLink(const HandleSeq&&, Type=GET_LINK);
+  GetLink(const HandleSeq &&, Type = GET_LINK);
 
-	GetLink(const GetLink&) = delete;
-	GetLink operator=(const GetLink&) = delete;
+  GetLink(const GetLink &) = delete;
+  GetLink operator=(const GetLink &) = delete;
 
-	virtual ValuePtr execute(AtomSpace*, bool silent=false);
+  virtual ValuePtr execute(AtomSpace *, bool silent = false);
 
-	static Handle factory(const Handle&);
+  static Handle factory(const Handle &);
 };
 
 LINK_PTR_DECL(GetLink)
 #define createGetLink CREATE_DECL(GetLink)
 
 /** @}*/
-}
+} // namespace opencog
 
 #endif // _OPENCOG_GET_LINK_H
