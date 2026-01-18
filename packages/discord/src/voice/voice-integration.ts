@@ -70,11 +70,9 @@ export class VADAudioProcessor implements AudioProcessor {
     /**
      * Process audio buffer and return transcription
      *
-     * Note: In a full implementation, this would:
-     * 1. Decode Opus audio to PCM
-     * 2. Run VAD to detect speech boundaries
-     * 3. Send speech segments to STT service
-     * 4. Return transcription results
+     * Uses MultiModalProcessor from deep-tree-echo-core for STT via:
+     * - OpenAI Whisper API (primary)
+     * - Can be extended to support Google Cloud, Azure, local Whisper
      */
     async processAudio(
         buffer: Buffer,
@@ -99,22 +97,39 @@ export class VADAudioProcessor implements AudioProcessor {
             this.log(`Audio too long (${duration}ms), truncating`);
         }
 
-        // In production, this would:
-        // 1. Use @deltecho/voice's VAD to detect speech segments
-        // 2. Use @deltecho/voice's SpeechRecognition to transcribe
-        // 3. Return the transcription result
+        this.log(`Processing ${duration}ms of audio from user ${userId}`);
 
-        // For now, return a placeholder indicating audio was received
-        this.log(`Processed ${duration}ms of audio from user ${userId}`);
+        try {
+            // Use MultiModalProcessor for STT
+            const { multiModalProcessor } = await import('deep-tree-echo-core/multimodal');
+            const capabilities = multiModalProcessor.getCapabilities();
 
-        // TODO: Integrate with actual STT implementation
-        // This requires a server-side STT service like:
-        // - Google Cloud Speech-to-Text
-        // - Azure Speech Services
-        // - Whisper API
-        // - Local Whisper instance
+            if (!capabilities.stt) {
+                this.log('STT not available - OpenAI API key required');
+                return null;
+            }
 
-        return null;
+            const result = await multiModalProcessor.speechToText(buffer, {
+                language: this.config.language,
+            });
+
+            if (result.text) {
+                this.log(`Transcribed: "${result.text.substring(0, 50)}..."`);
+                return {
+                    text: result.text,
+                    confidence: result.confidence || 0.9,
+                    userId,
+                    timestamp: Date.now(),
+                    duration,
+                };
+            }
+
+            return null;
+        } catch (error) {
+            // Fallback if multimodal module not available
+            this.log(`STT error: ${error}`);
+            return null;
+        }
     }
 
     private log(message: string): void {
@@ -169,34 +184,64 @@ export class VoiceTTSProvider implements TTSProvider {
     /**
      * Synthesize text to audio stream
      *
-     * Note: In a full implementation, this would:
-     * 1. Call TTS service with text and voice parameters
-     * 2. Apply emotion-based modulation
-     * 3. Return audio stream in Discord-compatible format
+     * Uses MultiModalProcessor from deep-tree-echo-core for TTS via:
+     * - OpenAI TTS API (primary)
+     * - Applies emotion-based voice modulation
      */
     async synthesize(text: string, emotion?: string): Promise<Readable> {
         this.log(`Synthesizing: "${text.substring(0, 50)}..." with emotion: ${emotion || 'neutral'}`);
 
-        // In production, this would:
-        // 1. Apply emotion-based voice modulation from @deltecho/voice
-        // 2. Call external TTS API or local TTS model
-        // 3. Convert audio to Discord-compatible format (Opus)
-        // 4. Return audio stream
-
-        // For now, return an empty stream as placeholder
-        // Real implementation requires:
-        // - Azure Speech SDK
-        // - Google Cloud TTS
-        // - ElevenLabs API
-        // - Local Piper/Coqui instance
-
         const stream = new PassThrough();
 
-        // Simulate TTS delay
-        setTimeout(() => {
-            // In real implementation, pipe TTS audio here
+        try {
+            // Use MultiModalProcessor for TTS
+            const { multiModalProcessor } = await import('deep-tree-echo-core/multimodal');
+            const capabilities = multiModalProcessor.getCapabilities();
+
+            if (!capabilities.tts) {
+                this.log('TTS not available - OpenAI API key required');
+                stream.end();
+                return stream;
+            }
+
+            // Get emotion-modulated voice parameters
+            const voiceConfig = this.getModulatedVoice(emotion || 'neutral');
+
+            // Map rate to OpenAI speed (0.25-4.0)
+            const speed = Math.max(0.25, Math.min(4.0, voiceConfig.rate || 1.0));
+
+            // Select voice based on emotion (OpenAI voices)
+            const emotionVoiceMap: Record<string, 'alloy' | 'echo' | 'fable' | 'onyx' | 'nova' | 'shimmer'> = {
+                joy: 'nova',
+                happy: 'nova',
+                sadness: 'onyx',
+                sad: 'onyx',
+                anger: 'echo',
+                angry: 'echo',
+                fear: 'shimmer',
+                fearful: 'shimmer',
+                surprise: 'fable',
+                surprised: 'fable',
+                neutral: 'alloy',
+            };
+
+            const voice = emotionVoiceMap[emotion || 'neutral'] || 'alloy';
+
+            const result = await multiModalProcessor.textToSpeech(text, {
+                voice,
+                speed,
+                format: 'opus',
+            });
+
+            // Write the audio buffer to the stream
+            stream.write(result.audioBuffer);
             stream.end();
-        }, 100);
+
+            this.log(`TTS generated ${result.audioBuffer.length} bytes`);
+        } catch (error) {
+            this.log(`TTS error: ${error}`);
+            stream.end();
+        }
 
         return stream;
     }
