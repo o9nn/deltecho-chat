@@ -3,6 +3,9 @@
 
 import { EventEmitter } from 'events'
 import { runtime } from '@deltachat-desktop/runtime-interface'
+import { getLogger } from '@deltachat-desktop/shared/logger'
+
+const log = getLogger('render/components/AICompanionHub/MemoryPersistenceLayer')
 
 // A breathtaking implementation of AI memory management
 export interface AIMemory {
@@ -78,11 +81,11 @@ export class MemoryPersistenceLayer extends EventEmitter {
 
       this.initialized = true
       this.emit('initialized', { memoryCount: this.memories.size })
-      console.log(
+      log.info(
         `Memory Persistence Layer initialized with ${this.memories.size} memories across ${this.companions.size} companions`
       )
     } catch (error) {
-      console.error('Failed to initialize Memory Persistence Layer:', error)
+      log.error('Failed to initialize Memory Persistence Layer:', error)
       throw new Error('Memory system initialization failed')
     }
   }
@@ -247,7 +250,7 @@ export class MemoryPersistenceLayer extends EventEmitter {
   }
 
   private async consolidateMemories(): Promise<void> {
-    console.log('Memory consolidation process starting...')
+    log.debug('Memory consolidation process starting...')
 
     // Group memories by companion
     const companionMemories: Record<string, AIMemory[]> = {}
@@ -320,7 +323,7 @@ export class MemoryPersistenceLayer extends EventEmitter {
     // Persist the updated memories
     await this.persistMemories()
 
-    console.log('Memory consolidation process completed')
+    log.debug('Memory consolidation process completed')
     this.emit('memoryConsolidation', { timestamp: Date.now() })
   }
 
@@ -337,7 +340,7 @@ export class MemoryPersistenceLayer extends EventEmitter {
 
       this.emit('memoriesPersisted', { count: memoriesArray.length })
     } catch (error) {
-      console.error('Failed to persist memories:', error)
+      log.error('Failed to persist memories:', error)
       this.emit('error', { message: 'Failed to persist memories', error })
     }
   }

@@ -410,11 +410,18 @@ AUTONOMY PRINCIPLES:
 
         if (message.tool_calls) {
             for (const toolCall of message.tool_calls) {
+                let parsedInput: Record<string, any> = {}
+                try {
+                    parsedInput = JSON.parse(toolCall.function.arguments)
+                } catch (parseError) {
+                    log.error(`Failed to parse tool call arguments for ${toolCall.function.name}:`, parseError)
+                    // Provide empty object to prevent crash, tool executor will handle gracefully
+                }
                 content.push({
                     type: 'tool_use',
                     id: toolCall.id,
                     name: toolCall.function.name,
-                    input: JSON.parse(toolCall.function.arguments)
+                    input: parsedInput
                 })
             }
         }

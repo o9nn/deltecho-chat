@@ -508,32 +508,47 @@ export class SecureIntegration {
     // Note: This is NOT secure encryption, just for demo purposes
     // A real implementation would use Web Crypto API
 
-    // Simple XOR for demonstration
-    let result = ''
-    for (let i = 0; i < data.length; i++) {
-      const charCode = data.charCodeAt(i) ^ key.charCodeAt(i % key.length)
-      result += String.fromCharCode(charCode)
+    // First encode the data to UTF-8 bytes to handle Unicode
+    const dataBytes = new TextEncoder().encode(data)
+    const keyBytes = new TextEncoder().encode(key)
+
+    // XOR operation on bytes (always produces values 0-255)
+    const resultBytes = new Uint8Array(dataBytes.length)
+    for (let i = 0; i < dataBytes.length; i++) {
+      resultBytes[i] = dataBytes[i] ^ keyBytes[i % keyBytes.length]
     }
 
+    // Convert bytes to Latin1 string for btoa (safe because all values are 0-255)
+    const binaryStr = Array.from(resultBytes, byte => String.fromCharCode(byte)).join('')
+
     // Convert to base64 for storage
-    return btoa(result)
+    return btoa(binaryStr)
   }
 
   /**
    * Simple decryption for demo purposes
    */
   private simpleDecrypt(encryptedData: string, key: string): string {
-    // Decode from base64
-    const data = atob(encryptedData)
+    // Decode from base64 to binary string
+    const binaryStr = atob(encryptedData)
 
-    // Reverse the XOR operation
-    let result = ''
-    for (let i = 0; i < data.length; i++) {
-      const charCode = data.charCodeAt(i) ^ key.charCodeAt(i % key.length)
-      result += String.fromCharCode(charCode)
+    // Convert binary string to bytes
+    const dataBytes = new Uint8Array(binaryStr.length)
+    for (let i = 0; i < binaryStr.length; i++) {
+      dataBytes[i] = binaryStr.charCodeAt(i)
     }
 
-    return result
+    // Get key as bytes
+    const keyBytes = new TextEncoder().encode(key)
+
+    // Reverse the XOR operation
+    const resultBytes = new Uint8Array(dataBytes.length)
+    for (let i = 0; i < dataBytes.length; i++) {
+      resultBytes[i] = dataBytes[i] ^ keyBytes[i % keyBytes.length]
+    }
+
+    // Decode UTF-8 bytes back to string
+    return new TextDecoder().decode(resultBytes)
   }
 
   /**

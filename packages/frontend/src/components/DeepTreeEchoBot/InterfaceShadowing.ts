@@ -141,7 +141,12 @@ export class InterfaceShadowing {
     }
 
     private computeStateHash(args: any[]): string {
-        return btoa(JSON.stringify(args)).slice(0, 16)
+        // Use TextEncoder to handle Unicode characters properly
+        // btoa() only supports Latin1 (0-255), so we encode to UTF-8 bytes first
+        const jsonStr = JSON.stringify(args)
+        const bytes = new TextEncoder().encode(jsonStr)
+        const binaryStr = Array.from(bytes, byte => String.fromCharCode(byte)).join('')
+        return btoa(binaryStr).slice(0, 16)
     }
 
     public getInterfaceState(): InfrastructureLatentState {

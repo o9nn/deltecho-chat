@@ -16,11 +16,12 @@ export class InternalJournalManager {
         diary: { id: 'diary', title: 'Personal Expression Diary', entries: [], lastUpdate: 0 },
         dream: { id: 'dream', title: 'Nocturnal Dream Log (Integration)', entries: [], lastUpdate: 0 }
     }
+    private updateInterval: ReturnType<typeof setInterval> | null = null
 
     private constructor() {
         this.loadFromStorage()
         // Start the periodic journal update loop (The Bot's Internal Clock)
-        setInterval(() => this.processInternalUpdate(), 60000) // Every minute
+        this.updateInterval = setInterval(() => this.processInternalUpdate(), 60000) // Every minute
     }
 
     public static getInstance(): InternalJournalManager {
@@ -30,7 +31,23 @@ export class InternalJournalManager {
         return this.instance
     }
 
+    private isLocalStorageAvailable(): boolean {
+        try {
+            const testKey = '__storage_test__'
+            localStorage.setItem(testKey, testKey)
+            localStorage.removeItem(testKey)
+            return true
+        } catch {
+            return false
+        }
+    }
+
     private loadFromStorage(): void {
+        if (!this.isLocalStorageAvailable()) {
+            log.warn('localStorage not available (private browsing?), journals will not persist')
+            return
+        }
+
         try {
             const saved = localStorage.getItem(STORAGE_KEY)
             if (saved) {
@@ -49,6 +66,10 @@ export class InternalJournalManager {
     }
 
     private saveToStorage(): void {
+        if (!this.isLocalStorageAvailable()) {
+            return // Silently skip - already warned in loadFromStorage
+        }
+
         try {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(this.journals))
         } catch (e) {
@@ -109,6 +130,17 @@ export class InternalJournalManager {
 
     public getJournals(): Record<JournalType, InternalJournal> {
         return this.journals
+    }
+
+    /**
+     * Cleanup resources - call when shutting down
+     */
+    public cleanup(): void {
+        if (this.updateInterval) {
+            clearInterval(this.updateInterval)
+            this.updateInterval = null
+        }
+        log.info('InternalJournalManager cleaned up')
     }
 }
 
