@@ -1,0 +1,2 @@
+/usr/bin/ar qc libembeddings_adapter.a CMakeFiles/embeddings_adapter.dir/otherarch/embeddings_adapter.cpp.o
+/usr/bin/ranlib libembeddings_adapter.a

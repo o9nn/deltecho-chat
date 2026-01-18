@@ -1,0 +1,2 @@
+/usr/bin/ar qc libwhisper_adapter.a CMakeFiles/whisper_adapter.dir/otherarch/whispercpp/whisper_adapter.cpp.o
+/usr/bin/ranlib libwhisper_adapter.a

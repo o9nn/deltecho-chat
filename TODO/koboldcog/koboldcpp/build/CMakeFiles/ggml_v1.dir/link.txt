@@ -1,0 +1,2 @@
+/usr/bin/ar qc libggml_v1.a CMakeFiles/ggml_v1.dir/otherarch/ggml_v1.c.o
+/usr/bin/ranlib libggml_v1.a

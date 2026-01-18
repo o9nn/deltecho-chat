@@ -1,0 +1,43 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/ggml.dir/ggml/src/ggml-alloc.c.o"
+  "CMakeFiles/ggml.dir/ggml/src/ggml-alloc.c.o.d"
+  "CMakeFiles/ggml.dir/ggml/src/ggml-backend-reg.cpp.o"
+  "CMakeFiles/ggml.dir/ggml/src/ggml-backend-reg.cpp.o.d"
+  "CMakeFiles/ggml.dir/ggml/src/ggml-backend.cpp.o"
+  "CMakeFiles/ggml.dir/ggml/src/ggml-backend.cpp.o.d"
+  "CMakeFiles/ggml.dir/ggml/src/ggml-cpu/binary-ops.cpp.o"
+  "CMakeFiles/ggml.dir/ggml/src/ggml-cpu/binary-ops.cpp.o.d"
+  "CMakeFiles/ggml.dir/ggml/src/ggml-cpu/ggml-cpu-aarch64.cpp.o"
+  "CMakeFiles/ggml.dir/ggml/src/ggml-cpu/ggml-cpu-aarch64.cpp.o.d"
+  "CMakeFiles/ggml.dir/ggml/src/ggml-cpu/ggml-cpu-quants.c.o"
+  "CMakeFiles/ggml.dir/ggml/src/ggml-cpu/ggml-cpu-quants.c.o.d"
+  "CMakeFiles/ggml.dir/ggml/src/ggml-cpu/ggml-cpu-traits.cpp.o"
+  "CMakeFiles/ggml.dir/ggml/src/ggml-cpu/ggml-cpu-traits.cpp.o.d"
+  "CMakeFiles/ggml.dir/ggml/src/ggml-cpu/ggml-cpu.c.o"
+  "CMakeFiles/ggml.dir/ggml/src/ggml-cpu/ggml-cpu.c.o.d"
+  "CMakeFiles/ggml.dir/ggml/src/ggml-cpu/ggml-cpu.cpp.o"
+  "CMakeFiles/ggml.dir/ggml/src/ggml-cpu/ggml-cpu.cpp.o.d"
+  "CMakeFiles/ggml.dir/ggml/src/ggml-cpu/llamafile/sgemm.cpp.o"
+  "CMakeFiles/ggml.dir/ggml/src/ggml-cpu/llamafile/sgemm.cpp.o.d"
+  "CMakeFiles/ggml.dir/ggml/src/ggml-cpu/ops.cpp.o"
+  "CMakeFiles/ggml.dir/ggml/src/ggml-cpu/ops.cpp.o.d"
+  "CMakeFiles/ggml.dir/ggml/src/ggml-cpu/unary-ops.cpp.o"
+  "CMakeFiles/ggml.dir/ggml/src/ggml-cpu/unary-ops.cpp.o.d"
+  "CMakeFiles/ggml.dir/ggml/src/ggml-cpu/vec.cpp.o"
+  "CMakeFiles/ggml.dir/ggml/src/ggml-cpu/vec.cpp.o.d"
+  "CMakeFiles/ggml.dir/ggml/src/ggml-quants.c.o"
+  "CMakeFiles/ggml.dir/ggml/src/ggml-quants.c.o.d"
+  "CMakeFiles/ggml.dir/ggml/src/ggml-threading.cpp.o"
+  "CMakeFiles/ggml.dir/ggml/src/ggml-threading.cpp.o.d"
+  "CMakeFiles/ggml.dir/ggml/src/ggml.c.o"
+  "CMakeFiles/ggml.dir/ggml/src/ggml.c.o.d"
+  "CMakeFiles/ggml.dir/ggml/src/gguf.cpp.o"
+  "CMakeFiles/ggml.dir/ggml/src/gguf.cpp.o.d"
+  "libggml.a"
+  "libggml.pdb"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang C CXX)
+  include(CMakeFiles/ggml.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

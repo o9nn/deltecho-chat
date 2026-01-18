@@ -1,0 +1,13 @@
+/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build/CMakeFiles/ggml.dir
+/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build/CMakeFiles/ggml_v1.dir
+/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build/CMakeFiles/ggml_v2.dir
+/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build/CMakeFiles/ggml_v3.dir
+/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build/CMakeFiles/common2.dir
+/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build/CMakeFiles/sdtype_adapter.dir
+/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build/CMakeFiles/whisper_adapter.dir
+/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build/CMakeFiles/tts_adapter.dir
+/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build/CMakeFiles/embeddings_adapter.dir
+/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build/CMakeFiles/gpttype_adapter.dir
+/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build/CMakeFiles/koboldcpp_cublas.dir
+/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build/CMakeFiles/edit_cache.dir
+/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build/CMakeFiles/rebuild_cache.dir

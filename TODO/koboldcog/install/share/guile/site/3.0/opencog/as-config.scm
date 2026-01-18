@@ -1,0 +1,6 @@
+(define-module (opencog as-config))
+(define-public opencog-ext-path-exec "/home/runner/work/opencog-basic/opencog-basic/install/lib/opencog/")
+(define-public opencog-ext-path-logger "/home/runner/work/opencog-basic/opencog-basic/install/lib/opencog/")
+(define-public opencog-ext-path-randgen "/home/runner/work/opencog-basic/opencog-basic/install/lib/opencog/")
+(define-public opencog-ext-path-type-utils "/home/runner/work/opencog-basic/opencog-basic/install/lib/opencog/")
+(define-public opencog-ext-path-smob "/home/runner/work/opencog-basic/opencog-basic/install/lib/opencog/")

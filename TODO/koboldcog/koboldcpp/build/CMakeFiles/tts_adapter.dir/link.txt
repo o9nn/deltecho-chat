@@ -1,0 +1,2 @@
+/usr/bin/ar qc libtts_adapter.a CMakeFiles/tts_adapter.dir/otherarch/tts_adapter.cpp.o
+/usr/bin/ranlib libtts_adapter.a

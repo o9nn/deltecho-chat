@@ -1,0 +1,2 @@
+/usr/bin/ar qc libsdtype_adapter.a CMakeFiles/sdtype_adapter.dir/otherarch/sdcpp/sdtype_adapter.cpp.o
+/usr/bin/ranlib libsdtype_adapter.a

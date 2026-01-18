@@ -1,0 +1,200 @@
+[
+{
+  "directory": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build",
+  "command": "/usr/bin/cc -DGGML_USE_CPU -DGGML_USE_CPU_AARCH64 -DLOG_DISABLE_LOGS -DNOMINMAX -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/. -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src/ggml-cpu -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/tools -O3 -DNDEBUG -std=gnu11 -fPIC -mf16c -mfma -mavx -mavx2 -o CMakeFiles/ggml.dir/ggml/src/ggml.c.o -c /home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/ggml.c",
+  "file": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/ggml.c",
+  "output": "CMakeFiles/ggml.dir/ggml/src/ggml.c.o"
+},
+{
+  "directory": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build",
+  "command": "/usr/bin/cc -DGGML_USE_CPU -DGGML_USE_CPU_AARCH64 -DLOG_DISABLE_LOGS -DNOMINMAX -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/. -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src/ggml-cpu -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/tools -O3 -DNDEBUG -std=gnu11 -fPIC -mf16c -mfma -mavx -mavx2 -o CMakeFiles/ggml.dir/ggml/src/ggml-cpu/ggml-cpu.c.o -c /home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/ggml-cpu/ggml-cpu.c",
+  "file": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/ggml-cpu/ggml-cpu.c",
+  "output": "CMakeFiles/ggml.dir/ggml/src/ggml-cpu/ggml-cpu.c.o"
+},
+{
+  "directory": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build",
+  "command": "/usr/bin/cc -DGGML_USE_CPU -DGGML_USE_CPU_AARCH64 -DLOG_DISABLE_LOGS -DNOMINMAX -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/. -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src/ggml-cpu -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/tools -O3 -DNDEBUG -std=gnu11 -fPIC -mf16c -mfma -mavx -mavx2 -o CMakeFiles/ggml.dir/ggml/src/ggml-alloc.c.o -c /home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/ggml-alloc.c",
+  "file": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/ggml-alloc.c",
+  "output": "CMakeFiles/ggml.dir/ggml/src/ggml-alloc.c.o"
+},
+{
+  "directory": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build",
+  "command": "/usr/bin/c++ -DGGML_USE_CPU -DGGML_USE_CPU_AARCH64 -DLOG_DISABLE_LOGS -DNOMINMAX -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/. -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src/ggml-cpu -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/tools -O3 -DNDEBUG -std=gnu++17 -fPIC -mf16c -mfma -mavx -mavx2 -o CMakeFiles/ggml.dir/ggml/src/ggml-backend.cpp.o -c /home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/ggml-backend.cpp",
+  "file": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/ggml-backend.cpp",
+  "output": "CMakeFiles/ggml.dir/ggml/src/ggml-backend.cpp.o"
+},
+{
+  "directory": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build",
+  "command": "/usr/bin/cc -DGGML_USE_CPU -DGGML_USE_CPU_AARCH64 -DLOG_DISABLE_LOGS -DNOMINMAX -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/. -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src/ggml-cpu -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/tools -O3 -DNDEBUG -std=gnu11 -fPIC -mf16c -mfma -mavx -mavx2 -o CMakeFiles/ggml.dir/ggml/src/ggml-quants.c.o -c /home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/ggml-quants.c",
+  "file": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/ggml-quants.c",
+  "output": "CMakeFiles/ggml.dir/ggml/src/ggml-quants.c.o"
+},
+{
+  "directory": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build",
+  "command": "/usr/bin/c++ -DGGML_USE_CPU -DGGML_USE_CPU_AARCH64 -DLOG_DISABLE_LOGS -DNOMINMAX -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/. -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src/ggml-cpu -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/tools -O3 -DNDEBUG -std=gnu++17 -fPIC -mf16c -mfma -mavx -mavx2 -o CMakeFiles/ggml.dir/ggml/src/ggml-cpu/llamafile/sgemm.cpp.o -c /home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/ggml-cpu/llamafile/sgemm.cpp",
+  "file": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/ggml-cpu/llamafile/sgemm.cpp",
+  "output": "CMakeFiles/ggml.dir/ggml/src/ggml-cpu/llamafile/sgemm.cpp.o"
+},
+{
+  "directory": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build",
+  "command": "/usr/bin/c++ -DGGML_USE_CPU -DGGML_USE_CPU_AARCH64 -DLOG_DISABLE_LOGS -DNOMINMAX -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/. -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src/ggml-cpu -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/tools -O3 -DNDEBUG -std=gnu++17 -fPIC -mf16c -mfma -mavx -mavx2 -o CMakeFiles/ggml.dir/ggml/src/ggml-cpu/ggml-cpu-traits.cpp.o -c /home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/ggml-cpu/ggml-cpu-traits.cpp",
+  "file": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/ggml-cpu/ggml-cpu-traits.cpp",
+  "output": "CMakeFiles/ggml.dir/ggml/src/ggml-cpu/ggml-cpu-traits.cpp.o"
+},
+{
+  "directory": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build",
+  "command": "/usr/bin/c++ -DGGML_USE_CPU -DGGML_USE_CPU_AARCH64 -DLOG_DISABLE_LOGS -DNOMINMAX -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/. -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src/ggml-cpu -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/tools -O3 -DNDEBUG -std=gnu++17 -fPIC -mf16c -mfma -mavx -mavx2 -o CMakeFiles/ggml.dir/ggml/src/ggml-threading.cpp.o -c /home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/ggml-threading.cpp",
+  "file": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/ggml-threading.cpp",
+  "output": "CMakeFiles/ggml.dir/ggml/src/ggml-threading.cpp.o"
+},
+{
+  "directory": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build",
+  "command": "/usr/bin/c++ -DGGML_USE_CPU -DGGML_USE_CPU_AARCH64 -DLOG_DISABLE_LOGS -DNOMINMAX -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/. -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src/ggml-cpu -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/tools -O3 -DNDEBUG -std=gnu++17 -fPIC -mf16c -mfma -mavx -mavx2 -o CMakeFiles/ggml.dir/ggml/src/ggml-cpu/ggml-cpu.cpp.o -c /home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/ggml-cpu/ggml-cpu.cpp",
+  "file": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/ggml-cpu/ggml-cpu.cpp",
+  "output": "CMakeFiles/ggml.dir/ggml/src/ggml-cpu/ggml-cpu.cpp.o"
+},
+{
+  "directory": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build",
+  "command": "/usr/bin/c++ -DGGML_USE_CPU -DGGML_USE_CPU_AARCH64 -DLOG_DISABLE_LOGS -DNOMINMAX -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/. -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src/ggml-cpu -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/tools -O3 -DNDEBUG -std=gnu++17 -fPIC -mf16c -mfma -mavx -mavx2 -o CMakeFiles/ggml.dir/ggml/src/ggml-cpu/ggml-cpu-aarch64.cpp.o -c /home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/ggml-cpu/ggml-cpu-aarch64.cpp",
+  "file": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/ggml-cpu/ggml-cpu-aarch64.cpp",
+  "output": "CMakeFiles/ggml.dir/ggml/src/ggml-cpu/ggml-cpu-aarch64.cpp.o"
+},
+{
+  "directory": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build",
+  "command": "/usr/bin/cc -DGGML_USE_CPU -DGGML_USE_CPU_AARCH64 -DLOG_DISABLE_LOGS -DNOMINMAX -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/. -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src/ggml-cpu -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/tools -O3 -DNDEBUG -std=gnu11 -fPIC -mf16c -mfma -mavx -mavx2 -o CMakeFiles/ggml.dir/ggml/src/ggml-cpu/ggml-cpu-quants.c.o -c /home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/ggml-cpu/ggml-cpu-quants.c",
+  "file": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/ggml-cpu/ggml-cpu-quants.c",
+  "output": "CMakeFiles/ggml.dir/ggml/src/ggml-cpu/ggml-cpu-quants.c.o"
+},
+{
+  "directory": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build",
+  "command": "/usr/bin/c++ -DGGML_USE_CPU -DGGML_USE_CPU_AARCH64 -DLOG_DISABLE_LOGS -DNOMINMAX -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/. -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src/ggml-cpu -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/tools -O3 -DNDEBUG -std=gnu++17 -fPIC -mf16c -mfma -mavx -mavx2 -o CMakeFiles/ggml.dir/ggml/src/ggml-cpu/binary-ops.cpp.o -c /home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/ggml-cpu/binary-ops.cpp",
+  "file": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/ggml-cpu/binary-ops.cpp",
+  "output": "CMakeFiles/ggml.dir/ggml/src/ggml-cpu/binary-ops.cpp.o"
+},
+{
+  "directory": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build",
+  "command": "/usr/bin/c++ -DGGML_USE_CPU -DGGML_USE_CPU_AARCH64 -DLOG_DISABLE_LOGS -DNOMINMAX -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/. -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src/ggml-cpu -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/tools -O3 -DNDEBUG -std=gnu++17 -fPIC -mf16c -mfma -mavx -mavx2 -o CMakeFiles/ggml.dir/ggml/src/ggml-cpu/unary-ops.cpp.o -c /home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/ggml-cpu/unary-ops.cpp",
+  "file": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/ggml-cpu/unary-ops.cpp",
+  "output": "CMakeFiles/ggml.dir/ggml/src/ggml-cpu/unary-ops.cpp.o"
+},
+{
+  "directory": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build",
+  "command": "/usr/bin/c++ -DGGML_USE_CPU -DGGML_USE_CPU_AARCH64 -DLOG_DISABLE_LOGS -DNOMINMAX -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/. -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src/ggml-cpu -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/tools -O3 -DNDEBUG -std=gnu++17 -fPIC -mf16c -mfma -mavx -mavx2 -o CMakeFiles/ggml.dir/ggml/src/ggml-cpu/vec.cpp.o -c /home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/ggml-cpu/vec.cpp",
+  "file": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/ggml-cpu/vec.cpp",
+  "output": "CMakeFiles/ggml.dir/ggml/src/ggml-cpu/vec.cpp.o"
+},
+{
+  "directory": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build",
+  "command": "/usr/bin/c++ -DGGML_USE_CPU -DGGML_USE_CPU_AARCH64 -DLOG_DISABLE_LOGS -DNOMINMAX -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/. -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src/ggml-cpu -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/tools -O3 -DNDEBUG -std=gnu++17 -fPIC -mf16c -mfma -mavx -mavx2 -o CMakeFiles/ggml.dir/ggml/src/ggml-cpu/ops.cpp.o -c /home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/ggml-cpu/ops.cpp",
+  "file": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/ggml-cpu/ops.cpp",
+  "output": "CMakeFiles/ggml.dir/ggml/src/ggml-cpu/ops.cpp.o"
+},
+{
+  "directory": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build",
+  "command": "/usr/bin/c++ -DGGML_USE_CPU -DGGML_USE_CPU_AARCH64 -DLOG_DISABLE_LOGS -DNOMINMAX -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/. -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src/ggml-cpu -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/tools -O3 -DNDEBUG -std=gnu++17 -fPIC -mf16c -mfma -mavx -mavx2 -o CMakeFiles/ggml.dir/ggml/src/ggml-backend-reg.cpp.o -c /home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/ggml-backend-reg.cpp",
+  "file": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/ggml-backend-reg.cpp",
+  "output": "CMakeFiles/ggml.dir/ggml/src/ggml-backend-reg.cpp.o"
+},
+{
+  "directory": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build",
+  "command": "/usr/bin/c++ -DGGML_USE_CPU -DGGML_USE_CPU_AARCH64 -DLOG_DISABLE_LOGS -DNOMINMAX -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/. -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src/ggml-cpu -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/tools -O3 -DNDEBUG -std=gnu++17 -fPIC -mf16c -mfma -mavx -mavx2 -o CMakeFiles/ggml.dir/ggml/src/gguf.cpp.o -c /home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/gguf.cpp",
+  "file": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/ggml/src/gguf.cpp",
+  "output": "CMakeFiles/ggml.dir/ggml/src/gguf.cpp.o"
+},
+{
+  "directory": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build",
+  "command": "/usr/bin/cc -DGGML_USE_CPU -DGGML_USE_CPU_AARCH64 -DLOG_DISABLE_LOGS -DNOMINMAX -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/. -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src/ggml-cpu -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/tools -O3 -DNDEBUG -std=gnu11 -fPIC -mf16c -mfma -mavx -mavx2 -o CMakeFiles/ggml_v1.dir/otherarch/ggml_v1.c.o -c /home/runner/work/opencog-basic/opencog-basic/koboldcpp/otherarch/ggml_v1.c",
+  "file": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/otherarch/ggml_v1.c",
+  "output": "CMakeFiles/ggml_v1.dir/otherarch/ggml_v1.c.o"
+},
+{
+  "directory": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build",
+  "command": "/usr/bin/cc -DGGML_USE_CPU -DGGML_USE_CPU_AARCH64 -DLOG_DISABLE_LOGS -DNOMINMAX -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/. -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src/ggml-cpu -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/tools -O3 -DNDEBUG -std=gnu11 -fPIC -mf16c -mfma -mavx -mavx2 -o CMakeFiles/ggml_v2.dir/otherarch/ggml_v2.c.o -c /home/runner/work/opencog-basic/opencog-basic/koboldcpp/otherarch/ggml_v2.c",
+  "file": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/otherarch/ggml_v2.c",
+  "output": "CMakeFiles/ggml_v2.dir/otherarch/ggml_v2.c.o"
+},
+{
+  "directory": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build",
+  "command": "/usr/bin/cc -DGGML_USE_CPU -DGGML_USE_CPU_AARCH64 -DLOG_DISABLE_LOGS -DNOMINMAX -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/. -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src/ggml-cpu -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/tools -O3 -DNDEBUG -std=gnu11 -fPIC -mf16c -mfma -mavx -mavx2 -o CMakeFiles/ggml_v3.dir/otherarch/ggml_v3.c.o -c /home/runner/work/opencog-basic/opencog-basic/koboldcpp/otherarch/ggml_v3.c",
+  "file": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/otherarch/ggml_v3.c",
+  "output": "CMakeFiles/ggml_v3.dir/otherarch/ggml_v3.c.o"
+},
+{
+  "directory": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build",
+  "command": "/usr/bin/c++ -DGGML_USE_CPU -DGGML_USE_CPU_AARCH64 -DLOG_DISABLE_LOGS -DNOMINMAX -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/. -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src/ggml-cpu -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/tools -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/sdcpp -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/sdcpp/thirdparty -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./tools -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./common -O3 -DNDEBUG -std=gnu++17 -fPIC -mf16c -mfma -mavx -mavx2 -o CMakeFiles/common2.dir/common/common.cpp.o -c /home/runner/work/opencog-basic/opencog-basic/koboldcpp/common/common.cpp",
+  "file": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/common/common.cpp",
+  "output": "CMakeFiles/common2.dir/common/common.cpp.o"
+},
+{
+  "directory": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build",
+  "command": "/usr/bin/c++ -DGGML_USE_CPU -DGGML_USE_CPU_AARCH64 -DLOG_DISABLE_LOGS -DNOMINMAX -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/. -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src/ggml-cpu -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/tools -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/sdcpp -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/sdcpp/thirdparty -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./tools -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./common -O3 -DNDEBUG -std=gnu++17 -fPIC -mf16c -mfma -mavx -mavx2 -o CMakeFiles/common2.dir/common/sampling.cpp.o -c /home/runner/work/opencog-basic/opencog-basic/koboldcpp/common/sampling.cpp",
+  "file": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/common/sampling.cpp",
+  "output": "CMakeFiles/common2.dir/common/sampling.cpp.o"
+},
+{
+  "directory": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build",
+  "command": "/usr/bin/c++ -DGGML_USE_CPU -DGGML_USE_CPU_AARCH64 -DLOG_DISABLE_LOGS -DNOMINMAX -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/. -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src/ggml-cpu -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/tools -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/sdcpp -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/sdcpp/thirdparty -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./tools -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./common -O3 -DNDEBUG -std=gnu++17 -fPIC -mf16c -mfma -mavx -mavx2 -o CMakeFiles/common2.dir/tools/mtmd/llava.cpp.o -c /home/runner/work/opencog-basic/opencog-basic/koboldcpp/tools/mtmd/llava.cpp",
+  "file": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/tools/mtmd/llava.cpp",
+  "output": "CMakeFiles/common2.dir/tools/mtmd/llava.cpp.o"
+},
+{
+  "directory": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build",
+  "command": "/usr/bin/c++ -DGGML_USE_CPU -DGGML_USE_CPU_AARCH64 -DLOG_DISABLE_LOGS -DNOMINMAX -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/. -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src/ggml-cpu -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/tools -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/sdcpp -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/sdcpp/thirdparty -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./tools -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./common -O3 -DNDEBUG -std=gnu++17 -fPIC -mf16c -mfma -mavx -mavx2 -o CMakeFiles/common2.dir/tools/mtmd/clip.cpp.o -c /home/runner/work/opencog-basic/opencog-basic/koboldcpp/tools/mtmd/clip.cpp",
+  "file": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/tools/mtmd/clip.cpp",
+  "output": "CMakeFiles/common2.dir/tools/mtmd/clip.cpp.o"
+},
+{
+  "directory": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build",
+  "command": "/usr/bin/c++ -DGGML_USE_CPU -DGGML_USE_CPU_AARCH64 -DLOG_DISABLE_LOGS -DNOMINMAX -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/. -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src/ggml-cpu -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/tools -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/sdcpp -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/sdcpp/thirdparty -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./tools -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./common -O3 -DNDEBUG -std=gnu++17 -fPIC -mf16c -mfma -mavx -mavx2 -o CMakeFiles/common2.dir/src/unicode.cpp.o -c /home/runner/work/opencog-basic/opencog-basic/koboldcpp/src/unicode.cpp",
+  "file": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/src/unicode.cpp",
+  "output": "CMakeFiles/common2.dir/src/unicode.cpp.o"
+},
+{
+  "directory": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build",
+  "command": "/usr/bin/c++ -DGGML_USE_CPU -DGGML_USE_CPU_AARCH64 -DLOG_DISABLE_LOGS -DNOMINMAX -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/. -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src/ggml-cpu -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/tools -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/sdcpp -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/sdcpp/thirdparty -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./tools -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./common -O3 -DNDEBUG -std=gnu++17 -fPIC -mf16c -mfma -mavx -mavx2 -o CMakeFiles/common2.dir/src/unicode-data.cpp.o -c /home/runner/work/opencog-basic/opencog-basic/koboldcpp/src/unicode-data.cpp",
+  "file": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/src/unicode-data.cpp",
+  "output": "CMakeFiles/common2.dir/src/unicode-data.cpp.o"
+},
+{
+  "directory": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build",
+  "command": "/usr/bin/c++ -DGGML_USE_CPU -DGGML_USE_CPU_AARCH64 -DLOG_DISABLE_LOGS -DNOMINMAX -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/. -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src/ggml-cpu -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/tools -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/sdcpp -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/sdcpp/thirdparty -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./tools -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./common -O3 -DNDEBUG -std=gnu++17 -fPIC -mf16c -mfma -mavx -mavx2 -o CMakeFiles/common2.dir/otherarch/utils.cpp.o -c /home/runner/work/opencog-basic/opencog-basic/koboldcpp/otherarch/utils.cpp",
+  "file": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/otherarch/utils.cpp",
+  "output": "CMakeFiles/common2.dir/otherarch/utils.cpp.o"
+},
+{
+  "directory": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build",
+  "command": "/usr/bin/c++ -DGGML_USE_CPU -DGGML_USE_CPU_AARCH64 -DLOG_DISABLE_LOGS -DNOMINMAX -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/. -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src/ggml-cpu -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/tools -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/sdcpp -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/sdcpp/thirdparty -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./tools -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./common -O3 -DNDEBUG -std=gnu++17 -fPIC -mf16c -mfma -mavx -mavx2 -o CMakeFiles/sdtype_adapter.dir/otherarch/sdcpp/sdtype_adapter.cpp.o -c /home/runner/work/opencog-basic/opencog-basic/koboldcpp/otherarch/sdcpp/sdtype_adapter.cpp",
+  "file": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/otherarch/sdcpp/sdtype_adapter.cpp",
+  "output": "CMakeFiles/sdtype_adapter.dir/otherarch/sdcpp/sdtype_adapter.cpp.o"
+},
+{
+  "directory": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build",
+  "command": "/usr/bin/c++ -DGGML_USE_CPU -DGGML_USE_CPU_AARCH64 -DLOG_DISABLE_LOGS -DNOMINMAX -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/. -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src/ggml-cpu -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/tools -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/whispercpp -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./tools -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./common -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/sdcpp -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/sdcpp/thirdparty -O3 -DNDEBUG -std=gnu++17 -fPIC -mf16c -mfma -mavx -mavx2 -o CMakeFiles/whisper_adapter.dir/otherarch/whispercpp/whisper_adapter.cpp.o -c /home/runner/work/opencog-basic/opencog-basic/koboldcpp/otherarch/whispercpp/whisper_adapter.cpp",
+  "file": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/otherarch/whispercpp/whisper_adapter.cpp",
+  "output": "CMakeFiles/whisper_adapter.dir/otherarch/whispercpp/whisper_adapter.cpp.o"
+},
+{
+  "directory": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build",
+  "command": "/usr/bin/c++ -DGGML_USE_CPU -DGGML_USE_CPU_AARCH64 -DLOG_DISABLE_LOGS -DNOMINMAX -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/. -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src/ggml-cpu -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/tools -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./tools -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./common -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/sdcpp -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/sdcpp/thirdparty -O3 -DNDEBUG -std=gnu++17 -fPIC -mf16c -mfma -mavx -mavx2 -o CMakeFiles/tts_adapter.dir/otherarch/tts_adapter.cpp.o -c /home/runner/work/opencog-basic/opencog-basic/koboldcpp/otherarch/tts_adapter.cpp",
+  "file": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/otherarch/tts_adapter.cpp",
+  "output": "CMakeFiles/tts_adapter.dir/otherarch/tts_adapter.cpp.o"
+},
+{
+  "directory": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build",
+  "command": "/usr/bin/c++ -DGGML_USE_CPU -DGGML_USE_CPU_AARCH64 -DLOG_DISABLE_LOGS -DNOMINMAX -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/. -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src/ggml-cpu -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/tools -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./tools -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./common -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/sdcpp -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/sdcpp/thirdparty -O3 -DNDEBUG -std=gnu++17 -fPIC -mf16c -mfma -mavx -mavx2 -o CMakeFiles/embeddings_adapter.dir/otherarch/embeddings_adapter.cpp.o -c /home/runner/work/opencog-basic/opencog-basic/koboldcpp/otherarch/embeddings_adapter.cpp",
+  "file": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/otherarch/embeddings_adapter.cpp",
+  "output": "CMakeFiles/embeddings_adapter.dir/otherarch/embeddings_adapter.cpp.o"
+},
+{
+  "directory": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build",
+  "command": "/usr/bin/c++ -DGGML_USE_CPU -DGGML_USE_CPU_AARCH64 -DLOG_DISABLE_LOGS -DNOMINMAX -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/. -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src/ggml-cpu -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/tools -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/sdcpp -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/sdcpp/thirdparty -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./tools -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./common -O3 -DNDEBUG -std=gnu++17 -fPIC -mf16c -mfma -mavx -mavx2 -o CMakeFiles/gpttype_adapter.dir/gpttype_adapter.cpp.o -c /home/runner/work/opencog-basic/opencog-basic/koboldcpp/gpttype_adapter.cpp",
+  "file": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/gpttype_adapter.cpp",
+  "output": "CMakeFiles/gpttype_adapter.dir/gpttype_adapter.cpp.o"
+},
+{
+  "directory": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/build",
+  "command": "/usr/bin/c++ -DGGML_USE_CPU -DGGML_USE_CPU_AARCH64 -DLOG_DISABLE_LOGS -DNOMINMAX -Dkoboldcpp_cublas_EXPORTS -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/. -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./ggml/src/ggml-cpu -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./include -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/tools -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/sdcpp -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/sdcpp/thirdparty -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./tools -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./common -I/home/runner/work/opencog-basic/opencog-basic/koboldcpp/./otherarch/whispercpp -O3 -DNDEBUG -std=gnu++17 -fPIC -mf16c -mfma -mavx -mavx2 -o CMakeFiles/koboldcpp_cublas.dir/expose.cpp.o -c /home/runner/work/opencog-basic/opencog-basic/koboldcpp/expose.cpp",
+  "file": "/home/runner/work/opencog-basic/opencog-basic/koboldcpp/expose.cpp",
+  "output": "CMakeFiles/koboldcpp_cublas.dir/expose.cpp.o"
+}
+]

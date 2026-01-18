@@ -1,0 +1,3 @@
+com.google.auto.value.extension.memoized.processor.MemoizeExtension
+com.google.auto.value.extension.serializable.processor.SerializableAutoValueExtension
+com.google.auto.value.extension.toprettystring.processor.ToPrettyStringExtension

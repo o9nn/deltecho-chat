@@ -1,0 +1,2 @@
+/usr/bin/ar qc libgpttype_adapter.a CMakeFiles/gpttype_adapter.dir/gpttype_adapter.cpp.o
+/usr/bin/ranlib libgpttype_adapter.a

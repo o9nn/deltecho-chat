@@ -1,0 +1,2 @@
+/usr/bin/ar qc libcommon2.a CMakeFiles/common2.dir/common/common.cpp.o CMakeFiles/common2.dir/common/sampling.cpp.o CMakeFiles/common2.dir/tools/mtmd/llava.cpp.o CMakeFiles/common2.dir/tools/mtmd/clip.cpp.o CMakeFiles/common2.dir/src/unicode.cpp.o "CMakeFiles/common2.dir/src/unicode-data.cpp.o" CMakeFiles/common2.dir/otherarch/utils.cpp.o
+/usr/bin/ranlib libcommon2.a

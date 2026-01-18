@@ -1,0 +1,8 @@
+(define-module (opencog as-storage-config))
+(define-public opencog-ext-path-storage-types "/home/runner/work/opencog-basic/opencog-basic/install/lib/opencog/")
+(define-public opencog-ext-path-persist "/home/runner/work/opencog-basic/opencog-basic/install/lib/opencog/")
+(define-public opencog-ext-path-csv-table "/home/runner/work/opencog-basic/opencog-basic/install/lib/opencog/")
+(define-public opencog-ext-path-persist-file "/home/runner/work/opencog-basic/opencog-basic/install/lib/opencog/")
+(define-public opencog-ext-path-persist-flow "/home/runner/work/opencog-basic/opencog-basic/install/lib/opencog/")
+(define-public opencog-ext-path-persist-proxy "/home/runner/work/opencog-basic/opencog-basic/install/lib/opencog/")
+(define-public opencog-ext-path-uuid "/home/runner/work/opencog-basic/opencog-basic/install/lib/opencog/")
