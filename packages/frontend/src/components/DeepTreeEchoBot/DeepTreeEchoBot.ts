@@ -718,6 +718,17 @@ I'm here to assist you with various tasks and engage in meaningful conversations
             log.error('Error in visual memory analysis:', err)
           );
         } else {
+          // Check for videos
+          const videos = (message.attachments || []).filter((a: any) => a.view_type === 'video' || a.type === 'video').map((a: any) => a.path || a.url);
+
+          if (this.options.visionEnabled && videos && videos.length > 0) {
+            log.info(`[VideoMemory] Found ${videos.length} videos. Initiating frame extraction.`);
+            // Trigger async video analysis
+            this.analyzeAndStoreVideoMemory(chatId, videos[0]).catch(err =>
+              log.error('Error in video memory analysis:', err)
+            );
+          }
+
           userMessage = { role: 'user', content: messageText };
         }
         messages.push(userMessage);
@@ -859,6 +870,49 @@ I'm here to assist you with various tasks and engage in meaningful conversations
 
     } catch (error) {
       log.error('[VisualMemory] Failed to analyze images:', error);
+    }
+  }
+
+  /**
+   * Analyze video frames and store a descriptive memory
+   */
+  private async analyzeAndStoreVideoMemory(chatId: number, videoUrl: string): Promise<void> {
+    if (!this.options.memoryEnabled || !this.options.visionEnabled) return;
+
+    try {
+      log.info(`[VideoMemory] Extracting frames from ${videoUrl}`);
+
+      // Extract 3 keyframes
+      const frames = await VisionProcessor.extractVideoFrames(videoUrl, 3);
+
+      log.info(`[VideoMemory] Extracted ${frames.length} frames. Analyzing...`);
+
+      // Construct a specific prompt for video analysis
+      const analysisPrompt = "These are keyframes from a video. Analyze them to describe the video's content, action, and context. Focus on movement, key events, and visual details. This description will be stored in long-term memory.";
+
+      const visionMessage = VisionProcessor.constructVisionMessage(analysisPrompt, frames);
+
+      // Generate description using LLM
+      const response = await this.llmService.generateResponse([visionMessage] as any);
+
+      log.info(`[VideoMemory] Generated description: ${response.substring(0, 50)}...`);
+
+      // Store in RAG memory with metadata
+      await this.memoryStore.storeMemory({
+        chatId,
+        messageId: 0,
+        sender: 'bot',
+        text: `[Video Observation] ${response}`,
+        metadata: {
+          type: 'video_analysis',
+          video_url: videoUrl,
+          original_prompt: analysisPrompt,
+          frame_count: frames.length
+        }
+      });
+
+    } catch (error) {
+      log.error('[VideoMemory] Failed to analyze video:', error);
     }
   }
 }

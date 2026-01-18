@@ -92,3 +92,8 @@ default.nix
 target
 packages/target-tauri/src-tauri/target
 packages/target-tauri/src-tauri/gen/schemas
+
+# Local untracked files
+TODO/
+lib/
+packages/digital-garden/
