@@ -206,4 +206,46 @@ describe('DeepTreeEchoBot Class', () => {
         // LLMService should be called with standard string or text content
         // Based on logic: `userMessage = { role: 'user', content: messageText }`
     });
+
+    it('should trigger analyzeAndStoreVideoMemory when video attached', async () => {
+        const options: any = {
+            enabled: true,
+            visionEnabled: true,
+            memoryEnabled: true,
+            webAutomationEnabled: false,
+            embodimentEnabled: false,
+            useParallelProcessing: false
+        };
+        bot = new DeepTreeEchoBot(options);
+
+        // Mock extractVideoFrames
+        (VisionProcessor.extractVideoFrames as jest.Mock).mockResolvedValue(['data:image/jpeg;base64,frame1', 'data:image/jpeg;base64,frame2']);
+
+        const message = {
+            text: 'Check this video',
+            attachments: [
+                { view_type: 'video', url: 'http://example.com/video.mp4' }
+            ]
+        };
+
+        await bot.processMessage(1, 100, 200, message);
+
+        // Wait for async
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        // Verify LLMService called twice (response + video analysis)
+        expect(mockLLMService.generateResponse).toHaveBeenCalledTimes(2);
+
+        // Verify extractVideoFrames called
+        expect(VisionProcessor.extractVideoFrames).toHaveBeenCalledWith('http://example.com/video.mp4', 3);
+
+        // Verify MemoryStore called with video metadata
+        const memoryStoreMock = (require('../RAGMemoryStore').RAGMemoryStore.getInstance)();
+        const memoryCalls = memoryStoreMock.storeMemory.mock.calls;
+        const videoMemory = memoryCalls.find((call: any) => call[0].metadata?.type === 'video_analysis');
+
+        expect(videoMemory).toBeDefined();
+        expect(videoMemory[0].metadata.video_url).toBe('http://example.com/video.mp4');
+        expect(videoMemory[0].metadata.frame_count).toBe(2);
+    });
 });
