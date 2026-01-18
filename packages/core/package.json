@@ -41,6 +41,14 @@
     "./config": {
       "import": "./dist/config/index.js",
       "types": "./dist/config/index.d.ts"
+    },
+    "./multimodal": {
+      "import": "./dist/multimodal/index.js",
+      "types": "./dist/multimodal/index.d.ts"
+    },
+    "./consciousness": {
+      "import": "./dist/consciousness/index.js",
+      "types": "./dist/consciousness/index.d.ts"
     }
   },
   "scripts": {
