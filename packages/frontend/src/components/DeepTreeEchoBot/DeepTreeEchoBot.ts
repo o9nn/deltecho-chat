@@ -157,6 +157,34 @@ export class DeepTreeEchoBot {
   }
 
   /**
+   * Get the LLM service instance (for proactive messaging integration)
+   */
+  public getLLMService(): LLMService {
+    return this.llmService
+  }
+
+  /**
+   * Get the self-reflection component
+   */
+  public getSelfReflection(): SelfReflection {
+    return this.selfReflection
+  }
+
+  /**
+   * Get the persona core component
+   */
+  public getPersonaCore(): PersonaCore {
+    return this.personaCore
+  }
+
+  /**
+   * Get the memory store component
+   */
+  public getMemoryStore(): RAGMemoryStore {
+    return this.memoryStore
+  }
+
+  /**
    * Process a received message and potentially generate a response
    */
   public async processMessage(

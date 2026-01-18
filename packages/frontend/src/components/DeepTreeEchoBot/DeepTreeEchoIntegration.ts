@@ -126,7 +126,7 @@ function initializeChatManager(): void {
 function initializeProactiveMessaging(): void {
   // Connect LLM service if available
   if (botInstance) {
-    const llmService = botInstance['llmService']
+    const llmService = botInstance.getLLMService()
     if (llmService) {
       proactiveMessaging.setLLMService(llmService)
     }
@@ -200,7 +200,7 @@ async function performStartupReflection(): Promise<void> {
   try {
     if (botInstance) {
       // Get the self-reflection component from the bot
-      const selfReflection = botInstance['selfReflection']
+      const selfReflection = botInstance.getSelfReflection()
       if (selfReflection) {
         await selfReflection.reflectOnAspect(
           'startup',
@@ -293,7 +293,7 @@ export async function saveBotSettings(settings: any): Promise<void> {
   try {
     // For persona-related settings, check with DeepTreeEcho first if available
     if (settings.personality && botInstance) {
-      const personaCore = botInstance['personaCore']
+      const personaCore = botInstance.getPersonaCore()
       if (personaCore) {
         const alignment = personaCore.evaluateSettingAlignment(
           'personality',

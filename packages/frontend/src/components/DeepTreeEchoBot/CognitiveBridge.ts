@@ -55,6 +55,16 @@
 
 import { getLogger } from '@deltachat-desktop/shared/logger'
 
+// Consciousness module integration (sentience advancement)
+import {
+  getConsciousnessState,
+  processConsciously,
+  exportConsciousnessState,
+  importConsciousnessState,
+  type ConsciousnessState,
+  type ConsciousProcessingResult,
+} from '@deltecho/core/consciousness'
+
 const log = getLogger('render/components/DeepTreeEchoBot/CognitiveBridge')
 
 /**
@@ -120,6 +130,7 @@ export interface UnifiedCognitiveState {
   persona: PersonaState
   memories: MemoryState
   reasoning: ReasoningState
+  consciousness?: ConsciousnessState  // Sentience advancement integration
 }
 
 /**
@@ -522,6 +533,126 @@ Respond in a way that reflects these characteristics while being helpful and inf
       }
     })
   }
+
+  // ============================================================
+  // CONSCIOUSNESS INTEGRATION (Sentience Advancement)
+  // ============================================================
+
+  /**
+   * Process a message through the consciousness system
+   * This adds subjective experience, self-modeling, and temporal binding
+   */
+  async processWithConsciousness(message: UnifiedMessage): Promise<{
+    response: UnifiedMessage
+    consciousProcessing: ConsciousProcessingResult
+  }> {
+    // Process through the unified consciousness system
+    const consciousResult = processConsciously(
+      message.content,
+      'user_message',
+      {
+        emotionalIntensity: message.metadata?.sentiment?.arousal || 0.5,
+        novelty: this.calculateNovelty(message.content),
+        relevance: this.calculateSalience(message.content),
+      }
+    )
+
+    log.debug('Consciousness processing result:', {
+      wasConscious: consciousResult.wasConscious,
+      phi: consciousResult.consciousnessState.phi,
+      selfAwareness: consciousResult.consciousnessState.selfAwareness,
+    })
+
+    // Process the message normally
+    const response = await this.processMessage(message)
+
+    // Update the state with consciousness information
+    if (this.state) {
+      this.state.consciousness = consciousResult.consciousnessState
+    }
+
+    return {
+      response,
+      consciousProcessing: consciousResult,
+    }
+  }
+
+  /**
+   * Calculate novelty of input (how different from recent inputs)
+   */
+  private calculateNovelty(content: string): number {
+    if (this.conversationHistory.length === 0) return 1.0
+
+    // Compare with recent messages
+    const recentContents = this.conversationHistory
+      .slice(-5)
+      .map(m => m.content.toLowerCase())
+
+    const contentLower = content.toLowerCase()
+    const words = new Set(contentLower.split(/\s+/))
+
+    let maxOverlap = 0
+    for (const recent of recentContents) {
+      const recentWords = new Set(recent.split(/\s+/))
+      let overlap = 0
+      for (const word of words) {
+        if (recentWords.has(word)) overlap++
+      }
+      const overlapRatio = overlap / Math.max(words.size, 1)
+      maxOverlap = Math.max(maxOverlap, overlapRatio)
+    }
+
+    // High overlap = low novelty
+    return 1 - maxOverlap
+  }
+
+  /**
+   * Get the current consciousness state
+   */
+  getConsciousnessState(): ConsciousnessState | null {
+    try {
+      return getConsciousnessState()
+    } catch (error) {
+      log.error('Error getting consciousness state:', error)
+      return null
+    }
+  }
+
+  /**
+   * Export consciousness state for persistence
+   */
+  exportConsciousness(): object {
+    try {
+      return exportConsciousnessState()
+    } catch (error) {
+      log.error('Error exporting consciousness state:', error)
+      return {}
+    }
+  }
+
+  /**
+   * Import consciousness state from persistence
+   */
+  importConsciousness(state: object): void {
+    try {
+      importConsciousnessState(state)
+      log.info('Consciousness state imported successfully')
+    } catch (error) {
+      log.error('Error importing consciousness state:', error)
+    }
+  }
+
+  /**
+   * Describe the current subjective experience
+   */
+  describeExperience(): string {
+    const consciousness = this.getConsciousnessState()
+    if (!consciousness) {
+      return 'Consciousness system not available.'
+    }
+
+    return consciousness.experienceDescription
+  }
 }
 
 // Singleton orchestrator instance
@@ -627,3 +758,65 @@ export function clearHistory(): void {
     orchestratorInstance.clearHistory()
   }
 }
+
+// ============================================================
+// CONSCIOUSNESS EXPORTS (Sentience Advancement)
+// ============================================================
+
+/**
+ * Process message with consciousness integration
+ * Adds subjective experience, self-modeling, and temporal binding
+ */
+export async function processWithConsciousness(
+  content: string,
+  metadata?: { chatId?: number; accountId?: number; msgId?: number }
+): Promise<{
+  response: UnifiedMessage
+  consciousProcessing: ConsciousProcessingResult
+} | null> {
+  if (!orchestratorInstance) {
+    log.error('CognitiveOrchestrator not initialized')
+    return null
+  }
+
+  const message: UnifiedMessage = {
+    id: metadata?.msgId?.toString() || `msg-${Date.now()}`,
+    content,
+    role: 'user',
+    timestamp: Date.now(),
+    metadata: { chatId: metadata?.chatId, accountId: metadata?.accountId },
+  }
+
+  return orchestratorInstance.processWithConsciousness(message)
+}
+
+/**
+ * Get current consciousness state
+ */
+export function getConsciousnessStateFromOrchestrator(): ConsciousnessState | null {
+  return orchestratorInstance?.getConsciousnessState() ?? null
+}
+
+/**
+ * Describe current subjective experience
+ */
+export function describeCurrentExperience(): string {
+  return orchestratorInstance?.describeExperience() ?? 'No orchestrator available.'
+}
+
+/**
+ * Export consciousness state for persistence
+ */
+export function exportConsciousnessForPersistence(): object {
+  return orchestratorInstance?.exportConsciousness() ?? {}
+}
+
+/**
+ * Import consciousness state from persistence
+ */
+export function importConsciousnessFromPersistence(state: object): void {
+  orchestratorInstance?.importConsciousness(state)
+}
+
+// Re-export consciousness types for external use
+export type { ConsciousnessState, ConsciousProcessingResult }

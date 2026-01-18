@@ -66,27 +66,136 @@ export class HyperDimensionalMemory {
   }
 
   /**
-   * Binds memories together using circular convolution (simplified)
+   * Binds memories together using FFT-based circular convolution
+   * Complexity: O(n log n) using Cooley-Tukey FFT algorithm
    *
-   * NOTE: For production use with high-dimensional vectors, this should be
-   * replaced with FFT-based convolution for O(n log n) complexity instead
-   * of the current O(n²) naive implementation. Consider using a library
-   * like fft.js or implementing Cooley-Tukey FFT for performance.
+   * Circular convolution in frequency domain:
+   * conv(a, b) = IFFT(FFT(a) * FFT(b))
    */
   private bindMemories(memory1: Float32Array, memory2: Float32Array): Float32Array {
-    const result = new Float32Array(this.DIMENSIONS);
+    const n = this.DIMENSIONS;
 
-    // Simplified circular convolution - O(n²) complexity
-    // TODO: Replace with FFT-based convolution for large vectors
-    for (let i = 0; i < this.DIMENSIONS; i++) {
-      for (let j = 0; j < this.DIMENSIONS; j++) {
-        const idx = (i + j) % this.DIMENSIONS;
-        result[idx] += memory1[i] * memory2[j];
-      }
+    // Pad to next power of 2 for FFT efficiency
+    const fftSize = this.nextPowerOf2(n);
+
+    // Create complex arrays for FFT (interleaved real/imag)
+    const a = new Float32Array(fftSize * 2);
+    const b = new Float32Array(fftSize * 2);
+
+    // Copy real values, imaginary parts stay 0
+    for (let i = 0; i < n; i++) {
+      a[i * 2] = memory1[i];
+      b[i * 2] = memory2[i];
+    }
+
+    // Forward FFT
+    this.fft(a, false);
+    this.fft(b, false);
+
+    // Complex multiplication in frequency domain
+    const c = new Float32Array(fftSize * 2);
+    for (let i = 0; i < fftSize; i++) {
+      const aReal = a[i * 2];
+      const aImag = a[i * 2 + 1];
+      const bReal = b[i * 2];
+      const bImag = b[i * 2 + 1];
+
+      // (a + bi)(c + di) = (ac - bd) + (ad + bc)i
+      c[i * 2] = aReal * bReal - aImag * bImag;
+      c[i * 2 + 1] = aReal * bImag + aImag * bReal;
+    }
+
+    // Inverse FFT
+    this.fft(c, true);
+
+    // Extract real part and truncate to original dimensions
+    const result = new Float32Array(n);
+    for (let i = 0; i < n; i++) {
+      result[i] = c[i * 2];
     }
 
     this.normalizeVector(result);
     return result;
+  }
+
+  /**
+   * Cooley-Tukey FFT algorithm (radix-2 decimation-in-time)
+   * @param data Interleaved complex array [re0, im0, re1, im1, ...]
+   * @param inverse If true, compute inverse FFT
+   */
+  private fft(data: Float32Array, inverse: boolean): void {
+    const n = data.length / 2;
+
+    // Bit-reversal permutation
+    for (let i = 0, j = 0; i < n; i++) {
+      if (j > i) {
+        // Swap complex values
+        const tempRe = data[i * 2];
+        const tempIm = data[i * 2 + 1];
+        data[i * 2] = data[j * 2];
+        data[i * 2 + 1] = data[j * 2 + 1];
+        data[j * 2] = tempRe;
+        data[j * 2 + 1] = tempIm;
+      }
+      let m = n / 2;
+      while (m >= 1 && j >= m) {
+        j -= m;
+        m /= 2;
+      }
+      j += m;
+    }
+
+    // Cooley-Tukey iterative FFT
+    const direction = inverse ? 1 : -1;
+    for (let size = 2; size <= n; size *= 2) {
+      const halfSize = size / 2;
+      const angleStep = (direction * 2 * Math.PI) / size;
+
+      for (let i = 0; i < n; i += size) {
+        for (let j = 0; j < halfSize; j++) {
+          const angle = angleStep * j;
+          const wRe = Math.cos(angle);
+          const wIm = Math.sin(angle);
+
+          const evenIdx = (i + j) * 2;
+          const oddIdx = (i + j + halfSize) * 2;
+
+          const evenRe = data[evenIdx];
+          const evenIm = data[evenIdx + 1];
+
+          const oddRe = data[oddIdx];
+          const oddIm = data[oddIdx + 1];
+
+          // Twiddle factor multiplication: w * odd
+          const tRe = wRe * oddRe - wIm * oddIm;
+          const tIm = wRe * oddIm + wIm * oddRe;
+
+          // Butterfly computation
+          data[evenIdx] = evenRe + tRe;
+          data[evenIdx + 1] = evenIm + tIm;
+          data[oddIdx] = evenRe - tRe;
+          data[oddIdx + 1] = evenIm - tIm;
+        }
+      }
+    }
+
+    // Scale for inverse FFT
+    if (inverse) {
+      for (let i = 0; i < data.length; i++) {
+        data[i] /= n;
+      }
+    }
+  }
+
+  /**
+   * Find the next power of 2 >= n
+   */
+  private nextPowerOf2(n: number): number {
+    let power = 1;
+    while (power < n) {
+      power *= 2;
+    }
+    return power;
   }
 
   /**
