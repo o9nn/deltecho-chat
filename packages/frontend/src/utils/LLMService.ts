@@ -2,9 +2,20 @@ import { getLogger } from '../../../shared/logger'
 
 const log = getLogger('renderer/LLMService')
 
+export interface ContentPart {
+  type: 'text' | 'image_url'
+  text?: string
+  image_url?: {
+    url: string
+    detail?: 'auto' | 'low' | 'high'
+  }
+}
+
+export type MessageContent = string | ContentPart[]
+
 export interface ChatMessage {
   role: 'system' | 'user' | 'assistant'
-  content: string
+  content: MessageContent
 }
 
 export interface OpenAIRequestParams {
@@ -36,7 +47,7 @@ export class LLMService {
     maxTokens: 1000,
   }
 
-  private constructor() {}
+  private constructor() { }
 
   public static getInstance(): LLMService {
     if (!LLMService.instance) {

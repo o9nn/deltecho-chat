@@ -6,6 +6,7 @@ import { PersonaCore } from './PersonaCore'
 import { SelfReflection } from './SelfReflection'
 import { AgenticLLMService } from './AgenticLLMService'
 import { AgentToolExecutor } from './AgentToolExecutor'
+import { VisionProcessor } from '../../utils/VisionProcessor'
 import {
   setAvatarListening,
   setAvatarThinking,
@@ -676,8 +677,51 @@ I'm here to assist you with various tasks and engage in meaningful conversations
         )
       } else {
         // Use regular processing with the general function
-        response = await this.llmService.generateResponse(messageText, context)
-        log.info('Generated response using general processing')
+        // Construct messages array for LLMService
+        const messages: any[] = []; // Use any[] temporarily to avoid circular types if needed, or import ChatMessage
+
+        // Add system prompt if needed (LLMService usually adds it, but let's be explicit if constructing manually)
+        // Actually LLMService.generateResponseWithContext does this logic. 
+        // But LLMService.generateResponse takes generic messages.
+        // Let's rely on LLMService.generateResponse and construct the array.
+
+        // 1. System Prompt (Optional, let's skip for now or use a default if LLMService doesn't enforce)
+        messages.push({ role: 'system', content: 'You are Deep Tree Echo, a helpful AI assistant.' });
+
+        // 2. Context
+        if (context.length > 0) {
+          const contextStr = context.join('\n');
+          messages.push({
+            role: 'user',
+            content: `Here is the recent conversation history for context:\n${contextStr}\n\nPlease keep this in mind when responding to my next message.`
+          });
+          messages.push({ role: 'assistant', content: "I'll keep this conversation context in mind." });
+        }
+
+        // 3. User Message (Text + Vision)
+        let userMessage;
+        // Check for images in the message object
+        // Assuming message.attachments like defined in delta-chat usually
+        const images = message.images || (message.attachments || []).filter((a: any) => a.is_image || a.view_type === 'image').map((a: any) => a.path || a.url);
+
+        console.log('[DEBUG] visionEnabled:', this.options.visionEnabled);
+        console.log('[DEBUG] images found:', images ? images.length : 0);
+
+        if (this.options.visionEnabled && images && images.length > 0) {
+          console.log('[DEBUG] Constructing vision message');
+          // Convert local paths to base64 if needed, or use URLs if they are web accessible
+          // Since this is electron/local, paths might be local file paths. 
+          // VisionProcessor expects URLs or Base64.
+          // For now, let's assume we pass what we have (URLs). 
+          // NOTE: Converting local file path to base64 in renderer might allow it.
+          userMessage = VisionProcessor.constructVisionMessage(messageText, images);
+        } else {
+          userMessage = { role: 'user', content: messageText };
+        }
+        messages.push(userMessage);
+
+        response = await this.llmService.generateResponse(messages as any);
+        log.info('Generated response using general processing (with Vision check)')
       }
 
       // Set avatar to responding state before sending

@@ -287,7 +287,7 @@ export class LLMService {
    * Maintains backward compatibility with the original implementation
    */
   public async generateResponse(
-    input: string,
+    input: string | any[],
     context: string[] = []
   ): Promise<string> {
     // Use the general function by default
@@ -303,7 +303,7 @@ export class LLMService {
    */
   public async generateResponseWithFunction(
     functionType: CognitiveFunctionType,
-    input: string,
+    input: string | any[],
     context: string[] = []
   ): Promise<string> {
     try {
@@ -320,7 +320,7 @@ export class LLMService {
       const systemPrompt = this.getSystemPromptForFunction(functionType)
 
       // Build messages array with context
-      const messages: Array<{ role: string; content: string }> = [
+      const messages: Array<{ role: string; content: string | Array<any> }> = [
         { role: 'system', content: systemPrompt },
       ]
 
@@ -334,7 +334,28 @@ export class LLMService {
       }
 
       // Add the current user message
-      messages.push({ role: 'user', content: input })
+      // If input is an array (Vision/Multi-modal), just push it. 
+      // If it is a string, push as string.
+      // Note: If input is array of content parts, it goes into 'content' field.
+      // If input is array of MESSAGES (from DeepTreeEchoBot hack), we need to spread it? 
+      // DeepTreeEchoBot Step 1157 constructs: [{role: system}, {role: user (context)}, {role: assistant}, {role: user (input)}]
+      // And passes that whole ARRAY as `input`.
+      // So here `input` is actually `messages`.
+
+      if (Array.isArray(input) && input.length > 0 && input[0].role) {
+        // Input is already a full messages array override
+        // We should probably replace `messages` with `input` or merge?
+        // DeepTreeEchoBot constructed the FULL chain including system prompt.
+        // So if we detect full message chain, use it directly.
+
+        // But wait, `DeepTreeEchoBot` passed `messages as any` to `generateResponse`.
+        // If we want to support that, we should check if input is full message history.
+        messages.length = 0; // Clear existing
+        (input as any[]).forEach(m => messages.push(m));
+      } else {
+        // Normal Flow: Input is just the user content (string or content array)
+        messages.push({ role: 'user', content: input as any });
+      }
 
       // Try to make the actual API call
       try {
@@ -364,7 +385,8 @@ export class LLMService {
         // Update usage stats
         cognitiveFunction.usage.lastUsed = Date.now()
         cognitiveFunction.usage.requestCount++
-        cognitiveFunction.usage.totalTokens += data.usage?.total_tokens || (input.length + assistantMessage.length)
+        const inputLen = typeof input === 'string' ? input.length : JSON.stringify(input).length;
+        cognitiveFunction.usage.totalTokens += data.usage?.total_tokens || (inputLen + assistantMessage.length)
 
         log.info(`Successfully generated response from ${cognitiveFunction.name}`)
         return assistantMessage
@@ -375,7 +397,8 @@ export class LLMService {
         // Update usage stats for the attempt
         cognitiveFunction.usage.lastUsed = Date.now()
         cognitiveFunction.usage.requestCount++
-        cognitiveFunction.usage.totalTokens += input.length + 100
+        const inputLen = typeof input === 'string' ? input.length : JSON.stringify(input).length;
+        cognitiveFunction.usage.totalTokens += inputLen + 100
 
         // Return intelligent placeholder based on function type
         return this.getPlaceholderResponse(functionType, input)
@@ -415,9 +438,10 @@ export class LLMService {
   /**
    * Get a fallback response from the local intelligence core
    */
-  private getPlaceholderResponse(functionType: CognitiveFunctionType, input: string): string {
+  private getPlaceholderResponse(functionType: CognitiveFunctionType, input: string | any[]): string {
     // Delegate to the innermost membrane (Local Intelligence)
-    const localResponse = localIntelligence.processLogic(input)
+    const inputStr = typeof input === 'string' ? input : JSON.stringify(input);
+    const localResponse = localIntelligence.processLogic(inputStr)
 
     // Add a prefix indicating which specific cognitive function was requested but fell back
     switch (functionType) {
