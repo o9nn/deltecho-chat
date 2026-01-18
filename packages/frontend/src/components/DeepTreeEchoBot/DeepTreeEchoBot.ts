@@ -704,17 +704,19 @@ I'm here to assist you with various tasks and engage in meaningful conversations
         // Assuming message.attachments like defined in delta-chat usually
         const images = message.images || (message.attachments || []).filter((a: any) => a.is_image || a.view_type === 'image').map((a: any) => a.path || a.url);
 
-        console.log('[DEBUG] visionEnabled:', this.options.visionEnabled);
-        console.log('[DEBUG] images found:', images ? images.length : 0);
-
         if (this.options.visionEnabled && images && images.length > 0) {
-          console.log('[DEBUG] Constructing vision message');
           // Convert local paths to base64 if needed, or use URLs if they are web accessible
           // Since this is electron/local, paths might be local file paths. 
           // VisionProcessor expects URLs or Base64.
           // For now, let's assume we pass what we have (URLs). 
           // NOTE: Converting local file path to base64 in renderer might allow it.
           userMessage = VisionProcessor.constructVisionMessage(messageText, images);
+
+          // Asynchronously analyze and store visual memory
+          // We don't await this to keep response time fast
+          this.analyzeAndStoreVisualMemory(chatId, images).catch(err =>
+            log.error('Error in visual memory analysis:', err)
+          );
         } else {
           userMessage = { role: 'user', content: messageText };
         }
@@ -818,5 +820,54 @@ I'm here to assist you with various tasks and engage in meaningful conversations
     }
 
     log.info('Bot options updated')
+  }
+
+  /**
+   * Analyze images and store a descriptive memory
+   */
+  private async analyzeAndStoreVisualMemory(chatId: number, images: string[]): Promise<void> {
+    console.log('[DEBUG-VS] analyzeAndStoreVisualMemory called');
+    console.log('[DEBUG-VS] memoryEnabled:', this.options.memoryEnabled);
+    console.log('[DEBUG-VS] visionEnabled:', this.options.visionEnabled);
+
+    if (!this.options.memoryEnabled || !this.options.visionEnabled) {
+      console.log('[DEBUG-VS] Skipping because option disabled');
+      return;
+    }
+
+    try {
+      log.info(`[VisualMemory] Analyzing ${images.length} images for chat ${chatId}`);
+      console.log(`[VisualMemory] Analyzing ${images.length} images for chat ${chatId}`);
+
+      // Construct a specific prompt for image analysis
+      const analysisPrompt = "Analyze these images and provide a detailed, objective description of their content. Focus on visible elements, text, colors, and context. This description will be stored in long-term memory for future reference. Do not answer any specific user query, just describe what you see.";
+
+      const visionMessage = VisionProcessor.constructVisionMessage(analysisPrompt, images);
+
+      console.log('[DEBUG-VS] Calling LLMService');
+      // Generate description using LLM
+      // We put this in a separate array to not pollute the main context
+      const response = await this.llmService.generateResponse([visionMessage] as any);
+
+      console.log(`[VisualMemory] Generated description: ${response.substring(0, 50)}...`);
+      log.info(`[VisualMemory] Generated description: ${response.substring(0, 50)}...`);
+
+      // Store in RAG memory with metadata
+      await this.memoryStore.storeMemory({
+        chatId,
+        messageId: 0, // System generated
+        sender: 'bot', // Or 'system'
+        text: `[Visual Observation] ${response}`,
+        metadata: {
+          type: 'visual_analysis',
+          image_urls: images,
+          original_prompt: analysisPrompt
+        }
+      });
+
+    } catch (error) {
+      console.error('[DEBUG-VS] Error:', error);
+      log.error('[VisualMemory] Failed to analyze images:', error);
+    }
   }
 }

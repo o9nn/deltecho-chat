@@ -14,6 +14,7 @@ export interface Memory {
   sender: 'user' | 'bot'
   text: string
   embedding?: number[] // Vector embedding for semantic search
+  metadata?: Record<string, any> // Additional metadata (e.g., image_url, tool_output)
 }
 
 /**
@@ -202,8 +203,7 @@ export class RAGMemoryStore {
       .slice(0, count)
       .map(
         mem =>
-          `[${new Date(mem.timestamp).toLocaleString()}] ${mem.sender}: ${
-            mem.text
+          `[${new Date(mem.timestamp).toLocaleString()}] ${mem.sender}: ${mem.text
           }`
       )
   }
