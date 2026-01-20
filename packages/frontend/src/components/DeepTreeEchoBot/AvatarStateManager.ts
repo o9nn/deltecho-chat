@@ -323,7 +323,7 @@ let consciousnessModuleLoaded = false;
 export async function initializeConsciousnessIntegration(): Promise<boolean> {
   try {
     // Dynamically import to avoid circular dependencies
-    const embodimentModule = await import("@deltecho/core/embodiment");
+    const embodimentModule = await import("deep-tree-echo-core/embodiment");
     embodiedCognitionInstance = embodimentModule.embodiedCognition;
 
     if (embodiedCognitionInstance) {

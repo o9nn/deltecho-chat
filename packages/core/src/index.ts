@@ -27,3 +27,6 @@ export * from "./utils/logger";
 
 // Export configuration modules
 export * from "./config";
+
+// Export multimodal modules
+export * from "./multimodal";

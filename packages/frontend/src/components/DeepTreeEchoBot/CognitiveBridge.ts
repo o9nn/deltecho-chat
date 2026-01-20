@@ -63,7 +63,7 @@ import {
   importConsciousnessState,
   type ConsciousnessState,
   type ConsciousProcessingResult,
-} from "@deltecho/core/consciousness";
+} from "deep-tree-echo-core/consciousness";
 
 const log = getLogger("render/components/DeepTreeEchoBot/CognitiveBridge");
 

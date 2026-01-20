@@ -34,7 +34,7 @@ type SettingsView =
 
 export default function Settings({ onClose }: DialogProps) {
   const { openDialog, closeDialog, openDialogIds } = useDialog();
-   
+
   const settingsStore = useSettingsStore()[0]!;
   const tx = useTranslationFunction();
   const [settingsMode, setSettingsMode] = useState<SettingsView>("main");

@@ -46,7 +46,7 @@ export class TauriStorageAdapter implements MemoryStorage {
 
     try {
       // Dynamic import to avoid issues when not in Tauri environment
-       
+
       const tauriStore = await (Function(
         'return import("@tauri-apps/plugin-store")',
       )() as Promise<{

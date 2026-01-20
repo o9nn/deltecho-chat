@@ -79,6 +79,7 @@ export interface VoiceTranscription {
   text: string;
   confidence: number;
   duration: number;
+  timestamp?: number;
 }
 
 /**
