@@ -30,3 +30,9 @@ export * from "./config";
 
 // Export multimodal modules
 export * from "./multimodal";
+
+// Export consciousness modules
+export * from "./consciousness";
+
+// Export scientific genius modules
+export * from "./scientific-genius";

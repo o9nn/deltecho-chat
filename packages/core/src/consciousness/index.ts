@@ -111,7 +111,7 @@ export {
   agencyRecognition,
   ActionType,
   VolitionType,
-  type Action,
+  type Action as AgencyAction,
   type ActionOutcome,
   type AgentSelfModel,
   type AgentCapability,
@@ -120,6 +120,33 @@ export {
   type AgencyEvent,
   type AgencyState,
 } from "./AgencyRecognition.js";
+
+// ============================================================
+// GEOMETRIC CONSCIOUSNESS MODULES (Deep Tree Echo Evolution)
+// ============================================================
+
+export {
+  HopfTowerIntegration,
+  hopfTowerIntegration,
+  AlgebraicGroup,
+  CognitiveRole,
+  type HopfLevelState,
+  type HopfTask,
+  type HopfTowerState,
+  type HopfTowerConfig,
+} from "./HopfTowerIntegration.js";
+
+export {
+  EchoBeatsEngine,
+  echoBeatsEngine,
+  StreamPhase,
+  StepMode,
+  StepType,
+  type StreamState,
+  type EchoBeatsState,
+  type NestedShell,
+  type EchoBeatsConfig,
+} from "./EchoBeatsEngine.js";
 
 /**
  * Unified Consciousness Interface

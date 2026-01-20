@@ -69,3 +69,12 @@ export {
   SAMPLE_MODELS,
   DEFAULT_MODEL_CONFIG,
 } from "./adapters/live2d-avatar";
+
+// Cognitive-Avatar Bridge
+export {
+  CognitiveAvatarBridge,
+  cognitiveAvatarBridge,
+  type CognitiveStateInput,
+  type AvatarResponseState,
+  type CognitiveAvatarBridgeConfig,
+} from "./cognitive-avatar-bridge";
