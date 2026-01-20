@@ -1,38 +1,40 @@
-import { BackendRemote } from '../backend-com'
+import { BackendRemote } from "../backend-com";
 
 export async function modifyGroup(
   accountId: number,
   chatId: number,
   name: string,
   image: string | null | undefined,
-  members: number[] | null
+  members: number[] | null,
 ) {
-  const chat = await BackendRemote.rpc.getFullChatById(accountId, chatId)
+  const chat = await BackendRemote.rpc.getFullChatById(accountId, chatId);
 
-  await BackendRemote.rpc.setChatName(accountId, chatId, name)
+  await BackendRemote.rpc.setChatName(accountId, chatId, name);
 
-  if (typeof image !== 'undefined' && chat.profileImage !== image) {
+  if (typeof image !== "undefined" && chat.profileImage !== image) {
     await BackendRemote.rpc.setChatProfileImage(
       accountId,
       chatId,
-      image || null
-    )
+      image || null,
+    );
   }
 
   if (members !== null) {
-    const previousMembers = [...chat.contactIds]
-    const remove = previousMembers.filter(m => !members.includes(m))
-    const add = members.filter(m => !previousMembers.includes(m))
+    const previousMembers = [...chat.contactIds];
+    const remove = previousMembers.filter((m) => !members.includes(m));
+    const add = members.filter((m) => !previousMembers.includes(m));
 
     await Promise.all(
-      remove.map(id =>
-        BackendRemote.rpc.removeContactFromChat(accountId, chatId, id)
-      )
-    )
+      remove.map((id) =>
+        BackendRemote.rpc.removeContactFromChat(accountId, chatId, id),
+      ),
+    );
     await Promise.all(
-      add.map(id => BackendRemote.rpc.addContactToChat(accountId, chatId, id))
-    )
+      add.map((id) =>
+        BackendRemote.rpc.addContactToChat(accountId, chatId, id),
+      ),
+    );
   }
 
-  return await BackendRemote.rpc.getFullChatById(accountId, chatId)
+  return await BackendRemote.rpc.getFullChatById(accountId, chatId);
 }

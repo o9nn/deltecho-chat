@@ -22,7 +22,7 @@ MCP Error
 
 [src/transport/types.ts:51](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/transport/types.ts#L51)
 
-___
+---
 
 ### message
 
@@ -32,7 +32,7 @@ ___
 
 [src/transport/types.ts:52](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/transport/types.ts#L52)
 
-___
+---
 
 ### data
 

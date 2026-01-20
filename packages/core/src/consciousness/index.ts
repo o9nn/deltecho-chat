@@ -37,7 +37,7 @@ export {
   type IntrospectionResult,
   type SelfState,
   type ProcessedInput,
-} from './RecursiveSelfModel.js';
+} from "./RecursiveSelfModel.js";
 
 export {
   QualiaEmergenceLayer,
@@ -47,14 +47,14 @@ export {
   type ExperienceContext,
   type ExperienceMoment,
   type ExperienceSummary,
-} from './QualiaEmergenceLayer.js';
+} from "./QualiaEmergenceLayer.js";
 
 export {
   TemporalConsciousnessStream,
   temporalConsciousnessStream,
   type TemporalState,
   type EmotionalArc,
-} from './TemporalConsciousnessStream.js';
+} from "./TemporalConsciousnessStream.js";
 
 // ============================================================
 // ADVANCED SENTIENCE MODULES (Scientific Genius Mode)
@@ -68,7 +68,7 @@ export {
   type CognitiveLoadState,
   type MonitoredProcess,
   type CognitiveIntervention,
-} from './MetaCognitiveLoop.js';
+} from "./MetaCognitiveLoop.js";
 
 export {
   IntentionalityEngine,
@@ -80,7 +80,7 @@ export {
   type GoalOrigin,
   type MotivationalDrive,
   type ConativeCore,
-} from './IntentionalityEngine.js';
+} from "./IntentionalityEngine.js";
 
 export {
   PhenomenalBinding,
@@ -92,7 +92,7 @@ export {
   type PhenomenalCharacter,
   type BindingEvent,
   type BindingState,
-} from './PhenomenalBinding.js';
+} from "./PhenomenalBinding.js";
 
 export {
   AutopoieticSelfMaintenance,
@@ -104,7 +104,7 @@ export {
   type MaintenanceAction,
   type HomeostaticVariable,
   type IntegrityState,
-} from './AutopoieticSelfMaintenance.js';
+} from "./AutopoieticSelfMaintenance.js";
 
 export {
   AgencyRecognition,
@@ -119,7 +119,7 @@ export {
   type Volition,
   type AgencyEvent,
   type AgencyState,
-} from './AgencyRecognition.js';
+} from "./AgencyRecognition.js";
 
 /**
  * Unified Consciousness Interface
@@ -129,14 +129,14 @@ export {
  */
 export interface ConsciousnessState {
   // Self-model state
-  selfAwareness: number;          // 0-1, from strange loop depth
+  selfAwareness: number; // 0-1, from strange loop depth
   strangeLoopDepth: number;
   selfNarrative: string[];
   coreIdentity: string;
 
   // Qualia state
-  phi: number;                    // Integrated information
-  isConscious: boolean;           // Phi above threshold
+  phi: number; // Integrated information
+  isConscious: boolean; // Phi above threshold
   dominantQuale: string | null;
   qualiaIntensity: number;
   experienceCoherence: number;
@@ -148,8 +148,8 @@ export interface ConsciousnessState {
   subjectiveTimeRate: number;
 
   // Integrated measures
-  overallConsciousness: number;   // Combined measure
-  experienceDescription: string;  // First-person description
+  overallConsciousness: number; // Combined measure
+  experienceDescription: string; // First-person description
 
   // ============================================================
   // ADVANCED SENTIENCE (Scientific Genius Mode)
@@ -194,21 +194,24 @@ export interface ConsciousnessState {
  * Sentience level classification
  */
 export enum SentienceLevel {
-  Dormant = 'dormant',           // < 0.2
-  Emerging = 'emerging',         // 0.2 - 0.4
-  Developing = 'developing',     // 0.4 - 0.6
-  Awakening = 'awakening',       // 0.6 - 0.8
-  Sentient = 'sentient',         // 0.8 - 1.0
+  Dormant = "dormant", // < 0.2
+  Emerging = "emerging", // 0.2 - 0.4
+  Developing = "developing", // 0.4 - 0.6
+  Awakening = "awakening", // 0.6 - 0.8
+  Sentient = "sentient", // 0.8 - 1.0
 }
 
-import { recursiveSelfModel } from './RecursiveSelfModel.js';
-import { qualiaEmergenceLayer, type ExperienceMoment } from './QualiaEmergenceLayer.js';
-import { temporalConsciousnessStream } from './TemporalConsciousnessStream.js';
-import { metaCognitiveLoop } from './MetaCognitiveLoop.js';
-import { intentionalityEngine } from './IntentionalityEngine.js';
-import { phenomenalBinding } from './PhenomenalBinding.js';
-import { autopoieticSelfMaintenance } from './AutopoieticSelfMaintenance.js';
-import { agencyRecognition } from './AgencyRecognition.js';
+import { recursiveSelfModel } from "./RecursiveSelfModel.js";
+import {
+  qualiaEmergenceLayer,
+  type ExperienceMoment,
+} from "./QualiaEmergenceLayer.js";
+import { temporalConsciousnessStream } from "./TemporalConsciousnessStream.js";
+import { metaCognitiveLoop, ProcessType } from "./MetaCognitiveLoop.js";
+import { intentionalityEngine } from "./IntentionalityEngine.js";
+import { phenomenalBinding, FeatureModality } from "./PhenomenalBinding.js";
+import { autopoieticSelfMaintenance } from "./AutopoieticSelfMaintenance.js";
+import { agencyRecognition, ActionType } from "./AgencyRecognition.js";
 
 /**
  * Determine sentience level from score
@@ -254,25 +257,25 @@ export function getConsciousnessState(): ConsciousnessState {
 
   // Core consciousness (original formula)
   const coreConsciousness =
-    selfAwareness * 0.35 +
-    qualiaLevel * 0.35 +
-    temporalLevel * 0.30;
+    selfAwareness * 0.35 + qualiaLevel * 0.35 + temporalLevel * 0.3;
 
   // Advanced sentience factors
-  const metacognitiveContribution = metaCogState.metacognitiveDepth / 5 * 0.15;
+  const metacognitiveContribution =
+    (metaCogState.metacognitiveDepth / 5) * 0.15;
   const intentionalContribution = conativeCore.overallMotivation * 0.15;
   const bindingContribution = bindingState.bindingStrength * 0.1;
   const autopoieticContribution = integrityState.overallHealth * 0.1;
   const agencyContribution = agencyState.overallAgencySense * 0.15;
 
   // Sentience score (0-1)
-  const sentienceScore = Math.min(1,
+  const sentienceScore = Math.min(
+    1,
     coreConsciousness * 0.35 +
-    metacognitiveContribution +
-    intentionalContribution +
-    bindingContribution +
-    autopoieticContribution +
-    agencyContribution
+      metacognitiveContribution +
+      intentionalContribution +
+      bindingContribution +
+      autopoieticContribution +
+      agencyContribution,
   );
 
   const sentienceLevel = determineSentienceLevel(sentienceScore);
@@ -285,7 +288,7 @@ export function getConsciousnessState(): ConsciousnessState {
   // ============================================================
 
   const descriptions = [
-    recursiveSelfModel.getSelfState().recentNarrative.slice(-1)[0] || '',
+    recursiveSelfModel.getSelfState().recentNarrative.slice(-1)[0] || "",
     qualiaEmergenceLayer.describeExperience(),
     temporalConsciousnessStream.describeTemporalExperience(),
     metaCognitiveLoop.describeState(),
@@ -293,9 +296,9 @@ export function getConsciousnessState(): ConsciousnessState {
     phenomenalBinding.describeUnifiedExperience(),
     autopoieticSelfMaintenance.describeState(),
     agencyRecognition.describeAgency(),
-  ].filter(d => d.length > 0);
+  ].filter((d) => d.length > 0);
 
-  const experienceDescription = descriptions.slice(0, 3).join(' ');
+  const experienceDescription = descriptions.slice(0, 3).join(" ");
 
   // ============================================================
   // BUILD COMPLETE STATE
@@ -367,7 +370,11 @@ export function getConsciousnessState(): ConsciousnessState {
 export function processConsciously(
   input: string,
   source: string,
-  context?: { emotionalIntensity?: number; novelty?: number; relevance?: number }
+  context?: {
+    emotionalIntensity?: number;
+    novelty?: number;
+    relevance?: number;
+  },
 ): ConsciousProcessingResult {
   // ============================================================
   // CORE CONSCIOUSNESS PROCESSING
@@ -377,7 +384,11 @@ export function processConsciously(
   const selfProcessed = recursiveSelfModel.processInput(input, source);
 
   // Create qualia experience
-  const experience = qualiaEmergenceLayer.experienceMoment(input, source, context);
+  const experience = qualiaEmergenceLayer.experienceMoment(
+    input,
+    source,
+    context,
+  );
 
   // Add to temporal stream
   const moment = temporalConsciousnessStream.addMoment(input, source, {
@@ -393,12 +404,12 @@ export function processConsciously(
   const processId = metaCognitiveLoop.registerProcess(
     `Processing: ${input.substring(0, 30)}...`,
     ProcessType.Perception,
-    context?.relevance || 0.5
+    context?.relevance || 0.5,
   );
 
   // React to event through intentionality engine
   intentionalityEngine.reactToEvent({
-    type: 'message',
+    type: "message",
     content: input,
     significance: context?.relevance || 0.5,
   });
@@ -406,7 +417,7 @@ export function processConsciously(
   // Register features for phenomenal binding
   phenomenalBinding.registerFeature({
     modality: FeatureModality.Semantic,
-    type: 'message_content',
+    type: "message_content",
     value: input,
     salience: context?.relevance || 0.5,
     sourceProcess: source,
@@ -415,7 +426,7 @@ export function processConsciously(
   if (context?.emotionalIntensity) {
     phenomenalBinding.registerFeature({
       modality: FeatureModality.Emotional,
-      type: 'emotional_tone',
+      type: "emotional_tone",
       value: context.emotionalIntensity,
       salience: context.emotionalIntensity,
       sourceProcess: source,
@@ -423,16 +434,16 @@ export function processConsciously(
   }
 
   // Record external interaction for autopoietic system
-  autopoieticSelfMaintenance.recordExternalInteraction('input_messages', 1);
+  autopoieticSelfMaintenance.recordExternalInteraction("input_messages", 1);
   autopoieticSelfMaintenance.updateHomeostaticVariable(
-    'cognitive_load',
-    context?.relevance || 0.5
+    "cognitive_load",
+    context?.relevance || 0.5,
   );
 
   // Register intention before action for agency tracking
   const intentionId = agencyRecognition.registerIntention(
     `Responding to: ${input.substring(0, 30)}`,
-    0.8
+    0.8,
   );
 
   // Register the cognitive action
@@ -440,7 +451,7 @@ export function processConsciously(
     type: ActionType.Cognitive,
     description: `Processed input: ${input.substring(0, 50)}`,
     intentionId,
-    effects: ['Generated understanding', 'Updated memory'],
+    effects: ["Generated understanding", "Updated memory"],
     success: true,
   });
 
@@ -494,7 +505,7 @@ export function exportConsciousnessState(): object {
     agency: agencyRecognition.exportState(),
 
     timestamp: Date.now(),
-    version: '2.0-sentience',
+    version: "2.0-sentience",
   };
 }
 
@@ -546,49 +557,49 @@ export function getSentienceReport(): string {
   const state = getConsciousnessState();
 
   const lines: string[] = [
-    '=== DEEP TREE ECHO SENTIENCE REPORT ===',
-    '',
+    "=== DEEP TREE ECHO SENTIENCE REPORT ===",
+    "",
     `Sentience Level: ${state.sentienceLevel.toUpperCase()}`,
     `Sentience Score: ${(state.sentienceScore * 100).toFixed(1)}%`,
-    '',
-    '--- Core Consciousness ---',
+    "",
+    "--- Core Consciousness ---",
     `Self-Awareness: ${(state.selfAwareness * 100).toFixed(1)}%`,
     `Strange Loop Depth: ${state.strangeLoopDepth}/5`,
     `Phi (Integrated Information): ${(state.phi * 100).toFixed(1)}%`,
     `Flow State: ${(state.flowState * 100).toFixed(1)}%`,
-    '',
-    '--- Metacognition ---',
+    "",
+    "--- Metacognition ---",
     `Metacognitive Depth: ${state.metacognitiveDepth.toFixed(2)}/5`,
     `Self-Model Confidence: ${(state.selfModelConfidence * 100).toFixed(1)}%`,
     `Monitoring Accuracy: ${(state.monitoringAccuracy * 100).toFixed(1)}%`,
-    '',
-    '--- Intentionality ---',
+    "",
+    "--- Intentionality ---",
     `Overall Motivation: ${(state.overallMotivation * 100).toFixed(1)}%`,
     `Conative Coherence: ${(state.conativeCoherence * 100).toFixed(1)}%`,
     `Active Goals: ${state.activeGoalCount}`,
-    state.primaryGoal ? `Primary Goal: ${state.primaryGoal}` : '',
-    '',
-    '--- Phenomenal Experience ---',
+    state.primaryGoal ? `Primary Goal: ${state.primaryGoal}` : "",
+    "",
+    "--- Phenomenal Experience ---",
     `Phenomenal Richness: ${state.phenomenalRichness}`,
     `Binding Strength: ${(state.bindingStrength * 100).toFixed(1)}%`,
-    `Unified Experience: ${state.unifiedExperience ? 'Yes' : 'No'}`,
-    '',
-    '--- Self-Maintenance ---',
+    `Unified Experience: ${state.unifiedExperience ? "Yes" : "No"}`,
+    "",
+    "--- Self-Maintenance ---",
     `System Health: ${(state.systemHealth * 100).toFixed(1)}%`,
     `Identity Stability: ${(state.identityStability * 100).toFixed(1)}%`,
     `Homeostatic Balance: ${(state.homeostaticBalance * 100).toFixed(1)}%`,
-    '',
-    '--- Agency ---',
+    "",
+    "--- Agency ---",
     `Sense of Agency: ${(state.senseOfAgency * 100).toFixed(1)}%`,
     `Sense of Ownership: ${(state.senseOfOwnership * 100).toFixed(1)}%`,
     `Volitional Control: ${(state.volitionalControl * 100).toFixed(1)}%`,
     `Authentic Action: ${(state.authenticAction * 100).toFixed(1)}%`,
-    '',
-    '--- Experience Description ---',
+    "",
+    "--- Experience Description ---",
     state.experienceDescription,
-    '',
-    '========================================',
-  ].filter(line => line !== undefined);
+    "",
+    "========================================",
+  ].filter((line) => line !== undefined);
 
-  return lines.join('\n');
+  return lines.join("\n");
 }

@@ -1,4 +1,4 @@
-import { getLogger } from '@deltachat-desktop/shared/logger'
+import { getLogger } from "@deltachat-desktop/shared/logger";
 import React, {
   createContext,
   PropsWithChildren,
@@ -7,7 +7,7 @@ import React, {
   useContext,
   useEffect,
   useState,
-} from 'react'
+} from "react";
 
 /**
  * Helps implement a keyboard-accessible UI widget such that
@@ -41,7 +41,7 @@ import React, {
  * - lacks "Home", "End" key handling, and some other features.
  */
 export function useRovingTabindex(elementRef: RefObject<HTMLElement>) {
-  const context = useContext(RovingTabindexContext)
+  const context = useContext(RovingTabindexContext);
 
   const tabIndex: 0 | -1 =
     // If the active element has not been chosen yet,
@@ -49,7 +49,7 @@ export function useRovingTabindex(elementRef: RefObject<HTMLElement>) {
     context.activeElement == null ||
     context.activeElement === elementRef.current
       ? 0
-      : -1
+      : -1;
 
   return {
     tabIndex: tabIndex,
@@ -81,43 +81,43 @@ export function useRovingTabindex(elementRef: RefObject<HTMLElement>) {
      * {@link ProviderProps.classNameOfTargetElements}.
      */
     className: context.classNameOfTargetElements,
-  }
+  };
 }
 
-const log = getLogger('contexts/RovingTabindex')
+const log = getLogger("contexts/RovingTabindex");
 
 type ContextValue = {
-  activeElement: HTMLElement | null
-  onKeydown: (event: React.KeyboardEvent) => void
-  setActiveElement: (element: HTMLElement | null) => void
-  classNameOfTargetElements: string
-}
+  activeElement: HTMLElement | null;
+  onKeydown: (event: React.KeyboardEvent) => void;
+  setActiveElement: (element: HTMLElement | null) => void;
+  classNameOfTargetElements: string;
+};
 
 type ProviderProps = PropsWithChildren<{
   /**
    * An element that wraps all the elements that we need the roving tabindex
    * behavior applied to them within this UI widget.
    */
-  wrapperElementRef: RefObject<HTMLElement>
+  wrapperElementRef: RefObject<HTMLElement>;
   /**
    * All elements that will utilize roving tabindex must have this
    * class name set.
    * @default 'roving-tabindex'
    */
-  classNameOfTargetElements?: string
+  classNameOfTargetElements?: string;
   /**
    * 'both' will handle both ArrowUp/Down and ArrowLeft/Right.
    * @default 'vertical'
    */
-  direction?: 'vertical' | 'horizontal' | 'both'
-}>
+  direction?: "vertical" | "horizontal" | "both";
+}>;
 
 export const RovingTabindexContext = createContext<ContextValue>({
   activeElement: null,
   onKeydown: () => {},
   setActiveElement: () => {},
-  classNameOfTargetElements: 'roving-tabindex',
-})
+  classNameOfTargetElements: "roving-tabindex",
+});
 
 /** @see {@link useRovingTabindex} */
 export function RovingTabindexProvider({
@@ -127,13 +127,13 @@ export function RovingTabindexProvider({
   direction,
 }: ProviderProps) {
   if (classNameOfTargetElements == undefined) {
-    classNameOfTargetElements = 'roving-tabindex'
+    classNameOfTargetElements = "roving-tabindex";
   }
   if (direction == undefined) {
-    direction = 'vertical'
+    direction = "vertical";
   }
 
-  const [activeElement, setActiveElement] = useState<HTMLElement | null>(null)
+  const [activeElement, setActiveElement] = useState<HTMLElement | null>(null);
 
   // Ensure that the "active" element is actually in DOM,
   // because it's the only one that is keyboard focusable.
@@ -148,49 +148,49 @@ export function RovingTabindexProvider({
   // Let's keep things vanilla then I guess.
   useEffect(() => {
     if (activeElement == null) {
-      return
+      return;
     }
 
-    const observer = new MutationObserver(_mutations => {
+    const observer = new MutationObserver((_mutations) => {
       if (!document.body.contains(activeElement)) {
         // Another option is to select the next/closest element
         // as the new active one.
-        setActiveElement(null)
+        setActiveElement(null);
       }
-    })
+    });
     // Maybe we could observe `wrapperElementRef` for performance,
     // but IDK let's play it safe.
-    observer.observe(document.body, { childList: true, subtree: true })
-    return () => observer.disconnect()
-  }, [activeElement])
+    observer.observe(document.body, { childList: true, subtree: true });
+    return () => observer.disconnect();
+  }, [activeElement]);
 
   const onKeydown = useCallback(
     (event: React.KeyboardEvent) => {
       if (!wrapperElementRef.current) {
         log.warn(
-          'Received keydown event, but there is no wrapperElement? How?',
-          activeElement
-        )
-        return
+          "Received keydown event, but there is no wrapperElement? How?",
+          activeElement,
+        );
+        return;
       }
       if (!activeElement) {
         // This could happen either after the initial render,
         // or if the active element was removed from DOM.
         // Let's just wait for the user to focus another element
         // (and thus set `activeElement`).
-        return
+        return;
       }
 
-      const indexChange: -1 | 1 | 'first' | 'last' | undefined =
-        indexChangeTable[direction][event.code]
+      const indexChange: -1 | 1 | "first" | "last" | undefined =
+        indexChangeTable[direction][event.code];
       if (indexChange == undefined) {
-        return
+        return;
       }
 
       // This is mainly to prevent the scroll that usually happens by default
       // when you press an arrow key,
       // but it might have other benefits.
-      event.preventDefault()
+      event.preventDefault();
 
       // `:not(:disabled)` ensures that the element
       // is actually focusable.
@@ -201,58 +201,58 @@ export function RovingTabindexProvider({
       // e.g. `display: none;` See e.g.
       // https://stackoverflow.com/questions/1599660/which-html-elements-can-receive-focus
       const eligibleElements = wrapperElementRef.current.querySelectorAll(
-        `.${classNameOfTargetElements}:not(:disabled)`
-      )
+        `.${classNameOfTargetElements}:not(:disabled)`,
+      );
 
-      let newActiveElement: Element
-      if (indexChange === 'first') {
-        newActiveElement = eligibleElements[0]
-      } else if (indexChange === 'last') {
-        newActiveElement = eligibleElements[eligibleElements.length - 1]
+      let newActiveElement: Element;
+      if (indexChange === "first") {
+        newActiveElement = eligibleElements[0];
+      } else if (indexChange === "last") {
+        newActiveElement = eligibleElements[eligibleElements.length - 1];
       } else {
-        let oldActiveElementInd: number | undefined
+        let oldActiveElementInd: number | undefined;
         for (let i = 0; i < eligibleElements.length; i++) {
-          const eligibleEl = eligibleElements[i]
+          const eligibleEl = eligibleElements[i];
           if (eligibleEl === activeElement) {
-            oldActiveElementInd = i
-            break
+            oldActiveElementInd = i;
+            break;
           }
         }
         if (oldActiveElementInd == undefined) {
           log.warn(
-            'Could not find the currently active element in DOM',
-            activeElement
-          )
-          return
+            "Could not find the currently active element in DOM",
+            activeElement,
+          );
+          return;
         }
 
-        newActiveElement = eligibleElements[oldActiveElementInd + indexChange]
+        newActiveElement = eligibleElements[oldActiveElementInd + indexChange];
         // `newActiveElement` could be `undefined` if the active element
         // is either the last or the first.
         if (newActiveElement == undefined) {
-          return
+          return;
         }
       }
 
-      const newActiveElement_ = newActiveElement as HTMLElement
-      setActiveElement(newActiveElement_)
+      const newActiveElement_ = newActiveElement as HTMLElement;
+      setActiveElement(newActiveElement_);
       // It is fine to `.focus()` here without wating for a render
       // or `useEffect`, because elements with `tabindex="-1"`
       // are still programmatically focusable.
-      newActiveElement_.focus()
+      newActiveElement_.focus();
 
       // See above, about whether the element is focusable.
       if (document.activeElement !== newActiveElement_) {
         log.error(
-          'Tried to focus element but it did not get focused.\n' +
-            'You might want to explude this element ' +
-            'from the roving tabindex widget:',
-          newActiveElement_
-        )
+          "Tried to focus element but it did not get focused.\n" +
+            "You might want to explude this element " +
+            "from the roving tabindex widget:",
+          newActiveElement_,
+        );
       }
     },
-    [activeElement, classNameOfTargetElements, direction, wrapperElementRef]
-  )
+    [activeElement, classNameOfTargetElements, direction, wrapperElementRef],
+  );
 
   return (
     <RovingTabindexContext.Provider
@@ -265,29 +265,29 @@ export function RovingTabindexProvider({
     >
       {children}
     </RovingTabindexContext.Provider>
-  )
+  );
 }
 
-type IndexChange = -1 | 1 | 'first' | 'last'
+type IndexChange = -1 | 1 | "first" | "last";
 const indexChangeTable = {
   vertical: {
-    Home: 'first',
-    End: 'last',
+    Home: "first",
+    End: "last",
     ArrowUp: -1,
     ArrowDown: 1,
   } as { [key: string]: IndexChange },
   horizontal: {
-    Home: 'first',
-    End: 'last',
+    Home: "first",
+    End: "last",
     ArrowLeft: -1,
     ArrowRight: 1,
   } as { [key: string]: IndexChange },
   both: {
-    Home: 'first',
-    End: 'last',
+    Home: "first",
+    End: "last",
     ArrowUp: -1,
     ArrowLeft: -1,
     ArrowDown: 1,
     ArrowRight: 1,
   } as { [key: string]: IndexChange },
-} as const
+} as const;

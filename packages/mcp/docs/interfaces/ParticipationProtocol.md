@@ -17,13 +17,13 @@ Participation protocol for agent engagement
 
 ### type
 
-• **type**: ``"dialogue"`` \| ``"collaboration"`` \| ``"observation"`` \| ``"guidance"``
+• **type**: `"dialogue"` \| `"collaboration"` \| `"observation"` \| `"guidance"`
 
 #### Defined in
 
 [src/types.ts:161](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L161)
 
-___
+---
 
 ### context
 
@@ -33,7 +33,7 @@ ___
 
 [src/types.ts:162](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L162)
 
-___
+---
 
 ### participants
 
@@ -43,7 +43,7 @@ ___
 
 [src/types.ts:163](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L163)
 
-___
+---
 
 ### constraints
 

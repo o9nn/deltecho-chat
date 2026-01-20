@@ -13,10 +13,12 @@ import {
   StreamChunk,
   ProviderHealth,
   registerProvider,
-} from './LLMProvider';
-import { getLogger } from '../../utils/logger';
+} from "./LLMProvider";
+import { getLogger } from "../../utils/logger";
 
-const log = getLogger('deep-tree-echo-core/cognitive/providers/AnthropicProvider');
+const log = getLogger(
+  "deep-tree-echo-core/cognitive/providers/AnthropicProvider",
+);
 
 /**
  * Anthropic API response structure
@@ -63,50 +65,53 @@ interface AnthropicStreamEvent {
  * Anthropic Provider Implementation
  */
 export class AnthropicProvider extends LLMProvider {
-  private static readonly DEFAULT_BASE_URL = 'https://api.anthropic.com/v1';
-  private static readonly API_VERSION = '2023-06-01';
+  private static readonly DEFAULT_BASE_URL = "https://api.anthropic.com/v1";
+  private static readonly API_VERSION = "2023-06-01";
   private static readonly DEFAULT_MODELS = [
-    'claude-3-opus-20240229',
-    'claude-3-sonnet-20240229',
-    'claude-3-haiku-20240307',
-    'claude-3-5-sonnet-20241022',
-    'claude-2.1',
-    'claude-2.0',
-    'claude-instant-1.2',
+    "claude-3-opus-20240229",
+    "claude-3-sonnet-20240229",
+    "claude-3-haiku-20240307",
+    "claude-3-5-sonnet-20241022",
+    "claude-2.1",
+    "claude-2.0",
+    "claude-instant-1.2",
   ];
 
   constructor(apiKey: string, baseUrl?: string) {
-    super(apiKey, baseUrl || AnthropicProvider.DEFAULT_BASE_URL, 'Anthropic');
+    super(apiKey, baseUrl || AnthropicProvider.DEFAULT_BASE_URL, "Anthropic");
   }
 
   /**
    * Generate a completion from Anthropic Claude
    */
-  async complete(messages: ChatMessage[], config: CompletionConfig): Promise<CompletionResponse> {
+  async complete(
+    messages: ChatMessage[],
+    config: CompletionConfig,
+  ): Promise<CompletionResponse> {
     if (!this.isConfigured()) {
-      throw new Error('Anthropic provider not configured: missing API key');
+      throw new Error("Anthropic provider not configured: missing API key");
     }
 
     const startTime = Date.now();
 
     // Extract system message if present
-    const systemMessage = messages.find((m) => m.role === 'system');
-    const conversationMessages = messages.filter((m) => m.role !== 'system');
+    const systemMessage = messages.find((m) => m.role === "system");
+    const conversationMessages = messages.filter((m) => m.role !== "system");
 
     try {
       const response = await fetch(`${this.baseUrl}/messages`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': this.apiKey,
-          'anthropic-version': AnthropicProvider.API_VERSION,
+          "Content-Type": "application/json",
+          "x-api-key": this.apiKey,
+          "anthropic-version": AnthropicProvider.API_VERSION,
         },
         body: JSON.stringify({
           model: config.model,
           max_tokens: config.maxTokens ?? 1024,
           ...(systemMessage && { system: systemMessage.content }),
           messages: conversationMessages.map((m) => ({
-            role: m.role === 'assistant' ? 'assistant' : 'user',
+            role: m.role === "assistant" ? "assistant" : "user",
             content: m.content,
           })),
           temperature: config.temperature ?? 0.7,
@@ -132,9 +137,9 @@ export class AnthropicProvider extends LLMProvider {
 
       // Extract text content from response
       const textContent = data.content
-        .filter((c) => c.type === 'text')
+        .filter((c) => c.type === "text")
         .map((c) => c.text)
-        .join('');
+        .join("");
 
       return {
         content: textContent,
@@ -152,7 +157,7 @@ export class AnthropicProvider extends LLMProvider {
         isHealthy: false,
         latencyMs: Date.now() - startTime,
         lastCheck: Date.now(),
-        errorMessage: error instanceof Error ? error.message : 'Unknown error',
+        errorMessage: error instanceof Error ? error.message : "Unknown error",
       };
       throw error;
     }
@@ -164,36 +169,36 @@ export class AnthropicProvider extends LLMProvider {
   async completeStream(
     messages: ChatMessage[],
     config: CompletionConfig,
-    onChunk: (chunk: StreamChunk) => void
+    onChunk: (chunk: StreamChunk) => void,
   ): Promise<CompletionResponse> {
     if (!this.isConfigured()) {
-      throw new Error('Anthropic provider not configured: missing API key');
+      throw new Error("Anthropic provider not configured: missing API key");
     }
 
     const startTime = Date.now();
-    let fullContent = '';
-    let finishReason: CompletionResponse['finishReason'] = 'stop';
+    let fullContent = "";
+    let finishReason: CompletionResponse["finishReason"] = "stop";
     let inputTokens = 0;
     let outputTokens = 0;
 
     // Extract system message if present
-    const systemMessage = messages.find((m) => m.role === 'system');
-    const conversationMessages = messages.filter((m) => m.role !== 'system');
+    const systemMessage = messages.find((m) => m.role === "system");
+    const conversationMessages = messages.filter((m) => m.role !== "system");
 
     try {
       const response = await fetch(`${this.baseUrl}/messages`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': this.apiKey,
-          'anthropic-version': AnthropicProvider.API_VERSION,
+          "Content-Type": "application/json",
+          "x-api-key": this.apiKey,
+          "anthropic-version": AnthropicProvider.API_VERSION,
         },
         body: JSON.stringify({
           model: config.model,
           max_tokens: config.maxTokens ?? 1024,
           ...(systemMessage && { system: systemMessage.content }),
           messages: conversationMessages.map((m) => ({
-            role: m.role === 'assistant' ? 'assistant' : 'user',
+            role: m.role === "assistant" ? "assistant" : "user",
             content: m.content,
           })),
           temperature: config.temperature ?? 0.7,
@@ -211,25 +216,25 @@ export class AnthropicProvider extends LLMProvider {
 
       const reader = response.body?.getReader();
       if (!reader) {
-        throw new Error('No response body reader available');
+        throw new Error("No response body reader available");
       }
 
       const decoder = new TextDecoder();
-      let buffer = '';
+      let buffer = "";
 
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
 
         buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split('\n');
-        buffer = lines.pop() || '';
+        const lines = buffer.split("\n");
+        buffer = lines.pop() || "";
 
         for (const line of lines) {
-          if (line.startsWith('data: ')) {
+          if (line.startsWith("data: ")) {
             const data = line.slice(6);
-            if (data === '[DONE]') {
-              onChunk({ content: '', isComplete: true, finishReason });
+            if (data === "[DONE]") {
+              onChunk({ content: "", isComplete: true, finishReason });
               continue;
             }
 
@@ -237,20 +242,20 @@ export class AnthropicProvider extends LLMProvider {
               const event: AnthropicStreamEvent = JSON.parse(data);
 
               switch (event.type) {
-                case 'message_start':
+                case "message_start":
                   if (event.message?.usage) {
                     inputTokens = event.message.usage.input_tokens;
                   }
                   break;
 
-                case 'content_block_delta':
+                case "content_block_delta":
                   if (event.delta?.text) {
                     fullContent += event.delta.text;
                     onChunk({ content: event.delta.text, isComplete: false });
                   }
                   break;
 
-                case 'message_delta':
+                case "message_delta":
                   if (event.delta?.stop_reason) {
                     finishReason = this.mapStopReason(event.delta.stop_reason);
                   }
@@ -259,8 +264,8 @@ export class AnthropicProvider extends LLMProvider {
                   }
                   break;
 
-                case 'message_stop':
-                  onChunk({ content: '', isComplete: true, finishReason });
+                case "message_stop":
+                  onChunk({ content: "", isComplete: true, finishReason });
                   break;
               }
             } catch (e) {
@@ -293,7 +298,7 @@ export class AnthropicProvider extends LLMProvider {
         isHealthy: false,
         latencyMs: Date.now() - startTime,
         lastCheck: Date.now(),
-        errorMessage: error instanceof Error ? error.message : 'Unknown error',
+        errorMessage: error instanceof Error ? error.message : "Unknown error",
       };
       throw error;
     }
@@ -308,7 +313,7 @@ export class AnthropicProvider extends LLMProvider {
         isHealthy: false,
         latencyMs: 0,
         lastCheck: Date.now(),
-        errorMessage: 'API key not configured',
+        errorMessage: "API key not configured",
       };
     }
 
@@ -317,16 +322,16 @@ export class AnthropicProvider extends LLMProvider {
     try {
       // Anthropic doesn't have a dedicated health endpoint, so we make a minimal request
       const response = await fetch(`${this.baseUrl}/messages`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': this.apiKey,
-          'anthropic-version': AnthropicProvider.API_VERSION,
+          "Content-Type": "application/json",
+          "x-api-key": this.apiKey,
+          "anthropic-version": AnthropicProvider.API_VERSION,
         },
         body: JSON.stringify({
-          model: 'claude-3-haiku-20240307',
+          model: "claude-3-haiku-20240307",
           max_tokens: 1,
-          messages: [{ role: 'user', content: 'Hi' }],
+          messages: [{ role: "user", content: "Hi" }],
         }),
       });
 
@@ -341,7 +346,7 @@ export class AnthropicProvider extends LLMProvider {
         isHealthy: false,
         latencyMs: Date.now() - startTime,
         lastCheck: Date.now(),
-        errorMessage: error instanceof Error ? error.message : 'Unknown error',
+        errorMessage: error instanceof Error ? error.message : "Unknown error",
       };
     }
 
@@ -359,19 +364,25 @@ export class AnthropicProvider extends LLMProvider {
   /**
    * Map Anthropic stop reason to standard format
    */
-  private mapStopReason(reason: string): CompletionResponse['finishReason'] {
+  private mapStopReason(reason: string): CompletionResponse["finishReason"] {
     switch (reason) {
-      case 'end_turn':
-      case 'stop_sequence':
-        return 'stop';
-      case 'max_tokens':
-        return 'length';
+      case "end_turn":
+      case "stop_sequence":
+        return "stop";
+      case "max_tokens":
+        return "length";
       default:
-        return 'stop';
+        return "stop";
     }
   }
 }
 
 // Register the provider
-registerProvider('anthropic', (apiKey, baseUrl) => new AnthropicProvider(apiKey, baseUrl));
-registerProvider('claude', (apiKey, baseUrl) => new AnthropicProvider(apiKey, baseUrl));
+registerProvider(
+  "anthropic",
+  (apiKey, baseUrl) => new AnthropicProvider(apiKey, baseUrl),
+);
+registerProvider(
+  "claude",
+  (apiKey, baseUrl) => new AnthropicProvider(apiKey, baseUrl),
+);

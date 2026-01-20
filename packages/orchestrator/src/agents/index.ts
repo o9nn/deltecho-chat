@@ -13,6 +13,6 @@ export {
   Task,
   TaskResult,
   CoordinatorConfig,
-} from './AgentCoordinator.js';
+} from "./AgentCoordinator.js";
 
-export { default } from './AgentCoordinator.js';
+export { default } from "./AgentCoordinator.js";

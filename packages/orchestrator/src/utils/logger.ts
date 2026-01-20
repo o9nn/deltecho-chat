@@ -3,7 +3,7 @@
  * Provides consistent logging across all orchestrator components
  */
 
-export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
+export type LogLevel = "debug" | "info" | "warn" | "error";
 
 export interface Logger {
   debug: (...args: any[]) => void;
@@ -20,16 +20,16 @@ const LOG_LEVEL_PRIORITY: Record<LogLevel, number> = {
   error: 3,
 };
 
-let minLevel: LogLevel = (process.env.LOG_LEVEL as LogLevel) || 'info';
-const enableColors = process.env.NO_COLOR !== 'true';
+let minLevel: LogLevel = (process.env.LOG_LEVEL as LogLevel) || "info";
+const enableColors = process.env.NO_COLOR !== "true";
 
 const COLORS = {
-  reset: '\x1b[0m',
-  debug: '\x1b[36m',
-  info: '\x1b[32m',
-  warn: '\x1b[33m',
-  error: '\x1b[31m',
-  context: '\x1b[90m',
+  reset: "\x1b[0m",
+  debug: "\x1b[36m",
+  info: "\x1b[32m",
+  warn: "\x1b[33m",
+  error: "\x1b[31m",
+  context: "\x1b[90m",
 };
 
 export function setLogLevel(level: LogLevel): void {
@@ -57,9 +57,9 @@ class OrchestratorLogger implements Logger {
       prefix = `${timestamp} ${levelStr} ${contextStr}`;
     }
 
-    if (level === 'error') {
+    if (level === "error") {
       console.error(prefix, ...args);
-    } else if (level === 'warn') {
+    } else if (level === "warn") {
       console.warn(prefix, ...args);
     } else {
       console.log(prefix, ...args);
@@ -67,19 +67,19 @@ class OrchestratorLogger implements Logger {
   }
 
   debug(...args: any[]) {
-    this.log('debug', ...args);
+    this.log("debug", ...args);
   }
 
   info(...args: any[]) {
-    this.log('info', ...args);
+    this.log("info", ...args);
   }
 
   warn(...args: any[]) {
-    this.log('warn', ...args);
+    this.log("warn", ...args);
   }
 
   error(...args: any[]) {
-    this.log('error', ...args);
+    this.log("error", ...args);
   }
 
   child(subContext: string): Logger {

@@ -1,19 +1,21 @@
 // sanity.test.ts
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect } from "@jest/globals";
 
-describe('DeepTreeEchoBot Sanity Check', () => {
-    it('should be able to import core bot components', async () => {
-        const botModule = await import('../components/DeepTreeEchoBot/index');
-        expect(botModule).toBeDefined();
-    });
+describe("DeepTreeEchoBot Sanity Check", () => {
+  it("should be able to import core bot components", async () => {
+    const botModule = await import("../components/DeepTreeEchoBot/index");
+    expect(botModule).toBeDefined();
+  });
 
-    it('should have a defined chat context registration function', async () => {
-        const { registerChatContext } = await import('../components/DeepTreeEchoBot/index');
-        expect(typeof registerChatContext).toBe('function');
-    });
+  it("should have a defined chat context registration function", async () => {
+    const { registerChatContext } = await import(
+      "../components/DeepTreeEchoBot/index"
+    );
+    expect(typeof registerChatContext).toBe("function");
+  });
 
-    it('should have a chat manager instance', async () => {
-        const { chatManager } = await import('../components/DeepTreeEchoBot/index');
-        expect(chatManager).toBeDefined();
-    });
+  it("should have a chat manager instance", async () => {
+    const { chatManager } = await import("../components/DeepTreeEchoBot/index");
+    expect(chatManager).toBeDefined();
+  });
 });

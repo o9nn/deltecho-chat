@@ -7,11 +7,11 @@
  * - Tier 3 (MEMBRANE): Double Membrane bio-inspired architecture
  */
 
-import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
-import { Orchestrator, type CognitiveTierMode } from '../orchestrator.js';
+import { describe, it, expect, beforeEach, afterEach } from "@jest/globals";
+import { Orchestrator, type CognitiveTierMode } from "../orchestrator.js";
 
 // Mock the external dependencies
-jest.mock('deep-tree-echo-core', () => ({
+jest.mock("deep-tree-echo-core", () => ({
   getLogger: () => ({
     info: jest.fn(),
     warn: jest.fn(),
@@ -20,7 +20,7 @@ jest.mock('deep-tree-echo-core', () => ({
   }),
   LLMService: jest.fn().mockImplementation(() => ({
     generateFullParallelResponse: jest.fn().mockResolvedValue({
-      integratedResponse: 'Mock response from LLM',
+      integratedResponse: "Mock response from LLM",
     }),
     setConfig: jest.fn(),
   })),
@@ -30,9 +30,9 @@ jest.mock('deep-tree-echo-core', () => ({
     retrieveRecentMemories: jest.fn().mockReturnValue([]),
   })),
   PersonaCore: jest.fn().mockImplementation(() => ({
-    getPersonality: jest.fn().mockReturnValue('Test personality'),
+    getPersonality: jest.fn().mockReturnValue("Test personality"),
     getDominantEmotion: jest.fn().mockReturnValue({
-      emotion: 'neutral',
+      emotion: "neutral",
       intensity: 0.5,
     }),
     updateEmotionalState: jest.fn(),
@@ -41,11 +41,11 @@ jest.mock('deep-tree-echo-core', () => ({
 }));
 
 // Mock Sys6 Bridge
-jest.mock('../sys6-bridge/Sys6OrchestratorBridge.js', () => ({
+jest.mock("../sys6-bridge/Sys6OrchestratorBridge.js", () => ({
   Sys6OrchestratorBridge: jest.fn().mockImplementation(() => ({
     start: jest.fn().mockResolvedValue(undefined),
     stop: jest.fn().mockResolvedValue(undefined),
-    processMessage: jest.fn().mockResolvedValue('Mock Sys6 response'),
+    processMessage: jest.fn().mockResolvedValue("Mock Sys6 response"),
     getState: jest.fn().mockReturnValue({
       running: true,
       cycleNumber: 5,
@@ -60,12 +60,12 @@ jest.mock('../sys6-bridge/Sys6OrchestratorBridge.js', () => ({
 }));
 
 // Mock Double Membrane Integration
-jest.mock('../double-membrane-integration.js', () => ({
+jest.mock("../double-membrane-integration.js", () => ({
   DoubleMembraneIntegration: jest.fn().mockImplementation(() => ({
     start: jest.fn().mockResolvedValue(undefined),
     stop: jest.fn().mockResolvedValue(undefined),
     isRunning: jest.fn().mockReturnValue(true),
-    chat: jest.fn().mockResolvedValue('Mock Membrane response'),
+    chat: jest.fn().mockResolvedValue("Mock Membrane response"),
     getStatus: jest.fn().mockReturnValue({
       running: true,
       identityEnergy: 0.85,
@@ -80,7 +80,7 @@ jest.mock('../double-membrane-integration.js', () => ({
 }));
 
 // Mock other dependencies
-jest.mock('../deltachat-interface/index.js', () => ({
+jest.mock("../deltachat-interface/index.js", () => ({
   DeltaChatInterface: jest.fn().mockImplementation(() => ({
     connect: jest.fn().mockResolvedValue(undefined),
     disconnect: jest.fn().mockResolvedValue(undefined),
@@ -89,7 +89,7 @@ jest.mock('../deltachat-interface/index.js', () => ({
   })),
 }));
 
-jest.mock('../dovecot-interface/index.js', () => ({
+jest.mock("../dovecot-interface/index.js", () => ({
   DovecotInterface: jest.fn().mockImplementation(() => ({
     start: jest.fn().mockResolvedValue(undefined),
     stop: jest.fn().mockResolvedValue(undefined),
@@ -98,28 +98,28 @@ jest.mock('../dovecot-interface/index.js', () => ({
   })),
 }));
 
-jest.mock('../ipc/server.js', () => ({
+jest.mock("../ipc/server.js", () => ({
   IPCServer: jest.fn().mockImplementation(() => ({
     start: jest.fn().mockResolvedValue(undefined),
     stop: jest.fn().mockResolvedValue(undefined),
   })),
 }));
 
-jest.mock('../scheduler/task-scheduler.js', () => ({
+jest.mock("../scheduler/task-scheduler.js", () => ({
   TaskScheduler: jest.fn().mockImplementation(() => ({
     start: jest.fn().mockResolvedValue(undefined),
     stop: jest.fn().mockResolvedValue(undefined),
   })),
 }));
 
-jest.mock('../webhooks/webhook-server.js', () => ({
+jest.mock("../webhooks/webhook-server.js", () => ({
   WebhookServer: jest.fn().mockImplementation(() => ({
     start: jest.fn().mockResolvedValue(undefined),
     stop: jest.fn().mockResolvedValue(undefined),
   })),
 }));
 
-jest.mock('../dove9-integration.js', () => ({
+jest.mock("../dove9-integration.js", () => ({
   Dove9Integration: jest.fn().mockImplementation(() => ({
     initialize: jest.fn().mockResolvedValue(undefined),
     start: jest.fn().mockResolvedValue(undefined),
@@ -129,7 +129,7 @@ jest.mock('../dove9-integration.js', () => ({
   })),
 }));
 
-describe('Cognitive Tier Integration', () => {
+describe("Cognitive Tier Integration", () => {
   let orchestrator: Orchestrator;
 
   beforeEach(() => {
@@ -142,37 +142,37 @@ describe('Cognitive Tier Integration', () => {
     }
   });
 
-  describe('Orchestrator Configuration', () => {
-    it('should use ADAPTIVE mode by default', () => {
+  describe("Orchestrator Configuration", () => {
+    it("should use ADAPTIVE mode by default", () => {
       orchestrator = new Orchestrator();
-      expect(orchestrator.getCognitiveTierMode()).toBe('ADAPTIVE');
+      expect(orchestrator.getCognitiveTierMode()).toBe("ADAPTIVE");
     });
 
-    it('should accept custom cognitive tier mode', () => {
-      orchestrator = new Orchestrator({ cognitiveTierMode: 'SYS6' });
-      expect(orchestrator.getCognitiveTierMode()).toBe('SYS6');
+    it("should accept custom cognitive tier mode", () => {
+      orchestrator = new Orchestrator({ cognitiveTierMode: "SYS6" });
+      expect(orchestrator.getCognitiveTierMode()).toBe("SYS6");
     });
 
-    it('should allow runtime mode changes', () => {
-      orchestrator = new Orchestrator({ cognitiveTierMode: 'BASIC' });
-      expect(orchestrator.getCognitiveTierMode()).toBe('BASIC');
+    it("should allow runtime mode changes", () => {
+      orchestrator = new Orchestrator({ cognitiveTierMode: "BASIC" });
+      expect(orchestrator.getCognitiveTierMode()).toBe("BASIC");
 
-      orchestrator.setCognitiveTierMode('MEMBRANE');
-      expect(orchestrator.getCognitiveTierMode()).toBe('MEMBRANE');
+      orchestrator.setCognitiveTierMode("MEMBRANE");
+      expect(orchestrator.getCognitiveTierMode()).toBe("MEMBRANE");
     });
 
-    it('should configure complexity thresholds', () => {
+    it("should configure complexity thresholds", () => {
       orchestrator = new Orchestrator({
         sys6ComplexityThreshold: 0.3,
         membraneComplexityThreshold: 0.6,
       });
       // Thresholds are internal but affect routing
-      expect(orchestrator.getCognitiveTierMode()).toBe('ADAPTIVE');
+      expect(orchestrator.getCognitiveTierMode()).toBe("ADAPTIVE");
     });
   });
 
-  describe('Service Initialization', () => {
-    it('should start all cognitive tier services', async () => {
+  describe("Service Initialization", () => {
+    it("should start all cognitive tier services", async () => {
       orchestrator = new Orchestrator({
         enableDeltaChat: false,
         enableDovecot: false,
@@ -191,7 +191,7 @@ describe('Cognitive Tier Integration', () => {
       expect(orchestrator.getDoubleMembraneIntegration()).toBeDefined();
     });
 
-    it('should start with only BASIC tier when others disabled', async () => {
+    it("should start with only BASIC tier when others disabled", async () => {
       orchestrator = new Orchestrator({
         enableDeltaChat: false,
         enableDovecot: false,
@@ -201,7 +201,7 @@ describe('Cognitive Tier Integration', () => {
         enableDove9: false,
         enableSys6: false,
         enableDoubleMembrane: false,
-        cognitiveTierMode: 'BASIC',
+        cognitiveTierMode: "BASIC",
       });
 
       await orchestrator.start();
@@ -211,7 +211,7 @@ describe('Cognitive Tier Integration', () => {
       expect(orchestrator.getDoubleMembraneIntegration()).toBeUndefined();
     });
 
-    it('should stop all services gracefully', async () => {
+    it("should stop all services gracefully", async () => {
       orchestrator = new Orchestrator({
         enableDeltaChat: false,
         enableDovecot: false,
@@ -231,8 +231,8 @@ describe('Cognitive Tier Integration', () => {
     });
   });
 
-  describe('Processing Statistics', () => {
-    it('should track processing statistics', async () => {
+  describe("Processing Statistics", () => {
+    it("should track processing statistics", async () => {
       orchestrator = new Orchestrator({
         enableDeltaChat: false,
         enableDovecot: false,
@@ -246,16 +246,16 @@ describe('Cognitive Tier Integration', () => {
       await orchestrator.start();
 
       const stats = orchestrator.getProcessingStats();
-      expect(stats).toHaveProperty('totalMessages');
-      expect(stats).toHaveProperty('basicTierMessages');
-      expect(stats).toHaveProperty('sys6TierMessages');
-      expect(stats).toHaveProperty('membraneTierMessages');
-      expect(stats).toHaveProperty('averageComplexity');
+      expect(stats).toHaveProperty("totalMessages");
+      expect(stats).toHaveProperty("basicTierMessages");
+      expect(stats).toHaveProperty("sys6TierMessages");
+      expect(stats).toHaveProperty("membraneTierMessages");
+      expect(stats).toHaveProperty("averageComplexity");
     });
   });
 
-  describe('Cognitive System Status', () => {
-    it('should provide comprehensive system status', async () => {
+  describe("Cognitive System Status", () => {
+    it("should provide comprehensive system status", async () => {
       orchestrator = new Orchestrator({
         enableDeltaChat: false,
         enableDovecot: false,
@@ -270,14 +270,14 @@ describe('Cognitive Tier Integration', () => {
       await orchestrator.start();
 
       const status = orchestrator.getCognitiveSystemStatus();
-      expect(status.tierMode).toBe('ADAPTIVE');
+      expect(status.tierMode).toBe("ADAPTIVE");
       expect(status.sys6).not.toBeNull();
       expect(status.doubleMembrane).not.toBeNull();
       expect(status.dove9).not.toBeNull();
       expect(status.stats).toBeDefined();
     });
 
-    it('should show null for disabled tiers', async () => {
+    it("should show null for disabled tiers", async () => {
       orchestrator = new Orchestrator({
         enableDeltaChat: false,
         enableDovecot: false,
@@ -299,7 +299,7 @@ describe('Cognitive Tier Integration', () => {
   });
 });
 
-describe('Complexity Assessment', () => {
+describe("Complexity Assessment", () => {
   let orchestrator: Orchestrator;
 
   beforeEach(async () => {
@@ -312,7 +312,7 @@ describe('Complexity Assessment', () => {
       enableDove9: false,
       enableSys6: false,
       enableDoubleMembrane: false,
-      cognitiveTierMode: 'ADAPTIVE',
+      cognitiveTierMode: "ADAPTIVE",
       sys6ComplexityThreshold: 0.4,
       membraneComplexityThreshold: 0.7,
     });
@@ -328,21 +328,21 @@ describe('Complexity Assessment', () => {
   // Note: assessComplexity is private, so we test through observable behavior
   // In a real scenario, we might expose it for testing or test through integration
 
-  it('should track average complexity over time', () => {
+  it("should track average complexity over time", () => {
     const stats = orchestrator.getProcessingStats();
-    expect(typeof stats.averageComplexity).toBe('number');
+    expect(typeof stats.averageComplexity).toBe("number");
     expect(stats.averageComplexity).toBeGreaterThanOrEqual(0);
     expect(stats.averageComplexity).toBeLessThanOrEqual(1);
   });
 });
 
-describe('Tier Mode Configurations', () => {
+describe("Tier Mode Configurations", () => {
   const testCases: Array<{ mode: CognitiveTierMode; description: string }> = [
-    { mode: 'BASIC', description: 'uses only Deep Tree Echo Core' },
-    { mode: 'SYS6', description: 'uses Sys6-Triality 30-step cycle' },
-    { mode: 'MEMBRANE', description: 'uses Double Membrane architecture' },
-    { mode: 'ADAPTIVE', description: 'auto-selects based on complexity' },
-    { mode: 'FULL', description: 'uses all tiers with cascading' },
+    { mode: "BASIC", description: "uses only Deep Tree Echo Core" },
+    { mode: "SYS6", description: "uses Sys6-Triality 30-step cycle" },
+    { mode: "MEMBRANE", description: "uses Double Membrane architecture" },
+    { mode: "ADAPTIVE", description: "auto-selects based on complexity" },
+    { mode: "FULL", description: "uses all tiers with cascading" },
   ];
 
   testCases.forEach(({ mode, description }) => {

@@ -96,16 +96,16 @@ milter_default_action = accept
 ### Orchestrator Configuration
 
 ```typescript
-import { Orchestrator } from 'deep-tree-echo-orchestrator';
+import { Orchestrator } from "deep-tree-echo-orchestrator";
 
 const orchestrator = new Orchestrator({
   enableDovecot: true,
   dovecot: {
     enableMilter: true,
-    milterSocket: '/var/run/deep-tree-echo/milter.sock',
+    milterSocket: "/var/run/deep-tree-echo/milter.sock",
     enableLMTP: false,
-    allowedDomains: ['example.com', 'mail.example.com'],
-    botEmailAddress: 'echo@example.com',
+    allowedDomains: ["example.com", "mail.example.com"],
+    botEmailAddress: "echo@example.com",
   },
 });
 
@@ -117,7 +117,7 @@ await orchestrator.start();
 Deep Tree Echo includes a custom avatar for email and chat representation:
 
 ```typescript
-import { PersonaCore } from 'deep-tree-echo-core';
+import { PersonaCore } from "deep-tree-echo-core";
 
 const persona = new PersonaCore();
 
@@ -128,8 +128,8 @@ console.log(avatar.displayName); // 'Deep Tree Echo'
 
 // Update avatar aesthetic
 await persona.updateAvatarConfig({
-  aesthetic: 'cosmic',
-  primaryColor: '#8b5cf6',
+  aesthetic: "cosmic",
+  primaryColor: "#8b5cf6",
 });
 ```
 

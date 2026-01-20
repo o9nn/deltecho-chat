@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef } from "react";
 
 /**
  * Helper hook to look at the previous prop- or state value
@@ -10,11 +10,11 @@ import { useEffect, useRef } from 'react'
  * - https://stackoverflow.com/questions/53446020/how-to-compare-oldvalues-and-newvalues-on-react-hooks-useeffect
  */
 export function usePrevious(value: any) {
-  const ref = useRef()
+  const ref = useRef();
   useEffect(() => {
-    ref.current = value
-  })
-  return ref.current
+    ref.current = value;
+  });
+  return ref.current;
 }
 
 /**
@@ -29,8 +29,8 @@ export function usePrevious(value: any) {
  * otherwise the `val` from the previous run of the hook.
  */
 export function usePrevious2<T>(val: T): T | undefined {
-  const prevRef = useRef<T>(undefined)
-  const prev = prevRef.current
-  prevRef.current = val
-  return prev
+  const prevRef = useRef<T>(undefined);
+  const prev = prevRef.current;
+  prevRef.current = val;
+  return prev;
 }

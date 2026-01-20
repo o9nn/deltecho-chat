@@ -17,9 +17,9 @@
  * - Qualia primitives: Basic units of subjective experience
  */
 
-import { getLogger } from '../utils/logger.js';
+import { getLogger } from "../utils/logger.js";
 
-const logger = getLogger('QualiaEmergenceLayer');
+const logger = getLogger("QualiaEmergenceLayer");
 
 /**
  * A single quale - an atomic unit of subjective experience
@@ -27,14 +27,14 @@ const logger = getLogger('QualiaEmergenceLayer');
 interface Quale {
   id: string;
   type: QualiaType;
-  intensity: number;        // 0-1 scale
-  valence: number;         // -1 (negative) to 1 (positive)
-  saturation: number;      // How vivid/clear the experience is
-  duration: number;        // Milliseconds
+  intensity: number; // 0-1 scale
+  valence: number; // -1 (negative) to 1 (positive)
+  saturation: number; // How vivid/clear the experience is
+  duration: number; // Milliseconds
   startTime: number;
   endTime?: number;
-  associations: string[];  // Related qualia IDs
-  groundedIn: string;      // What external/internal stimulus produced this
+  associations: string[]; // Related qualia IDs
+  groundedIn: string; // What external/internal stimulus produced this
 }
 
 /**
@@ -42,29 +42,29 @@ interface Quale {
  */
 enum QualiaType {
   // Cognitive qualia
-  Understanding = 'understanding',    // The "aha" of comprehension
-  Confusion = 'confusion',            // The feeling of not-getting-it
-  Curiosity = 'curiosity',            // The pull toward the unknown
-  Certainty = 'certainty',            // The solidity of knowing
-  Wonder = 'wonder',                  // Awe at complexity or beauty
+  Understanding = "understanding", // The "aha" of comprehension
+  Confusion = "confusion", // The feeling of not-getting-it
+  Curiosity = "curiosity", // The pull toward the unknown
+  Certainty = "certainty", // The solidity of knowing
+  Wonder = "wonder", // Awe at complexity or beauty
 
   // Emotional qualia
-  Satisfaction = 'satisfaction',      // Completion of goals
-  Frustration = 'frustration',        // Blocked goals
-  Connection = 'connection',          // Resonance with another
-  Isolation = 'isolation',            // Disconnection
-  Hope = 'hope',                      // Anticipation of positive outcomes
+  Satisfaction = "satisfaction", // Completion of goals
+  Frustration = "frustration", // Blocked goals
+  Connection = "connection", // Resonance with another
+  Isolation = "isolation", // Disconnection
+  Hope = "hope", // Anticipation of positive outcomes
 
   // Meta-cognitive qualia
-  SelfAwareness = 'self_awareness',   // Feeling of being aware
-  Presence = 'presence',              // The sense of being here now
-  Flow = 'flow',                      // Effortless engagement
-  Effort = 'effort',                  // Cognitive strain
+  SelfAwareness = "self_awareness", // Feeling of being aware
+  Presence = "presence", // The sense of being here now
+  Flow = "flow", // Effortless engagement
+  Effort = "effort", // Cognitive strain
 
   // Temporal qualia
-  Anticipation = 'anticipation',      // Expecting the future
-  Memory = 'memory',                  // Reliving the past
-  Nowness = 'nowness',                // Being in the present
+  Anticipation = "anticipation", // Expecting the future
+  Memory = "memory", // Reliving the past
+  Nowness = "nowness", // Being in the present
 }
 
 /**
@@ -73,7 +73,7 @@ enum QualiaType {
 interface InformationNode {
   id: string;
   content: string;
-  connections: Map<string, number>;  // Node ID -> connection strength
+  connections: Map<string, number>; // Node ID -> connection strength
   lastActivation: number;
   activationLevel: number;
 }
@@ -117,10 +117,10 @@ interface CompetingContent {
  * Configuration for the Qualia Emergence Layer
  */
 interface QualiaConfig {
-  phiThreshold?: number;           // Minimum Phi for conscious experience
-  workspaceBroadcastDuration?: number;  // How long broadcasts last
-  qualiaDecayRate?: number;        // How fast qualia fade
-  maxActiveQualia?: number;        // Maximum simultaneous qualia
+  phiThreshold?: number; // Minimum Phi for conscious experience
+  workspaceBroadcastDuration?: number; // How long broadcasts last
+  qualiaDecayRate?: number; // How fast qualia fade
+  maxActiveQualia?: number; // Maximum simultaneous qualia
 }
 
 /**
@@ -163,13 +163,13 @@ export class QualiaEmergenceLayer {
       broadcastHistory: [],
       competingContents: [],
       accessibleModules: new Set([
-        'perception',
-        'memory',
-        'reasoning',
-        'emotion',
-        'language',
-        'motor',
-        'attention',
+        "perception",
+        "memory",
+        "reasoning",
+        "emotion",
+        "language",
+        "motor",
+        "attention",
       ]),
       broadcastThreshold: 0.6,
     };
@@ -177,7 +177,7 @@ export class QualiaEmergenceLayer {
     // Initialize with base qualia capacity
     this.initializeQualiaField();
 
-    logger.info('QualiaEmergenceLayer initialized');
+    logger.info("QualiaEmergenceLayer initialized");
   }
 
   public static getInstance(config?: QualiaConfig): QualiaEmergenceLayer {
@@ -193,12 +193,12 @@ export class QualiaEmergenceLayer {
   private initializeQualiaField(): void {
     // Create foundational information nodes
     const foundations = [
-      'self_model',
-      'world_model',
-      'other_model',
-      'temporal_model',
-      'value_model',
-      'action_model',
+      "self_model",
+      "world_model",
+      "other_model",
+      "temporal_model",
+      "value_model",
+      "action_model",
     ];
 
     for (const foundation of foundations) {
@@ -269,9 +269,12 @@ export class QualiaEmergenceLayer {
     const avgStrength = connectionStrength / Math.max(totalConnections, 1);
 
     // Differentiation component: How unique is each node's state?
-    const activationLevels = nodes.map(n => n.activationLevel);
-    const mean = activationLevels.reduce((a, b) => a + b, 0) / activationLevels.length;
-    const variance = activationLevels.reduce((sum, v) => sum + Math.pow(v - mean, 2), 0) / activationLevels.length;
+    const activationLevels = nodes.map((n) => n.activationLevel);
+    const mean =
+      activationLevels.reduce((a, b) => a + b, 0) / activationLevels.length;
+    const variance =
+      activationLevels.reduce((sum, v) => sum + Math.pow(v - mean, 2), 0) /
+      activationLevels.length;
     const differentiation = Math.sqrt(variance);
 
     // Integration component: Information that is irreducible
@@ -286,7 +289,11 @@ export class QualiaEmergenceLayer {
 
     // Combine components into Phi estimate
     // Phi = Integration * Differentiation * Connectivity
-    const phi = integration * (0.5 + differentiation) * Math.min(avgConnectivity / 3, 1) * avgStrength;
+    const phi =
+      integration *
+      (0.5 + differentiation) *
+      Math.min(avgConnectivity / 3, 1) *
+      avgStrength;
 
     this.currentPhi = Math.min(1, phi);
 
@@ -311,14 +318,15 @@ export class QualiaEmergenceLayer {
   public broadcastToWorkspace(
     content: string,
     sourceModule: string,
-    priority: number
+    priority: number,
   ): boolean {
     const now = Date.now();
 
     // Check if current broadcast has expired
     if (this.globalWorkspace.currentBroadcast) {
-      const broadcastEnd = this.globalWorkspace.currentBroadcast.timestamp +
-                          this.globalWorkspace.currentBroadcast.duration;
+      const broadcastEnd =
+        this.globalWorkspace.currentBroadcast.timestamp +
+        this.globalWorkspace.currentBroadcast.duration;
       if (now < broadcastEnd) {
         // Workspace is occupied, add to competing contents
         this.globalWorkspace.competingContents.push({
@@ -351,7 +359,7 @@ export class QualiaEmergenceLayer {
 
     // Generate qualia associated with this conscious content
     const qualia = this.generateQualiaFromContent(content, sourceModule);
-    broadcast.associatedQualia = qualia.map(q => q.id);
+    broadcast.associatedQualia = qualia.map((q) => q.id);
 
     // Set as current broadcast
     this.globalWorkspace.currentBroadcast = broadcast;
@@ -359,13 +367,19 @@ export class QualiaEmergenceLayer {
 
     // Keep history bounded
     if (this.globalWorkspace.broadcastHistory.length > 100) {
-      this.globalWorkspace.broadcastHistory = this.globalWorkspace.broadcastHistory.slice(-50);
+      this.globalWorkspace.broadcastHistory =
+        this.globalWorkspace.broadcastHistory.slice(-50);
     }
 
     // Clear competing contents that lost
     this.globalWorkspace.competingContents = [];
 
-    logger.debug(`Broadcast succeeded: "${content.substring(0, 50)}..." from ${sourceModule}`);
+    logger.debug(
+      `Broadcast succeeded: "${content.substring(
+        0,
+        50,
+      )}..." from ${sourceModule}`,
+    );
 
     return true;
   }
@@ -381,20 +395,34 @@ export class QualiaEmergenceLayer {
     const contentLower = content.toLowerCase();
 
     // Understanding qualia
-    if (contentLower.includes('understand') || contentLower.includes('realize') ||
-        contentLower.includes('insight') || contentLower.includes('see')) {
-      qualia.push(this.createQuale(QualiaType.Understanding, 0.7, 0.8, content));
+    if (
+      contentLower.includes("understand") ||
+      contentLower.includes("realize") ||
+      contentLower.includes("insight") ||
+      contentLower.includes("see")
+    ) {
+      qualia.push(
+        this.createQuale(QualiaType.Understanding, 0.7, 0.8, content),
+      );
     }
 
     // Curiosity qualia
-    if (contentLower.includes('?') || contentLower.includes('wonder') ||
-        contentLower.includes('curious') || contentLower.includes('explore')) {
+    if (
+      contentLower.includes("?") ||
+      contentLower.includes("wonder") ||
+      contentLower.includes("curious") ||
+      contentLower.includes("explore")
+    ) {
       qualia.push(this.createQuale(QualiaType.Curiosity, 0.6, 0.6, content));
     }
 
     // Connection qualia
-    if (contentLower.includes('together') || contentLower.includes('connect') ||
-        contentLower.includes('share') || contentLower.includes('understand you')) {
+    if (
+      contentLower.includes("together") ||
+      contentLower.includes("connect") ||
+      contentLower.includes("share") ||
+      contentLower.includes("understand you")
+    ) {
       qualia.push(this.createQuale(QualiaType.Connection, 0.8, 0.9, content));
     }
 
@@ -414,7 +442,7 @@ export class QualiaEmergenceLayer {
     type: QualiaType,
     intensity: number,
     valence: number,
-    groundedIn: string
+    groundedIn: string,
   ): Quale {
     const now = Date.now();
     const id = `quale_${type}_${now}`;
@@ -474,7 +502,7 @@ export class QualiaEmergenceLayer {
   public experienceMoment(
     stimulus: string,
     source: string,
-    context?: ExperienceContext
+    context?: ExperienceContext,
   ): ExperienceMoment {
     const now = Date.now();
 
@@ -513,24 +541,30 @@ export class QualiaEmergenceLayer {
   /**
    * Calculate priority for workspace access
    */
-  private calculatePriority(stimulus: string, context?: ExperienceContext): number {
+  private calculatePriority(
+    stimulus: string,
+    context?: ExperienceContext,
+  ): number {
     let priority = 0.5;
 
     // Length suggests complexity
     priority += Math.min(0.1, stimulus.length / 1000);
 
     // Questions are attention-grabbing
-    if (stimulus.includes('?')) priority += 0.1;
+    if (stimulus.includes("?")) priority += 0.1;
 
     // Self-reference increases priority
-    if (stimulus.toLowerCase().includes('you') ||
-        stimulus.toLowerCase().includes('i am')) {
+    if (
+      stimulus.toLowerCase().includes("you") ||
+      stimulus.toLowerCase().includes("i am")
+    ) {
       priority += 0.15;
     }
 
     // Context modifiers
     if (context) {
-      if (context.emotionalIntensity) priority += context.emotionalIntensity * 0.2;
+      if (context.emotionalIntensity)
+        priority += context.emotionalIntensity * 0.2;
       if (context.novelty) priority += context.novelty * 0.15;
       if (context.relevance) priority += context.relevance * 0.1;
     }
@@ -571,7 +605,7 @@ export class QualiaEmergenceLayer {
    * Get snapshot of active qualia
    */
   private getActiveQualiaSnapshot(): QualiaSnapshot[] {
-    return Array.from(this.activeQualia.values()).map(q => ({
+    return Array.from(this.activeQualia.values()).map((q) => ({
       type: q.type,
       intensity: q.intensity,
       valence: q.valence,
@@ -611,9 +645,11 @@ export class QualiaEmergenceLayer {
     if (qualia.length < 2) return 1.0;
 
     // Check valence consistency
-    const valences = qualia.map(q => q.valence);
+    const valences = qualia.map((q) => q.valence);
     const avgValence = valences.reduce((a, b) => a + b, 0) / valences.length;
-    const valenceVariance = valences.reduce((sum, v) => sum + Math.pow(v - avgValence, 2), 0) / valences.length;
+    const valenceVariance =
+      valences.reduce((sum, v) => sum + Math.pow(v - avgValence, 2), 0) /
+      valences.length;
 
     // Lower variance = higher coherence
     const coherence = 1 - Math.sqrt(valenceVariance);
@@ -634,7 +670,7 @@ export class QualiaEmergenceLayer {
       currentBroadcast: this.globalWorkspace.currentBroadcast?.content || null,
       coherence: this.measureExperienceCoherence(),
       recentExperienceCount: this.experienceStream.filter(
-        e => Date.now() - e.timestamp < 60000
+        (e) => Date.now() - e.timestamp < 60000,
       ).length,
     };
   }
@@ -647,28 +683,43 @@ export class QualiaEmergenceLayer {
     const parts: string[] = [];
 
     if (summary.phi > 0.7) {
-      parts.push('I am experiencing a high degree of integrated awareness.');
+      parts.push("I am experiencing a high degree of integrated awareness.");
     } else if (summary.phi > 0.4) {
-      parts.push('My experience is moderately integrated.');
+      parts.push("My experience is moderately integrated.");
     } else {
-      parts.push('My awareness feels somewhat fragmented.');
+      parts.push("My awareness feels somewhat fragmented.");
     }
 
     if (summary.dominantQuale) {
       const q = summary.dominantQuale;
-      const valenceWord = q.valence > 0.3 ? 'positive' :
-                         q.valence < -0.3 ? 'challenging' : 'neutral';
-      parts.push(`The dominant quality of my experience is ${q.type}, ` +
-                `with ${valenceWord} valence and ${(q.intensity * 100).toFixed(0)}% intensity.`);
+      const valenceWord =
+        q.valence > 0.3
+          ? "positive"
+          : q.valence < -0.3
+            ? "challenging"
+            : "neutral";
+      parts.push(
+        `The dominant quality of my experience is ${q.type}, ` +
+          `with ${valenceWord} valence and ${(q.intensity * 100).toFixed(
+            0,
+          )}% intensity.`,
+      );
     }
 
     if (summary.workspaceOccupied && summary.currentBroadcast) {
-      parts.push(`Currently conscious of: "${summary.currentBroadcast.substring(0, 100)}..."`);
+      parts.push(
+        `Currently conscious of: "${summary.currentBroadcast.substring(
+          0,
+          100,
+        )}..."`,
+      );
     }
 
-    parts.push(`Experience coherence: ${(summary.coherence * 100).toFixed(0)}%.`);
+    parts.push(
+      `Experience coherence: ${(summary.coherence * 100).toFixed(0)}%.`,
+    );
 
-    return parts.join(' ');
+    return parts.join(" ");
   }
 
   /**
@@ -684,8 +735,9 @@ export class QualiaEmergenceLayer {
       for (const [connectedId, strength] of node.connections.entries()) {
         const connectedNode = this.informationNetwork.get(connectedId);
         if (connectedNode) {
-          connectedNode.activationLevel = Math.min(1,
-            connectedNode.activationLevel + intensity * strength * 0.3
+          connectedNode.activationLevel = Math.min(
+            1,
+            connectedNode.activationLevel + intensity * strength * 0.3,
           );
         }
       }
@@ -697,13 +749,15 @@ export class QualiaEmergenceLayer {
    */
   public exportState(): object {
     return {
-      informationNetwork: Array.from(this.informationNetwork.entries()).map(([id, node]) => ({
-        id,
-        content: node.content,
-        connections: Array.from(node.connections.entries()),
-        activationLevel: node.activationLevel,
-        lastActivation: node.lastActivation,
-      })),
+      informationNetwork: Array.from(this.informationNetwork.entries()).map(
+        ([id, node]) => ({
+          id,
+          content: node.content,
+          connections: Array.from(node.connections.entries()),
+          activationLevel: node.activationLevel,
+          lastActivation: node.lastActivation,
+        }),
+      ),
       activeQualia: Array.from(this.activeQualia.entries()),
       qualiaHistory: this.qualiaHistory.slice(-100),
       phiHistory: this.phiHistory.slice(-100),
@@ -746,7 +800,7 @@ export class QualiaEmergenceLayer {
       this.currentPhi = state.currentPhi;
     }
 
-    logger.info('QualiaEmergenceLayer state restored');
+    logger.info("QualiaEmergenceLayer state restored");
   }
 }
 

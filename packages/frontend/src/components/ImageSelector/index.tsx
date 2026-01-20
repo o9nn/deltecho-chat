@@ -1,24 +1,24 @@
-import React from 'react'
-import { dirname } from 'path'
+import React from "react";
+import { dirname } from "path";
 
-import Icon from '../Icon'
-import LargeProfileImage from '../LargeProfileImage'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
-import { runtime } from '@deltachat-desktop/runtime-interface'
+import Icon from "../Icon";
+import LargeProfileImage from "../LargeProfileImage";
+import useTranslationFunction from "../../hooks/useTranslationFunction";
+import { LastUsedSlot, rememberLastUsedPath } from "../../utils/lastUsedPaths";
+import { runtime } from "@deltachat-desktop/runtime-interface";
 
-import styles from './styles.module.scss'
+import styles from "./styles.module.scss";
 
 type Props = {
-  color?: string
-  filePath: string | null
-  initials: string
-  lastUsedSlot: LastUsedSlot
-  onChange: (path: string | null) => void
-  removeLabel?: string
-  selectLabel?: string
-  titleLabel?: string
-}
+  color?: string;
+  filePath: string | null;
+  initials: string;
+  lastUsedSlot: LastUsedSlot;
+  onChange: (path: string | null) => void;
+  removeLabel?: string;
+  selectLabel?: string;
+  titleLabel?: string;
+};
 
 export default function ImageSelector({
   color,
@@ -30,32 +30,32 @@ export default function ImageSelector({
   selectLabel,
   titleLabel,
 }: Props) {
-  const tx = useTranslationFunction()
-  const imageUrl = filePath ? runtime.transformBlobURL(filePath) : undefined
+  const tx = useTranslationFunction();
+  const imageUrl = filePath ? runtime.transformBlobURL(filePath) : undefined;
 
   const handleSelect = async () => {
     const { defaultPath, setLastPath } =
-      await rememberLastUsedPath(lastUsedSlot)
+      await rememberLastUsedPath(lastUsedSlot);
 
     const [file] = await runtime.showOpenFileDialog({
-      title: titleLabel ? titleLabel : tx('select_your_new_profile_image'),
+      title: titleLabel ? titleLabel : tx("select_your_new_profile_image"),
       filters: [
         {
-          name: tx('images'),
-          extensions: ['jpg', 'png', 'gif', 'jpeg', 'webp'],
+          name: tx("images"),
+          extensions: ["jpg", "png", "gif", "jpeg", "webp"],
         },
       ],
-      properties: ['openFile'],
+      properties: ["openFile"],
       defaultPath,
-    })
+    });
 
     if (file) {
-      onChange(file)
-      setLastPath(dirname(file))
+      onChange(file);
+      setLastPath(dirname(file));
     }
-  }
+  };
 
-  const handleRemove = () => onChange(null)
+  const handleRemove = () => onChange(null);
 
   return (
     <div className={styles.imageSelectorContainer}>
@@ -67,25 +67,25 @@ export default function ImageSelector({
         />
         {!imageUrl && (
           <button
-            title={selectLabel ? selectLabel : tx('profile_image_select')}
-            aria-label={selectLabel ? selectLabel : tx('profile_image_select')}
+            title={selectLabel ? selectLabel : tx("profile_image_select")}
+            aria-label={selectLabel ? selectLabel : tx("profile_image_select")}
             className={styles.imageSelectorButton}
             onClick={handleSelect}
           >
-            <Icon className={styles.imageSelectorIcon} icon='image' />
+            <Icon className={styles.imageSelectorIcon} icon="image" />
           </button>
         )}
         {imageUrl && (
           <button
-            title={removeLabel ? removeLabel : tx('profile_image_delete')}
-            aria-label={removeLabel ? removeLabel : tx('profile_image_delete')}
+            title={removeLabel ? removeLabel : tx("profile_image_delete")}
+            aria-label={removeLabel ? removeLabel : tx("profile_image_delete")}
             className={styles.imageSelectorButton}
             onClick={handleRemove}
           >
-            <Icon className={styles.imageSelectorIcon} icon='cross' />
+            <Icon className={styles.imageSelectorIcon} icon="cross" />
           </button>
         )}
       </div>
     </div>
-  )
+  );
 }

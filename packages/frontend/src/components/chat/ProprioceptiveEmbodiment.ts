@@ -1,25 +1,25 @@
-import { getLogger } from '../../../../shared/logger'
-import { runtime } from '@deltachat-desktop/runtime-interface'
+import { getLogger } from "../../../../shared/logger";
+import { runtime } from "@deltachat-desktop/runtime-interface";
 
-const log = getLogger('renderer/ProprioceptiveEmbodiment')
+const log = getLogger("renderer/ProprioceptiveEmbodiment");
 
 /**
  * Represents a 3D position with orientation
  */
 export interface Pose {
-  position: { x: number; y: number; z: number }
-  rotation: { pitch: number; yaw: number; roll: number }
+  position: { x: number; y: number; z: number };
+  rotation: { pitch: number; yaw: number; roll: number };
 }
 
 /**
  * Represents the state of a gaming controller
  */
 export interface ControllerState {
-  leftStick: { x: number; y: number }
-  rightStick: { x: number; y: number }
-  buttons: { [key: string]: boolean }
-  triggers: { left: number; right: number }
-  connected: boolean
+  leftStick: { x: number; y: number };
+  rightStick: { x: number; y: number };
+  buttons: { [key: string]: boolean };
+  triggers: { left: number; right: number };
+  connected: boolean;
 }
 
 /**
@@ -27,13 +27,13 @@ export interface ControllerState {
  */
 export interface ProprioceptiveFeedback {
   // Collision detection
-  collisions: { direction: string; intensity: number }[]
+  collisions: { direction: string; intensity: number }[];
   // Surface contact
-  surfaceContact: { surface: string; friction: number }
+  surfaceContact: { surface: string; friction: number };
   // Balance stability (0-1)
-  stability: number
+  stability: number;
   // Limb positions
-  limbPositions: { [key: string]: { x: number; y: number; z: number } }
+  limbPositions: { [key: string]: { x: number; y: number; z: number } };
 }
 
 /**
@@ -41,23 +41,23 @@ export interface ProprioceptiveFeedback {
  * gaming controllers and 3D environment interaction
  */
 export class ProprioceptiveEmbodiment {
-  private static instance: ProprioceptiveEmbodiment
-  private initialized: boolean = false
-  private frameCallbackId?: number
+  private static instance: ProprioceptiveEmbodiment;
+  private initialized: boolean = false;
+  private frameCallbackId?: number;
 
   // Controller state
-  private controllers: ControllerState[] = []
+  private controllers: ControllerState[] = [];
 
   // Environment state
   private currentPose: Pose = {
     position: { x: 0, y: 0, z: 0 },
     rotation: { pitch: 0, yaw: 0, roll: 0 },
-  }
+  };
 
   // Proprioceptive feedback
   private feedback: ProprioceptiveFeedback = {
     collisions: [],
-    surfaceContact: { surface: 'none', friction: 0 },
+    surfaceContact: { surface: "none", friction: 0 },
     stability: 1.0,
     limbPositions: {
       leftArm: { x: 0, y: 0, z: 0 },
@@ -65,30 +65,30 @@ export class ProprioceptiveEmbodiment {
       leftLeg: { x: 0, y: 0, z: 0 },
       rightLeg: { x: 0, y: 0, z: 0 },
     },
-  }
+  };
 
   // Training data
   private trainingMemory: {
-    state: ControllerState
-    pose: Pose
-    feedback: ProprioceptiveFeedback
-    success: boolean
-    timestamp: number
-  }[] = []
+    state: ControllerState;
+    pose: Pose;
+    feedback: ProprioceptiveFeedback;
+    success: boolean;
+    timestamp: number;
+  }[] = [];
 
   // Callbacks
   private onUpdateCallbacks: ((
     pose: Pose,
-    feedback: ProprioceptiveFeedback
-  ) => void)[] = []
+    feedback: ProprioceptiveFeedback,
+  ) => void)[] = [];
 
   private constructor() {}
 
   public static getInstance(): ProprioceptiveEmbodiment {
     if (!ProprioceptiveEmbodiment.instance) {
-      ProprioceptiveEmbodiment.instance = new ProprioceptiveEmbodiment()
+      ProprioceptiveEmbodiment.instance = new ProprioceptiveEmbodiment();
     }
-    return ProprioceptiveEmbodiment.instance
+    return ProprioceptiveEmbodiment.instance;
   }
 
   /**
@@ -96,35 +96,35 @@ export class ProprioceptiveEmbodiment {
    */
   public async initialize(): Promise<boolean> {
     if (this.initialized) {
-      return true
+      return true;
     }
 
     try {
       // Check if browser supports Gamepad API
-      if ('getGamepads' in navigator) {
+      if ("getGamepads" in navigator) {
         // Add event listeners for controller connections
         window.addEventListener(
-          'gamepadconnected',
-          this.handleGamepadConnected.bind(this)
-        )
+          "gamepadconnected",
+          this.handleGamepadConnected.bind(this),
+        );
         window.addEventListener(
-          'gamepaddisconnected',
-          this.handleGamepadDisconnected.bind(this)
-        )
+          "gamepaddisconnected",
+          this.handleGamepadDisconnected.bind(this),
+        );
 
         // Start the update loop
-        this.startUpdateLoop()
+        this.startUpdateLoop();
 
-        log.info('Proprioceptive embodiment system initialized')
-        this.initialized = true
-        return true
+        log.info("Proprioceptive embodiment system initialized");
+        this.initialized = true;
+        return true;
       } else {
-        log.error('Gamepad API not supported in this browser')
-        return false
+        log.error("Gamepad API not supported in this browser");
+        return false;
       }
     } catch (error) {
-      log.error('Failed to initialize proprioceptive embodiment:', error)
-      return false
+      log.error("Failed to initialize proprioceptive embodiment:", error);
+      return false;
     }
   }
 
@@ -132,16 +132,16 @@ export class ProprioceptiveEmbodiment {
    * Handle gamepad connected event
    */
   private handleGamepadConnected(event: GamepadEvent): void {
-    log.info(`Controller connected: ${event.gamepad.id}`)
-    this.updateControllerStates()
+    log.info(`Controller connected: ${event.gamepad.id}`);
+    this.updateControllerStates();
   }
 
   /**
    * Handle gamepad disconnected event
    */
   private handleGamepadDisconnected(event: GamepadEvent): void {
-    log.info(`Controller disconnected: ${event.gamepad.id}`)
-    this.updateControllerStates()
+    log.info(`Controller disconnected: ${event.gamepad.id}`);
+    this.updateControllerStates();
   }
 
   /**
@@ -149,11 +149,11 @@ export class ProprioceptiveEmbodiment {
    */
   private updateControllerStates(): void {
     // Get all connected gamepads
-    const gamepads = navigator.getGamepads()
-    this.controllers = []
+    const gamepads = navigator.getGamepads();
+    this.controllers = [];
 
     for (const gamepad of gamepads) {
-      if (!gamepad) continue
+      if (!gamepad) continue;
 
       // Map controller inputs to our state format
       const controllerState: ControllerState = {
@@ -165,14 +165,14 @@ export class ProprioceptiveEmbodiment {
           right: gamepad.buttons[7]?.value || 0,
         },
         connected: true,
-      }
+      };
 
       // Map button states
       gamepad.buttons.forEach((button, index) => {
-        controllerState.buttons[`button_${index}`] = button.pressed
-      })
+        controllerState.buttons[`button_${index}`] = button.pressed;
+      });
 
-      this.controllers.push(controllerState)
+      this.controllers.push(controllerState);
     }
   }
 
@@ -183,28 +183,28 @@ export class ProprioceptiveEmbodiment {
     // Use requestAnimationFrame for smooth updates
     const updateLoop = () => {
       // Update controller states
-      this.updateControllerStates()
+      this.updateControllerStates();
 
       // Update pose based on controller input (if we have controllers)
       if (this.controllers.length > 0) {
-        this.updatePoseFromControllers()
+        this.updatePoseFromControllers();
       }
 
       // Generate proprioceptive feedback based on current pose
-      this.generateProprioceptiveFeedback()
+      this.generateProprioceptiveFeedback();
 
       // Record training data
-      this.recordTrainingData()
+      this.recordTrainingData();
 
       // Trigger update callbacks
-      this.triggerUpdateCallbacks()
+      this.triggerUpdateCallbacks();
 
       // Continue the loop
-      this.frameCallbackId = requestAnimationFrame(updateLoop)
-    }
+      this.frameCallbackId = requestAnimationFrame(updateLoop);
+    };
 
     // Start the loop
-    this.frameCallbackId = requestAnimationFrame(updateLoop)
+    this.frameCallbackId = requestAnimationFrame(updateLoop);
   }
 
   /**
@@ -212,8 +212,8 @@ export class ProprioceptiveEmbodiment {
    */
   public stopUpdateLoop(): void {
     if (this.frameCallbackId !== undefined) {
-      cancelAnimationFrame(this.frameCallbackId)
-      this.frameCallbackId = undefined
+      cancelAnimationFrame(this.frameCallbackId);
+      this.frameCallbackId = undefined;
     }
   }
 
@@ -221,58 +221,58 @@ export class ProprioceptiveEmbodiment {
    * Update pose based on controller inputs
    */
   private updatePoseFromControllers(): void {
-    const controller = this.controllers[0] // Use first controller
+    const controller = this.controllers[0]; // Use first controller
 
     // Update position based on left stick
-    this.currentPose.position.x += controller.leftStick.x * 0.1
-    this.currentPose.position.z -= controller.leftStick.y * 0.1 // Invert for forward/backward
+    this.currentPose.position.x += controller.leftStick.x * 0.1;
+    this.currentPose.position.z -= controller.leftStick.y * 0.1; // Invert for forward/backward
 
     // Update rotation based on right stick
-    this.currentPose.rotation.yaw += controller.rightStick.x * 0.05
-    this.currentPose.rotation.pitch += controller.rightStick.y * 0.05
+    this.currentPose.rotation.yaw += controller.rightStick.x * 0.05;
+    this.currentPose.rotation.pitch += controller.rightStick.y * 0.05;
 
     // Use triggers for up/down movement
     this.currentPose.position.y +=
-      (controller.triggers.right - controller.triggers.left) * 0.1
+      (controller.triggers.right - controller.triggers.left) * 0.1;
 
     // Roll control with buttons
-    if (controller.buttons['button_4']) {
+    if (controller.buttons["button_4"]) {
       // Left shoulder
-      this.currentPose.rotation.roll -= 0.05
+      this.currentPose.rotation.roll -= 0.05;
     }
-    if (controller.buttons['button_5']) {
+    if (controller.buttons["button_5"]) {
       // Right shoulder
-      this.currentPose.rotation.roll += 0.05
+      this.currentPose.rotation.roll += 0.05;
     }
 
     // Normalize rotation values to prevent overflow
     this.currentPose.rotation.yaw = this.normalizeAngle(
-      this.currentPose.rotation.yaw
-    )
+      this.currentPose.rotation.yaw,
+    );
     this.currentPose.rotation.pitch = this.clampAngle(
       this.currentPose.rotation.pitch,
       -Math.PI / 2,
-      Math.PI / 2
-    )
+      Math.PI / 2,
+    );
     this.currentPose.rotation.roll = this.normalizeAngle(
-      this.currentPose.rotation.roll
-    )
+      this.currentPose.rotation.roll,
+    );
   }
 
   /**
    * Normalize angle to -PI to PI range
    */
   private normalizeAngle(angle: number): number {
-    while (angle > Math.PI) angle -= Math.PI * 2
-    while (angle < -Math.PI) angle += Math.PI * 2
-    return angle
+    while (angle > Math.PI) angle -= Math.PI * 2;
+    while (angle < -Math.PI) angle += Math.PI * 2;
+    return angle;
   }
 
   /**
    * Clamp angle to min/max range
    */
   private clampAngle(angle: number, min: number, max: number): number {
-    return Math.max(min, Math.min(max, angle))
+    return Math.max(min, Math.min(max, angle));
   }
 
   /**
@@ -280,32 +280,32 @@ export class ProprioceptiveEmbodiment {
    */
   private generateProprioceptiveFeedback(): void {
     // Reset collisions
-    this.feedback.collisions = []
+    this.feedback.collisions = [];
 
     // Simple ground collision detection
     if (this.currentPose.position.y < 0) {
       this.feedback.collisions.push({
-        direction: 'bottom',
+        direction: "bottom",
         intensity: Math.abs(this.currentPose.position.y) * 10,
-      })
-      this.currentPose.position.y = 0 // Prevent falling through floor
-      this.feedback.surfaceContact = { surface: 'ground', friction: 0.8 }
+      });
+      this.currentPose.position.y = 0; // Prevent falling through floor
+      this.feedback.surfaceContact = { surface: "ground", friction: 0.8 };
     } else {
-      this.feedback.surfaceContact = { surface: 'air', friction: 0.0 }
+      this.feedback.surfaceContact = { surface: "air", friction: 0.0 };
     }
 
     // Calculate stability based on orientation
     // Perfect stability when upright, decreases as orientation deviates from upright
-    const pitchFactor = Math.cos(this.currentPose.rotation.pitch)
-    const rollFactor = Math.cos(this.currentPose.rotation.roll)
-    this.feedback.stability = Math.min(pitchFactor, rollFactor)
+    const pitchFactor = Math.cos(this.currentPose.rotation.pitch);
+    const rollFactor = Math.cos(this.currentPose.rotation.roll);
+    this.feedback.stability = Math.min(pitchFactor, rollFactor);
 
     // Update limb positions based on pose and simulate natural arm/leg movements
-    const cycleOffset = ((Date.now() % 2000) / 2000) * Math.PI * 2 // Full cycle every 2 seconds
+    const cycleOffset = ((Date.now() % 2000) / 2000) * Math.PI * 2; // Full cycle every 2 seconds
 
     // Walking motion simulation when moving forward/backward
-    const walkingIntensity = Math.abs(this.controllers[0]?.leftStick.y || 0)
-    const walkCycle = cycleOffset * walkingIntensity
+    const walkingIntensity = Math.abs(this.controllers[0]?.leftStick.y || 0);
+    const walkCycle = cycleOffset * walkingIntensity;
 
     this.feedback.limbPositions = {
       leftArm: {
@@ -354,7 +354,7 @@ export class ProprioceptiveEmbodiment {
           this.currentPose.position.z +
           0.15 * Math.sin(this.currentPose.rotation.yaw),
       },
-    }
+    };
   }
 
   /**
@@ -378,11 +378,11 @@ export class ProprioceptiveEmbodiment {
         },
         success: this.evaluateSuccessState(),
         timestamp: Date.now(),
-      })
+      });
 
       // Limit training memory size
       if (this.trainingMemory.length > 1000) {
-        this.trainingMemory.shift()
+        this.trainingMemory.shift();
       }
     }
   }
@@ -395,27 +395,27 @@ export class ProprioceptiveEmbodiment {
     // Success criteria: upright, no intense collisions, stable
     return (
       this.feedback.stability > 0.8 && // Good stability
-      this.feedback.collisions.every(c => c.intensity < 3) && // No hard collisions
+      this.feedback.collisions.every((c) => c.intensity < 3) && // No hard collisions
       Math.abs(this.currentPose.rotation.pitch) < 0.3 && // Not tilting too much
       Math.abs(this.currentPose.rotation.roll) < 0.3 // Not rolling too much
-    )
+    );
   }
 
   /**
    * Register a callback for proprioceptive updates
    */
   public onUpdate(
-    callback: (pose: Pose, feedback: ProprioceptiveFeedback) => void
+    callback: (pose: Pose, feedback: ProprioceptiveFeedback) => void,
   ): () => void {
-    this.onUpdateCallbacks.push(callback)
+    this.onUpdateCallbacks.push(callback);
 
     // Return function to unregister callback
     return () => {
-      const index = this.onUpdateCallbacks.indexOf(callback)
+      const index = this.onUpdateCallbacks.indexOf(callback);
       if (index !== -1) {
-        this.onUpdateCallbacks.splice(index, 1)
+        this.onUpdateCallbacks.splice(index, 1);
       }
-    }
+    };
   }
 
   /**
@@ -423,7 +423,7 @@ export class ProprioceptiveEmbodiment {
    */
   private triggerUpdateCallbacks(): void {
     for (const callback of this.onUpdateCallbacks) {
-      callback(this.currentPose, this.feedback)
+      callback(this.currentPose, this.feedback);
     }
   }
 
@@ -431,7 +431,7 @@ export class ProprioceptiveEmbodiment {
    * Export training data for machine learning
    */
   public exportTrainingData(): string {
-    return JSON.stringify(this.trainingMemory)
+    return JSON.stringify(this.trainingMemory);
   }
 
   /**
@@ -439,13 +439,13 @@ export class ProprioceptiveEmbodiment {
    */
   public async loadModelWeights(weightsUrl: string): Promise<boolean> {
     try {
-      log.info(`Loading model weights from ${weightsUrl}`)
+      log.info(`Loading model weights from ${weightsUrl}`);
       // In a real implementation, this would load neural network weights
       // for autonomous control based on proprioceptive learning
-      return true
+      return true;
     } catch (error) {
-      log.error('Failed to load model weights:', error)
-      return false
+      log.error("Failed to load model weights:", error);
+      return false;
     }
   }
 
@@ -453,43 +453,43 @@ export class ProprioceptiveEmbodiment {
    * Check if proprioceptive embodiment is available
    */
   public isAvailable(): boolean {
-    return this.initialized && 'getGamepads' in navigator
+    return this.initialized && "getGamepads" in navigator;
   }
 
   /**
    * Return current controller state (for debugging)
    */
   public getControllerState(): ControllerState | null {
-    return this.controllers.length > 0 ? this.controllers[0] : null
+    return this.controllers.length > 0 ? this.controllers[0] : null;
   }
 
   /**
    * Return current pose
    */
   public getCurrentPose(): Pose {
-    return { ...this.currentPose }
+    return { ...this.currentPose };
   }
 
   /**
    * Return current proprioceptive feedback
    */
   public getCurrentFeedback(): ProprioceptiveFeedback {
-    return { ...this.feedback }
+    return { ...this.feedback };
   }
 
   /**
    * Clean up resources when system is shut down
    */
   public cleanup(): void {
-    this.stopUpdateLoop()
+    this.stopUpdateLoop();
     window.removeEventListener(
-      'gamepadconnected',
-      this.handleGamepadConnected.bind(this)
-    )
+      "gamepadconnected",
+      this.handleGamepadConnected.bind(this),
+    );
     window.removeEventListener(
-      'gamepaddisconnected',
-      this.handleGamepadDisconnected.bind(this)
-    )
-    log.info('Proprioceptive embodiment system shutdown')
+      "gamepaddisconnected",
+      this.handleGamepadDisconnected.bind(this),
+    );
+    log.info("Proprioceptive embodiment system shutdown");
   }
 }

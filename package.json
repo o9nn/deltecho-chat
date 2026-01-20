@@ -44,6 +44,7 @@
     "pnpm": ">=9.6.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.2",
     "@types/events": "^3.0.3",
     "@types/ignore-walk": "^4.0.3",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
@@ -51,14 +52,17 @@
     "chokidar": "^3.6.0",
     "cross-env": "^10.1.0",
     "dotenv": "^16.6.1",
-    "eslint": "^8.57.1",
+    "eslint": "^9.39.2",
     "eslint-config-prettier": "^9.1.2",
     "eslint-plugin-prettier": "^5.5.4",
-    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "globals": "^16.5.0",
     "ignore-walk": "^7.0.0",
     "prettier": "3.1.0",
     "ts-node": "^10.9.2",
     "typescript": "catalog:",
+    "typescript-eslint": "^8.53.1",
     "xml-js": "^1.6.11",
     "yaml": "^2.8.2"
   },

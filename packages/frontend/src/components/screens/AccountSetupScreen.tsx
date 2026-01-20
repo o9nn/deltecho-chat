@@ -1,9 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from "react";
 
-import ImageBackdrop from '../ImageBackdrop'
-import LoginForm from '../LoginForm'
-import { ConfigureProgressDialog } from '../dialogs/ConfigureProgressDialog'
-import { defaultCredentials, Credentials } from '../Settings/DefaultCredentials'
+import ImageBackdrop from "../ImageBackdrop";
+import LoginForm from "../LoginForm";
+import { ConfigureProgressDialog } from "../dialogs/ConfigureProgressDialog";
+import {
+  defaultCredentials,
+  Credentials,
+} from "../Settings/DefaultCredentials";
 import Dialog, {
   DialogBody,
   DialogContent,
@@ -11,78 +14,78 @@ import Dialog, {
   DialogHeader,
   FooterActionButton,
   FooterActions,
-} from '../Dialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useDialog from '../../hooks/dialog/useDialog'
-import { DialogId } from '../../contexts/DialogContext'
-import AlertDialog from '../dialogs/AlertDialog'
+} from "../Dialog";
+import useTranslationFunction from "../../hooks/useTranslationFunction";
+import useDialog from "../../hooks/dialog/useDialog";
+import { DialogId } from "../../contexts/DialogContext";
+import AlertDialog from "../dialogs/AlertDialog";
 
-import type ScreenController from '../../ScreenController'
+import type ScreenController from "../../ScreenController";
 
 export default function AccountSetupScreen({
   selectAccount,
   accountId,
 }: {
-  selectAccount: typeof ScreenController.prototype.selectAccount
-  accountId: number
+  selectAccount: typeof ScreenController.prototype.selectAccount;
+  accountId: number;
 }) {
-  const tx = useTranslationFunction()
-  const { openDialog, closeDialog, hasOpenDialogs } = useDialog()
-  const [promptDialogId, setPromptDialogId] = useState<null | DialogId>(null)
+  const tx = useTranslationFunction();
+  const { openDialog, closeDialog, hasOpenDialogs } = useDialog();
+  const [promptDialogId, setPromptDialogId] = useState<null | DialogId>(null);
 
   const [credentials, setCredentials] =
-    useState<Credentials>(defaultCredentials())
+    useState<Credentials>(defaultCredentials());
 
   const onClickLogin = useCallback(
     () =>
       openDialog(ConfigureProgressDialog, {
         credentials,
         onSuccess: () => {
-          selectAccount(accountId)
+          selectAccount(accountId);
         },
         onFail: (error: string) =>
           setPromptDialogId(
             openDialog(AlertDialog, {
               message: error,
               cb: () => setPromptDialogId(null),
-            })
+            }),
           ),
       }),
-    [accountId, openDialog, selectAccount, credentials]
-  )
+    [accountId, openDialog, selectAccount, credentials],
+  );
 
   // TODO(maxph): we're now using <dialog> and can submit result via input
   // and not an explicit keyboard handling
   const onKeyDown = useCallback(
     (ev: KeyboardEvent) => {
-      if (ev.key === 'Enter') {
-        ev.stopPropagation()
-        ev.preventDefault()
+      if (ev.key === "Enter") {
+        ev.stopPropagation();
+        ev.preventDefault();
         if (hasOpenDialogs) {
           if (promptDialogId !== null) {
-            closeDialog(promptDialogId)
+            closeDialog(promptDialogId);
           }
         } else {
-          onClickLogin()
+          onClickLogin();
         }
       }
     },
-    [onClickLogin, hasOpenDialogs, closeDialog, promptDialogId]
-  )
+    [onClickLogin, hasOpenDialogs, closeDialog, promptDialogId],
+  );
 
   useEffect(() => {
-    window.addEventListener('keydown', onKeyDown)
+    window.addEventListener("keydown", onKeyDown);
     return () => {
-      window.removeEventListener('keydown', onKeyDown)
-    }
-  }, [onKeyDown])
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [onKeyDown]);
 
-  const onCancel = () => selectAccount(accountId)
+  const onCancel = () => selectAccount(accountId);
 
   return (
-    <ImageBackdrop variant='welcome'>
+    <ImageBackdrop variant="welcome">
       <Dialog canOutsideClickClose={false} onClose={() => {}} fixed>
-        <DialogHeader title={tx('login_explain')} />
+        <DialogHeader title={tx("login_explain")} />
         <DialogBody>
           <DialogContent>
             <LoginForm
@@ -94,17 +97,17 @@ export default function AccountSetupScreen({
         <DialogFooter>
           <FooterActions>
             <FooterActionButton onClick={onCancel}>
-              {tx('cancel')}
+              {tx("cancel")}
             </FooterActionButton>
             <FooterActionButton
               onClick={onClickLogin}
-              data-testid='login-with-credentials'
+              data-testid="login-with-credentials"
             >
-              {tx('login_title')}
+              {tx("login_title")}
             </FooterActionButton>
           </FooterActions>
         </DialogFooter>
       </Dialog>
     </ImageBackdrop>
-  )
+  );
 }

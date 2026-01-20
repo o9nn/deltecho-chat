@@ -1,30 +1,30 @@
-import { Store } from './store'
-import { ActionEmitter, KeybindAction } from '../keybindings'
-import { C } from '@deltachat/jsonrpc-client'
-import { BackendRemote, onDCEvent, Type } from '../backend-com'
-import { selectedAccountId } from '../ScreenController'
-import { T } from '@deltachat/jsonrpc-client'
+import { Store } from "./store";
+import { ActionEmitter, KeybindAction } from "../keybindings";
+import { C } from "@deltachat/jsonrpc-client";
+import { BackendRemote, onDCEvent, Type } from "../backend-com";
+import { selectedAccountId } from "../ScreenController";
+import { T } from "@deltachat/jsonrpc-client";
 import {
   ChatViewState,
   ChatViewReducer,
   defaultChatViewState,
-} from './chat/chat_view_reducer'
-import { ChatStoreScheduler } from './chat/chat_scheduler'
-import { useEffect, useMemo, useState } from 'react'
-import { useDebouncedCallback } from 'use-debounce'
-import { debounce } from 'debounce'
-import { getLogger } from '@deltachat-desktop/shared/logger'
+} from "./chat/chat_view_reducer";
+import { ChatStoreScheduler } from "./chat/chat_scheduler";
+import { useEffect, useMemo, useState } from "react";
+import { useDebouncedCallback } from "use-debounce";
+import { debounce } from "debounce";
+import { getLogger } from "@deltachat-desktop/shared/logger";
 
-const log = getLogger('messagelist')
+const log = getLogger("messagelist");
 
-const PAGE_SIZE = 11
+const PAGE_SIZE = 11;
 
 interface MessageListState {
   // chat: Type.FullChat | null
-  messageListItems: T.MessageListItem[]
-  messageCache: { [msgId: number]: T.MessageLoadResult | undefined }
-  newestFetchedMessageListItemIndex: number
-  oldestFetchedMessageListItemIndex: number
+  messageListItems: T.MessageListItem[];
+  messageCache: { [msgId: number]: T.MessageLoadResult | undefined };
+  newestFetchedMessageListItemIndex: number;
+  oldestFetchedMessageListItemIndex: number;
   /**
    * This is used as an "event bus". When we need to update the scroll position
    * of the messages list (e.g. `scrollToMessage`), or, instead, keep the
@@ -35,17 +35,17 @@ interface MessageListState {
    * After that, the MessageList component looks at the new state,
    * sets the scroll position accordingly, and resets the state to null.
    */
-  viewState: ChatViewState
-  jumpToMessageStack: number[]
-  loaded: boolean
+  viewState: ChatViewState;
+  jumpToMessageStack: number[];
+  loaded: boolean;
 }
 
 export interface JumpToMessageParams {
-  msgId: number | undefined
-  highlight?: boolean
-  focus: boolean
-  addMessageIdToStack?: number
-  scrollIntoViewArg?: Parameters<HTMLElement['scrollIntoView']>[0]
+  msgId: number | undefined;
+  highlight?: boolean;
+  focus: boolean;
+  addMessageIdToStack?: number;
+  scrollIntoViewArg?: Parameters<HTMLElement["scrollIntoView"]>[0];
 }
 
 const defaultState = () =>
@@ -57,133 +57,133 @@ const defaultState = () =>
     viewState: defaultChatViewState(),
     jumpToMessageStack: [],
     loaded: false,
-  }) as MessageListState
+  }) as MessageListState;
 
 export function useMessageList(accountId: number, chatId: number) {
   const store = useMemo(() => {
-    const store = new MessageListStore(accountId, chatId)
-    store.effect.loadChat()
-    return store
-  }, [accountId, chatId])
+    const store = new MessageListStore(accountId, chatId);
+    store.effect.loadChat();
+    return store;
+  }, [accountId, chatId]);
 
   useEffect(() => {
     const cleanup = [
-      onDCEvent(accountId, 'MsgDelivered', ({ chatId: eventChatId, msgId }) => {
+      onDCEvent(accountId, "MsgDelivered", ({ chatId: eventChatId, msgId }) => {
         if (chatId === eventChatId) {
-          store.reducer.setMessageState(msgId, C.DC_STATE_OUT_DELIVERED)
+          store.reducer.setMessageState(msgId, C.DC_STATE_OUT_DELIVERED);
         }
       }),
-      onDCEvent(accountId, 'IncomingMsg', ({ chatId: eventChatId }) => {
+      onDCEvent(accountId, "IncomingMsg", ({ chatId: eventChatId }) => {
         if (chatId === eventChatId) {
-          store.effect.onEventIncomingMessage()
+          store.effect.onEventIncomingMessage();
         } else {
           store.log.debug(
-            `chatId of IncomingMsg event (${chatId}) doesn't match id of selected chat (${eventChatId}). Skipping.`
-          )
+            `chatId of IncomingMsg event (${chatId}) doesn't match id of selected chat (${eventChatId}). Skipping.`,
+          );
         }
       }),
-      onDCEvent(accountId, 'MsgRead', ({ chatId: eventChatId, msgId }) => {
+      onDCEvent(accountId, "MsgRead", ({ chatId: eventChatId, msgId }) => {
         if (chatId === eventChatId) {
-          store.reducer.setMessageState(msgId, C.DC_STATE_OUT_MDN_RCVD)
+          store.reducer.setMessageState(msgId, C.DC_STATE_OUT_MDN_RCVD);
         }
       }),
-      onDCEvent(accountId, 'MsgsChanged', ({ chatId: eventChatId, msgId }) => {
+      onDCEvent(accountId, "MsgsChanged", ({ chatId: eventChatId, msgId }) => {
         if (msgId === 0 && (eventChatId === 0 || eventChatId === chatId)) {
-          store.effect.refresh()
+          store.effect.refresh();
         } else {
-          store.effect.onEventMessagesChanged(msgId)
+          store.effect.onEventMessagesChanged(msgId);
         }
       }),
       onDCEvent(
         accountId,
-        'ReactionsChanged',
+        "ReactionsChanged",
         ({ chatId: eventChatId, msgId }) => {
           if (msgId === 0 && (eventChatId === 0 || eventChatId === chatId)) {
-            store.effect.refresh()
+            store.effect.refresh();
           } else {
-            store.effect.onEventMessagesChanged(msgId)
+            store.effect.onEventMessagesChanged(msgId);
           }
-        }
+        },
       ),
-      onDCEvent(accountId, 'MsgFailed', ({ chatId: eventChatId, msgId }) => {
+      onDCEvent(accountId, "MsgFailed", ({ chatId: eventChatId, msgId }) => {
         if (chatId === eventChatId) {
-          store.effect.onEventMessagesChanged(msgId)
+          store.effect.onEventMessagesChanged(msgId);
         }
       }),
-    ]
-    return () => cleanup.forEach(off => off())
-  }, [accountId, chatId, store])
+    ];
+    return () => cleanup.forEach((off) => off());
+  }, [accountId, chatId, store]);
 
-  const [state, setState] = useState(store.getState())
+  const [state, setState] = useState(store.getState());
 
   useEffect(() => {
-    setState(store.getState())
-    store.subscribe(setState)
-    return () => store.unsubscribe(setState)
-  }, [store])
+    setState(store.getState());
+    store.subscribe(setState);
+    return () => store.unsubscribe(setState);
+  }, [store]);
 
   const [fetchMoreTop] = useDebouncedCallback(
     async () => {
-      await store.effect.fetchMoreMessagesTop()
+      await store.effect.fetchMoreMessagesTop();
     },
     30,
-    { leading: true }
-  )
+    { leading: true },
+  );
 
   const [fetchMoreBottom] = useDebouncedCallback(
     async () => {
-      await store.effect.fetchMoreMessagesBottom()
+      await store.effect.fetchMoreMessagesBottom();
     },
     30,
-    { leading: true }
-  )
+    { leading: true },
+  );
 
-  return { store, state, fetchMoreTop, fetchMoreBottom }
+  return { store, state, fetchMoreTop, fetchMoreBottom };
 }
 
 function getView<T>(items: T[], start: number, end: number) {
-  return items.slice(start, end + 1)
+  return items.slice(start, end + 1);
 }
 
 class MessageListStore extends Store<MessageListState> {
-  scheduler = new ChatStoreScheduler()
+  scheduler = new ChatStoreScheduler();
 
-  emitter = BackendRemote.getContextEvents(this.accountId)
+  emitter = BackendRemote.getContextEvents(this.accountId);
 
   constructor(
     private readonly accountId: number,
-    private readonly chatId: number
+    private readonly chatId: number,
   ) {
-    super(defaultState(), 'MessageListStore')
+    super(defaultState(), "MessageListStore");
   }
 
   get activeView() {
-    const start = this.state.oldestFetchedMessageListItemIndex
-    const end = this.state.newestFetchedMessageListItemIndex
-    const view = getView(this.state.messageListItems, start, end)
+    const start = this.state.oldestFetchedMessageListItemIndex;
+    const end = this.state.newestFetchedMessageListItemIndex;
+    const view = getView(this.state.messageListItems, start, end);
     // this.log.debug('get activeView', { end, start, view })
-    return view
+    return view;
   }
 
   reducer = {
     selectedChat: (payload: Partial<MessageListState>) => {
-      this.setState(_ => {
-        this.scheduler.unlock('scroll')
+      this.setState((_) => {
+        this.scheduler.unlock("scroll");
         const modifiedState: MessageListState = {
           ...defaultState(),
           ...payload,
           loaded: true,
-        }
-        return modifiedState
-      }, 'selectedChat')
+        };
+        return modifiedState;
+      }, "selectedChat");
     },
     refresh: (
       messageListItems: T.MessageListItem[],
-      messageCache: MessageListState['messageCache'],
+      messageCache: MessageListState["messageCache"],
       newestFetchedMessageListItemIndex: number,
-      oldestFetchedMessageListItemIndex: number
+      oldestFetchedMessageListItemIndex: number,
     ) => {
-      this.setState(state => {
+      this.setState((state) => {
         const modifiedState: MessageListState = {
           ...state,
           messageListItems,
@@ -192,25 +192,25 @@ class MessageListStore extends Store<MessageListState> {
           newestFetchedMessageListItemIndex,
           oldestFetchedMessageListItemIndex,
           loaded: true,
-        }
-        return modifiedState
-      }, 'refresh')
+        };
+        return modifiedState;
+      }, "refresh");
     },
     modifiedChat: (payload: { id: number } & Partial<MessageListState>) => {
-      this.setState(state => {
+      this.setState((state) => {
         const modifiedState: MessageListState = {
           ...state,
           ...payload,
-        }
-        return modifiedState
-      }, 'modifiedChat')
+        };
+        return modifiedState;
+      }, "modifiedChat");
     },
     appendMessagesTop: (payload: {
-      id: number
-      newMessageCacheItems: MessageListState['messageCache']
-      oldestFetchedMessageListItemIndex: number
+      id: number;
+      newMessageCacheItems: MessageListState["messageCache"];
+      oldestFetchedMessageListItemIndex: number;
     }) => {
-      this.setState(state => {
+      this.setState((state) => {
         const modifiedState: MessageListState = {
           ...state,
           messageCache: {
@@ -220,15 +220,15 @@ class MessageListStore extends Store<MessageListState> {
           oldestFetchedMessageListItemIndex:
             payload.oldestFetchedMessageListItemIndex,
           viewState: ChatViewReducer.appendMessagesTop(state.viewState),
-        }
-        return modifiedState
-      }, 'appendMessagesTop')
+        };
+        return modifiedState;
+      }, "appendMessagesTop");
     },
     appendMessagesBottom: (payload: {
-      newMessageCacheItems: MessageListState['messageCache']
-      newestFetchedMessageIndex: number
+      newMessageCacheItems: MessageListState["messageCache"];
+      newestFetchedMessageIndex: number;
     }) => {
-      this.setState(state => {
+      this.setState((state) => {
         const modifiedState: MessageListState = {
           ...state,
           messageCache: {
@@ -237,16 +237,16 @@ class MessageListStore extends Store<MessageListState> {
           },
           newestFetchedMessageListItemIndex: payload.newestFetchedMessageIndex,
           viewState: ChatViewReducer.appendMessagesBottom(state.viewState),
-        }
-        return modifiedState
-      }, 'appendMessagesBottom')
+        };
+        return modifiedState;
+      }, "appendMessagesBottom");
     },
     fetchedIncomingMessages: (payload: {
-      messageListItems: MessageListState['messageListItems']
-      newestFetchedMessageIndex: number
-      newMessageCacheItems: MessageListState['messageCache']
+      messageListItems: MessageListState["messageListItems"];
+      newestFetchedMessageIndex: number;
+      newMessageCacheItems: MessageListState["messageCache"];
     }) => {
-      this.setState(state => {
+      this.setState((state) => {
         const modifiedState: MessageListState = {
           ...state,
           messageListItems: payload.messageListItems,
@@ -256,36 +256,36 @@ class MessageListStore extends Store<MessageListState> {
           },
           newestFetchedMessageListItemIndex: payload.newestFetchedMessageIndex,
           viewState: ChatViewReducer.fetchedIncomingMessages(state.viewState),
-        }
-        return modifiedState
-      }, 'fetchedIncomingMessages')
+        };
+        return modifiedState;
+      }, "fetchedIncomingMessages");
     },
     unlockScroll: () => {
-      this.log.debug('unlockScroll')
-      this.setState(state => {
+      this.log.debug("unlockScroll");
+      this.setState((state) => {
         const modifiedState: MessageListState = {
           ...state,
           viewState: ChatViewReducer.unlockScroll(state.viewState),
-        }
-        setTimeout(() => this.scheduler.unlock('scroll'), 0)
-        return modifiedState
-      }, 'unlockScroll')
+        };
+        setTimeout(() => this.scheduler.unlock("scroll"), 0);
+        return modifiedState;
+      }, "unlockScroll");
     },
     messageChanged: (message: Type.Message) => {
       const messageLoadResult: Type.MessageLoadResult = {
-        kind: 'message',
+        kind: "message",
         ...message,
-      }
-      this.setState(state => {
+      };
+      this.setState((state) => {
         const modifiedState: MessageListState = {
           ...state,
           messageCache: {
             ...state.messageCache,
             [message.id]: messageLoadResult,
           },
-        }
-        return modifiedState
-      }, 'messageChanged')
+        };
+        return modifiedState;
+      }, "messageChanged");
     },
     setMessageState: (messageId: number, messageState: number) => {
       if (this.state.messageCache[messageId] == undefined) {
@@ -305,13 +305,13 @@ class MessageListStore extends Store<MessageListState> {
         // Those are actual messages, but we don't render them
         this.log.warn(
           `setMessageState called for message ${messageId}, ` +
-          `state ${messageState}, but it's not loaded. ` +
-          "Ignoring, in hopes that we'll automatically load it later."
-        )
-        return
+            `state ${messageState}, but it's not loaded. ` +
+            "Ignoring, in hopes that we'll automatically load it later.",
+        );
+        return;
       }
 
-      this.setState(state => {
+      this.setState((state) => {
         const modifiedState: MessageListState = {
           ...state,
           messageCache: {
@@ -321,34 +321,34 @@ class MessageListStore extends Store<MessageListState> {
               state: messageState,
             } as Type.MessageLoadResult,
           },
-        }
-        return modifiedState
-      }, 'setMessageState')
+        };
+        return modifiedState;
+      }, "setMessageState");
     },
     setMessageListItems: (
-      messageListItems: MessageListState['messageListItems']
+      messageListItems: MessageListState["messageListItems"],
     ) => {
-      this.setState(state => {
+      this.setState((state) => {
         const modifiedState: MessageListState = {
           ...state,
           messageListItems,
           viewState: ChatViewReducer.setMessageListItems(state.viewState),
-        }
-        return modifiedState
-      }, 'setMessageIds')
+        };
+        return modifiedState;
+      }, "setMessageIds");
     },
     clearJumpStack: () => {
       if (this.state.jumpToMessageStack.length !== 0) {
-        this.setState(state => {
+        this.setState((state) => {
           const modifiedState: MessageListState = {
             ...state,
             jumpToMessageStack: [],
-          }
-          return modifiedState
-        }, 'clearJumpStack')
+          };
+          return modifiedState;
+        }, "clearJumpStack");
       }
     },
-  }
+  };
 
   effect = {
     /**
@@ -357,19 +357,19 @@ class MessageListStore extends Store<MessageListState> {
      * initialized.
      */
     loadChat: this.scheduler.lockedQueuedEffect(
-      'scroll',
+      "scroll",
       async () => {
-        const startTime = performance.now()
+        const startTime = performance.now();
 
         // FYI there is similar code in `MessageList.tsx`.
         if (
           window.__internal_jump_to_message_asap?.accountId ===
-          this.accountId &&
+            this.accountId &&
           window.__internal_jump_to_message_asap.chatId === this.chatId
         ) {
           const jumpArgs =
-            window.__internal_jump_to_message_asap.jumpToMessageArgs
-          window.__internal_jump_to_message_asap = undefined
+            window.__internal_jump_to_message_asap.jumpToMessageArgs;
+          window.__internal_jump_to_message_asap = undefined;
           // Instead of calling `this.effect.jumpToMessage()`,
           // we need to call the bare version and await it
           // prior to returning from this function,
@@ -381,21 +381,21 @@ class MessageListStore extends Store<MessageListState> {
           // `this.state.oldestFetchedMessageListItemIndex`.
           //
           // The same applies to the other `this.__jumpToMessage()` below
-          return await this.__jumpToMessage(jumpArgs[0])
+          return await this.__jumpToMessage(jumpArgs[0]);
         }
 
         const firstUnreadMsgIdP = BackendRemote.rpc.getFirstUnreadMessageOfChat(
           this.accountId,
-          this.chatId
-        )
+          this.chatId,
+        );
         const messageListItemsP = BackendRemote.rpc.getMessageListItems(
           this.accountId,
           this.chatId,
           false,
-          true
-        )
+          true,
+        );
 
-        const firstUnreadMsgId = await firstUnreadMsgIdP
+        const firstUnreadMsgId = await firstUnreadMsgIdP;
         if (firstUnreadMsgId !== null) {
           // See the comments about `this.__jumpToMessage()` above.
           const jumpToMessageP = this.__jumpToMessage({
@@ -407,8 +407,8 @@ class MessageListStore extends Store<MessageListState> {
             focus: false,
             // 'center' so that old messages are also shown, for context.
             // See https://github.com/deltachat/deltachat-desktop/issues/4284
-            scrollIntoViewArg: { block: 'center' },
-          })
+            scrollIntoViewArg: { block: "center" },
+          });
 
           // TODO why do we only do this when `firstUnreadMsgId !== null`?
           // This piece of code is here since
@@ -416,41 +416,41 @@ class MessageListStore extends Store<MessageListState> {
           // (https://github.com/deltachat/deltachat-desktop/pull/2750)
           BackendRemote.rpc
             .getBasicChatInfo(this.accountId, this.chatId)
-            .then(chat => {
+            .then((chat) => {
               ActionEmitter.emitAction(
                 chat.archived
                   ? KeybindAction.ChatList_SwitchToArchiveView
-                  : KeybindAction.ChatList_SwitchToNormalView
-              )
-            })
+                  : KeybindAction.ChatList_SwitchToNormalView,
+              );
+            });
 
-          return await jumpToMessageP
+          return await jumpToMessageP;
         }
 
-        let oldestFetchedMessageListItemIndex = -1
-        let newestFetchedMessageListItemIndex = -1
-        let messageCache: MessageListState['messageCache'] = {}
-        const messageListItems = await messageListItemsP
+        let oldestFetchedMessageListItemIndex = -1;
+        let newestFetchedMessageListItemIndex = -1;
+        let messageCache: MessageListState["messageCache"] = {};
+        const messageListItems = await messageListItemsP;
         if (messageListItems.length !== 0) {
           // mesageIds.length = 1767
           // oldestFetchedMessageListItemIndex = 1767 - 1 = 1766 - 10 = 1756
           // newestFetchedMessageIndex =                        1766
           oldestFetchedMessageListItemIndex = Math.max(
             messageListItems.length - 1 - PAGE_SIZE,
-            0
-          )
-          newestFetchedMessageListItemIndex = messageListItems.length - 1
+            0,
+          );
+          newestFetchedMessageListItemIndex = messageListItems.length - 1;
 
           messageCache =
             (await loadMessages(
               this.accountId,
               messageListItems,
               oldestFetchedMessageListItemIndex,
-              newestFetchedMessageListItemIndex
-            ).catch(err => this.log.error('loadMessages failed', err))) || {}
+              newestFetchedMessageListItemIndex,
+            ).catch((err) => this.log.error("loadMessages failed", err))) || {};
         }
 
-        this.log.debug('loadChat took', performance.now() - startTime)
+        this.log.debug("loadChat took", performance.now() - startTime);
 
         this.reducer.selectedChat({
           messageCache,
@@ -458,88 +458,88 @@ class MessageListStore extends Store<MessageListState> {
           oldestFetchedMessageListItemIndex,
           newestFetchedMessageListItemIndex,
           viewState: ChatViewReducer.selectChat(this.state.viewState),
-        })
+        });
       },
-      'selectChat'
+      "selectChat",
     ),
     /**
      * @see {@link MessageListStore.__jumpToMessage} for docs.
      */
     jumpToMessage: this.scheduler.lockedQueuedEffect(
-      'scroll',
+      "scroll",
       this.__jumpToMessage.bind(this),
-      'jumpToMessage'
+      "jumpToMessage",
     ),
     loadMissingMessages: debounce(
       // needs debounce, because every missing message calls this
       this.scheduler.lockedQueuedEffect(
-        'scroll',
+        "scroll",
         async () => {
-          const { messageCache } = this.state
-          const missing_message_ids: number[] = []
+          const { messageCache } = this.state;
+          const missing_message_ids: number[] = [];
           for (const item of this.activeView) {
-            if (item.kind === 'message' && !messageCache[item.msg_id]) {
-              missing_message_ids.push(item.msg_id)
+            if (item.kind === "message" && !messageCache[item.msg_id]) {
+              missing_message_ids.push(item.msg_id);
             }
           }
           if (missing_message_ids.length === 0) {
-            return
+            return;
           }
           this.log.warn(
-            'Message store cache misses messages, trying to load them now',
-            missing_message_ids
-          )
+            "Message store cache misses messages, trying to load them now",
+            missing_message_ids,
+          );
           const newMessageCacheItems = await BackendRemote.rpc.getMessages(
             this.accountId,
-            missing_message_ids
-          )
-          this.setState(state => {
+            missing_message_ids,
+          );
+          this.setState((state) => {
             const modifiedState: MessageListState = {
               ...state,
               messageCache: {
                 ...state.messageCache,
                 ...newMessageCacheItems,
               },
-            }
-            return modifiedState
-          }, 'loadMissingMessagesAppend')
+            };
+            return modifiedState;
+          }, "loadMissingMessagesAppend");
         },
-        'loadMissingMessages'
+        "loadMissingMessages",
       ),
-      400
+      400,
     ),
     fetchMoreMessagesTop: this.scheduler.queuedEffect(
       this.scheduler.lockedEffect(
-        'scroll',
+        "scroll",
         async () => {
-          this.log.debug(`fetchMoreMessagesTop`)
-          const state = this.state
-          const id = this.chatId
+          this.log.debug(`fetchMoreMessagesTop`);
+          const state = this.state;
+          const id = this.chatId;
           const oldestFetchedMessageListItemIndex = Math.max(
             state.oldestFetchedMessageListItemIndex - PAGE_SIZE,
-            0
-          )
+            0,
+          );
           const lastMessageIndexOnLastPage =
-            state.oldestFetchedMessageListItemIndex
+            state.oldestFetchedMessageListItemIndex;
           if (lastMessageIndexOnLastPage === 0) {
             this.log.debug(
-              'FETCH_MORE_MESSAGES: lastMessageIndexOnLastPage is zero, returning'
-            )
+              "FETCH_MORE_MESSAGES: lastMessageIndexOnLastPage is zero, returning",
+            );
             // Since we haven't changed `viewState`, `MessageList` won't
             // call `unlockScroll()`, so let's unlock it now.
-            return false
+            return false;
           }
           const fetchedMessageListItems = state.messageListItems.slice(
             oldestFetchedMessageListItemIndex,
-            lastMessageIndexOnLastPage
-          )
+            lastMessageIndexOnLastPage,
+          );
           if (fetchedMessageListItems.length === 0) {
             this.log.debug(
-              'fetchMoreMessagesTop: fetchedMessageListItems.length is zero, returning'
-            )
+              "fetchMoreMessagesTop: fetchedMessageListItems.length is zero, returning",
+            );
             // Since we haven't changed `viewState`, `MessageList` won't
             // call `unlockScroll()`, so let's unlock it now.
-            return false
+            return false;
           }
 
           const newMessageCacheItems =
@@ -547,59 +547,59 @@ class MessageListStore extends Store<MessageListState> {
               this.accountId,
               state.messageListItems,
               oldestFetchedMessageListItemIndex,
-              lastMessageIndexOnLastPage - 1
-            ).catch(err => this.log.error('loadMessages failed', err))) || {}
+              lastMessageIndexOnLastPage - 1,
+            ).catch((err) => this.log.error("loadMessages failed", err))) || {};
 
           this.reducer.appendMessagesTop({
             id,
             newMessageCacheItems,
             oldestFetchedMessageListItemIndex,
-          })
-          return true
+          });
+          return true;
         },
-        'fetchMoreMessagesTop'
+        "fetchMoreMessagesTop",
       ),
-      'fetchMoreMessagesTop'
+      "fetchMoreMessagesTop",
     ),
     fetchMoreMessagesBottom: this.scheduler.queuedEffect(
       this.scheduler.lockedEffect(
-        'scroll',
+        "scroll",
         async () => {
-          const state = this.state
+          const state = this.state;
 
           const newestFetchedMessageListItemIndex =
-            state.newestFetchedMessageListItemIndex + 1
+            state.newestFetchedMessageListItemIndex + 1;
           const newNewestFetchedMessageListItemIndex = Math.min(
             newestFetchedMessageListItemIndex + PAGE_SIZE,
-            state.messageListItems.length - 1
-          )
+            state.messageListItems.length - 1,
+          );
           if (
             newestFetchedMessageListItemIndex === state.messageListItems.length
           ) {
             //log.debug('fetchMoreMessagesBottom: no more messages, returning')
             // Since we haven't changed `viewState`, `MessageList` won't
             // call `unlockScroll()`, so let's unlock it now.
-            return false
+            return false;
           }
-          this.log.debug(`fetchMoreMessagesBottom`)
+          this.log.debug(`fetchMoreMessagesBottom`);
 
           const fetchedMessageListItems = state.messageListItems.slice(
             newestFetchedMessageListItemIndex,
-            newNewestFetchedMessageListItemIndex + 1
-          )
+            newNewestFetchedMessageListItemIndex + 1,
+          );
           if (fetchedMessageListItems.length === 0) {
             this.log.debug(
-              'fetchMoreMessagesBottom: fetchedMessageListItems.length is zero, returning',
+              "fetchMoreMessagesBottom: fetchedMessageListItems.length is zero, returning",
               JSON.stringify({
                 newestFetchedMessageIndex: newestFetchedMessageListItemIndex,
                 newNewestFetchedMessageIndex:
                   newNewestFetchedMessageListItemIndex,
                 messageIds: state.messageListItems,
-              })
-            )
+              }),
+            );
             // Since we haven't changed `viewState`, `MessageList` won't
             // call `unlockScroll()`, so let's unlock it now.
-            return false
+            return false;
           }
 
           const newMessageCacheItems =
@@ -607,100 +607,100 @@ class MessageListStore extends Store<MessageListState> {
               this.accountId,
               state.messageListItems,
               newestFetchedMessageListItemIndex,
-              newNewestFetchedMessageListItemIndex
-            ).catch(err => this.log.error('loadMessages failed', err))) || {}
+              newNewestFetchedMessageListItemIndex,
+            ).catch((err) => this.log.error("loadMessages failed", err))) || {};
 
           this.reducer.appendMessagesBottom({
             newMessageCacheItems,
             newestFetchedMessageIndex: newNewestFetchedMessageListItemIndex,
-          })
-          return true
+          });
+          return true;
         },
-        'fetchMoreMessagesBottom'
+        "fetchMoreMessagesBottom",
       ),
-      'fetchMoreMessagesBottom'
+      "fetchMoreMessagesBottom",
     ),
     refresh: this.scheduler.queuedEffect(
       this.scheduler.lockedEffect(
-        'scroll',
+        "scroll",
         async () => {
           // this.log.debug(`refresh`, this)
-          const state = this.state
+          const state = this.state;
           const messageListItems = await BackendRemote.rpc.getMessageListItems(
             this.accountId,
             this.chatId,
             false,
-            true
-          )
+            true,
+          );
           let {
             newestFetchedMessageListItemIndex,
             oldestFetchedMessageListItemIndex,
-          } = state
+          } = state;
           newestFetchedMessageListItemIndex = Math.min(
             newestFetchedMessageListItemIndex,
-            messageListItems.length - 1
-          )
+            messageListItems.length - 1,
+          );
           oldestFetchedMessageListItemIndex = Math.max(
             oldestFetchedMessageListItemIndex,
-            0
-          )
+            0,
+          );
 
           const messageCache =
             (await loadMessages(
               this.accountId,
               messageListItems,
               oldestFetchedMessageListItemIndex,
-              newestFetchedMessageListItemIndex
-            ).catch(err => this.log.error('loadMessages failed', err))) || {}
+              newestFetchedMessageListItemIndex,
+            ).catch((err) => this.log.error("loadMessages failed", err))) || {};
 
           this.reducer.refresh(
             messageListItems,
             messageCache,
             newestFetchedMessageListItemIndex,
-            oldestFetchedMessageListItemIndex
-          )
-          return true
+            oldestFetchedMessageListItemIndex,
+          );
+          return true;
         },
-        'refresh'
+        "refresh",
       ),
-      'refresh'
+      "refresh",
     ),
     onEventIncomingMessage: this.scheduler.queuedEffect(async () => {
       const messageListItems = await BackendRemote.rpc.getMessageListItems(
         this.accountId,
         this.chatId,
         false,
-        true
-      )
-      let indexEnd = -1
+        true,
+      );
+      let indexEnd = -1;
       const last_item: Type.MessageListItem | undefined =
-        this.state.messageListItems[this.state.messageListItems.length - 1]
+        this.state.messageListItems[this.state.messageListItems.length - 1];
 
       let indexStart =
         last_item === undefined
           ? -1
-          : messageListItems.findIndex(item => {
-            if (last_item.kind !== item.kind) {
-              return false
-            } else {
-              if (item.kind === 'message') {
-                return item.msg_id === (last_item as any).msg_id
+          : messageListItems.findIndex((item) => {
+              if (last_item.kind !== item.kind) {
+                return false;
               } else {
-                return item.timestamp === (last_item as any).timestamp
+                if (item.kind === "message") {
+                  return item.msg_id === (last_item as any).msg_id;
+                } else {
+                  return item.timestamp === (last_item as any).timestamp;
+                }
               }
-            }
-          })
+            });
 
       // check if there is an intersection
       if (indexStart !== -1 && messageListItems[indexStart + 1]) {
-        indexStart = indexStart + 1
+        indexStart = indexStart + 1;
       }
 
       // if index start is not the end set, then set the end to the end
       if (indexStart !== messageListItems.length - 1) {
-        indexEnd = messageListItems.length - 1
+        indexEnd = messageListItems.length - 1;
       } else {
-        indexEnd = indexStart
+        indexEnd = indexStart;
       }
 
       // Only add incoming messages if we could append them directly to messagePages without having a hole
@@ -709,10 +709,10 @@ class MessageListStore extends Store<MessageListState> {
         indexStart !== this.state.newestFetchedMessageListItemIndex + 1
       ) {
         this.log.debug(
-          `onEventIncomingMessage: new incoming messages cannot added to state without having a hole (indexStart: ${indexStart}, newestFetchedMessageListItemIndex ${this.state.newestFetchedMessageListItemIndex}), returning`
-        )
-        this.reducer.setMessageListItems(messageListItems)
-        return
+          `onEventIncomingMessage: new incoming messages cannot added to state without having a hole (indexStart: ${indexStart}, newestFetchedMessageListItemIndex ${this.state.newestFetchedMessageListItemIndex}), returning`,
+        );
+        this.reducer.setMessageListItems(messageListItems);
+        return;
       }
 
       const newMessageCacheItems =
@@ -720,37 +720,37 @@ class MessageListStore extends Store<MessageListState> {
           this.accountId,
           messageListItems,
           indexStart,
-          indexEnd
-        ).catch(err => this.log.error('loadMessages failed', err))) || {}
+          indexEnd,
+        ).catch((err) => this.log.error("loadMessages failed", err))) || {};
 
       this.reducer.fetchedIncomingMessages({
         messageListItems,
         newMessageCacheItems,
         newestFetchedMessageIndex: indexEnd,
-      })
-    }, 'onEventIncomingMessage'),
+      });
+    }, "onEventIncomingMessage"),
     onEventMessagesChanged: this.scheduler.queuedEffect(
       async (messageId: number) => {
         if (
           messageId > C.DC_MSG_ID_LAST_SPECIAL &&
           this.state.messageListItems.findIndex(
-            m => m.kind === 'message' && m.msg_id === messageId
+            (m) => m.kind === "message" && m.msg_id === messageId,
           ) !== -1
         ) {
           this.log.debug(
-            'DC_EVENT_MSGS_CHANGED',
-            'changed message seems to be message we already know'
-          )
+            "DC_EVENT_MSGS_CHANGED",
+            "changed message seems to be message we already know",
+          );
           try {
             const message = await BackendRemote.rpc.getMessage(
               this.accountId,
-              messageId
-            )
-            this.reducer.messageChanged(message)
+              messageId,
+            );
+            this.reducer.messageChanged(message);
           } catch (error) {
-            this.log.warn('failed to fetch message with id', messageId, error)
+            this.log.warn("failed to fetch message with id", messageId, error);
             // ignore not found and other errors
-            return
+            return;
           }
         } else {
           // The draft message does not affect the return value of
@@ -769,25 +769,25 @@ class MessageListStore extends Store<MessageListState> {
             (await BackendRemote.rpc.getMessage(this.accountId, messageId))
               .state === C.DC_STATE_OUT_DRAFT
           ) {
-            return
+            return;
           }
 
           this.log.debug(
-            'DC_EVENT_MSGS_CHANGED',
-            'changed message seems to be a new message, refetching messageIds'
-          )
+            "DC_EVENT_MSGS_CHANGED",
+            "changed message seems to be a new message, refetching messageIds",
+          );
           const messageListItems = await BackendRemote.rpc.getMessageListItems(
             this.accountId,
             this.chatId,
             false,
-            true
-          )
-          this.reducer.setMessageListItems(messageListItems)
+            true,
+          );
+          this.reducer.setMessageListItems(messageListItems);
         }
       },
-      'onEventMessagesChanged'
+      "onEventMessagesChanged",
     ),
-  }
+  };
 
   /**
    * Loads and shows the message in the messages list.
@@ -827,13 +827,13 @@ class MessageListStore extends Store<MessageListState> {
     addMessageIdToStack,
     scrollIntoViewArg,
   }: JumpToMessageParams) {
-    const startTime = performance.now()
+    const startTime = performance.now();
 
-    this.log.debug('jumpToMessage with messageId: ', jumpToMessageId)
-    const accountId = selectedAccountId()
+    this.log.debug("jumpToMessage with messageId: ", jumpToMessageId);
+    const accountId = selectedAccountId();
 
     if (!accountId) {
-      throw new Error('no account set')
+      throw new Error("no account set");
     }
 
     // As was said in this function's docstring,
@@ -841,96 +841,97 @@ class MessageListStore extends Store<MessageListState> {
     // so we know the chatId in advance.
     // However, let's keep the code that supports arbitrary chatId,
     // which can be "enabled" by setting `chatIdPreset = undefined`.
-    const chatIdPreset: number | undefined = this.chatId
-    let chatId: number | undefined = undefined
+    const chatIdPreset: number | undefined = this.chatId;
+    let chatId: number | undefined = undefined;
 
-    let jumpToMessageStack: number[] = []
+    let jumpToMessageStack: number[] = [];
     if (jumpToMessageId === undefined) {
       // jump down
-      const jumpToMessageStackLength = this.state.jumpToMessageStack.length
+      const jumpToMessageStackLength = this.state.jumpToMessageStack.length;
       if (jumpToMessageStackLength !== 0) {
         jumpToMessageStack = this.state.jumpToMessageStack.slice(
           0,
-          jumpToMessageStackLength - 1
-        )
+          jumpToMessageStackLength - 1,
+        );
         jumpToMessageId =
-          this.state.jumpToMessageStack[jumpToMessageStackLength - 1]
+          this.state.jumpToMessageStack[jumpToMessageStackLength - 1];
         chatId =
           chatIdPreset ??
           (await BackendRemote.rpc.getMessage(accountId, jumpToMessageId))
-            .chatId
+            .chatId;
       } else {
         // Since `jumpToMessageId` is coming from
         // `this.state.messageListItems`, it's guaranteed to belong
         // to the current chat. No need to
         // `(await rpc.getMessage(accountId, jumpToMessageId)).chatId`
-        chatId = chatIdPreset ?? this.chatId
-        jumpToMessageStack = []
-        highlight = false
+        chatId = chatIdPreset ?? this.chatId;
+        jumpToMessageStack = [];
+        highlight = false;
         // We will determine `jumpToMessageId` below
       }
     } else {
-      const fromCache = this.state.messageCache[jumpToMessageId]
+      const fromCache = this.state.messageCache[jumpToMessageId];
       chatId =
         chatIdPreset ??
-        (fromCache?.kind === 'message'
+        (fromCache?.kind === "message"
           ? fromCache
           : await BackendRemote.rpc.getMessage(accountId, jumpToMessageId)
-        ).chatId
+        ).chatId;
 
       if (addMessageIdToStack === undefined) {
         // reset jumpToMessageStack
-        jumpToMessageStack = []
+        jumpToMessageStack = [];
       } else {
         // If we are not switching chats, add current jumpToMessageId to the stack
-        const currentChatId = this.chatId || -1
+        const currentChatId = this.chatId || -1;
         if (chatId !== currentChatId) {
-          jumpToMessageStack = []
+          jumpToMessageStack = [];
         } else if (
           this.state.jumpToMessageStack.indexOf(addMessageIdToStack) !== -1
         ) {
-          jumpToMessageStack = this.state.jumpToMessageStack
+          jumpToMessageStack = this.state.jumpToMessageStack;
         } else {
           jumpToMessageStack = [
             ...this.state.jumpToMessageStack,
             addMessageIdToStack,
-          ]
+          ];
         }
       }
     }
 
     const isMessageInCurrentChat =
-      this.accountId === accountId && this.chatId === chatId
+      this.accountId === accountId && this.chatId === chatId;
     if (!isMessageInCurrentChat) {
       this.log.error(
-        'Tried to show messages from a different chat.\n' +
-        `this.accountId === ${this.accountId}, ` +
-        `this.chatId === ${this.chatId}, ` +
-        `target IDs: ${accountId}, ${chatId}. ` +
-        `jumpToMessageId === ${jumpToMessageId}`
-      )
+        "Tried to show messages from a different chat.\n" +
+          `this.accountId === ${this.accountId}, ` +
+          `this.chatId === ${this.chatId}, ` +
+          `target IDs: ${accountId}, ${chatId}. ` +
+          `jumpToMessageId === ${jumpToMessageId}`,
+      );
     }
 
-    let messageListItems = this.state.messageListItems
+    let messageListItems = this.state.messageListItems;
     const findMessageIndex = (): number | undefined => {
       if (jumpToMessageId == undefined) {
         return messageListItems.length > 0
           ? // The last `messageListItems` item is guaranteed to be _not_
-          // a daymarker, so we can safely return it without checking
-          // `m.kind === 'message'`.
-          messageListItems.length - 1
-          : undefined
+            // a daymarker, so we can safely return it without checking
+            // `m.kind === 'message'`.
+            messageListItems.length - 1
+          : undefined;
         // Maybe it would make sense to also set `jumpToMessageId` here.
       }
 
       const ind = messageListItems.findIndex(
-        m => m.kind === 'message' && m.msg_id === jumpToMessageId
-      )
-      return ind === -1 ? undefined : ind
-    }
+        (m) => m.kind === "message" && m.msg_id === jumpToMessageId,
+      );
+      return ind === -1 ? undefined : ind;
+    };
 
-    let jumpToMessageIndex = findMessageIndex()
-    const currentMessageListContainsTheMessage = jumpToMessageIndex != undefined
+    let jumpToMessageIndex = findMessageIndex();
+    const currentMessageListContainsTheMessage =
+      jumpToMessageIndex != undefined;
     // Even if the message is in the current chat, it could still
     // be missing from `this.state.messageListItems` in these cases:
     // - `this.state.messageListItems` is still unloaded,
@@ -946,32 +947,32 @@ class MessageListStore extends Store<MessageListState> {
         accountId,
         chatId,
         false,
-        true
-      )
-      jumpToMessageIndex = findMessageIndex()
+        true,
+      );
+      jumpToMessageIndex = findMessageIndex();
       // Yes, `jumpToMessageIndex` could stil be `undefined` here,
       // but only if the chat actually contains no messages
       // (or if something went horribly wrong).
     }
 
     // calculate page indexes, so that jumpToMessageId is in the middle of the page
-    let oldestFetchedMessageListItemIndex: number
-    let newestFetchedMessageListItemIndex: number
-    let newMessageCache: MessageListState['messageCache']
-    let newViewState: ChatViewState
+    let oldestFetchedMessageListItemIndex: number;
+    let newestFetchedMessageListItemIndex: number;
+    let newMessageCache: MessageListState["messageCache"];
+    let newViewState: ChatViewState;
     if (messageListItems.length === 0) {
       if (jumpToMessageId != undefined) {
         this.log.error(
           `Tried to jumpToMessage ${jumpToMessageId}, but messageListItems ` +
-          `is empty. Anyways, proceeding.`
-        )
+            `is empty. Anyways, proceeding.`,
+        );
       }
 
-      oldestFetchedMessageListItemIndex = -1
-      newestFetchedMessageListItemIndex = -1
-      newMessageCache = {}
+      oldestFetchedMessageListItemIndex = -1;
+      newestFetchedMessageListItemIndex = -1;
+      newMessageCache = {};
       // Same as in `loadChat()`
-      newViewState = ChatViewReducer.selectChat(this.state.viewState)
+      newViewState = ChatViewReducer.selectChat(this.state.viewState);
     } else {
       if (jumpToMessageIndex == undefined) {
         // To be fair, it's expected that we could jump to a message
@@ -979,66 +980,66 @@ class MessageListStore extends Store<MessageListState> {
         // and not all state has updated, but this is super rare.
         this.log.error(
           `messageListItems is not empty, but jumpToMessageIndex ` +
-          `is still undefined? Does msgId ${jumpToMessageId} ` +
-          `even belong to chat ${chatId}? Or did the message get deleted?\n` +
-          `Anyways, falling back to jumping to the last message.`
-        )
-        jumpToMessageIndex = messageListItems.length - 1
+            `is still undefined? Does msgId ${jumpToMessageId} ` +
+            `even belong to chat ${chatId}? Or did the message get deleted?\n` +
+            `Anyways, falling back to jumping to the last message.`,
+        );
+        jumpToMessageIndex = messageListItems.length - 1;
       }
 
-      const half_page_size = Math.ceil(PAGE_SIZE / 2)
+      const half_page_size = Math.ceil(PAGE_SIZE / 2);
 
       oldestFetchedMessageListItemIndex = Math.max(
         jumpToMessageIndex - half_page_size,
-        0
-      )
+        0,
+      );
       newestFetchedMessageListItemIndex = Math.min(
         jumpToMessageIndex + half_page_size,
-        messageListItems.length - 1
-      )
+        messageListItems.length - 1,
+      );
 
       const countMessagesOnNewerSide =
-        newestFetchedMessageListItemIndex - jumpToMessageIndex
+        newestFetchedMessageListItemIndex - jumpToMessageIndex;
       const countMessagesOnOlderSide =
-        jumpToMessageIndex - oldestFetchedMessageListItemIndex
+        jumpToMessageIndex - oldestFetchedMessageListItemIndex;
       if (countMessagesOnNewerSide < half_page_size) {
         oldestFetchedMessageListItemIndex = Math.max(
           oldestFetchedMessageListItemIndex -
-          (half_page_size - countMessagesOnNewerSide),
-          0
-        )
+            (half_page_size - countMessagesOnNewerSide),
+          0,
+        );
       } else if (countMessagesOnOlderSide < half_page_size) {
         newestFetchedMessageListItemIndex = Math.min(
           newestFetchedMessageListItemIndex +
-          (half_page_size - countMessagesOnOlderSide),
-          messageListItems.length - 1
-        )
+            (half_page_size - countMessagesOnOlderSide),
+          messageListItems.length - 1,
+        );
       }
 
       const messagesAlreadyLoaded = getView(
         messageListItems,
         oldestFetchedMessageListItemIndex,
-        newestFetchedMessageListItemIndex
-      ).every(item => {
-        if (item.kind === 'dayMarker') {
-          return true
+        newestFetchedMessageListItemIndex,
+      ).every((item) => {
+        if (item.kind === "dayMarker") {
+          return true;
         }
         // Just for type-safety.
-        const _kind: 'message' = item.kind
+        const _kind: "message" = item.kind;
 
-        return this.state.messageCache[item.msg_id] != undefined
-      })
+        return this.state.messageCache[item.msg_id] != undefined;
+      });
 
       this.log.debug(
-        'messagesAlreadyLoaded:',
+        "messagesAlreadyLoaded:",
         messagesAlreadyLoaded,
         messagesAlreadyLoaded
-          ? 'Using the existing cache'
-          : 'Resetting the messageCache'
-      )
+          ? "Using the existing cache"
+          : "Resetting the messageCache",
+      );
 
       if (messagesAlreadyLoaded) {
-        newMessageCache = this.state.messageCache
+        newMessageCache = this.state.messageCache;
 
         // Why do we need `Math.min` / `Math.max` here, instead of simply
         // keeping `this.state.oldestFetchedMessageListItemIndex`
@@ -1064,25 +1065,25 @@ class MessageListStore extends Store<MessageListState> {
         // this workaround for now.
         oldestFetchedMessageListItemIndex = Math.min(
           this.state.oldestFetchedMessageListItemIndex,
-          oldestFetchedMessageListItemIndex
-        )
+          oldestFetchedMessageListItemIndex,
+        );
         newestFetchedMessageListItemIndex = Math.max(
           this.state.newestFetchedMessageListItemIndex,
-          newestFetchedMessageListItemIndex
-        )
+          newestFetchedMessageListItemIndex,
+        );
       } else {
         newMessageCache =
           (await loadMessages(
             accountId,
             messageListItems,
             oldestFetchedMessageListItemIndex,
-            newestFetchedMessageListItemIndex
-          ).catch(err => this.log.error('loadMessages failed', err))) || {}
+            newestFetchedMessageListItemIndex,
+          ).catch((err) => this.log.error("loadMessages failed", err))) || {};
       }
 
       if (jumpToMessageId == undefined) {
-        const item = messageListItems[jumpToMessageIndex]
-        if (item.kind !== 'message') {
+        const item = messageListItems[jumpToMessageIndex];
+        if (item.kind !== "message") {
           // This should never happen, but let's write it to make
           // TypeScript happy, and juuuuuust in case.
           // Maybe we could refactor things, so that types guarantee this.
@@ -1090,22 +1091,22 @@ class MessageListStore extends Store<MessageListState> {
             'messageListItems[jumpToMessageIndex] is not of type "message"??',
             item,
             messageListItems,
-            jumpToMessageIndex
-          )
-          throw new Error()
+            jumpToMessageIndex,
+          );
+          throw new Error();
         }
-        jumpToMessageId = item.msg_id
+        jumpToMessageId = item.msg_id;
       }
       newViewState = ChatViewReducer.jumpToMessage(
         this.state.viewState,
         jumpToMessageId,
         highlight,
         focus,
-        scrollIntoViewArg
-      )
+        scrollIntoViewArg,
+      );
     }
 
-    this.log.debug('jumpToMessage took', performance.now() - startTime)
+    this.log.debug("jumpToMessage took", performance.now() - startTime);
     // TODO perf: it could so happen that nothing except `viewState` (which
     // is only responsible for scrolling)
     // has changed after this function has run.
@@ -1117,13 +1118,13 @@ class MessageListStore extends Store<MessageListState> {
       newestFetchedMessageListItemIndex,
       viewState: newViewState,
       jumpToMessageStack,
-    })
+    });
   }
 
   stateToHumanReadable(state: MessageListState): any {
     return {
       ...state,
-    }
+    };
   }
 }
 
@@ -1131,22 +1132,22 @@ async function loadMessages(
   accountId: number,
   messageListItems: Type.MessageListItem[],
   oldestFetchedMessageListItemIndex: number,
-  newestFetchedMessageListItemIndex: number
+  newestFetchedMessageListItemIndex: number,
 ) {
   const view = getView(
     messageListItems,
     oldestFetchedMessageListItemIndex,
-    newestFetchedMessageListItemIndex
+    newestFetchedMessageListItemIndex,
   )
-    .map(m => (m.kind === 'message' ? m.msg_id : C.DC_MSG_ID_LAST_SPECIAL))
-    .filter(msgId => msgId !== C.DC_MSG_ID_LAST_SPECIAL)
+    .map((m) => (m.kind === "message" ? m.msg_id : C.DC_MSG_ID_LAST_SPECIAL))
+    .filter((msgId) => msgId !== C.DC_MSG_ID_LAST_SPECIAL);
 
   if (view.length > 100) {
     log.error(
       `loadMessages is loading too many (${view.length}) messages. ` +
-      'This is bad for performance.'
-    )
+        "This is bad for performance.",
+    );
   }
 
-  return await BackendRemote.rpc.getMessages(accountId, view)
+  return await BackendRemote.rpc.getMessages(accountId, view);
 }

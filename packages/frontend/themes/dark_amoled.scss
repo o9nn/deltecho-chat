@@ -1,5 +1,5 @@
 /* Set theme variables used for theme Generation */
-@use './_themebase' with (
+@use "./_themebase" with (
   $accentColor: purple,
   $bgChatView: #000,
   $bgImage: none,
@@ -29,8 +29,8 @@
 );
 
 .theme-meta {
-  --name: 'Dark Amoled';
-  --description: 'An Dark theme optimized for amoled displays (black is really black)';
+  --name: "Dark Amoled";
+  --description: "An Dark theme optimized for amoled displays (black is really black)";
 }
 
 /* overwrite themedata */

@@ -25,7 +25,7 @@ Orchestration result from Arena coordinating agents
 
 [src/types.ts:139](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L139)
 
-___
+---
 
 ### participatingAgents
 
@@ -35,7 +35,7 @@ ___
 
 [src/types.ts:140](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L140)
 
-___
+---
 
 ### directive
 
@@ -45,7 +45,7 @@ ___
 
 [src/types.ts:141](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L141)
 
-___
+---
 
 ### responses
 
@@ -55,7 +55,7 @@ ___
 
 [src/types.ts:142](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L142)
 
-___
+---
 
 ### synthesizedOutcome
 
@@ -65,7 +65,7 @@ ___
 
 [src/types.ts:143](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L143)
 
-___
+---
 
 ### timestamp
 

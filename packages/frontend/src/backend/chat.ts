@@ -1,8 +1,8 @@
-import { BackendRemote } from '../backend-com'
-import { debouncedUpdateBadgeCounter } from '../system-integration/badge-counter'
-import { clearNotificationsForChat } from '../system-integration/notifications'
+import { BackendRemote } from "../backend-com";
+import { debouncedUpdateBadgeCounter } from "../system-integration/badge-counter";
+import { clearNotificationsForChat } from "../system-integration/notifications";
 
-import { C, type T } from '@deltachat/jsonrpc-client'
+import { C, type T } from "@deltachat/jsonrpc-client";
 
 /**
  * Finds basic info, like contact id and the related chat ID of a contact based
@@ -13,78 +13,78 @@ import { C, type T } from '@deltachat/jsonrpc-client'
  */
 export async function getChatInfoByEmail(
   accountId: number,
-  email: string
+  email: string,
 ): Promise<{
-  chatId: number | null
-  contactId: number | null
+  chatId: number | null;
+  contactId: number | null;
 }> {
   const contactId = await BackendRemote.rpc.lookupContactIdByAddr(
     accountId,
-    email
-  )
+    email,
+  );
 
   const chatId = contactId
     ? await BackendRemote.rpc.getChatIdByContactId(accountId, contactId)
-    : null
+    : null;
 
   return {
     contactId,
     chatId,
-  }
+  };
 }
 
 export async function saveLastChatId(accountId: number, chatId: number) {
-  await BackendRemote.rpc.setConfig(accountId, 'ui.lastchatid', `${chatId}`)
+  await BackendRemote.rpc.setConfig(accountId, "ui.lastchatid", `${chatId}`);
 }
 
 export async function getLastChatId(accountId: number): Promise<number | null> {
-  const chatId = await BackendRemote.rpc.getConfig(accountId, 'ui.lastchatid')
+  const chatId = await BackendRemote.rpc.getConfig(accountId, "ui.lastchatid");
 
-  if (typeof chatId === 'string') {
-    return parseInt(chatId, 10)
+  if (typeof chatId === "string") {
+    return parseInt(chatId, 10);
   }
 
-  return null
+  return null;
 }
 
 export async function muteChat(
   accountId: number,
   chatId: number,
-  duration: T.MuteDuration
+  duration: T.MuteDuration,
 ) {
-  await BackendRemote.rpc.setChatMuteDuration(accountId, chatId, duration)
+  await BackendRemote.rpc.setChatMuteDuration(accountId, chatId, duration);
 }
 
 export async function unmuteChat(accountId: number, chatId: number) {
   await BackendRemote.rpc.setChatMuteDuration(accountId, chatId, {
-    kind: 'NotMuted',
-  })
+    kind: "NotMuted",
+  });
 }
 
 export function markChatAsSeen(accountId: number, chatId: number) {
   // Mark all messages in chat as "seen" in core backend
-  BackendRemote.rpc.marknoticedChat(accountId, chatId)
-  debouncedUpdateBadgeCounter()
+  BackendRemote.rpc.marknoticedChat(accountId, chatId);
+  debouncedUpdateBadgeCounter();
 
   // Remove potential system notifications for this chat
-  clearNotificationsForChat(accountId, chatId)
+  clearNotificationsForChat(accountId, chatId);
 }
 
 export async function createChatByContactId(
   accountId: number,
   contactId: number | null,
-  email?: string
+  email?: string,
 ): Promise<number> {
   // Create contact first with given email address if it doesn't exist yet
   if (!contactId) {
     if (!email) {
-      throw new Error('either contactId or email needs to be set')
+      throw new Error("either contactId or email needs to be set");
     }
 
-    contactId = await BackendRemote.rpc.createContact(accountId, email, null)
+    contactId = await BackendRemote.rpc.createContact(accountId, email, null);
   }
 
-  return await BackendRemote.rpc.createChatByContactId(accountId, contactId)
+  return await BackendRemote.rpc.createChatByContactId(accountId, contactId);
 }
 
 /**
@@ -92,16 +92,16 @@ export async function createChatByContactId(
  */
 export async function areAllContactsVerified(
   accountId: number,
-  contactIds: number[]
+  contactIds: number[],
 ): Promise<boolean> {
   const contacts = await BackendRemote.rpc.getContactsByIds(
     accountId,
-    contactIds
-  )
+    contactIds,
+  );
 
-  return !contactIds.some(contactId => {
-    return !contacts[contactId].isVerified
-  })
+  return !contactIds.some((contactId) => {
+    return !contacts[contactId].isVerified;
+  });
 }
 
 /**
@@ -111,14 +111,14 @@ export async function areAllContactsVerified(
  * is why we're iterating over all currently available chats instead.
  */
 export async function getDeviceChatId(
-  accountId: number
+  accountId: number,
 ): Promise<number | null> {
   // This assumes that the chat with `C.DC_CONTACT_ID_DEVICE`
   // is actually a one-to-one chat.
   const chatId = await BackendRemote.rpc.getChatIdByContactId(
     accountId,
-    C.DC_CONTACT_ID_DEVICE
-  )
+    C.DC_CONTACT_ID_DEVICE,
+  );
 
-  return chatId
+  return chatId;
 }

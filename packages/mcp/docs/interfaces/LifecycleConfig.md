@@ -25,7 +25,7 @@ Interval between automatic cycles (0 = manual only)
 
 [src/integration/lifecycle.ts:34](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/integration/lifecycle.ts#L34)
 
-___
+---
 
 ### sequentialPhases
 
@@ -37,7 +37,7 @@ Whether to run phases sequentially or allow overlap
 
 [src/integration/lifecycle.ts:36](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/integration/lifecycle.ts#L36)
 
-___
+---
 
 ### coherenceThreshold
 
@@ -49,7 +49,7 @@ Coherence threshold below which extra integration is triggered
 
 [src/integration/lifecycle.ts:38](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/integration/lifecycle.ts#L38)
 
-___
+---
 
 ### verbose
 

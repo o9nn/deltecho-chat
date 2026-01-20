@@ -1,11 +1,11 @@
-import React from 'react'
+import React from "react";
 
-import styles from './styles.module.scss'
-import classNames from 'classnames'
+import styles from "./styles.module.scss";
+import classNames from "classnames";
 
 type Props = React.AudioHTMLAttributes<HTMLAudioElement> & {
-  src: string
-}
+  src: string;
+};
 
 export default function AudioPlayer({ src, className, ...restProps }: Props) {
   return (
@@ -16,5 +16,5 @@ export default function AudioPlayer({ src, className, ...restProps }: Props) {
     >
       <source src={src} />
     </audio>
-  )
+  );
 }

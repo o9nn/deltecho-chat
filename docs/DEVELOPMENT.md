@@ -79,7 +79,7 @@ Sometimes `eslint` complains on code lines that for whatever reason doesn't fit 
 
 ```js
 // eslint-disable-next-line
-const unused_var = 'This line would normally trigger some linting errors'
+const unused_var = "This line would normally trigger some linting errors";
 ```
 
 We set up the linting using this [`guide`](https://github.com/typescript-eslint/typescript-eslint/blob/master/docs/getting-started/linting/README.md)

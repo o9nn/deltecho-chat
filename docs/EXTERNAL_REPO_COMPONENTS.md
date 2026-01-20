@@ -7,13 +7,13 @@
 
 ## Summary
 
-| Repository | Key Value | Priority |
-|------------|-----------|----------|
-| **moeru-ai/airi** | AI companion framework, real-time voice, game interaction | 🔴 High |
-| **Live2D/Cubism** | Avatar animation SDK for visual AI representation | 🔴 High |
-| **DaedalOS** | Web desktop environment, UI patterns | 🟡 Medium |
-| **ARM NN / ACL** | Neural network inference on ARM devices | 🟡 Medium |
-| **dovecot/core** | Mail server integration patterns | 🟢 Low |
+| Repository        | Key Value                                                 | Priority  |
+| ----------------- | --------------------------------------------------------- | --------- |
+| **moeru-ai/airi** | AI companion framework, real-time voice, game interaction | 🔴 High   |
+| **Live2D/Cubism** | Avatar animation SDK for visual AI representation         | 🔴 High   |
+| **DaedalOS**      | Web desktop environment, UI patterns                      | 🟡 Medium |
+| **ARM NN / ACL**  | Neural network inference on ARM devices                   | 🟡 Medium |
+| **dovecot/core**  | Mail server integration patterns                          | 🟢 Low    |
 
 ---
 
@@ -27,12 +27,12 @@ A self-hosted AI companion ("Grok Companion") designed for virtual AI characters
 
 #### Useful Features for deltecho-chat
 
-| Feature | Description | Integration Value |
-|---------|-------------|-------------------|
-| **Real-time Voice Chat** | Live voice synthesis/recognition | Enables voice-based AI interaction |
-| **Game Integration** | Plays Minecraft, Factorio | Demonstrates agentic capabilities |
-| **Multi-platform** | Web, macOS, Windows support | Cross-platform patterns |
-| **LLM-Driven** | Fully LLM and AI driven behaviors | AI behavior architecture |
+| Feature                  | Description                       | Integration Value                  |
+| ------------------------ | --------------------------------- | ---------------------------------- |
+| **Real-time Voice Chat** | Live voice synthesis/recognition  | Enables voice-based AI interaction |
+| **Game Integration**     | Plays Minecraft, Factorio         | Demonstrates agentic capabilities  |
+| **Multi-platform**       | Web, macOS, Windows support       | Cross-platform patterns            |
+| **LLM-Driven**           | Fully LLM and AI driven behaviors | AI behavior architecture           |
 
 #### Key Components to Study
 
@@ -62,11 +62,11 @@ Professional avatar animation system for bringing AI characters to life visually
 
 #### Available SDKs
 
-| SDK | Platform | Use Case |
-|-----|----------|----------|
-| **Cubism SDK for Web** | Browser/TypeScript | Web-based AI avatar |
-| **Cubism SDK for Native** | C++ | Desktop applications |
-| **Cubism SDK for Unity** | Unity/C# | Game integration |
+| SDK                       | Platform           | Use Case             |
+| ------------------------- | ------------------ | -------------------- |
+| **Cubism SDK for Web**    | Browser/TypeScript | Web-based AI avatar  |
+| **Cubism SDK for Native** | C++                | Desktop applications |
+| **Cubism SDK for Unity**  | Unity/C#           | Game integration     |
 
 #### Key Components
 
@@ -92,13 +92,13 @@ CubismWebSamples/
 #### Sample Integration
 
 ```typescript
-import { CubismModel } from '@cubism/model';
-import { CubismMotionManager } from '@cubism/motion';
+import { CubismModel } from "@cubism/model";
+import { CubismMotionManager } from "@cubism/motion";
 
 interface DeepTreeEchoAvatar {
   model: CubismModel;
   motionManager: CubismMotionManager;
-  
+
   setExpression(emotion: EmotionalVector): void;
   speak(text: string): void;
   react(event: CognitiveEvent): void;
@@ -117,13 +117,13 @@ A complete web-based desktop environment with window management and applications
 
 #### Useful Patterns for deltecho-chat
 
-| Component | Value |
-|-----------|-------|
-| **Window Manager** | Multi-window AI interface patterns |
-| **File Explorer** | File system integration for AI |
-| **Monaco Editor** | Code editing for AI-assisted development |
-| **Terminal** | Command-line AI interaction |
-| **Webamp** | Audio player integration |
+| Component          | Value                                    |
+| ------------------ | ---------------------------------------- |
+| **Window Manager** | Multi-window AI interface patterns       |
+| **File Explorer**  | File system integration for AI           |
+| **Monaco Editor**  | Code editing for AI-assisted development |
+| **Terminal**       | Command-line AI interaction              |
+| **Webamp**         | Audio player integration                 |
 
 #### Key Architecture Patterns
 
@@ -162,11 +162,11 @@ For on-device neural network inference, especially useful for edge/mobile deploy
 
 #### Key Libraries
 
-| Library | Purpose | Platform |
-|---------|---------|----------|
-| **ARM NN** | ML inference engine | Android, Linux |
-| **ARM Compute Library** | Optimized CV/ML functions | ARM Cortex |
-| **CMSIS-NN** | Neural network kernels for MCU | Cortex-M |
+| Library                 | Purpose                        | Platform       |
+| ----------------------- | ------------------------------ | -------------- |
+| **ARM NN**              | ML inference engine            | Android, Linux |
+| **ARM Compute Library** | Optimized CV/ML functions      | ARM Cortex     |
+| **CMSIS-NN**            | Neural network kernels for MCU | Cortex-M       |
 
 #### Integration Ideas for deltecho-chat
 
@@ -179,7 +179,7 @@ For on-device neural network inference, especially useful for edge/mobile deploy
 class LocalEmotionProcessor {
     armnn::IRuntime* runtime;
     armnn::NetworkId networkId;
-    
+
 public:
     EmotionalVector processExpression(const Image& face);
     SentimentResult analyzeSentiment(const AudioBuffer& voice);
@@ -222,7 +222,7 @@ struct auth_request {
 From INTEGRATION_TASKS.md:
 
 - [ ] IMAP interface implementation
-- [ ] SMTP interface implementation  
+- [ ] SMTP interface implementation
 - [ ] Mail-to-chat bridge
 
 ---
@@ -294,4 +294,4 @@ packages/voice/
 
 ---
 
-*This analysis supports the integration work tracked in INTEGRATION_TASKS.md*
+_This analysis supports the integration work tracked in INTEGRATION_TASKS.md_

@@ -1,8 +1,8 @@
-import { getLogger } from 'deep-tree-echo-core';
-import * as net from 'net';
-import * as fs from 'fs';
+import { getLogger } from "deep-tree-echo-core";
+import * as net from "net";
+import * as fs from "fs";
 
-const log = getLogger('deep-tree-echo-orchestrator/MilterServer');
+const log = getLogger("deep-tree-echo-orchestrator/MilterServer");
 
 /**
  * Email message structure
@@ -44,47 +44,47 @@ export interface MilterConfig {
  * Based on Sendmail Milter Protocol
  */
 const MILTER_COMMANDS = {
-  SMFIC_ABORT: 'A',
-  SMFIC_BODY: 'B',
-  SMFIC_CONNECT: 'C',
-  SMFIC_MACRO: 'D',
-  SMFIC_BODYEOB: 'E',
-  SMFIC_HELO: 'H',
-  SMFIC_QUIT_NC: 'K',
-  SMFIC_HEADER: 'L',
-  SMFIC_MAIL: 'M',
-  SMFIC_EOH: 'N',
-  SMFIC_OPTNEG: 'O',
-  SMFIC_QUIT: 'Q',
-  SMFIC_RCPT: 'R',
-  SMFIC_DATA: 'T',
-  SMFIC_UNKNOWN: 'U',
+  SMFIC_ABORT: "A",
+  SMFIC_BODY: "B",
+  SMFIC_CONNECT: "C",
+  SMFIC_MACRO: "D",
+  SMFIC_BODYEOB: "E",
+  SMFIC_HELO: "H",
+  SMFIC_QUIT_NC: "K",
+  SMFIC_HEADER: "L",
+  SMFIC_MAIL: "M",
+  SMFIC_EOH: "N",
+  SMFIC_OPTNEG: "O",
+  SMFIC_QUIT: "Q",
+  SMFIC_RCPT: "R",
+  SMFIC_DATA: "T",
+  SMFIC_UNKNOWN: "U",
 } as const;
 
 /**
  * Milter protocol responses
  */
 const MILTER_RESPONSES = {
-  SMFIR_ADDRCPT: '+',
-  SMFIR_DELRCPT: '-',
-  SMFIR_ADDRCPT_PAR: '2',
-  SMFIR_SHUTDOWN: '4',
-  SMFIR_ACCEPT: 'a',
-  SMFIR_REPLBODY: 'b',
-  SMFIR_CONTINUE: 'c',
-  SMFIR_DISCARD: 'd',
-  SMFIR_CHGFROM: 'e',
-  SMFIR_CONN_FAIL: 'f',
-  SMFIR_ADDHEADER: 'h',
-  SMFIR_INSHEADER: 'i',
-  SMFIR_SETSYMLIST: 'l',
-  SMFIR_CHGHEADER: 'm',
-  SMFIR_PROGRESS: 'p',
-  SMFIR_QUARANTINE: 'q',
-  SMFIR_REJECT: 'r',
-  SMFIR_SKIP: 's',
-  SMFIR_TEMPFAIL: 't',
-  SMFIR_REPLYCODE: 'y',
+  SMFIR_ADDRCPT: "+",
+  SMFIR_DELRCPT: "-",
+  SMFIR_ADDRCPT_PAR: "2",
+  SMFIR_SHUTDOWN: "4",
+  SMFIR_ACCEPT: "a",
+  SMFIR_REPLBODY: "b",
+  SMFIR_CONTINUE: "c",
+  SMFIR_DISCARD: "d",
+  SMFIR_CHGFROM: "e",
+  SMFIR_CONN_FAIL: "f",
+  SMFIR_ADDHEADER: "h",
+  SMFIR_INSHEADER: "i",
+  SMFIR_SETSYMLIST: "l",
+  SMFIR_CHGHEADER: "m",
+  SMFIR_PROGRESS: "p",
+  SMFIR_QUARANTINE: "q",
+  SMFIR_REJECT: "r",
+  SMFIR_SKIP: "s",
+  SMFIR_TEMPFAIL: "t",
+  SMFIR_REPLYCODE: "y",
 } as const;
 
 /**
@@ -116,7 +116,10 @@ export class MilterServer {
   public async start(): Promise<void> {
     return new Promise((resolve, reject) => {
       // Clean up existing socket file if it exists
-      if (this.config.socketPath.startsWith('/') && fs.existsSync(this.config.socketPath)) {
+      if (
+        this.config.socketPath.startsWith("/") &&
+        fs.existsSync(this.config.socketPath)
+      ) {
         fs.unlinkSync(this.config.socketPath);
       }
 
@@ -124,26 +127,28 @@ export class MilterServer {
         this.handleConnection(socket);
       });
 
-      this.server.on('error', (error) => {
-        log.error('Milter server error:', error);
+      this.server.on("error", (error) => {
+        log.error("Milter server error:", error);
         reject(error);
       });
 
       // Determine if socket path or host:port
-      if (this.config.socketPath.startsWith('/')) {
+      if (this.config.socketPath.startsWith("/")) {
         // Unix socket
         this.server.listen(this.config.socketPath, () => {
-          log.info(`Milter server listening on Unix socket: ${this.config.socketPath}`);
+          log.info(
+            `Milter server listening on Unix socket: ${this.config.socketPath}`,
+          );
           // Set socket permissions
           fs.chmodSync(this.config.socketPath, 0o660);
           resolve();
         });
       } else {
         // TCP socket (host:port)
-        const [host, portStr] = this.config.socketPath.split(':');
+        const [host, portStr] = this.config.socketPath.split(":");
         const port = parseInt(portStr, 10) || 8890;
-        this.server.listen(port, host || '127.0.0.1', () => {
-          log.info(`Milter server listening on ${host || '127.0.0.1'}:${port}`);
+        this.server.listen(port, host || "127.0.0.1", () => {
+          log.info(`Milter server listening on ${host || "127.0.0.1"}:${port}`);
           resolve();
         });
       }
@@ -163,7 +168,7 @@ export class MilterServer {
 
       if (this.server) {
         this.server.close(() => {
-          log.info('Milter server stopped');
+          log.info("Milter server stopped");
           resolve();
         });
       } else {
@@ -177,11 +182,11 @@ export class MilterServer {
    */
   private handleConnection(socket: net.Socket): void {
     this.connections.add(socket);
-    log.debug('New Milter connection established');
+    log.debug("New Milter connection established");
 
     let buffer = Buffer.alloc(0);
 
-    socket.on('data', (data) => {
+    socket.on("data", (data) => {
       buffer = Buffer.concat([buffer, data]);
 
       // Process complete Milter packets
@@ -198,13 +203,13 @@ export class MilterServer {
       }
     });
 
-    socket.on('close', () => {
+    socket.on("close", () => {
       this.connections.delete(socket);
-      log.debug('Milter connection closed');
+      log.debug("Milter connection closed");
     });
 
-    socket.on('error', (error) => {
-      log.error('Milter connection error:', error);
+    socket.on("error", (error) => {
+      log.error("Milter connection error:", error);
       this.connections.delete(socket);
     });
   }
@@ -274,7 +279,7 @@ export class MilterServer {
     response.writeUInt32BE(protocol, 9);
 
     this.sendPacket(socket, response);
-    log.debug('Option negotiation complete');
+    log.debug("Option negotiation complete");
   }
 
   /**
@@ -304,7 +309,7 @@ export class MilterServer {
    * Handle MAIL FROM command
    */
   private handleMailFrom(socket: net.Socket, data: Buffer): void {
-    const from = this.parseNullTerminatedStrings(data)[0] || '';
+    const from = this.parseNullTerminatedStrings(data)[0] || "";
     this.currentMessage.from = this.extractEmail(from);
     log.debug(`MAIL FROM: ${this.currentMessage.from}`);
     this.sendResponse(socket, MILTER_RESPONSES.SMFIR_CONTINUE);
@@ -314,7 +319,7 @@ export class MilterServer {
    * Handle RCPT TO command
    */
   private handleRcptTo(socket: net.Socket, data: Buffer): void {
-    const rcpt = this.parseNullTerminatedStrings(data)[0] || '';
+    const rcpt = this.parseNullTerminatedStrings(data)[0] || "";
     const email = this.extractEmail(rcpt);
 
     if (!this.currentMessage.to) {
@@ -337,14 +342,16 @@ export class MilterServer {
 
       // Extract common headers
       switch (name.toLowerCase()) {
-        case 'subject':
+        case "subject":
           this.currentMessage.subject = value;
           break;
-        case 'message-id':
+        case "message-id":
           this.currentMessage.messageId = value;
           break;
-        case 'cc':
-          this.currentMessage.cc = value.split(',').map((e) => this.extractEmail(e));
+        case "cc":
+          this.currentMessage.cc = value
+            .split(",")
+            .map((e) => this.extractEmail(e));
           break;
       }
     }
@@ -363,9 +370,9 @@ export class MilterServer {
    */
   private handleBody(socket: net.Socket, data: Buffer): void {
     if (!this.currentMessage.body) {
-      this.currentMessage.body = '';
+      this.currentMessage.body = "";
     }
-    this.currentMessage.body += data.toString('utf8');
+    this.currentMessage.body += data.toString("utf8");
     this.sendResponse(socket, MILTER_RESPONSES.SMFIR_CONTINUE);
   }
 
@@ -375,17 +382,19 @@ export class MilterServer {
   private handleEndOfBody(socket: net.Socket): void {
     // Generate message ID if not present
     if (!this.currentMessage.messageId) {
-      this.currentMessage.messageId = `<${Date.now()}.${Math.random().toString(36)}@deep-tree-echo>`;
+      this.currentMessage.messageId = `<${Date.now()}.${Math.random().toString(
+        36,
+      )}@deep-tree-echo>`;
     }
 
     const message: EmailMessage = {
       messageId: this.currentMessage.messageId,
-      from: this.currentMessage.from || '',
+      from: this.currentMessage.from || "",
       to: this.currentMessage.to || [],
       cc: this.currentMessage.cc || [],
       bcc: this.currentMessage.bcc || [],
-      subject: this.currentMessage.subject || '(no subject)',
-      body: this.currentMessage.body || '',
+      subject: this.currentMessage.subject || "(no subject)",
+      body: this.currentMessage.body || "",
       headers: this.currentMessage.headers || new Map(),
       attachments: this.currentMessage.attachments || [],
       receivedAt: this.currentMessage.receivedAt || new Date(),
@@ -394,7 +403,7 @@ export class MilterServer {
     log.info(`Email received: ${message.subject} from ${message.from}`);
 
     // Emit the message for processing
-    this.emit('email', message);
+    this.emit("email", message);
 
     // Accept the message
     this.sendResponse(socket, MILTER_RESPONSES.SMFIR_ACCEPT);
@@ -441,7 +450,7 @@ export class MilterServer {
 
     for (let i = 0; i < data.length; i++) {
       if (data[i] === 0) {
-        strings.push(data.subarray(start, i).toString('utf8'));
+        strings.push(data.subarray(start, i).toString("utf8"));
         start = i + 1;
       }
     }

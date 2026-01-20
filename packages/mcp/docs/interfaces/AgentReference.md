@@ -24,7 +24,7 @@ Agent reference within an Arena
 
 [src/types.ts:128](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L128)
 
-___
+---
 
 ### name
 
@@ -34,17 +34,17 @@ ___
 
 [src/types.ts:129](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L129)
 
-___
+---
 
 ### status
 
-• **status**: ``"active"`` \| ``"dormant"`` \| ``"spawning"``
+• **status**: `"active"` \| `"dormant"` \| `"spawning"`
 
 #### Defined in
 
 [src/types.ts:130](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L130)
 
-___
+---
 
 ### lastActivity
 
@@ -54,7 +54,7 @@ ___
 
 [src/types.ts:131](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L131)
 
-___
+---
 
 ### mcpEndpoint
 

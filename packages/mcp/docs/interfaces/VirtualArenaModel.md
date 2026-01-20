@@ -26,17 +26,17 @@ Subjective understanding of current situation
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `perceivedContext` | `string` |
+| Name                    | Type                             |
+| :---------------------- | :------------------------------- |
+| `perceivedContext`      | `string`                         |
 | `assumedNarrativePhase` | `string` \| `number` \| `symbol` |
-| `estimatedCoherence` | `number` |
+| `estimatedCoherence`    | `number`                         |
 
 #### Defined in
 
 [src/types.ts:34](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L34)
 
-___
+---
 
 ### knownEntities
 
@@ -48,7 +48,7 @@ Mental map of known entities and impressions
 
 [src/types.ts:41](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L41)
 
-___
+---
 
 ### perceivedRules
 
@@ -60,7 +60,7 @@ Believed rules and constraints of the world
 
 [src/types.ts:44](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L44)
 
-___
+---
 
 ### worldTheory
 
@@ -72,7 +72,7 @@ The agent's theory of how the world works
 
 [src/types.ts:47](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L47)
 
-___
+---
 
 ### uncertainties
 
@@ -84,7 +84,7 @@ Acknowledged knowledge gaps
 
 [src/types.ts:50](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L50)
 
-___
+---
 
 ### divergenceMetrics
 
@@ -94,10 +94,10 @@ Divergence from actual arena (for self-awareness)
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `lastSyncTime` | `number` |
-| `estimatedDrift` | `number` |
+| Name                 | Type       |
+| :------------------- | :--------- |
+| `lastSyncTime`       | `number`   |
+| `estimatedDrift`     | `number`   |
 | `knownMisalignments` | `string`[] |
 
 #### Defined in

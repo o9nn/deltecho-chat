@@ -16,6 +16,6 @@ export {
   type AvatarExpressionState,
   type EmbodimentFeedback,
   type ConsciousnessEffect,
-} from './EmbodiedCognition.js';
+} from "./EmbodiedCognition.js";
 
-export { ProprioceptiveEmbodiment } from './ProprioceptiveEmbodiment.js';
+export { ProprioceptiveEmbodiment } from "./ProprioceptiveEmbodiment.js";

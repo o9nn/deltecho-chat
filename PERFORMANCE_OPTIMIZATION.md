@@ -12,10 +12,10 @@ Add this to your app initialization to completely disable TensorFlow.js loading:
 
 ```typescript
 // In App.tsx or your main component
-import { VisionCapabilities } from './components/chat/VisionCapabilities'
+import { VisionCapabilities } from "./components/chat/VisionCapabilities";
 
 // Disable vision features for better performance
-VisionCapabilities.disable()
+VisionCapabilities.disable();
 ```
 
 ### Performance Impact
@@ -30,7 +30,7 @@ VisionCapabilities.disable()
 
 ```typescript
 // Force WebGL backend for better GPU acceleration
-await tf.setBackend('webgl')
+await tf.setBackend("webgl");
 ```
 
 2. **Limit Model Size**:
@@ -42,11 +42,11 @@ await tf.setBackend('webgl')
 
 ```typescript
 // Dispose tensors after use
-tf.dispose(tensor)
+tf.dispose(tensor);
 // Or use tidy()
 const result = tf.tidy(() => {
   // TensorFlow operations
-})
+});
 ```
 
 4. **Worker Thread Option**:
@@ -54,13 +54,13 @@ const result = tf.tidy(() => {
 
 ```typescript
 // vision.worker.ts
-self.addEventListener('message', async e => {
-  if (e.data.action === 'analyze') {
-    const tf = await import('@tensorflow/tfjs')
-    const mobilenet = await import('@tensorflow-models/mobilenet')
+self.addEventListener("message", async (e) => {
+  if (e.data.action === "analyze") {
+    const tf = await import("@tensorflow/tfjs");
+    const mobilenet = await import("@tensorflow-models/mobilenet");
     // Process image in worker
   }
-})
+});
 ```
 
 ### Monitoring Performance

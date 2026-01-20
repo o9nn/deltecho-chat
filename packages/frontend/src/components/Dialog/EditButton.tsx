@@ -1,18 +1,18 @@
-import React from 'react'
+import React from "react";
 
-import HeaderButton from './HeaderButton'
+import HeaderButton from "./HeaderButton";
 
-import type { ButtonHTMLAttributes } from 'react'
+import type { ButtonHTMLAttributes } from "react";
 
 export default function EditButton(
-  props: ButtonHTMLAttributes<HTMLButtonElement>
+  props: ButtonHTMLAttributes<HTMLButtonElement>,
 ) {
   return (
     <HeaderButton
-      aria-label='Edit'
-      icon='lead-pencil'
+      aria-label="Edit"
+      icon="lead-pencil"
       iconSize={24}
       {...props}
     />
-  )
+  );
 }

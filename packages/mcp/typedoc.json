@@ -1,31 +1,25 @@
 {
-    "$schema": "https://typedoc.org/schema.json",
-    "entryPoints": [
-        "./src/index.ts"
-    ],
-    "out": "./docs",
-    "name": "Deep Tree Echo MCP",
-    "readme": "./README.md",
-    "includeVersion": true,
-    "plugin": [
-        "typedoc-plugin-markdown"
-    ],
-    "githubPages": false,
-    "excludePrivate": true,
-    "excludeProtected": true,
-    "excludeInternal": true,
-    "excludeExternals": true,
-    "skipErrorChecking": true,
-    "sort": [
-        "source-order"
-    ],
-    "categorizeByGroup": true,
-    "navigationLinks": {
-        "GitHub": "https://github.com/deep-tree-echo/mcp",
-        "Documentation": "./docs/README.md"
-    },
-    "customCss": "",
-    "hideGenerator": true,
-    "searchInComments": true,
-    "cleanOutputDir": true
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["./src/index.ts"],
+  "out": "./docs",
+  "name": "Deep Tree Echo MCP",
+  "readme": "./README.md",
+  "includeVersion": true,
+  "plugin": ["typedoc-plugin-markdown"],
+  "githubPages": false,
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "excludeInternal": true,
+  "excludeExternals": true,
+  "skipErrorChecking": true,
+  "sort": ["source-order"],
+  "categorizeByGroup": true,
+  "navigationLinks": {
+    "GitHub": "https://github.com/deep-tree-echo/mcp",
+    "Documentation": "./docs/README.md"
+  },
+  "customCss": "",
+  "hideGenerator": true,
+  "searchInComments": true,
+  "cleanOutputDir": true
 }

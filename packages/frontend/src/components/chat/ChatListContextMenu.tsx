@@ -1,65 +1,65 @@
-import React, { useContext, useState } from 'react'
-import { C } from '@deltachat/jsonrpc-client'
+import React, { useContext, useState } from "react";
+import { C } from "@deltachat/jsonrpc-client";
 
-import { Timespans } from '../../../../shared/constants'
-import { ContextMenuItem } from '../ContextMenu'
-import MailingListProfile from '../dialogs/MessageListProfile'
-import { BackendRemote } from '../../backend-com'
-import { selectedAccountId } from '../../ScreenController'
-import { ContextMenuContext } from '../../contexts/ContextMenuContext'
-import { unmuteChat } from '../../backend/chat'
-import useChat from '../../hooks/chat/useChat'
-import { CloneChat } from '../dialogs/CreateChat'
-import useChatDialog from '../../hooks/chat/useChatDialog'
-import useDialog from '../../hooks/dialog/useDialog'
-import useOpenViewGroupDialog from '../../hooks/dialog/useOpenViewGroupDialog'
-import useOpenViewProfileDialog from '../../hooks/dialog/useOpenViewProfileDialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { Timespans } from "../../../../shared/constants";
+import { ContextMenuItem } from "../ContextMenu";
+import MailingListProfile from "../dialogs/MessageListProfile";
+import { BackendRemote } from "../../backend-com";
+import { selectedAccountId } from "../../ScreenController";
+import { ContextMenuContext } from "../../contexts/ContextMenuContext";
+import { unmuteChat } from "../../backend/chat";
+import useChat from "../../hooks/chat/useChat";
+import { CloneChat } from "../dialogs/CreateChat";
+import useChatDialog from "../../hooks/chat/useChatDialog";
+import useDialog from "../../hooks/dialog/useDialog";
+import useOpenViewGroupDialog from "../../hooks/dialog/useOpenViewGroupDialog";
+import useOpenViewProfileDialog from "../../hooks/dialog/useOpenViewProfileDialog";
+import useTranslationFunction from "../../hooks/useTranslationFunction";
 
-import type { T } from '@deltachat/jsonrpc-client'
-import type { UnselectChat } from '../../contexts/ChatContext'
-import { mouseEventToPosition } from '../../utils/mouseEventToPosition'
+import type { T } from "@deltachat/jsonrpc-client";
+import type { UnselectChat } from "../../contexts/ChatContext";
+import { mouseEventToPosition } from "../../utils/mouseEventToPosition";
 
 function archiveStateMenu(
   unselectChat: UnselectChat,
   accountId: number,
-  chat: T.ChatListItemFetchResult & { kind: 'ChatListItem' },
+  chat: T.ChatListItemFetchResult & { kind: "ChatListItem" },
   tx: ReturnType<typeof useTranslationFunction>,
-  isTheSelectedChat: boolean
+  isTheSelectedChat: boolean,
 ): { pin: ContextMenuItem; archive: ContextMenuItem } {
   const archive: ContextMenuItem = {
-    label: tx('menu_archive_chat'),
+    label: tx("menu_archive_chat"),
     action: () => {
-      BackendRemote.rpc.setChatVisibility(accountId, chat.id, 'Archived')
+      BackendRemote.rpc.setChatVisibility(accountId, chat.id, "Archived");
       if (isTheSelectedChat) {
-        unselectChat()
+        unselectChat();
       }
     },
-  }
+  };
   const unArchive: ContextMenuItem = {
-    label: tx('menu_unarchive_chat'),
+    label: tx("menu_unarchive_chat"),
     action: () => {
-      BackendRemote.rpc.setChatVisibility(accountId, chat.id, 'Normal')
+      BackendRemote.rpc.setChatVisibility(accountId, chat.id, "Normal");
       if (isTheSelectedChat) {
-        unselectChat()
+        unselectChat();
       }
     },
-  }
+  };
   const pin: ContextMenuItem = {
-    label: tx('pin_chat'),
+    label: tx("pin_chat"),
     action: () => {
-      BackendRemote.rpc.setChatVisibility(accountId, chat.id, 'Pinned')
+      BackendRemote.rpc.setChatVisibility(accountId, chat.id, "Pinned");
 
       if (chat.isArchived) {
-        unselectChat()
+        unselectChat();
       }
     },
-  }
+  };
   const unPin: ContextMenuItem = {
-    label: tx('unpin_chat'),
+    label: tx("unpin_chat"),
     action: () =>
-      BackendRemote.rpc.setChatVisibility(accountId, chat.id, 'Normal'),
-  }
+      BackendRemote.rpc.setChatVisibility(accountId, chat.id, "Normal"),
+  };
 
   /*
             Archive	UnArchive	Pin	UnPin
@@ -69,86 +69,87 @@ function archiveStateMenu(
   */
 
   if (chat.isPinned) {
-    return { pin: unPin, archive }
+    return { pin: unPin, archive };
   } else if (chat.isArchived) {
-    return { pin, archive: unArchive }
+    return { pin, archive: unArchive };
   } else {
     // normal
-    return { pin, archive }
+    return { pin, archive };
   }
 }
 
 export function useChatListContextMenu(): {
   openContextMenu: (
     event: React.MouseEvent<any, MouseEvent>,
-    chatListItem: T.ChatListItemFetchResult & { kind: 'ChatListItem' },
-    selectedChatId: number | null
-  ) => Promise<void>
-  activeContextMenuChatId: number | null
+    chatListItem: T.ChatListItemFetchResult & { kind: "ChatListItem" },
+    selectedChatId: number | null,
+  ) => Promise<void>;
+  activeContextMenuChatId: number | null;
 } {
-  const { openDialog } = useDialog()
+  const { openDialog } = useDialog();
   const {
     openBlockFirstContactOfChatDialog,
     openEncryptionInfoDialog,
     openDeleteChatDialog,
     openLeaveChatDialog,
-  } = useChatDialog()
-  const openViewGroupDialog = useOpenViewGroupDialog()
-  const openViewProfileDialog = useOpenViewProfileDialog()
-  const { openContextMenu } = useContext(ContextMenuContext)
-  const accountId = selectedAccountId()
-  const { unselectChat } = useChat()
-  const tx = useTranslationFunction()
+  } = useChatDialog();
+  const openViewGroupDialog = useOpenViewGroupDialog();
+  const openViewProfileDialog = useOpenViewProfileDialog();
+  const { openContextMenu } = useContext(ContextMenuContext);
+  const accountId = selectedAccountId();
+  const { unselectChat } = useChat();
+  const tx = useTranslationFunction();
   const [activeContextMenuChatId, setActiveContextMenuChatId] = useState<
     number | null
-  >(null)
+  >(null);
 
   return {
     activeContextMenuChatId,
     openContextMenu: async (event, chatListItem, selectedChatId) => {
       const onDeleteChat = () =>
-        openDeleteChatDialog(accountId, chatListItem, selectedChatId)
+        openDeleteChatDialog(accountId, chatListItem, selectedChatId);
       const onEncrInfo = () =>
         openEncryptionInfoDialog({
           chatId: chatListItem.id,
           dmChatContact: chatListItem.dmChatContact,
-        })
+        });
       const onViewGroup = async () => {
         // throws error if chat was not found
         const fullChat = await BackendRemote.rpc.getFullChatById(
           accountId,
-          chatListItem.id
-        )
-        openViewGroupDialog(fullChat)
-      }
+          chatListItem.id,
+        );
+        openViewGroupDialog(fullChat);
+      };
       const onViewProfile = async () => {
         const fullChat = await BackendRemote.rpc.getFullChatById(
           accountId,
-          chatListItem.id
-        )
+          chatListItem.id,
+        );
         if (!fullChat) {
-          throw new Error('chat was not found')
+          throw new Error("chat was not found");
         }
         if (fullChat.chatType !== C.DC_CHAT_TYPE_MAILINGLIST) {
-          openViewProfileDialog(accountId, fullChat.contactIds[0])
+          openViewProfileDialog(accountId, fullChat.contactIds[0]);
         } else {
           openDialog(MailingListProfile, {
             chat: fullChat,
-          })
+          });
         }
-      }
-      const onLeaveGroup = () => openLeaveChatDialog(accountId, chatListItem.id)
+      };
+      const onLeaveGroup = () =>
+        openLeaveChatDialog(accountId, chatListItem.id);
       const onBlockContact = () =>
-        openBlockFirstContactOfChatDialog(accountId, chatListItem)
-      const onUnmuteChat = () => unmuteChat(accountId, chatListItem.id)
+        openBlockFirstContactOfChatDialog(accountId, chatListItem);
+      const onUnmuteChat = () => unmuteChat(accountId, chatListItem.id);
 
       const { pin, archive } = archiveStateMenu(
         unselectChat,
         accountId,
         chatListItem,
         tx,
-        selectedChatId === chatListItem.id
-      )
+        selectedChatId === chatListItem.id,
+      );
 
       const menu: (ContextMenuItem | false)[] = chatListItem
         ? [
@@ -157,141 +158,141 @@ export function useChatListContextMenu(): {
             // Mute
             !chatListItem.isMuted
               ? {
-                  label: tx('menu_mute'),
+                  label: tx("menu_mute"),
                   subitems: [
                     {
-                      label: tx('mute_for_one_hour'),
+                      label: tx("mute_for_one_hour"),
                       action: () => {
                         BackendRemote.rpc.setChatMuteDuration(
                           accountId,
                           chatListItem.id,
                           {
-                            kind: 'Until',
+                            kind: "Until",
                             duration: Timespans.ONE_HOUR_IN_SECONDS,
-                          }
-                        )
+                          },
+                        );
                       },
                     },
                     {
-                      label: tx('mute_for_eight_hours'),
+                      label: tx("mute_for_eight_hours"),
                       action: () => {
                         BackendRemote.rpc.setChatMuteDuration(
                           accountId,
                           chatListItem.id,
                           {
-                            kind: 'Until',
+                            kind: "Until",
                             duration: Timespans.ONE_HOUR_IN_SECONDS * 8,
-                          }
-                        )
+                          },
+                        );
                       },
                     },
                     {
-                      label: tx('mute_for_one_day'),
+                      label: tx("mute_for_one_day"),
                       action: () => {
                         BackendRemote.rpc.setChatMuteDuration(
                           accountId,
                           chatListItem.id,
                           {
-                            kind: 'Until',
+                            kind: "Until",
                             duration: Timespans.ONE_DAY_IN_SECONDS,
-                          }
-                        )
+                          },
+                        );
                       },
                     },
                     {
-                      label: tx('mute_for_seven_days'),
+                      label: tx("mute_for_seven_days"),
                       action: () => {
                         BackendRemote.rpc.setChatMuteDuration(
                           accountId,
                           chatListItem.id,
                           {
-                            kind: 'Until',
+                            kind: "Until",
                             duration: Timespans.ONE_WEEK_IN_SECONDS,
-                          }
-                        )
+                          },
+                        );
                       },
                     },
                     {
-                      label: tx('mute_forever'),
+                      label: tx("mute_forever"),
                       action: () => {
                         BackendRemote.rpc.setChatMuteDuration(
                           accountId,
                           chatListItem.id,
-                          { kind: 'Forever' }
-                        )
+                          { kind: "Forever" },
+                        );
                       },
                     },
                   ],
                 }
               : {
-                  label: tx('menu_unmute'),
+                  label: tx("menu_unmute"),
                   action: onUnmuteChat,
                 },
             // Archive
             archive,
-            { type: 'separator' },
+            { type: "separator" },
             // View Profile
             !chatListItem.isGroup && {
-              label: tx('menu_view_profile'),
+              label: tx("menu_view_profile"),
               action: onViewProfile,
             },
             // Edit Group
             chatListItem.isGroup &&
               chatListItem.isSelfInGroup && {
-                label: tx('menu_edit_group'),
+                label: tx("menu_edit_group"),
                 action: onViewGroup,
               },
             // Edit Broadcast List
             chatListItem.isBroadcast && {
-              label: tx('edit_broadcast_list'),
+              label: tx("edit_broadcast_list"),
               action: onViewGroup,
             },
             // Clone Group
             chatListItem.isGroup && {
-              label: tx('clone_chat'),
+              label: tx("clone_chat"),
               action: () => {
                 openDialog(CloneChat, {
-                  setViewMode: 'createGroup',
+                  setViewMode: "createGroup",
                   chatTemplateId: chatListItem.id,
-                })
+                });
               },
             },
 
             // Encryption Info
             !chatListItem.isDeviceTalk &&
               !chatListItem.isSelfTalk && {
-                label: tx('encryption_info_title_desktop'),
+                label: tx("encryption_info_title_desktop"),
                 action: onEncrInfo,
               },
-            { type: 'separator' },
+            { type: "separator" },
             // Leave group
             chatListItem.isGroup &&
               chatListItem.isSelfInGroup && {
-                label: tx('menu_leave_group'),
+                label: tx("menu_leave_group"),
                 action: onLeaveGroup,
               },
             // Block contact
             !chatListItem.isGroup &&
               !(chatListItem.isSelfTalk || chatListItem.isDeviceTalk) && {
-                label: tx('menu_block_contact'),
+                label: tx("menu_block_contact"),
                 action: onBlockContact,
               },
             // Delete
             {
-              label: tx('menu_delete_chat'),
+              label: tx("menu_delete_chat"),
               action: onDeleteChat,
             },
           ]
-        : []
+        : [];
 
-      event.preventDefault() // prevent default runtime context menu from opening
+      event.preventDefault(); // prevent default runtime context menu from opening
 
-      setActiveContextMenuChatId(chatListItem.id)
+      setActiveContextMenuChatId(chatListItem.id);
       await openContextMenu({
         ...mouseEventToPosition(event),
         items: menu,
-      })
-      setActiveContextMenuChatId(null)
+      });
+      setActiveContextMenuChatId(null);
     },
-  }
+  };
 }

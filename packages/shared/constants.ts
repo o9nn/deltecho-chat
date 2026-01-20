@@ -1,11 +1,11 @@
-export const appName = 'Delta Chat'
-export const homePageUrl = 'https://delta.chat'
-export const gitHubUrl = 'https://github.com/deltachat/deltachat-desktop'
-export const gitHubIssuesUrl = gitHubUrl + '/issues'
-export const gitHubLicenseUrl = gitHubUrl + '/blob/main/LICENSE'
-export const donationUrl = 'https://delta.chat/donate'
+export const appName = "Delta Chat";
+export const homePageUrl = "https://delta.chat";
+export const gitHubUrl = "https://github.com/deltachat/deltachat-desktop";
+export const gitHubIssuesUrl = gitHubUrl + "/issues";
+export const gitHubLicenseUrl = gitHubUrl + "/blob/main/LICENSE";
+export const donationUrl = "https://delta.chat/donate";
 
-export const appWindowTitle = appName
+export const appWindowTitle = appName;
 
 export const enum Timespans {
   ZERO_SECONDS = 0,
@@ -28,11 +28,11 @@ export const enum AutodeleteDuration {
   ONE_YEAR = Timespans.ONE_YEAR_IN_SECONDS,
 }
 
-export const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'apng', 'gif', 'webp']
+export const IMAGE_EXTENSIONS = ["jpg", "jpeg", "png", "apng", "gif", "webp"];
 
 // Videochat Server URLs
-export const VIDEO_CHAT_INSTANCE_SYSTEMLI = 'https://meet.systemli.org/$ROOM'
-export const VIDEO_CHAT_INSTANCE_AUTISTICI = 'https://vc.autistici.org/$ROOM'
+export const VIDEO_CHAT_INSTANCE_SYSTEMLI = "https://meet.systemli.org/$ROOM";
+export const VIDEO_CHAT_INSTANCE_AUTISTICI = "https://vc.autistici.org/$ROOM";
 
 export const enum NOTIFICATION_TYPE {
   MESSAGE,

@@ -1,7 +1,7 @@
-import { MemoryStorage } from '../memory/storage.js';
-import { getLogger } from '../utils/logger.js';
+import { MemoryStorage } from "../memory/storage.js";
+import { getLogger } from "../utils/logger.js";
 
-const log = getLogger('deep-tree-echo-core/adapters/TauriStorageAdapter');
+const log = getLogger("deep-tree-echo-core/adapters/TauriStorageAdapter");
 
 /**
  * Tauri Store interface (matches @tauri-apps/plugin-store API)
@@ -33,7 +33,7 @@ export class TauriStorageAdapter implements MemoryStorage {
   private readonly storagePrefix: string;
   private initialized = false;
 
-  constructor(storagePrefix = 'deltecho') {
+  constructor(storagePrefix = "deltecho") {
     this.storagePrefix = storagePrefix;
   }
 
@@ -46,16 +46,18 @@ export class TauriStorageAdapter implements MemoryStorage {
 
     try {
       // Dynamic import to avoid issues when not in Tauri environment
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const tauriStore = await (Function('return import("@tauri-apps/plugin-store")')() as Promise<{
+       
+      const tauriStore = await (Function(
+        'return import("@tauri-apps/plugin-store")',
+      )() as Promise<{
         Store: new (path: string) => TauriStore;
       }>);
-      this.store = new tauriStore.Store('deltecho.dat');
+      this.store = new tauriStore.Store("deltecho.dat");
       this.initialized = true;
     } catch (error) {
       throw new Error(
-        'TauriStorageAdapter requires Tauri environment with @tauri-apps/plugin-store. ' +
-          'Make sure the plugin is installed and configured.'
+        "TauriStorageAdapter requires Tauri environment with @tauri-apps/plugin-store. " +
+          "Make sure the plugin is installed and configured.",
       );
     }
   }
@@ -120,7 +122,7 @@ export class TauriStorageAdapter implements MemoryStorage {
         await this.delete(key);
       }
     } catch (error) {
-      log.error('Failed to clear storage:', error);
+      log.error("Failed to clear storage:", error);
       throw error;
     }
   }
@@ -135,9 +137,9 @@ export class TauriStorageAdapter implements MemoryStorage {
       const allKeys = await this.store!.keys();
       return allKeys
         .filter((key: string) => key.startsWith(`${this.storagePrefix}:`))
-        .map((key: string) => key.replace(`${this.storagePrefix}:`, ''));
+        .map((key: string) => key.replace(`${this.storagePrefix}:`, ""));
     } catch (error) {
-      log.error('Failed to list keys:', error);
+      log.error("Failed to list keys:", error);
       return [];
     }
   }

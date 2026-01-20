@@ -1,300 +1,300 @@
-import React, { createRef } from 'react'
-import { Component } from 'react'
-import { DcEventType } from '@deltachat/jsonrpc-client'
-import { debounce } from 'debounce'
+import React, { createRef } from "react";
+import { Component } from "react";
+import { DcEventType } from "@deltachat/jsonrpc-client";
+import { debounce } from "debounce";
 
-import MainScreen from './components/screens/MainScreen/MainScreen'
-import { getLogger } from '../../shared/logger'
-import AccountSetupScreen from './components/screens/AccountSetupScreen'
-import WelcomeScreen from './components/screens/WelcomeScreen'
-import { BackendRemote, EffectfulBackendActions } from './backend-com'
-import { updateDeviceChat, updateDeviceChats } from './deviceMessages'
-import { runtime } from '@deltachat-desktop/runtime-interface'
-import { updateTimestamps } from './components/conversations/Timestamp'
-import { ScreenContext } from './contexts/ScreenContext'
-import { KeybindingsContextProvider } from './contexts/KeybindingsContext'
-import { DialogContextProvider } from './contexts/DialogContext'
-import NeighborhoodSidebar from './components/NeighborhoodSidebar/NeighborhoodSidebar'
-import SettingsStoreInstance from './stores/settings'
-import { NoAccountSelectedScreen } from './components/screens/NoAccountSelectedScreen/NoAccountSelectedScreen'
-import AccountDeletionScreen from './components/screens/AccountDeletionScreen/AccountDeletionScreen'
-import RuntimeAdapter from './components/RuntimeAdapter'
-import { ChatProvider, UnselectChat } from './contexts/ChatContext'
-import { ContextMenuProvider } from './contexts/ContextMenuContext'
-import { InstantOnboardingProvider } from './contexts/InstantOnboardingContext'
-import { SmallScreenModeMacOSTitleBar } from './components/SmallScreenModeMacOSTitleBar'
-import DeepTreeEchoBot from './components/chat/DeepTreeEchoBot'
-import AINeighborhoodDashboard from './components/screens/AINeighborhoodDashboard/AINeighborhoodDashboard'
+import MainScreen from "./components/screens/MainScreen/MainScreen";
+import { getLogger } from "../../shared/logger";
+import AccountSetupScreen from "./components/screens/AccountSetupScreen";
+import WelcomeScreen from "./components/screens/WelcomeScreen";
+import { BackendRemote, EffectfulBackendActions } from "./backend-com";
+import { updateDeviceChat, updateDeviceChats } from "./deviceMessages";
+import { runtime } from "@deltachat-desktop/runtime-interface";
+import { updateTimestamps } from "./components/conversations/Timestamp";
+import { ScreenContext } from "./contexts/ScreenContext";
+import { KeybindingsContextProvider } from "./contexts/KeybindingsContext";
+import { DialogContextProvider } from "./contexts/DialogContext";
+import NeighborhoodSidebar from "./components/NeighborhoodSidebar/NeighborhoodSidebar";
+import SettingsStoreInstance from "./stores/settings";
+import { NoAccountSelectedScreen } from "./components/screens/NoAccountSelectedScreen/NoAccountSelectedScreen";
+import AccountDeletionScreen from "./components/screens/AccountDeletionScreen/AccountDeletionScreen";
+import RuntimeAdapter from "./components/RuntimeAdapter";
+import { ChatProvider, UnselectChat } from "./contexts/ChatContext";
+import { ContextMenuProvider } from "./contexts/ContextMenuContext";
+import { InstantOnboardingProvider } from "./contexts/InstantOnboardingContext";
+import { SmallScreenModeMacOSTitleBar } from "./components/SmallScreenModeMacOSTitleBar";
+import DeepTreeEchoBot from "./components/chat/DeepTreeEchoBot";
+import AINeighborhoodDashboard from "./components/screens/AINeighborhoodDashboard/AINeighborhoodDashboard";
 
-import { MemoryPersistenceLayer } from './components/AICompanionHub/MemoryPersistenceLayer'
+import { MemoryPersistenceLayer } from "./components/AICompanionHub/MemoryPersistenceLayer";
 
-const log = getLogger('renderer/ScreenController')
+const log = getLogger("renderer/ScreenController");
 
 export interface userFeedback {
-  type: 'error' | 'success'
-  text: string
+  type: "error" | "success";
+  text: string;
 }
 
 export enum Screens {
-  Welcome = 'welcome',
-  Main = 'main',
-  Login = 'login',
-  Loading = 'loading',
-  DeleteAccount = 'deleteAccount',
-  NoAccountSelected = 'noAccountSelected',
-  AINeighborhood = 'aiNeighborhood',
+  Welcome = "welcome",
+  Main = "main",
+  Login = "login",
+  Loading = "loading",
+  DeleteAccount = "deleteAccount",
+  NoAccountSelected = "noAccountSelected",
+  AINeighborhood = "aiNeighborhood",
 }
 
-const BREAKPOINT_FOR_SMALLSCREEN_MODE = 720
+const BREAKPOINT_FOR_SMALLSCREEN_MODE = 720;
 
 function isSmallScreenMode(): boolean {
-  return window.innerWidth <= BREAKPOINT_FOR_SMALLSCREEN_MODE
+  return window.innerWidth <= BREAKPOINT_FOR_SMALLSCREEN_MODE;
 }
 
 export default class ScreenController extends Component {
   state: {
-    message: userFeedback | false
-    screen: Screens
-    smallScreenMode: boolean
-  }
-  selectedAccountId: number | undefined
-  lastAccountBeforeAddingNewAccount: number | null = null
-  unselectChatRef = createRef<UnselectChat>()
+    message: userFeedback | false;
+    screen: Screens;
+    smallScreenMode: boolean;
+  };
+  selectedAccountId: number | undefined;
+  lastAccountBeforeAddingNewAccount: number | null = null;
+  unselectChatRef = createRef<UnselectChat>();
 
   constructor(public props: {}) {
-    super(props)
+    super(props);
     this.state = {
       message: false,
       screen: Screens.Loading,
       smallScreenMode: isSmallScreenMode(),
-    }
+    };
 
-    this.onError = this.onError.bind(this)
-    this.onSuccess = this.onSuccess.bind(this)
-    this.userFeedback = this.userFeedback.bind(this)
-    this.userFeedbackClick = this.userFeedbackClick.bind(this)
-    this.changeScreen = this.changeScreen.bind(this)
-    this.addAndSelectAccount = this.addAndSelectAccount.bind(this)
-    this.selectAccount = this.selectAccount.bind(this)
-    this.unSelectAccount = this.unSelectAccount.bind(this)
-    this.openAccountDeletionScreen = this.openAccountDeletionScreen.bind(this)
-    this.onDeleteAccount = this.onDeleteAccount.bind(this)
-    this.onExitWelcomeScreen = this.onExitWelcomeScreen.bind(this)
-    this.updateSmallScreenMode = this.updateSmallScreenMode.bind(this)
+    this.onError = this.onError.bind(this);
+    this.onSuccess = this.onSuccess.bind(this);
+    this.userFeedback = this.userFeedback.bind(this);
+    this.userFeedbackClick = this.userFeedbackClick.bind(this);
+    this.changeScreen = this.changeScreen.bind(this);
+    this.addAndSelectAccount = this.addAndSelectAccount.bind(this);
+    this.selectAccount = this.selectAccount.bind(this);
+    this.unSelectAccount = this.unSelectAccount.bind(this);
+    this.openAccountDeletionScreen = this.openAccountDeletionScreen.bind(this);
+    this.onDeleteAccount = this.onDeleteAccount.bind(this);
+    this.onExitWelcomeScreen = this.onExitWelcomeScreen.bind(this);
+    this.updateSmallScreenMode = this.updateSmallScreenMode.bind(this);
 
-    window.__userFeedback = this.userFeedback.bind(this)
-    window.__changeScreen = this.changeScreen.bind(this)
-    window.__selectAccount = this.selectAccount.bind(this)
-    window.__screen = this.state.screen
+    window.__userFeedback = this.userFeedback.bind(this);
+    window.__changeScreen = this.changeScreen.bind(this);
+    window.__selectAccount = this.selectAccount.bind(this);
+    window.__screen = this.state.screen;
   }
 
   private async startup() {
-    const lastLoggedInAccountId = await this._getLastUsedAccount()
+    const lastLoggedInAccountId = await this._getLastUsedAccount();
     if (lastLoggedInAccountId) {
-      await this.selectAccount(lastLoggedInAccountId)
+      await this.selectAccount(lastLoggedInAccountId);
     } else {
-      const allAccountIds = await BackendRemote.rpc.getAllAccountIds()
+      const allAccountIds = await BackendRemote.rpc.getAllAccountIds();
       if (allAccountIds && allAccountIds.length > 0) {
-        this.changeScreen(Screens.NoAccountSelected)
+        this.changeScreen(Screens.NoAccountSelected);
       } else {
-        await this.addAndSelectAccount()
+        await this.addAndSelectAccount();
       }
     }
-    updateDeviceChats()
+    updateDeviceChats();
 
-    BackendRemote.rpc.getAllAccountIds().then(accountIds => {
+    BackendRemote.rpc.getAllAccountIds().then((accountIds) => {
       for (const accountId of accountIds) {
         BackendRemote.rpc
-          .setConfig(accountId, 'disable_idle', null)
-          .catch(() => log.error("failed to reset 'disable_idle' config key"))
+          .setConfig(accountId, "disable_idle", null)
+          .catch(() => log.error("failed to reset 'disable_idle' config key"));
       }
-    })
+    });
   }
 
   private async _getLastUsedAccount(): Promise<number | undefined> {
-    let lastLoggedInAccountId
+    let lastLoggedInAccountId;
     const desktopSettingsLastAccount = (await runtime.getDesktopSettings())
-      .lastAccount
+      .lastAccount;
     if (desktopSettingsLastAccount != undefined) {
-      lastLoggedInAccountId = desktopSettingsLastAccount
-      runtime.setDesktopSetting('lastAccount', undefined)
+      lastLoggedInAccountId = desktopSettingsLastAccount;
+      runtime.setDesktopSetting("lastAccount", undefined);
     } else {
-      lastLoggedInAccountId = await BackendRemote.rpc.getSelectedAccountId()
+      lastLoggedInAccountId = await BackendRemote.rpc.getSelectedAccountId();
     }
     try {
       if (lastLoggedInAccountId) {
-        await BackendRemote.rpc.getAccountInfo(lastLoggedInAccountId)
-        return lastLoggedInAccountId
+        await BackendRemote.rpc.getAccountInfo(lastLoggedInAccountId);
+        return lastLoggedInAccountId;
       } else {
-        return undefined
+        return undefined;
       }
     } catch (error) {
       log.warn(
-        `getLastUsedAccount: account with id ${lastLoggedInAccountId} does not exist`
-      )
-      return undefined
+        `getLastUsedAccount: account with id ${lastLoggedInAccountId} does not exist`,
+      );
+      return undefined;
     }
   }
 
   async selectAccount(accountId: number, dontStartIo = false) {
     if (accountId !== this.selectedAccountId) {
-      await this.unSelectAccount()
-      this.selectedAccountId = accountId
-        ; (window.__selectedAccountId as number) = accountId
+      await this.unSelectAccount();
+      this.selectedAccountId = accountId;
+      (window.__selectedAccountId as number) = accountId;
       // forcing to load settings here so when we for example switch to Settings
       // from context menu they're already present and we avoid crashing
-      SettingsStoreInstance.effect.load()
+      SettingsStoreInstance.effect.load();
     } else {
-      log.info('account is already selected')
+      log.info("account is already selected");
       // do not return here as this can be the state transition between unconfigured to configured
     }
 
     const account = await BackendRemote.rpc.getAccountInfo(
-      this.selectedAccountId
-    )
-    if (account.kind === 'Configured') {
-      this.changeScreen(Screens.Main)
+      this.selectedAccountId,
+    );
+    if (account.kind === "Configured") {
+      this.changeScreen(Screens.Main);
     } else {
-      this.changeScreen(Screens.Welcome)
+      this.changeScreen(Screens.Welcome);
     }
 
     if (!dontStartIo) {
-      await BackendRemote.rpc.startIo(accountId)
+      await BackendRemote.rpc.startIo(accountId);
     }
 
-    BackendRemote.rpc.getInfo(accountId).then(info => {
-      log.info('account_info', info)
-    })
-    BackendRemote.rpc.getSystemInfo().then(info => {
-      log.info('system_info', info)
-    })
+    BackendRemote.rpc.getInfo(accountId).then((info) => {
+      log.info("account_info", info);
+    });
+    BackendRemote.rpc.getSystemInfo().then((info) => {
+      log.info("system_info", info);
+    });
 
-    await BackendRemote.rpc.selectAccount(accountId)
+    await BackendRemote.rpc.selectAccount(accountId);
   }
 
   async unSelectAccount() {
     if (this.selectedAccountId === undefined) {
-      return
+      return;
     }
 
-    this.unselectChatRef.current?.()
+    this.unselectChatRef.current?.();
 
-    const previousAccountId = this.selectedAccountId
+    const previousAccountId = this.selectedAccountId;
 
-    SettingsStoreInstance.effect.clear()
+    SettingsStoreInstance.effect.clear();
 
     if (!(await runtime.getDesktopSettings()).syncAllAccounts) {
-      await BackendRemote.rpc.stopIo(previousAccountId)
+      await BackendRemote.rpc.stopIo(previousAccountId);
       // does not work if previous account will be disabled, so better close it
-      runtime.closeAllWebxdcInstances()
+      runtime.closeAllWebxdcInstances();
     }
 
-    runtime.setDesktopSetting('lastAccount', undefined)
-      ; (window.__selectedAccountId as any) = this.selectedAccountId = undefined
+    runtime.setDesktopSetting("lastAccount", undefined);
+    (window.__selectedAccountId as any) = this.selectedAccountId = undefined;
   }
 
   async addAndSelectAccount(): Promise<number> {
     if (this.selectedAccountId) {
-      this.lastAccountBeforeAddingNewAccount = this.selectedAccountId
+      this.lastAccountBeforeAddingNewAccount = this.selectedAccountId;
     }
-    const accountId = await BackendRemote.rpc.addAccount()
-    updateDeviceChat(accountId, true) // skip changelog
-    await this.selectAccount(accountId)
-    return accountId
+    const accountId = await BackendRemote.rpc.addAccount();
+    updateDeviceChat(accountId, true); // skip changelog
+    await this.selectAccount(accountId);
+    return accountId;
   }
 
   async onExitWelcomeScreen(): Promise<void> {
     if (this.lastAccountBeforeAddingNewAccount) {
       try {
-        await this.selectAccount(this.lastAccountBeforeAddingNewAccount)
+        await this.selectAccount(this.lastAccountBeforeAddingNewAccount);
       } catch (error) {
-        this.changeScreen(Screens.NoAccountSelected)
+        this.changeScreen(Screens.NoAccountSelected);
       }
     } else {
-      const accounts = await BackendRemote.rpc.getAllAccountIds()
+      const accounts = await BackendRemote.rpc.getAllAccountIds();
       if (accounts.length > 0) {
-        this.changeScreen(Screens.NoAccountSelected)
+        this.changeScreen(Screens.NoAccountSelected);
       } else {
         // special case: there is no account at all
         // we should avoid a state with no selected
         // account, since instant onboarding expects
         // at least an unconfigured account to exist
-        this.addAndSelectAccount()
+        this.addAndSelectAccount();
       }
     }
-    this.lastAccountBeforeAddingNewAccount = null
+    this.lastAccountBeforeAddingNewAccount = null;
   }
 
   async openAccountDeletionScreen(accountId: number) {
-    const dontStartIo = true
-    await this.selectAccount(accountId, dontStartIo)
-    this.changeScreen(Screens.DeleteAccount)
+    const dontStartIo = true;
+    await this.selectAccount(accountId, dontStartIo);
+    this.changeScreen(Screens.DeleteAccount);
   }
 
   async onDeleteAccount(accountId: number) {
-    await this.unSelectAccount()
-    await EffectfulBackendActions.removeAccount(accountId)
-    this.changeScreen(Screens.NoAccountSelected)
+    await this.unSelectAccount();
+    await EffectfulBackendActions.removeAccount(accountId);
+    this.changeScreen(Screens.NoAccountSelected);
   }
 
   userFeedback(message: userFeedback | false, clickToClose = false) {
-    if (message !== false && this.state.message === message) return // one at a time, cowgirl
-    this.setState({ message })
-    if (!clickToClose && message && message.type !== 'error') {
+    if (message !== false && this.state.message === message) return; // one at a time, cowgirl
+    this.setState({ message });
+    if (!clickToClose && message && message.type !== "error") {
       window.setTimeout(() => {
-        this.userFeedback(false)
-      }, 3000)
+        this.userFeedback(false);
+      }, 3000);
     }
   }
 
   userFeedbackClick() {
-    this.userFeedback(false)
+    this.userFeedback(false);
   }
 
   changeScreen(screen: Screens) {
-    log.debug('Changing screen to:', screen)
-    this.setState({ screen })
-    window.__screen = screen
+    log.debug("Changing screen to:", screen);
+    this.setState({ screen });
+    window.__screen = screen;
     if (Screens.Welcome) {
       // remove user feedback error message - https://github.com/deltachat/deltachat-desktop/issues/2261
-      this.userFeedback(false)
+      this.userFeedback(false);
     }
   }
 
   updateSmallScreenMode() {
-    const newIsSmallScreen = isSmallScreenMode()
+    const newIsSmallScreen = isSmallScreenMode();
     if (this.state.smallScreenMode !== newIsSmallScreen) {
-      this.setState({ smallScreenMode: newIsSmallScreen })
+      this.setState({ smallScreenMode: newIsSmallScreen });
     }
   }
 
   componentWillUnmount() {
-    BackendRemote.off('Error', this.onError)
+    BackendRemote.off("Error", this.onError);
 
-    window.removeEventListener('resize', this.updateSmallScreenMode)
+    window.removeEventListener("resize", this.updateSmallScreenMode);
   }
 
-  onError(accountId: number, { msg }: DcEventType<'Error'>) {
+  onError(accountId: number, { msg }: DcEventType<"Error">) {
     if (
       this.selectedAccountId !== accountId ||
       this.state.screen === Screens.Welcome
     ) {
-      return
+      return;
     }
-    this.userFeedback({ type: 'error', text: msg })
+    this.userFeedback({ type: "error", text: msg });
   }
 
   onSuccess(_event: any, text: string) {
-    this.userFeedback({ type: 'success', text })
+    this.userFeedback({ type: "success", text });
   }
 
   renderScreen(key: React.Key | null | undefined) {
     switch (this.state.screen) {
       case Screens.Main:
-        return <MainScreen accountId={this.selectedAccountId} key={key} />
+        return <MainScreen accountId={this.selectedAccountId} key={key} />;
       case Screens.Login:
         if (this.selectedAccountId === undefined) {
-          throw new Error('Selected account not defined')
+          throw new Error("Selected account not defined");
         }
         return (
           <AccountSetupScreen
@@ -302,10 +302,10 @@ export default class ScreenController extends Component {
             accountId={this.selectedAccountId}
             key={key}
           />
-        )
+        );
       case Screens.Welcome:
         if (this.selectedAccountId === undefined) {
-          throw new Error('Selected account not defined')
+          throw new Error("Selected account not defined");
         }
         return (
           <WelcomeScreen
@@ -314,10 +314,10 @@ export default class ScreenController extends Component {
             onExitWelcomeScreen={this.onExitWelcomeScreen}
             key={key}
           />
-        )
+        );
       case Screens.DeleteAccount:
         if (this.selectedAccountId === undefined) {
-          throw new Error('Selected account not defined')
+          throw new Error("Selected account not defined");
         }
         return (
           <AccountDeletionScreen
@@ -325,13 +325,13 @@ export default class ScreenController extends Component {
             onDeleteAccount={this.onDeleteAccount.bind(this)}
             key={key}
           />
-        )
+        );
       case Screens.NoAccountSelected:
-        return <NoAccountSelectedScreen />
+        return <NoAccountSelectedScreen />;
       case Screens.AINeighborhood:
-        return <AINeighborhoodDashboard />
+        return <AINeighborhoodDashboard />;
       default:
-        return null
+        return null;
     }
   }
 
@@ -347,28 +347,28 @@ export default class ScreenController extends Component {
     //   })
     // })
 
-    BackendRemote.on('Error', this.onError)
+    BackendRemote.on("Error", this.onError);
 
     runtime.onResumeFromSleep = debounce(() => {
-      log.info('onResumeFromSleep')
+      log.info("onResumeFromSleep");
       // update timestamps
-      updateTimestamps()
+      updateTimestamps();
       // call maybe network
-      BackendRemote.rpc.maybeNetwork()
-    }, 1000)
+      BackendRemote.rpc.maybeNetwork();
+    }, 1000);
 
     this.startup().then(() => {
-      runtime.emitUIFullyReady()
-    })
+      runtime.emitUIFullyReady();
+    });
 
-    window.addEventListener('resize', this.updateSmallScreenMode)
+    window.addEventListener("resize", this.updateSmallScreenMode);
   }
 
   render() {
     // Get bot settings from the settings store
     const botEnabled =
       SettingsStoreInstance.state?.desktopSettings.deepTreeEchoBotEnabled ||
-      false
+      false;
 
     return (
       <div data-testid={`selected-account:${this.selectedAccountId}`}>
@@ -403,18 +403,18 @@ export default class ScreenController extends Component {
                     <DeepTreeEchoBot enabled={botEnabled} />
                   )}
                   <KeybindingsContextProvider>
-                    <div className='main-container-container'>
+                    <div className="main-container-container">
                       {this.state.smallScreenMode &&
                         runtime.getRuntimeInfo().isMac && (
                           <SmallScreenModeMacOSTitleBar />
                         )}
-                      <div className='main-container'>
+                      <div className="main-container">
                         <NeighborhoodSidebar
                           selectedAccountId={this.selectedAccountId}
                           onAddAccount={this.addAndSelectAccount}
                           onSelectAccount={this.selectAccount.bind(this)}
                           openAccountDeletionScreen={this.openAccountDeletionScreen.bind(
-                            this
+                            this,
                           )}
                         />
                         {this.renderScreen(this.selectedAccountId)}
@@ -427,16 +427,16 @@ export default class ScreenController extends Component {
           </InstantOnboardingProvider>
         </ScreenContext.Provider>
       </div>
-    )
+    );
   }
 }
 
 export function selectedAccountId(): number {
-  const selectedAccountId = window.__selectedAccountId
+  const selectedAccountId = window.__selectedAccountId;
   if (selectedAccountId === undefined) {
-    throw new Error('no context selected')
+    throw new Error("no context selected");
   }
-  return selectedAccountId
+  return selectedAccountId;
 }
 
 /**
@@ -444,5 +444,5 @@ export function selectedAccountId(): number {
  * Use this in components that may render before account selection.
  */
 export function maybeSelectedAccountId(): number | undefined {
-  return window.__selectedAccountId
+  return window.__selectedAccountId;
 }

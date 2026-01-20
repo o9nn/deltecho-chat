@@ -1,9 +1,9 @@
 /* Set theme variables used for theme Generation */
-@use './_themebase' with (
+@use "./_themebase" with (
   $outlineColor: #b9b9b9,
   $accentColor: #2090ea,
   $bgChatView: #e6dcd4,
-  $bgImage: url('./images/background_light.svg'),
+  $bgImage: url("./images/background_light.svg"),
   $bgMessageBubbleIncoming: #fff,
   $bgMessageBubbleOutgoing: #efffde,
   $bgNavBar: #415e6b,
@@ -31,8 +31,8 @@
 );
 
 .theme-meta {
-  --name: 'Light Theme';
-  --description: 'Our default theme.';
+  --name: "Light Theme";
+  --description: "Our default theme.";
 }
 
 /* overwrite themedata */

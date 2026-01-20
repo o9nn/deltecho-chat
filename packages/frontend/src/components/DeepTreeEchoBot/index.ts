@@ -1,55 +1,42 @@
 /**
  * Deep Tree Echo Bot - Main Export Module
- * 
+ *
  * This module exports all Deep Tree Echo components.
  */
 
 // Core cognitive modules
-export { HyperDimensionalMemory } from './HyperDimensionalMemory'
-export { AdaptivePersonality } from './AdaptivePersonality'
-export { QuantumBeliefPropagation } from './QuantumBeliefPropagation'
-export { EmotionalIntelligence } from './EmotionalIntelligence'
-export { SecureIntegration } from './SecureIntegration'
+export { HyperDimensionalMemory } from "./HyperDimensionalMemory";
+export { AdaptivePersonality } from "./AdaptivePersonality";
+export { QuantumBeliefPropagation } from "./QuantumBeliefPropagation";
+export { EmotionalIntelligence } from "./EmotionalIntelligence";
+export { SecureIntegration } from "./SecureIntegration";
 
 // Core bot
-export { DeepTreeEchoBot } from './DeepTreeEchoBot'
-export type { DeepTreeEchoBotOptions } from './DeepTreeEchoBot'
-export { DeepTreeEchoBot as DeepTreeEchoBotComponent } from './DeepTreeEchoBotComponent'
+export { DeepTreeEchoBot } from "./DeepTreeEchoBot";
+export type { DeepTreeEchoBotOptions } from "./DeepTreeEchoBot";
+export { DeepTreeEchoBot as DeepTreeEchoBotComponent } from "./DeepTreeEchoBotComponent";
 
 // Services
-export { LLMService } from './LLMService'
-export type { CognitiveFunctionType } from './LLMService'
-export { PersonaCore } from './PersonaCore'
-export { RAGMemoryStore } from './RAGMemoryStore'
-export { SelfReflection } from './SelfReflection'
-export { ChatOrchestrator } from './ChatOrchestrator'
+export { LLMService } from "./LLMService";
+export type { CognitiveFunctionType } from "./LLMService";
+export { PersonaCore } from "./PersonaCore";
+export { RAGMemoryStore } from "./RAGMemoryStore";
+export { SelfReflection } from "./SelfReflection";
+export { ChatOrchestrator } from "./ChatOrchestrator";
 
 // Agentic modules
-export {
-  AgenticLLMService,
-  getAgenticLLMService,
-} from './AgenticLLMService'
-export type {
-  AgenticResponse,
-  LLMProviderConfig,
-} from './AgenticLLMService'
+export { AgenticLLMService, getAgenticLLMService } from "./AgenticLLMService";
+export type { AgenticResponse, LLMProviderConfig } from "./AgenticLLMService";
 
-export {
-  AgentToolExecutor,
-  getAgentToolExecutor,
-} from './AgentToolExecutor'
-export type {
-  AgentTool,
-  ToolResult,
-  ToolCall,
-} from './AgentToolExecutor'
+export { AgentToolExecutor, getAgentToolExecutor } from "./AgentToolExecutor";
+export type { AgentTool, ToolResult, ToolCall } from "./AgentToolExecutor";
 
 // Chat management
 export {
   DeepTreeEchoChatManager,
   chatManager,
   getChatManager,
-} from './DeepTreeEchoChatManager'
+} from "./DeepTreeEchoChatManager";
 export type {
   ChatSummary,
   ActiveChatState,
@@ -57,14 +44,14 @@ export type {
   ChatWatchCallback,
   ContactSummary,
   MessageSummary,
-} from './DeepTreeEchoChatManager'
+} from "./DeepTreeEchoChatManager";
 
 // UI bridge
 export {
   DeepTreeEchoUIBridge,
   uiBridge,
   getUIBridge,
-} from './DeepTreeEchoUIBridge'
+} from "./DeepTreeEchoUIBridge";
 export type {
   UIView,
   DialogType as UIDialogType,
@@ -73,7 +60,7 @@ export type {
   DialogContextInterface,
   UIBridgeEvent,
   UIBridgeEventListener,
-} from './DeepTreeEchoUIBridge'
+} from "./DeepTreeEchoUIBridge";
 
 // Dialog adapter
 export {
@@ -82,25 +69,22 @@ export {
   showConfirmation,
   showAlert,
   isValidDialogType,
-} from './DialogAdapter'
-export type {
-  ConfirmDialogProps,
-  AlertDialogProps,
-} from './DialogAdapter'
+} from "./DialogAdapter";
+export type { ConfirmDialogProps, AlertDialogProps } from "./DialogAdapter";
 
 // Proactive messaging
 export {
   ProactiveMessaging,
   proactiveMessaging,
   getProactiveMessaging,
-} from './ProactiveMessaging'
+} from "./ProactiveMessaging";
 export type {
   TriggerType,
   EventType,
   ProactiveTrigger,
   QueuedMessage as ProactiveQueuedMessage,
   ProactiveConfig,
-} from './ProactiveMessaging'
+} from "./ProactiveMessaging";
 
 // Unified cognitive bridge
 export {
@@ -112,13 +96,13 @@ export {
   configureLLM,
   onCognitiveEvent,
   clearHistory,
-} from './CognitiveBridge'
+} from "./CognitiveBridge";
 export type {
   DeepTreeEchoBotConfig as UnifiedBotConfig,
   UnifiedMessage,
   UnifiedCognitiveState,
   CognitiveEvent,
-} from './CognitiveBridge'
+} from "./CognitiveBridge";
 
 // Integration functions
 export {
@@ -137,28 +121,28 @@ export {
   initiateConversation,
   listChats,
   getUnreadChats,
-} from './DeepTreeEchoIntegration'
+} from "./DeepTreeEchoIntegration";
 
 // UI components
-export { default as BotSettings } from './BotSettings'
-export { default as DeepTreeEchoSettingsScreen } from './DeepTreeEchoSettingsScreen'
-export { default as ProactiveMessagingSettings } from './ProactiveMessagingSettings'
-export { default as TriggerManager } from './TriggerManager'
-export { default as ProactiveStatusIndicator } from './ProactiveStatusIndicator'
+export { default as BotSettings } from "./BotSettings";
+export { default as DeepTreeEchoSettingsScreen } from "./DeepTreeEchoSettingsScreen";
+export { default as ProactiveMessagingSettings } from "./ProactiveMessagingSettings";
+export { default as TriggerManager } from "./TriggerManager";
+export { default as ProactiveStatusIndicator } from "./ProactiveStatusIndicator";
 
 // Avatar Components
-export { DeepTreeEchoAvatarDisplay } from './DeepTreeEchoAvatarDisplay'
+export { DeepTreeEchoAvatarDisplay } from "./DeepTreeEchoAvatarDisplay";
 export {
   DeepTreeEchoAvatarProvider,
   useDeepTreeEchoAvatar,
   useDeepTreeEchoAvatarOptional,
   AvatarProcessingState,
-} from './DeepTreeEchoAvatarContext'
+} from "./DeepTreeEchoAvatarContext";
 export type {
   AvatarConfig,
   AvatarState,
   AvatarContextValue,
-} from './DeepTreeEchoAvatarContext'
+} from "./DeepTreeEchoAvatarContext";
 
 export {
   registerAvatarStateControl,
@@ -179,15 +163,15 @@ export {
   getCurrentMouthShape,
   isStreamingLipSyncActive,
   createAvatarLipSyncReceiver,
-} from './AvatarStateManager'
-export type { MouthShape } from './AvatarStateManager'
+} from "./AvatarStateManager";
+export type { MouthShape } from "./AvatarStateManager";
 
 // Streaming Avatar Service
 export {
   StreamingAvatarService,
   getStreamingAvatarService,
   createStreamingAvatarService,
-} from './StreamingAvatarService'
+} from "./StreamingAvatarService";
 export type {
   StreamingAvatarConfig,
   StreamingAvatarEvent,
@@ -195,7 +179,7 @@ export type {
   StreamChunk,
   ChatMessage as StreamingChatMessage,
   StreamingLLMProvider,
-} from './StreamingAvatarService'
+} from "./StreamingAvatarService";
 
 // Test utilities
 export {
@@ -205,8 +189,8 @@ export {
   processMessageWithBot,
   runDemo,
   cleanup as cleanupTestUtil,
-} from './DeepTreeEchoTestUtil'
+} from "./DeepTreeEchoTestUtil";
 
 // Default export
-import { DeepTreeEchoBot } from './DeepTreeEchoBot'
-export default DeepTreeEchoBot
+import { DeepTreeEchoBot } from "./DeepTreeEchoBot";
+export default DeepTreeEchoBot;

@@ -1,24 +1,24 @@
-import React from 'react'
+import React from "react";
 
-import Dialog from './Dialog'
-import DialogHeader from './DialogHeader'
+import Dialog from "./Dialog";
+import DialogHeader from "./DialogHeader";
 
-import type { DialogProps } from '../../contexts/DialogContext'
+import type { DialogProps } from "../../contexts/DialogContext";
 
 type Props = React.PropsWithChildren<
   {
-    className?: string
-    fixed?: boolean
-    height?: number
-    onClickBack?: () => void
-    canOutsideClickClose?: boolean
-    title: string
-    width?: number
-    dataTestid?: string
+    className?: string;
+    fixed?: boolean;
+    height?: number;
+    onClickBack?: () => void;
+    canOutsideClickClose?: boolean;
+    title: string;
+    width?: number;
+    dataTestid?: string;
   } & DialogProps
->
+>;
 
-const DialogWithHeader = React.memo<Props>(props => {
+const DialogWithHeader = React.memo<Props>((props) => {
   return (
     <Dialog
       onClose={props.onClose}
@@ -36,7 +36,7 @@ const DialogWithHeader = React.memo<Props>(props => {
       />
       {props.children}
     </Dialog>
-  )
-})
+  );
+});
 
-export default DialogWithHeader
+export default DialogWithHeader;

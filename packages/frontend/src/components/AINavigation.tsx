@@ -1,58 +1,58 @@
 // AINavigation.tsx - A magnificent navigation component for the AI Companion Neighborhood
-import React from 'react'
-import { Brain, Globe, Sparkles, ArrowLeft } from 'lucide-react'
-import { Screens } from '../ScreenController'
+import React from "react";
+import { Brain, Globe, Sparkles, ArrowLeft } from "lucide-react";
+import { Screens } from "../ScreenController";
 
 type AINavigationProps = {
-  currentScreen: Screens
-  changeScreen: (screen: Screens) => void
-}
+  currentScreen: Screens;
+  changeScreen: (screen: Screens) => void;
+};
 
 const AINavigation: React.FC<AINavigationProps> = ({
   currentScreen,
   changeScreen,
 }) => {
-  const isActive = currentScreen === Screens.AINeighborhood
+  const isActive = currentScreen === Screens.AINeighborhood;
 
   // When on AI Neighborhood, show a "Back to Chat" button instead
   if (isActive) {
     return (
-      <div className='ai-neighborhood-navigation ai-neighborhood-navigation-back'>
+      <div className="ai-neighborhood-navigation ai-neighborhood-navigation-back">
         <button
-          className='ai-neighborhood-button ai-back-button'
+          className="ai-neighborhood-button ai-back-button"
           onClick={() => changeScreen(Screens.Main)}
-          title='Return to Chat (Ctrl+Shift+A)'
+          title="Return to Chat (Ctrl+Shift+A)"
         >
-          <div className='ai-button-icon-container'>
-            <ArrowLeft size={20} className='ai-button-icon primary' />
+          <div className="ai-button-icon-container">
+            <ArrowLeft size={20} className="ai-button-icon primary" />
           </div>
-          <span className='ai-button-text'>Back to Chat</span>
+          <span className="ai-button-text">Back to Chat</span>
         </button>
       </div>
-    )
+    );
   }
 
   return (
-    <div className='ai-neighborhood-navigation'>
+    <div className="ai-neighborhood-navigation">
       <button
-        className={`ai-neighborhood-button ${isActive ? 'active' : ''}`}
+        className={`ai-neighborhood-button ${isActive ? "active" : ""}`}
         onClick={() => changeScreen(Screens.AINeighborhood)}
-        title='Enter AI Companion Neighborhood (Ctrl+Shift+A)'
+        title="Enter AI Companion Neighborhood (Ctrl+Shift+A)"
       >
-        <div className='ai-button-icon-container'>
-          <Brain size={24} className='ai-button-icon primary' />
-          <Globe size={16} className='ai-button-icon secondary' />
-          <Sparkles size={12} className='ai-button-icon tertiary' />
+        <div className="ai-button-icon-container">
+          <Brain size={24} className="ai-button-icon primary" />
+          <Globe size={16} className="ai-button-icon secondary" />
+          <Sparkles size={12} className="ai-button-icon tertiary" />
         </div>
-        <span className='ai-button-text'>AI Neighborhood</span>
+        <span className="ai-button-text">AI Neighborhood</span>
       </button>
     </div>
-  )
-}
+  );
+};
 
 // Add styles to document
-if (typeof document !== 'undefined') {
-  const styleEl = document.createElement('style')
+if (typeof document !== "undefined") {
+  const styleEl = document.createElement("style");
   styleEl.textContent = `
     .ai-neighborhood-navigation {
       position: fixed;
@@ -182,8 +182,8 @@ if (typeof document !== 'undefined') {
         margin: 0;
       }
     }
-  `
-  document.head.appendChild(styleEl)
+  `;
+  document.head.appendChild(styleEl);
 }
 
-export default AINavigation
+export default AINavigation;

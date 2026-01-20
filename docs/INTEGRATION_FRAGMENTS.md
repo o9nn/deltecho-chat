@@ -5,16 +5,16 @@
 
 ## Repository Status Overview
 
-| Repository | Status | Description |
-|------------|--------|-------------|
-| **o9nn/deltecho** | ✅ Active | Main monorepo - Unified Deep Tree Echo Cognitive Ecosystem |
-| **o9nn/delta-echo-desk** | ✅ Active | Delta Chat Desktop with AI Hub (Electron + Tauri + Browser) |
-| **o9nn/deltecho2** | ✅ Active | Delta Chat Desktop with Inferno Kernel integration |
-| **o9nn/deltachat-core** | ⚠️ Deprecated | Old C-Library, use deltachat-core-rust instead |
-| **o9nn/deltecho1** | ❌ Empty | Placeholder repository |
-| **EchoCog/deltachat-core** | ⚠️ Deprecated | Fork of old C-Library |
-| **EchoCog/deltachat-android** | ✅ Reference | Android client with build instructions |
-| **EchoCog/deltachat-desktop** | ✅ Reference | Desktop client fork |
+| Repository                    | Status        | Description                                                 |
+| ----------------------------- | ------------- | ----------------------------------------------------------- |
+| **o9nn/deltecho**             | ✅ Active     | Main monorepo - Unified Deep Tree Echo Cognitive Ecosystem  |
+| **o9nn/delta-echo-desk**      | ✅ Active     | Delta Chat Desktop with AI Hub (Electron + Tauri + Browser) |
+| **o9nn/deltecho2**            | ✅ Active     | Delta Chat Desktop with Inferno Kernel integration          |
+| **o9nn/deltachat-core**       | ⚠️ Deprecated | Old C-Library, use deltachat-core-rust instead              |
+| **o9nn/deltecho1**            | ❌ Empty      | Placeholder repository                                      |
+| **EchoCog/deltachat-core**    | ⚠️ Deprecated | Fork of old C-Library                                       |
+| **EchoCog/deltachat-android** | ✅ Reference  | Android client with build instructions                      |
+| **EchoCog/deltachat-desktop** | ✅ Reference  | Desktop client fork                                         |
 
 ---
 
@@ -93,13 +93,13 @@ Sys6 := σ ∘ (φ ∘ μ ∘ (Δ₂ ⊗ Δ₃ ⊗ id_P))
 
 ### Key Components
 
-| Symbol | Name | Description |
-|--------|------|-------------|
-| **Δ₂** | Prime-power delegation | 2³ → 8-way cubic concurrency |
-| **Δ₃** | Prime-power delegation | 3² → 9-phase triadic convolution |
-| **μ** | LCM synchronizer | LCM(2,3,5) = 30-step global clock |
-| **φ** | Double-step delay fold | 2×3 → 4 compression |
-| **σ** | Stage scheduler | 5 stages × 6 steps |
+| Symbol | Name                   | Description                       |
+| ------ | ---------------------- | --------------------------------- |
+| **Δ₂** | Prime-power delegation | 2³ → 8-way cubic concurrency      |
+| **Δ₃** | Prime-power delegation | 3² → 9-phase triadic convolution  |
+| **μ**  | LCM synchronizer       | LCM(2,3,5) = 30-step global clock |
+| **φ**  | Double-step delay fold | 2×3 → 4 compression               |
+| **σ**  | Stage scheduler        | 5 stages × 6 steps                |
 
 ### Architecture Mappings
 
@@ -142,29 +142,29 @@ Stream 3: ...     → ...     → ACT     → ...     → ACT
 
 ### Core Cognitive Packages
 
-| Package | Description | Status |
-|---------|-------------|--------|
-| `deep-tree-echo-core` | Core cognitive modules: LLM services, memory (RAG + hyperdimensional), personality | ✅ Building |
-| `dove9` | Dove9 OS - Triadic cognitive loop with 3 concurrent streams and 12-step cycle | ✅ Building |
-| `deep-tree-echo-orchestrator` | System daemon coordinating all services | ✅ Building |
+| Package                       | Description                                                                        | Status      |
+| ----------------------------- | ---------------------------------------------------------------------------------- | ----------- |
+| `deep-tree-echo-core`         | Core cognitive modules: LLM services, memory (RAG + hyperdimensional), personality | ✅ Building |
+| `dove9`                       | Dove9 OS - Triadic cognitive loop with 3 concurrent streams and 12-step cycle      | ✅ Building |
+| `deep-tree-echo-orchestrator` | System daemon coordinating all services                                            | ✅ Building |
 
 ### Unified Packages (packages/)
 
-| Package | Description | Status |
-|---------|-------------|--------|
-| `@deltecho/sys6-triality` | Sys6 Operadic Architecture: 30-step cycle with prime-power delegation | ✅ Complete |
-| `@deltecho/cognitive` | Unified cognitive interface integrating core + dove9 + reasoning | ✅ Building |
-| `@deltecho/reasoning` | AGI kernel with AtomSpace, PLN, MOSES, OpenPsi | ✅ Building |
-| `@deltecho/shared` | Shared types, utilities, constants for all packages | ✅ Building |
-| `@deltecho/ui-components` | React components for Deep Tree Echo bot and AI Companion Hub | ⚠️ In Progress |
+| Package                   | Description                                                           | Status         |
+| ------------------------- | --------------------------------------------------------------------- | -------------- |
+| `@deltecho/sys6-triality` | Sys6 Operadic Architecture: 30-step cycle with prime-power delegation | ✅ Complete    |
+| `@deltecho/cognitive`     | Unified cognitive interface integrating core + dove9 + reasoning      | ✅ Building    |
+| `@deltecho/reasoning`     | AGI kernel with AtomSpace, PLN, MOSES, OpenPsi                        | ✅ Building    |
+| `@deltecho/shared`        | Shared types, utilities, constants for all packages                   | ✅ Building    |
+| `@deltecho/ui-components` | React components for Deep Tree Echo bot and AI Companion Hub          | ⚠️ In Progress |
 
 ### Applications
 
-| Application | Description | Status |
-|-------------|-------------|--------|
-| `delta-echo-desk` | Delta Chat Desktop with AI Companion Hub | ✅ Building |
-| `deltecho2` | Delta Chat Desktop with Inferno Kernel integration | ✅ Building |
-| `dovecot-core` | Dovecot mail server for email transport | ✅ Available |
+| Application       | Description                                        | Status       |
+| ----------------- | -------------------------------------------------- | ------------ |
+| `delta-echo-desk` | Delta Chat Desktop with AI Companion Hub           | ✅ Building  |
+| `deltecho2`       | Delta Chat Desktop with Inferno Kernel integration | ✅ Building  |
+| `dovecot-core`    | Dovecot mail server for email transport            | ✅ Available |
 
 ---
 
@@ -193,32 +193,38 @@ deep-tree-echo-core (independent)
 ### deep-tree-echo-core
 
 ```typescript
-import { LLMService, EnhancedLLMService } from 'deep-tree-echo-core/cognitive';
-import { RAGMemoryStore, HyperDimensionalMemory } from 'deep-tree-echo-core/memory';
-import { PersonaCore } from 'deep-tree-echo-core/personality';
-import { SecureIntegration } from 'deep-tree-echo-core/security';
+import { LLMService, EnhancedLLMService } from "deep-tree-echo-core/cognitive";
+import {
+  RAGMemoryStore,
+  HyperDimensionalMemory,
+} from "deep-tree-echo-core/memory";
+import { PersonaCore } from "deep-tree-echo-core/personality";
+import { SecureIntegration } from "deep-tree-echo-core/security";
 ```
 
 ### dove9
 
 ```typescript
-import { Dove9System, TriadicEngine } from 'dove9';
-import { MessageProcess, CognitiveContext } from 'dove9/types';
+import { Dove9System, TriadicEngine } from "dove9";
+import { MessageProcess, CognitiveContext } from "dove9/types";
 ```
 
 ### @deltecho/cognitive
 
 ```typescript
-import { CognitiveOrchestrator } from '@deltecho/cognitive';
-import { UnifiedMessage, UnifiedCognitiveState } from '@deltecho/cognitive/types';
+import { CognitiveOrchestrator } from "@deltecho/cognitive";
+import {
+  UnifiedMessage,
+  UnifiedCognitiveState,
+} from "@deltecho/cognitive/types";
 ```
 
 ### @deltecho/reasoning
 
 ```typescript
-import { InfernoKernel } from '@deltecho/reasoning';
-import { AtomSpace, PatternMatcher } from '@deltecho/reasoning/atomspace';
-import { PLNEngine } from '@deltecho/reasoning/reasoning';
+import { InfernoKernel } from "@deltecho/reasoning";
+import { AtomSpace, PatternMatcher } from "@deltecho/reasoning/atomspace";
+import { PLNEngine } from "@deltecho/reasoning/reasoning";
 ```
 
 ---
@@ -262,11 +268,11 @@ pnpm run build:all
 
 ### Target Platforms
 
-| Platform | Technology | Project Folder |
-|----------|------------|----------------|
-| **Electron** | Electron.js | `packages/target-electron` |
-| **Tauri** | Rust + WebView | `packages/target-tauri` |
-| **Browser** | Web | `packages/target-browser` |
+| Platform     | Technology     | Project Folder             |
+| ------------ | -------------- | -------------------------- |
+| **Electron** | Electron.js    | `packages/target-electron` |
+| **Tauri**    | Rust + WebView | `packages/target-tauri`    |
+| **Browser**  | Web            | `packages/target-browser`  |
 
 ### Links
 
@@ -385,15 +391,15 @@ scripts/ndk-make.sh
 
 **Build Status:**
 
-| Package | Status |
-|---------|--------|
-| @deltecho/shared | ✅ Built |
-| deep-tree-echo-core | ✅ Built |
-| dove9 | ✅ Built |
-| @deltecho/cognitive | ✅ Built |
-| @deltecho/reasoning | ✅ Built |
+| Package                     | Status   |
+| --------------------------- | -------- |
+| @deltecho/shared            | ✅ Built |
+| deep-tree-echo-core         | ✅ Built |
+| dove9                       | ✅ Built |
+| @deltecho/cognitive         | ✅ Built |
+| @deltecho/reasoning         | ✅ Built |
 | deep-tree-echo-orchestrator | ✅ Built |
-| @deltecho/ui-components | ✅ Built |
+| @deltecho/ui-components     | ✅ Built |
 
 **Previous Repairs (December 23, 2025):**
 
@@ -447,17 +453,17 @@ Update target packages (`target-electron`, `target-tauri`, `target-browser`) to 
 
 ## Source Repository Links
 
-| Repository | URL | Primary Use |
-|------------|-----|-------------|
-| o9nn/deltecho | <https://github.com/o9nn/deltecho> | 🌟 Main reference - Unified ecosystem |
-| o9nn/delta-echo-desk | <https://github.com/o9nn/delta-echo-desk> | Desktop with AI Hub |
-| o9nn/deltecho2 | <https://github.com/o9nn/deltecho2> | Desktop with Inferno Kernel |
-| o9nn/deltachat-core | <https://github.com/o9nn/deltachat-core> | ⚠️ Deprecated C-Library |
-| EchoCog/deltachat-core | <https://github.com/EchoCog/deltachat-core> | ⚠️ Deprecated C-Library fork |
-| EchoCog/deltachat-android | <https://github.com/EchoCog/deltachat-android> | Android build reference |
-| EchoCog/deltachat-desktop | <https://github.com/EchoCog/deltachat-desktop> | Desktop fork reference |
-| deltachat/deltachat-core-rust | <https://github.com/deltachat/deltachat-core-rust> | ✅ Current core library |
+| Repository                    | URL                                                | Primary Use                           |
+| ----------------------------- | -------------------------------------------------- | ------------------------------------- |
+| o9nn/deltecho                 | <https://github.com/o9nn/deltecho>                 | 🌟 Main reference - Unified ecosystem |
+| o9nn/delta-echo-desk          | <https://github.com/o9nn/delta-echo-desk>          | Desktop with AI Hub                   |
+| o9nn/deltecho2                | <https://github.com/o9nn/deltecho2>                | Desktop with Inferno Kernel           |
+| o9nn/deltachat-core           | <https://github.com/o9nn/deltachat-core>           | ⚠️ Deprecated C-Library               |
+| EchoCog/deltachat-core        | <https://github.com/EchoCog/deltachat-core>        | ⚠️ Deprecated C-Library fork          |
+| EchoCog/deltachat-android     | <https://github.com/EchoCog/deltachat-android>     | Android build reference               |
+| EchoCog/deltachat-desktop     | <https://github.com/EchoCog/deltachat-desktop>     | Desktop fork reference                |
+| deltachat/deltachat-core-rust | <https://github.com/deltachat/deltachat-core-rust> | ✅ Current core library               |
 
 ---
 
-*This document consolidates useful fragments from the deltecho ecosystem repositories for integration into deltecho-chat.*
+_This document consolidates useful fragments from the deltecho ecosystem repositories for integration into deltecho-chat._

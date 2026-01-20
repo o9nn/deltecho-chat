@@ -1,16 +1,16 @@
-import { defineConfig, devices } from '@playwright/test'
+import { defineConfig, devices } from "@playwright/test";
 
-const port = process.env.PORT ?? 3000
+const port = process.env.PORT ?? 3000;
 
 // Use HTTP in CI environment to avoid SSL certificate issues
-const protocol = process.env.CI ? 'http' : 'https'
-const baseURL = `${protocol}://localhost:${port}`
+const protocol = process.env.CI ? "http" : "https";
+const baseURL = `${protocol}://localhost:${port}`;
 
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  testDir: './tests',
+  testDir: "./tests",
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -20,7 +20,7 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: [['list'], ['html']],
+  reporter: [["list"], ["html"]],
   // timeout: 30 * 60 * 1000,
   expect: {
     // Our tests involve network interaction, so we want a higher timeout
@@ -33,22 +33,22 @@ export default defineConfig({
     baseURL: baseURL,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
-    video: 'retain-on-failure',
-    screenshot: 'only-on-failure',
-    permissions: ['notifications'],
+    trace: "on-first-retry",
+    video: "retain-on-failure",
+    screenshot: "only-on-failure",
+    permissions: ["notifications"],
     ignoreHTTPSErrors: true,
     launchOptions: {
-      args: ['--ignore-certificate-errors'],
+      args: ["--ignore-certificate-errors"],
     },
   },
 
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'Chrome',
+      name: "Chrome",
       use: {
-        ...devices['Desktop Chrome'],
+        ...devices["Desktop Chrome"],
       },
     },
     // {
@@ -89,19 +89,19 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: {
     command: `node ${
-      process.env.CI ? '--env-file /dev/null' : '--env-file .env'
+      process.env.CI ? "--env-file /dev/null" : "--env-file .env"
     } ../target-browser/dist/server.js`,
     env: {
       ...process.env,
-      NODE_TLS_REJECT_UNAUTHORIZED: '0',
-      HTTPS_ENABLED: process.env.CI ? 'false' : 'true',
-      NODE_ENV: process.env.CI ? 'test' : process.env.NODE_ENV || 'development',
+      NODE_TLS_REJECT_UNAUTHORIZED: "0",
+      HTTPS_ENABLED: process.env.CI ? "false" : "true",
+      NODE_ENV: process.env.CI ? "test" : process.env.NODE_ENV || "development",
     },
     url: baseURL,
     timeout: 120 * 1000,
     ignoreHTTPSErrors: true,
     reuseExistingServer: !process.env.CI,
-    stdout: 'pipe',
-    stderr: 'pipe',
+    stdout: "pipe",
+    stderr: "pipe",
   },
-})
+});

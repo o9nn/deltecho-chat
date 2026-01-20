@@ -1,4 +1,4 @@
-@use '../mixins';
+@use "../mixins";
 
 .contact-list-item {
   display: flex;
@@ -23,7 +23,7 @@
     flex-grow: 1;
 
     &:disabled,
-    &[aria-disabled='true'] {
+    &[aria-disabled="true"] {
       cursor: default;
     }
   }

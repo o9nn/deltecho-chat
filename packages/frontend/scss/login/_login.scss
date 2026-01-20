@@ -1,5 +1,5 @@
 .login-form {
-  button[type='submit'] {
+  button[type="submit"] {
     margin-right: 1rem;
   }
 
@@ -138,9 +138,9 @@ div.delta-form-group {
         pointer-events: none;
         top: 13px;
         right: 7px;
-        content: '^';
+        content: "^";
         font:
-          17px 'Consolas',
+          17px "Consolas",
           monospace;
         transform: rotate(180deg);
         -moz-osx-font-smoothing: grayscale;

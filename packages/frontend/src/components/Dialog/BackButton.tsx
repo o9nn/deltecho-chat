@@ -1,24 +1,24 @@
-import React from 'react'
+import React from "react";
 
-import HeaderButton from './HeaderButton'
+import HeaderButton from "./HeaderButton";
 
-import type { ButtonHTMLAttributes } from 'react'
+import type { ButtonHTMLAttributes } from "react";
 
-import styles from './styles.module.scss'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
+import styles from "./styles.module.scss";
+import useTranslationFunction from "../../hooks/useTranslationFunction";
 
 export default function BackButton(
-  props: ButtonHTMLAttributes<HTMLButtonElement>
+  props: ButtonHTMLAttributes<HTMLButtonElement>,
 ) {
-  const tx = useTranslationFunction()
+  const tx = useTranslationFunction();
 
   return (
     <HeaderButton
-      aria-label={tx('back')}
-      icon='arrow-left'
+      aria-label={tx("back")}
+      icon="arrow-left"
       iconSize={24}
       className={styles.backButton}
       {...props}
     />
-  )
+  );
 }

@@ -1,12 +1,12 @@
-import React from 'react'
-import classNames from 'classnames'
+import React from "react";
+import classNames from "classnames";
 
-import styles from './style.module.scss'
+import styles from "./style.module.scss";
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  active?: boolean
-  styling?: 'primary' | 'secondary' | 'danger'
-}
+  active?: boolean;
+  styling?: "primary" | "secondary" | "danger";
+};
 
 export default function Button({
   children,
@@ -21,11 +21,11 @@ export default function Button({
         styles.button,
         active && styles.active,
         styling && styles[styling],
-        className
+        className,
       )}
       {...props}
     >
       {children}
     </button>
-  )
+  );
 }

@@ -1,16 +1,16 @@
-import React from 'react'
+import React from "react";
 
-import type { PropsWithChildren } from 'react'
+import type { PropsWithChildren } from "react";
 
-import styles from './styles.module.scss'
+import styles from "./styles.module.scss";
 
 type Props = PropsWithChildren<{
-  onClick: () => void
-  currentValue?: string
-}>
+  onClick: () => void;
+  currentValue?: string;
+}>;
 
 export default function SettingsSelector(props: Props) {
-  const { onClick, currentValue, children } = props
+  const { onClick, currentValue, children } = props;
 
   return (
     // TODO a11y: this component implements `<select>` functionality,
@@ -21,5 +21,5 @@ export default function SettingsSelector(props: Props) {
         <div className={styles.settingsSelectorValue}>{currentValue}</div>
       )}
     </button>
-  )
+  );
 }

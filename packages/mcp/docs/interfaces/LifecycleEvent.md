@@ -24,7 +24,7 @@ Lifecycle event
 
 [src/integration/lifecycle.ts:54](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/integration/lifecycle.ts#L54)
 
-___
+---
 
 ### phase
 
@@ -34,7 +34,7 @@ ___
 
 [src/integration/lifecycle.ts:55](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/integration/lifecycle.ts#L55)
 
-___
+---
 
 ### timestamp
 
@@ -44,7 +44,7 @@ ___
 
 [src/integration/lifecycle.ts:56](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/integration/lifecycle.ts#L56)
 
-___
+---
 
 ### result
 
@@ -54,7 +54,7 @@ ___
 
 [src/integration/lifecycle.ts:57](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/integration/lifecycle.ts#L57)
 
-___
+---
 
 ### error
 

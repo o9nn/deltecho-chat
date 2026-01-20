@@ -32,15 +32,16 @@ The "hands" of Deep Tree Echo - executes actions in the environment.
 
 **Tools Available:**
 
-| Category | Tools | Description |
-|----------|-------|-------------|
-| **Chat Management** (Ao) | `list_chats`, `open_chat`, `send_message`, `get_chat_history`, `create_chat`, `search_contacts` | Manage chats like a user would |
-| **UI Navigation** (Ai) | `navigate_ui`, `focus_composer`, `open_dialog` | Navigate the application UI |
-| **Self-Reflection** (S) | `reflect`, `get_cognitive_status`, `get_memory_summary` | Introspection tools |
-| **Scheduling** (Vo) | `schedule_message`, `get_current_time` | Time-aware operations |
-| **Command Execution** | `execute_command` | Safe shell commands (Electron only) |
+| Category                 | Tools                                                                                           | Description                         |
+| ------------------------ | ----------------------------------------------------------------------------------------------- | ----------------------------------- |
+| **Chat Management** (Ao) | `list_chats`, `open_chat`, `send_message`, `get_chat_history`, `create_chat`, `search_contacts` | Manage chats like a user would      |
+| **UI Navigation** (Ai)   | `navigate_ui`, `focus_composer`, `open_dialog`                                                  | Navigate the application UI         |
+| **Self-Reflection** (S)  | `reflect`, `get_cognitive_status`, `get_memory_summary`                                         | Introspection tools                 |
+| **Scheduling** (Vo)      | `schedule_message`, `get_current_time`                                                          | Time-aware operations               |
+| **Command Execution**    | `execute_command`                                                                               | Safe shell commands (Electron only) |
 
 **Key Features:**
+
 - Max recursion depth: 5 (prevents infinite loops)
 - Safe command execution with whitelist patterns
 - Full AAR architecture integration
@@ -50,6 +51,7 @@ The "hands" of Deep Tree Echo - executes actions in the environment.
 The agentic brain - handles LLM calls with tool use.
 
 **Supported Providers:**
+
 - Anthropic Claude (with native tool_use)
 - OpenAI GPT-4 (with function calling)
 - OpenRouter
@@ -74,28 +76,28 @@ Enable agentic mode in DeepTreeEchoBotOptions:
 const bot = new DeepTreeEchoBot({
   enabled: true,
   memoryEnabled: true,
-  
+
   // NEW: Enable agentic mode
   useAgenticMode: true,
-  agenticProvider: 'anthropic', // or 'openai', 'openrouter', 'local'
-  
+  agenticProvider: "anthropic", // or 'openai', 'openrouter', 'local'
+
   apiKey: process.env.ANTHROPIC_KEY,
-  apiEndpoint: 'https://api.anthropic.com/v1/messages',
-})
+  apiEndpoint: "https://api.anthropic.com/v1/messages",
+});
 ```
 
 ## Comparison with deltecho-bot-smol.js
 
-| Feature | deltecho-bot-smol.js | DeepTreeEchoBot |
-|---------|---------------------|-----------------|
-| Environment | Standalone Node.js | Electron/Browser |
-| LLM | Anthropic Claude | Multi-provider |
-| Tools | bash only | 15+ tools |
-| Memory | Per-chat Map | RAGMemoryStore + per-chat |
-| Recursion Limit | 5 | 5 |
-| Tool Schema | Anthropic native | Anthropic-compatible |
-| Avatar | None | Full Live2D/Sprite |
-| Cognitive | None | Full cognitive stack |
+| Feature         | deltecho-bot-smol.js | DeepTreeEchoBot           |
+| --------------- | -------------------- | ------------------------- |
+| Environment     | Standalone Node.js   | Electron/Browser          |
+| LLM             | Anthropic Claude     | Multi-provider            |
+| Tools           | bash only            | 15+ tools                 |
+| Memory          | Per-chat Map         | RAGMemoryStore + per-chat |
+| Recursion Limit | 5                    | 5                         |
+| Tool Schema     | Anthropic native     | Anthropic-compatible      |
+| Avatar          | None                 | Full Live2D/Sprite        |
+| Cognitive       | None                 | Full cognitive stack      |
 
 ## Usage Examples
 
@@ -104,6 +106,7 @@ const bot = new DeepTreeEchoBot({
 When agentic mode is enabled, the bot can autonomously:
 
 1. **List and open chats:**
+
    ```
    User: "Show me my unread messages"
    Bot: [uses list_chats with filter=unread]
@@ -111,6 +114,7 @@ When agentic mode is enabled, the bot can autonomously:
    ```
 
 2. **Navigate UI:**
+
    ```
    User: "Open the settings"
    Bot: [uses navigate_ui with view=settings]
@@ -118,6 +122,7 @@ When agentic mode is enabled, the bot can autonomously:
    ```
 
 3. **Reflect on itself:**
+
    ```
    User: "How are you feeling today?"
    Bot: [uses reflect with aspect=emotions]
@@ -134,29 +139,26 @@ When agentic mode is enabled, the bot can autonomously:
 ### Programmatic Access
 
 ```typescript
-import { 
-  getAgenticLLMService,
-  getAgentToolExecutor 
-} from './DeepTreeEchoBot'
+import { getAgenticLLMService, getAgentToolExecutor } from "./DeepTreeEchoBot";
 
 // Configure the agentic service
-const agenticService = getAgenticLLMService()
+const agenticService = getAgenticLLMService();
 agenticService.configure({
-  provider: 'anthropic',
-  apiKey: 'your-api-key'
-})
+  provider: "anthropic",
+  apiKey: "your-api-key",
+});
 
 // Generate an agentic response
 const result = await agenticService.generateAgenticResponse(
   chatId,
   "List all my chats",
   accountId,
-  0 // initial recursion depth
-)
+  0, // initial recursion depth
+);
 
-console.log('Response:', result.response)
-console.log('Tools Used:', result.toolsUsed)
-console.log('Recursion Depth:', result.recursionDepth)
+console.log("Response:", result.response);
+console.log("Tools Used:", result.toolsUsed);
+console.log("Recursion Depth:", result.recursionDepth);
 ```
 
 ## Exports
@@ -168,7 +170,7 @@ export {
   getAgenticLLMService,
   AgentToolExecutor,
   getAgentToolExecutor,
-}
+};
 
 export type {
   AgenticResponse,
@@ -176,7 +178,7 @@ export type {
   AgentTool,
   ToolResult,
   ToolCall,
-}
+};
 ```
 
 ## Safety Considerations
@@ -196,4 +198,4 @@ export type {
 
 ---
 
-*Part of the Deep Tree Echo Autonomous AI Architecture*
+_Part of the Deep Tree Echo Autonomous AI Architecture_

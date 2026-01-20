@@ -1,20 +1,20 @@
-import React from 'react'
+import React from "react";
 
-import Icon from '../Icon'
+import Icon from "../Icon";
 
-import styles from './styles.module.scss'
+import styles from "./styles.module.scss";
 
-import type { IconName } from '../Icon'
-import classNames from 'classnames'
+import type { IconName } from "../Icon";
+import classNames from "classnames";
 
 type Props = {
-  'aria-label'?: string
-  icon: IconName
-  onClick: () => void
-  size?: number
-  className?: string
-  dataTestid?: string
-}
+  "aria-label"?: string;
+  icon: IconName;
+  onClick: () => void;
+  size?: number;
+  className?: string;
+  dataTestid?: string;
+};
 
 export default function SearchInputButton({
   icon,
@@ -25,13 +25,13 @@ export default function SearchInputButton({
 }: Props) {
   return (
     <button
-      aria-label={props['aria-label']}
-      data-testid={props['dataTestid']}
+      aria-label={props["aria-label"]}
+      data-testid={props["dataTestid"]}
       className={classNames(styles.searchInputButton, className)}
       data-no-drag-region
       onClick={onClick}
     >
       <Icon className={styles.searchInputButtonIcon} icon={icon} size={size} />
     </button>
-  )
+  );
 }

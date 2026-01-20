@@ -7,4 +7,4 @@ export {
   createDesktopIntegration,
   type DesktopIntegrationConfig,
   type CognitiveResponse,
-} from './DesktopIntegration';
+} from "./DesktopIntegration";

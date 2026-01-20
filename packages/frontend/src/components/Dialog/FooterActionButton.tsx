@@ -1,10 +1,10 @@
-import React from 'react'
+import React from "react";
 
-import Button from '../Button'
+import Button from "../Button";
 
-import type { ButtonProps } from '../Button'
+import type { ButtonProps } from "../Button";
 
-import styles from './styles.module.scss'
+import styles from "./styles.module.scss";
 
 export default function FooterActionButton({
   children,
@@ -14,5 +14,5 @@ export default function FooterActionButton({
     <Button className={styles.footerActionButton} {...props}>
       {children}
     </Button>
-  )
+  );
 }

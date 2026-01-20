@@ -1,4 +1,4 @@
-@use '../mixins';
+@use "../mixins";
 
 input.group-name-input {
   background-color: transparent;
@@ -68,7 +68,7 @@ input.group-name-input {
     div {
       height: 20px;
       width: 20px;
-      @include mixins.color-svg('./images/icons/lead-pencil.svg', white);
+      @include mixins.color-svg("./images/icons/lead-pencil.svg", white);
     }
   }
 }

@@ -38,6 +38,7 @@ sudo ldconfig
 - libsasl2
 
 Install on Debian/Ubuntu:
+
 ```bash
 sudo apt install libetpan-dev libssl-dev libsqlite3-dev libsasl2-dev libbz2-dev zlib1g-dev
 ```
@@ -65,6 +66,7 @@ pytest tests/
 ```
 
 Or using tox:
+
 ```bash
 cd python
 tox
@@ -73,6 +75,7 @@ tox
 ### C Command-line Testing
 
 After building:
+
 ```bash
 ./builddir/cmdline/delta <database-file>
 # Type 'help' for available commands
@@ -92,6 +95,7 @@ CI runs via CircleCI using Docker containers:
 - `deltachat/doxygen` - Documentation generation
 
 Run CI locally:
+
 ```bash
 docker pull deltachat/coredeps
 DOCS=1 TESTS=1 ci_scripts/ci_run.sh

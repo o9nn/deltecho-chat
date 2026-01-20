@@ -1,17 +1,17 @@
-import { getLogger } from 'deep-tree-echo-core';
-import { EventEmitter } from 'events';
+import { getLogger } from "deep-tree-echo-core";
+import { EventEmitter } from "events";
 
-const log = getLogger('deep-tree-echo-orchestrator/TaskScheduler');
+const log = getLogger("deep-tree-echo-orchestrator/TaskScheduler");
 
 /**
  * Task status
  */
 export enum TaskStatus {
-  PENDING = 'pending',
-  RUNNING = 'running',
-  COMPLETED = 'completed',
-  FAILED = 'failed',
-  CANCELLED = 'cancelled',
+  PENDING = "pending",
+  RUNNING = "running",
+  COMPLETED = "completed",
+  FAILED = "failed",
+  CANCELLED = "cancelled",
 }
 
 /**
@@ -68,8 +68,11 @@ const DEFAULT_CONFIG: TaskSchedulerConfig = {
  * Parse cron expression and get next run time
  * Supports: second minute hour day-of-month month day-of-week
  */
-function parseCronExpression(expression: string, fromDate: Date = new Date()): Date | null {
-  const parts = expression.split(' ');
+function parseCronExpression(
+  expression: string,
+  fromDate: Date = new Date(),
+): Date | null {
+  const parts = expression.split(" ");
   if (parts.length !== 6) {
     log.warn(`Invalid cron expression: ${expression}`);
     return null;
@@ -106,23 +109,23 @@ function parseCronExpression(expression: string, fromDate: Date = new Date()): D
  * Check if a value matches a cron field
  */
 function matchesCronField(value: number, field: string): boolean {
-  if (field === '*') return true;
+  if (field === "*") return true;
 
   // Handle step values (*/n)
-  if (field.startsWith('*/')) {
+  if (field.startsWith("*/")) {
     const step = parseInt(field.slice(2), 10);
     return value % step === 0;
   }
 
   // Handle ranges (n-m)
-  if (field.includes('-')) {
-    const [start, end] = field.split('-').map((n) => parseInt(n, 10));
+  if (field.includes("-")) {
+    const [start, end] = field.split("-").map((n) => parseInt(n, 10));
     return value >= start && value <= end;
   }
 
   // Handle lists (n,m,o)
-  if (field.includes(',')) {
-    const values = field.split(',').map((n) => parseInt(n, 10));
+  if (field.includes(",")) {
+    const values = field.split(",").map((n) => parseInt(n, 10));
     return values.includes(value);
   }
 
@@ -153,11 +156,11 @@ export class TaskScheduler extends EventEmitter {
    */
   public async start(): Promise<void> {
     if (this.running) {
-      log.warn('Task scheduler is already running');
+      log.warn("Task scheduler is already running");
       return;
     }
 
-    log.info('Starting task scheduler...');
+    log.info("Starting task scheduler...");
 
     // Start the check loop
     this.checkTimer = setInterval(() => {
@@ -165,8 +168,8 @@ export class TaskScheduler extends EventEmitter {
     }, this.config.checkInterval);
 
     this.running = true;
-    log.info('Task scheduler started');
-    this.emit('started');
+    log.info("Task scheduler started");
+    this.emit("started");
   }
 
   /**
@@ -206,7 +209,9 @@ export class TaskScheduler extends EventEmitter {
       const timeout = task.timeout || this.config.defaultTimeout!;
       await Promise.race([
         task.handler(),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('Task timeout')), timeout)),
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error("Task timeout")), timeout),
+        ),
       ]);
 
       success = true;
@@ -235,7 +240,7 @@ export class TaskScheduler extends EventEmitter {
         error,
       };
 
-      this.emit('task_completed', result);
+      this.emit("task_completed", result);
     }
   }
 
@@ -258,7 +263,7 @@ export class TaskScheduler extends EventEmitter {
     name: string,
     cronExpression: string,
     handler: () => Promise<void>,
-    options: Partial<ScheduledTask> = {}
+    options: Partial<ScheduledTask> = {},
   ): string {
     const taskId = `task_${++this.taskIdCounter}_${Date.now()}`;
 
@@ -279,9 +284,11 @@ export class TaskScheduler extends EventEmitter {
     task.nextRun = nextRun ? nextRun.getTime() : undefined;
 
     this.tasks.set(taskId, task);
-    log.info(`Scheduled task: ${name} (${cronExpression}) - next run: ${nextRun?.toISOString()}`);
+    log.info(
+      `Scheduled task: ${name} (${cronExpression}) - next run: ${nextRun?.toISOString()}`,
+    );
 
-    this.emit('task_scheduled', { taskId, name, cronExpression });
+    this.emit("task_scheduled", { taskId, name, cronExpression });
     return taskId;
   }
 
@@ -292,7 +299,7 @@ export class TaskScheduler extends EventEmitter {
     name: string,
     intervalMs: number,
     handler: () => Promise<void>,
-    options: Partial<ScheduledTask> = {}
+    options: Partial<ScheduledTask> = {},
   ): string {
     const taskId = `task_${++this.taskIdCounter}_${Date.now()}`;
 
@@ -312,14 +319,18 @@ export class TaskScheduler extends EventEmitter {
     this.tasks.set(taskId, task);
     log.info(`Scheduled interval task: ${name} (every ${intervalMs}ms)`);
 
-    this.emit('task_scheduled', { taskId, name, interval: intervalMs });
+    this.emit("task_scheduled", { taskId, name, interval: intervalMs });
     return taskId;
   }
 
   /**
    * Schedule a one-time task
    */
-  public scheduleOnce(name: string, delayMs: number, handler: () => Promise<void>): string {
+  public scheduleOnce(
+    name: string,
+    delayMs: number,
+    handler: () => Promise<void>,
+  ): string {
     const taskId = `task_${++this.taskIdCounter}_${Date.now()}`;
 
     const task: ScheduledTask = {
@@ -361,7 +372,7 @@ export class TaskScheduler extends EventEmitter {
     }
 
     log.info(`Cancelled task: ${task.name} (${taskId})`);
-    this.emit('task_cancelled', { taskId, name: task.name });
+    this.emit("task_cancelled", { taskId, name: task.name });
     return true;
   }
 
@@ -402,11 +413,11 @@ export class TaskScheduler extends EventEmitter {
     return new Promise((resolve) => {
       const handler = (result: TaskResult) => {
         if (result.taskId === taskId) {
-          this.off('task_completed', handler);
+          this.off("task_completed", handler);
           resolve(result);
         }
       };
-      this.on('task_completed', handler);
+      this.on("task_completed", handler);
       this.executeTask(taskId);
     });
   }
@@ -440,7 +451,7 @@ export class TaskScheduler extends EventEmitter {
   public async stop(): Promise<void> {
     if (!this.running) return;
 
-    log.info('Stopping task scheduler...');
+    log.info("Stopping task scheduler...");
 
     // Clear check timer
     if (this.checkTimer) {
@@ -456,13 +467,15 @@ export class TaskScheduler extends EventEmitter {
 
     // Wait for running tasks to complete (with timeout)
     if (this.runningTasks.size > 0) {
-      log.info(`Waiting for ${this.runningTasks.size} running tasks to complete...`);
+      log.info(
+        `Waiting for ${this.runningTasks.size} running tasks to complete...`,
+      );
       await new Promise((resolve) => setTimeout(resolve, 5000));
     }
 
     this.running = false;
-    log.info('Task scheduler stopped');
-    this.emit('stopped');
+    log.info("Task scheduler stopped");
+    this.emit("stopped");
   }
 
   /**
@@ -489,7 +502,8 @@ export class TaskScheduler extends EventEmitter {
       totalTasks: tasks.length,
       runningTasks: this.runningTasks.size,
       pendingTasks: tasks.filter((t) => t.status === TaskStatus.PENDING).length,
-      completedTasks: tasks.filter((t) => t.status === TaskStatus.COMPLETED).length,
+      completedTasks: tasks.filter((t) => t.status === TaskStatus.COMPLETED)
+        .length,
       failedTasks: tasks.filter((t) => t.status === TaskStatus.FAILED).length,
     };
   }

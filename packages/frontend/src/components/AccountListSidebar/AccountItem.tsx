@@ -1,40 +1,43 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import classNames from 'classnames'
-import debounce from 'debounce'
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import classNames from "classnames";
+import debounce from "debounce";
 
 import {
   BackendRemote,
   onDCEvent,
   EffectfulBackendActions,
-} from '../../backend-com'
-import { runtime } from '@deltachat-desktop/runtime-interface'
-import { avatarInitial } from '../Avatar'
-import { getLogger } from '../../../../shared/logger'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import { useContextMenuWithActiveState } from '../ContextMenu'
-import { ActionEmitter, KeybindAction } from '../../keybindings'
-import AccountNotificationStoreInstance from '../../stores/accountNotifications'
-import Icon from '../Icon'
+} from "../../backend-com";
+import { runtime } from "@deltachat-desktop/runtime-interface";
+import { avatarInitial } from "../Avatar";
+import { getLogger } from "../../../../shared/logger";
+import useTranslationFunction from "../../hooks/useTranslationFunction";
+import { useContextMenuWithActiveState } from "../ContextMenu";
+import { ActionEmitter, KeybindAction } from "../../keybindings";
+import AccountNotificationStoreInstance from "../../stores/accountNotifications";
+import Icon from "../Icon";
 
-import styles from './styles.module.scss'
+import styles from "./styles.module.scss";
 
-import { C, type T } from '@deltachat/jsonrpc-client'
-import { openMapWebxdc } from '../../system-integration/webxdc'
-import useDialog from '../../hooks/dialog/useDialog'
-import { EditPrivateTagDialog } from './EditPrivateTagDialog'
-import { useRovingTabindex } from '../../contexts/RovingTabindex'
+import { C, type T } from "@deltachat/jsonrpc-client";
+import { openMapWebxdc } from "../../system-integration/webxdc";
+import useDialog from "../../hooks/dialog/useDialog";
+import { EditPrivateTagDialog } from "./EditPrivateTagDialog";
+import { useRovingTabindex } from "../../contexts/RovingTabindex";
 
 type Props = {
-  accountId: number
-  isSelected: boolean
-  onSelectAccount: (accountId: number) => Promise<void>
-  openAccountDeletionScreen: (accountId: number) => Promise<void>
-  updateAccountForHoverInfo: (actingAccount: T.Account, select: boolean) => void
-  syncAllAccounts: boolean
-  muted: boolean
-}
+  accountId: number;
+  isSelected: boolean;
+  onSelectAccount: (accountId: number) => Promise<void>;
+  openAccountDeletionScreen: (accountId: number) => Promise<void>;
+  updateAccountForHoverInfo: (
+    actingAccount: T.Account,
+    select: boolean,
+  ) => void;
+  syncAllAccounts: boolean;
+  muted: boolean;
+};
 
-const log = getLogger('AccountsSidebar/AccountItem')
+const log = getLogger("AccountsSidebar/AccountItem");
 
 export default function AccountItem({
   accountId,
@@ -45,30 +48,30 @@ export default function AccountItem({
   syncAllAccounts,
   muted,
 }: Props) {
-  const tx = useTranslationFunction()
-  const [unreadCount, setUnreadCount] = useState<number>(0)
-  const [account, setAccount] = useState<T.Account | null>(null)
-  const { openDialog } = useDialog()
+  const tx = useTranslationFunction();
+  const [unreadCount, setUnreadCount] = useState<number>(0);
+  const [account, setAccount] = useState<T.Account | null>(null);
+  const { openDialog } = useDialog();
 
   useEffect(() => {
     const updateAccount = debounce(() => {
       BackendRemote.rpc
         .getAccountInfo(accountId)
         .then(setAccount)
-        .catch(log.error)
-    }, 200)
+        .catch(log.error);
+    }, 200);
     const updateUnread = debounce(() => {
       BackendRemote.rpc
         .getFreshMsgs(accountId)
-        .then(u => setUnreadCount(u?.length || 0))
-        .catch(log.error)
-    }, 200)
+        .then((u) => setUnreadCount(u?.length || 0))
+        .catch(log.error);
+    }, 200);
 
-    updateAccount()
-    updateUnread()
+    updateAccount();
+    updateUnread();
 
     const cleanup = [
-      onDCEvent(accountId, 'AccountsItemChanged', updateAccount),
+      onDCEvent(accountId, "AccountsItemChanged", updateAccount),
 
       // FYI we have 3 places where we watch the number of unread messages:
       // - App's badge counter
@@ -76,105 +79,105 @@ export default function AccountItem({
       // - useUnreadCount
       // Make sure to update all the places if you update one of them.
 
-      onDCEvent(accountId, 'IncomingMsg', updateUnread),
+      onDCEvent(accountId, "IncomingMsg", updateUnread),
       // IncomingMsg doesn't listen for added device messages,
       // so we also listen to `ChatlistChanged` because it is a good indicator and not emitted too often
       // https://github.com/deltachat/deltachat-desktop/issues/4013
-      onDCEvent(accountId, 'ChatlistChanged', updateUnread),
+      onDCEvent(accountId, "ChatlistChanged", updateUnread),
 
-      onDCEvent(accountId, 'MsgsNoticed', updateUnread),
+      onDCEvent(accountId, "MsgsNoticed", updateUnread),
       // when muting or unmuting a chat
-      onDCEvent(accountId, 'ChatModified', updateUnread),
-    ]
+      onDCEvent(accountId, "ChatModified", updateUnread),
+    ];
 
-    return () => cleanup.forEach(off => off())
-  }, [accountId])
+    return () => cleanup.forEach((off) => off());
+  }, [accountId]);
 
-  const bgSyncDisabled = syncAllAccounts === false && !isSelected
+  const bgSyncDisabled = syncAllAccounts === false && !isSelected;
 
   const { onContextMenu, isContextMenuActive } = useContextMenuWithActiveState([
     muted
       ? {
-          label: tx('menu_unmute'),
+          label: tx("menu_unmute"),
           action: () => {
-            AccountNotificationStoreInstance.effect.setMuted(accountId, false)
+            AccountNotificationStoreInstance.effect.setMuted(accountId, false);
           },
         }
       : {
-          label: tx('menu_mute'),
+          label: tx("menu_mute"),
           action: () => {
-            AccountNotificationStoreInstance.effect.setMuted(accountId, true)
+            AccountNotificationStoreInstance.effect.setMuted(accountId, true);
           },
         },
     {
-      label: tx('mark_all_as_read'),
+      label: tx("mark_all_as_read"),
       action: () => {
-        markAccountAsRead(accountId)
+        markAccountAsRead(accountId);
       },
     },
     {
-      label: tx('menu_all_media'),
+      label: tx("menu_all_media"),
       action: async () => {
-        await onSelectAccount(accountId)
+        await onSelectAccount(accountId);
         // set Timeout forces it to be run after react update
         setTimeout(() => {
-          ActionEmitter.emitAction(KeybindAction.GlobalGallery_Open)
+          ActionEmitter.emitAction(KeybindAction.GlobalGallery_Open);
           // NOTE(maxph): Gallery.tsx gets unmounted before receiving media data
           // and only partially updates chat header without changing chat view to Gallery,
           // so here 50ms is a temprorary workaround for that
-        }, 50)
+        }, 50);
       },
     },
     {
-      label: tx('menu_show_global_map'),
+      label: tx("menu_show_global_map"),
       action: async () => {
-        await onSelectAccount(accountId)
-        openMapWebxdc(accountId)
+        await onSelectAccount(accountId);
+        openMapWebxdc(accountId);
       },
     },
-    { type: 'separator' },
+    { type: "separator" },
     {
-      label: tx('menu_settings'),
+      label: tx("menu_settings"),
       action: async () => {
-        await onSelectAccount(accountId)
+        await onSelectAccount(accountId);
         setTimeout(() => {
           // set Timeout forces it to be run after react update
           // without the small delay the app crashed randomly in the e2e tests
-          ActionEmitter.emitAction(KeybindAction.Settings_Open)
-        }, 100)
+          ActionEmitter.emitAction(KeybindAction.Settings_Open);
+        }, 100);
       },
-      dataTestid: 'open-settings-menu-item',
+      dataTestid: "open-settings-menu-item",
     },
     {
-      label: tx('profile_tag'),
+      label: tx("profile_tag"),
       action: async () => {
         openDialog(EditPrivateTagDialog, {
           accountId,
           currentTag: await BackendRemote.rpc.getConfig(
             accountId,
-            'private_tag'
+            "private_tag",
           ),
-        })
+        });
       },
     },
-    { type: 'separator' },
+    { type: "separator" },
     {
-      label: tx('delete_account'),
+      label: tx("delete_account"),
       action: openAccountDeletionScreen.bind(null, accountId),
-      dataTestid: 'delete-account-menu-item',
+      dataTestid: "delete-account-menu-item",
     },
-  ])
+  ]);
 
-  let badgeContent
+  let badgeContent;
   if (bgSyncDisabled) {
     badgeContent = (
       <div
         className={classNames(styles.accountBadgeIcon, styles.bgSyncDisabled)}
-        aria-label={tx('background_sync_disabled_explaination')}
+        aria-label={tx("background_sync_disabled_explaination")}
       >
         ⏻
       </div>
-    )
+    );
   } else if (unreadCount > 0) {
     badgeContent = (
       <div
@@ -185,29 +188,29 @@ export default function AccountItem({
         // it only applies to a single chat.
         // But it's good enough I guess.
         // Maybe we could also use `n_messages_in_m_chats` instead.
-        aria-label={tx('chat_n_new_messages', String(unreadCount), {
+        aria-label={tx("chat_n_new_messages", String(unreadCount), {
           quantity: unreadCount,
         })}
       >
         {unreadCount}
       </div>
-    )
+    );
   }
 
-  const isSticky = unreadCount > 0
+  const isSticky = unreadCount > 0;
 
-  const ref = useRef<HTMLButtonElement>(null)
+  const ref = useRef<HTMLButtonElement>(null);
   useLayoutEffect(() => {
     if (!isSelected) {
-      return
+      return;
     }
 
     if (ref.current == null) {
       log.warn(
-        'Could not scroll the selected account into view. Element:',
-        ref.current
-      )
-      return
+        "Could not scroll the selected account into view. Element:",
+        ref.current,
+      );
+      return;
     }
 
     ref.current.scrollIntoView({
@@ -216,11 +219,11 @@ export default function AccountItem({
       // notification,
       // so let's not smooth-scroll here as this is not a "state change"
       // that needs to be shown to the user.
-      behavior: 'instant',
+      behavior: "instant",
       // "nearest" so as to not scroll if it's already in view.
-      block: 'nearest',
-      inline: 'nearest',
-    })
+      block: "nearest",
+      inline: "nearest",
+    });
     // `window.__screen` because we display the "settings" button
     // based on that, and whether it is displayed or not determines the
     // scrollHeight of the accounts list, so we want to make sure
@@ -234,9 +237,9 @@ export default function AccountItem({
     // and it would get out of view, so we'd want to get it back in view.
     //
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSelected, isSticky, window.__screen])
+  }, [isSelected, isSticky, window.__screen]);
 
-  const rovingTabindex = useRovingTabindex(ref)
+  const rovingTabindex = useRovingTabindex(ref);
   // TODO `rovingTabindex.setAsActiveElement()` when the active account
   // gets switched, e.g. via clicking on a message notification
   // for a different account, and upon initial render.
@@ -245,15 +248,15 @@ export default function AccountItem({
     <button
       className={classNames(styles.account, rovingTabindex.className, {
         [styles.active]: isSelected,
-        [styles['context-menu-active']]: isContextMenuActive,
+        [styles["context-menu-active"]]: isContextMenuActive,
         [styles.isSticky]: isSticky,
-        'unconfigured-account': account?.kind !== 'Configured',
+        "unconfigured-account": account?.kind !== "Configured",
       })}
       // TODO consider adding `role='tabpanel'` for the main area of the app.
       // Although screen readers might start to announce
       // the account name every time you focus something in the main area,
       // which might be too verbose.
-      role='tab'
+      role="tab"
       aria-selected={isSelected}
       aria-busy={!account}
       onClick={() => onSelectAccount(accountId)}
@@ -271,9 +274,9 @@ export default function AccountItem({
         <div className={styles.avatar}>
           <div className={styles.content}>⏳</div>
         </div>
-      ) : account.kind == 'Configured' ? (
+      ) : account.kind == "Configured" ? (
         <div className={styles.avatar}>
-          {' '}
+          {" "}
           {account.profileImage ? (
             <img
               className={styles.content}
@@ -285,8 +288,8 @@ export default function AccountItem({
               style={{ backgroundColor: account.color }}
             >
               {avatarInitial(
-                account.displayName || '',
-                account.addr || undefined
+                account.displayName || "",
+                account.addr || undefined,
               )}
             </div>
           )}
@@ -298,35 +301,35 @@ export default function AccountItem({
       )}
       {muted && (
         <div
-          aria-label='Account notifications muted'
+          aria-label="Account notifications muted"
           className={styles.accountMutedIconShadow}
         >
-          <Icon className={styles.accountMutedIcon} icon='audio-muted' />
+          <Icon className={styles.accountMutedIcon} icon="audio-muted" />
         </div>
       )}
       <div className={classNames(styles.accountBadge)}>{badgeContent}</div>
     </button>
-  )
+  );
 }
 
 // Marks all chats with fresh messages as noticed
 async function markAccountAsRead(accountId: number) {
-  const msgs = await BackendRemote.rpc.getFreshMsgs(accountId)
-  const messages = await BackendRemote.rpc.getMessages(accountId, msgs)
+  const msgs = await BackendRemote.rpc.getFreshMsgs(accountId);
+  const messages = await BackendRemote.rpc.getMessages(accountId, msgs);
 
-  const uniqueChatIds = new Set<number>()
+  const uniqueChatIds = new Set<number>();
   for (const key in messages) {
     if (Object.prototype.hasOwnProperty.call(messages, key)) {
-      const message = messages[key]
-      if (message.kind === 'message') {
-        uniqueChatIds.add(message.chatId)
+      const message = messages[key];
+      if (message.kind === "message") {
+        uniqueChatIds.add(message.chatId);
       }
     }
   }
   // Add archived chats to also mark them as read
-  uniqueChatIds.add(C.DC_CHAT_ID_ARCHIVED_LINK)
+  uniqueChatIds.add(C.DC_CHAT_ID_ARCHIVED_LINK);
 
   for (const chatId of uniqueChatIds) {
-    await EffectfulBackendActions.marknoticedChat(accountId, chatId)
+    await EffectfulBackendActions.marknoticedChat(accountId, chatId);
   }
 }

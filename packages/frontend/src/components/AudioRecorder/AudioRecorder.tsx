@@ -1,21 +1,21 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import MicRecorder from './MicRecorder'
-import styles from './styles.module.scss'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import { runtime } from '@deltachat-desktop/runtime-interface'
-import useDialog from '../../hooks/dialog/useDialog'
-import AlertDialog from '../dialogs/AlertDialog'
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import MicRecorder from "./MicRecorder";
+import styles from "./styles.module.scss";
+import useTranslationFunction from "../../hooks/useTranslationFunction";
+import { runtime } from "@deltachat-desktop/runtime-interface";
+import useDialog from "../../hooks/dialog/useDialog";
+import AlertDialog from "../dialogs/AlertDialog";
 
 export enum AudioErrorType {
-  'NO_INPUT',
-  'OTHER_ERROR',
+  "NO_INPUT",
+  "OTHER_ERROR",
 }
 
 export class AudioRecorderError extends Error {
-  public errorType: AudioErrorType
+  public errorType: AudioErrorType;
   constructor(message: string, type = AudioErrorType.OTHER_ERROR) {
-    super(message)
-    this.errorType = type
+    super(message);
+    this.errorType = type;
   }
 }
 
@@ -23,27 +23,27 @@ export class AudioRecorderError extends Error {
  * shows a timer in format MM:SS
  */
 const Timer = () => {
-  const [recordingTime, setRecordingTime] = useState(0)
+  const [recordingTime, setRecordingTime] = useState(0);
   useEffect(() => {
     const timer = window.setInterval(() => {
-      setRecordingTime(prevTime => prevTime + 1)
-    }, 1000)
-    return () => window.clearInterval(timer)
-  }, [])
+      setRecordingTime((prevTime) => prevTime + 1);
+    }, 1000);
+    return () => window.clearInterval(timer);
+  }, []);
 
   const minutes = Math.floor(recordingTime / 60)
     .toString()
-    .padStart(2, '0')
-  const seconds = (recordingTime % 60).toString().padStart(2, '0')
+    .padStart(2, "0");
+  const seconds = (recordingTime % 60).toString().padStart(2, "0");
 
   return (
-    <div role='timer'>
+    <div role="timer">
       <p>
         {minutes}:{seconds}
       </p>
     </div>
-  )
-}
+  );
+};
 
 /**
  * Show a volume meter by stacking 3 div layers
@@ -52,15 +52,15 @@ const Timer = () => {
  * 3. a coloured background with a color gradient from green to red
  */
 const VolumeMeter = (prop: { volume: number }) => {
-  const steps = 10
-  const volumeBarRef = useRef<HTMLDivElement>(null)
-  const totalWidth = Number(volumeBarRef.current?.clientWidth) || 0
+  const steps = 10;
+  const volumeBarRef = useRef<HTMLDivElement>(null);
+  const totalWidth = Number(volumeBarRef.current?.clientWidth) || 0;
   // doubling the volume shows a more realistic volume level
-  const level = Math.min(totalWidth * prop.volume * 2, totalWidth)
-  const levelWidth = totalWidth > 0 ? `${totalWidth - level}px` : '100%'
+  const level = Math.min(totalWidth * prop.volume * 2, totalWidth);
+  const levelWidth = totalWidth > 0 ? `${totalWidth - level}px` : "100%";
   return (
     <div
-      role='meter'
+      role="meter"
       aria-valuemin={0}
       aria-valuemax={totalWidth}
       aria-valuenow={level}
@@ -76,8 +76,8 @@ const VolumeMeter = (prop: { volume: number }) => {
         <div className={styles.colorBackground} />
       </div>
     </div>
-  )
-}
+  );
+};
 
 export const AudioRecorder = ({
   recording,
@@ -85,124 +85,126 @@ export const AudioRecorder = ({
   saveVoiceAsDraft,
   onError,
 }: {
-  recording: boolean
-  setRecording: (f: boolean) => void
-  saveVoiceAsDraft: (blob: Blob) => void
-  onError: (error: AudioRecorderError) => void
+  recording: boolean;
+  setRecording: (f: boolean) => void;
+  saveVoiceAsDraft: (blob: Blob) => void;
+  onError: (error: AudioRecorderError) => void;
 }) => {
-  const tx = useTranslationFunction()
-  const [volume, setVolume] = useState(0)
-  const recorder = useRef<MicRecorder | null>(null)
-  const { openDialog } = useDialog()
+  const tx = useTranslationFunction();
+  const [volume, setVolume] = useState(0);
+  const recorder = useRef<MicRecorder | null>(null);
+  const { openDialog } = useDialog();
 
   const onAccessDenied = useCallback(() => {
     openDialog(AlertDialog, {
-      message: tx('perm_explain_access_to_mic_denied'),
-    })
-  }, [openDialog, tx])
+      message: tx("perm_explain_access_to_mic_denied"),
+    });
+  }, [openDialog, tx]);
 
   const onRecordingStart = async () => {
-    let access = 'unknown'
+    let access = "unknown";
     try {
-      access = await runtime.checkMediaAccess('microphone')
-      if (access === 'denied') {
-        onAccessDenied()
-        return
+      access = await runtime.checkMediaAccess("microphone");
+      if (access === "denied") {
+        onAccessDenied();
+        return;
       }
-      if (access === 'not-determined') {
+      if (access === "not-determined") {
         // try to ask for access
-        const accessAllowed = await runtime.askForMediaAccess('microphone')
+        const accessAllowed = await runtime.askForMediaAccess("microphone");
         if (accessAllowed === false) {
-          onAccessDenied()
-          return
+          onAccessDenied();
+          return;
         }
       }
     } catch (err: any) {
-      onError(new AudioRecorderError(err.message))
-      return
+      onError(new AudioRecorderError(err.message));
+      return;
     }
 
     if (!recorder.current) {
       recorder.current = new MicRecorder(setVolume, {
         bitRate: 32,
-      })
+      });
     }
-    setRecording(true)
+    setRecording(true);
     recorder.current
       ?.start()
       .then(() => {
         window.setTimeout(() => {
           if (!recorder.current?.audioSignalDetected && recording) {
-            onError(new AudioRecorderError('No input', AudioErrorType.NO_INPUT))
-            onRecordingCancel()
+            onError(
+              new AudioRecorderError("No input", AudioErrorType.NO_INPUT),
+            );
+            onRecordingCancel();
           }
-        }, 1000)
+        }, 1000);
       })
       .catch((err: any) => {
-        onError(new AudioRecorderError(err.message))
-        setRecording(false)
-      })
-  }
+        onError(new AudioRecorderError(err.message));
+        setRecording(false);
+      });
+  };
   const onRecordingStop = () => {
-    setRecording(false)
+    setRecording(false);
     recorder.current
       ?.stop()
       .getMp3()
       .then(([buffer, _blob]) => {
-        saveVoiceAsDraft(new Blob(buffer as BlobPart[], { type: 'audio/mp3' }))
+        saveVoiceAsDraft(new Blob(buffer as BlobPart[], { type: "audio/mp3" }));
       })
       .catch((err: any) => {
-        onError(new AudioRecorderError(err.message))
-      })
-  }
+        onError(new AudioRecorderError(err.message));
+      });
+  };
 
   const onRecordingCancel = useCallback(() => {
-    setRecording(false)
-    recorder.current?.stop()
-  }, [setRecording])
+    setRecording(false);
+    recorder.current?.stop();
+  }, [setRecording]);
 
   useEffect(() => {
     return () => {
-      onRecordingCancel()
-    }
-  }, [onRecordingCancel])
+      onRecordingCancel();
+    };
+  }, [onRecordingCancel]);
 
   if (!recording) {
     // make sure recorder is stopped when still running
-    recorder.current?.stop()
+    recorder.current?.stop();
 
     return (
       <button
-        aria-label={tx('voice_send')}
+        aria-label={tx("voice_send")}
         className={styles.microphoneButton}
         onClick={() => onRecordingStart()}
       >
         <span />
       </button>
-    )
+    );
   } else {
     return (
       <div className={styles.audioRecorder}>
         <button
           className={styles.microphoneButton}
           onClick={() => onRecordingStop()}
-          aria-label={tx('stop_recording')}
+          aria-label={tx("stop_recording")}
         >
           <span />
         </button>
         <Timer />
         <VolumeMeter volume={volume} />
         <button className={styles.cancel} onClick={() => onRecordingCancel()}>
-          {tx('cancel')}
+          {tx("cancel")}
         </button>
         <button
           className={styles.stopRecording}
           onClick={() => onRecordingStop()}
-          aria-description={tx('stop_recording')}
+          aria-description={tx("stop_recording")}
         >
-          {tx('ok')}
+          {tx("ok")}
         </button>
       </div>
-    )
+    );
   }
-}
+};

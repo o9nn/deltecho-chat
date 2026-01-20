@@ -1,16 +1,16 @@
-import React from 'react'
-import classNames from 'classnames'
+import React from "react";
+import classNames from "classnames";
 
-import type { PropsWithChildren } from 'react'
+import type { PropsWithChildren } from "react";
 
-import styles from './styles.module.scss'
+import styles from "./styles.module.scss";
 
 type Props = PropsWithChildren<{
-  onClick: () => void
-  highlight?: boolean
-  dataTestid?: string
-  disabled?: boolean
-}>
+  onClick: () => void;
+  highlight?: boolean;
+  dataTestid?: string;
+  disabled?: boolean;
+}>;
 
 export default function SettingsButton({
   children,
@@ -30,5 +30,5 @@ export default function SettingsButton({
     >
       {children}
     </button>
-  )
+  );
 }

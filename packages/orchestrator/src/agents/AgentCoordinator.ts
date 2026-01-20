@@ -11,10 +11,10 @@
  * - Inter-agent communication
  */
 
-import { EventEmitter } from 'events';
-import { getLogger } from 'deep-tree-echo-core';
+import { EventEmitter } from "events";
+import { getLogger } from "deep-tree-echo-core";
 
-const log = getLogger('deep-tree-echo-orchestrator/AgentCoordinator');
+const log = getLogger("deep-tree-echo-orchestrator/AgentCoordinator");
 
 /**
  * Agent capability definition
@@ -50,8 +50,8 @@ export interface Task {
   id: string;
   type: string;
   description: string;
-  priority: 'low' | 'medium' | 'high' | 'critical';
-  status: 'pending' | 'assigned' | 'in_progress' | 'completed' | 'failed';
+  priority: "low" | "medium" | "high" | "critical";
+  status: "pending" | "assigned" | "in_progress" | "completed" | "failed";
   assignedAgentId?: string;
   parentTaskId?: string;
   subtaskIds: string[];
@@ -133,16 +133,29 @@ export class AgentCoordinator extends EventEmitter {
   private registerDefaultAgents(): void {
     // Root coordinator agent
     this.registerAgent({
-      id: 'coordinator',
-      name: 'Nested Agency Coordinator',
-      description: 'Coordinates complex tasks by delegating to specialized child agents',
-      specialization: 'Task coordination and delegation',
+      id: "coordinator",
+      name: "Nested Agency Coordinator",
+      description:
+        "Coordinates complex tasks by delegating to specialized child agents",
+      specialization: "Task coordination and delegation",
       capabilities: [
-        { name: 'planning', description: 'Strategic task planning', priority: 1 },
-        { name: 'delegation', description: 'Task delegation to child agents', priority: 1 },
-        { name: 'synthesis', description: 'Result synthesis and integration', priority: 1 },
+        {
+          name: "planning",
+          description: "Strategic task planning",
+          priority: 1,
+        },
+        {
+          name: "delegation",
+          description: "Task delegation to child agents",
+          priority: 1,
+        },
+        {
+          name: "synthesis",
+          description: "Result synthesis and integration",
+          priority: 1,
+        },
       ],
-      tools: ['bash', 'create', 'edit', 'read', 'search', 'custom-agent'],
+      tools: ["bash", "create", "edit", "read", "search", "custom-agent"],
       isActive: true,
       childIds: [],
       metadata: { isRoot: true },
@@ -151,18 +164,26 @@ export class AgentCoordinator extends EventEmitter {
 
     // Data analysis agent
     this.registerAgent({
-      id: 'data-analyst',
-      name: 'Data Analysis Specialist',
-      description: 'Analyzes data and generates insights',
-      specialization: 'Data analysis and processing',
+      id: "data-analyst",
+      name: "Data Analysis Specialist",
+      description: "Analyzes data and generates insights",
+      specialization: "Data analysis and processing",
       capabilities: [
-        { name: 'analysis', description: 'Statistical analysis', priority: 1 },
-        { name: 'visualization', description: 'Data visualization', priority: 2 },
-        { name: 'pattern_detection', description: 'Pattern recognition', priority: 1 },
+        { name: "analysis", description: "Statistical analysis", priority: 1 },
+        {
+          name: "visualization",
+          description: "Data visualization",
+          priority: 2,
+        },
+        {
+          name: "pattern_detection",
+          description: "Pattern recognition",
+          priority: 1,
+        },
       ],
-      tools: ['bash', 'read', 'search'],
+      tools: ["bash", "read", "search"],
       isActive: true,
-      parentId: 'coordinator',
+      parentId: "coordinator",
       childIds: [],
       metadata: {},
       createdAt: Date.now(),
@@ -170,18 +191,18 @@ export class AgentCoordinator extends EventEmitter {
 
     // Documentation agent
     this.registerAgent({
-      id: 'documentation',
-      name: 'Documentation Specialist',
-      description: 'Creates and maintains documentation',
-      specialization: 'Documentation and communication',
+      id: "documentation",
+      name: "Documentation Specialist",
+      description: "Creates and maintains documentation",
+      specialization: "Documentation and communication",
       capabilities: [
-        { name: 'writing', description: 'Technical writing', priority: 1 },
-        { name: 'formatting', description: 'Document formatting', priority: 2 },
-        { name: 'review', description: 'Content review', priority: 2 },
+        { name: "writing", description: "Technical writing", priority: 1 },
+        { name: "formatting", description: "Document formatting", priority: 2 },
+        { name: "review", description: "Content review", priority: 2 },
       ],
-      tools: ['create', 'edit', 'read'],
+      tools: ["create", "edit", "read"],
       isActive: true,
-      parentId: 'coordinator',
+      parentId: "coordinator",
       childIds: [],
       metadata: {},
       createdAt: Date.now(),
@@ -189,18 +210,22 @@ export class AgentCoordinator extends EventEmitter {
 
     // Cognitive processor agent
     this.registerAgent({
-      id: 'cognitive-processor',
-      name: 'Cognitive Processor',
-      description: 'Handles deep reasoning and inference',
-      specialization: 'Cognitive processing and reasoning',
+      id: "cognitive-processor",
+      name: "Cognitive Processor",
+      description: "Handles deep reasoning and inference",
+      specialization: "Cognitive processing and reasoning",
       capabilities: [
-        { name: 'reasoning', description: 'Logical reasoning', priority: 1 },
-        { name: 'inference', description: 'Pattern inference', priority: 1 },
-        { name: 'abstraction', description: 'Concept abstraction', priority: 2 },
+        { name: "reasoning", description: "Logical reasoning", priority: 1 },
+        { name: "inference", description: "Pattern inference", priority: 1 },
+        {
+          name: "abstraction",
+          description: "Concept abstraction",
+          priority: 2,
+        },
       ],
-      tools: ['bash', 'read', 'search'],
+      tools: ["bash", "read", "search"],
       isActive: true,
-      parentId: 'coordinator',
+      parentId: "coordinator",
       childIds: [],
       metadata: {},
       createdAt: Date.now(),
@@ -208,18 +233,22 @@ export class AgentCoordinator extends EventEmitter {
 
     // Memory manager agent
     this.registerAgent({
-      id: 'memory-manager',
-      name: 'Memory Manager',
-      description: 'Manages memory storage and retrieval',
-      specialization: 'Memory management',
+      id: "memory-manager",
+      name: "Memory Manager",
+      description: "Manages memory storage and retrieval",
+      specialization: "Memory management",
       capabilities: [
-        { name: 'storage', description: 'Memory storage', priority: 1 },
-        { name: 'retrieval', description: 'Memory retrieval', priority: 1 },
-        { name: 'consolidation', description: 'Memory consolidation', priority: 2 },
+        { name: "storage", description: "Memory storage", priority: 1 },
+        { name: "retrieval", description: "Memory retrieval", priority: 1 },
+        {
+          name: "consolidation",
+          description: "Memory consolidation",
+          priority: 2,
+        },
       ],
-      tools: ['read', 'create', 'edit'],
+      tools: ["read", "create", "edit"],
       isActive: true,
-      parentId: 'coordinator',
+      parentId: "coordinator",
       childIds: [],
       metadata: {},
       createdAt: Date.now(),
@@ -227,32 +256,36 @@ export class AgentCoordinator extends EventEmitter {
 
     // Action executor agent
     this.registerAgent({
-      id: 'action-executor',
-      name: 'Action Executor',
-      description: 'Executes actions and monitors results',
-      specialization: 'Action execution and monitoring',
+      id: "action-executor",
+      name: "Action Executor",
+      description: "Executes actions and monitors results",
+      specialization: "Action execution and monitoring",
       capabilities: [
-        { name: 'execution', description: 'Task execution', priority: 1 },
-        { name: 'monitoring', description: 'Execution monitoring', priority: 1 },
-        { name: 'feedback', description: 'Feedback processing', priority: 2 },
+        { name: "execution", description: "Task execution", priority: 1 },
+        {
+          name: "monitoring",
+          description: "Execution monitoring",
+          priority: 1,
+        },
+        { name: "feedback", description: "Feedback processing", priority: 2 },
       ],
-      tools: ['bash', 'create', 'edit'],
+      tools: ["bash", "create", "edit"],
       isActive: true,
-      parentId: 'coordinator',
+      parentId: "coordinator",
       childIds: [],
       metadata: {},
       createdAt: Date.now(),
     });
 
     // Update coordinator's child references
-    const coordinator = this.agents.get('coordinator');
+    const coordinator = this.agents.get("coordinator");
     if (coordinator) {
       coordinator.childIds = [
-        'data-analyst',
-        'documentation',
-        'cognitive-processor',
-        'memory-manager',
-        'action-executor',
+        "data-analyst",
+        "documentation",
+        "cognitive-processor",
+        "memory-manager",
+        "action-executor",
       ];
     }
   }
@@ -262,18 +295,18 @@ export class AgentCoordinator extends EventEmitter {
    */
   public async start(): Promise<void> {
     if (this.running) {
-      log.warn('Agent coordinator already running');
+      log.warn("Agent coordinator already running");
       return;
     }
 
-    log.info('Starting Agent Coordinator...');
+    log.info("Starting Agent Coordinator...");
     this.running = true;
 
     // Start task processing loop
     this.processInterval = setInterval(() => this.processTaskQueue(), 100);
 
-    this.emit('started', { timestamp: Date.now() });
-    log.info('Agent Coordinator started');
+    this.emit("started", { timestamp: Date.now() });
+    log.info("Agent Coordinator started");
   }
 
   /**
@@ -282,7 +315,7 @@ export class AgentCoordinator extends EventEmitter {
   public async stop(): Promise<void> {
     if (!this.running) return;
 
-    log.info('Stopping Agent Coordinator...');
+    log.info("Stopping Agent Coordinator...");
     this.running = false;
 
     if (this.processInterval) {
@@ -290,8 +323,8 @@ export class AgentCoordinator extends EventEmitter {
       this.processInterval = null;
     }
 
-    this.emit('stopped', { timestamp: Date.now() });
-    log.info('Agent Coordinator stopped');
+    this.emit("stopped", { timestamp: Date.now() });
+    log.info("Agent Coordinator stopped");
   }
 
   /**
@@ -299,7 +332,7 @@ export class AgentCoordinator extends EventEmitter {
    */
   public registerAgent(agent: Agent): void {
     this.agents.set(agent.id, agent);
-    this.emit('agent_registered', agent);
+    this.emit("agent_registered", agent);
     log.info(`Registered agent: ${agent.name}`);
   }
 
@@ -308,7 +341,7 @@ export class AgentCoordinator extends EventEmitter {
    */
   public generateAgent(template: AgentTemplate): Agent {
     if (!this.config.enableDynamicAgents) {
-      throw new Error('Dynamic agent generation is disabled');
+      throw new Error("Dynamic agent generation is disabled");
     }
 
     const agentId = `agent-${template.specializationId}-${Date.now()}`;
@@ -324,7 +357,7 @@ export class AgentCoordinator extends EventEmitter {
       })),
       tools: template.tools,
       isActive: true,
-      parentId: 'coordinator',
+      parentId: "coordinator",
       childIds: [],
       metadata: {
         generatedFromTemplate: true,
@@ -338,7 +371,7 @@ export class AgentCoordinator extends EventEmitter {
     this.registerAgent(agent);
 
     // Update coordinator's children
-    const coordinator = this.agents.get('coordinator');
+    const coordinator = this.agents.get("coordinator");
     if (coordinator) {
       coordinator.childIds.push(agentId);
     }
@@ -353,8 +386,8 @@ export class AgentCoordinator extends EventEmitter {
     type: string,
     description: string,
     input: Record<string, unknown>,
-    priority: Task['priority'] = 'medium',
-    parentTaskId?: string
+    priority: Task["priority"] = "medium",
+    parentTaskId?: string,
   ): Task {
     const taskId = `task-${Date.now()}-${Math.random().toString(36).slice(2)}`;
     const task: Task = {
@@ -362,7 +395,7 @@ export class AgentCoordinator extends EventEmitter {
       type,
       description,
       priority,
-      status: 'pending',
+      status: "pending",
       parentTaskId,
       subtaskIds: [],
       input,
@@ -380,7 +413,7 @@ export class AgentCoordinator extends EventEmitter {
       }
     }
 
-    this.emit('task_created', task);
+    this.emit("task_created", task);
     log.info(`Created task: ${taskId} - ${description}`);
 
     return task;
@@ -393,7 +426,9 @@ export class AgentCoordinator extends EventEmitter {
     if (this.taskQueue.length === 0) return;
 
     // Get pending tasks up to max concurrent
-    const activeTasks = Array.from(this.tasks.values()).filter((t) => t.status === 'in_progress');
+    const activeTasks = Array.from(this.tasks.values()).filter(
+      (t) => t.status === "in_progress",
+    );
 
     if (activeTasks.length >= this.config.maxConcurrentTasks) return;
 
@@ -411,7 +446,7 @@ export class AgentCoordinator extends EventEmitter {
     if (!taskId) return;
 
     const task = this.tasks.get(taskId);
-    if (!task || task.status !== 'pending') return;
+    if (!task || task.status !== "pending") return;
 
     await this.executeTask(task);
   }
@@ -423,34 +458,34 @@ export class AgentCoordinator extends EventEmitter {
     // Find best agent for task
     const agent = this.findBestAgent(task);
     if (!agent) {
-      task.status = 'failed';
-      task.error = 'No suitable agent found';
-      this.emit('task_failed', { task, error: task.error });
+      task.status = "failed";
+      task.error = "No suitable agent found";
+      this.emit("task_failed", { task, error: task.error });
       return;
     }
 
     // Assign task
-    task.status = 'assigned';
+    task.status = "assigned";
     task.assignedAgentId = agent.id;
     task.startedAt = Date.now();
     agent.lastActiveAt = Date.now();
 
-    this.emit('task_assigned', { task, agent });
+    this.emit("task_assigned", { task, agent });
     log.info(`Assigned task ${task.id} to agent ${agent.name}`);
 
     // Execute
-    task.status = 'in_progress';
-    this.emit('task_started', { task, agent });
+    task.status = "in_progress";
+    this.emit("task_started", { task, agent });
 
     try {
       // Simulate task execution
       const result = await this.delegateToAgent(agent, task);
 
-      task.status = 'completed';
+      task.status = "completed";
       task.output = result.output;
       task.completedAt = Date.now();
 
-      this.emit('task_completed', { task, result });
+      this.emit("task_completed", { task, result });
       log.info(`Completed task ${task.id}`);
 
       // Check if parent task can be completed
@@ -458,11 +493,11 @@ export class AgentCoordinator extends EventEmitter {
         await this.checkParentTaskCompletion(task.parentTaskId);
       }
     } catch (error) {
-      task.status = 'failed';
-      task.error = error instanceof Error ? error.message : 'Unknown error';
+      task.status = "failed";
+      task.error = error instanceof Error ? error.message : "Unknown error";
       task.completedAt = Date.now();
 
-      this.emit('task_failed', { task, error: task.error });
+      this.emit("task_failed", { task, error: task.error });
       log.error(`Failed task ${task.id}: ${task.error}`);
     }
   }
@@ -471,7 +506,9 @@ export class AgentCoordinator extends EventEmitter {
    * Find the best agent for a task
    */
   private findBestAgent(task: Task): Agent | null {
-    const activeAgents = Array.from(this.agents.values()).filter((a) => a.isActive);
+    const activeAgents = Array.from(this.agents.values()).filter(
+      (a) => a.isActive,
+    );
 
     // Score agents based on capability match
     let bestAgent: Agent | null = null;
@@ -491,7 +528,9 @@ export class AgentCoordinator extends EventEmitter {
       }
 
       // Check specialization match
-      if (task.type.toLowerCase().includes(agent.specialization.toLowerCase())) {
+      if (
+        task.type.toLowerCase().includes(agent.specialization.toLowerCase())
+      ) {
         score += 20;
       }
 
@@ -503,7 +542,7 @@ export class AgentCoordinator extends EventEmitter {
 
     // Default to coordinator if no match
     if (!bestAgent) {
-      bestAgent = this.agents.get('coordinator') || null;
+      bestAgent = this.agents.get("coordinator") || null;
     }
 
     return bestAgent;
@@ -516,7 +555,7 @@ export class AgentCoordinator extends EventEmitter {
     const startTime = Date.now();
 
     // Emit delegation event
-    this.emit('agent_invoked', {
+    this.emit("agent_invoked", {
       agentId: agent.id,
       agentName: agent.name,
       taskId: task.id,
@@ -553,10 +592,10 @@ export class AgentCoordinator extends EventEmitter {
     // Check if all subtasks are completed
     const allSubtasksComplete = parentTask.subtaskIds.every((id) => {
       const subtask = this.tasks.get(id);
-      return subtask && subtask.status === 'completed';
+      return subtask && subtask.status === "completed";
     });
 
-    if (allSubtasksComplete && parentTask.status === 'in_progress') {
+    if (allSubtasksComplete && parentTask.status === "in_progress") {
       // Synthesize results
       const subtaskOutputs = parentTask.subtaskIds.map((id) => {
         const subtask = this.tasks.get(id);
@@ -567,11 +606,13 @@ export class AgentCoordinator extends EventEmitter {
         synthesized: true,
         subtaskResults: subtaskOutputs,
       };
-      parentTask.status = 'completed';
+      parentTask.status = "completed";
       parentTask.completedAt = Date.now();
 
-      this.emit('task_completed', { task: parentTask });
-      log.info(`Completed parent task ${parentTaskId} with synthesized results`);
+      this.emit("task_completed", { task: parentTask });
+      log.info(
+        `Completed parent task ${parentTaskId} with synthesized results`,
+      );
     }
   }
 
@@ -622,8 +663,8 @@ export class AgentCoordinator extends EventEmitter {
       agentCount: agents.length,
       activeAgentCount: agents.filter((a) => a.isActive).length,
       taskCount: tasks.length,
-      pendingTaskCount: tasks.filter((t) => t.status === 'pending').length,
-      completedTaskCount: tasks.filter((t) => t.status === 'completed').length,
+      pendingTaskCount: tasks.filter((t) => t.status === "pending").length,
+      completedTaskCount: tasks.filter((t) => t.status === "completed").length,
     };
   }
 
@@ -638,15 +679,17 @@ export class AgentCoordinator extends EventEmitter {
     agentUtilization: Record<string, number>;
   } {
     const tasks = Array.from(this.tasks.values());
-    const completedTasks = tasks.filter((t) => t.status === 'completed');
-    const failedTasks = tasks.filter((t) => t.status === 'failed');
+    const completedTasks = tasks.filter((t) => t.status === "completed");
+    const failedTasks = tasks.filter((t) => t.status === "failed");
 
     // Calculate average duration
     const durations = completedTasks
       .filter((t) => t.startedAt && t.completedAt)
       .map((t) => t.completedAt! - t.startedAt!);
     const avgDuration =
-      durations.length > 0 ? durations.reduce((a, b) => a + b, 0) / durations.length : 0;
+      durations.length > 0
+        ? durations.reduce((a, b) => a + b, 0) / durations.length
+        : 0;
 
     // Calculate agent utilization
     const agentUtilization: Record<string, number> = {};

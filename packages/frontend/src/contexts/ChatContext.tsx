@@ -1,45 +1,45 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
-import { ActionEmitter, KeybindAction } from '../keybindings'
-import useKeyBindingAction from '../hooks/useKeyBindingAction'
-import { markChatAsSeen, saveLastChatId } from '../backend/chat'
-import { BackendRemote } from '../backend-com'
-import { getLogger } from '@deltachat-desktop/shared/logger'
+import { ActionEmitter, KeybindAction } from "../keybindings";
+import useKeyBindingAction from "../hooks/useKeyBindingAction";
+import { markChatAsSeen, saveLastChatId } from "../backend/chat";
+import { BackendRemote } from "../backend-com";
+import { getLogger } from "@deltachat-desktop/shared/logger";
 
 // Deep Tree Echo UI Bridge integration
-import { registerChatContext } from '../components/DeepTreeEchoBot/DeepTreeEchoIntegration'
+import { registerChatContext } from "../components/DeepTreeEchoBot/DeepTreeEchoIntegration";
 
-import type { MutableRefObject, PropsWithChildren } from 'react'
-import type { T } from '@deltachat/jsonrpc-client'
+import type { MutableRefObject, PropsWithChildren } from "react";
+import type { T } from "@deltachat/jsonrpc-client";
 
-const log = getLogger('renderer/contexts/ChatContext')
+const log = getLogger("renderer/contexts/ChatContext");
 
-export type AlternativeView = 'global-gallery' | null
+export type AlternativeView = "global-gallery" | null;
 
 export enum ChatView {
   Media,
   MessageList,
 }
 
-export type SetView = (nextView: ChatView) => void
+export type SetView = (nextView: ChatView) => void;
 
 export type SelectChat = (
   nextAccountId: number,
-  chatId: number
-) => Promise<boolean>
+  chatId: number,
+) => Promise<boolean>;
 
-export type UnselectChat = () => void
+export type UnselectChat = () => void;
 
 export type ChatContextValue = {
-  activeView: ChatView
+  activeView: ChatView;
   /**
    * `withLinger` means that after `selectChat()` the value of `chatWithLinger`
    * does not change immediately (unlike `chatId`),
    * until the new chat's info gets loaded.
    */
-  chatWithLinger?: T.FullChat
-  chatId?: number
-  alternativeView: AlternativeView
+  chatWithLinger?: T.FullChat;
+  chatId?: number;
+  alternativeView: AlternativeView;
   // The resolve value of the promise is unused at the time of writing.
   // And the Promise itself doesn't seem to be used that much.
   // Maybe we can make it just return `void`, or need to reconsider
@@ -56,49 +56,51 @@ export type ChatContextValue = {
    *
    * @throws if `nextAccountId` is not the currently selected account.
    */
-  selectChat: SelectChat
-  setChatView: SetView
-  unselectChat: UnselectChat
-}
+  selectChat: SelectChat;
+  setChatView: SetView;
+  unselectChat: UnselectChat;
+};
 
 type Props = {
-  accountId?: number
+  accountId?: number;
   /**
    * the ref gives us a handle to reset the component without moving it up in the hierarchy.
    * a class component would give us the option to call methods on the component,
    * but we are using a functional component here so we need to pass this as a property instead*/
-  unselectChatRef: MutableRefObject<UnselectChat | null>
-}
+  unselectChatRef: MutableRefObject<UnselectChat | null>;
+};
 
-export const ChatContext = React.createContext<ChatContextValue | null>(null)
+export const ChatContext = React.createContext<ChatContextValue | null>(null);
 
 export const ChatProvider = ({
   children,
   accountId,
   unselectChatRef,
 }: PropsWithChildren<Props>) => {
-  const [activeView, setActiveView] = useState(ChatView.MessageList)
+  const [activeView, setActiveView] = useState(ChatView.MessageList);
 
-  const [chatWithLinger, setChatWithLinger] = useState<T.FullChat | undefined>()
-  const cancelPendingSetChat = useRef<() => void>()
+  const [chatWithLinger, setChatWithLinger] = useState<
+    T.FullChat | undefined
+  >();
+  const cancelPendingSetChat = useRef<() => void>();
 
-  const [chatId, setChatId] = useState<number | undefined>()
-  const [alternativeView, setAlternativeView] = useState<AlternativeView>(null)
+  const [chatId, setChatId] = useState<number | undefined>();
+  const [alternativeView, setAlternativeView] = useState<AlternativeView>(null);
 
   const setChatView = useCallback<SetView>((nextView: ChatView) => {
-    setActiveView(nextView)
-  }, [])
+    setActiveView(nextView);
+  }, []);
 
   const selectChat = useCallback<SelectChat>(
     (nextAccountId: number, nextChatId: number) => {
       if (!accountId) {
-        throw new Error('can not select chat when no `accountId` is given')
+        throw new Error("can not select chat when no `accountId` is given");
       }
 
       if (accountId !== nextAccountId) {
         throw new Error(
-          'accountid of ChatProvider context is not equal to nextAccountId'
-        )
+          "accountid of ChatProvider context is not equal to nextAccountId",
+        );
       }
 
       // Jump to last message if user clicked chat twice
@@ -118,59 +120,59 @@ export const ChatProvider = ({
               // jumping to the last message.
             },
           ],
-        }
-        window.__internal_check_jump_to_message?.()
+        };
+        window.__internal_check_jump_to_message?.();
       }
 
       // Already set known state
-      setAlternativeView(null)
-      setActiveView(ChatView.MessageList)
-      setChatId(nextChatId)
+      setAlternativeView(null);
+      setActiveView(ChatView.MessageList);
+      setChatId(nextChatId);
 
       // Clear system notifications and mark chat as seen in backend
-      markChatAsSeen(accountId, nextChatId)
+      markChatAsSeen(accountId, nextChatId);
 
       // Remember that user selected this chat to open it again when they come back
-      saveLastChatId(accountId, nextChatId)
+      saveLastChatId(accountId, nextChatId);
 
       // Make sure that this gets called eventually.
-      let resolveRetPromise: (result: boolean) => void
-      const retPromise = new Promise<boolean>(r => {
-        resolveRetPromise = r
-      })
+      let resolveRetPromise: (result: boolean) => void;
+      const retPromise = new Promise<boolean>((r) => {
+        resolveRetPromise = r;
+      });
 
       // `cancelPendingSetChat` is mostly to resolve race conditions
       // where the previous `selectChat()` finishes _after_ the new one.
-      cancelPendingSetChat.current?.()
-      let cancelled = false
+      cancelPendingSetChat.current?.();
+      let cancelled = false;
       const cancel = () => {
-        cancelled = true
-        resolveRetPromise(false)
-      }
-      cancelPendingSetChat.current = cancel
+        cancelled = true;
+        resolveRetPromise(false);
+      };
+      cancelPendingSetChat.current = cancel;
 
       BackendRemote.rpc
         .getFullChatById(accountId, nextChatId)
-        .then(nextChat => {
+        .then((nextChat) => {
           if (cancelled) {
-            throw new Error('cancelled')
+            throw new Error("cancelled");
           }
 
-          setChatWithLinger(nextChat)
+          setChatWithLinger(nextChat);
 
           // Switch to "archived" view if selected chat is there
           // @TODO: We probably want this to be part of the UI logic instead
           ActionEmitter.emitAction(
             nextChat.archived
               ? KeybindAction.ChatList_SwitchToArchiveView
-              : KeybindAction.ChatList_SwitchToNormalView
-          )
+              : KeybindAction.ChatList_SwitchToNormalView,
+          );
         })
         .then(() => {
-          resolveRetPromise(true)
+          resolveRetPromise(true);
         })
-        .catch(_err => {
-          resolveRetPromise(false)
+        .catch((_err) => {
+          resolveRetPromise(false);
         })
         .finally(() => {
           // Yes, need to check if the current pendingSetChat
@@ -178,38 +180,38 @@ export const ChatProvider = ({
           // than the next one.
           if (cancelPendingSetChat.current === cancel) {
             // This is not necessary. Just to clean up the state.
-            cancelPendingSetChat.current = undefined
+            cancelPendingSetChat.current = undefined;
           }
-        })
+        });
 
-      return retPromise
+      return retPromise;
     },
-    [accountId, chatId]
-  )
+    [accountId, chatId],
+  );
 
   const refreshChat = useCallback(async () => {
     if (!accountId || !chatId) {
-      return
+      return;
     }
 
     setChatWithLinger(
-      await BackendRemote.rpc.getFullChatById(accountId, chatId)
-    )
-  }, [accountId, chatId])
+      await BackendRemote.rpc.getFullChatById(accountId, chatId),
+    );
+  }, [accountId, chatId]);
 
   const unselectChat = useCallback<UnselectChat>(() => {
-    setAlternativeView(null)
-    setActiveView(ChatView.MessageList)
-    setChatId(undefined)
-    setChatWithLinger(undefined)
-  }, [])
+    setAlternativeView(null);
+    setActiveView(ChatView.MessageList);
+    setChatId(undefined);
+    setChatWithLinger(undefined);
+  }, []);
 
-  unselectChatRef.current = unselectChat
+  unselectChatRef.current = unselectChat;
 
   useKeyBindingAction(KeybindAction.GlobalGallery_Open, () => {
-    unselectChat()
-    setAlternativeView('global-gallery')
-  })
+    unselectChat();
+    setAlternativeView("global-gallery");
+  });
 
   // Register with Deep Tree Echo UI Bridge for AI chat orchestration
   // This allows Deep Tree Echo to interact with chats like a normal user
@@ -223,66 +225,66 @@ export const ChatProvider = ({
             chatId,
             chatWithLinger,
           },
-          accountId
-        )
-        log.info('ChatContext registered with Deep Tree Echo UI Bridge')
+          accountId,
+        );
+        log.info("ChatContext registered with Deep Tree Echo UI Bridge");
       } catch (error) {
         // Log but don't crash if Deep Tree Echo isn't available
-        log.warn('Failed to register ChatContext with Deep Tree Echo:', error)
+        log.warn("Failed to register ChatContext with Deep Tree Echo:", error);
       }
     }
-  }, [accountId, chatId, chatWithLinger, selectChat, unselectChat])
+  }, [accountId, chatId, chatWithLinger, selectChat, unselectChat]);
 
   // Subscribe to events coming from the core
   useEffect(() => {
     const onChatModified = (
       eventAccountId: number,
-      { chatId: eventChatId }: { chatId: number }
+      { chatId: eventChatId }: { chatId: number },
     ) => {
       if (eventAccountId !== accountId) {
-        return
+        return;
       }
 
       if (eventChatId !== chatId) {
-        return
+        return;
       }
 
-      refreshChat()
-    }
+      refreshChat();
+    };
 
     const onContactsModified = (
       eventAccountId: number,
-      { contactId }: { contactId: number | null }
+      { contactId }: { contactId: number | null },
     ) => {
       if (eventAccountId !== accountId) {
-        return
+        return;
       }
 
       if (!chatWithLinger) {
-        return
+        return;
       }
 
       if (!contactId) {
-        return
+        return;
       }
 
       if (!chatWithLinger.contactIds.includes(contactId)) {
-        return
+        return;
       }
 
-      refreshChat()
-    }
+      refreshChat();
+    };
 
-    BackendRemote.on('ChatModified', onChatModified)
-    BackendRemote.on('ChatEphemeralTimerModified', onChatModified)
-    BackendRemote.on('ContactsChanged', onContactsModified)
+    BackendRemote.on("ChatModified", onChatModified);
+    BackendRemote.on("ChatEphemeralTimerModified", onChatModified);
+    BackendRemote.on("ContactsChanged", onContactsModified);
 
     return () => {
-      BackendRemote.off('ChatModified', onChatModified)
-      BackendRemote.off('ChatEphemeralTimerModified', onChatModified)
-      BackendRemote.off('ContactsChanged', onContactsModified)
-    }
-  }, [accountId, chatWithLinger, chatId, refreshChat])
+      BackendRemote.off("ChatModified", onChatModified);
+      BackendRemote.off("ChatEphemeralTimerModified", onChatModified);
+      BackendRemote.off("ContactsChanged", onContactsModified);
+    };
+  }, [accountId, chatWithLinger, chatId, refreshChat]);
 
   const value: ChatContextValue = {
     activeView,
@@ -292,7 +294,7 @@ export const ChatProvider = ({
     selectChat,
     setChatView,
     unselectChat,
-  }
+  };
 
-  return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>
-}
+  return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;
+};

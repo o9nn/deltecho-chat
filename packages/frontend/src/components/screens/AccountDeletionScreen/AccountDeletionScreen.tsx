@@ -1,6 +1,6 @@
-import React, { Component, useEffect, useState } from 'react'
-import useTranslationFunction from '../../../hooks/useTranslationFunction'
-import { filesize } from 'filesize'
+import React, { Component, useEffect, useState } from "react";
+import useTranslationFunction from "../../../hooks/useTranslationFunction";
+import { filesize } from "filesize";
 
 import Dialog, {
   DialogBody,
@@ -9,64 +9,64 @@ import Dialog, {
   DialogHeader,
   FooterActionButton,
   FooterActions,
-} from '../../Dialog'
+} from "../../Dialog";
 
-import styles from './styles.module.scss'
-import { T } from '@deltachat/jsonrpc-client'
-import { BackendRemote } from '../../../backend-com'
-import { Screens } from '../../../ScreenController'
-import { avatarInitial } from '../../Avatar'
-import { getLogger } from '../../../../../shared/logger'
-import ImageBackdrop from '../../ImageBackdrop'
-import { runtime } from '@deltachat-desktop/runtime-interface'
+import styles from "./styles.module.scss";
+import { T } from "@deltachat/jsonrpc-client";
+import { BackendRemote } from "../../../backend-com";
+import { Screens } from "../../../ScreenController";
+import { avatarInitial } from "../../Avatar";
+import { getLogger } from "../../../../../shared/logger";
+import ImageBackdrop from "../../ImageBackdrop";
+import { runtime } from "@deltachat-desktop/runtime-interface";
 
-const log = getLogger('AccountDeletionScreen')
+const log = getLogger("AccountDeletionScreen");
 
 export default function AccountDeletionScreen({
   selectedAccountId,
   onDeleteAccount,
 }: {
-  selectedAccountId: number
-  onDeleteAccount: (accountId: number) => Promise<void>
+  selectedAccountId: number;
+  onDeleteAccount: (accountId: number) => Promise<void>;
 }) {
-  const tx = useTranslationFunction()
+  const tx = useTranslationFunction();
 
-  const [accountInfo, setAccountInfo] = useState<null | T.Account>()
+  const [accountInfo, setAccountInfo] = useState<null | T.Account>();
 
   useEffect(() => {
-    BackendRemote.rpc.getAccountInfo(selectedAccountId).then(setAccountInfo)
-  }, [selectedAccountId])
+    BackendRemote.rpc.getAccountInfo(selectedAccountId).then(setAccountInfo);
+  }, [selectedAccountId]);
 
   const onCancel = () => {
     if (!accountInfo) {
-      return
+      return;
     }
-    if (accountInfo.kind === 'Configured') {
-      window.__changeScreen(Screens.Main)
+    if (accountInfo.kind === "Configured") {
+      window.__changeScreen(Screens.Main);
     } else {
-      window.__changeScreen(Screens.Welcome)
+      window.__changeScreen(Screens.Welcome);
     }
-  }
+  };
 
   return (
     <div className={styles.AccountDeletionScreen}>
-      <ImageBackdrop variant='deletion'>
+      <ImageBackdrop variant="deletion">
         <Dialog
           canEscapeKeyClose={true}
           backdropDragAreaOnTauriRuntime
           fixed={true}
           onClose={onCancel}
           width={400}
-          dataTestid='account-deletion-dialog'
+          dataTestid="account-deletion-dialog"
         >
           <DialogHeader
             onClickBack={accountInfo ? onCancel : undefined}
-            title={tx('delete_account')}
+            title={tx("delete_account")}
           />
           <DialogBody>
             <DialogContent>
-              <p>{tx('delete_account_ask')}</p>
-              {accountInfo?.kind == 'Configured' && (
+              <p>{tx("delete_account_ask")}</p>
+              {accountInfo?.kind == "Configured" && (
                 <div className={styles.accountCard}>
                   <div className={styles.avatar}>
                     {accountInfo.profileImage ? (
@@ -80,8 +80,8 @@ export default function AccountDeletionScreen({
                         style={{ backgroundColor: accountInfo.color }}
                       >
                         {avatarInitial(
-                          accountInfo.displayName || '',
-                          accountInfo.addr || undefined
+                          accountInfo.displayName || "",
+                          accountInfo.addr || undefined,
                         )}
                       </div>
                     )}
@@ -102,10 +102,10 @@ export default function AccountDeletionScreen({
               <p>
                 {accountInfo &&
                   tx(
-                    'delete_account_explain_with_name',
-                    accountInfo.kind === 'Configured'
+                    "delete_account_explain_with_name",
+                    accountInfo.kind === "Configured"
                       ? accountInfo.addr || undefined
-                      : tx('unconfigured_account')
+                      : tx("unconfigured_account"),
                   )}
               </p>
             </DialogContent>
@@ -113,49 +113,49 @@ export default function AccountDeletionScreen({
           <DialogFooter>
             <FooterActions>
               <FooterActionButton
-                styling='secondary'
+                styling="secondary"
                 onClick={() => onCancel()}
-                data-testid='cancel-delete-account'
+                data-testid="cancel-delete-account"
               >
-                {tx('cancel')}
+                {tx("cancel")}
               </FooterActionButton>
               <FooterActionButton
-                styling='danger'
+                styling="danger"
                 onClick={async () => onDeleteAccount(selectedAccountId)}
-                data-testid='delete-account'
+                data-testid="delete-account"
               >
-                {tx('delete')}
+                {tx("delete")}
               </FooterActionButton>
             </FooterActions>
           </DialogFooter>
         </Dialog>
       </ImageBackdrop>
     </div>
-  )
+  );
 }
 
 class AccountSize extends Component<{ accountId: number }, { size?: string }> {
-  wasDestroyed = false
-  state = { size: undefined }
+  wasDestroyed = false;
+  state = { size: undefined };
 
   async update() {
     const bytes = await BackendRemote.rpc
       .getAccountFileSize(this.props.accountId)
-      .catch(log.error)
+      .catch(log.error);
     if (!this.wasDestroyed) {
-      this.setState({ size: bytes ? filesize(bytes) : undefined })
+      this.setState({ size: bytes ? filesize(bytes) : undefined });
     }
   }
 
   componentDidMount(): void {
-    this.update()
+    this.update();
   }
 
   componentWillUnmount(): void {
-    this.wasDestroyed = true
+    this.wasDestroyed = true;
   }
 
   render(): React.ReactNode {
-    return <span>{this.state.size || '?'}</span>
+    return <span>{this.state.size || "?"}</span>;
   }
 }

@@ -1,4 +1,4 @@
-@use '../../../../scss/_mixins';
+@use "../../../../scss/_mixins";
 // We need to force the dialog to full height to make `AutoSizer` work
 .viewProfileDialog {
   height: 100%;

@@ -4,11 +4,11 @@ export {
   type CognitiveFunction,
   CognitiveFunctionType,
   type ParallelCognitiveResult,
-} from './LLMService';
+} from "./LLMService";
 
 export {
   EnhancedLLMService,
   type LLMConfig,
   type LLMMessage,
   type LLMResponse,
-} from './EnhancedLLMService';
+} from "./EnhancedLLMService";

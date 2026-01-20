@@ -1,6 +1,6 @@
 /**
  * ProactiveStatusIndicator - UI Component for Chat View Status Display
- * 
+ *
  * This component shows the proactive messaging status in the chat view:
  * - Active triggers for the current chat
  * - Scheduled messages pending
@@ -8,23 +8,25 @@
  * - Real-time status updates
  */
 
-import React, { useState, useEffect, useCallback } from 'react'
-import { getLogger } from '../../../../shared/logger'
+import React, { useState, useEffect, useCallback } from "react";
+import { getLogger } from "../../../../shared/logger";
 import {
   proactiveMessaging,
   ProactiveTrigger,
   QueuedMessage,
-} from './ProactiveMessaging'
-import { chatManager } from './DeepTreeEchoChatManager'
+} from "./ProactiveMessaging";
+import { chatManager } from "./DeepTreeEchoChatManager";
 
-const log = getLogger('render/components/DeepTreeEchoBot/ProactiveStatusIndicator')
+const log = getLogger(
+  "render/components/DeepTreeEchoBot/ProactiveStatusIndicator",
+);
 
 interface ProactiveStatusIndicatorProps {
-  accountId: number
-  chatId: number
-  compact?: boolean
-  onOpenSettings?: () => void
-  onOpenTriggers?: () => void
+  accountId: number;
+  chatId: number;
+  compact?: boolean;
+  onOpenSettings?: () => void;
+  onOpenTriggers?: () => void;
 }
 
 const ProactiveStatusIndicator: React.FC<ProactiveStatusIndicatorProps> = ({
@@ -34,109 +36,120 @@ const ProactiveStatusIndicator: React.FC<ProactiveStatusIndicatorProps> = ({
   onOpenSettings,
   onOpenTriggers,
 }) => {
-  const [isEnabled, setIsEnabled] = useState(proactiveMessaging.getConfig().enabled)
-  const [activeTriggers, setActiveTriggers] = useState<ProactiveTrigger[]>([])
-  const [queuedMessages, setQueuedMessages] = useState<QueuedMessage[]>([])
-  const [isExpanded, setIsExpanded] = useState(false)
-  const [quickMessage, setQuickMessage] = useState('')
-  const [scheduleTime, setScheduleTime] = useState('')
-  const [showScheduler, setShowScheduler] = useState(false)
+  const [isEnabled, setIsEnabled] = useState(
+    proactiveMessaging.getConfig().enabled,
+  );
+  const [activeTriggers, setActiveTriggers] = useState<ProactiveTrigger[]>([]);
+  const [queuedMessages, setQueuedMessages] = useState<QueuedMessage[]>([]);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [quickMessage, setQuickMessage] = useState("");
+  const [scheduleTime, setScheduleTime] = useState("");
+  const [showScheduler, setShowScheduler] = useState(false);
 
   // Update status periodically
   useEffect(() => {
     const updateStatus = () => {
-      const config = proactiveMessaging.getConfig()
-      setIsEnabled(config.enabled)
+      const config = proactiveMessaging.getConfig();
+      setIsEnabled(config.enabled);
 
       // Get triggers relevant to this chat
-      const allTriggers = proactiveMessaging.getTriggers()
-      const relevantTriggers = allTriggers.filter(t =>
-        t.enabled && (
-          t.targetType === 'all_chats' ||
-          t.targetType === 'unread_chats' ||
-          (t.targetType === 'specific_chat' && t.targetChatId === chatId)
-        )
-      )
-      setActiveTriggers(relevantTriggers)
+      const allTriggers = proactiveMessaging.getTriggers();
+      const relevantTriggers = allTriggers.filter(
+        (t) =>
+          t.enabled &&
+          (t.targetType === "all_chats" ||
+            t.targetType === "unread_chats" ||
+            (t.targetType === "specific_chat" && t.targetChatId === chatId)),
+      );
+      setActiveTriggers(relevantTriggers);
 
       // Get queued messages for this chat
-      const allQueued = proactiveMessaging.getQueuedMessages()
-      const chatQueued = allQueued.filter(m => m.chatId === chatId)
-      setQueuedMessages(chatQueued)
-    }
+      const allQueued = proactiveMessaging.getQueuedMessages();
+      const chatQueued = allQueued.filter((m) => m.chatId === chatId);
+      setQueuedMessages(chatQueued);
+    };
 
-    updateStatus()
-    const interval = setInterval(updateStatus, 5000)
-    return () => clearInterval(interval)
-  }, [chatId])
+    updateStatus();
+    const interval = setInterval(updateStatus, 5000);
+    return () => clearInterval(interval);
+  }, [chatId]);
 
   // Handle quick send
   const handleQuickSend = async () => {
-    if (!quickMessage.trim()) return
+    if (!quickMessage.trim()) return;
 
     try {
-      const success = await proactiveMessaging.sendNow(accountId, chatId, quickMessage)
+      const success = await proactiveMessaging.sendNow(
+        accountId,
+        chatId,
+        quickMessage,
+      );
       if (success) {
-        setQuickMessage('')
-        log.info('Quick message sent successfully')
+        setQuickMessage("");
+        log.info("Quick message sent successfully");
       }
     } catch (error) {
-      log.error('Failed to send quick message:', error)
+      log.error("Failed to send quick message:", error);
     }
-  }
+  };
 
   // Handle schedule message
   const handleSchedule = () => {
-    if (!quickMessage.trim() || !scheduleTime) return
+    if (!quickMessage.trim() || !scheduleTime) return;
 
     try {
-      const scheduledTime = new Date(scheduleTime).getTime()
+      const scheduledTime = new Date(scheduleTime).getTime();
       if (scheduledTime <= Date.now()) {
-        alert('Please select a future time')
-        return
+        alert("Please select a future time");
+        return;
       }
 
-      proactiveMessaging.scheduleOneTime(accountId, chatId, quickMessage, scheduledTime)
-      setQuickMessage('')
-      setScheduleTime('')
-      setShowScheduler(false)
-      log.info('Message scheduled successfully')
+      proactiveMessaging.scheduleOneTime(
+        accountId,
+        chatId,
+        quickMessage,
+        scheduledTime,
+      );
+      setQuickMessage("");
+      setScheduleTime("");
+      setShowScheduler(false);
+      log.info("Message scheduled successfully");
     } catch (error) {
-      log.error('Failed to schedule message:', error)
+      log.error("Failed to schedule message:", error);
     }
-  }
+  };
 
   // Handle cancel queued message
   const handleCancelQueued = (messageId: string) => {
-    proactiveMessaging.cancelQueuedMessage(messageId)
-    setQueuedMessages(prev => prev.filter(m => m.id !== messageId))
-  }
+    proactiveMessaging.cancelQueuedMessage(messageId);
+    setQueuedMessages((prev) => prev.filter((m) => m.id !== messageId));
+  };
 
   // Format time remaining
   const formatTimeRemaining = (scheduledTime: number): string => {
-    const diff = scheduledTime - Date.now()
-    if (diff < 0) return 'Now'
+    const diff = scheduledTime - Date.now();
+    if (diff < 0) return "Now";
 
-    const minutes = Math.floor(diff / 60000)
-    const hours = Math.floor(minutes / 60)
-    const days = Math.floor(hours / 24)
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
 
-    if (days > 0) return `${days}d ${hours % 24}h`
-    if (hours > 0) return `${hours}h ${minutes % 60}m`
-    return `${minutes}m`
-  }
+    if (days > 0) return `${days}d ${hours % 24}h`;
+    if (hours > 0) return `${hours}h ${minutes % 60}m`;
+    return `${minutes}m`;
+  };
 
   if (!isEnabled) {
-    return null
+    return null;
   }
 
   if (compact) {
     // Compact mode - just show an indicator
     return (
       <div
-        className='proactive-status-compact'
+        className="proactive-status-compact"
         onClick={() => setIsExpanded(!isExpanded)}
-        title='Proactive messaging active'
+        title="Proactive messaging active"
       >
         <style>{`
           .proactive-status-compact {
@@ -169,17 +182,15 @@ const ProactiveStatusIndicator: React.FC<ProactiveStatusIndicatorProps> = ({
             100% { opacity: 1; transform: scale(1); }
           }
         `}</style>
-        <span className='pulse'></span>
+        <span className="pulse"></span>
         <span>🤖 {activeTriggers.length}</span>
-        {queuedMessages.length > 0 && (
-          <span>📬 {queuedMessages.length}</span>
-        )}
+        {queuedMessages.length > 0 && <span>📬 {queuedMessages.length}</span>}
       </div>
-    )
+    );
   }
 
   return (
-    <div className='proactive-status-indicator'>
+    <div className="proactive-status-indicator">
       <style>{`
         .proactive-status-indicator {
           background: var(--bg-color-secondary, #1a1a2e);
@@ -438,116 +449,119 @@ const ProactiveStatusIndicator: React.FC<ProactiveStatusIndicatorProps> = ({
         }
       `}</style>
 
-      <div className='header'>
+      <div className="header">
         <h4>
-          <span className='pulse'></span>
+          <span className="pulse"></span>
           Proactive Messaging
         </h4>
         <button
-          className='toggle-expand'
+          className="toggle-expand"
           onClick={() => setIsExpanded(!isExpanded)}
         >
-          {isExpanded ? '▲' : '▼'}
+          {isExpanded ? "▲" : "▼"}
         </button>
       </div>
 
-      <div className='stats-row'>
-        <div className='stat'>
-          <span className='stat-icon'>🎯</span>
-          <span className='stat-value'>{activeTriggers.length}</span>
+      <div className="stats-row">
+        <div className="stat">
+          <span className="stat-icon">🎯</span>
+          <span className="stat-value">{activeTriggers.length}</span>
           <span>triggers</span>
         </div>
-        <div className='stat'>
-          <span className='stat-icon'>📬</span>
-          <span className='stat-value'>{queuedMessages.length}</span>
+        <div className="stat">
+          <span className="stat-icon">📬</span>
+          <span className="stat-value">{queuedMessages.length}</span>
           <span>queued</span>
         </div>
       </div>
 
-      <div className='quick-actions'>
-        <button className='quick-btn' onClick={onOpenSettings}>
+      <div className="quick-actions">
+        <button className="quick-btn" onClick={onOpenSettings}>
           ⚙️ Settings
         </button>
-        <button className='quick-btn' onClick={onOpenTriggers}>
+        <button className="quick-btn" onClick={onOpenTriggers}>
           🎯 Triggers
         </button>
       </div>
 
       {isExpanded && (
-        <div className='expanded-content'>
+        <div className="expanded-content">
           {/* Active Triggers */}
-          <div className='section-title'>Active Triggers for This Chat</div>
-          <div className='trigger-list'>
+          <div className="section-title">Active Triggers for This Chat</div>
+          <div className="trigger-list">
             {activeTriggers.length > 0 ? (
-              activeTriggers.slice(0, 5).map(trigger => (
-                <div key={trigger.id} className='trigger-item'>
-                  <span className='trigger-name'>
-                    {trigger.type === 'scheduled' && '📅'}
-                    {trigger.type === 'interval' && '🔄'}
-                    {trigger.type === 'event' && '⚡'}
-                    {trigger.type === 'condition' && '🎯'}
-                    {trigger.type === 'follow_up' && '💬'}
-                    {trigger.type === 'greeting' && '👋'}
+              activeTriggers.slice(0, 5).map((trigger) => (
+                <div key={trigger.id} className="trigger-item">
+                  <span className="trigger-name">
+                    {trigger.type === "scheduled" && "📅"}
+                    {trigger.type === "interval" && "🔄"}
+                    {trigger.type === "event" && "⚡"}
+                    {trigger.type === "condition" && "🎯"}
+                    {trigger.type === "follow_up" && "💬"}
+                    {trigger.type === "greeting" && "👋"}
                     {trigger.name}
                   </span>
-                  <span className='trigger-type'>{trigger.type}</span>
+                  <span className="trigger-type">{trigger.type}</span>
                 </div>
               ))
             ) : (
-              <div className='empty-state'>No active triggers for this chat</div>
+              <div className="empty-state">
+                No active triggers for this chat
+              </div>
             )}
           </div>
 
           {/* Queued Messages */}
-          <div className='section-title'>Scheduled Messages</div>
-          <div className='queued-list'>
+          <div className="section-title">Scheduled Messages</div>
+          <div className="queued-list">
             {queuedMessages.length > 0 ? (
-              queuedMessages.map(msg => (
-                <div key={msg.id} className='queued-item'>
-                  <div className='queued-info'>
-                    <div className='queued-message'>{msg.message}</div>
-                    <div className='queued-time'>
+              queuedMessages.map((msg) => (
+                <div key={msg.id} className="queued-item">
+                  <div className="queued-info">
+                    <div className="queued-message">{msg.message}</div>
+                    <div className="queued-time">
                       {msg.scheduledTime
                         ? `In ${formatTimeRemaining(msg.scheduledTime)}`
-                        : 'Pending'
-                      }
+                        : "Pending"}
                     </div>
                   </div>
                   <button
-                    className='cancel-btn'
+                    className="cancel-btn"
                     onClick={() => handleCancelQueued(msg.id)}
-                    title='Cancel'
+                    title="Cancel"
                   >
                     ✕
                   </button>
                 </div>
               ))
             ) : (
-              <div className='empty-state'>No scheduled messages</div>
+              <div className="empty-state">No scheduled messages</div>
             )}
           </div>
 
           {/* Quick Send */}
-          <div className='quick-send'>
-            <div className='section-title'>Quick Send</div>
-            <div className='quick-send-row'>
+          <div className="quick-send">
+            <div className="section-title">Quick Send</div>
+            <div className="quick-send-row">
               <input
-                type='text'
-                className='quick-input'
-                placeholder='Type a message...'
+                type="text"
+                className="quick-input"
+                placeholder="Type a message..."
                 value={quickMessage}
                 onChange={(e) => setQuickMessage(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && !showScheduler && handleQuickSend()}
+                onKeyPress={(e) =>
+                  e.key === "Enter" && !showScheduler && handleQuickSend()
+                }
               />
               <button
-                className='schedule-btn'
+                className="schedule-btn"
                 onClick={() => setShowScheduler(!showScheduler)}
-                title='Schedule'
+                title="Schedule"
               >
                 📅
               </button>
               <button
-                className='send-btn'
+                className="send-btn"
                 onClick={handleQuickSend}
                 disabled={!quickMessage.trim()}
               >
@@ -556,17 +570,17 @@ const ProactiveStatusIndicator: React.FC<ProactiveStatusIndicatorProps> = ({
             </div>
 
             {showScheduler && (
-              <div className='scheduler'>
-                <div className='scheduler-row'>
+              <div className="scheduler">
+                <div className="scheduler-row">
                   <input
-                    type='datetime-local'
-                    className='datetime-input'
+                    type="datetime-local"
+                    className="datetime-input"
                     value={scheduleTime}
                     onChange={(e) => setScheduleTime(e.target.value)}
                     min={new Date().toISOString().slice(0, 16)}
                   />
                   <button
-                    className='send-btn'
+                    className="send-btn"
                     onClick={handleSchedule}
                     disabled={!quickMessage.trim() || !scheduleTime}
                   >
@@ -579,7 +593,7 @@ const ProactiveStatusIndicator: React.FC<ProactiveStatusIndicatorProps> = ({
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default ProactiveStatusIndicator
+export default ProactiveStatusIndicator;

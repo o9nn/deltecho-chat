@@ -1,6 +1,6 @@
-import { useContext } from 'react'
+import { useContext } from "react";
 
-import { I18nContext } from '../contexts/I18nContext'
+import { I18nContext } from "../contexts/I18nContext";
 
 /**
  * Convenience wrapper function for `useContext(I18nContext)`.
@@ -12,5 +12,5 @@ import { I18nContext } from '../contexts/I18nContext'
  * the dynamic updating functionality use `window.static_translate` directly.
  */
 export default function useTranslationFunction() {
-  return useContext(I18nContext)
+  return useContext(I18nContext);
 }

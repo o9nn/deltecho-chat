@@ -41,12 +41,12 @@ through the Relation interface (S).
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `arenaMCP` | [`ArenaMCPServer`](ArenaMCPServer.md) |
-| `agentMCP` | [`AgentMCPServer`](AgentMCPServer.md) |
-| `relationMCP` | [`RelationMCPServer`](RelationMCPServer.md) |
-| `config` | `Partial`\<[`LifecycleConfig`](../interfaces/LifecycleConfig.md)\> |
+| Name          | Type                                                               |
+| :------------ | :----------------------------------------------------------------- |
+| `arenaMCP`    | [`ArenaMCPServer`](ArenaMCPServer.md)                              |
+| `agentMCP`    | [`AgentMCPServer`](AgentMCPServer.md)                              |
+| `relationMCP` | [`RelationMCPServer`](RelationMCPServer.md)                        |
+| `config`      | `Partial`\<[`LifecycleConfig`](../interfaces/LifecycleConfig.md)\> |
 
 #### Returns
 
@@ -76,7 +76,7 @@ Start the lifecycle coordinator
 
 [src/integration/lifecycle.ts:101](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/integration/lifecycle.ts#L101)
 
-___
+---
 
 ### stop
 
@@ -92,7 +92,7 @@ Stop the lifecycle coordinator
 
 [src/integration/lifecycle.ts:120](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/integration/lifecycle.ts#L120)
 
-___
+---
 
 ### runCycle
 
@@ -108,7 +108,7 @@ Run a complete developmental cycle
 
 [src/integration/lifecycle.ts:139](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/integration/lifecycle.ts#L139)
 
-___
+---
 
 ### executePhase
 
@@ -118,10 +118,10 @@ Execute a single lifecycle phase
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `phase` | [`LifecyclePhase`](../enums/LifecyclePhase.md) |
-| `cycleId` | `number` |
+| Name      | Type                                           |
+| :-------- | :--------------------------------------------- |
+| `phase`   | [`LifecyclePhase`](../enums/LifecyclePhase.md) |
+| `cycleId` | `number`                                       |
 
 #### Returns
 
@@ -131,7 +131,7 @@ Execute a single lifecycle phase
 
 [src/integration/lifecycle.ts:171](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/integration/lifecycle.ts#L171)
 
-___
+---
 
 ### getCycleCount
 
@@ -145,7 +145,7 @@ ___
 
 [src/integration/lifecycle.ts:395](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/integration/lifecycle.ts#L395)
 
-___
+---
 
 ### getCurrentPhase
 
@@ -159,7 +159,7 @@ ___
 
 [src/integration/lifecycle.ts:399](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/integration/lifecycle.ts#L399)
 
-___
+---
 
 ### isRunning
 
@@ -173,7 +173,7 @@ ___
 
 [src/integration/lifecycle.ts:403](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/integration/lifecycle.ts#L403)
 
-___
+---
 
 ### getConfig
 

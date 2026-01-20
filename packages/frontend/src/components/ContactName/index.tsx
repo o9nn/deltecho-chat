@@ -1,14 +1,14 @@
-import React from 'react'
+import React from "react";
 
-import { InlineVerifiedIcon } from '../VerifiedIcon'
+import { InlineVerifiedIcon } from "../VerifiedIcon";
 
-import styles from './styles.module.scss'
+import styles from "./styles.module.scss";
 
 type Props = {
-  displayName: string
-  address?: string
-  isVerified?: boolean
-}
+  displayName: string;
+  address?: string;
+  isVerified?: boolean;
+};
 
 export default function ContactName(props: Props) {
   return (
@@ -21,5 +21,5 @@ export default function ContactName(props: Props) {
         <div className={styles.contactNameAddress}>{props.address}</div>
       )}
     </div>
-  )
+  );
 }

@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react'
-import classNames from 'classnames'
+import React, { useEffect, useRef, useState } from "react";
+import classNames from "classnames";
 
 import Dialog, {
   DialogBody,
@@ -7,43 +7,43 @@ import Dialog, {
   DialogFooter,
   DialogHeader,
   FooterActions,
-} from '../../Dialog'
-import FooterActionButton from '../../Dialog/FooterActionButton'
-import useTranslationFunction from '../../../hooks/useTranslationFunction'
-import { selectedAccountId } from '../../../ScreenController'
-import { BackendRemote } from '../../../backend-com'
-import { AvatarFromContact } from '../../Avatar'
-import ContactName from '../../ContactName'
+} from "../../Dialog";
+import FooterActionButton from "../../Dialog/FooterActionButton";
+import useTranslationFunction from "../../../hooks/useTranslationFunction";
+import { selectedAccountId } from "../../../ScreenController";
+import { BackendRemote } from "../../../backend-com";
+import { AvatarFromContact } from "../../Avatar";
+import ContactName from "../../ContactName";
 
-import styles from './styles.module.scss'
+import styles from "./styles.module.scss";
 
-import type { DialogProps } from '../../../contexts/DialogContext'
-import { type T, C } from '@deltachat/jsonrpc-client'
+import type { DialogProps } from "../../../contexts/DialogContext";
+import { type T, C } from "@deltachat/jsonrpc-client";
 
-import useOpenViewProfileDialog from '../../../hooks/dialog/useOpenViewProfileDialog'
+import useOpenViewProfileDialog from "../../../hooks/dialog/useOpenViewProfileDialog";
 import {
   RovingTabindexProvider,
   useRovingTabindex,
-} from '../../../contexts/RovingTabindex'
+} from "../../../contexts/RovingTabindex";
 
 export type Props = {
-  reactionsByContact: T.Reactions['reactionsByContact']
-  onClose?: () => void
-}
+  reactionsByContact: T.Reactions["reactionsByContact"];
+  onClose?: () => void;
+};
 
 type ContactWithReaction = T.Contact & {
-  emoji: string
-}
+  emoji: string;
+};
 
 export default function ReactionsDialog({
   reactionsByContact,
   onClose,
 }: Props & DialogProps) {
-  const tx = useTranslationFunction()
+  const tx = useTranslationFunction();
 
   return (
     <Dialog width={400} onClose={onClose}>
-      <DialogHeader title={tx('reactions')} />
+      <DialogHeader title={tx("reactions")} />
       <DialogBody>
         <DialogContent>
           <ReactionsDialogList
@@ -54,55 +54,55 @@ export default function ReactionsDialog({
       </DialogBody>
       <DialogFooter>
         <FooterActions>
-          <FooterActionButton onClick={onClose}>{tx('ok')}</FooterActionButton>
+          <FooterActionButton onClick={onClose}>{tx("ok")}</FooterActionButton>
         </FooterActions>
       </DialogFooter>
     </Dialog>
-  )
+  );
 }
 
 function ReactionsDialogList({ reactionsByContact, onClose }: Props) {
-  const accountId = selectedAccountId()
-  const [contacts, setContacts] = useState<ContactWithReaction[]>([])
-  const openViewProfileDialog = useOpenViewProfileDialog({ onAction: onClose })
+  const accountId = selectedAccountId();
+  const [contacts, setContacts] = useState<ContactWithReaction[]>([]);
+  const openViewProfileDialog = useOpenViewProfileDialog({ onAction: onClose });
 
-  const ref = useRef<HTMLUListElement>(null)
+  const ref = useRef<HTMLUListElement>(null);
 
   useEffect(() => {
     const resolveContacts = async () => {
-      const contactIds = Object.keys(reactionsByContact).map(contactId =>
-        parseInt(contactId, 10)
-      )
+      const contactIds = Object.keys(reactionsByContact).map((contactId) =>
+        parseInt(contactId, 10),
+      );
 
       const result = await BackendRemote.rpc.getContactsByIds(
         accountId,
-        contactIds
-      )
+        contactIds,
+      );
 
       setContacts(
-        Object.values(result).map(contact => {
+        Object.values(result).map((contact) => {
           return {
             ...contact,
             // Even though multiple reactions are supported by the core we do
             // not display or support them here in the UI. Currently we only
             // pick the "first" reaction by that user
             emoji: reactionsByContact[contact.id][0],
-          }
-        })
-      )
-    }
+          };
+        }),
+      );
+    };
 
-    resolveContacts()
-  }, [accountId, reactionsByContact])
+    resolveContacts();
+  }, [accountId, reactionsByContact]);
 
   return (
     <ul ref={ref} className={styles.reactionsDialogList}>
       <RovingTabindexProvider wrapperElementRef={ref}>
-        {contacts.map(contact => (
+        {contacts.map((contact) => (
           <li key={contact.id}>
             <ReactionsDialogListItem
               contact={contact}
-              onClickNonSelf={contactId =>
+              onClickNonSelf={(contactId) =>
                 openViewProfileDialog(accountId, contactId)
               }
             />
@@ -110,25 +110,25 @@ function ReactionsDialogList({ reactionsByContact, onClose }: Props) {
         ))}
       </RovingTabindexProvider>
     </ul>
-  )
+  );
 }
 
 function ReactionsDialogListItem(props: {
-  contact: ContactWithReaction
-  onClickNonSelf: (contactId: number) => void
+  contact: ContactWithReaction;
+  onClickNonSelf: (contactId: number) => void;
 }) {
-  const { contact, onClickNonSelf } = props
-  const notFromSelf = C.DC_CONTACT_ID_SELF !== contact.id
+  const { contact, onClickNonSelf } = props;
+  const notFromSelf = C.DC_CONTACT_ID_SELF !== contact.id;
 
-  const ref = useRef<HTMLButtonElement>(null)
-  const rovingTabindex = useRovingTabindex(ref)
+  const ref = useRef<HTMLButtonElement>(null);
+  const rovingTabindex = useRovingTabindex(ref);
 
   return (
     <button
       ref={ref}
       onClick={() => {
         if (notFromSelf) {
-          onClickNonSelf(contact.id)
+          onClickNonSelf(contact.id);
         }
       }}
       // `aria-disabled` instead of just `disabled` because we probably
@@ -139,7 +139,7 @@ function ReactionsDialogListItem(props: {
         rovingTabindex.className,
         {
           [styles.reactionsDialogListClickable]: notFromSelf,
-        }
+        },
       )}
       tabIndex={rovingTabindex.tabIndex}
       onKeyDown={rovingTabindex.onKeydown}
@@ -159,5 +159,5 @@ function ReactionsDialogListItem(props: {
       </div>
       <div className={styles.reactionsDialogEmoji}>{contact.emoji}</div>
     </button>
-  )
+  );
 }

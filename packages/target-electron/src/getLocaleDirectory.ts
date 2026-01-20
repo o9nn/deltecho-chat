@@ -1,12 +1,12 @@
-import { existsSync } from 'fs'
-import { join, dirname } from 'path'
-import { fileURLToPath } from 'url'
+import { existsSync } from "fs";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const alternativeDirectory = process.env['DELTACHAT_LOCALE_DIR']
+const alternativeDirectory = process.env["DELTACHAT_LOCALE_DIR"];
 
-let cachedResult: string | null = null
+let cachedResult: string | null = null;
 
 // Idea: there could be instead a `resolveLocaleDirectoryPath(file)`
 // function that looks in the other folders as fallback if it can't find a file
@@ -15,14 +15,14 @@ let cachedResult: string | null = null
 
 export function getLocaleDirectoryPath() {
   if (cachedResult) {
-    return cachedResult
+    return cachedResult;
   }
 
   const places = [
     alternativeDirectory,
-    join(__dirname, '../_locales'), // packaged
-    join(__dirname, '../../../_locales'), // development
-  ]
+    join(__dirname, "../_locales"), // packaged
+    join(__dirname, "../../../_locales"), // development
+  ];
 
   if (alternativeDirectory && !isValidLocaleDirectory(alternativeDirectory)) {
     throw new Error(
@@ -32,16 +32,16 @@ export function getLocaleDirectoryPath() {
       - _untranslated_en.json  // for untranslated strings
       - en.json                // for fallback
       
-      Path to the invalid directory: ${alternativeDirectory}`
-    )
+      Path to the invalid directory: ${alternativeDirectory}`,
+    );
   }
 
-  const directory = places.find(isValidLocaleDirectory)
+  const directory = places.find(isValidLocaleDirectory);
   if (!directory) {
-    throw new Error('Failed to find locale data')
+    throw new Error("Failed to find locale data");
   }
-  cachedResult = directory
-  return directory
+  cachedResult = directory;
+  return directory;
 }
 
 function isValidLocaleDirectory(path: string | undefined): boolean {
@@ -50,8 +50,8 @@ function isValidLocaleDirectory(path: string | undefined): boolean {
   return (
     path !== undefined &&
     existsSync(path) &&
-    existsSync(join(path, '_languages.json')) &&
-    existsSync(join(path, '_untranslated_en.json')) &&
-    existsSync(join(path, 'en.json'))
-  )
+    existsSync(join(path, "_languages.json")) &&
+    existsSync(join(path, "_untranslated_en.json")) &&
+    existsSync(join(path, "en.json"))
+  );
 }

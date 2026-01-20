@@ -23,7 +23,7 @@ Synthesis result from integrating Agent and Arena states
 
 [src/types.ts:202](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L202)
 
-___
+---
 
 ### emergentIdentity
 
@@ -33,7 +33,7 @@ ___
 
 [src/types.ts:203](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L203)
 
-___
+---
 
 ### flows
 
@@ -43,11 +43,11 @@ ___
 
 [src/types.ts:204](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L204)
 
-___
+---
 
 ### tensions
 
-• **tensions**: \{ `pole1`: `string` ; `pole2`: `string` ; `balance`: `number`  }[]
+• **tensions**: \{ `pole1`: `string` ; `pole2`: `string` ; `balance`: `number` }[]
 
 #### Defined in
 

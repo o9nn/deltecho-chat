@@ -13,6 +13,6 @@ export {
   MetricDataPoint,
   HealthStatus,
   Alert,
-} from './TelemetryMonitor.js';
+} from "./TelemetryMonitor.js";
 
-export { default } from './TelemetryMonitor.js';
+export { default } from "./TelemetryMonitor.js";

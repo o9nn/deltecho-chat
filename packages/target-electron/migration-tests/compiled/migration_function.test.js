@@ -4,30 +4,46 @@ const __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 const __getOwnPropNames = Object.getOwnPropertyNames;
 const __getProtoOf = Object.getPrototypeOf;
 const __hasOwnProp = Object.prototype.hasOwnProperty;
-const __commonJS = (cb, mod) => function __require() {
-  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-};
+const __commonJS = (cb, mod) =>
+  function __require() {
+    return (
+      mod ||
+        (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod),
+      mod.exports
+    );
+  };
 const __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
+  if ((from && typeof from === "object") || typeof from === "function") {
     for (const key of __getOwnPropNames(from))
       if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+        __defProp(to, key, {
+          get: () => from[key],
+          enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable,
+        });
   }
   return to;
 };
-const __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
+const __toESM = (mod, isNodeMode, target) => (
+  (target = mod != null ? __create(__getProtoOf(mod)) : {}),
+  __copyProps(
+    // If the importer is in node compatibility mode or this is not an ESM
+    // file that has been converted to a CommonJS file using a Babel-
+    // compatible transform (i.e. "__esModule" has not been set), then set
+    // "default" to the CommonJS "module.exports" for node compatibility.
+    isNodeMode || !mod || !mod.__esModule
+      ? __defProp(target, "default", { value: mod, enumerable: true })
+      : target,
+    mod,
+  )
+);
 
 // ../../node_modules/.pnpm/stackframe@1.3.4/node_modules/stackframe/stackframe.js
 const require_stackframe = __commonJS({
-  "../../node_modules/.pnpm/stackframe@1.3.4/node_modules/stackframe/stackframe.js"(exports, module) {
-    (function(root, factory) {
+  "../../node_modules/.pnpm/stackframe@1.3.4/node_modules/stackframe/stackframe.js"(
+    exports,
+    module,
+  ) {
+    (function (root, factory) {
       "use strict";
       if (typeof define === "function" && define.amd) {
         define("stackframe", [], factory);
@@ -36,7 +52,7 @@ const require_stackframe = __commonJS({
       } else {
         root.StackFrame = factory();
       }
-    })(exports, function() {
+    })(exports, function () {
       "use strict";
       function _isNumber(n) {
         return !isNaN(parseFloat(n)) && isFinite(n);
@@ -45,19 +61,28 @@ const require_stackframe = __commonJS({
         return str.charAt(0).toUpperCase() + str.substring(1);
       }
       function _getter(p) {
-        return function() {
+        return function () {
           return this[p];
         };
       }
-      const booleanProps = ["isConstructor", "isEval", "isNative", "isToplevel"];
+      const booleanProps = [
+        "isConstructor",
+        "isEval",
+        "isNative",
+        "isToplevel",
+      ];
       const numericProps = ["columnNumber", "lineNumber"];
       const stringProps = ["fileName", "functionName", "source"];
       const arrayProps = ["args"];
       const objectProps = ["evalOrigin"];
-      const props = booleanProps.concat(numericProps, stringProps, arrayProps, objectProps);
+      const props = booleanProps.concat(
+        numericProps,
+        stringProps,
+        arrayProps,
+        objectProps,
+      );
       function StackFrame(obj) {
-        if (!obj)
-          return;
+        if (!obj) return;
         for (let i2 = 0; i2 < props.length; i2++) {
           if (obj[props[i2]] !== void 0) {
             this["set" + _capitalize(props[i2])](obj[props[i2]]);
@@ -65,19 +90,19 @@ const require_stackframe = __commonJS({
         }
       }
       StackFrame.prototype = {
-        getArgs: function() {
+        getArgs: function () {
           return this.args;
         },
-        setArgs: function(v) {
+        setArgs: function (v) {
           if (Object.prototype.toString.call(v) !== "[object Array]") {
             throw new TypeError("Args must be an Array");
           }
           this.args = v;
         },
-        getEvalOrigin: function() {
+        getEvalOrigin: function () {
           return this.evalOrigin;
         },
-        setEvalOrigin: function(v) {
+        setEvalOrigin: function (v) {
           if (v instanceof StackFrame) {
             this.evalOrigin = v;
           } else if (v instanceof Object) {
@@ -86,22 +111,39 @@ const require_stackframe = __commonJS({
             throw new TypeError("Eval Origin must be an Object or StackFrame");
           }
         },
-        toString: function() {
+        toString: function () {
           const fileName = this.getFileName() || "";
           const lineNumber = this.getLineNumber() || "";
           const columnNumber = this.getColumnNumber() || "";
           const functionName = this.getFunctionName() || "";
           if (this.getIsEval()) {
             if (fileName) {
-              return "[eval] (" + fileName + ":" + lineNumber + ":" + columnNumber + ")";
+              return (
+                "[eval] (" +
+                fileName +
+                ":" +
+                lineNumber +
+                ":" +
+                columnNumber +
+                ")"
+              );
             }
             return "[eval]:" + lineNumber + ":" + columnNumber;
           }
           if (functionName) {
-            return functionName + " (" + fileName + ":" + lineNumber + ":" + columnNumber + ")";
+            return (
+              functionName +
+              " (" +
+              fileName +
+              ":" +
+              lineNumber +
+              ":" +
+              columnNumber +
+              ")"
+            );
           }
           return fileName + ":" + lineNumber + ":" + columnNumber;
-        }
+        },
       };
       StackFrame.fromString = function StackFrame$$fromString(str) {
         const argsStartIndex = str.indexOf("(");
@@ -110,7 +152,10 @@ const require_stackframe = __commonJS({
         const args = str.substring(argsStartIndex + 1, argsEndIndex).split(",");
         const locationString = str.substring(argsEndIndex + 1);
         if (locationString.indexOf("@") === 0) {
-          const parts = /@(.+?)(?::(\d+))?(?::(\d+))?$/.exec(locationString, "");
+          const parts = /@(.+?)(?::(\d+))?(?::(\d+))?$/.exec(
+            locationString,
+            "",
+          );
           var fileName = parts[1];
           var lineNumber = parts[2];
           var columnNumber = parts[3];
@@ -120,45 +165,57 @@ const require_stackframe = __commonJS({
           args: args || void 0,
           fileName,
           lineNumber: lineNumber || void 0,
-          columnNumber: columnNumber || void 0
+          columnNumber: columnNumber || void 0,
         });
       };
       for (let i = 0; i < booleanProps.length; i++) {
-        StackFrame.prototype["get" + _capitalize(booleanProps[i])] = _getter(booleanProps[i]);
-        StackFrame.prototype["set" + _capitalize(booleanProps[i])] = /* @__PURE__ */ function(p) {
-          return function(v) {
-            this[p] = Boolean(v);
-          };
-        }(booleanProps[i]);
+        StackFrame.prototype["get" + _capitalize(booleanProps[i])] = _getter(
+          booleanProps[i],
+        );
+        StackFrame.prototype["set" + _capitalize(booleanProps[i])] =
+          /* @__PURE__ */ (function (p) {
+            return function (v) {
+              this[p] = Boolean(v);
+            };
+          })(booleanProps[i]);
       }
       for (let j = 0; j < numericProps.length; j++) {
-        StackFrame.prototype["get" + _capitalize(numericProps[j])] = _getter(numericProps[j]);
-        StackFrame.prototype["set" + _capitalize(numericProps[j])] = /* @__PURE__ */ function(p) {
-          return function(v) {
-            if (!_isNumber(v)) {
-              throw new TypeError(p + " must be a Number");
-            }
-            this[p] = Number(v);
-          };
-        }(numericProps[j]);
+        StackFrame.prototype["get" + _capitalize(numericProps[j])] = _getter(
+          numericProps[j],
+        );
+        StackFrame.prototype["set" + _capitalize(numericProps[j])] =
+          /* @__PURE__ */ (function (p) {
+            return function (v) {
+              if (!_isNumber(v)) {
+                throw new TypeError(p + " must be a Number");
+              }
+              this[p] = Number(v);
+            };
+          })(numericProps[j]);
       }
       for (let k = 0; k < stringProps.length; k++) {
-        StackFrame.prototype["get" + _capitalize(stringProps[k])] = _getter(stringProps[k]);
-        StackFrame.prototype["set" + _capitalize(stringProps[k])] = /* @__PURE__ */ function(p) {
-          return function(v) {
-            this[p] = String(v);
-          };
-        }(stringProps[k]);
+        StackFrame.prototype["get" + _capitalize(stringProps[k])] = _getter(
+          stringProps[k],
+        );
+        StackFrame.prototype["set" + _capitalize(stringProps[k])] =
+          /* @__PURE__ */ (function (p) {
+            return function (v) {
+              this[p] = String(v);
+            };
+          })(stringProps[k]);
       }
       return StackFrame;
     });
-  }
+  },
 });
 
 // ../../node_modules/.pnpm/error-stack-parser@2.1.4/node_modules/error-stack-parser/error-stack-parser.js
 const require_error_stack_parser = __commonJS({
-  "../../node_modules/.pnpm/error-stack-parser@2.1.4/node_modules/error-stack-parser/error-stack-parser.js"(exports, module) {
-    (function(root, factory) {
+  "../../node_modules/.pnpm/error-stack-parser@2.1.4/node_modules/error-stack-parser/error-stack-parser.js"(
+    exports,
+    module,
+  ) {
+    (function (root, factory) {
       "use strict";
       if (typeof define === "function" && define.amd) {
         define("error-stack-parser", ["stackframe"], factory);
@@ -180,7 +237,10 @@ const require_error_stack_parser = __commonJS({
          * @return {Array} of StackFrames
          */
         parse: function ErrorStackParser$$parse(error) {
-          if (typeof error.stacktrace !== "undefined" || typeof error["opera#sourceloc"] !== "undefined") {
+          if (
+            typeof error.stacktrace !== "undefined" ||
+            typeof error["opera#sourceloc"] !== "undefined"
+          ) {
             return this.parseOpera(error);
           } else if (error.stack && error.stack.match(CHROME_IE_STACK_REGEXP)) {
             return this.parseV8OrIE(error);
@@ -200,57 +260,78 @@ const require_error_stack_parser = __commonJS({
           return [parts[1], parts[2] || void 0, parts[3] || void 0];
         },
         parseV8OrIE: function ErrorStackParser$$parseV8OrIE(error) {
-          const filtered = error.stack.split("\n").filter(function(line) {
+          const filtered = error.stack.split("\n").filter(function (line) {
             return !!line.match(CHROME_IE_STACK_REGEXP);
           }, this);
-          return filtered.map(function(line) {
+          return filtered.map(function (line) {
             if (line.indexOf("(eval ") > -1) {
-              line = line.replace(/eval code/g, "eval").replace(/(\(eval at [^()]*)|(,.*$)/g, "");
+              line = line
+                .replace(/eval code/g, "eval")
+                .replace(/(\(eval at [^()]*)|(,.*$)/g, "");
             }
-            let sanitizedLine = line.replace(/^\s+/, "").replace(/\(eval code/g, "(").replace(/^.*?\s+/, "");
+            let sanitizedLine = line
+              .replace(/^\s+/, "")
+              .replace(/\(eval code/g, "(")
+              .replace(/^.*?\s+/, "");
             const location = sanitizedLine.match(/ (\(.+\)$)/);
-            sanitizedLine = location ? sanitizedLine.replace(location[0], "") : sanitizedLine;
-            const locationParts = this.extractLocation(location ? location[1] : sanitizedLine);
-            const functionName = location && sanitizedLine || void 0;
-            const fileName = ["eval", "<anonymous>"].indexOf(locationParts[0]) > -1 ? void 0 : locationParts[0];
+            sanitizedLine = location
+              ? sanitizedLine.replace(location[0], "")
+              : sanitizedLine;
+            const locationParts = this.extractLocation(
+              location ? location[1] : sanitizedLine,
+            );
+            const functionName = (location && sanitizedLine) || void 0;
+            const fileName =
+              ["eval", "<anonymous>"].indexOf(locationParts[0]) > -1
+                ? void 0
+                : locationParts[0];
             return new StackFrame({
               functionName,
               fileName,
               lineNumber: locationParts[1],
               columnNumber: locationParts[2],
-              source: line
+              source: line,
             });
           }, this);
         },
         parseFFOrSafari: function ErrorStackParser$$parseFFOrSafari(error) {
-          const filtered = error.stack.split("\n").filter(function(line) {
+          const filtered = error.stack.split("\n").filter(function (line) {
             return !line.match(SAFARI_NATIVE_CODE_REGEXP);
           }, this);
-          return filtered.map(function(line) {
+          return filtered.map(function (line) {
             if (line.indexOf(" > eval") > -1) {
-              line = line.replace(/ line (\d+)(?: > eval line \d+)* > eval:\d+:\d+/g, ":$1");
+              line = line.replace(
+                / line (\d+)(?: > eval line \d+)* > eval:\d+:\d+/g,
+                ":$1",
+              );
             }
             if (line.indexOf("@") === -1 && line.indexOf(":") === -1) {
               return new StackFrame({
-                functionName: line
+                functionName: line,
               });
             } else {
               const functionNameRegex = /((.*".+"[^@]*)?[^@]*)(?:@)/;
               const matches = line.match(functionNameRegex);
               const functionName = matches && matches[1] ? matches[1] : void 0;
-              const locationParts = this.extractLocation(line.replace(functionNameRegex, ""));
+              const locationParts = this.extractLocation(
+                line.replace(functionNameRegex, ""),
+              );
               return new StackFrame({
                 functionName,
                 fileName: locationParts[0],
                 lineNumber: locationParts[1],
                 columnNumber: locationParts[2],
-                source: line
+                source: line,
               });
             }
           }, this);
         },
         parseOpera: function ErrorStackParser$$parseOpera(e) {
-          if (!e.stacktrace || e.message.indexOf("\n") > -1 && e.message.split("\n").length > e.stacktrace.split("\n").length) {
+          if (
+            !e.stacktrace ||
+            (e.message.indexOf("\n") > -1 &&
+              e.message.split("\n").length > e.stacktrace.split("\n").length)
+          ) {
             return this.parseOpera9(e);
           } else if (!e.stack) {
             return this.parseOpera10(e);
@@ -265,17 +346,20 @@ const require_error_stack_parser = __commonJS({
           for (let i = 2, len = lines.length; i < len; i += 2) {
             const match = lineRE.exec(lines[i]);
             if (match) {
-              result.push(new StackFrame({
-                fileName: match[2],
-                lineNumber: match[1],
-                source: lines[i]
-              }));
+              result.push(
+                new StackFrame({
+                  fileName: match[2],
+                  lineNumber: match[1],
+                  source: lines[i],
+                }),
+              );
             }
           }
           return result;
         },
         parseOpera10: function ErrorStackParser$$parseOpera10(e) {
-          const lineRE = /Line (\d+).*script (?:in )?(\S+)(?:: In function (\S+))?$/i;
+          const lineRE =
+            /Line (\d+).*script (?:in )?(\S+)(?:: In function (\S+))?$/i;
           const lines = e.stacktrace.split("\n");
           const result = [];
           for (let i = 0, len = lines.length; i < len; i += 2) {
@@ -286,8 +370,8 @@ const require_error_stack_parser = __commonJS({
                   functionName: match[3] || void 0,
                   fileName: match[2],
                   lineNumber: match[1],
-                  source: lines[i]
-                })
+                  source: lines[i],
+                }),
               );
             }
           }
@@ -295,32 +379,41 @@ const require_error_stack_parser = __commonJS({
         },
         // Opera 10.65+ Error.stack very similar to FF/Safari
         parseOpera11: function ErrorStackParser$$parseOpera11(error) {
-          const filtered = error.stack.split("\n").filter(function(line) {
-            return !!line.match(FIREFOX_SAFARI_STACK_REGEXP) && !line.match(/^Error created at/);
+          const filtered = error.stack.split("\n").filter(function (line) {
+            return (
+              !!line.match(FIREFOX_SAFARI_STACK_REGEXP) &&
+              !line.match(/^Error created at/)
+            );
           }, this);
-          return filtered.map(function(line) {
+          return filtered.map(function (line) {
             const tokens = line.split("@");
             const locationParts = this.extractLocation(tokens.pop());
             const functionCall = tokens.shift() || "";
-            const functionName = functionCall.replace(/<anonymous function(: (\w+))?>/, "$2").replace(/\([^)]*\)/g, "") || void 0;
+            const functionName =
+              functionCall
+                .replace(/<anonymous function(: (\w+))?>/, "$2")
+                .replace(/\([^)]*\)/g, "") || void 0;
             let argsRaw;
             if (functionCall.match(/\(([^)]*)\)/)) {
               argsRaw = functionCall.replace(/^[^(]+\(([^)]*)\)$/, "$1");
             }
-            const args = argsRaw === void 0 || argsRaw === "[arguments not available]" ? void 0 : argsRaw.split(",");
+            const args =
+              argsRaw === void 0 || argsRaw === "[arguments not available]"
+                ? void 0
+                : argsRaw.split(",");
             return new StackFrame({
               functionName,
               args,
               fileName: locationParts[0],
               lineNumber: locationParts[1],
               columnNumber: locationParts[2],
-              source: line
+              source: line,
             });
           }, this);
-        }
+        },
       };
     });
-  }
+  },
 });
 
 // migration-tests/migration_function.test.ts
@@ -338,9 +431,14 @@ import { startDeltaChat } from "@deltachat/stdio-rpc-server";
 import { existsSync, lstatSync } from "fs";
 import { join } from "path";
 import { mkdir, readdir, rename, rm, rmdir, stat } from "fs/promises";
-async function migrateAccountsIfNeeded(cwd, log3, treatFailedMigrationAsError = false) {
+async function migrateAccountsIfNeeded(
+  cwd,
+  log3,
+  treatFailedMigrationAsError = false,
+) {
   let tmpDC;
-  const eventLogger = (accountId, event) => log3.debug("core-event", { accountId, ...event });
+  const eventLogger = (accountId, event) =>
+    log3.debug("core-event", { accountId, ...event });
   try {
     const new_accounts_format = existsSync(join(cwd, "accounts.toml"));
     if (new_accounts_format) {
@@ -354,12 +452,17 @@ async function migrateAccountsIfNeeded(cwd, log3, treatFailedMigrationAsError = 
         const path = join(configPath, folderName);
         try {
           const db_path = join(path, "db.sqlite");
-          return lstatSync(path).isDirectory() && existsSync(db_path) && lstatSync(db_path).isFile() && !lstatSync(path).isSymbolicLink();
+          return (
+            lstatSync(path).isDirectory() &&
+            existsSync(db_path) &&
+            lstatSync(db_path).isFile() &&
+            !lstatSync(path).isSymbolicLink()
+          );
         } catch (error) {
           log3.debug("error while testing if folder is account", error);
           return false;
         }
-      }
+      },
     );
     const migrateFromFormat1 = accountFoldersFormat1.length !== 0;
     const migrateFromFormat2 = existsSync(cwd);
@@ -374,13 +477,13 @@ async function migrateAccountsIfNeeded(cwd, log3, treatFailedMigrationAsError = 
       await rename(path_accounts, pathAccountsOld);
     }
     tmpDC = await startDeltaChat(path_accounts, {
-      muteStdErr: false
+      muteStdErr: false,
     });
     tmpDC.on("ALL", eventLogger);
     const oldFoldersToDelete = [];
     if (migrateFromFormat1) {
       log3.info(
-        `found old ${accountFoldersFormat1.length} legacy accounts (1), we need to migrate...`
+        `found old ${accountFoldersFormat1.length} legacy accounts (1), we need to migrate...`,
       );
       for (const folder of accountFoldersFormat1) {
         log3.debug(`migrating legacy account "${folder}"`);
@@ -393,7 +496,10 @@ async function migrateAccountsIfNeeded(cwd, log3, treatFailedMigrationAsError = 
           await tmpDC.rpc.migrateAccount(pathDBFile);
           oldFoldersToDelete.push(folder);
         } catch (error) {
-          log3.error(`Failed to migrate account at path "${pathDBFile}"`, error);
+          log3.error(
+            `Failed to migrate account at path "${pathDBFile}"`,
+            error,
+          );
           if (treatFailedMigrationAsError) {
             throw error;
           }
@@ -403,13 +509,12 @@ async function migrateAccountsIfNeeded(cwd, log3, treatFailedMigrationAsError = 
     if (migrateFromFormat2) {
       for (const entry of await readdir(pathAccountsOld)) {
         const stat_result = await stat(join(pathAccountsOld, entry));
-        if (!stat_result.isDirectory())
-          continue;
+        if (!stat_result.isDirectory()) continue;
         log3.debug(`migrating account "${join(pathAccountsOld, entry)}"`);
         const path_dbfile = join(pathAccountsOld, entry, "db.sqlite");
         if (!existsSync(path_dbfile)) {
           log3.warn(
-            "found an old accounts folder without a db.sqlite file, skipping"
+            "found an old accounts folder without a db.sqlite file, skipping",
           );
           continue;
         }
@@ -430,7 +535,11 @@ async function migrateAccountsIfNeeded(cwd, log3, treatFailedMigrationAsError = 
               const new_sticker_folder = join(blobdir, "../stickers");
               await rename(old_sticker_folder, new_sticker_folder);
             } catch (error) {
-              log3.error("stickers migration failed", old_sticker_folder, error);
+              log3.error(
+                "stickers migration failed",
+                old_sticker_folder,
+                error,
+              );
               if (treatFailedMigrationAsError) {
                 throw error;
               }
@@ -440,19 +549,20 @@ async function migrateAccountsIfNeeded(cwd, log3, treatFailedMigrationAsError = 
         } catch (error) {
           log3.error(
             `Failed to migrate account at path "${path_dbfile}":`,
-            error
+            error,
           );
         }
       }
     }
     tmpDC.off("ALL", eventLogger);
     tmpDC.close();
-    for (const oldFolder of oldFoldersToDelete.map((f) => join(configPath, f))) {
+    for (const oldFolder of oldFoldersToDelete.map((f) =>
+      join(configPath, f),
+    )) {
       try {
         try {
           await rm(join(oldFolder, ".DS_Store"));
-        } catch (error) {
-        }
+        } catch (error) {}
         await rmdir(oldFolder);
       } catch (error) {
         log3.error("Failed to cleanup old folder:", oldFolder, error);
@@ -470,45 +580,47 @@ async function migrateAccountsIfNeeded(cwd, log3, treatFailedMigrationAsError = 
 // ../shared/logger.ts
 const import_error_stack_parser = __toESM(require_error_stack_parser(), 1);
 const startTime = Date.now();
-const colorize = (light, code) => (str) => "\x1B[" + light + ";" + code + "m" + str + "\x1B[0m";
+const colorize = (light, code) => (str) =>
+  "\x1B[" + light + ";" + code + "m" + str + "\x1B[0m";
 const blue = colorize(1, 34);
 const red = colorize(1, 31);
 const yellow = colorize(1, 33);
 const grey = colorize(0, 37);
 const green = colorize(1, 37);
 const cyan = colorize(1, 36);
-const emojiFontCss = 'font-family: Roboto, "Apple Color Emoji", NotoEmoji, "Helvetica Neue", Arial, Helvetica, NotoMono, sans-serif !important;';
+const emojiFontCss =
+  'font-family: Roboto, "Apple Color Emoji", NotoEmoji, "Helvetica Neue", Arial, Helvetica, NotoMono, sans-serif !important;';
 const LoggerVariants = [
   {
     log: console.debug,
     level: "DEBUG" /* DEBUG */,
     emoji: "\u{1F578}\uFE0F",
-    symbol: "[D]"
+    symbol: "[D]",
   },
   {
     log: console.info,
     level: "INFO" /* INFO */,
     emoji: "\u2139\uFE0F",
-    symbol: blue("[i]")
+    symbol: blue("[i]"),
   },
   {
     log: console.warn,
     level: "WARNING" /* WARNING */,
     emoji: "\u26A0\uFE0F",
-    symbol: yellow("[w]")
+    symbol: yellow("[w]"),
   },
   {
     log: console.error,
     level: "ERROR" /* ERROR */,
     emoji: "\u{1F6A8}",
-    symbol: red("[E]")
+    symbol: red("[E]"),
   },
   {
     log: console.error,
     level: "CRITICAL" /* CRITICAL */,
     emoji: "\u{1F6A8}\u{1F6A8}",
-    symbol: red("[C]")
-  }
+    symbol: red("[C]"),
+  },
 ];
 let handler;
 let rc = {};
@@ -526,7 +638,9 @@ function log({ channel, isMainProcess }, level, stacktrace, args) {
   handler(channel, variant.level, stacktrace, ...args);
   if (rc["log-to-console"]) {
     if (isMainProcess) {
-      const beginning = `${Math.round((Date.now() - startTime) / 100) / 10}s ${LoggerVariants[level].symbol}${grey(channel)}:`;
+      const beginning = `${Math.round((Date.now() - startTime) / 100) / 10}s ${
+        LoggerVariants[level].symbol
+      }${grey(channel)}:`;
       if (!stacktrace) {
         variant.log(beginning, ...args);
       } else {
@@ -534,9 +648,15 @@ function log({ channel, isMainProcess }, level, stacktrace, args) {
           beginning,
           ...args,
           red(
-            Array.isArray(stacktrace) ? stacktrace.map((s) => `
-${s.toString()}`).join() : stacktrace
-          )
+            Array.isArray(stacktrace)
+              ? stacktrace
+                  .map(
+                    (s) => `
+${s.toString()}`,
+                  )
+                  .join()
+              : stacktrace,
+          ),
         );
       }
     } else {
@@ -561,15 +681,20 @@ const Logger = class {
   }
   getStackTrace() {
     const rawStack = import_error_stack_parser.default.parse(
-      new Error("Get Stacktrace")
+      new Error("Get Stacktrace"),
     );
     const stack = rawStack.slice(2, rawStack.length);
-    return rc["machine-readable-stacktrace"] ? stack : stack.map((s) => `
-${s.toString()}`).join();
+    return rc["machine-readable-stacktrace"]
+      ? stack
+      : stack
+          .map(
+            (s) => `
+${s.toString()}`,
+          )
+          .join();
   }
   debug(...args) {
-    if (!rc["log-debug"])
-      return;
+    if (!rc["log-debug"]) return;
     log(this, 0, "", args);
   }
   info(...args) {
@@ -594,15 +719,15 @@ function getLogger(channel) {
 }
 if (!("toJSON" in Error.prototype))
   Object.defineProperty(Error.prototype, "toJSON", {
-    value: function() {
+    value: function () {
       const alt = {};
-      Object.getOwnPropertyNames(this).forEach(function(key) {
+      Object.getOwnPropertyNames(this).forEach(function (key) {
         alt[key] = this[key];
       }, this);
       return alt;
     },
     configurable: true,
-    writable: true
+    writable: true,
   });
 
 // migration-tests/migration_function.test.ts
@@ -612,21 +737,24 @@ const log2 = getLogger("test");
 before(async () => {
   if (process.env["DEBUG"]) {
     setLogHandler(console.debug, {
-      "log-debug": process.env["DEBUG"] == "2"
+      "log-debug": process.env["DEBUG"] == "2",
     });
   } else {
-    setLogHandler(() => {
-    }, {});
+    setLogHandler(() => {}, {});
   }
 });
-const zip = new AdmZip(join2(__dirname, "../test_data/migration-test-data.zip"));
-const testEnvironment = mkdtempSync(join2(tmpdir(), "deltachat-migration-test-"));
+const zip = new AdmZip(
+  join2(__dirname, "../test_data/migration-test-data.zip"),
+);
+const testEnvironment = mkdtempSync(
+  join2(tmpdir(), "deltachat-migration-test-"),
+);
 zip.extractAllTo(testEnvironment);
 log2.debug({ testEnvironment });
 const versions = await readdir2(testEnvironment);
 const BROKEN_TEST_DATA = [
   "DeltaChat-1.3.1.AppImage",
-  "DeltaChat-1.3.3.AppImage"
+  "DeltaChat-1.3.3.AppImage",
 ];
 describe("/electron/main/account-migration", async () => {
   for (const version of versions) {
@@ -639,20 +767,26 @@ describe("/electron/main/account-migration", async () => {
       log2.info({ targetFolder });
       log2.debug(
         { targetFolder },
-        await readdir2(versionPath, { recursive: true })
+        await readdir2(versionPath, { recursive: true }),
       );
       if (!existsSync2(join2(targetFolder, "accounts.toml"))) {
-        const migrated = await migrateAccountsIfNeeded(targetFolder, log2, true);
+        const migrated = await migrateAccountsIfNeeded(
+          targetFolder,
+          log2,
+          true,
+        );
         expect(migrated).to.be.true;
       } else {
         log2.debug(
-          "accounts.toml already exists, the migration from absolute paths to relative ones should happen on normal start"
+          "accounts.toml already exists, the migration from absolute paths to relative ones should happen on normal start",
         );
       }
-      const eventLogger = (accountId, event) => log2.debug("core-event", { accountId, ...event });
+      const eventLogger = (accountId, event) =>
+        log2.debug("core-event", { accountId, ...event });
       const tmpDC = await startDeltaChat2(targetFolder, {
         disableEnvPath: true,
-        muteStdErr: process.env["DEBUG"] === void 0 || process.env["RUST_LOG"] === void 0
+        muteStdErr:
+          process.env["DEBUG"] === void 0 || process.env["RUST_LOG"] === void 0,
       });
       tmpDC.on("ALL", eventLogger);
       after(() => {
@@ -662,11 +796,11 @@ describe("/electron/main/account-migration", async () => {
       log2.debug("test if migration worked");
       const accounts = await tmpDC.rpc.getAllAccounts();
       const configured_accounts = accounts.filter(
-        (acc) => acc.kind === "Configured"
+        (acc) => acc.kind === "Configured",
       );
       expect(configured_accounts).to.have.length(2);
       expect(
-        configured_accounts.map((acc) => acc.kind === "Configured" && acc.addr)
+        configured_accounts.map((acc) => acc.kind === "Configured" && acc.addr),
       ).to.have.members(["tmpy.mh3we@testrun.org", "tmpy.3ftgt@testrun.org"]);
       log2.debug("test done");
     });

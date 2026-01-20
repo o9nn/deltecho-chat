@@ -25,10 +25,10 @@ Create an integrated audio pipeline that flows: VAD → STT → LLM → TTS
 // Flow: Microphone → VAD → Speech Recognition → Process → Synthesis → Speaker
 class AudioPipeline {
   - vad: VoiceActivityDetector
-  - stt: SpeechRecognitionService  
+  - stt: SpeechRecognitionService
   - tts: SpeechSynthesisService
   - lipSync: LipSyncGenerator
-  
+
   - handleVADSpeechStart()
   - handleVADSpeechEnd()
   - handleRecognitionResult()
@@ -153,11 +153,11 @@ Test emotion-to-voice modulation.
 
 ## Estimated Timeline
 
-| Task | Effort |
-|------|--------|
-| Idle Animation System | 1 hour |
-| Audio Pipeline | 1 hour |
-| Avatar Demo | 1.5 hours |
-| Voice Demo | 1.5 hours |
-| Integration Tests | 1 hour |
-| **Total** | **6 hours** |
+| Task                  | Effort      |
+| --------------------- | ----------- |
+| Idle Animation System | 1 hour      |
+| Audio Pipeline        | 1 hour      |
+| Avatar Demo           | 1.5 hours   |
+| Voice Demo            | 1.5 hours   |
+| Integration Tests     | 1 hour      |
+| **Total**             | **6 hours** |

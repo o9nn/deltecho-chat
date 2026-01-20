@@ -9,7 +9,7 @@
  */
 
 export interface LLMConfig {
-  provider: 'openai' | 'anthropic' | 'openrouter' | 'ollama';
+  provider: "openai" | "anthropic" | "openrouter" | "ollama";
   apiKey?: string;
   baseURL?: string;
   model: string;
@@ -19,7 +19,7 @@ export interface LLMConfig {
 }
 
 export interface LLMMessage {
-  role: 'system' | 'user' | 'assistant';
+  role: "system" | "user" | "assistant";
   content: string;
 }
 
@@ -54,13 +54,13 @@ export class EnhancedLLMService {
    */
   async complete(messages: LLMMessage[]): Promise<LLMResponse> {
     switch (this.config.provider) {
-      case 'openai':
+      case "openai":
         return this.completeOpenAI(messages);
-      case 'anthropic':
+      case "anthropic":
         return this.completeAnthropic(messages);
-      case 'openrouter':
+      case "openrouter":
         return this.completeOpenRouter(messages);
-      case 'ollama':
+      case "ollama":
         return this.completeOllama(messages);
       default:
         throw new Error(`Unsupported provider: ${this.config.provider}`);
@@ -72,15 +72,15 @@ export class EnhancedLLMService {
    */
   private async completeOpenAI(messages: LLMMessage[]): Promise<LLMResponse> {
     if (!this.config.apiKey) {
-      throw new Error('OpenAI API key is required');
+      throw new Error("OpenAI API key is required");
     }
 
     const response = await fetch(
-      this.config.baseURL || 'https://api.openai.com/v1/chat/completions',
+      this.config.baseURL || "https://api.openai.com/v1/chat/completions",
       {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${this.config.apiKey}`,
         },
         body: JSON.stringify({
@@ -89,7 +89,7 @@ export class EnhancedLLMService {
           temperature: this.config.temperature,
           max_tokens: this.config.maxTokens,
         }),
-      }
+      },
     );
 
     if (!response.ok) {
@@ -99,7 +99,11 @@ export class EnhancedLLMService {
 
     const data = (await response.json()) as {
       choices: Array<{ message: { content: string }; finish_reason: string }>;
-      usage: { prompt_tokens: number; completion_tokens: number; total_tokens: number };
+      usage: {
+        prompt_tokens: number;
+        completion_tokens: number;
+        total_tokens: number;
+      };
       model: string;
     };
     return {
@@ -117,21 +121,23 @@ export class EnhancedLLMService {
   /**
    * Anthropic Claude completion
    */
-  private async completeAnthropic(messages: LLMMessage[]): Promise<LLMResponse> {
+  private async completeAnthropic(
+    messages: LLMMessage[],
+  ): Promise<LLMResponse> {
     if (!this.config.apiKey) {
-      throw new Error('Anthropic API key is required');
+      throw new Error("Anthropic API key is required");
     }
 
     // Convert messages format for Anthropic
-    const systemMessage = messages.find((m) => m.role === 'system');
-    const conversationMessages = messages.filter((m) => m.role !== 'system');
+    const systemMessage = messages.find((m) => m.role === "system");
+    const conversationMessages = messages.filter((m) => m.role !== "system");
 
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': this.config.apiKey,
-        'anthropic-version': '2023-06-01',
+        "Content-Type": "application/json",
+        "x-api-key": this.config.apiKey,
+        "anthropic-version": "2023-06-01",
       },
       body: JSON.stringify({
         model: this.config.model,
@@ -168,26 +174,31 @@ export class EnhancedLLMService {
   /**
    * OpenRouter completion (unified API for multiple models)
    */
-  private async completeOpenRouter(messages: LLMMessage[]): Promise<LLMResponse> {
+  private async completeOpenRouter(
+    messages: LLMMessage[],
+  ): Promise<LLMResponse> {
     if (!this.config.apiKey) {
-      throw new Error('OpenRouter API key is required');
+      throw new Error("OpenRouter API key is required");
     }
 
-    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.config.apiKey}`,
-        'HTTP-Referer': 'https://deltecho.ai',
-        'X-Title': 'Deltecho',
+    const response = await fetch(
+      "https://openrouter.ai/api/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.config.apiKey}`,
+          "HTTP-Referer": "https://deltecho.ai",
+          "X-Title": "Deltecho",
+        },
+        body: JSON.stringify({
+          model: this.config.model,
+          messages,
+          temperature: this.config.temperature,
+          max_tokens: this.config.maxTokens,
+        }),
       },
-      body: JSON.stringify({
-        model: this.config.model,
-        messages,
-        temperature: this.config.temperature,
-        max_tokens: this.config.maxTokens,
-      }),
-    });
+    );
 
     if (!response.ok) {
       const error = await response.text();
@@ -196,7 +207,11 @@ export class EnhancedLLMService {
 
     const data = (await response.json()) as {
       choices: Array<{ message: { content: string }; finish_reason: string }>;
-      usage?: { prompt_tokens: number; completion_tokens: number; total_tokens: number };
+      usage?: {
+        prompt_tokens: number;
+        completion_tokens: number;
+        total_tokens: number;
+      };
       model: string;
     };
     return {
@@ -217,12 +232,12 @@ export class EnhancedLLMService {
    * Ollama local model completion
    */
   private async completeOllama(messages: LLMMessage[]): Promise<LLMResponse> {
-    const baseURL = this.config.baseURL || 'http://localhost:11434';
+    const baseURL = this.config.baseURL || "http://localhost:11434";
 
     const response = await fetch(`${baseURL}/api/chat`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         model: this.config.model,
@@ -246,7 +261,7 @@ export class EnhancedLLMService {
     return {
       content: data.message.content,
       model: this.config.model,
-      finishReason: 'stop',
+      finishReason: "stop",
     };
   }
 

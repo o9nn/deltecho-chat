@@ -1,8 +1,8 @@
-import { getLogger } from 'deep-tree-echo-core';
-import * as net from 'net';
-import { EventEmitter } from 'events';
+import { getLogger } from "deep-tree-echo-core";
+import * as net from "net";
+import { EventEmitter } from "events";
 
-const log = getLogger('deep-tree-echo-orchestrator/DeltaChatInterface');
+const log = getLogger("deep-tree-echo-orchestrator/DeltaChatInterface");
 
 /**
  * Simple JSON-RPC 2.0 client for DeltaChat RPC server
@@ -26,7 +26,7 @@ class JsonRpcClient {
     return new Promise((resolve, reject) => {
       const id = ++this.requestId;
       const request = {
-        jsonrpc: '2.0',
+        jsonrpc: "2.0",
         id,
         method,
         params,
@@ -46,20 +46,20 @@ class JsonRpcClient {
         if (pending) {
           this.pendingRequests.delete(response.id);
           if (response.error) {
-            pending.reject(new Error(response.error.message || 'RPC Error'));
+            pending.reject(new Error(response.error.message || "RPC Error"));
           } else {
             pending.resolve(response.result);
           }
         }
       }
     } catch (error) {
-      log.error('Failed to parse JSON-RPC message:', error);
+      log.error("Failed to parse JSON-RPC message:", error);
     }
   }
 
   clearPending(): void {
     for (const [, pending] of this.pendingRequests) {
-      pending.reject(new Error('Connection closed'));
+      pending.reject(new Error("Connection closed"));
     }
     this.pendingRequests.clear();
   }
@@ -108,7 +108,7 @@ export interface DeltaChatChat {
   isProtected: boolean;
   profileImage?: string;
   archived: boolean;
-  chatType: 'Single' | 'Group' | 'Mailinglist' | 'Broadcast';
+  chatType: "Single" | "Group" | "Mailinglist" | "Broadcast";
   isContactRequest: boolean;
   isSelfTalk: boolean;
   isDeviceChat: boolean;
@@ -132,35 +132,35 @@ export interface DeltaChatAccount {
  * DeltaChat event types
  */
 export type DeltaChatEventType =
-  | 'Info'
-  | 'SmtpConnected'
-  | 'ImapConnected'
-  | 'SmtpMessageSent'
-  | 'IncomingMsg'
-  | 'MsgsChanged'
-  | 'ReactionsChanged'
-  | 'IncomingMsgBunch'
-  | 'MsgDelivered'
-  | 'MsgFailed'
-  | 'MsgRead'
-  | 'MsgDeleted'
-  | 'ChatModified'
-  | 'ChatEphemeralTimerModified'
-  | 'ContactsChanged'
-  | 'LocationChanged'
-  | 'ConfigureProgress'
-  | 'ImexProgress'
-  | 'ImexFileWritten'
-  | 'SecurejoinInviterProgress'
-  | 'SecurejoinJoinerProgress'
-  | 'ConnectivityChanged'
-  | 'SelfavatarChanged'
-  | 'ConfigSynced'
-  | 'WebxdcStatusUpdate'
-  | 'WebxdcInstanceDeleted'
-  | 'Error'
-  | 'ErrorSelfNotInGroup'
-  | 'Warning';
+  | "Info"
+  | "SmtpConnected"
+  | "ImapConnected"
+  | "SmtpMessageSent"
+  | "IncomingMsg"
+  | "MsgsChanged"
+  | "ReactionsChanged"
+  | "IncomingMsgBunch"
+  | "MsgDelivered"
+  | "MsgFailed"
+  | "MsgRead"
+  | "MsgDeleted"
+  | "ChatModified"
+  | "ChatEphemeralTimerModified"
+  | "ContactsChanged"
+  | "LocationChanged"
+  | "ConfigureProgress"
+  | "ImexProgress"
+  | "ImexFileWritten"
+  | "SecurejoinInviterProgress"
+  | "SecurejoinJoinerProgress"
+  | "ConnectivityChanged"
+  | "SelfavatarChanged"
+  | "ConfigSynced"
+  | "WebxdcStatusUpdate"
+  | "WebxdcInstanceDeleted"
+  | "Error"
+  | "ErrorSelfNotInGroup"
+  | "Warning";
 
 /**
  * DeltaChat event structure
@@ -194,7 +194,7 @@ export interface DeltaChatConfig {
 }
 
 const DEFAULT_CONFIG: DeltaChatConfig = {
-  socketPath: '/run/deltachat-rpc-server/socket',
+  socketPath: "/run/deltachat-rpc-server/socket",
   timeout: 30000,
   autoReconnect: true,
   reconnectInterval: 5000,
@@ -222,11 +222,11 @@ export class DeltaChatInterface extends EventEmitter {
    */
   public async connect(): Promise<void> {
     if (this.connected) {
-      log.warn('Already connected to DeltaChat');
+      log.warn("Already connected to DeltaChat");
       return;
     }
 
-    log.info('Connecting to DeltaChat RPC server...');
+    log.info("Connecting to DeltaChat RPC server...");
 
     try {
       // Create socket connection
@@ -235,46 +235,46 @@ export class DeltaChatInterface extends EventEmitter {
       // Create JSON-RPC client using the socket
       this.client = new JsonRpcClient((msg: string) => {
         if (this.socket && !this.socket.destroyed) {
-          this.socket.write(msg + '\n');
+          this.socket.write(msg + "\n");
         }
       });
 
       // Handle incoming data from socket
-      let buffer = '';
-      this.socket.on('data', (data: Buffer) => {
+      let buffer = "";
+      this.socket.on("data", (data: Buffer) => {
         buffer += data.toString();
-        const lines = buffer.split('\n');
-        buffer = lines.pop() || '';
+        const lines = buffer.split("\n");
+        buffer = lines.pop() || "";
 
         for (const line of lines) {
           if (line.trim()) {
             try {
               this.client?.handleMessage(line);
             } catch (error) {
-              log.error('Error handling RPC message:', error);
+              log.error("Error handling RPC message:", error);
             }
           }
         }
       });
 
       // Handle socket events
-      this.socket.on('close', () => {
+      this.socket.on("close", () => {
         this.handleDisconnect();
       });
 
-      this.socket.on('error', (error) => {
-        log.error('Socket error:', error);
+      this.socket.on("error", (error) => {
+        log.error("Socket error:", error);
         this.handleDisconnect();
       });
 
       this.connected = true;
-      log.info('Connected to DeltaChat RPC server');
-      this.emit('connected');
+      log.info("Connected to DeltaChat RPC server");
+      this.emit("connected");
 
       // Start listening for events on all accounts
       await this.startEventListening();
     } catch (error) {
-      log.error('Failed to connect to DeltaChat:', error);
+      log.error("Failed to connect to DeltaChat:", error);
       this.handleDisconnect();
       throw error;
     }
@@ -289,7 +289,7 @@ export class DeltaChatInterface extends EventEmitter {
 
       const timeoutId = setTimeout(() => {
         socket.destroy();
-        reject(new Error('Connection timeout'));
+        reject(new Error("Connection timeout"));
       }, this.config.timeout);
 
       const connectHandler = () => {
@@ -302,8 +302,8 @@ export class DeltaChatInterface extends EventEmitter {
         reject(error);
       };
 
-      socket.once('connect', connectHandler);
-      socket.once('error', errorHandler);
+      socket.once("connect", connectHandler);
+      socket.once("error", errorHandler);
 
       if (this.config.socketPath) {
         log.debug(`Connecting to Unix socket: ${this.config.socketPath}`);
@@ -312,7 +312,7 @@ export class DeltaChatInterface extends EventEmitter {
         log.debug(`Connecting to TCP: ${this.config.host}:${this.config.port}`);
         socket.connect(this.config.port, this.config.host);
       } else {
-        reject(new Error('No connection method specified'));
+        reject(new Error("No connection method specified"));
       }
     });
   }
@@ -333,8 +333,8 @@ export class DeltaChatInterface extends EventEmitter {
     this.accountEventListeners.clear();
 
     if (wasConnected) {
-      log.info('Disconnected from DeltaChat');
-      this.emit('disconnected');
+      log.info("Disconnected from DeltaChat");
+      this.emit("disconnected");
     }
 
     // Auto-reconnect if enabled
@@ -346,7 +346,7 @@ export class DeltaChatInterface extends EventEmitter {
         try {
           await this.connect();
         } catch (error) {
-          log.error('Reconnection failed:', error);
+          log.error("Reconnection failed:", error);
         }
       }, this.config.reconnectInterval);
     }
@@ -365,7 +365,7 @@ export class DeltaChatInterface extends EventEmitter {
 
       log.info(`Started event listening on ${accounts.length} accounts`);
     } catch (error) {
-      log.error('Failed to start event listening:', error);
+      log.error("Failed to start event listening:", error);
     }
   }
 
@@ -390,7 +390,9 @@ export class DeltaChatInterface extends EventEmitter {
   private async pollEvents(accountId: number): Promise<void> {
     while (this.connected && this.accountEventListeners.has(accountId)) {
       try {
-        const event = (await this.call('get_next_event', [accountId])) as DeltaChatEvent | null;
+        const event = (await this.call("get_next_event", [
+          accountId,
+        ])) as DeltaChatEvent | null;
 
         if (event) {
           this.handleEvent(accountId, event);
@@ -411,44 +413,44 @@ export class DeltaChatInterface extends EventEmitter {
     log.debug(`Event on account ${accountId}: ${event.kind}`);
 
     // Emit the event with account ID
-    this.emit('event', { ...event, accountId });
+    this.emit("event", { ...event, accountId });
 
     // Emit specific event types
     switch (event.kind) {
-      case 'IncomingMsg':
-        this.emit('incoming_message', {
+      case "IncomingMsg":
+        this.emit("incoming_message", {
           accountId,
           chatId: event.chatId,
           msgId: event.msgId,
         });
         break;
 
-      case 'MsgsChanged':
-        this.emit('messages_changed', {
+      case "MsgsChanged":
+        this.emit("messages_changed", {
           accountId,
           chatId: event.chatId,
           msgId: event.msgId,
         });
         break;
 
-      case 'ChatModified':
-        this.emit('chat_modified', {
+      case "ChatModified":
+        this.emit("chat_modified", {
           accountId,
           chatId: event.chatId,
         });
         break;
 
-      case 'ContactsChanged':
-        this.emit('contacts_changed', {
+      case "ContactsChanged":
+        this.emit("contacts_changed", {
           accountId,
           contactId: event.contactId,
         });
         break;
 
-      case 'Error':
-      case 'Warning':
+      case "Error":
+      case "Warning":
         log.warn(`DeltaChat ${event.kind}: ${event.msg}`);
-        this.emit('error', {
+        this.emit("error", {
           accountId,
           kind: event.kind,
           message: event.msg,
@@ -462,7 +464,7 @@ export class DeltaChatInterface extends EventEmitter {
    */
   private async call(method: string, params: any[] = []): Promise<any> {
     if (!this.client || !this.connected) {
-      throw new Error('Not connected to DeltaChat');
+      throw new Error("Not connected to DeltaChat");
     }
 
     return this.client.call(method, params);
@@ -474,7 +476,7 @@ export class DeltaChatInterface extends EventEmitter {
   public async disconnect(): Promise<void> {
     if (!this.connected) return;
 
-    log.info('Disconnecting from DeltaChat...');
+    log.info("Disconnecting from DeltaChat...");
 
     // Stop auto-reconnect
     this.config.autoReconnect = false;
@@ -496,7 +498,7 @@ export class DeltaChatInterface extends EventEmitter {
     this.socket = null;
     this.client = null;
 
-    log.info('Disconnected from DeltaChat');
+    log.info("Disconnected from DeltaChat");
   }
 
   /**
@@ -514,7 +516,7 @@ export class DeltaChatInterface extends EventEmitter {
    * Get all accounts
    */
   public async getAllAccounts(): Promise<DeltaChatAccount[]> {
-    const accountIds = (await this.call('get_all_account_ids')) as number[];
+    const accountIds = (await this.call("get_all_account_ids")) as number[];
 
     const accounts: DeltaChatAccount[] = [];
     for (const id of accountIds) {
@@ -528,9 +530,16 @@ export class DeltaChatInterface extends EventEmitter {
   /**
    * Get account info
    */
-  public async getAccountInfo(accountId: number): Promise<Partial<DeltaChatAccount>> {
-    const config = (await this.call('get_config', [accountId, 'displayname'])) as string | null;
-    const email = (await this.call('get_config', [accountId, 'addr'])) as string | null;
+  public async getAccountInfo(
+    accountId: number,
+  ): Promise<Partial<DeltaChatAccount>> {
+    const config = (await this.call("get_config", [
+      accountId,
+      "displayname",
+    ])) as string | null;
+    const email = (await this.call("get_config", [accountId, "addr"])) as
+      | string
+      | null;
 
     return {
       displayName: config || undefined,
@@ -542,7 +551,7 @@ export class DeltaChatInterface extends EventEmitter {
    * Select an account
    */
   public async selectAccount(accountId: number): Promise<void> {
-    await this.call('select_account', [accountId]);
+    await this.call("select_account", [accountId]);
   }
 
   // ==========================================
@@ -552,15 +561,26 @@ export class DeltaChatInterface extends EventEmitter {
   /**
    * Get a message by ID
    */
-  public async getMessage(accountId: number, msgId: number): Promise<DeltaChatMessage> {
-    return await this.call('get_message', [accountId, msgId]);
+  public async getMessage(
+    accountId: number,
+    msgId: number,
+  ): Promise<DeltaChatMessage> {
+    return await this.call("get_message", [accountId, msgId]);
   }
 
   /**
    * Send a text message to a chat
    */
-  public async sendMessage(accountId: number, chatId: number, text: string): Promise<number> {
-    const msgId = await this.call('misc_send_text_message', [accountId, chatId, text]);
+  public async sendMessage(
+    accountId: number,
+    chatId: number,
+    text: string,
+  ): Promise<number> {
+    const msgId = await this.call("misc_send_text_message", [
+      accountId,
+      chatId,
+      text,
+    ]);
     log.info(`Sent message to chat ${chatId}: ${text.substring(0, 50)}...`);
     return msgId as number;
   }
@@ -573,7 +593,7 @@ export class DeltaChatInterface extends EventEmitter {
     chatId: number,
     text: string,
     filePath?: string,
-    fileName?: string
+    fileName?: string,
   ): Promise<number> {
     const params: any = {
       text,
@@ -586,22 +606,29 @@ export class DeltaChatInterface extends EventEmitter {
       }
     }
 
-    const msgId = await this.call('send_msg', [accountId, chatId, params]);
+    const msgId = await this.call("send_msg", [accountId, chatId, params]);
     return msgId as number;
   }
 
   /**
    * Get messages in a chat
    */
-  public async getMessages(accountId: number, chatId: number, flags?: number): Promise<number[]> {
-    return await this.call('get_chat_msgs', [accountId, chatId, flags || 0]);
+  public async getMessages(
+    accountId: number,
+    chatId: number,
+    flags?: number,
+  ): Promise<number[]> {
+    return await this.call("get_chat_msgs", [accountId, chatId, flags || 0]);
   }
 
   /**
    * Mark messages as seen
    */
-  public async markSeenMessages(accountId: number, msgIds: number[]): Promise<void> {
-    await this.call('markseen_msgs', [accountId, msgIds]);
+  public async markSeenMessages(
+    accountId: number,
+    msgIds: number[],
+  ): Promise<void> {
+    await this.call("markseen_msgs", [accountId, msgIds]);
   }
 
   // ==========================================
@@ -611,19 +638,27 @@ export class DeltaChatInterface extends EventEmitter {
   /**
    * Get chat info
    */
-  public async getChat(accountId: number, chatId: number): Promise<DeltaChatChat> {
-    return await this.call('get_chat', [accountId, chatId]);
+  public async getChat(
+    accountId: number,
+    chatId: number,
+  ): Promise<DeltaChatChat> {
+    return await this.call("get_chat", [accountId, chatId]);
   }
 
   /**
    * Get all chats
    */
   public async getAllChats(accountId: number): Promise<DeltaChatChat[]> {
-    const chatIds = await this.call('get_chatlist_entries', [accountId, null, null, null]);
+    const chatIds = await this.call("get_chatlist_entries", [
+      accountId,
+      null,
+      null,
+      null,
+    ]);
     const chats: DeltaChatChat[] = [];
 
     for (const entry of chatIds) {
-      const chatId = typeof entry === 'number' ? entry : entry[0];
+      const chatId = typeof entry === "number" ? entry : entry[0];
       const chat = await this.getChat(accountId, chatId);
       chats.push(chat);
     }
@@ -637,16 +672,19 @@ export class DeltaChatInterface extends EventEmitter {
   public async createGroupChat(
     accountId: number,
     name: string,
-    protect: boolean = false
+    protect: boolean = false,
   ): Promise<number> {
-    return await this.call('create_group_chat', [accountId, name, protect]);
+    return await this.call("create_group_chat", [accountId, name, protect]);
   }
 
   /**
    * Create or get a 1:1 chat with a contact
    */
-  public async createChatByContactId(accountId: number, contactId: number): Promise<number> {
-    return await this.call('create_chat_by_contact_id', [accountId, contactId]);
+  public async createChatByContactId(
+    accountId: number,
+    contactId: number,
+  ): Promise<number> {
+    return await this.call("create_chat_by_contact_id", [accountId, contactId]);
   }
 
   /**
@@ -655,9 +693,9 @@ export class DeltaChatInterface extends EventEmitter {
   public async addContactToChat(
     accountId: number,
     chatId: number,
-    contactId: number
+    contactId: number,
   ): Promise<void> {
-    await this.call('add_contact_to_chat', [accountId, chatId, contactId]);
+    await this.call("add_contact_to_chat", [accountId, chatId, contactId]);
   }
 
   // ==========================================
@@ -667,22 +705,35 @@ export class DeltaChatInterface extends EventEmitter {
   /**
    * Create a contact
    */
-  public async createContact(accountId: number, email: string, name?: string): Promise<number> {
-    return await this.call('create_contact', [accountId, email, name || '']);
+  public async createContact(
+    accountId: number,
+    email: string,
+    name?: string,
+  ): Promise<number> {
+    return await this.call("create_contact", [accountId, email, name || ""]);
   }
 
   /**
    * Get contact info
    */
-  public async getContact(accountId: number, contactId: number): Promise<DeltaChatContact> {
-    return await this.call('get_contact', [accountId, contactId]);
+  public async getContact(
+    accountId: number,
+    contactId: number,
+  ): Promise<DeltaChatContact> {
+    return await this.call("get_contact", [accountId, contactId]);
   }
 
   /**
    * Lookup contact by email
    */
-  public async lookupContactByEmail(accountId: number, email: string): Promise<number | null> {
-    const contactId = await this.call('lookup_contact_id_by_addr', [accountId, email]);
+  public async lookupContactByEmail(
+    accountId: number,
+    email: string,
+  ): Promise<number | null> {
+    const contactId = await this.call("lookup_contact_id_by_addr", [
+      accountId,
+      email,
+    ]);
     return contactId as number | null;
   }
 
@@ -694,7 +745,7 @@ export class DeltaChatInterface extends EventEmitter {
    * Get info about the DeltaChat core version
    */
   public async getSystemInfo(): Promise<Record<string, string>> {
-    return await this.call('get_system_info', []);
+    return await this.call("get_system_info", []);
   }
 
   /**
@@ -704,7 +755,7 @@ export class DeltaChatInterface extends EventEmitter {
   public async findOrCreateChatForEmail(
     accountId: number,
     email: string,
-    name?: string
+    name?: string,
   ): Promise<number> {
     // First try to find existing contact
     let contactId = await this.lookupContactByEmail(accountId, email);
