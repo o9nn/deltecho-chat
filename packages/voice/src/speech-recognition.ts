@@ -59,7 +59,6 @@ function getSpeechRecognition(): {
 } | null {
   if (typeof window === "undefined") return null;
 
-   
   const win = window as any;
   return win.SpeechRecognition || win.webkitSpeechRecognition || null;
 }

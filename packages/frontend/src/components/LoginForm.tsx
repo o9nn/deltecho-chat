@@ -1,5 +1,3 @@
- 
-
 import { C, T } from "@deltachat/jsonrpc-client";
 import React, { useState } from "react";
 import { useDebouncedCallback } from "use-debounce/lib";

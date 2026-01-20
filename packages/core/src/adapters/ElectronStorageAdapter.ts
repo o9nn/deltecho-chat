@@ -23,7 +23,6 @@ export class ElectronStorageAdapter implements MemoryStorage {
   constructor(storagePrefix = "deltecho") {
     // Dynamic import to avoid issues when not in Electron environment
     try {
-       
       const { ipcRenderer } = require("electron");
       this.ipcRenderer = ipcRenderer;
     } catch (error) {

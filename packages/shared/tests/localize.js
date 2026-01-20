@@ -1,5 +1,5 @@
 //@ts-check
- 
+
 /* global it, console */
 import { describe, setup } from "mocha";
 import { expect, assert } from "chai";

@@ -19,6 +19,7 @@ import {
   Music,
   Mic,
   Bot,
+  type LucideIcon,
 } from "lucide-react";
 import { AICompanionProvider, useAICompanion } from "./AICompanionController";
 import { AICapability } from "./connectors/BaseConnector";
@@ -95,7 +96,7 @@ const AI_PLATFORM_TYPES = [
 
 // Available capabilities
 const AVAILABLE_CAPABILITIES: {
-  [key in AICapability]: { name: string; icon: React.FC<any> };
+  [key in AICapability]: { name: string; icon: LucideIcon };
 } = {
   text_generation: { name: "Text Generation", icon: MessageSquare },
   code_generation: { name: "Code Generation", icon: Code },

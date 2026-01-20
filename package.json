@@ -70,8 +70,7 @@
     "@anthropic-ai/sdk": "^0.39.0",
     "@deltachat/jsonrpc-client": "^1.160.0",
     "@deltachat/stdio-rpc-server": "^1.160.0",
-    "events": "^3.3.0",
-    "lucide-react": "^0.511.0"
+    "events": "^3.3.0"
   },
   "keywords": [
     "deltecho",
@@ -85,5 +84,13 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/o9nn/deltecho-chat.git"
+  },
+  "pnpm": {
+    "overrides": {
+      "@types/react": "^18.3.27",
+      "@types/react-dom": "^18.3.7",
+      "react": "^18.3.1",
+      "react-dom": "^18.3.1"
+    }
   }
 }

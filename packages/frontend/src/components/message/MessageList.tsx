@@ -219,7 +219,6 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
     return () => window.removeEventListener("focus", onFocus);
   }, [accountId]);
 
-   
   useEffect(() => {
     return () => {
       // eslint-disable-next-line react-hooks/exhaustive-deps

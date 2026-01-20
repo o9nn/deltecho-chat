@@ -45,7 +45,7 @@ function ConnectivityDialogInner() {
         const cHTML = await getConnectivityHTML(styleSensor);
         setConnectivityHTML(cHTML);
       }, 240),
-    [],  
+    [],
   );
 
   useEffect(() => {

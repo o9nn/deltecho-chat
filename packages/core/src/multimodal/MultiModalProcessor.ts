@@ -131,8 +131,10 @@ export class MultiModalProcessor {
 
       // Create form data for Whisper API
       const formData = new FormData();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const blob = new Blob([new Uint8Array(buffer) as any], { type: "audio/ogg" });
+
+      const blob = new Blob([new Uint8Array(buffer) as any], {
+        type: "audio/ogg",
+      });
       formData.append("file", blob, "audio.ogg");
       formData.append("model", this.config.whisperModel || "whisper-1");
 
@@ -296,7 +298,9 @@ Be concise but comprehensive.`;
         content?: { type: string; text?: string }[];
       };
       const text =
-        result.content?.[0]?.type === "text" ? result.content[0].text || "" : "";
+        result.content?.[0]?.type === "text"
+          ? result.content[0].text || ""
+          : "";
 
       // Parse structured response
       const analysis = this.parseImageAnalysis(text);
