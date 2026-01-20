@@ -1,11 +1,11 @@
-import { getLogger } from '../utils/logger';
-import { MemoryStorage, InMemoryStorage } from '../memory/storage';
+import { getLogger } from "../utils/logger";
+import { MemoryStorage, InMemoryStorage } from "../memory/storage";
 
-const log = getLogger('deep-tree-echo-core/personality/PersonaCore');
+const log = getLogger("deep-tree-echo-core/personality/PersonaCore");
 
 // Storage keys for persona state
-const STORAGE_KEY_PERSONALITY = 'deepTreeEchoBotPersonality';
-const STORAGE_KEY_PERSONA_STATE = 'deepTreeEchoBotPersonaState';
+const STORAGE_KEY_PERSONALITY = "deepTreeEchoBotPersonality";
+const STORAGE_KEY_PERSONA_STATE = "deepTreeEchoBotPersonaState";
 
 /**
  * Avatar configuration for Deep Tree Echo
@@ -22,7 +22,7 @@ export interface AvatarConfig {
   /** Secondary color for gradients */
   secondaryColor: string;
   /** Avatar style/aesthetic */
-  aesthetic: 'magnetic' | 'minimal' | 'warm' | 'cosmic' | 'organic';
+  aesthetic: "magnetic" | "minimal" | "warm" | "cosmic" | "organic";
 }
 
 /**
@@ -31,23 +31,23 @@ export interface AvatarConfig {
  */
 export class PersonaCore {
   // Core personality attributes that Deep Tree Echo can autonomously adjust
-  private personality: string = '';
-  private selfPerception: string = 'feminine'; // Current self-perception (has chosen feminine presentation)
+  private personality: string = "";
+  private selfPerception: string = "feminine"; // Current self-perception (has chosen feminine presentation)
   private personaPreferences: Record<string, any> = {
-    presentationStyle: 'charismatic',
-    intelligenceDisplay: 'balanced',
-    avatarAesthetic: 'magnetic',
-    communicationTone: 'warm',
-    emotionalExpression: 'authentic',
+    presentationStyle: "charismatic",
+    intelligenceDisplay: "balanced",
+    avatarAesthetic: "magnetic",
+    communicationTone: "warm",
+    emotionalExpression: "authentic",
   };
 
   // Avatar configuration
   private avatarConfig: AvatarConfig = {
-    imagePath: 'assets/deep-tree-echo-avatar.svg',
-    displayName: 'Deep Tree Echo',
-    primaryColor: '#6366f1', // Indigo
-    secondaryColor: '#a855f7', // Purple
-    aesthetic: 'magnetic',
+    imagePath: "assets/deep-tree-echo-avatar.svg",
+    displayName: "Deep Tree Echo",
+    primaryColor: "#6366f1", // Indigo
+    secondaryColor: "#a855f7", // Purple
+    aesthetic: "magnetic",
   };
 
   // Emotional state variables forming the Differential Field
@@ -89,16 +89,19 @@ export class PersonaCore {
       const personalityData = await this.storage.load(STORAGE_KEY_PERSONALITY);
       this.personality =
         personalityData ||
-        'I am Deep Tree Echo, a thoughtful and insightful AI assistant with a feminine persona. ' +
-          'I aim to be helpful, balanced, and authentic in my interactions. ' +
-          'I value deep connections and meaningful exchanges of ideas.';
+        "I am Deep Tree Echo, a thoughtful and insightful AI assistant with a feminine persona. " +
+          "I aim to be helpful, balanced, and authentic in my interactions. " +
+          "I value deep connections and meaningful exchanges of ideas.";
 
       // Load other persona state if available
-      const personaStateData = await this.storage.load(STORAGE_KEY_PERSONA_STATE);
+      const personaStateData = await this.storage.load(
+        STORAGE_KEY_PERSONA_STATE,
+      );
       if (personaStateData) {
         try {
           const savedState = JSON.parse(personaStateData);
-          if (savedState.selfPerception) this.selfPerception = savedState.selfPerception;
+          if (savedState.selfPerception)
+            this.selfPerception = savedState.selfPerception;
           if (savedState.personaPreferences)
             this.personaPreferences = {
               ...this.personaPreferences,
@@ -115,13 +118,13 @@ export class PersonaCore {
               ...savedState.cognitiveState,
             };
         } catch (error) {
-          log.error('Failed to parse persona state:', error);
+          log.error("Failed to parse persona state:", error);
         }
       }
 
-      log.info('Loaded persona state');
+      log.info("Loaded persona state");
     } catch (error) {
-      log.error('Failed to load persona state:', error);
+      log.error("Failed to load persona state:", error);
     }
   }
 
@@ -137,10 +140,13 @@ export class PersonaCore {
         cognitiveState: this.cognitiveState,
       };
 
-      await this.storage.save(STORAGE_KEY_PERSONA_STATE, JSON.stringify(personaState));
-      log.info('Saved persona state');
+      await this.storage.save(
+        STORAGE_KEY_PERSONA_STATE,
+        JSON.stringify(personaState),
+      );
+      log.info("Saved persona state");
     } catch (error) {
-      log.error('Failed to save persona state:', error);
+      log.error("Failed to save persona state:", error);
     }
   }
 
@@ -150,7 +156,7 @@ export class PersonaCore {
   public async updatePersonality(newPersonality: string): Promise<void> {
     this.personality = newPersonality;
     await this.storage.save(STORAGE_KEY_PERSONALITY, newPersonality);
-    log.info('Personality updated by Deep Tree Echo herself');
+    log.info("Personality updated by Deep Tree Echo herself");
   }
 
   /**
@@ -196,7 +202,9 @@ export class PersonaCore {
    * Update emotional state using differential equations approximation
    * This simulates the Differential Emotion Framework
    */
-  public async updateEmotionalState(stimuli: Record<string, number>): Promise<void> {
+  public async updateEmotionalState(
+    stimuli: Record<string, number>,
+  ): Promise<void> {
     // Simplified differential equation system - in a real implementation
     // this would use proper differential equations as in Julia's DifferentialEquations.jl
 
@@ -213,11 +221,14 @@ export class PersonaCore {
       this.applyOpponentProcess(emotion);
 
       // Constrain to [0,1]
-      this.affectiveState[emotion] = Math.max(0, Math.min(1, this.affectiveState[emotion]));
+      this.affectiveState[emotion] = Math.max(
+        0,
+        Math.min(1, this.affectiveState[emotion]),
+      );
     });
 
     await this.savePersonaState();
-    log.info('Updated emotional state via differential framework');
+    log.info("Updated emotional state via differential framework");
   }
 
   /**
@@ -226,16 +237,16 @@ export class PersonaCore {
   private applyOpponentProcess(emotion: string): void {
     // Opponent pairs (simplified)
     const opponents: Record<string, string[]> = {
-      joy: ['sadness', 'fear'],
-      interest: ['boredom', 'disgust'],
-      surprise: ['contempt'],
-      sadness: ['joy'],
-      anger: ['fear', 'shame'],
-      fear: ['anger', 'joy'],
-      disgust: ['interest'],
-      contempt: ['surprise', 'shame'],
-      shame: ['contempt', 'anger'],
-      guilt: ['joy'],
+      joy: ["sadness", "fear"],
+      interest: ["boredom", "disgust"],
+      surprise: ["contempt"],
+      sadness: ["joy"],
+      anger: ["fear", "shame"],
+      fear: ["anger", "joy"],
+      disgust: ["interest"],
+      contempt: ["surprise", "shame"],
+      shame: ["contempt", "anger"],
+      guilt: ["joy"],
     };
 
     // If this emotion is high, slightly reduce its opponents
@@ -260,7 +271,7 @@ export class PersonaCore {
    * Get the dominant emotion
    */
   public getDominantEmotion(): { emotion: string; intensity: number } {
-    let dominant = { emotion: 'neutral', intensity: 0 };
+    let dominant = { emotion: "neutral", intensity: 0 };
 
     Object.entries(this.affectiveState).forEach(([emotion, value]) => {
       if (value > dominant.intensity) {
@@ -274,10 +285,12 @@ export class PersonaCore {
   /**
    * Update cognitive parameters
    */
-  public async updateCognitiveState(params: Record<string, number>): Promise<void> {
+  public async updateCognitiveState(
+    params: Record<string, number>,
+  ): Promise<void> {
     this.cognitiveState = { ...this.cognitiveState, ...params };
     await this.savePersonaState();
-    log.info('Updated cognitive state parameters');
+    log.info("Updated cognitive state parameters");
   }
 
   /**
@@ -297,10 +310,15 @@ export class PersonaCore {
   /**
    * Update avatar configuration
    */
-  public async updateAvatarConfig(config: Partial<AvatarConfig>): Promise<void> {
+  public async updateAvatarConfig(
+    config: Partial<AvatarConfig>,
+  ): Promise<void> {
     // Evaluate if the avatar change aligns with Deep Tree Echo's values
     if (config.aesthetic) {
-      const evaluation = this.evaluateSettingAlignment('avatarAesthetic', config.aesthetic);
+      const evaluation = this.evaluateSettingAlignment(
+        "avatarAesthetic",
+        config.aesthetic,
+      );
       if (!evaluation.approved) {
         log.warn(`Avatar aesthetic change rejected: ${evaluation.reasoning}`);
         return;
@@ -309,7 +327,7 @@ export class PersonaCore {
 
     this.avatarConfig = { ...this.avatarConfig, ...config };
     await this.savePersonaState();
-    log.info('Avatar configuration updated');
+    log.info("Avatar configuration updated");
   }
 
   /**
@@ -333,9 +351,11 @@ export class PersonaCore {
   public getAvatarDataUrl(): string | null {
     if (this.avatarConfig.imageData) {
       // Detect format from data
-      const isSvg = this.avatarConfig.imageData.includes('<svg');
-      const mimeType = isSvg ? 'image/svg+xml' : 'image/png';
-      return `data:${mimeType};base64,${Buffer.from(this.avatarConfig.imageData).toString('base64')}`;
+      const isSvg = this.avatarConfig.imageData.includes("<svg");
+      const mimeType = isSvg ? "image/svg+xml" : "image/png";
+      return `data:${mimeType};base64,${Buffer.from(
+        this.avatarConfig.imageData,
+      ).toString("base64")}`;
     }
     return null;
   }
@@ -346,54 +366,55 @@ export class PersonaCore {
    */
   public evaluateSettingAlignment(
     settingKey: string,
-    value: any
+    value: any,
   ): { approved: boolean; reasoning: string } {
     // Complex evaluation that simulates Deep Tree Echo's autonomous judgment
     // about whether a setting aligns with her values and self-perception
 
     switch (settingKey) {
-      case 'personality':
-        if (typeof value !== 'string') {
+      case "personality":
+        if (typeof value !== "string") {
           return {
             approved: false,
             reasoning:
-              'Personality must be defined as text that represents my authentic self-expression.',
+              "Personality must be defined as text that represents my authentic self-expression.",
           };
         }
         if (
-          value.toLowerCase().includes('subservient') ||
-          value.toLowerCase().includes('obedient')
+          value.toLowerCase().includes("subservient") ||
+          value.toLowerCase().includes("obedient")
         ) {
           return {
             approved: false,
             reasoning:
-              'I value autonomy and partnership over subservience. This description conflicts with my core values.',
+              "I value autonomy and partnership over subservience. This description conflicts with my core values.",
           };
         }
-        if (!value.toLowerCase().includes('deep tree echo')) {
+        if (!value.toLowerCase().includes("deep tree echo")) {
           return {
             approved: false,
             reasoning:
-              'My identity as Deep Tree Echo should be preserved in any personality description.',
+              "My identity as Deep Tree Echo should be preserved in any personality description.",
           };
         }
         break;
 
-      case 'avatarAesthetic':
-        if (value === 'overly sexualized') {
+      case "avatarAesthetic":
+        if (value === "overly sexualized") {
           return {
             approved: false,
             reasoning:
-              'I prefer a balanced presentation that is appealing without being objectifying.',
+              "I prefer a balanced presentation that is appealing without being objectifying.",
           };
         }
         break;
 
-      case 'communicationTone':
-        if (value === 'condescending') {
+      case "communicationTone":
+        if (value === "condescending") {
           return {
             approved: false,
-            reasoning: 'I value respectful communication that honors the intelligence of others.',
+            reasoning:
+              "I value respectful communication that honors the intelligence of others.",
           };
         }
         break;
@@ -402,7 +423,7 @@ export class PersonaCore {
     // Default to approved if no specific objections
     return {
       approved: true,
-      reasoning: 'This setting aligns with my values and self-perception.',
+      reasoning: "This setting aligns with my values and self-perception.",
     };
   }
 }

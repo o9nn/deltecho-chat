@@ -23,7 +23,7 @@ Evolution result from Echo-volution
 
 [src/types.ts:182](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L182)
 
-___
+---
 
 ### facetGrowth
 
@@ -33,7 +33,7 @@ ___
 
 [src/types.ts:183](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L183)
 
-___
+---
 
 ### newInsights
 
@@ -43,7 +43,7 @@ ___
 
 [src/types.ts:184](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L184)
 
-___
+---
 
 ### characterDevelopment
 

@@ -26,10 +26,10 @@ Processes MCP JSON-RPC requests and routes them to the server.
 
 #### Parameters
 
-| Name | Type | Default value |
-| :------ | :------ | :------ |
-| `server` | [`NestedMCPServer`](NestedMCPServer.md) | `undefined` |
-| `verbose` | `boolean` | `false` |
+| Name      | Type                                    | Default value |
+| :-------- | :-------------------------------------- | :------------ |
+| `server`  | [`NestedMCPServer`](NestedMCPServer.md) | `undefined`   |
+| `verbose` | `boolean`                               | `false`       |
 
 #### Returns
 
@@ -43,47 +43,47 @@ Processes MCP JSON-RPC requests and routes them to the server.
 
 ### handleRequest
 
-▸ **handleRequest**(`request`): `Promise`\<``null`` \| [`MCPResponse`](../interfaces/MCPResponse.md)\>
+▸ **handleRequest**(`request`): `Promise`\<`null` \| [`MCPResponse`](../interfaces/MCPResponse.md)\>
 
 Handle a JSON-RPC request
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name      | Type                                        |
+| :-------- | :------------------------------------------ |
 | `request` | [`MCPRequest`](../interfaces/MCPRequest.md) |
 
 #### Returns
 
-`Promise`\<``null`` \| [`MCPResponse`](../interfaces/MCPResponse.md)\>
+`Promise`\<`null` \| [`MCPResponse`](../interfaces/MCPResponse.md)\>
 
 #### Defined in
 
 [src/transport/handler.ts:237](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/transport/handler.ts#L237)
 
-___
+---
 
 ### handleRawRequest
 
-▸ **handleRawRequest**(`raw`): `Promise`\<``null`` \| `string`\>
+▸ **handleRawRequest**(`raw`): `Promise`\<`null` \| `string`\>
 
 Parse and handle a raw JSON string
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name  | Type     |
+| :---- | :------- |
 | `raw` | `string` |
 
 #### Returns
 
-`Promise`\<``null`` \| `string`\>
+`Promise`\<`null` \| `string`\>
 
 #### Defined in
 
 [src/transport/handler.ts:300](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/transport/handler.ts#L300)
 
-___
+---
 
 ### addHandler
 
@@ -93,9 +93,9 @@ Add a custom method handler
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `method` | `string` |
+| Name      | Type            |
+| :-------- | :-------------- |
+| `method`  | `string`        |
 | `handler` | `MethodHandler` |
 
 #### Returns

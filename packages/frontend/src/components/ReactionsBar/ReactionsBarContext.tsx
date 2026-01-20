@@ -1,43 +1,43 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 
-import AbsolutePositioningHelper from '../AbsolutePositioningHelper'
-import OutsideClickHelper from '../OutsideClickHelper'
-import ReactionsShortcutBar from '.'
+import AbsolutePositioningHelper from "../AbsolutePositioningHelper";
+import OutsideClickHelper from "../OutsideClickHelper";
+import ReactionsShortcutBar from ".";
 
-import type { PropsWithChildren } from 'react'
+import type { PropsWithChildren } from "react";
 
 export type ShowReactionBar = {
-  messageId: number
-  myReaction?: string
-  x: number
-  y: number
-}
+  messageId: number;
+  myReaction?: string;
+  x: number;
+  y: number;
+};
 
 export type ReactionsBarValue = {
-  showReactionsBar: (args: ShowReactionBar) => void
-  hideReactionsBar: () => void
-  isReactionsBarShown: boolean
-}
+  showReactionsBar: (args: ShowReactionBar) => void;
+  hideReactionsBar: () => void;
+  isReactionsBarShown: boolean;
+};
 
 export const ReactionsBarContext =
-  React.createContext<ReactionsBarValue | null>(null)
+  React.createContext<ReactionsBarValue | null>(null);
 
 export const ReactionsBarProvider = ({ children }: PropsWithChildren<{}>) => {
-  const [barArgs, setBarArgs] = useState<ShowReactionBar | null>(null)
+  const [barArgs, setBarArgs] = useState<ShowReactionBar | null>(null);
 
   const showReactionsBar = (args: ShowReactionBar) => {
-    setBarArgs(args)
-  }
+    setBarArgs(args);
+  };
 
   const hideReactionsBar = () => {
-    setBarArgs(null)
-  }
+    setBarArgs(null);
+  };
 
   const value: ReactionsBarValue = {
     showReactionsBar,
     hideReactionsBar,
     isReactionsBarShown: barArgs !== null,
-  }
+  };
 
   return (
     <ReactionsBarContext.Provider value={value}>
@@ -58,5 +58,5 @@ export const ReactionsBarProvider = ({ children }: PropsWithChildren<{}>) => {
       </AbsolutePositioningHelper>
       {children}
     </ReactionsBarContext.Provider>
-  )
-}
+  );
+};

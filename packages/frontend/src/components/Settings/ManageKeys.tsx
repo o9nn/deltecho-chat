@@ -1,118 +1,120 @@
-import React, { useCallback } from 'react'
-import { basename } from 'path'
+import React, { useCallback } from "react";
+import { basename } from "path";
 
-import { BackendRemote } from '../../backend-com'
-import { runtime } from '@deltachat-desktop/runtime-interface'
-import { selectedAccountId } from '../../ScreenController'
-import SettingsButton from './SettingsButton'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
-import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
+import { BackendRemote } from "../../backend-com";
+import { runtime } from "@deltachat-desktop/runtime-interface";
+import { selectedAccountId } from "../../ScreenController";
+import SettingsButton from "./SettingsButton";
+import useTranslationFunction from "../../hooks/useTranslationFunction";
+import useConfirmationDialog from "../../hooks/dialog/useConfirmationDialog";
+import { LastUsedSlot, rememberLastUsedPath } from "../../utils/lastUsedPaths";
 
-import { RuntimeOpenDialogOptions } from '@deltachat-desktop/shared/shared-types'
-import { getLogger } from '@deltachat-desktop/shared/logger'
-import { DcEventType } from '@deltachat/jsonrpc-client'
-import AlertDialog from '../dialogs/AlertDialog'
-import useDialog from '../../hooks/dialog/useDialog'
+import { RuntimeOpenDialogOptions } from "@deltachat-desktop/shared/shared-types";
+import { getLogger } from "@deltachat-desktop/shared/logger";
+import { DcEventType } from "@deltachat/jsonrpc-client";
+import AlertDialog from "../dialogs/AlertDialog";
+import useDialog from "../../hooks/dialog/useDialog";
 
-const log = getLogger('renderer/Settings/ManageKeys')
+const log = getLogger("renderer/Settings/ManageKeys");
 
 export default function ManageKeys() {
-  const tx = useTranslationFunction()
-  const openConfirmationDialog = useConfirmationDialog()
-  const { openDialog } = useDialog()
+  const tx = useTranslationFunction();
+  const openConfirmationDialog = useConfirmationDialog();
+  const { openDialog } = useDialog();
 
   const onKeysExport = useCallback(async () => {
     // TODO: ask for the user's password and check it
 
-    let destination: string
-    if (runtime.getRuntimeInfo().target === 'browser') {
-      destination = '<BROWSER>' // gets replaced internally by browser runtime
+    let destination: string;
+    if (runtime.getRuntimeInfo().target === "browser") {
+      destination = "<BROWSER>"; // gets replaced internally by browser runtime
     } else {
       const { defaultPath, setLastPath } = await rememberLastUsedPath(
-        LastUsedSlot.KeyExport
-      )
+        LastUsedSlot.KeyExport,
+      );
       const opts: RuntimeOpenDialogOptions = {
-        title: tx('pref_managekeys_export_secret_keys'),
+        title: tx("pref_managekeys_export_secret_keys"),
         defaultPath,
-        properties: ['openDirectory', 'createDirectory'],
-        buttonLabel: tx('select'),
-      }
+        properties: ["openDirectory", "createDirectory"],
+        buttonLabel: tx("select"),
+      };
 
-      const [chosen_destination] = await runtime.showOpenFileDialog(opts)
+      const [chosen_destination] = await runtime.showOpenFileDialog(opts);
       if (!chosen_destination) {
-        return
+        return;
       }
-      setLastPath(chosen_destination)
-      destination = chosen_destination
+      setLastPath(chosen_destination);
+      destination = chosen_destination;
     }
 
     const title = tx(
-      'pref_managekeys_export_explain',
-      runtime.getRuntimeInfo().target === 'browser' ? '(download)' : destination
-    )
+      "pref_managekeys_export_explain",
+      runtime.getRuntimeInfo().target === "browser"
+        ? "(download)"
+        : destination,
+    );
 
     const confirmed = await openConfirmationDialog({
       message: title,
-      confirmLabel: tx('yes'),
-      cancelLabel: tx('no'),
-    })
+      confirmLabel: tx("yes"),
+      cancelLabel: tx("no"),
+    });
 
     if (confirmed) {
       const listenForOutputFiles = ({
         path,
-      }: DcEventType<'ImexFileWritten'>) => {
-        if (runtime.getRuntimeInfo().target === 'browser') {
-          if (!basename(path).startsWith('private-key')) {
-            return
+      }: DcEventType<"ImexFileWritten">) => {
+        if (runtime.getRuntimeInfo().target === "browser") {
+          if (!basename(path).startsWith("private-key")) {
+            return;
           }
-          const downloadLink = `/download-backup/${basename(path)}`
+          const downloadLink = `/download-backup/${basename(path)}`;
           // this alert dialog is to make the opening of the link a user action, to prevent the popup warning
           openDialog(AlertDialog, {
-            cb: () => window.open(downloadLink, '__blank'),
+            cb: () => window.open(downloadLink, "__blank"),
             message: tx(
-              'pref_managekeys_secret_keys_exported_to_x',
-              downloadLink
+              "pref_managekeys_secret_keys_exported_to_x",
+              downloadLink,
             ),
-            okBtnLabel: tx('open'),
-          })
+            okBtnLabel: tx("open"),
+          });
         }
-      }
-      const emitter = BackendRemote.getContextEvents(selectedAccountId())
-      emitter.on('ImexFileWritten', listenForOutputFiles)
+      };
+      const emitter = BackendRemote.getContextEvents(selectedAccountId());
+      emitter.on("ImexFileWritten", listenForOutputFiles);
 
       try {
         await BackendRemote.rpc.exportSelfKeys(
           selectedAccountId(),
           destination,
-          null
-        )
+          null,
+        );
 
-        if (runtime.getRuntimeInfo().target !== 'browser') {
+        if (runtime.getRuntimeInfo().target !== "browser") {
           window.__userFeedback({
-            type: 'success',
-            text: tx('pref_managekeys_secret_keys_exported_to_x', destination),
-          })
+            type: "success",
+            text: tx("pref_managekeys_secret_keys_exported_to_x", destination),
+          });
         }
       } catch (error) {
         // TODO/QUESTION - how are errors shown to user?
-        log.error('backup-export failed:', error)
+        log.error("backup-export failed:", error);
       } finally {
-        if (runtime.getRuntimeInfo().target === 'browser') {
+        if (runtime.getRuntimeInfo().target === "browser") {
           // event is slower than return of exportSelfKeys
           // TODO find better solution
-          await new Promise(res => setTimeout(res, 1000))
+          await new Promise((res) => setTimeout(res, 1000));
         }
-        emitter.off('ImexFileWritten', listenForOutputFiles)
+        emitter.off("ImexFileWritten", listenForOutputFiles);
       }
     }
-  }, [tx, openConfirmationDialog, openDialog])
+  }, [tx, openConfirmationDialog, openDialog]);
 
   return (
     <>
       <SettingsButton onClick={onKeysExport}>
-        {tx('pref_managekeys_export_secret_keys')}
+        {tx("pref_managekeys_export_secret_keys")}
       </SettingsButton>
     </>
-  )
+  );
 }

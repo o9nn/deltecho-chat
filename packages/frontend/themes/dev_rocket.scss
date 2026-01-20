@@ -1,9 +1,9 @@
 /* Set theme variables used for theme Generation */
-@use './_themebase' with (
+@use "./_themebase" with (
   $outlineColor: #b9b9b9,
   $accentColor: #000000,
   $bgChatView: #e6dcd4,
-  $bgImage: url('./images/background_light.svg'),
+  $bgImage: url("./images/background_light.svg"),
   $bgMessageBubbleIncoming: #ecececaf,
   $bgMessageBubbleOutgoing: #efffde,
   $bgNavBar: #fff,
@@ -33,8 +33,8 @@ $borderColor: #ecececaf;
 $navbarBgLight: $borderColor;
 
 .theme-meta {
-  --name: 'Rocket';
-  --description: 'A theme supposed to look like Rocket.chat';
+  --name: "Rocket";
+  --description: "A theme supposed to look like Rocket.chat";
 }
 
 /* overwrite themedata */

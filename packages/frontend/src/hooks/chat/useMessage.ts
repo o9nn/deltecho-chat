@@ -1,11 +1,11 @@
-import { useCallback } from 'react'
+import { useCallback } from "react";
 
-import useChat from './useChat'
-import { BackendRemote } from '../../backend-com'
-import { ChatView } from '../../contexts/ChatContext'
-import { getLogger } from '../../../../shared/logger'
+import useChat from "./useChat";
+import { BackendRemote } from "../../backend-com";
+import { ChatView } from "../../contexts/ChatContext";
+import { getLogger } from "../../../../shared/logger";
 
-import type { T } from '@deltachat/jsonrpc-client'
+import type { T } from "@deltachat/jsonrpc-client";
 
 export type JumpToMessage = (params: {
   // "not from a different account" because apparently
@@ -18,17 +18,17 @@ export type JumpToMessage = (params: {
    * jumpToMessage from `useMessage()` _cannot_ jump to messages
    * of different accounts.
    */
-  accountId: number
-  msgId: number
+  accountId: number;
+  msgId: number;
   /**
    * Optional, but if it is known, it's best to provide it
    * for better performance.
    * When provided, the caller guarantees that
    * `msgChatId === await rpc.getMessage(accountId, msgId)).chatId`.
    */
-  msgChatId?: number
-  highlight?: boolean
-  focus: boolean
+  msgChatId?: number;
+  highlight?: boolean;
+  focus: boolean;
   /**
    * The ID of the message to remember,
    * to later go back to it, using the "jump down" button.
@@ -39,34 +39,34 @@ export type JumpToMessage = (params: {
    * we'll erroneously show messages from the previous chat
    * without actually switching to that chat.
    */
-  msgParentId?: number
+  msgParentId?: number;
   /**
    * `behavior: 'smooth'` should not be used due to "scroll locking":
    * they don't behave well together currently.
    * `inline` also isn't supposed to have effect because
    * the messages list should not be horizontally scrollable.
    */
-  scrollIntoViewArg?: Parameters<HTMLElement['scrollIntoView']>[0]
-}) => Promise<void>
+  scrollIntoViewArg?: Parameters<HTMLElement["scrollIntoView"]>[0];
+}) => Promise<void>;
 
 export type SendMessage = (
   accountId: number,
   chatId: number,
-  message: Partial<T.MessageData>
-) => Promise<void>
+  message: Partial<T.MessageData>,
+) => Promise<void>;
 
 export type ForwardMessage = (
   accountId: number,
   messageId: number,
-  chatId: number
-) => Promise<void>
+  chatId: number,
+) => Promise<void>;
 
 export type DeleteMessage = (
   accountId: number,
-  messageId: number
-) => Promise<void>
+  messageId: number,
+) => Promise<void>;
 
-const log = getLogger('hooks/useMessage')
+const log = getLogger("hooks/useMessage");
 
 const MESSAGE_DEFAULT: T.MessageData = {
   file: null,
@@ -78,10 +78,10 @@ const MESSAGE_DEFAULT: T.MessageData = {
   quotedMessageId: null,
   quotedText: null,
   text: null,
-}
+};
 
 export default function useMessage() {
-  const { chatId, setChatView, selectChat } = useChat()
+  const { chatId, setChatView, selectChat } = useChat();
 
   const jumpToMessage = useCallback<JumpToMessage>(
     async ({
@@ -93,20 +93,20 @@ export default function useMessage() {
       msgParentId,
       scrollIntoViewArg,
     }) => {
-      log.debug(`jumpToMessage with messageId: ${msgId}`)
+      log.debug(`jumpToMessage with messageId: ${msgId}`);
 
       if (msgChatId == undefined) {
         msgChatId = (await BackendRemote.rpc.getMessage(accountId, msgId))
-          .chatId
+          .chatId;
       }
       // Check if target message is in same chat, if not switch first
       if (msgChatId !== chatId) {
-        await selectChat(accountId, msgChatId)
+        await selectChat(accountId, msgChatId);
 
         // See `msgParentId` docstring.
-        msgParentId = undefined
+        msgParentId = undefined;
       }
-      setChatView(ChatView.MessageList)
+      setChatView(ChatView.MessageList);
 
       // Workaround to actual jump to message in regarding mounted component view
       window.__internal_jump_to_message_asap = {
@@ -121,22 +121,22 @@ export default function useMessage() {
             scrollIntoViewArg,
           },
         ],
-      }
-      window.__internal_check_jump_to_message?.()
+      };
+      window.__internal_check_jump_to_message?.();
     },
-    [chatId, selectChat, setChatView]
-  )
+    [chatId, selectChat, setChatView],
+  );
 
   const sendMessage = useCallback<SendMessage>(
     async (
       accountId: number,
       chatId: number,
-      message: Partial<T.MessageData>
+      message: Partial<T.MessageData>,
     ) => {
       const msgId = await BackendRemote.rpc.sendMsg(accountId, chatId, {
         ...MESSAGE_DEFAULT,
         ...message,
-      })
+      });
 
       // Jump down on sending
       jumpToMessage({
@@ -145,24 +145,24 @@ export default function useMessage() {
         msgChatId: chatId,
         highlight: false,
         focus: false,
-      })
+      });
     },
-    [jumpToMessage]
-  )
+    [jumpToMessage],
+  );
 
   const forwardMessage = useCallback<ForwardMessage>(
     async (accountId: number, messageId: number, chatId: number) => {
-      await BackendRemote.rpc.forwardMessages(accountId, [messageId], chatId)
+      await BackendRemote.rpc.forwardMessages(accountId, [messageId], chatId);
     },
-    []
-  )
+    [],
+  );
 
   const deleteMessage = useCallback<DeleteMessage>(
     async (accountId: number, messageId: number) => {
-      await BackendRemote.rpc.deleteMessages(accountId, [messageId])
+      await BackendRemote.rpc.deleteMessages(accountId, [messageId]);
     },
-    []
-  )
+    [],
+  );
 
   return {
     /**
@@ -177,5 +177,5 @@ export default function useMessage() {
     sendMessage,
     forwardMessage,
     deleteMessage,
-  }
+  };
 }

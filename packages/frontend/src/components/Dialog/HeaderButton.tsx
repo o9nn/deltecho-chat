@@ -1,19 +1,19 @@
-import React from 'react'
-import classNames from 'classnames'
+import React from "react";
+import classNames from "classnames";
 
-import Icon from '../Icon'
+import Icon from "../Icon";
 
-import type { ButtonHTMLAttributes } from 'react'
-import type { IconName } from '../Icon'
+import type { ButtonHTMLAttributes } from "react";
+import type { IconName } from "../Icon";
 
-import styles from './styles.module.scss'
+import styles from "./styles.module.scss";
 
 type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
-  icon: IconName
-  iconSize: number
-  rotation?: number
-  'aria-label': string
-}
+  icon: IconName;
+  iconSize: number;
+  rotation?: number;
+  "aria-label": string;
+};
 
 export default function HeaderButton({
   className,
@@ -35,5 +35,5 @@ export default function HeaderButton({
         rotation={rotation || 0}
       />
     </button>
-  )
+  );
 }

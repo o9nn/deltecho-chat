@@ -1,7 +1,10 @@
-import { NicheConstruction, NicheConstructionConfig } from '../NicheConstruction.js';
-import { ActiveInference, Observation, Action } from '../ActiveInference.js';
+import {
+  NicheConstruction,
+  NicheConstructionConfig,
+} from "../NicheConstruction.js";
+import { ActiveInference, Observation, Action } from "../ActiveInference.js";
 
-describe('NicheConstruction', () => {
+describe("NicheConstruction", () => {
   let activeInference: ActiveInference;
   let nicheConstruction: NicheConstruction;
   const testConfig: Partial<NicheConstructionConfig> = {
@@ -21,54 +24,54 @@ describe('NicheConstruction', () => {
     activeInference.stop();
   });
 
-  describe('constructor', () => {
-    it('should create NicheConstruction with active inference', () => {
+  describe("constructor", () => {
+    it("should create NicheConstruction with active inference", () => {
       expect(nicheConstruction).toBeDefined();
     });
 
-    it('should initialize default affordances', () => {
+    it("should initialize default affordances", () => {
       const state = nicheConstruction.getNicheState();
       expect(state.affordances.size).toBeGreaterThan(0);
     });
 
-    it('should start with empty artifacts', () => {
+    it("should start with empty artifacts", () => {
       const state = nicheConstruction.getNicheState();
       expect(state.artifacts.size).toBe(0);
     });
   });
 
-  describe('start and stop', () => {
-    it('should start maintenance timer', () => {
+  describe("start and stop", () => {
+    it("should start maintenance timer", () => {
       let called = false;
       const startedCallback = () => {
         called = true;
       };
-      nicheConstruction.on('started', startedCallback);
+      nicheConstruction.on("started", startedCallback);
 
       nicheConstruction.start();
       expect(called).toBe(true);
     });
 
-    it('should stop maintenance timer', () => {
+    it("should stop maintenance timer", () => {
       let called = false;
       const stoppedCallback = () => {
         called = true;
       };
-      nicheConstruction.on('stopped', stoppedCallback);
+      nicheConstruction.on("stopped", stoppedCallback);
 
       nicheConstruction.start();
       nicheConstruction.stop();
       expect(called).toBe(true);
     });
 
-    it('should handle multiple start calls gracefully', () => {
+    it("should handle multiple start calls gracefully", () => {
       nicheConstruction.start();
       nicheConstruction.start(); // Should not throw
     });
   });
 
-  describe('getNicheState', () => {
-    it('should return niche state with all components', () => {
+  describe("getNicheState", () => {
+    it("should return niche state with all components", () => {
       const state = nicheConstruction.getNicheState();
 
       expect(state.artifacts).toBeDefined();
@@ -79,7 +82,7 @@ describe('NicheConstruction', () => {
       expect(state.fitness).toBeDefined();
     });
 
-    it('should return copies of maps', () => {
+    it("should return copies of maps", () => {
       const state1 = nicheConstruction.getNicheState();
       const state2 = nicheConstruction.getNicheState();
 
@@ -88,13 +91,13 @@ describe('NicheConstruction', () => {
     });
   });
 
-  describe('getAvailableAffordances', () => {
-    it('should return list of available affordances', () => {
+  describe("getAvailableAffordances", () => {
+    it("should return list of available affordances", () => {
       const affordances = nicheConstruction.getAvailableAffordances();
       expect(Array.isArray(affordances)).toBe(true);
     });
 
-    it('should only return affordances marked as available', () => {
+    it("should only return affordances marked as available", () => {
       const affordances = nicheConstruction.getAvailableAffordances();
       for (const affordance of affordances) {
         expect(affordance.available).toBe(true);
@@ -102,17 +105,17 @@ describe('NicheConstruction', () => {
     });
   });
 
-  describe('artifact creation through belief updates', () => {
-    it('should create artifacts when free energy is high', async () => {
+  describe("artifact creation through belief updates", () => {
+    it("should create artifacts when free energy is high", async () => {
       // Start niche construction
       nicheConstruction.start();
 
       // Process observations that create uncertainty
       const uncertainObservation: Observation = {
-        type: 'sensory',
-        content: '??? unclear message with many questions ???',
+        type: "sensory",
+        content: "??? unclear message with many questions ???",
         features: [],
-        source: 'test',
+        source: "test",
         timestamp: Date.now(),
         reliability: 0.3,
       };
@@ -131,22 +134,22 @@ describe('NicheConstruction', () => {
       expect(state.artifacts).toBeDefined();
     });
 
-    it('should emit artifact_created event when creating artifacts', async () => {
+    it("should emit artifact_created event when creating artifacts", async () => {
       let called = false;
       const callback = () => {
         called = true;
       };
-      nicheConstruction.on('artifact_created', callback);
+      nicheConstruction.on("artifact_created", callback);
 
       nicheConstruction.start();
 
       // Trigger high uncertainty through observations
       for (let i = 0; i < 10; i++) {
         await activeInference.perceive({
-          type: 'sensory',
-          content: 'What is this? How does it work? Why?',
+          type: "sensory",
+          content: "What is this? How does it work? Why?",
           features: [],
-          source: 'test',
+          source: "test",
           timestamp: Date.now(),
           reliability: 0.2,
         });
@@ -155,26 +158,28 @@ describe('NicheConstruction', () => {
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       // The callback may or may not have been called depending on thresholds
-      expect(typeof callback).toBe('function');
+      expect(typeof callback).toBe("function");
     });
   });
 
-  describe('findRelevantArtifact', () => {
-    it('should return null when no artifacts exist', () => {
-      const artifact = nicheConstruction.findRelevantArtifact('nonexistent_context');
+  describe("findRelevantArtifact", () => {
+    it("should return null when no artifacts exist", () => {
+      const artifact = nicheConstruction.findRelevantArtifact(
+        "nonexistent_context",
+      );
       expect(artifact).toBeNull();
     });
 
-    it('should find artifact by context', async () => {
+    it("should find artifact by context", async () => {
       nicheConstruction.start();
 
       // Force artifact creation by triggering high uncertainty
       for (let i = 0; i < 10; i++) {
         await activeInference.perceive({
-          type: 'sensory',
-          content: 'Question about user_intent: what do they want?',
+          type: "sensory",
+          content: "Question about user_intent: what do they want?",
           features: [],
-          source: 'test',
+          source: "test",
           timestamp: Date.now(),
           reliability: 0.3,
         });
@@ -183,28 +188,34 @@ describe('NicheConstruction', () => {
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       // Try to find artifact (may or may not exist)
-      const artifact = nicheConstruction.findRelevantArtifact('user_intent', 'inference_template');
+      const artifact = nicheConstruction.findRelevantArtifact(
+        "user_intent",
+        "inference_template",
+      );
       // Result depends on whether artifact was created
-      expect(artifact === null || artifact?.type === 'inference_template').toBe(true);
+      expect(artifact === null || artifact?.type === "inference_template").toBe(
+        true,
+      );
     });
   });
 
-  describe('getArtifactsByType', () => {
-    it('should return empty array when no artifacts of type exist', () => {
-      const artifacts = nicheConstruction.getArtifactsByType('inference_template');
+  describe("getArtifactsByType", () => {
+    it("should return empty array when no artifacts of type exist", () => {
+      const artifacts =
+        nicheConstruction.getArtifactsByType("inference_template");
       expect(artifacts).toEqual([]);
     });
 
-    it('should filter artifacts by type', async () => {
+    it("should filter artifacts by type", async () => {
       nicheConstruction.start();
 
       // Trigger artifact creation
       for (let i = 0; i < 10; i++) {
         await activeInference.perceive({
-          type: 'sensory',
-          content: 'Complex question requiring inference template',
+          type: "sensory",
+          content: "Complex question requiring inference template",
           features: [],
-          source: 'test',
+          source: "test",
           timestamp: Date.now(),
           reliability: 0.2,
         });
@@ -212,15 +223,16 @@ describe('NicheConstruction', () => {
 
       await new Promise((resolve) => setTimeout(resolve, 100));
 
-      const inferenceTemplates = nicheConstruction.getArtifactsByType('inference_template');
+      const inferenceTemplates =
+        nicheConstruction.getArtifactsByType("inference_template");
       for (const artifact of inferenceTemplates) {
-        expect(artifact.type).toBe('inference_template');
+        expect(artifact.type).toBe("inference_template");
       }
     });
   });
 
-  describe('getSummary', () => {
-    it('should return summary with all fields', () => {
+  describe("getSummary", () => {
+    it("should return summary with all fields", () => {
       const summary = nicheConstruction.getSummary();
 
       expect(summary.artifactCount).toBeDefined();
@@ -231,7 +243,7 @@ describe('NicheConstruction', () => {
       expect(summary.recentModifications).toBeDefined();
     });
 
-    it('should return non-negative counts', () => {
+    it("should return non-negative counts", () => {
       const summary = nicheConstruction.getSummary();
 
       expect(summary.artifactCount).toBeGreaterThanOrEqual(0);
@@ -239,25 +251,25 @@ describe('NicheConstruction', () => {
       expect(summary.availableAffordances).toBeGreaterThanOrEqual(0);
     });
 
-    it('should have fitness between 0 and 1', () => {
+    it("should have fitness between 0 and 1", () => {
       const summary = nicheConstruction.getSummary();
       expect(summary.nicheFitness).toBeGreaterThanOrEqual(0);
       expect(summary.nicheFitness).toBeLessThanOrEqual(1);
     });
   });
 
-  describe('integration with ActiveInference', () => {
-    it('should update niche fitness when beliefs change', async () => {
+  describe("integration with ActiveInference", () => {
+    it("should update niche fitness when beliefs change", async () => {
       nicheConstruction.start();
       const initialState = nicheConstruction.getNicheState();
 
       // Process observations to update beliefs
       for (let i = 0; i < 5; i++) {
         await activeInference.perceive({
-          type: 'sensory',
-          content: 'Consistent helpful message',
+          type: "sensory",
+          content: "Consistent helpful message",
           features: [],
-          source: 'test',
+          source: "test",
           timestamp: Date.now(),
           reliability: 1.0,
         });
@@ -267,27 +279,27 @@ describe('NicheConstruction', () => {
 
       // Fitness should have been updated
       const newState = nicheConstruction.getNicheState();
-      expect(typeof newState.fitness).toBe('number');
+      expect(typeof newState.fitness).toBe("number");
     });
 
-    it('should respond to learning events', async () => {
+    it("should respond to learning events", async () => {
       nicheConstruction.start();
 
       const action: Action = {
-        id: 'test_action',
-        type: 'communicate',
-        target: 'user',
+        id: "test_action",
+        type: "communicate",
+        target: "user",
         parameters: {},
-        expectedOutcome: { content: 'expected' },
+        expectedOutcome: { content: "expected" },
         epistemicValue: 0.5,
         pragmaticValue: 0.5,
       };
 
       const outcome: Observation = {
-        type: 'sensory',
-        content: 'actual response',
+        type: "sensory",
+        content: "actual response",
         features: [],
-        source: 'user',
+        source: "user",
         timestamp: Date.now(),
         reliability: 1.0,
       };
@@ -300,29 +312,31 @@ describe('NicheConstruction', () => {
     });
   });
 
-  describe('affordance types', () => {
-    it('should have query affordance', () => {
+  describe("affordance types", () => {
+    it("should have query affordance", () => {
       const affordances = nicheConstruction.getAvailableAffordances();
-      const queryAffordance = affordances.find((a) => a.type === 'query');
+      const queryAffordance = affordances.find((a) => a.type === "query");
       expect(queryAffordance).toBeDefined();
-      expect(queryAffordance?.description).toContain('question');
+      expect(queryAffordance?.description).toContain("question");
     });
 
-    it('should have response affordance', () => {
+    it("should have response affordance", () => {
       const affordances = nicheConstruction.getAvailableAffordances();
-      const responseAffordance = affordances.find((a) => a.type === 'response');
+      const responseAffordance = affordances.find((a) => a.type === "response");
       expect(responseAffordance).toBeDefined();
     });
 
-    it('should have learning affordance', () => {
+    it("should have learning affordance", () => {
       const affordances = nicheConstruction.getAvailableAffordances();
-      const learningAffordance = affordances.find((a) => a.type === 'learning');
+      const learningAffordance = affordances.find((a) => a.type === "learning");
       expect(learningAffordance).toBeDefined();
     });
 
-    it('should have adaptation affordance', () => {
+    it("should have adaptation affordance", () => {
       const affordances = nicheConstruction.getAvailableAffordances();
-      const adaptationAffordance = affordances.find((a) => a.type === 'adaptation');
+      const adaptationAffordance = affordances.find(
+        (a) => a.type === "adaptation",
+      );
       expect(adaptationAffordance).toBeDefined();
     });
   });

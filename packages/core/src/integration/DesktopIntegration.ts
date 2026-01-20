@@ -5,14 +5,14 @@
  * into desktop applications (Electron, Tauri).
  */
 
-import { LLMService, CognitiveFunctionType } from '../cognitive/LLMService';
-import { EnhancedLLMService, LLMConfig } from '../cognitive/EnhancedLLMService';
-import { RAGMemoryStore, Memory } from '../memory/RAGMemoryStore';
-import { PersonaCore } from '../personality/PersonaCore';
-import { MemoryStorage, InMemoryStorage } from '../memory/storage';
-import { getLogger } from '../utils/logger';
+import { LLMService, CognitiveFunctionType } from "../cognitive/LLMService";
+import { EnhancedLLMService, LLMConfig } from "../cognitive/EnhancedLLMService";
+import { RAGMemoryStore, Memory } from "../memory/RAGMemoryStore";
+import { PersonaCore } from "../personality/PersonaCore";
+import { MemoryStorage, InMemoryStorage } from "../memory/storage";
+import { getLogger } from "../utils/logger";
 
-const log = getLogger('deep-tree-echo-core/integration/DesktopIntegration');
+const log = getLogger("deep-tree-echo-core/integration/DesktopIntegration");
 
 /**
  * Configuration for desktop integration
@@ -23,7 +23,7 @@ export interface DesktopIntegrationConfig {
 
   // LLM configuration
   llm?: {
-    provider: 'openai' | 'anthropic' | 'openrouter' | 'ollama';
+    provider: "openai" | "anthropic" | "openrouter" | "ollama";
     apiKey?: string;
     baseURL?: string;
     model?: string;
@@ -95,19 +95,21 @@ export class DesktopIntegration {
         provider: this.config.llm.provider,
         apiKey: this.config.llm.apiKey,
         baseURL: this.config.llm.baseURL,
-        model: this.config.llm.model || 'gpt-4',
+        model: this.config.llm.model || "gpt-4",
         temperature: this.config.llm.temperature || 0.7,
         maxTokens: this.config.llm.maxTokens || 2000,
       });
     }
 
-    log.info('DesktopIntegration initialized');
+    log.info("DesktopIntegration initialized");
   }
 
   /**
    * Merge provided config with defaults
    */
-  private mergeWithDefaults(config: DesktopIntegrationConfig): DesktopIntegrationConfig {
+  private mergeWithDefaults(
+    config: DesktopIntegrationConfig,
+  ): DesktopIntegrationConfig {
     return {
       memory: {
         enabled: true,
@@ -134,12 +136,21 @@ export class DesktopIntegration {
     try {
       // Configure cognitive function keys
       if (this.config.cognitiveKeys) {
-        for (const [funcType, keyConfig] of Object.entries(this.config.cognitiveKeys)) {
-          if (Object.values(CognitiveFunctionType).includes(funcType as CognitiveFunctionType)) {
-            this.llmService.setFunctionConfig(funcType as CognitiveFunctionType, {
-              apiKey: keyConfig.apiKey,
-              apiEndpoint: keyConfig.apiEndpoint,
-            });
+        for (const [funcType, keyConfig] of Object.entries(
+          this.config.cognitiveKeys,
+        )) {
+          if (
+            Object.values(CognitiveFunctionType).includes(
+              funcType as CognitiveFunctionType,
+            )
+          ) {
+            this.llmService.setFunctionConfig(
+              funcType as CognitiveFunctionType,
+              {
+                apiKey: keyConfig.apiKey,
+                apiEndpoint: keyConfig.apiEndpoint,
+              },
+            );
           }
         }
       }
@@ -148,14 +159,16 @@ export class DesktopIntegration {
       if (this.config.llm?.apiKey) {
         this.llmService.setConfig({
           apiKey: this.config.llm.apiKey,
-          apiEndpoint: this.config.llm.baseURL || 'https://api.openai.com/v1/chat/completions',
+          apiEndpoint:
+            this.config.llm.baseURL ||
+            "https://api.openai.com/v1/chat/completions",
         });
       }
 
       this.initialized = true;
-      log.info('DesktopIntegration fully initialized');
+      log.info("DesktopIntegration fully initialized");
     } catch (error) {
-      log.error('Failed to initialize DesktopIntegration:', error);
+      log.error("Failed to initialize DesktopIntegration:", error);
       throw error;
     }
   }
@@ -166,7 +179,7 @@ export class DesktopIntegration {
   async processMessage(
     message: string,
     chatId: number,
-    messageId: number
+    messageId: number,
   ): Promise<CognitiveResponse> {
     const startTime = Date.now();
 
@@ -176,7 +189,7 @@ export class DesktopIntegration {
         await this.ragMemory.storeMemory({
           chatId,
           messageId,
-          sender: 'user',
+          sender: "user",
           text: message,
         });
       }
@@ -194,17 +207,23 @@ export class DesktopIntegration {
       let tokensUsed: number | undefined;
 
       if (this.enhancedLLM) {
-        const systemPrompt = this.buildSystemPrompt(personality, dominantEmotion);
+        const systemPrompt = this.buildSystemPrompt(
+          personality,
+          dominantEmotion,
+        );
         const messages = [
-          { role: 'system' as const, content: systemPrompt },
-          { role: 'user' as const, content: message },
+          { role: "system" as const, content: systemPrompt },
+          { role: "user" as const, content: message },
         ];
 
         const response = await this.enhancedLLM.complete(messages);
         responseContent = response.content;
         tokensUsed = response.usage?.totalTokens;
       } else {
-        responseContent = await this.llmService.generateResponse(message, context);
+        responseContent = await this.llmService.generateResponse(
+          message,
+          context,
+        );
       }
 
       // Store response in memory
@@ -212,7 +231,7 @@ export class DesktopIntegration {
         await this.ragMemory.storeMemory({
           chatId,
           messageId: 0,
-          sender: 'bot',
+          sender: "bot",
           text: responseContent,
         });
       }
@@ -233,7 +252,7 @@ export class DesktopIntegration {
         tokensUsed,
       };
     } catch (error) {
-      log.error('Error processing message:', error);
+      log.error("Error processing message:", error);
       throw error;
     }
   }
@@ -243,35 +262,54 @@ export class DesktopIntegration {
    */
   private buildSystemPrompt(
     personality: string,
-    dominantEmotion: { emotion: string; intensity: number }
+    dominantEmotion: { emotion: string; intensity: number },
   ): string {
     let prompt = personality;
-    prompt += `\n\nCurrent emotional state: ${dominantEmotion.emotion} (intensity: ${dominantEmotion.intensity.toFixed(2)})`;
+    prompt += `\n\nCurrent emotional state: ${
+      dominantEmotion.emotion
+    } (intensity: ${dominantEmotion.intensity.toFixed(2)})`;
     return prompt;
   }
 
   /**
    * Update emotional state based on interaction
    */
-  private async updateEmotionalState(userMessage: string, botResponse: string): Promise<void> {
+  private async updateEmotionalState(
+    userMessage: string,
+    botResponse: string,
+  ): Promise<void> {
     // Simple sentiment analysis for emotional update
-    const positiveWords = ['thank', 'great', 'awesome', 'love', 'happy', 'good'];
-    const negativeWords = ['hate', 'bad', 'terrible', 'angry', 'sad', 'frustrated'];
+    const positiveWords = [
+      "thank",
+      "great",
+      "awesome",
+      "love",
+      "happy",
+      "good",
+    ];
+    const negativeWords = [
+      "hate",
+      "bad",
+      "terrible",
+      "angry",
+      "sad",
+      "frustrated",
+    ];
 
     const messageLower = userMessage.toLowerCase();
     const stimuli: Record<string, number> = {};
 
     positiveWords.forEach((word) => {
       if (messageLower.includes(word)) {
-        stimuli['joy'] = (stimuli['joy'] || 0) + 0.3;
-        stimuli['interest'] = (stimuli['interest'] || 0) + 0.1;
+        stimuli["joy"] = (stimuli["joy"] || 0) + 0.3;
+        stimuli["interest"] = (stimuli["interest"] || 0) + 0.1;
       }
     });
 
     negativeWords.forEach((word) => {
       if (messageLower.includes(word)) {
-        stimuli['sadness'] = (stimuli['sadness'] || 0) + 0.2;
-        stimuli['joy'] = (stimuli['joy'] || 0) - 0.2;
+        stimuli["sadness"] = (stimuli["sadness"] || 0) + 0.2;
+        stimuli["joy"] = (stimuli["joy"] || 0) - 0.2;
       }
     });
 
@@ -327,7 +365,7 @@ export class DesktopIntegration {
       }
     }
 
-    log.info('DesktopIntegration config updated');
+    log.info("DesktopIntegration config updated");
   }
 
   /**
@@ -335,7 +373,7 @@ export class DesktopIntegration {
    */
   async clearMemory(): Promise<void> {
     await this.ragMemory.clearAllMemories();
-    log.info('All memories cleared');
+    log.info("All memories cleared");
   }
 
   /**
@@ -350,7 +388,9 @@ export class DesktopIntegration {
     return {
       initialized: this.initialized,
       memoryEnabled: this.config.memory?.enabled || false,
-      llmConfigured: this.llmService.isFunctionConfigured(CognitiveFunctionType.GENERAL),
+      llmConfigured: this.llmService.isFunctionConfigured(
+        CognitiveFunctionType.GENERAL,
+      ),
       enhancedLLMConfigured: !!this.enhancedLLM,
     };
   }
@@ -361,7 +401,7 @@ export class DesktopIntegration {
  */
 export function createDesktopIntegration(
   storage: MemoryStorage,
-  llmConfig?: LLMConfig
+  llmConfig?: LLMConfig,
 ): DesktopIntegration {
   return new DesktopIntegration({
     storage,

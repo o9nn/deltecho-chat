@@ -1,29 +1,29 @@
-import React from 'react'
-import classNames from 'classnames'
-import { T } from '@deltachat/jsonrpc-client'
+import React from "react";
+import classNames from "classnames";
+import { T } from "@deltachat/jsonrpc-client";
 
-import Timestamp from '../conversations/Timestamp'
-import { isImage, isVideo } from '../attachment/Attachment'
-import { msgStatus } from '../../types-app'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
+import Timestamp from "../conversations/Timestamp";
+import { isImage, isVideo } from "../attachment/Attachment";
+import { msgStatus } from "../../types-app";
+import useTranslationFunction from "../../hooks/useTranslationFunction";
 
 type Props = {
-  padlock: boolean
-  fileMime: string | null
-  direction?: 'incoming' | 'outgoing'
-  status: msgStatus
-  isEdited: boolean
-  hasText: boolean
-  timestamp: number
-  hasLocation?: boolean
-  onClickError?: () => void
-  tabindexForInteractiveContents: -1 | 0
-  viewType: T.Viewtype
-  isSavedMessage: boolean
-}
+  padlock: boolean;
+  fileMime: string | null;
+  direction?: "incoming" | "outgoing";
+  status: msgStatus;
+  isEdited: boolean;
+  hasText: boolean;
+  timestamp: number;
+  hasLocation?: boolean;
+  onClickError?: () => void;
+  tabindexForInteractiveContents: -1 | 0;
+  viewType: T.Viewtype;
+  isSavedMessage: boolean;
+};
 
 export default function MessageMetaData(props: Props) {
-  const tx = useTranslationFunction()
+  const tx = useTranslationFunction();
 
   const {
     padlock,
@@ -38,15 +38,15 @@ export default function MessageMetaData(props: Props) {
     tabindexForInteractiveContents,
     viewType,
     isSavedMessage,
-  } = props
+  } = props;
 
   return (
     <div
-      className={classNames('metadata', {
-        'with-image-no-caption': isMediaWithoutText(
+      className={classNames("metadata", {
+        "with-image-no-caption": isMediaWithoutText(
           fileMime,
           hasText,
-          viewType
+          viewType,
         ),
       })}
     >
@@ -55,7 +55,7 @@ export default function MessageMetaData(props: Props) {
       https://github.com/deltachat/deltachat-desktop/pull/5023#discussion_r2059382983 */}
       {padlock && (
         <div
-          aria-label={tx('a11y_encryption_padlock')}
+          aria-label={tx("a11y_encryption_padlock")}
           // We should not announce this for _every_ message.
           // This is available in the "Message info" dialog.
           // In addition, if the message is not encerypted,
@@ -63,35 +63,35 @@ export default function MessageMetaData(props: Props) {
           // but arguably "not encrypted" is more important of a status
           // than "encrypted".
           aria-hidden={true}
-          className={'padlock-icon'}
+          className={"padlock-icon"}
         />
       )}
       <div
-        className='aria-live-wrapper'
-        aria-live='polite'
+        className="aria-live-wrapper"
+        aria-live="polite"
         // Also announce removals as to notify when a message gets unsaved.
         // AFAIK "saved" / "unsaved" changes only as a result of user action,
         // but let's do it for confirmation, and for future-proofing.
-        aria-relevant='all'
+        aria-relevant="all"
       >
         {isSavedMessage && (
-          <div aria-label={tx('saved')} className={'saved-message-icon'} />
+          <div aria-label={tx("saved")} className={"saved-message-icon"} />
         )}
       </div>
-      {hasLocation && <span className={'location-icon'} />}
-      <div className='aria-live-wrapper' aria-live='polite'>
-        {isEdited && <span className='edited'>{tx('edited')}</span>}
+      {hasLocation && <span className={"location-icon"} />}
+      <div className="aria-live-wrapper" aria-live="polite">
+        {isEdited && <span className="edited">{tx("edited")}</span>}
       </div>
       <Timestamp
         timestamp={timestamp}
         extended
         direction={direction}
-        module='date'
+        module="date"
       />
-      <span className='spacer' />
-      {direction === 'outgoing' && (
+      <span className="spacer" />
+      {direction === "outgoing" && (
         <button
-          className={classNames('status-icon', status)}
+          className={classNames("status-icon", status)}
           // The main point of `aria-live` here is to let the user know
           // that their message has been sent or delievered
           // right after they they send it.
@@ -106,7 +106,7 @@ export default function MessageMetaData(props: Props) {
           // even when you modify just `aria-label` through the dev tools.
           // We probably ought to keep `aria-label` fixed to "Delivery status",
           // and only update the content, i.e. "Delivered", "Read".
-          aria-live='polite'
+          aria-live="polite"
           aria-label={tx(
             `a11y_delivery_status_${
               status as Exclude<
@@ -114,20 +114,20 @@ export default function MessageMetaData(props: Props) {
                 // '' is not supposed to happen.
                 // The others are not supposed to happen
                 // as long as direction is outgoing.
-                | ''
-                | (typeof direction extends 'outgoing'
-                    ? 'in_fresh' | 'in_seen' | 'in_noticed'
+                | ""
+                | (typeof direction extends "outgoing"
+                    ? "in_fresh" | "in_seen" | "in_noticed"
                     : never)
               >
-            }`
+            }`,
           )}
-          disabled={status !== 'error'}
-          tabIndex={status === 'error' ? tabindexForInteractiveContents : -1}
-          onClick={status === 'error' ? onClickError : undefined}
+          disabled={status !== "error"}
+          tabIndex={status === "error" ? tabindexForInteractiveContents : -1}
+          onClick={status === "error" ? onClickError : undefined}
         />
       )}
     </div>
-  )
+  );
 }
 
 /**
@@ -137,11 +137,11 @@ export default function MessageMetaData(props: Props) {
 export function isMediaWithoutText(
   fileMime: string | null,
   hasText: boolean,
-  viewType: T.Viewtype
+  viewType: T.Viewtype,
 ): boolean {
   const withImageNoCaption = Boolean(
-    !hasText && (isImage(fileMime) || isVideo(fileMime))
-  )
+    !hasText && (isImage(fileMime) || isVideo(fileMime)),
+  );
 
-  return withImageNoCaption || viewType === 'Sticker'
+  return withImageNoCaption || viewType === "Sticker";
 }

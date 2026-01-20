@@ -36,8 +36,8 @@ Themes are just css files with a header identifying them as a theme:
 
 ```css
 .theme-meta {
-  --name: 'Custom Theme';
-  --description: 'my custom theme.';
+  --name: "Custom Theme";
+  --description: "my custom theme.";
 }
 ```
 
@@ -158,12 +158,12 @@ Then overwrite the `"EmojiMart"` font family at the end of your theme.scss file 
 /* overwrite css */
 
 @font-face {
-  font-family: 'EmojiMart';
+  font-family: "EmojiMart";
   /* use the absolute path */
-  src: url('/absolute/path/to/NotoEmoji-Medium.ttf') format('truetype');
+  src: url("/absolute/path/to/NotoEmoji-Medium.ttf") format("truetype");
   /* or if you installed it use the name under which it was installed */
   /* If your font name does not work, make sure it is the 'PostScript-Name' of the font */
-  src: local('NotoEmoji-Regular');
+  src: local("NotoEmoji-Regular");
   /* don't forget to remove the src that you don't need there should only be one */
 }
 ```

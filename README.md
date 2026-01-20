@@ -113,14 +113,14 @@ pnpm build:browser
 
 ### Cognitive Components
 
-| Component | Description |
-|-----------|-------------|
-| CognitiveBridge | Connects chat events to cognitive processing |
-| AdaptivePersonality | Adjusts response style based on context |
-| EmotionalIntelligence | Understands and responds to emotional cues |
-| HyperDimensionalMemory | Stores conversation context in hypergraph |
-| QuantumBeliefPropagation | Advanced inference for response generation |
-| SelfReflection | Meta-cognitive analysis of interactions |
+| Component                | Description                                  |
+| ------------------------ | -------------------------------------------- |
+| CognitiveBridge          | Connects chat events to cognitive processing |
+| AdaptivePersonality      | Adjusts response style based on context      |
+| EmotionalIntelligence    | Understands and responds to emotional cues   |
+| HyperDimensionalMemory   | Stores conversation context in hypergraph    |
+| QuantumBeliefPropagation | Advanced inference for response generation   |
+| SelfReflection           | Meta-cognitive analysis of interactions      |
 
 ### Orchestrator Daemon
 
@@ -136,12 +136,12 @@ GPL-3.0-or-later
 
 ## Links
 
-| Resource | URL |
-|----------|-----|
-| Repository | [github.com/o9nn/deltecho-chat](https://github.com/o9nn/deltecho-chat) |
-| Deep Tree Echo Core | [github.com/o9nn/deltecho](https://github.com/o9nn/deltecho) |
-| Skill Diffusion | [github.com/o9nn/deltecho-skill-diffusion](https://github.com/o9nn/deltecho-skill-diffusion) |
-| DeltaChat | [delta.chat](https://delta.chat) |
+| Resource            | URL                                                                                          |
+| ------------------- | -------------------------------------------------------------------------------------------- |
+| Repository          | [github.com/o9nn/deltecho-chat](https://github.com/o9nn/deltecho-chat)                       |
+| Deep Tree Echo Core | [github.com/o9nn/deltecho](https://github.com/o9nn/deltecho)                                 |
+| Skill Diffusion     | [github.com/o9nn/deltecho-skill-diffusion](https://github.com/o9nn/deltecho-skill-diffusion) |
+| DeltaChat           | [delta.chat](https://delta.chat)                                                             |
 
 ---
 

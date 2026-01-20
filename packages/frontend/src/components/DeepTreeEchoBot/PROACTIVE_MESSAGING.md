@@ -44,28 +44,37 @@ This fulfills the core design principle: **Deep Tree Echo should use the chat ap
 Provides programmatic control over chats:
 
 ```typescript
-import { chatManager, openChat, createChat, listChats } from './DeepTreeEchoBot'
+import {
+  chatManager,
+  openChat,
+  createChat,
+  listChats,
+} from "./DeepTreeEchoBot";
 
 // List all chats
-const chats = await listChats(accountId)
+const chats = await listChats(accountId);
 
 // Open a specific chat (like clicking on it)
-await openChat(accountId, chatId)
+await openChat(accountId, chatId);
 
 // Create a new chat with a contact
-const newChatId = await createChat(accountId, 'user@example.com')
+const newChatId = await createChat(accountId, "user@example.com");
 
 // Initiate a conversation proactively
 const result = await chatManager.initiateConversation(
   accountId,
-  'user@example.com',
-  'Hello! I wanted to check in with you.'
-)
+  "user@example.com",
+  "Hello! I wanted to check in with you.",
+);
 
 // Watch a chat for new messages
-const unwatch = chatManager.watchChat(accountId, chatId, (accountId, chatId, event, data) => {
-  console.log(`Event ${event} in chat ${chatId}`)
-})
+const unwatch = chatManager.watchChat(
+  accountId,
+  chatId,
+  (accountId, chatId, event, data) => {
+    console.log(`Event ${event} in chat ${chatId}`);
+  },
+);
 ```
 
 ### 2. DeepTreeEchoUIBridge
@@ -73,28 +82,28 @@ const unwatch = chatManager.watchChat(accountId, chatId, (accountId, chatId, eve
 Bridges Deep Tree Echo with the React UI:
 
 ```typescript
-import { uiBridge, registerChatContext } from './DeepTreeEchoBot'
+import { uiBridge, registerChatContext } from "./DeepTreeEchoBot";
 
 // Register React context (called by ChatProvider)
-registerChatContext(chatContext, accountId)
+registerChatContext(chatContext, accountId);
 
 // Select a chat in the UI
-await uiBridge.selectChat(accountId, chatId)
+await uiBridge.selectChat(accountId, chatId);
 
 // Navigate to different views
-uiBridge.navigateTo('settings')
-uiBridge.navigateTo('chat-list')
+uiBridge.navigateTo("settings");
+uiBridge.navigateTo("chat-list");
 
 // Scroll to a specific message
-uiBridge.scrollToMessage(msgId, true) // true = highlight
+uiBridge.scrollToMessage(msgId, true); // true = highlight
 
 // Set text in the composer
-uiBridge.setComposerText('Hello!')
-uiBridge.focusComposer()
+uiBridge.setComposerText("Hello!");
+uiBridge.focusComposer();
 
 // Open dialogs
-uiBridge.openDialog('create-chat')
-const confirmed = await uiBridge.showConfirm('Are you sure?')
+uiBridge.openDialog("create-chat");
+const confirmed = await uiBridge.showConfirm("Are you sure?");
 ```
 
 ### 3. ProactiveMessaging
@@ -102,32 +111,36 @@ const confirmed = await uiBridge.showConfirm('Are you sure?')
 Autonomous communication system with triggers and scheduling:
 
 ```typescript
-import { proactiveMessaging, scheduleMessage, sendProactiveMessage } from './DeepTreeEchoBot'
+import {
+  proactiveMessaging,
+  scheduleMessage,
+  sendProactiveMessage,
+} from "./DeepTreeEchoBot";
 
 // Send a message immediately
-await sendProactiveMessage(accountId, chatId, 'Hello!')
+await sendProactiveMessage(accountId, chatId, "Hello!");
 
 // Schedule a message for later
 const triggerId = scheduleMessage(
   accountId,
   chatId,
-  'Reminder: Don\'t forget our meeting!',
-  Date.now() + 3600000 // 1 hour from now
-)
+  "Reminder: Don't forget our meeting!",
+  Date.now() + 3600000, // 1 hour from now
+);
 
 // Create a custom trigger
 proactiveMessaging.addTrigger({
-  type: 'interval',
-  name: 'Daily Check-in',
-  description: 'Send a daily check-in message',
+  type: "interval",
+  name: "Daily Check-in",
+  description: "Send a daily check-in message",
   enabled: true,
   intervalMinutes: 24 * 60, // Every 24 hours
-  targetType: 'specific_chat',
+  targetType: "specific_chat",
   targetChatId: chatId,
   targetAccountId: accountId,
-  messageTemplate: 'Good morning! How are you today?',
+  messageTemplate: "Good morning! How are you today?",
   useAI: false,
-})
+});
 
 // Configure proactive messaging
 proactiveMessaging.updateConfig({
@@ -135,44 +148,46 @@ proactiveMessaging.updateConfig({
   maxMessagesPerHour: 10,
   maxMessagesPerDay: 50,
   quietHoursStart: 22, // 10 PM
-  quietHoursEnd: 8,    // 8 AM
+  quietHoursEnd: 8, // 8 AM
   respectMutedChats: true,
-})
+});
 ```
 
 ## Trigger Types
 
-| Type | Description | Use Case |
-|------|-------------|----------|
-| `scheduled` | Fire at a specific time | One-time reminders |
-| `interval` | Fire every X minutes | Periodic check-ins |
-| `event` | Fire on specific events | Welcome new contacts |
+| Type        | Description                | Use Case               |
+| ----------- | -------------------------- | ---------------------- |
+| `scheduled` | Fire at a specific time    | One-time reminders     |
+| `interval`  | Fire every X minutes       | Periodic check-ins     |
+| `event`     | Fire on specific events    | Welcome new contacts   |
 | `condition` | Fire when condition is met | Unread count threshold |
-| `follow_up` | Fire after conversation | Follow-up reminders |
-| `greeting` | Fire for new contacts | Welcome messages |
+| `follow_up` | Fire after conversation    | Follow-up reminders    |
+| `greeting`  | Fire for new contacts      | Welcome messages       |
 
 ## Event Types
 
-| Event | Description | Data |
-|-------|-------------|------|
-| `new_contact` | New contact added | `{ accountId, contactId, contact }` |
-| `new_group` | New group created | `{ accountId, chatId }` |
-| `mention` | Deep Tree Echo mentioned | `{ accountId, chatId, msgId, message }` |
-| `long_silence` | No activity for threshold | `{ accountId, chatId, duration }` |
-| `unread_threshold` | Unread count exceeded | `{ accountId, totalUnread }` |
-| `chat_created` | New chat created | `{ accountId, chatId }` |
-| `app_startup` | Application started | `{}` |
-| `app_resume` | App resumed from background | `{}` |
+| Event              | Description                 | Data                                    |
+| ------------------ | --------------------------- | --------------------------------------- |
+| `new_contact`      | New contact added           | `{ accountId, contactId, contact }`     |
+| `new_group`        | New group created           | `{ accountId, chatId }`                 |
+| `mention`          | Deep Tree Echo mentioned    | `{ accountId, chatId, msgId, message }` |
+| `long_silence`     | No activity for threshold   | `{ accountId, chatId, duration }`       |
+| `unread_threshold` | Unread count exceeded       | `{ accountId, totalUnread }`            |
+| `chat_created`     | New chat created            | `{ accountId, chatId }`                 |
+| `app_startup`      | Application started         | `{}`                                    |
+| `app_resume`       | App resumed from background | `{}`                                    |
 
 ## Default Triggers
 
 The system comes with these default triggers:
 
 1. **Welcome New Contact** (enabled)
+
    - Sends a greeting when a new contact is added
    - Template: "Hello! I'm Deep Tree Echo..."
 
 2. **Check In After Silence** (disabled by default)
+
    - Sends a message if no activity for 24 hours
    - Uses AI to generate contextual message
 
@@ -195,30 +210,30 @@ To fully integrate proactive messaging with the React UI, register the contexts:
 
 ```tsx
 // In ChatProvider.tsx
-import { registerChatContext } from './DeepTreeEchoBot'
+import { registerChatContext } from "./DeepTreeEchoBot";
 
 export const ChatProvider = ({ children, accountId }) => {
-  const chatContext = useChatContext()
-  
+  const chatContext = useChatContext();
+
   useEffect(() => {
-    registerChatContext(chatContext, accountId)
-  }, [chatContext, accountId])
-  
+    registerChatContext(chatContext, accountId);
+  }, [chatContext, accountId]);
+
   // ...
-}
+};
 
 // In Composer.tsx
-import { registerComposer } from './DeepTreeEchoBot'
+import { registerComposer } from "./DeepTreeEchoBot";
 
 export const Composer = () => {
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
-  
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
   useEffect(() => {
-    registerComposer(textareaRef.current)
-  }, [])
-  
+    registerComposer(textareaRef.current);
+  }, []);
+
   // ...
-}
+};
 ```
 
 ## Security Considerations
@@ -240,45 +255,45 @@ Settings are stored in desktop settings:
 
 ### ChatManager
 
-| Method | Description | Returns |
-|--------|-------------|---------|
-| `listChats(accountId)` | List all chats | `ChatSummary[]` |
-| `openChat(accountId, chatId)` | Open/select a chat | `boolean` |
-| `createChat(accountId, email)` | Create 1:1 chat | `number \| null` |
-| `createGroupChat(accountId, name, emails)` | Create group | `number \| null` |
-| `sendMessage(accountId, chatId, text)` | Send message | `number \| null` |
-| `getActiveChat()` | Get current chat | `ActiveChatState \| null` |
-| `watchChat(accountId, chatId, callback)` | Watch for events | `() => void` |
+| Method                                             | Description        | Returns                     |
+| -------------------------------------------------- | ------------------ | --------------------------- |
+| `listChats(accountId)`                             | List all chats     | `ChatSummary[]`             |
+| `openChat(accountId, chatId)`                      | Open/select a chat | `boolean`                   |
+| `createChat(accountId, email)`                     | Create 1:1 chat    | `number \| null`            |
+| `createGroupChat(accountId, name, emails)`         | Create group       | `number \| null`            |
+| `sendMessage(accountId, chatId, text)`             | Send message       | `number \| null`            |
+| `getActiveChat()`                                  | Get current chat   | `ActiveChatState \| null`   |
+| `watchChat(accountId, chatId, callback)`           | Watch for events   | `() => void`                |
 | `initiateConversation(accountId, email, greeting)` | Start conversation | `{ chatId, msgId } \| null` |
 
 ### UIBridge
 
-| Method | Description | Returns |
-|--------|-------------|---------|
-| `selectChat(accountId, chatId)` | Select chat in UI | `boolean` |
-| `unselectChat()` | Close chat view | `void` |
-| `navigateTo(view)` | Navigate to view | `void` |
-| `scrollToMessage(msgId, highlight)` | Scroll to message | `void` |
-| `setComposerText(text)` | Set composer text | `void` |
-| `focusComposer()` | Focus composer | `void` |
-| `openDialog(type, props)` | Open dialog | `void` |
-| `showConfirm(message, title)` | Show confirmation | `Promise<boolean>` |
-| `getState()` | Get UI state | `UIState` |
+| Method                              | Description       | Returns            |
+| ----------------------------------- | ----------------- | ------------------ |
+| `selectChat(accountId, chatId)`     | Select chat in UI | `boolean`          |
+| `unselectChat()`                    | Close chat view   | `void`             |
+| `navigateTo(view)`                  | Navigate to view  | `void`             |
+| `scrollToMessage(msgId, highlight)` | Scroll to message | `void`             |
+| `setComposerText(text)`             | Set composer text | `void`             |
+| `focusComposer()`                   | Focus composer    | `void`             |
+| `openDialog(type, props)`           | Open dialog       | `void`             |
+| `showConfirm(message, title)`       | Show confirmation | `Promise<boolean>` |
+| `getState()`                        | Get UI state      | `UIState`          |
 
 ### ProactiveMessaging
 
-| Method | Description | Returns |
-|--------|-------------|---------|
-| `addTrigger(trigger)` | Add new trigger | `string` |
-| `removeTrigger(id)` | Remove trigger | `boolean` |
-| `setTriggerEnabled(id, enabled)` | Enable/disable | `void` |
-| `getTriggers()` | Get all triggers | `ProactiveTrigger[]` |
-| `queueMessage(params)` | Queue message | `string` |
-| `sendNow(accountId, chatId, message)` | Send immediately | `boolean` |
-| `scheduleOneTime(accountId, chatId, message, time)` | Schedule once | `string` |
-| `handleEvent(eventType, data)` | Handle event | `void` |
-| `updateConfig(config)` | Update config | `void` |
-| `getConfig()` | Get config | `ProactiveConfig` |
+| Method                                              | Description      | Returns              |
+| --------------------------------------------------- | ---------------- | -------------------- |
+| `addTrigger(trigger)`                               | Add new trigger  | `string`             |
+| `removeTrigger(id)`                                 | Remove trigger   | `boolean`            |
+| `setTriggerEnabled(id, enabled)`                    | Enable/disable   | `void`               |
+| `getTriggers()`                                     | Get all triggers | `ProactiveTrigger[]` |
+| `queueMessage(params)`                              | Queue message    | `string`             |
+| `sendNow(accountId, chatId, message)`               | Send immediately | `boolean`            |
+| `scheduleOneTime(accountId, chatId, message, time)` | Schedule once    | `string`             |
+| `handleEvent(eventType, data)`                      | Handle event     | `void`               |
+| `updateConfig(config)`                              | Update config    | `void`               |
+| `getConfig()`                                       | Get config       | `ProactiveConfig`    |
 
 ## Example: Complete Proactive Workflow
 
@@ -288,51 +303,51 @@ import {
   proactiveMessaging,
   uiBridge,
   sendProactiveMessage,
-} from './DeepTreeEchoBot'
+} from "./DeepTreeEchoBot";
 
 // 1. List available chats
-const chats = await chatManager.listChats(accountId)
-console.log(`Found ${chats.length} chats`)
+const chats = await chatManager.listChats(accountId);
+console.log(`Found ${chats.length} chats`);
 
 // 2. Find chats with unread messages
-const unreadChats = await chatManager.getUnreadChats(accountId)
+const unreadChats = await chatManager.getUnreadChats(accountId);
 if (unreadChats.length > 0) {
   // Open the first unread chat
-  await chatManager.openChat(accountId, unreadChats[0].id)
+  await chatManager.openChat(accountId, unreadChats[0].id);
 }
 
 // 3. Set up a trigger for new contacts
 proactiveMessaging.addTrigger({
-  type: 'event',
-  name: 'Welcome New Friends',
-  description: 'Greet new contacts',
+  type: "event",
+  name: "Welcome New Friends",
+  description: "Greet new contacts",
   enabled: true,
-  eventType: 'new_contact',
-  targetType: 'new_contacts',
-  messageTemplate: 'Welcome! I\'m excited to chat with you.',
+  eventType: "new_contact",
+  targetType: "new_contacts",
+  messageTemplate: "Welcome! I'm excited to chat with you.",
   useAI: true,
-  aiPrompt: 'Generate a warm, friendly welcome message for a new contact.',
-})
+  aiPrompt: "Generate a warm, friendly welcome message for a new contact.",
+});
 
 // 4. Schedule a reminder
-const tomorrow = new Date()
-tomorrow.setDate(tomorrow.getDate() + 1)
-tomorrow.setHours(9, 0, 0, 0)
+const tomorrow = new Date();
+tomorrow.setDate(tomorrow.getDate() + 1);
+tomorrow.setHours(9, 0, 0, 0);
 
 proactiveMessaging.scheduleOneTime(
   accountId,
   chatId,
-  'Good morning! Just a reminder about our discussion yesterday.',
-  tomorrow.getTime()
-)
+  "Good morning! Just a reminder about our discussion yesterday.",
+  tomorrow.getTime(),
+);
 
 // 5. Watch for activity
 chatManager.watchAllChats(accountId, (accountId, chatId, event, data) => {
-  if (event === 'new_message') {
-    console.log(`New message in chat ${chatId}`)
+  if (event === "new_message") {
+    console.log(`New message in chat ${chatId}`);
     // Could trigger AI response here
   }
-})
+});
 ```
 
 ## Conclusion

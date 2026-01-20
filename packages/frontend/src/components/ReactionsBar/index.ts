@@ -1,14 +1,14 @@
-import ReactionsBar from './ReactionsBar'
-import useReactionsBar, { showReactionsUi } from './useReactionsBar'
+import ReactionsBar from "./ReactionsBar";
+import useReactionsBar, { showReactionsUi } from "./useReactionsBar";
 import {
   ReactionsBarProvider,
   ReactionsBarContext,
-} from './ReactionsBarContext'
+} from "./ReactionsBarContext";
 
-export default ReactionsBar
+export default ReactionsBar;
 export {
   ReactionsBarContext,
   ReactionsBarProvider,
   showReactionsUi,
   useReactionsBar,
-}
+};

@@ -1,30 +1,33 @@
-import { DcEventType } from '@deltachat/jsonrpc-client'
-import React, { useEffect, useRef, useState } from 'react'
+import { DcEventType } from "@deltachat/jsonrpc-client";
+import React, { useEffect, useRef, useState } from "react";
 
-import { DeltaProgressBar } from '../Login-Styles'
-import { BackendRemote } from '../../backend-com'
-import { selectedAccountId } from '../../ScreenController'
+import { DeltaProgressBar } from "../Login-Styles";
+import { BackendRemote } from "../../backend-com";
+import { selectedAccountId } from "../../ScreenController";
 import Dialog, {
   DialogBody,
   DialogContent,
   DialogFooter,
   FooterActionButton,
   FooterActions,
-} from '../Dialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import { getDeviceChatId, saveLastChatId } from '../../backend/chat'
+} from "../Dialog";
+import useTranslationFunction from "../../hooks/useTranslationFunction";
+import { getDeviceChatId, saveLastChatId } from "../../backend/chat";
 
-import type { DialogProps } from '../../contexts/DialogContext'
-import { defaultCredentials, Credentials } from '../Settings/DefaultCredentials'
-import { getLogger } from '@deltachat-desktop/shared/logger'
-const log = getLogger('renderer/loginForm')
+import type { DialogProps } from "../../contexts/DialogContext";
+import {
+  defaultCredentials,
+  Credentials,
+} from "../Settings/DefaultCredentials";
+import { getLogger } from "@deltachat-desktop/shared/logger";
+const log = getLogger("renderer/loginForm");
 
 interface ConfigureProgressDialogProps {
-  credentials: Credentials | null
-  qrCode?: string | null // must be of type DCACCOUNT or DCLOGIN
-  onSuccess?: () => void
-  onUserCancellation?: () => void
-  onFail: (error: string) => void
+  credentials: Credentials | null;
+  qrCode?: string | null; // must be of type DCACCOUNT or DCLOGIN
+  onSuccess?: () => void;
+  onUserCancellation?: () => void;
+  onFail: (error: string) => void;
 }
 
 /**
@@ -40,113 +43,116 @@ export function ConfigureProgressDialog({
   onFail,
   ...dialogProps
 }: ConfigureProgressDialogProps & DialogProps) {
-  const { onClose } = dialogProps
-  const [progress, setProgress] = useState(0)
-  const [progressComment, setProgressComment] = useState('')
-  const accountId = selectedAccountId()
-  const tx = useTranslationFunction()
+  const { onClose } = dialogProps;
+  const [progress, setProgress] = useState(0);
+  const [progressComment, setProgressComment] = useState("");
+  const accountId = selectedAccountId();
+  const tx = useTranslationFunction();
 
   const onConfigureProgress = ({
     progress,
     comment,
-  }: DcEventType<'ConfigureProgress'>) => {
-    progress !== 0 && setProgress(progress)
-    setProgressComment(comment || '')
-  }
+  }: DcEventType<"ConfigureProgress">) => {
+    progress !== 0 && setProgress(progress);
+    setProgressComment(comment || "");
+  };
 
-  const wasCanceled = useRef(false)
+  const wasCanceled = useRef(false);
 
   const onCancel = async (_event: any) => {
     try {
       if (window.__selectedAccountId === undefined) {
-        throw new Error('no selected account')
+        throw new Error("no selected account");
       }
-      wasCanceled.current = true
-      await BackendRemote.rpc.stopOngoingProcess(window.__selectedAccountId)
+      wasCanceled.current = true;
+      await BackendRemote.rpc.stopOngoingProcess(window.__selectedAccountId);
     } catch (error: any) {
-      log.error('failed to stopOngoingProcess', error)
-      onFail('failed to stopOngoingProcess' + error.message || error.toString())
+      log.error("failed to stopOngoingProcess", error);
+      onFail(
+        "failed to stopOngoingProcess" + error.message || error.toString(),
+      );
       // If it fails to cancel but is still successful, it should behave like normal.
-      wasCanceled.current = false
+      wasCanceled.current = false;
     }
-    onClose()
-  }
+    onClose();
+  };
 
   useEffect(
     () => {
-      ;(async () => {
+      (async () => {
         try {
           if (!credentials && !qrCode) {
             throw new Error(
-              'ConfigureProgressDialog needs either credentials or a qrCode'
-            )
+              "ConfigureProgressDialog needs either credentials or a qrCode",
+            );
           }
-          const configuration: Credentials = credentials || defaultCredentials()
-          let isInitialOnboarding = false
+          const configuration: Credentials =
+            credentials || defaultCredentials();
+          let isInitialOnboarding = false;
           if (qrCode) {
             // create a new transport for accountId based on the QR code
-            await BackendRemote.rpc.addTransportFromQr(accountId, qrCode)
-            isInitialOnboarding = true
+            await BackendRemote.rpc.addTransportFromQr(accountId, qrCode);
+            isInitialOnboarding = true;
           } else if (
             configuration.addr !== undefined &&
             configuration.addr.length > 0
           ) {
             const existingTransports =
-              await BackendRemote.rpc.listTransports(accountId)
+              await BackendRemote.rpc.listTransports(accountId);
             if (existingTransports.length > 0) {
-              const existingTransport = existingTransports[0]
+              const existingTransport = existingTransports[0];
               // there is always a "default" transport with empty addr
-              if (existingTransport.addr === '') {
-                isInitialOnboarding = true
+              if (existingTransport.addr === "") {
+                isInitialOnboarding = true;
               } else if (existingTransport.addr !== configuration.addr) {
                 // multiple transports are not supported yet
                 throw new Error(
-                  'Multi transport is not supported right now. Check back in a few months!'
-                )
+                  "Multi transport is not supported right now. Check back in a few months!",
+                );
               }
             }
             // If the address already exists the transport config is updated
             // otherwise a new transport is added (if the user entered credentials manually)
             await BackendRemote.rpc.addOrUpdateTransport(
               accountId,
-              configuration
-            )
+              configuration,
+            );
           }
 
           if (wasCanceled.current) {
-            onClose()
-            onUserCancellation?.()
-            return
+            onClose();
+            onUserCancellation?.();
+            return;
           }
           if (isInitialOnboarding) {
             // Select 'Device Messages' chat as the initial one. This will serve
             // as a first introduction to the app after they've entered
-            const deviceChatId = await getDeviceChatId(accountId)
+            const deviceChatId = await getDeviceChatId(accountId);
             if (deviceChatId) {
-              await saveLastChatId(accountId, deviceChatId)
+              await saveLastChatId(accountId, deviceChatId);
               // SettingsStoreInstance is reloaded the first time the main screen is shown
             }
           }
 
-          onClose()
-          onSuccess && onSuccess()
+          onClose();
+          onSuccess && onSuccess();
         } catch (err: any) {
-          log.error('configure error', err)
-          onClose()
-          onFail(err.message || err.toString())
+          log.error("configure error", err);
+          onClose();
+          onFail(err.message || err.toString());
         }
-      })()
+      })();
     },
-    [wasCanceled] // eslint-disable-line react-hooks/exhaustive-deps
-  )
+    [wasCanceled], // eslint-disable-line react-hooks/exhaustive-deps
+  );
 
   useEffect(() => {
-    const emitter = BackendRemote.getContextEvents(accountId)
-    emitter.on('ConfigureProgress', onConfigureProgress)
+    const emitter = BackendRemote.getContextEvents(accountId);
+    emitter.on("ConfigureProgress", onConfigureProgress);
     return () => {
-      emitter.off('ConfigureProgress', onConfigureProgress)
-    }
-  }, [accountId])
+      emitter.off("ConfigureProgress", onConfigureProgress);
+    };
+  }, [accountId]);
 
   return (
     <Dialog
@@ -162,11 +168,11 @@ export function ConfigureProgressDialog({
       </DialogBody>
       <DialogFooter>
         <FooterActions>
-          <FooterActionButton styling='danger' onClick={onCancel}>
-            {tx('cancel')}
+          <FooterActionButton styling="danger" onClick={onCancel}>
+            {tx("cancel")}
           </FooterActionButton>
         </FooterActions>
       </DialogFooter>
     </Dialog>
-  )
+  );
 }

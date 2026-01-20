@@ -1,19 +1,19 @@
-import React, { CSSProperties } from 'react'
+import React, { CSSProperties } from "react";
 
-import Icon from '../Icon'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import { ClickForFullscreenAvatarWrapper } from '../Avatar'
+import Icon from "../Icon";
+import useTranslationFunction from "../../hooks/useTranslationFunction";
+import { ClickForFullscreenAvatarWrapper } from "../Avatar";
 
-import styles from './styles.module.scss'
+import styles from "./styles.module.scss";
 
 type Props = {
-  color?: string
-  imageUrl?: string
-  initials: string
-}
+  color?: string;
+  imageUrl?: string;
+  initials: string;
+};
 
 interface CssWithAvatarColor extends CSSProperties {
-  '--local-avatar-color': string
+  "--local-avatar-color": string;
 }
 
 export default function LargeProfileImage({
@@ -21,7 +21,7 @@ export default function LargeProfileImage({
   imageUrl,
   initials,
 }: Props) {
-  const tx = useTranslationFunction()
+  const tx = useTranslationFunction();
 
   return (
     <div className={styles.largeProfileImage}>
@@ -30,25 +30,25 @@ export default function LargeProfileImage({
           <img
             className={styles.largeProfileImageArea}
             src={imageUrl}
-            alt={tx('pref_profile_photo')}
+            alt={tx("pref_profile_photo")}
           />
         </ClickForFullscreenAvatarWrapper>
       ) : (
         <span
           className={styles.largeProfileImageArea}
-          style={{ '--local-avatar-color': color } as CssWithAvatarColor}
+          style={{ "--local-avatar-color": color } as CssWithAvatarColor}
         >
           {initials ? (
             initials
           ) : (
             <Icon
               className={styles.largeProfileImageDefaultIcon}
-              icon='person-filled'
+              icon="person-filled"
               size={70}
             />
           )}
         </span>
       )}
     </div>
-  )
+  );
 }

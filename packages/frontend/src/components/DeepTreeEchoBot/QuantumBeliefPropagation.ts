@@ -9,50 +9,50 @@
 
 // Types of belief nodes that can exist in the belief network
 enum BeliefNodeType {
-  FACT = 'fact', // Concrete information believed to be true
-  INFERENCE = 'inference', // Derived understanding from facts and other inferences
-  HYPOTHESIS = 'hypothesis', // Provisional belief under consideration
-  PREFERENCE = 'preference', // Value judgment or subjective preference
-  META_BELIEF = 'meta_belief', // Belief about beliefs (recursive)
-  EMOTIONAL = 'emotional', // Belief with emotional component
+  FACT = "fact", // Concrete information believed to be true
+  INFERENCE = "inference", // Derived understanding from facts and other inferences
+  HYPOTHESIS = "hypothesis", // Provisional belief under consideration
+  PREFERENCE = "preference", // Value judgment or subjective preference
+  META_BELIEF = "meta_belief", // Belief about beliefs (recursive)
+  EMOTIONAL = "emotional", // Belief with emotional component
 }
 
 // Relationship types between beliefs
 enum BeliefRelationType {
-  SUPPORTS = 'supports', // Positive evidential relationship
-  CONTRADICTS = 'contradicts', // Negative evidential relationship
-  CAUSES = 'causes', // Causal relationship
-  PART_OF = 'part_of', // Compositional relationship
-  DEPENDS_ON = 'depends_on', // Dependency relationship
-  ASSOCIATED_WITH = 'associated_with', // General association
-  ENTANGLED_WITH = 'entangled_with', // Quantum entanglement (changes in one affect the other)
+  SUPPORTS = "supports", // Positive evidential relationship
+  CONTRADICTS = "contradicts", // Negative evidential relationship
+  CAUSES = "causes", // Causal relationship
+  PART_OF = "part_of", // Compositional relationship
+  DEPENDS_ON = "depends_on", // Dependency relationship
+  ASSOCIATED_WITH = "associated_with", // General association
+  ENTANGLED_WITH = "entangled_with", // Quantum entanglement (changes in one affect the other)
 }
 
 interface BeliefNode {
-  id: string
-  content: string
-  type: BeliefNodeType
+  id: string;
+  content: string;
+  type: BeliefNodeType;
 
   // Quantum-inspired attributes
-  amplitude: number // Amplitude (0-1) - strength of belief
-  phase: number // Phase (0-2π) - contextual orientation
-  certainty: number // Certainty (0-1) - inverse of uncertainty
-  entanglement: number // Entanglement factor (0-1) - influence on connected beliefs
+  amplitude: number; // Amplitude (0-1) - strength of belief
+  phase: number; // Phase (0-2π) - contextual orientation
+  certainty: number; // Certainty (0-1) - inverse of uncertainty
+  entanglement: number; // Entanglement factor (0-1) - influence on connected beliefs
 
   // Metadata
-  created: number
-  lastUpdated: number
-  evidenceStrength: number // 0-1, how much evidence supports this belief
-  contexts: string[] // Contexts where this belief is relevant
-  tags: string[] // Semantic tags for this belief
+  created: number;
+  lastUpdated: number;
+  evidenceStrength: number; // 0-1, how much evidence supports this belief
+  contexts: string[]; // Contexts where this belief is relevant
+  tags: string[]; // Semantic tags for this belief
 }
 
 interface BeliefRelation {
-  sourceId: string
-  targetId: string
-  type: BeliefRelationType
-  strength: number // Relation strength (0-1)
-  context: string[] // Contexts where this relation applies
+  sourceId: string;
+  targetId: string;
+  type: BeliefRelationType;
+  strength: number; // Relation strength (0-1)
+  context: string[]; // Contexts where this relation applies
 }
 
 /**
@@ -60,22 +60,22 @@ interface BeliefRelation {
  */
 export class QuantumBeliefPropagation {
   // The network of beliefs
-  private beliefNodes: Map<string, BeliefNode> = new Map()
+  private beliefNodes: Map<string, BeliefNode> = new Map();
 
   // Relations between beliefs
-  private beliefRelations: BeliefRelation[] = []
+  private beliefRelations: BeliefRelation[] = [];
 
   // Active reasoning contexts
-  private activeContexts: Set<string> = new Set(['general'])
+  private activeContexts: Set<string> = new Set(["general"]);
 
   // Coherence parameters
-  private readonly COHERENCE_THRESHOLD = 0.7 // Minimum coherence level to maintain
-  private readonly INTERFERENCE_FACTOR = 0.3 // How much beliefs interfere with each other
-  private readonly ENTANGLEMENT_DECAY = 0.95 // Decay rate for entanglement over propagation steps
+  private readonly COHERENCE_THRESHOLD = 0.7; // Minimum coherence level to maintain
+  private readonly INTERFERENCE_FACTOR = 0.3; // How much beliefs interfere with each other
+  private readonly ENTANGLEMENT_DECAY = 0.95; // Decay rate for entanglement over propagation steps
 
   // Inference parameters
-  private readonly MAX_INFERENCE_DEPTH = 5 // Maximum recursion for inference
-  private readonly CONFIDENCE_THRESHOLD = 0.6 // Minimum confidence for assertion
+  private readonly MAX_INFERENCE_DEPTH = 5; // Maximum recursion for inference
+  private readonly CONFIDENCE_THRESHOLD = 0.6; // Minimum confidence for assertion
 
   /**
    * Adds a new belief to the network
@@ -85,12 +85,12 @@ export class QuantumBeliefPropagation {
     type: BeliefNodeType,
     amplitude: number = 0.8,
     certainty: number = 0.7,
-    contexts: string[] = ['general'],
+    contexts: string[] = ["general"],
     tags: string[] = [],
-    evidence: number = 0.5
+    evidence: number = 0.5,
   ): string {
     // Generate a unique ID for this belief
-    const id = this.generateBeliefId(content)
+    const id = this.generateBeliefId(content);
 
     // Check if this belief already exists
     if (this.beliefNodes.has(id)) {
@@ -99,8 +99,8 @@ export class QuantumBeliefPropagation {
         amplitude,
         certainty,
         evidenceStrength: evidence,
-      })
-      return id
+      });
+      return id;
     }
 
     // Create new belief node with quantum properties
@@ -117,15 +117,15 @@ export class QuantumBeliefPropagation {
       evidenceStrength: evidence,
       contexts,
       tags,
-    }
+    };
 
     // Add to network
-    this.beliefNodes.set(id, beliefNode)
+    this.beliefNodes.set(id, beliefNode);
 
     // Check for conflicts and resolve coherence
-    this.resolveBeliefCoherence(id)
+    this.resolveBeliefCoherence(id);
 
-    return id
+    return id;
   }
 
   /**
@@ -133,24 +133,24 @@ export class QuantumBeliefPropagation {
    */
   public updateBelief(
     beliefId: string,
-    updates: Partial<Omit<BeliefNode, 'id' | 'created'>>
+    updates: Partial<Omit<BeliefNode, "id" | "created">>,
   ): boolean {
-    const belief = this.beliefNodes.get(beliefId)
-    if (!belief) return false
+    const belief = this.beliefNodes.get(beliefId);
+    if (!belief) return false;
 
     // Preserve quantum consistency in updates
-    const updatedBelief = { ...belief, ...updates, lastUpdated: Date.now() }
+    const updatedBelief = { ...belief, ...updates, lastUpdated: Date.now() };
 
     // Apply quantum normalization to ensure valid state
-    this.normalizeBeliefState(updatedBelief)
+    this.normalizeBeliefState(updatedBelief);
 
     // Store updated belief
-    this.beliefNodes.set(beliefId, updatedBelief)
+    this.beliefNodes.set(beliefId, updatedBelief);
 
     // Propagate changes to entangled beliefs
-    this.propagateBeliefChanges(beliefId)
+    this.propagateBeliefChanges(beliefId);
 
-    return true
+    return true;
   }
 
   /**
@@ -161,25 +161,25 @@ export class QuantumBeliefPropagation {
     targetId: string,
     relationType: BeliefRelationType,
     strength: number = 0.8,
-    context: string[] = ['general']
+    context: string[] = ["general"],
   ): boolean {
     // Verify beliefs exist
     if (!this.beliefNodes.has(sourceId) || !this.beliefNodes.has(targetId)) {
-      return false
+      return false;
     }
 
     // Check if relation already exists
     const existingRelation = this.beliefRelations.find(
-      r =>
+      (r) =>
         r.sourceId === sourceId &&
         r.targetId === targetId &&
-        r.type === relationType
-    )
+        r.type === relationType,
+    );
 
     if (existingRelation) {
       // Update existing relation
-      existingRelation.strength = strength
-      existingRelation.context = context
+      existingRelation.strength = strength;
+      existingRelation.context = context;
     } else {
       // Create new relation
       this.beliefRelations.push({
@@ -188,55 +188,55 @@ export class QuantumBeliefPropagation {
         type: relationType,
         strength,
         context,
-      })
+      });
 
       // Special handling for entanglement
       if (relationType === BeliefRelationType.ENTANGLED_WITH) {
-        const sourceBelief = this.beliefNodes.get(sourceId)!
-        const targetBelief = this.beliefNodes.get(targetId)!
+        const sourceBelief = this.beliefNodes.get(sourceId)!;
+        const targetBelief = this.beliefNodes.get(targetId)!;
 
         // Increase entanglement factor for both beliefs
         this.updateBelief(sourceId, {
           entanglement: Math.min(1, sourceBelief.entanglement + 0.2),
-        })
+        });
 
         this.updateBelief(targetId, {
           entanglement: Math.min(1, targetBelief.entanglement + 0.2),
-        })
+        });
       }
     }
 
-    return true
+    return true;
   }
 
   /**
    * Performs inference to derive new beliefs from existing ones
    */
   public inferBeliefs(
-    context: string[] = Array.from(this.activeContexts)
+    context: string[] = Array.from(this.activeContexts),
   ): string[] {
-    const newBeliefIds: string[] = []
-    const processedBeliefs = new Set<string>()
+    const newBeliefIds: string[] = [];
+    const processedBeliefs = new Set<string>();
 
     // Get all active beliefs in these contexts
     const activeBeliefs = Array.from(this.beliefNodes.values())
-      .filter(belief => belief.contexts.some(c => context.includes(c)))
+      .filter((belief) => belief.contexts.some((c) => context.includes(c)))
       .filter(
-        belief =>
-          belief.amplitude * belief.certainty > this.CONFIDENCE_THRESHOLD
-      )
+        (belief) =>
+          belief.amplitude * belief.certainty > this.CONFIDENCE_THRESHOLD,
+      );
 
     // Process each high-confidence belief
     for (const belief of activeBeliefs) {
-      if (processedBeliefs.has(belief.id)) continue
-      processedBeliefs.add(belief.id)
+      if (processedBeliefs.has(belief.id)) continue;
+      processedBeliefs.add(belief.id);
 
       // Find related beliefs for inference
       const relatedBeliefs = this.getRelatedBeliefs(belief.id, [
         BeliefRelationType.SUPPORTS,
         BeliefRelationType.CAUSES,
         BeliefRelationType.PART_OF,
-      ])
+      ]);
 
       // Apply inference rules based on relation types
       for (const { relation, belief: relatedBelief } of relatedBeliefs) {
@@ -245,7 +245,10 @@ export class QuantumBeliefPropagation {
           relation.strength > 0.7
         ) {
           // Supported beliefs can lead to inferences
-          const inferenceContent = this.generateInference(belief, relatedBelief)
+          const inferenceContent = this.generateInference(
+            belief,
+            relatedBelief,
+          );
           if (inferenceContent) {
             const newId = this.addBelief(
               inferenceContent,
@@ -255,10 +258,10 @@ export class QuantumBeliefPropagation {
               context,
               [...new Set([...belief.tags, ...relatedBelief.tags])],
               ((belief.evidenceStrength + relatedBelief.evidenceStrength) / 2) *
-                0.7
-            )
+                0.7,
+            );
 
-            newBeliefIds.push(newId)
+            newBeliefIds.push(newId);
 
             // Connect new inference to source beliefs
             this.relateBelief(
@@ -266,15 +269,15 @@ export class QuantumBeliefPropagation {
               newId,
               BeliefRelationType.SUPPORTS,
               0.8,
-              context
-            )
+              context,
+            );
             this.relateBelief(
               relatedBelief.id,
               newId,
               BeliefRelationType.SUPPORTS,
               0.8,
-              context
-            )
+              context,
+            );
           }
         }
 
@@ -283,46 +286,46 @@ export class QuantumBeliefPropagation {
           relation.strength > 0.6
         ) {
           // Handle contradictions by quantum superposition
-          this.resolveContradiction(belief, relatedBelief)
+          this.resolveContradiction(belief, relatedBelief);
         }
       }
     }
 
     // Check for complex inference patterns
-    this.detectComplexPatterns(context)
+    this.detectComplexPatterns(context);
 
-    return newBeliefIds
+    return newBeliefIds;
   }
 
   /**
    * Sets the active contexts for belief evaluation
    */
   public setActiveContexts(contexts: string[]): void {
-    this.activeContexts = new Set(contexts)
+    this.activeContexts = new Set(contexts);
 
     // Recalculate belief states based on new context
-    this.recalculateContextualBeliefs()
+    this.recalculateContextualBeliefs();
   }
 
   /**
    * Evaluates belief coherence across the network
    */
   public evaluateCoherence(): {
-    overallCoherence: number
-    contradictions: { belief1: string; belief2: string; severity: number }[]
-    strongestBeliefs: string[]
+    overallCoherence: number;
+    contradictions: { belief1: string; belief2: string; severity: number }[];
+    strongestBeliefs: string[];
   } {
     const contradictions: {
-      belief1: string
-      belief2: string
-      severity: number
-    }[] = []
+      belief1: string;
+      belief2: string;
+      severity: number;
+    }[] = [];
 
     // Find contradictory beliefs
     for (const relation of this.beliefRelations) {
       if (relation.type === BeliefRelationType.CONTRADICTS) {
-        const belief1 = this.beliefNodes.get(relation.sourceId)
-        const belief2 = this.beliefNodes.get(relation.targetId)
+        const belief1 = this.beliefNodes.get(relation.sourceId);
+        const belief2 = this.beliefNodes.get(relation.targetId);
 
         if (belief1 && belief2) {
           // Calculate contradiction severity based on amplitudes and certainty
@@ -331,33 +334,33 @@ export class QuantumBeliefPropagation {
             belief1.amplitude *
             belief2.amplitude *
             belief1.certainty *
-            belief2.certainty
+            belief2.certainty;
 
           if (severity > 0.3) {
             contradictions.push({
               belief1: belief1.content,
               belief2: belief2.content,
               severity,
-            })
+            });
           }
         }
       }
     }
 
     // Calculate overall coherence
-    const coherenceMetrics = this.calculateNetworkCoherence()
+    const coherenceMetrics = this.calculateNetworkCoherence();
 
     // Get strongest beliefs
     const strongestBeliefs = Array.from(this.beliefNodes.values())
       .sort((a, b) => b.amplitude * b.certainty - a.amplitude * a.certainty)
       .slice(0, 5)
-      .map(b => b.content)
+      .map((b) => b.content);
 
     return {
       overallCoherence: coherenceMetrics.globalCoherence,
       contradictions,
       strongestBeliefs,
-    }
+    };
   }
 
   /**
@@ -366,51 +369,51 @@ export class QuantumBeliefPropagation {
   public getRelevantBeliefs(query: string, topN: number = 5): BeliefNode[] {
     // Simple relevance calculation (in a real system, use semantic similarity)
     const scoredBeliefs = Array.from(this.beliefNodes.values())
-      .map(belief => {
+      .map((belief) => {
         // Calculate semantic relevance score
-        const relevanceScore = this.calculateRelevance(belief, query)
-        return { belief, relevance: relevanceScore }
+        const relevanceScore = this.calculateRelevance(belief, query);
+        return { belief, relevance: relevanceScore };
       })
-      .filter(item => item.relevance > 0.3) // Minimum relevance threshold
+      .filter((item) => item.relevance > 0.3) // Minimum relevance threshold
       .sort((a, b) => b.relevance - a.relevance)
-      .slice(0, topN)
+      .slice(0, topN);
 
-    return scoredBeliefs.map(item => item.belief)
+    return scoredBeliefs.map((item) => item.belief);
   }
 
   /**
    * Exports the belief network for persistence
    */
-  public exportBeliefNetwork(): Object {
+  public exportBeliefNetwork(): object {
     return {
       nodes: Array.from(this.beliefNodes.values()),
       relations: this.beliefRelations,
       activeContexts: Array.from(this.activeContexts),
-    }
+    };
   }
 
   /**
    * Imports a previously saved belief network
    */
   public importBeliefNetwork(data: any): void {
-    if (!data) return
+    if (!data) return;
 
-    this.beliefNodes.clear()
-    this.beliefRelations = []
-    this.activeContexts.clear()
+    this.beliefNodes.clear();
+    this.beliefRelations = [];
+    this.activeContexts.clear();
 
     if (data.nodes) {
       for (const node of data.nodes) {
-        this.beliefNodes.set(node.id, node)
+        this.beliefNodes.set(node.id, node);
       }
     }
 
     if (data.relations) {
-      this.beliefRelations = data.relations
+      this.beliefRelations = data.relations;
     }
 
     if (data.activeContexts) {
-      this.activeContexts = new Set(data.activeContexts)
+      this.activeContexts = new Set(data.activeContexts);
     }
   }
 
@@ -423,33 +426,33 @@ export class QuantumBeliefPropagation {
    */
   private propagateBeliefChanges(
     changedBeliefId: string,
-    depth: number = 0
+    depth: number = 0,
   ): void {
-    if (depth >= this.MAX_INFERENCE_DEPTH) return
+    if (depth >= this.MAX_INFERENCE_DEPTH) return;
 
-    const changedBelief = this.beliefNodes.get(changedBeliefId)
-    if (!changedBelief) return
+    const changedBelief = this.beliefNodes.get(changedBeliefId);
+    if (!changedBelief) return;
 
     // Find all directly connected beliefs
-    const connectedBeliefs = this.getConnectedBeliefs(changedBeliefId)
+    const connectedBeliefs = this.getConnectedBeliefs(changedBeliefId);
 
     for (const { relation, belief: connectedBelief } of connectedBeliefs) {
       // Skip if not in active context
       if (
-        !connectedBelief.contexts.some(c =>
-          Array.from(this.activeContexts).includes(c)
+        !connectedBelief.contexts.some((c) =>
+          Array.from(this.activeContexts).includes(c),
         )
       ) {
-        continue
+        continue;
       }
 
       // Calculate propagation strength based on relation and entanglement
       const propagationStrength =
         relation.strength *
         changedBelief.entanglement *
-        Math.pow(this.ENTANGLEMENT_DECAY, depth)
+        Math.pow(this.ENTANGLEMENT_DECAY, depth);
 
-      if (propagationStrength < 0.05) continue // Too weak to propagate
+      if (propagationStrength < 0.05) continue; // Too weak to propagate
 
       // Different propagation rules based on relation type
       switch (relation.type) {
@@ -458,32 +461,32 @@ export class QuantumBeliefPropagation {
           this.updateEntangledBelief(
             changedBelief,
             connectedBelief,
-            propagationStrength
-          )
-          break
+            propagationStrength,
+          );
+          break;
 
         case BeliefRelationType.SUPPORTS:
           // Supporting beliefs increase amplitude and certainty
           this.updateBelief(connectedBelief.id, {
             amplitude: Math.min(
               1,
-              connectedBelief.amplitude + propagationStrength * 0.2
+              connectedBelief.amplitude + propagationStrength * 0.2,
             ),
             certainty: Math.min(
               1,
-              connectedBelief.certainty + propagationStrength * 0.1
+              connectedBelief.certainty + propagationStrength * 0.1,
             ),
-          })
-          break
+          });
+          break;
 
         case BeliefRelationType.CONTRADICTS:
           // Contradicting beliefs create interference
           this.applyInterference(
             connectedBelief,
             changedBelief,
-            propagationStrength
-          )
-          break
+            propagationStrength,
+          );
+          break;
 
         case BeliefRelationType.DEPENDS_ON:
           // Dependent beliefs follow source changes
@@ -492,18 +495,18 @@ export class QuantumBeliefPropagation {
               connectedBelief.amplitude * (0.5 + 0.5 * changedBelief.amplitude),
             certainty:
               connectedBelief.certainty * (0.7 + 0.3 * changedBelief.certainty),
-          })
-          break
+          });
+          break;
 
         default:
           // Other relations have lighter influence
           this.updateBelief(connectedBelief.id, {
             lastUpdated: Date.now(), // Just mark as updated
-          })
+          });
       }
 
       // Recursively propagate to next level of beliefs
-      this.propagateBeliefChanges(connectedBelief.id, depth + 1)
+      this.propagateBeliefChanges(connectedBelief.id, depth + 1);
     }
   }
 
@@ -513,20 +516,20 @@ export class QuantumBeliefPropagation {
   private updateEntangledBelief(
     sourceBelief: BeliefNode,
     targetBelief: BeliefNode,
-    strength: number
+    strength: number,
   ): void {
     // Calculate phase relationship (quantum-inspired)
-    const phaseDifference = sourceBelief.phase - targetBelief.phase
+    const phaseDifference = sourceBelief.phase - targetBelief.phase;
 
     // Calculate new amplitude with quantum interference
-    const interferenceFactor = Math.cos(phaseDifference)
-    const amplitudeChange = strength * interferenceFactor
+    const interferenceFactor = Math.cos(phaseDifference);
+    const amplitudeChange = strength * interferenceFactor;
 
     // Apply entanglement effect
     this.updateBelief(targetBelief.id, {
       amplitude: Math.max(
         0.1,
-        Math.min(1, targetBelief.amplitude + amplitudeChange)
+        Math.min(1, targetBelief.amplitude + amplitudeChange),
       ),
       phase: targetBelief.phase + phaseDifference * strength * 0.3, // Partial phase alignment
       certainty: Math.max(
@@ -534,10 +537,10 @@ export class QuantumBeliefPropagation {
         Math.min(
           1,
           targetBelief.certainty +
-            (sourceBelief.certainty - targetBelief.certainty) * strength * 0.5
-        )
+            (sourceBelief.certainty - targetBelief.certainty) * strength * 0.5,
+        ),
       ),
-    })
+    });
   }
 
   /**
@@ -546,59 +549,59 @@ export class QuantumBeliefPropagation {
   private applyInterference(
     belief1: BeliefNode,
     belief2: BeliefNode,
-    strength: number
+    strength: number,
   ): void {
     // Destructive interference based on phase difference
-    const phaseDifference = belief1.phase - belief2.phase
+    const phaseDifference = belief1.phase - belief2.phase;
     const interferenceFactor =
-      Math.cos(phaseDifference) * this.INTERFERENCE_FACTOR
+      Math.cos(phaseDifference) * this.INTERFERENCE_FACTOR;
 
     // Apply interference effects
     const amplitude1 = Math.max(
       0.1,
-      belief1.amplitude - Math.abs(interferenceFactor) * strength
-    )
+      belief1.amplitude - Math.abs(interferenceFactor) * strength,
+    );
     const amplitude2 = Math.max(
       0.1,
-      belief2.amplitude - Math.abs(interferenceFactor) * strength
-    )
+      belief2.amplitude - Math.abs(interferenceFactor) * strength,
+    );
 
     // Update with interference results
-    this.updateBelief(belief1.id, { amplitude: amplitude1 })
-    this.updateBelief(belief2.id, { amplitude: amplitude2 })
+    this.updateBelief(belief1.id, { amplitude: amplitude1 });
+    this.updateBelief(belief2.id, { amplitude: amplitude2 });
 
     // Introduce slight phase shift (quantum-inspired)
-    const phaseShift = Math.PI * 0.1 * strength
-    this.updateBelief(belief1.id, { phase: belief1.phase + phaseShift })
-    this.updateBelief(belief2.id, { phase: belief2.phase - phaseShift })
+    const phaseShift = Math.PI * 0.1 * strength;
+    this.updateBelief(belief1.id, { phase: belief1.phase + phaseShift });
+    this.updateBelief(belief2.id, { phase: belief2.phase - phaseShift });
   }
 
   /**
    * Checks and resolves coherence for a belief and its relations
    */
   private resolveBeliefCoherence(beliefId: string): void {
-    const belief = this.beliefNodes.get(beliefId)
-    if (!belief) return
+    const belief = this.beliefNodes.get(beliefId);
+    if (!belief) return;
 
     // Find potentially contradicting beliefs
-    const contradictions = this.findContradictions(belief)
+    const contradictions = this.findContradictions(belief);
 
-    if (contradictions.length === 0) return // No contradictions to resolve
+    if (contradictions.length === 0) return; // No contradictions to resolve
 
     // Sort contradictions by severity
-    contradictions.sort((a, b) => b.severity - a.severity)
+    contradictions.sort((a, b) => b.severity - a.severity);
 
     // Resolve most severe contradictions
     for (const { otherBelief, severity } of contradictions) {
       if (severity > 1 - this.COHERENCE_THRESHOLD) {
-        this.resolveContradiction(belief, otherBelief)
+        this.resolveContradiction(belief, otherBelief);
 
         // Create contradiction relation if it doesn't exist
         const existingRelation = this.beliefRelations.find(
-          r =>
+          (r) =>
             (r.sourceId === belief.id && r.targetId === otherBelief.id) ||
-            (r.sourceId === otherBelief.id && r.targetId === belief.id)
-        )
+            (r.sourceId === otherBelief.id && r.targetId === belief.id),
+        );
 
         if (!existingRelation) {
           this.relateBelief(
@@ -606,8 +609,8 @@ export class QuantumBeliefPropagation {
             otherBelief.id,
             BeliefRelationType.CONTRADICTS,
             severity,
-            Array.from(new Set([...belief.contexts, ...otherBelief.contexts]))
-          )
+            Array.from(new Set([...belief.contexts, ...otherBelief.contexts])),
+          );
         }
       }
     }
@@ -619,52 +622,52 @@ export class QuantumBeliefPropagation {
   private resolveContradiction(belief1: BeliefNode, belief2: BeliefNode): void {
     // Calculate belief strengths
     const strength1 =
-      belief1.amplitude * belief1.certainty * belief1.evidenceStrength
+      belief1.amplitude * belief1.certainty * belief1.evidenceStrength;
     const strength2 =
-      belief2.amplitude * belief2.certainty * belief2.evidenceStrength
+      belief2.amplitude * belief2.certainty * belief2.evidenceStrength;
 
     // Total strength
-    const totalStrength = strength1 + strength2
-    if (totalStrength === 0) return
+    const totalStrength = strength1 + strength2;
+    if (totalStrength === 0) return;
 
     // Normalize relative strengths
-    const normStrength1 = strength1 / totalStrength
-    const normStrength2 = strength2 / totalStrength
+    const normStrength1 = strength1 / totalStrength;
+    const normStrength2 = strength2 / totalStrength;
 
     // Quantum-inspired resolution
     if (Math.abs(normStrength1 - normStrength2) < 0.2) {
       // Beliefs are of similar strength - create superposition
       // Adjust phases to be more orthogonal (closer to π/2 difference)
-      const idealPhaseDiff = Math.PI / 2
+      const idealPhaseDiff = Math.PI / 2;
       const currentPhaseDiff =
-        Math.abs(belief1.phase - belief2.phase) % (2 * Math.PI)
-      const phaseAdjustment = (idealPhaseDiff - currentPhaseDiff) * 0.5
+        Math.abs(belief1.phase - belief2.phase) % (2 * Math.PI);
+      const phaseAdjustment = (idealPhaseDiff - currentPhaseDiff) * 0.5;
 
       this.updateBelief(belief1.id, {
         phase: belief1.phase + phaseAdjustment,
         certainty: belief1.certainty * 0.9, // Slightly reduce certainty
-      })
+      });
 
       this.updateBelief(belief2.id, {
         phase: belief2.phase - phaseAdjustment,
         certainty: belief2.certainty * 0.9,
-      })
+      });
     } else {
       // One belief is significantly stronger
       // Reduce the weaker belief more significantly
       const weakerBeliefId =
-        normStrength1 < normStrength2 ? belief1.id : belief2.id
+        normStrength1 < normStrength2 ? belief1.id : belief2.id;
       const strongerBeliefId =
-        normStrength1 >= normStrength2 ? belief1.id : belief2.id
+        normStrength1 >= normStrength2 ? belief1.id : belief2.id;
 
       this.updateBelief(weakerBeliefId, {
         amplitude: this.beliefNodes.get(weakerBeliefId)!.amplitude * 0.7,
         certainty: this.beliefNodes.get(weakerBeliefId)!.certainty * 0.8,
-      })
+      });
 
       this.updateBelief(strongerBeliefId, {
         certainty: this.beliefNodes.get(strongerBeliefId)!.certainty * 0.95,
-      })
+      });
     }
   }
 
@@ -672,46 +675,48 @@ export class QuantumBeliefPropagation {
    * Calculates coherence metrics for the belief network
    */
   private calculateNetworkCoherence(): {
-    globalCoherence: number
-    localCoherenceMap: Map<string, number>
+    globalCoherence: number;
+    localCoherenceMap: Map<string, number>;
   } {
-    const localCoherenceMap = new Map<string, number>()
-    let totalCoherence = 0
-    let beliefCount = 0
+    const localCoherenceMap = new Map<string, number>();
+    let totalCoherence = 0;
+    let beliefCount = 0;
 
     // Calculate local coherence for each belief
     for (const [id, belief] of this.beliefNodes) {
       // Skip beliefs not in active contexts
       if (
-        !belief.contexts.some(c => Array.from(this.activeContexts).includes(c))
+        !belief.contexts.some((c) =>
+          Array.from(this.activeContexts).includes(c),
+        )
       ) {
-        continue
+        continue;
       }
 
-      beliefCount++
+      beliefCount++;
 
       // Find all relations for this belief
       const relations = this.beliefRelations.filter(
-        r => r.sourceId === id || r.targetId === id
-      )
+        (r) => r.sourceId === id || r.targetId === id,
+      );
 
       if (relations.length === 0) {
-        localCoherenceMap.set(id, 1) // No relations means no conflicts
-        totalCoherence += 1
-        continue
+        localCoherenceMap.set(id, 1); // No relations means no conflicts
+        totalCoherence += 1;
+        continue;
       }
 
       // Calculate coherence score based on supporting vs contradicting relations
-      let coherenceScore = 0
-      let relationCount = 0
+      let coherenceScore = 0;
+      let relationCount = 0;
 
       for (const relation of relations) {
-        relationCount++
+        relationCount++;
         const otherBeliefId =
-          relation.sourceId === id ? relation.targetId : relation.sourceId
-        const otherBelief = this.beliefNodes.get(otherBeliefId)
+          relation.sourceId === id ? relation.targetId : relation.sourceId;
+        const otherBelief = this.beliefNodes.get(otherBeliefId);
 
-        if (!otherBelief) continue
+        if (!otherBelief) continue;
 
         switch (relation.type) {
           case BeliefRelationType.SUPPORTS:
@@ -719,38 +724,38 @@ export class QuantumBeliefPropagation {
           case BeliefRelationType.DEPENDS_ON:
           case BeliefRelationType.ENTANGLED_WITH:
             // Positive contribution to coherence
-            coherenceScore += relation.strength
-            break
+            coherenceScore += relation.strength;
+            break;
 
           case BeliefRelationType.CONTRADICTS:
             // Negative contribution to coherence
             coherenceScore -=
-              relation.strength * otherBelief.amplitude * otherBelief.certainty
-            break
+              relation.strength * otherBelief.amplitude * otherBelief.certainty;
+            break;
 
           default:
             // Neutral
-            break
+            break;
         }
       }
 
       // Normalize and bound coherence score
       const normalizedCoherence = Math.max(
         0,
-        Math.min(1, 0.5 + coherenceScore / (2 * Math.max(1, relationCount)))
-      )
+        Math.min(1, 0.5 + coherenceScore / (2 * Math.max(1, relationCount))),
+      );
 
-      localCoherenceMap.set(id, normalizedCoherence)
-      totalCoherence += normalizedCoherence
+      localCoherenceMap.set(id, normalizedCoherence);
+      totalCoherence += normalizedCoherence;
     }
 
     // Calculate global coherence
-    const globalCoherence = beliefCount > 0 ? totalCoherence / beliefCount : 1
+    const globalCoherence = beliefCount > 0 ? totalCoherence / beliefCount : 1;
 
     return {
       globalCoherence,
       localCoherenceMap,
-    }
+    };
   }
 
   /**
@@ -760,16 +765,16 @@ export class QuantumBeliefPropagation {
     // First, adjust amplitudes based on context relevance
     for (const [id, belief] of this.beliefNodes) {
       // Calculate context relevance
-      const contextRelevance = belief.contexts.some(c =>
-        Array.from(this.activeContexts).includes(c)
+      const contextRelevance = belief.contexts.some((c) =>
+        Array.from(this.activeContexts).includes(c),
       )
         ? 1
-        : 0.3 // Beliefs outside current context have reduced amplitude
+        : 0.3; // Beliefs outside current context have reduced amplitude
 
       if (contextRelevance < 1) {
         this.updateBelief(id, {
           amplitude: belief.amplitude * contextRelevance,
-        })
+        });
       }
     }
 
@@ -777,12 +782,12 @@ export class QuantumBeliefPropagation {
     for (const context of this.activeContexts) {
       // Find high-amplitude beliefs in this context
       const contextualBeliefs = Array.from(this.beliefNodes.values()).filter(
-        b => b.contexts.includes(context) && b.amplitude > 0.7
-      )
+        (b) => b.contexts.includes(context) && b.amplitude > 0.7,
+      );
 
       // Propagate from these seed beliefs
       for (const belief of contextualBeliefs) {
-        this.propagateBeliefChanges(belief.id)
+        this.propagateBeliefChanges(belief.id);
       }
     }
   }
@@ -791,26 +796,26 @@ export class QuantumBeliefPropagation {
    * Gets all beliefs directly connected to the given belief
    */
   private getConnectedBeliefs(
-    beliefId: string
+    beliefId: string,
   ): { relation: BeliefRelation; belief: BeliefNode }[] {
-    const connected: { relation: BeliefRelation; belief: BeliefNode }[] = []
+    const connected: { relation: BeliefRelation; belief: BeliefNode }[] = [];
 
     // Find all relations involving this belief
     const relations = this.beliefRelations.filter(
-      r => r.sourceId === beliefId || r.targetId === beliefId
-    )
+      (r) => r.sourceId === beliefId || r.targetId === beliefId,
+    );
 
     for (const relation of relations) {
       const otherId =
-        relation.sourceId === beliefId ? relation.targetId : relation.sourceId
-      const other = this.beliefNodes.get(otherId)
+        relation.sourceId === beliefId ? relation.targetId : relation.sourceId;
+      const other = this.beliefNodes.get(otherId);
 
       if (other) {
-        connected.push({ relation, belief: other })
+        connected.push({ relation, belief: other });
       }
     }
 
-    return connected
+    return connected;
   }
 
   /**
@@ -818,45 +823,45 @@ export class QuantumBeliefPropagation {
    */
   private getRelatedBeliefs(
     beliefId: string,
-    relationTypes: BeliefRelationType[]
+    relationTypes: BeliefRelationType[],
   ): { relation: BeliefRelation; belief: BeliefNode }[] {
     return this.getConnectedBeliefs(beliefId).filter(({ relation }) =>
-      relationTypes.includes(relation.type)
-    )
+      relationTypes.includes(relation.type),
+    );
   }
 
   /**
    * Finds contradictions for a given belief
    */
   private findContradictions(
-    belief: BeliefNode
+    belief: BeliefNode,
   ): { otherBelief: BeliefNode; severity: number }[] {
-    const result: { otherBelief: BeliefNode; severity: number }[] = []
+    const result: { otherBelief: BeliefNode; severity: number }[] = [];
 
     // Simple semantic contradiction detection (placeholder)
     // In a real system, this would use NLP/semantic understanding
     for (const [id, otherBelief] of this.beliefNodes) {
-      if (id === belief.id) continue
+      if (id === belief.id) continue;
 
       // Check for contextual overlap
-      const hasContextOverlap = belief.contexts.some(c =>
-        otherBelief.contexts.includes(c)
-      )
+      const hasContextOverlap = belief.contexts.some((c) =>
+        otherBelief.contexts.includes(c),
+      );
 
-      if (!hasContextOverlap) continue
+      if (!hasContextOverlap) continue;
 
       // Simplified contradiction detection
-      const contradictionScore = this.detectContradiction(belief, otherBelief)
+      const contradictionScore = this.detectContradiction(belief, otherBelief);
 
       if (contradictionScore > 0.3) {
         result.push({
           otherBelief,
           severity: contradictionScore,
-        })
+        });
       }
     }
 
-    return result
+    return result;
   }
 
   /**
@@ -864,50 +869,50 @@ export class QuantumBeliefPropagation {
    */
   private detectContradiction(
     belief1: BeliefNode,
-    belief2: BeliefNode
+    belief2: BeliefNode,
   ): number {
     // In a real system, use semantic analysis
     // This is a simple placeholder implementation
 
     // Check for explicit negation patterns
-    const text1 = belief1.content.toLowerCase()
-    const text2 = belief2.content.toLowerCase()
+    const text1 = belief1.content.toLowerCase();
+    const text2 = belief2.content.toLowerCase();
 
     // Direct 'not' contradiction
     if (
-      text1.includes('not') &&
-      text2.replace('not', '').includes(text1.replace('not', ''))
+      text1.includes("not") &&
+      text2.replace("not", "").includes(text1.replace("not", ""))
     ) {
-      return 0.8
+      return 0.8;
     }
 
     // Opposite adjectives (very simplified)
     const opposites = [
-      ['good', 'bad'],
-      ['true', 'false'],
-      ['correct', 'incorrect'],
-      ['like', 'dislike'],
-      ['love', 'hate'],
-    ]
+      ["good", "bad"],
+      ["true", "false"],
+      ["correct", "incorrect"],
+      ["like", "dislike"],
+      ["love", "hate"],
+    ];
 
     for (const [a, b] of opposites) {
       if (
         (text1.includes(a) && text2.includes(b)) ||
         (text1.includes(b) && text2.includes(a))
       ) {
-        return 0.7
+        return 0.7;
       }
     }
 
     // Check for tag-based contradiction (beliefs with same tags but different types)
     if (
       belief1.type !== belief2.type &&
-      belief1.tags.some(tag => belief2.tags.includes(tag))
+      belief1.tags.some((tag) => belief2.tags.includes(tag))
     ) {
-      return 0.5
+      return 0.5;
     }
 
-    return 0
+    return 0;
   }
 
   /**
@@ -915,17 +920,17 @@ export class QuantumBeliefPropagation {
    */
   private normalizeBeliefState(belief: BeliefNode): void {
     // Ensure amplitude is between 0 and 1
-    belief.amplitude = Math.max(0, Math.min(1, belief.amplitude))
+    belief.amplitude = Math.max(0, Math.min(1, belief.amplitude));
 
     // Normalize phase to 0-2π range
     belief.phase =
-      ((belief.phase % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI)
+      ((belief.phase % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
 
     // Ensure certainty is between 0 and 1
-    belief.certainty = Math.max(0, Math.min(1, belief.certainty))
+    belief.certainty = Math.max(0, Math.min(1, belief.certainty));
 
     // Ensure entanglement is between 0 and 1
-    belief.entanglement = Math.max(0, Math.min(1, belief.entanglement))
+    belief.entanglement = Math.max(0, Math.min(1, belief.entanglement));
   }
 
   /**
@@ -934,11 +939,11 @@ export class QuantumBeliefPropagation {
   private generateBeliefId(content: string): string {
     // Simple hash function for generating ID
     const hash = String(content)
-      .split('')
+      .split("")
       .reduce((acc, char) => (acc << 5) - acc + char.charCodeAt(0), 0)
-      .toString(36)
+      .toString(36);
 
-    return `belief_${Date.now().toString(36)}_${hash}`
+    return `belief_${Date.now().toString(36)}_${hash}`;
   }
 
   /**
@@ -948,30 +953,30 @@ export class QuantumBeliefPropagation {
     // In a real system, use semantic similarity
     // This is a simple placeholder implementation
 
-    const queryTokens = query.toLowerCase().split(/\s+/)
-    const beliefTokens = belief.content.toLowerCase().split(/\s+/)
+    const queryTokens = query.toLowerCase().split(/\s+/);
+    const beliefTokens = belief.content.toLowerCase().split(/\s+/);
 
     // Count matching tokens
-    let matchCount = 0
+    let matchCount = 0;
     for (const token of queryTokens) {
       if (beliefTokens.includes(token)) {
-        matchCount++
+        matchCount++;
       }
     }
 
     // Basic relevance score based on token overlap
     const overlapScore =
-      queryTokens.length > 0 ? matchCount / queryTokens.length : 0
+      queryTokens.length > 0 ? matchCount / queryTokens.length : 0;
 
     // Boost score based on belief strength
-    const beliefStrength = belief.amplitude * belief.certainty
+    const beliefStrength = belief.amplitude * belief.certainty;
 
     // Tags boost
-    const tagsBoost = queryTokens.some(token => belief.tags.includes(token))
+    const tagsBoost = queryTokens.some((token) => belief.tags.includes(token))
       ? 0.2
-      : 0
+      : 0;
 
-    return Math.min(1, overlapScore * 0.7 + beliefStrength * 0.2 + tagsBoost)
+    return Math.min(1, overlapScore * 0.7 + beliefStrength * 0.2 + tagsBoost);
   }
 
   /**
@@ -979,7 +984,7 @@ export class QuantumBeliefPropagation {
    */
   private generateInference(
     belief1: BeliefNode,
-    belief2: BeliefNode
+    belief2: BeliefNode,
   ): string | null {
     // This would be a complex NLP task in a real system
     // Simplified placeholder implementation
@@ -989,7 +994,7 @@ export class QuantumBeliefPropagation {
       belief1.type === BeliefNodeType.HYPOTHESIS ||
       belief2.type === BeliefNodeType.HYPOTHESIS
     ) {
-      return null // Don't infer from hypotheses
+      return null; // Don't infer from hypotheses
     }
 
     // Basic pattern for combining related facts
@@ -997,7 +1002,7 @@ export class QuantumBeliefPropagation {
       belief1.type === BeliefNodeType.FACT &&
       belief2.type === BeliefNodeType.FACT
     ) {
-      return `Based on the facts that ${belief1.content} and ${belief2.content}, it can be inferred that they are related.`
+      return `Based on the facts that ${belief1.content} and ${belief2.content}, it can be inferred that they are related.`;
     }
 
     // Inference from fact to preference
@@ -1005,11 +1010,11 @@ export class QuantumBeliefPropagation {
       belief1.type === BeliefNodeType.FACT &&
       belief2.type === BeliefNodeType.PREFERENCE
     ) {
-      return `Since ${belief1.content}, it supports the preference that ${belief2.content}`
+      return `Since ${belief1.content}, it supports the preference that ${belief2.content}`;
     }
 
     // Default pattern when unsure
-    return `There may be a connection between ${belief1.content} and ${belief2.content}`
+    return `There may be a connection between ${belief1.content} and ${belief2.content}`;
   }
 
   /**
@@ -1020,24 +1025,24 @@ export class QuantumBeliefPropagation {
     // Simplified placeholder implementation
 
     // Count belief types in current context
-    const typeCount = new Map<BeliefNodeType, number>()
+    const typeCount = new Map<BeliefNodeType, number>();
 
     for (const belief of this.beliefNodes.values()) {
-      if (belief.contexts.some(c => contexts.includes(c))) {
-        const type = belief.type
-        typeCount.set(type, (typeCount.get(type) || 0) + 1)
+      if (belief.contexts.some((c) => contexts.includes(c))) {
+        const type = belief.type;
+        typeCount.set(type, (typeCount.get(type) || 0) + 1);
       }
     }
 
     // Check for hypothesis clusters
     if ((typeCount.get(BeliefNodeType.HYPOTHESIS) || 0) > 3) {
       this.addBelief(
-        'There are multiple hypotheses being considered in the current context.',
+        "There are multiple hypotheses being considered in the current context.",
         BeliefNodeType.META_BELIEF,
         0.7,
         0.8,
-        contexts
-      )
+        contexts,
+      );
     }
 
     // Check for emotional bias
@@ -1046,12 +1051,12 @@ export class QuantumBeliefPropagation {
       (typeCount.get(BeliefNodeType.FACT) || 0)
     ) {
       this.addBelief(
-        'The current reasoning may be emotionally influenced more than factually grounded.',
+        "The current reasoning may be emotionally influenced more than factually grounded.",
         BeliefNodeType.META_BELIEF,
         0.6,
         0.7,
-        contexts
-      )
+        contexts,
+      );
     }
   }
 }

@@ -1,4 +1,4 @@
-@use '../mixins';
+@use "../mixins";
 
 .media-attachment-media {
   @include mixins.button-reset;
@@ -47,7 +47,7 @@
 
       height: 36px;
       width: 36px;
-      @include mixins.color-svg('./images/play.svg', var(--videoPlayBtnIcon));
+      @include mixins.color-svg("./images/play.svg", var(--videoPlayBtnIcon));
     }
   }
 }
@@ -106,7 +106,7 @@
   }
 
   & > .file-icon {
-    background: url('./images/file-gradient.svg') no-repeat center;
+    background: url("./images/file-gradient.svg") no-repeat center;
     height: 49px;
     $file-icon-width: 42px;
     width: $file-icon-width;

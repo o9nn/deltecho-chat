@@ -1,54 +1,54 @@
-import React, { useState } from 'react'
-import classNames from 'classnames'
+import React, { useState } from "react";
+import classNames from "classnames";
 
-import Icon from '../Icon'
-import { BackendRemote } from '../../backend-com'
-import { selectedAccountId } from '../../ScreenController'
-import EmojiPicker from '../EmojiPicker'
+import Icon from "../Icon";
+import { BackendRemote } from "../../backend-com";
+import { selectedAccountId } from "../../ScreenController";
+import EmojiPicker from "../EmojiPicker";
 
-import styles from './styles.module.scss'
+import styles from "./styles.module.scss";
 
-import type { BaseEmoji } from 'emoji-mart/index'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
+import type { BaseEmoji } from "emoji-mart/index";
+import useTranslationFunction from "../../hooks/useTranslationFunction";
 
 type Props = {
-  messageId: number
-  myReaction?: string
-  onClick: () => void
-}
+  messageId: number;
+  myReaction?: string;
+  onClick: () => void;
+};
 
-const DEFAULT_EMOJIS = ['👍', '👎', '❤️', '😂', '🙁']
+const DEFAULT_EMOJIS = ["👍", "👎", "❤️", "😂", "🙁"];
 
 export default function ReactionsBar({
   onClick,
   messageId,
   myReaction,
 }: Props) {
-  const tx = useTranslationFunction()
+  const tx = useTranslationFunction();
 
-  const [showAllEmojis, setShowAllEmojis] = useState(false)
-  const accountId = selectedAccountId()
+  const [showAllEmojis, setShowAllEmojis] = useState(false);
+  const accountId = selectedAccountId();
 
   const toggleReaction = async (emoji: string) => {
     if (emoji === myReaction) {
-      await BackendRemote.rpc.sendReaction(accountId, messageId, [])
+      await BackendRemote.rpc.sendReaction(accountId, messageId, []);
     } else {
-      await BackendRemote.rpc.sendReaction(accountId, messageId, [emoji])
+      await BackendRemote.rpc.sendReaction(accountId, messageId, [emoji]);
     }
 
-    onClick()
-  }
+    onClick();
+  };
 
   const handleShowAllEmojis = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
-    event.stopPropagation()
-    setShowAllEmojis(true)
-  }
+    event.stopPropagation();
+    setShowAllEmojis(true);
+  };
 
   const isMyReactionDefault = myReaction
     ? DEFAULT_EMOJIS.includes(myReaction)
-    : false
+    : false;
 
   return (
     <>
@@ -68,7 +68,7 @@ export default function ReactionsBar({
               onClick={() => toggleReaction(myReaction!)}
               className={classNames(
                 styles.reactionsBarButton,
-                styles.isFromSelf
+                styles.isFromSelf,
               )}
             >
               <span className={styles.reactionsBarEmoji}>{myReaction}</span>
@@ -85,20 +85,20 @@ export default function ReactionsBar({
               >
                 <span className={styles.reactionsBarEmoji}>{emoji}</span>
               </button>
-            )
+            );
           })}
           <button
             className={classNames(
               styles.reactionsBarButton,
-              styles.showAllEmojis
+              styles.showAllEmojis,
             )}
             onClick={handleShowAllEmojis}
-            aria-label={tx('react_more_emojis')}
+            aria-label={tx("react_more_emojis")}
           >
-            <Icon className={styles.showAllIcon} icon='more' />
+            <Icon className={styles.showAllIcon} icon="more" />
           </button>
         </div>
       )}
     </>
-  )
+  );
 }

@@ -1,5 +1,5 @@
 /* Set theme variables used for theme Generation */
-@use './_themebase' with (
+@use "./_themebase" with (
   $accentColor: #cc12ac,
   $bgChatView: #252540,
   $bgImage: none,
@@ -29,8 +29,8 @@
 );
 
 .theme-meta {
-  --name: 'Dark Purple';
-  --description: 'A clean theme that highlights our purple nature';
+  --name: "Dark Purple";
+  --description: "A clean theme that highlights our purple nature";
 }
 
 /* overwrite themedata */

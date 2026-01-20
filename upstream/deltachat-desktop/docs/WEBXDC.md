@@ -204,11 +204,13 @@ Files from webxdc packages are stored in Delta Chat's blob storage and can only 
 1. **App Instance Verification**: Each request URL contains the app's unique identifier (`webxdc://{accountId}.{messageId}.webxdc/filename`).
 
 2. **RPC-Layer Enforcement**: Even the protocol handler doesn't access the filesystem directly. Instead, it calls `rpc.getWebxdcBlob(accountId, msgId, filename)` which delegates to the Delta Chat core. The core:
+
    - Validates that the requested file belongs to the specified webxdc message
    - Only returns files that are part of that specific webxdc package
    - Cannot be bypassed by manipulating URLs or parameters
 
 3. **No Cross-App Access**: Even if an app knows another app's accountId and messageId, it cannot access those files because:
+
    - Each app runs in its own BrowserWindow with its own protocol handler context
    - The handler only responds to requests matching the window's registered app ID
    - Session isolation prevents shared state between different apps

@@ -1,24 +1,24 @@
 {
-    "name": "@deltecho/ipc",
-    "version": "1.0.0",
-    "description": "IPC Protocol and Client for Deep Tree Echo",
-    "type": "module",
-    "main": "./dist/index.js",
-    "keywords": [
-        "ipc",
-        "deep-tree-echo",
-        "protocol"
-    ],
-    "scripts": {
-        "build": "tsc",
-        "check:types": "tsc --noEmit",
-        "clean": "rm -rf dist"
-    },
-    "dependencies": {
-        "events": "^3.3.0"
-    },
-    "devDependencies": {
-        "@types/node": "^20.19.27",
-        "typescript": "^5.9.3"
-    }
+  "name": "@deltecho/ipc",
+  "version": "1.0.0",
+  "description": "IPC Protocol and Client for Deep Tree Echo",
+  "type": "module",
+  "main": "./dist/index.js",
+  "keywords": [
+    "ipc",
+    "deep-tree-echo",
+    "protocol"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "check:types": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "events": "^3.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.27",
+    "typescript": "^5.9.3"
+  }
 }

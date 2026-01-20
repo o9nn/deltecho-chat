@@ -1,16 +1,16 @@
-import { useCallback } from 'react'
+import { useCallback } from "react";
 
-import MailtoDialog from '../components/dialogs/MailtoDialog'
-import useAlertDialog from './dialog/useAlertDialog'
-import useChat from './chat/useChat'
-import useCreateChatByEmail from './chat/useCreateChatByEmail'
-import useCreateDraftMessage from './chat/useCreateDraftMesssage'
-import useDialog from './dialog/useDialog'
-import useTranslationFunction from './useTranslationFunction'
-import { getLogger } from '../../../shared/logger'
-import { parseMailto } from '../../../shared/parse_mailto'
+import MailtoDialog from "../components/dialogs/MailtoDialog";
+import useAlertDialog from "./dialog/useAlertDialog";
+import useChat from "./chat/useChat";
+import useCreateChatByEmail from "./chat/useCreateChatByEmail";
+import useCreateDraftMessage from "./chat/useCreateDraftMesssage";
+import useDialog from "./dialog/useDialog";
+import useTranslationFunction from "./useTranslationFunction";
+import { getLogger } from "../../../shared/logger";
+import { parseMailto } from "../../../shared/parse_mailto";
 
-const log = getLogger('renderer/hooks/useOpenMailtoLink')
+const log = getLogger("renderer/hooks/useOpenMailtoLink");
 
 /**
  * Handles `mailto:` links.
@@ -22,52 +22,52 @@ const log = getLogger('renderer/hooks/useOpenMailtoLink')
  * receiver.
  */
 export default function useOpenMailtoLink() {
-  const createChatByEmail = useCreateChatByEmail()
-  const createDraftMessage = useCreateDraftMessage()
-  const openAlertDialog = useAlertDialog()
-  const tx = useTranslationFunction()
-  const { openDialog } = useDialog()
-  const { selectChat } = useChat()
+  const createChatByEmail = useCreateChatByEmail();
+  const createDraftMessage = useCreateDraftMessage();
+  const openAlertDialog = useAlertDialog();
+  const tx = useTranslationFunction();
+  const { openDialog } = useDialog();
+  const { selectChat } = useChat();
 
   return useCallback(
     async (accountId: number, url: string, callback?: () => void) => {
-      log.debug('processing mailto url:', url)
+      log.debug("processing mailto url:", url);
 
       try {
-        const mailto = parseMailto(url)
+        const mailto = parseMailto(url);
 
         const messageText = mailto.subject
-          ? mailto.subject + (mailto.body ? '\n\n' + mailto.body : '')
-          : mailto.body
+          ? mailto.subject + (mailto.body ? "\n\n" + mailto.body : "")
+          : mailto.body;
 
         if (mailto.to) {
           // Attempt creating a new chat based on email address. This method might
           // return `null` when the user did _not_ confirm creating a new chat
-          const chatId = await createChatByEmail(accountId, mailto.to)
+          const chatId = await createChatByEmail(accountId, mailto.to);
 
           if (chatId) {
             if (messageText) {
-              await createDraftMessage(accountId, chatId, messageText)
+              await createDraftMessage(accountId, chatId, messageText);
             } else {
-              selectChat(accountId, chatId)
+              selectChat(accountId, chatId);
             }
           }
         } else {
           if (messageText) {
             // Body but no email address was given in link, show a dialogue to
             // select a receiver
-            openDialog(MailtoDialog, { messageText })
+            openDialog(MailtoDialog, { messageText });
           }
         }
       } catch (error) {
-        log.error('mailto decoding error', error)
+        log.error("mailto decoding error", error);
 
         await openAlertDialog({
-          message: tx('mailto_link_could_not_be_decoded', url),
-        })
+          message: tx("mailto_link_could_not_be_decoded", url),
+        });
       }
 
-      callback && callback()
+      callback && callback();
     },
     [
       createChatByEmail,
@@ -76,6 +76,6 @@ export default function useOpenMailtoLink() {
       openDialog,
       selectChat,
       tx,
-    ]
-  )
+    ],
+  );
 }

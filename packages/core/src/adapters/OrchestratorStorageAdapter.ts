@@ -1,23 +1,23 @@
-import { MemoryStorage } from '../memory/storage.js';
-import * as net from 'net';
-import { EventEmitter } from 'events';
-import { getLogger } from '../utils/logger.js';
+import { MemoryStorage } from "../memory/storage.js";
+import * as net from "net";
+import { EventEmitter } from "events";
+import { getLogger } from "../utils/logger.js";
 
-const logger = getLogger('OrchestratorStorageAdapter');
+const logger = getLogger("OrchestratorStorageAdapter");
 
 /**
  * IPC message types (must match orchestrator's IPCMessageType)
  */
 enum IPCMessageType {
-  REQUEST_STORAGE_GET = 'request_storage_get',
-  REQUEST_STORAGE_SET = 'request_storage_set',
-  REQUEST_STORAGE_DELETE = 'request_storage_delete',
-  REQUEST_STORAGE_CLEAR = 'request_storage_clear',
-  REQUEST_STORAGE_KEYS = 'request_storage_keys',
-  RESPONSE_SUCCESS = 'response_success',
-  RESPONSE_ERROR = 'response_error',
-  PING = 'ping',
-  PONG = 'pong',
+  REQUEST_STORAGE_GET = "request_storage_get",
+  REQUEST_STORAGE_SET = "request_storage_set",
+  REQUEST_STORAGE_DELETE = "request_storage_delete",
+  REQUEST_STORAGE_CLEAR = "request_storage_clear",
+  REQUEST_STORAGE_KEYS = "request_storage_keys",
+  RESPONSE_SUCCESS = "response_success",
+  RESPONSE_ERROR = "response_error",
+  PING = "ping",
+  PONG = "pong",
 }
 
 /**
@@ -48,7 +48,10 @@ interface IPCMessage {
  * const ragMemory = new RAGMemoryStore(storage);
  * ```
  */
-export class OrchestratorStorageAdapter extends EventEmitter implements MemoryStorage {
+export class OrchestratorStorageAdapter
+  extends EventEmitter
+  implements MemoryStorage
+{
   private socket: net.Socket | null = null;
   private connected: boolean = false;
   private reconnectInterval: number = 5000;
@@ -59,12 +62,12 @@ export class OrchestratorStorageAdapter extends EventEmitter implements MemorySt
   > = new Map();
   private readonly socketPath: string;
   private readonly storagePrefix: string;
-  private buffer: string = '';
+  private buffer: string = "";
 
   constructor(options: { socketPath?: string; storagePrefix?: string } = {}) {
     super();
-    this.socketPath = options.socketPath || '/tmp/deep-tree-echo.sock';
-    this.storagePrefix = options.storagePrefix || 'deltecho';
+    this.socketPath = options.socketPath || "/tmp/deep-tree-echo.sock";
+    this.storagePrefix = options.storagePrefix || "deltecho";
   }
 
   /**
@@ -79,41 +82,41 @@ export class OrchestratorStorageAdapter extends EventEmitter implements MemorySt
 
       this.socket = net.createConnection(this.socketPath);
 
-      this.socket.on('connect', () => {
+      this.socket.on("connect", () => {
         this.connected = true;
-        this.emit('connected');
+        this.emit("connected");
         logger.info(`Connected to orchestrator at ${this.socketPath}`);
 
         // Send initial ping
-        this.sendPing().catch((err) => logger.error('Ping failed:', err));
+        this.sendPing().catch((err) => logger.error("Ping failed:", err));
 
         resolve();
       });
 
-      this.socket.on('data', (data: Buffer) => {
+      this.socket.on("data", (data: Buffer) => {
         this.handleData(data);
       });
 
-      this.socket.on('error', (error: Error) => {
-        logger.error('Socket error:', error);
-        this.emit('error', error);
+      this.socket.on("error", (error: Error) => {
+        logger.error("Socket error:", error);
+        this.emit("error", error);
         if (!this.connected) {
           reject(error);
         }
       });
 
-      this.socket.on('close', () => {
-        logger.info('Disconnected from orchestrator');
+      this.socket.on("close", () => {
+        logger.info("Disconnected from orchestrator");
         this.connected = false;
         this.socket = null;
-        this.emit('disconnected');
+        this.emit("disconnected");
         this.scheduleReconnect();
       });
 
       // Timeout for initial connection
       setTimeout(() => {
         if (!this.connected) {
-          reject(new Error('Connection timeout'));
+          reject(new Error("Connection timeout"));
         }
       }, 5000);
     });
@@ -138,7 +141,7 @@ export class OrchestratorStorageAdapter extends EventEmitter implements MemorySt
     // Reject all pending messages
     for (const [id, pending] of this.messageQueue.entries()) {
       clearTimeout(pending.timeout);
-      pending.reject(new Error('Disconnected'));
+      pending.reject(new Error("Disconnected"));
       this.messageQueue.delete(id);
     }
   }
@@ -153,9 +156,9 @@ export class OrchestratorStorageAdapter extends EventEmitter implements MemorySt
 
     this.reconnectTimer = setTimeout(() => {
       this.reconnectTimer = null;
-      logger.info('Attempting to reconnect...');
+      logger.info("Attempting to reconnect...");
       this.connect().catch((error) => {
-        logger.error('Reconnection failed:', error);
+        logger.error("Reconnection failed:", error);
       });
     }, this.reconnectInterval);
   }
@@ -169,7 +172,7 @@ export class OrchestratorStorageAdapter extends EventEmitter implements MemorySt
 
     // Try to parse complete messages (newline-delimited JSON)
     let newlineIndex: number;
-    while ((newlineIndex = this.buffer.indexOf('\n')) !== -1) {
+    while ((newlineIndex = this.buffer.indexOf("\n")) !== -1) {
       const line = this.buffer.slice(0, newlineIndex);
       this.buffer = this.buffer.slice(newlineIndex + 1);
 
@@ -178,7 +181,7 @@ export class OrchestratorStorageAdapter extends EventEmitter implements MemorySt
           const message: IPCMessage = JSON.parse(line);
           this.handleMessage(message);
         } catch (error) {
-          logger.error('Failed to parse message:', error);
+          logger.error("Failed to parse message:", error);
         }
       }
     }
@@ -190,7 +193,7 @@ export class OrchestratorStorageAdapter extends EventEmitter implements MemorySt
   private handleMessage(message: IPCMessage): void {
     // Handle pong responses
     if (message.type === IPCMessageType.PONG) {
-      this.emit('pong', message.payload);
+      this.emit("pong", message.payload);
       return;
     }
 
@@ -203,7 +206,7 @@ export class OrchestratorStorageAdapter extends EventEmitter implements MemorySt
       if (message.type === IPCMessageType.RESPONSE_SUCCESS) {
         pending.resolve(message.payload);
       } else if (message.type === IPCMessageType.RESPONSE_ERROR) {
-        pending.reject(new Error(message.payload?.message || 'Request failed'));
+        pending.reject(new Error(message.payload?.message || "Request failed"));
       }
     }
   }
@@ -214,10 +217,10 @@ export class OrchestratorStorageAdapter extends EventEmitter implements MemorySt
   private async sendMessage(
     type: IPCMessageType,
     payload?: any,
-    timeoutMs: number = 5000
+    timeoutMs: number = 5000,
   ): Promise<any> {
     if (!this.connected || !this.socket) {
-      throw new Error('Not connected to orchestrator');
+      throw new Error("Not connected to orchestrator");
     }
 
     const message: IPCMessage = {
@@ -230,13 +233,13 @@ export class OrchestratorStorageAdapter extends EventEmitter implements MemorySt
     return new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
         this.messageQueue.delete(message.id);
-        reject(new Error('Request timeout'));
+        reject(new Error("Request timeout"));
       }, timeoutMs);
 
       this.messageQueue.set(message.id, { resolve, reject, timeout });
 
       // Send as newline-delimited JSON
-      const data = JSON.stringify(message) + '\n';
+      const data = JSON.stringify(message) + "\n";
       this.socket!.write(data, (error) => {
         if (error) {
           clearTimeout(timeout);
@@ -254,7 +257,7 @@ export class OrchestratorStorageAdapter extends EventEmitter implements MemorySt
     try {
       await this.sendMessage(IPCMessageType.PING, {}, 2000);
     } catch (error) {
-      logger.error('Ping failed:', error);
+      logger.error("Ping failed:", error);
     }
   }
 
@@ -271,9 +274,12 @@ export class OrchestratorStorageAdapter extends EventEmitter implements MemorySt
   async load(key: string): Promise<string | undefined> {
     try {
       const prefixedKey = `${this.storagePrefix}:${key}`;
-      const response = await this.sendMessage(IPCMessageType.REQUEST_STORAGE_GET, {
-        key: prefixedKey,
-      });
+      const response = await this.sendMessage(
+        IPCMessageType.REQUEST_STORAGE_GET,
+        {
+          key: prefixedKey,
+        },
+      );
       return response?.value ?? undefined;
     } catch (error) {
       logger.error(`Failed to load key ${key}:`, error);
@@ -287,7 +293,10 @@ export class OrchestratorStorageAdapter extends EventEmitter implements MemorySt
   async save(key: string, value: string): Promise<void> {
     try {
       const prefixedKey = `${this.storagePrefix}:${key}`;
-      await this.sendMessage(IPCMessageType.REQUEST_STORAGE_SET, { key: prefixedKey, value });
+      await this.sendMessage(IPCMessageType.REQUEST_STORAGE_SET, {
+        key: prefixedKey,
+        value,
+      });
     } catch (error) {
       logger.error(`Failed to save key ${key}:`, error);
       throw error;
@@ -300,7 +309,9 @@ export class OrchestratorStorageAdapter extends EventEmitter implements MemorySt
   async delete(key: string): Promise<void> {
     try {
       const prefixedKey = `${this.storagePrefix}:${key}`;
-      await this.sendMessage(IPCMessageType.REQUEST_STORAGE_DELETE, { key: prefixedKey });
+      await this.sendMessage(IPCMessageType.REQUEST_STORAGE_DELETE, {
+        key: prefixedKey,
+      });
     } catch (error) {
       logger.error(`Failed to delete key ${key}:`, error);
       throw error;
@@ -312,9 +323,11 @@ export class OrchestratorStorageAdapter extends EventEmitter implements MemorySt
    */
   async clear(): Promise<void> {
     try {
-      await this.sendMessage(IPCMessageType.REQUEST_STORAGE_CLEAR, { prefix: this.storagePrefix });
+      await this.sendMessage(IPCMessageType.REQUEST_STORAGE_CLEAR, {
+        prefix: this.storagePrefix,
+      });
     } catch (error) {
-      logger.error('Failed to clear storage:', error);
+      logger.error("Failed to clear storage:", error);
       throw error;
     }
   }
@@ -324,13 +337,18 @@ export class OrchestratorStorageAdapter extends EventEmitter implements MemorySt
    */
   async keys(): Promise<string[]> {
     try {
-      const response = await this.sendMessage(IPCMessageType.REQUEST_STORAGE_KEYS, {
-        prefix: this.storagePrefix,
-      });
+      const response = await this.sendMessage(
+        IPCMessageType.REQUEST_STORAGE_KEYS,
+        {
+          prefix: this.storagePrefix,
+        },
+      );
       const allKeys = response?.keys || [];
-      return allKeys.map((key: string) => key.replace(`${this.storagePrefix}:`, ''));
+      return allKeys.map((key: string) =>
+        key.replace(`${this.storagePrefix}:`, ""),
+      );
     } catch (error) {
-      logger.error('Failed to list keys:', error);
+      logger.error("Failed to list keys:", error);
       return [];
     }
   }

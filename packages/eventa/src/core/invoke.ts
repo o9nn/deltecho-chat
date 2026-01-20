@@ -4,13 +4,13 @@
  * Provides define* functions for type-safe RPC calls
  */
 
-import type { EventContext } from './context.js';
+import type { EventContext } from "./context.js";
 import type {
-    InvokeEventDefinition,
-    InvokeHandler,
-    StreamHandler,
-    Subscription,
-} from '../types.js';
+  InvokeEventDefinition,
+  InvokeHandler,
+  StreamHandler,
+  Subscription,
+} from "../types.js";
 
 /**
  * Define an invoke function that can be reused
@@ -25,10 +25,10 @@ import type {
  * ```
  */
 export function defineInvoke<TResponse, TRequest>(
-    context: EventContext,
-    event: InvokeEventDefinition<TResponse, TRequest>
+  context: EventContext,
+  event: InvokeEventDefinition<TResponse, TRequest>,
 ): (request: TRequest) => Promise<TResponse> {
-    return (request: TRequest) => context.invoke(event, request);
+  return (request: TRequest) => context.invoke(event, request);
 }
 
 /**
@@ -44,11 +44,11 @@ export function defineInvoke<TResponse, TRequest>(
  * ```
  */
 export function defineInvokeHandler<TResponse, TRequest>(
-    context: EventContext,
-    event: InvokeEventDefinition<TResponse, TRequest>,
-    handler: InvokeHandler<TResponse, TRequest>
+  context: EventContext,
+  event: InvokeEventDefinition<TResponse, TRequest>,
+  handler: InvokeHandler<TResponse, TRequest>,
 ): Subscription {
-    return context.registerHandler(event, handler);
+  return context.registerHandler(event, handler);
 }
 
 /**
@@ -67,11 +67,11 @@ export function defineInvokeHandler<TResponse, TRequest>(
  * ```
  */
 export function defineStreamInvokeHandler<TResponse, TRequest>(
-    context: EventContext,
-    event: InvokeEventDefinition<TResponse, TRequest>,
-    handler: StreamHandler<TResponse, TRequest>
+  context: EventContext,
+  event: InvokeEventDefinition<TResponse, TRequest>,
+  handler: StreamHandler<TResponse, TRequest>,
 ): Subscription {
-    return context.registerStreamHandler(event, handler);
+  return context.registerStreamHandler(event, handler);
 }
 
 /**
@@ -87,12 +87,12 @@ export function defineStreamInvokeHandler<TResponse, TRequest>(
  * ```
  */
 export async function batchInvoke(
-    context: EventContext,
-    calls: Array<[InvokeEventDefinition<unknown, unknown>, unknown]>
+  context: EventContext,
+  calls: Array<[InvokeEventDefinition<unknown, unknown>, unknown]>,
 ): Promise<unknown[]> {
-    return Promise.all(
-        calls.map(([event, request]) => context.invoke(event, request))
-    );
+  return Promise.all(
+    calls.map(([event, request]) => context.invoke(event, request)),
+  );
 }
 
 /**
@@ -111,24 +111,24 @@ export async function batchInvoke(
  * ```
  */
 export function createInvokeClient<
-    T extends Record<string, InvokeEventDefinition<unknown, unknown>>
+  T extends Record<string, InvokeEventDefinition<unknown, unknown>>,
 >(
-    context: EventContext,
-    events: T
+  context: EventContext,
+  events: T,
 ): {
-        [K in keyof T]: T[K] extends InvokeEventDefinition<infer R, infer Q>
-        ? (request: Q) => Promise<R>
-        : never;
-    } {
-    const client: Record<string, (request: unknown) => Promise<unknown>> = {};
+  [K in keyof T]: T[K] extends InvokeEventDefinition<infer R, infer Q>
+    ? (request: Q) => Promise<R>
+    : never;
+} {
+  const client: Record<string, (request: unknown) => Promise<unknown>> = {};
 
-    for (const [key, event] of Object.entries(events)) {
-        client[key] = defineInvoke(context, event);
-    }
+  for (const [key, event] of Object.entries(events)) {
+    client[key] = defineInvoke(context, event);
+  }
 
-    return client as {
-        [K in keyof T]: T[K] extends InvokeEventDefinition<infer R, infer Q>
-        ? (request: Q) => Promise<R>
-        : never;
-    };
+  return client as {
+    [K in keyof T]: T[K] extends InvokeEventDefinition<infer R, infer Q>
+      ? (request: Q) => Promise<R>
+      : never;
+  };
 }

@@ -1,15 +1,15 @@
-import React from 'react'
-import classNames from 'classnames'
+import React from "react";
+import classNames from "classnames";
 
-import type { PropsWithChildren } from 'react'
+import type { PropsWithChildren } from "react";
 
-import styles from './styles.module.scss'
+import styles from "./styles.module.scss";
 
 type Props = PropsWithChildren<{
-  className?: string
-  paddingBottom?: boolean
-  paddingTop?: boolean
-}>
+  className?: string;
+  paddingBottom?: boolean;
+  paddingTop?: boolean;
+}>;
 
 export default function DialogContent({
   children,
@@ -26,5 +26,5 @@ export default function DialogContent({
     >
       {children}
     </div>
-  )
+  );
 }

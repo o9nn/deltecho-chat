@@ -43,9 +43,9 @@ virtual self-model (Vi) which in turn contains its world-view (Vo).
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `agent` | `AgentMembrane` |
+| Name     | Type                                                             |
+| :------- | :--------------------------------------------------------------- |
+| `agent`  | `AgentMembrane`                                                  |
 | `config` | `Partial`\<[`AgentMCPConfig`](../interfaces/AgentMCPConfig.md)\> |
 
 #### Returns
@@ -64,19 +64,19 @@ EventEmitter.constructor
 
 ### listResources
 
-▸ **listResources**(): \{ `uri`: `string` ; `name`: `string` ; `description`: `string`  }[]
+▸ **listResources**(): \{ `uri`: `string` ; `name`: `string` ; `description`: `string` }[]
 
 Handle list_resources request
 
 #### Returns
 
-\{ `uri`: `string` ; `name`: `string` ; `description`: `string`  }[]
+\{ `uri`: `string` ; `name`: `string` ; `description`: `string` }[]
 
 #### Defined in
 
 [src/agent-mcp/index.ts:125](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/agent-mcp/index.ts#L125)
 
-___
+---
 
 ### readResource
 
@@ -86,8 +86,8 @@ Handle read_resource request
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name  | Type     |
+| :---- | :------- |
 | `uri` | `string` |
 
 #### Returns
@@ -98,23 +98,23 @@ Handle read_resource request
 
 [src/agent-mcp/index.ts:132](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/agent-mcp/index.ts#L132)
 
-___
+---
 
 ### listTools
 
-▸ **listTools**(): \{ `name`: `string` ; `description`: `string` ; `inputSchema`: `object`  }[]
+▸ **listTools**(): \{ `name`: `string` ; `description`: `string` ; `inputSchema`: `object` }[]
 
 Handle list_tools request
 
 #### Returns
 
-\{ `name`: `string` ; `description`: `string` ; `inputSchema`: `object`  }[]
+\{ `name`: `string` ; `description`: `string` ; `inputSchema`: `object` }[]
 
 #### Defined in
 
 [src/agent-mcp/index.ts:164](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/agent-mcp/index.ts#L164)
 
-___
+---
 
 ### callTool
 
@@ -124,9 +124,9 @@ Handle call_tool request
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `name` | `string` |
+| Name   | Type      |
+| :----- | :-------- |
+| `name` | `string`  |
 | `args` | `unknown` |
 
 #### Returns
@@ -137,23 +137,23 @@ Handle call_tool request
 
 [src/agent-mcp/index.ts:175](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/agent-mcp/index.ts#L175)
 
-___
+---
 
 ### listPrompts
 
-▸ **listPrompts**(): \{ `name`: `string` ; `description`: `string` ; `arguments?`: \{ `name`: `string` ; `description`: `string` ; `required`: `boolean`  }[]  }[]
+▸ **listPrompts**(): \{ `name`: `string` ; `description`: `string` ; `arguments?`: \{ `name`: `string` ; `description`: `string` ; `required`: `boolean` }[] }[]
 
 Handle list_prompts request
 
 #### Returns
 
-\{ `name`: `string` ; `description`: `string` ; `arguments?`: \{ `name`: `string` ; `description`: `string` ; `required`: `boolean`  }[]  }[]
+\{ `name`: `string` ; `description`: `string` ; `arguments?`: \{ `name`: `string` ; `description`: `string` ; `required`: `boolean` }[] }[]
 
 #### Defined in
 
 [src/agent-mcp/index.ts:194](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/agent-mcp/index.ts#L194)
 
-___
+---
 
 ### getPrompt
 
@@ -163,9 +163,9 @@ Handle get_prompt request
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `name` | `string` |
+| Name    | Type                           |
+| :------ | :----------------------------- |
+| `name`  | `string`                       |
 | `args?` | `Record`\<`string`, `string`\> |
 
 #### Returns
@@ -176,7 +176,7 @@ Handle get_prompt request
 
 [src/agent-mcp/index.ts:205](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/agent-mcp/index.ts#L205)
 
-___
+---
 
 ### getVirtualAgent
 
@@ -192,7 +192,7 @@ Get the virtual self-model (Vi)
 
 [src/agent-mcp/index.ts:238](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/agent-mcp/index.ts#L238)
 
-___
+---
 
 ### getVirtualArena
 
@@ -208,7 +208,7 @@ Get the virtual world-view (Vo - inside Vi)
 
 [src/agent-mcp/index.ts:245](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/agent-mcp/index.ts#L245)
 
-___
+---
 
 ### updateVirtualAgent
 
@@ -218,8 +218,8 @@ Update the virtual self-model
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name     | Type                                                                   |
+| :------- | :--------------------------------------------------------------------- |
 | `update` | `Partial`\<[`VirtualAgentModel`](../interfaces/VirtualAgentModel.md)\> |
 
 #### Returns
@@ -230,7 +230,7 @@ Update the virtual self-model
 
 [src/agent-mcp/index.ts:252](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/agent-mcp/index.ts#L252)
 
-___
+---
 
 ### updateVirtualArena
 
@@ -240,8 +240,8 @@ Update the virtual world-view
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name     | Type                                                                   |
+| :------- | :--------------------------------------------------------------------- |
 | `update` | `Partial`\<[`VirtualArenaModel`](../interfaces/VirtualArenaModel.md)\> |
 
 #### Returns
@@ -252,7 +252,7 @@ Update the virtual world-view
 
 [src/agent-mcp/index.ts:260](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/agent-mcp/index.ts#L260)
 
-___
+---
 
 ### syncVirtualFromActual
 
@@ -269,7 +269,7 @@ This is how perception updates the internal world-view
 
 [src/agent-mcp/index.ts:269](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/agent-mcp/index.ts#L269)
 
-___
+---
 
 ### getAgent
 
@@ -283,7 +283,7 @@ ___
 
 [src/agent-mcp/index.ts:286](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/agent-mcp/index.ts#L286)
 
-___
+---
 
 ### getConfig
 

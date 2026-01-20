@@ -17,23 +17,23 @@ MCP Request
 
 ### jsonrpc
 
-• **jsonrpc**: ``"2.0"``
+• **jsonrpc**: `"2.0"`
 
 #### Defined in
 
 [src/transport/types.ts:31](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/transport/types.ts#L31)
 
-___
+---
 
 ### id
 
-• **id**: ``null`` \| `string` \| `number`
+• **id**: `null` \| `string` \| `number`
 
 #### Defined in
 
 [src/transport/types.ts:32](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/transport/types.ts#L32)
 
-___
+---
 
 ### method
 
@@ -43,7 +43,7 @@ ___
 
 [src/transport/types.ts:33](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/transport/types.ts#L33)
 
-___
+---
 
 ### params
 

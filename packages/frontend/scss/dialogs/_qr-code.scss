@@ -1,4 +1,4 @@
-@use '../mixins';
+@use "../mixins";
 
 .qr-code-switch {
   display: flex;
@@ -50,7 +50,7 @@
   height: 20px;
   transform: rotate(135deg);
   margin-inline-end: 8px;
-  @include mixins.color-svg('./images/icons/link.svg', currentcolor, 100%);
+  @include mixins.color-svg("./images/icons/link.svg", currentcolor, 100%);
 }
 
 .copy-content-preview {

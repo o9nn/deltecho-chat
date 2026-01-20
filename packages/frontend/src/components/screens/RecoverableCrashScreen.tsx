@@ -1,45 +1,45 @@
-import React, { PropsWithChildren } from 'react'
+import React, { PropsWithChildren } from "react";
 
-import { runtime } from '@deltachat-desktop/runtime-interface'
-import { getLogger } from '../../../../shared/logger'
-import { DialogContext } from '../../contexts/DialogContext'
+import { runtime } from "@deltachat-desktop/runtime-interface";
+import { getLogger } from "../../../../shared/logger";
+import { DialogContext } from "../../contexts/DialogContext";
 
-const log = getLogger('renderer/react-crashhandler')
+const log = getLogger("renderer/react-crashhandler");
 
 /**
  * if props.reset_on_change_key changes the RecoverableCrashScreen is reset
  */
 export class RecoverableCrashScreen extends React.Component<
   PropsWithChildren<{
-    reset_on_change_key: string | number
+    reset_on_change_key: string | number;
   }>
 > {
   state = {
     hasError: false,
-    error: '',
+    error: "",
     old_error_reset_key: undefined,
     timestamp: 0,
-  }
+  };
 
   componentDidCatch(error: any) {
-    log.error('The app encountered an react error', error)
+    log.error("The app encountered an react error", error);
     this.setState({
       hasError: true,
       error: this.errorToText(error),
       old_error_reset_key: this.props.reset_on_change_key,
       timestamp: Date.now(),
-    })
+    });
   }
 
   // FYI we also have `unknownErrorToString`.
   errorToText(error: any) {
     if (error instanceof Error) {
       // TODO parse the stack and map the sourcemap to provide a useful stacktrace
-      return (error.stack || '[no stack trace provided]')
-        .replace(/file:\/\/\/[\w\W]+?\/html-dist\//g, '') // for development
-        .replace(/\(file:\/\/.*?app.asar./g, '(') // for production (packaged)
+      return (error.stack || "[no stack trace provided]")
+        .replace(/file:\/\/\/[\w\W]+?\/html-dist\//g, "") // for development
+        .replace(/\(file:\/\/.*?app.asar./g, "("); // for production (packaged)
     } else {
-      return JSON.stringify(error)
+      return JSON.stringify(error);
     }
   }
 
@@ -50,28 +50,28 @@ export class RecoverableCrashScreen extends React.Component<
     ) {
       this.setState({
         hasError: false,
-        error: '',
+        error: "",
         old_error_reset_key: undefined,
         timestamp: 0,
-      })
+      });
     }
     if (
       this.state.hasError &&
       this.state.old_error_reset_key === this.props.reset_on_change_key
     ) {
-      const { VERSION, GIT_REF } = runtime.getRuntimeInfo().buildInfo
+      const { VERSION, GIT_REF } = runtime.getRuntimeInfo().buildInfo;
       return (
-        <div className='crash-screen'>
+        <div className="crash-screen">
           {this.props.reset_on_change_key}:{this.state.timestamp}
           <h1>Ooops something crashed</h1>
           <h2>
             Please restart Deltachat, if this problem persists please notify the
             developers on github issues (
             <a
-              href='#'
-              onClick={_ =>
+              href="#"
+              onClick={(_) =>
                 runtime.openLink(
-                  'https://github.com/deltachat/deltachat-desktop/issues'
+                  "https://github.com/deltachat/deltachat-desktop/issues",
                 )
               }
             >
@@ -80,15 +80,15 @@ export class RecoverableCrashScreen extends React.Component<
             )
           </h2>
           <p>
-            <button onClick={_ => runtime.reloadWebContent()}>Reload</button>
-            <button onClick={_ => runtime.openLogFile()}>Open Logfile</button>
+            <button onClick={(_) => runtime.reloadWebContent()}>Reload</button>
+            <button onClick={(_) => runtime.openLogFile()}>Open Logfile</button>
           </p>
           <p>
-            <pre className='error-details'>{this.state.error}</pre>
+            <pre className="error-details">{this.state.error}</pre>
           </p>
           <p>
-            Full Log under{' '}
-            <a href='#' onClick={_ => runtime.openLogFile()}>
+            Full Log under{" "}
+            <a href="#" onClick={(_) => runtime.openLogFile()}>
               {runtime.getCurrentLogLocation()}
             </a>
           </p>
@@ -96,11 +96,11 @@ export class RecoverableCrashScreen extends React.Component<
             DeltaChat Version: {VERSION} (git: {GIT_REF})
           </p>
         </div>
-      )
+      );
     } else {
-      return this.props.children
+      return this.props.children;
     }
   }
 }
 
-RecoverableCrashScreen.contextType = DialogContext
+RecoverableCrashScreen.contextType = DialogContext;

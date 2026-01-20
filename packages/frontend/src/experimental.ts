@@ -1,10 +1,10 @@
-import { getLogger } from '../../shared/logger'
-import { BackendRemote } from './backend-com'
-import { DragRegionOverlay, printCallCounterResult } from './debug-tools'
-import { runtime } from '@deltachat-desktop/runtime-interface'
-import { selectedAccountId } from './ScreenController'
+import { getLogger } from "../../shared/logger";
+import { BackendRemote } from "./backend-com";
+import { DragRegionOverlay, printCallCounterResult } from "./debug-tools";
+import { runtime } from "@deltachat-desktop/runtime-interface";
+import { selectedAccountId } from "./ScreenController";
 
-const log = getLogger('renderer/experiments')
+const log = getLogger("renderer/experiments");
 
 class Experimental {
   help() {
@@ -22,70 +22,70 @@ only for debugging:
 - .rpc // only available in devmode, gives full access to jsonrpc
 - .runtime // only available in devmode, gives full access to runtime
 - showDragAreas() // toggle drag region overlay
-    `)
+    `);
   }
   constructor() {
-    window.exp = this
+    window.exp = this;
   }
 
   getAllAccounts() {
-    return BackendRemote.listAccounts()
+    return BackendRemote.listAccounts();
   }
 
   async importContacts(contacts: [string, string][]) {
-    const accountId = selectedAccountId()
-    let error_count = 0
+    const accountId = selectedAccountId();
+    let error_count = 0;
     for (const contact of contacts) {
       if (
         await BackendRemote.rpc.createContact(accountId, contact[0], contact[1])
       )
-        log.debug('created contact', contact[1], contact[0])
+        log.debug("created contact", contact[1], contact[0]);
       else {
-        log.error('error on creating contact', contact[1], contact[0])
-        error_count++
+        log.error("error on creating contact", contact[1], contact[0]);
+        error_count++;
       }
     }
-    log.info(`Imported ${contacts.length - error_count} contacts`)
+    log.info(`Imported ${contacts.length - error_count} contacts`);
   }
 
   testErrorLogging() {
-    log.debug(new Error('a test error - should be logged to logfile'))
-    throw new Error('a test error - should be caught and logged to logfile')
+    log.debug(new Error("a test error - should be logged to logfile"));
+    throw new Error("a test error - should be caught and logged to logfile");
   }
 
   getContextEmitters() {
-    return (BackendRemote as any).contextEmitters
+    return (BackendRemote as any).contextEmitters;
   }
 
   printCallCounterResult() {
-    printCallCounterResult()
+    printCallCounterResult();
   }
 
   get rpc() {
     if (!runtime.getRC_Config().devmode) {
       throw new Error(
-        "you need to enable devmode to access this. This is dangerous don't continue if you don't know what you are doing."
-      )
+        "you need to enable devmode to access this. This is dangerous don't continue if you don't know what you are doing.",
+      );
     }
-    return BackendRemote.rpc
+    return BackendRemote.rpc;
   }
 
   get runtime() {
     if (!runtime.getRC_Config().devmode) {
       throw new Error(
-        "you need to enable devmode to access this. This is dangerous don't continue if you don't know what you are doing."
-      )
+        "you need to enable devmode to access this. This is dangerous don't continue if you don't know what you are doing.",
+      );
     }
-    return runtime
+    return runtime;
   }
 
-  dragRegionOverlay?: DragRegionOverlay
+  dragRegionOverlay?: DragRegionOverlay;
   showDragAreas() {
     if (!this.dragRegionOverlay) {
-      this.dragRegionOverlay = new DragRegionOverlay()
+      this.dragRegionOverlay = new DragRegionOverlay();
     }
-    this.dragRegionOverlay.toggle()
+    this.dragRegionOverlay.toggle();
   }
 }
 
-export const exp = new Experimental()
+export const exp = new Experimental();

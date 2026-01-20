@@ -1,60 +1,60 @@
-import React, { CSSProperties } from 'react'
-import classNames from 'classnames'
+import React, { CSSProperties } from "react";
+import classNames from "classnames";
 
-import useDialog from '../../hooks/dialog/useDialog'
-import FullscreenAvatar from '../dialogs/FullscreenAvatar'
+import useDialog from "../../hooks/dialog/useDialog";
+import FullscreenAvatar from "../dialogs/FullscreenAvatar";
 
-import type { Type } from '../../backend-com'
-import { get_first_emoji } from '@deltachat/message_parser_wasm'
-import { runtime } from '@deltachat-desktop/runtime-interface'
+import type { Type } from "../../backend-com";
+import { get_first_emoji } from "@deltachat/message_parser_wasm";
+import { runtime } from "@deltachat-desktop/runtime-interface";
 
-import styles from './styles.module.scss'
+import styles from "./styles.module.scss";
 
 export function QRAvatar() {
   return (
-    <div className='avatar'>
-      <div className='content'>
-        <img className='avatar-qr-code-img' src='./images/icons/qr.svg' />
+    <div className="avatar">
+      <div className="content">
+        <img className="avatar-qr-code-img" src="./images/icons/qr.svg" />
       </div>
     </div>
-  )
+  );
 }
 
 export function avatarInitial(name: string, addr?: string) {
-  const firstEmoji = name && get_first_emoji(name)
+  const firstEmoji = name && get_first_emoji(name);
   if (firstEmoji) {
-    return firstEmoji
+    return firstEmoji;
   } else {
-    const nameOrAddr = name || addr
-    const codepoint = nameOrAddr && nameOrAddr.codePointAt(0)
-    return codepoint ? String.fromCodePoint(codepoint).toUpperCase() : ''
+    const nameOrAddr = name || addr;
+    const codepoint = nameOrAddr && nameOrAddr.codePointAt(0);
+    return codepoint ? String.fromCodePoint(codepoint).toUpperCase() : "";
   }
 }
 
-type htmlDivProps = React.HTMLAttributes<HTMLDivElement>
+type htmlDivProps = React.HTMLAttributes<HTMLDivElement>;
 
 interface CssWithAvatarColor extends CSSProperties {
-  '--local-avatar-color': string
+  "--local-avatar-color": string;
 }
 
 export function Avatar(props: {
-  avatarPath?: string | null
-  color?: string
-  displayName: string
-  addr?: string
-  large?: boolean
-  small?: boolean
-  wasSeenRecently?: boolean
-  style?: htmlDivProps['style']
-  onClick?: () => void
+  avatarPath?: string | null;
+  color?: string;
+  displayName: string;
+  addr?: string;
+  large?: boolean;
+  small?: boolean;
+  wasSeenRecently?: boolean;
+  style?: htmlDivProps["style"];
+  onClick?: () => void;
   /**
    * Consider setting this to `true` if the name
    * of whoever the avatar belongs to is displayed somewhere near.
    * Has no effect when `onClick` is set.
    */
-  'aria-hidden'?: boolean
-  tabIndex?: -1 | 0
-  className?: string
+  "aria-hidden"?: boolean;
+  tabIndex?: -1 | 0;
+  className?: string;
 }) {
   const {
     avatarPath,
@@ -67,54 +67,54 @@ export function Avatar(props: {
     onClick,
     tabIndex,
     className,
-  } = props
+  } = props;
 
   const content = avatarPath ? (
-    <img className='content' src={runtime.transformBlobURL(avatarPath)} />
+    <img className="content" src={runtime.transformBlobURL(avatarPath)} />
   ) : (
     <div
-      className='content'
-      style={{ '--local-avatar-color': color } as CssWithAvatarColor}
+      className="content"
+      style={{ "--local-avatar-color": color } as CssWithAvatarColor}
     >
       {avatarInitial(displayName, addr)}
     </div>
-  )
+  );
 
   return (
     <div
       className={classNames(
-        'avatar',
+        "avatar",
         // Since `wasSeenRecently` is not exposed to accessibility API,
         // it is safe to apply aria-hidden to the entire component.
         // If at some point we make `wasSeenRecently` accessible,
         // we should only apply `aria-hidden` to the avatar / initial itself
         // (and perhaps rename the prop).
         { large, small, wasSeenRecently },
-        className
+        className,
       )}
       onClick={onClick}
-      aria-hidden={onClick ? undefined : props['aria-hidden']}
+      aria-hidden={onClick ? undefined : props["aria-hidden"]}
       tabIndex={tabIndex}
     >
       {content}
     </div>
-  )
+  );
 }
 
 export function AvatarFromContact(
   props: {
-    contact: Type.Contact
-    onClick?: (contact: Type.Contact) => void
-    tabIndex?: -1 | 0
+    contact: Type.Contact;
+    onClick?: (contact: Type.Contact) => void;
+    tabIndex?: -1 | 0;
     /**
      * @see {@link Avatar}'s aria-hidden prop.
      */
-    'aria-hidden'?: boolean
+    "aria-hidden"?: boolean;
   },
   large?: boolean,
-  small?: boolean
+  small?: boolean,
 ) {
-  const { contact, onClick, tabIndex } = props
+  const { contact, onClick, tabIndex } = props;
   return (
     <Avatar
       avatarPath={contact.profileImage || undefined}
@@ -126,17 +126,17 @@ export function AvatarFromContact(
       onClick={() => onClick && onClick(contact)}
       tabIndex={tabIndex}
     />
-  )
+  );
 }
 
 export function ClickForFullscreenAvatarWrapper(
   props: React.ButtonHTMLAttributes<HTMLButtonElement> & {
-    filename?: string
-  }
+    filename?: string;
+  },
 ) {
-  const { openDialog } = useDialog()
+  const { openDialog } = useDialog();
 
-  const { children, filename } = props
+  const { children, filename } = props;
 
   return filename ? (
     <button
@@ -144,7 +144,7 @@ export function ClickForFullscreenAvatarWrapper(
       onClick={() => {
         openDialog(FullscreenAvatar, {
           imagePath: filename!,
-        })
+        });
       }}
       {...props}
     >
@@ -152,5 +152,5 @@ export function ClickForFullscreenAvatarWrapper(
     </button>
   ) : (
     <div>{children}</div>
-  )
+  );
 }

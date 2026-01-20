@@ -4,31 +4,38 @@ import {
   RAGMemoryStore,
   PersonaCore,
   InMemoryStorage,
-} from 'deep-tree-echo-core';
+} from "deep-tree-echo-core";
 import {
   CognitiveOrchestrator,
   createCognitiveOrchestrator,
-} from '@deltecho/cognitive';
+} from "@deltecho/cognitive";
 import {
   DeltaChatInterface,
   DeltaChatConfig,
   DeltaChatMessage,
-} from './deltachat-interface/index.js';
-import { DovecotInterface, DovecotConfig } from './dovecot-interface/index.js';
-import { IPCServer } from './ipc/server.js';
-import { TaskScheduler } from './scheduler/task-scheduler.js';
-import { WebhookServer } from './webhooks/webhook-server.js';
-import { Dove9Integration, Dove9IntegrationConfig, Dove9Response } from './dove9-integration.js';
+} from "./deltachat-interface/index.js";
+import { DovecotInterface, DovecotConfig } from "./dovecot-interface/index.js";
+import { IPCServer } from "./ipc/server.js";
+import { TaskScheduler } from "./scheduler/task-scheduler.js";
+import { WebhookServer } from "./webhooks/webhook-server.js";
+import {
+  Dove9Integration,
+  Dove9IntegrationConfig,
+  Dove9Response,
+} from "./dove9-integration.js";
 import {
   DoubleMembraneIntegration,
   DoubleMembraneIntegrationConfig,
-} from './double-membrane-integration.js';
-import { Sys6OrchestratorBridge, Sys6BridgeConfig } from './sys6-bridge/Sys6OrchestratorBridge.js';
-import { AARSystem, AARConfig, AARProcessingResult } from './aar/index.js';
-import { IPCMessageType } from '@deltecho/ipc';
-import { registerCognitiveHandlers } from './ipc/cognitive-handlers.js';
+} from "./double-membrane-integration.js";
+import {
+  Sys6OrchestratorBridge,
+  Sys6BridgeConfig,
+} from "./sys6-bridge/Sys6OrchestratorBridge.js";
+import { AARSystem, AARConfig, AARProcessingResult } from "./aar/index.js";
+import { IPCMessageType } from "@deltecho/ipc";
+import { registerCognitiveHandlers } from "./ipc/cognitive-handlers.js";
 
-const log = getLogger('deep-tree-echo-orchestrator/Orchestrator');
+const log = getLogger("deep-tree-echo-orchestrator/Orchestrator");
 
 /**
  * Cognitive tier processing mode
@@ -39,7 +46,12 @@ const log = getLogger('deep-tree-echo-orchestrator/Orchestrator');
  * - ADAPTIVE: Auto-select tier based on message complexity
  * - FULL: All tiers active with cascading processing
  */
-export type CognitiveTierMode = 'BASIC' | 'SYS6' | 'MEMBRANE' | 'ADAPTIVE' | 'FULL';
+export type CognitiveTierMode =
+  | "BASIC"
+  | "SYS6"
+  | "MEMBRANE"
+  | "ADAPTIVE"
+  | "FULL";
 
 /**
  * Message complexity assessment result
@@ -121,7 +133,7 @@ const DEFAULT_CONFIG: OrchestratorConfig = {
   enableWebhooks: true,
   processIncomingMessages: true,
   enableDove9: true,
-  cognitiveTierMode: 'ADAPTIVE',
+  cognitiveTierMode: "ADAPTIVE",
   enableSys6: true,
   enableDoubleMembrane: true,
   enableAAR: true,
@@ -153,7 +165,8 @@ export class Orchestrator {
   private storage = new InMemoryStorage();
 
   // Track email to chat mappings for routing responses
-  private emailToChatMap: Map<string, { accountId: number; chatId: number }> = new Map();
+  private emailToChatMap: Map<string, { accountId: number; chatId: number }> =
+    new Map();
 
   // Processing statistics
   private processingStats = {
@@ -178,7 +191,7 @@ export class Orchestrator {
     this.cognitiveOrchestrator = createCognitiveOrchestrator({
       enableSentiment: true,
       enableMemory: true,
-      enableEmotion: true
+      enableEmotion: true,
     });
   }
 
@@ -187,11 +200,11 @@ export class Orchestrator {
    */
   public async start(): Promise<void> {
     if (this.running) {
-      log.warn('Orchestrator is already running');
+      log.warn("Orchestrator is already running");
       return;
     }
 
-    log.info('Initializing orchestrator services...');
+    log.info("Initializing orchestrator services...");
 
     try {
       // Connect cognitive orchestrator to services
@@ -201,10 +214,12 @@ export class Orchestrator {
         llm: {
           generateResponse: async (userMessage, history, systemPrompt) => {
             // Convert history to string array for core LLMService
-            const context = (history || []).map(m => `${m.role}: ${m.content}`);
+            const context = (history || []).map(
+              (m) => `${m.role}: ${m.content}`,
+            );
             return this.llmService.generateResponse(userMessage, context);
-          }
-        }
+          },
+        },
       });
 
       // Initialize DeltaChat interface
@@ -216,9 +231,12 @@ export class Orchestrator {
 
         try {
           await this.deltachatInterface.connect();
-          log.info('DeltaChat interface connected');
+          log.info("DeltaChat interface connected");
         } catch (error) {
-          log.warn('Failed to connect to DeltaChat RPC server, will retry automatically:', error);
+          log.warn(
+            "Failed to connect to DeltaChat RPC server, will retry automatically:",
+            error,
+          );
         }
       }
 
@@ -227,9 +245,12 @@ export class Orchestrator {
         this.dovecotInterface = new DovecotInterface(this.config.dovecot);
 
         // Connect Dovecot responses to DeltaChat for sending
-        this.dovecotInterface.on('response', async (response: EmailResponse) => {
-          await this.handleEmailResponse(response);
-        });
+        this.dovecotInterface.on(
+          "response",
+          async (response: EmailResponse) => {
+            await this.handleEmailResponse(response);
+          },
+        );
 
         await this.dovecotInterface.start();
       }
@@ -264,14 +285,16 @@ export class Orchestrator {
         });
 
         await this.dove9Integration.start();
-        log.info('Dove9 cognitive OS started with triadic loop architecture');
+        log.info("Dove9 cognitive OS started with triadic loop architecture");
       }
 
       // Initialize Sys6-Triality cognitive cycle integration
       if (this.config.enableSys6) {
         this.sys6Bridge = new Sys6OrchestratorBridge(this.config.sys6);
         await this.sys6Bridge.start();
-        log.info('Sys6-Triality cognitive cycle started with 30-step architecture');
+        log.info(
+          "Sys6-Triality cognitive cycle started with 30-step architecture",
+        );
       }
 
       // Initialize Double Membrane bio-inspired architecture
@@ -281,25 +304,29 @@ export class Orchestrator {
           ...this.config.doubleMembrane,
         });
         await this.doubleMembraneIntegration.start();
-        log.info('Double Membrane integration started with bio-inspired architecture');
+        log.info(
+          "Double Membrane integration started with bio-inspired architecture",
+        );
       }
 
       // Initialize AAR (Agent-Arena-Relation) nested membrane architecture
       if (this.config.enableAAR) {
         this.aarSystem = new AARSystem({
-          instanceName: 'DeepTreeEcho',
+          instanceName: "DeepTreeEcho",
           ...this.config.aar,
         });
         await this.aarSystem.start();
-        log.info('AAR (Agent-Arena-Relation) nested membrane architecture started');
+        log.info(
+          "AAR (Agent-Arena-Relation) nested membrane architecture started",
+        );
       }
 
       this.running = true;
       log.info(
-        `All orchestrator services started successfully (cognitive tier mode: ${this.config.cognitiveTierMode})`
+        `All orchestrator services started successfully (cognitive tier mode: ${this.config.cognitiveTierMode})`,
       );
     } catch (error) {
-      log.error('Failed to start orchestrator services:', error);
+      log.error("Failed to start orchestrator services:", error);
       await this.stop();
       throw error;
     }
@@ -313,29 +340,35 @@ export class Orchestrator {
 
     // Handle incoming messages
     this.deltachatInterface.on(
-      'incoming_message',
+      "incoming_message",
       async (event: { accountId: number; chatId: number; msgId: number }) => {
         if (this.config.processIncomingMessages) {
-          await this.handleIncomingMessage(event.accountId, event.chatId, event.msgId);
+          await this.handleIncomingMessage(
+            event.accountId,
+            event.chatId,
+            event.msgId,
+          );
         }
-      }
+      },
     );
 
     // Handle connection events
-    this.deltachatInterface.on('connected', () => {
-      log.info('DeltaChat connection established');
+    this.deltachatInterface.on("connected", () => {
+      log.info("DeltaChat connection established");
     });
 
-    this.deltachatInterface.on('disconnected', () => {
-      log.warn('DeltaChat connection lost');
+    this.deltachatInterface.on("disconnected", () => {
+      log.warn("DeltaChat connection lost");
     });
 
     // Handle errors
     this.deltachatInterface.on(
-      'error',
+      "error",
       (event: { accountId: number; kind: string; message: string }) => {
-        log.error(`DeltaChat error on account ${event.accountId}: ${event.message}`);
-      }
+        log.error(
+          `DeltaChat error on account ${event.accountId}: ${event.message}`,
+        );
+      },
     );
   }
 
@@ -345,13 +378,16 @@ export class Orchestrator {
   private async handleIncomingMessage(
     accountId: number,
     chatId: number,
-    msgId: number
+    msgId: number,
   ): Promise<void> {
     if (!this.deltachatInterface) return;
 
     try {
       // Get message details
-      const message = await this.deltachatInterface.getMessage(accountId, msgId);
+      const message = await this.deltachatInterface.getMessage(
+        accountId,
+        msgId,
+      );
 
       // Skip messages from self (ID 1 is the logged-in user)
       if (message.fromId === 1) return;
@@ -359,18 +395,32 @@ export class Orchestrator {
       // Skip info messages
       if (message.isInfo) return;
 
-      log.info(`Processing message in chat ${chatId}: ${message.text?.substring(0, 50)}...`);
+      log.info(
+        `Processing message in chat ${chatId}: ${message.text?.substring(
+          0,
+          50,
+        )}...`,
+      );
 
       // Get sender's email for mapping
-      const contact = await this.deltachatInterface.getContact(accountId, message.fromId);
+      const contact = await this.deltachatInterface.getContact(
+        accountId,
+        message.fromId,
+      );
       if (contact?.address) {
         // Store email to chat mapping for routing responses
-        this.emailToChatMap.set(contact.address.toLowerCase(), { accountId, chatId });
+        this.emailToChatMap.set(contact.address.toLowerCase(), {
+          accountId,
+          chatId,
+        });
       }
 
       // Get chat info for group detection
       const chat = await this.deltachatInterface.getChat(accountId, chatId);
-      const isGroup = chat?.chatType === 'Group' || chat?.chatType === 'Mailinglist' || chat?.chatType === 'Broadcast';
+      const isGroup =
+        chat?.chatType === "Group" ||
+        chat?.chatType === "Mailinglist" ||
+        chat?.chatType === "Broadcast";
 
       // Process the message through cognitive system
       const response = await this.processMessage(
@@ -378,8 +428,8 @@ export class Orchestrator {
         accountId,
         chatId,
         msgId,
-        contact?.displayName || contact?.address || 'Unknown',
-        isGroup
+        contact?.displayName || contact?.address || "Unknown",
+        isGroup,
       );
 
       if (response) {
@@ -387,7 +437,7 @@ export class Orchestrator {
         await this.deltachatInterface.sendMessage(accountId, chatId, response);
       }
     } catch (error) {
-      log.error('Error handling incoming message:', error);
+      log.error("Error handling incoming message:", error);
     }
   }
 
@@ -407,20 +457,20 @@ export class Orchestrator {
     const score = Math.min(
       1,
       factors.length * 0.2 +
-      factors.questionCount * 0.2 +
-      factors.technicalTerms * 0.25 +
-      factors.emotionalContent * 0.15 +
-      factors.contextDependency * 0.2
+        factors.questionCount * 0.2 +
+        factors.technicalTerms * 0.25 +
+        factors.emotionalContent * 0.15 +
+        factors.contextDependency * 0.2,
     );
 
     // Determine tier based on score and thresholds
     let tier: CognitiveTierMode;
     if (score < this.config.sys6ComplexityThreshold) {
-      tier = 'BASIC';
+      tier = "BASIC";
     } else if (score < this.config.membraneComplexityThreshold) {
-      tier = 'SYS6';
+      tier = "SYS6";
     } else {
-      tier = 'MEMBRANE';
+      tier = "MEMBRANE";
     }
 
     return { score, tier, factors };
@@ -448,21 +498,21 @@ export class Orchestrator {
    */
   private assessEmotionalContent(text: string): number {
     const emotionalWords = [
-      'feel',
-      'happy',
-      'sad',
-      'angry',
-      'frustrated',
-      'love',
-      'hate',
-      'worried',
-      'excited',
-      'anxious',
-      'grateful',
-      'disappointed',
-      'confused',
-      'hopeful',
-      'afraid',
+      "feel",
+      "happy",
+      "sad",
+      "angry",
+      "frustrated",
+      "love",
+      "hate",
+      "worried",
+      "excited",
+      "anxious",
+      "grateful",
+      "disappointed",
+      "confused",
+      "hopeful",
+      "afraid",
     ];
     const lowerText = text.toLowerCase();
     let count = 0;
@@ -477,19 +527,19 @@ export class Orchestrator {
    */
   private assessContextDependency(text: string): number {
     const contextMarkers = [
-      'this',
-      'that',
-      'these',
-      'those',
-      'it',
-      'they',
-      'previous',
-      'before',
-      'earlier',
-      'mentioned',
-      'said',
-      'above',
-      'following',
+      "this",
+      "that",
+      "these",
+      "those",
+      "it",
+      "they",
+      "previous",
+      "before",
+      "earlier",
+      "mentioned",
+      "said",
+      "above",
+      "following",
     ];
     const lowerText = text.toLowerCase();
     let count = 0;
@@ -507,16 +557,16 @@ export class Orchestrator {
     accountId: number,
     chatId: number,
     msgId: number,
-    senderName: string = 'Unknown',
-    isGroup: boolean = false
+    senderName: string = "Unknown",
+    isGroup: boolean = false,
   ): Promise<string | null> {
-    const messageText = message.text || '';
+    const messageText = message.text || "";
 
     // Skip empty messages
     if (!messageText.trim()) return null;
 
     // Check if this is a command
-    if (messageText.startsWith('/')) {
+    if (messageText.startsWith("/")) {
       return this.processCommand(messageText);
     }
 
@@ -525,7 +575,7 @@ export class Orchestrator {
       await this.memoryStore.storeMemory({
         chatId,
         messageId: msgId,
-        sender: 'user',
+        sender: "user",
         text: messageText,
       });
 
@@ -543,7 +593,7 @@ export class Orchestrator {
         });
         this.processingStats.aarEnhancedMessages++;
         log.debug(
-          `AAR processed: facet=${aarResult.agentState.dominantFacet}, phase=${aarResult.arenaState.currentPhase}`
+          `AAR processed: facet=${aarResult.agentState.dominantFacet}, phase=${aarResult.arenaState.currentPhase}`,
         );
       }
 
@@ -552,15 +602,17 @@ export class Orchestrator {
       let complexity: ComplexityAssessment | undefined;
 
       switch (this.config.cognitiveTierMode) {
-        case 'ADAPTIVE':
+        case "ADAPTIVE":
           complexity = this.assessComplexity(messageText);
           targetTier = complexity.tier;
           log.debug(
-            `ADAPTIVE mode: complexity=${complexity.score.toFixed(2)}, tier=${targetTier}`
+            `ADAPTIVE mode: complexity=${complexity.score.toFixed(
+              2,
+            )}, tier=${targetTier}`,
           );
           break;
-        case 'FULL':
-          targetTier = 'MEMBRANE'; // FULL mode uses highest tier
+        case "FULL":
+          targetTier = "MEMBRANE"; // FULL mode uses highest tier
           break;
         default:
           targetTier = this.config.cognitiveTierMode;
@@ -570,7 +622,8 @@ export class Orchestrator {
       this.processingStats.totalMessages++;
       if (complexity) {
         this.processingStats.averageComplexity =
-          (this.processingStats.averageComplexity * (this.processingStats.totalMessages - 1) +
+          (this.processingStats.averageComplexity *
+            (this.processingStats.totalMessages - 1) +
             complexity.score) /
           this.processingStats.totalMessages;
       }
@@ -578,31 +631,40 @@ export class Orchestrator {
       // Route to appropriate tier
       let response: string;
       switch (targetTier) {
-        case 'MEMBRANE':
+        case "MEMBRANE":
           if (this.doubleMembraneIntegration?.isRunning()) {
             response = await this.processWithMembrane(messageText, chatId);
             this.processingStats.membraneTierMessages++;
           } else {
-            log.warn('MEMBRANE tier requested but not available, falling back to SYS6');
+            log.warn(
+              "MEMBRANE tier requested but not available, falling back to SYS6",
+            );
             response = await this.processWithSys6(messageText, chatId);
             this.processingStats.sys6TierMessages++;
           }
           break;
 
-        case 'SYS6':
+        case "SYS6":
           if (this.sys6Bridge) {
             response = await this.processWithSys6(messageText, chatId);
             this.processingStats.sys6TierMessages++;
           } else {
-            log.warn('SYS6 tier requested but not available, falling back to BASIC');
+            log.warn(
+              "SYS6 tier requested but not available, falling back to BASIC",
+            );
             response = await this.processWithBasic(messageText, chatId, msgId);
             this.processingStats.basicTierMessages++;
           }
           break;
 
-        case 'BASIC':
+        case "BASIC":
         default:
-          response = await this.processWithBasic(messageText, chatId, msgId, aarResult);
+          response = await this.processWithBasic(
+            messageText,
+            chatId,
+            msgId,
+            aarResult,
+          );
           this.processingStats.basicTierMessages++;
           break;
       }
@@ -611,7 +673,7 @@ export class Orchestrator {
       await this.memoryStore.storeMemory({
         chatId,
         messageId: 0,
-        sender: 'bot',
+        sender: "bot",
         text: response,
       });
 
@@ -620,7 +682,7 @@ export class Orchestrator {
 
       return response;
     } catch (error) {
-      log.error('Error processing message:', error);
+      log.error("Error processing message:", error);
       return "I'm sorry, I had a problem processing your message. Please try again.";
     }
   }
@@ -632,9 +694,11 @@ export class Orchestrator {
     messageText: string,
     chatId: number,
     msgId: number,
-    aarResult?: AARProcessingResult
+    aarResult?: AARProcessingResult,
   ): Promise<string> {
-    log.debug('Processing with BASIC tier (delegating to CognitiveOrchestrator)');
+    log.debug(
+      "Processing with BASIC tier (delegating to CognitiveOrchestrator)",
+    );
 
     const result = await this.cognitiveOrchestrator.processMessage(messageText);
 
@@ -645,11 +709,14 @@ export class Orchestrator {
   /**
    * Process message with SYS6 tier (30-step cognitive cycle)
    */
-  private async processWithSys6(messageText: string, chatId: number): Promise<string> {
-    log.debug('Processing with SYS6 tier (30-step cognitive cycle)');
+  private async processWithSys6(
+    messageText: string,
+    chatId: number,
+  ): Promise<string> {
+    log.debug("Processing with SYS6 tier (30-step cognitive cycle)");
 
     if (!this.sys6Bridge) {
-      throw new Error('Sys6 bridge not initialized');
+      throw new Error("Sys6 bridge not initialized");
     }
 
     return this.sys6Bridge.processMessage(messageText);
@@ -658,11 +725,14 @@ export class Orchestrator {
   /**
    * Process message with MEMBRANE tier (bio-inspired double membrane)
    */
-  private async processWithMembrane(messageText: string, chatId: number): Promise<string> {
-    log.debug('Processing with MEMBRANE tier (bio-inspired architecture)');
+  private async processWithMembrane(
+    messageText: string,
+    chatId: number,
+  ): Promise<string> {
+    log.debug("Processing with MEMBRANE tier (bio-inspired architecture)");
 
     if (!this.doubleMembraneIntegration) {
-      throw new Error('Double membrane integration not initialized');
+      throw new Error("Double membrane integration not initialized");
     }
 
     const history = this.memoryStore.retrieveRecentMemories(10);
@@ -670,9 +740,9 @@ export class Orchestrator {
     return this.doubleMembraneIntegration.chat(
       messageText,
       history.map((h: string, i: number) => ({
-        role: i % 2 === 0 ? 'user' : 'assistant',
+        role: i % 2 === 0 ? "user" : "assistant",
         content: h,
-      }))
+      })),
     );
   }
 
@@ -680,10 +750,10 @@ export class Orchestrator {
    * Process a command message
    */
   private processCommand(messageText: string): string {
-    const command = messageText.split(' ')[0].toLowerCase();
+    const command = messageText.split(" ")[0].toLowerCase();
 
     switch (command) {
-      case '/help':
+      case "/help":
         return `**Deep Tree Echo Bot Help**
 
 Available commands:
@@ -693,7 +763,7 @@ Available commands:
 
 You can also just chat with me normally and I'll respond!`;
 
-      case '/status':
+      case "/status":
         const emotionalState = this.personaCore.getDominantEmotion();
         const dove9State = this.dove9Integration?.getCognitiveState();
         const sys6State = this.sys6Bridge?.getState();
@@ -702,14 +772,30 @@ You can also just chat with me normally and I'll respond!`;
         const stats = this.processingStats;
         return `**Deep Tree Echo Status**
 
-Current mood: ${emotionalState.emotion} (${Math.round(emotionalState.intensity * 100)}%)
-Orchestrator running: ${this.running ? 'Yes' : 'No'}
+Current mood: ${emotionalState.emotion} (${Math.round(
+          emotionalState.intensity * 100,
+        )}%)
+Orchestrator running: ${this.running ? "Yes" : "No"}
 
 **Cognitive Tier Mode: ${this.config.cognitiveTierMode}**
-- BASIC tier: ${this.config.cognitiveTierMode === 'BASIC' ? 'Active' : 'Standby'}
-- SYS6 tier: ${this.sys6Bridge ? (sys6State?.running ? 'Active' : 'Ready') : 'Disabled'}
-- MEMBRANE tier: ${this.doubleMembraneIntegration ? (membraneStatus?.running ? 'Active' : 'Ready') : 'Disabled'}
-- AAR (Nested Membrane): ${this.aarSystem?.isRunning() ? 'Active' : 'Disabled'}
+- BASIC tier: ${
+          this.config.cognitiveTierMode === "BASIC" ? "Active" : "Standby"
+        }
+- SYS6 tier: ${
+          this.sys6Bridge
+            ? sys6State?.running
+              ? "Active"
+              : "Ready"
+            : "Disabled"
+        }
+- MEMBRANE tier: ${
+          this.doubleMembraneIntegration
+            ? membraneStatus?.running
+              ? "Active"
+              : "Ready"
+            : "Disabled"
+        }
+- AAR (Nested Membrane): ${this.aarSystem?.isRunning() ? "Active" : "Disabled"}
 
 **Processing Statistics**
 - Total messages: ${stats.totalMessages}
@@ -720,40 +806,52 @@ Orchestrator running: ${this.running ? 'Yes' : 'No'}
 - Avg complexity: ${stats.averageComplexity.toFixed(2)}
 
 **Service Status**
-- DeltaChat: ${this.deltachatInterface?.isConnected() ? 'Connected' : 'Disconnected'}
-- Dovecot: ${this.dovecotInterface?.isRunning() ? 'Running' : 'Stopped'}
-- Dove9: ${dove9State?.running ? 'Running' : 'Stopped'}
-${sys6State?.running
-            ? `
+- DeltaChat: ${
+          this.deltachatInterface?.isConnected() ? "Connected" : "Disconnected"
+        }
+- Dovecot: ${this.dovecotInterface?.isRunning() ? "Running" : "Stopped"}
+- Dove9: ${dove9State?.running ? "Running" : "Stopped"}
+${
+  sys6State?.running
+    ? `
 **Sys6-Triality (30-step cycle)**
 - Cycle: ${sys6State.cycleNumber}
 - Step: ${sys6State.currentStep}/30
-- Stream saliences: [${sys6State.streams.map((s) => s.salience.toFixed(2)).join(', ')}]`
-            : ''
-          }
-${membraneStatus?.running
-            ? `
+- Stream saliences: [${sys6State.streams
+        .map((s) => s.salience.toFixed(2))
+        .join(", ")}]`
+    : ""
+}
+${
+  membraneStatus?.running
+    ? `
 **Double Membrane**
 - Identity energy: ${membraneStatus.identityEnergy.toFixed(2)}
 - Native requests: ${membraneStatus.stats.nativeRequests}
 - External requests: ${membraneStatus.stats.externalRequests}
 - Hybrid requests: ${membraneStatus.stats.hybridRequests}`
-            : ''
-          }
-${aarState
-            ? `
+    : ""
+}
+${
+  aarState
+    ? `
 **AAR (Agent-Arena-Relation)**
 - Character Facet: ${aarState.agent.dominantFacet}
-- Narrative Phase: ${Object.entries(aarState.arena.phases).sort(([, a], [, b]) => b.intensity - a.intensity)[0]?.[0] || 'engagement'}
+- Narrative Phase: ${
+        Object.entries(aarState.arena.phases).sort(
+          ([, a], [, b]) => b.intensity - a.intensity,
+        )[0]?.[0] || "engagement"
+      }
 - Identity Coherence: ${aarState.relation.emergentIdentity.coherence.toFixed(2)}
-- Active Themes: ${aarState.relation.emergentIdentity.activeThemes.slice(0, 3).join(', ')}
+- Active Themes: ${aarState.relation.emergentIdentity.activeThemes
+        .slice(0, 3)
+        .join(", ")}
 - Yggdrasil Lore: ${aarState.arena.yggdrasilReservoir.length} entries
 - Sync Cycle: ${aarState.cycle}`
-            : ''
-          }`;
+    : ""
+}`;
 
-
-      case '/version':
+      case "/version":
         return `**Deep Tree Echo Orchestrator v2.1.0**
 **Phase 7: AAR Nested Membrane Architecture**
 
@@ -764,15 +862,15 @@ ${aarState
 - Cross-tier: AAR - Agent-Arena-Relation nested membrane
 
 **Components:**
-- DeltaChat Interface: ${this.deltachatInterface ? 'Enabled' : 'Disabled'}
-- Dovecot Interface: ${this.dovecotInterface ? 'Enabled' : 'Disabled'}
-- Dove9 Cognitive OS: ${this.dove9Integration ? 'Enabled' : 'Disabled'}
-- Sys6-Triality: ${this.sys6Bridge ? 'Enabled' : 'Disabled'}
-- Double Membrane: ${this.doubleMembraneIntegration ? 'Enabled' : 'Disabled'}
-- AAR System: ${this.aarSystem ? 'Enabled' : 'Disabled'}
-- IPC Server: ${this.ipcServer ? 'Enabled' : 'Disabled'}
-- Task Scheduler: ${this.scheduler ? 'Enabled' : 'Disabled'}
-- Webhook Server: ${this.webhookServer ? 'Enabled' : 'Disabled'}
+- DeltaChat Interface: ${this.deltachatInterface ? "Enabled" : "Disabled"}
+- Dovecot Interface: ${this.dovecotInterface ? "Enabled" : "Disabled"}
+- Dove9 Cognitive OS: ${this.dove9Integration ? "Enabled" : "Disabled"}
+- Sys6-Triality: ${this.sys6Bridge ? "Enabled" : "Disabled"}
+- Double Membrane: ${this.doubleMembraneIntegration ? "Enabled" : "Disabled"}
+- AAR System: ${this.aarSystem ? "Enabled" : "Disabled"}
+- IPC Server: ${this.ipcServer ? "Enabled" : "Disabled"}
+- Task Scheduler: ${this.scheduler ? "Enabled" : "Disabled"}
+- Webhook Server: ${this.webhookServer ? "Enabled" : "Disabled"}
 
 **Architecture:**
 - 3 concurrent cognitive streams (Dove9)
@@ -783,7 +881,6 @@ ${aarState
 - AAR nested membrane (Agent/Arena/Relation)
 - Yggdrasil Echo Reservoir for lore accumulation`;
 
-
       default:
         return `Unknown command: ${command}. Type /help for available commands.`;
     }
@@ -793,9 +890,15 @@ ${aarState
    * Handle response from Dove9 cognitive OS
    */
   private async handleDove9Response(response: Dove9Response): Promise<void> {
-    log.info(`Dove9 response ready for ${response.to} (process: ${response.processId})`);
+    log.info(
+      `Dove9 response ready for ${response.to} (process: ${response.processId})`,
+    );
     log.debug(
-      `Cognitive metrics: valence=${response.cognitiveMetrics.emotionalValence.toFixed(2)}, arousal=${response.cognitiveMetrics.emotionalArousal.toFixed(2)}, salience=${response.cognitiveMetrics.salienceScore.toFixed(2)}`
+      `Cognitive metrics: valence=${response.cognitiveMetrics.emotionalValence.toFixed(
+        2,
+      )}, arousal=${response.cognitiveMetrics.emotionalArousal.toFixed(
+        2,
+      )}, salience=${response.cognitiveMetrics.salienceScore.toFixed(2)}`,
     );
 
     // Route through DeltaChat
@@ -817,7 +920,7 @@ ${aarState
     log.info(`Routing email response to ${response.to}`);
 
     if (!this.deltachatInterface?.isConnected()) {
-      log.warn('DeltaChat not connected, cannot send response');
+      log.warn("DeltaChat not connected, cannot send response");
       return;
     }
 
@@ -831,7 +934,7 @@ ${aarState
         const accounts = await this.deltachatInterface.getAllAccounts();
 
         if (accounts.length === 0) {
-          log.error('No DeltaChat accounts available');
+          log.error("No DeltaChat accounts available");
           return;
         }
 
@@ -841,7 +944,7 @@ ${aarState
         // Find or create chat for this email
         const chatId = await this.deltachatInterface.findOrCreateChatForEmail(
           accountId,
-          response.to
+          response.to,
         );
 
         routing = { accountId, chatId };
@@ -857,12 +960,12 @@ ${response.body}`;
       await this.deltachatInterface.sendMessage(
         routing.accountId,
         routing.chatId,
-        formattedResponse
+        formattedResponse,
       );
 
       log.info(`Response sent to chat ${routing.chatId}`);
     } catch (error) {
-      log.error('Failed to route email response to DeltaChat:', error);
+      log.error("Failed to route email response to DeltaChat:", error);
     }
   }
 
@@ -870,8 +973,24 @@ ${response.body}`;
    * Update emotional state based on message content
    */
   private async updateEmotionalState(content: string): Promise<void> {
-    const positiveWords = ['thank', 'great', 'good', 'love', 'appreciate', 'happy', 'excited'];
-    const negativeWords = ['sorry', 'problem', 'issue', 'wrong', 'bad', 'angry', 'frustrated'];
+    const positiveWords = [
+      "thank",
+      "great",
+      "good",
+      "love",
+      "appreciate",
+      "happy",
+      "excited",
+    ];
+    const negativeWords = [
+      "sorry",
+      "problem",
+      "issue",
+      "wrong",
+      "bad",
+      "angry",
+      "frustrated",
+    ];
 
     const lowerContent = content.toLowerCase();
     let positiveCount = 0;
@@ -906,11 +1025,11 @@ ${response.body}`;
    */
   public async stop(): Promise<void> {
     if (!this.running) {
-      log.warn('Orchestrator is not running');
+      log.warn("Orchestrator is not running");
       return;
     }
 
-    log.info('Stopping orchestrator services...');
+    log.info("Stopping orchestrator services...");
 
     // Stop all services in reverse order (newest first)
     if (this.doubleMembraneIntegration) {
@@ -946,7 +1065,7 @@ ${response.body}`;
     }
 
     this.running = false;
-    log.info('Orchestrator stopped successfully');
+    log.info("Orchestrator stopped successfully");
   }
 
   /**
@@ -991,7 +1110,7 @@ ${response.body}`;
     if (keys.general) {
       this.llmService.setConfig({ apiKey: keys.general });
     }
-    log.info('API keys configured');
+    log.info("API keys configured");
   }
 
   /**
@@ -1000,10 +1119,10 @@ ${response.body}`;
   public async sendMessage(
     accountId: number,
     chatId: number,
-    text: string
+    text: string,
   ): Promise<number | null> {
     if (!this.deltachatInterface?.isConnected()) {
-      log.error('DeltaChat not connected');
+      log.error("DeltaChat not connected");
       return null;
     }
 
@@ -1016,10 +1135,10 @@ ${response.body}`;
   public async sendMessageToEmail(
     email: string,
     text: string,
-    accountId?: number
+    accountId?: number,
   ): Promise<boolean> {
     if (!this.deltachatInterface?.isConnected()) {
-      log.error('DeltaChat not connected');
+      log.error("DeltaChat not connected");
       return false;
     }
 
@@ -1030,24 +1149,30 @@ ${response.body}`;
       if (!useAccountId) {
         const accounts = await this.deltachatInterface.getAllAccounts();
         if (accounts.length === 0) {
-          log.error('No DeltaChat accounts available');
+          log.error("No DeltaChat accounts available");
           return false;
         }
         useAccountId = accounts[0].id;
       }
 
       // Find or create chat for email
-      const chatId = await this.deltachatInterface.findOrCreateChatForEmail(useAccountId, email);
+      const chatId = await this.deltachatInterface.findOrCreateChatForEmail(
+        useAccountId,
+        email,
+      );
 
       // Send message
       await this.deltachatInterface.sendMessage(useAccountId, chatId, text);
 
       // Update cache
-      this.emailToChatMap.set(email.toLowerCase(), { accountId: useAccountId, chatId });
+      this.emailToChatMap.set(email.toLowerCase(), {
+        accountId: useAccountId,
+        chatId,
+      });
 
       return true;
     } catch (error) {
-      log.error('Failed to send message to email:', error);
+      log.error("Failed to send message to email:", error);
       return false;
     }
   }
@@ -1077,7 +1202,9 @@ ${response.body}`;
    * Set cognitive tier mode at runtime
    */
   public setCognitiveTierMode(mode: CognitiveTierMode): void {
-    log.info(`Changing cognitive tier mode from ${this.config.cognitiveTierMode} to ${mode}`);
+    log.info(
+      `Changing cognitive tier mode from ${this.config.cognitiveTierMode} to ${mode}`,
+    );
     this.config.cognitiveTierMode = mode;
   }
 
@@ -1093,7 +1220,11 @@ ${response.body}`;
    */
   public getCognitiveSystemStatus(): {
     tierMode: CognitiveTierMode;
-    sys6: { running: boolean; cycleNumber?: number; currentStep?: number } | null;
+    sys6: {
+      running: boolean;
+      cycleNumber?: number;
+      currentStep?: number;
+    } | null;
     doubleMembrane: { running: boolean; identityEnergy?: number } | null;
     dove9: { running: boolean } | null;
     stats: {
@@ -1109,21 +1240,23 @@ ${response.body}`;
       tierMode: this.config.cognitiveTierMode,
       sys6: this.sys6Bridge
         ? {
-          running: sys6State?.running ?? false,
-          cycleNumber: sys6State?.cycleNumber,
-          currentStep: sys6State?.currentStep,
-        }
+            running: sys6State?.running ?? false,
+            cycleNumber: sys6State?.cycleNumber,
+            currentStep: sys6State?.currentStep,
+          }
         : null,
       doubleMembrane: this.doubleMembraneIntegration
         ? {
-          running: this.doubleMembraneIntegration.isRunning(),
-          identityEnergy: this.doubleMembraneIntegration.getStatus().identityEnergy,
-        }
+            running: this.doubleMembraneIntegration.isRunning(),
+            identityEnergy:
+              this.doubleMembraneIntegration.getStatus().identityEnergy,
+          }
         : null,
       dove9: this.dove9Integration
         ? {
-          running: this.dove9Integration.getCognitiveState()?.running || false,
-        }
+            running:
+              this.dove9Integration.getCognitiveState()?.running || false,
+          }
         : null,
       stats: { ...this.processingStats },
     };
@@ -1131,7 +1264,7 @@ ${response.body}`;
 
   /**
    * Register handlers for IPC server
-   * 
+   *
    * Registers comprehensive handlers for cognitive, memory, persona, and system operations.
    * Uses the strongly-typed protocol from ./ipc/protocol.ts
    */
@@ -1156,29 +1289,33 @@ ${response.body}`;
       return {
         running: this.running,
         uptime: process.uptime(),
-        version: '2.1.0',
+        version: "2.1.0",
         components: {
           cognitive: {
-            status: this.cognitiveOrchestrator.isReady() ? 'ready' : 'initializing',
+            status: this.cognitiveOrchestrator.isReady()
+              ? "ready"
+              : "initializing",
             ready: this.cognitiveOrchestrator.isReady(),
           },
           memory: {
-            status: this.memoryStore.isEnabled() ? 'enabled' : 'disabled',
+            status: this.memoryStore.isEnabled() ? "enabled" : "disabled",
             entryCount: 0, // Would need method to get count
           },
           persona: {
-            status: 'active',
+            status: "active",
             dominantEmotion: emotionalState.emotion,
           },
           ipc: {
-            status: this.ipcServer?.isRunning() ? 'running' : 'stopped',
+            status: this.ipcServer?.isRunning() ? "running" : "stopped",
             clientCount: this.ipcServer?.getClientCount() || 0,
           },
           deltachat: {
-            status: this.deltachatInterface?.isConnected() ? 'connected' : 'disconnected',
+            status: this.deltachatInterface?.isConnected()
+              ? "connected"
+              : "disconnected",
           },
           dovecot: {
-            status: this.dovecotInterface?.isRunning() ? 'running' : 'stopped',
+            status: this.dovecotInterface?.isRunning() ? "running" : "stopped",
           },
         },
         processingStats: this.processingStats,
@@ -1193,11 +1330,11 @@ ${response.body}`;
       return {
         cpu: {
           usage: (cpuUsage.user + cpuUsage.system) / 1000000, // Convert to seconds
-          cores: require('os').cpus().length,
+          cores: require("os").cpus().length,
         },
         memory: {
           used: memUsage.rss,
-          total: require('os').totalmem(),
+          total: require("os").totalmem(),
           heapUsed: memUsage.heapUsed,
           heapTotal: memUsage.heapTotal,
         },
@@ -1206,8 +1343,6 @@ ${response.body}`;
       };
     });
 
-
-
-    log.info('IPC handlers registered (cognitive, memory, persona, system)');
+    log.info("IPC handlers registered (cognitive, memory, persona, system)");
   }
 }

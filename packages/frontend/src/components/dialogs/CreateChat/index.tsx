@@ -6,27 +6,27 @@ import React, {
   useMemo,
   useRef,
   useState,
-} from 'react'
-import { FixedSizeList } from 'react-window'
-import AutoSizer from 'react-virtualized-auto-sizer'
-import InfiniteLoader from 'react-window-infinite-loader'
-import { C } from '@deltachat/jsonrpc-client'
+} from "react";
+import { FixedSizeList } from "react-window";
+import AutoSizer from "react-virtualized-auto-sizer";
+import InfiniteLoader from "react-window-infinite-loader";
+import { C } from "@deltachat/jsonrpc-client";
 
-import { ContactList, useLazyLoadedContacts } from '../../contact/ContactList'
+import { ContactList, useLazyLoadedContacts } from "../../contact/ContactList";
 import {
   PseudoListItem,
   PseudoListItemAddMember,
   PseudoListItemAddContact,
   PseudoListItemAddContactOrGroupFromInviteLink,
-} from '../../helpers/PseudoListItem'
-import GroupImage from '../../GroupImage'
-import { runtime } from '@deltachat-desktop/runtime-interface'
-import { QRAvatar } from '../../Avatar'
-import { AddMemberDialog } from '../AddMember/AddMemberDialog'
-import { ContactListItem } from '../../contact/ContactListItem'
-import { useSettingsStore } from '../../../stores/settings'
-import { BackendRemote, Type } from '../../../backend-com'
-import { selectedAccountId } from '../../../ScreenController'
+} from "../../helpers/PseudoListItem";
+import GroupImage from "../../GroupImage";
+import { runtime } from "@deltachat-desktop/runtime-interface";
+import { QRAvatar } from "../../Avatar";
+import { AddMemberDialog } from "../AddMember/AddMemberDialog";
+import { ContactListItem } from "../../contact/ContactListItem";
+import { useSettingsStore } from "../../../stores/settings";
+import { BackendRemote, Type } from "../../../backend-com";
+import { selectedAccountId } from "../../../ScreenController";
 import Dialog, {
   DialogBody,
   DialogContent,
@@ -34,75 +34,75 @@ import Dialog, {
   DialogHeader,
   FooterActionButton,
   FooterActions,
-} from '../../Dialog'
-import { ScreenContext } from '../../../contexts/ScreenContext'
-import useChat from '../../../hooks/chat/useChat'
-import useConfirmationDialog from '../../../hooks/dialog/useConfirmationDialog'
-import useCreateChatByContactId from '../../../hooks/chat/useCreateChatByContactId'
-import useDialog from '../../../hooks/dialog/useDialog'
-import useTranslationFunction from '../../../hooks/useTranslationFunction'
+} from "../../Dialog";
+import { ScreenContext } from "../../../contexts/ScreenContext";
+import useChat from "../../../hooks/chat/useChat";
+import useConfirmationDialog from "../../../hooks/dialog/useConfirmationDialog";
+import useCreateChatByContactId from "../../../hooks/chat/useCreateChatByContactId";
+import useDialog from "../../../hooks/dialog/useDialog";
+import useTranslationFunction from "../../../hooks/useTranslationFunction";
 import {
   LastUsedSlot,
   rememberLastUsedPath,
-} from '../../../utils/lastUsedPaths'
-import { dirname } from 'path'
-import QrCode from '../QrCode'
-import { areAllContactsVerified } from '../../../backend/chat'
+} from "../../../utils/lastUsedPaths";
+import { dirname } from "path";
+import QrCode from "../QrCode";
+import { areAllContactsVerified } from "../../../backend/chat";
 
-import type { T } from '@deltachat/jsonrpc-client'
-import type { DialogProps } from '../../../contexts/DialogContext'
+import type { T } from "@deltachat/jsonrpc-client";
+import type { DialogProps } from "../../../contexts/DialogContext";
 
-import styles from './styles.module.scss'
-import { makeContextMenu } from '../../ContextMenu'
-import { ContextMenuContext } from '../../../contexts/ContextMenuContext'
-import ImageCropper from '../../ImageCropper'
-import { RovingTabindexProvider } from '../../../contexts/RovingTabindex'
-import ViewProfile from '../ViewProfile'
-import { isInviteLink } from '@deltachat-desktop/shared/util'
-import { copyToBlobDir } from '../../../utils/copyToBlobDir'
+import styles from "./styles.module.scss";
+import { makeContextMenu } from "../../ContextMenu";
+import { ContextMenuContext } from "../../../contexts/ContextMenuContext";
+import ImageCropper from "../../ImageCropper";
+import { RovingTabindexProvider } from "../../../contexts/RovingTabindex";
+import ViewProfile from "../ViewProfile";
+import { isInviteLink } from "@deltachat-desktop/shared/util";
+import { copyToBlobDir } from "../../../utils/copyToBlobDir";
 
-type ViewMode = 'main' | 'createGroup' | 'createBroadcastList'
+type ViewMode = "main" | "createGroup" | "createBroadcastList";
 
 export default function CreateChat(props: DialogProps) {
-  const { onClose } = props
-  const tx = useTranslationFunction()
+  const { onClose } = props;
+  const tx = useTranslationFunction();
 
-  const [viewMode, setViewMode] = useState<ViewMode>('main')
+  const [viewMode, setViewMode] = useState<ViewMode>("main");
 
   return (
     <Dialog width={400} onClose={onClose} fixed>
-      {viewMode == 'main' && <CreateChatMain {...{ setViewMode, onClose }} />}
-      {viewMode == 'createGroup' && (
+      {viewMode == "main" && <CreateChatMain {...{ setViewMode, onClose }} />}
+      {viewMode == "createGroup" && (
         <>
-          <DialogHeader title={tx('menu_new_group')} />
+          <DialogHeader title={tx("menu_new_group")} />
           <CreateGroup {...{ setViewMode, onClose }} />
         </>
       )}
-      {viewMode == 'createBroadcastList' && (
+      {viewMode == "createBroadcastList" && (
         <CreateBroadcastList {...{ setViewMode, onClose }} />
       )}
     </Dialog>
-  )
+  );
 }
 
 export function CloneChat(props: { chatTemplateId: number } & DialogProps) {
-  const { chatTemplateId, onClose } = props
-  const accountId = selectedAccountId()
-  const tx = useTranslationFunction()
+  const { chatTemplateId, onClose } = props;
+  const accountId = selectedAccountId();
+  const tx = useTranslationFunction();
 
-  const [chat, setChat] = useState<T.FullChat | null>(null)
+  const [chat, setChat] = useState<T.FullChat | null>(null);
 
   useEffect(() => {
     BackendRemote.rpc
       .getFullChatById(accountId, chatTemplateId)
-      .then(c => setChat(c))
-  }, [accountId, chatTemplateId])
+      .then((c) => setChat(c));
+  }, [accountId, chatTemplateId]);
 
   return (
     <Dialog width={400} onClose={onClose} fixed>
       {chat && (
         <>
-          <DialogHeader title={tx('clone_chat')} />
+          <DialogHeader title={tx("clone_chat")} />
           <CreateGroup
             {...{
               setViewMode: onClose,
@@ -114,59 +114,59 @@ export function CloneChat(props: { chatTemplateId: number } & DialogProps) {
         </>
       )}
     </Dialog>
-  )
+  );
 }
 
 type CreateChatMainProps = {
-  setViewMode: (newViewMode: ViewMode) => void
-  onClose: DialogProps['onClose']
-}
+  setViewMode: (newViewMode: ViewMode) => void;
+  onClose: DialogProps["onClose"];
+};
 
 function CreateChatMain(props: CreateChatMainProps) {
-  const { setViewMode, onClose } = props
-  const tx = useTranslationFunction()
-  const { userFeedback } = useContext(ScreenContext)
-  const openConfirmationDialog = useConfirmationDialog()
-  const accountId = selectedAccountId()
-  const { openDialog } = useDialog()
-  const createChatByContactId = useCreateChatByContactId()
+  const { setViewMode, onClose } = props;
+  const tx = useTranslationFunction();
+  const { userFeedback } = useContext(ScreenContext);
+  const openConfirmationDialog = useConfirmationDialog();
+  const accountId = selectedAccountId();
+  const { openDialog } = useDialog();
+  const createChatByContactId = useCreateChatByContactId();
 
-  const [queryStr, setQueryStr] = useState('')
+  const [queryStr, setQueryStr] = useState("");
   const {
     contactIds,
     contactCache,
     loadContacts,
     queryStrIsValidEmail,
     refresh: refreshContacts,
-  } = useLazyLoadedContacts(C.DC_GCL_ADD_SELF, queryStr)
+  } = useLazyLoadedContacts(C.DC_GCL_ADD_SELF, queryStr);
 
   const chooseContact = async ({ id }: Type.Contact) => {
     try {
-      await createChatByContactId(accountId, id)
+      await createChatByContactId(accountId, id);
     } catch (error: any) {
       return userFeedback({
-        type: 'error',
+        type: "error",
         text: error && (error.message || error),
-      })
+      });
     }
-    onClose()
-  }
-  const settingsStore = useSettingsStore()[0]
-  const isChatmail = settingsStore?.settings.is_chatmail === '1'
+    onClose();
+  };
+  const settingsStore = useSettingsStore()[0];
+  const isChatmail = settingsStore?.settings.is_chatmail === "1";
 
-  const needToRenderAddGroup = queryStr.length === 0
+  const needToRenderAddGroup = queryStr.length === 0;
   const needToRenderAddBroadcastList =
     queryStr.length === 0 &&
-    (settingsStore?.desktopSettings.enableBroadcastLists ?? false)
-  const needToRenderAddContactQRScan = queryStr.length === 0
+    (settingsStore?.desktopSettings.enableBroadcastLists ?? false);
+  const needToRenderAddContactQRScan = queryStr.length === 0;
   const needToRenderAddContact = !(
-    queryStr === '' ||
+    queryStr === "" ||
     (contactIds.length === 1 &&
       contactCache[contactIds[0]]?.address.toLowerCase() ===
         queryStr.trim().toLowerCase())
-  )
+  );
   const showPseudoListItemAddContactFromInviteLink =
-    queryStr && isInviteLink(queryStr)
+    queryStr && isInviteLink(queryStr);
   const contactsAndExtraItems = useMemo(
     () => [
       ...(showPseudoListItemAddContactFromInviteLink
@@ -189,57 +189,57 @@ function CreateChatMain(props: CreateChatMainProps) {
       needToRenderAddContactQRScan,
       needToRenderAddGroup,
       showPseudoListItemAddContactFromInviteLink,
-    ]
-  )
+    ],
+  );
 
   const openQRScan = async () => {
     const [qrCode, qrCodeSVG] =
-      await BackendRemote.rpc.getChatSecurejoinQrCodeSvg(accountId, null)
-    openDialog(QrCode, { qrCode, qrCodeSVG, selectScan: true })
-    onClose()
-  }
+      await BackendRemote.rpc.getChatSecurejoinQrCodeSvg(accountId, null);
+    openDialog(QrCode, { qrCode, qrCodeSVG, selectScan: true });
+    onClose();
+  };
 
   const addContactOnClick = async () => {
-    if (!queryStrIsValidEmail) return
+    if (!queryStrIsValidEmail) return;
 
     const contactId = await BackendRemote.rpc.createContact(
       accountId,
       queryStr.trim(),
-      null
-    )
-    await createChatByContactId(accountId, contactId)
-    onClose()
-  }
+      null,
+    );
+    await createChatByContactId(accountId, contactId);
+    onClose();
+  };
 
-  const { openContextMenu } = useContext(ContextMenuContext)
+  const { openContextMenu } = useContext(ContextMenuContext);
   const onContactContextMenu = useCallback(
     async (contact: Type.Contact, ev: MouseEvent) => {
       makeContextMenu(
         [
           {
-            label: tx('menu_view_profile'),
+            label: tx("menu_view_profile"),
             action: () => {
-              openDialog(ViewProfile, { contact })
+              openDialog(ViewProfile, { contact });
             },
           },
           {
-            label: tx('delete_contact'),
+            label: tx("delete_contact"),
             action: async () => {
               const confirmed = await openConfirmationDialog({
-                message: tx('ask_delete_contact', contact.address),
-                confirmLabel: tx('delete'),
-              })
+                message: tx("ask_delete_contact", contact.address),
+                confirmLabel: tx("delete"),
+              });
 
               if (confirmed) {
                 BackendRemote.rpc
                   .deleteContact(accountId, contact.id)
-                  .then(refreshContacts)
+                  .then(refreshContacts);
               }
             },
           },
         ],
-        openContextMenu
-      )(ev)
+        openContextMenu,
+      )(ev);
     },
     [
       accountId,
@@ -248,10 +248,10 @@ function CreateChatMain(props: CreateChatMainProps) {
       refreshContacts,
       tx,
       openContextMenu,
-    ]
-  )
+    ],
+  );
 
-  const infiniteLoaderRef = useRef<InfiniteLoader | null>(null)
+  const infiniteLoaderRef = useRef<InfiniteLoader | null>(null);
   // By default InfiniteLoader assumes that each item's index in the list
   // never changes. But in our case they do change because of filtering.
   // This code ensures that the currently displayed items get loaded
@@ -260,33 +260,33 @@ function CreateChatMain(props: CreateChatMainProps) {
   // - https://github.com/deltachat/deltachat-desktop/issues/3921
   // - https://github.com/deltachat/deltachat-desktop/issues/3208
   useEffect(() => {
-    infiniteLoaderRef.current?.resetloadMoreItemsCache(true)
+    infiniteLoaderRef.current?.resetloadMoreItemsCache(true);
     // We could specify `useEffect`'s dependencies (the major one being
     // `contactsAndExtraItems`) for some performance, but let's play it safe.
-  })
+  });
 
-  const fixedSizeListOuterRef = useRef<HTMLElement>(null)
+  const fixedSizeListOuterRef = useRef<HTMLElement>(null);
 
   const onKeyDown = (ev: React.KeyboardEvent) => {
-    if (ev.code === 'ArrowDown') {
-      ;(
-        fixedSizeListOuterRef.current?.querySelector('button') as HTMLElement
-      )?.focus()
+    if (ev.code === "ArrowDown") {
+      (
+        fixedSizeListOuterRef.current?.querySelector("button") as HTMLElement
+      )?.focus();
       // prevent scrolling down the list
-      ev.preventDefault()
+      ev.preventDefault();
     }
-  }
+  };
 
   return (
     <>
       <DialogHeader>
         <input
           data-no-drag-region
-          className='search-input'
-          onChange={e => setQueryStr(e.target.value)}
+          className="search-input"
+          onChange={(e) => setQueryStr(e.target.value)}
           value={queryStr}
           placeholder={
-            isChatmail ? tx('search') : tx('contacts_enter_name_or_email')
+            isChatmail ? tx("search") : tx("contacts_enter_name_or_email")
           }
           onKeyDown={onKeyDown}
           autoFocus
@@ -303,18 +303,18 @@ function CreateChatMain(props: CreateChatMainProps) {
                 // The indices are shifted due to the existence of extra items.
                 return loadContacts(
                   contactIds.indexOf(contactsAndExtraItems[startInd]),
-                  contactIds.indexOf(contactsAndExtraItems[stopInd])
-                )
+                  contactIds.indexOf(contactsAndExtraItems[stopInd]),
+                );
               }}
               // perf: consider using `isContactLoaded` from `useLazyLoadedContacts`
               // otherwise sometimes we might load the same contact twice (performance thing)
               // See https://github.com/bvaughn/react-window/issues/765
-              isItemLoaded={index => {
-                const isExtraItem = contactsAndExtraItems[index] < -100
+              isItemLoaded={(index) => {
+                const isExtraItem = contactsAndExtraItems[index] < -100;
                 if (isExtraItem) {
-                  return true
+                  return true;
                 }
-                return contactCache[contactsAndExtraItems[index]] != undefined
+                return contactCache[contactsAndExtraItems[index]] != undefined;
               }}
               // minimumBatchSize={100}
             >
@@ -326,8 +326,8 @@ function CreateChatMain(props: CreateChatMainProps) {
                   if the user has 5000 contacts.
                   (see https://github.com/deltachat/deltachat-desktop/issues/1830) */}
                   <FixedSizeList
-                    innerElementType={'ol'}
-                    className='react-window-list-reset'
+                    innerElementType={"ol"}
+                    className="react-window-list-reset"
                     itemCount={contactsAndExtraItems.length}
                     itemData={{
                       contactsAndExtraItems,
@@ -341,12 +341,12 @@ function CreateChatMain(props: CreateChatMainProps) {
                       queryStr,
                       onClose,
                     }}
-                    itemKey={index => contactsAndExtraItems[index]}
+                    itemKey={(index) => contactsAndExtraItems[index]}
                     onItemsRendered={onItemsRendered}
                     ref={ref}
                     outerRef={fixedSizeListOuterRef}
                     height={height}
-                    width='100%'
+                    width="100%"
                     // TODO fix: The size of each item is determined
                     // by `--local-avatar-size` and `--local-avatar-vertical-margin`,
                     // which might be different, e.g. currently they're smaller for
@@ -369,33 +369,33 @@ function CreateChatMain(props: CreateChatMainProps) {
       </DialogBody>
       <DialogFooter>
         <FooterActions>
-          <FooterActionButton styling='primary' onClick={onClose}>
-            {tx('close')}
+          <FooterActionButton styling="primary" onClick={onClose}>
+            {tx("close")}
           </FooterActionButton>
         </FooterActions>
       </DialogFooter>
     </>
-  )
+  );
 }
 function CreateChatMainRow({
   index,
   style,
   data,
 }: {
-  index: number
-  style: React.CSSProperties
+  index: number;
+  style: React.CSSProperties;
   data: {
-    contactsAndExtraItems: (CreateChatExtraItemType | T.Contact['id'])[]
-    contactCache: ReturnType<typeof useLazyLoadedContacts>['contactCache']
-    onContactClick: (contact: Type.Contact) => void
-    addContactOnClick: () => void
-    onContactContextMenu: (contact: Type.Contact, ev: MouseEvent) => void
-    setViewMode: (viewMode: ViewMode) => void
-    openQRScan: () => Promise<void>
-    queryStrIsValidEmail: boolean
-    queryStr: string
-    onClose: () => void
-  }
+    contactsAndExtraItems: (CreateChatExtraItemType | T.Contact["id"])[];
+    contactCache: ReturnType<typeof useLazyLoadedContacts>["contactCache"];
+    onContactClick: (contact: Type.Contact) => void;
+    addContactOnClick: () => void;
+    onContactContextMenu: (contact: Type.Contact, ev: MouseEvent) => void;
+    setViewMode: (viewMode: ViewMode) => void;
+    openQRScan: () => Promise<void>;
+    queryStrIsValidEmail: boolean;
+    queryStr: string;
+    onClose: () => void;
+  };
 }) {
   const {
     contactsAndExtraItems,
@@ -408,44 +408,44 @@ function CreateChatMainRow({
     queryStrIsValidEmail,
     queryStr,
     onClose,
-  } = data
-  const item = contactsAndExtraItems[index]
+  } = data;
+  const item = contactsAndExtraItems[index];
 
-  const tx = useTranslationFunction()
-  const accountId = selectedAccountId()
+  const tx = useTranslationFunction();
+  const accountId = selectedAccountId();
 
   const el = (() => {
     switch (item) {
       case CreateChatExtraItemType.ADD_GROUP: {
         return (
           <PseudoListItem
-            id='newgroup'
-            cutoff='+'
-            text={tx('menu_new_group')}
-            onClick={() => setViewMode('createGroup')}
+            id="newgroup"
+            cutoff="+"
+            text={tx("menu_new_group")}
+            onClick={() => setViewMode("createGroup")}
           />
-        )
+        );
       }
       case CreateChatExtraItemType.ADD_BROADCAST_LIST: {
         return (
           <PseudoListItem
-            id='newbroadcastlist'
-            cutoff='+'
-            text={tx('new_broadcast_list')}
-            onClick={() => setViewMode('createBroadcastList')}
+            id="newbroadcastlist"
+            cutoff="+"
+            text={tx("new_broadcast_list")}
+            onClick={() => setViewMode("createBroadcastList")}
           />
-        )
+        );
       }
       case CreateChatExtraItemType.ADD_CONTACT_QR_SCAN: {
         return (
           <PseudoListItem
-            id='showqrcode'
-            text={tx('menu_new_contact')}
+            id="showqrcode"
+            text={tx("menu_new_contact")}
             onClick={openQRScan}
           >
             <QRAvatar />
           </PseudoListItem>
-        )
+        );
       }
       case CreateChatExtraItemType.ADD_CONTACT: {
         return (
@@ -454,7 +454,7 @@ function CreateChatMainRow({
             queryStrIsEmail={queryStrIsValidEmail}
             onClick={addContactOnClick}
           />
-        )
+        );
       }
       case CreateChatExtraItemType.INVITE_LINK: {
         return (
@@ -463,34 +463,34 @@ function CreateChatMainRow({
             accountId={accountId}
             callback={onClose}
           />
-        )
+        );
       }
       default: {
-        const contact: Type.Contact | undefined = contactCache[item]
+        const contact: Type.Contact | undefined = contactCache[item];
         if (!contact) {
           // It's not loaded yet
-          return null
+          return null;
         }
         return (
           <ContactListItem
-            tagName='div'
+            tagName="div"
             contact={contact}
             onClick={onContactClick}
             onContextMenu={
               contact.id !== C.DC_CONTACT_ID_SELF
-                ? ev => onContactContextMenu(contact, ev)
+                ? (ev) => onContactContextMenu(contact, ev)
                 : undefined
             }
             showCheckbox={false}
             checked={false}
             showRemove={false}
           />
-        )
+        );
       }
     }
-  })()
+  })();
 
-  return <li style={style}>{el}</li>
+  return <li style={style}>{el}</li>;
 }
 const enum CreateChatExtraItemType {
   // Negative number so that we can differentiate these from
@@ -503,52 +503,52 @@ const enum CreateChatExtraItemType {
 }
 
 type CreateGroupProps = {
-  setViewMode: (newViewMode: ViewMode) => void
-  onClose: DialogProps['onClose']
-  groupImage?: string | null
-  groupMembers?: number[]
-}
+  setViewMode: (newViewMode: ViewMode) => void;
+  onClose: DialogProps["onClose"];
+  groupImage?: string | null;
+  groupMembers?: number[];
+};
 
 export function CreateGroup(props: CreateGroupProps) {
-  const { selectChat } = useChat()
-  const { openDialog } = useDialog()
-  const { setViewMode, onClose } = props
-  const tx = useTranslationFunction()
-  const accountId = selectedAccountId()
+  const { selectChat } = useChat();
+  const { openDialog } = useDialog();
+  const { setViewMode, onClose } = props;
+  const tx = useTranslationFunction();
+  const accountId = selectedAccountId();
 
-  const [groupName, setGroupName] = useState('')
+  const [groupName, setGroupName] = useState("");
   const [groupImage, onSetGroupImage, onUnsetGroupImage] = useGroupImage(
-    props.groupImage || null
-  )
+    props.groupImage || null,
+  );
   const [groupMembers, removeGroupMember, addGroupMember] = useGroupMembers(
-    props.groupMembers || [C.DC_CONTACT_ID_SELF]
-  )
-  const finishCreateGroup = useCreateGroup(groupName, groupImage, groupMembers)
+    props.groupMembers || [C.DC_CONTACT_ID_SELF],
+  );
+  const finishCreateGroup = useCreateGroup(groupName, groupImage, groupMembers);
 
-  const [errorMissingGroupName, setErrorMissingGroupName] = useState(false)
-  const [groupContacts, setGroupContacts] = useState<Type.Contact[]>([])
+  const [errorMissingGroupName, setErrorMissingGroupName] = useState(false);
+  const [groupContacts, setGroupContacts] = useState<Type.Contact[]>([]);
 
-  const groupMemberContactListWrapperRef = useRef<HTMLDivElement>(null)
+  const groupMemberContactListWrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     BackendRemote.rpc
       .getContactsByIds(accountId, groupMembers)
-      .then(records => {
-        setGroupContacts(groupMembers.map(id => records[id]))
-      })
-  }, [accountId, groupMembers])
+      .then((records) => {
+        setGroupContacts(groupMembers.map((id) => records[id]));
+      });
+  }, [accountId, groupMembers]);
 
   const showAddMemberDialog = () => {
     openDialog(AddMemberDialog, {
       listFlags: C.DC_GCL_ADD_SELF,
       groupMembers,
       onOk: (members: number[]) => {
-        members.forEach(contactId => addGroupMember({ id: contactId }))
+        members.forEach((contactId) => addGroupMember({ id: contactId }));
       },
       isBroadcast: false,
       isVerificationRequired: false,
-    })
-  }
+    });
+  };
 
   return (
     <>
@@ -562,16 +562,16 @@ export function CreateGroup(props: CreateGroupProps) {
             setChatName={setGroupName}
             errorMissingChatName={errorMissingGroupName}
             setErrorMissingChatName={setErrorMissingGroupName}
-            type='group'
+            type="group"
           />
         </DialogContent>
-        <div className='group-separator'>
-          {tx('n_members', groupMembers.length.toString(), {
+        <div className="group-separator">
+          {tx("n_members", groupMembers.length.toString(), {
             quantity: groupMembers.length,
           })}
         </div>
         <div
-          className='group-member-contact-list-wrapper'
+          className="group-member-contact-list-wrapper"
           ref={groupMemberContactListWrapperRef}
         >
           <RovingTabindexProvider
@@ -584,104 +584,106 @@ export function CreateGroup(props: CreateGroupProps) {
             <ContactList
               contacts={groupContacts}
               showRemove
-              onRemoveClick={c => {
-                removeGroupMember(c)
+              onRemoveClick={(c) => {
+                removeGroupMember(c);
               }}
             />
           </RovingTabindexProvider>
         </div>
       </DialogBody>
       <DialogFooter>
-        <FooterActions align='spaceBetween'>
+        <FooterActions align="spaceBetween">
           <FooterActionButton
-            styling='secondary'
-            onClick={() => setViewMode('main')}
+            styling="secondary"
+            onClick={() => setViewMode("main")}
           >
-            {tx('cancel')}
+            {tx("cancel")}
           </FooterActionButton>
           <FooterActionButton
             onClick={() => {
-              if (groupName === '') {
-                setErrorMissingGroupName(true)
-                return
+              if (groupName === "") {
+                setErrorMissingGroupName(true);
+                return;
               }
               finishCreateGroup()
-                .then(groupId => {
+                .then((groupId) => {
                   if (groupId) {
-                    selectChat(accountId, groupId)
+                    selectChat(accountId, groupId);
                   } else {
                     // TODO: handle error
                   }
                 })
-                .finally(onClose)
+                .finally(onClose);
             }}
-            data-testid='group-create-button'
-            styling='primary'
+            data-testid="group-create-button"
+            styling="primary"
           >
-            {tx('group_create_button')}
+            {tx("group_create_button")}
           </FooterActionButton>
         </FooterActions>
       </DialogFooter>
     </>
-  )
+  );
 }
 
 type CreateBroadcastListProps = {
-  setViewMode: (newViewMode: ViewMode) => void
-  onClose: DialogProps['onClose']
-}
+  setViewMode: (newViewMode: ViewMode) => void;
+  onClose: DialogProps["onClose"];
+};
 
 function CreateBroadcastList(props: CreateBroadcastListProps) {
-  const { openDialog } = useDialog()
-  const { setViewMode, onClose } = props
-  const tx = useTranslationFunction()
-  const accountId = selectedAccountId()
+  const { openDialog } = useDialog();
+  const { setViewMode, onClose } = props;
+  const tx = useTranslationFunction();
+  const accountId = selectedAccountId();
 
-  const [broadcastName, setBroadcastName] = useState<string>('')
+  const [broadcastName, setBroadcastName] = useState<string>("");
   const [broadcastRecipients, removeBroadcastRecipient, addBroadcastRecipient] =
-    useGroupMembers([])
+    useGroupMembers([]);
   const finishCreateBroadcast = useCreateBroadcast(
     broadcastRecipients,
     broadcastName,
-    onClose
-  )
+    onClose,
+  );
 
-  const [broadcastContacts, setBroadcastContacts] = useState<Type.Contact[]>([])
+  const [broadcastContacts, setBroadcastContacts] = useState<Type.Contact[]>(
+    [],
+  );
 
-  const groupMemberContactListWrapperRef = useRef<HTMLDivElement>(null)
+  const groupMemberContactListWrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     BackendRemote.rpc
       .getContactsByIds(accountId, broadcastRecipients)
-      .then(records => {
-        setBroadcastContacts(broadcastRecipients.map(id => records[id]))
-      })
-  }, [accountId, broadcastRecipients])
+      .then((records) => {
+        setBroadcastContacts(broadcastRecipients.map((id) => records[id]));
+      });
+  }, [accountId, broadcastRecipients]);
 
   const [errorMissingChatName, setErrorMissingChatName] =
-    useState<boolean>(false)
+    useState<boolean>(false);
 
   const showAddMemberDialog = () => {
-    const listFlags = C.DC_GCL_ADD_SELF
+    const listFlags = C.DC_GCL_ADD_SELF;
 
     openDialog(AddMemberDialog, {
       listFlags,
       groupMembers: broadcastRecipients,
       onOk: (recipients: number[]) =>
-        recipients.forEach(contactId =>
-          addBroadcastRecipient({ id: contactId })
+        recipients.forEach((contactId) =>
+          addBroadcastRecipient({ id: contactId }),
         ),
       isBroadcast: true,
-    })
-  }
+    });
+  };
 
   return (
     <>
-      <DialogHeader title={tx('new_broadcast_list')} />
+      <DialogHeader title={tx("new_broadcast_list")} />
       <DialogBody>
         <DialogContent>
-          <div className='broadcast-list-hint'>
-            <p>{tx('chat_new_broadcast_hint')}</p>
+          <div className="broadcast-list-hint">
+            <p>{tx("chat_new_broadcast_hint")}</p>
           </div>
           <br />
           <ChatSettingsSetNameAndProfileImage
@@ -689,18 +691,18 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
             setChatName={setBroadcastName}
             errorMissingChatName={errorMissingChatName}
             setErrorMissingChatName={setErrorMissingChatName}
-            type='broadcast'
+            type="broadcast"
           />
           <br />
           {broadcastRecipients.length > 0 && (
-            <div className='group-separator'>
-              {tx('n_recipients', broadcastRecipients.length.toString(), {
+            <div className="group-separator">
+              {tx("n_recipients", broadcastRecipients.length.toString(), {
                 quantity: broadcastRecipients.length,
               })}
             </div>
           )}
           <div
-            className='group-member-contact-list-wrapper'
+            className="group-member-contact-list-wrapper"
             ref={groupMemberContactListWrapperRef}
           >
             <RovingTabindexProvider
@@ -713,8 +715,8 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
               <ContactList
                 contacts={broadcastContacts}
                 showRemove
-                onRemoveClick={c => {
-                  removeBroadcastRecipient(c)
+                onRemoveClick={(c) => {
+                  removeBroadcastRecipient(c);
                 }}
               />
             </RovingTabindexProvider>
@@ -723,24 +725,24 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
       </DialogBody>
       <DialogFooter>
         <FooterActions>
-          <FooterActionButton onClick={() => setViewMode('main')}>
-            {tx('cancel')}
+          <FooterActionButton onClick={() => setViewMode("main")}>
+            {tx("cancel")}
           </FooterActionButton>
           <FooterActionButton
             onClick={() => {
-              if (broadcastName === '') {
-                setErrorMissingChatName(true)
-                return
+              if (broadcastName === "") {
+                setErrorMissingChatName(true);
+                return;
               }
-              finishCreateBroadcast()
+              finishCreateBroadcast();
             }}
           >
-            {tx('create')}
+            {tx("create")}
           </FooterActionButton>
         </FooterActions>
       </DialogFooter>
     </>
-  )
+  );
 }
 
 export const ChatSettingsSetNameAndProfileImage = ({
@@ -754,32 +756,32 @@ export const ChatSettingsSetNameAndProfileImage = ({
   color,
   type,
 }: {
-  groupImage?: string | null
-  onSetGroupImage?: () => void
-  onUnsetGroupImage?: () => void
-  chatName: string
-  setChatName: (newGroupName: string) => void
-  errorMissingChatName: boolean
-  setErrorMissingChatName: React.Dispatch<React.SetStateAction<boolean>>
-  color?: string
-  type: 'group' | 'broadcast'
+  groupImage?: string | null;
+  onSetGroupImage?: () => void;
+  onUnsetGroupImage?: () => void;
+  chatName: string;
+  setChatName: (newGroupName: string) => void;
+  errorMissingChatName: boolean;
+  setErrorMissingChatName: React.Dispatch<React.SetStateAction<boolean>>;
+  color?: string;
+  type: "group" | "broadcast";
 }) => {
-  const tx = useTranslationFunction()
+  const tx = useTranslationFunction();
   const onChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    if (target.value.length > 0) setErrorMissingChatName(false)
-    setChatName(target.value)
-  }
-  if (type === 'group' && !(onSetGroupImage && onUnsetGroupImage)) {
+    if (target.value.length > 0) setErrorMissingChatName(false);
+    setChatName(target.value);
+  };
+  if (type === "group" && !(onSetGroupImage && onUnsetGroupImage)) {
     throw new Error(
-      'if type is group, onSetGroupImage and onUnsetGroupImage must be present'
-    )
+      "if type is group, onSetGroupImage and onUnsetGroupImage must be present",
+    );
   }
   return (
     <>
-      <div className='group-settings-container'>
-        {type === 'group' && onUnsetGroupImage && onSetGroupImage && (
+      <div className="group-settings-container">
+        {type === "group" && onUnsetGroupImage && onSetGroupImage && (
           <GroupImage
-            style={{ float: 'left' }}
+            style={{ float: "left" }}
             groupImage={groupImage}
             onSetGroupImage={onSetGroupImage}
             onUnsetGroupImage={onUnsetGroupImage}
@@ -787,11 +789,11 @@ export const ChatSettingsSetNameAndProfileImage = ({
             color={color}
           />
         )}
-        <div className='group-name-input-wrapper'>
+        <div className="group-name-input-wrapper">
           <input
-            className='group-name-input'
+            className="group-name-input"
             placeholder={
-              type === 'group' ? tx('group_name') : tx('name_desktop')
+              type === "group" ? tx("group_name") : tx("name_desktop")
             }
             value={chatName}
             onChange={onChange}
@@ -799,152 +801,156 @@ export const ChatSettingsSetNameAndProfileImage = ({
             spellCheck={false}
           />
           {errorMissingChatName && (
-            <p className='input-error'>
-              {type === 'group'
-                ? tx('group_please_enter_group_name')
-                : tx('please_enter_broadcast_list_name')}
+            <p className="input-error">
+              {type === "group"
+                ? tx("group_please_enter_group_name")
+                : tx("please_enter_broadcast_list_name")}
             </p>
           )}
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
 const useCreateGroup = (
   groupName: string,
   groupImage: string | null | undefined,
-  groupMembers: number[]
+  groupMembers: number[],
 ) => {
-  const accountId = selectedAccountId()
+  const accountId = selectedAccountId();
 
   const createGroup = useCallback(async () => {
-    const isVerified = await areAllContactsVerified(accountId, groupMembers)
+    const isVerified = await areAllContactsVerified(accountId, groupMembers);
 
     const chatId = await BackendRemote.rpc.createGroupChat(
       accountId,
       groupName,
-      isVerified
-    )
+      isVerified,
+    );
 
-    if (groupImage && groupImage !== '') {
-      await BackendRemote.rpc.setChatProfileImage(accountId, chatId, groupImage)
+    if (groupImage && groupImage !== "") {
+      await BackendRemote.rpc.setChatProfileImage(
+        accountId,
+        chatId,
+        groupImage,
+      );
     }
 
     await Promise.all(
-      groupMembers.map(contactId => {
+      groupMembers.map((contactId) => {
         if (contactId === C.DC_CONTACT_ID_SELF) {
-          return
+          return;
         }
-        return BackendRemote.rpc.addContactToChat(accountId, chatId, contactId)
-      })
-    )
+        return BackendRemote.rpc.addContactToChat(accountId, chatId, contactId);
+      }),
+    );
 
-    return chatId
-  }, [accountId, groupImage, groupMembers, groupName])
+    return chatId;
+  }, [accountId, groupImage, groupMembers, groupName]);
 
   return async () => {
-    if (groupName === '') {
-      return
+    if (groupName === "") {
+      return;
     }
 
-    return createGroup()
-  }
-}
+    return createGroup();
+  };
+};
 
 const useCreateBroadcast = (
   broadcastRecipients: number[],
   groupName: string,
-  onClose: DialogProps['onClose']
+  onClose: DialogProps["onClose"],
 ) => {
-  const accountId = selectedAccountId()
-  const { selectChat } = useChat()
+  const accountId = selectedAccountId();
+  const { selectChat } = useChat();
 
   const createBroadcastList = async () => {
-    const chatId = await BackendRemote.rpc.createBroadcastList(accountId)
+    const chatId = await BackendRemote.rpc.createBroadcastList(accountId);
 
     await Promise.all(
-      broadcastRecipients.map(contactId => {
+      broadcastRecipients.map((contactId) => {
         if (contactId === C.DC_CONTACT_ID_SELF) {
-          return
+          return;
         }
-        return BackendRemote.rpc.addContactToChat(accountId, chatId, contactId)
-      })
-    )
+        return BackendRemote.rpc.addContactToChat(accountId, chatId, contactId);
+      }),
+    );
 
-    await BackendRemote.rpc.setChatName(accountId, chatId, groupName)
+    await BackendRemote.rpc.setChatName(accountId, chatId, groupName);
 
-    return chatId
-  }
+    return chatId;
+  };
 
   return async () => {
-    const chatId = await createBroadcastList()
-    onClose()
-    selectChat(accountId, chatId)
-  }
-}
+    const chatId = await createBroadcastList();
+    onClose();
+    selectChat(accountId, chatId);
+  };
+};
 
 export function useGroupImage(image: string | null) {
-  const [groupImage, setGroupImage] = useState(image)
-  const { openDialog } = useDialog()
-  const tx = window.static_translate
+  const [groupImage, setGroupImage] = useState(image);
+  const { openDialog } = useDialog();
+  const tx = window.static_translate;
 
   const onSetGroupImage = async () => {
     const { defaultPath, setLastPath } = await rememberLastUsedPath(
-      LastUsedSlot.GroupImage
-    )
+      LastUsedSlot.GroupImage,
+    );
     const [file] = await runtime.showOpenFileDialog({
-      title: tx('select_group_image_desktop'),
-      filters: [{ name: 'Images', extensions: ['jpg', 'png', 'gif', 'webp'] }],
-      properties: ['openFile'],
+      title: tx("select_group_image_desktop"),
+      filters: [{ name: "Images", extensions: ["jpg", "png", "gif", "webp"] }],
+      properties: ["openFile"],
       defaultPath,
-    })
+    });
     if (file) {
       openDialog(ImageCropper, {
         filepath: await copyToBlobDir(file),
-        shape: 'circle',
-        onResult: (croppedImage => {
-          setGroupImage(croppedImage)
-          setLastPath(dirname(file))
+        shape: "circle",
+        onResult: ((croppedImage) => {
+          setGroupImage(croppedImage);
+          setLastPath(dirname(file));
         }) as (path: string) => void /* typescript is weird and wants this */,
         onCancel: () => {},
         desiredWidth: 256,
         desiredHeight: 256,
-      })
+      });
     }
-  }
-  const onUnsetGroupImage = () => setGroupImage('')
+  };
+  const onUnsetGroupImage = () => setGroupImage("");
 
   return [groupImage, onSetGroupImage, onUnsetGroupImage] as [
     typeof groupImage,
     typeof onSetGroupImage,
     typeof onUnsetGroupImage,
-  ]
+  ];
 }
 
-type ContactWithId = T.Contact | { id: number }
+type ContactWithId = T.Contact | { id: number };
 
 export function useGroupMembers(initialMembers: number[]) {
-  const [groupMembers, setGroupMembers] = useState(initialMembers)
+  const [groupMembers, setGroupMembers] = useState(initialMembers);
 
   const removeGroupMember = ({ id }: ContactWithId) =>
     id !== C.DC_CONTACT_ID_SELF &&
-    setGroupMembers(prevMembers => prevMembers.filter(gId => gId !== id))
+    setGroupMembers((prevMembers) => prevMembers.filter((gId) => gId !== id));
 
   const addGroupMember = ({ id }: ContactWithId) =>
-    setGroupMembers(prevMembers => [...prevMembers, id])
+    setGroupMembers((prevMembers) => [...prevMembers, id]);
 
   const addRemoveGroupMember = ({ id }: ContactWithId) => {
     groupMembers.includes(id)
       ? removeGroupMember({ id })
-      : addGroupMember({ id })
-  }
+      : addGroupMember({ id });
+  };
 
   const addGroupMembers = (ids: number[]) => {
-    setGroupMembers(prevMembers => {
-      return [...prevMembers, ...ids]
-    })
-  }
+    setGroupMembers((prevMembers) => {
+      return [...prevMembers, ...ids];
+    });
+  };
 
   return [
     groupMembers,
@@ -958,5 +964,5 @@ export function useGroupMembers(initialMembers: number[]) {
     typeof addGroupMember,
     typeof addRemoveGroupMember,
     typeof addGroupMembers,
-  ]
+  ];
 }

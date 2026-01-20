@@ -1,4 +1,4 @@
-export { PersonaCore, AvatarConfig } from './PersonaCore';
+export { PersonaCore, AvatarConfig } from "./PersonaCore";
 
 // Placeholder exports for modules to be fully implemented
 // export { AdaptivePersonality } from './AdaptivePersonality'

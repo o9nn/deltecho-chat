@@ -1,7 +1,7 @@
-@use 'sass:map';
-@use '../variables';
+@use "sass:map";
+@use "../variables";
 
-@use 'sass:math';
+@use "sass:math";
 
 .message-list-and-composer {
   display: flex;
@@ -149,7 +149,7 @@
         visibility: hidden;
         display: block;
         font-size: 0;
-        content: ' ';
+        content: " ";
         clear: both;
         height: 0;
       }

@@ -1,5 +1,5 @@
-@use 'mixins';
-@use 'variables';
+@use "mixins";
+@use "variables";
 
 .emoji-container {
   margin-bottom: -1px;
@@ -40,11 +40,11 @@ button.emoji {
   background: transparent;
 
   &:before {
-    content: '';
+    content: "";
     display: inline-block;
     width: variables.$button-height;
     height: variables.$button-height;
-    @include mixins.color-svg('./images/smile.svg', var(--composerBtnColor));
+    @include mixins.color-svg("./images/smile.svg", var(--composerBtnColor));
   }
 
   &:focus,

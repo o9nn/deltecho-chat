@@ -1,1 +1,1 @@
-export * from './duckdb-adapter.js';
+export * from "./duckdb-adapter.js";

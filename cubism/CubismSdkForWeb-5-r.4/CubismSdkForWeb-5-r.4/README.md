@@ -8,24 +8,19 @@ This is a sample implementation of an application that displays models output by
 
 It is used in conjunction with the Cubism Web Framework and Live2D Cubism Core.
 
-
 ## License
 
 Please check the [license](LICENSE.md) before using this SDK.
 
-
 ## Notices
 
 Please check the [notices](NOTICE.md) before using this SDK.
-
 
 ## Compatibility with Cubism 5 new features and previous Cubism SDK versions
 
 This SDK is compatible with Cubism 5.  
 For SDK compatibility with new features in Cubism 5 Editor, please refer to [here](https://docs.live2d.com/en/cubism-sdk-manual/cubism-5-new-functions/).  
 For compatibility with previous versions of Cubism SDK, please refer to [here](https://docs.live2d.com/en/cubism-sdk-manual/compatibility-with-cubism-5/).
-
-
 
 ## Directory structure
 
@@ -39,7 +34,6 @@ For compatibility with previous versions of Cubism SDK, please refer to [here](h
    └─ TypeScript    # Directory containing TypeScript sample projects
 ```
 
-
 ## Live2D Cubism Core for Web
 
 A library for loading the model.
@@ -47,16 +41,15 @@ A library for loading the model.
 This repository does not manage Cubism Core.
 Download the Cubism SDK for Web from [here](https://www.live2d.com/download/cubism-sdk/download-web/) and copy the files in the Core directory.
 
-
 ## Development environment construction
 
 1. Install [Node.js] and [Visual Studio Code]
 1. Open **the top directory of this SDK** in Visual Studio Code and install the recommended extensions
-    * In addition to pop-up notifications, you can check the others by typing `@recommended` from the Extensions tab
+   - In addition to pop-up notifications, you can check the others by typing `@recommended` from the Extensions tab
 
 ### Operation check of sample demo
 
-Enter `>Tasks: Run Task` in the command palette (*View > Command Palette...*) to display the task list.
+Enter `>Tasks: Run Task` in the command palette (_View > Command Palette..._) to display the task list.
 
 1. Select `npm: install - Samples/TypeScript/Demo` from the task list to download the dependent packages
 1. Select `npm: build - Samples/TypeScript/Demo` from the task list to build the sample demo
@@ -70,17 +63,15 @@ NOTE: Settings for debugging are described in `.vscode/tasks.json`.
 
 ### Project debugging
 
-Open **the top directory of this SDK** in Visual Studio Code and enter the *F5* key to start Debugger for Chrome.
+Open **the top directory of this SDK** in Visual Studio Code and enter the _F5_ key to start Debugger for Chrome.
 
 You can place breakpoints in Visual Studio Code to debug in conjunction with the Chrome browser.
 
 NOTE: Settings for debugging are described in `.vscode/launch.json`.
 
-
 ## SDK manual
 
 [Cubism SDK Manual](https://docs.live2d.com/cubism-sdk-manual/top/)
-
 
 ## Changelog
 
@@ -90,36 +81,33 @@ Framework : [CHANGELOG.md](Framework/CHANGELOG.md)
 
 Core : [CHANGELOG.md](Core/CHANGELOG.md)
 
-
 ## Development environment
 
 ### Node.js
 
-* 24.0.1
-* 22.15.0
-
+- 24.0.1
+- 22.15.0
 
 ## Operation environment
 
-| Platform | Browser | Version |
-| --- | --- | --- |
-| Android | Google Chrome | 136.0.7103.87 |
-| Android | Microsoft Edge | 136.0.3240.50 |
-| Android | Mozilla Firefox | 138.0.2 |
-| iOS / iPadOS | Google Chrome | 136.0.7103.91 |
-| iOS / iPadOS | Microsoft Edge | 136.0.3240.61 |
-| iOS / iPadOS | Mozilla Firefox | 138.1 |
-| iOS / iPadOS | Safari | 18.4 |
-| macOS | Google Chrome | 136.0.7103.93 |
-| macOS | Microsoft Edge | 136.0.3240.64 |
-| macOS | Mozilla Firefox | 138.0.1 |
-| macOS | Safari | 18.4 |
-| Windows | Google Chrome | 136.0.7103.93 |
-| Windows | Microsoft Edge | 136.0.3240.64 |
-| Windows | Mozilla Firefox | 138.0.1 |
+| Platform     | Browser         | Version       |
+| ------------ | --------------- | ------------- |
+| Android      | Google Chrome   | 136.0.7103.87 |
+| Android      | Microsoft Edge  | 136.0.3240.50 |
+| Android      | Mozilla Firefox | 138.0.2       |
+| iOS / iPadOS | Google Chrome   | 136.0.7103.91 |
+| iOS / iPadOS | Microsoft Edge  | 136.0.3240.61 |
+| iOS / iPadOS | Mozilla Firefox | 138.1         |
+| iOS / iPadOS | Safari          | 18.4          |
+| macOS        | Google Chrome   | 136.0.7103.93 |
+| macOS        | Microsoft Edge  | 136.0.3240.64 |
+| macOS        | Mozilla Firefox | 138.0.1       |
+| macOS        | Safari          | 18.4          |
+| Windows      | Google Chrome   | 136.0.7103.93 |
+| Windows      | Microsoft Edge  | 136.0.3240.64 |
+| Windows      | Mozilla Firefox | 138.0.1       |
 
 Note: You can start the server for operation check by running the `serve` script of `./Samples/TypeScript/Demo/package.json`.
-
 
 ## Contributing
 
@@ -136,7 +124,6 @@ We are regularly checking issue-reports and feature requests at Live2D Community
 ### Suggestions
 
 We're also interested in your feedback for the future of the SDK. You can submit a suggestion or feature request at Live2D Community. To make this process more effective, we're asking that you include more information to help define them more clearly.
-
 
 ## Forum
 

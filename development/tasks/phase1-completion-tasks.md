@@ -3,6 +3,7 @@
 ## 1. Idle Animation System
 
 - [x] 1.1 Create `packages/avatar/src/idle-animation.ts` ✅
+
   - [x] Define IdleAnimationConfig interface
   - [x] Implement IdleAnimationSystem class
   - [x] Add breathing cycle logic
@@ -11,6 +12,7 @@
   - [x] Add body sway animation
 
 - [x] 1.2 Update AvatarController ✅
+
   - [x] Integrate IdleAnimationSystem
   - [x] Add idle state configuration
   - [x] Export from index.ts
@@ -20,6 +22,7 @@
 ## 2. Real-Time Audio Pipeline
 
 - [x] 2.1 Create `packages/voice/src/audio-pipeline.ts` ✅
+
   - [x] Define AudioPipelineConfig interface
   - [x] Define AudioPipelineState interface
   - [x] Define AudioPipelineEvent types
@@ -37,6 +40,7 @@
 ## 3. Avatar Demo
 
 - [x] 3.1 Create demo directory structure ✅
+
   - [x] `packages/avatar/demo/index.html`
   - [x] `packages/avatar/demo/avatar-demo.ts`
   - [x] `packages/avatar/demo/styles.css`
@@ -51,6 +55,7 @@
 ## 4. Voice Demo
 
 - [x] 4.1 Create demo directory structure ✅
+
   - [x] `packages/voice/demo/index.html`
   - [x] `packages/voice/demo/voice-demo.ts`
   - [x] `packages/voice/demo/styles.css`
@@ -88,15 +93,15 @@
 
 ## Progress
 
-| Section | Status | Notes |
-|---------|--------|-------|
-| 1. Idle Animation | ✅ Complete | 546 lines, fully tested |
-| 2. Audio Pipeline | ✅ Complete | 525 lines, fully tested |
-| 3. Avatar Demo | ✅ Complete | Interactive HTML demo |
-| 4. Voice Demo | ✅ Complete | Interactive HTML demo |
+| Section               | Status      | Notes                     |
+| --------------------- | ----------- | ------------------------- |
+| 1. Idle Animation     | ✅ Complete | 546 lines, fully tested   |
+| 2. Audio Pipeline     | ✅ Complete | 525 lines, fully tested   |
+| 3. Avatar Demo        | ✅ Complete | Interactive HTML demo     |
+| 4. Voice Demo         | ✅ Complete | Interactive HTML demo     |
 | 5. Avatar-Voice Tests | ✅ Complete | Integration tests passing |
-| 6. Voice-Core Tests | ✅ Complete | 122 tests passing |
-| 7. Roadmap Update | ✅ Complete | |
+| 6. Voice-Core Tests   | ✅ Complete | 122 tests passing         |
+| 7. Roadmap Update     | ✅ Complete |                           |
 
 **Legend**: ⬜ Not Started | 🟡 In Progress | ✅ Complete
 

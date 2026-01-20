@@ -1,8 +1,8 @@
 export function truncateText(text: string, max_len: number) {
   if (text.length > max_len) {
-    return text.slice(0, max_len) + '…'
+    return text.slice(0, max_len) + "…";
   } else {
-    return text
+    return text;
   }
 }
 
@@ -12,34 +12,34 @@ export function truncateText(text: string, max_len: number) {
  * - https://github.com/deltachat/interface/blob/main/uri-schemes.md#invite-links-httpsideltachat-
  */
 export function isInviteLink(url: string) {
-  return url.startsWith('https://i.delta.chat/') && url.includes('#')
+  return url.startsWith("https://i.delta.chat/") && url.includes("#");
 }
 
 export function throttle<R, A extends any[]>(
   fn: (...args: A) => R,
-  wait: number
+  wait: number,
 ) {
   let inThrottle: boolean,
     timeout: ReturnType<typeof setTimeout>,
-    lastTime: number
+    lastTime: number;
   const ret = (...args: A) => {
     if (!inThrottle) {
-      fn(...args)
-      lastTime = performance.now()
-      inThrottle = true
+      fn(...args);
+      lastTime = performance.now();
+      inThrottle = true;
     } else {
-      clearTimeout(timeout)
+      clearTimeout(timeout);
       timeout = setTimeout(
         () => {
-          fn(...args)
-          lastTime = performance.now()
+          fn(...args);
+          lastTime = performance.now();
         },
-        Math.max(wait - (performance.now() - lastTime), 0)
-      )
+        Math.max(wait - (performance.now() - lastTime), 0),
+      );
     }
-  }
+  };
   ret.cancel = () => {
-    clearTimeout(timeout)
-  }
-  return ret
+    clearTimeout(timeout);
+  };
+  return ret;
 }

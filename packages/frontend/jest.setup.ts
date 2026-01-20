@@ -14,7 +14,7 @@
  * adding more mocks here.
  */
 
-import '@testing-library/jest-dom'
+import "@testing-library/jest-dom";
 
 // =============================================================================
 // ESSENTIAL MOCKS - Required for jsdom environment
@@ -25,13 +25,13 @@ import '@testing-library/jest-dom'
  * This is a legitimate mock because WASM isn't supported in the test environment
  */
 jest.mock(
-  '@deltachat/message_parser_wasm',
+  "@deltachat/message_parser_wasm",
   () => ({
     get_first_emoji: jest.fn().mockReturnValue(null),
     parse_text: jest.fn().mockReturnValue([]),
   }),
-  { virtual: true }
-)
+  { virtual: true },
+);
 
 /**
  * Mock runtime interface - Platform-specific (Electron/Tauri)
@@ -41,26 +41,29 @@ jest.mock(
  *
  * The mock tracks RPC calls so tests can verify correct API usage.
  */
-jest.mock('@deltachat-desktop/runtime-interface', () => {
+jest.mock("@deltachat-desktop/runtime-interface", () => {
   const mockEmitter = {
     on: jest.fn(),
     off: jest.fn(),
     emit: jest.fn(),
-  }
+  };
 
   // Track RPC calls for test assertions
-  const rpcCalls: Array<{ method: string; args: unknown[] }> = []
+  const rpcCalls: Array<{ method: string; args: unknown[] }> = [];
 
   const createRpcMock = () => {
-    return new Proxy({}, {
-      get: (_target, method: string) => {
-        return jest.fn((...args: unknown[]) => {
-          rpcCalls.push({ method, args })
-          return Promise.resolve({})
-        })
+    return new Proxy(
+      {},
+      {
+        get: (_target, method: string) => {
+          return jest.fn((...args: unknown[]) => {
+            rpcCalls.push({ method, args });
+            return Promise.resolve({});
+          });
+        },
       },
-    })
-  }
+    );
+  };
 
   return {
     runtime: {
@@ -76,9 +79,11 @@ jest.mock('@deltachat-desktop/runtime-interface', () => {
     },
     // Expose for test assertions
     __getRpcCalls: () => rpcCalls,
-    __clearRpcCalls: () => { rpcCalls.length = 0 },
-  }
-})
+    __clearRpcCalls: () => {
+      rpcCalls.length = 0;
+    },
+  };
+});
 
 // =============================================================================
 // TYPE DEFINITIONS
@@ -87,17 +92,17 @@ jest.mock('@deltachat-desktop/runtime-interface', () => {
 declare global {
   namespace jest {
     interface Matchers<R> {
-      toBeInTheDocument(): R
-      toHaveTextContent(text: string): R
-      toHaveValue(value: string | number): R
-      toBeDisabled(): R
-      toHaveAttribute(attr: string, value?: string): R
-      toHaveClass(className: string): R
-      toHaveStyle(style: Record<string, unknown>): R
-      toBeVisible(): R
-      toBeChecked(): R
-      toContainElement(element: HTMLElement | null): R
-      toHaveLength(length: number): R
+      toBeInTheDocument(): R;
+      toHaveTextContent(text: string): R;
+      toHaveValue(value: string | number): R;
+      toBeDisabled(): R;
+      toHaveAttribute(attr: string, value?: string): R;
+      toHaveClass(className: string): R;
+      toHaveStyle(style: Record<string, unknown>): R;
+      toBeVisible(): R;
+      toBeChecked(): R;
+      toContainElement(element: HTMLElement | null): R;
+      toHaveLength(length: number): R;
     }
   }
 }
@@ -111,30 +116,32 @@ declare global {
  * This implementation stores data so tests can verify storage operations
  */
 const localStorageMock = (() => {
-  let store: Record<string, string> = {}
+  let store: Record<string, string> = {};
   return {
     getItem: jest.fn((key: string) => store[key] || null),
     setItem: jest.fn((key: string, value: string) => {
-      store[key] = value
+      store[key] = value;
     }),
     clear: jest.fn(() => {
-      store = {}
+      store = {};
     }),
     removeItem: jest.fn((key: string) => {
-      delete store[key]
+      delete store[key];
     }),
     // Helpers for test assertions
     __getStore: () => ({ ...store }),
-    __setStore: (newStore: Record<string, string>) => { store = newStore },
-  }
-})()
+    __setStore: (newStore: Record<string, string>) => {
+      store = newStore;
+    },
+  };
+})();
 
-Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+Object.defineProperty(window, "localStorage", { value: localStorageMock });
 
 // Window dialogs - not available in jsdom
 // Default confirm to true so tests don't hang
-window.confirm = jest.fn(() => true)
-window.alert = jest.fn()
+window.confirm = jest.fn(() => true);
+window.alert = jest.fn();
 
 // =============================================================================
 // TEST LIFECYCLE
@@ -142,14 +149,14 @@ window.alert = jest.fn()
 
 beforeEach(() => {
   // Clear localStorage between tests for isolation
-  localStorageMock.clear()
-  localStorageMock.__setStore({})
-})
+  localStorageMock.clear();
+  localStorageMock.__setStore({});
+});
 
 afterEach(() => {
   // Clear mock call history but preserve implementations
-  jest.clearAllMocks()
-})
+  jest.clearAllMocks();
+});
 
 // =============================================================================
 // EXPORTED TEST UTILITIES
@@ -159,4 +166,4 @@ afterEach(() => {
  * Get the localStorage mock for test assertions
  * Usage: getLocalStorageMock().__getStore() to inspect stored values
  */
-export const getLocalStorageMock = () => localStorageMock
+export const getLocalStorageMock = () => localStorageMock;

@@ -1,15 +1,12 @@
-import { getLogger } from 'deep-tree-echo-core';
-import * as net from 'net';
-import * as fs from 'fs';
-import * as path from 'path';
-import { EventEmitter } from 'events';
-import { StorageManager } from './storage-manager.js';
-import {
-  IPCMessageType,
-  type IPCMessage,
-} from '@deltecho/ipc';
+import { getLogger } from "deep-tree-echo-core";
+import * as net from "net";
+import * as fs from "fs";
+import * as path from "path";
+import { EventEmitter } from "events";
+import { StorageManager } from "./storage-manager.js";
+import { IPCMessageType, type IPCMessage } from "@deltecho/ipc";
 
-const log = getLogger('deep-tree-echo-orchestrator/IPCServer');
+const log = getLogger("deep-tree-echo-orchestrator/IPCServer");
 
 /**
  * IPC request handler function type
@@ -27,7 +24,7 @@ export interface IPCServerConfig {
 }
 
 const DEFAULT_CONFIG: IPCServerConfig = {
-  socketPath: '/tmp/deep-tree-echo.sock',
+  socketPath: "/tmp/deep-tree-echo.sock",
   tcpPort: 9876,
   useTcp: false,
   maxConnections: 10,
@@ -69,9 +66,12 @@ export class IPCServer extends EventEmitter {
       return {
         running: this.running,
         uptime: process.uptime(),
-        version: '2.1.0',
+        version: "2.1.0",
         components: {
-          ipc: { status: this.running ? 'running' : 'stopped', clientCount: this.clients.size }
+          ipc: {
+            status: this.running ? "running" : "stopped",
+            clientCount: this.clients.size,
+          },
         },
         processingStats: {
           totalMessages: 0,
@@ -79,8 +79,8 @@ export class IPCServer extends EventEmitter {
           sys6TierMessages: 0,
           membraneTierMessages: 0,
           aarEnhancedMessages: 0,
-          averageComplexity: 0
-        }
+          averageComplexity: 0,
+        },
       };
     });
 
@@ -128,11 +128,14 @@ export class IPCServer extends EventEmitter {
       return { success: true };
     });
 
-    this.registerHandler(IPCMessageType.STORAGE_DELETE, async (payload: any) => {
-      const { key } = payload;
-      await this.storageManager.delete(key);
-      return { success: true };
-    });
+    this.registerHandler(
+      IPCMessageType.STORAGE_DELETE,
+      async (payload: any) => {
+        const { key } = payload;
+        await this.storageManager.delete(key);
+        return { success: true };
+      },
+    );
 
     this.registerHandler(IPCMessageType.STORAGE_CLEAR, async (payload: any) => {
       const { prefix } = payload || {};
@@ -150,7 +153,10 @@ export class IPCServer extends EventEmitter {
   /**
    * Register a request handler
    */
-  public registerHandler(type: IPCMessageType | string, handler: IPCRequestHandler): void {
+  public registerHandler(
+    type: IPCMessageType | string,
+    handler: IPCRequestHandler,
+  ): void {
     this.handlers.set(type, handler);
     log.info(`Registered handler for ${type}`);
   }
@@ -160,17 +166,19 @@ export class IPCServer extends EventEmitter {
    */
   public async start(): Promise<void> {
     if (this.running) {
-      log.warn('IPC server is already running');
+      log.warn("IPC server is already running");
       return;
     }
 
-    log.info('Starting IPC server...');
+    log.info("Starting IPC server...");
 
     return new Promise((resolve, reject) => {
       try {
         if (this.config.useTcp) {
           // TCP server
-          this.server = net.createServer((socket) => this.handleConnection(socket));
+          this.server = net.createServer((socket) =>
+            this.handleConnection(socket),
+          );
           this.server.listen(this.config.tcpPort, () => {
             log.info(`IPC server listening on TCP port ${this.config.tcpPort}`);
             this.running = true;
@@ -191,7 +199,9 @@ export class IPCServer extends EventEmitter {
             fs.mkdirSync(socketDir, { recursive: true });
           }
 
-          this.server = net.createServer((socket) => this.handleConnection(socket));
+          this.server = net.createServer((socket) =>
+            this.handleConnection(socket),
+          );
           this.server.listen(socketPath, () => {
             log.info(`IPC server listening on socket ${socketPath}`);
             this.running = true;
@@ -199,18 +209,18 @@ export class IPCServer extends EventEmitter {
           });
         }
 
-        this.server.on('error', (error) => {
-          log.error('IPC server error:', error);
-          this.emit('error', error);
+        this.server.on("error", (error) => {
+          log.error("IPC server error:", error);
+          this.emit("error", error);
           reject(error);
         });
 
-        this.server.on('close', () => {
-          log.info('IPC server closed');
+        this.server.on("close", () => {
+          log.info("IPC server closed");
           this.running = false;
         });
       } catch (error) {
-        log.error('Failed to start IPC server:', error);
+        log.error("Failed to start IPC server:", error);
         reject(error);
       }
     });
@@ -230,16 +240,16 @@ export class IPCServer extends EventEmitter {
 
     log.info(`Client connected: ${clientId}`);
     this.clients.set(clientId, socket);
-    this.emit('client_connected', { clientId });
+    this.emit("client_connected", { clientId });
 
-    let buffer = '';
+    let buffer = "";
 
-    socket.on('data', async (data) => {
+    socket.on("data", async (data) => {
       buffer += data.toString();
 
       // Process complete messages (newline-delimited JSON)
-      const lines = buffer.split('\n');
-      buffer = lines.pop() || ''; // Keep incomplete line in buffer
+      const lines = buffer.split("\n");
+      buffer = lines.pop() || ""; // Keep incomplete line in buffer
 
       for (const line of lines) {
         if (line.trim()) {
@@ -248,13 +258,13 @@ export class IPCServer extends EventEmitter {
             await this.handleMessage(clientId, message, socket);
           } catch (error) {
             log.error(`Failed to parse message from ${clientId}:`, error);
-            this.sendError(socket, 'parse_error', 'Invalid JSON message');
+            this.sendError(socket, "parse_error", "Invalid JSON message");
           }
         }
       }
     });
 
-    socket.on('close', () => {
+    socket.on("close", () => {
       log.info(`Client disconnected: ${clientId}`);
       this.clients.delete(clientId);
 
@@ -263,10 +273,10 @@ export class IPCServer extends EventEmitter {
         subscribers.delete(clientId);
       }
 
-      this.emit('client_disconnected', { clientId });
+      this.emit("client_disconnected", { clientId });
     });
 
-    socket.on('error', (error) => {
+    socket.on("error", (error) => {
       log.error(`Client ${clientId} error:`, error);
       this.clients.delete(clientId);
     });
@@ -278,20 +288,29 @@ export class IPCServer extends EventEmitter {
   private async handleMessage(
     clientId: string,
     message: IPCMessage,
-    socket: net.Socket
+    socket: net.Socket,
   ): Promise<void> {
     log.debug(`Received message from ${clientId}: ${message.type}`);
 
     const handler = this.handlers.get(message.type);
 
     if (!handler) {
-      this.sendError(socket, message.id, `Unknown message type: ${message.type}`);
+      this.sendError(
+        socket,
+        message.id,
+        `Unknown message type: ${message.type}`,
+      );
       return;
     }
 
     try {
       const result = await handler({ ...(message.payload || {}), clientId });
-      this.sendResponse(socket, message.id, IPCMessageType.RESPONSE_SUCCESS, result);
+      this.sendResponse(
+        socket,
+        message.id,
+        IPCMessageType.RESPONSE_SUCCESS,
+        result,
+      );
     } catch (error) {
       log.error(`Handler error for ${message.type}:`, error);
       this.sendError(socket, message.id, (error as Error).message);
@@ -305,7 +324,7 @@ export class IPCServer extends EventEmitter {
     socket: net.Socket,
     requestId: string,
     type: IPCMessageType,
-    payload: any
+    payload: any,
   ): void {
     const response: IPCMessage = {
       id: requestId,
@@ -313,14 +332,20 @@ export class IPCServer extends EventEmitter {
       payload,
       timestamp: Date.now(),
     };
-    socket.write(JSON.stringify(response) + '\n');
+    socket.write(JSON.stringify(response) + "\n");
   }
 
   /**
    * Send error response to client
    */
-  private sendError(socket: net.Socket, requestId: string, message: string): void {
-    this.sendResponse(socket, requestId, IPCMessageType.RESPONSE_ERROR, { error: message });
+  private sendError(
+    socket: net.Socket,
+    requestId: string,
+    message: string,
+  ): void {
+    this.sendResponse(socket, requestId, IPCMessageType.RESPONSE_ERROR, {
+      error: message,
+    });
   }
 
   /**
@@ -337,7 +362,7 @@ export class IPCServer extends EventEmitter {
       timestamp: Date.now(),
     };
 
-    const messageStr = JSON.stringify(message) + '\n';
+    const messageStr = JSON.stringify(message) + "\n";
 
     for (const clientId of subscribers) {
       const socket = this.clients.get(clientId);
@@ -350,7 +375,11 @@ export class IPCServer extends EventEmitter {
   /**
    * Send message to specific client
    */
-  public sendToClient(clientId: string, type: IPCMessageType, payload: any): boolean {
+  public sendToClient(
+    clientId: string,
+    type: IPCMessageType,
+    payload: any,
+  ): boolean {
     const socket = this.clients.get(clientId);
     if (!socket || socket.destroyed) return false;
 
@@ -361,7 +390,7 @@ export class IPCServer extends EventEmitter {
       timestamp: Date.now(),
     };
 
-    socket.write(JSON.stringify(message) + '\n');
+    socket.write(JSON.stringify(message) + "\n");
     return true;
   }
 
@@ -371,7 +400,7 @@ export class IPCServer extends EventEmitter {
   public async stop(): Promise<void> {
     if (!this.running) return;
 
-    log.info('Stopping IPC server...');
+    log.info("Stopping IPC server...");
 
     return new Promise((resolve) => {
       // Close all client connections
@@ -391,13 +420,13 @@ export class IPCServer extends EventEmitter {
                 fs.unlinkSync(this.config.socketPath);
               }
             } catch (error) {
-              log.warn('Failed to clean up socket file:', error);
+              log.warn("Failed to clean up socket file:", error);
             }
           }
 
           this.server = null;
           this.running = false;
-          log.info('IPC server stopped');
+          log.info("IPC server stopped");
           resolve();
         });
       } else {

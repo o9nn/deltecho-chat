@@ -58,20 +58,20 @@ Telegram bot with:
 - Cognitive AI responses
 
 ```typescript
-import { createTelegramBot } from '@deltecho/integrations/telegram';
+import { createTelegramBot } from "@deltecho/integrations/telegram";
 
 const bot = createTelegramBot({
-    token: process.env.TELEGRAM_BOT_TOKEN!,
-    parseMode: 'HTML',
+  token: process.env.TELEGRAM_BOT_TOKEN!,
+  parseMode: "HTML",
 });
 
 // Register custom commands
 bot.registerCommand({
-    name: 'info',
-    description: 'Get bot information',
-    execute: async () => ({
-        content: '<b>Deep Tree Echo</b>\n\nA cognitive AI assistant.'
-    }),
+  name: "info",
+  description: "Get bot information",
+  execute: async () => ({
+    content: "<b>Deep Tree Echo</b>\n\nA cognitive AI assistant.",
+  }),
 });
 
 await bot.start();
@@ -87,32 +87,34 @@ Browser-native LLM inference using WebGPU:
 - Memory-efficient quantization
 
 ```typescript
-import { createWebGPUEngine } from '@deltecho/integrations/webgpu';
+import { createWebGPUEngine } from "@deltecho/integrations/webgpu";
 
 // Check support
 if (await WebGPUInferenceEngine.isSupported()) {
-    const engine = createWebGPUEngine({
-        model: {
-            id: 'microsoft/phi-3-mini-4k-instruct',
-            type: 'phi-3',
-        },
-        quantization: 'int4',
-        streaming: true,
-    });
+  const engine = createWebGPUEngine({
+    model: {
+      id: "microsoft/phi-3-mini-4k-instruct",
+      type: "phi-3",
+    },
+    quantization: "int4",
+    streaming: true,
+  });
 
-    // Load model with progress
-    await engine.loadModel((progress) => {
-        console.log(`${progress.stage}: ${progress.progress}%`);
-    });
+  // Load model with progress
+  await engine.loadModel((progress) => {
+    console.log(`${progress.stage}: ${progress.progress}%`);
+  });
 
-    // Generate response
-    const result = await engine.generate({
-        prompt: 'What is quantum computing?',
-        systemMessage: 'You are a helpful assistant.',
-        onToken: (token) => process.stdout.write(token),
-    });
+  // Generate response
+  const result = await engine.generate({
+    prompt: "What is quantum computing?",
+    systemMessage: "You are a helpful assistant.",
+    onToken: (token) => process.stdout.write(token),
+  });
 
-    console.log(`\n\nGenerated ${result.outputTokens} tokens in ${result.generationTimeMs}ms`);
+  console.log(
+    `\n\nGenerated ${result.outputTokens} tokens in ${result.generationTimeMs}ms`,
+  );
 }
 ```
 
@@ -120,28 +122,28 @@ if (await WebGPUInferenceEngine.isSupported()) {
 
 ### Discord
 
-| Export | Description |
-|--------|-------------|
-| `DiscordBot` | Main Discord bot class |
-| `createDiscordBot(config)` | Factory function |
-| `DiscordColors` | Color presets for embeds |
-| `DEFAULT_DISCORD_CONFIG` | Default configuration |
+| Export                     | Description              |
+| -------------------------- | ------------------------ |
+| `DiscordBot`               | Main Discord bot class   |
+| `createDiscordBot(config)` | Factory function         |
+| `DiscordColors`            | Color presets for embeds |
+| `DEFAULT_DISCORD_CONFIG`   | Default configuration    |
 
 ### Telegram
 
-| Export | Description |
-|--------|-------------|
-| `TelegramBot` | Main Telegram bot class |
-| `createTelegramBot(config)` | Factory function |
-| `DEFAULT_TELEGRAM_CONFIG` | Default configuration |
+| Export                      | Description             |
+| --------------------------- | ----------------------- |
+| `TelegramBot`               | Main Telegram bot class |
+| `createTelegramBot(config)` | Factory function        |
+| `DEFAULT_TELEGRAM_CONFIG`   | Default configuration   |
 
 ### WebGPU
 
-| Export | Description |
-|--------|-------------|
-| `WebGPUInferenceEngine` | Main inference engine class |
-| `createWebGPUEngine(config)` | Factory function |
-| `DEFAULT_WEBGPU_CONFIG` | Default configuration |
+| Export                       | Description                 |
+| ---------------------------- | --------------------------- |
+| `WebGPUInferenceEngine`      | Main inference engine class |
+| `createWebGPUEngine(config)` | Factory function            |
+| `DEFAULT_WEBGPU_CONFIG`      | Default configuration       |
 
 ## Shared Types
 
@@ -149,28 +151,28 @@ All integrations share common types:
 
 ```typescript
 interface PlatformMessage {
+  id: string;
+  platform: "discord" | "telegram" | "webgpu-local";
+  content: string;
+  author: {
     id: string;
-    platform: 'discord' | 'telegram' | 'webgpu-local';
-    content: string;
-    author: {
-        id: string;
-        username: string;
-        displayName?: string;
-        isBot?: boolean;
-    };
-    channel: {
-        id: string;
-        name?: string;
-        type: 'dm' | 'group' | 'guild' | 'channel';
-    };
-    timestamp: Date;
+    username: string;
+    displayName?: string;
+    isBot?: boolean;
+  };
+  channel: {
+    id: string;
+    name?: string;
+    type: "dm" | "group" | "guild" | "channel";
+  };
+  timestamp: Date;
 }
 
 interface BotCommand {
-    name: string;
-    description: string;
-    aliases?: string[];
-    execute: (ctx: CommandContext) => Promise<PlatformResponse | void>;
+  name: string;
+  description: string;
+  aliases?: string[];
+  execute: (ctx: CommandContext) => Promise<PlatformResponse | void>;
 }
 ```
 

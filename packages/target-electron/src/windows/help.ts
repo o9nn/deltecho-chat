@@ -1,56 +1,56 @@
-import { BrowserWindow, Menu, shell } from 'electron'
-import { join } from 'path'
-import { stat } from 'fs/promises'
-import { platform } from 'os'
+import { BrowserWindow, Menu, shell } from "electron";
+import { join } from "path";
+import { stat } from "fs/promises";
+import { platform } from "os";
 
-import { appIcon, htmlDistDir } from '../application-constants.js'
-import { getLogger } from '../../../shared/logger.js'
-import { appWindowTitle } from '../../../shared/constants.js'
-import { tx } from '../load-translations.js'
-import { window as main_window } from './main.js'
+import { appIcon, htmlDistDir } from "../application-constants.js";
+import { getLogger } from "../../../shared/logger.js";
+import { appWindowTitle } from "../../../shared/constants.js";
+import { tx } from "../load-translations.js";
+import { window as main_window } from "./main.js";
 import {
   getAppMenu,
   getFileMenu,
   getHelpMenu,
   refresh as refreshTitleMenu,
-} from '../menu.js'
-import { initMinWinDimensionHandling } from './helpers.js'
-import { setContentProtection } from '../content-protection.js'
+} from "../menu.js";
+import { initMinWinDimensionHandling } from "./helpers.js";
+import { setContentProtection } from "../content-protection.js";
 
-const log = getLogger('main/help')
+const log = getLogger("main/help");
 
 async function getHelpFileForLang(locale: string) {
-  const contentFilePath = join(htmlDistDir(), `help/${locale}/help.html`)
+  const contentFilePath = join(htmlDistDir(), `help/${locale}/help.html`);
   try {
     if (!(await stat(join(contentFilePath))).isFile()) {
-      log.warn('contentFilePath not a file')
-      throw new Error('contentFilePath not a file')
+      log.warn("contentFilePath not a file");
+      throw new Error("contentFilePath not a file");
     }
-    return contentFilePath
+    return contentFilePath;
   } catch (error) {
     log.warn(
-      `Did not find help file for language ${locale}, falling back to english`
-    )
-    return join(htmlDistDir(), `help/en/help.html`)
+      `Did not find help file for language ${locale}, falling back to english`,
+    );
+    return join(htmlDistDir(), `help/en/help.html`);
   }
 }
 
-let win: BrowserWindow | null = null
+let win: BrowserWindow | null = null;
 
 export async function openHelpWindow(locale: string, anchor?: string) {
   if (win) {
-    win.focus()
+    win.focus();
     if (anchor) {
       win.webContents.executeJavaScript(`
         document.getElementById(atob("${btoa(
-          anchor
+          anchor,
         )}"))?.scrollIntoView({"behavior":"smooth"})
-      `)
+      `);
     }
-    return
+    return;
   }
 
-  log.debug('open help', locale)
+  log.debug("open help", locale);
   const defaults = {
     bounds: {
       width: 500,
@@ -59,14 +59,14 @@ export async function openHelpWindow(locale: string, anchor?: string) {
     headerHeight: 36,
     minWidth: 450,
     minHeight: 450,
-  }
+  };
   const help_window = (win = new BrowserWindow({
-    backgroundColor: '#282828',
+    backgroundColor: "#282828",
     darkTheme: true, // Forces dark theme (GTK+3)
 
     icon: appIcon(),
     show: false,
-    title: appWindowTitle + ' - ' + tx('menu_help'),
+    title: appWindowTitle + " - " + tx("menu_help"),
     useContentSize: true, // Specify web page size without OS chrome
 
     webPreferences: {
@@ -75,65 +75,67 @@ export async function openHelpWindow(locale: string, anchor?: string) {
       spellcheck: false,
     },
     alwaysOnTop: main_window?.isAlwaysOnTop(),
-  }))
+  }));
 
-  setContentProtection(help_window)
+  setContentProtection(help_window);
 
   const removeScreenChangeListeners = initMinWinDimensionHandling(
     help_window,
     defaults.minWidth,
-    defaults.minHeight
-  )
+    defaults.minHeight,
+  );
 
-  const url = await getHelpFileForLang(locale)
+  const url = await getHelpFileForLang(locale);
 
-  log.debug(url)
+  log.debug(url);
 
-  win.loadFile(url)
+  win.loadFile(url);
 
-  win.once('ready-to-show', async () => {
+  win.once("ready-to-show", async () => {
     if (anchor) {
       await help_window.webContents.executeJavaScript(`
       document.getElementById(atob("${btoa(
-        anchor
+        anchor,
       )}"))?.scrollIntoView({"behavior":"instant"})
-      `)
+      `);
     }
-    help_window.show()
-  })
+    help_window.show();
+  });
 
   if (win.setSheetOffset) {
-    win.setSheetOffset(defaults.headerHeight)
+    win.setSheetOffset(defaults.headerHeight);
   }
 
-  win.webContents.on('will-navigate', (_ev, url) => {
-    log.debug('open ', url)
-    shell.openExternal(url)
-  })
+  win.webContents.on("will-navigate", (_ev, url) => {
+    log.debug("open ", url);
+    shell.openExternal(url);
+  });
 
-  win.on('close', _e => {
-    win = null
-    removeScreenChangeListeners()
-  })
+  win.on("close", (_e) => {
+    win = null;
+    removeScreenChangeListeners();
+  });
 
-  win.setMenu(Menu.buildFromTemplate([{ role: 'viewMenu' }]))
+  win.setMenu(Menu.buildFromTemplate([{ role: "viewMenu" }]));
 
   win.webContents.executeJavaScript(`
     const body = document.getElementsByTagName('body')[0];
     const back_btn = document.createElement('button');
     back_btn.className = 'back-btn';
     back_btn.onclick = (ev) => {document.body.scrollTop = 0; document.documentElement.scrollTop = 0;};
-    back_btn.innerText = '↑ ${tx('menu_scroll_to_top')}';
+    back_btn.innerText = '↑ ${tx("menu_scroll_to_top")}';
     body.append(back_btn);
-  `)
+  `);
 
   // help does not need web permissions so deny all
-  win.webContents.session.setPermissionCheckHandler((_wc, _permission) => false)
+  win.webContents.session.setPermissionCheckHandler(
+    (_wc, _permission) => false,
+  );
   win.webContents.session.setPermissionRequestHandler(
-    (_wc, _permission, callback) => callback(false)
-  )
+    (_wc, _permission, callback) => callback(false),
+  );
 
-  const isMac = platform() === 'darwin'
+  const isMac = platform() === "darwin";
 
   // copied and adapted from webxdc menu
   // TODO: would make sense to refactor these menus at some point
@@ -142,60 +144,60 @@ export async function openHelpWindow(locale: string, anchor?: string) {
       ...(isMac ? [getAppMenu(help_window)] : []),
       getFileMenu(win, isMac),
       {
-        label: tx('global_menu_edit_desktop'),
+        label: tx("global_menu_edit_desktop"),
         submenu: [
           {
-            label: tx('global_menu_edit_copy_desktop'),
-            role: 'copy',
+            label: tx("global_menu_edit_copy_desktop"),
+            role: "copy",
           },
           {
-            label: tx('menu_select_all'),
-            role: 'selectAll',
+            label: tx("menu_select_all"),
+            role: "selectAll",
           },
         ],
       },
       {
-        label: tx('global_menu_view_desktop'),
+        label: tx("global_menu_view_desktop"),
         submenu: [
-          { role: 'resetZoom' },
-          { role: 'zoomIn' },
-          { role: 'zoomOut' },
-          { type: 'separator' },
+          { role: "resetZoom" },
+          { role: "zoomIn" },
+          { role: "zoomOut" },
+          { type: "separator" },
           {
-            label: tx('global_menu_view_floatontop_desktop'),
-            type: 'checkbox',
+            label: tx("global_menu_view_floatontop_desktop"),
+            type: "checkbox",
             checked: win?.isAlwaysOnTop(),
             click: () => {
-              win?.setAlwaysOnTop(!win.isAlwaysOnTop())
+              win?.setAlwaysOnTop(!win.isAlwaysOnTop());
               if (isMac) {
-                win?.setMenu(makeMenu())
+                win?.setMenu(makeMenu());
               } else {
                 // change to window menu
-                Menu.setApplicationMenu(makeMenu())
+                Menu.setApplicationMenu(makeMenu());
               }
             },
           },
-          { role: 'togglefullscreen' },
+          { role: "togglefullscreen" },
         ],
       },
       getHelpMenu(isMac),
-    ])
-  }
+    ]);
+  };
 
   if (!isMac) {
-    win.setMenu(makeMenu())
+    win.setMenu(makeMenu());
   }
 
-  win.on('focus', () => {
+  win.on("focus", () => {
     if (isMac) {
       // change to help menu
-      Menu.setApplicationMenu(makeMenu())
+      Menu.setApplicationMenu(makeMenu());
     }
-  })
-  win.on('blur', () => {
+  });
+  win.on("blur", () => {
     if (isMac) {
       // change back to main-window menu
-      refreshTitleMenu()
+      refreshTitleMenu();
     }
-  })
+  });
 }

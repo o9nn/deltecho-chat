@@ -4,7 +4,7 @@
  * Enables communication with Web Workers
  */
 
-import type { Subscription, TransportAdapter, WireMessage } from '../types.js';
+import type { Subscription, TransportAdapter, WireMessage } from "../types.js";
 
 /**
  * Create an eventa transport adapter for the main thread (to communicate with a worker)
@@ -19,48 +19,49 @@ import type { Subscription, TransportAdapter, WireMessage } from '../types.js';
  * const result = await context.invoke(heavyComputation, { data: [...] });
  * ```
  */
-export function createWorkerAdapter(
-    worker: Worker
-): { adapter: TransportAdapter; context: ReturnType<typeof import('../core/context.js').createContext> } {
-    let messageHandler: ((message: WireMessage) => void) | null = null;
+export function createWorkerAdapter(worker: Worker): {
+  adapter: TransportAdapter;
+  context: ReturnType<typeof import("../core/context.js").createContext>;
+} {
+  let messageHandler: ((message: WireMessage) => void) | null = null;
 
-    const workerListener = (event: MessageEvent) => {
-        if (event.data && event.data.type && event.data.eventId) {
-            if (messageHandler) {
-                messageHandler(event.data as WireMessage);
-            }
-        }
-    };
+  const workerListener = (event: MessageEvent) => {
+    if (event.data && event.data.type && event.data.eventId) {
+      if (messageHandler) {
+        messageHandler(event.data as WireMessage);
+      }
+    }
+  };
 
-    worker.addEventListener('message', workerListener);
+  worker.addEventListener("message", workerListener);
 
-    const adapter: TransportAdapter = {
-        send(message: WireMessage): void {
-            worker.postMessage(message);
+  const adapter: TransportAdapter = {
+    send(message: WireMessage): void {
+      worker.postMessage(message);
+    },
+
+    onMessage(handler: (message: WireMessage) => void): Subscription {
+      messageHandler = handler;
+      return {
+        unsubscribe: () => {
+          messageHandler = null;
+          worker.removeEventListener("message", workerListener);
         },
+      };
+    },
 
-        onMessage(handler: (message: WireMessage) => void): Subscription {
-            messageHandler = handler;
-            return {
-                unsubscribe: () => {
-                    messageHandler = null;
-                    worker.removeEventListener('message', workerListener);
-                },
-            };
-        },
+    close(): void {
+      worker.removeEventListener("message", workerListener);
+      worker.terminate();
+    },
+  };
 
-        close(): void {
-            worker.removeEventListener('message', workerListener);
-            worker.terminate();
-        },
-    };
+  // Create a context and attach the adapter
+  const { createContext } = require("../core/context.js");
+  const context = createContext({ contextId: "worker-main" });
+  context.attachTransport(adapter);
 
-    // Create a context and attach the adapter
-    const { createContext } = require('../core/context.js');
-    const context = createContext({ contextId: 'worker-main' });
-    context.attachTransport(adapter);
-
-    return { adapter, context };
+  return { adapter, context };
 }
 
 /**
@@ -82,99 +83,106 @@ export function createWorkerAdapter(
  * ```
  */
 export function createWorkerSelfAdapter(): {
-    adapter: TransportAdapter;
-    context: ReturnType<typeof import('../core/context.js').createContext>;
+  adapter: TransportAdapter;
+  context: ReturnType<typeof import("../core/context.js").createContext>;
 } {
-    let messageHandler: ((message: WireMessage) => void) | null = null;
+  let messageHandler: ((message: WireMessage) => void) | null = null;
 
-    // 'self' in a worker context is the global scope
-    const workerScope = self as unknown as {
-        addEventListener(type: string, listener: (event: MessageEvent) => void): void;
-        removeEventListener(type: string, listener: (event: MessageEvent) => void): void;
-        postMessage(message: unknown): void;
-    };
+  // 'self' in a worker context is the global scope
+  const workerScope = self as unknown as {
+    addEventListener(
+      type: string,
+      listener: (event: MessageEvent) => void,
+    ): void;
+    removeEventListener(
+      type: string,
+      listener: (event: MessageEvent) => void,
+    ): void;
+    postMessage(message: unknown): void;
+  };
 
-    const selfListener = (event: MessageEvent) => {
-        if (event.data && event.data.type && event.data.eventId) {
-            if (messageHandler) {
-                messageHandler(event.data as WireMessage);
-            }
-        }
-    };
+  const selfListener = (event: MessageEvent) => {
+    if (event.data && event.data.type && event.data.eventId) {
+      if (messageHandler) {
+        messageHandler(event.data as WireMessage);
+      }
+    }
+  };
 
-    workerScope.addEventListener('message', selfListener);
+  workerScope.addEventListener("message", selfListener);
 
-    const adapter: TransportAdapter = {
-        send(message: WireMessage): void {
-            workerScope.postMessage(message);
+  const adapter: TransportAdapter = {
+    send(message: WireMessage): void {
+      workerScope.postMessage(message);
+    },
+
+    onMessage(handler: (message: WireMessage) => void): Subscription {
+      messageHandler = handler;
+      return {
+        unsubscribe: () => {
+          messageHandler = null;
+          workerScope.removeEventListener("message", selfListener);
         },
+      };
+    },
 
-        onMessage(handler: (message: WireMessage) => void): Subscription {
-            messageHandler = handler;
-            return {
-                unsubscribe: () => {
-                    messageHandler = null;
-                    workerScope.removeEventListener('message', selfListener);
-                },
-            };
-        },
+    close(): void {
+      workerScope.removeEventListener("message", selfListener);
+    },
+  };
 
-        close(): void {
-            workerScope.removeEventListener('message', selfListener);
-        },
-    };
+  // Create a context and attach the adapter
+  const { createContext } = require("../core/context.js");
+  const context = createContext({ contextId: "worker-self" });
+  context.attachTransport(adapter);
 
-    // Create a context and attach the adapter
-    const { createContext } = require('../core/context.js');
-    const context = createContext({ contextId: 'worker-self' });
-    context.attachTransport(adapter);
-
-    return { adapter, context };
+  return { adapter, context };
 }
 
 /**
  * Create a SharedWorker adapter
  */
-export function createSharedWorkerAdapter(
-    port: MessagePort
-): { adapter: TransportAdapter; context: ReturnType<typeof import('../core/context.js').createContext> } {
-    let messageHandler: ((message: WireMessage) => void) | null = null;
+export function createSharedWorkerAdapter(port: MessagePort): {
+  adapter: TransportAdapter;
+  context: ReturnType<typeof import("../core/context.js").createContext>;
+} {
+  let messageHandler: ((message: WireMessage) => void) | null = null;
 
-    const portListener = (event: MessageEvent) => {
-        if (event.data && event.data.type && event.data.eventId) {
-            if (messageHandler) {
-                messageHandler(event.data as WireMessage);
-            }
-        }
-    };
+  const portListener = (event: MessageEvent) => {
+    if (event.data && event.data.type && event.data.eventId) {
+      if (messageHandler) {
+        messageHandler(event.data as WireMessage);
+      }
+    }
+  };
 
-    port.addEventListener('message', portListener);
-    port.start();
+  port.addEventListener("message", portListener);
+  port.start();
 
-    const adapter: TransportAdapter = {
-        send(message: WireMessage): void {
-            port.postMessage(message);
+  const adapter: TransportAdapter = {
+    send(message: WireMessage): void {
+      port.postMessage(message);
+    },
+
+    onMessage(handler: (message: WireMessage) => void): Subscription {
+      messageHandler = handler;
+      return {
+        unsubscribe: () => {
+          messageHandler = null;
+          port.removeEventListener("message", portListener);
         },
+      };
+    },
 
-        onMessage(handler: (message: WireMessage) => void): Subscription {
-            messageHandler = handler;
-            return {
-                unsubscribe: () => {
-                    messageHandler = null;
-                    port.removeEventListener('message', portListener);
-                },
-            };
-        },
+    close(): void {
+      port.removeEventListener("message", portListener);
+      port.close();
+    },
+  };
 
-        close(): void {
-            port.removeEventListener('message', portListener);
-            port.close();
-        },
-    };
+  const { createContext } = require("../core/context.js");
+  const context = createContext({ contextId: "shared-worker" });
+  context.attachTransport(adapter);
 
-    const { createContext } = require('../core/context.js');
-    const context = createContext({ contextId: 'shared-worker' });
-    context.attachTransport(adapter);
-
-    return { adapter, context };
+  return { adapter, context };
 }

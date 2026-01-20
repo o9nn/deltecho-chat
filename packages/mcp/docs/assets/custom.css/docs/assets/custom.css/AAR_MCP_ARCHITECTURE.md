@@ -47,31 +47,31 @@ NOTATION: [ Ao [ Ai [ S ( Vi ( Vo ) ) ] ] ]
 
 **Role**: The "World" context provider for all participants
 
-| Component | Description |
-|-----------|-------------|
-| **Resources** | Session frames, narrative phases, Yggdrasil Reservoir, global threads |
-| **Tools** | `orchestrate`, `createSessionFrame`, `transitionNarrativePhase`, `addLore` |
-| **Prompts** | World-context injection, narrative weaving, orchestration directives |
+| Component     | Description                                                                |
+| ------------- | -------------------------------------------------------------------------- |
+| **Resources** | Session frames, narrative phases, Yggdrasil Reservoir, global threads      |
+| **Tools**     | `orchestrate`, `createSessionFrame`, `transitionNarrativePhase`, `addLore` |
+| **Prompts**   | World-context injection, narrative weaving, orchestration directives       |
 
 ### Layer 2: Agent-MCP (Tree-Echo ChatBot Agents)
 
 **Role**: Participatory Protocol implementation with Echo-volution
 
-| Component | Description |
-|-----------|-------------|
+| Component     | Description                                                          |
+| ------------- | -------------------------------------------------------------------- |
 | **Resources** | Character facets, social memory, transactional memory, core identity |
-| **Tools** | `participate`, `activateFacet`, `updateSocialMemory`, `evolve` |
-| **Prompts** | Persona templates, dialogue styles, character voice |
+| **Tools**     | `participate`, `activateFacet`, `updateSocialMemory`, `evolve`       |
+| **Prompts**   | Persona templates, dialogue styles, character voice                  |
 
 ### Layer 3: Relation-MCP (Deep-Tree-Echo Emergent Self)
 
 **Role**: Integrating Triadic Interface with Cyclic Developmental LifeCycles
 
-| Component | Description |
-|-----------|-------------|
+| Component     | Description                                                            |
+| ------------- | ---------------------------------------------------------------------- |
 | **Resources** | Cognitive flows, emergent identity, self-reflection, coherence metrics |
-| **Tools** | `synthesize`, `reflect`, `bridge`, `integrate` |
-| **Prompts** | Self-narrative construction, identity integration, reflexive awareness |
+| **Tools**     | `synthesize`, `reflect`, `bridge`, `integrate`                         |
+| **Prompts**   | Self-narrative construction, identity integration, reflexive awareness |
 
 ---
 
@@ -83,15 +83,15 @@ The agent's **model of itself** - how it believes it appears and functions.
 
 ```typescript
 interface VirtualAgentModel {
-    selfImage: {
-        perceivedFacets: Partial<CharacterFacets>;
-        believedStrengths: string[];
-        acknowledgedWeaknesses: string[];
-    };
-    selfStory: string;
-    perceivedCapabilities: string[];
-    roleUnderstanding: string;
-    worldView: VirtualArenaModel;  // ← The inversion happens here!
+  selfImage: {
+    perceivedFacets: Partial<CharacterFacets>;
+    believedStrengths: string[];
+    acknowledgedWeaknesses: string[];
+  };
+  selfStory: string;
+  perceivedCapabilities: string[];
+  roleUnderstanding: string;
+  worldView: VirtualArenaModel; // ← The inversion happens here!
 }
 ```
 
@@ -101,15 +101,15 @@ The agent's **mental image of the world** - subjective, partial, potentially mis
 
 ```typescript
 interface VirtualArenaModel {
-    situationalAwareness: {
-        perceivedContext: string;
-        assumedNarrativePhase: keyof NarrativePhases;
-        estimatedCoherence: number;  // May differ from actual!
-    };
-    knownEntities: Map<string, EntityImpression>;
-    perceivedRules: string[];
-    worldTheory: string;
-    uncertainties: string[];
+  situationalAwareness: {
+    perceivedContext: string;
+    assumedNarrativePhase: keyof NarrativePhases;
+    estimatedCoherence: number; // May differ from actual!
+  };
+  knownEntities: Map<string, EntityImpression>;
+  perceivedRules: string[];
+  worldTheory: string;
+  uncertainties: string[];
 }
 ```
 
@@ -169,7 +169,7 @@ packages/mcp/
 │   │   └── prompts.ts             # Arena prompts
 │   │
 │   ├── agent-mcp/
-│   │   ├── index.ts               # Agent MCP Server  
+│   │   ├── index.ts               # Agent MCP Server
 │   │   ├── resources.ts           # Agent resources
 │   │   ├── tools.ts               # Agent tools
 │   │   └── prompts.ts             # Agent prompts
@@ -192,29 +192,32 @@ packages/mcp/
 ## Usage Example
 
 ```typescript
-import { createNestedMCPServer } from 'deep-tree-echo-mcp';
+import { createNestedMCPServer } from "deep-tree-echo-mcp";
 
 // Create the unified server
 const server = await createNestedMCPServer({
-    instanceName: 'DeepTreeEcho',
-    enableLifecycle: true,
+  instanceName: "DeepTreeEcho",
+  enableLifecycle: true,
 });
 
 // Start the system
 await server.start();
 
 // Access prompts from each layer
-const worldContext = server.getPrompt('arena', 'world_context');
-const personaContext = server.getPrompt('agent', 'persona_context');
-const invertedMirror = server.getPrompt('relation', 'inverted_mirror');
+const worldContext = server.getPrompt("arena", "world_context");
+const personaContext = server.getPrompt("agent", "persona_context");
+const invertedMirror = server.getPrompt("relation", "inverted_mirror");
 
 // Run a developmental cycle
 const results = await server.runLifecycleCycle();
 
 // Check the inverted mirror
 const vo = server.getVirtualArena();
-console.log('World-view coherence:', vo.situationalAwareness.estimatedCoherence);
-console.log('Divergence from actual:', vo.divergenceMetrics.estimatedDrift);
+console.log(
+  "World-view coherence:",
+  vo.situationalAwareness.estimatedCoherence,
+);
+console.log("Divergence from actual:", vo.divergenceMetrics.estimatedDrift);
 ```
 
 ---

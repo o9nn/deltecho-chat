@@ -1,38 +1,38 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { DialogProps } from '../../../contexts/DialogContext'
+import React, { useCallback, useEffect, useState } from "react";
+import { DialogProps } from "../../../contexts/DialogContext";
 import Dialog, {
   DialogBody,
   DialogHeader,
   DialogFooter,
   FooterActions,
   FooterActionButton,
-} from '../../Dialog'
+} from "../../Dialog";
 
-import { C } from '@deltachat/jsonrpc-client'
-import useTranslationFunction from '../../../hooks/useTranslationFunction'
-import SettingsSwitch from '../../Settings/SettingsSwitch'
-import { DeltaInput } from '../../Login-Styles'
-import { BackendRemote, onDCEvent } from '../../../backend-com'
-import useAlertDialog from '../../../hooks/dialog/useAlertDialog'
-import Button from '../../Button'
+import { C } from "@deltachat/jsonrpc-client";
+import useTranslationFunction from "../../../hooks/useTranslationFunction";
+import SettingsSwitch from "../../Settings/SettingsSwitch";
+import { DeltaInput } from "../../Login-Styles";
+import { BackendRemote, onDCEvent } from "../../../backend-com";
+import useAlertDialog from "../../../hooks/dialog/useAlertDialog";
+import Button from "../../Button";
 
-import styles from './styles.module.scss'
-import { Proxy } from '../../Settings/DefaultCredentials'
-import { debounceWithInit } from '../../chat/ChatListHelpers'
+import styles from "./styles.module.scss";
+import { Proxy } from "../../Settings/DefaultCredentials";
+import { debounceWithInit } from "../../chat/ChatListHelpers";
 
-import { getLogger } from '@deltachat-desktop/shared/logger'
-import { unknownErrorToString } from '../../helpers/unknownErrorToString'
+import { getLogger } from "@deltachat-desktop/shared/logger";
+import { unknownErrorToString } from "../../helpers/unknownErrorToString";
 
-import ProxyItemRow from './ProxyItemRow'
+import ProxyItemRow from "./ProxyItemRow";
 
-const log = getLogger('proxy-configuration')
+const log = getLogger("proxy-configuration");
 
 type ProxyStateType = {
-  enabled: boolean
-  proxies: string[]
-  activeProxy: string | null
-  updateSettings: boolean
-}
+  enabled: boolean;
+  proxies: string[];
+  activeProxy: string | null;
+  updateSettings: boolean;
+};
 
 /**
  * Dialog for proxy configuration
@@ -49,198 +49,198 @@ type ProxyStateType = {
  * the list of proxies is kept even if proxy is disabled
  */
 export default function ProxyConfiguration(
-  props: DialogProps & { accountId: number; configured: boolean }
+  props: DialogProps & { accountId: number; configured: boolean },
 ) {
-  const tx = useTranslationFunction()
+  const tx = useTranslationFunction();
 
   // used in  new proxy form
-  const [newProxyUrl, setNewProxyUrl] = useState('')
+  const [newProxyUrl, setNewProxyUrl] = useState("");
 
-  const [showNewProxyForm, setShowNewProxyForm] = useState(false)
-  const [showEnableSwitch, setShowEnableSwitch] = useState(false)
+  const [showNewProxyForm, setShowNewProxyForm] = useState(false);
+  const [showEnableSwitch, setShowEnableSwitch] = useState(false);
 
   // updated on connectivity change
   const [connectivityStatus, setConnectivityStatus] = useState(
-    C.DC_CONNECTIVITY_NOT_CONNECTED
-  )
+    C.DC_CONNECTIVITY_NOT_CONNECTED,
+  );
 
   // configured means the account is already configured
   // which is needed to decide if we show the connectivity status
-  const { accountId, configured, onClose } = props
+  const { accountId, configured, onClose } = props;
 
-  const openAlertDialog = useAlertDialog()
+  const openAlertDialog = useAlertDialog();
 
   const [proxyState, setProxyState] = useState<ProxyStateType>({
     enabled: false,
     proxies: [],
     activeProxy: null,
     updateSettings: false,
-  })
+  });
 
   // convenience function to update the proxy state
   // called only after user actions (so updateSettings is set to true)
   const updateProxyState = useCallback(
     (updates: Partial<typeof proxyState>) =>
-      setProxyState(prev => ({ ...prev, ...updates, updateSettings: true })),
-    [setProxyState]
-  )
+      setProxyState((prev) => ({ ...prev, ...updates, updateSettings: true })),
+    [setProxyState],
+  );
 
   useEffect(() => {
     const loadSettings = async () => {
       try {
         const { proxy_enabled, proxy_url } =
           await BackendRemote.rpc.batchGetConfig(accountId, [
-            'proxy_enabled',
-            'proxy_url',
-          ])
+            "proxy_enabled",
+            "proxy_url",
+          ]);
         if (proxy_enabled !== undefined) {
-          const enabled = proxy_enabled === Proxy.ENABLED
-          let proxies: string[] = []
-          let activeProxy = null
+          const enabled = proxy_enabled === Proxy.ENABLED;
+          let proxies: string[] = [];
+          let activeProxy = null;
           if (proxy_url && proxy_url.length > 0) {
             // split proxy_url by new line
             // and remove empty lines from possible previous settings
-            const proxyLines = proxy_url.split(/\n/).filter(s => !!s)
-            proxies = proxyLines
-            activeProxy = enabled ? proxyLines[0] : null
+            const proxyLines = proxy_url.split(/\n/).filter((s) => !!s);
+            proxies = proxyLines;
+            activeProxy = enabled ? proxyLines[0] : null;
           }
-          setProxyState(prev => ({
+          setProxyState((prev) => ({
             ...prev,
             enabled,
             proxies,
             activeProxy,
-          }))
-          setShowNewProxyForm(proxies.length === 0)
+          }));
+          setShowNewProxyForm(proxies.length === 0);
         }
       } catch (error) {
-        log.error('failed to load proxy settings', error)
+        log.error("failed to load proxy settings", error);
         openAlertDialog({
           message: unknownErrorToString(error),
-        })
+        });
       }
-    }
-    loadSettings()
-  }, [accountId, openAlertDialog, tx])
+    };
+    loadSettings();
+  }, [accountId, openAlertDialog, tx]);
 
   const changeProxyEnable = (enableProxy: boolean) => {
-    let activeProxy = null
+    let activeProxy = null;
     // if proxy is disabled, set activeProxy to null
     if (enableProxy && proxyState.proxies.length > 0) {
-      activeProxy = proxyState.proxies[0]
+      activeProxy = proxyState.proxies[0];
     }
     updateProxyState({
       enabled: enableProxy,
       activeProxy,
-    })
-  }
+    });
+  };
 
   const addProxy = async (proxyUrl: string) => {
     if (proxyState.proxies.includes(proxyUrl)) {
-      log.warn('skip already existing proxy', proxyUrl)
+      log.warn("skip already existing proxy", proxyUrl);
       // proxy alread exists
-      return
+      return;
     }
-    let proxyValid = maybeValidProxyUrl(proxyUrl)
-    let errorMessage = ''
+    let proxyValid = maybeValidProxyUrl(proxyUrl);
+    let errorMessage = "";
     if (proxyValid) {
       try {
-        const parsedUrl = await BackendRemote.rpc.checkQr(accountId, proxyUrl)
-        proxyValid = parsedUrl.kind === 'proxy'
+        const parsedUrl = await BackendRemote.rpc.checkQr(accountId, proxyUrl);
+        proxyValid = parsedUrl.kind === "proxy";
       } catch (error) {
-        log.error('checkQr failed with error', error)
-        errorMessage = unknownErrorToString(error)
-        proxyValid = false
+        log.error("checkQr failed with error", error);
+        errorMessage = unknownErrorToString(error);
+        proxyValid = false;
       }
     }
     if (!proxyValid) {
       openAlertDialog({
         message:
-          tx('proxy_invalid') + (errorMessage ? `\n${errorMessage}` : ''),
-      })
-      return
+          tx("proxy_invalid") + (errorMessage ? `\n${errorMessage}` : ""),
+      });
+      return;
     }
     updateProxyState({
       enabled: true,
       proxies: [...proxyState.proxies, proxyUrl],
       activeProxy: proxyUrl,
-    })
-    setShowNewProxyForm(false)
-    setNewProxyUrl('')
-  }
+    });
+    setShowNewProxyForm(false);
+    setNewProxyUrl("");
+  };
 
   const changeActiveProxy = useCallback(
     (proxyUrl: string) => {
       updateProxyState({
         activeProxy: proxyUrl,
         enabled: true,
-      })
+      });
     },
-    [updateProxyState]
-  )
+    [updateProxyState],
+  );
 
   const deleteProxy = useCallback(
     (proxyUrl: string) => {
       const otherProxies = proxyState.proxies.filter(
-        proxy => proxy !== proxyUrl
-      )
+        (proxy) => proxy !== proxyUrl,
+      );
       // show new proxy form
       // if no other proxy is available
-      setShowNewProxyForm(otherProxies.length === 0)
+      setShowNewProxyForm(otherProxies.length === 0);
       if (proxyUrl !== proxyState.activeProxy) {
         updateProxyState({
           proxies: otherProxies,
-        })
-        return
+        });
+        return;
       }
       if (otherProxies.length > 0) {
         // change active proxy if it was deleted
         updateProxyState({
           proxies: otherProxies,
           activeProxy: otherProxies[0],
-        })
+        });
       } else {
         updateProxyState({
           enabled: false,
           proxies: [],
           activeProxy: null,
-        })
+        });
       }
     },
-    [proxyState.activeProxy, proxyState.proxies, updateProxyState]
-  )
+    [proxyState.activeProxy, proxyState.proxies, updateProxyState],
+  );
 
   // show/hide the enable switch
   useEffect(() => {
     if (proxyState.enabled) {
-      setShowEnableSwitch(proxyState.proxies.length > 0)
+      setShowEnableSwitch(proxyState.proxies.length > 0);
     } else {
-      setShowEnableSwitch(proxyState.proxies.length > 0)
+      setShowEnableSwitch(proxyState.proxies.length > 0);
     }
-  }, [showEnableSwitch, proxyState.enabled, proxyState.proxies])
+  }, [showEnableSwitch, proxyState.enabled, proxyState.proxies]);
 
   useEffect(() => {
-    let removeConnectivityListener = () => {}
+    let removeConnectivityListener = () => {};
     const checkConnectivity = async () => {
       if (configured) {
-        const connectivity = await BackendRemote.rpc.getConnectivity(accountId)
-        setConnectivityStatus(connectivity)
+        const connectivity = await BackendRemote.rpc.getConnectivity(accountId);
+        setConnectivityStatus(connectivity);
         removeConnectivityListener = onDCEvent(
           accountId,
-          'ConnectivityChanged',
+          "ConnectivityChanged",
           () =>
             debounceWithInit(async () => {
               const connectivity =
-                await BackendRemote.rpc.getConnectivity(accountId)
-              setConnectivityStatus(connectivity)
-            }, 300)()
-        )
+                await BackendRemote.rpc.getConnectivity(accountId);
+              setConnectivityStatus(connectivity);
+            }, 300)(),
+        );
       }
-    }
-    checkConnectivity()
+    };
+    checkConnectivity();
     return () => {
-      removeConnectivityListener()
-    }
-  }, [accountId, configured])
+      removeConnectivityListener();
+    };
+  }, [accountId, configured]);
 
   /**
    * Update proxy settings in the backend
@@ -249,40 +249,40 @@ export default function ProxyConfiguration(
   useEffect(() => {
     if (!proxyState.updateSettings) {
       // don't update while loading values from backend
-      return
+      return;
     }
     const updateProxySettings = async () => {
       const proxyString =
         proxyState.proxies.length > 0
           ? [
               proxyState.activeProxy,
-              ...proxyState.proxies.filter(p => p !== proxyState.activeProxy),
+              ...proxyState.proxies.filter((p) => p !== proxyState.activeProxy),
             ]
-              .filter(s => !!s) // remove null & empty strings
-              .join('\n')
-          : ''
-      if (proxyState.enabled && proxyString.trim() === '') {
+              .filter((s) => !!s) // remove null & empty strings
+              .join("\n")
+          : "";
+      if (proxyState.enabled && proxyString.trim() === "") {
         openAlertDialog({
-          message: tx('proxy_invalid'),
-        })
-        return
+          message: tx("proxy_invalid"),
+        });
+        return;
       }
       try {
         await BackendRemote.rpc.batchSetConfig(accountId, {
           proxy_url: proxyString,
           proxy_enabled: proxyState.enabled ? Proxy.ENABLED : Proxy.DISABLED,
-        })
+        });
 
-        await BackendRemote.rpc.stopIo(accountId)
-        await BackendRemote.rpc.startIo(accountId)
+        await BackendRemote.rpc.stopIo(accountId);
+        await BackendRemote.rpc.startIo(accountId);
       } catch (error) {
-        log.error('failed to update proxy settings', error)
+        log.error("failed to update proxy settings", error);
         openAlertDialog({
           message: unknownErrorToString(error),
-        })
+        });
       }
-    }
-    updateProxySettings()
+    };
+    updateProxySettings();
   }, [
     proxyState.enabled,
     accountId,
@@ -292,7 +292,7 @@ export default function ProxyConfiguration(
     proxyState.activeProxy,
     proxyState.updateSettings,
     proxyState,
-  ])
+  ]);
 
   /**
    * validate settings before closing
@@ -301,61 +301,61 @@ export default function ProxyConfiguration(
   const closeDialog = () => {
     if (proxyState.enabled && proxyState.proxies.length === 0) {
       openAlertDialog({
-        message: tx('proxy_invalid'),
-      })
-      return
+        message: tx("proxy_invalid"),
+      });
+      return;
     }
-    onClose()
-  }
+    onClose();
+  };
 
   const copyToClipboard = useCallback(
     (url: string) => {
-      navigator.clipboard.writeText(url)
+      navigator.clipboard.writeText(url);
       openAlertDialog({
-        message: `${url}\n${tx('copied_to_clipboard')}`,
-      })
+        message: `${url}\n${tx("copied_to_clipboard")}`,
+      });
     },
-    [tx, openAlertDialog]
-  )
+    [tx, openAlertDialog],
+  );
 
   // some basic validations, returns true if the url seems valid
   // and is not already in the list of proxies
   const maybeValidProxyUrl = (url: string): boolean => {
-    const parts = url.split('://')
+    const parts = url.split("://");
     return (
       parts.length === 2 &&
       parts[0].length >= 2 && // shortest protocol is ss://
       parts[1].length >= 1 && // host
       !proxyState.proxies.includes(url)
-    )
-  }
+    );
+  };
 
   return (
     <Dialog
       fixed
       width={400}
-      dataTestid='proxy-dialog'
+      dataTestid="proxy-dialog"
       canOutsideClickClose={false}
     >
       <DialogHeader
-        title={tx('menu_settings')}
+        title={tx("menu_settings")}
         onClose={closeDialog}
-        dataTestid='proxy-settings'
+        dataTestid="proxy-settings"
       />
       <DialogBody className={styles.proxyDialogBody}>
         <div className={styles.container}>
           {showEnableSwitch && (
             <SettingsSwitch
-              label={tx('proxy_use_proxy')}
+              label={tx("proxy_use_proxy")}
               value={proxyState.enabled}
               onChange={changeProxyEnable}
             />
           )}
           <div>
-            <h3 className='title'>{tx('proxy_list_header')}</h3>
-            <p className={styles.explain}>{tx('proxy_add_explain')}</p>
+            <h3 className="title">{tx("proxy_list_header")}</h3>
+            <p className={styles.explain}>{tx("proxy_add_explain")}</p>
           </div>
-          <div className={styles.proxyList} role='radiogroup'>
+          <div className={styles.proxyList} role="radiogroup">
             {proxyState.proxies.map((proxyUrl, index) => (
               <ProxyItemRow
                 key={index}
@@ -376,17 +376,17 @@ export default function ProxyConfiguration(
         {showNewProxyForm && (
           <form>
             <DeltaInput
-              label={tx('proxy_add_url_hint')}
+              label={tx("proxy_add_url_hint")}
               value={newProxyUrl}
-              onChange={e => setNewProxyUrl(e.target.value)}
+              onChange={(e) => setNewProxyUrl(e.target.value)}
             />
             <Button
-              className='save-proxy'
+              className="save-proxy"
               onClick={() => addProxy(newProxyUrl)}
-              styling='primary'
+              styling="primary"
               disabled={!maybeValidProxyUrl(newProxyUrl)}
             >
-              {tx('proxy_add')}
+              {tx("proxy_add")}
             </Button>
           </form>
         )}
@@ -394,19 +394,19 @@ export default function ProxyConfiguration(
           <Button
             className={styles.addProxyButton}
             onClick={() => setShowNewProxyForm(true)}
-            styling='secondary'
-            aria-label={tx('proxy_add')}
-            title={tx('proxy_add')}
+            styling="secondary"
+            aria-label={tx("proxy_add")}
+            title={tx("proxy_add")}
           >
             ＋
           </Button>
         )}
         <FooterActions>
-          <FooterActionButton styling='secondary' onClick={closeDialog}>
-            {tx('close')}
+          <FooterActionButton styling="secondary" onClick={closeDialog}>
+            {tx("close")}
           </FooterActionButton>
         </FooterActions>
       </DialogFooter>
     </Dialog>
-  )
+  );
 }

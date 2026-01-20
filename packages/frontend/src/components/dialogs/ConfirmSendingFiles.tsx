@@ -1,21 +1,21 @@
-import React from 'react'
+import React from "react";
 
-import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useTranslationFunction from "../../hooks/useTranslationFunction";
 import Dialog, {
   DialogBody,
   DialogContent,
   DialogFooter,
   FooterActionButton,
   FooterActions,
-} from '../Dialog'
+} from "../Dialog";
 
-import type { DialogProps } from '../../contexts/DialogContext'
+import type { DialogProps } from "../../contexts/DialogContext";
 
 type Props = {
-  onClick: (isConfirmed: boolean) => void
-  sanitizedFileList: Pick<File, 'name'>[]
-  chatName: string
-} & DialogProps
+  onClick: (isConfirmed: boolean) => void;
+  sanitizedFileList: Pick<File, "name">[];
+  chatName: string;
+} & DialogProps;
 
 export default function ConfirmSendingFiles({
   onClick,
@@ -23,37 +23,37 @@ export default function ConfirmSendingFiles({
   chatName,
   ...dialogProps
 }: Props) {
-  const { onClose } = dialogProps
-  const tx = useTranslationFunction()
+  const { onClose } = dialogProps;
+  const tx = useTranslationFunction();
 
   const handleCancel = () => {
-    onClose()
-    onClick(false)
-  }
+    onClose();
+    onClick(false);
+  };
 
   const handleConfirm = () => {
-    onClose()
-    onClick(true)
-  }
+    onClose();
+    onClick(true);
+  };
 
-  const fileCount = sanitizedFileList.length
+  const fileCount = sanitizedFileList.length;
 
   return (
     <Dialog onClose={onClose}>
       <DialogBody>
         <DialogContent paddingTop>
-          <p style={{ wordBreak: 'break-word' }}>
+          <p style={{ wordBreak: "break-word" }}>
             {tx(
-              'ask_send_following_n_files_to',
+              "ask_send_following_n_files_to",
               fileCount > 1 ? [String(fileCount), chatName] : [chatName],
               {
                 quantity: fileCount,
-              }
+              },
             )}
           </p>
-          <ul className='drop-file-dialog-file-list'>
+          <ul className="drop-file-dialog-file-list">
             {sanitizedFileList.map(({ name }) => (
-              <li key={name}>{' - ' + name}</li>
+              <li key={name}>{" - " + name}</li>
             ))}
           </ul>
         </DialogContent>
@@ -61,13 +61,13 @@ export default function ConfirmSendingFiles({
       <DialogFooter>
         <FooterActions>
           <FooterActionButton onClick={handleCancel}>
-            {tx('cancel')}
+            {tx("cancel")}
           </FooterActionButton>
           <FooterActionButton onClick={handleConfirm}>
-            {tx('menu_send')}
+            {tx("menu_send")}
           </FooterActionButton>
         </FooterActions>
       </DialogFooter>
     </Dialog>
-  )
+  );
 }

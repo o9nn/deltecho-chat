@@ -1,6 +1,6 @@
-@use 'sass:map';
-@use '../mixins';
-@use '../variables';
+@use "sass:map";
+@use "../mixins";
+@use "../variables";
 
 /* Chat List (conversation list) */
 
@@ -259,7 +259,7 @@
   }
   .pin_icon {
     flex-shrink: 0;
-    @include mixins.color-svg('./images/pin.svg', var(--globalText));
+    @include mixins.color-svg("./images/pin.svg", var(--globalText));
     width: 16px;
     height: 16px;
     margin-left: 6px;
@@ -272,7 +272,7 @@
   }
   .mute_icon {
     flex-shrink: 0;
-    @include mixins.color-svg('./images/mute.png', var(--globalText));
+    @include mixins.color-svg("./images/mute.png", var(--globalText));
     width: 16px;
     height: 16px;
   }

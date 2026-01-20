@@ -11,10 +11,10 @@
  * - Cognitive processing with triadic streams
  */
 
-import { EventEmitter } from 'events';
-import { getLogger } from 'deep-tree-echo-core';
+import { EventEmitter } from "events";
+import { getLogger } from "deep-tree-echo-core";
 
-const log = getLogger('deep-tree-echo-orchestrator/DoubleMembraneIntegration');
+const log = getLogger("deep-tree-echo-orchestrator/DoubleMembraneIntegration");
 
 /**
  * Double Membrane Integration Configuration
@@ -46,7 +46,7 @@ export interface DoubleMembraneIntegrationConfig {
 
 const DEFAULT_CONFIG: DoubleMembraneIntegrationConfig = {
   enabled: true,
-  instanceName: 'DeepTreeEcho',
+  instanceName: "DeepTreeEcho",
   persistencePath: undefined,
   enableAPIAcceleration: true,
   preferNative: true,
@@ -66,7 +66,7 @@ export interface DoubleMembraneRequest {
     systemPrompt?: string;
     metadata?: Record<string, any>;
   };
-  priority?: 'low' | 'normal' | 'high' | 'critical';
+  priority?: "low" | "normal" | "high" | "critical";
   preferNative?: boolean;
 }
 
@@ -76,7 +76,7 @@ export interface DoubleMembraneRequest {
 export interface DoubleMembraneResponse {
   id: string;
   text: string;
-  source: 'native' | 'external' | 'hybrid';
+  source: "native" | "external" | "hybrid";
   metadata: {
     processingTimeMs: number;
     provider?: string;
@@ -146,26 +146,28 @@ export class DoubleMembraneIntegration extends EventEmitter {
    */
   async start(): Promise<void> {
     if (!this.config.enabled) {
-      log.info('Double membrane integration is disabled');
+      log.info("Double membrane integration is disabled");
       return;
     }
 
     if (this.running) {
-      log.warn('Double membrane integration already running');
+      log.warn("Double membrane integration already running");
       return;
     }
 
-    log.info('Initializing double membrane integration...');
+    log.info("Initializing double membrane integration...");
 
     try {
       // Lazy load the double-membrane package
       const membraneModule: any = await (
-        new Function('return import("@deltecho/double-membrane")')() as Promise<any>
+        new Function(
+          'return import("@deltecho/double-membrane")',
+        )() as Promise<any>
       ).catch((error) => {
         throw new Error(
-          'Failed to load @deltecho/double-membrane package: ' +
+          "Failed to load @deltecho/double-membrane package: " +
             error +
-            '. Install with: pnpm add @deltecho/double-membrane'
+            ". Install with: pnpm add @deltecho/double-membrane",
         );
       });
 
@@ -186,77 +188,83 @@ export class DoubleMembraneIntegration extends EventEmitter {
 
         if (this.config.llmProviders.openai?.apiKey) {
           providers.push({
-            name: 'openai',
-            type: 'openai',
+            name: "openai",
+            type: "openai",
             apiKey: this.config.llmProviders.openai.apiKey,
-            model: this.config.llmProviders.openai.model || 'gpt-4',
-            endpoint: 'https://api.openai.com/v1/chat/completions',
+            model: this.config.llmProviders.openai.model || "gpt-4",
+            endpoint: "https://api.openai.com/v1/chat/completions",
           });
         }
 
         if (this.config.llmProviders.anthropic?.apiKey) {
           providers.push({
-            name: 'anthropic',
-            type: 'anthropic',
+            name: "anthropic",
+            type: "anthropic",
             apiKey: this.config.llmProviders.anthropic.apiKey,
-            model: this.config.llmProviders.anthropic.model || 'claude-3-opus-20240229',
-            endpoint: 'https://api.anthropic.com/v1/messages',
+            model:
+              this.config.llmProviders.anthropic.model ||
+              "claude-3-opus-20240229",
+            endpoint: "https://api.anthropic.com/v1/messages",
           });
         }
 
         if (this.config.llmProviders.openrouter?.apiKey) {
           providers.push({
-            name: 'openrouter',
-            type: 'openai',
+            name: "openrouter",
+            type: "openai",
             apiKey: this.config.llmProviders.openrouter.apiKey,
-            model: this.config.llmProviders.openrouter.model || 'anthropic/claude-3.5-sonnet:beta',
-            endpoint: 'https://openrouter.ai/api/v1/chat/completions',
+            model:
+              this.config.llmProviders.openrouter.model ||
+              "anthropic/claude-3.5-sonnet:beta",
+            endpoint: "https://openrouter.ai/api/v1/chat/completions",
           });
         }
 
         // Add providers to the double membrane
         for (const provider of providers) {
           await this.doubleMembrane.addProvider(provider);
-          log.info(`Configured LLM provider: ${provider.name} (${provider.model})`);
+          log.info(
+            `Configured LLM provider: ${provider.name} (${provider.model})`,
+          );
         }
       }
 
       // Set up event forwarding
-      this.doubleMembrane.on('started', () => {
-        this.emit('started');
-        log.info('Double membrane started');
+      this.doubleMembrane.on("started", () => {
+        this.emit("started");
+        log.info("Double membrane started");
       });
 
-      this.doubleMembrane.on('stopped', () => {
-        this.emit('stopped');
-        log.info('Double membrane stopped');
+      this.doubleMembrane.on("stopped", () => {
+        this.emit("stopped");
+        log.info("Double membrane stopped");
       });
 
-      this.doubleMembrane.on('processing', (data: any) => {
-        this.emit('processing', data);
+      this.doubleMembrane.on("processing", (data: any) => {
+        this.emit("processing", data);
       });
 
-      this.doubleMembrane.on('processed', (data: any) => {
-        this.emit('processed', data);
+      this.doubleMembrane.on("processed", (data: any) => {
+        this.emit("processed", data);
         // Track statistics
         this.stats.totalRequests++;
         switch (data.source) {
-          case 'native':
+          case "native":
             this.stats.nativeRequests++;
             break;
-          case 'external':
+          case "external":
             this.stats.externalRequests++;
             break;
-          case 'hybrid':
+          case "hybrid":
             this.stats.hybridRequests++;
             break;
         }
         this.stats.totalLatency += data.metadata.processingTimeMs;
       });
 
-      this.doubleMembrane.on('error', (error: Error) => {
-        this.emit('error', error);
-        log.error('Double membrane error:', error);
+      this.doubleMembrane.on("error", (error: Error) => {
+        this.emit("error", error);
+        log.error("Double membrane error:", error);
       });
 
       // Start the membrane
@@ -265,9 +273,9 @@ export class DoubleMembraneIntegration extends EventEmitter {
       this.running = true;
       this.startTime = Date.now();
 
-      log.info('Double membrane integration started successfully');
+      log.info("Double membrane integration started successfully");
     } catch (error) {
-      log.error('Failed to start double membrane integration:', error);
+      log.error("Failed to start double membrane integration:", error);
       throw error;
     }
   }
@@ -280,31 +288,35 @@ export class DoubleMembraneIntegration extends EventEmitter {
       return;
     }
 
-    log.info('Stopping double membrane integration...');
+    log.info("Stopping double membrane integration...");
 
     await this.doubleMembrane.stop();
     this.running = false;
 
-    log.info('Double membrane integration stopped');
+    log.info("Double membrane integration stopped");
   }
 
   /**
    * Process a request through the double membrane
    */
-  async process(request: DoubleMembraneRequest): Promise<DoubleMembraneResponse> {
+  async process(
+    request: DoubleMembraneRequest,
+  ): Promise<DoubleMembraneResponse> {
     if (!this.running || !this.doubleMembrane) {
-      throw new Error('Double membrane integration not running');
+      throw new Error("Double membrane integration not running");
     }
 
     const requestId = request.id || `req-${++this.requestCount}`;
 
-    log.debug(`Processing request ${requestId}: ${request.prompt.substring(0, 50)}...`);
+    log.debug(
+      `Processing request ${requestId}: ${request.prompt.substring(0, 50)}...`,
+    );
 
     const response = await this.doubleMembrane.process({
       id: requestId,
       prompt: request.prompt,
       context: request.context,
-      priority: request.priority || 'normal',
+      priority: request.priority || "normal",
       preferNative: request.preferNative ?? this.config.preferNative,
     });
 
@@ -321,13 +333,16 @@ export class DoubleMembraneIntegration extends EventEmitter {
    */
   async chat(
     message: string,
-    conversationHistory?: Array<{ role: string; content: string }>
+    conversationHistory?: Array<{ role: string; content: string }>,
   ): Promise<string> {
     if (!this.running || !this.doubleMembrane) {
-      throw new Error('Double membrane integration not running');
+      throw new Error("Double membrane integration not running");
     }
 
-    const response = await this.doubleMembrane.chat(message, conversationHistory);
+    const response = await this.doubleMembrane.chat(
+      message,
+      conversationHistory,
+    );
     return response;
   }
 
@@ -338,7 +353,7 @@ export class DoubleMembraneIntegration extends EventEmitter {
     const baseStatus = {
       enabled: this.config.enabled,
       running: this.running,
-      instanceName: this.config.instanceName || 'DeepTreeEcho',
+      instanceName: this.config.instanceName || "DeepTreeEcho",
       uptime: this.running ? Date.now() - this.startTime : 0,
       identityEnergy: 0,
       stats: {
@@ -347,7 +362,9 @@ export class DoubleMembraneIntegration extends EventEmitter {
         externalRequests: this.stats.externalRequests,
         hybridRequests: this.stats.hybridRequests,
         averageLatency:
-          this.stats.totalRequests > 0 ? this.stats.totalLatency / this.stats.totalRequests : 0,
+          this.stats.totalRequests > 0
+            ? this.stats.totalLatency / this.stats.totalRequests
+            : 0,
         queueLength: 0,
       },
       providers: [],
@@ -367,12 +384,20 @@ export class DoubleMembraneIntegration extends EventEmitter {
         ...baseStatus.stats,
         queueLength: membraneStatus.queueLength,
         // Merge with membrane stats if available
-        totalRequests: membraneStatus.stats?.totalRequests || baseStatus.stats.totalRequests,
-        nativeRequests: membraneStatus.stats?.nativeRequests || baseStatus.stats.nativeRequests,
+        totalRequests:
+          membraneStatus.stats?.totalRequests || baseStatus.stats.totalRequests,
+        nativeRequests:
+          membraneStatus.stats?.nativeRequests ||
+          baseStatus.stats.nativeRequests,
         externalRequests:
-          membraneStatus.stats?.externalRequests || baseStatus.stats.externalRequests,
-        hybridRequests: membraneStatus.stats?.hybridRequests || baseStatus.stats.hybridRequests,
-        averageLatency: membraneStatus.stats?.averageLatency || baseStatus.stats.averageLatency,
+          membraneStatus.stats?.externalRequests ||
+          baseStatus.stats.externalRequests,
+        hybridRequests:
+          membraneStatus.stats?.hybridRequests ||
+          baseStatus.stats.hybridRequests,
+        averageLatency:
+          membraneStatus.stats?.averageLatency ||
+          baseStatus.stats.averageLatency,
       },
       providers: membraneStatus.availableProviders.map((p: any) => ({
         name: p.name,
@@ -397,7 +422,7 @@ export class DoubleMembraneIntegration extends EventEmitter {
    */
   async rechargeEnergy(amount: number): Promise<void> {
     if (!this.running || !this.doubleMembrane) {
-      throw new Error('Double membrane integration not running');
+      throw new Error("Double membrane integration not running");
     }
     await this.doubleMembrane.rechargeEnergy(amount);
   }
@@ -421,7 +446,7 @@ export class DoubleMembraneIntegration extends EventEmitter {
  * Factory function for creating a configured integration
  */
 export function createDoubleMembraneIntegration(
-  config: Partial<DoubleMembraneIntegrationConfig> = {}
+  config: Partial<DoubleMembraneIntegrationConfig> = {},
 ): DoubleMembraneIntegration {
   return new DoubleMembraneIntegration(config);
 }

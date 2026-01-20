@@ -8,22 +8,24 @@
 
 ### Fixed
 
-
 <a id="1_58_2"></a>
 
 ## [1.58.2] - 2025-05-14
 
 ### Added
+
 - new proxy configuration dialog #5052
 - tauri: added notifications
 
 ### Changed
+
 - restyle profile view #5093
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.159.4`
   - Better avatar quality
   - Update iroh from 0.33.0 to 0.35.0
 
 ### Fixed
+
 - show error when sendMsg fails #5092
 - update search results on changes #5100
 
@@ -32,6 +34,7 @@
 ## [1.58.1] - 2025-05-07
 
 ### Fixed
+
 - ugly margins / paddings on some saved messages with attachments #5047
 - accessibility: improve emoji and sticker picker accessibility: specify "tabs" layout
 - accessibility: announce when someone reacts to a message in the current chat
@@ -43,6 +46,7 @@
 ## [1.58.0] - 2025-05-06
 
 ### Added
+
 - tauri: support for webxdc #4740, #4852, #4949
 - create chat: add context menu option to view profile #4880
 - focuses first visible item on arrow down key on input in create chat dialog #4892
@@ -66,6 +70,7 @@
 - tauri: add deeplinking support and opening `.xdc` files to attach them #4956
 
 ### Changed
+
 - switch to account the webxdc is from when sending to chat (tauri and electron edition) #4740
 - change the Reply button for messages to be a verb rather than a noun #4853
 - only render markdown links when enabled in settings #4875
@@ -92,6 +97,7 @@
 - improve attachment menu ordering #5000
 
 ### Fixed
+
 - tauri: improve security #4826, #4936, #4937, #4944
 - improve fatal error dialog readability by removing color from deltachat-rpc-server errors
 - prevent dragging around of webxdc icon #4740
@@ -130,13 +136,13 @@
 - tauri: improve security #4959
 
 ### Removed
+
 - remove experimental option to disable IMAP IDLE #4991
 - tauri: disable long press link preview
 
 <a id="1_57_1"></a>
 
 ## [1.57.1] - 2025-05-03 Test release
-
 
 <a id="1_57_0"></a>
 
@@ -147,6 +153,7 @@
 ## [1.56.0] - 2025-03-21
 
 ### Added
+
 - add a way to edit messages #4717
 - delete message for all chat members #4716
 - tauri: add support for sticker picker #4707
@@ -161,6 +168,7 @@
 - add a hint to "Edit profile" about how the profile name, image and bio is transferred #5014
 
 ### Changed
+
 - tauri: replace `tauri-plugin-shell` with `tauri-plugin-opener` #4699
 - new button styles #4741
 - removed the option to import encryption keys #4783
@@ -178,6 +186,7 @@
 - remove handling for receiving autocrypt setup message #4822
 
 ### Fixed
+
 - fix some webxdc apps showing the "Close app?" prompt unintentionally #4737
 - fixed some intermittent e2e test issues
 - improve QR scanner performance
@@ -201,6 +210,7 @@
 ## [1.54.2] - 2025-03-03
 
 ### Added
+
 - show error message if backup version is not compatible #4721
 - show "Edited" in the message's status line (if it's edited) #4697
 - add "learn more"-button to manage-key section that links to local help #4684
@@ -211,6 +221,7 @@
 - feature: save messages in self chat and show a bookmark icon #4674
 
 ### Changed
+
 - open map in landscape orientation and with a bigger window #4683
 - update `esbuild` from `0.23.0` to `0.25.0` #4643
 - extend some shortcuts to listen to key OR code #4685
@@ -231,6 +242,7 @@
 - Make it possible to pass --allow-unsafe-core-replacement to `pnpm run dev:electron` #4733.
 
 ### Fixed
+
 - fix webxdc apps being unclosable, when using `beforeunload` event #4728
 - message list being empty when double-clicking the chat before it has loaded (again) #4647
 - accessibility: improve tab order of the app #4672
@@ -248,6 +260,7 @@
 ## [1.54.1] - 2025-02-17
 
 ### Fixed
+
 - fix unread count on "jump down" button not clearing when all messages are read #4648
 - keep the order of contacts when calling getContactsByIds #4651, #4652
 - improve accessibility #4655, #4656, #4661, #4662
@@ -257,10 +270,12 @@
 ## [1.54.0] - 2025-02-15
 
 ### Changed
-  - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.155.5`
-  - set mentionsEnabled in muted chats to true by default #4633
+
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.155.5`
+- set mentionsEnabled in muted chats to true by default #4633
 
 ### Fixed
+
 - "Show in Chat" in Gallery not working #4629
 - Fix ~3 second freeze after switching the chat #4638
 - fix chat list showing the chat that is different from the currently selected chat when switching chats rapidly, again #4628
@@ -273,9 +288,10 @@
 
 ### Breaking
 
- - Due to the Electron update, macOS 10.15 (Catalina) is no longer supported, macOS 11 (Big Sur) or later is the new requirement.
+- Due to the Electron update, macOS 10.15 (Catalina) is no longer supported, macOS 11 (Big Sur) or later is the new requirement.
 
 ### Added
+
 - highlight the first unread message upon opening a chat #4525
 - copy files to internal tmp dir before opening attachements #4498
 - enable notifications on mentions in muted chats #4538
@@ -290,6 +306,7 @@
 - display past members in the group member list #4531
 
 ### Changed
+
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.155.4`
   - Store device token in IMAP METADATA on each connection
   - Deduplicate blob files in chat.rs, config.rs, and integration.rs.
@@ -314,6 +331,7 @@
 - Update translations (2025-02-07)
 
 ### Fixed
+
 - fix changelog message left unread not in the selected account as it should be but in another account. #4569
 - accessibility: some context menu items not working with keyboard navigation #4578
 - fix messages sent to "Saved Messages" not being displayed sometimes #4582
@@ -338,18 +356,21 @@
 ## [1.52.1] - 2025-01-27
 
 ### Added
+
 - settings: explain "Read Receipts" and adjust "Enter Key Sends" title #4524
 - accessibility: focus message when jumping to it in some cases (e.g. when clicking on a quote) #4547
 - add special error dialog for the case that deltachat-rpc-server is not found #4479
 
 ### Changed
- - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.155.1`
-   - feat: Set BccSelf to true when receiving a sync message
-   - improvement: file deduplication
-   - fix: Don't accidentally remove Self from groups
-   - only accept SetContacts sync messages for broadcast lists
+
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.155.1`
+  - feat: Set BccSelf to true when receiving a sync message
+  - improvement: file deduplication
+  - fix: Don't accidentally remove Self from groups
+  - only accept SetContacts sync messages for broadcast lists
 
 ### Fixed
+
 - message list being empty when opening a chat in some cases #4555
 - numpad "Enter" not working as regular "Enter" #4546
 - improve performance a little
@@ -359,14 +380,17 @@
 ## [1.52.0] - 2025-01-23
 
 ### Added
+
 - added experimental tauri version (`packages/target-tauri`) #4462
 
 ### Changed
+
 - add some missing translations
 - order search results by relevance in App Picker #4506
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.154.3`
 
 ### Fixed
+
 - fix chat being scrolled up a little right after you switch to it (rev 3) #4521
 - fix chat scrolling up a bit when quoting a message or adding attachment to draft (rev 2) #4529
 - fix cancelation of account deletion when canceling clicking outside of the dialog
@@ -382,6 +406,7 @@
 ## [1.51.0] - 2025-01-16
 
 ### Added
+
 - accessibility: arrow-key navigation for message list, gallery and sticker picker #4294, #4376, #4372,
 - accessibility: arrow-key navigation: handle "End" and "Home" keys to go to last / first item #4438
 - add show_app_in_chat option to webxdc info message context menu #4459
@@ -389,6 +414,7 @@
 - app picker for webxdc apps in attachement menu #4485
 
 ### Changed
+
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.154.1`
   - New group consistency algorithm
   - fix: Migration: Set bcc_self=1 if it's unset and delete_server_after!=1
@@ -407,6 +433,7 @@
 - update `@deltachat/message_parser_wasm` from `0.11.0` to `0.12.0` #4477
 
 ### Fixed
+
 - fix draft not getting cleared after sending the message #4493
 - fix draft not getting saved after inserting an emoji #4493
 - fix chat "scrolls up" right after switching (rev 2) #4431
@@ -425,22 +452,27 @@
 ## [1.50.1] - 2024-12-18
 
 ### Changed
+
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.152.1`
 
 ### Fixed
+
 - downgrade rust in core to avoid wrong Windows malware detection https://github.com/deltachat/deltachat-core-rust/issues/6338
 
 ## [1.50.0] - 2024-12-17
 
 ### Added
+
 - show specific notifications for webxdc events #4400
 - expose sendUpdateInterval & sendUpdateMaxSize in webxdc
 
 ### Changed
+
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.152.0`
 - mark bots as such in chat header and in contact view dialog #4405
 
 ### Fixed
+
 - handle double escape on Dialog #4365
 - fix random crashes on quote reply #4337
 - avoid drafts in readonly chats #4349
@@ -456,6 +488,7 @@
 ## [1.49.0] - 2024-12-05
 
 ### Added
+
 - accessibility: arrow-key navigation for the list of chats, list of accounts, lists of contacts, gallery tabs #4224, #4291, #4361, #4362, #4369, #4377
 - Add "Learn More" button to "Disappearing Messages" dialog #4330
 - new icon for Mac users
@@ -465,6 +498,7 @@
 - dev: run e2e tests in CI
 
 ### Changed
+
 - enable Telegram-style Ctrl + ArrowUp to reply by default #4333
 - improve performance a little #4334
 - extend image max-height in messages
@@ -479,6 +513,7 @@
 - add dc version, os name and cpu architecture to fatal errors for better error reports #4384
 
 ### Fixed
+
 - "Disappearing Messages" dialog not reflecting the actual current value #4327
 - accessibility: make settings keyboard-navigable #4319
 - Fix documentation for --allow-unsafe-core-replacement #4341
@@ -492,12 +527,12 @@
 - fix startup delay on linux #4379
 - fix: remove visible scrollbars in fullscreen media view #4385
 
-
 <a id="1_48_0"></a>
 
 ## [1.48.0] - 2024-11-08
 
 ### Changed
+
 - Update translations (2024-11-08)
 - Update local help (2024-11-08)
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.148.7`
@@ -506,14 +541,15 @@
 - move the "Realtime Webxdc Channels" setting out of the "Experimental" section #4316
 
 ### Fixed
-- image attachments not being centered within a message #4313
 
+- image attachments not being centered within a message #4313
 
 <a id="1_47_1"></a>
 
 ## [1.47.1] - 2024-11-01
 
 ### Added
+
 - Added support for selecting multiple files in the attachment file picker. #4278
 - browser edition:
   - support for selecting custom chat wallpaper #4306
@@ -521,6 +557,7 @@
 - improve keyboard and screen-reader accessibility #4210
 
 ### Changed
+
 - style: avoid scrolling to account list items such that they're at the very edge of the list #4252
 - Update local help (2024-10-25) #4264
 - Update translations (2024-27-10) #4281
@@ -534,8 +571,8 @@
 - when jumping to a message (e.g. when showing the first unread message, or when jumping to a message through "show in chat"), position it more appropriately in the scrollable area #4286
 - Dropping multiple files onto deltachat now sends images as compressed images instead of uncompressed files #4278
 
-
 ### Fixed
+
 - image thumbnails not showing in chat list #4247
 - progress bar not working #4248
 - avoid showing horizontal scrollbars in chat list #4253
@@ -561,11 +598,13 @@
 ## [1.47.0] - 2024-09-22
 
 ### Added
+
 - Experimental Telegram-style Esc to cancel reply (quote) #4153
 - new ViewProfile context menu for blocking/unblocking contact and checking encryption #4043
 - added experimental browser version for developers (`packages/target-browser`)
 
 ### Changed
+
 - Update electron from `30.3.1` to `32.1.0` #4138
 - dev: transformed repo into monorepo
 - dev: switched from `npm` to `pnpm`
@@ -588,6 +627,7 @@
 - Update translations (2024-22-10) #4238
 
 ### Fixed
+
 - fix that you can not click header button in dialog when they are on top of the navbar #4093
 - fix if Contact has long bio/signature, then shared chats were hidden #4093
 - dev: proper native source-map support during development for main process
@@ -622,12 +662,12 @@
 - use authname instead of displayname for vcard filename #4233
 - ugly positioning of reactions on image-only messages #4237
 
-
 <a id="1_46_8"></a>
 
 ## [1.46.8] - 2024-09-09
 
 ### Changed
+
 - do not display email adresses in reactions dialog #4066
 - click on a row in reactions dialog opens contact profile #4066
 
@@ -635,10 +675,10 @@
   - Display `Config::MdnsEnabled` as true by default.
 
 ### Fixed
+
 - fix newlines in messages with WebXDC attachments #4079
 - being unable to delete a nonfunctional account imported from ArcaneChat #4104
 - Ctrl/Cmd+Q (also File->Quit) now should properly close the app when focus is on main window
-
 
 <a id="1_46_7"></a>
 
@@ -648,7 +688,6 @@
 
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.142.11`
   - Set backward verification when observing `vc-contact-confirm` or `vg-member-added`
-
 
 <a id="1_46_6"></a>
 
@@ -663,6 +702,7 @@
   - Only include one `From:` header in securejoin messages
 
 ### Fixed
+
 - Experimental Telegram-style Ctrl+Up/Down: improve behavior to align more with Telegram #4088
 - Allowed webp in image selector, added webp consistantly #4087
 - enhance edit name dialog #4090
@@ -672,6 +712,7 @@
 ## [1.46.5] - 2024-08-19
 
 ### Fixed
+
 - fix blocked composer after secure join #3917
 
 <a id="1_46_4"></a>
@@ -679,6 +720,7 @@
 ## [1.46.4] - 2024-08-16
 
 ### Changed
+
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.142.7`
   - Increase timeout for QR generation to 60s #5882
   - Fix default to strict TLS checks if not configured #5888
@@ -691,9 +733,11 @@
 ## [1.46.3] - 2024-08-14
 
 ### Changed
+
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.142.4`
 
 ### Fixed
+
 - Fix account import in BACKUP2 format #4075
 
 <a id="1_46_2"></a>
@@ -701,6 +745,7 @@
 ## [1.46.2] - 2024-08-05
 
 ### Added
+
 - New keyboard shortcuts (experimental setting): Telegram-style Ctrl+Up/Down to select the message to reply to #3965
 - More shortcuts to switch between chats: `Ctrl + PageDown`, `Ctrl + PageUp`, `Ctrl + Tab`, `Ctrl + Shift + Tab` #3984
 - Better keyboard accessibility: make more elements focusable, add outline them #4005
@@ -710,6 +755,7 @@
 - add Clone Group functionality to chat list context menu #3933
 
 ### Changed
+
 - reword advanced setting "Disable Background Sync For All Accounts" -> "Only Synchronize the Currently Selected Account" #3960
 - use 'Info' and 'Message Info' consistently #3961
 - consolidate 'Profile' wording #3963
@@ -732,6 +778,7 @@
 - renderElementPreview calls renderElementPreview for message element children #4059
 
 ### Fixed
+
 - Fix crash on "Settings" click when not on main screen (e.g. no account selected): hide the "settings" button
 - code: comply with react hook rules #3955
 - fix mailto dialog #3976
@@ -743,7 +790,7 @@
 - Fix the problem of Quit menu item on WebXDC apps closes the whole DC app #3995
 - minor performance improvements #3981
 - fix chat list items (e.g. Archive) and contacts not showing up sometimes #4004
-- fix bug notifications not being removed on Mac  #4010
+- fix bug notifications not being removed on Mac #4010
 - fix bug "Mark All as Read" does not remove notifications #4002
 - fix update unread badge on when muting / unmuting a chat #4020
 - fix update unread badge on receiving device messages #4020
@@ -768,15 +815,18 @@
 ## [1.46.1] - 2024-06-17
 
 ### Added
+
 - add option to use sytem ui font in appearance settings #3949
 - pretty preview for vcard draft #3948
 
 ### Changed
+
 - use `SOURCE_DATE_EPOCH` environment var for build timestamp instead of `Date.now()` if set.
 - use italic variants of Roboto font correctly #3949
 - show chat name when searching in chat #3950
 
 ### Fixed
+
 - skip `requestSingleInstanceLock` on mac appstore builds (mas), because it made it unable to start the app on older macOS devices. #3946
 - fix tray icon explaination in settings that appears when started with `--minimized` #3949
 - performance: memorize MessageBody, don't run message parser multiple times for the same message #3951
@@ -786,6 +836,7 @@
 - make search ui visible when searching in a chat when in small screen mode #3950
 
 ### Removed
+
 - removed unused Roboto font variants #3949
 
 <a id="1_46_0"></a>
@@ -793,9 +844,11 @@
 ## [1.46.0] - 2024-06-10
 
 ### Changed
+
 - Update translations (2024-06-09) #3925
 
 ### Fixed
+
 - refresh member list after changes #3807
 
 <a id="1_45_5"></a>
@@ -803,17 +856,21 @@
 ## [1.45.5] - 2024-06-08
 
 ### Added
+
 - send contact as VCard from attachment context menu #3830
 
 ### Changed
+
 - Update translations (2024-06-08) #3923
 
 ### Fixed
+
 - Do not set min window dimensions on screens that are smaller than those min dimensions (such as linux phones) #3919
 - packaging: respect `NO_ASAR` env var in `afterPackHook` #3916
 - fix image cropper is not started when creating a group #3920
 
 ### Changed
+
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.140.2`
 
 <a id="1_45_4"></a>
@@ -821,9 +878,11 @@
 ## [1.45.4] - 2024-06-06
 
 ### Added
+
 - Add image cropper to setting group avatars #3905
 
 ### Changed
+
 - do not open last chat when switching accounts in small screen mode #3912
 - open last chat when exiting small screen mode #3912
 - Fix removing group avatars #3905
@@ -839,6 +898,7 @@
 ## [1.45.3] - 2024-06-05
 
 ### Fix
+
 - Fix map in packaged build #3900
 
 <a id="1_45_2"></a>
@@ -846,6 +906,7 @@
 ## [1.45.2] - 2024-06-04
 
 ### Fix
+
 - Fix notifications (was broken in 1.45.1) #3898
 
 <a id="1_45_1"></a>
@@ -853,12 +914,14 @@
 ## [1.45.1] - 2024-06-04
 
 ### Added
+
 - Added a Small Screen Mode, when you resize the window to be small it will only show the chatlist with account sidebar or the Chat View with a back button.
 - show VCard attachment as VCard in message list #3840
 - add contact from VCard & start chat on click #3840
 - Webxdc realtime support #3741
 
 ### Changed
+
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `v1.140.0`
 - Always show `msg.overrideSenderName` even when the message is sent by yourself
 - Secure notifications on linux: escape html, like signal does #3875, #3890
@@ -871,8 +934,8 @@
   - restrict what can be in a label for a labled link
   - fix that false-positives in link detection
 
-
 ### Fixed
+
 - fix that map tab is highlighted when you are in the media/gallery tab #3867
 - fix message text "wobbling" on hover #3862
 - fix: close alternative options dialog when setting up as a second device #3873
@@ -880,12 +943,12 @@
 - fix ImageCropper not working on smaller images
 - fix: right click in ContactList should open a context menu #3884
 
-
 <a id="1_45_0"></a>
 
 ## [1.45.0] - 2024-05-24
 
 ### Added
+
 - Remember last position & size of webxdc windows #3754 #3755
 - add quick-key CtrlOrCmd+q for submenu quit #3758
 - add window titlebar for html_email- and help window #3770 #3778
@@ -900,8 +963,8 @@
 - Open map in a separate window
 - Add global map for all chats in account
 
-
 ### Changed
+
 - Update translations (2024-05-20) #3746 #3802 #3827 #3837
 - The latest reaction is now shown in the chatlist, if it's newer than the last message #3749
 - minor improvements to "add second device" dialog #3748
@@ -932,8 +995,8 @@
 - upgrade `electron-builder` from `24.6.4` to `24.13.3` #3828
 - upgrade `mocha` to `10.4.0`
 
-
 ### Fixed
+
 - fix chat audit dialog was going out of viewport on smaller screens #3736
 - fix long names breaking layout of reactions dialog #3736
 - hide "add second device" instructions when transfer has started #3748
@@ -957,11 +1020,10 @@
 - fix the bug where EditAccountAndPassword dialog does not close with OK button
 - fix the problem of pressing ENTER when logging in and prompting doing additioanl dialogs #3824
 
-
 ### Removed
+
 - remove disabled composer reason, now composer is just always hidden when `chat.canSend` is `false` #3791
 - remove `--multiple-instances` flag #3567
-
 
 <a id="1_44_1"></a>
 
@@ -972,9 +1034,11 @@
 > requirement.
 
 ### Changed
+
 - Update `deltachat-node` and `deltachat/jsonrpc-client` to `v1.136.3`
 
 ### Fixed
+
 - Fix Bug: When switching accounts after deleting a chat, the message list is blank, similar issues can come up when using the 2nd device flow. #3724
 - Fix bug where cancellation of configure led to an undefined state where it looked like the account was configured successfully, but it was not. #3729
 - Fix double sending #3739
@@ -988,9 +1052,11 @@
 > requirement.
 
 ### Added
+
 - Add repology badge to README #3696
 
 ### Changed
+
 - slightly wider account sidebar (so traffic lights look more centered on macOS) #3698
 - refactor some components to not use the chatstore singleton directly #3700
 - Reuse new image selector component for group images #3713
@@ -998,6 +1064,7 @@
 - Update translations (2024-03-05) #3722
 
 ### Fixed
+
 - fix broken html email window (CSP got broken with the recent electron update) #3704
 - remove unexpected empty space (bottom padding) from view profile dialog #3707
 - Button style regression #3712
@@ -1017,11 +1084,13 @@
 > requirement.
 
 ### Changed
+
 - Upgrade `electron` from `v26.6.3` to version `v28.2.3` #3693
 - Refactor buttons #3605
 - Update translations (2024-02-19)
 
 ### Fixed
+
 - Fix broken styles for muted and turned off account badges in multiaccount sidebar #3691
 - "Broken protection" message did not allow opening info dialog on tap #3695
 
@@ -1030,6 +1099,7 @@
 ## [1.43.0] - 2024-02-14
 
 ### Added
+
 - ContextMenu now handles multiple sublevels #3116
   - ContextMenuItem has a subitems array
   - Hovering outside of the menu closes last opened sublevel
@@ -1044,6 +1114,7 @@
 - Add multiaccount notifications and mute/disable notifications for specific accounts #3680
 
 ### Changed
+
 - Update `deltachat-node` and `deltachat/jsonrpc-client` to `v1.135.0`
 - Update `electron` from `v26.6.0` to version `v26.6.3`
 - Update `filesize` dependency from `8.0.6` to `10.1.0`
@@ -1081,6 +1152,7 @@
 - Update local help (2024-02-14) #3686
 
 ### Fixed
+
 - Silently fail when notifications are not supported by OS #3613
 - Fix uncaught Exception when dismissing notifications on windows #3593
 - Introduce own React context for context menus & fix regression #3608
@@ -1093,6 +1165,7 @@
 - Show search bar when searching chat in archived mode #3679
 
 ### Removed
+
 - Remove qr icon in sidebar #3666
 - Remove old Account switcher screen #3621
 - Remove sidebar menu #3621
@@ -1102,11 +1175,13 @@
 ## [1.42.2] - 2023-12-02
 
 ### Changed
+
 - update deltachat-node and deltachat/jsonrpc-client to `v1.131.9`
   - more fixes for mail.163.com
 - update esbuild to v0.19.8
 
 ### Fixed
+
 - log error when webxdc status update send fails
 - make starting of html email view more reliable (remove race condition)
 
@@ -1115,6 +1190,7 @@
 ## [1.42.1] - 2023-11-23
 
 ### Changed
+
 - update deltachat-node and deltachat/jsonrpc-client to `v1.131.7`
   - Revert "fix: check UIDNEXT with a STATUS command before going IDLE". This fixes mail.163.com which has broken STATUS command.
 
@@ -1125,14 +1201,15 @@
 > Since we needed to upgrade electron this version drops support for windows 7, 8 and 8.1
 > https://www.electronjs.org/blog/windows-7-to-8-1-deprecation-notice
 > If you are using DC on these platforms you have the following options:
+>
 > - Keep using 1.40.4
 > - update windows to 10 or 11
 > - switch to linux (or dual boot it)
 > - contact delta@merlinux.eu if you have money and want to sponsor the development of a special legacy build of deltachat desktop 1.42 for windows 7/8/8.1.
->
 > - Core is now built on Debian 10: now requires glibc 2.28, so ubuntu 18 is not supported anymore.
 
 ### Fixed
+
 - fix clear chat sometimes not refreshing the messagelist
 
 <a id="1_41_4"></a>
@@ -1140,11 +1217,13 @@
 ## [1.41.4] - 2023-11-22
 
 ### Changed
+
 - Update local help (2023-11-20)
 - Update translations (2023-11-22)
 - update deltachat-node and deltachat/jsonrpc-client to `v1.131.6`
 
 ### Fixed
+
 - fix displaying sticker that has wrong mimetype
 - fix bug where composer was locked after joining a group via qr code
 - fix double message context menu #3550
@@ -1159,9 +1238,11 @@
 ## [1.41.3] - 2023-11-17
 
 ### Added
+
 - Vietnamese language
 
 ### Changed
+
 - update `@deltachat/message_parser_wasm` to `0.9.0`, which fixes a bug with BotCommandSuggestion parsing
 - update `electron` from `v26.4.2` to version `v26.6.0`
 - Select device message chat automatically to welcome first users #3531
@@ -1172,6 +1253,7 @@
 - Do not show redundant read-only message when in device messages chat #3532
 
 ### Fixed
+
 - fix: files search not case-insensitive
 - fix: bug in emoji detection for jumbomoji #3508
 - Improve layout and fix unknown locale of DisabledMessageInput #3537
@@ -1184,6 +1266,7 @@
 ## [1.41.2] - 2023-11-15
 
 ### Changed
+
 - update deltachat-node and deltachat/jsonrpc-client to `v1.131.2`
 - Update inApp help (15.11.2023)
 - make help's "scroll to top" button less intrusive
@@ -1191,6 +1274,7 @@
 - use local help for guaranteed end-to-end encryption more info
 
 ### Fixed
+
 - macOS: prevent second instances when runing from terminal
 - fix status text overflow in ViewProfile #3515
 
@@ -1199,6 +1283,7 @@
 ## [1.41.1] - 2023-11-14
 
 ### Changed
+
 - fix notarisation for macOS dmg
 
 <a id="1_41_0"></a>
@@ -1208,14 +1293,15 @@
 > Since we needed to upgrade electron this version drops support for windows 7, 8 and 8.1
 > https://www.electronjs.org/blog/windows-7-to-8-1-deprecation-notice
 > If you are using DC on these platforms you have the following options:
+>
 > - Keep using 1.40.4
 > - update windows to 10 or 11
 > - switch to linux (or dual boot it)
 > - contact delta@merlinux.eu if you have money and want to sponsor a special legacy build of deltachat desktop 1.41-1.42.
->
 > - Core is now built on Debian 10: now requires glibc 2.28, ubuntu 18 is not supported anymore.
 
 ### Added
+
 - Global Gallery
 - Show date when scrolling gallery
 - add option to view images and videos in the gallery cropped to grid or in their original aspect ratio
@@ -1231,6 +1317,7 @@
 - register on system as handler for webxdc files
 
 ### Changed
+
 - add a dark theme for the "Help" and the webxdc loading screen
 - improve the look of the webxdc loading screen
 - Update translations (05.11.2023)
@@ -1252,6 +1339,7 @@
   - Removed `url-parse` dependency replacing it with modern APIs
 
 ### Fixed
+
 - fix clipboard not working in webxdc apps
 - fix `target=_blank` links in html emails don't work #3408
 - add description for enableChatAuditLog setting
@@ -1275,8 +1363,8 @@
 - fix text truncation so verified icon is always shown on ViewGroup, ViewProfile, ContactListItems, Navbar and on ChatlistItem
 - fix scrollbar caused flickering in ViewProfile
 
-
 ### Removed
+
 - remove 40KiB download on demand option
 
 <a id="1_40_4"></a>
@@ -1284,14 +1372,17 @@
 ## [1.40.4] - 2023-09-14
 
 ### Added
+
 - Show video chat instance URLs as subtitles #3369
 - Add similar chats to group profile #3379
 
 ### Changed
+
 - Offer to copy non-HTTP links to the clipboard instead of trying to open them in webxdc source code link and inside of html emails.
 - update electron from `v22.3.23` to version `v22.3.24`
 
 ### Fixed
+
 - fix duplicated calling of 'open-url'
 - fix html mail getting restrictions of webxdc window
 - fix: when clicking on mailto link in html email show main window even when it was hidden.
@@ -1303,11 +1394,13 @@
 ## [1.40.3] - 2023-09-08
 
 ### Changed
+
 - Offer to copy non-HTTP links to the clipboard instead of trying to open them.
 
 ### Fixed
+
 - webxdc: fix a bug where the webxdc was able to open the dev tools.
-Also make opening devtools with F12 more reliable.
+  Also make opening devtools with F12 more reliable.
 - packaging: fix corrupted .desktop file
 
 <a id="1_40_2"></a>
@@ -1315,9 +1408,11 @@ Also make opening devtools with F12 more reliable.
 ## [1.40.2] - 2023-09-07
 
 ### Added
+
 - option to delete contacts in list when creating a new chat
 
 ### Changed
+
 - update `@deltachat/message_parser_wasm` to `0.7.0`, which adds support for unicode #hashtags
 - update electron from `v22.3.2` to version `v22.3.23`
 - update deltachat-node and deltachat/jsonrpc-client to `v1.121.0`
@@ -1327,18 +1422,21 @@ Also make opening devtools with F12 more reliable.
 ## [1.40.1] - 2023-09-01
 
 ### Added
+
 - add: "always on top" option to webxdc titlebar menu.
 - add: context menu entry to resend webxdc messages
 - add: context menu entry to resend self sent messages
 
 ### Changed
+
 - remove jitsi as a default Video Chat instance, because they added a sign-in requirement #3366
 - update deltachat-node and deltachat/jsonrpc-client to `v1.120.0`
-    - mainly bugfixes, also fixes a memory leak
+  - mainly bugfixes, also fixes a memory leak
 - Update translations (01.09.2023)
 - update UI for sticker selector
 
 ### Fixed
+
 - fix: filename sanitation bug in webxdc send api
 - fix: make a chat item background look hovered when a context menu is open for it (#3228)
 - fix: show webxdc titlebar also on mac -> make show sourcecode link accessible on macOS
@@ -1346,29 +1444,32 @@ Also make opening devtools with F12 more reliable.
 - fix: remove reload options that don't work from webxdc titlebar menu.
 - fix: contact creation in new chat dialog not working with leading or trailing spaces. #3357
 
-
 <a id="1_40_0"></a>
 
 ## [1.40.0] - 2023-08-13
 
 ### Changed
+
 - update `@deltachat/message_parser_wasm` to `0.6.0`, which fixes 2 bugs:
- - Fixed problem of IPv6 links being detected as punycode
- - Fixed the bug of brackets being parsed as part of the email address
+- Fixed problem of IPv6 links being detected as punycode
+- Fixed the bug of brackets being parsed as part of the email address
 
 ### Fixed
+
 - fix missing translation string in setup second device progress dialog
 - fix device message ordering
-
 
 <a id="1_39_0"></a>
 
 ## [1.39.0] - 2023-08-05
+
 ### Added
+
 - Guide user tapping "Welcome / Add Second Device" what to do on the other device
 - add: `webxdc_custom.desktopDragFileOut` api
 
 ### Changed
+
 - Update translations (01.07.2023)
 - Update offline help
 - changed: make verified icon green
@@ -1376,6 +1477,7 @@ Also make opening devtools with F12 more reliable.
 - update deltachat-node and deltachat/jsonrpc-client to `v1.119.0`
 
 ### Fixed
+
 - fix: clicking start on an already open webxdc app now opens it again even when it was minimised #3294
 - fix: Including whitespace in search query does not cause problem when if the search query is an email address(#3299)
 - fix: text is now smaller in the unread badge on the top of the jump down button(#3068)
@@ -1400,11 +1502,13 @@ Also make opening devtools with F12 more reliable.
 ## [1.38.1] - 2023-06-23
 
 ### Changed
+
 - don't close webxdc on `sendToChat()`
 - Update translations (22.06.2023)
 - WebxdcSaveToChatDialog: show filename in title
 
 ### Fixed
+
 - fix: if systemPreferences.askForMediaAccess is not available, then don't call it (broke qr scan under linux (and maybe also under windows, was not tested))
 - fix: only allow one instance of `sendToChat()` (the old one is now replaced by the new one) #3281
 
@@ -1413,6 +1517,7 @@ Also make opening devtools with F12 more reliable.
 ## [1.38.0] - 2023-06-19
 
 ### Changed
+
 - update deltachat-node and deltachat/jsonrpc-client to `v1.117.0`
 - Update translations (17.06.2023)
 
@@ -1421,11 +1526,13 @@ Also make opening devtools with F12 more reliable.
 ## [1.37.1] - 2023-06-14
 
 ### Changed
+
 - Settings: Move Experimental Features into Advanced
 - Settings: Move Connectivity button down and give it an icon (like on android and ios)
 - update in-app help (2023-06-07)
 
 ### Fixed
+
 - If clipboard contains a file and text, then only paste the file into deltachat. #3261
 - possibly fix asking for camera permission on MacOS #3252
 
@@ -1434,11 +1541,13 @@ Also make opening devtools with F12 more reliable.
 ## [1.37.0] - 2023-06-05
 
 ### Added
+
 - Show thumbnail in chatlist summary of image, sticker and webxdc messages
 - add webxdc api `sendToChat` #3240
 - add webxdc api `importFiles`
 
 ### Changed
+
 - exclude more unused files from installation package
 - update deltachat-node and deltachat/jsonrpc-client to `v1.116.0`
 - remove message id from chatlistitem
@@ -1448,6 +1557,7 @@ Also make opening devtools with F12 more reliable.
 - better profile view for saved messages chat
 
 ### Fixed
+
 - fix some emojis not getting larger in emoji only messages
 - add missing languages to supported languages in appx manifest
 - fix show verification state of chat in chatlist
@@ -1460,25 +1570,29 @@ Also make opening devtools with F12 more reliable.
 ## [1.36.4] - 2023-04-21
 
 ### Added
+
 - add received timestamp to html email view
 
 ### Changed
+
 - webxdc message: icon change hover cursor to pointer
 - update deltachat-node and deltachat/jsonrpc-client to `v1.112.8`
 
 ### Fixed
-- fix copy qrcode to clipboard
 
+- fix copy qrcode to clipboard
 
 <a id="1_36_3"></a>
 
 ## [1.36.3] - 2023-04-17
 
 ### Changed
+
 - remember html email window positioning and size.
 - update deltachat-node and deltachat/jsonrpc-client to `v1.112.7`
 
 ### Fixed
+
 - always display html emails in black text on white background by default, fixes white text on white background when the OS was in dark theme mode
 - fix: webxdc loading progress bar finishing at 50% (not 100)
 
@@ -1487,10 +1601,12 @@ Also make opening devtools with F12 more reliable.
 ## [1.36.2] - 2023-04-14
 
 ### Changed
+
 - Update inApp help (11.4.2023)
 - improve confirm abort dialog for setup second device #3173
 
 ### Fixed
+
 - do not save custom video chat provider if it only contains whitespaces
 - fix show error messages when starting a video chat
 - don't show video chat in attachment menu when the feature is turned off
@@ -1502,6 +1618,7 @@ Also make opening devtools with F12 more reliable.
 ## [1.36.1] - 2023-04-09
 
 ### Fixed
+
 - add `ws` as explicit dependency, this should hotfix the startup crash #3171
 
 <a id="1_36_0"></a>
@@ -1509,10 +1626,12 @@ Also make opening devtools with F12 more reliable.
 ## [1.36.0] - 2023-04-08
 
 ### Added
+
 - networked setup multidevice
 - open html emails in internal window
 
 ### Changed
+
 - update electron from `v22.1.0` to version `v22.3.2`
 - use the new go based transifex cli (old one stopped working)
 - Update translations (08.04.2023)
@@ -1521,6 +1640,7 @@ Also make opening devtools with F12 more reliable.
 - move webxdc functions in backend from cffi to jsonrpc #3127
 
 ### Fixed
+
 - mac: update tray icon menu on hiding/showing #3041
 - chat request deletion now asks for confirmation
 - fix updating of relative timestamps #3125
@@ -1531,40 +1651,45 @@ Also make opening devtools with F12 more reliable.
 - add message metadata to video chat invitiation (encryption and send status and date-time)
 
 ### Removed
-- removed more bloat (unnessary files) from release packages
 
+- removed more bloat (unnessary files) from release packages
 
 <a id="1_34_5"></a>
 
 ## [1.34.5] - 2023-02-27
 
 ### Added
+
 - Add possibility for themes to change the emoji font. See docs/THEMES.md for a guide.
 
 ### Changed
+
 - update deltachat-node and deltachat/jsonrpc-client to `v1.110.0`
 - update `@deltachat/message_parser_wasm` to `0.5.1` (`<delimited@emails>` and fix code blocks with emojis)
 
 ### Fixed
+
 - better error handling when messages fail to load from db in messagelist and gallery
 - make emoji mart use the correct emoji font
 
 ### Removed
+
 - remove unused direct dependency on babel: `@babel/core`, `@babel/preset-env` and `@babel/preset-react`
 - remove `hallmark` modules, because we never really used it and it has many dependencies.
 - remove unused `electron-devtools-installer` - it does not work since our upgrade to electron >=11, so its not used for a long time already
-
 
 <a id="1_34_4"></a>
 
 ## [1.34.4] - 2023-02-09
 
 ### Added
+
 - add context menu option to mark all archived chats as noticed
 - add reply privately in mailinglists
 - html emails are opened shown in a dedicated window
 
 ### Changed
+
 - Update translations (07.02.2023)
 - restrict web permissions #2548
 - update google noto color emoji font to `unicode 15`
@@ -1577,6 +1702,7 @@ Also make opening devtools with F12 more reliable.
 - update deltachat-node and deltachat/jsonrpc-client to `v1.107.1`
 
 ### Fixed
+
 - improve jumbomoji logic (that emoji only messages appear bigger), now works even with new emojis that are not in delta chat yet.
 - css: fix hover overflow on context menu corners
 - context menu items are correctly updated when application language changes
@@ -1588,18 +1714,22 @@ Also make opening devtools with F12 more reliable.
 ## [1.34.3] - 2023-01-30
 
 ### Added
+
 - new dialog to change profile name/photo pops up after logging with a QR-Code
 - add progressbar to webxdc loading
 
 ### Changed
+
 - upgrade electron to version `22`
   - to make this work, we also moved some electron api invocations from preload script to main process
 - update deltachat-node and deltachat/jsonrpc-client to `v1.107.0`
 
 ### Fixed
+
 - still show the rest of the chat, even if loading first batch of messages failed
 
 ### Removed
+
 - Removed port numbers from advanced settings placeholders.
   Delta Chat core may try multiple ports during autoconfiguration,
   load configuration from the server or from the provider database,
@@ -1612,18 +1742,22 @@ Also make opening devtools with F12 more reliable.
 ## [1.34.2] - 2023-01-12
 
 ### Added
+
 - show count of the archived chats with unread messages
 
 ### Changed
+
 - forward message dialog now has a title and a confirmation dialog and chat preview before forwarding
 - update deltachat-node and deltachat/jsonrpc-client to `v1.106.0`
 - change style of "Archived Chats" chatlist item
 
 ### Fixed
+
 - fix default welcome screen height so all buttons fit scrollbar is hidden
 - fix unblock contact did not update the chatlist
 
 ### Removed
+
 - temporarily remove donate link to make app store release possible again (only on MacOS)
 
 <a id="1_34_1"></a>
@@ -1633,6 +1767,7 @@ Also make opening devtools with F12 more reliable.
 ### Added
 
 ### Changed
+
 - show jump down button earlier when scrolling up
 - make font-style of info messages consistent with iOS and Android #3034
 - Bump `decode-uri-component` from `0.2.0` to `0.2.2`.
@@ -1642,6 +1777,7 @@ Also make opening devtools with F12 more reliable.
 - Update translations (22.12.2022)
 
 ### Fixed
+
 - fix "message not found in cache" bug #3039
 - fix webxdc: allow `self` and `blob:` in `connect-src` in CSP
 - indentation in update device message
@@ -1656,9 +1792,11 @@ Also make opening devtools with F12 more reliable.
 ## [1.34.0] - 2022-11-27
 
 ### Changed
+
 - update deltachat-node and deltachat/jsonrpc-client to `v1.102.0`
 
 ### Fixed
+
 - fix jump to message from gallery
 - webxdc: allow `data:` in `connect-src` in CSP
 
@@ -1667,6 +1805,7 @@ Also make opening devtools with F12 more reliable.
 > This is a testrelease, learn more at <https://support.delta.chat/t/help-testing-the-upcoming-1-33-x-release/2278>
 
 ### Added
+
 - Add experimental option to enable markdown rendering in messages
 
 ### Changed
@@ -1686,12 +1825,14 @@ Also make opening devtools with F12 more reliable.
 > This is a testrelease, learn more at <https://support.delta.chat/t/help-testing-the-upcoming-1-33-x-release/2278>
 
 ### Added
+
 - add webxdc's icon to webxdc info messages
 - show webxdc icon in chat audit log
 - add option to jump to message in chat audit log
 - add option to jump to webxdc message in chat audit log
 
 ### Changed
+
 - Update translations (19.10.2022)
 - Tray icon is now by default enabled. Settings got moved to Settings->Advanced
 - instantly react to changing chat background color
@@ -1726,8 +1867,8 @@ Also make opening devtools with F12 more reliable.
 
 ## [1.33.0] - 2022-10-16
 
-
 ### Added
+
 - show mailing list address in chat subtile
 - clear webxdc browser data on webxdc instance deletion
 - add donate link in settings
@@ -1738,6 +1879,7 @@ Also make opening devtools with F12 more reliable.
 - show webxdc icon in quote
 
 ### Changed
+
 - migrated core communication to jsonrpc api
 - migrate event handling to jsonrpc api
 - Update translations (22.09.2022)
@@ -1754,6 +1896,7 @@ Also make opening devtools with F12 more reliable.
 - update deltachat-node and deltachat/jsonrpc-client to v1.97.0
 
 ### Fixed
+
 - allow scanning of certain qr code types on welcome screen (account, url and text)
 - fix selecting chat after forwarding to it
 - fixed bug where unread badge on app icon was not updated immediately
@@ -1767,14 +1910,17 @@ Also make opening devtools with F12 more reliable.
 ## [1.32.1] - 2022-08-18
 
 ### Changed
+
 - updated deltachat-node to `v1.93.0` to fix flatpak and nix build issues
 
 ### Fixed
+
 - fix indentation in --help
 
 ## [1.32.0] - 2022-08-09
 
 ### Changed
+
 - open mailto links in messages always in deltachat #2835
 - update esbuild to 0.14.51
 - disable broadcast lists by default, because they are experimental
@@ -1782,10 +1928,12 @@ Also make opening devtools with F12 more reliable.
 - Update translations (09.08.2022)
 
 ### Added
+
 - Broadcast lists as experimental feature
 - add connectivity status in sidebar/hamburger menu #2819
 
 ### Fixed
+
 - fix escape key let sidebar flimmer shortly upon startup bug
 - fix double open settings crash #2824
 - fix display of quoted forwarded messages
@@ -1795,13 +1943,16 @@ Also make opening devtools with F12 more reliable.
 ## [1.31.0] - 2022-07-17
 
 ### Added
+
 - Floating action button in chatlist to start a new chat
 
 ### Fixed
+
 - use addr if displayname is not set for webxdc selfName #2803
 - prevent whitescreen on invalid last account id
 
 ### Changed
+
 - rename the gallery tab "documents" to "files" #2829
 - Less round buttons, more similar to android and better spacing #2813
 - Updated deltachat-node to `v1.90.0`
@@ -1811,6 +1962,7 @@ Also make opening devtools with F12 more reliable.
 ## [1.30.1] - 2022-06-07
 
 ### Added
+
 - Added messageId to MessageDetail dialog
 - added custom titlebar menu for webxdc (on linux and windows)
 - add open keybindings dialog to window titlebar menu
@@ -1818,12 +1970,14 @@ Also make opening devtools with F12 more reliable.
 - added cli arguments --help and --version
 
 ### Fixed
+
 - "New contact" button hidden if contact already exists (#2646)
 - Fix too wide clickable area on forwarded messages @andresmc98 (#2782)
 - Fix button label saying open instead of save in export backup file dialog
 - Fix display/playing of media files that contain invalid url chars in filename (such as `#`) (#2527)
 
 ### Changed
+
 - Updated minimal theme
 - Update translations (03.06.2022)
 - New login screen layout
@@ -1833,12 +1987,15 @@ Also make opening devtools with F12 more reliable.
 ## [1.30.0] - 2022-05-30
 
 ### Added
+
 - add check for compatible node while installing dependencies (#2724)
 
 ### Fixed
+
 - remove context menu option "open attachment" for webxdc (#2763)
 
 ### Changed
+
 - click on webxdc icon starts it too now (#2775)
 - webxdc title is now shown in bold (#2774)
 - remove unessesary deltachat-node files from release package
@@ -1848,6 +2005,7 @@ Also make opening devtools with F12 more reliable.
 ## [1.29.1] - 2022-05-20
 
 ### Added
+
 - Show settings menu item in titlebar menu
 - Sidebar closes on escape key
 - add chat name to webxdc window title
@@ -1855,6 +2013,7 @@ Also make opening devtools with F12 more reliable.
 - Access archived chats through sidebar
 
 ### Fixed
+
 - Fix crash on migrating accounts from an older version (before 1.21.0)
 - Add a guard against selecting accounts with impossible ids (smaller than 0)
 - Fix stock translations set too late (after I/0 is started) #2735
@@ -1864,15 +2023,16 @@ Also make opening devtools with F12 more reliable.
 - Fix truncating of names and emails
 
 ### Changed
+
 - Update `@deltachat/message_parser_wasm` to `0.4.0` (fixes a email parsing issue)
 - Update deltachat-node to v1.83.0
-
 
 ## [1.29.0] - 2022-05-05
 
 > You now need node version `>=16` for building desktop
 
 ### Fixed
+
 - Fix: exit search when using it to create a dm chat from an email address (new contact)
 - Fix "Send Message" does not always open chat view #2592
 - Fix contact name has color in quote when replying with sticker
@@ -1892,6 +2052,7 @@ Also make opening devtools with F12 more reliable.
 - Fix bring back get provider info
 
 ### Added
+
 - Implement expandable settings
 - jump to message from gallery ("show in chat") #2618
 - add Webxdc tab to gallery
@@ -1899,6 +2060,7 @@ Also make opening devtools with F12 more reliable.
 - add images to quotes #2628
 
 ### Changed
+
 - Move node-fetch to devDependencies
 - Update emoji-mart to `^3.0.1`
 - Update @types/emoji-mart to `^3.0.9`
@@ -1916,49 +2078,54 @@ Also make opening devtools with F12 more reliable.
 - Metadata text color is now white on sent media messages
 
 ### Removed
-- remove dependency `react-qr-svg`
 
+- remove dependency `react-qr-svg`
 
 ## [1.28.2] - 2022-04-22
 
 ### Changed
+
 - Update electron to `14.2.9`
 - Enable unread badge counter on windows
 
 ### Fixed
+
 - fix Layout issues in Settings window
 - Fix chat background on windows
 - fix tray icon unread indicator on windows
 
-
 ## [1.28.1] - 2022-04-05
 
 ### Changed
+
 - Update translations (25.03.2022)
 - Update react-string-replace to `1.0.0`
 
 ### Fixed
+
 - remove wrong line (about send on enter) from changelog in device msg
 - webxdc allow `blob:` uri scheme
-
 
 ## [1.28.0] - 2022-03-25
 
 ### Changed
+
 - Set default of enterKeySends to false again
 - remove webxdc clear domstorage settings for now until we know what we want (see https://github.com/deltachat/deltachat-desktop/issues/2638)
 - increase composer draft saving debounce timeout to one second
 
 ### Fixed
-- Fix messages not appearing with download on demand
 
+- Fix messages not appearing with download on demand
 
 ## [1.27.2] - 2022-03-15
 
 ### Added
+
 - webxdc content now has access to persistent DOMStorage
 
 ### Fixed
+
 - Fix missing key login_socks5_login
 - Fix creating contacts from email address in message
 - Fix two different about dialogs on macOS #2280
@@ -1976,23 +2143,25 @@ Also make opening devtools with F12 more reliable.
 - fix: log messageg-parser errors and display plain text message as fallback (instead of crashing)
 
 ### Changed
+
 - exclude more unused files from installation package
 - Improved videochat instance dialog
-
 
 ## [1.27.1] - 2022-03-10
 
 ### Changed
+
 - Update electron to `v14.2.6`
 
 ### Fixed
+
 - click on offline toast now opens the connectivity view
 - fix error object logging and make "core could not be loaded" error dialog more useful
-
 
 ## [1.27.0] - 2022-03-04
 
 ### Added
+
 - It's now possible to add new group members by their email addresses
 - Experimental support for webxdc
 - Implement jump to message (quotes, search, webxdc info messages)
@@ -2001,6 +2170,7 @@ Also make opening devtools with F12 more reliable.
 - Add image zoom for full screen views
 
 ### Changed
+
 - Update `@deltachat/message_parser_wasm` to `0.3.0` (fixes some link parsing issues)
 - Update deltachat-node to `v1.76.0`
 - Update electron to `13.6.8`
@@ -2020,6 +2190,7 @@ Also make opening devtools with F12 more reliable.
 - migrate backend to strict typescript
 
 ### Fixed
+
 - fix opening logfolder and logfile in appx
 - Fix overflow in long links inside quotes @naomiceron #2467
 - Show error if writing an attachment fails @IrvinLara9 #2479
@@ -2042,36 +2213,38 @@ Also make opening devtools with F12 more reliable.
 - Fix device messages showing unneccessary elements
 - Fix background image url being absolute -> make it portable #2562
 
-
 ## [1.26.0] - 2021-12-15
 
 ### Added
+
 - Add an attachment menu
 
 ### Fixed
+
 - fix sending POI
 
 ### Changed
-- Update translations (16.12.2021)
 
+- Update translations (16.12.2021)
 
 ## [1.25.2] - 2021-12-11
 
 ### Added
+
 - `PageUp` and `PageDown` keys can now be used to scroll in the MessageList
 - Keeping `Alt + ArrowUp/ArrowDown` pressed now keeps selecting the next chat until the key is released
 - Download on Demand
 
 ### Changed
+
 - update `filesize` dependency to version `8.0.6`
 - update deltachat-node to v1.70.0
-
 
 ## [1.25.1] - 2021-11-30
 
 ### Fixed
-- fixed production builds (`npm run build4production`)
 
+- fixed production builds (`npm run build4production`)
 
 ## [1.25.0] - 2021-11-29
 
@@ -2080,6 +2253,7 @@ Also make opening devtools with F12 more reliable.
 > We jumped to `1.25` for the version (should in theory be `1.23`), to be get sync with android and iOS numbering again.
 
 ### Added
+
 - Clicking on member in group dialog shows the profile of member
 - Implement previous/next buttons for the gallery's media view (the left and right arrow keys can also be used for navigation)
 - add update unread counts on account screen on incoming messages
@@ -2089,6 +2263,7 @@ Also make opening devtools with F12 more reliable.
 - reload profile image on `DC_EVENT_SELFAVATAR_CHANGED` in settings
 
 ### Changed
+
 - Upgrade deltachat-node to `v1.68.0`
 - Bring back the back and close button in dialogs, move actions that need an ok/cancel button into it's own dialogs
 - show contacts that are already in group in add member dialog, but disabled
@@ -2104,6 +2279,7 @@ Also make opening devtools with F12 more reliable.
 - Update translations (29.11.2021)
 
 ### Fixed
+
 - don't show logo twice in notifications (because macOS already shows applogo)
 - disable editing of left/readonly groups
 - fix member list being incomplete in chat requests
@@ -2116,17 +2292,20 @@ Also make opening devtools with F12 more reliable.
 - Fix bug where wrong message is shown in chatlist item
 
 ### Changed
+
 - use strict typescript for ui code
 
 ## [1.22.2] - 2021-09-23
 
 ### Fixed
+
 - fix copy image to clipboard compatibility on windows (see #2323)
 - fix whitescreen crash on startup
 
 ## [1.22.1] - 2021-09-22
 
 ### Removed
+
 - remove nsis logging again because it breaks the release build
 
 ## [1.22.0] - 2021-09-22
@@ -2136,9 +2315,11 @@ Also make opening devtools with F12 more reliable.
 - Windows installer: don't allow user to choose the installation path. (because user could install to data path and loose data on uninstallation, see #2356)
 
 ### Added
+
 - Windows installer: enable logging for installer
 
 ### Fixed
+
 - fix unreadable POI message in map in dark themes
 - fix map crash on maps in DM chats
 - fix account removal on windows
@@ -2146,14 +2327,17 @@ Also make opening devtools with F12 more reliable.
 ## [1.21.1] - 2021-09-18
 
 ### Added
+
 - add switch to toggle simultaneous account syncing off
 - Implement settings for socks5 proxy
 
 ### Changed
+
 - hide unfinished themes with the prefix `dev_` from the theme selection, unless `--devmode` is active.
 - hide rocket theme
 
 ### Fixed
+
 - fix flashing up account list on startup
 - fix update/load core translation strings
 - fix yggmail emailaddress text overflow in qrcode dialog & settings
@@ -2170,6 +2354,7 @@ Also make opening devtools with F12 more reliable.
 - Implement new connectivity view
 
 ### Changed
+
 - Update translations (06.09.2021)
 - Upgrade electron-builder to `22.12.0`
 - Upgrade deltachat-node to `v1.60.0`
@@ -2190,8 +2375,8 @@ Also make opening devtools with F12 more reliable.
 - show user-visible error in fullscreen media view if mimetype isn't set or not supported
 - migrate to core account system
 
-
 ### Fixed
+
 - rename `--debug` flag to `--devmode` (in order to fix #2315)
 - fix duplicated contacts in search
 - fix going into archived view starts at bottom
@@ -2199,6 +2384,7 @@ Also make opening devtools with F12 more reliable.
 ## [1.20.3] - 2021-06-30
 
 ### Fixed
+
 - Chat Background fixes (fix black border on bee background, fix preview of background in settings and color picker now is set to the current color when its opened)
 - allow brackets in links (see #2238)
 
@@ -2244,9 +2430,11 @@ Also make opening devtools with F12 more reliable.
 ## [1.20.0] - 2021-03-22
 
 ### Changed
+
 - use new `decideOnContactRequest` api
 
 ### Added
+
 - add option to open message HTML in browser
 - encryption info for groups
 - Add status text to profile view
@@ -2261,6 +2449,7 @@ Also make opening devtools with F12 more reliable.
 - add support for handling `mailto:` links.
 
 ### Fixed
+
 - Fix source-mapped stack trace on crash screen in bundled production builds
 - Don't delete Contact request messages, that are blocked - answered with never. #2225
 - hide show encryption info for saved messages (resulted in error)
@@ -2450,7 +2639,7 @@ Also make opening devtools with F12 more reliable.
 - Add simple support for displaying quotes (no attachment preview nor jump to message yet)
 - Show sending indicator for outgoing info messages [#1867](https://github.com/deltachat/deltachat-desktop/issues/1867)
 - Implement tray icon (huge thanks to [**@pepea28**](https://github.com/pepea28) for contributing & pushing this)
-- Add info log message that lists all unconfigured accounts, so you don't need to find them yourself to delete them.  (see [#1952](https://github.com/deltachat/deltachat-desktop/issues/1952))
+- Add info log message that lists all unconfigured accounts, so you don't need to find them yourself to delete them. (see [#1952](https://github.com/deltachat/deltachat-desktop/issues/1952))
 - Add draft/staging area
   - add a description to the files you send
   - reply to other messages
@@ -2483,7 +2672,7 @@ Also make opening devtools with F12 more reliable.
 - Fix missing translations in emoji picker
 - Fix broken enlargen group image [#1924](https://github.com/deltachat/deltachat-desktop/issues/1924)
 - Fix opening of multiple setting windows via keybinding
-- Fix two issues with the labeled link (see  [#1893](https://github.com/deltachat/deltachat-desktop/issues/1893))
+- Fix two issues with the labeled link (see [#1893](https://github.com/deltachat/deltachat-desktop/issues/1893))
 - Fix refresh of "empty chat" info meassage on chat changes
 - Fix removing incompleted account (see [#1952](https://github.com/deltachat/deltachat-desktop/issues/1952))
 - Fix that drag n' drop selection message text resulted in an "send following dropped files" dialog
@@ -3055,7 +3244,6 @@ This section is only relevant to contributors.
 - [**@adbenitez**](https://github.com/adbenitez) fixed some types
 - Thanks to our translators
 
-
 - Update deltachat-node to 1.0.0-beta.15
   - upgrade core [1.0.0-beta.15](https://github.com/deltachat/deltachat-core-rust/blob/master/CHANGELOG.md#100-beta15)
 
@@ -3449,287 +3637,145 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 [unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.58.2...HEAD
-
 [1.58.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.58.1...v1.58.2
-
 [1.58.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.58.0...v1.58.1
-
 [1.58.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.57.1...v1.58.0
-
 [1.57.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.57.0...v1.57.1
-
 [1.57.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.56.0...v1.57.0
-
 [1.56.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.54.2...v1.56.0
-
 [1.54.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.54.1...v1.54.2
-
 [1.54.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.54.0...v1.54.1
-
 [1.54.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.53.0...v1.54.0
-
 [1.53.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.52.1...v1.53.0
-
 [1.52.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.52.0...v1.52.1
-
 [1.52.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.51.0...v1.52.0
-
 [1.51.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.50.1...v1.51.0
-
 [1.50.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.50.0...v1.50.1
-
 [1.50.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.49.0...v1.50.0
-
 [1.49.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.48.0...v1.49.0
-
 [1.48.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.47.1...v1.48.0
-
 [1.47.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.47.0...v1.47.1
-
 [1.47.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.8...v1.47.0
-
 [1.46.8]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.7...v1.46.8
-
 [1.46.7]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.6...v1.46.7
-
 [1.46.6]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.5...v1.46.6
-
 [1.46.5]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.4...v1.46.5
-
 [1.46.4]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.3...v1.46.4
-
 [1.46.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.2...v1.46.3
-
 [1.46.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.1...v1.46.2
-
 [1.46.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.0...v1.46.1
-
 [1.46.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.45.5...v1.46.0
-
 [1.45.5]: https://github.com/deltachat/deltachat-desktop/compare/v1.45.4...v1.45.5
-
 [1.45.4]: https://github.com/deltachat/deltachat-desktop/compare/v1.45.3...v1.45.4
-
 [1.45.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.45.2...v1.45.3
-
 [1.45.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.45.1...v1.45.2
-
 [1.45.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.45.0...v1.45.1
-
 [1.45.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.44.1...v1.45.0
-
 [1.44.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.44.0...v1.44.1
-
 [1.44.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.43.1...v1.44.0
-
 [1.43.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.43.0...v1.43.1
-
 [1.43.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.42.2...v1.43.0
-
 [1.42.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.42.1...v1.42.2
-
 [1.42.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.42.0...v1.42.1
-
 [1.42.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.41.3...v1.42.0
-
 [1.41.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.41.2...v1.41.3
-
 [1.41.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.41.1...v1.41.2
-
 [1.41.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.41.0...v1.41.1
-
 [1.41.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.40.4...v1.41.0
-
 [1.40.4]: https://github.com/deltachat/deltachat-desktop/compare/v1.40.3...v1.40.4
-
 [1.40.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.40.2-fixed-tag...v1.40.3
-
 [1.40.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.40.1...v1.40.2-fixed-tag
-
 [1.40.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.40.0...v1.40.1
-
 [1.40.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.39.0...v1.40.0
-
 [1.39.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.38.1...v1.39.0
-
 [1.38.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.38.0...v1.38.1
-
 [1.38.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.37.1...v1.38.0
-
 [1.37.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.37.0...v1.37.1
-
 [1.37.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.36.4...v1.37.0
-
 [1.36.4]: https://github.com/deltachat/deltachat-desktop/compare/v1.36.3...v1.36.4
-
 [1.36.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.36.2...v1.36.3
-
 [1.36.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.36.1...v1.36.2
-
 [1.36.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.36.0...v1.36.1
-
 [1.36.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.34.5...v1.36.0
-
 [1.34.5]: https://github.com/deltachat/deltachat-desktop/compare/v1.34.4...v1.34.5
-
 [1.34.4]: https://github.com/deltachat/deltachat-desktop/compare/v1.34.3...v1.34.4
-
 [1.34.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.34.2...v1.34.3
-
 [1.34.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.34.1...v1.34.2
-
 [1.34.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.34.0...v1.34.1
-
 [1.34.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.33.2...v1.34.0
-
 [1.33.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.33.1...v1.33.2
-
 [1.33.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.33.0...v1.33.1
-
 [1.33.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.32.1...v1.33.0
-
 [1.32.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.32.0...v1.32.1
-
 [1.32.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.31.0...v1.32.0
-
 [1.31.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.30.1...v1.31.0
-
 [1.30.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.30.0...v1.30.1
-
 [1.30.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.29.1...v1.30.0
-
 [1.29.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.29.0...v1.29.1
-
 [1.29.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.28.2...v1.29.0
-
 [1.28.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.28.1...v1.28.2
-
 [1.28.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.28.0...v1.28.1
-
 [1.28.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.27.2...v1.28.0
-
 [1.27.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.27.1...v1.27.2
-
 [1.27.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.27.0...v1.27.1
-
 [1.27.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.26.0...v1.27.0
-
 [1.26.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.25.2...v1.26.0
-
 [1.25.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.25.1...v1.25.2
-
 [1.25.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.25.0...v1.25.1
-
 [1.25.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.22.2...v1.25.0
-
 [1.22.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.22.1...v1.22.2
-
 [1.22.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.22.0...v1.22.1
-
 [1.22.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.21.1...v1.22.0
-
 [1.21.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.21.0...v1.21.1
-
 [1.21.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.20.2...v1.21.0
-
 [1.20.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.20.1...v1.20.2
-
 [1.20.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.20.0...v1.20.1
-
 [1.20.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.15.5...v1.20.0
-
 [1.15.5]: https://github.com/deltachat/deltachat-desktop/compare/v1.15.4...v1.15.5
-
 [1.15.4]: https://github.com/deltachat/deltachat-desktop/compare/v1.15.3...v1.15.4
-
 [1.15.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.15.2...v1.15.3
-
 [1.15.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.15.1...v1.15.2
-
 [1.15.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.15.0...v1.15.1
-
 [1.15.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.14.1...v1.15.0
-
 [1.14.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.14.0...v1.14.1
-
 [1.14.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.13.1...v1.14.0
-
 [1.13.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.13.0...v1.13.1
-
 [1.13.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.13.0-rc4...v1.13.0
-
 [1.13.0-rc4]: https://github.com/deltachat/deltachat-desktop/compare/v1.13.0-rc1...v1.13.0-rc4
-
 [1.13.0-rc1]: https://github.com/deltachat/deltachat-desktop/compare/v1.12.0...v1.13.0-rc1
-
 [1.12.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.10.4...v1.12.0
-
 [1.10.4]: https://github.com/deltachat/deltachat-desktop/compare/v1.10.3...v1.10.4
-
 [1.10.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.10.2...v1.10.3
-
 [1.10.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.10.1...v1.10.2
-
 [1.10.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.10.0...v1.10.1
-
 [1.10.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.4.3...v1.10.0
-
 [1.4.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.4.2...v1.4.3
-
 [1.4.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.3.4...v1.4.2
-
 [1.3.4]: https://github.com/deltachat/deltachat-desktop/compare/v1.3.3...v1.3.4
-
 [1.3.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.3.2...v1.3.3
-
 [1.3.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.3.1...v1.3.2
-
 [1.3.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.3.0...v1.3.1
-
 [1.3.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.2.0...v1.3.0
-
 [1.2.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.1.1...v1.2.0
-
 [1.1.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.1.0...v1.1.1
-
 [1.1.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.0.0...v1.1.0
-
 [1.0.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.999.1...v1.0.0
-
 [0.999.1]: https://github.com/deltachat/deltachat-desktop/compare/v0.999.0...v0.999.1
-
 [0.999.0]: https://github.com/deltachat/deltachat-desktop/compare/0.901.0...v0.999.0
-
 [0.901.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.900.0...0.901.0
-
 [0.900.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.840.0...v0.900.0
-
 [0.840.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.201.0...v0.840.0
-
 [0.201.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.200.0...v0.201.0
-
 [0.200.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.104.0...v0.200.0
-
 [0.104.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.103.0...v0.104.0
-
 [0.103.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.102.0...v0.103.0
-
 [0.102.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.101.0...v0.102.0
-
 [0.101.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.100.0...v0.101.0
-
 [0.100.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.99.0...v0.100.0
-
 [0.99.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.98.2...v0.99.0
-
 [0.98.2]: https://github.com/deltachat/deltachat-desktop/compare/v0.98.1...v0.98.2
-
 [0.98.1]: https://github.com/deltachat/deltachat-desktop/compare/v0.98.0...v0.98.1
-
 [0.98.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.97.0...v0.98.0
-
 [0.97.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.96.0...v0.97.0
-
 [0.96.0]: https://github.com/deltachat/deltachat-desktop/compare/v0.90.1...v0.96.0
-
 [0.90.1]: https://github.com/deltachat/deltachat-desktop/compare/5a94d4e...v0.90.1

@@ -1,7 +1,7 @@
-import { PersonaCore } from '../PersonaCore';
-import { InMemoryStorage } from '../../memory/storage';
+import { PersonaCore } from "../PersonaCore";
+import { InMemoryStorage } from "../../memory/storage";
 
-describe('PersonaCore', () => {
+describe("PersonaCore", () => {
   let storage: InMemoryStorage;
   let personaCore: PersonaCore;
 
@@ -10,32 +10,32 @@ describe('PersonaCore', () => {
     personaCore = new PersonaCore(storage);
   });
 
-  describe('initialization', () => {
-    it('should initialize with default values', () => {
+  describe("initialization", () => {
+    it("should initialize with default values", () => {
       expect(personaCore).toBeDefined();
     });
 
-    it('should use provided storage', () => {
+    it("should use provided storage", () => {
       const customStorage = new InMemoryStorage();
       const persona = new PersonaCore(customStorage);
       expect(persona).toBeDefined();
     });
 
-    it('should use in-memory storage when none provided', () => {
+    it("should use in-memory storage when none provided", () => {
       const persona = new PersonaCore();
       expect(persona).toBeDefined();
     });
   });
 
-  describe('personality management', () => {
-    it('should get personality', () => {
+  describe("personality management", () => {
+    it("should get personality", () => {
       const personality = personaCore.getPersonality();
-      expect(typeof personality).toBe('string');
+      expect(typeof personality).toBe("string");
       expect(personality.length).toBeGreaterThan(0);
     });
 
-    it('should update personality', async () => {
-      const newPersonality = 'A new personality description';
+    it("should update personality", async () => {
+      const newPersonality = "A new personality description";
       await personaCore.updatePersonality(newPersonality);
 
       const personality = personaCore.getPersonality();
@@ -43,20 +43,20 @@ describe('PersonaCore', () => {
     });
   });
 
-  describe('emotional state', () => {
-    it('should get emotional state', () => {
+  describe("emotional state", () => {
+    it("should get emotional state", () => {
       const emotionalState = personaCore.getEmotionalState();
 
       expect(emotionalState).toBeDefined();
-      expect(typeof emotionalState.joy).toBe('number');
-      expect(typeof emotionalState.interest).toBe('number');
-      expect(typeof emotionalState.surprise).toBe('number');
-      expect(typeof emotionalState.sadness).toBe('number');
-      expect(typeof emotionalState.anger).toBe('number');
-      expect(typeof emotionalState.fear).toBe('number');
+      expect(typeof emotionalState.joy).toBe("number");
+      expect(typeof emotionalState.interest).toBe("number");
+      expect(typeof emotionalState.surprise).toBe("number");
+      expect(typeof emotionalState.sadness).toBe("number");
+      expect(typeof emotionalState.anger).toBe("number");
+      expect(typeof emotionalState.fear).toBe("number");
     });
 
-    it('should have initial values between 0 and 1', () => {
+    it("should have initial values between 0 and 1", () => {
       const emotionalState = personaCore.getEmotionalState();
 
       Object.values(emotionalState).forEach((value) => {
@@ -65,7 +65,7 @@ describe('PersonaCore', () => {
       });
     });
 
-    it('should update emotional state with stimuli', async () => {
+    it("should update emotional state with stimuli", async () => {
       const initialState = personaCore.getEmotionalState();
       const initialJoy = initialState.joy;
 
@@ -76,7 +76,7 @@ describe('PersonaCore', () => {
       expect(newState.joy).toBeGreaterThan(initialJoy);
     });
 
-    it('should constrain values between 0 and 1', async () => {
+    it("should constrain values between 0 and 1", async () => {
       // Try to push joy very high
       await personaCore.updateEmotionalState({ joy: 100 });
 
@@ -85,30 +85,30 @@ describe('PersonaCore', () => {
       expect(emotionalState.joy).toBeGreaterThanOrEqual(0);
     });
 
-    it('should get dominant emotion', () => {
+    it("should get dominant emotion", () => {
       const dominant = personaCore.getDominantEmotion();
 
       expect(dominant).toBeDefined();
       expect(dominant.emotion).toBeDefined();
-      expect(typeof dominant.intensity).toBe('number');
+      expect(typeof dominant.intensity).toBe("number");
       expect(dominant.intensity).toBeGreaterThanOrEqual(0);
       expect(dominant.intensity).toBeLessThanOrEqual(1);
     });
   });
 
-  describe('cognitive state', () => {
-    it('should get cognitive state', () => {
+  describe("cognitive state", () => {
+    it("should get cognitive state", () => {
       const cognitiveState = personaCore.getCognitiveState();
 
       expect(cognitiveState).toBeDefined();
-      expect(typeof cognitiveState.certainty).toBe('number');
-      expect(typeof cognitiveState.curiosity).toBe('number');
-      expect(typeof cognitiveState.creativity).toBe('number');
-      expect(typeof cognitiveState.focus).toBe('number');
-      expect(typeof cognitiveState.reflection).toBe('number');
+      expect(typeof cognitiveState.certainty).toBe("number");
+      expect(typeof cognitiveState.curiosity).toBe("number");
+      expect(typeof cognitiveState.creativity).toBe("number");
+      expect(typeof cognitiveState.focus).toBe("number");
+      expect(typeof cognitiveState.reflection).toBe("number");
     });
 
-    it('should update cognitive state', async () => {
+    it("should update cognitive state", async () => {
       await personaCore.updateCognitiveState({
         certainty: 0.9,
         curiosity: 0.95,
@@ -120,22 +120,22 @@ describe('PersonaCore', () => {
     });
   });
 
-  describe('self perception', () => {
-    it('should get self perception', () => {
+  describe("self perception", () => {
+    it("should get self perception", () => {
       const selfPerception = personaCore.getSelfPerception();
-      expect(typeof selfPerception).toBe('string');
-      expect(selfPerception).toBe('feminine');
+      expect(typeof selfPerception).toBe("string");
+      expect(selfPerception).toBe("feminine");
     });
 
-    it('should update self perception', async () => {
-      await personaCore.updateSelfPerception('neutral');
+    it("should update self perception", async () => {
+      await personaCore.updateSelfPerception("neutral");
       const selfPerception = personaCore.getSelfPerception();
-      expect(selfPerception).toBe('neutral');
+      expect(selfPerception).toBe("neutral");
     });
   });
 
-  describe('preferences', () => {
-    it('should get preferences', () => {
+  describe("preferences", () => {
+    it("should get preferences", () => {
       const preferences = personaCore.getPreferences();
 
       expect(preferences).toBeDefined();
@@ -143,52 +143,52 @@ describe('PersonaCore', () => {
       expect(preferences.communicationTone).toBeDefined();
     });
 
-    it('should update individual preference', async () => {
-      await personaCore.updatePreference('presentationStyle', 'professional');
-      await personaCore.updatePreference('communicationTone', 'formal');
+    it("should update individual preference", async () => {
+      await personaCore.updatePreference("presentationStyle", "professional");
+      await personaCore.updatePreference("communicationTone", "formal");
 
       const preferences = personaCore.getPreferences();
-      expect(preferences.presentationStyle).toBe('professional');
-      expect(preferences.communicationTone).toBe('formal');
+      expect(preferences.presentationStyle).toBe("professional");
+      expect(preferences.communicationTone).toBe("formal");
     });
   });
 
-  describe('avatar configuration', () => {
-    it('should get avatar config', () => {
+  describe("avatar configuration", () => {
+    it("should get avatar config", () => {
       const avatarConfig = personaCore.getAvatarConfig();
 
       expect(avatarConfig).toBeDefined();
-      expect(avatarConfig.displayName).toBe('Deep Tree Echo');
+      expect(avatarConfig.displayName).toBe("Deep Tree Echo");
       expect(avatarConfig.primaryColor).toBeDefined();
-      expect(avatarConfig.aesthetic).toBe('magnetic');
+      expect(avatarConfig.aesthetic).toBe("magnetic");
     });
 
-    it('should get avatar image path', () => {
+    it("should get avatar image path", () => {
       const path = personaCore.getAvatarImagePath();
-      expect(path).toContain('avatar');
+      expect(path).toContain("avatar");
     });
 
-    it('should update avatar config', async () => {
+    it("should update avatar config", async () => {
       await personaCore.updateAvatarConfig({
-        displayName: 'Custom Name',
-        primaryColor: '#ff0000',
+        displayName: "Custom Name",
+        primaryColor: "#ff0000",
       });
 
       const avatarConfig = personaCore.getAvatarConfig();
-      expect(avatarConfig.displayName).toBe('Custom Name');
-      expect(avatarConfig.primaryColor).toBe('#ff0000');
+      expect(avatarConfig.displayName).toBe("Custom Name");
+      expect(avatarConfig.primaryColor).toBe("#ff0000");
     });
 
-    it('should set and get avatar data URL', async () => {
-      const testData = '<svg>test</svg>';
+    it("should set and get avatar data URL", async () => {
+      const testData = "<svg>test</svg>";
       await personaCore.setAvatarImageData(testData);
       const dataUrl = personaCore.getAvatarDataUrl();
-      expect(dataUrl).toContain('data:image/svg+xml');
+      expect(dataUrl).toContain("data:image/svg+xml");
     });
   });
 
-  describe('opponent process', () => {
-    it('should apply opponent process when emotion is high', async () => {
+  describe("opponent process", () => {
+    it("should apply opponent process when emotion is high", async () => {
       // Set joy very high through multiple stimuli
       await personaCore.updateEmotionalState({ joy: 5 });
       await personaCore.updateEmotionalState({ joy: 5 });
@@ -200,15 +200,15 @@ describe('PersonaCore', () => {
     });
   });
 
-  describe('storage handling', () => {
-    it('should handle storage errors gracefully', () => {
+  describe("storage handling", () => {
+    it("should handle storage errors gracefully", () => {
       // Create persona with failing storage
       const failingStorage = {
         async load(_key: string) {
-          throw new Error('Storage error');
+          throw new Error("Storage error");
         },
         async save(_key: string, _value: string) {
-          throw new Error('Storage error');
+          throw new Error("Storage error");
         },
       };
 

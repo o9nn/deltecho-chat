@@ -27,18 +27,18 @@ Self-image: how the agent perceives its own character
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `perceivedFacets` | `CharacterFacets` |
-| `believedStrengths` | `string`[] |
-| `acknowledgedWeaknesses` | `string`[] |
+| Name                     | Type                             |
+| :----------------------- | :------------------------------- |
+| `perceivedFacets`        | `CharacterFacets`                |
+| `believedStrengths`      | `string`[]                       |
+| `acknowledgedWeaknesses` | `string`[]                       |
 | `perceivedDominantFacet` | `string` \| `number` \| `symbol` |
 
 #### Defined in
 
 [src/types.ts:79](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L79)
 
-___
+---
 
 ### selfStory
 
@@ -50,7 +50,7 @@ Self-narrative: the agent's story about itself
 
 [src/types.ts:87](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L87)
 
-___
+---
 
 ### perceivedCapabilities
 
@@ -62,7 +62,7 @@ Capabilities the agent believes it has
 
 [src/types.ts:90](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L90)
 
-___
+---
 
 ### roleUnderstanding
 
@@ -74,7 +74,7 @@ Understanding of role and purpose
 
 [src/types.ts:93](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L93)
 
-___
+---
 
 ### currentGoals
 
@@ -86,7 +86,7 @@ Goals and motivations
 
 [src/types.ts:96](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L96)
 
-___
+---
 
 ### worldView
 
@@ -98,7 +98,7 @@ INVERTED: The world-view lives INSIDE the self-model
 
 [src/types.ts:99](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L99)
 
-___
+---
 
 ### selfAwareness
 
@@ -108,11 +108,11 @@ Meta-awareness: knowing that Vi differs from Ai
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `lastReflection` | `number` |
-| `perceivedAccuracy` | `number` |
-| `activeQuestions` | `string`[] |
+| Name                | Type       |
+| :------------------ | :--------- |
+| `lastReflection`    | `number`   |
+| `perceivedAccuracy` | `number`   |
+| `activeQuestions`   | `string`[] |
 
 #### Defined in
 

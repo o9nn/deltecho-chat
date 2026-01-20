@@ -1,19 +1,19 @@
-import React, { useState, useLayoutEffect, useRef } from 'react'
+import React, { useState, useLayoutEffect, useRef } from "react";
 
-import styles from './styles.module.scss'
+import styles from "./styles.module.scss";
 
-import type { ReactNode } from 'react'
+import type { ReactNode } from "react";
 
 type Props = {
   /** Desired x position of element, usually determined by a user click event */
-  x: number
+  x: number;
 
   /** Desired y position of element, usually determined by a user click event */
-  y: number
+  y: number;
 
   /** Element which will be absolutely positioned and automatically adjusted */
-  children: ReactNode
-}
+  children: ReactNode;
+};
 
 /**
  * Helper component which fixes it's wrapped components absolutely on the screen,
@@ -28,31 +28,31 @@ type Props = {
  * or scroll.
  */
 export default function AbsolutePositioningHelper(props: Props) {
-  const ref = useRef<HTMLDivElement>(null)
+  const ref = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({
     refWidth: 0,
     refHeight: 0,
     windowWidth: window.innerWidth,
     windowHeight: window.innerHeight,
-  })
+  });
 
   // Observe size & position changes of the wrapped "ref" element.
   useLayoutEffect(() => {
     if (!ref.current) {
-      return
+      return;
     }
 
-    const refElem = ref.current
+    const refElem = ref.current;
 
-    const observer = new ResizeObserver(entries => {
+    const observer = new ResizeObserver((entries) => {
       if (entries.length === 0) {
-        return
+        return;
       }
 
-      const { width: refWidth, height: refHeight } = entries[0].contentRect
+      const { width: refWidth, height: refHeight } = entries[0].contentRect;
 
       if (refWidth === 0 || refHeight === 0) {
-        return
+        return;
       }
 
       setDimensions({
@@ -60,49 +60,49 @@ export default function AbsolutePositioningHelper(props: Props) {
         windowHeight: window.innerHeight,
         refWidth,
         refHeight,
-      })
-    })
+      });
+    });
 
-    observer.observe(refElem)
+    observer.observe(refElem);
 
     return () => {
-      observer.unobserve(refElem)
-    }
-  }, [])
+      observer.unobserve(refElem);
+    };
+  }, []);
 
-  let x
+  let x;
 
   // Adjust element position to be centered
-  x = props.x - dimensions.refWidth / 2
+  x = props.x - dimensions.refWidth / 2;
 
   // Change the x position when it is too far to the right and leaving the window
   if (x + dimensions.refWidth > dimensions.windowWidth) {
-    x = dimensions.windowWidth - dimensions.refWidth
+    x = dimensions.windowWidth - dimensions.refWidth;
   }
 
   // .. and when it is too far to the left
   if (x < 0) {
-    x = 0
+    x = 0;
   }
 
-  let y
+  let y;
 
   // Align element to be above the initial y position
-  y = props.y - dimensions.refHeight
+  y = props.y - dimensions.refHeight;
 
   // Align the element under the initial y position if it would otherwise cut the top
   if (y < dimensions.refHeight) {
-    y = props.y
+    y = props.y;
   }
 
   // .. and when it is too far to the bottom
   if (y + dimensions.refHeight > dimensions.windowHeight) {
-    y = dimensions.windowHeight - dimensions.refHeight
+    y = dimensions.windowHeight - dimensions.refHeight;
   }
 
   // Finally adjust when the screen is just too small
   if (y < 0) {
-    y = 0
+    y = 0;
   }
 
   // Hide wrapper if observed element is not rendered yet. Do not remove
@@ -110,8 +110,8 @@ export default function AbsolutePositioningHelper(props: Props) {
   // This helps us to prevent weird flickering when React is not ready yet.
   const visibility =
     dimensions.refWidth === 0 || dimensions.refHeight === 0
-      ? 'hidden'
-      : 'visible'
+      ? "hidden"
+      : "visible";
 
   return (
     <div
@@ -125,5 +125,5 @@ export default function AbsolutePositioningHelper(props: Props) {
     >
       {props.children}
     </div>
-  )
+  );
 }

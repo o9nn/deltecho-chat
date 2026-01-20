@@ -1,9 +1,9 @@
 /**
  * DeepTreeEchoUIBridge - React UI Interaction Layer for Deep Tree Echo
- * 
+ *
  * This module bridges Deep Tree Echo's cognitive system with the React UI,
  * allowing the AI to interact with the interface like a normal user would.
- * 
+ *
  * Architecture:
  * ```
  * ┌─────────────────────────────────────────────────────────────────────┐
@@ -35,137 +35,137 @@
  * ```
  */
 
-import { getLogger } from '@deltachat-desktop/shared/logger'
-import { BackendRemote, Type as T } from '../../backend-com'
-import { ActionEmitter, KeybindAction } from '../../keybindings'
-import { DeepTreeEchoChatManager } from './DeepTreeEchoChatManager'
-import { getAgentToolExecutor } from './AgentToolExecutor'
+import { getLogger } from "@deltachat-desktop/shared/logger";
+import { BackendRemote, Type as T } from "../../backend-com";
+import { ActionEmitter, KeybindAction } from "../../keybindings";
+import { DeepTreeEchoChatManager } from "./DeepTreeEchoChatManager";
+import { getAgentToolExecutor } from "./AgentToolExecutor";
 
 // Lazy logger to avoid initialization before logger handler is ready
-let _log: ReturnType<typeof getLogger> | null = null
+let _log: ReturnType<typeof getLogger> | null = null;
 function log() {
   if (!_log) {
-    _log = getLogger('render/components/DeepTreeEchoBot/DeepTreeEchoUIBridge')
+    _log = getLogger("render/components/DeepTreeEchoBot/DeepTreeEchoUIBridge");
   }
-  return _log
+  return _log;
 }
 
 /**
  * UI View types
  */
 export type UIView =
-  | 'chat-list'
-  | 'chat-view'
-  | 'settings'
-  | 'global-gallery'
-  | 'dialog'
-  | 'unknown'
+  | "chat-list"
+  | "chat-view"
+  | "settings"
+  | "global-gallery"
+  | "dialog"
+  | "unknown";
 
 /**
  * Dialog types that can be opened
  */
 export type DialogType =
-  | 'create-chat'
-  | 'create-group'
-  | 'settings'
-  | 'about'
-  | 'qr-code'
-  | 'forward-message'
-  | 'confirm'
-  | 'alert'
+  | "create-chat"
+  | "create-group"
+  | "settings"
+  | "about"
+  | "qr-code"
+  | "forward-message"
+  | "confirm"
+  | "alert";
 
 /**
  * UI State snapshot
  */
 export interface UIState {
-  currentView: UIView
-  activeAccountId: number | null
-  activeChatId: number | null
-  isDialogOpen: boolean
-  dialogType: DialogType | null
-  composerText: string
-  isComposerFocused: boolean
+  currentView: UIView;
+  activeAccountId: number | null;
+  activeChatId: number | null;
+  isDialogOpen: boolean;
+  dialogType: DialogType | null;
+  composerText: string;
+  isComposerFocused: boolean;
 }
 
 /**
  * Chat context interface (matches ChatContextValue)
  */
 export interface ChatContextInterface {
-  selectChat: (accountId: number, chatId: number) => Promise<boolean>
-  unselectChat: () => void
-  chatId?: number
-  chatWithLinger?: T.FullChat
+  selectChat: (accountId: number, chatId: number) => Promise<boolean>;
+  unselectChat: () => void;
+  chatId?: number;
+  chatWithLinger?: T.FullChat;
 }
 
 /**
  * Dialog context interface
  */
 export interface DialogContextInterface {
-  openDialog: (type: string, props?: any) => void
-  closeDialog: () => void
+  openDialog: (type: string, props?: any) => void;
+  closeDialog: () => void;
 }
 
 /**
  * UI Bridge event types
  */
 export type UIBridgeEvent =
-  | { type: 'chat_selected'; chatId: number; accountId: number }
-  | { type: 'chat_closed' }
-  | { type: 'dialog_opened'; dialogType: DialogType }
-  | { type: 'dialog_closed' }
-  | { type: 'view_changed'; view: UIView }
-  | { type: 'composer_changed'; text: string }
+  | { type: "chat_selected"; chatId: number; accountId: number }
+  | { type: "chat_closed" }
+  | { type: "dialog_opened"; dialogType: DialogType }
+  | { type: "dialog_closed" }
+  | { type: "view_changed"; view: UIView }
+  | { type: "composer_changed"; text: string };
 
 /**
  * UI Bridge event listener
  */
-export type UIBridgeEventListener = (event: UIBridgeEvent) => void
+export type UIBridgeEventListener = (event: UIBridgeEvent) => void;
 
 /**
  * DeepTreeEchoUIBridge - Connects Deep Tree Echo to the React UI
  */
 export class DeepTreeEchoUIBridge {
-  private static instance: DeepTreeEchoUIBridge | null = null
+  private static instance: DeepTreeEchoUIBridge | null = null;
 
   // Context references (set by React components)
-  private chatContext: ChatContextInterface | null = null
-  private dialogContext: DialogContextInterface | null = null
-  private accountId: number | null = null
+  private chatContext: ChatContextInterface | null = null;
+  private dialogContext: DialogContextInterface | null = null;
+  private accountId: number | null = null;
 
   // State
   private currentState: UIState = {
-    currentView: 'chat-list',
+    currentView: "chat-list",
     activeAccountId: null,
     activeChatId: null,
     isDialogOpen: false,
     dialogType: null,
-    composerText: '',
+    composerText: "",
     isComposerFocused: false,
-  }
+  };
 
   // Event listeners
-  private eventListeners: UIBridgeEventListener[] = []
+  private eventListeners: UIBridgeEventListener[] = [];
 
   // Composer reference
-  private composerRef: HTMLTextAreaElement | null = null
+  private composerRef: HTMLTextAreaElement | null = null;
 
   private constructor() {
-    log().info('DeepTreeEchoUIBridge initialized')
+    log().info("DeepTreeEchoUIBridge initialized");
 
     // Auto-connect to ChatManager
     try {
-      const chatManager = DeepTreeEchoChatManager.getInstance()
-      chatManager.setUIBridge(this)
+      const chatManager = DeepTreeEchoChatManager.getInstance();
+      chatManager.setUIBridge(this);
     } catch (err) {
-      log().error('Failed to connect to ChatManager:', err)
+      log().error("Failed to connect to ChatManager:", err);
     }
 
     // Auto-connect to AgentToolExecutor
     try {
-      const toolExecutor = getAgentToolExecutor()
-      toolExecutor.setUIBridge(this)
+      const toolExecutor = getAgentToolExecutor();
+      toolExecutor.setUIBridge(this);
     } catch (err) {
-      log().error('Failed to connect to AgentToolExecutor:', err)
+      log().error("Failed to connect to AgentToolExecutor:", err);
     }
   }
 
@@ -174,9 +174,9 @@ export class DeepTreeEchoUIBridge {
    */
   public static getInstance(): DeepTreeEchoUIBridge {
     if (!DeepTreeEchoUIBridge.instance) {
-      DeepTreeEchoUIBridge.instance = new DeepTreeEchoUIBridge()
+      DeepTreeEchoUIBridge.instance = new DeepTreeEchoUIBridge();
     }
-    return DeepTreeEchoUIBridge.instance
+    return DeepTreeEchoUIBridge.instance;
   }
 
   // ============================================================
@@ -186,40 +186,43 @@ export class DeepTreeEchoUIBridge {
   /**
    * Register the ChatContext
    */
-  public registerChatContext(context: ChatContextInterface, accountId: number): void {
-    this.chatContext = context
-    this.accountId = accountId
-    this.currentState.activeAccountId = accountId
+  public registerChatContext(
+    context: ChatContextInterface,
+    accountId: number,
+  ): void {
+    this.chatContext = context;
+    this.accountId = accountId;
+    this.currentState.activeAccountId = accountId;
 
     if (context.chatId) {
-      this.currentState.activeChatId = context.chatId
-      this.currentState.currentView = 'chat-view'
+      this.currentState.activeChatId = context.chatId;
+      this.currentState.currentView = "chat-view";
     }
 
-    log().info('ChatContext registered with UI Bridge')
+    log().info("ChatContext registered with UI Bridge");
   }
 
   /**
    * Register the DialogContext
    */
   public registerDialogContext(context: DialogContextInterface): void {
-    this.dialogContext = context
-    log().info('DialogContext registered with UI Bridge')
+    this.dialogContext = context;
+    log().info("DialogContext registered with UI Bridge");
   }
 
   /**
    * Register the composer element
    */
   public registerComposer(element: HTMLTextAreaElement | null): void {
-    this.composerRef = element
+    this.composerRef = element;
   }
 
   /**
    * Update account ID
    */
   public setAccountId(accountId: number): void {
-    this.accountId = accountId
-    this.currentState.activeAccountId = accountId
+    this.accountId = accountId;
+    this.currentState.activeAccountId = accountId;
   }
 
   /**
@@ -227,11 +230,11 @@ export class DeepTreeEchoUIBridge {
    */
   public static resetInstance(): void {
     if (DeepTreeEchoUIBridge.instance) {
-      DeepTreeEchoUIBridge.instance.cleanup()
-      DeepTreeEchoUIBridge.instance = null
+      DeepTreeEchoUIBridge.instance.cleanup();
+      DeepTreeEchoUIBridge.instance = null;
     }
-    _log = null
-    _uiBridgeInstance = null
+    _log = null;
+    _uiBridgeInstance = null;
   }
 
   // ============================================================
@@ -243,23 +246,23 @@ export class DeepTreeEchoUIBridge {
    */
   public async selectChat(accountId: number, chatId: number): Promise<boolean> {
     if (!this.chatContext) {
-      log().warn('ChatContext not registered, cannot select chat')
-      return false
+      log().warn("ChatContext not registered, cannot select chat");
+      return false;
     }
 
     try {
-      const result = await this.chatContext.selectChat(accountId, chatId)
+      const result = await this.chatContext.selectChat(accountId, chatId);
 
       if (result) {
-        this.currentState.activeChatId = chatId
-        this.currentState.currentView = 'chat-view'
-        this.emit({ type: 'chat_selected', chatId, accountId })
+        this.currentState.activeChatId = chatId;
+        this.currentState.currentView = "chat-view";
+        this.emit({ type: "chat_selected", chatId, accountId });
       }
 
-      return result
+      return result;
     } catch (error) {
-      log().error('Error selecting chat:', error)
-      return false
+      log().error("Error selecting chat:", error);
+      return false;
     }
   }
 
@@ -268,14 +271,14 @@ export class DeepTreeEchoUIBridge {
    */
   public unselectChat(): void {
     if (!this.chatContext) {
-      log().warn('ChatContext not registered, cannot unselect chat')
-      return
+      log().warn("ChatContext not registered, cannot unselect chat");
+      return;
     }
 
-    this.chatContext.unselectChat()
-    this.currentState.activeChatId = null
-    this.currentState.currentView = 'chat-list'
-    this.emit({ type: 'chat_closed' })
+    this.chatContext.unselectChat();
+    this.currentState.activeChatId = null;
+    this.currentState.currentView = "chat-list";
+    this.emit({ type: "chat_closed" });
   }
 
   /**
@@ -286,16 +289,16 @@ export class DeepTreeEchoUIBridge {
       return {
         accountId: this.accountId,
         chatId: this.chatContext.chatId,
-      }
+      };
     }
-    return null
+    return null;
   }
 
   /**
    * Get full info about the selected chat
    */
   public getSelectedChatInfo(): T.FullChat | null {
-    return this.chatContext?.chatWithLinger || null
+    return this.chatContext?.chatWithLinger || null;
   }
 
   // ============================================================
@@ -307,19 +310,19 @@ export class DeepTreeEchoUIBridge {
    */
   public navigateTo(view: UIView): void {
     switch (view) {
-      case 'chat-list':
-        this.unselectChat()
-        break
-      case 'settings':
-        ActionEmitter.emitAction(KeybindAction.Settings_Open)
-        break
-      case 'global-gallery':
-        ActionEmitter.emitAction(KeybindAction.GlobalGallery_Open)
-        break
+      case "chat-list":
+        this.unselectChat();
+        break;
+      case "settings":
+        ActionEmitter.emitAction(KeybindAction.Settings_Open);
+        break;
+      case "global-gallery":
+        ActionEmitter.emitAction(KeybindAction.GlobalGallery_Open);
+        break;
     }
 
-    this.currentState.currentView = view
-    this.emit({ type: 'view_changed', view })
+    this.currentState.currentView = view;
+    this.emit({ type: "view_changed", view });
   }
 
   /**
@@ -327,8 +330,8 @@ export class DeepTreeEchoUIBridge {
    */
   public scrollToMessage(msgId: number, highlight: boolean = true): void {
     if (!this.chatContext?.chatId || !this.accountId) {
-      log().warn('No chat selected, cannot scroll to message')
-      return
+      log().warn("No chat selected, cannot scroll to message");
+      return;
     }
 
     // Use the internal jump mechanism
@@ -343,22 +346,22 @@ export class DeepTreeEchoUIBridge {
           addMessageIdToStack: undefined,
         },
       ],
-    }
-    window.__internal_check_jump_to_message?.()
+    };
+    window.__internal_check_jump_to_message?.();
   }
 
   /**
    * Switch to archived chats view
    */
   public showArchivedChats(): void {
-    ActionEmitter.emitAction(KeybindAction.ChatList_SwitchToArchiveView)
+    ActionEmitter.emitAction(KeybindAction.ChatList_SwitchToArchiveView);
   }
 
   /**
    * Switch to normal chats view
    */
   public showNormalChats(): void {
-    ActionEmitter.emitAction(KeybindAction.ChatList_SwitchToNormalView)
+    ActionEmitter.emitAction(KeybindAction.ChatList_SwitchToNormalView);
   }
 
   // ============================================================
@@ -370,12 +373,12 @@ export class DeepTreeEchoUIBridge {
    */
   public setComposerText(text: string): void {
     if (this.composerRef) {
-      this.composerRef.value = text
-      this.composerRef.dispatchEvent(new Event('input', { bubbles: true }))
-      this.currentState.composerText = text
-      this.emit({ type: 'composer_changed', text })
+      this.composerRef.value = text;
+      this.composerRef.dispatchEvent(new Event("input", { bubbles: true }));
+      this.currentState.composerText = text;
+      this.emit({ type: "composer_changed", text });
     } else {
-      log().warn('Composer not registered, cannot set text')
+      log().warn("Composer not registered, cannot set text");
     }
   }
 
@@ -384,8 +387,8 @@ export class DeepTreeEchoUIBridge {
    */
   public focusComposer(): void {
     if (this.composerRef) {
-      this.composerRef.focus()
-      this.currentState.isComposerFocused = true
+      this.composerRef.focus();
+      this.currentState.isComposerFocused = true;
     }
   }
 
@@ -393,36 +396,36 @@ export class DeepTreeEchoUIBridge {
    * Get current composer text
    */
   public getComposerText(): string {
-    return this.composerRef?.value || ''
+    return this.composerRef?.value || "";
   }
 
   /**
    * Clear the composer
    */
   public clearComposer(): void {
-    this.setComposerText('')
+    this.setComposerText("");
   }
 
   /**
    * Alias for clearComposer to match tests
    */
   public clearComposerText(): void {
-    this.clearComposer()
+    this.clearComposer();
   }
 
   /**
    * Append text to composer
    */
   public appendToComposer(text: string): void {
-    const current = this.getComposerText()
-    this.setComposerText(current + text)
+    const current = this.getComposerText();
+    this.setComposerText(current + text);
   }
 
   /**
    * Alias for appendToComposer to match tests
    */
   public appendComposerText(text: string): void {
-    this.appendToComposer(text)
+    this.appendToComposer(text);
   }
 
   // ============================================================
@@ -434,14 +437,14 @@ export class DeepTreeEchoUIBridge {
    */
   public openDialog(type: DialogType, props?: any): void {
     if (!this.dialogContext) {
-      log().warn('DialogContext not registered, cannot open dialog')
-      return
+      log().warn("DialogContext not registered, cannot open dialog");
+      return;
     }
 
-    this.dialogContext.openDialog(type, props)
-    this.currentState.isDialogOpen = true
-    this.currentState.dialogType = type
-    this.emit({ type: 'dialog_opened', dialogType: type })
+    this.dialogContext.openDialog(type, props);
+    this.currentState.isDialogOpen = true;
+    this.currentState.dialogType = type;
+    this.emit({ type: "dialog_opened", dialogType: type });
   }
 
   /**
@@ -449,13 +452,13 @@ export class DeepTreeEchoUIBridge {
    */
   public closeDialog(): void {
     if (!this.dialogContext) {
-      return
+      return;
     }
 
-    this.dialogContext.closeDialog()
-    this.currentState.isDialogOpen = false
-    this.currentState.dialogType = null
-    this.emit({ type: 'dialog_closed' })
+    this.dialogContext.closeDialog();
+    this.currentState.isDialogOpen = false;
+    this.currentState.dialogType = null;
+    this.emit({ type: "dialog_closed" });
   }
 
   /**
@@ -463,26 +466,26 @@ export class DeepTreeEchoUIBridge {
    */
   public async showConfirm(message: string, title?: string): Promise<boolean> {
     return new Promise((resolve) => {
-      this.openDialog('confirm', {
+      this.openDialog("confirm", {
         message,
         title,
         onConfirm: () => {
-          this.closeDialog()
-          resolve(true)
+          this.closeDialog();
+          resolve(true);
         },
         onCancel: () => {
-          this.closeDialog()
-          resolve(false)
+          this.closeDialog();
+          resolve(false);
         },
-      })
-    })
+      });
+    });
   }
 
   /**
    * Show an alert dialog
    */
   public showAlert(message: string, title?: string): void {
-    this.openDialog('alert', { message, title })
+    this.openDialog("alert", { message, title });
   }
 
   // ============================================================
@@ -493,28 +496,28 @@ export class DeepTreeEchoUIBridge {
    * Get current UI state
    */
   public getState(): UIState {
-    return { ...this.currentState }
+    return { ...this.currentState };
   }
 
   /**
    * Get current view
    */
   public getCurrentView(): UIView {
-    return this.currentState.currentView
+    return this.currentState.currentView;
   }
 
   /**
    * Check if a dialog is open
    */
   public isDialogOpen(): boolean {
-    return this.currentState.isDialogOpen
+    return this.currentState.isDialogOpen;
   }
 
   /**
    * Check if a chat is selected
    */
   public isChatSelected(): boolean {
-    return this.currentState.activeChatId !== null
+    return this.currentState.activeChatId !== null;
   }
 
   // ============================================================
@@ -525,27 +528,27 @@ export class DeepTreeEchoUIBridge {
    * Subscribe to UI events
    */
   public on(listener: UIBridgeEventListener): () => void {
-    this.eventListeners.push(listener)
+    this.eventListeners.push(listener);
 
     return () => {
-      const index = this.eventListeners.indexOf(listener)
+      const index = this.eventListeners.indexOf(listener);
       if (index > -1) {
-        this.eventListeners.splice(index, 1)
+        this.eventListeners.splice(index, 1);
       }
-    }
+    };
   }
 
   /**
    * Emit an event
    */
   private emit(event: UIBridgeEvent): void {
-    this.eventListeners.forEach(listener => {
+    this.eventListeners.forEach((listener) => {
       try {
-        listener(event)
+        listener(event);
       } catch (error) {
-        log().error('Error in UI Bridge event listener:', error)
+        log().error("Error in UI Bridge event listener:", error);
       }
-    })
+    });
   }
 
   // ============================================================
@@ -556,91 +559,91 @@ export class DeepTreeEchoUIBridge {
    * Trigger a keyboard action
    */
   public triggerKeyAction(action: KeybindAction): void {
-    ActionEmitter.emitAction(action)
+    ActionEmitter.emitAction(action);
   }
 
   /**
    * Open search
    */
   public openSearch(): void {
-    ActionEmitter.emitAction(KeybindAction.ChatList_FocusSearchInput)
+    ActionEmitter.emitAction(KeybindAction.ChatList_FocusSearchInput);
   }
 
   /**
    * Focus chat list
    */
   public focusChatList(): void {
-    ActionEmitter.emitAction(KeybindAction.ChatList_FocusItems)
+    ActionEmitter.emitAction(KeybindAction.ChatList_FocusItems);
   }
 
   /**
    * Select next chat
    */
   public selectNextChat(): void {
-    ActionEmitter.emitAction(KeybindAction.ChatList_SelectNextChat)
+    ActionEmitter.emitAction(KeybindAction.ChatList_SelectNextChat);
   }
 
   /**
    * Select previous chat
    */
   public selectPreviousChat(): void {
-    ActionEmitter.emitAction(KeybindAction.ChatList_SelectPreviousChat)
+    ActionEmitter.emitAction(KeybindAction.ChatList_SelectPreviousChat);
   }
 
   /**
    * Open new chat dialog
    */
   public openNewChat(): void {
-    ActionEmitter.emitAction(KeybindAction.NewChat_Open)
+    ActionEmitter.emitAction(KeybindAction.NewChat_Open);
   }
 
   /**
    * Open settings
    */
   public openSettings(): void {
-    ActionEmitter.emitAction(KeybindAction.Settings_Open)
+    ActionEmitter.emitAction(KeybindAction.Settings_Open);
   }
 
   /**
    * Toggle AI Neighborhood view
    */
   public toggleAINeighborhood(): void {
-    ActionEmitter.emitAction(KeybindAction.AINeighborhood_Toggle)
+    ActionEmitter.emitAction(KeybindAction.AINeighborhood_Toggle);
   }
 
   /**
    * Open keyboard shortcuts cheatsheet
    */
   public openKeyboardShortcuts(): void {
-    ActionEmitter.emitAction(KeybindAction.KeybindingCheatSheet_Open)
+    ActionEmitter.emitAction(KeybindAction.KeybindingCheatSheet_Open);
   }
 
   /**
    * Page up in message list
    */
   public messageListPageUp(): void {
-    ActionEmitter.emitAction(KeybindAction.MessageList_PageUp)
+    ActionEmitter.emitAction(KeybindAction.MessageList_PageUp);
   }
 
   /**
    * Page down in message list
    */
   public messageListPageDown(): void {
-    ActionEmitter.emitAction(KeybindAction.MessageList_PageDown)
+    ActionEmitter.emitAction(KeybindAction.MessageList_PageDown);
   }
 
   /**
    * Search within current chat
    */
   public searchInChat(): void {
-    ActionEmitter.emitAction(KeybindAction.ChatList_SearchInChat)
+    ActionEmitter.emitAction(KeybindAction.ChatList_SearchInChat);
   }
 
   /**
    * Clear search and return to composer
    */
   public exitSearch(): void {
-    ActionEmitter.emitAction(KeybindAction.ChatList_ExitSearch)
+    ActionEmitter.emitAction(KeybindAction.ChatList_ExitSearch);
   }
 
   /**
@@ -649,22 +652,22 @@ export class DeepTreeEchoUIBridge {
    */
   public getAvailableKeyboardActions(): string[] {
     return [
-      'openSearch',
-      'focusChatList',
-      'selectNextChat',
-      'selectPreviousChat',
-      'openNewChat',
-      'openSettings',
-      'toggleAINeighborhood',
-      'openKeyboardShortcuts',
-      'messageListPageUp',
-      'messageListPageDown',
-      'searchInChat',
-      'exitSearch',
-      'focusComposer',
-      'showArchivedChats',
-      'showNormalChats',
-    ]
+      "openSearch",
+      "focusChatList",
+      "selectNextChat",
+      "selectPreviousChat",
+      "openNewChat",
+      "openSettings",
+      "toggleAINeighborhood",
+      "openKeyboardShortcuts",
+      "messageListPageUp",
+      "messageListPageDown",
+      "searchInChat",
+      "exitSearch",
+      "focusComposer",
+      "showArchivedChats",
+      "showNormalChats",
+    ];
   }
 
   // ============================================================
@@ -675,28 +678,29 @@ export class DeepTreeEchoUIBridge {
    * Cleanup resources
    */
   public cleanup(): void {
-    this.chatContext = null
-    this.dialogContext = null
-    this.composerRef = null
-    this.eventListeners = []
-    log().info('UI Bridge cleaned up')
+    this.chatContext = null;
+    this.dialogContext = null;
+    this.composerRef = null;
+    this.eventListeners = [];
+    log().info("UI Bridge cleaned up");
   }
 }
 
-
-
 // Export lazy singleton getter (avoids initialization before logger is ready)
-let _uiBridgeInstance: DeepTreeEchoUIBridge | null = null
+let _uiBridgeInstance: DeepTreeEchoUIBridge | null = null;
 export function getUIBridge(): DeepTreeEchoUIBridge {
   if (!_uiBridgeInstance) {
-    _uiBridgeInstance = DeepTreeEchoUIBridge.getInstance()
+    _uiBridgeInstance = DeepTreeEchoUIBridge.getInstance();
   }
-  return _uiBridgeInstance
+  return _uiBridgeInstance;
 }
 
 // Use Proxy for backward compatibility - lazily initializes on first access
-export const uiBridge: DeepTreeEchoUIBridge = new Proxy({} as DeepTreeEchoUIBridge, {
-  get(_target, prop) {
-    return (getUIBridge() as any)[prop]
-  }
-})
+export const uiBridge: DeepTreeEchoUIBridge = new Proxy(
+  {} as DeepTreeEchoUIBridge,
+  {
+    get(_target, prop) {
+      return (getUIBridge() as any)[prop];
+    },
+  },
+);

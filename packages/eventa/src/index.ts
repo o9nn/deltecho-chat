@@ -5,7 +5,7 @@
  * Best for Web Worker/WebSocket/Electron IPC/RPC
  */
 
-export * from './core/eventa.js';
-export * from './core/context.js';
-export * from './core/invoke.js';
-export * from './types.js';
+export * from "./core/eventa.js";
+export * from "./core/context.js";
+export * from "./core/invoke.js";
+export * from "./types.js";

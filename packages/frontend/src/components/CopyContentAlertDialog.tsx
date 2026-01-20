@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 import Dialog, {
   DialogBody,
@@ -6,13 +6,13 @@ import Dialog, {
   DialogFooter,
   FooterActionButton,
   FooterActions,
-} from './Dialog'
-import { runtime } from '@deltachat-desktop/runtime-interface'
-import useTranslationFunction from '../hooks/useTranslationFunction'
+} from "./Dialog";
+import { runtime } from "@deltachat-desktop/runtime-interface";
+import useTranslationFunction from "../hooks/useTranslationFunction";
 
-import type { DialogProps } from '../contexts/DialogContext'
+import type { DialogProps } from "../contexts/DialogContext";
 
-type Props = { message: string; content: string; cb?: () => void }
+type Props = { message: string; content: string; cb?: () => void };
 
 export default function CopyContentAlertDialog({
   onClose,
@@ -20,20 +20,20 @@ export default function CopyContentAlertDialog({
   content,
   cb,
 }: DialogProps & Props) {
-  const tx = useTranslationFunction()
+  const tx = useTranslationFunction();
 
   const onCopy = async () => {
-    await runtime.writeClipboardText(content)
-    onClose()
-  }
+    await runtime.writeClipboardText(content);
+    onClose();
+  };
 
   const onCancel = () => {
-    cb && cb()
-    onClose()
-  }
+    cb && cb();
+    onClose();
+  };
 
   return (
-    <Dialog onClose={onClose} dataTestid='copy-content-alert-dialog'>
+    <Dialog onClose={onClose} dataTestid="copy-content-alert-dialog">
       <DialogBody>
         <DialogContent paddingTop>
           <p>{message}</p>
@@ -41,14 +41,14 @@ export default function CopyContentAlertDialog({
       </DialogBody>
       <DialogFooter>
         <FooterActions>
-          <FooterActionButton onClick={onCopy} styling='secondary'>
-            {tx('global_menu_edit_copy_desktop')}
+          <FooterActionButton onClick={onCopy} styling="secondary">
+            {tx("global_menu_edit_copy_desktop")}
           </FooterActionButton>
-          <FooterActionButton styling='secondary' onClick={onCancel}>
-            {tx('ok')}
+          <FooterActionButton styling="secondary" onClick={onCancel}>
+            {tx("ok")}
           </FooterActionButton>
         </FooterActions>
       </DialogFooter>
     </Dialog>
-  )
+  );
 }

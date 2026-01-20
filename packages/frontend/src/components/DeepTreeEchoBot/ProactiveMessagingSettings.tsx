@@ -1,6 +1,6 @@
 /**
  * ProactiveMessagingSettings - UI Component for Proactive Messaging Configuration
- * 
+ *
  * This component provides a user interface for configuring Deep Tree Echo's
  * proactive messaging capabilities, including:
  * - Enable/disable proactive messaging
@@ -9,126 +9,136 @@
  * - Default behavior settings
  */
 
-import React, { useState, useEffect, useCallback } from 'react'
-import { getLogger } from '../../../../shared/logger'
-import { runtime } from '@deltachat-desktop/runtime-interface'
-import { 
-  proactiveMessaging, 
+import React, { useState, useEffect, useCallback } from "react";
+import { getLogger } from "../../../../shared/logger";
+import { runtime } from "@deltachat-desktop/runtime-interface";
+import {
+  proactiveMessaging,
   ProactiveConfig,
   ProactiveTrigger,
   TriggerType,
-} from './ProactiveMessaging'
+} from "./ProactiveMessaging";
 
-const log = getLogger('render/components/DeepTreeEchoBot/ProactiveMessagingSettings')
+const log = getLogger(
+  "render/components/DeepTreeEchoBot/ProactiveMessagingSettings",
+);
 
 interface ProactiveMessagingSettingsProps {
-  botEnabled: boolean
-  onNavigateToTriggers?: () => void
+  botEnabled: boolean;
+  onNavigateToTriggers?: () => void;
 }
 
 const ProactiveMessagingSettings: React.FC<ProactiveMessagingSettingsProps> = ({
   botEnabled,
   onNavigateToTriggers,
 }) => {
-  const [config, setConfig] = useState<ProactiveConfig>(proactiveMessaging.getConfig())
-  const [triggers, setTriggers] = useState<ProactiveTrigger[]>(proactiveMessaging.getTriggers())
+  const [config, setConfig] = useState<ProactiveConfig>(
+    proactiveMessaging.getConfig(),
+  );
+  const [triggers, setTriggers] = useState<ProactiveTrigger[]>(
+    proactiveMessaging.getTriggers(),
+  );
   const [stats, setStats] = useState({
     queuedMessages: 0,
     sentToday: 0,
     sentThisHour: 0,
     activeTriggers: 0,
-  })
-  const [isLoading, setIsLoading] = useState(true)
+  });
+  const [isLoading, setIsLoading] = useState(true);
 
   // Load settings on mount
   useEffect(() => {
     const loadSettings = async () => {
       try {
         // Get current config from proactive messaging system
-        const currentConfig = proactiveMessaging.getConfig()
-        setConfig(currentConfig)
+        const currentConfig = proactiveMessaging.getConfig();
+        setConfig(currentConfig);
 
         // Get triggers
-        const currentTriggers = proactiveMessaging.getTriggers()
-        setTriggers(currentTriggers)
+        const currentTriggers = proactiveMessaging.getTriggers();
+        setTriggers(currentTriggers);
 
         // Calculate stats
-        updateStats()
+        updateStats();
 
-        setIsLoading(false)
+        setIsLoading(false);
       } catch (error) {
-        log.error('Failed to load proactive messaging settings:', error)
-        setIsLoading(false)
+        log.error("Failed to load proactive messaging settings:", error);
+        setIsLoading(false);
       }
-    }
+    };
 
-    loadSettings()
+    loadSettings();
 
     // Set up interval to update stats
-    const statsInterval = setInterval(updateStats, 5000)
-    return () => clearInterval(statsInterval)
-  }, [])
+    const statsInterval = setInterval(updateStats, 5000);
+    return () => clearInterval(statsInterval);
+  }, []);
 
   // Update statistics
   const updateStats = useCallback(() => {
-    const queuedMessages = proactiveMessaging.getQueuedMessages().length
-    const currentTriggers = proactiveMessaging.getTriggers()
-    const activeTriggers = currentTriggers.filter(t => t.enabled).length
+    const queuedMessages = proactiveMessaging.getQueuedMessages().length;
+    const currentTriggers = proactiveMessaging.getTriggers();
+    const activeTriggers = currentTriggers.filter((t) => t.enabled).length;
 
     // Get rate limit info
-    const configData = proactiveMessaging.getConfig()
-    
+    const configData = proactiveMessaging.getConfig();
+
     setStats({
       queuedMessages,
       sentToday: 0, // Would need to track this in ProactiveMessaging
       sentThisHour: 0,
       activeTriggers,
-    })
-    
-    setTriggers(currentTriggers)
-  }, [])
+    });
+
+    setTriggers(currentTriggers);
+  }, []);
 
   // Handle config changes
   const handleConfigChange = async (key: keyof ProactiveConfig, value: any) => {
-    const newConfig = { ...config, [key]: value }
-    setConfig(newConfig)
+    const newConfig = { ...config, [key]: value };
+    setConfig(newConfig);
 
     try {
-      proactiveMessaging.updateConfig({ [key]: value })
-      
+      proactiveMessaging.updateConfig({ [key]: value });
+
       // Persist to desktop settings
       await runtime.setDesktopSetting(
-        `deepTreeEchoBotProactive${key.charAt(0).toUpperCase() + key.slice(1)}` as any,
-        value
-      )
-      
-      log.info(`Updated proactive config: ${key} = ${value}`)
+        `deepTreeEchoBotProactive${
+          key.charAt(0).toUpperCase() + key.slice(1)
+        }` as any,
+        value,
+      );
+
+      log.info(`Updated proactive config: ${key} = ${value}`);
     } catch (error) {
-      log.error(`Failed to update proactive config ${key}:`, error)
+      log.error(`Failed to update proactive config ${key}:`, error);
     }
-  }
+  };
 
   // Handle enabling/disabling proactive messaging
   const handleEnabledChange = (enabled: boolean) => {
-    proactiveMessaging.setEnabled(enabled)
-    handleConfigChange('enabled', enabled)
-  }
+    proactiveMessaging.setEnabled(enabled);
+    handleConfigChange("enabled", enabled);
+  };
 
   // Format time for display
   const formatHour = (hour: number): string => {
-    const ampm = hour >= 12 ? 'PM' : 'AM'
-    const displayHour = hour % 12 || 12
-    return `${displayHour}:00 ${ampm}`
-  }
+    const ampm = hour >= 12 ? "PM" : "AM";
+    const displayHour = hour % 12 || 12;
+    return `${displayHour}:00 ${ampm}`;
+  };
 
   if (isLoading) {
-    return <div className='loading'>Loading proactive messaging settings...</div>
+    return (
+      <div className="loading">Loading proactive messaging settings...</div>
+    );
   }
 
-  const isDisabled = !botEnabled || !config.enabled
+  const isDisabled = !botEnabled || !config.enabled;
 
   return (
-    <div className='proactive-messaging-settings'>
+    <div className="proactive-messaging-settings">
       <style>{`
         .proactive-messaging-settings {
           padding: 16px;
@@ -371,144 +381,171 @@ const ProactiveMessagingSettings: React.FC<ProactiveMessagingSettingsProps> = ({
       `}</style>
 
       <h3>
-        <span className='icon'>🤖</span>
+        <span className="icon">🤖</span>
         Proactive Messaging
       </h3>
 
       {!botEnabled && (
-        <div className='warning-banner'>
-          <span className='icon'>⚠️</span>
-          <span className='warning-text'>
-            Deep Tree Echo Bot must be enabled to use proactive messaging features.
+        <div className="warning-banner">
+          <span className="icon">⚠️</span>
+          <span className="warning-text">
+            Deep Tree Echo Bot must be enabled to use proactive messaging
+            features.
           </span>
         </div>
       )}
 
       {/* Stats Overview */}
-      <div className='section'>
-        <div className='section-title'>Status Overview</div>
-        <div className='stats-grid'>
-          <div className='stat-card'>
-            <div className='stat-value'>{stats.activeTriggers}</div>
-            <div className='stat-label'>Active Triggers</div>
+      <div className="section">
+        <div className="section-title">Status Overview</div>
+        <div className="stats-grid">
+          <div className="stat-card">
+            <div className="stat-value">{stats.activeTriggers}</div>
+            <div className="stat-label">Active Triggers</div>
           </div>
-          <div className='stat-card'>
-            <div className='stat-value'>{stats.queuedMessages}</div>
-            <div className='stat-label'>Queued Messages</div>
+          <div className="stat-card">
+            <div className="stat-value">{stats.queuedMessages}</div>
+            <div className="stat-label">Queued Messages</div>
           </div>
-          <div className='stat-card'>
-            <div className='stat-value'>{config.maxMessagesPerHour}</div>
-            <div className='stat-label'>Max/Hour</div>
+          <div className="stat-card">
+            <div className="stat-value">{config.maxMessagesPerHour}</div>
+            <div className="stat-label">Max/Hour</div>
           </div>
-          <div className='stat-card'>
-            <div className='stat-value'>{config.maxMessagesPerDay}</div>
-            <div className='stat-label'>Max/Day</div>
+          <div className="stat-card">
+            <div className="stat-value">{config.maxMessagesPerDay}</div>
+            <div className="stat-label">Max/Day</div>
           </div>
         </div>
       </div>
 
       {/* Main Toggle */}
-      <div className='section'>
-        <div className='section-title'>General Settings</div>
-        
-        <div className='setting-row'>
-          <div className='setting-info'>
-            <div className='setting-label'>Enable Proactive Messaging</div>
-            <div className='setting-description'>
-              Allow Deep Tree Echo to initiate conversations and send scheduled messages
+      <div className="section">
+        <div className="section-title">General Settings</div>
+
+        <div className="setting-row">
+          <div className="setting-info">
+            <div className="setting-label">Enable Proactive Messaging</div>
+            <div className="setting-description">
+              Allow Deep Tree Echo to initiate conversations and send scheduled
+              messages
             </div>
           </div>
-          <div 
-            className={`toggle-switch ${config.enabled ? 'active' : ''} ${!botEnabled ? 'disabled' : ''}`}
+          <div
+            className={`toggle-switch ${config.enabled ? "active" : ""} ${
+              !botEnabled ? "disabled" : ""
+            }`}
             onClick={() => botEnabled && handleEnabledChange(!config.enabled)}
           >
-            <input 
-              type='checkbox' 
+            <input
+              type="checkbox"
               checked={config.enabled}
               onChange={() => {}}
               disabled={!botEnabled}
             />
-            <div className='toggle-slider'></div>
+            <div className="toggle-slider"></div>
           </div>
         </div>
 
-        <div className='setting-row'>
-          <div className='setting-info'>
-            <div className='setting-label'>Respect Muted Chats</div>
-            <div className='setting-description'>
+        <div className="setting-row">
+          <div className="setting-info">
+            <div className="setting-label">Respect Muted Chats</div>
+            <div className="setting-description">
               Don't send proactive messages to muted chats
             </div>
           </div>
-          <div 
-            className={`toggle-switch ${config.respectMutedChats ? 'active' : ''} ${isDisabled ? 'disabled' : ''}`}
-            onClick={() => !isDisabled && handleConfigChange('respectMutedChats', !config.respectMutedChats)}
+          <div
+            className={`toggle-switch ${
+              config.respectMutedChats ? "active" : ""
+            } ${isDisabled ? "disabled" : ""}`}
+            onClick={() =>
+              !isDisabled &&
+              handleConfigChange("respectMutedChats", !config.respectMutedChats)
+            }
           >
-            <input 
-              type='checkbox' 
+            <input
+              type="checkbox"
               checked={config.respectMutedChats}
               onChange={() => {}}
               disabled={isDisabled}
             />
-            <div className='toggle-slider'></div>
+            <div className="toggle-slider"></div>
           </div>
         </div>
 
-        <div className='setting-row'>
-          <div className='setting-info'>
-            <div className='setting-label'>Respect Archived Chats</div>
-            <div className='setting-description'>
+        <div className="setting-row">
+          <div className="setting-info">
+            <div className="setting-label">Respect Archived Chats</div>
+            <div className="setting-description">
               Don't send proactive messages to archived chats
             </div>
           </div>
-          <div 
-            className={`toggle-switch ${config.respectArchivedChats ? 'active' : ''} ${isDisabled ? 'disabled' : ''}`}
-            onClick={() => !isDisabled && handleConfigChange('respectArchivedChats', !config.respectArchivedChats)}
+          <div
+            className={`toggle-switch ${
+              config.respectArchivedChats ? "active" : ""
+            } ${isDisabled ? "disabled" : ""}`}
+            onClick={() =>
+              !isDisabled &&
+              handleConfigChange(
+                "respectArchivedChats",
+                !config.respectArchivedChats,
+              )
+            }
           >
-            <input 
-              type='checkbox' 
+            <input
+              type="checkbox"
               checked={config.respectArchivedChats}
               onChange={() => {}}
               disabled={isDisabled}
             />
-            <div className='toggle-slider'></div>
+            <div className="toggle-slider"></div>
           </div>
         </div>
       </div>
 
       {/* Rate Limiting */}
-      <div className='section'>
-        <div className='section-title'>Rate Limiting</div>
-        
-        <div className='setting-row'>
-          <div className='setting-info'>
-            <div className='setting-label'>Max Messages Per Hour</div>
-            <div className='setting-description'>
+      <div className="section">
+        <div className="section-title">Rate Limiting</div>
+
+        <div className="setting-row">
+          <div className="setting-info">
+            <div className="setting-label">Max Messages Per Hour</div>
+            <div className="setting-description">
               Limit how many proactive messages can be sent per hour
             </div>
           </div>
           <input
-            type='number'
-            className='number-input'
+            type="number"
+            className="number-input"
             value={config.maxMessagesPerHour}
-            onChange={(e) => handleConfigChange('maxMessagesPerHour', parseInt(e.target.value) || 10)}
+            onChange={(e) =>
+              handleConfigChange(
+                "maxMessagesPerHour",
+                parseInt(e.target.value) || 10,
+              )
+            }
             min={1}
             max={100}
             disabled={isDisabled}
           />
         </div>
 
-        <div className='setting-row'>
-          <div className='setting-info'>
-            <div className='setting-label'>Max Messages Per Day</div>
-            <div className='setting-description'>
+        <div className="setting-row">
+          <div className="setting-info">
+            <div className="setting-label">Max Messages Per Day</div>
+            <div className="setting-description">
               Limit how many proactive messages can be sent per day
             </div>
           </div>
           <input
-            type='number'
-            className='number-input'
+            type="number"
+            className="number-input"
             value={config.maxMessagesPerDay}
-            onChange={(e) => handleConfigChange('maxMessagesPerDay', parseInt(e.target.value) || 50)}
+            onChange={(e) =>
+              handleConfigChange(
+                "maxMessagesPerDay",
+                parseInt(e.target.value) || 50,
+              )
+            }
             min={1}
             max={500}
             disabled={isDisabled}
@@ -517,36 +554,44 @@ const ProactiveMessagingSettings: React.FC<ProactiveMessagingSettingsProps> = ({
       </div>
 
       {/* Quiet Hours */}
-      <div className='section'>
-        <div className='section-title'>Quiet Hours</div>
-        <div className='setting-description' style={{ marginBottom: '12px' }}>
+      <div className="section">
+        <div className="section-title">Quiet Hours</div>
+        <div className="setting-description" style={{ marginBottom: "12px" }}>
           No proactive messages will be sent during quiet hours
         </div>
-        
-        <div className='setting-row'>
-          <div className='setting-info'>
-            <div className='setting-label'>Quiet Period</div>
+
+        <div className="setting-row">
+          <div className="setting-info">
+            <div className="setting-label">Quiet Period</div>
           </div>
-          <div className='time-range'>
+          <div className="time-range">
             <select
-              className='time-select'
+              className="time-select"
               value={config.quietHoursStart}
-              onChange={(e) => handleConfigChange('quietHoursStart', parseInt(e.target.value))}
+              onChange={(e) =>
+                handleConfigChange("quietHoursStart", parseInt(e.target.value))
+              }
               disabled={isDisabled}
             >
               {Array.from({ length: 24 }, (_, i) => (
-                <option key={i} value={i}>{formatHour(i)}</option>
+                <option key={i} value={i}>
+                  {formatHour(i)}
+                </option>
               ))}
             </select>
             <span>to</span>
             <select
-              className='time-select'
+              className="time-select"
               value={config.quietHoursEnd}
-              onChange={(e) => handleConfigChange('quietHoursEnd', parseInt(e.target.value))}
+              onChange={(e) =>
+                handleConfigChange("quietHoursEnd", parseInt(e.target.value))
+              }
               disabled={isDisabled}
             >
               {Array.from({ length: 24 }, (_, i) => (
-                <option key={i} value={i}>{formatHour(i)}</option>
+                <option key={i} value={i}>
+                  {formatHour(i)}
+                </option>
               ))}
             </select>
           </div>
@@ -554,40 +599,49 @@ const ProactiveMessagingSettings: React.FC<ProactiveMessagingSettingsProps> = ({
       </div>
 
       {/* Triggers Preview */}
-      <div className='section'>
-        <div className='section-title'>Active Triggers ({triggers.filter(t => t.enabled).length})</div>
-        
-        <div className='triggers-preview'>
-          {triggers.slice(0, 5).map(trigger => (
-            <div key={trigger.id} className='trigger-item'>
+      <div className="section">
+        <div className="section-title">
+          Active Triggers ({triggers.filter((t) => t.enabled).length})
+        </div>
+
+        <div className="triggers-preview">
+          {triggers.slice(0, 5).map((trigger) => (
+            <div key={trigger.id} className="trigger-item">
               <div>
-                <div className='trigger-name'>{trigger.name}</div>
-                <span className='trigger-type'>{trigger.type}</span>
+                <div className="trigger-name">{trigger.name}</div>
+                <span className="trigger-type">{trigger.type}</span>
               </div>
-              <span className={`trigger-status ${trigger.enabled ? 'enabled' : 'disabled'}`}>
-                {trigger.enabled ? '● Active' : '○ Inactive'}
+              <span
+                className={`trigger-status ${
+                  trigger.enabled ? "enabled" : "disabled"
+                }`}
+              >
+                {trigger.enabled ? "● Active" : "○ Inactive"}
               </span>
             </div>
           ))}
-          
+
           {triggers.length > 5 && (
-            <div className='setting-description' style={{ textAlign: 'center', marginTop: '8px' }}>
+            <div
+              className="setting-description"
+              style={{ textAlign: "center", marginTop: "8px" }}
+            >
               +{triggers.length - 5} more triggers
             </div>
           )}
         </div>
 
-        <button 
-          className='manage-triggers-btn'
+        <button
+          className="manage-triggers-btn"
           onClick={onNavigateToTriggers}
           disabled={isDisabled}
-          style={{ marginTop: '16px' }}
+          style={{ marginTop: "16px" }}
         >
           Manage Triggers
         </button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ProactiveMessagingSettings
+export default ProactiveMessagingSettings;

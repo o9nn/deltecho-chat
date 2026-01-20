@@ -1,7 +1,7 @@
-import { getLogger } from '../utils/logger';
-import { MemoryStorage, InMemoryStorage } from './storage';
+import { getLogger } from "../utils/logger";
+import { MemoryStorage, InMemoryStorage } from "./storage";
 
-const log = getLogger('deep-tree-echo-core/memory/RAGMemoryStore');
+const log = getLogger("deep-tree-echo-core/memory/RAGMemoryStore");
 
 // Default configuration
 const DEFAULT_MEMORY_LIMIT = 1000;
@@ -15,7 +15,7 @@ export interface Memory {
   timestamp: number;
   chatId: number;
   messageId: number;
-  sender: 'user' | 'bot';
+  sender: "user" | "bot";
   text: string;
   embedding?: number[]; // Vector embedding for semantic search
 }
@@ -27,7 +27,7 @@ export interface ReflectionMemory {
   id: string;
   timestamp: number;
   content: string;
-  type: 'periodic' | 'focused';
+  type: "periodic" | "focused";
   aspect?: string; // For focused reflections
 }
 
@@ -45,7 +45,7 @@ export class RAGMemoryStore {
 
   constructor(
     storage?: MemoryStorage,
-    options?: { memoryLimit?: number; reflectionLimit?: number }
+    options?: { memoryLimit?: number; reflectionLimit?: number },
   ) {
     this.storage = storage || new InMemoryStorage();
     this.memoryLimit = options?.memoryLimit || DEFAULT_MEMORY_LIMIT;
@@ -58,7 +58,7 @@ export class RAGMemoryStore {
    */
   public setEnabled(enabled: boolean): void {
     this.enabled = enabled;
-    log.info(`Memory system ${enabled ? 'enabled' : 'disabled'}`);
+    log.info(`Memory system ${enabled ? "enabled" : "disabled"}`);
   }
 
   /**
@@ -74,34 +74,38 @@ export class RAGMemoryStore {
   private async loadMemories(): Promise<void> {
     try {
       // Load conversation memories
-      const memoriesData = await this.storage.load('deepTreeEchoBotMemories');
+      const memoriesData = await this.storage.load("deepTreeEchoBotMemories");
       if (memoriesData) {
         try {
           this.memories = JSON.parse(memoriesData);
           log.info(`Loaded ${this.memories.length} conversation memories`);
         } catch (error) {
-          log.error('Failed to parse conversation memories:', error);
+          log.error("Failed to parse conversation memories:", error);
           this.memories = [];
         }
       }
 
       // Load reflection memories
-      const reflectionsData = await this.storage.load('deepTreeEchoBotReflections');
+      const reflectionsData = await this.storage.load(
+        "deepTreeEchoBotReflections",
+      );
       if (reflectionsData) {
         try {
           this.reflections = JSON.parse(reflectionsData);
           log.info(`Loaded ${this.reflections.length} reflection memories`);
         } catch (error) {
-          log.error('Failed to parse reflection memories:', error);
+          log.error("Failed to parse reflection memories:", error);
           this.reflections = [];
         }
       }
 
       // Load memory enabled setting
-      const enabledData = await this.storage.load('deepTreeEchoBotMemoryEnabled');
-      this.enabled = enabledData === 'true';
+      const enabledData = await this.storage.load(
+        "deepTreeEchoBotMemoryEnabled",
+      );
+      this.enabled = enabledData === "true";
     } catch (error) {
-      log.error('Failed to load memories:', error);
+      log.error("Failed to load memories:", error);
       this.memories = [];
       this.reflections = [];
     }
@@ -114,22 +118,30 @@ export class RAGMemoryStore {
     try {
       // Save conversation memories - limit to configured max to prevent excessive storage
       const trimmedMemories = this.memories.slice(-this.memoryLimit);
-      await this.storage.save('deepTreeEchoBotMemories', JSON.stringify(trimmedMemories));
+      await this.storage.save(
+        "deepTreeEchoBotMemories",
+        JSON.stringify(trimmedMemories),
+      );
 
       // Save reflection memories - limit to configured max
       const trimmedReflections = this.reflections.slice(-this.reflectionLimit);
-      await this.storage.save('deepTreeEchoBotReflections', JSON.stringify(trimmedReflections));
+      await this.storage.save(
+        "deepTreeEchoBotReflections",
+        JSON.stringify(trimmedReflections),
+      );
 
-      log.info('Saved memories to persistent storage');
+      log.info("Saved memories to persistent storage");
     } catch (error) {
-      log.error('Failed to save memories:', error);
+      log.error("Failed to save memories:", error);
     }
   }
 
   /**
    * Store a new memory
    */
-  public async storeMemory(memory: Omit<Memory, 'id' | 'timestamp' | 'embedding'>): Promise<void> {
+  public async storeMemory(
+    memory: Omit<Memory, "id" | "timestamp" | "embedding">,
+  ): Promise<void> {
     if (!this.enabled) return;
 
     try {
@@ -145,7 +157,7 @@ export class RAGMemoryStore {
 
       log.info(`Stored new memory: ${newMemory.id}`);
     } catch (error) {
-      log.error('Failed to store memory:', error);
+      log.error("Failed to store memory:", error);
     }
   }
 
@@ -154,8 +166,8 @@ export class RAGMemoryStore {
    */
   public async storeReflection(
     content: string,
-    type: 'periodic' | 'focused' = 'periodic',
-    aspect?: string
+    type: "periodic" | "focused" = "periodic",
+    aspect?: string,
   ): Promise<void> {
     if (!this.enabled) return;
 
@@ -171,9 +183,9 @@ export class RAGMemoryStore {
       this.reflections.push(reflection);
       await this.saveMemories();
 
-      log.info(`Stored new ${type} reflection${aspect ? ` on ${aspect}` : ''}`);
+      log.info(`Stored new ${type} reflection${aspect ? ` on ${aspect}` : ""}`);
     } catch (error) {
-      log.error('Failed to store reflection:', error);
+      log.error("Failed to store reflection:", error);
     }
   }
 
@@ -193,14 +205,21 @@ export class RAGMemoryStore {
     return this.memories
       .sort((a, b) => b.timestamp - a.timestamp)
       .slice(0, count)
-      .map((mem) => `[${new Date(mem.timestamp).toLocaleString()}] ${mem.sender}: ${mem.text}`);
+      .map(
+        (mem) =>
+          `[${new Date(mem.timestamp).toLocaleString()}] ${mem.sender}: ${
+            mem.text
+          }`,
+      );
   }
 
   /**
    * Retrieve recent reflections, ordered by timestamp
    */
   public getRecentReflections(count: number = 5): ReflectionMemory[] {
-    return this.reflections.sort((a, b) => b.timestamp - a.timestamp).slice(0, count);
+    return this.reflections
+      .sort((a, b) => b.timestamp - a.timestamp)
+      .slice(0, count);
   }
 
   /**
@@ -209,7 +228,7 @@ export class RAGMemoryStore {
   public async clearAllMemories(): Promise<void> {
     this.memories = [];
     await this.saveMemories();
-    log.info('Cleared all conversation memories');
+    log.info("Cleared all conversation memories");
   }
 
   /**
@@ -238,7 +257,11 @@ export class RAGMemoryStore {
     // Score each memory
     const scoredMemories = this.memories.map((memory) => {
       const memoryTokens = this.tokenize(memory.text);
-      const tfidfScore = this.calculateTFIDF(queryTokens, memoryTokens, idfScores);
+      const tfidfScore = this.calculateTFIDF(
+        queryTokens,
+        memoryTokens,
+        idfScores,
+      );
 
       // Apply recency boost (more recent = higher boost)
       const ageInDays = (Date.now() - memory.timestamp) / (1000 * 60 * 60 * 24);
@@ -264,7 +287,7 @@ export class RAGMemoryStore {
   private tokenize(text: string): string[] {
     return text
       .toLowerCase()
-      .replace(/[^\w\s]/g, ' ')
+      .replace(/[^\w\s]/g, " ")
       .split(/\s+/)
       .filter((word) => word.length > 2 && !this.isStopWord(word));
   }
@@ -274,62 +297,62 @@ export class RAGMemoryStore {
    */
   private isStopWord(word: string): boolean {
     const stopWords = new Set([
-      'the',
-      'a',
-      'an',
-      'and',
-      'or',
-      'but',
-      'in',
-      'on',
-      'at',
-      'to',
-      'for',
-      'of',
-      'with',
-      'by',
-      'from',
-      'as',
-      'is',
-      'was',
-      'are',
-      'were',
-      'been',
-      'be',
-      'have',
-      'has',
-      'had',
-      'do',
-      'does',
-      'did',
-      'will',
-      'would',
-      'could',
-      'should',
-      'may',
-      'might',
-      'must',
-      'shall',
-      'can',
-      'this',
-      'that',
-      'these',
-      'those',
-      'it',
-      'its',
-      'they',
-      'them',
-      'their',
-      'we',
-      'us',
-      'our',
-      'you',
-      'your',
-      'he',
-      'him',
-      'his',
-      'she',
-      'her',
+      "the",
+      "a",
+      "an",
+      "and",
+      "or",
+      "but",
+      "in",
+      "on",
+      "at",
+      "to",
+      "for",
+      "of",
+      "with",
+      "by",
+      "from",
+      "as",
+      "is",
+      "was",
+      "are",
+      "were",
+      "been",
+      "be",
+      "have",
+      "has",
+      "had",
+      "do",
+      "does",
+      "did",
+      "will",
+      "would",
+      "could",
+      "should",
+      "may",
+      "might",
+      "must",
+      "shall",
+      "can",
+      "this",
+      "that",
+      "these",
+      "those",
+      "it",
+      "its",
+      "they",
+      "them",
+      "their",
+      "we",
+      "us",
+      "our",
+      "you",
+      "your",
+      "he",
+      "him",
+      "his",
+      "she",
+      "her",
     ]);
     return stopWords.has(word);
   }
@@ -365,7 +388,7 @@ export class RAGMemoryStore {
   private calculateTFIDF(
     queryTokens: string[],
     docTokens: string[],
-    idfScores: Map<string, number>
+    idfScores: Map<string, number>,
   ): number {
     if (docTokens.length === 0) return 0;
 
@@ -392,7 +415,10 @@ export class RAGMemoryStore {
   /**
    * Find memories similar to a given memory (for clustering/deduplication)
    */
-  public findSimilarMemories(memoryId: string, threshold: number = 0.5): Memory[] {
+  public findSimilarMemories(
+    memoryId: string,
+    threshold: number = 0.5,
+  ): Memory[] {
     const targetMemory = this.memories.find((m) => m.id === memoryId);
     if (!targetMemory) return [];
 
@@ -406,7 +432,7 @@ export class RAGMemoryStore {
         similarity: this.calculateCosineSimilarity(
           targetTokens,
           this.tokenize(memory.text),
-          idfScores
+          idfScores,
         ),
       }))
       .filter((item) => item.similarity >= threshold)
@@ -420,7 +446,7 @@ export class RAGMemoryStore {
   private calculateCosineSimilarity(
     tokens1: string[],
     tokens2: string[],
-    idfScores: Map<string, number>
+    idfScores: Map<string, number>,
   ): number {
     const vec1 = this.createTFIDFVector(tokens1, idfScores);
     const vec2 = this.createTFIDFVector(tokens2, idfScores);
@@ -447,7 +473,10 @@ export class RAGMemoryStore {
   /**
    * Create TF-IDF vector for tokens
    */
-  private createTFIDFVector(tokens: string[], idfScores: Map<string, number>): Map<string, number> {
+  private createTFIDFVector(
+    tokens: string[],
+    idfScores: Map<string, number>,
+  ): Map<string, number> {
     const vector = new Map<string, number>();
     const termFreq = new Map<string, number>();
 
@@ -467,7 +496,10 @@ export class RAGMemoryStore {
   /**
    * Get conversation context for a specific chat
    */
-  public getConversationContext(chatId: number, messageLimit: number = 10): Memory[] {
+  public getConversationContext(
+    chatId: number,
+    messageLimit: number = 10,
+  ): Memory[] {
     return this.memories
       .filter((mem) => mem.chatId === chatId)
       .sort((a, b) => b.timestamp - a.timestamp)

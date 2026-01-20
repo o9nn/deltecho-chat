@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 
 import Dialog, {
   DialogBody,
@@ -6,24 +6,24 @@ import Dialog, {
   DialogFooter,
   DialogHeader,
   FooterActions,
-} from './Dialog'
-import Radio from './Radio'
-import RadioGroup from './RadioGroup'
-import FooterActionButton from './Dialog/FooterActionButton'
-import useTranslationFunction from '../hooks/useTranslationFunction'
+} from "./Dialog";
+import Radio from "./Radio";
+import RadioGroup from "./RadioGroup";
+import FooterActionButton from "./Dialog/FooterActionButton";
+import useTranslationFunction from "../hooks/useTranslationFunction";
 
-import type { DialogProps } from '../contexts/DialogContext'
+import type { DialogProps } from "../contexts/DialogContext";
 
-export type SelectDialogOption = [value: string, label: string]
+export type SelectDialogOption = [value: string, label: string];
 
 type Props = {
-  title: string
-  initialSelectedValue: string
-  values: SelectDialogOption[]
-  onSave?: (selectedValue: string) => void
-  onSelect?: (selectedValue: string) => void
-  onCancel?: () => void
-} & DialogProps
+  title: string;
+  initialSelectedValue: string;
+  values: SelectDialogOption[];
+  onSave?: (selectedValue: string) => void;
+  onSelect?: (selectedValue: string) => void;
+  onCancel?: () => void;
+} & DialogProps;
 
 export default function SmallSelectDialog({
   initialSelectedValue,
@@ -34,20 +34,20 @@ export default function SmallSelectDialog({
   onSelect,
   onCancel,
 }: Props) {
-  const tx = useTranslationFunction()
+  const tx = useTranslationFunction();
 
   const [selectedValue, setActualSelectedValue] =
-    useState<string>(initialSelectedValue)
+    useState<string>(initialSelectedValue);
 
   const onChange = (value: string) => {
-    setActualSelectedValue(value)
-    onSelect && onSelect(value)
-  }
+    setActualSelectedValue(value);
+    onSelect && onSelect(value);
+  };
 
   const saveAndClose = () => {
-    onSave && onSave(selectedValue)
-    onClose()
-  }
+    onSave && onSave(selectedValue);
+    onClose();
+  };
 
   return (
     <Dialog onClose={onClose}>
@@ -57,13 +57,13 @@ export default function SmallSelectDialog({
           <RadioGroup
             onChange={onChange}
             selectedValue={selectedValue}
-            name='small-dialog-value'
+            name="small-dialog-value"
           >
             {values.map((element, index) => {
-              const [value, label] = element
+              const [value, label] = element;
               return (
-                <Radio key={'select-' + index} label={label} value={value} />
-              )
+                <Radio key={"select-" + index} label={label} value={value} />
+              );
             })}
           </RadioGroup>
         </DialogContent>
@@ -72,18 +72,18 @@ export default function SmallSelectDialog({
         <FooterActions>
           <FooterActionButton
             onClick={() => {
-              onCancel && onCancel()
-              onClose()
+              onCancel && onCancel();
+              onClose();
             }}
-            styling='secondary'
+            styling="secondary"
           >
-            {tx('cancel')}
+            {tx("cancel")}
           </FooterActionButton>
-          <FooterActionButton styling='primary' onClick={saveAndClose}>
-            {tx('save_desktop')}
+          <FooterActionButton styling="primary" onClick={saveAndClose}>
+            {tx("save_desktop")}
           </FooterActionButton>
         </FooterActions>
       </DialogFooter>
     </Dialog>
-  )
+  );
 }

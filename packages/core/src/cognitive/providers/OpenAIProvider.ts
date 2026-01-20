@@ -13,10 +13,10 @@ import {
   StreamChunk,
   ProviderHealth,
   registerProvider,
-} from './LLMProvider';
-import { getLogger } from '../../utils/logger';
+} from "./LLMProvider";
+import { getLogger } from "../../utils/logger";
 
-const log = getLogger('deep-tree-echo-core/cognitive/providers/OpenAIProvider');
+const log = getLogger("deep-tree-echo-core/cognitive/providers/OpenAIProvider");
 
 /**
  * OpenAI API response structure
@@ -74,36 +74,39 @@ interface OpenAIModelsResponse {
  * OpenAI Provider Implementation
  */
 export class OpenAIProvider extends LLMProvider {
-  private static readonly DEFAULT_BASE_URL = 'https://api.openai.com/v1';
+  private static readonly DEFAULT_BASE_URL = "https://api.openai.com/v1";
   private static readonly DEFAULT_MODELS = [
-    'gpt-4-turbo-preview',
-    'gpt-4-turbo',
-    'gpt-4',
-    'gpt-4-0125-preview',
-    'gpt-4-1106-preview',
-    'gpt-3.5-turbo',
-    'gpt-3.5-turbo-16k',
+    "gpt-4-turbo-preview",
+    "gpt-4-turbo",
+    "gpt-4",
+    "gpt-4-0125-preview",
+    "gpt-4-1106-preview",
+    "gpt-3.5-turbo",
+    "gpt-3.5-turbo-16k",
   ];
 
   constructor(apiKey: string, baseUrl?: string) {
-    super(apiKey, baseUrl || OpenAIProvider.DEFAULT_BASE_URL, 'OpenAI');
+    super(apiKey, baseUrl || OpenAIProvider.DEFAULT_BASE_URL, "OpenAI");
   }
 
   /**
    * Generate a completion from OpenAI
    */
-  async complete(messages: ChatMessage[], config: CompletionConfig): Promise<CompletionResponse> {
+  async complete(
+    messages: ChatMessage[],
+    config: CompletionConfig,
+  ): Promise<CompletionResponse> {
     if (!this.isConfigured()) {
-      throw new Error('OpenAI provider not configured: missing API key');
+      throw new Error("OpenAI provider not configured: missing API key");
     }
 
     const startTime = Date.now();
 
     try {
       const response = await fetch(`${this.baseUrl}/chat/completions`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${this.apiKey}`,
         },
         body: JSON.stringify({
@@ -154,7 +157,7 @@ export class OpenAIProvider extends LLMProvider {
         isHealthy: false,
         latencyMs: Date.now() - startTime,
         lastCheck: Date.now(),
-        errorMessage: error instanceof Error ? error.message : 'Unknown error',
+        errorMessage: error instanceof Error ? error.message : "Unknown error",
       };
       throw error;
     }
@@ -166,21 +169,21 @@ export class OpenAIProvider extends LLMProvider {
   async completeStream(
     messages: ChatMessage[],
     config: CompletionConfig,
-    onChunk: (chunk: StreamChunk) => void
+    onChunk: (chunk: StreamChunk) => void,
   ): Promise<CompletionResponse> {
     if (!this.isConfigured()) {
-      throw new Error('OpenAI provider not configured: missing API key');
+      throw new Error("OpenAI provider not configured: missing API key");
     }
 
     const startTime = Date.now();
-    let fullContent = '';
-    let finishReason: CompletionResponse['finishReason'] = 'stop';
+    let fullContent = "";
+    let finishReason: CompletionResponse["finishReason"] = "stop";
 
     try {
       const response = await fetch(`${this.baseUrl}/chat/completions`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${this.apiKey}`,
         },
         body: JSON.stringify({
@@ -208,32 +211,32 @@ export class OpenAIProvider extends LLMProvider {
 
       const reader = response.body?.getReader();
       if (!reader) {
-        throw new Error('No response body reader available');
+        throw new Error("No response body reader available");
       }
 
       const decoder = new TextDecoder();
-      let buffer = '';
+      let buffer = "";
 
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
 
         buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split('\n');
-        buffer = lines.pop() || '';
+        const lines = buffer.split("\n");
+        buffer = lines.pop() || "";
 
         for (const line of lines) {
-          if (line.startsWith('data: ')) {
+          if (line.startsWith("data: ")) {
             const data = line.slice(6);
-            if (data === '[DONE]') {
-              onChunk({ content: '', isComplete: true, finishReason });
+            if (data === "[DONE]") {
+              onChunk({ content: "", isComplete: true, finishReason });
               continue;
             }
 
             try {
               const chunk: OpenAIStreamChunk = JSON.parse(data);
               const delta = chunk.choices[0]?.delta;
-              const content = delta?.content || '';
+              const content = delta?.content || "";
 
               if (content) {
                 fullContent += content;
@@ -241,7 +244,9 @@ export class OpenAIProvider extends LLMProvider {
               }
 
               if (chunk.choices[0]?.finish_reason) {
-                finishReason = this.mapFinishReason(chunk.choices[0].finish_reason);
+                finishReason = this.mapFinishReason(
+                  chunk.choices[0].finish_reason,
+                );
               }
             } catch (e) {
               // Skip malformed JSON chunks
@@ -259,7 +264,7 @@ export class OpenAIProvider extends LLMProvider {
 
       // Estimate token usage for streaming (actual usage not provided in stream)
       const estimatedPromptTokens = Math.ceil(
-        messages.reduce((acc, m) => acc + m.content.length, 0) / 4
+        messages.reduce((acc, m) => acc + m.content.length, 0) / 4,
       );
       const estimatedCompletionTokens = Math.ceil(fullContent.length / 4);
 
@@ -279,7 +284,7 @@ export class OpenAIProvider extends LLMProvider {
         isHealthy: false,
         latencyMs: Date.now() - startTime,
         lastCheck: Date.now(),
-        errorMessage: error instanceof Error ? error.message : 'Unknown error',
+        errorMessage: error instanceof Error ? error.message : "Unknown error",
       };
       throw error;
     }
@@ -294,7 +299,7 @@ export class OpenAIProvider extends LLMProvider {
         isHealthy: false,
         latencyMs: 0,
         lastCheck: Date.now(),
-        errorMessage: 'API key not configured',
+        errorMessage: "API key not configured",
       };
     }
 
@@ -302,7 +307,7 @@ export class OpenAIProvider extends LLMProvider {
 
     try {
       const response = await fetch(`${this.baseUrl}/models`, {
-        method: 'GET',
+        method: "GET",
         headers: {
           Authorization: `Bearer ${this.apiKey}`,
         },
@@ -319,7 +324,7 @@ export class OpenAIProvider extends LLMProvider {
         isHealthy: false,
         latencyMs: Date.now() - startTime,
         lastCheck: Date.now(),
-        errorMessage: error instanceof Error ? error.message : 'Unknown error',
+        errorMessage: error instanceof Error ? error.message : "Unknown error",
       };
     }
 
@@ -336,14 +341,14 @@ export class OpenAIProvider extends LLMProvider {
 
     try {
       const response = await fetch(`${this.baseUrl}/models`, {
-        method: 'GET',
+        method: "GET",
         headers: {
           Authorization: `Bearer ${this.apiKey}`,
         },
       });
 
       if (!response.ok) {
-        log.warn('Failed to fetch OpenAI models, using defaults');
+        log.warn("Failed to fetch OpenAI models, using defaults");
         return OpenAIProvider.DEFAULT_MODELS;
       }
 
@@ -351,13 +356,13 @@ export class OpenAIProvider extends LLMProvider {
 
       // Filter to only chat models
       const chatModels = data.data
-        .filter((m) => m.id.startsWith('gpt-'))
+        .filter((m) => m.id.startsWith("gpt-"))
         .map((m) => m.id)
         .sort();
 
       return chatModels.length > 0 ? chatModels : OpenAIProvider.DEFAULT_MODELS;
     } catch (error) {
-      log.warn('Error fetching OpenAI models:', error);
+      log.warn("Error fetching OpenAI models:", error);
       return OpenAIProvider.DEFAULT_MODELS;
     }
   }
@@ -365,20 +370,26 @@ export class OpenAIProvider extends LLMProvider {
   /**
    * Map OpenAI finish reason to standard format
    */
-  private mapFinishReason(reason: string): CompletionResponse['finishReason'] {
+  private mapFinishReason(reason: string): CompletionResponse["finishReason"] {
     switch (reason) {
-      case 'stop':
-        return 'stop';
-      case 'length':
-        return 'length';
-      case 'content_filter':
-        return 'content_filter';
+      case "stop":
+        return "stop";
+      case "length":
+        return "length";
+      case "content_filter":
+        return "content_filter";
       default:
-        return 'stop';
+        return "stop";
     }
   }
 }
 
 // Register the provider
-registerProvider('openai', (apiKey, baseUrl) => new OpenAIProvider(apiKey, baseUrl));
-registerProvider('openai-compatible', (apiKey, baseUrl) => new OpenAIProvider(apiKey, baseUrl));
+registerProvider(
+  "openai",
+  (apiKey, baseUrl) => new OpenAIProvider(apiKey, baseUrl),
+);
+registerProvider(
+  "openai-compatible",
+  (apiKey, baseUrl) => new OpenAIProvider(apiKey, baseUrl),
+);

@@ -48,7 +48,7 @@
     }
 
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       bottom: 0;
       left: 0;
@@ -72,7 +72,7 @@
     position: relative;
 
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       top: 30px;
       left: 60px;
@@ -336,7 +336,7 @@
                 transition: all 0.2s;
 
                 &::after {
-                  content: '';
+                  content: "";
                   position: absolute;
                   top: 100%;
                   right: 8px;
@@ -389,7 +389,7 @@
                 }
               }
 
-              input[type='range'] {
+              input[type="range"] {
                 width: 100%;
                 height: 6px;
                 -webkit-appearance: none;

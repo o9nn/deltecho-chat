@@ -13,14 +13,14 @@ Old readme below:
 The _Delta Chat Core Library_ is written in cross-platform **C**,
 documented at <https://c.delta.chat>.
 
-The ``deltachat`` Python bindings can be found in the
+The `deltachat` Python bindings can be found in the
 [python subdirectory](https://github.com/deltachat/deltachat-core/tree/master/python)
 and are documented at <https://py.delta.chat>.
 
 In the [ci_scripts directory](https://github.com/deltachat/deltachat-core/tree/master/ci_scripts/README.md)
 you'll find docker- and library-building scripts.
 
-## binary/distribution packages  (work-in-progress)
+## binary/distribution packages (work-in-progress)
 
 There are work-in-progress efforts for creating (binary) packages which
 do not require that you build the library manually:
@@ -34,43 +34,44 @@ do not require that you build the library manually:
 - [Windows building](https://github.com/deltachat/deltachat-core/issues/306)
 
 If you can help with advancing or adding to these efforts, please do contribute.
-Otherwise read on for how to get ``libdeltachat.so`` and ``deltachat.h``
+Otherwise read on for how to get `libdeltachat.so` and `deltachat.h`
 installed into your system.
 
-## building your own ``libdeltachat.so``
+## building your own `libdeltachat.so`
 
-### getting a recent enough ``meson`` for building
+### getting a recent enough `meson` for building
 
-If you have installed ``meson`` in your environment check the version::
+If you have installed `meson` in your environment check the version::
 
     meson --version
 
-You need to have version ``0.47.2`` at least. If the version
+You need to have version `0.47.2` at least. If the version
 is older there is a recommended way of getting a better version:
 
-1. uninstall your system-level ``meson`` package (if possible)
+1. uninstall your system-level `meson` package (if possible)
 
-2. ensure you have at least ``python3.5`` installed and type:
+2. ensure you have at least `python3.5` installed and type:
+
    ```
        python3 -m pip
    ```
 
    to check that you have "pip" installed. If not available, you
-   might get it as a ``python3-pip`` package or you could follow
+   might get it as a `python3-pip` package or you could follow
    [installing pip](https://pip.pypa.io/en/stable/installing/).
 
 3. then pip-install meson into your home-directory:
+
    ```
        python3 -u -m pip install meson
    ```
 
-   the ``-u`` causes the pip-install to put a ``meson`` command line tool into
-   ``~/.local/`` or %APPDATA%\Python on Windows.
+   the `-u` causes the pip-install to put a `meson` command line tool into
+   `~/.local/` or %APPDATA%\Python on Windows.
 
-4. run ``meson --version`` to verify it's at at least version 0.48.0 now.
-   If the ``meson`` command is not found, add ``~/.local/bin`` to ``PATH``
-   and try again (``export PATH=~/.local/bin:$PATH`` on many unix-y terminals).
-
+4. run `meson --version` to verify it's at at least version 0.48.0 now.
+   If the `meson` command is not found, add `~/.local/bin` to `PATH`
+   and try again (`export PATH=~/.local/bin:$PATH` on many unix-y terminals).
 
 ### installing "ninja-build"
 
@@ -146,12 +147,14 @@ sudo ldconfig
 
 The install keeps a log of which files were installed. Uninstalling
 is thus also supported:
+
 ```
 sudo ninja uninstall
 ```
+
 **NOTE** that the above assumes `/usr/local/lib` is configured somewhere
 in `/etc/ld.so.conf` or `/etc/ld.so.conf.d/*`, which is fairly
-standard.  It is possible your system uses
+standard. It is possible your system uses
 `/usr/local/lib/x86_64-linux-gnu` which should be auto-detected and
 just work as well.
 
@@ -159,7 +162,6 @@ The library is build using netpgp by default (shipped in /libs).
 By adding `-Drpgp=true` to the build command, rpgp is used instead
 (https://github.com/dignifiedquire/rpgp,
 needs to be installed on the system or available as a lib)
-
 
 ### Building without system-level dependencies
 
@@ -172,10 +174,9 @@ Likewise you can forbid using the bundled dependencies using
 
 There also is an experimental feature where you can build a version of the
 shared `libdeltachat.so` library with no further external
-dependencies.  This can be done by passing the `-Dmonolith=true`
-option to meson.  Note that this implies `--wrap-mode=forcefallback`
+dependencies. This can be done by passing the `-Dmonolith=true`
+option to meson. Note that this implies `--wrap-mode=forcefallback`
 since this will always use all the bundled dependencies.
-
 
 ## Language bindings and frontend Projects
 
@@ -202,7 +203,6 @@ The program then shows a prompt and typing `help` gives some help about the avai
 
 New tests are currently developed using Python, see
 https://github.com/deltachat/deltachat-core/tree/master/python/tests
-
 
 ## License
 

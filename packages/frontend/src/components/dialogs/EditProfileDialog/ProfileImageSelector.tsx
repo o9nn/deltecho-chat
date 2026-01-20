@@ -1,21 +1,21 @@
-import React from 'react'
+import React from "react";
 
-import ImageSelector from '../../ImageSelector'
-import ImageCropper from '../../ImageCropper'
+import ImageSelector from "../../ImageSelector";
+import ImageCropper from "../../ImageCropper";
 
-import { LastUsedSlot } from '../../../utils/lastUsedPaths'
-import { avatarInitial } from '../../Avatar'
-import useDialog from '../../../hooks/dialog/useDialog'
-import { copyToBlobDir } from '../../../utils/copyToBlobDir'
+import { LastUsedSlot } from "../../../utils/lastUsedPaths";
+import { avatarInitial } from "../../Avatar";
+import useDialog from "../../../hooks/dialog/useDialog";
+import { copyToBlobDir } from "../../../utils/copyToBlobDir";
 
 type Props = {
-  addr?: string
-  color?: string
-  displayName: string
-  hideDeleteButton?: boolean
-  profilePicture: string | null
-  setProfilePicture: (path: string | null) => void
-}
+  addr?: string;
+  color?: string;
+  displayName: string;
+  hideDeleteButton?: boolean;
+  profilePicture: string | null;
+  setProfilePicture: (path: string | null) => void;
+};
 
 export default function ProfileImageSelector({
   addr,
@@ -24,9 +24,9 @@ export default function ProfileImageSelector({
   profilePicture,
   setProfilePicture,
 }: Props) {
-  const initials = avatarInitial(displayName, addr)
+  const initials = avatarInitial(displayName, addr);
 
-  const { openDialog } = useDialog()
+  const { openDialog } = useDialog();
 
   return (
     <ImageSelector
@@ -34,20 +34,20 @@ export default function ProfileImageSelector({
       filePath={profilePicture}
       initials={initials}
       lastUsedSlot={LastUsedSlot.ProfileImage}
-      onChange={async filepath => {
+      onChange={async (filepath) => {
         if (!filepath) {
-          setProfilePicture(null)
+          setProfilePicture(null);
         } else {
           openDialog(ImageCropper, {
             filepath: await copyToBlobDir(filepath),
-            shape: 'circle',
+            shape: "circle",
             onResult: setProfilePicture,
             onCancel: () => {},
             desiredWidth: 256,
             desiredHeight: 256,
-          })
+          });
         }
       }}
     />
-  )
+  );
 }

@@ -1,18 +1,18 @@
-import React from 'react'
+import React from "react";
 
-import { Avatar, ClickForFullscreenAvatarWrapper } from '../Avatar'
-import { InlineVerifiedIcon } from '../VerifiedIcon'
+import { Avatar, ClickForFullscreenAvatarWrapper } from "../Avatar";
+import { InlineVerifiedIcon } from "../VerifiedIcon";
 
-import styles from './styles.module.scss'
+import styles from "./styles.module.scss";
 
 type Props = {
-  address?: string
-  avatarPath?: string
-  color?: string
-  displayName: string
-  isVerified: boolean
-  wasSeenRecently?: boolean
-}
+  address?: string;
+  avatarPath?: string;
+  color?: string;
+  displayName: string;
+  isVerified: boolean;
+  wasSeenRecently?: boolean;
+};
 
 export default function ProfileInfoHeader({
   avatarPath,
@@ -29,7 +29,7 @@ export default function ProfileInfoHeader({
           avatarPath={avatarPath}
           color={color}
           wasSeenRecently={wasSeenRecently}
-          className='very-large'
+          className="very-large"
         />
       </ClickForFullscreenAvatarWrapper>
       <div className={styles.infoContainer}>
@@ -41,5 +41,5 @@ export default function ProfileInfoHeader({
         </p>
       </div>
     </div>
-  )
+  );
 }

@@ -1,9 +1,9 @@
 /* Set theme variables used for theme Generation */
-@use './_themebase' with (
+@use "./_themebase" with (
   $outlineColor: #505050,
   $accentColor: #2090ea,
   $bgChatView: #19232b,
-  $bgImage: url('./images/background_dark.svg'),
+  $bgImage: url("./images/background_dark.svg"),
   $bgMessageBubbleIncoming: #303030,
   $bgMessageBubbleOutgoing: #354535,
   $bgNavBar: #272727,
@@ -31,6 +31,6 @@
 );
 
 .theme-meta {
-  --name: 'Dark Theme';
-  --description: 'Our default dark theme.';
+  --name: "Dark Theme";
+  --description: "Our default dark theme.";
 }

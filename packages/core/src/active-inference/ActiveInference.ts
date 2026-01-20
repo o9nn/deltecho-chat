@@ -11,10 +11,10 @@
  * Based on Karl Friston's Free Energy Principle and Active Inference framework.
  */
 
-import { getLogger } from '../utils/logger';
-import { EventEmitter } from 'events';
+import { getLogger } from "../utils/logger";
+import { EventEmitter } from "events";
 
-const log = getLogger('deep-tree-echo-core/active-inference/ActiveInference');
+const log = getLogger("deep-tree-echo-core/active-inference/ActiveInference");
 
 /**
  * A belief state representing probability distribution over hidden states
@@ -39,7 +39,7 @@ export interface BeliefState {
  */
 export interface Observation {
   /** Type of observation */
-  type: 'sensory' | 'proprioceptive' | 'interoceptive' | 'social';
+  type: "sensory" | "proprioceptive" | "interoceptive" | "social";
   /** Content of the observation */
   content: string;
   /** Numeric features extracted from observation */
@@ -59,7 +59,7 @@ export interface Action {
   /** Action identifier */
   id: string;
   /** Type of action */
-  type: 'communicate' | 'query' | 'modify' | 'construct' | 'explore';
+  type: "communicate" | "query" | "modify" | "construct" | "explore";
   /** Target of the action */
   target: string;
   /** Parameters for the action */
@@ -176,26 +176,26 @@ export class ActiveInference extends EventEmitter {
   private initializeDefaultModel(): void {
     // Initialize core belief categories with uniform priors
     const coreCategories = [
-      'user_intent',
-      'conversation_state',
-      'emotional_valence',
-      'topic_relevance',
-      'information_need',
-      'environment_state',
+      "user_intent",
+      "conversation_state",
+      "emotional_valence",
+      "topic_relevance",
+      "information_need",
+      "environment_state",
     ];
 
     for (const category of coreCategories) {
-      this.initializeBelief(category, ['unknown', 'low', 'medium', 'high']);
+      this.initializeBelief(category, ["unknown", "low", "medium", "high"]);
     }
 
     // Set default preferences (what states we prefer)
-    this.generativeModel.preferences.set('user_satisfied', 1.0);
-    this.generativeModel.preferences.set('understanding_achieved', 0.9);
-    this.generativeModel.preferences.set('information_shared', 0.8);
-    this.generativeModel.preferences.set('confusion_present', -0.8);
-    this.generativeModel.preferences.set('frustration_present', -1.0);
+    this.generativeModel.preferences.set("user_satisfied", 1.0);
+    this.generativeModel.preferences.set("understanding_achieved", 0.9);
+    this.generativeModel.preferences.set("information_shared", 0.8);
+    this.generativeModel.preferences.set("confusion_present", -0.8);
+    this.generativeModel.preferences.set("frustration_present", -1.0);
 
-    log.info('Initialized default generative model');
+    log.info("Initialized default generative model");
   }
 
   /**
@@ -225,8 +225,8 @@ export class ActiveInference extends EventEmitter {
   public start(): void {
     if (this.running) return;
     this.running = true;
-    log.info('Active Inference started');
-    this.emit('started');
+    log.info("Active Inference started");
+    this.emit("started");
   }
 
   /**
@@ -235,8 +235,8 @@ export class ActiveInference extends EventEmitter {
   public stop(): void {
     if (!this.running) return;
     this.running = false;
-    log.info('Active Inference stopped');
-    this.emit('stopped');
+    log.info("Active Inference stopped");
+    this.emit("stopped");
   }
 
   /**
@@ -245,8 +245,12 @@ export class ActiveInference extends EventEmitter {
    * This implements the "perception" part of active inference:
    * updating beliefs to minimize prediction error given new observations
    */
-  public async perceive(observation: Observation): Promise<Map<string, BeliefState>> {
-    log.debug(`Processing observation: ${observation.type} from ${observation.source}`);
+  public async perceive(
+    observation: Observation,
+  ): Promise<Map<string, BeliefState>> {
+    log.debug(
+      `Processing observation: ${observation.type} from ${observation.source}`,
+    );
 
     // Store observation
     this.observationHistory.push(observation);
@@ -259,7 +263,11 @@ export class ActiveInference extends EventEmitter {
 
     // Update beliefs using variational inference
     for (const [variable, belief] of this.currentBeliefs) {
-      const updatedBelief = await this.updateBelief(belief, features, observation);
+      const updatedBelief = await this.updateBelief(
+        belief,
+        features,
+        observation,
+      );
       this.currentBeliefs.set(variable, updatedBelief);
     }
 
@@ -267,7 +275,7 @@ export class ActiveInference extends EventEmitter {
     const freeEnergy = this.calculateFreeEnergy(observation);
     this.freeEnergyHistory.push(freeEnergy.totalFreeEnergy);
 
-    this.emit('beliefs_updated', {
+    this.emit("beliefs_updated", {
       beliefs: this.currentBeliefs,
       freeEnergy,
       observation,
@@ -286,8 +294,22 @@ export class ActiveInference extends EventEmitter {
     const content = observation.content.toLowerCase();
 
     // Emotional valence detection
-    const positiveWords = ['good', 'great', 'thanks', 'happy', 'love', 'excellent'];
-    const negativeWords = ['bad', 'wrong', 'hate', 'frustrated', 'confused', 'help'];
+    const positiveWords = [
+      "good",
+      "great",
+      "thanks",
+      "happy",
+      "love",
+      "excellent",
+    ];
+    const negativeWords = [
+      "bad",
+      "wrong",
+      "hate",
+      "frustrated",
+      "confused",
+      "help",
+    ];
 
     let valence = 0;
     positiveWords.forEach((w) => {
@@ -296,27 +318,34 @@ export class ActiveInference extends EventEmitter {
     negativeWords.forEach((w) => {
       if (content.includes(w)) valence -= 0.2;
     });
-    features.set('emotional_valence', Math.max(-1, Math.min(1, valence)));
+    features.set("emotional_valence", Math.max(-1, Math.min(1, valence)));
 
     // Information need detection
-    const questionMarkers = ['?', 'how', 'what', 'why', 'when', 'where', 'who'];
+    const questionMarkers = ["?", "how", "what", "why", "when", "where", "who"];
     let infoNeed = 0;
     questionMarkers.forEach((m) => {
       if (content.includes(m)) infoNeed += 0.15;
     });
-    features.set('information_need', Math.min(1, infoNeed));
+    features.set("information_need", Math.min(1, infoNeed));
 
     // Urgency detection
-    const urgentWords = ['urgent', 'asap', 'immediately', 'now', 'quick', 'fast'];
+    const urgentWords = [
+      "urgent",
+      "asap",
+      "immediately",
+      "now",
+      "quick",
+      "fast",
+    ];
     let urgency = 0;
     urgentWords.forEach((w) => {
       if (content.includes(w)) urgency += 0.25;
     });
-    features.set('urgency', Math.min(1, urgency));
+    features.set("urgency", Math.min(1, urgency));
 
     // Complexity estimation
     const wordCount = content.split(/\s+/).length;
-    features.set('complexity', Math.min(1, wordCount / 100));
+    features.set("complexity", Math.min(1, wordCount / 100));
 
     return features;
   }
@@ -330,7 +359,7 @@ export class ActiveInference extends EventEmitter {
   private async updateBelief(
     belief: BeliefState,
     features: Map<string, number>,
-    observation: Observation
+    observation: Observation,
   ): Promise<BeliefState> {
     const newDistribution = new Map<string, number>();
     let normalizer = 0;
@@ -341,12 +370,19 @@ export class ActiveInference extends EventEmitter {
     // Update each value's probability using likelihood and prior
     for (const [value, priorProb] of belief.distribution) {
       // Compute likelihood: P(observation features | belief value)
-      const likelihood = this.computeLikelihood(value, relevantFeature, observation);
+      const likelihood = this.computeLikelihood(
+        value,
+        relevantFeature,
+        observation,
+      );
 
       // Bayesian update with precision weighting
       const posteriorUnnorm =
         Math.pow(priorProb, this.config.priorPrecision) *
-        Math.pow(likelihood, this.config.sensoryPrecision * observation.reliability);
+        Math.pow(
+          likelihood,
+          this.config.sensoryPrecision * observation.reliability,
+        );
 
       newDistribution.set(value, posteriorUnnorm);
       normalizer += posteriorUnnorm;
@@ -354,14 +390,20 @@ export class ActiveInference extends EventEmitter {
 
     // Normalize to get valid probability distribution
     for (const [value, prob] of newDistribution) {
-      newDistribution.set(value, normalizer > 0 ? prob / normalizer : 1 / newDistribution.size);
+      newDistribution.set(
+        value,
+        normalizer > 0 ? prob / normalizer : 1 / newDistribution.size,
+      );
     }
 
     // Update precision based on prediction error
-    const predictionError = this.computePredictionError(belief, newDistribution);
+    const predictionError = this.computePredictionError(
+      belief,
+      newDistribution,
+    );
     const newPrecision = Math.max(
       0.1,
-      belief.precision + this.config.learningRate * (1 - predictionError)
+      belief.precision + this.config.learningRate * (1 - predictionError),
     );
 
     return {
@@ -379,7 +421,7 @@ export class ActiveInference extends EventEmitter {
   private computeLikelihood(
     beliefValue: string,
     observedFeature: number,
-    observation: Observation
+    observation: Observation,
   ): number {
     // Map belief values to expected feature values
     const expectedValues: Record<string, number> = {
@@ -402,7 +444,10 @@ export class ActiveInference extends EventEmitter {
   /**
    * Compute prediction error between prior and posterior
    */
-  private computePredictionError(prior: BeliefState, posterior: Map<string, number>): number {
+  private computePredictionError(
+    prior: BeliefState,
+    posterior: Map<string, number>,
+  ): number {
     let error = 0;
 
     for (const [value, priorProb] of prior.distribution) {
@@ -432,7 +477,11 @@ export class ActiveInference extends EventEmitter {
           const priorProb = prior?.distribution.get(value) || 0.1;
 
           // Accuracy: -E_q[log p(o|s)]
-          const likelihood = this.getLikelihoodForState(variable, value, observation);
+          const likelihood = this.getLikelihoodForState(
+            variable,
+            value,
+            observation,
+          );
           accuracy -= qProb * Math.log(Math.max(0.001, likelihood));
 
           // Complexity: D_KL[q(s)||p(s)]
@@ -459,7 +508,11 @@ export class ActiveInference extends EventEmitter {
   /**
    * Get likelihood for a specific state value given observation
    */
-  private getLikelihoodForState(variable: string, value: string, observation: Observation): number {
+  private getLikelihoodForState(
+    variable: string,
+    value: string,
+    observation: Observation,
+  ): number {
     const likelihoodMap = this.generativeModel.likelihood.get(variable);
     if (likelihoodMap) {
       return likelihoodMap.get(value) || 0.5;
@@ -500,7 +553,8 @@ export class ActiveInference extends EventEmitter {
     }
 
     const expected =
-      epistemic * this.config.explorationTemperature + pragmatic * this.config.preferenceStrength;
+      epistemic * this.config.explorationTemperature +
+      pragmatic * this.config.preferenceStrength;
 
     return { expected, epistemic, pragmatic };
   }
@@ -530,7 +584,9 @@ export class ActiveInference extends EventEmitter {
    * choosing actions that are expected to lead to preferred
    * outcomes while also gaining information
    */
-  public async selectAction(availableActions: Action[]): Promise<Action | null> {
+  public async selectAction(
+    availableActions: Action[],
+  ): Promise<Action | null> {
     if (availableActions.length === 0) {
       return null;
     }
@@ -552,7 +608,9 @@ export class ActiveInference extends EventEmitter {
     const probabilities: number[] = [];
 
     for (const av of actionValues) {
-      const exp = Math.exp((av.value - maxValue) / this.config.explorationTemperature);
+      const exp = Math.exp(
+        (av.value - maxValue) / this.config.explorationTemperature,
+      );
       probabilities.push(exp);
       totalExp += exp;
     }
@@ -567,7 +625,7 @@ export class ActiveInference extends EventEmitter {
         const selectedAction = actionValues[i].action;
         this.actionHistory.push(selectedAction);
 
-        this.emit('action_selected', {
+        this.emit("action_selected", {
           action: selectedAction,
           expectedFreeEnergy: -actionValues[i].value,
         });
@@ -600,11 +658,14 @@ export class ActiveInference extends EventEmitter {
   /**
    * Learn from action outcomes (update model)
    */
-  public async learnFromOutcome(action: Action, actualOutcome: Observation): Promise<void> {
+  public async learnFromOutcome(
+    action: Action,
+    actualOutcome: Observation,
+  ): Promise<void> {
     // Update transition model based on observed outcome
     const predictedFeatures = this.extractFeatures({
       ...actualOutcome,
-      content: action.expectedOutcome.content || '',
+      content: action.expectedOutcome.content || "",
     });
     const actualFeatures = this.extractFeatures(actualOutcome);
 
@@ -620,17 +681,19 @@ export class ActiveInference extends EventEmitter {
     this.updateLikelihoodModel(action, actualOutcome, predictionError);
 
     // Update preferences based on outcome valence
-    const valence = actualFeatures.get('emotional_valence') || 0;
+    const valence = actualFeatures.get("emotional_valence") || 0;
     if (Math.abs(valence) > 0.3) {
-      const outcomeState = valence > 0 ? 'positive_outcome' : 'negative_outcome';
-      const currentPref = this.generativeModel.preferences.get(outcomeState) || 0;
+      const outcomeState =
+        valence > 0 ? "positive_outcome" : "negative_outcome";
+      const currentPref =
+        this.generativeModel.preferences.get(outcomeState) || 0;
       this.generativeModel.preferences.set(
         outcomeState,
-        currentPref + this.config.learningRate * valence
+        currentPref + this.config.learningRate * valence,
       );
     }
 
-    this.emit('learning_complete', {
+    this.emit("learning_complete", {
       action,
       outcome: actualOutcome,
       predictionError,
@@ -640,7 +703,11 @@ export class ActiveInference extends EventEmitter {
   /**
    * Update the likelihood model based on observed outcomes
    */
-  private updateLikelihoodModel(action: Action, outcome: Observation, error: number): void {
+  private updateLikelihoodModel(
+    action: Action,
+    outcome: Observation,
+    error: number,
+  ): void {
     const actionType = action.type;
     const outcomeType = outcome.type;
 
@@ -652,8 +719,12 @@ export class ActiveInference extends EventEmitter {
 
     const currentLikelihood = likelihoodMap.get(outcomeType) || 0.5;
     const newLikelihood =
-      currentLikelihood + this.config.learningRate * (1 - error - currentLikelihood);
-    likelihoodMap.set(outcomeType, Math.max(0.01, Math.min(0.99, newLikelihood)));
+      currentLikelihood +
+      this.config.learningRate * (1 - error - currentLikelihood);
+    likelihoodMap.set(
+      outcomeType,
+      Math.max(0.01, Math.min(0.99, newLikelihood)),
+    );
   }
 
   /**
@@ -697,16 +768,24 @@ export class ActiveInference extends EventEmitter {
    * Get summary of current cognitive state
    */
   public getCognitiveState(): {
-    beliefs: Array<{ variable: string; mostLikely: string; confidence: number }>;
+    beliefs: Array<{
+      variable: string;
+      mostLikely: string;
+      confidence: number;
+    }>;
     freeEnergy: number;
     isLearning: boolean;
     observationCount: number;
     actionCount: number;
   } {
-    const beliefs: Array<{ variable: string; mostLikely: string; confidence: number }> = [];
+    const beliefs: Array<{
+      variable: string;
+      mostLikely: string;
+      confidence: number;
+    }> = [];
 
     for (const [variable, belief] of this.currentBeliefs) {
-      let mostLikely = 'unknown';
+      let mostLikely = "unknown";
       let maxProb = 0;
 
       for (const [value, prob] of belief.distribution) {

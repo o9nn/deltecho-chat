@@ -1,94 +1,94 @@
-import { useState, useEffect, useMemo, useRef } from 'react'
-import { getLogger } from '../../../../shared/logger'
-import { debounce } from 'debounce'
-import { BackendRemote, onDCEvent } from '../../backend-com'
-import { maybeSelectedAccountId } from '../../ScreenController'
+import { useState, useEffect, useMemo, useRef } from "react";
+import { getLogger } from "../../../../shared/logger";
+import { debounce } from "debounce";
+import { BackendRemote, onDCEvent } from "../../backend-com";
+import { maybeSelectedAccountId } from "../../ScreenController";
 
-const log = getLogger('renderer/helpers/ChatList')
+const log = getLogger("renderer/helpers/ChatList");
 
 export function debounceWithInit<ARGS extends Array<any>>(
   fn: (...args: ARGS) => void,
-  delay_ms: number
+  delay_ms: number,
 ): (...args: ARGS) => void {
-  const dfn = debounce(fn, delay_ms)
-  let first_run = true
+  const dfn = debounce(fn, delay_ms);
+  let first_run = true;
 
   return (...args: ARGS) => {
     if (first_run) {
-      first_run = false
-      fn(...args)
+      first_run = false;
+      fn(...args);
     } else {
-      dfn(...args)
+      dfn(...args);
     }
-  }
+  };
 }
 
 export function useMessageResults(
   queryStr: string | undefined,
-  chatId: number | null = null
+  chatId: number | null = null,
 ) {
-  const [ids, setIds] = useState<number[]>([])
+  const [ids, setIds] = useState<number[]>([]);
 
   const debouncedSearchMessages = useMemo(
     () =>
       debounceWithInit((queryStr: string | undefined) => {
-        const accountId = maybeSelectedAccountId()
-        if (accountId === undefined) return
+        const accountId = maybeSelectedAccountId();
+        if (accountId === undefined) return;
         BackendRemote.rpc
-          .searchMessages(accountId, queryStr || '', chatId)
-          .then(ids => {
+          .searchMessages(accountId, queryStr || "", chatId)
+          .then((ids) => {
             if (chatId) {
               // in-chat search results need to be be ordered by newest first
-              ids.reverse()
+              ids.reverse();
             }
-            setIds(ids)
-          })
+            setIds(ids);
+          });
       }, 200),
-    [chatId]
-  )
+    [chatId],
+  );
 
   useEffect(() => {
-    const accountId = window.__selectedAccountId
+    const accountId = window.__selectedAccountId;
     if (!accountId) {
-      return
+      return;
     }
     const removeMessageDeletedListener = onDCEvent(
       accountId,
-      'MsgDeleted',
+      "MsgDeleted",
       ({ msgId }) => {
         if (ids.includes(msgId)) {
-          setIds(ids.filter(id => id !== msgId))
+          setIds(ids.filter((id) => id !== msgId));
         }
-      }
-    )
+      },
+    );
     const removeChatChangedListener = onDCEvent(
       accountId,
-      'ChatlistItemChanged',
+      "ChatlistItemChanged",
       ({ chatId: eventChatId }) => {
         if (chatId != null && eventChatId !== chatId) {
           // if we search in a specific chat, but the
           // change event is for another chat
-          return
+          return;
         }
         if (queryStr && queryStr.length > 0) {
           // if a chatlist item changed, we need to re-fetch the messages
           // (chatlist items change if new messages arrive)
-          debouncedSearchMessages(queryStr)
+          debouncedSearchMessages(queryStr);
         }
-      }
-    )
+      },
+    );
     return () => {
-      removeMessageDeletedListener()
-      removeChatChangedListener()
-    }
-  }, [chatId, debouncedSearchMessages, ids, queryStr])
+      removeMessageDeletedListener();
+      removeChatChangedListener();
+    };
+  }, [chatId, debouncedSearchMessages, ids, queryStr]);
 
   useEffect(
     () => debouncedSearchMessages(queryStr),
-    [queryStr, debouncedSearchMessages]
-  )
+    [queryStr, debouncedSearchMessages],
+  );
 
-  return ids
+  return ids;
 }
 
 /**
@@ -99,30 +99,30 @@ export function useMessageResults(
 export function useChatList(
   listFlags: number | null = null,
   queryStr?: string,
-  queryContactId?: number
+  queryContactId?: number,
 ) {
-  const accountId = window.__selectedAccountId
+  const accountId = window.__selectedAccountId;
   // Return empty chat list if no account is selected yet
   if (accountId === undefined) {
-    return { chatListIds: [] }
+    return { chatListIds: [] };
   }
-  if (!queryStr) queryStr = ''
+  if (!queryStr) queryStr = "";
 
-  const initialListFlags = useRef(listFlags)
-  const initialQueryStr = useRef(queryStr)
-  const initialQueryContactId = useRef(queryContactId)
-  const [chatListEntries, setChatListEntries] = useState<number[]>([])
+  const initialListFlags = useRef(listFlags);
+  const initialQueryStr = useRef(queryStr);
+  const initialQueryContactId = useRef(queryContactId);
+  const [chatListEntries, setChatListEntries] = useState<number[]>([]);
 
   const areQueryParamsInitial: boolean =
     listFlags === initialListFlags.current &&
     queryStr === initialQueryStr.current &&
-    queryContactId === initialQueryContactId.current
+    queryContactId === initialQueryContactId.current;
   const chatListEntriesForInitialQueryParams = useChatListNoDebounce(
     accountId,
     initialListFlags.current,
     initialQueryStr.current,
-    initialQueryContactId.current
-  )
+    initialQueryContactId.current,
+  );
 
   const debouncedGetChatListEntries = useMemo(
     () =>
@@ -130,48 +130,48 @@ export function useChatList(
         (
           listFlags: number | null,
           queryStr: string | undefined,
-          queryContactId: number | undefined
+          queryContactId: number | undefined,
         ) => {
           BackendRemote.rpc
             .getChatlistEntries(
               accountId,
               listFlags,
               queryStr || null,
-              queryContactId || null
+              queryContactId || null,
             )
-            .then(setChatListEntries)
+            .then(setChatListEntries);
         },
-        200
+        200,
       ),
-    [accountId]
-  )
+    [accountId],
+  );
 
   useEffect(() => {
     log.debug(
-      'useChatList: listFlags, queryStr or queryContactId changed, refetching chatlistids'
-    )
+      "useChatList: listFlags, queryStr or queryContactId changed, refetching chatlistids",
+    );
 
     const refetchChatlist = () => {
-      log.debug('useChatList: refetchingChatlist')
+      log.debug("useChatList: refetchingChatlist");
 
       if (areQueryParamsInitial) {
         // We don't need to fetch the chat list another time,
         // because it will be fetched with the same parameters
         // inside of `useChatListNoDebounce`,
         // and we'll return that from this hook.
-        debouncedGetChatListEntries.clear()
+        debouncedGetChatListEntries.clear();
       } else {
-        debouncedGetChatListEntries(listFlags, queryStr, queryContactId)
+        debouncedGetChatListEntries(listFlags, queryStr, queryContactId);
       }
-    }
+    };
 
     if (areQueryParamsInitial) {
-      debouncedGetChatListEntries.clear()
+      debouncedGetChatListEntries.clear();
     } else {
-      debouncedGetChatListEntries(listFlags, queryStr, queryContactId)
+      debouncedGetChatListEntries(listFlags, queryStr, queryContactId);
     }
 
-    return onDCEvent(accountId, 'ChatlistChanged', refetchChatlist)
+    return onDCEvent(accountId, "ChatlistChanged", refetchChatlist);
   }, [
     listFlags,
     queryStr,
@@ -179,24 +179,24 @@ export function useChatList(
     debouncedGetChatListEntries,
     accountId,
     areQueryParamsInitial,
-  ])
+  ]);
 
   if (areQueryParamsInitial) {
     log.debug(
       "useChatList: query params are initial, we'll use " +
-      'the cached version of the chat list'
-    )
+        "the cached version of the chat list",
+    );
   } else {
     log.debug(
       "useChatList: query params are non-initial, we'll use a " +
-      'freshly fetched chat list'
-    )
+        "freshly fetched chat list",
+    );
   }
   return {
     chatListIds: areQueryParamsInitial
       ? chatListEntriesForInitialQueryParams
       : chatListEntries,
-  }
+  };
 }
 
 /**
@@ -206,10 +206,10 @@ export function useChatList(
 function useChatListNoDebounce(
   accountId: number,
   listFlags: number | null = null,
-  queryStr: string = '',
-  queryContactId?: number
+  queryStr: string = "",
+  queryContactId?: number,
 ) {
-  const [chatListEntries, setChatListEntries] = useState<number[]>([])
+  const [chatListEntries, setChatListEntries] = useState<number[]>([]);
 
   // Though perhaps a throttle would be more appropriate.
   const debouncedFetchChatlist = useMemo(
@@ -218,33 +218,33 @@ function useChatListNoDebounce(
         (
           listFlags: number | null,
           queryStr: string,
-          queryContactId: number | undefined
+          queryContactId: number | undefined,
         ) => {
-          log.debug('useChatListNoDebounce: fetching chat list')
+          log.debug("useChatListNoDebounce: fetching chat list");
 
           BackendRemote.rpc
             .getChatlistEntries(
               accountId,
               listFlags,
               queryStr || null,
-              queryContactId || null
+              queryContactId || null,
             )
-            .then(setChatListEntries)
+            .then(setChatListEntries);
         },
-        200
+        200,
       ),
-    [accountId]
-  )
+    [accountId],
+  );
 
   useEffect(() => {
-    debouncedFetchChatlist(listFlags, queryStr, queryContactId)
-    debouncedFetchChatlist.flush()
+    debouncedFetchChatlist(listFlags, queryStr, queryContactId);
+    debouncedFetchChatlist.flush();
 
     const debouncedFetchChatlist2 = () => {
-      debouncedFetchChatlist(listFlags, queryStr, queryContactId)
-    }
-    return onDCEvent(accountId, 'ChatlistChanged', debouncedFetchChatlist2)
-  }, [accountId, listFlags, queryStr, queryContactId, debouncedFetchChatlist])
+      debouncedFetchChatlist(listFlags, queryStr, queryContactId);
+    };
+    return onDCEvent(accountId, "ChatlistChanged", debouncedFetchChatlist2);
+  }, [accountId, listFlags, queryStr, queryContactId, debouncedFetchChatlist]);
 
-  return chatListEntries
+  return chatListEntries;
 }

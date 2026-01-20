@@ -1,17 +1,17 @@
-import React from 'react'
-import classNames from 'classnames'
+import React from "react";
+import classNames from "classnames";
 
-import Switch from '../Switch'
+import Switch from "../Switch";
 
-import styles from './styles.module.scss'
+import styles from "./styles.module.scss";
 
 type Props = {
-  description?: string
-  disabled?: boolean
-  label: string
-  onChange: (val: boolean) => void
-  value: boolean
-}
+  description?: string;
+  disabled?: boolean;
+  label: string;
+  onChange: (val: boolean) => void;
+  value: boolean;
+};
 
 export default function SettingsSwitch({
   description,
@@ -48,5 +48,5 @@ export default function SettingsSwitch({
         <Switch checked={value} disabled={disabled} onChange={onChange} />
       </div>
     </label>
-  )
+  );
 }

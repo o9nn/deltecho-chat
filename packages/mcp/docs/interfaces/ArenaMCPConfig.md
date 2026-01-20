@@ -24,7 +24,7 @@ Arena-MCP layer configuration
 
 [src/types.ts:117](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L117)
 
-___
+---
 
 ### maxAgents
 
@@ -34,7 +34,7 @@ ___
 
 [src/types.ts:118](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L118)
 
-___
+---
 
 ### maxFrames
 
@@ -44,7 +44,7 @@ ___
 
 [src/types.ts:119](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L119)
 
-___
+---
 
 ### maxLoreEntries
 
@@ -54,7 +54,7 @@ ___
 
 [src/types.ts:120](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L120)
 
-___
+---
 
 ### enableOrchestration
 

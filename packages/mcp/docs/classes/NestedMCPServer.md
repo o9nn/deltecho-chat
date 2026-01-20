@@ -10,12 +10,12 @@ developmental lifecycle, implementing the inverted mirror pattern.
 **`Example`**
 
 ```typescript
-const server = await NestedMCPServer.create({ instanceName: 'MyEcho' });
+const server = await NestedMCPServer.create({ instanceName: "MyEcho" });
 await server.start();
 
 // Access individual layers
-const arenaPrompt = server.getArenaServer().getPrompt('world_context');
-const agentPrompt = server.getAgentServer().getPrompt('persona_context');
+const arenaPrompt = server.getArenaServer().getPrompt("world_context");
+const agentPrompt = server.getAgentServer().getPrompt("persona_context");
 
 // Run a lifecycle cycle
 const results = await server.runLifecycleCycle();
@@ -63,8 +63,8 @@ Create a new NestedMCPServer
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name     | Type                                                                           |
+| :------- | :----------------------------------------------------------------------------- |
 | `config` | `Partial`\<[`NestedMCPServerConfig`](../interfaces/NestedMCPServerConfig.md)\> |
 
 #### Returns
@@ -75,7 +75,7 @@ Create a new NestedMCPServer
 
 [src/server.ts:170](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/server.ts#L170)
 
-___
+---
 
 ### start
 
@@ -91,7 +91,7 @@ Start the server and all subsystems
 
 [src/server.ts:262](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/server.ts#L262)
 
-___
+---
 
 ### stop
 
@@ -107,7 +107,7 @@ Stop the server and all subsystems
 
 [src/server.ts:280](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/server.ts#L280)
 
-___
+---
 
 ### runLifecycleCycle
 
@@ -123,7 +123,7 @@ Run a single lifecycle cycle manually
 
 [src/server.ts:299](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/server.ts#L299)
 
-___
+---
 
 ### executePhase
 
@@ -133,8 +133,8 @@ Execute a specific lifecycle phase
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name    | Type                                           |
+| :------ | :--------------------------------------------- |
 | `phase` | [`LifecyclePhase`](../enums/LifecyclePhase.md) |
 
 #### Returns
@@ -145,23 +145,23 @@ Execute a specific lifecycle phase
 
 [src/server.ts:306](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/server.ts#L306)
 
-___
+---
 
 ### listAllResources
 
-▸ **listAllResources**(): \{ `layer`: ``"arena"`` \| ``"agent"`` \| ``"relation"`` ; `uri`: `string` ; `name`: `string` ; `description`: `string`  }[]
+▸ **listAllResources**(): \{ `layer`: `"arena"` \| `"agent"` \| `"relation"` ; `uri`: `string` ; `name`: `string` ; `description`: `string` }[]
 
 Unified list_resources across all layers
 
 #### Returns
 
-\{ `layer`: ``"arena"`` \| ``"agent"`` \| ``"relation"`` ; `uri`: `string` ; `name`: `string` ; `description`: `string`  }[]
+\{ `layer`: `"arena"` \| `"agent"` \| `"relation"` ; `uri`: `string` ; `name`: `string` ; `description`: `string` }[]
 
 #### Defined in
 
 [src/server.ts:317](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/server.ts#L317)
 
-___
+---
 
 ### readResource
 
@@ -171,8 +171,8 @@ Unified read_resource that routes to appropriate layer
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name  | Type     |
+| :---- | :------- |
 | `uri` | `string` |
 
 #### Returns
@@ -183,23 +183,23 @@ Unified read_resource that routes to appropriate layer
 
 [src/server.ts:342](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/server.ts#L342)
 
-___
+---
 
 ### listAllTools
 
-▸ **listAllTools**(): \{ `layer`: ``"arena"`` \| ``"agent"`` \| ``"relation"`` ; `name`: `string` ; `description`: `string` ; `inputSchema`: `object`  }[]
+▸ **listAllTools**(): \{ `layer`: `"arena"` \| `"agent"` \| `"relation"` ; `name`: `string` ; `description`: `string` ; `inputSchema`: `object` }[]
 
 Unified list_tools across all layers
 
 #### Returns
 
-\{ `layer`: ``"arena"`` \| ``"agent"`` \| ``"relation"`` ; `name`: `string` ; `description`: `string` ; `inputSchema`: `object`  }[]
+\{ `layer`: `"arena"` \| `"agent"` \| `"relation"` ; `name`: `string` ; `description`: `string` ; `inputSchema`: `object` }[]
 
 #### Defined in
 
 [src/server.ts:356](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/server.ts#L356)
 
-___
+---
 
 ### callTool
 
@@ -209,11 +209,11 @@ Unified call_tool that routes to appropriate layer
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `layer` | ``"arena"`` \| ``"agent"`` \| ``"relation"`` |
-| `name` | `string` |
-| `args` | `unknown` |
+| Name    | Type                                   |
+| :------ | :------------------------------------- |
+| `layer` | `"arena"` \| `"agent"` \| `"relation"` |
+| `name`  | `string`                               |
+| `args`  | `unknown`                              |
 
 #### Returns
 
@@ -223,23 +223,23 @@ Unified call_tool that routes to appropriate layer
 
 [src/server.ts:381](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/server.ts#L381)
 
-___
+---
 
 ### listAllPrompts
 
-▸ **listAllPrompts**(): \{ `layer`: ``"arena"`` \| ``"agent"`` \| ``"relation"`` ; `name`: `string` ; `description`: `string` ; `arguments?`: \{ `name`: `string` ; `description`: `string` ; `required`: `boolean`  }[]  }[]
+▸ **listAllPrompts**(): \{ `layer`: `"arena"` \| `"agent"` \| `"relation"` ; `name`: `string` ; `description`: `string` ; `arguments?`: \{ `name`: `string` ; `description`: `string` ; `required`: `boolean` }[] }[]
 
 Unified list_prompts across all layers
 
 #### Returns
 
-\{ `layer`: ``"arena"`` \| ``"agent"`` \| ``"relation"`` ; `name`: `string` ; `description`: `string` ; `arguments?`: \{ `name`: `string` ; `description`: `string` ; `required`: `boolean`  }[]  }[]
+\{ `layer`: `"arena"` \| `"agent"` \| `"relation"` ; `name`: `string` ; `description`: `string` ; `arguments?`: \{ `name`: `string` ; `description`: `string` ; `required`: `boolean` }[] }[]
 
 #### Defined in
 
 [src/server.ts:397](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/server.ts#L397)
 
-___
+---
 
 ### getPrompt
 
@@ -249,11 +249,11 @@ Unified get_prompt that routes to appropriate layer
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `layer` | ``"arena"`` \| ``"agent"`` \| ``"relation"`` |
-| `name` | `string` |
-| `args?` | `Record`\<`string`, `string`\> |
+| Name    | Type                                   |
+| :------ | :------------------------------------- |
+| `layer` | `"arena"` \| `"agent"` \| `"relation"` |
+| `name`  | `string`                               |
+| `args?` | `Record`\<`string`, `string`\>         |
 
 #### Returns
 
@@ -263,7 +263,7 @@ Unified get_prompt that routes to appropriate layer
 
 [src/server.ts:422](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/server.ts#L422)
 
-___
+---
 
 ### getArenaServer
 
@@ -277,7 +277,7 @@ ___
 
 [src/server.ts:443](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/server.ts#L443)
 
-___
+---
 
 ### getAgentServer
 
@@ -291,7 +291,7 @@ ___
 
 [src/server.ts:447](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/server.ts#L447)
 
-___
+---
 
 ### getRelationServer
 
@@ -305,7 +305,7 @@ ___
 
 [src/server.ts:451](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/server.ts#L451)
 
-___
+---
 
 ### getLifecycle
 
@@ -319,7 +319,7 @@ ___
 
 [src/server.ts:455](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/server.ts#L455)
 
-___
+---
 
 ### getAARSystem
 
@@ -333,7 +333,7 @@ ___
 
 [src/server.ts:459](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/server.ts#L459)
 
-___
+---
 
 ### getVirtualAgent
 
@@ -347,7 +347,7 @@ ___
 
 [src/server.ts:463](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/server.ts#L463)
 
-___
+---
 
 ### getVirtualArena
 
@@ -361,7 +361,7 @@ ___
 
 [src/server.ts:467](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/server.ts#L467)
 
-___
+---
 
 ### getConfig
 
@@ -375,7 +375,7 @@ ___
 
 [src/server.ts:471](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/server.ts#L471)
 
-___
+---
 
 ### isRunning
 
@@ -389,7 +389,7 @@ ___
 
 [src/server.ts:475](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/server.ts#L475)
 
-___
+---
 
 ### getStateSummary
 

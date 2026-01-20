@@ -14,7 +14,6 @@ Details on structural changes and how to update from projects prior to Cubism 4 
 
 [Cubism SDK Manual]: https://docs.live2d.com/cubism-sdk-manual/warning-for-cubism4-web-r1-update/
 
-
 ## [Caution] About the duplicate declaration error in dependent packages (2023-02-23)
 
 A duplicate declaration error may occur due to `@types/node` among the dependency packages used in the Cubism 4 SDK for Web Samples.

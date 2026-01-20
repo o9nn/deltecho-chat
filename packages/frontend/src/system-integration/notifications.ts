@@ -1,15 +1,15 @@
-import { appName } from '../../../shared/constants'
-import { getLogger } from '../../../shared/logger'
-import { NOTIFICATION_TYPE } from '../../../shared/constants'
-import { BackendRemote } from '../backend-com'
-import { isImage } from '../components/attachment/Attachment'
-import { runtime } from '@deltachat-desktop/runtime-interface'
-import SettingsStoreInstance from '../stores/settings'
-import AccountNotificationStoreInstance from '../stores/accountNotifications'
+import { appName } from "../../../shared/constants";
+import { getLogger } from "../../../shared/logger";
+import { NOTIFICATION_TYPE } from "../../../shared/constants";
+import { BackendRemote } from "../backend-com";
+import { isImage } from "../components/attachment/Attachment";
+import { runtime } from "@deltachat-desktop/runtime-interface";
+import SettingsStoreInstance from "../stores/settings";
+import AccountNotificationStoreInstance from "../stores/accountNotifications";
 
-import { C, type T } from '@deltachat/jsonrpc-client'
+import { C, type T } from "@deltachat/jsonrpc-client";
 
-const log = getLogger('renderer/notifications')
+const log = getLogger("renderer/notifications");
 
 /**
  * Notification handling:
@@ -22,69 +22,69 @@ const log = getLogger('renderer/notifications')
  */
 
 export function initNotifications() {
-  BackendRemote.on('IncomingMsg', (accountId, { chatId, msgId }) => {
-    log.debug('IncomingMsg', { accountId, msgId, chatId })
-    incomingMessageHandler(accountId, chatId, msgId, NOTIFICATION_TYPE.MESSAGE)
-  })
+  BackendRemote.on("IncomingMsg", (accountId, { chatId, msgId }) => {
+    log.debug("IncomingMsg", { accountId, msgId, chatId });
+    incomingMessageHandler(accountId, chatId, msgId, NOTIFICATION_TYPE.MESSAGE);
+  });
 
   BackendRemote.on(
-    'IncomingWebxdcNotify',
+    "IncomingWebxdcNotify",
     (accountId, { msgId, text, chatId }) => {
       incomingMessageHandler(
         accountId,
         chatId,
         msgId,
         NOTIFICATION_TYPE.WEBXDC_INFO,
-        text
-      )
-    }
-  )
+        text,
+      );
+    },
+  );
 
   BackendRemote.on(
-    'IncomingReaction',
+    "IncomingReaction",
     (accountId, { contactId, chatId, msgId, reaction }) => {
-      log.debug('IncomingReaction', { contactId, chatId, msgId, reaction })
+      log.debug("IncomingReaction", { contactId, chatId, msgId, reaction });
       incomingMessageHandler(
         accountId,
         chatId,
         msgId,
         NOTIFICATION_TYPE.REACTION,
         reaction,
-        contactId
-      )
-    }
-  )
+        contactId,
+      );
+    },
+  );
 
-  BackendRemote.on('IncomingMsgBunch', accountId => {
-    flushNotifications(accountId)
-  })
+  BackendRemote.on("IncomingMsgBunch", (accountId) => {
+    flushNotifications(accountId);
+  });
 }
 
 function isMuted(accountId: number, chatId: number) {
-  return BackendRemote.rpc.isChatMuted(accountId, chatId)
+  return BackendRemote.rpc.isChatMuted(accountId, chatId);
 }
 
 type QueuedNotification = {
-  chatId: number
-  messageId: number
-  notificationType: NOTIFICATION_TYPE
-  eventText: string // for webxdc-info notifications or reactions
-  contactId?: number // for reactions
-}
+  chatId: number;
+  messageId: number;
+  notificationType: NOTIFICATION_TYPE;
+  eventText: string; // for webxdc-info notifications or reactions
+  contactId?: number; // for reactions
+};
 
 let queuedNotifications: {
-  [accountId: number]: QueuedNotification[]
-} = {}
+  [accountId: number]: QueuedNotification[];
+} = {};
 
 function incomingMessageHandler(
   accountId: number,
   chatId: number,
   messageId: number,
   notificationType: NOTIFICATION_TYPE,
-  eventText = '',
-  contactId?: number
+  eventText = "",
+  contactId?: number,
 ) {
-  log.debug('incomingMessageHandler: ', { chatId, messageId })
+  log.debug("incomingMessageHandler: ", { chatId, messageId });
 
   if (
     SettingsStoreInstance.state &&
@@ -92,27 +92,27 @@ function incomingMessageHandler(
   ) {
     // notifications are turned off for whole app
     log.debug(
-      'notification ignored: notifications are turned off for whole app'
-    )
-    return
+      "notification ignored: notifications are turned off for whole app",
+    );
+    return;
   }
 
   if (AccountNotificationStoreInstance.isAccountMuted(accountId)) {
     // notifications are turned off for account
-    log.debug('notification ignored: notifications are turned off for account')
-    return
+    log.debug("notification ignored: notifications are turned off for account");
+    return;
   }
 
   if (document.hasFocus() && accountId === window.__selectedAccountId) {
     // window has focus don't send notification for the selected account
     log.debug(
-      'notification ignored: window has focus and account of the notification is selected'
-    )
-    return
+      "notification ignored: window has focus and account of the notification is selected",
+    );
+    return;
   }
 
-  if (typeof queuedNotifications[accountId] === 'undefined') {
-    queuedNotifications[accountId] = []
+  if (typeof queuedNotifications[accountId] === "undefined") {
+    queuedNotifications[accountId] = [];
   }
   queuedNotifications[accountId].push({
     chatId,
@@ -120,7 +120,7 @@ function incomingMessageHandler(
     notificationType,
     eventText,
     contactId,
-  })
+  });
 }
 
 async function showNotification(
@@ -129,30 +129,33 @@ async function showNotification(
   messageId: number,
   notificationType: NOTIFICATION_TYPE,
   eventText: string,
-  contactId?: number
+  contactId?: number,
 ) {
-  const tx = window.static_translate
+  const tx = window.static_translate;
 
   if (!SettingsStoreInstance.state?.desktopSettings.showNotificationContent) {
     runtime.showNotification({
       title: appName,
-      body: tx('notify_new_message'),
+      body: tx("notify_new_message"),
       icon: null,
       chatId,
       messageId,
       accountId,
       notificationType,
-    })
+    });
   } else {
     try {
       const notificationInfo =
-        await BackendRemote.rpc.getMessageNotificationInfo(accountId, messageId)
-      let summaryPrefix = notificationInfo.summaryPrefix ?? ''
-      let summaryText = notificationInfo.summaryText ?? ''
-      const chatName = notificationInfo.chatName
-      const nIcon = getNotificationIcon(notificationInfo)
-      let icon = nIcon[0]
-      const iconIsAvatar = nIcon[1]
+        await BackendRemote.rpc.getMessageNotificationInfo(
+          accountId,
+          messageId,
+        );
+      let summaryPrefix = notificationInfo.summaryPrefix ?? "";
+      let summaryText = notificationInfo.summaryText ?? "";
+      const chatName = notificationInfo.chatName;
+      const nIcon = getNotificationIcon(notificationInfo);
+      let icon = nIcon[0];
+      const iconIsAvatar = nIcon[1];
       if (notificationType === NOTIFICATION_TYPE.WEBXDC_INFO) {
         /**
          * messageId may refer to a webxdc message OR a wexdc-info-message!
@@ -160,47 +163,47 @@ async function showNotification(
          * a notification might be sent even when no webxdc-info-message was
          * added to the chat; in that case the msg_id refers to the webxdc instance
          */
-        let message = await BackendRemote.rpc.getMessage(accountId, messageId)
+        let message = await BackendRemote.rpc.getMessage(accountId, messageId);
         if (
-          message.systemMessageType === 'WebxdcInfoMessage' &&
+          message.systemMessageType === "WebxdcInfoMessage" &&
           message.parentId
         ) {
           // we have to get the parent message
           // (the webxdc message which holds the webxdcInfo)
           message = await BackendRemote.rpc.getMessage(
             accountId,
-            message.parentId
-          )
+            message.parentId,
+          );
         }
         if (message.webxdcInfo) {
-          summaryText = eventText
-          summaryPrefix = `${message.webxdcInfo.name}`
+          summaryText = eventText;
+          summaryPrefix = `${message.webxdcInfo.name}`;
           if (message.webxdcInfo.icon) {
-            const iconName = message.webxdcInfo.icon
+            const iconName = message.webxdcInfo.icon;
             const iconBlob = await BackendRemote.rpc.getWebxdcBlob(
               accountId,
               message.id,
-              iconName
-            )
+              iconName,
+            );
             // needed for valid dataUrl
-            const imageExtension = iconName.split('.').pop()
-            icon = `data:image/${imageExtension};base64,${iconBlob}`
+            const imageExtension = iconName.split(".").pop();
+            icon = `data:image/${imageExtension};base64,${iconBlob}`;
           }
         } else {
-          throw new Error(`no webxdcInfo in message with id ${message.id}`)
+          throw new Error(`no webxdcInfo in message with id ${message.id}`);
         }
       } else if (notificationType === NOTIFICATION_TYPE.REACTION) {
         if (contactId) {
           const reactionSender = await BackendRemote.rpc.getContact(
             accountId,
-            contactId
-          )
-          summaryText = `${tx('reaction_by_other', [
+            contactId,
+          );
+          summaryText = `${tx("reaction_by_other", [
             reactionSender.displayName,
             eventText,
             summaryText,
-          ])}`
-          summaryPrefix = '' // not needed, sender name is included in summaryText
+          ])}`;
+          summaryPrefix = ""; // not needed, sender name is included in summaryText
         }
       }
       runtime.showNotification({
@@ -212,32 +215,36 @@ async function showNotification(
         messageId,
         accountId,
         notificationType,
-      })
+      });
     } catch (error) {
-      log.error('failed to create notification for message: ', messageId, error)
+      log.error(
+        "failed to create notification for message: ",
+        messageId,
+        error,
+      );
     }
   }
 }
 
 async function showGroupedNotification(
   accountId: number,
-  notifications: QueuedNotification[]
+  notifications: QueuedNotification[],
 ) {
-  const tx = window.static_translate
+  const tx = window.static_translate;
 
   if (!SettingsStoreInstance.state?.desktopSettings.showNotificationContent) {
     runtime.showNotification({
       title: appName,
-      body: tx('new_messages'),
+      body: tx("new_messages"),
       icon: null,
       chatId: 0,
       messageId: 0,
       accountId,
       notificationType: NOTIFICATION_TYPE.MESSAGE,
-    })
+    });
   } else {
-    const chatIds = [...new Set(notifications.map(({ chatId }) => chatId))]
-    const msgCount = notifications.length
+    const chatIds = [...new Set(notifications.map(({ chatId }) => chatId))];
+    const msgCount = notifications.length;
 
     try {
       if (chatIds.length === 1) {
@@ -248,12 +255,12 @@ async function showGroupedNotification(
         const notificationInfo =
           await BackendRemote.rpc.getMessageNotificationInfo(
             accountId,
-            notifications[0].messageId
-          )
-        const { chatName, chatProfileImage } = notificationInfo
+            notifications[0].messageId,
+          );
+        const { chatName, chatProfileImage } = notificationInfo;
         runtime.showNotification({
           title: chatName,
-          body: tx('chat_n_new_messages', String(msgCount), {
+          body: tx("chat_n_new_messages", String(msgCount), {
             quantity: msgCount,
           }),
           icon: chatProfileImage || null,
@@ -261,15 +268,15 @@ async function showGroupedNotification(
           messageId: 0, // just select chat on click, no specific message
           accountId,
           notificationType: NOTIFICATION_TYPE.MESSAGE,
-        })
+        });
       } else {
         // messages from diffent chats
         // title: "new messages"
         // body: "324 new messages in 6 chats"
-        const chatCount = chatIds.length
+        const chatCount = chatIds.length;
         runtime.showNotification({
-          title: tx('new_messages'), // IDEA: when we support notifications from multiple accounts, then show account displayname here?
-          body: tx('n_messages_in_m_chats', [
+          title: tx("new_messages"), // IDEA: when we support notifications from multiple accounts, then show account displayname here?
+          body: tx("n_messages_in_m_chats", [
             String(msgCount),
             String(chatCount),
           ]),
@@ -278,68 +285,75 @@ async function showGroupedNotification(
           messageId: 0,
           accountId,
           notificationType: NOTIFICATION_TYPE.MESSAGE,
-        })
+        });
       }
     } catch (error) {
-      log.error('failed to create grouped notification: ', notifications, error)
+      log.error(
+        "failed to create grouped notification: ",
+        notifications,
+        error,
+      );
     }
   }
 }
 
 // how many notifications can be shown without being grouped
-const STARTUP_LIMIT = 1
-const NORMAL_LIMIT = 3
+const STARTUP_LIMIT = 1;
+const NORMAL_LIMIT = 3;
 
-let notificationLimit = STARTUP_LIMIT
+let notificationLimit = STARTUP_LIMIT;
 
 async function flushNotifications(accountId: number) {
-  if (typeof queuedNotifications[accountId] === 'undefined') {
+  if (typeof queuedNotifications[accountId] === "undefined") {
     // make it work even if there is nothing
-    queuedNotifications[accountId] = []
+    queuedNotifications[accountId] = [];
   }
-  const notifications = [...queuedNotifications[accountId]]
-  queuedNotifications = []
+  const notifications = [...queuedNotifications[accountId]];
+  queuedNotifications = [];
 
   // filter out muted chats:
-  const uniqueChats = [...new Set(notifications.map(n => n.chatId))]
+  const uniqueChats = [...new Set(notifications.map((n) => n.chatId))];
   const mutedChats = (
     await Promise.all(
-      uniqueChats.map(id =>
-        isMuted(accountId, id).then(muted => ({ muted, id }))
-      )
+      uniqueChats.map((id) =>
+        isMuted(accountId, id).then((muted) => ({ muted, id })),
+      ),
     )
   )
-    .filter(e => e.muted)
-    .map(e => e.id)
+    .filter((e) => e.muted)
+    .map((e) => e.id);
 
   const filteredNotifications = (
     await Promise.all(
-      notifications.map(async notification => {
+      notifications.map(async (notification) => {
         if (!mutedChats.includes(notification.chatId)) {
-          return notification
+          return notification;
         }
         // muted chat - only show if it's a mention and mentions are enabled
         // see  https://github.com/deltachat/interface/pull/78#issuecomment-2536719734
         if (SettingsStoreInstance.state?.desktopSettings.isMentionsEnabled) {
-          const isMention = await notificationIsMention(accountId, notification)
+          const isMention = await notificationIsMention(
+            accountId,
+            notification,
+          );
           if (isMention) {
             const chat = await BackendRemote.rpc.getBasicChatInfo(
               accountId,
-              notification.chatId
-            )
+              notification.chatId,
+            );
             if (chat.chatType === C.DC_CHAT_TYPE_GROUP) {
               // only show mentions for group chats
-              return notification
+              return notification;
             }
           }
         }
-        return null
-      })
+        return null;
+      }),
     )
-  ).filter(notification => notification !== null)
+  ).filter((notification) => notification !== null);
 
   if (filteredNotifications.length > notificationLimit) {
-    showGroupedNotification(accountId, notifications)
+    showGroupedNotification(accountId, notifications);
   } else {
     for (const {
       chatId,
@@ -354,11 +368,11 @@ async function flushNotifications(accountId: number) {
         messageId,
         notificationType,
         eventText,
-        contactId
-      )
+        contactId,
+      );
     }
   }
-  notificationLimit = NORMAL_LIMIT
+  notificationLimit = NORMAL_LIMIT;
 }
 
 /**
@@ -367,56 +381,56 @@ async function flushNotifications(accountId: number) {
  */
 async function notificationIsMention(
   accountId: number,
-  notification: QueuedNotification
+  notification: QueuedNotification,
 ) {
   if (notification.notificationType === NOTIFICATION_TYPE.WEBXDC_INFO) {
-    log.info('mention detected: webxdc-info notification')
-    return true
+    log.info("mention detected: webxdc-info notification");
+    return true;
   }
 
   if (notification.notificationType === NOTIFICATION_TYPE.REACTION) {
-    log.info('mention detected: reaction to own message')
-    return true
+    log.info("mention detected: reaction to own message");
+    return true;
   }
 
   const message = await BackendRemote.rpc.getMessage(
     accountId,
-    notification.messageId
-  )
+    notification.messageId,
+  );
 
-  if (message.quote && message.quote.kind === 'WithMessage') {
+  if (message.quote && message.quote.kind === "WithMessage") {
     const quote = await BackendRemote.rpc.getMessage(
       accountId,
-      message.quote.messageId
-    )
+      message.quote.messageId,
+    );
     if (quote.sender.id === C.DC_CONTACT_ID_SELF) {
-      log.info('mention detected: answer to own message')
-      return true
+      log.info("mention detected: answer to own message");
+      return true;
     }
   }
-  log.debug('ignoring notification on muted chat')
-  return false
+  log.debug("ignoring notification on muted chat");
+  return false;
 }
 
 export function clearNotificationsForChat(accountId: number, chatId: number) {
-  log.debug('clearNotificationsForChat', accountId, chatId)
+  log.debug("clearNotificationsForChat", accountId, chatId);
   // ask runtime to delete the notifications
-  runtime.clearNotifications(accountId, chatId)
+  runtime.clearNotifications(accountId, chatId);
 }
 
 export function clearAllNotifications() {
   // ask runtime to delete the notifications
-  runtime.clearAllNotifications()
+  runtime.clearAllNotifications();
 }
 
 function getNotificationIcon(
-  notification: T.MessageNotificationInfo
+  notification: T.MessageNotificationInfo,
 ): [icon: string | null, iconIsAvatar: boolean] {
   if (notification.image && isImage(notification.imageMimeType)) {
-    return [notification.image, false]
+    return [notification.image, false];
   } else if (notification.chatProfileImage) {
-    return [notification.chatProfileImage, true]
+    return [notification.chatProfileImage, true];
   } else {
-    return [null, false]
+    return [null, false];
   }
 }

@@ -4,38 +4,57 @@ var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
-  get: (a, b) => (typeof require !== "undefined" ? require : a)[b]
-}) : x)(function(x) {
+var __require = /* @__PURE__ */ ((x) =>
+  typeof require !== "undefined"
+    ? require
+    : typeof Proxy !== "undefined"
+      ? new Proxy(x, {
+          get: (a, b) => (typeof require !== "undefined" ? require : a)[b],
+        })
+      : x)(function (x) {
   if (typeof require !== "undefined") return require.apply(this, arguments);
   throw Error('Dynamic require of "' + x + '" is not supported');
 });
-var __esm = (fn, res) => function __init() {
-  return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
-};
-var __commonJS = (cb, mod) => function __require2() {
-  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-};
+var __esm = (fn, res) =>
+  function __init() {
+    return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])((fn = 0))), res;
+  };
+var __commonJS = (cb, mod) =>
+  function __require2() {
+    return (
+      mod ||
+        (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod),
+      mod.exports
+    );
+  };
 var __export = (target, all) => {
   for (var name in all)
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
+  if ((from && typeof from === "object") || typeof from === "function") {
     for (let key of __getOwnPropNames(from))
       if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+        __defProp(to, key, {
+          get: () => from[key],
+          enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable,
+        });
   }
   return to;
 };
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
+var __toESM = (mod, isNodeMode, target) => (
+  (target = mod != null ? __create(__getProtoOf(mod)) : {}),
+  __copyProps(
+    // If the importer is in node compatibility mode or this is not an ESM
+    // file that has been converted to a CommonJS file using a Babel-
+    // compatible transform (i.e. "__esModule" has not been set), then set
+    // "default" to the CommonJS "module.exports" for node compatibility.
+    isNodeMode || !mod || !mod.__esModule
+      ? __defProp(target, "default", { value: mod, enumerable: true })
+      : target,
+    mod,
+  )
+);
 
 // src/cjs-shim.ts
 import { createRequire } from "node:module";
@@ -47,7 +66,7 @@ var init_cjs_shim = __esm({
     globalThis.require = createRequire(import.meta.url);
     globalThis.__filename = url.fileURLToPath(import.meta.url);
     globalThis.__dirname = path.dirname(__filename);
-  }
+  },
 });
 
 // ../../node_modules/.pnpm/ini@1.3.8/node_modules/ini/ini.js
@@ -58,50 +77,56 @@ var require_ini = __commonJS({
     exports.stringify = exports.encode = encode;
     exports.safe = safe;
     exports.unsafe = unsafe;
-    var eol = typeof process !== "undefined" && process.platform === "win32" ? "\r\n" : "\n";
+    var eol =
+      typeof process !== "undefined" && process.platform === "win32"
+        ? "\r\n"
+        : "\n";
     function encode(obj, opt) {
       var children = [];
       var out = "";
       if (typeof opt === "string") {
         opt = {
           section: opt,
-          whitespace: false
+          whitespace: false,
         };
       } else {
         opt = opt || {};
         opt.whitespace = opt.whitespace === true;
       }
       var separator = opt.whitespace ? " = " : "=";
-      Object.keys(obj).forEach(function(k, _, __) {
+      Object.keys(obj).forEach(function (k, _, __) {
         var val = obj[k];
         if (val && Array.isArray(val)) {
-          val.forEach(function(item) {
+          val.forEach(function (item) {
             out += safe(k + "[]") + separator + safe(item) + "\n";
           });
-        } else if (val && typeof val === "object")
-          children.push(k);
-        else
-          out += safe(k) + separator + safe(val) + eol;
+        } else if (val && typeof val === "object") children.push(k);
+        else out += safe(k) + separator + safe(val) + eol;
       });
       if (opt.section && out.length)
         out = "[" + safe(opt.section) + "]" + eol + out;
-      children.forEach(function(k, _, __) {
+      children.forEach(function (k, _, __) {
         var nk = dotSplit(k).join("\\.");
         var section = (opt.section ? opt.section + "." : "") + nk;
         var child = encode(obj[k], {
           section,
-          whitespace: opt.whitespace
+          whitespace: opt.whitespace,
         });
-        if (out.length && child.length)
-          out += eol;
+        if (out.length && child.length) out += eol;
         out += child;
       });
       return out;
     }
     function dotSplit(str) {
-      return str.replace(/\1/g, "LITERAL\\1LITERAL").replace(/\\\./g, "").split(/\./).map(function(part) {
-        return part.replace(/\1/g, "\\.").replace(/\2LITERAL\\1LITERAL\2/g, "");
-      });
+      return str
+        .replace(/\1/g, "LITERAL\\1LITERAL")
+        .replace(/\\\./g, "")
+        .split(/\./)
+        .map(function (part) {
+          return part
+            .replace(/\1/g, "\\.")
+            .replace(/\2LITERAL\\1LITERAL\2/g, "");
+        });
     }
     function decode(str) {
       var out = {};
@@ -109,12 +134,10 @@ var require_ini = __commonJS({
       var section = null;
       var re = /^\[([^\]]*)\]$|^([^=]+)(=(.*))?$/i;
       var lines = str.split(/[\r\n]+/g);
-      lines.forEach(function(line, _, __) {
-        if (!line || line.match(/^\s*[;#]/))
-          return;
+      lines.forEach(function (line, _, __) {
+        if (!line || line.match(/^\s*[;#]/)) return;
         var match = line.match(re);
-        if (!match)
-          return;
+        if (!match) return;
         if (match[1] !== void 0) {
           section = unsafe(match[1]);
           if (section === "__proto__") {
@@ -125,8 +148,7 @@ var require_ini = __commonJS({
           return;
         }
         var key = unsafe(match[2]);
-        if (key === "__proto__")
-          return;
+        if (key === "__proto__") return;
         var value = match[3] ? unsafe(match[4]) : true;
         switch (value) {
           case "true":
@@ -136,86 +158,84 @@ var require_ini = __commonJS({
         }
         if (key.length > 2 && key.slice(-2) === "[]") {
           key = key.substring(0, key.length - 2);
-          if (key === "__proto__")
-            return;
-          if (!p[key])
-            p[key] = [];
-          else if (!Array.isArray(p[key]))
-            p[key] = [p[key]];
+          if (key === "__proto__") return;
+          if (!p[key]) p[key] = [];
+          else if (!Array.isArray(p[key])) p[key] = [p[key]];
         }
-        if (Array.isArray(p[key]))
-          p[key].push(value);
-        else
-          p[key] = value;
+        if (Array.isArray(p[key])) p[key].push(value);
+        else p[key] = value;
       });
-      Object.keys(out).filter(function(k, _, __) {
-        if (!out[k] || typeof out[k] !== "object" || Array.isArray(out[k]))
-          return false;
-        var parts = dotSplit(k);
-        var p2 = out;
-        var l = parts.pop();
-        var nl = l.replace(/\\\./g, ".");
-        parts.forEach(function(part, _2, __2) {
-          if (part === "__proto__")
-            return;
-          if (!p2[part] || typeof p2[part] !== "object")
-            p2[part] = {};
-          p2 = p2[part];
+      Object.keys(out)
+        .filter(function (k, _, __) {
+          if (!out[k] || typeof out[k] !== "object" || Array.isArray(out[k]))
+            return false;
+          var parts = dotSplit(k);
+          var p2 = out;
+          var l = parts.pop();
+          var nl = l.replace(/\\\./g, ".");
+          parts.forEach(function (part, _2, __2) {
+            if (part === "__proto__") return;
+            if (!p2[part] || typeof p2[part] !== "object") p2[part] = {};
+            p2 = p2[part];
+          });
+          if (p2 === out && nl === l) return false;
+          p2[nl] = out[k];
+          return true;
+        })
+        .forEach(function (del, _, __) {
+          delete out[del];
         });
-        if (p2 === out && nl === l)
-          return false;
-        p2[nl] = out[k];
-        return true;
-      }).forEach(function(del, _, __) {
-        delete out[del];
-      });
       return out;
     }
     function isQuoted(val) {
-      return val.charAt(0) === '"' && val.slice(-1) === '"' || val.charAt(0) === "'" && val.slice(-1) === "'";
+      return (
+        (val.charAt(0) === '"' && val.slice(-1) === '"') ||
+        (val.charAt(0) === "'" && val.slice(-1) === "'")
+      );
     }
     function safe(val) {
-      return typeof val !== "string" || val.match(/[=\r\n]/) || val.match(/^\[/) || val.length > 1 && isQuoted(val) || val !== val.trim() ? JSON.stringify(val) : val.replace(/;/g, "\\;").replace(/#/g, "\\#");
+      return typeof val !== "string" ||
+        val.match(/[=\r\n]/) ||
+        val.match(/^\[/) ||
+        (val.length > 1 && isQuoted(val)) ||
+        val !== val.trim()
+        ? JSON.stringify(val)
+        : val.replace(/;/g, "\\;").replace(/#/g, "\\#");
     }
     function unsafe(val, doUnesc) {
       val = (val || "").trim();
       if (isQuoted(val)) {
-        if (val.charAt(0) === "'")
-          val = val.substr(1, val.length - 2);
+        if (val.charAt(0) === "'") val = val.substr(1, val.length - 2);
         try {
           val = JSON.parse(val);
-        } catch (_) {
-        }
+        } catch (_) {}
       } else {
         var esc = false;
         var unesc = "";
         for (var i = 0, l = val.length; i < l; i++) {
           var c = val.charAt(i);
           if (esc) {
-            if ("\\;#".indexOf(c) !== -1)
-              unesc += c;
-            else
-              unesc += "\\" + c;
+            if ("\\;#".indexOf(c) !== -1) unesc += c;
+            else unesc += "\\" + c;
             esc = false;
-          } else if (";#".indexOf(c) !== -1)
-            break;
-          else if (c === "\\")
-            esc = true;
-          else
-            unesc += c;
+          } else if (";#".indexOf(c) !== -1) break;
+          else if (c === "\\") esc = true;
+          else unesc += c;
         }
-        if (esc)
-          unesc += "\\";
+        if (esc) unesc += "\\";
         return unesc.trim();
       }
       return val;
     }
-  }
+  },
 });
 
 // ../../node_modules/.pnpm/strip-json-comments@2.0.1/node_modules/strip-json-comments/index.js
 var require_strip_json_comments = __commonJS({
-  "../../node_modules/.pnpm/strip-json-comments@2.0.1/node_modules/strip-json-comments/index.js"(exports, module) {
+  "../../node_modules/.pnpm/strip-json-comments@2.0.1/node_modules/strip-json-comments/index.js"(
+    exports,
+    module,
+  ) {
     "use strict";
     init_cjs_shim();
     var singleComment = 1;
@@ -226,7 +246,7 @@ var require_strip_json_comments = __commonJS({
     function stripWithWhitespace(str, start, end) {
       return str.slice(start, end).replace(/\S/g, " ");
     }
-    module.exports = function(str, opts) {
+    module.exports = function (str, opts) {
       opts = opts || {};
       var currentChar;
       var nextChar;
@@ -234,7 +254,10 @@ var require_strip_json_comments = __commonJS({
       var insideComment = false;
       var offset = 0;
       var ret = "";
-      var strip = opts.whitespace === false ? stripWithoutWhitespace : stripWithWhitespace;
+      var strip =
+        opts.whitespace === false
+          ? stripWithoutWhitespace
+          : stripWithWhitespace;
       for (var i = 0; i < str.length; i++) {
         currentChar = str[i];
         nextChar = str[i + 1];
@@ -252,7 +275,10 @@ var require_strip_json_comments = __commonJS({
           offset = i;
           insideComment = singleComment;
           i++;
-        } else if (insideComment === singleComment && currentChar + nextChar === "\r\n") {
+        } else if (
+          insideComment === singleComment &&
+          currentChar + nextChar === "\r\n"
+        ) {
           i++;
           insideComment = false;
           ret += strip(str, offset, i);
@@ -268,7 +294,10 @@ var require_strip_json_comments = __commonJS({
           insideComment = multiComment;
           i++;
           continue;
-        } else if (insideComment === multiComment && currentChar + nextChar === "*/") {
+        } else if (
+          insideComment === multiComment &&
+          currentChar + nextChar === "*/"
+        ) {
           i++;
           insideComment = false;
           ret += strip(str, offset, i + 1);
@@ -276,9 +305,11 @@ var require_strip_json_comments = __commonJS({
           continue;
         }
       }
-      return ret + (insideComment ? strip(str.substr(offset)) : str.substr(offset));
+      return (
+        ret + (insideComment ? strip(str.substr(offset)) : str.substr(offset))
+      );
     };
-  }
+  },
 });
 
 // ../../node_modules/.pnpm/rc@1.2.8/node_modules/rc/lib/utils.js
@@ -290,18 +321,15 @@ var require_utils = __commonJS({
     var ini = require_ini();
     var path4 = __require("path");
     var stripJsonComments = require_strip_json_comments();
-    var parse = exports.parse = function(content) {
-      if (/^\s*{/.test(content))
-        return JSON.parse(stripJsonComments(content));
+    var parse = (exports.parse = function (content) {
+      if (/^\s*{/.test(content)) return JSON.parse(stripJsonComments(content));
       return ini.parse(content);
-    };
-    var file = exports.file = function() {
-      var args = [].slice.call(arguments).filter(function(arg) {
+    });
+    var file = (exports.file = function () {
+      var args = [].slice.call(arguments).filter(function (arg) {
         return arg != null;
       });
-      for (var i in args)
-        if ("string" !== typeof args[i])
-          return;
+      for (var i in args) if ("string" !== typeof args[i]) return;
       var file2 = path4.join.apply(null, args);
       var content;
       try {
@@ -309,12 +337,12 @@ var require_utils = __commonJS({
       } catch (err) {
         return;
       }
-    };
-    var json = exports.json = function() {
+    });
+    var json = (exports.json = function () {
       var content = file.apply(null, arguments);
       return content ? parse(content) : null;
-    };
-    var env = exports.env = function(prefix, env2) {
+    });
+    var env = (exports.env = function (prefix, env2) {
       env2 = env2 || process.env;
       var obj = {};
       var l = prefix.length;
@@ -327,19 +355,16 @@ var require_utils = __commonJS({
           }
           var cursor = obj;
           keypath.forEach(function _buildSubObj(_subkey, i) {
-            if (!_subkey || typeof cursor !== "object")
-              return;
-            if (i === keypath.length - 1)
-              cursor[_subkey] = env2[k];
-            if (cursor[_subkey] === void 0)
-              cursor[_subkey] = {};
+            if (!_subkey || typeof cursor !== "object") return;
+            if (i === keypath.length - 1) cursor[_subkey] = env2[k];
+            if (cursor[_subkey] === void 0) cursor[_subkey] = {};
             cursor = cursor[_subkey];
           });
         }
       }
       return obj;
-    };
-    var find = exports.find = function() {
+    });
+    var find = (exports.find = function () {
       var rel = path4.join.apply(null, [].slice.call(arguments));
       function find2(start, rel2) {
         var file2 = path4.join(start, rel2);
@@ -352,21 +377,30 @@ var require_utils = __commonJS({
         }
       }
       return find2(process.cwd(), rel);
-    };
-  }
+    });
+  },
 });
 
 // ../../node_modules/.pnpm/deep-extend@0.6.0/node_modules/deep-extend/lib/deep-extend.js
 var require_deep_extend = __commonJS({
-  "../../node_modules/.pnpm/deep-extend@0.6.0/node_modules/deep-extend/lib/deep-extend.js"(exports, module) {
+  "../../node_modules/.pnpm/deep-extend@0.6.0/node_modules/deep-extend/lib/deep-extend.js"(
+    exports,
+    module,
+  ) {
     "use strict";
     init_cjs_shim();
     function isSpecificValue(val) {
-      return val instanceof Buffer || val instanceof Date || val instanceof RegExp ? true : false;
+      return val instanceof Buffer ||
+        val instanceof Date ||
+        val instanceof RegExp
+        ? true
+        : false;
     }
     function cloneSpecificValue(val) {
       if (val instanceof Buffer) {
-        var x = Buffer.alloc ? Buffer.alloc(val.length) : new Buffer(val.length);
+        var x = Buffer.alloc
+          ? Buffer.alloc(val.length)
+          : new Buffer(val.length);
         val.copy(x);
         return x;
       } else if (val instanceof Date) {
@@ -379,7 +413,7 @@ var require_deep_extend = __commonJS({
     }
     function deepCloneArray(arr) {
       var clone = [];
-      arr.forEach(function(item, index) {
+      arr.forEach(function (item, index) {
         if (typeof item === "object" && item !== null) {
           if (Array.isArray(item)) {
             clone[index] = deepCloneArray(item);
@@ -397,7 +431,7 @@ var require_deep_extend = __commonJS({
     function safeGetProperty(object, property) {
       return property === "__proto__" ? void 0 : object[property];
     }
-    var deepExtend = module.exports = function() {
+    var deepExtend = (module.exports = function () {
       if (arguments.length < 1 || typeof arguments[0] !== "object") {
         return false;
       }
@@ -407,11 +441,11 @@ var require_deep_extend = __commonJS({
       var target = arguments[0];
       var args = Array.prototype.slice.call(arguments, 1);
       var val, src, clone;
-      args.forEach(function(obj) {
+      args.forEach(function (obj) {
         if (typeof obj !== "object" || obj === null || Array.isArray(obj)) {
           return;
         }
-        Object.keys(obj).forEach(function(key) {
+        Object.keys(obj).forEach(function (key) {
           src = safeGetProperty(target, key);
           val = safeGetProperty(obj, key);
           if (val === target) {
@@ -425,7 +459,11 @@ var require_deep_extend = __commonJS({
           } else if (isSpecificValue(val)) {
             target[key] = cloneSpecificValue(val);
             return;
-          } else if (typeof src !== "object" || src === null || Array.isArray(src)) {
+          } else if (
+            typeof src !== "object" ||
+            src === null ||
+            Array.isArray(src)
+          ) {
             target[key] = deepExtend({}, val);
             return;
           } else {
@@ -435,15 +473,18 @@ var require_deep_extend = __commonJS({
         });
       });
       return target;
-    };
-  }
+    });
+  },
 });
 
 // ../../node_modules/.pnpm/minimist@1.2.6/node_modules/minimist/index.js
 var require_minimist = __commonJS({
-  "../../node_modules/.pnpm/minimist@1.2.6/node_modules/minimist/index.js"(exports, module) {
+  "../../node_modules/.pnpm/minimist@1.2.6/node_modules/minimist/index.js"(
+    exports,
+    module,
+  ) {
     init_cjs_shim();
-    module.exports = function(args, opts) {
+    module.exports = function (args, opts) {
       if (!opts) opts = {};
       var flags = { bools: {}, strings: {}, unknownFn: null };
       if (typeof opts["unknown"] === "function") {
@@ -452,28 +493,36 @@ var require_minimist = __commonJS({
       if (typeof opts["boolean"] === "boolean" && opts["boolean"]) {
         flags.allBools = true;
       } else {
-        [].concat(opts["boolean"]).filter(Boolean).forEach(function(key2) {
-          flags.bools[key2] = true;
-        });
+        []
+          .concat(opts["boolean"])
+          .filter(Boolean)
+          .forEach(function (key2) {
+            flags.bools[key2] = true;
+          });
       }
       var aliases = {};
-      Object.keys(opts.alias || {}).forEach(function(key2) {
+      Object.keys(opts.alias || {}).forEach(function (key2) {
         aliases[key2] = [].concat(opts.alias[key2]);
-        aliases[key2].forEach(function(x) {
-          aliases[x] = [key2].concat(aliases[key2].filter(function(y) {
-            return x !== y;
-          }));
+        aliases[key2].forEach(function (x) {
+          aliases[x] = [key2].concat(
+            aliases[key2].filter(function (y) {
+              return x !== y;
+            }),
+          );
         });
       });
-      [].concat(opts.string).filter(Boolean).forEach(function(key2) {
-        flags.strings[key2] = true;
-        if (aliases[key2]) {
-          flags.strings[aliases[key2]] = true;
-        }
-      });
+      []
+        .concat(opts.string)
+        .filter(Boolean)
+        .forEach(function (key2) {
+          flags.strings[key2] = true;
+          if (aliases[key2]) {
+            flags.strings[aliases[key2]] = true;
+          }
+        });
       var defaults2 = opts["default"] || {};
       var argv = { _: [] };
-      Object.keys(flags.bools).forEach(function(key2) {
+      Object.keys(flags.bools).forEach(function (key2) {
         setArg(key2, defaults2[key2] === void 0 ? false : defaults2[key2]);
       });
       var notFlags = [];
@@ -482,7 +531,12 @@ var require_minimist = __commonJS({
         args = args.slice(0, args.indexOf("--"));
       }
       function argDefined(key2, arg2) {
-        return flags.allBools && /^--[^=]+$/.test(arg2) || flags.strings[key2] || flags.bools[key2] || aliases[key2];
+        return (
+          (flags.allBools && /^--[^=]+$/.test(arg2)) ||
+          flags.strings[key2] ||
+          flags.bools[key2] ||
+          aliases[key2]
+        );
       }
       function setArg(key2, val, arg2) {
         if (arg2 && flags.unknownFn && !argDefined(key2, arg2)) {
@@ -490,7 +544,7 @@ var require_minimist = __commonJS({
         }
         var value2 = !flags.strings[key2] && isNumber(val) ? Number(val) : val;
         setKey(argv, key2.split("."), value2);
-        (aliases[key2] || []).forEach(function(x) {
+        (aliases[key2] || []).forEach(function (x) {
           setKey(argv, x.split("."), value2);
         });
       }
@@ -500,15 +554,29 @@ var require_minimist = __commonJS({
           var key2 = keys[i2];
           if (isConstructorOrProto(o, key2)) return;
           if (o[key2] === void 0) o[key2] = {};
-          if (o[key2] === Object.prototype || o[key2] === Number.prototype || o[key2] === String.prototype) o[key2] = {};
+          if (
+            o[key2] === Object.prototype ||
+            o[key2] === Number.prototype ||
+            o[key2] === String.prototype
+          )
+            o[key2] = {};
           if (o[key2] === Array.prototype) o[key2] = [];
           o = o[key2];
         }
         var key2 = keys[keys.length - 1];
         if (isConstructorOrProto(o, key2)) return;
-        if (o === Object.prototype || o === Number.prototype || o === String.prototype) o = {};
+        if (
+          o === Object.prototype ||
+          o === Number.prototype ||
+          o === String.prototype
+        )
+          o = {};
         if (o === Array.prototype) o = [];
-        if (o[key2] === void 0 || flags.bools[key2] || typeof o[key2] === "boolean") {
+        if (
+          o[key2] === void 0 ||
+          flags.bools[key2] ||
+          typeof o[key2] === "boolean"
+        ) {
           o[key2] = value2;
         } else if (Array.isArray(o[key2])) {
           o[key2].push(value2);
@@ -517,7 +585,7 @@ var require_minimist = __commonJS({
         }
       }
       function aliasIsBoolean(key2) {
-        return aliases[key2].some(function(x) {
+        return aliases[key2].some(function (x) {
           return flags.bools[x];
         });
       }
@@ -537,7 +605,13 @@ var require_minimist = __commonJS({
         } else if (/^--.+/.test(arg)) {
           var key = arg.match(/^--(.+)/)[1];
           var next = args[i + 1];
-          if (next !== void 0 && !/^-/.test(next) && !flags.bools[key] && !flags.allBools && (aliases[key] ? !aliasIsBoolean(key) : true)) {
+          if (
+            next !== void 0 &&
+            !/^-/.test(next) &&
+            !flags.bools[key] &&
+            !flags.allBools &&
+            (aliases[key] ? !aliasIsBoolean(key) : true)
+          ) {
             setArg(key, next, arg);
             i++;
           } else if (/^(true|false)$/.test(next)) {
@@ -560,7 +634,10 @@ var require_minimist = __commonJS({
               broken = true;
               break;
             }
-            if (/[A-Za-z]/.test(letters[j]) && /-?\d+(\.\d*)?(e-?\d+)?$/.test(next)) {
+            if (
+              /[A-Za-z]/.test(letters[j]) &&
+              /-?\d+(\.\d*)?(e-?\d+)?$/.test(next)
+            ) {
               setArg(letters[j], next, arg);
               broken = true;
               break;
@@ -575,7 +652,12 @@ var require_minimist = __commonJS({
           }
           var key = arg.slice(-1)[0];
           if (!broken && key !== "-") {
-            if (args[i + 1] && !/^(-|--)[^-]/.test(args[i + 1]) && !flags.bools[key] && (aliases[key] ? !aliasIsBoolean(key) : true)) {
+            if (
+              args[i + 1] &&
+              !/^(-|--)[^-]/.test(args[i + 1]) &&
+              !flags.bools[key] &&
+              (aliases[key] ? !aliasIsBoolean(key) : true)
+            ) {
               setArg(key, args[i + 1], arg);
               i++;
             } else if (args[i + 1] && /^(true|false)$/.test(args[i + 1])) {
@@ -588,7 +670,7 @@ var require_minimist = __commonJS({
         } else {
           if (!flags.unknownFn || flags.unknownFn(arg) !== false) {
             argv._.push(
-              flags.strings["_"] || !isNumber(arg) ? arg : Number(arg)
+              flags.strings["_"] || !isNumber(arg) ? arg : Number(arg),
             );
           }
           if (opts.stopEarly) {
@@ -597,21 +679,21 @@ var require_minimist = __commonJS({
           }
         }
       }
-      Object.keys(defaults2).forEach(function(key2) {
+      Object.keys(defaults2).forEach(function (key2) {
         if (!hasKey(argv, key2.split("."))) {
           setKey(argv, key2.split("."), defaults2[key2]);
-          (aliases[key2] || []).forEach(function(x) {
+          (aliases[key2] || []).forEach(function (x) {
             setKey(argv, x.split("."), defaults2[key2]);
           });
         }
       });
       if (opts["--"]) {
         argv["--"] = new Array();
-        notFlags.forEach(function(key2) {
+        notFlags.forEach(function (key2) {
           argv["--"].push(key2);
         });
       } else {
-        notFlags.forEach(function(key2) {
+        notFlags.forEach(function (key2) {
           argv._.push(key2);
         });
       }
@@ -619,7 +701,7 @@ var require_minimist = __commonJS({
     };
     function hasKey(obj, keys) {
       var o = obj;
-      keys.slice(0, -1).forEach(function(key2) {
+      keys.slice(0, -1).forEach(function (key2) {
         o = o[key2] || {};
       });
       var key = keys[keys.length - 1];
@@ -631,14 +713,20 @@ var require_minimist = __commonJS({
       return /^[-+]?(?:\d+(?:\.\d*)?|\.\d+)(e[-+]?\d+)?$/.test(x);
     }
     function isConstructorOrProto(obj, key) {
-      return key === "constructor" && typeof obj[key] === "function" || key === "__proto__";
+      return (
+        (key === "constructor" && typeof obj[key] === "function") ||
+        key === "__proto__"
+      );
     }
-  }
+  },
 });
 
 // ../../node_modules/.pnpm/rc@1.2.8/node_modules/rc/index.js
 var require_rc = __commonJS({
-  "../../node_modules/.pnpm/rc@1.2.8/node_modules/rc/index.js"(exports, module) {
+  "../../node_modules/.pnpm/rc@1.2.8/node_modules/rc/index.js"(
+    exports,
+    module,
+  ) {
     init_cjs_shim();
     var cc = require_utils();
     var join18 = __require("path").join;
@@ -646,12 +734,12 @@ var require_rc = __commonJS({
     var etc = "/etc";
     var win2 = process.platform === "win32";
     var home = win2 ? process.env.USERPROFILE : process.env.HOME;
-    module.exports = function(name, defaults2, argv, parse) {
+    module.exports = function (name, defaults2, argv, parse) {
       if ("string" !== typeof name)
         throw new Error("rc(name): name *must* be string");
-      if (!argv)
-        argv = require_minimist()(process.argv.slice(2));
-      defaults2 = ("string" === typeof defaults2 ? cc.json(defaults2) : defaults2) || {};
+      if (!argv) argv = require_minimist()(process.argv.slice(2));
+      defaults2 =
+        ("string" === typeof defaults2 ? cc.json(defaults2) : defaults2) || {};
       parse = parse || cc.parse;
       var env = cc.env(name + "_");
       var configs = [defaults2];
@@ -665,34 +753,44 @@ var require_rc = __commonJS({
         }
       }
       if (!win2)
-        [
-          join18(etc, name, "config"),
-          join18(etc, name + "rc")
-        ].forEach(addConfigFile);
+        [join18(etc, name, "config"), join18(etc, name + "rc")].forEach(
+          addConfigFile,
+        );
       if (home)
         [
           join18(home, ".config", name, "config"),
           join18(home, ".config", name),
           join18(home, "." + name, "config"),
-          join18(home, "." + name + "rc")
+          join18(home, "." + name + "rc"),
         ].forEach(addConfigFile);
       addConfigFile(cc.find("." + name + "rc"));
       if (env.config) addConfigFile(env.config);
       if (argv.config) addConfigFile(argv.config);
-      return deepExtend.apply(null, configs.concat([
-        env,
-        argv,
-        configFiles.length ? { configs: configFiles, config: configFiles[configFiles.length - 1] } : void 0
-      ]));
+      return deepExtend.apply(
+        null,
+        configs.concat([
+          env,
+          argv,
+          configFiles.length
+            ? {
+                configs: configFiles,
+                config: configFiles[configFiles.length - 1],
+              }
+            : void 0,
+        ]),
+      );
     };
-  }
+  },
 });
 
 // ../../node_modules/.pnpm/stackframe@1.3.4/node_modules/stackframe/stackframe.js
 var require_stackframe = __commonJS({
-  "../../node_modules/.pnpm/stackframe@1.3.4/node_modules/stackframe/stackframe.js"(exports, module) {
+  "../../node_modules/.pnpm/stackframe@1.3.4/node_modules/stackframe/stackframe.js"(
+    exports,
+    module,
+  ) {
     init_cjs_shim();
-    (function(root, factory) {
+    (function (root, factory) {
       "use strict";
       if (typeof define === "function" && define.amd) {
         define("stackframe", [], factory);
@@ -701,7 +799,7 @@ var require_stackframe = __commonJS({
       } else {
         root.StackFrame = factory();
       }
-    })(exports, function() {
+    })(exports, function () {
       "use strict";
       function _isNumber(n) {
         return !isNaN(parseFloat(n)) && isFinite(n);
@@ -710,7 +808,7 @@ var require_stackframe = __commonJS({
         return str.charAt(0).toUpperCase() + str.substring(1);
       }
       function _getter(p) {
-        return function() {
+        return function () {
           return this[p];
         };
       }
@@ -719,7 +817,12 @@ var require_stackframe = __commonJS({
       var stringProps = ["fileName", "functionName", "source"];
       var arrayProps = ["args"];
       var objectProps = ["evalOrigin"];
-      var props = booleanProps.concat(numericProps, stringProps, arrayProps, objectProps);
+      var props = booleanProps.concat(
+        numericProps,
+        stringProps,
+        arrayProps,
+        objectProps,
+      );
       function StackFrame2(obj) {
         if (!obj) return;
         for (var i2 = 0; i2 < props.length; i2++) {
@@ -729,19 +832,19 @@ var require_stackframe = __commonJS({
         }
       }
       StackFrame2.prototype = {
-        getArgs: function() {
+        getArgs: function () {
           return this.args;
         },
-        setArgs: function(v) {
+        setArgs: function (v) {
           if (Object.prototype.toString.call(v) !== "[object Array]") {
             throw new TypeError("Args must be an Array");
           }
           this.args = v;
         },
-        getEvalOrigin: function() {
+        getEvalOrigin: function () {
           return this.evalOrigin;
         },
-        setEvalOrigin: function(v) {
+        setEvalOrigin: function (v) {
           if (v instanceof StackFrame2) {
             this.evalOrigin = v;
           } else if (v instanceof Object) {
@@ -750,22 +853,39 @@ var require_stackframe = __commonJS({
             throw new TypeError("Eval Origin must be an Object or StackFrame");
           }
         },
-        toString: function() {
+        toString: function () {
           var fileName = this.getFileName() || "";
           var lineNumber = this.getLineNumber() || "";
           var columnNumber = this.getColumnNumber() || "";
           var functionName = this.getFunctionName() || "";
           if (this.getIsEval()) {
             if (fileName) {
-              return "[eval] (" + fileName + ":" + lineNumber + ":" + columnNumber + ")";
+              return (
+                "[eval] (" +
+                fileName +
+                ":" +
+                lineNumber +
+                ":" +
+                columnNumber +
+                ")"
+              );
             }
             return "[eval]:" + lineNumber + ":" + columnNumber;
           }
           if (functionName) {
-            return functionName + " (" + fileName + ":" + lineNumber + ":" + columnNumber + ")";
+            return (
+              functionName +
+              " (" +
+              fileName +
+              ":" +
+              lineNumber +
+              ":" +
+              columnNumber +
+              ")"
+            );
           }
           return fileName + ":" + lineNumber + ":" + columnNumber;
-        }
+        },
       };
       StackFrame2.fromString = function StackFrame$$fromString(str) {
         var argsStartIndex = str.indexOf("(");
@@ -784,46 +904,58 @@ var require_stackframe = __commonJS({
           args: args || void 0,
           fileName,
           lineNumber: lineNumber || void 0,
-          columnNumber: columnNumber || void 0
+          columnNumber: columnNumber || void 0,
         });
       };
       for (var i = 0; i < booleanProps.length; i++) {
-        StackFrame2.prototype["get" + _capitalize(booleanProps[i])] = _getter(booleanProps[i]);
-        StackFrame2.prototype["set" + _capitalize(booleanProps[i])] = /* @__PURE__ */ (function(p) {
-          return function(v) {
-            this[p] = Boolean(v);
-          };
-        })(booleanProps[i]);
+        StackFrame2.prototype["get" + _capitalize(booleanProps[i])] = _getter(
+          booleanProps[i],
+        );
+        StackFrame2.prototype["set" + _capitalize(booleanProps[i])] =
+          /* @__PURE__ */ (function (p) {
+            return function (v) {
+              this[p] = Boolean(v);
+            };
+          })(booleanProps[i]);
       }
       for (var j = 0; j < numericProps.length; j++) {
-        StackFrame2.prototype["get" + _capitalize(numericProps[j])] = _getter(numericProps[j]);
-        StackFrame2.prototype["set" + _capitalize(numericProps[j])] = /* @__PURE__ */ (function(p) {
-          return function(v) {
-            if (!_isNumber(v)) {
-              throw new TypeError(p + " must be a Number");
-            }
-            this[p] = Number(v);
-          };
-        })(numericProps[j]);
+        StackFrame2.prototype["get" + _capitalize(numericProps[j])] = _getter(
+          numericProps[j],
+        );
+        StackFrame2.prototype["set" + _capitalize(numericProps[j])] =
+          /* @__PURE__ */ (function (p) {
+            return function (v) {
+              if (!_isNumber(v)) {
+                throw new TypeError(p + " must be a Number");
+              }
+              this[p] = Number(v);
+            };
+          })(numericProps[j]);
       }
       for (var k = 0; k < stringProps.length; k++) {
-        StackFrame2.prototype["get" + _capitalize(stringProps[k])] = _getter(stringProps[k]);
-        StackFrame2.prototype["set" + _capitalize(stringProps[k])] = /* @__PURE__ */ (function(p) {
-          return function(v) {
-            this[p] = String(v);
-          };
-        })(stringProps[k]);
+        StackFrame2.prototype["get" + _capitalize(stringProps[k])] = _getter(
+          stringProps[k],
+        );
+        StackFrame2.prototype["set" + _capitalize(stringProps[k])] =
+          /* @__PURE__ */ (function (p) {
+            return function (v) {
+              this[p] = String(v);
+            };
+          })(stringProps[k]);
       }
       return StackFrame2;
     });
-  }
+  },
 });
 
 // ../../node_modules/.pnpm/error-stack-parser@2.1.4/node_modules/error-stack-parser/error-stack-parser.js
 var require_error_stack_parser = __commonJS({
-  "../../node_modules/.pnpm/error-stack-parser@2.1.4/node_modules/error-stack-parser/error-stack-parser.js"(exports, module) {
+  "../../node_modules/.pnpm/error-stack-parser@2.1.4/node_modules/error-stack-parser/error-stack-parser.js"(
+    exports,
+    module,
+  ) {
     init_cjs_shim();
-    (function(root, factory) {
+    (function (root, factory) {
       "use strict";
       if (typeof define === "function" && define.amd) {
         define("error-stack-parser", ["stackframe"], factory);
@@ -845,7 +977,10 @@ var require_error_stack_parser = __commonJS({
          * @return {Array} of StackFrames
          */
         parse: function ErrorStackParser$$parse(error) {
-          if (typeof error.stacktrace !== "undefined" || typeof error["opera#sourceloc"] !== "undefined") {
+          if (
+            typeof error.stacktrace !== "undefined" ||
+            typeof error["opera#sourceloc"] !== "undefined"
+          ) {
             return this.parseOpera(error);
           } else if (error.stack && error.stack.match(CHROME_IE_STACK_REGEXP)) {
             return this.parseV8OrIE(error);
@@ -865,57 +1000,78 @@ var require_error_stack_parser = __commonJS({
           return [parts[1], parts[2] || void 0, parts[3] || void 0];
         },
         parseV8OrIE: function ErrorStackParser$$parseV8OrIE(error) {
-          var filtered = error.stack.split("\n").filter(function(line) {
+          var filtered = error.stack.split("\n").filter(function (line) {
             return !!line.match(CHROME_IE_STACK_REGEXP);
           }, this);
-          return filtered.map(function(line) {
+          return filtered.map(function (line) {
             if (line.indexOf("(eval ") > -1) {
-              line = line.replace(/eval code/g, "eval").replace(/(\(eval at [^()]*)|(,.*$)/g, "");
+              line = line
+                .replace(/eval code/g, "eval")
+                .replace(/(\(eval at [^()]*)|(,.*$)/g, "");
             }
-            var sanitizedLine = line.replace(/^\s+/, "").replace(/\(eval code/g, "(").replace(/^.*?\s+/, "");
+            var sanitizedLine = line
+              .replace(/^\s+/, "")
+              .replace(/\(eval code/g, "(")
+              .replace(/^.*?\s+/, "");
             var location = sanitizedLine.match(/ (\(.+\)$)/);
-            sanitizedLine = location ? sanitizedLine.replace(location[0], "") : sanitizedLine;
-            var locationParts = this.extractLocation(location ? location[1] : sanitizedLine);
-            var functionName = location && sanitizedLine || void 0;
-            var fileName = ["eval", "<anonymous>"].indexOf(locationParts[0]) > -1 ? void 0 : locationParts[0];
+            sanitizedLine = location
+              ? sanitizedLine.replace(location[0], "")
+              : sanitizedLine;
+            var locationParts = this.extractLocation(
+              location ? location[1] : sanitizedLine,
+            );
+            var functionName = (location && sanitizedLine) || void 0;
+            var fileName =
+              ["eval", "<anonymous>"].indexOf(locationParts[0]) > -1
+                ? void 0
+                : locationParts[0];
             return new StackFrame2({
               functionName,
               fileName,
               lineNumber: locationParts[1],
               columnNumber: locationParts[2],
-              source: line
+              source: line,
             });
           }, this);
         },
         parseFFOrSafari: function ErrorStackParser$$parseFFOrSafari(error) {
-          var filtered = error.stack.split("\n").filter(function(line) {
+          var filtered = error.stack.split("\n").filter(function (line) {
             return !line.match(SAFARI_NATIVE_CODE_REGEXP);
           }, this);
-          return filtered.map(function(line) {
+          return filtered.map(function (line) {
             if (line.indexOf(" > eval") > -1) {
-              line = line.replace(/ line (\d+)(?: > eval line \d+)* > eval:\d+:\d+/g, ":$1");
+              line = line.replace(
+                / line (\d+)(?: > eval line \d+)* > eval:\d+:\d+/g,
+                ":$1",
+              );
             }
             if (line.indexOf("@") === -1 && line.indexOf(":") === -1) {
               return new StackFrame2({
-                functionName: line
+                functionName: line,
               });
             } else {
               var functionNameRegex = /((.*".+"[^@]*)?[^@]*)(?:@)/;
               var matches = line.match(functionNameRegex);
               var functionName = matches && matches[1] ? matches[1] : void 0;
-              var locationParts = this.extractLocation(line.replace(functionNameRegex, ""));
+              var locationParts = this.extractLocation(
+                line.replace(functionNameRegex, ""),
+              );
               return new StackFrame2({
                 functionName,
                 fileName: locationParts[0],
                 lineNumber: locationParts[1],
                 columnNumber: locationParts[2],
-                source: line
+                source: line,
               });
             }
           }, this);
         },
         parseOpera: function ErrorStackParser$$parseOpera(e) {
-          if (!e.stacktrace || e.message.indexOf("\n") > -1 && e.message.split("\n").length > e.stacktrace.split("\n").length) {
+          if (
+            !e.stacktrace ||
+            (e.message.indexOf("\n") > -1 &&
+              e.message.split("\n").length > e.stacktrace.split("\n").length)
+          ) {
             return this.parseOpera9(e);
           } else if (!e.stack) {
             return this.parseOpera10(e);
@@ -930,17 +1086,20 @@ var require_error_stack_parser = __commonJS({
           for (var i = 2, len = lines.length; i < len; i += 2) {
             var match = lineRE.exec(lines[i]);
             if (match) {
-              result.push(new StackFrame2({
-                fileName: match[2],
-                lineNumber: match[1],
-                source: lines[i]
-              }));
+              result.push(
+                new StackFrame2({
+                  fileName: match[2],
+                  lineNumber: match[1],
+                  source: lines[i],
+                }),
+              );
             }
           }
           return result;
         },
         parseOpera10: function ErrorStackParser$$parseOpera10(e) {
-          var lineRE = /Line (\d+).*script (?:in )?(\S+)(?:: In function (\S+))?$/i;
+          var lineRE =
+            /Line (\d+).*script (?:in )?(\S+)(?:: In function (\S+))?$/i;
           var lines = e.stacktrace.split("\n");
           var result = [];
           for (var i = 0, len = lines.length; i < len; i += 2) {
@@ -951,8 +1110,8 @@ var require_error_stack_parser = __commonJS({
                   functionName: match[3] || void 0,
                   fileName: match[2],
                   lineNumber: match[1],
-                  source: lines[i]
-                })
+                  source: lines[i],
+                }),
               );
             }
           }
@@ -960,37 +1119,49 @@ var require_error_stack_parser = __commonJS({
         },
         // Opera 10.65+ Error.stack very similar to FF/Safari
         parseOpera11: function ErrorStackParser$$parseOpera11(error) {
-          var filtered = error.stack.split("\n").filter(function(line) {
-            return !!line.match(FIREFOX_SAFARI_STACK_REGEXP) && !line.match(/^Error created at/);
+          var filtered = error.stack.split("\n").filter(function (line) {
+            return (
+              !!line.match(FIREFOX_SAFARI_STACK_REGEXP) &&
+              !line.match(/^Error created at/)
+            );
           }, this);
-          return filtered.map(function(line) {
+          return filtered.map(function (line) {
             var tokens = line.split("@");
             var locationParts = this.extractLocation(tokens.pop());
             var functionCall = tokens.shift() || "";
-            var functionName = functionCall.replace(/<anonymous function(: (\w+))?>/, "$2").replace(/\([^)]*\)/g, "") || void 0;
+            var functionName =
+              functionCall
+                .replace(/<anonymous function(: (\w+))?>/, "$2")
+                .replace(/\([^)]*\)/g, "") || void 0;
             var argsRaw;
             if (functionCall.match(/\(([^)]*)\)/)) {
               argsRaw = functionCall.replace(/^[^(]+\(([^)]*)\)$/, "$1");
             }
-            var args = argsRaw === void 0 || argsRaw === "[arguments not available]" ? void 0 : argsRaw.split(",");
+            var args =
+              argsRaw === void 0 || argsRaw === "[arguments not available]"
+                ? void 0
+                : argsRaw.split(",");
             return new StackFrame2({
               functionName,
               args,
               fileName: locationParts[0],
               lineNumber: locationParts[1],
               columnNumber: locationParts[2],
-              source: line
+              source: line,
             });
           }, this);
-        }
+        },
       };
     });
-  }
+  },
 });
 
 // ../../node_modules/.pnpm/dotenv@16.6.1/node_modules/dotenv/package.json
 var require_package = __commonJS({
-  "../../node_modules/.pnpm/dotenv@16.6.1/node_modules/dotenv/package.json"(exports, module) {
+  "../../node_modules/.pnpm/dotenv@16.6.1/node_modules/dotenv/package.json"(
+    exports,
+    module,
+  ) {
     module.exports = {
       name: "dotenv",
       version: "16.6.1",
@@ -1001,7 +1172,7 @@ var require_package = __commonJS({
         ".": {
           types: "./lib/main.d.ts",
           require: "./lib/main.js",
-          default: "./lib/main.js"
+          default: "./lib/main.js",
         },
         "./config": "./config.js",
         "./config.js": "./config.js",
@@ -1009,20 +1180,21 @@ var require_package = __commonJS({
         "./lib/env-options.js": "./lib/env-options.js",
         "./lib/cli-options": "./lib/cli-options.js",
         "./lib/cli-options.js": "./lib/cli-options.js",
-        "./package.json": "./package.json"
+        "./package.json": "./package.json",
       },
       scripts: {
         "dts-check": "tsc --project tests/types/tsconfig.json",
         lint: "standard",
         pretest: "npm run lint && npm run dts-check",
         test: "tap run --allow-empty-coverage --disable-coverage --timeout=60000",
-        "test:coverage": "tap run --show-full-coverage --timeout=60000 --coverage-report=text --coverage-report=lcov",
+        "test:coverage":
+          "tap run --show-full-coverage --timeout=60000 --coverage-report=text --coverage-report=lcov",
         prerelease: "npm test",
-        release: "standard-version"
+        release: "standard-version",
       },
       repository: {
         type: "git",
-        url: "git://github.com/motdotla/dotenv.git"
+        url: "git://github.com/motdotla/dotenv.git",
       },
       homepage: "https://github.com/motdotla/dotenv#readme",
       funding: "https://dotenvx.com",
@@ -1033,7 +1205,7 @@ var require_package = __commonJS({
         "environment",
         "variables",
         "config",
-        "settings"
+        "settings",
       ],
       readmeFilename: "README.md",
       license: "BSD-2-Clause",
@@ -1044,21 +1216,24 @@ var require_package = __commonJS({
         standard: "^17.0.0",
         "standard-version": "^9.5.0",
         tap: "^19.2.0",
-        typescript: "^4.8.4"
+        typescript: "^4.8.4",
       },
       engines: {
-        node: ">=12"
+        node: ">=12",
       },
       browser: {
-        fs: false
-      }
+        fs: false,
+      },
     };
-  }
+  },
 });
 
 // ../../node_modules/.pnpm/dotenv@16.6.1/node_modules/dotenv/lib/main.js
 var require_main = __commonJS({
-  "../../node_modules/.pnpm/dotenv@16.6.1/node_modules/dotenv/lib/main.js"(exports, module) {
+  "../../node_modules/.pnpm/dotenv@16.6.1/node_modules/dotenv/lib/main.js"(
+    exports,
+    module,
+  ) {
     init_cjs_shim();
     var fs2 = __require("fs");
     var path4 = __require("path");
@@ -1066,18 +1241,19 @@ var require_main = __commonJS({
     var crypto = __require("crypto");
     var packageJson = require_package();
     var version = packageJson.version;
-    var LINE = /(?:^|^)\s*(?:export\s+)?([\w.-]+)(?:\s*=\s*?|:\s+?)(\s*'(?:\\'|[^'])*'|\s*"(?:\\"|[^"])*"|\s*`(?:\\`|[^`])*`|[^#\r\n]+)?\s*(?:#.*)?(?:$|$)/mg;
+    var LINE =
+      /(?:^|^)\s*(?:export\s+)?([\w.-]+)(?:\s*=\s*?|:\s+?)(\s*'(?:\\'|[^'])*'|\s*"(?:\\"|[^"])*"|\s*`(?:\\`|[^`])*`|[^#\r\n]+)?\s*(?:#.*)?(?:$|$)/gm;
     function parse(src) {
       const obj = {};
       let lines = src.toString();
-      lines = lines.replace(/\r\n?/mg, "\n");
+      lines = lines.replace(/\r\n?/gm, "\n");
       let match;
       while ((match = LINE.exec(lines)) != null) {
         const key = match[1];
         let value = match[2] || "";
         value = value.trim();
         const maybeQuote = value[0];
-        value = value.replace(/^(['"`])([\s\S]*)\1$/mg, "$2");
+        value = value.replace(/^(['"`])([\s\S]*)\1$/gm, "$2");
         if (maybeQuote === '"') {
           value = value.replace(/\\n/g, "\n");
           value = value.replace(/\\r/g, "\r");
@@ -1092,7 +1268,9 @@ var require_main = __commonJS({
       options.path = vaultPath;
       const result = DotenvModule.configDotenv(options);
       if (!result.parsed) {
-        const err = new Error(`MISSING_DATA: Cannot parse ${vaultPath} for an unknown reason`);
+        const err = new Error(
+          `MISSING_DATA: Cannot parse ${vaultPath} for an unknown reason`,
+        );
         err.code = "MISSING_DATA";
         throw err;
       }
@@ -1137,7 +1315,9 @@ var require_main = __commonJS({
         uri = new URL(dotenvKey);
       } catch (error) {
         if (error.code === "ERR_INVALID_URL") {
-          const err = new Error("INVALID_DOTENV_KEY: Wrong format. Must be in valid uri format like dotenv://:key_1234@dotenvx.com/vault/.env.vault?environment=development");
+          const err = new Error(
+            "INVALID_DOTENV_KEY: Wrong format. Must be in valid uri format like dotenv://:key_1234@dotenvx.com/vault/.env.vault?environment=development",
+          );
           err.code = "INVALID_DOTENV_KEY";
           throw err;
         }
@@ -1158,7 +1338,9 @@ var require_main = __commonJS({
       const environmentKey = `DOTENV_VAULT_${environment.toUpperCase()}`;
       const ciphertext = result.parsed[environmentKey];
       if (!ciphertext) {
-        const err = new Error(`NOT_FOUND_DOTENV_ENVIRONMENT: Cannot locate environment ${environmentKey} in your .env.vault file.`);
+        const err = new Error(
+          `NOT_FOUND_DOTENV_ENVIRONMENT: Cannot locate environment ${environmentKey} in your .env.vault file.`,
+        );
         err.code = "NOT_FOUND_DOTENV_ENVIRONMENT";
         throw err;
       }
@@ -1170,11 +1352,15 @@ var require_main = __commonJS({
         if (Array.isArray(options.path)) {
           for (const filepath of options.path) {
             if (fs2.existsSync(filepath)) {
-              possibleVaultPath = filepath.endsWith(".vault") ? filepath : `${filepath}.vault`;
+              possibleVaultPath = filepath.endsWith(".vault")
+                ? filepath
+                : `${filepath}.vault`;
             }
           }
         } else {
-          possibleVaultPath = options.path.endsWith(".vault") ? options.path : `${options.path}.vault`;
+          possibleVaultPath = options.path.endsWith(".vault")
+            ? options.path
+            : `${options.path}.vault`;
         }
       } else {
         possibleVaultPath = path4.resolve(process.cwd(), ".env.vault");
@@ -1185,7 +1371,9 @@ var require_main = __commonJS({
       return null;
     }
     function _resolveHome(envPath) {
-      return envPath[0] === "~" ? path4.join(os.homedir(), envPath.slice(1)) : envPath;
+      return envPath[0] === "~"
+        ? path4.join(os.homedir(), envPath.slice(1))
+        : envPath;
     }
     function _configVault(options) {
       const debug = Boolean(options && options.debug);
@@ -1228,7 +1416,9 @@ var require_main = __commonJS({
       const parsedAll = {};
       for (const path5 of optionPaths) {
         try {
-          const parsed = DotenvModule.parse(fs2.readFileSync(path5, { encoding }));
+          const parsed = DotenvModule.parse(
+            fs2.readFileSync(path5, { encoding }),
+          );
           DotenvModule.populate(parsedAll, parsed, options);
         } catch (e) {
           if (debug) {
@@ -1270,7 +1460,9 @@ var require_main = __commonJS({
       }
       const vaultPath = _vaultPath(options);
       if (!vaultPath) {
-        _warn(`You set DOTENV_KEY but you are missing a .env.vault file at ${vaultPath}. Did you forget to build it?`);
+        _warn(
+          `You set DOTENV_KEY but you are missing a .env.vault file at ${vaultPath}. Did you forget to build it?`,
+        );
         return DotenvModule.configDotenv(options);
       }
       return DotenvModule._configVault(options);
@@ -1288,13 +1480,18 @@ var require_main = __commonJS({
       } catch (error) {
         const isRange = error instanceof RangeError;
         const invalidKeyLength = error.message === "Invalid key length";
-        const decryptionFailed = error.message === "Unsupported state or unable to authenticate data";
+        const decryptionFailed =
+          error.message === "Unsupported state or unable to authenticate data";
         if (isRange || invalidKeyLength) {
-          const err = new Error("INVALID_DOTENV_KEY: It must be 64 characters long (or more)");
+          const err = new Error(
+            "INVALID_DOTENV_KEY: It must be 64 characters long (or more)",
+          );
           err.code = "INVALID_DOTENV_KEY";
           throw err;
         } else if (decryptionFailed) {
-          const err = new Error("DECRYPTION_FAILED: Please check your DOTENV_KEY");
+          const err = new Error(
+            "DECRYPTION_FAILED: Please check your DOTENV_KEY",
+          );
           err.code = "DECRYPTION_FAILED";
           throw err;
         } else {
@@ -1306,7 +1503,9 @@ var require_main = __commonJS({
       const debug = Boolean(options && options.debug);
       const override = Boolean(options && options.override);
       if (typeof parsed !== "object") {
-        const err = new Error("OBJECT_REQUIRED: Please check the processEnv argument being passed to populate");
+        const err = new Error(
+          "OBJECT_REQUIRED: Please check the processEnv argument being passed to populate",
+        );
         err.code = "OBJECT_REQUIRED";
         throw err;
       }
@@ -1334,7 +1533,7 @@ var require_main = __commonJS({
       config: config2,
       decrypt,
       parse,
-      populate
+      populate,
     };
     module.exports.configDotenv = DotenvModule.configDotenv;
     module.exports._configVault = DotenvModule._configVault;
@@ -1344,17 +1543,25 @@ var require_main = __commonJS({
     module.exports.parse = DotenvModule.parse;
     module.exports.populate = DotenvModule.populate;
     module.exports = DotenvModule;
-  }
+  },
 });
 
 // ../../node_modules/.pnpm/application-config-path@0.1.0/node_modules/application-config-path/index.js
 var require_application_config_path = __commonJS({
-  "../../node_modules/.pnpm/application-config-path@0.1.0/node_modules/application-config-path/index.js"(exports, module) {
+  "../../node_modules/.pnpm/application-config-path@0.1.0/node_modules/application-config-path/index.js"(
+    exports,
+    module,
+  ) {
     init_cjs_shim();
     var os = __require("os");
     var path4 = __require("path");
     function darwin(name) {
-      return path4.join(process.env["HOME"], "Library", "Application Support", name);
+      return path4.join(
+        process.env["HOME"],
+        "Library",
+        "Application Support",
+        name,
+      );
     }
     function linux(name) {
       if (process.env["XDG_CONFIG_HOME"]) {
@@ -1366,7 +1573,12 @@ var require_application_config_path = __commonJS({
       if (process.env["LOCALAPPDATA"]) {
         return path4.join(process.env["LOCALAPPDATA"], name);
       }
-      return path4.join(process.env["USERPROFILE"], "Local Settings", "Application Data", name);
+      return path4.join(
+        process.env["USERPROFILE"],
+        "Local Settings",
+        "Application Data",
+        name,
+      );
     }
     function applicationConfigPath(name) {
       if (typeof name !== "string") {
@@ -1383,12 +1595,15 @@ var require_application_config_path = __commonJS({
       throw new Error("Platform not supported");
     }
     module.exports = applicationConfigPath;
-  }
+  },
 });
 
 // ../../node_modules/.pnpm/mkdirp@0.5.6/node_modules/mkdirp/index.js
 var require_mkdirp = __commonJS({
-  "../../node_modules/.pnpm/mkdirp@0.5.6/node_modules/mkdirp/index.js"(exports, module) {
+  "../../node_modules/.pnpm/mkdirp@0.5.6/node_modules/mkdirp/index.js"(
+    exports,
+    module,
+  ) {
     init_cjs_shim();
     var path4 = __require("path");
     var fs2 = __require("fs");
@@ -1407,11 +1622,9 @@ var require_mkdirp = __commonJS({
         mode = _0777;
       }
       if (!made) made = null;
-      var cb = f || /* istanbul ignore next */
-      function() {
-      };
+      var cb = f /* istanbul ignore next */ || function () {};
       p = path4.resolve(p);
-      xfs.mkdir(p, mode, function(er) {
+      xfs.mkdir(p, mode, function (er) {
         if (!er) {
           made = made || p;
           return cb(null, made);
@@ -1419,7 +1632,7 @@ var require_mkdirp = __commonJS({
         switch (er.code) {
           case "ENOENT":
             if (path4.dirname(p) === p) return cb(er);
-            mkdirP(path4.dirname(p), opts, function(er2, made2) {
+            mkdirP(path4.dirname(p), opts, function (er2, made2) {
               if (er2) cb(er2, made2);
               else mkdirP(p, opts, cb, made2);
             });
@@ -1428,7 +1641,7 @@ var require_mkdirp = __commonJS({
           // there already.  If so, then hooray!  If not, then something
           // is borked.
           default:
-            xfs.stat(p, function(er2, stat4) {
+            xfs.stat(p, function (er2, stat4) {
               if (er2 || !stat4.isDirectory()) cb(er, made);
               else cb(null, made);
             });
@@ -1472,12 +1685,15 @@ var require_mkdirp = __commonJS({
       }
       return made;
     };
-  }
+  },
 });
 
 // ../../node_modules/.pnpm/application-config@1.0.1/node_modules/application-config/index.js
 var require_application_config = __commonJS({
-  "../../node_modules/.pnpm/application-config@1.0.1/node_modules/application-config/index.js"(exports, module) {
+  "../../node_modules/.pnpm/application-config@1.0.1/node_modules/application-config/index.js"(
+    exports,
+    module,
+  ) {
     init_cjs_shim();
     var fs2 = __require("fs");
     var path4 = __require("path");
@@ -1485,9 +1701,9 @@ var require_application_config = __commonJS({
     function ApplicationConfig(name) {
       this.filePath = path4.join(applicationConfigPath(name), "config.json");
     }
-    ApplicationConfig.prototype.read = function(cb) {
+    ApplicationConfig.prototype.read = function (cb) {
       var self = this;
-      fs2.readFile(self.filePath, function(err, raw) {
+      fs2.readFile(self.filePath, function (err, raw) {
         if (err && err.code === "ENOENT") return cb(null, {});
         if (err) return cb(err);
         var data;
@@ -1499,32 +1715,41 @@ var require_application_config = __commonJS({
         cb(null, data);
       });
     };
-    ApplicationConfig.prototype.write = function(data, cb) {
+    ApplicationConfig.prototype.write = function (data, cb) {
       var self = this;
       var mkdirp = require_mkdirp();
       if (typeof data !== "object" || data === null) {
         throw new TypeError("data is not an object");
       }
       var directoryPath = path4.dirname(self.filePath);
-      mkdirp(directoryPath, function(err) {
+      mkdirp(directoryPath, function (err) {
         if (err) {
           return cb(err);
         }
-        var tempFilePath = self.filePath + "-" + Math.random().toString().substr(2) + Date.now().toString() + path4.extname(self.filePath);
-        fs2.writeFile(tempFilePath, JSON.stringify(data, null, 2), function(err2) {
-          if (err2) {
-            return cb(err2);
-          }
-          fs2.rename(tempFilePath, self.filePath, cb);
-        });
+        var tempFilePath =
+          self.filePath +
+          "-" +
+          Math.random().toString().substr(2) +
+          Date.now().toString() +
+          path4.extname(self.filePath);
+        fs2.writeFile(
+          tempFilePath,
+          JSON.stringify(data, null, 2),
+          function (err2) {
+            if (err2) {
+              return cb(err2);
+            }
+            fs2.rename(tempFilePath, self.filePath, cb);
+          },
+        );
       });
     };
-    ApplicationConfig.prototype.trash = function(cb) {
+    ApplicationConfig.prototype.trash = function (cb) {
       var self = this;
-      fs2.unlink(self.filePath, function(err) {
+      fs2.unlink(self.filePath, function (err) {
         if (err && err.code !== "ENOENT") return cb(err);
         var directoryPath = path4.dirname(self.filePath);
-        fs2.rmdir(directoryPath, function(err2) {
+        fs2.rmdir(directoryPath, function (err2) {
           if (err2 && err2.code !== "ENOENT") return cb(err2);
           cb(null);
         });
@@ -1533,12 +1758,15 @@ var require_application_config = __commonJS({
     module.exports = function createApplicationConfig(name) {
       return new ApplicationConfig(name);
     };
-  }
+  },
 });
 
 // ../../node_modules/.pnpm/debounce@1.2.1/node_modules/debounce/index.js
 var require_debounce = __commonJS({
-  "../../node_modules/.pnpm/debounce@1.2.1/node_modules/debounce/index.js"(exports, module) {
+  "../../node_modules/.pnpm/debounce@1.2.1/node_modules/debounce/index.js"(
+    exports,
+    module,
+  ) {
     init_cjs_shim();
     function debounce3(func, wait, immediate) {
       var timeout, args, context, timestamp, result;
@@ -1555,8 +1783,7 @@ var require_debounce = __commonJS({
           }
         }
       }
-      ;
-      var debounced = function() {
+      var debounced = function () {
         context = this;
         args = arguments;
         timestamp = Date.now();
@@ -1568,13 +1795,13 @@ var require_debounce = __commonJS({
         }
         return result;
       };
-      debounced.clear = function() {
+      debounced.clear = function () {
         if (timeout) {
           clearTimeout(timeout);
           timeout = null;
         }
       };
-      debounced.flush = function() {
+      debounced.flush = function () {
         if (timeout) {
           result = func.apply(context, args);
           context = args = null;
@@ -1584,10 +1811,9 @@ var require_debounce = __commonJS({
       };
       return debounced;
     }
-    ;
     debounce3.debounce = debounce3;
     module.exports = debounce3;
-  }
+  },
 });
 
 // src/index.ts
@@ -1609,7 +1835,7 @@ var defaults = {
   v: false,
   help: false,
   h: false,
-  "allow-unsafe-core-replacement": false
+  "allow-unsafe-core-replacement": false,
 };
 var config = (0, import_rc.default)("DeltaChat", defaults);
 if (config.version || config.v) {
@@ -1635,14 +1861,16 @@ init_cjs_shim();
 init_cjs_shim();
 var import_error_stack_parser = __toESM(require_error_stack_parser(), 1);
 var startTime = Date.now();
-var colorize = (light, code) => (str) => "\x1B[" + light + ";" + code + "m" + str + "\x1B[0m";
+var colorize = (light, code) => (str) =>
+  "\x1B[" + light + ";" + code + "m" + str + "\x1B[0m";
 var blue = colorize(1, 34);
 var red = colorize(1, 31);
 var yellow = colorize(1, 33);
 var grey = colorize(0, 37);
 var green = colorize(1, 37);
 var cyan = colorize(1, 36);
-var emojiFontCss = 'font-family: Roboto, "Apple Color Emoji", NotoEmoji, "Helvetica Neue", Arial, Helvetica, NotoMono, sans-serif !important;';
+var emojiFontCss =
+  'font-family: Roboto, "Apple Color Emoji", NotoEmoji, "Helvetica Neue", Arial, Helvetica, NotoMono, sans-serif !important;';
 var LogLevelString = /* @__PURE__ */ ((LogLevelString2) => {
   LogLevelString2["DEBUG"] = "DEBUG";
   LogLevelString2["WARNING"] = "WARNING";
@@ -1656,40 +1884,38 @@ var LoggerVariants = [
     log: console.debug,
     level: "DEBUG" /* DEBUG */,
     emoji: "\u{1F578}\uFE0F",
-    symbol: "[D]"
+    symbol: "[D]",
   },
   {
     log: console.info,
     level: "INFO" /* INFO */,
     emoji: "\u2139\uFE0F",
-    symbol: blue("[i]")
+    symbol: blue("[i]"),
   },
   {
     log: console.warn,
     level: "WARNING" /* WARNING */,
     emoji: "\u26A0\uFE0F",
-    symbol: yellow("[w]")
+    symbol: yellow("[w]"),
   },
   {
     log: console.error,
     level: "ERROR" /* ERROR */,
     emoji: "\u{1F6A8}",
-    symbol: red("[E]")
+    symbol: red("[E]"),
   },
   {
     log: console.error,
     level: "CRITICAL" /* CRITICAL */,
     emoji: "\u{1F6A8}\u{1F6A8}",
-    symbol: red("[C]")
-  }
+    symbol: red("[C]"),
+  },
 ];
 function printProcessLogLevelInfo() {
   console.info(
     `%cLogging Levels:
-${LoggerVariants.map((v) => `${v.emoji} ${v.level}`).join(
-      "\n"
-    )}`,
-    emojiFontCss
+${LoggerVariants.map((v) => `${v.emoji} ${v.level}`).join("\n")}`,
+    emojiFontCss,
   );
   console.info(
     `# Tips and Tricks for using the search filter in the browser console:
@@ -1713,7 +1939,7 @@ Examples:
 
 Start deltachat with --devmode (or --log-debug and --log-to-console) argument to show full log output.
 If the log seems quiet, make sure the 'All levels' drop down has 'Verbose' checked.
-  `
+  `,
   );
 }
 var handler;
@@ -1731,7 +1957,9 @@ function log({ channel, isMainProcess }, level, stacktrace, args) {
   handler(channel, variant.level, stacktrace, ...args);
   if (rc2["log-to-console"]) {
     if (isMainProcess) {
-      const beginning = `${Math.round((Date.now() - startTime) / 100) / 10}s ${LoggerVariants[level].symbol}${grey(channel)}:`;
+      const beginning = `${Math.round((Date.now() - startTime) / 100) / 10}s ${
+        LoggerVariants[level].symbol
+      }${grey(channel)}:`;
       if (!stacktrace) {
         variant.log(beginning, ...args);
       } else {
@@ -1739,9 +1967,15 @@ function log({ channel, isMainProcess }, level, stacktrace, args) {
           beginning,
           ...args,
           red(
-            Array.isArray(stacktrace) ? stacktrace.map((s) => `
-${s.toString()}`).join() : stacktrace
-          )
+            Array.isArray(stacktrace)
+              ? stacktrace
+                  .map(
+                    (s) => `
+${s.toString()}`,
+                  )
+                  .join()
+              : stacktrace,
+          ),
         );
       }
     } else {
@@ -1757,11 +1991,17 @@ ${s.toString()}`).join() : stacktrace
 }
 function getStackTrace() {
   const rawStack = import_error_stack_parser.default.parse(
-    new Error("Get Stacktrace")
+    new Error("Get Stacktrace"),
   );
   const stack = rawStack.slice(2, rawStack.length);
-  return rc2["machine-readable-stacktrace"] ? stack : stack.map((s) => `
-${s.toString()}`).join();
+  return rc2["machine-readable-stacktrace"]
+    ? stack
+    : stack
+        .map(
+          (s) => `
+${s.toString()}`,
+        )
+        .join();
 }
 var Logger = class {
   constructor(channel) {
@@ -1774,11 +2014,17 @@ var Logger = class {
   }
   getStackTrace() {
     const rawStack = import_error_stack_parser.default.parse(
-      new Error("Get Stacktrace")
+      new Error("Get Stacktrace"),
     );
     const stack = rawStack.slice(2, rawStack.length);
-    return rc2["machine-readable-stacktrace"] ? stack : stack.map((s) => `
-${s.toString()}`).join();
+    return rc2["machine-readable-stacktrace"]
+      ? stack
+      : stack
+          .map(
+            (s) => `
+${s.toString()}`,
+          )
+          .join();
   }
   debug(...args) {
     if (!rc2["log-debug"]) return;
@@ -1806,15 +2052,15 @@ function getLogger(channel) {
 }
 if (!("toJSON" in Error.prototype))
   Object.defineProperty(Error.prototype, "toJSON", {
-    value: function() {
+    value: function () {
       const alt = {};
-      Object.getOwnPropertyNames(this).forEach(function(key) {
+      Object.getOwnPropertyNames(this).forEach(function (key) {
         alt[key] = this[key];
       }, this);
       return alt;
     },
     configurable: true,
-    writable: true
+    writable: true,
   });
 
 // ../shared/localize.ts
@@ -1844,37 +2090,38 @@ function translate(locale, messages) {
       if (typeof opts.quantity === "string") {
         message = entry[opts.quantity];
       } else if (typeof opts.quantity === "number") {
-        message = entry[opts.quantity] || // TODO fix: simply using `pluralRules.select()` to index
-        // into the object is not quite right,
-        // because the string could be untranslated, and it'd fall back to
-        // English, with only 'one' and 'other' plural categories,
-        // in which case we must apply the English
-        // plural rules instead of the current locale's rules.
-        //
-        // Currently this is behaves incorrectly e.g. for untranslated
-        // Indonesian (id), which only has the 'other' plural category,
-        // so even when we have to use 'one' for English, we'd use 'other'.
-        //
-        // But currently we don't have a way to distinguish between translated
-        // and untranslated strings in this code.
-        // See https://github.com/deltachat/deltachat-desktop/blob/b342a1d47b505e68caaec71f79c381c3f304405a/src/main/load-translations.ts#L44-L64
-        entry[pluralRules.select(opts.quantity)] || // This also catches the case where we failed to construct
-        // `Intl.PluralRules` for the currentl locale, and fall back to
-        // English (see `try catch` above).
-        entry["other"];
+        message =
+          entry[opts.quantity] || // TODO fix: simply using `pluralRules.select()` to index
+          // into the object is not quite right,
+          // because the string could be untranslated, and it'd fall back to
+          // English, with only 'one' and 'other' plural categories,
+          // in which case we must apply the English
+          // plural rules instead of the current locale's rules.
+          //
+          // Currently this is behaves incorrectly e.g. for untranslated
+          // Indonesian (id), which only has the 'other' plural category,
+          // so even when we have to use 'one' for English, we'd use 'other'.
+          //
+          // But currently we don't have a way to distinguish between translated
+          // and untranslated strings in this code.
+          // See https://github.com/deltachat/deltachat-desktop/blob/b342a1d47b505e68caaec71f79c381c3f304405a/src/main/load-translations.ts#L44-L64
+          entry[pluralRules.select(opts.quantity)] || // This also catches the case where we failed to construct
+          // `Intl.PluralRules` for the currentl locale, and fall back to
+          // English (see `try catch` above).
+          entry["other"];
       } else {
         message = void 0;
       }
       if (typeof message === "undefined") {
         log2.error(
-          `Missing quantity '${opts.quantity}' for key '${translationKey}'`
+          `Missing quantity '${opts.quantity}' for key '${translationKey}'`,
         );
         return `${translationKey}:${opts.quantity}`;
       }
     }
     if (typeof message === "undefined") {
       log2.error(
-        `Missing 'message' for key '${translationKey}', maybe you need to specify quantity`
+        `Missing 'message' for key '${translationKey}', maybe you need to specify quantity`,
       );
       return `${translationKey}:?`;
     }
@@ -1887,13 +2134,21 @@ function translate(locale, messages) {
         counter++;
         if (f.length > 2) {
           const index = Number.parseInt(f[1]) - 1;
-          if (substitutions === void 0 || typeof substitutions[index] === "undefined") {
-            log2.error(`Missing ${index} argument for key %c'${translationKey}'`);
+          if (
+            substitutions === void 0 ||
+            typeof substitutions[index] === "undefined"
+          ) {
+            log2.error(
+              `Missing ${index} argument for key %c'${translationKey}'`,
+            );
             return "";
           }
           return substitutions[index].toString();
         }
-        if (substitutions === void 0 || typeof substitutions?.[counter] === "undefined") {
+        if (
+          substitutions === void 0 ||
+          typeof substitutions?.[counter] === "undefined"
+        ) {
           log2.error(`Missing ${0} argument for key %c'${translationKey}'`);
           return "";
         }
@@ -1918,33 +2173,50 @@ var gitHubLicenseUrl = gitHubUrl + "/blob/main/LICENSE";
 var donationUrl = "https://delta.chat/donate";
 var appWindowTitle = appName;
 var Timespans = /* @__PURE__ */ ((Timespans2) => {
-  Timespans2[Timespans2["ZERO_SECONDS"] = 0] = "ZERO_SECONDS";
-  Timespans2[Timespans2["ONE_SECOND"] = 1] = "ONE_SECOND";
-  Timespans2[Timespans2["ONE_MINUTE_IN_SECONDS"] = 60] = "ONE_MINUTE_IN_SECONDS";
-  Timespans2[Timespans2["ONE_HOUR_IN_SECONDS"] = 3600] = "ONE_HOUR_IN_SECONDS";
-  Timespans2[Timespans2["ONE_DAY_IN_SECONDS"] = 86400] = "ONE_DAY_IN_SECONDS";
-  Timespans2[Timespans2["ONE_WEEK_IN_SECONDS"] = 604800] = "ONE_WEEK_IN_SECONDS";
-  Timespans2[Timespans2["ONE_YEAR_IN_SECONDS"] = 31536e3] = "ONE_YEAR_IN_SECONDS";
+  Timespans2[(Timespans2["ZERO_SECONDS"] = 0)] = "ZERO_SECONDS";
+  Timespans2[(Timespans2["ONE_SECOND"] = 1)] = "ONE_SECOND";
+  Timespans2[(Timespans2["ONE_MINUTE_IN_SECONDS"] = 60)] =
+    "ONE_MINUTE_IN_SECONDS";
+  Timespans2[(Timespans2["ONE_HOUR_IN_SECONDS"] = 3600)] =
+    "ONE_HOUR_IN_SECONDS";
+  Timespans2[(Timespans2["ONE_DAY_IN_SECONDS"] = 86400)] = "ONE_DAY_IN_SECONDS";
+  Timespans2[(Timespans2["ONE_WEEK_IN_SECONDS"] = 604800)] =
+    "ONE_WEEK_IN_SECONDS";
+  Timespans2[(Timespans2["ONE_YEAR_IN_SECONDS"] = 31536e3)] =
+    "ONE_YEAR_IN_SECONDS";
   return Timespans2;
 })(Timespans || {});
 var AutodeleteDuration = /* @__PURE__ */ ((AutodeleteDuration2) => {
-  AutodeleteDuration2[AutodeleteDuration2["NEVER"] = 0 /* ZERO_SECONDS */] = "NEVER";
-  AutodeleteDuration2[AutodeleteDuration2["AT_ONCE"] = 1 /* ONE_SECOND */] = "AT_ONCE";
-  AutodeleteDuration2[AutodeleteDuration2["ONE_MINUTE"] = 60 /* ONE_MINUTE_IN_SECONDS */] = "ONE_MINUTE";
-  AutodeleteDuration2[AutodeleteDuration2["ONE_HOUR"] = 3600 /* ONE_HOUR_IN_SECONDS */] = "ONE_HOUR";
-  AutodeleteDuration2[AutodeleteDuration2["ONE_DAY"] = 86400 /* ONE_DAY_IN_SECONDS */] = "ONE_DAY";
-  AutodeleteDuration2[AutodeleteDuration2["ONE_WEEK"] = 604800 /* ONE_WEEK_IN_SECONDS */] = "ONE_WEEK";
-  AutodeleteDuration2[AutodeleteDuration2["FIVE_WEEKS"] = 3024e3] = "FIVE_WEEKS";
-  AutodeleteDuration2[AutodeleteDuration2["ONE_YEAR"] = 31536e3 /* ONE_YEAR_IN_SECONDS */] = "ONE_YEAR";
+  AutodeleteDuration2[(AutodeleteDuration2["NEVER"] = 0) /* ZERO_SECONDS */] =
+    "NEVER";
+  AutodeleteDuration2[(AutodeleteDuration2["AT_ONCE"] = 1) /* ONE_SECOND */] =
+    "AT_ONCE";
+  AutodeleteDuration2[
+    (AutodeleteDuration2["ONE_MINUTE"] = 60) /* ONE_MINUTE_IN_SECONDS */
+  ] = "ONE_MINUTE";
+  AutodeleteDuration2[
+    (AutodeleteDuration2["ONE_HOUR"] = 3600) /* ONE_HOUR_IN_SECONDS */
+  ] = "ONE_HOUR";
+  AutodeleteDuration2[
+    (AutodeleteDuration2["ONE_DAY"] = 86400) /* ONE_DAY_IN_SECONDS */
+  ] = "ONE_DAY";
+  AutodeleteDuration2[
+    (AutodeleteDuration2["ONE_WEEK"] = 604800) /* ONE_WEEK_IN_SECONDS */
+  ] = "ONE_WEEK";
+  AutodeleteDuration2[(AutodeleteDuration2["FIVE_WEEKS"] = 3024e3)] =
+    "FIVE_WEEKS";
+  AutodeleteDuration2[
+    (AutodeleteDuration2["ONE_YEAR"] = 31536e3) /* ONE_YEAR_IN_SECONDS */
+  ] = "ONE_YEAR";
   return AutodeleteDuration2;
 })(AutodeleteDuration || {});
 var IMAGE_EXTENSIONS = ["jpg", "jpeg", "png", "apng", "gif", "webp"];
 var VIDEO_CHAT_INSTANCE_SYSTEMLI = "https://meet.systemli.org/$ROOM";
 var VIDEO_CHAT_INSTANCE_AUTISTICI = "https://vc.autistici.org/$ROOM";
 var NOTIFICATION_TYPE = /* @__PURE__ */ ((NOTIFICATION_TYPE2) => {
-  NOTIFICATION_TYPE2[NOTIFICATION_TYPE2["MESSAGE"] = 0] = "MESSAGE";
-  NOTIFICATION_TYPE2[NOTIFICATION_TYPE2["REACTION"] = 1] = "REACTION";
-  NOTIFICATION_TYPE2[NOTIFICATION_TYPE2["WEBXDC_INFO"] = 2] = "WEBXDC_INFO";
+  NOTIFICATION_TYPE2[(NOTIFICATION_TYPE2["MESSAGE"] = 0)] = "MESSAGE";
+  NOTIFICATION_TYPE2[(NOTIFICATION_TYPE2["REACTION"] = 1)] = "REACTION";
+  NOTIFICATION_TYPE2[(NOTIFICATION_TYPE2["WEBXDC_INFO"] = 2)] = "WEBXDC_INFO";
   return NOTIFICATION_TYPE2;
 })(NOTIFICATION_TYPE || {});
 
@@ -1956,7 +2228,9 @@ init_cjs_shim();
 var import_application_config = __toESM(require_application_config(), 1);
 if (process.env.NODE_ENV !== "production") {
   try {
-    const { config: config2 } = await Promise.resolve().then(() => __toESM(require_main(), 1));
+    const { config: config2 } = await Promise.resolve().then(() =>
+      __toESM(require_main(), 1),
+    );
     config2();
   } catch (e) {
     console.error("Failed to load .env file", e);
@@ -1971,7 +2245,7 @@ if (process.env.DC_TEST_DIR) {
   appConfig.filePath = join(
     process.env.PORTABLE_EXECUTABLE_DIR,
     "DeltEchoData",
-    "config.json"
+    "config.json",
   );
 }
 var application_config_default = Object.freeze(appConfig);
@@ -1996,7 +2270,8 @@ function windowDefaults() {
     targetFile = "test.html";
     defaultWidth = 1100;
   }
-  const { height: screenHeight, width: screenWidth } = screen.getPrimaryDisplay().workAreaSize;
+  const { height: screenHeight, width: screenWidth } =
+    screen.getPrimaryDisplay().workAreaSize;
   const headerHeight = 38;
   const defaultHeight = Math.min(802 + headerHeight, screenHeight);
   const x = (screenWidth - defaultWidth) / 2;
@@ -2006,7 +2281,7 @@ function windowDefaults() {
       height: defaultHeight,
       width: defaultWidth,
       x,
-      y
+      y,
     },
     headerHeight,
     // On 0.6x zoom Delta Chat and 200x window size it's still somewhat usable,
@@ -2014,7 +2289,7 @@ function windowDefaults() {
     minWidth: 225,
     minHeight: 125,
     main: targetFile,
-    preload: join2(htmlDistDir(), "preload.js")
+    preload: join2(htmlDistDir(), "preload.js"),
   };
 }
 function getConfigPath() {
@@ -2032,27 +2307,18 @@ function getCustomThemesPath() {
 function getDraftTempDir() {
   return join2(app.getPath("temp"), "chat.deltecho.desktop-draft");
 }
-var supportedURISchemes = [
-  "OPENPGP4FPR:",
-  "MAILTO:",
-  "DCACCOUNT:",
-  "DCLOGIN:"
-];
+var supportedURISchemes = ["OPENPGP4FPR:", "MAILTO:", "DCACCOUNT:", "DCLOGIN:"];
 var ALLOWED_RESOURCE_FOLDERS = ["images", "node_modules", "html-dist"];
 var ALLOWED_SOURCE_FOLDERS = ["src", "scss", "node_modules"];
 var ALLOWED_CONFIG_FOLDERS = ["background"];
 var ALLOWED_STATIC_FOLDERS = [
-  ...[...ALLOWED_RESOURCE_FOLDERS, ...ALLOWED_SOURCE_FOLDERS].map(
-    (folder) => join2(AppFilesDir, folder)
+  ...[...ALLOWED_RESOURCE_FOLDERS, ...ALLOWED_SOURCE_FOLDERS].map((folder) =>
+    join2(AppFilesDir, folder),
   ),
   ...ALLOWED_CONFIG_FOLDERS.map((folder) => join2(getConfigPath(), folder)),
-  getDraftTempDir()
+  getDraftTempDir(),
 ];
-var ALLOWED_ACCOUNT_FOLDERS = [
-  "db.sqlite-blobs",
-  "dc.db-blobs",
-  "stickers"
-];
+var ALLOWED_ACCOUNT_FOLDERS = ["db.sqlite-blobs", "dc.db-blobs", "stickers"];
 var INTERNAL_TMP_DIR_NAME = "tmp";
 
 // src/windows/main.ts
@@ -2070,7 +2336,7 @@ __export(main_exports, {
   show: () => show,
   toggleAlwaysOnTop: () => toggleAlwaysOnTop,
   toggleDevTools: () => toggleDevTools,
-  window: () => window2
+  window: () => window2,
 });
 init_cjs_shim();
 
@@ -2128,7 +2394,7 @@ function getDefaultState() {
     useSystemUIFont: false,
     contentProtectionEnabled: false,
     isMentionsEnabled: true,
-    autostart: true
+    autostart: true,
   };
 }
 
@@ -2153,9 +2419,7 @@ var PersistentState = class extends EventEmitter {
     const default_state = getDefaultState();
     let saved = {};
     try {
-      saved = await promisify(
-        (cb) => application_config_default.read(cb)
-      )();
+      saved = await promisify((cb) => application_config_default.read(cb))();
       if (typeof saved.lastAccount !== "number" || saved.lastAccount < 0) {
         saved.lastAccount = void 0;
       }
@@ -2171,7 +2435,10 @@ var PersistentState = class extends EventEmitter {
   }
   /** state.save() calls are rate-limited. Use `PersistentState.saveImmediate()` to skip limit. */
   save() {
-    this.save = (0, import_debounce.default)(this.saveImmediate, SAVE_DEBOUNCE_INTERVAL);
+    this.save = (0, import_debounce.default)(
+      this.saveImmediate,
+      SAVE_DEBOUNCE_INTERVAL,
+    );
     this.saveImmediate();
   }
   saveImmediate() {
@@ -2210,14 +2477,16 @@ function set_has_unread(new_has_unread) {
 function TrayImage() {
   const trayIconFolder = join3(htmlDistDir(), "images/tray");
   if (process.platform === "darwin") {
-    const image = nativeImage.createFromPath(join3(trayIconFolder, "tray-icon-mac.png")).resize({ width: 24 });
+    const image = nativeImage
+      .createFromPath(join3(trayIconFolder, "tray-icon-mac.png"))
+      .resize({ width: 24 });
     image.setTemplateImage(true);
     return image;
   } else {
     const iconFormat = process.platform === "win32" ? ".ico" : ".png";
     return `${join3(
       trayIconFolder,
-      (has_unread ? "deltachat-unread" : "deltachat") + iconFormat
+      (has_unread ? "deltachat-unread" : "deltachat") + iconFormat,
     )}`;
   }
 }
@@ -2269,31 +2538,33 @@ function getTrayMenu() {
   if (tray === null) return;
   if (process.platform === "darwin") {
     contextMenu = Menu.buildFromTemplate([
-      mainWindowIsVisible() ? {
-        id: "reduce_window",
-        label: tx("hide"),
-        type: "normal",
-        click() {
-          hideDeltaChat();
-          refreshTrayContextMenu();
-        }
-      } : {
-        id: "open_windows",
-        label: tx("activate"),
-        type: "normal",
-        click() {
-          showDeltaChat();
-          refreshTrayContextMenu();
-        }
-      },
+      mainWindowIsVisible()
+        ? {
+            id: "reduce_window",
+            label: tx("hide"),
+            type: "normal",
+            click() {
+              hideDeltaChat();
+              refreshTrayContextMenu();
+            },
+          }
+        : {
+            id: "open_windows",
+            label: tx("activate"),
+            type: "normal",
+            click() {
+              showDeltaChat();
+              refreshTrayContextMenu();
+            },
+          },
       {
         id: "quit_app",
         label: tx("global_menu_file_quit_desktop"),
         type: "normal",
         click() {
           quitDeltaChat();
-        }
-      }
+        },
+      },
     ]);
   } else {
     contextMenu = Menu.buildFromTemplate([
@@ -2303,7 +2574,7 @@ function getTrayMenu() {
         type: "normal",
         click() {
           showDeltaChat();
-        }
+        },
       },
       {
         id: "reduce_window",
@@ -2312,7 +2583,7 @@ function getTrayMenu() {
         enabled: mainWindowIsVisible(),
         click() {
           hideDeltaChat();
-        }
+        },
       },
       {
         id: "quit_app",
@@ -2320,8 +2591,8 @@ function getTrayMenu() {
         type: "normal",
         click() {
           quitDeltaChat();
-        }
-      }
+        },
+      },
     ]);
   }
   return contextMenu;
@@ -2362,7 +2633,8 @@ function initMinWinDimensionHandling(main_window, minWidth, minHeight) {
     if (
       // A multiplier to make space for the taskbar and the window header.
       // Remember that the taskbar could also be placed vertically.
-      workAreaSize.width * 0.75 < minWidth || workAreaSize.height * 0.75 < minHeight
+      workAreaSize.width * 0.75 < minWidth ||
+      workAreaSize.height * 0.75 < minHeight
     ) {
       main_window.setMinimumSize(0, 0);
     } else {
@@ -2388,13 +2660,16 @@ var log5 = getLogger("contentProtection");
 function updateContentProtection(window3, enabled) {
   window3.setContentProtection(enabled);
   if (enabled && platform() !== "darwin" && platform() !== "win32") {
-    log5.warn("setContentProtection not available on your platform", platform());
+    log5.warn(
+      "setContentProtection not available on your platform",
+      platform(),
+    );
   }
 }
 function setContentProtection(window3) {
   updateContentProtection(
     window3,
-    DesktopSettings.state.contentProtectionEnabled
+    DesktopSettings.state.contentProtectionEnabled,
   );
 }
 function updateContentProtectionOnAllActiveWindows(enabled) {
@@ -2418,10 +2693,10 @@ function init(options) {
   const defaults2 = windowDefaults();
   const initialBounds = Object.assign(
     defaults2.bounds,
-    DesktopSettings.state.bounds
+    DesktopSettings.state.bounds,
   );
   const isMac2 = platform2() === "darwin";
-  const mainWindow = window2 = new electron.BrowserWindow({
+  const mainWindow = (window2 = new electron.BrowserWindow({
     backgroundColor: "#282828",
     // backgroundThrottling: false, // do not throttle animations/timers when page is background
     darkTheme: true,
@@ -2440,13 +2715,17 @@ function init(options) {
       // until we can load a local dictionary, see https://github.com/electron/electron/issues/22995
       webSecurity: true,
       allowRunningInsecureContent: false,
-      contextIsolation: false
+      contextIsolation: false,
     },
     titleBarStyle: isMac2 ? "hidden" : "default",
-    titleBarOverlay: true
-  });
+    titleBarOverlay: true,
+  }));
   mainWindow.filePathWhiteList = [];
-  initMinWinDimensionHandling(mainWindow, defaults2.minWidth, defaults2.minHeight);
+  initMinWinDimensionHandling(
+    mainWindow,
+    defaults2.minWidth,
+    defaults2.minHeight,
+  );
   setContentProtection(window2);
   session.defaultSession.setSpellCheckerDictionaryDownloadURL("https://00.00/");
   window2.loadFile(join4(htmlDistDir(), defaults2.main));
@@ -2473,8 +2752,7 @@ function init(options) {
   window2.once("show", () => {
     mainWindow.webContents.setZoomFactor(DesktopSettings.state.zoomFactor);
   });
-  window2.on("close", () => {
-  });
+  window2.on("close", () => {});
   window2.on("blur", () => {
     mainWindow.hidden = true;
     refreshTrayContextMenu();
@@ -2492,7 +2770,7 @@ function init(options) {
     "media",
     "mediaKeySystem",
     "accessibility-events",
-    "clipboard-sanitized-write"
+    "clipboard-sanitized-write",
     // not used:
     //  "display-capture", - not used
     //  "geolocation", - not used
@@ -2506,7 +2784,7 @@ function init(options) {
     log6.info("preq", permission);
     if (!allowed_web_permissions.includes(permission)) {
       log6.info(
-        `main window requested "${permission}" permission, but we denied it, because it is not in the list of allowed permissions.`
+        `main window requested "${permission}" permission, but we denied it, because it is not in the list of allowed permissions.`,
       );
       return false;
     } else {
@@ -2519,13 +2797,13 @@ function init(options) {
   window2.webContents.session.setPermissionRequestHandler(
     (_wc, permission, callback) => {
       callback(permission_handler(permission));
-    }
+    },
   );
   window2.webContents.session.webRequest.onBeforeRequest(
     { urls: ["file://*"] },
     (details, callback) => {
       const pathname = fileURLToPath3(
-        decodeURIComponent(new URL(details.url).href)
+        decodeURIComponent(new URL(details.url).href),
       );
       if (!isAbsolute(pathname) || pathname.includes("..")) {
         log6.errorWithoutStackTrace("tried to access relative path", pathname);
@@ -2534,17 +2812,21 @@ function init(options) {
       if (pathname.startsWith(getAccountsPath())) {
         const relativePathInAccounts = pathname.replace(getAccountsPath(), "");
         const relativePathInAccount = relativePathInAccounts.slice(
-          relativePathInAccounts.indexOf(sep, 1) + 1
+          relativePathInAccounts.indexOf(sep, 1) + 1,
         );
-        if (ALLOWED_ACCOUNT_FOLDERS.find(
-          (allowedPath) => relativePathInAccount.startsWith(allowedPath)
-        )) {
+        if (
+          ALLOWED_ACCOUNT_FOLDERS.find((allowedPath) =>
+            relativePathInAccount.startsWith(allowedPath),
+          )
+        ) {
           return callback({ cancel: false });
         }
       }
-      if (ALLOWED_STATIC_FOLDERS.find(
-        (allowedPath) => pathname.startsWith(allowedPath)
-      )) {
+      if (
+        ALLOWED_STATIC_FOLDERS.find((allowedPath) =>
+          pathname.startsWith(allowedPath),
+        )
+      ) {
         return callback({ cancel: false });
       }
       if (window2?.filePathWhiteList.includes(pathname)) {
@@ -2552,10 +2834,10 @@ function init(options) {
       }
       log6.errorWithoutStackTrace(
         "tried to access path that is not whitelisted",
-        pathname
+        pathname,
       );
       return callback({ cancel: true });
-    }
+    },
   );
 }
 function hide() {
@@ -2587,16 +2869,17 @@ function setBounds(bounds, maximize) {
     log6.debug("setBounds: unmaximizing");
     window2.unmaximize();
   }
-  const willBeMaximized = typeof maximize === "boolean" ? maximize : window2.isMaximized();
+  const willBeMaximized =
+    typeof maximize === "boolean" ? maximize : window2.isMaximized();
   if (!willBeMaximized) {
     log6.debug(`setBounds: setting bounds to ${JSON.stringify(bounds)}`);
     if (bounds.x === null && bounds.y === null) {
       const scr = electron.screen.getDisplayMatching(window2.getBounds());
       bounds.x = Math.round(
-        scr.bounds.x + scr.bounds.width / 2 - bounds.width / 2
+        scr.bounds.x + scr.bounds.width / 2 - bounds.width / 2,
       );
       bounds.y = Math.round(
-        scr.bounds.y + scr.bounds.height / 2 - bounds.height / 2
+        scr.bounds.y + scr.bounds.height / 2 - bounds.height / 2,
       );
       log6.debug(`setBounds: centered to ${JSON.stringify(bounds)}`);
     }
@@ -2663,8 +2946,8 @@ async function isWindowsStorePackage() {
       const info = JSON.parse(
         await readFile(
           join5(app_path, "../../", "windows_build_info.json"),
-          "utf-8"
-        )
+          "utf-8",
+        ),
       );
       if (info.isAPPX) {
         console.info("App is probably running as appx");
@@ -2672,14 +2955,15 @@ async function isWindowsStorePackage() {
       }
     } catch (error) {
       console.warn(
-        "Could not fetch windows build info, this is normal in dev mode"
+        "Could not fetch windows build info, this is normal in dev mode",
       );
     }
   }
 }
 function mapPackagePath(path4) {
   const basePath = "AppData\\Local\\DeltaChat";
-  const packagePath = "AppData\\Local\\Packages\\merlinux.DeltaChat_v2ry5hvxhdhyy\\LocalCache\\Local\\DeltaChat";
+  const packagePath =
+    "AppData\\Local\\Packages\\merlinux.DeltaChat_v2ry5hvxhdhyy\\LocalCache\\Local\\DeltaChat";
   if (appx && path4.indexOf(basePath) > -1) {
     const transformedPath = path4.replace(basePath, packagePath);
     if (existsSync(transformedPath)) {
@@ -2691,7 +2975,7 @@ function mapPackagePath(path4) {
 function getAppxPath(app_folder) {
   return join5(
     app_folder,
-    "../Packages/merlinux.DeltaChat_v2ry5hvxhdhyy/LocalCache/Local/DeltaChat"
+    "../Packages/merlinux.DeltaChat_v2ry5hvxhdhyy/LocalCache/Local/DeltaChat",
   );
 }
 
@@ -2711,7 +2995,7 @@ function getLocaleDirectoryPath() {
     alternativeDirectory,
     join6(__dirname3, "../_locales"),
     // packaged
-    join6(__dirname3, "../../../_locales")
+    join6(__dirname3, "../../../_locales"),
     // development
   ];
   if (alternativeDirectory && !isValidLocaleDirectory(alternativeDirectory)) {
@@ -2722,7 +3006,7 @@ function getLocaleDirectoryPath() {
       - _untranslated_en.json  // for untranslated strings
       - en.json                // for fallback
       
-      Path to the invalid directory: ${alternativeDirectory}`
+      Path to the invalid directory: ${alternativeDirectory}`,
     );
   }
   const directory = places.find(isValidLocaleDirectory);
@@ -2733,7 +3017,13 @@ function getLocaleDirectoryPath() {
   return directory;
 }
 function isValidLocaleDirectory(path4) {
-  return path4 !== void 0 && existsSync2(path4) && existsSync2(join6(path4, "_languages.json")) && existsSync2(join6(path4, "_untranslated_en.json")) && existsSync2(join6(path4, "en.json"));
+  return (
+    path4 !== void 0 &&
+    existsSync2(path4) &&
+    existsSync2(join6(path4, "_languages.json")) &&
+    existsSync2(join6(path4, "_untranslated_en.json")) &&
+    existsSync2(join6(path4, "en.json"))
+  );
 }
 
 // src/menu.ts
@@ -2743,13 +3033,14 @@ import { join as join7 } from "path";
 var log7 = getLogger("main/menu");
 var languages = (() => {
   const languagesFile = join7(getLocaleDirectoryPath(), "_languages.json");
-  const rawLanguageList = JSON.parse(
-    readFileSync(languagesFile, "utf8")
-  );
-  return Object.keys(rawLanguageList).map((locale) => ({
-    locale,
-    name: rawLanguageList[locale]
-  })).filter(({ name }) => name.indexOf("*") === -1).sort(({ name: name1 }, { name: name2 }) => name1 > name2 ? 1 : -1);
+  const rawLanguageList = JSON.parse(readFileSync(languagesFile, "utf8"));
+  return Object.keys(rawLanguageList)
+    .map((locale) => ({
+      locale,
+      name: rawLanguageList[locale],
+    }))
+    .filter(({ name }) => name.indexOf("*") === -1)
+    .sort(({ name: name1 }, { name: name2 }) => (name1 > name2 ? 1 : -1));
 })();
 var logHandlerRef = null;
 function refresh() {
@@ -2783,7 +3074,7 @@ function getAvailableLanguages() {
       click: () => {
         DesktopSettings.update({ locale });
         chooseLanguage(locale);
-      }
+      },
     };
   });
 }
@@ -2793,26 +3084,30 @@ function getZoomFactors() {
     { scale: 0.8, key: "small" },
     { scale: 1, key: "normal" },
     { scale: 1.2, key: "large" },
-    { scale: 1.4, key: "extra_large" }
+    { scale: 1.4, key: "extra_large" },
   ];
   const currentZoomFactor = DesktopSettings.state.zoomFactor;
   if (zoomFactors.map(({ scale }) => scale).indexOf(currentZoomFactor) === -1)
     zoomFactors.push({
       scale: currentZoomFactor,
-      key: "custom"
+      key: "custom",
     });
   return zoomFactors.map(({ key, scale }) => {
     return {
-      label: !(scale === 1 && key === "custom") ? `${scale}x ${tx(key)}` : tx("custom"),
+      label: !(scale === 1 && key === "custom")
+        ? `${scale}x ${tx(key)}`
+        : tx("custom"),
       type: "radio",
-      checked: scale === DesktopSettings.state.zoomFactor && !(scale === 1 && key === "custom"),
+      checked:
+        scale === DesktopSettings.state.zoomFactor &&
+        !(scale === 1 && key === "custom"),
       click: () => {
         if (key !== "custom") {
           DesktopSettings.update({ zoomFactor: scale });
           setZoomFactor(scale);
         } else {
         }
-      }
+      },
     };
   });
 }
@@ -2823,7 +3118,7 @@ function getAppMenu(window3) {
       label: tx("global_menu_help_about_desktop"),
       click: () => {
         send("showAboutDialog");
-      }
+      },
     },
     { type: "separator" },
     {
@@ -2831,33 +3126,35 @@ function getAppMenu(window3) {
       click: () => {
         send("showSettingsDialog");
       },
-      accelerator: "Cmd+,"
+      accelerator: "Cmd+,",
     },
-    { type: "separator" }
+    { type: "separator" },
   ];
   return {
     label: appWindowTitle,
     submenu: [
-      ...isMainWindow ? extraItemsForMainWindow : [],
+      ...(isMainWindow ? extraItemsForMainWindow : []),
       { role: "hide" },
       { role: "hideOthers" },
       { role: "unhide" },
       { type: "separator" },
-      ...isMainWindow ? [
-        {
-          // because menubar stays when it's closed and apple wants that the user can reopen it via the menu bar
-          label: tx("show_window"),
-          click: () => {
-            show();
-          }
-        }
-      ] : [],
+      ...(isMainWindow
+        ? [
+            {
+              // because menubar stays when it's closed and apple wants that the user can reopen it via the menu bar
+              label: tx("show_window"),
+              click: () => {
+                show();
+              },
+            },
+          ]
+        : []),
       {
         label: tx("global_menu_file_quit_desktop"),
         role: "quit",
-        accelerator: "Cmd+q"
-      }
-    ]
+        accelerator: "Cmd+q",
+      },
+    ],
   };
 }
 function getFileMenu(window3, isMac2) {
@@ -2871,24 +3168,24 @@ function getFileMenu(window3, isMac2) {
             click: () => {
               send("showSettingsDialog");
             },
-            accelerator: "Ctrl+,"
+            accelerator: "Ctrl+,",
           },
           {
             label: tx("global_menu_file_quit_desktop"),
             click: quitDeltaChat,
-            accelerator: "Ctrl+q"
-          }
+            accelerator: "Ctrl+q",
+          },
         ];
       } else {
         return [
           {
             label: tx("close_window"),
             click: () => window3?.close(),
-            accelerator: "Ctrl+q"
-          }
+            accelerator: "Ctrl+q",
+          },
         ];
       }
-    })()
+    })(),
   };
   const fileMenuMac = {
     label: tx("global_menu_file_desktop"),
@@ -2901,9 +3198,9 @@ function getFileMenu(window3, isMac2) {
             refresh();
           }
         },
-        accelerator: "Cmd+w"
-      }
-    ]
+        accelerator: "Cmd+w",
+      },
+    ],
   };
   return isMac2 ? fileMenuMac : fileMenuNonMac;
 }
@@ -2913,36 +3210,36 @@ function getEditMenu() {
     submenu: [
       {
         label: tx("global_menu_edit_undo_desktop"),
-        role: "undo"
+        role: "undo",
       },
       {
         label: tx("global_menu_edit_redo_desktop"),
-        role: "redo"
+        role: "redo",
       },
       {
-        type: "separator"
+        type: "separator",
       },
       {
         label: tx("global_menu_edit_cut_desktop"),
-        role: "cut"
+        role: "cut",
       },
       {
         label: tx("global_menu_edit_copy_desktop"),
-        role: "copy"
+        role: "copy",
       },
       {
         label: tx("global_menu_edit_paste_desktop"),
-        role: "paste"
+        role: "paste",
       },
       {
         label: tx("delete"),
-        role: "delete"
+        role: "delete",
       },
       {
         label: tx("menu_select_all"),
-        role: "selectAll"
-      }
-    ]
+        role: "selectAll",
+      },
+    ],
   };
 }
 function getHelpMenu(isMac2) {
@@ -2955,7 +3252,7 @@ function getHelpMenu(isMac2) {
         click: () => {
           send("showHelpDialog");
         },
-        accelerator: "F1"
+        accelerator: "F1",
       },
       {
         label: tx("keybindings"),
@@ -2964,31 +3261,31 @@ function getHelpMenu(isMac2) {
           window2?.focus();
           send("showKeybindingsDialog");
         },
-        accelerator: isMac2 ? "Cmd+/" : "Ctrl+/"
+        accelerator: isMac2 ? "Cmd+/" : "Ctrl+/",
       },
       {
-        type: "separator"
+        type: "separator",
       },
       {
         label: tx("delta_chat_homepage"),
         click: () => {
           shell.openExternal(homePageUrl);
-        }
+        },
       },
       {
         label: tx("contribute"),
         click: () => {
           shell.openExternal("https://delta.chat/contribute");
-        }
+        },
       },
       {
         label: tx("global_menu_help_report_desktop"),
         click: () => {
           shell.openExternal(gitHubIssuesUrl);
-        }
+        },
       },
       {
-        type: "separator"
+        type: "separator",
       },
       {
         label: tx("global_menu_help_about_desktop"),
@@ -2996,15 +3293,15 @@ function getHelpMenu(isMac2) {
           window2?.show();
           window2?.focus();
           send("showAboutDialog");
-        }
-      }
-    ]
+        },
+      },
+    ],
   };
 }
 function getMenuTemplate(logHandler2) {
   const isMac2 = process.platform === "darwin";
   return [
-    ...isMac2 ? [getAppMenu(window2)] : [],
+    ...(isMac2 ? [getAppMenu(window2)] : []),
     getFileMenu(window2, isMac2),
     getEditMenu(),
     {
@@ -3013,49 +3310,52 @@ function getMenuTemplate(logHandler2) {
         {
           label: tx("global_menu_view_floatontop_desktop"),
           type: "checkbox",
-          click: () => toggleAlwaysOnTop()
+          click: () => toggleAlwaysOnTop(),
         },
         {
           label: tx("zoom"),
-          submenu: getZoomFactors()
+          submenu: getZoomFactors(),
         },
         {
           label: tx("pref_language"),
-          submenu: getAvailableLanguages()
+          submenu: getAvailableLanguages(),
         },
         {
-          type: "separator"
+          type: "separator",
         },
         {
           label: tx("global_menu_view_developer_desktop"),
           submenu: [
             {
               label: tx("global_menu_view_developer_tools_desktop"),
-              accelerator: process.platform === "darwin" ? "Alt+Command+I" : "Ctrl+Shift+I",
-              click: () => toggleDevTools()
+              accelerator:
+                process.platform === "darwin"
+                  ? "Alt+Command+I"
+                  : "Ctrl+Shift+I",
+              click: () => toggleDevTools(),
             },
             {
               label: tx("menu.view.developer.open.log.folder"),
               click: () => {
                 shell.openPath(mapPackagePath(getLogsPath()));
-              }
+              },
             },
             {
               label: tx("menu.view.developer.open.current.log.file"),
               click: () => {
                 shell.openPath(mapPackagePath(logHandler2.logFilePath()));
-              }
-            }
-          ]
-        }
-      ]
+              },
+            },
+          ],
+        },
+      ],
     },
-    getHelpMenu(isMac2)
+    getHelpMenu(isMac2),
   ];
 }
 function getMenuItem(menu, label) {
   for (let i = 0; i < menu.items.length; i++) {
-    const menuItem = menu.items[i].submenu?.items.find(function(item) {
+    const menuItem = menu.items[i].submenu?.items.find(function (item) {
       return item.label === label;
     });
     if (menuItem) return menuItem;
@@ -3076,7 +3376,7 @@ function getCurrentLocaleDate() {
   return currentlocaleData;
 }
 var translateFunction = null;
-var tx = function(key, substitutions, raw_opts) {
+var tx = function (key, substitutions, raw_opts) {
   if (translateFunction === null) {
     log8.error("tried to use translation function before init");
     return key;
@@ -3086,10 +3386,7 @@ var tx = function(key, substitutions, raw_opts) {
 function setLanguage(locale) {
   const localeData = loadTranslations(locale);
   currentlocaleData = localeData;
-  translateFunction = translate(
-    localeData.locale,
-    localeData.messages
-  );
+  translateFunction = translate(localeData.locale, localeData.messages);
 }
 function loadTranslations(locale) {
   const messagesEnglish = getLocaleMessages(retrieveLocaleFile("en"));
@@ -3147,20 +3444,28 @@ import electron2 from "electron";
 var webContents = (win2) => win2.webContents;
 var removeUnusedMenuItems = (menuTemplate) => {
   let notDeletedPreviousElement;
-  return menuTemplate.filter((menuItem) => {
-    if (!menuItem) {
-      return false;
-    } else if (typeof menuItem === "object" && menuItem.visible === false) {
-      return false;
-    }
-    return true;
-  }).filter((item, index, array) => {
-    const menuItem = item;
-    const items = array;
-    const toDelete = menuItem.type === "separator" && (!notDeletedPreviousElement || index === array.length - 1 || items[index + 1].type === "separator");
-    notDeletedPreviousElement = toDelete ? notDeletedPreviousElement : menuItem;
-    return !toDelete;
-  });
+  return menuTemplate
+    .filter((menuItem) => {
+      if (!menuItem) {
+        return false;
+      } else if (typeof menuItem === "object" && menuItem.visible === false) {
+        return false;
+      }
+      return true;
+    })
+    .filter((item, index, array) => {
+      const menuItem = item;
+      const items = array;
+      const toDelete =
+        menuItem.type === "separator" &&
+        (!notDeletedPreviousElement ||
+          index === array.length - 1 ||
+          items[index + 1].type === "separator");
+      notDeletedPreviousElement = toDelete
+        ? notDeletedPreviousElement
+        : menuItem;
+      return !toDelete;
+    });
 };
 var create = (win2) => {
   const enableSpellChecking = false;
@@ -3177,7 +3482,7 @@ var create = (win2) => {
         click() {
           const target = webContents(win2);
           target.session.addWordToSpellCheckerDictionary(props.misspelledWord);
-        }
+        },
       }),
       cut: () => ({
         id: "cut",
@@ -3191,7 +3496,7 @@ var create = (win2) => {
           } else {
             electron2.clipboard.writeText(props.selectionText);
           }
-        }
+        },
       }),
       copy: () => ({
         id: "copy",
@@ -3205,7 +3510,7 @@ var create = (win2) => {
           } else {
             electron2.clipboard.writeText(props.selectionText);
           }
-        }
+        },
       }),
       paste: () => ({
         id: "paste",
@@ -3215,7 +3520,7 @@ var create = (win2) => {
         click() {
           const target = webContents(win2);
           target.paste();
-        }
+        },
       }),
       copyLink: () => ({
         id: "copyLink",
@@ -3224,9 +3529,9 @@ var create = (win2) => {
         click() {
           electron2.clipboard.write({
             bookmark: props.linkText,
-            text: props.linkURL
+            text: props.linkURL,
           });
-        }
+        },
       }),
       copyImage: () => ({
         id: "copyImage",
@@ -3234,8 +3539,8 @@ var create = (win2) => {
         visible: props.mediaType === "image",
         click() {
           webContents(win2).copyImageAt(props.x, props.y);
-        }
-      })
+        },
+      }),
     };
     function word(suggestion) {
       return {
@@ -3247,21 +3552,25 @@ var create = (win2) => {
             const target = webContents(win2);
             target.insertText(menuItem.label);
           }
-        }
+        },
       };
     }
     let dictionarySuggestions = [];
     if (enableSpellChecking) {
-      if (hasText && props.misspelledWord && props.dictionarySuggestions.length > 0) {
-        dictionarySuggestions = props.dictionarySuggestions.map(
-          (suggestion) => word(suggestion)
+      if (
+        hasText &&
+        props.misspelledWord &&
+        props.dictionarySuggestions.length > 0
+      ) {
+        dictionarySuggestions = props.dictionarySuggestions.map((suggestion) =>
+          word(suggestion),
         );
       } else {
         dictionarySuggestions.push({
           id: "dictionarySuggestions",
           label: tx("no_spellcheck_suggestions_found"),
           visible: Boolean(hasText && props.misspelledWord),
-          enabled: false
+          enabled: false,
         });
       }
     }
@@ -3278,7 +3587,7 @@ var create = (win2) => {
       defaultActions.copyImage(),
       defaultActions.separator(),
       defaultActions.copyLink(),
-      defaultActions.separator()
+      defaultActions.separator(),
     ];
     menuTemplate = removeUnusedMenuItems(menuTemplate);
     if (menuTemplate.length > 0) {
@@ -3384,10 +3693,8 @@ init_cjs_shim();
 import { createWriteStream } from "fs";
 import { join as join8 } from "path";
 import { stdout, stderr } from "process";
-stdout.on("error", () => {
-});
-stderr.on("error", () => {
-});
+stdout.on("error", () => {});
+stderr.on("error", () => {});
 function logName() {
   const dir = getLogsPath();
   const d = /* @__PURE__ */ new Date();
@@ -3401,7 +3708,7 @@ function logName() {
     `${pad(d.getHours())}-`,
     `${pad(d.getMinutes())}-`,
     `${pad(d.getSeconds())}`,
-    ".log"
+    ".log",
   ].join("");
   return join8(dir, fileName);
 }
@@ -3417,11 +3724,11 @@ function createLogHandler() {
      * @param stacktrace Stack trace if WARNING, ERROR or CRITICAL
      * @param ...args Variadic parameters. Stringified before logged to file
      */
-    log: ((channel, level, stacktrace, ...args) => {
-      const timestamp = (/* @__PURE__ */ new Date()).toISOString();
+    log: (channel, level, stacktrace, ...args) => {
+      const timestamp = /* @__PURE__ */ new Date().toISOString();
       let line = [timestamp, fillString(channel, 22), level];
       line = line.concat(
-        [stacktrace, ...args].map((value) => JSON.stringify(value))
+        [stacktrace, ...args].map((value) => JSON.stringify(value)),
       );
       if (stream.writable) {
         stream.write(`${line.join("	")}
@@ -3431,12 +3738,12 @@ function createLogHandler() {
           channel,
           level,
           args,
-          stacktrace
+          stacktrace,
         });
       }
-    }),
+    },
     end: () => stream.end(),
-    logFilePath: () => fileName
+    logFilePath: () => fileName,
   };
 }
 import { readdir, lstat, unlink } from "fs/promises";
@@ -3447,14 +3754,14 @@ async function cleanupLogFolder() {
   const filesWithDates = await Promise.all(
     logDirContent.map(async (logFileName) => ({
       filename: logFileName,
-      mtime: (await lstat(join8(logDir, logFileName))).mtime.getTime()
-    }))
+      mtime: (await lstat(join8(logDir, logFileName))).mtime.getTime(),
+    })),
   );
   const sortedFiles = filesWithDates.sort((a, b) => a.mtime - b.mtime);
   if (sortedFiles.length > 10) {
     sortedFiles.splice(sortedFiles.length - 11);
     const fileCount = await Promise.all(
-      sortedFiles.map(({ filename }) => unlink(join8(logDir, filename)))
+      sortedFiles.map(({ filename }) => unlink(join8(logDir, filename))),
     );
     log21.info(`Successfuly deleted ${fileCount.length} old logfiles`);
   } else {
@@ -3473,7 +3780,11 @@ init_cjs_shim();
 
 // src/windows/help.ts
 init_cjs_shim();
-import { BrowserWindow as BrowserWindow6, Menu as Menu3, shell as shell2 } from "electron";
+import {
+  BrowserWindow as BrowserWindow6,
+  Menu as Menu3,
+  shell as shell2,
+} from "electron";
 import { join as join9 } from "path";
 import { stat } from "fs/promises";
 import { platform as platform4 } from "os";
@@ -3488,7 +3799,7 @@ async function getHelpFileForLang(locale) {
     return contentFilePath;
   } catch (error) {
     log9.warn(
-      `Did not find help file for language ${locale}, falling back to english`
+      `Did not find help file for language ${locale}, falling back to english`,
     );
     return join9(htmlDistDir(), `help/en/help.html`);
   }
@@ -3500,8 +3811,8 @@ async function openHelpWindow(locale, anchor) {
     if (anchor) {
       win.webContents.executeJavaScript(`
         document.getElementById(atob("${btoa(
-        anchor
-      )}"))?.scrollIntoView({"behavior":"smooth"})
+          anchor,
+        )}"))?.scrollIntoView({"behavior":"smooth"})
       `);
     }
     return;
@@ -3510,13 +3821,13 @@ async function openHelpWindow(locale, anchor) {
   const defaults2 = {
     bounds: {
       width: 500,
-      height: 638
+      height: 638,
     },
     headerHeight: 36,
     minWidth: 450,
-    minHeight: 450
+    minHeight: 450,
   };
-  const help_window = win = new BrowserWindow6({
+  const help_window = (win = new BrowserWindow6({
     backgroundColor: "#282828",
     darkTheme: true,
     // Forces dark theme (GTK+3)
@@ -3528,15 +3839,15 @@ async function openHelpWindow(locale, anchor) {
     webPreferences: {
       contextIsolation: true,
       sandbox: true,
-      spellcheck: false
+      spellcheck: false,
     },
-    alwaysOnTop: window2?.isAlwaysOnTop()
-  });
+    alwaysOnTop: window2?.isAlwaysOnTop(),
+  }));
   setContentProtection(help_window);
   const removeScreenChangeListeners = initMinWinDimensionHandling(
     help_window,
     defaults2.minWidth,
-    defaults2.minHeight
+    defaults2.minHeight,
   );
   const url2 = await getHelpFileForLang(locale);
   log9.debug(url2);
@@ -3545,7 +3856,7 @@ async function openHelpWindow(locale, anchor) {
     if (anchor) {
       await help_window.webContents.executeJavaScript(`
       document.getElementById(atob("${btoa(
-        anchor
+        anchor,
       )}"))?.scrollIntoView({"behavior":"instant"})
       `);
     }
@@ -3571,27 +3882,29 @@ async function openHelpWindow(locale, anchor) {
     back_btn.innerText = '\u2191 ${tx("menu_scroll_to_top")}';
     body.append(back_btn);
   `);
-  win.webContents.session.setPermissionCheckHandler((_wc, _permission) => false);
+  win.webContents.session.setPermissionCheckHandler(
+    (_wc, _permission) => false,
+  );
   win.webContents.session.setPermissionRequestHandler(
-    (_wc, _permission, callback) => callback(false)
+    (_wc, _permission, callback) => callback(false),
   );
   const isMac2 = platform4() === "darwin";
   const makeMenu = () => {
     return Menu3.buildFromTemplate([
-      ...isMac2 ? [getAppMenu(help_window)] : [],
+      ...(isMac2 ? [getAppMenu(help_window)] : []),
       getFileMenu(win, isMac2),
       {
         label: tx("global_menu_edit_desktop"),
         submenu: [
           {
             label: tx("global_menu_edit_copy_desktop"),
-            role: "copy"
+            role: "copy",
           },
           {
             label: tx("menu_select_all"),
-            role: "selectAll"
-          }
-        ]
+            role: "selectAll",
+          },
+        ],
       },
       {
         label: tx("global_menu_view_desktop"),
@@ -3611,12 +3924,12 @@ async function openHelpWindow(locale, anchor) {
               } else {
                 Menu3.setApplicationMenu(makeMenu());
               }
-            }
+            },
           },
-          { role: "togglefullscreen" }
-        ]
+          { role: "togglefullscreen" },
+        ],
       },
-      getHelpMenu(isMac2)
+      getHelpMenu(isMac2),
     ]);
   };
   if (!isMac2) {
@@ -3663,7 +3976,7 @@ function throttle(fn, wait) {
           fn(...args);
           lastTime = performance.now();
         },
-        Math.max(wait - (performance.now() - lastTime), 0)
+        Math.max(wait - (performance.now() - lastTime), 0),
       );
     }
   };
@@ -3694,13 +4007,16 @@ ipcMain2.once("frontendReady", () => {
   frontend_ready = true;
 });
 function sendToFrontend(url2) {
-  if (url2.toUpperCase().startsWith("OPENPGP4FPR") && url2.indexOf("#") === -1) {
+  if (
+    url2.toUpperCase().startsWith("OPENPGP4FPR") &&
+    url2.indexOf("#") === -1
+  ) {
     send("open-url", url2.replace("%23", "#"));
   } else {
     send("open-url", url2);
   }
 }
-var open_url = function(url2) {
+var open_url = function (url2) {
   log10.info("open_url was called");
   const sendOpenUrlEvent = () => {
     log10.info("open-url: Sending url to frontend.");
@@ -3747,7 +4063,7 @@ async function handleWebxdcFileOpen(path4) {
   window2?.webContents.send(
     "webxdc.sendToChat",
     { file_name: basename(path4), file_content: buffer.toString("base64") },
-    null
+    null,
   );
 }
 app4.on("open-file", async (event, path4) => {
@@ -3762,7 +4078,7 @@ function openUrlsAndFilesFromArgv(argv) {
     if (arg.endsWith(".xdc")) {
       log10.debug(
         "open-url: process something that looks like it could be a webxc file:",
-        arg
+        arg,
       );
       handleWebxdcFileOpen(arg);
       continue;
@@ -3772,10 +4088,13 @@ function openUrlsAndFilesFromArgv(argv) {
     }
     log10.debug(
       "open-url: process something that looks like it could be a scheme:",
-      arg
+      arg,
     );
     for (const expectedScheme of supportedURISchemes) {
-      if (arg.startsWith(expectedScheme.toUpperCase()) || arg.startsWith(expectedScheme.toLowerCase())) {
+      if (
+        arg.startsWith(expectedScheme.toUpperCase()) ||
+        arg.startsWith(expectedScheme.toLowerCase())
+      ) {
         log10.debug("open-url: Detected URI: ", arg);
         open_url(arg);
         continue args_loop;
@@ -3797,7 +4116,8 @@ init_cjs_shim();
 // ../shared/themes.ts
 init_cjs_shim();
 function parseThemeMetaData(rawTheme) {
-  const meta_data_block = /.theme-meta ?{([^]*)}/gm.exec(rawTheme)?.[1].trim() || "";
+  const meta_data_block =
+    /.theme-meta ?{([^]*)}/gm.exec(rawTheme)?.[1].trim() || "";
   const regex = /--(\w*): ?['"]([^]*?)['"];?/gi;
   const meta = {};
   let last_result = true;
@@ -3809,7 +4129,7 @@ function parseThemeMetaData(rawTheme) {
   }
   if (!meta.name || !meta.description) {
     throw new Error(
-      "The meta variables meta.name and meta.description must be defined"
+      "The meta variables meta.name and meta.description must be defined",
     );
   }
   return meta;
@@ -3827,33 +4147,35 @@ var dc_theme_dir = join10(htmlDistDir(), "themes");
 async function readThemeDir(path4, prefix) {
   const files = await readdir2(path4);
   return Promise.all(
-    files.filter((f) => f.endsWith(".css") && f.charAt(0) !== "_").map(async (f) => {
-      const address = prefix + ":" + basename2(f, ".css");
-      const file_content = await readFile3(join10(path4, f), "utf-8");
-      try {
-        const theme_meta = parseThemeMetaData(file_content);
-        return {
-          name: theme_meta.name,
-          description: theme_meta.description,
-          address,
-          is_prototype: f.startsWith(HIDDEN_THEME_PREFIX)
-        };
-      } catch (error) {
-        log11.error("Error while parsing theme ${address}: ", error);
-        return {
-          name: address + " [Invalid Meta]",
-          description: "[missing description]",
-          address: prefix + ":" + basename2(f, ".css"),
-          is_prototype: f.startsWith(HIDDEN_THEME_PREFIX)
-        };
-      }
-    })
+    files
+      .filter((f) => f.endsWith(".css") && f.charAt(0) !== "_")
+      .map(async (f) => {
+        const address = prefix + ":" + basename2(f, ".css");
+        const file_content = await readFile3(join10(path4, f), "utf-8");
+        try {
+          const theme_meta = parseThemeMetaData(file_content);
+          return {
+            name: theme_meta.name,
+            description: theme_meta.description,
+            address,
+            is_prototype: f.startsWith(HIDDEN_THEME_PREFIX),
+          };
+        } catch (error) {
+          log11.error("Error while parsing theme ${address}: ", error);
+          return {
+            name: address + " [Invalid Meta]",
+            description: "[missing description]",
+            address: prefix + ":" + basename2(f, ".css"),
+            is_prototype: f.startsWith(HIDDEN_THEME_PREFIX),
+          };
+        }
+      }),
   );
 }
 async function getAvailableThemes() {
   return [
-    ...await readThemeDir(dc_theme_dir, "dc"),
-    ...await readThemeDir(getCustomThemesPath(), "custom")
+    ...(await readThemeDir(dc_theme_dir, "dc")),
+    ...(await readThemeDir(getCustomThemesPath(), "custom")),
   ];
 }
 async function loadTheme(theme_address) {
@@ -3868,9 +4190,9 @@ async function loadTheme(theme_address) {
       name: theme_meta.name,
       description: theme_meta.description,
       address: theme_address,
-      is_prototype: basename2(effective_path).startsWith(HIDDEN_THEME_PREFIX)
+      is_prototype: basename2(effective_path).startsWith(HIDDEN_THEME_PREFIX),
     },
-    data: themedata
+    data: themedata,
   };
 }
 function systemDefault() {
@@ -3881,7 +4203,8 @@ function systemDefault() {
   }
 }
 function resolveThemeAddress(address) {
-  const addressParts = address != "system" ? address.split(":") : systemDefault();
+  const addressParts =
+    address != "system" ? address.split(":") : systemDefault();
   let realPath = "";
   if (addressParts.length != 2)
     throw "not an theme address, must have the format [location]:[themename]";
@@ -3894,7 +4217,7 @@ function resolveThemeAddress(address) {
   }
   const result = join10(
     realPath,
-    addressParts[1].replace(/\/|\\|\.\./g, "") + ".css"
+    addressParts[1].replace(/\/|\\|\.\./g, "") + ".css",
   );
   if (existsSync3(result)) {
     return result;
@@ -3916,7 +4239,7 @@ If you did not specify this, ask the person which installed deltachat for you to
 
 If they are not available find the shortcut/.desktop file yourself and edit it to not contain the "--theme" argument.
 Using --theme is for developers and theme creators ONLY and should not be used by normal users
-If you have question or need help, feel free to ask in our forum https://support.delta.chat.`
+If you have question or need help, feel free to ask in our forum https://support.delta.chat.`,
       );
     }
     DesktopSettings.update({ activeTheme: app5.rc["theme"] });
@@ -3926,7 +4249,7 @@ If you have question or need help, feel free to ask in our forum https://support
       watchFile(resolveThemeAddress(app5.rc["theme"]), (curr, prev) => {
         if (curr.mtime !== prev.mtime) {
           log11.info(
-            "theme-watch: File changed reminding frontend to reload theme"
+            "theme-watch: File changed reminding frontend to reload theme",
           );
           app5.ipcReady && send("theme-update");
         }
@@ -3956,14 +4279,22 @@ import electron3, {
   nativeTheme as nativeTheme2,
   session as session2,
   shell as shell3,
-  WebContentsView
+  WebContentsView,
 } from "electron";
 import { clipboard } from "electron/common";
 import { join as join11 } from "path";
 import { platform as platform6 } from "os";
 var log12 = getLogger("html_email");
 var open_windows = {};
-function openHtmlEmailWindow(account_id, message_id, isContactRequest, subject, from, receiveTime, htmlEmail) {
+function openHtmlEmailWindow(
+  account_id,
+  message_id,
+  isContactRequest,
+  subject,
+  from,
+  receiveTime,
+  htmlEmail,
+) {
   const window_id = `${account_id}.${message_id}`;
   if (open_windows[window_id]) {
     open_windows[window_id].focus();
@@ -3973,9 +4304,9 @@ function openHtmlEmailWindow(account_id, message_id, isContactRequest, subject, 
     height: 621,
     width: 800,
     x: void 0,
-    y: void 0
+    y: void 0,
   };
-  const window3 = open_windows[window_id] = new electron3.BrowserWindow({
+  const window3 = (open_windows[window_id] = new electron3.BrowserWindow({
     backgroundColor: "#282828",
     // backgroundThrottling: false, // do not throttle animations/timers when page is background
     darkTheme: true,
@@ -3991,39 +4322,39 @@ function openHtmlEmailWindow(account_id, message_id, isContactRequest, subject, 
       nodeIntegration: false,
       preload: join11(
         htmlDistDir(),
-        "electron_html_email_view/electron_html_email_view_preload.js"
+        "electron_html_email_view/electron_html_email_view_preload.js",
       ),
       spellcheck: false,
       webSecurity: true,
       allowRunningInsecureContent: false,
-      contextIsolation: true
+      contextIsolation: true,
     },
-    alwaysOnTop: main_exports?.isAlwaysOnTop()
-  });
+    alwaysOnTop: main_exports?.isAlwaysOnTop(),
+  }));
   window3.webContents.setZoomFactor(DesktopSettings.state.zoomFactor);
   setContentProtection(window3);
   const removeScreenChangeListeners = initMinWinDimensionHandling(
     window3,
     400,
-    300
+    300,
   );
-  const loadRemoteContentAtStart = DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent && !isContactRequest;
+  const loadRemoteContentAtStart =
+    DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent && !isContactRequest;
   window3.webContents.ipc.handle("html_email:get_info", (_) => ({
     subject,
     from,
     receiveTime,
     networkButtonLabelText: tx("load_remote_content"),
-    toggle_network: loadRemoteContentAtStart
+    toggle_network: loadRemoteContentAtStart,
   }));
   nativeTheme2.on("updated", () => {
     try {
       window3.webContents.ipc.emit("theme-update");
-    } catch (error) {
-    }
+    } catch (error) {}
   });
   window3.webContents.ipc.handle(
     "get-theme",
-    async () => (await loadTheme(DesktopSettings.state.activeTheme)).data
+    async () => (await loadTheme(DesktopSettings.state.activeTheme)).data,
   );
   window3.webContents.on("will-navigate", (e, _url) => {
     e.preventDefault();
@@ -4039,14 +4370,14 @@ function openHtmlEmailWindow(account_id, message_id, isContactRequest, subject, 
   const isMac2 = platform6() === "darwin";
   const makeMenu = () => {
     return Menu4.buildFromTemplate([
-      ...isMac2 ? [getAppMenu(window3)] : [],
+      ...(isMac2 ? [getAppMenu(window3)] : []),
       getFileMenu(window3, isMac2),
       {
         label: tx("global_menu_edit_desktop"),
         submenu: [
           {
             label: tx("global_menu_edit_copy_desktop"),
-            role: "copy"
+            role: "copy",
           },
           {
             label: tx("menu_select_all"),
@@ -4054,9 +4385,9 @@ function openHtmlEmailWindow(account_id, message_id, isContactRequest, subject, 
               sandboxedView.webContents.focus();
               sandboxedView.webContents.selectAll();
             },
-            accelerator: isMac2 ? "Cmd+A" : "Ctrl+A"
-          }
-        ]
+            accelerator: isMac2 ? "Cmd+A" : "Ctrl+A",
+          },
+        ],
       },
       {
         label: tx("global_menu_view_desktop"),
@@ -4076,12 +4407,12 @@ function openHtmlEmailWindow(account_id, message_id, isContactRequest, subject, 
               } else {
                 Menu4.setApplicationMenu(makeMenu());
               }
-            }
+            },
           },
-          { role: "togglefullscreen" }
-        ]
+          { role: "togglefullscreen" },
+        ],
       },
-      getHelpMenu(isMac2)
+      getHelpMenu(isMac2),
     ]);
   };
   if (!isMac2) {
@@ -4101,13 +4432,17 @@ function openHtmlEmailWindow(account_id, message_id, isContactRequest, subject, 
     account_id,
     loadRemoteContentAtStart,
     htmlEmail,
-    window3
+    window3,
   );
   window3.contentView.addChildView(sandboxedView);
   sandboxedView.webContents.setZoomFactor(
-    DesktopSettings.state.zoomFactor * Math.pow(1.2, window3.webContents.getZoomLevel())
+    DesktopSettings.state.zoomFactor *
+      Math.pow(1.2, window3.webContents.getZoomLevel()),
   );
-  let context_menu_handle = createContextMenu(window3, sandboxedView.webContents);
+  let context_menu_handle = createContextMenu(
+    window3,
+    sandboxedView.webContents,
+  );
   window3.webContents.ipc.handle("html-view:more-menu", (_ev, { x, y }) => {
     const menuItems = {
       separator: () => ({ type: "separator" }),
@@ -4117,17 +4452,18 @@ function openHtmlEmailWindow(account_id, message_id, isContactRequest, subject, 
         label: tx("always_load_remote_images"),
         checked: DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent,
         click() {
-          const newValue = !DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent;
+          const newValue =
+            !DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent;
           DesktopSettings.update({
-            HTMLEmailAlwaysLoadRemoteContent: newValue
+            HTMLEmailAlwaysLoadRemoteContent: newValue,
           });
           update_restrictions(null, newValue, true);
           window3.webContents.executeJavaScript(
             `document.getElementById('toggle_network').checked = window.network_enabled= ${Boolean(
-              newValue
-            )}`
+              newValue,
+            )}`,
           );
-        }
+        },
       }),
       dont_ask: () => ({
         id: "show_warning",
@@ -4136,10 +4472,11 @@ function openHtmlEmailWindow(account_id, message_id, isContactRequest, subject, 
         checked: DesktopSettings.state.HTMLEmailAskForRemoteLoadingConfirmation,
         click() {
           DesktopSettings.update({
-            HTMLEmailAskForRemoteLoadingConfirmation: !DesktopSettings.state.HTMLEmailAskForRemoteLoadingConfirmation
+            HTMLEmailAskForRemoteLoadingConfirmation:
+              !DesktopSettings.state.HTMLEmailAskForRemoteLoadingConfirmation,
           });
-        }
-      })
+        },
+      }),
     };
     let menu;
     if (isContactRequest) {
@@ -4147,51 +4484,62 @@ function openHtmlEmailWindow(account_id, message_id, isContactRequest, subject, 
     } else {
       menu = electron3.Menu.buildFromTemplate([
         menuItems.always_show(),
-        menuItems.dont_ask()
+        menuItems.dont_ask(),
       ]);
     }
     menu.popup({ window: window3, x, y });
   });
-  window3.webContents.ipc.handle(
-    "html-view:resize-content",
-    (_ev, bounds) => {
-      const contentZoomFactor = DesktopSettings.state.zoomFactor * Math.pow(1.2, window3.webContents.getZoomLevel());
-      const windowZoomFactor = window3.webContents.getZoomFactor();
-      const window_bounds = window3.getBounds();
-      const content_size = window3.getContentSize();
-      const new_w = bounds.width * windowZoomFactor;
-      const new_h = bounds.height * windowZoomFactor;
-      const new_y = content_size[1] - new_h;
-      sandboxedView?.setBounds({
-        x: bounds.x,
-        y: new_y,
-        width: new_w,
-        height: new_h
-      });
-      sandboxedView?.webContents.setZoomFactor(contentZoomFactor);
-      DesktopSettings.update({ HTMLEmailWindowBounds: window_bounds });
-    }
-  );
+  window3.webContents.ipc.handle("html-view:resize-content", (_ev, bounds) => {
+    const contentZoomFactor =
+      DesktopSettings.state.zoomFactor *
+      Math.pow(1.2, window3.webContents.getZoomLevel());
+    const windowZoomFactor = window3.webContents.getZoomFactor();
+    const window_bounds = window3.getBounds();
+    const content_size = window3.getContentSize();
+    const new_w = bounds.width * windowZoomFactor;
+    const new_h = bounds.height * windowZoomFactor;
+    const new_y = content_size[1] - new_h;
+    sandboxedView?.setBounds({
+      x: bounds.x,
+      y: new_y,
+      width: new_w,
+      height: new_h,
+    });
+    sandboxedView?.webContents.setZoomFactor(contentZoomFactor);
+    DesktopSettings.update({ HTMLEmailWindowBounds: window_bounds });
+  });
   window3.on("moved", () => {
     const window_bounds = window3.getBounds();
     DesktopSettings.update({ HTMLEmailWindowBounds: window_bounds });
   });
-  const update_restrictions = async (_ev, allow_network, skip_sideeffects = false) => {
-    if (!skip_sideeffects && !isContactRequest && !allow_network && DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent) {
+  const update_restrictions = async (
+    _ev,
+    allow_network,
+    skip_sideeffects = false,
+  ) => {
+    if (
+      !skip_sideeffects &&
+      !isContactRequest &&
+      !allow_network &&
+      DesktopSettings.state.HTMLEmailAlwaysLoadRemoteContent
+    ) {
       DesktopSettings.update({
-        HTMLEmailAlwaysLoadRemoteContent: false
+        HTMLEmailAlwaysLoadRemoteContent: false,
       });
     }
-    if (!skip_sideeffects && allow_network && DesktopSettings.state.HTMLEmailAskForRemoteLoadingConfirmation) {
+    if (
+      !skip_sideeffects &&
+      allow_network &&
+      DesktopSettings.state.HTMLEmailAskForRemoteLoadingConfirmation
+    ) {
       const buttons = [
         {
           label: tx("no"),
           action: () => {
             throw new Error("user denied");
-          }
+          },
         },
-        { label: tx("yes"), action: () => {
-        } }
+        { label: tx("yes"), action: () => {} },
         // isContactRequest || {
         //   label: tx('pref_html_always_load_remote_content'),
         //   action: () => {
@@ -4207,7 +4555,7 @@ function openHtmlEmailWindow(account_id, message_id, isContactRequest, subject, 
         type: "none",
         icon: "",
         defaultId: 0,
-        cancelId: 0
+        cancelId: 0,
       });
       buttons[result.response].action();
     }
@@ -4219,18 +4567,21 @@ function openHtmlEmailWindow(account_id, message_id, isContactRequest, subject, 
       account_id,
       allow_network,
       htmlEmail,
-      window3
+      window3,
     );
     window3.contentView.addChildView(sandboxedView);
     context_menu_handle = createContextMenu(window3, sandboxedView.webContents);
     if (bounds) sandboxedView.setBounds(bounds);
   };
-  window3.webContents.ipc.handle("html-view:change-network", update_restrictions);
+  window3.webContents.ipc.handle(
+    "html-view:change-network",
+    update_restrictions,
+  );
   window3.loadFile(
     join11(
       htmlDistDir(),
-      "electron_html_email_view/electron_html_email_view.html"
-    )
+      "electron_html_email_view/electron_html_email_view.html",
+    ),
   );
 }
 var CSP_DENY = `default-src 'none';
@@ -4251,7 +4602,12 @@ style-src 'self' 'unsafe-inline';
 form-action 'none';
 script-src 'none';
 `.replace(/\n/g, "");
-function makeBrowserView(account_id, allow_remote_content, html_content, window3) {
+function makeBrowserView(
+  account_id,
+  allow_remote_content,
+  html_content,
+  window3,
+) {
   const ses = session2.fromPartition(`${Date.now()}`, { cache: false });
   ses.setProxy({ mode: "fixed_servers", proxyRules: "not-existing-proxy:80" });
   if (!allow_remote_content) {
@@ -4267,8 +4623,8 @@ function makeBrowserView(account_id, allow_remote_content, html_content, window3
       status: 200,
       headers: {
         "content-type": "text/html; charset=utf-8",
-        "Content-Security-Policy": allow_remote_content ? CSP_ALLOW : CSP_DENY
-      }
+        "Content-Security-Policy": allow_remote_content ? CSP_ALLOW : CSP_DENY,
+      },
     });
   });
   if (allow_remote_content) {
@@ -4276,23 +4632,23 @@ function makeBrowserView(account_id, allow_remote_content, html_content, window3
       try {
         const response = await getDCJsonrpcClient().getHttpResponse(
           account_id,
-          req.url
+          req.url,
         );
         const blob = Buffer.from(response.blob, "base64");
         return new Response(blob, {
           status: 200,
           headers: {
             "Content-Security-Policy": CSP_ALLOW,
-            "Content-Type": `${response.mimetype}; ${response.encoding}`
-          }
+            "Content-Type": `${response.mimetype}; ${response.encoding}`,
+          },
         });
       } catch (error) {
         log12.info("remote content failed to load", req.url, error);
         return new Response(Buffer.from(error?.message), {
           status: 400,
           headers: {
-            mimeType: "text/plain"
-          }
+            mimeType: "text/plain",
+          },
         });
       }
     };
@@ -4308,8 +4664,8 @@ function makeBrowserView(account_id, allow_remote_content, html_content, window3
       webgl: false,
       sandbox: true,
       spellcheck: false,
-      session: ses
-    }
+      session: ses,
+    },
   });
   sandboxedView.webContents.loadURL("email://index.html");
   sandboxedView.webContents.insertCSS(`:root {
@@ -4324,38 +4680,39 @@ function makeBrowserView(account_id, allow_remote_content, html_content, window3
       if (url2.startsWith("http:") || url2.startsWith("https:")) {
         shell3.openExternal(url2);
       } else {
-        dialog.showMessageBox(window3, {
-          buttons: [tx("no"), tx("menu_copy_link_to_clipboard")],
-          message: tx("ask_copy_unopenable_link_to_clipboard", url2)
-        }).then(({ response }) => {
-          if (response == 1) {
-            clipboard.writeText(url2);
-          }
-        });
+        dialog
+          .showMessageBox(window3, {
+            buttons: [tx("no"), tx("menu_copy_link_to_clipboard")],
+            message: tx("ask_copy_unopenable_link_to_clipboard", url2),
+          })
+          .then(({ response }) => {
+            if (response == 1) {
+              clipboard.writeText(url2);
+            }
+          });
       }
     }
   };
-  sandboxedView.webContents.on(
-    "will-navigate",
-    (e, url2) => {
-      e.preventDefault();
-      const prefix = "email://index.html";
-      if (url2.startsWith(prefix)) {
-        let urlWithoutPrefix = url2.slice(prefix.length);
-        if (url2.slice(prefix.length)[0] == "/") {
-          urlWithoutPrefix = urlWithoutPrefix.slice(1);
-        }
-        if (urlWithoutPrefix.startsWith("#")) {
-          const lastFragment = urlWithoutPrefix.split("#").reverse()[0];
-          sandboxedView.webContents.loadURL(`email://index.html/${Math.random()}/#${lastFragment}`).catch(log12.error.bind(log12, "error"));
-          return;
-        } else {
-          return openLink("https://" + urlWithoutPrefix);
-        }
+  sandboxedView.webContents.on("will-navigate", (e, url2) => {
+    e.preventDefault();
+    const prefix = "email://index.html";
+    if (url2.startsWith(prefix)) {
+      let urlWithoutPrefix = url2.slice(prefix.length);
+      if (url2.slice(prefix.length)[0] == "/") {
+        urlWithoutPrefix = urlWithoutPrefix.slice(1);
       }
-      openLink(url2);
+      if (urlWithoutPrefix.startsWith("#")) {
+        const lastFragment = urlWithoutPrefix.split("#").reverse()[0];
+        sandboxedView.webContents
+          .loadURL(`email://index.html/${Math.random()}/#${lastFragment}`)
+          .catch(log12.error.bind(log12, "error"));
+        return;
+      } else {
+        return openLink("https://" + urlWithoutPrefix);
+      }
     }
-  );
+    openLink(url2);
+  });
   sandboxedView.webContents.setWindowOpenHandler((details) => {
     openLink(details.url);
     return { action: "deny" };
@@ -4379,8 +4736,8 @@ var createContextMenu = (win2, webContents2) => {
             } else {
               electron3.clipboard.writeText(props.selectionText);
             }
-          }
-        })
+          },
+        }),
       );
     }
     if (props.mediaType === "image") {
@@ -4393,8 +4750,8 @@ var createContextMenu = (win2, webContents2) => {
           label: tx("menu_copy_image_to_clipboard"),
           click() {
             webContents2.copyImageAt(props.x, props.y);
-          }
-        })
+          },
+        }),
       );
     }
     if (props.linkURL.length !== 0 && props.mediaType === "none") {
@@ -4408,10 +4765,10 @@ var createContextMenu = (win2, webContents2) => {
           click() {
             electron3.clipboard.write({
               bookmark: props.linkText,
-              text: props.linkURL
+              text: props.linkURL,
             });
-          }
-        })
+          },
+        }),
       );
     }
     if (menuItems.length) {
@@ -4439,7 +4796,7 @@ import {
   protocol,
   ipcMain as ipcMain4,
   session as session3,
-  screen as screen3
+  screen as screen3,
 } from "electron/main";
 import Mime from "mime-types";
 import {
@@ -4447,33 +4804,40 @@ import {
   nativeImage as nativeImage2,
   shell as shell4,
   dialog as dialog2,
-  clipboard as clipboard2
+  clipboard as clipboard2,
 } from "electron";
 import { join as join12, dirname as dirname4 } from "path";
 import { fileURLToPath as fileURLToPath5 } from "url";
 import { platform as platform7 } from "os";
-import { readdir as readdir3, stat as stat2, rmdir, writeFile, readFile as readFile4 } from "fs/promises";
+import {
+  readdir as readdir3,
+  stat as stat2,
+  rmdir,
+  writeFile,
+  readFile as readFile4,
+} from "fs/promises";
 import { existsSync as existsSync4 } from "fs";
 var __dirname4 = dirname4(fileURLToPath5(import.meta.url));
 var log13 = getLogger("main/deltachat/webxdc");
 var open_apps = {};
 var accounts_sessions = [];
-var CSP = "default-src 'self';  style-src 'self' 'unsafe-inline' blob: ;  font-src 'self' data: blob: ;  script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: ;  connect-src 'self' data: blob: ;  img-src 'self' data: blob: ;  media-src 'self' data: blob: ;  webrtc 'block'";
+var CSP =
+  "default-src 'self';  style-src 'self' 'unsafe-inline' blob: ;  font-src 'self' data: blob: ;  script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: ;  connect-src 'self' data: blob: ;  img-src 'self' data: blob: ;  media-src 'self' data: blob: ;  webrtc 'block'";
 var ALLOWED_PERMISSIONS = [
   // Games might lock the pointer
   "pointerLock",
   // Games might do that too
-  "fullscreen"
+  "fullscreen",
 ];
 var WRAPPER_PATH = "webxdc-wrapper.45870014933640136498.html";
 var BOUNDS_UI_CONFIG_PREFIX = "ui.desktop.webxdcBounds";
 var DEFAULT_SIZE_WEBXDC = {
   width: 375,
-  height: 667
+  height: 667,
 };
 var DEFAULT_SIZE_MAP = {
   width: 1e3,
-  height: 800
+  height: 800,
 };
 var DCWebxdc = class {
   constructor(controller) {
@@ -4486,10 +4850,10 @@ var DCWebxdc = class {
           const { icon } = await this.rpc.getWebxdcInfo(accountId, messageId);
           const blob = Buffer.from(
             await this.rpc.getWebxdcBlob(accountId, messageId, icon),
-            "base64"
+            "base64",
           );
           return new Response(blob, {
-            headers: { "content-type": Mime.lookup(icon) || "" }
+            headers: { "content-type": Mime.lookup(icon) || "" },
           });
         } catch (error) {
           log13.error("failed to load webxdc icon for:", error);
@@ -4497,19 +4861,26 @@ var DCWebxdc = class {
         }
       });
     });
-    const openWebxdc = async (_ev, msg_id, p, defaultSize = DEFAULT_SIZE_WEBXDC) => {
+    const openWebxdc = async (
+      _ev,
+      msg_id,
+      p,
+      defaultSize = DEFAULT_SIZE_WEBXDC,
+    ) => {
       const { webxdcInfo, chatName, accountId, href } = p;
       let base64EncodedHref = "";
       const appURL = `webxdc://${accountId}.${msg_id}.webxdc`;
       if (href && href !== "") {
         const url2 = new URL(href, "http://dummy");
         const relativeUrl = url2.pathname + url2.search + url2.hash;
-        base64EncodedHref = Buffer.from(appURL + relativeUrl).toString("base64");
+        base64EncodedHref = Buffer.from(appURL + relativeUrl).toString(
+          "base64",
+        );
       }
       if (open_apps[`${accountId}.${msg_id}`]) {
         log13.warn(
           "webxdc instance for this app is already open, trying to focus it",
-          { msg_id }
+          { msg_id },
         );
         const window3 = open_apps[`${accountId}.${msg_id}`].win;
         if (window3.isMinimized()) {
@@ -4517,7 +4888,7 @@ var DCWebxdc = class {
         }
         if (base64EncodedHref !== "") {
           window3.webContents.executeJavaScript(
-            `window.webxdc_internal.setLocationUrl("${base64EncodedHref}")`
+            `window.webxdc_internal.setLocationUrl("${base64EncodedHref}")`,
           );
         }
         window3.focus();
@@ -4527,14 +4898,13 @@ var DCWebxdc = class {
       const icon = webxdcInfo.icon;
       const icon_blob = Buffer.from(
         await this.rpc.getWebxdcBlob(accountId, msg_id, icon),
-        "base64"
+        "base64",
       );
       if (!accounts_sessions.includes(accountId)) {
         const ses = sessionFromAccountId(accountId);
         accounts_sessions.push(accountId);
-        ses.protocol.handle(
-          "webxdc",
-          (...args) => webxdcProtocolHandler(this.rpc, ...args)
+        ses.protocol.handle("webxdc", (...args) =>
+          webxdcProtocolHandler(this.rpc, ...args),
         );
       }
       const app_icon = icon_blob && nativeImage2?.createFromBuffer(icon_blob);
@@ -4548,20 +4918,17 @@ var DCWebxdc = class {
           navigateOnDragDrop: false,
           devTools: DesktopSettings.state.enableWebxdcDevTools,
           javascript: true,
-          preload: join12(htmlDistDir(), "webxdc-preload.js")
+          preload: join12(htmlDistDir(), "webxdc-preload.js"),
         },
         title: makeTitle(webxdcInfo, chatName),
         icon: app_icon || void 0,
         alwaysOnTop: window2?.isAlwaysOnTop(),
-        show: false
+        show: false,
       });
       setContentProtection(webxdcWindow);
-      const lastBounds = await this.getLastBounds(
-        accountId,
-        msg_id
-      );
+      const lastBounds = await this.getLastBounds(accountId, msg_id);
       const size = adjustSize(lastBounds || defaultSize);
-      const bounds = { ...lastBounds || {}, ...size };
+      const bounds = { ...(lastBounds || {}), ...size };
       webxdcWindow.setBounds(bounds, true);
       webxdcWindow.show();
       open_apps[`${accountId}.${msg_id}`] = {
@@ -4572,23 +4939,25 @@ var DCWebxdc = class {
         selfAddr: webxdcInfo.selfAddr || "unknown@unknown",
         displayName: p.displayname || webxdcInfo.selfAddr || "unknown",
         sendUpdateInterval: webxdcInfo.sendUpdateInterval,
-        sendUpdateMaxSize: webxdcInfo.sendUpdateMaxSize
+        sendUpdateMaxSize: webxdcInfo.sendUpdateMaxSize,
       };
       const isMac2 = platform7() === "darwin";
       const makeMenu = () => {
         return Menu5.buildFromTemplate([
-          ...isMac2 ? [getAppMenu(webxdcWindow)] : [],
+          ...(isMac2 ? [getAppMenu(webxdcWindow)] : []),
           getFileMenu(webxdcWindow, isMac2),
           getEditMenu(),
           {
             label: tx("global_menu_view_desktop"),
             submenu: [
-              ...DesktopSettings.state.enableWebxdcDevTools ? [
-                {
-                  label: tx("global_menu_view_developer_tools_desktop"),
-                  role: "toggleDevTools"
-                }
-              ] : [],
+              ...(DesktopSettings.state.enableWebxdcDevTools
+                ? [
+                    {
+                      label: tx("global_menu_view_developer_tools_desktop"),
+                      role: "toggleDevTools",
+                    },
+                  ]
+                : []),
               { type: "separator" },
               { role: "resetZoom" },
               { role: "zoomIn" },
@@ -4605,10 +4974,10 @@ var DCWebxdc = class {
                   } else {
                     Menu5.setApplicationMenu(makeMenu());
                   }
-                }
+                },
               },
-              { role: "togglefullscreen" }
-            ]
+              { role: "togglefullscreen" },
+            ],
           },
           {
             label: tx("menu_help"),
@@ -4618,33 +4987,38 @@ var DCWebxdc = class {
                 enabled: !!webxdcInfo.sourceCodeUrl,
                 icon: app_icon?.resize({ width: 24 }) || void 0,
                 click: () => {
-                  if (webxdcInfo.sourceCodeUrl?.startsWith("https:") || webxdcInfo.sourceCodeUrl?.startsWith("http:")) {
+                  if (
+                    webxdcInfo.sourceCodeUrl?.startsWith("https:") ||
+                    webxdcInfo.sourceCodeUrl?.startsWith("http:")
+                  ) {
                     shell4.openExternal(webxdcInfo.sourceCodeUrl);
                   } else if (webxdcInfo.sourceCodeUrl) {
                     const url2 = webxdcInfo.sourceCodeUrl;
-                    dialog2.showMessageBox(webxdcWindow, {
-                      buttons: [tx("no"), tx("menu_copy_link_to_clipboard")],
-                      message: tx(
-                        "ask_copy_unopenable_link_to_clipboard",
-                        url2
-                      )
-                    }).then(({ response }) => {
-                      if (response == 1) {
-                        clipboard2.writeText(url2);
-                      }
-                    });
+                    dialog2
+                      .showMessageBox(webxdcWindow, {
+                        buttons: [tx("no"), tx("menu_copy_link_to_clipboard")],
+                        message: tx(
+                          "ask_copy_unopenable_link_to_clipboard",
+                          url2,
+                        ),
+                      })
+                      .then(({ response }) => {
+                        if (response == 1) {
+                          clipboard2.writeText(url2);
+                        }
+                      });
                   }
-                }
+                },
               },
               {
-                type: "separator"
+                type: "separator",
               },
               {
                 label: tx("what_is_webxdc"),
-                click: () => shell4.openExternal("https://webxdc.org")
-              }
-            ]
-          }
+                click: () => shell4.openExternal("https://webxdc.org"),
+              },
+            ],
+          },
         ]);
       };
       if (!isMac2) {
@@ -4670,12 +5044,12 @@ var DCWebxdc = class {
       webxdcWindow.once("ready-to-show", () => {
         if (base64EncodedHref !== "") {
           webxdcWindow.webContents.executeJavaScript(
-            `window.webxdc_internal.setLocationUrl("${base64EncodedHref}")`
+            `window.webxdc_internal.setLocationUrl("${base64EncodedHref}")`,
           );
         }
       });
       webxdcWindow.webContents.loadURL(appURL + "/" + WRAPPER_PATH, {
-        extraHeaders: "Content-Security-Policy: " + CSP
+        extraHeaders: "Content-Security-Policy: " + CSP,
       });
       webxdcWindow.webContents.on("will-navigate", (ev) => {
         ev.preventDefault();
@@ -4697,7 +5071,7 @@ var DCWebxdc = class {
             title: tx("webxdc_beforeunload_dialog_title"),
             message: tx("webxdc_beforeunload_dialog_message"),
             defaultId: 0,
-            cancelId: 1
+            cancelId: 1,
           });
           const close = choice === 0;
           if (close) {
@@ -4716,11 +5090,11 @@ var DCWebxdc = class {
           loggedPermissionRequests.add(permission);
           if (isAllowed) {
             log13.info(
-              `ALLOWED permission '${permission}' to webxdc '${webxdcInfo.name}'`
+              `ALLOWED permission '${permission}' to webxdc '${webxdcInfo.name}'`,
             );
           } else {
             log13.info(
-              `DENIED permission '${permission}' to webxdc '${webxdcInfo.name}'. If you think that's a bug and you need that permission, then please open an issue on github.`
+              `DENIED permission '${permission}' to webxdc '${webxdcInfo.name}'. If you think that's a bug and you need that permission, then please open an issue on github.`,
             );
           }
         }
@@ -4729,12 +5103,12 @@ var DCWebxdc = class {
       webxdcWindow.webContents.session.setPermissionCheckHandler(
         (_wc, permission) => {
           return permission_handler(permission);
-        }
+        },
       );
       webxdcWindow.webContents.session.setPermissionRequestHandler(
         (_wc, permission, callback) => {
           callback(permission_handler(permission));
-        }
+        },
       );
       webxdcWindow.webContents.on("before-input-event", (event, input) => {
         if (input.code === "F12") {
@@ -4763,21 +5137,21 @@ var DCWebxdc = class {
       const app13 = lookupAppFromEvent(event);
       if (!app13) {
         log13.error(
-          "webxdc.getAllUpdates failed, app not found in list of open ones"
+          "webxdc.getAllUpdates failed, app not found in list of open ones",
         );
         return [];
       }
       return await this.rpc.getWebxdcStatusUpdates(
         app13.accountId,
         app13.msgId,
-        serial
+        serial,
       );
     });
     ipcMain4.handle("webxdc.sendUpdate", async (event, update) => {
       const app13 = lookupAppFromEvent(event);
       if (!app13) {
         log13.error(
-          "webxdc.sendUpdate failed, app not found in list of open ones"
+          "webxdc.sendUpdate failed, app not found in list of open ones",
         );
         return;
       }
@@ -4786,74 +5160,71 @@ var DCWebxdc = class {
           app13.accountId,
           app13.msgId,
           update,
-          ""
+          "",
         );
       } catch (error) {
         log13.error("webxdc.sendUpdate failed:", error);
         throw error;
       }
     });
-    ipcMain4.handle(
-      "webxdc.sendRealtimeData",
-      async (event, update) => {
-        const app13 = lookupAppFromEvent(event);
-        if (!app13) {
-          log13.error(
-            "webxdc.sendRealtimeData failed, app not found in list of open ones"
-          );
-          return;
-        }
-        try {
-          return await this.rpc.sendWebxdcRealtimeData(
-            app13.accountId,
-            app13.msgId,
-            update
-          );
-        } catch (error) {
-          log13.error("webxdc.sendWebxdcRealtimeData failed:", error);
-          throw error;
-        }
+    ipcMain4.handle("webxdc.sendRealtimeData", async (event, update) => {
+      const app13 = lookupAppFromEvent(event);
+      if (!app13) {
+        log13.error(
+          "webxdc.sendRealtimeData failed, app not found in list of open ones",
+        );
+        return;
       }
-    );
+      try {
+        return await this.rpc.sendWebxdcRealtimeData(
+          app13.accountId,
+          app13.msgId,
+          update,
+        );
+      } catch (error) {
+        log13.error("webxdc.sendWebxdcRealtimeData failed:", error);
+        throw error;
+      }
+    });
     ipcMain4.handle("webxdc.sendRealtimeAdvertisement", async (event) => {
       const app13 = lookupAppFromEvent(event);
       if (!app13) {
         log13.error(
-          "webxdc.sendRealtimeAdvertisement failed, app not found in list of open ones"
+          "webxdc.sendRealtimeAdvertisement failed, app not found in list of open ones",
         );
         return;
       }
-      await this.rpc.sendWebxdcRealtimeAdvertisement(app13.accountId, app13.msgId);
+      await this.rpc.sendWebxdcRealtimeAdvertisement(
+        app13.accountId,
+        app13.msgId,
+      );
     });
     ipcMain4.handle("webxdc.leaveRealtimeChannel", async (event) => {
       const app13 = lookupAppFromEvent(event);
       if (!app13) {
         log13.error(
-          "webxdc.leaveRealtimeChannel, app not found in list of open ones"
+          "webxdc.leaveRealtimeChannel, app not found in list of open ones",
         );
         return;
       }
       this.rpc.leaveWebxdcRealtime(app13.accountId, app13.msgId);
     });
-    ipcMain4.handle(
-      "webxdc.sendToChat",
-      (event, file, text) => {
-        const app13 = lookupAppFromEvent(event);
-        if (!app13) {
-          log13.error(
-            "webxdc.sendToChat failed, app not found in list of open ones"
-          );
-          return;
-        }
-        window2?.webContents.send(
-          "webxdc.sendToChat",
-          file,
-          text,
-          app13.accountId
+    ipcMain4.handle("webxdc.sendToChat", (event, file, text) => {
+      const app13 = lookupAppFromEvent(event);
+      if (!app13) {
+        log13.error(
+          "webxdc.sendToChat failed, app not found in list of open ones",
         );
-        window2?.focus();
+        return;
       }
-    );
+      window2?.webContents.send(
+        "webxdc.sendToChat",
+        file,
+        text,
+        app13.accountId,
+      );
+      window2?.focus();
+    });
     ipcMain4.handle("close-all-webxdc", () => {
       this._closeAll();
     });
@@ -4861,28 +5232,22 @@ var DCWebxdc = class {
       "webxdc:custom:drag-file-out",
       async (event, file_name, base64_content, icon_data_url) => {
         const path4 = await writeTempFileFromBase64(file_name, base64_content);
-        let icon = join12(
-          htmlDistDir(),
-          "images/electron-file-drag-out.png"
-        );
+        let icon = join12(htmlDistDir(), "images/electron-file-drag-out.png");
         if (icon_data_url) {
           icon = nativeImage2.createFromDataURL(icon_data_url);
         }
         event.sender.startDrag({
           file: path4,
-          icon
+          icon,
         });
-      }
+      },
     );
-    ipcMain4.handle(
-      "webxdc:status-update",
-      (_ev, accountId, instanceId) => {
-        const instance = open_apps[`${accountId}.${instanceId}`];
-        if (instance) {
-          instance.win.webContents.send("webxdc.statusUpdate");
-        }
+    ipcMain4.handle("webxdc:status-update", (_ev, accountId, instanceId) => {
+      const instance = open_apps[`${accountId}.${instanceId}`];
+      if (instance) {
+        instance.win.webContents.send("webxdc.statusUpdate");
       }
-    );
+    });
     ipcMain4.handle(
       "webxdc:realtime-data",
       async (_ev, accountId, instanceId, payload) => {
@@ -4892,7 +5257,7 @@ var DCWebxdc = class {
         } else {
           this.rpc.leaveWebxdcRealtime(accountId, instanceId);
         }
-      }
+      },
     );
     ipcMain4.handle(
       "webxdc:message-changed",
@@ -4901,89 +5266,84 @@ var DCWebxdc = class {
         if (instance) {
           const { chatId, webxdcInfo } = await this.rpc.getMessage(
             accountId,
-            instanceId
+            instanceId,
           );
           const { name } = await this.rpc.getBasicChatInfo(accountId, chatId);
           if (instance.win && webxdcInfo) {
             instance.win.title = makeTitle(webxdcInfo, name);
           }
         }
-      }
+      },
     );
-    ipcMain4.handle(
-      "webxdc:instance-deleted",
-      (_ev, accountId, instanceId) => {
-        const webxdcId = `${accountId}.${instanceId}`;
-        const instance = open_apps[webxdcId];
-        if (instance) {
-          instance.win.close();
-        }
-        this.removeLastBounds(accountId, instanceId);
-        const s = sessionFromAccountId(accountId);
-        const appURL = `webxdc://${webxdcId}.webxdc`;
-        s.clearStorageData({ origin: appURL });
-        s.clearData({ origins: [appURL] });
-        s.clearCodeCaches({ urls: [appURL] });
-        s.clearCache();
+    ipcMain4.handle("webxdc:instance-deleted", (_ev, accountId, instanceId) => {
+      const webxdcId = `${accountId}.${instanceId}`;
+      const instance = open_apps[webxdcId];
+      if (instance) {
+        instance.win.close();
       }
-    );
-    ipcMain4.handle(
-      "open-maps-webxdc",
-      async (evt, accountId, chatId) => {
-        let msgId = await this.rpc.initWebxdcIntegration(
+      this.removeLastBounds(accountId, instanceId);
+      const s = sessionFromAccountId(accountId);
+      const appURL = `webxdc://${webxdcId}.webxdc`;
+      s.clearStorageData({ origin: appURL });
+      s.clearData({ origins: [appURL] });
+      s.clearCodeCaches({ urls: [appURL] });
+      s.clearCache();
+    });
+    ipcMain4.handle("open-maps-webxdc", async (evt, accountId, chatId) => {
+      let msgId = await this.rpc.initWebxdcIntegration(
+        accountId,
+        chatId ?? null,
+      );
+      if (!msgId) {
+        const path4 = htmlDistDir().replace("app.asar", "app.asar.unpacked");
+        await this.rpc.setWebxdcIntegration(
           accountId,
-          chatId ?? null
+          join12(path4, "/xdcs/maps.xdc"),
         );
-        if (!msgId) {
-          const path4 = htmlDistDir().replace("app.asar", "app.asar.unpacked");
-          await this.rpc.setWebxdcIntegration(
+        msgId = await this.rpc.initWebxdcIntegration(accountId, chatId ?? null);
+      }
+      if (msgId) {
+        let chatName = tx("menu_show_global_map");
+        if (chatId) {
+          const relatedChatInfo = await this.rpc.getBasicChatInfo(
             accountId,
-            join12(path4, "/xdcs/maps.xdc")
+            chatId,
           );
-          msgId = await this.rpc.initWebxdcIntegration(
-            accountId,
-            chatId ?? null
-          );
+          chatName = tx("locations") + " - " + relatedChatInfo.name;
+        } else {
+          const accountInfo = await this.rpc.getAccountInfo(accountId);
+          if (
+            "displayName" in accountInfo &&
+            accountInfo.displayName !== null
+          ) {
+            chatName =
+              tx("menu_show_global_map") + " - " + accountInfo.displayName;
+          }
         }
-        if (msgId) {
-          let chatName = tx("menu_show_global_map");
-          if (chatId) {
-            const relatedChatInfo = await this.rpc.getBasicChatInfo(
+        const key = `${accountId}.${msgId}`;
+        if (open_apps[key] !== void 0) {
+          open_apps[key].win.loadURL("about:blank");
+          open_apps[key].win.close();
+        }
+        const messageWithMap = await this.rpc.getMessage(accountId, msgId);
+        if (messageWithMap && messageWithMap.webxdcInfo) {
+          openWebxdc(
+            evt,
+            msgId,
+            {
               accountId,
-              chatId
-            );
-            chatName = tx("locations") + " - " + relatedChatInfo.name;
-          } else {
-            const accountInfo = await this.rpc.getAccountInfo(accountId);
-            if ("displayName" in accountInfo && accountInfo.displayName !== null) {
-              chatName = tx("menu_show_global_map") + " - " + accountInfo.displayName;
-            }
-          }
-          const key = `${accountId}.${msgId}`;
-          if (open_apps[key] !== void 0) {
-            open_apps[key].win.loadURL("about:blank");
-            open_apps[key].win.close();
-          }
-          const messageWithMap = await this.rpc.getMessage(accountId, msgId);
-          if (messageWithMap && messageWithMap.webxdcInfo) {
-            openWebxdc(
-              evt,
-              msgId,
-              {
-                accountId,
-                displayname: "",
-                chatName,
-                webxdcInfo: messageWithMap.webxdcInfo,
-                href: ""
-              },
-              // special behaviour for the map dc integration,
-              // (in this case bigger landscape window)
-              DEFAULT_SIZE_MAP
-            );
-          }
+              displayname: "",
+              chatName,
+              webxdcInfo: messageWithMap.webxdcInfo,
+              href: "",
+            },
+            // special behaviour for the map dc integration,
+            // (in this case bigger landscape window)
+            DEFAULT_SIZE_MAP,
+          );
         }
       }
-    );
+    });
   }
   // end of DeltaChatController constructor
   get rpc() {
@@ -4993,7 +5353,7 @@ var DCWebxdc = class {
     try {
       const raw = await this.rpc.getConfig(
         accountId,
-        `${BOUNDS_UI_CONFIG_PREFIX}.${msgId}`
+        `${BOUNDS_UI_CONFIG_PREFIX}.${msgId}`,
       );
       if (raw) {
         return JSON.parse(raw);
@@ -5007,14 +5367,14 @@ var DCWebxdc = class {
     return this.rpc.setConfig(
       accountId,
       `${BOUNDS_UI_CONFIG_PREFIX}.${msgId}`,
-      JSON.stringify(bounds)
+      JSON.stringify(bounds),
     );
   }
   removeLastBounds(accountId, msgId) {
     return this.rpc.setConfig(
       accountId,
       `${BOUNDS_UI_CONFIG_PREFIX}.${msgId}`,
-      null
+      null,
     );
   }
   _closeAll() {
@@ -5035,7 +5395,7 @@ async function webxdcProtocolHandler(rpc, request) {
     }
     return new Response(body, {
       ...responseInit,
-      headers
+      headers,
     });
   };
   const url2 = new URL(request.url);
@@ -5059,23 +5419,23 @@ async function webxdcProtocolHandler(rpc, request) {
     return makeResponse(
       await readFile4(join12(htmlDistDir(), "/webxdc_wrapper.html")),
       {},
-      mimeType
+      mimeType,
     );
   } else if (filename === "webxdc.js") {
     const displayName = Buffer.from(open_apps[id].displayName).toString(
-      "base64"
+      "base64",
     );
     const selfAddr = Buffer.from(open_apps[id].selfAddr).toString("base64");
     return makeResponse(
       Buffer.from(
         `window.parent.webxdc_internal.setup("${selfAddr}","${displayName}", ${Number(
-          open_apps[id].sendUpdateInterval
+          open_apps[id].sendUpdateInterval,
         )}, ${Number(open_apps[id].sendUpdateMaxSize)})
         window.webxdc = window.parent.webxdc
-        window.webxdc_custom = window.parent.webxdc_custom`
+        window.webxdc_custom = window.parent.webxdc_custom`,
       ),
       {},
-      mimeType
+      mimeType,
     );
   } else {
     try {
@@ -5083,9 +5443,9 @@ async function webxdcProtocolHandler(rpc, request) {
         await rpc.getWebxdcBlob(
           open_apps[id].accountId,
           open_apps[id].msgId,
-          filename
+          filename,
         ),
-        "base64"
+        "base64",
       );
       return makeResponse(blob, {}, mimeType);
     } catch (error) {
@@ -5104,14 +5464,16 @@ function lookupAppFromEvent(event) {
   return null;
 }
 function makeTitle(webxdcInfo, chatName) {
-  return `${webxdcInfo.document ? truncateText(webxdcInfo.document, 32) + " - " : ""}${truncateText(webxdcInfo.name, 42)} \u2013 ${chatName}`;
+  return `${
+    webxdcInfo.document ? truncateText(webxdcInfo.document, 32) + " - " : ""
+  }${truncateText(webxdcInfo.name, 42)} \u2013 ${chatName}`;
 }
 function partitionFromAccountId(accountId) {
   return `persist:webxdc_${accountId}`;
 }
 function sessionFromAccountId(accountId) {
   return session3.fromPartition(partitionFromAccountId(accountId), {
-    cache: false
+    cache: false,
   });
 }
 ipcMain4.handle("webxdc.clearWebxdcDOMStorage", async (_, accountId) => {
@@ -5139,8 +5501,8 @@ ipcMain4.handle("webxdc.getWebxdcDiskUsage", async (_, accountId) => {
       "Preferences",
       "QuotaManager-journal",
       "000003.log",
-      "MANIFEST-000001"
-    ])
+      "MANIFEST-000001",
+    ]),
   ]);
   const empty_size = 49 * 1024;
   let total_size = real_total_size - empty_size;
@@ -5152,7 +5514,7 @@ ipcMain4.handle("webxdc.getWebxdcDiskUsage", async (_, accountId) => {
   return {
     cache_size,
     total_size,
-    data_size
+    data_size,
   };
 });
 async function get_recursive_folder_size(path4, exclude_list = []) {
@@ -5197,15 +5559,16 @@ async function webxdcStartUpCleanup() {
   }
 }
 function adjustSize(size) {
-  const { height: screenHeight, width: screenWidth } = screen3.getPrimaryDisplay().workAreaSize;
+  const { height: screenHeight, width: screenWidth } =
+    screen3.getPrimaryDisplay().workAreaSize;
   return {
     width: Math.min(size.width, screenWidth),
-    height: Math.min(size.height, screenHeight)
+    height: Math.min(size.height, screenHeight),
   };
 }
 ipcMain4.handle("delete_webxdc_account_data", async (_ev, accountId) => {
   const s = session3.fromPartition(`persist:webxdc_${accountId}`, {
-    cache: false
+    cache: false,
   });
   await s.clearStorageData();
   await s.clearData();
@@ -5221,7 +5584,9 @@ init_cjs_shim();
 
 // src/get-build-info.ts
 init_cjs_shim();
-var BuildInfo = JSON.parse('{"VERSION":"1.0.0","BUILD_TIMESTAMP":1768681897435,"GIT_REF":"34533c0"}');
+var BuildInfo = JSON.parse(
+  '{"VERSION":"1.0.0","BUILD_TIMESTAMP":1768681897435,"GIT_REF":"34533c0"}',
+);
 
 // src/deltachat/stdio_server.ts
 import { spawn } from "child_process";
@@ -5242,8 +5607,8 @@ var StdioServer = class {
         DC_ACCOUNTS_PATH: this.accounts_path,
         RUST_LOG: process.env.RUST_LOG,
         // remove color from errors, see https://github.com/deltachat/deltachat-desktop/issues/4832
-        NO_COLOR: "1"
-      }
+        NO_COLOR: "1",
+      },
     });
     this.serverProcess.on("error", (err) => {
       if (err.message.endsWith("ENOENT")) {
@@ -5257,7 +5622,7 @@ The missing module should be located at "${this.cmd_path}".
 The Log file is located in this folder: ${getLogsPath()}
 --------------------
 Error: ${err.message}
-`
+`,
         );
       } else {
         dialog3.showErrorBox(
@@ -5268,7 +5633,7 @@ Error: ${err.message}
 
           The Log file is located in this folder: ${getLogsPath()}
 
-          `
+          `,
         );
       }
       app7.exit(1);
@@ -5300,12 +5665,15 @@ Error: ${err.message}
       if (code !== null) {
         log14.info(`child process exited with code ${code}`);
         if (code !== 0) {
-          log14.critical("Fatal: The Delta Chat Core exited unexpectedly", code);
+          log14.critical(
+            "Fatal: The Delta Chat Core exited unexpectedly",
+            code,
+          );
           dialog3.showErrorBox(
             "Fatal Error",
             `[Version: ${BuildInfo.VERSION} | ${platform8()} | ${arch()}]
 The Delta Chat Core exited unexpectedly with code ${code}
-${errorLog}`
+${errorLog}`,
           );
           app7.exit(1);
         }
@@ -5324,10 +5692,22 @@ init_cjs_shim();
 import { startDeltaChat } from "@deltachat/stdio-rpc-server";
 import { existsSync as existsSync5, lstatSync } from "fs";
 import { join as join13 } from "path";
-import { mkdir, readdir as readdir4, rename, rm, rmdir as rmdir2, stat as stat3 } from "fs/promises";
-async function migrateAccountsIfNeeded(cwd, log21, treatFailedMigrationAsError = false) {
+import {
+  mkdir,
+  readdir as readdir4,
+  rename,
+  rm,
+  rmdir as rmdir2,
+  stat as stat3,
+} from "fs/promises";
+async function migrateAccountsIfNeeded(
+  cwd,
+  log21,
+  treatFailedMigrationAsError = false,
+) {
   let tmpDC;
-  const eventLogger = (accountId, event) => log21.debug("core-event", { accountId, ...event });
+  const eventLogger = (accountId, event) =>
+    log21.debug("core-event", { accountId, ...event });
   try {
     const new_accounts_format = existsSync5(join13(cwd, "accounts.toml"));
     if (new_accounts_format) {
@@ -5341,12 +5721,17 @@ async function migrateAccountsIfNeeded(cwd, log21, treatFailedMigrationAsError =
         const path4 = join13(configPath, folderName);
         try {
           const db_path = join13(path4, "db.sqlite");
-          return lstatSync(path4).isDirectory() && existsSync5(db_path) && lstatSync(db_path).isFile() && !lstatSync(path4).isSymbolicLink();
+          return (
+            lstatSync(path4).isDirectory() &&
+            existsSync5(db_path) &&
+            lstatSync(db_path).isFile() &&
+            !lstatSync(path4).isSymbolicLink()
+          );
         } catch (error) {
           log21.debug("error while testing if folder is account", error);
           return false;
         }
-      }
+      },
     );
     const migrateFromFormat1 = accountFoldersFormat1.length !== 0;
     const migrateFromFormat2 = existsSync5(cwd);
@@ -5361,13 +5746,13 @@ async function migrateAccountsIfNeeded(cwd, log21, treatFailedMigrationAsError =
       await rename(path_accounts, pathAccountsOld);
     }
     tmpDC = await startDeltaChat(path_accounts, {
-      muteStdErr: false
+      muteStdErr: false,
     });
     tmpDC.on("ALL", eventLogger);
     const oldFoldersToDelete = [];
     if (migrateFromFormat1) {
       log21.info(
-        `found old ${accountFoldersFormat1.length} legacy accounts (1), we need to migrate...`
+        `found old ${accountFoldersFormat1.length} legacy accounts (1), we need to migrate...`,
       );
       for (const folder of accountFoldersFormat1) {
         log21.debug(`migrating legacy account "${folder}"`);
@@ -5380,7 +5765,10 @@ async function migrateAccountsIfNeeded(cwd, log21, treatFailedMigrationAsError =
           await tmpDC.rpc.migrateAccount(pathDBFile);
           oldFoldersToDelete.push(folder);
         } catch (error) {
-          log21.error(`Failed to migrate account at path "${pathDBFile}"`, error);
+          log21.error(
+            `Failed to migrate account at path "${pathDBFile}"`,
+            error,
+          );
           if (treatFailedMigrationAsError) {
             throw error;
           }
@@ -5395,7 +5783,7 @@ async function migrateAccountsIfNeeded(cwd, log21, treatFailedMigrationAsError =
         const path_dbfile = join13(pathAccountsOld, entry, "db.sqlite");
         if (!existsSync5(path_dbfile)) {
           log21.warn(
-            "found an old accounts folder without a db.sqlite file, skipping"
+            "found an old accounts folder without a db.sqlite file, skipping",
           );
           continue;
         }
@@ -5416,7 +5804,11 @@ async function migrateAccountsIfNeeded(cwd, log21, treatFailedMigrationAsError =
               const new_sticker_folder = join13(blobdir, "../stickers");
               await rename(old_sticker_folder, new_sticker_folder);
             } catch (error) {
-              log21.error("stickers migration failed", old_sticker_folder, error);
+              log21.error(
+                "stickers migration failed",
+                old_sticker_folder,
+                error,
+              );
               if (treatFailedMigrationAsError) {
                 throw error;
               }
@@ -5426,19 +5818,20 @@ async function migrateAccountsIfNeeded(cwd, log21, treatFailedMigrationAsError =
         } catch (error) {
           log21.error(
             `Failed to migrate account at path "${path_dbfile}":`,
-            error
+            error,
           );
         }
       }
     }
     tmpDC.off("ALL", eventLogger);
     tmpDC.close();
-    for (const oldFolder of oldFoldersToDelete.map((f) => join13(configPath, f))) {
+    for (const oldFolder of oldFoldersToDelete.map((f) =>
+      join13(configPath, f),
+    )) {
       try {
         try {
           await rm(join13(oldFolder, ".DS_Store"));
-        } catch (error) {
-        }
+        } catch (error) {}
         await rmdir2(oldFolder);
       } catch (error) {
         log21.error("Failed to cleanup old folder:", oldFolder, error);
@@ -5473,8 +5866,7 @@ var ElectronMainTransport = class extends yerpc.BaseTransport {
     this.sender(message);
   }
 };
-var JRPCDeltaChat = class extends BaseDeltaChat {
-};
+var JRPCDeltaChat = class extends BaseDeltaChat {};
 var DeltaChatController = class extends EventEmitter2 {
   constructor(cwd) {
     super();
@@ -5505,13 +5897,13 @@ var DeltaChatController = class extends EventEmitter2 {
       DesktopSettings.update({
         lastAccount: void 0,
         lastChats: {},
-        lastSaveDialogLocation: void 0
+        lastSaveDialogLocation: void 0,
       });
     }
     log15.debug("Initiating DeltaChatNode");
     let serverPath = await getRPCServerPath({
       // desktop should only use prebuilds normally
-      disableEnvPath: !rc_default["allow-unsafe-core-replacement"]
+      disableEnvPath: !rc_default["allow-unsafe-core-replacement"],
     });
     if (serverPath.includes("app.asar")) {
       serverPath = serverPath.replace("app.asar", "app.asar.unpacked");
@@ -5537,7 +5929,11 @@ var DeltaChatController = class extends EventEmitter2 {
           try {
             const { result } = JSON.parse(response);
             const { contextId, event } = result;
-            if (contextId !== void 0 && typeof event === "object" && event.kind) {
+            if (
+              contextId !== void 0 &&
+              typeof event === "object" &&
+              event.kind
+            ) {
               if (event.kind === "WebxdcRealtimeData") {
                 return;
               }
@@ -5558,7 +5954,7 @@ var DeltaChatController = class extends EventEmitter2 {
           }
       },
       this.cwd,
-      serverPath
+      serverPath,
     );
     this.account_manager.start();
     log15.info("HI");
@@ -5579,7 +5975,7 @@ var DeltaChatController = class extends EventEmitter2 {
       this.jsonrpcRemote.rpc.setConfig(
         account,
         "verified_one_on_one_chats",
-        "1"
+        "1",
       );
     }
   }
@@ -5587,7 +5983,12 @@ var DeltaChatController = class extends EventEmitter2 {
 };
 
 // src/ipc.ts
-import { copyFile, writeFile as writeFile2, mkdir as mkdir2, rm as rm2 } from "fs/promises";
+import {
+  copyFile,
+  writeFile as writeFile2,
+  mkdir as mkdir2,
+  rm as rm2,
+} from "fs/promises";
 import {
   app as rawApp5,
   clipboard as clipboard3,
@@ -5595,7 +5996,7 @@ import {
   ipcMain as ipcMain6,
   nativeImage as nativeImage3,
   shell as shell5,
-  systemPreferences
+  systemPreferences,
 } from "electron";
 import path3, {
   basename as basename3,
@@ -5604,7 +6005,7 @@ import path3, {
   posix,
   sep as sep2,
   dirname as dirname5,
-  normalize
+  normalize,
 } from "path";
 import { inspect } from "util";
 import { platform as platform9 } from "os";
@@ -5627,12 +6028,12 @@ async function init3(cwd, logHandler2) {
     log16.critical(
       "Fatal: The DeltaChat Module couldn't be loaded. Please check if all dependencies for deltachat-core are installed!",
       error,
-      dcController.rpcServerPath
+      dcController.rpcServerPath,
     );
     console.error(
       "Fatal: The DeltaChat Module couldn't be loaded. Please check if all dependencies for deltachat-core are installed!",
       error,
-      dcController.rpcServerPath
+      dcController.rpcServerPath,
     );
     dialog4.showErrorBox(
       "Fatal Error",
@@ -5642,7 +6043,7 @@ async function init3(cwd, logHandler2) {
 
   ${dcController.rpcServerPath}
 
-  ${error instanceof Error ? error.message : inspect(error, { depth: null })}`
+  ${error instanceof Error ? error.message : inspect(error, { depth: null })}`,
     );
     rawApp5.exit(1);
   }
@@ -5651,15 +6052,14 @@ async function init3(cwd, logHandler2) {
     app9.emit("ipcReady");
   });
   ipcMain6.on("show", () => main.show());
-  ipcMain6.on(
-    "handleLogMessage",
-    (_e, channel, level, stacktrace, ...args) => logHandler2.log(channel, level, stacktrace, ...args)
+  ipcMain6.on("handleLogMessage", (_e, channel, level, stacktrace, ...args) =>
+    logHandler2.log(channel, level, stacktrace, ...args),
   );
   ipcMain6.on("ondragstart", (event, filePath) => {
     let icon;
     try {
       icon = nativeImage3.createFromPath(
-        join14(htmlDistDir(), "images/electron-file-drag-out.png")
+        join14(htmlDistDir(), "images/electron-file-drag-out.png"),
       );
       if (icon.isEmpty()) {
         throw new Error("load failed");
@@ -5678,7 +6078,7 @@ async function init3(cwd, logHandler2) {
     }
     event.sender.startDrag({
       file: filePath,
-      icon
+      icon,
     });
   });
   ipcMain6.on("help", async (_ev, locale, anchor) => {
@@ -5706,12 +6106,13 @@ async function init3(cwd, logHandler2) {
       target: "electron",
       versions: [
         { label: "electron", value: versions.electron },
-        { label: "node", value: versions.node }
+        { label: "node", value: versions.node },
       ],
       runningUnderARM64Translation: app9.runningUnderARM64Translation,
       rpcServerPath: dcController.rpcServerPath,
       buildInfo: BuildInfo,
-      isContentProtectionSupported: platform9() === "darwin" || platform9() === "win32"
+      isContentProtectionSupported:
+        platform9() === "darwin" || platform9() === "win32",
     };
     ev.returnValue = info;
   });
@@ -5732,21 +6133,18 @@ async function init3(cwd, logHandler2) {
       throw new Error("checkMediaAccess: unsupported media type");
     }
   });
-  ipcMain6.handle(
-    "askForMediaAccess",
-    (_ev, mediaType) => {
-      if (systemPreferences.askForMediaAccess) {
-        if (mediaType === "camera") {
-          return systemPreferences.askForMediaAccess("camera");
-        } else if (mediaType === "microphone") {
-          return systemPreferences.askForMediaAccess("microphone");
-        }
+  ipcMain6.handle("askForMediaAccess", (_ev, mediaType) => {
+    if (systemPreferences.askForMediaAccess) {
+      if (mediaType === "camera") {
+        return systemPreferences.askForMediaAccess("camera");
+      } else if (mediaType === "microphone") {
+        return systemPreferences.askForMediaAccess("microphone");
       }
-      return new Promise((resolve) => {
-        resolve(void 0);
-      });
     }
-  );
+    return new Promise((resolve) => {
+      resolve(void 0);
+    });
+  });
   ipcMain6.handle("fileChooser", async (_ev, options) => {
     if (!window2) {
       throw new Error("window does not exist, this should never happen");
@@ -5756,79 +6154,64 @@ async function init3(cwd, logHandler2) {
     return returnValue;
   });
   let lastSaveDialogLocation = void 0;
-  ipcMain6.handle(
-    "saveFile",
-    async (_ev, pathToSource, filename) => {
-      if (!window2) {
-        throw new Error("window does not exist, this should never happen");
-      }
-      let base_path = lastSaveDialogLocation || app9.getPath("downloads");
-      if (!existsSync6(base_path)) {
-        base_path = app9.getPath("downloads");
-      }
-      const { canceled, filePath } = await dialog4.showSaveDialog(
-        window2,
-        {
-          defaultPath: join14(base_path, filename)
-        }
-      );
-      if (!canceled && filePath) {
-        try {
-          await copyFile(pathToSource, filePath);
-        } catch (error) {
-          if (error.code == "EACCES") {
-            dialog4.showErrorBox(
-              "Permission Error",
-              `Cannot write in this folder. You don't have write permission`
-            );
-          } else {
-            dialog4.showErrorBox(
-              "Unhandled Error",
-              `Cannot copy file. Error: ${error}`
-            );
-          }
-        }
-        lastSaveDialogLocation = path3.dirname(filePath);
-      }
+  ipcMain6.handle("saveFile", async (_ev, pathToSource, filename) => {
+    if (!window2) {
+      throw new Error("window does not exist, this should never happen");
     }
-  );
+    let base_path = lastSaveDialogLocation || app9.getPath("downloads");
+    if (!existsSync6(base_path)) {
+      base_path = app9.getPath("downloads");
+    }
+    const { canceled, filePath } = await dialog4.showSaveDialog(window2, {
+      defaultPath: join14(base_path, filename),
+    });
+    if (!canceled && filePath) {
+      try {
+        await copyFile(pathToSource, filePath);
+      } catch (error) {
+        if (error.code == "EACCES") {
+          dialog4.showErrorBox(
+            "Permission Error",
+            `Cannot write in this folder. You don't have write permission`,
+          );
+        } else {
+          dialog4.showErrorBox(
+            "Unhandled Error",
+            `Cannot copy file. Error: ${error}`,
+          );
+        }
+      }
+      lastSaveDialogLocation = path3.dirname(filePath);
+    }
+  });
   ipcMain6.handle("get-desktop-settings", async (_ev) => {
     return DesktopSettings.state;
   });
-  ipcMain6.handle(
-    "set-desktop-setting",
-    (_ev, key, value) => {
-      DesktopSettings.update({ [key]: value });
-      if (key === "minimizeToTray") {
-        updateTrayIcon();
-      } else if (key === "contentProtectionEnabled") {
-        updateContentProtectionOnAllActiveWindows(Boolean(value));
-      }
-      return true;
+  ipcMain6.handle("set-desktop-setting", (_ev, key, value) => {
+    DesktopSettings.update({ [key]: value });
+    if (key === "minimizeToTray") {
+      updateTrayIcon();
+    } else if (key === "contentProtectionEnabled") {
+      updateContentProtectionOnAllActiveWindows(Boolean(value));
     }
+    return true;
+  });
+  ipcMain6.handle("app.setBadgeCountAndTrayIconIndicator", (_, count) => {
+    app9.setBadgeCount(count);
+    set_has_unread(count !== 0);
+  });
+  ipcMain6.handle("app.writeTempFileFromBase64", (_ev, name, content) =>
+    writeTempFileFromBase64(name, content),
   );
-  ipcMain6.handle(
-    "app.setBadgeCountAndTrayIconIndicator",
-    (_, count) => {
-      app9.setBadgeCount(count);
-      set_has_unread(count !== 0);
-    }
-  );
-  ipcMain6.handle(
-    "app.writeTempFileFromBase64",
-    (_ev, name, content) => writeTempFileFromBase64(name, content)
-  );
-  ipcMain6.handle(
-    "app.writeTempFile",
-    (_ev, name, content) => writeTempFile(name, content)
+  ipcMain6.handle("app.writeTempFile", (_ev, name, content) =>
+    writeTempFile(name, content),
   );
   ipcMain6.handle("app.copyFileToInternalTmpDir", (_ev, name, pathToFile) => {
     return copyFileToInternalTmpDir(name, pathToFile);
   });
   ipcMain6.handle("app.removeTempFile", (_ev, path4) => removeTempFile(path4));
-  ipcMain6.handle(
-    "electron.shell.openExternal",
-    (_ev, url2) => shell5.openExternal(url2)
+  ipcMain6.handle("electron.shell.openExternal", (_ev, url2) =>
+    shell5.openExternal(url2),
   );
   ipcMain6.handle("electron.shell.openPath", (_ev, path4) => {
     return shell5.openPath(mapPackagePath(path4));
@@ -5852,7 +6235,9 @@ async function init3(cwd, logHandler2) {
   ipcMain6.handle(
     "saveBackgroundImage",
     async (_ev, file, isDefaultPicture) => {
-      const originalFilePath = !isDefaultPicture ? file : join14(htmlDistDir(), "images/backgrounds/", file);
+      const originalFilePath = !isDefaultPicture
+        ? file
+        : join14(htmlDistDir(), "images/backgrounds/", file);
       const bgDir = join14(getConfigPath(), "background");
       await rm2(bgDir, { recursive: true, force: true });
       await mkdir2(bgDir, { recursive: true });
@@ -5865,11 +6250,20 @@ async function init3(cwd, logHandler2) {
         throw error;
       }
       return `img: ${fileName.replace(/\\/g, "/")}`;
-    }
+    },
   );
   ipcMain6.handle(
     "openMessageHTML",
-    async (_ev, accountId, messageId, isContactRequest, subject, sender, receiveTime, content) => {
+    async (
+      _ev,
+      accountId,
+      messageId,
+      isContactRequest,
+      subject,
+      sender,
+      receiveTime,
+      content,
+    ) => {
       openHtmlEmailWindow(
         accountId,
         messageId,
@@ -5877,9 +6271,9 @@ async function init3(cwd, logHandler2) {
         subject,
         sender,
         receiveTime,
-        content
+        content,
       );
-    }
+    },
   );
   return () => {
     dcController.jsonrpcRemote.rpc.stopIoForAllAccounts();
@@ -5913,10 +6307,13 @@ async function copyFileToInternalTmpDir(fileName, sourcePath) {
   return targetPath;
 }
 async function removeTempFile(path4) {
-  if (path4.indexOf(rawApp5.getPath("temp")) === -1 || path4.indexOf("..") !== -1) {
+  if (
+    path4.indexOf(rawApp5.getPath("temp")) === -1 ||
+    path4.indexOf("..") !== -1
+  ) {
     log16.error(
       "removeTempFile was called with a path that is outside of the temp dir: ",
-      path4
+      path4,
     );
     throw new Error("Path is outside of the temp folder");
   }
@@ -5926,7 +6323,12 @@ async function removeTempFile(path4) {
 // src/notifications.ts
 init_cjs_shim();
 import { platform as platform10 } from "os";
-import { app as app10, Notification, nativeImage as nativeImage4, ipcMain as ipcMain7 } from "electron";
+import {
+  app as app10,
+  Notification,
+  nativeImage as nativeImage4,
+  ipcMain as ipcMain7,
+} from "electron";
 var log17 = getLogger("main/notifications");
 var isMac = platform10() === "darwin";
 if (Notification.isSupported()) {
@@ -5935,15 +6337,16 @@ if (Notification.isSupported()) {
   ipcMain7.handle("notifications.clearAll", clearAll);
   process.on("beforeExit", clearAll);
 } else {
-  ipcMain7.handle("notifications.show", () => {
-  });
-  ipcMain7.handle("notifications.clear", () => {
-  });
-  ipcMain7.handle("notifications.clearAll", () => {
-  });
+  ipcMain7.handle("notifications.show", () => {});
+  ipcMain7.handle("notifications.clear", () => {});
+  ipcMain7.handle("notifications.clearAll", () => {});
 }
 function createNotification(data) {
-  let icon = data.icon ? data.icon.startsWith("data:") ? nativeImage4.createFromDataURL(data.icon) : nativeImage4.createFromPath(data.icon) : void 0;
+  let icon = data.icon
+    ? data.icon.startsWith("data:")
+      ? nativeImage4.createFromDataURL(data.icon)
+      : nativeImage4.createFromPath(data.icon)
+    : void 0;
   if (!icon || icon.isEmpty()) {
     if (!isMac) {
       icon = nativeImage4.createFromPath(appIcon());
@@ -5958,9 +6361,10 @@ function createNotification(data) {
     // > [Desktop Notifications Specification](https://web.archive.org/web/20240428012536/https://specifications.freedesktop.org/notification-spec/notification-spec-latest.html)
     // Which says that the body supports limited markup
     // So let's escape it.
-    body: platform10() === "linux" ? filterNotificationText(data.body) : data.body,
+    body:
+      platform10() === "linux" ? filterNotificationText(data.body) : data.body,
     icon,
-    timeoutType: "default"
+    timeoutType: "default",
   };
   if (process.platform === "win32") {
     notificationOptions.closeButtonText = void 0;
@@ -5971,7 +6375,7 @@ function onClickNotification(accountId, chatId, msgId, _ev) {
   send("ClickOnNotification", {
     accountId,
     chatId,
-    msgId
+    msgId,
   });
   show();
   app10.focus();
@@ -5982,18 +6386,20 @@ function showNotification(_event, data) {
   const { chatId, accountId } = data;
   log17.debug(
     "Creating notification:",
-    Object.assign({}, data, { body: void 0, title: void 0 })
+    Object.assign({}, data, { body: void 0, title: void 0 }),
   );
   try {
     const notify = createNotification(data);
     notify.on("click", (Event2) => {
       onClickNotification(data.accountId, chatId, data.messageId, Event2);
-      notifications[accountId][chatId] = notifications[accountId]?.[chatId]?.filter((n) => n !== notify) || [];
+      notifications[accountId][chatId] =
+        notifications[accountId]?.[chatId]?.filter((n) => n !== notify) || [];
       notify.close();
     });
     notify.on("close", () => {
       if (isMac) {
-        notifications[accountId][chatId] = notifications[accountId]?.[chatId]?.filter((n) => n !== notify) || [];
+        notifications[accountId][chatId] =
+          notifications[accountId]?.[chatId]?.filter((n) => n !== notify) || [];
       }
       console.log("Notification close event triggered", notify);
     });
@@ -6011,14 +6417,22 @@ function showNotification(_event, data) {
   }
 }
 function clearNotificationsForChat(_, accountId, chatId) {
-  log17.debug("clearNotificationsForChat", { accountId, chatId, notifications });
+  log17.debug("clearNotificationsForChat", {
+    accountId,
+    chatId,
+    notifications,
+  });
   if (notifications[accountId]?.[chatId]) {
     for (const notify of notifications[accountId]?.[chatId] || []) {
       notify.close();
     }
     delete notifications[accountId][chatId];
   }
-  log17.debug("after cleared Notifications", { accountId, chatId, notifications });
+  log17.debug("after cleared Notifications", {
+    accountId,
+    chatId,
+    notifications,
+  });
 }
 function clearAll() {
   for (const accountId of Object.keys(notifications)) {
@@ -6032,13 +6446,21 @@ function clearAll() {
   }
 }
 function filterNotificationText(text) {
-  return (text || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  return (text || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
 }
 
 // src/cleanup_temp_dir.ts
 init_cjs_shim();
 import { app as app11 } from "electron";
-import { mkdir as mkdir3, readdir as readdir5, rm as rm3, rmdir as rmdir3 } from "fs/promises";
+import {
+  mkdir as mkdir3,
+  readdir as readdir5,
+  rm as rm3,
+  rmdir as rmdir3,
+} from "fs/promises";
 import { join as join15 } from "path";
 import { readdirSync } from "fs";
 var log18 = getLogger("main/cleanup_temp_dir");
@@ -6046,17 +6468,20 @@ async function cleanupDraftTempDir() {
   try {
     const path4 = getDraftTempDir();
     await mkdir3(path4, { recursive: true });
-    if (path4.indexOf(app11.getPath("temp")) === -1 || path4.indexOf("..") !== -1) {
+    if (
+      path4.indexOf(app11.getPath("temp")) === -1 ||
+      path4.indexOf("..") !== -1
+    ) {
       log18.error(
         "removeTempFile was called with a path that is outside of the temp dir: ",
-        path4
+        path4,
       );
       throw new Error("Path is outside of the temp folder");
     }
     const files = await readdir5(path4);
     if (files.length !== 0) {
       log18.debug(
-        `found old ${files.length} temporary draft files, trying to delete them now`
+        `found old ${files.length} temporary draft files, trying to delete them now`,
       );
       const promises = [];
       for (const file of files) {
@@ -6074,23 +6499,28 @@ async function cleanupInternalTempDirs() {
   try {
     let deletedTmpDirs = 0;
     const tmpDirents = readdirSync(getAccountsPath(), {
-      withFileTypes: true
-    }).filter((dirent) => dirent.isDirectory()).flatMap((accountDir) => {
-      return readdirSync(join15(accountDir.parentPath, accountDir.name), {
-        withFileTypes: true
-      }).filter(
-        (tmpDir) => tmpDir.isDirectory() && tmpDir.name === INTERNAL_TMP_DIR_NAME
-      );
-    });
+      withFileTypes: true,
+    })
+      .filter((dirent) => dirent.isDirectory())
+      .flatMap((accountDir) => {
+        return readdirSync(join15(accountDir.parentPath, accountDir.name), {
+          withFileTypes: true,
+        }).filter(
+          (tmpDir) =>
+            tmpDir.isDirectory() && tmpDir.name === INTERNAL_TMP_DIR_NAME,
+        );
+      });
     if (tmpDirents.length > 0) {
-      deletedTmpDirs = (await Promise.all(
-        tmpDirents.map(
-          (tmpDir) => rm3(join15(tmpDir.parentPath, tmpDir.name), {
-            recursive: true,
-            force: true
-          })
+      deletedTmpDirs = (
+        await Promise.all(
+          tmpDirents.map((tmpDir) =>
+            rm3(join15(tmpDir.parentPath, tmpDir.name), {
+              recursive: true,
+              force: true,
+            }),
+          ),
         )
-      )).length;
+      ).length;
     }
     log18.info(`Deleted ${deletedTmpDirs} internal tmp directories`);
   } catch (error) {
@@ -6101,7 +6531,11 @@ async function cleanupInternalTempDirs() {
 // src/cognitive-storage.ts
 init_cjs_shim();
 import { ipcMain as ipcMain8 } from "electron";
-import { readFile as readFile5, writeFile as writeFile3, mkdir as mkdir4 } from "fs/promises";
+import {
+  readFile as readFile5,
+  writeFile as writeFile3,
+  mkdir as mkdir4,
+} from "fs/promises";
 import { existsSync as existsSync7 } from "fs";
 import { join as join16 } from "path";
 var log19 = getLogger("main/cognitive-storage");
@@ -6211,7 +6645,9 @@ async function initCognitiveStorage() {
     if (keysToDelete.length > 0) {
       scheduleSave();
     }
-    log19.debug(`storage:clear ${prefix} -> deleted ${keysToDelete.length} keys`);
+    log19.debug(
+      `storage:clear ${prefix} -> deleted ${keysToDelete.length} keys`,
+    );
     return keysToDelete.length;
   });
   ipcMain8.handle("storage:keys", async (_event, prefix) => {
@@ -6239,7 +6675,12 @@ async function initCognitiveStorage() {
 // src/index.ts
 console.time("init");
 import { mkdirSync, watchFile as watchFile2 } from "fs";
-import { app as rawApp6, dialog as dialog5, ipcMain as ipcMain9, protocol as protocol2 } from "electron";
+import {
+  app as rawApp6,
+  dialog as dialog5,
+  ipcMain as ipcMain9,
+  protocol as protocol2,
+} from "electron";
 var hostRules = "MAP * ~NOTFOUND, EXCLUDE *.openstreetmap.org";
 rawApp6.commandLine.appendSwitch("host-resolver-rules", hostRules);
 rawApp6.commandLine.appendSwitch("host-rules", hostRules);
@@ -6280,14 +6721,18 @@ protocol2.registerSchemesAsPrivileged([
       allowServiceWorkers: true,
       standard: true,
       supportFetchAPI: true,
-      stream: true
+      stream: true,
       // needed for audio playback
-    }
-  }
+    },
+  },
 ]);
 var app12 = rawApp6;
 app12.rc = rc_default;
-if (!process.mas && !app12.requestSingleInstanceLock() && !process.env.DC_TEST_DIR) {
+if (
+  !process.mas &&
+  !app12.requestSingleInstanceLock() &&
+  !process.env.DC_TEST_DIR
+) {
   console.error("Only one instance allowed. Quitting.");
   app12.quit();
   process.exit(0);
@@ -6299,7 +6744,7 @@ var logHandler = createLogHandler();
 var log20 = getLogger("main/index");
 setLogHandler(logHandler.log, rc_default);
 log20.info(
-  `Deltachat Version ${BuildInfo.VERSION} ${BuildInfo.GIT_REF} ${BuildInfo.BUILD_TIMESTAMP}`
+  `Deltachat Version ${BuildInfo.VERSION} ${BuildInfo.GIT_REF} ${BuildInfo.BUILD_TIMESTAMP}`,
 );
 process.on("exit", logHandler.end);
 process.on("uncaughtException", (err) => {
@@ -6312,7 +6757,7 @@ process.on("uncaughtException", (err) => {
   dialog5.showErrorBox(
     "Error - uncaughtException",
     `See the logfile (${logHandler.logFilePath()}) for details and contact the developers about this issue:
-` + JSON.stringify(error)
+` + JSON.stringify(error),
   );
 });
 app12.ipcReady = false;
@@ -6321,18 +6766,20 @@ Promise.all([
   new Promise((resolve, _reject) => app12.on("ready", resolve)),
   DesktopSettings.load(),
   isWindowsStorePackage(),
-  webxdcStartUpCleanup()
-]).then(onReady).catch((error) => {
-  log20.critical("Fatal Error during init", error);
-  dialog5.showErrorBox(
-    "Fatal Error during init",
-    `[Version: ${BuildInfo.VERSION} | ${platform11()} | ${arch2()}]]
+  webxdcStartUpCleanup(),
+])
+  .then(onReady)
+  .catch((error) => {
+    log20.critical("Fatal Error during init", error);
+    dialog5.showErrorBox(
+      "Fatal Error during init",
+      `[Version: ${BuildInfo.VERSION} | ${platform11()} | ${arch2()}]]
 ${error}
 
-Also make sure you are not trying to run multiple instances of deltachat.`
-  );
-  process.exit(1);
-});
+Also make sure you are not trying to run multiple instances of deltachat.`,
+    );
+    process.exit(1);
+  });
 var ipc_shutdown_function = null;
 var cognitive_storage_cleanup = null;
 async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]) {
@@ -6357,21 +6804,22 @@ async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]) {
       join17(getLocaleDirectoryPath(), "/_untranslated_en.json"),
       (curr, prev) => {
         if (curr.mtime !== prev.mtime) {
-          log20.info("translation-watch: File changed reloading translation data");
+          log20.info(
+            "translation-watch: File changed reloading translation data",
+          );
           chooseLanguage(getCurrentLocaleDate().locale);
           log20.info("translation-watch: reloading translation data - done");
         }
-      }
+      },
     );
   }
-  cleanupLogFolder().catch(
-    (err) => log20.error("Cleanup of old logfiles failed: ", err)
+  cleanupLogFolder().catch((err) =>
+    log20.error("Cleanup of old logfiles failed: ", err),
   );
   cleanupDraftTempDir();
   cleanupInternalTempDirs();
   initialisePowerMonitor();
 }
-;
 app12.once("ipcReady", () => {
   if (!window2) {
     throw new Error("window does not exist, this should never happen");
@@ -6391,7 +6839,7 @@ app12.once("ipcReady", () => {
       } else {
         if (process.platform === "darwin") {
           log20.debug(
-            "mainWindow.window.on('close') We are on mac, so lets hide the main window"
+            "mainWindow.window.on('close') We are on mac, so lets hide the main window",
           );
           hideDeltaChat();
         } else {
@@ -6415,8 +6863,8 @@ function quit(e) {
   }
   ipc_shutdown_function && ipc_shutdown_function();
   if (cognitive_storage_cleanup) {
-    cognitive_storage_cleanup().catch(
-      (err) => log20.error("Failed to cleanup cognitive storage:", err)
+    cognitive_storage_cleanup().catch((err) =>
+      log20.error("Failed to cleanup cognitive storage:", err),
     );
   }
   cleanupDraftTempDir();
@@ -6448,7 +6896,9 @@ app12.on("activate", () => {
 app12.on("before-quit", (e) => quit(e));
 app12.on("window-all-closed", () => quit());
 app12.on("web-contents-created", (_ev, contents) => {
-  const is_webxdc = contents.session.storagePath && contents.session.storagePath.indexOf("webxdc_") !== -1;
+  const is_webxdc =
+    contents.session.storagePath &&
+    contents.session.storagePath.indexOf("webxdc_") !== -1;
   if (is_webxdc) {
     const webxdcOpenUrl = (url2) => {
       if (url2.startsWith("mailto:") || url2.startsWith("openpgp4fpr:")) {
@@ -6501,9 +6951,7 @@ ipcMain9.handle("restart_app", async (_ev) => {
   app12.relaunch();
   app12.quit();
 });
-export {
-  quit
-};
+export { quit };
 /*! Bundled license information:
 
 deep-extend/lib/deep-extend.js:

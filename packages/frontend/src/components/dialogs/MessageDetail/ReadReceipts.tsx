@@ -1,67 +1,67 @@
-import React, { useEffect, useState } from 'react'
-import { BackendRemote, onDCEvent } from '../../../backend-com'
-import { T } from '@deltachat/jsonrpc-client'
-import { selectedAccountId } from '../../../ScreenController'
+import React, { useEffect, useState } from "react";
+import { BackendRemote, onDCEvent } from "../../../backend-com";
+import { T } from "@deltachat/jsonrpc-client";
+import { selectedAccountId } from "../../../ScreenController";
 
-import styles from './styles.module.scss'
-import { Avatar } from '../../Avatar'
-import { InlineVerifiedIcon } from '../../VerifiedIcon'
-import moment from 'moment'
-import useTranslationFunction from '../../../hooks/useTranslationFunction'
-type ReadReceiptsListProps = { messageId: number }
+import styles from "./styles.module.scss";
+import { Avatar } from "../../Avatar";
+import { InlineVerifiedIcon } from "../../VerifiedIcon";
+import moment from "moment";
+import useTranslationFunction from "../../../hooks/useTranslationFunction";
+type ReadReceiptsListProps = { messageId: number };
 
 export function ReadReceiptsList(props: ReadReceiptsListProps) {
-  const tx = useTranslationFunction()
-  const accountId = selectedAccountId()
-  const [receipts, setReceipts] = useState<T.MessageReadReceipt[]>([])
+  const tx = useTranslationFunction();
+  const accountId = selectedAccountId();
+  const [receipts, setReceipts] = useState<T.MessageReadReceipt[]>([]);
   useEffect(() => {
     const update = () => {
       BackendRemote.rpc
         .getMessageReadReceipts(accountId, props.messageId)
-        .then(setReceipts)
-    }
-    update()
-    return onDCEvent(accountId, 'MsgRead', ({ msgId }) => {
+        .then(setReceipts);
+    };
+    update();
+    return onDCEvent(accountId, "MsgRead", ({ msgId }) => {
       if (msgId === props.messageId) {
-        update()
+        update();
       }
-    })
-  }, [props.messageId, accountId])
+    });
+  }, [props.messageId, accountId]);
 
   if (receipts.length === 0) {
-    return null
+    return null;
   }
   return (
     <div className={styles.ReadReceiptsContainer}>
       <div className={styles.Heading}>
         <div className={styles.DoubleCheckmarkIcon}></div>
-        {tx('read_by')}
+        {tx("read_by")}
       </div>
       <ul className={styles.ReadReceiptBox}>
-        {receipts.map(receipt => (
+        {receipts.map((receipt) => (
           <li key={receipt.contactId}>
             <ReadReceipt receipt={receipt} />
           </li>
         ))}
       </ul>
     </div>
-  )
+  );
 }
 
 function ReadReceipt(props: { receipt: T.MessageReadReceipt }) {
-  const accountId = selectedAccountId()
-  const [contact, setContact] = useState<T.Contact | null>(null)
+  const accountId = selectedAccountId();
+  const [contact, setContact] = useState<T.Contact | null>(null);
 
   useEffect(() => {
     BackendRemote.rpc
       .getContact(accountId, props.receipt.contactId)
-      .then(setContact)
-  }, [props.receipt.contactId, accountId])
+      .then(setContact);
+  }, [props.receipt.contactId, accountId]);
 
-  const time = moment(props.receipt.timestamp * 1000)
+  const time = moment(props.receipt.timestamp * 1000);
 
   if (!contact) {
-    return null
+    return null;
   }
   return (
     <div className={styles.ReadReceipt}>
@@ -78,9 +78,9 @@ function ReadReceipt(props: { receipt: T.MessageReadReceipt }) {
       />
       <div className={styles.ReadReceiptContactLabel}>
         <div>
-          <span className='truncated'>
+          <span className="truncated">
             <b>{contact.displayName}</b>
-          </span>{' '}
+          </span>{" "}
           {contact.isVerified && <InlineVerifiedIcon />}
         </div>
         {!contact.isVerified && (
@@ -88,9 +88,9 @@ function ReadReceipt(props: { receipt: T.MessageReadReceipt }) {
         )}
       </div>
       <div>
-        <span className={styles.Date}>{time.format('L')}</span>{' '}
-        {time.format('LT')}
+        <span className={styles.Date}>{time.format("L")}</span>{" "}
+        {time.format("LT")}
       </div>
     </div>
-  )
+  );
 }
