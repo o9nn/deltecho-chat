@@ -43,3 +43,11 @@ export {
   type StrangeLoopState,
   type ScientificGeniusConfig,
 } from "./ScientificGeniusEngine.js";
+
+export {
+  RelevanceGeniusIntegration,
+  relevanceGeniusIntegration,
+  type RelevanceGuidedInquiry,
+  type FrameProblemSolution,
+  type IntegrationConfig,
+} from "./RelevanceGeniusIntegration.js";

@@ -148,6 +148,26 @@ export {
   type EchoBeatsConfig,
 } from "./EchoBeatsEngine.js";
 
+export {
+  RelevanceRealizationWorkspace,
+  relevanceWorkspace,
+  CognitiveDomain,
+  RelevanceType,
+  type RelevanceSignal,
+  type RelevanceSpecialist,
+  type WorkspaceContext,
+  type Goal,
+  type ArenaState,
+  type RelevanceAffordance,
+  type Constraint,
+  type AgentState,
+  type Relation,
+  type OpponentPair,
+  type RelevanceStrategy,
+  type BroadcastEvent,
+  type WorkspaceConfig,
+} from "./RelevanceRealizationWorkspace.js";
+
 /**
  * Unified Consciousness Interface
  *
