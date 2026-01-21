@@ -168,6 +168,36 @@ export {
   type WorkspaceConfig,
 } from "./RelevanceRealizationWorkspace.js";
 
+export {
+  GaugeCognitiveManifold,
+  gaugeCognitiveManifold,
+  OrbifoldSingularity,
+  LieGroup,
+  LieAlgebra,
+  CognitiveSymmetry,
+  type ManifoldPoint,
+  type Fiber,
+  type LieGroupElement,
+  type LieAlgebraElement,
+  type Connection,
+  type BezierCurve,
+  type CognitiveTrajectory,
+  type NoetherCharge,
+  type GaugeManifoldConfig,
+  type GaugeManifoldState,
+} from "./GaugeCognitiveManifold.js";
+
+export {
+  GeneralGaugeTransformer,
+  generalGaugeTransformer,
+  type GaugeCognitiveState,
+  type BeliefState as GaugeBeliefState,
+  type ActiveInferenceAction,
+  type GaugeAttentionHead,
+  type GaugeTransformerConfig,
+  type GaugeTransformerState,
+} from "./GeneralGaugeTransformer.js";
+
 /**
  * Unified Consciousness Interface
  *
