@@ -918,7 +918,7 @@ export class AgentToolExecutor {
               const query = `SELECT * FROM atoms WHERE json_extract_string(metadata, '$.outgoing') LIKE '%${target}%'`;
               try {
                 results = await this.db.query(query);
-              } catch (e) {
+              } catch (_e) {
                 // Fallback or empty if JSON query fails
                 results = [];
               }

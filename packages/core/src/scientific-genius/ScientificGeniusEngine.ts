@@ -883,7 +883,7 @@ export class ScientificGeniusEngine extends EventEmitter {
   /**
    * Detect paradoxes in reasoning
    */
-  private detectParadoxes(query: string, insights: ScientificInsight[]): void {
+  private detectParadoxes( _query: string, insights: ScientificInsight[]): void {
     // Check for contradictory insights
     for (let i = 0; i < insights.length; i++) {
       for (let j = i + 1; j < insights.length; j++) {

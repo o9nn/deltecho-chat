@@ -1285,10 +1285,10 @@ ${response.body}`;
     // Register system status handler
     this.ipcServer.registerHandler(IPCMessageType.SYSTEM_STATUS, async () => {
       const emotionalState = this.personaCore.getDominantEmotion();
-      const dove9State = this.dove9Integration?.getCognitiveState();
-      const sys6State = this.sys6Bridge?.getState();
-      const membraneStatus = this.doubleMembraneIntegration?.getStatus();
-      const aarState = this.aarSystem?.getState();
+      const _dove9State = this.dove9Integration?.getCognitiveState();
+      const _sys6State = this.sys6Bridge?.getState();
+      const _membraneStatus = this.doubleMembraneIntegration?.getStatus();
+      const _aarState = this.aarSystem?.getState();
 
       return {
         running: this.running,

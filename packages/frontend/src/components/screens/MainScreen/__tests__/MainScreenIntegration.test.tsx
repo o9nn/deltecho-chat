@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import MainScreen from "../MainScreen";
-import { DeepTreeEchoUIBridge } from "../../../DeepTreeEchoBot/DeepTreeEchoUIBridge";
+import { _DeepTreeEchoUIBridge } from "../../../DeepTreeEchoBot/DeepTreeEchoUIBridge";
 import { ChatView } from "../../../../contexts/ChatContext";
 
 // Mocks

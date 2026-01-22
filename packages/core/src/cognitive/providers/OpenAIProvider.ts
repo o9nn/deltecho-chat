@@ -248,7 +248,7 @@ export class OpenAIProvider extends LLMProvider {
                   chunk.choices[0].finish_reason,
                 );
               }
-            } catch (e) {
+            } catch (_e) {
               // Skip malformed JSON chunks
             }
           }

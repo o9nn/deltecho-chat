@@ -1,4 +1,4 @@
-import { RAGMemoryStore, Memory, ReflectionMemory } from "../RAGMemoryStore";
+import { RAGMemoryStore, _Memory, _ReflectionMemory } from "../RAGMemoryStore";
 import { InMemoryStorage } from "../storage";
 
 describe("RAGMemoryStore", () => {

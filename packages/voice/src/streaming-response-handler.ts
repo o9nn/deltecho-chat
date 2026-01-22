@@ -20,7 +20,7 @@ import {
   createStreamingLipSyncController,
   StreamingLipSyncConfig,
 } from "./streaming-lip-sync";
-import { LipSyncData } from "./lip-sync";
+import { _LipSyncData as __LipSyncData  } from "./lip-sync";
 
 /**
  * LLM stream chunk interface (compatible with Anthropic/OpenAI patterns)

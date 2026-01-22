@@ -7,7 +7,7 @@ import {
   createCognitiveOrchestrator,
 } from "../cognitive-orchestrator";
 import { IPersonaCore } from "../integrations/persona-adapter";
-import { IRAGMemoryStore, IMemory } from "../integrations/memory-adapter";
+import { IRAGMemoryStore, _IMemory } from "../integrations/memory-adapter";
 import { ILLMService } from "../integrations/llm-adapter";
 
 // Mock PersonaCore

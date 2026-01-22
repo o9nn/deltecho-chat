@@ -529,7 +529,7 @@ export class GeneralGaugeTransformer extends EventEmitter {
    * F = -log p(o|s) + KL[q(s)||p(s)]
    *   = prediction error + complexity
    */
-  private computeFreeEnergy(beliefs: BeliefState, observation: number[]): number {
+  private computeFreeEnergy(beliefs: BeliefState, _observation: number[]): number {
     // Prediction error (negative log likelihood)
     const predictionError = beliefs.predictionErrors.reduce(
       (sum, e, i) => sum + (beliefs.precision[i] || 1) * e * e,

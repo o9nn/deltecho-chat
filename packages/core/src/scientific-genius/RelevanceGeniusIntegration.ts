@@ -198,7 +198,7 @@ export class RelevanceGeniusIntegration extends EventEmitter {
     const scientificDomains = this.mapToScientificDomains(relevantSignals);
 
     // Step 4: Generate hypotheses guided by relevance
-    const hypotheses = await this.generateRelevanceGuidedHypotheses(query, relevantSignals);
+    const _hypotheses = await this.generateRelevanceGuidedHypotheses(query, relevantSignals);
 
     // Step 5: Process through scientific genius engine
     const insights: ScientificInsight[] = [];

@@ -282,7 +282,7 @@ describe("Orchestration Integration", () => {
       await agentCoordinator.start();
 
       // Create multiple tasks
-      const tasks = [
+      const _tasks = [
         agentCoordinator.createTask("analysis", "Task 1", {}),
         agentCoordinator.createTask("reasoning", "Task 2", {}),
         agentCoordinator.createTask("documentation", "Task 3", {}),
@@ -334,7 +334,7 @@ describe("Orchestration Integration", () => {
       await agentCoordinator.start();
 
       // Generate a specialized agent
-      const agent = agentCoordinator.generateAgent({
+      const _agent = agentCoordinator.generateAgent({
         specializationId: "test-specialist",
         specializationName: "Test Specialist",
         description: "A test specialist agent",

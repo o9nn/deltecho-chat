@@ -279,7 +279,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
           intensity * 100
         ).toFixed(0)}%`,
       );
-    } catch (error) {
+    } catch (_error) {
       console.warn(
         "[PixiLive2DRenderer] Expression not available:",
         expressionName,

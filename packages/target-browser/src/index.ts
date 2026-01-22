@@ -150,7 +150,7 @@ app.get("/blobs/:accountId/:filename", authMiddleWare, async (req, res) => {
   try {
     // test if file exists
     await stat(filePath);
-  } catch (error) {
+  } catch (_error) {
     return res.status(404).send("404 Not Found");
   }
 
@@ -189,7 +189,7 @@ app.use("/background", express.static(join(DATA_DIR, "background")));
 app.use("/backend-api", BackendApiRoute);
 app.use(helpRoute);
 
-app.get("/themes.json", async (req, res) => {
+app.get("/themes.json", async (_req, res) => {
   res.json(await readThemeDir());
 });
 
@@ -286,5 +286,5 @@ process.on("exit", () => {
   server.closeAllConnections();
   server.close();
   shutdownDC();
-  logHandler.end;
+  void logHandler.end;
 });

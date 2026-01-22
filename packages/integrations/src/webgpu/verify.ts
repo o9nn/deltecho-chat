@@ -48,7 +48,7 @@ async function verify() {
 
     // Load Model
     console.log("Loading model...");
-    await engine.loadModel((progress) => {
+    await engine.loadModel(( _progress) => {
       // console.log(`Progress: ${progress.progress}%`);
     });
     console.log("Model loaded.");

@@ -10,7 +10,7 @@ import {
   IPCMessageType,
   IPCTypeMap,
   type IPCMessage,
-  type IPCResponse,
+  type _IPCResponse,
   type EventNotification,
   createIPCMessage,
 } from "./protocol.js";
@@ -264,7 +264,7 @@ export class IPCClient extends EventEmitter {
           pending.reject(new Error(errorPayload.error));
         }
       }
-    } catch (error) {
+    } catch (_error) {
       this.emit("error", new Error(`Failed to parse message: ${data}`));
     }
   }

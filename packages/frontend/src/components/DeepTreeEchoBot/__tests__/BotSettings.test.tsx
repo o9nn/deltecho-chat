@@ -6,7 +6,7 @@ import { render, screen, act, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import BotSettings from "../BotSettings";
 import { runtime } from "@deltachat-desktop/runtime-interface";
-import { LLMService, CognitiveFunctionType } from "../LLMService";
+import { LLMService, _CognitiveFunctionType } from "../LLMService";
 
 // Mock dependencies
 jest.mock("@deltachat-desktop/runtime-interface", () => ({
@@ -57,7 +57,7 @@ jest.mock("../LLMService", () => {
 
 describe("BotSettings Component", () => {
   const mockSaveSettings = jest.fn();
-  const mockOnNavigateToMain = jest.fn();
+  const _mockOnNavigateToMain = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();

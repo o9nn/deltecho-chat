@@ -268,7 +268,7 @@ export class AnthropicProvider extends LLMProvider {
                   onChunk({ content: "", isComplete: true, finishReason });
                   break;
               }
-            } catch (e) {
+            } catch (_e) {
               // Skip malformed JSON chunks
             }
           }

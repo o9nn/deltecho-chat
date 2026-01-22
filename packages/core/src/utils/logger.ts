@@ -83,7 +83,7 @@ class SimpleLogger implements Logger {
     return JSON.stringify(entry);
   }
 
-  private formatPretty(level: LogLevel, args: any[]): string {
+  private formatPretty(level: LogLevel, _args: any[]): string {
     const parts: string[] = [];
 
     if (globalConfig.enableTimestamp) {

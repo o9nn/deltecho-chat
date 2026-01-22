@@ -387,9 +387,9 @@ export class QualiaEmergenceLayer {
   /**
    * Generate qualia from conscious content
    */
-  private generateQualiaFromContent(content: string, source: string): Quale[] {
+  private generateQualiaFromContent(content: string, _source: string): Quale[] {
     const qualia: Quale[] = [];
-    const now = Date.now();
+    const _now = Date.now();
 
     // Analyze content to determine appropriate qualia
     const contentLower = content.toLowerCase();

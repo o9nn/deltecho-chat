@@ -704,7 +704,7 @@ export class GaugeCognitiveManifold extends EventEmitter {
    * - K = kinetic term (embedding velocity)
    * - V = potential term (curvature + active inference constraint)
    */
-  private computeAction(curve: BezierCurve, fibers: Fiber[]): number {
+  private computeAction( _curve: BezierCurve, fibers: Fiber[]): number {
     let action = 0;
     const dt = 1.0 / (fibers.length - 1);
 

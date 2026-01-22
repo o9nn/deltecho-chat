@@ -353,7 +353,7 @@ Deep Tree Echo`;
    */
   private trimQuotedContent(body: string): string {
     // Common quote patterns
-    const quotePatterns = [
+    const _quotePatterns = [
       /^>.*$/gm, // Lines starting with >
       /^On .* wrote:$/m, // "On ... wrote:" pattern
       /^-{3,}.*Original Message.*-{3,}$/im, // Original message separator

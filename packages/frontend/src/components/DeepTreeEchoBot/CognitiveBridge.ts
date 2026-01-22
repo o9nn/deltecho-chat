@@ -68,7 +68,7 @@ import {
 // Integrated memory system (HDM + RAG)
 import {
   IntegratedMemorySystem,
-  type MemoryContext,
+  type _MemoryContext,
 } from "deep-tree-echo-core/memory";
 
 // Relevance Realization Workspace
@@ -519,7 +519,7 @@ export class CognitiveOrchestrator {
     };
   }
 
-  private async callLLM(userMessage: string): Promise<string> {
+  private async callLLM( _userMessage: string): Promise<string> {
     if (!this.llmConfig || !this.llmConfig.apiKey) {
       throw new Error("LLM not configured");
     }
@@ -627,7 +627,7 @@ Respond in a way that reflects these characteristics while being helpful and inf
     }". Configure my LLM service for detailed responses.`;
   }
 
-  private generateFallbackResponse(input: string, error: unknown): string {
+  private generateFallbackResponse( _input: string, error: unknown): string {
     const errorMsg = error instanceof Error ? error.message : "Unknown error";
     return `I encountered an issue: ${errorMsg}. Please try again.`;
   }

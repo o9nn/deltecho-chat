@@ -521,7 +521,7 @@ export class TemporalConsciousnessStream {
   /**
    * Update subjective time rate based on state
    */
-  private updateSubjectiveTime(elapsed: number): void {
+  private updateSubjectiveTime( _elapsed: number): void {
     // Time feels faster when in flow, slower when bored or anxious
     if (this.currentMoment) {
       const cognitiveLoad = this.currentMoment.cognitiveLoad;

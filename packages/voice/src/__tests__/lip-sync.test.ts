@@ -117,7 +117,7 @@ describe("LipSyncGenerator", () => {
 
       // Higher audio levels should have higher intensities overall
       for (let i = 1; i < entries.length; i++) {
-        const prevIntensity = entries[i - 1].intensity;
+        const _prevIntensity = entries[i - 1].intensity;
         const currIntensity = entries[i].intensity;
         // Allow for phoneme transitions that might not be strictly increasing
         expect(currIntensity).toBeDefined();
@@ -209,7 +209,7 @@ describe("LipSyncGenerator", () => {
       generator.stopPlayback();
 
       expect(listener).toHaveBeenCalled();
-      const callCountBeforeRemove = listener.mock.calls.length;
+      const _callCountBeforeRemove = listener.mock.calls.length;
 
       // Remove listener and verify it's not called
       listener.mockClear();

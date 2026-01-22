@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, _useState, useEffect } from "react";
 import { EmotionalVector } from "./Live2DAvatar";
 
 // Import images - in a real app these typically would be imported or referenced by URL
@@ -56,7 +56,7 @@ export const ResponsiveSpriteAvatar: React.FC<ResponsiveSpriteAvatarProps> = ({
     const excitement = Number(emotionalState.excitement || 0);
     const surprise = Number(emotionalState.surprise || 0);
     const anger = Number(emotionalState.anger || 0);
-    const confusion = Number(emotionalState.confusion || 0);
+    const _confusion = Number(emotionalState.confusion || 0);
     const boredom = Number(emotionalState.boredom || 0);
     const contentment = Number(emotionalState.contentment || 0);
     const thinking = Number(emotionalState.thinking || 0); // Hypothetical

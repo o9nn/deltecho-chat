@@ -131,7 +131,7 @@ export function createAgentTools(
     participate: async (
       input: z.infer<typeof agentToolSchemas.participate>,
     ): Promise<ParticipationResult> => {
-      const state = agent.getState();
+      const _state = agent.getState();
 
       // Analyze context and activate appropriate facets
       const activatedFacets: (keyof CharacterFacets)[] = [];

@@ -2,8 +2,8 @@ import * as duckdb from "@duckdb/duckdb-wasm";
 import { AsyncDuckDB } from "@duckdb/duckdb-wasm";
 import { drizzle } from "drizzle-orm/pg-proxy";
 import { PgDatabase } from "drizzle-orm/pg-core";
-import { atoms, links } from "./schema";
-import { eq, like, sql, and } from "drizzle-orm";
+import { atoms, _links as __links  } from "./schema";
+import { eq, like, _sql as __sql, and  } from "drizzle-orm";
 
 /**
  * Adapter for DuckDB WASM integration with Deep Tree Echo
@@ -47,7 +47,7 @@ export class DuckDBAdapter {
       await this.db.instantiate(bundle.mainModule, bundle.pthreadWorker);
 
       // Initialize Drizzle with PG Proxy to bridge to DuckDB WASM
-      this.drizzleDb = drizzle(async (sql, params, method) => {
+      this.drizzleDb = drizzle(async (sql, params,_method) => {
         try {
           const rows = await this.query(sql, params);
           return { rows };
@@ -322,7 +322,7 @@ export class DuckDBAdapter {
         );
         log("Loaded links from persistence.");
       }
-    } catch (e) {
+    } catch (_e) {
       // If file doesn't exist or schema mismatch, just log - start fresh is fine
       log("No valid persistence found or load failed, starting fresh.");
     }
@@ -401,7 +401,7 @@ export class DuckDBAdapter {
           if (fs.existsSync(filePath)) {
             return new Uint8Array(fs.readFileSync(filePath));
           }
-        } catch (e) {
+        } catch (_e) {
           return null;
         }
       }
@@ -418,7 +418,7 @@ export class DuckDBAdapter {
         const file = await fileHandle.getFile();
         const arrayBuffer = await file.arrayBuffer();
         return new Uint8Array(arrayBuffer);
-      } catch (e) {
+      } catch (_e) {
         return null;
       }
     }

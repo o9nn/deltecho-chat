@@ -13,9 +13,9 @@
  */
 
 import { getLogger } from "@deltachat-desktop/shared/logger";
-import { BackendRemote, Type as T } from "../../backend-com";
+import { BackendRemote, Type as _T } from "../../backend-com";
 import { runtime } from "@deltachat-desktop/runtime-interface";
-import { DeepTreeEchoBot, DeepTreeEchoBotOptions } from "./DeepTreeEchoBot";
+import { DeepTreeEchoBot, _DeepTreeEchoBotOptions } from "./DeepTreeEchoBot";
 import {
   chatManager,
   DeepTreeEchoChatManager,
@@ -28,7 +28,7 @@ import {
 import { proactiveMessaging, ProactiveMessaging } from "./ProactiveMessaging";
 import { interfaceShadowing } from "./InterfaceShadowing";
 import { proactiveActionKernel } from "./ProactiveActionKernel";
-import { internalJournalManager } from "./InternalJournalManager";
+import { _internalJournalManager } from "./InternalJournalManager";
 
 const log = getLogger(
   "render/components/DeepTreeEchoBot/DeepTreeEchoIntegration",

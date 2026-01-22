@@ -413,7 +413,7 @@ export class TelemetryMonitor extends EventEmitter {
   /**
    * Record agent invocation
    */
-  public recordAgentInvocation(agentId: string): void {
+  public recordAgentInvocation(_agentId: string): void {
     this.incrementCounter("agent_invocations_total");
   }
 

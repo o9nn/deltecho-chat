@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import React from "react";
-import { render, screen, act, waitFor } from "@testing-library/react";
+import { render, _screen, act, _waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { DeepTreeEchoBotComponent as DeepTreeEchoBot } from "../index";
 

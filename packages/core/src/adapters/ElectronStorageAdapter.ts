@@ -25,7 +25,7 @@ export class ElectronStorageAdapter implements MemoryStorage {
     try {
       const { ipcRenderer } = require("electron");
       this.ipcRenderer = ipcRenderer;
-    } catch (error) {
+    } catch (_error) {
       throw new Error(
         "ElectronStorageAdapter requires Electron environment. " +
           "Make sure this is running in an Electron renderer process.",

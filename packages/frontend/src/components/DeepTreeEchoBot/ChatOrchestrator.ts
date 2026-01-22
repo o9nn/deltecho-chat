@@ -147,7 +147,7 @@ export class ChatOrchestrator {
    */
   private onAARStateUpdate(state: AARStateSnapshot): void {
     // Update all active sessions with new AAR state
-    for (const [sessionId, session] of this.sessions) {
+    for (const [_sessionId, session] of this.sessions) {
       session.aarSnapshot = state;
       session.aarContext = this.aarIntegration.generateContext() || undefined;
     }

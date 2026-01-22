@@ -664,7 +664,7 @@ export class DiscordBot implements IPlatformIntegration {
       name: "help",
       description: "Show available commands",
       aliases: ["h", "commands"],
-      execute: async (ctx) => {
+      execute: async ( _ctx) => {
         const prefix = this.config.commandPrefix || "!";
         const commands = Array.from(new Set(this.commands.values()));
 

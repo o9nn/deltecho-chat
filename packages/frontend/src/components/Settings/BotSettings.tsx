@@ -33,7 +33,7 @@ export default function BotSettings({
   const [apiEndpoint, setApiEndpoint] = useState("");
   const [personality, setPersonality] = useState("");
   const [proactiveEnabled, setProactiveEnabled] = useState(false);
-  const [proactiveTriggers, setProactiveTriggers] = useState("");
+  const [_proactiveTriggers, setProactiveTriggers] = useState("");
 
   // Load settings on component mount
   useEffect(() => {

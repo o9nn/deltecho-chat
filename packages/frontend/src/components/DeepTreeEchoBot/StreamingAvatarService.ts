@@ -323,7 +323,7 @@ export class StreamingAvatarService extends EventEmitter {
       };
 
       // Call LLM with streaming
-      const response = await this.llmProvider.completeStream(
+      const _response = await this.llmProvider.completeStream(
         messages,
         {
           model: this.config.model,

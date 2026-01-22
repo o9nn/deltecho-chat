@@ -324,7 +324,7 @@ export class AARPersistence extends EventEmitter {
           this.emit("recovered", { backup });
 
           return { agent, arena, relation, meta: state.meta };
-        } catch (error) {
+        } catch (_error) {
           log.warn(`Backup ${backup} corrupted, trying next`);
         }
       }

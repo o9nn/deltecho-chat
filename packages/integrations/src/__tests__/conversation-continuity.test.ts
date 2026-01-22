@@ -74,7 +74,7 @@ describe("ConversationContinuityManager", () => {
       const eventHandler = jest.fn();
       manager.on(ConversationEventType.PARTICIPANT_JOINED, eventHandler);
 
-      const conv1 = manager.getOrCreateConversation(
+      const _conv1 = manager.getOrCreateConversation(
         Platform.DISCORD,
         "channel_123",
         mockParticipant,

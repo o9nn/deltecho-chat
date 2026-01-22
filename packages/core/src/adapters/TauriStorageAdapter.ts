@@ -54,7 +54,7 @@ export class TauriStorageAdapter implements MemoryStorage {
       }>);
       this.store = new tauriStore.Store("deltecho.dat");
       this.initialized = true;
-    } catch (error) {
+    } catch (_error) {
       throw new Error(
         "TauriStorageAdapter requires Tauri environment with @tauri-apps/plugin-store. " +
           "Make sure the plugin is installed and configured.",

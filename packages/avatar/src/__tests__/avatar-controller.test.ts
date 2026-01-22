@@ -3,7 +3,7 @@
  */
 
 import { AvatarController } from "../avatar-controller";
-import { AvatarEvent, AvatarState, Expression } from "../types";
+import { AvatarEvent, _AvatarState, _Expression } from "../types";
 
 describe("AvatarController", () => {
   let controller: AvatarController;

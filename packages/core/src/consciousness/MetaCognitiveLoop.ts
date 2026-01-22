@@ -218,7 +218,7 @@ export class MetaCognitiveLoop {
     this.updateCognitiveLoad();
 
     // Monitor active processes
-    for (const [id, process] of this.activeProcesses.entries()) {
+    for (const [_id, process] of this.activeProcesses.entries()) {
       this.monitorProcess(process, now);
     }
 

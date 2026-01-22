@@ -16,7 +16,7 @@ import {
   proactiveMessaging,
   ProactiveConfig,
   ProactiveTrigger,
-  TriggerType,
+  _TriggerType,
 } from "./ProactiveMessaging";
 
 const log = getLogger(
@@ -82,7 +82,7 @@ const ProactiveMessagingSettings: React.FC<ProactiveMessagingSettingsProps> = ({
     const activeTriggers = currentTriggers.filter((t) => t.enabled).length;
 
     // Get rate limit info
-    const configData = proactiveMessaging.getConfig();
+    const _configData = proactiveMessaging.getConfig();
 
     setStats({
       queuedMessages,

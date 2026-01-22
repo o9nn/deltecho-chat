@@ -7,10 +7,10 @@ import {
   text,
   customType,
 } from "drizzle-orm/pg-core";
-import { sql } from "drizzle-orm";
+import { _sql as __sql  } from "drizzle-orm";
 
 // Define a custom type for embeddings (FLOAT[])
-const floatArray = customType<{ data: number[]; driverData: string }>({
+const _floatArray = customType<{ data: number[]; driverData: string }>({
   dataType() {
     return "FLOAT[]";
   },

@@ -1,5 +1,5 @@
 import { getLogger } from "../../../../shared/logger";
-import { runtime } from "@deltachat-desktop/runtime-interface";
+import { _runtime } from "@deltachat-desktop/runtime-interface";
 
 const log = getLogger("renderer/ProprioceptiveEmbodiment");
 

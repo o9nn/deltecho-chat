@@ -312,7 +312,7 @@ export class PhenomenalBinding {
    * Attempt to bind synchronized features
    */
   private attemptBinding(): void {
-    const now = Date.now();
+    const _now = Date.now();
 
     // Find features that are temporally synchronized
     const synchronizedGroups = this.findSynchronizedFeatures();

@@ -96,7 +96,7 @@ export class LMTPServer {
    */
   public async stop(): Promise<void> {
     return new Promise((resolve) => {
-      this.connections.forEach((session, socket) => {
+      this.connections.forEach((_session, socket) => {
         socket.destroy();
       });
       this.connections.clear();

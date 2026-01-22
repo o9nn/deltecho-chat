@@ -14,7 +14,7 @@ import { test, expect, Page } from "@playwright/test";
 
 // Test configuration
 const TEST_TIMEOUT = 30_000;
-const ANIMATION_FRAME_INTERVAL = 1000 / 30; // 30fps
+const _ANIMATION_FRAME_INTERVAL = 1000 / 30; // 30fps
 
 /**
  * Streaming lip-sync test context injected into the page

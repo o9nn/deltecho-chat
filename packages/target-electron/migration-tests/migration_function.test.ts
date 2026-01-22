@@ -65,7 +65,7 @@ describe("/electron/main/account-migration", async () => {
       // run migration function on environment
       if (!existsSync(join(targetFolder, "accounts.toml"))) {
         const migrated = await migrateAccountsIfNeeded(targetFolder, log, true);
-        expect(migrated).to.be.true;
+        void expect(migrated).to.be.true;
       } else {
         log.debug(
           "accounts.toml already exists, the migration from absolute paths to relative ones should happen on normal start",

@@ -135,7 +135,7 @@ describe("NicheConstruction", () => {
     });
 
     it("should emit artifact_created event when creating artifacts", async () => {
-      let called = false;
+      const _called = false;
       const callback = () => {
         called = true;
       };
@@ -261,7 +261,7 @@ describe("NicheConstruction", () => {
   describe("integration with ActiveInference", () => {
     it("should update niche fitness when beliefs change", async () => {
       nicheConstruction.start();
-      const initialState = nicheConstruction.getNicheState();
+      const _initialState = nicheConstruction.getNicheState();
 
       // Process observations to update beliefs
       for (let i = 0; i < 5; i++) {

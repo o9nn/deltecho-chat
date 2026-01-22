@@ -23,7 +23,7 @@ function createMethodHandlers(): MethodHandlers {
     // =====================================================================
     // INITIALIZATION
     // =====================================================================
-    initialize: async (server, params) => {
+    initialize: async ( _server, _params) => {
       return {
         protocolVersion: "2024-11-05",
         capabilities: {

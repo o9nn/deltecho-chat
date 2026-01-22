@@ -266,7 +266,7 @@ export class MilterServer {
   /**
    * Handle option negotiation
    */
-  private handleOptNeg(socket: net.Socket, data: Buffer): void {
+  private handleOptNeg(socket: net.Socket,_data: Buffer): void {
     // Version, actions, protocol
     const version = 6;
     const actions = 0x1ff; // All actions
@@ -285,7 +285,7 @@ export class MilterServer {
   /**
    * Handle CONNECT command
    */
-  private handleConnect(socket: net.Socket, data: Buffer): void {
+  private handleConnect(socket: net.Socket,_data: Buffer): void {
     // Reset message state
     this.currentMessage = {
       to: [],
@@ -301,7 +301,7 @@ export class MilterServer {
   /**
    * Handle HELO command
    */
-  private handleHelo(socket: net.Socket, data: Buffer): void {
+  private handleHelo(socket: net.Socket,_data: Buffer): void {
     this.sendResponse(socket, MILTER_RESPONSES.SMFIR_CONTINUE);
   }
 

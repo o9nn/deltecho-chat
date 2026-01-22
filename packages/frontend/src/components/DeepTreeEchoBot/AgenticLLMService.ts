@@ -26,7 +26,7 @@ import {
   ToolCall,
   ToolResult,
 } from "./AgentToolExecutor";
-import { LLMService, CognitiveFunctionType } from "./LLMService";
+import { LLMService, _CognitiveFunctionType } from "./LLMService";
 
 const log = getLogger("render/components/DeepTreeEchoBot/AgenticLLMService");
 

@@ -266,7 +266,7 @@ describe("AAR System", () => {
     });
 
     it("should transition narrative phases", () => {
-      const initialPhases = arena.getActivePhases();
+      const _initialPhases = arena.getActivePhases();
       arena.transitionPhase("possibility", 0.8);
 
       const newPhases = arena.getActivePhases();
