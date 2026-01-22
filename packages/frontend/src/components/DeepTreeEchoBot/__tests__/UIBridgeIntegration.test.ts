@@ -118,7 +118,7 @@ describe("DeepTreeEchoUIBridge Integration", () => {
     uiBridge = getUB();
 
     const keybindings = require("../../../keybindings");
-    _ActionEmitter = keybindings.ActionEmitter;
+    ActionEmitter = keybindings.ActionEmitter;
   });
 
   afterEach(() => {
