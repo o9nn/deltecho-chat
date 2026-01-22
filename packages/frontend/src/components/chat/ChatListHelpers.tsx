@@ -128,6 +128,7 @@ export function useChatList(
           queryStr: string | undefined,
           queryContactId: number | undefined,
         ) => {
+          if (accountId === undefined) return;
           BackendRemote.rpc
             .getChatlistEntries(
               accountId,

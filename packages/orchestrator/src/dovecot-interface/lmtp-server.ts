@@ -38,7 +38,8 @@ export class LMTPServer {
   private config: LMTPConfig;
   private server?: net.Server;
   private connections: Map<net.Socket, LMTPSession> = new Map();
-  private listeners: Map<string, Array<(data: unknown) => void>> = new Map();
+  private listeners: Map<string, Array<(data: any) => void | Promise<void>>> =
+    new Map();
 
   constructor(config: LMTPConfig) {
     this.config = {
@@ -560,7 +561,7 @@ export class LMTPServer {
   /**
    * Event emitter functionality
    */
-  public on(event: string, callback: (data: unknown) => void): void {
+  public on(event: string, callback: (data: any) => void | Promise<void>): void {
     if (!this.listeners.has(event)) {
       this.listeners.set(event, []);
     }
