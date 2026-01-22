@@ -19,7 +19,7 @@ import { AICompanionProvider, useAICompanion } from "./AICompanionController";
 import { AIMemory } from "./MemoryPersistenceLayer";
 
 // Force 3D graph rendering on canvas rather than WebGL when needed
-const forceCanvas = false;
+const _forceCanvas = false;
 
 // Import 3D graph library dynamically to avoid SSR issues
 let ForceGraph3D: any = null;

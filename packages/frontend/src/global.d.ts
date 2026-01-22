@@ -1,7 +1,7 @@
 import { userFeedback, Screens } from "./ScreenController";
 
 import "@deltachat-desktop/shared/global.d.ts";
-import type { useMessageList } from "./stores/messagelist";
+import type { _useMessageList } from "./stores/messagelist";
 import type { T } from "@deltachat/jsonrpc-client";
 
 declare global {

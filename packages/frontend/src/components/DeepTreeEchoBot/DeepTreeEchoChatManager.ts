@@ -257,7 +257,7 @@ export class DeepTreeEchoChatManager {
           messageIds[messageIds.length - 1],
         );
       }
-    } catch (err) {
+    } catch (_err) {
       // Ignore errors for last message
     }
     return null;
@@ -1096,7 +1096,7 @@ export class DeepTreeEchoChatManager {
               matchCount: matches ? matches.length : 0,
             });
           }
-        } catch (err) {
+        } catch (_err) {
           // Skip messages that can't be read
         }
       }

@@ -8,7 +8,7 @@ import {
   DEFAULT_DISCORD_CONFIG,
 } from "../discord/index.js";
 import type { DiscordConfig, DiscordSlashCommand } from "../discord/index.js";
-import type { BotCommand, CommandContext, PlatformResponse } from "../types.js";
+import type { BotCommand, _CommandContext, _PlatformResponse } from "../types.js";
 
 // Mock discord.js
 jest.mock("discord.js", () => ({

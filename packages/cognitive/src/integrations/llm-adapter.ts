@@ -5,7 +5,7 @@
  * for inference with cognitive context enrichment.
  */
 
-import { UnifiedMessage, EmotionalVector, LLMProcessorFn } from "../types";
+import { _UnifiedMessage, EmotionalVector, LLMProcessorFn } from "../types";
 
 /**
  * LLM response structure
@@ -170,7 +170,7 @@ export class LLMAdapter {
         // Fallback response
         content = this.getFallbackResponse(context);
       }
-    } catch (error) {
+    } catch (_error) {
       return {
         content:
           "I apologize, but I encountered an error processing your message. Please try again.",
@@ -339,7 +339,7 @@ export class LLMAdapter {
   /**
    * Get fallback response when no LLM available
    */
-  private getFallbackResponse(context: PromptContext): string {
+  private getFallbackResponse( _context: PromptContext): string {
     const responses = [
       "I understand you're reaching out. While I'm currently in a limited mode, I'm here to help.",
       "Thank you for your message. I'm processing in a simplified mode right now.",

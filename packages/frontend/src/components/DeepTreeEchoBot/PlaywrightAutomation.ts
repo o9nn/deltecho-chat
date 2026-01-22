@@ -130,7 +130,7 @@ export class PlaywrightAutomation {
       // Validate URL
       try {
         new URL(url);
-      } catch (error) {
+      } catch (_error) {
         return {
           success: false,
           error: "Invalid URL",
@@ -178,7 +178,7 @@ export class PlaywrightAutomation {
       // Validate URL
       try {
         new URL(url);
-      } catch (error) {
+      } catch (_error) {
         return {
           success: false,
           error: "Invalid URL",

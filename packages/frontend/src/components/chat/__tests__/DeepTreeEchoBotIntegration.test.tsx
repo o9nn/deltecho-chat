@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import DeepTreeEchoBot from "../DeepTreeEchoBot";
-import { getUIBridge } from "../../DeepTreeEchoBot/DeepTreeEchoUIBridge";
+import { _getUIBridge } from "../../DeepTreeEchoBot/DeepTreeEchoUIBridge";
 
 // Note: DeepTreeEchoBot is in components/chat/DeepTreeEchoBot.tsx
 // It imports from ../DeepTreeEchoBot/DeepTreeEchoUIBridge, which is physically located at

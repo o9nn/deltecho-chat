@@ -1,5 +1,5 @@
 import React from "react";
-import { DesktopSettingsType } from "@deltachat-desktop/shared/shared-types";
+import { _DesktopSettingsType } from "@deltachat-desktop/shared/shared-types";
 import { SettingsStoreState } from "../../stores/settings";
 import {
   BotSettings as DeepTreeEchoBotSettings,
@@ -14,7 +14,7 @@ type Props = {
 
 export default function BotSettings({ settingsStore }: Props) {
   // Get desktop settings from the store
-  const { desktopSettings } = settingsStore;
+  const { desktopSettings: _desktopSettings } = settingsStore;
 
   // Pass the settings to the DeepTreeEchoBotSettings component
   // and handle saving settings

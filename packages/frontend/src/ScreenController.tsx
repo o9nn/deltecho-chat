@@ -26,7 +26,7 @@ import { SmallScreenModeMacOSTitleBar } from "./components/SmallScreenModeMacOST
 import DeepTreeEchoBot from "./components/chat/DeepTreeEchoBot";
 import AINeighborhoodDashboard from "./components/screens/AINeighborhoodDashboard/AINeighborhoodDashboard";
 
-import { MemoryPersistenceLayer } from "./components/AICompanionHub/MemoryPersistenceLayer";
+import { _MemoryPersistenceLayer } from "./components/AICompanionHub/MemoryPersistenceLayer";
 
 const log = getLogger("renderer/ScreenController");
 
@@ -128,7 +128,7 @@ export default class ScreenController extends Component {
       } else {
         return undefined;
       }
-    } catch (error) {
+    } catch (_error) {
       log.warn(
         `getLastUsedAccount: account with id ${lastLoggedInAccountId} does not exist`,
       );
@@ -207,7 +207,7 @@ export default class ScreenController extends Component {
     if (this.lastAccountBeforeAddingNewAccount) {
       try {
         await this.selectAccount(this.lastAccountBeforeAddingNewAccount);
-      } catch (error) {
+      } catch (_error) {
         this.changeScreen(Screens.NoAccountSelected);
       }
     } else {

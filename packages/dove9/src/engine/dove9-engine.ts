@@ -57,7 +57,7 @@ export class Dove9Engine {
     this.anticipator.update(this.currentStep, globalSalience);
 
     // Apply homeostasis
-    const regulation = this.homeostat.update(globalSalience);
+    const _regulation = this.homeostat.update(globalSalience);
     // Apply regulation back to streams (simplistic: adjust load capacity or active state)
     // For now, we simply expose it in the state or logs implies regulation happening
 

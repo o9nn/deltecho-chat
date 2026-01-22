@@ -44,7 +44,7 @@
 import { getLogger } from "@deltachat-desktop/shared/logger";
 import { BackendRemote } from "../../backend-com";
 import { chatManager, ChatSummary } from "./DeepTreeEchoChatManager";
-import { uiBridge } from "./DeepTreeEchoUIBridge";
+import { _uiBridge } from "./DeepTreeEchoUIBridge";
 
 // Lazy logger to avoid initialization before logger handler is ready
 let _log: ReturnType<typeof getLogger> | null = null;
@@ -607,7 +607,7 @@ export class ProactiveMessaging {
           [`Chat name: ${chat.name}`, `Is group: ${chat.isGroup}`],
         );
         return response;
-      } catch (error) {
+      } catch (_error) {
         log().warn("Failed to generate AI message, using template");
       }
     }

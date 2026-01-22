@@ -6,7 +6,7 @@ import SettingsHeading from "./SettingsHeading";
 import SettingsSeparator from "./SettingsSeparator";
 import SettingsButton from "./SettingsButton";
 import { DeltaInput } from "../Login-Styles";
-import Callout from "../Callout";
+import _Callout from "../Callout";
 
 interface APIKeyEntry {
   id: string;

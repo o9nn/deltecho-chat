@@ -8,14 +8,14 @@
  * - Real-time status updates
  */
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, _useCallback } from "react";
 import { getLogger } from "../../../../shared/logger";
 import {
   proactiveMessaging,
   ProactiveTrigger,
   QueuedMessage,
 } from "./ProactiveMessaging";
-import { chatManager } from "./DeepTreeEchoChatManager";
+import { _chatManager } from "./DeepTreeEchoChatManager";
 
 const log = getLogger(
   "render/components/DeepTreeEchoBot/ProactiveStatusIndicator",

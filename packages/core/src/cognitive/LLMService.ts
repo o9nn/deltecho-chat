@@ -858,7 +858,7 @@ export class LLMService {
       log.info(
         `Generating self-reflection with ${reflectionFunctions.length} cognitive functions`,
       );
-      const responses = await this.generateParallelResponses(
+      const _responses = await this.generateParallelResponses(
         reflectionPrompt,
         reflectionFunctions,
       );
@@ -902,7 +902,7 @@ My self-reflection indicates that I can better serve users by slightly increasin
   /**
    * Analyze content for potential sensitivity issues using the specialized content evaluation function
    */
-  public async evaluateContent(content: string): Promise<{
+  public async evaluateContent( _content: string): Promise<{
     isSensitive: boolean;
     category?: "violence" | "sexual" | "other";
     explanation: string;
@@ -949,7 +949,7 @@ My self-reflection indicates that I can better serve users by slightly increasin
   /**
    * Analyze an image using vision capabilities
    */
-  public async analyzeImage(imageData: string): Promise<string> {
+  public async analyzeImage( _imageData: string): Promise<string> {
     try {
       const generalFunction = this.cognitiveFunctions.get(
         CognitiveFunctionType.GENERAL,

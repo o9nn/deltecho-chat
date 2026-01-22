@@ -15,7 +15,7 @@ import {
   ConnectorInfo,
 } from "./ConnectorRegistry";
 import { AIMemory } from "./MemoryPersistenceLayer";
-import { ConversationContext, Message } from "./connectors/BaseConnector";
+import { ConversationContext, _Message } from "./connectors/BaseConnector";
 
 // Context type for our magnificent AI Companion ecosystem
 interface AICompanionContextType {
@@ -178,7 +178,7 @@ export const AICompanionProvider: React.FC<{ children: ReactNode }> = ({
       setCompanions(companionInfos);
     };
 
-    const handleConnectorAuthenticated = async (data: any) => {
+    const handleConnectorAuthenticated = async (_data: any) => {
       const companionInfos = await registry.getConnectorInfos();
       setCompanions(companionInfos);
     };
@@ -483,7 +483,7 @@ export const AICompanionProvider: React.FC<{ children: ReactNode }> = ({
     if (!registry) throw new Error("AI Companion system not initialized");
 
     try {
-      const connector = await registry.createConnector(config);
+      const _connector = await registry.createConnector(config);
       return config.id;
     } catch (error) {
       console.error("Failed to create companion:", error);

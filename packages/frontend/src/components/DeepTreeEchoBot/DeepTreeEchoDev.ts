@@ -17,7 +17,7 @@ import {
   ProprioceptiveEmbodiment,
   ProprioceptiveEmbodimentOptions,
 } from "./ProprioceptiveEmbodiment";
-import { BackendRemote, Type as T } from "../../backend-com";
+import { _BackendRemote, Type as T } from "../../backend-com";
 
 const log = getLogger("render/components/DeepTreeEchoBot/DeepTreeEchoBot");
 
@@ -226,7 +226,7 @@ export class DeepTreeEchoBot {
     });
 
     // Vision command
-    this.commandHandlers.set("/vision", async (args, messageData) => {
+    this.commandHandlers.set("/vision", async ( _args, messageData) => {
       if (!this.options.visionEnabled) {
         return {
           success: false,
@@ -284,7 +284,7 @@ export class DeepTreeEchoBot {
     });
 
     // Search command
-    this.commandHandlers.set("/search", async (args, messageData) => {
+    this.commandHandlers.set("/search", async (args, _messageData) => {
       if (!this.options.webAutomationEnabled) {
         return {
           success: false,
@@ -336,7 +336,7 @@ export class DeepTreeEchoBot {
     });
 
     // Screenshot command
-    this.commandHandlers.set("/screenshot", async (args, messageData) => {
+    this.commandHandlers.set("/screenshot", async (args, _messageData) => {
       if (!this.options.webAutomationEnabled) {
         return {
           success: false,
@@ -388,7 +388,7 @@ export class DeepTreeEchoBot {
     });
 
     // Embodiment commands
-    this.commandHandlers.set("/embodiment", async (args, messageData) => {
+    this.commandHandlers.set("/embodiment", async (args, _messageData) => {
       if (!this.options.embodimentEnabled) {
         return {
           success: false,

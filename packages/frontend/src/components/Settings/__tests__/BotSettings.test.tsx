@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen, act, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import _userEvent from "@testing-library/user-event";
 import BotSettings from "../BotSettings";
 
 // Mock dependencies

@@ -149,7 +149,7 @@ describe("DeepTreeEchoUIBridge Integration", () => {
       uiBridge.registerDialogContext(mockDialogContext);
 
       // Try to open a dialog through the bridge
-      const result = uiBridge.openDialog("confirm", {
+      const _result = uiBridge.openDialog("confirm", {
         message: "Test confirmation",
         title: "Test",
       });
@@ -573,7 +573,7 @@ describe("DialogAdapter Integration", () => {
   it("should handle confirmation dialog promise", async () => {
     const { showConfirmation } = await import("../DialogAdapter");
 
-    const mockOpenDialog = jest.fn((component: any, props: any) => {
+    const mockOpenDialog = jest.fn((_component: any, props: any) => {
       // Immediately call the callback with confirmed=true
       setTimeout(() => {
         if (props.cb) props.cb(true);
@@ -592,7 +592,7 @@ describe("DialogAdapter Integration", () => {
   it("should handle alert dialog promise", async () => {
     const { showAlert } = await import("../DialogAdapter");
 
-    const mockOpenDialog = jest.fn((component: any, props: any) => {
+    const mockOpenDialog = jest.fn((_component: any, props: any) => {
       // Immediately call the callback
       setTimeout(() => {
         if (props.cb) props.cb();
@@ -609,8 +609,8 @@ describe("DialogAdapter Integration", () => {
 describe("ChatManager to UIBridge Integration", () => {
   let chatManager: any;
   let uiBridge: any;
-  let proactiveMessaging: any;
-  let ActionEmitter: any;
+  let _proactiveMessaging: any;
+  let _ActionEmitter: any;
 
   beforeEach(async () => {
     // Reset singleton instances explicitly

@@ -9,7 +9,7 @@
  * - Deleting triggers
  */
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, _useCallback } from "react";
 import { getLogger } from "../../../../shared/logger";
 import {
   proactiveMessaging,

@@ -101,7 +101,7 @@ const DEFAULT_CONFIG: Sys6BridgeConfig = {
 /**
  * Phase names for the 3 phases
  */
-const PHASE_NAMES: Record<1 | 2 | 3, string> = {
+const _PHASE_NAMES: Record<1 | 2 | 3, string> = {
   1: "Perception-Orientation",
   2: "Evaluation-Generation",
   3: "Action-Integration",
@@ -421,7 +421,7 @@ export class Sys6OrchestratorBridge extends EventEmitter {
     stream: StreamState,
     stepAddress: Sys6StepAddress,
   ): Promise<void> {
-    const stageName = STAGE_NAMES[1][stepAddress.stage];
+    const _stageName = STAGE_NAMES[1][stepAddress.stage];
 
     switch (stepAddress.stage) {
       case 1: // Sensory Intake

@@ -430,7 +430,7 @@ export class RecursiveSelfModel {
    * Synthesize a new narrative from observations
    */
   private synthesizeNarrative(observations: LayerObservation[]): string {
-    const themes = observations.map((o) => o.observation).join(" | ");
+    const _themes = observations.map((o) => o.observation).join(" | ");
     const avgSignificance =
       observations.reduce((sum, o) => sum + o.significance, 0) /
       observations.length;

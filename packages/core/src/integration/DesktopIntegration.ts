@@ -7,7 +7,7 @@
 
 import { LLMService, CognitiveFunctionType } from "../cognitive/LLMService";
 import { EnhancedLLMService, LLMConfig } from "../cognitive/EnhancedLLMService";
-import { RAGMemoryStore, Memory } from "../memory/RAGMemoryStore";
+import { RAGMemoryStore, _Memory } from "../memory/RAGMemoryStore";
 import { PersonaCore } from "../personality/PersonaCore";
 import { MemoryStorage, InMemoryStorage } from "../memory/storage";
 import { getLogger } from "../utils/logger";

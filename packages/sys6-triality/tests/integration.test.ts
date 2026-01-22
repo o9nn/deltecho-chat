@@ -2,7 +2,7 @@ import { Sys6Composer } from "../src/operadic/sys6-composer.js";
 // import { createCognitiveOrchestrator } from '@deltecho/cognitive';
 
 describe("Sys6 Integration", () => {
-  let composer: Sys6Composer;
+  let _composer: Sys6Composer;
 
   beforeEach(() => {
     composer = new Sys6Composer();

@@ -480,7 +480,7 @@ export class AutopoieticSelfMaintenance {
    * Run a complete maintenance cycle
    */
   private runMaintenanceCycle(): void {
-    const now = Date.now();
+    const _now = Date.now();
 
     // 1. Decay component health
     this.applyHealthDecay();

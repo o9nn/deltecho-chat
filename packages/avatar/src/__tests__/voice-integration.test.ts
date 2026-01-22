@@ -56,7 +56,7 @@ class AvatarVoiceCoordinator {
   /**
    * Apply lip-sync data to avatar
    */
-  applyLipSync(data: MockLipSyncData): void {
+  applyLipSync( _data: MockLipSyncData): void {
     this.lipSyncActive = true;
     this.avatarController.setSpeaking(true);
 
@@ -286,7 +286,7 @@ describe("Avatar ↔ Voice Integration", () => {
 
     it("should work with idle animation system", () => {
       idleAnimation.start();
-      const initialState = idleAnimation.getState();
+      const _initialState = idleAnimation.getState();
 
       // Start lip-sync
       coordinator.applyLipSync({ phonemes: [], duration: 100 });

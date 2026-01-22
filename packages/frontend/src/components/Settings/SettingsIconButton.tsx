@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { _ReactElement } from "react";
 
 import Icon from "../Icon";
 

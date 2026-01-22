@@ -13,7 +13,7 @@ import {
 import { runtime } from "@deltachat-desktop/runtime-interface";
 
 async function main() {
-  exp.help; //make sure experimental.ts is used
+  void void exp.help; //make sure experimental.ts is used
   try {
     await runtime.initialize(setLogHandler, getLogger);
     printProcessLogLevelInfo();

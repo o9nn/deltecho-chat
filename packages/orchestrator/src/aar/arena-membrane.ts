@@ -202,7 +202,7 @@ export class ArenaMembrane extends EventEmitter {
     intensity: number = 0.7,
   ): void {
     const oldPhase = this.getActivePhases()[0];
-    const phase = this.state.phases[phaseName];
+    const _phase = this.state.phases[phaseName];
 
     // Dampen other phases
     for (const [name, p] of Object.entries(this.state.phases)) {

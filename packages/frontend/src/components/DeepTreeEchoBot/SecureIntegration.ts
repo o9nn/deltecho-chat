@@ -7,7 +7,7 @@
  * DeltaChat ecosystem.
  */
 
-import { C } from "@deltachat/jsonrpc-client";
+import { _C } from "@deltachat/jsonrpc-client";
 import { getLogger } from "@deltachat-desktop/shared/logger";
 
 const log = getLogger("render/components/DeepTreeEchoBot/SecureIntegration");

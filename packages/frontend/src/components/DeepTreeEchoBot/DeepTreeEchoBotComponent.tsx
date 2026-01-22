@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { C } from "@deltachat/jsonrpc-client";
+import { _C } from "@deltachat/jsonrpc-client";
 import { getLogger } from "@deltachat-desktop/shared/logger";
 
 const log = getLogger("render/components/DeepTreeEchoBot/DeepTreeEchoBotComponent");
@@ -172,7 +172,7 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ testHooks }) => {
   });
 
   // Chat interaction state
-  const [currentChatId, setCurrentChatId] = useState<number | null>(null);
+  const [_currentChatId, setCurrentChatId] = useState<number | null>(null);
   const [currentProcessingState, setCurrentProcessingState] =
     useState<CognitiveState>(CognitiveState.IDLE);
   const [lastUserMessage, setLastUserMessage] = useState<string | null>(null);
@@ -355,7 +355,7 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ testHooks }) => {
       );
 
       // Generate beliefs from message
-      const relevantBeliefs =
+      const _relevantBeliefs =
         beliefSystem.current.getRelevantBeliefs(messageText);
       if (messageText.length > 10) {
         // Extract potential facts or preferences from longer messages
@@ -418,8 +418,8 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ testHooks }) => {
     const relevantMemories = hyperMemory.current.recallMemories(messageText, 5);
 
     // Get personality parameters
-    const personality = adaptivePersonality.current.getCurrentPersonality();
-    const emotionalState =
+    const _personality = adaptivePersonality.current.getCurrentPersonality();
+    const _emotionalState =
       adaptivePersonality.current.getCurrentEmotionalState();
 
     // Get belief context
@@ -579,7 +579,7 @@ Deep Tree Echo Bot Commands:
       case "emotional":
         const emotionalState =
           adaptivePersonality.current.getCurrentEmotionalState();
-        const personality = adaptivePersonality.current.getCurrentPersonality();
+        const _personality = adaptivePersonality.current.getCurrentPersonality();
 
         return `
 My current emotional state:

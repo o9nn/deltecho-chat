@@ -392,7 +392,7 @@ export async function init(cwd: string, logHandler: LogHandler) {
         if (!["http:", "https:"].includes(urlObj.protocol)) {
           throw new Error("Invalid protocol");
         }
-      } catch (e) {
+      } catch (_e) {
         throw new Error(`Invalid URL: ${url}`);
       }
 

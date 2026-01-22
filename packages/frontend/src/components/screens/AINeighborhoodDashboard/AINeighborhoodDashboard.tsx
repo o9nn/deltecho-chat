@@ -47,7 +47,7 @@ interface AICompanionHome {
 const AINeighborhoodDashboard: React.FC = () => {
   const [selectedHome, setSelectedHome] = useState<string | null>(null);
   const [neighborhoodActivity, setNeighborhoodActivity] = useState<any[]>([]);
-  const [sharedMemories, setSharedMemories] = useState<any[]>([]);
+  const [_sharedMemories, setSharedMemories] = useState<any[]>([]);
 
   // Initialize AI Companion Homes
   const aiHomes: AICompanionHome[] = useMemo(
@@ -342,7 +342,7 @@ const AICompanionChat: React.FC<{ connector: AIPlatformConnector }> = ({
     try {
       const response = await connector.sendMessage(userMessage);
       setMessages((prev) => [...prev, { role: "ai", content: response }]);
-    } catch (error) {
+    } catch (_error) {
       setMessages((prev) => [
         ...prev,
         {

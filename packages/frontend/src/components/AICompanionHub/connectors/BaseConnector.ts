@@ -2,7 +2,7 @@
 // A revolutionary foundation for AI platform integration
 
 import { EventEmitter } from "events";
-import { AIMemory, MemorySystem, MemoryType } from "../MemoryPersistenceLayer";
+import { AIMemory, MemorySystem, _MemoryType } from "../MemoryPersistenceLayer";
 
 export interface AIConnectorConfig {
   id: string;

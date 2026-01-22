@@ -13,7 +13,7 @@ import { EventEmitter } from "events";
 import type { ArenaMCPServer } from "../arena-mcp/index.js";
 import type { AgentMCPServer } from "../agent-mcp/index.js";
 import type { RelationMCPServer } from "../relation-mcp/index.js";
-import type { DevelopmentalCycleResult, VirtualAgentModel } from "../types.js";
+import type { DevelopmentalCycleResult, _VirtualAgentModel } from "../types.js";
 
 /**
  * Lifecycle phase enumeration
@@ -240,7 +240,7 @@ export class LifecycleCoordinator extends EventEmitter {
     if (dominantPhase) {
       // Raise engagement if narrative is active
       const currentEngagement = agent.getState().engagementLevel;
-      const newEngagement = Math.min(
+      const _newEngagement = Math.min(
         1,
         currentEngagement + dominantPhase[1].intensity * 0.1,
       );

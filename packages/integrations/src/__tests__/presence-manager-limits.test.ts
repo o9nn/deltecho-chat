@@ -2,7 +2,7 @@ import {
   createPresenceManager,
   Platform,
   PresenceStatus,
-  ActivityType,
+  _ActivityType,
   type PresenceAdapter,
   UnifiedPresenceManager,
 } from "../cross-platform/presence-manager";

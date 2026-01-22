@@ -384,7 +384,7 @@ export class RelevanceRealizationWorkspace extends EventEmitter {
         id: "exploration",
         name: "Exploration",
         description: "Seek novel, uncertain information",
-        evaluate: (signal, context) => {
+        evaluate: (signal, _context) => {
           // Higher relevance for novel, uncertain signals
           return signal.salience * (1 - signal.confidence) * 0.8;
         },
@@ -436,7 +436,7 @@ export class RelevanceRealizationWorkspace extends EventEmitter {
         id: "present",
         name: "Present",
         description: "Focus on immediate relevance",
-        evaluate: (signal, context) => {
+        evaluate: (signal, _context) => {
           return signal.urgency * signal.salience;
         },
       },

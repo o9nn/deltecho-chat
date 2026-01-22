@@ -212,7 +212,7 @@ describe("Voice ↔ Core Integration", () => {
       });
 
       const params = coordinator.getModulatedParams();
-      const happyMod = EMOTION_MODULATIONS["happy"];
+      const _happyMod = EMOTION_MODULATIONS["happy"];
 
       // Happy voice should be faster
       expect(params.rate).toBeGreaterThan(1);
@@ -231,7 +231,7 @@ describe("Voice ↔ Core Integration", () => {
       });
 
       const params = coordinator.getModulatedParams();
-      const sadMod = EMOTION_MODULATIONS["sad"];
+      const _sadMod = EMOTION_MODULATIONS["sad"];
 
       // Sad voice should have lower pitch
       expect(params.pitch).toBeLessThanOrEqual(1);
@@ -476,7 +476,7 @@ describe("EMOTION_MODULATIONS configuration", () => {
   });
 
   it("should have valid modulation ranges", () => {
-    for (const [emotion, modulation] of Object.entries(EMOTION_MODULATIONS)) {
+    for (const [_emotion, modulation] of Object.entries(EMOTION_MODULATIONS)) {
       // Rate adjustment should be reasonable
       expect(modulation.rateAdjust).toBeGreaterThanOrEqual(-0.5);
       expect(modulation.rateAdjust).toBeLessThanOrEqual(0.5);
