@@ -555,7 +555,7 @@ export class DeepTreeEchoTelegramBot {
    */
   private shouldRespond(
     context: TelegramMessageContext,
-    text: string,
+    _text: string,
   ): boolean {
     // Check chat allowlist
     if (
@@ -649,7 +649,7 @@ export class DeepTreeEchoTelegramBot {
    * Escape special characters for MarkdownV2
    */
   private escapeMarkdown(text: string): string {
-    return text.replace(/([_*\[\]()~`>#+\-=|{}.!\\])/g, "\\$1");
+    return text.replace(/([_*[\]()~`>#+\-=|{}.!\\])/g, "\\$1");
   }
 
   private log(message: string): void {

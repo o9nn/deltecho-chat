@@ -173,7 +173,7 @@ Use this context to inform your tone, depth of sharing, and reference to shared 
       },
     ],
     handler: (
-      agent: AgentMembrane,
+      _agent: AgentMembrane,
       _virtualAgent: VirtualAgentModel,
       args: { type: string },
     ): string => {

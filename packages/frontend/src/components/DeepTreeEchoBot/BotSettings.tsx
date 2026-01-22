@@ -60,6 +60,22 @@ const BotSettings: React.FC<BotSettingsProps> = ({
     totalTokens: 0,
   });
 
+  // Update service status information
+  const updateServiceStatus = () => {
+    const llmService = LLMService.getInstance();
+    const activeFunctions = llmService.getActiveFunctions();
+
+    let totalTokens = 0;
+    activeFunctions.forEach((func) => {
+      totalTokens += func.usage.totalTokens;
+    });
+
+    setServiceStatus({
+      activeFunctions: activeFunctions.length,
+      totalTokens,
+    });
+  };
+
   // Load settings on component mount
   useEffect(() => {
     const loadSettings = async () => {
@@ -130,23 +146,8 @@ const BotSettings: React.FC<BotSettingsProps> = ({
     };
 
     loadSettings();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // Update service status information
-  const updateServiceStatus = () => {
-    const llmService = LLMService.getInstance();
-    const activeFunctions = llmService.getActiveFunctions();
-
-    let totalTokens = 0;
-    activeFunctions.forEach((func) => {
-      totalTokens += func.usage.totalTokens;
-    });
-
-    setServiceStatus({
-      activeFunctions: activeFunctions.length,
-      totalTokens,
-    });
-  };
 
   // Handle advanced settings navigation or toggle
   const handleOpenAdvancedSettings = () => {

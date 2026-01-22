@@ -152,7 +152,7 @@ Weave responses that honor the current phase while hinting at possible transitio
       },
     ],
     handler: (
-      arena: ArenaMembrane,
+      _arena: ArenaMembrane,
       agentRegistry: Map<string, AgentReference>,
       args: { goal: string; agents: string },
     ): string => {

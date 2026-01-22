@@ -80,7 +80,7 @@ export const relationResources = {
   "relation://virtual-agent": {
     schema: z.object({}),
     handler: (
-      relation: RelationInterface,
+      _relation: RelationInterface,
       _params: Record<string, never>,
       virtualAgent: VirtualAgentModel,
     ): VirtualAgentModel => {
@@ -94,7 +94,7 @@ export const relationResources = {
   "relation://virtual-arena": {
     schema: z.object({}),
     handler: (
-      relation: RelationInterface,
+      _relation: RelationInterface,
       _params: Record<string, never>,
       virtualAgent: VirtualAgentModel,
     ): VirtualArenaModel => {

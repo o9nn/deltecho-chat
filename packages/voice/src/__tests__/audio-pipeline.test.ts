@@ -7,7 +7,6 @@ import {
   createAudioPipeline,
   DEFAULT_PIPELINE_CONFIG,
   PipelineEvent,
-  PipelineState,
 } from "../audio-pipeline";
 
 // Mock the dependencies

@@ -19,14 +19,6 @@ const defaults: RC_Config = {
 
 const config = rc("DeltaChat", defaults) as RC_Config;
 
-if (config.version || config.v) {
-  void config.version == true;
-}
-
-if (config.help || config.h) {
-  void config.help == true;
-}
-
 if (config.devmode) {
   config["log-debug"] = true;
   config["log-to-console"] = true;

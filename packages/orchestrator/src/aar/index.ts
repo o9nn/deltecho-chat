@@ -12,13 +12,10 @@ import { AgentMembrane } from "./agent-membrane.js";
 import { ArenaMembrane } from "./arena-membrane.js";
 import { RelationInterface } from "./relation-interface.js";
 import { AARPersistence } from "./persistence.js";
-import type { AARPersistenceConfig } from "./persistence.js";
 import type {
   AARState,
   AARConfig,
   AAREvent,
-  DEFAULT_AAR_CONFIG,
-  CoreIdentity,
   SessionFrame,
   CharacterFacets,
   NarrativePhases,

@@ -7,7 +7,6 @@ import {
   createLipSyncGenerator,
   phonemeToMouthShape,
   DEFAULT_LIPSYNC_CONFIG,
-  LipSyncData,
   PhonemeEntry,
   LipSyncEvent,
 } from "../lip-sync";

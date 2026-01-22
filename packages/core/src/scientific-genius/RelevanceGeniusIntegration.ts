@@ -24,7 +24,6 @@ import {
   RelevanceSignal,
   CognitiveDomain,
   RelevanceType,
-  WorkspaceContext,
 } from "../consciousness/RelevanceRealizationWorkspace";
 import {
   ScientificGeniusEngine,
@@ -32,7 +31,6 @@ import {
   ScientificDomain,
   ScientificInsight,
   Hypothesis,
-  ReasoningMode,
 } from "./ScientificGeniusEngine";
 
 const log = getLogger("deep-tree-echo-core/scientific-genius/RelevanceGeniusIntegration");

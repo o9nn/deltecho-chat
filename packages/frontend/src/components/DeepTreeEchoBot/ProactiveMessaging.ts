@@ -463,12 +463,13 @@ export class ProactiveMessaging {
       case "scheduled":
         return trigger.scheduledTime ? now >= trigger.scheduledTime : false;
 
-      case "interval":
+      case "interval": {
         if (!trigger.intervalMinutes) return false;
         const intervalMs = trigger.intervalMinutes * 60 * 1000;
         return (
           !trigger.lastTriggered || now - trigger.lastTriggered >= intervalMs
         );
+      }
 
       case "condition":
         return this.evaluateCondition(trigger);
@@ -489,7 +490,7 @@ export class ProactiveMessaging {
     if (!trigger.condition) return false;
 
     switch (trigger.condition.type) {
-      case "unread_count":
+      case "unread_count": {
         // Check if unread count exceeds threshold
         const accounts = await BackendRemote.rpc.getAllAccounts();
         for (const account of accounts) {
@@ -503,6 +504,7 @@ export class ProactiveMessaging {
           }
         }
         return false;
+      }
 
       case "silence_duration":
         // This would need to track last message times per chat
@@ -626,7 +628,7 @@ export class ProactiveMessaging {
   /**
    * Handle an event that might trigger messages
    */
-  public async handleEvent(eventType: EventType, data?: any): Promise<void> {
+  public async handleEvent(eventType: EventType, _data?: any): Promise<void> {
     if (!this.config.enabled) return;
 
     for (const trigger of this.triggers.values()) {

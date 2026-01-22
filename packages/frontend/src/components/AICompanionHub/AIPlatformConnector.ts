@@ -233,7 +233,7 @@ export class DeepTreeEchoConnector extends AIPlatformConnector {
   }
 
   private async generateRecursiveResponse(
-    input: string,
+    _input: string,
     patterns: string[],
   ): Promise<string> {
     // Simulate Deep Tree Echo's unique response style

@@ -5,12 +5,9 @@ import {
   Home,
   MessageSquare,
   Activity,
-  Cloud,
-  Users,
   Sparkles,
   TreePine,
   Code,
-  Palette,
   Theater,
   Wrench,
   Globe,
@@ -18,16 +15,11 @@ import {
   Zap,
   Heart,
   BookOpen,
-  Search,
-  Loader2,
-  Clock,
-  Tag,
   type LucideIcon,
 } from "lucide-react";
 import {
   DeepTreeEchoConnector,
   AIPlatformConnector,
-  AICompanionConfig,
 } from "../../AICompanionHub/AIPlatformConnector";
 import DeepTreeEchoHub from "../DeepTreeEchoHub/DeepTreeEchoHub";
 
@@ -47,7 +39,7 @@ interface AICompanionHome {
 const AINeighborhoodDashboard: React.FC = () => {
   const [selectedHome, setSelectedHome] = useState<string | null>(null);
   const [neighborhoodActivity, setNeighborhoodActivity] = useState<any[]>([]);
-  const [_sharedMemories, setSharedMemories] = useState<any[]>([]);
+  const [_sharedMemories, _setSharedMemories] = useState<any[]>([]);
 
   // Initialize AI Companion Homes
   const aiHomes: AICompanionHome[] = useMemo(

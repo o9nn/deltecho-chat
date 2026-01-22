@@ -649,7 +649,7 @@ export class RecursiveSelfModel {
    * Generate a response that demonstrates self-awareness
    */
   private generateSelfAwareResponse(
-    input: string,
+    _input: string,
     introspection: IntrospectionResult,
   ): string {
     const selfAwareness = introspection.strangeLoopDepth / this.RECURSION_DEPTH;

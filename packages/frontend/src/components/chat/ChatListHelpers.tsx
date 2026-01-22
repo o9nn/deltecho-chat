@@ -102,23 +102,19 @@ export function useChatList(
   queryContactId?: number,
 ) {
   const accountId = window.__selectedAccountId;
-  // Return empty chat list if no account is selected yet
-  if (accountId === undefined) {
-    return { chatListIds: [] };
-  }
-  if (!queryStr) queryStr = "";
+  const normalizedQueryStr = queryStr || "";
 
   const initialListFlags = useRef(listFlags);
-  const initialQueryStr = useRef(queryStr);
+  const initialQueryStr = useRef(normalizedQueryStr);
   const initialQueryContactId = useRef(queryContactId);
   const [chatListEntries, setChatListEntries] = useState<number[]>([]);
 
   const areQueryParamsInitial: boolean =
     listFlags === initialListFlags.current &&
-    queryStr === initialQueryStr.current &&
+    normalizedQueryStr === initialQueryStr.current &&
     queryContactId === initialQueryContactId.current;
   const chatListEntriesForInitialQueryParams = useChatListNoDebounce(
-    accountId,
+    accountId ?? 0,
     initialListFlags.current,
     initialQueryStr.current,
     initialQueryContactId.current,
@@ -161,25 +157,34 @@ export function useChatList(
         // and we'll return that from this hook.
         debouncedGetChatListEntries.clear();
       } else {
-        debouncedGetChatListEntries(listFlags, queryStr, queryContactId);
+        debouncedGetChatListEntries(listFlags, normalizedQueryStr, queryContactId);
       }
     };
 
     if (areQueryParamsInitial) {
       debouncedGetChatListEntries.clear();
     } else {
-      debouncedGetChatListEntries(listFlags, queryStr, queryContactId);
+      debouncedGetChatListEntries(listFlags, normalizedQueryStr, queryContactId);
+    }
+
+    if (accountId === undefined) {
+      return;
     }
 
     return onDCEvent(accountId, "ChatlistChanged", refetchChatlist);
   }, [
     listFlags,
-    queryStr,
+    normalizedQueryStr,
     queryContactId,
     debouncedGetChatListEntries,
     accountId,
     areQueryParamsInitial,
   ]);
+
+  // Return empty chat list if no account is selected yet
+  if (accountId === undefined) {
+    return { chatListIds: [] };
+  }
 
   if (areQueryParamsInitial) {
     log.debug(

@@ -421,7 +421,7 @@ export class ActiveInference extends EventEmitter {
   private computeLikelihood(
     beliefValue: string,
     observedFeature: number,
-    observation: Observation,
+    _observation: Observation,
   ): number {
     // Map belief values to expected feature values
     const expectedValues: Record<string, number> = {
@@ -511,7 +511,7 @@ export class ActiveInference extends EventEmitter {
   private getLikelihoodForState(
     variable: string,
     value: string,
-    observation: Observation,
+    _observation: Observation,
   ): number {
     const likelihoodMap = this.generativeModel.likelihood.get(variable);
     if (likelihoodMap) {

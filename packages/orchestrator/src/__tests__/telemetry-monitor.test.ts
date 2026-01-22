@@ -16,15 +16,8 @@ import {
   expect,
   beforeEach,
   afterEach,
-  jest,
 } from "@jest/globals";
-import {
-  TelemetryMonitor,
-  TelemetryConfig,
-  Metric,
-  Alert,
-  HealthStatus,
-} from "../telemetry/index.js";
+import { TelemetryMonitor, Metric, Alert } from "../telemetry/index.js";
 
 describe("TelemetryMonitor", () => {
   let monitor: TelemetryMonitor;

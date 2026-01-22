@@ -21,7 +21,6 @@ import type {
   AgentMCPResourceUri,
   VirtualAgentModel,
   VirtualArenaModel,
-  CharacterFacets,
 } from "../types.js";
 
 /**

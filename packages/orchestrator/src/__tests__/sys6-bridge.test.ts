@@ -17,12 +17,8 @@ import {
   expect,
   beforeEach,
   afterEach,
-  jest,
 } from "@jest/globals";
-import {
-  Sys6OrchestratorBridge,
-  Sys6BridgeConfig,
-} from "../sys6-bridge/index.js";
+import { Sys6OrchestratorBridge } from "../sys6-bridge/index.js";
 
 describe("Sys6OrchestratorBridge", () => {
   let bridge: Sys6OrchestratorBridge;

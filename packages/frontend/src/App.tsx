@@ -15,6 +15,16 @@ import { I18nContext } from "./contexts/I18nContext";
 export default function App(_props: any) {
   const [localeData, setLocaleData] = useState<LocaleData | null>(null);
 
+  // Declare reloadLocaleData before hooks that use it
+  async function reloadLocaleData(locale: string) {
+    const newLocaleData = await runtime.getLocaleData(locale);
+    window.localeData = newLocaleData;
+    window.static_translate = translate(newLocaleData.locale, newLocaleData.messages);
+    setLocaleData(newLocaleData);
+    moment.locale(newLocaleData.locale);
+    updateCoreStrings();
+  }
+
   useEffect(() => {
     runtime.emitUIReady();
     window.addEventListener("keydown", function (ev: KeyboardEvent) {
@@ -52,22 +62,15 @@ export default function App(_props: any) {
       const desktop_settings = await runtime.getDesktopSettings();
       await reloadLocaleData(desktop_settings.locale || "en");
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  async function reloadLocaleData(locale: string) {
-    const localeData = await runtime.getLocaleData(locale);
-    window.localeData = localeData;
-    window.static_translate = translate(localeData.locale, localeData.messages);
-    setLocaleData(localeData);
-    moment.locale(localeData.locale);
-    updateCoreStrings();
-  }
 
   useEffect(() => {
     runtime.onChooseLanguage = async (locale: string) => {
       await runtime.setLocale(locale);
       await reloadLocaleData(locale);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [localeData]);
 
   if (!localeData) return null;

@@ -16,14 +16,12 @@ import {
   expect,
   beforeEach,
   afterEach,
-  jest,
 } from "@jest/globals";
 import {
   AgentCoordinator,
   Agent,
   AgentTemplate,
   Task,
-  CoordinatorConfig,
 } from "../agents/index.js";
 
 describe("AgentCoordinator", () => {

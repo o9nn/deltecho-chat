@@ -6,10 +6,7 @@
  */
 
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import {
-  Live2DAvatar,
-  useLive2DController,
-} from "../AICompanionHub/Live2DAvatar";
+import { Live2DAvatar } from "../AICompanionHub/Live2DAvatar";
 import type {
   Live2DAvatarController,
   Expression,

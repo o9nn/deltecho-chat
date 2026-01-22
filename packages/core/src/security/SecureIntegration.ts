@@ -146,7 +146,7 @@ export class SecureIntegration {
     log.info("Encryption initialized");
   }
 
-  public validateInput(input: string, userId?: string): ValidationResult {
+  public validateInput(input: string, _userId?: string): ValidationResult {
     const result: ValidationResult = {
       valid: true,
       sanitized: input,
@@ -315,7 +315,7 @@ export class SecureIntegration {
       "password: [REDACTED]",
     );
     sanitized = sanitized.replace(
-      /Bearer\s+[A-Za-z0-9\-._~+\/]+=*/g,
+      /Bearer\s+[A-Za-z0-9\-._~+/]+=*/g,
       "Bearer [TOKEN_REDACTED]",
     );
     return sanitized;

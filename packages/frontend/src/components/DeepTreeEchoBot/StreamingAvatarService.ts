@@ -28,7 +28,6 @@ import {
   createAvatarLipSyncReceiver,
   startStreamingLipSync,
   stopStreamingLipSync,
-  setAvatarThinking,
   setAvatarIdle,
   setAvatarError,
   MouthShape,

@@ -32,7 +32,7 @@ interface CognitiveSystemCheck {
 /**
  * Wait for cognitive system to initialize and return availability status
  */
-async function checkCognitiveSystem(
+async function _checkCognitiveSystem(
   page: Page,
   timeout = COGNITIVE_LOAD_TIMEOUT,
 ): Promise<CognitiveSystemCheck> {
@@ -64,7 +64,7 @@ async function checkCognitiveSystem(
   }
 }
 
-async function getCognitiveState(page: Page) {
+async function _getCognitiveState(page: Page) {
   return page.evaluate(() => {
     const win = window as unknown as {
       __deepTreeEchoState?: {

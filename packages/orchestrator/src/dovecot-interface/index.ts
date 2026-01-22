@@ -165,9 +165,9 @@ export class DovecotInterface {
   /**
    * Event emitter functionality (simplified)
    */
-  private listeners: Map<string, Function[]> = new Map();
+  private listeners: Map<string, Array<(data: unknown) => void>> = new Map();
 
-  public on(event: string, callback: Function): void {
+  public on(event: string, callback: (data: unknown) => void): void {
     if (!this.listeners.has(event)) {
       this.listeners.set(event, []);
     }

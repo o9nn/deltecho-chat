@@ -618,7 +618,7 @@ export class DeepTreeEchoChatManager {
   public async respondToMention(
     accountId: number,
     chatId: number,
-    originalMessage: string,
+    _originalMessage: string,
     response: string,
   ): Promise<number | null> {
     // Open the chat first

@@ -533,7 +533,7 @@ export class IntentionalityEngine {
   public updateGoalProgress(
     goalId: string,
     progress: number,
-    notes?: string,
+    _notes?: string,
   ): void {
     const goal = this.goals.get(goalId);
     if (!goal) return;

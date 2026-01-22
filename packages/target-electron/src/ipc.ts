@@ -8,7 +8,6 @@ import {
   shell,
   NativeImage,
   systemPreferences,
-  net,
 } from "electron";
 import path, {
   basename,

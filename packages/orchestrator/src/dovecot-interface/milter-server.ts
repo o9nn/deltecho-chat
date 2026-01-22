@@ -100,7 +100,7 @@ export class MilterServer {
   private config: MilterConfig;
   private server?: net.Server;
   private connections: Set<net.Socket> = new Set();
-  private listeners: Map<string, Function[]> = new Map();
+  private listeners: Map<string, Array<(data: unknown) => void>> = new Map();
   private currentMessage: Partial<EmailMessage> = {};
 
   constructor(config: MilterConfig) {
@@ -469,7 +469,7 @@ export class MilterServer {
   /**
    * Event emitter functionality
    */
-  public on(event: string, callback: Function): void {
+  public on(event: string, callback: (data: unknown) => void): void {
     if (!this.listeners.has(event)) {
       this.listeners.set(event, []);
     }

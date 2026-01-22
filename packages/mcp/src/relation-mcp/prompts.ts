@@ -24,7 +24,7 @@ export const relationPrompts = {
     name: "self_narrative_construction",
     description: "Template for constructing or updating the self-narrative",
     handler: (
-      relation: RelationInterface,
+      _relation: RelationInterface,
       virtualAgent: VirtualAgentModel,
     ): string => {
       const selfReflection = relation.getSelfReflection();
@@ -136,7 +136,7 @@ but from their dynamic, ongoing synthesis through interaction.`;
     name: "reflexive_awareness",
     description: "Template for meta-cognitive self-observation",
     handler: (
-      relation: RelationInterface,
+      _relation: RelationInterface,
       virtualAgent: VirtualAgentModel,
     ): string => {
       const state = relation.getState();
@@ -205,7 +205,7 @@ The observer is also observed.`;
     name: "inverted_mirror",
     description: "Template for understanding the inverted mirror structure",
     handler: (
-      relation: RelationInterface,
+      _relation: RelationInterface,
       virtualAgent: VirtualAgentModel,
     ): string => {
       const vo = virtualAgent.worldView;

@@ -283,7 +283,7 @@ export abstract class BaseConnector extends EventEmitter {
    */
   protected async retrieveRelevantMemories(
     message: string,
-    conversationId: string,
+    _conversationId: string,
   ): Promise<AIMemory[]> {
     // Search for relevant memories
     const searchResults = await MemorySystem.searchMemories(

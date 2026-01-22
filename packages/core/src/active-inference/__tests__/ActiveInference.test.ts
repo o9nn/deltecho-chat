@@ -3,7 +3,6 @@ import {
   ActiveInferenceConfig,
   Observation,
   Action,
-  BeliefState,
 } from "../ActiveInference.js";
 
 describe("ActiveInference", () => {

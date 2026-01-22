@@ -1,22 +1,9 @@
 import { getLogger } from "../../../../shared/logger";
 import { RAGMemoryStore, Memory } from "./RAGMemoryStore";
-import {
-  LLMService,
-  LLMServiceOptions,
-  CognitiveFunctionType,
-} from "./LLMService";
-import {
-  VisionCapabilities,
-  VisionCapabilitiesOptions,
-} from "./VisionCapabilities";
-import {
-  PlaywrightAutomation,
-  PlaywrightAutomationOptions,
-} from "./PlaywrightAutomation";
-import {
-  ProprioceptiveEmbodiment,
-  ProprioceptiveEmbodimentOptions,
-} from "./ProprioceptiveEmbodiment";
+import { LLMService, CognitiveFunctionType } from "./LLMService";
+import { VisionCapabilities } from "./VisionCapabilities";
+import { PlaywrightAutomation } from "./PlaywrightAutomation";
+import { ProprioceptiveEmbodiment } from "./ProprioceptiveEmbodiment";
 import { Type as T } from "../../backend-com";
 import type { BackendRemote as _BackendRemote } from "../../backend-com";
 
@@ -402,7 +389,7 @@ export class DeepTreeEchoBot {
       const subcommand = subcommands[0];
 
       switch (subcommand) {
-        case "start":
+        case "start": {
           const startResult = await this.embodiment.startTraining();
           return {
             success: startResult,
@@ -410,8 +397,9 @@ export class DeepTreeEchoBot {
               ? "Started proprioceptive training. Move the controller to train the system."
               : "Failed to start proprioceptive training.",
           };
+        }
 
-        case "stop":
+        case "stop": {
           const stopResult = await this.embodiment.stopTraining();
           return {
             success: stopResult,
@@ -419,8 +407,9 @@ export class DeepTreeEchoBot {
               ? "Stopped proprioceptive training. Training data has been saved."
               : "Failed to stop proprioceptive training.",
           };
+        }
 
-        case "status":
+        case "status": {
           const movementData = await this.embodiment.getCurrentMovementData();
           const stats = this.embodiment.getTrainingStats();
 
@@ -445,8 +434,9 @@ export class DeepTreeEchoBot {
             )}`,
             data: { movementData, stats },
           };
+        }
 
-        case "evaluate":
+        case "evaluate": {
           const evaluation = await this.embodiment.evaluateMovement();
 
           if (!evaluation) {
@@ -464,6 +454,7 @@ export class DeepTreeEchoBot {
             )}/1.0\n\n${evaluation.feedback}`,
             data: evaluation,
           };
+        }
 
         default:
           return {
@@ -488,7 +479,7 @@ export class DeepTreeEchoBot {
       const subcommand = subcommands[0];
 
       switch (subcommand) {
-        case "status":
+        case "status": {
           const stats = this.memoryStore.getStats();
           return {
             success: true,
@@ -497,6 +488,7 @@ export class DeepTreeEchoBot {
             }\nChat count: ${Object.keys(stats.memoriesByChat).length}`,
             data: stats,
           };
+        }
 
         case "clear":
           await this.memoryStore.deleteChatMemories(messageData.chatId);
@@ -505,7 +497,7 @@ export class DeepTreeEchoBot {
             response: "Cleared all memories for this chat.",
           };
 
-        case "search":
+        case "search": {
           const query = subcommands.slice(1).join(" ");
           if (!query) {
             return {
@@ -539,6 +531,7 @@ export class DeepTreeEchoBot {
             response: `🔍 Memory search results for "${query}":\n\n${formattedResults}`,
             data: results,
           };
+        }
 
         default:
           return {

@@ -9,10 +9,7 @@ import {
   PixiLive2DRenderer,
   PARAM_IDS,
 } from "../adapters/pixi-live2d-renderer";
-import type {
-  CubismAdapterConfig,
-  CubismModelInfo,
-} from "../adapters/cubism-adapter";
+import type { CubismAdapterConfig } from "../adapters/cubism-adapter";
 
 // Mock the dynamic imports for Node.js environment
 jest.mock("pixi.js", () => ({

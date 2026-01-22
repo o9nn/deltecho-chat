@@ -7,13 +7,7 @@ import React, {
   useState,
 } from "react";
 import { debounce } from "debounce";
-import {
-  Brain,
-  Sparkles,
-  Plus,
-  Settings as SettingsIcon,
-  Globe,
-} from "lucide-react";
+import { Brain, Plus, Settings as SettingsIcon } from "lucide-react";
 import classNames from "classnames";
 
 import NeighborItem from "./NeighborItem";

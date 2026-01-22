@@ -277,7 +277,7 @@ export class DesktopIntegration {
    */
   private async updateEmotionalState(
     userMessage: string,
-    botResponse: string,
+    _botResponse: string,
   ): Promise<void> {
     // Simple sentiment analysis for emotional update
     const positiveWords = [

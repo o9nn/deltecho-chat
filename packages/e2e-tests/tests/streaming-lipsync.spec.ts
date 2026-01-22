@@ -220,7 +220,7 @@ async function injectTestHarness(page: Page): Promise<void> {
 /**
  * Helper to wait for a specific event type
  */
-async function waitForEvent(
+async function _waitForEvent(
   page: Page,
   eventType: string,
   timeout = 5000,

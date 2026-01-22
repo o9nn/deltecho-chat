@@ -26,7 +26,6 @@ import { CognitiveStateManager, createCognitiveState } from "./cognitive-state";
 import {
   UnifiedMessageHandler,
   createMessageHandler,
-  formatMessagesForLLM,
 } from "./unified-message";
 import {
   PersonaAdapter,

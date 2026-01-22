@@ -1,6 +1,5 @@
 import { test, expect } from "@playwright/test";
 import {
-  getUser,
   switchToProfile,
   User,
   loadExistingProfiles,

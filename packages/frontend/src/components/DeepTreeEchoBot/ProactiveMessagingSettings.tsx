@@ -46,6 +46,25 @@ const ProactiveMessagingSettings: React.FC<ProactiveMessagingSettingsProps> = ({
   });
   const [isLoading, setIsLoading] = useState(true);
 
+  // Update statistics - defined before useEffect that uses it
+  const updateStats = useCallback(() => {
+    const queuedMessages = proactiveMessaging.getQueuedMessages().length;
+    const currentTriggers = proactiveMessaging.getTriggers();
+    const activeTriggers = currentTriggers.filter((t) => t.enabled).length;
+
+    // Get rate limit info
+    const _configData = proactiveMessaging.getConfig();
+
+    setStats({
+      queuedMessages,
+      sentToday: 0, // Would need to track this in ProactiveMessaging
+      sentThisHour: 0,
+      activeTriggers,
+    });
+
+    setTriggers(currentTriggers);
+  }, []);
+
   // Load settings on mount
   useEffect(() => {
     const loadSettings = async () => {
@@ -73,25 +92,7 @@ const ProactiveMessagingSettings: React.FC<ProactiveMessagingSettingsProps> = ({
     // Set up interval to update stats
     const statsInterval = setInterval(updateStats, 5000);
     return () => clearInterval(statsInterval);
-  }, []);
-
-  // Update statistics
-  const updateStats = useCallback(() => {
-    const queuedMessages = proactiveMessaging.getQueuedMessages().length;
-    const currentTriggers = proactiveMessaging.getTriggers();
-    const activeTriggers = currentTriggers.filter((t) => t.enabled).length;
-
-    // Get rate limit info
-    const _configData = proactiveMessaging.getConfig();
-
-    setStats({
-      queuedMessages,
-      sentToday: 0, // Would need to track this in ProactiveMessaging
-      sentThisHour: 0,
-      activeTriggers,
-    });
-
-    setTriggers(currentTriggers);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Handle config changes

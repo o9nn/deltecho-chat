@@ -6,7 +6,7 @@
  */
 
 import { getLogger } from "deep-tree-echo-core";
-import type { AARSystem, AgentState, CharacterFacets } from "../aar/index.js";
+import type { AARSystem, CharacterFacets } from "../aar/index.js";
 import type { PersonaCore } from "deep-tree-echo-core";
 
 const log = getLogger("deep-tree-echo-orchestrator/AARPersonaBridge");

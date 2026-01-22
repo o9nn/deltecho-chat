@@ -16,7 +16,6 @@ import {
   LipSyncGenerator,
   LipSyncData,
   PhonemeEntry,
-  Phoneme,
   LipSyncConfig,
   phonemeToMouthShape,
   createLipSyncGenerator,

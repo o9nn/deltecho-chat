@@ -83,7 +83,7 @@ export const agentResources = {
   "agent://self": {
     schema: z.object({}),
     handler: (
-      agent: AgentMembrane,
+      _agent: AgentMembrane,
       _params: Record<string, never>,
       virtualAgent: VirtualAgentModel,
     ): VirtualAgentModel => {

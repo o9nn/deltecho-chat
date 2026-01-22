@@ -14,7 +14,6 @@ import {
   expect,
   beforeEach,
   afterEach,
-  jest,
 } from "@jest/globals";
 import { Sys6OrchestratorBridge } from "../sys6-bridge/index.js";
 import { AgentCoordinator } from "../agents/index.js";

@@ -758,7 +758,7 @@ export class GaugeCognitiveManifold extends EventEmitter {
    * Compute Noether charges from symmetries
    */
   private computeNoetherCharges(
-    curve: BezierCurve,
+    _curve: BezierCurve,
     fibers: Fiber[],
   ): NoetherCharge[] {
     const charges: NoetherCharge[] = [];

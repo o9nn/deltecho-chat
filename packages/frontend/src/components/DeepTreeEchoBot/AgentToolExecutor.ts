@@ -1113,7 +1113,6 @@ import {
   AtomType,
   createTruthValue, // Ensure this is available
   DuckDBAdapter,
-  Node as ReasoningNode, // Alias to avoid DOM Node conflict
 } from "@deltecho/reasoning";
 
 // Export singleton getter

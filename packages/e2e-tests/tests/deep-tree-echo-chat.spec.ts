@@ -1,12 +1,8 @@
 import { test, expect } from "@playwright/test";
 import {
-  getUser,
-  createProfiles,
-  deleteProfile,
   switchToProfile,
   User,
   loadExistingProfiles,
-  clickThroughTestIds,
   reloadPage,
 } from "../playwright-helper";
 

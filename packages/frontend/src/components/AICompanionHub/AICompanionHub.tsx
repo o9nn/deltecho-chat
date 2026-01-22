@@ -15,11 +15,9 @@ import {
   AlertCircle,
   Loader,
   Network,
-  Zap,
   User,
   HomeIcon,
   Video,
-  X as XIcon,
 } from "lucide-react";
 
 import { AICompanionProvider, useAICompanion } from "./AICompanionController";
@@ -166,7 +164,6 @@ const AICompanionHubContent: React.FC = () => {
     conversations,
     activeConversationId,
     setActiveCompanion,
-    startNewConversation,
     sendMessage,
     searchMemories,
   } = useAICompanion();
@@ -186,7 +183,7 @@ const AICompanionHubContent: React.FC = () => {
     | "avatar"
     | "calibration"
   >("chat");
-  const [_isCreatingCompanion, setIsCreatingCompanion] = useState(false);
+  const [_isCreatingCompanion, _setIsCreatingCompanion] = useState(false);
   const [cognitiveState, setCognitiveState] =
     useState<UnifiedCognitiveState | null>(null);
   const [atoms, setAtoms] = useState<Atom[]>([]);

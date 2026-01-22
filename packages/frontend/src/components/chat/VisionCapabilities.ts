@@ -53,7 +53,7 @@ export class VisionCapabilities {
       log.info("Starting lazy load of TensorFlow.js...");
 
       // Dynamic import of TensorFlow.js to avoid loading it if not needed
-      const tf = await import("@tensorflow/tfjs");
+      const _tf = await import("@tensorflow/tfjs");
       this.tensorflowLoaded = true;
 
       log.info("TensorFlow.js loaded successfully");

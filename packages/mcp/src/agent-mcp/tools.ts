@@ -10,7 +10,6 @@ import type { AgentMembrane } from "deep-tree-echo-orchestrator/aar";
 import type {
   CharacterFacets,
   SocialMemory,
-  ParticipationProtocol,
   ParticipationResult,
   EvolutionResult,
   VirtualAgentModel,

@@ -8,12 +8,10 @@
 import {
   AudioPlayer,
   AudioPlayerStatus,
-  AudioResource,
   createAudioPlayer,
   createAudioResource,
   entersState,
   EndBehaviorType,
-  getVoiceConnection,
   joinVoiceChannel,
   NoSubscriberBehavior,
   StreamType,
