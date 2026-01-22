@@ -6,6 +6,7 @@ const log = getLogger("deep-tree-echo-core/memory/RAGMemoryStore");
 // Default configuration
 const DEFAULT_MEMORY_LIMIT = 1000;
 const DEFAULT_REFLECTION_LIMIT = 100;
+const EMBEDDING_DIMENSIONS = 256; // Compact but effective
 
 /**
  * Structure for a conversation memory
@@ -149,7 +150,7 @@ export class RAGMemoryStore {
         ...memory,
         id: `mem_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
         timestamp: Date.now(),
-        embedding: [], // In a real implementation, this would be generated
+        embedding: this.generateEmbedding(memory.text),
       };
 
       this.memories.push(newMemory);
@@ -159,6 +160,69 @@ export class RAGMemoryStore {
     } catch (error) {
       log.error("Failed to store memory:", error);
     }
+  }
+
+  /**
+   * Generate a vector embedding for text using hash-based random projection
+   * This creates deterministic, compact embeddings without external API calls
+   */
+  private generateEmbedding(text: string): number[] {
+    const tokens = this.tokenize(text);
+    if (tokens.length === 0) {
+      return new Array(EMBEDDING_DIMENSIONS).fill(0);
+    }
+
+    // Initialize embedding vector
+    const embedding = new Array(EMBEDDING_DIMENSIONS).fill(0);
+
+    // Generate embedding using hash-based random projection
+    for (const token of tokens) {
+      const tokenHash = this.hashString(token);
+      const rng = this.createSeededRng(tokenHash);
+
+      // Add random projection for this token
+      for (let i = 0; i < EMBEDDING_DIMENSIONS; i++) {
+        // Generate pseudo-random value in [-1, 1]
+        const randomVal = rng() * 2 - 1;
+        embedding[i] += randomVal;
+      }
+    }
+
+    // Normalize to unit vector
+    const magnitude = Math.sqrt(
+      embedding.reduce((sum, val) => sum + val * val, 0)
+    );
+
+    if (magnitude > 0) {
+      for (let i = 0; i < EMBEDDING_DIMENSIONS; i++) {
+        embedding[i] /= magnitude;
+      }
+    }
+
+    return embedding;
+  }
+
+  /**
+   * Simple hash function for strings
+   */
+  private hashString(str: string): number {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash |= 0; // Convert to 32-bit integer
+    }
+    return Math.abs(hash);
+  }
+
+  /**
+   * Create a seeded pseudo-random number generator
+   */
+  private createSeededRng(seed: number): () => number {
+    return () => {
+      seed = (seed * 9301 + 49297) % 233280;
+      return seed / 233280;
+    };
   }
 
   /**
@@ -241,8 +305,8 @@ export class RAGMemoryStore {
   }
 
   /**
-   * Search memories using TF-IDF based semantic search
-   * Ranks results by relevance score combining term frequency and recency
+   * Search memories using hybrid TF-IDF + embedding similarity
+   * Ranks results by relevance score combining term frequency, embedding similarity, and recency
    */
   public searchMemories(query: string, limit: number = 5): Memory[] {
     if (this.memories.length === 0) return [];
@@ -250,6 +314,9 @@ export class RAGMemoryStore {
     // Tokenize query
     const queryTokens = this.tokenize(query);
     if (queryTokens.length === 0) return [];
+
+    // Generate query embedding for semantic similarity
+    const queryEmbedding = this.generateEmbedding(query);
 
     // Calculate IDF for all terms in corpus
     const idfScores = this.calculateIDF();
@@ -263,12 +330,18 @@ export class RAGMemoryStore {
         idfScores,
       );
 
+      // Calculate embedding similarity if embeddings exist
+      let embeddingScore = 0;
+      if (memory.embedding && memory.embedding.length === EMBEDDING_DIMENSIONS) {
+        embeddingScore = this.cosineSimilarityEmbedding(queryEmbedding, memory.embedding);
+      }
+
       // Apply recency boost (more recent = higher boost)
       const ageInDays = (Date.now() - memory.timestamp) / (1000 * 60 * 60 * 24);
       const recencyBoost = Math.exp(-ageInDays / 30); // Decay over 30 days
 
-      // Combine TF-IDF with recency (70% relevance, 30% recency)
-      const finalScore = tfidfScore * 0.7 + recencyBoost * 0.3;
+      // Combine scores: 40% TF-IDF, 40% embedding, 20% recency
+      const finalScore = tfidfScore * 0.4 + embeddingScore * 0.4 + recencyBoost * 0.2;
 
       return { memory, score: finalScore };
     });
@@ -279,6 +352,50 @@ export class RAGMemoryStore {
       .sort((a, b) => b.score - a.score)
       .slice(0, limit)
       .map((item) => item.memory);
+  }
+
+  /**
+   * Search memories using only embedding similarity (pure semantic search)
+   */
+  public searchByEmbedding(query: string, limit: number = 5): Memory[] {
+    if (this.memories.length === 0) return [];
+
+    const queryEmbedding = this.generateEmbedding(query);
+
+    const scoredMemories = this.memories
+      .filter((m) => m.embedding && m.embedding.length === EMBEDDING_DIMENSIONS)
+      .map((memory) => ({
+        memory,
+        score: this.cosineSimilarityEmbedding(queryEmbedding, memory.embedding!),
+      }));
+
+    return scoredMemories
+      .filter((item) => item.score > 0.1) // Threshold for relevance
+      .sort((a, b) => b.score - a.score)
+      .slice(0, limit)
+      .map((item) => item.memory);
+  }
+
+  /**
+   * Calculate cosine similarity between two embedding vectors
+   */
+  private cosineSimilarityEmbedding(a: number[], b: number[]): number {
+    if (a.length !== b.length) return 0;
+
+    let dotProduct = 0;
+    let normA = 0;
+    let normB = 0;
+
+    for (let i = 0; i < a.length; i++) {
+      dotProduct += a[i] * b[i];
+      normA += a[i] * a[i];
+      normB += b[i] * b[i];
+    }
+
+    const magnitude = Math.sqrt(normA) * Math.sqrt(normB);
+    if (magnitude === 0) return 0;
+
+    return dotProduct / magnitude;
   }
 
   /**
@@ -414,6 +531,7 @@ export class RAGMemoryStore {
 
   /**
    * Find memories similar to a given memory (for clustering/deduplication)
+   * Uses hybrid TF-IDF + embedding similarity
    */
   public findSimilarMemories(
     memoryId: string,
@@ -427,14 +545,33 @@ export class RAGMemoryStore {
 
     return this.memories
       .filter((m) => m.id !== memoryId)
-      .map((memory) => ({
-        memory,
-        similarity: this.calculateCosineSimilarity(
+      .map((memory) => {
+        // TF-IDF similarity
+        const tfidfSim = this.calculateCosineSimilarity(
           targetTokens,
           this.tokenize(memory.text),
           idfScores,
-        ),
-      }))
+        );
+
+        // Embedding similarity
+        let embeddingSim = 0;
+        if (
+          targetMemory.embedding &&
+          targetMemory.embedding.length === EMBEDDING_DIMENSIONS &&
+          memory.embedding &&
+          memory.embedding.length === EMBEDDING_DIMENSIONS
+        ) {
+          embeddingSim = this.cosineSimilarityEmbedding(
+            targetMemory.embedding,
+            memory.embedding
+          );
+        }
+
+        // Combine: 50% TF-IDF, 50% embedding
+        const similarity = tfidfSim * 0.5 + embeddingSim * 0.5;
+
+        return { memory, similarity };
+      })
       .filter((item) => item.similarity >= threshold)
       .sort((a, b) => b.similarity - a.similarity)
       .map((item) => item.memory);
