@@ -65,6 +65,12 @@ import {
   type ConsciousProcessingResult,
 } from "deep-tree-echo-core/consciousness";
 
+// Integrated memory system (HDM + RAG)
+import {
+  IntegratedMemorySystem,
+  type MemoryContext,
+} from "deep-tree-echo-core/memory";
+
 const log = getLogger("render/components/DeepTreeEchoBot/CognitiveBridge");
 
 /**
@@ -217,6 +223,8 @@ export class CognitiveOrchestrator {
     new Map();
   private conversationHistory: Array<{ role: string; content: string }> = [];
   private llmConfig: LLMProviderConfig | null = null;
+  private integratedMemory: IntegratedMemorySystem | null = null;
+  private currentChatId: number | null = null;
 
   constructor(config: DeepTreeEchoBotConfig) {
     this.config = config;
@@ -230,6 +238,17 @@ export class CognitiveOrchestrator {
         maxTokens: config.maxTokens ?? 1000,
       };
     }
+
+    // Initialize integrated memory system (HDM + RAG)
+    this.integratedMemory = new IntegratedMemorySystem(undefined, {
+      enableHDM: true,
+      hdmWeight: 0.6,
+      ragWeight: 0.4,
+      relevanceThreshold: 0.15,
+      maxRetrievalCount: 8,
+    });
+    this.integratedMemory.setEnabled(true);
+    log.info("Integrated memory system (HDM + RAG) initialized");
   }
 
   configureLLM(config: Partial<LLMProviderConfig>): void {
@@ -296,6 +315,11 @@ export class CognitiveOrchestrator {
       this.conversationHistory = this.conversationHistory.slice(-20);
     }
 
+    // Track current chat context
+    if (message.metadata?.chatId) {
+      this.currentChatId = message.metadata.chatId;
+    }
+
     if (this.state) {
       this.state.memories.shortTerm.push({
         content: message.content,
@@ -308,10 +332,37 @@ export class CognitiveOrchestrator {
       }
     }
 
+    // Store in integrated memory system (HDM + RAG)
+    if (this.integratedMemory) {
+      const emotionalSignificance = this.calculateEmotionalSignificance(message.content);
+      await this.integratedMemory.storeMemory(
+        message.metadata?.chatId || 0,
+        parseInt(message.id) || Date.now(),
+        "user",
+        message.content,
+        emotionalSignificance
+      );
+      log.debug("Stored message in integrated memory system");
+    }
+
     return {
       ...message,
       metadata: { ...message.metadata, cognitivePhase: "sense" },
     };
+  }
+
+  /**
+   * Calculate emotional significance of a message for memory weighting
+   */
+  private calculateEmotionalSignificance(text: string): number {
+    const sentiment = this.analyzeSentiment(text);
+    const salience = this.calculateSalience(text);
+
+    // Combine valence intensity and arousal with salience
+    const valenceIntensity = Math.abs(sentiment.valence);
+    const significance = 1.0 + (valenceIntensity * 0.3) + (sentiment.arousal * 0.3) + (salience * 0.4);
+
+    return Math.min(2.0, significance); // Cap at 2.0
   }
 
   private async process(message: UnifiedMessage): Promise<UnifiedMessage> {
@@ -348,6 +399,17 @@ export class CognitiveOrchestrator {
       role: "assistant",
       content: responseContent,
     });
+
+    // Store bot response in integrated memory system
+    if (this.integratedMemory) {
+      await this.integratedMemory.storeMemory(
+        message.metadata?.chatId || 0,
+        Date.now(),
+        "bot",
+        responseContent,
+        1.0 // Neutral emotional significance for bot responses
+      );
+    }
 
     return {
       id: `response-${Date.now()}`,
@@ -405,7 +467,7 @@ export class CognitiveOrchestrator {
     const mood = persona?.currentMood || "neutral";
     const style = persona?.interactionStyle || "casual";
 
-    return `You are ${
+    let basePrompt = `You are ${
       persona?.name || "Deep Tree Echo"
     }, an AI assistant with the following characteristics:
 - Personality traits: ${traits}
@@ -413,6 +475,30 @@ export class CognitiveOrchestrator {
 - Interaction style: ${style}
 
 Respond in a way that reflects these characteristics while being helpful and informative.`;
+
+    // Add memory context from integrated memory system
+    if (this.integratedMemory && this.conversationHistory.length > 0) {
+      const lastUserMessage = this.conversationHistory
+        .filter(m => m.role === "user")
+        .pop();
+
+      if (lastUserMessage) {
+        const memoryContext = this.integratedMemory.generateMemoryContext(
+          lastUserMessage.content,
+          this.currentChatId || undefined,
+          { includeReflections: true, maxMemories: 5, maxReflections: 2 }
+        );
+
+        if (memoryContext.relevantMemories.length > 0) {
+          const formattedContext = this.integratedMemory.formatContextForPrompt(memoryContext);
+          basePrompt += `\n\n# Memory Context\n${formattedContext}`;
+
+          log.debug(`Added memory context: ${memoryContext.relevantMemories.length} memories, ${memoryContext.recentReflections.length} reflections`);
+        }
+      }
+    }
+
+    return basePrompt;
   }
 
   private generateContextualResponse(input: string): string {
@@ -522,6 +608,49 @@ Respond in a way that reflects these characteristics while being helpful and inf
     this.conversationHistory = [];
     if (this.state) {
       this.state.memories.shortTerm = [];
+    }
+  }
+
+  /**
+   * Get memory system statistics
+   */
+  getMemoryStats(): object | null {
+    if (!this.integratedMemory) return null;
+    return this.integratedMemory.getStats();
+  }
+
+  /**
+   * Export integrated memory state for persistence
+   */
+  exportMemoryState(): object {
+    if (!this.integratedMemory) return {};
+    return this.integratedMemory.exportState();
+  }
+
+  /**
+   * Import integrated memory state from persistence
+   */
+  importMemoryState(state: object): void {
+    if (this.integratedMemory) {
+      this.integratedMemory.importState(state);
+      log.info("Imported integrated memory state");
+    }
+  }
+
+  /**
+   * Get the integrated memory system for direct access
+   */
+  getIntegratedMemory(): IntegratedMemorySystem | null {
+    return this.integratedMemory;
+  }
+
+  /**
+   * Store a reflection in the integrated memory system
+   */
+  async storeReflection(content: string, type: "periodic" | "focused" = "periodic", aspect?: string): Promise<void> {
+    if (this.integratedMemory) {
+      await this.integratedMemory.storeReflection(content, type, aspect);
+      log.info(`Stored ${type} reflection${aspect ? ` on ${aspect}` : ""}`);
     }
   }
 
@@ -769,6 +898,38 @@ export function clearHistory(): void {
   if (orchestratorInstance) {
     orchestratorInstance.clearHistory();
   }
+}
+
+/**
+ * Get memory system statistics
+ */
+export function getMemoryStats(): object | null {
+  return orchestratorInstance?.getMemoryStats() ?? null;
+}
+
+/**
+ * Export integrated memory state for persistence
+ */
+export function exportMemoryState(): object {
+  return orchestratorInstance?.exportMemoryState() ?? {};
+}
+
+/**
+ * Import integrated memory state from persistence
+ */
+export function importMemoryState(state: object): void {
+  orchestratorInstance?.importMemoryState(state);
+}
+
+/**
+ * Store a reflection in the integrated memory system
+ */
+export async function storeReflection(
+  content: string,
+  type: "periodic" | "focused" = "periodic",
+  aspect?: string
+): Promise<void> {
+  await orchestratorInstance?.storeReflection(content, type, aspect);
 }
 
 // ============================================================
