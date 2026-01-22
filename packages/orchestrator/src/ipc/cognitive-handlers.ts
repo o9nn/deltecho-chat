@@ -319,13 +319,18 @@ export function registerCognitiveHandlers(
       payload: ImportConversationRequest,
     ): Promise<{ imported: boolean }> => {
       // Convert protocol messages to internal format
-      const messagesToImport = payload.messages.map((msg, idx) => ({
-        id: `imported_${Date.now()}_${idx}`,
-        role: msg.role as "user" | "assistant" | "system",
-        content: msg.content,
-        timestamp: msg.timestamp,
-        metadata: msg.metadata || {},
-      }));
+      const messagesToImport = payload.messages.map(
+        (
+          msg: { role: string; content: string; timestamp: number; metadata?: Record<string, unknown> },
+          idx: number,
+        ) => ({
+          id: `imported_${Date.now()}_${idx}`,
+          role: msg.role as "user" | "assistant" | "system",
+          content: msg.content,
+          timestamp: msg.timestamp,
+          metadata: msg.metadata || {},
+        }),
+      );
 
       cognitiveOrchestrator.importConversation({
         messages: messagesToImport,

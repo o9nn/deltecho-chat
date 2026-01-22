@@ -134,6 +134,13 @@ export interface MessageMetadata {
     valence: number;
     arousal: number;
   };
+  relevanceInsights?: {
+    overallSalience: number;
+    urgency: number;
+    dominantRelevanceType: string | null;
+    relevantDomains: string[];
+    shouldPrioritize: boolean;
+  };
 }
 
 /**

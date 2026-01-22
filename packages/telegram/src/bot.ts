@@ -424,7 +424,7 @@ export class DeepTreeEchoTelegramBot {
               caption,
               detailedAnalysis: true,
               responseGenerator: this.processor
-                ? async (analysis) => {
+                ? async (analysis: { description: string }) => {
                     const prompt = caption
                       ? `The user sent an image with caption: "${caption}"\n\nImage analysis: ${analysis.description}`
                       : `The user sent an image.\n\nImage analysis: ${analysis.description}`;

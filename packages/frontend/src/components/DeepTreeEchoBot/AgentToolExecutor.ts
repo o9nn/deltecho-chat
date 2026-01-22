@@ -103,7 +103,7 @@ export class AgentToolExecutor {
 
     // Initialize Persistence
     this.db = new DuckDBAdapter();
-    this.db.initialize().catch((err) => {
+    this.db.initialize().catch((err: unknown) => {
       log.error("Failed to initialize DuckDB persistence", err);
     });
 
