@@ -13,7 +13,7 @@ import { EventEmitter } from "events";
 import type { ArenaMCPServer } from "../arena-mcp/index.js";
 import type { AgentMCPServer } from "../agent-mcp/index.js";
 import type { RelationMCPServer } from "../relation-mcp/index.js";
-import type { DevelopmentalCycleResult, _VirtualAgentModel } from "../types.js";
+import type { DevelopmentalCycleResult, VirtualAgentModel as _VirtualAgentModel } from "../types.js";
 
 /**
  * Lifecycle phase enumeration

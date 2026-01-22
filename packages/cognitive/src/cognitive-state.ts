@@ -16,8 +16,10 @@ import {
   CognitiveEvent,
   CognitiveEventListener,
 } from "./types";
-import { LCMSynchronizer, _OperadicState } from "@deltecho/sys6-triality";
-import { Dove9Engine, _Dove9State } from "@deltecho/dove9";
+import { LCMSynchronizer } from "@deltecho/sys6-triality";
+import type { OperadicState as _OperadicState } from "@deltecho/sys6-triality";
+import { Dove9Engine } from "@deltecho/dove9";
+import type { Dove9State as _Dove9State } from "@deltecho/dove9";
 
 /**
  * Configuration for cognitive state manager

@@ -118,7 +118,7 @@ describe("DeepTreeEchoUIBridge Integration", () => {
     uiBridge = getUB();
 
     const keybindings = require("../../../keybindings");
-    ActionEmitter = keybindings.ActionEmitter;
+    _ActionEmitter = keybindings.ActionEmitter;
   });
 
   afterEach(() => {
@@ -633,10 +633,10 @@ describe("ChatManager to UIBridge Integration", () => {
 
     uiBridge = getUB();
     chatManager = getCM();
-    proactiveMessaging = getPM();
+    _proactiveMessaging = getPM();
 
     const keybindings = require("../../../keybindings");
-    ActionEmitter = keybindings.ActionEmitter;
+    _ActionEmitter = keybindings.ActionEmitter;
   });
 
   afterEach(() => {

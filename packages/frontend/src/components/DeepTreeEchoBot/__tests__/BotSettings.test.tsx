@@ -6,7 +6,8 @@ import { render, screen, act, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import BotSettings from "../BotSettings";
 import { runtime } from "@deltachat-desktop/runtime-interface";
-import { LLMService, _CognitiveFunctionType } from "../LLMService";
+import { LLMService } from "../LLMService";
+import type { CognitiveFunctionType as _CognitiveFunctionType } from "../LLMService";
 
 // Mock dependencies
 jest.mock("@deltachat-desktop/runtime-interface", () => ({

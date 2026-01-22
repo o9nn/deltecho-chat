@@ -68,7 +68,7 @@ import {
 // Integrated memory system (HDM + RAG)
 import {
   IntegratedMemorySystem,
-  type _MemoryContext,
+  type MemoryContext as _MemoryContext,
 } from "deep-tree-echo-core/memory";
 
 // Relevance Realization Workspace

@@ -36,7 +36,8 @@
  */
 
 import { getLogger } from "@deltachat-desktop/shared/logger";
-import { _BackendRemote, Type as T } from "../../backend-com";
+import { Type as T } from "../../backend-com";
+import type { BackendRemote as _BackendRemote } from "../../backend-com";
 import { ActionEmitter, KeybindAction } from "../../keybindings";
 import { DeepTreeEchoChatManager } from "./DeepTreeEchoChatManager";
 import { getAgentToolExecutor } from "./AgentToolExecutor";

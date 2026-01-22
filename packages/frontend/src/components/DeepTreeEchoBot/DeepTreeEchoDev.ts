@@ -17,7 +17,8 @@ import {
   ProprioceptiveEmbodiment,
   ProprioceptiveEmbodimentOptions,
 } from "./ProprioceptiveEmbodiment";
-import { _BackendRemote, Type as T } from "../../backend-com";
+import { Type as T } from "../../backend-com";
+import type { BackendRemote as _BackendRemote } from "../../backend-com";
 
 const log = getLogger("render/components/DeepTreeEchoBot/DeepTreeEchoBot");
 

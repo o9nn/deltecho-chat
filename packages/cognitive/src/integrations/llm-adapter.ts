@@ -5,7 +5,8 @@
  * for inference with cognitive context enrichment.
  */
 
-import { _UnifiedMessage, EmotionalVector, LLMProcessorFn } from "../types";
+import { EmotionalVector, LLMProcessorFn } from "../types";
+import type { UnifiedMessage as _UnifiedMessage } from "../types";
 
 /**
  * LLM response structure

@@ -26,7 +26,7 @@ import { SmallScreenModeMacOSTitleBar } from "./components/SmallScreenModeMacOST
 import DeepTreeEchoBot from "./components/chat/DeepTreeEchoBot";
 import AINeighborhoodDashboard from "./components/screens/AINeighborhoodDashboard/AINeighborhoodDashboard";
 
-import { _MemoryPersistenceLayer } from "./components/AICompanionHub/MemoryPersistenceLayer";
+import type { MemoryPersistenceLayer as _MemoryPersistenceLayer } from "./components/AICompanionHub/MemoryPersistenceLayer";
 
 const log = getLogger("renderer/ScreenController");
 

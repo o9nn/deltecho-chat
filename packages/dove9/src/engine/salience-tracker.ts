@@ -1,4 +1,4 @@
-import { _Dove9State } from "../types/index.js";
+import type { Dove9State as _Dove9State } from "../types/index.js";
 
 export class SalienceTracker {
   private globalSalience: number = 0;

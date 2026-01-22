@@ -12,7 +12,7 @@ import * as https from "https";
 import {
   IPCMessageType,
   type IPCMessage,
-  type _IPCResponse,
+  type IPCResponse as _IPCResponse,
 } from "@deltecho/ipc";
 
 const log = getLogger("deep-tree-echo-orchestrator/WebSocketServer");

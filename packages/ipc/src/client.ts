@@ -10,7 +10,7 @@ import {
   IPCMessageType,
   IPCTypeMap,
   type IPCMessage,
-  type _IPCResponse,
+  type IPCResponse as _IPCResponse,
   type EventNotification,
   createIPCMessage,
 } from "./protocol.js";

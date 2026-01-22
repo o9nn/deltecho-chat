@@ -1,4 +1,5 @@
-import React, { _ReactElement } from "react";
+import React from "react";
+import type { ReactElement as _ReactElement } from "react";
 
 import Icon from "../Icon";
 

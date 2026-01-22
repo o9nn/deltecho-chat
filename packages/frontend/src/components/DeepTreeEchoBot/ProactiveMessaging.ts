@@ -44,7 +44,7 @@
 import { getLogger } from "@deltachat-desktop/shared/logger";
 import { BackendRemote } from "../../backend-com";
 import { chatManager, ChatSummary } from "./DeepTreeEchoChatManager";
-import { _uiBridge } from "./DeepTreeEchoUIBridge";
+import { uiBridge as _uiBridge } from "./DeepTreeEchoUIBridge";
 
 // Lazy logger to avoid initialization before logger handler is ready
 let _log: ReturnType<typeof getLogger> | null = null;

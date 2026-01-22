@@ -1,5 +1,6 @@
-import { Atom, _AtomType as __AtomType, Link, _Node as __Node   } from "../atomspace/atom.js";
-import { _TruthValue as __TruthValue  } from "../atomspace/truth-value.js";
+import { Atom, Link } from "../atomspace/atom.js";
+import type { AtomType, Node } from "../atomspace/atom.js"; from "../atomspace/atom.js";
+import type { TruthValue } from "../atomspace/truth-value.js"; from "../atomspace/truth-value.js";
 
 export interface ProgramCandidate {
   root: Atom;

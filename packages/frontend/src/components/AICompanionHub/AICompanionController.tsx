@@ -15,7 +15,8 @@ import {
   ConnectorInfo,
 } from "./ConnectorRegistry";
 import { AIMemory } from "./MemoryPersistenceLayer";
-import { ConversationContext, _Message } from "./connectors/BaseConnector";
+import { ConversationContext } from "./connectors/BaseConnector";
+import type { Message as _Message } from "./connectors/BaseConnector";
 
 // Context type for our magnificent AI Companion ecosystem
 interface AICompanionContextType {
