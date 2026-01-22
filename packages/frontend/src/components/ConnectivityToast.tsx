@@ -85,6 +85,7 @@ export default function ConnectivityToast() {
   const onConnectivityChanged = useMemo(
     () =>
       debounceWithInit(async () => {
+        if (accountId === undefined) return;
         const connectivity = await BackendRemote.rpc.getConnectivity(accountId);
 
         if (connectivity >= C.DC_CONNECTIVITY_CONNECTED) {
@@ -125,18 +126,21 @@ export default function ConnectivityToast() {
     window.addEventListener("offline", onBrowserOffline);
     window.addEventListener("focus", maybeNetwork);
 
-    const removeOnConnectivityChanged = onDCEvent(
-      accountId,
-      "ConnectivityChanged",
-      onConnectivityChanged,
-    );
+    let removeOnConnectivityChanged: (() => void) | undefined;
+    if (accountId !== undefined) {
+      removeOnConnectivityChanged = onDCEvent(
+        accountId,
+        "ConnectivityChanged",
+        onConnectivityChanged,
+      );
+    }
 
     return () => {
       window.removeEventListener("online", onBrowserOnline);
       window.removeEventListener("offline", onBrowserOffline);
       window.removeEventListener("focus", maybeNetwork);
 
-      removeOnConnectivityChanged();
+      removeOnConnectivityChanged?.();
     };
   }, [onBrowserOnline, maybeNetwork, onConnectivityChanged, accountId]);
 
