@@ -6,6 +6,10 @@
  * and inject AAR context into chat sessions.
  */
 
+import { getLogger } from "@deltachat-desktop/shared/logger";
+
+const log = getLogger("render/components/DeepTreeEchoBot/AARIntegration");
+
 /**
  * AAR State snapshot from backend
  */
@@ -89,7 +93,7 @@ export class AARFrontendIntegration {
 
   constructor(config: Partial<AARIntegrationConfig> = {}) {
     this.config = { ...DEFAULT_CONFIG, ...config };
-    console.log("[AARFrontendIntegration] Initialized");
+    log.info("[AARFrontendIntegration] Initialized");
   }
 
   /**
@@ -97,7 +101,7 @@ export class AARFrontendIntegration {
    */
   start(): void {
     if (!this.config.enabled) {
-      console.log("[AARFrontendIntegration] Disabled, not starting");
+      log.info("[AARFrontendIntegration] Disabled, not starting");
       return;
     }
 
@@ -107,7 +111,7 @@ export class AARFrontendIntegration {
       this.pollBackend();
     }, this.config.pollIntervalMs);
 
-    console.log("[AARFrontendIntegration] Started");
+    log.info("[AARFrontendIntegration] Started");
   }
 
   /**
@@ -118,7 +122,7 @@ export class AARFrontendIntegration {
       clearInterval(this.pollInterval);
       this.pollInterval = undefined;
     }
-    console.log("[AARFrontendIntegration] Stopped");
+    log.info("[AARFrontendIntegration] Stopped");
   }
 
   /**
@@ -133,7 +137,7 @@ export class AARFrontendIntegration {
         this.updateState(state);
       }
     } catch (error) {
-      console.error("[AARFrontendIntegration] Poll error:", error);
+      log.error("[AARFrontendIntegration] Poll error:", error);
     }
   }
 
@@ -160,12 +164,12 @@ export class AARFrontendIntegration {
       try {
         listener(state);
       } catch (error) {
-        console.error("[AARFrontendIntegration] Listener error:", error);
+        log.error("[AARFrontendIntegration] Listener error:", error);
       }
     }
 
     if (this.config.verbose) {
-      console.log("[AARFrontendIntegration] State updated:", state.meta.cycle);
+      log.info("[AARFrontendIntegration] State updated:", state.meta.cycle);
     }
   }
 
@@ -345,14 +349,8 @@ export function createAARFrontendIntegration(
  * This is a simple implementation - use with useState in actual React components
  */
 export function useAARState(integration: AARFrontendIntegration) {
-  // In a real React implementation:
-  // const [state, setState] = useState<AARStateSnapshot | null>(null);
-  // useEffect(() => {
-  //   const unsubscribe = integration.onStateUpdate(setState);
-  //   return unsubscribe;
-  // }, [integration]);
-  // return state;
-
+  // Note: In a real React component, use useState and useEffect
+  // to subscribe to integration.onStateUpdate(setState)
   return integration.getState();
 }
 

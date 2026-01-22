@@ -948,10 +948,10 @@ export class AgentToolExecutor {
               totalNew += this.plnEngine.deduce();
             }
 
-            // TODO: Persist new deductions to DB?
-            // complex since we need to know which are new.
-            // For now, we leave them in-memory only basically,
-            // unless we iterate and save all.
+            // Note: Deductions are stored in-memory only. Persisting to DB
+            // would require tracking which facts are new vs. existing, which
+            // adds complexity. Consider implementing if long-term reasoning
+            // persistence becomes a requirement.
 
             return {
               success: true,

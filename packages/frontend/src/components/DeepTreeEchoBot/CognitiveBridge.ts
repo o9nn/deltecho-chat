@@ -65,6 +65,20 @@ import {
   type ConsciousProcessingResult,
 } from "deep-tree-echo-core/consciousness";
 
+// Integrated memory system (HDM + RAG)
+import {
+  IntegratedMemorySystem,
+  type MemoryContext,
+} from "deep-tree-echo-core/memory";
+
+// Relevance Realization Workspace
+import {
+  relevanceWorkspace,
+  RelevanceType,
+  CognitiveDomain,
+  type RelevanceSignal,
+} from "deep-tree-echo-core/consciousness";
+
 const log = getLogger("render/components/DeepTreeEchoBot/CognitiveBridge");
 
 /**
@@ -217,6 +231,8 @@ export class CognitiveOrchestrator {
     new Map();
   private conversationHistory: Array<{ role: string; content: string }> = [];
   private llmConfig: LLMProviderConfig | null = null;
+  private integratedMemory: IntegratedMemorySystem | null = null;
+  private currentChatId: number | null = null;
 
   constructor(config: DeepTreeEchoBotConfig) {
     this.config = config;
@@ -230,6 +246,17 @@ export class CognitiveOrchestrator {
         maxTokens: config.maxTokens ?? 1000,
       };
     }
+
+    // Initialize integrated memory system (HDM + RAG)
+    this.integratedMemory = new IntegratedMemorySystem(undefined, {
+      enableHDM: true,
+      hdmWeight: 0.6,
+      ragWeight: 0.4,
+      relevanceThreshold: 0.15,
+      maxRetrievalCount: 8,
+    });
+    this.integratedMemory.setEnabled(true);
+    log.info("Integrated memory system (HDM + RAG) initialized");
   }
 
   configureLLM(config: Partial<LLMProviderConfig>): void {
@@ -296,6 +323,11 @@ export class CognitiveOrchestrator {
       this.conversationHistory = this.conversationHistory.slice(-20);
     }
 
+    // Track current chat context
+    if (message.metadata?.chatId) {
+      this.currentChatId = message.metadata.chatId;
+    }
+
     if (this.state) {
       this.state.memories.shortTerm.push({
         content: message.content,
@@ -308,26 +340,137 @@ export class CognitiveOrchestrator {
       }
     }
 
+    // Store in integrated memory system (HDM + RAG)
+    if (this.integratedMemory) {
+      const emotionalSignificance = this.calculateEmotionalSignificance(message.content);
+      await this.integratedMemory.storeMemory(
+        message.metadata?.chatId || 0,
+        parseInt(message.id) || Date.now(),
+        "user",
+        message.content,
+        emotionalSignificance
+      );
+      log.debug("Stored message in integrated memory system");
+    }
+
     return {
       ...message,
       metadata: { ...message.metadata, cognitivePhase: "sense" },
     };
   }
 
+  /**
+   * Calculate emotional significance of a message for memory weighting
+   */
+  private calculateEmotionalSignificance(text: string): number {
+    const sentiment = this.analyzeSentiment(text);
+    const salience = this.calculateSalience(text);
+
+    // Combine valence intensity and arousal with salience
+    const valenceIntensity = Math.abs(sentiment.valence);
+    const significance = 1.0 + (valenceIntensity * 0.3) + (sentiment.arousal * 0.3) + (salience * 0.4);
+
+    return Math.min(2.0, significance); // Cap at 2.0
+  }
+
   private async process(message: UnifiedMessage): Promise<UnifiedMessage> {
     const sentiment = this.analyzeSentiment(message.content);
+
+    // Process through Relevance Realization Workspace
+    let relevanceSignals: RelevanceSignal[] = [];
+    try {
+      relevanceSignals = await relevanceWorkspace.processInput({
+        type: "message",
+        content: message.content,
+        chatId: message.metadata?.chatId,
+        sentiment,
+        timestamp: message.timestamp,
+      });
+
+      log.debug(`Relevance processing returned ${relevanceSignals.length} signals`);
+    } catch (error) {
+      log.warn("Relevance processing failed, using fallback:", error);
+    }
+
+    // Extract relevance insights
+    const relevanceInsights = this.extractRelevanceInsights(relevanceSignals);
 
     if (this.state?.cognitiveContext) {
       this.state.cognitiveContext.emotionalValence = sentiment.valence;
       this.state.cognitiveContext.emotionalArousal = sentiment.arousal;
-      this.state.cognitiveContext.salienceScore = this.calculateSalience(
-        message.content,
-      );
+      this.state.cognitiveContext.salienceScore = relevanceInsights.overallSalience;
+      this.state.cognitiveContext.relevantMemories = relevanceInsights.relevantDomains;
+      this.state.cognitiveContext.attentionWeight = relevanceInsights.urgency;
     }
 
     return {
       ...message,
-      metadata: { ...message.metadata, cognitivePhase: "process", sentiment },
+      metadata: {
+        ...message.metadata,
+        cognitivePhase: "process",
+        sentiment,
+        relevanceInsights,
+      },
+    };
+  }
+
+  /**
+   * Extract actionable insights from relevance signals
+   */
+  private extractRelevanceInsights(signals: RelevanceSignal[]): {
+    overallSalience: number;
+    urgency: number;
+    dominantRelevanceType: string | null;
+    relevantDomains: string[];
+    shouldPrioritize: boolean;
+  } {
+    if (signals.length === 0) {
+      return {
+        overallSalience: 0.5,
+        urgency: 0.3,
+        dominantRelevanceType: null,
+        relevantDomains: [],
+        shouldPrioritize: false,
+      };
+    }
+
+    // Calculate aggregate metrics
+    const totalSalience = signals.reduce((sum, s) => sum + s.salience, 0);
+    const totalUrgency = signals.reduce((sum, s) => sum + s.urgency, 0);
+    const overallSalience = totalSalience / signals.length;
+    const urgency = totalUrgency / signals.length;
+
+    // Find dominant relevance type
+    const typeCounts = new Map<RelevanceType, number>();
+    for (const signal of signals) {
+      typeCounts.set(signal.relevanceType, (typeCounts.get(signal.relevanceType) || 0) + 1);
+    }
+    let dominantRelevanceType: RelevanceType | null = null;
+    let maxCount = 0;
+    for (const [type, count] of typeCounts.entries()) {
+      if (count > maxCount) {
+        maxCount = count;
+        dominantRelevanceType = type;
+      }
+    }
+
+    // Get relevant domains
+    const domains = new Set<string>();
+    for (const signal of signals) {
+      if (signal.salience > 0.4) {
+        domains.add(signal.source);
+      }
+    }
+
+    // Determine if this should be prioritized
+    const shouldPrioritize = overallSalience > 0.7 || urgency > 0.6;
+
+    return {
+      overallSalience,
+      urgency,
+      dominantRelevanceType,
+      relevantDomains: Array.from(domains),
+      shouldPrioritize,
     };
   }
 
@@ -348,6 +491,17 @@ export class CognitiveOrchestrator {
       role: "assistant",
       content: responseContent,
     });
+
+    // Store bot response in integrated memory system
+    if (this.integratedMemory) {
+      await this.integratedMemory.storeMemory(
+        message.metadata?.chatId || 0,
+        Date.now(),
+        "bot",
+        responseContent,
+        1.0 // Neutral emotional significance for bot responses
+      );
+    }
 
     return {
       id: `response-${Date.now()}`,
@@ -405,7 +559,7 @@ export class CognitiveOrchestrator {
     const mood = persona?.currentMood || "neutral";
     const style = persona?.interactionStyle || "casual";
 
-    return `You are ${
+    let basePrompt = `You are ${
       persona?.name || "Deep Tree Echo"
     }, an AI assistant with the following characteristics:
 - Personality traits: ${traits}
@@ -413,6 +567,30 @@ export class CognitiveOrchestrator {
 - Interaction style: ${style}
 
 Respond in a way that reflects these characteristics while being helpful and informative.`;
+
+    // Add memory context from integrated memory system
+    if (this.integratedMemory && this.conversationHistory.length > 0) {
+      const lastUserMessage = this.conversationHistory
+        .filter(m => m.role === "user")
+        .pop();
+
+      if (lastUserMessage) {
+        const memoryContext = this.integratedMemory.generateMemoryContext(
+          lastUserMessage.content,
+          this.currentChatId || undefined,
+          { includeReflections: true, maxMemories: 5, maxReflections: 2 }
+        );
+
+        if (memoryContext.relevantMemories.length > 0) {
+          const formattedContext = this.integratedMemory.formatContextForPrompt(memoryContext);
+          basePrompt += `\n\n# Memory Context\n${formattedContext}`;
+
+          log.debug(`Added memory context: ${memoryContext.relevantMemories.length} memories, ${memoryContext.recentReflections.length} reflections`);
+        }
+      }
+    }
+
+    return basePrompt;
   }
 
   private generateContextualResponse(input: string): string {
@@ -522,6 +700,93 @@ Respond in a way that reflects these characteristics while being helpful and inf
     this.conversationHistory = [];
     if (this.state) {
       this.state.memories.shortTerm = [];
+    }
+  }
+
+  /**
+   * Get memory system statistics
+   */
+  getMemoryStats(): object | null {
+    if (!this.integratedMemory) return null;
+    return this.integratedMemory.getStats();
+  }
+
+  /**
+   * Export integrated memory state for persistence
+   */
+  exportMemoryState(): object {
+    if (!this.integratedMemory) return {};
+    return this.integratedMemory.exportState();
+  }
+
+  /**
+   * Import integrated memory state from persistence
+   */
+  importMemoryState(state: object): void {
+    if (this.integratedMemory) {
+      this.integratedMemory.importState(state);
+      log.info("Imported integrated memory state");
+    }
+  }
+
+  /**
+   * Get the integrated memory system for direct access
+   */
+  getIntegratedMemory(): IntegratedMemorySystem | null {
+    return this.integratedMemory;
+  }
+
+  /**
+   * Store a reflection in the integrated memory system
+   */
+  async storeReflection(content: string, type: "periodic" | "focused" = "periodic", aspect?: string): Promise<void> {
+    if (this.integratedMemory) {
+      await this.integratedMemory.storeReflection(content, type, aspect);
+      log.info(`Stored ${type} reflection${aspect ? ` on ${aspect}` : ""}`);
+    }
+  }
+
+  /**
+   * Get the current relevance workspace state
+   */
+  getRelevanceState(): object | null {
+    try {
+      return relevanceWorkspace.getState();
+    } catch (error) {
+      log.error("Error getting relevance state:", error);
+      return null;
+    }
+  }
+
+  /**
+   * Add a goal to the relevance workspace
+   */
+  addGoal(description: string, priority: number = 0.5, relevanceType: RelevanceType = RelevanceType.Teleological): string {
+    try {
+      return relevanceWorkspace.addGoal({
+        description,
+        priority,
+        relevanceType,
+        progress: 0,
+        subgoals: [],
+      });
+    } catch (error) {
+      log.error("Error adding goal:", error);
+      return "";
+    }
+  }
+
+  /**
+   * Update the arena (environment/situation) in relevance workspace
+   */
+  updateArena(situation: string, uncertainty: number = 0.5): void {
+    try {
+      relevanceWorkspace.updateArena({
+        situation,
+        uncertainty,
+      });
+    } catch (error) {
+      log.error("Error updating arena:", error);
     }
   }
 
@@ -770,6 +1035,66 @@ export function clearHistory(): void {
     orchestratorInstance.clearHistory();
   }
 }
+
+/**
+ * Get memory system statistics
+ */
+export function getMemoryStats(): object | null {
+  return orchestratorInstance?.getMemoryStats() ?? null;
+}
+
+/**
+ * Export integrated memory state for persistence
+ */
+export function exportMemoryState(): object {
+  return orchestratorInstance?.exportMemoryState() ?? {};
+}
+
+/**
+ * Import integrated memory state from persistence
+ */
+export function importMemoryState(state: object): void {
+  orchestratorInstance?.importMemoryState(state);
+}
+
+/**
+ * Store a reflection in the integrated memory system
+ */
+export async function storeReflection(
+  content: string,
+  type: "periodic" | "focused" = "periodic",
+  aspect?: string
+): Promise<void> {
+  await orchestratorInstance?.storeReflection(content, type, aspect);
+}
+
+/**
+ * Get the current relevance workspace state
+ */
+export function getRelevanceState(): object | null {
+  return orchestratorInstance?.getRelevanceState() ?? null;
+}
+
+/**
+ * Add a goal to the relevance workspace
+ */
+export function addGoal(
+  description: string,
+  priority: number = 0.5,
+  relevanceType: RelevanceType = RelevanceType.Teleological
+): string {
+  return orchestratorInstance?.addGoal(description, priority, relevanceType) ?? "";
+}
+
+/**
+ * Update the arena (environment/situation) in the relevance workspace
+ */
+export function updateArena(situation: string, uncertainty: number = 0.5): void {
+  orchestratorInstance?.updateArena(situation, uncertainty);
+}
+
+// Re-export relevance types for external use
+export { RelevanceType, CognitiveDomain };
 
 // ============================================================
 // CONSCIOUSNESS EXPORTS (Sentience Advancement)

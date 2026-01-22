@@ -6,3 +6,9 @@ export {
   type ReflectionMemory,
 } from "./RAGMemoryStore";
 export { HyperDimensionalMemory } from "./HyperDimensionalMemory";
+export {
+  IntegratedMemorySystem,
+  type IntegratedMemoryConfig,
+  type RetrievedMemory,
+  type MemoryContext,
+} from "./IntegratedMemorySystem";
