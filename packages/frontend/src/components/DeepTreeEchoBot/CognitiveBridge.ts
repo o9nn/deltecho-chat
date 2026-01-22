@@ -71,6 +71,14 @@ import {
   type MemoryContext,
 } from "deep-tree-echo-core/memory";
 
+// Relevance Realization Workspace
+import {
+  relevanceWorkspace,
+  RelevanceType,
+  CognitiveDomain,
+  type RelevanceSignal,
+} from "deep-tree-echo-core/consciousness";
+
 const log = getLogger("render/components/DeepTreeEchoBot/CognitiveBridge");
 
 /**
@@ -368,17 +376,101 @@ export class CognitiveOrchestrator {
   private async process(message: UnifiedMessage): Promise<UnifiedMessage> {
     const sentiment = this.analyzeSentiment(message.content);
 
+    // Process through Relevance Realization Workspace
+    let relevanceSignals: RelevanceSignal[] = [];
+    try {
+      relevanceSignals = await relevanceWorkspace.processInput({
+        type: "message",
+        content: message.content,
+        chatId: message.metadata?.chatId,
+        sentiment,
+        timestamp: message.timestamp,
+      });
+
+      log.debug(`Relevance processing returned ${relevanceSignals.length} signals`);
+    } catch (error) {
+      log.warn("Relevance processing failed, using fallback:", error);
+    }
+
+    // Extract relevance insights
+    const relevanceInsights = this.extractRelevanceInsights(relevanceSignals);
+
     if (this.state?.cognitiveContext) {
       this.state.cognitiveContext.emotionalValence = sentiment.valence;
       this.state.cognitiveContext.emotionalArousal = sentiment.arousal;
-      this.state.cognitiveContext.salienceScore = this.calculateSalience(
-        message.content,
-      );
+      this.state.cognitiveContext.salienceScore = relevanceInsights.overallSalience;
+      this.state.cognitiveContext.relevantMemories = relevanceInsights.relevantDomains;
+      this.state.cognitiveContext.attentionWeight = relevanceInsights.urgency;
     }
 
     return {
       ...message,
-      metadata: { ...message.metadata, cognitivePhase: "process", sentiment },
+      metadata: {
+        ...message.metadata,
+        cognitivePhase: "process",
+        sentiment,
+        relevanceInsights,
+      },
+    };
+  }
+
+  /**
+   * Extract actionable insights from relevance signals
+   */
+  private extractRelevanceInsights(signals: RelevanceSignal[]): {
+    overallSalience: number;
+    urgency: number;
+    dominantRelevanceType: string | null;
+    relevantDomains: string[];
+    shouldPrioritize: boolean;
+  } {
+    if (signals.length === 0) {
+      return {
+        overallSalience: 0.5,
+        urgency: 0.3,
+        dominantRelevanceType: null,
+        relevantDomains: [],
+        shouldPrioritize: false,
+      };
+    }
+
+    // Calculate aggregate metrics
+    const totalSalience = signals.reduce((sum, s) => sum + s.salience, 0);
+    const totalUrgency = signals.reduce((sum, s) => sum + s.urgency, 0);
+    const overallSalience = totalSalience / signals.length;
+    const urgency = totalUrgency / signals.length;
+
+    // Find dominant relevance type
+    const typeCounts = new Map<RelevanceType, number>();
+    for (const signal of signals) {
+      typeCounts.set(signal.relevanceType, (typeCounts.get(signal.relevanceType) || 0) + 1);
+    }
+    let dominantRelevanceType: RelevanceType | null = null;
+    let maxCount = 0;
+    for (const [type, count] of typeCounts.entries()) {
+      if (count > maxCount) {
+        maxCount = count;
+        dominantRelevanceType = type;
+      }
+    }
+
+    // Get relevant domains
+    const domains = new Set<string>();
+    for (const signal of signals) {
+      if (signal.salience > 0.4) {
+        domains.add(signal.source);
+      }
+    }
+
+    // Determine if this should be prioritized
+    const shouldPrioritize = overallSalience > 0.7 || urgency > 0.6;
+
+    return {
+      overallSalience,
+      urgency,
+      dominantRelevanceType,
+      relevantDomains: Array.from(domains),
+      shouldPrioritize,
     };
   }
 
@@ -651,6 +743,50 @@ Respond in a way that reflects these characteristics while being helpful and inf
     if (this.integratedMemory) {
       await this.integratedMemory.storeReflection(content, type, aspect);
       log.info(`Stored ${type} reflection${aspect ? ` on ${aspect}` : ""}`);
+    }
+  }
+
+  /**
+   * Get the current relevance workspace state
+   */
+  getRelevanceState(): object | null {
+    try {
+      return relevanceWorkspace.getState();
+    } catch (error) {
+      log.error("Error getting relevance state:", error);
+      return null;
+    }
+  }
+
+  /**
+   * Add a goal to the relevance workspace
+   */
+  addGoal(description: string, priority: number = 0.5, relevanceType: RelevanceType = RelevanceType.Teleological): string {
+    try {
+      return relevanceWorkspace.addGoal({
+        description,
+        priority,
+        relevanceType,
+        progress: 0,
+        subgoals: [],
+      });
+    } catch (error) {
+      log.error("Error adding goal:", error);
+      return "";
+    }
+  }
+
+  /**
+   * Update the arena (environment/situation) in relevance workspace
+   */
+  updateArena(situation: string, uncertainty: number = 0.5): void {
+    try {
+      relevanceWorkspace.updateArena({
+        situation,
+        uncertainty,
+      });
+    } catch (error) {
+      log.error("Error updating arena:", error);
     }
   }
 
@@ -931,6 +1067,34 @@ export async function storeReflection(
 ): Promise<void> {
   await orchestratorInstance?.storeReflection(content, type, aspect);
 }
+
+/**
+ * Get the current relevance workspace state
+ */
+export function getRelevanceState(): object | null {
+  return orchestratorInstance?.getRelevanceState() ?? null;
+}
+
+/**
+ * Add a goal to the relevance workspace
+ */
+export function addGoal(
+  description: string,
+  priority: number = 0.5,
+  relevanceType: RelevanceType = RelevanceType.Teleological
+): string {
+  return orchestratorInstance?.addGoal(description, priority, relevanceType) ?? "";
+}
+
+/**
+ * Update the arena (environment/situation) in the relevance workspace
+ */
+export function updateArena(situation: string, uncertainty: number = 0.5): void {
+  orchestratorInstance?.updateArena(situation, uncertainty);
+}
+
+// Re-export relevance types for external use
+export { RelevanceType, CognitiveDomain };
 
 // ============================================================
 // CONSCIOUSNESS EXPORTS (Sentience Advancement)
