@@ -8,7 +8,7 @@
  */
 
 import { ipcMain } from "electron";
-import { readFile, writeFile, _unlink as __unlink, mkdir  } from "fs/promises";
+import { readFile, writeFile, unlink as _unlink, mkdir } from "fs/promises";
 import { existsSync } from "fs";
 import { join } from "path";
 
