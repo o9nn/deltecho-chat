@@ -1,4 +1,4 @@
-import { _Atom as __Atom  } from "../atomspace/atom.js";
+import type { Atom } from "../atomspace/atom.js"; from "../atomspace/atom.js";
 
 export type RequestType = "QUERY" | "VALIDATE" | "SYNC";
 

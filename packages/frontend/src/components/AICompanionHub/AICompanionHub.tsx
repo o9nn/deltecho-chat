@@ -23,7 +23,8 @@ import {
 } from "lucide-react";
 
 import { AICompanionProvider, useAICompanion } from "./AICompanionController";
-import { ConnectorInfo, _ConnectorRegistryEvent } from "./ConnectorRegistry";
+import { ConnectorInfo } from "./ConnectorRegistry";
+import type { ConnectorRegistryEvent as _ConnectorRegistryEvent } from "./ConnectorRegistry";
 import { AIMemory } from "./MemoryPersistenceLayer";
 import MemoryVisualization from "./MemoryVisualization";
 import AICompanionCreator from "./AICompanionCreator";
@@ -33,7 +34,7 @@ import {
   MemoryBrowser,
 } from "@deltecho/ui-components";
 import type { UnifiedCognitiveState, Atom } from "@deltecho/cognitive";
-import { Live2DAvatar, _useLive2DController } from "./Live2DAvatar";
+import { Live2DAvatar } from "./Live2DAvatar";
 import type {
   Live2DAvatarController,
   Expression,

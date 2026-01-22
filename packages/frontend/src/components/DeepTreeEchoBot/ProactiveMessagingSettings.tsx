@@ -16,7 +16,7 @@ import {
   proactiveMessaging,
   ProactiveConfig,
   ProactiveTrigger,
-  _TriggerType,
+  TriggerType as _TriggerType,
 } from "./ProactiveMessaging";
 
 const log = getLogger(

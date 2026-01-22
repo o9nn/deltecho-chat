@@ -1,5 +1,5 @@
 import { Atom, Node, Link, AtomType } from "./atom.js";
-import { TruthValue, _createTruthValue as __createTruthValue  } from "./truth-value.js";
+import { TruthValue } from "./truth-value.js";
 
 export class AtomSpace {
   private atoms: Map<string, Atom> = new Map();

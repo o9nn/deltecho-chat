@@ -2,8 +2,8 @@ import * as duckdb from "@duckdb/duckdb-wasm";
 import { AsyncDuckDB } from "@duckdb/duckdb-wasm";
 import { drizzle } from "drizzle-orm/pg-proxy";
 import { PgDatabase } from "drizzle-orm/pg-core";
-import { atoms, _links as __links  } from "./schema";
-import { eq, like, _sql as __sql, and  } from "drizzle-orm";
+import { atoms } from "./schema";
+import { eq, like, and } from "drizzle-orm";
 
 /**
  * Adapter for DuckDB WASM integration with Deep Tree Echo

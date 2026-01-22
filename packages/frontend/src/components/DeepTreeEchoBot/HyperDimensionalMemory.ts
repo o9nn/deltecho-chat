@@ -1,4 +1,4 @@
-import { _C } from "@deltachat/jsonrpc-client";
+import type { C as _C } from "@deltachat/jsonrpc-client";
 
 /**
  * HyperDimensionalMemory: Advanced memory architecture that organizes conversations

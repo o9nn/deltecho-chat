@@ -6,7 +6,7 @@
  */
 
 import { EventEmitter } from "events";
-import { _Readable as __Readable, _PassThrough as __PassThrough   } from "stream";
+import type { Readable, PassThrough } from "stream";
 import * as https from "https";
 import * as http from "http";
 

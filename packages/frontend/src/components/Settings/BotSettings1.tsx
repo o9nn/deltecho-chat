@@ -1,5 +1,5 @@
 import React from "react";
-import { _DesktopSettingsType } from "@deltachat-desktop/shared/shared-types";
+import type { DesktopSettingsType as _DesktopSettingsType } from "@deltachat-desktop/shared/shared-types";
 import { SettingsStoreState } from "../../stores/settings";
 import {
   BotSettings as DeepTreeEchoBotSettings,

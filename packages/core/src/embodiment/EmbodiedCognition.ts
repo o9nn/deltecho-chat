@@ -455,7 +455,7 @@ export class EmbodiedCognition {
    * Update proprioceptive state based on consciousness
    */
   private updateProprioception(): void {
-    const { phi,_selfAwareness, flowState, emotionalArousal } =
+    const { phi, selfAwareness: _selfAwareness, flowState, emotionalArousal } =
       this.consciousnessMapping;
 
     // Presence correlates with integrated information (Phi)

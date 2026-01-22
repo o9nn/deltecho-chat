@@ -1,4 +1,5 @@
-import { RAGMemoryStore, _Memory } from "../RAGMemoryStore";
+import { RAGMemoryStore } from "../RAGMemoryStore";
+import type { Memory as _Memory } from "../RAGMemoryStore";
 
 // Mock logger
 jest.mock("../../../../../shared/logger", () => ({

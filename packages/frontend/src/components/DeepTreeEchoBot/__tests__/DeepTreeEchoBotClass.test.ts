@@ -1,7 +1,7 @@
 import { DeepTreeEchoBot } from "../DeepTreeEchoBot";
 import { LLMService } from "../LLMService";
 import { VisionProcessor } from "../../../utils/VisionProcessor";
-import { _BackendRemote } from "../../../backend-com";
+import type { BackendRemote as _BackendRemote } from "../../../backend-com";
 
 // Mock AvatarStateManager
 jest.mock("../AvatarStateManager", () => ({
