@@ -8,6 +8,9 @@
  */
 
 import { C } from "@deltachat/jsonrpc-client";
+import { getLogger } from "@deltachat-desktop/shared/logger";
+
+const log = getLogger("render/components/DeepTreeEchoBot/SecureIntegration");
 
 // Encryption states for cognitive data
 enum SecureState {
@@ -100,7 +103,7 @@ export class SecureIntegration {
 
     // Check if current encryption state meets requirements
     if (!this.isEncryptionSufficient(requiredLevel)) {
-      console.warn(`Encryption level insufficient for ${options.dataType}`);
+      log.warn(`Encryption level insufficient for ${options.dataType}`);
       return false;
     }
 
@@ -167,7 +170,7 @@ export class SecureIntegration {
         return decrypted;
       }
     } catch (err) {
-      console.error(`Failed to retrieve ${key} from secure storage:`, err);
+      log.error(`Failed to retrieve ${key} from secure storage:`, err);
     }
 
     return null;
@@ -185,7 +188,7 @@ export class SecureIntegration {
       await this.deleteFromSecureStorage(key);
       return true;
     } catch (err) {
-      console.error(`Failed to delete ${key} from secure storage:`, err);
+      log.error(`Failed to delete ${key} from secure storage:`, err);
       return false;
     }
   }
@@ -267,7 +270,7 @@ export class SecureIntegration {
 
       return true;
     } catch (err) {
-      console.error("Failed to import secure data:", err);
+      log.error("Failed to import secure data:", err);
       return false;
     }
   }
@@ -578,7 +581,7 @@ export class SecureIntegration {
         }),
       );
     } catch (err) {
-      console.error(`Failed to persist ${key} to secure storage:`, err);
+      log.error(`Failed to persist ${key} to secure storage:`, err);
     }
   }
 
@@ -596,7 +599,7 @@ export class SecureIntegration {
       const parsed = JSON.parse(item);
       return parsed.data;
     } catch (err) {
-      console.error(`Failed to parse secure storage data for ${key}:`, err);
+      log.error(`Failed to parse secure storage data for ${key}:`, err);
       return null;
     }
   }
@@ -636,7 +639,7 @@ export class SecureIntegration {
             }
           }
         } catch (err) {
-          console.error(
+          log.error(
             `Failed to parse secure storage data for index ${i}:`,
             err,
           );
@@ -654,6 +657,6 @@ export class SecureIntegration {
     // In a real implementation, this would write to a secure audit log
 
     // For demo, just log to console
-    console.log(`[SECURITY EVENT] ChatID ${chatId}:`, eventData);
+    log.info(`[SECURITY EVENT] ChatID ${chatId}:`, eventData);
   }
 }

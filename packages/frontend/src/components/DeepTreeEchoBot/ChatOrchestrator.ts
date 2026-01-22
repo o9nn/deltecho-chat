@@ -10,12 +10,15 @@
  */
 
 import { Type as T } from "../../backend-com";
+import { getLogger } from "@deltachat-desktop/shared/logger";
 import {
   AARFrontendIntegration,
   type AARStateSnapshot,
   type AARContext,
   createAARFrontendIntegration,
 } from "./AARIntegration";
+
+const log = getLogger("render/components/DeepTreeEchoBot/ChatOrchestrator");
 
 /**
  * Cognitive state for a chat session
@@ -128,7 +131,7 @@ export class ChatOrchestrator {
    */
   start(): void {
     this.aarIntegration.start();
-    console.log("[ChatOrchestrator] Started with AAR integration");
+    log.info("[ChatOrchestrator] Started with AAR integration");
   }
 
   /**
@@ -136,7 +139,7 @@ export class ChatOrchestrator {
    */
   shutdown(): void {
     this.aarIntegration.stop();
-    console.log("[ChatOrchestrator] Stopped");
+    log.info("[ChatOrchestrator] Stopped");
   }
 
   /**

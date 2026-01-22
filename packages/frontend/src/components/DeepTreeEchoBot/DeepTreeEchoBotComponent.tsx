@@ -1,5 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import { C } from "@deltachat/jsonrpc-client";
+import { getLogger } from "@deltachat-desktop/shared/logger";
+
+const log = getLogger("render/components/DeepTreeEchoBot/DeepTreeEchoBotComponent");
 
 // Import all the advanced cognitive modules
 import { HyperDimensionalMemory } from "./HyperDimensionalMemory";
@@ -244,7 +247,7 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ testHooks }) => {
 
       addSystemMessage("Cognitive systems initialized successfully.");
     } catch (error) {
-      console.error("Error loading bot state:", error);
+      log.error("Error loading bot state:", error);
       addSystemMessage(
         "Error initializing cognitive systems. Starting with fresh state.",
       );
@@ -259,7 +262,7 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ testHooks }) => {
     // For demo purposes, we're just mocking the connection
 
     // In a real implementation, this would subscribe to DeltaChat events
-    console.log("Deep Tree Echo Bot is listening for messages");
+    log.info("Deep Tree Echo Bot is listening for messages");
   };
 
   /**
@@ -267,7 +270,7 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ testHooks }) => {
    */
   const cleanupMessageListener = () => {
     // Cleanup code for message listener
-    console.log("Deep Tree Echo Bot stopped listening for messages");
+    log.info("Deep Tree Echo Bot stopped listening for messages");
   };
 
   /**
@@ -395,7 +398,7 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ testHooks }) => {
         saveBotState();
       }
     } catch (error) {
-      console.error("Error processing message:", error);
+      log.error("Error processing message:", error);
       setPendingResponse(
         "I experienced an internal error while processing your message. Please try again.",
       );
@@ -761,7 +764,7 @@ Self-reflection complete:
 - Contradictions: ${beliefCoherence.contradictions.length}
       `;
 
-      console.log(reflectionSummary);
+      log.info(reflectionSummary);
       addSystemMessage("Self-reflection completed.");
 
       // Save state after reflection
@@ -769,7 +772,7 @@ Self-reflection complete:
 
       setCurrentProcessingState(CognitiveState.IDLE);
     } catch (error) {
-      console.error("Error during self-reflection:", error);
+      log.error("Error during self-reflection:", error);
       addSystemMessage("Error during self-reflection.");
       setCurrentProcessingState(CognitiveState.ERROR);
     }
@@ -811,7 +814,7 @@ Self-reflection complete:
 
       addSystemMessage("State saved successfully.");
     } catch (error) {
-      console.error("Error saving bot state:", error);
+      log.error("Error saving bot state:", error);
       addSystemMessage("Error saving state.");
     }
   };
