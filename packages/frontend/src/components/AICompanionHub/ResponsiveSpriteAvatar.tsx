@@ -1,4 +1,4 @@
-import React, { useMemo, _useState, useEffect } from "react";
+import React, { useMemo, useEffect } from "react";
 import { EmotionalVector } from "./Live2DAvatar";
 
 // Import images - in a real app these typically would be imported or referenced by URL
