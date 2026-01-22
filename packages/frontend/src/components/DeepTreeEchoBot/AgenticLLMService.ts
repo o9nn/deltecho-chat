@@ -20,12 +20,7 @@
  */
 
 import { getLogger } from "@deltachat-desktop/shared/logger";
-import {
-  AgentToolExecutor,
-  AgentTool,
-  ToolCall,
-  ToolResult,
-} from "./AgentToolExecutor";
+import { AgentToolExecutor, AgentTool, ToolCall } from "./AgentToolExecutor";
 import { LLMService } from "./LLMService";
 import type { CognitiveFunctionType as _CognitiveFunctionType } from "./LLMService";
 
@@ -285,7 +280,7 @@ AUTONOMY PRINCIPLES:
   private async callLLMWithTools(
     conversation: ConversationMessage[],
     tools: AgentTool[],
-    accountId: number,
+    _accountId: number,
   ): Promise<{ content: ContentBlock[] }> {
     if (!this.providerConfig) {
       // Fallback to basic LLM service without tools
@@ -443,7 +438,7 @@ AUTONOMY PRINCIPLES:
    */
   private async callLocal(
     conversation: ConversationMessage[],
-    tools: AgentTool[],
+    _tools: AgentTool[],
   ): Promise<{ content: ContentBlock[] }> {
     // For local mode, use the base LLM service
     const lastUserMessage = conversation.filter((m) => m.role === "user").pop();

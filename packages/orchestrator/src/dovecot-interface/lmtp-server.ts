@@ -38,7 +38,7 @@ export class LMTPServer {
   private config: LMTPConfig;
   private server?: net.Server;
   private connections: Map<net.Socket, LMTPSession> = new Map();
-  private listeners: Map<string, Function[]> = new Map();
+  private listeners: Map<string, Array<(data: unknown) => void>> = new Map();
 
   constructor(config: LMTPConfig) {
     this.config = {
@@ -505,7 +505,7 @@ export class LMTPServer {
    */
   private decodeBodyContent(
     body: string,
-    contentType: string,
+    _contentType: string,
     encoding: string = "7bit",
   ): string {
     let decoded = body;
@@ -560,7 +560,7 @@ export class LMTPServer {
   /**
    * Event emitter functionality
    */
-  public on(event: string, callback: Function): void {
+  public on(event: string, callback: (data: unknown) => void): void {
     if (!this.listeners.has(event)) {
       this.listeners.set(event, []);
     }

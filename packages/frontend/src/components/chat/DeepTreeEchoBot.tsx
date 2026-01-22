@@ -248,7 +248,7 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ enabled }) => {
    */
   const handleVisionCommand = async (
     imagePath: string,
-    messageText: string,
+    _messageText: string,
   ): Promise<string> => {
     try {
       // Only load VisionCapabilities when actually needed

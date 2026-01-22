@@ -83,12 +83,7 @@ const TriggerManager: React.FC<TriggerManagerProps> = ({
   >([]);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Load triggers and chats
-  useEffect(() => {
-    loadTriggers();
-    loadChats();
-  }, [accountId]);
-
+  // Define functions before useEffect that uses them
   const loadTriggers = () => {
     const allTriggers = proactiveMessaging.getTriggers();
     setTriggers(allTriggers);
@@ -102,6 +97,13 @@ const TriggerManager: React.FC<TriggerManagerProps> = ({
       log.error("Failed to load chats:", error);
     }
   };
+
+  // Load triggers and chats
+  useEffect(() => {
+    loadTriggers();
+    loadChats();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accountId]);
 
   // Filter triggers by search
   const filteredTriggers = triggers.filter(

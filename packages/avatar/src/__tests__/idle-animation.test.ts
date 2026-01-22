@@ -6,7 +6,6 @@ import {
   IdleAnimationSystem,
   createIdleAnimationSystem,
   DEFAULT_IDLE_CONFIG,
-  IdleAnimationState,
   IdleAnimationEvent,
 } from "../idle-animation";
 

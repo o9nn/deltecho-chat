@@ -20,10 +20,7 @@ import {
   type PartialMessage,
   type Interaction,
 } from "discord.js";
-import type {
-  CognitiveOrchestrator,
-  UnifiedMessage,
-} from "@deltecho/cognitive";
+import type { CognitiveOrchestrator } from "@deltecho/cognitive";
 import type {
   IPlatformIntegration,
   PlatformMessage,

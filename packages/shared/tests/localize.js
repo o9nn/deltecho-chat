@@ -1,6 +1,6 @@
 //@ts-check
 
-/* global it, console */
+/* global it */
 import { describe, setup } from "mocha";
 import { expect, assert } from "chai";
 import fs from "fs";

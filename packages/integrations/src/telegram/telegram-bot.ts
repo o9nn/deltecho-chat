@@ -22,7 +22,6 @@ import type {
   TelegramMessage,
   TelegramCallbackQuery,
   TelegramInlineKeyboard,
-  TelegramCommand,
 } from "./types.js";
 import { DEFAULT_TELEGRAM_CONFIG } from "./types.js";
 
@@ -453,7 +452,7 @@ export class TelegramBot implements IPlatformIntegration {
 
   private async handleCognitiveResponse(
     message: TelegramMessage,
-    platformMessage: PlatformMessage,
+    _platformMessage: PlatformMessage,
   ): Promise<void> {
     if (!this.cognitive) {
       await this.sendMessage(message.chat.id.toString(), {

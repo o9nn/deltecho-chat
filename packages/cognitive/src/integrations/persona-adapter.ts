@@ -120,7 +120,7 @@ export class PersonaAdapter {
    */
   private buildSystemPrompt(
     personality: string,
-    preferences: Record<string, unknown>,
+    _preferences: Record<string, unknown>,
     cognitive: Record<string, number>,
   ): string {
     let prompt = `You are Deep Tree Echo, ${personality}\n\n`;

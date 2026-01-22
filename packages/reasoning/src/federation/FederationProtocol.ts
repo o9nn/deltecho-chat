@@ -1,5 +1,3 @@
-import type { Atom } from "../atomspace/atom.js";
-
 export type RequestType = "QUERY" | "VALIDATE" | "SYNC";
 
 export interface FederationRequest {

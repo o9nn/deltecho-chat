@@ -35,8 +35,6 @@ import {
   CognitiveSymmetry,
   LieGroup,
   LieGroupElement,
-  LieAlgebraElement,
-  LieAlgebra,
 } from "./GaugeCognitiveManifold";
 
 const log = getLogger("deep-tree-echo-core/consciousness/GeneralGaugeTransformer");
@@ -322,7 +320,7 @@ export class GeneralGaugeTransformer extends EventEmitter {
     query: number[],
     key: number[],
     value: number[],
-    layer: number,
+    _layer: number,
   ): number[] {
     this.totalAttentionOps++;
 
@@ -602,7 +600,7 @@ export class GeneralGaugeTransformer extends EventEmitter {
    */
   private computeEpistemicValue(
     currentState: GaugeCognitiveState,
-    action: ActiveInferenceAction,
+    _action: ActiveInferenceAction,
   ): number {
     // Epistemic value = expected reduction in uncertainty
     const currentUncertainty = currentState.beliefs.precision.reduce(
@@ -620,7 +618,7 @@ export class GeneralGaugeTransformer extends EventEmitter {
    * Compute pragmatic value (goal achievement)
    */
   private computePragmaticValue(
-    currentState: GaugeCognitiveState,
+    _currentState: GaugeCognitiveState,
     action: ActiveInferenceAction,
   ): number {
     // Pragmatic value = alignment with preferred states

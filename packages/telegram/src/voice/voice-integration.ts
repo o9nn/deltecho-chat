@@ -244,7 +244,7 @@ export class ElevenLabsTTSProvider implements TTSProvider {
  */
 export class StubSTTProvider implements STTProvider {
   async transcribe(
-    buffer: Buffer,
+    _buffer: Buffer,
     options?: { language?: string },
   ): Promise<{ text: string; confidence: number; language?: string }> {
     // Simulate processing delay

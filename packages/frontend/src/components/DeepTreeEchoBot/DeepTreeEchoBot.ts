@@ -387,7 +387,7 @@ You can also just chat with me normally and I'll respond!
     const subCommand = args.split(" ")[0] || "status";
 
     switch (subCommand) {
-      case "status":
+      case "status": {
         const activeFunctions = this.llmService.getActiveFunctions();
 
         let statusMessage = `
@@ -412,6 +412,7 @@ Active cognitive functions: ${activeFunctions.length}
 
         await this.sendMessage(accountId, chatId, statusMessage);
         break;
+      }
 
       default:
         await this.sendMessage(
@@ -428,7 +429,7 @@ Active cognitive functions: ${activeFunctions.length}
   private async processVisionCommand(
     accountId: number,
     chatId: number,
-    message: any,
+    _message: any,
   ): Promise<void> {
     // For now, just send a placeholder response
     await this.sendMessage(
@@ -499,7 +500,7 @@ Active cognitive functions: ${activeFunctions.length}
     const subCommand = args.split(" ")[0] || "";
 
     switch (subCommand) {
-      case "status":
+      case "status": {
         const recentMemories = this.memoryStore.retrieveRecentMemories(5);
         const statusMessage = `
 **Memory Status**
@@ -516,6 +517,7 @@ ${
         `;
         await this.sendMessage(accountId, chatId, statusMessage);
         break;
+      }
 
       case "clear":
         await this.memoryStore.clearChatMemories(chatId);
@@ -526,7 +528,7 @@ ${
         );
         break;
 
-      case "search":
+      case "search": {
         const searchQuery = args.substring("search".length).trim();
         if (!searchQuery) {
           await this.sendMessage(
@@ -557,6 +559,7 @@ ${
         `;
         await this.sendMessage(accountId, chatId, resultsMessage);
         break;
+      }
 
       default:
         await this.sendMessage(

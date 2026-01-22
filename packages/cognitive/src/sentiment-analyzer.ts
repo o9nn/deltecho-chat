@@ -5,11 +5,7 @@
  * Provides valence/arousal calculation and emotional trend tracking.
  */
 
-import {
-  SentimentScore,
-  EmotionalVector,
-  DEFAULT_EMOTIONAL_VECTOR,
-} from "./types";
+import { SentimentScore, EmotionalVector } from "./types";
 
 /**
  * Emotion keywords mapped to their emotion category and intensity

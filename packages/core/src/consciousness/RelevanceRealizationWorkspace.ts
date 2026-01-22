@@ -581,7 +581,7 @@ export class RelevanceRealizationWorkspace extends EventEmitter {
    * Calculate urgency of input in a domain
    */
   private calculateUrgency(
-    input: unknown,
+    _input: unknown,
     domain: CognitiveDomain,
     context: WorkspaceContext,
   ): number {
@@ -607,7 +607,7 @@ export class RelevanceRealizationWorkspace extends EventEmitter {
    * Calculate confidence in relevance assessment
    */
   private calculateConfidence(
-    input: unknown,
+    _input: unknown,
     domain: CognitiveDomain,
     context: WorkspaceContext,
   ): number {

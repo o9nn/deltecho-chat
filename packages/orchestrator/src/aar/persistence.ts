@@ -9,12 +9,7 @@ import { EventEmitter } from "events";
 import { getLogger } from "deep-tree-echo-core";
 import * as fs from "fs/promises";
 import * as path from "path";
-import type {
-  AARState,
-  AgentState,
-  ArenaState,
-  RelationState,
-} from "./types.js";
+import type { AARState as _AARState } from "./types.js";
 import { AgentMembrane } from "./agent-membrane.js";
 import { ArenaMembrane } from "./arena-membrane.js";
 import { RelationInterface } from "./relation-interface.js";

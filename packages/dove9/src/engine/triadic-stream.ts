@@ -1,8 +1,4 @@
-import {
-  StreamPhase,
-  TriadicStreamConfig,
-  StreamState,
-} from "../types/index.js";
+import { TriadicStreamConfig, StreamState } from "../types/index.js";
 
 export class TriadicStream {
   private config: TriadicStreamConfig;

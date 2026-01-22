@@ -17,8 +17,6 @@ import type {
   CognitiveFlow,
   VirtualAgentModel,
   VirtualArenaModel,
-  AgentState,
-  ArenaState,
 } from "../types.js";
 
 /**
@@ -112,7 +110,7 @@ export function createRelationTools(
      * Synthesize Agent and Arena states through Relation
      */
     synthesize: (
-      input: z.infer<typeof relationToolSchemas.synthesize>,
+      _input: z.infer<typeof relationToolSchemas.synthesize>,
     ): SynthesisResult => {
       const agent = getAgent();
       const arena = getArena();
@@ -210,7 +208,7 @@ export function createRelationTools(
           relation.synthesize(agent.getState(), arena.getState());
           break;
 
-        case "reflection":
+        case "reflection": {
           // S → Vi: Self updates virtual agent model
           const selfReflection = relation.getSelfReflection();
           updateVirtualAgent({
@@ -223,8 +221,9 @@ export function createRelationTools(
             },
           });
           break;
+        }
 
-        case "mirroring":
+        case "mirroring": {
           // Vi ↔ Vo: Self-model updates world-view (INVERTED)
           // This is where the inverted mirror magic happens
           const emergent = relation.getEmergentIdentity();
@@ -245,6 +244,7 @@ export function createRelationTools(
             },
           });
           break;
+        }
 
         case "enaction":
           // Vo → Ao: World-view guides action in actual world

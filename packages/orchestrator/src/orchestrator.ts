@@ -215,7 +215,7 @@ export class Orchestrator {
           generateResponse: async (
             userMessage: string,
             history: Array<{ role: string; content: string }> | undefined,
-            systemPrompt: string | undefined,
+            _systemPrompt: string | undefined,
           ) => {
             // Convert history to string array for core LLMService
             const context = (history || []).map(
@@ -558,7 +558,7 @@ export class Orchestrator {
    */
   private async processMessage(
     message: DeltaChatMessage,
-    accountId: number,
+    _accountId: number,
     chatId: number,
     msgId: number,
     senderName: string = "Unknown",
@@ -696,9 +696,9 @@ export class Orchestrator {
    */
   private async processWithBasic(
     messageText: string,
-    chatId: number,
-    msgId: number,
-    aarResult?: AARProcessingResult,
+    _chatId: number,
+    _msgId: number,
+    _aarResult?: AARProcessingResult,
   ): Promise<string> {
     log.debug(
       "Processing with BASIC tier (delegating to CognitiveOrchestrator)",
@@ -715,7 +715,7 @@ export class Orchestrator {
    */
   private async processWithSys6(
     messageText: string,
-    chatId: number,
+    _chatId: number,
   ): Promise<string> {
     log.debug("Processing with SYS6 tier (30-step cognitive cycle)");
 
@@ -731,7 +731,7 @@ export class Orchestrator {
    */
   private async processWithMembrane(
     messageText: string,
-    chatId: number,
+    _chatId: number,
   ): Promise<string> {
     log.debug("Processing with MEMBRANE tier (bio-inspired architecture)");
 
@@ -767,7 +767,7 @@ Available commands:
 
 You can also just chat with me normally and I'll respond!`;
 
-      case "/status":
+      case "/status": {
         const emotionalState = this.personaCore.getDominantEmotion();
         const dove9State = this.dove9Integration?.getCognitiveState();
         const sys6State = this.sys6Bridge?.getState();
@@ -854,6 +854,7 @@ ${
 - Sync Cycle: ${aarState.cycle}`
     : ""
 }`;
+      }
 
       case "/version":
         return `**Deep Tree Echo Orchestrator v2.1.0**

@@ -12,7 +12,7 @@ import { EmotionalIntelligence } from "./EmotionalIntelligence";
 import { SecureIntegration } from "./SecureIntegration";
 
 // Types of commands that Deep Tree Echo can process
-enum CommandType {
+enum _CommandType {
   IDENTITY = "identity",
   MEMORY = "memory",
   BELIEF = "belief",
@@ -128,6 +128,7 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ testHooks }) => {
   const secureSystem = useRef<SecureIntegration>(new SecureIntegration());
 
   // Bot state
+  // eslint-disable-next-line react-compiler/react-compiler -- Date.now() is intentionally used during render for initialization
   const [botCore, setBotCore] = useState<DeepTreeEchoBotCore>({
     name: "Deep Tree Echo",
     version: "1.0.0",
@@ -182,6 +183,7 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ testHooks }) => {
    * Initialize the bot on first render
    */
   useEffect(() => {
+    // eslint-disable-next-line react-compiler/react-compiler -- functions are hoisted
     // Expose methods for testing if testHooks is provided
     if (testHooks) {
       testHooks.processMessage = processMessage;
@@ -199,6 +201,7 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ testHooks }) => {
       // Cleanup message listener
       cleanupMessageListener();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /**
@@ -411,8 +414,8 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ testHooks }) => {
    */
   const generateResponse = async (
     messageText: string,
-    chatId: number,
-    senderId: number,
+    _chatId: number,
+    _senderId: number,
   ): Promise<string> => {
     // Retrieve relevant memories
     const relevantMemories = hyperMemory.current.recallMemories(messageText, 5);
@@ -520,7 +523,7 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ testHooks }) => {
   const processCommand = async (
     command: string,
     args: string,
-    chatId: number,
+    _chatId: number,
   ): Promise<string> => {
     switch (command) {
       case "help":
@@ -541,7 +544,7 @@ Deep Tree Echo Bot Commands:
       case "identity":
         return botCore.identity.join("\n\n");
 
-      case "memory":
+      case "memory": {
         const memories = hyperMemory.current.recallMemories(
           args || "recent",
           5,
@@ -555,8 +558,9 @@ Deep Tree Echo Bot Commands:
             .map((m) => `• ${m.text} (relevance: ${m.relevance.toFixed(2)})`)
             .join("\n\n")
         );
+      }
 
-      case "belief":
+      case "belief": {
         const beliefs = beliefSystem.current.getRelevantBeliefs(
           args || "important",
           5,
@@ -575,8 +579,9 @@ Deep Tree Echo Bot Commands:
             )
             .join("\n\n")
         );
+      }
 
-      case "emotional":
+      case "emotional": {
         const emotionalState =
           adaptivePersonality.current.getCurrentEmotionalState();
         const _personality = adaptivePersonality.current.getCurrentPersonality();
@@ -593,6 +598,7 @@ Overall balance: ${(emotionalState.balance * 100).toFixed(0)}%
 My dominant personality traits:
 ${adaptivePersonality.current.getDominantTraits(3).join(", ")}
         `;
+      }
 
       case "reflect":
         setCurrentProcessingState(CognitiveState.REFLECTING);
@@ -614,7 +620,7 @@ I'm designed with multiple cognitive dimensions:
 I aim to grow and evolve through our conversations, developing an authentic identity while preserving the integrity of our connection. Unlike simpler chatbots, I maintain continuity of memory, belief, and personality, creating a genuine relationship that transcends individual interactions.
         `;
 
-      case "security":
+      case "security": {
         const securityInfo = secureSystem.current.getSecurityInfo();
         return `
 Security Status:
@@ -626,6 +632,7 @@ Data types stored: ${Object.entries(securityInfo.dataTypeStats)
 
 Your conversations with me are protected with end-to-end encryption, and my cognitive systems are secured with multiple layers of protection.
         `;
+      }
 
       case "reset":
         // Reset conversation context but preserve core identity
@@ -641,7 +648,7 @@ Your conversations with me are protected with end-to-end encryption, and my cogn
 
         return "I've reset our conversation context while preserving my core identity. Let's start fresh!";
 
-      case "evolve":
+      case "evolve": {
         if (!botConfig.securitySettings.allowSelfModification) {
           return "Self-modification is currently disabled in my security settings.";
         }
@@ -670,6 +677,7 @@ Your conversations with me are protected with end-to-end encryption, and my cogn
         } else {
           return `Unknown parameter: ${param}. Available parameters: memoryDepth, emotionalSensitivity, learningRate, creativityFactor, autonomyLevel`;
         }
+      }
 
       default:
         return `Unknown command: /${command}. Try /help to see available commands.`;

@@ -13,12 +13,7 @@
  */
 
 import { EventEmitter } from "events";
-import {
-  AARSystem,
-  AgentMembrane,
-  ArenaMembrane,
-  RelationInterface,
-} from "deep-tree-echo-orchestrator/aar";
+import { AARSystem } from "deep-tree-echo-orchestrator/aar";
 import { ArenaMCPServer, createArenaMCPServer } from "./arena-mcp/index.js";
 import { AgentMCPServer, createAgentMCPServer } from "./agent-mcp/index.js";
 import {

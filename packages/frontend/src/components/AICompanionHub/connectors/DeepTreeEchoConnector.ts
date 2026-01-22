@@ -84,7 +84,7 @@ export class DeepTreeEchoConnector extends BaseConnector {
    */
   async generateResponse(
     context: ConversationContext,
-    functions?: FunctionDefinition[],
+    _functions?: FunctionDefinition[],
   ): Promise<AIResponse> {
     // Get the last user message
     const userMessages = context.messages.filter((m) => m.role === "user");
@@ -171,9 +171,9 @@ export class DeepTreeEchoConnector extends BaseConnector {
    * Generate a recursive response based on detected patterns
    */
   private async generateRecursiveResponse(
-    input: string,
+    _input: string,
     patterns: string[],
-    context: ConversationContext,
+    _context: ConversationContext,
   ): Promise<string> {
     // Build response based on patterns
     const responses: Record<string, string[]> = {

@@ -6,10 +6,8 @@ import {
   Brain,
   Sparkles,
   Sliders,
-  PlusCircle,
   CheckCircle,
   XCircle,
-  Upload,
   Info,
   Globe,
   MessageSquare,
@@ -219,9 +217,10 @@ const AICompanionCreatorContent: React.FC<{
         return !!platformType;
       case 2:
         return !!name && !!personality;
-      case 3:
+      case 3: {
         const platform = AI_PLATFORM_TYPES.find((p) => p.id === platformType);
         return !platform?.requiresApiKey || !!apiKey;
+      }
       case 4:
         return selectedCapabilities.length > 0;
       default:
@@ -325,7 +324,7 @@ const AICompanionCreatorContent: React.FC<{
           </div>
         );
 
-      case 3:
+      case 3: {
         const selectedPlatform = AI_PLATFORM_TYPES.find(
           (p) => p.id === platformType,
         );
@@ -395,6 +394,7 @@ const AICompanionCreatorContent: React.FC<{
             </div>
           </div>
         );
+      }
 
       case 4:
         return (

@@ -586,8 +586,8 @@ export class WebGPUInferenceEngine {
   }
 
   private async generateNextToken(
-    inputIds: number[],
-    config: GenerationConfig,
+    _inputIds: number[],
+    _config: GenerationConfig,
   ): Promise<number | null> {
     // Here we would dispatch the compute pipeline
     await new Promise((r) => setTimeout(r, 10)); // Minimal latency

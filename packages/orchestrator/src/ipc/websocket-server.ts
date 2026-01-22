@@ -167,9 +167,9 @@ export class WebSocketServer extends EventEmitter {
    * Handle WebSocket upgrade request
    */
   private handleUpgrade(
-    request: http.IncomingMessage,
+    _request: http.IncomingMessage,
     socket: any,
-    head: Buffer,
+    _head: Buffer,
   ): void {
     // Check max connections
     if (this.clients.size >= this.config.maxConnections!) {

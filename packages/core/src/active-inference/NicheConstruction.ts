@@ -18,7 +18,6 @@ import { EventEmitter } from "events";
 import {
   ActiveInference,
   BeliefState,
-  Observation,
   Action,
   FreeEnergyResult,
 } from "./ActiveInference.js";
@@ -302,7 +301,7 @@ export class NicheConstruction extends EventEmitter {
    */
   private async considerArtifactCreation(
     beliefs: Map<string, BeliefState>,
-    freeEnergy: FreeEnergyResult,
+    _freeEnergy: FreeEnergyResult,
   ): Promise<void> {
     // Identify sources of high free energy
     const highUncertaintyBeliefs: BeliefState[] = [];

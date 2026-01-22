@@ -35,11 +35,6 @@ export default function ConnectivityToast() {
     [],
   );
 
-  // Don't render when no account is selected
-  if (accountId === undefined) {
-    return null;
-  }
-
   const onBrowserOffline = () => {
     log.debug("Browser knows we're offline");
     setNetworkState(() => [
@@ -60,6 +55,7 @@ export default function ConnectivityToast() {
             );
             maybeNetwork();
           } else if (ms < 30000) {
+            // eslint-disable-next-line react-compiler/react-compiler -- recursive callback reference
             tryMaybeNetworkIfOfflineAfterXms(2 * ms);
           } else {
             log.debug(
@@ -156,6 +152,11 @@ export default function ConnectivityToast() {
   }, [openDialog]);
 
   const tx = useTranslationFunction();
+
+  // Don't render when no account is selected
+  if (accountId === undefined) {
+    return null;
+  }
 
   if (networkState[0] === Connectivity.CONNECTED) {
     return null;

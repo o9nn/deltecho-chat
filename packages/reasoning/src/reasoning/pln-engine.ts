@@ -1,6 +1,5 @@
 import { AtomSpace } from "../atomspace/index.js";
 import { Link, AtomType } from "../atomspace/atom.js";
-import type { Node } from "../atomspace/atom.js";
 import { TruthValue, createTruthValue } from "../atomspace/truth-value.js";
 
 export class PLNEngine {

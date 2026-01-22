@@ -458,7 +458,7 @@ export class ChatOrchestrator {
    */
   private shouldGenerateResponse(
     state: CognitiveState,
-    message: T.Message,
+    _message: T.Message,
   ): boolean {
     // Always respond to questions
     if (state.activeIntents.some((i) => i.type === "question" && !i.resolved)) {
@@ -488,8 +488,8 @@ export class ChatOrchestrator {
    */
   private async generateResponse(
     state: CognitiveState,
-    message: T.Message,
-    relevantMemory: MemoryAnchor[],
+    _message: T.Message,
+    _relevantMemory: MemoryAnchor[],
   ): Promise<string> {
     // This would integrate with LLM service in production
     // Now enhanced with AAR context for character-appropriate responses
@@ -560,7 +560,7 @@ export class ChatOrchestrator {
    */
   private generateSuggestedActions(
     state: CognitiveState,
-    message: T.Message,
+    _message: T.Message,
   ): SuggestedAction[] {
     const actions: SuggestedAction[] = [];
 

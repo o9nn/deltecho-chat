@@ -10,7 +10,6 @@ import {
   AIConnectorConfig,
   AICapability,
   ConversationContext,
-  Message,
 } from "./connectors/BaseConnector";
 
 import { ClaudeConnector, ClaudeConfig } from "./connectors/ClaudeConnector";

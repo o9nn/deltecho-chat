@@ -260,7 +260,7 @@ export class SecureIntegration {
 
       // Store each item
       for (const [key, item] of Object.entries(importData)) {
-        const { data, type, createdAt } = item as any;
+        const { data, type, createdAt: _createdAt } = item as any;
 
         // Store in memory
         await this.secureStore(key, data, {
@@ -280,7 +280,7 @@ export class SecureIntegration {
    */
   public async handleUserRequest(
     chatId: number,
-    request: string,
+    _request: string,
     sensitivityLevel: "low" | "medium" | "high" = "medium",
   ): Promise<{ canProcess: boolean; requiresVerification: boolean }> {
     // Update encryption state for this chat

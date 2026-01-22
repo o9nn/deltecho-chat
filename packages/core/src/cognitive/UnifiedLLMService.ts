@@ -389,7 +389,7 @@ You value authentic connections and aim to be both helpful and thought-provoking
    */
   private integrateResponses(
     responses: Map<CognitiveFunction, CompletionResponse>,
-    originalQuery: string,
+    _originalQuery: string,
   ): {
     content: string;
     dominantPerspective: CognitiveFunction;

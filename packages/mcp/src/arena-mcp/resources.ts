@@ -71,7 +71,7 @@ export const arenaResources = {
   "arena://agents": {
     schema: z.object({}),
     handler: (
-      arena: ArenaMembrane,
+      _arena: ArenaMembrane,
       _params: Record<string, never>,
       agentRegistry: Map<string, AgentReference>,
     ): AgentReference[] => {

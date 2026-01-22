@@ -9,7 +9,6 @@ import {
   VoiceActivityDetector,
   createVoiceActivityDetector,
   SpeechRecognitionService,
-  createSpeechRecognitionService,
   SpeechSynthesisService,
   createSpeechSynthesisService,
   LipSyncGenerator,

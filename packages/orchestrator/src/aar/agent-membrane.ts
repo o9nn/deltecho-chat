@@ -334,7 +334,7 @@ export class AgentMembrane extends EventEmitter {
    * Modulate facet activations based on emotional state
    */
   private modulateFacetsByEmotion(): void {
-    const { valence, arousal, dominance } = this.state.emotionalState;
+    const { valence, arousal, dominance: _dominance } = this.state.emotionalState;
 
     // Positive valence boosts compassion, playfulness
     if (valence > 0.3) {

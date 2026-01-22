@@ -13,7 +13,7 @@ export class ChatStoreScheduler {
     queue: false,
   };
 
-  effectQueue: Function[] = [];
+  effectQueue: Array<() => Promise<unknown> | unknown> = [];
 
   unlock(key: keyof ChatStoreLocks) {
     this.locks[key] = false;
@@ -33,7 +33,7 @@ export class ChatStoreScheduler {
    *
    * If `await effect() === false`, the lock will be automatically unlocked
    * synchronously right after the effect is executed.*/
-  lockedEffect<T extends Function>(
+  lockedEffect<T extends (...args: unknown[]) => unknown>(
     lockName: keyof ChatStoreLocks,
     effect: T,
     effectName: string,
@@ -99,7 +99,7 @@ export class ChatStoreScheduler {
   }
 
   /**  This effect will get added to the end of the queue. The queue is getting executed one after the other. */
-  queuedEffect<T extends Function>(effect: T, effectName: string): T {
+  queuedEffect<T extends (...args: unknown[]) => unknown>(effect: T, effectName: string): T {
     const fn: T = (async (...args: any) => {
       const lockQueue = () => {
         //log.debug(`queuedEffect: ${effectName}: locking`)
@@ -141,7 +141,7 @@ export class ChatStoreScheduler {
   }
 
   /** This effect is once the lock with lockName is unlocked. It will get postponed until the lock is free. */
-  lockedQueuedEffect<T extends Function>(
+  lockedQueuedEffect<T extends (...args: unknown[]) => unknown>(
     lockName: keyof ChatStoreLocks,
     effect: T,
     effectName: string,

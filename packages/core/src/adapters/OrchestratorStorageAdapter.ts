@@ -58,7 +58,7 @@ export class OrchestratorStorageAdapter
   private reconnectTimer: NodeJS.Timeout | null = null;
   private messageQueue: Map<
     string,
-    { resolve: Function; reject: Function; timeout: NodeJS.Timeout }
+    { resolve: (value: unknown) => void; reject: (reason?: unknown) => void; timeout: NodeJS.Timeout }
   > = new Map();
   private readonly socketPath: string;
   private readonly storagePrefix: string;

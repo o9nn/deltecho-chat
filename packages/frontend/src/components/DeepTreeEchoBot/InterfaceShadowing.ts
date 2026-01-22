@@ -41,6 +41,7 @@ export class InterfaceShadowing {
    */
   public shadowRpcInterface(): void {
     const originalRpc = BackendRemote.rpc;
+    // eslint-disable-next-line @typescript-eslint/no-this-alias -- required for Proxy handler context
     const self = this;
 
     log.info("ULI: Initiating Interface Shadowing for BackendRemote.rpc");

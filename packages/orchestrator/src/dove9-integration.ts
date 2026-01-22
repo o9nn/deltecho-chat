@@ -122,7 +122,7 @@ class MemoryStoreAdapter {
   }
 
   async retrieveRelevantMemories(
-    query: string,
+    _query: string,
     count: number,
   ): Promise<string[]> {
     return this.memoryStore.retrieveRecentMemories(count);

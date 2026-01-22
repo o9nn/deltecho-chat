@@ -10,8 +10,6 @@ import {
   ZoomOut,
   RotateCcw,
   Search,
-  Eye,
-  EyeOff,
   Loader,
   X,
 } from "lucide-react";
