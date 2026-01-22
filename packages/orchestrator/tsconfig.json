@@ -3,12 +3,11 @@
     "target": "ES2022",
     "module": "ES2022",
     "lib": ["ES2022"],
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
     "outDir": "./dist",
-    "rootDir": "./src",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -18,7 +17,16 @@
     "noUnusedParameters": false,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "types": ["node"]
+    "types": ["node"],
+    "baseUrl": ".",
+    "paths": {
+      "deep-tree-echo-core": ["../core/src/index.ts"],
+      "deep-tree-echo-core/*": ["../core/src/*/index.ts"],
+      "@deltecho/cognitive": ["../cognitive/src/index.ts"],
+      "@deltecho/ipc": ["../ipc/src/index.ts"],
+      "@deltecho/sys6-triality": ["../sys6-triality/src/index.ts"],
+      "@deltecho/dove9": ["../dove9/src/index.ts"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "**/*.test.ts"]

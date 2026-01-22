@@ -212,10 +212,14 @@ export class Orchestrator {
         persona: this.personaCore,
         memory: this.memoryStore,
         llm: {
-          generateResponse: async (userMessage, history, systemPrompt) => {
+          generateResponse: async (
+            userMessage: string,
+            history: Array<{ role: string; content: string }> | undefined,
+            systemPrompt: string | undefined,
+          ) => {
             // Convert history to string array for core LLMService
             const context = (history || []).map(
-              (m) => `${m.role}: ${m.content}`,
+              (m: { role: string; content: string }) => `${m.role}: ${m.content}`,
             );
             return this.llmService.generateResponse(userMessage, context);
           },

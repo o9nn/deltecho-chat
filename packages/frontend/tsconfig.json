@@ -14,6 +14,17 @@
     "strictNullChecks": true,
     "strict": true,
     "skipLibCheck": true,
-    "plugins": [{ "name": "typescript-plugin-css-modules" }]
+    "plugins": [{ "name": "typescript-plugin-css-modules" }],
+    "baseUrl": ".",
+    "paths": {
+      "@deltecho/ui-components": ["../ui-components/src/index.ts"],
+      "@deltecho/cognitive": ["../cognitive/src/index.ts"],
+      "@deltecho/avatar": ["../avatar/src/index.ts"],
+      "@deltecho/reasoning": ["../reasoning/src/index.ts"],
+      "@deltecho/sys6-triality": ["../sys6-triality/src/index.ts"],
+      "@deltecho/dove9": ["../dove9/src/index.ts"],
+      "deep-tree-echo-core": ["../core/src/index.ts"],
+      "deep-tree-echo-core/*": ["../core/src/*/index.ts"]
+    }
   }
 }
