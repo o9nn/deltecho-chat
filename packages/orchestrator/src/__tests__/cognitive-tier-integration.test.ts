@@ -7,7 +7,7 @@
  * - Tier 3 (MEMBRANE): Double Membrane bio-inspired architecture
  */
 
-import { describe, it, expect, beforeEach, afterEach } from "@jest/globals";
+import { describe, it, expect, beforeEach, afterEach, jest } from "@jest/globals";
 import { Orchestrator, type CognitiveTierMode } from "../orchestrator.js";
 
 // Mock the external dependencies

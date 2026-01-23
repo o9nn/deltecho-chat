@@ -9,11 +9,57 @@ import {
 import type { WebGPUConfig, InferenceRequest } from "../webgpu/index.js";
 
 // Mock the WebGPU API
+const mockBuffer = {
+  mapAsync: jest.fn().mockResolvedValue(undefined),
+  getMappedRange: jest.fn().mockReturnValue(new ArrayBuffer(1024)),
+  unmap: jest.fn(),
+  destroy: jest.fn(),
+  size: 1024,
+  usage: 0,
+  label: "mock-buffer",
+};
+
+const mockCommandEncoder = {
+  beginComputePass: jest.fn().mockReturnValue({
+    setPipeline: jest.fn(),
+    setBindGroup: jest.fn(),
+    dispatchWorkgroups: jest.fn(),
+    end: jest.fn(),
+  }),
+  copyBufferToBuffer: jest.fn(),
+  finish: jest.fn().mockReturnValue({}),
+};
+
 const mockDevice = {
   createShaderModule: jest.fn().mockReturnValue({}),
+  createBuffer: jest.fn().mockReturnValue(mockBuffer),
+  createComputePipeline: jest.fn().mockReturnValue({
+    getBindGroupLayout: jest.fn().mockReturnValue({}),
+  }),
+  createBindGroup: jest.fn().mockReturnValue({}),
+  createBindGroupLayout: jest.fn().mockReturnValue({}),
+  createPipelineLayout: jest.fn().mockReturnValue({}),
+  createCommandEncoder: jest.fn().mockReturnValue(mockCommandEncoder),
+  queue: {
+    submit: jest.fn(),
+    writeBuffer: jest.fn(),
+    onSubmittedWorkDone: jest.fn().mockResolvedValue(undefined),
+  },
   destroy: jest.fn(),
   // Use a promise that never resolves to prevent device from being nullified
   lost: new Promise<{ message: string }>(() => {}),
+  limits: {
+    maxBufferSize: 1024 * 1024 * 1024,
+    maxStorageBufferBindingSize: 1024 * 1024 * 512,
+    maxComputeWorkgroupsPerDimension: 65535,
+    maxComputeInvocationsPerWorkgroup: 256,
+    maxComputeWorkgroupSizeX: 256,
+    maxComputeWorkgroupSizeY: 256,
+    maxComputeWorkgroupSizeZ: 64,
+    maxBindGroups: 4,
+    maxDynamicStorageBuffersPerPipelineLayout: 8,
+  },
+  features: new Set(["shader-f16"]),
 };
 
 const mockAdapter = {

@@ -44,7 +44,7 @@ export const relationResources = {
       relation: RelationInterface,
       params: { limit?: number; direction?: string },
     ): CognitiveFlow[] => {
-      let flows = relation.getState().recentFlows;
+      let flows = relation.getRecentFlows();
 
       if (params.direction && params.direction !== "all") {
         flows = flows.filter((f: any) => f.direction === params.direction);
