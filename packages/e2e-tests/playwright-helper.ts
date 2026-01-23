@@ -75,6 +75,63 @@ export const getUser = (index: number, existingProfiles: User[]) => {
 };
 
 /**
+ * Wait for the app to be ready - either showing accounts or the onboarding dialog
+ * This handles the variable initialization time in CI environments
+ */
+async function waitForAppReady(page: Page): Promise<"accounts" | "onboarding"> {
+  console.log("Waiting for app to be ready...");
+
+  // Wait for the main container first
+  try {
+    await page.waitForSelector(".main-container", { timeout: 30000 });
+  } catch {
+    console.log("Main container not found, waiting longer...");
+    await page.waitForTimeout(5000);
+  }
+
+  // Now check for either the onboarding dialog or account buttons
+  // Use a loop with retries to handle slow initialization
+  for (let attempt = 0; attempt < 10; attempt++) {
+    // Check for onboarding dialog using test ID
+    const onboardingDialog = page.getByTestId("onboarding-dialog");
+    const isOnboardingVisible = await onboardingDialog
+      .isVisible()
+      .catch(() => false);
+
+    if (isOnboardingVisible) {
+      console.log("Onboarding dialog detected");
+      return "onboarding";
+    }
+
+    // Check for account buttons (existing profiles)
+    const accountButtons = page.locator("button[x-account-sidebar-account-id]");
+    const accountCount = await accountButtons.count().catch(() => 0);
+
+    if (accountCount > 0) {
+      console.log(`Found ${accountCount} existing account(s)`);
+      return "accounts";
+    }
+
+    // Also check for add-account-button which appears when accounts exist
+    const addAccountButton = page.getByTestId("add-account-button");
+    const hasAddButton = await addAccountButton.isVisible().catch(() => false);
+
+    if (hasAddButton) {
+      console.log("Add account button found - accounts exist");
+      return "accounts";
+    }
+
+    console.log(`Attempt ${attempt + 1}: App not ready yet, waiting...`);
+    await page.waitForTimeout(1000);
+  }
+
+  // If we still haven't found anything, assume fresh start with onboarding
+  console.log("Assuming fresh start - waiting for onboarding dialog");
+  await page.getByTestId("onboarding-dialog").waitFor({ timeout: 30000 });
+  return "onboarding";
+}
+
+/**
  * create a profile after pasting DCACCOUNT link
  */
 export async function createNewProfile(
@@ -82,54 +139,24 @@ export async function createNewProfile(
   name: string,
   isFirstOnboarding: boolean,
 ): Promise<User> {
-  // Wait for either account button or welcome screen with graceful fallback
-  // Use Promise.any to succeed if ANY selector is found, and handle the case where none are found
-  try {
-    await Promise.race([
-      page
-        .waitForSelector(".styles_module_account", { timeout: 15000 })
-        .catch(() => null),
-      page
-        .waitForSelector(".styles_module_welcome", { timeout: 15000 })
-        .catch(() => null),
-    ]);
-  } catch {
-    // If neither selector is found, wait a bit longer for the app to initialize
-    console.log(
-      "Neither account nor welcome screen found, waiting for app initialization...",
-    );
-    await page.waitForTimeout(2000);
-  }
-
-  // Verify at least one of the expected elements is now visible
-  const accountVisible = await page
-    .locator(".styles_module_account")
-    .first()
-    .isVisible()
-    .catch(() => false);
-  const welcomeVisible = await page
-    .locator(".styles_module_welcome")
-    .isVisible()
-    .catch(() => false);
-
-  if (!accountVisible && !welcomeVisible) {
-    // Last resort: wait for the main container and try again
-    await page.waitForSelector(".main-container", { timeout: 10000 });
-    await page.waitForTimeout(1000);
-  }
-
-  const accountList = page.locator(".styles_module_account");
+  // Wait for app to be ready
+  const appState = await waitForAppReady(page);
+  console.log(
+    `App state: ${appState}, isFirstOnboarding: ${isFirstOnboarding}`,
+  );
 
   if (!isFirstOnboarding) {
-    // add account to show onboarding screen
+    // Need to click add-account-button to show onboarding screen
     const addAccountButton = page.getByTestId("add-account-button");
     await expect(addAccountButton).toBeVisible({ timeout: 30000 });
     await expect(addAccountButton).toBeEnabled({ timeout: 10000 });
     await addAccountButton.click();
+
+    // Wait for onboarding dialog to appear
+    await page.getByTestId("onboarding-dialog").waitFor({ timeout: 15000 });
   }
 
-  // Wait for create-account-button to be visible and enabled before clicking
-  // This handles slow app initialization in CI environments
+  // Now we should be on the onboarding screen - click create account
   const createAccountButton = page.getByTestId("create-account-button");
   await expect(createAccountButton).toBeVisible({ timeout: 30000 });
   await expect(createAccountButton).toBeEnabled({ timeout: 10000 });
@@ -156,10 +183,13 @@ export async function createNewProfile(
 
   await page.getByTestId("login-button").click();
 
-  const newAccountList = page.locator(".styles_module_account");
-  await expect(newAccountList.last()).toHaveClass(
+  // Wait for account to be created and active
+  const accountList = page.locator("button[x-account-sidebar-account-id]");
+  await expect(accountList.last()).toHaveClass(
     /(^|\s)styles_module_active(\s|$)/,
+    { timeout: 30000 },
   );
+
   // open settings to validate the name and to get
   // the (randomly) created mail address
   const settingsButton = page.getByTestId("open-settings-button");
@@ -279,75 +309,34 @@ export async function deleteAllProfiles(
  * Load existing profiles from the app.
  * This function handles the case where no profiles exist yet (fresh app start).
  *
- * FIXED: Added proper timeout handling and graceful fallback for fresh app starts
- * where no profiles exist and the welcome screen is shown instead.
+ * FIXED: Uses test IDs and proper attribute selectors instead of CSS class names
+ * for more reliable element detection.
  */
 export async function loadExistingProfiles(page: Page): Promise<User[]> {
   const existingProfiles: User[] = [];
 
-  // Wait for main container with a reasonable timeout
-  try {
-    await page.waitForSelector(".main-container", { timeout: 10000 });
-  } catch {
-    console.log(
-      "Main container not found within timeout, returning empty profiles",
-    );
+  // Wait for app to be ready
+  const appState = await waitForAppReady(page);
+
+  if (appState === "onboarding") {
+    console.log("Fresh app start - no existing profiles");
     return [];
   }
 
-  // Check if we're on the welcome/onboarding screen (no profiles yet)
-  // This is the expected state on fresh app start
-  const welcomeDialog = await page
-    .locator(".styles_module_welcome")
-    .isVisible();
-  if (welcomeDialog) {
-    console.log(
-      "Welcome dialog visible - no existing profiles (fresh app start)",
-    );
-    return [];
-  }
-
-  // Try to find account buttons with a shorter timeout
-  // On fresh start, these won't exist, so we need to handle that gracefully
-  try {
-    await page.waitForSelector("button.styles_module_account", {
-      timeout: 5000,
-    });
-  } catch {
-    console.log(
-      "No account buttons found within timeout - no existing profiles",
-    );
-    return [];
-  }
-
-  // Wait for accounts to finish loading (aria-busy=false)
-  try {
-    await page.waitForSelector(
-      "button.styles_module_account[aria-busy=false]",
-      { timeout: 5000 },
-    );
-  } catch {
-    console.log(
-      "Account buttons still busy or not found - returning empty profiles",
-    );
-    return [];
-  }
-
-  const accountList = page.locator("button.styles_module_account");
+  // Find account buttons using the custom attribute
+  const accountList = page.locator("button[x-account-sidebar-account-id]");
   const existingAccountItems = await accountList.count();
   console.log("existingAccountItems", existingAccountItems);
 
   if (existingAccountItems > 0) {
-    // Double-check: if there's only one account and welcome dialog is visible,
-    // it's a new empty account that hasn't been persisted yet
-    if (existingAccountItems === 1) {
-      const welcomeStillVisible = await page
-        .locator(".styles_module_welcome")
-        .isVisible();
-      if (welcomeStillVisible) {
-        console.log("Single account with welcome dialog - not yet persisted");
-        return [];
-      }
+    // Wait for accounts to finish loading (aria-busy=false)
+    try {
+      await page.waitForSelector(
+        "button[x-account-sidebar-account-id][aria-busy=false]",
+        { timeout: 10000 },
+      );
+    } catch {
+      console.log("Account buttons still busy, proceeding anyway...");
     }
 
     for (let i = 0; i < existingAccountItems; i++) {
@@ -372,9 +361,8 @@ export async function deleteProfile(
   page: Page,
   accountId?: string, // if empty, the last account will be deleted
 ): Promise<string | null> {
-  await page.waitForSelector(".styles_module_account");
-  const accountList = page.locator(".styles_module_account");
-  await expect(accountList.last()).toBeVisible();
+  const accountList = page.locator("button[x-account-sidebar-account-id]");
+  await expect(accountList.first()).toBeVisible({ timeout: 10000 });
   const accounts = await accountList.all();
   if (accounts.length > 0) {
     if (accountId) {
