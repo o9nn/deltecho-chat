@@ -88,6 +88,22 @@ jest.mock("../PlaywrightAutomation", () => ({
   },
 }));
 
+// Mock useDialog hook
+jest.mock("../../../hooks/dialog/useDialog", () => ({
+  __esModule: true,
+  default: () => ({
+    openDialog: jest.fn(),
+    closeDialog: jest.fn(),
+  }),
+}));
+
+// Mock DeepTreeEchoUIBridge
+jest.mock("../../DeepTreeEchoBot/DeepTreeEchoUIBridge", () => ({
+  getUIBridge: jest.fn().mockReturnValue({
+    registerDialogContext: jest.fn(),
+  }),
+}));
+
 // Mock the logger
 jest.mock("../../../../../shared/logger", () => ({
   getLogger: () => ({

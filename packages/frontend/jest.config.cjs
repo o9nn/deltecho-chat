@@ -20,6 +20,10 @@ module.exports = {
     '^react-force-graph-2d$': '<rootDir>/__mocks__/styleMock.js',
     '^react-force-graph-3d$': '<rootDir>/__mocks__/styleMock.js',
     '^d3-.*$': '<rootDir>/__mocks__/styleMock.js',
+    // Mock WASM modules
+    '@deltachat/message_parser_wasm/message_parser_wasm': '<rootDir>/__mocks__/styleMock.js',
+    // Shared package mapping
+    '^@deltachat-desktop/shared/(.*)\\.js$': '<rootDir>/../shared/$1.ts',
     // Workspace package mappings
     '^@deltecho/ui-components$': '<rootDir>/../ui-components/src/index.ts',
     '^@deltecho/cognitive$': '<rootDir>/../cognitive/src/index.ts',
@@ -48,6 +52,9 @@ module.exports = {
       },
     ],
   },
+  transformIgnorePatterns: [
+    'node_modules/(?!(@deltachat/message_parser_wasm|@deltachat-desktop|deep-tree-echo-core|deep-tree-echo-orchestrator)/)',
+  ],
   // Note: 'globals.ts-jest' is deprecated in ts-jest 29+
   // Options should be in the transform array above
   collectCoverageFrom: [
