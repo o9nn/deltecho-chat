@@ -7,11 +7,13 @@ Based on the CI logs from the GitHub Actions run, **12 tests failed** out of 105
 ### Category 1: Profile/Account Management (Critical - Cascading Failures)
 
 **Root Cause:** The `loadExistingProfiles()` function in `playwright-helper.ts` times out waiting for `button.styles_module_account` selector. This happens because:
+
 1. On fresh app start, no profiles exist yet
 2. The function waits indefinitely for an element that won't appear
 3. This causes `beforeAll` hooks to timeout (30s), cascading to skip dependent tests
 
 **Affected Tests:**
+
 - `basic-tests.spec.ts:53` - create profiles
 - `group-tests.spec.ts:51` - start chat with user
 - `qrcode-tests.spec.ts:59` - instant onboarding with contact invite link
@@ -22,6 +24,7 @@ Based on the CI logs from the GitHub Actions run, **12 tests failed** out of 105
 **Root Cause:** The cognitive system tests expect UI elements that may not be present in the CI environment, or the settings panel selector doesn't match the actual UI.
 
 **Affected Tests:**
+
 - `cognitive-integration.spec.ts:112` - should load cognitive configuration from settings
 - `cognitive-memory.spec.ts:37` - should store conversation memories
 - `deep-tree-echo-chat.spec.ts:57` - AI should be able to list all available chats
@@ -31,11 +34,13 @@ Based on the CI logs from the GitHub Actions run, **12 tests failed** out of 105
 ### Category 3: Streaming Lip-Sync Logic Errors
 
 **Root Cause:** The phrase boundary detection algorithm in the test harness has bugs:
+
 1. `extractPhrases()` only detects phrases when `lastBoundary >= MIN_PHRASE_LENGTH - 1` (4), but "First." is 6 chars, "Second." is 7 chars - should work
 2. The issue is that `lastIndexOf` finds the LAST boundary, so "First. Second! Third?" only extracts up to the last boundary found
 3. The algorithm doesn't properly handle multiple boundaries in a single chunk
 
 **Affected Tests:**
+
 - `streaming-lipsync.spec.ts:329` - should detect phrase boundaries and queue phrases (expected ≥2, got 1)
 - `streaming-lipsync.spec.ts:451` - should emit speaking_start and speaking_end events (expected ≤1, got 4)
 - `streaming-lipsync.spec.ts:617` - should track progress accurately (expected 3, got 1)
@@ -52,7 +57,7 @@ The function should handle the case where no profiles exist yet, instead of wait
 // playwright-helper.ts - Line 239-277
 export async function loadExistingProfiles(page: Page): Promise<User[]> {
   const existingProfiles: User[] = [];
-  
+
   // Wait for main container with a reasonable timeout
   try {
     await page.waitForSelector(".main-container", { timeout: 10000 });
@@ -60,27 +65,34 @@ export async function loadExistingProfiles(page: Page): Promise<User[]> {
     console.log("Main container not found, returning empty profiles");
     return [];
   }
-  
+
   // Check if we're on the welcome/onboarding screen (no profiles yet)
-  const welcomeDialog = await page.locator(".styles_module_welcome").isVisible();
+  const welcomeDialog = await page
+    .locator(".styles_module_welcome")
+    .isVisible();
   if (welcomeDialog) {
     console.log("Welcome dialog visible - no existing profiles");
     return [];
   }
-  
+
   // Try to find account buttons with a shorter timeout
   try {
-    await page.waitForSelector("button.styles_module_account", { timeout: 5000 });
-    await page.waitForSelector("button.styles_module_account[aria-busy=false]", { timeout: 5000 });
+    await page.waitForSelector("button.styles_module_account", {
+      timeout: 5000,
+    });
+    await page.waitForSelector(
+      "button.styles_module_account[aria-busy=false]",
+      { timeout: 5000 },
+    );
   } catch {
     console.log("No account buttons found - no existing profiles");
     return [];
   }
-  
+
   const accountList = page.locator("button.styles_module_account");
   const existingAccountItems = await accountList.count();
   console.log("existingAccountItems", existingAccountItems);
-  
+
   if (existingAccountItems > 0) {
     for (let i = 0; i < existingAccountItems; i++) {
       const account = accountList.nth(i);
@@ -92,7 +104,7 @@ export async function loadExistingProfiles(page: Page): Promise<User[]> {
       }
     }
   }
-  
+
   return existingProfiles;
 }
 ```
@@ -106,10 +118,10 @@ The `extractPhrases()` function needs to properly extract ALL phrases, not just 
 function extractPhrases() {
   // Find all phrase boundaries and extract phrases iteratively
   let searchStart = 0;
-  
+
   while (searchStart < textBuffer.length) {
     let earliestBoundary = -1;
-    
+
     // Find the earliest boundary from current position
     for (const boundary of PHRASE_BOUNDARIES) {
       const idx = textBuffer.indexOf(boundary, searchStart);
@@ -117,12 +129,12 @@ function extractPhrases() {
         earliestBoundary = idx;
       }
     }
-    
+
     if (earliestBoundary === -1) {
       // No more boundaries found
       break;
     }
-    
+
     // Check if we have enough content for a phrase
     const phraseContent = textBuffer.substring(0, earliestBoundary + 1).trim();
     if (phraseContent.length >= MIN_PHRASE_LENGTH) {
@@ -130,7 +142,7 @@ function extractPhrases() {
       emitEvent("phrase_ready", { phrase: phraseContent });
       textBuffer = textBuffer.substring(earliestBoundary + 1);
       searchStart = 0; // Reset search position
-      
+
       if (currentPhraseIndex < 0) {
         startNextPhrase();
       }
@@ -148,7 +160,9 @@ The test assertion is backwards - it expects `speakingEndEvents.length <= speaki
 ```typescript
 // streaming-lipsync.spec.ts - Line 495
 // Change from:
-expect(speakingEndEvents.length).toBeLessThanOrEqual(speakingStartEvents.length);
+expect(speakingEndEvents.length).toBeLessThanOrEqual(
+  speakingStartEvents.length,
+);
 
 // To:
 // End events should be less than or equal to start events (some phrases may still be speaking)
@@ -170,7 +184,7 @@ test("should load cognitive configuration from settings", async ({ page }) => {
 
   // Try multiple selectors for settings button
   const settingsButton = page.locator(
-    '[data-testid="settings-button"], [data-testid="open-settings-button"], [aria-label*="settings" i], button:has-text("Settings"), .settings-button'
+    '[data-testid="settings-button"], [data-testid="open-settings-button"], [aria-label*="settings" i], button:has-text("Settings"), .settings-button',
   );
 
   const buttonExists = (await settingsButton.count()) > 0;
@@ -184,14 +198,17 @@ test("should load cognitive configuration from settings", async ({ page }) => {
 
   // Verify settings panel appears with more flexible selectors
   const settingsPanel = page.locator(
-    '[data-testid="settings-panel"], [data-testid="settings-dialog"], [role="dialog"], .settings-container, .styles_module_settingsDialog'
+    '[data-testid="settings-panel"], [data-testid="settings-dialog"], [role="dialog"], .settings-container, .styles_module_settingsDialog',
   );
 
   // Use a try-catch to handle cases where settings panel doesn't appear
   try {
     await expect(settingsPanel.first()).toBeVisible({ timeout: 5000 });
   } catch {
-    test.skip(true, "Settings panel not visible - may require different interaction");
+    test.skip(
+      true,
+      "Settings panel not visible - may require different interaction",
+    );
   }
 });
 ```

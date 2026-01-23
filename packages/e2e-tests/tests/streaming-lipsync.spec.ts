@@ -42,7 +42,7 @@ interface StreamingLipSyncTestContext {
 
 /**
  * Inject the streaming lip-sync test harness into the page
- * 
+ *
  * FIXED: The extractPhrases function now properly extracts ALL phrases
  * by iterating through the buffer and finding boundaries sequentially,
  * rather than only finding the last boundary.
@@ -86,40 +86,45 @@ async function injectTestHarness(page: Page): Promise<void> {
 
     /**
      * FIXED: Extract ALL phrases from the buffer by finding boundaries sequentially.
-     * 
+     *
      * The original implementation only found the LAST boundary using lastIndexOf,
      * which meant "First. Second! Third?" would only extract one phrase.
-     * 
+     *
      * This fixed version iterates through the buffer to find and extract
      * each phrase as it encounters boundaries.
      */
     function extractPhrases() {
       let foundPhrase = true;
-      
+
       // Keep extracting phrases until no more complete phrases are found
       while (foundPhrase) {
         foundPhrase = false;
         let earliestBoundary = -1;
-        
+
         // Find the EARLIEST boundary in the current buffer
         for (const boundary of PHRASE_BOUNDARIES) {
           const idx = textBuffer.indexOf(boundary);
-          if (idx !== -1 && (earliestBoundary === -1 || idx < earliestBoundary)) {
+          if (
+            idx !== -1 &&
+            (earliestBoundary === -1 || idx < earliestBoundary)
+          ) {
             earliestBoundary = idx;
           }
         }
-        
+
         // If we found a boundary and have enough content for a phrase
         if (earliestBoundary >= 0) {
-          const phraseContent = textBuffer.substring(0, earliestBoundary + 1).trim();
-          
+          const phraseContent = textBuffer
+            .substring(0, earliestBoundary + 1)
+            .trim();
+
           if (phraseContent.length >= MIN_PHRASE_LENGTH) {
             // Extract the phrase and update the buffer
             phraseQueue.push(phraseContent);
             emitEvent("phrase_ready", { phrase: phraseContent });
             textBuffer = textBuffer.substring(earliestBoundary + 1);
             foundPhrase = true;
-            
+
             // Start speaking if not already
             if (currentPhraseIndex < 0) {
               startNextPhrase();

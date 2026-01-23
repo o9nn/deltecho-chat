@@ -240,7 +240,7 @@ export async function deleteAllProfiles(
 /**
  * Load existing profiles from the app.
  * This function handles the case where no profiles exist yet (fresh app start).
- * 
+ *
  * FIXED: Added proper timeout handling and graceful fallback for fresh app starts
  * where no profiles exist and the welcome screen is shown instead.
  */
@@ -251,32 +251,47 @@ export async function loadExistingProfiles(page: Page): Promise<User[]> {
   try {
     await page.waitForSelector(".main-container", { timeout: 10000 });
   } catch {
-    console.log("Main container not found within timeout, returning empty profiles");
+    console.log(
+      "Main container not found within timeout, returning empty profiles",
+    );
     return [];
   }
 
   // Check if we're on the welcome/onboarding screen (no profiles yet)
   // This is the expected state on fresh app start
-  const welcomeDialog = await page.locator(".styles_module_welcome").isVisible();
+  const welcomeDialog = await page
+    .locator(".styles_module_welcome")
+    .isVisible();
   if (welcomeDialog) {
-    console.log("Welcome dialog visible - no existing profiles (fresh app start)");
+    console.log(
+      "Welcome dialog visible - no existing profiles (fresh app start)",
+    );
     return [];
   }
 
   // Try to find account buttons with a shorter timeout
   // On fresh start, these won't exist, so we need to handle that gracefully
   try {
-    await page.waitForSelector("button.styles_module_account", { timeout: 5000 });
+    await page.waitForSelector("button.styles_module_account", {
+      timeout: 5000,
+    });
   } catch {
-    console.log("No account buttons found within timeout - no existing profiles");
+    console.log(
+      "No account buttons found within timeout - no existing profiles",
+    );
     return [];
   }
 
   // Wait for accounts to finish loading (aria-busy=false)
   try {
-    await page.waitForSelector("button.styles_module_account[aria-busy=false]", { timeout: 5000 });
+    await page.waitForSelector(
+      "button.styles_module_account[aria-busy=false]",
+      { timeout: 5000 },
+    );
   } catch {
-    console.log("Account buttons still busy or not found - returning empty profiles");
+    console.log(
+      "Account buttons still busy or not found - returning empty profiles",
+    );
     return [];
   }
 
