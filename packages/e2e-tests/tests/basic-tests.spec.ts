@@ -118,7 +118,7 @@ test("send message", async ({ page }) => {
 
   const badgeNumber = page
     .getByTestId(`account-item-${userB.id}`)
-    .locator(".styles_module_accountBadgeIcon");
+    .locator("[class*='accountBadgeIcon']");
   const sentMessageText = page
     .locator(`.message.outgoing`)
     .last()
@@ -164,7 +164,7 @@ test("delete message", async ({ page }) => {
     .filter({ hasText: userB.name })
     .click();
   await page.locator(".message-wrapper").last().hover();
-  const menuButtons = page.locator(".styles_module_shortcutMenuButton");
+  const menuButtons = page.locator("[class*='shortcutMenuButton']");
   await expect(menuButtons.last()).toBeVisible();
   await menuButtons.last().click();
   await page.locator(".dc-context-menu button").last().click();
@@ -191,7 +191,7 @@ test("delete message for all", async ({ page }) => {
     .filter({ hasText: userB.name })
     .click();
   await page.locator(".message-wrapper").last().hover();
-  const menuButtons = page.locator(".styles_module_shortcutMenuButton");
+  const menuButtons = page.locator("[class*='shortcutMenuButton']");
   await expect(menuButtons.last()).toBeVisible();
   await menuButtons.last().click();
   await page.locator(".dc-context-menu button").last().click();
@@ -261,22 +261,22 @@ test("add app from picker to chat", async ({ page }) => {
   await chatListItem.click();
   await page.getByTestId("open-attachment-menu").click();
   await page.getByTestId("open-app-picker").click();
-  const apps = page.locator(".styles_module_appPickerList button").first();
+  const apps = page.locator("[class*='appPickerList'] button").first();
   await apps.waitFor({ state: "visible" });
   const appsCount = await page
-    .locator(".styles_module_appPickerList")
+    .locator("[class*='appPickerList']")
     .locator("button")
     .count();
   expect(appsCount).toBeGreaterThan(0);
-  await page.locator(".styles_module_searchInput").fill("Cal");
+  await page.locator("[class*='searchInput']").fill("Cal");
   const appName = "Calendar";
   const calendarApp = page
-    .locator(".styles_module_appPickerList button")
+    .locator("[class*='appPickerList'] button")
     .getByText(appName)
     .first();
   await expect(calendarApp).toBeVisible();
   await calendarApp.click();
-  const appInfoDialog = page.locator(".styles_module_dialogContent");
+  const appInfoDialog = page.locator("[class*='dialogContent']");
   await expect(appInfoDialog).toBeVisible();
   await page.getByTestId("add-app-to-chat").click();
   const appDraft = page.locator(".attachment-quote-section .text-part");

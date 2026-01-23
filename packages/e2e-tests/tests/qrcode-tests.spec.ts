@@ -142,15 +142,15 @@ test("onboarding with manual credentials", async ({
   await page.getByTestId("login-with-credentials").click();
   await expect(page.getByTestId("login-with-credentials")).not.toBeVisible();
 
-  const newAccountList = page.locator(".styles_module_account");
-  await expect(newAccountList.last()).toHaveClass(
-    /(^|\s)styles_module_active(\s|$)/,
-  );
+  const newAccountList = page
+    .locator("[class*='account']")
+    .filter({ has: page.locator("[class*='accountButton']") });
+  await expect(newAccountList.last()).toHaveClass(/_active/);
   // open settings to validate the name and the mail address
   const settingsButton = page.getByTestId("open-settings-button");
   await settingsButton.click();
 
-  await expect(page.locator(".styles_module_profileDisplayName")).toHaveText(
+  await expect(page.locator("[class*='profileDisplayName']")).toHaveText(
     newUsername,
   );
   await page.getByTestId("open-advanced-settings").click();

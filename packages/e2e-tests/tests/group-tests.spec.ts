@@ -124,7 +124,7 @@ test("create group", async ({ page, context, browserName }) => {
   await page.locator("button.send-button").click();
   const badgeNumber = page
     .getByTestId(`account-item-${userB.id}`)
-    .locator(".styles_module_accountBadgeIcon");
+    .locator("[class*='accountBadgeIcon']");
   await expect(badgeNumber).toHaveText("1");
   // copy group invite link
   await page.getByTestId("chat-info-button").click();
@@ -153,7 +153,7 @@ test("create group", async ({ page, context, browserName }) => {
   // userB has 2 new notifications now
   const badge = page
     .getByTestId(`account-item-${userB.id}`)
-    .locator(".styles_module_accountBadgeIcon")
+    .locator("[class*='accountBadgeIcon']")
     .getByText("2");
 
   await expect(badge).toBeVisible();
