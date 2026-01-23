@@ -3,6 +3,8 @@
   "compilerOptions": {
     "outDir": "./dist-test",
     "rootDir": ".",
+    "rootDirs": ["."],
+    "isolatedModules": true,
     "types": [
       "node",
       "jest",
