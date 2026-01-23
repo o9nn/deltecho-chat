@@ -7,6 +7,7 @@ import { AdaptivePersonality } from './AdaptivePersonality'
 import { QuantumBeliefPropagation } from './QuantumBeliefPropagation'
 import { EmotionalIntelligence } from './EmotionalIntelligence'
 import { SecureIntegration } from './SecureIntegration'
+import { ScientificDashboard } from '../ScientificGenius/ScientificDashboard'
 
 // Types of commands that Deep Tree Echo can process
 enum CommandType {
@@ -165,7 +166,9 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ testHooks }) => {
   const [currentProcessingState, setCurrentProcessingState] =
     useState<CognitiveState>(CognitiveState.IDLE)
   const [lastUserMessage, setLastUserMessage] = useState<string | null>(null)
+  const [lastUserMessage, setLastUserMessage] = useState<string | null>(null)
   const [pendingResponse, setPendingResponse] = useState<string | null>(null)
+  const [showScientificDashboard, setShowScientificDashboard] = useState(false)
 
   /**
    * Initialize the bot on first render
@@ -893,6 +896,26 @@ Self-reflection complete:
       {/* For demo purposes, we're just showing basic status */}
 
       {pendingResponse && <div className='bot-response'>{pendingResponse}</div>}
+
+      <div style={{ marginTop: '20px', borderTop: '1px solid #ccc', paddingTop: '10px' }}>
+        <button
+          onClick={() => setShowScientificDashboard(!showScientificDashboard)}
+          style={{ padding: '8px 16px', cursor: 'pointer', background: '#0969da', color: 'white', border: 'none', borderRadius: '4px' }}
+        >
+          {showScientificDashboard ? 'Hide Visual Cortex' : 'Show Visual Cortex'}
+        </button>
+      </div>
+
+      {showScientificDashboard && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1000, background: 'rgba(0,0,0,0.8)', padding: '50px' }}>
+          <div style={{ height: '100%', borderRadius: '8px', overflow: 'hidden', boxShadow: '0 0 20px rgba(0,0,0,0.5)' }}>
+            <div style={{ background: '#0d1117', padding: '10px', textAlign: 'right' }}>
+              <button onClick={() => setShowScientificDashboard(false)} style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer' }}>Close ✕</button>
+            </div>
+            <ScientificDashboard />
+          </div>
+        </div>
+      )}
     </div>
   )
 }
