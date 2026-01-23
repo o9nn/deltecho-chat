@@ -192,19 +192,16 @@ export async function createNewProfile(
 
   // Wait for account to be created and active
   const accountList = page.locator("button[x-account-sidebar-account-id]");
-  await expect(accountList.last()).toHaveClass(
-    /(^|\s)styles_module_active(\s|$)/,
-    { timeout: 30000 },
-  );
+  await expect(accountList.last()).toHaveClass(/_active(\s|$)/, {
+    timeout: 30000,
+  });
 
   // open settings to validate the name and to get
   // the (randomly) created mail address
   const settingsButton = page.getByTestId("open-settings-button");
   await settingsButton.click();
 
-  await expect(page.locator(".styles_module_profileDisplayName")).toHaveText(
-    name,
-  );
+  await expect(page.locator("[class*='profileDisplayName']")).toHaveText(name);
   await page.getByTestId("open-advanced-settings").click();
   await page.getByTestId("open-account-and-password").click();
   const addressLocator = page.locator("#addr");
@@ -240,7 +237,7 @@ export async function getProfile(
     .getByTestId(`account-item-${accountId}`)
     .click({ button: "right" });
   await page.getByTestId("open-settings-menu-item").click();
-  const nameLocator = page.locator(".styles_module_profileDisplayName");
+  const nameLocator = page.locator("[class*='profileDisplayName']");
   await expect(nameLocator).not.toBeEmpty();
   const name = await nameLocator.textContent();
   await page.getByTestId("open-advanced-settings").click();
@@ -383,13 +380,13 @@ export async function deleteProfile(
     await page.getByTestId("delete-account-menu-item").click();
     await expect(page.getByTestId("account-deletion-dialog")).toBeVisible();
     const userName: string | null = await page
-      .locator(".styles_module_accountName > div")
+      .locator("[class*='accountName'] > div")
       .nth(0)
       .textContent();
     const deleteButton = page.getByTestId("delete-account");
     await expect(deleteButton).toBeVisible();
     await deleteButton.click();
-    await expect(page.locator(".styles_module_infoBox")).toBeVisible();
+    await expect(page.locator("[class*='infoBox']")).toBeVisible();
     if (accountId) {
       await expect(page.getByTestId(`account-item-${accountId}`)).toHaveCount(
         0,
