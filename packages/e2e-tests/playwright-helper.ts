@@ -196,9 +196,15 @@ export async function createNewProfile(
     timeout: 30000,
   });
 
+  // Wait for the main screen to be fully loaded
+  // The settings button only appears on Main or AINeighborhood screens
+  console.log("Waiting for main screen to load...");
+
   // open settings to validate the name and to get
   // the (randomly) created mail address
   const settingsButton = page.getByTestId("open-settings-button");
+  await expect(settingsButton).toBeVisible({ timeout: 60000 });
+  await expect(settingsButton).toBeEnabled({ timeout: 10000 });
   await settingsButton.click();
 
   await expect(page.locator("[class*='profileDisplayName']")).toHaveText(name);
