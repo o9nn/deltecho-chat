@@ -194,6 +194,7 @@ export default function NeighborhoodSidebar({
           onClick={openSettings}
           title={tx("menu_settings")}
           aria-label={tx("menu_settings")}
+          data-testid="open-settings-button"
         >
           <SettingsIcon size={20} />
         </button>
