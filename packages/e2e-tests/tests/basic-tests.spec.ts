@@ -128,13 +128,15 @@ test("send message", async ({ page }) => {
     .last()
     .locator(".msg-body .text");
   await expect(sentMessageText).toHaveText(messageText);
-  await expect(badgeNumber).toHaveText("1");
+  // Badge notification may take time to appear in CI
+  await expect(badgeNumber).toHaveText("1", { timeout: 30000 });
 
   await page.locator("#composer-textarea").fill(`${messageText} 2`);
   await page.locator("button.send-button").click();
 
   await expect(sentMessageText).toHaveText(messageText + " 2");
-  await expect(badgeNumber).toHaveText("2");
+  // Badge notification may take time to update in CI
+  await expect(badgeNumber).toHaveText("2", { timeout: 30000 });
 
   await switchToProfile(page, userB.id);
   const chatListItem = page

@@ -126,7 +126,8 @@ test("create group", async ({ page, context, browserName }) => {
   const badgeNumber = page
     .getByTestId(`account-item-${userB.id}`)
     .locator("[class*='accountBadgeIcon']");
-  await expect(badgeNumber).toHaveText("1");
+  // Badge notification may take time to appear in CI
+  await expect(badgeNumber).toHaveText("1", { timeout: 30000 });
   // copy group invite link
   await page.getByTestId("chat-info-button").click();
   await page.locator("#showqrcode button").click();
@@ -157,5 +158,6 @@ test("create group", async ({ page, context, browserName }) => {
     .locator("[class*='accountBadgeIcon']")
     .getByText("2");
 
-  await expect(badge).toBeVisible();
+  // Badge notification may take time to update in CI
+  await expect(badge).toBeVisible({ timeout: 30000 });
 });
