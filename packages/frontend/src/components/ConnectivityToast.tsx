@@ -55,7 +55,7 @@ export default function ConnectivityToast() {
             );
             maybeNetwork();
           } else if (ms < 30000) {
-            // eslint-disable-next-line react-compiler/react-compiler -- recursive callback reference
+            // Recursive callback reference for retry logic
             tryMaybeNetworkIfOfflineAfterXms(2 * ms);
           } else {
             log.debug(

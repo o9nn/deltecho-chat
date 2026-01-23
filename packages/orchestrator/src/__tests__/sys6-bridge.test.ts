@@ -11,13 +11,7 @@
  * - Telemetry and metrics
  */
 
-import {
-  describe,
-  it,
-  expect,
-  beforeEach,
-  afterEach,
-} from "@jest/globals";
+import { describe, it, expect, beforeEach, afterEach } from "@jest/globals";
 import { Sys6OrchestratorBridge } from "../sys6-bridge/index.js";
 
 describe("Sys6OrchestratorBridge", () => {

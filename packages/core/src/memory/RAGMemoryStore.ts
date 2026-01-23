@@ -190,7 +190,7 @@ export class RAGMemoryStore {
 
     // Normalize to unit vector
     const magnitude = Math.sqrt(
-      embedding.reduce((sum, val) => sum + val * val, 0)
+      embedding.reduce((sum, val) => sum + val * val, 0),
     );
 
     if (magnitude > 0) {
@@ -209,7 +209,7 @@ export class RAGMemoryStore {
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
       const char = str.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
+      hash = (hash << 5) - hash + char;
       hash |= 0; // Convert to 32-bit integer
     }
     return Math.abs(hash);
@@ -332,8 +332,14 @@ export class RAGMemoryStore {
 
       // Calculate embedding similarity if embeddings exist
       let embeddingScore = 0;
-      if (memory.embedding && memory.embedding.length === EMBEDDING_DIMENSIONS) {
-        embeddingScore = this.cosineSimilarityEmbedding(queryEmbedding, memory.embedding);
+      if (
+        memory.embedding &&
+        memory.embedding.length === EMBEDDING_DIMENSIONS
+      ) {
+        embeddingScore = this.cosineSimilarityEmbedding(
+          queryEmbedding,
+          memory.embedding,
+        );
       }
 
       // Apply recency boost (more recent = higher boost)
@@ -341,7 +347,8 @@ export class RAGMemoryStore {
       const recencyBoost = Math.exp(-ageInDays / 30); // Decay over 30 days
 
       // Combine scores: 40% TF-IDF, 40% embedding, 20% recency
-      const finalScore = tfidfScore * 0.4 + embeddingScore * 0.4 + recencyBoost * 0.2;
+      const finalScore =
+        tfidfScore * 0.4 + embeddingScore * 0.4 + recencyBoost * 0.2;
 
       return { memory, score: finalScore };
     });
@@ -366,7 +373,10 @@ export class RAGMemoryStore {
       .filter((m) => m.embedding && m.embedding.length === EMBEDDING_DIMENSIONS)
       .map((memory) => ({
         memory,
-        score: this.cosineSimilarityEmbedding(queryEmbedding, memory.embedding!),
+        score: this.cosineSimilarityEmbedding(
+          queryEmbedding,
+          memory.embedding!,
+        ),
       }));
 
     return scoredMemories
@@ -563,7 +573,7 @@ export class RAGMemoryStore {
         ) {
           embeddingSim = this.cosineSimilarityEmbedding(
             targetMemory.embedding,
-            memory.embedding
+            memory.embedding,
           );
         }
 

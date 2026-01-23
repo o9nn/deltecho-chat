@@ -27,7 +27,9 @@
 import { EventEmitter } from "events";
 import { getLogger } from "../utils/logger";
 
-const log = getLogger("deep-tree-echo-core/consciousness/RelevanceRealizationWorkspace");
+const log = getLogger(
+  "deep-tree-echo-core/consciousness/RelevanceRealizationWorkspace",
+);
 
 // ============================================================
 // TYPES AND INTERFACES
@@ -290,7 +292,12 @@ export class RelevanceRealizationWorkspace extends EventEmitter {
 
   // Frame problem tracking
   private frameState: Map<string, unknown> = new Map();
-  private frameChangeLog: Array<{ property: string; oldValue: unknown; newValue: unknown; action: string }> = [];
+  private frameChangeLog: Array<{
+    property: string;
+    oldValue: unknown;
+    newValue: unknown;
+    action: string;
+  }> = [];
 
   // Trialectic state (Agent-Arena-Relation)
   private trialecticPhase: "agent" | "arena" | "relation" = "agent";
@@ -367,7 +374,10 @@ export class RelevanceRealizationWorkspace extends EventEmitter {
       domain,
       activation: 0.5,
       isBroadcasting: false,
-      process: (input: unknown, context: WorkspaceContext): RelevanceSignal[] => {
+      process: (
+        input: unknown,
+        context: WorkspaceContext,
+      ): RelevanceSignal[] => {
         return this.processInDomain(domain, input, context);
       },
     };
@@ -411,7 +421,11 @@ export class RelevanceRealizationWorkspace extends EventEmitter {
         description: "Consider many domains",
         evaluate: (signal, context) => {
           // Higher relevance for cross-domain signals
-          const crossDomainFactor = context.attentionFocus.includes(signal.source) ? 0.5 : 1.0;
+          const crossDomainFactor = context.attentionFocus.includes(
+            signal.source,
+          )
+            ? 0.5
+            : 1.0;
           return signal.salience * crossDomainFactor;
         },
       },
@@ -421,7 +435,9 @@ export class RelevanceRealizationWorkspace extends EventEmitter {
         description: "Focus on current domain",
         evaluate: (signal, context) => {
           // Higher relevance for in-focus signals
-          const inFocusFactor = context.attentionFocus.includes(signal.source) ? 1.0 : 0.3;
+          const inFocusFactor = context.attentionFocus.includes(signal.source)
+            ? 1.0
+            : 0.3;
           return signal.salience * inFocusFactor;
         },
       },
@@ -509,7 +525,9 @@ export class RelevanceRealizationWorkspace extends EventEmitter {
 
     // Domain-specific relevance detection
     const baseSignal: RelevanceSignal = {
-      id: `signal_${domain}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `signal_${domain}_${Date.now()}_${Math.random()
+        .toString(36)
+        .substr(2, 9)}`,
       source: domain,
       content: input,
       relevanceType: this.inferRelevanceType(domain),
@@ -588,7 +606,10 @@ export class RelevanceRealizationWorkspace extends EventEmitter {
     let urgency = 0.3; // Base urgency
 
     // High urgency for perception and motor domains
-    if (domain === CognitiveDomain.Perception || domain === CognitiveDomain.Motor) {
+    if (
+      domain === CognitiveDomain.Perception ||
+      domain === CognitiveDomain.Motor
+    ) {
       urgency += 0.3;
     }
 
@@ -634,7 +655,10 @@ export class RelevanceRealizationWorkspace extends EventEmitter {
     context: WorkspaceContext,
   ): void {
     signal.context.set("domain", domain);
-    signal.context.set("goals", context.goals.map((g) => g.id));
+    signal.context.set(
+      "goals",
+      context.goals.map((g) => g.id),
+    );
     signal.context.set("cognitiveLoad", context.cognitiveLoad);
     signal.context.set("uncertainty", context.arena.uncertainty);
   }
@@ -646,7 +670,9 @@ export class RelevanceRealizationWorkspace extends EventEmitter {
   /**
    * Apply opponent processing to evaluate signals
    */
-  private applyOpponentProcessing(signals: RelevanceSignal[]): RelevanceSignal[] {
+  private applyOpponentProcessing(
+    signals: RelevanceSignal[],
+  ): RelevanceSignal[] {
     return signals.map((signal) => {
       let totalRelevance = 0;
       let totalWeight = 0;
@@ -657,7 +683,8 @@ export class RelevanceRealizationWorkspace extends EventEmitter {
 
         // Blend based on current balance
         const blendedScore =
-          score1 * (0.5 + pair.currentBalance / 2) + score2 * (0.5 - pair.currentBalance / 2);
+          score1 * (0.5 + pair.currentBalance / 2) +
+          score2 * (0.5 - pair.currentBalance / 2);
 
         totalRelevance += blendedScore;
         totalWeight += 1;
@@ -673,7 +700,10 @@ export class RelevanceRealizationWorkspace extends EventEmitter {
   /**
    * Calculate goal alignment for a signal
    */
-  private goalAlignment(signal: RelevanceSignal, context: WorkspaceContext): number {
+  private goalAlignment(
+    signal: RelevanceSignal,
+    context: WorkspaceContext,
+  ): number {
     let alignment = 0;
     for (const goal of context.goals) {
       if (signal.relevanceType === goal.relevanceType) {
@@ -686,7 +716,10 @@ export class RelevanceRealizationWorkspace extends EventEmitter {
   /**
    * Adapt opponent processing based on outcomes
    */
-  public adaptOpponentProcessing(outcome: "success" | "failure", pairId: string): void {
+  public adaptOpponentProcessing(
+    outcome: "success" | "failure",
+    pairId: string,
+  ): void {
     const pair = this.opponentPairs.find((p) => p.id === pairId);
     if (!pair) return;
 
@@ -717,7 +750,9 @@ export class RelevanceRealizationWorkspace extends EventEmitter {
     const sorted = [...signals].sort((a, b) => b.salience - a.salience);
 
     // Select top signals above threshold
-    const selected = sorted.filter((s) => s.salience >= this.config.broadcastThreshold);
+    const selected = sorted.filter(
+      (s) => s.salience >= this.config.broadcastThreshold,
+    );
 
     // Limit by working memory capacity
     return selected.slice(0, this.config.workingMemoryCapacity);
@@ -747,7 +782,10 @@ export class RelevanceRealizationWorkspace extends EventEmitter {
 
     // Update working memory
     this.context.workingMemory.set(signal.id, signal.content);
-    if (this.context.workingMemory.size > this.config.workingMemoryCapacity * 2) {
+    if (
+      this.context.workingMemory.size >
+      this.config.workingMemoryCapacity * 2
+    ) {
       // Prune oldest entries
       const entries = Array.from(this.context.workingMemory.entries());
       for (let i = 0; i < this.config.workingMemoryCapacity; i++) {
@@ -764,7 +802,9 @@ export class RelevanceRealizationWorkspace extends EventEmitter {
     // Emit broadcast event
     this.emit("broadcast", event);
 
-    log.debug(`Broadcast signal ${signal.id} from ${signal.source} with salience ${signal.salience}`);
+    log.debug(
+      `Broadcast signal ${signal.id} from ${signal.source} with salience ${signal.salience}`,
+    );
   }
 
   // ============================================================
@@ -819,9 +859,13 @@ export class RelevanceRealizationWorkspace extends EventEmitter {
   /**
    * Query frame state (what has changed)
    */
-  public getFrameChanges(sinceAction?: string): Array<{ property: string; oldValue: unknown; newValue: unknown }> {
+  public getFrameChanges(
+    sinceAction?: string,
+  ): Array<{ property: string; oldValue: unknown; newValue: unknown }> {
     if (sinceAction) {
-      const actionIndex = this.frameChangeLog.findIndex((c) => c.action === sinceAction);
+      const actionIndex = this.frameChangeLog.findIndex(
+        (c) => c.action === sinceAction,
+      );
       if (actionIndex >= 0) {
         return this.frameChangeLog.slice(actionIndex + 1);
       }
@@ -847,7 +891,11 @@ export class RelevanceRealizationWorkspace extends EventEmitter {
     this.trialecticCycle++;
 
     // Rotate through phases
-    const phases: Array<"agent" | "arena" | "relation"> = ["agent", "arena", "relation"];
+    const phases: Array<"agent" | "arena" | "relation"> = [
+      "agent",
+      "arena",
+      "relation",
+    ];
     const currentIndex = phases.indexOf(this.trialecticPhase);
     this.trialecticPhase = phases[(currentIndex + 1) % 3];
 
@@ -892,12 +940,30 @@ export class RelevanceRealizationWorkspace extends EventEmitter {
    */
   private isDomainRelevantToGoal(domain: CognitiveDomain, goal: Goal): boolean {
     const relevanceMap: Record<RelevanceType, CognitiveDomain[]> = {
-      [RelevanceType.Teleological]: [CognitiveDomain.Reasoning, CognitiveDomain.Motor],
-      [RelevanceType.Contextual]: [CognitiveDomain.Perception, CognitiveDomain.Spatial],
-      [RelevanceType.Existential]: [CognitiveDomain.Emotion, CognitiveDomain.Motor],
-      [RelevanceType.Epistemic]: [CognitiveDomain.Memory, CognitiveDomain.Reasoning],
-      [RelevanceType.Pragmatic]: [CognitiveDomain.Motor, CognitiveDomain.Perception],
-      [RelevanceType.Axiological]: [CognitiveDomain.Emotion, CognitiveDomain.Social],
+      [RelevanceType.Teleological]: [
+        CognitiveDomain.Reasoning,
+        CognitiveDomain.Motor,
+      ],
+      [RelevanceType.Contextual]: [
+        CognitiveDomain.Perception,
+        CognitiveDomain.Spatial,
+      ],
+      [RelevanceType.Existential]: [
+        CognitiveDomain.Emotion,
+        CognitiveDomain.Motor,
+      ],
+      [RelevanceType.Epistemic]: [
+        CognitiveDomain.Memory,
+        CognitiveDomain.Reasoning,
+      ],
+      [RelevanceType.Pragmatic]: [
+        CognitiveDomain.Motor,
+        CognitiveDomain.Perception,
+      ],
+      [RelevanceType.Axiological]: [
+        CognitiveDomain.Emotion,
+        CognitiveDomain.Social,
+      ],
     };
 
     return relevanceMap[goal.relevanceType]?.includes(domain) ?? false;
@@ -922,7 +988,11 @@ export class RelevanceRealizationWorkspace extends EventEmitter {
    * Update arena state
    */
   public updateArena(update: Partial<ArenaState>): void {
-    this.context.arena = { ...this.context.arena, ...update, lastUpdated: Date.now() };
+    this.context.arena = {
+      ...this.context.arena,
+      ...update,
+      lastUpdated: Date.now(),
+    };
     this.emit("arena_updated", { arena: this.context.arena });
   }
 

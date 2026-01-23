@@ -659,7 +659,7 @@ Provide a comprehensive review with specific suggestions for improvement.`,
   /**
    * Generate embeddings (not directly supported by Copilot)
    */
-  async generateEmbeddings( _text: string): Promise<number[]> {
+  async generateEmbeddings(_text: string): Promise<number[]> {
     throw new Error("Embeddings not directly supported by GitHub Copilot API");
   }
 }

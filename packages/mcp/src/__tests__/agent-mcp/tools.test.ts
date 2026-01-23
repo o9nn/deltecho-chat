@@ -46,7 +46,7 @@ function createMockAgentMembrane(): AgentMembrane {
       }
       return null;
     }),
-    addTransaction: vi.fn(( _tx: any) => `tx-${Date.now()}`),
+    addTransaction: vi.fn((_tx: any) => `tx-${Date.now()}`),
     addExperience: vi.fn(),
     evolve: vi.fn((experiences: number) => ({
       experienceIntegrated: experiences,

@@ -99,7 +99,10 @@ export class ChatStoreScheduler {
   }
 
   /**  This effect will get added to the end of the queue. The queue is getting executed one after the other. */
-  queuedEffect<T extends (...args: any[]) => any>(effect: T, effectName: string): T {
+  queuedEffect<T extends (...args: any[]) => any>(
+    effect: T,
+    effectName: string,
+  ): T {
     const fn: T = (async (...args: any) => {
       const lockQueue = () => {
         //log.debug(`queuedEffect: ${effectName}: locking`)

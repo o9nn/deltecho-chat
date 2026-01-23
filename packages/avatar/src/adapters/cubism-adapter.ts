@@ -128,7 +128,7 @@ export class StubCubismRenderer implements ICubismRenderer {
     console.log(`[CubismAdapter] Stub: playMotion(${motion}, ${priority})`);
   }
 
-  updateLipSync( _audioLevel: number): void {
+  updateLipSync(_audioLevel: number): void {
     if (!this.initialized) return;
     // Stub: no visual output
   }

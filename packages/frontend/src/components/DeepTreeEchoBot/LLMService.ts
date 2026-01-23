@@ -829,7 +829,7 @@ My self-reflection indicates that I can better serve users by slightly increasin
   /**
    * Analyze content for potential sensitivity issues using the specialized content evaluation function
    */
-  public async evaluateContent( _content: string): Promise<{
+  public async evaluateContent(_content: string): Promise<{
     isSensitive: boolean;
     category?: "violence" | "sexual" | "other";
     explanation: string;
@@ -876,7 +876,7 @@ My self-reflection indicates that I can better serve users by slightly increasin
   /**
    * Analyze an image using vision capabilities
    */
-  public async analyzeImage( _imageData: string): Promise<string> {
+  public async analyzeImage(_imageData: string): Promise<string> {
     try {
       const generalFunction = this.cognitiveFunctions.get(
         CognitiveFunctionType.GENERAL,

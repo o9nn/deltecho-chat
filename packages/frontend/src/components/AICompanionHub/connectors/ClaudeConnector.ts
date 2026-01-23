@@ -372,7 +372,7 @@ Only use these functions when necessary. If you need to use a function, output O
    * Generate embeddings for text (for semantic search)
    * Note: Claude doesn't directly provide embeddings, so this is a placeholder
    */
-  async generateEmbeddings( _text: string): Promise<number[]> {
+  async generateEmbeddings(_text: string): Promise<number[]> {
     // Claude doesn't have a native embeddings API, so we'd need to use another service
     // This is just a placeholder implementation
     throw new Error("Embeddings not directly supported by Claude API");

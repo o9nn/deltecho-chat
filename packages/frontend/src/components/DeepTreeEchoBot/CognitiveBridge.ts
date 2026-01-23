@@ -349,13 +349,15 @@ export class CognitiveOrchestrator {
 
     // Store in integrated memory system (HDM + RAG)
     if (this.integratedMemory) {
-      const emotionalSignificance = this.calculateEmotionalSignificance(message.content);
+      const emotionalSignificance = this.calculateEmotionalSignificance(
+        message.content,
+      );
       await this.integratedMemory.storeMemory(
         message.metadata?.chatId || 0,
         parseInt(message.id) || Date.now(),
         "user",
         message.content,
-        emotionalSignificance
+        emotionalSignificance,
       );
       log.debug("Stored message in integrated memory system");
     }
@@ -375,7 +377,8 @@ export class CognitiveOrchestrator {
 
     // Combine valence intensity and arousal with salience
     const valenceIntensity = Math.abs(sentiment.valence);
-    const significance = 1.0 + (valenceIntensity * 0.3) + (sentiment.arousal * 0.3) + (salience * 0.4);
+    const significance =
+      1.0 + valenceIntensity * 0.3 + sentiment.arousal * 0.3 + salience * 0.4;
 
     return Math.min(2.0, significance); // Cap at 2.0
   }
@@ -394,7 +397,9 @@ export class CognitiveOrchestrator {
         timestamp: message.timestamp,
       });
 
-      log.debug(`Relevance processing returned ${relevanceSignals.length} signals`);
+      log.debug(
+        `Relevance processing returned ${relevanceSignals.length} signals`,
+      );
     } catch (error) {
       log.warn("Relevance processing failed, using fallback:", error);
     }
@@ -405,8 +410,10 @@ export class CognitiveOrchestrator {
     if (this.state?.cognitiveContext) {
       this.state.cognitiveContext.emotionalValence = sentiment.valence;
       this.state.cognitiveContext.emotionalArousal = sentiment.arousal;
-      this.state.cognitiveContext.salienceScore = relevanceInsights.overallSalience;
-      this.state.cognitiveContext.relevantMemories = relevanceInsights.relevantDomains;
+      this.state.cognitiveContext.salienceScore =
+        relevanceInsights.overallSalience;
+      this.state.cognitiveContext.relevantMemories =
+        relevanceInsights.relevantDomains;
       this.state.cognitiveContext.attentionWeight = relevanceInsights.urgency;
     }
 
@@ -450,7 +457,10 @@ export class CognitiveOrchestrator {
     // Find dominant relevance type
     const typeCounts = new Map<RelevanceType, number>();
     for (const signal of signals) {
-      typeCounts.set(signal.relevanceType, (typeCounts.get(signal.relevanceType) || 0) + 1);
+      typeCounts.set(
+        signal.relevanceType,
+        (typeCounts.get(signal.relevanceType) || 0) + 1,
+      );
     }
     let dominantRelevanceType: RelevanceType | null = null;
     let maxCount = 0;
@@ -506,7 +516,7 @@ export class CognitiveOrchestrator {
         Date.now(),
         "bot",
         responseContent,
-        1.0 // Neutral emotional significance for bot responses
+        1.0, // Neutral emotional significance for bot responses
       );
     }
 
@@ -519,7 +529,7 @@ export class CognitiveOrchestrator {
     };
   }
 
-  private async callLLM( _userMessage: string): Promise<string> {
+  private async callLLM(_userMessage: string): Promise<string> {
     if (!this.llmConfig || !this.llmConfig.apiKey) {
       throw new Error("LLM not configured");
     }
@@ -578,21 +588,24 @@ Respond in a way that reflects these characteristics while being helpful and inf
     // Add memory context from integrated memory system
     if (this.integratedMemory && this.conversationHistory.length > 0) {
       const lastUserMessage = this.conversationHistory
-        .filter(m => m.role === "user")
+        .filter((m) => m.role === "user")
         .pop();
 
       if (lastUserMessage) {
         const memoryContext = this.integratedMemory.generateMemoryContext(
           lastUserMessage.content,
           this.currentChatId || undefined,
-          { includeReflections: true, maxMemories: 5, maxReflections: 2 }
+          { includeReflections: true, maxMemories: 5, maxReflections: 2 },
         );
 
         if (memoryContext.relevantMemories.length > 0) {
-          const formattedContext = this.integratedMemory.formatContextForPrompt(memoryContext);
+          const formattedContext =
+            this.integratedMemory.formatContextForPrompt(memoryContext);
           basePrompt += `\n\n# Memory Context\n${formattedContext}`;
 
-          log.debug(`Added memory context: ${memoryContext.relevantMemories.length} memories, ${memoryContext.recentReflections.length} reflections`);
+          log.debug(
+            `Added memory context: ${memoryContext.relevantMemories.length} memories, ${memoryContext.recentReflections.length} reflections`,
+          );
         }
       }
     }
@@ -627,7 +640,7 @@ Respond in a way that reflects these characteristics while being helpful and inf
     }". Configure my LLM service for detailed responses.`;
   }
 
-  private generateFallbackResponse( _input: string, error: unknown): string {
+  private generateFallbackResponse(_input: string, error: unknown): string {
     const errorMsg = error instanceof Error ? error.message : "Unknown error";
     return `I encountered an issue: ${errorMsg}. Please try again.`;
   }
@@ -746,7 +759,11 @@ Respond in a way that reflects these characteristics while being helpful and inf
   /**
    * Store a reflection in the integrated memory system
    */
-  async storeReflection(content: string, type: "periodic" | "focused" = "periodic", aspect?: string): Promise<void> {
+  async storeReflection(
+    content: string,
+    type: "periodic" | "focused" = "periodic",
+    aspect?: string,
+  ): Promise<void> {
     if (this.integratedMemory) {
       await this.integratedMemory.storeReflection(content, type, aspect);
       log.info(`Stored ${type} reflection${aspect ? ` on ${aspect}` : ""}`);
@@ -768,7 +785,11 @@ Respond in a way that reflects these characteristics while being helpful and inf
   /**
    * Add a goal to the relevance workspace
    */
-  addGoal(description: string, priority: number = 0.5, relevanceType: RelevanceType = RelevanceType.Teleological): string {
+  addGoal(
+    description: string,
+    priority: number = 0.5,
+    relevanceType: RelevanceType = RelevanceType.Teleological,
+  ): string {
     try {
       return relevanceWorkspace.addGoal({
         description,
@@ -1070,7 +1091,7 @@ export function importMemoryState(state: object): void {
 export async function storeReflection(
   content: string,
   type: "periodic" | "focused" = "periodic",
-  aspect?: string
+  aspect?: string,
 ): Promise<void> {
   await orchestratorInstance?.storeReflection(content, type, aspect);
 }
@@ -1088,15 +1109,20 @@ export function getRelevanceState(): object | null {
 export function addGoal(
   description: string,
   priority: number = 0.5,
-  relevanceType: RelevanceType = RelevanceType.Teleological
+  relevanceType: RelevanceType = RelevanceType.Teleological,
 ): string {
-  return orchestratorInstance?.addGoal(description, priority, relevanceType) ?? "";
+  return (
+    orchestratorInstance?.addGoal(description, priority, relevanceType) ?? ""
+  );
 }
 
 /**
  * Update the arena (environment/situation) in the relevance workspace
  */
-export function updateArena(situation: string, uncertainty: number = 0.5): void {
+export function updateArena(
+  situation: string,
+  uncertainty: number = 0.5,
+): void {
   orchestratorInstance?.updateArena(situation, uncertainty);
 }
 

@@ -600,7 +600,7 @@ export class TelegramBot implements IPlatformIntegration {
     this.registerCommand({
       name: "start",
       description: "Start the bot",
-      execute: async ( _ctx) => {
+      execute: async (_ctx) => {
         return {
           content: `🌳 <b>Welcome to Deep Tree Echo!</b>\n\nI'm an AI assistant powered by cognitive architecture. You can chat with me directly or use commands.\n\nUse /help to see available commands.`,
         };

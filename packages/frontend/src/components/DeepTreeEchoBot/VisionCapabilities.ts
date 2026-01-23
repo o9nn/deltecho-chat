@@ -65,7 +65,7 @@ export class VisionCapabilities {
   /**
    * Analyze an image and return a description
    */
-  async analyzeImage( _imageData: string | Blob): Promise<ImageAnalysisResult> {
+  async analyzeImage(_imageData: string | Blob): Promise<ImageAnalysisResult> {
     if (!this.options.enabled) {
       return {
         description: "Vision capabilities are disabled",

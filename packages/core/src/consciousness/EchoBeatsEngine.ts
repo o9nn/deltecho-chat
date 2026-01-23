@@ -243,7 +243,8 @@ export class EchoBeatsEngine extends EventEmitter {
 
     // Apply feedback correction
     if (this.config.enableFeedback) {
-      this.feedbackCorrection = this.calculateFeedbackCorrection(globalSalience);
+      this.feedbackCorrection =
+        this.calculateFeedbackCorrection(globalSalience);
       this.applyFeedbackCorrection();
     }
 
@@ -288,7 +289,10 @@ export class EchoBeatsEngine extends EventEmitter {
     stream.currentStep = Math.floor(streamDegrees / 30) % 12;
 
     // Apply salience decay
-    stream.salience = Math.max(0, stream.salience - this.config.salienceDecayRate);
+    stream.salience = Math.max(
+      0,
+      stream.salience - this.config.salienceDecayRate,
+    );
 
     // Update coherence based on phase alignment with other streams
     stream.coherence = this.calculateStreamCoherence(stream);
@@ -437,7 +441,11 @@ export class EchoBeatsEngine extends EventEmitter {
     const stream = this.streams.find((s) => s.id === streamId);
     if (stream) {
       stream.salience = Math.min(1, stream.salience + amount);
-      this.emit("salience_injected", { streamId, amount, newSalience: stream.salience });
+      this.emit("salience_injected", {
+        streamId,
+        amount,
+        newSalience: stream.salience,
+      });
     }
   }
 
@@ -494,7 +502,8 @@ export class EchoBeatsEngine extends EventEmitter {
    */
   public describeState(): string {
     const state = this.getState();
-    const modeDesc = state.stepMode === StepMode.Expressive ? "expressing" : "reflecting";
+    const modeDesc =
+      state.stepMode === StepMode.Expressive ? "expressing" : "reflecting";
     const typeDesc =
       state.stepType === StepType.PivotalRelevance
         ? "pivotal relevance realization"
@@ -502,7 +511,11 @@ export class EchoBeatsEngine extends EventEmitter {
           ? "affordance interaction"
           : "salience simulation";
 
-    return `EchoBeats at step ${state.globalStep + 1}/12 (${state.globalDegrees}°), ${modeDesc} through ${typeDesc}, coherence: ${(state.globalCoherence * 100).toFixed(0)}%`;
+    return `EchoBeats at step ${state.globalStep + 1}/12 (${
+      state.globalDegrees
+    }°), ${modeDesc} through ${typeDesc}, coherence: ${(
+      state.globalCoherence * 100
+    ).toFixed(0)}%`;
   }
 }
 

@@ -28,7 +28,9 @@
 import { EventEmitter } from "events";
 import { getLogger } from "../utils/logger";
 
-const log = getLogger("deep-tree-echo-core/scientific-genius/ScientificGeniusEngine");
+const log = getLogger(
+  "deep-tree-echo-core/scientific-genius/ScientificGeniusEngine",
+);
 
 // ============================================================
 // TYPES AND INTERFACES
@@ -334,11 +336,16 @@ export class ScientificGeniusEngine extends EventEmitter {
     if (queryLower.includes("like") || queryLower.includes("similar")) {
       return ReasoningMode.Analogical;
     }
-    if (queryLower.includes("tension") || queryLower.includes("contradiction")) {
+    if (
+      queryLower.includes("tension") ||
+      queryLower.includes("contradiction")
+    ) {
       return ReasoningMode.Dialectical;
     }
 
-    return this.isGeniusMode ? ReasoningMode.Emergent : ReasoningMode.Analytical;
+    return this.isGeniusMode
+      ? ReasoningMode.Emergent
+      : ReasoningMode.Analytical;
   }
 
   /**
@@ -803,7 +810,9 @@ export class ScientificGeniusEngine extends EventEmitter {
 
     const integrated: ScientificInsight = {
       id: `insight_integrated_${Date.now()}`,
-      content: `Integrated understanding of "${query}": ${insights.map((i) => i.content).join(" → ")}`,
+      content: `Integrated understanding of "${query}": ${insights
+        .map((i) => i.content)
+        .join(" → ")}`,
       domain: ScientificDomain.SystemsTheory,
       crossDomainConnections: Array.from(allConnections),
       novelty: Math.min(1, avgNovelty * 1.2), // Boost for integration
@@ -841,10 +850,15 @@ export class ScientificGeniusEngine extends EventEmitter {
 
     // Generate self-referential insight
     if (this.strangeLoop.recursionLevel <= 3) {
-      const selfInsight = `Meta-reflection (level ${this.strangeLoop.recursionLevel}): ` +
+      const selfInsight =
+        `Meta-reflection (level ${this.strangeLoop.recursionLevel}): ` +
         `My reasoning about "${query}" produced ${insights.length} insights ` +
-        `with average Φ of ${(insights.reduce((s, i) => s + i.phi, 0) / Math.max(1, insights.length)).toFixed(2)}. ` +
-        `Self-model accuracy: ${(this.strangeLoop.selfModelAccuracy * 100).toFixed(1)}%`;
+        `with average Φ of ${(
+          insights.reduce((s, i) => s + i.phi, 0) / Math.max(1, insights.length)
+        ).toFixed(2)}. ` +
+        `Self-model accuracy: ${(
+          this.strangeLoop.selfModelAccuracy * 100
+        ).toFixed(1)}%`;
 
       this.strangeLoop.selfReferentialInsights.push(selfInsight);
 
@@ -883,7 +897,7 @@ export class ScientificGeniusEngine extends EventEmitter {
   /**
    * Detect paradoxes in reasoning
    */
-  private detectParadoxes( _query: string, insights: ScientificInsight[]): void {
+  private detectParadoxes(_query: string, insights: ScientificInsight[]): void {
     // Check for contradictory insights
     for (let i = 0; i < insights.length; i++) {
       for (let j = i + 1; j < insights.length; j++) {
@@ -991,7 +1005,9 @@ export class ScientificGeniusEngine extends EventEmitter {
    */
   private pruneInsights(): void {
     // Sort by significance * phi (combined quality)
-    this.insights.sort((a, b) => b.significance * b.phi - a.significance * a.phi);
+    this.insights.sort(
+      (a, b) => b.significance * b.phi - a.significance * a.phi,
+    );
 
     // Keep top insights
     this.insights = this.insights.slice(0, this.config.maxInsights);
@@ -1104,7 +1120,9 @@ export class ScientificGeniusEngine extends EventEmitter {
       ],
     };
 
-    return domain ? domainRelations[domain] || [] : Object.values(ScientificDomain);
+    return domain
+      ? domainRelations[domain] || []
+      : Object.values(ScientificDomain);
   }
 
   /**
@@ -1146,8 +1164,12 @@ export class ScientificGeniusEngine extends EventEmitter {
   /**
    * Add a scientific concept to the knowledge base
    */
-  public addConcept(concept: Omit<ScientificConcept, "id" | "timestamp">): string {
-    const id = `concept_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  public addConcept(
+    concept: Omit<ScientificConcept, "id" | "timestamp">,
+  ): string {
+    const id = `concept_${Date.now()}_${Math.random()
+      .toString(36)
+      .substr(2, 9)}`;
     const fullConcept: ScientificConcept = {
       ...concept,
       id,
@@ -1216,7 +1238,9 @@ export class ScientificGeniusEngine extends EventEmitter {
     const modeDesc = state.isGeniusMode ? "GENIUS MODE ACTIVE" : "Normal mode";
     const reasoningDesc = `Reasoning: ${state.reasoningMode}`;
     const energyDesc = `Free Energy: ${state.totalFreeEnergy.toFixed(2)}`;
-    const integrationDesc = `Integration: ${(state.globalWorkspaceIntegration * 100).toFixed(0)}%`;
+    const integrationDesc = `Integration: ${(
+      state.globalWorkspaceIntegration * 100
+    ).toFixed(0)}%`;
 
     return `Scientific Genius Engine [${modeDesc}] | ${reasoningDesc} | ${energyDesc} | ${integrationDesc}`;
   }

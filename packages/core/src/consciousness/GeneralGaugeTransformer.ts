@@ -37,7 +37,9 @@ import {
   LieGroupElement,
 } from "./GaugeCognitiveManifold";
 
-const log = getLogger("deep-tree-echo-core/consciousness/GeneralGaugeTransformer");
+const log = getLogger(
+  "deep-tree-echo-core/consciousness/GeneralGaugeTransformer",
+);
 
 // ============================================================
 // TYPES AND INTERFACES
@@ -203,7 +205,9 @@ export class GeneralGaugeTransformer extends EventEmitter {
         queryTransform: this.createRandomGaugeElement(),
         keyTransform: this.createRandomGaugeElement(),
         valueTransform: this.createRandomGaugeElement(),
-        weights: new Array(this.config.embeddingDim).fill(1 / this.config.embeddingDim),
+        weights: new Array(this.config.embeddingDim).fill(
+          1 / this.config.embeddingDim,
+        ),
       };
       this.attentionHeads.push(head);
     }
@@ -228,9 +232,15 @@ export class GeneralGaugeTransformer extends EventEmitter {
   private initializeFeedForward(): void {
     for (let i = 0; i < this.config.numLayers; i++) {
       this.feedForward.push({
-        weights1: this.createRandomMatrix(this.config.embeddingDim, this.config.embeddingDim * 4),
+        weights1: this.createRandomMatrix(
+          this.config.embeddingDim,
+          this.config.embeddingDim * 4,
+        ),
         bias1: new Array(this.config.embeddingDim * 4).fill(0),
-        weights2: this.createRandomMatrix(this.config.embeddingDim * 4, this.config.embeddingDim),
+        weights2: this.createRandomMatrix(
+          this.config.embeddingDim * 4,
+          this.config.embeddingDim,
+        ),
         bias2: new Array(this.config.embeddingDim).fill(0),
       });
     }
@@ -265,7 +275,11 @@ export class GeneralGaugeTransformer extends EventEmitter {
       );
 
       // Residual connection + layer norm
-      currentEmbedding = this.addAndNorm(currentEmbedding, attentionOutput, layer);
+      currentEmbedding = this.addAndNorm(
+        currentEmbedding,
+        attentionOutput,
+        layer,
+      );
 
       // Feed-forward network with logistic activation
       const ffOutput = this.feedForwardPass(currentEmbedding, layer);
@@ -275,7 +289,10 @@ export class GeneralGaugeTransformer extends EventEmitter {
     }
 
     // Create new fiber with transformed embedding
-    const newFiber = this.manifold.createFiber(state.position, currentEmbedding);
+    const newFiber = this.manifold.createFiber(
+      state.position,
+      currentEmbedding,
+    );
 
     // Compute new belief state via active inference
     const newBeliefs = this.updateBeliefs(state.beliefs, currentEmbedding);
@@ -357,7 +374,11 @@ export class GeneralGaugeTransformer extends EventEmitter {
     const result: number[] = [];
     for (let i = 0; i < transform.matrix.length; i++) {
       let sum = 0;
-      for (let j = 0; j < Math.min(transform.matrix[i].length, vector.length); j++) {
+      for (
+        let j = 0;
+        j < Math.min(transform.matrix[i].length, vector.length);
+        j++
+      ) {
         sum += transform.matrix[i][j] * vector[j];
       }
       result.push(sum);
@@ -510,7 +531,10 @@ export class GeneralGaugeTransformer extends EventEmitter {
     // Update precision (inverse variance)
     const precision = currentBeliefs.precision.map((p, i) => {
       const error = predictionErrors[i] || 0;
-      return Math.max(0.1, p - this.config.learningRate * (error * error - 1 / p));
+      return Math.max(
+        0.1,
+        p - this.config.learningRate * (error * error - 1 / p),
+      );
     });
 
     return {
@@ -527,7 +551,10 @@ export class GeneralGaugeTransformer extends EventEmitter {
    * F = -log p(o|s) + KL[q(s)||p(s)]
    *   = prediction error + complexity
    */
-  private computeFreeEnergy(beliefs: BeliefState, _observation: number[]): number {
+  private computeFreeEnergy(
+    beliefs: BeliefState,
+    _observation: number[],
+  ): number {
     // Prediction error (negative log likelihood)
     const predictionError = beliefs.predictionErrors.reduce(
       (sum, e, i) => sum + (beliefs.precision[i] || 1) * e * e,
@@ -538,7 +565,10 @@ export class GeneralGaugeTransformer extends EventEmitter {
     const complexity = beliefs.posteriors.reduce((sum, post, i) => {
       const prior = beliefs.priors[i] || 0;
       if (Math.abs(post) < 1e-10) return sum;
-      return sum + post * Math.log((Math.abs(post) + 1e-10) / (Math.abs(prior) + 1e-10));
+      return (
+        sum +
+        post * Math.log((Math.abs(post) + 1e-10) / (Math.abs(prior) + 1e-10))
+      );
     }, 0);
 
     return predictionError + 0.1 * complexity;
@@ -650,7 +680,9 @@ export class GeneralGaugeTransformer extends EventEmitter {
       name: "Cognitive Energy",
       symmetry: CognitiveSymmetry.TimeTranslation,
       value: newEnergy,
-      conservationLaw: `ΔE = ${(newEnergy - oldEnergy).toFixed(4)} (should be ~0)`,
+      conservationLaw: `ΔE = ${(newEnergy - oldEnergy).toFixed(
+        4,
+      )} (should be ~0)`,
     });
 
     // Momentum conservation (space translation)
@@ -921,10 +953,18 @@ export class GeneralGaugeTransformer extends EventEmitter {
 ╠══════════════════════════════════════════════════════════════════╣
 ║  CURRENT METRICS:                                                ║
 ║  ─────────────────────────────────────────────────────────────── ║
-║  Total Transforms:       ${String(this.totalTransforms).padEnd(10)}                          ║
-║  Total Attention Ops:    ${String(this.totalAttentionOps).padEnd(10)}                          ║
-║  Free Energy Reduced:    ${this.totalFreeEnergyReduced.toFixed(4).padEnd(10)}                          ║
-║  Current Free Energy:    ${(this.currentState?.freeEnergy || 0).toFixed(4).padEnd(10)}                          ║
+║  Total Transforms:       ${String(this.totalTransforms).padEnd(
+      10,
+    )}                          ║
+║  Total Attention Ops:    ${String(this.totalAttentionOps).padEnd(
+      10,
+    )}                          ║
+║  Free Energy Reduced:    ${this.totalFreeEnergyReduced
+      .toFixed(4)
+      .padEnd(10)}                          ║
+║  Current Free Energy:    ${(this.currentState?.freeEnergy || 0)
+      .toFixed(4)
+      .padEnd(10)}                          ║
 ╚══════════════════════════════════════════════════════════════════╝
 `;
   }

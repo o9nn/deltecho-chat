@@ -33,7 +33,9 @@ import {
   Hypothesis,
 } from "./ScientificGeniusEngine";
 
-const log = getLogger("deep-tree-echo-core/scientific-genius/RelevanceGeniusIntegration");
+const log = getLogger(
+  "deep-tree-echo-core/scientific-genius/RelevanceGeniusIntegration",
+);
 
 // ============================================================
 // TYPES AND INTERFACES
@@ -67,16 +69,43 @@ export interface FrameProblemSolution {
  * Mapping between cognitive and scientific domains
  */
 const DOMAIN_MAPPING: Record<CognitiveDomain, ScientificDomain[]> = {
-  [CognitiveDomain.Perception]: [ScientificDomain.Neuroscience, ScientificDomain.Physics],
-  [CognitiveDomain.Memory]: [ScientificDomain.Neuroscience, ScientificDomain.CognitiveScience],
-  [CognitiveDomain.Reasoning]: [ScientificDomain.Philosophy, ScientificDomain.Mathematics],
-  [CognitiveDomain.Emotion]: [ScientificDomain.Neuroscience, ScientificDomain.CognitiveScience],
+  [CognitiveDomain.Perception]: [
+    ScientificDomain.Neuroscience,
+    ScientificDomain.Physics,
+  ],
+  [CognitiveDomain.Memory]: [
+    ScientificDomain.Neuroscience,
+    ScientificDomain.CognitiveScience,
+  ],
+  [CognitiveDomain.Reasoning]: [
+    ScientificDomain.Philosophy,
+    ScientificDomain.Mathematics,
+  ],
+  [CognitiveDomain.Emotion]: [
+    ScientificDomain.Neuroscience,
+    ScientificDomain.CognitiveScience,
+  ],
   [CognitiveDomain.Motor]: [ScientificDomain.Biology, ScientificDomain.Physics],
-  [CognitiveDomain.Language]: [ScientificDomain.CognitiveScience, ScientificDomain.Philosophy],
-  [CognitiveDomain.Spatial]: [ScientificDomain.Mathematics, ScientificDomain.Physics],
-  [CognitiveDomain.Social]: [ScientificDomain.CognitiveScience, ScientificDomain.Philosophy],
-  [CognitiveDomain.Temporal]: [ScientificDomain.Physics, ScientificDomain.Philosophy],
-  [CognitiveDomain.Metacognitive]: [ScientificDomain.CognitiveScience, ScientificDomain.Philosophy],
+  [CognitiveDomain.Language]: [
+    ScientificDomain.CognitiveScience,
+    ScientificDomain.Philosophy,
+  ],
+  [CognitiveDomain.Spatial]: [
+    ScientificDomain.Mathematics,
+    ScientificDomain.Physics,
+  ],
+  [CognitiveDomain.Social]: [
+    ScientificDomain.CognitiveScience,
+    ScientificDomain.Philosophy,
+  ],
+  [CognitiveDomain.Temporal]: [
+    ScientificDomain.Physics,
+    ScientificDomain.Philosophy,
+  ],
+  [CognitiveDomain.Metacognitive]: [
+    ScientificDomain.CognitiveScience,
+    ScientificDomain.Philosophy,
+  ],
 };
 
 /**
@@ -196,12 +225,18 @@ export class RelevanceGeniusIntegration extends EventEmitter {
     const scientificDomains = this.mapToScientificDomains(relevantSignals);
 
     // Step 4: Generate hypotheses guided by relevance
-    const _hypotheses = await this.generateRelevanceGuidedHypotheses(query, relevantSignals);
+    const _hypotheses = await this.generateRelevanceGuidedHypotheses(
+      query,
+      relevantSignals,
+    );
 
     // Step 5: Process through scientific genius engine
     const insights: ScientificInsight[] = [];
     for (const domain of scientificDomains) {
-      const domainInsights = await this.geniusEngine.processScientificQuery(query, domain);
+      const domainInsights = await this.geniusEngine.processScientificQuery(
+        query,
+        domain,
+      );
       insights.push(...domainInsights);
     }
 
@@ -236,7 +271,9 @@ export class RelevanceGeniusIntegration extends EventEmitter {
   /**
    * Map relevance signals to scientific domains
    */
-  private mapToScientificDomains(signals: RelevanceSignal[]): ScientificDomain[] {
+  private mapToScientificDomains(
+    signals: RelevanceSignal[],
+  ): ScientificDomain[] {
     const domains = new Set<ScientificDomain>();
 
     for (const signal of signals) {
@@ -274,7 +311,11 @@ export class RelevanceGeniusIntegration extends EventEmitter {
 
     // Generate hypotheses for each relevance type
     for (const [relevanceType, typeSignals] of signalsByType) {
-      const hypothesis = this.createHypothesisFromRelevance(query, relevanceType, typeSignals);
+      const hypothesis = this.createHypothesisFromRelevance(
+        query,
+        relevanceType,
+        typeSignals,
+      );
       if (hypothesis) {
         hypotheses.push(hypothesis);
       }
@@ -292,8 +333,10 @@ export class RelevanceGeniusIntegration extends EventEmitter {
     signals: RelevanceSignal[],
   ): Hypothesis | null {
     // Calculate aggregate salience
-    const avgSalience = signals.reduce((sum, s) => sum + s.salience, 0) / signals.length;
-    const avgConfidence = signals.reduce((sum, s) => sum + s.confidence, 0) / signals.length;
+    const avgSalience =
+      signals.reduce((sum, s) => sum + s.salience, 0) / signals.length;
+    const avgConfidence =
+      signals.reduce((sum, s) => sum + s.confidence, 0) / signals.length;
 
     // Determine scientific domain from relevance type
     const domainMapping: Record<RelevanceType, ScientificDomain> = {
@@ -349,8 +392,19 @@ export class RelevanceGeniusIntegration extends EventEmitter {
     const solutions: FrameProblemSolution[] = [];
 
     // Check if query involves action-effect reasoning
-    const actionKeywords = ["do", "perform", "execute", "change", "modify", "update", "create", "delete"];
-    const isActionQuery = actionKeywords.some((kw) => query.toLowerCase().includes(kw));
+    const actionKeywords = [
+      "do",
+      "perform",
+      "execute",
+      "change",
+      "modify",
+      "update",
+      "create",
+      "delete",
+    ];
+    const isActionQuery = actionKeywords.some((kw) =>
+      query.toLowerCase().includes(kw),
+    );
 
     if (!isActionQuery) {
       return solutions;
@@ -372,8 +426,11 @@ export class RelevanceGeniusIntegration extends EventEmitter {
       action: query,
       affectedProperties: affectedSignals.map((s) => `${s.source}_${s.id}`),
       unchangedProperties: unchangedSignals.map((s) => `${s.source}_${s.id}`),
-      confidence: affectedSignals.length > 0 ? 
-        affectedSignals.reduce((sum, s) => sum + s.confidence, 0) / affectedSignals.length : 0.5,
+      confidence:
+        affectedSignals.length > 0
+          ? affectedSignals.reduce((sum, s) => sum + s.confidence, 0) /
+            affectedSignals.length
+          : 0.5,
       method: "relevance_realization",
     };
 
@@ -392,7 +449,10 @@ export class RelevanceGeniusIntegration extends EventEmitter {
    */
   private handleRelevanceBroadcast(event: { signal: RelevanceSignal }): void {
     // Check if signal warrants scientific inquiry
-    if (event.signal.salience > 0.7 && event.signal.relevanceType === RelevanceType.Epistemic) {
+    if (
+      event.signal.salience > 0.7 &&
+      event.signal.relevanceType === RelevanceType.Epistemic
+    ) {
       // Trigger scientific inquiry
       this.emit("epistemic_relevance_detected", event.signal);
     }
@@ -401,25 +461,34 @@ export class RelevanceGeniusIntegration extends EventEmitter {
   /**
    * Handle frame problem optimization events
    */
-  private handleFrameProblemOptimized(data: { affectedCount: number; totalProperties: number }): void {
-    log.debug(`Frame problem optimized: ${data.affectedCount}/${data.totalProperties} properties affected`);
+  private handleFrameProblemOptimized(data: {
+    affectedCount: number;
+    totalProperties: number;
+  }): void {
+    log.debug(
+      `Frame problem optimized: ${data.affectedCount}/${data.totalProperties} properties affected`,
+    );
   }
 
   /**
    * Handle trialectic advance events
    */
-  private handleTrialecticAdvance(data: { phase: string; cycle: number }): void {
+  private handleTrialecticAdvance(data: {
+    phase: string;
+    cycle: number;
+  }): void {
     // Adjust scientific focus based on trialectic phase
     // Note: Focus adjustment is handled internally by the genius engine
     // We emit an event to notify of the phase change
     this.emit("trialectic_phase_changed", {
       phase: data.phase,
       cycle: data.cycle,
-      suggestedDomain: data.phase === "agent" 
-        ? ScientificDomain.CognitiveScience 
-        : data.phase === "arena" 
-          ? ScientificDomain.Physics 
-          : ScientificDomain.SystemsTheory,
+      suggestedDomain:
+        data.phase === "agent"
+          ? ScientificDomain.CognitiveScience
+          : data.phase === "arena"
+            ? ScientificDomain.Physics
+            : ScientificDomain.SystemsTheory,
     });
   }
 

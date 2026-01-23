@@ -141,7 +141,7 @@ class EchoLangTranspiler {
     );
   }
 
-  isRecursive( _ast: any) {
+  isRecursive(_ast: any) {
     // Simplified checks for TS port
     return false;
   }

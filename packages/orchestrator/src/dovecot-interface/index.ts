@@ -168,7 +168,10 @@ export class DovecotInterface {
   private listeners: Map<string, Array<(data: any) => void | Promise<void>>> =
     new Map();
 
-  public on(event: string, callback: (data: any) => void | Promise<void>): void {
+  public on(
+    event: string,
+    callback: (data: any) => void | Promise<void>,
+  ): void {
     if (!this.listeners.has(event)) {
       this.listeners.set(event, []);
     }

@@ -639,10 +639,7 @@ export class SecureIntegration {
             }
           }
         } catch (err) {
-          log.error(
-            `Failed to parse secure storage data for index ${i}:`,
-            err,
-          );
+          log.error(`Failed to parse secure storage data for index ${i}:`, err);
         }
       }
     }

@@ -83,7 +83,10 @@ export class IntegratedMemorySystem {
   private memoryTextMap: Map<string, string> = new Map();
   private emotionalHistory: Map<string, number> = new Map();
 
-  constructor(storage?: MemoryStorage, config?: Partial<IntegratedMemoryConfig>) {
+  constructor(
+    storage?: MemoryStorage,
+    config?: Partial<IntegratedMemoryConfig>,
+  ) {
     this.config = { ...DEFAULT_CONFIG, ...config };
 
     // Initialize HyperDimensionalMemory
@@ -125,9 +128,11 @@ export class IntegratedMemorySystem {
     messageId: number,
     sender: "user" | "bot",
     text: string,
-    emotionalSignificance: number = 1.0
+    emotionalSignificance: number = 1.0,
   ): Promise<string> {
-    const memoryId = `mem_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+    const memoryId = `mem_${Date.now()}_${Math.random()
+      .toString(36)
+      .substring(2, 9)}`;
 
     // Store in RAGMemoryStore for persistence and TF-IDF search
     await this.rag.storeMemory({
@@ -154,7 +159,7 @@ export class IntegratedMemorySystem {
   async storeReflection(
     content: string,
     type: "periodic" | "focused" = "periodic",
-    aspect?: string
+    aspect?: string,
   ): Promise<void> {
     await this.rag.storeReflection(content, type, aspect);
 
@@ -172,7 +177,7 @@ export class IntegratedMemorySystem {
   retrieveRelevantMemories(
     query: string,
     chatId?: number,
-    limit?: number
+    limit?: number,
   ): RetrievedMemory[] {
     const maxResults = limit || this.config.maxRetrievalCount;
     const results: Map<string, RetrievedMemory> = new Map();
@@ -246,7 +251,7 @@ export class IntegratedMemorySystem {
     // Filter by chatId if specified
     if (chatId !== undefined) {
       return finalResults.filter(
-        (r) => r.memory.chatId === chatId || r.memory.chatId === 0
+        (r) => r.memory.chatId === chatId || r.memory.chatId === 0,
       );
     }
 
@@ -264,14 +269,18 @@ export class IntegratedMemorySystem {
       includeReflections?: boolean;
       maxMemories?: number;
       maxReflections?: number;
-    }
+    },
   ): MemoryContext {
     const includeReflections = options?.includeReflections ?? true;
     const maxMemories = options?.maxMemories ?? this.config.maxRetrievalCount;
     const maxReflections = options?.maxReflections ?? 3;
 
     // Retrieve relevant memories
-    const relevantMemories = this.retrieveRelevantMemories(query, chatId, maxMemories);
+    const relevantMemories = this.retrieveRelevantMemories(
+      query,
+      chatId,
+      maxMemories,
+    );
 
     // Get recent reflections
     const recentReflections = includeReflections
@@ -292,7 +301,7 @@ export class IntegratedMemorySystem {
     const contextSummary = this.generateContextSummary(
       relevantMemories,
       recentReflections,
-      emotionalTone
+      emotionalTone,
     );
 
     return {
@@ -325,7 +334,9 @@ export class IntegratedMemorySystem {
       for (const other of memories) {
         if (assigned.has(other.memory.id)) continue;
 
-        const otherWords = new Set(other.memory.text.toLowerCase().split(/\s+/));
+        const otherWords = new Set(
+          other.memory.text.toLowerCase().split(/\s+/),
+        );
         let overlap = 0;
         for (const word of words) {
           if (otherWords.has(word) && word.length > 3) overlap++;
@@ -352,7 +363,7 @@ export class IntegratedMemorySystem {
   private generateContextSummary(
     memories: RetrievedMemory[],
     reflections: ReflectionMemory[],
-    emotionalTone: number
+    emotionalTone: number,
   ): string {
     const parts: string[] = [];
 
@@ -361,7 +372,9 @@ export class IntegratedMemorySystem {
 
       const topMemory = memories[0];
       if (topMemory.combinedScore > 0.7) {
-        parts.push(`Strongly related to: "${topMemory.memory.text.slice(0, 100)}..."`);
+        parts.push(
+          `Strongly related to: "${topMemory.memory.text.slice(0, 100)}..."`,
+        );
       }
     }
 
@@ -398,7 +411,11 @@ export class IntegratedMemorySystem {
     if (context.recentReflections.length > 0) {
       sections.push("\n## Recent Reflections");
       for (const ref of context.recentReflections) {
-        sections.push(`- ${ref.content.slice(0, 200)}${ref.content.length > 200 ? "..." : ""}`);
+        sections.push(
+          `- ${ref.content.slice(0, 200)}${
+            ref.content.length > 200 ? "..." : ""
+          }`,
+        );
       }
     }
 
@@ -408,8 +425,8 @@ export class IntegratedMemorySystem {
         context.emotionalTone > 1.2
           ? "emotionally significant"
           : context.emotionalTone < 0.8
-          ? "routine"
-          : "neutral";
+            ? "routine"
+            : "neutral";
       sections.push(`\n## Emotional Context: ${tone}`);
     }
 

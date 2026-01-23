@@ -561,7 +561,10 @@ export class LMTPServer {
   /**
    * Event emitter functionality
    */
-  public on(event: string, callback: (data: any) => void | Promise<void>): void {
+  public on(
+    event: string,
+    callback: (data: any) => void | Promise<void>,
+  ): void {
     if (!this.listeners.has(event)) {
       this.listeners.set(event, []);
     }

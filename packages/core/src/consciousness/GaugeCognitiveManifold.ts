@@ -28,7 +28,9 @@
 import { EventEmitter } from "events";
 import { getLogger } from "../utils/logger";
 
-const log = getLogger("deep-tree-echo-core/consciousness/GaugeCognitiveManifold");
+const log = getLogger(
+  "deep-tree-echo-core/consciousness/GaugeCognitiveManifold",
+);
 
 // ============================================================
 // MATHEMATICAL PRIMITIVES
@@ -305,7 +307,7 @@ export class GaugeCognitiveManifold extends EventEmitter {
   private createChartCenter(index: number): ManifoldPoint {
     // Distribute chart centers on a sphere in the base space
     const phi = (1 + Math.sqrt(5)) / 2; // Golden ratio
-    const theta = 2 * Math.PI * index / phi;
+    const theta = (2 * Math.PI * index) / phi;
     const z = 1 - (2 * index + 1) / this.config.baseDimension;
     const r = Math.sqrt(1 - z * z);
 
@@ -492,7 +494,11 @@ export class GaugeCognitiveManifold extends EventEmitter {
       );
 
       // Apply gauge transformation to the fiber
-      const newFiber = this.applyGaugeTransform(currentFiber, gaugeTransform, point);
+      const newFiber = this.applyGaugeTransform(
+        currentFiber,
+        gaugeTransform,
+        point,
+      );
       transportedFibers.push(newFiber);
       currentFiber = newFiber;
     }
@@ -514,7 +520,8 @@ export class GaugeCognitiveManifold extends EventEmitter {
     let connectionContribution = 0;
     for (let i = 0; i < displacement.length; i++) {
       for (let j = 0; j < displacement.length; j++) {
-        connectionContribution += this.connection.components[i][j] * displacement[j];
+        connectionContribution +=
+          this.connection.components[i][j] * displacement[j];
       }
     }
 
@@ -544,7 +551,10 @@ export class GaugeCognitiveManifold extends EventEmitter {
     );
 
     // Compose the gauge frames
-    const newGaugeFrame = this.composeGaugeElements(fiber.gaugeFrame, transform);
+    const newGaugeFrame = this.composeGaugeElements(
+      fiber.gaugeFrame,
+      transform,
+    );
 
     return {
       basePoint: newPoint,
@@ -704,13 +714,17 @@ export class GaugeCognitiveManifold extends EventEmitter {
    * - K = kinetic term (embedding velocity)
    * - V = potential term (curvature + active inference constraint)
    */
-  private computeAction( _curve: BezierCurve, fibers: Fiber[]): number {
+  private computeAction(_curve: BezierCurve, fibers: Fiber[]): number {
     let action = 0;
     const dt = 1.0 / (fibers.length - 1);
 
     for (let i = 1; i < fibers.length; i++) {
       // Kinetic term: |dξ/dt|²
-      const velocity = this.computeEmbeddingVelocity(fibers[i - 1], fibers[i], dt);
+      const velocity = this.computeEmbeddingVelocity(
+        fibers[i - 1],
+        fibers[i],
+        dt,
+      );
       const kinetic = 0.5 * velocity.reduce((sum, v) => sum + v * v, 0);
 
       // Potential term: curvature regularization + active inference
@@ -993,7 +1007,9 @@ export class GaugeCognitiveManifold extends EventEmitter {
    */
   private invertTransitionMap(map: TransitionMap): TransitionMap {
     // For orthogonal matrices, inverse = transpose
-    const invMatrix = map.matrix[0].map((_, i) => map.matrix.map((row) => row[i]));
+    const invMatrix = map.matrix[0].map((_, i) =>
+      map.matrix.map((row) => row[i]),
+    );
 
     return {
       fromChart: map.toChart,
@@ -1052,7 +1068,11 @@ export class GaugeCognitiveManifold extends EventEmitter {
     for (let g = 0; g < algebra.generators.length; g++) {
       const coeff = algebra.coefficients[g] || 0;
       for (let i = 0; i < Math.min(dim, algebra.generators[g].length); i++) {
-        for (let j = 0; j < Math.min(dim, algebra.generators[g][i].length); j++) {
+        for (
+          let j = 0;
+          j < Math.min(dim, algebra.generators[g][i].length);
+          j++
+        ) {
           algebraMatrix[i][j] += coeff * algebra.generators[g][i][j];
         }
       }
@@ -1069,10 +1089,7 @@ export class GaugeCognitiveManifold extends EventEmitter {
       result.push(new Array(dim).fill(0));
       for (let j = 0; j < dim; j++) {
         result[i][j] =
-          identity[i][j] +
-          algebraMatrix[i][j] +
-          X2[i][j] / 2 +
-          X3[i][j] / 6;
+          identity[i][j] + algebraMatrix[i][j] + X2[i][j] / 2 + X3[i][j] / 6;
       }
     }
 
@@ -1239,7 +1256,9 @@ export class GaugeCognitiveManifold extends EventEmitter {
    * Generate a unique fiber ID
    */
   private generateFiberId(point: ManifoldPoint): string {
-    return `fiber_${point.chartIndex}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `fiber_${point.chartIndex}_${Date.now()}_${Math.random()
+      .toString(36)
+      .substr(2, 9)}`;
   }
 
   // ============================================================
@@ -1293,14 +1312,30 @@ export class GaugeCognitiveManifold extends EventEmitter {
 ╠══════════════════════════════════════════════════════════════════╣
 ║  CURRENT STATE:                                                  ║
 ║  ─────────────────────────────────────────────────────────────── ║
-║  Base Dimension:     ${String(this.config.baseDimension).padEnd(6)} (9 terms from 4 nestings)      ║
-║  Fiber Dimension:    ${String(this.config.fiberDimension).padEnd(6)} (12 steps of cognitive loop)  ║
-║  Gauge Group:        ${String(this.config.gaugeGroup).padEnd(6)} (3 concurrent streams)       ║
-║  Charts:             ${String(this.atlas.size).padEnd(6)}                                     ║
-║  Fibers:             ${String(this.fibers.size).padEnd(6)}                                     ║
-║  Trajectories:       ${String(this.activeTrajectories.length).padEnd(6)}                                     ║
-║  Parallel Transports: ${String(this.parallelTransportCount).padEnd(5)}                                     ║
-║  Gauge Transforms:   ${String(this.gaugeTransformCount).padEnd(6)}                                     ║
+║  Base Dimension:     ${String(this.config.baseDimension).padEnd(
+      6,
+    )} (9 terms from 4 nestings)      ║
+║  Fiber Dimension:    ${String(this.config.fiberDimension).padEnd(
+      6,
+    )} (12 steps of cognitive loop)  ║
+║  Gauge Group:        ${String(this.config.gaugeGroup).padEnd(
+      6,
+    )} (3 concurrent streams)       ║
+║  Charts:             ${String(this.atlas.size).padEnd(
+      6,
+    )}                                     ║
+║  Fibers:             ${String(this.fibers.size).padEnd(
+      6,
+    )}                                     ║
+║  Trajectories:       ${String(this.activeTrajectories.length).padEnd(
+      6,
+    )}                                     ║
+║  Parallel Transports: ${String(this.parallelTransportCount).padEnd(
+      5,
+    )}                                     ║
+║  Gauge Transforms:   ${String(this.gaugeTransformCount).padEnd(
+      6,
+    )}                                     ║
 ╚══════════════════════════════════════════════════════════════════╝
 `;
   }

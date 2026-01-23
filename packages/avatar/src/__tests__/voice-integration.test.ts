@@ -56,7 +56,7 @@ class AvatarVoiceCoordinator {
   /**
    * Apply lip-sync data to avatar
    */
-  applyLipSync( _data: MockLipSyncData): void {
+  applyLipSync(_data: MockLipSyncData): void {
     this.lipSyncActive = true;
     this.avatarController.setSpeaking(true);
 

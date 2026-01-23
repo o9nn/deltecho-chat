@@ -214,7 +214,7 @@ export class DeepTreeEchoBot {
     });
 
     // Vision command
-    this.commandHandlers.set("/vision", async ( _args, messageData) => {
+    this.commandHandlers.set("/vision", async (_args, messageData) => {
       if (!this.options.visionEnabled) {
         return {
           success: false,

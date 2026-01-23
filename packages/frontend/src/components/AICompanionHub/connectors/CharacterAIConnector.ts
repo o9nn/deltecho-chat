@@ -519,7 +519,7 @@ export class CharacterAIConnector extends BaseConnector {
   /**
    * Generate embeddings (not supported by Character.AI)
    */
-  async generateEmbeddings( _text: string): Promise<number[]> {
+  async generateEmbeddings(_text: string): Promise<number[]> {
     throw new Error("Embeddings not supported by Character.AI API");
   }
 }

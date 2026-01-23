@@ -36,8 +36,8 @@ function createMockRelation(): RelationInterface {
     getState: vi.fn(() => ({
       recentFlows: [],
     })),
-    synthesize: vi.fn(( _agentState, _arenaState) => undefined),
-    reflectOnInteractions: vi.fn(( _interactions) => [
+    synthesize: vi.fn((_agentState, _arenaState) => undefined),
+    reflectOnInteractions: vi.fn((_interactions) => [
       "Insight 1",
       "Insight 2",
       "Insight 3",

@@ -23,10 +23,7 @@ import {
   createSentimentAnalyzer,
 } from "./sentiment-analyzer";
 import { CognitiveStateManager, createCognitiveState } from "./cognitive-state";
-import {
-  UnifiedMessageHandler,
-  createMessageHandler,
-} from "./unified-message";
+import { UnifiedMessageHandler, createMessageHandler } from "./unified-message";
 import {
   PersonaAdapter,
   createPersonaAdapter,

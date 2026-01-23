@@ -19,7 +19,10 @@ export default function App(_props: any) {
   async function reloadLocaleData(locale: string) {
     const newLocaleData = await runtime.getLocaleData(locale);
     window.localeData = newLocaleData;
-    window.static_translate = translate(newLocaleData.locale, newLocaleData.messages);
+    window.static_translate = translate(
+      newLocaleData.locale,
+      newLocaleData.messages,
+    );
     setLocaleData(newLocaleData);
     moment.locale(newLocaleData.locale);
     updateCoreStrings();

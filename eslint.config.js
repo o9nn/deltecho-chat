@@ -38,7 +38,15 @@ export default defineConfig(
         'react-hooks': pluginReactHooks,
       },
       rules: {
-        ...pluginReactHooks.configs.recommended.rules,
+        // Core React Hooks rules (stable)
+        'react-hooks/rules-of-hooks': 'error',
+        'react-hooks/exhaustive-deps': 'warn',
+        // Disable experimental React Compiler rules that are too strict for existing codebase
+        // These rules enforce React Compiler requirements but the compiler is still experimental
+        // See: https://github.com/facebook/react/blob/main/packages/eslint-plugin-react-hooks/CHANGELOG.md
+        'react-hooks/refs': 'off',
+        'react-hooks/purity': 'off',
+        'react-hooks/set-state-in-effect': 'off',
       },
     },
     {

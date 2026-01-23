@@ -332,10 +332,7 @@ export class HopfTowerIntegration extends EventEmitter {
     const triadicPhases = [0, 120, 240];
     let minDist = 180;
     for (const tp of triadicPhases) {
-      const dist = Math.min(
-        Math.abs(phase - tp),
-        360 - Math.abs(phase - tp),
-      );
+      const dist = Math.min(Math.abs(phase - tp), 360 - Math.abs(phase - tp));
       minDist = Math.min(minDist, dist);
     }
 

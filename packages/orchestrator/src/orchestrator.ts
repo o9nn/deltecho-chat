@@ -219,7 +219,8 @@ export class Orchestrator {
           ) => {
             // Convert history to string array for core LLMService
             const context = (history || []).map(
-              (m: { role: string; content: string }) => `${m.role}: ${m.content}`,
+              (m: { role: string; content: string }) =>
+                `${m.role}: ${m.content}`,
             );
             return this.llmService.generateResponse(userMessage, context);
           },

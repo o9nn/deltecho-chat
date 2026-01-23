@@ -239,7 +239,8 @@ export class CognitiveAvatarBridge extends EventEmitter {
     const eyeMovement = this.calculateEyeMovement(state);
 
     // Calculate head tilt based on curiosity/interest
-    const headTilt = (emotions.interest || 0) * 15 - (emotions.sadness || 0) * 10;
+    const headTilt =
+      (emotions.interest || 0) * 15 - (emotions.sadness || 0) * 10;
 
     // Calculate consciousness glow from sentience level
     const consciousnessGlow = state.sentienceLevel * state.phi;
@@ -260,9 +261,10 @@ export class CognitiveAvatarBridge extends EventEmitter {
   /**
    * Calculate eye movement based on EchoBeats phase
    */
-  private calculateEyeMovement(
-    state: CognitiveStateInput,
-  ): { x: number; y: number } {
+  private calculateEyeMovement(state: CognitiveStateInput): {
+    x: number;
+    y: number;
+  } {
     if (!this.config.echoBeatsSync || state.echoBeatsPhase === undefined) {
       return { x: 0, y: 0 };
     }
@@ -289,7 +291,8 @@ export class CognitiveAvatarBridge extends EventEmitter {
 
     // Smooth expression intensity
     this.smoothedExpression =
-      this.smoothedExpression * factor + response.expressionIntensity * invFactor;
+      this.smoothedExpression * factor +
+      response.expressionIntensity * invFactor;
 
     // Smooth arousal
     this.smoothedArousal =
@@ -317,7 +320,10 @@ export class CognitiveAvatarBridge extends EventEmitter {
     const state = this.currentState;
 
     // Set expression
-    this.avatarController.setExpression(state.expression, state.expressionIntensity);
+    this.avatarController.setExpression(
+      state.expression,
+      state.expressionIntensity,
+    );
 
     // Update lip sync
     if (state.lipSyncLevel > 0) {
@@ -393,8 +399,14 @@ export class CognitiveAvatarBridge extends EventEmitter {
    */
   public describeState(): string {
     const state = this.currentState;
-    return `Avatar: ${state.expression} (${(state.expressionIntensity * 100).toFixed(0)}%), ` +
-      `motion: ${state.motion}, consciousness: ${(state.consciousnessGlow * 100).toFixed(0)}%`;
+    return (
+      `Avatar: ${state.expression} (${(state.expressionIntensity * 100).toFixed(
+        0,
+      )}%), ` +
+      `motion: ${state.motion}, consciousness: ${(
+        state.consciousnessGlow * 100
+      ).toFixed(0)}%`
+    );
   }
 }
 

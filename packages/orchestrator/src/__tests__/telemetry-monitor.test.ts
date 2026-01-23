@@ -10,13 +10,7 @@
  * - Data retention
  */
 
-import {
-  describe,
-  it,
-  expect,
-  beforeEach,
-  afterEach,
-} from "@jest/globals";
+import { describe, it, expect, beforeEach, afterEach } from "@jest/globals";
 import { TelemetryMonitor, Metric, Alert } from "../telemetry/index.js";
 
 describe("TelemetryMonitor", () => {

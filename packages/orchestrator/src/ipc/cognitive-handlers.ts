@@ -321,7 +321,12 @@ export function registerCognitiveHandlers(
       // Convert protocol messages to internal format
       const messagesToImport = payload.messages.map(
         (
-          msg: { role: string; content: string; timestamp: number; metadata?: Record<string, unknown> },
+          msg: {
+            role: string;
+            content: string;
+            timestamp: number;
+            metadata?: Record<string, unknown>;
+          },
           idx: number,
         ) => ({
           id: `imported_${Date.now()}_${idx}`,

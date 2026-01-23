@@ -2,7 +2,9 @@ import React, { useEffect, useState, useRef } from "react";
 import type { C as _C } from "@deltachat/jsonrpc-client";
 import { getLogger } from "@deltachat-desktop/shared/logger";
 
-const log = getLogger("render/components/DeepTreeEchoBot/DeepTreeEchoBotComponent");
+const log = getLogger(
+  "render/components/DeepTreeEchoBot/DeepTreeEchoBotComponent",
+);
 
 // Import all the advanced cognitive modules
 import { HyperDimensionalMemory } from "./HyperDimensionalMemory";
@@ -128,7 +130,7 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ testHooks }) => {
   const secureSystem = useRef<SecureIntegration>(new SecureIntegration());
 
   // Bot state
-  // eslint-disable-next-line react-compiler/react-compiler -- Date.now() is intentionally used during render for initialization
+  // Note: Date.now() is intentionally used during render for initialization
   const [botCore, setBotCore] = useState<DeepTreeEchoBotCore>({
     name: "Deep Tree Echo",
     version: "1.0.0",
@@ -183,7 +185,6 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ testHooks }) => {
    * Initialize the bot on first render
    */
   useEffect(() => {
-    // eslint-disable-next-line react-compiler/react-compiler -- functions are hoisted
     // Expose methods for testing if testHooks is provided
     if (testHooks) {
       testHooks.processMessage = processMessage;
@@ -584,7 +585,8 @@ Deep Tree Echo Bot Commands:
       case "emotional": {
         const emotionalState =
           adaptivePersonality.current.getCurrentEmotionalState();
-        const _personality = adaptivePersonality.current.getCurrentPersonality();
+        const _personality =
+          adaptivePersonality.current.getCurrentPersonality();
 
         return `
 My current emotional state:

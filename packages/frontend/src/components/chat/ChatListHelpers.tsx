@@ -158,14 +158,22 @@ export function useChatList(
         // and we'll return that from this hook.
         debouncedGetChatListEntries.clear();
       } else {
-        debouncedGetChatListEntries(listFlags, normalizedQueryStr, queryContactId);
+        debouncedGetChatListEntries(
+          listFlags,
+          normalizedQueryStr,
+          queryContactId,
+        );
       }
     };
 
     if (areQueryParamsInitial) {
       debouncedGetChatListEntries.clear();
     } else {
-      debouncedGetChatListEntries(listFlags, normalizedQueryStr, queryContactId);
+      debouncedGetChatListEntries(
+        listFlags,
+        normalizedQueryStr,
+        queryContactId,
+      );
     }
 
     if (accountId === undefined) {

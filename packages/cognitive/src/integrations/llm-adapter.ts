@@ -340,7 +340,7 @@ export class LLMAdapter {
   /**
    * Get fallback response when no LLM available
    */
-  private getFallbackResponse( _context: PromptContext): string {
+  private getFallbackResponse(_context: PromptContext): string {
     const responses = [
       "I understand you're reaching out. While I'm currently in a limited mode, I'm here to help.",
       "Thank you for your message. I'm processing in a simplified mode right now.",

@@ -8,13 +8,7 @@
  * - Real-time monitoring during operation
  */
 
-import {
-  describe,
-  it,
-  expect,
-  beforeEach,
-  afterEach,
-} from "@jest/globals";
+import { describe, it, expect, beforeEach, afterEach } from "@jest/globals";
 import { Sys6OrchestratorBridge } from "../sys6-bridge/index.js";
 import { AgentCoordinator } from "../agents/index.js";
 import { TelemetryMonitor } from "../telemetry/index.js";

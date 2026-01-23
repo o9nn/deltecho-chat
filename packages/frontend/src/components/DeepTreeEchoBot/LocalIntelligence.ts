@@ -65,7 +65,7 @@ export class LocalIntelligence {
   /**
    * Analyze image using local "TinyVision" engine equivalent
    */
-  public processVision( _imageData: any): string {
+  public processVision(_imageData: any): string {
     log.info("Processing vision via Local Intelligence (TinyVision mod)");
     // Simulated local vision response
     return "[Local Vision]: I can see the image structure, but fine details require my cloud enhancements. I detect shapes and contrast, and I'm ready to process further if you enable my full vision capabilities.";
@@ -74,7 +74,7 @@ export class LocalIntelligence {
   /**
    * Process audio using local "TinyAudio" engine equivalent
    */
-  public processAudio( _audioData: any): string {
+  public processAudio(_audioData: any): string {
     log.info("Processing audio via Local Intelligence (TinyAudio mod)");
     return "[Local Audio]: Audio signal received. VAD (Voice Activity Detection) is active locally. I know you're speaking, but full transcription requires enhanced connectivity.";
   }
@@ -82,7 +82,7 @@ export class LocalIntelligence {
   /**
    * Process haptic feedback using local "TinyHaptic" engine equivalent
    */
-  public processHaptic( _sensorData: any): string {
+  public processHaptic(_sensorData: any): string {
     log.info("Processing haptic data via Local Intelligence (TinyHaptic mod)");
     return "[Local Haptic]: Tactile input registered on the innermost membrane. I feel the interaction.";
   }

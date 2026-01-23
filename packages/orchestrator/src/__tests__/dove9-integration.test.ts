@@ -1,11 +1,8 @@
+import { describe, it, expect, beforeEach, afterEach } from "@jest/globals";
 import {
-  describe,
-  it,
-  expect,
-  beforeEach,
-  afterEach,
-} from "@jest/globals";
-import { Dove9Integration, Dove9IntegrationConfig } from "../dove9-integration.js";
+  Dove9Integration,
+  Dove9IntegrationConfig,
+} from "../dove9-integration.js";
 import { EmailMessage } from "../dovecot-interface/milter-server.js";
 
 // Helper to create a complete EmailMessage

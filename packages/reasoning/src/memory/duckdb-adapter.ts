@@ -47,7 +47,7 @@ export class DuckDBAdapter {
       await this.db.instantiate(bundle.mainModule, bundle.pthreadWorker);
 
       // Initialize Drizzle with PG Proxy to bridge to DuckDB WASM
-      this.drizzleDb = drizzle(async (sql, params,_method) => {
+      this.drizzleDb = drizzle(async (sql, params, _method) => {
         try {
           const rows = await this.query(sql, params);
           return { rows };
