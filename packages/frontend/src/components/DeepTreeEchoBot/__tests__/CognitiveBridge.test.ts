@@ -873,7 +873,9 @@ describe("CognitiveBridge", () => {
       const salienceWithoutQuestion =
         state2?.cognitiveContext?.salienceScore || 0;
 
-      expect(salienceWithQuestion).toBeGreaterThanOrEqual(salienceWithoutQuestion);
+      expect(salienceWithQuestion).toBeGreaterThanOrEqual(
+        salienceWithoutQuestion,
+      );
     });
 
     it("should handle mixed sentiment messages", async () => {
