@@ -37,7 +37,14 @@ jest.mock("deep-tree-echo-core", () => ({
       dominantMood: "neutral",
       intensity: 0.5,
     }),
+    getDominantEmotion: jest.fn().mockReturnValue({
+      emotion: "neutral",
+      intensity: 0.5,
+    }),
     updateMood: jest.fn(),
+    updateEmotionalState: jest
+      .fn<() => Promise<void>>()
+      .mockResolvedValue(undefined),
   })),
   InMemoryStorage: jest.fn().mockImplementation(() => ({
     set: jest.fn(),
