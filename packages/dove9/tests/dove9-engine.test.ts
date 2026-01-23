@@ -1,5 +1,4 @@
 import { Dove9Engine } from "../src/engine/dove9-engine.js";
-import { STREAM_PHASES } from "../src/types/index.js";
 
 describe("Dove9Engine", () => {
   let engine: Dove9Engine;
