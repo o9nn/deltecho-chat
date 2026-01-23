@@ -9,9 +9,9 @@ import {
 import {
   IPCServer,
   IPCServerConfig,
-  IPCMessageType,
   IPCRequestHandler,
 } from "../ipc/server.js";
+import { IPCMessageType } from "@deltecho/ipc";
 
 describe("IPCServer", () => {
   let server: IPCServer;
