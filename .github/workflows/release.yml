@@ -33,7 +33,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libicns-utils graphicsmagick
+          sudo apt-get install -y icnsutils graphicsmagick
 
       - name: Install System Dependencies (Mac)
         if: matrix.os == 'macos-latest'
