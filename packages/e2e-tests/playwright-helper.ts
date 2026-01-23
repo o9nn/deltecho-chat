@@ -122,10 +122,18 @@ export async function createNewProfile(
 
   if (!isFirstOnboarding) {
     // add account to show onboarding screen
-    await page.getByTestId("add-account-button").click();
+    const addAccountButton = page.getByTestId("add-account-button");
+    await expect(addAccountButton).toBeVisible({ timeout: 30000 });
+    await expect(addAccountButton).toBeEnabled({ timeout: 10000 });
+    await addAccountButton.click();
   }
-  // create a new account
-  await page.getByTestId("create-account-button").click();
+
+  // Wait for create-account-button to be visible and enabled before clicking
+  // This handles slow app initialization in CI environments
+  const createAccountButton = page.getByTestId("create-account-button");
+  await expect(createAccountButton).toBeVisible({ timeout: 30000 });
+  await expect(createAccountButton).toBeEnabled({ timeout: 10000 });
+  await createAccountButton.click();
 
   await page.evaluate(
     `navigator.clipboard.writeText('dcaccount:${chatmailServer}/new')`,
