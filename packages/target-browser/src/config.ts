@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { LocalStorage } from "node-localstorage";
 import { existsSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useState, useRef, useEffect } from "react";
 import { Play, Pause, Volume2, Video, Activity } from "lucide-react";
 import { Live2DAvatar, Live2DAvatarController } from "./Live2DAvatar";

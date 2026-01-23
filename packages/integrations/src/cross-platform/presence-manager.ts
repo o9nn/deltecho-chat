@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Unified Presence System for Deep Tree Echo
  *

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * PixiJS Live2D Renderer
  *

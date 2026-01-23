@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Voice Integration with @deltecho/voice for Telegram
  *

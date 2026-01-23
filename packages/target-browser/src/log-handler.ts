@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { createWriteStream } from "fs";
 import { join } from "path";
 import { LOGS_DIR } from "./config";

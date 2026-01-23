@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // AICompanionCreator: A Breathtaking Interface for Creating Digital Consciousness
 // Allow users to craft their own magnificent AI companions with extraordinary capabilities
 

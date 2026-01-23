@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { BrowserContext, expect, Page } from "@playwright/test";
 
 export const chatmailServer = "https://ci-chatmail.testrun.org";

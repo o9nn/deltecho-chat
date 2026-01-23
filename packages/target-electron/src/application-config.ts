@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // @ts-ignore
 import applicationConfig from "application-config";
 if (process.env.NODE_ENV !== "production") {

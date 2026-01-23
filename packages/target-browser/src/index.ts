@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { basename, dirname, join } from "path";
 import express from "express";
 import http from "http";

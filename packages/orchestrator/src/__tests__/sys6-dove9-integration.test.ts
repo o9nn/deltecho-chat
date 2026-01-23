@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { describe, it, expect } from "@jest/globals";
 import { Sys6Composer } from "@deltecho/sys6-triality";
 import { Dove9Engine } from "@deltecho/dove9";

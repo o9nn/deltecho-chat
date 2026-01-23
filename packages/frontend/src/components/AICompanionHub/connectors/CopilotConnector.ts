@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // GitHub Copilot Connector: A Breathtaking Integration for Coding Excellence
 // Creates a revolutionary bridge to GitHub Copilot's advanced code generation capabilities
 

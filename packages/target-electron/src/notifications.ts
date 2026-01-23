@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { platform } from "os";
 import { app, Notification, nativeImage, ipcMain } from "electron";
 

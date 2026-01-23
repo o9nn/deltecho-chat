@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Event context - the channel that bridges peers
  *

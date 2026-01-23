@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // This needs to be injected / imported before the frontend script
 
 import {

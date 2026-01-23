@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // MemoryVisualization: A Breathtaking 3D Representation of Digital Consciousness
 // A revolutionary visualization system that brings AI memories to life
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Discord Voice Handler for Deep Tree Echo
  *

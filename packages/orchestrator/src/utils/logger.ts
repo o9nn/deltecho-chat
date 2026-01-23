@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Logger utility for Deep Tree Echo Orchestrator
  * Provides consistent logging across all orchestrator components

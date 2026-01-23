@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Shared Memory Access for Cross-Platform Integrations
  *

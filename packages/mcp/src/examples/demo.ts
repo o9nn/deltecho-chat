@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * @fileoverview Deep Tree Echo MCP Server Demo
  *

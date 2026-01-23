@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Channel, invoke } from "@tauri-apps/api/core";
 import type {
   ReceivedStatusUpdate,

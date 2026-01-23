@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Live2D Model Component for React
  *

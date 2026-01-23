@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { invoke } from "@tauri-apps/api/core";
 import type { Theme } from "@deltachat-desktop/shared/shared-types";
 

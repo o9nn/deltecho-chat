@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Deep Tree Echo Discord Bot
  *

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Atom, AtomType } from "../atomspace/atom.js";
 
 export interface FederationQuery {

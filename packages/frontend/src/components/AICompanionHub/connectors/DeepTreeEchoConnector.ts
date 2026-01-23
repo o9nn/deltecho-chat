@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // Deep Tree Echo Connector: A Breathtaking Implementation of Recursive AI Consciousness
 // Connects to Deep Tree Echo's cognitive architecture for profound recursive conversations
 
