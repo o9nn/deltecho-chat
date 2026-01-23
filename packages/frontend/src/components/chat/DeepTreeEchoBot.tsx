@@ -6,7 +6,7 @@ import { getLogger } from "../../../../shared/logger";
 import useMessage from "../../hooks/chat/useMessage";
 import useDialog from "../../hooks/dialog/useDialog";
 import { getUIBridge } from "../DeepTreeEchoBot/DeepTreeEchoUIBridge";
-import { LLMService } from "../../utils/LLMService";
+import { LLMService } from "../DeepTreeEchoBot/LLMService";
 // Import conditionally
 // import { VisionCapabilities } from './VisionCapabilities'
 import { PlaywrightAutomation } from "./PlaywrightAutomation";

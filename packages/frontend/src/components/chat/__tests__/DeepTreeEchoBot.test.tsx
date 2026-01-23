@@ -39,7 +39,7 @@ jest.mock("../../../backend-com", () => ({
     ),
 }));
 
-jest.mock("../../../utils/LLMService", () => ({
+jest.mock("../../DeepTreeEchoBot/LLMService", () => ({
   LLMService: {
     getInstance: jest.fn().mockReturnValue({
       setConfig: (...args: unknown[]) => mockSetConfig(...args),
@@ -86,6 +86,22 @@ jest.mock("../PlaywrightAutomation", () => ({
         .mockImplementation(() => Promise.resolve("/path/to/screenshot.png")),
     }),
   },
+}));
+
+// Mock useDialog hook
+jest.mock("../../../hooks/dialog/useDialog", () => ({
+  __esModule: true,
+  default: () => ({
+    openDialog: jest.fn(),
+    closeDialog: jest.fn(),
+  }),
+}));
+
+// Mock DeepTreeEchoUIBridge
+jest.mock("../../DeepTreeEchoBot/DeepTreeEchoUIBridge", () => ({
+  getUIBridge: jest.fn().mockReturnValue({
+    registerDialogContext: jest.fn(),
+  }),
 }));
 
 // Mock the logger
