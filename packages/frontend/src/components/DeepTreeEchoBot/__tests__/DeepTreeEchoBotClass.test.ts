@@ -35,7 +35,13 @@ jest.mock("../RAGMemoryStore", () => ({
     getInstance: jest.fn().mockReturnValue({
       setEnabled: jest.fn(),
       storeMemory: jest.fn(),
-      getConversationContext: jest.fn().mockReturnValue([]), // Add this
+      getConversationContext: jest.fn().mockReturnValue([]),
+      getStats: jest.fn().mockReturnValue({ totalMemories: 5, totalReflections: 2, memoriesByChat: {} }),
+      getMemoriesByChatId: jest.fn().mockReturnValue([]),
+      exportToMindStream: jest.fn().mockReturnValue([
+        { id: '1', content: 'test thought', type: 'thought' }
+      ]),
+      getAllVisualMemories: jest.fn().mockReturnValue([]),
     }),
   },
 }));
@@ -58,6 +64,13 @@ jest.mock("../AgenticLLMService", () => ({
     getInstance: jest.fn().mockReturnValue({
       configure: jest.fn(),
       processMessageAgentic: jest.fn(),
+    }),
+  },
+}));
+jest.mock("../../../utils/DeploymentService", () => ({
+  DeploymentService: {
+    getInstance: jest.fn().mockReturnValue({
+      deploy: jest.fn().mockResolvedValue("https://mock-garden.com"),
     }),
   },
 }));
@@ -280,5 +293,39 @@ describe("DeepTreeEchoBot Class", () => {
       "http://example.com/video.mp4",
     );
     expect(videoMemory[0].metadata.frame_count).toBe(2);
+  });
+
+  it("should generate mind data with /publish command", async () => {
+    const options: any = {
+      enabled: true,
+      visionEnabled: true,
+      memoryEnabled: true,
+    };
+    bot = new DeepTreeEchoBot(options);
+
+    const message = {
+      text: "/publish"
+    };
+
+    await bot.processMessage(1, 100, 201, message);
+
+    // Wait for async publish delay (mocked adapter has 1500ms delay, but here we mock the service directly)
+    // The previous implementation had a direct delay, now it's inside the service.
+    // If we mock the service to resolve immediately, we don't need a huge wait, but processMessage is async.
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    const memoryStoreMock = require('../RAGMemoryStore').RAGMemoryStore.getInstance();
+    const deploymentServiceMock = require('../../../utils/DeploymentService').DeploymentService.getInstance();
+
+    expect(memoryStoreMock.getStats).toHaveBeenCalled();
+    expect(memoryStoreMock.exportToMindStream).toHaveBeenCalled();
+    expect(memoryStoreMock.getAllVisualMemories).toHaveBeenCalled();
+    expect(deploymentServiceMock.deploy).toHaveBeenCalled();
+
+    // Verify confirmation message sent
+    const { BackendRemote } = require('../../../backend-com');
+    // Should send "Publishing..." then "Updated!"
+    expect(BackendRemote.rpc.miscSendTextMessage).toHaveBeenCalledTimes(2);
+    expect(BackendRemote.rpc.miscSendTextMessage).toHaveBeenLastCalledWith(1, 100, expect.stringContaining("Digital Garden Updated"));
   });
 });

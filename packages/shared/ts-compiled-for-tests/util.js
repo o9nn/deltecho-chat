@@ -23,7 +23,7 @@ export function throttle(fn, wait) {
           fn(...args);
           lastTime = performance.now();
         },
-        Math.max(wait - (performance.now() - lastTime), 0),
+        Math.max(wait - (performance.now() - lastTime), 0)
       );
     }
   };

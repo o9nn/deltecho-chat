@@ -45,7 +45,7 @@ export function getDefaultState() {
     useSystemUIFont: false,
     contentProtectionEnabled: false,
     isMentionsEnabled: true,
-    autostart: true,
+    autostart: true
   };
 }
 //# sourceMappingURL=state.js.map
