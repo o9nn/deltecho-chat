@@ -95,8 +95,8 @@ jest.mock("../double-membrane-integration.js", () => ({
 // Mock other dependencies
 jest.mock("../deltachat-interface/index.js", () => ({
   DeltaChatInterface: jest.fn().mockImplementation(() => ({
-    connect: jest.fn().mockResolvedValue(undefined),
-    disconnect: jest.fn().mockResolvedValue(undefined),
+    connect: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
+    disconnect: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
     isConnected: jest.fn().mockReturnValue(false),
     on: jest.fn(),
   })),
@@ -104,8 +104,8 @@ jest.mock("../deltachat-interface/index.js", () => ({
 
 jest.mock("../dovecot-interface/index.js", () => ({
   DovecotInterface: jest.fn().mockImplementation(() => ({
-    start: jest.fn().mockResolvedValue(undefined),
-    stop: jest.fn().mockResolvedValue(undefined),
+    start: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
+    stop: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
     isRunning: jest.fn().mockReturnValue(false),
     on: jest.fn(),
   })),
@@ -113,30 +113,30 @@ jest.mock("../dovecot-interface/index.js", () => ({
 
 jest.mock("../ipc/server.js", () => ({
   IPCServer: jest.fn().mockImplementation(() => ({
-    start: jest.fn().mockResolvedValue(undefined),
-    stop: jest.fn().mockResolvedValue(undefined),
+    start: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
+    stop: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
   })),
 }));
 
 jest.mock("../scheduler/task-scheduler.js", () => ({
   TaskScheduler: jest.fn().mockImplementation(() => ({
-    start: jest.fn().mockResolvedValue(undefined),
-    stop: jest.fn().mockResolvedValue(undefined),
+    start: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
+    stop: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
   })),
 }));
 
 jest.mock("../webhooks/webhook-server.js", () => ({
   WebhookServer: jest.fn().mockImplementation(() => ({
-    start: jest.fn().mockResolvedValue(undefined),
-    stop: jest.fn().mockResolvedValue(undefined),
+    start: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
+    stop: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
   })),
 }));
 
 jest.mock("../dove9-integration.js", () => ({
   Dove9Integration: jest.fn().mockImplementation(() => ({
-    initialize: jest.fn().mockResolvedValue(undefined),
-    start: jest.fn().mockResolvedValue(undefined),
-    stop: jest.fn().mockResolvedValue(undefined),
+    initialize: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
+    start: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
+    stop: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
     onResponse: jest.fn(),
     getCognitiveState: jest.fn().mockReturnValue({ running: true }),
   })),
