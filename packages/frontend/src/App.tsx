@@ -65,7 +65,7 @@ export default function App(_props: any) {
       const desktop_settings = await runtime.getDesktopSettings();
       await reloadLocaleData(desktop_settings.locale || "en");
     })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, []);
 
   useEffect(() => {
@@ -73,7 +73,7 @@ export default function App(_props: any) {
       await runtime.setLocale(locale);
       await reloadLocaleData(locale);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [localeData]);
 
   if (!localeData) return null;
