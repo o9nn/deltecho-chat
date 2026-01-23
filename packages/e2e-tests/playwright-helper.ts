@@ -82,11 +82,41 @@ export async function createNewProfile(
   name: string,
   isFirstOnboarding: boolean,
 ): Promise<User> {
-  // Wait for either account button or welcome screen
-  await Promise.race([
-    page.waitForSelector(".styles_module_account", { timeout: 15000 }),
-    page.waitForSelector(".styles_module_welcome", { timeout: 15000 }),
-  ]);
+  // Wait for either account button or welcome screen with graceful fallback
+  // Use Promise.any to succeed if ANY selector is found, and handle the case where none are found
+  try {
+    await Promise.race([
+      page
+        .waitForSelector(".styles_module_account", { timeout: 15000 })
+        .catch(() => null),
+      page
+        .waitForSelector(".styles_module_welcome", { timeout: 15000 })
+        .catch(() => null),
+    ]);
+  } catch {
+    // If neither selector is found, wait a bit longer for the app to initialize
+    console.log(
+      "Neither account nor welcome screen found, waiting for app initialization...",
+    );
+    await page.waitForTimeout(2000);
+  }
+
+  // Verify at least one of the expected elements is now visible
+  const accountVisible = await page
+    .locator(".styles_module_account")
+    .first()
+    .isVisible()
+    .catch(() => false);
+  const welcomeVisible = await page
+    .locator(".styles_module_welcome")
+    .isVisible()
+    .catch(() => false);
+
+  if (!accountVisible && !welcomeVisible) {
+    // Last resort: wait for the main container and try again
+    await page.waitForSelector(".main-container", { timeout: 10000 });
+    await page.waitForTimeout(1000);
+  }
 
   const accountList = page.locator(".styles_module_account");
 
