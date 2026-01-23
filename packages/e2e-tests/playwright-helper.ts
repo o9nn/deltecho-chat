@@ -190,6 +190,13 @@ export async function createNewProfile(
 
   await page.getByTestId("login-button").click();
 
+  // Wait for the onboarding dialog to close (account creation complete)
+  // This can take a while in CI as the chatmail account is being created
+  console.log("Waiting for account creation to complete...");
+  await expect(page.getByTestId("onboarding-dialog")).not.toBeVisible({
+    timeout: 120000,
+  });
+
   // Wait for account to be created and active
   const accountList = page.locator("button[x-account-sidebar-account-id]");
   await expect(accountList.last()).toHaveClass(/_active(\s|$)/, {
