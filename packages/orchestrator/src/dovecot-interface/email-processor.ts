@@ -384,10 +384,11 @@ Deep Tree Echo`;
    * Determine if email should be processed
    */
   private shouldProcessEmail(email: EmailMessage): boolean {
-    // Skip bounce messages
+    // Skip bounce messages (case-insensitive)
+    const fromLower = email.from.toLowerCase();
     if (
-      email.from.includes("mailer-daemon") ||
-      email.from.includes("postmaster")
+      fromLower.includes("mailer-daemon") ||
+      fromLower.includes("postmaster")
     ) {
       return false;
     }
