@@ -146,7 +146,7 @@ const BotSettings: React.FC<BotSettingsProps> = ({
     };
 
     loadSettings();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, []);
 
   // Handle advanced settings navigation or toggle
