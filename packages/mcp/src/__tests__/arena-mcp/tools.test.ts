@@ -101,18 +101,20 @@ function createMockArenaMembrane(): ArenaMembrane {
         },
       }),
     ),
-    forkFrame: vi.fn((frameId: string, title: string) => {
-      if (frameId === "frame-1") {
-        return {
-          frameId: `frame-fork-${Date.now()}`,
-          title,
-          messageCount: 0,
-          status: "active",
-          parentFrameId: frameId,
-        };
-      }
-      return null;
-    }),
+    forkFrame: vi.fn(
+      (frameId: string, options: { title: string; reason: string }) => {
+        if (frameId === "frame-1") {
+          return {
+            frameId: `frame-fork-${Date.now()}`,
+            title: options.title,
+            messageCount: 0,
+            status: "active",
+            parentFrameId: frameId,
+          };
+        }
+        return null;
+      },
+    ),
     addLore: vi.fn(
       (entry: {
         category: string;
@@ -449,10 +451,10 @@ describe("Arena Tools", () => {
       });
 
       expect(forked).toBeDefined();
-      expect(arena.forkFrame).toHaveBeenCalledWith(
-        "frame-1",
-        "Alternative Path",
-      );
+      expect(arena.forkFrame).toHaveBeenCalledWith("frame-1", {
+        title: "Alternative Path",
+        reason: "fork",
+      });
     });
 
     it("should return null for non-existent frame", () => {

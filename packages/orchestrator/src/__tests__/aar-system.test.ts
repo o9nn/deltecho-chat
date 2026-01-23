@@ -133,6 +133,9 @@ describe("AAR System", () => {
         await system.processMessage(ctx);
       }
 
+      // Wait for at least one sync cycle to complete (syncIntervalMs is 100ms)
+      await new Promise((resolve) => setTimeout(resolve, 150));
+
       const state = system.getState();
       expect(state.coherence).toBeGreaterThan(0);
       expect(state.cycle).toBeGreaterThan(0);

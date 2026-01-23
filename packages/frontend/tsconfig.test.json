@@ -2,6 +2,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./dist-test",
+    "rootDir": ".",
     "types": [
       "node",
       "jest",
@@ -9,8 +10,7 @@
       "react-dom",
       "@testing-library/jest-dom"
     ],
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["src", "jest.setup.ts", "**/*.test.ts", "**/*.test.tsx"],
   "exclude": ["node_modules", "dist"]
