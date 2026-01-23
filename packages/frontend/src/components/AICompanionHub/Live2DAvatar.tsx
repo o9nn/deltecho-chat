@@ -129,11 +129,29 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
   // Initialize the avatar
   useEffect(() => {
     let mounted = true;
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
     const initializeAvatar = async () => {
       if (!containerRef.current) return;
 
       setState((prev) => ({ ...prev, isLoading: true, error: null }));
+
+      // Set a timeout to prevent infinite loading state
+      timeoutId = setTimeout(() => {
+        if (mounted) {
+          setState((prev) => {
+            // Only set error if still loading (not already loaded or errored)
+            if (prev.isLoading && !prev.isLoaded && !prev.error) {
+              return {
+                ...prev,
+                isLoading: false,
+                error: new Error("Avatar loading timed out"),
+              };
+            }
+            return prev;
+          });
+        }
+      }, 10000); // 10 second timeout
 
       try {
         // Dynamic import to avoid SSR issues
@@ -152,6 +170,7 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
             scale,
             onLoad: () => {
               if (mounted) {
+                if (timeoutId) clearTimeout(timeoutId);
                 setState((prev) => ({
                   ...prev,
                   isLoading: false,
@@ -162,6 +181,7 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
             },
             onError: (error: Error) => {
               if (mounted) {
+                if (timeoutId) clearTimeout(timeoutId);
                 setState((prev) => ({
                   ...prev,
                   isLoading: false,
@@ -178,6 +198,7 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
         onControllerReady?.(controller);
       } catch (error) {
         if (mounted) {
+          if (timeoutId) clearTimeout(timeoutId);
           const err = error instanceof Error ? error : new Error(String(error));
           setState((prev) => ({
             ...prev,
@@ -193,6 +214,7 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
 
     return () => {
       mounted = false;
+      if (timeoutId) clearTimeout(timeoutId);
       managerRef.current?.dispose();
       managerRef.current = null;
       controllerRef.current = null;
