@@ -412,7 +412,8 @@ const BotSettings: React.FC<BotSettingsProps> = ({
               <div className="toggle-slider"></div>
             </div>
             <button
-              type="button" className="test-toggle-btn"
+              type="button"
+              className="test-toggle-btn"
               onClick={() =>
                 handleChange("memoryEnabled", !settings.memoryEnabled)
               }
@@ -447,7 +448,8 @@ const BotSettings: React.FC<BotSettingsProps> = ({
               <div className="toggle-slider radiant-glow"></div>
             </div>
             <button
-              type="button" className="test-toggle-btn"
+              type="button"
+              className="test-toggle-btn"
               onClick={() =>
                 handleChange("visionEnabled", !settings.visionEnabled)
               }
@@ -481,7 +483,8 @@ const BotSettings: React.FC<BotSettingsProps> = ({
               <div className="toggle-slider radiant-glow"></div>
             </div>
             <button
-              type="button" className="test-toggle-btn"
+              type="button"
+              className="test-toggle-btn"
               onClick={() =>
                 handleChange(
                   "webAutomationEnabled",
@@ -518,7 +521,8 @@ const BotSettings: React.FC<BotSettingsProps> = ({
               <div className="toggle-slider radiant-glow"></div>
             </div>
             <button
-              type="button" className="test-toggle-btn"
+              type="button"
+              className="test-toggle-btn"
               onClick={() =>
                 handleChange("embodimentEnabled", !settings.embodimentEnabled)
               }
@@ -582,7 +586,8 @@ const BotSettings: React.FC<BotSettingsProps> = ({
         <div className="setting-section-header">
           <h3>Advanced Cognitive Architecture</h3>
           <button
-            type="button" className="toggle-advanced-button"
+            type="button"
+            className="toggle-advanced-button"
             onClick={handleOpenAdvancedSettings}
             disabled={!settings.enabled}
           >

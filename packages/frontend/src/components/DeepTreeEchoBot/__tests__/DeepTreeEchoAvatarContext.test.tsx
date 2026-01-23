@@ -24,7 +24,8 @@ function TestConsumer() {
       </span>
       <span data-testid="audio-level">{avatar.state.audioLevel}</span>
       <button
-        type="button" data-testid="set-listening"
+        type="button"
+        data-testid="set-listening"
         onClick={() =>
           avatar.setProcessingState(AvatarProcessingState.LISTENING)
         }
@@ -32,13 +33,15 @@ function TestConsumer() {
         Set Listening
       </button>
       <button
-        type="button" data-testid="set-speaking"
+        type="button"
+        data-testid="set-speaking"
         onClick={() => avatar.setIsSpeaking(true)}
       >
         Set Speaking
       </button>
       <button
-        type="button" data-testid="set-audio"
+        type="button"
+        data-testid="set-audio"
         onClick={() => avatar.setAudioLevel(0.75)}
       >
         Set Audio

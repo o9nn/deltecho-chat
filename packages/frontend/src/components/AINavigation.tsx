@@ -19,7 +19,8 @@ const AINavigation: React.FC<AINavigationProps> = ({
     return (
       <div className="ai-neighborhood-navigation ai-neighborhood-navigation-back">
         <button
-          type="button" className="ai-neighborhood-button ai-back-button"
+          type="button"
+          className="ai-neighborhood-button ai-back-button"
           onClick={() => changeScreen(Screens.Main)}
           title="Return to Chat (Ctrl+Shift+A)"
         >
@@ -35,7 +36,8 @@ const AINavigation: React.FC<AINavigationProps> = ({
   return (
     <div className="ai-neighborhood-navigation">
       <button
-        type="button" className={`ai-neighborhood-button ${isActive ? "active" : ""}`}
+        type="button"
+        className={`ai-neighborhood-button ${isActive ? "active" : ""}`}
         onClick={() => changeScreen(Screens.AINeighborhood)}
         title="Enter AI Companion Neighborhood (Ctrl+Shift+A)"
       >

@@ -115,7 +115,8 @@ export const DivergenceMonitor: React.FC = () => {
               Internal Journals (Cognitive Streams)
             </div>
             <button
-              type="button" className={styles.triggerButton}
+              type="button"
+              className={styles.triggerButton}
               onClick={() => {
                 internalJournalManager.addEntry(
                   "diary",
@@ -131,7 +132,8 @@ export const DivergenceMonitor: React.FC = () => {
             {(["dream", "learning", "diary", "project"] as JournalType[]).map(
               (type) => (
                 <button
-                  type="button" key={type}
+                  type="button"
+                  key={type}
                   className={`${styles.journalTab} ${
                     activeJournal === type ? styles.active : ""
                   }`}

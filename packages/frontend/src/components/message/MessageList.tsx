@@ -1032,7 +1032,8 @@ function JumpDownButton({
           {countToShow}
         </div>
         <button
-          type="button" className="button"
+          type="button"
+          className="button"
           onClick={() => {
             jumpToMessage({
               msgId: undefined,

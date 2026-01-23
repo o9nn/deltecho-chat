@@ -455,7 +455,8 @@ const ProactiveStatusIndicator: React.FC<ProactiveStatusIndicatorProps> = ({
           Proactive Messaging
         </h4>
         <button
-          type="button" className="toggle-expand"
+          type="button"
+          className="toggle-expand"
           onClick={() => setIsExpanded(!isExpanded)}
         >
           {isExpanded ? "▲" : "▼"}
@@ -526,7 +527,8 @@ const ProactiveStatusIndicator: React.FC<ProactiveStatusIndicatorProps> = ({
                     </div>
                   </div>
                   <button
-                    type="button" className="cancel-btn"
+                    type="button"
+                    className="cancel-btn"
                     onClick={() => handleCancelQueued(msg.id)}
                     title="Cancel"
                   >
@@ -554,14 +556,16 @@ const ProactiveStatusIndicator: React.FC<ProactiveStatusIndicatorProps> = ({
                 }
               />
               <button
-                type="button" className="schedule-btn"
+                type="button"
+                className="schedule-btn"
                 onClick={() => setShowScheduler(!showScheduler)}
                 title="Schedule"
               >
                 📅
               </button>
               <button
-                type="button" className="send-btn"
+                type="button"
+                className="send-btn"
                 onClick={handleQuickSend}
                 disabled={!quickMessage.trim()}
               >
@@ -580,7 +584,8 @@ const ProactiveStatusIndicator: React.FC<ProactiveStatusIndicatorProps> = ({
                     min={new Date().toISOString().slice(0, 16)}
                   />
                   <button
-                    type="button" className="send-btn"
+                    type="button"
+                    className="send-btn"
                     onClick={handleSchedule}
                     disabled={!quickMessage.trim() || !scheduleTime}
                   >

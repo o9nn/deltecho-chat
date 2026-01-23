@@ -80,7 +80,8 @@ export default function Reactions(props: Props) {
         </span>
       )}
       <button
-        type="button" className={styles.openReactionsListDialogButton}
+        type="button"
+        className={styles.openReactionsListDialogButton}
         aria-label={tx("more_info_desktop")}
         onClick={handleClick}
         tabIndex={props.tabindexForInteractiveContents}

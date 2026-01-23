@@ -67,7 +67,8 @@ export default function ImageSelector({
         />
         {!imageUrl && (
           <button
-            type="button" title={selectLabel ? selectLabel : tx("profile_image_select")}
+            type="button"
+            title={selectLabel ? selectLabel : tx("profile_image_select")}
             aria-label={selectLabel ? selectLabel : tx("profile_image_select")}
             className={styles.imageSelectorButton}
             onClick={handleSelect}
@@ -77,7 +78,8 @@ export default function ImageSelector({
         )}
         {imageUrl && (
           <button
-            type="button" title={removeLabel ? removeLabel : tx("profile_image_delete")}
+            type="button"
+            title={removeLabel ? removeLabel : tx("profile_image_delete")}
             aria-label={removeLabel ? removeLabel : tx("profile_image_delete")}
             className={styles.imageSelectorButton}
             onClick={handleRemove}

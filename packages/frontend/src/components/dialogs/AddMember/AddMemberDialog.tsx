@@ -87,7 +87,8 @@ export const AddMemberChip = (props: {
         {contact.isVerified && <InlineVerifiedIcon />}
       </div>
       <button
-        type="button" className={styles.removeMember}
+        type="button"
+        className={styles.removeMember}
         onClick={() => onRemoveClick(contact)}
         aria-label="Remove"
       >

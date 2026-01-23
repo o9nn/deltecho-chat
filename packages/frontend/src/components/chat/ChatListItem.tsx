@@ -197,7 +197,8 @@ function ChatListItemArchiveLink({
 
   return (
     <button
-      type="button" ref={ref}
+      type="button"
+      ref={ref}
       tabIndex={tabIndex}
       onClick={onClick}
       onKeyDown={tabindexOnKeydown}
@@ -246,7 +247,8 @@ function ChatListItemError({
 
   return (
     <button
-      type="button" ref={ref}
+      type="button"
+      ref={ref}
       tabIndex={tabIndex}
       onClick={onClick}
       onKeyDown={tabindexOnKeydown}
@@ -309,7 +311,8 @@ function ChatListItemNormal({
 
   return (
     <button
-      type="button" ref={ref}
+      type="button"
+      ref={ref}
       tabIndex={tabIndex}
       onClick={onClick}
       onKeyDown={tabindexOnKeydown}
@@ -451,7 +454,8 @@ export const ChatListItemMessageResult = React.memo<{
 
   return (
     <button
-      type="button" ref={ref}
+      type="button"
+      ref={ref}
       tabIndex={tabIndex}
       onClick={onClick}
       onKeyDown={tabindexOnKeydown}

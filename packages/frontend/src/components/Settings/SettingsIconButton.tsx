@@ -36,7 +36,8 @@ export default function SettingsIconButton({
 }: Props) {
   return (
     <button
-      type="button" className={styles.settingsIconButton}
+      type="button"
+      className={styles.settingsIconButton}
       onClick={onClick}
       data-testid={dataTestid}
     >

@@ -125,7 +125,8 @@ function ReactionsDialogListItem(props: {
 
   return (
     <button
-      type="button" ref={ref}
+      type="button"
+      ref={ref}
       onClick={() => {
         if (notFromSelf) {
           onClickNonSelf(contact.id);

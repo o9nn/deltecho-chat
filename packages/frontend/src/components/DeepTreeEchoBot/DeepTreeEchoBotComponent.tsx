@@ -931,7 +931,8 @@ Self-reflection complete:
         }}
       >
         <button
-          type="button" onClick={() => setShowScientificDashboard(!showScientificDashboard)}
+          type="button"
+          onClick={() => setShowScientificDashboard(!showScientificDashboard)}
           style={{
             padding: "8px 16px",
             cursor: "pointer",
@@ -976,7 +977,8 @@ Self-reflection complete:
               }}
             >
               <button
-                type="button" onClick={() => setShowScientificDashboard(false)}
+                type="button"
+                onClick={() => setShowScientificDashboard(false)}
                 style={{
                   background: "none",
                   border: "none",

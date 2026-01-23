@@ -440,7 +440,8 @@ const Composer = forwardRef<
     return (
       <div ref={ref} className="composer contact-request">
         <button
-          type="button" className="contact-request-button delete"
+          type="button"
+          className="contact-request-button delete"
           onClick={async () => {
             if (selectedChat.chatType !== C.DC_CHAT_TYPE_SINGLE) {
               // if chat gets deleted instead of blocked ask user for confirmation
@@ -464,7 +465,8 @@ const Composer = forwardRef<
             : tx("delete")}
         </button>
         <button
-          type="button" className="contact-request-button accept"
+          type="button"
+          className="contact-request-button accept"
           onClick={() => {
             EffectfulBackendActions.acceptChat(selectedAccountId(), chatId);
           }}
@@ -477,7 +479,8 @@ const Composer = forwardRef<
     return (
       <div ref={ref} className="composer contact-request">
         <button
-          type="button" className="contact-request-button"
+          type="button"
+          className="contact-request-button"
           onClick={async () => {
             openDialog(ProtectionBrokenDialog, { name: selectedChat.name });
           }}
@@ -485,7 +488,8 @@ const Composer = forwardRef<
           {tx("more_info_desktop")}
         </button>
         <button
-          type="button" className="contact-request-button"
+          type="button"
+          className="contact-request-button"
           onClick={() => {
             EffectfulBackendActions.acceptChat(selectedAccountId(), chatId);
           }}
@@ -631,7 +635,7 @@ const Composer = forwardRef<
           {!runtime.getRuntimeInfo().hideEmojiAndStickerPicker &&
             !recording && (
               <button
-               type="button"  type="button"
+                type="button"
                 className="emoji-button"
                 ref={pickerButtonRef}
                 onClick={onEmojiIconClick}

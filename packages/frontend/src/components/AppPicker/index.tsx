@@ -261,7 +261,8 @@ export function AppPicker({ onAppSelected }: Props) {
           <p>{app.short_description}</p>
           {setSearchQuery && app.author && (
             <button
-              type="button" onClick={() => {
+              type="button"
+              onClick={() => {
                 if (setSearchQuery && app.author) {
                   setSearchQuery(app.author);
                   if (setSelectedAppInfo) {
@@ -316,7 +317,8 @@ export function AppPicker({ onAppSelected }: Props) {
               )}
               {filteredApps.map((app) => (
                 <button
-                  type="button" key={app.app_id}
+                  type="button"
+                  key={app.app_id}
                   className={styles.appListItem}
                   onClick={() => setSelectedAppInfo(app)}
                 >
@@ -333,7 +335,8 @@ export function AppPicker({ onAppSelected }: Props) {
         <div className={styles.tabBar}>
           {categories.map((category) => (
             <button
-              type="button" key={category}
+              type="button"
+              key={category}
               className={classNames(styles.tab, {
                 [styles.activeTab]: selectedCategory === category,
               })}

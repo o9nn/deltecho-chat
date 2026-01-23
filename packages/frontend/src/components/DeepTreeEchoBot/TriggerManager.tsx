@@ -708,13 +708,15 @@ const TriggerManager: React.FC<TriggerManagerProps> = ({
                 {!isEditing && !isCreating && selectedTrigger && (
                   <>
                     <button
-                      type="button" className="btn btn-secondary"
+                      type="button"
+                      className="btn btn-secondary"
                       onClick={() => handleEdit(selectedTrigger)}
                     >
                       Edit
                     </button>
                     <button
-                      type="button" className="btn btn-danger"
+                      type="button"
+                      className="btn btn-danger"
                       onClick={() => handleDelete(selectedTrigger.id)}
                     >
                       Delete
@@ -724,7 +726,8 @@ const TriggerManager: React.FC<TriggerManagerProps> = ({
                 {(isEditing || isCreating) && (
                   <>
                     <button
-                      type="button" className="btn btn-secondary"
+                      type="button"
+                      className="btn btn-secondary"
                       onClick={() => {
                         setIsEditing(false);
                         setIsCreating(false);
@@ -732,7 +735,11 @@ const TriggerManager: React.FC<TriggerManagerProps> = ({
                     >
                       Cancel
                     </button>
-                    <button type="button" className="btn btn-primary" onClick={handleSave}>
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={handleSave}
+                    >
                       Save
                     </button>
                   </>

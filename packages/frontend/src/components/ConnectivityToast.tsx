@@ -172,7 +172,8 @@ export default function ConnectivityToast() {
       Ensure to set `position: relative` on all interactive elements
       so that they are clickable */}
       <button
-        type="button" onClick={onInfoTextClick}
+        type="button"
+        onClick={onInfoTextClick}
         className="showInfoButton"
         aria-label={tx("connectivity")}
       ></button>
@@ -181,7 +182,8 @@ export default function ConnectivityToast() {
         <>
           <a title={networkState[1]}>{tx("connectivity_not_connected")}</a>
           <button
-            type="button" className="tryNowButton"
+            type="button"
+            className="tryNowButton"
             onClick={onTryReconnectClick}
             disabled={!tryConnectCooldown}
             // See comment above

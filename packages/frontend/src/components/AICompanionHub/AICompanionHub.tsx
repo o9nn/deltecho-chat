@@ -353,7 +353,9 @@ const AICompanionHubContent: React.FC = () => {
         <AlertCircle size={48} className="error-icon" />
         <h2>Error Connecting to AI Companions</h2>
         <p>{error}</p>
-        <button type="button" onClick={() => window.location.reload()}>Retry</button>
+        <button type="button" onClick={() => window.location.reload()}>
+          Retry
+        </button>
       </div>
     );
   }

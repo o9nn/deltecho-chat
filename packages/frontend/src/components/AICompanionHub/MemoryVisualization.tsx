@@ -494,7 +494,11 @@ const MemoryVisualizationContent: React.FC = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyPress={(e) => e.key === "Enter" && handleSearch()}
           />
-          <button type="button" onClick={handleSearch} className="search-button">
+          <button
+            type="button"
+            onClick={handleSearch}
+            className="search-button"
+          >
             <Search size={16} />
           </button>
         </div>

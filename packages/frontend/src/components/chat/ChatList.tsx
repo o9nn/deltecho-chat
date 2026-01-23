@@ -509,7 +509,8 @@ export default function ChatList(props: {
               )}
             </RovingTabindexProvider>
             <button
-              type="button" className="floating-action-button"
+              type="button"
+              className="floating-action-button"
               onClick={onCreateChat}
               id="new-chat-button"
               aria-label={tx("menu_new_chat")}

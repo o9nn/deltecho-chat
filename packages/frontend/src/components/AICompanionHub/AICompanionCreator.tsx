@@ -523,7 +523,11 @@ const AICompanionCreatorContent: React.FC<{
         )}
 
         <div className="creator-actions">
-          <button type="button" className="action-button back" onClick={prevStep}>
+          <button
+            type="button"
+            className="action-button back"
+            onClick={prevStep}
+          >
             {step === 1 && onClose ? "Cancel" : "Back"}
           </button>
           <button
