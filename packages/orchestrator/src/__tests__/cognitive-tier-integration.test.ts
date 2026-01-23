@@ -26,9 +26,11 @@ jest.mock("deep-tree-echo-core", () => ({
     debug: jest.fn(),
   }),
   LLMService: jest.fn().mockImplementation(() => ({
-    generateFullParallelResponse: jest.fn().mockResolvedValue({
-      integratedResponse: "Mock response from LLM",
-    }),
+    generateFullParallelResponse: jest
+      .fn<() => Promise<{ integratedResponse: string }>>()
+      .mockResolvedValue({
+        integratedResponse: "Mock response from LLM",
+      }),
     setConfig: jest.fn(),
   })),
   RAGMemoryStore: jest.fn().mockImplementation(() => ({
@@ -50,9 +52,11 @@ jest.mock("deep-tree-echo-core", () => ({
 // Mock Sys6 Bridge
 jest.mock("../sys6-bridge/Sys6OrchestratorBridge.js", () => ({
   Sys6OrchestratorBridge: jest.fn().mockImplementation(() => ({
-    start: jest.fn().mockResolvedValue(undefined),
-    stop: jest.fn().mockResolvedValue(undefined),
-    processMessage: jest.fn().mockResolvedValue("Mock Sys6 response"),
+    start: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
+    stop: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
+    processMessage: jest
+      .fn<() => Promise<string>>()
+      .mockResolvedValue("Mock Sys6 response"),
     getState: jest.fn().mockReturnValue({
       running: true,
       cycleNumber: 5,
@@ -69,10 +73,12 @@ jest.mock("../sys6-bridge/Sys6OrchestratorBridge.js", () => ({
 // Mock Double Membrane Integration
 jest.mock("../double-membrane-integration.js", () => ({
   DoubleMembraneIntegration: jest.fn().mockImplementation(() => ({
-    start: jest.fn().mockResolvedValue(undefined),
-    stop: jest.fn().mockResolvedValue(undefined),
+    start: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
+    stop: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
     isRunning: jest.fn().mockReturnValue(true),
-    chat: jest.fn().mockResolvedValue("Mock Membrane response"),
+    chat: jest
+      .fn<() => Promise<string>>()
+      .mockResolvedValue("Mock Membrane response"),
     getStatus: jest.fn().mockReturnValue({
       running: true,
       identityEnergy: 0.85,

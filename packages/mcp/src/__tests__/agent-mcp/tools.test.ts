@@ -47,6 +47,7 @@ function createMockAgentMembrane(): AgentMembrane {
       return null;
     }),
     addTransaction: vi.fn((_tx: any) => `tx-${Date.now()}`),
+    recordTransaction: vi.fn((_tx: any) => `tx-${Date.now()}`),
     addExperience: vi.fn(),
     evolve: vi.fn((experiences: number) => ({
       experienceIntegrated: experiences,
@@ -359,7 +360,7 @@ describe("Agent Tools", () => {
       });
 
       expect(typeof txId).toBe("string");
-      expect(agent.addTransaction).toHaveBeenCalled();
+      expect(agent.recordTransaction).toHaveBeenCalled();
     });
   });
 

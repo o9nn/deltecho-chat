@@ -19,8 +19,8 @@ jest.mock("../dovecot-interface/milter-server.js", () => ({
     on: jest.fn(),
     off: jest.fn(),
     emit: jest.fn(),
-    start: jest.fn().mockResolvedValue(undefined),
-    stop: jest.fn().mockResolvedValue(undefined),
+    start: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
+    stop: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
   })),
   MilterConfig: {},
   EmailMessage: {},
@@ -31,16 +31,18 @@ jest.mock("../dovecot-interface/lmtp-server.js", () => ({
     on: jest.fn(),
     off: jest.fn(),
     emit: jest.fn(),
-    start: jest.fn().mockResolvedValue(undefined),
-    stop: jest.fn().mockResolvedValue(undefined),
+    start: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
+    stop: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
   })),
   LMTPConfig: {},
 }));
 
 jest.mock("../dovecot-interface/email-processor.js", () => ({
   EmailProcessor: jest.fn().mockImplementation(() => ({
-    processEmail: jest.fn().mockResolvedValue("AI Response"),
-    initialize: jest.fn().mockResolvedValue(undefined),
+    processEmail: jest
+      .fn<() => Promise<string>>()
+      .mockResolvedValue("AI Response"),
+    initialize: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
   })),
 }));
 
