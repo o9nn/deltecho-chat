@@ -36,6 +36,7 @@
     "build:core": "pnpm --filter=deep-tree-echo-core build",
     "build:orchestrator": "pnpm --filter=deep-tree-echo-orchestrator build",
     "start:orchestrator": "pnpm --filter=deep-tree-echo-orchestrator start",
+    "build:tauri": "pnpm --filter=@deltachat-desktop/target-tauri tauri build",
     "start:bot": "npx ts-node bin/deltecho-bot.ts",
     "reset:node_modules": "rm -rf node_modules && rm -rf packages/*/node_modules || true && pnpm i"
   },
