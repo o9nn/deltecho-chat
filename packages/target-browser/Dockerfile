@@ -1,0 +1,71 @@
+# DeltEcho Chat Browser Target - Cloudflare Containers
+# Multi-stage build for optimal image size
+
+# Stage 1: Build the application
+FROM node:20-slim AS builder
+
+# Install pnpm
+RUN npm install -g pnpm
+
+WORKDIR /app
+
+# Copy package files first for better caching
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY packages/target-browser/package.json ./packages/target-browser/
+COPY packages/frontend/package.json ./packages/frontend/
+COPY packages/shared/package.json ./packages/shared/
+COPY packages/runtime/package.json ./packages/runtime/
+COPY packages/avatar/package.json ./packages/avatar/
+COPY packages/cognitive/package.json ./packages/cognitive/
+
+# Install dependencies
+RUN pnpm install --frozen-lockfile
+
+# Copy source code
+COPY . .
+
+# Build the browser target
+RUN pnpm build:browser
+
+# Stage 2: Production image
+FROM node:20-slim AS runner
+
+# Install curl for healthchecks and download deltachat-rpc-server
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Download deltachat-rpc-server binary
+ARG DELTACHAT_CORE_VERSION=2.38.0
+RUN curl -L -o /usr/local/bin/deltachat-rpc-server \
+    "https://github.com/chatmail/core/releases/download/v${DELTACHAT_CORE_VERSION}/deltachat-rpc-server-x86_64-linux" \
+    && chmod +x /usr/local/bin/deltachat-rpc-server
+
+WORKDIR /app
+
+# Copy built application from builder stage
+COPY --from=builder /app/packages/target-browser/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/packages/target-browser/node_modules ./packages/target-browser/node_modules
+
+# Create directories for data persistence
+RUN mkdir -p /data/accounts /data/logs /data/background
+
+# Environment variables
+ENV NODE_ENV=production
+ENV DC_ACCOUNTS_PATH=/data/accounts
+ENV DATA_DIR=/data
+ENV DIST_DIR=/app/dist
+ENV WEB_PORT=8080
+ENV USE_HTTP_IN_TEST=true
+
+# Expose the port
+EXPOSE 8080
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8080/ || exit 1
+
+# Start the server
+CMD ["node", "dist/server.js"]
