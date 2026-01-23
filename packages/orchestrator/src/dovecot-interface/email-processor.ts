@@ -384,6 +384,21 @@ Deep Tree Echo`;
    * Determine if email should be processed
    */
   private shouldProcessEmail(email: EmailMessage): boolean {
+    // Skip emails not addressed to the bot
+    const isAddressedToBot =
+      email.to.some((addr) =>
+        addr.toLowerCase().includes(this.botEmailAddress.toLowerCase()),
+      ) ||
+      email.cc.some((addr) =>
+        addr.toLowerCase().includes(this.botEmailAddress.toLowerCase()),
+      ) ||
+      email.bcc.some((addr) =>
+        addr.toLowerCase().includes(this.botEmailAddress.toLowerCase()),
+      );
+    if (!isAddressedToBot) {
+      return false;
+    }
+
     // Skip bounce messages (case-insensitive)
     const fromLower = email.from.toLowerCase();
     if (
