@@ -1,0 +1,59 @@
+# Log convention ignore file
+# Files listed here are excluded from the console.log convention check
+# These files either:
+# - Are third-party/vendor code (cubism SDK)
+# - Are test files where console.log is acceptable
+# - Are CLI tools/bots that use console for output
+# - Are logger implementations themselves
+# - Are upstream code that we don't modify
+
+# Third-party SDK
+cubism/
+
+# Test files
+packages/e2e-tests/
+packages/orchestrator/src/__tests__/
+test_exports.ts
+
+# CLI tools and bots (console output is expected)
+bin/deltecho-bot.ts
+deltecho-bot-smol.ts
+packages/discord/src/bot.ts
+packages/telegram/src/bot.ts
+
+# Voice handlers (debug logging)
+packages/discord/src/voice/
+packages/telegram/src/voice/
+packages/voice/
+
+# Logger implementations
+packages/core/src/utils/logger.ts
+packages/orchestrator/src/utils/logger.ts
+upstream/deltachat-desktop/packages/shared/logger.ts
+
+# MCP server and transport (stdio logging required)
+packages/mcp/
+
+# Upstream code (we don't modify these)
+upstream/
+
+# Avatar/Live2D adapters (third-party integration)
+packages/avatar/src/adapters/
+
+# Eventa core (event system logging)
+packages/eventa/src/
+
+# AI Companion Hub connectors (debug logging for AI integrations)
+packages/frontend/src/components/AICompanionHub/
+packages/frontend/src/components/DeepTreeEchoBot/ChatOrchestrator.ts
+packages/frontend/src/components/DeepTreeEchoBot/DialogAdapter.ts
+packages/frontend/src/components/chat/PlaywrightAutomation.ts
+
+# Integrations (cross-platform, discord, telegram)
+packages/integrations/
+
+# Scientific genius module
+packages/core/src/scientific-genius/
+
+# DuckDB adapter (database logging)
+packages/reasoning/src/memory/duckdb-adapter.ts
