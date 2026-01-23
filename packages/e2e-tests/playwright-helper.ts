@@ -145,8 +145,15 @@ export async function createNewProfile(
     `App state: ${appState}, isFirstOnboarding: ${isFirstOnboarding}`,
   );
 
-  if (!isFirstOnboarding) {
+  // Determine if we need to click add-account-button
+  // This is needed when:
+  // 1. It's not the first onboarding (adding additional account)
+  // 2. OR accounts already exist even though isFirstOnboarding is true (stale state)
+  const needToAddAccount = !isFirstOnboarding || appState === "accounts";
+
+  if (needToAddAccount && appState === "accounts") {
     // Need to click add-account-button to show onboarding screen
+    console.log("Clicking add-account-button to show onboarding screen");
     const addAccountButton = page.getByTestId("add-account-button");
     await expect(addAccountButton).toBeVisible({ timeout: 30000 });
     await expect(addAccountButton).toBeEnabled({ timeout: 10000 });
