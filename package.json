@@ -1,6 +1,7 @@
 {
   "private": "true",
   "name": "deltecho-chat",
+  "packageManager": "pnpm@9.15.0",
   "description": "DeltaChat interface with Deep Tree Echo cognitive orchestration",
   "type": "module",
   "version": "1.0.0",
