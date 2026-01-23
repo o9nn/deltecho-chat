@@ -1,23 +1,15 @@
 {
-    "extends": "./tsconfig.json",
-    "compilerOptions": {
-        "types": [
-            "node",
-            "jest",
-            "react",
-            "react-dom",
-            "@testing-library/jest-dom"
-        ],
-        "forceConsistentCasingInFileNames": true
-    },
-    "include": [
-        "src",
-        "jest.setup.ts",
-        "**/*.test.ts",
-        "**/*.test.tsx"
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": [
+      "node",
+      "jest",
+      "react",
+      "react-dom",
+      "@testing-library/jest-dom"
     ],
-    "exclude": [
-        "node_modules",
-        "dist"
-    ]
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src", "jest.setup.ts", "**/*.test.ts", "**/*.test.tsx"],
+  "exclude": ["node_modules", "dist"]
 }
