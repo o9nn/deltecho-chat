@@ -174,7 +174,7 @@ export default function AccountListSidebar({
         <div className={styles.buttonsContainer}>
           {/* AI Neighborhood Button */}
           <button
-            aria-label={
+            type="button" aria-label={
               screen === Screens.AINeighborhood
                 ? "Return to Chat"
                 : "AI Companion Neighborhood"
@@ -206,7 +206,7 @@ export default function AccountListSidebar({
           </button>
           {/* Settings Button */}
           <button
-            aria-label={tx("menu_settings")}
+            type="button" aria-label={tx("menu_settings")}
             className={styles.settingsButton}
             onClick={openSettings}
             data-testid="open-settings-button"
@@ -242,7 +242,7 @@ function AddAccountButton(props: { onClick: () => void }) {
 
   return (
     <button
-      ref={ref}
+      type="button" ref={ref}
       aria-label={tx("add_account")}
       className={classNames(styles.addButton, rovingTabindex.className)}
       tabIndex={rovingTabindex.tabIndex}

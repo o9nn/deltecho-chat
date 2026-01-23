@@ -131,7 +131,7 @@ export default function Attachment({
     }
     return (
       <button
-        onClick={onClickAttachment}
+        type="button" onClick={onClickAttachment}
         tabIndex={tabindexForInteractiveContents}
         className={classNames(
           "message-attachment-media",
@@ -153,7 +153,7 @@ export default function Attachment({
     if (!message.file) {
       return (
         <button
-          onClick={onClickAttachment}
+          type="button" onClick={onClickAttachment}
           tabIndex={tabindexForInteractiveContents}
           style={{ cursor: "pointer" }}
           className={classNames("message-attachment-broken-media", direction)}
@@ -201,7 +201,7 @@ export default function Attachment({
     const extension = getExtension(message);
     return (
       <button
-        className={classNames(
+        type="button" className={classNames(
           "message-attachment-generic",
           withContentBelow ? "content-below" : null,
         )}

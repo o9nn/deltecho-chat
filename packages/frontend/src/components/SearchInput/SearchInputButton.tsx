@@ -25,7 +25,7 @@ export default function SearchInputButton({
 }: Props) {
   return (
     <button
-      aria-label={props["aria-label"]}
+      type="button" aria-label={props["aria-label"]}
       data-testid={props["dataTestid"]}
       className={classNames(styles.searchInputButton, className)}
       data-no-drag-region

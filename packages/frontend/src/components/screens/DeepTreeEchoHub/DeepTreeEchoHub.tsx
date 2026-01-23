@@ -491,7 +491,7 @@ const DeepTreeEchoHub: React.FC = () => {
 
         <nav className={styles.nav}>
           <button
-            className={classNames(
+            type="button" className={classNames(
               styles.tab_button,
               activeTab === "dashboard" && styles.active,
             )}
@@ -501,7 +501,7 @@ const DeepTreeEchoHub: React.FC = () => {
             Dashboard
           </button>
           <button
-            className={classNames(
+            type="button" className={classNames(
               styles.tab_button,
               activeTab === "echolang" && styles.active,
             )}
@@ -511,7 +511,7 @@ const DeepTreeEchoHub: React.FC = () => {
             EchoLang Terminal
           </button>
           <button
-            className={classNames(
+            type="button" className={classNames(
               styles.tab_button,
               activeTab === "neural" && styles.active,
             )}
@@ -609,15 +609,15 @@ const DeepTreeEchoHub: React.FC = () => {
                     style={{ position: "static", background: "none" }}
                   >
                     <button
-                      onClick={toggleAutoRun}
+                      type="button" onClick={toggleAutoRun}
                       title={autoRun ? "Pause" : "Auto Run"}
                     >
                       {autoRun ? <Pause size={16} /> : <Play size={16} />}
                     </button>
-                    <button onClick={stepSimulation} title="Step">
+                    <button type="button" onClick={stepSimulation} title="Step">
                       <RefreshCw size={16} />
                     </button>
-                    <button onClick={resetSimulation} title="Reset">
+                    <button type="button" onClick={resetSimulation} title="Reset">
                       <RotateCcw size={16} />
                     </button>
                   </div>

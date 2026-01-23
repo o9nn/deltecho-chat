@@ -196,13 +196,13 @@ export default function NeighborItem({
       block: "nearest",
       inline: "nearest",
     });
-  }, [isSelected, isSticky, window.__screen]);
+  }, [isSelected, isSticky]);
 
   const rovingTabindex = useRovingTabindex(ref);
 
   return (
     <button
-      className={classNames(styles.account, rovingTabindex.className, {
+      type="button" className={classNames(styles.account, rovingTabindex.className, {
         [styles.active]: isSelected,
         [styles["context-menu-active"]]: isContextMenuActive,
         [styles.isSticky]: isSticky,

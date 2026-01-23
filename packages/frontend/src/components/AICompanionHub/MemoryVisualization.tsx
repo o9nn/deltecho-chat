@@ -389,12 +389,15 @@ const MemoryVisualizationContent: React.FC = () => {
     // Start animation
     animate();
 
+    // Store container ref for cleanup
+    const container = containerRef.current;
+
     return () => {
       window.removeEventListener("resize", handleResize);
       cancelAnimationFrame(animationFrame);
 
       // Clean up graph
-      if (graphRef.current && containerRef.current) {
+      if (graphRef.current && container) {
         graphRef.current._destructor();
       }
     };
@@ -491,13 +494,14 @@ const MemoryVisualizationContent: React.FC = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyPress={(e) => e.key === "Enter" && handleSearch()}
           />
-          <button onClick={handleSearch} className="search-button">
+          <button type="button" onClick={handleSearch} className="search-button">
             <Search size={16} />
           </button>
         </div>
 
         <div className="display-controls">
           <button
+            type="button"
             className={`toggle-button ${showCompanions ? "active" : ""}`}
             onClick={() => setShowCompanions(!showCompanions)}
             title={showCompanions ? "Hide Companions" : "Show Companions"}
@@ -507,6 +511,7 @@ const MemoryVisualizationContent: React.FC = () => {
           </button>
 
           <button
+            type="button"
             className={`toggle-button ${showTopics ? "active" : ""}`}
             onClick={() => setShowTopics(!showTopics)}
             title={showTopics ? "Hide Topics" : "Show Topics"}
@@ -516,6 +521,7 @@ const MemoryVisualizationContent: React.FC = () => {
           </button>
 
           <button
+            type="button"
             className={`toggle-button ${showEmotions ? "active" : ""}`}
             onClick={() => setShowEmotions(!showEmotions)}
             title={showEmotions ? "Hide Emotions" : "Show Emotions"}
@@ -526,13 +532,13 @@ const MemoryVisualizationContent: React.FC = () => {
         </div>
 
         <div className="view-controls">
-          <button onClick={zoomIn} title="Zoom In">
+          <button type="button" onClick={zoomIn} title="Zoom In">
             <ZoomIn size={16} />
           </button>
-          <button onClick={zoomOut} title="Zoom Out">
+          <button type="button" onClick={zoomOut} title="Zoom Out">
             <ZoomOut size={16} />
           </button>
-          <button onClick={resetView} title="Reset View">
+          <button type="button" onClick={resetView} title="Reset View">
             <RotateCcw size={16} />
           </button>
         </div>
@@ -581,6 +587,7 @@ const MemoryVisualizationContent: React.FC = () => {
           )}
 
           <button
+            type="button"
             className="close-details"
             onClick={() => setSelectedNode(null)}
           >

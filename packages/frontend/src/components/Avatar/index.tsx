@@ -140,7 +140,7 @@ export function ClickForFullscreenAvatarWrapper(
 
   return filename ? (
     <button
-      className={styles.avatarButton}
+      type="button" className={styles.avatarButton}
       onClick={() => {
         openDialog(FullscreenAvatar, {
           imagePath: filename!,

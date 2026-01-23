@@ -173,7 +173,7 @@ export const VideoCalibrationLab: React.FC = () => {
                 </option>
               ))}
             </select>
-            <button className="play-btn" onClick={togglePlay}>
+            <button type="button" className="play-btn" onClick={togglePlay}>
               {isPlaying ? <Pause size={18} /> : <Play size={18} />}
             </button>
           </div>

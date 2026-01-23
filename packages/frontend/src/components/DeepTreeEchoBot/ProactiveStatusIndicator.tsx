@@ -455,7 +455,7 @@ const ProactiveStatusIndicator: React.FC<ProactiveStatusIndicatorProps> = ({
           Proactive Messaging
         </h4>
         <button
-          className="toggle-expand"
+          type="button" className="toggle-expand"
           onClick={() => setIsExpanded(!isExpanded)}
         >
           {isExpanded ? "▲" : "▼"}
@@ -476,10 +476,10 @@ const ProactiveStatusIndicator: React.FC<ProactiveStatusIndicatorProps> = ({
       </div>
 
       <div className="quick-actions">
-        <button className="quick-btn" onClick={onOpenSettings}>
+        <button type="button" className="quick-btn" onClick={onOpenSettings}>
           ⚙️ Settings
         </button>
-        <button className="quick-btn" onClick={onOpenTriggers}>
+        <button type="button" className="quick-btn" onClick={onOpenTriggers}>
           🎯 Triggers
         </button>
       </div>
@@ -526,7 +526,7 @@ const ProactiveStatusIndicator: React.FC<ProactiveStatusIndicatorProps> = ({
                     </div>
                   </div>
                   <button
-                    className="cancel-btn"
+                    type="button" className="cancel-btn"
                     onClick={() => handleCancelQueued(msg.id)}
                     title="Cancel"
                   >
@@ -554,14 +554,14 @@ const ProactiveStatusIndicator: React.FC<ProactiveStatusIndicatorProps> = ({
                 }
               />
               <button
-                className="schedule-btn"
+                type="button" className="schedule-btn"
                 onClick={() => setShowScheduler(!showScheduler)}
                 title="Schedule"
               >
                 📅
               </button>
               <button
-                className="send-btn"
+                type="button" className="send-btn"
                 onClick={handleQuickSend}
                 disabled={!quickMessage.trim()}
               >
@@ -580,7 +580,7 @@ const ProactiveStatusIndicator: React.FC<ProactiveStatusIndicatorProps> = ({
                     min={new Date().toISOString().slice(0, 16)}
                   />
                   <button
-                    className="send-btn"
+                    type="button" className="send-btn"
                     onClick={handleSchedule}
                     disabled={!quickMessage.trim() || !scheduleTime}
                   >

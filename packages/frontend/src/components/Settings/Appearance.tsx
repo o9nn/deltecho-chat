@@ -256,7 +256,7 @@ function BackgroundSelector({
         />
         <div className={"background-options"}>
           <button
-            onClick={onButton.bind(null, SetBackgroundAction.default)}
+            type="button" onClick={onButton.bind(null, SetBackgroundAction.default)}
             style={{
               backgroundImage: "var(--chatViewBgImgPath)",
               backgroundColor: "var(--chatViewBg)",
@@ -265,19 +265,19 @@ function BackgroundSelector({
             aria-label={tx("pref_background_default")}
           />
           <button
-            onClick={onButton.bind(null, SetBackgroundAction.defaultColor)}
+            type="button" onClick={onButton.bind(null, SetBackgroundAction.defaultColor)}
             style={{ backgroundColor: "var(--chatViewBg)" }}
             aria-label={tx("pref_background_default_color")}
           />
           <button
-            onClick={onButton.bind(null, SetBackgroundAction.customImage)}
+            type="button" onClick={onButton.bind(null, SetBackgroundAction.customImage)}
             className="custom-image"
             aria-label={tx("pref_background_custom_image")}
           >
             <Icon icon="image_outline" size={36} coloring="iconColorCSSVar" />
           </button>
           <button
-            onClick={onButton.bind(null, SetBackgroundAction.customColor)}
+            type="button" onClick={onButton.bind(null, SetBackgroundAction.customColor)}
             className="custom-color"
             aria-label={tx("pref_background_custom_color")}
           >
@@ -297,7 +297,7 @@ function BackgroundSelector({
           "petito-moreno.webp",
         ].map((elem) => (
           <button
-            onClick={onButton.bind(null, SetBackgroundAction.presetImage)}
+            type="button" onClick={onButton.bind(null, SetBackgroundAction.presetImage)}
             style={{
               backgroundImage: `url(./images/backgrounds/thumb/${elem})`,
             }}

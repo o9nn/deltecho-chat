@@ -549,7 +549,7 @@ function GalleryTab(props: {
 
   return (
     <button
-      ref={ref}
+      type="button" ref={ref}
       className={`tab-item ${isSelected ? "selected" : ""} ${
         rovingTabindex.className
       }`}

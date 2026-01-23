@@ -372,7 +372,7 @@ export function ContextMenu(props: {
             }
             return (
               <button
-                className={classNames({
+                type="button" className={classNames({
                   item: true,
                   selected: index === openSublevels[levelIdx],
                 })}

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { BackendRemote, onDCEvent } from "../../backend-com";
 import { selectedAccountId } from "../../ScreenController";
 import { useSettingsStore } from "../../stores/settings";
@@ -126,8 +126,8 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ enabled }) => {
         "https://api.openai.com/v1/chat/completions",
     });
   }, [
-    settingsStore?.desktopSettings?.deepTreeEchoBotApiKey,
-    settingsStore?.desktopSettings?.deepTreeEchoBotApiEndpoint,
+    llmService,
+    settingsStore?.desktopSettings,
   ]);
 
   // Listen for incoming messages
@@ -217,6 +217,9 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ enabled }) => {
     enabled,
     sendMessage,
     memory,
+    generateBotResponse,
+    handleScreenshotCommand,
+    handleSearchCommand,
     settingsStore?.desktopSettings?.deepTreeEchoBotEnabled,
   ]);
 
@@ -239,6 +242,7 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ enabled }) => {
     return () => clearInterval(intervalId);
   }, [
     enabled,
+    runLearningExercise,
     settingsStore?.desktopSettings?.deepTreeEchoBotEnabled,
     settingsStore?.desktopSettings?.deepTreeEchoBotMemoryEnabled,
   ]);
@@ -266,7 +270,7 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ enabled }) => {
   /**
    * Process web search commands
    */
-  const handleSearchCommand = async (query: string): Promise<string> => {
+  const handleSearchCommand = useCallback(async (query: string): Promise<string> => {
     try {
       if (!query) {
         return "Please provide a search query after the /search command.";
@@ -277,12 +281,12 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ enabled }) => {
       log.error("Error handling search command:", error);
       return "I couldn't perform that web search. Playwright automation might not be available in this environment.";
     }
-  };
+  }, [playwrightAutomation]);
 
   /**
    * Process screenshot commands
    */
-  const handleScreenshotCommand = async (
+  const handleScreenshotCommand = useCallback(async (
     url: string,
     chatId: number,
   ): Promise<string> => {
@@ -310,9 +314,9 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ enabled }) => {
       log.error("Error handling screenshot command:", error);
       return "I couldn't capture a screenshot of that webpage. Playwright automation might not be available.";
     }
-  };
+  }, [playwrightAutomation, sendMessage, accountId]);
 
-  const generateBotResponse = async (
+  const generateBotResponse = useCallback(async (
     inputText: string,
     chatId: number,
   ): Promise<string> => {
@@ -339,9 +343,9 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ enabled }) => {
       log.error("Error generating bot response:", error);
       return "I'm sorry, I couldn't process your message at the moment.";
     }
-  };
+  }, [llmService, memory, settingsStore?.desktopSettings?.deepTreeEchoBotPersonality]);
 
-  const runLearningExercise = async () => {
+  const runLearningExercise = useCallback(async () => {
     try {
       log.info("Running learning exercise...");
       const allMemory = memory.getAllMemory();
@@ -380,7 +384,7 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ enabled }) => {
     } catch (error) {
       log.error("Error during learning exercise:", error);
     }
-  };
+  }, [llmService, memory]);
 
   return null; // This is a background component with no UI
 };

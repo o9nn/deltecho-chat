@@ -197,6 +197,7 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
       managerRef.current = null;
       controllerRef.current = null;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modelUrl, width, height, scale]);
 
   // Update emotional state

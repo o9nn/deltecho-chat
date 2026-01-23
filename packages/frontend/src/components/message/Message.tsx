@@ -80,7 +80,7 @@ const Avatar = ({
 
   if (profileImage) {
     return (
-      <button className="author-avatar" onClick={onClick} tabIndex={tabIndex}>
+      <button type="button" className="author-avatar" onClick={onClick} tabIndex={tabIndex}>
         <img alt={displayName} src={runtime.transformBlobURL(profileImage)} />
       </button>
     );
@@ -91,7 +91,7 @@ const Avatar = ({
       : "#";
     return (
       <button
-        className="author-avatar default"
+        type="button" className="author-avatar default"
         aria-label={displayName}
         onClick={onClick}
         tabIndex={tabIndex}
@@ -138,7 +138,7 @@ const AuthorName = ({
 
   return (
     <button
-      key="author"
+      type="button" key="author"
       className="author"
       style={{ color }}
       onClick={() => onContactClick(contact)}
@@ -176,7 +176,7 @@ const ForwardedTitle = ({
           "$$forwarder$$",
           () => (
             <button
-              className="forwarded-indicator-button"
+              type="button" className="forwarded-indicator-button"
               onClick={() => onContactClick(contact)}
               tabIndex={tabIndex}
               key="displayname"
@@ -188,7 +188,7 @@ const ForwardedTitle = ({
         )
       ) : (
         <button
-          onClick={() => onContactClick(contact)}
+          type="button" onClick={() => onContactClick(contact)}
           className="forwarded-indicator-button"
           tabIndex={tabIndex}
         >
@@ -746,7 +746,7 @@ export default function Message(props: {
             ? tx("videochat_contact_invited_hint", message.sender.displayName)
             : tx("videochat_you_invited_hint")}
           <button
-            className="join-button"
+            type="button" className="join-button"
             tabIndex={tabindexForInteractiveContents}
           >
             {direction === "incoming"
@@ -802,7 +802,7 @@ export default function Message(props: {
         )}
         {(downloadState == "Failure" || downloadState === "Available") && (
           <button
-            onClick={downloadFullMessage.bind(null, message.id)}
+            type="button" onClick={downloadFullMessage.bind(null, message.id)}
             tabIndex={tabindexForInteractiveContents}
           >
             {tx("download")}
@@ -924,7 +924,7 @@ export default function Message(props: {
           {content}
           {hasHtml && (
             <button
-              onClick={openMessageHTML.bind(null, message.id)}
+              type="button" onClick={openMessageHTML.bind(null, message.id)}
               className="show-html"
               tabIndex={tabindexForInteractiveContents}
             >

@@ -40,7 +40,7 @@ jest.mock("../../AICompanionHub/Live2DAvatar", () => ({
       data-model={model}
     >
       <button
-        data-testid="trigger-controller-ready"
+        type="button" data-testid="trigger-controller-ready"
         onClick={() =>
           onControllerReady?.({
             setExpression: jest.fn(),

@@ -147,7 +147,7 @@ export default function NeighborhoodSidebar({
 
       <div className={styles.header}>
         <button
-          className={classNames(styles.overviewButton, {
+          type="button" className={classNames(styles.overviewButton, {
             [styles.active]: isOverviewActive,
           })}
           onClick={() => changeScreen(Screens.AINeighborhood)}
@@ -188,7 +188,7 @@ export default function NeighborhoodSidebar({
 
       <div className={styles.footer}>
         <button
-          className={styles.settingsButton}
+          type="button" className={styles.settingsButton}
           onClick={openSettings}
           title={tx("menu_settings")}
           aria-label={tx("menu_settings")}
@@ -218,7 +218,7 @@ function AddHomeButton(props: { onClick: () => void }) {
 
   return (
     <button
-      ref={ref}
+      type="button" ref={ref}
       aria-label={tx("add_account")}
       className={classNames(styles.addButton, rovingTabindex.className)}
       tabIndex={rovingTabindex.tabIndex}

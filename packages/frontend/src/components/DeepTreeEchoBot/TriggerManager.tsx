@@ -629,7 +629,7 @@ const TriggerManager: React.FC<TriggerManagerProps> = ({
           <h3>
             Triggers
             {onClose && (
-              <button className="close-btn" onClick={onClose}>
+              <button type="button" className="close-btn" onClick={onClose}>
                 ×
               </button>
             )}
@@ -678,7 +678,7 @@ const TriggerManager: React.FC<TriggerManagerProps> = ({
           )}
         </div>
 
-        <button className="create-btn" onClick={handleCreateNew}>
+        <button type="button" className="create-btn" onClick={handleCreateNew}>
           + Create New Trigger
         </button>
       </div>
@@ -708,13 +708,13 @@ const TriggerManager: React.FC<TriggerManagerProps> = ({
                 {!isEditing && !isCreating && selectedTrigger && (
                   <>
                     <button
-                      className="btn btn-secondary"
+                      type="button" className="btn btn-secondary"
                       onClick={() => handleEdit(selectedTrigger)}
                     >
                       Edit
                     </button>
                     <button
-                      className="btn btn-danger"
+                      type="button" className="btn btn-danger"
                       onClick={() => handleDelete(selectedTrigger.id)}
                     >
                       Delete
@@ -724,7 +724,7 @@ const TriggerManager: React.FC<TriggerManagerProps> = ({
                 {(isEditing || isCreating) && (
                   <>
                     <button
-                      className="btn btn-secondary"
+                      type="button" className="btn btn-secondary"
                       onClick={() => {
                         setIsEditing(false);
                         setIsCreating(false);
@@ -732,7 +732,7 @@ const TriggerManager: React.FC<TriggerManagerProps> = ({
                     >
                       Cancel
                     </button>
-                    <button className="btn btn-primary" onClick={handleSave}>
+                    <button type="button" className="btn btn-primary" onClick={handleSave}>
                       Save
                     </button>
                   </>

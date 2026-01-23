@@ -235,7 +235,7 @@ export function ImageAttachment({
 
     return (
       <button
-        ref={interactiveElRef}
+        type="button" ref={interactiveElRef}
         className={`media-attachment-media${isBroken ? ` broken` : ""} ${
           rovingTabindex.className
         }`}
@@ -316,7 +316,7 @@ export function VideoAttachment({
     const isBroken = !file || !hasSupportedFormat;
     return (
       <button
-        ref={interactiveElRef}
+        type="button" ref={interactiveElRef}
         className={`media-attachment-media${isBroken ? ` broken` : ""} ${
           rovingTabindex.className
         }`}
@@ -529,7 +529,7 @@ export function FileAttachmentRow({
     const extension = getExtension(message);
     return (
       <button
-        ref={interactiveElRef}
+        type="button" ref={interactiveElRef}
         className={"media-attachment-generic " + rovingTabindex.className}
         onClick={(ev) => {
           ev.stopPropagation();
@@ -673,7 +673,7 @@ export function WebxdcAttachment({
     const { summary, name, document } = loadResult.webxdcInfo;
     return (
       <button
-        ref={interactiveElRef}
+        type="button" ref={interactiveElRef}
         className={"media-attachment-webxdc " + rovingTabindex.className}
         onContextMenu={openContextMenu}
         onClick={openWebxdc.bind(null, loadResult)}

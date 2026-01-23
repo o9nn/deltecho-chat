@@ -372,7 +372,7 @@ const AICompanionChat: React.FC<{ connector: AIPlatformConnector }> = ({
           placeholder="Share your thoughts..."
         />
         <button
-          onClick={sendMessage}
+          type="button" onClick={sendMessage}
           disabled={isThinking}
           aria-label="Send message"
         >
