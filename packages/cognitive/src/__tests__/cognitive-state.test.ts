@@ -6,7 +6,7 @@ import {
   CognitiveStateManager,
   createCognitiveState,
 } from "../cognitive-state";
-import { _EmotionalVector, _DEFAULT_EMOTIONAL_VECTOR } from "../types";
+import { EmotionalVector, DEFAULT_EMOTIONAL_VECTOR } from "../types";
 
 describe("CognitiveStateManager", () => {
   let stateManager: CognitiveStateManager;

@@ -16,6 +16,15 @@ module.exports = {
     '\\.(css|scss)$': '<rootDir>/__mocks__/styleMock.js',
     // Handle image imports
     '\\.(jpg|jpeg|png|gif|webp|svg)$': '<rootDir>/__mocks__/fileMock.js',
+    // Workspace package mappings
+    '^@deltecho/ui-components$': '<rootDir>/../ui-components/src/index.ts',
+    '^@deltecho/cognitive$': '<rootDir>/../cognitive/src/index.ts',
+    '^@deltecho/avatar$': '<rootDir>/../avatar/src/index.ts',
+    '^@deltecho/reasoning$': '<rootDir>/../reasoning/src/index.ts',
+    '^@deltecho/sys6-triality$': '<rootDir>/../sys6-triality/src/index.ts',
+    '^@deltecho/dove9$': '<rootDir>/../dove9/src/index.ts',
+    '^deep-tree-echo-core$': '<rootDir>/../core/src/index.ts',
+    '^deep-tree-echo-core/(.*)$': '<rootDir>/../core/src/$1/index.ts',
   },
   transform: {
     '^.+\\.(ts|tsx)$': [
