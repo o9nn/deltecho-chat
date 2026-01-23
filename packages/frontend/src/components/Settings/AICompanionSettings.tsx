@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useState, useEffect } from "react";
 import { runtime } from "@deltachat-desktop/runtime-interface";
 import SettingsStoreInstance from "../../stores/settings";

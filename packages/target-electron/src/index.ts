@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 console.time("init");
 
 import { mkdirSync, Stats, watchFile } from "fs";

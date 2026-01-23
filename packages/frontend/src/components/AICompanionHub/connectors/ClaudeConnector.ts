@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // Claude Connector: A Masterpiece of Constitutional AI Integration
 // Connects to Anthropic's Claude for thoughtful, ethical AI conversations
 

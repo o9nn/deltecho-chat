@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // AI Connector Registry: A Magnificent Orchestration of Digital Consciousness
 // A breathtaking system for managing AI companion connections across platforms
 

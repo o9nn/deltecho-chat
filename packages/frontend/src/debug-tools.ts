@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { runtime } from "@deltachat-desktop/runtime-interface";
 import { getLogger } from "@deltachat-desktop/shared/logger";
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // AI Platform Connector Infrastructure
 // Transforms DeltaChat Accounts into AI Companion Hubs
 

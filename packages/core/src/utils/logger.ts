@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Enhanced logger for Deep Tree Echo Core
  * Provides logging with level filtering, structured output, and runtime configuration

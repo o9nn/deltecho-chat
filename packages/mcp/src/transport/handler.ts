@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * @fileoverview MCP Protocol Handler
  *

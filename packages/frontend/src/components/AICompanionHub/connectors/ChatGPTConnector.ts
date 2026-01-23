@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // ChatGPT Connector: A Revolutionary Integration with OpenAI's Language Models
 // Creates a breathtaking bridge to GPT-4 and beyond with native function calling support
 

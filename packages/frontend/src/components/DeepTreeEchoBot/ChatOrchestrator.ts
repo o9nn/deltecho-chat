@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * ChatOrchestrator - Deep Tree Echo Chat Session Orchestration
  *

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import errorStackParser from "error-stack-parser";
 import StackFrame from "stackframe";
 import { RC_Config } from "./shared-types.js";

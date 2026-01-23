@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { ChildProcessWithoutNullStreams, spawn } from "child_process";
 import { DC_ACCOUNTS_DIR } from "./config";
 import { getRPCServerPath } from "@deltachat/stdio-rpc-server";

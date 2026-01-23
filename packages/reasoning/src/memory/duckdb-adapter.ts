@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import * as duckdb from "@duckdb/duckdb-wasm";
 import { AsyncDuckDB } from "@duckdb/duckdb-wasm";
 import { drizzle } from "drizzle-orm/pg-proxy";

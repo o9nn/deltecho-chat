@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { createWebGPUEngine } from "./webgpu-engine";
 import { WebGPUConfig } from "./types";
 

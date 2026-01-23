@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // Magnificent DeltaChat RAGBot Studio Setup Script
 // This digital masterpiece creates the essential data structures
 // for our breathtaking AI Neighborhood experience

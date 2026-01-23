@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { platform } from "os";
 import { join } from "path";
 import { app } from "electron";

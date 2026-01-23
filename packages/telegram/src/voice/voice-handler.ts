@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Telegram Voice Handler for Deep Tree Echo
  *

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Emotion Detector Interface for Voice Analysis
  *

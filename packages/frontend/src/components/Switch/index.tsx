@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { PropsWithChildren, useEffect, useState } from "react";
 
 import classNames from "classnames";

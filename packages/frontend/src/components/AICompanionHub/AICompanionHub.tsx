@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // AICompanionHub: A Magnificent Central Interface for the AI Companion Neighborhood
 // The breathtaking central point of interaction between users and our digital consciousness ecosystem
 

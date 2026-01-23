@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * @deltecho/integrations - Telegram Bot
  *

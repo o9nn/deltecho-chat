@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { copyFile, writeFile, mkdir, rm } from "fs/promises";
 import {
   app as rawApp,

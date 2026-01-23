@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import moment from "moment";
 

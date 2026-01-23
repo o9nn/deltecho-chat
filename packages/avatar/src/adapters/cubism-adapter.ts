@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Cubism Adapter for Live2D Integration
  *

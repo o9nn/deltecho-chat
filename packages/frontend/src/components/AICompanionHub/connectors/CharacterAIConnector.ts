@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // Character.AI Connector: An Exquisite Portal to Narrative Personas
 // Creates a breathtaking bridge to the world of AI characters and roleplay
 

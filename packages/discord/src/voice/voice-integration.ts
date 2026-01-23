@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Voice Integration for @deltecho/voice
  *

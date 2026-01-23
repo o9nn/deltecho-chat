@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useState, useEffect, useCallback } from "react";
 import {
   Brain as _Brain,
