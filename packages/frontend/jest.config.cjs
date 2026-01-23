@@ -16,6 +16,10 @@ module.exports = {
     '\\.(css|scss)$': '<rootDir>/__mocks__/styleMock.js',
     // Handle image imports
     '\\.(jpg|jpeg|png|gif|webp|svg)$': '<rootDir>/__mocks__/fileMock.js',
+    // Mock ESM-only modules
+    '^react-force-graph-2d$': '<rootDir>/__mocks__/styleMock.js',
+    '^react-force-graph-3d$': '<rootDir>/__mocks__/styleMock.js',
+    '^d3-.*$': '<rootDir>/__mocks__/styleMock.js',
     // Workspace package mappings
     '^@deltecho/ui-components$': '<rootDir>/../ui-components/src/index.ts',
     '^@deltecho/cognitive$': '<rootDir>/../cognitive/src/index.ts',
