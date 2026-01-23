@@ -158,7 +158,7 @@ describe("DovecotInterface", () => {
 
   describe("event system", () => {
     it("should register event listeners", () => {
-      const callback = jest.fn();
+      const callback = jest.fn<(data: unknown) => void>();
       dovecotInterface.on("response", callback);
 
       dovecotInterface.emit("response", { to: "test@example.com" });
@@ -167,8 +167,8 @@ describe("DovecotInterface", () => {
     });
 
     it("should handle multiple listeners", () => {
-      const callback1 = jest.fn();
-      const callback2 = jest.fn();
+      const callback1 = jest.fn<(data: unknown) => void>();
+      const callback2 = jest.fn<(data: unknown) => void>();
 
       dovecotInterface.on("response", callback1);
       dovecotInterface.on("response", callback2);
@@ -180,8 +180,8 @@ describe("DovecotInterface", () => {
     });
 
     it("should handle different event types", () => {
-      const responseCallback = jest.fn();
-      const errorCallback = jest.fn();
+      const responseCallback = jest.fn<(data: unknown) => void>();
+      const errorCallback = jest.fn<(data: unknown) => void>();
 
       dovecotInterface.on("response", responseCallback);
       dovecotInterface.on("error", errorCallback);

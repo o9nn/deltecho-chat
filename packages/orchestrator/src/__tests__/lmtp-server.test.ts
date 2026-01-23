@@ -43,7 +43,7 @@ describe("LMTPServer", () => {
 
   describe("event handling", () => {
     it("should register event listeners", () => {
-      const callback = jest.fn();
+      const callback = jest.fn<(data: unknown) => void>();
       server.on("email", callback);
 
       // Simulate emitting an event
@@ -53,8 +53,8 @@ describe("LMTPServer", () => {
     });
 
     it("should handle multiple listeners for same event", () => {
-      const callback1 = jest.fn();
-      const callback2 = jest.fn();
+      const callback1 = jest.fn<(data: unknown) => void>();
+      const callback2 = jest.fn<(data: unknown) => void>();
 
       server.on("email", callback1);
       server.on("email", callback2);
