@@ -143,6 +143,31 @@ Object.defineProperty(window, "localStorage", { value: localStorageMock });
 window.confirm = jest.fn(() => true);
 window.alert = jest.fn();
 
+// Add TextEncoder/TextDecoder for jsdom (missing in some Node/Jest setups)
+if (typeof global.TextEncoder === "undefined") {
+  const { TextEncoder, TextDecoder } = require("util");
+  global.TextEncoder = TextEncoder;
+  global.TextDecoder = TextDecoder;
+}
+
+// Add Worker mock for jsdom (if missing)
+if (typeof global.Worker === "undefined") {
+  global.Worker = class {
+    constructor() { }
+    postMessage() { }
+    terminate() { }
+    onmessage() { }
+    onerror() { }
+    addEventListener() { }
+    removeEventListener() { }
+  } as any;
+}
+
+// Mock react-force-graph-2d as it's an ESM module that can't be parsed by some Jest configs
+jest.mock("react-force-graph-2d", () => {
+  return jest.fn(() => null);
+});
+
 // =============================================================================
 // TEST LIFECYCLE
 // =============================================================================

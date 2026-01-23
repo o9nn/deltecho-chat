@@ -193,7 +193,9 @@ describe("DeepTreeEchoUIBridge Integration", () => {
     });
 
     afterEach(() => {
-      document.body.removeChild(mockTextarea);
+      if (mockTextarea && mockTextarea.parentNode === document.body) {
+        document.body.removeChild(mockTextarea);
+      }
     });
 
     it("should register composer element", () => {

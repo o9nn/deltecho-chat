@@ -25,6 +25,12 @@ module.exports = {
     '^@deltecho/dove9$': '<rootDir>/../dove9/src/index.ts',
     '^deep-tree-echo-core$': '<rootDir>/../core/src/index.ts',
     '^deep-tree-echo-core/(.*)$': '<rootDir>/../core/src/$1/index.ts',
+    // Handle .js extensions in ESM-style imports (strip for Jest/TS)
+    '^@deltecho/reasoning/(.*)\\.js$': '<rootDir>/../reasoning/src/$1.ts',
+    '^@deltecho/sys6-triality/(.*)\\.js$': '<rootDir>/../sys6-triality/src/$1.ts',
+    '^@deltecho/dove9/(.*)\\.js$': '<rootDir>/../dove9/src/$1.ts',
+    // Generic relative .js to .ts/tsx mapping
+    '^(\\.\\.?/.*)\\.js$': '$1',
   },
   transform: {
     '^.+\\.(ts|tsx)$': [
