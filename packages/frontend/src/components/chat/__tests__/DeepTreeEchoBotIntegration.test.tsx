@@ -29,7 +29,7 @@ jest.mock("../../../stores/settings", () => ({
   ],
 }));
 
-jest.mock("../../DeepTreeEchoBot/LLMService", () => ({
+jest.mock("../../../utils/LLMService", () => ({
   LLMService: {
     getInstance: () => ({
       setConfig: jest.fn(),

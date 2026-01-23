@@ -39,7 +39,7 @@ jest.mock("../../../backend-com", () => ({
     ),
 }));
 
-jest.mock("../../DeepTreeEchoBot/LLMService", () => ({
+jest.mock("../../../utils/LLMService", () => ({
   LLMService: {
     getInstance: jest.fn().mockReturnValue({
       setConfig: (...args: unknown[]) => mockSetConfig(...args),
