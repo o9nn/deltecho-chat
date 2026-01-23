@@ -440,6 +440,7 @@ const Composer = forwardRef<
     return (
       <div ref={ref} className="composer contact-request">
         <button
+          type="button"
           className="contact-request-button delete"
           onClick={async () => {
             if (selectedChat.chatType !== C.DC_CHAT_TYPE_SINGLE) {
@@ -464,6 +465,7 @@ const Composer = forwardRef<
             : tx("delete")}
         </button>
         <button
+          type="button"
           className="contact-request-button accept"
           onClick={() => {
             EffectfulBackendActions.acceptChat(selectedAccountId(), chatId);
@@ -477,6 +479,7 @@ const Composer = forwardRef<
     return (
       <div ref={ref} className="composer contact-request">
         <button
+          type="button"
           className="contact-request-button"
           onClick={async () => {
             openDialog(ProtectionBrokenDialog, { name: selectedChat.name });
@@ -485,6 +488,7 @@ const Composer = forwardRef<
           {tx("more_info_desktop")}
         </button>
         <button
+          type="button"
           className="contact-request-button"
           onClick={() => {
             EffectfulBackendActions.acceptChat(selectedAccountId(), chatId);
@@ -642,7 +646,7 @@ const Composer = forwardRef<
             )}
           {showSendButton && (
             <button
-              // This ensures that the button loses focus as we switch between
+              type="button" // This ensures that the button loses focus as we switch between
               // the editing mode and the regular mode,
               // so that it's harder to accidentally send a normal message
               // right after sending the draft by using the keyboard.

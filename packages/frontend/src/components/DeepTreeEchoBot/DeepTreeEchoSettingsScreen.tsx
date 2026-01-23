@@ -200,6 +200,7 @@ const DeepTreeEchoSettingsScreen: React.FC<DeepTreeEchoSettingsScreenProps> = ({
       {/* Tab Navigation */}
       <div className="tabs">
         <button
+          type="button"
           className={`tab ${activeTab === "general" ? "active" : ""}`}
           onClick={() => setActiveTab("general")}
         >
@@ -207,6 +208,7 @@ const DeepTreeEchoSettingsScreen: React.FC<DeepTreeEchoSettingsScreenProps> = ({
           General
         </button>
         <button
+          type="button"
           className={`tab ${activeTab === "proactive" ? "active" : ""}`}
           onClick={() => setActiveTab("proactive")}
         >
@@ -214,6 +216,7 @@ const DeepTreeEchoSettingsScreen: React.FC<DeepTreeEchoSettingsScreenProps> = ({
           Proactive Messaging
         </button>
         <button
+          type="button"
           className={`tab ${activeTab === "triggers" ? "active" : ""}`}
           onClick={() => setActiveTab("triggers")}
         >

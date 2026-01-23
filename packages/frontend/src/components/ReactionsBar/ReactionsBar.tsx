@@ -65,6 +65,7 @@ export default function ReactionsBar({
         <div className={styles.reactionsBar}>
           {myReaction && !isMyReactionDefault && (
             <button
+              type="button"
               onClick={() => toggleReaction(myReaction!)}
               className={classNames(
                 styles.reactionsBarButton,
@@ -77,6 +78,7 @@ export default function ReactionsBar({
           {DEFAULT_EMOJIS.map((emoji, index) => {
             return (
               <button
+                type="button"
                 key={`emoji-${index}`}
                 onClick={() => toggleReaction(emoji)}
                 className={classNames(styles.reactionsBarButton, {
@@ -88,6 +90,7 @@ export default function ReactionsBar({
             );
           })}
           <button
+            type="button"
             className={classNames(
               styles.reactionsBarButton,
               styles.showAllEmojis,

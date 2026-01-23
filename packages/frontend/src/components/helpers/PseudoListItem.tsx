@@ -35,6 +35,7 @@ export function PseudoListItem(
   return (
     <div className="contact-list-item" id={id} key={id}>
       <button
+        type="button"
         ref={buttonRef}
         className={"contact-list-item-button " + rovingTabindex.className}
         onClick={onClick}

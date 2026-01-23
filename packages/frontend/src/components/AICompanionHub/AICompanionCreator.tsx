@@ -473,7 +473,7 @@ const AICompanionCreatorContent: React.FC<{
           Create AI Companion
         </h2>
         {onClose && (
-          <button className="close-button" onClick={onClose}>
+          <button type="button" className="close-button" onClick={onClose}>
             <XCircle size={24} />
           </button>
         )}
@@ -523,10 +523,15 @@ const AICompanionCreatorContent: React.FC<{
         )}
 
         <div className="creator-actions">
-          <button className="action-button back" onClick={prevStep}>
+          <button
+            type="button"
+            className="action-button back"
+            onClick={prevStep}
+          >
             {step === 1 && onClose ? "Cancel" : "Back"}
           </button>
           <button
+            type="button"
             className={`action-button next ${canProceed() ? "" : "disabled"} ${
               loading ? "loading" : ""
             }`}

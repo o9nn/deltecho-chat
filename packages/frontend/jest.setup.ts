@@ -153,13 +153,13 @@ if (typeof global.TextEncoder === "undefined") {
 // Add Worker mock for jsdom (if missing)
 if (typeof global.Worker === "undefined") {
   global.Worker = class {
-    constructor() { }
-    postMessage() { }
-    terminate() { }
-    onmessage() { }
-    onerror() { }
-    addEventListener() { }
-    removeEventListener() { }
+    constructor() {}
+    postMessage() {}
+    terminate() {}
+    onmessage() {}
+    onerror() {}
+    addEventListener() {}
+    removeEventListener() {}
   } as any;
 }
 

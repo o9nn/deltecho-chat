@@ -21,6 +21,7 @@ export default function SettingsButton({
 }: Props) {
   return (
     <button
+      type="button"
       className={classNames(styles.settingsButton, {
         [styles.highlight]: highlight,
       })}

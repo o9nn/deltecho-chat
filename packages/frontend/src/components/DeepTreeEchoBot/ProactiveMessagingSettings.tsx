@@ -633,6 +633,7 @@ const ProactiveMessagingSettings: React.FC<ProactiveMessagingSettingsProps> = ({
         </div>
 
         <button
+          type="button"
           className="manage-triggers-btn"
           onClick={onNavigateToTriggers}
           disabled={isDisabled}

@@ -175,6 +175,7 @@ export const AudioRecorder = ({
 
     return (
       <button
+        type="button"
         aria-label={tx("voice_send")}
         className={styles.microphoneButton}
         onClick={() => onRecordingStart()}
@@ -186,6 +187,7 @@ export const AudioRecorder = ({
     return (
       <div className={styles.audioRecorder}>
         <button
+          type="button"
           className={styles.microphoneButton}
           onClick={() => onRecordingStop()}
           aria-label={tx("stop_recording")}
@@ -194,10 +196,15 @@ export const AudioRecorder = ({
         </button>
         <Timer />
         <VolumeMeter volume={volume} />
-        <button className={styles.cancel} onClick={() => onRecordingCancel()}>
+        <button
+          type="button"
+          className={styles.cancel}
+          onClick={() => onRecordingCancel()}
+        >
           {tx("cancel")}
         </button>
         <button
+          type="button"
           className={styles.stopRecording}
           onClick={() => onRecordingStop()}
           aria-description={tx("stop_recording")}

@@ -149,6 +149,7 @@ const AICompanionSettings: React.FC<Props> = ({ onClose }) => {
               </div>
             </div>
             <button
+              type="button"
               onClick={() => handleDeleteKey(key.id)}
               style={{
                 background: "transparent",

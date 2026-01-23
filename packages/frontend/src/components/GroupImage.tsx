@@ -59,6 +59,7 @@ export default function GroupImage(props: Props) {
         />
       </AvatarTag>
       <button
+        type="button"
         className="group-image-edit-button"
         onClick={openContextMenu}
         aria-label={tx("change_group_image")}
