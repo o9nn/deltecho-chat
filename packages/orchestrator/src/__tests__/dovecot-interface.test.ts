@@ -219,7 +219,7 @@ describe("DovecotInterface", () => {
     it("should emit response event for bot-addressed emails", async () => {
       await dovecotInterface.start();
 
-      const responseCallback = jest.fn();
+      const responseCallback = jest.fn<(data: unknown) => void>();
       dovecotInterface.on("response", responseCallback);
 
       const handleEmail = (
