@@ -146,7 +146,6 @@ const BotSettings: React.FC<BotSettingsProps> = ({
     };
 
     loadSettings();
-     
   }, []);
 
   // Handle advanced settings navigation or toggle
