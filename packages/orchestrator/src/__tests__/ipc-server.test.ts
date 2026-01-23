@@ -45,7 +45,7 @@ describe("IPCServer", () => {
       const handler: IPCRequestHandler = jest
         .fn<IPCRequestHandler>()
         .mockResolvedValue({ result: "ok" });
-      server.registerHandler(IPCMessageType.REQUEST_COGNITIVE, handler);
+      server.registerHandler(IPCMessageType.COGNITIVE_PROCESS, handler);
 
       // Handler registration should not throw
       expect(handler).not.toHaveBeenCalled();
@@ -109,7 +109,7 @@ describe("IPCServer", () => {
     it("should return false for non-existent client", () => {
       const result = server.sendToClient(
         "non_existent",
-        IPCMessageType.EVENT_MESSAGE,
+        IPCMessageType.EVENT,
         {},
       );
       expect(result).toBe(false);

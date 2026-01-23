@@ -26,6 +26,7 @@ jest.mock("deep-tree-echo-core", () => ({
   RAGMemoryStore: jest.fn().mockImplementation(() => ({
     storeMemory: jest.fn(),
     queryMemories: jest.fn<() => Promise<unknown[]>>().mockResolvedValue([]),
+    setEnabled: jest.fn(),
   })),
   PersonaCore: jest.fn().mockImplementation(() => ({
     getPersonality: jest.fn().mockReturnValue({
