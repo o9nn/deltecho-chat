@@ -40,7 +40,7 @@ module.exports = {
     '^.+\\.(ts|tsx)$': [
       'ts-jest',
       {
-        tsconfig: 'tsconfig.json',
+        tsconfig: 'tsconfig.test.json',
         diagnostics: {
           // Reduce noise from type errors in tests (caught by tsc)
           warnOnly: true,
