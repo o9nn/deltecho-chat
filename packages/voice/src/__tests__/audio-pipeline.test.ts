@@ -1,14 +1,7 @@
 /**
  * Audio Pipeline Tests
  */
-import {
-  jest,
-  describe,
-  it,
-  expect,
-  beforeEach,
-  afterEach,
-} from "@jest/globals";
+// Jest globals are injected automatically via jest.config.js injectGlobals: true
 
 import {
   AudioPipeline,
