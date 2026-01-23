@@ -135,7 +135,7 @@ describe("NicheConstruction", () => {
     });
 
     it("should emit artifact_created event when creating artifacts", async () => {
-      const _called = false;
+      let called = false;
       const callback = () => {
         called = true;
       };
