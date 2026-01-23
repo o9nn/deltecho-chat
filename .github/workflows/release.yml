@@ -45,6 +45,9 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build Frontend and Electron App
+        run: pnpm --filter=@deltachat-desktop/target-electron build
+
       - name: Build Electron (Linux)
         if: matrix.os == 'ubuntu-latest'
         run: |
