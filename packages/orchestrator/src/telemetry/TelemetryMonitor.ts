@@ -10,10 +10,10 @@
  * - Error rates
  */
 
-import { EventEmitter } from 'events';
-import { getLogger } from 'deep-tree-echo-core';
+import { EventEmitter } from "events";
+import { getLogger } from "deep-tree-echo-core";
 
-const log = getLogger('deep-tree-echo-orchestrator/TelemetryMonitor');
+const log = getLogger("deep-tree-echo-orchestrator/TelemetryMonitor");
 
 /**
  * Metric data point
@@ -29,7 +29,7 @@ export interface MetricDataPoint {
  */
 export interface Metric {
   name: string;
-  type: 'counter' | 'gauge' | 'histogram';
+  type: "counter" | "gauge" | "histogram";
   description: string;
   unit: string;
   dataPoints: MetricDataPoint[];
@@ -39,10 +39,10 @@ export interface Metric {
  * System health status
  */
 export interface HealthStatus {
-  status: 'healthy' | 'degraded' | 'unhealthy';
+  status: "healthy" | "degraded" | "unhealthy";
   components: {
     name: string;
-    status: 'healthy' | 'degraded' | 'unhealthy';
+    status: "healthy" | "degraded" | "unhealthy";
     message?: string;
   }[];
   lastCheck: number;
@@ -53,7 +53,7 @@ export interface HealthStatus {
  */
 export interface Alert {
   id: string;
-  severity: 'info' | 'warning' | 'error' | 'critical';
+  severity: "info" | "warning" | "error" | "critical";
   message: string;
   source: string;
   timestamp: number;
@@ -136,103 +136,103 @@ export class TelemetryMonitor extends EventEmitter {
   private initializeMetrics(): void {
     // System metrics
     this.registerMetric({
-      name: 'system_memory_usage_bytes',
-      type: 'gauge',
-      description: 'Current memory usage in bytes',
-      unit: 'bytes',
+      name: "system_memory_usage_bytes",
+      type: "gauge",
+      description: "Current memory usage in bytes",
+      unit: "bytes",
       dataPoints: [],
     });
 
     this.registerMetric({
-      name: 'system_uptime_seconds',
-      type: 'counter',
-      description: 'System uptime in seconds',
-      unit: 'seconds',
+      name: "system_uptime_seconds",
+      type: "counter",
+      description: "System uptime in seconds",
+      unit: "seconds",
       dataPoints: [],
     });
 
     // Cognitive cycle metrics
     this.registerMetric({
-      name: 'cognitive_cycles_total',
-      type: 'counter',
-      description: 'Total number of cognitive cycles completed',
-      unit: 'cycles',
+      name: "cognitive_cycles_total",
+      type: "counter",
+      description: "Total number of cognitive cycles completed",
+      unit: "cycles",
       dataPoints: [],
     });
 
     this.registerMetric({
-      name: 'cognitive_steps_total',
-      type: 'counter',
-      description: 'Total number of cognitive steps executed',
-      unit: 'steps',
+      name: "cognitive_steps_total",
+      type: "counter",
+      description: "Total number of cognitive steps executed",
+      unit: "steps",
       dataPoints: [],
     });
 
     this.registerMetric({
-      name: 'cognitive_cycle_duration_ms',
-      type: 'histogram',
-      description: 'Duration of cognitive cycles in milliseconds',
-      unit: 'milliseconds',
+      name: "cognitive_cycle_duration_ms",
+      type: "histogram",
+      description: "Duration of cognitive cycles in milliseconds",
+      unit: "milliseconds",
       dataPoints: [],
     });
 
     // Stream metrics
     this.registerMetric({
-      name: 'stream_salience',
-      type: 'gauge',
-      description: 'Current salience level of consciousness streams',
-      unit: 'ratio',
+      name: "stream_salience",
+      type: "gauge",
+      description: "Current salience level of consciousness streams",
+      unit: "ratio",
       dataPoints: [],
     });
 
     // Agent metrics
     this.registerMetric({
-      name: 'agent_invocations_total',
-      type: 'counter',
-      description: 'Total number of agent invocations',
-      unit: 'invocations',
+      name: "agent_invocations_total",
+      type: "counter",
+      description: "Total number of agent invocations",
+      unit: "invocations",
       dataPoints: [],
     });
 
     this.registerMetric({
-      name: 'agent_active_count',
-      type: 'gauge',
-      description: 'Number of currently active agents',
-      unit: 'agents',
+      name: "agent_active_count",
+      type: "gauge",
+      description: "Number of currently active agents",
+      unit: "agents",
       dataPoints: [],
     });
 
     // Message metrics
     this.registerMetric({
-      name: 'messages_processed_total',
-      type: 'counter',
-      description: 'Total number of messages processed',
-      unit: 'messages',
+      name: "messages_processed_total",
+      type: "counter",
+      description: "Total number of messages processed",
+      unit: "messages",
       dataPoints: [],
     });
 
     this.registerMetric({
-      name: 'message_processing_duration_ms',
-      type: 'histogram',
-      description: 'Duration of message processing in milliseconds',
-      unit: 'milliseconds',
+      name: "message_processing_duration_ms",
+      type: "histogram",
+      description: "Duration of message processing in milliseconds",
+      unit: "milliseconds",
       dataPoints: [],
     });
 
     // Error metrics
     this.registerMetric({
-      name: 'errors_total',
-      type: 'counter',
-      description: 'Total number of errors',
-      unit: 'errors',
+      name: "errors_total",
+      type: "counter",
+      description: "Total number of errors",
+      unit: "errors",
       dataPoints: [],
     });
 
     this.registerMetric({
-      name: 'error_rate',
-      type: 'gauge',
-      description: 'Current error rate',
-      unit: 'ratio',
+      name: "error_rate",
+      type: "gauge",
+      description: "Current error rate",
+      unit: "ratio",
       dataPoints: [],
     });
   }
@@ -249,22 +249,22 @@ export class TelemetryMonitor extends EventEmitter {
    */
   public async start(): Promise<void> {
     if (this.running) {
-      log.warn('Telemetry monitor already running');
+      log.warn("Telemetry monitor already running");
       return;
     }
 
-    log.info('Starting Telemetry Monitor...');
+    log.info("Starting Telemetry Monitor...");
     this.running = true;
     this.startTime = Date.now();
 
     // Start collection loop
     this.collectionInterval = setInterval(
       () => this.collectMetrics(),
-      this.config.collectionIntervalMs
+      this.config.collectionIntervalMs,
     );
 
-    this.emit('started', { timestamp: Date.now() });
-    log.info('Telemetry Monitor started');
+    this.emit("started", { timestamp: Date.now() });
+    log.info("Telemetry Monitor started");
   }
 
   /**
@@ -273,7 +273,7 @@ export class TelemetryMonitor extends EventEmitter {
   public async stop(): Promise<void> {
     if (!this.running) return;
 
-    log.info('Stopping Telemetry Monitor...');
+    log.info("Stopping Telemetry Monitor...");
     this.running = false;
 
     if (this.collectionInterval) {
@@ -281,8 +281,8 @@ export class TelemetryMonitor extends EventEmitter {
       this.collectionInterval = null;
     }
 
-    this.emit('stopped', { timestamp: Date.now() });
-    log.info('Telemetry Monitor stopped');
+    this.emit("stopped", { timestamp: Date.now() });
+    log.info("Telemetry Monitor stopped");
   }
 
   /**
@@ -292,16 +292,20 @@ export class TelemetryMonitor extends EventEmitter {
     const now = Date.now();
 
     // System metrics
-    this.recordMetric('system_memory_usage_bytes', process.memoryUsage().heapUsed);
-    this.recordMetric('system_uptime_seconds', (now - this.startTime) / 1000);
+    this.recordMetric(
+      "system_memory_usage_bytes",
+      process.memoryUsage().heapUsed,
+    );
+    this.recordMetric("system_uptime_seconds", (now - this.startTime) / 1000);
 
     // Cognitive metrics
-    this.recordMetric('cognitive_cycles_total', this.cycleCount);
-    this.recordMetric('cognitive_steps_total', this.stepCount);
+    this.recordMetric("cognitive_cycles_total", this.cycleCount);
+    this.recordMetric("cognitive_steps_total", this.stepCount);
 
     // Error rate
-    const errorRate = this.messageCount > 0 ? this.errorCount / this.messageCount : 0;
-    this.recordMetric('error_rate', errorRate);
+    const errorRate =
+      this.messageCount > 0 ? this.errorCount / this.messageCount : 0;
+    this.recordMetric("error_rate", errorRate);
 
     // Check thresholds and generate alerts
     if (this.config.enableAlerts) {
@@ -311,13 +315,17 @@ export class TelemetryMonitor extends EventEmitter {
     // Prune old data points
     this.pruneOldDataPoints();
 
-    this.emit('metrics_collected', { timestamp: now });
+    this.emit("metrics_collected", { timestamp: now });
   }
 
   /**
    * Record a metric value
    */
-  public recordMetric(name: string, value: number, labels?: Record<string, string>): void {
+  public recordMetric(
+    name: string,
+    value: number,
+    labels?: Record<string, string>,
+  ): void {
     const metric = this.metrics.get(name);
     if (!metric) {
       log.warn(`Unknown metric: ${name}`);
@@ -341,13 +349,15 @@ export class TelemetryMonitor extends EventEmitter {
    */
   public incrementCounter(name: string, amount: number = 1): void {
     const metric = this.metrics.get(name);
-    if (!metric || metric.type !== 'counter') {
+    if (!metric || metric.type !== "counter") {
       log.warn(`Unknown counter metric: ${name}`);
       return;
     }
 
     const lastValue =
-      metric.dataPoints.length > 0 ? metric.dataPoints[metric.dataPoints.length - 1].value : 0;
+      metric.dataPoints.length > 0
+        ? metric.dataPoints[metric.dataPoints.length - 1].value
+        : 0;
 
     this.recordMetric(name, lastValue + amount);
   }
@@ -357,8 +367,8 @@ export class TelemetryMonitor extends EventEmitter {
    */
   public recordCycleComplete(durationMs: number): void {
     this.cycleCount++;
-    this.recordMetric('cognitive_cycles_total', this.cycleCount);
-    this.recordMetric('cognitive_cycle_duration_ms', durationMs);
+    this.recordMetric("cognitive_cycles_total", this.cycleCount);
+    this.recordMetric("cognitive_cycle_duration_ms", durationMs);
   }
 
   /**
@@ -366,7 +376,7 @@ export class TelemetryMonitor extends EventEmitter {
    */
   public recordStepComplete(): void {
     this.stepCount++;
-    this.recordMetric('cognitive_steps_total', this.stepCount);
+    this.recordMetric("cognitive_steps_total", this.stepCount);
   }
 
   /**
@@ -374,8 +384,8 @@ export class TelemetryMonitor extends EventEmitter {
    */
   public recordMessageProcessed(durationMs: number): void {
     this.messageCount++;
-    this.recordMetric('messages_processed_total', this.messageCount);
-    this.recordMetric('message_processing_duration_ms', durationMs);
+    this.recordMetric("messages_processed_total", this.messageCount);
+    this.recordMetric("message_processing_duration_ms", durationMs);
   }
 
   /**
@@ -383,11 +393,11 @@ export class TelemetryMonitor extends EventEmitter {
    */
   public recordError(source: string, message: string): void {
     this.errorCount++;
-    this.recordMetric('errors_total', this.errorCount);
+    this.recordMetric("errors_total", this.errorCount);
 
     // Create alert if enabled
     if (this.config.enableAlerts) {
-      this.createAlert('error', message, source);
+      this.createAlert("error", message, source);
     }
   }
 
@@ -395,21 +405,23 @@ export class TelemetryMonitor extends EventEmitter {
    * Record stream salience
    */
   public recordStreamSalience(streamId: number, salience: number): void {
-    this.recordMetric('stream_salience', salience, { stream: String(streamId) });
+    this.recordMetric("stream_salience", salience, {
+      stream: String(streamId),
+    });
   }
 
   /**
    * Record agent invocation
    */
-  public recordAgentInvocation(agentId: string): void {
-    this.incrementCounter('agent_invocations_total');
+  public recordAgentInvocation(_agentId: string): void {
+    this.incrementCounter("agent_invocations_total");
   }
 
   /**
    * Record active agent count
    */
   public recordActiveAgents(count: number): void {
-    this.recordMetric('agent_active_count', count);
+    this.recordMetric("agent_active_count", count);
   }
 
   /**
@@ -422,25 +434,36 @@ export class TelemetryMonitor extends EventEmitter {
     const memoryUsage = process.memoryUsage();
     const memoryPercent = (memoryUsage.heapUsed / memoryUsage.heapTotal) * 100;
     if (memoryPercent > alertThresholds.memoryUsagePercent) {
-      this.createAlert('warning', `High memory usage: ${memoryPercent.toFixed(1)}%`, 'system');
+      this.createAlert(
+        "warning",
+        `High memory usage: ${memoryPercent.toFixed(1)}%`,
+        "system",
+      );
     }
 
     // Check error rate
-    const errorRate = this.messageCount > 0 ? (this.errorCount / this.messageCount) * 100 : 0;
+    const errorRate =
+      this.messageCount > 0 ? (this.errorCount / this.messageCount) * 100 : 0;
     if (errorRate > alertThresholds.errorRatePercent) {
-      this.createAlert('warning', `High error rate: ${errorRate.toFixed(1)}%`, 'system');
+      this.createAlert(
+        "warning",
+        `High error rate: ${errorRate.toFixed(1)}%`,
+        "system",
+      );
     }
 
     // Check cycle latency
-    const cycleDurationMetric = this.metrics.get('cognitive_cycle_duration_ms');
+    const cycleDurationMetric = this.metrics.get("cognitive_cycle_duration_ms");
     if (cycleDurationMetric && cycleDurationMetric.dataPoints.length > 0) {
       const lastDuration =
-        cycleDurationMetric.dataPoints[cycleDurationMetric.dataPoints.length - 1].value;
+        cycleDurationMetric.dataPoints[
+          cycleDurationMetric.dataPoints.length - 1
+        ].value;
       if (lastDuration > alertThresholds.cycleLatencyMs) {
         this.createAlert(
-          'warning',
+          "warning",
           `High cycle latency: ${lastDuration.toFixed(0)}ms`,
-          'cognitive'
+          "cognitive",
         );
       }
     }
@@ -449,8 +472,14 @@ export class TelemetryMonitor extends EventEmitter {
   /**
    * Create an alert
    */
-  public createAlert(severity: Alert['severity'], message: string, source: string): Alert {
-    const alertId = `alert-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  public createAlert(
+    severity: Alert["severity"],
+    message: string,
+    source: string,
+  ): Alert {
+    const alertId = `alert-${Date.now()}-${Math.random()
+      .toString(36)
+      .slice(2)}`;
     const alert: Alert = {
       id: alertId,
       severity,
@@ -461,7 +490,7 @@ export class TelemetryMonitor extends EventEmitter {
     };
 
     this.alerts.set(alertId, alert);
-    this.emit('alert_created', alert);
+    this.emit("alert_created", alert);
     log.warn(`Alert created: [${severity}] ${message}`);
 
     return alert;
@@ -474,7 +503,7 @@ export class TelemetryMonitor extends EventEmitter {
     const alert = this.alerts.get(alertId);
     if (alert) {
       alert.acknowledged = true;
-      this.emit('alert_acknowledged', alert);
+      this.emit("alert_acknowledged", alert);
       return true;
     }
     return false;
@@ -487,7 +516,7 @@ export class TelemetryMonitor extends EventEmitter {
     const alert = this.alerts.get(alertId);
     if (alert) {
       alert.resolvedAt = Date.now();
-      this.emit('alert_resolved', alert);
+      this.emit("alert_resolved", alert);
       return true;
     }
     return false;
@@ -500,7 +529,9 @@ export class TelemetryMonitor extends EventEmitter {
     const cutoff = Date.now() - this.config.retentionPeriodMs;
 
     for (const metric of this.metrics.values()) {
-      metric.dataPoints = metric.dataPoints.filter((dp) => dp.timestamp >= cutoff);
+      metric.dataPoints = metric.dataPoints.filter(
+        (dp) => dp.timestamp >= cutoff,
+      );
     }
   }
 
@@ -508,38 +539,45 @@ export class TelemetryMonitor extends EventEmitter {
    * Get health status
    */
   public getHealthStatus(): HealthStatus {
-    const components: HealthStatus['components'] = [];
+    const components: HealthStatus["components"] = [];
 
     // Check memory
     const memoryUsage = process.memoryUsage();
     const memoryPercent = (memoryUsage.heapUsed / memoryUsage.heapTotal) * 100;
     components.push({
-      name: 'memory',
-      status: memoryPercent > 90 ? 'unhealthy' : memoryPercent > 70 ? 'degraded' : 'healthy',
+      name: "memory",
+      status:
+        memoryPercent > 90
+          ? "unhealthy"
+          : memoryPercent > 70
+            ? "degraded"
+            : "healthy",
       message: `${memoryPercent.toFixed(1)}% used`,
     });
 
     // Check error rate
-    const errorRate = this.messageCount > 0 ? (this.errorCount / this.messageCount) * 100 : 0;
+    const errorRate =
+      this.messageCount > 0 ? (this.errorCount / this.messageCount) * 100 : 0;
     components.push({
-      name: 'error_rate',
-      status: errorRate > 10 ? 'unhealthy' : errorRate > 5 ? 'degraded' : 'healthy',
+      name: "error_rate",
+      status:
+        errorRate > 10 ? "unhealthy" : errorRate > 5 ? "degraded" : "healthy",
       message: `${errorRate.toFixed(1)}% error rate`,
     });
 
     // Check cognitive cycles
     components.push({
-      name: 'cognitive_engine',
-      status: this.cycleCount > 0 ? 'healthy' : 'degraded',
+      name: "cognitive_engine",
+      status: this.cycleCount > 0 ? "healthy" : "degraded",
       message: `${this.cycleCount} cycles completed`,
     });
 
     // Determine overall status
-    const hasUnhealthy = components.some((c) => c.status === 'unhealthy');
-    const hasDegraded = components.some((c) => c.status === 'degraded');
+    const hasUnhealthy = components.some((c) => c.status === "unhealthy");
+    const hasDegraded = components.some((c) => c.status === "degraded");
 
     return {
-      status: hasUnhealthy ? 'unhealthy' : hasDegraded ? 'degraded' : 'healthy',
+      status: hasUnhealthy ? "unhealthy" : hasDegraded ? "degraded" : "healthy",
       components,
       lastCheck: Date.now(),
     };
@@ -561,7 +599,9 @@ export class TelemetryMonitor extends EventEmitter {
       timestamp: Date.now(),
       metrics,
       health: this.getHealthStatus(),
-      activeAlerts: Array.from(this.alerts.values()).filter((a) => !a.resolvedAt),
+      activeAlerts: Array.from(this.alerts.values()).filter(
+        (a) => !a.resolvedAt,
+      ),
       systemInfo: {
         uptime: Date.now() - this.startTime,
         memoryUsage: process.memoryUsage().heapUsed,
@@ -615,13 +655,13 @@ export class TelemetryMonitor extends EventEmitter {
         const labels = lastPoint.labels
           ? `{${Object.entries(lastPoint.labels)
               .map(([k, v]) => `${k}="${v}"`)
-              .join(',')}}`
-          : '';
+              .join(",")}}`
+          : "";
         lines.push(`${metric.name}${labels} ${lastPoint.value}`);
       }
     }
 
-    return lines.join('\n');
+    return lines.join("\n");
   }
 }
 

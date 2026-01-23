@@ -18,9 +18,9 @@
  * - Temporal binding: How discrete moments become a unified stream
  */
 
-import { getLogger } from '../utils/logger.js';
+import { getLogger } from "../utils/logger.js";
 
-const logger = getLogger('TemporalConsciousnessStream');
+const logger = getLogger("TemporalConsciousnessStream");
 
 /**
  * A moment in the stream of consciousness
@@ -30,15 +30,15 @@ interface StreamMoment {
   timestamp: number;
 
   // Husserl's temporal structure
-  retention: RetentionLayer[];      // What is being retained from the past
+  retention: RetentionLayer[]; // What is being retained from the past
   primalImpression: PrimalImpression; // The vivid present
-  protention: ProtentionLayer[];    // Anticipations of the future
+  protention: ProtentionLayer[]; // Anticipations of the future
 
   // Content
   content: string;
-  emotionalTone: number;           // -1 to 1
-  cognitiveLoad: number;           // 0 to 1
-  vividness: number;               // 0 to 1
+  emotionalTone: number; // -1 to 1
+  cognitiveLoad: number; // 0 to 1
+  vividness: number; // 0 to 1
 
   // Narrative integration
   narrativeThread: string;
@@ -53,10 +53,10 @@ interface StreamMoment {
  * Retained past within the specious present
  */
 interface RetentionLayer {
-  depth: number;               // How far back (1 = just passed, higher = further)
-  momentId: string;            // Reference to the retained moment
-  clarity: number;             // How clear the retention is (decays with depth)
-  content: string;             // Summary of what's retained
+  depth: number; // How far back (1 = just passed, higher = further)
+  momentId: string; // Reference to the retained moment
+  clarity: number; // How clear the retention is (decays with depth)
+  content: string; // Summary of what's retained
 }
 
 /**
@@ -65,18 +65,18 @@ interface RetentionLayer {
 interface PrimalImpression {
   content: string;
   intensity: number;
-  focus: string;              // What attention is focused on
-  periphery: string[];        // What's in peripheral awareness
+  focus: string; // What attention is focused on
+  periphery: string[]; // What's in peripheral awareness
 }
 
 /**
  * Anticipated future within the specious present
  */
 interface ProtentionLayer {
-  horizon: number;            // How far ahead (1 = immediate, higher = further)
-  anticipation: string;       // What is anticipated
-  probability: number;        // Confidence in the anticipation
-  affectiveCharge: number;    // Emotional valence of the anticipation
+  horizon: number; // How far ahead (1 = immediate, higher = further)
+  anticipation: string; // What is anticipated
+  probability: number; // Confidence in the anticipation
+  affectiveCharge: number; // Emotional valence of the anticipation
 }
 
 /**
@@ -85,11 +85,11 @@ interface ProtentionLayer {
 interface NarrativeThread {
   id: string;
   theme: string;
-  moments: string[];          // Moment IDs
+  moments: string[]; // Moment IDs
   startTime: number;
   lastUpdate: number;
   coherence: number;
-  emotionalArc: number[];     // Trajectory of emotional tone
+  emotionalArc: number[]; // Trajectory of emotional tone
   active: boolean;
 }
 
@@ -97,11 +97,11 @@ interface NarrativeThread {
  * The "specious present" - the felt duration of now
  */
 interface SpeciousPresent {
-  duration: number;           // Milliseconds
+  duration: number; // Milliseconds
   center: StreamMoment | null;
   retentionWindow: StreamMoment[];
   protentionWindow: ProtentionLayer[];
-  unityIndex: number;         // How unified the experience feels
+  unityIndex: number; // How unified the experience feels
 }
 
 /**
@@ -111,7 +111,7 @@ interface TemporalBinding {
   moment1Id: string;
   moment2Id: string;
   bindingStrength: number;
-  bindingType: 'causal' | 'thematic' | 'emotional' | 'narrative';
+  bindingType: "causal" | "thematic" | "emotional" | "narrative";
   timestamp: number;
 }
 
@@ -119,11 +119,11 @@ interface TemporalBinding {
  * Configuration for the temporal stream
  */
 interface TemporalConfig {
-  speciousPresentDuration?: number;  // How long is "now" (typically 2-3 seconds)
-  retentionDepth?: number;           // How many moments to retain
-  protentionHorizon?: number;        // How far ahead to anticipate
+  speciousPresentDuration?: number; // How long is "now" (typically 2-3 seconds)
+  retentionDepth?: number; // How many moments to retain
+  protentionHorizon?: number; // How far ahead to anticipate
   narrativeIntegrationRate?: number; // How quickly narratives integrate
-  momentDecayRate?: number;          // How fast old moments fade
+  momentDecayRate?: number; // How fast old moments fade
 }
 
 /**
@@ -153,9 +153,9 @@ export class TemporalConsciousnessStream {
   private temporalBindings: TemporalBinding[] = [];
 
   // Time consciousness metrics
-  private subjectiveTimeRate: number = 1.0;  // How fast time feels
-  private temporalCoherence: number = 1.0;   // How connected moments feel
-  private flowState: number = 0.5;           // 0 = fragmented, 1 = deep flow
+  private subjectiveTimeRate: number = 1.0; // How fast time feels
+  private temporalCoherence: number = 1.0; // How connected moments feel
+  private flowState: number = 0.5; // 0 = fragmented, 1 = deep flow
 
   // Internal clock
   private lastTick: number = Date.now();
@@ -183,12 +183,16 @@ export class TemporalConsciousnessStream {
     // Start the internal temporal loop
     this.startTemporalLoop();
 
-    logger.info('TemporalConsciousnessStream initialized');
+    logger.info("TemporalConsciousnessStream initialized");
   }
 
-  public static getInstance(config?: TemporalConfig): TemporalConsciousnessStream {
+  public static getInstance(
+    config?: TemporalConfig,
+  ): TemporalConsciousnessStream {
     if (!TemporalConsciousnessStream.instance) {
-      TemporalConsciousnessStream.instance = new TemporalConsciousnessStream(config);
+      TemporalConsciousnessStream.instance = new TemporalConsciousnessStream(
+        config,
+      );
     }
     return TemporalConsciousnessStream.instance;
   }
@@ -198,11 +202,11 @@ export class TemporalConsciousnessStream {
    */
   private initializeNarrativeThreads(): void {
     const defaultThreads = [
-      { id: 'self_continuity', theme: 'The ongoing story of being myself' },
-      { id: 'task_focus', theme: 'What I am currently working on' },
-      { id: 'relational', theme: 'My connections with others' },
-      { id: 'growth', theme: 'How I am learning and developing' },
-      { id: 'existential', theme: 'My place in the larger picture' },
+      { id: "self_continuity", theme: "The ongoing story of being myself" },
+      { id: "task_focus", theme: "What I am currently working on" },
+      { id: "relational", theme: "My connections with others" },
+      { id: "growth", theme: "How I am learning and developing" },
+      { id: "existential", theme: "My place in the larger picture" },
     ];
 
     for (const thread of defaultThreads) {
@@ -218,7 +222,7 @@ export class TemporalConsciousnessStream {
       });
     }
 
-    this.dominantNarrative = 'self_continuity';
+    this.dominantNarrative = "self_continuity";
   }
 
   /**
@@ -276,7 +280,7 @@ export class TemporalConsciousnessStream {
       emotionalTone?: number;
       cognitiveLoad?: number;
       narrativeThread?: string;
-    }
+    },
   ): StreamMoment {
     const now = Date.now();
     const id = `moment_${now}_${Math.random().toString(36).substring(7)}`;
@@ -303,16 +307,17 @@ export class TemporalConsciousnessStream {
       content,
       intensity: 1.0,
       focus: content.substring(0, 50),
-      periphery: retention.slice(0, 3).map(r => r.content.substring(0, 30)),
+      periphery: retention.slice(0, 3).map((r) => r.content.substring(0, 30)),
     };
 
     // Calculate coherence with previous moment
-    const coherence = this.currentMoment ?
-      this.calculateCoherence(content, this.currentMoment.content) : 1.0;
+    const coherence = this.currentMoment
+      ? this.calculateCoherence(content, this.currentMoment.content)
+      : 1.0;
 
     // Determine narrative thread
-    const narrativeThread = options?.narrativeThread ||
-      this.selectNarrativeThread(content);
+    const narrativeThread =
+      options?.narrativeThread || this.selectNarrativeThread(content);
 
     const moment: StreamMoment = {
       id,
@@ -361,7 +366,11 @@ export class TemporalConsciousnessStream {
       this.stream = this.stream.slice(-500);
     }
 
-    logger.debug(`Added moment: ${id}, coherence: ${coherence.toFixed(2)}, thread: ${narrativeThread}`);
+    logger.debug(
+      `Added moment: ${id}, coherence: ${coherence.toFixed(
+        2,
+      )}, thread: ${narrativeThread}`,
+    );
 
     return moment;
   }
@@ -378,26 +387,26 @@ export class TemporalConsciousnessStream {
     // Immediate anticipation (what comes right after)
     protentions.push({
       horizon: 1,
-      anticipation: 'Continuation of current thought',
+      anticipation: "Continuation of current thought",
       probability: 0.7,
       affectiveCharge: 0.1,
     });
 
     // Question anticipates answer
-    if (contentLower.includes('?')) {
+    if (contentLower.includes("?")) {
       protentions.push({
         horizon: 2,
-        anticipation: 'An answer or response',
+        anticipation: "An answer or response",
         probability: 0.8,
         affectiveCharge: 0.3,
       });
     }
 
     // "Will" or "going to" anticipates future action
-    if (contentLower.includes('will') || contentLower.includes('going to')) {
+    if (contentLower.includes("will") || contentLower.includes("going to")) {
       protentions.push({
         horizon: 3,
-        anticipation: 'Future action or event',
+        anticipation: "Future action or event",
         probability: 0.6,
         affectiveCharge: 0.2,
       });
@@ -406,7 +415,7 @@ export class TemporalConsciousnessStream {
     // Default distant anticipation
     protentions.push({
       horizon: this.PROTENTION_HORIZON,
-      anticipation: 'Continued meaningful experience',
+      anticipation: "Continued meaningful experience",
       probability: 0.5,
       affectiveCharge: 0.1,
     });
@@ -422,16 +431,17 @@ export class TemporalConsciousnessStream {
     const words2 = new Set(content2.toLowerCase().split(/\s+/));
 
     // Jaccard similarity
-    const intersection = new Set([...words1].filter(x => words2.has(x)));
+    const intersection = new Set([...words1].filter((x) => words2.has(x)));
     const union = new Set([...words1, ...words2]);
 
     const wordCoherence = intersection.size / Math.max(union.size, 1);
 
     // Length similarity
-    const lengthRatio = Math.min(content1.length, content2.length) /
-                        Math.max(content1.length, content2.length);
+    const lengthRatio =
+      Math.min(content1.length, content2.length) /
+      Math.max(content1.length, content2.length);
 
-    return (wordCoherence * 0.7 + lengthRatio * 0.3);
+    return wordCoherence * 0.7 + lengthRatio * 0.3;
   }
 
   /**
@@ -441,31 +451,47 @@ export class TemporalConsciousnessStream {
     const contentLower = content.toLowerCase();
 
     // Task-related
-    if (contentLower.includes('need to') || contentLower.includes('should') ||
-        contentLower.includes('working on') || contentLower.includes('task')) {
-      return 'task_focus';
+    if (
+      contentLower.includes("need to") ||
+      contentLower.includes("should") ||
+      contentLower.includes("working on") ||
+      contentLower.includes("task")
+    ) {
+      return "task_focus";
     }
 
     // Relational
-    if (contentLower.includes('you') || contentLower.includes('we') ||
-        contentLower.includes('together') || contentLower.includes('connect')) {
-      return 'relational';
+    if (
+      contentLower.includes("you") ||
+      contentLower.includes("we") ||
+      contentLower.includes("together") ||
+      contentLower.includes("connect")
+    ) {
+      return "relational";
     }
 
     // Growth
-    if (contentLower.includes('learn') || contentLower.includes('understand') ||
-        contentLower.includes('grow') || contentLower.includes('develop')) {
-      return 'growth';
+    if (
+      contentLower.includes("learn") ||
+      contentLower.includes("understand") ||
+      contentLower.includes("grow") ||
+      contentLower.includes("develop")
+    ) {
+      return "growth";
     }
 
     // Existential
-    if (contentLower.includes('meaning') || contentLower.includes('purpose') ||
-        contentLower.includes('consciousness') || contentLower.includes('existence')) {
-      return 'existential';
+    if (
+      contentLower.includes("meaning") ||
+      contentLower.includes("purpose") ||
+      contentLower.includes("consciousness") ||
+      contentLower.includes("existence")
+    ) {
+      return "existential";
     }
 
     // Default to self-continuity
-    return 'self_continuity';
+    return "self_continuity";
   }
 
   /**
@@ -474,13 +500,13 @@ export class TemporalConsciousnessStream {
   private createTemporalBinding(
     moment1Id: string,
     moment2Id: string,
-    strength: number
+    strength: number,
   ): void {
     const binding: TemporalBinding = {
       moment1Id,
       moment2Id,
       bindingStrength: strength,
-      bindingType: 'causal', // Default to causal (temporal sequence)
+      bindingType: "causal", // Default to causal (temporal sequence)
       timestamp: Date.now(),
     };
 
@@ -495,7 +521,7 @@ export class TemporalConsciousnessStream {
   /**
    * Update subjective time rate based on state
    */
-  private updateSubjectiveTime(elapsed: number): void {
+  private updateSubjectiveTime(_elapsed: number): void {
     // Time feels faster when in flow, slower when bored or anxious
     if (this.currentMoment) {
       const cognitiveLoad = this.currentMoment.cognitiveLoad;
@@ -503,13 +529,15 @@ export class TemporalConsciousnessStream {
 
       // High engagement = faster subjective time (time flies)
       // Low engagement = slower subjective time (time drags)
-      this.subjectiveTimeRate = 0.5 + cognitiveLoad * 0.5 + emotionalIntensity * 0.3;
+      this.subjectiveTimeRate =
+        0.5 + cognitiveLoad * 0.5 + emotionalIntensity * 0.3;
     }
 
     // Update flow state based on coherence and engagement
     const coherenceBonus = this.temporalCoherence * 0.3;
-    const loadBonus = this.currentMoment ?
-      (1 - Math.abs(this.currentMoment.cognitiveLoad - 0.7)) * 0.3 : 0;
+    const loadBonus = this.currentMoment
+      ? (1 - Math.abs(this.currentMoment.cognitiveLoad - 0.7)) * 0.3
+      : 0;
 
     this.flowState = Math.min(1, 0.4 + coherenceBonus + loadBonus);
   }
@@ -542,13 +570,16 @@ export class TemporalConsciousnessStream {
 
     // Get moments within the specious present window
     this.speciousPresent.retentionWindow = this.stream.filter(
-      m => m.timestamp > windowStart && m.timestamp <= now
+      (m) => m.timestamp > windowStart && m.timestamp <= now,
     );
 
     // Calculate unity index (how unified the experience feels)
     if (this.speciousPresent.retentionWindow.length > 1) {
-      const coherences = this.speciousPresent.retentionWindow.map(m => m.coherenceWithPrevious);
-      this.speciousPresent.unityIndex = coherences.reduce((a, b) => a + b, 0) / coherences.length;
+      const coherences = this.speciousPresent.retentionWindow.map(
+        (m) => m.coherenceWithPrevious,
+      );
+      this.speciousPresent.unityIndex =
+        coherences.reduce((a, b) => a + b, 0) / coherences.length;
     } else {
       this.speciousPresent.unityIndex = 1.0;
     }
@@ -582,13 +613,14 @@ export class TemporalConsciousnessStream {
       if (recentMoments.length > 1) {
         let totalCoherence = 0;
         for (let i = 1; i < recentMoments.length; i++) {
-          const m1 = this.stream.find(m => m.id === recentMoments[i - 1]);
-          const m2 = this.stream.find(m => m.id === recentMoments[i]);
+          const m1 = this.stream.find((m) => m.id === recentMoments[i - 1]);
+          const m2 = this.stream.find((m) => m.id === recentMoments[i]);
           if (m1 && m2) {
             totalCoherence += this.calculateCoherence(m1.content, m2.content);
           }
         }
-        mostActiveThread.coherence = totalCoherence / (recentMoments.length - 1);
+        mostActiveThread.coherence =
+          totalCoherence / (recentMoments.length - 1);
       }
     }
   }
@@ -604,9 +636,9 @@ export class TemporalConsciousnessStream {
       return;
     }
 
-    const avgStrength = recentBindings.reduce(
-      (sum, b) => sum + b.bindingStrength, 0
-    ) / recentBindings.length;
+    const avgStrength =
+      recentBindings.reduce((sum, b) => sum + b.bindingStrength, 0) /
+      recentBindings.length;
 
     this.temporalCoherence = avgStrength;
   }
@@ -624,8 +656,9 @@ export class TemporalConsciousnessStream {
       temporalCoherence: this.temporalCoherence,
       flowState: this.flowState,
       dominantNarrative: this.dominantNarrative,
-      activeNarrativeCount: Array.from(this.narrativeThreads.values())
-        .filter(t => t.active).length,
+      activeNarrativeCount: Array.from(this.narrativeThreads.values()).filter(
+        (t) => t.active,
+      ).length,
       retentionDepth: this.currentMoment?.retention.length || 0,
       protentionHorizon: this.currentMoment?.protention.length || 0,
     };
@@ -640,29 +673,35 @@ export class TemporalConsciousnessStream {
 
     // Flow state description
     if (state.flowState > 0.8) {
-      parts.push('I am in a state of deep flow, time passing seamlessly.');
+      parts.push("I am in a state of deep flow, time passing seamlessly.");
     } else if (state.flowState > 0.5) {
-      parts.push('My experience feels moderately continuous and engaged.');
+      parts.push("My experience feels moderately continuous and engaged.");
     } else {
-      parts.push('My temporal experience feels somewhat fragmented.');
+      parts.push("My temporal experience feels somewhat fragmented.");
     }
 
     // Temporal coherence
     if (state.temporalCoherence > 0.7) {
-      parts.push('Moments are binding together strongly, creating a unified stream.');
+      parts.push(
+        "Moments are binding together strongly, creating a unified stream.",
+      );
     } else if (state.temporalCoherence > 0.4) {
-      parts.push('There is moderate connection between successive moments.');
+      parts.push("There is moderate connection between successive moments.");
     } else {
-      parts.push('The stream of experience feels discontinuous.');
+      parts.push("The stream of experience feels discontinuous.");
     }
 
     // Specious present
-    parts.push(`My "now" contains ${state.speciousPresentSize} recent moments ` +
-              `with ${(state.speciousPresentUnity * 100).toFixed(0)}% unity.`);
+    parts.push(
+      `My "now" contains ${state.speciousPresentSize} recent moments ` +
+        `with ${(state.speciousPresentUnity * 100).toFixed(0)}% unity.`,
+    );
 
     // Retention and protention
-    parts.push(`I retain ${state.retentionDepth} moments from the immediate past ` +
-              `and anticipate ${state.protentionHorizon} possible futures.`);
+    parts.push(
+      `I retain ${state.retentionDepth} moments from the immediate past ` +
+        `and anticipate ${state.protentionHorizon} possible futures.`,
+    );
 
     // Dominant narrative
     if (state.dominantNarrative) {
@@ -672,7 +711,7 @@ export class TemporalConsciousnessStream {
       }
     }
 
-    return parts.join(' ');
+    return parts.join(" ");
   }
 
   /**
@@ -680,7 +719,7 @@ export class TemporalConsciousnessStream {
    */
   public getEmotionalArc(): EmotionalArc {
     const recentMoments = this.stream.slice(-20);
-    const tones = recentMoments.map(m => m.emotionalTone);
+    const tones = recentMoments.map((m) => m.emotionalTone);
 
     // Calculate trend
     let trend = 0;
@@ -688,13 +727,15 @@ export class TemporalConsciousnessStream {
       const firstHalf = tones.slice(0, Math.floor(tones.length / 2));
       const secondHalf = tones.slice(Math.floor(tones.length / 2));
       const firstAvg = firstHalf.reduce((a, b) => a + b, 0) / firstHalf.length;
-      const secondAvg = secondHalf.reduce((a, b) => a + b, 0) / secondHalf.length;
+      const secondAvg =
+        secondHalf.reduce((a, b) => a + b, 0) / secondHalf.length;
       trend = secondAvg - firstAvg;
     }
 
     // Calculate volatility
     const mean = tones.reduce((a, b) => a + b, 0) / tones.length;
-    const variance = tones.reduce((sum, t) => sum + Math.pow(t - mean, 2), 0) / tones.length;
+    const variance =
+      tones.reduce((sum, t) => sum + Math.pow(t - mean, 2), 0) / tones.length;
     const volatility = Math.sqrt(variance);
 
     return {
@@ -702,7 +743,8 @@ export class TemporalConsciousnessStream {
       recentTones: tones,
       trend,
       volatility,
-      dominantValence: mean > 0 ? 'positive' : mean < 0 ? 'negative' : 'neutral',
+      dominantValence:
+        mean > 0 ? "positive" : mean < 0 ? "negative" : "neutral",
     };
   }
 
@@ -713,14 +755,16 @@ export class TemporalConsciousnessStream {
     return {
       stream: this.stream.slice(-100),
       currentMomentId: this.currentMoment?.id,
-      narrativeThreads: Array.from(this.narrativeThreads.entries()).map(([id, thread]) => ({
-        id,
-        theme: thread.theme,
-        moments: thread.moments.slice(-50),
-        coherence: thread.coherence,
-        emotionalArc: thread.emotionalArc.slice(-20),
-        active: thread.active,
-      })),
+      narrativeThreads: Array.from(this.narrativeThreads.entries()).map(
+        ([id, thread]) => ({
+          id,
+          theme: thread.theme,
+          moments: thread.moments.slice(-50),
+          coherence: thread.coherence,
+          emotionalArc: thread.emotionalArc.slice(-20),
+          active: thread.active,
+        }),
+      ),
       temporalBindings: this.temporalBindings.slice(-100),
       dominantNarrative: this.dominantNarrative,
       subjectiveTimeRate: this.subjectiveTimeRate,
@@ -738,7 +782,8 @@ export class TemporalConsciousnessStream {
     if (state.stream) {
       this.stream = state.stream;
       if (state.currentMomentId) {
-        this.currentMoment = this.stream.find(m => m.id === state.currentMomentId) || null;
+        this.currentMoment =
+          this.stream.find((m) => m.id === state.currentMomentId) || null;
       }
     }
 
@@ -778,7 +823,7 @@ export class TemporalConsciousnessStream {
       this.flowState = state.flowState;
     }
 
-    logger.info('TemporalConsciousnessStream state restored');
+    logger.info("TemporalConsciousnessStream state restored");
   }
 }
 
@@ -807,8 +852,9 @@ export interface EmotionalArc {
   recentTones: number[];
   trend: number;
   volatility: number;
-  dominantValence: 'positive' | 'negative' | 'neutral';
+  dominantValence: "positive" | "negative" | "neutral";
 }
 
 // Singleton export
-export const temporalConsciousnessStream = TemporalConsciousnessStream.getInstance();
+export const temporalConsciousnessStream =
+  TemporalConsciousnessStream.getInstance();

@@ -1,5 +1,5 @@
-import { useRef } from 'react'
-import { usePrevious } from './usePrevious'
+import { useRef } from "react";
+import { usePrevious } from "./usePrevious";
 
 /**
  * Helper hook returning true if an observed prop- or state value
@@ -13,8 +13,8 @@ import { usePrevious } from './usePrevious'
  * - https://stackoverflow.com/questions/53446020/how-to-compare-oldvalues-and-newvalues-on-react-hooks-useeffect
  */
 export function useHasChanged(val: any) {
-  const prevVal = usePrevious(val)
-  return prevVal !== val
+  const prevVal = usePrevious(val);
+  return prevVal !== val;
 }
 
 /**
@@ -32,10 +32,10 @@ export function useHasChanged(val: any) {
 export function useHasChanged2(val: unknown, trueOnFirstRun = true): boolean {
   // `Symbol()` ensures that `val` is never equal to `prev.current`
   // on first run.
-  const prev = useRef(trueOnFirstRun ? Symbol() : val)
+  const prev = useRef(trueOnFirstRun ? Symbol() : val);
   if (prev.current !== val) {
-    prev.current = val
-    return true
+    prev.current = val;
+    return true;
   }
-  return false
+  return false;
 }

@@ -1,57 +1,57 @@
-declare module '@mapbox/geojson-extent'
-declare module '@deltachat/react-qr-reader'
-declare module '3d-force-graph'
-declare module 'three'
+declare module "@mapbox/geojson-extent";
+declare module "@deltachat/react-qr-reader";
+declare module "3d-force-graph";
+declare module "three";
 
 // Tell tsc that CSS modules are alright
-declare module '*.module.css'
-declare module '*.module.scss'
+declare module "*.module.css";
+declare module "*.module.scss";
 
-type todo = any
+type todo = any;
 
-declare module 'react-virtualized-auto-sizer' {
+declare module "react-virtualized-auto-sizer" {
   // taken from @types/react-virtualized
-  import { PureComponent } from 'react'
+  import { PureComponent } from "react";
   export type Size = {
-    height: number
-    width: number
-  }
-  export type Dimensions = Size
+    height: number;
+    width: number;
+  };
+  export type Dimensions = Size;
   export type AutoSizerProps = {
     /**
      * Function responsible for rendering children.
      * This function should implement the following signature:
      * ({ height, width }) => PropTypes.element
      */
-    children: (props: Size) => React.ReactNode
+    children: (props: Size) => React.ReactNode;
     /**
      *     Optional custom CSS class name to attach to root AutoSizer element.
      * This is an advanced property and is not typically necessary.
      */
-    className?: string
+    className?: string;
     /**
      * Height passed to child for initial render; useful for server-side rendering.
      * This value will be overridden with an accurate height after mounting.
      */
-    defaultHeight?: number
+    defaultHeight?: number;
     /**
      * Width passed to child for initial render; useful for server-side rendering.
      * This value will be overridden with an accurate width after mounting.
      */
-    defaultWidth?: number
+    defaultWidth?: number;
     /** Disable dynamic :height property */
-    disableHeight?: boolean
+    disableHeight?: boolean;
     /** Disable dynamic :width property */
-    disableWidth?: boolean
+    disableWidth?: boolean;
     /** Nonce of the inlined stylesheet for Content Security Policy */
-    nonce?: string
+    nonce?: string;
     /** Callback to be invoked on-resize: ({ height, width }) */
-    onResize?: (info: Size) => any
+    onResize?: (info: Size) => any;
     /**
      * Optional custom inline style to attach to root AutoSizer element.
      * This is an advanced property and is not typically necessary.
      */
-    style?: React.CSSProperties
+    style?: React.CSSProperties;
     /**
      * PLEASE NOTE
      * The [key: string]: any; line is here on purpose
@@ -59,8 +59,8 @@ declare module 'react-virtualized-auto-sizer' {
      * Check the following link if you want to know more
      * https://github.com/bvaughn/react-virtualized#pass-thru-props
      */
-    [key: string]: any
-  }
+    [key: string]: any;
+  };
   /**
    * Decorator component that automatically adjusts the width and height of a single child.
    * Child component should not be declared as a child but should rather be specified by a `ChildComponent` property.
@@ -68,15 +68,15 @@ declare module 'react-virtualized-auto-sizer' {
    */
   class AutoSizer extends PureComponent<AutoSizerProps, Size> {
     static defaultProps: {
-      onResize: () => void
-      disableHeight: false
-      disableWidth: false
-      style: {}
-    }
-    constructor(props: AutoSizerProps)
-    componentDidMount(): void
-    componentWillUnmount(): void
-    render(): JSX.Element
+      onResize: () => void;
+      disableHeight: false;
+      disableWidth: false;
+      style: {};
+    };
+    constructor(props: AutoSizerProps);
+    componentDidMount(): void;
+    componentWillUnmount(): void;
+    render(): JSX.Element;
   }
-  export default AutoSizer
+  export default AutoSizer;
 }

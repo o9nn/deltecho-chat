@@ -1,20 +1,20 @@
-import React from 'react'
+import React from "react";
 
-import Gallery from './Gallery'
-import MessageListAndComposer from './message/MessageListAndComposer'
-import NoChatSelected from './NoChatSelected'
-import useChat from '../hooks/chat/useChat'
-import { ChatView } from '../contexts/ChatContext'
-import { RecoverableCrashScreen } from './screens/RecoverableCrashScreen'
+import Gallery from "./Gallery";
+import MessageListAndComposer from "./message/MessageListAndComposer";
+import NoChatSelected from "./NoChatSelected";
+import useChat from "../hooks/chat/useChat";
+import { ChatView } from "../contexts/ChatContext";
+import { RecoverableCrashScreen } from "./screens/RecoverableCrashScreen";
 
-import type { AlternativeView } from '../contexts/ChatContext'
+import type { AlternativeView } from "../contexts/ChatContext";
 
 type Props = {
-  accountId?: number
-  alternativeView: AlternativeView
-  galleryRef: any
-  onUpdateGalleryView: () => void
-}
+  accountId?: number;
+  alternativeView: AlternativeView;
+  galleryRef: any;
+  onUpdateGalleryView: () => void;
+};
 
 export default function MessageListView({
   accountId,
@@ -22,7 +22,7 @@ export default function MessageListView({
   alternativeView,
   onUpdateGalleryView,
 }: Props) {
-  const { activeView, chatWithLinger } = useChat()
+  const { activeView, chatWithLinger } = useChat();
 
   if (chatWithLinger && accountId) {
     switch (activeView) {
@@ -33,7 +33,7 @@ export default function MessageListView({
             chatId={chatWithLinger.id}
             onUpdateView={onUpdateGalleryView}
           />
-        )
+        );
       case ChatView.MessageList:
       default:
         return (
@@ -43,17 +43,17 @@ export default function MessageListView({
               chat={chatWithLinger}
             />
           </RecoverableCrashScreen>
-        )
+        );
     }
-  } else if (alternativeView === 'global-gallery') {
+  } else if (alternativeView === "global-gallery") {
     return (
       <Gallery
-        chatId={'all'}
+        chatId={"all"}
         ref={galleryRef}
         onUpdateView={onUpdateGalleryView}
       />
-    )
+    );
   }
 
-  return <NoChatSelected />
+  return <NoChatSelected />;
 }

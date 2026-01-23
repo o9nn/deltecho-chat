@@ -1,17 +1,17 @@
-import React from 'react'
+import React from "react";
 
-import DialogFooter from './DialogFooter'
-import FooterActionButton from './FooterActionButton'
-import FooterActions from './FooterActions'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
+import DialogFooter from "./DialogFooter";
+import FooterActionButton from "./FooterActionButton";
+import FooterActions from "./FooterActions";
+import useTranslationFunction from "../../hooks/useTranslationFunction";
 
 type Props = {
-  cancelLabel?: string
-  confirmLabel?: string
-  disableOK?: boolean
-  onCancel: () => void
-  onOk: () => void
-}
+  cancelLabel?: string;
+  confirmLabel?: string;
+  disableOK?: boolean;
+  onCancel: () => void;
+  onOk: () => void;
+};
 
 export default function OkCancelFooterAction({
   onCancel,
@@ -20,30 +20,30 @@ export default function OkCancelFooterAction({
   cancelLabel,
   confirmLabel,
 }: Props) {
-  const tx = useTranslationFunction()
+  const tx = useTranslationFunction();
 
-  cancelLabel = cancelLabel || tx('cancel')
-  confirmLabel = confirmLabel || tx('ok')
+  cancelLabel = cancelLabel || tx("cancel");
+  confirmLabel = confirmLabel || tx("ok");
 
   return (
     <DialogFooter>
       <FooterActions>
         <FooterActionButton
-          styling='secondary'
+          styling="secondary"
           onClick={onCancel}
-          data-testid='cancel'
+          data-testid="cancel"
         >
           {cancelLabel}
         </FooterActionButton>
         <FooterActionButton
-          styling='primary'
+          styling="primary"
           disabled={disableOK}
-          data-testid='ok'
+          data-testid="ok"
           onClick={onOk}
         >
           {confirmLabel}
         </FooterActionButton>
       </FooterActions>
     </DialogFooter>
-  )
+  );
 }

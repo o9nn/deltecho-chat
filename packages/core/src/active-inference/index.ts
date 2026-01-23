@@ -13,5 +13,5 @@
  * Based on theoretical neuroscience work by Karl Friston and colleagues.
  */
 
-export * from './ActiveInference.js';
-export * from './NicheConstruction.js';
+export * from "./ActiveInference.js";
+export * from "./NicheConstruction.js";

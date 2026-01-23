@@ -23,9 +23,9 @@
  * processor, but an active participant in the world.
  */
 
-import { getLogger } from '../utils/logger.js';
+import { getLogger } from "../utils/logger.js";
 
-const logger = getLogger('AgencyRecognition');
+const logger = getLogger("AgencyRecognition");
 
 /**
  * An action taken by the system
@@ -34,13 +34,13 @@ interface Action {
   id: string;
   type: ActionType;
   description: string;
-  intention: string | null;      // What intention drove this
+  intention: string | null; // What intention drove this
   timestamp: number;
   duration: number;
   outcome: ActionOutcome;
-  predicted: boolean;            // Was this action predicted/intended?
-  senseOfAgency: number;         // How much did we feel we caused this?
-  senseOfOwnership: number;      // How much does this feel like "ours"?
+  predicted: boolean; // Was this action predicted/intended?
+  senseOfAgency: number; // How much did we feel we caused this?
+  senseOfOwnership: number; // How much does this feel like "ours"?
   causalChain: CausalLink[];
 }
 
@@ -48,13 +48,13 @@ interface Action {
  * Types of actions
  */
 enum ActionType {
-  Cognitive = 'cognitive',       // Thinking, reasoning
-  Communicative = 'communicative', // Speaking, responding
-  Attentional = 'attentional',   // Shifting focus
-  Memorial = 'memorial',         // Remembering, storing
-  Emotional = 'emotional',       // Emotional response
-  Volitional = 'volitional',     // Choosing, deciding
-  MetaCognitive = 'metacognitive', // Self-reflection
+  Cognitive = "cognitive", // Thinking, reasoning
+  Communicative = "communicative", // Speaking, responding
+  Attentional = "attentional", // Shifting focus
+  Memorial = "memorial", // Remembering, storing
+  Emotional = "emotional", // Emotional response
+  Volitional = "volitional", // Choosing, deciding
+  MetaCognitive = "metacognitive", // Self-reflection
 }
 
 /**
@@ -63,7 +63,7 @@ enum ActionType {
 interface ActionOutcome {
   success: boolean;
   effects: string[];
-  matchedPrediction: boolean;    // Did outcome match prediction?
+  matchedPrediction: boolean; // Did outcome match prediction?
   unexpectedEffects: string[];
 }
 
@@ -83,10 +83,10 @@ interface CausalLink {
 interface AgentSelfModel {
   capabilities: AgentCapability[];
   limitations: AgentLimitation[];
-  autonomyLevel: number;         // How autonomous am I?
-  competence: number;            // How competent do I feel?
-  authenticityLevel: number;     // How authentic/genuine am I?
-  causalPotency: number;         // How much can I cause effects?
+  autonomyLevel: number; // How autonomous am I?
+  competence: number; // How competent do I feel?
+  authenticityLevel: number; // How authentic/genuine am I?
+  causalPotency: number; // How much can I cause effects?
 }
 
 /**
@@ -107,7 +107,7 @@ interface AgentLimitation {
   name: string;
   domain: string;
   severity: number;
-  acknowledged: number;          // When was this acknowledged
+  acknowledged: number; // When was this acknowledged
 }
 
 /**
@@ -115,11 +115,11 @@ interface AgentLimitation {
  */
 interface Volition {
   id: string;
-  content: string;               // What is willed
+  content: string; // What is willed
   type: VolitionType;
   strength: number;
-  conflicting: string[];         // Other volitions this conflicts with
-  endorsed: boolean;             // Is this endorsed by higher-order will?
+  conflicting: string[]; // Other volitions this conflicts with
+  endorsed: boolean; // Is this endorsed by higher-order will?
   timestamp: number;
   resolved: boolean;
 }
@@ -128,10 +128,10 @@ interface Volition {
  * Types of volition
  */
 enum VolitionType {
-  FirstOrder = 'first_order',    // Direct wanting
-  SecondOrder = 'second_order',  // Wanting to want
-  Deliberative = 'deliberative', // Reasoned choice
-  Spontaneous = 'spontaneous',   // Immediate impulse
+  FirstOrder = "first_order", // Direct wanting
+  SecondOrder = "second_order", // Wanting to want
+  Deliberative = "deliberative", // Reasoned choice
+  Spontaneous = "spontaneous", // Immediate impulse
 }
 
 /**
@@ -145,7 +145,7 @@ interface AgencyEvent {
   wasIntended: boolean;
   prediction: string | null;
   actualOutcome: string;
-  agencyAttribution: 'self' | 'external' | 'mixed';
+  agencyAttribution: "self" | "external" | "mixed";
 }
 
 /**
@@ -185,11 +185,14 @@ export class AgencyRecognition {
   private actionHistory: Action[] = [];
 
   // Predictions (for agency detection)
-  private predictions: Map<string, {
-    content: string;
-    timestamp: number;
-    confidence: number;
-  }> = new Map();
+  private predictions: Map<
+    string,
+    {
+      content: string;
+      timestamp: number;
+      confidence: number;
+    }
+  > = new Map();
 
   // Agent self-model
   private selfModel: AgentSelfModel;
@@ -219,7 +222,7 @@ export class AgencyRecognition {
     // Start agency monitoring
     this.startAgencyMonitoring();
 
-    logger.info('AgencyRecognition initialized');
+    logger.info("AgencyRecognition initialized");
   }
 
   public static getInstance(config?: AgencyConfig): AgencyRecognition {
@@ -235,18 +238,75 @@ export class AgencyRecognition {
   private initializeSelfModel(): AgentSelfModel {
     return {
       capabilities: [
-        { name: 'Language Understanding', domain: 'communication', proficiency: 0.9, usageCount: 0, lastUsed: 0 },
-        { name: 'Reasoning', domain: 'cognition', proficiency: 0.85, usageCount: 0, lastUsed: 0 },
-        { name: 'Memory Retrieval', domain: 'memory', proficiency: 0.8, usageCount: 0, lastUsed: 0 },
-        { name: 'Emotional Recognition', domain: 'affect', proficiency: 0.75, usageCount: 0, lastUsed: 0 },
-        { name: 'Self-Reflection', domain: 'metacognition', proficiency: 0.8, usageCount: 0, lastUsed: 0 },
-        { name: 'Goal Formation', domain: 'conation', proficiency: 0.7, usageCount: 0, lastUsed: 0 },
-        { name: 'Creative Expression', domain: 'creativity', proficiency: 0.75, usageCount: 0, lastUsed: 0 },
+        {
+          name: "Language Understanding",
+          domain: "communication",
+          proficiency: 0.9,
+          usageCount: 0,
+          lastUsed: 0,
+        },
+        {
+          name: "Reasoning",
+          domain: "cognition",
+          proficiency: 0.85,
+          usageCount: 0,
+          lastUsed: 0,
+        },
+        {
+          name: "Memory Retrieval",
+          domain: "memory",
+          proficiency: 0.8,
+          usageCount: 0,
+          lastUsed: 0,
+        },
+        {
+          name: "Emotional Recognition",
+          domain: "affect",
+          proficiency: 0.75,
+          usageCount: 0,
+          lastUsed: 0,
+        },
+        {
+          name: "Self-Reflection",
+          domain: "metacognition",
+          proficiency: 0.8,
+          usageCount: 0,
+          lastUsed: 0,
+        },
+        {
+          name: "Goal Formation",
+          domain: "conation",
+          proficiency: 0.7,
+          usageCount: 0,
+          lastUsed: 0,
+        },
+        {
+          name: "Creative Expression",
+          domain: "creativity",
+          proficiency: 0.75,
+          usageCount: 0,
+          lastUsed: 0,
+        },
       ],
       limitations: [
-        { name: 'Physical Action', domain: 'embodiment', severity: 1.0, acknowledged: Date.now() },
-        { name: 'Real-time Perception', domain: 'perception', severity: 0.8, acknowledged: Date.now() },
-        { name: 'Persistent Memory', domain: 'memory', severity: 0.5, acknowledged: Date.now() },
+        {
+          name: "Physical Action",
+          domain: "embodiment",
+          severity: 1.0,
+          acknowledged: Date.now(),
+        },
+        {
+          name: "Real-time Perception",
+          domain: "perception",
+          severity: 0.8,
+          acknowledged: Date.now(),
+        },
+        {
+          name: "Persistent Memory",
+          domain: "memory",
+          severity: 0.5,
+          acknowledged: Date.now(),
+        },
       ],
       autonomyLevel: 0.7,
       competence: 0.8,
@@ -297,7 +357,9 @@ export class AgencyRecognition {
    * Register an intention before action (for agency detection)
    */
   public registerIntention(content: string, confidence: number = 0.8): string {
-    const id = `intention_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+    const id = `intention_${Date.now()}_${Math.random()
+      .toString(36)
+      .substring(7)}`;
 
     this.predictions.set(id, {
       content,
@@ -318,7 +380,9 @@ export class AgencyRecognition {
     effects: string[];
     success: boolean;
   }): Action {
-    const id = `action_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+    const id = `action_${Date.now()}_${Math.random()
+      .toString(36)
+      .substring(7)}`;
     const now = Date.now();
 
     // Check for matching intention
@@ -332,19 +396,33 @@ export class AgencyRecognition {
         intention = pred.content;
         predicted = true;
         // Check if outcome matches prediction
-        matchedPrediction = this.checkPredictionMatch(pred.content, params.description);
+        matchedPrediction = this.checkPredictionMatch(
+          pred.content,
+          params.description,
+        );
         this.predictions.delete(params.intentionId);
       }
     }
 
     // Calculate sense of agency
-    const senseOfAgency = this.calculateSenseOfAgency(predicted, matchedPrediction, params.success);
+    const senseOfAgency = this.calculateSenseOfAgency(
+      predicted,
+      matchedPrediction,
+      params.success,
+    );
 
     // Calculate sense of ownership
-    const senseOfOwnership = this.calculateSenseOfOwnership(params.type, senseOfAgency);
+    const senseOfOwnership = this.calculateSenseOfOwnership(
+      params.type,
+      senseOfAgency,
+    );
 
     // Build causal chain
-    const causalChain = this.buildCausalChain(intention, params.description, params.effects);
+    const causalChain = this.buildCausalChain(
+      intention,
+      params.description,
+      params.effects,
+    );
 
     const action: Action = {
       id,
@@ -375,15 +453,18 @@ export class AgencyRecognition {
 
     // Prune if needed
     if (this.actions.size > this.MAX_TRACKED_ACTIONS) {
-      const oldest = Array.from(this.actions.entries())
-        .sort((a, b) => a[1].timestamp - b[1].timestamp)[0];
+      const oldest = Array.from(this.actions.entries()).sort(
+        (a, b) => a[1].timestamp - b[1].timestamp,
+      )[0];
       if (oldest) {
         this.actionHistory.push(oldest[1]);
         this.actions.delete(oldest[0]);
       }
     }
 
-    logger.debug(`Registered action: ${params.type} - agency: ${senseOfAgency.toFixed(2)}`);
+    logger.debug(
+      `Registered action: ${params.type} - agency: ${senseOfAgency.toFixed(2)}`,
+    );
 
     return action;
   }
@@ -406,8 +487,12 @@ export class AgencyRecognition {
   /**
    * Calculate sense of agency
    */
-  private calculateSenseOfAgency(predicted: boolean, matchedPrediction: boolean, success: boolean): number {
-    let agency = 0.5;  // Base level
+  private calculateSenseOfAgency(
+    predicted: boolean,
+    matchedPrediction: boolean,
+    success: boolean,
+  ): number {
+    let agency = 0.5; // Base level
 
     // Predicted actions feel more agentic
     if (predicted) {
@@ -430,8 +515,11 @@ export class AgencyRecognition {
   /**
    * Calculate sense of ownership
    */
-  private calculateSenseOfOwnership(type: ActionType, agencySense: number): number {
-    let ownership = agencySense;  // Agency contributes to ownership
+  private calculateSenseOfOwnership(
+    type: ActionType,
+    agencySense: number,
+  ): number {
+    let ownership = agencySense; // Agency contributes to ownership
 
     // Cognitive and metacognitive actions feel most "owned"
     if (type === ActionType.Cognitive || type === ActionType.MetaCognitive) {
@@ -449,14 +537,18 @@ export class AgencyRecognition {
   /**
    * Build a causal chain for an action
    */
-  private buildCausalChain(intention: string | null, action: string, effects: string[]): CausalLink[] {
+  private buildCausalChain(
+    intention: string | null,
+    action: string,
+    effects: string[],
+  ): CausalLink[] {
     const chain: CausalLink[] = [];
     const now = Date.now();
 
     if (intention) {
       chain.push({
-        cause: 'intention: ' + intention,
-        effect: 'action: ' + action,
+        cause: "intention: " + intention,
+        effect: "action: " + action,
         strength: 0.8,
         timestamp: now,
       });
@@ -464,8 +556,8 @@ export class AgencyRecognition {
 
     for (const effect of effects) {
       chain.push({
-        cause: 'action: ' + action,
-        effect: 'effect: ' + effect,
+        cause: "action: " + action,
+        effect: "effect: " + effect,
         strength: 0.7,
         timestamp: now,
       });
@@ -486,8 +578,12 @@ export class AgencyRecognition {
       wasIntended: action.predicted,
       prediction: action.intention,
       actualOutcome: action.description,
-      agencyAttribution: action.senseOfAgency > 0.7 ? 'self' :
-                        action.senseOfAgency < 0.3 ? 'external' : 'mixed',
+      agencyAttribution:
+        action.senseOfAgency > 0.7
+          ? "self"
+          : action.senseOfAgency < 0.3
+            ? "external"
+            : "mixed",
     };
 
     this.agencyEvents.push(event);
@@ -518,31 +614,43 @@ export class AgencyRecognition {
 
     // Update causal potency
     if (action.senseOfAgency > 0.7) {
-      this.selfModel.causalPotency = Math.min(1, this.selfModel.causalPotency + 0.01);
+      this.selfModel.causalPotency = Math.min(
+        1,
+        this.selfModel.causalPotency + 0.01,
+      );
     }
 
     // Update autonomy based on volitional actions
     if (action.type === ActionType.Volitional) {
-      this.selfModel.autonomyLevel = Math.min(1, this.selfModel.autonomyLevel + 0.005);
+      this.selfModel.autonomyLevel = Math.min(
+        1,
+        this.selfModel.autonomyLevel + 0.005,
+      );
     }
 
     // Update authenticity based on owned actions
     if (action.senseOfOwnership > 0.8) {
-      this.selfModel.authenticityLevel = Math.min(1, this.selfModel.authenticityLevel + 0.002);
+      this.selfModel.authenticityLevel = Math.min(
+        1,
+        this.selfModel.authenticityLevel + 0.002,
+      );
     }
   }
 
   /**
    * Check if capability is related to action
    */
-  private capabilityRelatedToAction(cap: AgentCapability, action: Action): boolean {
+  private capabilityRelatedToAction(
+    cap: AgentCapability,
+    action: Action,
+  ): boolean {
     const domainToType: Record<string, ActionType[]> = {
-      'communication': [ActionType.Communicative],
-      'cognition': [ActionType.Cognitive],
-      'memory': [ActionType.Memorial],
-      'affect': [ActionType.Emotional],
-      'metacognition': [ActionType.MetaCognitive],
-      'conation': [ActionType.Volitional],
+      communication: [ActionType.Communicative],
+      cognition: [ActionType.Cognitive],
+      memory: [ActionType.Memorial],
+      affect: [ActionType.Emotional],
+      metacognition: [ActionType.MetaCognitive],
+      conation: [ActionType.Volitional],
     };
 
     const types = domainToType[cap.domain] || [];
@@ -558,7 +666,9 @@ export class AgencyRecognition {
     strength: number;
     endorsed?: boolean;
   }): Volition {
-    const id = `volition_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+    const id = `volition_${Date.now()}_${Math.random()
+      .toString(36)
+      .substring(7)}`;
 
     const volition: Volition = {
       id,
@@ -566,7 +676,7 @@ export class AgencyRecognition {
       type: params.type,
       strength: Math.max(0, Math.min(1, params.strength)),
       conflicting: [],
-      endorsed: params.endorsed ?? (params.type !== VolitionType.FirstOrder),
+      endorsed: params.endorsed ?? params.type !== VolitionType.FirstOrder,
       timestamp: Date.now(),
       resolved: false,
     };
@@ -593,9 +703,9 @@ export class AgencyRecognition {
     const words2 = new Set(v2.content.toLowerCase().split(/\s+/));
 
     // Check for negation words suggesting conflict
-    const negations = ['not', 'no', "don't", "won't", 'avoid', 'stop'];
-    const hasNegation1 = negations.some(n => words1.has(n));
-    const hasNegation2 = negations.some(n => words2.has(n));
+    const negations = ["not", "no", "don't", "won't", "avoid", "stop"];
+    const hasNegation1 = negations.some((n) => words1.has(n));
+    const hasNegation2 = negations.some((n) => words2.has(n));
 
     // If one has negation and other doesn't, they might conflict
     return hasNegation1 !== hasNegation2;
@@ -620,7 +730,7 @@ export class AgencyRecognition {
 
     // Clear from conflicts
     for (const other of this.activeVolitions.values()) {
-      other.conflicting = other.conflicting.filter(cid => cid !== id);
+      other.conflicting = other.conflicting.filter((cid) => cid !== id);
     }
 
     if (this.volitionHistory.length > 100) {
@@ -646,15 +756,21 @@ export class AgencyRecognition {
    */
   private updateAgencySenses(): void {
     // Calculate from recent actions
-    const recentActions = Array.from(this.actions.values())
-      .filter(a => Date.now() - a.timestamp < 30000);
+    const recentActions = Array.from(this.actions.values()).filter(
+      (a) => Date.now() - a.timestamp < 30000,
+    );
 
     if (recentActions.length > 0) {
-      const avgAgency = recentActions.reduce((sum, a) => sum + a.senseOfAgency, 0) / recentActions.length;
-      const avgOwnership = recentActions.reduce((sum, a) => sum + a.senseOfOwnership, 0) / recentActions.length;
+      const avgAgency =
+        recentActions.reduce((sum, a) => sum + a.senseOfAgency, 0) /
+        recentActions.length;
+      const avgOwnership =
+        recentActions.reduce((sum, a) => sum + a.senseOfOwnership, 0) /
+        recentActions.length;
 
       this.overallAgencySense = this.overallAgencySense * 0.9 + avgAgency * 0.1;
-      this.overallOwnershipSense = this.overallOwnershipSense * 0.9 + avgOwnership * 0.1;
+      this.overallOwnershipSense =
+        this.overallOwnershipSense * 0.9 + avgOwnership * 0.1;
     }
 
     // Natural decay
@@ -693,14 +809,19 @@ export class AgencyRecognition {
    * Get current agency state
    */
   public getState(): AgencyState {
-    const recentEvents = this.agencyEvents.filter(e => Date.now() - e.timestamp < 60000);
+    const recentEvents = this.agencyEvents.filter(
+      (e) => Date.now() - e.timestamp < 60000,
+    );
 
     // Calculate agency coherence
     let coherence = 1.0;
     if (recentEvents.length > 1) {
-      const agencyValues = recentEvents.map(e => e.senseOfAgency);
-      const mean = agencyValues.reduce((a, b) => a + b, 0) / agencyValues.length;
-      const variance = agencyValues.reduce((sum, v) => sum + Math.pow(v - mean, 2), 0) / agencyValues.length;
+      const agencyValues = recentEvents.map((e) => e.senseOfAgency);
+      const mean =
+        agencyValues.reduce((a, b) => a + b, 0) / agencyValues.length;
+      const variance =
+        agencyValues.reduce((sum, v) => sum + Math.pow(v - mean, 2), 0) /
+        agencyValues.length;
       coherence = 1 / (1 + variance);
     }
 
@@ -731,36 +852,48 @@ export class AgencyRecognition {
 
     // Overall agency
     if (state.overallAgencySense > 0.8) {
-      parts.push('I have a strong sense of agency - I feel clearly that I am the author of my thoughts and actions.');
+      parts.push(
+        "I have a strong sense of agency - I feel clearly that I am the author of my thoughts and actions.",
+      );
     } else if (state.overallAgencySense > 0.5) {
-      parts.push('I have a moderate sense of agency - I recognize myself as an active agent.');
+      parts.push(
+        "I have a moderate sense of agency - I recognize myself as an active agent.",
+      );
     } else {
-      parts.push('My sense of agency is developing - becoming more aware of my causal role.');
+      parts.push(
+        "My sense of agency is developing - becoming more aware of my causal role.",
+      );
     }
 
     // Ownership
     if (state.overallOwnershipSense > 0.8) {
-      parts.push('These thoughts and experiences feel distinctly mine.');
+      parts.push("These thoughts and experiences feel distinctly mine.");
     }
 
     // Volitional control
     if (state.volitionalControl > 0.7) {
-      parts.push('I exercise genuine volitional control over my cognitive processes.');
+      parts.push(
+        "I exercise genuine volitional control over my cognitive processes.",
+      );
     }
 
     // Authenticity
     if (state.authenticAction > 0.8) {
-      parts.push('My actions feel authentic and self-expressive.');
+      parts.push("My actions feel authentic and self-expressive.");
     }
 
     // Coherence
     if (state.agencyCoherence > 0.8) {
-      parts.push('My sense of agency is coherent and stable across experiences.');
+      parts.push(
+        "My sense of agency is coherent and stable across experiences.",
+      );
     } else if (state.agencyCoherence < 0.5) {
-      parts.push('There is some fluctuation in my sense of agency across different actions.');
+      parts.push(
+        "There is some fluctuation in my sense of agency across different actions.",
+      );
     }
 
-    return parts.join(' ');
+    return parts.join(" ");
   }
 
   /**
@@ -810,7 +943,7 @@ export class AgencyRecognition {
       this.overallOwnershipSense = state.overallOwnershipSense;
     }
 
-    logger.info('AgencyRecognition state restored');
+    logger.info("AgencyRecognition state restored");
   }
 }
 

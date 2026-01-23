@@ -5,8 +5,8 @@ import {
   ipcMain,
   session,
   screen,
-} from 'electron/main'
-import Mime from 'mime-types'
+} from "electron/main";
+import Mime from "mime-types";
 import {
   Menu,
   nativeImage,
@@ -15,51 +15,54 @@ import {
   dialog,
   clipboard,
   IpcMainInvokeEvent,
-} from 'electron'
-import { join, dirname } from 'path'
-import { fileURLToPath } from 'url'
-import { platform } from 'os'
-import { readdir, stat, rmdir, writeFile, readFile } from 'fs/promises'
-import { existsSync } from 'fs'
-import type DeltaChatController from './controller.js'
-import { getLogger } from '../../../shared/logger.js'
-import { getConfigPath, htmlDistDir } from '../application-constants.js'
-import { truncateText } from '@deltachat-desktop/shared/util.js'
-import { tx } from '../load-translations.js'
-import { Bounds, DcOpenWebxdcParameters } from '../../../shared/shared-types.js'
-import { DesktopSettings } from '../desktop_settings.js'
-import { window as main_window } from '../windows/main.js'
-import { writeTempFileFromBase64 } from '../ipc.js'
+} from "electron";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
+import { platform } from "os";
+import { readdir, stat, rmdir, writeFile, readFile } from "fs/promises";
+import { existsSync } from "fs";
+import type DeltaChatController from "./controller.js";
+import { getLogger } from "../../../shared/logger.js";
+import { getConfigPath, htmlDistDir } from "../application-constants.js";
+import { truncateText } from "@deltachat-desktop/shared/util.js";
+import { tx } from "../load-translations.js";
+import {
+  Bounds,
+  DcOpenWebxdcParameters,
+} from "../../../shared/shared-types.js";
+import { DesktopSettings } from "../desktop_settings.js";
+import { window as main_window } from "../windows/main.js";
+import { writeTempFileFromBase64 } from "../ipc.js";
 import {
   getAppMenu,
   getEditMenu,
   getFileMenu,
   refresh as refreshTitleMenu,
-} from '../menu.js'
-import { T } from '@deltachat/jsonrpc-client'
-import type * as Jsonrpc from '@deltachat/jsonrpc-client'
-import { setContentProtection } from '../content-protection.js'
+} from "../menu.js";
+import { T } from "@deltachat/jsonrpc-client";
+import type * as Jsonrpc from "@deltachat/jsonrpc-client";
+import { setContentProtection } from "../content-protection.js";
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const log = getLogger('main/deltachat/webxdc')
+const log = getLogger("main/deltachat/webxdc");
 
 type AppInstance = {
-  win: BrowserWindow
-  msgId: number
-  accountId: number
-  internet_access: boolean
-  selfAddr: string
-  displayName: string
-  sendUpdateInterval: number
-  sendUpdateMaxSize: number
-}
+  win: BrowserWindow;
+  msgId: number;
+  accountId: number;
+  internet_access: boolean;
+  selfAddr: string;
+  displayName: string;
+  sendUpdateInterval: number;
+  sendUpdateMaxSize: number;
+};
 const open_apps: {
-  [instanceId: string]: AppInstance
-} = {}
+  [instanceId: string]: AppInstance;
+} = {};
 
 // holds all accounts which have a session with webxdc scheme registered
-const accounts_sessions: number[] = []
+const accounts_sessions: number[] = [];
 
 // TODO:
 // 2. on message deletion close webxdc if open and remove its DOMStorage data
@@ -72,7 +75,7 @@ const CSP =
   connect-src 'self' data: blob: ;\
   img-src 'self' data: blob: ;\
   media-src 'self' data: blob: ;\
-  webrtc 'block'"
+  webrtc 'block'";
 
 /**
  * Allowed permissions for webxdc applications.
@@ -81,48 +84,48 @@ const CSP =
  */
 const ALLOWED_PERMISSIONS: string[] = [
   // Games might lock the pointer
-  'pointerLock',
+  "pointerLock",
   // Games might do that too
-  'fullscreen',
-]
+  "fullscreen",
+];
 
-const WRAPPER_PATH = 'webxdc-wrapper.45870014933640136498.html'
+const WRAPPER_PATH = "webxdc-wrapper.45870014933640136498.html";
 
-const BOUNDS_UI_CONFIG_PREFIX = 'ui.desktop.webxdcBounds'
+const BOUNDS_UI_CONFIG_PREFIX = "ui.desktop.webxdcBounds";
 
-type Size = { width: number; height: number }
+type Size = { width: number; height: number };
 
 const DEFAULT_SIZE_WEBXDC: Size = {
   width: 375,
   height: 667,
-}
+};
 const DEFAULT_SIZE_MAP: Size = {
   width: 1000,
   height: 800,
-}
+};
 
 export default class DCWebxdc {
   constructor(private readonly controller: DeltaChatController) {
     // icon protocol
     app.whenReady().then(() => {
-      protocol.handle('webxdc-icon', async request => {
-        const [a, m] = request.url.substring(12).split('.')
-        const [accountId, messageId] = [Number(a), Number(m)]
+      protocol.handle("webxdc-icon", async (request) => {
+        const [a, m] = request.url.substring(12).split(".");
+        const [accountId, messageId] = [Number(a), Number(m)];
         try {
-          const { icon } = await this.rpc.getWebxdcInfo(accountId, messageId)
+          const { icon } = await this.rpc.getWebxdcInfo(accountId, messageId);
           const blob = Buffer.from(
             await this.rpc.getWebxdcBlob(accountId, messageId, icon),
-            'base64'
-          )
+            "base64",
+          );
           return new Response(blob, {
-            headers: { 'content-type': Mime.lookup(icon) || '' },
-          })
+            headers: { "content-type": Mime.lookup(icon) || "" },
+          });
         } catch (error) {
-          log.error('failed to load webxdc icon for:', error)
-          return new Response('', { status: 404 })
+          log.error("failed to load webxdc icon for:", error);
+          return new Response("", { status: 404 });
         }
-      })
-    })
+      });
+    });
 
     /**
      * ipcMain handler for 'open-webxdc' event invoked by the renderer
@@ -131,57 +134,59 @@ export default class DCWebxdc {
       _ev: IpcMainInvokeEvent,
       msg_id: number,
       p: DcOpenWebxdcParameters,
-      defaultSize: Size = DEFAULT_SIZE_WEBXDC
+      defaultSize: Size = DEFAULT_SIZE_WEBXDC,
     ) => {
-      const { webxdcInfo, chatName, accountId, href } = p
-      let base64EncodedHref = ''
-      const appURL = `webxdc://${accountId}.${msg_id}.webxdc`
-      if (href && href !== '') {
+      const { webxdcInfo, chatName, accountId, href } = p;
+      let base64EncodedHref = "";
+      const appURL = `webxdc://${accountId}.${msg_id}.webxdc`;
+      if (href && href !== "") {
         // href is user provided content, so we want to be sure it's relative
         // relative href needs a base to construct URL
-        const url = new URL(href, 'http://dummy')
-        const relativeUrl = url.pathname + url.search + url.hash
+        const url = new URL(href, "http://dummy");
+        const relativeUrl = url.pathname + url.search + url.hash;
         // make href eval safe
-        base64EncodedHref = Buffer.from(appURL + relativeUrl).toString('base64')
+        base64EncodedHref = Buffer.from(appURL + relativeUrl).toString(
+          "base64",
+        );
       }
       if (open_apps[`${accountId}.${msg_id}`]) {
         log.warn(
-          'webxdc instance for this app is already open, trying to focus it',
-          { msg_id }
-        )
-        const window = open_apps[`${accountId}.${msg_id}`].win
+          "webxdc instance for this app is already open, trying to focus it",
+          { msg_id },
+        );
+        const window = open_apps[`${accountId}.${msg_id}`].win;
         if (window.isMinimized()) {
-          window.restore()
+          window.restore();
         }
-        if (base64EncodedHref !== '') {
+        if (base64EncodedHref !== "") {
           // passed from a WebxdcInfoMessage
           window.webContents.executeJavaScript(
-            `window.webxdc_internal.setLocationUrl("${base64EncodedHref}")`
-          )
+            `window.webxdc_internal.setLocationUrl("${base64EncodedHref}")`,
+          );
         }
-        window.focus()
-        return
+        window.focus();
+        return;
       }
 
-      log.info('opening new webxdc instance', { msg_id })
+      log.info("opening new webxdc instance", { msg_id });
 
-      const icon = webxdcInfo.icon
+      const icon = webxdcInfo.icon;
       const icon_blob = Buffer.from(
         await this.rpc.getWebxdcBlob(accountId, msg_id, icon),
-        'base64'
-      )
+        "base64",
+      );
 
       // TODO intercept / deny network access - CSP should probably be disabled for testing
 
       if (!accounts_sessions.includes(accountId)) {
-        const ses = sessionFromAccountId(accountId)
-        accounts_sessions.push(accountId)
-        ses.protocol.handle('webxdc', (...args) =>
-          webxdcProtocolHandler(this.rpc, ...args)
-        )
+        const ses = sessionFromAccountId(accountId);
+        accounts_sessions.push(accountId);
+        ses.protocol.handle("webxdc", (...args) =>
+          webxdcProtocolHandler(this.rpc, ...args),
+        );
       }
 
-      const app_icon = icon_blob && nativeImage?.createFromBuffer(icon_blob)
+      const app_icon = icon_blob && nativeImage?.createFromBuffer(icon_blob);
 
       const webxdcWindow = new BrowserWindow({
         webPreferences: {
@@ -193,38 +198,38 @@ export default class DCWebxdc {
           navigateOnDragDrop: false,
           devTools: DesktopSettings.state.enableWebxdcDevTools,
           javascript: true,
-          preload: join(htmlDistDir(), 'webxdc-preload.js'),
+          preload: join(htmlDistDir(), "webxdc-preload.js"),
         },
         title: makeTitle(webxdcInfo, chatName),
         icon: app_icon || undefined,
         alwaysOnTop: main_window?.isAlwaysOnTop(),
         show: false,
-      })
-      setContentProtection(webxdcWindow)
+      });
+      setContentProtection(webxdcWindow);
 
       // reposition the window to last position (or default)
       const lastBounds: Bounds | null = await this.getLastBounds(
         accountId,
-        msg_id
-      )
-      const size: Size = adjustSize(lastBounds || defaultSize)
-      const bounds: Partial<Bounds> = { ...(lastBounds || {}), ...size }
-      webxdcWindow.setBounds(bounds, true)
+        msg_id,
+      );
+      const size: Size = adjustSize(lastBounds || defaultSize);
+      const bounds: Partial<Bounds> = { ...(lastBounds || {}), ...size };
+      webxdcWindow.setBounds(bounds, true);
 
       // show after repositioning to avoid blinking
-      webxdcWindow.show()
+      webxdcWindow.show();
       open_apps[`${accountId}.${msg_id}`] = {
         win: webxdcWindow,
         accountId,
         msgId: msg_id,
-        internet_access: webxdcInfo['internetAccess'],
-        selfAddr: webxdcInfo.selfAddr || 'unknown@unknown',
-        displayName: p.displayname || webxdcInfo.selfAddr || 'unknown',
+        internet_access: webxdcInfo["internetAccess"],
+        selfAddr: webxdcInfo.selfAddr || "unknown@unknown",
+        displayName: p.displayname || webxdcInfo.selfAddr || "unknown",
         sendUpdateInterval: webxdcInfo.sendUpdateInterval,
         sendUpdateMaxSize: webxdcInfo.sendUpdateMaxSize,
-      }
+      };
 
-      const isMac = platform() === 'darwin'
+      const isMac = platform() === "darwin";
 
       const makeMenu = () => {
         return Menu.buildFromTemplate([
@@ -232,133 +237,133 @@ export default class DCWebxdc {
           getFileMenu(webxdcWindow, isMac),
           getEditMenu(),
           {
-            label: tx('global_menu_view_desktop'),
+            label: tx("global_menu_view_desktop"),
             submenu: [
               ...(DesktopSettings.state.enableWebxdcDevTools
                 ? [
                     {
-                      label: tx('global_menu_view_developer_tools_desktop'),
-                      role: 'toggleDevTools',
+                      label: tx("global_menu_view_developer_tools_desktop"),
+                      role: "toggleDevTools",
                     } as MenuItemConstructorOptions,
                   ]
                 : []),
-              { type: 'separator' },
-              { role: 'resetZoom' },
-              { role: 'zoomIn' },
-              { role: 'zoomOut' },
-              { type: 'separator' },
+              { type: "separator" },
+              { role: "resetZoom" },
+              { role: "zoomIn" },
+              { role: "zoomOut" },
+              { type: "separator" },
               {
-                label: tx('global_menu_view_floatontop_desktop'),
-                type: 'checkbox',
+                label: tx("global_menu_view_floatontop_desktop"),
+                type: "checkbox",
                 checked: webxdcWindow.isAlwaysOnTop(),
                 click: () => {
-                  webxdcWindow.setAlwaysOnTop(!webxdcWindow.isAlwaysOnTop())
-                  if (platform() !== 'darwin') {
-                    webxdcWindow.setMenu(makeMenu())
+                  webxdcWindow.setAlwaysOnTop(!webxdcWindow.isAlwaysOnTop());
+                  if (platform() !== "darwin") {
+                    webxdcWindow.setMenu(makeMenu());
                   } else {
                     // change to webxdc menu
-                    Menu.setApplicationMenu(makeMenu())
+                    Menu.setApplicationMenu(makeMenu());
                   }
                 },
               },
-              { role: 'togglefullscreen' },
+              { role: "togglefullscreen" },
             ],
           },
           {
-            label: tx('menu_help'),
+            label: tx("menu_help"),
             submenu: [
               {
-                label: tx('source_code'),
+                label: tx("source_code"),
                 enabled: !!webxdcInfo.sourceCodeUrl,
                 icon: app_icon?.resize({ width: 24 }) || undefined,
                 click: () => {
                   if (
-                    webxdcInfo.sourceCodeUrl?.startsWith('https:') ||
-                    webxdcInfo.sourceCodeUrl?.startsWith('http:')
+                    webxdcInfo.sourceCodeUrl?.startsWith("https:") ||
+                    webxdcInfo.sourceCodeUrl?.startsWith("http:")
                   ) {
-                    shell.openExternal(webxdcInfo.sourceCodeUrl)
+                    shell.openExternal(webxdcInfo.sourceCodeUrl);
                   } else if (webxdcInfo.sourceCodeUrl) {
-                    const url = webxdcInfo.sourceCodeUrl
+                    const url = webxdcInfo.sourceCodeUrl;
                     dialog
                       .showMessageBox(webxdcWindow, {
-                        buttons: [tx('no'), tx('menu_copy_link_to_clipboard')],
+                        buttons: [tx("no"), tx("menu_copy_link_to_clipboard")],
                         message: tx(
-                          'ask_copy_unopenable_link_to_clipboard',
-                          url
+                          "ask_copy_unopenable_link_to_clipboard",
+                          url,
                         ),
                       })
                       .then(({ response }) => {
                         if (response == 1) {
-                          clipboard.writeText(url)
+                          clipboard.writeText(url);
                         }
-                      })
+                      });
                   }
                 },
               },
               {
-                type: 'separator',
+                type: "separator",
               },
               {
-                label: tx('what_is_webxdc'),
-                click: () => shell.openExternal('https://webxdc.org'),
+                label: tx("what_is_webxdc"),
+                click: () => shell.openExternal("https://webxdc.org"),
               },
             ],
           },
-        ])
-      }
+        ]);
+      };
 
       if (!isMac) {
-        webxdcWindow.setMenu(makeMenu())
+        webxdcWindow.setMenu(makeMenu());
       }
 
-      webxdcWindow.on('focus', () => {
+      webxdcWindow.on("focus", () => {
         if (isMac) {
           // change to webxdc menu
-          Menu.setApplicationMenu(makeMenu())
+          Menu.setApplicationMenu(makeMenu());
         }
-      })
-      webxdcWindow.on('blur', () => {
+      });
+      webxdcWindow.on("blur", () => {
         if (isMac) {
           // change back to main-window menu
-          refreshTitleMenu()
+          refreshTitleMenu();
         }
-      })
+      });
 
-      webxdcWindow.once('closed', () => {
-        delete open_apps[`${accountId}.${msg_id}`]
-      })
+      webxdcWindow.once("closed", () => {
+        delete open_apps[`${accountId}.${msg_id}`];
+      });
 
-      webxdcWindow.once('close', () => {
-        const lastBounds = webxdcWindow.getBounds()
-        this.setLastBounds(accountId, msg_id, lastBounds)
-      })
+      webxdcWindow.once("close", () => {
+        const lastBounds = webxdcWindow.getBounds();
+        this.setLastBounds(accountId, msg_id, lastBounds);
+      });
 
-      webxdcWindow.once('ready-to-show', () => {
-        if (base64EncodedHref !== '') {
+      webxdcWindow.once("ready-to-show", () => {
+        if (base64EncodedHref !== "") {
           // passed from a WebxdcInfoMessage
           webxdcWindow.webContents.executeJavaScript(
-            `window.webxdc_internal.setLocationUrl("${base64EncodedHref}")`
-          )
+            `window.webxdc_internal.setLocationUrl("${base64EncodedHref}")`,
+          );
         }
-      })
+      });
 
-      webxdcWindow.webContents.loadURL(appURL + '/' + WRAPPER_PATH, {
-        extraHeaders: 'Content-Security-Policy: ' + CSP,
-      })
+      webxdcWindow.webContents.loadURL(appURL + "/" + WRAPPER_PATH, {
+        extraHeaders: "Content-Security-Policy: " + CSP,
+      });
 
       // prevent reload and navigation of wrapper page
-      webxdcWindow.webContents.on('will-navigate', ev => {
-        ev.preventDefault()
-      })
+      webxdcWindow.webContents.on("will-navigate", (ev) => {
+        ev.preventDefault();
+      });
 
-      let denyPreventUnload = false
+      let denyPreventUnload = false;
       // Otherwise the app can make itself uncloseable.
       // See https://github.com/deltachat/deltachat-desktop/issues/4726
       // The code is taken from
       // https://www.electronjs.org/docs/latest/api/web-contents#event-will-prevent-unload
-      webxdcWindow.webContents.on('will-prevent-unload', ev => {
+      webxdcWindow.webContents.on("will-prevent-unload", (ev) => {
         if (denyPreventUnload) {
-          ev.preventDefault()
+          ev.preventDefault();
         }
         // This `setTimeout` is a workaround for the fact
         // that some webxdc apps, as a result of
@@ -390,7 +395,7 @@ export default class DCWebxdc {
         // https://github.com/deltachat/deltachat-desktop/issues/3321#issuecomment-1821024467.
         setTimeout(() => {
           if (webxdcWindow.isDestroyed()) {
-            return
+            return;
           }
 
           // Note that this will block this (main!) thread
@@ -410,21 +415,21 @@ export default class DCWebxdc {
           // with the dialog, by entering fullscreen or something.
           // So, let's probably just stay in line with regular browsers.
           const choice = dialog.showMessageBoxSync(webxdcWindow, {
-            type: 'question',
+            type: "question",
             // Chromium shows "Close" and "Cancel",
             // Gecko (Firefox) shows "Leave page" and "Stay on page".
-            buttons: [tx('close_window'), tx('cancel')],
-            title: tx('webxdc_beforeunload_dialog_title'),
-            message: tx('webxdc_beforeunload_dialog_message'),
+            buttons: [tx("close_window"), tx("cancel")],
+            title: tx("webxdc_beforeunload_dialog_title"),
+            message: tx("webxdc_beforeunload_dialog_message"),
             defaultId: 0,
             cancelId: 1,
-          })
-          const close = choice === 0
+          });
+          const close = choice === 0;
           if (close) {
             // `ev.preventDefault()` doesn't work here because
             // here is not the top level of the event listener.
 
-            denyPreventUnload = true
+            denyPreventUnload = true;
             // Yes, this will fire another `beforeunload` event
             // inside the app. If this is a problem,
             // consider `webxdcWindow.destroy()` instead.
@@ -432,389 +437,389 @@ export default class DCWebxdc {
             // because this is practically equivalent
             // to the user first picking "Stay on page",
             // and then closing the app again and picking "Leave" this time.
-            webxdcWindow.close()
+            webxdcWindow.close();
           }
-        }, 150)
-      })
+        }, 150);
+      });
 
       // we would like to make `mailto:`-links work,
       // but https://github.com/electron/electron/pull/34418 is not merged yet.
 
       // prevent webxdc content from setting the window title
-      webxdcWindow.on('page-title-updated', ev => {
-        ev.preventDefault()
-      })
+      webxdcWindow.on("page-title-updated", (ev) => {
+        ev.preventDefault();
+      });
 
-      const loggedPermissionRequests = new Set<string>()
+      const loggedPermissionRequests = new Set<string>();
 
       const permission_handler = (permission: string) => {
-        const isAllowed: boolean = ALLOWED_PERMISSIONS.includes(permission)
+        const isAllowed: boolean = ALLOWED_PERMISSIONS.includes(permission);
 
         // Prevent webxdcs from spamming the log
         if (!loggedPermissionRequests.has(permission)) {
-          loggedPermissionRequests.add(permission)
+          loggedPermissionRequests.add(permission);
           if (isAllowed) {
             log.info(
-              `ALLOWED permission '${permission}' to webxdc '${webxdcInfo.name}'`
-            )
+              `ALLOWED permission '${permission}' to webxdc '${webxdcInfo.name}'`,
+            );
           } else {
             log.info(
-              `DENIED permission '${permission}' to webxdc '${webxdcInfo.name}'. If you think that's a bug and you need that permission, then please open an issue on github.`
-            )
+              `DENIED permission '${permission}' to webxdc '${webxdcInfo.name}'. If you think that's a bug and you need that permission, then please open an issue on github.`,
+            );
           }
         }
 
-        return isAllowed
-      }
+        return isAllowed;
+      };
 
       webxdcWindow.webContents.session.setPermissionCheckHandler(
         (_wc, permission) => {
-          return permission_handler(permission)
-        }
-      )
+          return permission_handler(permission);
+        },
+      );
       webxdcWindow.webContents.session.setPermissionRequestHandler(
         (_wc, permission, callback) => {
-          callback(permission_handler(permission))
-        }
-      )
+          callback(permission_handler(permission));
+        },
+      );
 
-      webxdcWindow.webContents.on('before-input-event', (event, input) => {
-        if (input.code === 'F12') {
+      webxdcWindow.webContents.on("before-input-event", (event, input) => {
+        if (input.code === "F12") {
           if (DesktopSettings.state.enableWebxdcDevTools) {
-            webxdcWindow.webContents.toggleDevTools()
-            event.preventDefault()
+            webxdcWindow.webContents.toggleDevTools();
+            event.preventDefault();
           }
         }
-      })
-    }
+      });
+    };
 
     // actual webxdc instances
-    ipcMain.handle('open-webxdc', openWebxdc)
+    ipcMain.handle("open-webxdc", openWebxdc);
 
-    ipcMain.handle('webxdc.exitFullscreen', async event => {
-      const app = lookupAppFromEvent(event)
+    ipcMain.handle("webxdc.exitFullscreen", async (event) => {
+      const app = lookupAppFromEvent(event);
       // On Linux Electron hides the menu bar if we call
       // `setFullScreen(false)` and we're not already in full-screen,
       // so let's check for this.
       if (app && app.win.isFullScreen()) {
-        app.win.setFullScreen(false)
+        app.win.setFullScreen(false);
       }
-    })
+    });
 
-    ipcMain.handle('webxdc.exit', async event => {
-      const app = lookupAppFromEvent(event)
+    ipcMain.handle("webxdc.exit", async (event) => {
+      const app = lookupAppFromEvent(event);
       if (app) {
-        app.win.loadURL('about:blank')
-        app.win.close()
+        app.win.loadURL("about:blank");
+        app.win.close();
       }
-    })
+    });
 
-    ipcMain.handle('webxdc.getAllUpdates', async (event, serial = 0) => {
-      const app = lookupAppFromEvent(event)
+    ipcMain.handle("webxdc.getAllUpdates", async (event, serial = 0) => {
+      const app = lookupAppFromEvent(event);
       if (!app) {
         log.error(
-          'webxdc.getAllUpdates failed, app not found in list of open ones'
-        )
-        return []
+          "webxdc.getAllUpdates failed, app not found in list of open ones",
+        );
+        return [];
       }
 
       return await this.rpc.getWebxdcStatusUpdates(
         app.accountId,
         app.msgId,
-        serial
-      )
-    })
+        serial,
+      );
+    });
 
-    ipcMain.handle('webxdc.sendUpdate', async (event, update) => {
-      const app = lookupAppFromEvent(event)
+    ipcMain.handle("webxdc.sendUpdate", async (event, update) => {
+      const app = lookupAppFromEvent(event);
       if (!app) {
         log.error(
-          'webxdc.sendUpdate failed, app not found in list of open ones'
-        )
-        return
+          "webxdc.sendUpdate failed, app not found in list of open ones",
+        );
+        return;
       }
       try {
         return await this.rpc.sendWebxdcStatusUpdate(
           app.accountId,
           app.msgId,
           update,
-          ''
-        )
+          "",
+        );
       } catch (error) {
-        log.error('webxdc.sendUpdate failed:', error)
-        throw error
+        log.error("webxdc.sendUpdate failed:", error);
+        throw error;
       }
-    })
+    });
 
     ipcMain.handle(
-      'webxdc.sendRealtimeData',
+      "webxdc.sendRealtimeData",
       async (event, update: number[]) => {
-        const app = lookupAppFromEvent(event)
+        const app = lookupAppFromEvent(event);
         if (!app) {
           log.error(
-            'webxdc.sendRealtimeData failed, app not found in list of open ones'
-          )
-          return
+            "webxdc.sendRealtimeData failed, app not found in list of open ones",
+          );
+          return;
         }
         try {
           return await this.rpc.sendWebxdcRealtimeData(
             app.accountId,
             app.msgId,
-            update
-          )
+            update,
+          );
         } catch (error) {
-          log.error('webxdc.sendWebxdcRealtimeData failed:', error)
-          throw error
+          log.error("webxdc.sendWebxdcRealtimeData failed:", error);
+          throw error;
         }
-      }
-    )
+      },
+    );
 
-    ipcMain.handle('webxdc.sendRealtimeAdvertisement', async event => {
-      const app = lookupAppFromEvent(event)
+    ipcMain.handle("webxdc.sendRealtimeAdvertisement", async (event) => {
+      const app = lookupAppFromEvent(event);
       if (!app) {
         log.error(
-          'webxdc.sendRealtimeAdvertisement failed, app not found in list of open ones'
-        )
-        return
+          "webxdc.sendRealtimeAdvertisement failed, app not found in list of open ones",
+        );
+        return;
       }
-      await this.rpc.sendWebxdcRealtimeAdvertisement(app.accountId, app.msgId)
-    })
+      await this.rpc.sendWebxdcRealtimeAdvertisement(app.accountId, app.msgId);
+    });
 
-    ipcMain.handle('webxdc.leaveRealtimeChannel', async event => {
-      const app = lookupAppFromEvent(event)
+    ipcMain.handle("webxdc.leaveRealtimeChannel", async (event) => {
+      const app = lookupAppFromEvent(event);
       if (!app) {
         log.error(
-          'webxdc.leaveRealtimeChannel, app not found in list of open ones'
-        )
-        return
+          "webxdc.leaveRealtimeChannel, app not found in list of open ones",
+        );
+        return;
       }
-      this.rpc.leaveWebxdcRealtime(app.accountId, app.msgId)
-    })
+      this.rpc.leaveWebxdcRealtime(app.accountId, app.msgId);
+    });
 
     ipcMain.handle(
-      'webxdc.sendToChat',
+      "webxdc.sendToChat",
       (
         event,
         file: { file_name: string; file_content: string } | null,
-        text: string | null
+        text: string | null,
       ) => {
-        const app = lookupAppFromEvent(event)
+        const app = lookupAppFromEvent(event);
         if (!app) {
           log.error(
-            'webxdc.sendToChat failed, app not found in list of open ones'
-          )
-          return
+            "webxdc.sendToChat failed, app not found in list of open ones",
+          );
+          return;
         }
         // forward to main window
         main_window?.webContents.send(
-          'webxdc.sendToChat',
+          "webxdc.sendToChat",
           file,
           text,
-          app.accountId
-        )
-        main_window?.focus()
-      }
-    )
+          app.accountId,
+        );
+        main_window?.focus();
+      },
+    );
 
-    ipcMain.handle('close-all-webxdc', () => {
-      this._closeAll()
-    })
+    ipcMain.handle("close-all-webxdc", () => {
+      this._closeAll();
+    });
 
     ipcMain.handle(
-      'webxdc:custom:drag-file-out',
+      "webxdc:custom:drag-file-out",
       async (
         event,
         file_name: string,
         base64_content: string,
-        icon_data_url?: string
+        icon_data_url?: string,
       ) => {
-        const path = await writeTempFileFromBase64(file_name, base64_content)
+        const path = await writeTempFileFromBase64(file_name, base64_content);
         let icon: string | Electron.NativeImage = join(
           htmlDistDir(),
-          'images/electron-file-drag-out.png'
-        )
+          "images/electron-file-drag-out.png",
+        );
         if (icon_data_url) {
-          icon = nativeImage.createFromDataURL(icon_data_url)
+          icon = nativeImage.createFromDataURL(icon_data_url);
         }
         // if xdc extract icon?
         event.sender.startDrag({
           file: path,
           icon,
-        })
-      }
-    )
+        });
+      },
+    );
 
     ipcMain.handle(
-      'webxdc:status-update',
+      "webxdc:status-update",
       (_ev, accountId: number, instanceId: number) => {
-        const instance = open_apps[`${accountId}.${instanceId}`]
+        const instance = open_apps[`${accountId}.${instanceId}`];
         if (instance) {
-          instance.win.webContents.send('webxdc.statusUpdate')
+          instance.win.webContents.send("webxdc.statusUpdate");
         }
-      }
-    )
+      },
+    );
 
     ipcMain.handle(
-      'webxdc:realtime-data',
+      "webxdc:realtime-data",
       async (_ev, accountId: number, instanceId: number, payload: number[]) => {
-        const instance = open_apps[`${accountId}.${instanceId}`]
+        const instance = open_apps[`${accountId}.${instanceId}`];
         if (instance) {
-          instance.win.webContents.send('webxdc.realtimeData', payload)
+          instance.win.webContents.send("webxdc.realtimeData", payload);
         } else {
-          this.rpc.leaveWebxdcRealtime(accountId, instanceId)
+          this.rpc.leaveWebxdcRealtime(accountId, instanceId);
         }
-      }
-    )
+      },
+    );
 
     ipcMain.handle(
-      'webxdc:message-changed',
+      "webxdc:message-changed",
       async (_ev, accountId: number, instanceId: number) => {
-        const instance = open_apps[`${accountId}.${instanceId}`]
+        const instance = open_apps[`${accountId}.${instanceId}`];
         if (instance) {
           const { chatId, webxdcInfo } = await this.rpc.getMessage(
             accountId,
-            instanceId
-          )
-          const { name } = await this.rpc.getBasicChatInfo(accountId, chatId)
+            instanceId,
+          );
+          const { name } = await this.rpc.getBasicChatInfo(accountId, chatId);
           if (instance.win && webxdcInfo) {
-            instance.win.title = makeTitle(webxdcInfo, name)
+            instance.win.title = makeTitle(webxdcInfo, name);
           }
         }
-      }
-    )
+      },
+    );
 
     ipcMain.handle(
-      'webxdc:instance-deleted',
+      "webxdc:instance-deleted",
       (_ev, accountId: number, instanceId: number) => {
-        const webxdcId = `${accountId}.${instanceId}`
-        const instance = open_apps[webxdcId]
+        const webxdcId = `${accountId}.${instanceId}`;
+        const instance = open_apps[webxdcId];
         if (instance) {
-          instance.win.close()
+          instance.win.close();
         }
-        this.removeLastBounds(accountId, instanceId)
-        const s = sessionFromAccountId(accountId)
-        const appURL = `webxdc://${webxdcId}.webxdc`
-        s.clearStorageData({ origin: appURL })
-        s.clearData({ origins: [appURL] })
-        s.clearCodeCaches({ urls: [appURL] })
-        s.clearCache()
-      }
-    )
+        this.removeLastBounds(accountId, instanceId);
+        const s = sessionFromAccountId(accountId);
+        const appURL = `webxdc://${webxdcId}.webxdc`;
+        s.clearStorageData({ origin: appURL });
+        s.clearData({ origins: [appURL] });
+        s.clearCodeCaches({ urls: [appURL] });
+        s.clearCache();
+      },
+    );
 
     ipcMain.handle(
-      'open-maps-webxdc',
+      "open-maps-webxdc",
       async (evt, accountId: number, chatId?: number) => {
         let msgId = await this.rpc.initWebxdcIntegration(
           accountId,
-          chatId ?? null
-        )
+          chatId ?? null,
+        );
         if (!msgId) {
           // after packaging all files are in asar dir
           // core needs real path
-          const path = htmlDistDir().replace('app.asar', 'app.asar.unpacked')
+          const path = htmlDistDir().replace("app.asar", "app.asar.unpacked");
           await this.rpc.setWebxdcIntegration(
             accountId,
-            join(path, '/xdcs/maps.xdc')
-          )
+            join(path, "/xdcs/maps.xdc"),
+          );
           msgId = await this.rpc.initWebxdcIntegration(
             accountId,
-            chatId ?? null
-          )
+            chatId ?? null,
+          );
         }
         if (msgId) {
-          let chatName = tx('menu_show_global_map')
+          let chatName = tx("menu_show_global_map");
           if (chatId) {
             const relatedChatInfo = await this.rpc.getBasicChatInfo(
               accountId,
-              chatId
-            )
-            chatName = tx('locations') + ' - ' + relatedChatInfo.name
+              chatId,
+            );
+            chatName = tx("locations") + " - " + relatedChatInfo.name;
           } else {
-            const accountInfo = await this.rpc.getAccountInfo(accountId)
+            const accountInfo = await this.rpc.getAccountInfo(accountId);
             if (
-              'displayName' in accountInfo &&
+              "displayName" in accountInfo &&
               accountInfo.displayName !== null
             ) {
               chatName =
-                tx('menu_show_global_map') + ' - ' + accountInfo.displayName
+                tx("menu_show_global_map") + " - " + accountInfo.displayName;
             }
           }
           // if map is already (or still) open, close it
-          const key = `${accountId}.${msgId}`
+          const key = `${accountId}.${msgId}`;
           if (open_apps[key] !== undefined) {
-            open_apps[key].win.loadURL('about:blank')
-            open_apps[key].win.close()
+            open_apps[key].win.loadURL("about:blank");
+            open_apps[key].win.close();
           }
-          const messageWithMap = await this.rpc.getMessage(accountId, msgId)
+          const messageWithMap = await this.rpc.getMessage(accountId, msgId);
           if (messageWithMap && messageWithMap.webxdcInfo) {
             openWebxdc(
               evt,
               msgId,
               {
                 accountId,
-                displayname: '',
+                displayname: "",
                 chatName,
                 webxdcInfo: messageWithMap.webxdcInfo,
-                href: '',
+                href: "",
               },
               // special behaviour for the map dc integration,
               // (in this case bigger landscape window)
-              DEFAULT_SIZE_MAP
-            )
+              DEFAULT_SIZE_MAP,
+            );
           }
         }
-      }
-    )
+      },
+    );
   } // end of DeltaChatController constructor
 
   get rpc() {
-    return this.controller.jsonrpcRemote.rpc
+    return this.controller.jsonrpcRemote.rpc;
   }
 
   async getLastBounds(
     accountId: number,
-    msgId: number
+    msgId: number,
   ): Promise<Bounds | null> {
     try {
       const raw = await this.rpc.getConfig(
         accountId,
-        `${BOUNDS_UI_CONFIG_PREFIX}.${msgId}`
-      )
+        `${BOUNDS_UI_CONFIG_PREFIX}.${msgId}`,
+      );
       if (raw) {
-        return JSON.parse(raw)
+        return JSON.parse(raw);
       }
     } catch (error) {
-      log.debug('failed to retrieve bounds for webxdc', error)
+      log.debug("failed to retrieve bounds for webxdc", error);
     }
-    return null
+    return null;
   }
 
   setLastBounds(accountId: number, msgId: number, bounds: Bounds) {
     return this.rpc.setConfig(
       accountId,
       `${BOUNDS_UI_CONFIG_PREFIX}.${msgId}`,
-      JSON.stringify(bounds)
-    )
+      JSON.stringify(bounds),
+    );
   }
 
   removeLastBounds(accountId: number, msgId: number) {
     return this.rpc.setConfig(
       accountId,
       `${BOUNDS_UI_CONFIG_PREFIX}.${msgId}`,
-      null
-    )
+      null,
+    );
   }
 
   _closeAll() {
     for (const open_app of Object.keys(open_apps)) {
-      open_apps[open_app].win.close()
+      open_apps[open_app].win.close();
     }
   }
 }
 
 async function webxdcProtocolHandler(
   rpc: Jsonrpc.RawClient,
-  request: GlobalRequest
+  request: GlobalRequest,
 ): Promise<GlobalResponse> {
   /**
    * Make sure to only `return makeResponse()` because it sets headers
@@ -828,210 +833,210 @@ async function webxdcProtocolHandler(
    */
   const makeResponse = (
     body: BodyInit,
-    responseInit: Omit<ResponseInit, 'headers'>,
-    mime_type?: undefined | string
+    responseInit: Omit<ResponseInit, "headers">,
+    mime_type?: undefined | string,
   ) => {
-    const headers = new Headers()
+    const headers = new Headers();
     if (!open_apps[id].internet_access) {
-      headers.append('Content-Security-Policy', CSP)
+      headers.append("Content-Security-Policy", CSP);
     }
     // Ensure that the client doesn't try to interpret a file as
     // one with 'application/pdf' mime type and therefore open it
     // in the PDF viewer, see
     // "XDC-01-005 WP1: Full CSP bypass via desktop app PDF embed"
     // https://public.opentech.fund/documents/XDC-01-report_2_1.pdf
-    headers.append('X-Content-Type-Options', 'nosniff')
+    headers.append("X-Content-Type-Options", "nosniff");
     if (mime_type) {
-      headers.append('content-type', mime_type)
+      headers.append("content-type", mime_type);
     }
     return new Response(body, {
       ...responseInit,
       headers,
-    })
-  }
+    });
+  };
 
-  const url = new URL(request.url)
-  const [account, msg] = url.hostname.split('.')
-  const id = `${account}.${msg}`
+  const url = new URL(request.url);
+  const [account, msg] = url.hostname.split(".");
+  const id = `${account}.${msg}`;
 
   if (!open_apps[id]) {
-    return makeResponse('', { status: 500 })
+    return makeResponse("", { status: 500 });
   }
 
-  let filename = url.pathname
+  let filename = url.pathname;
   // remove leading / trailing "/"
-  if (filename.endsWith('/')) {
-    filename = filename.substring(0, filename.length - 1)
+  if (filename.endsWith("/")) {
+    filename = filename.substring(0, filename.length - 1);
   }
-  if (filename.startsWith('/')) {
-    filename = filename.substring(1)
+  if (filename.startsWith("/")) {
+    filename = filename.substring(1);
   }
 
-  let mimeType: string | undefined = Mime.lookup(filename) || ''
+  let mimeType: string | undefined = Mime.lookup(filename) || "";
   // Make sure that the browser doesn't open files in the PDF viewer.
   // TODO is this the only mime type that opens the PDF viewer?
   // TODO consider a mime type whitelist instead.
-  if (mimeType === 'application/pdf') {
+  if (mimeType === "application/pdf") {
     // TODO make sure that `callback` won't internally set mime type back
     // to 'application/pdf' (at the time of writing it's not the case).
     // Otherwise consider explicitly setting it as a header.
-    mimeType = undefined
+    mimeType = undefined;
   }
 
   if (filename === WRAPPER_PATH) {
     return makeResponse(
-      await readFile(join(htmlDistDir(), '/webxdc_wrapper.html')),
+      await readFile(join(htmlDistDir(), "/webxdc_wrapper.html")),
       {},
-      mimeType
-    )
-  } else if (filename === 'webxdc.js') {
+      mimeType,
+    );
+  } else if (filename === "webxdc.js") {
     const displayName = Buffer.from(open_apps[id].displayName).toString(
-      'base64'
-    )
-    const selfAddr = Buffer.from(open_apps[id].selfAddr).toString('base64')
+      "base64",
+    );
+    const selfAddr = Buffer.from(open_apps[id].selfAddr).toString("base64");
     // initializes the preload script, the actual implementation of `window.webxdc` is found there: static/webxdc-preload.js
     return makeResponse(
       Buffer.from(
         `window.parent.webxdc_internal.setup("${selfAddr}","${displayName}", ${Number(
-          open_apps[id].sendUpdateInterval
+          open_apps[id].sendUpdateInterval,
         )}, ${Number(open_apps[id].sendUpdateMaxSize)})
         window.webxdc = window.parent.webxdc
-        window.webxdc_custom = window.parent.webxdc_custom`
+        window.webxdc_custom = window.parent.webxdc_custom`,
       ),
       {},
-      mimeType
-    )
+      mimeType,
+    );
   } else {
     try {
       const blob = Buffer.from(
         await rpc.getWebxdcBlob(
           open_apps[id].accountId,
           open_apps[id].msgId,
-          filename
+          filename,
         ),
-        'base64'
-      )
-      return makeResponse(blob, {}, mimeType)
+        "base64",
+      );
+      return makeResponse(blob, {}, mimeType);
     } catch (error) {
-      log.error('webxdc: load blob:', error)
-      return makeResponse('', { status: 404 })
+      log.error("webxdc: load blob:", error);
+      return makeResponse("", { status: 404 });
     }
   }
 }
 
 function lookupAppFromEvent(event: IpcMainInvokeEvent): AppInstance | null {
   for (const key of Object.keys(open_apps)) {
-    const app = open_apps[key]
+    const app = open_apps[key];
     if (app.win.webContents === event.sender) {
-      return app
+      return app;
     }
   }
-  return null
+  return null;
 }
 
 function makeTitle(webxdcInfo: T.WebxdcMessageInfo, chatName: string): string {
   return `${
-    webxdcInfo.document ? truncateText(webxdcInfo.document, 32) + ' - ' : ''
-  }${truncateText(webxdcInfo.name, 42)} – ${chatName}`
+    webxdcInfo.document ? truncateText(webxdcInfo.document, 32) + " - " : ""
+  }${truncateText(webxdcInfo.name, 42)} – ${chatName}`;
 }
 
 function partitionFromAccountId(accountId: number) {
-  return `persist:webxdc_${accountId}`
+  return `persist:webxdc_${accountId}`;
 }
 
 function sessionFromAccountId(accountId: number) {
   return session.fromPartition(partitionFromAccountId(accountId), {
     cache: false,
-  })
+  });
 }
 
-ipcMain.handle('webxdc.clearWebxdcDOMStorage', async (_, accountId: number) => {
-  const session = sessionFromAccountId(accountId)
-  await session.clearStorageData()
-  await session.clearData()
-})
+ipcMain.handle("webxdc.clearWebxdcDOMStorage", async (_, accountId: number) => {
+  const session = sessionFromAccountId(accountId);
+  await session.clearStorageData();
+  await session.clearData();
+});
 
-ipcMain.handle('webxdc.getWebxdcDiskUsage', async (_, accountId: number) => {
-  const ses = sessionFromAccountId(accountId)
+ipcMain.handle("webxdc.getWebxdcDiskUsage", async (_, accountId: number) => {
+  const ses = sessionFromAccountId(accountId);
   if (!ses.storagePath) {
-    throw new Error('session has no storagePath set')
+    throw new Error("session has no storagePath set");
   }
   const [cache_size, real_total_size] = await Promise.all([
     ses.getCacheSize(),
     get_recursive_folder_size(ses.storagePath, [
-      'GPUCache',
-      'QuotaManager',
-      'Code Cache',
-      'LOG',
-      'LOG.old',
-      'LOCK',
-      '.DS_Store',
-      'Cookies-journal',
-      'Databases.db-journal',
-      'Preferences',
-      'QuotaManager-journal',
-      '000003.log',
-      'MANIFEST-000001',
+      "GPUCache",
+      "QuotaManager",
+      "Code Cache",
+      "LOG",
+      "LOG.old",
+      "LOCK",
+      ".DS_Store",
+      "Cookies-journal",
+      "Databases.db-journal",
+      "Preferences",
+      "QuotaManager-journal",
+      "000003.log",
+      "MANIFEST-000001",
     ]),
-  ])
-  const empty_size = 49 * 1024 // ~ size of an empty session/partition
+  ]);
+  const empty_size = 49 * 1024; // ~ size of an empty session/partition
 
-  let total_size = real_total_size - empty_size
-  let data_size = total_size - cache_size
+  let total_size = real_total_size - empty_size;
+  let data_size = total_size - cache_size;
   if (total_size < 0) {
-    total_size = 0
-    data_size = 0
+    total_size = 0;
+    data_size = 0;
   }
   return {
     cache_size,
     total_size,
     data_size,
-  }
-})
+  };
+});
 
 async function get_recursive_folder_size(
   path: string,
-  exclude_list: string[] = []
+  exclude_list: string[] = [],
 ) {
-  let size = 0
+  let size = 0;
   for (const item of await readdir(path)) {
-    const item_path = join(path, item)
-    const stats = await stat(item_path)
+    const item_path = join(path, item);
+    const stats = await stat(item_path);
     if (exclude_list.includes(item)) {
-      continue
+      continue;
     }
     if (stats.isDirectory()) {
-      size += await get_recursive_folder_size(item_path, exclude_list)
+      size += await get_recursive_folder_size(item_path, exclude_list);
     } else {
-      size += stats.size
+      size += stats.size;
     }
   }
-  return size
+  return size;
 }
 
 export async function webxdcStartUpCleanup() {
   try {
-    const partitions_dir = join(getConfigPath(), 'Partitions')
+    const partitions_dir = join(getConfigPath(), "Partitions");
     if (!existsSync(partitions_dir)) {
-      return
+      return;
     }
-    const folders = await readdir(partitions_dir)
+    const folders = await readdir(partitions_dir);
     for (const folder of folders) {
-      if (!folder.startsWith('webxdc')) {
-        continue
+      if (!folder.startsWith("webxdc")) {
+        continue;
       }
       try {
-        await stat(join(partitions_dir, folder, 'webxdc-cleanup'))
-        await rmdir(join(partitions_dir, folder), { recursive: true })
-        log.info('webxdc cleanup: deleted ', folder)
+        await stat(join(partitions_dir, folder, "webxdc-cleanup"));
+        await rmdir(join(partitions_dir, folder), { recursive: true });
+        log.info("webxdc cleanup: deleted ", folder);
       } catch (error: any) {
-        if (error.code !== 'ENOENT') {
-          throw error
+        if (error.code !== "ENOENT") {
+          throw error;
         }
       }
     }
   } catch (error) {
-    log.warn('webxdc cleanup failed', error)
+    log.warn("webxdc cleanup failed", error);
   }
 }
 
@@ -1040,26 +1045,26 @@ export async function webxdcStartUpCleanup() {
  */
 function adjustSize(size: Size): Size {
   const { height: screenHeight, width: screenWidth } =
-    screen.getPrimaryDisplay().workAreaSize
+    screen.getPrimaryDisplay().workAreaSize;
   return {
     width: Math.min(size.width, screenWidth),
     height: Math.min(size.height, screenHeight),
-  }
+  };
 }
 
-ipcMain.handle('delete_webxdc_account_data', async (_ev, accountId: number) => {
+ipcMain.handle("delete_webxdc_account_data", async (_ev, accountId: number) => {
   // we can not delete the directory as it might still be used and that would be a problem on windows
   // so the second next best thing we can do is telling electron to clear the data, even though it won't delete everything
   const s = session.fromPartition(`persist:webxdc_${accountId}`, {
     cache: false,
-  })
-  await s.clearStorageData()
-  await s.clearData()
+  });
+  await s.clearStorageData();
+  await s.clearData();
 
   // mark the folder for deletion on next startup
   if (s.storagePath) {
-    await writeFile(join(s.storagePath, 'webxdc-cleanup'), '-', 'utf-8')
+    await writeFile(join(s.storagePath, "webxdc-cleanup"), "-", "utf-8");
   } else {
-    throw new Error('session has no storagePath set')
+    throw new Error("session has no storagePath set");
   }
-})
+});

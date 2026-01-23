@@ -24,7 +24,7 @@ Result of agent participation
 
 [src/types.ts:171](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L171)
 
-___
+---
 
 ### facetsActivated
 
@@ -34,7 +34,7 @@ ___
 
 [src/types.ts:172](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L172)
 
-___
+---
 
 ### emotionalShift
 
@@ -42,8 +42,8 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
+| Name      | Type     |
+| :-------- | :------- |
 | `valence` | `number` |
 | `arousal` | `number` |
 
@@ -51,7 +51,7 @@ ___
 
 [src/types.ts:173](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L173)
 
-___
+---
 
 ### insightsGained
 
@@ -61,7 +61,7 @@ ___
 
 [src/types.ts:174](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L174)
 
-___
+---
 
 ### socialUpdates
 

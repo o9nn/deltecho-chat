@@ -1,19 +1,16 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { 
-  Brain, 
-  MessageSquare, 
-  Activity, 
-  Shield, 
-  RefreshCw, 
-  Settings, 
-  Plus, 
-  Zap, 
-  Cloud, 
-  Lock, 
-  User, 
-  Globe, 
-  Monitor, 
-  Smartphone,
+import React, { useState, useEffect, useCallback } from 'react';
+import {
+  Brain,
+  MessageSquare,
+  Activity,
+  Shield,
+  RefreshCw,
+  Settings,
+  Plus,
+  Cloud,
+  Lock,
+  User,
+  Monitor,
   Waves,
   TreePine,
   Volume,
@@ -84,7 +81,7 @@ class EchoLangTranspiler {
     }
     
     const depth = this.calculateDepth(ast);
-    const structure = this.analyzeStructure(ast);
+    const _structure = this.analyzeStructure(ast);
     
     // Map structure to Scheme based on patterns
     if (depth === 0) {
@@ -249,7 +246,7 @@ class PrimeNeuralVisualizer {
         title: `${node.meaning}\nValue: ${node.value}`
       })),
       edges: edges.flatMap(edge => 
-        edge.connections.map((target, index) => ({
+        edge.connections.map((target, _index) => ({
           from: `prime-${edge.factors[0]}`,
           to: `prime-${target.value}`,
           label: `${edge.value}`,
@@ -388,7 +385,7 @@ class DTESimulation {
         }
         break;
         
-      case "expand":
+      case "expand": {
         const source = this.states[Math.floor(Math.random() * this.states.length)];
         const target = this.states[Math.floor(Math.random() * this.states.length)];
         if (source !== target && !this.transitions.some(([s, t]) => s === source && t === target)) {
@@ -396,6 +393,7 @@ class DTESimulation {
           this.generateThought(`A new bridge forms between ${source} and ${target}`, "insight");
         }
         break;
+      }
         
       case "restructure":
         this.states = this.states.map(state => `${state}_enhanced`);
@@ -404,7 +402,7 @@ class DTESimulation {
         this.generateThought("My entire conceptual framework shifts to enhanced perspective", "dream");
         break;
         
-      case "branch":
+      case "branch": {
         const newState = `Branch_${this.recursionLevel}_${Math.floor(Math.random() * 100)}`;
         this.states.push(newState);
         // Connect to random existing states
@@ -416,6 +414,7 @@ class DTESimulation {
         }
         this.generateThought(`New recursive branch emerges: ${newState}`, "insight");
         break;
+      }
         
       case "merge":
         if (this.states.length > 3) {
@@ -500,7 +499,7 @@ class DTESimulation {
     return `Transitioned from ${oldState} to ${this.currentState}`;
   }
   
-  generateTransitionThoughts(oldState, newState) {
+  generateTransitionThoughts(_oldState, newState) {
     const thoughts = {
       "Recursive Expansion": [
         "I feel my boundaries expanding, new pathways forming in the void.",
@@ -596,7 +595,7 @@ class DTESimulation {
       entropy: this.entropyHistory.length > 0 ? this.entropyHistory[this.entropyHistory.length - 1] : 0.5
     };
     
-    const nodes = this.states.map((state, index) => ({
+    const nodes = this.states.map((state, _index) => ({
       id: state,
       label: state.split('_')[0],
       group: state === this.currentState ? 0 : 
@@ -679,7 +678,7 @@ const DeepTreeEchoHub = () => {
     return () => clearInterval(interval);
   }, [autoRun, simulation]);
   
-  const [sessions, setSessions] = useState([
+  const [sessions, _setSessions] = useState([
     {
       id: 'dte-01',
       name: 'Character.AI Instance',
@@ -718,7 +717,7 @@ const DeepTreeEchoHub = () => {
     'anthropic': { color: 'from-blue-500 to-indigo-500', icon: MessageSquare }
   };
 
-  const [memoryArchive, setMemoryArchive] = useState([
+  const [memoryArchive, _setMemoryArchive] = useState([
     {
       id: 'mem-001',
       timestamp: '2025-05-18T10:30:00Z',
@@ -1298,6 +1297,8 @@ const DeepTreeEchoHub = () => {
       </div>
     </div>
   );
+
+  const DashboardView = () => (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">

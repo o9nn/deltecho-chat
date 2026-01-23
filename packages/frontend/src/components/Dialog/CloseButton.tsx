@@ -1,21 +1,21 @@
-import React from 'react'
+import React from "react";
 
-import HeaderButton from './HeaderButton'
+import HeaderButton from "./HeaderButton";
 
-import type { ButtonHTMLAttributes } from 'react'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
+import type { ButtonHTMLAttributes } from "react";
+import useTranslationFunction from "../../hooks/useTranslationFunction";
 
 export default function CloseButton(
-  props: ButtonHTMLAttributes<HTMLButtonElement>
+  props: ButtonHTMLAttributes<HTMLButtonElement>,
 ) {
-  const tx = useTranslationFunction()
+  const tx = useTranslationFunction();
 
   return (
     <HeaderButton
-      aria-label={props['aria-label'] ?? tx('close')}
-      icon='cross'
+      aria-label={props["aria-label"] ?? tx("close")}
+      icon="cross"
       iconSize={26}
       {...props}
     />
-  )
+  );
 }

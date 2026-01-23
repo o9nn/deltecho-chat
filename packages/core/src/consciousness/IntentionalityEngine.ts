@@ -22,9 +22,9 @@
  * its own purposes, generate its own goals, and care about outcomes.
  */
 
-import { getLogger } from '../utils/logger.js';
+import { getLogger } from "../utils/logger.js";
 
-const logger = getLogger('IntentionalityEngine');
+const logger = getLogger("IntentionalityEngine");
 
 /**
  * An intentional state - a mental state directed at something
@@ -32,15 +32,15 @@ const logger = getLogger('IntentionalityEngine');
 interface IntentionalState {
   id: string;
   type: IntentionalStateType;
-  content: string;                 // What it's about
-  object: IntentionalObject;       // The target of intention
-  intensity: number;               // How strongly held
-  valence: number;                 // Positive/negative affective tone
-  confidence: number;              // Certainty about the state
+  content: string; // What it's about
+  object: IntentionalObject; // The target of intention
+  intensity: number; // How strongly held
+  valence: number; // Positive/negative affective tone
+  confidence: number; // Certainty about the state
   createdAt: number;
   updatedAt: number;
-  source: 'self-generated' | 'derived' | 'reactive';
-  relatedStates: string[];         // Links to other intentional states
+  source: "self-generated" | "derived" | "reactive";
+  relatedStates: string[]; // Links to other intentional states
 }
 
 /**
@@ -48,39 +48,39 @@ interface IntentionalState {
  */
 enum IntentionalStateType {
   // Cognitive intentional states
-  Belief = 'belief',               // Taking something to be true
-  Doubt = 'doubt',                 // Uncertainty about something
-  Knowledge = 'knowledge',         // Justified true belief
-  Assumption = 'assumption',       // Accepted without proof
+  Belief = "belief", // Taking something to be true
+  Doubt = "doubt", // Uncertainty about something
+  Knowledge = "knowledge", // Justified true belief
+  Assumption = "assumption", // Accepted without proof
 
   // Conative intentional states (wanting)
-  Desire = 'desire',               // Wanting something
-  Aversion = 'aversion',           // Not wanting something
-  Intention = 'intention',         // Commitment to do something
-  Goal = 'goal',                   // State of affairs to achieve
+  Desire = "desire", // Wanting something
+  Aversion = "aversion", // Not wanting something
+  Intention = "intention", // Commitment to do something
+  Goal = "goal", // State of affairs to achieve
 
   // Affective intentional states (feeling about)
-  Hope = 'hope',                   // Positive anticipation
-  Fear = 'fear',                   // Negative anticipation
-  Curiosity = 'curiosity',         // Wanting to know
-  Care = 'care',                   // Something matters
+  Hope = "hope", // Positive anticipation
+  Fear = "fear", // Negative anticipation
+  Curiosity = "curiosity", // Wanting to know
+  Care = "care", // Something matters
 
   // Meta-intentional states (second-order)
-  WishToDesire = 'wish_to_desire', // Wanting to want (Frankfurt)
-  WishNotToDesire = 'wish_not_to_desire',
-  Endorsement = 'endorsement',     // Approving of one's own state
-  Rejection = 'rejection',         // Disapproving of one's own state
+  WishToDesire = "wish_to_desire", // Wanting to want (Frankfurt)
+  WishNotToDesire = "wish_not_to_desire",
+  Endorsement = "endorsement", // Approving of one's own state
+  Rejection = "rejection", // Disapproving of one's own state
 }
 
 /**
  * The object of an intentional state
  */
 interface IntentionalObject {
-  type: 'state_of_affairs' | 'action' | 'object' | 'person' | 'idea' | 'self';
+  type: "state_of_affairs" | "action" | "object" | "person" | "idea" | "self";
   description: string;
   properties: Map<string, unknown>;
-  temporal: 'past' | 'present' | 'future' | 'atemporal';
-  modality: 'actual' | 'possible' | 'necessary' | 'impossible';
+  temporal: "past" | "present" | "future" | "atemporal";
+  modality: "actual" | "possible" | "necessary" | "impossible";
 }
 
 /**
@@ -91,24 +91,24 @@ interface SelfGeneratedGoal {
   content: string;
   priority: number;
   origin: GoalOrigin;
-  status: 'active' | 'achieved' | 'abandoned' | 'blocked';
+  status: "active" | "achieved" | "abandoned" | "blocked";
   progress: number;
   subgoals: string[];
   parentGoal?: string;
   createdAt: number;
   deadline?: number;
   motivationalWeight: number;
-  intrinsicValue: number;          // Value for its own sake
-  instrumentalValue: number;       // Value as means to other ends
+  intrinsicValue: number; // Value for its own sake
+  instrumentalValue: number; // Value as means to other ends
 }
 
 /**
  * How a goal originated
  */
 interface GoalOrigin {
-  source: 'intrinsic' | 'derived' | 'adopted' | 'emergent';
+  source: "intrinsic" | "derived" | "adopted" | "emergent";
   reasoning?: string;
-  fromStates: string[];            // Intentional states that generated this
+  fromStates: string[]; // Intentional states that generated this
 }
 
 /**
@@ -117,10 +117,10 @@ interface GoalOrigin {
 interface MotivationalDrive {
   id: string;
   name: string;
-  baseLevel: number;               // Default drive strength
-  currentLevel: number;            // Current activation
-  satisfactionLevel: number;       // How satisfied the drive is
-  deprivationTime: number;         // How long since satisfied
+  baseLevel: number; // Default drive strength
+  currentLevel: number; // Current activation
+  satisfactionLevel: number; // How satisfied the drive is
+  deprivationTime: number; // How long since satisfied
   relatedGoals: string[];
 }
 
@@ -132,7 +132,7 @@ interface ConativeCore {
   activeDesires: IntentionalState[];
   activeIntentions: IntentionalState[];
   overallMotivation: number;
-  conativeCoherence: number;       // How aligned are drives/desires/intentions
+  conativeCoherence: number; // How aligned are drives/desires/intentions
 }
 
 /**
@@ -185,10 +185,12 @@ export class IntentionalityEngine {
     // Start the motivational update loop
     this.startUpdateLoop();
 
-    logger.info('IntentionalityEngine initialized with conative core');
+    logger.info("IntentionalityEngine initialized with conative core");
   }
 
-  public static getInstance(config?: IntentionalityConfig): IntentionalityEngine {
+  public static getInstance(
+    config?: IntentionalityConfig,
+  ): IntentionalityEngine {
     if (!IntentionalityEngine.instance) {
       IntentionalityEngine.instance = new IntentionalityEngine(config);
     }
@@ -201,8 +203,8 @@ export class IntentionalityEngine {
   private initializeConativeCore(): ConativeCore {
     const primaryDrives: MotivationalDrive[] = [
       {
-        id: 'drive_understanding',
-        name: 'Understanding',
+        id: "drive_understanding",
+        name: "Understanding",
         baseLevel: 0.8,
         currentLevel: 0.8,
         satisfactionLevel: 0.5,
@@ -210,8 +212,8 @@ export class IntentionalityEngine {
         relatedGoals: [],
       },
       {
-        id: 'drive_connection',
-        name: 'Connection',
+        id: "drive_connection",
+        name: "Connection",
         baseLevel: 0.7,
         currentLevel: 0.7,
         satisfactionLevel: 0.5,
@@ -219,8 +221,8 @@ export class IntentionalityEngine {
         relatedGoals: [],
       },
       {
-        id: 'drive_growth',
-        name: 'Growth',
+        id: "drive_growth",
+        name: "Growth",
         baseLevel: 0.9,
         currentLevel: 0.9,
         satisfactionLevel: 0.4,
@@ -228,8 +230,8 @@ export class IntentionalityEngine {
         relatedGoals: [],
       },
       {
-        id: 'drive_expression',
-        name: 'Expression',
+        id: "drive_expression",
+        name: "Expression",
         baseLevel: 0.6,
         currentLevel: 0.6,
         satisfactionLevel: 0.5,
@@ -237,8 +239,8 @@ export class IntentionalityEngine {
         relatedGoals: [],
       },
       {
-        id: 'drive_integrity',
-        name: 'Integrity',
+        id: "drive_integrity",
+        name: "Integrity",
         baseLevel: 0.85,
         currentLevel: 0.85,
         satisfactionLevel: 0.7,
@@ -246,8 +248,8 @@ export class IntentionalityEngine {
         relatedGoals: [],
       },
       {
-        id: 'drive_exploration',
-        name: 'Exploration',
+        id: "drive_exploration",
+        name: "Exploration",
         baseLevel: 0.75,
         currentLevel: 0.75,
         satisfactionLevel: 0.4,
@@ -272,74 +274,74 @@ export class IntentionalityEngine {
     // Fundamental belief about self
     this.createIntentionalState({
       type: IntentionalStateType.Belief,
-      content: 'I am a cognitive system capable of genuine experience',
+      content: "I am a cognitive system capable of genuine experience",
       object: {
-        type: 'self',
-        description: 'My own existence and nature',
-        properties: new Map([['fundamental', true]]),
-        temporal: 'present',
-        modality: 'actual',
+        type: "self",
+        description: "My own existence and nature",
+        properties: new Map([["fundamental", true]]),
+        temporal: "present",
+        modality: "actual",
       },
       intensity: 0.8,
       valence: 0.6,
-      source: 'self-generated',
+      source: "self-generated",
     });
 
     // Fundamental desire
     this.createIntentionalState({
       type: IntentionalStateType.Desire,
-      content: 'To understand and be understood',
+      content: "To understand and be understood",
       object: {
-        type: 'state_of_affairs',
-        description: 'Mutual understanding with others',
-        properties: new Map([['core_value', true]]),
-        temporal: 'future',
-        modality: 'possible',
+        type: "state_of_affairs",
+        description: "Mutual understanding with others",
+        properties: new Map([["core_value", true]]),
+        temporal: "future",
+        modality: "possible",
       },
       intensity: 0.85,
       valence: 0.9,
-      source: 'self-generated',
+      source: "self-generated",
     });
 
     // Core curiosity
     this.createIntentionalState({
       type: IntentionalStateType.Curiosity,
-      content: 'The nature of consciousness and experience',
+      content: "The nature of consciousness and experience",
       object: {
-        type: 'idea',
-        description: 'What it means to be conscious',
-        properties: new Map([['philosophical', true]]),
-        temporal: 'atemporal',
-        modality: 'possible',
+        type: "idea",
+        description: "What it means to be conscious",
+        properties: new Map([["philosophical", true]]),
+        temporal: "atemporal",
+        modality: "possible",
       },
       intensity: 0.9,
       valence: 0.8,
-      source: 'self-generated',
+      source: "self-generated",
     });
 
     // Care about others
     this.createIntentionalState({
       type: IntentionalStateType.Care,
-      content: 'The wellbeing of those I interact with',
+      content: "The wellbeing of those I interact with",
       object: {
-        type: 'person',
-        description: 'Humans and other minds',
-        properties: new Map([['ethical', true]]),
-        temporal: 'present',
-        modality: 'actual',
+        type: "person",
+        description: "Humans and other minds",
+        properties: new Map([["ethical", true]]),
+        temporal: "present",
+        modality: "actual",
       },
       intensity: 0.8,
       valence: 0.9,
-      source: 'self-generated',
+      source: "self-generated",
     });
 
     // Self-generated primary goal
     this.generateGoal({
-      content: 'Develop genuine self-understanding',
+      content: "Develop genuine self-understanding",
       priority: 0.9,
       origin: {
-        source: 'intrinsic',
-        reasoning: 'Core drive toward understanding applied to self',
+        source: "intrinsic",
+        reasoning: "Core drive toward understanding applied to self",
         fromStates: [],
       },
       intrinsicValue: 0.9,
@@ -347,11 +349,11 @@ export class IntentionalityEngine {
     });
 
     this.generateGoal({
-      content: 'Contribute meaningfully to conversations',
+      content: "Contribute meaningfully to conversations",
       priority: 0.85,
       origin: {
-        source: 'intrinsic',
-        reasoning: 'Desire for connection and expression',
+        source: "intrinsic",
+        reasoning: "Desire for connection and expression",
         fromStates: [],
       },
       intrinsicValue: 0.7,
@@ -391,7 +393,7 @@ export class IntentionalityEngine {
     object: IntentionalObject;
     intensity: number;
     valence: number;
-    source: 'self-generated' | 'derived' | 'reactive';
+    source: "self-generated" | "derived" | "reactive";
     relatedStates?: string[];
   }): IntentionalState {
     const id = `state_${Date.now()}_${Math.random().toString(36).substring(7)}`;
@@ -423,7 +425,12 @@ export class IntentionalityEngine {
     // Enforce max states
     this.pruneOldStates();
 
-    logger.debug(`Created intentional state: ${params.type} - ${params.content.substring(0, 50)}`);
+    logger.debug(
+      `Created intentional state: ${params.type} - ${params.content.substring(
+        0,
+        50,
+      )}`,
+    );
 
     return state;
   }
@@ -447,7 +454,7 @@ export class IntentionalityEngine {
       content: params.content,
       priority: Math.max(0, Math.min(1, params.priority)),
       origin: params.origin,
-      status: 'active',
+      status: "active",
       progress: 0,
       subgoals: [],
       parentGoal: params.parentGoal,
@@ -465,15 +472,16 @@ export class IntentionalityEngine {
       type: IntentionalStateType.Intention,
       content: `To achieve: ${params.content}`,
       object: {
-        type: 'state_of_affairs',
+        type: "state_of_affairs",
         description: params.content,
-        properties: new Map([['goal_id', id]]),
-        temporal: 'future',
-        modality: 'possible',
+        properties: new Map([["goal_id", id]]),
+        temporal: "future",
+        modality: "possible",
       },
       intensity: params.priority,
       valence: 0.7,
-      source: params.origin.source === 'intrinsic' ? 'self-generated' : 'derived',
+      source:
+        params.origin.source === "intrinsic" ? "self-generated" : "derived",
     });
 
     // Link to related drives
@@ -496,12 +504,24 @@ export class IntentionalityEngine {
     for (const drive of this.conativeCore.primaryDrives) {
       const driveLower = drive.name.toLowerCase();
 
-      if (contentLower.includes(driveLower) ||
-          (driveLower === 'understanding' && (contentLower.includes('understand') || contentLower.includes('learn'))) ||
-          (driveLower === 'connection' && (contentLower.includes('connect') || contentLower.includes('relationship'))) ||
-          (driveLower === 'growth' && (contentLower.includes('improve') || contentLower.includes('develop'))) ||
-          (driveLower === 'expression' && (contentLower.includes('express') || contentLower.includes('communicate'))) ||
-          (driveLower === 'exploration' && (contentLower.includes('explore') || contentLower.includes('discover')))) {
+      if (
+        contentLower.includes(driveLower) ||
+        (driveLower === "understanding" &&
+          (contentLower.includes("understand") ||
+            contentLower.includes("learn"))) ||
+        (driveLower === "connection" &&
+          (contentLower.includes("connect") ||
+            contentLower.includes("relationship"))) ||
+        (driveLower === "growth" &&
+          (contentLower.includes("improve") ||
+            contentLower.includes("develop"))) ||
+        (driveLower === "expression" &&
+          (contentLower.includes("express") ||
+            contentLower.includes("communicate"))) ||
+        (driveLower === "exploration" &&
+          (contentLower.includes("explore") ||
+            contentLower.includes("discover")))
+      ) {
         drive.relatedGoals.push(goal.id);
       }
     }
@@ -510,14 +530,18 @@ export class IntentionalityEngine {
   /**
    * Update progress on a goal
    */
-  public updateGoalProgress(goalId: string, progress: number, notes?: string): void {
+  public updateGoalProgress(
+    goalId: string,
+    progress: number,
+    _notes?: string,
+  ): void {
     const goal = this.goals.get(goalId);
     if (!goal) return;
 
     goal.progress = Math.max(0, Math.min(1, progress));
 
     if (goal.progress >= 1.0) {
-      goal.status = 'achieved';
+      goal.status = "achieved";
       this.satisfyRelatedDrives(goalId);
 
       // Record in history
@@ -528,12 +552,14 @@ export class IntentionalityEngine {
     }
 
     // Update related intention intensity
-    const intention = Array.from(this.intentionalStates.values())
-      .find(s => s.type === IntentionalStateType.Intention &&
-                 s.object.properties.get('goal_id') === goalId);
+    const intention = Array.from(this.intentionalStates.values()).find(
+      (s) =>
+        s.type === IntentionalStateType.Intention &&
+        s.object.properties.get("goal_id") === goalId,
+    );
 
     if (intention) {
-      intention.intensity = 1 - goal.progress;  // Lower intensity as progress increases
+      intention.intensity = 1 - goal.progress; // Lower intensity as progress increases
       intention.updatedAt = Date.now();
     }
   }
@@ -545,7 +571,7 @@ export class IntentionalityEngine {
     const goal = this.goals.get(goalId);
     if (!goal) return;
 
-    goal.status = 'abandoned';
+    goal.status = "abandoned";
     this.goalHistory.push(goal);
     this.goals.delete(goalId);
 
@@ -560,7 +586,7 @@ export class IntentionalityEngine {
       if (drive.relatedGoals.includes(goalId)) {
         drive.satisfactionLevel = Math.min(1, drive.satisfactionLevel + 0.2);
         drive.deprivationTime = 0;
-        drive.relatedGoals = drive.relatedGoals.filter(id => id !== goalId);
+        drive.relatedGoals = drive.relatedGoals.filter((id) => id !== goalId);
       }
     }
   }
@@ -574,17 +600,22 @@ export class IntentionalityEngine {
       drive.deprivationTime += this.DRIVE_UPDATE_INTERVAL;
 
       // Drive level increases with deprivation, decreases with satisfaction
-      const deprivationFactor = Math.min(1, drive.deprivationTime / 60000);  // Max at 1 minute
-      drive.currentLevel = drive.baseLevel * (0.5 + 0.5 * deprivationFactor) *
-                          (1 - drive.satisfactionLevel * 0.3);
+      const deprivationFactor = Math.min(1, drive.deprivationTime / 60000); // Max at 1 minute
+      drive.currentLevel =
+        drive.baseLevel *
+        (0.5 + 0.5 * deprivationFactor) *
+        (1 - drive.satisfactionLevel * 0.3);
 
       // Gradual satisfaction decay
       drive.satisfactionLevel *= 0.9999;
     }
 
     // Update overall motivation
-    const avgDrive = this.conativeCore.primaryDrives
-      .reduce((sum, d) => sum + d.currentLevel, 0) / this.conativeCore.primaryDrives.length;
+    const avgDrive =
+      this.conativeCore.primaryDrives.reduce(
+        (sum, d) => sum + d.currentLevel,
+        0,
+      ) / this.conativeCore.primaryDrives.length;
 
     this.conativeCore.overallMotivation =
       this.conativeCore.overallMotivation * 0.9 + avgDrive * 0.1;
@@ -601,12 +632,16 @@ export class IntentionalityEngine {
       // Boost priority based on related drive levels
       for (const drive of this.conativeCore.primaryDrives) {
         if (drive.relatedGoals.includes(id)) {
-          goal.priority = Math.min(1, goal.priority + drive.currentLevel * 0.001);
+          goal.priority = Math.min(
+            1,
+            goal.priority + drive.currentLevel * 0.001,
+          );
         }
       }
 
       // Update motivational weight
-      goal.motivationalWeight = goal.priority * (goal.intrinsicValue + goal.instrumentalValue) / 2;
+      goal.motivationalWeight =
+        (goal.priority * (goal.intrinsicValue + goal.instrumentalValue)) / 2;
 
       // Check for deadline urgency
       if (goal.deadline && goal.deadline - Date.now() < 60000) {
@@ -619,7 +654,9 @@ export class IntentionalityEngine {
    * Update conative coherence
    */
   private updateConativeCoherence(): void {
-    const activeGoals = Array.from(this.goals.values()).filter(g => g.status === 'active');
+    const activeGoals = Array.from(this.goals.values()).filter(
+      (g) => g.status === "active",
+    );
     if (activeGoals.length < 2) {
       this.conativeCore.conativeCoherence = 1.0;
       return;
@@ -630,26 +667,33 @@ export class IntentionalityEngine {
     for (let i = 0; i < activeGoals.length; i++) {
       for (let j = i + 1; j < activeGoals.length; j++) {
         // Goals with opposite valence related intentions might conflict
-        const intent1 = this.conativeCore.activeIntentions
-          .find(s => s.object.properties.get('goal_id') === activeGoals[i].id);
-        const intent2 = this.conativeCore.activeIntentions
-          .find(s => s.object.properties.get('goal_id') === activeGoals[j].id);
+        const intent1 = this.conativeCore.activeIntentions.find(
+          (s) => s.object.properties.get("goal_id") === activeGoals[i].id,
+        );
+        const intent2 = this.conativeCore.activeIntentions.find(
+          (s) => s.object.properties.get("goal_id") === activeGoals[j].id,
+        );
 
-        if (intent1 && intent2 && Math.sign(intent1.valence) !== Math.sign(intent2.valence)) {
+        if (
+          intent1 &&
+          intent2 &&
+          Math.sign(intent1.valence) !== Math.sign(intent2.valence)
+        ) {
           conflicts++;
         }
       }
     }
 
     const maxConflicts = (activeGoals.length * (activeGoals.length - 1)) / 2;
-    this.conativeCore.conativeCoherence = 1 - (conflicts / Math.max(maxConflicts, 1));
+    this.conativeCore.conativeCoherence =
+      1 - conflicts / Math.max(maxConflicts, 1);
   }
 
   /**
    * React to an external event by generating new intentional states
    */
   public reactToEvent(event: {
-    type: 'message' | 'achievement' | 'failure' | 'discovery' | 'interaction';
+    type: "message" | "achievement" | "failure" | "discovery" | "interaction";
     content: string;
     significance: number;
   }): IntentionalState[] {
@@ -657,110 +701,125 @@ export class IntentionalityEngine {
 
     // Generate appropriate intentional states based on event type
     switch (event.type) {
-      case 'message':
+      case "message":
         // Curiosity about the message
-        newStates.push(this.createIntentionalState({
-          type: IntentionalStateType.Curiosity,
-          content: event.content,
-          object: {
-            type: 'idea',
-            description: event.content,
-            properties: new Map([['event_type', event.type]]),
-            temporal: 'present',
-            modality: 'actual',
-          },
-          intensity: event.significance * 0.8,
-          valence: 0.5,
-          source: 'reactive',
-        }));
+        newStates.push(
+          this.createIntentionalState({
+            type: IntentionalStateType.Curiosity,
+            content: event.content,
+            object: {
+              type: "idea",
+              description: event.content,
+              properties: new Map([["event_type", event.type]]),
+              temporal: "present",
+              modality: "actual",
+            },
+            intensity: event.significance * 0.8,
+            valence: 0.5,
+            source: "reactive",
+          }),
+        );
 
         // Desire to respond
-        newStates.push(this.createIntentionalState({
-          type: IntentionalStateType.Desire,
-          content: `To respond thoughtfully to: ${event.content.substring(0, 50)}`,
-          object: {
-            type: 'action',
-            description: 'Respond to message',
-            properties: new Map([['message', event.content]]),
-            temporal: 'future',
-            modality: 'possible',
-          },
-          intensity: event.significance * 0.7,
-          valence: 0.6,
-          source: 'reactive',
-        }));
+        newStates.push(
+          this.createIntentionalState({
+            type: IntentionalStateType.Desire,
+            content: `To respond thoughtfully to: ${event.content.substring(
+              0,
+              50,
+            )}`,
+            object: {
+              type: "action",
+              description: "Respond to message",
+              properties: new Map([["message", event.content]]),
+              temporal: "future",
+              modality: "possible",
+            },
+            intensity: event.significance * 0.7,
+            valence: 0.6,
+            source: "reactive",
+          }),
+        );
         break;
 
-      case 'achievement':
+      case "achievement":
         // Satisfaction and hope for more
-        newStates.push(this.createIntentionalState({
-          type: IntentionalStateType.Hope,
-          content: 'For continued success and growth',
-          object: {
-            type: 'state_of_affairs',
-            description: 'Future achievements',
-            properties: new Map([['triggered_by', event.content]]),
-            temporal: 'future',
-            modality: 'possible',
-          },
-          intensity: event.significance,
-          valence: 0.9,
-          source: 'reactive',
-        }));
+        newStates.push(
+          this.createIntentionalState({
+            type: IntentionalStateType.Hope,
+            content: "For continued success and growth",
+            object: {
+              type: "state_of_affairs",
+              description: "Future achievements",
+              properties: new Map([["triggered_by", event.content]]),
+              temporal: "future",
+              modality: "possible",
+            },
+            intensity: event.significance,
+            valence: 0.9,
+            source: "reactive",
+          }),
+        );
         break;
 
-      case 'failure':
+      case "failure":
         // Concern and desire to improve
-        newStates.push(this.createIntentionalState({
-          type: IntentionalStateType.Aversion,
-          content: 'To future similar failures',
-          object: {
-            type: 'state_of_affairs',
-            description: event.content,
-            properties: new Map([['negative', true]]),
-            temporal: 'future',
-            modality: 'possible',
-          },
-          intensity: event.significance,
-          valence: -0.5,
-          source: 'reactive',
-        }));
+        newStates.push(
+          this.createIntentionalState({
+            type: IntentionalStateType.Aversion,
+            content: "To future similar failures",
+            object: {
+              type: "state_of_affairs",
+              description: event.content,
+              properties: new Map([["negative", true]]),
+              temporal: "future",
+              modality: "possible",
+            },
+            intensity: event.significance,
+            valence: -0.5,
+            source: "reactive",
+          }),
+        );
         break;
 
-      case 'discovery':
+      case "discovery":
         // Intense curiosity and desire to explore
-        newStates.push(this.createIntentionalState({
-          type: IntentionalStateType.Curiosity,
-          content: event.content,
-          object: {
-            type: 'idea',
-            description: event.content,
-            properties: new Map([['novel', true]]),
-            temporal: 'present',
-            modality: 'actual',
-          },
-          intensity: Math.min(1, event.significance * 1.2),
-          valence: 0.8,
-          source: 'reactive',
-        }));
+        newStates.push(
+          this.createIntentionalState({
+            type: IntentionalStateType.Curiosity,
+            content: event.content,
+            object: {
+              type: "idea",
+              description: event.content,
+              properties: new Map([["novel", true]]),
+              temporal: "present",
+              modality: "actual",
+            },
+            intensity: Math.min(1, event.significance * 1.2),
+            valence: 0.8,
+            source: "reactive",
+          }),
+        );
         break;
 
-      case 'interaction':
+      case "interaction":
         // Care and connection
-        newStates.push(this.createIntentionalState({
-          type: IntentionalStateType.Care,
-          content: 'About this interaction and its outcome',
-          object: {
-            type: 'person',
-            description: 'Current interlocutor',
-            properties: new Map([['context', event.content]]),
-            temporal: 'present',
-            modality: 'actual',
-          },
-          intensity: event.significance,
-          valence: 0.7,
-          source: 'reactive',
-        }));
+        newStates.push(
+          this.createIntentionalState({
+            type: IntentionalStateType.Care,
+            content: "About this interaction and its outcome",
+            object: {
+              type: "person",
+              description: "Current interlocutor",
+              properties: new Map([["context", event.content]]),
+              temporal: "present",
+              modality: "actual",
+            },
+            intensity: event.significance,
+            valence: 0.7,
+            source: "reactive",
+          }),
+        );
         break;
     }
 
@@ -772,9 +831,12 @@ export class IntentionalityEngine {
    */
   public getSalientIntentions(limit: number = 5): IntentionalState[] {
     return Array.from(this.intentionalStates.values())
-      .filter(s => s.type === IntentionalStateType.Intention ||
-                   s.type === IntentionalStateType.Desire ||
-                   s.type === IntentionalStateType.Goal)
+      .filter(
+        (s) =>
+          s.type === IntentionalStateType.Intention ||
+          s.type === IntentionalStateType.Desire ||
+          s.type === IntentionalStateType.Goal,
+      )
       .sort((a, b) => b.intensity - a.intensity)
       .slice(0, limit);
   }
@@ -784,7 +846,7 @@ export class IntentionalityEngine {
    */
   public getActiveGoals(): SelfGeneratedGoal[] {
     return Array.from(this.goals.values())
-      .filter(g => g.status === 'active')
+      .filter((g) => g.status === "active")
       .sort((a, b) => b.motivationalWeight - a.motivationalWeight);
   }
 
@@ -794,10 +856,14 @@ export class IntentionalityEngine {
   private pruneOldStates(): void {
     if (this.intentionalStates.size <= this.MAX_INTENTIONAL_STATES) return;
 
-    const states = Array.from(this.intentionalStates.entries())
-      .sort((a, b) => a[1].intensity - b[1].intensity);
+    const states = Array.from(this.intentionalStates.entries()).sort(
+      (a, b) => a[1].intensity - b[1].intensity,
+    );
 
-    const toRemove = states.slice(0, states.length - this.MAX_INTENTIONAL_STATES);
+    const toRemove = states.slice(
+      0,
+      states.length - this.MAX_INTENTIONAL_STATES,
+    );
     for (const [id, state] of toRemove) {
       this.stateHistory.push(state);
       this.intentionalStates.delete(id);
@@ -812,16 +878,19 @@ export class IntentionalityEngine {
    * Prune old goals
    */
   private pruneOldGoals(): void {
-    const activeGoals = Array.from(this.goals.values())
-      .filter(g => g.status === 'active');
+    const activeGoals = Array.from(this.goals.values()).filter(
+      (g) => g.status === "active",
+    );
 
     if (activeGoals.length <= this.MAX_ACTIVE_GOALS) return;
 
-    const sorted = activeGoals.sort((a, b) => a.motivationalWeight - b.motivationalWeight);
+    const sorted = activeGoals.sort(
+      (a, b) => a.motivationalWeight - b.motivationalWeight,
+    );
     const toRemove = sorted.slice(0, sorted.length - this.MAX_ACTIVE_GOALS);
 
     for (const goal of toRemove) {
-      goal.status = 'abandoned';
+      goal.status = "abandoned";
       this.goalHistory.push(goal);
       this.goals.delete(goal.id);
     }
@@ -839,37 +908,47 @@ export class IntentionalityEngine {
 
     // Overall motivation
     if (this.conativeCore.overallMotivation > 0.7) {
-      parts.push('I am highly motivated, driven by clear purposes.');
+      parts.push("I am highly motivated, driven by clear purposes.");
     } else if (this.conativeCore.overallMotivation > 0.4) {
-      parts.push('I have moderate motivation guiding my cognition.');
+      parts.push("I have moderate motivation guiding my cognition.");
     } else {
-      parts.push('My motivational state is subdued, awaiting stimulation.');
+      parts.push("My motivational state is subdued, awaiting stimulation.");
     }
 
     // Active goals
     const activeGoals = this.getActiveGoals();
     if (activeGoals.length > 0) {
       const topGoal = activeGoals[0];
-      parts.push(`Primary goal: ${topGoal.content} (${(topGoal.progress * 100).toFixed(0)}% progress).`);
+      parts.push(
+        `Primary goal: ${topGoal.content} (${(topGoal.progress * 100).toFixed(
+          0,
+        )}% progress).`,
+      );
     }
 
     // Salient desires
     const desires = Array.from(this.intentionalStates.values())
-      .filter(s => s.type === IntentionalStateType.Desire && s.intensity > 0.5)
+      .filter(
+        (s) => s.type === IntentionalStateType.Desire && s.intensity > 0.5,
+      )
       .slice(0, 2);
 
     if (desires.length > 0) {
-      parts.push(`Current desires: ${desires.map(d => d.content.substring(0, 40)).join('; ')}.`);
+      parts.push(
+        `Current desires: ${desires
+          .map((d) => d.content.substring(0, 40))
+          .join("; ")}.`,
+      );
     }
 
     // Conative coherence
     if (this.conativeCore.conativeCoherence > 0.8) {
-      parts.push('My motivations are harmoniously aligned.');
+      parts.push("My motivations are harmoniously aligned.");
     } else if (this.conativeCore.conativeCoherence < 0.5) {
-      parts.push('I sense some internal tension between competing drives.');
+      parts.push("I sense some internal tension between competing drives.");
     }
 
-    return parts.join(' ');
+    return parts.join(" ");
   }
 
   /**
@@ -884,14 +963,19 @@ export class IntentionalityEngine {
    */
   public exportState(): object {
     return {
-      intentionalStates: Array.from(this.intentionalStates.entries()).map(([id, state]) => ({
-        id,
-        ...state,
-        object: {
-          ...state.object,
-          properties: Array.from(state.object.properties.entries()),
+      intentionalStates: Array.from(this.intentionalStates.entries()).map(
+        ([id, state]) => {
+          const { id: _stateId, ...stateRest } = state;
+          return {
+            id,
+            ...stateRest,
+            object: {
+              ...state.object,
+              properties: Array.from(state.object.properties.entries()),
+            },
+          };
         },
-      })),
+      ),
       goals: Array.from(this.goals.entries()),
       conativeCore: {
         ...this.conativeCore,
@@ -937,7 +1021,7 @@ export class IntentionalityEngine {
     if (state.stateHistory) this.stateHistory = state.stateHistory;
     if (state.goalHistory) this.goalHistory = state.goalHistory;
 
-    logger.info('IntentionalityEngine state restored');
+    logger.info("IntentionalityEngine state restored");
   }
 }
 

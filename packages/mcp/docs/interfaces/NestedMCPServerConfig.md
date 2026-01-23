@@ -28,7 +28,7 @@ Instance name
 
 [src/server.ts:43](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/server.ts#L43)
 
-___
+---
 
 ### arena
 
@@ -40,7 +40,7 @@ Arena layer configuration
 
 [src/server.ts:45](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/server.ts#L45)
 
-___
+---
 
 ### agent
 
@@ -52,7 +52,7 @@ Agent layer configuration
 
 [src/server.ts:47](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/server.ts#L47)
 
-___
+---
 
 ### relation
 
@@ -64,7 +64,7 @@ Relation layer configuration
 
 [src/server.ts:49](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/server.ts#L49)
 
-___
+---
 
 ### enableLifecycle
 
@@ -76,7 +76,7 @@ Enable automatic lifecycle cycling
 
 [src/server.ts:51](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/server.ts#L51)
 
-___
+---
 
 ### lifecycleIntervalMs
 
@@ -88,7 +88,7 @@ Lifecycle cycle interval (0 = manual)
 
 [src/server.ts:53](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/server.ts#L53)
 
-___
+---
 
 ### verbose
 

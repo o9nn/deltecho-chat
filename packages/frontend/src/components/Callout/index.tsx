@@ -1,17 +1,19 @@
-import React from 'react'
-import classNames from 'classnames'
+import React from "react";
+import classNames from "classnames";
 
-import type { PropsWithChildren } from 'react'
+import type { PropsWithChildren } from "react";
 
-import styles from './styles.module.scss'
+import styles from "./styles.module.scss";
 
 type Props = {
-  className?: string
-}
+  className?: string;
+};
 
 export default function Callout({
   children,
   className,
 }: PropsWithChildren<Props>) {
-  return <div className={classNames(styles.callout, className)}>{children}</div>
+  return (
+    <div className={classNames(styles.callout, className)}>{children}</div>
+  );
 }

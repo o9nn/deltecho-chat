@@ -1,100 +1,100 @@
-import React, { useRef, useEffect, useCallback } from 'react'
-import { basename, join, parse } from 'path'
-import { T } from '@deltachat/jsonrpc-client'
+import React, { useRef, useEffect, useCallback } from "react";
+import { basename, join, parse } from "path";
+import { T } from "@deltachat/jsonrpc-client";
 
-import Composer, { useDraft } from '../composer/Composer'
-import { getLogger } from '../../../../shared/logger'
-import MessageList from './MessageList'
-import type ComposerMessageInput from '../composer/ComposerMessageInput'
-import { DesktopSettingsType } from '../../../../shared/shared-types'
-import { runtime } from '@deltachat-desktop/runtime-interface'
-import { RecoverableCrashScreen } from '../screens/RecoverableCrashScreen'
-import { useSettingsStore } from '../../stores/settings'
-import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
-import { ReactionsBarProvider } from '../ReactionsBar'
-import useDialog from '../../hooks/dialog/useDialog'
-import useMessage from '../../hooks/chat/useMessage'
-import { DeepTreeEchoAvatarDisplay } from '../DeepTreeEchoBot/DeepTreeEchoAvatarDisplay'
+import Composer, { useDraft } from "../composer/Composer";
+import { getLogger } from "../../../../shared/logger";
+import MessageList from "./MessageList";
+import type ComposerMessageInput from "../composer/ComposerMessageInput";
+import { DesktopSettingsType } from "../../../../shared/shared-types";
+import { runtime } from "@deltachat-desktop/runtime-interface";
+import { RecoverableCrashScreen } from "../screens/RecoverableCrashScreen";
+import { useSettingsStore } from "../../stores/settings";
+import ConfirmSendingFiles from "../dialogs/ConfirmSendingFiles";
+import { ReactionsBarProvider } from "../ReactionsBar";
+import useDialog from "../../hooks/dialog/useDialog";
+import useMessage from "../../hooks/chat/useMessage";
+import { DeepTreeEchoAvatarDisplay } from "../DeepTreeEchoBot/DeepTreeEchoAvatarDisplay";
 
-const log = getLogger('renderer/MessageListAndComposer')
+const log = getLogger("renderer/MessageListAndComposer");
 
 export function getBackgroundImageStyle(
-  settings: DesktopSettingsType
+  settings: DesktopSettingsType,
 ): React.CSSProperties {
   const style: React.CSSProperties = {
-    backgroundSize: 'cover',
-  }
+    backgroundSize: "cover",
+  };
 
-  if (!settings) return style
+  if (!settings) return style;
 
-  let bgImg = settings['chatViewBgImg']
+  let bgImg = settings["chatViewBgImg"];
   if (bgImg) {
-    if (bgImg && bgImg.startsWith('url')) {
+    if (bgImg && bgImg.startsWith("url")) {
       // migrating in case of absolute filepaths
-      const filePath = parse(bgImg.slice(5, bgImg.length - 2)).base
-      bgImg = `img: ${filePath}`
-      runtime.setDesktopSetting('chatViewBgImg', bgImg)
-    } else if (bgImg.startsWith('#')) {
+      const filePath = parse(bgImg.slice(5, bgImg.length - 2)).base;
+      bgImg = `img: ${filePath}`;
+      runtime.setDesktopSetting("chatViewBgImg", bgImg);
+    } else if (bgImg.startsWith("#")) {
       // migrating to new prefixes
-      bgImg = `color: ${bgImg}`
-      runtime.setDesktopSetting('chatViewBgImg', bgImg)
+      bgImg = `color: ${bgImg}`;
+      runtime.setDesktopSetting("chatViewBgImg", bgImg);
     }
-    if (bgImg.startsWith('img: ')) {
-      const filePath = bgImg.slice(5)
-      const target = runtime.getRuntimeInfo().target
+    if (bgImg.startsWith("img: ")) {
+      const filePath = bgImg.slice(5);
+      const target = runtime.getRuntimeInfo().target;
       switch (target) {
-        case 'electron': {
+        case "electron": {
           style.backgroundImage = `url("file://${join(
             runtime.getConfigPath(),
-            'background/',
-            filePath
-          )}")`
-          break
+            "background/",
+            filePath,
+          )}")`;
+          break;
         }
-        case 'tauri': {
+        case "tauri": {
           const base =
-            runtime.getRuntimeInfo()?.tauriSpecific?.scheme.chatBackgroundImage
-          style.backgroundImage = `url("${base}${filePath}")`
-          break
+            runtime.getRuntimeInfo()?.tauriSpecific?.scheme.chatBackgroundImage;
+          style.backgroundImage = `url("${base}${filePath}")`;
+          break;
         }
-        case 'browser': {
-          style.backgroundImage = `url("/${join('background/', filePath)}")`
-          break
+        case "browser": {
+          style.backgroundImage = `url("/${join("background/", filePath)}")`;
+          break;
         }
         default: {
-          const _: never = target
+          const _: never = target;
         }
       }
-    } else if (bgImg.startsWith('color: ')) {
-      style.backgroundColor = bgImg.slice(7)
-      style.backgroundImage = 'none'
-    } else if (bgImg === 'var(--chatViewBg)') {
+    } else if (bgImg.startsWith("color: ")) {
+      style.backgroundColor = bgImg.slice(7);
+      style.backgroundImage = "none";
+    } else if (bgImg === "var(--chatViewBg)") {
       // theme default background color
-      style.backgroundColor = bgImg
-      style.backgroundImage = 'none'
+      style.backgroundColor = bgImg;
+      style.backgroundImage = "none";
     } else {
       log.error(
-        `Could not read background image ${bgImg} from config file under ${runtime.getConfigPath()}.`
-      )
+        `Could not read background image ${bgImg} from config file under ${runtime.getConfigPath()}.`,
+      );
     }
   }
-  return style
+  return style;
 }
 
 type Props = {
-  chat: T.FullChat
-  accountId: number
-}
+  chat: T.FullChat;
+  accountId: number;
+};
 
 export default function MessageListAndComposer({ accountId, chat }: Props) {
-  const conversationRef = useRef(null)
-  const refComposer = useRef(null)
+  const conversationRef = useRef(null);
+  const refComposer = useRef(null);
 
-  const { openDialog, hasOpenDialogs } = useDialog()
-  const { sendMessage } = useMessage()
+  const { openDialog, hasOpenDialogs } = useDialog();
+  const { sendMessage } = useMessage();
 
-  const regularMessageInputRef = useRef<ComposerMessageInput>(null)
-  const editMessageInputRef = useRef<ComposerMessageInput>(null)
+  const regularMessageInputRef = useRef<ComposerMessageInput>(null);
+  const editMessageInputRef = useRef<ComposerMessageInput>(null);
   const {
     draftState,
     updateDraftText,
@@ -109,83 +109,83 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     chat.isContactRequest,
     chat.isProtectionBroken,
     chat.canSend,
-    regularMessageInputRef
-  )
+    regularMessageInputRef,
+  );
 
   const onDrop = async (e: React.DragEvent<any>) => {
     if (chat === null) {
-      log.warn('dropped something, but no chat is selected')
-      return
+      log.warn("dropped something, but no chat is selected");
+      return;
     }
 
-    e.preventDefault()
-    e.stopPropagation()
+    e.preventDefault();
+    e.stopPropagation();
 
-    const sanitizedFileList: File[] = []
+    const sanitizedFileList: File[] = [];
     {
       const fileList: FileList =
-        /* (e.target as any).files */ e.dataTransfer.files
+        /* (e.target as any).files */ e.dataTransfer.files;
       for (let i = 0; i < fileList.length; i++) {
-        const file = fileList[i]
+        const file = fileList[i];
         if (runtime.isDroppedFileFromOutside(file)) {
-          sanitizedFileList.push(file)
+          sanitizedFileList.push(file);
         } else {
           log.warn(
-            'Prevented a file from being send again while dragging it out',
-            file.name
-          )
+            "Prevented a file from being send again while dragging it out",
+            file.name,
+          );
         }
       }
     }
 
-    const fileCount = sanitizedFileList.length
+    const fileCount = sanitizedFileList.length;
 
     if (fileCount === 0) {
-      return
+      return;
     }
 
     function writeTempFileFromFile(file: File): Promise<string> {
       if (file.size > 1e8 /* 100mb */) {
         log.warn(
-          `dropped file is bigger than 100mb ${file.name} ${file.size} ${file.type}`
-        )
+          `dropped file is bigger than 100mb ${file.name} ${file.size} ${file.type}`,
+        );
       }
       return new Promise((resolve, reject) => {
-        const reader = new FileReader()
-        reader.onload = _ => {
+        const reader = new FileReader();
+        reader.onload = (_) => {
           if (reader.result === null) {
-            return reject(new Error('result empty'))
-          } else if (typeof reader.result !== 'string') {
-            return reject(new Error('wrong type'))
+            return reject(new Error("result empty"));
+          } else if (typeof reader.result !== "string") {
+            return reject(new Error("wrong type"));
           }
-          const base64Content = reader.result.split(',')[1]
+          const base64Content = reader.result.split(",")[1];
           runtime
             .writeTempFileFromBase64(file.name, base64Content)
-            .then(tempUrl => {
-              resolve(tempUrl)
+            .then((tempUrl) => {
+              resolve(tempUrl);
             })
-            .catch(err => {
-              reject(err)
-            })
-        }
-        reader.onerror = err => {
-          reject(err)
-        }
-        reader.readAsDataURL(file)
-      })
+            .catch((err) => {
+              reject(err);
+            });
+        };
+        reader.onerror = (err) => {
+          reject(err);
+        };
+        reader.readAsDataURL(file);
+      });
     }
 
     if (fileCount === 1) {
-      const file = sanitizedFileList[0]
-      log.debug(`dropped image of type ${file.type}`)
-      const msgViewType: T.Viewtype = file.type.startsWith('image')
-        ? 'Image'
-        : 'File'
+      const file = sanitizedFileList[0];
+      log.debug(`dropped image of type ${file.type}`);
+      const msgViewType: T.Viewtype = file.type.startsWith("image")
+        ? "Image"
+        : "File";
 
-      const path = await writeTempFileFromFile(sanitizedFileList[0])
-      await addFileToDraft(path, basename(path), msgViewType)
-      await runtime.removeTempFile(path)
-      return
+      const path = await writeTempFileFromFile(sanitizedFileList[0]);
+      await addFileToDraft(path, basename(path), msgViewType);
+      await runtime.removeTempFile(path);
+      return;
     }
 
     // This is a desktop specific "hack" to support sending multiple attachments at once.
@@ -194,116 +194,116 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
       chatName: chat.name,
       onClick: async (isConfirmed: boolean) => {
         if (!isConfirmed) {
-          return
+          return;
         }
 
         for (const file of sanitizedFileList) {
-          const path = await writeTempFileFromFile(file)
-          const msgViewType: T.Viewtype = file.type.startsWith('image')
-            ? 'Image'
-            : 'File'
+          const path = await writeTempFileFromFile(file);
+          const msgViewType: T.Viewtype = file.type.startsWith("image")
+            ? "Image"
+            : "File";
           await sendMessage(accountId, chat.id, {
             file: path,
             filename: basename(path),
             viewtype: msgViewType,
-          })
+          });
           // start sending other files, don't wait until last file is sent
-          runtime.removeTempFile(path)
+          runtime.removeTempFile(path);
         }
       },
-    })
-  }
+    });
+  };
 
   const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault()
-    e.stopPropagation()
-  }
+    e.preventDefault();
+    e.stopPropagation();
+  };
 
   const onMouseUp = useCallback(
     (e: MouseEvent) => {
-      const selection = window.getSelection()
+      const selection = window.getSelection();
 
-      if (selection?.type === 'Range' && selection.rangeCount > 0) {
-        return
+      if (selection?.type === "Range" && selection.rangeCount > 0) {
+        return;
       }
-      const targetTagName = (e.target as unknown as any)?.tagName
+      const targetTagName = (e.target as unknown as any)?.tagName;
 
-      if (targetTagName === 'INPUT' || targetTagName === 'TEXTAREA') {
-        return
+      if (targetTagName === "INPUT" || targetTagName === "TEXTAREA") {
+        return;
       }
 
       // don't force focus on the message input as long as the emoji picker is open
       if (
-        document.querySelector(':focus')?.tagName?.toLowerCase() ===
-        'em-emoji-picker'
+        document.querySelector(":focus")?.tagName?.toLowerCase() ===
+        "em-emoji-picker"
       ) {
-        return
+        return;
       }
 
       if (!hasOpenDialogs) {
-        return
+        return;
       }
 
-      e.preventDefault()
-      e.stopPropagation()
+      e.preventDefault();
+      e.stopPropagation();
 
       // Only one of these is actually rendered at any given moment.
-      regularMessageInputRef.current?.focus()
-      editMessageInputRef.current?.focus()
+      regularMessageInputRef.current?.focus();
+      editMessageInputRef.current?.focus();
 
-      return false
+      return false;
     },
-    [hasOpenDialogs]
-  )
+    [hasOpenDialogs],
+  );
 
   const onSelectionChange = () => {
-    const selection = window.getSelection()
+    const selection = window.getSelection();
 
     if (
-      selection?.type === 'Caret' ||
-      (selection?.type === 'Range' && selection.rangeCount > 0)
+      selection?.type === "Caret" ||
+      (selection?.type === "Range" && selection.rangeCount > 0)
     )
-      return
+      return;
 
     // Only one of these is actually rendered at any given moment.
-    regularMessageInputRef.current?.focus()
-    editMessageInputRef.current?.focus()
-  }
+    regularMessageInputRef.current?.focus();
+    editMessageInputRef.current?.focus();
+  };
 
   const onEscapeKeyUp = (ev: KeyboardEvent) => {
-    if (ev.code === 'Escape') {
+    if (ev.code === "Escape") {
       // Only one of these is actually rendered at any given moment.
-      regularMessageInputRef.current?.focus()
-      editMessageInputRef.current?.focus()
+      regularMessageInputRef.current?.focus();
+      editMessageInputRef.current?.focus();
     }
-  }
+  };
 
   useEffect(() => {
-    window.addEventListener('mouseup', onMouseUp)
-    document.addEventListener('selectionchange', onSelectionChange)
-    window.addEventListener('keyup', onEscapeKeyUp)
+    window.addEventListener("mouseup", onMouseUp);
+    document.addEventListener("selectionchange", onSelectionChange);
+    window.addEventListener("keyup", onEscapeKeyUp);
 
     // Only one of these is actually rendered at any given moment.
-    regularMessageInputRef.current?.focus()
-    editMessageInputRef.current?.focus()
+    regularMessageInputRef.current?.focus();
+    editMessageInputRef.current?.focus();
 
     return () => {
-      window.removeEventListener('mouseup', onMouseUp)
-      document.removeEventListener('selectionchange', onSelectionChange)
-      window.removeEventListener('keyup', onEscapeKeyUp)
-    }
-  }, [onMouseUp])
+      window.removeEventListener("mouseup", onMouseUp);
+      document.removeEventListener("selectionchange", onSelectionChange);
+      window.removeEventListener("keyup", onEscapeKeyUp);
+    };
+  }, [onMouseUp]);
 
-  const settingsStore = useSettingsStore()[0]
+  const settingsStore = useSettingsStore()[0];
   // If you want to update this, don't forget to update
   // the `.background-preview` element as well.
   const style = settingsStore
     ? getBackgroundImageStyle(settingsStore.desktopSettings)
-    : {}
+    : {};
 
   return (
     <div
-      role='tabpanel'
+      role="tabpanel"
       // Techically we must apply `aria-labelledby` to `tabpanel`,
       // but it's a little annoying that screen readers (NVDA)
       // announce "'Chat' property page" every time
@@ -314,14 +314,14 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
       // aria-labelledby='tab-message-list-view'
 
       // NoChatSelected also has this ID and class.
-      id='message-list-and-composer'
-      className='message-list-and-composer'
+      id="message-list-and-composer"
+      className="message-list-and-composer"
       style={style}
       ref={conversationRef}
       onDrop={onDrop.bind({ props: { chat } })}
       onDragOver={onDragOver}
     >
-      <div className='message-list-and-composer__message-list'>
+      <div className="message-list-and-composer__message-list">
         <RecoverableCrashScreen reset_on_change_key={chat.id}>
           <ReactionsBarProvider>
             <MessageList
@@ -350,9 +350,8 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
         }
       />
       {settingsStore?.desktopSettings?.deepTreeEchoBotEnabled &&
-        settingsStore?.desktopSettings?.deepTreeEchoBotAvatarEnabled !== false && (
-          <DeepTreeEchoAvatarDisplay position="floating" />
-        )}
+        settingsStore?.desktopSettings?.deepTreeEchoBotAvatarEnabled !==
+          false && <DeepTreeEchoAvatarDisplay position="floating" />}
     </div>
-  )
+  );
 }

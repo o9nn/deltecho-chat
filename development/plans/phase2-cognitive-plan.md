@@ -38,7 +38,7 @@ packages/cognitive/
 // Triadic stream for parallel processing
 interface TriadicStream {
   id: string;
-  phase: 'sense' | 'process' | 'act';
+  phase: "sense" | "process" | "act";
   data: unknown;
   timestamp: number;
 }
@@ -68,8 +68,8 @@ interface EmotionalVector {
   contempt: number;
   interest: number;
   dominant: string;
-  valence: number;  // -1 to 1
-  arousal: number;  // 0 to 1
+  valence: number; // -1 to 1
+  arousal: number; // 0 to 1
 }
 
 // Unified cognitive state
@@ -85,7 +85,7 @@ interface UnifiedCognitiveState {
 interface UnifiedMessage {
   id: string;
   timestamp: number;
-  role: 'user' | 'assistant' | 'system';
+  role: "user" | "assistant" | "system";
   content: string;
   metadata: MessageMetadata;
 }
@@ -173,14 +173,14 @@ Main class that coordinates all cognitive processes:
 
 ## Estimated Timeline
 
-| Task | Effort |
-|------|--------|
-| Package setup | 15 min |
-| Types | 20 min |
-| Sentiment analyzer | 25 min |
-| Cognitive state | 25 min |
-| Unified message | 20 min |
-| Integrations | 30 min |
-| Orchestrator | 30 min |
-| Tests | 45 min |
-| **Total** | **~3.5 hours** |
+| Task               | Effort         |
+| ------------------ | -------------- |
+| Package setup      | 15 min         |
+| Types              | 20 min         |
+| Sentiment analyzer | 25 min         |
+| Cognitive state    | 25 min         |
+| Unified message    | 20 min         |
+| Integrations       | 30 min         |
+| Orchestrator       | 30 min         |
+| Tests              | 45 min         |
+| **Total**          | **~3.5 hours** |

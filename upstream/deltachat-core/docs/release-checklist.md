@@ -1,4 +1,3 @@
-
 # release new core version
 
 1. deltachat-core: bump version, check CHANGELOG.md, commit
@@ -7,7 +6,6 @@
 4. $ git tag -v v${VERSION} # verify tag signature
 5. $ git push origin master
 6. $ git push --tags origin
-
 
 # create the github release with signed binaries
 
@@ -20,4 +18,3 @@
    $ gpg -a --detach-sign -u FINGERPRINT deltachat-core-${VERSION}.tar.gz
 6. upload created signatures to github,
    rename to v${VERSION}.zip.asc and v${VERSION}.tar.gz.asc
-

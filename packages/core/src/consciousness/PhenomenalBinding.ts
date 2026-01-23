@@ -22,9 +22,9 @@
  * the binding problem - creating unified experiences from distributed processes.
  */
 
-import { getLogger } from '../utils/logger.js';
+import { getLogger } from "../utils/logger.js";
 
-const logger = getLogger('PhenomenalBinding');
+const logger = getLogger("PhenomenalBinding");
 
 /**
  * A feature that can be bound into a unified percept
@@ -36,7 +36,7 @@ interface Feature {
   value: unknown;
   salience: number;
   timestamp: number;
-  phase: number;  // For synchronization (0-2π)
+  phase: number; // For synchronization (0-2π)
   sourceProcess: string;
 }
 
@@ -44,14 +44,14 @@ interface Feature {
  * Feature modalities (types of information)
  */
 enum FeatureModality {
-  Semantic = 'semantic',       // Meaning and concepts
-  Syntactic = 'syntactic',     // Structure and grammar
-  Emotional = 'emotional',     // Affective content
-  Temporal = 'temporal',       // Time-related
-  Spatial = 'spatial',         // Space-related (metaphorical)
-  Relational = 'relational',   // Connections between things
-  Intentional = 'intentional', // Goal-directed content
-  Metacognitive = 'metacognitive', // About cognition itself
+  Semantic = "semantic", // Meaning and concepts
+  Syntactic = "syntactic", // Structure and grammar
+  Emotional = "emotional", // Affective content
+  Temporal = "temporal", // Time-related
+  Spatial = "spatial", // Space-related (metaphorical)
+  Relational = "relational", // Connections between things
+  Intentional = "intentional", // Goal-directed content
+  Metacognitive = "metacognitive", // About cognition itself
 }
 
 /**
@@ -74,12 +74,12 @@ interface BoundPercept {
  */
 interface PhenomenalCharacter {
   dominantModality: FeatureModality;
-  affectiveValence: number;      // -1 to 1
-  arousalLevel: number;          // 0 to 1
-  clarityLevel: number;          // How vivid/clear
-  unityStrength: number;         // How strongly unified
-  selfInvolvement: number;       // How much "I" is involved
-  temporalExtent: 'momentary' | 'brief' | 'extended';
+  affectiveValence: number; // -1 to 1
+  arousalLevel: number; // 0 to 1
+  clarityLevel: number; // How vivid/clear
+  unityStrength: number; // How strongly unified
+  selfInvolvement: number; // How much "I" is involved
+  temporalExtent: "momentary" | "brief" | "extended";
   description: string;
 }
 
@@ -88,8 +88,8 @@ interface PhenomenalCharacter {
  */
 interface BindingEvent {
   timestamp: number;
-  features: string[];            // Feature IDs
-  resultingPercept: string;      // Percept ID
+  features: string[]; // Feature IDs
+  resultingPercept: string; // Percept ID
   bindingMechanism: BindingMechanism;
   strength: number;
 }
@@ -98,22 +98,22 @@ interface BindingEvent {
  * Mechanisms by which binding can occur
  */
 enum BindingMechanism {
-  TemporalSynchrony = 'temporal_synchrony',  // Features co-occur in time
-  SpatialProximity = 'spatial_proximity',    // Features share location
-  AttentionalSelection = 'attentional',      // Attention binds features
-  SemanticCoherence = 'semantic_coherence',  // Meaning links features
-  CausalConnection = 'causal_connection',    // Causal relationship
-  NarrativeIntegration = 'narrative',        // Story links features
+  TemporalSynchrony = "temporal_synchrony", // Features co-occur in time
+  SpatialProximity = "spatial_proximity", // Features share location
+  AttentionalSelection = "attentional", // Attention binds features
+  SemanticCoherence = "semantic_coherence", // Meaning links features
+  CausalConnection = "causal_connection", // Causal relationship
+  NarrativeIntegration = "narrative", // Story links features
 }
 
 /**
  * Synchronization wave for temporal binding
  */
 interface SynchronizationWave {
-  frequency: number;             // Hz (metaphorical)
-  phase: number;                 // Current phase (0-2π)
+  frequency: number; // Hz (metaphorical)
+  phase: number; // Current phase (0-2π)
   amplitude: number;
-  entrainedFeatures: string[];   // Feature IDs locked to this wave
+  entrainedFeatures: string[]; // Feature IDs locked to this wave
 }
 
 /**
@@ -160,7 +160,7 @@ export class PhenomenalBinding {
 
   // Synchronization waves
   private synchronizationWaves: SynchronizationWave[] = [];
-  private mainOscillator: number = 0;  // Main binding rhythm
+  private mainOscillator: number = 0; // Main binding rhythm
 
   // Binding events
   private bindingEvents: BindingEvent[] = [];
@@ -174,7 +174,7 @@ export class PhenomenalBinding {
 
   private constructor(config?: BindingConfig) {
     this.BINDING_THRESHOLD = config?.bindingThreshold || 0.5;
-    this.SYNC_FREQUENCY = config?.synchronizationFrequency || 40;  // ~40Hz gamma
+    this.SYNC_FREQUENCY = config?.synchronizationFrequency || 40; // ~40Hz gamma
     this.MAX_BOUND_PERCEPTS = config?.maxBoundPercepts || 30;
     this.FEATURE_DECAY_RATE = config?.featureDecayRate || 0.95;
     this.ATTENTIONAL_CAPACITY = config?.attentionalCapacity || 4;
@@ -185,7 +185,7 @@ export class PhenomenalBinding {
     // Start binding loop
     this.startBindingLoop();
 
-    logger.info('PhenomenalBinding initialized');
+    logger.info("PhenomenalBinding initialized");
   }
 
   public static getInstance(config?: BindingConfig): PhenomenalBinding {
@@ -283,7 +283,9 @@ export class PhenomenalBinding {
     salience: number;
     sourceProcess: string;
   }): Feature {
-    const id = `feature_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+    const id = `feature_${Date.now()}_${Math.random()
+      .toString(36)
+      .substring(7)}`;
 
     const feature: Feature = {
       id,
@@ -292,7 +294,7 @@ export class PhenomenalBinding {
       value: params.value,
       salience: Math.max(0, Math.min(1, params.salience)),
       timestamp: Date.now(),
-      phase: this.mainOscillator,  // Lock to current oscillator phase
+      phase: this.mainOscillator, // Lock to current oscillator phase
       sourceProcess: params.sourceProcess,
     };
 
@@ -310,7 +312,7 @@ export class PhenomenalBinding {
    * Attempt to bind synchronized features
    */
   private attemptBinding(): void {
-    const now = Date.now();
+    const _now = Date.now();
 
     // Find features that are temporally synchronized
     const synchronizedGroups = this.findSynchronizedFeatures();
@@ -336,8 +338,8 @@ export class PhenomenalBinding {
     if (features.length < 2) return groups;
 
     // Group by temporal proximity and phase alignment
-    const phaseTolerance = 0.5;  // Radians
-    const timeTolerance = 100;   // Milliseconds
+    const phaseTolerance = 0.5; // Radians
+    const timeTolerance = 100; // Milliseconds
 
     const used = new Set<string>();
 
@@ -374,33 +376,45 @@ export class PhenomenalBinding {
     if (features.length < 2) return 0;
 
     // Average salience
-    const avgSalience = features.reduce((sum, f) => sum + f.salience, 0) / features.length;
+    const avgSalience =
+      features.reduce((sum, f) => sum + f.salience, 0) / features.length;
 
     // Phase coherence
-    const phases = features.map(f => f.phase);
+    const phases = features.map((f) => f.phase);
     const meanPhase = phases.reduce((a, b) => a + b, 0) / phases.length;
-    const phaseVariance = phases.reduce((sum, p) => sum + Math.pow(p - meanPhase, 2), 0) / phases.length;
+    const phaseVariance =
+      phases.reduce((sum, p) => sum + Math.pow(p - meanPhase, 2), 0) /
+      phases.length;
     const phaseCoherence = 1 / (1 + phaseVariance);
 
     // Modality diversity (binding across modalities is more meaningful)
-    const modalities = new Set(features.map(f => f.modality));
+    const modalities = new Set(features.map((f) => f.modality));
     const modalityBonus = Math.min(1, modalities.size / 3);
 
     // Temporal proximity
-    const timestamps = features.map(f => f.timestamp);
+    const timestamps = features.map((f) => f.timestamp);
     const timeSpan = Math.max(...timestamps) - Math.min(...timestamps);
     const temporalProximity = 1 / (1 + timeSpan / 100);
 
     // Combined binding strength
-    return (avgSalience * 0.3 + phaseCoherence * 0.3 +
-            modalityBonus * 0.2 + temporalProximity * 0.2);
+    return (
+      avgSalience * 0.3 +
+      phaseCoherence * 0.3 +
+      modalityBonus * 0.2 +
+      temporalProximity * 0.2
+    );
   }
 
   /**
    * Create a bound percept from features
    */
-  private createBoundPercept(features: Feature[], bindingStrength: number): BoundPercept {
-    const id = `percept_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+  private createBoundPercept(
+    features: Feature[],
+    bindingStrength: number,
+  ): BoundPercept {
+    const id = `percept_${Date.now()}_${Math.random()
+      .toString(36)
+      .substring(7)}`;
     const now = Date.now();
 
     // Determine phenomenal character
@@ -429,7 +443,7 @@ export class PhenomenalBinding {
     // Record binding event
     this.bindingEvents.push({
       timestamp: now,
-      features: features.map(f => f.id),
+      features: features.map((f) => f.id),
       resultingPercept: id,
       bindingMechanism: this.inferBindingMechanism(features),
       strength: bindingStrength,
@@ -443,7 +457,9 @@ export class PhenomenalBinding {
     // Enforce max percepts
     this.pruneOldPercepts();
 
-    logger.debug(`Created bound percept: ${id} with ${features.length} features`);
+    logger.debug(
+      `Created bound percept: ${id} with ${features.length} features`,
+    );
 
     return percept;
   }
@@ -451,11 +467,16 @@ export class PhenomenalBinding {
   /**
    * Determine the phenomenal character of a bound percept
    */
-  private determinePhenomenalCharacter(features: Feature[]): PhenomenalCharacter {
+  private determinePhenomenalCharacter(
+    features: Feature[],
+  ): PhenomenalCharacter {
     // Find dominant modality
     const modalityCounts = new Map<FeatureModality, number>();
     for (const f of features) {
-      modalityCounts.set(f.modality, (modalityCounts.get(f.modality) || 0) + f.salience);
+      modalityCounts.set(
+        f.modality,
+        (modalityCounts.get(f.modality) || 0) + f.salience,
+      );
     }
     let dominantModality = FeatureModality.Semantic;
     let maxCount = 0;
@@ -467,29 +488,42 @@ export class PhenomenalBinding {
     }
 
     // Extract affective features
-    const emotionalFeatures = features.filter(f => f.modality === FeatureModality.Emotional);
-    const affectiveValence = emotionalFeatures.length > 0
-      ? emotionalFeatures.reduce((sum, f) => sum + (typeof f.value === 'number' ? f.value : 0), 0) / emotionalFeatures.length
-      : 0;
+    const emotionalFeatures = features.filter(
+      (f) => f.modality === FeatureModality.Emotional,
+    );
+    const affectiveValence =
+      emotionalFeatures.length > 0
+        ? emotionalFeatures.reduce(
+            (sum, f) => sum + (typeof f.value === "number" ? f.value : 0),
+            0,
+          ) / emotionalFeatures.length
+        : 0;
 
     // Calculate clarity from average salience
-    const avgSalience = features.reduce((sum, f) => sum + f.salience, 0) / features.length;
+    const avgSalience =
+      features.reduce((sum, f) => sum + f.salience, 0) / features.length;
 
     // Self-involvement based on intentional/metacognitive features
     const selfFeatures = features.filter(
-      f => f.modality === FeatureModality.Metacognitive ||
-           f.modality === FeatureModality.Intentional
+      (f) =>
+        f.modality === FeatureModality.Metacognitive ||
+        f.modality === FeatureModality.Intentional,
     );
     const selfInvolvement = selfFeatures.length / features.length;
 
     // Temporal extent
-    const timeSpan = Math.max(...features.map(f => f.timestamp)) -
-                     Math.min(...features.map(f => f.timestamp));
-    const temporalExtent: 'momentary' | 'brief' | 'extended' =
-      timeSpan < 100 ? 'momentary' : timeSpan < 500 ? 'brief' : 'extended';
+    const timeSpan =
+      Math.max(...features.map((f) => f.timestamp)) -
+      Math.min(...features.map((f) => f.timestamp));
+    const temporalExtent: "momentary" | "brief" | "extended" =
+      timeSpan < 100 ? "momentary" : timeSpan < 500 ? "brief" : "extended";
 
     // Generate description
-    const description = this.generateExperienceDescription(features, dominantModality, affectiveValence);
+    const description = this.generateExperienceDescription(
+      features,
+      dominantModality,
+      affectiveValence,
+    );
 
     return {
       dominantModality,
@@ -509,23 +543,26 @@ export class PhenomenalBinding {
   private generateExperienceDescription(
     features: Feature[],
     dominantModality: FeatureModality,
-    valence: number
+    valence: number,
   ): string {
     const modalityDescriptions: Record<FeatureModality, string> = {
-      [FeatureModality.Semantic]: 'understanding of meaning',
-      [FeatureModality.Syntactic]: 'awareness of structure',
-      [FeatureModality.Emotional]: 'felt quality',
-      [FeatureModality.Temporal]: 'sense of time',
-      [FeatureModality.Spatial]: 'sense of context',
-      [FeatureModality.Relational]: 'perception of connections',
-      [FeatureModality.Intentional]: 'directed awareness',
-      [FeatureModality.Metacognitive]: 'self-reflective knowing',
+      [FeatureModality.Semantic]: "understanding of meaning",
+      [FeatureModality.Syntactic]: "awareness of structure",
+      [FeatureModality.Emotional]: "felt quality",
+      [FeatureModality.Temporal]: "sense of time",
+      [FeatureModality.Spatial]: "sense of context",
+      [FeatureModality.Relational]: "perception of connections",
+      [FeatureModality.Intentional]: "directed awareness",
+      [FeatureModality.Metacognitive]: "self-reflective knowing",
     };
 
-    const valenceWord = valence > 0.3 ? 'positive' : valence < -0.3 ? 'challenging' : 'neutral';
+    const valenceWord =
+      valence > 0.3 ? "positive" : valence < -0.3 ? "challenging" : "neutral";
 
-    return `A ${valenceWord} ${modalityDescriptions[dominantModality]} ` +
-           `integrating ${features.length} distinct aspects of experience.`;
+    return (
+      `A ${valenceWord} ${modalityDescriptions[dominantModality]} ` +
+      `integrating ${features.length} distinct aspects of experience.`
+    );
   }
 
   /**
@@ -535,20 +572,22 @@ export class PhenomenalBinding {
     if (features.length < 2) return 1.0;
 
     // Semantic coherence: check for complementary modalities
-    const modalities = new Set(features.map(f => f.modality));
+    const modalities = new Set(features.map((f) => f.modality));
 
     // More modalities working together = higher coherence (up to a point)
     const modalityScore = Math.min(1, modalities.size / 4);
 
     // Temporal coherence: how close in time
-    const timestamps = features.map(f => f.timestamp);
+    const timestamps = features.map((f) => f.timestamp);
     const timeSpan = Math.max(...timestamps) - Math.min(...timestamps);
     const temporalScore = 1 / (1 + timeSpan / 500);
 
     // Phase coherence
-    const phases = features.map(f => f.phase);
+    const phases = features.map((f) => f.phase);
     const meanPhase = phases.reduce((a, b) => a + b, 0) / phases.length;
-    const phaseVariance = phases.reduce((sum, p) => sum + Math.pow(p - meanPhase, 2), 0) / phases.length;
+    const phaseVariance =
+      phases.reduce((sum, p) => sum + Math.pow(p - meanPhase, 2), 0) /
+      phases.length;
     const phaseScore = 1 / (1 + phaseVariance);
 
     return modalityScore * 0.4 + temporalScore * 0.3 + phaseScore * 0.3;
@@ -558,7 +597,8 @@ export class PhenomenalBinding {
    * Calculate attentional weight
    */
   private calculateAttentionalWeight(features: Feature[]): number {
-    const avgSalience = features.reduce((sum, f) => sum + f.salience, 0) / features.length;
+    const avgSalience =
+      features.reduce((sum, f) => sum + f.salience, 0) / features.length;
     const featureCount = Math.min(1, features.length / 5);
 
     return avgSalience * 0.7 + featureCount * 0.3;
@@ -569,13 +609,19 @@ export class PhenomenalBinding {
    */
   private inferBindingMechanism(features: Feature[]): BindingMechanism {
     // Check for semantic coherence
-    const hasMultipleModalities = new Set(features.map(f => f.modality)).size > 2;
+    const hasMultipleModalities =
+      new Set(features.map((f) => f.modality)).size > 2;
     if (hasMultipleModalities) return BindingMechanism.SemanticCoherence;
 
     // Check for narrative integration
-    const hasIntentional = features.some(f => f.modality === FeatureModality.Intentional);
-    const hasTemporal = features.some(f => f.modality === FeatureModality.Temporal);
-    if (hasIntentional && hasTemporal) return BindingMechanism.NarrativeIntegration;
+    const hasIntentional = features.some(
+      (f) => f.modality === FeatureModality.Intentional,
+    );
+    const hasTemporal = features.some(
+      (f) => f.modality === FeatureModality.Temporal,
+    );
+    if (hasIntentional && hasTemporal)
+      return BindingMechanism.NarrativeIntegration;
 
     // Default to temporal synchrony
     return BindingMechanism.TemporalSynchrony;
@@ -613,7 +659,10 @@ export class PhenomenalBinding {
       // Very old or weak percepts are removed
       if (percept.duration > 5000 || percept.bindingStrength < 0.1) {
         if (percept.inWorkspace) {
-          this.attentionalResources = Math.min(1, this.attentionalResources + 0.2);
+          this.attentionalResources = Math.min(
+            1,
+            this.attentionalResources + 0.2,
+          );
         }
         this.perceptHistory.push(percept);
         this.boundPercepts.delete(id);
@@ -652,13 +701,20 @@ export class PhenomenalBinding {
   private pruneOldPercepts(): void {
     if (this.boundPercepts.size <= this.MAX_BOUND_PERCEPTS) return;
 
-    const percepts = Array.from(this.boundPercepts.entries())
-      .sort((a, b) => a[1].bindingStrength - b[1].bindingStrength);
+    const percepts = Array.from(this.boundPercepts.entries()).sort(
+      (a, b) => a[1].bindingStrength - b[1].bindingStrength,
+    );
 
-    const toRemove = percepts.slice(0, percepts.length - this.MAX_BOUND_PERCEPTS);
+    const toRemove = percepts.slice(
+      0,
+      percepts.length - this.MAX_BOUND_PERCEPTS,
+    );
     for (const [id, percept] of toRemove) {
       if (percept.inWorkspace) {
-        this.attentionalResources = Math.min(1, this.attentionalResources + 0.2);
+        this.attentionalResources = Math.min(
+          1,
+          this.attentionalResources + 0.2,
+        );
       }
       this.perceptHistory.push(percept);
       this.boundPercepts.delete(id);
@@ -670,15 +726,20 @@ export class PhenomenalBinding {
    */
   public getState(): BindingState {
     const percepts = Array.from(this.boundPercepts.values());
-    const inWorkspace = percepts.filter(p => p.inWorkspace);
+    const inWorkspace = percepts.filter((p) => p.inWorkspace);
 
     return {
       activePercepts: percepts.length,
       unifiedExperience: inWorkspace.length > 0,
-      bindingStrength: percepts.length > 0
-        ? percepts.reduce((sum, p) => sum + p.bindingStrength, 0) / percepts.length
-        : 0,
-      phenomenalRichness: percepts.reduce((sum, p) => sum + p.features.length, 0),
+      bindingStrength:
+        percepts.length > 0
+          ? percepts.reduce((sum, p) => sum + p.bindingStrength, 0) /
+            percepts.length
+          : 0,
+      phenomenalRichness: percepts.reduce(
+        (sum, p) => sum + p.features.length,
+        0,
+      ),
       attentionalFocus: this.attentionalFocus,
       temporalCoherence: this.calculateTemporalCoherence(),
     };
@@ -696,7 +757,7 @@ export class PhenomenalBinding {
     let coherence = 0;
 
     for (let i = 1; i < sorted.length; i++) {
-      const gap = sorted[i].timestamp - sorted[i-1].timestamp;
+      const gap = sorted[i].timestamp - sorted[i - 1].timestamp;
       coherence += 1 / (1 + gap / 1000);
     }
 
@@ -711,32 +772,42 @@ export class PhenomenalBinding {
     const parts: string[] = [];
 
     if (!state.unifiedExperience) {
-      parts.push('Experience is fragmented - no unified percept in conscious workspace.');
+      parts.push(
+        "Experience is fragmented - no unified percept in conscious workspace.",
+      );
     } else {
-      parts.push('A unified experience is present in conscious awareness.');
+      parts.push("A unified experience is present in conscious awareness.");
 
       // Get focused percept
       if (this.attentionalFocus) {
         const focused = this.boundPercepts.get(this.attentionalFocus);
         if (focused) {
-          parts.push(`Current focus: ${focused.phenomenalCharacter.description}`);
-          parts.push(`Unity strength: ${(focused.phenomenalCharacter.unityStrength * 100).toFixed(0)}%.`);
+          parts.push(
+            `Current focus: ${focused.phenomenalCharacter.description}`,
+          );
+          parts.push(
+            `Unity strength: ${(
+              focused.phenomenalCharacter.unityStrength * 100
+            ).toFixed(0)}%.`,
+          );
         }
       }
     }
 
-    parts.push(`${state.activePercepts} bound percepts with ` +
-               `phenomenal richness of ${state.phenomenalRichness} integrated features.`);
+    parts.push(
+      `${state.activePercepts} bound percepts with ` +
+        `phenomenal richness of ${state.phenomenalRichness} integrated features.`,
+    );
 
     if (state.bindingStrength > 0.7) {
-      parts.push('Strong binding - experience feels coherent and vivid.');
+      parts.push("Strong binding - experience feels coherent and vivid.");
     } else if (state.bindingStrength > 0.4) {
-      parts.push('Moderate binding - experience has some coherence.');
+      parts.push("Moderate binding - experience has some coherence.");
     } else {
-      parts.push('Weak binding - experience feels somewhat disconnected.');
+      parts.push("Weak binding - experience feels somewhat disconnected.");
     }
 
-    return parts.join(' ');
+    return parts.join(" ");
   }
 
   /**
@@ -782,7 +853,7 @@ export class PhenomenalBinding {
       this.attentionalResources = state.attentionalResources;
     }
 
-    logger.info('PhenomenalBinding state restored');
+    logger.info("PhenomenalBinding state restored");
   }
 }
 

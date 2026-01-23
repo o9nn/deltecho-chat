@@ -1,31 +1,31 @@
-import { platform } from 'os'
-import { join } from 'path'
-import { app } from 'electron'
-import { readFile } from 'fs/promises'
-import { existsSync } from 'fs'
+import { platform } from "os";
+import { join } from "path";
+import { app } from "electron";
+import { readFile } from "fs/promises";
+import { existsSync } from "fs";
 
-export let appx = false
+export let appx = false;
 
 export async function isWindowsStorePackage() {
-  if (platform() === 'win32') {
-    const app_path = app.getAppPath()
+  if (platform() === "win32") {
+    const app_path = app.getAppPath();
     try {
       const info = JSON.parse(
         await readFile(
-          join(app_path, '../../', 'windows_build_info.json'),
-          'utf-8'
-        )
-      )
+          join(app_path, "../../", "windows_build_info.json"),
+          "utf-8",
+        ),
+      );
       if (info.isAPPX) {
         /* ignore-console-log */
-        console.info('App is probably running as appx')
-        appx = info.isAPPX
+        console.info("App is probably running as appx");
+        appx = info.isAPPX;
       }
-    } catch (error) {
+    } catch (_error) {
       /* ignore-console-log */
       console.warn(
-        'Could not fetch windows build info, this is normal in dev mode'
-      )
+        "Could not fetch windows build info, this is normal in dev mode",
+      );
     }
   }
 }
@@ -38,23 +38,23 @@ export async function isWindowsStorePackage() {
  * such a folder
  */
 export function mapPackagePath(path: string) {
-  const basePath = 'AppData\\Local\\DeltaChat'
+  const basePath = "AppData\\Local\\DeltaChat";
   const packagePath =
-    'AppData\\Local\\Packages\\merlinux.DeltaChat_v2ry5hvxhdhyy\\LocalCache\\Local\\DeltaChat'
+    "AppData\\Local\\Packages\\merlinux.DeltaChat_v2ry5hvxhdhyy\\LocalCache\\Local\\DeltaChat";
   if (appx && path.indexOf(basePath) > -1) {
     // only test for packagePath is reliable here, for basePath
     // existsSync might return true even if it not exists!
-    const transformedPath = path.replace(basePath, packagePath)
+    const transformedPath = path.replace(basePath, packagePath);
     if (existsSync(transformedPath)) {
-      return transformedPath
+      return transformedPath;
     }
   }
-  return path
+  return path;
 }
 
 export function getAppxPath(app_folder: string) {
   return join(
     app_folder,
-    '../Packages/merlinux.DeltaChat_v2ry5hvxhdhyy/LocalCache/Local/DeltaChat'
-  )
+    "../Packages/merlinux.DeltaChat_v2ry5hvxhdhyy/LocalCache/Local/DeltaChat",
+  );
 }

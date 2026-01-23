@@ -7,6 +7,7 @@ This file provides guidance for Claude Code when working with the Deltecho Chat 
 Deltecho Chat is a fork of Delta Chat Desktop that integrates **Deep Tree Echo**, an advanced cognitive AI architecture. It transforms Delta Chat from a traditional messaging app into an **AI Companion Neighborhood** - a persistent, evolving digital ecosystem where AI personalities live, learn, and collaborate with humans.
 
 ### Key Differentiators from Upstream Delta Chat
+
 - **Deep Tree Echo Cognitive Architecture** - Full AI consciousness integration
 - **Memory Persistence** - AI companions remember across sessions
 - **Personality Evolution** - AI personalities that develop over time
@@ -14,6 +15,7 @@ Deltecho Chat is a fork of Delta Chat Desktop that integrates **Deep Tree Echo**
 - **Proactive Messaging** - AI can initiate contextual conversations
 
 ### Target Platforms
+
 - **Electron** (default, production) - `packages/target-electron`
 - **Tauri** (WIP, modern alternative) - `packages/target-tauri`
 - **Browser** (experimental) - `packages/target-browser`
@@ -126,14 +128,14 @@ upstream/                 # Upstream source repositories for reference
 
 The main AI chatbot integration with 20+ TypeScript files:
 
-| Category | Files | Purpose |
-|----------|-------|---------|
-| **Core Logic** | `DeepTreeEchoBot.ts/tsx`, `DeepTreeEchoIntegration.ts`, `DeepTreeEchoChatManager.ts` | Main bot implementation |
-| **Cognitive** | `CognitiveBridge.ts`, `PersonaCore.ts`, `SelfReflection.ts`, `AdaptivePersonality.ts`, `EmotionalIntelligence.ts` | Cognitive architecture |
-| **Memory** | `RAGMemoryStore.ts`, `HyperDimensionalMemory.ts`, `ChatOrchestrator.ts` | Memory and session management |
-| **LLM** | `LLMService.ts` | Multi-backend LLM integration (OpenAI, Anthropic) |
-| **Proactive** | `ProactiveMessaging.ts`, `ProactiveMessagingSettings.tsx`, `TriggerManager.tsx`, `ProactiveStatusIndicator.tsx` | Proactive messaging system |
-| **UI** | `DeepTreeEchoSettingsScreen.tsx`, `BotSettings.tsx` | Settings and configuration |
+| Category       | Files                                                                                                             | Purpose                                           |
+| -------------- | ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| **Core Logic** | `DeepTreeEchoBot.ts/tsx`, `DeepTreeEchoIntegration.ts`, `DeepTreeEchoChatManager.ts`                              | Main bot implementation                           |
+| **Cognitive**  | `CognitiveBridge.ts`, `PersonaCore.ts`, `SelfReflection.ts`, `AdaptivePersonality.ts`, `EmotionalIntelligence.ts` | Cognitive architecture                            |
+| **Memory**     | `RAGMemoryStore.ts`, `HyperDimensionalMemory.ts`, `ChatOrchestrator.ts`                                           | Memory and session management                     |
+| **LLM**        | `LLMService.ts`                                                                                                   | Multi-backend LLM integration (OpenAI, Anthropic) |
+| **Proactive**  | `ProactiveMessaging.ts`, `ProactiveMessagingSettings.tsx`, `TriggerManager.tsx`, `ProactiveStatusIndicator.tsx`   | Proactive messaging system                        |
+| **UI**         | `DeepTreeEchoSettingsScreen.tsx`, `BotSettings.tsx`                                                               | Settings and configuration                        |
 
 ### AICompanionHub (`packages/frontend/src/components/AICompanionHub/`)
 
@@ -168,14 +170,14 @@ Deep Tree Echo achieves **autonomous operation** through a standalone bot that r
 
 ### Key Capabilities
 
-| Capability | Description |
-|------------|-------------|
-| **Persistent Operation** | Runs as a daemon, responding to messages 24/7 |
-| **Email-Native** | Uses DeltaChat's encrypted email protocol |
-| **Tool Use** | Claude can execute bash commands to help with tasks |
-| **Per-Chat Memory** | Maintains separate conversation history per chat |
-| **Safety Limits** | Recursion depth limits prevent infinite tool loops |
-| **E2EE** | End-to-end encryption via Autocrypt |
+| Capability               | Description                                         |
+| ------------------------ | --------------------------------------------------- |
+| **Persistent Operation** | Runs as a daemon, responding to messages 24/7       |
+| **Email-Native**         | Uses DeltaChat's encrypted email protocol           |
+| **Tool Use**             | Claude can execute bash commands to help with tasks |
+| **Per-Chat Memory**      | Maintains separate conversation history per chat    |
+| **Safety Limits**        | Recursion depth limits prevent infinite tool loops  |
+| **E2EE**                 | End-to-end encryption via Autocrypt                 |
 
 ### Running the Autonomous Bot
 
@@ -201,7 +203,7 @@ Location: `bin/deltecho-bot.ts`
 
 ```typescript
 // Core dependencies
-import Anthropic from '@anthropic-ai/sdk';
+import Anthropic from "@anthropic-ai/sdk";
 import { startDeltaChat } from "@deltachat/stdio-rpc-server";
 import { C } from "@deltachat/jsonrpc-client";
 
@@ -221,26 +223,28 @@ import { C } from "@deltachat/jsonrpc-client";
 The autonomous bot exposes tools to Claude for task execution:
 
 ```typescript
-tools: [{
-  name: 'bash',
-  description: 'Execute bash commands',
-  input_schema: {
-    type: 'object',
-    properties: { command: { type: 'string' } },
-    required: ['command']
-  }
-}]
+tools: [
+  {
+    name: "bash",
+    description: "Execute bash commands",
+    input_schema: {
+      type: "object",
+      properties: { command: { type: "string" } },
+      required: ["command"],
+    },
+  },
+];
 ```
 
 ### Safety Features
 
-| Feature | Implementation |
-|---------|----------------|
-| **Recursion Limit** | `MAX_TOOL_RECURSION = 5` prevents infinite loops |
-| **Timeout** | 30-second timeout on command execution |
-| **Buffer Limit** | 10MB max output buffer |
-| **Chat Type Filter** | Only responds to direct messages (1:1 chats) |
-| **Error Recovery** | Graceful error messages sent to user |
+| Feature              | Implementation                                   |
+| -------------------- | ------------------------------------------------ |
+| **Recursion Limit**  | `MAX_TOOL_RECURSION = 5` prevents infinite loops |
+| **Timeout**          | 30-second timeout on command execution           |
+| **Buffer Limit**     | 10MB max output buffer                           |
+| **Chat Type Filter** | Only responds to direct messages (1:1 chats)     |
+| **Error Recovery**   | Graceful error messages sent to user             |
 
 ### Extending the Bot
 
@@ -254,17 +258,17 @@ Example adding a file read tool:
 
 ```typescript
 tools: [
-  { name: 'bash', /* ... */ },
+  { name: "bash" /* ... */ },
   {
-    name: 'read_file',
-    description: 'Read contents of a file',
+    name: "read_file",
+    description: "Read contents of a file",
     input_schema: {
-      type: 'object',
-      properties: { path: { type: 'string' } },
-      required: ['path']
-    }
-  }
-]
+      type: "object",
+      properties: { path: { type: "string" } },
+      required: ["path"],
+    },
+  },
+];
 ```
 
 ### Integration with Orchestrator
@@ -324,12 +328,14 @@ See `packages/orchestrator/src/deltachat-interface/` for integration code.
 ## Key Files
 
 ### Runtime & Core
+
 - `packages/runtime/runtime.ts` - Runtime abstraction interface
 - `packages/frontend/src/App.tsx` - Main application component
 - `packages/shared/shared-types.d.ts` - Shared TypeScript types
 - `packages/target-*/runtime-*` - Platform-specific runtime implementations
 
 ### Deep Tree Echo
+
 - `packages/core/src/cognitive/LLMService.ts` - LLM provider abstraction
 - `packages/core/src/memory/RAGMemoryStore.ts` - Conversation memory
 - `packages/core/src/personality/PersonaCore.ts` - Personality management
@@ -366,6 +372,7 @@ See `packages/orchestrator/src/deltachat-interface/` for integration code.
 - [Delta Chat Core](https://github.com/chatmail/core)
 
 ### Deep Tree Echo Specific
+
 - [Chat Integration Analysis](./CHAT_INTEGRATION_ANALYSIS.md)
 - [Delta Echo Vision](./Delta%20Echo%20v2.md)
 - [RAGBot Roadmap](./RAGBOT_ROADMAP.md)

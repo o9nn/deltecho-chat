@@ -1,4 +1,4 @@
-@use '../mixins';
+@use "../mixins";
 
 .dc-context-menu-layer {
   width: 100vw;
@@ -72,7 +72,7 @@
       height: 18px;
       margin-left: auto;
       @include mixins.color-svg(
-        './images/icons/navigate_next.svg',
+        "./images/icons/navigate_next.svg",
         var(--textPrimary),
         100%
       );

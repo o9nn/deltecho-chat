@@ -12,6 +12,6 @@ export {
   StreamState,
   CycleResult,
   CognitiveAgent,
-} from './Sys6OrchestratorBridge.js';
+} from "./Sys6OrchestratorBridge.js";
 
-export { default } from './Sys6OrchestratorBridge.js';
+export { default } from "./Sys6OrchestratorBridge.js";

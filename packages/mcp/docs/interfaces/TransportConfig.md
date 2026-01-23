@@ -23,7 +23,7 @@ Transport configuration
 
 [src/transport/types.ts:18](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/transport/types.ts#L18)
 
-___
+---
 
 ### port
 
@@ -35,7 +35,7 @@ Port for HTTP/SSE mode
 
 [src/transport/types.ts:20](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/transport/types.ts#L20)
 
-___
+---
 
 ### host
 
@@ -47,7 +47,7 @@ Host for HTTP/SSE mode
 
 [src/transport/types.ts:22](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/transport/types.ts#L22)
 
-___
+---
 
 ### verbose
 

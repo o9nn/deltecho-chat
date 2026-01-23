@@ -19,9 +19,9 @@
  * processes information but also represents that it is processing information.
  */
 
-import { getLogger } from '../utils/logger.js';
+import { getLogger } from "../utils/logger.js";
 
-const logger = getLogger('MetaCognitiveLoop');
+const logger = getLogger("MetaCognitiveLoop");
 
 /**
  * A single cognitive process being monitored
@@ -32,7 +32,7 @@ interface MonitoredProcess {
   type: ProcessType;
   startTime: number;
   endTime?: number;
-  status: 'active' | 'completed' | 'failed' | 'interrupted';
+  status: "active" | "completed" | "failed" | "interrupted";
   confidence: number;
   effort: number;
   output?: unknown;
@@ -43,14 +43,14 @@ interface MonitoredProcess {
  * Types of cognitive processes that can be monitored
  */
 enum ProcessType {
-  Perception = 'perception',
-  Reasoning = 'reasoning',
-  Memory = 'memory',
-  Decision = 'decision',
-  Planning = 'planning',
-  Learning = 'learning',
-  Introspection = 'introspection',
-  Communication = 'communication',
+  Perception = "perception",
+  Reasoning = "reasoning",
+  Memory = "memory",
+  Decision = "decision",
+  Planning = "planning",
+  Learning = "learning",
+  Introspection = "introspection",
+  Communication = "communication",
 }
 
 /**
@@ -58,7 +58,7 @@ enum ProcessType {
  */
 interface MetaObservation {
   timestamp: number;
-  observationType: 'monitoring' | 'control' | 'evaluation';
+  observationType: "monitoring" | "control" | "evaluation";
   content: string;
   confidence: number;
   intervention?: CognitiveIntervention;
@@ -68,7 +68,7 @@ interface MetaObservation {
  * An intervention to modify cognitive processing
  */
 interface CognitiveIntervention {
-  type: 'redirect' | 'intensify' | 'suppress' | 'persist' | 'abandon';
+  type: "redirect" | "intensify" | "suppress" | "persist" | "abandon";
   reason: string;
   targetProcess: string;
   strength: number;
@@ -79,8 +79,8 @@ interface CognitiveIntervention {
  */
 interface FeelingOfKnowing {
   query: string;
-  fok: number;  // 0-1, confidence that we know the answer
-  accessibility: number;  // 0-1, how easy to retrieve
+  fok: number; // 0-1, confidence that we know the answer
+  accessibility: number; // 0-1, how easy to retrieve
   timestamp: number;
 }
 
@@ -89,7 +89,7 @@ interface FeelingOfKnowing {
  */
 interface JudgmentOfLearning {
   material: string;
-  jol: number;  // 0-1, predicted future recall
+  jol: number; // 0-1, predicted future recall
   actualPerformance?: number;
   timestamp: number;
 }
@@ -98,11 +98,11 @@ interface JudgmentOfLearning {
  * Cognitive load state
  */
 interface CognitiveLoadState {
-  intrinsic: number;    // Complexity of the material itself
-  extraneous: number;   // Distracting elements
-  germane: number;      // Effort toward learning/understanding
-  total: number;        // Combined load
-  capacity: number;     // Maximum capacity
+  intrinsic: number; // Complexity of the material itself
+  extraneous: number; // Distracting elements
+  germane: number; // Effort toward learning/understanding
+  total: number; // Combined load
+  capacity: number; // Maximum capacity
   overloaded: boolean;
 }
 
@@ -177,7 +177,7 @@ export class MetaCognitiveLoop {
     };
 
     this.startMonitoringLoop();
-    logger.info('MetaCognitiveLoop initialized');
+    logger.info("MetaCognitiveLoop initialized");
   }
 
   public static getInstance(config?: MetaCognitiveConfig): MetaCognitiveLoop {
@@ -218,7 +218,7 @@ export class MetaCognitiveLoop {
     this.updateCognitiveLoad();
 
     // Monitor active processes
-    for (const [id, process] of this.activeProcesses.entries()) {
+    for (const [_id, process] of this.activeProcesses.entries()) {
       this.monitorProcess(process, now);
     }
 
@@ -238,16 +238,18 @@ export class MetaCognitiveLoop {
   public registerProcess(
     name: string,
     type: ProcessType,
-    estimatedEffort: number = 0.5
+    estimatedEffort: number = 0.5,
   ): string {
-    const id = `process_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+    const id = `process_${Date.now()}_${Math.random()
+      .toString(36)
+      .substring(7)}`;
 
     const process: MonitoredProcess = {
       id,
       name,
       type,
       startTime: Date.now(),
-      status: 'active',
+      status: "active",
       confidence: 0.5,
       effort: estimatedEffort,
       metaObservations: [],
@@ -258,8 +260,10 @@ export class MetaCognitiveLoop {
     // Add initial meta-observation
     this.addMetaObservation(id, {
       timestamp: Date.now(),
-      observationType: 'monitoring',
-      content: `Process "${name}" initiated with estimated effort ${estimatedEffort.toFixed(2)}`,
+      observationType: "monitoring",
+      content: `Process "${name}" initiated with estimated effort ${estimatedEffort.toFixed(
+        2,
+      )}`,
       confidence: 0.7,
     });
 
@@ -279,12 +283,16 @@ export class MetaCognitiveLoop {
   /**
    * Complete a process
    */
-  public completeProcess(id: string, output?: unknown, confidence?: number): void {
+  public completeProcess(
+    id: string,
+    output?: unknown,
+    confidence?: number,
+  ): void {
     const process = this.activeProcesses.get(id);
     if (!process) return;
 
     process.endTime = Date.now();
-    process.status = 'completed';
+    process.status = "completed";
     process.output = output;
     if (confidence !== undefined) {
       process.confidence = confidence;
@@ -293,8 +301,10 @@ export class MetaCognitiveLoop {
     // Meta-observation about completion
     this.addMetaObservation(id, {
       timestamp: Date.now(),
-      observationType: 'evaluation',
-      content: `Process completed with confidence ${process.confidence.toFixed(2)}`,
+      observationType: "evaluation",
+      content: `Process completed with confidence ${process.confidence.toFixed(
+        2,
+      )}`,
       confidence: 0.8,
     });
 
@@ -303,7 +313,10 @@ export class MetaCognitiveLoop {
     this.activeProcesses.delete(id);
 
     // Update load
-    this.cognitiveLoad.germane = Math.max(0, this.cognitiveLoad.germane - process.effort * 0.3);
+    this.cognitiveLoad.germane = Math.max(
+      0,
+      this.cognitiveLoad.germane - process.effort * 0.3,
+    );
     this.updateCognitiveLoad();
 
     // Update monitoring accuracy based on prediction vs actual
@@ -324,11 +337,11 @@ export class MetaCognitiveLoop {
     if (!process) return;
 
     process.endTime = Date.now();
-    process.status = 'failed';
+    process.status = "failed";
 
     this.addMetaObservation(id, {
       timestamp: Date.now(),
-      observationType: 'evaluation',
+      observationType: "evaluation",
       content: `Process failed: ${reason}`,
       confidence: 0.9,
     });
@@ -336,7 +349,10 @@ export class MetaCognitiveLoop {
     this.processHistory.push(process);
     this.activeProcesses.delete(id);
 
-    this.cognitiveLoad.germane = Math.max(0, this.cognitiveLoad.germane - process.effort * 0.3);
+    this.cognitiveLoad.germane = Math.max(
+      0,
+      this.cognitiveLoad.germane - process.effort * 0.3,
+    );
     this.updateCognitiveLoad();
 
     logger.debug(`Failed process: ${process.name} (${id}): ${reason}`);
@@ -352,8 +368,10 @@ export class MetaCognitiveLoop {
     if (duration > 10000 && process.metaObservations.length < 3) {
       this.addMetaObservation(process.id, {
         timestamp: now,
-        observationType: 'monitoring',
-        content: `Process appears stalled (${(duration / 1000).toFixed(1)}s elapsed)`,
+        observationType: "monitoring",
+        content: `Process appears stalled (${(duration / 1000).toFixed(
+          1,
+        )}s elapsed)`,
         confidence: 0.6,
       });
     }
@@ -390,8 +408,8 @@ export class MetaCognitiveLoop {
       const leastImportant = this.findLeastImportantProcess();
       if (leastImportant) {
         this.intervene({
-          type: 'suppress',
-          reason: 'Cognitive overload - reducing load',
+          type: "suppress",
+          reason: "Cognitive overload - reducing load",
           targetProcess: leastImportant.id,
           strength: 0.7,
         });
@@ -405,8 +423,8 @@ export class MetaCognitiveLoop {
 
       if (duration > expectedDuration * 2 && process.confidence < 0.4) {
         this.intervene({
-          type: 'redirect',
-          reason: 'Low confidence and extended duration',
+          type: "redirect",
+          reason: "Low confidence and extended duration",
           targetProcess: id,
           strength: 0.5,
         });
@@ -424,7 +442,7 @@ export class MetaCognitiveLoop {
     if (process) {
       process.metaObservations.push({
         timestamp: Date.now(),
-        observationType: 'control',
+        observationType: "control",
         content: `Intervention: ${intervention.type} - ${intervention.reason}`,
         confidence: intervention.strength,
         intervention,
@@ -434,7 +452,9 @@ export class MetaCognitiveLoop {
     // Update control effectiveness based on outcome
     // (tracked over time through process completions)
 
-    logger.debug(`Intervention applied: ${intervention.type} on ${intervention.targetProcess}`);
+    logger.debug(
+      `Intervention applied: ${intervention.type} on ${intervention.targetProcess}`,
+    );
 
     if (this.interventionHistory.length > 50) {
       this.interventionHistory = this.interventionHistory.slice(-25);
@@ -462,7 +482,10 @@ export class MetaCognitiveLoop {
   /**
    * Add a meta-observation to a process
    */
-  private addMetaObservation(processId: string, observation: MetaObservation): void {
+  private addMetaObservation(
+    processId: string,
+    observation: MetaObservation,
+  ): void {
     const process = this.activeProcesses.get(processId);
     if (process) {
       process.metaObservations.push(observation);
@@ -487,12 +510,13 @@ export class MetaCognitiveLoop {
     this.cognitiveLoad.total = Math.min(
       1.5,
       this.cognitiveLoad.intrinsic +
-      this.cognitiveLoad.extraneous +
-      this.cognitiveLoad.germane
+        this.cognitiveLoad.extraneous +
+        this.cognitiveLoad.germane,
     );
 
     // Check for overload
-    this.cognitiveLoad.overloaded = this.cognitiveLoad.total > this.cognitiveLoad.capacity;
+    this.cognitiveLoad.overloaded =
+      this.cognitiveLoad.total > this.cognitiveLoad.capacity;
   }
 
   /**
@@ -500,12 +524,13 @@ export class MetaCognitiveLoop {
    */
   private updateMonitoringAccuracy(process: MonitoredProcess): void {
     // Compare predicted confidence with actual outcome
-    const wasSuccessful = process.status === 'completed';
+    const wasSuccessful = process.status === "completed";
     const predictedSuccess = process.confidence > 0.5;
     const correct = wasSuccessful === predictedSuccess;
 
     // Exponential moving average
-    this.monitoringAccuracy = this.monitoringAccuracy * 0.95 + (correct ? 0.05 : 0);
+    this.monitoringAccuracy =
+      this.monitoringAccuracy * 0.95 + (correct ? 0.05 : 0);
   }
 
   /**
@@ -513,7 +538,8 @@ export class MetaCognitiveLoop {
    */
   private updateSelfModel(): void {
     // Self-model confidence based on monitoring accuracy and control effectiveness
-    const performanceMetric = (this.monitoringAccuracy + this.controlEffectiveness) / 2;
+    const performanceMetric =
+      (this.monitoringAccuracy + this.controlEffectiveness) / 2;
 
     // Bayesian update of self-model confidence
     this.selfModelConfidence =
@@ -528,8 +554,9 @@ export class MetaCognitiveLoop {
     const toRemove: string[] = [];
 
     for (const [id, process] of this.activeProcesses.entries()) {
-      if (now - process.startTime > 60000) {  // 1 minute timeout
-        process.status = 'interrupted';
+      if (now - process.startTime > 60000) {
+        // 1 minute timeout
+        process.status = "interrupted";
         process.endTime = now;
         this.processHistory.push(process);
         toRemove.push(id);
@@ -575,14 +602,20 @@ export class MetaCognitiveLoop {
   /**
    * Update JOL with actual performance
    */
-  public updateJOLPerformance(material: string, actualPerformance: number): void {
-    const jol = this.jolHistory.find(j => j.material === material && !j.actualPerformance);
+  public updateJOLPerformance(
+    material: string,
+    actualPerformance: number,
+  ): void {
+    const jol = this.jolHistory.find(
+      (j) => j.material === material && !j.actualPerformance,
+    );
     if (jol) {
       jol.actualPerformance = actualPerformance;
 
       // Update monitoring accuracy based on prediction accuracy
       const error = Math.abs(jol.jol - actualPerformance);
-      this.monitoringAccuracy = this.monitoringAccuracy * 0.9 + (1 - error) * 0.1;
+      this.monitoringAccuracy =
+        this.monitoringAccuracy * 0.9 + (1 - error) * 0.1;
     }
   }
 
@@ -610,36 +643,46 @@ export class MetaCognitiveLoop {
 
     // Metacognitive depth
     if (state.metacognitiveDepth > 3) {
-      parts.push('Deep metacognitive awareness active - observing my own observation of thoughts.');
+      parts.push(
+        "Deep metacognitive awareness active - observing my own observation of thoughts.",
+      );
     } else if (state.metacognitiveDepth > 1) {
-      parts.push('Moderate metacognitive monitoring - aware of my cognitive processes.');
+      parts.push(
+        "Moderate metacognitive monitoring - aware of my cognitive processes.",
+      );
     } else {
-      parts.push('Basic metacognitive awareness developing.');
+      parts.push("Basic metacognitive awareness developing.");
     }
 
     // Cognitive load
     if (state.cognitiveLoad.overloaded) {
-      parts.push('Currently experiencing cognitive overload - prioritizing essential processes.');
+      parts.push(
+        "Currently experiencing cognitive overload - prioritizing essential processes.",
+      );
     } else if (state.cognitiveLoad.total > 0.7) {
-      parts.push('High cognitive engagement - working near capacity.');
+      parts.push("High cognitive engagement - working near capacity.");
     } else if (state.cognitiveLoad.total > 0.3) {
-      parts.push('Moderate cognitive load - balanced processing.');
+      parts.push("Moderate cognitive load - balanced processing.");
     } else {
-      parts.push('Low cognitive load - ready for complex tasks.');
+      parts.push("Low cognitive load - ready for complex tasks.");
     }
 
     // Self-model confidence
     parts.push(
-      `Self-model confidence: ${(state.selfModelConfidence * 100).toFixed(0)}%. ` +
-      `Monitoring accuracy: ${(state.monitoringAccuracy * 100).toFixed(0)}%.`
+      `Self-model confidence: ${(state.selfModelConfidence * 100).toFixed(
+        0,
+      )}%. ` +
+        `Monitoring accuracy: ${(state.monitoringAccuracy * 100).toFixed(0)}%.`,
     );
 
     // Active processes
     if (state.activeProcessCount > 0) {
-      parts.push(`Currently tracking ${state.activeProcessCount} active cognitive processes.`);
+      parts.push(
+        `Currently tracking ${state.activeProcessCount} active cognitive processes.`,
+      );
     }
 
-    return parts.join(' ');
+    return parts.join(" ");
   }
 
   /**
@@ -667,13 +710,18 @@ export class MetaCognitiveLoop {
     if (state.processHistory) this.processHistory = state.processHistory;
     if (state.fokHistory) this.fokHistory = state.fokHistory;
     if (state.jolHistory) this.jolHistory = state.jolHistory;
-    if (state.interventionHistory) this.interventionHistory = state.interventionHistory;
-    if (state.monitoringAccuracy !== undefined) this.monitoringAccuracy = state.monitoringAccuracy;
-    if (state.controlEffectiveness !== undefined) this.controlEffectiveness = state.controlEffectiveness;
-    if (state.selfModelConfidence !== undefined) this.selfModelConfidence = state.selfModelConfidence;
-    if (state.metacognitiveDepth !== undefined) this.metacognitiveDepth = state.metacognitiveDepth;
+    if (state.interventionHistory)
+      this.interventionHistory = state.interventionHistory;
+    if (state.monitoringAccuracy !== undefined)
+      this.monitoringAccuracy = state.monitoringAccuracy;
+    if (state.controlEffectiveness !== undefined)
+      this.controlEffectiveness = state.controlEffectiveness;
+    if (state.selfModelConfidence !== undefined)
+      this.selfModelConfidence = state.selfModelConfidence;
+    if (state.metacognitiveDepth !== undefined)
+      this.metacognitiveDepth = state.metacognitiveDepth;
 
-    logger.info('MetaCognitiveLoop state restored');
+    logger.info("MetaCognitiveLoop state restored");
   }
 }
 

@@ -19,7 +19,7 @@ Add the Deep Tree Echo settings screen to the DeltaChat settings page:
 
 ```jsx
 // In your settings component (example)
-import { DeepTreeEchoSettingsScreen } from '../../components/DeepTreeEchoBot'
+import { DeepTreeEchoSettingsScreen } from "../../components/DeepTreeEchoBot";
 
 // In your render method
 return (
@@ -29,7 +29,7 @@ return (
     {/* Deep Tree Echo Settings */}
     <DeepTreeEchoSettingsScreen />
   </SettingsContainer>
-)
+);
 ```
 
 ### 2. Initializing on Startup
@@ -38,10 +38,10 @@ The bot automatically initializes on import, but you can also explicitly initial
 
 ```jsx
 // In your app initialization code
-import { initDeepTreeEchoBot } from '../../components/DeepTreeEchoBot'
+import { initDeepTreeEchoBot } from "../../components/DeepTreeEchoBot";
 
 // Initialize the bot
-initDeepTreeEchoBot()
+initDeepTreeEchoBot();
 ```
 
 ### 3. Cleanup on Shutdown
@@ -50,10 +50,10 @@ When the application shuts down, make sure to clean up resources:
 
 ```jsx
 // In your app shutdown code
-import { cleanupBot } from '../../components/DeepTreeEchoBot'
+import { cleanupBot } from "../../components/DeepTreeEchoBot";
 
 // Clean up bot resources
-cleanupBot()
+cleanupBot();
 ```
 
 ### 4. Accessing the Bot Instance
@@ -61,10 +61,10 @@ cleanupBot()
 You can access the bot instance from anywhere in your application:
 
 ```jsx
-import { getBotInstance } from '../../components/DeepTreeEchoBot'
+import { getBotInstance } from "../../components/DeepTreeEchoBot";
 
 // Access the bot instance
-const bot = getBotInstance()
+const bot = getBotInstance();
 if (bot && bot.isEnabled()) {
   // Bot is available and enabled
 }
@@ -77,13 +77,13 @@ Deep Tree Echo comes with built-in utilities to help test and demonstrate its ca
 ### Running a Complete Demo
 
 ```jsx
-import { runDemo } from '../../components/DeepTreeEchoBot'
+import { runDemo } from "../../components/DeepTreeEchoBot";
 
 // Run a complete demo of the bot's features in a new group chat
 async function startDemo() {
-  const accounts = await BackendRemote.rpc.getAllAccounts()
+  const accounts = await BackendRemote.rpc.getAllAccounts();
   if (accounts.length > 0) {
-    await runDemo(accounts[0])
+    await runDemo(accounts[0]);
   }
 }
 ```
@@ -91,17 +91,17 @@ async function startDemo() {
 ### Creating Test Groups
 
 ```jsx
-import { createTestGroup } from '../../components/DeepTreeEchoBot'
+import { createTestGroup } from "../../components/DeepTreeEchoBot";
 
 // Create a test group with the bot
 async function createBotGroup() {
-  const accounts = await BackendRemote.rpc.getAllAccounts()
+  const accounts = await BackendRemote.rpc.getAllAccounts();
   if (accounts.length > 0) {
-    const chatId = await createTestGroup(accounts[0], 'Deep Tree Echo Test', [
+    const chatId = await createTestGroup(accounts[0], "Deep Tree Echo Test", [
       contactId1,
       contactId2,
-    ])
-    console.log(`Created test group with ID: ${chatId}`)
+    ]);
+    console.log(`Created test group with ID: ${chatId}`);
   }
 }
 ```
@@ -112,16 +112,16 @@ async function createBotGroup() {
 import {
   sendTestMessage,
   processMessageWithBot,
-} from '../../components/DeepTreeEchoBot'
+} from "../../components/DeepTreeEchoBot";
 
 // Send a test message and process it with the bot
 async function testBotResponse(accountId, chatId) {
   const msgId = await sendTestMessage(
     accountId,
     chatId,
-    'Hello, Deep Tree Echo!'
-  )
-  await processMessageWithBot(accountId, chatId, msgId)
+    "Hello, Deep Tree Echo!",
+  );
+  await processMessageWithBot(accountId, chatId, msgId);
 }
 ```
 

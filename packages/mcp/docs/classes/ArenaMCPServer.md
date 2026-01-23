@@ -42,9 +42,9 @@ actual world context in which agents operate.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `arena` | `ArenaMembrane` |
+| Name     | Type                                                             |
+| :------- | :--------------------------------------------------------------- |
+| `arena`  | `ArenaMembrane`                                                  |
 | `config` | `Partial`\<[`ArenaMCPConfig`](../interfaces/ArenaMCPConfig.md)\> |
 
 #### Returns
@@ -63,19 +63,19 @@ EventEmitter.constructor
 
 ### listResources
 
-▸ **listResources**(): \{ `uri`: `string` ; `name`: `string` ; `description`: `string`  }[]
+▸ **listResources**(): \{ `uri`: `string` ; `name`: `string` ; `description`: `string` }[]
 
 Handle list_resources request
 
 #### Returns
 
-\{ `uri`: `string` ; `name`: `string` ; `description`: `string`  }[]
+\{ `uri`: `string` ; `name`: `string` ; `description`: `string` }[]
 
 #### Defined in
 
 [src/arena-mcp/index.ts:73](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/arena-mcp/index.ts#L73)
 
-___
+---
 
 ### readResource
 
@@ -85,8 +85,8 @@ Handle read_resource request
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name  | Type     |
+| :---- | :------- |
 | `uri` | `string` |
 
 #### Returns
@@ -97,23 +97,23 @@ Handle read_resource request
 
 [src/arena-mcp/index.ts:80](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/arena-mcp/index.ts#L80)
 
-___
+---
 
 ### listTools
 
-▸ **listTools**(): \{ `name`: `string` ; `description`: `string` ; `inputSchema`: `object`  }[]
+▸ **listTools**(): \{ `name`: `string` ; `description`: `string` ; `inputSchema`: `object` }[]
 
 Handle list_tools request
 
 #### Returns
 
-\{ `name`: `string` ; `description`: `string` ; `inputSchema`: `object`  }[]
+\{ `name`: `string` ; `description`: `string` ; `inputSchema`: `object` }[]
 
 #### Defined in
 
 [src/arena-mcp/index.ts:116](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/arena-mcp/index.ts#L116)
 
-___
+---
 
 ### callTool
 
@@ -123,9 +123,9 @@ Handle call_tool request
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `name` | `string` |
+| Name   | Type      |
+| :----- | :-------- |
+| `name` | `string`  |
 | `args` | `unknown` |
 
 #### Returns
@@ -136,23 +136,23 @@ Handle call_tool request
 
 [src/arena-mcp/index.ts:127](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/arena-mcp/index.ts#L127)
 
-___
+---
 
 ### listPrompts
 
-▸ **listPrompts**(): \{ `name`: `string` ; `description`: `string` ; `arguments?`: \{ `name`: `string` ; `description`: `string` ; `required`: `boolean`  }[]  }[]
+▸ **listPrompts**(): \{ `name`: `string` ; `description`: `string` ; `arguments?`: \{ `name`: `string` ; `description`: `string` ; `required`: `boolean` }[] }[]
 
 Handle list_prompts request
 
 #### Returns
 
-\{ `name`: `string` ; `description`: `string` ; `arguments?`: \{ `name`: `string` ; `description`: `string` ; `required`: `boolean`  }[]  }[]
+\{ `name`: `string` ; `description`: `string` ; `arguments?`: \{ `name`: `string` ; `description`: `string` ; `required`: `boolean` }[] }[]
 
 #### Defined in
 
 [src/arena-mcp/index.ts:146](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/arena-mcp/index.ts#L146)
 
-___
+---
 
 ### getPrompt
 
@@ -162,9 +162,9 @@ Handle get_prompt request
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `name` | `string` |
+| Name    | Type                           |
+| :------ | :----------------------------- |
+| `name`  | `string`                       |
 | `args?` | `Record`\<`string`, `string`\> |
 
 #### Returns
@@ -175,7 +175,7 @@ Handle get_prompt request
 
 [src/arena-mcp/index.ts:157](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/arena-mcp/index.ts#L157)
 
-___
+---
 
 ### registerAgent
 
@@ -185,8 +185,8 @@ Register an agent in this arena
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name  | Type                                                |
+| :---- | :-------------------------------------------------- |
 | `ref` | [`AgentReference`](../interfaces/AgentReference.md) |
 
 #### Returns
@@ -197,7 +197,7 @@ Register an agent in this arena
 
 [src/arena-mcp/index.ts:186](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/arena-mcp/index.ts#L186)
 
-___
+---
 
 ### deregisterAgent
 
@@ -207,8 +207,8 @@ Deregister an agent
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name      | Type     |
+| :-------- | :------- |
 | `agentId` | `string` |
 
 #### Returns
@@ -219,7 +219,7 @@ Deregister an agent
 
 [src/arena-mcp/index.ts:194](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/arena-mcp/index.ts#L194)
 
-___
+---
 
 ### getAgents
 
@@ -235,7 +235,7 @@ Get all registered agents
 
 [src/arena-mcp/index.ts:205](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/arena-mcp/index.ts#L205)
 
-___
+---
 
 ### setOrchestrationCallback
 
@@ -245,8 +245,8 @@ Set orchestration callback
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name       | Type                                                                                      |
+| :--------- | :---------------------------------------------------------------------------------------- |
 | `callback` | (`agents`: `string`[], `directive`: `string`) => `Promise`\<`Map`\<`string`, `string`\>\> |
 
 #### Returns
@@ -257,7 +257,7 @@ Set orchestration callback
 
 [src/arena-mcp/index.ts:212](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/arena-mcp/index.ts#L212)
 
-___
+---
 
 ### getArena
 
@@ -273,7 +273,7 @@ Get underlying arena membrane
 
 [src/arena-mcp/index.ts:225](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/arena-mcp/index.ts#L225)
 
-___
+---
 
 ### getConfig
 

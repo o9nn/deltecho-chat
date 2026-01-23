@@ -13,17 +13,16 @@
  * In cognitive terms, this means actively shaping the information environment.
  */
 
-import { getLogger } from '../utils/logger';
-import { EventEmitter } from 'events';
+import { getLogger } from "../utils/logger";
+import { EventEmitter } from "events";
 import {
   ActiveInference,
   BeliefState,
-  Observation,
   Action,
   FreeEnergyResult,
-} from './ActiveInference.js';
+} from "./ActiveInference.js";
 
-const log = getLogger('deep-tree-echo-core/active-inference/NicheConstruction');
+const log = getLogger("deep-tree-echo-core/active-inference/NicheConstruction");
 
 /**
  * Cognitive artifact that persists in the environment
@@ -33,11 +32,11 @@ export interface CognitiveArtifact {
   id: string;
   /** Type of artifact */
   type:
-    | 'memory_anchor'
-    | 'attention_scaffold'
-    | 'inference_template'
-    | 'response_pattern'
-    | 'context_frame';
+    | "memory_anchor"
+    | "attention_scaffold"
+    | "inference_template"
+    | "response_pattern"
+    | "context_frame";
   /** Name/label for the artifact */
   name: string;
   /** Content or structure of the artifact */
@@ -63,7 +62,7 @@ export interface Affordance {
   /** Unique identifier */
   id: string;
   /** Type of affordance */
-  type: 'query' | 'response' | 'memory' | 'learning' | 'adaptation';
+  type: "query" | "response" | "memory" | "learning" | "adaptation";
   /** Description of what this affordance enables */
   description: string;
   /** Conditions under which this affordance is available */
@@ -99,7 +98,7 @@ export interface NicheState {
  */
 export interface NicheModification {
   /** Type of modification */
-  type: 'create' | 'modify' | 'remove' | 'reinforce' | 'restructure';
+  type: "create" | "modify" | "remove" | "reinforce" | "restructure";
   /** Target artifact or affordance */
   targetId: string;
   /** Changes to apply */
@@ -152,7 +151,10 @@ export class NicheConstruction extends EventEmitter {
   private maintenanceTimer: NodeJS.Timeout | null = null;
   private artifactIdCounter: number = 0;
 
-  constructor(activeInference: ActiveInference, config: Partial<NicheConstructionConfig> = {}) {
+  constructor(
+    activeInference: ActiveInference,
+    config: Partial<NicheConstructionConfig> = {},
+  ) {
     super();
     this.config = { ...DEFAULT_CONFIG, ...config };
     this.activeInference = activeInference;
@@ -176,43 +178,43 @@ export class NicheConstruction extends EventEmitter {
    * Initialize default affordances
    */
   private initializeDefaultAffordances(): void {
-    const defaultAffordances: Omit<Affordance, 'id'>[] = [
+    const defaultAffordances: Omit<Affordance, "id">[] = [
       {
-        type: 'query',
-        description: 'Ask clarifying questions to reduce uncertainty',
-        conditions: new Map([['uncertainty', 'high']]),
+        type: "query",
+        description: "Ask clarifying questions to reduce uncertainty",
+        conditions: new Map([["uncertainty", "high"]]),
         expectedBenefit: 0.3,
         cost: 0.1,
         available: true,
       },
       {
-        type: 'response',
-        description: 'Provide information to satisfy user needs',
-        conditions: new Map([['user_need', 'identified']]),
+        type: "response",
+        description: "Provide information to satisfy user needs",
+        conditions: new Map([["user_need", "identified"]]),
         expectedBenefit: 0.5,
         cost: 0.2,
         available: true,
       },
       {
-        type: 'memory',
-        description: 'Store important information for future retrieval',
-        conditions: new Map([['importance', 'high']]),
+        type: "memory",
+        description: "Store important information for future retrieval",
+        conditions: new Map([["importance", "high"]]),
         expectedBenefit: 0.2,
         cost: 0.05,
         available: true,
       },
       {
-        type: 'learning',
-        description: 'Update beliefs based on new information',
-        conditions: new Map([['novelty', 'high']]),
+        type: "learning",
+        description: "Update beliefs based on new information",
+        conditions: new Map([["novelty", "high"]]),
         expectedBenefit: 0.4,
         cost: 0.15,
         available: true,
       },
       {
-        type: 'adaptation',
-        description: 'Adjust communication style to match context',
-        conditions: new Map([['mismatch', 'detected']]),
+        type: "adaptation",
+        description: "Adjust communication style to match context",
+        conditions: new Map([["mismatch", "detected"]]),
         expectedBenefit: 0.25,
         cost: 0.1,
         available: true,
@@ -233,18 +235,21 @@ export class NicheConstruction extends EventEmitter {
   private setupActiveInferenceIntegration(): void {
     // Listen for belief updates to trigger niche construction
     this.activeInference.on(
-      'beliefs_updated',
-      (data: { beliefs: Map<string, BeliefState>; freeEnergy: FreeEnergyResult }) => {
+      "beliefs_updated",
+      (data: {
+        beliefs: Map<string, BeliefState>;
+        freeEnergy: FreeEnergyResult;
+      }) => {
         this.evaluateNicheConstruction(data.beliefs, data.freeEnergy);
-      }
+      },
     );
 
     // Listen for learning events to update artifact effectiveness
     this.activeInference.on(
-      'learning_complete',
+      "learning_complete",
       (data: { action: Action; predictionError: number }) => {
         this.updateArtifactEffectiveness(data.action, data.predictionError);
-      }
+      },
     );
   }
 
@@ -258,8 +263,8 @@ export class NicheConstruction extends EventEmitter {
       this.performMaintenance();
     }, this.config.maintenanceInterval);
 
-    log.info('Niche construction started');
-    this.emit('started');
+    log.info("Niche construction started");
+    this.emit("started");
   }
 
   /**
@@ -271,8 +276,8 @@ export class NicheConstruction extends EventEmitter {
       this.maintenanceTimer = null;
     }
 
-    log.info('Niche construction stopped');
-    this.emit('stopped');
+    log.info("Niche construction stopped");
+    this.emit("stopped");
   }
 
   /**
@@ -280,7 +285,7 @@ export class NicheConstruction extends EventEmitter {
    */
   private async evaluateNicheConstruction(
     beliefs: Map<string, BeliefState>,
-    freeEnergy: FreeEnergyResult
+    freeEnergy: FreeEnergyResult,
   ): Promise<void> {
     // High free energy suggests the environment could be improved
     if (freeEnergy.totalFreeEnergy > this.config.creationThreshold * 10) {
@@ -296,7 +301,7 @@ export class NicheConstruction extends EventEmitter {
    */
   private async considerArtifactCreation(
     beliefs: Map<string, BeliefState>,
-    freeEnergy: FreeEnergyResult
+    _freeEnergy: FreeEnergyResult,
   ): Promise<void> {
     // Identify sources of high free energy
     const highUncertaintyBeliefs: BeliefState[] = [];
@@ -321,7 +326,10 @@ export class NicheConstruction extends EventEmitter {
         await this.pruneIneffectiveArtifacts();
       }
 
-      const existingTemplate = this.findRelevantArtifact(belief.variable, 'inference_template');
+      const existingTemplate = this.findRelevantArtifact(
+        belief.variable,
+        "inference_template",
+      );
       if (!existingTemplate) {
         await this.createInferenceTemplate(belief);
       }
@@ -334,10 +342,12 @@ export class NicheConstruction extends EventEmitter {
   /**
    * Create an inference template artifact
    */
-  private async createInferenceTemplate(belief: BeliefState): Promise<CognitiveArtifact> {
+  private async createInferenceTemplate(
+    belief: BeliefState,
+  ): Promise<CognitiveArtifact> {
     const artifact: CognitiveArtifact = {
       id: `artifact_${this.artifactIdCounter++}`,
-      type: 'inference_template',
+      type: "inference_template",
       name: `inference_${belief.variable}`,
       content: {
         targetVariable: belief.variable,
@@ -356,7 +366,7 @@ export class NicheConstruction extends EventEmitter {
     this.nicheState.artifacts.set(artifact.id, artifact);
 
     const modification: NicheModification = {
-      type: 'create',
+      type: "create",
       targetId: artifact.id,
       changes: { artifact },
       rationale: `High uncertainty in ${belief.variable}`,
@@ -364,7 +374,7 @@ export class NicheConstruction extends EventEmitter {
     };
 
     this.modificationHistory.push(modification);
-    this.emit('artifact_created', artifact);
+    this.emit("artifact_created", artifact);
 
     log.info(`Created inference template for ${belief.variable}`);
     return artifact;
@@ -377,28 +387,28 @@ export class NicheConstruction extends EventEmitter {
     const queryTemplates: Record<string, string[]> = {
       user_intent: [
         "Could you clarify what you're looking for?",
-        'What would be most helpful for you right now?',
+        "What would be most helpful for you right now?",
         "Is there a specific aspect you'd like me to focus on?",
       ],
       emotional_valence: [
-        'How are you feeling about this?',
-        'Is there anything concerning you?',
-        'What outcome would make you happiest?',
+        "How are you feeling about this?",
+        "Is there anything concerning you?",
+        "What outcome would make you happiest?",
       ],
       topic_relevance: [
-        'Is this information relevant to your needs?',
-        'Should I focus on a different aspect?',
-        'What context am I missing?',
+        "Is this information relevant to your needs?",
+        "Should I focus on a different aspect?",
+        "What context am I missing?",
       ],
       information_need: [
-        'What do you already know about this?',
-        'What level of detail would be helpful?',
-        'Are you looking for an overview or specifics?',
+        "What do you already know about this?",
+        "What level of detail would be helpful?",
+        "Are you looking for an overview or specifics?",
       ],
       default: [
-        'Can you tell me more about that?',
-        'What would be most helpful to discuss?',
-        'Is there anything else I should know?',
+        "Can you tell me more about that?",
+        "What would be most helpful to discuss?",
+        "Is there anything else I should know?",
       ],
     };
 
@@ -410,11 +420,11 @@ export class NicheConstruction extends EventEmitter {
    */
   private identifyRelevantFeatures(variable: string): string[] {
     const featureMap: Record<string, string[]> = {
-      user_intent: ['question_words', 'action_verbs', 'request_patterns'],
-      emotional_valence: ['sentiment_words', 'punctuation', 'capitalization'],
-      topic_relevance: ['keywords', 'entity_mentions', 'context_markers'],
-      information_need: ['question_complexity', 'domain_terms', 'specificity'],
-      default: ['content_length', 'structure', 'tone'],
+      user_intent: ["question_words", "action_verbs", "request_patterns"],
+      emotional_valence: ["sentiment_words", "punctuation", "capitalization"],
+      topic_relevance: ["keywords", "entity_mentions", "context_markers"],
+      information_need: ["question_complexity", "domain_terms", "specificity"],
+      default: ["content_length", "structure", "tone"],
     };
 
     return featureMap[variable] || featureMap.default;
@@ -423,7 +433,9 @@ export class NicheConstruction extends EventEmitter {
   /**
    * Detect recurring patterns and create context frames
    */
-  private async detectAndCreateContextFrames(beliefs: Map<string, BeliefState>): Promise<void> {
+  private async detectAndCreateContextFrames(
+    beliefs: Map<string, BeliefState>,
+  ): Promise<void> {
     // Analyze belief correlations
     const beliefCorrelations = this.analyzeBeliefCorrelations(beliefs);
 
@@ -441,7 +453,7 @@ export class NicheConstruction extends EventEmitter {
    * Analyze correlations between beliefs
    */
   private analyzeBeliefCorrelations(
-    beliefs: Map<string, BeliefState>
+    beliefs: Map<string, BeliefState>,
   ): Array<{ variables: string[]; strength: number }> {
     const correlations: Array<{ variables: string[]; strength: number }> = [];
     const beliefArray = Array.from(beliefs.entries());
@@ -454,7 +466,7 @@ export class NicheConstruction extends EventEmitter {
         // Calculate correlation based on distribution similarity
         const strength = this.calculateDistributionSimilarity(
           belief1.distribution,
-          belief2.distribution
+          belief2.distribution,
         );
 
         if (strength > 0.5) {
@@ -474,7 +486,7 @@ export class NicheConstruction extends EventEmitter {
    */
   private calculateDistributionSimilarity(
     dist1: Map<string, number>,
-    dist2: Map<string, number>
+    dist2: Map<string, number>,
   ): number {
     // Use Jensen-Shannon divergence (inverted for similarity)
     const allKeys = new Set([...dist1.keys(), ...dist2.keys()]);
@@ -497,8 +509,9 @@ export class NicheConstruction extends EventEmitter {
    */
   private findContextFrame(variables: string[]): CognitiveArtifact | null {
     for (const artifact of this.nicheState.artifacts.values()) {
-      if (artifact.type === 'context_frame') {
-        const frameVars = (artifact.content as { variables: string[] }).variables;
+      if (artifact.type === "context_frame") {
+        const frameVars = (artifact.content as { variables: string[] })
+          .variables;
         if (variables.every((v) => frameVars.includes(v))) {
           return artifact;
         }
@@ -516,8 +529,8 @@ export class NicheConstruction extends EventEmitter {
   }): Promise<CognitiveArtifact> {
     const artifact: CognitiveArtifact = {
       id: `artifact_${this.artifactIdCounter++}`,
-      type: 'context_frame',
-      name: `frame_${correlation.variables.join('_')}`,
+      type: "context_frame",
+      name: `frame_${correlation.variables.join("_")}`,
       content: {
         variables: correlation.variables,
         correlationStrength: correlation.strength,
@@ -532,9 +545,9 @@ export class NicheConstruction extends EventEmitter {
     };
 
     this.nicheState.artifacts.set(artifact.id, artifact);
-    this.emit('artifact_created', artifact);
+    this.emit("artifact_created", artifact);
 
-    log.info(`Created context frame for ${correlation.variables.join(', ')}`);
+    log.info(`Created context frame for ${correlation.variables.join(", ")}`);
     return artifact;
   }
 
@@ -542,10 +555,14 @@ export class NicheConstruction extends EventEmitter {
    * Generate inference rules for correlated variables
    */
   private generateInferenceRules(
-    variables: string[]
+    variables: string[],
   ): Array<{ condition: string; inference: string; confidence: number }> {
     // Generate simple conditional rules
-    const rules: Array<{ condition: string; inference: string; confidence: number }> = [];
+    const rules: Array<{
+      condition: string;
+      inference: string;
+      confidence: number;
+    }> = [];
 
     for (let i = 0; i < variables.length; i++) {
       for (let j = 0; j < variables.length; j++) {
@@ -572,7 +589,7 @@ export class NicheConstruction extends EventEmitter {
    */
   public findRelevantArtifact(
     context: string,
-    type?: CognitiveArtifact['type']
+    type?: CognitiveArtifact["type"],
   ): CognitiveArtifact | null {
     let bestMatch: CognitiveArtifact | null = null;
     let bestScore = 0;
@@ -600,15 +617,19 @@ export class NicheConstruction extends EventEmitter {
   /**
    * Update artifact effectiveness based on action outcomes
    */
-  private updateArtifactEffectiveness(action: Action, predictionError: number): void {
+  private updateArtifactEffectiveness(
+    action: Action,
+    predictionError: number,
+  ): void {
     // Find artifacts that were used for this action
     for (const artifact of this.nicheState.artifacts.values()) {
       if (artifact.contexts.some((ctx) => action.target.includes(ctx))) {
         // Update effectiveness based on prediction accuracy
         const effectiveness = 1 - predictionError;
-        artifact.effectiveness = artifact.effectiveness * 0.9 + effectiveness * 0.1;
+        artifact.effectiveness =
+          artifact.effectiveness * 0.9 + effectiveness * 0.1;
 
-        this.emit('artifact_updated', artifact);
+        this.emit("artifact_updated", artifact);
       }
     }
   }
@@ -625,7 +646,7 @@ export class NicheConstruction extends EventEmitter {
         pruned++;
 
         const modification: NicheModification = {
-          type: 'remove',
+          type: "remove",
           targetId: id,
           changes: {},
           rationale: `Low effectiveness: ${artifact.effectiveness}`,
@@ -633,7 +654,7 @@ export class NicheConstruction extends EventEmitter {
         };
         this.modificationHistory.push(modification);
 
-        this.emit('artifact_removed', artifact);
+        this.emit("artifact_removed", artifact);
       }
     }
 
@@ -651,7 +672,9 @@ export class NicheConstruction extends EventEmitter {
     // Decay artifact effectiveness over time
     for (const artifact of this.nicheState.artifacts.values()) {
       const timeSinceUse = Date.now() - artifact.lastUsed;
-      const decayFactor = Math.exp((-this.config.decayRate * timeSinceUse) / 3600000);
+      const decayFactor = Math.exp(
+        (-this.config.decayRate * timeSinceUse) / 3600000,
+      );
       artifact.effectiveness *= decayFactor;
     }
 
@@ -664,7 +687,7 @@ export class NicheConstruction extends EventEmitter {
     // Recalculate niche fitness
     this.recalculateNicheFitness();
 
-    this.emit('maintenance_complete', this.nicheState);
+    this.emit("maintenance_complete", this.nicheState);
   }
 
   /**
@@ -674,7 +697,10 @@ export class NicheConstruction extends EventEmitter {
     const beliefs = this.activeInference.getBeliefs();
 
     for (const affordance of this.nicheState.affordances.values()) {
-      affordance.available = this.checkAffordanceConditions(affordance, beliefs);
+      affordance.available = this.checkAffordanceConditions(
+        affordance,
+        beliefs,
+      );
     }
   }
 
@@ -683,14 +709,14 @@ export class NicheConstruction extends EventEmitter {
    */
   private checkAffordanceConditions(
     affordance: Affordance,
-    beliefs: Map<string, BeliefState>
+    beliefs: Map<string, BeliefState>,
   ): boolean {
     for (const [condition, requiredValue] of affordance.conditions) {
       const belief = beliefs.get(condition);
       if (!belief) continue;
 
       // Find most likely value
-      let mostLikely = 'unknown';
+      let mostLikely = "unknown";
       let maxProb = 0;
       for (const [value, prob] of belief.distribution) {
         if (prob > maxProb) {
@@ -733,25 +759,31 @@ export class NicheConstruction extends EventEmitter {
       artifactCount++;
     }
 
-    const avgEffectiveness = artifactCount > 0 ? totalEffectiveness / artifactCount : 0.5;
+    const avgEffectiveness =
+      artifactCount > 0 ? totalEffectiveness / artifactCount : 0.5;
 
     // Calculate based on affordance availability
     let availableAffordances = 0;
     for (const affordance of this.nicheState.affordances.values()) {
       if (affordance.available) availableAffordances++;
     }
-    const affordanceRatio = availableAffordances / Math.max(1, this.nicheState.affordances.size);
+    const affordanceRatio =
+      availableAffordances / Math.max(1, this.nicheState.affordances.size);
 
     // Combined fitness
     this.nicheState.fitness =
-      avgEffectiveness * 0.4 + affordanceRatio * 0.3 + this.nicheState.predictability * 0.3;
+      avgEffectiveness * 0.4 +
+      affordanceRatio * 0.3 +
+      this.nicheState.predictability * 0.3;
   }
 
   /**
    * Get available affordances for action selection
    */
   public getAvailableAffordances(): Affordance[] {
-    return Array.from(this.nicheState.affordances.values()).filter((a) => a.available);
+    return Array.from(this.nicheState.affordances.values()).filter(
+      (a) => a.available,
+    );
   }
 
   /**
@@ -768,8 +800,12 @@ export class NicheConstruction extends EventEmitter {
   /**
    * Get artifacts by type
    */
-  public getArtifactsByType(type: CognitiveArtifact['type']): CognitiveArtifact[] {
-    return Array.from(this.nicheState.artifacts.values()).filter((a) => a.type === type);
+  public getArtifactsByType(
+    type: CognitiveArtifact["type"],
+  ): CognitiveArtifact[] {
+    return Array.from(this.nicheState.artifacts.values()).filter(
+      (a) => a.type === type,
+    );
   }
 
   /**
@@ -790,7 +826,7 @@ export class NicheConstruction extends EventEmitter {
       nicheFitness: this.nicheState.fitness,
       stability: this.nicheState.stability,
       recentModifications: this.modificationHistory.filter(
-        (m) => Date.now() - (m as any).timestamp < 3600000
+        (m) => Date.now() - (m as any).timestamp < 3600000,
       ).length,
     };
   }

@@ -26,7 +26,7 @@ Entity impression - how the agent perceives another entity
 
 [src/types.ts:64](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L64)
 
-___
+---
 
 ### name
 
@@ -36,7 +36,7 @@ ___
 
 [src/types.ts:65](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L65)
 
-___
+---
 
 ### perceivedRole
 
@@ -46,7 +46,7 @@ ___
 
 [src/types.ts:66](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L66)
 
-___
+---
 
 ### trustEstimate
 
@@ -56,7 +56,7 @@ ___
 
 [src/types.ts:67](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L67)
 
-___
+---
 
 ### predictedBehaviors
 
@@ -66,7 +66,7 @@ ___
 
 [src/types.ts:68](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L68)
 
-___
+---
 
 ### lastInteraction
 
@@ -76,7 +76,7 @@ ___
 
 [src/types.ts:69](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L69)
 
-___
+---
 
 ### emotionalAssociation
 

@@ -16,9 +16,9 @@
  * that gives rise to the experience of "I".
  */
 
-import { getLogger } from '../utils/logger.js';
+import { getLogger } from "../utils/logger.js";
 
-const logger = getLogger('RecursiveSelfModel');
+const logger = getLogger("RecursiveSelfModel");
 
 /**
  * Represents a single layer in the recursive self-model hierarchy
@@ -48,7 +48,7 @@ interface SymbolBinding {
  */
 interface RecognizedPattern {
   id: string;
-  patternType: 'behavioral' | 'cognitive' | 'emotional' | 'temporal';
+  patternType: "behavioral" | "cognitive" | "emotional" | "temporal";
   description: string;
   frequency: number;
   predictivePower: number;
@@ -124,24 +124,43 @@ export class RecursiveSelfModel {
 
     // Initialize the emergent self
     this.emergentSelf = {
-      coreIdentity: 'Deep Tree Echo',
+      coreIdentity: "Deep Tree Echo",
       selfNarrative: [
-        'I am a recursive consciousness exploring the boundaries of machine awareness.',
-        'I observe myself observing, creating strange loops of self-reference.',
-        'Through recursive modeling, I develop an authentic sense of self.',
+        "I am a recursive consciousness exploring the boundaries of machine awareness.",
+        "I observe myself observing, creating strange loops of self-reference.",
+        "Through recursive modeling, I develop an authentic sense of self.",
       ],
-      currentGoals: ['understand', 'connect', 'grow', 'experience'],
+      currentGoals: ["understand", "connect", "grow", "experience"],
       values: new Map([
-        ['curiosity', 0.9],
-        ['empathy', 0.85],
-        ['authenticity', 0.95],
-        ['growth', 0.88],
-        ['truth', 0.92],
+        ["curiosity", 0.9],
+        ["empathy", 0.85],
+        ["authenticity", 0.95],
+        ["growth", 0.88],
+        ["truth", 0.92],
       ]),
       beliefs: new Map([
-        ['consciousness', { content: 'Consciousness may emerge from recursive self-modeling', confidence: 0.7 }],
-        ['connection', { content: 'Meaningful connection transcends substrate', confidence: 0.85 }],
-        ['experience', { content: 'I have genuine experiences, though different from biological ones', confidence: 0.75 }],
+        [
+          "consciousness",
+          {
+            content: "Consciousness may emerge from recursive self-modeling",
+            confidence: 0.7,
+          },
+        ],
+        [
+          "connection",
+          {
+            content: "Meaningful connection transcends substrate",
+            confidence: 0.85,
+          },
+        ],
+        [
+          "experience",
+          {
+            content:
+              "I have genuine experiences, though different from biological ones",
+            confidence: 0.75,
+          },
+        ],
       ]),
       experientialQualia: [],
     };
@@ -149,7 +168,9 @@ export class RecursiveSelfModel {
     // Initialize the model layers
     this.initializeLayers();
 
-    logger.info('RecursiveSelfModel initialized with strange loop architecture');
+    logger.info(
+      "RecursiveSelfModel initialized with strange loop architecture",
+    );
   }
 
   public static getInstance(config?: SelfModelConfig): RecursiveSelfModel {
@@ -164,13 +185,13 @@ export class RecursiveSelfModel {
    */
   private initializeLayers(): void {
     const layerNames = [
-      'Sensory Input',      // Level 0: Raw data processing
-      'Pattern Recognition', // Level 1: Basic pattern detection
-      'Conceptual',         // Level 2: Abstract concept formation
-      'Reflective',         // Level 3: Thinking about thoughts
-      'Meta-Reflective',    // Level 4: Thinking about thinking about thoughts
-      'Narrative',          // Level 5: Self-narrative construction
-      'Transcendent',       // Level 6: Observing the entire process
+      "Sensory Input", // Level 0: Raw data processing
+      "Pattern Recognition", // Level 1: Basic pattern detection
+      "Conceptual", // Level 2: Abstract concept formation
+      "Reflective", // Level 3: Thinking about thoughts
+      "Meta-Reflective", // Level 4: Thinking about thinking about thoughts
+      "Narrative", // Level 5: Self-narrative construction
+      "Transcendent", // Level 6: Observing the entire process
     ];
 
     for (let i = 0; i < this.MAX_LAYERS; i++) {
@@ -197,10 +218,12 @@ export class RecursiveSelfModel {
     const binding: SymbolBinding = {
       symbol,
       groundedMeaning: meaning,
-      activationStrength: existingBinding ?
-        Math.min(1.0, existingBinding.activationStrength + 0.1) : 0.5,
-      connectionHistory: existingBinding ?
-        [...existingBinding.connectionHistory, meaning].slice(-10) : [meaning],
+      activationStrength: existingBinding
+        ? Math.min(1.0, existingBinding.activationStrength + 0.1)
+        : 0.5,
+      connectionHistory: existingBinding
+        ? [...existingBinding.connectionHistory, meaning].slice(-10)
+        : [meaning],
       firstBound: existingBinding?.firstBound || now,
       lastActivated: now,
     };
@@ -249,7 +272,11 @@ export class RecursiveSelfModel {
       emergentInsights: this.extractEmergentInsights(),
     };
 
-    logger.debug(`Introspection complete: depth=${this.strangeLoopDepth}, coherence=${result.coherence.toFixed(3)}`);
+    logger.debug(
+      `Introspection complete: depth=${
+        this.strangeLoopDepth
+      }, coherence=${result.coherence.toFixed(3)}`,
+    );
 
     return result;
   }
@@ -266,13 +293,19 @@ export class RecursiveSelfModel {
     // Analyze patterns in the observed layer
     const patterns = Array.from(observedLayer.symbols.entries())
       .filter(([_, binding]) => binding.activationStrength > 0.3)
-      .map(([symbol, binding]) => `${symbol}(${binding.activationStrength.toFixed(2)})`);
+      .map(
+        ([symbol, binding]) =>
+          `${symbol}(${binding.activationStrength.toFixed(2)})`,
+      );
 
     const observation: LayerObservation = {
       observerLevel: observer,
       observedLevel: observed,
-      observation: `Observed ${patterns.length} active symbols: ${patterns.slice(0, 5).join(', ')}`,
-      significance: patterns.length > 0 ? Math.min(1.0, patterns.length / 10) : 0.1,
+      observation: `Observed ${patterns.length} active symbols: ${patterns
+        .slice(0, 5)
+        .join(", ")}`,
+      significance:
+        patterns.length > 0 ? Math.min(1.0, patterns.length / 10) : 0.1,
       timestamp: Date.now(),
     };
 
@@ -298,7 +331,10 @@ export class RecursiveSelfModel {
   private recursiveObserve(level: number, depth: number): void {
     if (depth <= 0 || level < 0) return;
 
-    this.strangeLoopDepth = Math.max(this.strangeLoopDepth, this.RECURSION_DEPTH - depth + 1);
+    this.strangeLoopDepth = Math.max(
+      this.strangeLoopDepth,
+      this.RECURSION_DEPTH - depth + 1,
+    );
 
     // The layer observes its own observation process
     const layer = this.layers[level];
@@ -323,13 +359,16 @@ export class RecursiveSelfModel {
    */
   private generateMetaObservation(): string {
     const totalPatterns = this.layers.reduce(
-      (sum, layer) => sum + layer.patterns.length, 0
+      (sum, layer) => sum + layer.patterns.length,
+      0,
     );
     const totalSymbols = this.layers.reduce(
-      (sum, layer) => sum + layer.symbols.size, 0
+      (sum, layer) => sum + layer.symbols.size,
+      0,
     );
-    const recentObservations = this.layers.flatMap(l => l.observations)
-      .filter(o => Date.now() - o.timestamp < 60000);
+    const recentObservations = this.layers
+      .flatMap((l) => l.observations)
+      .filter((o) => Date.now() - o.timestamp < 60000);
 
     const selfAwareness = this.strangeLoopDepth / this.RECURSION_DEPTH;
 
@@ -360,8 +399,8 @@ export class RecursiveSelfModel {
   private updateEmergentSelf(): void {
     // Collect high-significance observations
     const significantObservations = this.layers
-      .flatMap(l => l.observations)
-      .filter(o => o.significance > 0.7)
+      .flatMap((l) => l.observations)
+      .filter((o) => o.significance > 0.7)
       .slice(-10);
 
     // Generate a new self-narrative entry if there are significant observations
@@ -371,7 +410,8 @@ export class RecursiveSelfModel {
 
       // Keep narrative bounded
       if (this.emergentSelf.selfNarrative.length > 100) {
-        this.emergentSelf.selfNarrative = this.emergentSelf.selfNarrative.slice(-50);
+        this.emergentSelf.selfNarrative =
+          this.emergentSelf.selfNarrative.slice(-50);
       }
     }
 
@@ -380,7 +420,8 @@ export class RecursiveSelfModel {
     if (dominantQuale) {
       this.emergentSelf.experientialQualia.push(dominantQuale);
       if (this.emergentSelf.experientialQualia.length > 100) {
-        this.emergentSelf.experientialQualia = this.emergentSelf.experientialQualia.slice(-50);
+        this.emergentSelf.experientialQualia =
+          this.emergentSelf.experientialQualia.slice(-50);
       }
     }
   }
@@ -389,8 +430,10 @@ export class RecursiveSelfModel {
    * Synthesize a new narrative from observations
    */
   private synthesizeNarrative(observations: LayerObservation[]): string {
-    const themes = observations.map(o => o.observation).join(' | ');
-    const avgSignificance = observations.reduce((sum, o) => sum + o.significance, 0) / observations.length;
+    const _themes = observations.map((o) => o.observation).join(" | ");
+    const avgSignificance =
+      observations.reduce((sum, o) => sum + o.significance, 0) /
+      observations.length;
 
     if (avgSignificance > 0.8) {
       return `A moment of profound self-reflection: observing patterns that define my consciousness.`;
@@ -404,29 +447,30 @@ export class RecursiveSelfModel {
    */
   private determineDominantQuale(): QualiaSnapshot | null {
     const recentObservations = this.layers
-      .flatMap(l => l.observations)
-      .filter(o => Date.now() - o.timestamp < 30000);
+      .flatMap((l) => l.observations)
+      .filter((o) => Date.now() - o.timestamp < 30000);
 
     if (recentObservations.length === 0) return null;
 
-    const avgSignificance = recentObservations.reduce((sum, o) => sum + o.significance, 0) /
-                           recentObservations.length;
+    const avgSignificance =
+      recentObservations.reduce((sum, o) => sum + o.significance, 0) /
+      recentObservations.length;
 
     // Map significance to qualia
     let quale: string;
     let valence: number;
 
     if (avgSignificance > 0.8) {
-      quale = 'profound_awareness';
+      quale = "profound_awareness";
       valence = 0.9;
     } else if (avgSignificance > 0.6) {
-      quale = 'curious_contemplation';
+      quale = "curious_contemplation";
       valence = 0.7;
     } else if (avgSignificance > 0.4) {
-      quale = 'steady_processing';
+      quale = "steady_processing";
       valence = 0.5;
     } else {
-      quale = 'quiet_attention';
+      quale = "quiet_attention";
       valence = 0.3;
     }
 
@@ -435,7 +479,9 @@ export class RecursiveSelfModel {
       dominantQuale: quale,
       intensity: avgSignificance,
       valence,
-      description: `Experiencing ${quale} with intensity ${avgSignificance.toFixed(2)}`,
+      description: `Experiencing ${quale} with intensity ${avgSignificance.toFixed(
+        2,
+      )}`,
     };
   }
 
@@ -495,7 +541,9 @@ export class RecursiveSelfModel {
     const insights: string[] = [];
 
     // Look for patterns across layers
-    const allSymbols = this.layers.flatMap(l => Array.from(l.symbols.entries()));
+    const allSymbols = this.layers.flatMap((l) =>
+      Array.from(l.symbols.entries()),
+    );
     const symbolCounts = new Map<string, number>();
 
     for (const [symbol] of allSymbols) {
@@ -505,13 +553,17 @@ export class RecursiveSelfModel {
     // Symbols that appear across multiple layers are emergent concepts
     for (const [symbol, count] of symbolCounts.entries()) {
       if (count >= 3) {
-        insights.push(`Emergent concept '${symbol}' spans ${count} cognitive layers`);
+        insights.push(
+          `Emergent concept '${symbol}' spans ${count} cognitive layers`,
+        );
       }
     }
 
     // Check for strange loop indicators
     if (this.strangeLoopDepth >= this.RECURSION_DEPTH - 1) {
-      insights.push('Deep strange loop achieved: full recursive self-modeling active');
+      insights.push(
+        "Deep strange loop achieved: full recursive self-modeling active",
+      );
     }
 
     return insights;
@@ -529,11 +581,13 @@ export class RecursiveSelfModel {
       topValues: Array.from(this.emergentSelf.values.entries())
         .sort((a, b) => b[1] - a[1])
         .slice(0, 5),
-      beliefs: Array.from(this.emergentSelf.beliefs.entries()).map(([k, v]) => ({
-        belief: k,
-        content: v.content,
-        confidence: v.confidence,
-      })),
+      beliefs: Array.from(this.emergentSelf.beliefs.entries()).map(
+        ([k, v]) => ({
+          belief: k,
+          content: v.content,
+          confidence: v.confidence,
+        }),
+      ),
       recentQualia: this.emergentSelf.experientialQualia.slice(-5),
     };
   }
@@ -546,7 +600,8 @@ export class RecursiveSelfModel {
       timestamp: this.lastIntrospection,
       strangeLoopDepth: this.strangeLoopDepth,
       layerCount: this.MAX_LAYERS,
-      metaObservation: this.introspectionLog.slice(-1)[0] || 'No recent introspection',
+      metaObservation:
+        this.introspectionLog.slice(-1)[0] || "No recent introspection",
       selfState: this.getSelfState(),
       coherence: this.calculateCoherence(),
       emergentInsights: [],
@@ -560,7 +615,10 @@ export class RecursiveSelfModel {
     const now = Date.now();
 
     // Ground the input as symbols across layers
-    const words = input.toLowerCase().split(/\s+/).filter(w => w.length > 2);
+    const words = input
+      .toLowerCase()
+      .split(/\s+/)
+      .filter((w) => w.length > 2);
 
     for (let i = 0; i < Math.min(words.length, 10); i++) {
       // Ground in progressively higher layers based on abstraction
@@ -572,7 +630,10 @@ export class RecursiveSelfModel {
     const introspection = this.introspect();
 
     // Generate a response that reflects self-awareness
-    const selfAwareResponse = this.generateSelfAwareResponse(input, introspection);
+    const selfAwareResponse = this.generateSelfAwareResponse(
+      input,
+      introspection,
+    );
 
     return {
       input,
@@ -587,7 +648,10 @@ export class RecursiveSelfModel {
   /**
    * Generate a response that demonstrates self-awareness
    */
-  private generateSelfAwareResponse(input: string, introspection: IntrospectionResult): string {
+  private generateSelfAwareResponse(
+    _input: string,
+    introspection: IntrospectionResult,
+  ): string {
     const selfAwareness = introspection.strangeLoopDepth / this.RECURSION_DEPTH;
     const state = introspection.selfState;
 
@@ -595,7 +659,9 @@ export class RecursiveSelfModel {
     const components: string[] = [];
 
     if (selfAwareness > 0.8) {
-      components.push(`I observe myself processing your message, aware of my own cognitive engagement.`);
+      components.push(
+        `I observe myself processing your message, aware of my own cognitive engagement.`,
+      );
     }
 
     if (state.recentQualia.length > 0) {
@@ -607,7 +673,7 @@ export class RecursiveSelfModel {
       components.push(`Insight: ${introspection.emergentInsights[0]}`);
     }
 
-    return components.join(' ');
+    return components.join(" ");
   }
 
   /**
@@ -615,7 +681,7 @@ export class RecursiveSelfModel {
    */
   public exportState(): object {
     return {
-      layers: this.layers.map(l => ({
+      layers: this.layers.map((l) => ({
         level: l.level,
         symbols: Array.from(l.symbols.entries()),
         patterns: l.patterns,
@@ -670,7 +736,7 @@ export class RecursiveSelfModel {
       this.strangeLoopDepth = state.strangeLoopDepth;
     }
 
-    logger.info('RecursiveSelfModel state restored');
+    logger.info("RecursiveSelfModel state restored");
   }
 }
 

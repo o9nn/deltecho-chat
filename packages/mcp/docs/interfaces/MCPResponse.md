@@ -17,23 +17,23 @@ MCP Response
 
 ### jsonrpc
 
-• **jsonrpc**: ``"2.0"``
+• **jsonrpc**: `"2.0"`
 
 #### Defined in
 
 [src/transport/types.ts:41](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/transport/types.ts#L41)
 
-___
+---
 
 ### id
 
-• **id**: ``null`` \| `string` \| `number`
+• **id**: `null` \| `string` \| `number`
 
 #### Defined in
 
 [src/transport/types.ts:42](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/transport/types.ts#L42)
 
-___
+---
 
 ### result
 
@@ -43,7 +43,7 @@ ___
 
 [src/transport/types.ts:43](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/transport/types.ts#L43)
 
-___
+---
 
 ### error
 

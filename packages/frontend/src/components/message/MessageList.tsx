@@ -6,74 +6,74 @@ import React, {
   useEffect,
   useState,
   useMemo,
-} from 'react'
-import classNames from 'classnames'
-import moment from 'moment'
-import { C } from '@deltachat/jsonrpc-client'
-import { debounce } from 'debounce'
+} from "react";
+import classNames from "classnames";
+import moment from "moment";
+import { C } from "@deltachat/jsonrpc-client";
+import { debounce } from "debounce";
 
-import { MessageWrapper } from './MessageWrapper'
-import { getLogger } from '../../../../shared/logger'
-import { KeybindAction } from '../../keybindings'
-import { useMessageList } from '../../stores/messagelist'
-import { BackendRemote, onDCEvent } from '../../backend-com'
-import { debouncedUpdateBadgeCounter } from '../../system-integration/badge-counter'
-import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useKeyBindingAction from '../../hooks/useKeyBindingAction'
-import { useHasChanged2 } from '../../hooks/useHasChanged'
-import { useReactionsBar } from '../ReactionsBar'
-import EmptyChatMessage from './EmptyChatMessage'
+import { MessageWrapper } from "./MessageWrapper";
+import { getLogger } from "../../../../shared/logger";
+import { KeybindAction } from "../../keybindings";
+import { useMessageList } from "../../stores/messagelist";
+import { BackendRemote, onDCEvent } from "../../backend-com";
+import { debouncedUpdateBadgeCounter } from "../../system-integration/badge-counter";
+import { MessagesDisplayContext } from "../../contexts/MessagesDisplayContext";
+import useTranslationFunction from "../../hooks/useTranslationFunction";
+import useKeyBindingAction from "../../hooks/useKeyBindingAction";
+import { useHasChanged2 } from "../../hooks/useHasChanged";
+import { useReactionsBar } from "../ReactionsBar";
+import EmptyChatMessage from "./EmptyChatMessage";
 
-const log = getLogger('render/components/message/MessageList')
+const log = getLogger("render/components/message/MessageList");
 
-import type { T } from '@deltachat/jsonrpc-client'
+import type { T } from "@deltachat/jsonrpc-client";
 import {
   RovingTabindexProvider,
   useRovingTabindex,
-} from '../../contexts/RovingTabindex'
+} from "../../contexts/RovingTabindex";
 
 type ChatTypes =
   | C.DC_CHAT_TYPE_SINGLE
   | C.DC_CHAT_TYPE_GROUP
   | C.DC_CHAT_TYPE_BROADCAST
   | C.DC_CHAT_TYPE_MAILINGLIST
-  | C.DC_CHAT_TYPE_UNDEFINED
+  | C.DC_CHAT_TYPE_UNDEFINED;
 
 const onWindowFocus = (accountId: number) => {
-  log.debug('window focused')
+  log.debug("window focused");
   const messageElements = Array.prototype.slice.call(
-    document.querySelectorAll('#message-list .message-observer-bottom')
-  )
+    document.querySelectorAll("#message-list .message-observer-bottom"),
+  );
 
-  const visibleElements = messageElements.filter(el => {
-    const rect = el.getBoundingClientRect()
+  const visibleElements = messageElements.filter((el) => {
+    const rect = el.getBoundingClientRect();
     return (
       rect.top >= 0 &&
       rect.left >= 0 &&
       rect.bottom <=
-      (window.innerHeight || document.documentElement.clientHeight) &&
+        (window.innerHeight || document.documentElement.clientHeight) &&
       rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-    )
-  })
+    );
+  });
 
-  const messageIdsToMarkAsRead = visibleElements.map(el =>
-    Number.parseInt(el.getAttribute('id').split('-')[1])
-  )
+  const messageIdsToMarkAsRead = visibleElements.map((el) =>
+    Number.parseInt(el.getAttribute("id").split("-")[1]),
+  );
 
   if (messageIdsToMarkAsRead.length !== 0) {
     log.debug(
       `window was focused: marking ${messageIdsToMarkAsRead.length} visible messages as read`,
-      messageIdsToMarkAsRead
-    )
+      messageIdsToMarkAsRead,
+    );
     // FYI we also listen for `MsgsNoticed` event
     // to update the badge counter,
     // so `.then(debouncedUpdateBadgeCounter)` is probably not necessary.
     BackendRemote.rpc
       .markseenMsgs(accountId, messageIdsToMarkAsRead)
-      .then(debouncedUpdateBadgeCounter)
+      .then(debouncedUpdateBadgeCounter);
   }
-}
+};
 
 /**
  * Returns a "live" version of `FullChat.freshMessageCounter`.
@@ -83,23 +83,26 @@ const onWindowFocus = (accountId: number) => {
  */
 function useUnreadCount(
   accountId: number,
-  chat: Pick<T.FullChat, 'freshMessageCounter' | 'id'>
+  chat: Pick<T.FullChat, "freshMessageCounter" | "id">,
 ) {
-  const [updatedValue, setUpdatedValue] = useState<number | null>(null)
-  const updatedValueForChat = useRef<typeof chat>()
+  const [updatedValue, setUpdatedValue] = useState<number | null>(null);
+  const updatedValueForChat = useRef<typeof chat>();
 
   useEffect(() => {
-    let outdated = false
+    let outdated = false;
 
     const update = async ({ chatId: eventChatId }: { chatId: number }) => {
       if (chat.id === eventChatId) {
-        const count = await BackendRemote.rpc.getFreshMsgCnt(accountId, chat.id)
+        const count = await BackendRemote.rpc.getFreshMsgCnt(
+          accountId,
+          chat.id,
+        );
         if (!outdated) {
-          setUpdatedValue(count)
-          updatedValueForChat.current = chat
+          setUpdatedValue(count);
+          updatedValueForChat.current = chat;
         }
       }
-    }
+    };
 
     // FYI we have 3 places where we watch the number of unread messages:
     // - App's badge counter
@@ -107,23 +110,23 @@ function useUnreadCount(
     // - useUnreadCount
     // Make sure to update all the places if you update one of them.
     const cleanup = [
-      onDCEvent(accountId, 'IncomingMsg', update),
-      onDCEvent(accountId, 'MsgsNoticed', update),
+      onDCEvent(accountId, "IncomingMsg", update),
+      onDCEvent(accountId, "MsgsNoticed", update),
       () => (outdated = true),
-    ]
-    return () => cleanup.forEach(off => off())
-  }, [accountId, chat])
+    ];
+    return () => cleanup.forEach((off) => off());
+  }, [accountId, chat]);
 
   return updatedValueForChat.current === chat && updatedValue != null
     ? updatedValue
-    : chat.freshMessageCounter
+    : chat.freshMessageCounter;
 }
 
 type Props = {
-  accountId: number
-  chat: T.FullChat
-  refComposer: any
-}
+  accountId: number;
+  chat: T.FullChat;
+  refComposer: any;
+};
 
 export default function MessageList({ accountId, chat, refComposer }: Props) {
   const {
@@ -144,85 +147,84 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
     },
     fetchMoreBottom,
     fetchMoreTop,
-  } = useMessageList(accountId, chat.id)
-  const { hideReactionsBar, isReactionsBarShown } = useReactionsBar()
+  } = useMessageList(accountId, chat.id);
+  const { hideReactionsBar, isReactionsBarShown } = useReactionsBar();
 
-  const messageListRef = useRef<HTMLDivElement | null>(null)
-  const [showJumpDownButton, setShowJumpDownButton] = useState(false)
+  const messageListRef = useRef<HTMLDivElement | null>(null);
+  const [showJumpDownButton, setShowJumpDownButton] = useState(false);
 
   /**
    * If scroll distance to bottom is bigger than this, we'll show
    * the "scroll to bottom" button and not scroll new messages into view.
    */
-  const maxScrollToBottomDistanceConsideredShort = 10
+  const maxScrollToBottomDistanceConsideredShort = 10;
 
-  const onUnreadMessageInView: IntersectionObserverCallback = entries => {
-    if (!chat) return
+  const onUnreadMessageInView: IntersectionObserverCallback = (entries) => {
+    if (!chat) return;
     // Don't mark messages as read if window is not focused
-    if (document.hasFocus() === false) return
+    if (document.hasFocus() === false) return;
 
-    if (scheduler.isLocked('scroll') === true) {
+    if (scheduler.isLocked("scroll") === true) {
       //console.log('onScroll: locked, returning')
-      return
+      return;
     }
 
     setTimeout(() => {
-      log.debug(`onUnreadMessageInView: entries.length: ${entries.length}`)
+      log.debug(`onUnreadMessageInView: entries.length: ${entries.length}`);
 
-      const messageIdsToMarkAsRead = []
+      const messageIdsToMarkAsRead = [];
       for (const entry of entries) {
-        if (!entry.isIntersecting) continue
-        const messageKey = entry.target.getAttribute('id')
-        if (messageKey === null) continue
-        const messageId = messageKey.split('-')[1]
-        const messageHeight = entry.target.clientHeight
+        if (!entry.isIntersecting) continue;
+        const messageKey = entry.target.getAttribute("id");
+        if (messageKey === null) continue;
+        const messageId = messageKey.split("-")[1];
+        const messageHeight = entry.target.clientHeight;
 
         log.debug(
-          `onUnreadMessageInView: messageId ${messageId} height: ${messageHeight} intersectionRate: ${entry.intersectionRatio}`
-        )
+          `onUnreadMessageInView: messageId ${messageId} height: ${messageHeight} intersectionRate: ${entry.intersectionRatio}`,
+        );
         log.debug(
-          `onUnreadMessageInView: messageId ${messageId} marking as read`
-        )
+          `onUnreadMessageInView: messageId ${messageId} marking as read`,
+        );
 
-        messageIdsToMarkAsRead.push(Number.parseInt(messageId))
-        if (unreadMessageInViewIntersectionObserver.current === null) continue
-        unreadMessageInViewIntersectionObserver.current.unobserve(entry.target)
+        messageIdsToMarkAsRead.push(Number.parseInt(messageId));
+        if (unreadMessageInViewIntersectionObserver.current === null) continue;
+        unreadMessageInViewIntersectionObserver.current.unobserve(entry.target);
       }
 
       if (messageIdsToMarkAsRead.length > 0) {
-        const chatId = chat?.id
-        if (!chatId) return
+        const chatId = chat?.id;
+        if (!chatId) return;
         // FYI we also listen for `MsgsNoticed` event
         // to update the badge counter,
         // so `.then(debouncedUpdateBadgeCounter)` is probably not necessary.
         BackendRemote.rpc
           .markseenMsgs(accountId, messageIdsToMarkAsRead)
-          .then(debouncedUpdateBadgeCounter)
+          .then(debouncedUpdateBadgeCounter);
       }
-    })
-  }
+    });
+  };
   const unreadMessageInViewIntersectionObserver: MutableRefObject<IntersectionObserver> =
     useRef(
       new IntersectionObserver(onUnreadMessageInView, {
         root: null,
-        rootMargin: '0px',
+        rootMargin: "0px",
         threshold: [0, 1],
-      })
-    )
+      }),
+    );
 
   useEffect(() => {
-    const onFocus = onWindowFocus.bind(null, accountId)
-    window.addEventListener('focus', onFocus)
-    return () => window.removeEventListener('focus', onFocus)
-  }, [accountId])
+    const onFocus = onWindowFocus.bind(null, accountId);
+    window.addEventListener("focus", onFocus);
+    return () => window.removeEventListener("focus", onFocus);
+  }, [accountId]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     return () => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      unreadMessageInViewIntersectionObserver.current?.disconnect()
-    }
-  }, [])
+      unreadMessageInViewIntersectionObserver.current?.disconnect();
+    };
+  }, []);
 
   const maybeJumpToMessageHack = () => {
     // FYI there is similar code in `messagelist.ts`.
@@ -230,18 +232,18 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
       window.__internal_jump_to_message_asap?.accountId === accountId &&
       window.__internal_jump_to_message_asap.chatId === chat.id
     ) {
-      const jumpArgs = window.__internal_jump_to_message_asap.jumpToMessageArgs
+      const jumpArgs = window.__internal_jump_to_message_asap.jumpToMessageArgs;
       if (jumpArgs && jumpArgs.length > 0) {
-        jumpToMessage(jumpArgs[0])
+        jumpToMessage(jumpArgs[0]);
       }
-      window.__internal_jump_to_message_asap = undefined
+      window.__internal_jump_to_message_asap = undefined;
     }
-  }
-  maybeJumpToMessageHack()
-  window.__internal_check_jump_to_message = maybeJumpToMessageHack
-  const thisMessageListIntanceId = useRef(Symbol())
+  };
+  maybeJumpToMessageHack();
+  window.__internal_check_jump_to_message = maybeJumpToMessageHack;
+  const thisMessageListIntanceId = useRef(Symbol());
   window.__internal_current_message_list_instance_id =
-    thisMessageListIntanceId.current
+    thisMessageListIntanceId.current;
   useEffect(() => {
     // Unset `__internal_check_jump_to_message` when unmounting,
     // so that it's the next component instance
@@ -258,45 +260,45 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
         // This means that another component has already set
         // `__internal_check_jump_to_message`.
         // No need to clean it up.
-        return
+        return;
       }
-      window.__internal_check_jump_to_message = undefined
-    }
-  }, [])
+      window.__internal_check_jump_to_message = undefined;
+    };
+  }, []);
 
-  const pendingProgrammaticSmoothScrollTo = useRef<null | number>(null)
-  const pendingProgrammaticSmoothScrollTimeout = useRef<number>(-1)
+  const pendingProgrammaticSmoothScrollTo = useRef<null | number>(null);
+  const pendingProgrammaticSmoothScrollTimeout = useRef<number>(-1);
 
   const onScroll = useCallback(
     (ev: React.UIEvent<HTMLDivElement> | null) => {
       if (!messageListRef.current) {
-        return
+        return;
       }
-      if (scheduler.isLocked('scroll') === true) {
-        return
+      if (scheduler.isLocked("scroll") === true) {
+        return;
       }
 
       // We might call `onScroll` manually with `null` argument.
       // We only want to hide the reactions bar when _the user_ scrolls,
       // intentionally.
-      if (ev) hideReactionsBar()
+      if (ev) hideReactionsBar();
 
-      const distanceToTop = messageListRef.current.scrollTop
+      const distanceToTop = messageListRef.current.scrollTop;
       const distanceToBottom =
         messageListRef.current.scrollHeight -
         messageListRef.current.scrollTop -
-        messageListRef.current.clientHeight
+        messageListRef.current.clientHeight;
 
       const isNewestMessageLoaded =
-        newestFetchedMessageListItemIndex === messageListItems.length - 1
+        newestFetchedMessageListItemIndex === messageListItems.length - 1;
       const newShowJumpDownButton =
         !isNewestMessageLoaded ||
-        distanceToBottom > maxScrollToBottomDistanceConsideredShort
+        distanceToBottom > maxScrollToBottomDistanceConsideredShort;
       if (newShowJumpDownButton != showJumpDownButton) {
-        setShowJumpDownButton(newShowJumpDownButton)
+        setShowJumpDownButton(newShowJumpDownButton);
       }
       if (!newShowJumpDownButton) {
-        clearJumpStack()
+        clearJumpStack();
       }
 
       // Remember that `distanceToTop` and `distanceToBottom` can both be true.
@@ -312,15 +314,15 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
         // > ...
         // > The scroll offset of the scrollable element being zero.
         if (distanceToTop < 3) {
-          messageListRef.current.scrollTop = 3
+          messageListRef.current.scrollTop = 3;
         }
 
-        log.debug('onScroll: Scrolled to top, fetching more messages!')
-        setTimeout(() => fetchMoreTop(), 0)
+        log.debug("onScroll: Scrolled to top, fetching more messages!");
+        setTimeout(() => fetchMoreTop(), 0);
       }
       if (distanceToBottom < 800) {
-        log.debug('onScroll: Scrolled to bottom, fetching more messages!')
-        setTimeout(() => fetchMoreBottom(), 0)
+        log.debug("onScroll: Scrolled to bottom, fetching more messages!");
+        setTimeout(() => fetchMoreBottom(), 0);
       }
     },
     [
@@ -333,12 +335,12 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
       scheduler,
       setShowJumpDownButton,
       showJumpDownButton,
-    ]
-  )
+    ],
+  );
   const onScrollEnd = useCallback((_ev: Event) => {
-    clearTimeout(pendingProgrammaticSmoothScrollTimeout.current)
-    pendingProgrammaticSmoothScrollTo.current = null
-  }, [])
+    clearTimeout(pendingProgrammaticSmoothScrollTimeout.current);
+    pendingProgrammaticSmoothScrollTo.current = null;
+  }, []);
 
   // This `useLayoutEffect` is made to run whenever `viewState` changes.
   // `viewState` controls the desired scroll position of `messageListRef`.
@@ -346,13 +348,13 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
   // to where `viewState` told it to be, we reset `viewState` back to `null`.
   useLayoutEffect(() => {
     if (!chat) {
-      return
+      return;
     }
     if (!messageListRef.current) {
-      return
+      return;
     }
     if (viewState.scrollTo === null) {
-      return
+      return;
     }
 
     if (pendingProgrammaticSmoothScrollTo.current != null) {
@@ -366,14 +368,14 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
       // This would queue new scrollTo "events" until after
       // the smooth scroll finishes.
       log.debug(
-        'New viewState received, but a previous programmatic smooth scroll ' +
-        "is pending. Let's finish the pending one immediately. " +
-        `Scrolling to ${pendingProgrammaticSmoothScrollTo.current}`
-      )
+        "New viewState received, but a previous programmatic smooth scroll " +
+          "is pending. Let's finish the pending one immediately. " +
+          `Scrolling to ${pendingProgrammaticSmoothScrollTo.current}`,
+      );
       messageListRef.current.scrollTop =
-        pendingProgrammaticSmoothScrollTo.current
-      clearTimeout(pendingProgrammaticSmoothScrollTimeout.current)
-      pendingProgrammaticSmoothScrollTo.current = null
+        pendingProgrammaticSmoothScrollTo.current;
+      clearTimeout(pendingProgrammaticSmoothScrollTimeout.current);
+      pendingProgrammaticSmoothScrollTo.current = null;
 
       // But keep in mind that we record `lastKnownScrollTop`
       // in `chat_view_reducer`, and that recording could happen during
@@ -382,60 +384,60 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
       // `lastKnownScrollTop` too much.
     }
 
-    const { scrollTo, lastKnownScrollHeight } = viewState
+    const { scrollTo, lastKnownScrollHeight } = viewState;
 
     log.debug(
-      'scrollTo: ' + scrollTo.type,
-      'scrollTop:',
+      "scrollTo: " + scrollTo.type,
+      "scrollTop:",
       messageListRef.current.scrollTop,
-      'scrollHeight:',
+      "scrollHeight:",
       messageListRef.current.scrollHeight,
-      'reactionsBar:',
-      isReactionsBarShown
-    )
-    if (scrollTo.type === 'scrollToMessage') {
-      log.debug('scrollTo: scrollToMessage: ' + scrollTo.msgId)
+      "reactionsBar:",
+      isReactionsBarShown,
+    );
+    if (scrollTo.type === "scrollToMessage") {
+      log.debug("scrollTo: scrollToMessage: " + scrollTo.msgId);
 
-      const domElement = document.getElementById(scrollTo.msgId.toString())
+      const domElement = document.getElementById(scrollTo.msgId.toString());
       if (!domElement) {
         log.error(
           "scrollTo: scrollToMessage, couldn't find matching message in dom, returning",
-          domElement
-        )
-        return
+          domElement,
+        );
+        return;
       }
       if (
-        !domElement.classList.contains('message') &&
-        !domElement.classList.contains('info-message') &&
-        !domElement.classList.contains('videochat-invitation') &&
+        !domElement.classList.contains("message") &&
+        !domElement.classList.contains("info-message") &&
+        !domElement.classList.contains("videochat-invitation") &&
         // Currently we have the same `id=` set on both `<li>` and its child.
-        !domElement.firstElementChild?.classList.contains('message') &&
-        !domElement.firstElementChild?.classList.contains('info-message') &&
+        !domElement.firstElementChild?.classList.contains("message") &&
+        !domElement.firstElementChild?.classList.contains("info-message") &&
         !domElement.firstElementChild?.classList.contains(
-          'videochat-invitation'
+          "videochat-invitation",
         )
       ) {
         log.warn(
           `scrollTo: scrollToMessage, found an element with ` +
-          `id=${scrollTo.msgId}, but it's not a message:`,
-          domElement
-        )
+            `id=${scrollTo.msgId}, but it's not a message:`,
+          domElement,
+        );
       }
 
-      domElement.scrollIntoView(scrollTo.scrollIntoViewArg)
+      domElement.scrollIntoView(scrollTo.scrollIntoViewArg);
 
       if (scrollTo.focus) {
         const focusEl = domElement.getElementsByClassName(
-          'roving-tabindex'
-        )[0] as HTMLElement | undefined
+          "roving-tabindex",
+        )[0] as HTMLElement | undefined;
         if (!focusEl) {
           log.error(
-            'scrollTo: failed to focus element:' +
-            'no child element with class "roving-tabindex" found',
-            domElement
-          )
+            "scrollTo: failed to focus element:" +
+              'no child element with class "roving-tabindex" found',
+            domElement,
+          );
         } else {
-          focusEl.focus()
+          focusEl.focus();
         }
       }
 
@@ -447,24 +449,24 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
         // The `<li>` is what implements the animation, so let's ensure that
         // we add the class to the `<li>` element.
         const highlightableElement =
-          domElement.tagName === 'LI' ? domElement : domElement.parentElement
+          domElement.tagName === "LI" ? domElement : domElement.parentElement;
         if (highlightableElement !== null) {
           setTimeout(() => {
             // Stop the animation on the previously highlighted message.
             highlightableElement.parentElement
-              ?.querySelectorAll(':scope > .highlight')
-              .forEach(el => el.classList.remove('highlight'))
+              ?.querySelectorAll(":scope > .highlight")
+              .forEach((el) => el.classList.remove("highlight"));
 
             // Retrigger animation
-            highlightableElement.classList.add('highlight')
-            highlightableElement.style.animation = 'none'
-            highlightableElement.offsetHeight
+            highlightableElement.classList.add("highlight");
+            highlightableElement.style.animation = "none";
+            void void highlightableElement.offsetHeight;
             //@ts-ignore
-            highlightableElement.style.animation = null
-          }, 0)
+            highlightableElement.style.animation = null;
+          }, 0);
         }
       }
-    } else if (scrollTo.type === 'scrollToLastKnownPosition') {
+    } else if (scrollTo.type === "scrollToLastKnownPosition") {
       // "Why need scrollToLastKnownPosition if there is scroll anchoring
       // in browsers already?"
       // https://developer.mozilla.org/en-US/docs/Web/CSS/overflow-anchor/Guide_to_scroll_anchoring
@@ -474,52 +476,52 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
       // when we switch to Tauri, so let's not remove it yet.
 
       log.debug(
-        'scrollTo type: scrollToLastKnownPosition; lastKnownScrollHeight: ' +
-        scrollTo.lastKnownScrollHeight +
-        '; lastKnownScrollTop: ' +
-        scrollTo.lastKnownScrollTop
-      )
+        "scrollTo type: scrollToLastKnownPosition; lastKnownScrollHeight: " +
+          scrollTo.lastKnownScrollHeight +
+          "; lastKnownScrollTop: " +
+          scrollTo.lastKnownScrollTop,
+      );
 
-      if (scrollTo.appendedOn === 'top') {
+      if (scrollTo.appendedOn === "top") {
         messageListRef.current.scrollTop =
           messageListRef.current.scrollHeight -
           scrollTo.lastKnownScrollHeight +
-          scrollTo.lastKnownScrollTop
+          scrollTo.lastKnownScrollTop;
       } else {
-        messageListRef.current.scrollTop = scrollTo.lastKnownScrollTop
+        messageListRef.current.scrollTop = scrollTo.lastKnownScrollTop;
       }
-    } else if (scrollTo.type === 'scrollToPosition') {
+    } else if (scrollTo.type === "scrollToPosition") {
       log.debug(
-        'scrollTo type: scrollToPosition; scrollTop: ' + scrollTo.scrollTop
-      )
-      messageListRef.current.scrollTop = scrollTo.scrollTop
-    } else if (scrollTo.type === 'scrollToBottom' && !isReactionsBarShown) {
+        "scrollTo type: scrollToPosition; scrollTop: " + scrollTo.scrollTop,
+      );
+      messageListRef.current.scrollTop = scrollTo.scrollTop;
+    } else if (scrollTo.type === "scrollToBottom" && !isReactionsBarShown) {
       if (scrollTo.ifClose === true) {
-        const scrollHeight = lastKnownScrollHeight
-        const { scrollTop, clientHeight } = messageListRef.current
-        const scrollBottom = scrollTop + clientHeight
+        const scrollHeight = lastKnownScrollHeight;
+        const { scrollTop, clientHeight } = messageListRef.current;
+        const scrollBottom = scrollTop + clientHeight;
 
         const shouldScrollToBottom =
           scrollBottom >=
-          scrollHeight - maxScrollToBottomDistanceConsideredShort
+          scrollHeight - maxScrollToBottomDistanceConsideredShort;
 
         log.debug(
-          'scrollToBottomIfClose',
+          "scrollToBottomIfClose",
           scrollBottom,
           scrollHeight,
-          shouldScrollToBottom
-        )
+          shouldScrollToBottom,
+        );
 
         if (shouldScrollToBottom) {
-          const scrollTo = messageListRef.current.scrollHeight
+          const scrollTo = messageListRef.current.scrollHeight;
           // Smooth scroll for newly arrived messages.
           // TODO also add this for self-sent messages.
           // In that case 'scrollToMessage' is used though...
           messageListRef.current.scrollTo({
             top: scrollTo,
-            behavior: 'smooth',
-          })
-          pendingProgrammaticSmoothScrollTo.current = scrollTo
+            behavior: "smooth",
+          });
+          pendingProgrammaticSmoothScrollTo.current = scrollTo;
 
           // Smooth scroll duration is not defined by the spec:
           // https://drafts.csswg.org/cssom-view/#scrolling:
@@ -528,7 +530,7 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
           // As of 2024-09, on Firefox it appears to range from
           // 300 to 1000 ms, depending on scroll amount.
           // On Chromium: 50-700
-          const smoothScrollMaxDuration = 1000
+          const smoothScrollMaxDuration = 1000;
 
           // Why is 'scrollend' event not enough?
           // - Because the user might interrup such a scroll and start scrolling
@@ -537,41 +539,41 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
           // - Because 'scrollend' is not supported by WebKit yet
           //   https://webkit.org/b/201556
           //   and we'll be running on WebKit when we switch to Tauri.
-          clearTimeout(pendingProgrammaticSmoothScrollTimeout.current)
+          clearTimeout(pendingProgrammaticSmoothScrollTimeout.current);
           pendingProgrammaticSmoothScrollTimeout.current = window.setTimeout(
             () => {
-              pendingProgrammaticSmoothScrollTo.current = null
+              pendingProgrammaticSmoothScrollTo.current = null;
 
               console.warn(
-                'Smooth scroll: scrollend did not fire before timeout.\n' +
-                'Did the user scroll, or did the smooth scroll take so long?'
-              )
+                "Smooth scroll: scrollend did not fire before timeout.\n" +
+                  "Did the user scroll, or did the smooth scroll take so long?",
+              );
             },
-            smoothScrollMaxDuration
-          )
+            smoothScrollMaxDuration,
+          );
         }
       } else {
         log.debug(
-          'scrollToBottom',
+          "scrollToBottom",
           messageListRef.current.scrollTop,
-          messageListRef.current.scrollHeight
-        )
-        messageListRef.current.scrollTop = messageListRef.current.scrollHeight
+          messageListRef.current.scrollHeight,
+        );
+        messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
       }
     }
     setTimeout(() => {
       // We just scrolled where we needed to, now let's reset the value of
       // `viewState` so that we don't keep scrolling to the same place
       // again and again.
-      unlockScroll()
+      unlockScroll();
 
       setTimeout(() => {
         // Since the scroll position might have changed,
         // let's invoke `onScroll`, e.g. to load more messages if we're close
         // to top / bottom
-        onScroll(null)
-      }, 0)
-    }, 0)
+        onScroll(null);
+      }, 0);
+    }, 0);
   }, [
     chat,
     onScroll,
@@ -580,27 +582,27 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
     viewState.lastKnownScrollHeight,
     viewState.scrollTo,
     isReactionsBarShown,
-  ])
+  ]);
 
   useLayoutEffect(() => {
     if (!refComposer.current) {
-      return
+      return;
     }
 
     const composerTextarea =
-      refComposer.current.querySelector('#composer-textarea')
-    composerTextarea && composerTextarea.focus()
-  }, [refComposer, chat.id])
+      refComposer.current.querySelector("#composer-textarea");
+    composerTextarea && composerTextarea.focus();
+  }, [refComposer, chat.id]);
 
   useLayoutEffect(() => {
     if (!messageListRef.current || !refComposer.current) {
-      return
+      return;
     }
     const composerTextarea =
-      refComposer.current.querySelector('#composer-textarea')
-    composerTextarea && composerTextarea.focus()
-    messageListRef.current.scrollTop = messageListRef.current.scrollHeight
-  }, [refComposer])
+      refComposer.current.querySelector("#composer-textarea");
+    composerTextarea && composerTextarea.focus();
+    messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
+  }, [refComposer]);
 
   // This is a fix for
   // https://github.com/deltachat/deltachat-desktop/issues/3763
@@ -629,55 +631,55 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
   // on the first run and for that we want the contents to be painted already.
   // However, it appears to work either way.
   useEffect(() => {
-    const el = messageListRef.current
+    const el = messageListRef.current;
     if (!el) {
-      return
+      return;
     }
 
-    let prevHeight = el.clientHeight
+    let prevHeight = el.clientHeight;
 
-    const observer = new ResizeObserver(entries => {
-      const entry = entries[0]
+    const observer = new ResizeObserver((entries) => {
+      const entry = entries[0];
       if (!entry) {
-        return
+        return;
       }
-      const newHeight = el.clientHeight
+      const newHeight = el.clientHeight;
       if (newHeight === prevHeight) {
         // In case only width changed or something.
-        return
+        return;
       }
 
       const scrollDistanceToBottomBeforeResize =
-        el.scrollHeight - el.scrollTop - prevHeight
+        el.scrollHeight - el.scrollTop - prevHeight;
       if (
         scrollDistanceToBottomBeforeResize <=
         maxScrollToBottomDistanceConsideredShort
       ) {
-        el.scrollTop = Number.MAX_SAFE_INTEGER
+        el.scrollTop = Number.MAX_SAFE_INTEGER;
         // Sometimes this spews out negative numbers when we're scrolled
         // all the way to the bottom and then resize the window.
         // We'd expect this to be 0 in that case, but as long as
         // it works it's fine I guess.
         log.debug(
           `Message list resized, and distance to bottom was` +
-          ` ${scrollDistanceToBottomBeforeResize} before the resize.` +
-          ` Scrolling to bottom.`
-        )
+            ` ${scrollDistanceToBottomBeforeResize} before the resize.` +
+            ` Scrolling to bottom.`,
+        );
       }
 
-      prevHeight = newHeight
-    })
+      prevHeight = newHeight;
+    });
 
-    observer.observe(el)
+    observer.observe(el);
     return () => {
-      observer.unobserve(el)
-    }
-  }, [])
+      observer.unobserve(el);
+    };
+  }, []);
 
   return (
     <MessagesDisplayContext.Provider
       value={{
-        context: 'chat_messagelist',
+        context: "chat_messagelist",
         chatId: chat.id,
         isDeviceChat: chat.isDeviceChat,
       }}
@@ -710,30 +712,30 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
         jumpToMessageStack={jumpToMessageStack}
       />
     </MessagesDisplayContext.Provider>
-  )
+  );
 }
 
 /** Object holding type information about a chat for messages in that chat */
 export type ConversationType = {
   /* whether this chat has multiple participants */
-  hasMultipleParticipants: boolean
-  isDeviceChat: boolean
-  chatType: ChatTypes
-}
+  hasMultipleParticipants: boolean;
+  isDeviceChat: boolean;
+  chatType: ChatTypes;
+};
 
 export const MessageListInner = React.memo(
   (props: {
-    onScroll: (event: React.UIEvent<HTMLDivElement>) => void
-    onScrollEnd: (event: Event) => void
-    oldestFetchedMessageIndex: number
-    messageListItems: T.MessageListItem[]
-    activeView: T.MessageListItem[]
-    messageCache: { [msgId: number]: T.MessageLoadResult | undefined }
-    messageListRef: React.MutableRefObject<HTMLDivElement | null>
-    chat: T.FullChat
-    loaded: boolean
-    unreadMessageInViewIntersectionObserver: React.MutableRefObject<IntersectionObserver | null>
-    loadMissingMessages: () => Promise<void>
+    onScroll: (event: React.UIEvent<HTMLDivElement>) => void;
+    onScrollEnd: (event: Event) => void;
+    oldestFetchedMessageIndex: number;
+    messageListItems: T.MessageListItem[];
+    activeView: T.MessageListItem[];
+    messageCache: { [msgId: number]: T.MessageLoadResult | undefined };
+    messageListRef: React.MutableRefObject<HTMLDivElement | null>;
+    chat: T.FullChat;
+    loaded: boolean;
+    unreadMessageInViewIntersectionObserver: React.MutableRefObject<IntersectionObserver | null>;
+    loadMissingMessages: () => Promise<void>;
   }) => {
     const {
       onScroll,
@@ -746,7 +748,7 @@ export const MessageListInner = React.memo(
       loaded,
       unreadMessageInViewIntersectionObserver,
       loadMissingMessages,
-    } = props
+    } = props;
 
     const conversationType: ConversationType = {
       hasMultipleParticipants:
@@ -755,24 +757,26 @@ export const MessageListInner = React.memo(
         chat.chatType === C.DC_CHAT_TYPE_BROADCAST,
       isDeviceChat: chat.isDeviceChat as boolean,
       chatType: chat.chatType as number,
-    }
+    };
 
     useKeyBindingAction(KeybindAction.MessageList_PageUp, () => {
       if (messageListRef.current) {
         messageListRef.current.scrollTop =
-          messageListRef.current.scrollTop - messageListRef.current.clientHeight
+          messageListRef.current.scrollTop -
+          messageListRef.current.clientHeight;
         // @ts-ignore
-        onScroll(null)
+        onScroll(null);
       }
-    })
+    });
     useKeyBindingAction(KeybindAction.MessageList_PageDown, () => {
       if (messageListRef.current) {
         messageListRef.current.scrollTop =
-          messageListRef.current.scrollTop + messageListRef.current.clientHeight
+          messageListRef.current.scrollTop +
+          messageListRef.current.clientHeight;
         // @ts-ignore
-        onScroll(null)
+        onScroll(null);
       }
-    })
+    });
 
     // This fixes bad FPS when scrolling the chat on some devices,
     // e.g. on one of mine, Windows with a not-good GPU.
@@ -805,86 +809,86 @@ export const MessageListInner = React.memo(
     // E.g. tinker with `position: absolte`, `z-index` or something IDK.
     // [MDN docs say](https://developer.mozilla.org/en-US/docs/Web/CSS/will-change):
     // > `will-change` is intended to be used as a last resort
-    const scrolledRecently = useRef(false)
+    const scrolledRecently = useRef(false);
     const onScrolledRecentlyChange = useCallback(
       (newVal: boolean) => {
         if (scrolledRecently.current === newVal) {
-          return
+          return;
         }
-        scrolledRecently.current = newVal
+        scrolledRecently.current = newVal;
 
         if (messageListRef.current == undefined) {
-          return
+          return;
         }
         messageListRef.current.style.willChange = newVal
-          ? 'scroll-position'
-          : ''
+          ? "scroll-position"
+          : "";
       },
-      [messageListRef]
-    )
+      [messageListRef],
+    );
     const debouncedResetScrolledRecently = useMemo(
       () => debounce(() => onScrolledRecentlyChange(false), 3000),
-      [onScrolledRecentlyChange]
-    )
+      [onScrolledRecentlyChange],
+    );
     const onScroll2 = (...args: Parameters<typeof onScroll>) => {
-      const switchedChatRecently = Date.now() - switchedChatAt.current < 200
+      const switchedChatRecently = Date.now() - switchedChatAt.current < 200;
       // Ignore scrolls that are not caused by the user, because this
       // gives no indication as to whether they're gonna scroll soon.
       // Maybe they're just jumping between chats.
-      const isScrollProgrammatic = switchedChatRecently
+      const isScrollProgrammatic = switchedChatRecently;
       if (!isScrollProgrammatic) {
-        onScrolledRecentlyChange(true)
-        debouncedResetScrolledRecently()
+        onScrolledRecentlyChange(true);
+        debouncedResetScrolledRecently();
       }
 
-      onScroll(...args)
-    }
-    const hasChatChanged = useHasChanged2(chat)
-    const switchedChatAt = useRef(0)
+      onScroll(...args);
+    };
+    const hasChatChanged = useHasChanged2(chat);
+    const switchedChatAt = useRef(0);
     if (hasChatChanged) {
-      switchedChatAt.current = Date.now()
+      switchedChatAt.current = Date.now();
     }
 
     // onScrollend is not defined in React, let's attach manually...
     useEffect(() => {
-      const el = messageListRef.current
+      const el = messageListRef.current;
       if (!el) {
-        return
+        return;
       }
 
-      el.addEventListener('scrollend', onScrollEnd)
-      return () => el.removeEventListener('scrollend', onScrollEnd)
+      el.addEventListener("scrollend", onScrollEnd);
+      return () => el.removeEventListener("scrollend", onScrollEnd);
 
       // Yes, re-run on every re-render, because `messageListRef` might change
       // over the lifetime of this component.
-    })
+    });
 
     if (!loaded) {
       return (
-        <div id='message-list' ref={messageListRef} onScroll={onScroll2}>
+        <div id="message-list" ref={messageListRef} onScroll={onScroll2}>
           <ol></ol>
         </div>
-      )
+      );
     }
 
     return (
-      <div id='message-list' ref={messageListRef} onScroll={onScroll2}>
+      <div id="message-list" ref={messageListRef} onScroll={onScroll2}>
         <ol>
           <RovingTabindexProvider wrapperElementRef={messageListRef}>
             {messageListItems.length === 0 && <EmptyChatMessage chat={chat} />}
-            {activeView.map(messageId => {
-              if (messageId.kind === 'dayMarker') {
+            {activeView.map((messageId) => {
+              if (messageId.kind === "dayMarker") {
                 return (
                   <DayMarker
                     key={`daymarker-${messageId.timestamp}`}
                     timestamp={messageId.timestamp}
                   />
-                )
+                );
               }
 
-              if (messageId.kind === 'message') {
-                const message = messageCache[messageId.msg_id]
-                if (message?.kind === 'message') {
+              if (messageId.kind === "message") {
+                const message = messageCache[messageId.msg_id];
+                if (message?.kind === "message") {
                   return (
                     <MessageWrapper
                       key={messageId.msg_id}
@@ -896,55 +900,55 @@ export const MessageListInner = React.memo(
                         unreadMessageInViewIntersectionObserver
                       }
                     />
-                  )
-                } else if (message?.kind === 'loadingError') {
+                  );
+                } else if (message?.kind === "loadingError") {
                   return (
                     <MessageLoadingError
                       messageId={messageId}
                       message={message}
                     />
-                  )
+                  );
                 } else {
                   // setTimeout tells it to call method in next event loop iteration, so after rendering
                   // it is debounced later so we can call it here multiple times and it's ok
-                  setTimeout(loadMissingMessages)
-                  return <MessageLoading messageId={messageId} />
+                  setTimeout(loadMissingMessages);
+                  return <MessageLoading messageId={messageId} />;
                 }
               }
             })}
           </RovingTabindexProvider>
         </ol>
       </div>
-    )
+    );
   },
   (prevProps, nextProps) => {
     const areEqual: boolean =
       prevProps.activeView === nextProps.activeView &&
       prevProps.messageCache === nextProps.messageCache &&
       prevProps.oldestFetchedMessageIndex ===
-      nextProps.oldestFetchedMessageIndex &&
-      prevProps.onScroll === nextProps.onScroll
-    return areEqual
-  }
-)
+        nextProps.oldestFetchedMessageIndex &&
+      prevProps.onScroll === nextProps.onScroll;
+    return areEqual;
+  },
+);
 
 function MessageLoadingError({
   messageId,
   message,
 }: {
-  messageId: T.MessageListItem & { kind: 'message' }
-  message: T.MessageLoadResult
+  messageId: T.MessageListItem & { kind: "message" };
+  message: T.MessageLoadResult;
 }) {
-  const ref = useRef<HTMLDivElement>(null)
-  const rovingTabindex = useRovingTabindex(ref)
+  const ref = useRef<HTMLDivElement>(null);
+  const rovingTabindex = useRovingTabindex(ref);
 
   return (
-    <div className='info-message' id={String(messageId.msg_id)}>
+    <div className="info-message" id={String(messageId.msg_id)}>
       <div
         ref={ref}
-        className={'bubble ' + rovingTabindex.className}
+        className={"bubble " + rovingTabindex.className}
         style={{
-          backgroundColor: 'rgba(55,0,0,0.5)',
+          backgroundColor: "rgba(55,0,0,0.5)",
         }}
         tabIndex={rovingTabindex.tabIndex}
         onKeyDown={rovingTabindex.onKeydown}
@@ -953,23 +957,23 @@ function MessageLoadingError({
         loading message {messageId.msg_id} failed: {message.error}
       </div>
     </div>
-  )
+  );
 }
 function MessageLoading({
   messageId,
 }: {
-  messageId: T.MessageListItem & { kind: 'message' }
+  messageId: T.MessageListItem & { kind: "message" };
 }) {
-  const ref = useRef<HTMLDivElement>(null)
-  const rovingTabindex = useRovingTabindex(ref)
+  const ref = useRef<HTMLDivElement>(null);
+  const rovingTabindex = useRovingTabindex(ref);
 
   return (
-    <div className='info-message' id={String(messageId.msg_id)}>
+    <div className="info-message" id={String(messageId.msg_id)}>
       <div
         ref={ref}
-        className={'bubble ' + rovingTabindex.className}
+        className={"bubble " + rovingTabindex.className}
         style={{
-          backgroundColor: 'rgba(55,0,0,0.5)',
+          backgroundColor: "rgba(55,0,0,0.5)",
         }}
         tabIndex={rovingTabindex.tabIndex}
         onKeyDown={rovingTabindex.onKeydown}
@@ -978,7 +982,7 @@ function MessageLoading({
         Loading Message {messageId.msg_id}
       </div>
     </div>
-  )
+  );
 }
 
 function JumpDownButton({
@@ -988,46 +992,46 @@ function JumpDownButton({
   jumpToMessage,
   jumpToMessageStack,
 }: {
-  hidden: boolean
-  accountId: number
-  chat: Parameters<typeof useUnreadCount>[1]
+  hidden: boolean;
+  accountId: number;
+  chat: Parameters<typeof useUnreadCount>[1];
   jumpToMessage: ReturnType<
     typeof useMessageList
-  >['store']['effect']['jumpToMessage']
-  jumpToMessageStack: number[]
+  >["store"]["effect"]["jumpToMessage"];
+  jumpToMessageStack: number[];
 }) {
-  const tx = useTranslationFunction()
+  const tx = useTranslationFunction();
 
-  const countUnreadMessages = useUnreadCount(accountId, chat)
+  const countUnreadMessages = useUnreadCount(accountId, chat);
 
   if (hidden) {
-    return null
+    return null;
   }
 
-  let countToShow: string = countUnreadMessages.toString()
+  let countToShow: string = countUnreadMessages.toString();
   if (countUnreadMessages > 99) {
-    countToShow = '99+'
+    countToShow = "99+";
   }
 
   return (
     <>
-      <div className='jump-down-button'>
+      <div className="jump-down-button">
         <div
           className={classNames(
-            'counter',
-            countToShow.length === 3 && 'counter-3digits'
+            "counter",
+            countToShow.length === 3 && "counter-3digits",
           )}
           // Even though this is not focusable as of the time of writing,
           // let's still apply label, for future-proofing.
-          aria-label={tx('chat_n_new_messages', String(countUnreadMessages), {
+          aria-label={tx("chat_n_new_messages", String(countUnreadMessages), {
             quantity: countUnreadMessages,
           })}
-          style={countUnreadMessages === 0 ? { visibility: 'hidden' } : {}}
+          style={countUnreadMessages === 0 ? { visibility: "hidden" } : {}}
         >
           {countToShow}
         </div>
         <button
-          className='button'
+          className="button"
           onClick={() => {
             jumpToMessage({
               msgId: undefined,
@@ -1035,53 +1039,53 @@ function JumpDownButton({
               // 'center' is for when we're jumping the message stack.
               // When the stack is empty, we'll jump to last message,
               // and 'center' will make the chat scroll down all the way.
-              scrollIntoViewArg: { block: 'center' },
+              scrollIntoViewArg: { block: "center" },
               focus: false,
-            })
+            });
           }}
           // Technically this is not always "to bottom",
           // but perhaps it's good enough.
-          aria-label={tx('menu_scroll_to_bottom')}
+          aria-label={tx("menu_scroll_to_bottom")}
         >
           <div
             className={
-              'icon ' + (jumpToMessageStack.length > 0 ? 'back' : 'down')
+              "icon " + (jumpToMessageStack.length > 0 ? "back" : "down")
             }
           />
         </button>
       </div>
     </>
-  )
+  );
 }
 
 export function DayMarker(props: { timestamp: number }) {
-  const { timestamp } = props
-  const tx = useTranslationFunction()
+  const { timestamp } = props;
+  const tx = useTranslationFunction();
 
-  const ref = useRef<HTMLDivElement>(null)
+  const ref = useRef<HTMLDivElement>(null);
   // Yes, we want daymakers to be focusable.
   // See https://github.com/deltachat/deltachat-desktop/issues/2141
   // > Also make the divider items proper list items that can be focused,
   // > so users know when they traverse to the next/previous date.
-  const rovingTabindex = useRovingTabindex(ref)
+  const rovingTabindex = useRovingTabindex(ref);
 
   return (
-    <li className='info-message daymarker'>
+    <li className="info-message daymarker">
       <div
         ref={ref}
         className={`bubble ${rovingTabindex.className}`}
-        style={{ textTransform: 'capitalize' }}
+        style={{ textTransform: "capitalize" }}
         tabIndex={rovingTabindex.tabIndex}
         onKeyDown={rovingTabindex.onKeydown}
         onFocus={rovingTabindex.setAsActiveElement}
       >
         {moment.unix(timestamp).calendar(null, {
-          sameDay: `[${tx('today')}]`,
-          lastDay: `[${tx('yesterday')}]`,
-          lastWeek: 'LL',
-          sameElse: 'LL',
+          sameDay: `[${tx("today")}]`,
+          lastDay: `[${tx("yesterday")}]`,
+          lastWeek: "LL",
+          sameElse: "LL",
         })}
       </div>
     </li>
-  )
+  );
 }

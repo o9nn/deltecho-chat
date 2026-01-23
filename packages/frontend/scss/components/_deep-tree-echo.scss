@@ -1,5 +1,5 @@
 /* Deep Tree Echo Bot Styling - Celestial Consciousness Interface */
-@use 'sass:color';
+@use "sass:color";
 
 /* Mesmerizing Toggle Switch Styling */
 .toggle-switch-container {
@@ -18,7 +18,7 @@
     overflow: hidden;
 
     &:before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: 0;
@@ -37,7 +37,7 @@
     }
 
     &:after {
-      content: '';
+      content: "";
       position: absolute;
       width: 100%;
       height: 10px;
@@ -97,7 +97,7 @@
 
       &.radiant-glow {
         &:after {
-          content: '';
+          content: "";
           position: absolute;
           width: 16px;
           height: 16px;
@@ -259,7 +259,7 @@
         display: flex;
         align-items: center;
 
-        input[type='checkbox'] {
+        input[type="checkbox"] {
           margin-left: auto;
         }
       }
@@ -270,8 +270,8 @@
         margin-top: 0.5rem;
       }
 
-      input[type='text'],
-      input[type='password'],
+      input[type="text"],
+      input[type="password"],
       textarea {
         padding: 0.75rem 1rem;
         border-radius: 4px;
@@ -463,7 +463,7 @@ $echo-security-color: #f1c40f;
 // Main Deep Tree Echo Bot container
 .deep-tree-echo-bot {
   position: relative;
-  font-family: 'Open Sans', system-ui, sans-serif;
+  font-family: "Open Sans", system-ui, sans-serif;
   border-radius: 12px;
   background-color: rgba(color.adjust($echo-dark-color, $lightness: 65%), 0.8);
   padding: 20px;
@@ -473,7 +473,7 @@ $echo-security-color: #f1c40f;
 
   // Subtle neural network pattern background
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -515,7 +515,7 @@ $echo-security-color: #f1c40f;
       );
 
       &::after {
-        content: '';
+        content: "";
         position: absolute;
         width: 100%;
         height: 100%;
@@ -591,7 +591,7 @@ $echo-security-color: #f1c40f;
 
     // Left-pointing triangle indicator
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       top: -8px;
       left: 20px;
@@ -618,7 +618,7 @@ $echo-security-color: #f1c40f;
       overflow: hidden;
 
       &::after {
-        content: '';
+        content: "";
         position: absolute;
         top: 0;
         left: 0;

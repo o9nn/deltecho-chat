@@ -1,11 +1,11 @@
-const subjectElement = document.getElementById('subject')
-const fromElement = document.getElementById('sender')
-const receiveTimeElement = document.getElementById('receive-time')
-const networkCheckbox = document.getElementById('toggle_network')
-const networkButtonLabel = document.getElementById('toggle_network_label')
-const networkMoreButton = document.getElementById('toggle_network_more_button')
+const subjectElement = document.getElementById("subject");
+const fromElement = document.getElementById("sender");
+const receiveTimeElement = document.getElementById("receive-time");
+const networkCheckbox = document.getElementById("toggle_network");
+const networkButtonLabel = document.getElementById("toggle_network_label");
+const networkMoreButton = document.getElementById("toggle_network_more_button");
 
-window.network_enabled = false
+window.network_enabled = false;
 
 const promise = window.htmlview
   .getInfo()
@@ -17,40 +17,40 @@ const promise = window.htmlview
       toggle_network,
       networkButtonLabelText,
     }) => {
-      ;(subjectElement.innerText = subject), (fromElement.innerText = from)
-      networkButtonLabel.innerText = networkButtonLabelText
-      networkCheckbox.checked = window.network_enabled = toggle_network
-      receiveTimeElement.innerText = receiveTime
-    }
-  )
+      (subjectElement.innerText = subject), (fromElement.innerText = from);
+      networkButtonLabel.innerText = networkButtonLabelText;
+      networkCheckbox.checked = window.network_enabled = toggle_network;
+      receiveTimeElement.innerText = receiveTime;
+    },
+  );
 
-networkCheckbox.onclick = ev => {
-  ev.preventDefault()
-  const new_value = !window.network_enabled
+networkCheckbox.onclick = (ev) => {
+  ev.preventDefault();
+  const new_value = !window.network_enabled;
   window.htmlview.changeAllowNetwork(new_value).then(() => {
-    networkCheckbox.checked = new_value
-    window.network_enabled = new_value
-  })
-}
+    networkCheckbox.checked = new_value;
+    window.network_enabled = new_value;
+  });
+};
 
-networkMoreButton.onclick = ev => {
+networkMoreButton.onclick = (ev) => {
   /** @type {MouseEvent} */
-  const event = ev
-  const { x, y } = event
-  window.htmlview.openMoreMenu({ x, y })
-}
+  const event = ev;
+  const { x, y } = event;
+  window.htmlview.openMoreMenu({ x, y });
+};
 
-const contentElement = document.getElementById('content')
+const contentElement = document.getElementById("content");
 function updateContentBounds() {
-  const { x, y, width, height } = contentElement.getBoundingClientRect()
+  const { x, y, width, height } = contentElement.getBoundingClientRect();
   window.htmlview.setContentBounds({
     x: Math.floor(x),
     y: Math.floor(y),
     width: Math.floor(width),
     height: Math.floor(height),
-  })
+  });
 }
-window.onresize = updateContentBounds
+window.onresize = updateContentBounds;
 
 // when load of meta data Finished
-promise.then(updateContentBounds)
+promise.then(updateContentBounds);

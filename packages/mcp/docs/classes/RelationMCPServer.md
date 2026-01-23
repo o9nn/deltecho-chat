@@ -47,13 +47,13 @@ Holds the virtual models (Vi containing Vo) that form the inverted mirror.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `relation` | `RelationInterface` |
-| `agent` | `AgentMembrane` |
-| `arena` | `ArenaMembrane` |
-| `virtualAgent` | [`VirtualAgentModel`](../interfaces/VirtualAgentModel.md) |
-| `config` | `Partial`\<[`RelationMCPConfig`](../interfaces/RelationMCPConfig.md)\> |
+| Name           | Type                                                                   |
+| :------------- | :--------------------------------------------------------------------- |
+| `relation`     | `RelationInterface`                                                    |
+| `agent`        | `AgentMembrane`                                                        |
+| `arena`        | `ArenaMembrane`                                                        |
+| `virtualAgent` | [`VirtualAgentModel`](../interfaces/VirtualAgentModel.md)              |
+| `config`       | `Partial`\<[`RelationMCPConfig`](../interfaces/RelationMCPConfig.md)\> |
 
 #### Returns
 
@@ -71,19 +71,19 @@ EventEmitter.constructor
 
 ### listResources
 
-▸ **listResources**(): \{ `uri`: `string` ; `name`: `string` ; `description`: `string`  }[]
+▸ **listResources**(): \{ `uri`: `string` ; `name`: `string` ; `description`: `string` }[]
 
 Handle list_resources request
 
 #### Returns
 
-\{ `uri`: `string` ; `name`: `string` ; `description`: `string`  }[]
+\{ `uri`: `string` ; `name`: `string` ; `description`: `string` }[]
 
 #### Defined in
 
 [src/relation-mcp/index.ts:87](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/relation-mcp/index.ts#L87)
 
-___
+---
 
 ### readResource
 
@@ -93,8 +93,8 @@ Handle read_resource request
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name  | Type     |
+| :---- | :------- |
 | `uri` | `string` |
 
 #### Returns
@@ -105,23 +105,23 @@ Handle read_resource request
 
 [src/relation-mcp/index.ts:94](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/relation-mcp/index.ts#L94)
 
-___
+---
 
 ### listTools
 
-▸ **listTools**(): \{ `name`: `string` ; `description`: `string` ; `inputSchema`: `object`  }[]
+▸ **listTools**(): \{ `name`: `string` ; `description`: `string` ; `inputSchema`: `object` }[]
 
 Handle list_tools request
 
 #### Returns
 
-\{ `name`: `string` ; `description`: `string` ; `inputSchema`: `object`  }[]
+\{ `name`: `string` ; `description`: `string` ; `inputSchema`: `object` }[]
 
 #### Defined in
 
 [src/relation-mcp/index.ts:121](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/relation-mcp/index.ts#L121)
 
-___
+---
 
 ### callTool
 
@@ -131,9 +131,9 @@ Handle call_tool request
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `name` | `string` |
+| Name   | Type      |
+| :----- | :-------- |
+| `name` | `string`  |
 | `args` | `unknown` |
 
 #### Returns
@@ -144,23 +144,23 @@ Handle call_tool request
 
 [src/relation-mcp/index.ts:132](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/relation-mcp/index.ts#L132)
 
-___
+---
 
 ### listPrompts
 
-▸ **listPrompts**(): \{ `name`: `string` ; `description`: `string` ; `arguments?`: \{ `name`: `string` ; `description`: `string` ; `required`: `boolean`  }[]  }[]
+▸ **listPrompts**(): \{ `name`: `string` ; `description`: `string` ; `arguments?`: \{ `name`: `string` ; `description`: `string` ; `required`: `boolean` }[] }[]
 
 Handle list_prompts request
 
 #### Returns
 
-\{ `name`: `string` ; `description`: `string` ; `arguments?`: \{ `name`: `string` ; `description`: `string` ; `required`: `boolean`  }[]  }[]
+\{ `name`: `string` ; `description`: `string` ; `arguments?`: \{ `name`: `string` ; `description`: `string` ; `required`: `boolean` }[] }[]
 
 #### Defined in
 
 [src/relation-mcp/index.ts:150](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/relation-mcp/index.ts#L150)
 
-___
+---
 
 ### getPrompt
 
@@ -170,9 +170,9 @@ Handle get_prompt request
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `name` | `string` |
+| Name     | Type                           |
+| :------- | :----------------------------- |
+| `name`   | `string`                       |
 | `_args?` | `Record`\<`string`, `string`\> |
 
 #### Returns
@@ -183,7 +183,7 @@ Handle get_prompt request
 
 [src/relation-mcp/index.ts:161](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/relation-mcp/index.ts#L161)
 
-___
+---
 
 ### startMirrorSync
 
@@ -199,7 +199,7 @@ Start periodic mirror synchronization
 
 [src/relation-mcp/index.ts:197](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/relation-mcp/index.ts#L197)
 
-___
+---
 
 ### stopMirrorSync
 
@@ -215,7 +215,7 @@ Stop mirror synchronization
 
 [src/relation-mcp/index.ts:210](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/relation-mcp/index.ts#L210)
 
-___
+---
 
 ### getVirtualAgent
 
@@ -231,7 +231,7 @@ Get virtual agent model (Vi)
 
 [src/relation-mcp/index.ts:319](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/relation-mcp/index.ts#L319)
 
-___
+---
 
 ### getVirtualArena
 
@@ -247,7 +247,7 @@ Get virtual arena model (Vo)
 
 [src/relation-mcp/index.ts:326](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/relation-mcp/index.ts#L326)
 
-___
+---
 
 ### updateVirtualAgent
 
@@ -257,8 +257,8 @@ Update virtual agent model
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name     | Type                                                                   |
+| :------- | :--------------------------------------------------------------------- |
 | `update` | `Partial`\<[`VirtualAgentModel`](../interfaces/VirtualAgentModel.md)\> |
 
 #### Returns
@@ -269,7 +269,7 @@ Update virtual agent model
 
 [src/relation-mcp/index.ts:333](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/relation-mcp/index.ts#L333)
 
-___
+---
 
 ### updateVirtualArena
 
@@ -279,8 +279,8 @@ Update virtual arena model
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name     | Type                                                                   |
+| :------- | :--------------------------------------------------------------------- |
 | `update` | `Partial`\<[`VirtualArenaModel`](../interfaces/VirtualArenaModel.md)\> |
 
 #### Returns
@@ -291,7 +291,7 @@ Update virtual arena model
 
 [src/relation-mcp/index.ts:341](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/relation-mcp/index.ts#L341)
 
-___
+---
 
 ### shutdown
 
@@ -307,7 +307,7 @@ Shutdown the server
 
 [src/relation-mcp/index.ts:353](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/relation-mcp/index.ts#L353)
 
-___
+---
 
 ### getRelation
 
@@ -321,7 +321,7 @@ ___
 
 [src/relation-mcp/index.ts:362](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/relation-mcp/index.ts#L362)
 
-___
+---
 
 ### getAgent
 
@@ -335,7 +335,7 @@ ___
 
 [src/relation-mcp/index.ts:366](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/relation-mcp/index.ts#L366)
 
-___
+---
 
 ### getArena
 
@@ -349,7 +349,7 @@ ___
 
 [src/relation-mcp/index.ts:370](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/relation-mcp/index.ts#L370)
 
-___
+---
 
 ### getConfig
 

@@ -8,16 +8,13 @@ Live2D Cubism Editor で出力したモデルを表示するアプリケーシ�
 
 Cubism Web Framework および Live2D Cubism Core と組み合わせて使用します。
 
-
 ## ライセンス
 
 本 SDK を使用する前に、[ライセンス](LICENSE.md)をご確認ください。
 
-
 ## お知らせ
 
 本 SDK を使用する前に、[お知らせ](NOTICE.ja.md)をご確認ください。
-
 
 ## Cubism 5新機能や過去バージョンとの互換性について
 
@@ -37,7 +34,6 @@ Cubism 5 Editorに搭載された新機能のSDK対応については [こちら
    └─ TypeScript    # TypeScript のサンプルプロジェクトが含まれるディレクトリ
 ```
 
-
 ## Live2D Cubism Core for Web
 
 モデルをロードするためのライブラリです。
@@ -46,16 +42,15 @@ Cubism 5 Editorに搭載された新機能のSDK対応については [こちら
 [こちら](https://www.live2d.com/download/cubism-sdk/download-web/)からCubism SDK for Webをダウンロードして、
 Coreディレクトリのファイルをコピーしてください。
 
-
 ## 開発環境構築
 
 1. [Node.js] と [Visual Studio Code] をインストールします
 1. Visual Studio Code で **本 SDK のトップディレクトリ** を開き、推奨拡張機能をインストールします
-    * ポップアップ通知の他、拡張機能タブから `@recommended` を入力することで確認できます
+   - ポップアップ通知の他、拡張機能タブから `@recommended` を入力することで確認できます
 
 ### サンプルデモの動作確認
 
-コマンドパレット（*View > Command Palette...*）で `>Tasks: Run Task` を入力することで、タスク一覧が表示されます。
+コマンドパレット（_View > Command Palette..._）で `>Tasks: Run Task` を入力することで、タスク一覧が表示されます。
 
 1. タスク一覧から　`npm: install - Samples/TypeScript/Demo` を選択して依存パッケージのダウンロードを行います
 1. タスク一覧から `npm: build - Samples/TypeScript/Demo` を選択してサンプルデモのビルドを行います
@@ -69,17 +64,15 @@ NOTE: デバック用の設定は、`.vscode/tasks.json` に記述していま�
 
 ### プロジェクトのデバック
 
-Visual Studio Code で **本 SDK のトップディレクトリ** を開き、 *F5* キーを入力すると Debugger for Chrome が起動します。
+Visual Studio Code で **本 SDK のトップディレクトリ** を開き、 _F5_ キーを入力すると Debugger for Chrome が起動します。
 
 Visual Studio Code 上でブレイクポイントを貼って Chrome ブラウザと連動してデバックを行うことができます。
 
 NOTE: デバック用の設定は、`.vscode/launch.json` に記述しています。
 
-
 ## SDKマニュアル
 
 [Cubism SDK Manual](https://docs.live2d.com/cubism-sdk-manual/top/)
-
 
 ## 変更履歴
 
@@ -89,36 +82,33 @@ Framework : [CHANGELOG.md](Framework/CHANGELOG.md)
 
 Core : [CHANGELOG.md](Core/CHANGELOG.md)
 
-
 ## 開発環境
 
 ### Node.js
 
-* 24.0.1
-* 22.15.0
-
+- 24.0.1
+- 22.15.0
 
 ## 動作確認環境
 
-| プラットフォーム | ブラウザ | バージョン |
-| --- | --- | --- |
-| Android | Google Chrome | 136.0.7103.87 |
-| Android | Microsoft Edge | 136.0.3240.50 |
-| Android | Mozilla Firefox | 138.0.2 |
-| iOS / iPadOS | Google Chrome | 136.0.7103.91 |
-| iOS / iPadOS | Microsoft Edge | 136.0.3240.61 |
-| iOS / iPadOS | Mozilla Firefox | 138.1 |
-| iOS / iPadOS | Safari | 18.4 |
-| macOS | Google Chrome | 136.0.7103.93 |
-| macOS | Microsoft Edge | 136.0.3240.64 |
-| macOS | Mozilla Firefox | 138.0.1 |
-| macOS | Safari | 18.4 |
-| Windows | Google Chrome | 136.0.7103.93 |
-| Windows | Microsoft Edge | 136.0.3240.64 |
-| Windows | Mozilla Firefox | 138.0.1 |
+| プラットフォーム | ブラウザ        | バージョン    |
+| ---------------- | --------------- | ------------- |
+| Android          | Google Chrome   | 136.0.7103.87 |
+| Android          | Microsoft Edge  | 136.0.3240.50 |
+| Android          | Mozilla Firefox | 138.0.2       |
+| iOS / iPadOS     | Google Chrome   | 136.0.7103.91 |
+| iOS / iPadOS     | Microsoft Edge  | 136.0.3240.61 |
+| iOS / iPadOS     | Mozilla Firefox | 138.1         |
+| iOS / iPadOS     | Safari          | 18.4          |
+| macOS            | Google Chrome   | 136.0.7103.93 |
+| macOS            | Microsoft Edge  | 136.0.3240.64 |
+| macOS            | Mozilla Firefox | 138.0.1       |
+| macOS            | Safari          | 18.4          |
+| Windows          | Google Chrome   | 136.0.7103.93 |
+| Windows          | Microsoft Edge  | 136.0.3240.64 |
+| Windows          | Mozilla Firefox | 138.0.1       |
 
 Note: 動作確認時のサーバの起動は `./Samples/TypeScript/Demo/package.json` の `serve` スクリプトを使用して行っています。
-
 
 ## プロジェクトへの貢献
 
@@ -135,7 +125,6 @@ Live2Dコミュニティでは、問題のレポートと機能リクエスト�
 ### 提案
 
 SDKの将来についてのフィードバックにも関心があります。Live2Dコミュニティで提案や機能のリクエストを送信できます。このプロセスをより効果的にするために、それらをより明確に定義するのに役立つより多くの情報を含めるようお願いしています。
-
 
 ## フォーラム
 

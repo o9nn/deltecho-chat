@@ -1,19 +1,19 @@
-import { getLogger } from '../../../../shared/logger'
+import { getLogger } from "../../../../shared/logger";
 
-const log = getLogger('renderer/VisionCapabilities')
+const log = getLogger("renderer/VisionCapabilities");
 
 /**
  * Class that provides visual recognition capabilities using the browser's ML capabilities
  * This allows Deep Tree Echo to "see" images and understand their content
  */
 export class VisionCapabilities {
-  private static instance: VisionCapabilities
-  private static DISABLED = false // Can be set via environment or config
-  private tensorflowLoaded: boolean = false
-  private modelLoaded: boolean = false
-  private model: any = null
-  private labels: string[] = []
-  private initializationPromise: Promise<void> | null = null
+  private static instance: VisionCapabilities;
+  private static DISABLED = false; // Can be set via environment or config
+  private tensorflowLoaded: boolean = false;
+  private modelLoaded: boolean = false;
+  private model: any = null;
+  private labels: string[] = [];
+  private initializationPromise: Promise<void> | null = null;
 
   private constructor() {
     // Remove automatic initialization - wait until first use
@@ -22,17 +22,17 @@ export class VisionCapabilities {
 
   public static getInstance(): VisionCapabilities {
     if (!VisionCapabilities.instance) {
-      VisionCapabilities.instance = new VisionCapabilities()
+      VisionCapabilities.instance = new VisionCapabilities();
     }
-    return VisionCapabilities.instance
+    return VisionCapabilities.instance;
   }
 
   /**
    * Disable vision capabilities entirely (useful for performance)
    */
   public static disable(): void {
-    VisionCapabilities.DISABLED = true
-    log.info('Vision capabilities disabled - TensorFlow.js will not be loaded')
+    VisionCapabilities.DISABLED = true;
+    log.info("Vision capabilities disabled - TensorFlow.js will not be loaded");
   }
 
   /**
@@ -41,32 +41,32 @@ export class VisionCapabilities {
   private async initialize(): Promise<void> {
     // Prevent multiple initialization attempts
     if (this.initializationPromise) {
-      return this.initializationPromise
+      return this.initializationPromise;
     }
 
-    this.initializationPromise = this.doInitialize()
-    return this.initializationPromise
+    this.initializationPromise = this.doInitialize();
+    return this.initializationPromise;
   }
 
   private async doInitialize(): Promise<void> {
     try {
-      log.info('Starting lazy load of TensorFlow.js...')
+      log.info("Starting lazy load of TensorFlow.js...");
 
       // Dynamic import of TensorFlow.js to avoid loading it if not needed
-      const tf = await import('@tensorflow/tfjs')
-      this.tensorflowLoaded = true
+      const _tf = await import("@tensorflow/tfjs");
+      this.tensorflowLoaded = true;
 
-      log.info('TensorFlow.js loaded successfully')
+      log.info("TensorFlow.js loaded successfully");
 
       // Load MobileNet model
-      const mobilenet = await import('@tensorflow-models/mobilenet')
-      this.model = await mobilenet.load()
-      this.modelLoaded = true
+      const mobilenet = await import("@tensorflow-models/mobilenet");
+      this.model = await mobilenet.load();
+      this.modelLoaded = true;
 
-      log.info('MobileNet model loaded successfully')
+      log.info("MobileNet model loaded successfully");
     } catch (error) {
-      log.error('Failed to initialize vision capabilities:', error)
-      this.initializationPromise = null // Allow retry on error
+      log.error("Failed to initialize vision capabilities:", error);
+      this.initializationPromise = null; // Allow retry on error
     }
   }
 
@@ -76,34 +76,34 @@ export class VisionCapabilities {
    * @returns Promise with array of classifications
    */
   public async analyzeImage(
-    imageUrl: string
+    imageUrl: string,
   ): Promise<{ className: string; probability: number }[]> {
     if (!this.tensorflowLoaded || !this.modelLoaded || !this.model) {
-      log.warn('Vision model not loaded yet, trying to initialize')
-      await this.initialize()
+      log.warn("Vision model not loaded yet, trying to initialize");
+      await this.initialize();
 
       if (!this.modelLoaded) {
-        throw new Error('Vision capabilities are not available')
+        throw new Error("Vision capabilities are not available");
       }
     }
 
     try {
       // Create an image element from the URL
-      const img = new Image()
-      img.crossOrigin = 'anonymous'
-      img.src = imageUrl
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.src = imageUrl;
 
       // Wait for the image to load
-      await new Promise(resolve => {
-        img.onload = resolve
-      })
+      await new Promise((resolve) => {
+        img.onload = resolve;
+      });
 
       // Classify the image
-      const predictions = await this.model.classify(img)
-      return predictions
+      const predictions = await this.model.classify(img);
+      return predictions;
     } catch (error) {
-      log.error('Error analyzing image:', error)
-      throw new Error('Failed to analyze image')
+      log.error("Error analyzing image:", error);
+      throw new Error("Failed to analyze image");
     }
   }
 
@@ -114,28 +114,28 @@ export class VisionCapabilities {
    */
   public async generateImageDescription(imageUrl: string): Promise<string> {
     try {
-      const predictions = await this.analyzeImage(imageUrl)
+      const predictions = await this.analyzeImage(imageUrl);
 
       if (predictions.length === 0) {
-        return "I couldn't identify anything specific in this image."
+        return "I couldn't identify anything specific in this image.";
       }
 
       // Format the results into a natural language description
-      const topPrediction = predictions[0]
-      let description = `I can see that this image shows ${topPrediction.className}`
+      const topPrediction = predictions[0];
+      let description = `I can see that this image shows ${topPrediction.className}`;
 
       if (predictions.length > 1) {
-        description += `. It might also contain ${predictions[1].className}`
+        description += `. It might also contain ${predictions[1].className}`;
 
         if (predictions.length > 2) {
-          description += ` and possibly ${predictions[2].className}`
+          description += ` and possibly ${predictions[2].className}`;
         }
       }
 
-      return description
+      return description;
     } catch (error) {
-      log.error('Error generating image description:', error)
-      return "I'm unable to analyze this image at the moment."
+      log.error("Error generating image description:", error);
+      return "I'm unable to analyze this image at the moment.";
     }
   }
 
@@ -143,6 +143,6 @@ export class VisionCapabilities {
    * Check if vision capabilities are available
    */
   public isAvailable(): boolean {
-    return this.tensorflowLoaded && this.modelLoaded
+    return this.tensorflowLoaded && this.modelLoaded;
   }
 }

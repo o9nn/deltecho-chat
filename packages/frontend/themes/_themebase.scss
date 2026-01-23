@@ -1,4 +1,4 @@
-@use 'sass:color';
+@use "sass:color";
 
 $hover-contrast-change: 2%;
 // set light theme variables as fallback
@@ -14,7 +14,7 @@ $accentColor: #2090ea !default;
 
 $bgPrimary: #ffffff !default;
 $bgSecondary: #f5f5f5 !default;
-$bgImage: url('./images/background_light.svg') !default;
+$bgImage: url("./images/background_light.svg") !default;
 $bgMessageBubbleIncoming: #fff !default;
 $bgMessageBubbleOutgoing: #efffde !default;
 $bgNavBar: #f8f9fa !default;
@@ -37,7 +37,7 @@ $scrollbarTransparency: 0.34 !default;
 
 /* Functions */
 @function changeContrast($color, $factor) {
-  @if color.channel($color, 'lightness', $space: hsl) < 50 {
+  @if color.channel($color, "lightness", $space: hsl) < 50 {
     @return color.adjust($color, $lightness: $factor);
   } @else {
     @return color.adjust($color, $lightness: -$factor);
@@ -45,9 +45,9 @@ $scrollbarTransparency: 0.34 !default;
 }
 
 @function colorToRGB($color) {
-  @return color.channel($color, 'red', $space: rgb),
-    color.channel($color, 'green', $space: rgb),
-    color.channel($color, 'blue', $space: rgb);
+  @return color.channel($color, "red", $space: rgb),
+    color.channel($color, "green", $space: rgb),
+    color.channel($color, "blue", $space: rgb);
 }
 
 /* Root Variables */
@@ -274,7 +274,7 @@ $scrollbarTransparency: 0.34 !default;
   --textPrimary: #{$textPrimary};
   --textSecondary: #{$textSecondary};
 
-  @if color.channel($bgPrimary, 'lightness', $space: hsl) < 50 {
+  @if color.channel($bgPrimary, "lightness", $space: hsl) < 50 {
     // dark theme
     --scrollbarThumb: #{rgba(white, $scrollbarTransparency)};
     --scrollbarThumbHover: #{rgba(white, $scrollbarTransparency + 0.14)};

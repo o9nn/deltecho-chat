@@ -23,7 +23,7 @@ Relation-MCP layer configuration
 
 [src/types.ts:192](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L192)
 
-___
+---
 
 ### coherenceThreshold
 
@@ -33,7 +33,7 @@ ___
 
 [src/types.ts:193](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L193)
 
-___
+---
 
 ### enableMirroring
 
@@ -43,7 +43,7 @@ ___
 
 [src/types.ts:194](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L194)
 
-___
+---
 
 ### mirrorSyncIntervalMs
 

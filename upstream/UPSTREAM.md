@@ -4,11 +4,11 @@ This directory contains upstream source repositories integrated into deltecho-ch
 
 ## Included Repositories
 
-| Directory | Source | Description |
-|-----------|--------|-------------|
-| `deltachat-desktop/` | [deltachat/deltachat-desktop](https://github.com/deltachat/deltachat-desktop) | Original DeltaChat Desktop application |
-| `delta-echo-desk/` | [EchoCog/delta-echo-desk](https://github.com/EchoCog/delta-echo-desk) | EchoCog's Deep Tree Echo integration with DeltaChat |
-| `deltachat-core/` | [EchoCog/deltachat-core](https://github.com/EchoCog/deltachat-core) | Delta.Chat C-Library with Python bindings |
+| Directory            | Source                                                                        | Description                                         |
+| -------------------- | ----------------------------------------------------------------------------- | --------------------------------------------------- |
+| `deltachat-desktop/` | [deltachat/deltachat-desktop](https://github.com/deltachat/deltachat-desktop) | Original DeltaChat Desktop application              |
+| `delta-echo-desk/`   | [EchoCog/delta-echo-desk](https://github.com/EchoCog/delta-echo-desk)         | EchoCog's Deep Tree Echo integration with DeltaChat |
+| `deltachat-core/`    | [EchoCog/deltachat-core](https://github.com/EchoCog/deltachat-core)           | Delta.Chat C-Library with Python bindings           |
 
 ## Purpose
 

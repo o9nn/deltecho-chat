@@ -18,11 +18,11 @@ import {
   RAGMemoryStore,
   PersonaCore,
   InMemoryStorage,
-} from 'deep-tree-echo-core';
-import { EmailMessage } from './dovecot-interface/milter-server.js';
-import { EventEmitter } from 'events';
+} from "deep-tree-echo-core";
+import { EmailMessage } from "./dovecot-interface/milter-server.js";
+import { EventEmitter } from "events";
 
-const log = getLogger('deep-tree-echo-orchestrator/Dove9Integration');
+const log = getLogger("deep-tree-echo-orchestrator/Dove9Integration");
 
 // Dove9 types (defined locally for type safety)
 interface MailMessage {
@@ -39,7 +39,7 @@ interface MailMessage {
 
 interface MessageProcess {
   id: string;
-  status: 'pending' | 'processing' | 'completed' | 'failed';
+  status: "pending" | "processing" | "completed" | "failed";
   response?: string;
   startTime: number;
   endTime?: number;
@@ -54,7 +54,7 @@ interface KernelMetrics {
 
 interface TriadicStream {
   id: string;
-  mode: 'cognitive' | 'affective' | 'relevance';
+  mode: "cognitive" | "affective" | "relevance";
   isActive: boolean;
 }
 
@@ -76,15 +76,15 @@ class LLMServiceAdapter {
 
   async generateResponse(prompt: string, context: string[]): Promise<string> {
     const result = await this.llmService.generateFullParallelResponse(
-      `${prompt}\n\nContext:\n${context.join('\n')}`,
-      context
+      `${prompt}\n\nContext:\n${context.join("\n")}`,
+      context,
     );
     return result.integratedResponse;
   }
 
   async generateParallelResponse(
     prompt: string,
-    history: string[]
+    history: string[],
   ): Promise<{
     integratedResponse: string;
     cognitiveResponse?: string;
@@ -113,7 +113,7 @@ class MemoryStoreAdapter {
   }): Promise<void> {
     await this.memoryStore.storeMemory({
       ...memory,
-      sender: memory.sender as 'user' | 'bot',
+      sender: memory.sender as "user" | "bot",
     });
   }
 
@@ -121,7 +121,10 @@ class MemoryStoreAdapter {
     return this.memoryStore.retrieveRecentMemories(count);
   }
 
-  async retrieveRelevantMemories(query: string, count: number): Promise<string[]> {
+  async retrieveRelevantMemories(
+    _query: string,
+    count: number,
+  ): Promise<string[]> {
     return this.memoryStore.retrieveRecentMemories(count);
   }
 }
@@ -164,7 +167,7 @@ const DEFAULT_CONFIG: Dove9IntegrationConfig = {
   enabled: true,
   stepDuration: 100,
   maxConcurrentProcesses: 50,
-  botEmailAddress: 'echo@localhost',
+  botEmailAddress: "echo@localhost",
   enableTriadicLoop: true,
 };
 
@@ -211,9 +214,9 @@ class Dove9SystemImpl extends EventEmitter {
     currentStep: 0,
     cycleNumber: 0,
     streams: new Map([
-      ['cognitive', { id: 'cognitive', mode: 'cognitive', isActive: true }],
-      ['affective', { id: 'affective', mode: 'affective', isActive: true }],
-      ['relevance', { id: 'relevance', mode: 'relevance', isActive: true }],
+      ["cognitive", { id: "cognitive", mode: "cognitive", isActive: true }],
+      ["affective", { id: "affective", mode: "affective", isActive: true }],
+      ["relevance", { id: "relevance", mode: "relevance", isActive: true }],
     ]),
   };
   private cycleInterval: NodeJS.Timeout | null = null;
@@ -226,7 +229,7 @@ class Dove9SystemImpl extends EventEmitter {
       stepDuration: number;
       maxConcurrentProcesses: number;
       enableParallelCognition: boolean;
-    }
+    },
   ) {
     super();
     this.llmAdapter = llmAdapter;
@@ -236,7 +239,7 @@ class Dove9SystemImpl extends EventEmitter {
   }
 
   async initialize(): Promise<void> {
-    log.info('Dove9System initializing...');
+    log.info("Dove9System initializing...");
   }
 
   async start(): Promise<void> {
@@ -250,7 +253,7 @@ class Dove9SystemImpl extends EventEmitter {
       }, this.config.stepDuration);
     }
 
-    log.info('Dove9System started');
+    log.info("Dove9System started");
   }
 
   async stop(): Promise<void> {
@@ -262,7 +265,7 @@ class Dove9SystemImpl extends EventEmitter {
       this.cycleInterval = null;
     }
 
-    log.info('Dove9System stopped');
+    log.info("Dove9System stopped");
   }
 
   private async runTriadicCycle(): Promise<void> {
@@ -273,24 +276,26 @@ class Dove9SystemImpl extends EventEmitter {
       this.triadicState.cycleNumber++;
       this.metrics.totalCycles++;
 
-      this.emit('cycle_complete', {
+      this.emit("cycle_complete", {
         cycle: this.triadicState.cycleNumber,
         metrics: this.metrics,
       });
     }
 
     // Emit triadic sync
-    this.emit('triad_sync', {
+    this.emit("triad_sync", {
       timePoint: this.triadicState.currentStep,
     });
   }
 
   async processMessage(message: MailMessage): Promise<MessageProcess> {
-    const processId = `proc_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+    const processId = `proc_${Date.now()}_${Math.random()
+      .toString(36)
+      .slice(2)}`;
 
     const process: MessageProcess = {
       id: processId,
-      status: 'processing',
+      status: "processing",
       startTime: Date.now(),
     };
 
@@ -301,7 +306,7 @@ class Dove9SystemImpl extends EventEmitter {
       await this.memoryAdapter.storeMemory({
         chatId: 0,
         messageId: Date.now(),
-        sender: 'user',
+        sender: "user",
         text: `${message.subject}: ${message.body}`,
       });
 
@@ -311,10 +316,10 @@ class Dove9SystemImpl extends EventEmitter {
       // Generate response using triadic cognition
       const result = await this.llmAdapter.generateParallelResponse(
         `Subject: ${message.subject}\n\nMessage: ${message.body}`,
-        context
+        context,
       );
 
-      process.status = 'completed';
+      process.status = "completed";
       process.response = result.integratedResponse;
       process.endTime = Date.now();
 
@@ -322,11 +327,13 @@ class Dove9SystemImpl extends EventEmitter {
       this.metrics.processedMessages++;
       const duration = process.endTime - process.startTime;
       this.metrics.averageResponseTime =
-        (this.metrics.averageResponseTime * (this.metrics.processedMessages - 1) + duration) /
+        (this.metrics.averageResponseTime *
+          (this.metrics.processedMessages - 1) +
+          duration) /
         this.metrics.processedMessages;
 
       // Emit response
-      this.emit('response_ready', {
+      this.emit("response_ready", {
         processId,
         originalMail: message,
         response: {
@@ -337,15 +344,15 @@ class Dove9SystemImpl extends EventEmitter {
           emotionalValence: 0.5,
           emotionalArousal: 0.5,
           salienceScore: 0.7,
-          activeCouplings: ['cognitive-affective', 'affective-relevance'],
+          activeCouplings: ["cognitive-affective", "affective-relevance"],
         },
       });
 
       return process;
     } catch (error) {
-      process.status = 'failed';
+      process.status = "failed";
       process.endTime = Date.now();
-      log.error('Failed to process message:', error);
+      log.error("Failed to process message:", error);
       return process;
     }
   }
@@ -362,7 +369,9 @@ class Dove9SystemImpl extends EventEmitter {
   }
 
   getActiveProcesses(): MessageProcess[] {
-    return Array.from(this.processes.values()).filter((p) => p.status === 'processing');
+    return Array.from(this.processes.values()).filter(
+      (p) => p.status === "processing",
+    );
   }
 }
 
@@ -399,11 +408,11 @@ export class Dove9Integration {
    */
   public async initialize(): Promise<void> {
     if (!this.config.enabled) {
-      log.info('Dove9 integration disabled');
+      log.info("Dove9 integration disabled");
       return;
     }
 
-    log.info('Initializing Dove9 cognitive OS...');
+    log.info("Initializing Dove9 cognitive OS...");
 
     // Create adapters
     const llmAdapter = new LLMServiceAdapter(this.llmService);
@@ -411,17 +420,22 @@ export class Dove9Integration {
     const personaAdapter = new PersonaCoreAdapter(this.personaCore);
 
     // Create Dove9 system
-    this.dove9 = new Dove9SystemImpl(llmAdapter, memoryAdapter, personaAdapter, {
-      stepDuration: this.config.stepDuration,
-      maxConcurrentProcesses: this.config.maxConcurrentProcesses,
-      enableParallelCognition: this.config.enableTriadicLoop,
-    });
+    this.dove9 = new Dove9SystemImpl(
+      llmAdapter,
+      memoryAdapter,
+      personaAdapter,
+      {
+        stepDuration: this.config.stepDuration,
+        maxConcurrentProcesses: this.config.maxConcurrentProcesses,
+        enableParallelCognition: this.config.enableTriadicLoop,
+      },
+    );
 
     // Set up event handlers
     this.setupEventHandlers();
 
     await this.dove9.initialize();
-    log.info('Dove9 cognitive OS initialized');
+    log.info("Dove9 cognitive OS initialized");
   }
 
   /**
@@ -432,7 +446,7 @@ export class Dove9Integration {
 
     // Handle response ready
     this.dove9.on(
-      'response_ready',
+      "response_ready",
       (data: {
         processId: string;
         originalMail: MailMessage;
@@ -463,21 +477,24 @@ export class Dove9Integration {
         for (const handler of this.responseHandlers) {
           handler(response);
         }
-      }
+      },
     );
 
     // Handle cycle completion
-    this.dove9.on('cycle_complete', (data: { cycle: number; metrics: KernelMetrics }) => {
-      log.debug(`Dove9 cycle ${data.cycle} complete`);
+    this.dove9.on(
+      "cycle_complete",
+      (data: { cycle: number; metrics: KernelMetrics }) => {
+        log.debug(`Dove9 cycle ${data.cycle} complete`);
 
-      // Notify metrics handlers
-      for (const handler of this.metricsHandlers) {
-        handler(data.metrics);
-      }
-    });
+        // Notify metrics handlers
+        for (const handler of this.metricsHandlers) {
+          handler(data.metrics);
+        }
+      },
+    );
 
     // Handle triadic sync
-    this.dove9.on('triad_sync', (triad: { timePoint: number }) => {
+    this.dove9.on("triad_sync", (triad: { timePoint: number }) => {
       log.debug(`Triadic convergence at time point ${triad.timePoint}`);
     });
   }
@@ -495,7 +512,7 @@ export class Dove9Integration {
     await this.dove9.start();
     this.running = true;
 
-    log.info('Dove9 cognitive OS started');
+    log.info("Dove9 cognitive OS started");
   }
 
   /**
@@ -507,21 +524,24 @@ export class Dove9Integration {
     await this.dove9.stop();
     this.running = false;
 
-    log.info('Dove9 cognitive OS stopped');
+    log.info("Dove9 cognitive OS stopped");
   }
 
   /**
    * Process an email through Dove9
    */
-  public async processEmail(email: EmailMessage): Promise<MessageProcess | null> {
+  public async processEmail(
+    email: EmailMessage,
+  ): Promise<MessageProcess | null> {
     if (!this.dove9) {
-      log.warn('Dove9 not initialized, cannot process email');
+      log.warn("Dove9 not initialized, cannot process email");
       return null;
     }
 
     // Check if email is for the bot
     const isForBot = email.to.some(
-      (addr) => addr.toLowerCase() === this.config.botEmailAddress.toLowerCase()
+      (addr) =>
+        addr.toLowerCase() === this.config.botEmailAddress.toLowerCase(),
     );
 
     if (!isForBot) {
@@ -535,7 +555,7 @@ export class Dove9Integration {
       id: email.messageId || `msg_${Date.now()}`,
       messageId: email.messageId,
       from: email.from,
-      to: email.to.join(', '),
+      to: email.to.join(", "),
       subject: email.subject,
       body: email.body,
       headers: Object.fromEntries(email.headers),
@@ -567,7 +587,7 @@ export class Dove9Integration {
     if (keys.general) {
       this.llmService.setConfig({ apiKey: keys.general });
     }
-    log.info('API keys configured for Dove9');
+    log.info("API keys configured for Dove9");
   }
 
   /**

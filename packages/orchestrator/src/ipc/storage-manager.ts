@@ -1,8 +1,8 @@
-import * as fs from 'fs';
-import * as path from 'path';
-import { getLogger } from '../utils/logger.js';
+import * as fs from "fs";
+import * as path from "path";
+import { getLogger } from "../utils/logger.js";
 
-const logger = getLogger('StorageManager');
+const logger = getLogger("StorageManager");
 
 /**
  * Simple key-value storage manager for the orchestrator
@@ -20,7 +20,7 @@ export class StorageManager {
   constructor(persistencePath?: string) {
     this.persistencePath = persistencePath;
     if (persistencePath) {
-      this.persistenceFile = path.join(persistencePath, 'storage.json');
+      this.persistenceFile = path.join(persistencePath, "storage.json");
       this.loadFromDisk();
     }
   }
@@ -38,15 +38,15 @@ export class StorageManager {
       }
 
       if (fs.existsSync(this.persistenceFile)) {
-        const data = fs.readFileSync(this.persistenceFile, 'utf-8');
+        const data = fs.readFileSync(this.persistenceFile, "utf-8");
         const parsed = JSON.parse(data);
 
-        if (typeof parsed === 'object' && parsed !== null) {
+        if (typeof parsed === "object" && parsed !== null) {
           this.storage = new Map(Object.entries(parsed));
         }
       }
     } catch (error) {
-      logger.error('Failed to load from disk:', error);
+      logger.error("Failed to load from disk:", error);
     }
   }
 
@@ -80,13 +80,13 @@ export class StorageManager {
       }
 
       const data = Object.fromEntries(this.storage);
-      const tempFile = this.persistenceFile + '.tmp';
+      const tempFile = this.persistenceFile + ".tmp";
 
       // Write to temp file first, then rename for atomicity
-      fs.writeFileSync(tempFile, JSON.stringify(data, null, 2), 'utf-8');
+      fs.writeFileSync(tempFile, JSON.stringify(data, null, 2), "utf-8");
       fs.renameSync(tempFile, this.persistenceFile);
     } catch (error) {
-      logger.error('Failed to persist to disk:', error);
+      logger.error("Failed to persist to disk:", error);
     }
   }
 

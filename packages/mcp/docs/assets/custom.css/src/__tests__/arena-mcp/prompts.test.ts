@@ -5,238 +5,304 @@
  * narrative weaving, orchestration directives, and lore cultivation.
  */
 
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { arenaPrompts, listArenaPrompts } from '../../arena-mcp/prompts.js';
-import type { ArenaMembrane } from 'deep-tree-echo-orchestrator/aar';
-import type { AgentReference } from '../../types.js';
+import { describe, it, expect, beforeEach, vi } from "vitest";
+import { arenaPrompts, listArenaPrompts } from "../../arena-mcp/prompts.js";
+import type { ArenaMembrane } from "deep-tree-echo-orchestrator/aar";
+import type { AgentReference } from "../../types.js";
 
 // Create a mock ArenaMembrane with full state shape expected by prompts
 function createMockArenaMembrane(): ArenaMembrane {
-    return {
-        getState: vi.fn(() => ({
-            phases: {
-                origin: { intensity: 0.3, storyElements: ['beginning'], name: 'Origin' },
-                journey: { intensity: 0.4, storyElements: ['travel'], name: 'Journey' },
-                arrival: { intensity: 0.5, storyElements: ['destination'], name: 'Arrival' },
-                situation: { intensity: 0.6, storyElements: ['context'], name: 'Situation' },
-                engagement: { intensity: 0.8, storyElements: ['action'], name: 'Engagement' },
-                culmination: { intensity: 0.4, storyElements: ['peak'], name: 'Culmination' },
-                possibility: { intensity: 0.5, storyElements: ['options'], name: 'Possibility' },
-                trajectory: { intensity: 0.6, storyElements: ['direction'], name: 'Trajectory' },
-                destiny: { intensity: 0.3, storyElements: ['fate'], name: 'Destiny' },
-            },
-            coherence: 0.75,
-            yggdrasilReservoir: [
-                { id: 'lore-1', content: 'Ancient wisdom about patience', category: 'wisdom', weight: 0.9, tags: [] },
-                { id: 'lore-2', content: 'Story of the brave user', category: 'story', weight: 0.7, tags: [] },
-            ],
-            globalThreads: ['Main quest', 'Side adventure'],
-            currentFrameId: 'frame-1',
-            gestaltProgress: {
-                patternsRecognized: 5,
-                emergentInsights: 3,
-                narrativeIntegration: 0.7,
-            },
-        })),
-        getActiveFrames: vi.fn(() => [
-            {
-                frameId: 'frame-1',
-                title: 'Current Session',
-                messageCount: 25,
-                status: 'active',
-                timestamp: Date.now(),
-                participants: ['user', 'Deep Echo'],
-                narrativeContext: {
-                    activePhases: ['engagement'],
-                    storyThreads: ['Main quest'],
-                    thematicElements: ['growth', 'discovery'],
-                },
-            },
-        ]),
-    } as unknown as ArenaMembrane;
+  return {
+    getState: vi.fn(() => ({
+      phases: {
+        origin: {
+          intensity: 0.3,
+          storyElements: ["beginning"],
+          name: "Origin",
+        },
+        journey: { intensity: 0.4, storyElements: ["travel"], name: "Journey" },
+        arrival: {
+          intensity: 0.5,
+          storyElements: ["destination"],
+          name: "Arrival",
+        },
+        situation: {
+          intensity: 0.6,
+          storyElements: ["context"],
+          name: "Situation",
+        },
+        engagement: {
+          intensity: 0.8,
+          storyElements: ["action"],
+          name: "Engagement",
+        },
+        culmination: {
+          intensity: 0.4,
+          storyElements: ["peak"],
+          name: "Culmination",
+        },
+        possibility: {
+          intensity: 0.5,
+          storyElements: ["options"],
+          name: "Possibility",
+        },
+        trajectory: {
+          intensity: 0.6,
+          storyElements: ["direction"],
+          name: "Trajectory",
+        },
+        destiny: { intensity: 0.3, storyElements: ["fate"], name: "Destiny" },
+      },
+      coherence: 0.75,
+      yggdrasilReservoir: [
+        {
+          id: "lore-1",
+          content: "Ancient wisdom about patience",
+          category: "wisdom",
+          weight: 0.9,
+          tags: [],
+        },
+        {
+          id: "lore-2",
+          content: "Story of the brave user",
+          category: "story",
+          weight: 0.7,
+          tags: [],
+        },
+      ],
+      globalThreads: ["Main quest", "Side adventure"],
+      currentFrameId: "frame-1",
+      gestaltProgress: {
+        patternsRecognized: 5,
+        emergentInsights: 3,
+        narrativeIntegration: 0.7,
+      },
+    })),
+    getActiveFrames: vi.fn(() => [
+      {
+        frameId: "frame-1",
+        title: "Current Session",
+        messageCount: 25,
+        status: "active",
+        timestamp: Date.now(),
+        participants: ["user", "Deep Echo"],
+        narrativeContext: {
+          activePhases: ["engagement"],
+          storyThreads: ["Main quest"],
+          thematicElements: ["growth", "discovery"],
+        },
+      },
+    ]),
+  } as unknown as ArenaMembrane;
 }
 
-describe('Arena Prompts', () => {
-    let arena: ArenaMembrane;
-    let agentRegistry: Map<string, AgentReference>;
+describe("Arena Prompts", () => {
+  let arena: ArenaMembrane;
+  let agentRegistry: Map<string, AgentReference>;
 
-    beforeEach(() => {
-        arena = createMockArenaMembrane();
-        agentRegistry = new Map([
-            ['agent-1', { agentId: 'agent-1', name: 'Deep Echo', status: 'active', lastActivity: Date.now() }],
-            ['agent-2', { agentId: 'agent-2', name: 'Helper', status: 'dormant', lastActivity: Date.now() }],
-        ]);
+  beforeEach(() => {
+    arena = createMockArenaMembrane();
+    agentRegistry = new Map([
+      [
+        "agent-1",
+        {
+          agentId: "agent-1",
+          name: "Deep Echo",
+          status: "active",
+          lastActivity: Date.now(),
+        },
+      ],
+      [
+        "agent-2",
+        {
+          agentId: "agent-2",
+          name: "Helper",
+          status: "dormant",
+          lastActivity: Date.now(),
+        },
+      ],
+    ]);
+  });
+
+  describe("worldContext prompt", () => {
+    it("should have correct metadata", () => {
+      expect(arenaPrompts.worldContext.name).toBe("world_context");
+      expect(arenaPrompts.worldContext.description).toBeDefined();
     });
 
-    describe('worldContext prompt', () => {
-        it('should have correct metadata', () => {
-            expect(arenaPrompts.worldContext.name).toBe('world_context');
-            expect(arenaPrompts.worldContext.description).toBeDefined();
-        });
+    it("should generate world context prompt", () => {
+      const prompt = arenaPrompts.worldContext.handler(arena, agentRegistry);
 
-        it('should generate world context prompt', () => {
-            const prompt = arenaPrompts.worldContext.handler(arena, agentRegistry);
-
-            expect(typeof prompt).toBe('string');
-            expect(prompt.length).toBeGreaterThan(0);
-        });
-
-        it('should include narrative phases in context', () => {
-            const prompt = arenaPrompts.worldContext.handler(arena, agentRegistry);
-
-            // Should reference phase information
-            expect(prompt.toLowerCase()).toMatch(/phase|narrative|story/);
-        });
-
-        it('should include agent information in context', () => {
-            const prompt = arenaPrompts.worldContext.handler(arena, agentRegistry);
-
-            // Should reference agents - either count or status info
-            expect(prompt).toMatch(/agent|Active/i);
-        });
+      expect(typeof prompt).toBe("string");
+      expect(prompt.length).toBeGreaterThan(0);
     });
 
-    describe('narrativeWeaving prompt', () => {
-        it('should have correct metadata', () => {
-            expect(arenaPrompts.narrativeWeaving.name).toBe('narrative_weaving');
-            expect(arenaPrompts.narrativeWeaving.description).toBeDefined();
-        });
+    it("should include narrative phases in context", () => {
+      const prompt = arenaPrompts.worldContext.handler(arena, agentRegistry);
 
-        it('should generate narrative weaving prompt', () => {
-            const prompt = arenaPrompts.narrativeWeaving.handler(arena);
-
-            expect(typeof prompt).toBe('string');
-            expect(prompt.length).toBeGreaterThan(0);
-        });
-
-        it('should reference narrative structure', () => {
-            const prompt = arenaPrompts.narrativeWeaving.handler(arena);
-
-            // Should mention narrative/story elements
-            expect(prompt.toLowerCase()).toMatch(/narrative|story|weav|thread|phase/);
-        });
+      // Should reference phase information
+      expect(prompt.toLowerCase()).toMatch(/phase|narrative|story/);
     });
 
-    describe('orchestrationDirective prompt', () => {
-        it('should have correct metadata', () => {
-            expect(arenaPrompts.orchestrationDirective.name).toBe('orchestration_directive');
-            expect(arenaPrompts.orchestrationDirective.description).toBeDefined();
-        });
+    it("should include agent information in context", () => {
+      const prompt = arenaPrompts.worldContext.handler(arena, agentRegistry);
 
-        it('should have required arguments', () => {
-            expect(arenaPrompts.orchestrationDirective.arguments).toBeDefined();
-            expect(arenaPrompts.orchestrationDirective.arguments).toHaveLength(2);
+      // Should reference agents - either count or status info
+      expect(prompt).toMatch(/agent|Active/i);
+    });
+  });
 
-            const argNames = arenaPrompts.orchestrationDirective.arguments.map(a => a.name);
-            expect(argNames).toContain('goal');
-            expect(argNames).toContain('agents');
-        });
-
-        it('should generate orchestration prompt with arguments', () => {
-            const prompt = arenaPrompts.orchestrationDirective.handler(
-                arena,
-                agentRegistry,
-                { goal: 'Complete the mission', agents: 'agent-1,agent-2' }
-            );
-
-            expect(typeof prompt).toBe('string');
-            expect(prompt.length).toBeGreaterThan(0);
-        });
-
-        it('should include goal in prompt', () => {
-            const prompt = arenaPrompts.orchestrationDirective.handler(
-                arena,
-                agentRegistry,
-                { goal: 'Solve the puzzle together', agents: 'agent-1' }
-            );
-
-            expect(prompt).toContain('Solve the puzzle together');
-        });
-
-        it('should include agents in prompt', () => {
-            const prompt = arenaPrompts.orchestrationDirective.handler(
-                arena,
-                agentRegistry,
-                { goal: 'Test goal', agents: 'Deep Echo,Helper' }
-            );
-
-            expect(prompt).toMatch(/Deep Echo|Helper/);
-        });
+  describe("narrativeWeaving prompt", () => {
+    it("should have correct metadata", () => {
+      expect(arenaPrompts.narrativeWeaving.name).toBe("narrative_weaving");
+      expect(arenaPrompts.narrativeWeaving.description).toBeDefined();
     });
 
-    describe('loreCultivation prompt', () => {
-        it('should have correct metadata', () => {
-            expect(arenaPrompts.loreCultivation.name).toBe('lore_cultivation');
-            expect(arenaPrompts.loreCultivation.description).toBeDefined();
-        });
+    it("should generate narrative weaving prompt", () => {
+      const prompt = arenaPrompts.narrativeWeaving.handler(arena);
 
-        it('should generate lore cultivation prompt', () => {
-            const prompt = arenaPrompts.loreCultivation.handler(arena);
-
-            expect(typeof prompt).toBe('string');
-            expect(prompt.length).toBeGreaterThan(0);
-        });
-
-        it('should reference lore/wisdom cultivation', () => {
-            const prompt = arenaPrompts.loreCultivation.handler(arena);
-
-            expect(prompt.toLowerCase()).toMatch(/lore|wisdom|knowledge|insight/);
-        });
-
-        it('should include existing lore context', () => {
-            const prompt = arenaPrompts.loreCultivation.handler(arena);
-
-            // Should reference reservoir or existing knowledge/entries
-            expect(prompt.toLowerCase()).toMatch(/reservoir|entries|total|recent/);
-        });
+      expect(typeof prompt).toBe("string");
+      expect(prompt.length).toBeGreaterThan(0);
     });
+
+    it("should reference narrative structure", () => {
+      const prompt = arenaPrompts.narrativeWeaving.handler(arena);
+
+      // Should mention narrative/story elements
+      expect(prompt.toLowerCase()).toMatch(/narrative|story|weav|thread|phase/);
+    });
+  });
+
+  describe("orchestrationDirective prompt", () => {
+    it("should have correct metadata", () => {
+      expect(arenaPrompts.orchestrationDirective.name).toBe(
+        "orchestration_directive",
+      );
+      expect(arenaPrompts.orchestrationDirective.description).toBeDefined();
+    });
+
+    it("should have required arguments", () => {
+      expect(arenaPrompts.orchestrationDirective.arguments).toBeDefined();
+      expect(arenaPrompts.orchestrationDirective.arguments).toHaveLength(2);
+
+      const argNames = arenaPrompts.orchestrationDirective.arguments.map(
+        (a) => a.name,
+      );
+      expect(argNames).toContain("goal");
+      expect(argNames).toContain("agents");
+    });
+
+    it("should generate orchestration prompt with arguments", () => {
+      const prompt = arenaPrompts.orchestrationDirective.handler(
+        arena,
+        agentRegistry,
+        { goal: "Complete the mission", agents: "agent-1,agent-2" },
+      );
+
+      expect(typeof prompt).toBe("string");
+      expect(prompt.length).toBeGreaterThan(0);
+    });
+
+    it("should include goal in prompt", () => {
+      const prompt = arenaPrompts.orchestrationDirective.handler(
+        arena,
+        agentRegistry,
+        { goal: "Solve the puzzle together", agents: "agent-1" },
+      );
+
+      expect(prompt).toContain("Solve the puzzle together");
+    });
+
+    it("should include agents in prompt", () => {
+      const prompt = arenaPrompts.orchestrationDirective.handler(
+        arena,
+        agentRegistry,
+        { goal: "Test goal", agents: "Deep Echo,Helper" },
+      );
+
+      expect(prompt).toMatch(/Deep Echo|Helper/);
+    });
+  });
+
+  describe("loreCultivation prompt", () => {
+    it("should have correct metadata", () => {
+      expect(arenaPrompts.loreCultivation.name).toBe("lore_cultivation");
+      expect(arenaPrompts.loreCultivation.description).toBeDefined();
+    });
+
+    it("should generate lore cultivation prompt", () => {
+      const prompt = arenaPrompts.loreCultivation.handler(arena);
+
+      expect(typeof prompt).toBe("string");
+      expect(prompt.length).toBeGreaterThan(0);
+    });
+
+    it("should reference lore/wisdom cultivation", () => {
+      const prompt = arenaPrompts.loreCultivation.handler(arena);
+
+      expect(prompt.toLowerCase()).toMatch(/lore|wisdom|knowledge|insight/);
+    });
+
+    it("should include existing lore context", () => {
+      const prompt = arenaPrompts.loreCultivation.handler(arena);
+
+      // Should reference reservoir or existing knowledge/entries
+      expect(prompt.toLowerCase()).toMatch(/reservoir|entries|total|recent/);
+    });
+  });
 });
 
-describe('listArenaPrompts', () => {
-    it('should list all available prompts', () => {
-        const prompts = listArenaPrompts();
+describe("listArenaPrompts", () => {
+  it("should list all available prompts", () => {
+    const prompts = listArenaPrompts();
 
-        expect(Array.isArray(prompts)).toBe(true);
-        expect(prompts.length).toBeGreaterThan(0);
+    expect(Array.isArray(prompts)).toBe(true);
+    expect(prompts.length).toBeGreaterThan(0);
+  });
+
+  it("should include expected prompts", () => {
+    const prompts = listArenaPrompts();
+    const promptNames = prompts.map((p) => p.name);
+
+    expect(promptNames).toContain("world_context");
+    expect(promptNames).toContain("narrative_weaving");
+    expect(promptNames).toContain("orchestration_directive");
+    expect(promptNames).toContain("lore_cultivation");
+  });
+
+  it("should have proper prompt structure", () => {
+    const prompts = listArenaPrompts();
+
+    prompts.forEach((prompt) => {
+      expect(prompt).toHaveProperty("name");
+      expect(prompt).toHaveProperty("description");
+      expect(typeof prompt.name).toBe("string");
+      expect(typeof prompt.description).toBe("string");
     });
+  });
 
-    it('should include expected prompts', () => {
-        const prompts = listArenaPrompts();
-        const promptNames = prompts.map(p => p.name);
+  it("should include arguments for prompts that require them", () => {
+    const prompts = listArenaPrompts();
+    const orchestrationPrompt = prompts.find(
+      (p) => p.name === "orchestration_directive",
+    );
 
-        expect(promptNames).toContain('world_context');
-        expect(promptNames).toContain('narrative_weaving');
-        expect(promptNames).toContain('orchestration_directive');
-        expect(promptNames).toContain('lore_cultivation');
-    });
+    expect(orchestrationPrompt).toBeDefined();
+    expect(orchestrationPrompt?.arguments).toBeDefined();
+    expect(orchestrationPrompt?.arguments?.length).toBeGreaterThan(0);
+  });
 
-    it('should have proper prompt structure', () => {
-        const prompts = listArenaPrompts();
+  it("should mark required arguments correctly", () => {
+    const prompts = listArenaPrompts();
+    const orchestrationPrompt = prompts.find(
+      (p) => p.name === "orchestration_directive",
+    );
 
-        prompts.forEach(prompt => {
-            expect(prompt).toHaveProperty('name');
-            expect(prompt).toHaveProperty('description');
-            expect(typeof prompt.name).toBe('string');
-            expect(typeof prompt.description).toBe('string');
-        });
-    });
-
-    it('should include arguments for prompts that require them', () => {
-        const prompts = listArenaPrompts();
-        const orchestrationPrompt = prompts.find(p => p.name === 'orchestration_directive');
-
-        expect(orchestrationPrompt).toBeDefined();
-        expect(orchestrationPrompt?.arguments).toBeDefined();
-        expect(orchestrationPrompt?.arguments?.length).toBeGreaterThan(0);
-    });
-
-    it('should mark required arguments correctly', () => {
-        const prompts = listArenaPrompts();
-        const orchestrationPrompt = prompts.find(p => p.name === 'orchestration_directive');
-
-        if (orchestrationPrompt?.arguments) {
-            const goalArg = orchestrationPrompt.arguments.find(a => a.name === 'goal');
-            expect(goalArg?.required).toBe(true);
-        }
-    });
+    if (orchestrationPrompt?.arguments) {
+      const goalArg = orchestrationPrompt.arguments.find(
+        (a) => a.name === "goal",
+      );
+      expect(goalArg?.required).toBe(true);
+    }
+  });
 });

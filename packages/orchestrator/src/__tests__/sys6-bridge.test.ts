@@ -11,10 +11,10 @@
  * - Telemetry and metrics
  */
 
-import { describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals';
-import { Sys6OrchestratorBridge, Sys6BridgeConfig } from '../sys6-bridge/index.js';
+import { describe, it, expect, beforeEach, afterEach } from "@jest/globals";
+import { Sys6OrchestratorBridge } from "../sys6-bridge/index.js";
 
-describe('Sys6OrchestratorBridge', () => {
+describe("Sys6OrchestratorBridge", () => {
   let bridge: Sys6OrchestratorBridge;
 
   beforeEach(() => {
@@ -34,8 +34,8 @@ describe('Sys6OrchestratorBridge', () => {
     }
   });
 
-  describe('Initialization', () => {
-    it('should initialize with default configuration', () => {
+  describe("Initialization", () => {
+    it("should initialize with default configuration", () => {
       const defaultBridge = new Sys6OrchestratorBridge();
       const state = defaultBridge.getState();
 
@@ -46,7 +46,7 @@ describe('Sys6OrchestratorBridge', () => {
       expect(state.agents).toHaveLength(5); // Default agents
     });
 
-    it('should initialize with custom configuration', () => {
+    it("should initialize with custom configuration", () => {
       const customBridge = new Sys6OrchestratorBridge({
         dim: 128,
         stepDurationMs: 50,
@@ -57,39 +57,39 @@ describe('Sys6OrchestratorBridge', () => {
       expect(state.streams).toHaveLength(3);
     });
 
-    it('should initialize three consciousness streams with 120° phase separation', () => {
+    it("should initialize three consciousness streams with 120° phase separation", () => {
       const state = bridge.getState();
       const [stream1, stream2, stream3] = state.streams;
 
       expect(stream1.streamId).toBe(1);
-      expect(stream1.phase).toBe('perception');
+      expect(stream1.phase).toBe("perception");
       expect(stream1.currentStep).toBe(0);
 
       expect(stream2.streamId).toBe(2);
-      expect(stream2.phase).toBe('evaluation');
+      expect(stream2.phase).toBe("evaluation");
       expect(stream2.currentStep).toBe(10); // 120° offset
 
       expect(stream3.streamId).toBe(3);
-      expect(stream3.phase).toBe('action');
+      expect(stream3.phase).toBe("action");
       expect(stream3.currentStep).toBe(20); // 240° offset
     });
 
-    it('should register default cognitive agents', () => {
+    it("should register default cognitive agents", () => {
       const state = bridge.getState();
       const agentIds = state.agents.map((a) => a.id);
 
-      expect(agentIds).toContain('coordinator');
-      expect(agentIds).toContain('cognitive-processor');
-      expect(agentIds).toContain('memory-manager');
-      expect(agentIds).toContain('emotional-processor');
-      expect(agentIds).toContain('action-executor');
+      expect(agentIds).toContain("coordinator");
+      expect(agentIds).toContain("cognitive-processor");
+      expect(agentIds).toContain("memory-manager");
+      expect(agentIds).toContain("emotional-processor");
+      expect(agentIds).toContain("action-executor");
     });
   });
 
-  describe('Lifecycle Management', () => {
-    it('should start the cognitive cycle', async () => {
+  describe("Lifecycle Management", () => {
+    it("should start the cognitive cycle", async () => {
       const startedPromise = new Promise<void>((resolve) => {
-        bridge.once('started', () => resolve());
+        bridge.once("started", () => resolve());
       });
 
       await bridge.start();
@@ -99,7 +99,7 @@ describe('Sys6OrchestratorBridge', () => {
       expect(state.running).toBe(true);
     });
 
-    it('should not start twice', async () => {
+    it("should not start twice", async () => {
       await bridge.start();
       await bridge.start(); // Should not throw
 
@@ -107,11 +107,11 @@ describe('Sys6OrchestratorBridge', () => {
       expect(state.running).toBe(true);
     });
 
-    it('should stop the cognitive cycle', async () => {
+    it("should stop the cognitive cycle", async () => {
       await bridge.start();
 
       const stoppedPromise = new Promise<void>((resolve) => {
-        bridge.once('stopped', () => resolve());
+        bridge.once("stopped", () => resolve());
       });
 
       await bridge.stop();
@@ -121,9 +121,9 @@ describe('Sys6OrchestratorBridge', () => {
       expect(state.running).toBe(false);
     });
 
-    it('should emit step_complete events', async () => {
+    it("should emit step_complete events", async () => {
       const stepEvents: unknown[] = [];
-      bridge.on('step_complete', (event) => stepEvents.push(event));
+      bridge.on("step_complete", (event) => stepEvents.push(event));
 
       await bridge.start();
 
@@ -135,9 +135,9 @@ describe('Sys6OrchestratorBridge', () => {
       expect(stepEvents.length).toBeGreaterThan(0);
     });
 
-    it('should emit cycle_complete event after 30 steps', async () => {
+    it("should emit cycle_complete event after 30 steps", async () => {
       const cycleCompletePromise = new Promise<unknown>((resolve) => {
-        bridge.once('cycle_complete', resolve);
+        bridge.once("cycle_complete", resolve);
       });
 
       await bridge.start();
@@ -154,8 +154,8 @@ describe('Sys6OrchestratorBridge', () => {
     });
   });
 
-  describe('30-Step Cognitive Cycle', () => {
-    it('should correctly calculate step addresses', () => {
+  describe("30-Step Cognitive Cycle", () => {
+    it("should correctly calculate step addresses", () => {
       // Access private method through type assertion for testing
       const toStepAddress = (
         bridge as unknown as { toStepAddress: (step: number) => unknown }
@@ -174,7 +174,7 @@ describe('Sys6OrchestratorBridge', () => {
       expect(step1.phase).toBe(1);
       expect(step1.stage).toBe(1);
       expect(step1.stepInStage).toBe(1);
-      expect(step1.dyad).toBe('A');
+      expect(step1.dyad).toBe("A");
       expect(step1.triad).toBe(1);
 
       // Step 10: Phase 1, Stage 5, Step 2
@@ -214,17 +214,17 @@ describe('Sys6OrchestratorBridge', () => {
       expect(step30.stepInStage).toBe(2);
     });
 
-    it('should implement double step delay pattern', () => {
+    it("should implement double step delay pattern", () => {
       const toStepAddress = (
         bridge as unknown as { toStepAddress: (step: number) => unknown }
       ).toStepAddress.bind(bridge);
 
       // Verify the 4-step pattern repeats
       const pattern = [
-        { dyad: 'A', triad: 1 },
-        { dyad: 'A', triad: 2 },
-        { dyad: 'B', triad: 2 },
-        { dyad: 'B', triad: 3 },
+        { dyad: "A", triad: 1 },
+        { dyad: "A", triad: 2 },
+        { dyad: "B", triad: 2 },
+        { dyad: "B", triad: 3 },
       ];
 
       for (let i = 0; i < 30; i++) {
@@ -235,10 +235,10 @@ describe('Sys6OrchestratorBridge', () => {
       }
     });
 
-    it('should process all three phases in order', async () => {
+    it("should process all three phases in order", async () => {
       const phasesSeen = new Set<number>();
 
-      bridge.on('step_complete', (event: { step: { phase: number } }) => {
+      bridge.on("step_complete", (event: { step: { phase: number } }) => {
         phasesSeen.add(event.step.phase);
       });
 
@@ -255,8 +255,8 @@ describe('Sys6OrchestratorBridge', () => {
     });
   });
 
-  describe('Triadic Stream Processing', () => {
-    it('should update stream salience during processing', async () => {
+  describe("Triadic Stream Processing", () => {
+    it("should update stream salience during processing", async () => {
       await bridge.start();
 
       // Wait for some processing
@@ -271,21 +271,21 @@ describe('Sys6OrchestratorBridge', () => {
       await bridge.stop();
     });
 
-    it('should maintain stream phase assignments', async () => {
+    it("should maintain stream phase assignments", async () => {
       await bridge.start();
 
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       const state = bridge.getState();
 
-      expect(state.streams[0].phase).toBe('perception');
-      expect(state.streams[1].phase).toBe('evaluation');
-      expect(state.streams[2].phase).toBe('action');
+      expect(state.streams[0].phase).toBe("perception");
+      expect(state.streams[1].phase).toBe("evaluation");
+      expect(state.streams[2].phase).toBe("action");
 
       await bridge.stop();
     });
 
-    it('should update stream perceives relationships', async () => {
+    it("should update stream perceives relationships", async () => {
       const state = bridge.getState();
 
       // Stream 1 perceives streams 2 and 3
@@ -299,7 +299,7 @@ describe('Sys6OrchestratorBridge', () => {
       expect(state.streams[1].perceives.stream3).toBe(true);
     });
 
-    it('should detect affordances based on salience', async () => {
+    it("should detect affordances based on salience", async () => {
       await bridge.start();
 
       // Wait for processing
@@ -316,10 +316,10 @@ describe('Sys6OrchestratorBridge', () => {
     });
   });
 
-  describe('Agent Coordination', () => {
-    it('should invoke agents during processing', async () => {
+  describe("Agent Coordination", () => {
+    it("should invoke agents during processing", async () => {
       const agentInvocations: unknown[] = [];
-      bridge.on('agent_invoked', (event) => agentInvocations.push(event));
+      bridge.on("agent_invoked", (event) => agentInvocations.push(event));
 
       await bridge.start();
 
@@ -332,56 +332,56 @@ describe('Sys6OrchestratorBridge', () => {
       expect(agentInvocations.length).toBeGreaterThan(0);
     });
 
-    it('should register new agents', () => {
+    it("should register new agents", () => {
       bridge.registerAgent({
-        id: 'test-agent',
-        name: 'Test Agent',
-        specialization: 'Testing',
-        capabilities: ['testing'],
+        id: "test-agent",
+        name: "Test Agent",
+        specialization: "Testing",
+        capabilities: ["testing"],
         isActive: true,
       });
 
       const state = bridge.getState();
-      const testAgent = state.agents.find((a) => a.id === 'test-agent');
+      const testAgent = state.agents.find((a) => a.id === "test-agent");
 
       expect(testAgent).toBeDefined();
-      expect(testAgent?.name).toBe('Test Agent');
+      expect(testAgent?.name).toBe("Test Agent");
     });
 
-    it('should deactivate agents', () => {
-      const result = bridge.deactivateAgent('cognitive-processor');
+    it("should deactivate agents", () => {
+      const result = bridge.deactivateAgent("cognitive-processor");
 
       expect(result).toBe(true);
 
       const state = bridge.getState();
-      const agent = state.agents.find((a) => a.id === 'cognitive-processor');
+      const agent = state.agents.find((a) => a.id === "cognitive-processor");
 
       expect(agent?.isActive).toBe(false);
     });
 
-    it('should return false when deactivating non-existent agent', () => {
-      const result = bridge.deactivateAgent('non-existent');
+    it("should return false when deactivating non-existent agent", () => {
+      const result = bridge.deactivateAgent("non-existent");
       expect(result).toBe(false);
     });
   });
 
-  describe('Message Processing', () => {
-    it('should process messages through cognitive system', async () => {
-      const response = await bridge.processMessage('Hello, Deep Tree Echo!');
+  describe("Message Processing", () => {
+    it("should process messages through cognitive system", async () => {
+      const response = await bridge.processMessage("Hello, Deep Tree Echo!");
 
-      expect(typeof response).toBe('string');
+      expect(typeof response).toBe("string");
       expect(response.length).toBeGreaterThan(0);
     });
 
-    it('should handle empty messages gracefully', async () => {
-      const response = await bridge.processMessage('');
+    it("should handle empty messages gracefully", async () => {
+      const response = await bridge.processMessage("");
 
-      expect(typeof response).toBe('string');
+      expect(typeof response).toBe("string");
     });
 
-    it('should update emotional state after processing', async () => {
+    it("should update emotional state after processing", async () => {
       // Process a message
-      await bridge.processMessage('This is a test message');
+      await bridge.processMessage("This is a test message");
 
       // The emotional state should have been updated
       // (We can't directly verify this without exposing internal state)
@@ -390,8 +390,8 @@ describe('Sys6OrchestratorBridge', () => {
     });
   });
 
-  describe('Telemetry and Metrics', () => {
-    it('should collect telemetry during operation', async () => {
+  describe("Telemetry and Metrics", () => {
+    it("should collect telemetry during operation", async () => {
       await bridge.start();
 
       // Wait for cycle completion
@@ -403,7 +403,7 @@ describe('Sys6OrchestratorBridge', () => {
       expect(history.length).toBeGreaterThan(0);
     });
 
-    it('should provide accurate metrics', async () => {
+    it("should provide accurate metrics", async () => {
       await bridge.start();
 
       await new Promise((resolve) => setTimeout(resolve, 200));
@@ -418,9 +418,9 @@ describe('Sys6OrchestratorBridge', () => {
       await bridge.stop();
     });
 
-    it('should track cycle count correctly', async () => {
+    it("should track cycle count correctly", async () => {
       const cycleEvents: unknown[] = [];
-      bridge.on('cycle_complete', (event) => cycleEvents.push(event));
+      bridge.on("cycle_complete", (event) => cycleEvents.push(event));
 
       await bridge.start();
 
@@ -433,7 +433,7 @@ describe('Sys6OrchestratorBridge', () => {
       expect(metrics.totalCycles).toBe(cycleEvents.length);
     });
 
-    it('should maintain telemetry history limit', async () => {
+    it("should maintain telemetry history limit", async () => {
       // Create bridge with short step duration
       const fastBridge = new Sys6OrchestratorBridge({
         dim: 32,
@@ -453,18 +453,18 @@ describe('Sys6OrchestratorBridge', () => {
     });
   });
 
-  describe('Error Handling', () => {
-    it('should handle processing errors gracefully', async () => {
+  describe("Error Handling", () => {
+    it("should handle processing errors gracefully", async () => {
       // Process should return error message, not throw
-      const response = await bridge.processMessage('test');
-      expect(typeof response).toBe('string');
+      const response = await bridge.processMessage("test");
+      expect(typeof response).toBe("string");
     });
 
-    it('should continue operation after errors', async () => {
+    it("should continue operation after errors", async () => {
       await bridge.start();
 
       // Process message (may or may not error)
-      await bridge.processMessage('test');
+      await bridge.processMessage("test");
 
       // Bridge should still be running
       const state = bridge.getState();
@@ -474,18 +474,18 @@ describe('Sys6OrchestratorBridge', () => {
     });
   });
 
-  describe('State Management', () => {
-    it('should provide complete state snapshot', () => {
+  describe("State Management", () => {
+    it("should provide complete state snapshot", () => {
       const state = bridge.getState();
 
-      expect(state).toHaveProperty('running');
-      expect(state).toHaveProperty('cycleNumber');
-      expect(state).toHaveProperty('currentStep');
-      expect(state).toHaveProperty('streams');
-      expect(state).toHaveProperty('agents');
+      expect(state).toHaveProperty("running");
+      expect(state).toHaveProperty("cycleNumber");
+      expect(state).toHaveProperty("currentStep");
+      expect(state).toHaveProperty("streams");
+      expect(state).toHaveProperty("agents");
     });
 
-    it('should track step count accurately', async () => {
+    it("should track step count accurately", async () => {
       await bridge.start();
 
       await new Promise((resolve) => setTimeout(resolve, 100));

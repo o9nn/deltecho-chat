@@ -10,9 +10,9 @@
  * Telegram, Discord, and other integrations.
  */
 
-import { getLogger } from '../utils/logger.js';
+import { getLogger } from "../utils/logger.js";
 
-const logger = getLogger('MultiModalProcessor');
+const logger = getLogger("MultiModalProcessor");
 
 /**
  * Configuration for the multi-modal processor
@@ -29,7 +29,7 @@ export interface MultiModalConfig {
   ttsVoice?: string;
 
   // Alternative STT providers
-  sttProvider?: 'openai-whisper' | 'google-cloud' | 'azure' | 'local-whisper';
+  sttProvider?: "openai-whisper" | "google-cloud" | "azure" | "local-whisper";
   sttEndpoint?: string;
 
   // Debug mode
@@ -67,7 +67,7 @@ export interface ImageAnalysisResult {
  */
 export interface TTSResult {
   audioBuffer: Buffer;
-  format: 'mp3' | 'opus' | 'aac' | 'wav';
+  format: "mp3" | "opus" | "aac" | "flac" | "wav";
   durationMs: number;
 }
 
@@ -80,16 +80,16 @@ export class MultiModalProcessor {
 
   private constructor(config: MultiModalConfig) {
     this.config = {
-      anthropicModel: 'claude-sonnet-4-20250514',
-      whisperModel: 'whisper-1',
-      ttsModel: 'tts-1',
-      ttsVoice: 'alloy',
-      sttProvider: 'openai-whisper',
+      anthropicModel: "claude-sonnet-4-20250514",
+      whisperModel: "whisper-1",
+      ttsModel: "tts-1",
+      ttsVoice: "alloy",
+      sttProvider: "openai-whisper",
       debug: false,
       ...config,
     };
 
-    logger.info('MultiModalProcessor initialized');
+    logger.info("MultiModalProcessor initialized");
   }
 
   public static getInstance(config?: MultiModalConfig): MultiModalProcessor {
@@ -114,13 +114,13 @@ export class MultiModalProcessor {
     options?: {
       language?: string;
       prompt?: string;
-      responseFormat?: 'json' | 'text' | 'verbose_json';
-    }
+      responseFormat?: "json" | "text" | "verbose_json";
+    },
   ): Promise<STTResult> {
     const startTime = Date.now();
 
     if (!this.config.openaiApiKey) {
-      throw new Error('OpenAI API key required for speech-to-text');
+      throw new Error("OpenAI API key required for speech-to-text");
     }
 
     try {
@@ -131,30 +131,33 @@ export class MultiModalProcessor {
 
       // Create form data for Whisper API
       const formData = new FormData();
-      const blob = new Blob([buffer], { type: 'audio/ogg' });
-      formData.append('file', blob, 'audio.ogg');
-      formData.append('model', this.config.whisperModel || 'whisper-1');
+
+      const blob = new Blob([new Uint8Array(buffer) as any], {
+        type: "audio/ogg",
+      });
+      formData.append("file", blob, "audio.ogg");
+      formData.append("model", this.config.whisperModel || "whisper-1");
 
       if (options?.language) {
-        formData.append('language', options.language);
+        formData.append("language", options.language);
       }
       if (options?.prompt) {
-        formData.append('prompt', options.prompt);
+        formData.append("prompt", options.prompt);
       }
       formData.append(
-        'response_format',
-        options?.responseFormat || 'verbose_json'
+        "response_format",
+        options?.responseFormat || "verbose_json",
       );
 
       const response = await fetch(
-        'https://api.openai.com/v1/audio/transcriptions',
+        "https://api.openai.com/v1/audio/transcriptions",
         {
-          method: 'POST',
+          method: "POST",
           headers: {
             Authorization: `Bearer ${this.config.openaiApiKey}`,
           },
           body: formData,
-        }
+        },
       );
 
       if (!response.ok) {
@@ -162,18 +165,28 @@ export class MultiModalProcessor {
         throw new Error(`Whisper API error: ${response.status} - ${error}`);
       }
 
-      const result = await response.json();
+      const result = (await response.json()) as {
+        text?: string;
+        language?: string;
+        confidence?: number;
+        segments?: { start: number; end: number; text: string }[];
+      };
       const durationMs = Date.now() - startTime;
 
       if (this.config.debug) {
-        logger.debug(`STT completed in ${durationMs}ms: "${result.text?.substring(0, 50)}..."`);
+        logger.debug(
+          `STT completed in ${durationMs}ms: "${result.text?.substring(
+            0,
+            50,
+          )}..."`,
+        );
       }
 
       return {
-        text: result.text || '',
+        text: result.text || "",
         language: result.language,
         confidence: result.confidence,
-        segments: result.segments?.map((seg: { start: number; end: number; text: string }) => ({
+        segments: result.segments?.map((seg) => ({
           start: seg.start * 1000,
           end: seg.end * 1000,
           text: seg.text,
@@ -181,7 +194,7 @@ export class MultiModalProcessor {
         durationMs,
       };
     } catch (error) {
-      logger.error('Speech-to-text failed:', error);
+      logger.error("Speech-to-text failed:", error);
       throw error;
     }
   }
@@ -194,34 +207,34 @@ export class MultiModalProcessor {
     options?: {
       prompt?: string;
       maxTokens?: number;
-      mediaType?: 'image/jpeg' | 'image/png' | 'image/gif' | 'image/webp';
-    }
+      mediaType?: "image/jpeg" | "image/png" | "image/gif" | "image/webp";
+    },
   ): Promise<ImageAnalysisResult> {
     if (!this.config.anthropicApiKey) {
-      throw new Error('Anthropic API key required for image analysis');
+      throw new Error("Anthropic API key required for image analysis");
     }
 
     try {
       // Handle different input types
       let base64Data: string;
-      let mediaType = options?.mediaType || 'image/jpeg';
+      let mediaType = options?.mediaType || "image/jpeg";
 
-      if (typeof imageData === 'string') {
+      if (typeof imageData === "string") {
         // Already base64 or URL
-        if (imageData.startsWith('data:')) {
+        if (imageData.startsWith("data:")) {
           // Data URL
           const matches = imageData.match(/^data:([^;]+);base64,(.+)$/);
           if (matches) {
             mediaType = matches[1] as typeof mediaType;
             base64Data = matches[2];
           } else {
-            throw new Error('Invalid data URL format');
+            throw new Error("Invalid data URL format");
           }
-        } else if (imageData.startsWith('http')) {
+        } else if (imageData.startsWith("http")) {
           // Fetch URL and convert
           const response = await fetch(imageData);
           const buffer = await response.arrayBuffer();
-          base64Data = Buffer.from(buffer).toString('base64');
+          base64Data = Buffer.from(buffer).toString("base64");
         } else {
           // Assume base64
           base64Data = imageData;
@@ -231,7 +244,7 @@ export class MultiModalProcessor {
         const buffer = Buffer.isBuffer(imageData)
           ? imageData
           : Buffer.from(imageData);
-        base64Data = buffer.toString('base64');
+        base64Data = buffer.toString("base64");
       }
 
       const prompt =
@@ -244,30 +257,30 @@ export class MultiModalProcessor {
 
 Be concise but comprehensive.`;
 
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': this.config.anthropicApiKey,
-          'anthropic-version': '2023-06-01',
+          "Content-Type": "application/json",
+          "x-api-key": this.config.anthropicApiKey,
+          "anthropic-version": "2023-06-01",
         },
         body: JSON.stringify({
           model: this.config.anthropicModel,
           max_tokens: options?.maxTokens || 1024,
           messages: [
             {
-              role: 'user',
+              role: "user",
               content: [
                 {
-                  type: 'image',
+                  type: "image",
                   source: {
-                    type: 'base64',
+                    type: "base64",
                     media_type: mediaType,
                     data: base64Data,
                   },
                 },
                 {
-                  type: 'text',
+                  type: "text",
                   text: prompt,
                 },
               ],
@@ -281,20 +294,26 @@ Be concise but comprehensive.`;
         throw new Error(`Claude API error: ${response.status} - ${error}`);
       }
 
-      const result = await response.json();
+      const result = (await response.json()) as {
+        content?: { type: string; text?: string }[];
+      };
       const text =
-        result.content?.[0]?.type === 'text' ? result.content[0].text : '';
+        result.content?.[0]?.type === "text"
+          ? result.content[0].text || ""
+          : "";
 
       // Parse structured response
       const analysis = this.parseImageAnalysis(text);
 
       if (this.config.debug) {
-        logger.debug(`Image analysis: ${analysis.description.substring(0, 100)}...`);
+        logger.debug(
+          `Image analysis: ${analysis.description.substring(0, 100)}...`,
+        );
       }
 
       return analysis;
     } catch (error) {
-      logger.error('Image analysis failed:', error);
+      logger.error("Image analysis failed:", error);
       throw error;
     }
   }
@@ -310,13 +329,13 @@ Be concise but comprehensive.`;
     };
 
     // Try to extract structured information
-    const lines = text.split('\n');
+    const lines = text.split("\n");
 
     for (const line of lines) {
       const lowerLine = line.toLowerCase();
 
       // Look for detected text
-      if (lowerLine.includes('text:') || lowerLine.includes('text detected:')) {
+      if (lowerLine.includes("text:") || lowerLine.includes("text detected:")) {
         const textMatch = line.match(/text[^:]*:\s*(.+)/i);
         if (textMatch) {
           result.detectedText?.push(textMatch[1].trim());
@@ -324,7 +343,7 @@ Be concise but comprehensive.`;
       }
 
       // Look for objects
-      if (lowerLine.includes('object:') || lowerLine.includes('subject:')) {
+      if (lowerLine.includes("object:") || lowerLine.includes("subject:")) {
         const objMatch = line.match(/(?:object|subject)[^:]*:\s*(.+)/i);
         if (objMatch) {
           result.detectedObjects?.push(objMatch[1].trim());
@@ -332,7 +351,7 @@ Be concise but comprehensive.`;
       }
 
       // Look for sentiment/mood
-      if (lowerLine.includes('mood:') || lowerLine.includes('sentiment:')) {
+      if (lowerLine.includes("mood:") || lowerLine.includes("sentiment:")) {
         const sentMatch = line.match(/(?:mood|sentiment)[^:]*:\s*(.+)/i);
         if (sentMatch) {
           result.sentiment = sentMatch[1].trim();
@@ -349,28 +368,28 @@ Be concise but comprehensive.`;
   public async textToSpeech(
     text: string,
     options?: {
-      voice?: 'alloy' | 'echo' | 'fable' | 'onyx' | 'nova' | 'shimmer';
+      voice?: "alloy" | "echo" | "fable" | "onyx" | "nova" | "shimmer";
       speed?: number;
-      format?: 'mp3' | 'opus' | 'aac' | 'flac';
-    }
+      format?: "mp3" | "opus" | "aac" | "flac";
+    },
   ): Promise<TTSResult> {
     if (!this.config.openaiApiKey) {
-      throw new Error('OpenAI API key required for text-to-speech');
+      throw new Error("OpenAI API key required for text-to-speech");
     }
 
     try {
-      const response = await fetch('https://api.openai.com/v1/audio/speech', {
-        method: 'POST',
+      const response = await fetch("https://api.openai.com/v1/audio/speech", {
+        method: "POST",
         headers: {
           Authorization: `Bearer ${this.config.openaiApiKey}`,
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: this.config.ttsModel || 'tts-1',
+          model: this.config.ttsModel || "tts-1",
           input: text,
-          voice: options?.voice || this.config.ttsVoice || 'alloy',
+          voice: options?.voice || this.config.ttsVoice || "alloy",
           speed: options?.speed || 1.0,
-          response_format: options?.format || 'mp3',
+          response_format: options?.format || "mp3",
         }),
       });
 
@@ -386,16 +405,18 @@ Be concise but comprehensive.`;
       const durationMs = (wordCount / 150) * 60 * 1000;
 
       if (this.config.debug) {
-        logger.debug(`TTS generated ${audioBuffer.length} bytes for ${text.length} chars`);
+        logger.debug(
+          `TTS generated ${audioBuffer.length} bytes for ${text.length} chars`,
+        );
       }
 
       return {
         audioBuffer,
-        format: options?.format || 'mp3',
+        format: options?.format || "mp3",
         durationMs,
       };
     } catch (error) {
-      logger.error('Text-to-speech failed:', error);
+      logger.error("Text-to-speech failed:", error);
       throw error;
     }
   }
@@ -409,7 +430,7 @@ Be concise but comprehensive.`;
       language?: string;
       respondWithVoice?: boolean;
       responseGenerator?: (text: string) => Promise<string>;
-    }
+    },
   ): Promise<{
     transcription: STTResult;
     response?: string;
@@ -448,7 +469,7 @@ Be concise but comprehensive.`;
       caption?: string;
       detailedAnalysis?: boolean;
       responseGenerator?: (analysis: ImageAnalysisResult) => Promise<string>;
-    }
+    },
   ): Promise<{
     analysis: ImageAnalysisResult;
     response?: string;
@@ -461,7 +482,11 @@ Be concise but comprehensive.`;
 4. Colors, composition, and style
 5. Emotional tone and mood
 6. Context and possible meaning
-${options.caption ? `\nThe user provided this caption: "${options.caption}"` : ''}`
+${
+  options.caption
+    ? `\nThe user provided this caption: "${options.caption}"`
+    : ""
+}`
       : options?.caption
         ? `Analyze this image. The user says: "${options.caption}"`
         : undefined;
@@ -499,11 +524,3 @@ ${options.caption ? `\nThe user provided this caption: "${options.caption}"` : '
 
 // Singleton export
 export const multiModalProcessor = MultiModalProcessor.getInstance();
-
-// Export types
-export type {
-  MultiModalConfig,
-  STTResult,
-  ImageAnalysisResult,
-  TTSResult,
-};

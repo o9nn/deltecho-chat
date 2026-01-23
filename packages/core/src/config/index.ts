@@ -1,1 +1,1 @@
-export * from './ProductionConfig';
+export * from "./ProductionConfig";

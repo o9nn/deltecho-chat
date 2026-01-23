@@ -3,7 +3,7 @@
  * Provides logging with level filtering, structured output, and runtime configuration
  */
 
-export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
+export type LogLevel = "debug" | "info" | "warn" | "error";
 
 export interface Logger {
   debug: (...args: any[]) => void;
@@ -30,20 +30,20 @@ const LOG_LEVEL_PRIORITY: Record<LogLevel, number> = {
 
 // Default configuration
 let globalConfig: LoggerConfig = {
-  minLevel: (process.env.LOG_LEVEL as LogLevel) || 'info',
-  enableStructured: process.env.LOG_STRUCTURED === 'true',
+  minLevel: (process.env.LOG_LEVEL as LogLevel) || "info",
+  enableStructured: process.env.LOG_STRUCTURED === "true",
   enableTimestamp: true,
-  enableColors: process.env.NO_COLOR !== 'true',
+  enableColors: process.env.NO_COLOR !== "true",
 };
 
 // ANSI color codes for terminal output
 const COLORS = {
-  reset: '\x1b[0m',
-  debug: '\x1b[36m', // cyan
-  info: '\x1b[32m', // green
-  warn: '\x1b[33m', // yellow
-  error: '\x1b[31m', // red
-  context: '\x1b[90m', // gray
+  reset: "\x1b[0m",
+  debug: "\x1b[36m", // cyan
+  info: "\x1b[32m", // green
+  warn: "\x1b[33m", // yellow
+  error: "\x1b[31m", // red
+  context: "\x1b[90m", // gray
 };
 
 /**
@@ -64,7 +64,9 @@ class SimpleLogger implements Logger {
   constructor(private context: string) {}
 
   private shouldLog(level: LogLevel): boolean {
-    return LOG_LEVEL_PRIORITY[level] >= LOG_LEVEL_PRIORITY[globalConfig.minLevel];
+    return (
+      LOG_LEVEL_PRIORITY[level] >= LOG_LEVEL_PRIORITY[globalConfig.minLevel]
+    );
   }
 
   private formatStructured(level: LogLevel, args: any[]): string {
@@ -73,19 +75,23 @@ class SimpleLogger implements Logger {
       level: level.toUpperCase(),
       context: this.context,
       message: args
-        .map((arg) => (typeof arg === 'object' ? JSON.stringify(arg) : String(arg)))
-        .join(' '),
+        .map((arg) =>
+          typeof arg === "object" ? JSON.stringify(arg) : String(arg),
+        )
+        .join(" "),
     };
     return JSON.stringify(entry);
   }
 
-  private formatPretty(level: LogLevel, args: any[]): string {
+  private formatPretty(level: LogLevel, _args: any[]): string {
     const parts: string[] = [];
 
     if (globalConfig.enableTimestamp) {
       const timestamp = new Date().toISOString();
       parts.push(
-        globalConfig.enableColors ? `${COLORS.context}${timestamp}${COLORS.reset}` : timestamp
+        globalConfig.enableColors
+          ? `${COLORS.context}${timestamp}${COLORS.reset}`
+          : timestamp,
       );
     }
 
@@ -98,10 +104,12 @@ class SimpleLogger implements Logger {
 
     const contextStr = `[${this.context}]`;
     parts.push(
-      globalConfig.enableColors ? `${COLORS.context}${contextStr}${COLORS.reset}` : contextStr
+      globalConfig.enableColors
+        ? `${COLORS.context}${contextStr}${COLORS.reset}`
+        : contextStr,
     );
 
-    return parts.join(' ');
+    return parts.join(" ");
   }
 
   private log(level: LogLevel, ...args: any[]) {
@@ -110,18 +118,18 @@ class SimpleLogger implements Logger {
     if (globalConfig.enableStructured) {
       const output = this.formatStructured(level, args);
       // Use appropriate console method for structured output
-      if (level === 'error') {
+      if (level === "error") {
         console.error(output);
-      } else if (level === 'warn') {
+      } else if (level === "warn") {
         console.warn(output);
       } else {
         console.log(output);
       }
     } else {
       const prefix = this.formatPretty(level, args);
-      if (level === 'error') {
+      if (level === "error") {
         console.error(prefix, ...args);
-      } else if (level === 'warn') {
+      } else if (level === "warn") {
         console.warn(prefix, ...args);
       } else {
         console.log(prefix, ...args);
@@ -130,19 +138,19 @@ class SimpleLogger implements Logger {
   }
 
   debug(...args: any[]) {
-    this.log('debug', ...args);
+    this.log("debug", ...args);
   }
 
   info(...args: any[]) {
-    this.log('info', ...args);
+    this.log("info", ...args);
   }
 
   warn(...args: any[]) {
-    this.log('warn', ...args);
+    this.log("warn", ...args);
   }
 
   error(...args: any[]) {
-    this.log('error', ...args);
+    this.log("error", ...args);
   }
 
   /**

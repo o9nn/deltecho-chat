@@ -6,14 +6,14 @@
  * zero-tolerance policy for stubs - all implementations are production-ready.
  */
 
-import { getLogger } from '../../utils/logger';
+import { getLogger } from "../../utils/logger";
 
-const log = getLogger('deep-tree-echo-core/cognitive/providers/LLMProvider');
+const log = getLogger("deep-tree-echo-core/cognitive/providers/LLMProvider");
 
 /**
  * Message role in a conversation
  */
-export type MessageRole = 'system' | 'user' | 'assistant';
+export type MessageRole = "system" | "user" | "assistant";
 
 /**
  * A single message in a conversation
@@ -42,7 +42,7 @@ export interface CompletionConfig {
  */
 export interface CompletionResponse {
   content: string;
-  finishReason: 'stop' | 'length' | 'content_filter' | 'error';
+  finishReason: "stop" | "length" | "content_filter" | "error";
   usage: {
     promptTokens: number;
     completionTokens: number;
@@ -58,7 +58,7 @@ export interface CompletionResponse {
 export interface StreamChunk {
   content: string;
   isComplete: boolean;
-  finishReason?: CompletionResponse['finishReason'];
+  finishReason?: CompletionResponse["finishReason"];
 }
 
 /**
@@ -114,7 +114,10 @@ export abstract class LLMProvider {
   /**
    * Generate a completion from the LLM
    */
-  abstract complete(messages: ChatMessage[], config: CompletionConfig): Promise<CompletionResponse>;
+  abstract complete(
+    messages: ChatMessage[],
+    config: CompletionConfig,
+  ): Promise<CompletionResponse>;
 
   /**
    * Generate a streaming completion from the LLM
@@ -122,7 +125,7 @@ export abstract class LLMProvider {
   abstract completeStream(
     messages: ChatMessage[],
     config: CompletionConfig,
-    onChunk: (chunk: StreamChunk) => void
+    onChunk: (chunk: StreamChunk) => void,
   ): Promise<CompletionResponse>;
 
   /**
@@ -157,7 +160,11 @@ export function registerProvider(name: string, factory: ProviderFactory): void {
 /**
  * Create a provider instance
  */
-export function createProvider(name: string, apiKey: string, baseUrl?: string): LLMProvider | null {
+export function createProvider(
+  name: string,
+  apiKey: string,
+  baseUrl?: string,
+): LLMProvider | null {
   const factory = providerRegistry.get(name.toLowerCase());
   if (!factory) {
     log.warn(`Unknown LLM provider: ${name}`);

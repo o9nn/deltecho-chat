@@ -23,7 +23,7 @@ Agent-MCP layer configuration
 
 [src/types.ts:151](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L151)
 
-___
+---
 
 ### parentArenaId
 
@@ -33,7 +33,7 @@ ___
 
 [src/types.ts:152](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L152)
 
-___
+---
 
 ### enableEvolution
 
@@ -43,7 +43,7 @@ ___
 
 [src/types.ts:153](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L153)
 
-___
+---
 
 ### evolutionRate
 

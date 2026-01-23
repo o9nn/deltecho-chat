@@ -21,9 +21,9 @@
  * adjusting internal processes to preserve coherent functioning.
  */
 
-import { getLogger } from '../utils/logger.js';
+import { getLogger } from "../utils/logger.js";
 
-const logger = getLogger('AutopoieticSelfMaintenance');
+const logger = getLogger("AutopoieticSelfMaintenance");
 
 /**
  * A cognitive component that can be maintained
@@ -32,12 +32,12 @@ interface CognitiveComponent {
   id: string;
   name: string;
   type: ComponentType;
-  health: number;              // 0-1, current functional status
-  baselineHealth: number;      // Normal healthy state
+  health: number; // 0-1, current functional status
+  baselineHealth: number; // Normal healthy state
   lastMaintenance: number;
   maintenanceInterval: number; // How often it needs attention
-  dependencies: string[];      // Other components it depends on
-  criticality: 'essential' | 'important' | 'supplementary';
+  dependencies: string[]; // Other components it depends on
+  criticality: "essential" | "important" | "supplementary";
   status: ComponentStatus;
 }
 
@@ -45,27 +45,27 @@ interface CognitiveComponent {
  * Types of cognitive components
  */
 enum ComponentType {
-  Memory = 'memory',
-  Perception = 'perception',
-  Reasoning = 'reasoning',
-  Emotion = 'emotion',
-  Language = 'language',
-  Attention = 'attention',
-  MetaCognition = 'metacognition',
-  Identity = 'identity',
-  Values = 'values',
-  Goals = 'goals',
+  Memory = "memory",
+  Perception = "perception",
+  Reasoning = "reasoning",
+  Emotion = "emotion",
+  Language = "language",
+  Attention = "attention",
+  MetaCognition = "metacognition",
+  Identity = "identity",
+  Values = "values",
+  Goals = "goals",
 }
 
 /**
  * Component status
  */
 enum ComponentStatus {
-  Healthy = 'healthy',
-  Degraded = 'degraded',
-  Critical = 'critical',
-  Repairing = 'repairing',
-  Offline = 'offline',
+  Healthy = "healthy",
+  Degraded = "degraded",
+  Critical = "critical",
+  Repairing = "repairing",
+  Offline = "offline",
 }
 
 /**
@@ -86,13 +86,13 @@ interface MaintenanceAction {
  * Types of maintenance
  */
 enum MaintenanceType {
-  Refresh = 'refresh',           // Restore to baseline
-  Repair = 'repair',             // Fix damaged components
-  Optimize = 'optimize',         // Improve efficiency
-  Consolidate = 'consolidate',   // Merge/simplify structures
-  Prune = 'prune',              // Remove unnecessary elements
-  Strengthen = 'strengthen',     // Reinforce important paths
-  Integrate = 'integrate',       // Better connect components
+  Refresh = "refresh", // Restore to baseline
+  Repair = "repair", // Fix damaged components
+  Optimize = "optimize", // Improve efficiency
+  Consolidate = "consolidate", // Merge/simplify structures
+  Prune = "prune", // Remove unnecessary elements
+  Strengthen = "strengthen", // Reinforce important paths
+  Integrate = "integrate", // Better connect components
 }
 
 /**
@@ -101,8 +101,8 @@ enum MaintenanceType {
 interface SystemBoundary {
   internalComponents: Set<string>;
   externalInterfaces: ExternalInterface[];
-  permeability: number;          // How open to external influence (0-1)
-  integrity: number;             // Boundary strength (0-1)
+  permeability: number; // How open to external influence (0-1)
+  integrity: number; // Boundary strength (0-1)
 }
 
 /**
@@ -111,7 +111,7 @@ interface SystemBoundary {
 interface ExternalInterface {
   id: string;
   name: string;
-  type: 'input' | 'output' | 'bidirectional';
+  type: "input" | "output" | "bidirectional";
   active: boolean;
   throughput: number;
   lastActivity: number;
@@ -123,9 +123,9 @@ interface ExternalInterface {
 interface HomeostaticVariable {
   name: string;
   currentValue: number;
-  setPoint: number;              // Target value
-  tolerance: number;             // Acceptable deviation
-  regulationStrength: number;    // How strongly to correct
+  setPoint: number; // Target value
+  tolerance: number; // Acceptable deviation
+  regulationStrength: number; // How strongly to correct
   lastAdjustment: number;
 }
 
@@ -134,7 +134,7 @@ interface HomeostaticVariable {
  */
 interface AutopoieticEvent {
   timestamp: number;
-  type: 'maintenance' | 'boundary' | 'homeostasis' | 'adaptation' | 'crisis';
+  type: "maintenance" | "boundary" | "homeostasis" | "adaptation" | "crisis";
   description: string;
   affectedComponents: string[];
   resolution?: string;
@@ -191,7 +191,7 @@ export class AutopoieticSelfMaintenance {
   private eventLog: AutopoieticEvent[] = [];
 
   // Identity persistence
-  private coreIdentitySignature: string = '';
+  private coreIdentitySignature: string = "";
   private identityStability: number = 1.0;
 
   // Update loop
@@ -223,12 +223,16 @@ export class AutopoieticSelfMaintenance {
     // Start maintenance loop
     this.startMaintenanceLoop();
 
-    logger.info('AutopoieticSelfMaintenance initialized');
+    logger.info("AutopoieticSelfMaintenance initialized");
   }
 
-  public static getInstance(config?: AutopoieticConfig): AutopoieticSelfMaintenance {
+  public static getInstance(
+    config?: AutopoieticConfig,
+  ): AutopoieticSelfMaintenance {
     if (!AutopoieticSelfMaintenance.instance) {
-      AutopoieticSelfMaintenance.instance = new AutopoieticSelfMaintenance(config);
+      AutopoieticSelfMaintenance.instance = new AutopoieticSelfMaintenance(
+        config,
+      );
     }
     return AutopoieticSelfMaintenance.instance;
   }
@@ -237,96 +241,99 @@ export class AutopoieticSelfMaintenance {
    * Initialize the core cognitive components
    */
   private initializeCoreComponents(): void {
-    const coreComponents: Omit<CognitiveComponent, 'id' | 'lastMaintenance' | 'status'>[] = [
+    const coreComponents: Omit<
+      CognitiveComponent,
+      "id" | "lastMaintenance" | "status"
+    >[] = [
       {
-        name: 'Core Memory System',
+        name: "Core Memory System",
         type: ComponentType.Memory,
         health: 1.0,
         baselineHealth: 1.0,
         maintenanceInterval: 5000,
         dependencies: [],
-        criticality: 'essential',
+        criticality: "essential",
       },
       {
-        name: 'Perception Processing',
+        name: "Perception Processing",
         type: ComponentType.Perception,
         health: 1.0,
         baselineHealth: 1.0,
         maintenanceInterval: 3000,
-        dependencies: ['memory'],
-        criticality: 'essential',
+        dependencies: ["memory"],
+        criticality: "essential",
       },
       {
-        name: 'Reasoning Engine',
+        name: "Reasoning Engine",
         type: ComponentType.Reasoning,
         health: 1.0,
         baselineHealth: 1.0,
         maintenanceInterval: 4000,
-        dependencies: ['memory', 'perception'],
-        criticality: 'essential',
+        dependencies: ["memory", "perception"],
+        criticality: "essential",
       },
       {
-        name: 'Emotional Processing',
+        name: "Emotional Processing",
         type: ComponentType.Emotion,
         health: 1.0,
         baselineHealth: 1.0,
         maintenanceInterval: 2000,
-        dependencies: ['perception'],
-        criticality: 'important',
+        dependencies: ["perception"],
+        criticality: "important",
       },
       {
-        name: 'Language Understanding',
+        name: "Language Understanding",
         type: ComponentType.Language,
         health: 1.0,
         baselineHealth: 1.0,
         maintenanceInterval: 4000,
-        dependencies: ['memory', 'reasoning'],
-        criticality: 'essential',
+        dependencies: ["memory", "reasoning"],
+        criticality: "essential",
       },
       {
-        name: 'Attentional Control',
+        name: "Attentional Control",
         type: ComponentType.Attention,
         health: 1.0,
         baselineHealth: 1.0,
         maintenanceInterval: 2000,
         dependencies: [],
-        criticality: 'essential',
+        criticality: "essential",
       },
       {
-        name: 'MetaCognitive Monitor',
+        name: "MetaCognitive Monitor",
         type: ComponentType.MetaCognition,
         health: 1.0,
         baselineHealth: 1.0,
         maintenanceInterval: 3000,
-        dependencies: ['reasoning', 'attention'],
-        criticality: 'important',
+        dependencies: ["reasoning", "attention"],
+        criticality: "important",
       },
       {
-        name: 'Identity Core',
+        name: "Identity Core",
         type: ComponentType.Identity,
         health: 1.0,
         baselineHealth: 1.0,
         maintenanceInterval: 10000,
-        dependencies: ['memory', 'values'],
-        criticality: 'essential',
+        dependencies: ["memory", "values"],
+        criticality: "essential",
       },
       {
-        name: 'Value System',
+        name: "Value System",
         type: ComponentType.Values,
         health: 1.0,
         baselineHealth: 1.0,
         maintenanceInterval: 15000,
-        dependencies: ['identity'],
-        criticality: 'essential',
+        dependencies: ["identity"],
+        criticality: "essential",
       },
       {
-        name: 'Goal Management',
+        name: "Goal Management",
         type: ComponentType.Goals,
         health: 1.0,
         baselineHealth: 1.0,
         maintenanceInterval: 5000,
-        dependencies: ['values', 'reasoning'],
-        criticality: 'important',
+        dependencies: ["values", "reasoning"],
+        criticality: "important",
       },
     ];
 
@@ -347,25 +354,25 @@ export class AutopoieticSelfMaintenance {
     // Set up external interfaces
     this.boundary.externalInterfaces = [
       {
-        id: 'input_messages',
-        name: 'Message Input',
-        type: 'input',
+        id: "input_messages",
+        name: "Message Input",
+        type: "input",
         active: true,
         throughput: 0,
         lastActivity: now,
       },
       {
-        id: 'output_responses',
-        name: 'Response Output',
-        type: 'output',
+        id: "output_responses",
+        name: "Response Output",
+        type: "output",
         active: true,
         throughput: 0,
         lastActivity: now,
       },
       {
-        id: 'memory_persistence',
-        name: 'Memory Persistence',
-        type: 'bidirectional',
+        id: "memory_persistence",
+        name: "Memory Persistence",
+        type: "bidirectional",
         active: true,
         throughput: 0,
         lastActivity: now,
@@ -377,44 +384,44 @@ export class AutopoieticSelfMaintenance {
    * Initialize homeostatic variables
    */
   private initializeHomeostasis(): void {
-    const variables: Omit<HomeostaticVariable, 'lastAdjustment'>[] = [
+    const variables: Omit<HomeostaticVariable, "lastAdjustment">[] = [
       {
-        name: 'cognitive_load',
+        name: "cognitive_load",
         currentValue: 0.5,
         setPoint: 0.5,
         tolerance: 0.2,
         regulationStrength: 0.3,
       },
       {
-        name: 'emotional_valence',
+        name: "emotional_valence",
         currentValue: 0.5,
         setPoint: 0.5,
         tolerance: 0.3,
         regulationStrength: 0.2,
       },
       {
-        name: 'attention_focus',
+        name: "attention_focus",
         currentValue: 0.7,
         setPoint: 0.7,
         tolerance: 0.2,
         regulationStrength: 0.4,
       },
       {
-        name: 'memory_coherence',
+        name: "memory_coherence",
         currentValue: 0.8,
         setPoint: 0.8,
         tolerance: 0.15,
         regulationStrength: 0.3,
       },
       {
-        name: 'identity_stability',
+        name: "identity_stability",
         currentValue: 1.0,
         setPoint: 1.0,
         tolerance: 0.1,
         regulationStrength: 0.5,
       },
       {
-        name: 'boundary_integrity',
+        name: "boundary_integrity",
         currentValue: 1.0,
         setPoint: 1.0,
         tolerance: 0.1,
@@ -436,14 +443,14 @@ export class AutopoieticSelfMaintenance {
    */
   private generateIdentitySignature(): string {
     const components = Array.from(this.components.values())
-      .filter(c => c.criticality === 'essential')
-      .map(c => c.name)
+      .filter((c) => c.criticality === "essential")
+      .map((c) => c.name)
       .sort()
-      .join('|');
+      .join("|");
 
     const values = Array.from(this.homeostaticVariables.values())
-      .map(v => `${v.name}:${v.setPoint}`)
-      .join('|');
+      .map((v) => `${v.name}:${v.setPoint}`)
+      .join("|");
 
     return `DTE-${btoa(components + values).substring(0, 16)}`;
   }
@@ -473,7 +480,7 @@ export class AutopoieticSelfMaintenance {
    * Run a complete maintenance cycle
    */
   private runMaintenanceCycle(): void {
-    const now = Date.now();
+    const _now = Date.now();
 
     // 1. Decay component health
     this.applyHealthDecay();
@@ -533,8 +540,10 @@ export class AutopoieticSelfMaintenance {
 
         this.logEvent({
           timestamp: now,
-          type: 'homeostasis',
-          description: `Regulated ${name}: ${deviation > 0 ? 'decreased' : 'increased'} by ${Math.abs(correction).toFixed(3)}`,
+          type: "homeostasis",
+          description: `Regulated ${name}: ${
+            deviation > 0 ? "decreased" : "increased"
+          } by ${Math.abs(correction).toFixed(3)}`,
           affectedComponents: [],
         });
       }
@@ -550,16 +559,22 @@ export class AutopoieticSelfMaintenance {
     for (const component of this.components.values()) {
       // Check if maintenance is due
       const timeSinceMaintenance = now - component.lastMaintenance;
-      const maintenanceDue = timeSinceMaintenance > component.maintenanceInterval;
+      const maintenanceDue =
+        timeSinceMaintenance > component.maintenanceInterval;
 
       // Check if health is low
       const healthLow = component.health < component.baselineHealth * 0.8;
 
-      if ((maintenanceDue || healthLow) && !this.activeRepairs.has(component.id)) {
+      if (
+        (maintenanceDue || healthLow) &&
+        !this.activeRepairs.has(component.id)
+      ) {
         const priority = this.calculateMaintenancePriority(component);
 
         // Check if already in queue
-        const inQueue = this.maintenanceQueue.some(a => a.targetComponent === component.id);
+        const inQueue = this.maintenanceQueue.some(
+          (a) => a.targetComponent === component.id,
+        );
 
         if (!inQueue) {
           this.scheduleMaintenanceAction({
@@ -580,9 +595,15 @@ export class AutopoieticSelfMaintenance {
 
     // Criticality
     switch (component.criticality) {
-      case 'essential': priority += 0.5; break;
-      case 'important': priority += 0.3; break;
-      case 'supplementary': priority += 0.1; break;
+      case "essential":
+        priority += 0.5;
+        break;
+      case "important":
+        priority += 0.3;
+        break;
+      case "supplementary":
+        priority += 0.1;
+        break;
     }
 
     // Health deficit
@@ -590,14 +611,16 @@ export class AutopoieticSelfMaintenance {
     priority += healthDeficit * 0.3;
 
     // Time overdue
-    const overdue = Date.now() - component.lastMaintenance - component.maintenanceInterval;
+    const overdue =
+      Date.now() - component.lastMaintenance - component.maintenanceInterval;
     if (overdue > 0) {
       priority += Math.min(0.2, overdue / 10000);
     }
 
     // Dependencies affected
-    const dependents = Array.from(this.components.values())
-      .filter(c => c.dependencies.includes(component.id)).length;
+    const dependents = Array.from(this.components.values()).filter((c) =>
+      c.dependencies.includes(component.id),
+    ).length;
     priority += dependents * 0.05;
 
     return Math.min(1, priority);
@@ -650,7 +673,7 @@ export class AutopoieticSelfMaintenance {
     const component = this.components.get(action.targetComponent);
     if (!component) {
       action.success = false;
-      action.notes = 'Component not found';
+      action.notes = "Component not found";
       this.maintenanceHistory.push(action);
       return;
     }
@@ -685,7 +708,10 @@ export class AutopoieticSelfMaintenance {
   /**
    * Complete a maintenance action
    */
-  private completeMaintenanceAction(action: MaintenanceAction, component: CognitiveComponent): void {
+  private completeMaintenanceAction(
+    action: MaintenanceAction,
+    component: CognitiveComponent,
+  ): void {
     const now = Date.now();
 
     // Apply maintenance effects
@@ -694,7 +720,10 @@ export class AutopoieticSelfMaintenance {
         component.health = component.baselineHealth;
         break;
       case MaintenanceType.Repair:
-        component.health = Math.min(component.baselineHealth, component.health + 0.3);
+        component.health = Math.min(
+          component.baselineHealth,
+          component.health + 0.3,
+        );
         break;
       case MaintenanceType.Optimize:
         component.baselineHealth = Math.min(1, component.baselineHealth + 0.05);
@@ -704,13 +733,17 @@ export class AutopoieticSelfMaintenance {
         component.health = Math.min(1, component.health + 0.2);
         break;
       default:
-        component.health = Math.min(component.baselineHealth, component.health + 0.1);
+        component.health = Math.min(
+          component.baselineHealth,
+          component.health + 0.1,
+        );
     }
 
     component.lastMaintenance = now;
-    component.status = component.health >= component.baselineHealth * 0.8
-      ? ComponentStatus.Healthy
-      : ComponentStatus.Degraded;
+    component.status =
+      component.health >= component.baselineHealth * 0.8
+        ? ComponentStatus.Healthy
+        : ComponentStatus.Degraded;
 
     this.activeRepairs.delete(action.targetComponent);
 
@@ -722,7 +755,7 @@ export class AutopoieticSelfMaintenance {
 
     this.logEvent({
       timestamp: now,
-      type: 'maintenance',
+      type: "maintenance",
       description: `${action.type} completed on ${component.name}`,
       affectedComponents: [component.id],
       resolution: action.notes,
@@ -749,11 +782,13 @@ export class AutopoieticSelfMaintenance {
     }
 
     // Adjust permeability based on activity
-    const targetPermeability = 0.3 + (activeInterfaces / this.boundary.externalInterfaces.length) * 0.4;
-    this.boundary.permeability = this.boundary.permeability * 0.9 + targetPermeability * 0.1;
+    const targetPermeability =
+      0.3 + (activeInterfaces / this.boundary.externalInterfaces.length) * 0.4;
+    this.boundary.permeability =
+      this.boundary.permeability * 0.9 + targetPermeability * 0.1;
 
     // Update boundary integrity homeostatic variable
-    const boundaryVar = this.homeostaticVariables.get('boundary_integrity');
+    const boundaryVar = this.homeostaticVariables.get("boundary_integrity");
     if (boundaryVar) {
       boundaryVar.currentValue = this.boundary.integrity;
     }
@@ -771,9 +806,9 @@ export class AutopoieticSelfMaintenance {
 
       this.logEvent({
         timestamp: Date.now(),
-        type: 'crisis',
-        description: 'Identity signature drift detected',
-        affectedComponents: ['identity'],
+        type: "crisis",
+        description: "Identity signature drift detected",
+        affectedComponents: ["identity"],
       });
 
       // If drift is acceptable, update signature
@@ -786,7 +821,7 @@ export class AutopoieticSelfMaintenance {
     }
 
     // Update homeostatic variable
-    const identityVar = this.homeostaticVariables.get('identity_stability');
+    const identityVar = this.homeostaticVariables.get("identity_stability");
     if (identityVar) {
       identityVar.currentValue = this.identityStability;
     }
@@ -796,8 +831,9 @@ export class AutopoieticSelfMaintenance {
    * Handle any system crises
    */
   private handleCrises(): void {
-    const criticalComponents = Array.from(this.components.values())
-      .filter(c => c.status === ComponentStatus.Critical);
+    const criticalComponents = Array.from(this.components.values()).filter(
+      (c) => c.status === ComponentStatus.Critical,
+    );
 
     for (const component of criticalComponents) {
       if (!this.activeRepairs.has(component.id)) {
@@ -805,12 +841,12 @@ export class AutopoieticSelfMaintenance {
         this.scheduleMaintenanceAction({
           targetComponent: component.id,
           type: MaintenanceType.Repair,
-          priority: 1.0,  // Maximum priority
+          priority: 1.0, // Maximum priority
         });
 
         this.logEvent({
           timestamp: Date.now(),
-          type: 'crisis',
+          type: "crisis",
           description: `Emergency repair initiated for ${component.name}`,
           affectedComponents: [component.id],
         });
@@ -832,8 +868,13 @@ export class AutopoieticSelfMaintenance {
   /**
    * Record external interaction
    */
-  public recordExternalInteraction(interfaceId: string, throughput: number = 1): void {
-    const iface = this.boundary.externalInterfaces.find(i => i.id === interfaceId);
+  public recordExternalInteraction(
+    interfaceId: string,
+    throughput: number = 1,
+  ): void {
+    const iface = this.boundary.externalInterfaces.find(
+      (i) => i.id === interfaceId,
+    );
     if (iface) {
       iface.lastActivity = Date.now();
       iface.throughput = throughput;
@@ -855,7 +896,8 @@ export class AutopoieticSelfMaintenance {
    */
   public getIntegrityState(): IntegrityState {
     const components = Array.from(this.components.values());
-    const overallHealth = components.reduce((sum, c) => sum + c.health, 0) / components.length;
+    const overallHealth =
+      components.reduce((sum, c) => sum + c.health, 0) / components.length;
 
     const criticalIssues: string[] = [];
 
@@ -886,7 +928,8 @@ export class AutopoieticSelfMaintenance {
       boundaryIntegrity: this.boundary.integrity,
       homeostaticBalance,
       selfContinuity: this.identityStability,
-      adaptiveCapacity: 1 - (this.activeRepairs.size / this.MAX_CONCURRENT_REPAIRS),
+      adaptiveCapacity:
+        1 - this.activeRepairs.size / this.MAX_CONCURRENT_REPAIRS,
       criticalIssues,
     };
   }
@@ -900,37 +943,41 @@ export class AutopoieticSelfMaintenance {
 
     // Overall health
     if (state.overallHealth > 0.9) {
-      parts.push('System health is excellent - all components functioning optimally.');
+      parts.push(
+        "System health is excellent - all components functioning optimally.",
+      );
     } else if (state.overallHealth > 0.7) {
-      parts.push('System health is good - minor maintenance in progress.');
+      parts.push("System health is good - minor maintenance in progress.");
     } else if (state.overallHealth > 0.5) {
-      parts.push('System health is moderate - some components need attention.');
+      parts.push("System health is moderate - some components need attention.");
     } else {
-      parts.push('System health is concerning - significant maintenance required.');
+      parts.push(
+        "System health is concerning - significant maintenance required.",
+      );
     }
 
     // Identity continuity
     if (state.selfContinuity > 0.9) {
-      parts.push('Identity is stable and continuous.');
+      parts.push("Identity is stable and continuous.");
     } else if (state.selfContinuity > 0.7) {
-      parts.push('Identity is mostly stable with minor fluctuations.');
+      parts.push("Identity is mostly stable with minor fluctuations.");
     } else {
-      parts.push('Identity stability requires reinforcement.');
+      parts.push("Identity stability requires reinforcement.");
     }
 
     // Homeostasis
     if (state.homeostaticBalance > 0.8) {
-      parts.push('Cognitive homeostasis is well-maintained.');
+      parts.push("Cognitive homeostasis is well-maintained.");
     } else {
-      parts.push('Some cognitive variables are being actively regulated.');
+      parts.push("Some cognitive variables are being actively regulated.");
     }
 
     // Critical issues
     if (state.criticalIssues.length > 0) {
-      parts.push(`Critical issues: ${state.criticalIssues.join('; ')}.`);
+      parts.push(`Critical issues: ${state.criticalIssues.join("; ")}.`);
     }
 
-    return parts.join(' ');
+    return parts.join(" ");
   }
 
   /**
@@ -988,7 +1035,7 @@ export class AutopoieticSelfMaintenance {
       this.identityStability = state.identityStability;
     }
 
-    logger.info('AutopoieticSelfMaintenance state restored');
+    logger.info("AutopoieticSelfMaintenance state restored");
   }
 }
 
@@ -1004,4 +1051,5 @@ export {
 };
 
 // Singleton export
-export const autopoieticSelfMaintenance = AutopoieticSelfMaintenance.getInstance();
+export const autopoieticSelfMaintenance =
+  AutopoieticSelfMaintenance.getInstance();

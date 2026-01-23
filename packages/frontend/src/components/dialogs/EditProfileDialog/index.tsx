@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 
 import SettingsStoreInstance, {
   SettingsStoreState,
-} from '../../../stores/settings'
-import { BackendRemote } from '../../../backend-com'
-import { selectedAccountId } from '../../../ScreenController'
-import { DeltaInput, DeltaTextarea } from '../../Login-Styles'
-import ProfileImageSelector from './ProfileImageSelector'
+} from "../../../stores/settings";
+import { BackendRemote } from "../../../backend-com";
+import { selectedAccountId } from "../../../ScreenController";
+import { DeltaInput, DeltaTextarea } from "../../Login-Styles";
+import ProfileImageSelector from "./ProfileImageSelector";
 import Dialog, {
   DialogBody,
   DialogContent,
@@ -14,29 +14,29 @@ import Dialog, {
   DialogHeader,
   FooterActionButton,
   FooterActions,
-} from '../../Dialog'
-import Callout from '../../Callout'
-import useTranslationFunction from '../../../hooks/useTranslationFunction'
-import useAlertDialog from '../../../hooks/dialog/useAlertDialog'
+} from "../../Dialog";
+import Callout from "../../Callout";
+import useTranslationFunction from "../../../hooks/useTranslationFunction";
+import useAlertDialog from "../../../hooks/dialog/useAlertDialog";
 
-import styles from './styles.module.scss'
+import styles from "./styles.module.scss";
 
-import type { DialogProps } from '../../../contexts/DialogContext'
+import type { DialogProps } from "../../../contexts/DialogContext";
 
 type Props = {
-  settingsStore: SettingsStoreState
-  firstSetup?: boolean
-} & DialogProps
+  settingsStore: SettingsStoreState;
+  firstSetup?: boolean;
+} & DialogProps;
 
 export default function EditProfileDialog({ onClose, ...props }: Props) {
-  const tx = useTranslationFunction()
+  const tx = useTranslationFunction();
 
   return (
     <Dialog canOutsideClickClose={false} onClose={onClose}>
-      <DialogHeader title={tx('pref_profile_info_headline')} />
+      <DialogHeader title={tx("pref_profile_info_headline")} />
       {EditProfileDialogInner({ onClose, ...props })}
     </Dialog>
-  )
+  );
 }
 
 function EditProfileDialogInner({
@@ -44,43 +44,43 @@ function EditProfileDialogInner({
   settingsStore,
   firstSetup = false,
 }: Props) {
-  const tx = useTranslationFunction()
-  const openAlertDialog = useAlertDialog()
+  const tx = useTranslationFunction();
+  const openAlertDialog = useAlertDialog();
 
   const [displayname, setDisplayname] = useState(
-    settingsStore.settings.displayname || ''
-  )
+    settingsStore.settings.displayname || "",
+  );
 
   const [selfstatus, setSelfstatus] = useState(
-    settingsStore.settings.selfstatus || ''
-  )
+    settingsStore.settings.selfstatus || "",
+  );
 
   const [profilePicture, setProfilePicture] = useState(
-    settingsStore.selfContact.profileImage
-  )
+    settingsStore.selfContact.profileImage,
+  );
 
   const onCancel = () => {
-    onClose()
-  }
+    onClose();
+  };
 
   const onConfirm = async () => {
     // Display name should not be empty and needs to be set when setting up an
     // user account for the first time after scanning an QRCode with DCACCOUNT scheme
     // (for example via chatmail server invite code)
     if (displayname.length === 0) {
-      await openAlertDialog({ message: tx('please_enter_name') })
-      return
+      await openAlertDialog({ message: tx("please_enter_name") });
+      return;
     }
 
     await BackendRemote.rpc.setConfig(
       selectedAccountId(),
-      'selfavatar',
-      profilePicture ? profilePicture : null
-    )
-    SettingsStoreInstance.effect.setCoreSetting('displayname', displayname)
-    SettingsStoreInstance.effect.setCoreSetting('selfstatus', selfstatus)
-    onClose()
-  }
+      "selfavatar",
+      profilePicture ? profilePicture : null,
+    );
+    SettingsStoreInstance.effect.setCoreSetting("displayname", displayname);
+    SettingsStoreInstance.effect.setCoreSetting("selfstatus", selfstatus);
+    onClose();
+  };
 
   return (
     <>
@@ -96,37 +96,37 @@ function EditProfileDialogInner({
             />
           </div>
           <DeltaInput
-            key='displayname'
-            id='displayname'
-            placeholder={tx('pref_your_name')}
+            key="displayname"
+            id="displayname"
+            placeholder={tx("pref_your_name")}
             value={displayname}
             onChange={(
               event: React.FormEvent<HTMLElement> &
-                React.ChangeEvent<HTMLInputElement>
+                React.ChangeEvent<HTMLInputElement>,
             ) => {
-              setDisplayname(event.target.value)
+              setDisplayname(event.target.value);
             }}
             autoFocus={true}
           />
         </DialogContent>
-        {firstSetup && <Callout>{tx('set_name_and_avatar_explain')}</Callout>}
+        {firstSetup && <Callout>{tx("set_name_and_avatar_explain")}</Callout>}
         <DialogContent>
           {!firstSetup && (
             <DeltaTextarea
-              key='status'
-              id='status'
-              placeholder={tx('pref_default_status_label')}
+              key="status"
+              id="status"
+              placeholder={tx("pref_default_status_label")}
               value={selfstatus}
               onChange={(
                 event: React.FormEvent<HTMLElement> &
-                  React.ChangeEvent<HTMLTextAreaElement>
+                  React.ChangeEvent<HTMLTextAreaElement>,
               ) => {
-                setSelfstatus(event.target.value)
+                setSelfstatus(event.target.value);
               }}
             />
           )}
           <div className={styles.editProfileHint}>
-            {tx('pref_who_can_see_profile_explain')}
+            {tx("pref_who_can_see_profile_explain")}
           </div>
         </DialogContent>
       </DialogBody>
@@ -134,22 +134,22 @@ function EditProfileDialogInner({
         <FooterActions>
           {!firstSetup && (
             <FooterActionButton
-              styling='secondary'
+              styling="secondary"
               onClick={onCancel}
-              data-testid='cancel'
+              data-testid="cancel"
             >
-              {tx('cancel')}
+              {tx("cancel")}
             </FooterActionButton>
           )}
           <FooterActionButton
-            styling='primary'
+            styling="primary"
             onClick={onConfirm}
-            data-testid='ok'
+            data-testid="ok"
           >
-            {tx('ok')}
+            {tx("ok")}
           </FooterActionButton>
         </FooterActions>
       </DialogFooter>
     </>
-  )
+  );
 }

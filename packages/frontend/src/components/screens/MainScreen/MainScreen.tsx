@@ -1,60 +1,60 @@
-import styles from './styles.module.scss'
+import styles from "./styles.module.scss";
 import React, {
   useState,
   useRef,
   useEffect,
   useCallback,
   useContext,
-} from 'react'
-import { C } from '@deltachat/jsonrpc-client'
+} from "react";
+import { C } from "@deltachat/jsonrpc-client";
 
-import Gallery from '../../Gallery'
-import { useThreeDotMenu } from '../../ThreeDotMenu'
-import ChatList from '../../chat/ChatList'
-import { Avatar } from '../../Avatar'
-import ConnectivityToast from '../../ConnectivityToast'
-import MailingListProfile from '../../dialogs/MessageListProfile'
+import Gallery from "../../Gallery";
+import { useThreeDotMenu } from "../../ThreeDotMenu";
+import ChatList from "../../chat/ChatList";
+import { Avatar } from "../../Avatar";
+import ConnectivityToast from "../../ConnectivityToast";
+import MailingListProfile from "../../dialogs/MessageListProfile";
 import SettingsStoreInstance, {
   useSettingsStore,
-} from '../../../stores/settings'
-import { Type } from '../../../backend-com'
-import { InlineVerifiedIcon } from '../../VerifiedIcon'
-import Button from '../../Button'
-import Icon from '../../Icon'
-import SearchInput from '../../SearchInput'
-import MessageListView from '../../MessageListView'
-import useChat from '../../../hooks/chat/useChat'
-import useDialog from '../../../hooks/dialog/useDialog'
-import useKeyBindingAction from '../../../hooks/useKeyBindingAction'
-import useOpenViewGroupDialog from '../../../hooks/dialog/useOpenViewGroupDialog'
-import useOpenViewProfileDialog from '../../../hooks/dialog/useOpenViewProfileDialog'
-import useSelectLastChat from '../../../hooks/chat/useSelectLastChat'
-import useTranslationFunction from '../../../hooks/useTranslationFunction'
-import { KeybindAction } from '../../../keybindings'
-import { maybeSelectedAccountId } from '../../../ScreenController'
-import { openMapWebxdc } from '../../../system-integration/webxdc'
-import { ChatView } from '../../../contexts/ChatContext'
-import { ScreenContext } from '../../../contexts/ScreenContext'
-import { Screens } from '../../../ScreenController'
+} from "../../../stores/settings";
+import { Type } from "../../../backend-com";
+import { InlineVerifiedIcon } from "../../VerifiedIcon";
+import Button from "../../Button";
+import Icon from "../../Icon";
+import SearchInput from "../../SearchInput";
+import MessageListView from "../../MessageListView";
+import useChat from "../../../hooks/chat/useChat";
+import useDialog from "../../../hooks/dialog/useDialog";
+import useKeyBindingAction from "../../../hooks/useKeyBindingAction";
+import useOpenViewGroupDialog from "../../../hooks/dialog/useOpenViewGroupDialog";
+import useOpenViewProfileDialog from "../../../hooks/dialog/useOpenViewProfileDialog";
+import useSelectLastChat from "../../../hooks/chat/useSelectLastChat";
+import useTranslationFunction from "../../../hooks/useTranslationFunction";
+import { KeybindAction } from "../../../keybindings";
+import { maybeSelectedAccountId } from "../../../ScreenController";
+import { openMapWebxdc } from "../../../system-integration/webxdc";
+import { ChatView } from "../../../contexts/ChatContext";
+import { ScreenContext } from "../../../contexts/ScreenContext";
+import { Screens } from "../../../ScreenController";
 
-import type { T } from '@deltachat/jsonrpc-client'
-import CreateChat from '../../dialogs/CreateChat'
-import { getUIBridge } from '../../DeepTreeEchoBot/DeepTreeEchoUIBridge'
+import type { T } from "@deltachat/jsonrpc-client";
+import CreateChat from "../../dialogs/CreateChat";
+import { getUIBridge } from "../../DeepTreeEchoBot/DeepTreeEchoUIBridge";
 
 type Props = {
-  accountId?: number
-}
+  accountId?: number;
+};
 
 export default function MainScreen({ accountId }: Props) {
   // Automatically select last known chat when account changed
-  useSelectLastChat(accountId)
+  useSelectLastChat(accountId);
 
-  const tx = useTranslationFunction()
-  const { changeScreen } = useContext(ScreenContext)
+  const tx = useTranslationFunction();
+  const { changeScreen } = useContext(ScreenContext);
 
-  const [queryStr, setQueryStr] = useState('')
-  const [queryChatId, setQueryChatId] = useState<null | number>(null)
-  const [archivedChatsSelected, setArchivedChatsSelected] = useState(false)
+  const [queryStr, setQueryStr] = useState("");
+  const [queryChatId, setQueryChatId] = useState<null | number>(null);
+  const [archivedChatsSelected, setArchivedChatsSelected] = useState(false);
   const {
     activeView,
     chatId,
@@ -62,144 +62,148 @@ export default function MainScreen({ accountId }: Props) {
     alternativeView,
     selectChat,
     unselectChat,
-  } = useChat()
+  } = useChat();
 
   // Register ChatContext with Deep Tree Echo UI Bridge
   useEffect(() => {
     if (accountId) {
-      const bridge = getUIBridge()
-      bridge.registerChatContext({
-        selectChat,
-        unselectChat,
-        chatId,
-        chatWithLinger: chatWithLinger || undefined
-      }, accountId)
+      const bridge = getUIBridge();
+      bridge.registerChatContext(
+        {
+          selectChat,
+          unselectChat,
+          chatId,
+          chatWithLinger: chatWithLinger || undefined,
+        },
+        accountId,
+      );
     }
-  }, [accountId, chatId, chatWithLinger, selectChat, unselectChat])
+  }, [accountId, chatId, chatWithLinger, selectChat, unselectChat]);
 
-  const { smallScreenMode } = useContext(ScreenContext)
+  const { smallScreenMode } = useContext(ScreenContext);
 
   // Small hack/misuse of keyBindingAction to setArchivedChatsSelected from
   // other components (especially ViewProfile when selecting a shared chat/group)
   useKeyBindingAction(KeybindAction.ChatList_SwitchToArchiveView, () =>
-    setArchivedChatsSelected(true)
-  )
+    setArchivedChatsSelected(true),
+  );
   useKeyBindingAction(KeybindAction.ChatList_SwitchToNormalView, () =>
-    setArchivedChatsSelected(false)
-  )
+    setArchivedChatsSelected(false),
+  );
 
   const chatListShouldBeHidden =
-    smallScreenMode && (chatId !== undefined || alternativeView !== null)
+    smallScreenMode && (chatId !== undefined || alternativeView !== null);
   const messageSectionShouldBeHidden =
-    smallScreenMode && chatId === undefined && alternativeView === null
+    smallScreenMode && chatId === undefined && alternativeView === null;
 
   const onBackButton = () => {
-    unselectChat()
-  }
+    unselectChat();
+  };
 
   const onChatClick = (chatId: number) => {
     if (chatId === C.DC_CHAT_ID_ARCHIVED_LINK) {
-      setArchivedChatsSelected(true)
-      return
+      setArchivedChatsSelected(true);
+      return;
     }
 
-    accountId && selectChat(accountId, chatId)
-  }
+    accountId && selectChat(accountId, chatId);
+  };
 
   const searchChats = useCallback(
     (queryStr: string, chatId: number | null = null) => {
       if (smallScreenMode) {
-        unselectChat()
+        unselectChat();
       }
-      setQueryStr(queryStr)
-      setQueryChatId(chatId)
+      setQueryStr(queryStr);
+      setQueryChatId(chatId);
     },
-    [smallScreenMode, unselectChat]
-  )
+    [smallScreenMode, unselectChat],
+  );
 
   const handleSearchChange = (event: { target: { value: string } }) => {
-    setQueryStr(event.target.value)
-  }
+    setQueryStr(event.target.value);
+  };
 
   const handleSearchClear = useCallback(() => {
     if (!searchRef.current) {
-      return
+      return;
     }
 
-    searchRef.current.value = ''
-    searchChats('')
-    setQueryChatId(null)
+    searchRef.current.value = "";
+    searchChats("");
+    setQueryChatId(null);
 
     // If we've searched a non-archive chat while being in archive mode
     // previously we want to get back to normal mode after cancelling
     if (!chatWithLinger?.archived && archivedChatsSelected) {
-      setArchivedChatsSelected(false)
+      setArchivedChatsSelected(false);
     }
-  }, [archivedChatsSelected, chatWithLinger?.archived, searchChats])
+  }, [archivedChatsSelected, chatWithLinger?.archived, searchChats]);
 
-  window.__chatlistSetSearch = searchChats
+  window.__chatlistSetSearch = searchChats;
 
-  const searchRef = useRef<HTMLInputElement>(null)
+  const searchRef = useRef<HTMLInputElement>(null);
 
   useKeyBindingAction(KeybindAction.ChatList_FocusSearchInput, () => {
-    searchRef.current?.focus()
-  })
+    searchRef.current?.focus();
+  });
 
   useKeyBindingAction(KeybindAction.ChatList_SearchInChat, () => {
     // Also see `search_in_chat` item in ThreeDotMenu.tsx
-    searchRef.current?.focus()
+    searchRef.current?.focus();
     if (chatId == undefined) {
-      return
+      return;
     }
     // Yes, preserve the search string. This might be nice.
-    searchChats(queryStr, chatId)
-  })
+    searchChats(queryStr, chatId);
+  });
 
   useKeyBindingAction(KeybindAction.ChatList_ClearSearchInput, () => {
-    handleSearchClear()
-  })
+    handleSearchClear();
+  });
 
-  const { openDialog } = useDialog()
+  const { openDialog } = useDialog();
   useKeyBindingAction(KeybindAction.NewChat_Open, () => {
     // Same as `onCreateChat` in ChatList.
-    openDialog(CreateChat)
-  })
+    openDialog(CreateChat);
+  });
 
   useEffect(() => {
     // Make sure it uses new version of settings store instance
-    SettingsStoreInstance.effect.load()
-  }, [])
+    SettingsStoreInstance.effect.load();
+  }, []);
 
   const onClickThreeDotMenu = useThreeDotMenu(
     chatWithLinger,
-    alternativeView === 'global-gallery' || activeView === ChatView.Media
-      ? 'gallery'
-      : 'chat'
-  )
-  const galleryRef = useRef<Gallery | null>(null)
+    alternativeView === "global-gallery" || activeView === ChatView.Media
+      ? "gallery"
+      : "chat",
+  );
+  const galleryRef = useRef<Gallery | null>(null);
 
   // @TODO: This could be refactored into a context which knows about the
   // gallery tab state
-  const [threeDotMenuHidden, setthreeDotMenuHidden] = useState(false)
+  const [threeDotMenuHidden, setthreeDotMenuHidden] = useState(false);
   const updatethreeDotMenuHidden = useCallback(() => {
     setthreeDotMenuHidden(
-      (alternativeView === 'global-gallery' || activeView === ChatView.Media) &&
-      !['images', 'video'].includes(
-        galleryRef.current?.state.currentTab || ''
-      )
-    )
-  }, [activeView, alternativeView])
+      (alternativeView === "global-gallery" || activeView === ChatView.Media) &&
+        !["images", "video"].includes(
+          galleryRef.current?.state.currentTab || "",
+        ),
+    );
+  }, [activeView, alternativeView]);
   useEffect(() => {
-    updatethreeDotMenuHidden()
-  }, [alternativeView, galleryRef, updatethreeDotMenuHidden])
+    updatethreeDotMenuHidden();
+  }, [alternativeView, galleryRef, updatethreeDotMenuHidden]);
 
-  const isSearchActive = queryStr.length > 0 || queryChatId !== null
-  const showArchivedChats = !isSearchActive && archivedChatsSelected
+  const isSearchActive = queryStr.length > 0 || queryChatId !== null;
+  const showArchivedChats = !isSearchActive && archivedChatsSelected;
 
   return (
     <div
-      className={`main-screen ${smallScreenMode ? 'small-screen' : ''} ${!messageSectionShouldBeHidden ? 'chat-view-open' : ''
-        }`}
+      className={`main-screen ${smallScreenMode ? "small-screen" : ""} ${
+        !messageSectionShouldBeHidden ? "chat-view-open" : ""
+      }`}
     >
       <section className={styles.chatListAndNavbar}>
         <nav className={styles.chatListNavbar} data-tauri-drag-region>
@@ -207,21 +211,21 @@ export default function MainScreen({ accountId }: Props) {
             <>
               <span data-no-drag-region>
                 <Button
-                  aria-label={tx('back')}
+                  aria-label={tx("back")}
                   onClick={() => setArchivedChatsSelected(false)}
-                  className='backButton'
+                  className="backButton"
                 >
-                  <Icon icon='arrow-left' className='backButtonIcon'></Icon>
+                  <Icon icon="arrow-left" className="backButtonIcon"></Icon>
                 </Button>
               </span>
               <div className={styles.archivedChatsTitle} data-no-drag-region>
-                {tx('chat_archived_chats_title')}
+                {tx("chat_archived_chats_title")}
               </div>
             </>
           )}
           {!showArchivedChats && (
             <SearchInput
-              id='chat-list-search'
+              id="chat-list-search"
               inputRef={searchRef}
               onChange={handleSearchChange}
               onClear={queryChatId ? () => handleSearchClear() : undefined}
@@ -230,13 +234,13 @@ export default function MainScreen({ accountId }: Props) {
           )}
           {!showArchivedChats && (
             <Button
-              aria-label='AI Neighborhood'
+              aria-label="AI Neighborhood"
               onClick={() => changeScreen(Screens.AINeighborhood)}
-              className='navbar-button'
-              style={{ marginLeft: '8px' }}
-              title='Visit the AI Companion Neighborhood'
+              className="navbar-button"
+              style={{ marginLeft: "8px" }}
+              title="Visit the AI Companion Neighborhood"
             >
-              <Icon icon='settings' size={20} />
+              <Icon icon="settings" size={20} />
             </Button>
           )}
         </nav>
@@ -247,8 +251,8 @@ export default function MainScreen({ accountId }: Props) {
           selectedChatId={chatId ?? null}
           queryChatId={queryChatId}
           onExitSearch={() => {
-            setQueryStr('')
-            setQueryChatId(null)
+            setQueryStr("");
+            setQueryChatId(null);
           }}
         />
       </section>
@@ -257,11 +261,11 @@ export default function MainScreen({ accountId }: Props) {
           {smallScreenMode && (
             <span data-no-drag-region>
               <Button
-                aria-label={tx('back')}
+                aria-label={tx("back")}
                 onClick={onBackButton}
-                className='backButton'
+                className="backButton"
               >
-                <Icon icon='arrow-left' className='backButtonIcon'></Icon>
+                <Icon icon="arrow-left" className="backButtonIcon"></Icon>
               </Button>
             </span>
           )}
@@ -269,29 +273,31 @@ export default function MainScreen({ accountId }: Props) {
             className={styles.chatNavbarHeadingWrapper}
             data-tauri-drag-region
           >
-            {alternativeView === 'global-gallery' && (
+            {alternativeView === "global-gallery" && (
               <>
-                <div className='navbar-heading' data-tauri-drag-region>
-                  {tx('menu_all_media')}
+                <div className="navbar-heading" data-tauri-drag-region>
+                  {tx("menu_all_media")}
                 </div>
-                <span className='views' data-tauri-drag-region />
+                <span className="views" data-tauri-drag-region />
               </>
             )}
             {chatWithLinger && <ChatHeading chat={chatWithLinger} />}
           </div>
           {chatWithLinger && <ChatNavButtons />}
-          {(chatWithLinger || alternativeView === 'global-gallery') && (
+          {(chatWithLinger || alternativeView === "global-gallery") && (
             <span
-              className={`${styles.threeDotMenuContainer} ${threeDotMenuHidden ? styles.hidden : ''}`}
+              className={`${styles.threeDotMenuContainer} ${
+                threeDotMenuHidden ? styles.hidden : ""
+              }`}
               data-no-drag-region
             >
               <Button
-                id='three-dot-menu-button'
-                className='navbar-button'
-                aria-label={tx('main_menu')}
+                id="three-dot-menu-button"
+                className="navbar-button"
+                aria-label={tx("main_menu")}
                 onClick={onClickThreeDotMenu}
               >
-                <Icon coloring='navbar' icon='more' rotation={90} size={24} />
+                <Icon coloring="navbar" icon="more" rotation={90} size={24} />
               </Button>
             </span>
           )}
@@ -305,81 +311,81 @@ export default function MainScreen({ accountId }: Props) {
       </section>
       {!chatListShouldBeHidden && <ConnectivityToast />}
     </div>
-  )
+  );
 }
 
 function chatSubtitle(chat: Type.FullChat) {
-  const tx = window.static_translate
+  const tx = window.static_translate;
   if (chat.id && chat.id > C.DC_CHAT_ID_LAST_SPECIAL) {
     if (chat.chatType === C.DC_CHAT_TYPE_GROUP) {
-      return tx('n_members', [String(chat.contactIds.length)], {
+      return tx("n_members", [String(chat.contactIds.length)], {
         quantity: chat.contactIds.length,
-      })
+      });
     } else if (
       chat.chatType === C.DC_CHAT_TYPE_SINGLE &&
       chat.contacts[0]?.isBot
     ) {
-      return tx('bot')
+      return tx("bot");
     } else if (chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST) {
       if (chat.mailingListAddress) {
-        return `${tx('mailing_list')} – ${chat.mailingListAddress}`
+        return `${tx("mailing_list")} – ${chat.mailingListAddress}`;
       } else {
-        return tx('mailing_list')
+        return tx("mailing_list");
       }
     } else if (chat.chatType === C.DC_CHAT_TYPE_BROADCAST) {
-      return tx('n_recipients', [String(chat.contactIds.length)], {
+      return tx("n_recipients", [String(chat.contactIds.length)], {
         quantity: chat.contactIds.length,
-      })
+      });
     } else if (chat.contactIds.length >= 1) {
       if (chat.isSelfTalk) {
-        return tx('chat_self_talk_subtitle')
+        return tx("chat_self_talk_subtitle");
       } else if (chat.isDeviceChat) {
-        return tx('device_talk_subtitle')
+        return tx("device_talk_subtitle");
       }
       if (chat.isProtected) {
-        return null
+        return null;
       } else {
-        return chat.contacts[0].address
+        return chat.contacts[0].address;
       }
     }
   }
-  return 'ErrTitle'
+  return "ErrTitle";
 }
 
 function ChatHeading({ chat }: { chat: T.FullChat }) {
-  const tx = useTranslationFunction()
-  const { openDialog } = useDialog()
-  const openViewGroupDialog = useOpenViewGroupDialog()
-  const openViewProfileDialog = useOpenViewProfileDialog()
-  const accountId = maybeSelectedAccountId()
+  const tx = useTranslationFunction();
+  const { openDialog } = useDialog();
+  const openViewGroupDialog = useOpenViewGroupDialog();
+  const openViewProfileDialog = useOpenViewProfileDialog();
+  const accountId = maybeSelectedAccountId();
 
   const onTitleClick = () => {
     if (!chat) {
-      return
+      return;
     }
 
     if (chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST) {
-      openDialog(MailingListProfile, { chat })
+      openDialog(MailingListProfile, { chat });
     } else if (
       chat.chatType === C.DC_CHAT_TYPE_GROUP ||
       chat.chatType === C.DC_CHAT_TYPE_BROADCAST
     ) {
-      openViewGroupDialog(chat)
+      openViewGroupDialog(chat);
     } else {
       if (chat.contactIds && chat.contactIds[0] && accountId !== undefined) {
-        openViewProfileDialog(accountId, chat.contactIds[0])
+        openViewProfileDialog(accountId, chat.contactIds[0]);
       }
     }
-  }
+  };
 
-  const subtitle = chatSubtitle(chat)
+  const subtitle = chatSubtitle(chat);
 
   return (
     <button
-      className='navbar-heading navbar-heading--button'
+      className="navbar-heading navbar-heading--button"
       data-no-drag-region
       onClick={onTitleClick}
-      data-testid='chat-info-button'
+      data-testid="chat-info-button"
     >
       <Avatar
         displayName={chat.name}
@@ -393,84 +399,84 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
         aria-hidden={true}
       />
       <div className={styles.chatTitleContainer}>
-        <div className='navbar-chat-name'>
-          <div className='truncated'>{chat.name}</div>
-          <div className='chat_property_icons'>
+        <div className="navbar-chat-name">
+          <div className="truncated">{chat.name}</div>
+          <div className="chat_property_icons">
             {chat.isProtected && <InlineVerifiedIcon />}
             {chat.ephemeralTimer !== 0 && (
               <div
                 role="img"
-                className={'disapearing-messages-icon'}
-                aria-label={tx('a11y_disappearing_messages_activated')}
+                className={"disapearing-messages-icon"}
+                aria-label={tx("a11y_disappearing_messages_activated")}
               />
             )}
           </div>
         </div>
         {subtitle && subtitle.length && (
-          <div className='navbar-chat-subtitle'>{subtitle}</div>
+          <div className="navbar-chat-subtitle">{subtitle}</div>
         )}
       </div>
     </button>
-  )
+  );
 }
 
 function ChatNavButtons() {
-  const tx = useTranslationFunction()
-  const { activeView, setChatView, chatId } = useChat()
-  const settingsStore = useSettingsStore()[0]
+  const tx = useTranslationFunction();
+  const { activeView, setChatView, chatId } = useChat();
+  const settingsStore = useSettingsStore()[0];
 
   return (
     <>
       <span
-        role='tablist'
-        aria-orientation='horizontal'
-        className='views'
+        role="tablist"
+        aria-orientation="horizontal"
+        className="views"
         data-no-drag-region
       >
         {/* Hidden tab for static ARIA analysis - actual tabs are Button components below */}
-        <span role='tab' aria-hidden='true' className={styles.visuallyHidden} />
+        <span role="tab" aria-hidden="true" className={styles.visuallyHidden} />
         <Button
-          role='tab'
-          id='tab-message-list-view'
+          role="tab"
+          id="tab-message-list-view"
           onClick={() => setChatView(ChatView.MessageList)}
           active={activeView === ChatView.MessageList}
           aria-selected={activeView === ChatView.MessageList}
           // FYI there are 2 components that use this ID,
           // but they're not supposed to be rendered at the same time.
-          aria-controls='message-list-and-composer'
-          aria-label={tx('chat')}
-          className='navbar-button'
+          aria-controls="message-list-and-composer"
+          aria-label={tx("chat")}
+          className="navbar-button"
         >
-          <Icon coloring='navbar' icon='chats' size={18} />
+          <Icon coloring="navbar" icon="chats" size={18} />
         </Button>
         <Button
-          role='tab'
-          id='tab-media-view'
+          role="tab"
+          id="tab-media-view"
           onClick={() => setChatView(ChatView.Media)}
           active={activeView === ChatView.Media}
           aria-selected={activeView === ChatView.Media}
-          aria-controls='media-view'
-          aria-label={tx('media')}
-          className='navbar-button'
+          aria-controls="media-view"
+          aria-label={tx("media")}
+          className="navbar-button"
         >
-          <Icon coloring='navbar' icon='image' size={18} />
+          <Icon coloring="navbar" icon="image" size={18} />
         </Button>
         {settingsStore?.desktopSettings.enableOnDemandLocationStreaming && (
           // Yes, this is not marked as `role='tab'`.
           // I'm not sure if this is alright.
           <Button
-            role='tab'
+            role="tab"
             onClick={() => {
-              const accountId = maybeSelectedAccountId()
-              if (accountId !== undefined) openMapWebxdc(accountId, chatId)
+              const accountId = maybeSelectedAccountId();
+              if (accountId !== undefined) openMapWebxdc(accountId, chatId);
             }}
-            aria-label={tx('tab_map')}
-            className='navbar-button'
+            aria-label={tx("tab_map")}
+            className="navbar-button"
           >
-            <Icon coloring='navbar' icon='map' size={18} />
+            <Icon coloring="navbar" icon="map" size={18} />
           </Button>
         )}
       </span>
     </>
-  )
+  );
 }

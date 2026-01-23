@@ -1,14 +1,14 @@
-import { createContext } from 'react'
+import { createContext } from "react";
 
 type MessagesDisplayContextValue =
-  | { context: 'chat_messagelist'; chatId: number; isDeviceChat: boolean }
-  | { context: 'chat_map'; chatId: number }
+  | { context: "chat_messagelist"; chatId: number; isDeviceChat: boolean }
+  | { context: "chat_map"; chatId: number }
   | {
-      context: 'contact_profile_status'
-      contact_id: number
-      closeProfileDialog: () => void
+      context: "contact_profile_status";
+      contact_id: number;
+      closeProfileDialog: () => void;
     }
-  | null
+  | null;
 
 /**
  * Additional context for message body rendering.
@@ -17,4 +17,4 @@ type MessagesDisplayContextValue =
  * that they know in which chat they need to set/replace the draft
  */
 export const MessagesDisplayContext =
-  createContext<MessagesDisplayContextValue>(null)
+  createContext<MessagesDisplayContextValue>(null);

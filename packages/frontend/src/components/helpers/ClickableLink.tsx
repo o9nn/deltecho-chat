@@ -1,11 +1,11 @@
-import React from 'react'
+import React from "react";
 
 import useOpenLinkSafely, {
   useOpenNonMailtoLinkSafely,
-} from '../../hooks/useOpenLinkSafely'
-import { selectedAccountId } from '../../ScreenController'
+} from "../../hooks/useOpenLinkSafely";
+import { selectedAccountId } from "../../ScreenController";
 
-import type { PropsWithChildren } from 'react'
+import type { PropsWithChildren } from "react";
 
 /**
  * Note: requires that an account is selected to be rendered.
@@ -14,19 +14,19 @@ export function ClickableLink({
   href,
   children,
 }: PropsWithChildren<{ href: string }>) {
-  const openLinkSafely = useOpenLinkSafely()
-  const accountId = selectedAccountId()
+  const openLinkSafely = useOpenLinkSafely();
+  const accountId = selectedAccountId();
 
   const onClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    event.preventDefault()
-    openLinkSafely(accountId, href)
-  }
+    event.preventDefault();
+    openLinkSafely(accountId, href);
+  };
 
   return (
     <a href={href} onClick={onClick}>
       {children}
     </a>
-  )
+  );
 }
 
 /**
@@ -38,16 +38,16 @@ export function ClickableNonMailtoLink({
   href,
   children,
 }: PropsWithChildren<{ href: string }>) {
-  const openNonMailtoLinkSafely = useOpenNonMailtoLinkSafely()
+  const openNonMailtoLinkSafely = useOpenNonMailtoLinkSafely();
 
   const onClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    event.preventDefault()
-    openNonMailtoLinkSafely(href)
-  }
+    event.preventDefault();
+    openNonMailtoLinkSafely(href);
+  };
 
   return (
     <a href={href} onClick={onClick}>
       {children}
     </a>
-  )
+  );
 }

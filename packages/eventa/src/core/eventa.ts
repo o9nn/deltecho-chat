@@ -4,7 +4,11 @@
  * All events should be defined with these utilities for type safety
  */
 
-import type { EventDefinition, EventId, InvokeEventDefinition } from '../types.js';
+import type {
+  EventDefinition,
+  EventId,
+  InvokeEventDefinition,
+} from "../types.js";
 
 let eventCounter = 0;
 
@@ -12,8 +16,8 @@ let eventCounter = 0;
  * Generate a unique event ID
  */
 function generateEventId(name?: string): EventId {
-    const id = name || `event_${++eventCounter}_${Date.now().toString(36)}`;
-    return id as EventId;
+  const id = name || `event_${++eventCounter}_${Date.now().toString(36)}`;
+  return id as EventId;
 }
 
 /**
@@ -26,10 +30,12 @@ function generateEventId(name?: string): EventId {
  * context.on(playerMoved, ({ body }) => console.log(body.x, body.y));
  * ```
  */
-export function defineEventa<TPayload = void>(name?: string): EventDefinition<TPayload> {
-    return {
-        id: generateEventId(name),
-    } as EventDefinition<TPayload>;
+export function defineEventa<TPayload = void>(
+  name?: string,
+): EventDefinition<TPayload> {
+  return {
+    id: generateEventId(name),
+  } as EventDefinition<TPayload>;
 }
 
 /**
@@ -42,11 +48,11 @@ export function defineEventa<TPayload = void>(name?: string): EventDefinition<TP
  * ```
  */
 export function defineInvokeEventa<TResponse = void, TRequest = void>(
-    name?: string
+  name?: string,
 ): InvokeEventDefinition<TResponse, TRequest> {
-    return {
-        id: generateEventId(name),
-    } as InvokeEventDefinition<TResponse, TRequest>;
+  return {
+    id: generateEventId(name),
+  } as InvokeEventDefinition<TResponse, TRequest>;
 }
 
 /**
@@ -57,9 +63,16 @@ export type EventPayload<E> = E extends EventDefinition<infer P> ? P : never;
 /**
  * Type helper to extract request type from invoke event definition
  */
-export type InvokeRequest<E> = E extends InvokeEventDefinition<unknown, infer R> ? R : never;
+export type InvokeRequest<E> = E extends InvokeEventDefinition<unknown, infer R>
+  ? R
+  : never;
 
 /**
  * Type helper to extract response type from invoke event definition
  */
-export type InvokeResponse<E> = E extends InvokeEventDefinition<infer R, unknown> ? R : never;
+export type InvokeResponse<E> = E extends InvokeEventDefinition<
+  infer R,
+  unknown
+>
+  ? R
+  : never;

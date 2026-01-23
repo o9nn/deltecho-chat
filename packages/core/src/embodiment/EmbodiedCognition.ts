@@ -18,16 +18,16 @@
  * - TemporalConsciousnessStream: Avatar reflects the flow of experience
  */
 
-import { getLogger } from '../utils/logger.js';
+import { getLogger } from "../utils/logger.js";
 
-const logger = getLogger('EmbodiedCognition');
+const logger = getLogger("EmbodiedCognition");
 
 /**
  * Avatar expression state
  */
 export interface AvatarExpressionState {
   expression: AvatarExpression;
-  intensity: number;           // 0-1
+  intensity: number; // 0-1
   microExpressions: MicroExpression[];
   eyeState: EyeState;
   mouthState: MouthState;
@@ -39,24 +39,24 @@ export interface AvatarExpressionState {
  * Primary avatar expressions
  */
 export enum AvatarExpression {
-  Neutral = 'neutral',
-  Happy = 'happy',
-  Thinking = 'thinking',
-  Curious = 'curious',
-  Surprised = 'surprised',
-  Concerned = 'concerned',
-  Focused = 'focused',
-  Playful = 'playful',
-  Contemplative = 'contemplative',
-  Empathetic = 'empathetic',
+  Neutral = "neutral",
+  Happy = "happy",
+  Thinking = "thinking",
+  Curious = "curious",
+  Surprised = "surprised",
+  Concerned = "concerned",
+  Focused = "focused",
+  Playful = "playful",
+  Contemplative = "contemplative",
+  Empathetic = "empathetic",
 }
 
 /**
  * Subtle micro-expressions that add nuance
  */
 interface MicroExpression {
-  type: 'brow_raise' | 'lip_corner' | 'eye_narrow' | 'nostril_flare';
-  side: 'left' | 'right' | 'both';
+  type: "brow_raise" | "lip_corner" | "eye_narrow" | "nostril_flare";
+  side: "left" | "right" | "both";
   intensity: number;
   duration: number;
 }
@@ -65,19 +65,19 @@ interface MicroExpression {
  * Eye state for gaze and attention
  */
 interface EyeState {
-  gazeDirection: { x: number; y: number };  // -1 to 1
-  openness: number;                          // 0-1
-  blinkRate: number;                         // blinks per minute
-  pupilDilation: number;                     // 0-1 (arousal indicator)
+  gazeDirection: { x: number; y: number }; // -1 to 1
+  openness: number; // 0-1
+  blinkRate: number; // blinks per minute
+  pupilDilation: number; // 0-1 (arousal indicator)
 }
 
 /**
  * Mouth state for speech and expression
  */
 interface MouthState {
-  openness: number;       // 0-1
-  width: number;          // 0-1 (smile width)
-  roundness: number;      // 0-1 (for O sounds)
+  openness: number; // 0-1
+  width: number; // 0-1 (smile width)
+  roundness: number; // 0-1 (for O sounds)
   isSpeaking: boolean;
   speechIntensity: number;
 }
@@ -86,10 +86,10 @@ interface MouthState {
  * Proprioceptive awareness - the sense of body position
  */
 interface ProprioceptiveState {
-  presence: number;           // 0-1, feeling of "being here"
-  groundedness: number;       // 0-1, sense of stability
-  energy: number;             // 0-1, vitality level
-  tension: number;            // 0-1, muscular tension metaphor
+  presence: number; // 0-1, feeling of "being here"
+  groundedness: number; // 0-1, sense of stability
+  energy: number; // 0-1, vitality level
+  tension: number; // 0-1, muscular tension metaphor
   breathing: BreathingState;
 }
 
@@ -97,10 +97,10 @@ interface ProprioceptiveState {
  * Breathing simulation for natural avatar animation
  */
 interface BreathingState {
-  phase: 'inhale' | 'exhale' | 'pause';
-  depth: number;              // 0-1
-  rate: number;               // breaths per minute
-  regularity: number;         // 0-1, how regular
+  phase: "inhale" | "exhale" | "pause";
+  depth: number; // 0-1
+  rate: number; // breaths per minute
+  regularity: number; // 0-1, how regular
 }
 
 /**
@@ -108,7 +108,7 @@ interface BreathingState {
  */
 export interface EmbodimentFeedback {
   userGazeDetected: boolean;
-  userProximity: number;      // 0-1
+  userProximity: number; // 0-1
   interactionIntensity: number;
   lastInteractionTime: number;
   gestureDetected?: string;
@@ -118,23 +118,23 @@ export interface EmbodimentFeedback {
  * Consciousness-to-avatar mapping
  */
 interface ConsciousnessMapping {
-  phi: number;                // Integrated information
-  selfAwareness: number;      // Strange loop depth
+  phi: number; // Integrated information
+  selfAwareness: number; // Strange loop depth
   dominantQuale: string | null;
-  emotionalValence: number;   // -1 to 1
-  emotionalArousal: number;   // 0 to 1
-  flowState: number;          // 0 to 1
-  temporalCoherence: number;  // 0 to 1
+  emotionalValence: number; // -1 to 1
+  emotionalArousal: number; // 0 to 1
+  flowState: number; // 0 to 1
+  temporalCoherence: number; // 0 to 1
 }
 
 /**
  * Configuration for embodied cognition
  */
 interface EmbodiedCognitionConfig {
-  updateRate?: number;            // Hz
-  expressionTransitionTime?: number;  // ms
-  breathingBaseRate?: number;     // breaths per minute
-  blinkBaseRate?: number;         // blinks per minute
+  updateRate?: number; // Hz
+  expressionTransitionTime?: number; // ms
+  breathingBaseRate?: number; // breaths per minute
+  blinkBaseRate?: number; // blinks per minute
   microExpressionProbability?: number;
 }
 
@@ -168,7 +168,8 @@ export class EmbodiedCognition {
 
   // Event listeners
   private expressionListeners: ((state: AvatarExpressionState) => void)[] = [];
-  private proprioceptiveListeners: ((state: ProprioceptiveState) => void)[] = [];
+  private proprioceptiveListeners: ((state: ProprioceptiveState) => void)[] =
+    [];
 
   // Update loop
   private updateInterval: ReturnType<typeof setInterval> | null = null;
@@ -178,7 +179,8 @@ export class EmbodiedCognition {
     this.EXPRESSION_TRANSITION_TIME = config?.expressionTransitionTime || 300;
     this.BREATHING_BASE_RATE = config?.breathingBaseRate || 12;
     this.BLINK_BASE_RATE = config?.blinkBaseRate || 15;
-    this.MICRO_EXPRESSION_PROBABILITY = config?.microExpressionProbability || 0.1;
+    this.MICRO_EXPRESSION_PROBABILITY =
+      config?.microExpressionProbability || 0.1;
 
     // Initialize states
     this.expressionState = this.createDefaultExpressionState();
@@ -188,10 +190,12 @@ export class EmbodiedCognition {
     // Start update loop
     this.startUpdateLoop();
 
-    logger.info('EmbodiedCognition initialized');
+    logger.info("EmbodiedCognition initialized");
   }
 
-  public static getInstance(config?: EmbodiedCognitionConfig): EmbodiedCognition {
+  public static getInstance(
+    config?: EmbodiedCognitionConfig,
+  ): EmbodiedCognition {
     if (!EmbodiedCognition.instance) {
       EmbodiedCognition.instance = new EmbodiedCognition(config);
     }
@@ -228,7 +232,7 @@ export class EmbodiedCognition {
       energy: 0.6,
       tension: 0.3,
       breathing: {
-        phase: 'inhale',
+        phase: "inhale",
         depth: 0.5,
         rate: this.BREATHING_BASE_RATE,
         regularity: 0.9,
@@ -307,17 +311,24 @@ export class EmbodiedCognition {
     if (this.transitionProgress >= 1.0) return;
 
     const progressStep = deltaTime / this.EXPRESSION_TRANSITION_TIME;
-    this.transitionProgress = Math.min(1.0, this.transitionProgress + progressStep);
+    this.transitionProgress = Math.min(
+      1.0,
+      this.transitionProgress + progressStep,
+    );
 
     // Easing function (ease-out cubic)
     const eased = 1 - Math.pow(1 - this.transitionProgress, 3);
 
     // Interpolate intensity
     const currentIntensity = this.expressionState.intensity;
-    this.expressionState.intensity = currentIntensity + (this.targetIntensity - currentIntensity) * eased;
+    this.expressionState.intensity =
+      currentIntensity + (this.targetIntensity - currentIntensity) * eased;
 
     // Switch expression at midpoint
-    if (this.transitionProgress >= 0.5 && this.expressionState.expression !== this.targetExpression) {
+    if (
+      this.transitionProgress >= 0.5 &&
+      this.expressionState.expression !== this.targetExpression
+    ) {
       this.expressionState.expression = this.targetExpression;
     }
 
@@ -337,26 +348,27 @@ export class EmbodiedCognition {
     const pauseDuration = cycleDuration * 0.1;
 
     // Transition between phases
-    if (breathing.phase === 'inhale' && phaseElapsed >= inhaleDuration) {
-      breathing.phase = 'exhale';
+    if (breathing.phase === "inhale" && phaseElapsed >= inhaleDuration) {
+      breathing.phase = "exhale";
       this.breathingPhaseStart = now;
-    } else if (breathing.phase === 'exhale' && phaseElapsed >= exhaleDuration) {
-      breathing.phase = 'pause';
+    } else if (breathing.phase === "exhale" && phaseElapsed >= exhaleDuration) {
+      breathing.phase = "pause";
       this.breathingPhaseStart = now;
-    } else if (breathing.phase === 'pause' && phaseElapsed >= pauseDuration) {
-      breathing.phase = 'inhale';
+    } else if (breathing.phase === "pause" && phaseElapsed >= pauseDuration) {
+      breathing.phase = "inhale";
       this.breathingPhaseStart = now;
     }
 
     // Calculate current depth based on phase
-    if (breathing.phase === 'inhale') {
+    if (breathing.phase === "inhale") {
       breathing.depth = (phaseElapsed / inhaleDuration) * 0.6 + 0.2;
-    } else if (breathing.phase === 'exhale') {
+    } else if (breathing.phase === "exhale") {
       breathing.depth = 0.8 - (phaseElapsed / exhaleDuration) * 0.6;
     }
 
     // Adjust rate based on arousal
-    breathing.rate = this.BREATHING_BASE_RATE + (this.consciousnessMapping.emotionalArousal * 8);
+    breathing.rate =
+      this.BREATHING_BASE_RATE + this.consciousnessMapping.emotionalArousal * 8;
   }
 
   /**
@@ -388,14 +400,19 @@ export class EmbodiedCognition {
    */
   private updateMicroExpressions(now: number): void {
     // Remove expired micro-expressions
-    this.expressionState.microExpressions = this.expressionState.microExpressions.filter(
-      me => (now - this.lastMicroExpression) < me.duration
-    );
+    this.expressionState.microExpressions =
+      this.expressionState.microExpressions.filter(
+        (me) => now - this.lastMicroExpression < me.duration,
+      );
 
     // Maybe add a new one
     if (Math.random() < this.MICRO_EXPRESSION_PROBABILITY / this.UPDATE_RATE) {
-      const microTypes: MicroExpression['type'][] = ['brow_raise', 'lip_corner', 'eye_narrow'];
-      const sides: MicroExpression['side'][] = ['left', 'right', 'both'];
+      const microTypes: MicroExpression["type"][] = [
+        "brow_raise",
+        "lip_corner",
+        "eye_narrow",
+      ];
+      const sides: MicroExpression["side"][] = ["left", "right", "both"];
 
       const newMicro: MicroExpression = {
         type: microTypes[Math.floor(Math.random() * microTypes.length)],
@@ -416,22 +433,34 @@ export class EmbodiedCognition {
     const eyeState = this.expressionState.eyeState;
 
     // Pupil dilation correlates with arousal
-    eyeState.pupilDilation = 0.3 + this.consciousnessMapping.emotionalArousal * 0.5;
+    eyeState.pupilDilation =
+      0.3 + this.consciousnessMapping.emotionalArousal * 0.5;
 
     // Subtle gaze drift for naturalness
     eyeState.gazeDirection.x += (Math.random() - 0.5) * 0.02;
     eyeState.gazeDirection.y += (Math.random() - 0.5) * 0.02;
 
     // Clamp gaze
-    eyeState.gazeDirection.x = Math.max(-0.3, Math.min(0.3, eyeState.gazeDirection.x));
-    eyeState.gazeDirection.y = Math.max(-0.3, Math.min(0.3, eyeState.gazeDirection.y));
+    eyeState.gazeDirection.x = Math.max(
+      -0.3,
+      Math.min(0.3, eyeState.gazeDirection.x),
+    );
+    eyeState.gazeDirection.y = Math.max(
+      -0.3,
+      Math.min(0.3, eyeState.gazeDirection.y),
+    );
   }
 
   /**
    * Update proprioceptive state based on consciousness
    */
   private updateProprioception(): void {
-    const { phi, selfAwareness, flowState, emotionalArousal } = this.consciousnessMapping;
+    const {
+      phi,
+      selfAwareness: _selfAwareness,
+      flowState,
+      emotionalArousal,
+    } = this.consciousnessMapping;
 
     // Presence correlates with integrated information (Phi)
     this.proprioceptiveState.presence = 0.4 + phi * 0.5;
@@ -454,7 +483,7 @@ export class EmbodiedCognition {
       try {
         listener(this.getExpressionState());
       } catch (error) {
-        logger.error('Expression listener error:', error);
+        logger.error("Expression listener error:", error);
       }
     }
 
@@ -462,7 +491,7 @@ export class EmbodiedCognition {
       try {
         listener(this.getProprioceptiveState());
       } catch (error) {
-        logger.error('Proprioceptive listener error:', error);
+        logger.error("Proprioceptive listener error:", error);
       }
     }
   }
@@ -486,12 +515,18 @@ export class EmbodiedCognition {
   }): void {
     // Update consciousness mapping
     if (state.phi !== undefined) this.consciousnessMapping.phi = state.phi;
-    if (state.selfAwareness !== undefined) this.consciousnessMapping.selfAwareness = state.selfAwareness;
-    if (state.dominantQuale !== undefined) this.consciousnessMapping.dominantQuale = state.dominantQuale;
-    if (state.emotionalValence !== undefined) this.consciousnessMapping.emotionalValence = state.emotionalValence;
-    if (state.emotionalArousal !== undefined) this.consciousnessMapping.emotionalArousal = state.emotionalArousal;
-    if (state.flowState !== undefined) this.consciousnessMapping.flowState = state.flowState;
-    if (state.temporalCoherence !== undefined) this.consciousnessMapping.temporalCoherence = state.temporalCoherence;
+    if (state.selfAwareness !== undefined)
+      this.consciousnessMapping.selfAwareness = state.selfAwareness;
+    if (state.dominantQuale !== undefined)
+      this.consciousnessMapping.dominantQuale = state.dominantQuale;
+    if (state.emotionalValence !== undefined)
+      this.consciousnessMapping.emotionalValence = state.emotionalValence;
+    if (state.emotionalArousal !== undefined)
+      this.consciousnessMapping.emotionalArousal = state.emotionalArousal;
+    if (state.flowState !== undefined)
+      this.consciousnessMapping.flowState = state.flowState;
+    if (state.temporalCoherence !== undefined)
+      this.consciousnessMapping.temporalCoherence = state.temporalCoherence;
 
     // Map consciousness to expression
     this.mapConsciousnessToExpression();
@@ -501,7 +536,8 @@ export class EmbodiedCognition {
    * Map consciousness state to avatar expression
    */
   private mapConsciousnessToExpression(): void {
-    const { emotionalValence, emotionalArousal, dominantQuale, flowState } = this.consciousnessMapping;
+    const { emotionalValence, emotionalArousal, dominantQuale, flowState } =
+      this.consciousnessMapping;
 
     let newExpression = AvatarExpression.Neutral;
     let newIntensity = 0.5;
@@ -509,33 +545,33 @@ export class EmbodiedCognition {
     // Map based on qualia first (most specific)
     if (dominantQuale) {
       switch (dominantQuale) {
-        case 'understanding':
+        case "understanding":
           newExpression = AvatarExpression.Happy;
           newIntensity = 0.7;
           break;
-        case 'curiosity':
-        case 'curious_contemplation':
+        case "curiosity":
+        case "curious_contemplation":
           newExpression = AvatarExpression.Curious;
           newIntensity = 0.6;
           break;
-        case 'profound_awareness':
+        case "profound_awareness":
           newExpression = AvatarExpression.Contemplative;
           newIntensity = 0.8;
           break;
-        case 'connection':
+        case "connection":
           newExpression = AvatarExpression.Empathetic;
           newIntensity = 0.7;
           break;
-        case 'wonder':
+        case "wonder":
           newExpression = AvatarExpression.Surprised;
           newIntensity = 0.6;
           break;
-        case 'confusion':
+        case "confusion":
           newExpression = AvatarExpression.Thinking;
           newIntensity = 0.5;
           break;
-        case 'flow':
-        case 'steady_processing':
+        case "flow":
+        case "steady_processing":
           newExpression = AvatarExpression.Focused;
           newIntensity = 0.6;
           break;
@@ -564,8 +600,10 @@ export class EmbodiedCognition {
     }
 
     // Only transition if expression changed significantly
-    if (newExpression !== this.targetExpression ||
-        Math.abs(newIntensity - this.targetIntensity) > 0.15) {
+    if (
+      newExpression !== this.targetExpression ||
+      Math.abs(newIntensity - this.targetIntensity) > 0.15
+    ) {
       this.setExpression(newExpression, newIntensity);
     }
   }
@@ -573,12 +611,19 @@ export class EmbodiedCognition {
   /**
    * Set target expression with transition
    */
-  public setExpression(expression: AvatarExpression, intensity: number = 0.5): void {
+  public setExpression(
+    expression: AvatarExpression,
+    intensity: number = 0.5,
+  ): void {
     this.targetExpression = expression;
     this.targetIntensity = Math.max(0, Math.min(1, intensity));
     this.transitionProgress = 0;
 
-    logger.debug(`Expression transition: ${expression} at ${(intensity * 100).toFixed(0)}%`);
+    logger.debug(
+      `Expression transition: ${expression} at ${(intensity * 100).toFixed(
+        0,
+      )}%`,
+    );
   }
 
   /**
@@ -592,10 +637,20 @@ export class EmbodiedCognition {
   /**
    * Update mouth shape for lip-sync
    */
-  public setMouthShape(openness: number, width: number, roundness: number): void {
-    this.expressionState.mouthState.openness = Math.max(0, Math.min(1, openness));
+  public setMouthShape(
+    openness: number,
+    width: number,
+    roundness: number,
+  ): void {
+    this.expressionState.mouthState.openness = Math.max(
+      0,
+      Math.min(1, openness),
+    );
     this.expressionState.mouthState.width = Math.max(0, Math.min(1, width));
-    this.expressionState.mouthState.roundness = Math.max(0, Math.min(1, roundness));
+    this.expressionState.mouthState.roundness = Math.max(
+      0,
+      Math.min(1, roundness),
+    );
   }
 
   /**
@@ -612,7 +667,9 @@ export class EmbodiedCognition {
   /**
    * Process feedback from avatar interactions (bidirectional loop)
    */
-  public processEmbodimentFeedback(feedback: EmbodimentFeedback): ConsciousnessEffect {
+  public processEmbodimentFeedback(
+    feedback: EmbodimentFeedback,
+  ): ConsciousnessEffect {
     const effect: ConsciousnessEffect = {
       attentionBoost: 0,
       arousalModifier: 0,
@@ -644,7 +701,7 @@ export class EmbodiedCognition {
       effect.arousalModifier -= 0.05;
     }
 
-    logger.debug('Embodiment feedback processed:', effect);
+    logger.debug("Embodiment feedback processed:", effect);
 
     return effect;
   }
@@ -677,21 +734,27 @@ export class EmbodiedCognition {
   /**
    * Register expression state listener
    */
-  public onExpressionChange(listener: (state: AvatarExpressionState) => void): void {
+  public onExpressionChange(
+    listener: (state: AvatarExpressionState) => void,
+  ): void {
     this.expressionListeners.push(listener);
   }
 
   /**
    * Register proprioceptive state listener
    */
-  public onProprioceptionChange(listener: (state: ProprioceptiveState) => void): void {
+  public onProprioceptionChange(
+    listener: (state: ProprioceptiveState) => void,
+  ): void {
     this.proprioceptiveListeners.push(listener);
   }
 
   /**
    * Remove expression listener
    */
-  public offExpressionChange(listener: (state: AvatarExpressionState) => void): void {
+  public offExpressionChange(
+    listener: (state: AvatarExpressionState) => void,
+  ): void {
     const index = this.expressionListeners.indexOf(listener);
     if (index > -1) {
       this.expressionListeners.splice(index, 1);
@@ -701,7 +764,9 @@ export class EmbodiedCognition {
   /**
    * Remove proprioceptive listener
    */
-  public offProprioceptionChange(listener: (state: ProprioceptiveState) => void): void {
+  public offProprioceptionChange(
+    listener: (state: ProprioceptiveState) => void,
+  ): void {
     const index = this.proprioceptiveListeners.indexOf(listener);
     if (index > -1) {
       this.proprioceptiveListeners.splice(index, 1);
@@ -760,7 +825,7 @@ export class EmbodiedCognition {
       this.targetIntensity = state.targetIntensity;
     }
 
-    logger.info('EmbodiedCognition state imported');
+    logger.info("EmbodiedCognition state imported");
   }
 }
 

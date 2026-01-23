@@ -1,40 +1,40 @@
-import React, { PropsWithChildren, useEffect, useState } from 'react'
+import React, { PropsWithChildren, useEffect, useState } from "react";
 
-import classNames from 'classnames'
+import classNames from "classnames";
 
-import styles from './styles.module.scss'
+import styles from "./styles.module.scss";
 
 type Props = {
-  disabled?: boolean
-  checked?: boolean
-  label?: string
-  id?: string
-  onChange: (value: boolean) => void
-}
+  disabled?: boolean;
+  checked?: boolean;
+  label?: string;
+  id?: string;
+  onChange: (value: boolean) => void;
+};
 export default function Switch({ ...props }: PropsWithChildren<Props>) {
-  const [checked, setChecked] = useState(props.checked)
+  const [checked, setChecked] = useState(props.checked);
 
   useEffect(() => {
-    setChecked(props.checked)
-  }, [props.checked])
+    setChecked(props.checked);
+  }, [props.checked]);
 
   const toggle = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const v = event.target.checked
-    console.log('Switch toggle clicked:', {
+    const v = event.target.checked;
+    console.log("Switch toggle clicked:", {
       newValue: v,
       currentChecked: checked,
       propsChecked: props.checked,
       disabled: props.disabled,
-    })
-    props.onChange(v)
-    setChecked(v)
-  }
+    });
+    props.onChange(v);
+    setChecked(v);
+  };
 
   return (
     <div className={styles.switchWrapper}>
       <input
         id={props.id}
-        type='checkbox'
+        type="checkbox"
         disabled={props.disabled}
         onChange={toggle}
         checked={checked}
@@ -47,5 +47,5 @@ export default function Switch({ ...props }: PropsWithChildren<Props>) {
         })}
       ></span>
     </div>
-  )
+  );
 }

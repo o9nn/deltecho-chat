@@ -1,4 +1,4 @@
-@use '../mixins';
+@use "../mixins";
 
 // used by message and the popup message on map
 .metadata {
@@ -21,12 +21,12 @@
     }
 
     .padlock-icon {
-      @include mixins.color-svg('./images/padlock.svg', white, 125%);
+      @include mixins.color-svg("./images/padlock.svg", white, 125%);
     }
 
     .saved-message-icon {
       @include mixins.color-svg(
-        './images/icons/bookmark-filled.svg',
+        "./images/icons/bookmark-filled.svg",
         white,
         100%
       );

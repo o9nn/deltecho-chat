@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 import Dialog, {
   DialogBody,
@@ -6,16 +6,16 @@ import Dialog, {
   DialogFooter,
   FooterActionButton,
   FooterActions,
-} from '../Dialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
+} from "../Dialog";
+import useTranslationFunction from "../../hooks/useTranslationFunction";
 
-import type { DialogProps } from '../../contexts/DialogContext'
+import type { DialogProps } from "../../contexts/DialogContext";
 
 export type Props = {
-  cb?: () => void
-  message: string
-  okBtnLabel?: string
-} & DialogProps
+  cb?: () => void;
+  message: string;
+  okBtnLabel?: string;
+} & DialogProps;
 
 export default function AlertDialog({
   message,
@@ -23,27 +23,27 @@ export default function AlertDialog({
   cb,
   okBtnLabel,
 }: Props) {
-  const tx = useTranslationFunction()
+  const tx = useTranslationFunction();
 
   const onClick = () => {
-    cb && cb()
-    onClose()
-  }
+    cb && cb();
+    onClose();
+  };
 
   return (
     <Dialog width={350} onClose={onClose}>
       <DialogBody>
         <DialogContent paddingTop>
-          <p className='whitespace'>{message}</p>
+          <p className="whitespace">{message}</p>
         </DialogContent>
       </DialogBody>
       <DialogFooter>
         <FooterActions>
-          <FooterActionButton styling='secondary' onClick={onClick}>
-            {okBtnLabel || tx('ok')}
+          <FooterActionButton styling="secondary" onClick={onClick}>
+            {okBtnLabel || tx("ok")}
           </FooterActionButton>
         </FooterActions>
       </DialogFooter>
     </Dialog>
-  )
+  );
 }

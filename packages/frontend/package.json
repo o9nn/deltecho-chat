@@ -25,12 +25,14 @@
   },
   "dependencies": {
     "@breezystack/lamejs": "^1.2.7",
+    "lucide-react": "^0.511.0",
     "@deltachat-desktop/runtime-interface": "link:../runtime",
     "@deltachat-desktop/shared": "link:../shared",
     "@deltachat/jsonrpc-client": "catalog:",
     "@deltachat/message_parser_wasm": "^0.13.0",
     "@deltecho/avatar": "workspace:*",
     "@deltecho/cognitive": "workspace:*",
+    "deep-tree-echo-core": "workspace:*",
     "@deltecho/reasoning": "workspace:*",
     "@deltecho/ui-components": "workspace:*",
     "@emoji-mart/data": "^1.2.1",
@@ -61,6 +63,7 @@
     "ws": "7.5.10"
   },
   "devDependencies": {
+    "@jest/globals": "^29.7.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^14.3.1",
     "@testing-library/user-event": "^14.6.1",

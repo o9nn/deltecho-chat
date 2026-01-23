@@ -1,13 +1,13 @@
-import React, { useState } from 'react'
-import { AddMemberInnerDialog } from './AddMemberInnerDialog'
-import { useLazyLoadedContacts } from '../../contact/ContactList'
-import Dialog from '../../Dialog'
-import Icon from '../../Icon'
-import type { T } from '@deltachat/jsonrpc-client'
-import type { DialogProps } from '../../../contexts/DialogContext'
-import { InlineVerifiedIcon } from '../../VerifiedIcon'
-import { Avatar } from '../../Avatar'
-import styles from './styles.module.scss'
+import React, { useState } from "react";
+import { AddMemberInnerDialog } from "./AddMemberInnerDialog";
+import { useLazyLoadedContacts } from "../../contact/ContactList";
+import Dialog from "../../Dialog";
+import Icon from "../../Icon";
+import type { T } from "@deltachat/jsonrpc-client";
+import type { DialogProps } from "../../../contexts/DialogContext";
+import { InlineVerifiedIcon } from "../../VerifiedIcon";
+import { Avatar } from "../../Avatar";
+import styles from "./styles.module.scss";
 
 export function AddMemberDialog({
   onClose,
@@ -17,36 +17,36 @@ export function AddMemberDialog({
   isBroadcast = false,
   isVerificationRequired = false,
 }: {
-  onOk: (members: number[]) => void
-  groupMembers: number[]
-  listFlags: number
-  isBroadcast?: boolean
-  isVerificationRequired?: boolean
+  onOk: (members: number[]) => void;
+  groupMembers: number[];
+  listFlags: number;
+  isBroadcast?: boolean;
+  isVerificationRequired?: boolean;
 } & DialogProps) {
-  const [queryStr, setQueryStr] = useState('')
+  const [queryStr, setQueryStr] = useState("");
   const {
     contactIds,
     contactCache,
     loadContacts,
     queryStrIsValidEmail,
     refresh: refreshContacts,
-  } = useLazyLoadedContacts(listFlags, queryStr)
+  } = useLazyLoadedContacts(listFlags, queryStr);
   return (
     <Dialog
       canOutsideClickClose={false}
       fixed
       onClose={onClose}
-      dataTestid='add-member-dialog'
+      dataTestid="add-member-dialog"
     >
       {AddMemberInnerDialog({
-        onOk: addMembers => {
-          onOk(addMembers)
-          onClose()
+        onOk: (addMembers) => {
+          onOk(addMembers);
+          onClose();
         },
         onCancel: () => {
-          onClose()
+          onClose();
         },
-        onSearchChange: e => setQueryStr(e.target.value),
+        onSearchChange: (e) => setQueryStr(e.target.value),
         queryStr,
         queryStrIsValidEmail,
 
@@ -60,14 +60,14 @@ export function AddMemberDialog({
         isVerificationRequired,
       })}
     </Dialog>
-  )
+  );
 }
 
 export const AddMemberChip = (props: {
-  contact: T.Contact
-  onRemoveClick: (contact: T.Contact) => void
+  contact: T.Contact;
+  onRemoveClick: (contact: T.Contact) => void;
 }) => {
-  const { contact, onRemoveClick } = props
+  const { contact, onRemoveClick } = props;
   return (
     <div key={contact.id} className={styles.AddMemberChip}>
       <div className={styles.Avatar}>
@@ -89,10 +89,10 @@ export const AddMemberChip = (props: {
       <button
         className={styles.removeMember}
         onClick={() => onRemoveClick(contact)}
-        aria-label='Remove'
+        aria-label="Remove"
       >
-        <Icon className={styles.removeIcon} icon={'cross'} size={12} />
+        <Icon className={styles.removeIcon} icon={"cross"} size={12} />
       </button>
     </div>
-  )
-}
+  );
+};

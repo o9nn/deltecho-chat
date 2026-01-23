@@ -1,21 +1,24 @@
 /**
  * ChatOrchestrator - Deep Tree Echo Chat Session Orchestration
- * 
+ *
  * This module provides cognitive orchestration for chat sessions,
  * integrating the Deep Tree Echo cognitive architecture with the
  * DeltaChat messaging interface.
- * 
+ *
  * Enhanced with AAR (Agent-Arena-Relation) nested membrane architecture
  * for deeper character and narrative integration.
  */
 
-import { Type as T } from '../../backend-com';
+import { Type as T } from "../../backend-com";
+import { getLogger } from "@deltachat-desktop/shared/logger";
 import {
   AARFrontendIntegration,
   type AARStateSnapshot,
   type AARContext,
   createAARFrontendIntegration,
-} from './AARIntegration';
+} from "./AARIntegration";
+
+const log = getLogger("render/components/DeepTreeEchoBot/ChatOrchestrator");
 
 /**
  * Cognitive state for a chat session
@@ -39,10 +42,10 @@ interface CognitiveState {
  * Emotional tone analysis
  */
 interface EmotionalTone {
-  valence: number;      // -1 (negative) to 1 (positive)
-  arousal: number;      // 0 (calm) to 1 (excited)
-  dominance: number;    // 0 (submissive) to 1 (dominant)
-  confidence: number;   // 0 to 1
+  valence: number; // -1 (negative) to 1 (positive)
+  arousal: number; // 0 (calm) to 1 (excited)
+  dominance: number; // 0 (submissive) to 1 (dominant)
+  confidence: number; // 0 to 1
 }
 
 /**
@@ -66,7 +69,7 @@ interface MemoryAnchor {
   embedding?: number[];
   importance: number;
   timestamp: number;
-  type: 'episodic' | 'semantic' | 'procedural';
+  type: "episodic" | "semantic" | "procedural";
 }
 
 /**
@@ -74,7 +77,7 @@ interface MemoryAnchor {
  */
 interface Intent {
   id: string;
-  type: 'question' | 'request' | 'statement' | 'emotion' | 'action';
+  type: "question" | "request" | "statement" | "emotion" | "action";
   content: string;
   priority: number;
   resolved: boolean;
@@ -96,7 +99,7 @@ interface OrchestrationResult {
  * Suggested action for the user or system
  */
 interface SuggestedAction {
-  type: 'reply' | 'clarify' | 'defer' | 'escalate' | 'remember';
+  type: "reply" | "clarify" | "defer" | "escalate" | "remember";
   content: string;
   priority: number;
 }
@@ -110,9 +113,7 @@ export class ChatOrchestrator {
   private syncEventsPerCycle: number = 42;
   private aarIntegration: AARFrontendIntegration;
 
-  constructor(
-    private config: OrchestratorConfig = defaultConfig
-  ) {
+  constructor(private config: OrchestratorConfig = defaultConfig) {
     // Initialize AAR integration
     this.aarIntegration = createAARFrontendIntegration({
       enabled: true,
@@ -130,7 +131,7 @@ export class ChatOrchestrator {
    */
   start(): void {
     this.aarIntegration.start();
-    console.log('[ChatOrchestrator] Started with AAR integration');
+    log.info("[ChatOrchestrator] Started with AAR integration");
   }
 
   /**
@@ -138,7 +139,7 @@ export class ChatOrchestrator {
    */
   shutdown(): void {
     this.aarIntegration.stop();
-    console.log('[ChatOrchestrator] Stopped');
+    log.info("[ChatOrchestrator] Stopped");
   }
 
   /**
@@ -146,11 +147,13 @@ export class ChatOrchestrator {
    */
   private onAARStateUpdate(state: AARStateSnapshot): void {
     // Update all active sessions with new AAR state
-    for (const [sessionId, session] of this.sessions) {
+    for (const [_sessionId, session] of this.sessions) {
       session.aarSnapshot = state;
       session.aarContext = this.aarIntegration.generateContext() || undefined;
     }
-    console.log(`[ChatOrchestrator] AAR state updated (cycle ${state.meta.cycle})`);
+    console.log(
+      `[ChatOrchestrator] AAR state updated (cycle ${state.meta.cycle})`,
+    );
   }
 
   /**
@@ -185,7 +188,7 @@ export class ChatOrchestrator {
         valence: aarSnapshot?.agent.emotionalValence ?? 0,
         arousal: aarSnapshot?.agent.emotionalArousal ?? 0.3,
         dominance: 0.5,
-        confidence: aarSnapshot?.meta.coherence ?? 0.5
+        confidence: aarSnapshot?.meta.coherence ?? 0.5,
       },
       topicGraph: [],
       memoryAnchors: [],
@@ -201,18 +204,19 @@ export class ChatOrchestrator {
     // Initialize memory anchors from contact history if available
     await this.loadContactMemory(sessionId, contact);
 
-    console.log(`[ChatOrchestrator] Session ${sessionId} initialized with AAR state`);
+    console.log(
+      `[ChatOrchestrator] Session ${sessionId} initialized with AAR state`,
+    );
 
     return sessionId;
   }
-
 
   /**
    * Process an incoming message
    */
   async processMessage(
     sessionId: string,
-    message: T.Message
+    message: T.Message,
   ): Promise<OrchestrationResult> {
     const state = this.sessions.get(sessionId);
     if (!state) {
@@ -237,9 +241,15 @@ export class ChatOrchestrator {
     const memoryRetrieval = await this.retrieveRelevantMemory(message, state);
 
     // Update state
-    state.emotionalTone = this.blendEmotions(state.emotionalTone, emotionalAnalysis);
+    state.emotionalTone = this.blendEmotions(
+      state.emotionalTone,
+      emotionalAnalysis,
+    );
     state.topicGraph = this.updateTopicGraph(state.topicGraph, topicExtraction);
-    state.activeIntents = this.updateIntents(state.activeIntents, intentDetection);
+    state.activeIntents = this.updateIntents(
+      state.activeIntents,
+      intentDetection,
+    );
     state.lastUpdate = Date.now();
 
     // Generate response decision
@@ -258,10 +268,10 @@ export class ChatOrchestrator {
       suggestedActions,
       stateUpdate: {
         emotionalTone: state.emotionalTone,
-        sys6Phase: state.sys6Phase
+        sys6Phase: state.sys6Phase,
       },
       shouldRespond,
-      confidence: this.calculateConfidence(state)
+      confidence: this.calculateConfidence(state),
     };
   }
 
@@ -269,12 +279,28 @@ export class ChatOrchestrator {
    * Analyze emotional content of a message
    */
   private async analyzeEmotion(message: T.Message): Promise<EmotionalTone> {
-    const text = message.text || '';
+    const text = message.text || "";
 
     // Simple heuristic analysis (would be replaced with ML model)
-    const positiveWords = ['happy', 'great', 'love', 'thanks', 'good', 'wonderful', 'amazing'];
-    const negativeWords = ['sad', 'bad', 'hate', 'angry', 'terrible', 'awful', 'upset'];
-    const excitedWords = ['!', 'wow', 'amazing', 'incredible', 'excited'];
+    const positiveWords = [
+      "happy",
+      "great",
+      "love",
+      "thanks",
+      "good",
+      "wonderful",
+      "amazing",
+    ];
+    const negativeWords = [
+      "sad",
+      "bad",
+      "hate",
+      "angry",
+      "terrible",
+      "awful",
+      "upset",
+    ];
+    const excitedWords = ["!", "wow", "amazing", "incredible", "excited"];
 
     const words = text.toLowerCase().split(/\s+/);
 
@@ -283,18 +309,21 @@ export class ChatOrchestrator {
     let excitedCount = 0;
 
     for (const word of words) {
-      if (positiveWords.some(p => word.includes(p))) positiveCount++;
-      if (negativeWords.some(n => word.includes(n))) negativeCount++;
-      if (excitedWords.some(e => word.includes(e))) excitedCount++;
+      if (positiveWords.some((p) => word.includes(p))) positiveCount++;
+      if (negativeWords.some((n) => word.includes(n))) negativeCount++;
+      if (excitedWords.some((e) => word.includes(e))) excitedCount++;
     }
 
     const total = Math.max(words.length, 1);
 
     return {
       valence: (positiveCount - negativeCount) / total,
-      arousal: Math.min(excitedCount / total + (text.includes('!') ? 0.2 : 0), 1),
+      arousal: Math.min(
+        excitedCount / total + (text.includes("!") ? 0.2 : 0),
+        1,
+      ),
       dominance: 0.5,
-      confidence: 0.6
+      confidence: 0.6,
     };
   }
 
@@ -303,30 +332,32 @@ export class ChatOrchestrator {
    */
   private async extractTopics(
     message: T.Message,
-    state: CognitiveState
+    state: CognitiveState,
   ): Promise<TopicNode[]> {
-    const text = message.text || '';
-    const words = text.split(/\s+/).filter(w => w.length > 3);
+    const text = message.text || "";
+    const words = text.split(/\s+/).filter((w) => w.length > 3);
 
     // Simple keyword extraction (would use NLP in production)
     const topics: TopicNode[] = [];
-    const stopWords = new Set(['this', 'that', 'with', 'from', 'have', 'been']);
+    const stopWords = new Set(["this", "that", "with", "from", "have", "been"]);
 
     for (const word of words) {
-      const normalized = word.toLowerCase().replace(/[^a-z]/g, '');
+      const normalized = word.toLowerCase().replace(/[^a-z]/g, "");
       if (normalized.length > 3 && !stopWords.has(normalized)) {
-        const existing = state.topicGraph.find(t => t.label === normalized);
+        const existing = state.topicGraph.find((t) => t.label === normalized);
         if (existing) {
           existing.weight += 1;
           existing.lastMention = Date.now();
         } else {
           topics.push({
-            id: `topic_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+            id: `topic_${Date.now()}_${Math.random()
+              .toString(36)
+              .substr(2, 9)}`,
             label: normalized,
             weight: 1,
             connections: [],
             firstMention: Date.now(),
-            lastMention: Date.now()
+            lastMention: Date.now(),
           });
         }
       }
@@ -340,46 +371,56 @@ export class ChatOrchestrator {
    */
   private async detectIntents(
     message: T.Message,
-    state: CognitiveState
+    state: CognitiveState,
   ): Promise<Intent[]> {
-    const text = message.text || '';
+    const text = message.text || "";
     const intents: Intent[] = [];
 
     // Question detection
-    if (text.includes('?') || text.toLowerCase().startsWith('what') ||
-      text.toLowerCase().startsWith('how') || text.toLowerCase().startsWith('why')) {
+    if (
+      text.includes("?") ||
+      text.toLowerCase().startsWith("what") ||
+      text.toLowerCase().startsWith("how") ||
+      text.toLowerCase().startsWith("why")
+    ) {
       intents.push({
         id: `intent_${Date.now()}`,
-        type: 'question',
+        type: "question",
         content: text,
         priority: 0.8,
         resolved: false,
-        createdAt: Date.now()
+        createdAt: Date.now(),
       });
     }
 
     // Request detection
-    if (text.toLowerCase().includes('please') || text.toLowerCase().includes('can you') ||
-      text.toLowerCase().includes('could you')) {
+    if (
+      text.toLowerCase().includes("please") ||
+      text.toLowerCase().includes("can you") ||
+      text.toLowerCase().includes("could you")
+    ) {
       intents.push({
         id: `intent_${Date.now()}`,
-        type: 'request',
+        type: "request",
         content: text,
         priority: 0.9,
         resolved: false,
-        createdAt: Date.now()
+        createdAt: Date.now(),
       });
     }
 
     // Emotion expression
-    if (state.emotionalTone.valence < -0.3 || state.emotionalTone.valence > 0.3) {
+    if (
+      state.emotionalTone.valence < -0.3 ||
+      state.emotionalTone.valence > 0.3
+    ) {
       intents.push({
         id: `intent_${Date.now()}`,
-        type: 'emotion',
+        type: "emotion",
         content: text,
         priority: 0.6,
         resolved: false,
-        createdAt: Date.now()
+        createdAt: Date.now(),
       });
     }
 
@@ -391,17 +432,19 @@ export class ChatOrchestrator {
    */
   private async retrieveRelevantMemory(
     message: T.Message,
-    state: CognitiveState
+    state: CognitiveState,
   ): Promise<MemoryAnchor[]> {
     // Simple relevance scoring based on keyword overlap
     const messageWords = new Set(
-      (message.text || '').toLowerCase().split(/\s+/)
+      (message.text || "").toLowerCase().split(/\s+/),
     );
 
     return state.memoryAnchors
-      .map(anchor => {
+      .map((anchor) => {
         const anchorWords = new Set(anchor.content.toLowerCase().split(/\s+/));
-        const overlap = [...messageWords].filter(w => anchorWords.has(w)).length;
+        const overlap = [...messageWords].filter((w) =>
+          anchorWords.has(w),
+        ).length;
         return { anchor, score: overlap / Math.max(messageWords.size, 1) };
       })
       .filter(({ score }) => score > 0.1)
@@ -415,15 +458,15 @@ export class ChatOrchestrator {
    */
   private shouldGenerateResponse(
     state: CognitiveState,
-    message: T.Message
+    _message: T.Message,
   ): boolean {
     // Always respond to questions
-    if (state.activeIntents.some(i => i.type === 'question' && !i.resolved)) {
+    if (state.activeIntents.some((i) => i.type === "question" && !i.resolved)) {
       return true;
     }
 
     // Respond to requests
-    if (state.activeIntents.some(i => i.type === 'request' && !i.resolved)) {
+    if (state.activeIntents.some((i) => i.type === "request" && !i.resolved)) {
       return true;
     }
 
@@ -445,16 +488,16 @@ export class ChatOrchestrator {
    */
   private async generateResponse(
     state: CognitiveState,
-    message: T.Message,
-    relevantMemory: MemoryAnchor[]
+    _message: T.Message,
+    _relevantMemory: MemoryAnchor[],
   ): Promise<string> {
     // This would integrate with LLM service in production
     // Now enhanced with AAR context for character-appropriate responses
 
-    const intent = state.activeIntents.find(i => !i.resolved);
+    const intent = state.activeIntents.find((i) => !i.resolved);
 
     // Build emotion acknowledgment based on AAR emotional state
-    let emotionAck = '';
+    let emotionAck = "";
     if (state.aarSnapshot) {
       const valence = state.aarSnapshot.agent.emotionalValence;
       if (valence < -0.3) {
@@ -469,74 +512,73 @@ export class ChatOrchestrator {
     }
 
     // Apply AAR character facet guidance
-    let characterPrefix = '';
+    let characterPrefix = "";
     if (state.aarContext) {
       // Use facet-specific response style
       const facet = state.aarSnapshot?.agent.dominantFacet;
       switch (facet) {
-        case 'wisdom':
-          characterPrefix = 'Reflecting on this, ';
+        case "wisdom":
+          characterPrefix = "Reflecting on this, ";
           break;
-        case 'curiosity':
-          characterPrefix = 'How fascinating! ';
+        case "curiosity":
+          characterPrefix = "How fascinating! ";
           break;
-        case 'compassion':
-          characterPrefix = 'I really hear you. ';
+        case "compassion":
+          characterPrefix = "I really hear you. ";
           break;
-        case 'playfulness':
-          characterPrefix = 'Oh, this is fun! ';
+        case "playfulness":
+          characterPrefix = "Oh, this is fun! ";
           break;
-        case 'determination':
-          characterPrefix = 'Let\'s focus on this. ';
+        case "determination":
+          characterPrefix = "Let's focus on this. ";
           break;
-        case 'authenticity':
-          characterPrefix = 'To be honest, ';
+        case "authenticity":
+          characterPrefix = "To be honest, ";
           break;
-        case 'protector':
-          characterPrefix = 'First, let me make sure I understand. ';
+        case "protector":
+          characterPrefix = "First, let me make sure I understand. ";
           break;
-        case 'transcendence':
-          characterPrefix = 'Looking at the bigger picture, ';
+        case "transcendence":
+          characterPrefix = "Looking at the bigger picture, ";
           break;
       }
     }
 
-    if (intent?.type === 'question') {
+    if (intent?.type === "question") {
       return `${emotionAck}${characterPrefix}That's an interesting question. Let me think about that...`;
     }
 
-    if (intent?.type === 'request') {
+    if (intent?.type === "request") {
       return `${emotionAck}${characterPrefix}I'd be happy to help with that.`;
     }
 
     return `${emotionAck}${characterPrefix}I understand. Tell me more.`;
   }
 
-
   /**
    * Generate suggested actions
    */
   private generateSuggestedActions(
     state: CognitiveState,
-    message: T.Message
+    _message: T.Message,
   ): SuggestedAction[] {
     const actions: SuggestedAction[] = [];
 
     // Suggest clarification if intent is unclear
     if (state.activeIntents.length === 0) {
       actions.push({
-        type: 'clarify',
-        content: 'Ask for more details',
-        priority: 0.5
+        type: "clarify",
+        content: "Ask for more details",
+        priority: 0.5,
       });
     }
 
     // Suggest remembering important information
-    if (state.topicGraph.some(t => t.weight > 3)) {
+    if (state.topicGraph.some((t) => t.weight > 3)) {
       actions.push({
-        type: 'remember',
-        content: 'Save key topics to long-term memory',
-        priority: 0.7
+        type: "remember",
+        content: "Save key topics to long-term memory",
+        priority: 0.7,
       });
     }
 
@@ -548,14 +590,14 @@ export class ChatOrchestrator {
    */
   private blendEmotions(
     current: EmotionalTone,
-    incoming: EmotionalTone
+    incoming: EmotionalTone,
   ): EmotionalTone {
     const alpha = 0.3; // Blend factor
     return {
       valence: current.valence * (1 - alpha) + incoming.valence * alpha,
       arousal: current.arousal * (1 - alpha) + incoming.arousal * alpha,
       dominance: current.dominance * (1 - alpha) + incoming.dominance * alpha,
-      confidence: Math.max(current.confidence, incoming.confidence)
+      confidence: Math.max(current.confidence, incoming.confidence),
     };
   }
 
@@ -564,12 +606,12 @@ export class ChatOrchestrator {
    */
   private updateTopicGraph(
     current: TopicNode[],
-    newTopics: TopicNode[]
+    newTopics: TopicNode[],
   ): TopicNode[] {
     const merged = [...current];
 
     for (const topic of newTopics) {
-      const existing = merged.find(t => t.label === topic.label);
+      const existing = merged.find((t) => t.label === topic.label);
       if (!existing) {
         merged.push(topic);
       }
@@ -578,22 +620,20 @@ export class ChatOrchestrator {
     // Decay old topics
     const now = Date.now();
     return merged
-      .map(t => ({
+      .map((t) => ({
         ...t,
-        weight: t.weight * Math.exp(-(now - t.lastMention) / (24 * 60 * 60 * 1000))
+        weight:
+          t.weight * Math.exp(-(now - t.lastMention) / (24 * 60 * 60 * 1000)),
       }))
-      .filter(t => t.weight > 0.1);
+      .filter((t) => t.weight > 0.1);
   }
 
   /**
    * Update active intents
    */
-  private updateIntents(
-    current: Intent[],
-    newIntents: Intent[]
-  ): Intent[] {
+  private updateIntents(current: Intent[], newIntents: Intent[]): Intent[] {
     // Keep unresolved intents and add new ones
-    const active = current.filter(i => !i.resolved);
+    const active = current.filter((i) => !i.resolved);
     return [...active, ...newIntents].slice(0, 10);
   }
 
@@ -605,7 +645,7 @@ export class ChatOrchestrator {
       state.contextWindow.length / this.config.maxContextWindow,
       state.emotionalTone.confidence,
       state.memoryAnchors.length > 0 ? 0.8 : 0.5,
-      state.topicGraph.length > 0 ? 0.7 : 0.4
+      state.topicGraph.length > 0 ? 0.7 : 0.4,
     ];
 
     return factors.reduce((a, b) => a + b, 0) / factors.length;
@@ -616,21 +656,24 @@ export class ChatOrchestrator {
    */
   private async archiveToMemory(
     state: CognitiveState,
-    message: T.Message
+    message: T.Message,
   ): Promise<void> {
     state.memoryAnchors.push({
       id: `memory_${Date.now()}`,
-      content: message.text || '',
+      content: message.text || "",
       importance: 0.5,
       timestamp: message.timestamp || Date.now(),
-      type: 'episodic'
+      type: "episodic",
     });
 
     // Keep memory bounded
     if (state.memoryAnchors.length > this.config.maxMemoryAnchors) {
       // Remove least important memories
       state.memoryAnchors.sort((a, b) => b.importance - a.importance);
-      state.memoryAnchors = state.memoryAnchors.slice(0, this.config.maxMemoryAnchors);
+      state.memoryAnchors = state.memoryAnchors.slice(
+        0,
+        this.config.maxMemoryAnchors,
+      );
     }
   }
 
@@ -639,10 +682,12 @@ export class ChatOrchestrator {
    */
   private async loadContactMemory(
     sessionId: string,
-    contact: T.Contact
+    contact: T.Contact,
   ): Promise<void> {
     // This would load from persistent storage in production
-    console.log(`Loading memory for contact ${contact.id} in session ${sessionId}`);
+    console.log(
+      `Loading memory for contact ${contact.id} in session ${sessionId}`,
+    );
   }
 
   /**
@@ -659,7 +704,9 @@ export class ChatOrchestrator {
     const state = this.sessions.get(sessionId);
     if (state) {
       // Persist important memories before ending
-      console.log(`Ending session ${sessionId} with ${state.memoryAnchors.length} memories`);
+      console.log(
+        `Ending session ${sessionId} with ${state.memoryAnchors.length} memories`,
+      );
       this.sessions.delete(sessionId);
     }
   }
@@ -682,6 +729,5 @@ const defaultConfig: OrchestratorConfig = {
   responseThreshold: 0.5,
   verbose: false,
 };
-
 
 export default ChatOrchestrator;

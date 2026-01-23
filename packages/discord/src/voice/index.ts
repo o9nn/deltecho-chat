@@ -5,25 +5,25 @@
  */
 
 export {
-    DiscordVoiceHandler,
-    createVoiceHandler,
-    VoiceConnectionState,
-    VoiceEventType,
-    VoiceEvent,
-    VoiceTranscription,
-    AudioProcessor,
-    TTSProvider,
-} from './voice-handler.js';
+  DiscordVoiceHandler,
+  createVoiceHandler,
+  VoiceConnectionState,
+  VoiceEventType,
+  VoiceEvent,
+  VoiceTranscription,
+  AudioProcessor,
+  TTSProvider,
+} from "./voice-handler.js";
 
 export {
-    VADAudioProcessor,
-    VoiceTTSProvider,
-    createVADProcessor,
-    createTTSProvider,
-    VADProcessorConfig,
-    VoiceTTSConfig,
-    AudioFormat,
-    DISCORD_AUDIO_FORMAT,
-    DEFAULT_VAD_CONFIG,
-    DEFAULT_TTS_CONFIG,
-} from './voice-integration.js';
+  VADAudioProcessor,
+  VoiceTTSProvider,
+  createVADProcessor,
+  createTTSProvider,
+  VADProcessorConfig,
+  VoiceTTSConfig,
+  AudioFormat,
+  DISCORD_AUDIO_FORMAT,
+  DEFAULT_VAD_CONFIG,
+  DEFAULT_TTS_CONFIG,
+} from "./voice-integration.js";

@@ -1,33 +1,33 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 
-import type { PropsWithChildren } from 'react'
+import type { PropsWithChildren } from "react";
 import type {
   AccountQr,
   LoginQr,
   QrWithUrl,
   VerifyContactQr,
   VerifyGroupQr,
-} from '../backend/qr'
+} from "../backend/qr";
 
-export type WelcomeQr = VerifyGroupQr | VerifyContactQr | AccountQr | LoginQr
+export type WelcomeQr = VerifyGroupQr | VerifyContactQr | AccountQr | LoginQr;
 
-export type WelcomeQrWithUrl = QrWithUrl<WelcomeQr>
+export type WelcomeQrWithUrl = QrWithUrl<WelcomeQr>;
 
 type InstantOnboardingContextValue = {
-  setShowInstantOnboarding: (value: boolean) => void
-  setWelcomeQr: (value?: WelcomeQrWithUrl) => void
-  showInstantOnboarding: boolean
-  welcomeQr?: WelcomeQrWithUrl
-}
+  setShowInstantOnboarding: (value: boolean) => void;
+  setWelcomeQr: (value?: WelcomeQrWithUrl) => void;
+  showInstantOnboarding: boolean;
+  welcomeQr?: WelcomeQrWithUrl;
+};
 
 export const InstantOnboardingContext =
-  React.createContext<InstantOnboardingContextValue | null>(null)
+  React.createContext<InstantOnboardingContextValue | null>(null);
 
 export const InstantOnboardingProvider = ({
   children,
 }: PropsWithChildren<{}>) => {
   // Flag for welcome screen to decide if it shows the "Instant Onboarding" UI or the "Welcome" UI
-  const [showInstantOnboarding, setShowInstantOnboarding] = useState(false)
+  const [showInstantOnboarding, setShowInstantOnboarding] = useState(false);
 
   // Some QR codes invite the user to create a new account on a chatmail
   // instance.
@@ -37,19 +37,19 @@ export const InstantOnboardingProvider = ({
   // can store it here temporarily, adjust the UI state and bring the user
   // back to the QR code process again when everything is ready.
   const [welcomeQr, setWelcomeQr] = useState<WelcomeQrWithUrl | undefined>(
-    undefined
-  )
+    undefined,
+  );
 
   const value = {
     setShowInstantOnboarding,
     setWelcomeQr,
     showInstantOnboarding,
     welcomeQr,
-  }
+  };
 
   return (
     <InstantOnboardingContext.Provider value={value}>
       {children}
     </InstantOnboardingContext.Provider>
-  )
-}
+  );
+};

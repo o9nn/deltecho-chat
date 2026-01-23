@@ -59,14 +59,14 @@ packages/sys6-triality/
 **Integration Points:**
 
 ```typescript
-import { Dove9System, TriadicEngine } from 'dove9';
-import { MessageProcess, CognitiveContext } from 'dove9/types';
+import { Dove9System, TriadicEngine } from "dove9";
+import { MessageProcess, CognitiveContext } from "dove9/types";
 
 // Stream phases
 const STREAM_PHASES = {
   SENSE: 0,
-  PROCESS: 120,  // degrees
-  ACT: 240       // degrees
+  PROCESS: 120, // degrees
+  ACT: 240, // degrees
 };
 ```
 
@@ -83,14 +83,14 @@ const STREAM_PHASES = {
 
 **Current → Target:**
 
-| Current Package | Target Package |
-|-----------------|----------------|
-| `packages/core` | `deep-tree-echo-core` |
+| Current Package         | Target Package                |
+| ----------------------- | ----------------------------- |
+| `packages/core`         | `deep-tree-echo-core`         |
 | `packages/orchestrator` | `deep-tree-echo-orchestrator` |
-| `packages/shared` | `@deltecho/shared` |
-| (new) | `@deltecho/cognitive` |
-| (new) | `@deltecho/reasoning` |
-| (new) | `@deltecho/ui-components` |
+| `packages/shared`       | `@deltecho/shared`            |
+| (new)                   | `@deltecho/cognitive`         |
+| (new)                   | `@deltecho/reasoning`         |
+| (new)                   | `@deltecho/ui-components`     |
 
 ---
 
@@ -157,7 +157,7 @@ interface UnifiedMessage {
   content: string;
   cognitiveContext: UnifiedCognitiveState;
   timestamp: number;
-  streamOrigin: 'SENSE' | 'PROCESS' | 'ACT';
+  streamOrigin: "SENSE" | "PROCESS" | "ACT";
 }
 ```
 
@@ -251,14 +251,14 @@ interface UnifiedMessage {
 
 ### Already Implemented
 
-| Component | Location | Status |
-|-----------|----------|--------|
+| Component       | Location                            | Status     |
+| --------------- | ----------------------------------- | ---------- |
 | DeepTreeEchoBot | `packages/frontend/src/components/` | ✅ Working |
 | CognitiveBridge | `packages/frontend/src/components/` | ✅ Working |
-| LLMService | `packages/core/src/cognitive/` | ✅ Working |
-| RAGMemoryStore | `packages/core/src/memory/` | ✅ Working |
-| PersonaCore | `packages/core/src/personality/` | ✅ Working |
-| Orchestrator | `packages/orchestrator/src/` | ✅ Working |
+| LLMService      | `packages/core/src/cognitive/`      | ✅ Working |
+| RAGMemoryStore  | `packages/core/src/memory/`         | ✅ Working |
+| PersonaCore     | `packages/core/src/personality/`    | ✅ Working |
+| Orchestrator    | `packages/orchestrator/src/`        | ✅ Working |
 
 ### Identified Gaps (from CHAT_INTEGRATION_ANALYSIS.md)
 
@@ -313,7 +313,7 @@ interface UnifiedMessage {
 
 ---
 
-*This task list is derived from INTEGRATION_FRAGMENTS.md and should be updated as integration progresses.*
+_This task list is derived from INTEGRATION_FRAGMENTS.md and should be updated as integration progresses._
 
 ---
 
@@ -321,13 +321,13 @@ interface UnifiedMessage {
 
 See [EXTERNAL_REPO_COMPONENTS.md](./EXTERNAL_REPO_COMPONENTS.md) for detailed analysis of:
 
-| Repository | Key Value | Priority |
-|------------|-----------|----------|
-| **moeru-ai/airi** | AI companion framework, real-time voice, game interaction | 🔴 High |
-| **Live2D/Cubism** | Avatar animation SDK for visual AI representation | 🔴 High |
-| **DaedalOS** | Web desktop environment, UI patterns | 🟡 Medium |
-| **ARM NN / ACL** | Neural network inference on ARM devices | 🟡 Medium |
-| **dovecot/core** | Mail server integration patterns | 🟢 Low |
+| Repository        | Key Value                                                 | Priority  |
+| ----------------- | --------------------------------------------------------- | --------- |
+| **moeru-ai/airi** | AI companion framework, real-time voice, game interaction | 🔴 High   |
+| **Live2D/Cubism** | Avatar animation SDK for visual AI representation         | 🔴 High   |
+| **DaedalOS**      | Web desktop environment, UI patterns                      | 🟡 Medium |
+| **ARM NN / ACL**  | Neural network inference on ARM devices                   | 🟡 Medium |
+| **dovecot/core**  | Mail server integration patterns                          | 🟢 Low    |
 
 ### Recommended New Packages
 

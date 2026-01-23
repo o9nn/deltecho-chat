@@ -1,4 +1,4 @@
-@use '../mixins';
+@use "../mixins";
 
 // FYI there is also `MainScreen/styles.module.scss`.
 
@@ -50,7 +50,7 @@
       .disapearing-messages-icon {
         display: inline-block;
         @include mixins.color-svg(
-          './images/clock.svg',
+          "./images/clock.svg",
           var(--navBarGroupSubtitle)
         );
       }

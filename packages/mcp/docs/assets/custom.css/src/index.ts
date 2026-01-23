@@ -9,76 +9,75 @@
 
 // Main server
 export {
-    NestedMCPServer,
-    createNestedMCPServer,
-    type NestedMCPServerConfig,
-} from './server.js';
+  NestedMCPServer,
+  createNestedMCPServer,
+  type NestedMCPServerConfig,
+} from "./server.js";
 
 // Arena layer (Ao)
 export {
-    ArenaMCPServer,
-    createArenaMCPServer,
-    arenaResources,
-    arenaToolSchemas,
-    arenaPrompts,
-    listArenaResources,
-    listArenaTools,
-    listArenaPrompts,
-} from './arena-mcp/index.js';
+  ArenaMCPServer,
+  createArenaMCPServer,
+  arenaResources,
+  arenaToolSchemas,
+  arenaPrompts,
+  listArenaResources,
+  listArenaTools,
+  listArenaPrompts,
+} from "./arena-mcp/index.js";
 
 // Agent layer (Ai)
 export {
-    AgentMCPServer,
-    createAgentMCPServer,
-    agentResources,
-    agentToolSchemas,
-    agentPrompts,
-    listAgentResources,
-    listAgentTools,
-    listAgentPrompts,
-} from './agent-mcp/index.js';
+  AgentMCPServer,
+  createAgentMCPServer,
+  agentResources,
+  agentToolSchemas,
+  agentPrompts,
+  listAgentResources,
+  listAgentTools,
+  listAgentPrompts,
+} from "./agent-mcp/index.js";
 
 // Relation layer (S)
 export {
-    RelationMCPServer,
-    createRelationMCPServer,
-    relationResources,
-    relationToolSchemas,
-    relationPrompts,
-    listRelationResources,
-    listRelationTools,
-    listRelationPrompts,
-} from './relation-mcp/index.js';
+  RelationMCPServer,
+  createRelationMCPServer,
+  relationResources,
+  relationToolSchemas,
+  relationPrompts,
+  listRelationResources,
+  listRelationTools,
+  listRelationPrompts,
+} from "./relation-mcp/index.js";
 
 // Lifecycle integration
 export {
-    LifecycleCoordinator,
-    createLifecycleCoordinator,
-    LifecyclePhase,
-    type LifecycleConfig,
-    type LifecycleEvent,
-} from './integration/lifecycle.js';
+  LifecycleCoordinator,
+  createLifecycleCoordinator,
+  LifecyclePhase,
+  type LifecycleConfig,
+  type LifecycleEvent,
+} from "./integration/lifecycle.js";
 
 // Transport layer
 export {
-    // Types
-    type TransportMode,
-    type TransportConfig,
-    type MCPRequest,
-    type MCPResponse,
-    type MCPError,
-    type Transport,
-    ErrorCodes,
-    // Protocol handler
-    ProtocolHandler,
-    createProtocolHandler,
-    // Transports
-    StdioTransport,
-    createStdioTransport,
-    runStdioServer,
-    type StdioTransportConfig,
-} from './transport/index.js';
+  // Types
+  type TransportMode,
+  type TransportConfig,
+  type MCPRequest,
+  type MCPResponse,
+  type MCPError,
+  type Transport,
+  ErrorCodes,
+  // Protocol handler
+  ProtocolHandler,
+  createProtocolHandler,
+  // Transports
+  StdioTransport,
+  createStdioTransport,
+  runStdioServer,
+  type StdioTransportConfig,
+} from "./transport/index.js";
 
 // Types
-export * from './types.js';
-
+export * from "./types.js";

@@ -112,12 +112,12 @@ async function main() {
     if (firstAccount.kind === "Unconfigured") {
         console.info("account not configured, trying to login now...");
         try {
-            if (!!process.env.ADDR && !!process.env.MAIL_PW) {
+            if (process.env.ADDR && process.env.MAIL_PW) {
                 await dc.rpc.batchSetConfig(firstAccount.id, {
                     addr: process.env.ADDR,
                     mail_pw: process.env.MAIL_PW,
                 });
-            } else if (!!process.env.CHATMAIL_QR) {
+            } else if (process.env.CHATMAIL_QR) {
                 await dc.rpc.setConfigFromQr(firstAccount.id, process.env.CHATMAIL_QR);
             } else {
                 throw new Error(

@@ -1,7 +1,7 @@
-import { MemoryStorage } from '../memory/storage.js';
-import { getLogger } from '../utils/logger.js';
+import { MemoryStorage } from "../memory/storage.js";
+import { getLogger } from "../utils/logger.js";
 
-const logger = getLogger('ElectronStorageAdapter');
+const logger = getLogger("ElectronStorageAdapter");
 
 /**
  * Storage adapter for Electron runtime using IPC to communicate with main process
@@ -20,16 +20,15 @@ export class ElectronStorageAdapter implements MemoryStorage {
   private readonly ipcRenderer: any;
   private readonly storagePrefix: string;
 
-  constructor(storagePrefix = 'deltecho') {
+  constructor(storagePrefix = "deltecho") {
     // Dynamic import to avoid issues when not in Electron environment
     try {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const { ipcRenderer } = require('electron');
+      const { ipcRenderer } = require("electron");
       this.ipcRenderer = ipcRenderer;
-    } catch (error) {
+    } catch (_error) {
       throw new Error(
-        'ElectronStorageAdapter requires Electron environment. ' +
-          'Make sure this is running in an Electron renderer process.'
+        "ElectronStorageAdapter requires Electron environment. " +
+          "Make sure this is running in an Electron renderer process.",
       );
     }
     this.storagePrefix = storagePrefix;
@@ -41,7 +40,7 @@ export class ElectronStorageAdapter implements MemoryStorage {
   async load(key: string): Promise<string | undefined> {
     try {
       const prefixedKey = `${this.storagePrefix}:${key}`;
-      const result = await this.ipcRenderer.invoke('storage:get', prefixedKey);
+      const result = await this.ipcRenderer.invoke("storage:get", prefixedKey);
       return result ?? undefined;
     } catch (error) {
       logger.error(`Failed to load key ${key}:`, error);
@@ -55,7 +54,7 @@ export class ElectronStorageAdapter implements MemoryStorage {
   async save(key: string, value: string): Promise<void> {
     try {
       const prefixedKey = `${this.storagePrefix}:${key}`;
-      await this.ipcRenderer.invoke('storage:set', prefixedKey, value);
+      await this.ipcRenderer.invoke("storage:set", prefixedKey, value);
     } catch (error) {
       logger.error(`Failed to save key ${key}:`, error);
       throw error;
@@ -68,7 +67,7 @@ export class ElectronStorageAdapter implements MemoryStorage {
   async delete(key: string): Promise<void> {
     try {
       const prefixedKey = `${this.storagePrefix}:${key}`;
-      await this.ipcRenderer.invoke('storage:delete', prefixedKey);
+      await this.ipcRenderer.invoke("storage:delete", prefixedKey);
     } catch (error) {
       logger.error(`Failed to delete key ${key}:`, error);
       throw error;
@@ -80,9 +79,9 @@ export class ElectronStorageAdapter implements MemoryStorage {
    */
   async clear(): Promise<void> {
     try {
-      await this.ipcRenderer.invoke('storage:clear', this.storagePrefix);
+      await this.ipcRenderer.invoke("storage:clear", this.storagePrefix);
     } catch (error) {
-      logger.error('Failed to clear storage:', error);
+      logger.error("Failed to clear storage:", error);
       throw error;
     }
   }
@@ -92,10 +91,15 @@ export class ElectronStorageAdapter implements MemoryStorage {
    */
   async keys(): Promise<string[]> {
     try {
-      const allKeys = await this.ipcRenderer.invoke('storage:keys', this.storagePrefix);
-      return allKeys.map((key: string) => key.replace(`${this.storagePrefix}:`, ''));
+      const allKeys = await this.ipcRenderer.invoke(
+        "storage:keys",
+        this.storagePrefix,
+      );
+      return allKeys.map((key: string) =>
+        key.replace(`${this.storagePrefix}:`, ""),
+      );
     } catch (error) {
-      logger.error('Failed to list keys:', error);
+      logger.error("Failed to list keys:", error);
       return [];
     }
   }

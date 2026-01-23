@@ -23,5 +23,5 @@ Logging
 --machine-readable-stack        Enable JSON stack trace
 --no-color                      Disable colors in the output of main process
 
-For more info on logging see LOGGING.md.)`)
+For more info on logging see LOGGING.md.)`);
 }

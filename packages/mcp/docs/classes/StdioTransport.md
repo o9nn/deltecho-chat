@@ -31,9 +31,9 @@ and writes responses to stdout (one per line).
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `server` | [`NestedMCPServer`](NestedMCPServer.md) |
+| Name     | Type                                                            |
+| :------- | :-------------------------------------------------------------- |
+| `server` | [`NestedMCPServer`](NestedMCPServer.md)                         |
 | `config` | [`StdioTransportConfig`](../interfaces/StdioTransportConfig.md) |
 
 #### Returns
@@ -64,7 +64,7 @@ Start the transport
 
 [src/transport/stdio.ts:43](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/transport/stdio.ts#L43)
 
-___
+---
 
 ### stop
 
@@ -84,7 +84,7 @@ Stop the transport
 
 [src/transport/stdio.ts:93](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/transport/stdio.ts#L93)
 
-___
+---
 
 ### isRunning
 

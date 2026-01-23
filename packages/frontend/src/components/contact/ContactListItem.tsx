@@ -1,58 +1,58 @@
-import React, { MouseEventHandler, useRef } from 'react'
-import Contact from './Contact'
-import classNames from 'classnames'
-import { Type } from '../../backend-com'
-import Icon from '../Icon'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import { useRovingTabindex } from '../../contexts/RovingTabindex'
+import React, { MouseEventHandler, useRef } from "react";
+import Contact from "./Contact";
+import classNames from "classnames";
+import { Type } from "../../backend-com";
+import Icon from "../Icon";
+import useTranslationFunction from "../../hooks/useTranslationFunction";
+import { useRovingTabindex } from "../../contexts/RovingTabindex";
 
 export const DeltaCheckbox = (props: {
-  checked: boolean
-  disabled?: boolean
-  onClick?: (event: React.SyntheticEvent) => void
-  tabIndex?: 0 | -1
+  checked: boolean;
+  disabled?: boolean;
+  onClick?: (event: React.SyntheticEvent) => void;
+  tabIndex?: 0 | -1;
 }) => {
-  const { checked, disabled, tabIndex } = props
-  const _onClick = props.onClick
+  const { checked, disabled, tabIndex } = props;
+  const _onClick = props.onClick;
   const onClick = (
-    event: React.ChangeEvent<any> | React.MouseEvent<any, MouseEvent>
+    event: React.ChangeEvent<any> | React.MouseEvent<any, MouseEvent>,
   ) => {
-    typeof _onClick === 'function' && _onClick(event)
-  }
+    typeof _onClick === "function" && _onClick(event);
+  };
   return (
-    <div className='delta-checkbox'>
+    <div className="delta-checkbox">
       <input
-        type='checkbox'
+        type="checkbox"
         disabled={disabled === true}
         onChange={onClick}
         checked={checked}
         tabIndex={tabIndex}
       />
       <div
-        className='checkmark'
+        className="checkmark"
         onClick={onClick}
-        style={{ visibility: checked ? 'visible' : 'hidden' }}
+        style={{ visibility: checked ? "visible" : "hidden" }}
       >
         <span />
         <span />
       </div>
     </div>
-  )
-}
+  );
+};
 export function ContactListItem(props: {
-  tagName: 'li' | 'div'
-  style?: React.CSSProperties
-  contact: Type.Contact
-  onClick?: (contact: Type.Contact) => void
-  showCheckbox: boolean
-  checked: boolean
-  showRemove: boolean
-  onCheckboxClick?: (contact: Type.Contact) => void
-  onRemoveClick?: (contact: Type.Contact) => void
-  disabled?: boolean
-  onContextMenu?: MouseEventHandler<HTMLButtonElement>
+  tagName: "li" | "div";
+  style?: React.CSSProperties;
+  contact: Type.Contact;
+  onClick?: (contact: Type.Contact) => void;
+  showCheckbox: boolean;
+  checked: boolean;
+  showRemove: boolean;
+  onCheckboxClick?: (contact: Type.Contact) => void;
+  onRemoveClick?: (contact: Type.Contact) => void;
+  disabled?: boolean;
+  onContextMenu?: MouseEventHandler<HTMLButtonElement>;
 }) {
-  const tx = useTranslationFunction()
+  const tx = useTranslationFunction();
 
   const {
     contact,
@@ -62,32 +62,32 @@ export function ContactListItem(props: {
     showRemove,
     disabled,
     onContextMenu,
-  } = props
+  } = props;
 
-  const checkboxDisabled = disabled || contact.id === 1
+  const checkboxDisabled = disabled || contact.id === 1;
 
-  const refMain = useRef<HTMLButtonElement>(null)
+  const refMain = useRef<HTMLButtonElement>(null);
 
   const onCheckboxClick = () => {
-    if (disabled) return
-    if (!showCheckbox) return
-    typeof props.onCheckboxClick === 'function' &&
-      props.onCheckboxClick(contact)
-  }
+    if (disabled) return;
+    if (!showCheckbox) return;
+    typeof props.onCheckboxClick === "function" &&
+      props.onCheckboxClick(contact);
+  };
   const onRemoveClick = () => {
-    if (disabled) return
-    if (!showRemove) return
-    typeof props.onRemoveClick === 'function' && props.onRemoveClick(contact)
-  }
+    if (disabled) return;
+    if (!showRemove) return;
+    typeof props.onRemoveClick === "function" && props.onRemoveClick(contact);
+  };
 
   // Keep in mind that this component is not always placed inside of
   // `RovingTabindexContext`. It's fine, because `useRovingTabindex`
   // will simply always return `tabIndex === 0` in this case.
-  const rovingTabindex = useRovingTabindex(refMain)
+  const rovingTabindex = useRovingTabindex(refMain);
 
   return (
     <props.tagName
-      className={classNames('contact-list-item', { disabled })}
+      className={classNames("contact-list-item", { disabled })}
       style={props.style}
       key={contact.id}
       // Apply these to the wrapper element,
@@ -98,9 +98,9 @@ export function ContactListItem(props: {
       <button
         ref={refMain}
         className={classNames(
-          'contact-list-item-button',
+          "contact-list-item-button",
           rovingTabindex.className,
-          { disabled }
+          { disabled },
         )}
         // `aria-disabled` instead of just `disabled` because we probably
         // still want to keep it focusable so that the context menu can be
@@ -112,8 +112,8 @@ export function ContactListItem(props: {
         disabled={disabled && !onContextMenu}
         tabIndex={rovingTabindex.tabIndex}
         onClick={() => {
-          if (disabled) return
-          onClick && onClick(contact)
+          if (disabled) return;
+          onClick && onClick(contact);
           // TODO improvement: in "Add Members" dialog,
           // this button and the checkbox are both focusable
           // and they both do the same thing...
@@ -121,7 +121,7 @@ export function ContactListItem(props: {
           // Perhaps we should make this button take full width,
           // and make the checkbox unfocusable?
           // Or is it not a big deal since we're gonna add arrow key shortcuts?
-          onCheckboxClick()
+          onCheckboxClick();
         }}
         onContextMenu={onContextMenu}
       >
@@ -137,15 +137,15 @@ export function ContactListItem(props: {
       )}
       {showRemove && contact.id !== 1 && (
         <button
-          className='btn-remove'
+          className="btn-remove"
           onClick={onRemoveClick}
           disabled={disabled}
           tabIndex={disabled ? undefined : rovingTabindex.tabIndex}
-          aria-label={tx('remove_desktop')}
+          aria-label={tx("remove_desktop")}
         >
-          <Icon icon='cross' coloring='remove' />
+          <Icon icon="cross" coloring="remove" />
         </button>
       )}
     </props.tagName>
-  )
+  );
 }

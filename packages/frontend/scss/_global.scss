@@ -1,5 +1,5 @@
-@use 'sass:map';
-@use 'variables';
+@use "sass:map";
+@use "variables";
 
 * {
   box-sizing: border-box;
@@ -83,8 +83,8 @@ a {
 
 $unread-badge-size: 21px;
 
-input[type='text'],
-input[type='search'],
+input[type="text"],
+input[type="search"],
 textarea {
   &:active,
   &:focus {

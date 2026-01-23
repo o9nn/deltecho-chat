@@ -1,51 +1,51 @@
 {
-    "name": "@deltecho/eventa",
-    "version": "1.0.0",
-    "description": "Type-safe event-driven toolbox for Deep Tree Echo - supports Web Workers, WebSocket, Electron IPC",
-    "type": "module",
-    "main": "./dist/index.js",
-    "types": "./dist/index.d.ts",
-    "exports": {
-        ".": {
-            "types": "./dist/index.d.ts",
-            "import": "./dist/index.js"
-        },
-        "./adapters/electron/main": {
-            "types": "./dist/adapters/electron/main.d.ts",
-            "import": "./dist/adapters/electron/main.js"
-        },
-        "./adapters/electron/renderer": {
-            "types": "./dist/adapters/electron/renderer.d.ts",
-            "import": "./dist/adapters/electron/renderer.js"
-        },
-        "./adapters/websocket": {
-            "types": "./dist/adapters/websocket.d.ts",
-            "import": "./dist/adapters/websocket.js"
-        },
-        "./adapters/worker": {
-            "types": "./dist/adapters/worker.d.ts",
-            "import": "./dist/adapters/worker.js"
-        }
+  "name": "@deltecho/eventa",
+  "version": "1.0.0",
+  "description": "Type-safe event-driven toolbox for Deep Tree Echo - supports Web Workers, WebSocket, Electron IPC",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
     },
-    "scripts": {
-        "build": "tsc",
-        "test": "jest",
-        "check:types": "tsc --noEmit"
+    "./adapters/electron/main": {
+      "types": "./dist/adapters/electron/main.d.ts",
+      "import": "./dist/adapters/electron/main.js"
     },
-    "dependencies": {},
-    "devDependencies": {
-        "@types/jest": "^29.5.12",
-        "@types/node": "^20.17.12",
-        "jest": "^29.7.0",
-        "ts-jest": "^29.1.2",
-        "typescript": "^5.4.5"
+    "./adapters/electron/renderer": {
+      "types": "./dist/adapters/electron/renderer.d.ts",
+      "import": "./dist/adapters/electron/renderer.js"
     },
-    "peerDependencies": {
-        "electron": ">=20.0.0"
+    "./adapters/websocket": {
+      "types": "./dist/adapters/websocket.d.ts",
+      "import": "./dist/adapters/websocket.js"
     },
-    "peerDependenciesMeta": {
-        "electron": {
-            "optional": true
-        }
+    "./adapters/worker": {
+      "types": "./dist/adapters/worker.d.ts",
+      "import": "./dist/adapters/worker.js"
     }
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "check:types": "tsc --noEmit"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.17.12",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "typescript": "^5.4.5"
+  },
+  "peerDependencies": {
+    "electron": ">=20.0.0"
+  },
+  "peerDependenciesMeta": {
+    "electron": {
+      "optional": true
+    }
+  }
 }

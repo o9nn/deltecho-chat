@@ -3,22 +3,22 @@
  */
 export async function fileToBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
-    const reader = new FileReader()
+    const reader = new FileReader();
 
     try {
       reader.addEventListener(
-        'load',
+        "load",
         () => {
-          resolve(reader.result as string)
+          resolve(reader.result as string);
         },
-        false
-      )
+        false,
+      );
 
-      reader.readAsDataURL(file)
+      reader.readAsDataURL(file);
     } catch (error) {
-      reject(error)
+      reject(error);
     }
-  })
+  });
 }
 
 /**
@@ -26,30 +26,30 @@ export async function fileToBase64(file: File): Promise<string> {
  */
 export async function base64ToImageData(base64: string): Promise<ImageData> {
   return new Promise((resolve, reject) => {
-    const image = new Image()
+    const image = new Image();
 
-    image.addEventListener('load', () => {
+    image.addEventListener("load", () => {
       try {
-        const canvas = document.createElement('canvas')
-        const context = canvas.getContext('2d')
-        canvas.width = image.width
-        canvas.height = image.height
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+        canvas.width = image.width;
+        canvas.height = image.height;
 
         if (!context) {
-          return
+          return;
         }
 
-        context.drawImage(image, 0, 0)
+        context.drawImage(image, 0, 0);
 
-        const imageData = context.getImageData(0, 0, image.width, image.height)
-        resolve(imageData)
+        const imageData = context.getImageData(0, 0, image.width, image.height);
+        resolve(imageData);
       } catch (error) {
-        reject(error)
+        reject(error);
       }
-    })
-    image.addEventListener('error', err => {
-      reject(err)
-    })
-    image.src = base64
-  })
+    });
+    image.addEventListener("error", (err) => {
+      reject(err);
+    });
+    image.src = base64;
+  });
 }

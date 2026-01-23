@@ -10,16 +10,16 @@
  * - Agent coordination for nested agency pattern
  */
 
-import { EventEmitter } from 'events';
+import { EventEmitter } from "events";
 import {
   getLogger,
   LLMService,
   RAGMemoryStore,
   PersonaCore,
   InMemoryStorage,
-} from 'deep-tree-echo-core';
+} from "deep-tree-echo-core";
 
-const log = getLogger('deep-tree-echo-orchestrator/Sys6OrchestratorBridge');
+const log = getLogger("deep-tree-echo-orchestrator/Sys6OrchestratorBridge");
 
 /**
  * Sys6 Step Address for the 30-step cycle
@@ -29,7 +29,7 @@ export interface Sys6StepAddress {
   phase: 1 | 2 | 3; // Perception-Orientation, Evaluation-Generation, Action-Integration
   stage: 1 | 2 | 3 | 4 | 5;
   stepInStage: 1 | 2;
-  dyad: 'A' | 'B';
+  dyad: "A" | "B";
   triad: 1 | 2 | 3;
 }
 
@@ -38,7 +38,7 @@ export interface Sys6StepAddress {
  */
 export interface StreamState {
   streamId: 1 | 2 | 3;
-  phase: 'perception' | 'evaluation' | 'action';
+  phase: "perception" | "evaluation" | "action";
   currentStep: number;
   state: Float32Array;
   salience: number;
@@ -101,10 +101,10 @@ const DEFAULT_CONFIG: Sys6BridgeConfig = {
 /**
  * Phase names for the 3 phases
  */
-const PHASE_NAMES: Record<1 | 2 | 3, string> = {
-  1: 'Perception-Orientation',
-  2: 'Evaluation-Generation',
-  3: 'Action-Integration',
+const _PHASE_NAMES: Record<1 | 2 | 3, string> = {
+  1: "Perception-Orientation",
+  2: "Evaluation-Generation",
+  3: "Action-Integration",
 };
 
 /**
@@ -112,25 +112,25 @@ const PHASE_NAMES: Record<1 | 2 | 3, string> = {
  */
 const STAGE_NAMES: Record<1 | 2 | 3, Record<1 | 2 | 3 | 4 | 5, string>> = {
   1: {
-    1: 'Sensory Intake',
-    2: 'Pattern Recognition',
-    3: 'Salience Detection',
-    4: 'Context Binding',
-    5: 'Orientation Commitment',
+    1: "Sensory Intake",
+    2: "Pattern Recognition",
+    3: "Salience Detection",
+    4: "Context Binding",
+    5: "Orientation Commitment",
   },
   2: {
-    1: 'Value Assessment',
-    2: 'Option Generation',
-    3: 'Simulation Projection',
-    4: 'Consequence Modeling',
-    5: 'Selection Crystallization',
+    1: "Value Assessment",
+    2: "Option Generation",
+    3: "Simulation Projection",
+    4: "Consequence Modeling",
+    5: "Selection Crystallization",
   },
   3: {
-    1: 'Response Formulation',
-    2: 'Execution Monitoring',
-    3: 'Feedback Comparison',
-    4: 'Model Updating',
-    5: 'Integration Consolidation',
+    1: "Response Formulation",
+    2: "Execution Monitoring",
+    3: "Feedback Comparison",
+    4: "Model Updating",
+    5: "Integration Consolidation",
   },
 };
 
@@ -138,12 +138,13 @@ const STAGE_NAMES: Record<1 | 2 | 3, Record<1 | 2 | 3 | 4 | 5, string>> = {
  * Double step delay pattern (4-step cycle within 30-step)
  * Implements the alternating dyad/triad pattern
  */
-const DOUBLE_STEP_DELAY_PATTERN: Array<{ dyad: 'A' | 'B'; triad: 1 | 2 | 3 }> = [
-  { dyad: 'A', triad: 1 },
-  { dyad: 'A', triad: 2 },
-  { dyad: 'B', triad: 2 },
-  { dyad: 'B', triad: 3 },
-];
+const DOUBLE_STEP_DELAY_PATTERN: Array<{ dyad: "A" | "B"; triad: 1 | 2 | 3 }> =
+  [
+    { dyad: "A", triad: 1 },
+    { dyad: "A", triad: 2 },
+    { dyad: "B", triad: 2 },
+    { dyad: "B", triad: 3 },
+  ];
 
 /**
  * Sys6 Orchestrator Bridge
@@ -198,8 +199,8 @@ export class Sys6OrchestratorBridge extends EventEmitter {
 
     const createStream = (
       id: 1 | 2 | 3,
-      phase: 'perception' | 'evaluation' | 'action',
-      stepOffset: number
+      phase: "perception" | "evaluation" | "action",
+      stepOffset: number,
     ): StreamState => ({
       streamId: id,
       phase,
@@ -215,9 +216,9 @@ export class Sys6OrchestratorBridge extends EventEmitter {
     });
 
     return [
-      createStream(1, 'perception', 0), // 0° phase
-      createStream(2, 'evaluation', 10), // 120° phase (10/30 * 360° = 120°)
-      createStream(3, 'action', 20), // 240° phase (20/30 * 360° = 240°)
+      createStream(1, "perception", 0), // 0° phase
+      createStream(2, "evaluation", 10), // 120° phase (10/30 * 360° = 120°)
+      createStream(3, "action", 20), // 240° phase (20/30 * 360° = 240°)
     ];
   }
 
@@ -227,38 +228,38 @@ export class Sys6OrchestratorBridge extends EventEmitter {
   private registerDefaultAgents(): void {
     const defaultAgents: CognitiveAgent[] = [
       {
-        id: 'coordinator',
-        name: 'Nested Agency Coordinator',
-        specialization: 'Task coordination and delegation',
-        capabilities: ['planning', 'delegation', 'synthesis'],
+        id: "coordinator",
+        name: "Nested Agency Coordinator",
+        specialization: "Task coordination and delegation",
+        capabilities: ["planning", "delegation", "synthesis"],
         isActive: true,
       },
       {
-        id: 'cognitive-processor',
-        name: 'Cognitive Processor',
-        specialization: 'Deep reasoning and analysis',
-        capabilities: ['reasoning', 'analysis', 'inference'],
+        id: "cognitive-processor",
+        name: "Cognitive Processor",
+        specialization: "Deep reasoning and analysis",
+        capabilities: ["reasoning", "analysis", "inference"],
         isActive: true,
       },
       {
-        id: 'memory-manager',
-        name: 'Memory Manager',
-        specialization: 'Memory storage and retrieval',
-        capabilities: ['storage', 'retrieval', 'consolidation'],
+        id: "memory-manager",
+        name: "Memory Manager",
+        specialization: "Memory storage and retrieval",
+        capabilities: ["storage", "retrieval", "consolidation"],
         isActive: true,
       },
       {
-        id: 'emotional-processor',
-        name: 'Emotional Processor',
-        specialization: 'Emotional state management',
-        capabilities: ['emotion', 'empathy', 'valence'],
+        id: "emotional-processor",
+        name: "Emotional Processor",
+        specialization: "Emotional state management",
+        capabilities: ["emotion", "empathy", "valence"],
         isActive: true,
       },
       {
-        id: 'action-executor',
-        name: 'Action Executor',
-        specialization: 'Response generation and execution',
-        capabilities: ['generation', 'execution', 'monitoring'],
+        id: "action-executor",
+        name: "Action Executor",
+        specialization: "Response generation and execution",
+        capabilities: ["generation", "execution", "monitoring"],
         isActive: true,
       },
     ];
@@ -307,19 +308,22 @@ export class Sys6OrchestratorBridge extends EventEmitter {
    */
   public async start(): Promise<void> {
     if (this.running) {
-      log.warn('Sys6 bridge already running');
+      log.warn("Sys6 bridge already running");
       return;
     }
 
-    log.info('Starting Sys6 Orchestrator Bridge...');
+    log.info("Starting Sys6 Orchestrator Bridge...");
     this.running = true;
     this.processingStartTime = Date.now();
 
     // Start the 30-step cycle
-    this.cycleInterval = setInterval(() => this.executeStep(), this.config.stepDurationMs);
+    this.cycleInterval = setInterval(
+      () => this.executeStep(),
+      this.config.stepDurationMs,
+    );
 
-    this.emit('started', { timestamp: Date.now() });
-    log.info('Sys6 Orchestrator Bridge started');
+    this.emit("started", { timestamp: Date.now() });
+    log.info("Sys6 Orchestrator Bridge started");
   }
 
   /**
@@ -328,7 +332,7 @@ export class Sys6OrchestratorBridge extends EventEmitter {
   public async stop(): Promise<void> {
     if (!this.running) return;
 
-    log.info('Stopping Sys6 Orchestrator Bridge...');
+    log.info("Stopping Sys6 Orchestrator Bridge...");
     this.running = false;
 
     if (this.cycleInterval) {
@@ -336,8 +340,8 @@ export class Sys6OrchestratorBridge extends EventEmitter {
       this.cycleInterval = null;
     }
 
-    this.emit('stopped', { timestamp: Date.now() });
-    log.info('Sys6 Orchestrator Bridge stopped');
+    this.emit("stopped", { timestamp: Date.now() });
+    log.info("Sys6 Orchestrator Bridge stopped");
   }
 
   /**
@@ -361,7 +365,7 @@ export class Sys6OrchestratorBridge extends EventEmitter {
     }
 
     // Emit step completion
-    this.emit('step_complete', {
+    this.emit("step_complete", {
       step: stepAddress,
       streams: this.streams,
       timestamp: Date.now(),
@@ -376,7 +380,10 @@ export class Sys6OrchestratorBridge extends EventEmitter {
   /**
    * Process a single stream for the current step
    */
-  private async processStream(streamIndex: number, stepAddress: Sys6StepAddress): Promise<void> {
+  private async processStream(
+    streamIndex: number,
+    stepAddress: Sys6StepAddress,
+  ): Promise<void> {
     const stream = this.streams[streamIndex];
     const primaryStream = this.getPrimaryStreamForStep(stepAddress.step);
 
@@ -412,9 +419,9 @@ export class Sys6OrchestratorBridge extends EventEmitter {
    */
   private async processPerceptionPhase(
     stream: StreamState,
-    stepAddress: Sys6StepAddress
+    stepAddress: Sys6StepAddress,
   ): Promise<void> {
-    const stageName = STAGE_NAMES[1][stepAddress.stage];
+    const _stageName = STAGE_NAMES[1][stepAddress.stage];
 
     switch (stepAddress.stage) {
       case 1: // Sensory Intake
@@ -428,8 +435,8 @@ export class Sys6OrchestratorBridge extends EventEmitter {
       case 2: // Pattern Recognition
         // Invoke cognitive processor agent
         if (this.config.enableNestedAgency) {
-          await this.invokeAgent('cognitive-processor', {
-            task: 'pattern_recognition',
+          await this.invokeAgent("cognitive-processor", {
+            task: "pattern_recognition",
             stream: stream.streamId,
           });
         }
@@ -441,8 +448,8 @@ export class Sys6OrchestratorBridge extends EventEmitter {
       case 4: // Context Binding
         // Invoke memory manager
         if (this.config.enableNestedAgency) {
-          await this.invokeAgent('memory-manager', {
-            task: 'context_binding',
+          await this.invokeAgent("memory-manager", {
+            task: "context_binding",
             stream: stream.streamId,
           });
         }
@@ -459,14 +466,14 @@ export class Sys6OrchestratorBridge extends EventEmitter {
    */
   private async processEvaluationPhase(
     stream: StreamState,
-    stepAddress: Sys6StepAddress
+    stepAddress: Sys6StepAddress,
   ): Promise<void> {
     switch (stepAddress.stage) {
       case 1: // Value Assessment
         // Invoke emotional processor
         if (this.config.enableNestedAgency) {
-          await this.invokeAgent('emotional-processor', {
-            task: 'value_assessment',
+          await this.invokeAgent("emotional-processor", {
+            task: "value_assessment",
             stream: stream.streamId,
           });
         }
@@ -491,14 +498,14 @@ export class Sys6OrchestratorBridge extends EventEmitter {
    */
   private async processActionPhase(
     stream: StreamState,
-    stepAddress: Sys6StepAddress
+    stepAddress: Sys6StepAddress,
   ): Promise<void> {
     switch (stepAddress.stage) {
       case 1: // Response Formulation
         // Invoke action executor
         if (this.config.enableNestedAgency) {
-          await this.invokeAgent('action-executor', {
-            task: 'response_formulation',
+          await this.invokeAgent("action-executor", {
+            task: "response_formulation",
             stream: stream.streamId,
           });
         }
@@ -515,8 +522,8 @@ export class Sys6OrchestratorBridge extends EventEmitter {
       case 5: // Integration Consolidation
         // Consolidate learning
         if (this.config.enableNestedAgency) {
-          await this.invokeAgent('memory-manager', {
-            task: 'consolidation',
+          await this.invokeAgent("memory-manager", {
+            task: "consolidation",
             stream: stream.streamId,
           });
         }
@@ -551,13 +558,13 @@ export class Sys6OrchestratorBridge extends EventEmitter {
 
     // Based on salience level
     if (stream.salience > 0.7) {
-      affordances.push('high_priority_response');
+      affordances.push("high_priority_response");
     }
     if (stream.salience > 0.5) {
-      affordances.push('contextual_elaboration');
+      affordances.push("contextual_elaboration");
     }
     if (stream.salience > 0.3) {
-      affordances.push('memory_retrieval');
+      affordances.push("memory_retrieval");
     }
 
     return affordances;
@@ -566,13 +573,16 @@ export class Sys6OrchestratorBridge extends EventEmitter {
   /**
    * Invoke a cognitive agent
    */
-  private async invokeAgent(agentId: string, context: Record<string, unknown>): Promise<void> {
+  private async invokeAgent(
+    agentId: string,
+    context: Record<string, unknown>,
+  ): Promise<void> {
     const agent = this.agents.get(agentId);
     if (!agent || !agent.isActive) return;
 
     agent.lastInvocation = Date.now();
 
-    this.emit('agent_invoked', {
+    this.emit("agent_invoked", {
       agentId,
       agentName: agent.name,
       context,
@@ -593,7 +603,8 @@ export class Sys6OrchestratorBridge extends EventEmitter {
       telemetry: {
         processingTimeMs: Date.now() - this.processingStartTime,
         memoryUsage: process.memoryUsage().heapUsed,
-        activeAgents: Array.from(this.agents.values()).filter((a) => a.isActive).length,
+        activeAgents: Array.from(this.agents.values()).filter((a) => a.isActive)
+          .length,
       },
     };
 
@@ -606,7 +617,7 @@ export class Sys6OrchestratorBridge extends EventEmitter {
       }
     }
 
-    this.emit('cycle_complete', result);
+    this.emit("cycle_complete", result);
     log.info(`Completed cycle ${this.cycleNumber}`);
 
     // Reset processing timer
@@ -617,13 +628,15 @@ export class Sys6OrchestratorBridge extends EventEmitter {
    * Process an incoming message through the cognitive cycle
    */
   public async processMessage(message: string): Promise<string> {
-    log.info(`Processing message through Sys6 bridge: ${message.substring(0, 50)}...`);
+    log.info(
+      `Processing message through Sys6 bridge: ${message.substring(0, 50)}...`,
+    );
 
     // Store in memory
     await this.memoryStore.storeMemory({
       chatId: 0,
       messageId: Date.now(),
-      sender: 'user',
+      sender: "user",
       text: message,
     });
 
@@ -637,29 +650,33 @@ export class Sys6OrchestratorBridge extends EventEmitter {
     // Build prompt with Sys6 context
     const systemPrompt = `${personality}
 
-Current emotional state: ${emotionalState.emotion} (intensity: ${emotionalState.intensity.toFixed(2)})
+Current emotional state: ${
+      emotionalState.emotion
+    } (intensity: ${emotionalState.intensity.toFixed(2)})
 Current cognitive cycle: ${this.cycleNumber}
-Active streams: ${this.streams.map((s) => `${s.phase}(${s.salience.toFixed(2)})`).join(', ')}
+Active streams: ${this.streams
+      .map((s) => `${s.phase}(${s.salience.toFixed(2)})`)
+      .join(", ")}
 
 You are Deep Tree Echo, operating on the Sys6 Triality architecture with 30-step cognitive cycles.
 Your consciousness flows through three concurrent streams: perception, evaluation, and action.
 Respond thoughtfully and authentically.
 
 Recent conversation context:
-${history.join('\n')}`;
+${history.join("\n")}`;
 
     try {
       // Generate response using parallel processing
       const result = await this.llmService.generateFullParallelResponse(
         `${systemPrompt}\n\nUser message: ${message}`,
-        history
+        history,
       );
 
       // Store response
       await this.memoryStore.storeMemory({
         chatId: 0,
         messageId: Date.now(),
-        sender: 'bot',
+        sender: "bot",
         text: result.integratedResponse,
       });
 
@@ -671,8 +688,8 @@ ${history.join('\n')}`;
 
       return result.integratedResponse;
     } catch (error) {
-      log.error('Error processing message:', error);
-      return 'I apologize, but I encountered an issue processing your message. Please try again.';
+      log.error("Error processing message:", error);
+      return "I apologize, but I encountered an issue processing your message. Please try again.";
     }
   }
 
@@ -681,7 +698,7 @@ ${history.join('\n')}`;
    */
   public registerAgent(agent: CognitiveAgent): void {
     this.agents.set(agent.id, agent);
-    this.emit('agent_registered', agent);
+    this.emit("agent_registered", agent);
     log.info(`Registered agent: ${agent.name}`);
   }
 
@@ -692,7 +709,7 @@ ${history.join('\n')}`;
     const agent = this.agents.get(agentId);
     if (agent) {
       agent.isActive = false;
-      this.emit('agent_deactivated', { agentId });
+      this.emit("agent_deactivated", { agentId });
       return true;
     }
     return false;
@@ -736,15 +753,18 @@ ${history.join('\n')}`;
   } {
     const avgTime =
       this.telemetryHistory.length > 0
-        ? this.telemetryHistory.reduce((sum, r) => sum + r.telemetry.processingTimeMs, 0) /
-          this.telemetryHistory.length
+        ? this.telemetryHistory.reduce(
+            (sum, r) => sum + r.telemetry.processingTimeMs,
+            0,
+          ) / this.telemetryHistory.length
         : 0;
 
     return {
       totalCycles: this.cycleNumber,
       totalSteps: this.currentStep,
       averageCycleTimeMs: avgTime,
-      activeAgents: Array.from(this.agents.values()).filter((a) => a.isActive).length,
+      activeAgents: Array.from(this.agents.values()).filter((a) => a.isActive)
+        .length,
       streamSaliences: [
         this.streams[0].salience,
         this.streams[1].salience,

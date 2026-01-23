@@ -12,4 +12,4 @@ export {
   type STTResult,
   type ImageAnalysisResult,
   type TTSResult,
-} from './MultiModalProcessor.js';
+} from "./MultiModalProcessor.js";

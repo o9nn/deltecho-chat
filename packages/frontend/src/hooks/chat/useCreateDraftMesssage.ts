@@ -1,16 +1,16 @@
-import { useCallback } from 'react'
+import { useCallback } from "react";
 
-import useChat from './useChat'
-import useConfirmationDialog from '../dialog/useConfirmationDialog'
-import useTranslationFunction from '../useTranslationFunction'
-import { BackendRemote } from '../../backend-com'
+import useChat from "./useChat";
+import useConfirmationDialog from "../dialog/useConfirmationDialog";
+import useTranslationFunction from "../useTranslationFunction";
+import { BackendRemote } from "../../backend-com";
 
 export type CreateDraftMessage = (
   accountId: number,
   chatId: number,
   messageText: string,
-  file?: { path: string; name: string }
-) => Promise<void>
+  file?: { path: string; name: string },
+) => Promise<void>;
 
 /**
  * Create draft message in given chat.
@@ -19,30 +19,30 @@ export type CreateDraftMessage = (
  * replace it.
  */
 export default function useCreateDraftMessage() {
-  const tx = useTranslationFunction()
-  const openConfirmationDialog = useConfirmationDialog()
-  const { selectChat } = useChat()
+  const tx = useTranslationFunction();
+  const openConfirmationDialog = useConfirmationDialog();
+  const { selectChat } = useChat();
 
   return useCallback<CreateDraftMessage>(
     async (accountId, chatId, messageText, file) => {
-      const draft = await BackendRemote.rpc.getDraft(accountId, chatId)
+      const draft = await BackendRemote.rpc.getDraft(accountId, chatId);
 
-      selectChat(accountId, chatId)
+      selectChat(accountId, chatId);
 
       if (draft) {
         const { name } = await BackendRemote.rpc.getBasicChatInfo(
           accountId,
-          chatId
-        )
+          chatId,
+        );
 
         // Ask if the draft should be replaced
         const continueProcess = await openConfirmationDialog({
-          message: tx('confirm_replace_draft', name),
-          confirmLabel: tx('replace_draft'),
-        })
+          message: tx("confirm_replace_draft", name),
+          confirmLabel: tx("replace_draft"),
+        });
 
         if (!continueProcess) {
-          return
+          return;
         }
       }
 
@@ -53,11 +53,11 @@ export default function useCreateDraftMessage() {
         file?.path || null,
         file?.name || null,
         null,
-        file ? 'File' : 'Text'
-      )
+        file ? "File" : "Text",
+      );
 
-      window.__reloadDraft?.()
+      window.__reloadDraft?.();
     },
-    [tx, openConfirmationDialog, selectChat]
-  )
+    [tx, openConfirmationDialog, selectChat],
+  );
 }

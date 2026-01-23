@@ -24,17 +24,17 @@ Developmental cycle result
 
 [src/types.ts:212](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L212)
 
-___
+---
 
 ### phase
 
-• **phase**: ``"reflection"`` \| ``"perception"`` \| ``"modeling"`` \| ``"mirroring"`` \| ``"enaction"``
+• **phase**: `"reflection"` \| `"perception"` \| `"modeling"` \| `"mirroring"` \| `"enaction"`
 
 #### Defined in
 
 [src/types.ts:213](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L213)
 
-___
+---
 
 ### stateChanges
 
@@ -42,10 +42,10 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `agentDelta` | `AgentState` |
-| `arenaDelta` | `ArenaState` |
+| Name                | Type                                                     |
+| :------------------ | :------------------------------------------------------- |
+| `agentDelta`        | `AgentState`                                             |
+| `arenaDelta`        | `ArenaState`                                             |
 | `virtualAgentDelta` | `Partial`\<[`VirtualAgentModel`](VirtualAgentModel.md)\> |
 | `virtualArenaDelta` | `Partial`\<[`VirtualArenaModel`](VirtualArenaModel.md)\> |
 
@@ -53,7 +53,7 @@ ___
 
 [src/types.ts:214](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L214)
 
-___
+---
 
 ### coherenceAfter
 
@@ -63,7 +63,7 @@ ___
 
 [src/types.ts:220](https://github.com/o9nn/deltecho-chat/blob/15d0e30998daea850f15334a96e7eed48b417f15/packages/mcp/src/types.ts#L220)
 
-___
+---
 
 ### timestamp
 

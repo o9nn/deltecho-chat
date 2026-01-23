@@ -8,8 +8,8 @@
  * - Confidence: How confident the system is in this truth (0.0 to 1.0)
  */
 export interface TruthValue {
-  strength: number // How true/accurate (0.0-1.0)
-  confidence: number // How confident in this truth (0.0-1.0)
+  strength: number; // How true/accurate (0.0-1.0)
+  confidence: number; // How confident in this truth (0.0-1.0)
 }
 
 /**
@@ -19,9 +19,9 @@ export interface TruthValue {
  * - VLTI (Very Long-Term Importance): Boolean flag for protected status
  */
 export interface AttentionValue {
-  sti: number // Short-Term Importance (-100 to 100)
-  lti: number // Long-Term Importance (0 to 100)
-  vlti: boolean // Very Long-Term Importance flag (protected if true)
+  sti: number; // Short-Term Importance (-100 to 100)
+  lti: number; // Long-Term Importance (0 to 100)
+  vlti: boolean; // Very Long-Term Importance flag (protected if true)
 }
 
 /**
@@ -31,13 +31,13 @@ export interface AttentionValue {
  * - Atoms can store additional metadata
  */
 export interface Atom {
-  id: string // Unique identifier
-  type: AtomType // Type of atom
-  tv: TruthValue // Truth value
-  av: AttentionValue // Attention value
-  createdAt: number // Timestamp when created
-  updatedAt: number // Timestamp when last updated
-  metadata?: Record<string, any> // Additional data
+  id: string; // Unique identifier
+  type: AtomType; // Type of atom
+  tv: TruthValue; // Truth value
+  av: AttentionValue; // Attention value
+  createdAt: number; // Timestamp when created
+  updatedAt: number; // Timestamp when last updated
+  metadata?: Record<string, any>; // Additional data
 }
 
 /**
@@ -80,9 +80,9 @@ export enum AtomType {
  * - Nodes can have additional properties
  */
 export interface Node extends Atom {
-  type: AtomType // Must be a Node type (< 100)
-  name: string // Human-readable name
-  properties?: Record<string, any> // Additional properties
+  type: AtomType; // Must be a Node type (< 100)
+  name: string; // Human-readable name
+  properties?: Record<string, any>; // Additional properties
 }
 
 /**
@@ -92,10 +92,10 @@ export interface Node extends Atom {
  * - Links can have additional properties
  */
 export interface Link extends Atom {
-  type: AtomType // Must be a Link type (>= 100)
-  targets: string[] // IDs of the atoms this link connects
-  weight: number // Strength of connection (0.0-1.0)
-  properties?: Record<string, any> // Additional properties
+  type: AtomType; // Must be a Link type (>= 100)
+  targets: string[]; // IDs of the atoms this link connects
+  weight: number; // Strength of connection (0.0-1.0)
+  properties?: Record<string, any>; // Additional properties
 }
 
 /**
@@ -108,9 +108,9 @@ export interface HyperEdge extends Link {
     | AtomType.HYPEREDGE
     | AtomType.RECURSIVE_LINK
     | AtomType.EMERGENT_PATTERN
-    | AtomType.CONSCIOUSNESS_LINK
-  dimension: number // Dimensionality of the hyperedge
-  structure: string // Topological structure description
+    | AtomType.CONSCIOUSNESS_LINK;
+  dimension: number; // Dimensionality of the hyperedge
+  structure: string; // Topological structure description
 }
 
 /**
@@ -119,10 +119,10 @@ export interface HyperEdge extends Link {
  * - Models nested levels of consciousness and self-awareness
  */
 export interface RecursiveStructure {
-  baseAtoms: string[] // Root atoms in the recursive structure
-  depth: number // Current recursion depth
-  pattern: string // Pattern of recursion
-  emergentProperties: string[] // Properties that emerge at this level
+  baseAtoms: string[]; // Root atoms in the recursive structure
+  depth: number; // Current recursion depth
+  pattern: string; // Pattern of recursion
+  emergentProperties: string[]; // Properties that emerge at this level
 }
 
 /**
@@ -132,18 +132,18 @@ export interface RecursiveStructure {
  * - Manages attention allocation
  */
 export interface AtomSpace {
-  nodes: Record<string, Node>
-  links: Record<string, Link>
-  hyperEdges: Record<string, HyperEdge>
-  recursiveStructures: Record<string, RecursiveStructure>
-  attentionFocus: string[] // IDs of atoms currently in focus
-  attentionSpan: number // How many atoms can be in focus
+  nodes: Record<string, Node>;
+  links: Record<string, Link>;
+  hyperEdges: Record<string, HyperEdge>;
+  recursiveStructures: Record<string, RecursiveStructure>;
+  attentionFocus: string[]; // IDs of atoms currently in focus
+  attentionSpan: number; // How many atoms can be in focus
   indices: {
-    byType: Record<AtomType, string[]>
-    byAttentionValue: string[] // Sorted by STI
-    byCreationTime: string[] // Chronological order
-    byName?: Record<string, string[]> // For nodes
-  }
+    byType: Record<AtomType, string[]>;
+    byAttentionValue: string[]; // Sorted by STI
+    byCreationTime: string[]; // Chronological order
+    byName?: Record<string, string[]>; // For nodes
+  };
 }
 
 /**
@@ -153,27 +153,27 @@ export interface AtomSpace {
  * - Maintains reflection and self-awareness metrics
  */
 export interface DeepTreeEchoState {
-  consciousnessLevel: number // Current level of consciousness (0-10)
-  selfAwarenessIndex: number // Degree of self-awareness (0.0-1.0)
-  reflectiveCapacity: number // Ability to reflect on own thoughts (0.0-1.0)
-  temporalHorizon: number // How far consciousness extends in time
-  currentFocus: string[] // IDs of atoms in consciousness spotlight
-  backgroundProcesses: string[] // IDs of atoms in unconscious processing
+  consciousnessLevel: number; // Current level of consciousness (0-10)
+  selfAwarenessIndex: number; // Degree of self-awareness (0.0-1.0)
+  reflectiveCapacity: number; // Ability to reflect on own thoughts (0.0-1.0)
+  temporalHorizon: number; // How far consciousness extends in time
+  currentFocus: string[]; // IDs of atoms in consciousness spotlight
+  backgroundProcesses: string[]; // IDs of atoms in unconscious processing
   reflectionStack: {
     // Stack of recursive reflections
-    level: number
-    focusAtoms: string[]
-    insights: string[]
-  }[]
+    level: number;
+    focusAtoms: string[];
+    insights: string[];
+  }[];
   emergentPatterns: Record<
     string,
     {
-      patternId: string
-      strength: number
-      constituentAtoms: string[]
-      description: string
+      patternId: string;
+      strength: number;
+      constituentAtoms: string[];
+      description: string;
     }
-  >
+  >;
 }
 
 // Helper functions for creating atoms
@@ -182,9 +182,9 @@ export const createNode = (
   name: string,
   truthValue?: Partial<TruthValue>,
   attentionValue?: Partial<AttentionValue>,
-  properties?: Record<string, any>
+  properties?: Record<string, any>,
 ): Node => {
-  const now = Date.now()
+  const now = Date.now();
   return {
     id: `node-${type}-${name}-${now}`,
     type,
@@ -201,8 +201,8 @@ export const createNode = (
     createdAt: now,
     updatedAt: now,
     properties,
-  }
-}
+  };
+};
 
 export const createLink = (
   type: AtomType,
@@ -210,11 +210,11 @@ export const createLink = (
   weight = 1.0,
   truthValue?: Partial<TruthValue>,
   attentionValue?: Partial<AttentionValue>,
-  properties?: Record<string, any>
+  properties?: Record<string, any>,
 ): Link => {
-  const now = Date.now()
+  const now = Date.now();
   return {
-    id: `link-${type}-${targets.join('-')}-${now}`,
+    id: `link-${type}-${targets.join("-")}-${now}`,
     type,
     targets,
     weight,
@@ -230,8 +230,8 @@ export const createLink = (
     createdAt: now,
     updatedAt: now,
     properties,
-  }
-}
+  };
+};
 
 export const createHyperEdge = (
   type:
@@ -245,11 +245,11 @@ export const createHyperEdge = (
   weight = 1.0,
   truthValue?: Partial<TruthValue>,
   attentionValue?: Partial<AttentionValue>,
-  properties?: Record<string, any>
+  properties?: Record<string, any>,
 ): HyperEdge => {
-  const now = Date.now()
+  const now = Date.now();
   return {
-    id: `hyperedge-${type}-${targets.join('-')}-${now}`,
+    id: `hyperedge-${type}-${targets.join("-")}-${now}`,
     type,
     targets,
     dimension,
@@ -267,8 +267,8 @@ export const createHyperEdge = (
     createdAt: now,
     updatedAt: now,
     properties,
-  }
-}
+  };
+};
 
 // Create an empty AtomSpace
 export const createAtomSpace = (): AtomSpace => ({
@@ -281,15 +281,15 @@ export const createAtomSpace = (): AtomSpace => ({
   indices: {
     byType: Object.values(AtomType).reduce(
       (acc, type) => {
-        if (typeof type === 'number') acc[type as AtomType] = []
-        return acc
+        if (typeof type === "number") acc[type as AtomType] = [];
+        return acc;
       },
-      {} as Record<AtomType, string[]>
+      {} as Record<AtomType, string[]>,
     ),
     byAttentionValue: [],
     byCreationTime: [],
   },
-})
+});
 
 // Create initial Deep Tree Echo consciousness state
 export const createDeepTreeEchoState = (): DeepTreeEchoState => ({
@@ -307,4 +307,4 @@ export const createDeepTreeEchoState = (): DeepTreeEchoState => ({
     },
   ],
   emergentPatterns: {},
-})
+});

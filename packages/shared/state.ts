@@ -1,4 +1,4 @@
-import { DesktopSettingsType } from './shared-types.js'
+import { DesktopSettingsType } from "./shared-types.js";
 
 export function getDefaultState(): DesktopSettingsType {
   /**
@@ -20,7 +20,7 @@ export function getDefaultState(): DesktopSettingsType {
     chatViewBgImg: undefined,
     lastChats: {},
     zoomFactor: 1,
-    activeTheme: 'system',
+    activeTheme: "system",
     minimizeToTray: true,
     syncAllAccounts: true,
     lastSaveDialogLocation: undefined,
@@ -31,16 +31,16 @@ export function getDefaultState(): DesktopSettingsType {
     enableRelatedChats: false,
     deepTreeEchoBotEnabled: false,
     deepTreeEchoBotMemoryEnabled: false,
-    deepTreeEchoBotPersonality: '',
-    deepTreeEchoBotApiKey: '',
-    deepTreeEchoBotApiEndpoint: '',
+    deepTreeEchoBotPersonality: "",
+    deepTreeEchoBotApiKey: "",
+    deepTreeEchoBotApiEndpoint: "",
     deepTreeEchoBotVisionEnabled: false,
     deepTreeEchoBotWebAutomationEnabled: false,
     deepTreeEchoBotEmbodimentEnabled: false,
-    deepTreeEchoBotPersonaState: '',
-    deepTreeEchoBotMemories: '',
-    deepTreeEchoBotReflections: '',
-    deepTreeEchoBotCognitiveKeys: '',
+    deepTreeEchoBotPersonaState: "",
+    deepTreeEchoBotMemories: "",
+    deepTreeEchoBotReflections: "",
+    deepTreeEchoBotCognitiveKeys: "",
     deepTreeEchoBotUseParallelProcessing: true,
     deepTreeEchoBotProactiveEnabled: true,
     deepTreeEchoBotAvatarEnabled: true,
@@ -49,5 +49,5 @@ export function getDefaultState(): DesktopSettingsType {
     contentProtectionEnabled: false,
     isMentionsEnabled: true,
     autostart: true,
-  }
+  };
 }

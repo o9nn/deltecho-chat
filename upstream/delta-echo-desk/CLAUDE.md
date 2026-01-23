@@ -84,6 +84,7 @@ static/                   # Fonts, help files, extensions
 ## Code Conventions
 
 ### General
+
 - Avoid `console.log()` - use the proper logging system
 - Use TypeScript strict mode patterns
 - Follow existing code style in each file
@@ -91,16 +92,19 @@ static/                   # Fonts, help files, extensions
 - Add CHANGELOG.md entries for user-visible changes
 
 ### React/TypeScript
+
 - Functional components with hooks preferred
 - Use `useTranslationFunction()` hook for i18n in components
 - Use `window.static_translate` in non-component code
 - Avoid premature optimization and over-abstraction
 
 ### CSS/SCSS
+
 - See `docs/STYLES.md` for styling guidelines
 - Use existing theme variables when possible
 
 ### Translations
+
 - English strings live in Android repo, PR changes there
 - Experimental strings: add to `_locales/_untranslated_en.json`
 - Run `pnpm translations:update` to pull latest translations
@@ -123,6 +127,7 @@ static/                   # Fonts, help files, extensions
 ## Custom Components
 
 This fork includes additional AI/bot components:
+
 - `packages/frontend/src/components/DeepTreeEchoBot/` - AI chatbot integration
 - `packages/frontend/src/components/AICompanionHub/` - AI platform connectors
 

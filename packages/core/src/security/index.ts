@@ -1,1 +1,1 @@
-export { SecureIntegration } from './SecureIntegration';
+export { SecureIntegration } from "./SecureIntegration";

@@ -5,39 +5,39 @@ import React, {
   useMemo,
   useRef,
   useState,
-} from 'react'
-import { debounce } from 'debounce'
-import { Brain, Sparkles } from 'lucide-react'
+} from "react";
+import { debounce } from "debounce";
+import { Brain, Sparkles } from "lucide-react";
 
-import AccountHoverInfo from './AccountHoverInfo'
-import AccountItem from './AccountItem'
-import Icon from '../Icon'
-import Settings from '../Settings'
-import useDialog from '../../hooks/dialog/useDialog'
-import { BackendRemote } from '../../backend-com'
-import { runtime } from '@deltachat-desktop/runtime-interface'
-import { useAccountNotificationStore } from '../../stores/accountNotifications'
+import AccountHoverInfo from "./AccountHoverInfo";
+import AccountItem from "./AccountItem";
+import Icon from "../Icon";
+import Settings from "../Settings";
+import useDialog from "../../hooks/dialog/useDialog";
+import { BackendRemote } from "../../backend-com";
+import { runtime } from "@deltachat-desktop/runtime-interface";
+import { useAccountNotificationStore } from "../../stores/accountNotifications";
 
-import styles from './styles.module.scss'
+import styles from "./styles.module.scss";
 
-import type { T } from '@deltachat/jsonrpc-client'
-import { ScreenContext } from '../../contexts/ScreenContext'
-import useChat from '../../hooks/chat/useChat'
-import { Screens } from '../../ScreenController'
-import { ActionEmitter, KeybindAction } from '../../keybindings'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
+import type { T } from "@deltachat/jsonrpc-client";
+import { ScreenContext } from "../../contexts/ScreenContext";
+import useChat from "../../hooks/chat/useChat";
+import { Screens } from "../../ScreenController";
+import { ActionEmitter, KeybindAction } from "../../keybindings";
+import useTranslationFunction from "../../hooks/useTranslationFunction";
 import {
   RovingTabindexProvider,
   useRovingTabindex,
-} from '../../contexts/RovingTabindex'
-import classNames from 'classnames'
+} from "../../contexts/RovingTabindex";
+import classNames from "classnames";
 
 type Props = {
-  onAddAccount: () => Promise<number>
-  onSelectAccount: (accountId: number) => Promise<void>
-  openAccountDeletionScreen: (accountId: number) => Promise<void>
-  selectedAccountId?: number
-}
+  onAddAccount: () => Promise<number>;
+  onSelectAccount: (accountId: number) => Promise<void>;
+  openAccountDeletionScreen: (accountId: number) => Promise<void>;
+  selectedAccountId?: number;
+};
 
 export default function AccountListSidebar({
   onAddAccount,
@@ -45,96 +45,96 @@ export default function AccountListSidebar({
   openAccountDeletionScreen,
   selectedAccountId,
 }: Props) {
-  const tx = useTranslationFunction()
+  const tx = useTranslationFunction();
 
-  const accountsListRef = useRef<HTMLDivElement>(null)
-  const { openDialog } = useDialog()
-  const [accounts, setAccounts] = useState<number[]>([])
-  const [{ accounts: noficationSettings }] = useAccountNotificationStore()
+  const accountsListRef = useRef<HTMLDivElement>(null);
+  const { openDialog } = useDialog();
+  const [accounts, setAccounts] = useState<number[]>([]);
+  const [{ accounts: noficationSettings }] = useAccountNotificationStore();
 
-  const { smallScreenMode, changeScreen, screen } = useContext(ScreenContext)
-  const { chatId } = useChat()
+  const { smallScreenMode, changeScreen, screen } = useContext(ScreenContext);
+  const { chatId } = useChat();
 
-  const shouldBeHidden = smallScreenMode && chatId !== undefined
+  const shouldBeHidden = smallScreenMode && chatId !== undefined;
 
   const selectAccount = async (accountId: number) => {
     if (selectedAccountId === accountId) {
-      ActionEmitter.emitAction(KeybindAction.ChatList_ExitSearch)
-      return
+      ActionEmitter.emitAction(KeybindAction.ChatList_ExitSearch);
+      return;
     }
 
-    await onSelectAccount(accountId)
-  }
+    await onSelectAccount(accountId);
+  };
 
-  const [syncAllAccounts, setSyncAllAccounts] = useState(true)
+  const [syncAllAccounts, setSyncAllAccounts] = useState(true);
 
   const refresh = useMemo(
     () => async () => {
-      const accounts = await BackendRemote.rpc.getAllAccountIds()
-      setAccounts(accounts)
-      const desktopSettings = await runtime.getDesktopSettings()
-      setSyncAllAccounts(desktopSettings.syncAllAccounts)
+      const accounts = await BackendRemote.rpc.getAllAccountIds();
+      setAccounts(accounts);
+      const desktopSettings = await runtime.getDesktopSettings();
+      setSyncAllAccounts(desktopSettings.syncAllAccounts);
     },
-    []
-  )
+    [],
+  );
 
   useEffect(() => {
-    refresh()
-  }, [selectedAccountId, refresh])
+    refresh();
+  }, [selectedAccountId, refresh]);
 
   const [accountForHoverInfo, internalSetAccountForHoverInfo] =
-    useState<T.Account | null>(null)
+    useState<T.Account | null>(null);
 
   const updateAccountForHoverInfo = (
     actingAccount: T.Account,
-    select: boolean
+    select: boolean,
   ) => {
-    internalSetAccountForHoverInfo(oldAccount => {
+    internalSetAccountForHoverInfo((oldAccount) => {
       if (actingAccount === oldAccount && select === false) {
         // only deselect if it is really deselecting the current one
-        return null
+        return null;
       }
-      if (select) return actingAccount
-      return null
-    })
-  }
+      if (select) return actingAccount;
+      return null;
+    });
+  };
 
-  const hoverInfo = useRef<HTMLDivElement | null>(null)
+  const hoverInfo = useRef<HTMLDivElement | null>(null);
 
   const updateHoverInfoPosition = useCallback(() => {
     if (hoverInfo.current && accountForHoverInfo) {
       const elem = document.querySelector(
-        `[x-account-sidebar-account-id="${accountForHoverInfo.id}"]`
-      )
+        `[x-account-sidebar-account-id="${accountForHoverInfo.id}"]`,
+      );
       if (elem) {
-        const rect = elem.getBoundingClientRect()
-        hoverInfo.current.style.top = `${rect.top}px`
-        hoverInfo.current.style.left = `${rect.right + 15}px`
+        const rect = elem.getBoundingClientRect();
+        hoverInfo.current.style.top = `${rect.top}px`;
+        hoverInfo.current.style.left = `${rect.right + 15}px`;
       }
     }
-  }, [accountForHoverInfo])
+  }, [accountForHoverInfo]);
 
   useEffect(() => {
-    updateHoverInfoPosition()
-  }, [accountForHoverInfo, updateHoverInfoPosition])
+    updateHoverInfoPosition();
+  }, [accountForHoverInfo, updateHoverInfoPosition]);
 
   useEffect(() => {
     const debouncedUpdate = debounce(() => {
-      refresh()
-    }, 200)
+      refresh();
+    }, 200);
 
     /// now this workaround is only used when changing background sync setting
-    window.__updateAccountListSidebar = debouncedUpdate
-    BackendRemote.on('AccountsChanged', debouncedUpdate)
+    window.__updateAccountListSidebar = debouncedUpdate;
+    BackendRemote.on("AccountsChanged", debouncedUpdate);
     return () => {
-      BackendRemote.off('AccountsChanged', debouncedUpdate)
-    }
-  }, [refresh])
+      BackendRemote.off("AccountsChanged", debouncedUpdate);
+    };
+  }, [refresh]);
 
-  const openSettings = () => openDialog(Settings)
+  const openSettings = () => openDialog(Settings);
 
   if (shouldBeHidden) {
-    return <div></div>
+    return <div></div>;
   }
 
   return (
@@ -149,11 +149,11 @@ export default function AccountListSidebar({
         ref={accountsListRef}
         className={styles.accountList}
         onScroll={updateHoverInfoPosition}
-        role='tablist'
-        aria-orientation='vertical'
+        role="tablist"
+        aria-orientation="vertical"
       >
         <RovingTabindexProvider wrapperElementRef={accountsListRef}>
-          {accounts.map(id => (
+          {accounts.map((id) => (
             <AccountItem
               key={id}
               accountId={id}
@@ -169,17 +169,33 @@ export default function AccountListSidebar({
         </RovingTabindexProvider>
       </div>
       {/* The condition is the same as in https://github.com/deltachat/deltachat-desktop/blob/63af023437ff1828a27de2da37bf94ab180ec528/src/renderer/contexts/KeybindingsContext.tsx#L26 */}
-      {(window.__screen === Screens.Main || window.__screen === Screens.AINeighborhood) && (
+      {(window.__screen === Screens.Main ||
+        window.__screen === Screens.AINeighborhood) && (
         <div className={styles.buttonsContainer}>
           {/* AI Neighborhood Button */}
           <button
-            aria-label={screen === Screens.AINeighborhood ? 'Return to Chat' : 'AI Companion Neighborhood'}
+            aria-label={
+              screen === Screens.AINeighborhood
+                ? "Return to Chat"
+                : "AI Companion Neighborhood"
+            }
             className={classNames(styles.aiNeighborhoodButton, {
-              [styles.aiNeighborhoodButtonActive]: screen === Screens.AINeighborhood,
+              [styles.aiNeighborhoodButtonActive]:
+                screen === Screens.AINeighborhood,
             })}
-            onClick={() => changeScreen(screen === Screens.AINeighborhood ? Screens.Main : Screens.AINeighborhood)}
-            data-testid='ai-neighborhood-button'
-            title={screen === Screens.AINeighborhood ? 'Return to Chat (Ctrl+Shift+A)' : 'AI Neighborhood (Ctrl+Shift+A)'}
+            onClick={() =>
+              changeScreen(
+                screen === Screens.AINeighborhood
+                  ? Screens.Main
+                  : Screens.AINeighborhood,
+              )
+            }
+            data-testid="ai-neighborhood-button"
+            title={
+              screen === Screens.AINeighborhood
+                ? "Return to Chat (Ctrl+Shift+A)"
+                : "AI Neighborhood (Ctrl+Shift+A)"
+            }
           >
             <div className={styles.aiNeighborhoodIconContainer}>
               <Brain size={22} className={styles.aiNeighborhoodIcon} />
@@ -190,15 +206,15 @@ export default function AccountListSidebar({
           </button>
           {/* Settings Button */}
           <button
-            aria-label={tx('menu_settings')}
+            aria-label={tx("menu_settings")}
             className={styles.settingsButton}
             onClick={openSettings}
-            data-testid='open-settings-button'
+            data-testid="open-settings-button"
           >
             <Icon
               size={38}
               className={styles.settingsButtonIcon}
-              icon={'settings'}
+              icon={"settings"}
             />
           </button>
         </div>
@@ -213,29 +229,29 @@ export default function AccountListSidebar({
         )}
       </div>
     </div>
-  )
+  );
 }
 
 function AddAccountButton(props: { onClick: () => void }) {
-  const tx = useTranslationFunction()
+  const tx = useTranslationFunction();
 
-  const ref = useRef<HTMLButtonElement>(null)
+  const ref = useRef<HTMLButtonElement>(null);
   // This relies on the existence of `RovingTabindexProvider`.
   // This is why this button is a separate component.
-  const rovingTabindex = useRovingTabindex(ref)
+  const rovingTabindex = useRovingTabindex(ref);
 
   return (
     <button
       ref={ref}
-      aria-label={tx('add_account')}
+      aria-label={tx("add_account")}
       className={classNames(styles.addButton, rovingTabindex.className)}
       tabIndex={rovingTabindex.tabIndex}
-      data-testid='add-account-button'
+      data-testid="add-account-button"
       onKeyDown={rovingTabindex.onKeydown}
       onFocus={rovingTabindex.setAsActiveElement}
       {...props}
     >
       +
     </button>
-  )
+  );
 }

@@ -1,34 +1,36 @@
-import React, { useState, useEffect } from 'react'
-import { getLogger } from '../../../../shared/logger'
-import { runtime } from '@deltachat-desktop/runtime-interface'
-import { CognitiveFunctionType, LLMService } from './LLMService'
-import { DesktopSettingsType } from '../../../../shared/shared-types'
+import React, { useState, useEffect } from "react";
+import { getLogger } from "../../../../shared/logger";
+import { runtime } from "@deltachat-desktop/runtime-interface";
+import { CognitiveFunctionType, LLMService } from "./LLMService";
+import { DesktopSettingsType } from "../../../../shared/shared-types";
 
-const log = getLogger('render/components/DeepTreeEchoBot/BotSettings')
+const log = getLogger("render/components/DeepTreeEchoBot/BotSettings");
 
 // Type for API key configuration for a cognitive function
 type CognitiveFunctionConfig = {
-  apiKey: string
-  apiEndpoint?: string
-}
+  apiKey: string;
+  apiEndpoint?: string;
+};
 
 export interface DeepTreeEchoBotOptions {
-  enabled: boolean
-  apiKey?: string
-  apiEndpoint?: string
-  memoryEnabled: boolean
-  personality?: string
-  visionEnabled: boolean
-  webAutomationEnabled: boolean
-  embodimentEnabled: boolean
-  cognitiveKeys: Partial<Record<CognitiveFunctionType, CognitiveFunctionConfig>>
-  useParallelProcessing?: boolean
-  version?: string
+  enabled: boolean;
+  apiKey?: string;
+  apiEndpoint?: string;
+  memoryEnabled: boolean;
+  personality?: string;
+  visionEnabled: boolean;
+  webAutomationEnabled: boolean;
+  embodimentEnabled: boolean;
+  cognitiveKeys: Partial<
+    Record<CognitiveFunctionType, CognitiveFunctionConfig>
+  >;
+  useParallelProcessing?: boolean;
+  version?: string;
 }
 
 interface BotSettingsProps {
-  saveSettings: (settings: Partial<DeepTreeEchoBotOptions>) => void
-  onNavigateToMain?: () => void
+  saveSettings: (settings: Partial<DeepTreeEchoBotOptions>) => void;
+  onNavigateToMain?: () => void;
 }
 
 const BotSettings: React.FC<BotSettingsProps> = ({
@@ -37,447 +39,453 @@ const BotSettings: React.FC<BotSettingsProps> = ({
 }) => {
   const [settings, setSettings] = useState<DeepTreeEchoBotOptions>({
     enabled: false,
-    apiKey: '',
-    apiEndpoint: '',
+    apiKey: "",
+    apiEndpoint: "",
     memoryEnabled: false,
-    personality: '',
+    personality: "",
     visionEnabled: false,
     webAutomationEnabled: false,
     embodimentEnabled: false,
     useParallelProcessing: true,
     cognitiveKeys: {},
-  })
+  });
 
-  const [isLoading, setIsLoading] = useState(true)
-  const [showAdvancedKeys, setShowAdvancedKeys] = useState(false)
+  const [isLoading, setIsLoading] = useState(true);
+  const [showAdvancedKeys, setShowAdvancedKeys] = useState(false);
   const [serviceStatus, setServiceStatus] = useState<{
-    activeFunctions: number
-    totalTokens: number
+    activeFunctions: number;
+    totalTokens: number;
   }>({
     activeFunctions: 0,
     totalTokens: 0,
-  })
+  });
+
+  // Update service status information
+  const updateServiceStatus = () => {
+    const llmService = LLMService.getInstance();
+    const activeFunctions = llmService.getActiveFunctions();
+
+    let totalTokens = 0;
+    activeFunctions.forEach((func) => {
+      totalTokens += func.usage.totalTokens;
+    });
+
+    setServiceStatus({
+      activeFunctions: activeFunctions.length,
+      totalTokens,
+    });
+  };
 
   // Load settings on component mount
   useEffect(() => {
     const loadSettings = async () => {
       try {
-        const desktopSettings = await runtime.getDesktopSettings()
+        const desktopSettings = await runtime.getDesktopSettings();
 
         // Load core settings
         const basicSettings = {
           enabled: desktopSettings.deepTreeEchoBotEnabled || false,
-          apiKey: desktopSettings.deepTreeEchoBotApiKey || '',
-          apiEndpoint: desktopSettings.deepTreeEchoBotApiEndpoint || '',
+          apiKey: desktopSettings.deepTreeEchoBotApiKey || "",
+          apiEndpoint: desktopSettings.deepTreeEchoBotApiEndpoint || "",
           memoryEnabled: desktopSettings.deepTreeEchoBotMemoryEnabled || false,
-          personality: desktopSettings.deepTreeEchoBotPersonality || '',
+          personality: desktopSettings.deepTreeEchoBotPersonality || "",
           visionEnabled: desktopSettings.deepTreeEchoBotVisionEnabled || false,
           webAutomationEnabled:
             desktopSettings.deepTreeEchoBotWebAutomationEnabled || false,
           embodimentEnabled:
             desktopSettings.deepTreeEchoBotEmbodimentEnabled || false,
           useParallelProcessing: true, // Default to true
-          version: '1.0.0', // Default version
-        }
+          version: "1.0.0", // Default version
+        };
 
         // Load advanced cognitive function keys
         const cognitiveKeys: Partial<
           Record<CognitiveFunctionType, CognitiveFunctionConfig>
-        > = {}
+        > = {};
 
         // Try to load cognitive key settings
         if (desktopSettings.deepTreeEchoBotCognitiveKeys) {
           try {
             const parsedKeys = JSON.parse(
-              desktopSettings.deepTreeEchoBotCognitiveKeys
-            )
-            Object.keys(parsedKeys).forEach(key => {
-              const funcType = key as CognitiveFunctionType
+              desktopSettings.deepTreeEchoBotCognitiveKeys,
+            );
+            Object.keys(parsedKeys).forEach((key) => {
+              const funcType = key as CognitiveFunctionType;
               if (Object.values(CognitiveFunctionType).includes(funcType)) {
-                cognitiveKeys[funcType] = parsedKeys[key]
+                cognitiveKeys[funcType] = parsedKeys[key];
               }
-            })
+            });
           } catch (error) {
-            log.error('Failed to parse cognitive keys:', error)
+            log.error("Failed to parse cognitive keys:", error);
           }
         }
 
         // Ensure all cognitive function types have an entry
-        Object.values(CognitiveFunctionType).forEach(funcType => {
+        Object.values(CognitiveFunctionType).forEach((funcType) => {
           if (
             funcType !== CognitiveFunctionType.GENERAL &&
             !cognitiveKeys[funcType]
           ) {
-            cognitiveKeys[funcType] = { apiKey: '' }
+            cognitiveKeys[funcType] = { apiKey: "" };
           }
-        })
+        });
 
         setSettings({
           ...basicSettings,
           cognitiveKeys,
-        })
+        });
 
         // Update service status
-        updateServiceStatus()
+        updateServiceStatus();
 
-        setIsLoading(false)
+        setIsLoading(false);
       } catch (error) {
-        log.error('Failed to load bot settings:', error)
-        setIsLoading(false)
+        log.error("Failed to load bot settings:", error);
+        setIsLoading(false);
       }
-    }
+    };
 
-    loadSettings()
-  }, [])
-
-  // Update service status information
-  const updateServiceStatus = () => {
-    const llmService = LLMService.getInstance()
-    const activeFunctions = llmService.getActiveFunctions()
-
-    let totalTokens = 0
-    activeFunctions.forEach(func => {
-      totalTokens += func.usage.totalTokens
-    })
-
-    setServiceStatus({
-      activeFunctions: activeFunctions.length,
-      totalTokens,
-    })
-  }
+    loadSettings();
+  }, []);
 
   // Handle advanced settings navigation or toggle
   const handleOpenAdvancedSettings = () => {
     if (onNavigateToMain) {
       // If navigation callback is provided, use it to navigate to main settings
-      onNavigateToMain()
+      onNavigateToMain();
     } else {
       // Otherwise, toggle the advanced settings section visibility
-      setShowAdvancedKeys(!showAdvancedKeys)
+      setShowAdvancedKeys(!showAdvancedKeys);
       log.info(
         `${
-          showAdvancedKeys ? 'Hiding' : 'Showing'
-        } advanced cognitive function settings`
-      )
+          showAdvancedKeys ? "Hiding" : "Showing"
+        } advanced cognitive function settings`,
+      );
     }
-  }
+  };
 
   // Handle changes to basic settings with enhanced synchronization
   const handleChange = async (
     key: keyof DeepTreeEchoBotOptions,
-    value: any
+    value: any,
   ) => {
     // Update local state immediately for responsive UI
-    setSettings(prev => ({
+    setSettings((prev) => ({
       ...prev,
       [key]: value,
-    }))
+    }));
 
     try {
       // Save changes through the provided callback
-      await saveSettings({ [key]: value })
+      await saveSettings({ [key]: value });
 
       // Force direct update to desktop settings for immediate effect
       const settingKey = `deepTreeEchoBot${
         key.charAt(0).toUpperCase() + key.slice(1)
-      }` as keyof DesktopSettingsType
-      await runtime.setDesktopSetting(settingKey, value as any)
+      }` as keyof DesktopSettingsType;
+      await runtime.setDesktopSetting(settingKey, value as any);
 
       // If this is a feature toggle, ensure immediate activation/deactivation
       if (
         [
-          'memoryEnabled',
-          'visionEnabled',
-          'webAutomationEnabled',
-          'embodimentEnabled',
+          "memoryEnabled",
+          "visionEnabled",
+          "webAutomationEnabled",
+          "embodimentEnabled",
         ].includes(key)
       ) {
-        const llmService = LLMService.getInstance()
-        if (key === 'memoryEnabled') {
-          value ? llmService.enableMemory() : llmService.disableMemory()
-        } else if (key === 'visionEnabled') {
-          value ? llmService.enableVision() : llmService.disableVision()
-        } else if (key === 'webAutomationEnabled') {
+        const llmService = LLMService.getInstance();
+        if (key === "memoryEnabled") {
+          value ? llmService.enableMemory() : llmService.disableMemory();
+        } else if (key === "visionEnabled") {
+          value ? llmService.enableVision() : llmService.disableVision();
+        } else if (key === "webAutomationEnabled") {
           value
             ? llmService.enableWebAutomation()
-            : llmService.disableWebAutomation()
-        } else if (key === 'embodimentEnabled') {
-          value ? llmService.enableEmbodiment() : llmService.disableEmbodiment()
+            : llmService.disableWebAutomation();
+        } else if (key === "embodimentEnabled") {
+          value
+            ? llmService.enableEmbodiment()
+            : llmService.disableEmbodiment();
         }
       }
 
-      log.info(`Successfully updated ${key} to ${value}`)
+      log.info(`Successfully updated ${key} to ${value}`);
     } catch (error) {
-      log.error(`Failed to update ${key}:`, error)
+      log.error(`Failed to update ${key}:`, error);
       // Revert local state if save failed
-      setSettings(prev => ({
+      setSettings((prev) => ({
         ...prev,
         [key]: !value, // Revert to opposite of attempted value
-      }))
+      }));
     }
-  }
+  };
 
   // Handle changes to cognitive function keys
   const handleCognitiveKeyChange = (
     funcType: CognitiveFunctionType,
-    field: 'apiKey' | 'apiEndpoint',
-    value: string
+    field: "apiKey" | "apiEndpoint",
+    value: string,
   ) => {
-    setSettings(prev => {
+    setSettings((prev) => {
       // Create a deep copy of the cognitive keys to modify
-      const updatedKeys = { ...prev.cognitiveKeys }
+      const updatedKeys = { ...prev.cognitiveKeys };
 
       // Ensure the function type exists in the map
       if (!updatedKeys[funcType]) {
-        updatedKeys[funcType] = { apiKey: '' }
+        updatedKeys[funcType] = { apiKey: "" };
       }
 
       // Update the specific field
       updatedKeys[funcType] = {
         ...updatedKeys[funcType],
         [field]: value,
-      } as CognitiveFunctionConfig
+      } as CognitiveFunctionConfig;
 
       return {
         ...prev,
         cognitiveKeys: updatedKeys,
-      }
-    })
+      };
+    });
 
     // Save the entire cognitive keys object
     // This approach allows for atomic updates of the entire cognitive keys configuration
-    const updatedKeys = { ...settings.cognitiveKeys }
+    const updatedKeys = { ...settings.cognitiveKeys };
 
     // Ensure the function type exists
     if (!updatedKeys[funcType]) {
-      updatedKeys[funcType] = { apiKey: '' }
+      updatedKeys[funcType] = { apiKey: "" };
     }
 
     // Update the specific field
     updatedKeys[funcType] = {
       ...updatedKeys[funcType],
       [field]: value,
-    } as CognitiveFunctionConfig
+    } as CognitiveFunctionConfig;
 
     // Save the settings
-    saveSettings({ cognitiveKeys: updatedKeys })
+    saveSettings({ cognitiveKeys: updatedKeys });
 
     // If changing a core function, also configure the LLM service directly
-    const llmService = LLMService.getInstance()
+    const llmService = LLMService.getInstance();
     llmService.setFunctionConfig(funcType, {
-      apiKey: field === 'apiKey' ? value : updatedKeys[funcType]?.apiKey || '',
+      apiKey: field === "apiKey" ? value : updatedKeys[funcType]?.apiKey || "",
       apiEndpoint:
-        field === 'apiEndpoint'
+        field === "apiEndpoint"
           ? value
-          : updatedKeys[funcType]?.apiEndpoint || '',
-    })
+          : updatedKeys[funcType]?.apiEndpoint || "",
+    });
 
     // Update service status
-    updateServiceStatus()
-  }
+    updateServiceStatus();
+  };
 
   // Handle API key change (general/default key)
   const handleApiKeyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    handleChange('apiKey', e.target.value)
-  }
+    handleChange("apiKey", e.target.value);
+  };
 
   // Handle API endpoint change
   const handleApiEndpointChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    handleChange('apiEndpoint', e.target.value)
-  }
+    handleChange("apiEndpoint", e.target.value);
+  };
 
   // Handle personality change
   const handlePersonalityChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
-    handleChange('personality', e.target.value)
-  }
+    handleChange("personality", e.target.value);
+  };
 
   if (isLoading) {
-    return <div className='loading'>Loading settings...</div>
+    return <div className="loading">Loading settings...</div>;
   }
 
   // Get function names for display
   const getFunctionName = (funcType: CognitiveFunctionType): string => {
     switch (funcType) {
       case CognitiveFunctionType.COGNITIVE_CORE:
-        return 'Cognitive Core'
+        return "Cognitive Core";
       case CognitiveFunctionType.AFFECTIVE_CORE:
-        return 'Affective Core'
+        return "Affective Core";
       case CognitiveFunctionType.RELEVANCE_CORE:
-        return 'Relevance Core'
+        return "Relevance Core";
       case CognitiveFunctionType.SEMANTIC_MEMORY:
-        return 'Semantic Memory'
+        return "Semantic Memory";
       case CognitiveFunctionType.EPISODIC_MEMORY:
-        return 'Episodic Memory'
+        return "Episodic Memory";
       case CognitiveFunctionType.PROCEDURAL_MEMORY:
-        return 'Procedural Memory'
+        return "Procedural Memory";
       case CognitiveFunctionType.CONTENT_EVALUATION:
-        return 'Content Evaluation'
+        return "Content Evaluation";
       default:
-        return funcType
+        return funcType;
     }
-  }
+  };
 
   // Get function descriptions for display
   const getFunctionDescription = (funcType: CognitiveFunctionType): string => {
     switch (funcType) {
       case CognitiveFunctionType.COGNITIVE_CORE:
-        return 'Handles logical reasoning, planning, and analytical thinking'
+        return "Handles logical reasoning, planning, and analytical thinking";
       case CognitiveFunctionType.AFFECTIVE_CORE:
-        return 'Processes emotional content and generates appropriate emotional responses'
+        return "Processes emotional content and generates appropriate emotional responses";
       case CognitiveFunctionType.RELEVANCE_CORE:
-        return 'Integrates cognitive and affective processing to determine relevance'
+        return "Integrates cognitive and affective processing to determine relevance";
       case CognitiveFunctionType.SEMANTIC_MEMORY:
-        return 'Stores and retrieves factual knowledge and conceptual information'
+        return "Stores and retrieves factual knowledge and conceptual information";
       case CognitiveFunctionType.EPISODIC_MEMORY:
-        return 'Manages memories of events and experiences'
+        return "Manages memories of events and experiences";
       case CognitiveFunctionType.PROCEDURAL_MEMORY:
-        return 'Handles knowledge of how to perform tasks and procedures'
+        return "Handles knowledge of how to perform tasks and procedures";
       case CognitiveFunctionType.CONTENT_EVALUATION:
-        return 'Evaluates potentially sensitive content to determine appropriate responses'
+        return "Evaluates potentially sensitive content to determine appropriate responses";
       default:
-        return 'Unknown function'
+        return "Unknown function";
     }
-  }
+  };
 
   return (
-    <div className='deep-tree-echo-settings'>
+    <div className="deep-tree-echo-settings">
       <h3>Deep Tree Echo Bot Settings</h3>
 
-      <div className='setting-section'>
-        <label className='setting-item'>
-          <div className='setting-label'>Enable Bot</div>
+      <div className="setting-section">
+        <label className="setting-item">
+          <div className="setting-label">Enable Bot</div>
           <input
-            type='checkbox'
+            type="checkbox"
             checked={settings.enabled}
-            onChange={e => handleChange('enabled', e.target.checked)}
+            onChange={(e) => handleChange("enabled", e.target.checked)}
           />
         </label>
 
-        <div className='setting-item'>
-          <div className='setting-label'>Default API Key</div>
+        <div className="setting-item">
+          <div className="setting-label">Default API Key</div>
           <input
-            type='password'
+            type="password"
             value={settings.apiKey}
             onChange={handleApiKeyChange}
-            placeholder='Enter your default API key'
+            placeholder="Enter your default API key"
             disabled={!settings.enabled}
           />
-          <div className='setting-description'>
+          <div className="setting-description">
             Primary API key for the bot. Used as a fallback when specialized
             keys aren't configured.
           </div>
         </div>
 
-        <div className='setting-item'>
-          <div className='setting-label'>Default API Endpoint</div>
+        <div className="setting-item">
+          <div className="setting-label">Default API Endpoint</div>
           <input
-            type='text'
+            type="text"
             value={settings.apiEndpoint}
             onChange={handleApiEndpointChange}
-            placeholder='Enter API endpoint URL (optional)'
+            placeholder="Enter API endpoint URL (optional)"
             disabled={!settings.enabled}
           />
-          <div className='setting-description'>
+          <div className="setting-description">
             Default API endpoint (leave blank for standard OpenAI endpoint)
           </div>
         </div>
       </div>
 
-      <div className='setting-section'>
+      <div className="setting-section">
         <h4>Features</h4>
 
-        <label className='setting-item'>
-          <div className='setting-label'>Enable Memory</div>
-          <div className='toggle-switch-container'>
+        <label className="setting-item">
+          <div className="setting-label">Enable Memory</div>
+          <div className="toggle-switch-container">
             <div
               className={`toggle-switch ${
-                settings.memoryEnabled ? 'active' : ''
+                settings.memoryEnabled ? "active" : ""
               }`}
             >
               <input
-                type='checkbox'
+                type="checkbox"
                 checked={settings.memoryEnabled}
-                onChange={e => handleChange('memoryEnabled', e.target.checked)}
+                onChange={(e) =>
+                  handleChange("memoryEnabled", e.target.checked)
+                }
                 disabled={!settings.enabled}
-                id='memory-toggle'
+                id="memory-toggle"
               />
-              <div className='toggle-slider'></div>
+              <div className="toggle-slider"></div>
             </div>
             <button
-              className='test-toggle-btn'
+              className="test-toggle-btn"
               onClick={() =>
-                handleChange('memoryEnabled', !settings.memoryEnabled)
+                handleChange("memoryEnabled", !settings.memoryEnabled)
               }
               disabled={!settings.enabled}
             >
               Test Toggle
             </button>
           </div>
-          <div className='setting-description'>
+          <div className="setting-description">
             Allows the bot to remember conversation history for more contextual
             responses
           </div>
         </label>
 
-        <label className='setting-item'>
-          <div className='setting-label'>Enable Vision</div>
-          <div className='toggle-switch-container'>
+        <label className="setting-item">
+          <div className="setting-label">Enable Vision</div>
+          <div className="toggle-switch-container">
             <div
               className={`toggle-switch ${
-                settings.visionEnabled ? 'active' : ''
+                settings.visionEnabled ? "active" : ""
               }`}
             >
               <input
-                type='checkbox'
+                type="checkbox"
                 checked={settings.visionEnabled}
-                onChange={e => handleChange('visionEnabled', e.target.checked)}
+                onChange={(e) =>
+                  handleChange("visionEnabled", e.target.checked)
+                }
                 disabled={!settings.enabled}
-                id='vision-toggle'
+                id="vision-toggle"
               />
-              <div className='toggle-slider radiant-glow'></div>
+              <div className="toggle-slider radiant-glow"></div>
             </div>
             <button
-              className='test-toggle-btn'
+              className="test-toggle-btn"
               onClick={() =>
-                handleChange('visionEnabled', !settings.visionEnabled)
+                handleChange("visionEnabled", !settings.visionEnabled)
               }
               disabled={!settings.enabled}
             >
               Test Toggle
             </button>
           </div>
-          <div className='setting-description'>
+          <div className="setting-description">
             Allows the bot to analyze images using computer vision
           </div>
         </label>
 
-        <label className='setting-item'>
-          <div className='setting-label'>Enable Web Automation</div>
-          <div className='toggle-switch-container'>
+        <label className="setting-item">
+          <div className="setting-label">Enable Web Automation</div>
+          <div className="toggle-switch-container">
             <div
               className={`toggle-switch ${
-                settings.webAutomationEnabled ? 'active' : ''
+                settings.webAutomationEnabled ? "active" : ""
               }`}
             >
               <input
-                type='checkbox'
+                type="checkbox"
                 checked={settings.webAutomationEnabled}
-                onChange={e =>
-                  handleChange('webAutomationEnabled', e.target.checked)
+                onChange={(e) =>
+                  handleChange("webAutomationEnabled", e.target.checked)
                 }
                 disabled={!settings.enabled}
-                id='web-automation-toggle'
+                id="web-automation-toggle"
               />
-              <div className='toggle-slider radiant-glow'></div>
+              <div className="toggle-slider radiant-glow"></div>
             </div>
             <button
-              className='test-toggle-btn'
+              className="test-toggle-btn"
               onClick={() =>
                 handleChange(
-                  'webAutomationEnabled',
-                  !settings.webAutomationEnabled
+                  "webAutomationEnabled",
+                  !settings.webAutomationEnabled,
                 )
               }
               disabled={!settings.enabled}
@@ -485,104 +493,104 @@ const BotSettings: React.FC<BotSettingsProps> = ({
               Test Toggle
             </button>
           </div>
-          <div className='setting-description'>
+          <div className="setting-description">
             Allows the bot to search the web and take screenshots
           </div>
         </label>
 
-        <label className='setting-item'>
-          <div className='setting-label'>Enable Embodiment</div>
-          <div className='toggle-switch-container'>
+        <label className="setting-item">
+          <div className="setting-label">Enable Embodiment</div>
+          <div className="toggle-switch-container">
             <div
               className={`toggle-switch ${
-                settings.embodimentEnabled ? 'active' : ''
+                settings.embodimentEnabled ? "active" : ""
               }`}
             >
               <input
-                type='checkbox'
+                type="checkbox"
                 checked={settings.embodimentEnabled}
-                onChange={e =>
-                  handleChange('embodimentEnabled', e.target.checked)
+                onChange={(e) =>
+                  handleChange("embodimentEnabled", e.target.checked)
                 }
                 disabled={!settings.enabled}
-                id='embodiment-toggle'
+                id="embodiment-toggle"
               />
-              <div className='toggle-slider radiant-glow'></div>
+              <div className="toggle-slider radiant-glow"></div>
             </div>
             <button
-              className='test-toggle-btn'
+              className="test-toggle-btn"
               onClick={() =>
-                handleChange('embodimentEnabled', !settings.embodimentEnabled)
+                handleChange("embodimentEnabled", !settings.embodimentEnabled)
               }
               disabled={!settings.enabled}
             >
               Test Toggle
             </button>
           </div>
-          <div className='setting-description'>
+          <div className="setting-description">
             Enables physical awareness training capabilities
           </div>
         </label>
 
-        <label className='setting-item'>
-          <div className='setting-label'>Enable Parallel Processing</div>
-          <div className='toggle-switch-container'>
+        <label className="setting-item">
+          <div className="setting-label">Enable Parallel Processing</div>
+          <div className="toggle-switch-container">
             <div
               className={`toggle-switch ${
-                settings.useParallelProcessing ? 'active' : ''
+                settings.useParallelProcessing ? "active" : ""
               }`}
             >
               <input
-                type='checkbox'
+                type="checkbox"
                 checked={settings.useParallelProcessing}
-                onChange={e =>
-                  handleChange('useParallelProcessing', e.target.checked)
+                onChange={(e) =>
+                  handleChange("useParallelProcessing", e.target.checked)
                 }
                 disabled={!settings.enabled}
-                id='parallel-processing-toggle'
+                id="parallel-processing-toggle"
               />
-              <div className='toggle-slider radiant-glow'></div>
+              <div className="toggle-slider radiant-glow"></div>
             </div>
           </div>
-          <div className='setting-description'>
+          <div className="setting-description">
             Uses multiple cognitive functions in parallel for more sophisticated
             responses (requires API keys)
           </div>
         </label>
       </div>
 
-      <div className='setting-section'>
+      <div className="setting-section">
         <h4>Personality</h4>
 
-        <div className='setting-item'>
-          <div className='setting-label'>Custom Personality</div>
+        <div className="setting-item">
+          <div className="setting-label">Custom Personality</div>
           <textarea
             value={settings.personality}
             onChange={handlePersonalityChange}
-            placeholder='Enter a custom system prompt for the bot (optional)'
+            placeholder="Enter a custom system prompt for the bot (optional)"
             disabled={!settings.enabled}
             rows={5}
           />
-          <div className='setting-description'>
+          <div className="setting-description">
             Customize how the bot responds by providing a system prompt. Deep
             Tree Echo may modify this based on her self-reflection.
           </div>
         </div>
       </div>
 
-      <div className='setting-section'>
-        <div className='setting-section-header'>
+      <div className="setting-section">
+        <div className="setting-section-header">
           <h3>Advanced Cognitive Architecture</h3>
           <button
-            className='toggle-advanced-button'
+            className="toggle-advanced-button"
             onClick={handleOpenAdvancedSettings}
             disabled={!settings.enabled}
           >
             {showAdvancedKeys
-              ? 'Hide Advanced Settings'
-              : 'Show Advanced Settings'}
+              ? "Hide Advanced Settings"
+              : "Show Advanced Settings"}
           </button>
-          <p className='setting-description'>
+          <p className="setting-description">
             Configure specialized cognitive functions with separate API keys for
             Deep Tree Echo's multi-tiered architecture. Each function handles
             different aspects of her thinking and memory processes.
@@ -590,20 +598,20 @@ const BotSettings: React.FC<BotSettingsProps> = ({
         </div>
 
         {showAdvancedKeys && (
-          <div className='cognitive-keys-section'>
-            <div className='cognitive-keys-intro'>
+          <div className="cognitive-keys-section">
+            <div className="cognitive-keys-intro">
               <p>
                 Configure separate API keys for specialized cognitive functions.
                 Each function handles different aspects of Deep Tree Echo's
                 thinking process. When specified, these keys will be used
                 instead of the default API key for their respective functions.
               </p>
-              <p className='service-status'>
+              <p className="service-status">
                 <strong>Status:</strong> {serviceStatus.activeFunctions} active
                 cognitive functions, {serviceStatus.totalTokens} total tokens
                 used
               </p>
-              <div className='architecture-note'>
+              <div className="architecture-note">
                 <h5>About Deep Tree Echo's Cognitive Architecture</h5>
                 <p>
                   Deep Tree Echo uses a sophisticated architecture with 7
@@ -634,57 +642,57 @@ const BotSettings: React.FC<BotSettingsProps> = ({
             </div>
 
             {/* Core Cognitive Functions */}
-            <div className='cognitive-function-group'>
+            <div className="cognitive-function-group">
               <h5>Core Cognitive Functions</h5>
 
               {[
                 CognitiveFunctionType.COGNITIVE_CORE,
                 CognitiveFunctionType.AFFECTIVE_CORE,
                 CognitiveFunctionType.RELEVANCE_CORE,
-              ].map(funcType => (
-                <div key={funcType} className='cognitive-function-item'>
-                  <div className='cognitive-function-header'>
+              ].map((funcType) => (
+                <div key={funcType} className="cognitive-function-item">
+                  <div className="cognitive-function-header">
                     <h6>{getFunctionName(funcType)}</h6>
-                    <div className='cognitive-function-description'>
+                    <div className="cognitive-function-description">
                       {getFunctionDescription(funcType)}
                     </div>
                   </div>
 
-                  <div className='cognitive-function-inputs'>
-                    <div className='input-group'>
+                  <div className="cognitive-function-inputs">
+                    <div className="input-group">
                       <label>API Key:</label>
                       <input
-                        type='password'
-                        value={settings.cognitiveKeys[funcType]?.apiKey || ''}
-                        onChange={e =>
+                        type="password"
+                        value={settings.cognitiveKeys[funcType]?.apiKey || ""}
+                        onChange={(e) =>
                           handleCognitiveKeyChange(
                             funcType,
-                            'apiKey',
-                            e.target.value
+                            "apiKey",
+                            e.target.value,
                           )
                         }
                         placeholder={`Enter API key for ${getFunctionName(
-                          funcType
+                          funcType,
                         )}`}
                         disabled={!settings.enabled}
                       />
                     </div>
 
-                    <div className='input-group'>
+                    <div className="input-group">
                       <label>API Endpoint (optional):</label>
                       <input
-                        type='text'
+                        type="text"
                         value={
-                          settings.cognitiveKeys[funcType]?.apiEndpoint || ''
+                          settings.cognitiveKeys[funcType]?.apiEndpoint || ""
                         }
-                        onChange={e =>
+                        onChange={(e) =>
                           handleCognitiveKeyChange(
                             funcType,
-                            'apiEndpoint',
-                            e.target.value
+                            "apiEndpoint",
+                            e.target.value,
                           )
                         }
-                        placeholder='Custom endpoint URL'
+                        placeholder="Custom endpoint URL"
                         disabled={!settings.enabled}
                       />
                     </div>
@@ -694,57 +702,57 @@ const BotSettings: React.FC<BotSettingsProps> = ({
             </div>
 
             {/* Memory Functions */}
-            <div className='cognitive-function-group'>
+            <div className="cognitive-function-group">
               <h5>Memory Functions</h5>
 
               {[
                 CognitiveFunctionType.SEMANTIC_MEMORY,
                 CognitiveFunctionType.EPISODIC_MEMORY,
                 CognitiveFunctionType.PROCEDURAL_MEMORY,
-              ].map(funcType => (
-                <div key={funcType} className='cognitive-function-item'>
-                  <div className='cognitive-function-header'>
+              ].map((funcType) => (
+                <div key={funcType} className="cognitive-function-item">
+                  <div className="cognitive-function-header">
                     <h6>{getFunctionName(funcType)}</h6>
-                    <div className='cognitive-function-description'>
+                    <div className="cognitive-function-description">
                       {getFunctionDescription(funcType)}
                     </div>
                   </div>
 
-                  <div className='cognitive-function-inputs'>
-                    <div className='input-group'>
+                  <div className="cognitive-function-inputs">
+                    <div className="input-group">
                       <label>API Key:</label>
                       <input
-                        type='password'
-                        value={settings.cognitiveKeys[funcType]?.apiKey || ''}
-                        onChange={e =>
+                        type="password"
+                        value={settings.cognitiveKeys[funcType]?.apiKey || ""}
+                        onChange={(e) =>
                           handleCognitiveKeyChange(
                             funcType,
-                            'apiKey',
-                            e.target.value
+                            "apiKey",
+                            e.target.value,
                           )
                         }
                         placeholder={`Enter API key for ${getFunctionName(
-                          funcType
+                          funcType,
                         )}`}
                         disabled={!settings.enabled}
                       />
                     </div>
 
-                    <div className='input-group'>
+                    <div className="input-group">
                       <label>API Endpoint (optional):</label>
                       <input
-                        type='text'
+                        type="text"
                         value={
-                          settings.cognitiveKeys[funcType]?.apiEndpoint || ''
+                          settings.cognitiveKeys[funcType]?.apiEndpoint || ""
                         }
-                        onChange={e =>
+                        onChange={(e) =>
                           handleCognitiveKeyChange(
                             funcType,
-                            'apiEndpoint',
-                            e.target.value
+                            "apiEndpoint",
+                            e.target.value,
                           )
                         }
-                        placeholder='Custom endpoint URL'
+                        placeholder="Custom endpoint URL"
                         disabled={!settings.enabled}
                       />
                     </div>
@@ -754,62 +762,62 @@ const BotSettings: React.FC<BotSettingsProps> = ({
             </div>
 
             {/* Content Evaluation */}
-            <div className='cognitive-function-group'>
+            <div className="cognitive-function-group">
               <h5>Content Evaluation</h5>
 
-              <div className='cognitive-function-item'>
-                <div className='cognitive-function-header'>
+              <div className="cognitive-function-item">
+                <div className="cognitive-function-header">
                   <h6>
                     {getFunctionName(CognitiveFunctionType.CONTENT_EVALUATION)}
                   </h6>
-                  <div className='cognitive-function-description'>
+                  <div className="cognitive-function-description">
                     {getFunctionDescription(
-                      CognitiveFunctionType.CONTENT_EVALUATION
+                      CognitiveFunctionType.CONTENT_EVALUATION,
                     )}
                   </div>
                 </div>
 
-                <div className='cognitive-function-inputs'>
-                  <div className='input-group'>
+                <div className="cognitive-function-inputs">
+                  <div className="input-group">
                     <label>API Key:</label>
                     <input
-                      type='password'
+                      type="password"
                       value={
                         settings.cognitiveKeys[
                           CognitiveFunctionType.CONTENT_EVALUATION
-                        ]?.apiKey || ''
+                        ]?.apiKey || ""
                       }
-                      onChange={e =>
+                      onChange={(e) =>
                         handleCognitiveKeyChange(
                           CognitiveFunctionType.CONTENT_EVALUATION,
-                          'apiKey',
-                          e.target.value
+                          "apiKey",
+                          e.target.value,
                         )
                       }
                       placeholder={`Enter API key for ${getFunctionName(
-                        CognitiveFunctionType.CONTENT_EVALUATION
+                        CognitiveFunctionType.CONTENT_EVALUATION,
                       )}`}
                       disabled={!settings.enabled}
                     />
                   </div>
 
-                  <div className='input-group'>
+                  <div className="input-group">
                     <label>API Endpoint (optional):</label>
                     <input
-                      type='text'
+                      type="text"
                       value={
                         settings.cognitiveKeys[
                           CognitiveFunctionType.CONTENT_EVALUATION
-                        ]?.apiEndpoint || ''
+                        ]?.apiEndpoint || ""
                       }
-                      onChange={e =>
+                      onChange={(e) =>
                         handleCognitiveKeyChange(
                           CognitiveFunctionType.CONTENT_EVALUATION,
-                          'apiEndpoint',
-                          e.target.value
+                          "apiEndpoint",
+                          e.target.value,
                         )
                       }
-                      placeholder='Custom endpoint URL'
+                      placeholder="Custom endpoint URL"
                       disabled={!settings.enabled}
                     />
                   </div>
@@ -820,7 +828,7 @@ const BotSettings: React.FC<BotSettingsProps> = ({
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default BotSettings
+export default BotSettings;

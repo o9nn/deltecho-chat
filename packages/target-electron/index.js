@@ -1,1 +1,1 @@
-import './bundle_out/index.js'
+import "./bundle_out/index.js";

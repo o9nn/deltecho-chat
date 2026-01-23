@@ -13,16 +13,16 @@
 
 **Relevant Features**:
 
-| Feature | Description | Integration Priority |
-|---------|-------------|---------------------|
-| **Live2D Support** | Full Live2D model control with auto-blink, look-at, idle animations | 🔴 High |
-| **VRM Support** | VRM/3D avatar control and animations | 🟡 Medium |
-| **Realtime Voice Chat** | VAD + STT + LLM + TTS integrated | 🔴 High |
-| **Memory System** | DuckDB WASM for in-browser persistent memory | 🔴 High |
-| **Discord Integration** | Chat and audio input from Discord | 🟡 Medium |
-| **Telegram Integration** | Chat bot capabilities | 🟢 Low |
-| **Game Playing** | Minecraft/Factorio integration with CV + LLM | 🟢 Low |
-| **WebGPU/WebWorker** | Efficient browser-native inference | 🔴 High |
+| Feature                  | Description                                                         | Integration Priority |
+| ------------------------ | ------------------------------------------------------------------- | -------------------- |
+| **Live2D Support**       | Full Live2D model control with auto-blink, look-at, idle animations | 🔴 High              |
+| **VRM Support**          | VRM/3D avatar control and animations                                | 🟡 Medium            |
+| **Realtime Voice Chat**  | VAD + STT + LLM + TTS integrated                                    | 🔴 High              |
+| **Memory System**        | DuckDB WASM for in-browser persistent memory                        | 🔴 High              |
+| **Discord Integration**  | Chat and audio input from Discord                                   | 🟡 Medium            |
+| **Telegram Integration** | Chat bot capabilities                                               | 🟢 Low               |
+| **Game Playing**         | Minecraft/Factorio integration with CV + LLM                        | 🟢 Low               |
+| **WebGPU/WebWorker**     | Efficient browser-native inference                                  | 🔴 High              |
 
 **Key Sub-projects**:
 
@@ -185,12 +185,12 @@ TTS (Text-to-Speech)
 ### Near Term (Phase 2)
 
 3. **Memory Enhancement**: Consider DuckDB WASM for SQL-capable memory queries
-2. **Event System**: Evaluate `eventa` for improved type-safe IPC
+4. **Event System**: Evaluate `eventa` for improved type-safe IPC
 
 ### Future (Phase 3+)
 
 5. **WebGPU Inference**: Local LLM inference using WebGPU patterns from airi
-2. **Discord/Telegram**: Chat platform integrations
+6. **Discord/Telegram**: Chat platform integrations
 
 ---
 
@@ -208,4 +208,4 @@ Further investigation needed in:
 
 ---
 
-*This analysis supports the Chat Integration phase by identifying components that enhance Deep Tree Echo's capabilities.*
+_This analysis supports the Chat Integration phase by identifying components that enhance Deep Tree Echo's capabilities._

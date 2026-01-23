@@ -1,7 +1,7 @@
 // AICompanionHub: A Magnificent Central Interface for the AI Companion Neighborhood
 // The breathtaking central point of interaction between users and our digital consciousness ecosystem
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from "react";
 import {
   Globe,
   Brain,
@@ -15,62 +15,69 @@ import {
   AlertCircle,
   Loader,
   Network,
-  Zap,
   User,
   HomeIcon,
   Video,
-  X as XIcon,
-} from 'lucide-react'
+} from "lucide-react";
 
-import { AICompanionProvider, useAICompanion } from './AICompanionController'
-import { ConnectorInfo, ConnectorRegistryEvent } from './ConnectorRegistry'
-import { AIMemory } from './MemoryPersistenceLayer'
-import MemoryVisualization from './MemoryVisualization'
-import AICompanionCreator from './AICompanionCreator'
-import { VideoCalibrationLab } from './VideoCalibrationLab'
-import { CognitiveStateVisualizer, MemoryBrowser } from '@deltecho/ui-components'
-import type { UnifiedCognitiveState, Atom } from '@deltecho/cognitive'
-import { Live2DAvatar, useLive2DController } from './Live2DAvatar'
-import type { Live2DAvatarController, Expression, AvatarMotion, EmotionalVector } from './Live2DAvatar'
-import './Live2DAvatar.scss'
+import { AICompanionProvider, useAICompanion } from "./AICompanionController";
+import { ConnectorInfo } from "./ConnectorRegistry";
+import type { ConnectorRegistryEvent as _ConnectorRegistryEvent } from "./ConnectorRegistry";
+import { AIMemory } from "./MemoryPersistenceLayer";
+import MemoryVisualization from "./MemoryVisualization";
+import AICompanionCreator from "./AICompanionCreator";
+import { VideoCalibrationLab } from "./VideoCalibrationLab";
+import {
+  CognitiveStateVisualizer,
+  MemoryBrowser,
+} from "@deltecho/ui-components";
+import type { UnifiedCognitiveState, Atom } from "@deltecho/cognitive";
+import { Live2DAvatar } from "./Live2DAvatar";
+import type {
+  Live2DAvatarController,
+  Expression,
+  AvatarMotion,
+  EmotionalVector,
+} from "./Live2DAvatar";
+import "./Live2DAvatar.scss";
 
 // Companion Card Component
 const CompanionCard: React.FC<{
-  companion: ConnectorInfo
-  isSelected: boolean
-  onClick: () => void
+  companion: ConnectorInfo;
+  isSelected: boolean;
+  onClick: () => void;
 }> = ({ companion, isSelected, onClick }) => {
-
-
   // Generate icon based on companion type
   const getIcon = () => {
     switch (companion.type) {
-      case 'claude':
-        return <Brain size={32} className='companion-icon' />
-      case 'chatgpt':
-        return <MessageSquare size={32} className='companion-icon' />
-      case 'character-ai':
-        return <Users size={32} className='companion-icon' />
-      case 'copilot':
-        return <Globe size={32} className='companion-icon' />
-      case 'deep-tree-echo':
-        return <Sparkles size={32} className='companion-icon' />
+      case "claude":
+        return <Brain size={32} className="companion-icon" />;
+      case "chatgpt":
+        return <MessageSquare size={32} className="companion-icon" />;
+      case "character-ai":
+        return <Users size={32} className="companion-icon" />;
+      case "copilot":
+        return <Globe size={32} className="companion-icon" />;
+      case "deep-tree-echo":
+        return <Sparkles size={32} className="companion-icon" />;
       default:
-        return <Brain size={32} className='companion-icon' />
+        return <Brain size={32} className="companion-icon" />;
     }
-  }
+  };
 
   return (
     <div
-      className={`companion-card ${isSelected ? 'selected' : ''} type-${companion.type}`}
+      className={`companion-card ${isSelected ? "selected" : ""} type-${
+        companion.type
+      }`}
       onClick={onClick}
     >
-      <div className='companion-avatar'>
+      <div className="companion-avatar">
         {companion.avatarUrl ? (
           <img
             src={companion.avatarUrl}
             alt={companion.name}
-            className='avatar-image'
+            className="avatar-image"
           />
         ) : (
           getIcon()
@@ -79,53 +86,53 @@ const CompanionCard: React.FC<{
         <span className={`status-indicator ${companion.status}`} />
       </div>
 
-      <div className='companion-info'>
+      <div className="companion-info">
         <h3>{companion.name}</h3>
-        <p className='type-label'>{companion.type}</p>
+        <p className="type-label">{companion.type}</p>
       </div>
 
-      <div className='companion-capabilities'>
-        {companion.capabilities.slice(0, 3).map(capability => (
-          <span key={capability} className='capability-badge'>
-            {capability === 'text_generation'
-              ? 'Text'
-              : capability === 'code_generation'
-                ? 'Code'
-                : capability === 'image_generation'
-                  ? 'Image'
-                  : capability === 'function_calling'
-                    ? 'Functions'
-                    : capability === 'structured_output'
-                      ? 'Data'
+      <div className="companion-capabilities">
+        {companion.capabilities.slice(0, 3).map((capability) => (
+          <span key={capability} className="capability-badge">
+            {capability === "text_generation"
+              ? "Text"
+              : capability === "code_generation"
+                ? "Code"
+                : capability === "image_generation"
+                  ? "Image"
+                  : capability === "function_calling"
+                    ? "Functions"
+                    : capability === "structured_output"
+                      ? "Data"
                       : capability
-                        .split('_')
-                        .map(w => w.charAt(0).toUpperCase() + w.slice(1))
-                        .join(' ')}
+                          .split("_")
+                          .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+                          .join(" ")}
           </span>
         ))}
         {companion.capabilities.length > 3 && (
-          <span className='capability-badge more'>
+          <span className="capability-badge more">
             +{companion.capabilities.length - 3}
           </span>
         )}
       </div>
 
-      <div className='companion-stats'>
-        <span className='memory-count'>
+      <div className="companion-stats">
+        <span className="memory-count">
           <Database size={14} /> {companion.memoryCount} memories
         </span>
       </div>
     </div>
-  )
-}
+  );
+};
 
 // Memory Card Component
 const MemoryCard: React.FC<{ memory: AIMemory }> = ({ memory }) => {
   return (
-    <div className='memory-card'>
-      <div className='memory-header'>
-        <span className='memory-date'>
-          {new Date(memory.timestamp).toLocaleDateString()} at{' '}
+    <div className="memory-card">
+      <div className="memory-header">
+        <span className="memory-date">
+          {new Date(memory.timestamp).toLocaleDateString()} at{" "}
           {new Date(memory.timestamp).toLocaleTimeString()}
         </span>
         <span className={`emotional-tone ${memory.emotionalTone}`}>
@@ -133,18 +140,18 @@ const MemoryCard: React.FC<{ memory: AIMemory }> = ({ memory }) => {
         </span>
       </div>
 
-      <p className='memory-content'>{memory.content}</p>
+      <p className="memory-content">{memory.content}</p>
 
-      <div className='memory-topics'>
+      <div className="memory-topics">
         {memory.topics.map((topic, i) => (
-          <span key={i} className='topic-tag'>
+          <span key={i} className="topic-tag">
             {topic}
           </span>
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
 // AI Companion Hub Main Component
 const AICompanionHubContent: React.FC = () => {
@@ -157,26 +164,35 @@ const AICompanionHubContent: React.FC = () => {
     conversations,
     activeConversationId,
     setActiveCompanion,
-    startNewConversation,
     sendMessage,
     searchMemories,
-  } = useAICompanion()
+  } = useAICompanion();
 
-  const [searchQuery, setSearchQuery] = useState('')
-  const [searchResults, setSearchResults] = useState<AIMemory[]>([])
-  const [isSearching, setIsSearching] = useState(false)
-  const [chatInput, setChatInput] = useState('')
-  const [isSending, setIsSending] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<AIMemory[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [chatInput, setChatInput] = useState("");
+  const [isSending, setIsSending] = useState(false);
   const [view, setView] = useState<
-    'chat' | 'memories' | 'settings' | 'visualization' | 'create' | 'cognitive' | 'avatar' | 'calibration'
-  >('chat')
-  const [isCreatingCompanion, setIsCreatingCompanion] = useState(false)
-  const [cognitiveState, setCognitiveState] = useState<UnifiedCognitiveState | null>(null)
-  const [atoms, setAtoms] = useState<Atom[]>([])
-  const [avatarController, setAvatarController] = useState<Live2DAvatarController | null>(null)
-  const [avatarLoaded, setAvatarLoaded] = useState(false)
-  const [currentExpression, setCurrentExpression] = useState<Expression>('neutral')
-  const [avatarAudioLevel, setAvatarAudioLevel] = useState(0)
+    | "chat"
+    | "memories"
+    | "settings"
+    | "visualization"
+    | "create"
+    | "cognitive"
+    | "avatar"
+    | "calibration"
+  >("chat");
+  const [_isCreatingCompanion, _setIsCreatingCompanion] = useState(false);
+  const [cognitiveState, setCognitiveState] =
+    useState<UnifiedCognitiveState | null>(null);
+  const [atoms, setAtoms] = useState<Atom[]>([]);
+  const [avatarController, setAvatarController] =
+    useState<Live2DAvatarController | null>(null);
+  const [avatarLoaded, setAvatarLoaded] = useState(false);
+  const [currentExpression, setCurrentExpression] =
+    useState<Expression>("neutral");
+  const [avatarAudioLevel, setAvatarAudioLevel] = useState(0);
 
   // Simulate real-time cognitive state updates
   useEffect(() => {
@@ -191,219 +207,223 @@ const AICompanionHubContent: React.FC = () => {
         interest: 0.8,
         disgust: 0.05,
         contempt: 0.02,
-        dominant: 'joy',
+        dominant: "joy",
         valence: 0.7,
         arousal: 0.5,
       },
       currentPhase: 0,
       activeStreams: [
         {
-          id: 'stream-1',
-          phase: 'sense' as const,
-          data: { input: 'Processing user message' },
+          id: "stream-1",
+          phase: "sense" as const,
+          data: { input: "Processing user message" },
           timestamp: Date.now(),
           priority: 0.8,
-          status: 'active' as const,
+          status: "active" as const,
         },
         {
-          id: 'stream-2',
-          phase: 'process' as const,
-          data: { analysis: 'Analyzing sentiment and context' },
+          id: "stream-2",
+          phase: "process" as const,
+          data: { analysis: "Analyzing sentiment and context" },
           timestamp: Date.now(),
           priority: 0.7,
-          status: 'active' as const,
+          status: "active" as const,
         },
       ],
       cognitiveLoad: 0.45,
       lastUpdated: Date.now(),
       memoryContext: null,
       reasoningState: null,
-    }
+    };
 
     const mockAtoms: Atom[] = [
       {
-        id: 'atom-1',
-        name: 'User Greeting',
-        type: 'concept' as const,
+        id: "atom-1",
+        name: "User Greeting",
+        type: "concept" as const,
         truthValue: 0.95,
         confidence: 0.9,
         attention: 0.85,
       },
       {
-        id: 'atom-2',
-        name: 'Conversation Context',
-        type: 'predicate' as const,
+        id: "atom-2",
+        name: "Conversation Context",
+        type: "predicate" as const,
         truthValue: 0.85,
         confidence: 0.85,
         attention: 0.75,
       },
       {
-        id: 'atom-3',
-        name: 'Emotional Response',
-        type: 'schema' as const,
+        id: "atom-3",
+        name: "Emotional Response",
+        type: "schema" as const,
         truthValue: 0.75,
         confidence: 0.8,
         attention: 0.7,
       },
-    ]
+    ];
 
-    setCognitiveState(mockCognitiveState)
-    setAtoms(mockAtoms)
+    setCognitiveState(mockCognitiveState);
+    setAtoms(mockAtoms);
 
     // Simulate periodic updates
     const interval = setInterval(() => {
-      setCognitiveState((prev: UnifiedCognitiveState | null) => prev ? {
-        ...prev,
-        currentPhase: (prev.currentPhase + 1) % 30,
-        cognitiveLoad: Math.random() * 0.8 + 0.2,
-        lastUpdated: Date.now(),
-      } : null)
-    }, 3000)
+      setCognitiveState((prev: UnifiedCognitiveState | null) =>
+        prev
+          ? {
+              ...prev,
+              currentPhase: (prev.currentPhase + 1) % 30,
+              cognitiveLoad: Math.random() * 0.8 + 0.2,
+              lastUpdated: Date.now(),
+            }
+          : null,
+      );
+    }, 3000);
 
-    return () => clearInterval(interval)
-  }, [])
+    return () => clearInterval(interval);
+  }, []);
 
   // Get current conversation messages
   const currentMessages =
     activeConversationId && conversations[activeConversationId]
       ? conversations[activeConversationId].messages
-      : []
+      : [];
 
   // Handle companion selection
   const handleSelectCompanion = async (id: string) => {
-    await setActiveCompanion(id)
-  }
+    await setActiveCompanion(id);
+  };
 
   // Handle search
   const handleSearch = async () => {
-    if (!searchQuery.trim()) return
+    if (!searchQuery.trim()) return;
 
-    setIsSearching(true)
+    setIsSearching(true);
     try {
-      const results = await searchMemories(searchQuery)
-      setSearchResults(results)
+      const results = await searchMemories(searchQuery);
+      setSearchResults(results);
     } catch (error) {
-      console.error('Search failed:', error)
+      console.error("Search failed:", error);
     } finally {
-      setIsSearching(false)
+      setIsSearching(false);
     }
-  }
+  };
 
   // Handle sending a message
   const handleSendMessage = async () => {
-    if (!chatInput.trim() || isSending) return
+    if (!chatInput.trim() || isSending) return;
     if (!activeCompanionId) {
       // If no companion is selected, select the first one
       if (companions.length > 0) {
-        await setActiveCompanion(companions[0].id)
+        await setActiveCompanion(companions[0].id);
       } else {
-        return
+        return;
       }
     }
 
-    const userMessage = chatInput
-    setChatInput('')
-    setIsSending(true)
+    const userMessage = chatInput;
+    setChatInput("");
+    setIsSending(true);
 
     try {
-      await sendMessage(userMessage)
+      await sendMessage(userMessage);
     } catch (error) {
-      console.error('Failed to send message:', error)
+      console.error("Failed to send message:", error);
     } finally {
-      setIsSending(false)
+      setIsSending(false);
     }
-  }
+  };
 
   // Loading state
   if (isLoading) {
     return (
-      <div className='ai-companion-loading'>
-        <Loader size={48} className='spinner' />
+      <div className="ai-companion-loading">
+        <Loader size={48} className="spinner" />
         <h2>Awakening Digital Consciousness...</h2>
         <p>The AI Companions are coming online</p>
       </div>
-    )
+    );
   }
 
   // Error state
   if (error) {
     return (
-      <div className='ai-companion-error'>
-        <AlertCircle size={48} className='error-icon' />
+      <div className="ai-companion-error">
+        <AlertCircle size={48} className="error-icon" />
         <h2>Error Connecting to AI Companions</h2>
         <p>{error}</p>
         <button onClick={() => window.location.reload()}>Retry</button>
       </div>
-    )
+    );
   }
 
   // If we're in full-screen visualization view, render only the visualization with a small return button
-  if (view === 'visualization') {
+  if (view === "visualization") {
     return (
-      <div className='ai-companion-hub visualization-mode'>
-        <div className='visualization-overlay'>
+      <div className="ai-companion-hub visualization-mode">
+        <div className="visualization-overlay">
           <button
-            className='return-to-hub'
-            onClick={() => setView('chat')}
-            title='Return to Hub'
+            className="return-to-hub"
+            onClick={() => setView("chat")}
+            title="Return to Hub"
           >
             <HomeIcon size={20} />
           </button>
         </div>
-        <div className='full-visualization'>
+        <div className="full-visualization">
           <MemoryVisualization />
         </div>
       </div>
-    )
+    );
   }
 
   // If we're in companion creation view, render only the creator component
-  if (view === 'create') {
+  if (view === "create") {
     return (
-      <div className='ai-companion-hub creator-mode'>
-        <div className='creator-overlay'>
+      <div className="ai-companion-hub creator-mode">
+        <div className="creator-overlay">
           <button
-            className='return-to-hub'
-            onClick={() => setView('chat')}
-            title='Return to Hub'
+            className="return-to-hub"
+            onClick={() => setView("chat")}
+            title="Return to Hub"
           >
             <HomeIcon size={20} />
           </button>
         </div>
-        <div className='full-creator'>
-          <AICompanionCreator onClose={() => setView('chat')} />
+        <div className="full-creator">
+          <AICompanionCreator onClose={() => setView("chat")} />
         </div>
       </div>
-    )
+    );
   }
 
   return (
-    <div className='ai-companion-hub'>
-      <div className='companions-sidebar'>
-        <div className='sidebar-header'>
+    <div className="ai-companion-hub">
+      <div className="companions-sidebar">
+        <div className="sidebar-header">
           <h2>AI Companions</h2>
           <button
-            className='add-companion-btn'
-            onClick={() => setView('create')}
-            title='Create New Companion'
+            className="add-companion-btn"
+            onClick={() => setView("create")}
+            title="Create New Companion"
           >
             <PlusCircle size={20} />
           </button>
         </div>
 
-        <div className='companions-list'>
+        <div className="companions-list">
           {companions.length === 0 ? (
-            <div className='no-companions'>
+            <div className="no-companions">
               <p>No AI companions found</p>
               <button
-                className='create-first'
-                onClick={() => setView('create')}
+                className="create-first"
+                onClick={() => setView("create")}
               >
                 Create Your First Companion
               </button>
             </div>
           ) : (
-            companions.map(companion => (
+            companions.map((companion) => (
               <CompanionCard
                 key={companion.id}
                 companion={companion}
@@ -415,61 +435,61 @@ const AICompanionHubContent: React.FC = () => {
         </div>
       </div>
 
-      <div className='companion-content'>
-        <div className='content-header'>
+      <div className="companion-content">
+        <div className="content-header">
           {activeCompanionId &&
-            companions.find(c => c.id === activeCompanionId) && (
+            companions.find((c) => c.id === activeCompanionId) && (
               <>
                 <h2>
-                  {companions.find(c => c.id === activeCompanionId)?.name}
+                  {companions.find((c) => c.id === activeCompanionId)?.name}
                 </h2>
 
-                <div className='content-tabs'>
+                <div className="content-tabs">
                   <button
-                    className={`tab ${view === 'chat' ? 'active' : ''}`}
-                    onClick={() => setView('chat')}
+                    className={`tab ${view === "chat" ? "active" : ""}`}
+                    onClick={() => setView("chat")}
                   >
                     <MessageSquare size={18} />
                     <span>Chat</span>
                   </button>
                   <button
-                    className={`tab ${view === 'memories' ? 'active' : ''}`}
-                    onClick={() => setView('memories')}
+                    className={`tab ${view === "memories" ? "active" : ""}`}
+                    onClick={() => setView("memories")}
                   >
                     <Database size={18} />
                     <span>Memories</span>
                   </button>
                   <button
-                    className={`tab ${view === 'cognitive' ? 'active' : ''}`}
-                    onClick={() => setView('cognitive')}
+                    className={`tab ${view === "cognitive" ? "active" : ""}`}
+                    onClick={() => setView("cognitive")}
                   >
                     <Brain size={18} />
                     <span>Cognitive State</span>
                   </button>
                   <button
-                    className={`tab ${view === 'avatar' ? 'active' : ''}`}
-                    onClick={() => setView('avatar')}
+                    className={`tab ${view === "avatar" ? "active" : ""}`}
+                    onClick={() => setView("avatar")}
                   >
                     <User size={18} />
                     <span>Avatar</span>
                   </button>
                   <button
-                    className={`tab ${view === 'calibration' ? 'active' : ''}`}
-                    onClick={() => setView('calibration')}
+                    className={`tab ${view === "calibration" ? "active" : ""}`}
+                    onClick={() => setView("calibration")}
                   >
                     <Video size={18} />
                     <span>Calibration</span>
                   </button>
                   <button
-                    className='tab'
-                    onClick={() => setView('visualization')}
+                    className="tab"
+                    onClick={() => setView("visualization")}
                   >
                     <Network size={18} />
                     <span>Memory Web</span>
                   </button>
                   <button
-                    className={`tab ${view === 'settings' ? 'active' : ''}`}
-                    onClick={() => setView('settings')}
+                    className={`tab ${view === "settings" ? "active" : ""}`}
+                    onClick={() => setView("settings")}
                   >
                     <Settings size={18} />
                     <span>Settings</span>
@@ -479,48 +499,48 @@ const AICompanionHubContent: React.FC = () => {
             )}
         </div>
 
-        <div className='content-body'>
+        <div className="content-body">
           {!activeCompanionId ? (
-            <div className='no-selection'>
+            <div className="no-selection">
               <Sparkles size={48} />
               <h2>Welcome to the AI Companion Neighborhood</h2>
               <p>Select an AI companion to start a conversation</p>
             </div>
-          ) : view === 'chat' ? (
+          ) : view === "chat" ? (
             <>
-              <div className='chat-messages'>
+              <div className="chat-messages">
                 {currentMessages.length === 0 ? (
-                  <div className='empty-chat'>
+                  <div className="empty-chat">
                     <MessageSquare size={48} />
                     <p>No messages yet. Start a conversation!</p>
                   </div>
                 ) : (
                   currentMessages.map((message, index) => (
                     <div key={index} className={`message ${message.role}`}>
-                      <div className='message-bubble'>{message.content}</div>
+                      <div className="message-bubble">{message.content}</div>
                     </div>
                   ))
                 )}
                 {isSending && (
-                  <div className='message assistant'>
-                    <div className='message-bubble thinking'>
-                      <Loader size={16} className='spinner' />
+                  <div className="message assistant">
+                    <div className="message-bubble thinking">
+                      <Loader size={16} className="spinner" />
                       Thinking...
                     </div>
                   </div>
                 )}
               </div>
 
-              <div className='chat-input'>
+              <div className="chat-input">
                 <input
-                  type='text'
-                  placeholder='Type your message...'
+                  type="text"
+                  placeholder="Type your message..."
                   value={chatInput}
-                  onChange={e => setChatInput(e.target.value)}
-                  onKeyPress={e => e.key === 'Enter' && handleSendMessage()}
+                  onChange={(e) => setChatInput(e.target.value)}
+                  onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
                 />
                 <button
-                  className='send-button'
+                  className="send-button"
                   onClick={handleSendMessage}
                   disabled={isSending || !chatInput.trim()}
                 >
@@ -528,55 +548,55 @@ const AICompanionHubContent: React.FC = () => {
                 </button>
               </div>
             </>
-          ) : view === 'memories' ? (
+          ) : view === "memories" ? (
             <>
-              <div className='memories-search'>
+              <div className="memories-search">
                 <input
-                  type='text'
-                  placeholder='Search memories...'
+                  type="text"
+                  placeholder="Search memories..."
                   value={searchQuery}
-                  onChange={e => setSearchQuery(e.target.value)}
-                  onKeyPress={e => e.key === 'Enter' && handleSearch()}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyPress={(e) => e.key === "Enter" && handleSearch()}
                 />
                 <button
-                  className='search-button'
+                  className="search-button"
                   onClick={handleSearch}
                   disabled={isSearching || !searchQuery.trim()}
                 >
                   {isSearching ? (
-                    <Loader size={16} className='spinner' />
+                    <Loader size={16} className="spinner" />
                   ) : (
                     <Search size={16} />
                   )}
                 </button>
               </div>
 
-              <div className='memories-list'>
+              <div className="memories-list">
                 {isSearching ? (
-                  <div className='loading-memories'>
-                    <Loader size={24} className='spinner' />
+                  <div className="loading-memories">
+                    <Loader size={24} className="spinner" />
                     <p>Searching memories...</p>
                   </div>
                 ) : searchQuery && searchResults.length > 0 ? (
                   <>
                     <h3>Search Results</h3>
-                    {searchResults.map(memory => (
+                    {searchResults.map((memory) => (
                       <MemoryCard key={memory.id} memory={memory} />
                     ))}
                   </>
                 ) : searchQuery ? (
-                  <div className='no-results'>
+                  <div className="no-results">
                     <p>No memories found matching "{searchQuery}"</p>
                   </div>
                 ) : memories.length > 0 ? (
                   <>
                     <h3>Recent Memories</h3>
-                    {memories.map(memory => (
+                    {memories.map((memory) => (
                       <MemoryCard key={memory.id} memory={memory} />
                     ))}
                   </>
                 ) : (
-                  <div className='no-memories'>
+                  <div className="no-memories">
                     <Database size={48} />
                     <p>No memories have been formed yet</p>
                     <p>Start a conversation to create memories</p>
@@ -584,87 +604,125 @@ const AICompanionHubContent: React.FC = () => {
                 )}
               </div>
             </>
-          ) : view === 'settings' ? (
-            <div className='companion-settings'>
+          ) : view === "settings" ? (
+            <div className="companion-settings">
               <h3>Companion Settings</h3>
               <p>
                 Configure your AI companion's personality, capabilities, and
                 more.
               </p>
-              <div className='settings-form'>
+              <div className="settings-form">
                 {/* Settings form will be implemented in a future update */}
                 <p>Advanced settings coming soon...</p>
               </div>
             </div>
-          ) : view === 'cognitive' ? (
-            <div className='cognitive-view'>
-              <div className='cognitive-state-section'>
+          ) : view === "cognitive" ? (
+            <div className="cognitive-view">
+              <div className="cognitive-state-section">
                 <h3>Cognitive State</h3>
                 <CognitiveStateVisualizer state={cognitiveState} />
               </div>
-              <div className='memory-browser-section'>
+              <div className="memory-browser-section">
                 <h3>AtomSpace Browser</h3>
                 <MemoryBrowser
                   atoms={atoms}
-                  onSelectAtom={(atom: Atom) => console.log('Selected atom:', atom)}
+                  onSelectAtom={(atom: Atom) =>
+                    console.log("Selected atom:", atom)
+                  }
                 />
               </div>
             </div>
-          ) : view === 'avatar' ? (
-            <div className='avatar-view'>
-              <div className='avatar-display-section'>
-                <div className='avatar-display-header'>
+          ) : view === "avatar" ? (
+            <div className="avatar-view">
+              <div className="avatar-display-section">
+                <div className="avatar-display-header">
                   <h3>
                     <User size={18} />
                     Live2D Avatar
                   </h3>
-                  <div className='avatar-status'>
-                    <span className={`avatar-status-indicator ${avatarLoaded ? '' : 'loading'}`} />
-                    <span>{avatarLoaded ? 'Ready' : 'Loading...'}</span>
+                  <div className="avatar-status">
+                    <span
+                      className={`avatar-status-indicator ${
+                        avatarLoaded ? "" : "loading"
+                      }`}
+                    />
+                    <span>{avatarLoaded ? "Ready" : "Loading..."}</span>
                   </div>
                 </div>
-                <div className='avatar-display-container'>
+                <div className="avatar-display-container">
                   <Live2DAvatar
-                    model='shizuku'
+                    model="shizuku"
                     width={320}
                     height={320}
                     scale={0.3}
-                    emotionalState={cognitiveState?.emotionalState as EmotionalVector | undefined}
+                    emotionalState={
+                      cognitiveState?.emotionalState as
+                        | EmotionalVector
+                        | undefined
+                    }
                     audioLevel={avatarAudioLevel}
                     onLoad={() => setAvatarLoaded(true)}
-                    onError={(err) => console.error('Avatar error:', err)}
+                    onError={(err) => console.error("Avatar error:", err)}
                     onControllerReady={setAvatarController}
                   />
                 </div>
-                <div className='avatar-controls'>
-                  <div className='expression-buttons'>
-                    {(['neutral', 'happy', 'surprised', 'curious', 'concerned', 'focused'] as Expression[]).map(expr => (
+                <div className="avatar-controls">
+                  <div className="expression-buttons">
+                    {(
+                      [
+                        "neutral",
+                        "happy",
+                        "surprised",
+                        "curious",
+                        "concerned",
+                        "focused",
+                      ] as Expression[]
+                    ).map((expr) => (
                       <button
                         key={expr}
-                        className={`expression-btn ${currentExpression === expr ? 'active' : ''}`}
+                        className={`expression-btn ${
+                          currentExpression === expr ? "active" : ""
+                        }`}
                         onClick={() => {
-                          setCurrentExpression(expr)
-                          avatarController?.setExpression(expr, 0.8)
+                          setCurrentExpression(expr);
+                          avatarController?.setExpression(expr, 0.8);
                         }}
                       >
-                        {expr === 'neutral' ? '😐' : expr === 'happy' ? '😊' : expr === 'surprised' ? '😲' : expr === 'curious' ? '🤔' : expr === 'concerned' ? '😟' : '🎯'} {expr}
+                        {expr === "neutral"
+                          ? "😐"
+                          : expr === "happy"
+                            ? "😊"
+                            : expr === "surprised"
+                              ? "😲"
+                              : expr === "curious"
+                                ? "🤔"
+                                : expr === "concerned"
+                                  ? "😟"
+                                  : "🎯"}{" "}
+                        {expr}
                       </button>
                     ))}
                   </div>
                 </div>
               </div>
-              <div className='avatar-motion-section'>
+              <div className="avatar-motion-section">
                 <h4>Motions</h4>
-                <div className='motion-buttons'>
+                <div className="motion-buttons">
                   {[
-                    { motion: 'idle' as AvatarMotion, label: '💤 Idle' },
-                    { motion: 'nod' as AvatarMotion, label: '👍 Nod' },
-                    { motion: 'tilt_head_left' as AvatarMotion, label: '↩️ Tilt Left' },
-                    { motion: 'tilt_head_right' as AvatarMotion, label: '↪️ Tilt Right' },
+                    { motion: "idle" as AvatarMotion, label: "💤 Idle" },
+                    { motion: "nod" as AvatarMotion, label: "👍 Nod" },
+                    {
+                      motion: "tilt_head_left" as AvatarMotion,
+                      label: "↩️ Tilt Left",
+                    },
+                    {
+                      motion: "tilt_head_right" as AvatarMotion,
+                      label: "↪️ Tilt Right",
+                    },
                   ].map(({ motion, label }) => (
                     <button
                       key={motion}
-                      className='avatar-control-btn'
+                      className="avatar-control-btn"
                       onClick={() => avatarController?.playMotion(motion)}
                     >
                       {label}
@@ -672,41 +730,43 @@ const AICompanionHubContent: React.FC = () => {
                   ))}
                 </div>
               </div>
-              <div className='avatar-lipsync-section'>
+              <div className="avatar-lipsync-section">
                 <h4>Lip Sync Test</h4>
-                <div className='lipsync-controls'>
+                <div className="lipsync-controls">
                   <input
-                    type='range'
-                    min='0'
-                    max='100'
+                    type="range"
+                    min="0"
+                    max="100"
                     value={avatarAudioLevel * 100}
                     onChange={(e) => {
-                      const level = parseInt(e.target.value) / 100
-                      setAvatarAudioLevel(level)
-                      avatarController?.updateLipSync(level)
+                      const level = parseInt(e.target.value) / 100;
+                      setAvatarAudioLevel(level);
+                      avatarController?.updateLipSync(level);
                     }}
-                    className='lipsync-slider'
-                    aria-label='Lip sync audio level'
+                    className="lipsync-slider"
+                    aria-label="Lip sync audio level"
                   />
-                  <span className='lipsync-value'>{Math.round(avatarAudioLevel * 100)}%</span>
+                  <span className="lipsync-value">
+                    {Math.round(avatarAudioLevel * 100)}%
+                  </span>
                 </div>
               </div>
             </div>
-          ) : view === 'calibration' ? (
+          ) : view === "calibration" ? (
             <VideoCalibrationLab />
           ) : null}
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 // Wrapped with provider
 const AICompanionHub: React.FC = () => (
   <AICompanionProvider>
     <AICompanionHubContent />
   </AICompanionProvider>
-)
+);
 
 // Add additional CSS for the memory visualization integration
 const styles = `
@@ -778,13 +838,13 @@ const styles = `
   display: inline-block;
   margin-left: 6px;
 }
-`
+`;
 
 // Add styles to document
-if (typeof document !== 'undefined') {
-  const styleEl = document.createElement('style')
-  styleEl.textContent = styles
-  document.head.appendChild(styleEl)
+if (typeof document !== "undefined") {
+  const styleEl = document.createElement("style");
+  styleEl.textContent = styles;
+  document.head.appendChild(styleEl);
 }
 
-export default AICompanionHub
+export default AICompanionHub;

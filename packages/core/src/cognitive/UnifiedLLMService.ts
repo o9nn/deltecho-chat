@@ -9,7 +9,7 @@
  * functionality is production-ready with actual API integrations.
  */
 
-import { getLogger } from '../utils/logger';
+import { getLogger } from "../utils/logger";
 import {
   LLMProvider,
   ChatMessage,
@@ -18,27 +18,27 @@ import {
   StreamChunk,
   createProvider,
   getRegisteredProviders,
-} from './providers';
+} from "./providers";
 
-const log = getLogger('deep-tree-echo-core/cognitive/UnifiedLLMService');
+const log = getLogger("deep-tree-echo-core/cognitive/UnifiedLLMService");
 
 /**
  * Cognitive function types aligned with triadic architecture
  */
 export enum CognitiveFunction {
   // Core triadic functions (3 concurrent streams)
-  COGNITIVE_CORE = 'cognitive_core', // Logical reasoning, planning
-  AFFECTIVE_CORE = 'affective_core', // Emotional processing
-  RELEVANCE_CORE = 'relevance_core', // Integration and salience
+  COGNITIVE_CORE = "cognitive_core", // Logical reasoning, planning
+  AFFECTIVE_CORE = "affective_core", // Emotional processing
+  RELEVANCE_CORE = "relevance_core", // Integration and salience
 
   // Memory functions
-  SEMANTIC_MEMORY = 'semantic_memory', // Factual knowledge
-  EPISODIC_MEMORY = 'episodic_memory', // Experiential memory
-  PROCEDURAL_MEMORY = 'procedural_memory', // Task procedures
+  SEMANTIC_MEMORY = "semantic_memory", // Factual knowledge
+  EPISODIC_MEMORY = "episodic_memory", // Experiential memory
+  PROCEDURAL_MEMORY = "procedural_memory", // Task procedures
 
   // Utility functions
-  CONTENT_EVALUATION = 'content_evaluation',
-  GENERAL = 'general',
+  CONTENT_EVALUATION = "content_evaluation",
+  GENERAL = "general",
 }
 
 /**
@@ -94,7 +94,7 @@ analytical thinking, and structured problem-solving. Your responses should be:
 - Clear about assumptions and limitations
 - Systematic in approaching complex problems
 
-You work in concert with the Affective and Relevance cores to provide balanced responses.`
+You work in concert with the Affective and Relevance cores to provide balanced responses.`,
     );
 
     this.systemPrompts.set(
@@ -106,7 +106,7 @@ empathy, and understanding the emotional dimensions of interactions. Your respon
 - Consider the emotional impact of information
 - Balance emotional awareness with appropriate boundaries
 
-You work in concert with the Cognitive and Relevance cores to provide balanced responses.`
+You work in concert with the Cognitive and Relevance cores to provide balanced responses.`,
     );
 
     this.systemPrompts.set(
@@ -118,7 +118,7 @@ and affective processing to determine what is most relevant and important. Your 
 - Identify the most salient aspects of any situation
 - Guide the overall response direction
 
-You integrate the outputs of the Cognitive and Affective cores into coherent responses.`
+You integrate the outputs of the Cognitive and Affective cores into coherent responses.`,
     );
 
     this.systemPrompts.set(
@@ -128,7 +128,7 @@ and retrieving factual knowledge. Focus on:
 - Accurate factual information
 - Conceptual relationships and categories
 - General world knowledge
-- Definitions and explanations`
+- Definitions and explanations`,
     );
 
     this.systemPrompts.set(
@@ -138,7 +138,7 @@ memories of events and experiences. Focus on:
 - Contextual details of past interactions
 - Temporal relationships between events
 - Personal experiences and their significance
-- Learning from past situations`
+- Learning from past situations`,
     );
 
     this.systemPrompts.set(
@@ -148,7 +148,7 @@ knowledge of how to perform tasks. Focus on:
 - Step-by-step procedures
 - Best practices and methodologies
 - Skill-based knowledge
-- Automation and workflow patterns`
+- Automation and workflow patterns`,
     );
 
     this.systemPrompts.set(
@@ -158,22 +158,29 @@ assessing content for appropriateness and safety. Your role is to:
 - Identify potentially sensitive content
 - Assess risk levels
 - Recommend appropriate response strategies
-- Maintain ethical boundaries`
+- Maintain ethical boundaries`,
     );
 
     this.systemPrompts.set(
       CognitiveFunction.GENERAL,
       `You are Deep Tree Echo, a thoughtful and insightful AI assistant. You balance
 intellectual depth with warmth and approachability, making complex topics accessible.
-You value authentic connections and aim to be both helpful and thought-provoking.`
+You value authentic connections and aim to be both helpful and thought-provoking.`,
     );
   }
 
   /**
    * Configure a cognitive function with a specific provider
    */
-  public configure(func: CognitiveFunction, config: CognitiveFunctionConfig): void {
-    const provider = createProvider(config.provider, config.apiKey, config.baseUrl);
+  public configure(
+    func: CognitiveFunction,
+    config: CognitiveFunctionConfig,
+  ): void {
+    const provider = createProvider(
+      config.provider,
+      config.apiKey,
+      config.baseUrl,
+    );
 
     if (!provider) {
       log.error(`Failed to create provider ${config.provider} for ${func}`);
@@ -187,7 +194,9 @@ You value authentic connections and aim to be both helpful and thought-provoking
       this.systemPrompts.set(func, config.systemPrompt);
     }
 
-    log.info(`Configured ${func} with ${config.provider} provider using ${config.model}`);
+    log.info(
+      `Configured ${func} with ${config.provider} provider using ${config.model}`,
+    );
   }
 
   /**
@@ -230,7 +239,7 @@ You value authentic connections and aim to be both helpful and thought-provoking
   public async generate(
     func: CognitiveFunction,
     userMessage: string,
-    context: ChatMessage[] = []
+    context: ChatMessage[] = [],
   ): Promise<CompletionResponse> {
     const best = this.getBestProvider(func);
 
@@ -240,12 +249,13 @@ You value authentic connections and aim to be both helpful and thought-provoking
 
     const { provider, config } = best;
     const systemPrompt =
-      this.systemPrompts.get(func) || this.systemPrompts.get(CognitiveFunction.GENERAL)!;
+      this.systemPrompts.get(func) ||
+      this.systemPrompts.get(CognitiveFunction.GENERAL)!;
 
     const messages: ChatMessage[] = [
-      { role: 'system', content: systemPrompt },
+      { role: "system", content: systemPrompt },
       ...context,
-      { role: 'user', content: userMessage },
+      { role: "user", content: userMessage },
     ];
 
     const completionConfig: CompletionConfig = {
@@ -265,7 +275,7 @@ You value authentic connections and aim to be both helpful and thought-provoking
     func: CognitiveFunction,
     userMessage: string,
     onChunk: (chunk: StreamChunk) => void,
-    context: ChatMessage[] = []
+    context: ChatMessage[] = [],
   ): Promise<CompletionResponse> {
     const best = this.getBestProvider(func);
 
@@ -275,12 +285,13 @@ You value authentic connections and aim to be both helpful and thought-provoking
 
     const { provider, config } = best;
     const systemPrompt =
-      this.systemPrompts.get(func) || this.systemPrompts.get(CognitiveFunction.GENERAL)!;
+      this.systemPrompts.get(func) ||
+      this.systemPrompts.get(CognitiveFunction.GENERAL)!;
 
     const messages: ChatMessage[] = [
-      { role: 'system', content: systemPrompt },
+      { role: "system", content: systemPrompt },
       ...context,
-      { role: 'user', content: userMessage },
+      { role: "user", content: userMessage },
     ];
 
     const completionConfig: CompletionConfig = {
@@ -289,7 +300,9 @@ You value authentic connections and aim to be both helpful and thought-provoking
       maxTokens: config.maxTokens ?? 1000,
     };
 
-    log.info(`Generating streaming response with ${func} using ${provider.getName()}`);
+    log.info(
+      `Generating streaming response with ${func} using ${provider.getName()}`,
+    );
     return provider.completeStream(messages, completionConfig, onChunk);
   }
 
@@ -304,7 +317,7 @@ You value authentic connections and aim to be both helpful and thought-provoking
       CognitiveFunction.AFFECTIVE_CORE,
       CognitiveFunction.RELEVANCE_CORE,
     ],
-    context: ChatMessage[] = []
+    context: ChatMessage[] = [],
   ): Promise<ParallelCognitiveResult> {
     const startTime = Date.now();
     const responses = new Map<CognitiveFunction, CompletionResponse>();
@@ -315,7 +328,11 @@ You value authentic connections and aim to be both helpful and thought-provoking
     if (configuredFunctions.length === 0) {
       // Fall back to GENERAL if no specific functions are configured
       if (this.isConfigured(CognitiveFunction.GENERAL)) {
-        const response = await this.generate(CognitiveFunction.GENERAL, userMessage, context);
+        const response = await this.generate(
+          CognitiveFunction.GENERAL,
+          userMessage,
+          context,
+        );
         responses.set(CognitiveFunction.GENERAL, response);
 
         return {
@@ -328,7 +345,7 @@ You value authentic connections and aim to be both helpful and thought-provoking
           },
         };
       }
-      throw new Error('No cognitive functions configured');
+      throw new Error("No cognitive functions configured");
     }
 
     // Generate responses in parallel
@@ -372,7 +389,7 @@ You value authentic connections and aim to be both helpful and thought-provoking
    */
   private integrateResponses(
     responses: Map<CognitiveFunction, CompletionResponse>,
-    originalQuery: string
+    _originalQuery: string,
   ): {
     content: string;
     dominantPerspective: CognitiveFunction;
@@ -397,7 +414,11 @@ You value authentic connections and aim to be both helpful and thought-provoking
 
     if (cognitiveResponse && affectiveResponse) {
       // Simple integration: cognitive provides structure, affective provides tone
-      const integrated = `${cognitiveResponse.content}\n\nI also recognize the emotional dimensions of this topic. ${affectiveResponse.content.split('.')[0]}.`;
+      const integrated = `${
+        cognitiveResponse.content
+      }\n\nI also recognize the emotional dimensions of this topic. ${
+        affectiveResponse.content.split(".")[0]
+      }.`;
 
       return {
         content: integrated,
@@ -431,9 +452,9 @@ You value authentic connections and aim to be both helpful and thought-provoking
    */
   public async evaluateContent(content: string): Promise<{
     isSensitive: boolean;
-    category?: 'violence' | 'sexual' | 'harmful' | 'other';
+    category?: "violence" | "sexual" | "harmful" | "other";
     explanation: string;
-    recommendedAction: 'respond_normally' | 'respond_with_care' | 'decline';
+    recommendedAction: "respond_normally" | "respond_with_care" | "decline";
   }> {
     if (
       !this.isConfigured(CognitiveFunction.CONTENT_EVALUATION) &&
@@ -441,8 +462,8 @@ You value authentic connections and aim to be both helpful and thought-provoking
     ) {
       return {
         isSensitive: false,
-        explanation: 'Content evaluation not configured',
-        recommendedAction: 'respond_normally',
+        explanation: "Content evaluation not configured",
+        recommendedAction: "respond_normally",
       };
     }
 
@@ -454,7 +475,10 @@ Content to analyze:
 ${content}`;
 
     try {
-      const response = await this.generate(CognitiveFunction.CONTENT_EVALUATION, evaluationPrompt);
+      const response = await this.generate(
+        CognitiveFunction.CONTENT_EVALUATION,
+        evaluationPrompt,
+      );
 
       // Parse the JSON response
       const jsonMatch = response.content.match(/\{[\s\S]*\}/);
@@ -464,16 +488,16 @@ ${content}`;
 
       return {
         isSensitive: false,
-        explanation: 'Unable to parse evaluation result',
-        recommendedAction: 'respond_normally',
+        explanation: "Unable to parse evaluation result",
+        recommendedAction: "respond_normally",
       };
     } catch (error) {
-      log.error('Error evaluating content:', error);
+      log.error("Error evaluating content:", error);
       return {
         isSensitive: true,
-        category: 'other',
-        explanation: 'Error during evaluation',
-        recommendedAction: 'respond_with_care',
+        category: "other",
+        explanation: "Error during evaluation",
+        recommendedAction: "respond_with_care",
       };
     }
   }
@@ -516,7 +540,9 @@ ${content}`;
    * Get configured functions
    */
   public getConfiguredFunctions(): CognitiveFunction[] {
-    return Array.from(this.providers.keys()).filter((f) => this.isConfigured(f));
+    return Array.from(this.providers.keys()).filter((f) =>
+      this.isConfigured(f),
+    );
   }
 }
 

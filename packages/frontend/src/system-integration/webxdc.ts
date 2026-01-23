@@ -2,22 +2,22 @@
 // because it opens new "independent" windows
 // and heavily uses the events
 
-import { BackendRemote, Type } from '../backend-com'
-import { runtime } from '@deltachat-desktop/runtime-interface'
+import { BackendRemote, Type } from "../backend-com";
+import { runtime } from "@deltachat-desktop/runtime-interface";
 
 export function initWebxdc() {
-  BackendRemote.on('WebxdcStatusUpdate', (accountId, { msgId }) => {
-    runtime.notifyWebxdcStatusUpdate(accountId, msgId)
-  })
-  BackendRemote.on('WebxdcRealtimeData', (accountId, { msgId, data }) => {
-    runtime.notifyWebxdcRealtimeData(accountId, msgId, data)
-  })
-  BackendRemote.on('MsgsChanged', (accountId, { msgId }) => {
-    runtime.notifyWebxdcMessageChanged(accountId, msgId)
-  })
-  BackendRemote.on('WebxdcInstanceDeleted', (accountId, { msgId }) => {
-    runtime.notifyWebxdcInstanceDeleted(accountId, msgId)
-  })
+  BackendRemote.on("WebxdcStatusUpdate", (accountId, { msgId }) => {
+    runtime.notifyWebxdcStatusUpdate(accountId, msgId);
+  });
+  BackendRemote.on("WebxdcRealtimeData", (accountId, { msgId, data }) => {
+    runtime.notifyWebxdcRealtimeData(accountId, msgId, data);
+  });
+  BackendRemote.on("MsgsChanged", (accountId, { msgId }) => {
+    runtime.notifyWebxdcMessageChanged(accountId, msgId);
+  });
+  BackendRemote.on("WebxdcInstanceDeleted", (accountId, { msgId }) => {
+    runtime.notifyWebxdcInstanceDeleted(accountId, msgId);
+  });
 }
 
 /**
@@ -27,27 +27,27 @@ export function initWebxdc() {
  */
 export async function internalOpenWebxdc(
   accountId: number,
-  message: Type.Message
+  message: Type.Message,
 ) {
-  let href = ''
-  let messageId = message.id
-  if (message.systemMessageType === 'WebxdcInfoMessage' && message.parentId) {
-    href = message.webxdcHref ?? ''
+  let href = "";
+  let messageId = message.id;
+  if (message.systemMessageType === "WebxdcInfoMessage" && message.parentId) {
+    href = message.webxdcHref ?? "";
     // if we have a webxdc info message, the webxdcInfo is attached to the parent message
-    messageId = message.parentId
-    message = await BackendRemote.rpc.getMessage(accountId, messageId)
+    messageId = message.parentId;
+    message = await BackendRemote.rpc.getMessage(accountId, messageId);
   }
   if (!message.webxdcInfo) {
     // we can open only messages with webxdc info
-    throw new Error('no webxdc info for message ' + message)
+    throw new Error("no webxdc info for message " + message);
   }
   const chatName = (
     await BackendRemote.rpc.getBasicChatInfo(accountId, message.chatId)
-  ).name
+  ).name;
   const account: Type.Account =
-    await BackendRemote.rpc.getAccountInfo(accountId)
+    await BackendRemote.rpc.getAccountInfo(accountId);
   const displayname =
-    account.kind === 'Configured' ? account.displayName || account.addr : null
+    account.kind === "Configured" ? account.displayName || account.addr : null;
 
   runtime.openWebxdc(messageId, {
     accountId,
@@ -55,9 +55,9 @@ export async function internalOpenWebxdc(
     chatName,
     webxdcInfo: message.webxdcInfo,
     href,
-  })
+  });
 }
 
 export async function openMapWebxdc(accountId: number, chatId?: number) {
-  runtime.openMapsWebxdc(accountId, chatId)
+  runtime.openMapsWebxdc(accountId, chatId);
 }

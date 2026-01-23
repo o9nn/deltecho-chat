@@ -53,8 +53,6 @@ if (checkOnly) {
   )
 }
 
-// TODO
-
 if (checkFailed) {
   console.log("\nCheck failed, make sure you have run 'update:target-versions'")
   process.exit(1)

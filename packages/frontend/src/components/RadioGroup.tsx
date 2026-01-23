@@ -1,14 +1,14 @@
-import React from 'react'
-import Radio from './Radio'
+import React from "react";
+import Radio from "./Radio";
 
 type RadioGroupProps = {
-  onChange?: (value: string) => void
-  children: any
-  selectedValue: string
-  name: string
-}
+  onChange?: (value: string) => void;
+  children: any;
+  selectedValue: string;
+  name: string;
+};
 
-type RadioProps = Parameters<typeof Radio>[0]
+type RadioProps = Parameters<typeof Radio>[0];
 
 export default function RadioGroup({
   onChange,
@@ -18,7 +18,7 @@ export default function RadioGroup({
 }: RadioGroupProps) {
   return (
     <form>
-      <fieldset className='radiogroup'>
+      <fieldset className="radiogroup">
         {children.map(({ props }: { props: RadioProps }) => {
           return (
             <Radio
@@ -28,9 +28,9 @@ export default function RadioGroup({
               name={name}
               key={props.value}
             />
-          )
+          );
         })}
       </fieldset>
     </form>
-  )
+  );
 }
