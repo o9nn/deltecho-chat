@@ -1,6 +1,14 @@
 /**
  * Audio Pipeline Tests
  */
+import {
+  jest,
+  describe,
+  it,
+  expect,
+  beforeEach,
+  afterEach,
+} from "@jest/globals";
 
 import {
   AudioPipeline,
