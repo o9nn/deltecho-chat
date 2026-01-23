@@ -1,6 +1,7 @@
 "use strict";
 export function parseThemeMetaData(rawTheme) {
-  const meta_data_block = /.theme-meta ?{([^]*)}/gm.exec(rawTheme)?.[1].trim() || "";
+  const meta_data_block =
+    /.theme-meta ?{([^]*)}/gm.exec(rawTheme)?.[1].trim() || "";
   const regex = /--(\w*): ?['"]([^]*?)['"];?/gi;
   const meta = {};
   let last_result = true;
@@ -12,7 +13,7 @@ export function parseThemeMetaData(rawTheme) {
   }
   if (!meta.name || !meta.description) {
     throw new Error(
-      "The meta variables meta.name and meta.description must be defined"
+      "The meta variables meta.name and meta.description must be defined",
     );
   }
   return meta;

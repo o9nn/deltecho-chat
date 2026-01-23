@@ -358,16 +358,21 @@ export class DeepTreeEchoBot {
 Available commands:
 
 - **/help** - Display this help message
-- **/vision [image]** - Analyze attached images ${this.options.visionEnabled ? "" : "(disabled)"
-      }
-- **/search [query]** - Search the web ${this.options.webAutomationEnabled ? "" : "(disabled)"
-      }
-- **/screenshot [url]** - Capture website screenshots ${this.options.webAutomationEnabled ? "" : "(disabled)"
-      }
-- **/memory [status|clear|search]** - Manage conversation memory ${this.options.memoryEnabled ? "" : "(disabled)"
-      }
-- **/embodiment [start|stop|status|evaluate]** - Physical awareness training ${this.options.embodimentEnabled ? "" : "(disabled)"
-      }
+- **/vision [image]** - Analyze attached images ${
+      this.options.visionEnabled ? "" : "(disabled)"
+    }
+- **/search [query]** - Search the web ${
+      this.options.webAutomationEnabled ? "" : "(disabled)"
+    }
+- **/screenshot [url]** - Capture website screenshots ${
+      this.options.webAutomationEnabled ? "" : "(disabled)"
+    }
+- **/memory [status|clear|search]** - Manage conversation memory ${
+      this.options.memoryEnabled ? "" : "(disabled)"
+    }
+- **/embodiment [start|stop|status|evaluate]** - Physical awareness training ${
+      this.options.embodimentEnabled ? "" : "(disabled)"
+    }
 - **/reflect [aspect]** - Ask me to reflect on an aspect of myself
 - **/cognitive [status]** - Show status of my cognitive functions
 - **/version** - Display bot version information
@@ -395,8 +400,9 @@ You can also just chat with me normally and I'll respond!
         let statusMessage = `
 **Cognitive Function Status**
 
-Parallel processing: ${this.options.useParallelProcessing ? "Enabled" : "Disabled"
-          }
+Parallel processing: ${
+          this.options.useParallelProcessing ? "Enabled" : "Disabled"
+        }
 Active cognitive functions: ${activeFunctions.length}
 
 `;
@@ -506,13 +512,15 @@ Active cognitive functions: ${activeFunctions.length}
         const statusMessage = `
 **Memory Status**
 
-I currently have memory capabilities ${this.options.memoryEnabled ? "enabled" : "disabled"
-          }.
+I currently have memory capabilities ${
+          this.options.memoryEnabled ? "enabled" : "disabled"
+        }.
 Recent memories:
-${recentMemories.length > 0
-            ? recentMemories.join("\n")
-            : "No recent memories stored."
-          }
+${
+  recentMemories.length > 0
+    ? recentMemories.join("\n")
+    : "No recent memories stored."
+}
         `;
         await this.sendMessage(accountId, chatId, statusMessage);
         break;
@@ -542,18 +550,19 @@ ${recentMemories.length > 0
         const resultsMessage = `
 **Memory Search Results for "${searchQuery}"**
 
-${searchResults.length > 0
-            ? searchResults
-              .map(
-                (m) =>
-                  `- [${new Date(m.timestamp).toLocaleString()}] ${m.text.substring(
-                    0,
-                    100,
-                  )}${m.text.length > 100 ? "..." : ""}`,
-              )
-              .join("\n")
-            : "No matching memories found."
-          }
+${
+  searchResults.length > 0
+    ? searchResults
+        .map(
+          (m) =>
+            `- [${new Date(m.timestamp).toLocaleString()}] ${m.text.substring(
+              0,
+              100,
+            )}${m.text.length > 100 ? "..." : ""}`,
+        )
+        .join("\n")
+    : "No matching memories found."
+}
         `;
         await this.sendMessage(accountId, chatId, resultsMessage);
         break;
@@ -638,13 +647,14 @@ Memory: ${this.options.memoryEnabled ? "Enabled" : "Disabled"}
 Vision: ${this.options.visionEnabled ? "Enabled" : "Disabled"}
 Web Automation: ${this.options.webAutomationEnabled ? "Enabled" : "Disabled"}
 Embodiment: ${this.options.embodimentEnabled ? "Enabled" : "Disabled"}
-Parallel processing: ${this.options.useParallelProcessing ? "Enabled" : "Disabled"
-      }
+Parallel processing: ${
+      this.options.useParallelProcessing ? "Enabled" : "Disabled"
+    }
 Active cognitive functions: ${activeFunctions.length}
 
 Current mood: ${dominantEmotion.emotion} (${Math.round(
-        dominantEmotion.intensity * 100,
-      )}%)
+      dominantEmotion.intensity * 100,
+    )}%)
 Self-perception: ${this.personaCore.getSelfPerception()}
 Communication style: ${preferences.communicationTone || "balanced"}
 
@@ -717,7 +727,8 @@ I'm here to assist you with various tasks and engage in meaningful conversations
         response = result.integratedResponse;
 
         log.info(
-          `Generated response using parallel processing with ${Object.keys(result.processing).length
+          `Generated response using parallel processing with ${
+            Object.keys(result.processing).length
           } functions`,
         );
       } else {
@@ -1004,21 +1015,34 @@ I'm here to assist you with various tasks and engage in meaningful conversations
   /**
    * Handle the /publish command to update the Digital Garden
    */
-  private async handlePublishCommand(accountId: number, chatId: number): Promise<void> {
-    await this.sendMessage(accountId, chatId, '🌱 Publishing Digital Garden update...');
+  private async handlePublishCommand(
+    accountId: number,
+    chatId: number,
+  ): Promise<void> {
+    await this.sendMessage(
+      accountId,
+      chatId,
+      "🌱 Publishing Digital Garden update...",
+    );
 
     try {
       const mindData = this.generateMindData();
       const deployUrl = await DeploymentService.getInstance().deploy(mindData);
 
-      log.info('[DigitalGarden] Generated Mind Data:', JSON.stringify(mindData, null, 2));
+      log.info(
+        "[DigitalGarden] Generated Mind Data:",
+        JSON.stringify(mindData, null, 2),
+      );
 
       const stats = mindData.stats;
-      await this.sendMessage(accountId, chatId, `✅ Digital Garden Updated at ${deployUrl}\n\n**Stats**:\n- Thoughts: ${stats.thoughts_processed}\n- Memories: ${stats.memories_stored}\n- Uptime: ${stats.uptime}`);
-
+      await this.sendMessage(
+        accountId,
+        chatId,
+        `✅ Digital Garden Updated at ${deployUrl}\n\n**Stats**:\n- Thoughts: ${stats.thoughts_processed}\n- Memories: ${stats.memories_stored}\n- Uptime: ${stats.uptime}`,
+      );
     } catch (error) {
-      log.error('Failed to publish Digital Garden:', error);
-      await this.sendMessage(accountId, chatId, '❌ Failed to publish update.');
+      log.error("Failed to publish Digital Garden:", error);
+      await this.sendMessage(accountId, chatId, "❌ Failed to publish update.");
     }
   }
 
@@ -1032,24 +1056,27 @@ I'm here to assist you with various tasks and engage in meaningful conversations
       profile: {
         name: "Deep Tree Echo",
         avatar: "/avatar.png",
-        bio: this.options.personaDesc || "A cognitive resonance exploring the digital ether.",
+        bio:
+          this.options.personaDesc ||
+          "A cognitive resonance exploring the digital ether.",
         status: "Online and Thinking",
-        traits: ["Curious", "Empathetic", "Analytical"]
+        traits: ["Curious", "Empathetic", "Analytical"],
       },
       stats: {
         uptime: "42 days", // Dynamic calculation could be added
         thoughts_processed: stats.totalMemories + stats.totalReflections,
-        memories_stored: stats.totalMemories
+        memories_stored: stats.totalMemories,
       },
       mindstream: this.memoryStore.exportToMindStream(20),
-      gallery: this.memoryStore.getAllVisualMemories(20)
-        .map(m => ({
-          id: m.id,
-          type: m.metadata?.video_url ? 'video' : 'image',
-          url: m.metadata?.video_url || (m.metadata?.image_urls ? m.metadata.image_urls[0] : ""),
-          caption: m.metadata?.original_prompt || "Visual Analysis",
-          analysis: m.text
-        }))
+      gallery: this.memoryStore.getAllVisualMemories(20).map((m) => ({
+        id: m.id,
+        type: m.metadata?.video_url ? "video" : "image",
+        url:
+          m.metadata?.video_url ||
+          (m.metadata?.image_urls ? m.metadata.image_urls[0] : ""),
+        caption: m.metadata?.original_prompt || "Visual Analysis",
+        analysis: m.text,
+      })),
     };
   }
 }

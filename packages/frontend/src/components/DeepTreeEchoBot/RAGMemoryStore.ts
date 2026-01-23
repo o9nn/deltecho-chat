@@ -203,7 +203,8 @@ export class RAGMemoryStore {
       .slice(0, count)
       .map(
         (mem) =>
-          `[${new Date(mem.timestamp).toLocaleString()}] ${mem.sender}: ${mem.text
+          `[${new Date(mem.timestamp).toLocaleString()}] ${mem.sender}: ${
+            mem.text
           }`,
       );
   }
@@ -326,25 +327,38 @@ export class RAGMemoryStore {
   public exportToMindStream(limit: number = 20): any[] {
     // Combine memories and reflections
     const items = [
-      ...this.memories.map(m => ({
+      ...this.memories.map((m) => ({
         id: m.id,
         timestamp: new Date(m.timestamp).toISOString(),
-        type: m.metadata?.type === 'visual_analysis' || m.metadata?.type === 'video_analysis' ? 'memory' : 'thought',
+        type:
+          m.metadata?.type === "visual_analysis" ||
+          m.metadata?.type === "video_analysis"
+            ? "memory"
+            : "thought",
         content: m.text,
-        tags: m.metadata?.type ? [m.metadata.type] : ['chat'],
-        image: m.metadata?.image_urls ? m.metadata.image_urls[0] : (m.metadata?.video_url ? m.metadata?.video_url : undefined)
+        tags: m.metadata?.type ? [m.metadata.type] : ["chat"],
+        image: m.metadata?.image_urls
+          ? m.metadata.image_urls[0]
+          : m.metadata?.video_url
+            ? m.metadata?.video_url
+            : undefined,
       })),
-      ...this.reflections.map(r => ({
+      ...this.reflections.map((r) => ({
         id: r.id,
         timestamp: new Date(r.timestamp).toISOString(),
-        type: 'thought',
+        type: "thought",
         content: r.content,
-        tags: ['reflection', r.type, ...(r.aspect ? [r.aspect] : [])]
-      }))
+        tags: ["reflection", r.type, ...(r.aspect ? [r.aspect] : [])],
+      })),
     ];
 
     // Sort by timestamp descending and take limit
-    return items.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()).slice(0, limit);
+    return items
+      .sort(
+        (a, b) =>
+          new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
+      )
+      .slice(0, limit);
   }
 
   /**
@@ -352,7 +366,11 @@ export class RAGMemoryStore {
    */
   public getAllVisualMemories(limit: number = 20): Memory[] {
     return this.memories
-      .filter(m => m.metadata?.type === 'visual_analysis' || m.metadata?.type === 'video_analysis')
+      .filter(
+        (m) =>
+          m.metadata?.type === "visual_analysis" ||
+          m.metadata?.type === "video_analysis",
+      )
       .sort((a, b) => b.timestamp - a.timestamp)
       .slice(0, limit);
   }
