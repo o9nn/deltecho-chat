@@ -36,11 +36,17 @@ jest.mock("../RAGMemoryStore", () => ({
       setEnabled: jest.fn(),
       storeMemory: jest.fn(),
       getConversationContext: jest.fn().mockReturnValue([]),
-      getStats: jest.fn().mockReturnValue({ totalMemories: 5, totalReflections: 2, memoriesByChat: {} }),
+      getStats: jest.fn().mockReturnValue({
+        totalMemories: 5,
+        totalReflections: 2,
+        memoriesByChat: {},
+      }),
       getMemoriesByChatId: jest.fn().mockReturnValue([]),
-      exportToMindStream: jest.fn().mockReturnValue([
-        { id: '1', content: 'test thought', type: 'thought' }
-      ]),
+      exportToMindStream: jest
+        .fn()
+        .mockReturnValue([
+          { id: "1", content: "test thought", type: "thought" },
+        ]),
       getAllVisualMemories: jest.fn().mockReturnValue([]),
     }),
   },
@@ -304,7 +310,7 @@ describe("DeepTreeEchoBot Class", () => {
     bot = new DeepTreeEchoBot(options);
 
     const message = {
-      text: "/publish"
+      text: "/publish",
     };
 
     await bot.processMessage(1, 100, 201, message);
@@ -312,10 +318,12 @@ describe("DeepTreeEchoBot Class", () => {
     // Wait for async publish delay (mocked adapter has 1500ms delay, but here we mock the service directly)
     // The previous implementation had a direct delay, now it's inside the service.
     // If we mock the service to resolve immediately, we don't need a huge wait, but processMessage is async.
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 100));
 
-    const memoryStoreMock = require('../RAGMemoryStore').RAGMemoryStore.getInstance();
-    const deploymentServiceMock = require('../../../utils/DeploymentService').DeploymentService.getInstance();
+    const memoryStoreMock =
+      require("../RAGMemoryStore").RAGMemoryStore.getInstance();
+    const deploymentServiceMock =
+      require("../../../utils/DeploymentService").DeploymentService.getInstance();
 
     expect(memoryStoreMock.getStats).toHaveBeenCalled();
     expect(memoryStoreMock.exportToMindStream).toHaveBeenCalled();
@@ -323,9 +331,13 @@ describe("DeepTreeEchoBot Class", () => {
     expect(deploymentServiceMock.deploy).toHaveBeenCalled();
 
     // Verify confirmation message sent
-    const { BackendRemote } = require('../../../backend-com');
+    const { BackendRemote } = require("../../../backend-com");
     // Should send "Publishing..." then "Updated!"
     expect(BackendRemote.rpc.miscSendTextMessage).toHaveBeenCalledTimes(2);
-    expect(BackendRemote.rpc.miscSendTextMessage).toHaveBeenLastCalledWith(1, 100, expect.stringContaining("Digital Garden Updated"));
+    expect(BackendRemote.rpc.miscSendTextMessage).toHaveBeenLastCalledWith(
+      1,
+      100,
+      expect.stringContaining("Digital Garden Updated"),
+    );
   });
 });

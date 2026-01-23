@@ -447,7 +447,7 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ testHooks }) => {
     if (responseParams.empathyLevel > 0.6 && lastUserMessage) {
       response +=
         responseParams.suggestedPhrases[
-        Math.floor(Math.random() * responseParams.suggestedPhrases.length)
+          Math.floor(Math.random() * responseParams.suggestedPhrases.length)
         ] + ". ";
     }
 
@@ -631,8 +631,8 @@ Security Status:
 Encryption level: ${securityInfo.encryptionState}
 Identity export allowed: ${securityInfo.canExportIdentity ? "Yes" : "No"}
 Data types stored: ${Object.entries(securityInfo.dataTypeStats)
-            .map(([type, count]) => `${type} (${count})`)
-            .join(", ")}
+          .map(([type, count]) => `${type} (${count})`)
+          .join(", ")}
 
 Your conversations with me are protected with end-to-end encryption, and my cognitive systems are secured with multiple layers of protection.
         `;
@@ -767,10 +767,11 @@ Self-reflection complete:
 - Personality stability: ${(personalityAnalysis.stabilityScore * 100).toFixed(
         0,
       )}%
-- Emotional patterns: ${emotionalTrends.patterns.length > 0
+- Emotional patterns: ${
+        emotionalTrends.patterns.length > 0
           ? emotionalTrends.patterns.join(", ")
           : "None detected"
-        }
+      }
 - Belief coherence: ${(beliefCoherence.overallCoherence * 100).toFixed(0)}%
 - Contradictions: ${beliefCoherence.contradictions.length}
       `;
@@ -920,34 +921,77 @@ Self-reflection complete:
       {/* This component would normally be properly integrated with DeltaChat's UI */}
       {/* For demo purposes, we're just showing basic status */}
 
-<<<<<<< HEAD
-  { pendingResponse && <div className='bot-response'>{pendingResponse}</div> }
-
-  <div style={{ marginTop: '20px', borderTop: '1px solid #ccc', paddingTop: '10px' }}>
-    <button
-      onClick={() => setShowScientificDashboard(!showScientificDashboard)}
-      style={{ padding: '8px 16px', cursor: 'pointer', background: '#0969da', color: 'white', border: 'none', borderRadius: '4px' }}
-    >
-      {showScientificDashboard ? 'Hide Visual Cortex' : 'Show Visual Cortex'}
-    </button>
-  </div>
-
-  {
-    showScientificDashboard && (
-      <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1000, background: 'rgba(0,0,0,0.8)', padding: '50px' }}>
-        <div style={{ height: '100%', borderRadius: '8px', overflow: 'hidden', boxShadow: '0 0 20px rgba(0,0,0,0.5)' }}>
-          <div style={{ background: '#0d1117', padding: '10px', textAlign: 'right' }}>
-            <button onClick={() => setShowScientificDashboard(false)} style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer' }}>Close ✕</button>
-          </div>
-          <ScientificDashboard />
-        </div>
-      </div>
-    )
-  }
-=======
       {pendingResponse && <div className="bot-response">{pendingResponse}</div>}
->>>>>>> bb7a297f5b5425a8e734ac6a8cb1268a350f0fa7
-    </div >
+
+      <div
+        style={{
+          marginTop: "20px",
+          borderTop: "1px solid #ccc",
+          paddingTop: "10px",
+        }}
+      >
+        <button
+          onClick={() => setShowScientificDashboard(!showScientificDashboard)}
+          style={{
+            padding: "8px 16px",
+            cursor: "pointer",
+            background: "#0969da",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+          }}
+        >
+          {showScientificDashboard
+            ? "Hide Visual Cortex"
+            : "Show Visual Cortex"}
+        </button>
+      </div>
+
+      {showScientificDashboard && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 1000,
+            background: "rgba(0,0,0,0.8)",
+            padding: "50px",
+          }}
+        >
+          <div
+            style={{
+              height: "100%",
+              borderRadius: "8px",
+              overflow: "hidden",
+              boxShadow: "0 0 20px rgba(0,0,0,0.5)",
+            }}
+          >
+            <div
+              style={{
+                background: "#0d1117",
+                padding: "10px",
+                textAlign: "right",
+              }}
+            >
+              <button
+                onClick={() => setShowScientificDashboard(false)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: "white",
+                  cursor: "pointer",
+                }}
+              >
+                Close ✕
+              </button>
+            </div>
+            <ScientificDashboard />
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 
