@@ -85,12 +85,12 @@ test("start chat with user", async ({ page, context, browserName }) => {
   await expect(confirmDialog).toContainText(userA.name);
 
   await page.getByTestId("confirm-start-chat").getByTestId("confirm").click();
-  // There may be multiple chats with this user from previous runs, check at least 1 exists
-  const chatCount = await page
+  // Wait for the chat to appear in the chat list (may take time for sync)
+  const chatItem = page
     .locator(".chat-list .chat-list-item")
     .filter({ hasText: userA.name })
-    .count();
-  expect(chatCount).toBeGreaterThanOrEqual(1);
+    .first();
+  await expect(chatItem).toBeVisible({ timeout: 30000 });
   /* ignore-console-log */
   console.log(`Chat with ${userA.name} created!`);
 });
