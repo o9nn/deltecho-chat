@@ -1,0 +1,1176 @@
+
+> deep-tree-echo-core@1.0.0 test C:\Users\sandbox_713\Documents\gh\deltecho-chat\deltecho-chat\packages\core
+> cross-env NODE_OPTIONS='--experimental-vm-modules' jest
+
+  console.log
+    [90m2026-01-23T08:17:55.141Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:55.995Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.073Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.076Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.079Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.091Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.097Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.114Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.126Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.140Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:55.280Z[0m [32mINFO [0m [90m[deep-tree-echo-core/active-inference/ActiveInference][0m Initialized default generative model
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.193Z[0m [32mINFO [0m [90m[deep-tree-echo-core/active-inference/ActiveInference][0m Initialized default generative model
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.206Z[0m [32mINFO [0m [90m[deep-tree-echo-core/active-inference/ActiveInference][0m Initialized default generative model
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.143Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.226Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.230Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.239Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.242Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.245Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.258Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.260Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.269Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.272Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.281Z[0m [32mINFO [0m [90m[deep-tree-echo-core/active-inference/ActiveInference][0m Initialized default generative model
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.291Z[0m [32mINFO [0m [90m[deep-tree-echo-core/active-inference/ActiveInference][0m Initialized default generative model
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.294Z[0m [32mINFO [0m [90m[deep-tree-echo-core/active-inference/ActiveInference][0m Active Inference started
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.297Z[0m [32mINFO [0m [90m[deep-tree-echo-core/active-inference/ActiveInference][0m Active Inference stopped
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.305Z[0m [32mINFO [0m [90m[deep-tree-echo-core/active-inference/ActiveInference][0m Initialized default generative model
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.308Z[0m [32mINFO [0m [90m[deep-tree-echo-core/active-inference/ActiveInference][0m Active Inference started
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.310Z[0m [32mINFO [0m [90m[deep-tree-echo-core/active-inference/ActiveInference][0m Active Inference stopped
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.314Z[0m [32mINFO [0m [90m[deep-tree-echo-core/active-inference/ActiveInference][0m Initialized default generative model
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.328Z[0m [32mINFO [0m [90m[deep-tree-echo-core/active-inference/ActiveInference][0m Active Inference started
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.330Z[0m [32mINFO [0m [90m[deep-tree-echo-core/active-inference/ActiveInference][0m Active Inference stopped
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.345Z[0m [32mINFO [0m [90m[deep-tree-echo-core/active-inference/ActiveInference][0m Initialized default generative model
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.428Z[0m [32mINFO [0m [90m[deep-tree-echo-core/active-inference/ActiveInference][0m Initialized default generative model
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.433Z[0m [32mINFO [0m [90m[deep-tree-echo-core/active-inference/ActiveInference][0m Initialized default generative model
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.443Z[0m [32mINFO [0m [90m[deep-tree-echo-core/active-inference/ActiveInference][0m Initialized default generative model
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.448Z[0m [32mINFO [0m [90m[deep-tree-echo-core/active-inference/ActiveInference][0m Initialized default generative model
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.459Z[0m [32mINFO [0m [90m[deep-tree-echo-core/active-inference/ActiveInference][0m Initialized default generative model
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.463Z[0m [32mINFO [0m [90m[deep-tree-echo-core/active-inference/ActiveInference][0m Initialized default generative model
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.481Z[0m [32mINFO [0m [90m[deep-tree-echo-core/active-inference/ActiveInference][0m Initialized default generative model
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.513Z[0m [32mINFO [0m [90m[deep-tree-echo-core/active-inference/ActiveInference][0m Initialized default generative model
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.548Z[0m [32mINFO [0m [90m[deep-tree-echo-core/active-inference/ActiveInference][0m Initialized default generative model
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.558Z[0m [32mINFO [0m [90m[deep-tree-echo-core/active-inference/ActiveInference][0m Initialized default generative model
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.563Z[0m [32mINFO [0m [90m[deep-tree-echo-core/active-inference/ActiveInference][0m Initialized default generative model
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.573Z[0m [32mINFO [0m [90m[deep-tree-echo-core/active-inference/ActiveInference][0m Initialized default generative model
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.578Z[0m [32mINFO [0m [90m[deep-tree-echo-core/active-inference/ActiveInference][0m Initialized default generative model
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.588Z[0m [32mINFO [0m [90m[deep-tree-echo-core/active-inference/ActiveInference][0m Initialized default generative model
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:56.592Z[0m [32mINFO [0m [90m[deep-tree-echo-core/active-inference/ActiveInference][0m Initialized default generative model
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+(node:46180) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS src/active-inference/__tests__/ActiveInference.test.ts (19.569 s)
+  ActiveInference
+    constructor
+      √ should create ActiveInference with default config (961 ms)
+      √ should create ActiveInference with custom config (75 ms)
+      √ should initialize default beliefs (9 ms)
+    start and stop
+      √ should start active inference (13 ms)
+      √ should stop active inference (9 ms)
+      √ should handle multiple start calls (31 ms)
+    perceive
+      √ should process observation and update beliefs (83 ms)
+      √ should emit beliefs_updated event (4 ms)
+      √ should detect emotional valence from content (9 ms)
+      √ should update observation history (5 ms)
+    calculateFreeEnergy
+      √ should calculate free energy components (11 ms)
+      √ should return non-negative free energy (5 ms)
+    selectAction
+      √ should select action from available actions (17 ms)
+      √ should return null for empty action list (33 ms)
+      √ should emit action_selected event (35 ms)
+      √ should favor high epistemic value actions when uncertain (9 ms)
+    learnFromOutcome
+      √ should update model after action outcome (5 ms)
+    getCognitiveState
+      √ should return cognitive state summary (9 ms)
+      √ should include belief summaries with confidence (6 ms)
+    getFreeEnergyHistory
+      √ should track free energy over time (4 ms)
+    isMinimizingFreeEnergy
+      √ should return true initially (4 ms)
+      √ should detect when learning is occurring (104 ms)
+
+  console.log
+    [90m2026-01-23T08:17:56.914Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m Encryption initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:57.096Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:57.098Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:57.728Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m Encryption initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:57.746Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:57.748Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:58.228Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m Encryption initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:58.230Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:58.236Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+(node:13104) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+  console.log
+    [90m2026-01-23T08:17:58.403Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/LLMService][0m Configured cognitive_core function
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:58.447Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/LLMService][0m Configured general function
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:58.462Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/LLMService][0m Configured general function
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:58.472Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/LLMService][0m Configured affective_core function
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:58.478Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/LLMService][0m Configured general function
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:58.480Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/LLMService][0m LLM service general configuration updated
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+PASS src/__tests__/integration/cognitive-core.integration.test.ts (20.405 s)
+  Cognitive Core Integration
+    Memory-Personality Integration
+      √ should build context with memories and personality (88 ms)
+      √ should update personality based on conversation (3 ms)
+      √ should maintain personality consistency across contexts (1 ms)
+    Memory Retrieval and Search
+      √ should retrieve memories by chat ID (2 ms)
+      √ should search memories by content (1 ms)
+      √ should return latest memories with limit (175 ms)
+    Context Building
+      √ should extract current topic from message (1 ms)
+      √ should calculate conversation depth correctly (1 ms)
+    Memory Statistics
+      √ should provide accurate memory statistics (1 ms)
+    Memory Cleanup
+      √ should delete memories for specific chat (1 ms)
+      √ should clear all memories (1 ms)
+  Triadic Cognitive Loop
+    √ should execute 12-step cognitive cycle (2 ms)
+    √ should maintain 120-degree phase offset between streams (1 ms)
+    √ should alternate between expressive and reflective modes (1 ms)
+    √ should cycle through all three streams (1 ms)
+  Error Handling
+    √ should handle empty memory searches gracefully (2 ms)
+    √ should handle invalid chat IDs (1 ms)
+    √ should handle personality reset
+  Performance
+    √ should handle large memory stores efficiently (12 ms)
+    √ should retrieve latest memories efficiently (3 ms)
+
+  console.log
+    [90m2026-01-23T08:17:58.576Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/LLMService][0m Configured cognitive_core function
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:58.578Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/LLMService][0m Configured affective_core function
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:58.580Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/LLMService][0m Configured relevance_core function
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:58.589Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/LLMService][0m Configured cognitive_core function
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:58.592Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/LLMService][0m Configured affective_core function
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:58.595Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/LLMService][0m Configured relevance_core function
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:58.604Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/LLMService][0m Configured cognitive_core function
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:58.606Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:58.608Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/LLMService][0m Configured episodic_memory function
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.warn
+    [90m2026-01-23T08:17:58.612Z[0m [33mWARN [0m [90m[deep-tree-echo-core/cognitive/LLMService][0m No API key provided for Unconfigured Function
+
+    [0m [90m 132 |[39m         console[33m.[39merror(prefix[33m,[39m [33m...[39margs)[33m;[39m
+     [90m 133 |[39m       } [36melse[39m [36mif[39m (level [33m===[39m [32m"warn"[39m) {
+    [31m[1m>[22m[39m[90m 134 |[39m         console[33m.[39mwarn(prefix[33m,[39m [33m...[39margs)[33m;[39m
+     [90m     |[39m                 [31m[1m^[22m[39m
+     [90m 135 |[39m       } [36melse[39m {
+     [90m 136 |[39m         console[33m.[39mlog(prefix[33m,[39m [33m...[39margs)[33m;[39m
+     [90m 137 |[39m       }[0m
+
+      at SimpleLogger.log (src/utils/logger.ts:134:17)
+      at SimpleLogger.warn (src/utils/logger.ts:150:10)
+      at LLMService.generateResponseWithFunction (src/cognitive/LLMService.ts:484:13)
+      at LLMService.generateResponse (src/cognitive/LLMService.ts:465:17)
+      at Object.<anonymous> (src/cognitive/__tests__/LLMService.test.ts:201:41)
+
+  console.log
+    [90m2026-01-23T08:17:58.691Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/LLMService][0m Configured general function
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:58.694Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/LLMService][0m LLM service general configuration updated
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:58.696Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/LLMService][0m Generating response with General Processing
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:58.712Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/LLMService][0m Configured cognitive_core function
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:58.714Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/LLMService][0m Configured affective_core function
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:58.727Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/LLMService][0m Generating response with Cognitive Core
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:58.732Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/LLMService][0m Configured cognitive_core function
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:58.742Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/LLMService][0m Configured affective_core function
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:58.744Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/LLMService][0m Generating response with Affective Core
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:58.747Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/LLMService][0m Configured cognitive_core function
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:58.748Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/LLMService][0m Configured affective_core function
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:58.754Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/LLMService][0m Configured general function
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:58.782Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/LLMService][0m LLM service general configuration updated
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:58.797Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/LLMService][0m Generating response with General Processing
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:58.806Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/LLMService][0m Configured cognitive_core function
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:58.812Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/LLMService][0m Configured affective_core function
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:17:58.815Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/LLMService][0m Generating response with Cognitive Core
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+PASS src/cognitive/__tests__/LLMService.test.ts
+  LLMService
+    initialization
+      √ should initialize with default general function (18 ms)
+      √ should have default configuration values (1 ms)
+    setFunctionConfig
+      √ should configure a cognitive function with API key (48 ms)
+      √ should update existing function configuration (18 ms)
+      √ should create new function if not exists (12 ms)
+    setConfig
+      √ should set general function config for backward compatibility (13 ms)
+    getAllFunctions
+      √ should return all configured functions (12 ms)
+    getActiveFunctions
+      √ should return only functions with API keys (11 ms)
+      √ should return empty array when no functions have API keys (1 ms)
+    isFunctionConfigured
+      √ should return true for configured functions (4 ms)
+      √ should return false for unconfigured functions
+      √ should return false for functions without API key (2 ms)
+    generateResponse
+      √ should return error message when no API key configured (78 ms)
+      √ should generate response with configured API key (22 ms)
+    generateResponseWithFunction
+      √ should use specific function when configured (19 ms)
+      √ should use affective core for emotional processing (15 ms)
+      √ should fall back to general function when specific not configured (59 ms)
+      √ should track usage statistics (18 ms)
+    CognitiveFunctionType enum
+      √ should have all expected function types (2 ms)
+
+  console.log
+    [90m2026-01-23T08:17:59.432Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+PASS src/cognitive/__tests__/EnhancedLLMService.test.ts
+  EnhancedLLMService
+    initialization
+      √ should initialize with provided config (29 ms)
+      √ should use default values for optional config (2 ms)
+      √ should support different providers (7 ms)
+    configuration
+      √ should update configuration (1 ms)
+    message formatting
+      √ should format messages correctly (1 ms)
+      √ should handle empty messages array (1 ms)
+      √ should handle multi-turn conversations (1 ms)
+    provider-specific endpoints
+      √ should use correct endpoint for OpenAI (2 ms)
+      √ should use correct endpoint for Anthropic (1 ms)
+      √ should use correct endpoint for OpenRouter
+      √ should use correct endpoint for Ollama (1 ms)
+    error handling
+      √ should handle missing API key gracefully (3 ms)
+    streaming support
+      √ should support streaming configuration (1 ms)
+    token estimation
+      √ should estimate token count for text (1 ms)
+      √ should estimate tokens for empty string (1 ms)
+      √ should estimate tokens for long text (1 ms)
+
+  console.log
+    [90m2026-01-23T08:17:59.792Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/providers/LLMProvider][0m Registered LLM provider: openai
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:00.381Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/providers/LLMProvider][0m Registered LLM provider: openai-compatible
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:00.390Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/providers/LLMProvider][0m Registered LLM provider: anthropic
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:00.431Z[0m [32mINFO [0m [90m[deep-tree-echo-core/cognitive/providers/LLMProvider][0m Registered LLM provider: claude
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.warn
+    [90m2026-01-23T08:18:00.477Z[0m [33mWARN [0m [90m[deep-tree-echo-core/cognitive/providers/LLMProvider][0m Unknown LLM provider: unknown-provider
+
+    [0m [90m 132 |[39m         console[33m.[39merror(prefix[33m,[39m [33m...[39margs)[33m;[39m
+     [90m 133 |[39m       } [36melse[39m [36mif[39m (level [33m===[39m [32m"warn"[39m) {
+    [31m[1m>[22m[39m[90m 134 |[39m         console[33m.[39mwarn(prefix[33m,[39m [33m...[39margs)[33m;[39m
+     [90m     |[39m                 [31m[1m^[22m[39m
+     [90m 135 |[39m       } [36melse[39m {
+     [90m 136 |[39m         console[33m.[39mlog(prefix[33m,[39m [33m...[39margs)[33m;[39m
+     [90m 137 |[39m       }[0m
+
+      at SimpleLogger.log (src/utils/logger.ts:134:17)
+      at SimpleLogger.warn (src/utils/logger.ts:150:10)
+      at createProvider (src/cognitive/providers/LLMProvider.ts:170:9)
+      at Object.<anonymous> (src/cognitive/providers/__tests__/LLMProvider.test.ts:66:24)
+
+  console.log
+    [90m2026-01-23T08:18:00.546Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+PASS src/cognitive/providers/__tests__/LLMProvider.test.ts
+  LLM Provider Infrastructure
+    Provider Registration
+      √ should have OpenAI provider registered (6 ms)
+      √ should have Anthropic provider registered (1 ms)
+      √ should have claude alias registered (1 ms)
+      √ should have openai-compatible registered
+    Provider Creation
+      √ should create OpenAI provider (6 ms)
+      √ should create Anthropic provider (2 ms)
+      √ should create provider with custom base URL (1 ms)
+      √ should return null for unknown provider (53 ms)
+      √ should be case-insensitive for provider names (1 ms)
+    Provider Configuration
+      √ should report configured when API key is provided
+      √ should report not configured when API key is empty (1 ms)
+    Provider Health
+      √ should return health status (4 ms)
+  OpenAI Provider
+    √ should have correct name (1 ms)
+    √ should be configured with API key (1 ms)
+    √ should throw error when completing without API key (41 ms)
+    √ should return default models list (68 ms)
+  Anthropic Provider
+    √ should have correct name (1 ms)
+    √ should be configured with API key (2 ms)
+    √ should throw error when completing without API key (9 ms)
+    √ should return known models list
+  ChatMessage Interface
+    √ should support system role (1 ms)
+    √ should support user role
+    √ should support assistant role (1 ms)
+    √ should support optional name field
+  CompletionConfig Interface
+    √ should require model field (1 ms)
+    √ should support all optional fields (14 ms)
+
+  console.log
+    [90m2026-01-23T08:18:00.981Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Loaded persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.009Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Loaded persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.010Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Loaded persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.013Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Loaded persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.015Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Loaded persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.016Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Loaded persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.033Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Loaded persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.044Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Personality updated by Deep Tree Echo herself
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.048Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Loaded persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.058Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Loaded persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.115Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Loaded persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.166Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Saved persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.171Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Updated emotional state via differential framework
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.180Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Loaded persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.196Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Saved persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.197Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Updated emotional state via differential framework
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.199Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Loaded persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.214Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Loaded persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.222Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Loaded persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.226Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Saved persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.227Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Updated cognitive state parameters
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.230Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Loaded persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.232Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Loaded persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.233Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Saved persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.237Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Deep Tree Echo updated self-perception to: neutral
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.242Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Loaded persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.246Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Loaded persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.248Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Saved persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.310Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Deep Tree Echo updated preference: presentationStyle to professional
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.311Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Saved persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.312Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Deep Tree Echo updated preference: communicationTone to formal
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.313Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Loaded persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.339Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Loaded persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.343Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Loaded persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.345Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Saved persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.347Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Avatar configuration updated
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.348Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Loaded persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.361Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Saved persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.363Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Loaded persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.365Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Saved persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.366Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Updated emotional state via differential framework
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.373Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Saved persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.379Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Updated emotional state via differential framework
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.381Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Saved persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.383Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Updated emotional state via differential framework
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.389Z[0m [32mINFO [0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Loaded persona state
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.error
+    [90m2026-01-23T08:18:01.391Z[0m [31mERROR[0m [90m[deep-tree-echo-core/personality/PersonaCore][0m Failed to load persona state: Error: Storage error
+        at Object.load (C:\Users\sandbox_713\Documents\gh\deltecho-chat\deltecho-chat\packages\core\src\personality\__tests__\PersonaCore.test.ts:208:17)
+        at PersonaCore.loadPersonaState (C:\Users\sandbox_713\Documents\gh\deltecho-chat\deltecho-chat\packages\core\src\personality\PersonaCore.ts:89:50)
+        at new PersonaCore (C:\Users\sandbox_713\Documents\gh\deltecho-chat\deltecho-chat\packages\core\src\personality\PersonaCore.ts:80:10)
+        at Object.<anonymous> (C:\Users\sandbox_713\Documents\gh\deltecho-chat\deltecho-chat\packages\core\src\personality\__tests__\PersonaCore.test.ts:216:23)
+        at Promise.then.completed (C:\Users\sandbox_713\Documents\gh\deltecho-chat\deltecho-chat\node_modules\.pnpm\jest-circus@29.7.0\node_modules\jest-circus\build\utils.js:298:28)
+        at new Promise (<anonymous>)
+        at callAsyncCircusFn (C:\Users\sandbox_713\Documents\gh\deltecho-chat\deltecho-chat\node_modules\.pnpm\jest-circus@29.7.0\node_modules\jest-circus\build\utils.js:231:10)
+        at _callCircusTest (C:\Users\sandbox_713\Documents\gh\deltecho-chat\deltecho-chat\node_modules\.pnpm\jest-circus@29.7.0\node_modules\jest-circus\build\run.js:316:40)
+        at processTicksAndRejections (node:internal/process/task_queues:103:5)
+        at _runTest (C:\Users\sandbox_713\Documents\gh\deltecho-chat\deltecho-chat\node_modules\.pnpm\jest-circus@29.7.0\node_modules\jest-circus\build\run.js:252:3)
+        at _runTestsForDescribeBlock (C:\Users\sandbox_713\Documents\gh\deltecho-chat\deltecho-chat\node_modules\.pnpm\jest-circus@29.7.0\node_modules\jest-circus\build\run.js:126:9)
+        at _runTestsForDescribeBlock (C:\Users\sandbox_713\Documents\gh\deltecho-chat\deltecho-chat\node_modules\.pnpm\jest-circus@29.7.0\node_modules\jest-circus\build\run.js:121:9)
+        at _runTestsForDescribeBlock (C:\Users\sandbox_713\Documents\gh\deltecho-chat\deltecho-chat\node_modules\.pnpm\jest-circus@29.7.0\node_modules\jest-circus\build\run.js:121:9)
+        at run (C:\Users\sandbox_713\Documents\gh\deltecho-chat\deltecho-chat\node_modules\.pnpm\jest-circus@29.7.0\node_modules\jest-circus\build\run.js:71:3)
+        at runAndTransformResultsToJestFormat (C:\Users\sandbox_713\Documents\gh\deltecho-chat\deltecho-chat\node_modules\.pnpm\jest-circus@29.7.0\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+        at jestAdapter (C:\Users\sandbox_713\Documents\gh\deltecho-chat\deltecho-chat\node_modules\.pnpm\jest-circus@29.7.0\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+        at runTestInternal (C:\Users\sandbox_713\Documents\gh\deltecho-chat\deltecho-chat\node_modules\.pnpm\jest-runner@29.7.0\node_modules\jest-runner\build\runTest.js:367:16)
+        at runTest (C:\Users\sandbox_713\Documents\gh\deltecho-chat\deltecho-chat\node_modules\.pnpm\jest-runner@29.7.0\node_modules\jest-runner\build\runTest.js:444:34)
+        at Object.worker (C:\Users\sandbox_713\Documents\gh\deltecho-chat\deltecho-chat\node_modules\.pnpm\jest-runner@29.7.0\node_modules\jest-runner\build\testWorker.js:106:12)
+
+    [0m [90m 130 |[39m       [36mconst[39m prefix [33m=[39m [36mthis[39m[33m.[39mformatPretty(level[33m,[39m args)[33m;[39m
+     [90m 131 |[39m       [36mif[39m (level [33m===[39m [32m"error"[39m) {
+    [31m[1m>[22m[39m[90m 132 |[39m         console[33m.[39merror(prefix[33m,[39m [33m...[39margs)[33m;[39m
+     [90m     |[39m                 [31m[1m^[22m[39m
+     [90m 133 |[39m       } [36melse[39m [36mif[39m (level [33m===[39m [32m"warn"[39m) {
+     [90m 134 |[39m         console[33m.[39mwarn(prefix[33m,[39m [33m...[39margs)[33m;[39m
+     [90m 135 |[39m       } [36melse[39m {[0m
+
+      at SimpleLogger.log (src/utils/logger.ts:132:17)
+      at SimpleLogger.error (src/utils/logger.ts:154:10)
+      at PersonaCore.loadPersonaState (src/personality/PersonaCore.ts:127:11)
+
+PASS src/personality/__tests__/PersonaCore.test.ts
+  PersonaCore
+    initialization
+      √ should initialize with default values (51 ms)
+      √ should use provided storage (3 ms)
+      √ should use in-memory storage when none provided (3 ms)
+    personality management
+      √ should get personality (16 ms)
+      √ should update personality (16 ms)
+    emotional state
+      √ should get emotional state (9 ms)
+      √ should have initial values between 0 and 1 (6 ms)
+      √ should update emotional state with stimuli (60 ms)
+      √ should constrain values between 0 and 1 (25 ms)
+      √ should get dominant emotion (14 ms)
+    cognitive state
+      √ should get cognitive state (2 ms)
+      √ should update cognitive state (13 ms)
+    self perception
+      √ should get self perception (1 ms)
+      √ should update self perception (9 ms)
+    preferences
+      √ should get preferences (3 ms)
+      √ should update individual preference (68 ms)
+    avatar configuration
+      √ should get avatar config (2 ms)
+      √ should get avatar image path (26 ms)
+      √ should update avatar config (6 ms)
+      √ should set and get avatar data URL (15 ms)
+    opponent process
+      √ should apply opponent process when emotion is high (25 ms)
+    storage handling
+      √ should handle storage errors gracefully (238 ms)
+
+  console.log
+    [90m2026-01-23T08:18:01.949Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.973Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.977Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.980Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:01.996Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:02.016Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:02.066Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:02.077Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:02.079Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m Added content filter: custom_filter
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:02.086Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+PASS src/memory/__tests__/HyperDimensionalMemory.test.ts
+  HyperDimensionalMemory
+    initialization
+      √ should initialize with default configuration (54 ms)
+      √ should initialize with custom configuration (1 ms)
+    storeMemory
+      √ should store memory without error (3 ms)
+      √ should store multiple memories (2 ms)
+      √ should handle emotional significance (3 ms)
+    recallMemories
+      √ should recall memories based on query (8 ms)
+      √ should return results with id, text, and relevance (2 ms)
+      √ should limit results to specified count (1 ms)
+      √ should return empty array for completely unrelated query (1 ms)
+    memory associations
+      √ should build associations between related memories (2 ms)
+    temporal indexing
+      √ should index memories by time (1 ms)
+    memory decay
+      √ should apply memory decay over time (2 ms)
+    emotional weighting
+      √ should weight emotionally significant memories higher (1 ms)
+    edge cases
+      √ should handle empty query (1 ms)
+      √ should handle very long text (1 ms)
+      √ should handle special characters (1 ms)
+
+  console.log
+    [90m2026-01-23T08:18:02.516Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m Encryption initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:02.522Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:03.149Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m Encryption initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:03.155Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:03.158Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:03.163Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:03.297Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m SecureIntegration initialized
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+  console.log
+    [90m2026-01-23T08:18:03.300Z[0m [32mINFO [0m [90m[deep-tree-echo-core/security/SecureIntegration][0m Security configuration updated
+
+      at SimpleLogger.log (src/utils/logger.ts:136:17)
+
+(node:18884) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS src/security/__tests__/SecureIntegration.test.ts (26.201 s)
+  SecureIntegration
+    initialization
+      √ should initialize with default config (975 ms)
+      √ should initialize with custom config (94 ms)
+      √ should create pre-configured instance (14 ms)
+    input validation
+      √ should validate normal input (5 ms)
+      √ should reject input exceeding max length (16 ms)
+      √ should block SQL injection attempts (12 ms)
+      √ should sanitize XSS script tags (13 ms)
+      √ should block path traversal attempts (2 ms)
+      √ should sanitize HTML event handlers (71 ms)
+    rate limiting
+      √ should allow requests within limit (7 ms)
+      √ should block requests exceeding limit (12 ms)
+      √ should track different clients separately (15 ms)
+      √ should reset rate limits (10 ms)
+    encryption
+      √ should encrypt data (677 ms)
+      √ should decrypt data (786 ms)
+      √ should return null when encryption not initialized (487 ms)
+    hashing
+      √ should hash data (370 ms)
+      √ should verify correct hash (827 ms)
+      √ should reject incorrect hash (1112 ms)
+      √ should produce different hashes for same input (due to random salt) (1403 ms)
+    API key management
+      √ should generate API key (24 ms)
+      √ should generate API key with custom prefix (3 ms)
+      √ should validate correct API key format (2 ms)
+      √ should reject invalid API key format (4 ms)
+    output sanitization
+      √ should redact API keys in output (20 ms)
+      √ should redact passwords in output (51 ms)
+      √ should redact bearer tokens (10 ms)
+    content filters
+      √ should add custom content filter (5 ms)
+    backward compatibility
+      √ should support encryptData method (439 ms)
+      √ should support decryptData method (633 ms)
+      √ should fallback to base64 when encryption not enabled (7 ms)
+    statistics
+      √ should return stats (134 ms)
+    configuration
+      √ should update configuration (6 ms)
+
+FAIL src/memory/__tests__/RAGMemoryStore.test.ts
+  ● Test suite failed to run
+
+    [96msrc/memory/__tests__/RAGMemoryStore.test.ts[0m:[93m1[0m:[93m26[0m - [91merror[0m[90m TS2724: [0m'"../RAGMemoryStore"' has no exported member named '_Memory'. Did you mean 'Memory'?
+
+    [7m1[0m import { RAGMemoryStore, _Memory, _ReflectionMemory } from "../RAGMemoryStore";
+    [7m [0m [91m                         ~~~~~~~[0m
+    [96msrc/memory/__tests__/RAGMemoryStore.test.ts[0m:[93m1[0m:[93m35[0m - [91merror[0m[90m TS2724: [0m'"../RAGMemoryStore"' has no exported member named '_ReflectionMemory'. Did you mean 'ReflectionMemory'?
+
+    [7m1[0m import { RAGMemoryStore, _Memory, _ReflectionMemory } from "../RAGMemoryStore";
+    [7m [0m [91m                                  ~~~~~~~~~~~~~~~~~[0m
+
+FAIL src/active-inference/__tests__/NicheConstruction.test.ts
+  ● Test suite failed to run
+
+    [96msrc/active-inference/__tests__/NicheConstruction.test.ts[0m:[93m140[0m:[93m9[0m - [91merror[0m[90m TS2552: [0mCannot find name 'called'. Did you mean '_called'?
+
+    [7m140[0m         called = true;
+    [7m   [0m [91m        ~~~~~~[0m
+
+      [96msrc/active-inference/__tests__/NicheConstruction.test.ts[0m:[93m138[0m:[93m13[0m
+        [7m138[0m       const _called = false;
+        [7m   [0m [96m            ~~~~~~~[0m
+        '_called' is declared here.
+
+A worker process has failed to exit gracefully and has been force exited. This is likely caused by tests leaking due to improper teardown. Try running with --detectOpenHandles to find leaks. Active timers can also cause this, ensure that .unref() was called on them.
+Test Suites: 2 failed, 8 passed, 10 total
+Tests:       174 passed, 174 total
+Snapshots:   0 total
+Time:        42.084 s
+Ran all test suites.
+ ELIFECYCLE  Test failed. See above for more details.
