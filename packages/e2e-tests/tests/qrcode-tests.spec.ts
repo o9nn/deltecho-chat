@@ -51,12 +51,21 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.afterAll(async ({ browser }) => {
+  // Skip cleanup if no profiles were created
+  if (existingProfiles.length === 0) {
+    return;
+  }
   // Use try-finally to ensure context is properly cleaned up
   const context = await browser.newContext();
   const page = await context.newPage();
   try {
     await reloadPage(page);
     await deleteAllProfiles(page, existingProfiles);
+  } catch {
+    /* ignore-console-log */
+    console.log(
+      "Failed to delete profiles in afterAll - may already be deleted",
+    );
   } finally {
     await context.close();
   }

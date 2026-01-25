@@ -133,8 +133,15 @@ test("create group", async ({ page, context, browserName }) => {
     .filter({ hasText: groupName })
     .first();
   await expect(chatListItem).toBeVisible();
+  // Click on the group chat to ensure it's selected
+  await chatListItem.click();
+  // Wait for the composer to be ready
+  await expect(page.locator("#composer-textarea")).toBeVisible();
   await page.locator("#composer-textarea").fill(`Hello group members!`);
-  await page.locator("button.send-button").click();
+  // Wait for send button to be enabled before clicking
+  const sendButton = page.locator("button.send-button");
+  await expect(sendButton).toBeEnabled({ timeout: 10000 });
+  await sendButton.click();
   const badgeNumber = page
     .getByTestId(`account-item-${userB.id}`)
     .locator("[class*='accountBadgeIcon']");
