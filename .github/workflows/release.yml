@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest]
 
     steps:
       - uses: actions/checkout@v4
@@ -35,13 +35,6 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y icnsutils graphicsmagick
-
-      - name: Install System Dependencies (Mac)
-        if: matrix.os == 'macos-latest'
-        run: |
-          if ! command -v graphicsmagick &> /dev/null; then
-              brew install graphicsmagick
-          fi
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
@@ -69,19 +62,6 @@ jobs:
           npx electron-builder --config ./electron-builder.json5 --win nsis portable
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build Electron (macOS)
-        if: matrix.os == 'macos-latest'
-        run: |
-          pnpm --filter=@deltachat-desktop/target-electron pack:generate_config
-          pnpm --filter=@deltachat-desktop/target-electron pack:patch-node-modules
-          # Build zip without code signing (skip dmg/mas which require Apple Developer certificate)
-          cd packages/target-electron
-          npx electron-builder --config ./electron-builder.json5 --mac zip -c.mac.identity=null -c.afterSign=
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CSC_IDENTITY_AUTO_DISCOVERY: false
-          CSC_LINK: ""
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
@@ -116,7 +96,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-22.04, windows-latest, macos-latest]
+        os: [ubuntu-22.04, windows-latest]
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -133,8 +113,6 @@ jobs:
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: ${{ matrix.os == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
 
       - name: Install dependencies (Ubuntu 22.04)
         if: matrix.os == 'ubuntu-22.04'
@@ -149,6 +127,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAURI_CLI_NO_DEV_SERVER_WAIT: true
+          VERSION_INFO_GIT_REF: ${{ github.sha }}
         run: pnpm build:tauri
 
       - name: Upload Artifacts
@@ -160,8 +139,6 @@ jobs:
             packages/target-tauri/src-tauri/target/release/bundle/appimage/*.AppImage
             packages/target-tauri/src-tauri/target/release/bundle/msi/*.msi
             packages/target-tauri/src-tauri/target/release/bundle/nsis/*.exe
-            packages/target-tauri/src-tauri/target/release/bundle/dmg/*.dmg
-            packages/target-tauri/src-tauri/target/release/bundle/macos/*.app
           if-no-files-found: warn
 
   build-packages:
@@ -211,11 +188,9 @@ jobs:
           files: |
             electron-release-ubuntu-latest/*
             electron-release-windows-latest/*
-            electron-release-macos-latest/*
             browser-build.tar.gz
             tauri-release-ubuntu-22.04/*
             tauri-release-windows-latest/*
-            tauri-release-macos-latest/*
             npm-packages/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
