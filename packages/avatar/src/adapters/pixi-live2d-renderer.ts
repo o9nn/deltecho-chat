@@ -228,8 +228,9 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     }
 
     // Dynamically import Live2DModel
-    const { Live2DModel: Live2DModelClass } =
-      await import("pixi-live2d-display-lipsyncpatch");
+    const { Live2DModel: Live2DModelClass } = await import(
+      "pixi-live2d-display-lipsyncpatch"
+    );
 
     // Dispose existing model
     if (this.model) {
@@ -406,7 +407,9 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     }
 
     console.warn(
-      `[PixiLive2DRenderer] Motion playback failed: ${motion} (tried groups: ${motionDef.groups.join(", ")})`,
+      `[PixiLive2DRenderer] Motion playback failed: ${motion} (tried groups: ${motionDef.groups.join(
+        ", ",
+      )})`,
     );
   }
 
