@@ -5,14 +5,12 @@
   "compatibility_date": "2024-12-01",
 
   // Container configuration
-  // Use context to build from repo root where all packages are available
+  // Dockerfile is at repo root (../../Dockerfile.cloudflare relative to this file)
+  // Wrangler will be run from repo root so path is relative to that
   "containers": [
     {
       "class_name": "DeltEchoContainer",
-      "image": {
-        "context": "../../",
-        "dockerfile": "packages/target-browser/Dockerfile"
-      },
+      "image": "./Dockerfile.cloudflare",
       "max_instances": 10
     }
   ],

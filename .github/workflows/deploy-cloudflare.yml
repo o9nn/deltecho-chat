@@ -60,7 +60,8 @@ jobs:
 
       - name: Deploy to Cloudflare Containers
         id: deploy
-        working-directory: packages/target-browser
+        # Run from repo root so Dockerfile.cloudflare is accessible
+        working-directory: .
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -69,11 +70,11 @@ jobs:
           set +e  # Don't exit on error so we can capture output
           if [ "${{ github.event_name }}" == "pull_request" ]; then
             # Preview deployment for PRs
-            wrangler deploy --env preview 2>&1 | tee /tmp/deploy_output.txt
+            wrangler deploy --config packages/target-browser/wrangler.jsonc --env preview 2>&1 | tee /tmp/deploy_output.txt
             DEPLOY_STATUS=${PIPESTATUS[0]}
           else
             # Production deployment for main branch
-            wrangler deploy 2>&1 | tee /tmp/deploy_output.txt
+            wrangler deploy --config packages/target-browser/wrangler.jsonc 2>&1 | tee /tmp/deploy_output.txt
             DEPLOY_STATUS=${PIPESTATUS[0]}
           fi
           
