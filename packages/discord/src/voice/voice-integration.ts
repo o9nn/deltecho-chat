@@ -102,9 +102,8 @@ export class VADAudioProcessor implements AudioProcessor {
 
     try {
       // Use MultiModalProcessor for STT
-      const { multiModalProcessor } = await import(
-        "deep-tree-echo-core/multimodal"
-      );
+      const { multiModalProcessor } =
+        await import("deep-tree-echo-core/multimodal");
       const capabilities = multiModalProcessor.getCapabilities();
 
       if (!capabilities.stt) {
@@ -202,9 +201,8 @@ export class VoiceTTSProvider implements TTSProvider {
 
     try {
       // Use MultiModalProcessor for TTS
-      const { multiModalProcessor } = await import(
-        "deep-tree-echo-core/multimodal"
-      );
+      const { multiModalProcessor } =
+        await import("deep-tree-echo-core/multimodal");
       const capabilities = multiModalProcessor.getCapabilities();
 
       if (!capabilities.tts) {

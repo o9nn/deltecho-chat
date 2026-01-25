@@ -7,9 +7,8 @@ describe("DeepTreeEchoBot Sanity Check", () => {
   });
 
   it("should have a defined chat context registration function", async () => {
-    const { registerChatContext } = await import(
-      "./components/DeepTreeEchoBot/index"
-    );
+    const { registerChatContext } =
+      await import("./components/DeepTreeEchoBot/index");
     expect(typeof registerChatContext).toBe("function");
   });
 

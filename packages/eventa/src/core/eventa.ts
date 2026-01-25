@@ -63,16 +63,11 @@ export type EventPayload<E> = E extends EventDefinition<infer P> ? P : never;
 /**
  * Type helper to extract request type from invoke event definition
  */
-export type InvokeRequest<E> = E extends InvokeEventDefinition<unknown, infer R>
-  ? R
-  : never;
+export type InvokeRequest<E> =
+  E extends InvokeEventDefinition<unknown, infer R> ? R : never;
 
 /**
  * Type helper to extract response type from invoke event definition
  */
-export type InvokeResponse<E> = E extends InvokeEventDefinition<
-  infer R,
-  unknown
->
-  ? R
-  : never;
+export type InvokeResponse<E> =
+  E extends InvokeEventDefinition<infer R, unknown> ? R : never;
