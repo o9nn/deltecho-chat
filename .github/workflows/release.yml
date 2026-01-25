@@ -64,8 +64,9 @@ jobs:
         run: |
           pnpm --filter=@deltachat-desktop/target-electron pack:generate_config
           pnpm --filter=@deltachat-desktop/target-electron pack:patch-node-modules
-          # Use npx to invoke electron-builder directly to avoid pnpm.cjs execution issue
-          npx electron-builder --config ./packages/target-electron/electron-builder.json5 --win nsis portable --project packages/target-electron
+          # Use npx to invoke electron-builder directly in the target-electron directory
+          cd packages/target-electron
+          npx electron-builder --config ./electron-builder.json5 --win nsis portable
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -74,9 +75,12 @@ jobs:
         run: |
           pnpm --filter=@deltachat-desktop/target-electron pack:generate_config
           pnpm --filter=@deltachat-desktop/target-electron pack:patch-node-modules
-          pnpm --filter=@deltachat-desktop/target-electron pack:mac
+          # Build dmg only (skip mas which requires Apple Developer certificate)
+          cd packages/target-electron
+          npx electron-builder --config ./electron-builder.json5 --mac dmg
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CSC_IDENTITY_AUTO_DISCOVERY: false
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
