@@ -17,6 +17,9 @@ COPY packages/shared/package.json ./packages/shared/
 COPY packages/runtime/package.json ./packages/runtime/
 COPY packages/avatar/package.json ./packages/avatar/
 COPY packages/cognitive/package.json ./packages/cognitive/
+COPY packages/core/package.json ./packages/core/
+COPY packages/reasoning/package.json ./packages/reasoning/
+COPY packages/ui-components/package.json ./packages/ui-components/
 
 # Copy bin directory for preinstall scripts
 COPY bin/ ./bin/
@@ -45,6 +48,9 @@ COPY packages/shared/package.json ./packages/shared/
 COPY packages/runtime/package.json ./packages/runtime/
 COPY packages/avatar/package.json ./packages/avatar/
 COPY packages/cognitive/package.json ./packages/cognitive/
+COPY packages/core/package.json ./packages/core/
+COPY packages/reasoning/package.json ./packages/reasoning/
+COPY packages/ui-components/package.json ./packages/ui-components/
 COPY bin/ ./bin/
 
 # Install production dependencies only - skip optional deps to reduce size
