@@ -49,7 +49,9 @@ function config(options) {
 const eslintPlugin = {
   name: 'eslint',
   setup(build) {
-    const eslint = new ESLint()
+    // Use the root eslint.config.js (flat config) by setting cwd to project root
+    const projectRoot = path.resolve(import.meta.dirname, '../../..')
+    const eslint = new ESLint({ cwd: projectRoot })
     const filesToLint = []
 
     build.onLoad({ filter: /\.(?:jsx?|tsx?)$/ }, args => {
