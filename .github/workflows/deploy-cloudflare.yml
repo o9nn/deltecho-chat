@@ -66,16 +66,27 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           # Deploy with Wrangler
+          set +e  # Don't exit on error so we can capture output
           if [ "${{ github.event_name }}" == "pull_request" ]; then
             # Preview deployment for PRs
-            DEPLOY_OUTPUT=$(wrangler deploy --env preview 2>&1)
-            echo "deployment_url=$(echo "$DEPLOY_OUTPUT" | grep -oP 'https://[^\s]+')" >> $GITHUB_OUTPUT
+            wrangler deploy --env preview 2>&1 | tee /tmp/deploy_output.txt
+            DEPLOY_STATUS=${PIPESTATUS[0]}
           else
             # Production deployment for main branch
-            DEPLOY_OUTPUT=$(wrangler deploy 2>&1)
-            echo "deployment_url=$(echo "$DEPLOY_OUTPUT" | grep -oP 'https://[^\s]+')" >> $GITHUB_OUTPUT
+            wrangler deploy 2>&1 | tee /tmp/deploy_output.txt
+            DEPLOY_STATUS=${PIPESTATUS[0]}
           fi
-          echo "$DEPLOY_OUTPUT"
+          
+          # Extract deployment URL if successful
+          DEPLOY_URL=$(grep -oP 'https://[^\s]+' /tmp/deploy_output.txt | head -1 || true)
+          echo "deployment_url=$DEPLOY_URL" >> $GITHUB_OUTPUT
+          
+          # Show full output for debugging
+          echo "=== Full Wrangler Output ==="
+          cat /tmp/deploy_output.txt
+          
+          # Exit with the original status
+          exit $DEPLOY_STATUS
 
       - name: Comment PR with Preview URL
         if: github.event_name == 'pull_request'
