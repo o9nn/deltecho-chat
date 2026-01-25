@@ -5,12 +5,11 @@
   "compatibility_date": "2024-12-01",
 
   // Container configuration
-  // Dockerfile is at repo root (../../Dockerfile.cloudflare relative to this file)
-  // Wrangler will be run from repo root so path is relative to that
+  // Dockerfile is at repo root, path is relative to this wrangler.jsonc file
   "containers": [
     {
       "class_name": "DeltEchoContainer",
-      "image": "./Dockerfile.cloudflare",
+      "image": "../../Dockerfile.cloudflare",
       "max_instances": 10
     }
   ],
