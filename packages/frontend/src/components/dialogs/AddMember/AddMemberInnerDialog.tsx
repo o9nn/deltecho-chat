@@ -143,9 +143,9 @@ export function AddMemberInnerDialog({
   const applyCSSHacks = () => {
     setTimeout(() => inputRef.current?.focus(), 0);
 
-    const offsetHeight = document.querySelector(
-      ".AddMemberChipsWrapper",
-    )?.offsetHeight; //@ts-ignore
+    const offsetHeight = (
+      document.querySelector(".AddMemberChipsWrapper") as HTMLElement | null
+    )?.offsetHeight;
     if (!offsetHeight) return;
     contactListRef.current?.style.setProperty(
       "max-height",
