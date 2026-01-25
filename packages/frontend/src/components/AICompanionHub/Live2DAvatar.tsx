@@ -48,9 +48,9 @@ export interface Live2DAvatarController {
   setParameter: (paramId: string, value: number) => void;
 }
 
-// CDN-hosted sample models for demo
+// Model paths - local models are served from /models/ in the build output
 const CDN_MODELS = {
-  miara: "/static/models/miara/miara_pro_t03.model3.json",
+  miara: "/models/miara/miara_pro_t03.model3.json",
   shizuku:
     "https://cdn.jsdelivr.net/gh/guansss/pixi-live2d-display/test/assets/shizuku/shizuku.model.json",
   haru: "https://cdn.jsdelivr.net/gh/guansss/pixi-live2d-display/test/assets/haru/haru_greeter_t03.model3.json",
@@ -92,7 +92,10 @@ export interface Live2DAvatarState {
   isLoaded: boolean;
   error: Error | null;
   currentExpression: Expression;
+  retryCount: number;
 }
+
+const MAX_RETRIES = 3;
 
 /**
  * Live2D Avatar Component for the AI Companion Hub
@@ -121,7 +124,19 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
     isLoaded: false,
     error: null,
     currentExpression: "neutral",
+    retryCount: 0,
   });
+
+  // Retry function to re-attempt loading
+  const handleRetry = useCallback(() => {
+    setState((prev) => ({
+      ...prev,
+      isLoading: true,
+      isLoaded: false,
+      error: null,
+      retryCount: prev.retryCount + 1,
+    }));
+  }, []);
 
   // Resolve model URL from preset or use as-is
   const modelUrl = CDN_MODELS[model as keyof typeof CDN_MODELS] || model;
@@ -220,7 +235,7 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
       controllerRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modelUrl, width, height, scale]);
+  }, [modelUrl, width, height, scale, state.retryCount]);
 
   // Update emotional state
   useEffect(() => {
@@ -234,8 +249,8 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
     controllerRef.current.updateLipSync(audioLevel ?? 0);
   }, [audioLevel, state.isLoaded]);
 
-  // Render sprite mode if selected or if loading/error
-  if (mode === "sprite" || (!state.isLoaded && !showLoading)) {
+  // Sprite-only mode: render sprite without Live2D container
+  if (mode === "sprite") {
     return (
       <div
         className={`live2d-avatar-container ${className || ""}`}
@@ -247,59 +262,104 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
           width={width}
           height={height}
         />
-        {/* Optional: Show loading overlay if we are actually trying to load live2d in background */}
-        {showLoading && state.isLoading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/50 text-white text-xs">
-            Loading Live2D...
-          </div>
-        )}
       </div>
     );
   }
 
-  // Render loading state for Live2D
-  if (showLoading && state.isLoading) {
-    return (
-      <div
-        className={`live2d-avatar live2d-loading ${className || ""}`}
-        data-width={width}
-        data-height={height}
-      >
-        <div className="live2d-loading-content">
-          <div className="live2d-spinner" />
-          <span>Loading Avatar...</span>
-        </div>
-      </div>
-    );
-  }
-
-  // Render error state -> Fallback to Sprite
-  if (showError && state.error) {
-    return (
-      <div
-        className={`live2d-avatar-container ${className || ""}`}
-        style={{ width, height }}
-      >
-        <ResponsiveSpriteAvatar
-          emotionalState={emotionalState}
-          isSpeaking={isSpeaking}
-          width={width}
-          height={height}
-        />
-        <div className="live2d-error-overlay" title={state.error.message}>
-          ⚠️ Live2D Failed
-        </div>
-      </div>
-    );
-  }
-
+  // Live2D mode: Always render the container so initialization can attach canvas
+  // Overlay loading/error states on top of the container
   return (
     <div
-      ref={containerRef}
-      className={`live2d-avatar live2d-ready ${className || ""}`}
-      data-width={width}
-      data-height={height}
-    />
+      className={`live2d-avatar-container ${className || ""}`}
+      style={{ width, height, position: "relative" }}
+    >
+      {/* Main Live2D canvas container - always rendered for initialization */}
+      <div
+        ref={containerRef}
+        className={`live2d-avatar ${state.isLoaded ? "live2d-ready" : ""}`}
+        style={{
+          width: "100%",
+          height: "100%",
+          position: "absolute",
+          top: 0,
+          left: 0,
+          visibility: state.isLoaded && !state.error ? "visible" : "hidden",
+        }}
+        data-width={width}
+        data-height={height}
+      />
+
+      {/* Loading state overlay */}
+      {showLoading && state.isLoading && !state.error && (
+        <div
+          className="live2d-loading"
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div className="live2d-loading-content">
+            <div className="live2d-spinner" />
+            <span>Loading Avatar...</span>
+          </div>
+        </div>
+      )}
+
+      {/* Error state: show sprite fallback with error indicator and retry button */}
+      {showError && state.error && (
+        <>
+          <ResponsiveSpriteAvatar
+            emotionalState={emotionalState}
+            isSpeaking={isSpeaking}
+            width={width}
+            height={height}
+          />
+          <div
+            className="live2d-error-overlay"
+            style={{
+              position: "absolute",
+              bottom: 8,
+              left: "50%",
+              transform: "translateX(-50%)",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 4,
+              background: "rgba(0,0,0,0.7)",
+              padding: "6px 12px",
+              borderRadius: 6,
+              color: "#fff",
+              fontSize: 12,
+            }}
+          >
+            <span title={state.error.message}>⚠️ Live2D Failed</span>
+            {state.retryCount < MAX_RETRIES && (
+              <button
+                type="button"
+                onClick={handleRetry}
+                style={{
+                  background: "#4a90d9",
+                  border: "none",
+                  borderRadius: 4,
+                  color: "#fff",
+                  padding: "4px 8px",
+                  cursor: "pointer",
+                  fontSize: 11,
+                }}
+              >
+                Retry ({MAX_RETRIES - state.retryCount} left)
+              </button>
+            )}
+          </div>
+        </>
+      )}
+    </div>
   );
 };
 
