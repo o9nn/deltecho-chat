@@ -1,0 +1,45 @@
+{
+  "$schema": "https://raw.githubusercontent.com/cloudflare/workers-sdk/main/packages/wrangler/config-schema.json",
+  "name": "deltecho-chat-preview",
+  "main": "packages/target-browser/cloudflare/worker.ts",
+  "compatibility_date": "2024-12-01",
+
+  // Container configuration
+  // Dockerfile is at repo root
+  "containers": [
+    {
+      "class_name": "DeltEchoContainer",
+      "image": "./Dockerfile.cloudflare",
+      "max_instances": 10
+    }
+  ],
+
+  // Durable Objects binding for containers
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "DELTECHO_CONTAINER",
+        "class_name": "DeltEchoContainer"
+      }
+    ]
+  },
+
+  // Required migration for Durable Objects with SQLite
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["DeltEchoContainer"]
+    }
+  ],
+
+  // Environment variables (secrets should be set via wrangler secret)
+  "vars": {
+    "ENVIRONMENT": "preview"
+  },
+
+  // Development settings
+  "dev": {
+    "port": 8787,
+    "local_protocol": "http"
+  }
+}
