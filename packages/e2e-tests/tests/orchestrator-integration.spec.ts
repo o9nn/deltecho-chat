@@ -45,11 +45,17 @@ test.describe("Orchestrator Integration", () => {
 
       if (existingProfiles.length > 0) {
         await switchToProfile(page, existingProfiles[0].id);
+        // App should be responsive, indicating IPC is working
+        const chatList = page.locator(".chat-list");
+        await expect(chatList).toBeVisible({ timeout: 30000 });
+      } else {
+        // No profiles exist, just verify the app is responsive
+        // The onboarding dialog or main container should be visible
+        const appReady = page.locator(
+          ".main-container, [data-testid='onboarding-dialog']",
+        );
+        await expect(appReady.first()).toBeVisible({ timeout: 30000 });
       }
-
-      // App should be responsive, indicating IPC is working
-      const chatList = page.locator(".chat-list");
-      await expect(chatList).toBeVisible({ timeout: 30000 });
     });
 
     test("should handle IPC message routing", async ({ page }) => {

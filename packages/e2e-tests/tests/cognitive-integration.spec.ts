@@ -131,9 +131,9 @@ test.describe("Cognitive System Initialization", () => {
 
     await settingsButton.first().click();
 
-    // Verify settings panel appears - the settings dialog uses a specific class
+    // Verify settings panel appears - the settings dialog uses data-testid="settings-dialog"
     const settingsPanel = page.locator(
-      '[data-testid="settings-panel"], [class*="SettingsDialog"], [role="dialog"], .settings-container',
+      '[data-testid="settings-dialog"], [data-testid="settings-panel"], .dc-settings-dialog, [role="dialog"], .settings-container',
     );
 
     // Actually wait for the panel with a reasonable timeout

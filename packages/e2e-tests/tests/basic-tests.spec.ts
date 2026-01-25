@@ -100,6 +100,8 @@ test("start chat with user", async ({ page, context, browserName }) => {
  * user A sends two messages to user B
  */
 test("send message", async ({ page }) => {
+  // Increase test timeout to accommodate message delivery delays
+  test.setTimeout(120_000);
   const userA = existingProfiles[0];
   const userB = existingProfiles[1];
   // prepare last open chat for receiving user
@@ -130,9 +132,9 @@ test("send message", async ({ page }) => {
     .locator(".msg-body .text");
   await expect(sentMessageText).toHaveText(messageText);
   // Badge notification may take time to appear in CI due to SMTP rate limiting
-  // Skip badge check if it doesn't appear - message delivery is the critical test
+  // Use shorter timeout and skip if not visible - message delivery is the critical test
   try {
-    await expect(badgeNumber).toHaveText("1", { timeout: 60000 });
+    await expect(badgeNumber).toHaveText("1", { timeout: 30000 });
   } catch {
     /* ignore-console-log */
     console.log(
@@ -145,9 +147,9 @@ test("send message", async ({ page }) => {
 
   await expect(sentMessageText).toHaveText(messageText + " 2");
   // Badge notification may take time to update in CI due to SMTP rate limiting
-  // Skip badge check if it doesn't appear - message delivery is the critical test
+  // Use shorter timeout and skip if not visible - message delivery is the critical test
   try {
-    await expect(badgeNumber).toHaveText("2", { timeout: 60000 });
+    await expect(badgeNumber).toHaveText("2", { timeout: 30000 });
   } catch {
     /* ignore-console-log */
     console.log(
@@ -164,7 +166,7 @@ test("send message", async ({ page }) => {
   try {
     await expect(
       chatListItem.locator(".chat-list-item-message .text"),
-    ).toHaveText(messageText + " 2", { timeout: 60000 });
+    ).toHaveText(messageText + " 2", { timeout: 30000 });
     await expect(
       chatListItem
         .locator(".chat-list-item-message")

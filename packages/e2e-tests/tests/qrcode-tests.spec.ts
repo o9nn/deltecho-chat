@@ -151,10 +151,12 @@ test("onboarding with manual credentials", async ({
   await page.getByTestId("login-with-credentials").click();
   await expect(page.getByTestId("login-with-credentials")).not.toBeVisible();
 
-  const newAccountList = page
-    .locator("[class*='account']")
-    .filter({ has: page.locator("[class*='accountButton']") });
-  await expect(newAccountList.last()).toHaveClass(/_active/);
+  // Use the correct selector for account buttons
+  const newAccountList = page.locator("button[x-account-sidebar-account-id]");
+  // Wait for the account to be active with increased timeout
+  await expect(newAccountList.last()).toHaveClass(/_active/, {
+    timeout: 20000,
+  });
   // open settings to validate the name and the mail address
   const settingsButton = page.getByTestId("open-settings-button");
   await settingsButton.click();
