@@ -134,7 +134,7 @@ test("send message", async ({ page }) => {
   // Badge notification may take time to appear in CI due to SMTP rate limiting
   // Use shorter timeout and skip if not visible - message delivery is the critical test
   try {
-    await expect(badgeNumber).toHaveText("1", { timeout: 30000 });
+    await expect(badgeNumber).toHaveText("1", { timeout: 10000 });
   } catch {
     /* ignore-console-log */
     console.log(
@@ -149,7 +149,7 @@ test("send message", async ({ page }) => {
   // Badge notification may take time to update in CI due to SMTP rate limiting
   // Use shorter timeout and skip if not visible - message delivery is the critical test
   try {
-    await expect(badgeNumber).toHaveText("2", { timeout: 30000 });
+    await expect(badgeNumber).toHaveText("2", { timeout: 10000 });
   } catch {
     /* ignore-console-log */
     console.log(
@@ -166,12 +166,12 @@ test("send message", async ({ page }) => {
       .filter({ hasText: userA.name })
       .first();
     // Wait for the chat to appear with a timeout
-    await expect(chatListItem).toBeVisible({ timeout: 30000 });
+    await expect(chatListItem).toBeVisible({ timeout: 15000 });
     // Message preview may not be visible due to SMTP rate limiting
     try {
       await expect(
         chatListItem.locator(".chat-list-item-message .text"),
-      ).toHaveText(messageText + " 2", { timeout: 30000 });
+      ).toHaveText(messageText + " 2", { timeout: 10000 });
       await expect(
         chatListItem
           .locator(".chat-list-item-message")
@@ -192,7 +192,7 @@ test("send message", async ({ page }) => {
     // Make this check optional to avoid flaky test failures
     try {
       await expect(receivedMessageText).toHaveText(messageText, {
-        timeout: 60000,
+        timeout: 15000,
       });
     } catch {
       /* ignore-console-log */
