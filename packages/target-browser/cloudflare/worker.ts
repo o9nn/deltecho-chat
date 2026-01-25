@@ -25,6 +25,9 @@ export class DeltEchoContainer extends Container {
   // Sleep after 30 minutes of inactivity to save resources
   sleepAfter = "30m";
 
+  // Enable internet access for the container (needed for DeltaChat)
+  enableInternet = true;
+
   // Environment variables passed to the container
   envVars = {
     NODE_ENV: "production",
@@ -75,34 +78,46 @@ export default {
     // Get session ID from cookie or create new one
     const sessionId = getSessionId(request);
 
-    // Get or create container instance for this session
-    const container = getContainer(env.DELTECHO_CONTAINER, sessionId);
+    try {
+      // Get or create container instance for this session
+      const container = getContainer(env.DELTECHO_CONTAINER, sessionId);
 
-    // Check if this is a WebSocket upgrade request
-    const upgradeHeader = request.headers.get("Upgrade");
-    if (upgradeHeader?.toLowerCase() === "websocket") {
-      // Forward WebSocket requests directly to the container
-      return container.fetch(request);
-    }
+      // Explicitly start the container and wait for port 8080 to be ready
+      await container.startAndWaitForPorts(8080);
 
-    // Forward HTTP requests to the container
-    const response = await container.fetch(request);
+      // Check if this is a WebSocket upgrade request
+      const upgradeHeader = request.headers.get("Upgrade");
+      if (upgradeHeader?.toLowerCase() === "websocket") {
+        // Forward WebSocket requests directly to the container
+        return container.fetch(request);
+      }
 
-    // Add session cookie if not present
-    if (!request.headers.get("Cookie")?.includes("deltecho-session")) {
-      const headers = new Headers(response.headers);
-      headers.append(
-        "Set-Cookie",
-        `deltecho-session=${sessionId}; Path=/; HttpOnly; SameSite=Strict; Max-Age=86400`,
+      // Forward HTTP requests to the container
+      const response = await container.fetch(request);
+
+      // Add session cookie if not present
+      if (!request.headers.get("Cookie")?.includes("deltecho-session")) {
+        const headers = new Headers(response.headers);
+        headers.append(
+          "Set-Cookie",
+          `deltecho-session=${sessionId}; Path=/; HttpOnly; SameSite=Strict; Max-Age=86400`,
+        );
+        return new Response(response.body, {
+          status: response.status,
+          statusText: response.statusText,
+          headers,
+        });
+      }
+
+      return response;
+    } catch (error) {
+      /* ignore-console-log */
+      console.error("[DeltEcho] Error handling request:", error);
+      return new Response(
+        `Failed to start container: ${error instanceof Error ? error.message : String(error)}`,
+        { status: 500 },
       );
-      return new Response(response.body, {
-        status: response.status,
-        statusText: response.statusText,
-        headers,
-      });
     }
-
-    return response;
   },
 };
 
