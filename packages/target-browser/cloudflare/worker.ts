@@ -90,7 +90,7 @@ export default {
       const headers = new Headers(response.headers);
       headers.append(
         "Set-Cookie",
-        `deltecho-session=${sessionId}; Path=/; HttpOnly; SameSite=Strict; Max-Age=86400`
+        `deltecho-session=${sessionId}; Path=/; HttpOnly; SameSite=Strict; Max-Age=86400`,
       );
       return new Response(response.body, {
         status: response.status,

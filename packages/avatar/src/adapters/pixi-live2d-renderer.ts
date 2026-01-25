@@ -228,9 +228,8 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     }
 
     // Dynamically import Live2DModel
-    const { Live2DModel: Live2DModelClass } = await import(
-      "pixi-live2d-display-lipsyncpatch"
-    );
+    const { Live2DModel: Live2DModelClass } =
+      await import("pixi-live2d-display-lipsyncpatch");
 
     // Dispose existing model
     if (this.model) {

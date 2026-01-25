@@ -48,20 +48,22 @@ Cloudflare Containers allows running Docker containers on Cloudflare's edge netw
 
 Add the following secrets to your repository:
 
-| Secret Name | Description |
-|-------------|-------------|
-| `CLOUDFLARE_API_TOKEN` | API token with Workers permissions |
-| `CLOUDFLARE_ACCOUNT_ID` | Your Cloudflare account ID |
+| Secret Name             | Description                        |
+| ----------------------- | ---------------------------------- |
+| `CLOUDFLARE_API_TOKEN`  | API token with Workers permissions |
+| `CLOUDFLARE_ACCOUNT_ID` | Your Cloudflare account ID         |
 
 ### 2. Enable Cloudflare Containers Beta
 
 Cloudflare Containers is currently in Beta. You may need to:
+
 1. Join the [Cloudflare Containers Discord](https://discord.gg/cloudflaredev)
 2. Request access to the beta program
 
 ### 3. Deploy
 
 The deployment happens automatically on:
+
 - Push to `main` branch (production deployment)
 - Pull request (preview deployment)
 - Manual trigger via workflow dispatch
@@ -71,6 +73,7 @@ The deployment happens automatically on:
 ### Dockerfile (`packages/target-browser/Dockerfile`)
 
 Multi-stage Docker build that:
+
 1. Builds the browser target with Node.js
 2. Downloads the `deltachat-rpc-server` binary
 3. Creates a minimal production image
@@ -78,6 +81,7 @@ Multi-stage Docker build that:
 ### Wrangler Config (`packages/target-browser/wrangler.jsonc`)
 
 Cloudflare Workers configuration that defines:
+
 - Container settings (max instances, sleep timeout)
 - Durable Object bindings
 - Environment variables
@@ -85,6 +89,7 @@ Cloudflare Workers configuration that defines:
 ### Worker (`packages/target-browser/cloudflare/worker.ts`)
 
 The Worker that:
+
 - Routes requests to container instances
 - Manages session-based container routing
 - Handles WebSocket upgrades
@@ -98,24 +103,24 @@ The Worker that:
 
 ## Environment Variables
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `WEB_PORT` | Port the server listens on | `8080` |
-| `WEB_PASSWORD` | Password for authentication | (set via secret) |
-| `DC_ACCOUNTS_PATH` | Path to DeltaChat accounts | `/data/accounts` |
-| `USE_HTTP_IN_TEST` | Use HTTP instead of HTTPS | `true` |
+| Variable           | Description                 | Default          |
+| ------------------ | --------------------------- | ---------------- |
+| `WEB_PORT`         | Port the server listens on  | `8080`           |
+| `WEB_PASSWORD`     | Password for authentication | (set via secret) |
+| `DC_ACCOUNTS_PATH` | Path to DeltaChat accounts  | `/data/accounts` |
+| `USE_HTTP_IN_TEST` | Use HTTP instead of HTTPS   | `true`           |
 
 ## Limits
 
 Cloudflare Containers has the following limits:
 
-| Resource | Limit |
-|----------|-------|
-| Max instances | 10 (configurable) |
-| Memory | Up to 4GB |
-| CPU | Dedicated vCPU |
-| Disk | Ephemeral (use R2 for persistence) |
-| Request timeout | 30 seconds |
+| Resource        | Limit                              |
+| --------------- | ---------------------------------- |
+| Max instances   | 10 (configurable)                  |
+| Memory          | Up to 4GB                          |
+| CPU             | Dedicated vCPU                     |
+| Disk            | Ephemeral (use R2 for persistence) |
+| Request timeout | 30 seconds                         |
 
 ## Persistent Storage
 
@@ -131,6 +136,7 @@ See the [Mount R2 buckets with FUSE](https://developers.cloudflare.com/container
 ### Container fails to start
 
 Check the container logs:
+
 ```bash
 wrangler tail --env preview
 ```
@@ -138,6 +144,7 @@ wrangler tail --env preview
 ### WebSocket connection fails
 
 Ensure the Worker is forwarding WebSocket requests:
+
 ```typescript
 const upgradeHeader = request.headers.get("Upgrade");
 if (upgradeHeader?.toLowerCase() === "websocket") {
@@ -148,6 +155,7 @@ if (upgradeHeader?.toLowerCase() === "websocket") {
 ### Slow cold starts
 
 Cold starts are expected (~5-10s). Consider:
+
 - Keeping containers warm with periodic requests
 - Using smaller Docker images
 - Pre-warming containers before demos
@@ -166,6 +174,7 @@ Note: Local development requires Docker running for container simulation.
 ## Cost Estimation
 
 Cloudflare Containers pricing (as of Jan 2026):
+
 - **Requests**: Included in Workers Paid plan
 - **Container runtime**: Billed per GB-second
 - **Container storage**: Billed per GB stored
