@@ -4,6 +4,11 @@
   "main": "packages/target-browser/cloudflare/worker.ts",
   "compatibility_date": "2024-12-01",
 
+  // Enable observability for container logs
+  "observability": {
+    "enabled": true
+  },
+
   // Container configuration
   // Dockerfile is at repo root
   "containers": [
