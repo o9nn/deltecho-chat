@@ -80,6 +80,7 @@ ENV DATA_DIR=/data
 ENV DIST_DIR=/app/dist
 ENV WEB_PORT=8080
 ENV USE_HTTP_IN_TEST=true
+ENV DELTA_CHAT_RPC_SERVER=/usr/local/bin/deltachat-rpc-server
 
 # Expose the port
 EXPOSE 8080
