@@ -127,9 +127,11 @@ test("create group", async ({ page, context, browserName }) => {
   await addMemberDialog.getByTestId("ok").click();
 
   await page.getByTestId("group-create-button").click();
+  // Use first() to avoid strict mode violation when multiple groups with same name exist
   const chatListItem = page
     .locator(".chat-list .chat-list-item")
-    .filter({ hasText: groupName });
+    .filter({ hasText: groupName })
+    .first();
   await expect(chatListItem).toBeVisible();
   await page.locator("#composer-textarea").fill(`Hello group members!`);
   await page.locator("button.send-button").click();
