@@ -36,6 +36,7 @@ export class DeltEchoContainer extends Container {
    * Called when the container starts successfully
    */
   override onStart() {
+    /* ignore-console-log */
     console.log("[DeltEcho] Container started successfully");
   }
 
@@ -43,6 +44,7 @@ export class DeltEchoContainer extends Container {
    * Called when the container stops
    */
   override onStop() {
+    /* ignore-console-log */
     console.log("[DeltEcho] Container stopped");
   }
 
@@ -50,6 +52,7 @@ export class DeltEchoContainer extends Container {
    * Called when an error occurs in the container
    */
   override onError(error: unknown) {
+    /* ignore-console-log */
     console.error("[DeltEcho] Container error:", error);
   }
 }
