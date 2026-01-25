@@ -114,7 +114,9 @@ export default {
       /* ignore-console-log */
       console.error("[DeltEcho] Error handling request:", error);
       return new Response(
-        `Failed to start container: ${error instanceof Error ? error.message : String(error)}`,
+        `Failed to start container: ${
+          error instanceof Error ? error.message : String(error)
+        }`,
         { status: 500 },
       );
     }
