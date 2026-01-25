@@ -1,0 +1,25 @@
+# Vendor and third-party files
+cubism/
+packages/frontend/static/live2dcubismcore.min.js
+packages/target-electron/static/electron_html_email_view/
+
+# Upstream repositories (should maintain their own formatting)
+upstream/
+
+# Build outputs
+dist/
+build/
+node_modules/
+.pnpm-store/
+
+# Lock files
+pnpm-lock.yaml
+package-lock.json
+
+# Generated files
+*.min.js
+*.min.css
+
+# Coverage and test outputs
+coverage/
+.nyc_output/

@@ -211,6 +211,7 @@
 
 1. **Run the App**: `pnpm dev:electron`
 2. **Manual Testing Checklist**:
+
    - Open AI Neighborhood (Ctrl+Shift+A)
    - Navigate chats using Alt+Up/Down
    - Open developer console (F12)

@@ -182,10 +182,12 @@ proactiveMessaging.updateConfig({
 The system comes with these default triggers:
 
 1. **Welcome New Contact** (enabled)
+
    - Sends a greeting when a new contact is added
    - Template: "Hello! I'm Deep Tree Echo..."
 
 2. **Check In After Silence** (disabled by default)
+
    - Sends a message if no activity for 24 hours
    - Uses AI to generate contextual message
 

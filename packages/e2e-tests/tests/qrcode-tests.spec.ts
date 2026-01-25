@@ -175,15 +175,24 @@ test("onboarding with manual credentials", async ({
   });
 });
 
-test.fixme("instant onboarding fails with withdrawn invite link", async () => {});
+test.fixme(
+  "instant onboarding fails with withdrawn invite link",
+  async () => {},
+);
 
 test.fixme("instant onboarding works with revived invite link", async () => {});
 
 // maybe move this to group tests?
 test.fixme("instant onboarding with group invite link", async () => {});
 
-test.fixme("instant onboarding fails with withdrawn group invite link", async () => {});
+test.fixme(
+  "instant onboarding fails with withdrawn group invite link",
+  async () => {},
+);
 
 test.fixme("instant onboarding works with DCLOGIN qr code", async () => {});
 
-test.fixme("instant onboarding with DCACCOUNT link from loaded image", async () => {});
+test.fixme(
+  "instant onboarding with DCACCOUNT link from loaded image",
+  async () => {},
+);

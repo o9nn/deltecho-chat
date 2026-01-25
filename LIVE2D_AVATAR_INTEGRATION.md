@@ -146,11 +146,13 @@ The avatar can be controlled via DeltaChat desktop settings:
 The avatar integrates with Deep Tree Echo's cognitive architecture:
 
 1. **CognitiveBridge** provides `UnifiedCognitiveState` with:
+
    - `emotionalValence` (-1 to 1, negative to positive)
    - `emotionalArousal` (0 to 1, calm to excited)
    - `salienceScore` (0 to 1, attention/importance)
 
 2. **State Mapping** converts cognitive state to:
+
    - Avatar expressions (neutral, happy, thinking, etc.)
    - Emotional vectors for fine-tuned animation
    - Motion triggers (nodding, tilting head, etc.)

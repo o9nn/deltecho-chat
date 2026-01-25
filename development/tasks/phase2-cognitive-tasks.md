@@ -26,6 +26,7 @@
 ## 3. Sentiment Analyzer
 
 - [x] 3.1 Create `src/sentiment-analyzer.ts` ✅
+
   - [x] Emotion keywords mapping
   - [x] Positive/negative word lists
   - [x] Negation handling
@@ -41,6 +42,7 @@
 ## 4. Cognitive State Manager
 
 - [x] 4.1 Create `src/cognitive-state.ts` ✅
+
   - [x] Phase cycling (0-29)
   - [x] Emotional decay
   - [x] Triadic stream management
@@ -53,6 +55,7 @@
 ## 5. Unified Message Handler
 
 - [x] 5.1 Create `src/unified-message.ts` ✅
+
   - [x] Message creation methods
   - [x] Enrichment methods (sentiment, emotion, memories)
   - [x] History management
@@ -66,18 +69,21 @@
 ## 6. Integration Adapters
 
 - [x] 6.1 Create `src/integrations/persona-adapter.ts` ✅
+
   - [x] PersonaCore connection
   - [x] Emotional state sync
   - [x] System prompt generation
   - [x] Cognitive params retrieval
 
 - [x] 6.2 Create `src/integrations/memory-adapter.ts` ✅
+
   - [x] RAGMemoryStore connection
   - [x] Memory search with caching
   - [x] Context formatting
   - [x] Vector creation
 
 - [x] 6.3 Create `src/integrations/llm-adapter.ts` ✅
+
   - [x] LLMService connection
   - [x] Prompt enrichment
   - [x] Emotional context injection
@@ -88,6 +94,7 @@
 ## 7. Cognitive Orchestrator
 
 - [x] 7.1 Create `src/cognitive-orchestrator.ts` ✅
+
   - [x] Pipeline orchestration
   - [x] Message processing
   - [x] Sentiment integration

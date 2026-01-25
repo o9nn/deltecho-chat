@@ -330,8 +330,9 @@ export class DeepTreeEchoTelegramBot {
 
       // Try to use MultiModalProcessor for STT
       try {
-        const { multiModalProcessor } =
-          await import("deep-tree-echo-core/multimodal");
+        const { multiModalProcessor } = await import(
+          "deep-tree-echo-core/multimodal"
+        );
         const capabilities = multiModalProcessor.getCapabilities();
 
         if (capabilities.stt) {
@@ -412,8 +413,9 @@ export class DeepTreeEchoTelegramBot {
 
       // Try to use MultiModalProcessor for vision
       try {
-        const { multiModalProcessor } =
-          await import("deep-tree-echo-core/multimodal");
+        const { multiModalProcessor } = await import(
+          "deep-tree-echo-core/multimodal"
+        );
         const capabilities = multiModalProcessor.getCapabilities();
 
         if (capabilities.vision) {
