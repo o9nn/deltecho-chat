@@ -14,6 +14,7 @@ jobs:
     name: Build Electron (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
 
@@ -59,10 +60,12 @@ jobs:
 
       - name: Build Electron (Windows)
         if: matrix.os == 'windows-latest'
+        shell: pwsh
         run: |
           pnpm --filter=@deltachat-desktop/target-electron pack:generate_config
           pnpm --filter=@deltachat-desktop/target-electron pack:patch-node-modules
-          pnpm --filter=@deltachat-desktop/target-electron pack:win
+          # Use npx to invoke electron-builder directly to avoid pnpm.cjs execution issue
+          npx electron-builder --config ./packages/target-electron/electron-builder.json5 --win nsis portable --project packages/target-electron
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -108,7 +111,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-22.04, windows-latest, macos-latest]
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -128,8 +131,8 @@ jobs:
         with:
           targets: ${{ matrix.os == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
 
-      - name: Install dependencies (ubuntu only)
-        if: matrix.os == 'ubuntu-22.04' || matrix.os == 'ubuntu-latest'
+      - name: Install dependencies (Ubuntu 22.04)
+        if: matrix.os == 'ubuntu-22.04'
         run: |
           sudo apt-get update
           sudo apt-get install -y libwebkit2gtk-4.0-dev build-essential curl wget file libssl-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev
@@ -140,6 +143,7 @@ jobs:
       - name: Build Tauri
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_CLI_NO_DEV_SERVER_WAIT: true
         run: pnpm build:tauri
 
       - name: Upload Artifacts
@@ -204,7 +208,7 @@ jobs:
             electron-release-windows-latest/*
             electron-release-macos-latest/*
             browser-build.tar.gz
-            tauri-release-ubuntu-latest/*
+            tauri-release-ubuntu-22.04/*
             tauri-release-windows-latest/*
             tauri-release-macos-latest/*
             npm-packages/*
