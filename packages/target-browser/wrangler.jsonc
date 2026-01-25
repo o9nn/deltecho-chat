@@ -5,10 +5,14 @@
   "compatibility_date": "2024-12-01",
 
   // Container configuration
+  // Use context to build from repo root where all packages are available
   "containers": [
     {
       "class_name": "DeltEchoContainer",
-      "image": "./Dockerfile",
+      "image": {
+        "context": "../../",
+        "dockerfile": "packages/target-browser/Dockerfile"
+      },
       "max_instances": 10
     }
   ],
