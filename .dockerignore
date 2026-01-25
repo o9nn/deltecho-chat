@@ -1,0 +1,69 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Node modules (will be installed fresh in container)
+node_modules
+**/node_modules
+
+# Build artifacts that aren't needed
+**/dist
+!packages/target-browser/dist
+!packages/frontend/html-dist
+
+# Development files
+.env
+.env.*
+*.log
+*.local
+
+# IDE and editor files
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Test files
+**/tests
+**/__tests__
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx
+packages/e2e-tests
+
+# Documentation
+docs
+*.md
+!README.md
+
+# CI/CD
+.github
+.gitlab-ci.yml
+.travis.yml
+
+# Electron/Tauri specific (not needed for browser target)
+packages/target-electron
+packages/target-tauri
+
+# Other packages not needed for browser target container
+packages/integrations
+packages/orchestrator
+packages/mcp
+packages/reasoning
+
+# Misc
+.DS_Store
+Thumbs.db
+*.bak
+*.tmp
+coverage
+.nyc_output
+
+# Large binary files
+*.exe
+*.dll
+*.so
+*.dylib
