@@ -52,7 +52,7 @@ packages/target-tauri
 packages/integrations
 packages/orchestrator
 packages/mcp
-packages/reasoning
+# packages/reasoning - REQUIRED: frontend depends on @deltecho/reasoning
 
 # Misc
 .DS_Store
