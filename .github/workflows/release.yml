@@ -75,9 +75,9 @@ jobs:
         run: |
           pnpm --filter=@deltachat-desktop/target-electron pack:generate_config
           pnpm --filter=@deltachat-desktop/target-electron pack:patch-node-modules
-          # Build dmg only without code signing (skip mas which requires Apple Developer certificate)
+          # Build zip without code signing (skip dmg/mas which require Apple Developer certificate)
           cd packages/target-electron
-          npx electron-builder --config ./electron-builder.json5 --mac dir
+          npx electron-builder --config ./electron-builder.json5 --mac zip -c.mac.identity=null -c.afterSign=
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CSC_IDENTITY_AUTO_DISCOVERY: false
