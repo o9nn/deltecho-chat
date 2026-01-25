@@ -1,10 +1,5 @@
 import { test, expect } from "@playwright/test";
-import {
-  switchToProfile,
-  User,
-  loadExistingProfiles,
-  reloadPage,
-} from "../playwright-helper";
+import { switchToProfile, User, reloadPage } from "../playwright-helper";
 
 /**
  * Orchestrator Integration E2E Test Suite
@@ -20,7 +15,7 @@ import {
 test.describe("Orchestrator Integration", () => {
   test.describe.configure({ mode: "serial" });
 
-  let existingProfiles: User[] = [];
+  const existingProfiles: User[] = [];
 
   // Skip beforeAll profile loading - tests should handle missing profiles gracefully
   // This avoids timeout issues when the app takes too long to initialize
