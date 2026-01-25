@@ -158,9 +158,10 @@ test("send message", async ({ page }) => {
   }
 
   await switchToProfile(page, userB.id);
+  // After switching to userB, we need to find the chat with userA (not userB)
   const chatListItem = page
     .locator(".chat-list .chat-list-item")
-    .filter({ hasText: userB.name })
+    .filter({ hasText: userA.name })
     .first();
   // Message preview may not be visible due to SMTP rate limiting
   try {

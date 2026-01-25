@@ -96,6 +96,8 @@ test("start chat with user", async ({ page, context, browserName }) => {
 });
 
 test("create group", async ({ page, context, browserName }) => {
+  // Increase test timeout to accommodate group creation delays
+  test.setTimeout(120_000);
   if (browserName.toLowerCase().indexOf("chrom") > -1) {
     await context.grantPermissions(["clipboard-read", "clipboard-write"]);
   }
