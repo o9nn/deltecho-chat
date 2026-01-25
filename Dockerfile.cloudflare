@@ -47,19 +47,22 @@ COPY packages/avatar/package.json ./packages/avatar/
 COPY packages/cognitive/package.json ./packages/cognitive/
 COPY bin/ ./bin/
 
-# Install production dependencies only
-RUN pnpm install --frozen-lockfile --prod
+# Install production dependencies only - skip optional deps to reduce size
+RUN pnpm install --frozen-lockfile --prod --ignore-scripts
 
-# Stage 3: Production image (minimal)
-FROM node:20-alpine AS runner
+# Stage 3: Production image (minimal debian-slim)
+FROM node:20-slim AS runner
 
 # Install curl for healthchecks
-RUN apk add --no-cache curl ca-certificates
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
-# Download deltachat-rpc-server binary
+# Download deltachat-rpc-server binary (glibc version for debian)
 ARG DELTACHAT_CORE_VERSION=2.38.0
 RUN curl -L -o /usr/local/bin/deltachat-rpc-server \
-    "https://github.com/chatmail/core/releases/download/v${DELTACHAT_CORE_VERSION}/deltachat-rpc-server-x86_64-linux-musl" \
+    "https://github.com/chatmail/core/releases/download/v${DELTACHAT_CORE_VERSION}/deltachat-rpc-server-x86_64-linux" \
     && chmod +x /usr/local/bin/deltachat-rpc-server
 
 WORKDIR /app
@@ -67,7 +70,8 @@ WORKDIR /app
 # Copy built application from builder stage
 COPY --from=builder /app/packages/target-browser/dist ./dist
 
-# Copy production node_modules from deps stage
+# Copy only essential production node_modules (not the full tree)
+# This significantly reduces image size
 COPY --from=deps /app/node_modules ./node_modules
 
 # Create directories for data persistence
