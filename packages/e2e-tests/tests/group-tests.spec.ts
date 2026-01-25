@@ -19,21 +19,23 @@ let existingProfiles: User[] = [];
 const numberOfProfiles = 3;
 
 test.beforeAll(async ({ browser }) => {
+  // Use try-finally to ensure context is properly cleaned up
   const context = await browser.newContext();
   const page = await context.newPage();
-  await reloadPage(page);
+  try {
+    await reloadPage(page);
 
-  existingProfiles = (await loadExistingProfiles(page)) ?? existingProfiles;
-  test.setTimeout(120_000);
-  await createProfiles(
-    numberOfProfiles,
-    existingProfiles,
-    page,
-    context,
-    browser.browserType().name(),
-  );
-
-  await context.close();
+    existingProfiles = (await loadExistingProfiles(page)) ?? existingProfiles;
+    await createProfiles(
+      numberOfProfiles,
+      existingProfiles,
+      page,
+      context,
+      browser.browserType().name(),
+    );
+  } finally {
+    await context.close();
+  }
 });
 
 test.beforeEach(async ({ page }) => {
@@ -41,11 +43,15 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.afterAll(async ({ browser }) => {
+  // Use try-finally to ensure context is properly cleaned up
   const context = await browser.newContext();
   const page = await context.newPage();
-  await reloadPage(page);
-  await deleteAllProfiles(page, existingProfiles);
-  await context.close();
+  try {
+    await reloadPage(page);
+    await deleteAllProfiles(page, existingProfiles);
+  } finally {
+    await context.close();
+  }
 });
 
 test("start chat with user", async ({ page, context, browserName }) => {
@@ -109,9 +115,11 @@ test("create group", async ({ page, context, browserName }) => {
   const addMemberDialog = page.getByTestId("add-member-dialog");
   /* ignore-console-log */
   console.log("userB", userB);
+  // Use first() to avoid strict mode violation when multiple contacts match
   await page
     .locator(".contact-list-item")
     .filter({ hasText: userB.name })
+    .first()
     .click();
 
   await addMemberDialog.getByTestId("ok").click();

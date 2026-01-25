@@ -23,11 +23,15 @@ test.describe("Orchestrator Integration", () => {
   let existingProfiles: User[] = [];
 
   test.beforeAll(async ({ browser }) => {
+    // Use try-finally to ensure context is properly cleaned up
     const context = await browser.newContext();
     const page = await context.newPage();
-    await reloadPage(page);
-    existingProfiles = (await loadExistingProfiles(page)) ?? existingProfiles;
-    await context.close();
+    try {
+      await reloadPage(page);
+      existingProfiles = (await loadExistingProfiles(page)) ?? existingProfiles;
+    } finally {
+      await context.close();
+    }
   });
 
   test.beforeEach(async ({ page }) => {

@@ -26,22 +26,24 @@ let existingProfiles: User[] = [];
 const numberOfProfiles = 2;
 
 test.beforeAll(async ({ browser }) => {
+  // Use try-finally to ensure context is properly cleaned up
   const context = await browser.newContext();
   const page = await context.newPage();
+  try {
+    await reloadPage(page);
 
-  await reloadPage(page);
+    existingProfiles = (await loadExistingProfiles(page)) ?? existingProfiles;
 
-  existingProfiles = (await loadExistingProfiles(page)) ?? existingProfiles;
-
-  await createProfiles(
-    numberOfProfiles,
-    existingProfiles,
-    page,
-    context,
-    browser.browserType().name(),
-  );
-
-  await context.close();
+    await createProfiles(
+      numberOfProfiles,
+      existingProfiles,
+      page,
+      context,
+      browser.browserType().name(),
+    );
+  } finally {
+    await context.close();
+  }
 });
 
 test.beforeEach(async ({ page }) => {
@@ -49,11 +51,15 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.afterAll(async ({ browser }) => {
+  // Use try-finally to ensure context is properly cleaned up
   const context = await browser.newContext();
   const page = await context.newPage();
-  await reloadPage(page);
-  await deleteAllProfiles(page, existingProfiles);
-  await context.close();
+  try {
+    await reloadPage(page);
+    await deleteAllProfiles(page, existingProfiles);
+  } finally {
+    await context.close();
+  }
 });
 
 test("instant onboarding with contact invite link", async ({

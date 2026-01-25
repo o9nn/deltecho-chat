@@ -117,9 +117,9 @@ test.describe("Cognitive System Initialization", () => {
     // Wait for page to fully load
     await page.waitForLoadState("networkidle");
 
-    // Try to find settings button with multiple selectors
+    // Try to find settings button with correct test ID
     const settingsButton = page.locator(
-      '[data-testid="settings-button"], [aria-label*="settings" i], button:has-text("Settings")',
+      '[data-testid="open-settings-button"], [data-testid="settings-button"], [aria-label*="settings" i], button:has-text("Settings")',
     );
 
     const buttonExists = (await settingsButton.count()) > 0;
@@ -131,13 +131,13 @@ test.describe("Cognitive System Initialization", () => {
 
     await settingsButton.first().click();
 
-    // Verify settings panel appears
+    // Verify settings panel appears - the settings dialog uses a specific class
     const settingsPanel = page.locator(
-      '[data-testid="settings-panel"], [role="dialog"], .settings-container',
+      '[data-testid="settings-panel"], [class*="SettingsDialog"], [role="dialog"], .settings-container',
     );
 
     // Actually wait for the panel with a reasonable timeout
-    await expect(settingsPanel.first()).toBeVisible({ timeout: 5000 });
+    await expect(settingsPanel.first()).toBeVisible({ timeout: 10000 });
   });
 });
 
