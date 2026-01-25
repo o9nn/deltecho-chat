@@ -30,27 +30,45 @@ COPY . .
 # Build the browser target
 RUN pnpm build:browser
 
-# Stage 2: Production image
-FROM node:20-slim AS runner
+# Stage 2: Production dependencies only
+FROM node:20-slim AS deps
 
-# Install curl for healthchecks and download deltachat-rpc-server
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl \
-    ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
+RUN npm install -g pnpm
+
+WORKDIR /app
+
+# Copy only what's needed for production install
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY packages/target-browser/package.json ./packages/target-browser/
+COPY packages/frontend/package.json ./packages/frontend/
+COPY packages/shared/package.json ./packages/shared/
+COPY packages/runtime/package.json ./packages/runtime/
+COPY packages/avatar/package.json ./packages/avatar/
+COPY packages/cognitive/package.json ./packages/cognitive/
+COPY bin/ ./bin/
+
+# Install production dependencies only
+RUN pnpm install --frozen-lockfile --prod
+
+# Stage 3: Production image (minimal)
+FROM node:20-alpine AS runner
+
+# Install curl for healthchecks
+RUN apk add --no-cache curl ca-certificates
 
 # Download deltachat-rpc-server binary
 ARG DELTACHAT_CORE_VERSION=2.38.0
 RUN curl -L -o /usr/local/bin/deltachat-rpc-server \
-    "https://github.com/chatmail/core/releases/download/v${DELTACHAT_CORE_VERSION}/deltachat-rpc-server-x86_64-linux" \
+    "https://github.com/chatmail/core/releases/download/v${DELTACHAT_CORE_VERSION}/deltachat-rpc-server-x86_64-linux-musl" \
     && chmod +x /usr/local/bin/deltachat-rpc-server
 
 WORKDIR /app
 
 # Copy built application from builder stage
 COPY --from=builder /app/packages/target-browser/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/packages/target-browser/node_modules ./packages/target-browser/node_modules
+
+# Copy production node_modules from deps stage
+COPY --from=deps /app/node_modules ./node_modules
 
 # Create directories for data persistence
 RUN mkdir -p /data/accounts /data/logs /data/background
