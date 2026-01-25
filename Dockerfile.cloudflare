@@ -74,6 +74,9 @@ COPY --from=builder /app/packages/target-browser/dist ./dist
 # This significantly reduces image size
 COPY --from=deps /app/node_modules ./node_modules
 
+# Create package.json with type: module for ESM support
+RUN echo '{"type": "module", "name": "deltecho-chat-container"}' > package.json
+
 # Create directories for data persistence
 RUN mkdir -p /data/accounts /data/logs /data/background
 
