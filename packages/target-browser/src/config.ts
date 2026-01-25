@@ -10,8 +10,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 config({ path: join(__dirname, "../") + ".env" });
 
 // Directories & Files
-export const DIST_DIR = join(__dirname);
-export const DATA_DIR = join(__dirname, "../data");
+export const DIST_DIR = process.env["DIST_DIR"] || join(__dirname);
+export const DATA_DIR = process.env["DATA_DIR"] || join(__dirname, "../data");
 export const LOGS_DIR = join(DATA_DIR, "logs");
 export const PRIVATE_CERTIFICATE_KEY = join(
   DATA_DIR,
