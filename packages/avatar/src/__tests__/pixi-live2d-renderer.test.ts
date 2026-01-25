@@ -304,9 +304,8 @@ describe("PixiLive2DRenderer", () => {
 
 describe("createPixiLive2DRenderer", () => {
   it("should create a new renderer instance", async () => {
-    const { createPixiLive2DRenderer } = await import(
-      "../adapters/pixi-live2d-renderer"
-    );
+    const { createPixiLive2DRenderer } =
+      await import("../adapters/pixi-live2d-renderer");
     const renderer = createPixiLive2DRenderer();
     expect(renderer).toBeInstanceOf(PixiLive2DRenderer);
   });

@@ -480,7 +480,8 @@ $echo-security-color: #f1c40f;
     right: 0;
     bottom: 0;
     opacity: 0.05;
-    background-image: radial-gradient(
+    background-image:
+      radial-gradient(
         circle at 25px 25px,
         $echo-primary-color 2px,
         transparent 0
