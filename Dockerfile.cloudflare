@@ -18,6 +18,9 @@ COPY packages/runtime/package.json ./packages/runtime/
 COPY packages/avatar/package.json ./packages/avatar/
 COPY packages/cognitive/package.json ./packages/cognitive/
 
+# Copy bin directory for preinstall scripts
+COPY bin/ ./bin/
+
 # Install dependencies
 RUN pnpm install --frozen-lockfile
 
