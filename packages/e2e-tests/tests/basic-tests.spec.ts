@@ -184,7 +184,8 @@ test("send message", async ({ page }) => {
     .locator(`.message.incoming`)
     .first()
     .locator(`.msg-body .text`);
-  await expect(receivedMessageText).toHaveText(messageText);
+  // Message may take time to be received due to SMTP rate limiting
+  await expect(receivedMessageText).toHaveText(messageText, { timeout: 60000 });
 });
 
 /**
