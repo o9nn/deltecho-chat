@@ -27,10 +27,13 @@
     border-radius: 12px;
     padding: 8px;
     transition: all 0.3s ease;
-    // Allow clicks to pass through to elements below
-    // The avatar container remains interactive for direct clicks
-    // but the image itself won't block underlying elements
-    img {
+    // Allow clicks to pass through the entire avatar container
+    // This prevents the floating avatar from blocking message interactions
+    // The avatar is purely decorative and doesn't need to receive clicks
+    pointer-events: none;
+
+    // All child elements also pass through clicks
+    * {
       pointer-events: none;
     }
 
