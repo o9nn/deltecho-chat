@@ -5,6 +5,7 @@ const BuildInfoString = JSON.stringify(await gatherBuildInfo());
 
 // Check if we're building for Cloudflare containers (bundle all deps)
 const isCloudflare = process.env.CLOUDFLARE_BUILD === "true";
+console.log(`CLOUDFLARE_BUILD=${process.env.CLOUDFLARE_BUILD}, isCloudflare=${isCloudflare}`);
 
 await build({
   bundle: true,
