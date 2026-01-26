@@ -509,8 +509,17 @@ test("add app from picker to chat", async ({ page }) => {
   await chatListItem.click();
   await page.getByTestId("open-attachment-menu").click();
   await page.getByTestId("open-app-picker").click();
+  // Wait for the app picker dialog to be visible first
+  const appPickerDialog = page.locator("[class*='appPickerList']");
+  await appPickerDialog.waitFor({ state: "visible", timeout: 60000 });
+  // Wait for apps to load (loading state disappears when apps are loaded)
+  // The component shows "loading" text when apps haven't loaded yet
+  await page.waitForFunction(
+    () => !document.querySelector("[class*='offlineMessage']"),
+    { timeout: 60000 }
+  );
   const apps = page.locator("[class*='appPickerList'] button").first();
-  await apps.waitFor({ state: "visible" });
+  await apps.waitFor({ state: "visible", timeout: 60000 });
   const appsCount = await page
     .locator("[class*='appPickerList']")
     .locator("button")
