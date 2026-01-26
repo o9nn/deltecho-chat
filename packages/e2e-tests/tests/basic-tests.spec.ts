@@ -516,7 +516,7 @@ test("add app from picker to chat", async ({ page }) => {
   // The component shows "loading" text when apps haven't loaded yet
   await page.waitForFunction(
     () => !document.querySelector("[class*='offlineMessage']"),
-    { timeout: 60000 }
+    { timeout: 60000 },
   );
   const apps = page.locator("[class*='appPickerList'] button").first();
   await apps.waitFor({ state: "visible", timeout: 60000 });
