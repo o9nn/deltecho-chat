@@ -30,7 +30,8 @@ RUN pnpm install --frozen-lockfile
 # Copy source code
 COPY . .
 
-# Build the browser target
+# Build the browser target with full bundling for Cloudflare
+ENV CLOUDFLARE_BUILD=true
 RUN pnpm build:browser
 
 # Use pnpm deploy to create a minimal production bundle
