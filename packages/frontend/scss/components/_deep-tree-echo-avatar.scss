@@ -27,6 +27,12 @@
     border-radius: 12px;
     padding: 8px;
     transition: all 0.3s ease;
+    // Allow clicks to pass through to elements below
+    // The avatar container remains interactive for direct clicks
+    // but the image itself won't block underlying elements
+    img {
+      pointer-events: none;
+    }
 
     &:hover {
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
