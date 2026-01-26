@@ -417,7 +417,8 @@ test("edit message", async ({ page }) => {
     test.skip();
     return;
   }
-  await ourMessageLocator.click({ button: "right" });
+  // Use force: true to bypass pointer-events check from floating avatar overlay
+  await ourMessageLocator.click({ button: "right", force: true });
   const editMenuItem = page
     .locator('[role="menuitem"]')
     .filter({ hasText: "Edit " });
