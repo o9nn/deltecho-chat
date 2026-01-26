@@ -33,30 +33,7 @@ COPY . .
 # Build the browser target
 RUN pnpm build:browser
 
-# Stage 2: Production dependencies only
-FROM node:20-slim AS deps
-
-RUN npm install -g pnpm
-
-WORKDIR /app
-
-# Copy only what's needed for production install
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY packages/target-browser/package.json ./packages/target-browser/
-COPY packages/frontend/package.json ./packages/frontend/
-COPY packages/shared/package.json ./packages/shared/
-COPY packages/runtime/package.json ./packages/runtime/
-COPY packages/avatar/package.json ./packages/avatar/
-COPY packages/cognitive/package.json ./packages/cognitive/
-COPY packages/core/package.json ./packages/core/
-COPY packages/reasoning/package.json ./packages/reasoning/
-COPY packages/ui-components/package.json ./packages/ui-components/
-COPY bin/ ./bin/
-
-# Install production dependencies only - skip optional deps to reduce size
-RUN pnpm install --frozen-lockfile --prod --ignore-scripts
-
-# Stage 3: Production image (minimal debian-slim)
+# Stage 2: Production image (minimal debian-slim)
 FROM node:20-slim AS runner
 
 # Install curl for healthchecks
@@ -71,17 +48,26 @@ RUN curl -L -o /usr/local/bin/deltachat-rpc-server \
     "https://github.com/chatmail/core/releases/download/v${DELTACHAT_CORE_VERSION}/deltachat-rpc-server-x86_64-linux" \
     && chmod +x /usr/local/bin/deltachat-rpc-server
 
+# Install pnpm for production deploy
+RUN npm install -g pnpm
+
 WORKDIR /app
 
 # Copy built application from builder stage
 COPY --from=builder /app/packages/target-browser/dist ./dist
 
-# Copy only essential production node_modules (not the full tree)
-# This significantly reduces image size
-COPY --from=deps /app/node_modules ./node_modules
+# Copy package files for production install
+COPY --from=builder /app/package.json /app/pnpm-lock.yaml /app/pnpm-workspace.yaml ./
+COPY --from=builder /app/packages/target-browser/package.json ./packages/target-browser/
+COPY --from=builder /app/packages/shared/package.json ./packages/shared/
+COPY --from=builder /app/packages/runtime/package.json ./packages/runtime/
 
-# Create package.json with type: module for ESM support
-RUN echo '{"type": "module", "name": "deltecho-chat-container"}' > package.json
+# Copy bin directory (needed for preinstall scripts)
+COPY --from=builder /app/bin/ ./bin/
+
+# Install production dependencies only for target-browser
+# Use --filter to only install deps for the browser target and its workspace deps
+RUN pnpm install --frozen-lockfile --prod --filter @deltachat-desktop/target-browser... --ignore-scripts
 
 # Create directories for data persistence
 RUN mkdir -p /data/accounts /data/logs /data/background
@@ -102,5 +88,5 @@ EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:8080/ || exit 1
 
-# Start the server
+# Start the server - use pnpm to resolve workspace dependencies correctly
 CMD ["node", "dist/server.js"]
