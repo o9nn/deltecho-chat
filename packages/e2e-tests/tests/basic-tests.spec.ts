@@ -356,6 +356,15 @@ test("delete message for all", async ({ page }) => {
 test("edit message", async ({ page }) => {
   const userA = existingProfiles[0];
   const userB = existingProfiles[1];
+  // Skip test if profiles don't exist (happens when running test in isolation)
+  if (!userA || !userB) {
+    /* ignore-console-log */
+    console.log(
+      "Skipping edit message test - required profiles not found (test may be running in isolation)",
+    );
+    test.skip();
+    return;
+  }
   await switchToProfile(page, userA.id);
   const chatWithUserB = page
     .locator(".chat-list .chat-list-item")
