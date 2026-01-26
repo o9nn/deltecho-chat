@@ -1,0 +1,54 @@
+name: Test Edit Message
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths:
+      - 'packages/e2e-tests/tests/basic-tests.spec.ts'
+      - 'packages/frontend/scss/components/_deep-tree-echo-avatar.scss'
+      - '.github/workflows/test-edit-message.yml'
+
+jobs:
+  test-edit-message:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install pnpm
+      uses: pnpm/action-setup@v4
+
+    - name: Use Node.js 22
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22
+
+    - name: Install Dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Build for E2E
+      run: pnpm build:browser
+
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+      working-directory: packages/e2e-tests
+
+    - name: Run Edit Message Test Only
+      run: |
+        cd packages/e2e-tests
+        npx playwright test --grep "edit message" --reporter=list --retries=2
+      env:
+        CI: true
+        DEBUG: pw:api
+
+    - name: Upload Test Results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: edit-message-test-results
+        path: |
+          packages/e2e-tests/test-results/
+          packages/e2e-tests/playwright-report/
+        retention-days: 7
