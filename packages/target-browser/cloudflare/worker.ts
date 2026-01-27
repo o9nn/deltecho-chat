@@ -22,19 +22,14 @@ export class DeltEchoContainer extends Container {
   // Port the container server listens on
   defaultPort = 8080;
 
+  // Ports to wait for during startup
+  requiredPorts = [8080];
+
   // Sleep after 30 minutes of inactivity to save resources
   sleepAfter = "30m";
 
   // Enable internet access for the container (needed for DeltaChat)
   enableInternet = true;
-
-  // Base environment variables passed to the container
-  // WEB_PASSWORD is set dynamically per-instance via startOptions
-  envVars = {
-    NODE_ENV: "production",
-    USE_HTTP_IN_TEST: "true",
-    WEB_PORT: "8080",
-  };
 
   /**
    * Called when the container starts successfully
@@ -101,7 +96,9 @@ export default {
             WEB_PORT: "8080",
             WEB_PASSWORD: env.WEB_PASSWORD,
           },
+          enableInternet: true,
         },
+        ports: 8080,
       });
 
       // Check if this is a WebSocket upgrade request
