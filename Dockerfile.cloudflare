@@ -62,8 +62,10 @@ COPY --from=builder /app/packages/target-browser/dist ./dist
 COPY packages/target-browser/cloudflare/startup.sh /app/startup.sh
 RUN chmod +x /app/startup.sh
 
-# Create directories for data persistence
-RUN mkdir -p /data/accounts /data/logs /data/background
+# Create directories for data persistence and initialize accounts.toml
+# The deltachat-rpc-server requires accounts.toml to exist
+RUN mkdir -p /data/accounts /data/logs /data/background \
+    && echo '[accounts]' > /data/accounts/accounts.toml
 
 # Environment variables
 ENV NODE_ENV=production
