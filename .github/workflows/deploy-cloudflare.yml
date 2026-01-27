@@ -66,15 +66,15 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
-          # Deploy with Wrangler
+          # Deploy with Wrangler using immediate rollout to avoid gradual rollout JSON parsing issues
           set +e  # Don't exit on error so we can capture output
           if [ "${{ github.event_name }}" == "pull_request" ]; then
             # Preview deployment for PRs
-            wrangler deploy --config packages/target-browser/wrangler.jsonc --env preview 2>&1 | tee /tmp/deploy_output.txt
+            wrangler deploy --config packages/target-browser/wrangler.jsonc --env preview --containers-rollout=immediate 2>&1 | tee /tmp/deploy_output.txt
             DEPLOY_STATUS=${PIPESTATUS[0]}
           else
             # Production deployment for main branch
-            wrangler deploy --config packages/target-browser/wrangler.jsonc 2>&1 | tee /tmp/deploy_output.txt
+            wrangler deploy --config packages/target-browser/wrangler.jsonc --containers-rollout=immediate 2>&1 | tee /tmp/deploy_output.txt
             DEPLOY_STATUS=${PIPESTATUS[0]}
           fi
           
