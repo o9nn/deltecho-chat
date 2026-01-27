@@ -28,8 +28,8 @@ export class DeltEchoContainer extends Container {
   // Enable internet access for the container (needed for DeltaChat)
   enableInternet = true;
 
-  // Environment variables passed to the container
-  // Note: WEB_PASSWORD is set dynamically in getEnvVars()
+  // Base environment variables passed to the container
+  // WEB_PASSWORD is set dynamically per-instance via startOptions
   envVars = {
     NODE_ENV: "production",
     USE_HTTP_IN_TEST: "true",
@@ -91,15 +91,18 @@ export default {
       // Get or create container instance for this session
       const container = getContainer(env.DELTECHO_CONTAINER, sessionId);
 
-      // Set the WEB_PASSWORD environment variable for the container
-      // This is required for the server to start
-      container.envVars = {
-        ...container.envVars,
-        WEB_PASSWORD: env.WEB_PASSWORD,
-      };
-
-      // Explicitly start the container and wait for port 8080 to be ready
-      await container.startAndWaitForPorts(8080);
+      // Start the container with WEB_PASSWORD passed via startOptions
+      // This is the correct way to pass secrets to containers per-instance
+      await container.startAndWaitForPorts({
+        startOptions: {
+          envVars: {
+            NODE_ENV: "production",
+            USE_HTTP_IN_TEST: "true",
+            WEB_PORT: "8080",
+            WEB_PASSWORD: env.WEB_PASSWORD,
+          },
+        },
+      });
 
       // Check if this is a WebSocket upgrade request
       const upgradeHeader = request.headers.get("Upgrade");
