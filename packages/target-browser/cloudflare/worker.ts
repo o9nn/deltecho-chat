@@ -31,6 +31,14 @@ export class DeltEchoContainer extends Container {
   // Enable internet access for the container (needed for DeltaChat)
   enableInternet = true;
 
+  // Environment variables for the container
+  // Note: These are default values, can be overridden in startAndWaitForPorts
+  env = {
+    NODE_ENV: "production",
+    USE_HTTP_IN_TEST: "true",
+    WEB_PORT: "8080",
+  };
+
   /**
    * Called when the container starts successfully
    */
@@ -53,6 +61,7 @@ export class DeltEchoContainer extends Container {
   override onError(error: unknown) {
     /* ignore-console-log */
     console.error("[DeltEcho] Container error:", error);
+    // Don't rethrow - let the worker handle the error gracefully
   }
 }
 
@@ -71,6 +80,21 @@ export default {
       return new Response("OK", { status: 200 });
     }
 
+    // Debug endpoint to check environment
+    if (url.pathname === "/_debug") {
+      return new Response(
+        JSON.stringify({
+          hasWebPassword: !!env.WEB_PASSWORD,
+          webPasswordLength: env.WEB_PASSWORD?.length || 0,
+          hasContainer: !!env.DELTECHO_CONTAINER,
+        }),
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        },
+      );
+    }
+
     // Validate that WEB_PASSWORD is configured
     if (!env.WEB_PASSWORD) {
       return new Response(
@@ -86,6 +110,9 @@ export default {
       // Get or create container instance for this session
       const container = getContainer(env.DELTECHO_CONTAINER, sessionId);
 
+      /* ignore-console-log */
+      console.log("[DeltEcho] Starting container for session:", sessionId);
+
       // Start the container with WEB_PASSWORD passed via startOptions
       // This is the correct way to pass secrets to containers per-instance
       await container.startAndWaitForPorts({
@@ -95,11 +122,22 @@ export default {
             USE_HTTP_IN_TEST: "true",
             WEB_PORT: "8080",
             WEB_PASSWORD: env.WEB_PASSWORD,
+            DELTA_CHAT_RPC_SERVER: "/usr/local/bin/deltachat-rpc-server",
+            DC_ACCOUNTS_PATH: "/data/accounts",
+            DATA_DIR: "/data",
+            DIST_DIR: "/app/dist",
           },
           enableInternet: true,
         },
         ports: 8080,
+        cancellationOptions: {
+          instanceGetTimeoutMS: 60000, // 60 seconds to get instance
+          portReadyTimeoutMS: 60000, // 60 seconds to wait for port
+        },
       });
+
+      /* ignore-console-log */
+      console.log("[DeltEcho] Container started, forwarding request");
 
       // Check if this is a WebSocket upgrade request
       const upgradeHeader = request.headers.get("Upgrade");
@@ -129,11 +167,23 @@ export default {
     } catch (error) {
       /* ignore-console-log */
       console.error("[DeltEcho] Error handling request:", error);
+
+      // Provide more detailed error information
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      const errorStack = error instanceof Error ? error.stack : undefined;
+
       return new Response(
-        `Failed to start container: ${
-          error instanceof Error ? error.message : String(error)
-        }`,
-        { status: 500 },
+        JSON.stringify({
+          error: "Failed to start container",
+          message: errorMessage,
+          stack: errorStack,
+          sessionId,
+        }),
+        {
+          status: 500,
+          headers: { "Content-Type": "application/json" },
+        },
       );
     }
   },
