@@ -1,5 +1,6 @@
 import { build } from "esbuild";
 import { gatherBuildInfo } from "../../../bin/lib/gather-version-info.js";
+import { stat } from "fs/promises";
 
 const BuildInfoString = JSON.stringify(await gatherBuildInfo());
 
@@ -15,7 +16,7 @@ import { createRequire as __createRequire } from 'module';
 const require = __createRequire(import.meta.url);
 `;
 
-await build({
+const result = await build({
   bundle: true,
   sourcemap: true,
   format: "esm",
@@ -23,6 +24,7 @@ await build({
   outfile: "dist/server.js",
   entryPoints: ["src/index.ts"],
   treeShaking: false,
+  metafile: true, // Enable metafile for size analysis
   // Inject the require shim for Cloudflare builds
   banner: isCloudflare ? { js: requireShimBanner } : undefined,
   plugins: isCloudflare
@@ -47,5 +49,26 @@ await build({
     BUILD_INFO_JSON_STRING: `"${BuildInfoString.replace(/"/g, '\\"')}"`,
   },
 });
+
+// Output file size information
+const serverJsStats = await stat("dist/server.js");
+const serverJsSize = (serverJsStats.size / 1024 / 1024).toFixed(2);
+console.log(`Built dist/server.js: ${serverJsSize}MB`);
+
+// Show external dependencies if any (for debugging)
+if (result.metafile) {
+  const outputs = result.metafile.outputs;
+  for (const [file, info] of Object.entries(outputs)) {
+    if (file.endsWith(".js")) {
+      console.log(`  ${file}: ${(info.bytes / 1024 / 1024).toFixed(2)}MB`);
+      if (info.imports && info.imports.length > 0) {
+        const externalImports = info.imports.filter((i) => i.external);
+        if (externalImports.length > 0) {
+          console.log(`  External imports: ${externalImports.map((i) => i.path).join(", ")}`);
+        }
+      }
+    }
+  }
+}
 
 console.log(BuildInfoString);
