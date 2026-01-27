@@ -19,8 +19,6 @@
     "@deltachat-desktop/shared": "link:../shared",
     "@deltachat/jsonrpc-client": "catalog:",
     "@deltachat/stdio-rpc-server": "catalog:",
-    "@types/express-session": "^1.18.2",
-    "@types/node-localstorage": "^1.3.3",
     "express": "^4.22.1",
     "express-session": "^1.18.2",
     "node-localstorage": "^3.0.5",
@@ -30,7 +28,9 @@
   "devDependencies": {
     "@cloudflare/containers": "^0.1.0",
     "@types/express": "^4.17.25",
+    "@types/express-session": "^1.18.2",
     "@types/node": "^20.19.27",
+    "@types/node-localstorage": "^1.3.3",
     "@types/resolve-path": "^1.4.3",
     "@types/ws": "^8.18.1",
     "error-stack-parser": "^2.1.4",

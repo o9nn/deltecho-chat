@@ -1,5 +1,5 @@
 # DeltEcho Chat Browser Target - Cloudflare Containers
-# Multi-stage build for optimal image size using pnpm deploy
+# Multi-stage build for optimal image size with fully bundled server.js
 
 # Stage 1: Build the application
 FROM node:20-slim AS builder
@@ -31,12 +31,9 @@ RUN pnpm install --frozen-lockfile
 COPY . .
 
 # Build the browser target with full bundling for Cloudflare
+# This bundles ALL dependencies into server.js, making it self-contained
 ENV CLOUDFLARE_BUILD=true
 RUN pnpm build:browser
-
-# Use pnpm deploy to create a minimal production bundle
-# This creates a self-contained directory with only production deps
-RUN pnpm deploy --filter @deltachat-desktop/target-browser --prod /deploy
 
 # Stage 2: Production image (minimal)
 FROM node:20-slim AS runner
@@ -56,11 +53,7 @@ RUN curl -L -o /usr/local/bin/deltachat-rpc-server \
 
 WORKDIR /app
 
-# Copy only the deployed production bundle (minimal node_modules)
-COPY --from=builder /deploy/node_modules ./node_modules
-COPY --from=builder /deploy/package.json ./
-
-# Copy built application from builder stage
+# Copy only the built dist directory - server.js is fully bundled, no node_modules needed
 COPY --from=builder /app/packages/target-browser/dist ./dist
 
 # Create directories for data persistence
@@ -82,5 +75,5 @@ EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:8080/ || exit 1
 
-# Start the server directly with node (no pnpm needed in production)
+# Start the server directly with node (no pnpm or node_modules needed)
 CMD ["node", "dist/server.js"]
