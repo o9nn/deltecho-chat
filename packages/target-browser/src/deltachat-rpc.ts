@@ -39,6 +39,9 @@ class StdioServer {
     log.info("using deltachat-rpc-server at", { serverPath });
     this.serverProcess = spawn(serverPath, {
       env: {
+        // Spread the existing environment to ensure system libraries and PATH are available
+        ...process.env,
+        // Override with our custom values
         DC_ACCOUNTS_PATH: DC_ACCOUNTS_DIR,
         RUST_LOG: process.env.RUST_LOG,
       },
