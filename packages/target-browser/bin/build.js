@@ -7,6 +7,14 @@ const BuildInfoString = JSON.stringify(await gatherBuildInfo());
 const isCloudflare = process.env.CLOUDFLARE_BUILD === "true";
 console.log(`CLOUDFLARE_BUILD=${process.env.CLOUDFLARE_BUILD}, isCloudflare=${isCloudflare}`);
 
+// Banner to inject a proper require function that handles Node.js built-ins
+// This is needed because esbuild's ESM output creates a require shim that doesn't
+// properly handle Node.js built-in modules when bundling CommonJS packages
+const requireShimBanner = `
+import { createRequire as __createRequire } from 'module';
+const require = __createRequire(import.meta.url);
+`;
+
 await build({
   bundle: true,
   sourcemap: true,
@@ -15,6 +23,8 @@ await build({
   outfile: "dist/server.js",
   entryPoints: ["src/index.ts"],
   treeShaking: false,
+  // Inject the require shim for Cloudflare builds
+  banner: isCloudflare ? { js: requireShimBanner } : undefined,
   plugins: isCloudflare
     ? []
     : [
