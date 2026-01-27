@@ -38,10 +38,11 @@ RUN pnpm build:browser
 # Stage 2: Production image (minimal)
 FROM node:20-slim AS runner
 
-# Install curl for healthchecks only
+# Install curl for healthchecks and debugging tools
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     ca-certificates \
+    file \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
@@ -49,12 +50,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 ARG DELTACHAT_CORE_VERSION=2.38.0
 RUN curl -L -o /usr/local/bin/deltachat-rpc-server \
     "https://github.com/chatmail/core/releases/download/v${DELTACHAT_CORE_VERSION}/deltachat-rpc-server-x86_64-linux" \
-    && chmod +x /usr/local/bin/deltachat-rpc-server
+    && chmod +x /usr/local/bin/deltachat-rpc-server \
+    && file /usr/local/bin/deltachat-rpc-server
 
 WORKDIR /app
 
 # Copy only the built dist directory - server.js is fully bundled, no node_modules needed
 COPY --from=builder /app/packages/target-browser/dist ./dist
+
+# Copy startup script
+COPY packages/target-browser/cloudflare/startup.sh /app/startup.sh
+RUN chmod +x /app/startup.sh
 
 # Create directories for data persistence
 RUN mkdir -p /data/accounts /data/logs /data/background
@@ -75,5 +81,5 @@ EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
     CMD curl -f http://localhost:8080/health || exit 1
 
-# Start the server directly with node (no pnpm or node_modules needed)
-CMD ["node", "dist/server.js"]
+# Start the server using the startup script for debugging
+CMD ["/app/startup.sh"]
