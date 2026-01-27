@@ -65,6 +65,10 @@ export class DeltEchoContainer extends Container {
   }
 }
 
+// Fixed container ID for shared instance mode
+// All users share the same container in preview mode
+const SHARED_CONTAINER_ID = "deltecho-shared-preview";
+
 /**
  * Main Worker fetch handler
  *
@@ -87,6 +91,8 @@ export default {
           hasWebPassword: !!env.WEB_PASSWORD,
           webPasswordLength: env.WEB_PASSWORD?.length || 0,
           hasContainer: !!env.DELTECHO_CONTAINER,
+          containerMode: "shared",
+          containerId: SHARED_CONTAINER_ID,
         }),
         {
           status: 200,
@@ -103,15 +109,17 @@ export default {
       );
     }
 
-    // Get session ID from cookie or create new one
+    // Get session ID from cookie for the internal server session management
+    // But use a shared container ID for the Cloudflare container
     const sessionId = getSessionId(request);
 
     try {
-      // Get or create container instance for this session
-      const container = getContainer(env.DELTECHO_CONTAINER, sessionId);
+      // Use a shared container for all users in preview mode
+      // This prevents hitting max_instances limit with many visitors
+      const container = getContainer(env.DELTECHO_CONTAINER, SHARED_CONTAINER_ID);
 
       /* ignore-console-log */
-      console.log("[DeltEcho] Starting container for session:", sessionId);
+      console.log("[DeltEcho] Using shared container, session:", sessionId);
 
       // Start the container with WEB_PASSWORD passed via startOptions
       // This is the correct way to pass secrets to containers per-instance
@@ -137,7 +145,7 @@ export default {
       });
 
       /* ignore-console-log */
-      console.log("[DeltEcho] Container started, forwarding request");
+      console.log("[DeltEcho] Container ready, forwarding request");
 
       // Check if this is a WebSocket upgrade request
       const upgradeHeader = request.headers.get("Upgrade");
@@ -149,7 +157,7 @@ export default {
       // Forward HTTP requests to the container
       const response = await container.fetch(request);
 
-      // Add session cookie if not present
+      // Add session cookie if not present (for internal server session management)
       if (!request.headers.get("Cookie")?.includes("deltecho-session")) {
         const headers = new Headers(response.headers);
         headers.append(
@@ -179,6 +187,7 @@ export default {
           message: errorMessage,
           stack: errorStack,
           sessionId,
+          containerId: SHARED_CONTAINER_ID,
         }),
         {
           status: 500,
@@ -190,7 +199,8 @@ export default {
 };
 
 /**
- * Extract or generate a session ID for container routing
+ * Extract or generate a session ID for internal server session management
+ * Note: This is separate from the container ID - all users share the same container
  */
 function getSessionId(request: Request): string {
   const cookies = request.headers.get("Cookie") || "";
