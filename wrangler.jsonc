@@ -15,7 +15,9 @@
     {
       "class_name": "DeltEchoContainer",
       "image": "./Dockerfile.cloudflare",
-      "max_instances": 10
+      "max_instances": 10,
+      // Use immediate rollout to avoid gradual rollout issues
+      "rollout_step_percentage": [100]
     }
   ],
 

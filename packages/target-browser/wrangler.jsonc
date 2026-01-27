@@ -4,13 +4,20 @@
   "main": "cloudflare/worker.ts",
   "compatibility_date": "2024-12-01",
 
+  // Enable observability for container logs
+  "observability": {
+    "enabled": true
+  },
+
   // Container configuration
   // Dockerfile is at repo root, path is relative to this wrangler.jsonc file
   "containers": [
     {
       "class_name": "DeltEchoContainer",
       "image": "../../Dockerfile.cloudflare",
-      "max_instances": 10
+      "max_instances": 10,
+      // Use immediate rollout to avoid gradual rollout issues
+      "rollout_step_percentage": [100]
     }
   ],
 
