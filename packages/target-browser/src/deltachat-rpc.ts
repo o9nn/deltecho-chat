@@ -11,6 +11,23 @@ import { join } from "path";
 const log = getLogger("main/dc_wss");
 const logCoreEvent = getLogger("core");
 
+/**
+ * Get the path to the deltachat-rpc-server binary.
+ * First checks DELTA_CHAT_RPC_SERVER environment variable (for container deployments),
+ * then falls back to the @deltachat/stdio-rpc-server package.
+ */
+async function getDeltaChatRPCServerPath(): Promise<string> {
+  // Check for environment variable first (used in Cloudflare containers)
+  const envPath = process.env["DELTA_CHAT_RPC_SERVER"];
+  if (envPath) {
+    log.info("Using deltachat-rpc-server from DELTA_CHAT_RPC_SERVER env var:", envPath);
+    return envPath;
+  }
+  
+  // Fall back to the package-provided binary
+  return getRPCServerPath();
+}
+
 class StdioServer {
   serverProcess: ChildProcessWithoutNullStreams | null;
   constructor(public on_data: (reponse: string) => void) {
@@ -18,7 +35,7 @@ class StdioServer {
   }
 
   async start() {
-    const serverPath = await getRPCServerPath();
+    const serverPath = await getDeltaChatRPCServerPath();
     log.info("using deltachat-rpc-server at", { serverPath });
     this.serverProcess = spawn(serverPath, {
       env: {
