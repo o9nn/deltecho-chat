@@ -58,6 +58,10 @@ WORKDIR /app
 # Copy only the built dist directory - server.js is fully bundled, no node_modules needed
 COPY --from=builder /app/packages/target-browser/dist ./dist
 
+# Copy locales directory for translations
+# The server expects locales at LOCALES_DIR which we set via environment variable
+COPY --from=builder /app/_locales ./locales
+
 # Copy startup script
 COPY packages/target-browser/cloudflare/startup.sh /app/startup.sh
 RUN chmod +x /app/startup.sh
@@ -72,6 +76,7 @@ ENV NODE_ENV=production
 ENV DC_ACCOUNTS_PATH=/data/accounts
 ENV DATA_DIR=/data
 ENV DIST_DIR=/app/dist
+ENV LOCALES_DIR=/app/locales
 ENV WEB_PORT=8080
 ENV USE_HTTP_IN_TEST=true
 ENV DELTA_CHAT_RPC_SERVER=/usr/local/bin/deltachat-rpc-server

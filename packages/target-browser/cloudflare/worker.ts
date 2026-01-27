@@ -134,6 +134,7 @@ export default {
             DC_ACCOUNTS_PATH: "/data/accounts",
             DATA_DIR: "/data",
             DIST_DIR: "/app/dist",
+            LOCALES_DIR: "/app/locales",
           },
           enableInternet: true,
         },

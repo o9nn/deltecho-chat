@@ -20,7 +20,7 @@ export const PRIVATE_CERTIFICATE_KEY = join(
 export const PRIVATE_CERTIFICATE_CERT = join(DATA_DIR, "certificate/cert.pem");
 export let DC_ACCOUNTS_DIR = join(DATA_DIR, "accounts");
 
-export const LOCALES_DIR = join(__dirname, "../../../_locales");
+export const LOCALES_DIR = process.env["LOCALES_DIR"] || join(__dirname, "../../../_locales");
 
 // ENV Vars
 export const ENV_WEB_PASSWORD = process.env["WEB_PASSWORD"];
