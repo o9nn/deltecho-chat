@@ -21,22 +21,32 @@ echo ""
 echo "Ensuring data directories exist..."
 mkdir -p /data/accounts /data/logs /data/background
 
-# Create accounts.toml if it doesn't exist (required by deltachat-rpc-server)
+# Create or fix accounts.toml (required by deltachat-rpc-server)
 # The format must match the InnerConfig struct from deltachat-core
-if [ ! -f /data/accounts/accounts.toml ]; then
-    echo "Creating /data/accounts/accounts.toml..."
-    cat > /data/accounts/accounts.toml << 'TOMLEOF'
+ACCOUNTS_TOML="/data/accounts/accounts.toml"
+
+# Check if the file exists and has the wrong format (contains [accounts] section)
+if [ -f "$ACCOUNTS_TOML" ]; then
+    if grep -q '^\[accounts\]' "$ACCOUNTS_TOML"; then
+        echo "Found accounts.toml with wrong format (has [accounts] section), recreating..."
+        rm -f "$ACCOUNTS_TOML"
+    fi
+fi
+
+# Create accounts.toml if it doesn't exist
+if [ ! -f "$ACCOUNTS_TOML" ]; then
+    echo "Creating $ACCOUNTS_TOML with correct format..."
+    cat > "$ACCOUNTS_TOML" << 'TOMLEOF'
 selected_account = 0
 next_id = 1
 accounts = []
 accounts_order = []
 TOMLEOF
-    echo "accounts.toml created successfully with content:"
-    cat /data/accounts/accounts.toml
-else
-    echo "accounts.toml already exists with content:"
-    cat /data/accounts/accounts.toml
+    echo "accounts.toml created successfully"
 fi
+
+echo "Current accounts.toml content:"
+cat "$ACCOUNTS_TOML"
 
 echo ""
 echo "Checking data directories:"
