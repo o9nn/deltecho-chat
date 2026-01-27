@@ -16,8 +16,25 @@ ls -la /usr/local/bin/deltachat-rpc-server || echo "Binary not found"
 file /usr/local/bin/deltachat-rpc-server 2>/dev/null || echo "Cannot determine file type"
 ldd /usr/local/bin/deltachat-rpc-server 2>/dev/null || echo "Cannot check library dependencies"
 echo ""
+
+# Ensure data directories exist
+echo "Ensuring data directories exist..."
+mkdir -p /data/accounts /data/logs /data/background
+
+# Create accounts.toml if it doesn't exist (required by deltachat-rpc-server)
+if [ ! -f /data/accounts/accounts.toml ]; then
+    echo "Creating /data/accounts/accounts.toml..."
+    echo '[accounts]' > /data/accounts/accounts.toml
+    echo "accounts.toml created successfully"
+else
+    echo "accounts.toml already exists"
+fi
+
 echo "Checking data directories:"
 ls -la /data/ || echo "Failed to list /data"
+echo ""
+echo "Contents of /data/accounts:"
+ls -la /data/accounts/ || echo "Failed to list /data/accounts"
 echo ""
 echo "=== Starting server ==="
 exec node /app/dist/server.js
