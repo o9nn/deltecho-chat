@@ -9,7 +9,7 @@ import { Container, getContainer } from "@cloudflare/containers";
 
 export interface Env {
   DELTECHO_CONTAINER: DurableObjectNamespace;
-  WEB_PASSWORD?: string;
+  WEB_PASSWORD: string;
 }
 
 /**
@@ -29,6 +29,7 @@ export class DeltEchoContainer extends Container {
   enableInternet = true;
 
   // Environment variables passed to the container
+  // Note: WEB_PASSWORD is set dynamically in getEnvVars()
   envVars = {
     NODE_ENV: "production",
     USE_HTTP_IN_TEST: "true",
@@ -75,12 +76,27 @@ export default {
       return new Response("OK", { status: 200 });
     }
 
+    // Validate that WEB_PASSWORD is configured
+    if (!env.WEB_PASSWORD) {
+      return new Response(
+        "Server configuration error: WEB_PASSWORD secret is not set. Please configure it using 'wrangler secret put WEB_PASSWORD'.",
+        { status: 500 },
+      );
+    }
+
     // Get session ID from cookie or create new one
     const sessionId = getSessionId(request);
 
     try {
       // Get or create container instance for this session
       const container = getContainer(env.DELTECHO_CONTAINER, sessionId);
+
+      // Set the WEB_PASSWORD environment variable for the container
+      // This is required for the server to start
+      container.envVars = {
+        ...container.envVars,
+        WEB_PASSWORD: env.WEB_PASSWORD,
+      };
 
       // Explicitly start the container and wait for port 8080 to be ready
       await container.startAndWaitForPorts(8080);
