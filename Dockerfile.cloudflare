@@ -72,8 +72,8 @@ ENV DELTA_CHAT_RPC_SERVER=/usr/local/bin/deltachat-rpc-server
 EXPOSE 8080
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:8080/ || exit 1
+HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+    CMD curl -f http://localhost:8080/health || exit 1
 
 # Start the server directly with node (no pnpm or node_modules needed)
 CMD ["node", "dist/server.js"]

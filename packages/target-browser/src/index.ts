@@ -73,6 +73,11 @@ app.use(sessionParser);
 
 app.use(CORSMiddleWare);
 
+// Health check endpoint for container healthchecks (no auth required)
+app.get("/health", (_req, res) => {
+  res.status(200).send("OK");
+});
+
 app.get("/", (req, res) => {
   let startPage = "main.html";
   if (NODE_ENV === "test") {
