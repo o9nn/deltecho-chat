@@ -22,14 +22,23 @@ echo "Ensuring data directories exist..."
 mkdir -p /data/accounts /data/logs /data/background
 
 # Create accounts.toml if it doesn't exist (required by deltachat-rpc-server)
+# The format must match the InnerConfig struct from deltachat-core
 if [ ! -f /data/accounts/accounts.toml ]; then
     echo "Creating /data/accounts/accounts.toml..."
-    echo '[accounts]' > /data/accounts/accounts.toml
-    echo "accounts.toml created successfully"
+    cat > /data/accounts/accounts.toml << 'TOMLEOF'
+selected_account = 0
+next_id = 1
+accounts = []
+accounts_order = []
+TOMLEOF
+    echo "accounts.toml created successfully with content:"
+    cat /data/accounts/accounts.toml
 else
-    echo "accounts.toml already exists"
+    echo "accounts.toml already exists with content:"
+    cat /data/accounts/accounts.toml
 fi
 
+echo ""
 echo "Checking data directories:"
 ls -la /data/ || echo "Failed to list /data"
 echo ""
