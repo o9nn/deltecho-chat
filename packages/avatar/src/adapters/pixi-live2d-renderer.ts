@@ -43,6 +43,7 @@ interface Live2DModel {
     index?: number,
     priority?: number,
   ) => Promise<boolean>;
+  focus: (x: number, y: number) => void;
   speak: (
     audioUrl: string,
     options?: { volume?: number; crossOrigin?: string },
@@ -88,6 +89,8 @@ const DEFAULT_MOTION_MAP: Record<
   nod: { groups: ["Tap", "tap_body", "tap"], index: 1 },
   shake: { groups: ["Flic", "shake", "flick"], index: 0 },
   thinking: { groups: ["Idle", "idle"], index: 1 },
+  tilt_head_left: { groups: ["Flic", "flick_head", "flick"], index: 1 },
+  tilt_head_right: { groups: ["Flic", "flick_head", "flick"], index: 0 },
 };
 
 /**
@@ -179,6 +182,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     this.app = new Application({
       view: canvas,
       backgroundAlpha: 0,
+      antialias: true,
       resolution:
         (config as PixiLive2DConfig).pixelRatio ?? window.devicePixelRatio ?? 1,
       autoDensity: true,
@@ -239,10 +243,11 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     }
 
     try {
-      // Load the model
-      const model = (await Live2DModelClass.from(
-        modelInfo.modelPath,
-      )) as unknown as Live2DModel;
+      // Load the model with autoInteract for cursor eye-tracking
+      const model = (await Live2DModelClass.from(modelInfo.modelPath, {
+        autoInteract: true,
+        autoUpdate: true,
+      })) as unknown as Live2DModel;
       this.model = model;
 
       // Position and scale the model
@@ -355,7 +360,26 @@ export class PixiLive2DRenderer implements ICubismRenderer {
         this.setParameterSafe(core, PARAM_IDS.PARAM_EYE_L_OPEN, 0.8);
         this.setParameterSafe(core, PARAM_IDS.PARAM_EYE_R_OPEN, 0.8);
         break;
-
+      case "curious":
+        // Slight head tilt, one brow raised
+        this.setParameterSafe(core, PARAM_IDS.PARAM_BROW_L_Y, 0.4 * intensity);
+        this.setParameterSafe(core, PARAM_IDS.PARAM_BROW_R_Y, 0.1 * intensity);
+        this.setParameterSafe(core, PARAM_IDS.PARAM_ANGLE_Z, 3 * intensity); // Slight head tilt
+        this.setParameterSafe(core, PARAM_IDS.PARAM_EYE_L_OPEN, 1.1);
+        this.setParameterSafe(core, PARAM_IDS.PARAM_EYE_R_OPEN, 1.1);
+        break;
+      case "empathetic":
+        // Soft brows, gentle smile
+        this.setParameterSafe(core, PARAM_IDS.PARAM_BROW_L_Y, 0.1 * intensity);
+        this.setParameterSafe(core, PARAM_IDS.PARAM_BROW_R_Y, 0.1 * intensity);
+        this.setParameterSafe(
+          core,
+          PARAM_IDS.PARAM_MOUTH_FORM,
+          0.2 * intensity,
+        ); // Gentle smile
+        this.setParameterSafe(core, PARAM_IDS.PARAM_EYE_L_OPEN, 0.9);
+        this.setParameterSafe(core, PARAM_IDS.PARAM_EYE_R_OPEN, 0.9);
+        break;
       default:
         // Reset to neutral
         this.setParameterSafe(core, PARAM_IDS.PARAM_BROW_L_Y, 0);
@@ -589,11 +613,25 @@ export class PixiLive2DRenderer implements ICubismRenderer {
    */
   getParameter(paramId: string): number | undefined {
     if (!this.model?.internalModel?.coreModel) return undefined;
-
     try {
       return this.model.internalModel.coreModel.getParameterValueById(paramId);
     } catch {
       return undefined;
+    }
+  }
+
+  /**
+   * Manually focus the model's eyes at screen coordinates.
+   * Useful for programmatic gaze direction when autoInteract is off.
+   * @param x - Screen X coordinate (pixels)
+   * @param y - Screen Y coordinate (pixels)
+   */
+  focusEyes(x: number, y: number): void {
+    if (!this.model || !this.initialized) return;
+    try {
+      this.model.focus(x, y);
+    } catch {
+      // focus() may not be available on all model versions
     }
   }
 }
