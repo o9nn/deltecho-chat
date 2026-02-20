@@ -20,10 +20,13 @@ async function getDeltaChatRPCServerPath(): Promise<string> {
   // Check for environment variable first (used in Cloudflare containers)
   const envPath = process.env["DELTA_CHAT_RPC_SERVER"];
   if (envPath) {
-    log.info("Using deltachat-rpc-server from DELTA_CHAT_RPC_SERVER env var:", envPath);
+    log.info(
+      "Using deltachat-rpc-server from DELTA_CHAT_RPC_SERVER env var:",
+      envPath,
+    );
     return envPath;
   }
-  
+
   // Fall back to the package-provided binary
   return getRPCServerPath();
 }

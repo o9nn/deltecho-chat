@@ -20,7 +20,8 @@ export const PRIVATE_CERTIFICATE_KEY = join(
 export const PRIVATE_CERTIFICATE_CERT = join(DATA_DIR, "certificate/cert.pem");
 export let DC_ACCOUNTS_DIR = join(DATA_DIR, "accounts");
 
-export const LOCALES_DIR = process.env["LOCALES_DIR"] || join(__dirname, "../../../_locales");
+export const LOCALES_DIR =
+  process.env["LOCALES_DIR"] || join(__dirname, "../../../_locales");
 
 // ENV Vars
 export const ENV_WEB_PASSWORD = process.env["WEB_PASSWORD"];
@@ -48,7 +49,9 @@ if (!existsSync(DATA_DIR)) {
   if (USE_HTTP_IN_TEST) {
     mkdirSync(DATA_DIR, { recursive: true });
     /* ignore-console-log */
-    console.log("[INFO]: Created data directory for container/CI/test environment");
+    console.log(
+      "[INFO]: Created data directory for container/CI/test environment",
+    );
   } else {
     /* ignore-console-log */
     console.log(

@@ -6,7 +6,9 @@ const BuildInfoString = JSON.stringify(await gatherBuildInfo());
 
 // Check if we're building for Cloudflare containers (bundle all deps)
 const isCloudflare = process.env.CLOUDFLARE_BUILD === "true";
-console.log(`CLOUDFLARE_BUILD=${process.env.CLOUDFLARE_BUILD}, isCloudflare=${isCloudflare}`);
+console.log(
+  `CLOUDFLARE_BUILD=${process.env.CLOUDFLARE_BUILD}, isCloudflare=${isCloudflare}`,
+);
 
 // Create a polyfill file for ESM compatibility when bundling CommonJS packages
 // This is needed because:
@@ -28,7 +30,7 @@ globalThis.require = createRequire(import.meta.url);
 // Using globalThis to make them available globally
 globalThis.__filename = fileURLToPath(import.meta.url);
 globalThis.__dirname = dirname(globalThis.__filename);
-`
+`,
   );
 }
 
@@ -81,7 +83,11 @@ try {
         if (info.imports && info.imports.length > 0) {
           const externalImports = info.imports.filter((i) => i.external);
           if (externalImports.length > 0) {
-            console.log(`  External imports: ${externalImports.map((i) => i.path).join(", ")}`);
+            console.log(
+              `  External imports: ${externalImports
+                .map((i) => i.path)
+                .join(", ")}`,
+            );
           }
         }
       }

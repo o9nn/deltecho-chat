@@ -116,7 +116,10 @@ export default {
     try {
       // Use a shared container for all users in preview mode
       // This prevents hitting max_instances limit with many visitors
-      const container = getContainer(env.DELTECHO_CONTAINER, SHARED_CONTAINER_ID);
+      const container = getContainer(
+        env.DELTECHO_CONTAINER,
+        SHARED_CONTAINER_ID,
+      );
 
       /* ignore-console-log */
       console.log("[DeltEcho] Using shared container, session:", sessionId);
