@@ -78,3 +78,13 @@ export {
   type AvatarResponseState,
   type CognitiveAvatarBridgeConfig,
 } from "./cognitive-avatar-bridge";
+
+// ESN Reservoir-Avatar Bridge
+export {
+  ESNAvatarBridge,
+  esnAvatarBridge,
+  type ReservoirAnimationParams,
+  type ReservoirInput,
+  type EntelechyInput,
+  type ESNAvatarBridgeConfig,
+} from "./esn-avatar-bridge";

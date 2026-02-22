@@ -172,12 +172,12 @@ export function createRelationTools(
     bridge: (
       input: z.infer<typeof relationToolSchemas.bridge>,
     ): CognitiveFlow => {
-      return relation.createFlow(
-        input.direction,
-        input.contentType,
-        input.content,
-        input.intensity,
-      );
+      return relation.recordFlow({
+        direction: input.direction as any,
+        contentType: input.contentType as any,
+        content: input.content,
+        intensity: input.intensity,
+      });
     },
 
     /**
@@ -276,11 +276,9 @@ export function createRelationTools(
     updateSelfNarrative: (
       input: z.infer<typeof relationToolSchemas.updateSelfNarrative>,
     ): void => {
-      relation.updateSelfReflection({
-        selfNarrative: input.narrative,
-        perceivedRole: input.perceivedRole,
-        growthDirection: input.growthDirection,
-      });
+      if (input.narrative) relation.updateSelfNarrative(input.narrative);
+      if (input.perceivedRole) relation.updatePerceivedRole(input.perceivedRole);
+      if (input.growthDirection) relation.updateGrowthDirection(input.growthDirection);
     },
 
     /**

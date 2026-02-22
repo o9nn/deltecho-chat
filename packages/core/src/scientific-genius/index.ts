@@ -9,6 +9,7 @@
  * - Global Workspace Theory (Baars): Broadcasts insights for integration
  * - Autopoiesis (Maturana & Varela): Self-maintains knowledge structures
  * - Strange Loops (Hofstadter): Enables self-referential reasoning
+ * - Entelechy (Aristotle): Full self-realization through emergence
  *
  * Usage:
  * ```typescript
@@ -51,3 +52,12 @@ export {
   type FrameProblemSolution,
   type IntegrationConfig,
 } from "./RelevanceGeniusIntegration.js";
+
+export {
+  EntelechyEmergenceEngine,
+  entelechyEngine,
+  EmergenceLevel,
+  type EmergentPattern,
+  type EntelechyState,
+  type EntelechyConfig,
+} from "./EntelechyEmergenceEngine.js";

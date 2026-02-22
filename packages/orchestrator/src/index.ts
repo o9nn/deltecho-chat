@@ -137,3 +137,12 @@ export {
   type EmergentIdentity,
   type SelfReflectionState,
 } from "./aar/index.js";
+
+// Entelechy Integration - ESN Reservoir + EchoBeats + Consciousness + Emergence
+export {
+  EntelechyIntegration,
+  entelechyIntegration,
+  type EntelechyIntegrationConfig,
+  type CognitiveSnapshot,
+  type EntelechyProcessingResult,
+} from "./entelechy-integration.js";
