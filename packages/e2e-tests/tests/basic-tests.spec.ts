@@ -577,7 +577,9 @@ test("add app from picker to chat", async ({ page }) => {
     .locator("button")
     .count();
   expect(appsCount).toBeGreaterThan(0);
-  await page.locator("[class*='searchInput']").fill("Cal");
+  // The searchInput class matches multiple elements on the page, so scope to the appPicker container
+  const appPickerContainer = page.locator("[class*='appPickerContainer']");
+  await appPickerContainer.locator("input[class*='searchInput']").fill("Cal");
   const appName = "Calendar";
   const calendarApp = page
     .locator("[class*='appPickerList'] button")
