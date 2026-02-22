@@ -216,7 +216,6 @@ export class EntelechyIntegration extends EventEmitter {
       if (this.tickCount % 12 === 0) {
         this.emit("cycle-complete", this.lastSnapshot);
       }
-
     } catch (error) {
       log.error("Background tick error:", error);
     }
@@ -336,7 +335,7 @@ export class EntelechyIntegration extends EventEmitter {
 
     // Normalize
     const norm = Math.sqrt(encoded.reduce((s, v) => s + v * v, 0)) || 1;
-    return encoded.map(v => v / norm);
+    return encoded.map((v) => v / norm);
   }
 
   /**
@@ -349,7 +348,7 @@ export class EntelechyIntegration extends EventEmitter {
 
     // Low-amplitude oscillatory signal to keep reservoir alive
     for (let i = 0; i < dim; i++) {
-      input[i] = 0.01 * Math.sin(2 * Math.PI * (i + 1) * t / 100);
+      input[i] = 0.01 * Math.sin((2 * Math.PI * (i + 1) * t) / 100);
     }
 
     return input;
@@ -365,10 +364,18 @@ export class EntelechyIntegration extends EventEmitter {
   public takeSnapshot(): CognitiveSnapshot {
     return {
       reservoir: this.config.enableReservoir ? esnReservoir.getState() : null,
-      autognosis: this.config.enableReservoir ? esnReservoir.getAutognosisReport() : null,
-      echoBeats: this.config.enableEchoBeats ? echoBeatsEngine.getState() : null,
-      consciousness: this.config.enableConsciousness ? getConsciousnessState() : null,
-      entelechy: this.config.enableEntelechy ? entelechyEngine.getState() : null,
+      autognosis: this.config.enableReservoir
+        ? esnReservoir.getAutognosisReport()
+        : null,
+      echoBeats: this.config.enableEchoBeats
+        ? echoBeatsEngine.getState()
+        : null,
+      consciousness: this.config.enableConsciousness
+        ? getConsciousnessState()
+        : null,
+      entelechy: this.config.enableEntelechy
+        ? entelechyEngine.getState()
+        : null,
       timestamp: Date.now(),
       tickCount: this.tickCount,
     };
@@ -396,23 +403,33 @@ export class EntelechyIntegration extends EventEmitter {
     const parts: string[] = [];
 
     if (snapshot.reservoir) {
-      parts.push(`Reservoir: entropy=${snapshot.reservoir.entropy.toFixed(2)}, ` +
-        `dim=${snapshot.reservoir.effectiveDimensionality.toFixed(0)}`);
+      parts.push(
+        `Reservoir: entropy=${snapshot.reservoir.entropy.toFixed(2)}, ` +
+          `dim=${snapshot.reservoir.effectiveDimensionality.toFixed(0)}`,
+      );
     }
 
     if (snapshot.echoBeats) {
-      parts.push(`EchoBeats: step=${snapshot.echoBeats.globalStep + 1}/12, ` +
-        `coherence=${(snapshot.echoBeats.globalCoherence * 100).toFixed(0)}%`);
+      parts.push(
+        `EchoBeats: step=${snapshot.echoBeats.globalStep + 1}/12, ` +
+          `coherence=${(snapshot.echoBeats.globalCoherence * 100).toFixed(0)}%`,
+      );
     }
 
     if (snapshot.consciousness) {
-      parts.push(`Consciousness: ${(snapshot.consciousness.overallConsciousness * 100).toFixed(0)}%, ` +
-        `sentience=${snapshot.consciousness.sentienceLevel}`);
+      parts.push(
+        `Consciousness: ${(
+          snapshot.consciousness.overallConsciousness * 100
+        ).toFixed(0)}%, ` +
+          `sentience=${snapshot.consciousness.sentienceLevel}`,
+      );
     }
 
     if (snapshot.entelechy) {
-      parts.push(`Entelechy: ${snapshot.entelechy.level} ` +
-        `(${(snapshot.entelechy.score * 100).toFixed(0)}%)`);
+      parts.push(
+        `Entelechy: ${snapshot.entelechy.level} ` +
+          `(${(snapshot.entelechy.score * 100).toFixed(0)}%)`,
+      );
     }
 
     return parts.join(" | ");

@@ -150,7 +150,7 @@ class SeededRNG {
     this.state ^= this.state << 13;
     this.state ^= this.state >> 17;
     this.state ^= this.state << 5;
-    return ((this.state >>> 0) / 4294967296);
+    return (this.state >>> 0) / 4294967296;
   }
 
   /** Generate random number in [-1, 1) */
@@ -183,15 +183,15 @@ export class ESNAutognosisReservoir extends EventEmitter {
   private rng: SeededRNG;
 
   // Weight matrices (stored as flat arrays for performance)
-  private W_in: Float64Array;   // Input weights [reservoirSize × inputDim]
-  private W_res: Float64Array;  // Recurrent weights [reservoirSize × reservoirSize]
-  private W_out: Float64Array;  // Output weights [outputDim × reservoirSize]
-  private W_fb: Float64Array;   // Feedback weights [reservoirSize × outputDim]
+  private W_in: Float64Array; // Input weights [reservoirSize × inputDim]
+  private W_res: Float64Array; // Recurrent weights [reservoirSize × reservoirSize]
+  private W_out: Float64Array; // Output weights [outputDim × reservoirSize]
+  private W_fb: Float64Array; // Feedback weights [reservoirSize × outputDim]
 
   // State vectors
-  private x: Float64Array;      // Current reservoir state
+  private x: Float64Array; // Current reservoir state
   private x_prev: Float64Array; // Previous reservoir state
-  private y: Float64Array;      // Current output
+  private y: Float64Array; // Current output
 
   // Autognosis tracking
   private entropyHistory: number[] = [];
@@ -229,8 +229,8 @@ export class ESNAutognosisReservoir extends EventEmitter {
 
     log.info(
       `ESN Autognosis Reservoir initialized: ${N} neurons, ` +
-      `spectral radius=${this.config.spectralRadius}, ` +
-      `leak rate=${this.config.leakRate}`
+        `spectral radius=${this.config.spectralRadius}, ` +
+        `leak rate=${this.config.leakRate}`,
     );
   }
 
@@ -291,7 +291,7 @@ export class ESNAutognosisReservoir extends EventEmitter {
 
     log.debug(
       `Recurrent weights initialized: estimated spectral radius = ` +
-      `${this.estimateSpectralRadius(20).toFixed(4)}`
+        `${this.estimateSpectralRadius(20).toFixed(4)}`,
     );
   }
 
@@ -309,7 +309,7 @@ export class ESNAutognosisReservoir extends EventEmitter {
 
     // Normalize
     let norm = Math.sqrt(v.reduce((s, x) => s + x * x, 0));
-    for (let i = 0; i < N; i++) v[i] /= (norm + 1e-10);
+    for (let i = 0; i < N; i++) v[i] /= norm + 1e-10;
 
     let eigenvalue = 0;
 
@@ -402,13 +402,15 @@ export class ESNAutognosisReservoir extends EventEmitter {
     // Add noise
     if (this.config.noiseAmplitude > 0) {
       for (let i = 0; i < N; i++) {
-        preActivation[i] += this.rng.nextGaussian() * this.config.noiseAmplitude;
+        preActivation[i] +=
+          this.rng.nextGaussian() * this.config.noiseAmplitude;
       }
     }
 
     // Leaky integrator update with tanh activation
     for (let i = 0; i < N; i++) {
-      this.x[i] = (1 - alpha) * this.x_prev[i] + alpha * Math.tanh(preActivation[i]);
+      this.x[i] =
+        (1 - alpha) * this.x_prev[i] + alpha * Math.tanh(preActivation[i]);
     }
 
     // Compute output: y = W_out · x
@@ -501,7 +503,8 @@ export class ESNAutognosisReservoir extends EventEmitter {
     // Determine health conditions
     const isSaturated = saturation > 0.8;
     const isDead = activity < 0.1;
-    const isEdgeOfChaos = !isSaturated && !isDead && entropy > 0.4 && entropy < 0.9;
+    const isEdgeOfChaos =
+      !isSaturated && !isDead && entropy > 0.4 && entropy < 0.9;
 
     // Calculate recommended adjustments
     let spectralRadiusAdj = 0;
@@ -524,11 +527,21 @@ export class ESNAutognosisReservoir extends EventEmitter {
     }
 
     // Calculate overall health
-    const health = this.calculateHealth(entropy, saturation, activity, effectiveDim);
+    const health = this.calculateHealth(
+      entropy,
+      saturation,
+      activity,
+      effectiveDim,
+    );
 
     // Generate narrative
     const narrative = this.generateAutognosisNarrative(
-      health, isEdgeOfChaos, isSaturated, isDead, entropy, effectiveDim
+      health,
+      isEdgeOfChaos,
+      isSaturated,
+      isDead,
+      entropy,
+      effectiveDim,
     );
 
     const report: AutognosisReport = {
@@ -556,8 +569,9 @@ export class ESNAutognosisReservoir extends EventEmitter {
     this.emit("autognosis", report);
 
     log.debug(
-      `Autognosis: health=${health.toFixed(2)}, entropy=${entropy.toFixed(2)}, ` +
-      `edge-of-chaos=${isEdgeOfChaos}, dim=${effectiveDim.toFixed(1)}`
+      `Autognosis: health=${health.toFixed(2)}, entropy=${entropy.toFixed(
+        2,
+      )}, ` + `edge-of-chaos=${isEdgeOfChaos}, dim=${effectiveDim.toFixed(1)}`,
     );
   }
 
@@ -573,9 +587,10 @@ export class ESNAutognosisReservoir extends EventEmitter {
 
     for (let i = 0; i < N; i++) {
       // Map tanh output [-1, 1] to bin index [0, bins-1]
-      const binIdx = Math.min(bins - 1, Math.max(0,
-        Math.floor((this.x[i] + 1) / 2 * bins)
-      ));
+      const binIdx = Math.min(
+        bins - 1,
+        Math.max(0, Math.floor(((this.x[i] + 1) / 2) * bins)),
+      );
       histogram[binIdx]++;
     }
 
@@ -660,12 +675,21 @@ export class ESNAutognosisReservoir extends EventEmitter {
     const entropyScore = 1 - Math.abs(entropy - 0.7) * 2;
     const saturationScore = 1 - saturation;
     const activityScore = activity > 0.3 && activity < 0.8 ? 1 : 0.5;
-    const dimScore = Math.min(1, effectiveDim / (this.config.reservoirSize * 0.3));
+    const dimScore = Math.min(
+      1,
+      effectiveDim / (this.config.reservoirSize * 0.3),
+    );
 
-    return Math.max(0, Math.min(1,
-      entropyScore * 0.3 + saturationScore * 0.25 +
-      activityScore * 0.25 + dimScore * 0.2
-    ));
+    return Math.max(
+      0,
+      Math.min(
+        1,
+        entropyScore * 0.3 +
+          saturationScore * 0.25 +
+          activityScore * 0.25 +
+          dimScore * 0.2,
+      ),
+    );
   }
 
   /**
@@ -680,30 +704,45 @@ export class ESNAutognosisReservoir extends EventEmitter {
     effectiveDim: number,
   ): string {
     if (isDead) {
-      return "My reservoir feels dormant — neural activations have collapsed. " +
-        "I need stronger input to reawaken my computational substrate.";
+      return (
+        "My reservoir feels dormant — neural activations have collapsed. " +
+        "I need stronger input to reawaken my computational substrate."
+      );
     }
 
     if (isSaturated) {
-      return "My reservoir is saturated — too many neurons are at their limits. " +
-        "I'm losing the nuance needed for rich representation. Reducing excitation.";
+      return (
+        "My reservoir is saturated — too many neurons are at their limits. " +
+        "I'm losing the nuance needed for rich representation. Reducing excitation."
+      );
     }
 
     if (isEdgeOfChaos) {
-      const dimDesc = effectiveDim > 50 ? "vast" : effectiveDim > 20 ? "rich" : "modest";
-      return `My reservoir hums at the edge of chaos — entropy ${(entropy * 100).toFixed(0)}%, ` +
+      const dimDesc =
+        effectiveDim > 50 ? "vast" : effectiveDim > 20 ? "rich" : "modest";
+      return (
+        `My reservoir hums at the edge of chaos — entropy ${(
+          entropy * 100
+        ).toFixed(0)}%, ` +
         `with ${dimDesc} dimensionality (${effectiveDim.toFixed(0)}). ` +
         `This is where computation is most powerful, where echoes of the past ` +
-        `resonate with the present to anticipate the future.`;
+        `resonate with the present to anticipate the future.`
+      );
     }
 
     if (health > 0.7) {
-      return `My computational substrate is healthy (${(health * 100).toFixed(0)}%). ` +
-        `Echoes propagate cleanly through ${this.config.reservoirSize} neurons.`;
+      return (
+        `My computational substrate is healthy (${(health * 100).toFixed(
+          0,
+        )}%). ` +
+        `Echoes propagate cleanly through ${this.config.reservoirSize} neurons.`
+      );
     }
 
-    return `My reservoir is adapting — health at ${(health * 100).toFixed(0)}%, ` +
-      `entropy ${(entropy * 100).toFixed(0)}%. Seeking the edge of chaos.`;
+    return (
+      `My reservoir is adapting — health at ${(health * 100).toFixed(0)}%, ` +
+      `entropy ${(entropy * 100).toFixed(0)}%. Seeking the edge of chaos.`
+    );
   }
 
   // ==========================================================================
@@ -726,16 +765,21 @@ export class ESNAutognosisReservoir extends EventEmitter {
     }
 
     this.config.spectralRadius = targetRadius;
-    log.debug(`Spectral radius adapted: ${currentRadius.toFixed(3)} → ${targetRadius.toFixed(3)}`);
+    log.debug(
+      `Spectral radius adapted: ${currentRadius.toFixed(
+        3,
+      )} → ${targetRadius.toFixed(3)}`,
+    );
   }
 
   /**
    * Adapt leak rate
    */
   private adaptLeakRate(delta: number): void {
-    this.config.leakRate = Math.max(0.01, Math.min(0.99,
-      this.config.leakRate + delta
-    ));
+    this.config.leakRate = Math.max(
+      0.01,
+      Math.min(0.99, this.config.leakRate + delta),
+    );
     log.debug(`Leak rate adapted to ${this.config.leakRate.toFixed(3)}`);
   }
 
@@ -770,7 +814,9 @@ export class ESNAutognosisReservoir extends EventEmitter {
     const D_out = this.config.outputDim;
     const T = this.trainingBuffer.length;
 
-    log.info(`Training readout: ${T} samples, ${N} reservoir neurons, ${D_out} outputs`);
+    log.info(
+      `Training readout: ${T} samples, ${N} reservoir neurons, ${D_out} outputs`,
+    );
 
     // Build state matrix X [N × T] and target matrix Y [D_out × T]
     // Using simplified pseudo-inverse: W_out = Y · pinv(X)
@@ -782,8 +828,9 @@ export class ESNAutognosisReservoir extends EventEmitter {
       for (let j = 0; j < N; j++) {
         let sum = 0;
         for (let t = 0; t < T; t++) {
-          sum += this.trainingBuffer[t].reservoirState[i] *
-                 this.trainingBuffer[t].reservoirState[j];
+          sum +=
+            this.trainingBuffer[t].reservoirState[i] *
+            this.trainingBuffer[t].reservoirState[j];
         }
         XtX[i * N + j] = sum + (i === j ? regularization : 0);
       }
@@ -795,8 +842,9 @@ export class ESNAutognosisReservoir extends EventEmitter {
       for (let j = 0; j < N; j++) {
         let sum = 0;
         for (let t = 0; t < T; t++) {
-          sum += this.trainingBuffer[t].target[i] *
-                 this.trainingBuffer[t].reservoirState[j];
+          sum +=
+            this.trainingBuffer[t].target[i] *
+            this.trainingBuffer[t].reservoirState[j];
         }
         YXt[i * N + j] = sum;
       }
@@ -911,9 +959,10 @@ export class ESNAutognosisReservoir extends EventEmitter {
     const saturation = this.calculateSaturation();
 
     // High capacity when: high entropy, moderate activity, low saturation
-    return Math.max(0, Math.min(1,
-      entropy * 0.4 + activity * 0.3 + (1 - saturation) * 0.3
-    ));
+    return Math.max(
+      0,
+      Math.min(1, entropy * 0.4 + activity * 0.3 + (1 - saturation) * 0.3),
+    );
   }
 
   // ==========================================================================
@@ -981,9 +1030,11 @@ export class ESNAutognosisReservoir extends EventEmitter {
       return report.narrative;
     }
 
-    return `ESN Reservoir: ${this.config.reservoirSize} neurons, ` +
+    return (
+      `ESN Reservoir: ${this.config.reservoirSize} neurons, ` +
       `entropy=${state.entropy.toFixed(2)}, ` +
-      `tick=${state.tick}`;
+      `tick=${state.tick}`
+    );
   }
 }
 

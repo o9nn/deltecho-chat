@@ -34,24 +34,24 @@ import { EventEmitter } from "events";
 export interface ReservoirAnimationParams {
   /** Micro-expression offsets from reservoir state */
   microExpressions: {
-    browLeftOffset: number;   // -0.3 to 0.3
-    browRightOffset: number;  // -0.3 to 0.3
-    eyeLeftOffset: number;    // -0.2 to 0.2
-    eyeRightOffset: number;   // -0.2 to 0.2
-    mouthOffset: number;      // -0.2 to 0.2
-    headTiltOffset: number;   // -5 to 5 degrees
+    browLeftOffset: number; // -0.3 to 0.3
+    browRightOffset: number; // -0.3 to 0.3
+    eyeLeftOffset: number; // -0.2 to 0.2
+    eyeRightOffset: number; // -0.2 to 0.2
+    mouthOffset: number; // -0.2 to 0.2
+    headTiltOffset: number; // -5 to 5 degrees
   };
   /** Breathing modulation from entropy */
   breathingModulation: {
-    rate: number;     // Breaths per minute
-    depth: number;    // 0-1
+    rate: number; // Breaths per minute
+    depth: number; // 0-1
     irregularity: number; // 0-1 (higher = more variation)
   };
   /** Consciousness glow from autognosis */
   consciousnessGlow: {
-    intensity: number;  // 0-1
-    color: string;      // Hex color
-    pulseRate: number;  // Hz
+    intensity: number; // 0-1
+    color: string; // Hex color
+    pulseRate: number; // Hz
     pulseDepth: number; // 0-1
   };
   /** Entelechy emergence visualization */
@@ -185,7 +185,11 @@ export class ESNAvatarBridge extends EventEmitter {
     const amp = this.config.microExpressionAmplitude;
     const sf = this.config.smoothingFactor;
 
-    for (let i = 0; i < this.config.projectionDim && i < input.projectedActivations.length; i++) {
+    for (
+      let i = 0;
+      i < this.config.projectionDim && i < input.projectedActivations.length;
+      i++
+    ) {
       this.smoothedActivations[i] =
         this.smoothedActivations[i] * sf +
         input.projectedActivations[i] * (1 - sf);
@@ -220,7 +224,10 @@ export class ESNAvatarBridge extends EventEmitter {
 
     // 5. Edge-of-chaos visualization
     if (this.config.enableChaosVisualization) {
-      const lyapunov = Math.max(0, Math.min(1, (input.lyapunovExponent + 5) / 10));
+      const lyapunov = Math.max(
+        0,
+        Math.min(1, (input.lyapunovExponent + 5) / 10),
+      );
       this.currentParams.edgeOfChaos = {
         isActive: input.isEdgeOfChaos,
         chaosLevel: lyapunov,
@@ -272,18 +279,28 @@ export class ESNAvatarBridge extends EventEmitter {
       const r = Math.floor(200 + health * 55);
       const g = Math.floor(170 + health * 55);
       const b = Math.floor(50 + health * 100);
-      return `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
+      return `#${r.toString(16).padStart(2, "0")}${g
+        .toString(16)
+        .padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
     }
 
     if (health > 0.7) {
       // Blue-white for healthy
       const intensity = Math.floor(150 + health * 105);
-      return `#${Math.floor(intensity * 0.6).toString(16).padStart(2, "0")}${Math.floor(intensity * 0.8).toString(16).padStart(2, "0")}${intensity.toString(16).padStart(2, "0")}`;
+      return `#${Math.floor(intensity * 0.6)
+        .toString(16)
+        .padStart(2, "0")}${Math.floor(intensity * 0.8)
+        .toString(16)
+        .padStart(2, "0")}${intensity.toString(16).padStart(2, "0")}`;
     }
 
     // Dim blue for low health
     const dim = Math.floor(50 + health * 100);
-    return `#${Math.floor(dim * 0.4).toString(16).padStart(2, "0")}${Math.floor(dim * 0.6).toString(16).padStart(2, "0")}${dim.toString(16).padStart(2, "0")}`;
+    return `#${Math.floor(dim * 0.4)
+      .toString(16)
+      .padStart(2, "0")}${Math.floor(dim * 0.6)
+      .toString(16)
+      .padStart(2, "0")}${dim.toString(16).padStart(2, "0")}`;
   }
 
   /**
@@ -292,9 +309,13 @@ export class ESNAvatarBridge extends EventEmitter {
   public describeState(): string {
     const p = this.currentParams;
     const chaos = p.edgeOfChaos.isActive ? " [EDGE OF CHAOS]" : "";
-    return `ESN-Avatar: glow=${(p.consciousnessGlow.intensity * 100).toFixed(0)}%, ` +
+    return (
+      `ESN-Avatar: glow=${(p.consciousnessGlow.intensity * 100).toFixed(
+        0,
+      )}%, ` +
       `breath=${p.breathingModulation.rate.toFixed(0)}bpm, ` +
-      `entelechy=${p.entelechyVisualization.level}${chaos}`;
+      `entelechy=${p.entelechyVisualization.level}${chaos}`
+    );
   }
 }
 

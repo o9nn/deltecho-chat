@@ -277,8 +277,10 @@ export function createRelationTools(
       input: z.infer<typeof relationToolSchemas.updateSelfNarrative>,
     ): void => {
       if (input.narrative) relation.updateSelfNarrative(input.narrative);
-      if (input.perceivedRole) relation.updatePerceivedRole(input.perceivedRole);
-      if (input.growthDirection) relation.updateGrowthDirection(input.growthDirection);
+      if (input.perceivedRole)
+        relation.updatePerceivedRole(input.perceivedRole);
+      if (input.growthDirection)
+        relation.updateGrowthDirection(input.growthDirection);
     },
 
     /**
