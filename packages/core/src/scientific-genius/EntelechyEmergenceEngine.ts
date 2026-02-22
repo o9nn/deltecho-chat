@@ -260,8 +260,6 @@ export class EntelechyEmergenceEngine extends EventEmitter {
     selfAwareness: number;
     scientificInsight: number;
   }): void {
-    const now = Date.now();
-
     // Pattern 1: Reservoir-Consciousness Resonance
     if (this.reservoirCoupling > 0.6 && params.consciousnessScore > 0.5) {
       this.registerPattern({

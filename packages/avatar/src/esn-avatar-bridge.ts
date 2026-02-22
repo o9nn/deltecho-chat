@@ -22,7 +22,7 @@
  */
 
 import { EventEmitter } from "events";
-import type { Expression, AvatarMotion } from "./types";
+// Types from ./types available if needed for future integration
 
 // ============================================================
 // TYPES

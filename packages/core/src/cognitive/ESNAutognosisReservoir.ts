@@ -300,7 +300,7 @@ export class ESNAutognosisReservoir extends EventEmitter {
    */
   private estimateSpectralRadius(iterations: number): number {
     const N = this.config.reservoirSize;
-    let v = new Float64Array(N);
+    const v = new Float64Array(N);
 
     // Random initial vector
     for (let i = 0; i < N; i++) {
