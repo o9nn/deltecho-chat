@@ -29,6 +29,18 @@ jobs:
     - name: Install Dependencies
       run: pnpm install --frozen-lockfile
 
+    - name: Build Workspace Dependencies
+      run: |
+        # Build workspace packages in dependency order so check:types
+        # can resolve cross-package type declarations via symlinks.
+        # Leaf packages first (no workspace deps), then dependents.
+        pnpm --filter=deep-tree-echo-core build
+        pnpm --filter=@deltecho/sys6-triality build
+        pnpm --filter=@deltecho/dove9 build
+        pnpm --filter=@deltecho/ipc build
+        pnpm --filter=@deltecho/cognitive build
+        pnpm --filter=deep-tree-echo-orchestrator build
+
     - name: Check (Lint, Types, Format)
       run: pnpm check
 
