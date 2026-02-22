@@ -42,12 +42,12 @@ function createMockRelation(): RelationInterface {
       "Insight 2",
       "Insight 3",
     ]),
-    createFlow: vi.fn((direction, contentType, content, intensity) => ({
+    recordFlow: vi.fn((options) => ({
       id: "flow-1",
-      direction,
-      contentType,
-      content,
-      intensity: intensity ?? 0.5,
+      direction: options.direction,
+      contentType: options.contentType,
+      content: options.content,
+      intensity: options.intensity ?? 0.5,
       timestamp: Date.now(),
     })),
     integrate: vi.fn((phase) => ({
@@ -57,7 +57,9 @@ function createMockRelation(): RelationInterface {
       coherenceAfter: 0.87,
       timestamp: Date.now(),
     })),
-    updateSelfReflection: vi.fn(),
+    updateSelfNarrative: vi.fn(),
+    updatePerceivedRole: vi.fn(),
+    updateGrowthDirection: vi.fn(),
     addInsight: vi.fn(),
   } as unknown as RelationInterface;
 }
@@ -306,7 +308,7 @@ describe("Relation Tools", () => {
 
       expect(result).toBeDefined();
       expect(result.direction).toBe("agent-to-arena");
-      expect(relation.createFlow).toHaveBeenCalled();
+      expect(relation.recordFlow).toHaveBeenCalled();
     });
 
     it("should bridge content bidirectionally", () => {
@@ -345,7 +347,7 @@ describe("Relation Tools", () => {
         perceivedRole: "Guide and mentor",
       });
 
-      expect(relation.updateSelfReflection).toHaveBeenCalled();
+      expect(relation.updateSelfNarrative).toHaveBeenCalled();
     });
   });
 
