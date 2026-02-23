@@ -33,6 +33,9 @@ COPY . .
 # Build the browser target with full bundling for Cloudflare
 # This bundles ALL dependencies into server.js, making it self-contained
 ENV CLOUDFLARE_BUILD=true
+# Pass git ref from build args to avoid git describe errors in Docker (no .git dir)
+ARG VERSION_INFO_GIT_REF=unknown
+ENV VERSION_INFO_GIT_REF=${VERSION_INFO_GIT_REF}
 RUN pnpm build:browser
 
 # Stage 2: Production image (minimal)
