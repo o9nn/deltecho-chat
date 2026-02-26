@@ -19,11 +19,12 @@ export const ScientificDashboard: React.FC = () => {
     if (!executor) return;
 
     if (input.includes("->")) {
-      const [source, target] = input.split("->").map((s) => s.trim());
+      const [source, target] = input.split("->").map((s: string) => s.trim());
       if (source && target) {
         // Manually trigger the tool
         await executor.executeTool(
           {
+            id: `manual-store-${Date.now()}`,
             name: "store_knowledge",
             input: {
               type: "InheritanceLink",
@@ -37,6 +38,7 @@ export const ScientificDashboard: React.FC = () => {
     } else {
       await executor.executeTool(
         {
+          id: `manual-store-${Date.now()}`,
           name: "store_knowledge",
           input: {
             type: "ConceptNode",
@@ -68,7 +70,7 @@ export const ScientificDashboard: React.FC = () => {
           <input
             type="text"
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value)}
             placeholder="Omnibar: Enter 'Entity' or 'Entity A -> Entity B' to teach..."
             className="omnibar-input"
           />

@@ -63,11 +63,12 @@ export const KnowledgeGraph: React.FC = () => {
     const fetchInitialData = async () => {
       try {
         const result = await executor.executeTool({
+          id: `initial-fetch-${Date.now()}`,
           name: "query_knowledge",
           input: { queryType: "by_type", target: "ConceptNode" }
         }, 0);
 
-        if (result.success && result.metadata?.count > 0) {
+        if (result.success && result.metadata && typeof result.metadata.count === 'number') {
           // This is a simplification - real implementation would fetch all atoms
           log.info(`Fetched ${result.metadata.count} initial ConceptNodes`);
         }
@@ -92,7 +93,7 @@ export const KnowledgeGraph: React.FC = () => {
 
         log.info("Visualizing atom:", atom);
 
-        setGraphData((prev) => {
+        setGraphData((prev: GraphData) => {
           const newNodes = [...prev.nodes];
           const newLinks = [...prev.links];
 
