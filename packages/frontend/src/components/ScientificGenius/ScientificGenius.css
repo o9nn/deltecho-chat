@@ -1,0 +1,66 @@
+.knowledge-graph-container {
+  width: 100%;
+  height: 100%;
+  min-height: 400px;
+  background: #000011;
+}
+
+.scientific-dashboard {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  color: white;
+  background: #0d1117;
+}
+
+.dashboard-header {
+  padding: 20px;
+  border-bottom: 1px solid #30363d;
+}
+
+.dashboard-header h2 {
+  margin: 0;
+}
+
+.dashboard-header p {
+  margin: 5px 0 0;
+  opacity: 0.7;
+}
+
+.graph-view {
+  flex: 1;
+  position: relative;
+}
+
+.dashboard-footer {
+  padding: 20px;
+  border-top: 1px solid #30363d;
+  background: #161b22;
+}
+
+.omnibar-form {
+  display: flex;
+  gap: 10px;
+}
+
+.omnibar-input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #30363d;
+  background: #0d1117;
+  color: white;
+}
+
+.omnibar-button {
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: none;
+  background: #238636;
+  color: white;
+  cursor: pointer;
+}
+
+.omnibar-button:hover {
+  background: #2ea043;
+}

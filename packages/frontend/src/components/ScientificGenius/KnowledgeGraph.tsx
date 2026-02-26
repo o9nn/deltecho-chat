@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import ForceGraph2D, { ForceGraphMethods } from "react-force-graph-2d";
 import { getLogger } from "@deltachat-desktop/shared/logger";
+import { getAgentToolExecutor } from "../DeepTreeEchoBot/AgentToolExecutor";
+import "./ScientificGenius.css";
 
 const log = getLogger("frontend/components/ScientificGenius/KnowledgeGraph");
 
@@ -23,8 +25,6 @@ interface GraphData {
   nodes: GraphNode[];
   links: GraphLink[];
 }
-
-import { getAgentToolExecutor } from "../DeepTreeEchoBot/AgentToolExecutor";
 
 export const KnowledgeGraph: React.FC = () => {
   const [graphData, setGraphData] = useState<GraphData>({
@@ -165,15 +165,7 @@ export const KnowledgeGraph: React.FC = () => {
   }, []);
 
   return (
-    <div
-      ref={containerRef}
-      style={{
-        width: "100%",
-        height: "100%",
-        minHeight: "400px",
-        background: "#000011",
-      }}
-    >
+    <div ref={containerRef} className="knowledge-graph-container">
       {/* @ts-ignore: Library type definition mismatch */}
       <ForceGraph2D
         ref={fgRef}

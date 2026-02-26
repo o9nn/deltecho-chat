@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { KnowledgeGraph } from "./KnowledgeGraph";
 import { getLogger } from "@deltachat-desktop/shared/logger";
 import { getAgentToolExecutor } from "../DeepTreeEchoBot/AgentToolExecutor";
+import "./ScientificGenius.css";
 
 const _log = getLogger(
   "frontend/components/ScientificGenius/ScientificDashboard",
@@ -50,59 +51,28 @@ export const ScientificDashboard: React.FC = () => {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        height: "100%",
-        color: "white",
-        background: "#0d1117",
-      }}
-    >
-      <div style={{ padding: "20px", borderBottom: "1px solid #30363d" }}>
-        <h2 style={{ margin: 0 }}>🧠 Scientific Cortex</h2>
-        <p style={{ margin: "5px 0 0", opacity: 0.7 }}>
+    <div className="scientific-dashboard">
+      <div className="dashboard-header">
+        <h2>🧠 Scientific Cortex</h2>
+        <p>
           Visualizing the AtomSpace Knowledge Graph
         </p>
       </div>
 
-      <div style={{ flex: 1, position: "relative" }}>
+      <div className="graph-view">
         <KnowledgeGraph />
       </div>
 
-      <div
-        style={{
-          padding: "20px",
-          borderTop: "1px solid #30363d",
-          background: "#161b22",
-        }}
-      >
-        <form onSubmit={handleInput} style={{ display: "flex", gap: "10px" }}>
+      <div className="dashboard-footer">
+        <form onSubmit={handleInput} className="omnibar-form">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Omnibar: Enter 'Entity' or 'Entity A -> Entity B' to teach..."
-            style={{
-              flex: 1,
-              padding: "10px",
-              borderRadius: "6px",
-              border: "1px solid #30363d",
-              background: "#0d1117",
-              color: "white",
-            }}
+            className="omnibar-input"
           />
-          <button
-            type="submit"
-            style={{
-              padding: "10px 20px",
-              borderRadius: "6px",
-              border: "none",
-              background: "#238636",
-              color: "white",
-              cursor: "pointer",
-            }}
-          >
+          <button type="submit" className="omnibar-button">
             Inject Knowledge
           </button>
         </form>
