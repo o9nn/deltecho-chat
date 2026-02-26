@@ -400,24 +400,42 @@ export class StreamingAvatarService extends EventEmitter {
    * Extract complete phrases from buffer
    */
   private extractPhrases(): void {
-    let lastBoundaryIndex = -1;
+    let searchIndex = 0;
+    
+    while (searchIndex < this.textBuffer.length) {
+      let earliestBoundaryIndex = -1;
+      let foundBoundary = "";
 
-    for (const boundary of this.config.phraseBoundaries) {
-      const index = this.textBuffer.lastIndexOf(boundary);
-      if (index > lastBoundaryIndex) {
-        lastBoundaryIndex = index;
+      // Find the earliest boundary character in the buffer
+      for (const boundary of this.config.phraseBoundaries) {
+        const index = this.textBuffer.indexOf(boundary, searchIndex);
+        if (index !== -1 && (earliestBoundaryIndex === -1 || index < earliestBoundaryIndex)) {
+          earliestBoundaryIndex = index;
+          foundBoundary = boundary;
+        }
       }
-    }
 
-    if (
-      lastBoundaryIndex >= 0 &&
-      lastBoundaryIndex >= this.config.minPhraseLength - 1
-    ) {
-      const phrase = this.textBuffer.substring(0, lastBoundaryIndex + 1).trim();
-      this.textBuffer = this.textBuffer.substring(lastBoundaryIndex + 1);
-
-      if (phrase.length > 0) {
-        this.queuePhrase(phrase);
+      if (earliestBoundaryIndex !== -1) {
+        // We found a boundary!
+        const phraseLength = earliestBoundaryIndex + 1;
+        
+        // Only extract if it meets the minimum length requirement, or if we're flushing
+        if (phraseLength >= this.config.minPhraseLength || this.streamComplete) {
+          const phrase = this.textBuffer.substring(0, phraseLength).trim();
+          this.textBuffer = this.textBuffer.substring(phraseLength);
+          
+          if (phrase.length > 0) {
+            this.queuePhrase(phrase);
+          }
+          // Reset search index since we modified textBuffer
+          searchIndex = 0;
+        } else {
+          // Phrase too short, skip this boundary and look for next one
+          searchIndex = earliestBoundaryIndex + 1;
+        }
+      } else {
+        // No more boundaries in current buffer
+        break;
       }
     }
   }

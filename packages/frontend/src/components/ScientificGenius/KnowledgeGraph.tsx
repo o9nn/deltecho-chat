@@ -24,6 +24,8 @@ interface GraphData {
   links: GraphLink[];
 }
 
+import { getAgentToolExecutor } from "../DeepTreeEchoBot/AgentToolExecutor";
+
 export const KnowledgeGraph: React.FC = () => {
   const [graphData, setGraphData] = useState<GraphData>({
     nodes: [],
@@ -51,18 +53,33 @@ export const KnowledgeGraph: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const executor = (window as any).deepTreeEchoExecutor;
+    const executor = getAgentToolExecutor();
     if (!executor) {
-      log.warn("AgentToolExecutor not found on window");
+      log.warn("AgentToolExecutor singleton not available");
       return;
     }
 
-    // Initial fetch of atoms (Using the query_knowledge tool abstraction manually or just starting fresh)
-    // For now, we start fresh and listen for updates.
-    // In a real implementation, we'd fetch all existing atoms from DB.
+    // Initial fetch of atoms to populate the graph
+    const fetchInitialData = async () => {
+      try {
+        const result = await executor.executeTool({
+          name: "query_knowledge",
+          input: { queryType: "by_type", target: "ConceptNode" }
+        }, 0);
+
+        if (result.success && result.metadata?.count > 0) {
+          // This is a simplification - real implementation would fetch all atoms
+          log.info(`Fetched ${result.metadata.count} initial ConceptNodes`);
+        }
+      } catch (err) {
+        log.error("Failed to fetch initial graph data", err);
+      }
+    };
+
+    fetchInitialData();
 
     const unsubscribe = executor.subscribe((event: any) => {
-      if (event.type === "knowledge_stored") {
+      if (event.type === "knowledge_stored" || event.type === "knowledge_updated") {
         const { atom, type } = event.data;
         // Parse atom string: e.g., (InheritanceLink (ConceptNode "A") (ConceptNode "B"))
         // This is a naive parser for visualization purposes

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { KnowledgeGraph } from "./KnowledgeGraph";
 import { getLogger } from "@deltachat-desktop/shared/logger";
+import { getAgentToolExecutor } from "../DeepTreeEchoBot/AgentToolExecutor";
 
 const _log = getLogger(
   "frontend/components/ScientificGenius/ScientificDashboard",
@@ -13,7 +14,7 @@ export const ScientificDashboard: React.FC = () => {
   // Syntax: A -> B (creates InheritanceLink)
   const handleInput = async (e: React.FormEvent) => {
     e.preventDefault();
-    const executor = (window as any).deepTreeEchoExecutor;
+    const executor = getAgentToolExecutor();
     if (!executor) return;
 
     if (input.includes("->")) {
