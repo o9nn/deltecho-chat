@@ -43,6 +43,10 @@ The Deep Tree Echo integration brings advanced cognitive capabilities to chat in
 
 The DeepTreeEchoBot serves as an AI companion integrated directly into the chat interface, while the AICompanionHub provides a central location for all AI-powered features. The CognitiveBridge creates a seamless connection between chat events and cognitive processing, with the LLM Service supporting multiple backends including OpenAI, Anthropic, and local models.
 
+### Visual Cortex & Scientific Dashboard
+
+The system features a real-time Visual Cortex that visualizes the AI's internal knowledge graph (AtomSpace) using an interactive force-directed layout. The Scientific Dashboard provides an interface for interacting with this knowledge base, allowing users to manually inject knowledge and observe the agent's cognitive state. It also features integration with Live2D streaming avatars equipped with lip-sync capabilities.
+
 ## Project Structure
 
 ```
@@ -52,7 +56,8 @@ deltecho-chat/
 │   │   └── src/
 │   │       └── components/
 │   │           ├── DeepTreeEchoBot/    # AI bot integration
-│   │           └── AICompanionHub/     # AI features hub
+│   │           ├── AICompanionHub/     # AI features hub
+│   │           └── ScientificGenius/   # Visual Cortex & Dashboard
 │   ├── target-browser/     # Browser deployment target
 │   ├── target-electron/    # Desktop app target
 │   ├── target-tauri/       # Lightweight desktop target
