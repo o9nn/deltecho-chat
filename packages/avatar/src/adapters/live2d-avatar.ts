@@ -78,6 +78,7 @@ export class Live2DAvatarManager {
   private renderer: PixiLive2DRenderer | null = null;
   private canvas: HTMLCanvasElement | null = null;
   private isLoaded = false;
+  private isDisposed = false;
   private modelInfo: CubismModelInfo | null = null;
 
   /**
@@ -102,6 +103,14 @@ export class Live2DAvatarManager {
 
     // Dynamically import the renderer
     const { PixiLive2DRenderer } = await import("./pixi-live2d-renderer");
+
+    if (this.isDisposed) {
+      if (this.canvas?.parentElement) {
+        this.canvas.parentElement.removeChild(this.canvas);
+      }
+      this.canvas = null;
+      return this.createController();
+    }
 
     // Create and initialize the renderer
     this.renderer = new PixiLive2DRenderer();
@@ -217,6 +226,7 @@ export class Live2DAvatarManager {
    * Dispose of all resources
    */
   dispose(): void {
+    this.isDisposed = true;
     this.renderer?.dispose();
     this.renderer = null;
 

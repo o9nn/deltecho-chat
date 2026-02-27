@@ -110,6 +110,7 @@ interface SuggestedAction {
  */
 export class ChatOrchestrator {
   private sessions: Map<string, CognitiveState> = new Map();
+  private chatSessions: Map<number, string> = new Map();
   private sys6CycleInterval: number = 30; // 30-step cycle
   private syncEventsPerCycle: number = 42;
   private aarIntegration: AARFrontendIntegration;
@@ -175,6 +176,11 @@ export class ChatOrchestrator {
    * Initialize a new chat session
    */
   async initSession(chatId: number, contact: T.Contact): Promise<string> {
+    // If a session for this chat already exists, return it
+    if (this.chatSessions.has(chatId)) {
+      return this.chatSessions.get(chatId)!;
+    }
+
     const sessionId = `session_${chatId}_${Date.now()}`;
 
     // Get current AAR state if available
@@ -201,6 +207,7 @@ export class ChatOrchestrator {
     };
 
     this.sessions.set(sessionId, initialState);
+    this.chatSessions.set(chatId, sessionId);
 
     // Initialize memory anchors from contact history if available
     await this.loadContactMemory(sessionId, contact);
@@ -443,7 +450,7 @@ export class ChatOrchestrator {
     return state.memoryAnchors
       .map((anchor) => {
         const anchorWords = new Set(anchor.content.toLowerCase().split(/\s+/));
-        const overlap = [...messageWords].filter((w) =>
+        const overlap = Array.from(messageWords).filter((w: string) =>
           anchorWords.has(w),
         ).length;
         return { anchor, score: overlap / Math.max(messageWords.size, 1) };
@@ -691,6 +698,11 @@ export class ChatOrchestrator {
     );
   }
 
+  getSessionStateByChatId(chatId: number): CognitiveState | undefined {
+    const sessionId = this.chatSessions.get(chatId);
+    return sessionId ? this.sessions.get(sessionId) : undefined;
+  }
+
   /**
    * Get session state
    */
@@ -709,6 +721,7 @@ export class ChatOrchestrator {
         `Ending session ${sessionId} with ${state.memoryAnchors.length} memories`,
       );
       this.sessions.delete(sessionId);
+      this.chatSessions.delete(state.chatId);
     }
   }
 }

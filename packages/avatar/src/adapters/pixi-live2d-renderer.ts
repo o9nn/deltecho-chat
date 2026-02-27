@@ -489,7 +489,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   private startAutoBlinkLoop(): void {
     // Stop existing timer
     if (this.blinkTimer) {
-      clearInterval(this.blinkTimer);
+      clearTimeout(this.blinkTimer);
     }
 
     // Random blink every 2-6 seconds
@@ -547,7 +547,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
    */
   dispose(): void {
     if (this.blinkTimer) {
-      clearInterval(this.blinkTimer);
+      clearTimeout(this.blinkTimer);
       this.blinkTimer = null;
     }
 
