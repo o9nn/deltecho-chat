@@ -26,8 +26,8 @@ export default function Profile({ settingsStore }: Props) {
   );
 
   const profileName =
-    settingsStore.settings.displayname !== ""
-      ? settingsStore.settings.displayname
+    settingsStore.settings?.displayname !== ""
+      ? settingsStore.settings?.displayname
       : tx("pref_profile_info_headline");
 
   return (
