@@ -17,6 +17,7 @@ test_exports.ts
 
 # CLI tools and bots (console output is expected)
 bin/deltecho-bot.ts
+bin/deploy-optimization-agents.ts
 deltecho-bot-smol.ts
 packages/discord/src/bot.ts
 packages/telegram/src/bot.ts
@@ -57,3 +58,6 @@ packages/core/src/scientific-genius/
 
 # DuckDB adapter (database logging)
 packages/reasoning/src/memory/duckdb-adapter.ts
+
+# Temp agent scripts (CLI output)
+temp-agent-script/

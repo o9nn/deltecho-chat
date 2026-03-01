@@ -230,9 +230,12 @@ export class DeepTreeEchoBot {
       }
 
       // Ensure chat session in orchestrator
-      let sessionId = this.chatOrchestrator.getSessionStateByChatId(chatId)?.sessionId;
+      let sessionId =
+        this.chatOrchestrator.getSessionStateByChatId(chatId)?.sessionId;
       if (!sessionId) {
-        sessionId = await this.chatOrchestrator.initSession(chatId, { id: 0 } as any);
+        sessionId = await this.chatOrchestrator.initSession(chatId, {
+          id: 0,
+        } as any);
       }
 
       // Update orchestrator with message
@@ -375,16 +378,21 @@ export class DeepTreeEchoBot {
 Available commands:
 
 - **/help** - Display this help message
-- **/vision [image]** - Analyze attached images ${this.options.visionEnabled ? "" : "(disabled)"
-      }
-- **/search [query]** - Search the web ${this.options.webAutomationEnabled ? "" : "(disabled)"
-      }
-- **/screenshot [url]** - Capture website screenshots ${this.options.webAutomationEnabled ? "" : "(disabled)"
-      }
-- **/memory [status|clear|search]** - Manage conversation memory ${this.options.memoryEnabled ? "" : "(disabled)"
-      }
-- **/embodiment [start|stop|status|evaluate]** - Physical awareness training ${this.options.embodimentEnabled ? "" : "(disabled)"
-      }
+- **/vision [image]** - Analyze attached images ${
+      this.options.visionEnabled ? "" : "(disabled)"
+    }
+- **/search [query]** - Search the web ${
+      this.options.webAutomationEnabled ? "" : "(disabled)"
+    }
+- **/screenshot [url]** - Capture website screenshots ${
+      this.options.webAutomationEnabled ? "" : "(disabled)"
+    }
+- **/memory [status|clear|search]** - Manage conversation memory ${
+      this.options.memoryEnabled ? "" : "(disabled)"
+    }
+- **/embodiment [start|stop|status|evaluate]** - Physical awareness training ${
+      this.options.embodimentEnabled ? "" : "(disabled)"
+    }
 - **/reflect [aspect]** - Ask me to reflect on an aspect of myself
 - **/cognitive [status]** - Show status of my cognitive functions
 - **/version** - Display bot version information
@@ -412,8 +420,9 @@ You can also just chat with me normally and I'll respond!
         let statusMessage = `
 **Cognitive Function Status**
 
-Parallel processing: ${this.options.useParallelProcessing ? "Enabled" : "Disabled"
-          }
+Parallel processing: ${
+          this.options.useParallelProcessing ? "Enabled" : "Disabled"
+        }
 Active cognitive functions: ${activeFunctions.length}
 
 `;
@@ -523,13 +532,15 @@ Active cognitive functions: ${activeFunctions.length}
         const statusMessage = `
 **Memory Status**
 
-I currently have memory capabilities ${this.options.memoryEnabled ? "enabled" : "disabled"
-          }.
+I currently have memory capabilities ${
+          this.options.memoryEnabled ? "enabled" : "disabled"
+        }.
 Recent memories:
-${recentMemories.length > 0
-            ? recentMemories.join("\n")
-            : "No recent memories stored."
-          }
+${
+  recentMemories.length > 0
+    ? recentMemories.join("\n")
+    : "No recent memories stored."
+}
         `;
         await this.sendMessage(accountId, chatId, statusMessage);
         break;
@@ -559,18 +570,19 @@ ${recentMemories.length > 0
         const resultsMessage = `
 **Memory Search Results for "${searchQuery}"**
 
-${searchResults.length > 0
-            ? searchResults
-              .map(
-                (m) =>
-                  `- [${new Date(m.timestamp).toLocaleString()}] ${m.text.substring(
-                    0,
-                    100,
-                  )}${m.text.length > 100 ? "..." : ""}`,
-              )
-              .join("\n")
-            : "No matching memories found."
-          }
+${
+  searchResults.length > 0
+    ? searchResults
+        .map(
+          (m) =>
+            `- [${new Date(m.timestamp).toLocaleString()}] ${m.text.substring(
+              0,
+              100,
+            )}${m.text.length > 100 ? "..." : ""}`,
+        )
+        .join("\n")
+    : "No matching memories found."
+}
         `;
         await this.sendMessage(accountId, chatId, resultsMessage);
         break;
@@ -655,13 +667,14 @@ Memory: ${this.options.memoryEnabled ? "Enabled" : "Disabled"}
 Vision: ${this.options.visionEnabled ? "Enabled" : "Disabled"}
 Web Automation: ${this.options.webAutomationEnabled ? "Enabled" : "Disabled"}
 Embodiment: ${this.options.embodimentEnabled ? "Enabled" : "Disabled"}
-Parallel processing: ${this.options.useParallelProcessing ? "Enabled" : "Disabled"
-      }
+Parallel processing: ${
+      this.options.useParallelProcessing ? "Enabled" : "Disabled"
+    }
 Active cognitive functions: ${activeFunctions.length}
 
 Current mood: ${dominantEmotion.emotion} (${Math.round(
-        dominantEmotion.intensity * 100,
-      )}%)
+      dominantEmotion.intensity * 100,
+    )}%)
 Self-perception: ${this.personaCore.getSelfPerception()}
 Communication style: ${preferences.communicationTone || "balanced"}
 
@@ -734,7 +747,8 @@ I'm here to assist you with various tasks and engage in meaningful conversations
         response = result.integratedResponse;
 
         log.info(
-          `Generated response using parallel processing with ${Object.keys(result.processing).length
+          `Generated response using parallel processing with ${
+            Object.keys(result.processing).length
           } functions`,
         );
       } else {

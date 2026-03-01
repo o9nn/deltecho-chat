@@ -62,13 +62,20 @@ export const KnowledgeGraph: React.FC = () => {
     // Initial fetch of atoms to populate the graph
     const fetchInitialData = async () => {
       try {
-        const result = await executor.executeTool({
-          id: `initial-fetch-${Date.now()}`,
-          name: "query_knowledge",
-          input: { queryType: "by_type", target: "ConceptNode" }
-        }, 0);
+        const result = await executor.executeTool(
+          {
+            id: `initial-fetch-${Date.now()}`,
+            name: "query_knowledge",
+            input: { queryType: "by_type", target: "ConceptNode" },
+          },
+          0,
+        );
 
-        if (result.success && result.metadata && typeof result.metadata.count === 'number') {
+        if (
+          result.success &&
+          result.metadata &&
+          typeof result.metadata.count === "number"
+        ) {
           // This is a simplification - real implementation would fetch all atoms
           log.info(`Fetched ${result.metadata.count} initial ConceptNodes`);
         }
@@ -80,7 +87,10 @@ export const KnowledgeGraph: React.FC = () => {
     fetchInitialData();
 
     const unsubscribe = executor.subscribe((event: any) => {
-      if (event.type === "knowledge_stored" || event.type === "knowledge_updated") {
+      if (
+        event.type === "knowledge_stored" ||
+        event.type === "knowledge_updated"
+      ) {
         const { atom, type } = event.data;
         // Parse atom string: e.g., (InheritanceLink (ConceptNode "A") (ConceptNode "B"))
         // This is a naive parser for visualization purposes

@@ -401,29 +401,35 @@ export class StreamingAvatarService extends EventEmitter {
    */
   private extractPhrases(): void {
     let searchIndex = 0;
-    
+
     while (searchIndex < this.textBuffer.length) {
       let earliestBoundaryIndex = -1;
-      let foundBoundary = "";
+      let _foundBoundary = "";
 
       // Find the earliest boundary character in the buffer
       for (const boundary of this.config.phraseBoundaries) {
         const index = this.textBuffer.indexOf(boundary, searchIndex);
-        if (index !== -1 && (earliestBoundaryIndex === -1 || index < earliestBoundaryIndex)) {
+        if (
+          index !== -1 &&
+          (earliestBoundaryIndex === -1 || index < earliestBoundaryIndex)
+        ) {
           earliestBoundaryIndex = index;
-          foundBoundary = boundary;
+          _foundBoundary = boundary;
         }
       }
 
       if (earliestBoundaryIndex !== -1) {
         // We found a boundary!
         const phraseLength = earliestBoundaryIndex + 1;
-        
+
         // Only extract if it meets the minimum length requirement, or if we're flushing
-        if (phraseLength >= this.config.minPhraseLength || this.streamComplete) {
+        if (
+          phraseLength >= this.config.minPhraseLength ||
+          this.streamComplete
+        ) {
           const phrase = this.textBuffer.substring(0, phraseLength).trim();
           this.textBuffer = this.textBuffer.substring(phraseLength);
-          
+
           if (phrase.length > 0) {
             this.queuePhrase(phrase);
           }

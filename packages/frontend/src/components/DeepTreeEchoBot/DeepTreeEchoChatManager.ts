@@ -207,7 +207,7 @@ export class DeepTreeEchoChatManager {
           );
           const lastMsg = await this.getLastMessage(accountId, chatId);
 
-          const unreadCount = await BackendRemote.rpc.getChatUnreadCount(
+          const unreadCount = await BackendRemote.rpc.getFreshMsgCnt(
             accountId,
             chatId,
           );

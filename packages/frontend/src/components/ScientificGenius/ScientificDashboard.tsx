@@ -56,9 +56,7 @@ export const ScientificDashboard: React.FC = () => {
     <div className="scientific-dashboard">
       <div className="dashboard-header">
         <h2>🧠 Scientific Cortex</h2>
-        <p>
-          Visualizing the AtomSpace Knowledge Graph
-        </p>
+        <p>Visualizing the AtomSpace Knowledge Graph</p>
       </div>
 
       <div className="graph-view">
@@ -70,7 +68,9 @@ export const ScientificDashboard: React.FC = () => {
           <input
             type="text"
             value={input}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setInput(e.target.value)
+            }
             placeholder="Omnibar: Enter 'Entity' or 'Entity A -> Entity B' to teach..."
             className="omnibar-input"
           />
