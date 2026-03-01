@@ -6,6 +6,7 @@ jest.mock("../../../backend-com", () => ({
     rpc: {
       getChatlistEntries: jest.fn(),
       getBasicChatInfo: jest.fn(),
+      getFreshMsgCnt: jest.fn(),
       getMessageIds: jest.fn(),
       getMessage: jest.fn(),
       createContact: jest.fn(),
@@ -43,6 +44,8 @@ describe("DeepTreeEchoChatManager", () => {
       archived: false,
       isMuted: false,
     });
+    (BackendRemote.rpc.getFreshMsgCnt as jest.Mock).mockResolvedValue(0);
+    (BackendRemote.rpc.getMessageIds as jest.Mock).mockResolvedValue([]);
 
     const manager = DeepTreeEchoChatManager.getInstance();
     const chats = await manager.listChats(1);
