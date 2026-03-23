@@ -24,12 +24,12 @@
  *   - Thread multiplexing schedule
  */
 
-import { EventEmitter } from 'events';
-import * as fs from 'fs';
-import * as path from 'path';
-import { getLogger } from 'deep-tree-echo-core';
+import { EventEmitter } from "events";
+import * as fs from "fs";
+import * as path from "path";
+import { getLogger } from "deep-tree-echo-core";
 
-const log = getLogger('deep-tree-echo-orchestrator/SelfModification');
+const log = getLogger("deep-tree-echo-orchestrator/SelfModification");
 
 // ─── Types ─────────────────────────────────────────────────────
 
@@ -49,7 +49,13 @@ export interface ModifiableParameter {
   /** Maximum change per modification (as fraction of range) */
   maxDeltaFraction: number;
   /** Category for grouping */
-  category: 'timing' | 'learning' | 'inference' | 'perception' | 'memory' | 'goals';
+  category:
+    | "timing"
+    | "learning"
+    | "inference"
+    | "perception"
+    | "memory"
+    | "goals";
 }
 
 export interface ModificationRequest {
@@ -60,7 +66,7 @@ export interface ModificationRequest {
   /** Reason for the modification */
   reason: string;
   /** Source of the modification request */
-  source: 'enaction' | 'reflection' | 'coherence_recovery' | 'dead_man_switch';
+  source: "enaction" | "reflection" | "coherence_recovery" | "dead_man_switch";
   /** Coherence at time of request */
   coherenceAtRequest: number;
 }
@@ -105,7 +111,7 @@ const DEFAULT_CONFIG: SelfModificationConfig = {
   maxModificationsPerMinute: 10,
   deadManSwitchThreshold: 0.2,
   enablePersistence: true,
-  persistencePath: '/tmp/deep-tree-echo/self-modifications',
+  persistencePath: "/tmp/deep-tree-echo/self-modifications",
   maxHistorySize: 10000,
   deadManSwitchCooldown: 60000,
   dryRun: false,
@@ -137,100 +143,100 @@ export class SelfModificationEngine extends EventEmitter {
     const defaults: ModifiableParameter[] = [
       // Timing parameters
       {
-        key: 'echobeats.cycleInterval',
-        description: 'Echobeats cognitive cycle interval (ms)',
+        key: "echobeats.cycleInterval",
+        description: "Echobeats cognitive cycle interval (ms)",
         currentValue: 2000,
         defaultValue: 2000,
         min: 500,
         max: 30000,
         maxDeltaFraction: 0.3,
-        category: 'timing',
+        category: "timing",
       },
       {
-        key: 'perception.scanInterval',
-        description: 'Perception handler scan interval (ms)',
+        key: "perception.scanInterval",
+        description: "Perception handler scan interval (ms)",
         currentValue: 5000,
         defaultValue: 5000,
         min: 1000,
         max: 60000,
         maxDeltaFraction: 0.3,
-        category: 'perception',
+        category: "perception",
       },
       {
-        key: 'consolidation.interval',
-        description: 'Memory consolidation interval (ms)',
+        key: "consolidation.interval",
+        description: "Memory consolidation interval (ms)",
         currentValue: 300000,
         defaultValue: 300000,
         min: 60000,
         max: 3600000,
         maxDeltaFraction: 0.5,
-        category: 'memory',
+        category: "memory",
       },
 
       // Learning parameters
       {
-        key: 'reservoir.forgettingFactor',
-        description: 'RLS forgetting factor (adaptation speed)',
+        key: "reservoir.forgettingFactor",
+        description: "RLS forgetting factor (adaptation speed)",
         currentValue: 0.995,
         defaultValue: 0.995,
         min: 0.9,
         max: 0.9999,
         maxDeltaFraction: 0.1,
-        category: 'learning',
+        category: "learning",
       },
       {
-        key: 'reservoir.spectralRadius',
-        description: 'ESN spectral radius (memory capacity)',
+        key: "reservoir.spectralRadius",
+        description: "ESN spectral radius (memory capacity)",
         currentValue: 0.95,
         defaultValue: 0.95,
         min: 0.5,
         max: 1.5,
         maxDeltaFraction: 0.1,
-        category: 'learning',
+        category: "learning",
       },
 
       // Inference parameters
       {
-        key: 'inference.temperature',
-        description: 'LLM generation temperature',
+        key: "inference.temperature",
+        description: "LLM generation temperature",
         currentValue: 0.7,
         defaultValue: 0.7,
         min: 0.1,
         max: 2.0,
         maxDeltaFraction: 0.3,
-        category: 'inference',
+        category: "inference",
       },
       {
-        key: 'inference.topP',
-        description: 'LLM top-p sampling',
+        key: "inference.topP",
+        description: "LLM top-p sampling",
         currentValue: 0.9,
         defaultValue: 0.9,
         min: 0.1,
         max: 1.0,
         maxDeltaFraction: 0.2,
-        category: 'inference',
+        category: "inference",
       },
 
       // Goal parameters
       {
-        key: 'goals.maxActive',
-        description: 'Maximum concurrent active goals',
+        key: "goals.maxActive",
+        description: "Maximum concurrent active goals",
         currentValue: 10,
         defaultValue: 10,
         min: 3,
         max: 50,
         maxDeltaFraction: 0.3,
-        category: 'goals',
+        category: "goals",
       },
       {
-        key: 'goals.coherenceThreshold',
-        description: 'Coherence threshold for extra integration',
+        key: "goals.coherenceThreshold",
+        description: "Coherence threshold for extra integration",
         currentValue: 0.6,
         defaultValue: 0.6,
         min: 0.2,
         max: 0.95,
         maxDeltaFraction: 0.2,
-        category: 'goals',
+        category: "goals",
       },
     ];
 
@@ -255,14 +261,26 @@ export class SelfModificationEngine extends EventEmitter {
 
     // Check dead man's switch
     if (this.deadManSwitchActive && now < this.deadManSwitchUntil) {
-      return this.reject(request, 'Dead man\'s switch active — modifications frozen', now);
+      return this.reject(
+        request,
+        "Dead man's switch active — modifications frozen",
+        now,
+      );
     }
     this.deadManSwitchActive = false;
 
     // Check rate limit
-    this.recentModifications = this.recentModifications.filter(t => now - t < 60000);
-    if (this.recentModifications.length >= this.config.maxModificationsPerMinute) {
-      return this.reject(request, `Rate limit exceeded (${this.config.maxModificationsPerMinute}/min)`, now);
+    this.recentModifications = this.recentModifications.filter(
+      (t) => now - t < 60000,
+    );
+    if (
+      this.recentModifications.length >= this.config.maxModificationsPerMinute
+    ) {
+      return this.reject(
+        request,
+        `Rate limit exceeded (${this.config.maxModificationsPerMinute}/min)`,
+        now,
+      );
     }
 
     // Check parameter exists
@@ -274,7 +292,13 @@ export class SelfModificationEngine extends EventEmitter {
     // Check coherence — trigger dead man's switch if too low
     if (request.coherenceAtRequest < this.config.deadManSwitchThreshold) {
       this.activateDeadManSwitch();
-      return this.reject(request, `Coherence ${request.coherenceAtRequest.toFixed(3)} below dead man's switch threshold`, now);
+      return this.reject(
+        request,
+        `Coherence ${request.coherenceAtRequest.toFixed(
+          3,
+        )} below dead man's switch threshold`,
+        now,
+      );
     }
 
     // Clamp to allowed range
@@ -330,9 +354,13 @@ export class SelfModificationEngine extends EventEmitter {
       this.persistModification(result);
     }
 
-    this.emit('modified', result);
+    this.emit("modified", result);
     log.info(
-      `Self-modification #${result.index}: ${request.key} ${previousValue.toFixed(4)} → ${newValue.toFixed(4)} (${request.reason})`
+      `Self-modification #${result.index}: ${
+        request.key
+      } ${previousValue.toFixed(4)} → ${newValue.toFixed(4)} (${
+        request.reason
+      })`,
     );
 
     return result;
@@ -342,7 +370,9 @@ export class SelfModificationEngine extends EventEmitter {
    * Activate the dead man's switch — revert all parameters to defaults.
    */
   private activateDeadManSwitch(): void {
-    log.warn('DEAD MAN\'S SWITCH ACTIVATED — reverting all parameters to defaults');
+    log.warn(
+      "DEAD MAN'S SWITCH ACTIVATED — reverting all parameters to defaults",
+    );
 
     this.deadManSwitchActive = true;
     this.deadManSwitchUntil = Date.now() + this.config.deadManSwitchCooldown;
@@ -366,7 +396,7 @@ export class SelfModificationEngine extends EventEmitter {
           key,
           previousValue,
           newValue: param.defaultValue,
-          reason: 'Dead man\'s switch — coherence critically low',
+          reason: "Dead man's switch — coherence critically low",
           timestamp: Date.now(),
           index: ++this.totalModifications,
         };
@@ -375,7 +405,7 @@ export class SelfModificationEngine extends EventEmitter {
       }
     }
 
-    this.emit('dead_man_switch', {
+    this.emit("dead_man_switch", {
       timestamp: Date.now(),
       cooldownUntil: this.deadManSwitchUntil,
     });
@@ -387,7 +417,7 @@ export class SelfModificationEngine extends EventEmitter {
   private reject(
     request: ModificationRequest,
     reason: string,
-    timestamp: number
+    timestamp: number,
   ): ModificationResult {
     this.totalRejections++;
 
@@ -402,7 +432,7 @@ export class SelfModificationEngine extends EventEmitter {
       index: this.totalModifications,
     };
 
-    this.emit('rejected', result);
+    this.emit("rejected", result);
     log.info(`Self-modification rejected: ${request.key} — ${reason}`);
 
     return result;
@@ -414,10 +444,13 @@ export class SelfModificationEngine extends EventEmitter {
   private persistModification(result: ModificationResult): void {
     try {
       fs.mkdirSync(this.config.persistencePath, { recursive: true });
-      const file = path.join(this.config.persistencePath, 'modifications.jsonl');
-      fs.appendFileSync(file, JSON.stringify(result) + '\n');
+      const file = path.join(
+        this.config.persistencePath,
+        "modifications.jsonl",
+      );
+      fs.appendFileSync(file, JSON.stringify(result) + "\n");
     } catch (err) {
-      log.error('Failed to persist modification:', err);
+      log.error("Failed to persist modification:", err);
     }
   }
 
@@ -436,18 +469,24 @@ export class SelfModificationEngine extends EventEmitter {
     // If coherence is declining, slow down the cycle to allow more integration
     if (coherence < 0.5) {
       proposals.push({
-        key: 'echobeats.cycleInterval',
-        newValue: (this.parameters.get('echobeats.cycleInterval')?.currentValue ?? 2000) * 1.2,
-        reason: `Low coherence (${coherence.toFixed(3)}) — slowing cycle for integration`,
-        source: 'enaction',
+        key: "echobeats.cycleInterval",
+        newValue:
+          (this.parameters.get("echobeats.cycleInterval")?.currentValue ??
+            2000) * 1.2,
+        reason: `Low coherence (${coherence.toFixed(
+          3,
+        )}) — slowing cycle for integration`,
+        source: "enaction",
         coherenceAtRequest: coherence,
       });
     } else if (coherence > 0.85) {
       proposals.push({
-        key: 'echobeats.cycleInterval',
-        newValue: (this.parameters.get('echobeats.cycleInterval')?.currentValue ?? 2000) * 0.9,
+        key: "echobeats.cycleInterval",
+        newValue:
+          (this.parameters.get("echobeats.cycleInterval")?.currentValue ??
+            2000) * 0.9,
         reason: `High coherence (${coherence.toFixed(3)}) — accelerating cycle`,
-        source: 'enaction',
+        source: "enaction",
         coherenceAtRequest: coherence,
       });
     }
@@ -455,29 +494,48 @@ export class SelfModificationEngine extends EventEmitter {
     // If prediction error is high, increase adaptation speed
     if (avgPredictionError > 0.5) {
       proposals.push({
-        key: 'reservoir.forgettingFactor',
-        newValue: Math.max(0.9, (this.parameters.get('reservoir.forgettingFactor')?.currentValue ?? 0.995) - 0.005),
-        reason: `High prediction error (${avgPredictionError.toFixed(3)}) — increasing adaptation speed`,
-        source: 'enaction',
+        key: "reservoir.forgettingFactor",
+        newValue: Math.max(
+          0.9,
+          (this.parameters.get("reservoir.forgettingFactor")?.currentValue ??
+            0.995) - 0.005,
+        ),
+        reason: `High prediction error (${avgPredictionError.toFixed(
+          3,
+        )}) — increasing adaptation speed`,
+        source: "enaction",
         coherenceAtRequest: coherence,
       });
     } else if (avgPredictionError < 0.1) {
       proposals.push({
-        key: 'reservoir.forgettingFactor',
-        newValue: Math.min(0.9999, (this.parameters.get('reservoir.forgettingFactor')?.currentValue ?? 0.995) + 0.001),
-        reason: `Low prediction error (${avgPredictionError.toFixed(3)}) — stabilizing weights`,
-        source: 'enaction',
+        key: "reservoir.forgettingFactor",
+        newValue: Math.min(
+          0.9999,
+          (this.parameters.get("reservoir.forgettingFactor")?.currentValue ??
+            0.995) + 0.001,
+        ),
+        reason: `Low prediction error (${avgPredictionError.toFixed(
+          3,
+        )}) — stabilizing weights`,
+        source: "enaction",
         coherenceAtRequest: coherence,
       });
     }
 
     // If too many active goals, increase the limit or reduce temperature
-    if (activeGoals > (this.parameters.get('goals.maxActive')?.currentValue ?? 10) * 0.9) {
+    if (
+      activeGoals >
+      (this.parameters.get("goals.maxActive")?.currentValue ?? 10) * 0.9
+    ) {
       proposals.push({
-        key: 'inference.temperature',
-        newValue: Math.max(0.3, (this.parameters.get('inference.temperature')?.currentValue ?? 0.7) - 0.1),
+        key: "inference.temperature",
+        newValue: Math.max(
+          0.3,
+          (this.parameters.get("inference.temperature")?.currentValue ?? 0.7) -
+            0.1,
+        ),
         reason: `Goal overload (${activeGoals} active) — reducing temperature for focus`,
-        source: 'enaction',
+        source: "enaction",
         coherenceAtRequest: coherence,
       });
     }
@@ -485,10 +543,14 @@ export class SelfModificationEngine extends EventEmitter {
     // If memory consolidation is low, increase consolidation frequency
     if (memoryConsolidationRatio < 0.3) {
       proposals.push({
-        key: 'consolidation.interval',
-        newValue: (this.parameters.get('consolidation.interval')?.currentValue ?? 300000) * 0.8,
-        reason: `Low consolidation ratio (${memoryConsolidationRatio.toFixed(3)}) — increasing frequency`,
-        source: 'enaction',
+        key: "consolidation.interval",
+        newValue:
+          (this.parameters.get("consolidation.interval")?.currentValue ??
+            300000) * 0.8,
+        reason: `Low consolidation ratio (${memoryConsolidationRatio.toFixed(
+          3,
+        )}) — increasing frequency`,
+        source: "enaction",
         coherenceAtRequest: coherence,
       });
     }
@@ -504,7 +566,7 @@ export class SelfModificationEngine extends EventEmitter {
   }
 
   getAllParameters(): ModifiableParameter[] {
-    return Array.from(this.parameters.values()).map(p => ({ ...p }));
+    return Array.from(this.parameters.values()).map((p) => ({ ...p }));
   }
 
   getHistory(): ModificationResult[] {
@@ -522,9 +584,12 @@ export class SelfModificationEngine extends EventEmitter {
     return {
       totalModifications: this.totalModifications,
       totalRejections: this.totalRejections,
-      deadManSwitchActive: this.deadManSwitchActive && now < this.deadManSwitchUntil,
+      deadManSwitchActive:
+        this.deadManSwitchActive && now < this.deadManSwitchUntil,
       parameterCount: this.parameters.size,
-      recentModificationsPerMinute: this.recentModifications.filter(t => now - t < 60000).length,
+      recentModificationsPerMinute: this.recentModifications.filter(
+        (t) => now - t < 60000,
+      ).length,
     };
   }
 

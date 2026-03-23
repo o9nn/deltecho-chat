@@ -20,28 +20,28 @@
  * - Arena: The environment state manifold (need-to-be)
  * - Relation: The continuous interplay via the cognitive cycle
  */
-import { EventEmitter } from 'events';
-import { getLogger } from 'deep-tree-echo-core';
+import { EventEmitter } from "events";
+import { getLogger } from "deep-tree-echo-core";
 
-const log = getLogger('deep-tree-echo-orchestrator/ProactiveLoop');
+const log = getLogger("deep-tree-echo-orchestrator/ProactiveLoop");
 
 /**
  * Cognitive phase in the proactive cycle
  */
 export enum ProactivePhase {
-  PERCEIVE = 'PERCEIVE',
-  REFLECT = 'REFLECT',
-  PLAN = 'PLAN',
-  ACT = 'ACT',
-  INTEGRATE = 'INTEGRATE',
-  IDLE = 'IDLE',
+  PERCEIVE = "PERCEIVE",
+  REFLECT = "REFLECT",
+  PLAN = "PLAN",
+  ACT = "ACT",
+  INTEGRATE = "INTEGRATE",
+  IDLE = "IDLE",
 }
 
 /**
  * Environment stimulus detected during perception
  */
 export interface EnvironmentStimulus {
-  type: 'message' | 'task' | 'memory' | 'schedule' | 'system' | 'self';
+  type: "message" | "task" | "memory" | "schedule" | "system" | "self";
   source: string;
   priority: number;
   data: Record<string, unknown>;
@@ -68,7 +68,7 @@ export interface AutonomousGoal {
   id: string;
   description: string;
   priority: number;
-  status: 'pending' | 'active' | 'completed' | 'deferred';
+  status: "pending" | "active" | "completed" | "deferred";
   createdAt: number;
   updatedAt: number;
   deadline?: number;
@@ -155,29 +155,33 @@ export interface ProactiveLoopState {
  * Ontogenetic development stages
  */
 export enum OntogeneticStage {
-  EMBRYONIC = 'EMBRYONIC',
-  JUVENILE = 'JUVENILE',
-  ADOLESCENT = 'ADOLESCENT',
-  ADULT = 'ADULT',
-  TRANSCENDENT = 'TRANSCENDENT',
+  EMBRYONIC = "EMBRYONIC",
+  JUVENILE = "JUVENILE",
+  ADOLESCENT = "ADOLESCENT",
+  ADULT = "ADULT",
+  TRANSCENDENT = "TRANSCENDENT",
 }
 
 /**
  * Proactive loop event types
  */
 export type ProactiveLoopEvent =
-  | { type: 'cycle_start'; cycleNumber: number; phase: ProactivePhase }
-  | { type: 'cycle_complete'; cycleNumber: number; duration: number }
-  | { type: 'stimulus_detected'; stimulus: EnvironmentStimulus }
-  | { type: 'reflection_complete'; result: ReflectionResult }
-  | { type: 'goal_created'; goal: AutonomousGoal }
-  | { type: 'goal_completed'; goalId: string }
-  | { type: 'action_executed'; result: ActionResult }
-  | { type: 'integration_complete'; result: IntegrationResult }
-  | { type: 'phase_transition'; from: ProactivePhase; to: ProactivePhase }
-  | { type: 'ontogenetic_advance'; from: OntogeneticStage; to: OntogeneticStage }
-  | { type: 'idle_entered' }
-  | { type: 'error'; phase: ProactivePhase; error: string };
+  | { type: "cycle_start"; cycleNumber: number; phase: ProactivePhase }
+  | { type: "cycle_complete"; cycleNumber: number; duration: number }
+  | { type: "stimulus_detected"; stimulus: EnvironmentStimulus }
+  | { type: "reflection_complete"; result: ReflectionResult }
+  | { type: "goal_created"; goal: AutonomousGoal }
+  | { type: "goal_completed"; goalId: string }
+  | { type: "action_executed"; result: ActionResult }
+  | { type: "integration_complete"; result: IntegrationResult }
+  | { type: "phase_transition"; from: ProactivePhase; to: ProactivePhase }
+  | {
+      type: "ontogenetic_advance";
+      from: OntogeneticStage;
+      to: OntogeneticStage;
+    }
+  | { type: "idle_entered" }
+  | { type: "error"; phase: ProactivePhase; error: string };
 
 /**
  * ProactiveLoop
@@ -198,7 +202,10 @@ export class ProactiveLoop extends EventEmitter {
   // Perception handlers registered by external systems
   private perceptionHandlers: Array<() => Promise<EnvironmentStimulus[]>> = [];
   // Action handlers for executing autonomous goals
-  private actionHandlers: Map<string, (goal: AutonomousGoal) => Promise<ActionResult>> = new Map();
+  private actionHandlers: Map<
+    string,
+    (goal: AutonomousGoal) => Promise<ActionResult>
+  > = new Map();
 
   constructor(config: Partial<ProactiveLoopConfig> = {}) {
     super();
@@ -222,9 +229,13 @@ export class ProactiveLoop extends EventEmitter {
   /**
    * Register a perception handler that scans for environmental stimuli
    */
-  public registerPerceptionHandler(handler: () => Promise<EnvironmentStimulus[]>): void {
+  public registerPerceptionHandler(
+    handler: () => Promise<EnvironmentStimulus[]>,
+  ): void {
     this.perceptionHandlers.push(handler);
-    log.info(`Registered perception handler (total: ${this.perceptionHandlers.length})`);
+    log.info(
+      `Registered perception handler (total: ${this.perceptionHandlers.length})`,
+    );
   }
 
   /**
@@ -232,7 +243,7 @@ export class ProactiveLoop extends EventEmitter {
    */
   public registerActionHandler(
     goalType: string,
-    handler: (goal: AutonomousGoal) => Promise<ActionResult>
+    handler: (goal: AutonomousGoal) => Promise<ActionResult>,
   ): void {
     this.actionHandlers.set(goalType, handler);
     log.info(`Registered action handler for goal type: ${goalType}`);
@@ -243,7 +254,7 @@ export class ProactiveLoop extends EventEmitter {
    */
   public injectStimulus(stimulus: EnvironmentStimulus): void {
     this.stimuliQueue.push(stimulus);
-    this.emitEvent({ type: 'stimulus_detected', stimulus });
+    this.emitEvent({ type: "stimulus_detected", stimulus });
 
     // Reset idle timer on new stimulus
     if (this.idleTimer) {
@@ -257,24 +268,26 @@ export class ProactiveLoop extends EventEmitter {
    */
   public async start(): Promise<void> {
     if (this.state.running) {
-      log.warn('Proactive loop is already running');
+      log.warn("Proactive loop is already running");
       return;
     }
 
-    log.info('Starting proactive autonomous loop');
-    log.info(`Configuration: cycle=${this.config.cycleIntervalMs}ms, ` +
-      `maxStimuli=${this.config.maxStimuliPerCycle}, ` +
-      `actionThreshold=${this.config.actionThreshold}`);
+    log.info("Starting proactive autonomous loop");
+    log.info(
+      `Configuration: cycle=${this.config.cycleIntervalMs}ms, ` +
+        `maxStimuli=${this.config.maxStimuliPerCycle}, ` +
+        `actionThreshold=${this.config.actionThreshold}`,
+    );
 
     this.state.running = true;
     this.state.currentPhase = ProactivePhase.PERCEIVE;
 
     // Start the cognitive cycle timer
     this.cycleTimer = setInterval(() => {
-      this.runCycle().catch(error => {
-        log.error('Proactive cycle error:', error);
+      this.runCycle().catch((error) => {
+        log.error("Proactive cycle error:", error);
         this.emitEvent({
-          type: 'error',
+          type: "error",
           phase: this.state.currentPhase,
           error: String(error),
         });
@@ -291,7 +304,7 @@ export class ProactiveLoop extends EventEmitter {
   public async stop(): Promise<void> {
     if (!this.state.running) return;
 
-    log.info('Stopping proactive autonomous loop');
+    log.info("Stopping proactive autonomous loop");
 
     if (this.cycleTimer) {
       clearInterval(this.cycleTimer);
@@ -317,7 +330,7 @@ export class ProactiveLoop extends EventEmitter {
     this.state.cycleNumber++;
 
     this.emitEvent({
-      type: 'cycle_start',
+      type: "cycle_start",
       cycleNumber: this.state.cycleNumber,
       phase: ProactivePhase.PERCEIVE,
     });
@@ -342,7 +355,6 @@ export class ProactiveLoop extends EventEmitter {
       // Phase 5: INTEGRATE
       await this.transitionPhase(ProactivePhase.INTEGRATE);
       await this.integrate(actions, reflection);
-
     } catch (error) {
       log.error(`Cycle ${this.state.cycleNumber} error:`, error);
     }
@@ -360,7 +372,7 @@ export class ProactiveLoop extends EventEmitter {
       this.cycleTimes.reduce((a, b) => a + b, 0) / this.cycleTimes.length;
 
     this.emitEvent({
-      type: 'cycle_complete',
+      type: "cycle_complete",
       cycleNumber: this.state.cycleNumber,
       duration: cycleDuration,
     });
@@ -383,12 +395,15 @@ export class ProactiveLoop extends EventEmitter {
         const detected = await handler();
         stimuli.push(...detected);
       } catch (error) {
-        log.warn('Perception handler error:', error);
+        log.warn("Perception handler error:", error);
       }
     }
 
     // Drain queued stimuli
-    while (this.stimuliQueue.length > 0 && stimuli.length < this.config.maxStimuliPerCycle) {
+    while (
+      this.stimuliQueue.length > 0 &&
+      stimuli.length < this.config.maxStimuliPerCycle
+    ) {
       const stimulus = this.stimuliQueue.shift();
       if (stimulus) stimuli.push(stimulus);
     }
@@ -401,9 +416,11 @@ export class ProactiveLoop extends EventEmitter {
     this.state.stimuliProcessed += processed.length;
 
     if (processed.length > 0) {
-      log.info(`Perceived ${processed.length} stimuli (types: ${
-        [...new Set(processed.map(s => s.type))].join(', ')
-      })`);
+      log.info(
+        `Perceived ${processed.length} stimuli (types: ${[
+          ...new Set(processed.map((s) => s.type)),
+        ].join(", ")})`,
+      );
     }
 
     return processed;
@@ -412,29 +429,42 @@ export class ProactiveLoop extends EventEmitter {
   /**
    * Phase 2: REFLECT - Introspective analysis of cognitive state
    */
-  private async reflect(stimuli: EnvironmentStimulus[]): Promise<ReflectionResult> {
+  private async reflect(
+    stimuli: EnvironmentStimulus[],
+  ): Promise<ReflectionResult> {
     const activeGoals = this.getActiveGoals();
 
     // Calculate cognitive load from active goals and pending stimuli
-    const goalLoad = Math.min(1, activeGoals.length / this.config.maxConcurrentActions);
-    const stimuliLoad = Math.min(1, stimuli.length / this.config.maxStimuliPerCycle);
-    const cognitiveLoad = (goalLoad * 0.6 + stimuliLoad * 0.4);
+    const goalLoad = Math.min(
+      1,
+      activeGoals.length / this.config.maxConcurrentActions,
+    );
+    const stimuliLoad = Math.min(
+      1,
+      stimuli.length / this.config.maxStimuliPerCycle,
+    );
+    const cognitiveLoad = goalLoad * 0.6 + stimuliLoad * 0.4;
 
     // Calculate emotional valence from stimuli priorities
-    const avgPriority = stimuli.length > 0
-      ? stimuli.reduce((sum, s) => sum + s.priority, 0) / stimuli.length
-      : 5;
+    const avgPriority =
+      stimuli.length > 0
+        ? stimuli.reduce((sum, s) => sum + s.priority, 0) / stimuli.length
+        : 5;
     const emotionalValence = (avgPriority - 5) / 5; // Normalize to [-1, 1]
 
     // Calculate memory coherence (how well goals align with each other)
-    const completedGoals = [...this.goals.values()].filter(g => g.status === 'completed').length;
+    const completedGoals = [...this.goals.values()].filter(
+      (g) => g.status === "completed",
+    ).length;
     const totalGoals = this.goals.size;
     const memoryCoherence = totalGoals > 0 ? completedGoals / totalGoals : 1;
 
     // Calculate goal alignment
-    const goalAlignment = activeGoals.length > 0
-      ? activeGoals.reduce((sum, g) => sum + g.priority, 0) / (activeGoals.length * 10)
-      : 0;
+    const goalAlignment =
+      activeGoals.length > 0
+        ? activeGoals.reduce((sum, g) => sum + g.priority, 0) /
+          (activeGoals.length * 10)
+        : 0;
 
     // Self-image delta: how much the system has changed this cycle
     const selfImageDelta = stimuli.length > 0 ? 0.01 * stimuli.length : 0;
@@ -445,13 +475,17 @@ export class ProactiveLoop extends EventEmitter {
       memoryCoherence,
       goalAlignment,
       selfImageDelta,
-      insights: this.generateInsights(cognitiveLoad, emotionalValence, activeGoals),
+      insights: this.generateInsights(
+        cognitiveLoad,
+        emotionalValence,
+        activeGoals,
+      ),
       timestamp: Date.now(),
     };
 
     this.state.cognitiveLoad = cognitiveLoad;
 
-    this.emitEvent({ type: 'reflection_complete', result });
+    this.emitEvent({ type: "reflection_complete", result });
 
     return result;
   }
@@ -461,26 +495,28 @@ export class ProactiveLoop extends EventEmitter {
    */
   private async plan(
     reflection: ReflectionResult,
-    stimuli: EnvironmentStimulus[]
+    stimuli: EnvironmentStimulus[],
   ): Promise<void> {
     if (!this.config.enableAutonomousGoals) return;
 
     // Generate goals from high-priority stimuli
     for (const stimulus of stimuli) {
       if (stimulus.priority >= 7) {
-        const goalId = `goal_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+        const goalId = `goal_${Date.now()}_${Math.random()
+          .toString(36)
+          .slice(2, 8)}`;
         const goal: AutonomousGoal = {
           id: goalId,
           description: `Process ${stimulus.type} stimulus from ${stimulus.source}`,
           priority: stimulus.priority,
-          status: 'pending',
+          status: "pending",
           createdAt: Date.now(),
           updatedAt: Date.now(),
           subtasks: [],
           dependencies: [],
         };
         this.goals.set(goalId, goal);
-        this.emitEvent({ type: 'goal_created', goal });
+        this.emitEvent({ type: "goal_created", goal });
       }
     }
 
@@ -488,7 +524,7 @@ export class ProactiveLoop extends EventEmitter {
     if (reflection.cognitiveLoad > 0.8) {
       for (const goal of this.getActiveGoals()) {
         if (goal.priority < 5) {
-          goal.status = 'deferred';
+          goal.status = "deferred";
           goal.updatedAt = Date.now();
         }
       }
@@ -497,8 +533,8 @@ export class ProactiveLoop extends EventEmitter {
     // Re-activate deferred goals when load drops
     if (reflection.cognitiveLoad < 0.4) {
       for (const goal of [...this.goals.values()]) {
-        if (goal.status === 'deferred') {
-          goal.status = 'pending';
+        if (goal.status === "deferred") {
+          goal.status = "pending";
           goal.updatedAt = Date.now();
         }
       }
@@ -513,12 +549,12 @@ export class ProactiveLoop extends EventEmitter {
   private async act(): Promise<ActionResult[]> {
     const results: ActionResult[] = [];
     const activeGoals = this.getActiveGoals()
-      .filter(g => g.status === 'pending')
+      .filter((g) => g.status === "pending")
       .sort((a, b) => b.priority - a.priority)
       .slice(0, this.config.maxConcurrentActions);
 
     for (const goal of activeGoals) {
-      goal.status = 'active';
+      goal.status = "active";
       goal.updatedAt = Date.now();
 
       // Find matching action handler
@@ -531,23 +567,23 @@ export class ProactiveLoop extends EventEmitter {
           results.push(result);
 
           if (result.success) {
-            goal.status = 'completed';
+            goal.status = "completed";
             this.state.goalsCompleted++;
-            this.emitEvent({ type: 'goal_completed', goalId: goal.id });
+            this.emitEvent({ type: "goal_completed", goalId: goal.id });
           } else {
-            goal.status = 'pending'; // Retry next cycle
+            goal.status = "pending"; // Retry next cycle
           }
         } catch (error) {
           log.warn(`Action failed for goal ${goal.id}:`, error);
-          goal.status = 'pending';
+          goal.status = "pending";
         }
       } else {
         // No handler available, mark as completed (self-resolving)
-        goal.status = 'completed';
+        goal.status = "completed";
         results.push({
           goalId: goal.id,
           success: true,
-          output: { note: 'Self-resolved: no action handler required' },
+          output: { note: "Self-resolved: no action handler required" },
           duration: 0,
           sideEffects: [],
         });
@@ -559,7 +595,7 @@ export class ProactiveLoop extends EventEmitter {
     }
 
     for (const result of results) {
-      this.emitEvent({ type: 'action_executed', result });
+      this.emitEvent({ type: "action_executed", result });
     }
 
     return results;
@@ -570,7 +606,7 @@ export class ProactiveLoop extends EventEmitter {
    */
   private async integrate(
     actions: ActionResult[],
-    reflection: ReflectionResult
+    reflection: ReflectionResult,
   ): Promise<IntegrationResult> {
     let memoriesStored = 0;
     let goalsUpdated = 0;
@@ -582,10 +618,13 @@ export class ProactiveLoop extends EventEmitter {
     }
 
     // Update goal statuses
-    goalsUpdated = actions.filter(a => a.success).length;
+    goalsUpdated = actions.filter((a) => a.success).length;
 
     // Update self-image if significant changes occurred
-    if (this.config.enableSelfImageUpdates && reflection.selfImageDelta > 0.05) {
+    if (
+      this.config.enableSelfImageUpdates &&
+      reflection.selfImageDelta > 0.05
+    ) {
       selfImageUpdated = true;
     }
 
@@ -599,7 +638,7 @@ export class ProactiveLoop extends EventEmitter {
       ontogeneticProgress,
     };
 
-    this.emitEvent({ type: 'integration_complete', result });
+    this.emitEvent({ type: "integration_complete", result });
 
     // Check for stage advancement
     this.checkOntogeneticAdvancement(ontogeneticProgress);
@@ -613,7 +652,7 @@ export class ProactiveLoop extends EventEmitter {
   private async transitionPhase(newPhase: ProactivePhase): Promise<void> {
     const oldPhase = this.state.currentPhase;
     this.state.currentPhase = newPhase;
-    this.emitEvent({ type: 'phase_transition', from: oldPhase, to: newPhase });
+    this.emitEvent({ type: "phase_transition", from: oldPhase, to: newPhase });
   }
 
   /**
@@ -623,7 +662,7 @@ export class ProactiveLoop extends EventEmitter {
     if (this.idleTimer) return;
 
     this.idleTimer = setTimeout(() => {
-      this.emitEvent({ type: 'idle_entered' });
+      this.emitEvent({ type: "idle_entered" });
       this.idleTimer = undefined;
     }, this.config.idleTimeoutMs);
   }
@@ -634,27 +673,31 @@ export class ProactiveLoop extends EventEmitter {
   private generateInsights(
     cognitiveLoad: number,
     emotionalValence: number,
-    activeGoals: AutonomousGoal[]
+    activeGoals: AutonomousGoal[],
   ): string[] {
     const insights: string[] = [];
 
     if (cognitiveLoad > 0.8) {
-      insights.push('High cognitive load detected - consider deferring low-priority goals');
+      insights.push(
+        "High cognitive load detected - consider deferring low-priority goals",
+      );
     }
     if (cognitiveLoad < 0.2) {
-      insights.push('Low cognitive load - capacity available for exploration');
+      insights.push("Low cognitive load - capacity available for exploration");
     }
     if (emotionalValence > 0.5) {
-      insights.push('Positive emotional valence - favorable conditions for creative tasks');
+      insights.push(
+        "Positive emotional valence - favorable conditions for creative tasks",
+      );
     }
     if (emotionalValence < -0.5) {
-      insights.push('Negative emotional valence - prioritize stabilization');
+      insights.push("Negative emotional valence - prioritize stabilization");
     }
     if (activeGoals.length === 0) {
-      insights.push('No active goals - entering exploratory mode');
+      insights.push("No active goals - entering exploratory mode");
     }
     if (activeGoals.length > this.config.maxConcurrentActions) {
-      insights.push('Goal overflow - need to prioritize and defer');
+      insights.push("Goal overflow - need to prioritize and defer");
     }
 
     return insights;
@@ -664,7 +707,7 @@ export class ProactiveLoop extends EventEmitter {
    * Find the best action handler for a goal
    */
   private findActionHandler(
-    goal: AutonomousGoal
+    goal: AutonomousGoal,
   ): ((goal: AutonomousGoal) => Promise<ActionResult>) | undefined {
     // Try exact match first
     for (const [type, handler] of this.actionHandlers) {
@@ -673,7 +716,7 @@ export class ProactiveLoop extends EventEmitter {
       }
     }
     // Return default handler if available
-    return this.actionHandlers.get('default');
+    return this.actionHandlers.get("default");
   }
 
   /**
@@ -681,7 +724,7 @@ export class ProactiveLoop extends EventEmitter {
    */
   private getActiveGoals(): AutonomousGoal[] {
     return [...this.goals.values()].filter(
-      g => g.status === 'pending' || g.status === 'active'
+      (g) => g.status === "pending" || g.status === "active",
     );
   }
 
@@ -693,7 +736,7 @@ export class ProactiveLoop extends EventEmitter {
     const goalWeight = Math.min(1, this.state.goalsCompleted / 100);
     const stimuliWeight = Math.min(1, this.state.stimuliProcessed / 500);
 
-    return (cycleWeight * 0.4 + goalWeight * 0.35 + stimuliWeight * 0.25);
+    return cycleWeight * 0.4 + goalWeight * 0.35 + stimuliWeight * 0.25;
   }
 
   /**
@@ -720,9 +763,13 @@ export class ProactiveLoop extends EventEmitter {
     if (targetStage !== this.state.ontogeneticStage) {
       const oldStage = this.state.ontogeneticStage;
       this.state.ontogeneticStage = targetStage;
-      log.info(`Ontogenetic advancement: ${oldStage} → ${targetStage} (progress: ${(progress * 100).toFixed(1)}%)`);
+      log.info(
+        `Ontogenetic advancement: ${oldStage} → ${targetStage} (progress: ${(
+          progress * 100
+        ).toFixed(1)}%)`,
+      );
       this.emitEvent({
-        type: 'ontogenetic_advance',
+        type: "ontogenetic_advance",
         from: oldStage,
         to: targetStage,
       });
@@ -735,7 +782,7 @@ export class ProactiveLoop extends EventEmitter {
   private emitEvent(event: ProactiveLoopEvent): void {
     this.emit(event.type, event);
     if (this.config.enableTelemetry) {
-      this.emit('telemetry', event);
+      this.emit("telemetry", event);
     }
   }
 
@@ -757,19 +804,21 @@ export class ProactiveLoop extends EventEmitter {
    * Manually create a goal
    */
   public createGoal(description: string, priority: number = 5): AutonomousGoal {
-    const goalId = `goal_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    const goalId = `goal_${Date.now()}_${Math.random()
+      .toString(36)
+      .slice(2, 8)}`;
     const goal: AutonomousGoal = {
       id: goalId,
       description,
       priority,
-      status: 'pending',
+      status: "pending",
       createdAt: Date.now(),
       updatedAt: Date.now(),
       subtasks: [],
       dependencies: [],
     };
     this.goals.set(goalId, goal);
-    this.emitEvent({ type: 'goal_created', goal });
+    this.emitEvent({ type: "goal_created", goal });
     return goal;
   }
 

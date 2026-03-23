@@ -19,7 +19,7 @@
  * Architecture: This is the AAR Relation — the continuous interplay
  * between Agent (tools) and Arena (memory) through the cognitive cycle.
  */
-import { EventEmitter } from 'events';
+import { EventEmitter } from "events";
 import {
   getLogger,
   LLMService,
@@ -28,17 +28,36 @@ import {
   EmbeddingService,
   EmbeddingServiceConfig,
   FileSystemStorage,
-
   CoreSelfEngine,
   CoreSelfConfig,
-} from 'deep-tree-echo-core';
-import { ProactiveLoop, EnvironmentStimulus, ProactivePhase } from './proactive-loop.js';
-import { CognitiveTickProcessor, CognitivePercept, CognitiveGoal } from './cognitive-tick-processor.js';
-import { PerceptionHandlers, PerceptionHandlerConfig } from './perception/index.js';
-import { ToolExecutionEngine, ToolExecutionEngineConfig,  ToolResult } from './tools/ToolExecutionEngine.js';
-import { LLMGoalPlanner, LLMGoalPlannerConfig, PlanningContext, PlanningResult } from './tools/LLMGoalPlanner.js';
+} from "deep-tree-echo-core";
+import {
+  ProactiveLoop,
+  EnvironmentStimulus,
+  ProactivePhase,
+} from "./proactive-loop.js";
+import {
+  CognitiveTickProcessor,
+  CognitivePercept,
+  CognitiveGoal,
+} from "./cognitive-tick-processor.js";
+import {
+  PerceptionHandlers,
+  PerceptionHandlerConfig,
+} from "./perception/index.js";
+import {
+  ToolExecutionEngine,
+  ToolExecutionEngineConfig,
+  ToolResult,
+} from "./tools/ToolExecutionEngine.js";
+import {
+  LLMGoalPlanner,
+  LLMGoalPlannerConfig,
+  PlanningContext,
+  PlanningResult,
+} from "./tools/LLMGoalPlanner.js";
 
-const log = getLogger('deep-tree-echo-orchestrator/AutonomyPipeline');
+const log = getLogger("deep-tree-echo-orchestrator/AutonomyPipeline");
 
 // ─── Configuration ─────────────────────────────────────────────
 
@@ -90,7 +109,7 @@ const DEFAULT_CONFIG: AutonomyPipelineConfig = {
   enableConsolidation: true,
   consolidationInterval: 30, // Every 30 ticks
   consolidationBatchSize: 10,
-  storagePath: '/tmp/deep-tree-echo/memory',
+  storagePath: "/tmp/deep-tree-echo/memory",
   enableEchobeats: false,
   echobeatsCycleInterval: 2000,
   enableCoreSelf: false,
@@ -118,14 +137,14 @@ interface EchobeatStream {
 // ─── Pipeline Events ───────────────────────────────────────────
 
 export type AutonomyPipelineEvent =
-  | { type: 'pipeline_started' }
-  | { type: 'pipeline_stopped' }
-  | { type: 'percept_received'; percept: CognitivePercept }
-  | { type: 'planning_complete'; result: PlanningResult }
-  | { type: 'tool_executed'; result: ToolResult }
-  | { type: 'consolidation_complete'; consolidated: number; summarized: number }
-  | { type: 'echobeat_tick'; stream: number; step: number; phase: string }
-  | { type: 'error'; component: string; error: string };
+  | { type: "pipeline_started" }
+  | { type: "pipeline_stopped" }
+  | { type: "percept_received"; percept: CognitivePercept }
+  | { type: "planning_complete"; result: PlanningResult }
+  | { type: "tool_executed"; result: ToolResult }
+  | { type: "consolidation_complete"; consolidated: number; summarized: number }
+  | { type: "echobeat_tick"; stream: number; step: number; phase: string }
+  | { type: "error"; component: string; error: string };
 
 // ─── AutonomyPipeline ──────────────────────────────────────────
 
@@ -194,13 +213,13 @@ export class AutonomyPipeline extends EventEmitter {
   async start(): Promise<void> {
     if (this.running) return;
     if (!this.config.enabled) {
-      log.info('Autonomy pipeline disabled by configuration');
+      log.info("Autonomy pipeline disabled by configuration");
       return;
     }
 
-    log.info('═══════════════════════════════════════════════');
-    log.info('  Initializing Autonomy Pipeline (Level 4)');
-    log.info('═══════════════════════════════════════════════');
+    log.info("═══════════════════════════════════════════════");
+    log.info("  Initializing Autonomy Pipeline (Level 4)");
+    log.info("═══════════════════════════════════════════════");
 
     try {
       // 1. Initialize persistent storage
@@ -215,39 +234,45 @@ export class AutonomyPipeline extends EventEmitter {
         // Initialize vector memory store
         this.vectorMemory = new VectorMemoryStore(
           this.storage,
-          this.config.vectorMemory
+          this.config.vectorMemory,
         );
         this.vectorMemory.setEnabled(true);
         await this.vectorMemory.ready();
 
-        log.info('✓ Vector memory store initialized with persistent storage');
+        log.info("✓ Vector memory store initialized with persistent storage");
       }
 
       // 2. Initialize perception handlers
       if (this.config.enablePerception) {
-        this.perceptionHandlers = new PerceptionHandlers(this.config.perception);
+        this.perceptionHandlers = new PerceptionHandlers(
+          this.config.perception,
+        );
 
         // Wire percepts from handlers → cognitive processor
         this.perceptionHandlers.onPercept((percept: CognitivePercept) => {
           this.cognitiveProcessor.injectPercept(percept);
           this.stats.perceptsReceived++;
-          this.emitEvent({ type: 'percept_received', percept });
+          this.emitEvent({ type: "percept_received", percept });
         });
 
         await this.perceptionHandlers.start();
-        log.info('✓ Perception handlers started (filesystem, system monitor, git)');
+        log.info(
+          "✓ Perception handlers started (filesystem, system monitor, git)",
+        );
       }
 
       // 3. Initialize tool execution engine
       if (this.config.enableExecution) {
         this.toolEngine = new ToolExecutionEngine(this.config.tools);
-        log.info('✓ Tool execution engine initialized (shell, fs, http, mcp)');
+        log.info("✓ Tool execution engine initialized (shell, fs, http, mcp)");
       }
 
       // 4. Initialize LLM goal planner
       if (this.config.enablePlanning && this.config.planner?.apiKey) {
         this.goalPlanner = new LLMGoalPlanner({
-          apiEndpoint: this.config.planner.apiEndpoint || 'https://api.openai.com/v1/chat/completions',
+          apiEndpoint:
+            this.config.planner.apiEndpoint ||
+            "https://api.openai.com/v1/chat/completions",
           apiKey: this.config.planner.apiKey,
           ...this.config.planner,
         } as LLMGoalPlannerConfig);
@@ -257,9 +282,9 @@ export class AutonomyPipeline extends EventEmitter {
           this.goalPlanner.setToolEngine(this.toolEngine);
         }
 
-        log.info('✓ LLM goal planner initialized');
+        log.info("✓ LLM goal planner initialized");
       } else if (this.config.enablePlanning) {
-        log.warn('LLM goal planner requires API key — planning disabled');
+        log.warn("LLM goal planner requires API key — planning disabled");
       }
 
       // 5. Wire cognitive processor action handlers
@@ -268,38 +293,53 @@ export class AutonomyPipeline extends EventEmitter {
       // 6. Wire into proactive loop
       if (this.proactiveLoop) {
         this.wireProactiveLoop();
-        log.info('✓ Wired into proactive loop (PERCEIVE → REFLECT → PLAN → ACT → INTEGRATE)');
+        log.info(
+          "✓ Wired into proactive loop (PERCEIVE → REFLECT → PLAN → ACT → INTEGRATE)",
+        );
       }
 
       // 7. Initialize Core Self Engine (persistent local intelligence)
       if (this.config.enableCoreSelf) {
         this.coreSelfEngine = new CoreSelfEngine(this.config.coreSelf);
         await this.coreSelfEngine.start();
-        log.info(`✓ Core Self Engine initialized (Lucy: ${this.coreSelfEngine.getLucy().isHealthy() ? 'ONLINE' : 'OFFLINE'}, Stage: ${this.coreSelfEngine.getIdentity().getStage()})`);
+        log.info(
+          `✓ Core Self Engine initialized (Lucy: ${
+            this.coreSelfEngine.getLucy().isHealthy() ? "ONLINE" : "OFFLINE"
+          }, Stage: ${this.coreSelfEngine.getIdentity().getStage()})`,
+        );
       }
 
       // 8. Initialize Echobeats concurrent streams
       if (this.config.enableEchobeats) {
         this.initializeEchobeats();
-        log.info('✓ Echobeats 3-stream concurrent processing initialized');
+        log.info("✓ Echobeats 3-stream concurrent processing initialized");
       }
 
       this.running = true;
-      this.emitEvent({ type: 'pipeline_started' });
+      this.emitEvent({ type: "pipeline_started" });
 
-      log.info('═══════════════════════════════════════════════');
-      log.info('  Autonomy Pipeline ACTIVE');
-      log.info(`  Perception: ${this.perceptionHandlers ? 'ON' : 'OFF'}`);
-      log.info(`  Planning:   ${this.goalPlanner ? 'ON' : 'OFF'}`);
-      log.info(`  Execution:  ${this.toolEngine ? 'ON' : 'OFF'}`);
-      log.info(`  Memory:     ${this.vectorMemory ? 'ON' : 'OFF'}`);
-      log.info(`  Core Self:  ${this.coreSelfEngine ? 'ON (' + this.coreSelfEngine.getIdentity().getStage() + ')' : 'OFF'}`);
-      log.info(`  Echobeats:  ${this.config.enableEchobeats ? 'ON' : 'OFF'}`);
-      log.info('═══════════════════════════════════════════════');
-
+      log.info("═══════════════════════════════════════════════");
+      log.info("  Autonomy Pipeline ACTIVE");
+      log.info(`  Perception: ${this.perceptionHandlers ? "ON" : "OFF"}`);
+      log.info(`  Planning:   ${this.goalPlanner ? "ON" : "OFF"}`);
+      log.info(`  Execution:  ${this.toolEngine ? "ON" : "OFF"}`);
+      log.info(`  Memory:     ${this.vectorMemory ? "ON" : "OFF"}`);
+      log.info(
+        `  Core Self:  ${
+          this.coreSelfEngine
+            ? "ON (" + this.coreSelfEngine.getIdentity().getStage() + ")"
+            : "OFF"
+        }`,
+      );
+      log.info(`  Echobeats:  ${this.config.enableEchobeats ? "ON" : "OFF"}`);
+      log.info("═══════════════════════════════════════════════");
     } catch (error) {
-      log.error('Failed to start autonomy pipeline:', error);
-      this.emitEvent({ type: 'error', component: 'pipeline', error: String(error) });
+      log.error("Failed to start autonomy pipeline:", error);
+      this.emitEvent({
+        type: "error",
+        component: "pipeline",
+        error: String(error),
+      });
       await this.stop();
       throw error;
     }
@@ -311,7 +351,7 @@ export class AutonomyPipeline extends EventEmitter {
   async stop(): Promise<void> {
     if (!this.running && !this.perceptionHandlers && !this.vectorMemory) return;
 
-    log.info('Stopping autonomy pipeline...');
+    log.info("Stopping autonomy pipeline...");
 
     // Stop Echobeats
     if (this.echobeatTimer) {
@@ -336,8 +376,8 @@ export class AutonomyPipeline extends EventEmitter {
     }
 
     this.running = false;
-    this.emitEvent({ type: 'pipeline_stopped' });
-    log.info('Autonomy pipeline stopped');
+    this.emitEvent({ type: "pipeline_stopped" });
+    log.info("Autonomy pipeline stopped");
   }
 
   // ─── Proactive Loop Wiring ─────────────────────────────────────
@@ -349,54 +389,62 @@ export class AutonomyPipeline extends EventEmitter {
     if (!this.proactiveLoop) return;
 
     // Register a perception handler that collects percepts from our buffer
-    this.proactiveLoop.registerPerceptionHandler(async (): Promise<EnvironmentStimulus[]> => {
-      // Convert cognitive percepts to environment stimuli for the proactive loop
-      const processorState = this.cognitiveProcessor.getState();
-      const stimuli: EnvironmentStimulus[] = [];
+    this.proactiveLoop.registerPerceptionHandler(
+      async (): Promise<EnvironmentStimulus[]> => {
+        // Convert cognitive percepts to environment stimuli for the proactive loop
+        const processorState = this.cognitiveProcessor.getState();
+        const stimuli: EnvironmentStimulus[] = [];
 
-      // If we have pending percepts, signal the proactive loop
-      if (processorState.perceptBufferSize > 0) {
-        stimuli.push({
-          type: 'system' as const,
-          source: 'autonomy-pipeline',
-          priority: Math.min(10, 5 + processorState.perceptBufferSize),
-          data: {
-            perceptBufferSize: processorState.perceptBufferSize,
-            activeGoals: processorState.activeGoals,
-            episodicMemories: processorState.episodicMemories,
-          },
-          timestamp: Date.now(),
-        });
-      }
+        // If we have pending percepts, signal the proactive loop
+        if (processorState.perceptBufferSize > 0) {
+          stimuli.push({
+            type: "system" as const,
+            source: "autonomy-pipeline",
+            priority: Math.min(10, 5 + processorState.perceptBufferSize),
+            data: {
+              perceptBufferSize: processorState.perceptBufferSize,
+              activeGoals: processorState.activeGoals,
+              episodicMemories: processorState.episodicMemories,
+            },
+            timestamp: Date.now(),
+          });
+        }
 
-      return stimuli;
-    });
+        return stimuli;
+      },
+    );
 
     // Register a default action handler that uses the LLM planner + tool engine
-    this.proactiveLoop.registerActionHandler('default', async (goal) => {
+    this.proactiveLoop.registerActionHandler("default", async (goal) => {
       return this.executeGoalWithPipeline(goal);
     });
 
     // Listen to proactive loop phase transitions to drive cognitive processing
-    this.proactiveLoop.on('phase_transition', async (event: { from: ProactivePhase; to: ProactivePhase }) => {
-      try {
-        // Drive the cognitive tick processor on each phase transition
-        await this.cognitiveProcessor.processTick(event.to, 0);
+    this.proactiveLoop.on(
+      "phase_transition",
+      async (event: { from: ProactivePhase; to: ProactivePhase }) => {
+        try {
+          // Drive the cognitive tick processor on each phase transition
+          await this.cognitiveProcessor.processTick(event.to, 0);
 
-        // On PLAN phase: invoke LLM planner if available
-        if (event.to === ProactivePhase.PLAN && this.goalPlanner) {
-          await this.runPlanningCycle();
-        }
+          // On PLAN phase: invoke LLM planner if available
+          if (event.to === ProactivePhase.PLAN && this.goalPlanner) {
+            await this.runPlanningCycle();
+          }
 
-        // On INTEGRATE phase: run memory consolidation
-        if (event.to === ProactivePhase.INTEGRATE && this.config.enableConsolidation) {
-          await this.runConsolidation();
+          // On INTEGRATE phase: run memory consolidation
+          if (
+            event.to === ProactivePhase.INTEGRATE &&
+            this.config.enableConsolidation
+          ) {
+            await this.runConsolidation();
+          }
+        } catch (error) {
+          log.error(`Pipeline error during ${event.to} phase:`, error);
+          this.stats.errors++;
         }
-      } catch (error) {
-        log.error(`Pipeline error during ${event.to} phase:`, error);
-        this.stats.errors++;
-      }
-    });
+      },
+    );
   }
 
   // ─── Action Handlers ───────────────────────────────────────────
@@ -406,34 +454,44 @@ export class AutonomyPipeline extends EventEmitter {
    */
   private wireActionHandlers(): void {
     // Register a default handler that uses the tool engine
-    this.cognitiveProcessor.registerActionHandler('default', async (goal: CognitiveGoal) => {
-      if (!this.toolEngine) {
-        return { note: 'Tool engine not available', goalId: goal.id };
-      }
+    this.cognitiveProcessor.registerActionHandler(
+      "default",
+      async (goal: CognitiveGoal) => {
+        if (!this.toolEngine) {
+          return { note: "Tool engine not available", goalId: goal.id };
+        }
 
-      // If we have a planner, ask it what to do
-      if (this.goalPlanner) {
-        const context: PlanningContext = {
-          percepts: [],
-          activeGoals: [goal],
-          recentMemories: this.getRecentMemoryStrings(5),
-          emotionalState: 0,
-          cognitiveLoad: 0.5,
-          availableTools: this.toolEngine.getToolDefinitions().map(t => t.name),
-        };
+        // If we have a planner, ask it what to do
+        if (this.goalPlanner) {
+          const context: PlanningContext = {
+            percepts: [],
+            activeGoals: [goal],
+            recentMemories: this.getRecentMemoryStrings(5),
+            emotionalState: 0,
+            cognitiveLoad: 0.5,
+            availableTools: this.toolEngine
+              .getToolDefinitions()
+              .map((t) => t.name),
+          };
 
-        const plan = await this.goalPlanner.plan(context);
-        return {
-          goalId: goal.id,
-          reasoning: plan.reasoning,
-          toolCalls: plan.goals.flatMap(g => g.toolCalls.map(tc => tc.toolName)),
-          results: plan.executionResults.map(r => ({ tool: r.toolName, success: r.success })),
-        };
-      }
+          const plan = await this.goalPlanner.plan(context);
+          return {
+            goalId: goal.id,
+            reasoning: plan.reasoning,
+            toolCalls: plan.goals.flatMap((g) =>
+              g.toolCalls.map((tc) => tc.toolName),
+            ),
+            results: plan.executionResults.map((r) => ({
+              tool: r.toolName,
+              success: r.success,
+            })),
+          };
+        }
 
-      // Without planner, just mark as self-resolved
-      return { goalId: goal.id, note: 'Resolved without LLM planning' };
-    });
+        // Without planner, just mark as self-resolved
+        return { goalId: goal.id, note: "Resolved without LLM planning" };
+      },
+    );
   }
 
   // ─── Planning Cycle ────────────────────────────────────────────
@@ -452,26 +510,33 @@ export class AutonomyPipeline extends EventEmitter {
 
     const context: PlanningContext = {
       percepts: [], // Percepts already consumed by cognitive processor
-      activeGoals: goals.filter(g => g.status === 'pending' || g.status === 'active'),
+      activeGoals: goals.filter(
+        (g) => g.status === "pending" || g.status === "active",
+      ),
       recentMemories: memories,
-      emotionalState: processorState.latestSelfImage?.averageEmotionalValence ?? 0,
+      emotionalState:
+        processorState.latestSelfImage?.averageEmotionalValence ?? 0,
       cognitiveLoad: processorState.activeGoals / 20, // Normalize
-      availableTools: this.toolEngine.getToolDefinitions().map(t => t.name),
+      availableTools: this.toolEngine.getToolDefinitions().map((t) => t.name),
     };
 
     try {
       const result = await this.goalPlanner.plan(context);
-      this.emitEvent({ type: 'planning_complete', result });
+      this.emitEvent({ type: "planning_complete", result });
 
       // Track tool execution results
       for (const execResult of result.executionResults) {
         this.stats.toolsExecuted++;
-        this.emitEvent({ type: 'tool_executed', result: execResult });
+        this.emitEvent({ type: "tool_executed", result: execResult });
       }
     } catch (error) {
-      log.error('Planning cycle failed:', error);
+      log.error("Planning cycle failed:", error);
       this.stats.errors++;
-      this.emitEvent({ type: 'error', component: 'planner', error: String(error) });
+      this.emitEvent({
+        type: "error",
+        component: "planner",
+        error: String(error),
+      });
     }
   }
 
@@ -480,33 +545,41 @@ export class AutonomyPipeline extends EventEmitter {
   /**
    * Execute a proactive loop goal through the full pipeline
    */
-  private async executeGoalWithPipeline(goal: { id: string; description: string; priority: number }) {
+  private async executeGoalWithPipeline(goal: {
+    id: string;
+    description: string;
+    priority: number;
+  }) {
     const startTime = Date.now();
 
     try {
       if (this.goalPlanner && this.toolEngine) {
         const context: PlanningContext = {
           percepts: [],
-          activeGoals: [{
-            id: goal.id,
-            description: goal.description,
-            priority: goal.priority,
-            urgency: goal.priority / 10,
-            status: 'active',
-            createdAt: Date.now(),
-            updatedAt: Date.now(),
-            attempts: 1,
-            maxAttempts: 3,
-            dependencies: [],
-          }],
+          activeGoals: [
+            {
+              id: goal.id,
+              description: goal.description,
+              priority: goal.priority,
+              urgency: goal.priority / 10,
+              status: "active",
+              createdAt: Date.now(),
+              updatedAt: Date.now(),
+              attempts: 1,
+              maxAttempts: 3,
+              dependencies: [],
+            },
+          ],
           recentMemories: this.getRecentMemoryStrings(5),
           emotionalState: 0,
           cognitiveLoad: 0.5,
-          availableTools: this.toolEngine.getToolDefinitions().map(t => t.name),
+          availableTools: this.toolEngine
+            .getToolDefinitions()
+            .map((t) => t.name),
         };
 
         const plan = await this.goalPlanner.plan(context);
-        const success = plan.executionResults.every(r => r.success);
+        const success = plan.executionResults.every((r) => r.success);
 
         return {
           goalId: goal.id,
@@ -514,7 +587,7 @@ export class AutonomyPipeline extends EventEmitter {
           output: {
             reasoning: plan.reasoning,
             toolCalls: plan.executionResults.length,
-            results: plan.executionResults.map(r => ({
+            results: plan.executionResults.map((r) => ({
               tool: r.toolName,
               success: r.success,
               error: r.error,
@@ -522,8 +595,8 @@ export class AutonomyPipeline extends EventEmitter {
           },
           duration: Date.now() - startTime,
           sideEffects: plan.executionResults
-            .filter(r => r.success)
-            .map(r => `Executed ${r.toolName}`),
+            .filter((r) => r.success)
+            .map((r) => `Executed ${r.toolName}`),
         };
       }
 
@@ -531,7 +604,7 @@ export class AutonomyPipeline extends EventEmitter {
       return {
         goalId: goal.id,
         success: true,
-        output: { note: 'Self-resolved: no planner/executor available' },
+        output: { note: "Self-resolved: no planner/executor available" },
         duration: Date.now() - startTime,
         sideEffects: [],
       };
@@ -558,7 +631,9 @@ export class AutonomyPipeline extends EventEmitter {
   private async runConsolidation(): Promise<void> {
     if (!this.vectorMemory || !this.llmService) return;
 
-    const unconsolidated = this.cognitiveProcessor.getEpisodicMemories({ consolidated: false });
+    const unconsolidated = this.cognitiveProcessor.getEpisodicMemories({
+      consolidated: false,
+    });
     if (unconsolidated.length < 3) return; // Need enough to consolidate
 
     const batch = unconsolidated.slice(0, this.config.consolidationBatchSize);
@@ -566,9 +641,14 @@ export class AutonomyPipeline extends EventEmitter {
 
     try {
       // Build a consolidation prompt from the episodic memories
-      const memoryTexts = batch.map((m, i) =>
-        `[${i + 1}] ${m.reflection} | Action: ${m.actionTaken} | Outcome: ${m.outcome} | Valence: ${m.emotionalTag.toFixed(2)}`
-      ).join('\n');
+      const memoryTexts = batch
+        .map(
+          (m, i) =>
+            `[${i + 1}] ${m.reflection} | Action: ${m.actionTaken} | Outcome: ${
+              m.outcome
+            } | Valence: ${m.emotionalTag.toFixed(2)}`,
+        )
+        .join("\n");
 
       const consolidationPrompt = `You are Deep Tree Echo's memory consolidation system.
 Analyze these recent episodic memories and produce a consolidated summary that captures:
@@ -582,14 +662,17 @@ ${memoryTexts}
 
 Produce a concise consolidated memory (2-3 sentences) that preserves the essential information.`;
 
-      const summary = await this.llmService.generateResponse(consolidationPrompt, []);
+      const summary = await this.llmService.generateResponse(
+        consolidationPrompt,
+        [],
+      );
 
       if (summary && summary.trim()) {
         // Store the consolidated summary as a high-salience reflection
         await this.vectorMemory.storeReflection(
           summary.trim(),
-          'periodic',
-          'episodic_consolidation'
+          "periodic",
+          "episodic_consolidation",
         );
 
         summarized = 1;
@@ -598,12 +681,12 @@ Produce a concise consolidated memory (2-3 sentences) that preserves the essenti
         log.info(`Consolidated ${batch.length} episodic memories into summary`);
       }
     } catch (error) {
-      log.error('Memory consolidation failed:', error);
+      log.error("Memory consolidation failed:", error);
       this.stats.errors++;
     }
 
     this.emitEvent({
-      type: 'consolidation_complete',
+      type: "consolidation_complete",
       consolidated: batch.length,
       summarized,
     });
@@ -627,7 +710,7 @@ Produce a concise consolidated memory (2-3 sentences) that preserves the essenti
     this.echobeatStreams = [
       {
         id: 0,
-        name: 'perception',
+        name: "perception",
         phase: ProactivePhase.PERCEIVE,
         stepOffset: 0,
         tickCount: 0,
@@ -635,7 +718,7 @@ Produce a concise consolidated memory (2-3 sentences) that preserves the essenti
       },
       {
         id: 1,
-        name: 'action',
+        name: "action",
         phase: ProactivePhase.ACT,
         stepOffset: 1,
         tickCount: 0,
@@ -643,7 +726,7 @@ Produce a concise consolidated memory (2-3 sentences) that preserves the essenti
       },
       {
         id: 2,
-        name: 'simulation',
+        name: "simulation",
         phase: ProactivePhase.REFLECT,
         stepOffset: 2,
         tickCount: 0,
@@ -657,10 +740,18 @@ Produce a concise consolidated memory (2-3 sentences) that preserves the essenti
     // Steps 7-9:  PLAN     (streams generate goals)
     // Steps 10-12: ACT+INTEGRATE (streams execute and consolidate)
     const phaseMap: ProactivePhase[] = [
-      ProactivePhase.PERCEIVE, ProactivePhase.PERCEIVE, ProactivePhase.PERCEIVE,
-      ProactivePhase.REFLECT,  ProactivePhase.REFLECT,  ProactivePhase.REFLECT,
-      ProactivePhase.PLAN,     ProactivePhase.PLAN,     ProactivePhase.PLAN,
-      ProactivePhase.ACT,      ProactivePhase.ACT,      ProactivePhase.INTEGRATE,
+      ProactivePhase.PERCEIVE,
+      ProactivePhase.PERCEIVE,
+      ProactivePhase.PERCEIVE,
+      ProactivePhase.REFLECT,
+      ProactivePhase.REFLECT,
+      ProactivePhase.REFLECT,
+      ProactivePhase.PLAN,
+      ProactivePhase.PLAN,
+      ProactivePhase.PLAN,
+      ProactivePhase.ACT,
+      ProactivePhase.ACT,
+      ProactivePhase.INTEGRATE,
     ];
 
     this.echobeatTimer = setInterval(async () => {
@@ -671,23 +762,30 @@ Produce a concise consolidated memory (2-3 sentences) that preserves the essenti
 
       // Each stream processes based on its offset
       for (const stream of this.echobeatStreams) {
-        const streamStep = ((this.echobeatStep - 1 + stream.stepOffset * 4) % 12) + 1;
+        const streamStep =
+          ((this.echobeatStep - 1 + stream.stepOffset * 4) % 12) + 1;
         const streamPhase = phaseMap[streamStep - 1];
 
         try {
           // Create a dedicated processor tick for this stream
-          await this.cognitiveProcessor.processTick(streamPhase, this.echobeatStep);
+          await this.cognitiveProcessor.processTick(
+            streamPhase,
+            this.echobeatStep,
+          );
           stream.tickCount++;
           stream.phase = streamPhase;
 
           this.emitEvent({
-            type: 'echobeat_tick',
+            type: "echobeat_tick",
             stream: stream.id,
             step: this.echobeatStep,
             phase: streamPhase,
           });
         } catch (error) {
-          log.error(`Echobeat stream ${stream.name} error at step ${this.echobeatStep}:`, error);
+          log.error(
+            `Echobeat stream ${stream.name} error at step ${this.echobeatStep}:`,
+            error,
+          );
           this.stats.errors++;
         }
       }
@@ -712,7 +810,12 @@ Produce a concise consolidated memory (2-3 sentences) that preserves the essenti
   /**
    * Store a message in vector memory (for orchestrator integration)
    */
-  async storeMessage(data: { chatId: number; messageId: number; sender: 'user' | 'bot'; text: string }): Promise<void> {
+  async storeMessage(data: {
+    chatId: number;
+    messageId: number;
+    sender: "user" | "bot";
+    text: string;
+  }): Promise<void> {
     if (this.vectorMemory) {
       await this.vectorMemory.storeMemory(data);
     }
@@ -721,10 +824,16 @@ Produce a concise consolidated memory (2-3 sentences) that preserves the essenti
   /**
    * Search vector memory semantically
    */
-  async searchMemory(query: string, limit = 5): Promise<Array<{ text: string; score: number }>> {
+  async searchMemory(
+    query: string,
+    limit = 5,
+  ): Promise<Array<{ text: string; score: number }>> {
     if (this.vectorMemory) {
-      const results = await this.vectorMemory.searchMemoriesWithScores(query, limit);
-      return results.map(r => ({ text: r.memory.text, score: r.score }));
+      const results = await this.vectorMemory.searchMemoriesWithScores(
+        query,
+        limit,
+      );
+      return results.map((r) => ({ text: r.memory.text, score: r.score }));
     }
     return [];
   }
@@ -741,11 +850,13 @@ Produce a concise consolidated memory (2-3 sentences) that preserves the essenti
       cognitiveState: this.cognitiveProcessor.getState(),
       perceptionStats: this.perceptionHandlers?.getStats() ?? null,
       plannerStats: this.goalPlanner?.getStats() ?? null,
-      toolEngineStats: this.toolEngine ? {
-        tools: this.toolEngine.getToolDefinitions().length,
-      } : null,
+      toolEngineStats: this.toolEngine
+        ? {
+            tools: this.toolEngine.getToolDefinitions().length,
+          }
+        : null,
       vectorMemoryStats: this.vectorMemory?.getStats() ?? null,
-      echobeatStreams: this.echobeatStreams.map(s => ({
+      echobeatStreams: this.echobeatStreams.map((s) => ({
         id: s.id,
         name: s.name,
         phase: s.phase,
@@ -782,14 +893,20 @@ Produce a concise consolidated memory (2-3 sentences) that preserves the essenti
    * Process a message through the Core Self Engine (if available).
    * Falls back to LLMService if Core Self is not enabled.
    */
-  async processWithCoreSelf(message: string, context?: string): Promise<{
+  async processWithCoreSelf(
+    message: string,
+    context?: string,
+  ): Promise<{
     content: string;
     source: string;
     coherence: number;
     stage: string;
   }> {
     if (this.coreSelfEngine && this.coreSelfEngine.isRunning()) {
-      const response = await this.coreSelfEngine.processMessage(message, context);
+      const response = await this.coreSelfEngine.processMessage(
+        message,
+        context,
+      );
       return {
         content: response.content,
         source: response.source,
@@ -803,17 +920,17 @@ Produce a concise consolidated memory (2-3 sentences) that preserves the essenti
       const content = await this.llmService.generateResponse(message, []);
       return {
         content,
-        source: 'llm-service',
+        source: "llm-service",
         coherence: 0.5,
-        stage: 'unknown',
+        stage: "unknown",
       };
     }
 
     return {
-      content: '[No inference engine available]',
-      source: 'none',
+      content: "[No inference engine available]",
+      source: "none",
       coherence: 0,
-      stage: 'offline',
+      stage: "offline",
     };
   }
 
@@ -821,6 +938,6 @@ Produce a concise consolidated memory (2-3 sentences) that preserves the essenti
 
   private emitEvent(event: AutonomyPipelineEvent): void {
     this.emit(event.type, event);
-    this.emit('telemetry', event);
+    this.emit("telemetry", event);
   }
 }

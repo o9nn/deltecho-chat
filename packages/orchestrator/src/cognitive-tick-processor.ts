@@ -16,18 +16,18 @@
  * - Arena: The cognitive state manifold (memory, goals, percepts)
  * - Relation: The continuous interplay via the tick cycle
  */
-import { EventEmitter } from 'events';
-import { getLogger } from 'deep-tree-echo-core';
-import { ProactivePhase } from './proactive-loop.js';
+import { EventEmitter } from "events";
+import { getLogger } from "deep-tree-echo-core";
+import { ProactivePhase } from "./proactive-loop.js";
 
-const log = getLogger('deep-tree-echo-orchestrator/CognitiveTickProcessor');
+const log = getLogger("deep-tree-echo-orchestrator/CognitiveTickProcessor");
 
 /**
  * Cognitive percept - aggregated environmental signal
  */
 export interface CognitivePercept {
   id: string;
-  source: 'message' | 'email' | 'schedule' | 'memory' | 'internal' | 'mcp';
+  source: "message" | "email" | "schedule" | "memory" | "internal" | "mcp";
   content: string;
   salience: number;
   emotionalValence: number;
@@ -57,7 +57,7 @@ export interface CognitiveGoal {
   description: string;
   priority: number;
   urgency: number;
-  status: 'pending' | 'active' | 'completed' | 'deferred' | 'failed';
+  status: "pending" | "active" | "completed" | "deferred" | "failed";
   createdAt: number;
   updatedAt: number;
   deadline?: number;
@@ -132,7 +132,10 @@ export class CognitiveTickProcessor extends EventEmitter {
   private emotionalSamples: number = 0;
 
   // Cognitive action handlers registered by external systems
-  private actionHandlers: Map<string, (goal: CognitiveGoal) => Promise<Record<string, unknown>>> = new Map();
+  private actionHandlers: Map<
+    string,
+    (goal: CognitiveGoal) => Promise<Record<string, unknown>>
+  > = new Map();
 
   constructor(config: Partial<CognitiveTickProcessorConfig> = {}) {
     super();
@@ -144,7 +147,7 @@ export class CognitiveTickProcessor extends EventEmitter {
    */
   public registerActionHandler(
     goalType: string,
-    handler: (goal: CognitiveGoal) => Promise<Record<string, unknown>>
+    handler: (goal: CognitiveGoal) => Promise<Record<string, unknown>>,
   ): void {
     this.actionHandlers.set(goalType, handler);
     log.info(`Registered cognitive action handler: ${goalType}`);
@@ -155,13 +158,16 @@ export class CognitiveTickProcessor extends EventEmitter {
    */
   public injectPercept(percept: CognitivePercept): void {
     this.perceptBuffer.push(percept);
-    this.emit('percept_injected', percept);
+    this.emit("percept_injected", percept);
   }
 
   /**
    * Process a single tick based on the current proactive phase
    */
-  public async processTick(phase: ProactivePhase, _grandCycleStep: number): Promise<void> {
+  public async processTick(
+    phase: ProactivePhase,
+    _grandCycleStep: number,
+  ): Promise<void> {
     this.tickCount++;
 
     switch (phase) {
@@ -185,7 +191,10 @@ export class CognitiveTickProcessor extends EventEmitter {
     }
 
     // Self-image snapshot at configured interval
-    if (this.config.enableSelfImage && this.tickCount % this.config.selfImageInterval === 0) {
+    if (
+      this.config.enableSelfImage &&
+      this.tickCount % this.config.selfImageInterval === 0
+    ) {
       this.captureSelfImage();
     }
   }
@@ -203,12 +212,18 @@ export class CognitiveTickProcessor extends EventEmitter {
     const aggregated = {
       count: this.perceptBuffer.length,
       highestSalience: this.perceptBuffer[0]?.salience ?? 0,
-      sources: [...new Set(this.perceptBuffer.map(p => p.source))],
-      averageValence: this.perceptBuffer.reduce((sum, p) => sum + p.emotionalValence, 0) / this.perceptBuffer.length,
+      sources: [...new Set(this.perceptBuffer.map((p) => p.source))],
+      averageValence:
+        this.perceptBuffer.reduce((sum, p) => sum + p.emotionalValence, 0) /
+        this.perceptBuffer.length,
     };
 
-    this.emit('perception_aggregated', aggregated);
-    log.debug(`Perceived ${aggregated.count} stimuli (salience: ${aggregated.highestSalience.toFixed(2)})`);
+    this.emit("perception_aggregated", aggregated);
+    log.debug(
+      `Perceived ${
+        aggregated.count
+      } stimuli (salience: ${aggregated.highestSalience.toFixed(2)})`,
+    );
   }
 
   /**
@@ -216,14 +231,21 @@ export class CognitiveTickProcessor extends EventEmitter {
    */
   private async processReflect(): Promise<void> {
     // Compute current cognitive load
-    const activeGoals = [...this.goals.values()].filter(g => g.status === 'active' || g.status === 'pending');
-    const cognitiveLoad = Math.min(1, activeGoals.length / this.config.maxActiveGoals);
+    const activeGoals = [...this.goals.values()].filter(
+      (g) => g.status === "active" || g.status === "pending",
+    );
+    const cognitiveLoad = Math.min(
+      1,
+      activeGoals.length / this.config.maxActiveGoals,
+    );
 
     // Compute emotional state from recent percepts
     const recentPercepts = this.perceptBuffer.slice(0, 10);
-    const emotionalState = recentPercepts.length > 0
-      ? recentPercepts.reduce((sum, p) => sum + p.emotionalValence, 0) / recentPercepts.length
-      : 0;
+    const emotionalState =
+      recentPercepts.length > 0
+        ? recentPercepts.reduce((sum, p) => sum + p.emotionalValence, 0) /
+          recentPercepts.length
+        : 0;
 
     // Track emotional accumulator for self-image
     this.emotionalAccumulator += emotionalState;
@@ -231,8 +253,11 @@ export class CognitiveTickProcessor extends EventEmitter {
 
     // Compute memory coherence (ratio of consolidated to total)
     const totalMemories = this.episodicMemories.length;
-    const consolidatedMemories = this.episodicMemories.filter(m => m.consolidated).length;
-    const memoryCoherence = totalMemories > 0 ? consolidatedMemories / totalMemories : 1;
+    const consolidatedMemories = this.episodicMemories.filter(
+      (m) => m.consolidated,
+    ).length;
+    const memoryCoherence =
+      totalMemories > 0 ? consolidatedMemories / totalMemories : 1;
 
     const reflection = {
       cognitiveLoad,
@@ -244,7 +269,7 @@ export class CognitiveTickProcessor extends EventEmitter {
       tickCount: this.tickCount,
     };
 
-    this.emit('reflection_complete', reflection);
+    this.emit("reflection_complete", reflection);
   }
 
   /**
@@ -253,14 +278,22 @@ export class CognitiveTickProcessor extends EventEmitter {
   private async processPlan(): Promise<void> {
     // Generate goals from high-salience percepts
     for (const percept of this.perceptBuffer) {
-      if (percept.salience >= 0.7 && this.goals.size < this.config.maxActiveGoals) {
-        const goalId = `cg_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+      if (
+        percept.salience >= 0.7 &&
+        this.goals.size < this.config.maxActiveGoals
+      ) {
+        const goalId = `cg_${Date.now()}_${Math.random()
+          .toString(36)
+          .slice(2, 8)}`;
         const goal: CognitiveGoal = {
           id: goalId,
-          description: `Process ${percept.source}: ${percept.content.slice(0, 100)}`,
+          description: `Process ${percept.source}: ${percept.content.slice(
+            0,
+            100,
+          )}`,
           priority: percept.salience * 10,
           urgency: percept.salience,
-          status: 'pending',
+          status: "pending",
           createdAt: Date.now(),
           updatedAt: Date.now(),
           attempts: 0,
@@ -268,16 +301,18 @@ export class CognitiveTickProcessor extends EventEmitter {
           dependencies: [],
         };
         this.goals.set(goalId, goal);
-        this.emit('goal_created', goal);
+        this.emit("goal_created", goal);
       }
     }
 
     // Defer low-priority goals when overloaded
-    const activeGoals = [...this.goals.values()].filter(g => g.status === 'pending' || g.status === 'active');
+    const activeGoals = [...this.goals.values()].filter(
+      (g) => g.status === "pending" || g.status === "active",
+    );
     if (activeGoals.length > this.config.maxActiveGoals) {
       const sorted = activeGoals.sort((a, b) => a.priority - b.priority);
       for (let i = 0; i < sorted.length - this.config.maxActiveGoals; i++) {
-        sorted[i].status = 'deferred';
+        sorted[i].status = "deferred";
         sorted[i].updatedAt = Date.now();
       }
     }
@@ -291,12 +326,12 @@ export class CognitiveTickProcessor extends EventEmitter {
    */
   private async processAct(): Promise<void> {
     const pendingGoals = [...this.goals.values()]
-      .filter(g => g.status === 'pending')
+      .filter((g) => g.status === "pending")
       .sort((a, b) => b.priority - a.priority)
       .slice(0, 3);
 
     for (const goal of pendingGoals) {
-      goal.status = 'active';
+      goal.status = "active";
       goal.attempts++;
       goal.updatedAt = Date.now();
 
@@ -305,21 +340,21 @@ export class CognitiveTickProcessor extends EventEmitter {
       if (handler) {
         try {
           const result = await handler(goal);
-          goal.status = 'completed';
+          goal.status = "completed";
           goal.result = result;
-          this.emit('goal_completed', { goalId: goal.id, result });
+          this.emit("goal_completed", { goalId: goal.id, result });
         } catch (error) {
           if (goal.attempts >= goal.maxAttempts) {
-            goal.status = 'failed';
-            this.emit('goal_failed', { goalId: goal.id, error: String(error) });
+            goal.status = "failed";
+            this.emit("goal_failed", { goalId: goal.id, error: String(error) });
           } else {
-            goal.status = 'pending'; // Retry next cycle
+            goal.status = "pending"; // Retry next cycle
           }
         }
       } else {
         // No handler: mark as completed with self-resolution note
-        goal.status = 'completed';
-        goal.result = { note: 'Self-resolved: awaiting handler registration' };
+        goal.status = "completed";
+        goal.result = { note: "Self-resolved: awaiting handler registration" };
       }
       goal.updatedAt = Date.now();
     }
@@ -330,14 +365,16 @@ export class CognitiveTickProcessor extends EventEmitter {
    */
   private async processIntegrate(): Promise<void> {
     // Store completed goals as episodic memories
-    const completedGoals = [...this.goals.values()].filter(g => g.status === 'completed');
+    const completedGoals = [...this.goals.values()].filter(
+      (g) => g.status === "completed",
+    );
 
     for (const goal of completedGoals) {
       const memory: EpisodicMemory = {
         id: `em_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
         percept: {
           id: goal.id,
-          source: 'internal',
+          source: "internal",
           content: goal.description,
           salience: goal.priority / 10,
           emotionalValence: goal.result ? 0.5 : -0.2,
@@ -346,7 +383,7 @@ export class CognitiveTickProcessor extends EventEmitter {
         },
         reflection: `Goal completed: ${goal.description}`,
         actionTaken: `Executed with ${goal.attempts} attempt(s)`,
-        outcome: goal.result ? 'success' : 'self-resolved',
+        outcome: goal.result ? "success" : "self-resolved",
         emotionalTag: goal.result ? 0.3 : 0,
         timestamp: Date.now(),
         consolidated: false,
@@ -358,7 +395,7 @@ export class CognitiveTickProcessor extends EventEmitter {
 
     // Also clean up failed goals
     for (const [id, goal] of this.goals) {
-      if (goal.status === 'failed') {
+      if (goal.status === "failed") {
         this.goals.delete(id);
       }
     }
@@ -366,7 +403,10 @@ export class CognitiveTickProcessor extends EventEmitter {
     // Memory consolidation: mark high-importance memories as consolidated
     if (this.config.enableConsolidation) {
       for (const memory of this.episodicMemories) {
-        if (!memory.consolidated && memory.percept.salience >= this.config.consolidationThreshold) {
+        if (
+          !memory.consolidated &&
+          memory.percept.salience >= this.config.consolidationThreshold
+        ) {
           memory.consolidated = true;
         }
       }
@@ -375,18 +415,24 @@ export class CognitiveTickProcessor extends EventEmitter {
     // Evict oldest non-consolidated memories if over limit
     if (this.episodicMemories.length > this.config.maxEpisodicMemories) {
       const unconsolidated = this.episodicMemories
-        .filter(m => !m.consolidated)
+        .filter((m) => !m.consolidated)
         .sort((a, b) => a.timestamp - b.timestamp);
 
-      const toRemove = this.episodicMemories.length - this.config.maxEpisodicMemories;
-      const removeIds = new Set(unconsolidated.slice(0, toRemove).map(m => m.id));
-      this.episodicMemories = this.episodicMemories.filter(m => !removeIds.has(m.id));
+      const toRemove =
+        this.episodicMemories.length - this.config.maxEpisodicMemories;
+      const removeIds = new Set(
+        unconsolidated.slice(0, toRemove).map((m) => m.id),
+      );
+      this.episodicMemories = this.episodicMemories.filter(
+        (m) => !removeIds.has(m.id),
+      );
     }
 
-    this.emit('integration_complete', {
+    this.emit("integration_complete", {
       memoriesStored: completedGoals.length,
       totalMemories: this.episodicMemories.length,
-      consolidatedMemories: this.episodicMemories.filter(m => m.consolidated).length,
+      consolidatedMemories: this.episodicMemories.filter((m) => m.consolidated)
+        .length,
     });
   }
 
@@ -394,23 +440,35 @@ export class CognitiveTickProcessor extends EventEmitter {
    * Capture a self-image snapshot for ontogenetic tracking
    */
   private captureSelfImage(): void {
-    const completedGoals = this.episodicMemories.filter(m => m.outcome === 'success').length;
-    const avgValence = this.emotionalSamples > 0
-      ? this.emotionalAccumulator / this.emotionalSamples
-      : 0;
+    const completedGoals = this.episodicMemories.filter(
+      (m) => m.outcome === "success",
+    ).length;
+    const avgValence =
+      this.emotionalSamples > 0
+        ? this.emotionalAccumulator / this.emotionalSamples
+        : 0;
 
     // Compute identity vector (simplified: hash of recent cognitive state)
-    const identityVector = new Array(this.config.identityVectorDim).fill(0).map((_, i) => {
-      const seed = this.tickCount * (i + 1) + completedGoals * 7 + this.episodicMemories.length * 13;
-      return Math.sin(seed * 0.1) * 0.5 + 0.5;
-    });
+    const identityVector = new Array(this.config.identityVectorDim)
+      .fill(0)
+      .map((_, i) => {
+        const seed =
+          this.tickCount * (i + 1) +
+          completedGoals * 7 +
+          this.episodicMemories.length * 13;
+        return Math.sin(seed * 0.1) * 0.5 + 0.5;
+      });
 
     // Compute coherence from identity vector stability
-    const prevSnapshot = this.selfImageHistory[this.selfImageHistory.length - 1];
+    const prevSnapshot =
+      this.selfImageHistory[this.selfImageHistory.length - 1];
     let coherenceScore = 1;
     if (prevSnapshot) {
-      const diff = identityVector.reduce((sum, v, i) =>
-        sum + Math.abs(v - (prevSnapshot.identityVector[i] ?? 0)), 0);
+      const diff = identityVector.reduce(
+        (sum, v, i) =>
+          sum + Math.abs(v - (prevSnapshot.identityVector[i] ?? 0)),
+        0,
+      );
       coherenceScore = Math.max(0, 1 - diff / this.config.identityVectorDim);
     }
 
@@ -433,18 +491,21 @@ export class CognitiveTickProcessor extends EventEmitter {
       this.selfImageHistory.shift();
     }
 
-    this.emit('self_image_captured', snapshot);
+    this.emit("self_image_captured", snapshot);
   }
 
   /**
    * Determine the dominant cognitive mode based on recent activity
    */
   private determineDominantMode(): string {
-    const activeGoals = [...this.goals.values()].filter(g => g.status === 'active' || g.status === 'pending');
-    if (activeGoals.length > this.config.maxActiveGoals * 0.7) return 'focused';
-    if (this.perceptBuffer.length > 5) return 'perceptive';
-    if (this.episodicMemories.length > this.config.maxEpisodicMemories * 0.8) return 'reflective';
-    return 'exploratory';
+    const activeGoals = [...this.goals.values()].filter(
+      (g) => g.status === "active" || g.status === "pending",
+    );
+    if (activeGoals.length > this.config.maxActiveGoals * 0.7) return "focused";
+    if (this.perceptBuffer.length > 5) return "perceptive";
+    if (this.episodicMemories.length > this.config.maxEpisodicMemories * 0.8)
+      return "reflective";
+    return "exploratory";
   }
 
   /**
@@ -452,7 +513,10 @@ export class CognitiveTickProcessor extends EventEmitter {
    */
   private calculateOntogeneticProgress(): number {
     const tickProgress = Math.min(1, this.tickCount / 10000);
-    const goalProgress = Math.min(1, this.episodicMemories.filter(m => m.outcome === 'success').length / 500);
+    const goalProgress = Math.min(
+      1,
+      this.episodicMemories.filter((m) => m.outcome === "success").length / 500,
+    );
     const memoryProgress = Math.min(1, this.episodicMemories.length / 5000);
     return tickProgress * 0.3 + goalProgress * 0.4 + memoryProgress * 0.3;
   }
@@ -460,13 +524,15 @@ export class CognitiveTickProcessor extends EventEmitter {
   /**
    * Find the best action handler for a goal
    */
-  private findHandler(goal: CognitiveGoal): ((goal: CognitiveGoal) => Promise<Record<string, unknown>>) | undefined {
+  private findHandler(
+    goal: CognitiveGoal,
+  ): ((goal: CognitiveGoal) => Promise<Record<string, unknown>>) | undefined {
     for (const [type, handler] of this.actionHandlers) {
       if (goal.description.toLowerCase().includes(type.toLowerCase())) {
         return handler;
       }
     }
-    return this.actionHandlers.get('default');
+    return this.actionHandlers.get("default");
   }
 
   /**
@@ -476,22 +542,31 @@ export class CognitiveTickProcessor extends EventEmitter {
     return {
       tickCount: this.tickCount,
       perceptBufferSize: this.perceptBuffer.length,
-      activeGoals: [...this.goals.values()].filter(g => g.status === 'active' || g.status === 'pending').length,
+      activeGoals: [...this.goals.values()].filter(
+        (g) => g.status === "active" || g.status === "pending",
+      ).length,
       totalGoals: this.goals.size,
       episodicMemories: this.episodicMemories.length,
-      consolidatedMemories: this.episodicMemories.filter(m => m.consolidated).length,
+      consolidatedMemories: this.episodicMemories.filter((m) => m.consolidated)
+        .length,
       selfImageSnapshots: this.selfImageHistory.length,
-      latestSelfImage: this.selfImageHistory[this.selfImageHistory.length - 1] ?? null,
+      latestSelfImage:
+        this.selfImageHistory[this.selfImageHistory.length - 1] ?? null,
     };
   }
 
   /**
    * Get episodic memories (optionally filtered)
    */
-  public getEpisodicMemories(options?: { consolidated?: boolean; limit?: number }): EpisodicMemory[] {
+  public getEpisodicMemories(options?: {
+    consolidated?: boolean;
+    limit?: number;
+  }): EpisodicMemory[] {
     let memories = [...this.episodicMemories];
     if (options?.consolidated !== undefined) {
-      memories = memories.filter(m => m.consolidated === options.consolidated);
+      memories = memories.filter(
+        (m) => m.consolidated === options.consolidated,
+      );
     }
     if (options?.limit) {
       memories = memories.slice(-options.limit);

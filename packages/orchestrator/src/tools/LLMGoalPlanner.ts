@@ -15,12 +15,19 @@
  *
  * Supports OpenAI and Anthropic function-calling formats.
  */
-import { EventEmitter } from 'events';
-import { getLogger } from 'deep-tree-echo-core';
-import type { CognitivePercept, CognitiveGoal } from '../cognitive-tick-processor.js';
-import type { ToolExecutionEngine, ToolCall, ToolResult } from './ToolExecutionEngine.js';
+import { EventEmitter } from "events";
+import { getLogger } from "deep-tree-echo-core";
+import type {
+  CognitivePercept,
+  CognitiveGoal,
+} from "../cognitive-tick-processor.js";
+import type {
+  ToolExecutionEngine,
+  ToolCall,
+  ToolResult,
+} from "./ToolExecutionEngine.js";
 
-const log = getLogger('deep-tree-echo-orchestrator/LLMGoalPlanner');
+const log = getLogger("deep-tree-echo-orchestrator/LLMGoalPlanner");
 
 // ─── Types ──────────────────────────────────────────────────────
 
@@ -32,7 +39,7 @@ export interface LLMGoalPlannerConfig {
   /** Model name */
   model: string;
   /** LLM provider */
-  provider: 'openai' | 'anthropic';
+  provider: "openai" | "anthropic";
   /** Maximum tokens for planning response */
   maxTokens: number;
   /** Temperature for planning (lower = more deterministic) */
@@ -106,20 +113,27 @@ export class LLMGoalPlanner extends EventEmitter {
   private planningCount: number = 0;
   private totalTokensUsed: number = 0;
 
-  constructor(config: Partial<LLMGoalPlannerConfig> & { apiEndpoint: string; apiKey: string }) {
+  constructor(
+    config: Partial<LLMGoalPlannerConfig> & {
+      apiEndpoint: string;
+      apiKey: string;
+    },
+  ) {
     super();
     this.config = {
       apiEndpoint: config.apiEndpoint,
       apiKey: config.apiKey,
-      model: config.model || 'gpt-4o',
-      provider: config.provider || 'openai',
+      model: config.model || "gpt-4o",
+      provider: config.provider || "openai",
       maxTokens: config.maxTokens || 2000,
       temperature: config.temperature || 0.3,
       systemPrompt: config.systemPrompt || DEFAULT_SYSTEM_PROMPT,
       maxToolCallsPerCycle: config.maxToolCallsPerCycle || 5,
       enableExecution: config.enableExecution ?? true,
     };
-    log.info(`LLMGoalPlanner initialized: model=${this.config.model}, provider=${this.config.provider}`);
+    log.info(
+      `LLMGoalPlanner initialized: model=${this.config.model}, provider=${this.config.provider}`,
+    );
   }
 
   /**
@@ -127,7 +141,7 @@ export class LLMGoalPlanner extends EventEmitter {
    */
   setToolEngine(engine: ToolExecutionEngine): void {
     this.toolEngine = engine;
-    log.info('Tool execution engine connected to planner');
+    log.info("Tool execution engine connected to planner");
   }
 
   /**
@@ -154,7 +168,10 @@ export class LLMGoalPlanner extends EventEmitter {
       const executionResults: ToolResult[] = [];
       if (this.config.enableExecution && this.toolEngine) {
         for (const goal of goals) {
-          for (const call of goal.toolCalls.slice(0, this.config.maxToolCallsPerCycle)) {
+          for (const call of goal.toolCalls.slice(
+            0,
+            this.config.maxToolCallsPerCycle,
+          )) {
             const result = await this.toolEngine.execute(call);
             executionResults.push(result);
           }
@@ -169,19 +186,23 @@ export class LLMGoalPlanner extends EventEmitter {
       };
 
       this.totalTokensUsed += llmResponse.tokensUsed;
-      this.emit('planning_complete', {
+      this.emit("planning_complete", {
         planningCount: this.planningCount,
         goalsGenerated: goals.length,
         toolCallsExecuted: executionResults.length,
         duration: Date.now() - startTime,
       });
 
-      log.info(`Planning cycle ${this.planningCount}: ${goals.length} goals, ${executionResults.length} tool calls, ${Date.now() - startTime}ms`);
+      log.info(
+        `Planning cycle ${this.planningCount}: ${goals.length} goals, ${
+          executionResults.length
+        } tool calls, ${Date.now() - startTime}ms`,
+      );
 
       return result;
     } catch (error) {
-      log.error('Planning failed:', error);
-      this.emit('planning_failed', { error: String(error) });
+      log.error("Planning failed:", error);
+      this.emit("planning_failed", { error: String(error) });
 
       return {
         goals: [],
@@ -199,49 +220,73 @@ export class LLMGoalPlanner extends EventEmitter {
 
     // Percepts
     if (context.percepts.length > 0) {
-      sections.push('## Pending Percepts\n' +
-        context.percepts.map((p, i) =>
-          `${i + 1}. [${p.source}] (salience: ${p.salience.toFixed(2)}, valence: ${p.emotionalValence.toFixed(2)}): ${p.content}`
-        ).join('\n')
+      sections.push(
+        "## Pending Percepts\n" +
+          context.percepts
+            .map(
+              (p, i) =>
+                `${i + 1}. [${p.source}] (salience: ${p.salience.toFixed(
+                  2,
+                )}, valence: ${p.emotionalValence.toFixed(2)}): ${p.content}`,
+            )
+            .join("\n"),
       );
     } else {
-      sections.push('## Pending Percepts\nNone — idle state.');
+      sections.push("## Pending Percepts\nNone — idle state.");
     }
 
     // Active goals
     if (context.activeGoals.length > 0) {
-      sections.push('## Active Goals\n' +
-        context.activeGoals.map((g, i) =>
-          `${i + 1}. [${g.status}] (priority: ${g.priority}, attempts: ${g.attempts}/${g.maxAttempts}): ${g.description}`
-        ).join('\n')
+      sections.push(
+        "## Active Goals\n" +
+          context.activeGoals
+            .map(
+              (g, i) =>
+                `${i + 1}. [${g.status}] (priority: ${g.priority}, attempts: ${
+                  g.attempts
+                }/${g.maxAttempts}): ${g.description}`,
+            )
+            .join("\n"),
       );
     }
 
     // Recent memories
     if (context.recentMemories.length > 0) {
-      sections.push('## Recent Memories\n' +
-        context.recentMemories.slice(0, 5).join('\n')
+      sections.push(
+        "## Recent Memories\n" + context.recentMemories.slice(0, 5).join("\n"),
       );
     }
 
     // Cognitive state
     sections.push(`## Cognitive State
-- Emotional valence: ${context.emotionalState.toFixed(2)} (${context.emotionalState > 0.3 ? 'positive' : context.emotionalState < -0.3 ? 'negative' : 'neutral'})
+- Emotional valence: ${context.emotionalState.toFixed(2)} (${
+      context.emotionalState > 0.3
+        ? "positive"
+        : context.emotionalState < -0.3
+          ? "negative"
+          : "neutral"
+    })
 - Cognitive load: ${(context.cognitiveLoad * 100).toFixed(0)}%
-- Available tools: ${context.availableTools.join(', ')}`);
+- Available tools: ${context.availableTools.join(", ")}`);
 
-    sections.push('## Instructions\nAnalyze the above state. If action is needed, specify which tools to call and why. If no action is needed, explain why.');
+    sections.push(
+      "## Instructions\nAnalyze the above state. If action is needed, specify which tools to call and why. If no action is needed, explain why.",
+    );
 
-    return sections.join('\n\n');
+    return sections.join("\n\n");
   }
 
   // ─── LLM API Call ─────────────────────────────────────────────
 
   private async callLLM(
     userPrompt: string,
-    tools: ReturnType<ToolExecutionEngine['getToolsForLLM']>
-  ): Promise<{ reasoning: string; toolCalls: Array<{ name: string; arguments: Record<string, unknown> }>; tokensUsed: number }> {
-    if (this.config.provider === 'openai') {
+    tools: ReturnType<ToolExecutionEngine["getToolsForLLM"]>,
+  ): Promise<{
+    reasoning: string;
+    toolCalls: Array<{ name: string; arguments: Record<string, unknown> }>;
+    tokensUsed: number;
+  }> {
+    if (this.config.provider === "openai") {
       return this.callOpenAI(userPrompt, tools);
     } else {
       return this.callAnthropic(userPrompt, tools);
@@ -250,13 +295,17 @@ export class LLMGoalPlanner extends EventEmitter {
 
   private async callOpenAI(
     userPrompt: string,
-    tools: ReturnType<ToolExecutionEngine['getToolsForLLM']>
-  ): Promise<{ reasoning: string; toolCalls: Array<{ name: string; arguments: Record<string, unknown> }>; tokensUsed: number }> {
+    tools: ReturnType<ToolExecutionEngine["getToolsForLLM"]>,
+  ): Promise<{
+    reasoning: string;
+    toolCalls: Array<{ name: string; arguments: Record<string, unknown> }>;
+    tokensUsed: number;
+  }> {
     const body: Record<string, unknown> = {
       model: this.config.model,
       messages: [
-        { role: 'system', content: this.config.systemPrompt },
-        { role: 'user', content: userPrompt },
+        { role: "system", content: this.config.systemPrompt },
+        { role: "user", content: userPrompt },
       ],
       temperature: this.config.temperature,
       max_tokens: this.config.maxTokens,
@@ -264,23 +313,25 @@ export class LLMGoalPlanner extends EventEmitter {
 
     if (tools.length > 0) {
       body.tools = tools;
-      body.tool_choice = 'auto';
+      body.tool_choice = "auto";
     }
 
     const response = await fetch(this.config.apiEndpoint, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.config.apiKey}`,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${this.config.apiKey}`,
       },
       body: JSON.stringify(body),
     });
 
     if (!response.ok) {
-      throw new Error(`OpenAI API error: ${response.status} ${await response.text()}`);
+      throw new Error(
+        `OpenAI API error: ${response.status} ${await response.text()}`,
+      );
     }
 
-    const data = await response.json() as {
+    const data = (await response.json()) as {
       choices: Array<{
         message: {
           content: string | null;
@@ -293,8 +344,8 @@ export class LLMGoalPlanner extends EventEmitter {
     };
 
     const message = data.choices[0]?.message;
-    const reasoning = message?.content || '';
-    const toolCalls = (message?.tool_calls || []).map(tc => ({
+    const reasoning = message?.content || "";
+    const toolCalls = (message?.tool_calls || []).map((tc) => ({
       name: tc.function.name,
       arguments: JSON.parse(tc.function.arguments),
     }));
@@ -308,9 +359,13 @@ export class LLMGoalPlanner extends EventEmitter {
 
   private async callAnthropic(
     userPrompt: string,
-    tools: ReturnType<ToolExecutionEngine['getToolsForLLM']>
-  ): Promise<{ reasoning: string; toolCalls: Array<{ name: string; arguments: Record<string, unknown> }>; tokensUsed: number }> {
-    const anthropicTools = tools.map(t => ({
+    tools: ReturnType<ToolExecutionEngine["getToolsForLLM"]>,
+  ): Promise<{
+    reasoning: string;
+    toolCalls: Array<{ name: string; arguments: Record<string, unknown> }>;
+    tokensUsed: number;
+  }> {
+    const anthropicTools = tools.map((t) => ({
       name: t.function.name,
       description: t.function.description,
       input_schema: t.function.parameters,
@@ -320,7 +375,7 @@ export class LLMGoalPlanner extends EventEmitter {
       model: this.config.model,
       max_tokens: this.config.maxTokens,
       system: this.config.systemPrompt,
-      messages: [{ role: 'user', content: userPrompt }],
+      messages: [{ role: "user", content: userPrompt }],
       temperature: this.config.temperature,
     };
 
@@ -329,33 +384,43 @@ export class LLMGoalPlanner extends EventEmitter {
     }
 
     const response = await fetch(this.config.apiEndpoint, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': this.config.apiKey,
-        'anthropic-version': '2023-06-01',
+        "Content-Type": "application/json",
+        "x-api-key": this.config.apiKey,
+        "anthropic-version": "2023-06-01",
       },
       body: JSON.stringify(body),
     });
 
     if (!response.ok) {
-      throw new Error(`Anthropic API error: ${response.status} ${await response.text()}`);
+      throw new Error(
+        `Anthropic API error: ${response.status} ${await response.text()}`,
+      );
     }
 
-    const data = await response.json() as {
-      content: Array<{ type: string; text?: string; name?: string; input?: Record<string, unknown> }>;
+    const data = (await response.json()) as {
+      content: Array<{
+        type: string;
+        text?: string;
+        name?: string;
+        input?: Record<string, unknown>;
+      }>;
       usage?: { input_tokens: number; output_tokens: number };
     };
 
-    let reasoning = '';
-    const toolCalls: Array<{ name: string; arguments: Record<string, unknown> }> = [];
+    let reasoning = "";
+    const toolCalls: Array<{
+      name: string;
+      arguments: Record<string, unknown>;
+    }> = [];
 
     for (const block of data.content) {
-      if (block.type === 'text') {
-        reasoning += block.text || '';
-      } else if (block.type === 'tool_use') {
+      if (block.type === "text") {
+        reasoning += block.text || "";
+      } else if (block.type === "tool_use") {
         toolCalls.push({
-          name: block.name || '',
+          name: block.name || "",
           arguments: block.input || {},
         });
       }
@@ -364,15 +429,17 @@ export class LLMGoalPlanner extends EventEmitter {
     return {
       reasoning,
       toolCalls,
-      tokensUsed: (data.usage?.input_tokens || 0) + (data.usage?.output_tokens || 0),
+      tokensUsed:
+        (data.usage?.input_tokens || 0) + (data.usage?.output_tokens || 0),
     };
   }
 
   // ─── Response Parsing ─────────────────────────────────────────
 
-  private parseGoals(
-    llmResponse: { reasoning: string; toolCalls: Array<{ name: string; arguments: Record<string, unknown> }> }
-  ): PlanningResult['goals'] {
+  private parseGoals(llmResponse: {
+    reasoning: string;
+    toolCalls: Array<{ name: string; arguments: Record<string, unknown> }>;
+  }): PlanningResult["goals"] {
     if (llmResponse.toolCalls.length === 0) {
       // No tool calls — the LLM decided no action is needed
       return [];
@@ -386,11 +453,14 @@ export class LLMGoalPlanner extends EventEmitter {
       timestamp: Date.now(),
     }));
 
-    return [{
-      description: llmResponse.reasoning.slice(0, 200) || 'LLM-planned action',
-      priority: 8, // LLM-planned goals are high priority
-      toolCalls,
-    }];
+    return [
+      {
+        description:
+          llmResponse.reasoning.slice(0, 200) || "LLM-planned action",
+        priority: 8, // LLM-planned goals are high priority
+        toolCalls,
+      },
+    ];
   }
 
   // ─── Statistics ───────────────────────────────────────────────

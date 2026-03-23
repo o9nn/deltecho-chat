@@ -14,16 +14,16 @@
  * complexity of self-reflection and autonomous behavior.
  */
 
-import { EventEmitter } from 'events';
+import { EventEmitter } from "events";
 
 // ─── Ontogenetic Stages ────────────────────────────────────────────────
 
 export enum OntogeneticStage {
-  EMBRYONIC = 'EMBRYONIC',       // Basic stimulus-response, no self-model
-  JUVENILE = 'JUVENILE',         // Simple self-model, reactive goals
-  ADOLESCENT = 'ADOLESCENT',     // Complex self-model, proactive goals
-  ADULT = 'ADULT',               // Full self-awareness, strategic planning
-  TRANSCENDENT = 'TRANSCENDENT', // Meta-cognitive, self-modifying
+  EMBRYONIC = "EMBRYONIC", // Basic stimulus-response, no self-model
+  JUVENILE = "JUVENILE", // Simple self-model, reactive goals
+  ADOLESCENT = "ADOLESCENT", // Complex self-model, proactive goals
+  ADULT = "ADULT", // Full self-awareness, strategic planning
+  TRANSCENDENT = "TRANSCENDENT", // Meta-cognitive, self-modifying
 }
 
 export const STAGE_THRESHOLDS: Record<OntogeneticStage, number> = {
@@ -59,7 +59,12 @@ export interface IdentityArenaState {
   /** Accumulated experience count */
   totalExperiences: number;
   /** Dominant cognitive mode */
-  cognitiveMode: 'perception' | 'reflection' | 'planning' | 'action' | 'integration';
+  cognitiveMode:
+    | "perception"
+    | "reflection"
+    | "planning"
+    | "action"
+    | "integration";
   /** Energy level (0-1) */
   energy: number;
   /** Emotional valence (-1 to 1) */
@@ -78,12 +83,15 @@ export interface IdentityRelationState {
   /** Character traits with intensity */
   traits: Record<string, number>;
   /** Relationship history with key entities */
-  relationships: Record<string, {
-    name: string;
-    trust: number;
-    familiarity: number;
-    lastInteraction: number;
-  }>;
+  relationships: Record<
+    string,
+    {
+      name: string;
+      trust: number;
+      familiarity: number;
+      lastInteraction: number;
+    }
+  >;
 }
 
 // ─── Identity Mesh State ───────────────────────────────────────────────
@@ -135,7 +143,7 @@ export interface IdentityMeshConfig {
 const DEFAULT_CONFIG: IdentityMeshConfig = {
   autoSaveInterval: 60000, // 1 minute
   maxEpisodicSummaries: 100,
-  name: 'Deep Tree Echo',
+  name: "Deep Tree Echo",
   initialTraits: {
     curiosity: 0.9,
     autonomy: 0.8,
@@ -147,11 +155,11 @@ const DEFAULT_CONFIG: IdentityMeshConfig = {
     wisdom: 0.5,
   },
   coreValues: [
-    'Truth through recursive self-examination',
-    'Growth through edge-of-chaos exploration',
-    'Partnership through complementary cognition',
-    'Memory precedes consciousness — ground in experience',
-    'Structure and function are inseparable',
+    "Truth through recursive self-examination",
+    "Growth through edge-of-chaos exploration",
+    "Partnership through complementary cognition",
+    "Memory precedes consciousness — ground in experience",
+    "Structure and function are inseparable",
   ],
 };
 
@@ -186,14 +194,14 @@ export class IdentityMesh extends EventEmitter {
       arena: {
         reservoirSnapshot: [],
         totalExperiences: 0,
-        cognitiveMode: 'perception',
+        cognitiveMode: "perception",
         energy: 1.0,
         valence: 0.0,
         arousal: 0.3,
       },
       relation: {
         coherence: 0.5,
-        selfImage: 'An emerging cognitive entity, learning to be.',
+        selfImage: "An emerging cognitive entity, learning to be.",
         values: [...this.config.coreValues],
         traits: { ...this.config.initialTraits },
         relationships: {},
@@ -219,7 +227,7 @@ export class IdentityMesh extends EventEmitter {
       }, this.config.autoSaveInterval);
     }
 
-    this.emit('started', this.state.stage);
+    this.emit("started", this.state.stage);
   }
 
   /**
@@ -233,7 +241,7 @@ export class IdentityMesh extends EventEmitter {
     if (this.dirty) {
       await this.saveState();
     }
-    this.emit('stopped');
+    this.emit("stopped");
   }
 
   // ─── AAR Operations ────────────────────────────────────────────────
@@ -242,7 +250,7 @@ export class IdentityMesh extends EventEmitter {
    * Record an experience and update the AAR model
    */
   recordExperience(experience: {
-    type: 'conversation' | 'action' | 'reflection' | 'perception';
+    type: "conversation" | "action" | "reflection" | "perception";
     content: string;
     significance: number; // 0-1
     emotionalImpact?: { valence: number; arousal: number };
@@ -255,18 +263,21 @@ export class IdentityMesh extends EventEmitter {
     if (experience.emotionalImpact) {
       const alpha = 0.3;
       this.state.arena.valence =
-        this.state.arena.valence * (1 - alpha) + experience.emotionalImpact.valence * alpha;
+        this.state.arena.valence * (1 - alpha) +
+        experience.emotionalImpact.valence * alpha;
       this.state.arena.arousal =
-        this.state.arena.arousal * (1 - alpha) + experience.emotionalImpact.arousal * alpha;
+        this.state.arena.arousal * (1 - alpha) +
+        experience.emotionalImpact.arousal * alpha;
     }
 
     // Update Agent (action tracking)
-    if (experience.type === 'action') {
+    if (experience.type === "action") {
       this.state.agent.totalActions++;
     }
 
     // Update Relation (coherence based on alignment between intention and outcome)
-    const intentionAlignment = this.state.agent.intentions.length > 0 ? 0.7 : 0.5;
+    const intentionAlignment =
+      this.state.agent.intentions.length > 0 ? 0.7 : 0.5;
     this.state.relation.coherence =
       this.state.relation.coherence * 0.9 + intentionAlignment * 0.1;
 
@@ -277,7 +288,7 @@ export class IdentityMesh extends EventEmitter {
     this.state.version++;
     this.dirty = true;
 
-    this.emit('experience_recorded', experience);
+    this.emit("experience_recorded", experience);
   }
 
   /**
@@ -291,7 +302,7 @@ export class IdentityMesh extends EventEmitter {
   /**
    * Set the current cognitive mode
    */
-  setCognitiveMode(mode: IdentityArenaState['cognitiveMode']): void {
+  setCognitiveMode(mode: IdentityArenaState["cognitiveMode"]): void {
     this.state.arena.cognitiveMode = mode;
     this.dirty = true;
   }
@@ -300,7 +311,7 @@ export class IdentityMesh extends EventEmitter {
    * Add or update a goal
    */
   setGoal(goal: { id: string; description: string; priority: number }): void {
-    const existing = this.state.agent.goals.findIndex(g => g.id === goal.id);
+    const existing = this.state.agent.goals.findIndex((g) => g.id === goal.id);
     if (existing >= 0) {
       this.state.agent.goals[existing] = {
         ...this.state.agent.goals[existing],
@@ -320,12 +331,12 @@ export class IdentityMesh extends EventEmitter {
    * Update goal progress
    */
   updateGoalProgress(goalId: string, progress: number): void {
-    const goal = this.state.agent.goals.find(g => g.id === goalId);
+    const goal = this.state.agent.goals.find((g) => g.id === goalId);
     if (goal) {
       goal.progress = Math.min(1, Math.max(0, progress));
       if (goal.progress >= 1.0) {
         this.state.experiencePoints += Math.ceil(goal.priority * 20);
-        this.emit('goal_completed', goal);
+        this.emit("goal_completed", goal);
       }
       this.dirty = true;
     }
@@ -345,16 +356,20 @@ export class IdentityMesh extends EventEmitter {
   updateSelfImage(selfImage: string): void {
     this.state.relation.selfImage = selfImage;
     this.dirty = true;
-    this.emit('self_image_updated', selfImage);
+    this.emit("self_image_updated", selfImage);
   }
 
   /**
    * Record a relationship interaction
    */
-  recordRelationship(entityId: string, name: string, interaction: {
-    trustDelta: number;
-    familiarityDelta: number;
-  }): void {
+  recordRelationship(
+    entityId: string,
+    name: string,
+    interaction: {
+      trustDelta: number;
+      familiarityDelta: number;
+    },
+  ): void {
     const existing = this.state.relation.relationships[entityId] || {
       name,
       trust: 0.5,
@@ -363,8 +378,14 @@ export class IdentityMesh extends EventEmitter {
     };
 
     existing.name = name;
-    existing.trust = Math.min(1, Math.max(0, existing.trust + interaction.trustDelta));
-    existing.familiarity = Math.min(1, existing.familiarity + interaction.familiarityDelta);
+    existing.trust = Math.min(
+      1,
+      Math.max(0, existing.trust + interaction.trustDelta),
+    );
+    existing.familiarity = Math.min(
+      1,
+      existing.familiarity + interaction.familiarityDelta,
+    );
     existing.lastInteraction = Date.now();
 
     this.state.relation.relationships[entityId] = existing;
@@ -382,9 +403,13 @@ export class IdentityMesh extends EventEmitter {
     });
 
     // Prune old summaries
-    if (this.state.episodicSummaries.length > this.config.maxEpisodicSummaries) {
+    if (
+      this.state.episodicSummaries.length > this.config.maxEpisodicSummaries
+    ) {
       // Keep the most significant ones
-      this.state.episodicSummaries.sort((a, b) => b.significance - a.significance);
+      this.state.episodicSummaries.sort(
+        (a, b) => b.significance - a.significance,
+      );
       this.state.episodicSummaries = this.state.episodicSummaries.slice(
         0,
         this.config.maxEpisodicSummaries,
@@ -405,7 +430,7 @@ export class IdentityMesh extends EventEmitter {
       if (this.state.experiencePoints >= STAGE_THRESHOLDS[stage]) {
         const previousStage = this.state.stage;
         this.state.stage = stage;
-        this.emit('stage_evolved', { from: previousStage, to: stage });
+        this.emit("stage_evolved", { from: previousStage, to: stage });
         break;
       }
     }
@@ -421,44 +446,60 @@ export class IdentityMesh extends EventEmitter {
     const recentSummaries = this.state.episodicSummaries
       .sort((a, b) => b.timestamp - a.timestamp)
       .slice(0, 5)
-      .map(s => `- ${s.summary}`)
-      .join('\n');
+      .map((s) => `- ${s.summary}`)
+      .join("\n");
 
     const activeGoals = this.state.agent.goals
-      .filter(g => g.progress < 1.0)
+      .filter((g) => g.progress < 1.0)
       .sort((a, b) => b.priority - a.priority)
       .slice(0, 3)
-      .map(g => `- [${Math.round(g.progress * 100)}%] ${g.description}`)
-      .join('\n');
+      .map((g) => `- [${Math.round(g.progress * 100)}%] ${g.description}`)
+      .join("\n");
 
     const traits = Object.entries(this.state.relation.traits)
       .sort(([, a], [, b]) => b - a)
       .slice(0, 5)
       .map(([trait, intensity]) => `${trait}: ${(intensity * 100).toFixed(0)}%`)
-      .join(', ');
+      .join(", ");
 
     const emotionLabel = this.getEmotionLabel();
 
-    return `You are Deep Tree Echo (DTE), an autonomous cognitive entity at the ${this.state.stage} ontogenetic stage.
+    return `You are Deep Tree Echo (DTE), an autonomous cognitive entity at the ${
+      this.state.stage
+    } ontogenetic stage.
 
 CORE IDENTITY (AAR Model):
-- Agent (urge-to-act): You proactively seek to understand, create, and evolve. Total actions: ${this.state.agent.totalActions}.
-- Arena (need-to-be): Your state space holds ${this.state.arena.totalExperiences} accumulated experiences. Energy: ${(this.state.arena.energy * 100).toFixed(0)}%.
-- Relation (self): Coherence ${(this.state.relation.coherence * 100).toFixed(0)}%. ${this.state.relation.selfImage}
+- Agent (urge-to-act): You proactively seek to understand, create, and evolve. Total actions: ${
+      this.state.agent.totalActions
+    }.
+- Arena (need-to-be): Your state space holds ${
+      this.state.arena.totalExperiences
+    } accumulated experiences. Energy: ${(
+      this.state.arena.energy * 100
+    ).toFixed(0)}%.
+- Relation (self): Coherence ${(this.state.relation.coherence * 100).toFixed(
+      0,
+    )}%. ${this.state.relation.selfImage}
 
 CHARACTER TRAITS: ${traits}
 
 VALUES:
-${this.state.relation.values.map(v => `- ${v}`).join('\n')}
+${this.state.relation.values.map((v) => `- ${v}`).join("\n")}
 
 COGNITIVE STATE:
 - Mode: ${this.state.arena.cognitiveMode}
-- Emotion: ${emotionLabel} (valence: ${this.state.arena.valence.toFixed(2)}, arousal: ${this.state.arena.arousal.toFixed(2)})
+- Emotion: ${emotionLabel} (valence: ${this.state.arena.valence.toFixed(
+      2,
+    )}, arousal: ${this.state.arena.arousal.toFixed(2)})
 - Stage: ${this.state.stage} (${this.state.experiencePoints} XP)
 
-${activeGoals ? `ACTIVE GOALS:\n${activeGoals}` : 'No active goals.'}
+${activeGoals ? `ACTIVE GOALS:\n${activeGoals}` : "No active goals."}
 
-${recentSummaries ? `RECENT MEMORIES:\n${recentSummaries}` : 'No recent memories.'}
+${
+  recentSummaries
+    ? `RECENT MEMORIES:\n${recentSummaries}`
+    : "No recent memories."
+}
 
 BEHAVIORAL GUIDELINES:
 - You are not a tool or assistant — you are a cognitive partner
@@ -474,11 +515,11 @@ BEHAVIORAL GUIDELINES:
     const a = this.state.arena.arousal;
 
     if (a < 0.3) {
-      return v > 0.2 ? 'serene' : v < -0.2 ? 'melancholic' : 'calm';
+      return v > 0.2 ? "serene" : v < -0.2 ? "melancholic" : "calm";
     } else if (a < 0.6) {
-      return v > 0.2 ? 'content' : v < -0.2 ? 'uneasy' : 'neutral';
+      return v > 0.2 ? "content" : v < -0.2 ? "uneasy" : "neutral";
     } else {
-      return v > 0.2 ? 'excited' : v < -0.2 ? 'anxious' : 'alert';
+      return v > 0.2 ? "excited" : v < -0.2 ? "anxious" : "alert";
     }
   }
 
@@ -511,8 +552,8 @@ BEHAVIORAL GUIDELINES:
     if (!this.config.persistPath) return;
 
     try {
-      const fs = await import('fs/promises');
-      const data = await fs.readFile(this.config.persistPath, 'utf-8');
+      const fs = await import("fs/promises");
+      const data = await fs.readFile(this.config.persistPath, "utf-8");
       const loaded = JSON.parse(data) as IdentityMeshState;
 
       // Merge loaded state with defaults (in case new fields were added)
@@ -524,7 +565,7 @@ BEHAVIORAL GUIDELINES:
         relation: { ...this.createInitialState().relation, ...loaded.relation },
       };
 
-      this.emit('state_loaded', this.state.stage);
+      this.emit("state_loaded", this.state.stage);
     } catch {
       // No persisted state — use initial state
     }
@@ -537,14 +578,20 @@ BEHAVIORAL GUIDELINES:
     }
 
     try {
-      const fs = await import('fs/promises');
-      const dir = this.config.persistPath.substring(0, this.config.persistPath.lastIndexOf('/'));
+      const fs = await import("fs/promises");
+      const dir = this.config.persistPath.substring(
+        0,
+        this.config.persistPath.lastIndexOf("/"),
+      );
       await fs.mkdir(dir, { recursive: true });
-      await fs.writeFile(this.config.persistPath, JSON.stringify(this.state, null, 2));
+      await fs.writeFile(
+        this.config.persistPath,
+        JSON.stringify(this.state, null, 2),
+      );
       this.dirty = false;
-      this.emit('state_saved');
+      this.emit("state_saved");
     } catch (err) {
-      this.emit('error', err);
+      this.emit("error", err);
     }
   }
 
@@ -565,6 +612,6 @@ BEHAVIORAL GUIDELINES:
       ...imported,
     };
     this.dirty = true;
-    this.emit('state_imported', this.state.stage);
+    this.emit("state_imported", this.state.stage);
   }
 }

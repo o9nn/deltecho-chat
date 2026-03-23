@@ -15,7 +15,7 @@
  *   - System prompt injection for identity embedding
  */
 
-import { EventEmitter } from 'events';
+import { EventEmitter } from "events";
 
 // ─── Types ─────────────────────────────────────────────────────────────
 
@@ -43,7 +43,7 @@ export interface LucyDriverConfig {
 }
 
 export interface ChatMessage {
-  role: 'system' | 'user' | 'assistant';
+  role: "system" | "user" | "assistant";
   content: string;
 }
 
@@ -53,7 +53,7 @@ export interface InferenceResult {
   tokensPrompt: number;
   durationMs: number;
   tokensPerSecond: number;
-  finishReason: 'stop' | 'length' | 'error';
+  finishReason: "stop" | "length" | "error";
 }
 
 export interface InferenceMetrics {
@@ -70,8 +70,8 @@ export interface InferenceMetrics {
 // ─── Default Configuration ─────────────────────────────────────────────
 
 const DEFAULT_CONFIG: LucyDriverConfig = {
-  baseUrl: 'http://localhost:8080',
-  modelName: 'lucy-128k',
+  baseUrl: "http://localhost:8080",
+  modelName: "lucy-128k",
   maxTokens: 512,
   temperature: 0.7,
   topP: 0.9,
@@ -116,14 +116,14 @@ export class LucyInferenceDriver extends EventEmitter {
         const wasHealthy = this.metrics.isHealthy;
         this.metrics.isHealthy = await this.checkHealth();
         if (!wasHealthy && this.metrics.isHealthy) {
-          this.emit('reconnected');
+          this.emit("reconnected");
         } else if (wasHealthy && !this.metrics.isHealthy) {
-          this.emit('disconnected');
+          this.emit("disconnected");
         }
       }, this.config.healthCheckInterval);
     }
 
-    this.emit('started', { healthy: this.metrics.isHealthy });
+    this.emit("started", { healthy: this.metrics.isHealthy });
   }
 
   async stop(): Promise<void> {
@@ -138,7 +138,7 @@ export class LucyInferenceDriver extends EventEmitter {
     }
     this.abortControllers.clear();
 
-    this.emit('stopped');
+    this.emit("stopped");
   }
 
   // ─── Inference ─────────────────────────────────────────────────────
@@ -176,19 +176,26 @@ export class LucyInferenceDriver extends EventEmitter {
 
       for (let attempt = 0; attempt <= this.config.retries; attempt++) {
         try {
-          const response = await fetch(`${this.config.baseUrl}/v1/chat/completions`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body),
-            signal: controller.signal,
-          });
+          const response = await fetch(
+            `${this.config.baseUrl}/v1/chat/completions`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(body),
+              signal: controller.signal,
+            },
+          );
 
           if (!response.ok) {
-            const errorText = await response.text().catch(() => 'Unknown error');
-            throw new Error(`Inference server error ${response.status}: ${errorText}`);
+            const errorText = await response
+              .text()
+              .catch(() => "Unknown error");
+            throw new Error(
+              `Inference server error ${response.status}: ${errorText}`,
+            );
           }
 
-          const data = await response.json() as {
+          const data = (await response.json()) as {
             choices: Array<{
               message: { content: string };
               finish_reason: string;
@@ -205,12 +212,14 @@ export class LucyInferenceDriver extends EventEmitter {
           const tokensPrompt = data.usage?.prompt_tokens ?? 0;
 
           const result: InferenceResult = {
-            content: data.choices[0]?.message?.content ?? '',
+            content: data.choices[0]?.message?.content ?? "",
             tokensGenerated,
             tokensPrompt,
             durationMs,
-            tokensPerSecond: tokensGenerated > 0 ? (tokensGenerated / durationMs) * 1000 : 0,
-            finishReason: (data.choices[0]?.finish_reason as 'stop' | 'length') ?? 'stop',
+            tokensPerSecond:
+              tokensGenerated > 0 ? (tokensGenerated / durationMs) * 1000 : 0,
+            finishReason:
+              (data.choices[0]?.finish_reason as "stop" | "length") ?? "stop",
           };
 
           // Update metrics
@@ -220,24 +229,26 @@ export class LucyInferenceDriver extends EventEmitter {
           this.metrics.totalDurationMs += durationMs;
           this.metrics.averageTokensPerSecond =
             this.metrics.totalTokensGenerated > 0
-              ? (this.metrics.totalTokensGenerated / this.metrics.totalDurationMs) * 1000
+              ? (this.metrics.totalTokensGenerated /
+                  this.metrics.totalDurationMs) *
+                1000
               : 0;
           this.metrics.lastRequestAt = Date.now();
           this.metrics.isHealthy = true;
 
-          this.emit('inference_complete', result);
+          this.emit("inference_complete", result);
           return result;
         } catch (err) {
           lastError = err as Error;
           if (attempt < this.config.retries) {
-            await new Promise(r => setTimeout(r, 1000 * (attempt + 1)));
+            await new Promise((r) => setTimeout(r, 1000 * (attempt + 1)));
           }
         }
       }
 
       // All retries exhausted
       this.metrics.errors++;
-      throw lastError ?? new Error('Inference failed after retries');
+      throw lastError ?? new Error("Inference failed after retries");
     } finally {
       this.abortControllers.delete(controller);
     }
@@ -268,12 +279,15 @@ export class LucyInferenceDriver extends EventEmitter {
         stop: options.stop,
       };
 
-      const response = await fetch(`${this.config.baseUrl}/v1/chat/completions`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-        signal: controller.signal,
-      });
+      const response = await fetch(
+        `${this.config.baseUrl}/v1/chat/completions`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+          signal: controller.signal,
+        },
+      );
 
       if (!response.ok || !response.body) {
         throw new Error(`Stream error: ${response.status}`);
@@ -281,18 +295,18 @@ export class LucyInferenceDriver extends EventEmitter {
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
-      let buffer = '';
+      let buffer = "";
 
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
 
         buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split('\n');
-        buffer = lines.pop() ?? '';
+        const lines = buffer.split("\n");
+        buffer = lines.pop() ?? "";
 
         for (const line of lines) {
-          if (line.startsWith('data: ') && line !== 'data: [DONE]') {
+          if (line.startsWith("data: ") && line !== "data: [DONE]") {
             try {
               const data = JSON.parse(line.slice(6)) as {
                 choices: Array<{ delta: { content?: string } }>;
@@ -325,10 +339,7 @@ export class LucyInferenceDriver extends EventEmitter {
     prompt: string,
     options: Partial<{ maxTokens: number; temperature: number }> = {},
   ): Promise<InferenceResult> {
-    return this.chatCompletion(
-      [{ role: 'user', content: prompt }],
-      options,
-    );
+    return this.chatCompletion([{ role: "user", content: prompt }], options);
   }
 
   /**
@@ -337,8 +348,8 @@ export class LucyInferenceDriver extends EventEmitter {
   async generateEmbedding(text: string): Promise<number[]> {
     try {
       const response = await fetch(`${this.config.baseUrl}/v1/embeddings`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           model: this.config.modelName,
           input: text,
@@ -349,7 +360,7 @@ export class LucyInferenceDriver extends EventEmitter {
         throw new Error(`Embedding error: ${response.status}`);
       }
 
-      const data = await response.json() as {
+      const data = (await response.json()) as {
         data: Array<{ embedding: number[] }>;
       };
 

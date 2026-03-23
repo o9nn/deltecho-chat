@@ -24,10 +24,10 @@
  *   λ = forgetting factor (0.99 = slow forget, 0.9 = fast adapt)
  */
 
-import { EventEmitter } from 'events';
-import { getLogger } from '../utils/logger.js';
+import { EventEmitter } from "events";
+import { getLogger } from "../utils/logger.js";
 
-const log = getLogger('deep-tree-echo-core/OnlineReservoirLearner');
+const log = getLogger("deep-tree-echo-core/OnlineReservoirLearner");
 
 // ─── Types ─────────────────────────────────────────────────────
 
@@ -79,7 +79,7 @@ export interface FeedbackSignal {
   /** Timestamp */
   timestamp: number;
   /** Source of feedback */
-  source: 'user' | 'self-evaluation' | 'coherence' | 'reservoir';
+  source: "user" | "self-evaluation" | "coherence" | "reservoir";
 }
 
 export interface LearningUpdate {
@@ -118,9 +118,9 @@ export class OnlineReservoirLearner extends EventEmitter {
   private config: OnlineLearnerConfig;
 
   // Core RLS state
-  private weights: Float64Array;     // W: [outputDim x reservoirDim]
-  private pMatrix: Float64Array;     // P: [reservoirDim x reservoirDim]
-  private momentum: Float64Array;    // M: [outputDim x reservoirDim]
+  private weights: Float64Array; // W: [outputDim x reservoirDim]
+  private pMatrix: Float64Array; // P: [reservoirDim x reservoirDim]
+  private momentum: Float64Array; // M: [outputDim x reservoirDim]
 
   // Statistics
   private totalUpdates = 0;
@@ -155,13 +155,16 @@ export class OnlineReservoirLearner extends EventEmitter {
    * This is the core online learning step.
    */
   update(feedback: FeedbackSignal): LearningUpdate {
-    const { reservoirDim, outputDim, forgettingFactor, learningRateScale } = this.config;
+    const { reservoirDim, outputDim, forgettingFactor, learningRateScale } =
+      this.config;
     const x = feedback.reservoirState;
     const y = feedback.targetOutput;
 
     // Validate dimensions
     if (x.length !== reservoirDim) {
-      throw new Error(`Reservoir state dim ${x.length} != expected ${reservoirDim}`);
+      throw new Error(
+        `Reservoir state dim ${x.length} != expected ${reservoirDim}`,
+      );
     }
     if (y.length !== outputDim) {
       throw new Error(`Target output dim ${y.length} != expected ${outputDim}`);
@@ -220,7 +223,8 @@ export class OnlineReservoirLearner extends EventEmitter {
 
         if (this.config.enableMomentum) {
           const idx = i * reservoirDim + j;
-          this.momentum[idx] = this.config.momentumCoeff * this.momentum[idx] + delta;
+          this.momentum[idx] =
+            this.config.momentumCoeff * this.momentum[idx] + delta;
           this.weights[idx] += this.momentum[idx];
         } else {
           this.weights[i * reservoirDim + j] += delta;
@@ -239,7 +243,8 @@ export class OnlineReservoirLearner extends EventEmitter {
     for (let i = 0; i < reservoirDim; i++) {
       for (let j = 0; j < reservoirDim; j++) {
         this.pMatrix[i * reservoirDim + j] =
-          (this.pMatrix[i * reservoirDim + j] - K[i] * Px[j]) / forgettingFactor;
+          (this.pMatrix[i * reservoirDim + j] - K[i] * Px[j]) /
+          forgettingFactor;
       }
     }
 
@@ -266,11 +271,15 @@ export class OnlineReservoirLearner extends EventEmitter {
       this.updateHistory.shift();
     }
 
-    this.emit('update', update);
+    this.emit("update", update);
 
     if (this.totalUpdates % 100 === 0) {
       log.info(
-        `RLS update #${this.totalUpdates}: err=${errorMag.toFixed(4)}, ΔW=${weightChangeMag.toFixed(6)}, reward=${feedback.reward.toFixed(2)}`
+        `RLS update #${this.totalUpdates}: err=${errorMag.toFixed(
+          4,
+        )}, ΔW=${weightChangeMag.toFixed(6)}, reward=${feedback.reward.toFixed(
+          2,
+        )}`,
       );
     }
 
@@ -311,7 +320,10 @@ export class OnlineReservoirLearner extends EventEmitter {
    */
   getAvgPredictionError(): number {
     if (this.predictionErrors.length === 0) return 0;
-    return this.predictionErrors.reduce((a, b) => a + b, 0) / this.predictionErrors.length;
+    return (
+      this.predictionErrors.reduce((a, b) => a + b, 0) /
+      this.predictionErrors.length
+    );
   }
 
   /**
@@ -379,7 +391,8 @@ export class OnlineReservoirLearner extends EventEmitter {
       cumulativeReward: this.cumulativeReward,
       avgPredictionError: this.getAvgPredictionError(),
       weightNorm: this.getWeightNorm(),
-      avgReward: this.totalUpdates > 0 ? this.cumulativeReward / this.totalUpdates : 0,
+      avgReward:
+        this.totalUpdates > 0 ? this.cumulativeReward / this.totalUpdates : 0,
     };
   }
 

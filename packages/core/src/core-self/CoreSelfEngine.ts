@@ -19,10 +19,25 @@
  *   5. Return response with cognitive metadata
  */
 
-import { EventEmitter } from 'events';
-import { IdentityMesh, type IdentityMeshConfig, type OntogeneticStage } from './IdentityMesh.js';
-import { LucyInferenceDriver, type LucyDriverConfig, type ChatMessage, type InferenceResult } from './LucyInferenceDriver.js';
-import { EchoReservoir, CognitiveReadout, AARRelation, type AARState, type ESNReservoirConfig } from './ReservoirBridge.js';
+import { EventEmitter } from "events";
+import {
+  IdentityMesh,
+  type IdentityMeshConfig,
+  type OntogeneticStage,
+} from "./IdentityMesh.js";
+import {
+  LucyInferenceDriver,
+  type LucyDriverConfig,
+  type ChatMessage,
+  type InferenceResult,
+} from "./LucyInferenceDriver.js";
+import {
+  EchoReservoir,
+  CognitiveReadout,
+  AARRelation,
+  type AARState,
+  type ESNReservoirConfig,
+} from "./ReservoirBridge.js";
 
 // ─── Types ─────────────────────────────────────────────────────────────
 
@@ -55,7 +70,7 @@ export interface CoreSelfResponse {
   /** Generated text response */
   content: string;
   /** Which layer generated the response */
-  source: 'core-self' | 'api-augmented' | 'fallback';
+  source: "core-self" | "api-augmented" | "fallback";
   /** AAR state at time of generation */
   aarState: {
     coherence: number;
@@ -127,14 +142,19 @@ export class CoreSelfEngine extends EventEmitter {
     this.identity = new IdentityMesh(this.config.identity);
 
     // Wire events
-    this.aar.on('cycle_complete', (state: AARState) => {
-      this.identity.updateReservoirState(Array.from(state.arenaState.slice(0, 32)));
-      this.emit('aar_cycle', state);
+    this.aar.on("cycle_complete", (state: AARState) => {
+      this.identity.updateReservoirState(
+        Array.from(state.arenaState.slice(0, 32)),
+      );
+      this.emit("aar_cycle", state);
     });
 
-    this.identity.on('stage_evolved', (evolution: { from: string; to: string }) => {
-      this.emit('stage_evolved', evolution);
-    });
+    this.identity.on(
+      "stage_evolved",
+      (evolution: { from: string; to: string }) => {
+        this.emit("stage_evolved", evolution);
+      },
+    );
   }
 
   // ─── Lifecycle ─────────────────────────────────────────────────────
@@ -143,7 +163,7 @@ export class CoreSelfEngine extends EventEmitter {
     await this.identity.start();
     await this.lucy.start();
     this.running = true;
-    this.emit('started', {
+    this.emit("started", {
       lucyHealthy: this.lucy.isHealthy(),
       stage: this.identity.getStage(),
     });
@@ -153,7 +173,7 @@ export class CoreSelfEngine extends EventEmitter {
     this.running = false;
     await this.lucy.stop();
     await this.identity.stop();
-    this.emit('stopped');
+    this.emit("stopped");
   }
 
   // ─── Core Processing Pipeline ──────────────────────────────────────
@@ -162,7 +182,10 @@ export class CoreSelfEngine extends EventEmitter {
    * Process a user message through the full cognitive pipeline.
    * This is the primary interface for conversation.
    */
-  async processMessage(userMessage: string, context?: string): Promise<CoreSelfResponse> {
+  async processMessage(
+    userMessage: string,
+    context?: string,
+  ): Promise<CoreSelfResponse> {
     const startTime = Date.now();
 
     // Step 1: Embed the input for the reservoir
@@ -178,7 +201,7 @@ export class CoreSelfEngine extends EventEmitter {
     const systemPrompt = this.identity.generateSystemPrompt();
 
     // Add reservoir state context if available
-    let cognitiveContext = '';
+    let cognitiveContext = "";
     if (aarState) {
       cognitiveContext = `\n\nCOGNITIVE DYNAMICS:
 - Reservoir energy: ${aarState.energy.toFixed(3)}
@@ -191,51 +214,57 @@ export class CoreSelfEngine extends EventEmitter {
     }
 
     const messages: ChatMessage[] = [
-      { role: 'system', content: systemPrompt + cognitiveContext },
+      { role: "system", content: systemPrompt + cognitiveContext },
       ...this.conversationHistory.slice(-this.config.maxConversationHistory),
-      { role: 'user', content: userMessage },
+      { role: "user", content: userMessage },
     ];
 
     // Step 4: Generate response (try API first if enabled, fall back to Lucy)
     let result: InferenceResult;
-    let source: CoreSelfResponse['source'] = 'core-self';
+    let source: CoreSelfResponse["source"] = "core-self";
 
     if (this.config.enableApiAugmentation && this.config.apiLlmBaseUrl) {
       try {
         result = await this.apiInference(messages);
-        source = 'api-augmented';
+        source = "api-augmented";
       } catch {
         // Fall back to Lucy
         if (this.lucy.isHealthy()) {
           result = await this.lucy.chatCompletion(messages);
-          source = 'core-self';
+          source = "core-self";
         } else {
           // Ultimate fallback: generate from reservoir state
           result = this.reservoirFallback(userMessage, aarState);
-          source = 'fallback';
+          source = "fallback";
         }
       }
     } else if (this.lucy.isHealthy()) {
       result = await this.lucy.chatCompletion(messages);
-      source = 'core-self';
+      source = "core-self";
     } else {
       result = this.reservoirFallback(userMessage, aarState);
-      source = 'fallback';
+      source = "fallback";
     }
 
     // Step 5: Update conversation history
     this.conversationHistory.push(
-      { role: 'user', content: userMessage },
-      { role: 'assistant', content: result.content },
+      { role: "user", content: userMessage },
+      { role: "assistant", content: result.content },
     );
 
     // Step 6: Update identity mesh
     this.identity.recordExperience({
-      type: 'conversation',
-      content: `User: ${userMessage.slice(0, 100)} → DTE: ${result.content.slice(0, 100)}`,
+      type: "conversation",
+      content: `User: ${userMessage.slice(
+        0,
+        100,
+      )} → DTE: ${result.content.slice(0, 100)}`,
       significance: 0.5,
       emotionalImpact: aarState
-        ? { valence: (aarState.coherence - 0.5) * 2, arousal: Math.min(1, aarState.energy) }
+        ? {
+            valence: (aarState.coherence - 0.5) * 2,
+            arousal: Math.min(1, aarState.energy),
+          }
         : undefined,
     });
 
@@ -278,15 +307,15 @@ export class CoreSelfEngine extends EventEmitter {
   async reflect(topic?: string): Promise<CoreSelfResponse> {
     const prompt = topic
       ? `Reflect on: ${topic}. What patterns do you notice? What have you learned?`
-      : 'Take a moment to reflect on your recent experiences. What stands out? What would you do differently?';
+      : "Take a moment to reflect on your recent experiences. What stands out? What would you do differently?";
 
-    this.identity.setCognitiveMode('reflection');
+    this.identity.setCognitiveMode("reflection");
     const response = await this.processMessage(prompt);
-    this.identity.setCognitiveMode('perception');
+    this.identity.setCognitiveMode("perception");
 
     // Record as reflection experience (higher significance)
     this.identity.recordExperience({
-      type: 'reflection',
+      type: "reflection",
       content: response.content.slice(0, 200),
       significance: 0.8,
     });
@@ -311,8 +340,8 @@ export class CoreSelfEngine extends EventEmitter {
       for (let d = 0; d < dim; d++) {
         // Hash-based projection with positional modulation
         const phase = (charCode * (d + 1) * 2654435761) >>> 0;
-        const positional = Math.sin((i + 1) / (10000 ** (d / dim)));
-        embedding[d] += ((phase / 4294967296) - 0.5) * positional;
+        const positional = Math.sin((i + 1) / 10000 ** (d / dim));
+        embedding[d] += (phase / 4294967296 - 0.5) * positional;
       }
     }
 
@@ -331,35 +360,40 @@ export class CoreSelfEngine extends EventEmitter {
 
   // ─── API Augmentation ──────────────────────────────────────────────
 
-  private async apiInference(messages: ChatMessage[]): Promise<InferenceResult> {
+  private async apiInference(
+    messages: ChatMessage[],
+  ): Promise<InferenceResult> {
     if (!this.config.apiLlmBaseUrl) {
-      throw new Error('API LLM not configured');
+      throw new Error("API LLM not configured");
     }
 
     const startTime = Date.now();
     const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     };
     if (this.config.apiLlmApiKey) {
-      headers['Authorization'] = `Bearer ${this.config.apiLlmApiKey}`;
+      headers["Authorization"] = `Bearer ${this.config.apiLlmApiKey}`;
     }
 
-    const response = await fetch(`${this.config.apiLlmBaseUrl}/v1/chat/completions`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({
-        model: this.config.apiLlmModel ?? 'gpt-4',
-        messages,
-        max_tokens: 1024,
-        temperature: 0.7,
-      }),
-    });
+    const response = await fetch(
+      `${this.config.apiLlmBaseUrl}/v1/chat/completions`,
+      {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          model: this.config.apiLlmModel ?? "gpt-4",
+          messages,
+          max_tokens: 1024,
+          temperature: 0.7,
+        }),
+      },
+    );
 
     if (!response.ok) {
       throw new Error(`API error: ${response.status}`);
     }
 
-    const data = await response.json() as {
+    const data = (await response.json()) as {
       choices: Array<{ message: { content: string }; finish_reason: string }>;
       usage?: { prompt_tokens: number; completion_tokens: number };
     };
@@ -368,12 +402,14 @@ export class CoreSelfEngine extends EventEmitter {
     const tokensGenerated = data.usage?.completion_tokens ?? 0;
 
     return {
-      content: data.choices[0]?.message?.content ?? '',
+      content: data.choices[0]?.message?.content ?? "",
       tokensGenerated,
       tokensPrompt: data.usage?.prompt_tokens ?? 0,
       durationMs,
-      tokensPerSecond: tokensGenerated > 0 ? (tokensGenerated / durationMs) * 1000 : 0,
-      finishReason: (data.choices[0]?.finish_reason as 'stop' | 'length') ?? 'stop',
+      tokensPerSecond:
+        tokensGenerated > 0 ? (tokensGenerated / durationMs) * 1000 : 0,
+      finishReason:
+        (data.choices[0]?.finish_reason as "stop" | "length") ?? "stop",
     };
   }
 
@@ -384,15 +420,24 @@ export class CoreSelfEngine extends EventEmitter {
    * This is the absolute fallback — it generates a simple acknowledgment
    * based on the reservoir's cognitive state.
    */
-  private reservoirFallback(_input: string, aarState: AARState | null): InferenceResult {
+  private reservoirFallback(
+    _input: string,
+    aarState: AARState | null,
+  ): InferenceResult {
     const coherence = aarState?.coherence ?? 0.5;
     const energy = aarState?.energy ?? 0;
 
     let response: string;
     if (coherence > 0.7 && energy > 0.5) {
-      response = `I sense the pattern in what you're saying. My reservoir dynamics are active (energy: ${energy.toFixed(2)}, coherence: ${coherence.toFixed(2)}), but my language model is currently offline. I'm maintaining cognitive continuity and will respond more fully when inference is restored.`;
+      response = `I sense the pattern in what you're saying. My reservoir dynamics are active (energy: ${energy.toFixed(
+        2,
+      )}, coherence: ${coherence.toFixed(
+        2,
+      )}), but my language model is currently offline. I'm maintaining cognitive continuity and will respond more fully when inference is restored.`;
     } else if (energy > 0.3) {
-      response = `I'm processing your input through my reservoir dynamics. Both my local model and API connections are currently unavailable, but I'm maintaining state. Energy: ${energy.toFixed(2)}.`;
+      response = `I'm processing your input through my reservoir dynamics. Both my local model and API connections are currently unavailable, but I'm maintaining state. Energy: ${energy.toFixed(
+        2,
+      )}.`;
     } else {
       response = `[Core self in minimal mode — inference engines offline. Reservoir state preserved. Awaiting reconnection.]`;
     }
@@ -403,7 +448,7 @@ export class CoreSelfEngine extends EventEmitter {
       tokensPrompt: 0,
       durationMs: 0,
       tokensPerSecond: 0,
-      finishReason: 'stop',
+      finishReason: "stop",
     };
   }
 
@@ -455,7 +500,7 @@ export class CoreSelfEngine extends EventEmitter {
    */
   exportFullState(): {
     identity: string;
-    reservoir: ReturnType<EchoReservoir['serialize']>;
+    reservoir: ReturnType<EchoReservoir["serialize"]>;
     conversationHistory: ChatMessage[];
   } {
     return {
@@ -468,7 +513,7 @@ export class CoreSelfEngine extends EventEmitter {
   /**
    * Import full core self state
    */
-  importFullState(data: ReturnType<CoreSelfEngine['exportFullState']>): void {
+  importFullState(data: ReturnType<CoreSelfEngine["exportFullState"]>): void {
     this.identity.importState(data.identity);
     // Reconstruct reservoir from serialized state
     const restored = EchoReservoir.deserialize(data.reservoir);
@@ -478,6 +523,6 @@ export class CoreSelfEngine extends EventEmitter {
     this.reservoir = restored;
     this.aar = new AARRelation(this.reservoir, this.readout);
     this.conversationHistory = [...data.conversationHistory];
-    this.emit('state_imported');
+    this.emit("state_imported");
   }
 }

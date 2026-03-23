@@ -19,7 +19,7 @@
  *   - State serialization for persistence
  */
 
-import { EventEmitter } from 'events';
+import { EventEmitter } from "events";
 
 // ─── Types ─────────────────────────────────────────────────────────────
 
@@ -97,14 +97,15 @@ class SeededRNG {
 
   next(): number {
     const s = this.s;
-    const result = Math.imul(s[1] * 5, 1) << 7 | Math.imul(s[1] * 5, 1) >>> 25;
+    const result =
+      (Math.imul(s[1] * 5, 1) << 7) | (Math.imul(s[1] * 5, 1) >>> 25);
     const t = s[1] << 9;
     s[2] ^= s[0];
     s[3] ^= s[1];
     s[1] ^= s[2];
     s[0] ^= s[3];
     s[2] ^= t;
-    s[3] = s[3] << 11 | s[3] >>> 21;
+    s[3] = (s[3] << 11) | (s[3] >>> 21);
     return (result >>> 0) / 4294967296;
   }
 
@@ -123,8 +124,8 @@ export class EchoReservoir {
   private rng: SeededRNG;
 
   // Weight matrices
-  private Win: Float64Array | null = null;  // Input weights [units x inputDim]
-  private W: Float64Array | null = null;    // Recurrent weights [units x units]
+  private Win: Float64Array | null = null; // Input weights [units x inputDim]
+  private W: Float64Array | null = null; // Recurrent weights [units x units]
 
   // State
   private stateFast: Float64Array;
@@ -156,7 +157,8 @@ export class EchoReservoir {
     // Generate sparse input weights
     this.Win = new Float64Array(N * inputDim);
     for (let i = 0; i < N * inputDim; i++) {
-      if (this.rng.next() < 0.3) { // 30% connectivity for input
+      if (this.rng.next() < 0.3) {
+        // 30% connectivity for input
         this.Win[i] = this.rng.gaussian() * this.config.inputScaling;
       }
     }
@@ -193,7 +195,8 @@ export class EchoReservoir {
    * Returns the combined state vector.
    */
   step(input: Float64Array | number[]): Float64Array {
-    const inp = input instanceof Float64Array ? input : Float64Array.from(input);
+    const inp =
+      input instanceof Float64Array ? input : Float64Array.from(input);
 
     if (!this.initialized) {
       this.initialize(inp.length);
@@ -307,7 +310,9 @@ export class EchoReservoir {
   /**
    * Deserialize state from persistence
    */
-  static deserialize(data: ReturnType<EchoReservoir['serialize']>): EchoReservoir {
+  static deserialize(
+    data: ReturnType<EchoReservoir["serialize"]>,
+  ): EchoReservoir {
     const reservoir = new EchoReservoir(data.config);
     reservoir.stateFast = Float64Array.from(data.stateFast);
     reservoir.stateSlow = Float64Array.from(data.stateSlow);
@@ -482,7 +487,8 @@ export class AARRelation extends EventEmitter {
     const arenaState = this.reservoir.step(input);
 
     // Agent: readout from reservoir state
-    const { output: agentOutput, confidence: _confidence } = this.readout.run(arenaState);
+    const { output: agentOutput, confidence: _confidence } =
+      this.readout.run(arenaState);
 
     // Relation: compute coherence between agent and arena
     const coherence = this.computeCoherence(agentOutput, arenaState);
@@ -506,7 +512,7 @@ export class AARRelation extends EventEmitter {
       tick: this.reservoir.getTick(),
     };
 
-    this.emit('cycle_complete', state);
+    this.emit("cycle_complete", state);
     return state;
   }
 
@@ -516,7 +522,9 @@ export class AARRelation extends EventEmitter {
    */
   private computeCoherence(agent: Float64Array, arena: Float64Array): number {
     const dim = Math.min(agent.length, arena.length);
-    let dot = 0, magA = 0, magB = 0;
+    let dot = 0,
+      magA = 0,
+      magB = 0;
 
     for (let i = 0; i < dim; i++) {
       dot += agent[i] * arena[i];

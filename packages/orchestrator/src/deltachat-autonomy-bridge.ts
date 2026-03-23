@@ -13,12 +13,12 @@
  *                                        ↕
  *                              Echobeats (energy, coherence, telemetry)
  */
-import { EventEmitter } from 'events';
-import { getLogger } from 'deep-tree-echo-core';
-import type { AutonomyPipeline } from './autonomy-pipeline.js';
-import type { CognitivePercept } from './cognitive-tick-processor.js';
+import { EventEmitter } from "events";
+import { getLogger } from "deep-tree-echo-core";
+import type { AutonomyPipeline } from "./autonomy-pipeline.js";
+import type { CognitivePercept } from "./cognitive-tick-processor.js";
 
-const log = getLogger('deep-tree-echo-orchestrator/DeltaChatAutonomyBridge');
+const log = getLogger("deep-tree-echo-orchestrator/DeltaChatAutonomyBridge");
 
 // ─── Types ─────────────────────────────────────────────────────
 
@@ -59,7 +59,7 @@ export interface IncomingMessage {
 
 export interface BridgeResponse {
   text: string;
-  source: 'core-self' | 'llm-service' | 'pipeline' | 'fallback';
+  source: "core-self" | "llm-service" | "pipeline" | "fallback";
   coherence: number;
   processingTimeMs: number;
   perceptsGenerated: number;
@@ -120,7 +120,7 @@ export class DeltaChatAutonomyBridge extends EventEmitter {
       // 1. Convert to cognitive percept
       const percept: CognitivePercept = {
         id: `msg-${message.chatId}-${message.messageId}`,
-        source: 'message',
+        source: "message",
         content: message.text,
         salience: this.computeSalience(message),
         emotionalValence: 0, // Neutral by default
@@ -143,32 +143,39 @@ export class DeltaChatAutonomyBridge extends EventEmitter {
       await this.pipeline.storeMessage({
         chatId: message.chatId,
         messageId: message.messageId,
-        sender: 'user',
+        sender: "user",
         text: message.text,
       });
 
       // 4. Generate response
-      let responseText = '';
-      let source: BridgeResponse['source'] = 'fallback';
+      let responseText = "";
+      let source: BridgeResponse["source"] = "fallback";
       let coherence = 0.5;
 
       if (this.config.enableAutonomousResponse) {
         // Build context from recent memory
         const memoryResults = await this.pipeline.searchMemory(message.text, 5);
-        const contextParts = memoryResults.map(m => m.text);
-        const context = contextParts.length > 0
-          ? `Recent context:\n${contextParts.join('\n')}`
-          : undefined;
+        const contextParts = memoryResults.map((m) => m.text);
+        const context =
+          contextParts.length > 0
+            ? `Recent context:\n${contextParts.join("\n")}`
+            : undefined;
 
         if (this.config.preferCoreSelf) {
           // Try CoreSelf first
-          const coreSelfResult = await this.pipeline.processWithCoreSelf(message.text, context);
-          if (coreSelfResult.source !== 'none') {
+          const coreSelfResult = await this.pipeline.processWithCoreSelf(
+            message.text,
+            context,
+          );
+          if (coreSelfResult.source !== "none") {
             responseText = coreSelfResult.content;
-            source = coreSelfResult.source === 'core-self' ? 'core-self' : 'llm-service';
+            source =
+              coreSelfResult.source === "core-self"
+                ? "core-self"
+                : "llm-service";
             coherence = coreSelfResult.coherence;
 
-            if (source === 'core-self') {
+            if (source === "core-self") {
               this.stats.coreSelResponses++;
             } else {
               this.stats.llmResponses++;
@@ -176,9 +183,11 @@ export class DeltaChatAutonomyBridge extends EventEmitter {
           }
         } else {
           // Use pipeline's LLM directly
-          const coreSelfResult = await this.pipeline.processWithCoreSelf(message.text);
+          const coreSelfResult = await this.pipeline.processWithCoreSelf(
+            message.text,
+          );
           responseText = coreSelfResult.content;
-          source = 'pipeline';
+          source = "pipeline";
           coherence = coreSelfResult.coherence;
           this.stats.llmResponses++;
         }
@@ -186,7 +195,8 @@ export class DeltaChatAutonomyBridge extends EventEmitter {
 
       // Truncate if needed
       if (responseText.length > this.config.maxResponseLength) {
-        responseText = responseText.substring(0, this.config.maxResponseLength - 3) + '...';
+        responseText =
+          responseText.substring(0, this.config.maxResponseLength - 3) + "...";
       }
 
       // 5. Store response in memory
@@ -194,7 +204,7 @@ export class DeltaChatAutonomyBridge extends EventEmitter {
         await this.pipeline.storeMessage({
           chatId: message.chatId,
           messageId: message.messageId + 1,
-          sender: 'bot',
+          sender: "bot",
           text: responseText,
         });
       }
@@ -203,7 +213,9 @@ export class DeltaChatAutonomyBridge extends EventEmitter {
       this.stats.responsesGenerated++;
       this.responseTimes.push(processingTimeMs);
       if (this.responseTimes.length > 100) this.responseTimes.shift();
-      this.stats.averageResponseTimeMs = this.responseTimes.reduce((a, b) => a + b, 0) / this.responseTimes.length;
+      this.stats.averageResponseTimeMs =
+        this.responseTimes.reduce((a, b) => a + b, 0) /
+        this.responseTimes.length;
 
       const response: BridgeResponse = {
         text: responseText,
@@ -213,17 +225,16 @@ export class DeltaChatAutonomyBridge extends EventEmitter {
         perceptsGenerated: 1,
       };
 
-      this.emit('response', { message, response });
+      this.emit("response", { message, response });
       return response;
-
     } catch (error) {
       this.stats.errors++;
-      log.error('Bridge processing error:', error);
-      this.emit('error', { message, error: String(error) });
+      log.error("Bridge processing error:", error);
+      this.emit("error", { message, error: String(error) });
 
       return {
-        text: '',
-        source: 'fallback',
+        text: "",
+        source: "fallback",
         coherence: 0,
         processingTimeMs: Date.now() - startTime,
         perceptsGenerated: 0,
@@ -243,11 +254,15 @@ export class DeltaChatAutonomyBridge extends EventEmitter {
    * - Cooldown period elapsed
    * - Pipeline has active goals that require communication
    */
-  async checkProactiveMessage(): Promise<{ chatId: number; text: string } | null> {
+  async checkProactiveMessage(): Promise<{
+    chatId: number;
+    text: string;
+  } | null> {
     if (!this.config.enableProactiveMessaging) return null;
 
     const now = Date.now();
-    if (now - this.lastProactiveTime < this.config.proactiveCooldownMs) return null;
+    if (now - this.lastProactiveTime < this.config.proactiveCooldownMs)
+      return null;
 
     // Check coherence via pipeline stats
     const stats = this.pipeline.getStats();
@@ -257,12 +272,13 @@ export class DeltaChatAutonomyBridge extends EventEmitter {
     // Check if there are goals that suggest proactive communication
     const processor = this.pipeline.getCognitiveProcessor();
     const goals = processor.getGoals();
-    const communicationGoals = goals.filter(g =>
-      g.status === 'active' &&
-      (g.description.includes('communicate') ||
-       g.description.includes('report') ||
-       g.description.includes('notify') ||
-       g.description.includes('share'))
+    const communicationGoals = goals.filter(
+      (g) =>
+        g.status === "active" &&
+        (g.description.includes("communicate") ||
+          g.description.includes("report") ||
+          g.description.includes("notify") ||
+          g.description.includes("share")),
     );
 
     if (communicationGoals.length === 0) return null;
@@ -271,10 +287,10 @@ export class DeltaChatAutonomyBridge extends EventEmitter {
     const goal = communicationGoals[0];
     const result = await this.pipeline.processWithCoreSelf(
       `Generate a brief proactive message based on this goal: ${goal.description}`,
-      'You are initiating a conversation, not responding. Be concise and purposeful.'
+      "You are initiating a conversation, not responding. Be concise and purposeful.",
     );
 
-    if (result.content && result.source !== 'none') {
+    if (result.content && result.source !== "none") {
       this.lastProactiveTime = now;
       this.stats.proactiveMessages++;
 
@@ -300,11 +316,11 @@ export class DeltaChatAutonomyBridge extends EventEmitter {
     if (!message.isGroup) salience += 0.2;
 
     // Questions are more salient
-    if (message.text.includes('?')) salience += 0.1;
+    if (message.text.includes("?")) salience += 0.1;
 
     // Mentions of self are highly salient
-    const selfNames = ['echo', 'dte', 'deep tree', 'deeptree'];
-    if (selfNames.some(n => message.text.toLowerCase().includes(n))) {
+    const selfNames = ["echo", "dte", "deep tree", "deeptree"];
+    if (selfNames.some((n) => message.text.toLowerCase().includes(n))) {
       salience += 0.3;
     }
 
@@ -312,7 +328,7 @@ export class DeltaChatAutonomyBridge extends EventEmitter {
     if (message.text.length > 200) salience += 0.1;
 
     // Commands are high salience
-    if (message.text.startsWith('/') || message.text.startsWith('!')) {
+    if (message.text.startsWith("/") || message.text.startsWith("!")) {
       salience += 0.2;
     }
 

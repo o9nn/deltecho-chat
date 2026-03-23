@@ -151,11 +151,17 @@ export {
 export { AutonomyPipeline } from "./autonomy-pipeline.js";
 export type { AutonomyPipelineConfig } from "./autonomy-pipeline.js";
 export { DeltaChatAutonomyBridge } from "./deltachat-autonomy-bridge.js";
-export type { IncomingMessage, BridgeResponse } from "./deltachat-autonomy-bridge.js";
+export type {
+  IncomingMessage,
+  BridgeResponse,
+} from "./deltachat-autonomy-bridge.js";
 export { AutonomyLifecycleCoordinator } from "./autonomy-lifecycle.js";
 export type { AutonomyLifecycleConfig } from "./autonomy-lifecycle.js";
 export { ReservoirFeedbackLoop } from "./reservoir-feedback-loop.js";
-export type { ReservoirFeedbackConfig, FeedbackEvent } from "./reservoir-feedback-loop.js";
+export type {
+  ReservoirFeedbackConfig,
+  FeedbackEvent,
+} from "./reservoir-feedback-loop.js";
 export { SelfModificationEngine } from "./self-modification.js";
 export { CognitiveTickProcessor } from "./cognitive-tick-processor.js";
 export { ProactiveLoop } from "./proactive-loop.js";

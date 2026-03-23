@@ -19,22 +19,27 @@
  * The feedback loop runs asynchronously, collecting feedback events and
  * batching them into RLS updates at a configurable interval.
  */
-import { EventEmitter } from 'events';
+import { EventEmitter } from "events";
 import {
   OnlineReservoirLearner,
   type LearnerState,
   type FeedbackSignal,
   EchoReservoir,
-} from 'deep-tree-echo-core';
-import { getLogger } from 'deep-tree-echo-core';
+} from "deep-tree-echo-core";
+import { getLogger } from "deep-tree-echo-core";
 
-const log = getLogger('deep-tree-echo-orchestrator/ReservoirFeedbackLoop');
+const log = getLogger("deep-tree-echo-orchestrator/ReservoirFeedbackLoop");
 
 // ─── Types ─────────────────────────────────────────────────────────────
 
 export interface FeedbackEvent {
   /** Source of the feedback */
-  source: 'conversation' | 'salience' | 'coherence' | 'self_modification' | 'external';
+  source:
+    | "conversation"
+    | "salience"
+    | "coherence"
+    | "self_modification"
+    | "external";
   /** Reward signal (-1 to 1) */
   reward: number;
   /** Target output vector (what the readout should have produced) */
@@ -80,10 +85,10 @@ export interface FeedbackLoopMetrics {
 }
 
 export type FeedbackLoopEvent =
-  | 'feedback_received'
-  | 'batch_update'
-  | 'state_persisted'
-  | 'error';
+  | "feedback_received"
+  | "batch_update"
+  | "state_persisted"
+  | "error";
 
 // ─── Default Configuration ─────────────────────────────────────────────
 
@@ -95,7 +100,7 @@ const DEFAULT_CONFIG: ReservoirFeedbackConfig = {
   minRewardMagnitude: 0.05,
   forgettingFactor: 0.995,
   enablePersistence: true,
-  persistPath: '',
+  persistPath: "",
   persistIntervalMs: 60000,
 };
 
@@ -156,7 +161,9 @@ export class ReservoirFeedbackLoop extends EventEmitter {
       }, this.config.persistIntervalMs);
     }
 
-    log.info(`ReservoirFeedbackLoop started (dim=${this.config.reservoirDim}, out=${this.config.outputDim})`);
+    log.info(
+      `ReservoirFeedbackLoop started (dim=${this.config.reservoirDim}, out=${this.config.outputDim})`,
+    );
   }
 
   /**
@@ -185,7 +192,9 @@ export class ReservoirFeedbackLoop extends EventEmitter {
       await this.persistState();
     }
 
-    log.info(`ReservoirFeedbackLoop stopped (${this.totalRLSUpdates} total updates)`);
+    log.info(
+      `ReservoirFeedbackLoop stopped (${this.totalRLSUpdates} total updates)`,
+    );
   }
 
   // ─── Feedback Ingestion ──────────────────────────────────────────
@@ -208,7 +217,7 @@ export class ReservoirFeedbackLoop extends EventEmitter {
 
     this.feedbackBuffer.push(event);
     this.totalFeedbackEvents++;
-    this.emit('feedback_received', event);
+    this.emit("feedback_received", event);
 
     // Force flush if buffer is full
     if (this.feedbackBuffer.length >= this.config.maxBufferSize) {
@@ -221,7 +230,7 @@ export class ReservoirFeedbackLoop extends EventEmitter {
    */
   submitConversationalFeedback(
     processId: string,
-    status: 'completed' | 'failed' | 'evicted',
+    status: "completed" | "failed" | "evicted",
     quality: number,
     reservoirState?: Float64Array,
   ): void {
@@ -232,7 +241,7 @@ export class ReservoirFeedbackLoop extends EventEmitter {
     };
 
     this.submitFeedback({
-      source: 'conversation',
+      source: "conversation",
       reward: rewardMap[status] ?? 0,
       reservoirState,
       timestamp: Date.now(),
@@ -243,12 +252,15 @@ export class ReservoirFeedbackLoop extends EventEmitter {
   /**
    * Create feedback from cognitive coherence measurement.
    */
-  submitCoherenceFeedback(coherence: number, reservoirState?: Float64Array): void {
+  submitCoherenceFeedback(
+    coherence: number,
+    reservoirState?: Float64Array,
+  ): void {
     // Coherence above 0.7 is positive, below 0.3 is negative
     const reward = (coherence - 0.5) * 2; // Maps [0,1] → [-1,1]
 
     this.submitFeedback({
-      source: 'coherence',
+      source: "coherence",
       reward,
       reservoirState,
       timestamp: Date.now(),
@@ -268,7 +280,7 @@ export class ReservoirFeedbackLoop extends EventEmitter {
     const reward = applied ? coherenceDelta * 2 : -0.1;
 
     this.submitFeedback({
-      source: 'self_modification',
+      source: "self_modification",
       reward,
       reservoirState,
       timestamp: Date.now(),
@@ -296,12 +308,12 @@ export class ReservoirFeedbackLoop extends EventEmitter {
       const targetOutput = event.targetOutput ?? this.constructTarget(event);
 
       try {
-        const sourceMap: Record<string, FeedbackSignal['source']> = {
-          conversation: 'user',
-          salience: 'self-evaluation',
-          coherence: 'coherence',
-          self_modification: 'self-evaluation',
-          external: 'user',
+        const sourceMap: Record<string, FeedbackSignal["source"]> = {
+          conversation: "user",
+          salience: "self-evaluation",
+          coherence: "coherence",
+          self_modification: "self-evaluation",
+          external: "user",
         };
 
         const feedbackSignal: FeedbackSignal = {
@@ -310,7 +322,7 @@ export class ReservoirFeedbackLoop extends EventEmitter {
           reward: event.reward,
           valence: event.reward, // Map reward to valence
           timestamp: event.timestamp,
-          source: sourceMap[event.source] ?? 'self-evaluation',
+          source: sourceMap[event.source] ?? "self-evaluation",
         };
 
         const update = this.learner.update(feedbackSignal);
@@ -321,13 +333,17 @@ export class ReservoirFeedbackLoop extends EventEmitter {
           this.lastUpdateAt = Date.now();
         }
       } catch (err) {
-        log.warn(`RLS update failed: ${err instanceof Error ? err.message : String(err)}`);
-        this.emit('error', { error: err, event });
+        log.warn(
+          `RLS update failed: ${
+            err instanceof Error ? err.message : String(err)
+          }`,
+        );
+        this.emit("error", { error: err, event });
       }
     }
 
     if (updatesApplied > 0) {
-      this.emit('batch_update', {
+      this.emit("batch_update", {
         eventsProcessed: events.length,
         updatesApplied,
         avgPredictionError: this.learner.getAvgPredictionError(),
@@ -336,8 +352,8 @@ export class ReservoirFeedbackLoop extends EventEmitter {
 
       log.info(
         `Batch update: ${updatesApplied}/${events.length} events → ` +
-        `err=${this.learner.getAvgPredictionError().toFixed(4)}, ` +
-        `‖W‖=${this.learner.getWeightNorm().toFixed(4)}`
+          `err=${this.learner.getAvgPredictionError().toFixed(4)}, ` +
+          `‖W‖=${this.learner.getWeightNorm().toFixed(4)}`,
       );
     }
   }
@@ -374,8 +390,8 @@ export class ReservoirFeedbackLoop extends EventEmitter {
     if (!this.config.persistPath) return;
 
     try {
-      const { writeFileSync, mkdirSync } = await import('fs');
-      const { dirname } = await import('path');
+      const { writeFileSync, mkdirSync } = await import("fs");
+      const { dirname } = await import("path");
 
       mkdirSync(dirname(this.config.persistPath), { recursive: true });
 
@@ -392,9 +408,13 @@ export class ReservoirFeedbackLoop extends EventEmitter {
       };
 
       writeFileSync(this.config.persistPath, JSON.stringify(serializable));
-      this.emit('state_persisted', { path: this.config.persistPath });
+      this.emit("state_persisted", { path: this.config.persistPath });
     } catch (err) {
-      log.warn(`Failed to persist state: ${err instanceof Error ? err.message : String(err)}`);
+      log.warn(
+        `Failed to persist state: ${
+          err instanceof Error ? err.message : String(err)
+        }`,
+      );
     }
   }
 
@@ -405,11 +425,11 @@ export class ReservoirFeedbackLoop extends EventEmitter {
     if (!this.config.persistPath) return false;
 
     try {
-      const { readFileSync, existsSync } = await import('fs');
+      const { readFileSync, existsSync } = await import("fs");
 
       if (!existsSync(this.config.persistPath)) return false;
 
-      const data = JSON.parse(readFileSync(this.config.persistPath, 'utf-8'));
+      const data = JSON.parse(readFileSync(this.config.persistPath, "utf-8"));
 
       const state: LearnerState = {
         weights: new Float64Array(data.weights),
@@ -421,10 +441,18 @@ export class ReservoirFeedbackLoop extends EventEmitter {
       };
 
       this.learner.deserialize(state);
-      log.info(`Restored learner state: ${state.totalUpdates} updates, err=${state.avgPredictionError.toFixed(4)}`);
+      log.info(
+        `Restored learner state: ${
+          state.totalUpdates
+        } updates, err=${state.avgPredictionError.toFixed(4)}`,
+      );
       return true;
     } catch (err) {
-      log.warn(`Failed to restore state: ${err instanceof Error ? err.message : String(err)}`);
+      log.warn(
+        `Failed to restore state: ${
+          err instanceof Error ? err.message : String(err)
+        }`,
+      );
       return false;
     }
   }

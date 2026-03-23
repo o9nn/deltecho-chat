@@ -39,7 +39,7 @@
  * @see cosmic-order-bridge.ts for runtime integration
  */
 
-import { EventEmitter } from 'events';
+import { EventEmitter } from "events";
 
 // ============================================================
 // OEIS A000081 Constants
@@ -69,7 +69,7 @@ export interface CognitiveModuleNode {
   /** Module name */
   name: string;
   /** Module type classification */
-  type: 'core' | 'extension' | 'integration' | 'membrane' | 'bridge';
+  type: "core" | "extension" | "integration" | "membrane" | "bridge";
   /** Matula-Godsil number of this subtree */
   matula: number;
   /** Polynomial encoding */
@@ -233,20 +233,14 @@ export function enumerateRootedTrees(n: number): RootedTree[] {
       }
     }
 
-    function generateFromPartition(
-      parts: number[],
-      out: RootedTree[],
-    ): void {
+    function generateFromPartition(parts: number[], out: RootedTree[]): void {
       if (parts.length === 0) return;
 
       // Get all possible subtrees for each part size
       const subtreeOptions = parts.map((p) => enumerate(p));
 
       // Generate all combinations
-      function combine(
-        idx: number,
-        current: RootedTree[],
-      ): void {
+      function combine(idx: number, current: RootedTree[]): void {
         if (idx === parts.length) {
           // Sort for canonical form
           const sorted = [...current].sort(compareTree);
@@ -289,8 +283,8 @@ function compareTree(a: RootedTree, b: RootedTree): number {
 
 /** Convert tree to string for deduplication */
 function treeToString(tree: RootedTree): string {
-  if (tree.length === 0) return '()';
-  return '(' + tree.map(treeToString).join('') + ')';
+  if (tree.length === 0) return "()";
+  return "(" + tree.map(treeToString).join("") + ")";
 }
 
 /** Convert tree to parenthesis notation */
@@ -460,7 +454,7 @@ export function buildSGramRhythm(system: number): SGramRhythm {
   // Denominator follows the pattern: sys(n) uses denominator from s-gram theory
   // For the 1/7 particular sequence: [1, 4, 2, 8, 5, 7]
   const denominators = [1, 1, 3, 7, 15, 31, 63];
-  const denominator = denominators[system] ?? (Math.pow(2, system) - 1);
+  const denominator = denominators[system] ?? Math.pow(2, system) - 1;
 
   // Compute repeating sequence
   const sequence = computeRepeatingSequence(denominator, system);
@@ -475,7 +469,10 @@ export function buildSGramRhythm(system: number): SGramRhythm {
 }
 
 /** Compute repeating decimal expansion sequence */
-function computeRepeatingSequence(denominator: number, base: number = 10): readonly number[] {
+function computeRepeatingSequence(
+  denominator: number,
+  base: number = 10,
+): readonly number[] {
   if (denominator <= 1) return [0];
 
   const sequence: number[] = [];
@@ -512,71 +509,71 @@ export function buildStructuralSelfModel(): StructuralSelfModel {
   //   ├── Double-Membrane (inner, outer, IPC)
   //   └── AAR (agent, arena, relation)
 
-  const core = buildModuleNode('core', 'core', [
-    buildModuleNode('cognitive', 'core', [
-      buildModuleNode('llm-service', 'core', []),
-      buildModuleNode('esn-reservoir', 'core', []),
+  const core = buildModuleNode("core", "core", [
+    buildModuleNode("cognitive", "core", [
+      buildModuleNode("llm-service", "core", []),
+      buildModuleNode("esn-reservoir", "core", []),
     ]),
-    buildModuleNode('memory', 'core', [
-      buildModuleNode('declarative', 'core', []),
-      buildModuleNode('procedural', 'core', []),
-      buildModuleNode('episodic', 'core', []),
+    buildModuleNode("memory", "core", [
+      buildModuleNode("declarative", "core", []),
+      buildModuleNode("procedural", "core", []),
+      buildModuleNode("episodic", "core", []),
     ]),
-    buildModuleNode('personality', 'core', []),
-    buildModuleNode('security', 'core', []),
-    buildModuleNode('embodiment', 'core', []),
+    buildModuleNode("personality", "core", []),
+    buildModuleNode("security", "core", []),
+    buildModuleNode("embodiment", "core", []),
   ]);
 
-  const activeInference = buildModuleNode('active-inference', 'core', [
-    buildModuleNode('free-energy', 'core', []),
-    buildModuleNode('belief-state', 'core', []),
-    buildModuleNode('niche-construction', 'core', []),
+  const activeInference = buildModuleNode("active-inference", "core", [
+    buildModuleNode("free-energy", "core", []),
+    buildModuleNode("belief-state", "core", []),
+    buildModuleNode("niche-construction", "core", []),
   ]);
 
-  const consciousness = buildModuleNode('consciousness', 'core', [
-    buildModuleNode('echobeats', 'core', []),
-    buildModuleNode('qualia-emergence', 'core', []),
-    buildModuleNode('metacognition', 'core', []),
-    buildModuleNode('intentionality', 'core', []),
-    buildModuleNode('phenomenal-binding', 'core', []),
+  const consciousness = buildModuleNode("consciousness", "core", [
+    buildModuleNode("echobeats", "core", []),
+    buildModuleNode("qualia-emergence", "core", []),
+    buildModuleNode("metacognition", "core", []),
+    buildModuleNode("intentionality", "core", []),
+    buildModuleNode("phenomenal-binding", "core", []),
   ]);
 
-  const scientificGenius = buildModuleNode('scientific-genius', 'extension', [
-    buildModuleNode('entelechy', 'extension', []),
-    buildModuleNode('relevance', 'extension', []),
+  const scientificGenius = buildModuleNode("scientific-genius", "extension", [
+    buildModuleNode("entelechy", "extension", []),
+    buildModuleNode("relevance", "extension", []),
   ]);
 
-  const orchestrator = buildModuleNode('orchestrator', 'integration', [
-    buildModuleNode('proactive-loop', 'integration', []),
-    buildModuleNode('echo-agent-loop', 'integration', []),
-    buildModuleNode('cosmic-order-bridge', 'bridge', []),
-    buildModuleNode('aar-system', 'integration', [
-      buildModuleNode('agent-membrane', 'membrane', []),
-      buildModuleNode('arena-membrane', 'membrane', []),
-      buildModuleNode('relation-interface', 'integration', []),
+  const orchestrator = buildModuleNode("orchestrator", "integration", [
+    buildModuleNode("proactive-loop", "integration", []),
+    buildModuleNode("echo-agent-loop", "integration", []),
+    buildModuleNode("cosmic-order-bridge", "bridge", []),
+    buildModuleNode("aar-system", "integration", [
+      buildModuleNode("agent-membrane", "membrane", []),
+      buildModuleNode("arena-membrane", "membrane", []),
+      buildModuleNode("relation-interface", "integration", []),
     ]),
   ]);
 
-  const dove9 = buildModuleNode('dove9', 'core', [
-    buildModuleNode('triadic-engine', 'core', []),
-    buildModuleNode('anticipator', 'extension', []),
-    buildModuleNode('feedback-loop', 'core', []),
+  const dove9 = buildModuleNode("dove9", "core", [
+    buildModuleNode("triadic-engine", "core", []),
+    buildModuleNode("anticipator", "extension", []),
+    buildModuleNode("feedback-loop", "core", []),
   ]);
 
-  const sys6Triality = buildModuleNode('sys6-triality', 'core', [
-    buildModuleNode('cosmic-order', 'core', []),
-    buildModuleNode('generative-kernel', 'core', []),
-    buildModuleNode('flip-transform', 'core', []),
-    buildModuleNode('sgram', 'core', []),
+  const sys6Triality = buildModuleNode("sys6-triality", "core", [
+    buildModuleNode("cosmic-order", "core", []),
+    buildModuleNode("generative-kernel", "core", []),
+    buildModuleNode("flip-transform", "core", []),
+    buildModuleNode("sgram", "core", []),
   ]);
 
-  const doubleMembrane = buildModuleNode('double-membrane', 'membrane', [
-    buildModuleNode('inner-membrane', 'membrane', []),
-    buildModuleNode('outer-membrane', 'membrane', []),
-    buildModuleNode('ipc-bridge', 'bridge', []),
+  const doubleMembrane = buildModuleNode("double-membrane", "membrane", [
+    buildModuleNode("inner-membrane", "membrane", []),
+    buildModuleNode("outer-membrane", "membrane", []),
+    buildModuleNode("ipc-bridge", "bridge", []),
   ]);
 
-  const root = buildModuleNode('deep-tree-echo', 'core', [
+  const root = buildModuleNode("deep-tree-echo", "core", [
     core,
     activeInference,
     consciousness,
@@ -606,7 +603,7 @@ export function buildStructuralSelfModel(): StructuralSelfModel {
 /** Build a cognitive module node */
 function buildModuleNode(
   name: string,
-  type: CognitiveModuleNode['type'],
+  type: CognitiveModuleNode["type"],
   children: CognitiveModuleNode[],
   depth: number = 0,
 ): CognitiveModuleNode {
@@ -658,10 +655,16 @@ function computeComplexity(node: CognitiveModuleNode): number {
   const totalNodes = countTotalNodes(node);
   const primeModules = countPrimeModules(node);
   // Complexity = log2(matula) × branching_factor × depth_ratio
-  const branchingFactor = totalNodes > 1 ? (totalNodes - 1) / Math.max(1, totalNodes - leaves) : 1;
+  const branchingFactor =
+    totalNodes > 1 ? (totalNodes - 1) / Math.max(1, totalNodes - leaves) : 1;
   const depthRatio = depth / Math.max(1, Math.log2(totalNodes));
-  const primeBonus = 1 + (primeModules / Math.max(1, totalNodes));
-  return branchingFactor * depthRatio * primeBonus * Math.log2(Math.max(2, totalNodes));
+  const primeBonus = 1 + primeModules / Math.max(1, totalNodes);
+  return (
+    branchingFactor *
+    depthRatio *
+    primeBonus *
+    Math.log2(Math.max(2, totalNodes))
+  );
 }
 
 /** Count total nodes in the tree */
@@ -781,14 +784,20 @@ export class TreePolytopeKernel extends EventEmitter {
       Math.max(1, butcherConditions.length);
 
     // Factor 2: Self-model completeness (leaf count vs expected)
-    const expectedLeaves = A000081[selfModel.systemLevel + 1] ?? selfModel.leafCount;
-    const completenessScore = Math.min(1, selfModel.leafCount / Math.max(1, expectedLeaves));
+    const expectedLeaves =
+      A000081[selfModel.systemLevel + 1] ?? selfModel.leafCount;
+    const completenessScore = Math.min(
+      1,
+      selfModel.leafCount / Math.max(1, expectedLeaves),
+    );
 
     // Factor 3: Prime module ratio (higher = more irreducible = more robust)
-    const primeRatio = countPrimeModules(selfModel.root) / Math.max(1, selfModel.leafCount);
+    const primeRatio =
+      countPrimeModules(selfModel.root) / Math.max(1, selfModel.leafCount);
 
     // Weighted combination
-    this.state.integrity = butcherScore * 0.4 + completenessScore * 0.3 + primeRatio * 0.3;
+    this.state.integrity =
+      butcherScore * 0.4 + completenessScore * 0.3 + primeRatio * 0.3;
     return this.state.integrity;
   }
 
@@ -796,7 +805,7 @@ export class TreePolytopeKernel extends EventEmitter {
   setActiveSystem(system: number): void {
     if (system >= 0 && system <= 6) {
       this.state.activeSystem = system;
-      this.emit('system-change', system);
+      this.emit("system-change", system);
     }
   }
 
@@ -830,7 +839,7 @@ export class TreePolytopeKernel extends EventEmitter {
     this.updateInterval = setInterval(() => {
       this.computeIntegrity();
       this.advanceSGrams();
-      this.emit('tick', this.getSnapshot());
+      this.emit("tick", this.getSnapshot());
     }, intervalMs);
   }
 
@@ -847,7 +856,7 @@ export class TreePolytopeKernel extends EventEmitter {
     this.state.selfModel = buildStructuralSelfModel();
     this.state.lastUpdate = Date.now();
     this.computeIntegrity();
-    this.emit('rebuild', this.state.selfModel);
+    this.emit("rebuild", this.state.selfModel);
   }
 }
 

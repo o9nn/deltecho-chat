@@ -2,4 +2,4 @@ export {
   PerceptionHandlers,
   type PerceptionHandlerConfig,
   type PerceptCallback,
-} from './PerceptionHandlers.js';
+} from "./PerceptionHandlers.js";

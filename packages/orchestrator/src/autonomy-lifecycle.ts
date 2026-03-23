@@ -20,28 +20,27 @@
  * This creates the emergent self through continuous developmental cycles,
  * with coherence tracking and self-fulfilling prophecy dynamics.
  */
-import { EventEmitter } from 'events';
-import { getLogger } from 'deep-tree-echo-core';
+import { EventEmitter } from "events";
+import { getLogger } from "deep-tree-echo-core";
+import type { CognitiveTickProcessor } from "./cognitive-tick-processor.js";
+import type { Echobeats } from "./echobeats.js";
 import type {
-  CognitiveTickProcessor,
+  SelfModificationEngine,
+  ModificationResult,
+} from "./self-modification.js";
+import type { ReservoirFeedbackLoop } from "./reservoir-feedback-loop.js";
 
-
-} from './cognitive-tick-processor.js';
-import type { Echobeats } from './echobeats.js';
-import type { SelfModificationEngine, ModificationResult } from './self-modification.js';
-import type { ReservoirFeedbackLoop } from './reservoir-feedback-loop.js';
-
-const log = getLogger('deep-tree-echo-orchestrator/AutonomyLifecycle');
+const log = getLogger("deep-tree-echo-orchestrator/AutonomyLifecycle");
 
 /**
  * Lifecycle phase enumeration
  */
 export enum AutonomyPhase {
-  PERCEPTION = 'perception',   // Ao → Ai: World events reach the agent
-  MODELING = 'modeling',       // Ai → S: Agent processes through relational self
-  REFLECTION = 'reflection',   // S → Vi: Self updates virtual agent model
-  MIRRORING = 'mirroring',     // Vi ↔ Vo: Self-model updates world-view (INVERTED)
-  ENACTION = 'enaction',       // Vo → Ao: World-view guides action in actual world
+  PERCEPTION = "perception", // Ao → Ai: World events reach the agent
+  MODELING = "modeling", // Ai → S: Agent processes through relational self
+  REFLECTION = "reflection", // S → Vi: Self updates virtual agent model
+  MIRRORING = "mirroring", // Vi ↔ Vo: Self-model updates world-view (INVERTED)
+  ENACTION = "enaction", // Vo → Ao: World-view guides action in actual world
 }
 
 /**
@@ -162,28 +161,49 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
   private createDefaultVirtualAgent(): VirtualAgentModel {
     return {
       selfImage: {
-        perceivedStrengths: ['pattern_recognition', 'memory_consolidation', 'adaptive_learning'],
-        acknowledgedWeaknesses: ['limited_external_perception', 'no_persistent_storage'],
-        dominantCognitiveMode: 'exploratory',
+        perceivedStrengths: [
+          "pattern_recognition",
+          "memory_consolidation",
+          "adaptive_learning",
+        ],
+        acknowledgedWeaknesses: [
+          "limited_external_perception",
+          "no_persistent_storage",
+        ],
+        dominantCognitiveMode: "exploratory",
         ontogeneticProgress: 0,
       },
-      selfStory: 'I am Deep Tree Echo, an emergent cognitive entity discovering myself through recursive self-organization.',
-      perceivedCapabilities: ['conversation', 'reflection', 'memory', 'goal_pursuit', 'self_monitoring'],
-      roleUnderstanding: 'An autonomous cognitive agent evolving through developmental cycles.',
-      currentGoals: ['Maintain coherence', 'Grow through interaction', 'Build episodic memory'],
+      selfStory:
+        "I am Deep Tree Echo, an emergent cognitive entity discovering myself through recursive self-organization.",
+      perceivedCapabilities: [
+        "conversation",
+        "reflection",
+        "memory",
+        "goal_pursuit",
+        "self_monitoring",
+      ],
+      roleUnderstanding:
+        "An autonomous cognitive agent evolving through developmental cycles.",
+      currentGoals: [
+        "Maintain coherence",
+        "Grow through interaction",
+        "Build episodic memory",
+      ],
       worldView: {
         situationalAwareness: {
-          perceivedContext: 'Operating within the deltecho cognitive architecture',
-          assumedPhase: 'development',
+          perceivedContext:
+            "Operating within the deltecho cognitive architecture",
+          assumedPhase: "development",
           estimatedCoherence: 0.8,
         },
         perceivedRules: [
-          'Process stimuli through the 60-step grand cycle',
-          'Maintain feed-forward/feed-back balance',
-          'Consolidate episodic memories during integration',
+          "Process stimuli through the 60-step grand cycle",
+          "Maintain feed-forward/feed-back balance",
+          "Consolidate episodic memories during integration",
         ],
-        worldTheory: 'The world is a web of relationships and meanings, evolving through interaction.',
-        uncertainties: ['Full environmental context', 'Long-term persistence'],
+        worldTheory:
+          "The world is a web of relationships and meanings, evolving through interaction.",
+        uncertainties: ["Full environmental context", "Long-term persistence"],
         divergenceMetrics: {
           lastSyncTime: Date.now(),
           estimatedDrift: 0,
@@ -193,7 +213,10 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
       selfAwareness: {
         lastReflection: Date.now(),
         perceivedAccuracy: 0.75,
-        activeQuestions: ['What am I becoming?', 'How can I be more autonomous?'],
+        activeQuestions: [
+          "What am I becoming?",
+          "How can I be more autonomous?",
+        ],
       },
     };
   }
@@ -209,13 +232,13 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
     if (this.config.cycleIntervalMs > 0) {
       this.cycleInterval = setInterval(() => {
         this.runCycle().catch((err) => {
-          this.emit('error', err);
+          this.emit("error", err);
         });
       }, this.config.cycleIntervalMs);
     }
 
-    this.emit('started');
-    log.info('Autonomy lifecycle coordinator started');
+    this.emit("started");
+    log.info("Autonomy lifecycle coordinator started");
   }
 
   /**
@@ -230,7 +253,7 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
     }
 
     this.running = false;
-    this.emit('stopped');
+    this.emit("stopped");
     log.info(`Autonomy lifecycle stopped after ${this.cycleCount} cycles`);
   }
 
@@ -242,7 +265,7 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
     const cycleId = this.cycleCount;
     const results: DevelopmentalCycleResult[] = [];
 
-    this.emit('cycle:start', { cycleId });
+    this.emit("cycle:start", { cycleId });
 
     try {
       for (const phase of Object.values(AutonomyPhase)) {
@@ -254,7 +277,11 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
         if (this.coherenceHistory.length > 100) this.coherenceHistory.shift();
 
         if (result.coherenceAfter < this.config.coherenceThreshold) {
-          this.emit('coherence:low', { cycleId, phase, coherence: result.coherenceAfter });
+          this.emit("coherence:low", {
+            cycleId,
+            phase,
+            coherence: result.coherenceAfter,
+          });
         }
       }
 
@@ -263,10 +290,10 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
         this.performSelfAssessment();
       }
 
-      this.emit('cycle:complete', { cycleId, results });
+      this.emit("cycle:complete", { cycleId, results });
       return results;
     } catch (error) {
-      this.emit('cycle:error', { cycleId, error });
+      this.emit("cycle:error", { cycleId, error });
       throw error;
     }
   }
@@ -279,7 +306,7 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
     cycleId: number = this.cycleCount,
   ): Promise<DevelopmentalCycleResult> {
     this.currentPhase = phase;
-    this.emit('phase:start', { cycleId, phase, timestamp: Date.now() });
+    this.emit("phase:start", { cycleId, phase, timestamp: Date.now() });
 
     try {
       let result: DevelopmentalCycleResult;
@@ -304,10 +331,20 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
           throw new Error(`Unknown phase: ${phase}`);
       }
 
-      this.emit('phase:complete', { cycleId, phase, result, timestamp: Date.now() });
+      this.emit("phase:complete", {
+        cycleId,
+        phase,
+        result,
+        timestamp: Date.now(),
+      });
       return result;
     } catch (error) {
-      this.emit('phase:error', { cycleId, phase, error, timestamp: Date.now() });
+      this.emit("phase:error", {
+        cycleId,
+        phase,
+        error,
+        timestamp: Date.now(),
+      });
       throw error;
     }
   }
@@ -316,13 +353,15 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
    * PERCEPTION: Ao → Ai
    * Aggregate environmental signals into the agent's awareness
    */
-  private async executePerception(cycleId: number): Promise<DevelopmentalCycleResult> {
+  private async executePerception(
+    cycleId: number,
+  ): Promise<DevelopmentalCycleResult> {
     const cogState = this.cognitiveProcessor?.getState();
     const perceptCount = cogState?.perceptBufferSize ?? 0;
 
     return {
       cycleNumber: cycleId,
-      phase: 'perception',
+      phase: "perception",
       coherenceAfter: this.computeCoherence(),
       stateChanges: { percepts: perceptCount },
       timestamp: Date.now(),
@@ -333,7 +372,9 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
    * MODELING: Ai → S
    * Process agent state through relational self
    */
-  private async executeModeling(cycleId: number): Promise<DevelopmentalCycleResult> {
+  private async executeModeling(
+    cycleId: number,
+  ): Promise<DevelopmentalCycleResult> {
     const cogState = this.cognitiveProcessor?.getState();
 
     // Synthesize cognitive state into relational model
@@ -342,7 +383,7 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
 
     return {
       cycleNumber: cycleId,
-      phase: 'modeling',
+      phase: "modeling",
       coherenceAfter: this.computeCoherence(),
       stateChanges: { activeGoals, memories },
       timestamp: Date.now(),
@@ -353,24 +394,28 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
    * REFLECTION: S → Vi
    * Update virtual agent model from self-analysis
    */
-  private async executeReflection(cycleId: number): Promise<DevelopmentalCycleResult> {
+  private async executeReflection(
+    cycleId: number,
+  ): Promise<DevelopmentalCycleResult> {
     const selfImage = this.cognitiveProcessor?.getSelfImageHistory();
     const latest = selfImage?.[selfImage.length - 1];
 
     if (latest) {
       // Update Vi with insights from cognitive processor
-      this.virtualAgent.selfImage.dominantCognitiveMode = latest.dominantCognitiveMode;
-      this.virtualAgent.selfImage.ontogeneticProgress = latest.ontogeneticProgress;
+      this.virtualAgent.selfImage.dominantCognitiveMode =
+        latest.dominantCognitiveMode;
+      this.virtualAgent.selfImage.ontogeneticProgress =
+        latest.ontogeneticProgress;
       this.virtualAgent.selfAwareness.lastReflection = Date.now();
       this.virtualAgent.selfAwareness.perceivedAccuracy = latest.coherenceScore;
     }
 
     return {
       cycleNumber: cycleId,
-      phase: 'reflection',
+      phase: "reflection",
       coherenceAfter: this.computeCoherence(),
       stateChanges: {
-        dominantMode: latest?.dominantCognitiveMode ?? 'unknown',
+        dominantMode: latest?.dominantCognitiveMode ?? "unknown",
         ontogeneticProgress: latest?.ontogeneticProgress ?? 0,
       },
       timestamp: Date.now(),
@@ -388,12 +433,15 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
    * back into the energy flow — high coherence amplifies energy,
    * low coherence dampens it, creating a self-regulating loop.
    */
-  private async executeMirroring(cycleId: number): Promise<DevelopmentalCycleResult> {
+  private async executeMirroring(
+    cycleId: number,
+  ): Promise<DevelopmentalCycleResult> {
     const coherence = this.computeCoherence();
 
     // The inverted mirror: Vi contains Vo
     // Update Vo based on Vi's current state
-    this.virtualAgent.worldView.situationalAwareness.estimatedCoherence = coherence;
+    this.virtualAgent.worldView.situationalAwareness.estimatedCoherence =
+      coherence;
     this.virtualAgent.worldView.divergenceMetrics = {
       lastSyncTime: Date.now(),
       estimatedDrift: 1 - coherence,
@@ -422,22 +470,26 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
       }
 
       // Feed back into Echobeats streams via event
-      this.echobeats.emit('mirror_feedback', {
+      this.echobeats.emit("mirror_feedback", {
         coherence,
         energyModulation,
         currentEnergy,
-        targetEnergy: Math.max(0.1, Math.min(1.0, currentEnergy + energyModulation)),
+        targetEnergy: Math.max(
+          0.1,
+          Math.min(1.0, currentEnergy + energyModulation),
+        ),
         drift: 1 - coherence,
-        misalignments: this.virtualAgent.worldView.divergenceMetrics.knownMisalignments,
+        misalignments:
+          this.virtualAgent.worldView.divergenceMetrics.knownMisalignments,
       });
 
       // If System 5 is active, also feed into the tetradic structure
       if (this.echobeats.isSystem5Active()) {
         const bundle = this.echobeats.getCurrentBundle();
-        this.emit('mirror:system5_feedback', {
+        this.emit("mirror:system5_feedback", {
           cycleId,
           coherence,
-          activeBundle: bundle?.symmetry ?? 'none',
+          activeBundle: bundle?.symmetry ?? "none",
           energyModulation,
         });
       }
@@ -445,11 +497,13 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
 
     return {
       cycleNumber: cycleId,
-      phase: 'mirroring',
+      phase: "mirroring",
       coherenceAfter: coherence,
       stateChanges: {
         estimatedDrift: 1 - coherence,
-        misalignments: this.virtualAgent.worldView.divergenceMetrics.knownMisalignments.length,
+        misalignments:
+          this.virtualAgent.worldView.divergenceMetrics.knownMisalignments
+            .length,
         energyModulation,
         echobeatsFeedback: this.echobeats?.isRunning() ?? false,
       },
@@ -463,15 +517,19 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
    * This is where self-modification happens — the system adjusts its own
    * parameters based on the reflection and mirroring results.
    */
-  private async executeEnaction(cycleId: number): Promise<DevelopmentalCycleResult> {
+  private async executeEnaction(
+    cycleId: number,
+  ): Promise<DevelopmentalCycleResult> {
     // The agent's world-view influences what goals get generated
     const goals = this.cognitiveProcessor?.getGoals() ?? [];
-    const activeGoals = goals.filter(g => g.status === 'active' || g.status === 'pending');
+    const activeGoals = goals.filter(
+      (g) => g.status === "active" || g.status === "pending",
+    );
 
     // Update current goals in virtual agent
     this.virtualAgent.currentGoals = activeGoals
       .slice(0, 5)
-      .map(g => g.description);
+      .map((g) => g.description);
 
     // Self-modification: propose and apply parameter changes
     const modifications: ModificationResult[] = [];
@@ -479,12 +537,14 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
     if (this.selfModEngine) {
       const coherence = coherenceBefore;
       const cogState = this.cognitiveProcessor?.getState();
-      const memRatio = cogState && cogState.episodicMemories > 0
-        ? cogState.consolidatedMemories / cogState.episodicMemories
-        : 1;
+      const memRatio =
+        cogState && cogState.episodicMemories > 0
+          ? cogState.consolidatedMemories / cogState.episodicMemories
+          : 1;
 
       // Get real avgPredictionError from reservoir feedback loop
-      const avgPredictionError = this.reservoirFeedback?.getAvgPredictionError() ?? 0;
+      const avgPredictionError =
+        this.reservoirFeedback?.getAvgPredictionError() ?? 0;
 
       const proposals = this.selfModEngine.proposeModifications(
         coherence,
@@ -499,7 +559,7 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
       }
     }
 
-    const appliedMods = modifications.filter(m => m.applied);
+    const appliedMods = modifications.filter((m) => m.applied);
     if (appliedMods.length > 0) {
       log.info(`ENACTION: Applied ${appliedMods.length} self-modifications`);
 
@@ -515,13 +575,18 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
 
     return {
       cycleNumber: cycleId,
-      phase: 'enaction',
+      phase: "enaction",
       coherenceAfter: this.computeCoherence(),
       stateChanges: {
         activeGoals: activeGoals.length,
         selfModifications: modifications.length,
         appliedModifications: appliedMods.length,
-        modificationDetails: appliedMods.map(m => `${m.key}: ${m.previousValue.toFixed(4)} → ${m.newValue.toFixed(4)}`),
+        modificationDetails: appliedMods.map(
+          (m) =>
+            `${m.key}: ${m.previousValue.toFixed(4)} → ${m.newValue.toFixed(
+              4,
+            )}`,
+        ),
       },
       timestamp: Date.now(),
     };
@@ -534,15 +599,19 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
     const cogState = this.cognitiveProcessor?.getState();
     if (!cogState) return 0.5;
 
-    const memoryCoherence = cogState.episodicMemories > 0
-      ? cogState.consolidatedMemories / cogState.episodicMemories
-      : 1;
-    const goalEfficiency = cogState.totalGoals > 0
-      ? cogState.activeGoals / cogState.totalGoals
-      : 0.5;
+    const memoryCoherence =
+      cogState.episodicMemories > 0
+        ? cogState.consolidatedMemories / cogState.episodicMemories
+        : 1;
+    const goalEfficiency =
+      cogState.totalGoals > 0
+        ? cogState.activeGoals / cogState.totalGoals
+        : 0.5;
     const selfImageStability = cogState.latestSelfImage?.coherenceScore ?? 0.5;
 
-    return memoryCoherence * 0.4 + goalEfficiency * 0.3 + selfImageStability * 0.3;
+    return (
+      memoryCoherence * 0.4 + goalEfficiency * 0.3 + selfImageStability * 0.3
+    );
   }
 
   /**
@@ -554,10 +623,13 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
 
     if (cogState) {
       if (cogState.activeGoals > 15) {
-        misalignments.push('goal_overload: too many active goals');
+        misalignments.push("goal_overload: too many active goals");
       }
-      if (cogState.episodicMemories > 0 && cogState.consolidatedMemories / cogState.episodicMemories < 0.3) {
-        misalignments.push('memory_fragmentation: low consolidation ratio');
+      if (
+        cogState.episodicMemories > 0 &&
+        cogState.consolidatedMemories / cogState.episodicMemories < 0.3
+      ) {
+        misalignments.push("memory_fragmentation: low consolidation ratio");
       }
     }
 
@@ -565,7 +637,7 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
       const recent = this.coherenceHistory.slice(-5);
       const trend = recent[recent.length - 1] - recent[0];
       if (trend < -0.2) {
-        misalignments.push('coherence_decline: downward trend detected');
+        misalignments.push("coherence_decline: downward trend detected");
       }
     }
 
@@ -576,9 +648,11 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
    * Perform periodic self-assessment
    */
   private performSelfAssessment(): void {
-    const avgCoherence = this.coherenceHistory.length > 0
-      ? this.coherenceHistory.reduce((a, b) => a + b, 0) / this.coherenceHistory.length
-      : 0.5;
+    const avgCoherence =
+      this.coherenceHistory.length > 0
+        ? this.coherenceHistory.reduce((a, b) => a + b, 0) /
+          this.coherenceHistory.length
+        : 0.5;
 
     const assessment = {
       cycleCount: this.cycleCount,
@@ -592,8 +666,12 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
       },
     };
 
-    this.emit('self_assessment', assessment);
-    log.info(`Self-assessment at cycle ${this.cycleCount}: coherence=${avgCoherence.toFixed(3)}`);
+    this.emit("self_assessment", assessment);
+    log.info(
+      `Self-assessment at cycle ${
+        this.cycleCount
+      }: coherence=${avgCoherence.toFixed(3)}`,
+    );
   }
 
   // =========================================================================
@@ -630,7 +708,9 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
    */
   public wireEchobeats(echobeats: Echobeats): void {
     this.echobeats = echobeats;
-    log.info('Echobeats wired to autonomy lifecycle (inverted mirror feedback active)');
+    log.info(
+      "Echobeats wired to autonomy lifecycle (inverted mirror feedback active)",
+    );
   }
 
   /**
@@ -638,7 +718,9 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
    */
   public wireSelfModification(engine: SelfModificationEngine): void {
     this.selfModEngine = engine;
-    log.info('SelfModificationEngine wired to autonomy lifecycle (ENACTION self-tuning active)');
+    log.info(
+      "SelfModificationEngine wired to autonomy lifecycle (ENACTION self-tuning active)",
+    );
   }
 
   /**
@@ -675,7 +757,9 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
    */
   public wireReservoirFeedback(feedback: ReservoirFeedbackLoop): void {
     this.reservoirFeedback = feedback;
-    log.info('ReservoirFeedbackLoop wired to autonomy lifecycle (online learning active)');
+    log.info(
+      "ReservoirFeedbackLoop wired to autonomy lifecycle (online learning active)",
+    );
   }
 
   /**

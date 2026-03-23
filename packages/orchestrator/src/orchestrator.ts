@@ -36,10 +36,19 @@ import { IPCMessageType } from "@deltecho/ipc";
 import { registerCognitiveHandlers } from "./ipc/cognitive-handlers.js";
 // Level 5: Autonomy Pipeline and Core Self
 import { CoreSelfEngine } from "deep-tree-echo-core";
-import { AutonomyPipeline, type AutonomyPipelineConfig } from "./autonomy-pipeline.js";
+import {
+  AutonomyPipeline,
+  type AutonomyPipelineConfig,
+} from "./autonomy-pipeline.js";
 import { DeltaChatAutonomyBridge } from "./deltachat-autonomy-bridge.js";
-import { AutonomyLifecycleCoordinator, type AutonomyLifecycleConfig } from "./autonomy-lifecycle.js";
-import { ReservoirFeedbackLoop, type ReservoirFeedbackConfig } from "./reservoir-feedback-loop.js";
+import {
+  AutonomyLifecycleCoordinator,
+  type AutonomyLifecycleConfig,
+} from "./autonomy-lifecycle.js";
+import {
+  ReservoirFeedbackLoop,
+  type ReservoirFeedbackConfig,
+} from "./reservoir-feedback-loop.js";
 import { Echobeats } from "./echobeats.js";
 
 const log = getLogger("deep-tree-echo-orchestrator/Orchestrator");
@@ -361,14 +370,16 @@ export class Orchestrator {
         try {
           // 1. CoreSelfEngine — local inference + reservoir + identity
           this.coreSelfEngine = new CoreSelfEngine({
-            lucy: { baseUrl: this.config.lucyEndpoint || 'http://localhost:8080' },
+            lucy: {
+              baseUrl: this.config.lucyEndpoint || "http://localhost:8080",
+            },
             reservoir: { units: 256 },
             identity: {},
             readoutDim: 64,
             embeddingDim: 128,
           });
           await this.coreSelfEngine.start();
-          log.info('CoreSelfEngine started (Lucy + Reservoir + Identity)');
+          log.info("CoreSelfEngine started (Lucy + Reservoir + Identity)");
 
           // 2. Echobeats — 3-stream, 12-step cognitive loop
           this.echobeats = new Echobeats({
@@ -377,7 +388,7 @@ export class Orchestrator {
             cycleInterval: 500,
           });
           this.echobeats.start();
-          log.info('Echobeats started (3-stream, 12-step cognitive loop)');
+          log.info("Echobeats started (3-stream, 12-step cognitive loop)");
 
           // 3. AutonomyPipeline — perception → reflection → planning → action
           this.autonomyPipeline = new AutonomyPipeline({
@@ -390,7 +401,7 @@ export class Orchestrator {
             ...this.config.autonomy,
           });
           await this.autonomyPipeline.start();
-          log.info('AutonomyPipeline started');
+          log.info("AutonomyPipeline started");
 
           // 4. AutonomyLifecycleCoordinator — 5-phase autonomy cycle
           this.autonomyLifecycle = new AutonomyLifecycleCoordinator({
@@ -401,7 +412,7 @@ export class Orchestrator {
           });
           this.autonomyLifecycle.wireEchobeats(this.echobeats);
           await this.autonomyLifecycle.start();
-          log.info('AutonomyLifecycleCoordinator started (5-phase cycle)');
+          log.info("AutonomyLifecycleCoordinator started (5-phase cycle)");
 
           // 5. ReservoirFeedbackLoop — online RLS learning
           this.reservoirFeedback = new ReservoirFeedbackLoop({
@@ -415,11 +426,14 @@ export class Orchestrator {
           const reservoir = this.coreSelfEngine.getReservoir?.();
           await this.reservoirFeedback.start(reservoir);
           this.autonomyLifecycle.wireReservoirFeedback(this.reservoirFeedback);
-          log.info('ReservoirFeedbackLoop started (online RLS learning)');
+          log.info("ReservoirFeedbackLoop started (online RLS learning)");
 
-          log.info('Level 5 Autonomy Pipeline fully initialized');
+          log.info("Level 5 Autonomy Pipeline fully initialized");
         } catch (error) {
-          log.warn('Level 5 Autonomy Pipeline failed to initialize (non-fatal):', error);
+          log.warn(
+            "Level 5 Autonomy Pipeline failed to initialize (non-fatal):",
+            error,
+          );
         }
       }
 
@@ -707,7 +721,10 @@ export class Orchestrator {
         case "ADAPTIVE":
           complexity = this.assessComplexity(messageText);
           // Extended adaptive routing with CORESELF tier
-          if (complexity.score >= this.config.coreSelfComplexityThreshold && this.coreSelfEngine) {
+          if (
+            complexity.score >= this.config.coreSelfComplexityThreshold &&
+            this.coreSelfEngine
+          ) {
             targetTier = "CORESELF";
           } else {
             targetTier = complexity.tier;
@@ -769,7 +786,9 @@ export class Orchestrator {
             response = await this.processWithCoreSelf(messageText, chatId);
             this.processingStats.coreSelfTierMessages++;
           } else {
-            log.warn('CORESELF tier requested but not available, falling back to MEMBRANE');
+            log.warn(
+              "CORESELF tier requested but not available, falling back to MEMBRANE",
+            );
             response = await this.processWithMembrane(messageText, chatId);
             this.processingStats.membraneTierMessages++;
           }
@@ -847,10 +866,10 @@ export class Orchestrator {
     messageText: string,
     _chatId: number,
   ): Promise<string> {
-    log.debug('Processing with CORESELF tier (Level 5 autonomy)');
+    log.debug("Processing with CORESELF tier (Level 5 autonomy)");
 
     if (!this.coreSelfEngine) {
-      throw new Error('CoreSelfEngine not initialized');
+      throw new Error("CoreSelfEngine not initialized");
     }
 
     const result = await this.coreSelfEngine.processMessage(messageText);
@@ -859,7 +878,7 @@ export class Orchestrator {
     if (this.reservoirFeedback?.isRunning()) {
       this.reservoirFeedback.submitConversationalFeedback(
         `coreself-${Date.now()}`,
-        'completed',
+        "completed",
         result.aarState?.coherence ?? 0.5,
       );
     }
@@ -941,7 +960,13 @@ Orchestrator running: ${this.running ? "Yes" : "No"}
               : "Ready"
             : "Disabled"
         }
-- CORESELF tier: ${this.coreSelfEngine ? (coreSelfStatus?.reservoirInitialized ? 'Active' : 'Ready') : 'Disabled'}
+- CORESELF tier: ${
+          this.coreSelfEngine
+            ? coreSelfStatus?.reservoirInitialized
+              ? "Active"
+              : "Ready"
+            : "Disabled"
+        }
 - AAR (Nested Membrane): ${this.aarSystem?.isRunning() ? "Active" : "Disabled"}
 
 **Processing Statistics**
@@ -1183,23 +1208,23 @@ ${response.body}`;
     // Stop Level 5 autonomy components first (newest first)
     if (this.reservoirFeedback) {
       await this.reservoirFeedback.stop();
-      log.info('ReservoirFeedbackLoop stopped');
+      log.info("ReservoirFeedbackLoop stopped");
     }
     if (this.autonomyLifecycle) {
       await this.autonomyLifecycle.stop();
-      log.info('AutonomyLifecycleCoordinator stopped');
+      log.info("AutonomyLifecycleCoordinator stopped");
     }
     if (this.autonomyPipeline) {
       await this.autonomyPipeline.stop();
-      log.info('AutonomyPipeline stopped');
+      log.info("AutonomyPipeline stopped");
     }
     if (this.echobeats) {
       this.echobeats.stop();
-      log.info('Echobeats stopped');
+      log.info("Echobeats stopped");
     }
     if (this.coreSelfEngine) {
       await this.coreSelfEngine.stop();
-      log.info('CoreSelfEngine stopped');
+      log.info("CoreSelfEngine stopped");
     }
 
     // Stop all services in reverse order (newest first)

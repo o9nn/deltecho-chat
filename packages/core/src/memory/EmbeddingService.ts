@@ -17,11 +17,11 @@
  * This is significantly better than TF-IDF and competitive with neural
  * embeddings for short text similarity tasks.
  */
-import { getLogger } from '../utils/logger.js';
+import { getLogger } from "../utils/logger.js";
 
-const log = getLogger('deep-tree-echo-core/memory/EmbeddingService');
+const log = getLogger("deep-tree-echo-core/memory/EmbeddingService");
 
-export type EmbeddingProvider = 'openai' | 'ollama' | 'onnx' | 'local';
+export type EmbeddingProvider = "openai" | "ollama" | "onnx" | "local";
 
 export interface EmbeddingServiceConfig {
   /** Embedding provider */
@@ -40,23 +40,26 @@ export interface EmbeddingServiceConfig {
   onnxModelPath?: string;
 }
 
-const DEFAULT_CONFIGS: Record<EmbeddingProvider, Partial<EmbeddingServiceConfig>> = {
+const DEFAULT_CONFIGS: Record<
+  EmbeddingProvider,
+  Partial<EmbeddingServiceConfig>
+> = {
   openai: {
-    apiEndpoint: 'https://api.openai.com/v1/embeddings',
-    model: 'text-embedding-3-small',
+    apiEndpoint: "https://api.openai.com/v1/embeddings",
+    model: "text-embedding-3-small",
     dimension: 1536,
   },
   ollama: {
-    apiEndpoint: 'http://localhost:11434/api/embeddings',
-    model: 'nomic-embed-text',
+    apiEndpoint: "http://localhost:11434/api/embeddings",
+    model: "nomic-embed-text",
     dimension: 768,
   },
   onnx: {
-    model: 'all-MiniLM-L6-v2',
+    model: "all-MiniLM-L6-v2",
     dimension: 384,
   },
   local: {
-    dimension: 384,  // Increased from 256 for better JL preservation
+    dimension: 384, // Increased from 256 for better JL preservation
   },
 };
 
@@ -85,8 +88,8 @@ class SeededRNG {
   /** Returns a float in [-1, 1] from standard normal approximation */
   nextGaussian(): number {
     // Box-Muller transform using xoshiro128** outputs
-    const u1 = (this.next() >>> 0) / 0xFFFFFFFF;
-    const u2 = (this.next() >>> 0) / 0xFFFFFFFF;
+    const u1 = (this.next() >>> 0) / 0xffffffff;
+    const u2 = (this.next() >>> 0) / 0xffffffff;
     const r = Math.sqrt(-2 * Math.log(Math.max(u1, 1e-10)));
     return r * Math.cos(2 * Math.PI * u2);
   }
@@ -124,19 +127,21 @@ export class EmbeddingService {
   private onnxTokenizer: unknown = null;
 
   constructor(config?: Partial<EmbeddingServiceConfig>) {
-    const provider = config?.provider || 'local';
+    const provider = config?.provider || "local";
     const defaults = DEFAULT_CONFIGS[provider];
     this.config = {
       provider,
-      apiKey: config?.apiKey || process.env.OPENAI_API_KEY || '',
-      apiEndpoint: config?.apiEndpoint || defaults.apiEndpoint || '',
-      model: config?.model || defaults.model || '',
+      apiKey: config?.apiKey || process.env.OPENAI_API_KEY || "",
+      apiEndpoint: config?.apiEndpoint || defaults.apiEndpoint || "",
+      model: config?.model || defaults.model || "",
       dimension: config?.dimension || defaults.dimension || 384,
       enableCache: config?.enableCache ?? true,
-      onnxModelPath: config?.onnxModelPath || '',
+      onnxModelPath: config?.onnxModelPath || "",
     } as Required<EmbeddingServiceConfig>;
 
-    log.info(`EmbeddingService initialized: provider=${provider}, dim=${this.config.dimension}`);
+    log.info(
+      `EmbeddingService initialized: provider=${provider}, dim=${this.config.dimension}`,
+    );
   }
 
   /**
@@ -155,9 +160,9 @@ export class EmbeddingService {
     let embedding: number[];
 
     // Try primary provider, fall back to local on failure
-    if (this.config.provider !== 'local' && !this.fallbackActive) {
+    if (this.config.provider !== "local" && !this.fallbackActive) {
       try {
-        if (this.config.provider === 'onnx') {
+        if (this.config.provider === "onnx") {
           embedding = await this.embedONNX(text);
         } else {
           embedding = await this.embedRemote(text);
@@ -166,10 +171,14 @@ export class EmbeddingService {
         this.failureCount = 0;
       } catch (error) {
         this.failureCount++;
-        log.warn(`Embedding ${this.config.provider} failed (${this.failureCount}x): ${error}`);
+        log.warn(
+          `Embedding ${this.config.provider} failed (${this.failureCount}x): ${error}`,
+        );
 
         if (this.failureCount >= 3) {
-          log.warn('Switching to local JL projection fallback after 3 consecutive failures');
+          log.warn(
+            "Switching to local JL projection fallback after 3 consecutive failures",
+          );
           this.fallbackActive = true;
         }
         embedding = this.embedLocal(text);
@@ -196,14 +205,14 @@ export class EmbeddingService {
    * Generate embeddings for multiple texts (batched)
    */
   async embedBatch(texts: string[]): Promise<number[][]> {
-    if (this.config.provider === 'openai' && !this.fallbackActive) {
+    if (this.config.provider === "openai" && !this.fallbackActive) {
       try {
         return await this.embedBatchRemote(texts);
       } catch {
         // Fall through to individual embedding
       }
     }
-    return Promise.all(texts.map(t => this.embed(t)));
+    return Promise.all(texts.map((t) => this.embed(t)));
   }
 
   /**
@@ -242,7 +251,9 @@ export class EmbeddingService {
       failureCount: this.failureCount,
       cacheSize: this.cache.size,
       fallbackActive: this.fallbackActive,
-      provider: this.fallbackActive ? 'local-jl (fallback)' : this.config.provider,
+      provider: this.fallbackActive
+        ? "local-jl (fallback)"
+        : this.config.provider,
       dimension: this.config.dimension,
     };
   }
@@ -253,7 +264,7 @@ export class EmbeddingService {
   resetFallback(): void {
     this.fallbackActive = false;
     this.failureCount = 0;
-    log.info('Embedding fallback reset — will retry remote provider');
+    log.info("Embedding fallback reset — will retry remote provider");
   }
 
   /**
@@ -266,27 +277,27 @@ export class EmbeddingService {
   // ─── Remote Embedding ─────────────────────────────────────────
 
   private async embedRemote(text: string): Promise<number[]> {
-    if (this.config.provider === 'openai') {
+    if (this.config.provider === "openai") {
       return this.embedOpenAI(text);
-    } else if (this.config.provider === 'ollama') {
+    } else if (this.config.provider === "ollama") {
       return this.embedOllama(text);
     }
     return this.embedLocal(text);
   }
 
   private async embedBatchRemote(texts: string[]): Promise<number[][]> {
-    if (this.config.provider === 'openai') {
+    if (this.config.provider === "openai") {
       return this.embedOpenAIBatch(texts);
     }
-    return Promise.all(texts.map(t => this.embedRemote(t)));
+    return Promise.all(texts.map((t) => this.embedRemote(t)));
   }
 
   private async embedOpenAI(text: string): Promise<number[]> {
     const response = await fetch(this.config.apiEndpoint, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.config.apiKey}`,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${this.config.apiKey}`,
       },
       body: JSON.stringify({
         model: this.config.model,
@@ -296,19 +307,25 @@ export class EmbeddingService {
     });
 
     if (!response.ok) {
-      throw new Error(`OpenAI embedding API error: ${response.status} ${await response.text()}`);
+      throw new Error(
+        `OpenAI embedding API error: ${
+          response.status
+        } ${await response.text()}`,
+      );
     }
 
-    const data = await response.json() as { data: Array<{ embedding: number[] }> };
+    const data = (await response.json()) as {
+      data: Array<{ embedding: number[] }>;
+    };
     return data.data[0].embedding;
   }
 
   private async embedOpenAIBatch(texts: string[]): Promise<number[][]> {
     const response = await fetch(this.config.apiEndpoint, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.config.apiKey}`,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${this.config.apiKey}`,
       },
       body: JSON.stringify({
         model: this.config.model,
@@ -321,16 +338,16 @@ export class EmbeddingService {
       throw new Error(`OpenAI batch embedding API error: ${response.status}`);
     }
 
-    const data = await response.json() as { data: Array<{ embedding: number[]; index: number }> };
-    return data.data
-      .sort((a, b) => a.index - b.index)
-      .map(d => d.embedding);
+    const data = (await response.json()) as {
+      data: Array<{ embedding: number[]; index: number }>;
+    };
+    return data.data.sort((a, b) => a.index - b.index).map((d) => d.embedding);
   }
 
   private async embedOllama(text: string): Promise<number[]> {
     const response = await fetch(this.config.apiEndpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         model: this.config.model,
         prompt: text,
@@ -341,7 +358,7 @@ export class EmbeddingService {
       throw new Error(`Ollama embedding API error: ${response.status}`);
     }
 
-    const data = await response.json() as { embedding: number[] };
+    const data = (await response.json()) as { embedding: number[] };
     return data.embedding;
   }
 
@@ -357,34 +374,63 @@ export class EmbeddingService {
       try {
         // Dynamic import — onnxruntime-node is an optional peer dependency
         // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const ort = await (Function('return import("onnxruntime-node")')() as Promise<{
+        const ort = await (Function(
+          'return import("onnxruntime-node")',
+        )() as Promise<{
           InferenceSession: {
             create: (path: string) => Promise<unknown>;
           };
-          Tensor: new (type: string, data: BigInt64Array, dims: number[]) => unknown;
+          Tensor: new (
+            type: string,
+            data: BigInt64Array,
+            dims: number[],
+          ) => unknown;
         }>);
-        const modelPath = this.config.onnxModelPath || 'models/all-MiniLM-L6-v2.onnx';
+        const modelPath =
+          this.config.onnxModelPath || "models/all-MiniLM-L6-v2.onnx";
         this.onnxSession = await ort.InferenceSession.create(modelPath);
         log.info(`ONNX model loaded: ${modelPath}`);
       } catch (error) {
-        throw new Error(`Failed to load ONNX model: ${error}. Install with: npm install onnxruntime-node`);
+        throw new Error(
+          `Failed to load ONNX model: ${error}. Install with: npm install onnxruntime-node`,
+        );
       }
     }
 
     // Simple tokenization (word-piece approximation)
     const tokens = this.simpleTokenize(text);
     const session = this.onnxSession as {
-      run: (feeds: Record<string, unknown>) => Promise<Record<string, { data: Float32Array; dims: number[] }>>;
+      run: (
+        feeds: Record<string, unknown>,
+      ) => Promise<Record<string, { data: Float32Array; dims: number[] }>>;
     };
 
     try {
       // Dynamic import for Tensor creation
-      const ort = await (Function('return import("onnxruntime-node")')() as Promise<{
-        Tensor: new (type: string, data: BigInt64Array, dims: number[]) => unknown;
+      const ort = await (Function(
+        'return import("onnxruntime-node")',
+      )() as Promise<{
+        Tensor: new (
+          type: string,
+          data: BigInt64Array,
+          dims: number[],
+        ) => unknown;
       }>);
-      const inputIds = new ort.Tensor('int64', BigInt64Array.from(tokens.map(BigInt)), [1, tokens.length]);
-      const attentionMask = new ort.Tensor('int64', BigInt64Array.from(tokens.map(() => BigInt(1))), [1, tokens.length]);
-      const tokenTypeIds = new ort.Tensor('int64', BigInt64Array.from(tokens.map(() => BigInt(0))), [1, tokens.length]);
+      const inputIds = new ort.Tensor(
+        "int64",
+        BigInt64Array.from(tokens.map(BigInt)),
+        [1, tokens.length],
+      );
+      const attentionMask = new ort.Tensor(
+        "int64",
+        BigInt64Array.from(tokens.map(() => BigInt(1))),
+        [1, tokens.length],
+      );
+      const tokenTypeIds = new ort.Tensor(
+        "int64",
+        BigInt64Array.from(tokens.map(() => BigInt(0))),
+        [1, tokens.length],
+      );
 
       const results = await session.run({
         input_ids: inputIds,
@@ -393,9 +439,10 @@ export class EmbeddingService {
       });
 
       // Mean pooling over token embeddings
-      const output = results['last_hidden_state'] || results['token_embeddings'];
+      const output =
+        results["last_hidden_state"] || results["token_embeddings"];
       if (!output) {
-        throw new Error('ONNX model output missing expected tensor');
+        throw new Error("ONNX model output missing expected tensor");
       }
 
       const data = output.data;
@@ -436,7 +483,11 @@ export class EmbeddingService {
   private simpleTokenize(text: string, maxLen = 128): number[] {
     const CLS = 101;
     const SEP = 102;
-    const words = text.toLowerCase().replace(/[^\w\s]/g, ' ').split(/\s+/).filter(w => w);
+    const words = text
+      .toLowerCase()
+      .replace(/[^\w\s]/g, " ")
+      .split(/\s+/)
+      .filter((w) => w);
     const tokens = [CLS];
 
     for (const word of words) {
@@ -517,7 +568,7 @@ export class EmbeddingService {
     }
 
     // Word unigrams
-    const words = text.split(/\s+/).filter(w => w.length > 0);
+    const words = text.split(/\s+/).filter((w) => w.length > 0);
     for (const word of words) {
       const hash = this.fnv1a(`w:${word}`, 0x01000193);
       features.set(hash, (features.get(hash) || 0) + 1);

@@ -13,12 +13,15 @@
  * This is the "Arena" in the AAR (Agent-Arena-Relation) architecture:
  * the state manifold that the Agent operates upon.
  */
-import { getLogger } from '../utils/logger.js';
-import { MemoryStorage, InMemoryStorage } from './storage.js';
-import { EmbeddingService, EmbeddingServiceConfig } from './EmbeddingService.js';
-import type { Memory, ReflectionMemory } from './RAGMemoryStore.js';
+import { getLogger } from "../utils/logger.js";
+import { MemoryStorage, InMemoryStorage } from "./storage.js";
+import {
+  EmbeddingService,
+  EmbeddingServiceConfig,
+} from "./EmbeddingService.js";
+import type { Memory, ReflectionMemory } from "./RAGMemoryStore.js";
 
-const log = getLogger('deep-tree-echo-core/memory/VectorMemoryStore');
+const log = getLogger("deep-tree-echo-core/memory/VectorMemoryStore");
 
 /**
  * Internal vector-indexed memory entry
@@ -78,10 +81,13 @@ export class VectorMemoryStore {
 
   constructor(
     storage?: MemoryStorage,
-    config?: Partial<VectorMemoryStoreConfig>
+    config?: Partial<VectorMemoryStoreConfig>,
   ) {
     this.storage = storage || new InMemoryStorage();
-    this.config = { ...DEFAULT_CONFIG, ...config } as Required<VectorMemoryStoreConfig>;
+    this.config = {
+      ...DEFAULT_CONFIG,
+      ...config,
+    } as Required<VectorMemoryStoreConfig>;
     this.embeddingService = new EmbeddingService(this.config.embedding);
     this.loadPromise = this.loadMemories();
   }
@@ -97,7 +103,7 @@ export class VectorMemoryStore {
 
   public setEnabled(enabled: boolean): void {
     this.enabled = enabled;
-    log.info(`Vector memory system ${enabled ? 'enabled' : 'disabled'}`);
+    log.info(`Vector memory system ${enabled ? "enabled" : "disabled"}`);
   }
 
   public isEnabled(): boolean {
@@ -107,7 +113,9 @@ export class VectorMemoryStore {
   /**
    * Store a new memory with real vector embedding
    */
-  public async storeMemory(memory: Omit<Memory, 'id' | 'timestamp' | 'embedding'>): Promise<void> {
+  public async storeMemory(
+    memory: Omit<Memory, "id" | "timestamp" | "embedding">,
+  ): Promise<void> {
     await this.loadPromise; // Ensure initial load is complete
     if (!this.enabled) return;
 
@@ -132,9 +140,11 @@ export class VectorMemoryStore {
       }
 
       this.scheduleSave();
-      log.info(`Stored memory ${newMemory.id} (embedding dim=${embedding.length})`);
+      log.info(
+        `Stored memory ${newMemory.id} (embedding dim=${embedding.length})`,
+      );
     } catch (error) {
-      log.error('Failed to store memory:', error);
+      log.error("Failed to store memory:", error);
     }
   }
 
@@ -143,8 +153,8 @@ export class VectorMemoryStore {
    */
   public async storeReflection(
     content: string,
-    type: 'periodic' | 'focused' = 'periodic',
-    aspect?: string
+    type: "periodic" | "focused" = "periodic",
+    aspect?: string,
   ): Promise<void> {
     await this.loadPromise;
     if (!this.enabled) return;
@@ -166,9 +176,9 @@ export class VectorMemoryStore {
       }
 
       this.scheduleSave();
-      log.info(`Stored ${type} reflection${aspect ? ` on ${aspect}` : ''}`);
+      log.info(`Stored ${type} reflection${aspect ? ` on ${aspect}` : ""}`);
     } catch (error) {
-      log.error('Failed to store reflection:', error);
+      log.error("Failed to store reflection:", error);
     }
   }
 
@@ -179,7 +189,12 @@ export class VectorMemoryStore {
     return this.memories
       .sort((a, b) => b.timestamp - a.timestamp)
       .slice(0, count)
-      .map((mem) => `[${new Date(mem.timestamp).toLocaleString()}] ${mem.sender}: ${mem.text}`);
+      .map(
+        (mem) =>
+          `[${new Date(mem.timestamp).toLocaleString()}] ${mem.sender}: ${
+            mem.text
+          }`,
+      );
   }
 
   /**
@@ -195,13 +210,18 @@ export class VectorMemoryStore {
    * Get recent reflections
    */
   public getRecentReflections(count: number = 5): ReflectionMemory[] {
-    return this.reflections.sort((a, b) => b.timestamp - a.timestamp).slice(0, count);
+    return this.reflections
+      .sort((a, b) => b.timestamp - a.timestamp)
+      .slice(0, count);
   }
 
   /**
    * Get conversation context for a specific chat
    */
-  public getConversationContext(chatId: number, messageLimit: number = 10): Memory[] {
+  public getConversationContext(
+    chatId: number,
+    messageLimit: number = 10,
+  ): Memory[] {
     return this.memories
       .filter((mem) => mem.chatId === chatId)
       .sort((a, b) => b.timestamp - a.timestamp)
@@ -213,13 +233,13 @@ export class VectorMemoryStore {
     this.memories = [];
     this.vectorIndex.clear();
     await this.saveMemories();
-    log.info('Cleared all memories and vector index');
+    log.info("Cleared all memories and vector index");
   }
 
   public async clearChatMemories(chatId: number): Promise<void> {
-    const removed = this.memories.filter(m => m.chatId === chatId);
-    removed.forEach(m => this.vectorIndex.delete(m.id));
-    this.memories = this.memories.filter(m => m.chatId !== chatId);
+    const removed = this.memories.filter((m) => m.chatId === chatId);
+    removed.forEach((m) => this.vectorIndex.delete(m.id));
+    this.memories = this.memories.filter((m) => m.chatId !== chatId);
     await this.saveMemories();
     log.info(`Cleared memories for chat ${chatId}`);
   }
@@ -232,15 +252,21 @@ export class VectorMemoryStore {
    * This is the core autonomy upgrade — real cosine similarity over
    * dense vector embeddings instead of TF-IDF keyword matching.
    */
-  public async searchMemories(query: string, limit: number = 5): Promise<Memory[]> {
+  public async searchMemories(
+    query: string,
+    limit: number = 5,
+  ): Promise<Memory[]> {
     const results = await this.searchMemoriesWithScores(query, limit);
-    return results.map(r => r.memory);
+    return results.map((r) => r.memory);
   }
 
   /**
    * Semantic search with similarity scores
    */
-  public async searchMemoriesWithScores(query: string, limit: number = 5): Promise<VectorSearchResult[]> {
+  public async searchMemoriesWithScores(
+    query: string,
+    limit: number = 5,
+  ): Promise<VectorSearchResult[]> {
     if (this.memories.length === 0) return [];
 
     // Embed the query
@@ -250,11 +276,15 @@ export class VectorMemoryStore {
     const scored: VectorSearchResult[] = [];
 
     for (const memory of this.memories) {
-      const memoryEmbedding = this.vectorIndex.get(memory.id) || memory.embedding || [];
+      const memoryEmbedding =
+        this.vectorIndex.get(memory.id) || memory.embedding || [];
 
       if (memoryEmbedding.length === 0) continue;
 
-      const similarity = EmbeddingService.cosineSimilarity(queryEmbedding, memoryEmbedding);
+      const similarity = EmbeddingService.cosineSimilarity(
+        queryEmbedding,
+        memoryEmbedding,
+      );
 
       if (similarity < this.config.similarityThreshold) continue;
 
@@ -263,39 +293,42 @@ export class VectorMemoryStore {
       const recencyBoost = Math.exp(-ageInDays / 30);
 
       // Combined score
-      const score = similarity * this.config.similarityWeight +
-                    recencyBoost * (1 - this.config.similarityWeight);
+      const score =
+        similarity * this.config.similarityWeight +
+        recencyBoost * (1 - this.config.similarityWeight);
 
       scored.push({ memory, similarity, score });
     }
 
-    return scored
-      .sort((a, b) => b.score - a.score)
-      .slice(0, limit);
+    return scored.sort((a, b) => b.score - a.score).slice(0, limit);
   }
 
   /**
    * Find memories similar to a given memory
    */
-  public async findSimilarMemories(memoryId: string, threshold: number = 0.5): Promise<Memory[]> {
-    const target = this.memories.find(m => m.id === memoryId);
+  public async findSimilarMemories(
+    memoryId: string,
+    threshold: number = 0.5,
+  ): Promise<Memory[]> {
+    const target = this.memories.find((m) => m.id === memoryId);
     if (!target) return [];
 
-    const targetEmbedding = this.vectorIndex.get(memoryId) || target.embedding || [];
+    const targetEmbedding =
+      this.vectorIndex.get(memoryId) || target.embedding || [];
     if (targetEmbedding.length === 0) return [];
 
     return this.memories
-      .filter(m => m.id !== memoryId)
-      .map(m => ({
+      .filter((m) => m.id !== memoryId)
+      .map((m) => ({
         memory: m,
         similarity: EmbeddingService.cosineSimilarity(
           targetEmbedding,
-          this.vectorIndex.get(m.id) || m.embedding || []
+          this.vectorIndex.get(m.id) || m.embedding || [],
         ),
       }))
-      .filter(r => r.similarity >= threshold)
+      .filter((r) => r.similarity >= threshold)
       .sort((a, b) => b.similarity - a.similarity)
-      .map(r => r.memory);
+      .map((r) => r.memory);
   }
 
   // ─── Statistics ───────────────────────────────────────────────
@@ -307,7 +340,7 @@ export class VectorMemoryStore {
     memoryCount: number;
     reflectionCount: number;
     vectorIndexSize: number;
-    embeddingStats: ReturnType<EmbeddingService['getStats']>;
+    embeddingStats: ReturnType<EmbeddingService["getStats"]>;
     enabled: boolean;
   } {
     return {
@@ -330,7 +363,9 @@ export class VectorMemoryStore {
 
   private async loadMemories(): Promise<void> {
     try {
-      const memoriesData = await this.storage.load('vectorMemoryStore_memories');
+      const memoriesData = await this.storage.load(
+        "vectorMemoryStore_memories",
+      );
       if (memoriesData) {
         try {
           this.memories = JSON.parse(memoriesData);
@@ -340,20 +375,24 @@ export class VectorMemoryStore {
               this.vectorIndex.set(mem.id, mem.embedding);
             }
           }
-          log.info(`Loaded ${this.memories.length} memories (${this.vectorIndex.size} with embeddings)`);
+          log.info(
+            `Loaded ${this.memories.length} memories (${this.vectorIndex.size} with embeddings)`,
+          );
         } catch (error) {
-          log.error('Failed to parse memories:', error);
+          log.error("Failed to parse memories:", error);
           this.memories = [];
         }
       }
 
-      const reflectionsData = await this.storage.load('vectorMemoryStore_reflections');
+      const reflectionsData = await this.storage.load(
+        "vectorMemoryStore_reflections",
+      );
       if (reflectionsData) {
         try {
           this.reflections = JSON.parse(reflectionsData);
           log.info(`Loaded ${this.reflections.length} reflections`);
         } catch (error) {
-          log.error('Failed to parse reflections:', error);
+          log.error("Failed to parse reflections:", error);
           this.reflections = [];
         }
       }
@@ -361,22 +400,32 @@ export class VectorMemoryStore {
       // Note: enabled state is controlled explicitly via setEnabled(),
       // not loaded from storage, to prevent race conditions with constructor
     } catch (error) {
-      log.error('Failed to load memories:', error);
+      log.error("Failed to load memories:", error);
     }
   }
 
   private async saveMemories(): Promise<void> {
     try {
       const trimmedMemories = this.memories.slice(-this.config.memoryLimit);
-      await this.storage.save('vectorMemoryStore_memories', JSON.stringify(trimmedMemories));
+      await this.storage.save(
+        "vectorMemoryStore_memories",
+        JSON.stringify(trimmedMemories),
+      );
 
-      const trimmedReflections = this.reflections.slice(-this.config.reflectionLimit);
-      await this.storage.save('vectorMemoryStore_reflections', JSON.stringify(trimmedReflections));
+      const trimmedReflections = this.reflections.slice(
+        -this.config.reflectionLimit,
+      );
+      await this.storage.save(
+        "vectorMemoryStore_reflections",
+        JSON.stringify(trimmedReflections),
+      );
 
       this.dirty = false;
-      log.info(`Saved ${trimmedMemories.length} memories, ${trimmedReflections.length} reflections`);
+      log.info(
+        `Saved ${trimmedMemories.length} memories, ${trimmedReflections.length} reflections`,
+      );
     } catch (error) {
-      log.error('Failed to save memories:', error);
+      log.error("Failed to save memories:", error);
     }
   }
 
@@ -407,7 +456,7 @@ export class VectorMemoryStore {
     this.reflections = [];
     this.vectorIndex.clear();
     this.enabled = false;
-    log.info('VectorMemoryStore destroyed');
+    log.info("VectorMemoryStore destroyed");
   }
 
   async flush(): Promise<void> {

@@ -32,14 +32,14 @@
  * This module provides the standalone Echobeats engine that can be
  * used independently or wired into the AutonomyPipeline.
  */
-import { EventEmitter } from 'events';
-import { getLogger } from 'deep-tree-echo-core';
+import { EventEmitter } from "events";
+import { getLogger } from "deep-tree-echo-core";
 
-const log = getLogger('deep-tree-echo-orchestrator/Echobeats');
+const log = getLogger("deep-tree-echo-orchestrator/Echobeats");
 
 // ─── Types ─────────────────────────────────────────────────────
 
-export type StreamPhase = 'perceive' | 'reflect' | 'plan' | 'act';
+export type StreamPhase = "perceive" | "reflect" | "plan" | "act";
 
 export interface EchobeatsConfig {
   /** Cycle interval in ms (one step per interval) */
@@ -102,7 +102,7 @@ export interface ThreadPermutation {
   /** Step in the 6-permutation cycle */
   step: number;
   /** Which triad (MP1 or MP2) this belongs to */
-  triad: 'MP1' | 'MP2';
+  triad: "MP1" | "MP2";
 }
 
 /**
@@ -138,29 +138,62 @@ export class Echobeats extends EventEmitter {
 
   // System 5 tetradic state
   private system5Active = false;
-  private currentTriad: 'MP1' | 'MP2' = 'MP1';
+  private currentTriad: "MP1" | "MP2" = "MP1";
   private triadStep = 0;
   private dyadicEdge = 0;
-  private threadBundles: Array<{ threads: number[]; edges: Array<[number, number]>; symmetry: string }> = [];
-  private telemetryBuffer: Array<{ timestamp: number; step: number; phase: string; energy: number; coherence: number }> = [];
+  private threadBundles: Array<{
+    threads: number[];
+    edges: Array<[number, number]>;
+    symmetry: string;
+  }> = [];
+  private telemetryBuffer: Array<{
+    timestamp: number;
+    step: number;
+    phase: string;
+    energy: number;
+    coherence: number;
+  }> = [];
   private maxTelemetryBuffer = 1000;
 
   // The 12-step phase map (3 streams × 4 phases)
   private readonly PHASE_MAP: StreamPhase[] = [
-    'perceive', 'perceive', 'perceive',
-    'reflect',  'reflect',  'reflect',
-    'plan',     'plan',     'plan',
-    'act',      'act',      'act',
+    "perceive",
+    "perceive",
+    "perceive",
+    "reflect",
+    "reflect",
+    "reflect",
+    "plan",
+    "plan",
+    "plan",
+    "act",
+    "act",
+    "act",
   ];
 
   // The 6 dyadic permutations of 4 particular sets
   private readonly PERMUTATIONS: Array<[number, number]> = [
-    [1, 2], [1, 3], [1, 4], [2, 3], [2, 4], [3, 4],
+    [1, 2],
+    [1, 3],
+    [1, 4],
+    [2, 3],
+    [2, 4],
+    [3, 4],
   ];
 
   // Two complementary triads
-  private readonly MP1_TRIADS: number[][] = [[1, 2, 3], [1, 2, 4], [1, 3, 4], [2, 3, 4]];
-  private readonly MP2_TRIADS: number[][] = [[1, 3, 4], [2, 3, 4], [1, 2, 3], [1, 2, 4]];
+  private readonly MP1_TRIADS: number[][] = [
+    [1, 2, 3],
+    [1, 2, 4],
+    [1, 3, 4],
+    [2, 3, 4],
+  ];
+  private readonly MP2_TRIADS: number[][] = [
+    [1, 3, 4],
+    [2, 3, 4],
+    [1, 2, 3],
+    [1, 2, 4],
+  ];
 
   // The 1/7 = 0.142857 particular sequence (enneagram inner flow)
   private readonly ENERGY_FLOW = [1, 4, 2, 8, 5, 7];
@@ -175,13 +208,13 @@ export class Echobeats extends EventEmitter {
   // ─── Initialization ────────────────────────────────────────────
 
   private initializeStreams(): void {
-    const streamNames = ['perception', 'action', 'simulation'];
+    const streamNames = ["perception", "action", "simulation"];
 
     for (let i = 0; i < this.config.streamCount; i++) {
       this.streams.push({
         id: i,
         name: streamNames[i] || `stream-${i}`,
-        currentPhase: 'perceive',
+        currentPhase: "perceive",
         tickCount: 0,
         lastTickTime: 0,
         particularSet: this.MP1_TRIADS[i] || [1, 2, 3],
@@ -194,13 +227,15 @@ export class Echobeats extends EventEmitter {
   private initializeShells(): void {
     if (!this.config.enableNestedShells) {
       // Single global shell
-      this.shells = [{
-        level: 0,
-        name: 'global',
-        termCount: 1,
-        parent: null,
-        activeStreams: this.streams.map(s => s.id),
-      }];
+      this.shells = [
+        {
+          level: 0,
+          name: "global",
+          termCount: 1,
+          parent: null,
+          activeStreams: this.streams.map((s) => s.id),
+        },
+      ];
       return;
     }
 
@@ -208,23 +243,23 @@ export class Echobeats extends EventEmitter {
     this.shells = [
       {
         level: 0,
-        name: 'global',
+        name: "global",
         termCount: 1,
         parent: null,
         activeStreams: [0, 1, 2],
       },
       {
         level: 1,
-        name: 'organization',
+        name: "organization",
         termCount: 2,
-        parent: 'global',
+        parent: "global",
         activeStreams: [0, 1],
       },
       {
         level: 2,
-        name: 'process',
+        name: "process",
         termCount: 4,
-        parent: 'organization',
+        parent: "organization",
         activeStreams: [0],
       },
     ];
@@ -246,17 +281,21 @@ export class Echobeats extends EventEmitter {
     if (this.running) return;
     this.running = true;
 
-    log.info('═══════════════════════════════════════════════');
-    log.info('  Echobeats 3-Stream Concurrent Loop ACTIVE');
+    log.info("═══════════════════════════════════════════════");
+    log.info("  Echobeats 3-Stream Concurrent Loop ACTIVE");
     log.info(`  Streams: ${this.config.streamCount}`);
     log.info(`  Steps/cycle: ${this.config.stepsPerCycle}`);
     log.info(`  Interval: ${this.config.cycleInterval}ms`);
-    log.info(`  Multiplexing: ${this.config.enableMultiplexing ? 'ON' : 'OFF'}`);
-    log.info(`  Nested shells: ${this.config.enableNestedShells ? 'ON' : 'OFF'}`);
-    log.info('═══════════════════════════════════════════════');
+    log.info(
+      `  Multiplexing: ${this.config.enableMultiplexing ? "ON" : "OFF"}`,
+    );
+    log.info(
+      `  Nested shells: ${this.config.enableNestedShells ? "ON" : "OFF"}`,
+    );
+    log.info("═══════════════════════════════════════════════");
 
     this.timer = setInterval(() => this.tick(), this.config.cycleInterval);
-    this.emit('started');
+    this.emit("started");
   }
 
   /**
@@ -271,8 +310,10 @@ export class Echobeats extends EventEmitter {
       this.timer = null;
     }
 
-    log.info(`Echobeats stopped after ${this.globalStep} steps (${this.cycleNumber} cycles)`);
-    this.emit('stopped');
+    log.info(
+      `Echobeats stopped after ${this.globalStep} steps (${this.cycleNumber} cycles)`,
+    );
+    this.emit("stopped");
   }
 
   // ─── Core Tick ─────────────────────────────────────────────────
@@ -290,7 +331,10 @@ export class Echobeats extends EventEmitter {
     // New cycle detection
     if (cycleStep === 1) {
       this.cycleNumber++;
-      this.emit('cycle_start', { cycleNumber: this.cycleNumber, globalStep: this.globalStep });
+      this.emit("cycle_start", {
+        cycleNumber: this.cycleNumber,
+        globalStep: this.globalStep,
+      });
     }
 
     // Determine which stream is active for this step
@@ -311,11 +355,12 @@ export class Echobeats extends EventEmitter {
       permutation = {
         pair: this.PERMUTATIONS[permIdx],
         step: permIdx,
-        triad: (Math.floor((this.globalStep - 1) / 6) % 2 === 0) ? 'MP1' : 'MP2',
+        triad: Math.floor((this.globalStep - 1) / 6) % 2 === 0 ? "MP1" : "MP2",
       };
 
       // Update stream's particular set based on current triad
-      const triads = permutation.triad === 'MP1' ? this.MP1_TRIADS : this.MP2_TRIADS;
+      const triads =
+        permutation.triad === "MP1" ? this.MP1_TRIADS : this.MP2_TRIADS;
       stream.particularSet = triads[triadIdx] || [1, 2, 3];
     }
 
@@ -340,7 +385,7 @@ export class Echobeats extends EventEmitter {
     };
 
     // Emit events
-    this.emit('tick', tickEvent);
+    this.emit("tick", tickEvent);
     this.emit(`stream_${stream.name}`, tickEvent);
     this.emit(`phase_${phase}`, tickEvent);
 
@@ -356,7 +401,7 @@ export class Echobeats extends EventEmitter {
 
       // Alternate MP1/MP2 every full cycle
       if (cycleStep === this.config.stepsPerCycle) {
-        this.currentTriad = this.currentTriad === 'MP1' ? 'MP2' : 'MP1';
+        this.currentTriad = this.currentTriad === "MP1" ? "MP2" : "MP1";
       }
     }
 
@@ -369,17 +414,24 @@ export class Echobeats extends EventEmitter {
       try {
         await this.tickHandler(tickEvent);
       } catch (error) {
-        log.error(`Echobeats tick handler error at step ${this.globalStep}:`, error);
-        this.emit('error', { step: this.globalStep, stream: stream.name, error: String(error) });
+        log.error(
+          `Echobeats tick handler error at step ${this.globalStep}:`,
+          error,
+        );
+        this.emit("error", {
+          step: this.globalStep,
+          stream: stream.name,
+          error: String(error),
+        });
       }
     }
 
     // End of cycle
     if (cycleStep === this.config.stepsPerCycle) {
-      this.emit('cycle_end', {
+      this.emit("cycle_end", {
         cycleNumber: this.cycleNumber,
         globalStep: this.globalStep,
-        streamStats: this.streams.map(s => ({
+        streamStats: this.streams.map((s) => ({
           name: s.name,
           tickCount: s.tickCount,
           energy: s.energy,
@@ -424,14 +476,14 @@ export class Echobeats extends EventEmitter {
   evolveToSystem5(): void {
     if (this.system5Active) return;
 
-    log.info('Evolving to System 5 tetradic structure...');
+    log.info("Evolving to System 5 tetradic structure...");
 
     // Add 4th stream (integration/meta-cognition)
     if (this.streams.length < 4) {
       this.streams.push({
         id: 3,
-        name: 'integration',
-        currentPhase: 'act',
+        name: "integration",
+        currentPhase: "act",
         tickCount: 0,
         lastTickTime: 0,
         particularSet: [1, 2, 3, 4],
@@ -444,47 +496,71 @@ export class Echobeats extends EventEmitter {
     // Each bundle = 3 threads with 3 dyadic edges
     this.threadBundles = [
       {
-        threads: [0, 1, 2],  // perception-action-simulation
-        edges: [[0, 1], [0, 2], [1, 2]],
-        symmetry: 'operational',
+        threads: [0, 1, 2], // perception-action-simulation
+        edges: [
+          [0, 1],
+          [0, 2],
+          [1, 2],
+        ],
+        symmetry: "operational",
       },
       {
-        threads: [0, 1, 3],  // perception-action-integration
-        edges: [[0, 1], [0, 3], [1, 3]],
-        symmetry: 'executive',
+        threads: [0, 1, 3], // perception-action-integration
+        edges: [
+          [0, 1],
+          [0, 3],
+          [1, 3],
+        ],
+        symmetry: "executive",
       },
       {
-        threads: [0, 2, 3],  // perception-simulation-integration
-        edges: [[0, 2], [0, 3], [2, 3]],
-        symmetry: 'reflective',
+        threads: [0, 2, 3], // perception-simulation-integration
+        edges: [
+          [0, 2],
+          [0, 3],
+          [2, 3],
+        ],
+        symmetry: "reflective",
       },
       {
-        threads: [1, 2, 3],  // action-simulation-integration
-        edges: [[1, 2], [1, 3], [2, 3]],
-        symmetry: 'generative',
+        threads: [1, 2, 3], // action-simulation-integration
+        edges: [
+          [1, 2],
+          [1, 3],
+          [2, 3],
+        ],
+        symmetry: "generative",
       },
     ];
 
     // Add System 5 shell
     this.shells.push({
       level: 3,
-      name: 'system5-tetrad',
+      name: "system5-tetrad",
       termCount: 9, // OEIS A000081 for N=4
-      parent: 'process',
+      parent: "process",
       activeStreams: [0, 1, 2, 3],
     });
 
     this.system5Active = true;
     this.config.streamCount = 4;
 
-    log.info('System 5 tetradic structure active:');
+    log.info("System 5 tetradic structure active:");
     log.info(`  4 threads: perception, action, simulation, integration`);
-    log.info(`  6 dyadic edges: ${this.PERMUTATIONS.map(p => `(${p[0]},${p[1]})`).join(' ')}`);
-    log.info(`  4 tensor bundles: ${this.threadBundles.map(b => b.symmetry).join(', ')}`);
+    log.info(
+      `  6 dyadic edges: ${this.PERMUTATIONS.map(
+        (p) => `(${p[0]},${p[1]})`,
+      ).join(" ")}`,
+    );
+    log.info(
+      `  4 tensor bundles: ${this.threadBundles
+        .map((b) => b.symmetry)
+        .join(", ")}`,
+    );
 
-    this.emit('system5_evolved', {
-      threads: this.streams.map(s => s.name),
-      bundles: this.threadBundles.map(b => b.symmetry),
+    this.emit("system5_evolved", {
+      threads: this.streams.map((s) => s.name),
+      bundles: this.threadBundles.map((b) => b.symmetry),
     });
   }
 
@@ -492,7 +568,11 @@ export class Echobeats extends EventEmitter {
    * Get the current active tensor bundle based on the triad rotation.
    * MP1 and MP2 alternate, each cycling through 4 triadic faces.
    */
-  getCurrentBundle(): { threads: number[]; edges: Array<[number, number]>; symmetry: string } | null {
+  getCurrentBundle(): {
+    threads: number[];
+    edges: Array<[number, number]>;
+    symmetry: string;
+  } | null {
     if (!this.system5Active || this.threadBundles.length === 0) return null;
     return this.threadBundles[this.triadStep % this.threadBundles.length];
   }
@@ -502,7 +582,7 @@ export class Echobeats extends EventEmitter {
   }
 
   getThreadBundles() {
-    return this.threadBundles.map(b => ({ ...b }));
+    return this.threadBundles.map((b) => ({ ...b }));
   }
 
   // ─── Telemetry ─────────────────────────────────────────────────
@@ -511,7 +591,12 @@ export class Echobeats extends EventEmitter {
    * Record a telemetry point for monitoring.
    * Called automatically on each tick.
    */
-  private recordTelemetry(step: number, phase: string, energy: number, coherence: number): void {
+  private recordTelemetry(
+    step: number,
+    phase: string,
+    energy: number,
+    coherence: number,
+  ): void {
     this.telemetryBuffer.push({
       timestamp: Date.now(),
       step,
@@ -521,7 +606,9 @@ export class Echobeats extends EventEmitter {
     });
 
     if (this.telemetryBuffer.length > this.maxTelemetryBuffer) {
-      this.telemetryBuffer = this.telemetryBuffer.slice(-this.maxTelemetryBuffer);
+      this.telemetryBuffer = this.telemetryBuffer.slice(
+        -this.maxTelemetryBuffer,
+      );
     }
   }
 
@@ -530,7 +617,13 @@ export class Echobeats extends EventEmitter {
    * Returns recent metrics for dashboard display.
    */
   getTelemetry(): {
-    recentTicks: Array<{ timestamp: number; step: number; phase: string; energy: number; coherence: number }>;
+    recentTicks: Array<{
+      timestamp: number;
+      step: number;
+      phase: string;
+      energy: number;
+      coherence: number;
+    }>;
     averageEnergy: number;
     averageCoherence: number;
     ticksPerSecond: number;
@@ -539,17 +632,20 @@ export class Echobeats extends EventEmitter {
     currentBundle: string | null;
   } {
     const recent = this.telemetryBuffer.slice(-100);
-    const avgEnergy = recent.length > 0
-      ? recent.reduce((sum, t) => sum + t.energy, 0) / recent.length
-      : 0;
-    const avgCoherence = recent.length > 0
-      ? recent.reduce((sum, t) => sum + t.coherence, 0) / recent.length
-      : 0;
+    const avgEnergy =
+      recent.length > 0
+        ? recent.reduce((sum, t) => sum + t.energy, 0) / recent.length
+        : 0;
+    const avgCoherence =
+      recent.length > 0
+        ? recent.reduce((sum, t) => sum + t.coherence, 0) / recent.length
+        : 0;
 
     // Calculate ticks per second
     let ticksPerSecond = 0;
     if (recent.length >= 2) {
-      const timeSpan = recent[recent.length - 1].timestamp - recent[0].timestamp;
+      const timeSpan =
+        recent[recent.length - 1].timestamp - recent[0].timestamp;
       if (timeSpan > 0) {
         ticksPerSecond = (recent.length / timeSpan) * 1000;
       }
@@ -575,11 +671,11 @@ export class Echobeats extends EventEmitter {
   }
 
   getStreams(): CognitiveStream[] {
-    return this.streams.map(s => ({ ...s }));
+    return this.streams.map((s) => ({ ...s }));
   }
 
   getShells(): NestedShell[] {
-    return this.shells.map(s => ({ ...s }));
+    return this.shells.map((s) => ({ ...s }));
   }
 
   getStats(): {
@@ -601,14 +697,14 @@ export class Echobeats extends EventEmitter {
       globalStep: this.globalStep,
       cycleNumber: this.cycleNumber,
       cycleStep: ((this.globalStep - 1) % this.config.stepsPerCycle) + 1,
-      streams: this.streams.map(s => ({
+      streams: this.streams.map((s) => ({
         name: s.name,
         phase: s.currentPhase,
         tickCount: s.tickCount,
         energy: s.energy,
         particularSet: s.particularSet,
       })),
-      shells: this.shells.map(s => ({
+      shells: this.shells.map((s) => ({
         name: s.name,
         level: s.level,
         termCount: s.termCount,
