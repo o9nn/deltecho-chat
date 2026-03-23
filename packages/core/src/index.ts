@@ -36,3 +36,7 @@ export * from "./consciousness";
 
 // Export scientific genius modules
 export * from "./scientific-genius";
+
+// Level 5: Core Self (IdentityMesh, CoreSelfEngine, ReservoirBridge, LucyInferenceDriver)
+export * from "./core-self/index.js";
+export { TreePolytopeKernel } from "./core-self/TreePolytopeKernel.js";
