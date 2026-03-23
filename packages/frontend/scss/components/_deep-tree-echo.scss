@@ -686,7 +686,7 @@ $echo-security-color: #f1c40f;
       transition: all 0.2s ease;
 
       &:hover {
-        background-color: darken($echo-primary-color, 10%);
+        background-color: color.adjust($echo-primary-color, $lightness: -10%);
         transform: translateY(-2px);
       }
 

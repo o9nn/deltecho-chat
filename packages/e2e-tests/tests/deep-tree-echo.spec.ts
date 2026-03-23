@@ -27,7 +27,7 @@ test.describe("Deep Tree Echo Cognitive Interface", () => {
     const page = await context.newPage();
     await reloadPage(page);
     existingProfiles = (await loadExistingProfiles(page)) ?? existingProfiles;
-    await context.close();
+    await context.close().catch(() => {});
   });
 
   test.beforeEach(async ({ page }) => {
