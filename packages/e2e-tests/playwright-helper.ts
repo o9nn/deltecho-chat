@@ -293,7 +293,11 @@ export async function createProfiles(
     return hasProfile;
   };
   if (browserName.toLowerCase().indexOf("chrom") > -1) {
-    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    try {
+      await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    } catch {
+      // Context may already be closed
+    }
   }
   for (let n = 0; n < number; n++) {
     if (!hasProfileWithName(userNames[n])) {
