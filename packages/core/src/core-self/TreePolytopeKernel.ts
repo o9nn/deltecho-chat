@@ -52,7 +52,7 @@ const A000081 = [0, 1, 1, 2, 4, 9, 20, 48, 115, 286, 719] as const;
 const CHAIN_PRIMES = [2, 3, 5, 11, 31, 127, 709, 5381] as const;
 
 /** The 1/7 particular sequence */
-const PARTICULAR_SEQUENCE = [1, 4, 2, 8, 5, 7] as const;
+const _PARTICULAR_SEQUENCE = [1, 4, 2, 8, 5, 7] as const;
 
 // ============================================================
 // Types

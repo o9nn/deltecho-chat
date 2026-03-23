@@ -24,8 +24,8 @@ import { EventEmitter } from 'events';
 import { getLogger } from 'deep-tree-echo-core';
 import type {
   CognitiveTickProcessor,
-  CognitivePercept,
-  SelfImageSnapshot,
+
+
 } from './cognitive-tick-processor.js';
 import type { Echobeats } from './echobeats.js';
 import type { SelfModificationEngine, ModificationResult } from './self-modification.js';

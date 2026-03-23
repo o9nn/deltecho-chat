@@ -23,7 +23,7 @@ const log = getLogger('deep-tree-echo-core/memory/VectorMemoryStore');
 /**
  * Internal vector-indexed memory entry
  */
-interface VectorEntry {
+interface _VectorEntry {
   id: string;
   text: string;
   embedding: number[];

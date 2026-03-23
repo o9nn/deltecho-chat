@@ -161,7 +161,7 @@ export class CognitiveTickProcessor extends EventEmitter {
   /**
    * Process a single tick based on the current proactive phase
    */
-  public async processTick(phase: ProactivePhase, grandCycleStep: number): Promise<void> {
+  public async processTick(phase: ProactivePhase, _grandCycleStep: number): Promise<void> {
     this.tickCount++;
 
     switch (phase) {

@@ -22,8 +22,6 @@
 import { EventEmitter } from 'events';
 import {
   OnlineReservoirLearner,
-  type OnlineLearnerConfig,
-  type LearningUpdate,
   type LearnerState,
   type FeedbackSignal,
   EchoReservoir,

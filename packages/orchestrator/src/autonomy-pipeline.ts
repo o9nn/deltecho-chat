@@ -28,14 +28,14 @@ import {
   EmbeddingService,
   EmbeddingServiceConfig,
   FileSystemStorage,
-  FileSystemStorageConfig,
+
   CoreSelfEngine,
   CoreSelfConfig,
 } from 'deep-tree-echo-core';
 import { ProactiveLoop, EnvironmentStimulus, ProactivePhase } from './proactive-loop.js';
-import { CognitiveTickProcessor, CognitivePercept, CognitiveGoal, EpisodicMemory } from './cognitive-tick-processor.js';
+import { CognitiveTickProcessor, CognitivePercept, CognitiveGoal } from './cognitive-tick-processor.js';
 import { PerceptionHandlers, PerceptionHandlerConfig } from './perception/index.js';
-import { ToolExecutionEngine, ToolExecutionEngineConfig, ToolCall, ToolResult } from './tools/ToolExecutionEngine.js';
+import { ToolExecutionEngine, ToolExecutionEngineConfig,  ToolResult } from './tools/ToolExecutionEngine.js';
 import { LLMGoalPlanner, LLMGoalPlannerConfig, PlanningContext, PlanningResult } from './tools/LLMGoalPlanner.js';
 
 const log = getLogger('deep-tree-echo-orchestrator/AutonomyPipeline');
@@ -667,7 +667,7 @@ Produce a concise consolidated memory (2-3 sentences) that preserves the essenti
       if (!this.running) return;
 
       this.echobeatStep = (this.echobeatStep % 12) + 1;
-      const globalPhase = phaseMap[this.echobeatStep - 1];
+      const _globalPhase = phaseMap[this.echobeatStep - 1];
 
       // Each stream processes based on its offset
       for (const stream of this.echobeatStreams) {
