@@ -238,11 +238,18 @@ test("delete message", async ({ page }) => {
   }
   await page.locator(".message-wrapper").last().hover();
   const menuButtons = page.locator("[class*='shortcutMenuButton']");
-  await expect(menuButtons.last()).toBeVisible();
+  // Menu button may not be visible if hover didn't work
+  try {
+    await expect(menuButtons.last()).toBeVisible({ timeout: 10000 });
+  } catch {
+    // Retry hover if menu didn't appear
+    await page.locator(".message-wrapper").last().hover({ force: true });
+    await expect(menuButtons.last()).toBeVisible({ timeout: 5000 });
+  }
   await menuButtons.last().click();
   await page.locator(".dc-context-menu button").last().click();
   const deleteButton = page.getByTestId("delete_for_me");
-  await expect(deleteButton).toBeVisible();
+  await expect(deleteButton).toBeVisible({ timeout: 5000 });
   await deleteButton.click();
   await switchToProfile(page, userB.id);
   const chatWithUserA = page

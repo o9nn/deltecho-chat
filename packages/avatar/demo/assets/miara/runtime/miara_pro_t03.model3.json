@@ -8,17 +8,23 @@
     "Motions": {
       "Idle": [
         {
-          "File": "motion/Scene1.motion3.json"
+          "File": "motion/Scene1.motion3.json",
+          "FadeInTime": 0.5,
+          "FadeOutTime": 0.5
         }
       ],
       "Tap": [
         {
-          "File": "motion/Scene2.motion3.json"
+          "File": "motion/Scene2.motion3.json",
+          "FadeInTime": 0.3,
+          "FadeOutTime": 0.5
         }
       ],
       "Flic": [
         {
-          "File": "motion/Scene3.motion3.json"
+          "File": "motion/Scene3.motion3.json",
+          "FadeInTime": 0.3,
+          "FadeOutTime": 0.5
         }
       ]
     }
@@ -27,13 +33,22 @@
     {
       "Target": "Parameter",
       "Name": "LipSync",
-      "Ids": []
+      "Ids": ["ParamMouthOpenY"]
     },
     {
       "Target": "Parameter",
       "Name": "EyeBlink",
-      "Ids": []
+      "Ids": ["ParamEyeLOpen", "ParamEyeROpen"]
     }
   ],
-  "HitAreas": []
+  "HitAreas": [
+    {
+      "Name": "Head",
+      "Id": "HitAreaHead"
+    },
+    {
+      "Name": "Body",
+      "Id": "HitAreaBody"
+    }
+  ]
 }
