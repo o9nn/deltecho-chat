@@ -387,7 +387,7 @@ export class OnlineReservoirLearner extends EventEmitter {
    * Reset the learner to initial state.
    */
   reset(): void {
-    const { reservoirDim, outputDim, initialPDiag } = this.config;
+    const { reservoirDim, outputDim: _outputDim, initialPDiag } = this.config;
 
     for (let i = 0; i < this.weights.length; i++) {
       this.weights[i] = (Math.random() - 0.5) * 0.01;

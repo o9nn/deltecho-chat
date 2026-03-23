@@ -384,7 +384,7 @@ export class CoreSelfEngine extends EventEmitter {
    * This is the absolute fallback — it generates a simple acknowledgment
    * based on the reservoir's cognitive state.
    */
-  private reservoirFallback(input: string, aarState: AARState | null): InferenceResult {
+  private reservoirFallback(_input: string, aarState: AARState | null): InferenceResult {
     const coherence = aarState?.coherence ?? 0.5;
     const energy = aarState?.energy ?? 0;
 
@@ -473,7 +473,7 @@ export class CoreSelfEngine extends EventEmitter {
     // Reconstruct reservoir from serialized state
     const restored = EchoReservoir.deserialize(data.reservoir);
     // Copy state into our reservoir
-    const state = restored.getState();
+    const _state = restored.getState();
     // Re-initialize with the same config
     this.reservoir = restored;
     this.aar = new AARRelation(this.reservoir, this.readout);

@@ -482,7 +482,7 @@ export class AARRelation extends EventEmitter {
     const arenaState = this.reservoir.step(input);
 
     // Agent: readout from reservoir state
-    const { output: agentOutput, confidence } = this.readout.run(arenaState);
+    const { output: agentOutput, confidence: _confidence } = this.readout.run(arenaState);
 
     // Relation: compute coherence between agent and arena
     const coherence = this.computeCoherence(agentOutput, arenaState);
