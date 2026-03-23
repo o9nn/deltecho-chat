@@ -34,7 +34,7 @@ test.beforeAll(async ({ browser }) => {
       browser.browserType().name(),
     );
   } finally {
-    await context.close();
+    await context.close().catch(() => {});
   }
 });
 
@@ -50,7 +50,7 @@ test.afterAll(async ({ browser }) => {
     await reloadPage(page);
     await deleteAllProfiles(page, existingProfiles);
   } finally {
-    await context.close();
+    await context.close().catch(() => {});
   }
 });
 

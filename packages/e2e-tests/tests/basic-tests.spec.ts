@@ -39,7 +39,7 @@ test.beforeAll(async ({ browser }) => {
     await reloadPage(page);
     existingProfiles = (await loadExistingProfiles(page)) ?? existingProfiles;
   } finally {
-    await context.close();
+    await context.close().catch(() => {});
   }
 });
 

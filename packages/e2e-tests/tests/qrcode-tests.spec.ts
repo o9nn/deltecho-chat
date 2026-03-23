@@ -42,7 +42,7 @@ test.beforeAll(async ({ browser }) => {
       browser.browserType().name(),
     );
   } finally {
-    await context.close();
+    await context.close().catch(() => {});
   }
 });
 
@@ -67,7 +67,7 @@ test.afterAll(async ({ browser }) => {
       "Failed to delete profiles in afterAll - may already be deleted",
     );
   } finally {
-    await context.close();
+    await context.close().catch(() => {});
   }
 });
 
