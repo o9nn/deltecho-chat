@@ -155,6 +155,7 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
 
           <p className="text">{tx("login_no_servers_hint")}</p>
           <button
+            type="button"
             className="advanced"
             aria-controls="advanced-collapse"
             onClick={() => setUiShowAdvanced(!uiShowAdvanced)}

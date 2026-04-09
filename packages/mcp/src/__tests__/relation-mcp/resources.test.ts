@@ -49,7 +49,21 @@ function createMockRelation(): RelationInterface {
     getCoherence: vi.fn(() => 0.82),
     getState: vi.fn(() => ({
       recentFlows: [
-        { direction: "agent-to-arena", content: "Test", timestamp: Date.now() },
+        {
+          direction: "agent-to-arena",
+          content: "Response generated",
+          timestamp: Date.now(),
+        },
+        {
+          direction: "arena-to-agent",
+          content: "Context absorbed",
+          timestamp: Date.now() - 100,
+        },
+        {
+          direction: "bidirectional",
+          content: "Synthesis complete",
+          timestamp: Date.now() - 200,
+        },
       ],
     })),
   } as unknown as RelationInterface;

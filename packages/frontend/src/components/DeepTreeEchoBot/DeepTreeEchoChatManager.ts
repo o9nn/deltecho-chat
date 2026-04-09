@@ -207,6 +207,11 @@ export class DeepTreeEchoChatManager {
           );
           const lastMsg = await this.getLastMessage(accountId, chatId);
 
+          const unreadCount = await BackendRemote.rpc.getFreshMsgCnt(
+            accountId,
+            chatId,
+          );
+
           summaries.push({
             id: chatId,
             name: chatInfo.name,
@@ -215,7 +220,7 @@ export class DeepTreeEchoChatManager {
               chatInfo.chatType === C.DC_CHAT_TYPE_BROADCAST,
             isArchived: chatInfo.archived,
             isMuted: chatInfo.isMuted,
-            unreadCount: 0, // Will be updated from chat list item
+            unreadCount: unreadCount,
             lastMessageTimestamp: lastMsg?.timestamp || 0,
             lastMessagePreview: lastMsg?.text?.slice(0, 100) || "",
             contactIds: [],

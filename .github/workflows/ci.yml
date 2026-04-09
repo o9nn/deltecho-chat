@@ -2,16 +2,17 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
   check-and-test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [20]
+        node-version: [20, 22]
 
     steps:
     - uses: actions/checkout@v4
@@ -23,10 +24,22 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'pnpm'
+        cache: "pnpm"
 
     - name: Install Dependencies
       run: pnpm install --frozen-lockfile
+
+    - name: Build Workspace Dependencies
+      run: |
+        # Build workspace packages in dependency order so check:types
+        # can resolve cross-package type declarations via symlinks.
+        # Leaf packages first (no workspace deps), then dependents.
+        pnpm --filter=deep-tree-echo-core build
+        pnpm --filter=@deltecho/sys6-triality build
+        pnpm --filter=@deltecho/dove9 build
+        pnpm --filter=@deltecho/ipc build
+        pnpm --filter=@deltecho/cognitive build
+        pnpm --filter=deep-tree-echo-orchestrator build
 
     - name: Check (Lint, Types, Format)
       run: pnpm check
@@ -50,6 +63,6 @@ jobs:
       if: failure()
       uses: actions/upload-artifact@v4
       with:
-        name: playwright-report
+        name: playwright-report-node${{ matrix.node-version }}
         path: packages/e2e-tests/playwright-report/
         retention-days: 30

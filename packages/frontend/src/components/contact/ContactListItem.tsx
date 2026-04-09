@@ -96,6 +96,7 @@ export function ContactListItem(props: {
       onFocus={rovingTabindex.setAsActiveElement}
     >
       <button
+        type="button"
         ref={refMain}
         className={classNames(
           "contact-list-item-button",
@@ -137,6 +138,7 @@ export function ContactListItem(props: {
       )}
       {showRemove && contact.id !== 1 && (
         <button
+          type="button"
           className="btn-remove"
           onClick={onRemoveClick}
           disabled={disabled}

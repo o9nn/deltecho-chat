@@ -36,7 +36,7 @@ type SettingsView =
 export default function Settings({ onClose }: DialogProps) {
   const { openDialog, closeDialog, openDialogIds } = useDialog();
 
-  const settingsStore = useSettingsStore()[0]!;
+  const settingsStore = useSettingsStore()[0];
   const tx = useTranslationFunction();
   const [settingsMode, setSettingsMode] = useState<SettingsView>("main");
 
@@ -93,6 +93,16 @@ export default function Settings({ onClose }: DialogProps) {
       console.error(error);
     }
   }, [openDialogIds]);
+
+  if (!settingsStore) {
+    return (
+      <Dialog onClose={onClose} fixed width={400} dataTestid="settings-dialog">
+        <div style={{ padding: "2em", textAlign: "center" }}>
+          Loading settings...
+        </div>
+      </Dialog>
+    );
+  }
 
   return (
     <Dialog onClose={onClose} fixed width={400} dataTestid="settings-dialog">

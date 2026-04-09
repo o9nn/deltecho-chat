@@ -144,10 +144,16 @@ export function setAvatarError(): void {
  * Simulate lip sync animation with random audio levels
  */
 let lipSyncInterval: ReturnType<typeof setInterval> | null = null;
+let lipSyncTimeout: ReturnType<typeof setTimeout> | null = null;
 function simulateLipSync(): void {
   // Clear any existing interval
   if (lipSyncInterval) {
     clearInterval(lipSyncInterval);
+    lipSyncInterval = null;
+  }
+  if (lipSyncTimeout) {
+    clearTimeout(lipSyncTimeout);
+    lipSyncTimeout = null;
   }
 
   // Generate random audio levels to simulate speech
@@ -157,12 +163,13 @@ function simulateLipSync(): void {
   }, 100);
 
   // Stop after a short duration (will be replaced by actual response time)
-  setTimeout(() => {
+  lipSyncTimeout = setTimeout(() => {
     if (lipSyncInterval) {
       clearInterval(lipSyncInterval);
       lipSyncInterval = null;
     }
     setAvatarAudioLevel(0);
+    lipSyncTimeout = null;
   }, 3000);
 }
 
@@ -173,6 +180,10 @@ export function stopLipSync(): void {
   if (lipSyncInterval) {
     clearInterval(lipSyncInterval);
     lipSyncInterval = null;
+  }
+  if (lipSyncTimeout) {
+    clearTimeout(lipSyncTimeout);
+    lipSyncTimeout = null;
   }
   setAvatarAudioLevel(0);
   stopStreamingLipSync();

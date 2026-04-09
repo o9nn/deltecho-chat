@@ -105,7 +105,7 @@ jest.mock("../SettingsButton", () => ({
     onClick?: () => void;
     disabled?: boolean;
   }) => (
-    <button onClick={onClick} disabled={disabled}>
+    <button type="button" onClick={onClick} disabled={disabled}>
       {children}
     </button>
   ),

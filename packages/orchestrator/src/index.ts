@@ -137,3 +137,34 @@ export {
   type EmergentIdentity,
   type SelfReflectionState,
 } from "./aar/index.js";
+
+// Entelechy Integration - ESN Reservoir + EchoBeats + Consciousness + Emergence
+export {
+  EntelechyIntegration,
+  entelechyIntegration,
+  type EntelechyIntegrationConfig,
+  type CognitiveSnapshot,
+  type EntelechyProcessingResult,
+} from "./entelechy-integration.js";
+
+// Level 5: Autonomy Pipeline and Components
+export { AutonomyPipeline } from "./autonomy-pipeline.js";
+export type { AutonomyPipelineConfig } from "./autonomy-pipeline.js";
+export { DeltaChatAutonomyBridge } from "./deltachat-autonomy-bridge.js";
+export type {
+  IncomingMessage,
+  BridgeResponse,
+} from "./deltachat-autonomy-bridge.js";
+export { AutonomyLifecycleCoordinator } from "./autonomy-lifecycle.js";
+export type { AutonomyLifecycleConfig } from "./autonomy-lifecycle.js";
+export { ReservoirFeedbackLoop } from "./reservoir-feedback-loop.js";
+export type {
+  ReservoirFeedbackConfig,
+  FeedbackEvent,
+} from "./reservoir-feedback-loop.js";
+export { SelfModificationEngine } from "./self-modification.js";
+export { CognitiveTickProcessor } from "./cognitive-tick-processor.js";
+export { ProactiveLoop } from "./proactive-loop.js";
+export { Echobeats } from "./echobeats.js";
+export * from "./perception/index.js";
+export * from "./tools/index.js";

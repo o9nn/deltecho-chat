@@ -147,6 +147,7 @@ export default function NeighborhoodSidebar({
 
       <div className={styles.header}>
         <button
+          type="button"
           className={classNames(styles.overviewButton, {
             [styles.active]: isOverviewActive,
           })}
@@ -188,10 +189,12 @@ export default function NeighborhoodSidebar({
 
       <div className={styles.footer}>
         <button
+          type="button"
           className={styles.settingsButton}
           onClick={openSettings}
           title={tx("menu_settings")}
           aria-label={tx("menu_settings")}
+          data-testid="open-settings-button"
         >
           <SettingsIcon size={20} />
         </button>
@@ -218,6 +221,7 @@ function AddHomeButton(props: { onClick: () => void }) {
 
   return (
     <button
+      type="button"
       ref={ref}
       aria-label={tx("add_account")}
       className={classNames(styles.addButton, rovingTabindex.className)}

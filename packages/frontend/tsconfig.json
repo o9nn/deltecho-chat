@@ -1,10 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "../../tsc-dist/renderer",
-    "rootDirs": [
-      ".",
-      "../shared"
-    ],
+    "rootDirs": [".", "../shared"],
     "sourceMap": true,
     "noImplicitAny": true,
     "module": "es2020",
@@ -25,39 +22,16 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@deltecho/ui-components": [
-        "../ui-components/src/index.ts"
-      ],
-      "@deltecho/cognitive": [
-        "../cognitive/src/index.ts"
-      ],
-      "@deltecho/avatar": [
-        "../avatar/src/index.ts"
-      ],
-      "@deltecho/reasoning": [
-        "../reasoning/src/index.ts"
-      ],
-      "@deltecho/sys6-triality": [
-        "../sys6-triality/src/index.ts"
-      ],
-      "@deltecho/dove9": [
-        "../dove9/src/index.ts"
-      ],
-      "deep-tree-echo-core": [
-        "../core/src/index.ts"
-      ],
-      "deep-tree-echo-core/*": [
-        "../core/src/*/index.ts"
-      ]
+      "@deltecho/ui-components": ["../ui-components/src/index.ts"],
+      "@deltecho/cognitive": ["../cognitive/src/index.ts"],
+      "@deltecho/avatar": ["../avatar/src/index.ts"],
+      "@deltecho/reasoning": ["../reasoning/src/index.ts"],
+      "@deltecho/sys6-triality": ["../sys6-triality/src/index.ts"],
+      "@deltecho/dove9": ["../dove9/src/index.ts"],
+      "deep-tree-echo-core": ["../core/src/index.ts"],
+      "deep-tree-echo-core/*": ["../core/src/*/index.ts"]
     }
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "node_modules",
-    "**/*.test.ts",
-    "**/*.test.tsx",
-    "jest.setup.ts"
-  ]
+  "include": ["src"],
+  "exclude": ["node_modules", "**/*.test.ts", "**/*.test.tsx", "jest.setup.ts"]
 }

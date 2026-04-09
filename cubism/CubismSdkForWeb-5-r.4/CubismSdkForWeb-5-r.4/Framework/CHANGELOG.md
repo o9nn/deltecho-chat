@@ -67,7 +67,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Deprecated
 
 - Deprecate the following elements because a priority value is not actually used during expression motion playback:
-
   - `CubismExpressionMotionManager._currentPriority`
   - `CubismExpressionMotionManager._reservePriority`
   - `CubismExpressionMotionManager.startMotionPriority()`

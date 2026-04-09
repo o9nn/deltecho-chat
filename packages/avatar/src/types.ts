@@ -62,6 +62,8 @@ export type AvatarMotion =
   | "nodding"
   | "shaking_head"
   | "tilting_head"
+  | "tilt_head_left"
+  | "tilt_head_right"
   | "breathing"
   | "wave"
   | "nod"

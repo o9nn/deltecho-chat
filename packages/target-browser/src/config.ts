@@ -10,8 +10,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 config({ path: join(__dirname, "../") + ".env" });
 
 // Directories & Files
-export const DIST_DIR = join(__dirname);
-export const DATA_DIR = join(__dirname, "../data");
+export const DIST_DIR = process.env["DIST_DIR"] || join(__dirname);
+export const DATA_DIR = process.env["DATA_DIR"] || join(__dirname, "../data");
 export const LOGS_DIR = join(DATA_DIR, "logs");
 export const PRIVATE_CERTIFICATE_KEY = join(
   DATA_DIR,
@@ -20,7 +20,8 @@ export const PRIVATE_CERTIFICATE_KEY = join(
 export const PRIVATE_CERTIFICATE_CERT = join(DATA_DIR, "certificate/cert.pem");
 export let DC_ACCOUNTS_DIR = join(DATA_DIR, "accounts");
 
-export const LOCALES_DIR = join(__dirname, "../../../_locales");
+export const LOCALES_DIR =
+  process.env["LOCALES_DIR"] || join(__dirname, "../../../_locales");
 
 // ENV Vars
 export const ENV_WEB_PASSWORD = process.env["WEB_PASSWORD"];
@@ -36,12 +37,21 @@ if (process.env["DC_ACCOUNTS_DIR"]) {
 
 export const NODE_ENV = (process.env["NODE_ENV"] ?? "production").toLowerCase();
 
+// Check for USE_HTTP_IN_TEST environment variable, CI mode, or test environment
+// This allows running without HTTPS certificates in container environments
+export const USE_HTTP_IN_TEST =
+  NODE_ENV === "test" ||
+  process.env.CI === "true" ||
+  process.env["USE_HTTP_IN_TEST"] === "true";
+
 if (!existsSync(DATA_DIR)) {
-  // In CI/test environments, create the data directory automatically
-  if (NODE_ENV === "test" || process.env.CI === "true") {
+  // In CI/test/container environments, create the data directory automatically
+  if (USE_HTTP_IN_TEST) {
     mkdirSync(DATA_DIR, { recursive: true });
     /* ignore-console-log */
-    console.log("[INFO]: Created data directory for CI/test environment");
+    console.log(
+      "[INFO]: Created data directory for container/CI/test environment",
+    );
   } else {
     /* ignore-console-log */
     console.log(
@@ -52,10 +62,6 @@ if (!existsSync(DATA_DIR)) {
 }
 
 mkdirSync(LOGS_DIR, { recursive: true });
-
-// In CI/test environments, generate self-signed certificates if not present
-export const USE_HTTP_IN_TEST =
-  NODE_ENV === "test" || process.env.CI === "true";
 
 if (
   !existsSync(PRIVATE_CERTIFICATE_KEY) &&
@@ -69,7 +75,7 @@ if (
   process.exit(1);
 }
 
-if (!ENV_WEB_PASSWORD && NODE_ENV !== "test") {
+if (!ENV_WEB_PASSWORD && NODE_ENV !== "test" && !USE_HTTP_IN_TEST) {
   /* ignore-console-log */
   console.log(
     `\n[ERROR]: Environment Variable WEB_PASSWORD is not set. You need to set it.\n`,

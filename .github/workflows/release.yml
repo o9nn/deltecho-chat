@@ -14,8 +14,9 @@ jobs:
     name: Build Electron (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest]
 
     steps:
       - uses: actions/checkout@v4
@@ -33,17 +34,13 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libicns-utils graphicsmagick
-
-      - name: Install System Dependencies (Mac)
-        if: matrix.os == 'macos-latest'
-        run: |
-          if ! command -v graphicsmagick &> /dev/null; then
-              brew install graphicsmagick
-          fi
+          sudo apt-get install -y icnsutils graphicsmagick
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Build Frontend and Electron App
+        run: pnpm --filter=@deltachat-desktop/target-electron build
 
       - name: Build Electron (Linux)
         if: matrix.os == 'ubuntu-latest'
@@ -56,19 +53,13 @@ jobs:
 
       - name: Build Electron (Windows)
         if: matrix.os == 'windows-latest'
+        shell: pwsh
         run: |
           pnpm --filter=@deltachat-desktop/target-electron pack:generate_config
           pnpm --filter=@deltachat-desktop/target-electron pack:patch-node-modules
-          pnpm --filter=@deltachat-desktop/target-electron pack:win
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build Electron (macOS)
-        if: matrix.os == 'macos-latest'
-        run: |
-          pnpm --filter=@deltachat-desktop/target-electron pack:generate_config
-          pnpm --filter=@deltachat-desktop/target-electron pack:patch-node-modules
-          pnpm --filter=@deltachat-desktop/target-electron pack:mac
+          # Use npx to invoke electron-builder directly in the target-electron directory
+          cd packages/target-electron
+          npx electron-builder --config ./electron-builder.json5 --win nsis portable
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -105,7 +96,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-22.04, windows-latest]
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -122,14 +113,12 @@ jobs:
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: ${{ matrix.os == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
 
-      - name: Install dependencies (ubuntu only)
-        if: matrix.os == 'ubuntu-22.04' || matrix.os == 'ubuntu-latest'
+      - name: Install dependencies (Ubuntu 22.04)
+        if: matrix.os == 'ubuntu-22.04'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libwebkit2gtk-4.0-dev build-essential curl wget file libssl-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev
+          sudo apt-get install -y libwebkit2gtk-4.0-dev libwebkit2gtk-4.1-dev libjavascriptcoregtk-4.0-dev libjavascriptcoregtk-4.1-dev libsoup-3.0-dev build-essential curl wget file libssl-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev
 
       - name: Install Frontend Dependencies
         run: pnpm install --frozen-lockfile
@@ -137,6 +126,8 @@ jobs:
       - name: Build Tauri
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_CLI_NO_DEV_SERVER_WAIT: true
+          VERSION_INFO_GIT_REF: ${{ github.sha }}
         run: pnpm build:tauri
 
       - name: Upload Artifacts
@@ -148,8 +139,6 @@ jobs:
             packages/target-tauri/src-tauri/target/release/bundle/appimage/*.AppImage
             packages/target-tauri/src-tauri/target/release/bundle/msi/*.msi
             packages/target-tauri/src-tauri/target/release/bundle/nsis/*.exe
-            packages/target-tauri/src-tauri/target/release/bundle/dmg/*.dmg
-            packages/target-tauri/src-tauri/target/release/bundle/macos/*.app
           if-no-files-found: warn
 
   build-packages:
@@ -163,7 +152,7 @@ jobs:
           node-version: 20
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
-      
+
       - name: Build Core
         run: |
           pnpm build:core
@@ -199,11 +188,9 @@ jobs:
           files: |
             electron-release-ubuntu-latest/*
             electron-release-windows-latest/*
-            electron-release-macos-latest/*
             browser-build.tar.gz
-            tauri-release-ubuntu-latest/*
+            tauri-release-ubuntu-22.04/*
             tauri-release-windows-latest/*
-            tauri-release-macos-latest/*
             npm-packages/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

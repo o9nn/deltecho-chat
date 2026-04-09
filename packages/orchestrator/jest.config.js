@@ -11,6 +11,12 @@ export default {
     "^@deltecho/cognitive/(.*)$": "<rootDir>/../cognitive/src/$1",
     "^@deltecho/shared$": "<rootDir>/../shared/src/index.ts",
     "^@deltecho/shared/(.*)$": "<rootDir>/../shared/src/$1",
+    "^@deltecho/sys6-triality$": "<rootDir>/../sys6-triality/src/index.ts",
+    "^@deltecho/sys6-triality/(.*)$": "<rootDir>/../sys6-triality/src/$1",
+    "^@deltecho/ipc$": "<rootDir>/../ipc/src/index.ts",
+    "^@deltecho/ipc/(.*)$": "<rootDir>/../ipc/src/$1",
+    "^@deltecho/dove9$": "<rootDir>/../dove9/src/index.ts",
+    "^@deltecho/dove9/(.*)$": "<rootDir>/../dove9/src/$1",
   },
   transform: {
     "^.+\\.tsx?$": [

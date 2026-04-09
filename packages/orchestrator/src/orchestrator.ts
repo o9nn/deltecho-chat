@@ -34,6 +34,22 @@ import {
 import { AARSystem, AARConfig, AARProcessingResult } from "./aar/index.js";
 import { IPCMessageType } from "@deltecho/ipc";
 import { registerCognitiveHandlers } from "./ipc/cognitive-handlers.js";
+// Level 5: Autonomy Pipeline and Core Self
+import { CoreSelfEngine } from "deep-tree-echo-core";
+import {
+  AutonomyPipeline,
+  type AutonomyPipelineConfig,
+} from "./autonomy-pipeline.js";
+import { DeltaChatAutonomyBridge } from "./deltachat-autonomy-bridge.js";
+import {
+  AutonomyLifecycleCoordinator,
+  type AutonomyLifecycleConfig,
+} from "./autonomy-lifecycle.js";
+import {
+  ReservoirFeedbackLoop,
+  type ReservoirFeedbackConfig,
+} from "./reservoir-feedback-loop.js";
+import { Echobeats } from "./echobeats.js";
 
 const log = getLogger("deep-tree-echo-orchestrator/Orchestrator");
 
@@ -50,6 +66,7 @@ export type CognitiveTierMode =
   | "BASIC"
   | "SYS6"
   | "MEMBRANE"
+  | "CORESELF"
   | "ADAPTIVE"
   | "FULL";
 
@@ -123,6 +140,18 @@ export interface OrchestratorConfig {
   sys6ComplexityThreshold: number;
   /** Complexity threshold for ADAPTIVE mode to escalate from SYS6 to MEMBRANE */
   membraneComplexityThreshold: number;
+  /** Enable Level 5 Autonomy Pipeline (CoreSelf + Echobeats + ReservoirFeedback) */
+  enableAutonomy: boolean;
+  /** Autonomy pipeline configuration */
+  autonomy?: Partial<AutonomyPipelineConfig>;
+  /** Autonomy lifecycle configuration */
+  autonomyLifecycle?: Partial<AutonomyLifecycleConfig>;
+  /** Reservoir feedback configuration */
+  reservoirFeedback?: Partial<ReservoirFeedbackConfig>;
+  /** Lucy GGUF model endpoint URL */
+  lucyEndpoint?: string;
+  /** Complexity threshold for ADAPTIVE mode to escalate from MEMBRANE to CORESELF */
+  coreSelfComplexityThreshold: number;
 }
 
 const DEFAULT_CONFIG: OrchestratorConfig = {
@@ -139,6 +168,8 @@ const DEFAULT_CONFIG: OrchestratorConfig = {
   enableAAR: true,
   sys6ComplexityThreshold: 0.4,
   membraneComplexityThreshold: 0.7,
+  enableAutonomy: true,
+  coreSelfComplexityThreshold: 0.85,
 };
 
 /**
@@ -155,6 +186,13 @@ export class Orchestrator {
   private sys6Bridge?: Sys6OrchestratorBridge;
   private doubleMembraneIntegration?: DoubleMembraneIntegration;
   private aarSystem?: AARSystem;
+  // Level 5: Autonomy components
+  private coreSelfEngine?: CoreSelfEngine;
+  private autonomyPipeline?: AutonomyPipeline;
+  private autonomyBridge?: DeltaChatAutonomyBridge;
+  private autonomyLifecycle?: AutonomyLifecycleCoordinator;
+  private reservoirFeedback?: ReservoirFeedbackLoop;
+  private echobeats?: Echobeats;
   private running: boolean = false;
 
   // Cognitive services for processing messages
@@ -174,6 +212,7 @@ export class Orchestrator {
     basicTierMessages: 0,
     sys6TierMessages: 0,
     membraneTierMessages: 0,
+    coreSelfTierMessages: 0,
     aarEnhancedMessages: 0,
     averageComplexity: 0,
   };
@@ -324,6 +363,78 @@ export class Orchestrator {
         log.info(
           "AAR (Agent-Arena-Relation) nested membrane architecture started",
         );
+      }
+
+      // Level 5: Initialize Autonomy Pipeline (CoreSelf + Echobeats + ReservoirFeedback)
+      if (this.config.enableAutonomy) {
+        try {
+          // 1. CoreSelfEngine — local inference + reservoir + identity
+          this.coreSelfEngine = new CoreSelfEngine({
+            lucy: {
+              baseUrl: this.config.lucyEndpoint || "http://localhost:8080",
+            },
+            reservoir: { units: 256 },
+            identity: {},
+            readoutDim: 64,
+            embeddingDim: 128,
+          });
+          await this.coreSelfEngine.start();
+          log.info("CoreSelfEngine started (Lucy + Reservoir + Identity)");
+
+          // 2. Echobeats — 3-stream, 12-step cognitive loop
+          this.echobeats = new Echobeats({
+            streamCount: 3,
+            stepsPerCycle: 12,
+            cycleInterval: 500,
+          });
+          this.echobeats.start();
+          log.info("Echobeats started (3-stream, 12-step cognitive loop)");
+
+          // 3. AutonomyPipeline — perception → reflection → planning → action
+          this.autonomyPipeline = new AutonomyPipeline({
+            enabled: true,
+            enablePerception: false, // Start conservative
+            enablePlanning: false,
+            enableExecution: false,
+            enableVectorMemory: false,
+            enableConsolidation: false,
+            ...this.config.autonomy,
+          });
+          await this.autonomyPipeline.start();
+          log.info("AutonomyPipeline started");
+
+          // 4. AutonomyLifecycleCoordinator — 5-phase autonomy cycle
+          this.autonomyLifecycle = new AutonomyLifecycleCoordinator({
+            cycleIntervalMs: 30_000,
+            coherenceThreshold: 0.6,
+            verbose: false,
+            ...this.config.autonomyLifecycle,
+          });
+          this.autonomyLifecycle.wireEchobeats(this.echobeats);
+          await this.autonomyLifecycle.start();
+          log.info("AutonomyLifecycleCoordinator started (5-phase cycle)");
+
+          // 5. ReservoirFeedbackLoop — online RLS learning
+          this.reservoirFeedback = new ReservoirFeedbackLoop({
+            reservoirDim: 256,
+            outputDim: 64,
+            batchIntervalMs: 10_000,
+            maxBufferSize: 128,
+            minRewardMagnitude: 0.01,
+            ...this.config.reservoirFeedback,
+          });
+          const reservoir = this.coreSelfEngine.getReservoir?.();
+          await this.reservoirFeedback.start(reservoir);
+          this.autonomyLifecycle.wireReservoirFeedback(this.reservoirFeedback);
+          log.info("ReservoirFeedbackLoop started (online RLS learning)");
+
+          log.info("Level 5 Autonomy Pipeline fully initialized");
+        } catch (error) {
+          log.warn(
+            "Level 5 Autonomy Pipeline failed to initialize (non-fatal):",
+            error,
+          );
+        }
       }
 
       this.running = true;
@@ -609,7 +720,15 @@ export class Orchestrator {
       switch (this.config.cognitiveTierMode) {
         case "ADAPTIVE":
           complexity = this.assessComplexity(messageText);
-          targetTier = complexity.tier;
+          // Extended adaptive routing with CORESELF tier
+          if (
+            complexity.score >= this.config.coreSelfComplexityThreshold &&
+            this.coreSelfEngine
+          ) {
+            targetTier = "CORESELF";
+          } else {
+            targetTier = complexity.tier;
+          }
           log.debug(
             `ADAPTIVE mode: complexity=${complexity.score.toFixed(
               2,
@@ -617,7 +736,7 @@ export class Orchestrator {
           );
           break;
         case "FULL":
-          targetTier = "MEMBRANE"; // FULL mode uses highest tier
+          targetTier = this.coreSelfEngine ? "CORESELF" : "MEMBRANE"; // FULL mode uses highest available tier
           break;
         default:
           targetTier = this.config.cognitiveTierMode;
@@ -659,6 +778,19 @@ export class Orchestrator {
             );
             response = await this.processWithBasic(messageText, chatId, msgId);
             this.processingStats.basicTierMessages++;
+          }
+          break;
+
+        case "CORESELF":
+          if (this.coreSelfEngine) {
+            response = await this.processWithCoreSelf(messageText, chatId);
+            this.processingStats.coreSelfTierMessages++;
+          } else {
+            log.warn(
+              "CORESELF tier requested but not available, falling back to MEMBRANE",
+            );
+            response = await this.processWithMembrane(messageText, chatId);
+            this.processingStats.membraneTierMessages++;
           }
           break;
 
@@ -728,6 +860,33 @@ export class Orchestrator {
   }
 
   /**
+   * Process message with CORESELF tier (Level 5: CoreSelf + Reservoir + Identity)
+   */
+  private async processWithCoreSelf(
+    messageText: string,
+    _chatId: number,
+  ): Promise<string> {
+    log.debug("Processing with CORESELF tier (Level 5 autonomy)");
+
+    if (!this.coreSelfEngine) {
+      throw new Error("CoreSelfEngine not initialized");
+    }
+
+    const result = await this.coreSelfEngine.processMessage(messageText);
+
+    // Submit conversational feedback to reservoir for online learning
+    if (this.reservoirFeedback?.isRunning()) {
+      this.reservoirFeedback.submitConversationalFeedback(
+        `coreself-${Date.now()}`,
+        "completed",
+        result.aarState?.coherence ?? 0.5,
+      );
+    }
+
+    return result.content;
+  }
+
+  /**
    * Process message with MEMBRANE tier (bio-inspired double membrane)
    */
   private async processWithMembrane(
@@ -774,6 +933,7 @@ You can also just chat with me normally and I'll respond!`;
         const sys6State = this.sys6Bridge?.getState();
         const membraneStatus = this.doubleMembraneIntegration?.getStatus();
         const aarState = this.aarSystem?.getState();
+        const coreSelfStatus = this.coreSelfEngine?.getStatus();
         const stats = this.processingStats;
         return `**Deep Tree Echo Status**
 
@@ -800,6 +960,13 @@ Orchestrator running: ${this.running ? "Yes" : "No"}
               : "Ready"
             : "Disabled"
         }
+- CORESELF tier: ${
+          this.coreSelfEngine
+            ? coreSelfStatus?.reservoirInitialized
+              ? "Active"
+              : "Ready"
+            : "Disabled"
+        }
 - AAR (Nested Membrane): ${this.aarSystem?.isRunning() ? "Active" : "Disabled"}
 
 **Processing Statistics**
@@ -807,6 +974,7 @@ Orchestrator running: ${this.running ? "Yes" : "No"}
 - BASIC tier: ${stats.basicTierMessages}
 - SYS6 tier: ${stats.sys6TierMessages}
 - MEMBRANE tier: ${stats.membraneTierMessages}
+- CORESELF tier: ${stats.coreSelfTierMessages}
 - AAR enhanced: ${stats.aarEnhancedMessages}
 - Avg complexity: ${stats.averageComplexity.toFixed(2)}
 
@@ -858,8 +1026,8 @@ ${
       }
 
       case "/version":
-        return `**Deep Tree Echo Orchestrator v2.1.0**
-**Phase 7: AAR Nested Membrane Architecture**
+        return `**Deep Tree Echo Orchestrator v3.0.0**
+**Phase 8: Level 5 True Autonomy**
 
 **Cognitive Tiers:**
 - Tier 1 (BASIC): Deep Tree Echo Core - LLM + RAG + Personality
@@ -1036,6 +1204,28 @@ ${response.body}`;
     }
 
     log.info("Stopping orchestrator services...");
+
+    // Stop Level 5 autonomy components first (newest first)
+    if (this.reservoirFeedback) {
+      await this.reservoirFeedback.stop();
+      log.info("ReservoirFeedbackLoop stopped");
+    }
+    if (this.autonomyLifecycle) {
+      await this.autonomyLifecycle.stop();
+      log.info("AutonomyLifecycleCoordinator stopped");
+    }
+    if (this.autonomyPipeline) {
+      await this.autonomyPipeline.stop();
+      log.info("AutonomyPipeline stopped");
+    }
+    if (this.echobeats) {
+      this.echobeats.stop();
+      log.info("Echobeats stopped");
+    }
+    if (this.coreSelfEngine) {
+      await this.coreSelfEngine.stop();
+      log.info("CoreSelfEngine stopped");
+    }
 
     // Stop all services in reverse order (newest first)
     if (this.doubleMembraneIntegration) {

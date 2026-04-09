@@ -27,6 +27,15 @@
     border-radius: 12px;
     padding: 8px;
     transition: all 0.3s ease;
+    // Allow clicks to pass through the entire avatar container
+    // This prevents the floating avatar from blocking message interactions
+    // The avatar is purely decorative and doesn't need to receive clicks
+    pointer-events: none;
+
+    // All child elements also pass through clicks
+    * {
+      pointer-events: none;
+    }
 
     &:hover {
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);

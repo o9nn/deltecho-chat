@@ -87,6 +87,7 @@ function StickersListItem(props: { filePath: string; onClick: () => void }) {
   const rovingTabindex = useRovingTabindex(ref);
   return (
     <button
+      type="button"
       ref={ref}
       className={"sticker " + rovingTabindex.className}
       onClick={onClick}
@@ -171,6 +172,7 @@ const EmojiOrStickerSelectorButton = (
   const { isSelected, onClick, children, ...rest } = props;
   return (
     <button
+      type="button"
       {...rest}
       role="tab"
       aria-selected={isSelected}

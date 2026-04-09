@@ -12,3 +12,8 @@ export {
   type RetrievedMemory,
   type MemoryContext,
 } from "./IntegratedMemorySystem";
+
+// Level 5: Vector Memory Store and Embedding Service
+export * from "./VectorMemoryStore.js";
+export * from "./EmbeddingService.js";
+export * from "./FileSystemStorage.js";

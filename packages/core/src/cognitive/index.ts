@@ -12,3 +12,12 @@ export {
   type LLMMessage,
   type LLMResponse,
 } from "./EnhancedLLMService";
+
+export {
+  ESNAutognosisReservoir,
+  esnReservoir,
+  type ReservoirConfig,
+  type ReservoirState,
+  type AutognosisReport,
+  type TrainingSample,
+} from "./ESNAutognosisReservoir.js";

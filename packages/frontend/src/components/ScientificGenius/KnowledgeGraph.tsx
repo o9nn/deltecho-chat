@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import ForceGraph2D, { ForceGraphMethods } from "react-force-graph-2d";
 import { getLogger } from "@deltachat-desktop/shared/logger";
+import { getAgentToolExecutor } from "../DeepTreeEchoBot/AgentToolExecutor";
+import "./ScientificGenius.css";
 import { AgentToolExecutor } from "../DeepTreeEchoBot/AgentToolExecutor";
 
 const log = getLogger("frontend/components/ScientificGenius/KnowledgeGraph");
@@ -52,18 +54,44 @@ export const KnowledgeGraph: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const executor = AgentToolExecutor.getInstance();
+    const executor = getAgentToolExecutor();
     if (!executor) {
-      log.warn("AgentToolExecutor not found");
+      log.warn("AgentToolExecutor singleton not available");
       return;
     }
 
-    // Initial fetch of atoms (Using the query_knowledge tool abstraction manually or just starting fresh)
-    // For now, we start fresh and listen for updates.
-    // In a real implementation, we'd fetch all existing atoms from DB.
+    // Initial fetch of atoms to populate the graph
+    const fetchInitialData = async () => {
+      try {
+        const result = await executor.executeTool(
+          {
+            id: `initial-fetch-${Date.now()}`,
+            name: "query_knowledge",
+            input: { queryType: "by_type", target: "ConceptNode" },
+          },
+          0,
+        );
+
+        if (
+          result.success &&
+          result.metadata &&
+          typeof result.metadata.count === "number"
+        ) {
+          // This is a simplification - real implementation would fetch all atoms
+          log.info(`Fetched ${result.metadata.count} initial ConceptNodes`);
+        }
+      } catch (err) {
+        log.error("Failed to fetch initial graph data", err);
+      }
+    };
+
+    fetchInitialData();
 
     const unsubscribe = executor.subscribe((event: any) => {
-      if (event.type === "knowledge_stored") {
+      if (
+        event.type === "knowledge_stored" ||
+        event.type === "knowledge_updated"
+      ) {
         const { atom, type } = event.data;
         // Parse atom string: e.g., (InheritanceLink (ConceptNode "A") (ConceptNode "B"))
         // This is a naive parser for visualization purposes
@@ -76,7 +104,7 @@ export const KnowledgeGraph: React.FC = () => {
 
         log.info("Visualizing atom:", atom);
 
-        setGraphData((prev) => {
+        setGraphData((prev: GraphData) => {
           const newNodes = [...prev.nodes];
           const newLinks = [...prev.links];
 
@@ -149,15 +177,7 @@ export const KnowledgeGraph: React.FC = () => {
   }, []);
 
   return (
-    <div
-      ref={containerRef}
-      style={{
-        width: "100%",
-        height: "100%",
-        minHeight: "400px",
-        background: "#000011",
-      }}
-    >
+    <div ref={containerRef} className="knowledge-graph-container">
       {/* @ts-ignore: Library type definition mismatch */}
       <ForceGraph2D
         ref={fgRef}

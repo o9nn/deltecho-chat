@@ -10,8 +10,8 @@ import {
 import type { DiscordConfig, DiscordSlashCommand } from "../discord/index.js";
 import type {
   BotCommand,
-  _CommandContext,
-  _PlatformResponse,
+  CommandContext as _CommandContext,
+  PlatformResponse as _PlatformResponse,
 } from "../types.js";
 
 // Mock discord.js

@@ -43,6 +43,7 @@ interface Live2DModel {
     index?: number,
     priority?: number,
   ) => Promise<boolean>;
+  focus: (x: number, y: number) => void;
   speak: (
     audioUrl: string,
     options?: { volume?: number; crossOrigin?: string },
@@ -69,21 +70,27 @@ const DEFAULT_EXPRESSION_MAP: Record<Expression, string> = {
 
 /**
  * Motion to Live2D motion group mapping
+ * Note: Motion groups vary between models. Common conventions:
+ * - Standard models: "idle", "tap_body", "shake", "flick_head"
+ * - Cubism Editor exports: "Idle", "Tap", "Flic" (capitalized, abbreviated)
+ * We try multiple group names in order of preference.
  */
 const DEFAULT_MOTION_MAP: Record<
   AvatarMotion,
-  { group: string; index: number }
+  { groups: string[]; index: number }
 > = {
-  idle: { group: "idle", index: 0 },
-  talking: { group: "tap_body", index: 0 },
-  nodding: { group: "tap_body", index: 1 },
-  shaking_head: { group: "shake", index: 0 },
-  tilting_head: { group: "flick_head", index: 0 },
-  breathing: { group: "idle", index: 0 },
-  wave: { group: "tap_body", index: 2 },
-  nod: { group: "tap_body", index: 1 },
-  shake: { group: "shake", index: 0 },
-  thinking: { group: "idle", index: 1 },
+  idle: { groups: ["Idle", "idle"], index: 0 },
+  talking: { groups: ["Tap", "tap_body", "tap"], index: 0 },
+  nodding: { groups: ["Tap", "tap_body", "tap"], index: 1 },
+  shaking_head: { groups: ["Flic", "shake", "flick"], index: 0 },
+  tilting_head: { groups: ["Flic", "flick_head", "flick"], index: 0 },
+  breathing: { groups: ["Idle", "idle"], index: 0 },
+  wave: { groups: ["Tap", "tap_body", "tap"], index: 2 },
+  nod: { groups: ["Tap", "tap_body", "tap"], index: 1 },
+  shake: { groups: ["Flic", "shake", "flick"], index: 0 },
+  thinking: { groups: ["Idle", "idle"], index: 1 },
+  tilt_head_left: { groups: ["Flic", "flick_head", "flick"], index: 1 },
+  tilt_head_right: { groups: ["Flic", "flick_head", "flick"], index: 0 },
 };
 
 /**
@@ -143,7 +150,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   private isBlinking = false;
   private blinkTimer: ReturnType<typeof setInterval> | null = null;
   private expressionMap: Record<Expression, string> = DEFAULT_EXPRESSION_MAP;
-  private motionMap: Record<AvatarMotion, { group: string; index: number }> =
+  private motionMap: Record<AvatarMotion, { groups: string[]; index: number }> =
     DEFAULT_MOTION_MAP;
 
   /**
@@ -175,6 +182,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     this.app = new Application({
       view: canvas,
       backgroundAlpha: 0,
+      antialias: true,
       resolution:
         (config as PixiLive2DConfig).pixelRatio ?? window.devicePixelRatio ?? 1,
       autoDensity: true,
@@ -195,12 +203,19 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       };
     }
     if (config.motions) {
+      // Convert config motion map (single group) to internal format (array of groups)
+      const convertedMotions: Partial<
+        Record<AvatarMotion, { groups: string[]; index: number }>
+      > = {};
+      for (const [motion, def] of Object.entries(config.motions)) {
+        convertedMotions[motion as AvatarMotion] = {
+          groups: [def.group], // Wrap single group in array
+          index: def.index,
+        };
+      }
       this.motionMap = {
         ...DEFAULT_MOTION_MAP,
-        ...(config.motions as Record<
-          AvatarMotion,
-          { group: string; index: number }
-        >),
+        ...convertedMotions,
       };
     }
 
@@ -228,10 +243,11 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     }
 
     try {
-      // Load the model
-      const model = (await Live2DModelClass.from(
-        modelInfo.modelPath,
-      )) as unknown as Live2DModel;
+      // Load the model with autoInteract for cursor eye-tracking
+      const model = (await Live2DModelClass.from(modelInfo.modelPath, {
+        autoInteract: true,
+        autoUpdate: true,
+      })) as unknown as Live2DModel;
       this.model = model;
 
       // Position and scale the model
@@ -344,7 +360,26 @@ export class PixiLive2DRenderer implements ICubismRenderer {
         this.setParameterSafe(core, PARAM_IDS.PARAM_EYE_L_OPEN, 0.8);
         this.setParameterSafe(core, PARAM_IDS.PARAM_EYE_R_OPEN, 0.8);
         break;
-
+      case "curious":
+        // Slight head tilt, one brow raised
+        this.setParameterSafe(core, PARAM_IDS.PARAM_BROW_L_Y, 0.4 * intensity);
+        this.setParameterSafe(core, PARAM_IDS.PARAM_BROW_R_Y, 0.1 * intensity);
+        this.setParameterSafe(core, PARAM_IDS.PARAM_ANGLE_Z, 3 * intensity); // Slight head tilt
+        this.setParameterSafe(core, PARAM_IDS.PARAM_EYE_L_OPEN, 1.1);
+        this.setParameterSafe(core, PARAM_IDS.PARAM_EYE_R_OPEN, 1.1);
+        break;
+      case "empathetic":
+        // Soft brows, gentle smile
+        this.setParameterSafe(core, PARAM_IDS.PARAM_BROW_L_Y, 0.1 * intensity);
+        this.setParameterSafe(core, PARAM_IDS.PARAM_BROW_R_Y, 0.1 * intensity);
+        this.setParameterSafe(
+          core,
+          PARAM_IDS.PARAM_MOUTH_FORM,
+          0.2 * intensity,
+        ); // Gentle smile
+        this.setParameterSafe(core, PARAM_IDS.PARAM_EYE_L_OPEN, 0.9);
+        this.setParameterSafe(core, PARAM_IDS.PARAM_EYE_R_OPEN, 0.9);
+        break;
       default:
         // Reset to neutral
         this.setParameterSafe(core, PARAM_IDS.PARAM_BROW_L_Y, 0);
@@ -371,6 +406,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
 
   /**
    * Play a motion animation
+   * Tries multiple motion group names until one succeeds
    */
   playMotion(motion: AvatarMotion, priority = 2): void {
     if (!this.model || !this.initialized) return;
@@ -381,14 +417,24 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       return;
     }
 
-    try {
-      this.model.motion(motionDef.group, motionDef.index, priority);
-      console.log(
-        `[PixiLive2DRenderer] Motion played: ${motion} (${motionDef.group}[${motionDef.index}])`,
-      );
-    } catch (error) {
-      console.warn("[PixiLive2DRenderer] Motion playback failed:", error);
+    // Try each group name until one works
+    for (const group of motionDef.groups) {
+      try {
+        this.model.motion(group, motionDef.index, priority);
+        console.log(
+          `[PixiLive2DRenderer] Motion played: ${motion} (${group}[${motionDef.index}])`,
+        );
+        return; // Success - exit loop
+      } catch {
+        // Group not available, try next
+      }
     }
+
+    console.warn(
+      `[PixiLive2DRenderer] Motion playback failed: ${motion} (tried groups: ${motionDef.groups.join(
+        ", ",
+      )})`,
+    );
   }
 
   /**
@@ -443,7 +489,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   private startAutoBlinkLoop(): void {
     // Stop existing timer
     if (this.blinkTimer) {
-      clearInterval(this.blinkTimer);
+      clearTimeout(this.blinkTimer);
     }
 
     // Random blink every 2-6 seconds
@@ -501,7 +547,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
    */
   dispose(): void {
     if (this.blinkTimer) {
-      clearInterval(this.blinkTimer);
+      clearTimeout(this.blinkTimer);
       this.blinkTimer = null;
     }
 
@@ -567,11 +613,25 @@ export class PixiLive2DRenderer implements ICubismRenderer {
    */
   getParameter(paramId: string): number | undefined {
     if (!this.model?.internalModel?.coreModel) return undefined;
-
     try {
       return this.model.internalModel.coreModel.getParameterValueById(paramId);
     } catch {
       return undefined;
+    }
+  }
+
+  /**
+   * Manually focus the model's eyes at screen coordinates.
+   * Useful for programmatic gaze direction when autoInteract is off.
+   * @param x - Screen X coordinate (pixels)
+   * @param y - Screen Y coordinate (pixels)
+   */
+  focusEyes(x: number, y: number): void {
+    if (!this.model || !this.initialized) return;
+    try {
+      this.model.focus(x, y);
+    } catch {
+      // focus() may not be available on all model versions
     }
   }
 }

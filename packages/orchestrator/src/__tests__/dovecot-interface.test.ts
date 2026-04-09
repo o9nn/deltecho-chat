@@ -19,8 +19,8 @@ jest.mock("../dovecot-interface/milter-server.js", () => ({
     on: jest.fn(),
     off: jest.fn(),
     emit: jest.fn(),
-    start: jest.fn().mockResolvedValue(undefined),
-    stop: jest.fn().mockResolvedValue(undefined),
+    start: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
+    stop: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
   })),
   MilterConfig: {},
   EmailMessage: {},
@@ -31,16 +31,18 @@ jest.mock("../dovecot-interface/lmtp-server.js", () => ({
     on: jest.fn(),
     off: jest.fn(),
     emit: jest.fn(),
-    start: jest.fn().mockResolvedValue(undefined),
-    stop: jest.fn().mockResolvedValue(undefined),
+    start: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
+    stop: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
   })),
   LMTPConfig: {},
 }));
 
 jest.mock("../dovecot-interface/email-processor.js", () => ({
   EmailProcessor: jest.fn().mockImplementation(() => ({
-    processEmail: jest.fn().mockResolvedValue("AI Response"),
-    initialize: jest.fn().mockResolvedValue(undefined),
+    processEmail: jest
+      .fn<() => Promise<string>>()
+      .mockResolvedValue("AI Response"),
+    initialize: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
   })),
 }));
 
@@ -156,7 +158,7 @@ describe("DovecotInterface", () => {
 
   describe("event system", () => {
     it("should register event listeners", () => {
-      const callback = jest.fn();
+      const callback = jest.fn<(data: unknown) => void>();
       dovecotInterface.on("response", callback);
 
       dovecotInterface.emit("response", { to: "test@example.com" });
@@ -165,8 +167,8 @@ describe("DovecotInterface", () => {
     });
 
     it("should handle multiple listeners", () => {
-      const callback1 = jest.fn();
-      const callback2 = jest.fn();
+      const callback1 = jest.fn<(data: unknown) => void>();
+      const callback2 = jest.fn<(data: unknown) => void>();
 
       dovecotInterface.on("response", callback1);
       dovecotInterface.on("response", callback2);
@@ -178,8 +180,8 @@ describe("DovecotInterface", () => {
     });
 
     it("should handle different event types", () => {
-      const responseCallback = jest.fn();
-      const errorCallback = jest.fn();
+      const responseCallback = jest.fn<(data: unknown) => void>();
+      const errorCallback = jest.fn<(data: unknown) => void>();
 
       dovecotInterface.on("response", responseCallback);
       dovecotInterface.on("error", errorCallback);
@@ -217,7 +219,7 @@ describe("DovecotInterface", () => {
     it("should emit response event for bot-addressed emails", async () => {
       await dovecotInterface.start();
 
-      const responseCallback = jest.fn();
+      const responseCallback = jest.fn<(data: unknown) => void>();
       dovecotInterface.on("response", responseCallback);
 
       const handleEmail = (

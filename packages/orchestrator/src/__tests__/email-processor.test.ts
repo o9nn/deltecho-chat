@@ -12,10 +12,12 @@ jest.mock("deep-tree-echo-core", () => ({
     debug: jest.fn(),
   }),
   LLMService: jest.fn().mockImplementation(() => ({
-    generateResponse: jest.fn().mockResolvedValue({
-      text: "AI response",
-      success: true,
-    }),
+    generateResponse: jest
+      .fn<() => Promise<{ text: string; success: boolean }>>()
+      .mockResolvedValue({
+        text: "AI response",
+        success: true,
+      }),
     isInitialized: true,
   })),
   CognitiveFunctionType: {
@@ -23,7 +25,8 @@ jest.mock("deep-tree-echo-core", () => ({
   },
   RAGMemoryStore: jest.fn().mockImplementation(() => ({
     storeMemory: jest.fn(),
-    queryMemories: jest.fn().mockResolvedValue([]),
+    queryMemories: jest.fn<() => Promise<unknown[]>>().mockResolvedValue([]),
+    setEnabled: jest.fn(),
   })),
   PersonaCore: jest.fn().mockImplementation(() => ({
     getPersonality: jest.fn().mockReturnValue({
@@ -34,7 +37,14 @@ jest.mock("deep-tree-echo-core", () => ({
       dominantMood: "neutral",
       intensity: 0.5,
     }),
+    getDominantEmotion: jest.fn().mockReturnValue({
+      emotion: "neutral",
+      intensity: 0.5,
+    }),
     updateMood: jest.fn(),
+    updateEmotionalState: jest
+      .fn<() => Promise<void>>()
+      .mockResolvedValue(undefined),
   })),
   InMemoryStorage: jest.fn().mockImplementation(() => ({
     set: jest.fn(),

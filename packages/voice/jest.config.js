@@ -11,9 +11,13 @@ export default {
       "ts-jest",
       {
         useESM: true,
+        tsconfig: {
+          types: ["node", "jest"],
+        },
       },
     ],
   },
   testMatch: ["**/__tests__/**/*.test.ts"],
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
+  injectGlobals: true,
 };

@@ -353,7 +353,9 @@ const AICompanionHubContent: React.FC = () => {
         <AlertCircle size={48} className="error-icon" />
         <h2>Error Connecting to AI Companions</h2>
         <p>{error}</p>
-        <button onClick={() => window.location.reload()}>Retry</button>
+        <button type="button" onClick={() => window.location.reload()}>
+          Retry
+        </button>
       </div>
     );
   }
@@ -364,6 +366,7 @@ const AICompanionHubContent: React.FC = () => {
       <div className="ai-companion-hub visualization-mode">
         <div className="visualization-overlay">
           <button
+            type="button"
             className="return-to-hub"
             onClick={() => setView("chat")}
             title="Return to Hub"
@@ -384,6 +387,7 @@ const AICompanionHubContent: React.FC = () => {
       <div className="ai-companion-hub creator-mode">
         <div className="creator-overlay">
           <button
+            type="button"
             className="return-to-hub"
             onClick={() => setView("chat")}
             title="Return to Hub"
@@ -404,6 +408,7 @@ const AICompanionHubContent: React.FC = () => {
         <div className="sidebar-header">
           <h2>AI Companions</h2>
           <button
+            type="button"
             className="add-companion-btn"
             onClick={() => setView("create")}
             title="Create New Companion"
@@ -417,6 +422,7 @@ const AICompanionHubContent: React.FC = () => {
             <div className="no-companions">
               <p>No AI companions found</p>
               <button
+                type="button"
                 className="create-first"
                 onClick={() => setView("create")}
               >
@@ -447,6 +453,7 @@ const AICompanionHubContent: React.FC = () => {
 
                 <div className="content-tabs">
                   <button
+                    type="button"
                     className={`tab ${view === "chat" ? "active" : ""}`}
                     onClick={() => setView("chat")}
                   >
@@ -454,6 +461,7 @@ const AICompanionHubContent: React.FC = () => {
                     <span>Chat</span>
                   </button>
                   <button
+                    type="button"
                     className={`tab ${view === "memories" ? "active" : ""}`}
                     onClick={() => setView("memories")}
                   >
@@ -461,6 +469,7 @@ const AICompanionHubContent: React.FC = () => {
                     <span>Memories</span>
                   </button>
                   <button
+                    type="button"
                     className={`tab ${view === "cognitive" ? "active" : ""}`}
                     onClick={() => setView("cognitive")}
                   >
@@ -468,6 +477,7 @@ const AICompanionHubContent: React.FC = () => {
                     <span>Cognitive State</span>
                   </button>
                   <button
+                    type="button"
                     className={`tab ${view === "avatar" ? "active" : ""}`}
                     onClick={() => setView("avatar")}
                   >
@@ -475,6 +485,7 @@ const AICompanionHubContent: React.FC = () => {
                     <span>Avatar</span>
                   </button>
                   <button
+                    type="button"
                     className={`tab ${view === "calibration" ? "active" : ""}`}
                     onClick={() => setView("calibration")}
                   >
@@ -482,6 +493,7 @@ const AICompanionHubContent: React.FC = () => {
                     <span>Calibration</span>
                   </button>
                   <button
+                    type="button"
                     className="tab"
                     onClick={() => setView("visualization")}
                   >
@@ -489,6 +501,7 @@ const AICompanionHubContent: React.FC = () => {
                     <span>Memory Web</span>
                   </button>
                   <button
+                    type="button"
                     className={`tab ${view === "settings" ? "active" : ""}`}
                     onClick={() => setView("settings")}
                   >
@@ -541,6 +554,7 @@ const AICompanionHubContent: React.FC = () => {
                   onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
                 />
                 <button
+                  type="button"
                   className="send-button"
                   onClick={handleSendMessage}
                   disabled={isSending || !chatInput.trim()}
@@ -560,6 +574,7 @@ const AICompanionHubContent: React.FC = () => {
                   onKeyPress={(e) => e.key === "Enter" && handleSearch()}
                 />
                 <button
+                  type="button"
                   className="search-button"
                   onClick={handleSearch}
                   disabled={isSearching || !searchQuery.trim()}
@@ -680,6 +695,7 @@ const AICompanionHubContent: React.FC = () => {
                       ] as Expression[]
                     ).map((expr) => (
                       <button
+                        type="button"
                         key={expr}
                         className={`expression-btn ${
                           currentExpression === expr ? "active" : ""
@@ -722,6 +738,7 @@ const AICompanionHubContent: React.FC = () => {
                     },
                   ].map(({ motion, label }) => (
                     <button
+                      type="button"
                       key={motion}
                       className="avatar-control-btn"
                       onClick={() => avatarController?.playMotion(motion)}

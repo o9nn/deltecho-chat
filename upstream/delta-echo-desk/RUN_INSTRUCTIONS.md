@@ -48,13 +48,11 @@ pnpm test
 ## Testing the AI Neighborhood
 
 1. **Enable AI Features**
-
    - Go to Settings → Experimental Features
    - Enable "AI Companion Mode"
    - Configure at least one AI API key
 
 2. **Access AI Neighborhood**
-
    - Look for the "AI Neighborhood" button in the main interface
    - Click to enter the AI companion ecosystem
    - Select Deep Tree Echo to test the recursive AI
@@ -70,18 +68,15 @@ pnpm test
 ### Common Issues
 
 1. **"Module not found" errors**
-
    - Run `pnpm install` again
    - Check that all dependencies are listed in package.json
 
 2. **API Connection Issues**
-
    - Verify API keys are correct
    - Check network connectivity
    - Ensure API endpoints are accessible
 
 3. **UI Not Displaying Correctly**
-
    - Clear browser cache
    - Rebuild the project: `pnpm clean && pnpm build`
    - Check console for errors

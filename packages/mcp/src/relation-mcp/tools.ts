@@ -173,8 +173,8 @@ export function createRelationTools(
       input: z.infer<typeof relationToolSchemas.bridge>,
     ): CognitiveFlow => {
       return relation.recordFlow({
-        direction: input.direction,
-        contentType: input.contentType,
+        direction: input.direction as any,
+        contentType: input.contentType as any,
         content: input.content,
         intensity: input.intensity,
       });

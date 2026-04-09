@@ -46,7 +46,7 @@ test.describe("Deep Tree Echo Chat Integration", () => {
     const page = await context.newPage();
     await reloadPage(page);
     existingProfiles = (await loadExistingProfiles(page)) ?? existingProfiles;
-    await context.close();
+    await context.close().catch(() => {});
   });
 
   test.beforeEach(async ({ page }) => {
@@ -608,7 +608,7 @@ test.describe("Deep Tree Echo Chat Manager Edge Cases", () => {
     const page = await context.newPage();
     await reloadPage(page);
     existingProfiles = (await loadExistingProfiles(page)) ?? existingProfiles;
-    await context.close();
+    await context.close().catch(() => {});
   });
 
   test("should handle empty chat list gracefully", async ({ page }) => {

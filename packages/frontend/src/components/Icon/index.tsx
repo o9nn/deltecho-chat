@@ -99,7 +99,7 @@ export function IconButton({
   ...rest
 }: IconButtonProps) {
   return (
-    <button {...rest} className={classNames(styles.iconButton)}>
+    <button type="button" {...rest} className={classNames(styles.iconButton)}>
       <Icon coloring={coloring} size={size} rotation={rotation} icon={icon} />
     </button>
   );

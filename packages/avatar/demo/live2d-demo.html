@@ -579,16 +579,13 @@
         </footer>
     </div>
 
-    <!-- Local Cubism Core -->
+    <!-- Load order: CubismCore -> PixiJS v6 -> pixi-live2d-display cubism4 -->
     <script src="./lib/live2dcubismcore.min.js"></script>
+    <script src="./lib/pixi6.min.js"></script>
+    <script src="./lib/pixi-live2d-display-cubism4.min.js"></script>
 
-    <script type="module">
-        // Import PixiJS and pixi-live2d-display from CDN
-        import * as PIXI from 'https://cdn.jsdelivr.net/npm/pixi.js@7.4.2/+esm';
-        import { Live2DModel } from 'https://cdn.jsdelivr.net/npm/pixi-live2d-display@0.4.0/+esm';
-
-        // Register PIXI to the window for pixi-live2d-display
-        window.PIXI = PIXI;
+    <script>
+        const { Live2DModel } = PIXI.live2d;
 
         // DOM Elements
         const canvas = document.getElementById('avatar-canvas');
@@ -636,8 +633,8 @@
                 height: container.clientHeight,
             });
 
-            // Register ticker for Live2D updates
-            Live2DModel.registerTicker(app.ticker);
+            // Note: using autoUpdate:true in Live2DModel.from() instead of registerTicker
+            // to avoid ticker compatibility issues between PixiJS v6 and pixi-live2d-display
         }
 
         // Load a model
@@ -658,8 +655,8 @@
                     await initApp();
                 }
 
-                // Load the model
-                model = await Live2DModel.from(modelUrl);
+                // Load the model with autoUpdate for ticker compatibility
+                model = await Live2DModel.from(modelUrl, { autoUpdate: true });
 
                 // Position the model
                 const container = canvas.parentElement;
@@ -717,10 +714,10 @@
 
             // Map motion types to groups
             const motionMap = {
-                idle: { group: 'idle', index: 0 },
-                nod: { group: 'tap_body', index: 0 },
-                shake: { group: 'shake', index: 0 },
-                wave: { group: 'flick_head', index: 0 },
+                idle: { group: 'Idle', index: 0 },
+                nod: { group: 'Tap', index: 0 },
+                shake: { group: 'Flic', index: 0 },
+                wave: { group: 'Idle', index: 0 },
             };
 
             const motion = motionMap[motionType];

@@ -15,7 +15,7 @@ import {
   type CognitiveProcessRequest,
   type CognitiveStateSnapshot,
   type EmotionalStateSnapshot,
-} from "../ipc/protocol";
+} from "@deltecho/ipc";
 
 describe("IPC Protocol", () => {
   describe("IPCMessageType", () => {

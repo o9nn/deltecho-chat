@@ -1032,6 +1032,7 @@ function JumpDownButton({
           {countToShow}
         </div>
         <button
+          type="button"
           className="button"
           onClick={() => {
             jumpToMessage({

@@ -14,6 +14,7 @@ import { getUIBridge as _getUIBridge } from "../../DeepTreeEchoBot/DeepTreeEchoU
 
 // Mock dependencies
 jest.mock("../../../hooks/chat/useMessage", () => ({
+  __esModule: true,
   default: () => ({ sendMessage: jest.fn() }),
 }));
 
@@ -43,6 +44,7 @@ const mockDialogContext = {
 };
 
 jest.mock("../../../hooks/dialog/useDialog", () => ({
+  __esModule: true,
   default: () => mockDialogContext,
 }));
 

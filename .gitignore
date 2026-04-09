@@ -97,3 +97,7 @@ packages/target-tauri/src-tauri/gen/schemas
 TODO/
 lib/
 packages/digital-garden/
+
+# Build artifacts and compiled files
+packages/shared/ts-compiled-for-tests/
+packages/target-electron/bundle_out/

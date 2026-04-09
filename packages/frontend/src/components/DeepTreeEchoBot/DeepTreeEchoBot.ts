@@ -16,6 +16,7 @@ import {
   stopLipSync,
 } from "./AvatarStateManager";
 import { DeploymentService } from "../../utils/DeploymentService";
+import { ChatOrchestrator } from "./ChatOrchestrator";
 
 const log = getLogger("render/components/DeepTreeEchoBot/DeepTreeEchoBot");
 
@@ -52,6 +53,7 @@ export class DeepTreeEchoBot {
   private selfReflection: SelfReflection;
   private agenticService: AgenticLLMService;
   private toolExecutor: AgentToolExecutor;
+  private chatOrchestrator: ChatOrchestrator;
 
   constructor(options: DeepTreeEchoBotOptions) {
     // Set default options, then override with provided options
@@ -76,6 +78,8 @@ export class DeepTreeEchoBot {
     this.selfReflection = SelfReflection.getInstance();
     this.agenticService = AgenticLLMService.getInstance();
     this.toolExecutor = AgentToolExecutor.getInstance();
+    this.chatOrchestrator = new ChatOrchestrator();
+    this.chatOrchestrator.start();
 
     // Configure components based on options
     this.memoryStore.setEnabled(this.options.memoryEnabled);
@@ -224,6 +228,22 @@ export class DeepTreeEchoBot {
           text: messageText,
         });
       }
+
+      // Ensure chat session in orchestrator
+      let sessionId =
+        this.chatOrchestrator.getSessionStateByChatId(chatId)?.sessionId;
+      if (!sessionId) {
+        sessionId = await this.chatOrchestrator.initSession(chatId, {
+          id: 0,
+        } as any);
+      }
+
+      // Update orchestrator with message
+      await this.chatOrchestrator.processMessage(sessionId, {
+        id: msgId,
+        text: messageText,
+        timestamp: message.timestamp || Date.now(),
+      } as any);
 
       // Otherwise, generate a regular response
       await this.generateAndSendResponse(

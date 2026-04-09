@@ -1,4 +1,11 @@
-import { describe, it, expect, beforeEach, afterEach } from "@jest/globals";
+import {
+  describe,
+  it,
+  expect,
+  beforeEach,
+  afterEach,
+  jest,
+} from "@jest/globals";
 import {
   Dove9Integration,
   Dove9IntegrationConfig,
@@ -136,14 +143,14 @@ describe("Dove9Integration", () => {
 
   describe("onResponse", () => {
     it("should register response handler", () => {
-      const handler = jest.fn();
+      const handler = jest.fn<(response: unknown) => void>();
       integration.onResponse(handler);
       // Handler registration should not throw
       expect(handler).not.toHaveBeenCalled();
     });
 
     it("should call response handler when response is ready", async () => {
-      const handler = jest.fn();
+      const handler = jest.fn<(response: unknown) => void>();
       integration.onResponse(handler);
 
       await integration.start();
@@ -164,7 +171,7 @@ describe("Dove9Integration", () => {
 
   describe("onMetrics", () => {
     it("should register metrics handler", () => {
-      const handler = jest.fn();
+      const handler = jest.fn<(metrics: unknown) => void>();
       integration.onMetrics(handler);
       // Handler registration should not throw
       expect(handler).not.toHaveBeenCalled();

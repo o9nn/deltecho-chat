@@ -1,0 +1,98 @@
+name: Purge Cache & Dependencies
+
+on:
+  workflow_dispatch:
+    inputs:
+      clear_pnpm_cache:
+        description: 'Clear pnpm cache'
+        required: true
+        default: true
+        type: boolean
+      clear_actions_cache:
+        description: 'Clear GitHub Actions cache'
+        required: true
+        default: true
+        type: boolean
+      trigger_fresh_build:
+        description: 'Trigger fresh CI build after purge'
+        required: true
+        default: true
+        type: boolean
+
+jobs:
+  purge-cache:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: read
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Clear GitHub Actions Cache
+      if: ${{ inputs.clear_actions_cache }}
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        echo "🗑️ Clearing GitHub Actions cache..."
+        # List all caches
+        CACHES=$(gh cache list --json id,key --jq '.[].id' 2>/dev/null || echo "")
+        if [ -n "$CACHES" ]; then
+          echo "Found caches to delete:"
+          gh cache list
+          # Delete each cache
+          for cache_id in $CACHES; do
+            echo "Deleting cache: $cache_id"
+            gh cache delete "$cache_id" || true
+          done
+          echo "✅ All caches cleared"
+        else
+          echo "ℹ️ No caches found to clear"
+        fi
+
+    - name: Install pnpm
+      if: ${{ inputs.clear_pnpm_cache }}
+      uses: pnpm/action-setup@v4
+
+    - name: Clear pnpm store
+      if: ${{ inputs.clear_pnpm_cache }}
+      run: |
+        echo "🗑️ Clearing pnpm store..."
+        pnpm store prune
+        echo "✅ pnpm store pruned"
+
+    - name: Summary
+      run: |
+        echo "## Cache Purge Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "| Action | Status |" >> $GITHUB_STEP_SUMMARY
+        echo "|--------|--------|" >> $GITHUB_STEP_SUMMARY
+        echo "| Clear Actions Cache | ${{ inputs.clear_actions_cache && '✅ Done' || '⏭️ Skipped' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Clear pnpm Cache | ${{ inputs.clear_pnpm_cache && '✅ Done' || '⏭️ Skipped' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Trigger Fresh Build | ${{ inputs.trigger_fresh_build && '🔄 Pending' || '⏭️ Skipped' }} |" >> $GITHUB_STEP_SUMMARY
+
+  trigger-fresh-build:
+    needs: purge-cache
+    if: ${{ inputs.trigger_fresh_build }}
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: read
+    
+    steps:
+    - name: Trigger CI22 workflow
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        echo "🔄 Triggering fresh CI22 build..."
+        gh workflow run ci22.yml --repo ${{ github.repository }} --ref main
+        echo "✅ CI22 workflow triggered"
+
+    - name: Trigger Cloudflare deployment
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        echo "🔄 Triggering Cloudflare deployment..."
+        gh workflow run deploy-cloudflare.yml --repo ${{ github.repository }} --ref main || echo "⚠️ deploy-cloudflare.yml may not have workflow_dispatch trigger"
+        echo "✅ Deployment workflow triggered (if available)"

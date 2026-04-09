@@ -91,6 +91,7 @@ export default function MessageMetaData(props: Props) {
       <span className="spacer" />
       {direction === "outgoing" && (
         <button
+          type="button"
           className={classNames("status-icon", status)}
           // The main point of `aria-live` here is to let the user know
           // that their message has been sent or delievered

@@ -159,6 +159,7 @@ export const AICompanionProvider: React.FC<{ children: ReactNode }> = ({
         registry.shutdown().catch(console.error);
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Set up event listeners when registry changes

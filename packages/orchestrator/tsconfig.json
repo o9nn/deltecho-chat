@@ -18,15 +18,7 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "types": ["node"],
-    "baseUrl": ".",
-    "paths": {
-      "deep-tree-echo-core": ["../core/src/index.ts"],
-      "deep-tree-echo-core/*": ["../core/src/*/index.ts"],
-      "@deltecho/cognitive": ["../cognitive/src/index.ts"],
-      "@deltecho/ipc": ["../ipc/src/index.ts"],
-      "@deltecho/sys6-triality": ["../sys6-triality/src/index.ts"],
-      "@deltecho/dove9": ["../dove9/src/index.ts"]
-    }
+    "baseUrl": "."
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "**/*.test.ts"]
