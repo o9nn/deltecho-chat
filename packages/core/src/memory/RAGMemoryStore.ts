@@ -43,6 +43,7 @@ export class RAGMemoryStore {
   private storage: MemoryStorage;
   private memoryLimit: number;
   private reflectionLimit: number;
+  private idfScoresCache: Map<string, number> | null = null;
 
   constructor(
     storage?: MemoryStorage,
@@ -154,6 +155,7 @@ export class RAGMemoryStore {
       };
 
       this.memories.push(newMemory);
+      this.idfScoresCache = null; // Invalidate cache
       await this.saveMemories();
 
       log.info(`Stored new memory: ${newMemory.id}`);
@@ -291,6 +293,7 @@ export class RAGMemoryStore {
    */
   public async clearAllMemories(): Promise<void> {
     this.memories = [];
+    this.idfScoresCache = null; // Invalidate cache
     await this.saveMemories();
     log.info("Cleared all conversation memories");
   }
@@ -300,6 +303,7 @@ export class RAGMemoryStore {
    */
   public async clearChatMemories(chatId: number): Promise<void> {
     this.memories = this.memories.filter((mem) => mem.chatId !== chatId);
+    this.idfScoresCache = null; // Invalidate cache
     await this.saveMemories();
     log.info(`Cleared memories for chat ${chatId}`);
   }
@@ -488,6 +492,10 @@ export class RAGMemoryStore {
    * Calculate IDF (Inverse Document Frequency) for all terms
    */
   private calculateIDF(): Map<string, number> {
+    if (this.idfScoresCache) {
+      return this.idfScoresCache;
+    }
+
     const documentFrequency = new Map<string, number>();
     const totalDocs = this.memories.length;
 
@@ -506,6 +514,7 @@ export class RAGMemoryStore {
       idfScores.set(term, Math.log((totalDocs + 1) / (df + 1)) + 1);
     });
 
+    this.idfScoresCache = idfScores;
     return idfScores;
   }
 

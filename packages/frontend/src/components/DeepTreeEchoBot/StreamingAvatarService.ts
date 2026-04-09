@@ -183,24 +183,24 @@ interface PhonemeData {
  * Character to phoneme mapping (simplified English)
  */
 const CHAR_TO_PHONEME: Record<string, { phoneme: string; intensity: number }> =
-  {
-    a: { phoneme: "A", intensity: 1.0 },
-    e: { phoneme: "C", intensity: 0.6 },
-    i: { phoneme: "I", intensity: 0.6 },
-    o: { phoneme: "E", intensity: 0.8 },
-    u: { phoneme: "F", intensity: 0.8 },
-    b: { phoneme: "B", intensity: 0.3 },
-    p: { phoneme: "B", intensity: 0.3 },
-    m: { phoneme: "B", intensity: 0.3 },
-    f: { phoneme: "G", intensity: 0.5 },
-    v: { phoneme: "G", intensity: 0.5 },
-    l: { phoneme: "H", intensity: 0.5 },
-    t: { phoneme: "H", intensity: 0.5 },
-    d: { phoneme: "H", intensity: 0.5 },
-    n: { phoneme: "H", intensity: 0.5 },
-    w: { phoneme: "E", intensity: 0.8 },
-    y: { phoneme: "I", intensity: 0.6 },
-  };
+{
+  a: { phoneme: "A", intensity: 1.0 },
+  e: { phoneme: "C", intensity: 0.6 },
+  i: { phoneme: "I", intensity: 0.6 },
+  o: { phoneme: "E", intensity: 0.8 },
+  u: { phoneme: "F", intensity: 0.8 },
+  b: { phoneme: "B", intensity: 0.3 },
+  p: { phoneme: "B", intensity: 0.3 },
+  m: { phoneme: "B", intensity: 0.3 },
+  f: { phoneme: "G", intensity: 0.5 },
+  v: { phoneme: "G", intensity: 0.5 },
+  l: { phoneme: "H", intensity: 0.5 },
+  t: { phoneme: "H", intensity: 0.5 },
+  d: { phoneme: "H", intensity: 0.5 },
+  n: { phoneme: "H", intensity: 0.5 },
+  w: { phoneme: "E", intensity: 0.8 },
+  y: { phoneme: "I", intensity: 0.6 },
+};
 
 /**
  * Phoneme to mouth shape mapping
@@ -400,24 +400,36 @@ export class StreamingAvatarService extends EventEmitter {
    * Extract complete phrases from buffer
    */
   private extractPhrases(): void {
-    let lastBoundaryIndex = -1;
+    let hasBoundary = true;
 
-    for (const boundary of this.config.phraseBoundaries) {
-      const index = this.textBuffer.lastIndexOf(boundary);
-      if (index > lastBoundaryIndex) {
-        lastBoundaryIndex = index;
+    while (hasBoundary && this.textBuffer.length > 0) {
+      let earliestBoundaryIndex = -1;
+
+      for (const boundary of this.config.phraseBoundaries) {
+        const index = this.textBuffer.indexOf(boundary);
+        if (index !== -1) {
+          if (earliestBoundaryIndex === -1 || index < earliestBoundaryIndex) {
+            earliestBoundaryIndex = index;
+          }
+        }
       }
-    }
 
-    if (
-      lastBoundaryIndex >= 0 &&
-      lastBoundaryIndex >= this.config.minPhraseLength - 1
-    ) {
-      const phrase = this.textBuffer.substring(0, lastBoundaryIndex + 1).trim();
-      this.textBuffer = this.textBuffer.substring(lastBoundaryIndex + 1);
+      if (
+        earliestBoundaryIndex >= 0 &&
+        earliestBoundaryIndex >= this.config.minPhraseLength - 1
+      ) {
+        const phrase = this.textBuffer.substring(0, earliestBoundaryIndex + 1).trim();
+        this.textBuffer = this.textBuffer.substring(earliestBoundaryIndex + 1);
 
-      if (phrase.length > 0) {
-        this.queuePhrase(phrase);
+        if (phrase.length > 0) {
+          this.queuePhrase(phrase);
+        }
+      } else if (earliestBoundaryIndex >= 0 && earliestBoundaryIndex < this.config.minPhraseLength - 1) {
+        // A boundary exists but it's too early. We need to keep searching after this point.
+        // To be safe and simple, we'll wait for more text unless this is the only text left.
+        break;
+      } else {
+        hasBoundary = false;
       }
     }
   }
@@ -514,8 +526,7 @@ export class StreamingAvatarService extends EventEmitter {
 
     this.emitEvent("phrase_speaking", { phrase: phrase.text });
     log.debug(
-      `Speaking phrase ${this.currentPhraseIndex + 1}/${
-        this.phraseQueue.length
+      `Speaking phrase ${this.currentPhraseIndex + 1}/${this.phraseQueue.length
       }`,
     );
   }

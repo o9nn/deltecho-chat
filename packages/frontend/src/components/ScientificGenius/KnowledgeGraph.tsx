@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import ForceGraph2D, { ForceGraphMethods } from "react-force-graph-2d";
 import { getLogger } from "@deltachat-desktop/shared/logger";
+import { AgentToolExecutor } from "../DeepTreeEchoBot/AgentToolExecutor";
 
 const log = getLogger("frontend/components/ScientificGenius/KnowledgeGraph");
 
@@ -51,9 +52,9 @@ export const KnowledgeGraph: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const executor = (window as any).deepTreeEchoExecutor;
+    const executor = AgentToolExecutor.getInstance();
     if (!executor) {
-      log.warn("AgentToolExecutor not found on window");
+      log.warn("AgentToolExecutor not found");
       return;
     }
 
