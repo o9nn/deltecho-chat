@@ -7,7 +7,7 @@ import React, {
   useState,
 } from "react";
 import { debounce } from "debounce";
-import { Brain, Plus, Settings as SettingsIcon } from "lucide-react";
+import { Brain, Plus, Settings as SettingsIcon, Orbit } from "lucide-react";
 import classNames from "classnames";
 
 import NeighborItem from "./NeighborItem";
@@ -135,6 +135,7 @@ export default function NeighborhoodSidebar({
   }
 
   const isOverviewActive = screen === Screens.AINeighborhood;
+  const isOntelechoActive = screen === Screens.Ontelecho;
 
   return (
     <div className={styles.neighborhoodSidebar}>
@@ -188,6 +189,21 @@ export default function NeighborhoodSidebar({
       </div>
 
       <div className={styles.footer}>
+        <button
+          type="button"
+          className={classNames(styles.overviewButton, {
+            [styles.active]: isOntelechoActive,
+          })}
+          onClick={() => changeScreen(Screens.Ontelecho)}
+          title="Ontelecho — Cosmic Order Simulator"
+          style={isOntelechoActive ? {} : {
+            background: 'linear-gradient(135deg, rgba(0,212,255,0.15) 0%, rgba(123,47,247,0.15) 100%)',
+            borderColor: 'rgba(0,212,255,0.3)',
+            color: '#00d4ff',
+          }}
+        >
+          <Orbit size={20} />
+        </button>
         <button
           type="button"
           className={styles.settingsButton}

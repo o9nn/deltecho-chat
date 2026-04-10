@@ -443,13 +443,6 @@ export class StreamingAvatarService extends EventEmitter {
         // No more boundaries in current buffer
         break;
       }
-    } else if (earliestBoundaryIndex >= 0 && earliestBoundaryIndex < this.config.minPhraseLength - 1) {
-      // A boundary exists but it's too early. We need to keep searching after this point.
-      // To be safe and simple, we'll wait for more text unless this is the only text left.
-      break;
-    } else {
-      hasBoundary = false;
-    }
   }
 }
 

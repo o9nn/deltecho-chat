@@ -25,6 +25,7 @@ import { InstantOnboardingProvider } from "./contexts/InstantOnboardingContext";
 import { SmallScreenModeMacOSTitleBar } from "./components/SmallScreenModeMacOSTitleBar";
 import DeepTreeEchoBot from "./components/chat/DeepTreeEchoBot";
 import AINeighborhoodDashboard from "./components/screens/AINeighborhoodDashboard/AINeighborhoodDashboard";
+import { OntelechoDashboard } from "./components/OntelechoDashboard";
 
 import type { MemoryPersistenceLayer as _MemoryPersistenceLayer } from "./components/AICompanionHub/MemoryPersistenceLayer";
 
@@ -43,6 +44,7 @@ export enum Screens {
   DeleteAccount = "deleteAccount",
   NoAccountSelected = "noAccountSelected",
   AINeighborhood = "aiNeighborhood",
+  Ontelecho = "ontelecho",
 }
 
 const BREAKPOINT_FOR_SMALLSCREEN_MODE = 720;
@@ -330,6 +332,8 @@ export default class ScreenController extends Component {
         return <NoAccountSelectedScreen />;
       case Screens.AINeighborhood:
         return <AINeighborhoodDashboard />;
+      case Screens.Ontelecho:
+        return <OntelechoDashboard onBack={() => this.changeScreen(Screens.Main)} />;
       default:
         return null;
     }
