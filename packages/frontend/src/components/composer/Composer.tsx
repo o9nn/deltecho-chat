@@ -54,6 +54,8 @@ import {
 } from "../AudioRecorder/AudioRecorder";
 import AlertDialog from "../dialogs/AlertDialog";
 import { unknownErrorToString } from "../helpers/unknownErrorToString";
+import { isDTERelayCommand, extractRelayMessage } from "../DeepTreeEchoBot/DTEMessageRelay";
+import { interceptDTECommand } from "../DeepTreeEchoBot/DeepTreeEchoIntegration";
 
 const log = getLogger("renderer/composer");
 
@@ -224,6 +226,20 @@ const Composer = forwardRef<
           const message = regularMessageInputRef.current?.getText() || "";
           if (!regularMessageInputRef.current?.hasText() && !draftState.file) {
             log.debug(`Empty message: don't send it...`);
+            return;
+          }
+
+          // Intercept /dte and /echo prefix commands for Deep Tree Echo relay
+          if (isDTERelayCommand(message) && !draftState.file) {
+            log.info(`DTE relay command detected: "${message.substring(0, 50)}..."`);
+            // Clear the composer immediately
+            regularMessageInputRef.current?.setText?.("");
+            await BackendRemote.rpc.removeDraft(selectedAccountId(), chatId);
+            window.__reloadDraft && window.__reloadDraft();
+            // Process the relay asynchronously (response will appear in chat)
+            interceptDTECommand(accountId, chatId, message).catch(err => {
+              log.error("DTE relay failed:", err);
+            });
             return;
           }
 

@@ -3,6 +3,9 @@
  *
  * A React wrapper for the Live2D avatar system that integrates
  * with the AI Companion Hub to display an animated avatar.
+ *
+ * Fixed: StrictMode-safe lifecycle — debounced initialization prevents
+ * the double-mount/unmount race that caused immediate renderer disposal.
  */
 
 import React, { useRef, useEffect, useState, useCallback } from "react";
@@ -98,6 +101,13 @@ export interface Live2DAvatarState {
 const MAX_RETRIES = 3;
 
 /**
+ * Debounce delay to survive React StrictMode double-mount.
+ * In dev mode, React mounts → unmounts → remounts within ~50ms.
+ * A 100ms debounce ensures we only initialize once after the final mount.
+ */
+const INIT_DEBOUNCE_MS = 150;
+
+/**
  * Live2D Avatar Component for the AI Companion Hub
  */
 export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
@@ -119,6 +129,8 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const managerRef = useRef<any>(null);
   const controllerRef = useRef<Live2DAvatarController | null>(null);
+  // Track whether the current effect instance is still the active one
+  const initIdRef = useRef(0);
   const [state, setState] = useState<Live2DAvatarState>({
     isLoading: true,
     isLoaded: false,
@@ -141,21 +153,25 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
   // Resolve model URL from preset or use as-is
   const modelUrl = CDN_MODELS[model as keyof typeof CDN_MODELS] || model;
 
-  // Initialize the avatar
+  // Initialize the avatar with debounce to survive StrictMode
   useEffect(() => {
-    let mounted = true;
+    // Increment the init ID — only the latest init should proceed
+    const thisInitId = ++initIdRef.current;
+    let debounceTimer: ReturnType<typeof setTimeout> | null = null;
     let timeoutId: ReturnType<typeof setTimeout> | null = null;
+    let localManager: any = null;
 
     const initializeAvatar = async () => {
       if (!containerRef.current) return;
+      // Double-check we're still the active init
+      if (thisInitId !== initIdRef.current) return;
 
       setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
       // Set a timeout to prevent infinite loading state
       timeoutId = setTimeout(() => {
-        if (mounted) {
+        if (thisInitId === initIdRef.current) {
           setState((prev) => {
-            // Only set error if still loading (not already loaded or errored)
             if (prev.isLoading && !prev.isLoaded && !prev.error) {
               return {
                 ...prev,
@@ -166,17 +182,21 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
             return prev;
           });
         }
-      }, 10000); // 10 second timeout
+      }, 15000); // 15 second timeout (increased for slower machines)
 
       try {
         // Dynamic import to avoid SSR issues
         const { Live2DAvatarManager } = await import("@deltecho/avatar");
 
+        // Check again after async import
+        if (thisInitId !== initIdRef.current) return;
+
         // Create manager instance
-        managerRef.current = new Live2DAvatarManager();
+        localManager = new Live2DAvatarManager();
+        managerRef.current = localManager;
 
         // Initialize with props
-        const controller = await managerRef.current.initialize(
+        const controller = await localManager.initialize(
           containerRef.current,
           {
             modelPath: modelUrl,
@@ -184,7 +204,7 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
             height,
             scale,
             onLoad: () => {
-              if (mounted) {
+              if (thisInitId === initIdRef.current) {
                 if (timeoutId) clearTimeout(timeoutId);
                 setState((prev) => ({
                   ...prev,
@@ -195,7 +215,7 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
               }
             },
             onError: (error: Error) => {
-              if (mounted) {
+              if (thisInitId === initIdRef.current) {
                 if (timeoutId) clearTimeout(timeoutId);
                 setState((prev) => ({
                   ...prev,
@@ -205,14 +225,22 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
                 onError?.(error);
               }
             },
-            debug: process.env.NODE_ENV === "development",
+            debug: false, // Reduce console noise
           },
         );
+
+        // Final check before storing controller
+        if (thisInitId !== initIdRef.current) {
+          // We were superseded — clean up
+          localManager.dispose();
+          localManager = null;
+          return;
+        }
 
         controllerRef.current = controller;
         onControllerReady?.(controller);
       } catch (error) {
-        if (mounted) {
+        if (thisInitId === initIdRef.current) {
           if (timeoutId) clearTimeout(timeoutId);
           const err = error instanceof Error ? error : new Error(String(error));
           setState((prev) => ({
@@ -225,17 +253,38 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
       }
     };
 
-    initializeAvatar();
+    // Debounce the initialization to survive StrictMode double-mount
+    debounceTimer = setTimeout(initializeAvatar, INIT_DEBOUNCE_MS);
 
     return () => {
-      mounted = false;
+      // Invalidate this init instance
+      // Do NOT increment initIdRef here — the next effect will do that
+      // Instead, just mark this one as stale
+      const wasActive = thisInitId === initIdRef.current;
+
+      if (debounceTimer) clearTimeout(debounceTimer);
       if (timeoutId) clearTimeout(timeoutId);
-      managerRef.current?.dispose();
-      managerRef.current = null;
-      controllerRef.current = null;
+
+      // Only dispose if this was the active manager AND we're truly unmounting
+      // (not just a StrictMode re-run)
+      if (wasActive && localManager) {
+        // Delay disposal slightly to allow StrictMode remount to claim the manager
+        setTimeout(() => {
+          // If initIdRef has moved on, the new effect took over — don't dispose
+          if (thisInitId === initIdRef.current) {
+            localManager?.dispose();
+            if (managerRef.current === localManager) {
+              managerRef.current = null;
+            }
+            controllerRef.current = null;
+          }
+        }, INIT_DEBOUNCE_MS + 50);
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modelUrl, width, height, scale, state.retryCount]);
+  }, [modelUrl, state.retryCount]);
+  // Note: removed width/height/scale from deps to prevent re-init on resize.
+  // The PixiJS app uses resizeTo: canvas.parentElement which handles resize natively.
 
   // Update emotional state
   useEffect(() => {
@@ -283,7 +332,14 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
           position: "absolute",
           top: 0,
           left: 0,
+          // Transparent background — let the chat view show through
+          background: "transparent",
+          // Always visible so the canvas can initialize with real dimensions
           visibility: state.isLoaded && !state.error ? "visible" : "hidden",
+          // Ensure the canvas is above the chat but below UI controls
+          zIndex: 10,
+          // Pointer events pass through when not loaded
+          pointerEvents: state.isLoaded ? "auto" : "none",
         }}
         data-width={width}
         data-height={height}
@@ -302,6 +358,7 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            zIndex: 11,
           }}
         >
           <div className="live2d-loading-content">
@@ -336,9 +393,10 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
               borderRadius: 6,
               color: "#fff",
               fontSize: 12,
+              zIndex: 12,
             }}
           >
-            <span title={state.error.message}>⚠️ Live2D Failed</span>
+            <span title={state.error.message}>Live2D Failed</span>
             {state.retryCount < MAX_RETRIES && (
               <button
                 type="button"

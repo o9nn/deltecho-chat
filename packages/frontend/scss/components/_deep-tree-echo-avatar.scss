@@ -21,15 +21,13 @@
     bottom: 20px;
     right: 20px;
     z-index: 1000;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    background: var(--colorBackgroundSecondary);
-    border: 1px solid var(--colorBorderPrimary);
-    border-radius: 12px;
-    padding: 8px;
+    // Transparent background so the Live2D model floats naturally
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
     transition: all 0.3s ease;
-    // Allow clicks to pass through the entire avatar container
-    // This prevents the floating avatar from blocking message interactions
-    // The avatar is purely decorative and doesn't need to receive clicks
+    // Allow clicks to pass through to the chat below
     pointer-events: none;
 
     // All child elements also pass through clicks
@@ -37,9 +35,14 @@
       pointer-events: none;
     }
 
+    // The Live2D canvas container needs transparent bg too
+    .live2d-avatar-container,
+    .live2d-avatar {
+      background: transparent;
+    }
+
     &:hover {
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-      transform: translateY(-2px);
+      filter: drop-shadow(0 4px 12px rgba(99, 102, 241, 0.3));
     }
   }
 

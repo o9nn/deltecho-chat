@@ -30,6 +30,7 @@ import { proactiveMessaging, ProactiveMessaging } from "./ProactiveMessaging";
 import { interfaceShadowing } from "./InterfaceShadowing";
 import { proactiveActionKernel } from "./ProactiveActionKernel";
 import { internalJournalManager as _internalJournalManager } from "./InternalJournalManager";
+import { dteRelay, DTEMessageRelay } from "./DTEMessageRelay";
 
 const log = getLogger(
   "render/components/DeepTreeEchoBot/DeepTreeEchoIntegration",
@@ -94,6 +95,7 @@ export async function initDeepTreeEchoBot(): Promise<void> {
     // Initialize subsystems
     initializeChatManager();
     initializeProactiveMessaging();
+    initializeMessageRelay();
 
     // Register message event handlers
     registerMessageHandlers();
@@ -114,7 +116,7 @@ export async function initDeepTreeEchoBot(): Promise<void> {
     proactiveActionKernel.start();
 
     isInitialized = true;
-    log.info("Deep Tree Echo fully initialized with all subsystems");
+    log.info("Deep Tree Echo fully initialized with all subsystems (relay active)");
   } catch (error) {
     log.error("Failed to initialize Deep Tree Echo Bot:", error);
   }
@@ -128,6 +130,16 @@ function initializeChatManager(): void {
   chatManager.setUIBridge(uiBridge);
 
   log.info("Chat Manager initialized");
+}
+
+/**
+ * Initialize the Message Relay for /dte and /echo prefix commands
+ */
+function initializeMessageRelay(): void {
+  if (botInstance) {
+    dteRelay.setBotInstance(botInstance);
+  }
+  log.info("Message Relay initialized — /dte and /echo commands active");
 }
 
 /**
@@ -449,6 +461,7 @@ export function cleanupBot(): void {
   chatManager.cleanup();
   uiBridge.cleanup();
   proactiveMessaging.cleanup();
+  dteRelay.cleanup();
 
   botInstance = null;
   isInitialized = false;
@@ -530,6 +543,43 @@ export async function listChats(accountId: number) {
  */
 export async function getUnreadChats(accountId: number) {
   return chatManager.getUnreadChats(accountId);
+}
+
+/**
+ * Get the DTE message relay instance
+ */
+export function getMessageRelay(): DTEMessageRelay {
+  return dteRelay;
+}
+
+/**
+ * Intercept an outgoing message for /dte or /echo prefix relay.
+ * Returns true if the message was handled by DTE.
+ */
+export async function interceptDTECommand(
+  accountId: number,
+  chatId: number,
+  text: string,
+): Promise<boolean> {
+  return dteRelay.interceptOutgoingMessage(accountId, chatId, text);
+}
+
+/**
+ * Send a message to DTE from any context and get a response in the same chat
+ */
+export async function talkToDTE(
+  accountId: number,
+  chatId: number,
+  message: string,
+  senderName?: string,
+) {
+  return dteRelay.relayMessage({
+    accountId,
+    chatId,
+    messageText: message,
+    senderName,
+    respondInPlace: true,
+  });
 }
 
 // Automatically initialize the bot when this module is imported,

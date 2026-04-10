@@ -1,37 +1,44 @@
 /**
  * Live2D Avatar Styles
  * 
- * Styling for the Live2D avatar component in AICompanionHub
+ * Styling for the Live2D avatar component in AICompanionHub.
+ * The avatar floats over the chat view with a transparent background
+ * so the Live2D model is visible without an opaque backdrop.
  */
+
+.live2d-avatar-container {
+  position: relative;
+  // Ensure the container itself doesn't clip or hide the canvas
+  overflow: visible;
+}
 
 .live2d-avatar {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;
   overflow: hidden;
-  background: radial-gradient(circle at center, #1e1e3f 0%, #0f0f23 100%);
-  box-shadow:
-    0 4px 20px rgba(0, 0, 0, 0.3),
-    inset 0 0 60px rgba(99, 102, 241, 0.05);
+  // TRANSPARENT background — the PixiJS canvas renders with backgroundAlpha: 0
+  // so the model floats over whatever is behind it
+  background: transparent;
   transition: box-shadow 0.3s ease;
 
   &:hover {
-    box-shadow:
-      0 6px 30px rgba(99, 102, 241, 0.2),
-      inset 0 0 80px rgba(99, 102, 241, 0.08);
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
   }
 
   canvas {
     display: block;
     width: 100%;
     height: 100%;
+    // Ensure canvas itself is transparent
+    background: transparent;
   }
 }
 
 // Loading state
 .live2d-loading {
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  background: linear-gradient(135deg, rgba(26, 26, 46, 0.8) 0%, rgba(22, 33, 62, 0.8) 100%);
+  border-radius: 12px;
 }
 
 .live2d-loading-content {
@@ -60,7 +67,7 @@
 
 // Error state
 .live2d-error {
-  background: linear-gradient(135deg, #1a1a2e 0%, #2a1a2e 100%);
+  background: linear-gradient(135deg, rgba(26, 26, 46, 0.8) 0%, rgba(42, 26, 46, 0.8) 100%);
 }
 
 .live2d-error-content {
@@ -368,18 +375,27 @@
   color: #a5b4fc;
 }
 
-// Live2D avatar sizing from data attributes
-.live2d-avatar {
-  &[data-width][data-height] {
-    width: attr(data-width px);
-    height: attr(data-height px);
-  }
-}
-
-// Ready state
+// Ready state — transparent, no opaque background
 .live2d-ready {
   position: relative;
   overflow: hidden;
-  border-radius: 12px;
-  background: radial-gradient(circle at center, #1e1e3f 0%, #0f0f23 100%);
+  background: transparent;
+}
+
+// Floating avatar overlay in chat view
+.deep-tree-echo-avatar-overlay {
+  position: absolute;
+  z-index: 100;
+  pointer-events: auto;
+  // Allow the avatar to be draggable or repositioned
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+
+  .live2d-avatar-container {
+    // No border-radius clipping for the floating overlay
+    border-radius: 0;
+  }
 }

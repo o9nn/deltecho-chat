@@ -15,6 +15,7 @@ import { ReactionsBarProvider } from "../ReactionsBar";
 import useDialog from "../../hooks/dialog/useDialog";
 import useMessage from "../../hooks/chat/useMessage";
 import { DeepTreeEchoAvatarDisplay } from "../DeepTreeEchoBot/DeepTreeEchoAvatarDisplay";
+import { TalkToEchoFAB } from "../DeepTreeEchoBot/TalkToEchoFAB";
 
 const log = getLogger("renderer/MessageListAndComposer");
 
@@ -349,9 +350,13 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
           clearDraftStateButKeepTextareaValue
         }
       />
-      {settingsStore?.desktopSettings?.deepTreeEchoBotEnabled &&
-        settingsStore?.desktopSettings?.deepTreeEchoBotAvatarEnabled !==
-          false && <DeepTreeEchoAvatarDisplay position="floating" />}
+      {settingsStore?.desktopSettings?.deepTreeEchoBotEnabled && (
+        <>
+          {settingsStore?.desktopSettings?.deepTreeEchoBotAvatarEnabled !==
+            false && <DeepTreeEchoAvatarDisplay position="floating" />}
+          <TalkToEchoFAB chatId={chat.id} />
+        </>
+      )}
     </div>
   );
 }

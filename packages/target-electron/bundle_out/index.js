@@ -30454,7 +30454,7 @@ var supportedURISchemes = [
   "DCACCOUNT:",
   "DCLOGIN:"
 ];
-var ALLOWED_RESOURCE_FOLDERS = ["images", "node_modules", "html-dist"];
+var ALLOWED_RESOURCE_FOLDERS = ["images", "models", "node_modules", "html-dist"];
 var ALLOWED_SOURCE_FOLDERS = ["src", "scss", "node_modules"];
 var ALLOWED_CONFIG_FOLDERS = ["background"];
 var ALLOWED_STATIC_FOLDERS = [
@@ -30525,7 +30525,7 @@ function getDefaultState() {
     HTMLEmailAskForRemoteLoadingConfirmation: true,
     HTMLEmailAlwaysLoadRemoteContent: false,
     enableRelatedChats: false,
-    deepTreeEchoBotEnabled: false,
+    deepTreeEchoBotEnabled: true,
     deepTreeEchoBotMemoryEnabled: false,
     deepTreeEchoBotPersonality: "",
     deepTreeEchoBotApiKey: "",
@@ -30574,6 +30574,11 @@ var PersistentState = class extends EventEmitter {
       )();
       if (typeof saved.lastAccount !== "number" || saved.lastAccount < 0) {
         saved.lastAccount = void 0;
+      }
+      if (saved.deepTreeEchoBotEnabled === false && !saved._dteMigrated) {
+        saved.deepTreeEchoBotEnabled = true;
+        saved._dteMigrated = true;
+        log3.info("Migrated deepTreeEchoBotEnabled to true");
       }
     } catch (error) {
       log3.debug(error);
@@ -48897,7 +48902,7 @@ init_cjs_shim();
 
 // src/get-build-info.ts
 init_cjs_shim();
-var BuildInfo = JSON.parse('{"VERSION":"1.0.0","BUILD_TIMESTAMP":1775814664553,"GIT_REF":"v99.1.0-80-g97b42d2-2026-04-10-L4-cognitive"}');
+var BuildInfo = JSON.parse('{"VERSION":"1.0.0","BUILD_TIMESTAMP":1775826265499,"GIT_REF":"v99.1.0-82-g3a30b7b-2026-04-10-L4-cognitive"}');
 
 // src/deltachat/stdio_server.ts
 import { spawn } from "child_process";
