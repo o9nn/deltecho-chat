@@ -37,14 +37,15 @@ export class ProactiveActionKernel {
       "Proactive Action Kernel started. Continuous autonomous operation engaged.",
     );
 
-    // The pulse of consciousness - checking every 30 seconds
-    this.heartbeatInterval = setInterval(() => this.heartbeat(), 30000);
+    // The pulse of consciousness - checking every 5 minutes (was 30s, caused log spam)
+    this.heartbeatInterval = setInterval(() => this.heartbeat(), 300000);
   }
 
   public stop(): void {
     this.isRunning = false;
     if (this.heartbeatInterval) {
       clearInterval(this.heartbeatInterval);
+      this.heartbeatInterval = undefined;
     }
   }
 
@@ -52,9 +53,11 @@ export class ProactiveActionKernel {
     const { rhythm, resonance } = ecologicalResonance.getMetabolicState();
     const now = Date.now();
 
-    // 1. Calculate Pacing: Don't act too frequently (exponential back-off)
+    // 1. Calculate Pacing: Don't act too frequently
+    // Minimum 5 minutes between actions, plus ecological pacing delay
+    const MIN_ACTION_INTERVAL = 5 * 60 * 1000; // 5 minutes
     const nextAllowedAction =
-      this.lastActionTime + ecologicalResonance.getPacingDelay();
+      this.lastActionTime + Math.max(MIN_ACTION_INTERVAL, ecologicalResonance.getPacingDelay());
     if (now < nextAllowedAction) return;
 
     // 2. Decide Action based on Rhythm

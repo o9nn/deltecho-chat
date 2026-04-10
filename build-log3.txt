@@ -1,0 +1,129 @@
+﻿
+> deltecho-chat@1.0.0 build:electron C:\Users\sandbox_713\Documents\gh\deltecho-chat\deltecho-chat
+> pnpm --filter=@deltachat-desktop/target-electron build
+
+
+> @deltachat-desktop/target-electron@1.0.0 build C:\Users\sandbox_713\Documents\gh\deltecho-chat\deltecho-chat\packages\target-electron
+> pnpm build:locales && pnpm build:backend && pnpm --filter=@deltachat-desktop/frontend build && pnpm build:compose-frontend
+
+
+> @deltachat-desktop/target-electron@1.0.0 build:locales C:\Users\sandbox_713\Documents\gh\deltecho-chat\deltecho-chat\packages\target-electron
+> pnpm -w translations:convert
+
+
+> deltecho-chat@1.0.0 translations:convert C:\Users\sandbox_713\Documents\gh\deltecho-chat\deltecho-chat
+> node ./bin/build-shared-convert-translations.mjs ./_locales
+
++ Converting translations from xml to json... 
++ converted 61 files in 1949 ms
+
+
+> @deltachat-desktop/target-electron@1.0.0 build:backend C:\Users\sandbox_713\Documents\gh\deltecho-chat\deltecho-chat\packages\target-electron
+> node ./bin/build.js
+
+refs/heads/autogenesis/2026-04-10-L4-cognitive 2026-04-10-L4-cognitive
+{"VERSION":"1.0.0","BUILD_TIMESTAMP":1775833916008,"GIT_REF":"v99.1.0-84-ge0a87e3-2026-04-10-L4-cognitive"}
+
+> @deltachat-desktop/frontend@ build C:\Users\sandbox_713\Documents\gh\deltecho-chat\deltecho-chat\packages\frontend
+> pnpm build:ts && pnpm build:themes && pnpm build:static && pnpm build:source-map-support && pnpm build:scss
+
+
+> @deltachat-desktop/frontend@ build:ts C:\Users\sandbox_713\Documents\gh\deltecho-chat\deltecho-chat\packages\frontend
+> node ./bin/build-frontend-ts.mjs
+
+
+> @deltachat-desktop/frontend@ build:themes C:\Users\sandbox_713\Documents\gh\deltecho-chat\deltecho-chat\packages\frontend
+> sass themes/light.scss static/fallback-theme.css --style=compressed --embed-source-map && node ./bin/build-frontend-themes.js
+
+
+> @deltachat-desktop/frontend@ build:static C:\Users\sandbox_713\Documents\gh\deltecho-chat\deltecho-chat\packages\frontend
+> node ../../bin/copy.js ../../static ./html-dist && node ../../bin/copy.js ./static ./html-dist && node ../../bin/copy.js ../../images ./html-dist/images
+
++ copied all source files to "./html-dist"
++ copied all source files to "./html-dist"
++ copied all source files to "./html-dist/images"
+
+> @deltachat-desktop/frontend@ build:source-map-support C:\Users\sandbox_713\Documents\gh\deltecho-chat\deltecho-chat\packages\frontend
+> node ./bin/build-frontend-source_map_support.js
+
+
+> @deltachat-desktop/frontend@ build:scss C:\Users\sandbox_713\Documents\gh\deltecho-chat\deltecho-chat\packages\frontend
+> sass ./scss/manifest.scss ./html-dist/main.css --embed-source-map --style=compressed
+
+node.exe : DEPRECATION WARNING [import]: Sass @import rules are deprecated and 
+will be removed in Dart Sass 3.0.0.
+At C:\Users\sandbox_713\AppData\Roaming\npm\pnpm.ps1:24 char:5
++     & "node$exe"  "$basedir/node_modules/pnpm/bin/pnpm.cjs" $args
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (DEPRECATION WAR...art Sass 3.0.0. 
+   :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+    ÔòÀ
+106 Ôöé @import "components/bot_settings";
+    Ôöé         ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ÔòÁ
+    scss\manifest.scss 106:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be 
+removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+    ÔòÀ
+107 Ôöé @import "components/deep-tree-echo";
+    Ôöé         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ÔòÁ
+    scss\manifest.scss 107:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be 
+removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+    ÔòÀ
+108 Ôöé @import "components/ai_neighborhood_dashboard";
+    Ôöé         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ÔòÁ
+    scss\manifest.scss 108:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be 
+removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+    ÔòÀ
+109 Ôöé @import "components/deep-tree-echo-avatar";
+    Ôöé         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ÔòÁ
+    scss\manifest.scss 109:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be 
+removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+    ÔòÀ
+110 Ôöé @import "components/three-panel-layout";
+    Ôöé         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ÔòÁ
+    scss\manifest.scss 110:9  root stylesheet
+
+
+> @deltachat-desktop/target-electron@1.0.0 build:compose-frontend C:\Users\sandbox_713\Documents\gh\deltecho-chat\deltecho-chat\packages\target-electron
+> node ../../bin/copy.js ../frontend/html-dist ./html-dist && node ../../bin/copy.js ./static ./html-dist && pnpm build:runtime-impl
+
++ copied all source files to "./html-dist"
++ copied all source files to "./html-dist"
+
+> @deltachat-desktop/target-electron@1.0.0 build:runtime-impl C:\Users\sandbox_713\Documents\gh\deltecho-chat\deltecho-chat\packages\target-electron
+> pnpm esbuild --format=esm --bundle --minify --keep-names --sourcemap --outdir=./html-dist runtime-electron/runtime.ts
+
+
+  html-dist\runtime.js       35.0kb
+  html-dist\runtime.js.map  133.4kb
+
+Done in 144ms

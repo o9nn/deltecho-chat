@@ -1,54 +1,41 @@
 {
-  "Version": 3,
-  "FileReferences": {
-    "Moc": "miara_pro_t03.moc3",
-    "Textures": ["miara_pro_t03.4096/texture_00.png"],
-    "Physics": "miara_pro_t03.physics3.json",
-    "DisplayInfo": "miara_pro_t03.cdi3.json",
-    "Motions": {
-      "Idle": [
-        {
-          "File": "motion/Scene1.motion3.json",
-          "FadeInTime": 0.5,
-          "FadeOutTime": 0.5
-        }
-      ],
-      "Tap": [
-        {
-          "File": "motion/Scene2.motion3.json",
-          "FadeInTime": 0.3,
-          "FadeOutTime": 0.5
-        }
-      ],
-      "Flic": [
-        {
-          "File": "motion/Scene3.motion3.json",
-          "FadeInTime": 0.3,
-          "FadeOutTime": 0.5
-        }
-      ]
-    }
-  },
-  "Groups": [
-    {
-      "Target": "Parameter",
-      "Name": "LipSync",
-      "Ids": ["ParamMouthOpenY"]
-    },
-    {
-      "Target": "Parameter",
-      "Name": "EyeBlink",
-      "Ids": ["ParamEyeLOpen", "ParamEyeROpen"]
-    }
-  ],
-  "HitAreas": [
-    {
-      "Name": "Head",
-      "Id": "HitAreaHead"
-    },
-    {
-      "Name": "Body",
-      "Id": "HitAreaBody"
-    }
-  ]
+	"Version": 3,
+	"FileReferences": {
+		"Moc": "miara_pro_t03.moc3",
+		"Textures": [
+			"miara_pro_t03.4096/texture_00.png"
+		],
+		"Physics": "miara_pro_t03.physics3.json",
+		"DisplayInfo": "miara_pro_t03.cdi3.json",
+		"Motions": {
+			"Idle": [
+				{
+					"File": "motion/Scene1.motion3.json"
+				}
+			],
+			"Tap": [
+				{
+					"File": "motion/Scene2.motion3.json"
+				}
+			],
+			"Flic": [
+				{
+					"File": "motion/Scene3.motion3.json"
+				}
+			]
+		}
+	},
+	"Groups": [
+		{
+			"Target": "Parameter",
+			"Name": "LipSync",
+			"Ids": []
+		},
+		{
+			"Target": "Parameter",
+			"Name": "EyeBlink",
+			"Ids": []
+		}
+	],
+	"HitAreas": []
 }

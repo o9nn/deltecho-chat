@@ -160,11 +160,17 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     this.config = config as PixiLive2DConfig;
 
     // Dynamically import PixiJS and pixi-live2d-display-lipsyncpatch
-    const [{ Application }, { Live2DModel: Live2DModelClass }] =
+    const [PIXI, { Live2DModel: Live2DModelClass }] =
       await Promise.all([
         import("pixi.js"),
         import("pixi-live2d-display-lipsyncpatch"),
       ]);
+
+    // Expose PIXI globally so pixi-live2d-display can find the Ticker
+    // This fixes the "No Ticker to be used for automatic updates" warning
+    (window as any).PIXI = PIXI;
+
+    const { Application } = PIXI;
 
     // Get or create canvas element
     let canvas: HTMLCanvasElement;

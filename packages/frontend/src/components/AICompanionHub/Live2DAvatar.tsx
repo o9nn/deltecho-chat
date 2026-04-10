@@ -53,7 +53,7 @@ export interface Live2DAvatarController {
 
 // Model paths - local models are served from /models/ in the build output
 const CDN_MODELS = {
-  miara: "/models/miara/miara_pro_t03.model3.json",
+  miara: "./models/miara/miara_pro_t03.model3.json",
   shizuku:
     "https://cdn.jsdelivr.net/gh/guansss/pixi-live2d-display/test/assets/shizuku/shizuku.model.json",
   haru: "https://cdn.jsdelivr.net/gh/guansss/pixi-live2d-display/test/assets/haru/haru_greeter_t03.model3.json",
