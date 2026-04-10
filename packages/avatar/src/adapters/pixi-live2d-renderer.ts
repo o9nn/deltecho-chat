@@ -249,8 +249,32 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     }
 
     try {
+      // Pre-fetch model JSON to work around file:// protocol issues
+      // The pixi-live2d-display library's internal fetch can fail with file:// URLs
+      // By passing a parsed JSON object with a 'url' property, we bypass the fetch
+      // and give the library the correct base URL for resolving relative paths
+      let modelSource: string | Record<string, unknown> = modelInfo.modelPath;
+      
+      if (modelInfo.modelPath.startsWith('./') || modelInfo.modelPath.startsWith('/') || modelInfo.modelPath.startsWith('file://')) {
+        try {
+          const response = await fetch(modelInfo.modelPath);
+          if (response.ok) {
+            const modelJSON = await response.json();
+            // Set the url property so the library knows the base URL for relative paths
+            // This is critical for resolving texture, motion, and physics file paths
+            modelJSON.url = modelInfo.modelPath;
+            modelSource = modelJSON;
+            console.log('[PixiLive2DRenderer] Pre-fetched model JSON, passing parsed object to from()');
+          } else {
+            console.warn(`[PixiLive2DRenderer] Pre-fetch failed (${response.status}), falling back to URL string`);
+          }
+        } catch (fetchError) {
+          console.warn('[PixiLive2DRenderer] Pre-fetch error, falling back to URL string:', fetchError);
+        }
+      }
+      
       // Load the model with autoInteract for cursor eye-tracking
-      const model = (await Live2DModelClass.from(modelInfo.modelPath, {
+      const model = (await Live2DModelClass.from(modelSource, {
         autoInteract: true,
         autoUpdate: true,
       })) as unknown as Live2DModel;

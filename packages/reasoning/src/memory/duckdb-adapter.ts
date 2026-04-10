@@ -79,6 +79,9 @@ export class DuckDBAdapter {
       log("DuckDB Adapter: Initialized successfully with schema");
     } catch (error) {
       logError("Failed to initialize DuckDB:", error);
+      // Gracefully degrade — DuckDB is optional for core chat functionality
+      // The bot will work without SQL-based memory (uses RAGMemoryStore instead)
+      log("DuckDB unavailable — running in degraded mode without SQL memory");
     }
   }
 
