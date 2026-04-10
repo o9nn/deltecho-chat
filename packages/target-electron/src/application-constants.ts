@@ -81,7 +81,7 @@ export const supportedURISchemes = [
 /// Files that the main window is allowed access over the file protocol
 
 // folders the renderer need to load resources from
-const ALLOWED_RESOURCE_FOLDERS = ["images", "node_modules", "html-dist"];
+const ALLOWED_RESOURCE_FOLDERS = ["images", "models", "node_modules", "html-dist"];
 // folders the renderer wants to load source files from (when using the devtools)
 const ALLOWED_SOURCE_FOLDERS = ["src", "scss", "node_modules"];
 

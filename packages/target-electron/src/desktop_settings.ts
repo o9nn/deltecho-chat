@@ -34,6 +34,13 @@ class PersistentState extends EventEmitter {
       if (typeof saved.lastAccount !== "number" || saved.lastAccount < 0) {
         saved.lastAccount = undefined;
       }
+      // Migration: enable Deep Tree Echo bot for existing configs
+      // that were created before it was enabled by default
+      if (saved.deepTreeEchoBotEnabled === false && !saved._dteMigrated) {
+        saved.deepTreeEchoBotEnabled = true;
+        saved._dteMigrated = true as any;
+        log.info("Migrated deepTreeEchoBotEnabled to true");
+      }
     } catch (error) {
       log.debug(error);
       log.info("Missing configuration file. Using default values.");

@@ -29,7 +29,7 @@ export function getDefaultState(): DesktopSettingsType {
     HTMLEmailAskForRemoteLoadingConfirmation: true,
     HTMLEmailAlwaysLoadRemoteContent: false,
     enableRelatedChats: false,
-    deepTreeEchoBotEnabled: false,
+    deepTreeEchoBotEnabled: true,
     deepTreeEchoBotMemoryEnabled: false,
     deepTreeEchoBotPersonality: "",
     deepTreeEchoBotApiKey: "",
