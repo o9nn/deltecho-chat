@@ -3,17 +3,21 @@ import { EmotionalVector } from "./Live2DAvatar";
 
 // Import images - in a real app these typically would be imported or referenced by URL
 // We are using static paths
+// Resolve sprite paths relative to the app's html-dist root.
+// The build:static step copies ./static/* into html-dist/, so sprites
+// land at html-dist/images/avatar/sprites/ (NOT /static/images/...).
+const SPRITE_BASE = "images/avatar/sprites";
 const SPRITE_PATHS = {
-  happy_up: "/static/images/avatar/sprites/sprite_happy_up.jpg",
-  neutral: "/static/images/avatar/sprites/sprite_neutral.jpg",
-  ecstatic: "/static/images/avatar/sprites/sprite_ecstatic.jpg",
-  speaking: "/static/images/avatar/sprites/sprite_speaking.jpg",
-  surprised: "/static/images/avatar/sprites/sprite_surprised.jpg",
-  singing: "/static/images/avatar/sprites/sprite_singing.jpg",
-  annoyed: "/static/images/avatar/sprites/sprite_annoyed.jpg",
-  content: "/static/images/avatar/sprites/sprite_content.jpg",
-  thinking: "/static/images/avatar/sprites/sprite_thinking.jpg",
-  bored: "/static/images/avatar/sprites/sprite_bored.jpg",
+  happy_up: `${SPRITE_BASE}/sprite_happy_up.jpg`,
+  neutral: `${SPRITE_BASE}/sprite_neutral.jpg`,
+  ecstatic: `${SPRITE_BASE}/sprite_ecstatic.jpg`,
+  speaking: `${SPRITE_BASE}/sprite_speaking.jpg`,
+  surprised: `${SPRITE_BASE}/sprite_surprised.jpg`,
+  singing: `${SPRITE_BASE}/sprite_singing.jpg`,
+  annoyed: `${SPRITE_BASE}/sprite_annoyed.jpg`,
+  content: `${SPRITE_BASE}/sprite_content.jpg`,
+  thinking: `${SPRITE_BASE}/sprite_thinking.jpg`,
+  bored: `${SPRITE_BASE}/sprite_bored.jpg`,
 };
 
 export interface ResponsiveSpriteAvatarProps {
