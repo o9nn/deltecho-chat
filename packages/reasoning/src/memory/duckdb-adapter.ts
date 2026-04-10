@@ -41,7 +41,18 @@ export class DuckDBAdapter {
         return;
       }
 
-      const worker = new Worker(bundle.mainWorker!);
+      // Fix CSP worker-src violation: fetch the worker script and create a blob: URL
+      // This avoids the CSP block on loading workers from cdn.jsdelivr.net
+      let worker: Worker;
+      try {
+        const workerResponse = await fetch(bundle.mainWorker!);
+        const workerBlob = new Blob([await workerResponse.text()], { type: 'application/javascript' });
+        const workerUrl = URL.createObjectURL(workerBlob);
+        worker = new Worker(workerUrl);
+      } catch (fetchErr) {
+        log(`DuckDB Worker fetch failed, falling back to direct URL: ${fetchErr}`);
+        worker = new Worker(bundle.mainWorker!);
+      }
       const logger = new duckdb.ConsoleLogger();
 
       this.db = new AsyncDuckDB(logger, worker);
