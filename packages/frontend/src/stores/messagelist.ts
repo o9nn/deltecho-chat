@@ -303,7 +303,10 @@ class MessageListStore extends Store<MessageListState> {
         //
         // TODO refactor: this warning triggers for "edit request" messages.
         // Those are actual messages, but we don't render them
-        this.log.warn(
+        // Downgraded from warn to debug: this is a known benign race condition
+        // that occurs with fast delivery (e.g. Chatmail) and edit-request messages.
+        // The message will be loaded later by other event listeners.
+        this.log.debug(
           `setMessageState called for message ${messageId}, ` +
             `state ${messageState}, but it's not loaded. ` +
             "Ignoring, in hopes that we'll automatically load it later.",
