@@ -1060,13 +1060,11 @@ function useMessageEditing(
     editMessageInputRef.current?.setText("");
   }, [editMessageInputRef]);
 
-  if (useHasChanged2(chatId)) {
-    // Yes, this means that the "edit draft" gets lost on chat change.
-    // Though maybe we can easily keep it between chat switches,
-    // at least for one chat?
-    // Because we do check if `_originalMessage` belongs to the current chat,
-    // so it's safe to not `setOriginalMessage(null)`
-    // when switching between chats.
+  const chatIdChanged = useHasChanged2(chatId);
+  if (chatIdChanged && isEditingModeActive) {
+    // Only call cancelEditing (which triggers setState) when there's actually
+    // an active editing session to cancel. This avoids the React warning:
+    // "Cannot update during an existing state transition".
     cancelEditing();
   }
 
