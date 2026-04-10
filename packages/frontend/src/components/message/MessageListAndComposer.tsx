@@ -14,8 +14,7 @@ import ConfirmSendingFiles from "../dialogs/ConfirmSendingFiles";
 import { ReactionsBarProvider } from "../ReactionsBar";
 import useDialog from "../../hooks/dialog/useDialog";
 import useMessage from "../../hooks/chat/useMessage";
-import { DeepTreeEchoAvatarDisplay } from "../DeepTreeEchoBot/DeepTreeEchoAvatarDisplay";
-import { TalkToEchoFAB } from "../DeepTreeEchoBot/TalkToEchoFAB";
+// Avatar and TalkToEchoFAB moved to dedicated AvatarPanel (right panel)
 
 const log = getLogger("renderer/MessageListAndComposer");
 
@@ -350,13 +349,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
           clearDraftStateButKeepTextareaValue
         }
       />
-      {settingsStore?.desktopSettings?.deepTreeEchoBotEnabled && (
-        <>
-          {settingsStore?.desktopSettings?.deepTreeEchoBotAvatarEnabled !==
-            false && <DeepTreeEchoAvatarDisplay position="floating" />}
-          <TalkToEchoFAB chatId={chat.id} />
-        </>
-      )}
+      {/* Avatar and TalkToEchoFAB moved to dedicated AvatarPanel (right panel) */}
     </div>
   );
 }

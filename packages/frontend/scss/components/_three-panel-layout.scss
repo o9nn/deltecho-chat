@@ -1,0 +1,282 @@
+// ==========================================================================
+// Three-Panel Layout: Chat List | Message Canvas | Avatar Panel
+// ==========================================================================
+// Resizable dividers between all three panels.
+// Default proportions: ~28% | ~44% | ~28% (roughly 1/3 | 1/3 | 1/3)
+// Min widths prevent panels from collapsing to zero.
+
+// --- Resizable Divider ---------------------------------------------------
+
+.resizable-divider {
+  flex-shrink: 0;
+  background-color: var(--outlineColor, #2a2a2a);
+  z-index: 10;
+  transition: background-color 0.15s ease;
+
+  &--vertical {
+    width: 4px;
+    cursor: col-resize;
+    min-height: 100%;
+
+    &:hover,
+    &:active {
+      background-color: var(--colorPrimary, #4a9fd5);
+      width: 4px;
+    }
+  }
+
+  &--horizontal {
+    height: 4px;
+    cursor: row-resize;
+    min-width: 100%;
+
+    &:hover,
+    &:active {
+      background-color: var(--colorPrimary, #4a9fd5);
+      height: 4px;
+    }
+  }
+}
+
+// --- Avatar Panel ---------------------------------------------------------
+
+.avatar-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  background: var(--chatViewBg, #1a1a2e);
+  position: relative;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--navBarHeight, 40px);
+    padding: 0 12px;
+    background-color: var(--navBarBackground, #1e1e2e);
+    color: var(--navBarText, #cdd6f4);
+    border-bottom: var(--outlineProperties, 1px solid #313244);
+    flex-shrink: 0;
+  }
+
+  &__title {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  &__status {
+    font-size: 11px;
+    color: var(--colorPrimary, #4a9fd5);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    &::before {
+      content: "";
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: #a6e3a1;
+    }
+  }
+
+  &__canvas {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    background: transparent;
+
+    // Override the floating avatar styles — we're inline now
+    .deep-tree-echo-avatar-display {
+      position: relative !important;
+      bottom: auto !important;
+      right: auto !important;
+      z-index: auto !important;
+      pointer-events: auto !important;
+      width: 100% !important;
+      height: 100% !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent !important;
+    }
+
+    .inline-avatar {
+      position: relative !important;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .live2d-avatar-container {
+      background: transparent !important;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .live2d-avatar {
+      background: transparent !important;
+
+      canvas {
+        background: transparent !important;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+      }
+    }
+  }
+
+  &__controls {
+    flex-shrink: 0;
+    padding: 8px 12px;
+    border-top: var(--outlineProperties, 1px solid #313244);
+    background-color: var(--navBarBackground, #1e1e2e);
+
+    // Override TalkToEchoFAB to be inline instead of floating
+    .talk-to-echo-fab {
+      position: relative !important;
+      bottom: auto !important;
+      right: auto !important;
+      z-index: auto !important;
+    }
+
+    .talk-to-echo-fab__toggle {
+      display: none; // Hide the toggle button — the panel IS the avatar area
+    }
+
+    .talk-to-echo-fab__overlay {
+      position: relative !important;
+      bottom: auto !important;
+      right: auto !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      padding: 0 !important;
+      display: flex !important;
+      opacity: 1 !important;
+      pointer-events: auto !important;
+      transform: none !important;
+    }
+
+    .talk-to-echo-fab__input-row {
+      width: 100%;
+    }
+
+    .talk-to-echo-fab__input {
+      border-radius: 8px;
+      background: var(--chatViewBg, #1a1a2e);
+      border: 1px solid var(--outlineColor, #313244);
+      color: var(--navBarText, #cdd6f4);
+      padding: 8px 12px;
+      font-size: 13px;
+      width: 100%;
+
+      &:focus {
+        border-color: var(--colorPrimary, #4a9fd5);
+        outline: none;
+      }
+
+      &::placeholder {
+        color: var(--navBarGroupSubtitle, #6c7086);
+      }
+    }
+  }
+}
+
+// --- Inline Talk-to-Echo Input (inside AvatarPanel) ----------------------
+
+.talk-to-echo-inline {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+
+  &__toast {
+    font-size: 11px;
+    color: var(--colorPrimary, #4a9fd5);
+    padding: 4px 0;
+    text-align: center;
+    animation: fadeIn 0.3s ease;
+  }
+
+  &__input-row {
+    display: flex;
+    gap: 6px;
+    width: 100%;
+  }
+
+  &__input {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--outlineColor, #313244);
+    background: var(--chatViewBg, #1a1a2e);
+    color: var(--navBarText, #cdd6f4);
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.15s ease;
+
+    &:focus {
+      border-color: var(--colorPrimary, #4a9fd5);
+    }
+
+    &::placeholder {
+      color: var(--navBarGroupSubtitle, #6c7086);
+    }
+  }
+
+  &__send {
+    padding: 8px 14px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    border: none;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+
+  &__hint {
+    font-size: 10px;
+    color: var(--navBarGroupSubtitle, #6c7086);
+    padding: 0 2px;
+
+    code {
+      background: rgba(99, 102, 241, 0.15);
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-size: 10px;
+      color: #a5b4fc;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+// --- Small Screen: hide avatar panel --------------------------------------
+
+:global(.main-screen.small-screen) {
+  .avatar-panel {
+    display: none;
+  }
+
+  .resizable-divider:last-of-type {
+    display: none;
+  }
+}

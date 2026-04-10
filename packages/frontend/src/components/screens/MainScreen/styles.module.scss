@@ -28,11 +28,11 @@
   display: flex;
   flex-direction: column;
 
-  // See below, `.chatAndNavbar`'s flex-grow.
+  // flex-grow is now set via inline style for resizable panels
   width: 0;
   flex-grow: 3;
 
-  min-width: 295px;
+  min-width: 220px;
 
   .chatListNavbar {
     @include navbar;
@@ -57,11 +57,13 @@
   // Also this ensures that `.chatListAndNavbar` and `.chatAndNavbar`
   // take respectively 3 and 8 parts of the width of the parent
   // on wide screens.
+  // flex-grow is now set via inline style for resizable panels
   width: 0;
-  flex-grow: 8;
+  flex-grow: 5;
 
   display: flex;
   flex-direction: column;
+  min-width: 280px;
 
   .chatNavbar {
     @include navbar;

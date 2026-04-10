@@ -1,9 +1,8 @@
 /**
- * TalkToEchoFAB - Floating Action Button to Talk to Deep Tree Echo
+ * TalkToEchoFAB - Talk to Deep Tree Echo Input
  *
- * A small floating button that appears in the chat view, allowing users
- * to quickly send a message to Deep Tree Echo from any chat context.
- * Clicking it opens a small input overlay where the user can type a message.
+ * When used inside the AvatarPanel, renders as an inline input bar.
+ * When used standalone (floating), renders as a FAB with expandable overlay.
  */
 
 import React, { useState, useRef, useCallback, useEffect } from "react";
@@ -11,15 +10,23 @@ import { selectedAccountId } from "../../ScreenController";
 import { talkToDTE } from "./DeepTreeEchoIntegration";
 
 interface TalkToEchoFABProps {
-  chatId: number;
+  /** Chat ID for relay context */
+  chatId?: number;
+  /** Account ID override */
+  accountId?: number;
+  /** Additional CSS class name */
   className?: string;
+  /** Render mode: 'inline' for panel, 'floating' for overlay */
+  mode?: "inline" | "floating";
 }
 
 export const TalkToEchoFAB: React.FC<TalkToEchoFABProps> = ({
   chatId,
+  accountId,
   className = "",
+  mode = "inline",
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(mode === "inline");
   const [message, setMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [lastResponse, setLastResponse] = useState<string | null>(null);
@@ -45,21 +52,20 @@ export const TalkToEchoFAB: React.FC<TalkToEchoFABProps> = ({
 
     setIsSending(true);
     try {
-      const accountId = selectedAccountId();
-      const result = await talkToDTE(accountId, chatId, message.trim());
+      const acctId = accountId ?? selectedAccountId();
+      const result = await talkToDTE(acctId, chatId ?? 0, message.trim());
       if (result.success) {
         setLastResponse("Message sent to Deep Tree Echo");
       } else {
         setLastResponse(result.error || "Failed to send");
       }
       setMessage("");
-      setIsOpen(false);
-    } catch (error) {
+    } catch (_error) {
       setLastResponse("Error communicating with Deep Tree Echo");
     } finally {
       setIsSending(false);
     }
-  }, [message, chatId, isSending]);
+  }, [message, chatId, accountId, isSending]);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
@@ -67,41 +73,76 @@ export const TalkToEchoFAB: React.FC<TalkToEchoFABProps> = ({
         e.preventDefault();
         handleSend();
       }
-      if (e.key === "Escape") {
+      if (e.key === "Escape" && mode === "floating") {
         setIsOpen(false);
         setMessage("");
       }
     },
-    [handleSend],
+    [handleSend, mode],
   );
 
+  // --- Inline mode (for AvatarPanel) ---
+  if (mode === "inline") {
+    return (
+      <div className={`talk-to-echo-inline ${className}`}>
+        {/* Response toast */}
+        {lastResponse && (
+          <div className="talk-to-echo-inline__toast">
+            {lastResponse}
+          </div>
+        )}
+        <div className="talk-to-echo-inline__input-row">
+          <input
+            ref={inputRef}
+            type="text"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Talk to Echo..."
+            className="talk-to-echo-inline__input"
+            disabled={isSending}
+          />
+          <button
+            onClick={handleSend}
+            disabled={!message.trim() || isSending}
+            className="talk-to-echo-inline__send"
+            title="Send to Deep Tree Echo"
+            style={{ opacity: !message.trim() || isSending ? 0.5 : 1 }}
+          >
+            {isSending ? "..." : "Send"}
+          </button>
+        </div>
+        <div className="talk-to-echo-inline__hint">
+          Tip: Type <code>/dte message</code> or <code>/echo message</code> in any chat
+        </div>
+      </div>
+    );
+  }
+
+  // --- Floating mode (legacy FAB) ---
   return (
-    <div className={`talk-to-echo-fab-container ${className}`} style={styles.container}>
-      {/* Response toast */}
+    <div className={`talk-to-echo-fab ${className}`} style={floatingStyles.container}>
       {lastResponse && (
-        <div style={styles.toast}>
-          <span style={styles.toastIcon}>🌳</span>
-          <span style={styles.toastText}>{lastResponse}</span>
+        <div style={floatingStyles.toast}>
+          <span>🌳</span>
+          <span style={{ fontSize: 12, color: "#c7d2fe" }}>{lastResponse}</span>
         </div>
       )}
-
-      {/* Input overlay */}
       {isOpen && (
-        <div style={styles.inputOverlay}>
-          <div style={styles.inputHeader}>
-            <span style={styles.inputTitle}>🌳 Talk to Deep Tree Echo</span>
+        <div style={floatingStyles.inputOverlay}>
+          <div style={floatingStyles.inputHeader}>
+            <span style={{ fontSize: 13, fontWeight: 600, color: "#c7d2fe" }}>
+              🌳 Talk to Deep Tree Echo
+            </span>
             <button
-              style={styles.closeBtn}
-              onClick={() => {
-                setIsOpen(false);
-                setMessage("");
-              }}
+              style={floatingStyles.closeBtn}
+              onClick={() => { setIsOpen(false); setMessage(""); }}
               title="Close"
             >
               ×
             </button>
           </div>
-          <div style={styles.inputRow}>
+          <div style={{ display: "flex", gap: 8, padding: "10px 12px" }}>
             <input
               ref={inputRef}
               type="text"
@@ -109,43 +150,37 @@ export const TalkToEchoFAB: React.FC<TalkToEchoFABProps> = ({
               onChange={(e) => setMessage(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Type a message to Echo..."
-              style={styles.input}
+              style={floatingStyles.input}
               disabled={isSending}
             />
             <button
               onClick={handleSend}
               disabled={!message.trim() || isSending}
               style={{
-                ...styles.sendBtn,
+                ...floatingStyles.sendBtn,
                 opacity: !message.trim() || isSending ? 0.5 : 1,
               }}
-              title="Send to Deep Tree Echo"
+              title="Send"
             >
               {isSending ? "..." : "→"}
             </button>
           </div>
-          <div style={styles.hint}>
-            Tip: You can also type <code style={styles.code}>/dte message</code>{" "}
-            or <code style={styles.code}>/echo message</code> in any chat
-          </div>
         </div>
       )}
-
-      {/* FAB button */}
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          style={styles.fab}
+          style={floatingStyles.fab}
           title="Talk to Deep Tree Echo"
         >
-          <span style={styles.fabIcon}>🌳</span>
+          <span style={{ fontSize: 20, lineHeight: 1 }}>🌳</span>
         </button>
       )}
     </div>
   );
 };
 
-const styles: Record<string, React.CSSProperties> = {
+const floatingStyles: Record<string, React.CSSProperties> = {
   container: {
     position: "fixed",
     bottom: 180,
@@ -168,12 +203,6 @@ const styles: Record<string, React.CSSProperties> = {
     alignItems: "center",
     justifyContent: "center",
     boxShadow: "0 4px 12px rgba(99, 102, 241, 0.4)",
-    transition: "all 0.2s ease",
-    pointerEvents: "auto",
-  },
-  fabIcon: {
-    fontSize: 20,
-    lineHeight: 1,
   },
   inputOverlay: {
     width: 320,
@@ -183,7 +212,6 @@ const styles: Record<string, React.CSSProperties> = {
     border: "1px solid rgba(99, 102, 241, 0.3)",
     boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)",
     overflow: "hidden",
-    pointerEvents: "auto",
   },
   inputHeader: {
     display: "flex",
@@ -193,11 +221,6 @@ const styles: Record<string, React.CSSProperties> = {
     borderBottom: "1px solid rgba(99, 102, 241, 0.2)",
     background: "rgba(99, 102, 241, 0.1)",
   },
-  inputTitle: {
-    fontSize: 13,
-    fontWeight: 600,
-    color: "#c7d2fe",
-  },
   closeBtn: {
     background: "none",
     border: "none",
@@ -206,11 +229,6 @@ const styles: Record<string, React.CSSProperties> = {
     cursor: "pointer",
     padding: "0 4px",
     lineHeight: 1,
-  },
-  inputRow: {
-    display: "flex",
-    gap: 8,
-    padding: "10px 12px",
   },
   input: {
     flex: 1,
@@ -231,19 +249,6 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: 16,
     fontWeight: 700,
     cursor: "pointer",
-    transition: "opacity 0.2s",
-  },
-  hint: {
-    padding: "4px 12px 10px",
-    fontSize: 11,
-    color: "#64748b",
-  },
-  code: {
-    background: "rgba(99, 102, 241, 0.15)",
-    padding: "1px 4px",
-    borderRadius: 3,
-    fontSize: 11,
-    color: "#a5b4fc",
   },
   toast: {
     display: "flex",
@@ -251,19 +256,8 @@ const styles: Record<string, React.CSSProperties> = {
     gap: 6,
     padding: "8px 14px",
     background: "rgba(20, 20, 40, 0.9)",
-    backdropFilter: "blur(8px)",
     borderRadius: 8,
     border: "1px solid rgba(99, 102, 241, 0.3)",
-    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
-    animation: "fadeIn 0.3s ease",
-    pointerEvents: "auto",
-  },
-  toastIcon: {
-    fontSize: 14,
-  },
-  toastText: {
-    fontSize: 12,
-    color: "#c7d2fe",
   },
 };
 

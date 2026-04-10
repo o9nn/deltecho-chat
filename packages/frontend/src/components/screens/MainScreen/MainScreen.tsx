@@ -40,6 +40,8 @@ import { Screens } from "../../../ScreenController";
 import type { T } from "@deltachat/jsonrpc-client";
 import CreateChat from "../../dialogs/CreateChat";
 import { getUIBridge } from "../../DeepTreeEchoBot/DeepTreeEchoUIBridge";
+import { ResizableDivider } from "../../ResizableDivider";
+import { AvatarPanel } from "../../AvatarPanel";
 
 type Props = {
   accountId?: number;
@@ -199,13 +201,48 @@ export default function MainScreen({ accountId }: Props) {
   const isSearchActive = queryStr.length > 0 || queryChatId !== null;
   const showArchivedChats = !isSearchActive && archivedChatsSelected;
 
+  // --- 3-Panel Resizable Layout State ---
+  const settingsStore = useSettingsStore()[0];
+  const deepTreeEchoBotEnabled = settingsStore?.desktopSettings.deepTreeEchoBotEnabled ?? false;
+  const deepTreeEchoBotAvatarEnabled = settingsStore?.desktopSettings.deepTreeEchoBotAvatarEnabled ?? true;
+  const showAvatarPanel = deepTreeEchoBotEnabled && deepTreeEchoBotAvatarEnabled !== false && !smallScreenMode;
+
+  // Panel widths as flex-grow values (persisted in ref to survive re-renders)
+  const [chatListFlex, setChatListFlex] = useState(3);
+  const [chatFlex, setChatFlex] = useState(5);
+  const [avatarFlex, setAvatarFlex] = useState(3);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const handleLeftDividerResize = useCallback((delta: number) => {
+    if (!containerRef.current) return;
+    const totalWidth = containerRef.current.offsetWidth;
+    const flexPerPixel = (chatListFlex + chatFlex + (showAvatarPanel ? avatarFlex : 0)) / totalWidth;
+    const flexDelta = delta * flexPerPixel;
+    const newChatListFlex = Math.max(1.5, chatListFlex + flexDelta);
+    const newChatFlex = Math.max(2, chatFlex - flexDelta);
+    setChatListFlex(newChatListFlex);
+    setChatFlex(newChatFlex);
+  }, [chatListFlex, chatFlex, avatarFlex, showAvatarPanel]);
+
+  const handleRightDividerResize = useCallback((delta: number) => {
+    if (!containerRef.current) return;
+    const totalWidth = containerRef.current.offsetWidth;
+    const flexPerPixel = (chatListFlex + chatFlex + avatarFlex) / totalWidth;
+    const flexDelta = delta * flexPerPixel;
+    const newChatFlex = Math.max(2, chatFlex + flexDelta);
+    const newAvatarFlex = Math.max(1.5, avatarFlex - flexDelta);
+    setChatFlex(newChatFlex);
+    setAvatarFlex(newAvatarFlex);
+  }, [chatListFlex, chatFlex, avatarFlex]);
+
   return (
     <div
+      ref={containerRef}
       className={`main-screen ${smallScreenMode ? "small-screen" : ""} ${
         !messageSectionShouldBeHidden ? "chat-view-open" : ""
       }`}
     >
-      <section className={styles.chatListAndNavbar}>
+      <section className={styles.chatListAndNavbar} style={{ flexGrow: chatListFlex }}>
         <nav className={styles.chatListNavbar} data-tauri-drag-region>
           {showArchivedChats && (
             <>
@@ -256,7 +293,8 @@ export default function MainScreen({ accountId }: Props) {
           }}
         />
       </section>
-      <section className={styles.chatAndNavbar}>
+      <ResizableDivider direction="vertical" onResize={handleLeftDividerResize} />
+      <section className={styles.chatAndNavbar} style={{ flexGrow: chatFlex }}>
         <nav className={styles.chatNavbar} data-tauri-drag-region>
           {smallScreenMode && (
             <span data-no-drag-region>
@@ -309,6 +347,18 @@ export default function MainScreen({ accountId }: Props) {
           onUpdateGalleryView={updatethreeDotMenuHidden}
         />
       </section>
+      {showAvatarPanel && (
+        <>
+          <ResizableDivider direction="vertical" onResize={handleRightDividerResize} />
+          <section className="avatar-panel-section" style={{ flexGrow: avatarFlex, width: 0, display: 'flex', flexDirection: 'column' }}>
+            <AvatarPanel
+              visible={true}
+              accountId={accountId}
+              chatId={chatId}
+            />
+          </section>
+        </>
+      )}
       {!chatListShouldBeHidden && <ConnectivityToast />}
     </div>
   );
