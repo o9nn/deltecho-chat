@@ -191,6 +191,10 @@ export class DeepTreeEchoUIBridge {
     context: ChatContextInterface,
     accountId: number,
   ): void {
+    // Dedup guard: skip if same context and account are already registered
+    if (this.chatContext === context && this.accountId === accountId) {
+      return;
+    }
     this.chatContext = context;
     this.accountId = accountId;
     this.currentState.activeAccountId = accountId;
@@ -207,6 +211,10 @@ export class DeepTreeEchoUIBridge {
    * Register the DialogContext
    */
   public registerDialogContext(context: DialogContextInterface): void {
+    // Dedup guard: skip if same context is already registered
+    if (this.dialogContext === context) {
+      return;
+    }
     this.dialogContext = context;
     log().info("DialogContext registered with UI Bridge");
   }
