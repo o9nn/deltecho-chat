@@ -162,9 +162,16 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
     let localManager: any = null;
 
     const initializeAvatar = async () => {
-      if (!containerRef.current) return;
+      console.log('[Live2DAvatar] initializeAvatar called, containerRef:', !!containerRef.current, 'initId:', thisInitId, 'current:', initIdRef.current);
+      if (!containerRef.current) {
+        console.warn('[Live2DAvatar] No container ref — aborting init');
+        return;
+      }
       // Double-check we're still the active init
-      if (thisInitId !== initIdRef.current) return;
+      if (thisInitId !== initIdRef.current) {
+        console.warn('[Live2DAvatar] Stale init ID — aborting');
+        return;
+      }
 
       setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
@@ -186,16 +193,27 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
 
       try {
         // Dynamic import to avoid SSR issues
-        const { Live2DAvatarManager } = await import("@deltecho/avatar");
+        console.log('[Live2DAvatar] Importing @deltecho/avatar...');
+        const avatarModule = await import("@deltecho/avatar");
+        console.log('[Live2DAvatar] Import succeeded, Live2DAvatarManager:', !!avatarModule.Live2DAvatarManager);
+        const { Live2DAvatarManager } = avatarModule;
 
         // Check again after async import
-        if (thisInitId !== initIdRef.current) return;
+        if (thisInitId !== initIdRef.current) {
+          console.warn('[Live2DAvatar] Stale after import — aborting');
+          return;
+        }
+
+        // Check for Live2DCubismCore
+        console.log('[Live2DAvatar] window.Live2DCubismCore:', typeof (window as any).Live2DCubismCore);
 
         // Create manager instance
+        console.log('[Live2DAvatar] Creating Live2DAvatarManager, modelUrl:', modelUrl);
         localManager = new Live2DAvatarManager();
         managerRef.current = localManager;
 
         // Initialize with props
+        console.log('[Live2DAvatar] Calling manager.initialize...');
         const controller = await localManager.initialize(
           containerRef.current,
           {
@@ -238,8 +256,10 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
         }
 
         controllerRef.current = controller;
+        console.log('[Live2DAvatar] Controller ready, avatar loaded successfully!');
         onControllerReady?.(controller);
       } catch (error) {
+        console.error('[Live2DAvatar] Initialization error:', error);
         if (thisInitId === initIdRef.current) {
           if (timeoutId) clearTimeout(timeoutId);
           const err = error instanceof Error ? error : new Error(String(error));

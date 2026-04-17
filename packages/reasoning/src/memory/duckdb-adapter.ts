@@ -24,12 +24,16 @@ export class DuckDBAdapter {
     if (this.initialized) return;
 
     try {
+      // Early bail-out: In Electron with file:// protocol or DNS hardening,
+      // the jsdelivr CDN is unreachable. Detect this and skip gracefully
+      // to avoid spewing multiple console errors.
+      if (typeof window !== 'undefined' && window.location?.protocol === 'file:') {
+        log("DuckDB Adapter: Skipping — file:// protocol detected (Electron). CDN workers unreachable.");
+        log("DuckDB unavailable — running in degraded mode without SQL memory");
+        return;
+      }
+
       log("DuckDB Adapter: Initializing WASM database...");
-
-      const JSDELIVR_BUNDLES = duckdb.getJsDelivrBundles();
-
-      // specific bundle selection or auto
-      const bundle = await duckdb.selectBundle(JSDELIVR_BUNDLES);
 
       // In Node.js environment, we might need to handle Worker instantiation differently
       // but for now assuming standard Web Worker API is available or polyfilled
@@ -41,17 +45,26 @@ export class DuckDBAdapter {
         return;
       }
 
+      const JSDELIVR_BUNDLES = duckdb.getJsDelivrBundles();
+
+      // specific bundle selection or auto
+      const bundle = await duckdb.selectBundle(JSDELIVR_BUNDLES);
+
       // Fix CSP worker-src violation: fetch the worker script and create a blob: URL
       // This avoids the CSP block on loading workers from cdn.jsdelivr.net
       let worker: Worker;
       try {
         const workerResponse = await fetch(bundle.mainWorker!);
+        if (!workerResponse.ok) {
+          throw new Error(`HTTP ${workerResponse.status}`);
+        }
         const workerBlob = new Blob([await workerResponse.text()], { type: 'application/javascript' });
         const workerUrl = URL.createObjectURL(workerBlob);
         worker = new Worker(workerUrl);
       } catch (fetchErr) {
-        log(`DuckDB Worker fetch failed, falling back to direct URL: ${fetchErr}`);
-        worker = new Worker(bundle.mainWorker!);
+        log(`DuckDB Worker fetch failed: ${fetchErr}`);
+        log("DuckDB unavailable — running in degraded mode without SQL memory");
+        return;
       }
       const logger = new duckdb.ConsoleLogger();
 

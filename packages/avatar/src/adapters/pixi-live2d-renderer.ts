@@ -163,7 +163,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     const [PIXI, { Live2DModel: Live2DModelClass }] =
       await Promise.all([
         import("pixi.js"),
-        import("pixi-live2d-display-lipsyncpatch"),
+        import("pixi-live2d-display-lipsyncpatch/cubism4"),
       ]);
 
     // Expose PIXI globally so pixi-live2d-display can find the Ticker
@@ -233,14 +233,18 @@ export class PixiLive2DRenderer implements ICubismRenderer {
    * Load and display a Live2D model
    */
   async loadModel(modelInfo: CubismModelInfo): Promise<void> {
+    console.log('[PixiLive2DRenderer] loadModel called:', modelInfo.modelPath);
     if (!this.app || !this.initialized) {
       throw new Error("Renderer not initialized");
     }
 
     // Dynamically import Live2DModel
-    const { Live2DModel: Live2DModelClass } = await import(
-      "pixi-live2d-display-lipsyncpatch"
+    console.log('[PixiLive2DRenderer] Importing pixi-live2d-display-lipsyncpatch/cubism4...');
+    const live2dModule = await import(
+      "pixi-live2d-display-lipsyncpatch/cubism4"
     );
+    console.log('[PixiLive2DRenderer] Import succeeded, Live2DModel:', !!live2dModule.Live2DModel);
+    const { Live2DModel: Live2DModelClass } = live2dModule;
 
     // Dispose existing model
     if (this.model) {
@@ -249,35 +253,30 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     }
 
     try {
-      // Pre-fetch model JSON to work around file:// protocol issues
-      // The pixi-live2d-display library's internal fetch can fail with file:// URLs
-      // By passing a parsed JSON object with a 'url' property, we bypass the fetch
-      // and give the library the correct base URL for resolving relative paths
-      let modelSource: string | Record<string, unknown> = modelInfo.modelPath;
+      // Log registered runtimes for debugging
+      console.log('[PixiLive2DRenderer] Registered runtimes:', (Live2DModelClass as any).runtimes?.length ?? 'unknown');
+      console.log('[PixiLive2DRenderer] Live2DCubismCore available:', typeof (window as any).Live2DCubismCore);
+      console.log('[PixiLive2DRenderer] Model path:', modelInfo.modelPath, 'protocol:', window.location?.protocol);
       
-      if (modelInfo.modelPath.startsWith('./') || modelInfo.modelPath.startsWith('/') || modelInfo.modelPath.startsWith('file://')) {
-        try {
-          const response = await fetch(modelInfo.modelPath);
-          if (response.ok) {
-            const modelJSON = await response.json();
-            // Set the url property so the library knows the base URL for relative paths
-            // This is critical for resolving texture, motion, and physics file paths
-            modelJSON.url = modelInfo.modelPath;
-            modelSource = modelJSON;
-            console.log('[PixiLive2DRenderer] Pre-fetched model JSON, passing parsed object to from()');
-          } else {
-            console.warn(`[PixiLive2DRenderer] Pre-fetch failed (${response.status}), falling back to URL string`);
-          }
-        } catch (fetchError) {
-          console.warn('[PixiLive2DRenderer] Pre-fetch error, falling back to URL string:', fetchError);
-        }
-      }
+      // Strategy: Pass the URL string directly to Live2DModel.from()
+      // The library handles fetching, parsing, and base URL resolution internally.
+      // Previous approach of pre-fetching JSON and passing as object caused
+      // "Unknown settings format" because the library's runtime detection
+      // needs the full pipeline (urlToJSON → jsonToSettings) to work correctly.
+      //
+      // For file:// protocol in Electron, the library's internal fetch works fine
+      // since Electron allows file:// fetches from the renderer process.
       
-      // Load the model with autoInteract for cursor eye-tracking
-      const model = (await Live2DModelClass.from(modelSource, {
-        autoInteract: true,
+      const modelUrl = modelInfo.modelPath;
+      
+      // Use autoHitTest + autoFocus instead of deprecated autoInteract
+      console.log('[PixiLive2DRenderer] Calling Live2DModel.from() with URL string:', modelUrl);
+      const model = (await Live2DModelClass.from(modelUrl, {
+        autoHitTest: true,
+        autoFocus: true,
         autoUpdate: true,
       })) as unknown as Live2DModel;
+      console.log('[PixiLive2DRenderer] Live2DModel.from() returned:', !!model);
       this.model = model;
 
       // Position and scale the model
