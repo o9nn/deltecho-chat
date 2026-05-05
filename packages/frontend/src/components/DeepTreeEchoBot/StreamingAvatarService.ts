@@ -183,24 +183,24 @@ interface PhonemeData {
  * Character to phoneme mapping (simplified English)
  */
 const CHAR_TO_PHONEME: Record<string, { phoneme: string; intensity: number }> =
-{
-  a: { phoneme: "A", intensity: 1.0 },
-  e: { phoneme: "C", intensity: 0.6 },
-  i: { phoneme: "I", intensity: 0.6 },
-  o: { phoneme: "E", intensity: 0.8 },
-  u: { phoneme: "F", intensity: 0.8 },
-  b: { phoneme: "B", intensity: 0.3 },
-  p: { phoneme: "B", intensity: 0.3 },
-  m: { phoneme: "B", intensity: 0.3 },
-  f: { phoneme: "G", intensity: 0.5 },
-  v: { phoneme: "G", intensity: 0.5 },
-  l: { phoneme: "H", intensity: 0.5 },
-  t: { phoneme: "H", intensity: 0.5 },
-  d: { phoneme: "H", intensity: 0.5 },
-  n: { phoneme: "H", intensity: 0.5 },
-  w: { phoneme: "E", intensity: 0.8 },
-  y: { phoneme: "I", intensity: 0.6 },
-};
+  {
+    a: { phoneme: "A", intensity: 1.0 },
+    e: { phoneme: "C", intensity: 0.6 },
+    i: { phoneme: "I", intensity: 0.6 },
+    o: { phoneme: "E", intensity: 0.8 },
+    u: { phoneme: "F", intensity: 0.8 },
+    b: { phoneme: "B", intensity: 0.3 },
+    p: { phoneme: "B", intensity: 0.3 },
+    m: { phoneme: "B", intensity: 0.3 },
+    f: { phoneme: "G", intensity: 0.5 },
+    v: { phoneme: "G", intensity: 0.5 },
+    l: { phoneme: "H", intensity: 0.5 },
+    t: { phoneme: "H", intensity: 0.5 },
+    d: { phoneme: "H", intensity: 0.5 },
+    n: { phoneme: "H", intensity: 0.5 },
+    w: { phoneme: "E", intensity: 0.8 },
+    y: { phoneme: "I", intensity: 0.6 },
+  };
 
 /**
  * Phoneme to mouth shape mapping
@@ -443,339 +443,333 @@ export class StreamingAvatarService extends EventEmitter {
         // No more boundaries in current buffer
         break;
       }
-    } else if (earliestBoundaryIndex >= 0 && earliestBoundaryIndex < this.config.minPhraseLength - 1) {
-      // A boundary exists but it's too early. We need to keep searching after this point.
-      // To be safe and simple, we'll wait for more text unless this is the only text left.
-      break;
-    } else {
-      hasBoundary = false;
     }
   }
-}
 
   /**
    * Queue a phrase for lip-sync playback
    */
   private queuePhrase(text: string): void {
-  const phonemes = this.generatePhonemes(text);
-  const duration = phonemes.reduce(
-    (sum, p) => Math.max(sum, p.startTime + p.duration),
-    0,
-  );
+    const phonemes = this.generatePhonemes(text);
+    const duration = phonemes.reduce(
+      (sum, p) => Math.max(sum, p.startTime + p.duration),
+      0,
+    );
 
-  const entry: PhraseEntry = {
-    text,
-    phonemes,
-    startTime: 0,
-    duration,
-    status: "pending",
-  };
+    const entry: PhraseEntry = {
+      text,
+      phonemes,
+      startTime: 0,
+      duration,
+      status: "pending",
+    };
 
-  this.phraseQueue.push(entry);
-  log.debug(`Queued phrase: "${text.substring(0, 30)}..."`);
+    this.phraseQueue.push(entry);
+    log.debug(`Queued phrase: "${text.substring(0, 30)}..."`);
 
-  // Start playback if not already
-  if(this.currentPhraseIndex < 0) {
-  this.startNextPhrase();
-}
+    // Start playback if not already
+    if (this.currentPhraseIndex < 0) {
+      this.startNextPhrase();
+    }
   }
 
   /**
    * Generate phonemes from text
    */
   private generatePhonemes(text: string): PhonemeData[] {
-  const phonemes: PhonemeData[] = [];
-  let currentTime = 0;
-  const baseDuration = 80; // ms per phoneme
+    const phonemes: PhonemeData[] = [];
+    let currentTime = 0;
+    const baseDuration = 80; // ms per phoneme
 
-  const normalized = text.toLowerCase().replace(/[^a-z\s]/g, "");
+    const normalized = text.toLowerCase().replace(/[^a-z\s]/g, "");
 
-  for (const char of normalized) {
-    if (char === " ") {
-      // Word gap
-      phonemes.push({
-        phoneme: "X",
-        startTime: currentTime,
-        duration: baseDuration * 0.5,
-        intensity: 0,
-      });
-      currentTime += baseDuration * 0.5;
-    } else {
-      const mapping = CHAR_TO_PHONEME[char] || {
-        phoneme: "H",
-        intensity: 0.5,
-      };
-      const isVowel = "aeiou".includes(char);
-      const duration = baseDuration * (isVowel ? 1.2 : 1);
+    for (const char of normalized) {
+      if (char === " ") {
+        // Word gap
+        phonemes.push({
+          phoneme: "X",
+          startTime: currentTime,
+          duration: baseDuration * 0.5,
+          intensity: 0,
+        });
+        currentTime += baseDuration * 0.5;
+      } else {
+        const mapping = CHAR_TO_PHONEME[char] || {
+          phoneme: "H",
+          intensity: 0.5,
+        };
+        const isVowel = "aeiou".includes(char);
+        const duration = baseDuration * (isVowel ? 1.2 : 1);
 
-      phonemes.push({
-        phoneme: mapping.phoneme,
-        startTime: currentTime,
-        duration,
-        intensity: mapping.intensity,
-      });
-      currentTime += duration;
+        phonemes.push({
+          phoneme: mapping.phoneme,
+          startTime: currentTime,
+          duration,
+          intensity: mapping.intensity,
+        });
+        currentTime += duration;
+      }
     }
+
+    // Final rest
+    phonemes.push({
+      phoneme: "X",
+      startTime: currentTime,
+      duration: baseDuration,
+      intensity: 0,
+    });
+
+    return phonemes;
   }
-
-  // Final rest
-  phonemes.push({
-    phoneme: "X",
-    startTime: currentTime,
-    duration: baseDuration,
-    intensity: 0,
-  });
-
-  return phonemes;
-}
 
   /**
    * Start the next phrase
    */
   private startNextPhrase(): void {
-  this.currentPhraseIndex++;
+    this.currentPhraseIndex++;
 
-  if(this.currentPhraseIndex >= this.phraseQueue.length) {
-  return;
-}
+    if (this.currentPhraseIndex >= this.phraseQueue.length) {
+      return;
+    }
 
-const phrase = this.phraseQueue[this.currentPhraseIndex];
-phrase.status = "speaking";
-phrase.startTime = Date.now();
+    const phrase = this.phraseQueue[this.currentPhraseIndex];
+    phrase.status = "speaking";
+    phrase.startTime = Date.now();
 
-this.emitEvent("phrase_speaking", { phrase: phrase.text });
-log.debug(
-  `Speaking phrase ${this.currentPhraseIndex + 1}/${this.phraseQueue.length
-  }`,
-);
+    this.emitEvent("phrase_speaking", { phrase: phrase.text });
+    log.debug(
+      `Speaking phrase ${this.currentPhraseIndex + 1}/${
+        this.phraseQueue.length
+      }`,
+    );
   }
 
   /**
    * Start animation loop
    */
   private startAnimationLoop(): void {
-  if(this.animationFrameId) {
-  clearInterval(this.animationFrameId);
-}
+    if (this.animationFrameId) {
+      clearInterval(this.animationFrameId);
+    }
 
-const frameInterval = 1000 / this.config.animationFps;
+    const frameInterval = 1000 / this.config.animationFps;
 
-this.animationFrameId = setInterval(() => {
-  this.updateAnimation();
-}, frameInterval);
+    this.animationFrameId = setInterval(() => {
+      this.updateAnimation();
+    }, frameInterval);
   }
 
   /**
    * Stop animation loop
    */
   private stopAnimationLoop(): void {
-  if(this.animationFrameId) {
-  clearInterval(this.animationFrameId);
-  this.animationFrameId = null;
-}
+    if (this.animationFrameId) {
+      clearInterval(this.animationFrameId);
+      this.animationFrameId = null;
+    }
   }
 
   /**
    * Update animation each frame
    */
   private updateAnimation(): void {
-  const currentPhrase = this.phraseQueue[this.currentPhraseIndex];
+    const currentPhrase = this.phraseQueue[this.currentPhraseIndex];
 
-  if(!currentPhrase || currentPhrase.status !== "speaking") {
-  // Return to rest
-  this.targetMouthShape = {
-    mouthOpen: 0,
-    mouthWide: 0,
-    lipRound: 0,
-    timestamp: Date.now(),
-  };
-  this.applySmoothing();
-  return;
-}
+    if (!currentPhrase || currentPhrase.status !== "speaking") {
+      // Return to rest
+      this.targetMouthShape = {
+        mouthOpen: 0,
+        mouthWide: 0,
+        lipRound: 0,
+        timestamp: Date.now(),
+      };
+      this.applySmoothing();
+      return;
+    }
 
-const elapsed = Date.now() - currentPhrase.startTime;
+    const elapsed = Date.now() - currentPhrase.startTime;
 
-// Find current phoneme
-let currentPhoneme: PhonemeData | null = null;
-for (const phoneme of currentPhrase.phonemes) {
-  if (
-    elapsed >= phoneme.startTime &&
-    elapsed < phoneme.startTime + phoneme.duration
-  ) {
-    currentPhoneme = phoneme;
-    break;
-  }
-}
+    // Find current phoneme
+    let currentPhoneme: PhonemeData | null = null;
+    for (const phoneme of currentPhrase.phonemes) {
+      if (
+        elapsed >= phoneme.startTime &&
+        elapsed < phoneme.startTime + phoneme.duration
+      ) {
+        currentPhoneme = phoneme;
+        break;
+      }
+    }
 
-if (currentPhoneme) {
-  const mouthBase =
-    PHONEME_TO_MOUTH[currentPhoneme.phoneme] || PHONEME_TO_MOUTH["X"];
-  this.targetMouthShape = {
-    mouthOpen: mouthBase.mouthOpen * currentPhoneme.intensity,
-    mouthWide: mouthBase.mouthWide * currentPhoneme.intensity,
-    lipRound: mouthBase.lipRound * currentPhoneme.intensity,
-    timestamp: Date.now(),
-  };
-} else if (elapsed >= currentPhrase.duration) {
-  // Phrase complete
-  currentPhrase.status = "complete";
+    if (currentPhoneme) {
+      const mouthBase =
+        PHONEME_TO_MOUTH[currentPhoneme.phoneme] || PHONEME_TO_MOUTH["X"];
+      this.targetMouthShape = {
+        mouthOpen: mouthBase.mouthOpen * currentPhoneme.intensity,
+        mouthWide: mouthBase.mouthWide * currentPhoneme.intensity,
+        lipRound: mouthBase.lipRound * currentPhoneme.intensity,
+        timestamp: Date.now(),
+      };
+    } else if (elapsed >= currentPhrase.duration) {
+      // Phrase complete
+      currentPhrase.status = "complete";
 
-  // Start next phrase after gap
-  setTimeout(() => {
-    this.startNextPhrase();
-  }, this.config.phraseGapMs);
+      // Start next phrase after gap
+      setTimeout(() => {
+        this.startNextPhrase();
+      }, this.config.phraseGapMs);
 
-  return;
-}
+      return;
+    }
 
-this.applySmoothing();
+    this.applySmoothing();
   }
 
   /**
    * Apply smoothing to mouth shape
    */
   private applySmoothing(): void {
-  if(this.config.enableSmoothing) {
-  const f = this.config.smoothingFactor;
-  this.currentMouthShape = {
-    mouthOpen: this.lerp(
-      this.currentMouthShape.mouthOpen,
-      this.targetMouthShape.mouthOpen,
-      f,
-    ),
-    mouthWide: this.lerp(
-      this.currentMouthShape.mouthWide,
-      this.targetMouthShape.mouthWide,
-      f,
-    ),
-    lipRound: this.lerp(
-      this.currentMouthShape.lipRound,
-      this.targetMouthShape.lipRound,
-      f,
-    ),
-    timestamp: Date.now(),
-  };
-} else {
-  this.currentMouthShape = { ...this.targetMouthShape };
-}
+    if (this.config.enableSmoothing) {
+      const f = this.config.smoothingFactor;
+      this.currentMouthShape = {
+        mouthOpen: this.lerp(
+          this.currentMouthShape.mouthOpen,
+          this.targetMouthShape.mouthOpen,
+          f,
+        ),
+        mouthWide: this.lerp(
+          this.currentMouthShape.mouthWide,
+          this.targetMouthShape.mouthWide,
+          f,
+        ),
+        lipRound: this.lerp(
+          this.currentMouthShape.lipRound,
+          this.targetMouthShape.lipRound,
+          f,
+        ),
+        timestamp: Date.now(),
+      };
+    } else {
+      this.currentMouthShape = { ...this.targetMouthShape };
+    }
 
-// Emit mouth update
-this.emitEvent("mouth_update", { mouthShape: this.currentMouthShape });
+    // Emit mouth update
+    this.emitEvent("mouth_update", { mouthShape: this.currentMouthShape });
 
-// Update avatar state manager
-const receiver = createAvatarLipSyncReceiver();
-receiver.updateLipSync(this.currentMouthShape);
+    // Update avatar state manager
+    const receiver = createAvatarLipSyncReceiver();
+    receiver.updateLipSync(this.currentMouthShape);
   }
 
   /**
    * Linear interpolation
    */
   private lerp(a: number, b: number, t: number): number {
-  return a + (b - a) * t;
-}
+    return a + (b - a) * t;
+  }
 
   /**
    * Wait for all speech to complete
    */
-  private async waitForSpeechComplete(): Promise < void> {
-  while(
+  private async waitForSpeechComplete(): Promise<void> {
+    while (
       !this.streamComplete ||
-    this.currentPhraseIndex < this.phraseQueue.length - 1 ||
-    this.phraseQueue[this.currentPhraseIndex]?.status === "speaking"
+      this.currentPhraseIndex < this.phraseQueue.length - 1 ||
+      this.phraseQueue[this.currentPhraseIndex]?.status === "speaking"
     ) {
-  await new Promise((resolve) => setTimeout(resolve, 100));
-}
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
 
-// Brief pause at end
-await new Promise((resolve) => setTimeout(resolve, 200));
+    // Brief pause at end
+    await new Promise((resolve) => setTimeout(resolve, 200));
   }
 
-/**
- * Stop current generation
- */
-stop(): void {
-  this.isGenerating = false;
-  this.streamComplete = true;
-  this.stopAnimationLoop();
-  stopStreamingLipSync();
+  /**
+   * Stop current generation
+   */
+  stop(): void {
+    this.isGenerating = false;
+    this.streamComplete = true;
+    this.stopAnimationLoop();
+    stopStreamingLipSync();
     setAvatarIdle();
-}
+  }
 
   /**
    * Reset state
    */
   private reset(): void {
-  this.textBuffer = "";
-  this.fullText = "";
-  this.streamComplete = false;
-  this.phraseQueue = [];
-  this.currentPhraseIndex = -1;
-  this.currentMouthShape = {
-    mouthOpen: 0,
-    mouthWide: 0,
-    lipRound: 0,
-    timestamp: 0,
-  };
-  this.targetMouthShape = { ...this.currentMouthShape };
-  this.generationStartTime = 0;
-  this.firstTokenTime = 0;
-  this.tokensReceived = 0;
-}
+    this.textBuffer = "";
+    this.fullText = "";
+    this.streamComplete = false;
+    this.phraseQueue = [];
+    this.currentPhraseIndex = -1;
+    this.currentMouthShape = {
+      mouthOpen: 0,
+      mouthWide: 0,
+      lipRound: 0,
+      timestamp: 0,
+    };
+    this.targetMouthShape = { ...this.currentMouthShape };
+    this.generationStartTime = 0;
+    this.firstTokenTime = 0;
+    this.tokensReceived = 0;
+  }
 
-/**
- * Check if currently generating
- */
-isActive(): boolean {
-  return this.isGenerating;
-}
+  /**
+   * Check if currently generating
+   */
+  isActive(): boolean {
+    return this.isGenerating;
+  }
 
-/**
- * Get current full text
- */
-getFullText(): string {
-  return this.fullText;
-}
+  /**
+   * Get current full text
+   */
+  getFullText(): string {
+    return this.fullText;
+  }
 
-/**
- * Add event listener
- */
-onStreamingAvatarEvent(
-  listener: (event: StreamingAvatarEvent) => void,
-): void {
-  this.on("streaming_avatar_event", listener);
-}
+  /**
+   * Add event listener
+   */
+  onStreamingAvatarEvent(
+    listener: (event: StreamingAvatarEvent) => void,
+  ): void {
+    this.on("streaming_avatar_event", listener);
+  }
 
-/**
- * Remove event listener
- */
-offStreamingAvatarEvent(
-  listener: (event: StreamingAvatarEvent) => void,
-): void {
-  this.off("streaming_avatar_event", listener);
-}
+  /**
+   * Remove event listener
+   */
+  offStreamingAvatarEvent(
+    listener: (event: StreamingAvatarEvent) => void,
+  ): void {
+    this.off("streaming_avatar_event", listener);
+  }
 
   /**
    * Emit event
    */
   private emitEvent(
-  type: StreamingAvatarEventType,
-  data ?: StreamingAvatarEvent["data"],
-): void {
-  const event: StreamingAvatarEvent = {
-    type,
-    timestamp: Date.now(),
-    data,
-  };
-  this.emit("streaming_avatar_event", event);
-}
+    type: StreamingAvatarEventType,
+    data?: StreamingAvatarEvent["data"],
+  ): void {
+    const event: StreamingAvatarEvent = {
+      type,
+      timestamp: Date.now(),
+      data,
+    };
+    this.emit("streaming_avatar_event", event);
+  }
 
-/**
- * Clean up
- */
-dispose(): void {
-  this.stop();
-  this.removeAllListeners();
-}
+  /**
+   * Clean up
+   */
+  dispose(): void {
+    this.stop();
+    this.removeAllListeners();
+  }
 }
 
 // Singleton instance

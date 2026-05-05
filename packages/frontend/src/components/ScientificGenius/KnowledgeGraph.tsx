@@ -3,7 +3,6 @@ import ForceGraph2D, { ForceGraphMethods } from "react-force-graph-2d";
 import { getLogger } from "@deltachat-desktop/shared/logger";
 import { getAgentToolExecutor } from "../DeepTreeEchoBot/AgentToolExecutor";
 import "./ScientificGenius.css";
-import { AgentToolExecutor } from "../DeepTreeEchoBot/AgentToolExecutor";
 
 const log = getLogger("frontend/components/ScientificGenius/KnowledgeGraph");
 

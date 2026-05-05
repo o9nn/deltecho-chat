@@ -3,7 +3,6 @@ import { KnowledgeGraph } from "./KnowledgeGraph";
 import { getLogger } from "@deltachat-desktop/shared/logger";
 import { getAgentToolExecutor } from "../DeepTreeEchoBot/AgentToolExecutor";
 import "./ScientificGenius.css";
-import { AgentToolExecutor } from "../DeepTreeEchoBot/AgentToolExecutor";
 
 const _log = getLogger(
   "frontend/components/ScientificGenius/ScientificDashboard",
