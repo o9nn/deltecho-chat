@@ -10,61 +10,34 @@
  *
  * Precedence:
  *   1. Caller-supplied config.apiEndpoint / config.model
- *   2. Build-time injected env (Vite `import.meta.env` or process.env in tests)
+ *   2. Build-time injected env (esbuild `define` substitutes
+ *      process.env.VITE_APHRODITECHO_LLM_URL with a string literal
+ *      when .env.local in packages/frontend defines it)
  *   3. Public OpenAI fallback so external users keep working
  *
- * The implementation goes through a small accessor that works in both
- * the Vite-built browser bundle (which inlines `import.meta.env.*`) and
- * the Jest CommonJS test environment (which only sees `process.env`).
+ * The frontend build script bin/build-frontend-ts.mjs reads
+ * packages/frontend/.env.local at build time and feeds every
+ * VITE_-prefixed value to esbuild's `define` option, so references
+ * like `process.env.VITE_APHRODITECHO_LLM_URL` here become literal
+ * strings in the bundle. In Jest (CommonJS) the same references
+ * resolve at runtime against process.env, so unit tests work
+ * unchanged.
  */
 
 export const PUBLIC_OPENAI_ENDPOINT =
   "https://api.openai.com/v1/chat/completions";
 
-const ENV_KEY_URL = "VITE_APHRODITECHO_LLM_URL";
-const ENV_KEY_MODEL = "VITE_APHRODITECHO_MODEL";
-
-/**
- * Read a build-time env var. Vite replaces `import.meta.env.X` literally at
- * build time so the lookup must reference exact identifiers. We avoid
- * touching `import.meta` directly (Jest CJS chokes on it) by using the
- * `Function` constructor to evaluate the expression only when the
- * runtime supports it. Falls back to `process.env` for Node/Jest, then
- * returns undefined.
- */
-function readEnv(key: string): string | undefined {
-  // Try Vite's injected env via a defensive eval. The Function constructor
-  // creates a new lexical scope so the inner `import.meta` reference is
-  // only evaluated when the engine supports the syntax.
-  try {
-    // eslint-disable-next-line no-new-func
-    const getter = new Function(
-      "k",
-      "try { return import.meta.env ? import.meta.env[k] : undefined; } catch { return undefined; }",
-    ) as (k: string) => string | undefined;
-    const v = getter(key);
-    if (typeof v === "string" && v.length > 0) return v;
-  } catch {
-    /* engine doesn't support import.meta — fall through */
-  }
-
-  // Fallback: Node/Jest reads from process.env.
-  if (
-    typeof process !== "undefined" &&
-    process.env &&
-    typeof process.env[key] === "string" &&
-    process.env[key]!.length > 0
-  ) {
-    return process.env[key];
-  }
-
+function readEnv(value: string | undefined): string | undefined {
+  if (typeof value === "string" && value.length > 0) return value;
   return undefined;
 }
 
 export function getDefaultLLMEndpoint(): string {
-  return readEnv(ENV_KEY_URL) ?? PUBLIC_OPENAI_ENDPOINT;
+  return (
+    readEnv(process.env.VITE_APHRODITECHO_LLM_URL) ?? PUBLIC_OPENAI_ENDPOINT
+  );
 }
 
 export function getDefaultLLMModel(): string {
-  return readEnv(ENV_KEY_MODEL) ?? "gpt-4";
+  return readEnv(process.env.VITE_APHRODITECHO_MODEL) ?? "gpt-4";
 }

@@ -1,11 +1,51 @@
 //@ts-check
-import path from 'path'
-import { copyFile, readFile } from 'fs/promises'
+import path from "path";
+import { copyFile, readFile } from "fs/promises";
+import { readFileSync, existsSync } from "fs";
 
-import esbuild from 'esbuild'
-import inlineWorkerPlugin from 'esbuild-plugin-inline-worker'
-import { ESLint } from 'eslint'
-import { compile } from 'sass'
+import esbuild from "esbuild";
+import inlineWorkerPlugin from "esbuild-plugin-inline-worker";
+import { ESLint } from "eslint";
+import { compile } from "sass";
+
+/**
+ * Load build-time env from .env.local (and .env) in the current dir.
+ * Only keys starting with VITE_ are exported to the browser bundle.
+ * Returns a map suitable for esbuild's `define` option.
+ */
+function loadFrontendEnv() {
+  const candidates = [".env.local", ".env"];
+  /** @type {Record<string, string>} */
+  const env = {};
+  for (const file of candidates) {
+    const p = path.resolve(".", file);
+    if (!existsSync(p)) continue;
+    const text = readFileSync(p, "utf8");
+    for (const raw of text.split(/\r?\n/)) {
+      const line = raw.trim();
+      if (!line || line.startsWith("#")) continue;
+      const eq = line.indexOf("=");
+      if (eq < 0) continue;
+      const key = line.slice(0, eq).trim();
+      let value = line.slice(eq + 1).trim();
+      if (
+        (value.startsWith('"') && value.endsWith('"')) ||
+        (value.startsWith("'") && value.endsWith("'"))
+      ) {
+        value = value.slice(1, -1);
+      }
+      if (key.startsWith("VITE_") && env[key] === undefined) {
+        env[key] = value;
+      }
+    }
+  }
+  /** @type {Record<string, string>} */
+  const define = {};
+  for (const [k, v] of Object.entries(env)) {
+    define[`process.env.${k}`] = JSON.stringify(v);
+  }
+  return define;
+}
 
 /**
  * Helper method returning a bundle configuration which is shared amongst
@@ -14,32 +54,33 @@ import { compile } from 'sass'
  * @returns {esbuild.BuildOptions}
  */
 function config(options) {
-  const { isProduction, isMinify, isWatch } = options
+  const { isProduction, isMinify, isWatch } = options;
 
-  const plugins = [wasmPlugin, sassPlugin, inlineWorkerPlugin()]
+  const plugins = [wasmPlugin, sassPlugin, inlineWorkerPlugin()];
   if (isWatch || isProduction) {
     // Make eslint optional as it affects build times significantly
-    plugins.push(eslintPlugin)
-    plugins.push(reporterPlugin)
+    plugins.push(eslintPlugin);
+    plugins.push(reporterPlugin);
   }
 
   return {
-    entryPoints: ['src/main.tsx'],
+    entryPoints: ["src/main.tsx"],
     bundle: true,
     minify: isMinify,
     sourcemap: true,
-    outfile: 'html-dist/bundle.js',
-    platform: 'browser',
+    outfile: "html-dist/bundle.js",
+    platform: "browser",
     define: {
-      'process.env.NODE_ENV': isProduction ? '"production"' : '"development"',
+      "process.env.NODE_ENV": isProduction ? '"production"' : '"development"',
+      ...loadFrontendEnv(),
     },
     plugins,
-    external: ['*.jpg', '*.png', '*.webp', '*.svg'],
-    format: 'esm',
+    external: ["*.jpg", "*.png", "*.webp", "*.svg"],
+    format: "esm",
     alias: {
-      path: 'path-browserify',
+      path: "path-browserify",
     },
-  }
+  };
 }
 
 /**
@@ -47,37 +88,37 @@ function config(options) {
  * console and reports them further to `esbuild`.
  */
 const eslintPlugin = {
-  name: 'eslint',
+  name: "eslint",
   setup(build) {
     // Use the root eslint.config.js (flat config) by setting cwd to project root
-    const projectRoot = path.resolve(import.meta.dirname, '../../..')
-    const eslint = new ESLint({ cwd: projectRoot })
-    const filesToLint = []
+    const projectRoot = path.resolve(import.meta.dirname, "../../..");
+    const eslint = new ESLint({ cwd: projectRoot });
+    const filesToLint = [];
 
-    build.onLoad({ filter: /\.(?:jsx?|tsx?)$/ }, args => {
-      if (!args.path.includes('node_modules')) {
-        filesToLint.push(args.path)
+    build.onLoad({ filter: /\.(?:jsx?|tsx?)$/ }, (args) => {
+      if (!args.path.includes("node_modules")) {
+        filesToLint.push(args.path);
       }
 
-      return null
-    })
+      return null;
+    });
 
     build.onEnd(async () => {
-      const results = await eslint.lintFiles(filesToLint)
-      const formatter = await eslint.loadFormatter('stylish')
-      const output = await formatter.format(results)
+      const results = await eslint.lintFiles(filesToLint);
+      const formatter = await eslint.loadFormatter("stylish");
+      const output = await formatter.format(results);
 
       const warnings = results.reduce(
         (count, result) => count + result.warningCount,
-        0
-      )
+        0,
+      );
       const errors = results.reduce(
         (count, result) => count + result.errorCount,
-        0
-      )
+        0,
+      );
 
       if (output.length > 0) {
-        console.log(output)
+        console.log(output);
       }
 
       return {
@@ -87,53 +128,53 @@ const eslintPlugin = {
         ...(errors > 0 && {
           errors: [{ text: `${errors} errors were found by eslint!` }],
         }),
-      }
-    })
+      };
+    });
   },
-}
+};
 
 /**
  * `esbuild` plugin to allow SCSS in CSS modules.
  */
 const sassPlugin = {
-  name: 'sass',
+  name: "sass",
   setup(build) {
-    build.onLoad({ filter: /\.module\.scss$/ }, args => {
-      const { css } = compile(args.path)
-      return { contents: css, loader: 'local-css' }
-    })
+    build.onLoad({ filter: /\.module\.scss$/ }, (args) => {
+      const { css } = compile(args.path);
+      return { contents: css, loader: "local-css" };
+    });
   },
-}
+};
 
 /**
  * `esbuild` plugin decoding WebAssembly and automatically embedding it in the build.
  */
 const wasmPlugin = {
-  name: 'wasm',
+  name: "wasm",
   setup(build) {
     // Resolve ".wasm" files to a path with a namespace
-    build.onResolve({ filter: /\.wasm$/ }, args => {
-      if (args.resolveDir === '') {
-        return // Ignore unresolvable paths
+    build.onResolve({ filter: /\.wasm$/ }, (args) => {
+      if (args.resolveDir === "") {
+        return; // Ignore unresolvable paths
       }
       return {
         path: path.isAbsolute(args.path)
           ? args.path
           : path.join(args.resolveDir, args.path),
-        namespace: 'wasm-binary',
-      }
-    })
+        namespace: "wasm-binary",
+      };
+    });
 
     // Virtual modules in the "wasm-binary" namespace contain the actual bytes
     // of the WebAssembly file. This uses esbuild's built-in "binary" loader
     // instead of manually embedding the binary data inside JavaScript code
     // ourselves.
-    build.onLoad({ filter: /.*/, namespace: 'wasm-binary' }, async args => ({
+    build.onLoad({ filter: /.*/, namespace: "wasm-binary" }, async (args) => ({
       contents: await readFile(args.path),
-      loader: 'binary',
-    }))
+      loader: "binary",
+    }));
   },
-}
+};
 
 /**
  * `esbuild` plugin to report to the user if a bundle process started or ended.
@@ -142,32 +183,32 @@ const wasmPlugin = {
  * a change.
  */
 const reporterPlugin = {
-  name: 'reporter',
+  name: "reporter",
   setup(build) {
     build.onStart(() => {
-      console.log('- Start esbuild ...')
-    })
+      console.log("- Start esbuild ...");
+    });
 
-    build.onEnd(async args => {
-      const errors = args.errors.length
-      const warnings = args.warnings.length
+    build.onEnd(async (args) => {
+      const errors = args.errors.length;
+      const warnings = args.warnings.length;
       console.log(
-        `- Finished esbuild with ${warnings} warnings and ${errors} errors`
-      )
-    })
+        `- Finished esbuild with ${warnings} warnings and ${errors} errors`,
+      );
+    });
   },
-}
+};
 
 /**
  * Bundle all files with `esbuild`.
  */
 async function bundle(options) {
-  await esbuild.build(options)
+  await esbuild.build(options);
 
   await copyFile(
-    'node_modules/@deltachat/message_parser_wasm/message_parser_wasm_bg.wasm',
-    'html-dist/message_parser_wasm_bg.wasm'
-  )
+    "node_modules/@deltachat/message_parser_wasm/message_parser_wasm_bg.wasm",
+    "html-dist/message_parser_wasm_bg.wasm",
+  );
 }
 
 /**
@@ -175,8 +216,8 @@ async function bundle(options) {
  * file this will trigger a build.
  */
 async function watch(options) {
-  const context = await esbuild.context(options)
-  await context.watch()
+  const context = await esbuild.context(options);
+  await context.watch();
 }
 
 async function main(isWatch = false, isProduction = false, isMinify = false) {
@@ -184,20 +225,20 @@ async function main(isWatch = false, isProduction = false, isMinify = false) {
     isProduction: !isWatch && isProduction,
     isMinify: (!isWatch && isMinify) || isProduction,
     isWatch,
-  })
+  });
 
   if (isWatch) {
-    await watch(options)
+    await watch(options);
   } else {
-    await bundle(options)
+    await bundle(options);
   }
 }
 
-const isWatch = process.argv.indexOf('-w') !== -1
-const isMinify = process.argv.indexOf('-m') !== -1
-const isProduction = process.env['NODE_ENV'] === 'production'
+const isWatch = process.argv.indexOf("-w") !== -1;
+const isMinify = process.argv.indexOf("-m") !== -1;
+const isProduction = process.env["NODE_ENV"] === "production";
 
-main(isWatch, isProduction, isMinify).catch(err => {
-  console.error(err)
-  process.exitCode = 1
-})
+main(isWatch, isProduction, isMinify).catch((err) => {
+  console.error(err);
+  process.exitCode = 1;
+});
