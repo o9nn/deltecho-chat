@@ -1,6 +1,7 @@
 import { getLogger } from "../../../../shared/logger";
 import { Memory } from "./RAGMemoryStore";
 import { localIntelligence } from "./LocalIntelligence";
+import { getDefaultLLMEndpoint } from "./llmEndpoint";
 
 const log = getLogger("render/components/DeepTreeEchoBot/LLMService");
 
@@ -91,7 +92,7 @@ export class LLMService {
         "Default function for general processing when no specific function is required",
       config: {
         apiKey: "",
-        apiEndpoint: "https://api.openai.com/v1/chat/completions",
+        apiEndpoint: getDefaultLLMEndpoint(),
         ...this.defaultConfig,
       },
       usage: {
@@ -133,8 +134,7 @@ export class LLMService {
         description: this.getFunctionDescription(functionType),
         config: {
           apiKey: config.apiKey || "",
-          apiEndpoint:
-            config.apiEndpoint || "https://api.openai.com/v1/chat/completions",
+          apiEndpoint: config.apiEndpoint || getDefaultLLMEndpoint(),
           model: config.model || this.defaultConfig.model,
           temperature: config.temperature || this.defaultConfig.temperature,
           maxTokens: config.maxTokens || this.defaultConfig.maxTokens,
@@ -271,7 +271,7 @@ export class LLMService {
       description: "No API key provided for any function",
       config: {
         apiKey: "",
-        apiEndpoint: "https://api.openai.com/v1/chat/completions",
+        apiEndpoint: getDefaultLLMEndpoint(),
         ...this.defaultConfig,
       },
       usage: {

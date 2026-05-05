@@ -23,6 +23,7 @@ import { getLogger } from "@deltachat-desktop/shared/logger";
 import { AgentToolExecutor, AgentTool, ToolCall } from "./AgentToolExecutor";
 import { LLMService } from "./LLMService";
 import type { CognitiveFunctionType as _CognitiveFunctionType } from "./LLMService";
+import { getDefaultLLMEndpoint } from "./llmEndpoint";
 
 const log = getLogger("render/components/DeepTreeEchoBot/AgenticLLMService");
 
@@ -367,8 +368,7 @@ AUTONOMY PRINCIPLES:
     tools: AgentTool[],
   ): Promise<{ content: ContentBlock[] }> {
     const endpoint =
-      this.providerConfig!.apiEndpoint ||
-      "https://api.openai.com/v1/chat/completions";
+      this.providerConfig!.apiEndpoint || getDefaultLLMEndpoint();
 
     const response = await fetch(endpoint, {
       method: "POST",

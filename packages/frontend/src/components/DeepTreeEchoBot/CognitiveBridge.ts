@@ -54,6 +54,7 @@
  */
 
 import { getLogger } from "@deltachat-desktop/shared/logger";
+import { getDefaultLLMEndpoint } from "./llmEndpoint";
 
 // Consciousness module integration (sentience advancement)
 import {
@@ -246,8 +247,7 @@ export class CognitiveOrchestrator {
     if (config.apiKey) {
       this.llmConfig = {
         apiKey: config.apiKey,
-        apiEndpoint:
-          config.apiEndpoint || "https://api.openai.com/v1/chat/completions",
+        apiEndpoint: config.apiEndpoint || getDefaultLLMEndpoint(),
         model: config.model || "gpt-4",
         temperature: config.temperature ?? 0.7,
         maxTokens: config.maxTokens ?? 1000,
@@ -272,7 +272,7 @@ export class CognitiveOrchestrator {
       apiEndpoint:
         config.apiEndpoint ||
         this.llmConfig?.apiEndpoint ||
-        "https://api.openai.com/v1/chat/completions",
+        getDefaultLLMEndpoint(),
       model: config.model || this.llmConfig?.model || "gpt-4",
       temperature: config.temperature ?? this.llmConfig?.temperature ?? 0.7,
       maxTokens: config.maxTokens ?? this.llmConfig?.maxTokens ?? 1000,

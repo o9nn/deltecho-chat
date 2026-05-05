@@ -17,6 +17,7 @@ import {
 } from "./AvatarStateManager";
 import { DeploymentService } from "../../utils/DeploymentService";
 import { ChatOrchestrator } from "./ChatOrchestrator";
+import { getDefaultLLMEndpoint } from "./llmEndpoint";
 
 const log = getLogger("render/components/DeepTreeEchoBot/DeepTreeEchoBot");
 
@@ -88,9 +89,7 @@ export class DeepTreeEchoBot {
     if (this.options.apiKey) {
       this.llmService.setConfig({
         apiKey: this.options.apiKey,
-        apiEndpoint:
-          this.options.apiEndpoint ||
-          "https://api.openai.com/v1/chat/completions",
+        apiEndpoint: this.options.apiEndpoint || getDefaultLLMEndpoint(),
       });
 
       // Also configure the agentic service if agentic mode is enabled
@@ -905,7 +904,7 @@ I'm here to assist you with various tasks and engage in meaningful conversations
         apiEndpoint:
           options.apiEndpoint ||
           this.options.apiEndpoint ||
-          "https://api.openai.com/v1/chat/completions",
+          getDefaultLLMEndpoint(),
       });
     }
 
