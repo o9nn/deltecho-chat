@@ -149,9 +149,19 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   private lipSyncValue = 0;
   private isBlinking = false;
   private blinkTimer: ReturnType<typeof setInterval> | null = null;
+  private nextBlinkAt = 0;
+  private blinkCloseUntil = 0;
   private expressionMap: Record<Expression, string> = DEFAULT_EXPRESSION_MAP;
   private motionMap: Record<AvatarMotion, { groups: string[]; index: number }> =
     DEFAULT_MOTION_MAP;
+  private debug = false;
+  private visibilityHandler: (() => void) | null = null;
+  private blinkTickerCallback: ((deltaMS: number) => void) | null = null;
+
+  /** Internal debug logger - no-op unless config.debug is true */
+  private dlog(...args: unknown[]): void {
+    if (this.debug) console.log("[PixiLive2DRenderer]", ...args);
+  }
 
   /**
    * Initialize the renderer with configuration
@@ -178,16 +188,46 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       canvas = config.canvas;
     }
 
+    // Cap pixelRatio at 2 by default to prevent GPU thrashing on 4K/Retina displays.
+    // Per user preference (Avatar Resolution Preference), explicit pixelRatio overrides cap.
+    const explicitRatio = (config as PixiLive2DConfig).pixelRatio;
+    const dpr =
+      typeof window !== "undefined" && window.devicePixelRatio
+        ? window.devicePixelRatio
+        : 1;
+    const resolution = explicitRatio ?? Math.min(dpr, 2);
+    this.debug = Boolean((config as PixiLive2DConfig).debug);
+
     // Create PixiJS application
     this.app = new Application({
       view: canvas,
       backgroundAlpha: 0,
       antialias: true,
-      resolution:
-        (config as PixiLive2DConfig).pixelRatio ?? window.devicePixelRatio ?? 1,
+      resolution,
       autoDensity: true,
+      // Hint hybrid GPUs to choose the discrete adapter for smoother animation.
+      powerPreference: "high-performance",
       resizeTo: canvas.parentElement ?? undefined,
     });
+
+    // Pause the ticker when the tab is hidden to save battery/CPU.
+    if (typeof document !== "undefined") {
+      this.visibilityHandler = () => {
+        const ticker = this.app?.ticker as
+          | { stop?: () => void; start?: () => void }
+          | undefined;
+        if (!ticker) return;
+        if (
+          document.visibilityState === "hidden" &&
+          typeof ticker.stop === "function"
+        ) {
+          ticker.stop();
+        } else if (typeof ticker.start === "function") {
+          ticker.start();
+        }
+      };
+      document.addEventListener("visibilitychange", this.visibilityHandler);
+    }
 
     // Register the Live2D ticker for animation updates
     // Note: Type cast needed due to pixi-live2d-display type definitions
@@ -220,7 +260,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     }
 
     this.initialized = true;
-    console.log("[PixiLive2DRenderer] Initialized successfully");
+    this.dlog("Initialized successfully");
   }
 
   /**
@@ -262,13 +302,22 @@ export class PixiLive2DRenderer implements ICubismRenderer {
         model.y = canvas.height / 2 + (modelInfo.offset?.y ?? 0);
       }
 
+      // Defensively clear stage in case a previous model left children behind.
+      // Guarded for compatibility with PixiJS test mocks that may not implement
+      // removeChildren().
+      const stageWithRemove = this.app.stage as Container & {
+        removeChildren?: () => void;
+      };
+      if (typeof stageWithRemove.removeChildren === "function") {
+        stageWithRemove.removeChildren();
+      }
       // Add to stage
       this.app.stage.addChild(model as unknown as Container);
 
-      // Start auto-blink
+      // Start auto-blink (ticker-based for proper sync with PixiJS rAF loop)
       this.startAutoBlinkLoop();
 
-      console.log(`[PixiLive2DRenderer] Model loaded: ${modelInfo.name}`);
+      this.dlog(`Model loaded: ${modelInfo.name}`);
     } catch (error) {
       console.error("[PixiLive2DRenderer] Failed to load model:", error);
       throw error;
@@ -291,8 +340,8 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       // Also adjust facial parameters based on intensity
       this.adjustFacialParameters(expression, intensity);
 
-      console.log(
-        `[PixiLive2DRenderer] Expression set: ${expression} (${expressionName}) at ${(
+      this.dlog(
+        `Expression set: ${expression} (${expressionName}) at ${(
           intensity * 100
         ).toFixed(0)}%`,
       );
@@ -421,9 +470,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     for (const group of motionDef.groups) {
       try {
         this.model.motion(group, motionDef.index, priority);
-        console.log(
-          `[PixiLive2DRenderer] Motion played: ${motion} (${group}[${motionDef.index}])`,
-        );
+        this.dlog(`Motion played: ${motion} (${group}[${motionDef.index}])`);
         return; // Success - exit loop
       } catch {
         // Group not available, try next
@@ -484,15 +531,56 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   }
 
   /**
-   * Start automatic blink loop
+   * Start automatic blink loop. Prefers the PixiJS ticker (synced with the
+   * render loop and naturally paused when the tab is hidden). Falls back to a
+   * setTimeout-based loop if the ticker is unavailable (e.g. in test mocks).
    */
   private startAutoBlinkLoop(): void {
-    // Stop existing timer
-    if (this.blinkTimer) {
-      clearTimeout(this.blinkTimer);
+    const ticker = this.app?.ticker as
+      | {
+          add?: (cb: (deltaMS: number) => void) => void;
+          remove?: (cb: (deltaMS: number) => void) => void;
+        }
+      | undefined;
+
+    if (this.blinkTickerCallback && ticker?.remove) {
+      try {
+        ticker.remove(this.blinkTickerCallback);
+      } catch {
+        /* ignore */
+      }
+      this.blinkTickerCallback = null;
     }
 
-    // Random blink every 2-6 seconds
+    this.scheduleNextBlink();
+
+    if (ticker && typeof ticker.add === "function") {
+      // Preferred path: ticker-driven blink.
+      this.blinkTickerCallback = (_deltaMS: number) => {
+        const now = performance.now();
+        if (now >= this.nextBlinkAt && this.blinkCloseUntil === 0) {
+          const core = this.model?.internalModel?.coreModel;
+          if (!core) return;
+          this.setParameterSafe(core, PARAM_IDS.PARAM_EYE_L_OPEN, 0);
+          this.setParameterSafe(core, PARAM_IDS.PARAM_EYE_R_OPEN, 0);
+          this.blinkCloseUntil = now + 100 + Math.random() * 50;
+        }
+        if (this.blinkCloseUntil > 0 && now >= this.blinkCloseUntil) {
+          const core = this.model?.internalModel?.coreModel;
+          if (core) {
+            this.setParameterSafe(core, PARAM_IDS.PARAM_EYE_L_OPEN, 1);
+            this.setParameterSafe(core, PARAM_IDS.PARAM_EYE_R_OPEN, 1);
+          }
+          this.blinkCloseUntil = 0;
+          this.scheduleNextBlink();
+        }
+      };
+      ticker.add(this.blinkTickerCallback);
+      return;
+    }
+
+    // Fallback: setTimeout-based blink loop.
+    if (this.blinkTimer) clearTimeout(this.blinkTimer);
     const scheduleBlink = () => {
       const delay = 2000 + Math.random() * 4000;
       this.blinkTimer = setTimeout(() => {
@@ -500,23 +588,15 @@ export class PixiLive2DRenderer implements ICubismRenderer {
         scheduleBlink();
       }, delay);
     };
-
     scheduleBlink();
   }
 
-  /**
-   * Perform a single blink animation
-   */
+  /** Single blink animation, used by the setTimeout fallback path */
   private performBlink(): void {
-    if (!this.model?.internalModel?.coreModel) return;
-
-    const core = this.model.internalModel.coreModel;
-
-    // Close eyes
+    const core = this.model?.internalModel?.coreModel;
+    if (!core) return;
     this.setParameterSafe(core, PARAM_IDS.PARAM_EYE_L_OPEN, 0);
     this.setParameterSafe(core, PARAM_IDS.PARAM_EYE_R_OPEN, 0);
-
-    // Re-open after 100-150ms
     setTimeout(
       () => {
         this.setParameterSafe(core, PARAM_IDS.PARAM_EYE_L_OPEN, 1);
@@ -524,6 +604,11 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       },
       100 + Math.random() * 50,
     );
+  }
+
+  /** Schedule the next blink 2-6 seconds from now */
+  private scheduleNextBlink(): void {
+    this.nextBlinkAt = performance.now() + 2000 + Math.random() * 4000;
   }
 
   /**
@@ -551,6 +636,25 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       this.blinkTimer = null;
     }
 
+    if (this.app && this.blinkTickerCallback) {
+      const ticker = this.app.ticker as
+        | { remove?: (cb: (deltaMS: number) => void) => void }
+        | undefined;
+      if (ticker && typeof ticker.remove === "function") {
+        try {
+          ticker.remove(this.blinkTickerCallback);
+        } catch {
+          /* ignore */
+        }
+      }
+      this.blinkTickerCallback = null;
+    }
+
+    if (typeof document !== "undefined" && this.visibilityHandler) {
+      document.removeEventListener("visibilitychange", this.visibilityHandler);
+      this.visibilityHandler = null;
+    }
+
     if (this.model) {
       this.model.destroy();
       this.model = null;
@@ -562,7 +666,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     }
 
     this.initialized = false;
-    console.log("[PixiLive2DRenderer] Disposed");
+    this.dlog("Disposed");
   }
 
   // === Utility methods ===
