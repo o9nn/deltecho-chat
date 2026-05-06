@@ -667,7 +667,7 @@ const AICompanionHubContent: React.FC = () => {
                 </div>
                 <div className="avatar-display-container">
                   <Live2DAvatar
-                    model="shizuku"
+                    model="miara"
                     width={320}
                     height={320}
                     scale={0.3}

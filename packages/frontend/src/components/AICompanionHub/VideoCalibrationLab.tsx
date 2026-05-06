@@ -210,7 +210,7 @@ export const VideoCalibrationLab: React.FC = () => {
       <div className="avatar-panel">
         <div className="avatar-container">
           <Live2DAvatar
-            model="shizuku"
+            model="miara"
             width={400}
             height={400}
             scale={0.35}

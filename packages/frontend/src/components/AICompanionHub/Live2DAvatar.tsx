@@ -151,12 +151,18 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
 
       setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
-      // Set a timeout to prevent infinite loading state
+      // Set a timeout to prevent infinite loading state.
+      // 30s accounts for slow networks pulling moc3 (~500 KB) + 4096x4096 texture + JSON files.
       timeoutId = setTimeout(() => {
         if (mounted) {
           setState((prev) => {
             // Only set error if still loading (not already loaded or errored)
             if (prev.isLoading && !prev.isLoaded && !prev.error) {
+              // eslint-disable-next-line no-console
+              console.error(
+                "[Live2DAvatar] Loading timed out after 30s. Model URL:",
+                modelUrl,
+              );
               return {
                 ...prev,
                 isLoading: false,
@@ -166,7 +172,7 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
             return prev;
           });
         }
-      }, 10000); // 10 second timeout
+      }, 30000); // 30 second timeout
 
       try {
         // Dynamic import to avoid SSR issues
@@ -215,6 +221,13 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
         if (mounted) {
           if (timeoutId) clearTimeout(timeoutId);
           const err = error instanceof Error ? error : new Error(String(error));
+          // eslint-disable-next-line no-console
+          console.error(
+            "[Live2DAvatar] Initialization error for model",
+            modelUrl,
+            ":",
+            err,
+          );
           setState((prev) => ({
             ...prev,
             isLoading: false,
