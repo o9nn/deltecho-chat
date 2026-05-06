@@ -3,10 +3,16 @@
  *
  * In CogHood / Aphroditecho-home mode, the chat UI talks to a local
  * OpenAI-compatible inference server (e.g. llama-server on :8420 or
- * the aphroditecho-api FastAPI surface on :8430). The build can be
+ * the aphroditecho-api FastAPI surface on :8431). The build can be
  * pointed at either by setting:
- *   VITE_APHRODITECHO_LLM_URL  — endpoint URL
+ *   VITE_APHRODITECHO_LLM_URL  — endpoint URL; absolute (`http://...`)
+ *                                or same-origin relative (`/aphro.../v1/...`)
  *   VITE_APHRODITECHO_MODEL    — model name
+ *
+ * Same-origin relative URLs are preferred for production deployments
+ * behind a reverse proxy: they satisfy the existing `connect-src 'self'`
+ * CSP without exposing the upstream port to the browser, and
+ * `fetch()` accepts relative URLs natively.
  *
  * Precedence:
  *   1. Caller-supplied config.apiEndpoint / config.model
