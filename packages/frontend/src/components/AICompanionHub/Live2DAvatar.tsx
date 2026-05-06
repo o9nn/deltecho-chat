@@ -203,6 +203,14 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
             onError: (error: Error) => {
               if (mounted) {
                 if (timeoutId) clearTimeout(timeoutId);
+                // eslint-disable-next-line no-console
+                console.error(
+                  "[Live2DAvatar] Manager.onError for model",
+                  modelUrl,
+                  ":",
+                  error?.message || error,
+                  error,
+                );
                 setState((prev) => ({
                   ...prev,
                   isLoading: false,

@@ -1,19 +1,20 @@
 import React, { useMemo, useEffect } from "react";
 import { EmotionalVector } from "./Live2DAvatar";
 
-// Import images - in a real app these typically would be imported or referenced by URL
-// We are using static paths
+// Sprite paths are served from the build output's images/ directory.
+// The browser target serves dist/ as the web root, so /images/avatar/sprites/...
+// resolves to packages/target-browser/dist/images/avatar/sprites/... (no /static prefix).
 const SPRITE_PATHS = {
-  happy_up: "/static/images/avatar/sprites/sprite_happy_up.jpg",
-  neutral: "/static/images/avatar/sprites/sprite_neutral.jpg",
-  ecstatic: "/static/images/avatar/sprites/sprite_ecstatic.jpg",
-  speaking: "/static/images/avatar/sprites/sprite_speaking.jpg",
-  surprised: "/static/images/avatar/sprites/sprite_surprised.jpg",
-  singing: "/static/images/avatar/sprites/sprite_singing.jpg",
-  annoyed: "/static/images/avatar/sprites/sprite_annoyed.jpg",
-  content: "/static/images/avatar/sprites/sprite_content.jpg",
-  thinking: "/static/images/avatar/sprites/sprite_thinking.jpg",
-  bored: "/static/images/avatar/sprites/sprite_bored.jpg",
+  happy_up: "/images/avatar/sprites/sprite_happy_up.jpg",
+  neutral: "/images/avatar/sprites/sprite_neutral.jpg",
+  ecstatic: "/images/avatar/sprites/sprite_ecstatic.jpg",
+  speaking: "/images/avatar/sprites/sprite_speaking.jpg",
+  surprised: "/images/avatar/sprites/sprite_surprised.jpg",
+  singing: "/images/avatar/sprites/sprite_singing.jpg",
+  annoyed: "/images/avatar/sprites/sprite_annoyed.jpg",
+  content: "/images/avatar/sprites/sprite_content.jpg",
+  thinking: "/images/avatar/sprites/sprite_thinking.jpg",
+  bored: "/images/avatar/sprites/sprite_bored.jpg",
 };
 
 export interface ResponsiveSpriteAvatarProps {
