@@ -86,6 +86,8 @@ export async function initDeepTreeEchoBot(): Promise<void> {
         desktopSettings.deepTreeEchoBotEmbodimentEnabled || false,
       useParallelProcessing:
         desktopSettings.deepTreeEchoBotUseParallelProcessing !== false,
+      scientificGeniusMode:
+        desktopSettings.deepTreeEchoBotScientificGeniusMode || false,
       cognitiveKeys,
     });
 

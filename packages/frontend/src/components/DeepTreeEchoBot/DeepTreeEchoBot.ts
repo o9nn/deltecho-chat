@@ -18,6 +18,13 @@ import {
 import { DeploymentService } from "../../utils/DeploymentService";
 import { ChatOrchestrator } from "./ChatOrchestrator";
 import { getDefaultLLMEndpoint } from "./llmEndpoint";
+import {
+  relevanceGeniusIntegration,
+  scientificGeniusEngine,
+  ScientificDomain,
+  type RelevanceGuidedInquiry,
+  type ScientificInsight,
+} from "deep-tree-echo-core";
 
 const log = getLogger("render/components/DeepTreeEchoBot/DeepTreeEchoBot");
 
@@ -41,6 +48,8 @@ export interface DeepTreeEchoBotOptions {
   agenticProvider?: "anthropic" | "openai" | "openrouter" | "local";
   /** The persona description */
   personaDesc?: string;
+  /** Enable Scientific Genius Mode: relevance-guided scientific reasoning overlay */
+  scientificGeniusMode?: boolean;
 }
 
 /**
@@ -67,6 +76,7 @@ export class DeepTreeEchoBot {
       useParallelProcessing: true,
       useAgenticMode: false,
       agenticProvider: "anthropic",
+      scientificGeniusMode: false,
       apiKey: "",
       apiEndpoint: "",
     };
@@ -106,6 +116,10 @@ export class DeepTreeEchoBot {
       }
     }
 
+    this.configureScientificGeniusMode(
+      this.options.scientificGeniusMode || false,
+    );
+
     // Configure specialized cognitive function keys if provided
     if (this.options.cognitiveKeys) {
       Object.entries(this.options.cognitiveKeys).forEach(
@@ -136,6 +150,7 @@ export class DeepTreeEchoBot {
       useParallelProcessing: this.options.useParallelProcessing,
       useAgenticMode: this.options.useAgenticMode,
       agenticProvider: this.options.agenticProvider,
+      scientificGeniusMode: this.options.scientificGeniusMode,
       hasApiKey: !!this.options.apiKey,
       hasApiEndpoint: !!this.options.apiEndpoint,
       configuredCognitiveKeys: this.options.cognitiveKeys
@@ -149,6 +164,24 @@ export class DeepTreeEchoBot {
    */
   public isAgenticMode(): boolean {
     return this.options.useAgenticMode || false;
+  }
+
+  /**
+   * Check if Scientific Genius Mode is enabled.
+   */
+  public isScientificGeniusMode(): boolean {
+    return this.options.scientificGeniusMode || false;
+  }
+
+  /**
+   * Activate or deactivate the core Scientific Genius Engine consistently.
+   */
+  private configureScientificGeniusMode(enabled: boolean): void {
+    if (enabled) {
+      scientificGeniusEngine.enterGeniusMode();
+    } else {
+      scientificGeniusEngine.exitGeniusMode();
+    }
   }
 
   /**
@@ -393,7 +426,7 @@ Available commands:
       this.options.embodimentEnabled ? "" : "(disabled)"
     }
 - **/reflect [aspect]** - Ask me to reflect on an aspect of myself
-- **/cognitive [status]** - Show status of my cognitive functions
+- **/cognitive [status|genius]** - Show status of my cognitive functions or manage Scientific Genius Mode
 - **/version** - Display bot version information
 
 You can also just chat with me normally and I'll respond!
@@ -423,6 +456,10 @@ Parallel processing: ${
           this.options.useParallelProcessing ? "Enabled" : "Disabled"
         }
 Active cognitive functions: ${activeFunctions.length}
+Scientific Genius Mode: ${
+          this.options.scientificGeniusMode ? "Enabled" : "Disabled"
+        }
+Scientific Cortex: ${scientificGeniusEngine.describeState()}
 
 `;
 
@@ -440,13 +477,210 @@ Active cognitive functions: ${activeFunctions.length}
         break;
       }
 
+      case "genius":
+        await this.processScientificGeniusCommand(accountId, chatId, args);
+        break;
+
       default:
         await this.sendMessage(
           accountId,
           chatId,
-          "Unknown cognitive command. Available options: status",
+          "Unknown cognitive command. Available options: status, genius [on|off|status|ask <question>]",
         );
     }
+  }
+
+  /**
+   * Manage Scientific Genius Mode and run relevance-guided scientific inquiry.
+   */
+  private async processScientificGeniusCommand(
+    accountId: number,
+    chatId: number,
+    args: string,
+  ): Promise<void> {
+    const parts = args.split(" ").filter(Boolean);
+    const action = (parts[1] || "status").toLowerCase();
+    const query = parts.slice(2).join(" ").trim();
+
+    switch (action) {
+      case "on":
+      case "enable":
+        this.options.scientificGeniusMode = true;
+        this.configureScientificGeniusMode(true);
+        await this.sendMessage(
+          accountId,
+          chatId,
+          `**Scientific Genius Mode enabled**
+
+${scientificGeniusEngine.describeState()}
+
+I will now enrich normal responses with relevance-guided scientific hypotheses, cross-domain synthesis, and free-energy minimization where appropriate.`,
+        );
+        break;
+
+      case "off":
+      case "disable":
+        this.options.scientificGeniusMode = false;
+        this.configureScientificGeniusMode(false);
+        await this.sendMessage(
+          accountId,
+          chatId,
+          `**Scientific Genius Mode disabled**
+
+${scientificGeniusEngine.describeState()}`,
+        );
+        break;
+
+      case "ask":
+      case "inquire":
+      case "query": {
+        if (!query) {
+          await this.sendMessage(
+            accountId,
+            chatId,
+            "Please provide a scientific question. Usage: /cognitive genius ask [question]",
+          );
+          return;
+        }
+
+        const inquiry = await relevanceGeniusIntegration.conductInquiry(query);
+        await this.sendMessage(
+          accountId,
+          chatId,
+          this.formatScientificGeniusInquiry(inquiry),
+        );
+        break;
+      }
+
+      case "status":
+      default:
+        await this.sendMessage(
+          accountId,
+          chatId,
+          `**Scientific Genius Mode Status**
+
+Mode: ${this.options.scientificGeniusMode ? "Enabled" : "Disabled"}
+${scientificGeniusEngine.describeState()}`,
+        );
+    }
+  }
+
+  /**
+   * Summarize a relevance-guided scientific inquiry for chat output.
+   */
+  private formatScientificGeniusInquiry(
+    inquiry: RelevanceGuidedInquiry,
+  ): string {
+    const insightLines = this.formatScientificInsights(
+      inquiry.scientificInsights,
+    );
+    const relevanceLines = inquiry.relevanceSignals
+      .slice(0, 5)
+      .map(
+        (signal) =>
+          `- ${signal.source}/${
+            signal.relevanceType
+          }: salience ${signal.salience.toFixed(
+            2,
+          )}, confidence ${signal.confidence.toFixed(2)}`,
+      )
+      .join("\\n");
+    const frameLines = inquiry.frameProblemSolutions
+      .slice(0, 3)
+      .map(
+        (solution) =>
+          `- ${solution.action}: ${Math.round(
+            solution.confidence * 100,
+          )}% confidence via ${solution.method}`,
+      )
+      .join("\\n");
+
+    return `**Scientific Genius Inquiry**
+
+Query: ${inquiry.query}
+
+**Relevance signals**
+${
+  relevanceLines ||
+  "- No high-salience relevance signals exceeded the threshold."
+}
+
+**Scientific insights**
+${insightLines}
+
+**Frame-problem notes**
+${frameLines || "- No explicit action-effect frame problem was detected."}`;
+  }
+
+  private formatScientificInsights(insights: ScientificInsight[]): string {
+    if (insights.length === 0) {
+      return "- No scientific insight was generated yet; try a more specific domain or hypothesis question.";
+    }
+
+    return insights
+      .slice(0, 5)
+      .map(
+        (insight) =>
+          `- [${insight.domain}/${insight.generatedBy}] ${
+            insight.content
+          } (novelty ${insight.novelty.toFixed(
+            2,
+          )}, significance ${insight.significance.toFixed(
+            2,
+          )}, Φ ${insight.phi.toFixed(2)})`,
+      )
+      .join("\\n");
+  }
+
+  /**
+   * Generate a compact scientific reasoning overlay for normal chat responses.
+   */
+  private async generateScientificGeniusOverlay(
+    messageText: string,
+  ): Promise<string | null> {
+    if (!this.options.scientificGeniusMode || messageText.trim().length < 8) {
+      return null;
+    }
+
+    const domain = this.inferScientificDomain(messageText);
+    const insights = await scientificGeniusEngine.processScientificQuery(
+      messageText,
+      domain,
+    );
+
+    if (insights.length === 0) {
+      return null;
+    }
+
+    return `
+
+**Scientific Genius Lens**
+${this.formatScientificInsights(insights.slice(0, 3))}`;
+  }
+
+  private inferScientificDomain(
+    messageText: string,
+  ): ScientificDomain | undefined {
+    const lower = messageText.toLowerCase();
+    if (/(math|theorem|proof|derive|equation|geometry|algebra)/.test(lower)) {
+      return ScientificDomain.Mathematics;
+    }
+    if (/(physics|energy|field|quantum|relativity|matter)/.test(lower)) {
+      return ScientificDomain.Physics;
+    }
+    if (/(code|software|algorithm|computer|typescript|system)/.test(lower)) {
+      return ScientificDomain.ComputerScience;
+    }
+    if (/(brain|mind|neural|cognition|consciousness|memory)/.test(lower)) {
+      return ScientificDomain.CognitiveScience;
+    }
+    if (/(information|entropy|signal|communication)/.test(lower)) {
+      return ScientificDomain.InformationTheory;
+    }
+    if (/(biology|life|organism|autopoiesis|evolution)/.test(lower)) {
+      return ScientificDomain.Biology;
+    }
+    return undefined;
   }
 
   /**
@@ -537,7 +771,7 @@ I currently have memory capabilities ${
 Recent memories:
 ${
   recentMemories.length > 0
-    ? recentMemories.join("\n")
+    ? recentMemories.map((m) => `- ${m.substring(0, 100)}...`).join("\n")
     : "No recent memories stored."
 }
         `;
@@ -768,7 +1002,7 @@ I'm here to assist you with various tasks and engage in meaningful conversations
 
         // 2. Context
         if (context.length > 0) {
-          const contextStr = context.join("\n");
+          const contextStr = context.join("\\n");
           messages.push({
             role: "user",
             content: `Here is the recent conversation history for context:\n${contextStr}\n\nPlease keep this in mind when responding to my next message.`,
@@ -829,6 +1063,12 @@ I'm here to assist you with various tasks and engage in meaningful conversations
         log.info(
           "Generated response using general processing (with Vision check)",
         );
+      }
+
+      const scientificOverlay =
+        await this.generateScientificGeniusOverlay(messageText);
+      if (scientificOverlay) {
+        response += scientificOverlay;
       }
 
       // Set avatar to responding state before sending
@@ -906,6 +1146,14 @@ I'm here to assist you with various tasks and engage in meaningful conversations
           this.options.apiEndpoint ||
           getDefaultLLMEndpoint(),
       });
+    }
+
+    this.configureScientificGeniusMode(
+      this.options.scientificGeniusMode || false,
+    );
+
+    if (options.scientificGeniusMode !== undefined) {
+      this.configureScientificGeniusMode(options.scientificGeniusMode);
     }
 
     // Configure specialized cognitive function keys if provided

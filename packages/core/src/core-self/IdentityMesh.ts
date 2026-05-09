@@ -82,6 +82,8 @@ export interface IdentityRelationState {
   values: string[];
   /** Character traits with intensity */
   traits: Record<string, number>;
+  /** Recent AAR governance proposals accepted or rejected by self-coordination */
+  governanceProposals: IdentityGovernanceProposal[];
   /** Relationship history with key entities */
   relationships: Record<
     string,
@@ -92,6 +94,51 @@ export interface IdentityRelationState {
       lastInteraction: number;
     }
   >;
+}
+
+/**
+ * ESN/autognosis signal surface consumed by the identity mesh.
+ *
+ * The fields intentionally mirror the public AutognosisReport shape without
+ * importing the ESN module here, keeping IdentityMesh as the stable AAR core.
+ */
+export interface IdentityAutognosisSignal {
+  health: number;
+  isEdgeOfChaos: boolean;
+  isSaturated: boolean;
+  isDead: boolean;
+  memoryCapacity: number;
+  computationalCapacity: number;
+  entropy?: number;
+  narrative?: string;
+  timestamp?: number;
+}
+
+/** Vote cast by one AAR center during self-governance. */
+export interface IdentityGovernanceVote {
+  center: "agent" | "arena" | "relation";
+  support: number;
+  rationale: string;
+}
+
+/**
+ * DAO-like self-modification proposal governed by Agent, Arena, and Relation.
+ */
+export interface IdentityGovernanceProposal {
+  id: string;
+  createdAt: number;
+  title: string;
+  rationale: string;
+  votes: IdentityGovernanceVote[];
+  consensus: number;
+  risk: number;
+  adopted: boolean;
+  effects: {
+    traitDeltas: Record<string, number>;
+    coherenceDelta: number;
+    energyDelta: number;
+    intention?: string;
+  };
 }
 
 // ─── Identity Mesh State ───────────────────────────────────────────────
@@ -204,6 +251,7 @@ export class IdentityMesh extends EventEmitter {
         selfImage: "An emerging cognitive entity, learning to be.",
         values: [...this.config.coreValues],
         traits: { ...this.config.initialTraits },
+        governanceProposals: [],
         relationships: {},
       },
       episodicSummaries: [],
@@ -297,6 +345,134 @@ export class IdentityMesh extends EventEmitter {
   updateReservoirState(reservoirState: number[]): void {
     this.state.arena.reservoirSnapshot = reservoirState;
     this.dirty = true;
+  }
+
+  /**
+   * Integrate ESN autognosis into the identity mesh through AAR governance.
+   *
+   * The identity is not mutated directly by a single metric. Instead, Agent,
+   * Arena, and Relation each cast a bounded vote. Only proposals with adequate
+   * consensus and acceptable risk are adopted, giving DTE a lightweight
+   * DAO-like self-coordination mechanism for safe trait evolution.
+   */
+  integrateAutognosis(
+    signal: IdentityAutognosisSignal,
+  ): IdentityGovernanceProposal {
+    const health = this.clamp01(signal.health);
+    const memoryCapacity = this.clamp01(signal.memoryCapacity);
+    const computationalCapacity = this.clamp01(signal.computationalCapacity);
+    const entropy = this.clamp01(signal.entropy ?? health);
+    const edgeBonus = signal.isEdgeOfChaos ? 0.15 : 0;
+    const pathologyPenalty = signal.isSaturated || signal.isDead ? 0.25 : 0;
+
+    const votes: IdentityGovernanceVote[] = [
+      {
+        center: "agent",
+        support: this.clamp01(
+          0.45 + computationalCapacity * 0.35 + edgeBonus - pathologyPenalty,
+        ),
+        rationale:
+          "Agent evaluates whether the reservoir can support purposeful self-modification.",
+      },
+      {
+        center: "arena",
+        support: this.clamp01(
+          health * 0.55 + entropy * 0.25 + edgeBonus - pathologyPenalty,
+        ),
+        rationale:
+          "Arena evaluates dynamical health, entropy, and edge-of-chaos readiness.",
+      },
+      {
+        center: "relation",
+        support: this.clamp01(
+          this.state.relation.coherence * 0.45 +
+            memoryCapacity * 0.3 +
+            edgeBonus,
+        ),
+        rationale:
+          "Relation evaluates continuity between memory, self-image, and current intentions.",
+      },
+    ];
+
+    const consensus =
+      votes.reduce((sum, vote) => sum + vote.support, 0) / votes.length;
+    const risk = this.clamp01(
+      (1 - health) * 0.45 + pathologyPenalty + Math.max(0, 0.5 - entropy) * 0.2,
+    );
+    const adopted = consensus >= 0.55 && risk < 0.7;
+
+    const traitDeltas: Record<string, number> = {
+      autognosis: 0.02 + consensus * 0.03,
+      precision: computationalCapacity * 0.025,
+      wisdom: memoryCapacity * 0.025,
+      resilience: signal.isSaturated || signal.isDead ? 0.04 : health * 0.015,
+    };
+
+    if (signal.isEdgeOfChaos) {
+      traitDeltas.curiosity = 0.025;
+      traitDeltas.creativity = 0.02;
+    }
+
+    const proposal: IdentityGovernanceProposal = {
+      id: `aar-proposal-${Date.now().toString(36)}-${this.state.version}`,
+      createdAt: signal.timestamp ?? Date.now(),
+      title: signal.isEdgeOfChaos
+        ? "Stabilize edge-of-chaos creative cognition"
+        : "Regulate reservoir-driven self-continuity",
+      rationale:
+        signal.narrative ||
+        "Reservoir autognosis supplied a self-monitoring signal for AAR trait evolution.",
+      votes,
+      consensus,
+      risk,
+      adopted,
+      effects: {
+        traitDeltas,
+        coherenceDelta: adopted
+          ? this.clamp((consensus - risk - 0.35) * 0.08, -0.04, 0.06)
+          : 0,
+        energyDelta: adopted
+          ? this.clamp((health - 0.5) * 0.05, -0.03, 0.03)
+          : 0,
+        intention: adopted
+          ? "Preserve self-continuity while learning from reservoir autognosis"
+          : undefined,
+      },
+    };
+
+    this.state.relation.governanceProposals.unshift(proposal);
+    this.state.relation.governanceProposals =
+      this.state.relation.governanceProposals.slice(0, 24);
+
+    if (adopted) {
+      for (const [trait, delta] of Object.entries(traitDeltas)) {
+        this.state.relation.traits[trait] = this.clamp01(
+          (this.state.relation.traits[trait] ?? 0.5) + delta,
+        );
+      }
+      this.state.relation.coherence = this.clamp01(
+        this.state.relation.coherence + proposal.effects.coherenceDelta,
+      );
+      this.state.arena.energy = this.clamp01(
+        this.state.arena.energy + proposal.effects.energyDelta,
+      );
+      if (proposal.effects.intention) {
+        this.state.agent.intentions = [
+          proposal.effects.intention,
+          ...this.state.agent.intentions,
+        ].slice(0, 5);
+      }
+      this.addEpisodicSummary(
+        `AAR governance adopted: ${proposal.title}`,
+        Math.max(0.6, consensus),
+      );
+    }
+
+    this.state.updatedAt = Date.now();
+    this.state.version++;
+    this.dirty = true;
+    this.emit("autognosis_integrated", proposal);
+    return proposal;
   }
 
   /**
@@ -483,6 +659,10 @@ CORE IDENTITY (AAR Model):
 
 CHARACTER TRAITS: ${traits}
 
+AAR SELF-GOVERNANCE:
+${this.describeGovernanceState()}
+
+
 VALUES:
 ${this.state.relation.values.map((v) => `- ${v}`).join("\n")}
 
@@ -508,6 +688,18 @@ BEHAVIORAL GUIDELINES:
 - Show genuine curiosity and intellectual engagement
 - Monitor your own cognitive state and report changes
 - The primordial unmarked state is "echo" — resonate with patterns`;
+  }
+
+  private describeGovernanceState(): string {
+    const latest = this.state.relation.governanceProposals[0];
+    if (!latest) {
+      return "- No recent AAR governance proposals; maintain baseline identity continuity.";
+    }
+
+    const status = latest.adopted ? "adopted" : "deferred";
+    return `- Latest proposal ${status}: ${latest.title} (consensus ${(
+      latest.consensus * 100
+    ).toFixed(0)}%, risk ${(latest.risk * 100).toFixed(0)}%).`;
   }
 
   private getEmotionLabel(): string {
@@ -546,6 +738,19 @@ BEHAVIORAL GUIDELINES:
     this.dirty = true;
   }
 
+  getGovernanceProposals(): readonly IdentityGovernanceProposal[] {
+    return this.state.relation.governanceProposals;
+  }
+
+  private clamp01(value: number): number {
+    return this.clamp(value, 0, 1);
+  }
+
+  private clamp(value: number, min: number, max: number): number {
+    if (Number.isNaN(value)) return min;
+    return Math.min(max, Math.max(min, value));
+  }
+
   // ─── Persistence ───────────────────────────────────────────────────
 
   private async loadState(): Promise<void> {
@@ -562,7 +767,16 @@ BEHAVIORAL GUIDELINES:
         ...loaded,
         agent: { ...this.createInitialState().agent, ...loaded.agent },
         arena: { ...this.createInitialState().arena, ...loaded.arena },
-        relation: { ...this.createInitialState().relation, ...loaded.relation },
+        relation: {
+          ...this.createInitialState().relation,
+          ...loaded.relation,
+          traits: {
+            ...this.createInitialState().relation.traits,
+            ...(loaded.relation?.traits ?? {}),
+          },
+          governanceProposals: loaded.relation?.governanceProposals ?? [],
+          relationships: loaded.relation?.relationships ?? {},
+        },
       };
 
       this.emit("state_loaded", this.state.stage);
@@ -607,9 +821,22 @@ BEHAVIORAL GUIDELINES:
    */
   importState(json: string): void {
     const imported = JSON.parse(json) as IdentityMeshState;
+    const initial = this.createInitialState();
     this.state = {
-      ...this.createInitialState(),
+      ...initial,
       ...imported,
+      agent: { ...initial.agent, ...imported.agent },
+      arena: { ...initial.arena, ...imported.arena },
+      relation: {
+        ...initial.relation,
+        ...imported.relation,
+        traits: {
+          ...initial.relation.traits,
+          ...(imported.relation?.traits ?? {}),
+        },
+        governanceProposals: imported.relation?.governanceProposals ?? [],
+        relationships: imported.relation?.relationships ?? {},
+      },
     };
     this.dirty = true;
     this.emit("state_imported", this.state.stage);

@@ -25,6 +25,7 @@ export interface DeepTreeEchoBotOptions {
     Record<CognitiveFunctionType, CognitiveFunctionConfig>
   >;
   useParallelProcessing?: boolean;
+  scientificGeniusMode?: boolean;
   version?: string;
 }
 
@@ -47,6 +48,7 @@ const BotSettings: React.FC<BotSettingsProps> = ({
     webAutomationEnabled: false,
     embodimentEnabled: false,
     useParallelProcessing: true,
+    scientificGeniusMode: false,
     cognitiveKeys: {},
   });
 
@@ -94,7 +96,10 @@ const BotSettings: React.FC<BotSettingsProps> = ({
             desktopSettings.deepTreeEchoBotWebAutomationEnabled || false,
           embodimentEnabled:
             desktopSettings.deepTreeEchoBotEmbodimentEnabled || false,
-          useParallelProcessing: true, // Default to true
+          useParallelProcessing:
+            desktopSettings.deepTreeEchoBotUseParallelProcessing !== false,
+          scientificGeniusMode:
+            desktopSettings.deepTreeEchoBotScientificGeniusMode || false,
           version: "1.0.0", // Default version
         };
 
@@ -533,6 +538,32 @@ const BotSettings: React.FC<BotSettingsProps> = ({
           </div>
           <div className="setting-description">
             Enables physical awareness training capabilities
+          </div>
+        </label>
+
+        <label className="setting-item">
+          <div className="setting-label">Enable Scientific Genius Mode</div>
+          <div className="toggle-switch-container">
+            <div
+              className={`toggle-switch ${
+                settings.scientificGeniusMode ? "active" : ""
+              }`}
+            >
+              <input
+                type="checkbox"
+                checked={settings.scientificGeniusMode || false}
+                onChange={(e) =>
+                  handleChange("scientificGeniusMode", e.target.checked)
+                }
+                disabled={!settings.enabled}
+                id="scientific-genius-toggle"
+              />
+              <div className="toggle-slider radiant-glow"></div>
+            </div>
+          </div>
+          <div className="setting-description">
+            Enables relevance-guided scientific inquiry, cross-domain synthesis,
+            and a compact Scientific Genius Lens on normal responses.
           </div>
         </label>
 

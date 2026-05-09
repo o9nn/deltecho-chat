@@ -73,6 +73,8 @@ export interface DesktopSettingsType {
   deepTreeEchoBotCognitiveKeys?: string;
   /** Enable parallel processing in Deep Tree Echo Bot */
   deepTreeEchoBotUseParallelProcessing?: boolean;
+  /** Enable relevance-guided Scientific Genius Mode in Deep Tree Echo Bot */
+  deepTreeEchoBotScientificGeniusMode?: boolean;
   /** AI connectors configuration (JSON-stringified) */
   aiConnectors?: string;
   /** AI memories storage (JSON-stringified) */

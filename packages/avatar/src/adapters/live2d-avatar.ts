@@ -7,7 +7,12 @@
  */
 
 import type { Expression, EmotionalVector, AvatarMotion } from "../types";
+import {
+  getExpressionIntensity,
+  mapEmotionToExpression,
+} from "../expression-mapper";
 import type { CubismModelInfo } from "./cubism-adapter";
+import { PARAM_IDS } from "./pixi-live2d-renderer";
 import type { PixiLive2DRenderer } from "./pixi-live2d-renderer";
 
 /**
@@ -51,6 +56,22 @@ export interface Live2DAvatarState {
 }
 
 /**
+ * High-level DTE cognitive state that can be projected onto Cubism parameters.
+ * Values are normalized unless otherwise noted.
+ */
+export interface Live2DCognitiveVisualState {
+  valence?: number; // -1..1
+  arousal?: number; // 0..1
+  selfAwareness?: number; // 0..1
+  sentience?: number; // 0..1
+  phi?: number; // 0..1 consciousness/integration proxy
+  flow?: number; // 0..1 focus/processing flow
+  isProcessing?: boolean;
+  isSpeaking?: boolean;
+  audioLevel?: number;
+}
+
+/**
  * Controller interface for external control of the avatar
  */
 export interface Live2DAvatarController {
@@ -60,6 +81,8 @@ export interface Live2DAvatarController {
   playMotion: (motion: AvatarMotion) => void;
   /** Update lip sync value */
   updateLipSync: (audioLevel: number) => void;
+  /** Project DTE cognitive state into expression, motion, gaze, and Cubism parameters */
+  updateCognitiveState: (state: Live2DCognitiveVisualState) => void;
   /** Trigger a blink */
   triggerBlink: () => void;
   /** Set a model parameter directly */
@@ -158,6 +181,9 @@ export class Live2DAvatarManager {
       updateLipSync: (audioLevel) => {
         this.renderer?.updateLipSync(audioLevel);
       },
+      updateCognitiveState: (state) => {
+        this.updateCognitiveState(state);
+      },
       triggerBlink: () => {
         this.renderer?.setBlinking(true);
         setTimeout(() => {
@@ -172,54 +198,119 @@ export class Live2DAvatarManager {
   }
 
   /**
-   * Update emotional state
+   * Update emotional state using the package-wide weighted expression mapper.
    */
   updateEmotionalState(state: EmotionalVector): void {
     if (!this.renderer || !this.isLoaded) return;
 
-    // Map emotional vector to expression
-    const expression = this.mapEmotionToExpression(state);
-    const intensity = this.calculateIntensity(state);
+    const expression = mapEmotionToExpression(state);
+    const intensity = Math.max(0.3, getExpressionIntensity(expression, state));
 
     this.renderer.setExpression(expression, intensity);
   }
 
   /**
-   * Map emotional vector to expression
+   * Project a richer DTE cognitive state into Live2D expression, motion,
+   * gaze, lip-sync, and direct Cubism parameter modulation.
    */
-  private mapEmotionToExpression(state: EmotionalVector): Expression {
-    const emotions: Array<[keyof EmotionalVector, Expression]> = [
-      ["joy", "happy"],
-      ["interest", "curious"],
-      ["surprise", "surprised"],
-      ["sadness", "concerned"],
-      ["anger", "focused"],
-      ["fear", "concerned"],
-    ];
+  updateCognitiveState(state: Live2DCognitiveVisualState): void {
+    if (!this.renderer || !this.isLoaded) return;
 
-    let maxEmotion: Expression = "neutral";
-    let maxValue = 0.2; // Threshold for neutral
+    const emotionalState = this.cognitiveStateToEmotion(state);
+    const expression = mapEmotionToExpression(emotionalState);
+    const intensity = Math.max(
+      0.35,
+      getExpressionIntensity(expression, emotionalState),
+      this.clamp01(state.selfAwareness ?? 0) * 0.55,
+    );
 
-    for (const [emotion, expression] of emotions) {
-      const value = state[emotion] ?? 0;
-      if (value > maxValue) {
-        maxValue = value;
-        maxEmotion = expression;
-      }
+    this.renderer.setExpression(expression, intensity);
+    if (state.isSpeaking || state.audioLevel !== undefined) {
+      this.renderer.updateLipSync(
+        state.audioLevel ?? (state.isSpeaking ? 0.45 : 0),
+      );
     }
-
-    return maxEmotion;
+    if (state.isProcessing) {
+      this.renderer.playMotion("thinking");
+    }
+    this.applyCognitiveMicroExpressions(state);
   }
 
-  /**
-   * Calculate overall emotional intensity
-   */
-  private calculateIntensity(state: EmotionalVector): number {
-    const values = Object.values(state).filter(
-      (v): v is number => typeof v === "number",
+  private cognitiveStateToEmotion(
+    state: Live2DCognitiveVisualState,
+  ): EmotionalVector {
+    const valence = this.clamp(state.valence ?? 0, -1, 1);
+    const arousal = this.clamp01(state.arousal ?? 0.3);
+    const flow = this.clamp01(state.flow ?? 0);
+    const selfAwareness = this.clamp01(state.selfAwareness ?? 0);
+    const sentience = this.clamp01(state.sentience ?? 0);
+
+    return {
+      joy: Math.max(0, valence) * 0.7 + sentience * 0.15,
+      interest: Math.max(flow, selfAwareness * 0.8, sentience * 0.6),
+      surprise: arousal > 0.75 ? (arousal - 0.75) * 4 : 0,
+      sadness: Math.max(0, -valence) * 0.45,
+      anger: 0,
+      fear:
+        valence < -0.35 && arousal > 0.6 ? Math.min(1, -valence * arousal) : 0,
+      disgust: 0,
+      contempt: 0,
+    };
+  }
+
+  private applyCognitiveMicroExpressions(
+    state: Live2DCognitiveVisualState,
+  ): void {
+    if (!this.renderer) return;
+
+    const arousal = this.clamp01(state.arousal ?? 0.3);
+    const valence = this.clamp(state.valence ?? 0, -1, 1);
+    const selfAwareness = this.clamp01(state.selfAwareness ?? 0);
+    const phi = this.clamp01(state.phi ?? 0);
+    const flow = this.clamp01(state.flow ?? 0);
+
+    this.renderer.setParameter(
+      PARAM_IDS.PARAM_EYE_L_OPEN,
+      this.clamp(0.82 + arousal * 0.28, 0.55, 1.2),
     );
-    if (values.length === 0) return 0.5;
-    return Math.min(1, Math.max(0.3, Math.max(...values)));
+    this.renderer.setParameter(
+      PARAM_IDS.PARAM_EYE_R_OPEN,
+      this.clamp(0.82 + arousal * 0.28, 0.55, 1.2),
+    );
+    this.renderer.setParameter(
+      PARAM_IDS.PARAM_BROW_L_Y,
+      this.clamp((selfAwareness - 0.5) * 0.45 + valence * 0.18, -0.45, 0.55),
+    );
+    this.renderer.setParameter(
+      PARAM_IDS.PARAM_BROW_R_Y,
+      this.clamp((phi - 0.5) * 0.35 + valence * 0.18, -0.45, 0.55),
+    );
+    this.renderer.setParameter(
+      PARAM_IDS.PARAM_ANGLE_Z,
+      this.clamp((selfAwareness - phi) * 8, -8, 8),
+    );
+    this.renderer.setParameter(
+      PARAM_IDS.PARAM_BODY_ANGLE_X,
+      this.clamp((flow - 0.5) * 8, -8, 8),
+    );
+
+    if (typeof this.renderer.focusEyes === "function" && this.canvas) {
+      const x =
+        this.canvas.width / 2 +
+        (selfAwareness - 0.5) * this.canvas.width * 0.18;
+      const y =
+        this.canvas.height / 2 - (phi - 0.5) * this.canvas.height * 0.16;
+      this.renderer.focusEyes(x, y);
+    }
+  }
+
+  private clamp01(value: number): number {
+    return this.clamp(value, 0, 1);
+  }
+
+  private clamp(value: number, min: number, max: number): number {
+    if (Number.isNaN(value)) return min;
+    return Math.min(max, Math.max(min, value));
   }
 
   /**
