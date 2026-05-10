@@ -24,7 +24,7 @@ import {
   ScientificDomain,
   type RelevanceGuidedInquiry,
   type ScientificInsight,
-} from "deep-tree-echo-core";
+} from "deep-tree-echo-core/scientific-genius";
 
 const log = getLogger("render/components/DeepTreeEchoBot/DeepTreeEchoBot");
 

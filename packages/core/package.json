@@ -49,6 +49,10 @@
     "./consciousness": {
       "import": "./dist/consciousness/index.js",
       "types": "./dist/consciousness/index.d.ts"
+    },
+    "./scientific-genius": {
+      "import": "./dist/scientific-genius/index.js",
+      "types": "./dist/scientific-genius/index.d.ts"
     }
   },
   "scripts": {

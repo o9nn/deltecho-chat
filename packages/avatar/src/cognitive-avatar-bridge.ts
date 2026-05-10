@@ -14,7 +14,16 @@
 
 import { EventEmitter } from "events";
 import type { Expression, EmotionalVector, AvatarMotion } from "./types";
-import type { Live2DAvatarController } from "./adapters/live2d-avatar";
+import type {
+  Live2DAvatarController,
+  Live2DCognitiveVisualState,
+} from "./adapters/live2d-avatar";
+import type {
+  DTEchoCognitiveMode,
+  DTEchoExpressionName,
+  DTEchoHormoneVector,
+} from "./dtecho-expression-driver";
+import { projectDTEchoCognitiveState } from "./dtecho-expression-driver";
 import { ExpressionMapper } from "./expression-mapper";
 
 /**
@@ -31,6 +40,12 @@ export interface CognitiveStateInput {
   emotionalValence: number; // -1 to 1
   emotionalArousal: number; // 0-1
   dominantEmotion?: string;
+
+  // Optional DTEcho mode/state naming for the Live2D projection atlas
+  mode?: DTEchoCognitiveMode | string;
+  currentState?: DTEchoCognitiveMode | string;
+  salience?: number; // 0-1
+  temporalCoherence?: number; // 0-1
 
   // EchoBeats state
   echoBeatsPhase?: number; // 0-11
@@ -62,6 +77,12 @@ export interface AvatarResponseState {
   eyeMovement: { x: number; y: number }; // -1 to 1
   headTilt: number; // -30 to 30 degrees
   consciousnessGlow: number; // 0-1 for visual effect
+  dtechoMode: DTEchoCognitiveMode;
+  dtechoExpression: DTEchoExpressionName;
+  dtechoCognitiveMode: string;
+  hormones: DTEchoHormoneVector;
+  cubism: Record<string, number>;
+  cognitiveVisualState: Live2DCognitiveVisualState;
 }
 
 /**
@@ -108,16 +129,23 @@ export class CognitiveAvatarBridge extends EventEmitter {
     this.config = { ...DEFAULT_CONFIG, ...config };
     this.expressionMapper = new ExpressionMapper();
 
+    const initialProjection = projectDTEchoCognitiveState({ mode: "Idle" });
     this.currentState = {
-      expression: "neutral",
-      expressionIntensity: 0.5,
-      motion: "idle",
-      lipSyncLevel: 0,
+      expression: initialProjection.avatarExpression,
+      expressionIntensity: initialProjection.intensity,
+      motion: initialProjection.motion ?? "idle",
+      lipSyncLevel: initialProjection.lipSyncLevel,
       blinkRate: 15, // Normal blink rate
       breathingRate: 12, // Normal breathing
       eyeMovement: { x: 0, y: 0 },
       headTilt: 0,
       consciousnessGlow: 0,
+      dtechoMode: initialProjection.selectedMode,
+      dtechoExpression: initialProjection.expressionName,
+      dtechoCognitiveMode: initialProjection.cognitiveMode,
+      hormones: initialProjection.hormones,
+      cubism: initialProjection.cubism,
+      cognitiveVisualState: { mode: initialProjection.selectedMode },
     };
   }
 
@@ -217,13 +245,40 @@ export class CognitiveAvatarBridge extends EventEmitter {
     state: CognitiveStateInput,
     emotions: EmotionalVector,
   ): AvatarResponseState {
-    // Get expression from mapper
-    const expression = this.expressionMapper.getExpression();
-    const expressionIntensity = this.expressionMapper.getIntensity(emotions);
+    const salience = Math.max(
+      state.salience ?? 0,
+      state.processingIntensity ?? 0,
+      state.streamCoherence ?? 0,
+      state.hopfCoherence ?? 0,
+      emotions.interest ?? 0,
+    );
+    const cognitiveVisualState: Live2DCognitiveVisualState = {
+      mode: state.mode ?? state.currentState ?? state.dominantEmotion,
+      currentState: state.currentState ?? state.mode ?? state.dominantEmotion,
+      valence: state.emotionalValence,
+      arousal: state.emotionalArousal,
+      selfAwareness: state.selfAwareness,
+      sentience: state.sentienceLevel,
+      phi: state.phi,
+      flow: state.flowState,
+      temporalCoherence:
+        state.temporalCoherence ?? state.streamCoherence ?? state.hopfCoherence,
+      salience,
+      isProcessing: state.isProcessing,
+      isSpeaking: state.isSpeaking,
+      audioLevel: state.audioLevel,
+    };
+    const projection = projectDTEchoCognitiveState(cognitiveVisualState);
+
+    // Keep the generic mapper updated for compatibility, but prefer the DTEcho atlas.
+    const expression = projection.avatarExpression;
+    const expressionIntensity = projection.intensity;
 
     // Determine motion based on processing state
     let motion: AvatarMotion = "idle";
-    if (state.isProcessing) {
+    if (projection.motion) {
+      motion = projection.motion;
+    } else if (state.isProcessing) {
       motion = "thinking";
     } else if (state.isSpeaking) {
       motion = "talking";
@@ -249,12 +304,22 @@ export class CognitiveAvatarBridge extends EventEmitter {
       expression,
       expressionIntensity,
       motion,
-      lipSyncLevel: state.audioLevel || 0,
+      lipSyncLevel: projection.lipSyncLevel,
       blinkRate,
       breathingRate,
       eyeMovement,
       headTilt,
       consciousnessGlow,
+      dtechoMode: projection.selectedMode,
+      dtechoExpression: projection.expressionName,
+      dtechoCognitiveMode: projection.cognitiveMode,
+      hormones: projection.hormones,
+      cubism: projection.cubism,
+      cognitiveVisualState: {
+        ...cognitiveVisualState,
+        mode: projection.selectedMode,
+        currentState: projection.selectedMode,
+      },
     };
   }
 
@@ -319,18 +384,21 @@ export class CognitiveAvatarBridge extends EventEmitter {
 
     const state = this.currentState;
 
-    // Set expression
+    this.avatarController.updateCognitiveState(state.cognitiveVisualState);
+
+    // Keep direct calls as a compatibility layer for renderers that do not consume
+    // every field of the DTEcho cognitive projection.
     this.avatarController.setExpression(
       state.expression,
       state.expressionIntensity,
     );
 
-    // Update lip sync
-    if (state.lipSyncLevel > 0) {
-      this.avatarController.updateLipSync(state.lipSyncLevel);
+    this.avatarController.updateLipSync(state.lipSyncLevel);
+
+    for (const [paramId, value] of Object.entries(state.cubism)) {
+      this.avatarController.setParameter(paramId, value);
     }
 
-    // Play motion if changed
     this.avatarController.playMotion(state.motion);
   }
 
@@ -403,6 +471,7 @@ export class CognitiveAvatarBridge extends EventEmitter {
       `Avatar: ${state.expression} (${(state.expressionIntensity * 100).toFixed(
         0,
       )}%), ` +
+      `DTEcho: ${state.dtechoMode}/${state.dtechoExpression}, ` +
       `motion: ${state.motion}, consciousness: ${(
         state.consciousnessGlow * 100
       ).toFixed(0)}%`

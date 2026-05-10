@@ -172,6 +172,44 @@ const DEFAULT_CONFIG: OrchestratorConfig = {
   coreSelfComplexityThreshold: 0.85,
 };
 
+const TRUE_ENV_VALUES = new Set(["1", "true", "yes", "on"]);
+const FALSE_ENV_VALUES = new Set(["0", "false", "no", "off"]);
+
+function envFlag(name: string, fallback: boolean): boolean {
+  const raw = process.env[name];
+  if (!raw) return fallback;
+  const value = raw.trim().toLowerCase();
+  if (TRUE_ENV_VALUES.has(value)) return true;
+  if (FALSE_ENV_VALUES.has(value)) return false;
+  return fallback;
+}
+
+function createAutonomyPipelineStartupConfig(
+  config: OrchestratorConfig,
+): Partial<AutonomyPipelineConfig> {
+  const embodiedAutonomy = envFlag("DELTECHO_DTE_AUTONOMY", true);
+  const planning = envFlag("DELTECHO_DTE_PLANNING", embodiedAutonomy);
+  const execution = envFlag("DELTECHO_DTE_EXECUTION", false);
+  const storagePath = process.env.DELTECHO_AUTONOMY_STORAGE_PATH;
+
+  return {
+    enabled: true,
+    // Strengthen sensory-memory centers by default while keeping side-effecting
+    // tool execution opt-in via DELTECHO_DTE_EXECUTION=1.
+    enablePerception: embodiedAutonomy,
+    enablePlanning: planning,
+    enableExecution: execution,
+    enableVectorMemory: embodiedAutonomy,
+    enableConsolidation: embodiedAutonomy,
+    // CoreSelfEngine and Echobeats are owned by the orchestrator in this startup
+    // path, so the pipeline should wire around them rather than create duplicates.
+    enableCoreSelf: false,
+    enableEchobeats: false,
+    ...(storagePath ? { storagePath } : {}),
+    ...config.autonomy,
+  };
+}
+
 /**
  * Main orchestrator that coordinates all Deep Tree Echo services
  */
@@ -391,15 +429,9 @@ export class Orchestrator {
           log.info("Echobeats started (3-stream, 12-step cognitive loop)");
 
           // 3. AutonomyPipeline — perception → reflection → planning → action
-          this.autonomyPipeline = new AutonomyPipeline({
-            enabled: true,
-            enablePerception: false, // Start conservative
-            enablePlanning: false,
-            enableExecution: false,
-            enableVectorMemory: false,
-            enableConsolidation: false,
-            ...this.config.autonomy,
-          });
+          this.autonomyPipeline = new AutonomyPipeline(
+            createAutonomyPipelineStartupConfig(this.config),
+          );
           await this.autonomyPipeline.start();
           log.info("AutonomyPipeline started");
 
