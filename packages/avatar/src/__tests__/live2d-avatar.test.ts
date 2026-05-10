@@ -13,6 +13,20 @@ import type { EmotionalVector } from "../types";
 
 // Mock the PixiLive2DRenderer
 jest.mock("../adapters/pixi-live2d-renderer", () => ({
+  PARAM_IDS: {
+    PARAM_MOUTH_OPEN_Y: "ParamMouthOpenY",
+    PARAM_MOUTH_FORM: "ParamMouthForm",
+    PARAM_EYE_L_OPEN: "ParamEyeLOpen",
+    PARAM_EYE_R_OPEN: "ParamEyeROpen",
+    PARAM_BROW_L_Y: "ParamBrowLY",
+    PARAM_BROW_R_Y: "ParamBrowRY",
+    PARAM_BODY_ANGLE_X: "ParamBodyAngleX",
+    PARAM_BODY_ANGLE_Y: "ParamBodyAngleY",
+    PARAM_BODY_ANGLE_Z: "ParamBodyAngleZ",
+    PARAM_ANGLE_X: "ParamAngleX",
+    PARAM_ANGLE_Y: "ParamAngleY",
+    PARAM_ANGLE_Z: "ParamAngleZ",
+  },
   PixiLive2DRenderer: jest.fn().mockImplementation(() => ({
     initialize: jest.fn().mockResolvedValue(undefined),
     loadModel: jest.fn().mockResolvedValue(undefined),

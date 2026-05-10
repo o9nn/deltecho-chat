@@ -39,11 +39,28 @@ export type AvatarMotion =
 // Compatible with both @deltecho/cognitive and @deltecho/avatar types
 export type EmotionalVector = Record<string, number | string | undefined>;
 
+export interface CognitiveVisualState {
+  mode?: string;
+  currentState?: string;
+  valence?: number;
+  arousal?: number;
+  selfAwareness?: number;
+  sentience?: number;
+  phi?: number;
+  flow?: number;
+  temporalCoherence?: number;
+  salience?: number;
+  isProcessing?: boolean;
+  isSpeaking?: boolean;
+  audioLevel?: number;
+}
+
 // Controller interface for external control of the avatar
 export interface Live2DAvatarController {
   setExpression: (expression: Expression, intensity?: number) => void;
   playMotion: (motion: AvatarMotion) => void;
   updateLipSync: (audioLevel: number) => void;
+  updateCognitiveState?: (state: CognitiveVisualState) => void;
   triggerBlink: () => void;
   setParameter: (paramId: string, value: number) => void;
 }
@@ -67,6 +84,8 @@ export interface Live2DAvatarComponentProps {
   scale?: number;
   /** Current emotional state from cognitive system */
   emotionalState?: EmotionalVector;
+  /** Richer DTEcho visual projection state for Cubism micro-expressions */
+  cognitiveVisualState?: CognitiveVisualState;
   /** Audio level for lip sync (0-1) */
   audioLevel?: number;
   /** Whether the avatar is actively speaking */
@@ -106,6 +125,7 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
   height = 400,
   scale = 0.25,
   emotionalState,
+  cognitiveVisualState,
   audioLevel,
   isSpeaking = false,
   onLoad,
@@ -264,6 +284,12 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
     managerRef.current.updateEmotionalState(emotionalState);
   }, [emotionalState, state.isLoaded]);
 
+  // Update richer DTEcho cognitive visual state
+  useEffect(() => {
+    if (!managerRef.current || !state.isLoaded || !cognitiveVisualState) return;
+    managerRef.current.updateCognitiveState(cognitiveVisualState);
+  }, [cognitiveVisualState, state.isLoaded]);
+
   // Update lip sync
   useEffect(() => {
     if (!controllerRef.current || !state.isLoaded) return;
@@ -413,6 +439,10 @@ export function useLive2DController() {
     controllerRef.current?.triggerBlink();
   }, []);
 
+  const updateCognitiveState = useCallback((state: CognitiveVisualState) => {
+    controllerRef.current?.updateCognitiveState?.(state);
+  }, []);
+
   const setParameter = useCallback((paramId: string, value: number) => {
     controllerRef.current?.setParameter(paramId, value);
   }, []);
@@ -422,6 +452,7 @@ export function useLive2DController() {
     setExpression,
     playMotion,
     updateLipSync,
+    updateCognitiveState,
     triggerBlink,
     setParameter,
     controller: controllerRef.current,

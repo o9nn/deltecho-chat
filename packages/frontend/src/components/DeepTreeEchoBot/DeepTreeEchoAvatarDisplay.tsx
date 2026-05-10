@@ -12,6 +12,7 @@ import type {
   Expression,
   AvatarMotion,
   EmotionalVector,
+  CognitiveVisualState,
 } from "../AICompanionHub/Live2DAvatar";
 import { getOrchestrator } from "./CognitiveBridge";
 import type { UnifiedCognitiveState } from "./CognitiveBridge";
@@ -135,6 +136,74 @@ function mapCognitiveStateToEmotionalVector(
   return emotional;
 }
 
+function mapProcessingStateToDTEchoMode(
+  processingState: BotProcessingState,
+  cognitiveState: UnifiedCognitiveState | null,
+): string {
+  if (processingState === BotProcessingState.RESPONDING) return "Speaking";
+  if (processingState === BotProcessingState.THINKING)
+    return "Recursive Expansion";
+  if (processingState === BotProcessingState.LISTENING) {
+    return "External Validation Triggered";
+  }
+  if (processingState === BotProcessingState.ERROR) return "Entropy Threshold";
+
+  const mood = cognitiveState?.persona?.currentMood?.toLowerCase() ?? "";
+  if (mood.includes("curious")) return "Recursive Expansion";
+  if (mood.includes("focused")) return "Knowledge Integration";
+  if (mood.includes("playful")) return "Pattern Recognition";
+  if (mood.includes("contemplative")) return "Self-Reference Point";
+  return "Idle";
+}
+
+function mapCognitiveStateToVisualState(
+  cognitiveState: UnifiedCognitiveState | null,
+  processingState: BotProcessingState,
+  isSpeaking: boolean,
+  audioLevel: number,
+): CognitiveVisualState {
+  const context = cognitiveState?.cognitiveContext;
+  const consciousness = cognitiveState?.consciousness as
+    | {
+        phi?: number;
+        selfAwareness?: number;
+        flowState?: number;
+        temporalCoherence?: number;
+      }
+    | undefined;
+
+  const valence = context?.emotionalValence ?? 0;
+  const arousal =
+    context?.emotionalArousal ??
+    (processingState === BotProcessingState.IDLE ? 0.25 : 0.58);
+  const salience = context?.salienceScore ?? context?.attentionWeight ?? 0.45;
+  const mode = mapProcessingStateToDTEchoMode(processingState, cognitiveState);
+
+  return {
+    mode,
+    currentState: mode,
+    valence,
+    arousal,
+    selfAwareness:
+      consciousness?.selfAwareness ?? Math.max(0.35, salience * 0.7),
+    sentience: consciousness?.phi ?? Math.max(0.35, salience * 0.65),
+    phi: consciousness?.phi ?? salience * 0.65,
+    flow:
+      consciousness?.flowState ??
+      (processingState === BotProcessingState.THINKING ||
+      processingState === BotProcessingState.RESPONDING
+        ? Math.max(0.55, salience)
+        : Math.max(0.25, salience * 0.55)),
+    temporalCoherence: consciousness?.temporalCoherence ?? 0.6,
+    salience,
+    isProcessing:
+      processingState === BotProcessingState.THINKING ||
+      processingState === BotProcessingState.RESPONDING,
+    isSpeaking,
+    audioLevel,
+  };
+}
+
 /**
  * Main Avatar Display Component
  */
@@ -174,6 +243,10 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
   const [emotionalVector, setEmotionalVector] = useState<EmotionalVector>({
     neutral: 1.0,
   });
+  const [cognitiveVisualState, setCognitiveVisualState] =
+    useState<CognitiveVisualState>(() =>
+      mapCognitiveStateToVisualState(null, BotProcessingState.IDLE, false, 0),
+    );
 
   const avatarController = useRef<Live2DAvatarController | null>(null);
   const updateIntervalRef = useRef<ReturnType<typeof setInterval>>();
@@ -225,7 +298,21 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
     const newEmotionalVector =
       mapCognitiveStateToEmotionalVector(cognitiveState);
     setEmotionalVector(newEmotionalVector);
-  }, [cognitiveState, processingState, currentExpression]);
+    setCognitiveVisualState(
+      mapCognitiveStateToVisualState(
+        cognitiveState,
+        processingState,
+        isSpeaking,
+        audioLevel,
+      ),
+    );
+  }, [
+    cognitiveState,
+    processingState,
+    currentExpression,
+    isSpeaking,
+    audioLevel,
+  ]);
 
   // Trigger motion based on processing state changes
   useEffect(() => {
@@ -266,6 +353,7 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
         height={finalHeight}
         scale={0.25}
         emotionalState={emotionalVector}
+        cognitiveVisualState={cognitiveVisualState}
         audioLevel={audioLevel}
         isSpeaking={isSpeaking}
         onControllerReady={handleAvatarReady}

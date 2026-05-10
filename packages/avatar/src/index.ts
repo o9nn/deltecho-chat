@@ -28,6 +28,18 @@ export {
 // Avatar Controller
 export { AvatarController } from "./avatar-controller";
 
+// Deep Tree Echo expression projection atlas
+export {
+  DTE_EXPRESSION_MAP,
+  projectDTEchoCognitiveState,
+  type DTEchoCognitiveMode,
+  type DTEchoExpressionName,
+  type DTEchoHormoneVector,
+  type DTEchoProjectionInput,
+  type DTEchoExpressionProfile,
+  type DTEchoVisualProjection,
+} from "./dtecho-expression-driver";
+
 // Cubism Adapter
 export {
   CubismModelInfo,
@@ -63,6 +75,7 @@ export {
 export {
   Live2DAvatarProps,
   Live2DAvatarState,
+  Live2DCognitiveVisualState,
   Live2DAvatarController,
   Live2DAvatarManager,
   createLive2DAvatarManager,
