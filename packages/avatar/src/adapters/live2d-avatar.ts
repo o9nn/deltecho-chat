@@ -42,6 +42,8 @@ export interface Live2DAvatarProps {
   onError?: (error: Error) => void;
   /** Additional CSS class name */
   className?: string;
+  /** Pixel ratio override for high-resolution or performance-tuned rendering */
+  pixelRatio?: number;
   /** Debug mode */
   debug?: boolean;
 }
@@ -118,6 +120,10 @@ export class Live2DAvatarManager {
     container: HTMLElement,
     props: Live2DAvatarProps,
   ): Promise<Live2DAvatarController> {
+    // Make repeated initialization idempotent for React remount/retry paths.
+    this.dispose();
+    this.isDisposed = false;
+
     // Create canvas
     this.canvas = document.createElement("canvas");
     this.canvas.width = props.width ?? 400;
@@ -155,6 +161,8 @@ export class Live2DAvatarManager {
       await this.renderer.initialize({
         canvas: this.canvas,
         model: this.modelInfo,
+        pixelRatio: props.pixelRatio,
+        debug: props.debug,
       });
 
       await this.renderer.loadModel(this.modelInfo);
@@ -192,10 +200,7 @@ export class Live2DAvatarManager {
         this.updateCognitiveState(state);
       },
       triggerBlink: () => {
-        this.renderer?.setBlinking(true);
-        setTimeout(() => {
-          this.renderer?.setBlinking(false);
-        }, 150);
+        this.renderer?.triggerBlink(150);
       },
       setParameter: (paramId, value) => {
         this.renderer?.setParameter(paramId, value);

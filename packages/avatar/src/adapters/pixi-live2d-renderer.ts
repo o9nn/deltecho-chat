@@ -148,7 +148,9 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   private currentExpression: Expression = "neutral";
   private lipSyncValue = 0;
   private isBlinking = false;
-  private blinkTimer: ReturnType<typeof setInterval> | null = null;
+  private blinkTimer: ReturnType<typeof setTimeout> | null = null;
+  private blinkOpenTimer: ReturnType<typeof setTimeout> | null = null;
+  private manualBlinkTimer: ReturnType<typeof setTimeout> | null = null;
   private nextBlinkAt = 0;
   private blinkCloseUntil = 0;
   private expressionMap: Record<Expression, string> = DEFAULT_EXPRESSION_MAP;
@@ -531,6 +533,24 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   }
 
   /**
+   * Trigger a single tracked blink that is cleaned up during disposal.
+   * This avoids manager-level timers firing after the Live2D renderer has unmounted.
+   */
+  triggerBlink(durationMs = 150): void {
+    if (this.manualBlinkTimer) {
+      clearTimeout(this.manualBlinkTimer);
+      this.manualBlinkTimer = null;
+    }
+
+    this.setBlinking(true);
+    this.manualBlinkTimer = setTimeout(() => {
+      this.setBlinking(false);
+      this.manualBlinkTimer = null;
+      this.scheduleNextBlink();
+    }, Math.max(50, durationMs));
+  }
+
+  /**
    * Start automatic blink loop. Prefers the PixiJS ticker (synced with the
    * render loop and naturally paused when the tab is hidden). Falls back to a
    * setTimeout-based loop if the ticker is unavailable (e.g. in test mocks).
@@ -597,10 +617,20 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     if (!core) return;
     this.setParameterSafe(core, PARAM_IDS.PARAM_EYE_L_OPEN, 0);
     this.setParameterSafe(core, PARAM_IDS.PARAM_EYE_R_OPEN, 0);
-    setTimeout(
+
+    if (this.blinkOpenTimer) {
+      clearTimeout(this.blinkOpenTimer);
+      this.blinkOpenTimer = null;
+    }
+
+    this.blinkOpenTimer = setTimeout(
       () => {
-        this.setParameterSafe(core, PARAM_IDS.PARAM_EYE_L_OPEN, 1);
-        this.setParameterSafe(core, PARAM_IDS.PARAM_EYE_R_OPEN, 1);
+        const currentCore = this.model?.internalModel?.coreModel;
+        if (currentCore) {
+          this.setParameterSafe(currentCore, PARAM_IDS.PARAM_EYE_L_OPEN, 1);
+          this.setParameterSafe(currentCore, PARAM_IDS.PARAM_EYE_R_OPEN, 1);
+        }
+        this.blinkOpenTimer = null;
       },
       100 + Math.random() * 50,
     );
@@ -635,6 +665,18 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       clearTimeout(this.blinkTimer);
       this.blinkTimer = null;
     }
+
+    if (this.blinkOpenTimer) {
+      clearTimeout(this.blinkOpenTimer);
+      this.blinkOpenTimer = null;
+    }
+
+    if (this.manualBlinkTimer) {
+      clearTimeout(this.manualBlinkTimer);
+      this.manualBlinkTimer = null;
+    }
+
+    this.blinkCloseUntil = 0;
 
     if (this.app && this.blinkTickerCallback) {
       const ticker = this.app.ticker as

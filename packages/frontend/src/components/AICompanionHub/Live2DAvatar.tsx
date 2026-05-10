@@ -82,6 +82,8 @@ export interface Live2DAvatarComponentProps {
   height?: number;
   /** Scale factor for the model (0-1) */
   scale?: number;
+  /** Optional Live2D render pixel-ratio override; omit to use the renderer's capped default. */
+  pixelRatio?: number;
   /** Current emotional state from cognitive system */
   emotionalState?: EmotionalVector;
   /** Richer DTEcho visual projection state for Cubism micro-expressions */
@@ -124,6 +126,7 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
   width = 400,
   height = 400,
   scale = 0.25,
+  pixelRatio,
   emotionalState,
   cognitiveVisualState,
   audioLevel,
@@ -209,6 +212,7 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
             width,
             height,
             scale,
+            pixelRatio,
             onLoad: () => {
               if (mounted) {
                 if (timeoutId) clearTimeout(timeoutId);
@@ -276,7 +280,7 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
       controllerRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modelUrl, width, height, scale, state.retryCount]);
+  }, [modelUrl, width, height, scale, pixelRatio, state.retryCount]);
 
   // Update emotional state
   useEffect(() => {

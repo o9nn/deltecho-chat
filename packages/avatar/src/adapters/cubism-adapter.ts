@@ -60,6 +60,10 @@ export interface CubismAdapterConfig {
   expressions?: CubismExpressionMap;
   /** Motion mapping */
   motions?: CubismMotionMap;
+  /** Optional render pixel ratio override for high-resolution or performance-tuned renderers */
+  pixelRatio?: number;
+  /** Enable renderer debug logging when supported */
+  debug?: boolean;
 }
 
 /**

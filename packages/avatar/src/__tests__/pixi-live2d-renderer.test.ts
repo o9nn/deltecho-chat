@@ -257,6 +257,14 @@ describe("PixiLive2DRenderer", () => {
       expect(() => renderer.setBlinking(true)).not.toThrow();
       expect(() => renderer.setBlinking(false)).not.toThrow();
     });
+
+    it("should trigger and clean up a tracked manual blink", () => {
+      jest.useFakeTimers();
+      expect(() => renderer.triggerBlink(75)).not.toThrow();
+      renderer.dispose();
+      expect(() => jest.runOnlyPendingTimers()).not.toThrow();
+      jest.useRealTimers();
+    });
   });
 
   describe("disposal", () => {
