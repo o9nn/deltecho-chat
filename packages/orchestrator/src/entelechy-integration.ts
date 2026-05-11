@@ -80,12 +80,42 @@ const DEFAULT_CONFIG: EntelechyIntegrationConfig = {
 /**
  * Full cognitive state snapshot
  */
+export interface ScientificGeniusVisualSignal {
+  /** DTEcho expression-driver mode hint consumed by Live2D avatar packages. */
+  mode: "Scientific Genius" | "Synthesis Phase" | "Idle";
+  /** Combined autonomy/scientific-reasoning activation, normalized 0..1. */
+  scientificGenius: number;
+  /** Entelechy creative insight potential, normalized 0..1. */
+  insightPotential: number;
+  /** Entelechy realization score, normalized 0..1. */
+  entelechyScore: number;
+  /** Conscious integration proxy for Live2D projection. */
+  phi: number;
+  /** Current self-awareness estimate. */
+  selfAwareness: number;
+  /** Sentience/consciousness estimate. */
+  sentience: number;
+  /** Reservoir-consciousness flow/coupling estimate. */
+  flow: number;
+  /** Temporal coherence from EchoBeats and entelechy synchrony. */
+  temporalCoherence: number;
+  /** Visual salience to sharpen expression intensity. */
+  salience: number;
+  /** Valence/arousal hints for the avatar bridge. */
+  valence: number;
+  arousal: number;
+  /** Free-energy pressure proxy from reservoir entropy and health. */
+  freeEnergy: number;
+  isProcessing: boolean;
+}
+
 export interface CognitiveSnapshot {
   reservoir: ReservoirState | null;
   autognosis: AutognosisReport | null;
   echoBeats: EchoBeatsState | null;
   consciousness: ConsciousnessState | null;
   entelechy: EntelechyState | null;
+  scientificGeniusVisual: ScientificGeniusVisualSignal;
   timestamp: number;
   tickCount: number;
 }
@@ -362,23 +392,46 @@ export class EntelechyIntegration extends EventEmitter {
    * Take a full cognitive snapshot
    */
   public takeSnapshot(): CognitiveSnapshot {
+    const reservoir = this.config.enableReservoir ? esnReservoir.getState() : null;
+    const autognosis = this.config.enableReservoir
+      ? esnReservoir.getAutognosisReport()
+      : null;
+    const echoBeats = this.config.enableEchoBeats
+      ? echoBeatsEngine.getState()
+      : null;
+    const consciousness = this.config.enableConsciousness
+      ? getConsciousnessState()
+      : null;
+    const entelechy = this.config.enableEntelechy
+      ? entelechyEngine.getState()
+      : null;
+
     return {
-      reservoir: this.config.enableReservoir ? esnReservoir.getState() : null,
-      autognosis: this.config.enableReservoir
-        ? esnReservoir.getAutognosisReport()
-        : null,
-      echoBeats: this.config.enableEchoBeats
-        ? echoBeatsEngine.getState()
-        : null,
-      consciousness: this.config.enableConsciousness
-        ? getConsciousnessState()
-        : null,
-      entelechy: this.config.enableEntelechy
-        ? entelechyEngine.getState()
-        : null,
+      reservoir,
+      autognosis,
+      echoBeats,
+      consciousness,
+      entelechy,
+      scientificGeniusVisual: this.buildScientificGeniusVisualSignal({
+        reservoir,
+        autognosis,
+        echoBeats,
+        consciousness,
+        entelechy,
+      }),
       timestamp: Date.now(),
       tickCount: this.tickCount,
     };
+  }
+
+  /**
+   * Convert the latest or provided snapshot into the Live2D cognitive-state shape
+   * understood by @deltecho/avatar without introducing a package dependency.
+   */
+  public getScientificGeniusVisualState(
+    snapshot: CognitiveSnapshot | null = this.lastSnapshot,
+  ): ScientificGeniusVisualSignal {
+    return snapshot?.scientificGeniusVisual ?? this.takeSnapshot().scientificGeniusVisual;
   }
 
   /**
@@ -386,6 +439,74 @@ export class EntelechyIntegration extends EventEmitter {
    */
   public getLastSnapshot(): CognitiveSnapshot | null {
     return this.lastSnapshot;
+  }
+
+  private buildScientificGeniusVisualSignal(state: {
+    reservoir: ReservoirState | null;
+    autognosis: AutognosisReport | null;
+    echoBeats: EchoBeatsState | null;
+    consciousness: ConsciousnessState | null;
+    entelechy: EntelechyState | null;
+  }): ScientificGeniusVisualSignal {
+    const insightPotential = this.clamp01(state.entelechy?.insightPotential ?? 0);
+    const entelechyScore = this.clamp01(state.entelechy?.score ?? 0);
+    const selfAwareness = this.clamp01(state.consciousness?.selfAwareness ?? 0.2);
+    const sentience = this.clamp01(
+      state.consciousness?.overallConsciousness ?? selfAwareness,
+    );
+    const reservoirCoupling = this.clamp01(
+      state.entelechy?.reservoirCoupling ?? state.reservoir?.currentSpectralRadius ?? 0.4,
+    );
+    const temporalCoherence = this.clamp01(
+      Math.max(
+        state.echoBeats?.globalCoherence ?? 0,
+        state.entelechy?.temporalSynchrony ?? 0,
+      ),
+    );
+    const freeEnergy = this.clamp01(
+      (state.reservoir?.entropy ?? 0.5) * (1 - (state.autognosis?.health ?? 0.5)),
+    );
+    const scientificGenius = this.clamp01(
+      insightPotential * 0.42 +
+        entelechyScore * 0.28 +
+        selfAwareness * 0.14 +
+        sentience * 0.1 +
+        reservoirCoupling * 0.06,
+    );
+
+    return {
+      mode:
+        scientificGenius >= 0.62
+          ? "Scientific Genius"
+          : scientificGenius >= 0.42
+            ? "Synthesis Phase"
+            : "Idle",
+      scientificGenius,
+      insightPotential,
+      entelechyScore,
+      phi: entelechyScore,
+      selfAwareness,
+      sentience,
+      flow: reservoirCoupling,
+      temporalCoherence,
+      salience: this.clamp01(
+        Math.max(scientificGenius, insightPotential, entelechyScore),
+      ),
+      valence: this.clampSigned(entelechyScore - freeEnergy),
+      arousal: this.clamp01(0.35 + scientificGenius * 0.45 + freeEnergy * 0.2),
+      freeEnergy,
+      isProcessing: scientificGenius >= 0.35,
+    };
+  }
+
+  private clamp01(value: number): number {
+    if (!Number.isFinite(value)) return 0;
+    return Math.min(1, Math.max(0, value));
+  }
+
+  private clampSigned(value: number): number {
+    if (!Number.isFinite(value)) return 0;
+    return Math.min(1, Math.max(-1, value));
   }
 
   /**
@@ -444,6 +565,7 @@ export class EntelechyIntegration extends EventEmitter {
       tickCount: this.tickCount,
       reservoir: esnReservoir.serialize(),
       entelechy: entelechyEngine.serialize(),
+      scientificGeniusVisual: this.getScientificGeniusVisualState(),
     };
   }
 }

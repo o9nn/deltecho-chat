@@ -16,6 +16,7 @@ export type DTEchoCognitiveMode =
   | "Pattern Recognition"
   | "Evolutionary Pruning"
   | "External Validation Triggered"
+  | "Scientific Genius"
   | "Speaking"
   | "Idle"
   | "Deep Recursion";
@@ -32,6 +33,7 @@ export type DTEchoExpressionName =
   | "PHOTO_ExuberantLaugh"
   | "PHOTO_UpwardGaze"
   | "SPEAK_01_OpenVowel"
+  | "GENIUS_01_LuminousInference"
   | "WONDER_02_CuriousGaze"
   | "WONDER_03_Contemplative";
 
@@ -58,6 +60,14 @@ export interface DTEchoProjectionInput {
   flow?: number; // 0..1
   temporalCoherence?: number; // 0..1
   salience?: number; // 0..1
+  /** Normalized activation from the ScientificGeniusEngine / RelevanceGenius stack. */
+  scientificGenius?: number; // 0..1
+  /** Entelechy insight potential, usually derived from emergent-pattern coupling. */
+  insightPotential?: number; // 0..1
+  /** Entelechy realization score, used as an embodied self-realization signal. */
+  entelechyScore?: number; // 0..1
+  /** Free-energy pressure; higher values sharpen vigilance until insight resolves it. */
+  freeEnergy?: number; // 0..1
   isProcessing?: boolean;
   isSpeaking?: boolean;
   audioLevel?: number;
@@ -74,7 +84,8 @@ export interface DTEchoExpressionProfile {
     | "EXPLORATORY"
     | "REFLECTIVE"
     | "FOCUSED"
-    | "VIGILANT";
+    | "VIGILANT"
+    | "GENIUS";
   hormones: DTEchoHormoneVector;
   cubism: Record<string, number>;
   description: string;
@@ -101,6 +112,7 @@ export const DTE_EXPRESSION_MAP: Record<
   "Pattern Recognition": "PHOTO_ExuberantLaugh",
   "Evolutionary Pruning": "WONDER_03_Contemplative",
   "External Validation Triggered": "JOY_02_Laughing",
+  "Scientific Genius": "GENIUS_01_LuminousInference",
   Speaking: "SPEAK_01_OpenVowel",
   Idle: "PHOTO_UpwardGaze",
   "Deep Recursion": "JOY_05_Blissful",
@@ -249,6 +261,32 @@ const PROFILE_ATLAS: Record<DTEchoExpressionName, DTEchoExpressionProfile> = {
     },
     description: "Animated speaking face for social-focused articulation.",
   },
+  GENIUS_01_LuminousInference: {
+    expressionName: "GENIUS_01_LuminousInference",
+    avatarExpression: "focused",
+    motion: "thinking",
+    cognitiveMode: "GENIUS",
+    hormones: hormone({
+      dopamineTonic: 0.68,
+      dopaminePhasic: 0.86,
+      serotonin: 0.56,
+      norepinephrine: 0.5,
+      thyroid: 0.82,
+      anandamide: 0.38,
+    }),
+    cubism: {
+      [PARAM_IDS.PARAM_MOUTH_FORM]: 0.42,
+      [PARAM_IDS.PARAM_MOUTH_OPEN_Y]: 0.12,
+      [PARAM_IDS.PARAM_EYE_L_OPEN]: 1.04,
+      [PARAM_IDS.PARAM_EYE_R_OPEN]: 1.04,
+      [PARAM_IDS.PARAM_BROW_L_Y]: 0.34,
+      [PARAM_IDS.PARAM_BROW_R_Y]: 0.3,
+      [PARAM_IDS.PARAM_ANGLE_Y]: -1.8,
+      [PARAM_IDS.PARAM_BODY_ANGLE_Y]: 2.2,
+    },
+    description:
+      "Luminous inference face for transdisciplinary scientific insight and rigorous novelty.",
+  },
   WONDER_02_CuriousGaze: {
     expressionName: "WONDER_02_CuriousGaze",
     avatarExpression: "curious",
@@ -299,10 +337,18 @@ export function projectDTEchoCognitiveState(
   const sentience = clamp01(input.sentience ?? 0.5);
   const phi = clamp01(input.phi ?? 0.45);
   const flow = clamp01(input.flow ?? 0.45);
-  const salience = clamp01(input.salience ?? Math.max(arousal, flow));
+  const scientificGenius = inferScientificGeniusActivation(input);
+  const salience = clamp01(
+    input.salience ?? Math.max(arousal, flow, scientificGenius),
+  );
   const speaking = Boolean(input.isSpeaking || selectedMode === "Speaking");
   const intensity = clamp(
-    0.35 + arousal * 0.25 + selfAwareness * 0.16 + phi * 0.12 + salience * 0.12,
+    0.35 +
+      arousal * 0.22 +
+      selfAwareness * 0.15 +
+      phi * 0.12 +
+      salience * 0.11 +
+      scientificGenius * 0.16,
     0.35,
     1,
   );
@@ -339,6 +385,8 @@ export function projectDTEchoCognitiveState(
           ? Math.max(0.55, salience)
           : salience * 0.35,
       attention: salience,
+      insight: scientificGenius,
+      rigor: clamp01((input.freeEnergy ?? 0) * 0.35 + phi * 0.45),
       sentience,
     },
     cubism: {
@@ -373,6 +421,17 @@ export function projectDTEchoCognitiveState(
         0,
         1,
       ),
+      [PARAM_IDS.PARAM_ANGLE_Y]: clamp(
+        (profile.cubism[PARAM_IDS.PARAM_ANGLE_Y] ?? 0) - scientificGenius * 2.5,
+        -10,
+        10,
+      ),
+      [PARAM_IDS.PARAM_BODY_ANGLE_Y]: clamp(
+        (profile.cubism[PARAM_IDS.PARAM_BODY_ANGLE_Y] ?? 0) +
+          scientificGenius * 3,
+        -10,
+        10,
+      ),
     },
   };
 }
@@ -385,6 +444,7 @@ function normalizeMode(
     return mode as DTEchoCognitiveMode;
   }
   if (input.isSpeaking) return "Speaking";
+  if (inferScientificGeniusActivation(input) >= 0.62) return "Scientific Genius";
   if (input.isProcessing && clamp01(input.flow ?? 0) > 0.65)
     return "Synthesis Phase";
   if (
@@ -405,6 +465,24 @@ function normalizeMode(
   if (clamp01(input.flow ?? 0) > 0.72) return "Knowledge Integration";
   if (clamp01(input.selfAwareness ?? 0) > 0.7) return "Recursive Expansion";
   return "Idle";
+}
+
+function inferScientificGeniusActivation(input: DTEchoProjectionInput): number {
+  const explicit = clamp01(input.scientificGenius ?? 0);
+  const insight = clamp01(input.insightPotential ?? 0);
+  const entelechy = clamp01(input.entelechyScore ?? 0);
+  const integration =
+    (clamp01(input.phi ?? 0) +
+      clamp01(input.selfAwareness ?? 0) +
+      clamp01(input.flow ?? 0)) /
+    3;
+  const freeEnergyPressure = clamp01(input.freeEnergy ?? 0) * 0.18;
+
+  return clamp01(
+    Math.max(explicit, insight * 0.85, entelechy * 0.72) +
+      integration * 0.22 +
+      freeEnergyPressure,
+  );
 }
 
 function hormone(partial: Partial<DTEchoHormoneVector>): DTEchoHormoneVector {
@@ -429,6 +507,7 @@ function inferValence(profile: DTEchoExpressionProfile): number {
 }
 
 function inferArousal(profile: DTEchoExpressionProfile): number {
+  if (profile.expressionName === "GENIUS_01_LuminousInference") return 0.68;
   if (
     profile.expressionName === "PHOTO_Awe" ||
     profile.expressionName === "PHOTO_ExuberantLaugh"

@@ -75,6 +75,10 @@ export interface Live2DCognitiveVisualState {
   flow?: number; // 0..1 focus/processing flow
   temporalCoherence?: number; // 0..1
   salience?: number; // 0..1
+  scientificGenius?: number; // 0..1
+  insightPotential?: number; // 0..1
+  entelechyScore?: number; // 0..1
+  freeEnergy?: number; // 0..1
   isProcessing?: boolean;
   isSpeaking?: boolean;
   audioLevel?: number;

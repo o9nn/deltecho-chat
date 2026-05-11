@@ -37,6 +37,27 @@ describe("DTEcho expression driver", () => {
     expect(projection.emotionalState.surprise).toBeGreaterThanOrEqual(0.5);
   });
 
+  it("projects scientific-genius activation into a luminous inference expression", () => {
+    const projection = projectDTEchoCognitiveState({
+      scientificGenius: 0.74,
+      insightPotential: 0.7,
+      entelechyScore: 0.66,
+      selfAwareness: 0.82,
+      phi: 0.78,
+      flow: 0.76,
+      freeEnergy: 0.42,
+    });
+
+    expect(DTE_EXPRESSION_MAP["Scientific Genius"]).toBe(
+      "GENIUS_01_LuminousInference",
+    );
+    expect(projection.selectedMode).toBe("Scientific Genius");
+    expect(projection.expressionName).toBe("GENIUS_01_LuminousInference");
+    expect(projection.avatarExpression).toBe("focused");
+    expect(projection.emotionalState.insight).toBeGreaterThan(0.7);
+    expect(projection.cubism[PARAM_IDS.PARAM_BODY_ANGLE_Y]).toBeGreaterThan(2);
+  });
+
   it("projects speaking state into lip sync and open-vowel expression", () => {
     const projection = projectDTEchoCognitiveState({
       isSpeaking: true,

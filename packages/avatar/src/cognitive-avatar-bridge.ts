@@ -46,6 +46,10 @@ export interface CognitiveStateInput {
   currentState?: DTEchoCognitiveMode | string;
   salience?: number; // 0-1
   temporalCoherence?: number; // 0-1
+  scientificGenius?: number; // 0-1 ScientificGeniusEngine activation
+  insightPotential?: number; // 0-1 Entelechy insight potential
+  entelechyScore?: number; // 0-1 Entelechy realization score
+  freeEnergy?: number; // 0-1 unresolved surprise/rigor pressure
 
   // EchoBeats state
   echoBeatsPhase?: number; // 0-11
@@ -250,6 +254,9 @@ export class CognitiveAvatarBridge extends EventEmitter {
       state.processingIntensity ?? 0,
       state.streamCoherence ?? 0,
       state.hopfCoherence ?? 0,
+      state.scientificGenius ?? 0,
+      state.insightPotential ?? 0,
+      state.entelechyScore ?? 0,
       emotions.interest ?? 0,
     );
     const cognitiveVisualState: Live2DCognitiveVisualState = {
@@ -264,6 +271,10 @@ export class CognitiveAvatarBridge extends EventEmitter {
       temporalCoherence:
         state.temporalCoherence ?? state.streamCoherence ?? state.hopfCoherence,
       salience,
+      scientificGenius: state.scientificGenius,
+      insightPotential: state.insightPotential,
+      entelechyScore: state.entelechyScore,
+      freeEnergy: state.freeEnergy,
       isProcessing: state.isProcessing,
       isSpeaking: state.isSpeaking,
       audioLevel: state.audioLevel,
