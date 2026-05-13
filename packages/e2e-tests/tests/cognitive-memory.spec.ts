@@ -22,6 +22,10 @@ test.describe("Cognitive Memory System", () => {
   let existingProfiles: User[] = [];
 
   test.beforeAll(async ({ browser }) => {
+    // Existing-profile discovery can exceed Playwright's default 30s hook timeout
+    // when CI chatmail sessions are already populated.
+    test.setTimeout(90_000);
+
     const context = await browser.newContext();
     const page = await context.newPage();
     await reloadPage(page);

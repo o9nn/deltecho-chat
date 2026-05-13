@@ -32,6 +32,10 @@ let existingProfiles: User[] = [];
 const numberOfProfiles = 2;
 
 test.beforeAll(async ({ browser }) => {
+  // Existing-profile discovery can exceed Playwright's default 30s hook timeout
+  // when CI chatmail sessions are already populated.
+  test.setTimeout(90_000);
+
   // Use try-finally to ensure context is properly cleaned up
   const context = await browser.newContext();
   const page = await context.newPage();
