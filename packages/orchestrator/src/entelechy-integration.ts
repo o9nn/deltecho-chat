@@ -392,7 +392,9 @@ export class EntelechyIntegration extends EventEmitter {
    * Take a full cognitive snapshot
    */
   public takeSnapshot(): CognitiveSnapshot {
-    const reservoir = this.config.enableReservoir ? esnReservoir.getState() : null;
+    const reservoir = this.config.enableReservoir
+      ? esnReservoir.getState()
+      : null;
     const autognosis = this.config.enableReservoir
       ? esnReservoir.getAutognosisReport()
       : null;
@@ -431,7 +433,10 @@ export class EntelechyIntegration extends EventEmitter {
   public getScientificGeniusVisualState(
     snapshot: CognitiveSnapshot | null = this.lastSnapshot,
   ): ScientificGeniusVisualSignal {
-    return snapshot?.scientificGeniusVisual ?? this.takeSnapshot().scientificGeniusVisual;
+    return (
+      snapshot?.scientificGeniusVisual ??
+      this.takeSnapshot().scientificGeniusVisual
+    );
   }
 
   /**
@@ -448,14 +453,20 @@ export class EntelechyIntegration extends EventEmitter {
     consciousness: ConsciousnessState | null;
     entelechy: EntelechyState | null;
   }): ScientificGeniusVisualSignal {
-    const insightPotential = this.clamp01(state.entelechy?.insightPotential ?? 0);
+    const insightPotential = this.clamp01(
+      state.entelechy?.insightPotential ?? 0,
+    );
     const entelechyScore = this.clamp01(state.entelechy?.score ?? 0);
-    const selfAwareness = this.clamp01(state.consciousness?.selfAwareness ?? 0.2);
+    const selfAwareness = this.clamp01(
+      state.consciousness?.selfAwareness ?? 0.2,
+    );
     const sentience = this.clamp01(
       state.consciousness?.overallConsciousness ?? selfAwareness,
     );
     const reservoirCoupling = this.clamp01(
-      state.entelechy?.reservoirCoupling ?? state.reservoir?.currentSpectralRadius ?? 0.4,
+      state.entelechy?.reservoirCoupling ??
+        state.reservoir?.currentSpectralRadius ??
+        0.4,
     );
     const temporalCoherence = this.clamp01(
       Math.max(
@@ -464,7 +475,8 @@ export class EntelechyIntegration extends EventEmitter {
       ),
     );
     const freeEnergy = this.clamp01(
-      (state.reservoir?.entropy ?? 0.5) * (1 - (state.autognosis?.health ?? 0.5)),
+      (state.reservoir?.entropy ?? 0.5) *
+        (1 - (state.autognosis?.health ?? 0.5)),
     );
     const scientificGenius = this.clamp01(
       insightPotential * 0.42 +

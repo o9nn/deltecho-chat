@@ -22,6 +22,70 @@ import {
 } from "./DeepTreeEchoAvatarContext";
 // Styles are in scss/components/_deep-tree-echo-avatar.scss
 
+const AVATAR_STATE_POLL_MS = 500;
+const AVATAR_STATE_DEADBAND = 0.01;
+
+function roundAvatarSignal(value: number | undefined): number {
+  if (typeof value !== "number" || !Number.isFinite(value)) return 0;
+  return Math.round(value * 100) / 100;
+}
+
+function getCognitiveStateSignature(
+  cognitiveState: UnifiedCognitiveState | null,
+): string {
+  if (!cognitiveState?.cognitiveContext) return "no-context";
+
+  const { cognitiveContext, persona, reasoning } = cognitiveState;
+  return [
+    roundAvatarSignal(cognitiveContext.emotionalValence),
+    roundAvatarSignal(cognitiveContext.emotionalArousal),
+    roundAvatarSignal(cognitiveContext.salienceScore),
+    roundAvatarSignal(cognitiveContext.attentionWeight),
+    persona?.currentMood ?? "unknown-mood",
+    roundAvatarSignal(reasoning?.confidenceLevel),
+    reasoning?.activeGoals?.length ?? 0,
+    reasoning?.attentionFocus?.length ?? 0,
+  ].join("|");
+}
+
+function emotionalVectorsEqual(
+  left: EmotionalVector,
+  right: EmotionalVector,
+): boolean {
+  const keys = new Set([...Object.keys(left), ...Object.keys(right)]);
+  for (const key of keys) {
+    const leftValue = left[key];
+    const rightValue = right[key];
+    if (typeof leftValue === "number" && typeof rightValue === "number") {
+      if (Math.abs(leftValue - rightValue) > AVATAR_STATE_DEADBAND) {
+        return false;
+      }
+    } else if (leftValue !== rightValue) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function cognitiveVisualStatesEqual(
+  left: CognitiveVisualState,
+  right: CognitiveVisualState,
+): boolean {
+  const keys = new Set([...Object.keys(left), ...Object.keys(right)]);
+  for (const key of keys) {
+    const leftValue = left[key as keyof CognitiveVisualState];
+    const rightValue = right[key as keyof CognitiveVisualState];
+    if (typeof leftValue === "number" && typeof rightValue === "number") {
+      if (Math.abs(leftValue - rightValue) > AVATAR_STATE_DEADBAND) {
+        return false;
+      }
+    } else if (leftValue !== rightValue) {
+      return false;
+    }
+  }
+  return true;
+}
+
 export interface DeepTreeEchoAvatarDisplayProps {
   /** Width in pixels */
   width?: number;
@@ -238,8 +302,7 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
 
   const [cognitiveState, setCognitiveState] =
     useState<UnifiedCognitiveState | null>(null);
-  const [currentExpression, setCurrentExpression] =
-    useState<Expression>("neutral");
+  const [, setCurrentExpression] = useState<Expression>("neutral");
   const [emotionalVector, setEmotionalVector] = useState<EmotionalVector>({
     neutral: 1.0,
   });
@@ -249,7 +312,8 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
     );
 
   const avatarController = useRef<Live2DAvatarController | null>(null);
-  const updateIntervalRef = useRef<ReturnType<typeof setInterval>>();
+  const updateIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const lastCognitiveSignatureRef = useRef<string | null>(null);
 
   // Handle avatar controller ready
   const handleAvatarReady = useCallback(
@@ -262,28 +326,47 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
     [onReady, avatarContext],
   );
 
-  // Update cognitive state from orchestrator
+  // Update cognitive state from orchestrator. The avatar is a visual expression
+  // layer, so it should follow meaningful cognitive drift rather than every raw
+  // polling tick. This mirrors the Echo introspection pattern: observe, compare,
+  // then act only when the self-state has actually changed.
   useEffect(() => {
+    if (!finalVisible) return undefined;
+
     const updateCognitiveState = () => {
-      const orchestrator = getOrchestrator();
-      if (orchestrator) {
-        const state = orchestrator.getState();
-        setCognitiveState(state);
+      if (
+        typeof document !== "undefined" &&
+        document.visibilityState === "hidden"
+      ) {
+        return;
       }
+
+      const orchestrator = getOrchestrator();
+      if (!orchestrator) return;
+
+      const state = orchestrator.getState();
+      const signature = getCognitiveStateSignature(state);
+      if (signature === lastCognitiveSignatureRef.current) return;
+
+      lastCognitiveSignatureRef.current = signature;
+      setCognitiveState(state);
     };
 
     // Initial update
     updateCognitiveState();
 
-    // Poll for updates every 500ms
-    updateIntervalRef.current = setInterval(updateCognitiveState, 500);
+    updateIntervalRef.current = setInterval(
+      updateCognitiveState,
+      AVATAR_STATE_POLL_MS,
+    );
 
     return () => {
       if (updateIntervalRef.current) {
         clearInterval(updateIntervalRef.current);
+        updateIntervalRef.current = null;
       }
     };
-  }, []);
+  }, [finalVisible]);
 
   // Update expression based on cognitive state and processing state
   useEffect(() => {
@@ -291,28 +374,30 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
       cognitiveState,
       processingState,
     );
-    if (newExpression !== currentExpression) {
-      setCurrentExpression(newExpression);
-    }
+    setCurrentExpression((previous) =>
+      previous === newExpression ? previous : newExpression,
+    );
 
     const newEmotionalVector =
       mapCognitiveStateToEmotionalVector(cognitiveState);
-    setEmotionalVector(newEmotionalVector);
-    setCognitiveVisualState(
-      mapCognitiveStateToVisualState(
-        cognitiveState,
-        processingState,
-        isSpeaking,
-        audioLevel,
-      ),
+    setEmotionalVector((previous) =>
+      emotionalVectorsEqual(previous, newEmotionalVector)
+        ? previous
+        : newEmotionalVector,
     );
-  }, [
-    cognitiveState,
-    processingState,
-    currentExpression,
-    isSpeaking,
-    audioLevel,
-  ]);
+
+    const nextCognitiveVisualState = mapCognitiveStateToVisualState(
+      cognitiveState,
+      processingState,
+      isSpeaking,
+      audioLevel,
+    );
+    setCognitiveVisualState((previous) =>
+      cognitiveVisualStatesEqual(previous, nextCognitiveVisualState)
+        ? previous
+        : nextCognitiveVisualState,
+    );
+  }, [cognitiveState, processingState, isSpeaking, audioLevel]);
 
   // Trigger motion based on processing state changes
   useEffect(() => {

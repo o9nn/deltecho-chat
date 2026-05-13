@@ -444,7 +444,8 @@ function normalizeMode(
     return mode as DTEchoCognitiveMode;
   }
   if (input.isSpeaking) return "Speaking";
-  if (inferScientificGeniusActivation(input) >= 0.62) return "Scientific Genius";
+  if (inferScientificGeniusActivation(input) >= 0.62)
+    return "Scientific Genius";
   if (input.isProcessing && clamp01(input.flow ?? 0) > 0.65)
     return "Synthesis Phase";
   if (

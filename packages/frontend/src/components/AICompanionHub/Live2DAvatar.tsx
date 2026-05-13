@@ -142,6 +142,7 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const managerRef = useRef<any>(null);
   const controllerRef = useRef<Live2DAvatarController | null>(null);
+  const lastLipSyncLevelRef = useRef<number | null>(null);
   const [state, setState] = useState<Live2DAvatarState>({
     isLoading: true,
     isLoaded: false,
@@ -278,6 +279,7 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
       managerRef.current?.dispose();
       managerRef.current = null;
       controllerRef.current = null;
+      lastLipSyncLevelRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modelUrl, width, height, scale, pixelRatio, state.retryCount]);
@@ -294,11 +296,18 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
     managerRef.current.updateCognitiveState(cognitiveVisualState);
   }, [cognitiveVisualState, state.isLoaded]);
 
-  // Update lip sync
+  // Update lip sync. Use a small deadband so high-frequency audio-level
+  // sampling does not force redundant parameter writes into the Live2D core.
   useEffect(() => {
     if (!controllerRef.current || !state.isLoaded) return;
-    controllerRef.current.updateLipSync(audioLevel ?? 0);
-  }, [audioLevel, state.isLoaded]);
+    const nextLevel = isSpeaking ? audioLevel ?? 0 : 0;
+    const previousLevel = lastLipSyncLevelRef.current;
+    if (previousLevel !== null && Math.abs(previousLevel - nextLevel) < 0.01) {
+      return;
+    }
+    lastLipSyncLevelRef.current = nextLevel;
+    controllerRef.current.updateLipSync(nextLevel);
+  }, [audioLevel, isSpeaking, state.isLoaded]);
 
   // Sprite-only mode: render sprite without Live2D container
   if (mode === "sprite") {

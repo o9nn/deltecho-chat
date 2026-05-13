@@ -278,7 +278,15 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       "pixi-live2d-display-lipsyncpatch"
     );
 
-    // Dispose existing model
+    // Dispose existing model and any model-bound blink timers.
+    if (this.blinkTimer) {
+      clearTimeout(this.blinkTimer);
+      this.blinkTimer = null;
+    }
+    if (this.blinkOpenTimer) {
+      clearTimeout(this.blinkOpenTimer);
+      this.blinkOpenTimer = null;
+    }
     if (this.model) {
       this.model.destroy();
       this.model = null;
@@ -543,11 +551,14 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     }
 
     this.setBlinking(true);
-    this.manualBlinkTimer = setTimeout(() => {
-      this.setBlinking(false);
-      this.manualBlinkTimer = null;
-      this.scheduleNextBlink();
-    }, Math.max(50, durationMs));
+    this.manualBlinkTimer = setTimeout(
+      () => {
+        this.setBlinking(false);
+        this.manualBlinkTimer = null;
+        this.scheduleNextBlink();
+      },
+      Math.max(50, durationMs),
+    );
   }
 
   /**
@@ -601,6 +612,10 @@ export class PixiLive2DRenderer implements ICubismRenderer {
 
     // Fallback: setTimeout-based blink loop.
     if (this.blinkTimer) clearTimeout(this.blinkTimer);
+    if (this.blinkOpenTimer) {
+      clearTimeout(this.blinkOpenTimer);
+      this.blinkOpenTimer = null;
+    }
     const scheduleBlink = () => {
       const delay = 2000 + Math.random() * 4000;
       this.blinkTimer = setTimeout(() => {
@@ -625,11 +640,15 @@ export class PixiLive2DRenderer implements ICubismRenderer {
 
     this.blinkOpenTimer = setTimeout(
       () => {
-        const currentCore = this.model?.internalModel?.coreModel;
-        if (currentCore) {
-          this.setParameterSafe(currentCore, PARAM_IDS.PARAM_EYE_L_OPEN, 1);
-          this.setParameterSafe(currentCore, PARAM_IDS.PARAM_EYE_R_OPEN, 1);
+        if (
+          !this.initialized ||
+          this.model?.internalModel?.coreModel !== core
+        ) {
+          this.blinkOpenTimer = null;
+          return;
         }
+        this.setParameterSafe(core, PARAM_IDS.PARAM_EYE_L_OPEN, 1);
+        this.setParameterSafe(core, PARAM_IDS.PARAM_EYE_R_OPEN, 1);
         this.blinkOpenTimer = null;
       },
       100 + Math.random() * 50,

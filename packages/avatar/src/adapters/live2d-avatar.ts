@@ -204,7 +204,18 @@ export class Live2DAvatarManager {
         this.updateCognitiveState(state);
       },
       triggerBlink: () => {
-        this.renderer?.triggerBlink(150);
+        const renderer = this.renderer as
+          | (PixiLive2DRenderer & {
+              triggerBlink?: (durationMs?: number) => void;
+              setBlinking?: (isBlinking: boolean) => void;
+            })
+          | null;
+        if (typeof renderer?.triggerBlink === "function") {
+          renderer.triggerBlink(150);
+          return;
+        }
+        renderer?.setBlinking?.(true);
+        setTimeout(() => renderer?.setBlinking?.(false), 150);
       },
       setParameter: (paramId, value) => {
         this.renderer?.setParameter(paramId, value);
