@@ -50,7 +50,7 @@ jobs:
       run: pnpm build:browser
 
     - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
+      run: pnpm exec playwright install chromium --with-deps
       working-directory: packages/e2e-tests
 
     - name: Run E2E Tests
