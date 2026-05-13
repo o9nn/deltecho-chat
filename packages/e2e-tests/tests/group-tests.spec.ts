@@ -19,6 +19,10 @@ let existingProfiles: User[] = [];
 const numberOfProfiles = 3;
 
 test.beforeAll(async ({ browser }) => {
+  // Profile provisioning can legitimately take more than Playwright's default
+  // 30s hook timeout because it creates multiple CI chatmail accounts.
+  test.setTimeout(180_000);
+
   // Use try-finally to ensure context is properly cleaned up
   const context = await browser.newContext();
   const page = await context.newPage();
@@ -43,6 +47,9 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.afterAll(async ({ browser }) => {
+  // Keep teardown bounded but long enough for account deletion dialogs to settle.
+  test.setTimeout(90_000);
+
   // Use try-finally to ensure context is properly cleaned up
   const context = await browser.newContext();
   const page = await context.newPage();

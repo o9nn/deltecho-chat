@@ -313,7 +313,10 @@ export async function deleteAllProfiles(
   existingProfiles: User[],
 ): Promise<void> {
   if (existingProfiles.length < 1) {
-    throw new Error("Not existing profiles to delete!");
+    console.log(
+      "No existing profiles recorded for cleanup; skipping deletion.",
+    );
+    return;
   }
   for (let i = 0; i < existingProfiles.length; i++) {
     const profileToDelete = existingProfiles[i];
