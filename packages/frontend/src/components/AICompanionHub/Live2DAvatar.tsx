@@ -50,6 +50,14 @@ export interface CognitiveVisualState {
   flow?: number;
   temporalCoherence?: number;
   salience?: number;
+  /** Normalized ScientificGeniusEngine / entelechy activation projected into Live2D. */
+  scientificGenius?: number;
+  /** Emergent insight potential from the scientific-genius / entelechy loop. */
+  insightPotential?: number;
+  /** Self-realization score from the entelechy emergence pathway. */
+  entelechyScore?: number;
+  /** Free-energy pressure; high values sharpen vigilance until insight resolves it. */
+  freeEnergy?: number;
   isProcessing?: boolean;
   isSpeaking?: boolean;
   audioLevel?: number;

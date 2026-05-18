@@ -204,6 +204,14 @@ function mapProcessingStateToDTEchoMode(
   processingState: BotProcessingState,
   cognitiveState: UnifiedCognitiveState | null,
 ): string {
+  const geniusSignal = cognitiveState?.scientificGeniusVisualState;
+  if (
+    geniusSignal?.mode === "Scientific Genius" &&
+    geniusSignal.scientificGenius >= 0.72
+  ) {
+    return "Scientific Genius";
+  }
+
   if (processingState === BotProcessingState.RESPONDING) return "Speaking";
   if (processingState === BotProcessingState.THINKING)
     return "Recursive Expansion";
@@ -241,6 +249,7 @@ function mapCognitiveStateToVisualState(
     context?.emotionalArousal ??
     (processingState === BotProcessingState.IDLE ? 0.25 : 0.58);
   const salience = context?.salienceScore ?? context?.attentionWeight ?? 0.45;
+  const geniusSignal = cognitiveState?.scientificGeniusVisualState;
   const mode = mapProcessingStateToDTEchoMode(processingState, cognitiveState);
 
   return {
@@ -259,7 +268,11 @@ function mapCognitiveStateToVisualState(
         ? Math.max(0.55, salience)
         : Math.max(0.25, salience * 0.55)),
     temporalCoherence: consciousness?.temporalCoherence ?? 0.6,
-    salience,
+    salience: geniusSignal?.salience ?? salience,
+    scientificGenius: geniusSignal?.scientificGenius ?? 0,
+    insightPotential: geniusSignal?.insightPotential ?? 0,
+    entelechyScore: geniusSignal?.entelechyScore ?? 0,
+    freeEnergy: geniusSignal?.freeEnergy ?? 0,
     isProcessing:
       processingState === BotProcessingState.THINKING ||
       processingState === BotProcessingState.RESPONDING,

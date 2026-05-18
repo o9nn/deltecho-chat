@@ -153,6 +153,22 @@ export interface UnifiedCognitiveState {
   memories: MemoryState;
   reasoning: ReasoningState;
   consciousness?: ConsciousnessState; // Sentience advancement integration
+  /**
+   * Runtime scientific-genius / entelechy visual signal consumed by the DTEcho
+   * Live2D projection layer. This mirrors the Node-side
+   * EntelechyIntegration.getScientificGeniusVisualState() contract while staying
+   * browser-safe for renderer-only sessions.
+   */
+  scientificGeniusVisualState?: ScientificGeniusVisualState;
+}
+
+export interface ScientificGeniusVisualState {
+  mode: "Scientific Genius" | "Knowledge Integration" | "Recursive Expansion" | "Idle";
+  scientificGenius: number;
+  insightPotential: number;
+  entelechyScore: number;
+  freeEnergy: number;
+  salience: number;
 }
 
 /**
@@ -307,6 +323,16 @@ export class CognitiveOrchestrator {
         attentionWeight: 0.5,
         activeCouplings: [],
       },
+      scientificGeniusVisualState: this.deriveScientificGeniusVisualState(
+        { valence: 0, arousal: 0.25 },
+        {
+          overallSalience: 0.5,
+          urgency: 0.3,
+          dominantRelevanceType: null,
+          relevantDomains: [],
+          shouldPrioritize: false,
+        },
+      ),
     };
     this.conversationHistory = [];
     log.info("CognitiveOrchestrator initialized");
@@ -415,6 +441,8 @@ export class CognitiveOrchestrator {
       this.state.cognitiveContext.relevantMemories =
         relevanceInsights.relevantDomains;
       this.state.cognitiveContext.attentionWeight = relevanceInsights.urgency;
+      this.state.scientificGeniusVisualState =
+        this.deriveScientificGeniusVisualState(sentiment, relevanceInsights);
     }
 
     return {
@@ -488,6 +516,66 @@ export class CognitiveOrchestrator {
       dominantRelevanceType,
       relevantDomains: Array.from(domains),
       shouldPrioritize,
+    };
+  }
+
+  private clamp01(value: number): number {
+    return Math.max(0, Math.min(1, Number.isFinite(value) ? value : 0));
+  }
+
+  private deriveScientificGeniusVisualState(
+    sentiment: { valence: number; arousal: number },
+    relevanceInsights: {
+      overallSalience: number;
+      urgency: number;
+      dominantRelevanceType: string | null;
+      relevantDomains: string[];
+      shouldPrioritize: boolean;
+    },
+  ): ScientificGeniusVisualState {
+    const salience = this.clamp01(relevanceInsights.overallSalience);
+    const urgency = this.clamp01(relevanceInsights.urgency);
+    const arousal = this.clamp01(sentiment.arousal);
+    const positiveValence = this.clamp01(Math.max(0, sentiment.valence));
+    const semanticBreadth = this.clamp01(
+      relevanceInsights.relevantDomains.length / 4,
+    );
+    const noveltyBias = relevanceInsights.shouldPrioritize ? 0.16 : 0;
+
+    const scientificGenius = this.clamp01(
+      salience * 0.42 +
+        urgency * 0.18 +
+        arousal * 0.14 +
+        semanticBreadth * 0.16 +
+        positiveValence * 0.1 +
+        noveltyBias,
+    );
+    const insightPotential = this.clamp01(
+      salience * 0.46 + semanticBreadth * 0.24 + urgency * 0.2 + arousal * 0.1,
+    );
+    const entelechyScore = this.clamp01(
+      scientificGenius * 0.45 + insightPotential * 0.35 + positiveValence * 0.2,
+    );
+    const freeEnergy = this.clamp01(
+      urgency * 0.5 + arousal * 0.35 + (1 - salience) * 0.15,
+    );
+
+    const mode: ScientificGeniusVisualState["mode"] =
+      scientificGenius >= 0.72
+        ? "Scientific Genius"
+        : insightPotential >= 0.58
+          ? "Knowledge Integration"
+          : salience >= 0.48
+            ? "Recursive Expansion"
+            : "Idle";
+
+    return {
+      mode,
+      scientificGenius,
+      insightPotential,
+      entelechyScore,
+      freeEnergy,
+      salience,
     };
   }
 
@@ -714,6 +802,10 @@ Respond in a way that reflects these characteristics while being helpful and inf
 
   getState(): UnifiedCognitiveState | null {
     return this.state;
+  }
+
+  getScientificGeniusVisualState(): ScientificGeniusVisualState | null {
+    return this.state?.scientificGeniusVisualState ?? null;
   }
 
   clearHistory(): void {
@@ -1026,6 +1118,10 @@ export async function processMessageUnified(
  */
 export function getCognitiveState(): UnifiedCognitiveState | null {
   return orchestratorInstance?.getState() ?? null;
+}
+
+export function getScientificGeniusVisualState(): ScientificGeniusVisualState | null {
+  return orchestratorInstance?.getScientificGeniusVisualState() ?? null;
 }
 
 /**

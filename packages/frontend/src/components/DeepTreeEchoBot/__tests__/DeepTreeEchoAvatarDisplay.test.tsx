@@ -29,10 +29,12 @@ jest.mock("../../AICompanionHub/Live2DAvatar", () => ({
     width,
     height,
     model,
+    cognitiveVisualState,
   }: any) => (
     <div
       data-testid="mock-live2d-avatar"
       data-emotional-state={JSON.stringify(emotionalState)}
+      data-cognitive-visual-state={JSON.stringify(cognitiveVisualState)}
       data-audio-level={audioLevel}
       data-is-speaking={isSpeaking}
       data-width={width}
@@ -365,6 +367,54 @@ describe("DeepTreeEchoAvatarDisplay", () => {
         );
         // Negative valence should set concern
         expect(emotionalState.concern).toBe(0.6);
+      });
+    });
+
+
+    it("should forward scientific-genius visual signal into Live2D cognitive state", async () => {
+      const mockGetState = jest.fn().mockReturnValue({
+        cognitiveContext: {
+          emotionalValence: 0.35,
+          emotionalArousal: 0.74,
+          salienceScore: 0.88,
+          relevantMemories: ["hypothesis", "proof"],
+          attentionWeight: 0.67,
+          activeCouplings: ["entelechy", "scientific-genius"],
+        },
+        scientificGeniusVisualState: {
+          mode: "Scientific Genius",
+          scientificGenius: 0.92,
+          insightPotential: 0.81,
+          entelechyScore: 0.76,
+          freeEnergy: 0.24,
+          salience: 0.88,
+        },
+      });
+
+      (CognitiveBridge.getOrchestrator as jest.Mock).mockReturnValue({
+        getState: mockGetState,
+      });
+
+      render(
+        <DeepTreeEchoAvatarProvider>
+          <DeepTreeEchoAvatarDisplay
+            processingState={AvatarProcessingState.THINKING}
+          />
+        </DeepTreeEchoAvatarProvider>,
+      );
+
+      await waitFor(() => {
+        const avatar = screen.getByTestId("mock-live2d-avatar");
+        const visualState = JSON.parse(
+          avatar.getAttribute("data-cognitive-visual-state") || "{}",
+        );
+
+        expect(visualState.mode).toBe("Scientific Genius");
+        expect(visualState.currentState).toBe("Scientific Genius");
+        expect(visualState.scientificGenius).toBe(0.92);
+        expect(visualState.insightPotential).toBe(0.81);
+        expect(visualState.entelechyScore).toBe(0.76);
+        expect(visualState.freeEnergy).toBe(0.24);
       });
     });
 
