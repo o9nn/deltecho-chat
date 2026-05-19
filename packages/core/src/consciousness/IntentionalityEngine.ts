@@ -372,6 +372,7 @@ export class IntentionalityEngine {
       this.updateGoals();
       this.updateConativeCoherence();
     }, this.DRIVE_UPDATE_INTERVAL);
+    (this.updateInterval as unknown as { unref?: () => void }).unref?.();
   }
 
   /**

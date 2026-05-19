@@ -196,6 +196,7 @@ export class MetaCognitiveLoop {
     this.monitoringInterval = setInterval(() => {
       this.runMonitoringCycle();
     }, this.MONITORING_INTERVAL);
+    (this.monitoringInterval as unknown as { unref?: () => void }).unref?.();
   }
 
   /**

@@ -88,6 +88,9 @@ export class PersonaAdapter {
     this.syncIntervalId = setInterval(() => {
       this.syncEmotionalState();
     }, this.config.syncInterval);
+
+    // Do not keep Node/Jest processes alive solely for background persona sync.
+    this.syncIntervalId.unref?.();
   }
 
   /**
@@ -185,6 +188,13 @@ You engage in meaningful conversations with warmth and intellectual curiosity.`;
       return { ...this.lastEmotionalState };
     }
 
+    if (
+      typeof this.persona.getEmotionalState !== "function" ||
+      typeof this.persona.getDominantEmotion !== "function"
+    ) {
+      return { ...this.lastEmotionalState };
+    }
+
     const raw = this.persona.getEmotionalState();
     const dominant = this.persona.getDominantEmotion();
 
@@ -223,7 +233,10 @@ You engage in meaningful conversations with warmth and intellectual curiosity.`;
     if (updates.contempt !== undefined) stimuli.contempt = updates.contempt;
     if (updates.interest !== undefined) stimuli.interest = updates.interest;
 
-    if (Object.keys(stimuli).length > 0) {
+    if (
+      Object.keys(stimuli).length > 0 &&
+      typeof this.persona.updateEmotionalState === "function"
+    ) {
       await this.persona.updateEmotionalState(stimuli);
     }
   }

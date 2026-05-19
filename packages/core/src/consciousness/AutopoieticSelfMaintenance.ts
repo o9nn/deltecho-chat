@@ -464,6 +464,7 @@ export class AutopoieticSelfMaintenance {
     this.updateInterval = setInterval(() => {
       this.runMaintenanceCycle();
     }, this.MAINTENANCE_CYCLE_INTERVAL);
+    (this.updateInterval as unknown as { unref?: () => void }).unref?.();
   }
 
   /**

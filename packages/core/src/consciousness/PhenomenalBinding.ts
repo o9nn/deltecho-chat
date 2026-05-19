@@ -227,6 +227,7 @@ export class PhenomenalBinding {
     this.updateInterval = setInterval(() => {
       this.runBindingCycle();
     }, period);
+    (this.updateInterval as unknown as { unref?: () => void }).unref?.();
   }
 
   /**

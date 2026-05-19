@@ -39,6 +39,7 @@ export function getDefaultState() {
     deepTreeEchoBotReflections: "",
     deepTreeEchoBotCognitiveKeys: "",
     deepTreeEchoBotUseParallelProcessing: true,
+    deepTreeEchoBotScientificGeniusMode: false,
     deepTreeEchoBotProactiveEnabled: true,
     deepTreeEchoBotAvatarEnabled: true,
     galleryImageKeepAspectRatio: false,

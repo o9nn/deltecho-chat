@@ -120,6 +120,7 @@ export class AgentCoordinator extends EventEmitter {
   private taskQueue: string[] = [];
   private running = false;
   private processInterval: NodeJS.Timeout | null = null;
+  private processingQueue = false;
 
   constructor(config: Partial<CoordinatorConfig> = {}) {
     super();
@@ -302,8 +303,12 @@ export class AgentCoordinator extends EventEmitter {
     log.info("Starting Agent Coordinator...");
     this.running = true;
 
-    // Start task processing loop
-    this.processInterval = setInterval(() => this.processTaskQueue(), 100);
+    // Start task processing loop. Keep the interval as a safety net, but
+    // also drain immediately when tasks are created so CI/load tests are not
+    // dependent on coarse timer ticks under heavy Jest worker pressure.
+    this.processInterval = setInterval(() => void this.processTaskQueue(), 50);
+    this.processInterval.unref?.();
+    void this.processTaskQueue();
 
     this.emit("started", { timestamp: Date.now() });
     log.info("Agent Coordinator started");
@@ -416,6 +421,15 @@ export class AgentCoordinator extends EventEmitter {
     this.emit("task_created", task);
     log.info(`Created task: ${taskId} - ${description}`);
 
+    if (this.running) {
+      // Defer draining until the next turn so bursts of synchronously-created
+      // tasks are sorted together by priority before any low-priority task can
+      // begin execution. This preserves deterministic priority semantics while
+      // still draining immediately under load instead of waiting for the
+      // interval safety net.
+      setImmediate(() => void this.processTaskQueue()).unref?.();
+    }
+
     return task;
   }
 
@@ -423,32 +437,60 @@ export class AgentCoordinator extends EventEmitter {
    * Process the task queue
    */
   private async processTaskQueue(): Promise<void> {
-    if (this.taskQueue.length === 0) return;
+    if (this.processingQueue || !this.running) return;
+    this.processingQueue = true;
 
-    // Get pending tasks up to max concurrent
-    const activeTasks = Array.from(this.tasks.values()).filter(
-      (t) => t.status === "in_progress",
-    );
+    try {
+      // Drain as many pending tasks as the configured concurrency allows.
+      // The previous single-task-per-100ms tick bottleneck caused the
+      // high-volume integration test to complete only one task under CI load
+      // despite maxConcurrentTasks being greater than one.
+      while (this.running && this.taskQueue.length > 0) {
+        const activeTasks = Array.from(this.tasks.values()).filter(
+          (t) => t.status === "in_progress" || t.status === "assigned",
+        );
+        const availableSlots =
+          this.config.maxConcurrentTasks - activeTasks.length;
 
-    if (activeTasks.length >= this.config.maxConcurrentTasks) return;
+        if (availableSlots <= 0) return;
 
-    // Sort by priority
-    const priorityOrder = { critical: 0, high: 1, medium: 2, low: 3 };
-    this.taskQueue.sort((a, b) => {
-      const taskA = this.tasks.get(a);
-      const taskB = this.tasks.get(b);
-      if (!taskA || !taskB) return 0;
-      return priorityOrder[taskA.priority] - priorityOrder[taskB.priority];
-    });
+        const priorityOrder = { critical: 0, high: 1, medium: 2, low: 3 };
+        this.taskQueue.sort((a, b) => {
+          const taskA = this.tasks.get(a);
+          const taskB = this.tasks.get(b);
+          if (!taskA || !taskB) return 0;
+          return priorityOrder[taskA.priority] - priorityOrder[taskB.priority];
+        });
 
-    // Process next task
-    const taskId = this.taskQueue.shift();
-    if (!taskId) return;
+        const tasksToRun: Task[] = [];
+        while (
+          tasksToRun.length < availableSlots &&
+          this.taskQueue.length > 0
+        ) {
+          const taskId = this.taskQueue.shift();
+          if (!taskId) break;
 
-    const task = this.tasks.get(taskId);
-    if (!task || task.status !== "pending") return;
+          const task = this.tasks.get(taskId);
+          if (task?.status === "pending") {
+            tasksToRun.push(task);
+          }
+        }
 
-    await this.executeTask(task);
+        if (tasksToRun.length === 0) return;
+
+        void Promise.all(
+          tasksToRun.map((task) => this.executeTask(task)),
+        ).finally(() => {
+          if (this.running && this.taskQueue.length > 0) {
+            setImmediate(() => void this.processTaskQueue()).unref?.();
+          }
+        });
+
+        return;
+      }
+    } finally {
+      this.processingQueue = false;
+    }
   }
 
   /**
@@ -562,8 +604,11 @@ export class AgentCoordinator extends EventEmitter {
       timestamp: startTime,
     });
 
-    // Simulate processing based on task type
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    // Simulate processing based on task type. Use a shorter deterministic
+    // delay in test environments so high-volume CI tests exercise scheduling
+    // semantics rather than wall-clock timer contention.
+    const processingDelayMs = process.env.NODE_ENV === "test" ? 20 : 100;
+    await new Promise((resolve) => setTimeout(resolve, processingDelayMs));
 
     // Generate result based on task type
     const output: Record<string, unknown> = {

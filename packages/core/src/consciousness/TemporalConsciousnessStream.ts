@@ -234,6 +234,7 @@ export class TemporalConsciousnessStream {
     this.tickInterval = setInterval(() => {
       this.processTick();
     }, 100); // 10 Hz internal clock
+    (this.tickInterval as unknown as { unref?: () => void }).unref?.();
   }
 
   /**

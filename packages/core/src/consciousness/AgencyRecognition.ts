@@ -324,6 +324,7 @@ export class AgencyRecognition {
     this.updateInterval = setInterval(() => {
       this.runAgencyCycle();
     }, 500);
+    (this.updateInterval as unknown as { unref?: () => void }).unref?.();
   }
 
   /**

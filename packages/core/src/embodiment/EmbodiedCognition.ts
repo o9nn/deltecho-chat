@@ -262,6 +262,7 @@ export class EmbodiedCognition {
     this.updateInterval = setInterval(() => {
       this.update();
     }, intervalMs);
+    (this.updateInterval as unknown as { unref?: () => void }).unref?.();
   }
 
   /**
