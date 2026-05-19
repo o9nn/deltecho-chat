@@ -370,7 +370,6 @@ describe("DeepTreeEchoAvatarDisplay", () => {
       });
     });
 
-
     it("should forward scientific-genius visual signal into Live2D cognitive state", async () => {
       const mockGetState = jest.fn().mockReturnValue({
         cognitiveContext: {
