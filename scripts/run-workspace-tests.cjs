@@ -61,3 +61,9 @@ for (const pkg of packages) {
 }
 
 console.log("\n=== [deltecho-test] all workspace test packages passed ===");
+
+// Explicitly terminate the runner after a fully successful pass. Some package
+// test frameworks leave benign handles in their own child processes; although
+// each child is executed serially, GitHub Actions can still keep the parent step
+// open if inherited stdio or signal forwarding leaves a dangling descriptor.
+process.exit(0);

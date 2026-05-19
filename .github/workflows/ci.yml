@@ -46,6 +46,7 @@ jobs:
         run: pnpm check
 
       - name: Unit Tests
+        timeout-minutes: 30
         run: pnpm test
 
       - name: Build for E2E
