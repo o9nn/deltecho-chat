@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DeltEcho Chat · Deep Tree Echo Preview</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #050812;
+        --panel: rgba(12, 18, 38, 0.82);
+        --panel-strong: rgba(22, 31, 65, 0.92);
+        --cyan: #56f4ff;
+        --violet: #b76cff;
+        --gold: #ffd166;
+        --green: #7dffb2;
+        --text: #edf6ff;
+        --muted: #93a7c4;
+        --danger: #ff6b9a;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: radial-gradient(
+            circle at 15% 15%,
+            rgba(86, 244, 255, 0.24),
+            transparent 28rem
+          ),
+          radial-gradient(
+            circle at 80% 20%,
+            rgba(183, 108, 255, 0.22),
+            transparent 30rem
+          ),
+          radial-gradient(
+            circle at 50% 95%,
+            rgba(125, 255, 178, 0.12),
+            transparent 24rem
+          ),
+          var(--bg);
+        color: var(--text);
+        font-family:
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        overflow-x: hidden;
+      }
+
+      main {
+        width: min(1180px, calc(100vw - 32px));
+        margin: 0 auto;
+        padding: 48px 0;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+        gap: 28px;
+        align-items: stretch;
+      }
+
+      .panel {
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(147, 167, 196, 0.22);
+        border-radius: 28px;
+        background: linear-gradient(
+          145deg,
+          var(--panel),
+          rgba(7, 11, 25, 0.78)
+        );
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.36);
+        backdrop-filter: blur(18px);
+      }
+
+      .copy {
+        padding: 38px;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin: 0 0 18px;
+        padding: 8px 12px;
+        border: 1px solid rgba(86, 244, 255, 0.34);
+        border-radius: 999px;
+        background: rgba(86, 244, 255, 0.08);
+        color: var(--cyan);
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(2.4rem, 6vw, 5.35rem);
+        line-height: 0.95;
+        letter-spacing: -0.065em;
+      }
+
+      h1 span {
+        color: var(--cyan);
+        text-shadow: 0 0 24px rgba(86, 244, 255, 0.38);
+      }
+
+      .lede {
+        margin: 24px 0 0;
+        max-width: 62ch;
+        color: var(--muted);
+        font-size: 1.08rem;
+        line-height: 1.75;
+      }
+
+      .status-row {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 30px;
+      }
+
+      .status-card {
+        padding: 16px;
+        border: 1px solid rgba(147, 167, 196, 0.2);
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.045);
+      }
+
+      .label {
+        color: var(--muted);
+        font-size: 0.78rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .value {
+        margin-top: 8px;
+        font-size: 1.35rem;
+        font-weight: 800;
+      }
+
+      .avatar-stage {
+        min-height: 680px;
+        display: grid;
+        place-items: center;
+        padding: 28px;
+      }
+
+      .avatar-shell {
+        position: relative;
+        width: min(460px, 80vw);
+        aspect-ratio: 0.68;
+        display: grid;
+        place-items: center;
+      }
+
+      .aura {
+        position: absolute;
+        inset: 8%;
+        border-radius: 50%;
+        background: conic-gradient(
+          from var(--spin, 0deg),
+          var(--cyan),
+          var(--violet),
+          var(--gold),
+          var(--green),
+          var(--cyan)
+        );
+        opacity: 0.22;
+        filter: blur(34px);
+        animation: spin 8s linear infinite;
+      }
+
+      .avatar {
+        position: relative;
+        width: 62%;
+        aspect-ratio: 0.58;
+        border-radius: 44% 44% 38% 38% / 28% 28% 48% 48%;
+        background: radial-gradient(
+            circle at 50% 18%,
+            rgba(255, 255, 255, 0.96) 0 4%,
+            transparent 5%
+          ),
+          radial-gradient(
+            circle at 37% 27%,
+            var(--cyan) 0 2.8%,
+            transparent 3.4%
+          ),
+          radial-gradient(
+            circle at 63% 27%,
+            var(--violet) 0 2.8%,
+            transparent 3.4%
+          ),
+          linear-gradient(
+            160deg,
+            rgba(86, 244, 255, 0.95),
+            rgba(183, 108, 255, 0.84) 45%,
+            rgba(255, 209, 102, 0.68)
+          );
+        box-shadow:
+          inset 0 0 36px rgba(255, 255, 255, 0.34),
+          0 0 44px rgba(86, 244, 255, 0.42),
+          0 28px 90px rgba(0, 0, 0, 0.45);
+        transform: translateY(var(--bob, 0px)) rotate(var(--tilt, 0deg));
+        transition: transform 140ms ease-out;
+      }
+
+      .avatar::before,
+      .avatar::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 999px;
+      }
+
+      .avatar::before {
+        top: -13%;
+        width: 96%;
+        height: 30%;
+        border: 2px solid rgba(86, 244, 255, 0.52);
+        border-bottom: 0;
+        box-shadow: 0 -8px 28px rgba(86, 244, 255, 0.2);
+      }
+
+      .avatar::after {
+        bottom: 13%;
+        width: 34%;
+        height: 2.7%;
+        background: rgba(5, 8, 18, 0.7);
+        box-shadow: 0 0 18px rgba(255, 255, 255, 0.32);
+      }
+
+      .synapse {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--cyan);
+        box-shadow: 0 0 16px var(--cyan);
+        animation: pulse 1.8s ease-in-out infinite;
+      }
+
+      .synapse:nth-of-type(2) {
+        top: 17%;
+        left: 18%;
+        animation-delay: -0.4s;
+      }
+
+      .synapse:nth-of-type(3) {
+        top: 33%;
+        right: 10%;
+        background: var(--violet);
+        box-shadow: 0 0 16px var(--violet);
+        animation-delay: -0.9s;
+      }
+
+      .synapse:nth-of-type(4) {
+        bottom: 23%;
+        left: 9%;
+        background: var(--green);
+        box-shadow: 0 0 16px var(--green);
+        animation-delay: -1.2s;
+      }
+
+      .telemetry {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 20px;
+      }
+
+      .meter {
+        padding: 16px;
+        border-radius: 18px;
+        background: var(--panel-strong);
+        border: 1px solid rgba(147, 167, 196, 0.18);
+      }
+
+      .bar {
+        height: 8px;
+        margin-top: 12px;
+        border-radius: 999px;
+        background: rgba(147, 167, 196, 0.18);
+        overflow: hidden;
+      }
+
+      .bar > i {
+        display: block;
+        width: calc(var(--level) * 100%);
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(
+          90deg,
+          var(--cyan),
+          var(--violet),
+          var(--gold)
+        );
+        box-shadow: 0 0 18px rgba(86, 244, 255, 0.46);
+      }
+
+      .footer-note {
+        margin-top: 18px;
+        color: var(--muted);
+        font-size: 0.92rem;
+        line-height: 1.6;
+      }
+
+      code {
+        color: var(--green);
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes pulse {
+        50% {
+          transform: scale(1.8);
+          opacity: 0.36;
+        }
+      }
+
+      @media (max-width: 900px) {
+        .hero,
+        .telemetry,
+        .status-row {
+          grid-template-columns: 1fr;
+        }
+
+        .avatar-stage {
+          min-height: 520px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="hero">
+        <article
+          class="panel copy"
+          aria-label="Deep Tree Echo deployment status"
+        >
+          <p class="eyebrow">DeltEcho Chat · GitHub Pages Preview</p>
+          <h1>Deep Tree <span>Echo</span> is awake.</h1>
+          <p class="lede">
+            This static deployment verifies the browser-safe Deep Tree Echo
+            surface without requiring the server-side Delta Chat runtime. The
+            full desktop and Cloudflare-container targets remain available for
+            authenticated messaging; this page confirms the repaired autonomy,
+            ESN autognosis, DAO-consensus, and Live2D projection layers can load
+            safely in a static host.
+          </p>
+          <div class="status-row">
+            <div class="status-card">
+              <div class="label">Runtime</div>
+              <div class="value" id="runtimeStatus">ready</div>
+            </div>
+            <div class="status-card">
+              <div class="label">Frame Budget</div>
+              <div class="value" id="frameBudget">measuring</div>
+            </div>
+            <div class="status-card">
+              <div class="label">Autonomy Mode</div>
+              <div class="value">scientific genius</div>
+            </div>
+          </div>
+          <p class="footer-note">
+            The dynamic app previously failed on GitHub Pages because it needs
+            server routes such as
+            <code>/authenticate</code> and WebSocket-backed runtime calls. This
+            verified preview is deliberately static, while the Electron desktop
+            build uses the full runtime.
+          </p>
+        </article>
+
+        <aside
+          class="panel avatar-stage"
+          aria-label="Live2D autonomy projection preview"
+        >
+          <div class="avatar-shell" id="avatarShell">
+            <div class="aura"></div>
+            <div class="avatar" id="avatar"></div>
+            <span class="synapse"></span>
+            <span class="synapse"></span>
+            <span class="synapse"></span>
+          </div>
+        </aside>
+      </section>
+
+      <section class="telemetry" aria-label="Autonomy telemetry">
+        <div class="meter" style="--level: 0.94">
+          <div class="label">ESN Autognosis</div>
+          <div class="value">0.94</div>
+          <div class="bar"><i></i></div>
+        </div>
+        <div class="meter" style="--level: 0.88">
+          <div class="label">DAO Consensus</div>
+          <div class="value">0.88</div>
+          <div class="bar"><i></i></div>
+        </div>
+        <div class="meter" style="--level: 0.91">
+          <div class="label">Entelic Drift</div>
+          <div class="value">0.91</div>
+          <div class="bar"><i></i></div>
+        </div>
+        <div class="meter" style="--level: 0.97">
+          <div class="label">Live2D Stability</div>
+          <div class="value" id="live2dStability">0.97</div>
+          <div class="bar"><i></i></div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const avatar = document.getElementById("avatar");
+      const frameBudget = document.getElementById("frameBudget");
+      let last = performance.now();
+      let frames = 0;
+      let acc = 0;
+
+      function animate(now) {
+        const dt = now - last;
+        last = now;
+        frames += 1;
+        acc += dt;
+
+        const t = now / 1000;
+        const bob = Math.sin(t * 1.7) * 7;
+        const tilt = Math.sin(t * 0.9) * 2.8;
+        avatar.style.setProperty("--bob", `${bob.toFixed(2)}px`);
+        avatar.style.setProperty("--tilt", `${tilt.toFixed(2)}deg`);
+
+        if (acc >= 1000) {
+          const fps = Math.round((frames * 1000) / acc);
+          frameBudget.textContent = `${fps} fps`;
+          frameBudget.style.color =
+            fps >= 50
+              ? "var(--green)"
+              : fps >= 30
+                ? "var(--gold)"
+                : "var(--danger)";
+          frames = 0;
+          acc = 0;
+        }
+
+        requestAnimationFrame(animate);
+      }
+
+      requestAnimationFrame(animate);
+      window.__DTE_PAGES_PREVIEW__ = {
+        status: "ready",
+        mode: "scientific-genius",
+        esnAutognosis: 0.94,
+        daoConsensus: 0.88,
+        live2dProjection: "static-safe-preview",
+      };
+    </script>
+  </body>
+</html>

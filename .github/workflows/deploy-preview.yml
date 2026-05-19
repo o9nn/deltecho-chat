@@ -36,21 +36,21 @@ jobs:
       - name: Build Browser Target
         run: pnpm build:browser
 
+      - name: Prepare static-safe Pages preview
+        run: |
+          mkdir -p packages/target-browser/pages-dist
+          cp -R packages/target-browser/dist/. packages/target-browser/pages-dist/
+          cp packages/target-browser/static-pages/index.html packages/target-browser/pages-dist/index.html
+          cp packages/target-browser/static-pages/index.html packages/target-browser/pages-dist/main.html
+          printf '%s\n' 'Deep Tree Echo static-safe GitHub Pages preview' > packages/target-browser/pages-dist/.nojekyll
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
-
-      # Assuming the build output is in packages/target-browser/dist or similar
-      # Checked package.json scripts:
-      # "build:compose-frontend" -> "node ../../bin/copy.js ../frontend/html-dist ./html-dist"
-      # Usually target-browser outputs to `dist` or `html-dist`.
-      # Let's verify output dir in next steps if needed, but standard is dist.
-      # Looking at scripts, `pnpm build` in target-browser does `pnpm build:locales && pnpm --filter=@deltachat-desktop/frontend build && pnpm build:compose-frontend`
-      # `build:compose-frontend` copies to `./html-dist`.
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "packages/target-browser/dist"
+          path: "packages/target-browser/pages-dist"
 
   deploy:
     environment:
