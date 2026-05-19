@@ -56,6 +56,25 @@ describe("DTEcho expression driver", () => {
     expect(projection.avatarExpression).toBe("focused");
     expect(projection.emotionalState.insight).toBeGreaterThan(0.7);
     expect(projection.cubism[PARAM_IDS.PARAM_BODY_ANGLE_Y]).toBeGreaterThan(2);
+    expect(projection.geniusResonance.activation).toBeGreaterThan(0.65);
+    expect(projection.geniusResonance.haloPulseHz).toBeGreaterThan(2);
+  });
+
+  it("adds DAO/ESN autognosis resonance to scientific-genius pose dynamics", () => {
+    const projection = projectDTEchoCognitiveState({
+      mode: "Scientific Genius",
+      scientificGenius: 0.9,
+      daoConsensus: 0.88,
+      esnCoherence: 0.92,
+      autognosisResonance: 0.86,
+      freeEnergy: 0.28,
+    });
+
+    expect(projection.geniusResonance.description).toContain("ESN Autognosis");
+    expect(projection.geniusResonance.daoConsensus).toBeCloseTo(0.88);
+    expect(projection.geniusResonance.esnCoherence).toBeCloseTo(0.92);
+    expect(projection.cubism[PARAM_IDS.PARAM_ANGLE_X]).toBeGreaterThan(1.5);
+    expect(projection.cubism[PARAM_IDS.PARAM_BODY_ANGLE_Z]).toBeGreaterThan(1);
   });
 
   it("projects speaking state into lip sync and open-vowel expression", () => {

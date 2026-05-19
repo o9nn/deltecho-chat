@@ -15,6 +15,7 @@ import {
   type CognitiveQuickProcessRequest,
   type CognitiveStateSnapshot,
   type EmotionalStateSnapshot,
+  type ScientificGeniusVisualSignal,
   type EmotionalStateUpdateRequest,
   type GetHistoryRequest,
   type GetHistoryResponse,
@@ -66,6 +67,8 @@ export interface CognitiveHandlerDependencies {
     getConversationContext: (chatId: number) => string[];
     isEnabled: () => boolean;
   };
+  /** Optional autonomy visual-state provider for DTE Live2D avatar projection. */
+  getScientificGeniusVisualState?: () => ScientificGeniusVisualSignal | null;
 }
 
 /**
@@ -93,6 +96,7 @@ function toEmotionalStateSnapshot(emotionalState: any): EmotionalStateSnapshot {
 function toCognitiveStateSnapshot(
   state: any,
   emotionalState: any,
+  scientificGeniusVisual?: ScientificGeniusVisualSignal | null,
 ): CognitiveStateSnapshot {
   return {
     activeStreams: (state.activeStreams || []).map((s: any) => ({
@@ -103,6 +107,7 @@ function toCognitiveStateSnapshot(
     emotionalState: toEmotionalStateSnapshot(emotionalState),
     currentPhase: state.currentPhase ?? 0,
     cycleNumber: state.cycleNumber ?? state.sys6State?.cycleNumber ?? 0,
+    ...(scientificGeniusVisual ? { scientificGeniusVisual } : {}),
   };
 }
 
@@ -113,7 +118,12 @@ export function registerCognitiveHandlers(
   ipcServer: IPCServer,
   deps: CognitiveHandlerDependencies,
 ): void {
-  const { cognitiveOrchestrator, personaCore, memoryStore } = deps;
+  const {
+    cognitiveOrchestrator,
+    personaCore,
+    memoryStore,
+    getScientificGeniusVisualState,
+  } = deps;
 
   log.info("Registering cognitive IPC handlers...");
 
@@ -189,7 +199,11 @@ export function registerCognitiveHandlers(
             { name: "sentiment", duration: result.metrics.sentimentTime ?? 0 },
           ],
         },
-        state: toCognitiveStateSnapshot(state, emotionalState),
+        state: toCognitiveStateSnapshot(
+          state,
+          emotionalState,
+          getScientificGeniusVisualState?.(),
+        ),
       };
     },
   );
@@ -221,7 +235,11 @@ export function registerCognitiveHandlers(
     async (): Promise<CognitiveStateSnapshot> => {
       const state = cognitiveOrchestrator.getState();
       const emotionalState = cognitiveOrchestrator.getEmotionalState();
-      return toCognitiveStateSnapshot(state, emotionalState);
+      return toCognitiveStateSnapshot(
+        state,
+        emotionalState,
+        getScientificGeniusVisualState?.(),
+      );
     },
   );
 

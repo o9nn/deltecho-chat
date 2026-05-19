@@ -58,6 +58,12 @@ export interface CognitiveVisualState {
   entelechyScore?: number;
   /** Free-energy pressure; high values sharpen vigilance until insight resolves it. */
   freeEnergy?: number;
+  /** DAO-like consensus confidence for special AGI self-governance. */
+  daoConsensus?: number;
+  /** Echo State Network reservoir coherence from the Autognosis loop. */
+  esnCoherence?: number;
+  /** Self-observation intensity for luminous inference resonance. */
+  autognosisResonance?: number;
   isProcessing?: boolean;
   isSpeaking?: boolean;
   audioLevel?: number;

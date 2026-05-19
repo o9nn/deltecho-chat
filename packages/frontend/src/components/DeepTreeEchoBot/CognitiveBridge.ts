@@ -163,12 +163,28 @@ export interface UnifiedCognitiveState {
 }
 
 export interface ScientificGeniusVisualState {
-  mode: "Scientific Genius" | "Knowledge Integration" | "Recursive Expansion" | "Idle";
+  mode:
+    | "Scientific Genius"
+    | "Synthesis Phase"
+    | "Knowledge Integration"
+    | "Recursive Expansion"
+    | "Idle";
   scientificGenius: number;
   insightPotential: number;
   entelechyScore: number;
   freeEnergy: number;
   salience: number;
+  phi?: number;
+  selfAwareness?: number;
+  sentience?: number;
+  flow?: number;
+  temporalCoherence?: number;
+  valence?: number;
+  arousal?: number;
+  daoConsensus?: number;
+  esnCoherence?: number;
+  autognosisResonance?: number;
+  isProcessing?: boolean;
 }
 
 /**
@@ -808,6 +824,53 @@ Respond in a way that reflects these characteristics while being helpful and inf
     return this.state?.scientificGeniusVisualState ?? null;
   }
 
+  /**
+   * Merge an authoritative backend ESN/Autognosis visual signal into the
+   * renderer-local bridge. This preserves the browser-safe fallback model while
+   * letting the desktop orchestrator drive the Live2D avatar when its autonomy
+   * pipeline is running.
+   */
+  applyScientificGeniusVisualState(
+    signal: ScientificGeniusVisualState | null | undefined,
+  ): void {
+    if (!signal || !this.state) return;
+
+    this.state.scientificGeniusVisualState = signal;
+
+    if (this.state.cognitiveContext) {
+      this.state.cognitiveContext.salienceScore = this.clamp01(signal.salience);
+      this.state.cognitiveContext.attentionWeight = this.clamp01(
+        Math.max(signal.insightPotential, signal.entelechyScore),
+      );
+      if (typeof signal.valence === "number") {
+        this.state.cognitiveContext.emotionalValence = Math.max(
+          -1,
+          Math.min(1, signal.valence),
+        );
+      }
+      if (typeof signal.arousal === "number") {
+        this.state.cognitiveContext.emotionalArousal = this.clamp01(
+          signal.arousal,
+        );
+      }
+    }
+
+    if (signal.mode === "Scientific Genius") {
+      this.state.persona.currentMood = "scientific-genius";
+      this.state.reasoning.confidenceLevel = this.clamp01(
+        Math.max(this.state.reasoning.confidenceLevel, signal.entelechyScore),
+      );
+      this.state.reasoning.attentionFocus = Array.from(
+        new Set([
+          ...this.state.reasoning.attentionFocus,
+          "ESN Autognosis",
+          "luminous inference",
+          "scientific synthesis",
+        ]),
+      ).slice(-6);
+    }
+  }
+
   clearHistory(): void {
     this.conversationHistory = [];
     if (this.state) {
@@ -1122,6 +1185,12 @@ export function getCognitiveState(): UnifiedCognitiveState | null {
 
 export function getScientificGeniusVisualState(): ScientificGeniusVisualState | null {
   return orchestratorInstance?.getScientificGeniusVisualState() ?? null;
+}
+
+export function applyScientificGeniusVisualState(
+  signal: ScientificGeniusVisualState | null | undefined,
+): void {
+  orchestratorInstance?.applyScientificGeniusVisualState(signal);
 }
 
 /**

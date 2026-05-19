@@ -148,6 +148,32 @@ export interface CognitiveQuickProcessResponse {
   response: string;
 }
 
+/** Avatar-ready autonomy signal emitted by the DTE ESN/Autognosis/Entelechy loop. */
+export interface ScientificGeniusVisualSignal {
+  mode:
+    | "Scientific Genius"
+    | "Synthesis Phase"
+    | "Knowledge Integration"
+    | "Recursive Expansion"
+    | "Idle";
+  scientificGenius: number;
+  insightPotential: number;
+  entelechyScore: number;
+  phi: number;
+  selfAwareness: number;
+  sentience: number;
+  flow: number;
+  temporalCoherence: number;
+  salience: number;
+  valence: number;
+  arousal: number;
+  freeEnergy: number;
+  daoConsensus?: number;
+  esnCoherence?: number;
+  autognosisResonance?: number;
+  isProcessing: boolean;
+}
+
 /** Cognitive state snapshot */
 export interface CognitiveStateSnapshot {
   activeStreams: Array<{
@@ -158,6 +184,12 @@ export interface CognitiveStateSnapshot {
   emotionalState: EmotionalStateSnapshot;
   currentPhase: number;
   cycleNumber: number;
+  /**
+   * Rich autonomy/entelechy visual state for DTE Live2D projection. Older clients
+   * can ignore this optional field, while avatar-aware clients can drive Cubism
+   * parameters directly from the real ESN Autognosis loop.
+   */
+  scientificGeniusVisual?: ScientificGeniusVisualSignal;
 }
 
 /** Emotional state snapshot */

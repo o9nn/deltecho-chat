@@ -79,6 +79,9 @@ export interface Live2DCognitiveVisualState {
   insightPotential?: number; // 0..1
   entelechyScore?: number; // 0..1
   freeEnergy?: number; // 0..1
+  daoConsensus?: number; // 0..1
+  esnCoherence?: number; // 0..1
+  autognosisResonance?: number; // 0..1
   isProcessing?: boolean;
   isSpeaking?: boolean;
   audioLevel?: number;

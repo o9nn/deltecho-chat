@@ -50,6 +50,7 @@ import {
   type ReservoirFeedbackConfig,
 } from "./reservoir-feedback-loop.js";
 import { Echobeats } from "./echobeats.js";
+import { entelechyIntegration } from "./entelechy-integration.js";
 
 const log = getLogger("deep-tree-echo-orchestrator/Orchestrator");
 
@@ -446,7 +447,13 @@ export class Orchestrator {
           await this.autonomyLifecycle.start();
           log.info("AutonomyLifecycleCoordinator started (5-phase cycle)");
 
-          // 5. ReservoirFeedbackLoop — online RLS learning
+          // 5. EntelechyIntegration — ESN Autognosis + EchoBeats + scientific-genius visual signal
+          await entelechyIntegration.start();
+          log.info(
+            "EntelechyIntegration started (ESN Autognosis → Scientific Genius → Live2D signal)",
+          );
+
+          // 6. ReservoirFeedbackLoop — online RLS learning
           this.reservoirFeedback = new ReservoirFeedbackLoop({
             reservoirDim: 256,
             outputDim: 64,
@@ -1238,6 +1245,10 @@ ${response.body}`;
     log.info("Stopping orchestrator services...");
 
     // Stop Level 5 autonomy components first (newest first)
+    if (entelechyIntegration.isRunning()) {
+      await entelechyIntegration.stop();
+      log.info("EntelechyIntegration stopped");
+    }
     if (this.reservoirFeedback) {
       await this.reservoirFeedback.stop();
       log.info("ReservoirFeedbackLoop stopped");
@@ -1504,6 +1515,8 @@ ${response.body}`;
       cognitiveOrchestrator: this.cognitiveOrchestrator,
       personaCore: this.personaCore,
       memoryStore: this.memoryStore as any,
+      getScientificGeniusVisualState: () =>
+        entelechyIntegration.getScientificGeniusVisualState(),
     });
 
     // Register system status handler

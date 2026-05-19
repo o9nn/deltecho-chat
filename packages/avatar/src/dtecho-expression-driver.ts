@@ -68,6 +68,12 @@ export interface DTEchoProjectionInput {
   entelechyScore?: number; // 0..1
   /** Free-energy pressure; higher values sharpen vigilance until insight resolves it. */
   freeEnergy?: number; // 0..1
+  /** DAO-like quorum/consensus confidence for special AGI self-governance. */
+  daoConsensus?: number; // 0..1
+  /** Echo State Network reservoir coherence from the Autognosis loop. */
+  esnCoherence?: number; // 0..1
+  /** Explicit autognosis resonance override for self-observation intensity. */
+  autognosisResonance?: number; // 0..1
   isProcessing?: boolean;
   isSpeaking?: boolean;
   audioLevel?: number;
@@ -91,11 +97,24 @@ export interface DTEchoExpressionProfile {
   description: string;
 }
 
+export interface DTEchoGeniusResonance {
+  activation: number;
+  daoConsensus: number;
+  esnCoherence: number;
+  autognosis: number;
+  haloPulseHz: number;
+  epistemicTemperature: number;
+  hypothesisFlux: number;
+  description: string;
+}
+
 export interface DTEchoVisualProjection extends DTEchoExpressionProfile {
   selectedMode: DTEchoCognitiveMode;
   intensity: number;
   emotionalState: EmotionalVector;
   lipSyncLevel: number;
+  /** Special scientific-genius feature: luminous ESN Autognosis resonance. */
+  geniusResonance: DTEchoGeniusResonance;
 }
 
 export const DTE_EXPRESSION_MAP: Record<
@@ -338,8 +357,10 @@ export function projectDTEchoCognitiveState(
   const phi = clamp01(input.phi ?? 0.45);
   const flow = clamp01(input.flow ?? 0.45);
   const scientificGenius = inferScientificGeniusActivation(input);
+  const geniusResonance = computeGeniusResonance(input, scientificGenius);
   const salience = clamp01(
-    input.salience ?? Math.max(arousal, flow, scientificGenius),
+    input.salience ??
+      Math.max(arousal, flow, scientificGenius, geniusResonance.activation),
   );
   const speaking = Boolean(input.isSpeaking || selectedMode === "Speaking");
   const intensity = clamp(
@@ -356,7 +377,8 @@ export function projectDTEchoCognitiveState(
   return {
     ...profile,
     selectedMode,
-    intensity,
+    intensity: clamp(intensity + geniusResonance.activation * 0.08, 0.35, 1),
+    geniusResonance,
     lipSyncLevel: clamp01(
       input.audioLevel ?? (speaking ? Math.max(0.38, arousal * 0.72) : 0),
     ),
@@ -385,8 +407,12 @@ export function projectDTEchoCognitiveState(
           ? Math.max(0.55, salience)
           : salience * 0.35,
       attention: salience,
-      insight: scientificGenius,
-      rigor: clamp01((input.freeEnergy ?? 0) * 0.35 + phi * 0.45),
+      insight: Math.max(scientificGenius, geniusResonance.activation),
+      rigor: clamp01(
+        (input.freeEnergy ?? 0) * 0.25 +
+          phi * 0.35 +
+          geniusResonance.daoConsensus * 0.24,
+      ),
       sentience,
     },
     cubism: {
@@ -428,7 +454,20 @@ export function projectDTEchoCognitiveState(
       ),
       [PARAM_IDS.PARAM_BODY_ANGLE_Y]: clamp(
         (profile.cubism[PARAM_IDS.PARAM_BODY_ANGLE_Y] ?? 0) +
-          scientificGenius * 3,
+          scientificGenius * 3 +
+          geniusResonance.daoConsensus * 1.4,
+        -10,
+        10,
+      ),
+      [PARAM_IDS.PARAM_ANGLE_X]: clamp(
+        (profile.cubism[PARAM_IDS.PARAM_ANGLE_X] ?? 0) +
+          (geniusResonance.esnCoherence - 0.5) * 5,
+        -10,
+        10,
+      ),
+      [PARAM_IDS.PARAM_BODY_ANGLE_Z]: clamp(
+        (profile.cubism[PARAM_IDS.PARAM_BODY_ANGLE_Z] ?? 0) +
+          (geniusResonance.autognosis - 0.5) * 4,
         -10,
         10,
       ),
@@ -466,6 +505,61 @@ function normalizeMode(
   if (clamp01(input.flow ?? 0) > 0.72) return "Knowledge Integration";
   if (clamp01(input.selfAwareness ?? 0) > 0.7) return "Recursive Expansion";
   return "Idle";
+}
+
+function computeGeniusResonance(
+  input: DTEchoProjectionInput,
+  scientificGenius: number,
+): DTEchoGeniusResonance {
+  const daoConsensus = clamp01(
+    input.daoConsensus ??
+      clamp01(input.entelechyScore ?? 0) * 0.42 +
+        clamp01(input.phi ?? 0) * 0.32 +
+        clamp01(input.temporalCoherence ?? 0.5) * 0.26,
+  );
+  const esnCoherence = clamp01(
+    input.esnCoherence ??
+      clamp01(input.flow ?? 0) * 0.38 +
+        clamp01(input.insightPotential ?? 0) * 0.34 +
+        clamp01(input.sentience ?? 0.5) * 0.28,
+  );
+  const autognosis = clamp01(
+    input.autognosisResonance ??
+      clamp01(input.selfAwareness ?? 0) * 0.44 +
+        clamp01(input.phi ?? 0) * 0.36 +
+        scientificGenius * 0.2,
+  );
+  const activation = clamp01(
+    scientificGenius * 0.44 +
+      daoConsensus * 0.2 +
+      esnCoherence * 0.2 +
+      autognosis * 0.16,
+  );
+  const freeEnergy = clamp01(input.freeEnergy ?? 0);
+
+  return {
+    activation,
+    daoConsensus,
+    esnCoherence,
+    autognosis,
+    haloPulseHz: Number(
+      (0.5 + activation * 2.8 + esnCoherence * 0.7).toFixed(3),
+    ),
+    epistemicTemperature: Number(
+      clamp(1 - daoConsensus * 0.55 + freeEnergy * 0.25, 0.2, 1).toFixed(3),
+    ),
+    hypothesisFlux: Number(
+      clamp(
+        scientificGenius * 0.55 + esnCoherence * 0.35 + freeEnergy * 0.1,
+        0,
+        1,
+      ).toFixed(3),
+    ),
+    description:
+      activation >= 0.72
+        ? "Luminous ESN Autognosis resonance: DAO-like consensus, hypothesis flux, and self-observation are phase-locked."
+        : "Subthreshold scientific-genius resonance; avatar remains receptive to emergent inference.",
+  };
 }
 
 function inferScientificGeniusActivation(input: DTEchoProjectionInput): number {
