@@ -27,7 +27,7 @@
     "build": "tsc",
     "check:types": "tsc --noEmit",
     "clean": "rm -rf dist",
-    "test": "jest",
+    "test": "jest --runInBand --forceExit",
     "test:coverage": "jest --coverage"
   },
   "keywords": [

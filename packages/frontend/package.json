@@ -16,7 +16,7 @@
     "watch:types": "npx tsc --noEmit --pretty -w --preserveWatchOutput",
     "watch:static": "node ../../bin/copy.js ../../static ./html-dist -w & node ../../bin/copy.js ./static ./html-dist -w & node ../../bin/copy.js ../../images ./html-dist/images -w",
     "watch:scss": "pnpm build:scss --watch",
-    "test": "jest",
+    "test": "jest --runInBand --forceExit",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"
   },

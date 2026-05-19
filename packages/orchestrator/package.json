@@ -24,7 +24,7 @@
     "dev": "tsc && node dist/bin/daemon.js",
     "check:types": "tsc --noEmit",
     "clean": "rm -rf dist",
-    "test": "jest",
+    "test": "jest --runInBand --forceExit",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"
   },

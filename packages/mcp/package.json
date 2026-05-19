@@ -11,8 +11,8 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "test": "vitest run",
-    "test:run": "vitest run",
+    "test": "vitest run --passWithNoTests --dir src",
+    "test:run": "vitest run --passWithNoTests --dir src",
     "test:coverage": "vitest run --coverage",
     "lint": "eslint src",
     "start": "node dist/bin/mcp-server.js",

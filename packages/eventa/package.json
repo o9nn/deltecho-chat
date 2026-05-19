@@ -29,7 +29,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "test": "jest",
+    "test": "jest --runInBand --forceExit",
     "check:types": "tsc --noEmit"
   },
   "dependencies": {},
