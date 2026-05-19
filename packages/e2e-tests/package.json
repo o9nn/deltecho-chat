@@ -9,6 +9,7 @@
   },
   "scripts": {
     "e2e": "pnpm exec playwright test",
+    "e2e:ci": "pnpm exec playwright test tests/streaming-lipsync.spec.ts tests/cognitive-integration.spec.ts tests/deep-tree-echo-chat.spec.ts tests/cognitive-memory.spec.ts tests/orchestrator-integration.spec.ts",
     "e2e:report": "pnpm exec playwright show-report"
   }
 }

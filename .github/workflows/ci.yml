@@ -59,7 +59,7 @@ jobs:
 
       - name: Run E2E Tests
         timeout-minutes: 10
-        run: pnpm --filter=e2e-tests e2e
+        run: pnpm --filter=e2e-tests e2e:ci
         env:
           CI: true
 
