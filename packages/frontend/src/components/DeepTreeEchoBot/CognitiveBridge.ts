@@ -575,6 +575,24 @@ export class CognitiveOrchestrator {
     const freeEnergy = this.clamp01(
       urgency * 0.5 + arousal * 0.35 + (1 - salience) * 0.15,
     );
+    const daoConsensus = this.clamp01(
+      entelechyScore * 0.38 +
+        salience * 0.24 +
+        semanticBreadth * 0.2 +
+        positiveValence * 0.18,
+    );
+    const esnCoherence = this.clamp01(
+      salience * 0.32 +
+        insightPotential * 0.28 +
+        semanticBreadth * 0.22 +
+        (1 - freeEnergy) * 0.18,
+    );
+    const autognosisResonance = this.clamp01(
+      scientificGenius * 0.34 +
+        daoConsensus * 0.26 +
+        esnCoherence * 0.24 +
+        arousal * 0.16,
+    );
 
     const mode: ScientificGeniusVisualState["mode"] =
       scientificGenius >= 0.72
@@ -592,6 +610,9 @@ export class CognitiveOrchestrator {
       entelechyScore,
       freeEnergy,
       salience,
+      daoConsensus,
+      esnCoherence,
+      autognosisResonance,
     };
   }
 
@@ -858,7 +879,12 @@ Respond in a way that reflects these characteristics while being helpful and inf
     if (signal.mode === "Scientific Genius") {
       this.state.persona.currentMood = "scientific-genius";
       this.state.reasoning.confidenceLevel = this.clamp01(
-        Math.max(this.state.reasoning.confidenceLevel, signal.entelechyScore),
+        Math.max(
+          this.state.reasoning.confidenceLevel,
+          signal.entelechyScore,
+          signal.daoConsensus ?? 0,
+          signal.esnCoherence ?? 0,
+        ),
       );
       this.state.reasoning.attentionFocus = Array.from(
         new Set([

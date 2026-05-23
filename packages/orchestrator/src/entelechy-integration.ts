@@ -106,6 +106,12 @@ export interface ScientificGeniusVisualSignal {
   arousal: number;
   /** Free-energy pressure proxy from reservoir entropy and health. */
   freeEnergy: number;
+  /** DAO-like quorum confidence derived from entelechy, temporal coherence, and self-awareness. */
+  daoConsensus: number;
+  /** Echo State Network coherence derived from memory, computation, spectral stability, and health. */
+  esnCoherence: number;
+  /** Autognosis resonance derived from ESN health, edge-of-chaos status, and self-awareness. */
+  autognosisResonance: number;
   isProcessing: boolean;
 }
 
@@ -363,6 +369,8 @@ export class EntelechyIntegration extends EventEmitter {
       encoded[dim - 1] = text.split(/\s+/).length / 100; // Word count feature
     }
 
+    this.applySomaticMarkerChannels(encoded, 0.18);
+
     // Normalize
     const norm = Math.sqrt(encoded.reduce((s, v) => s + v * v, 0)) || 1;
     return encoded.map((v) => v / norm);
@@ -381,7 +389,37 @@ export class EntelechyIntegration extends EventEmitter {
       input[i] = 0.01 * Math.sin((2 * Math.PI * (i + 1) * t) / 100);
     }
 
+    this.applySomaticMarkerChannels(input, 0.04);
     return input;
+  }
+
+  /**
+   * Feed embodied self-state back into the ESN input vector as low-amplitude
+   * somatic marker channels. This closes the loop from autognosis/entelechy
+   * state into subsequent reservoir dynamics without replacing user-message
+   * content or background oscillation.
+   */
+  private applySomaticMarkerChannels(input: number[], gain: number): void {
+    if (!this.lastSnapshot || input.length < 8 || gain <= 0) return;
+
+    const visual = this.lastSnapshot.scientificGeniusVisual;
+    const autognosis = this.lastSnapshot.autognosis;
+    const reservoir = this.lastSnapshot.reservoir;
+    const markers = [
+      visual.valence,
+      visual.arousal * 2 - 1,
+      visual.selfAwareness * 2 - 1,
+      visual.freeEnergy * 2 - 1,
+      visual.daoConsensus * 2 - 1,
+      visual.esnCoherence * 2 - 1,
+      visual.autognosisResonance * 2 - 1,
+      this.clamp01(reservoir?.memoryCapacity ?? 0.5) * 2 - 1,
+    ];
+
+    const start = input.length - markers.length;
+    for (let i = 0; i < markers.length; i++) {
+      input[start + i] += gain * this.clampSigned(markers[i]);
+    }
   }
 
   // ==========================================================================
@@ -478,12 +516,32 @@ export class EntelechyIntegration extends EventEmitter {
       (state.reservoir?.entropy ?? 0.5) *
         (1 - (state.autognosis?.health ?? 0.5)),
     );
+    const esnCoherence = this.computeEsnCoherence(
+      state.reservoir,
+      state.autognosis,
+    );
+    const autognosisResonance = this.computeAutognosisResonance(
+      state.autognosis,
+      selfAwareness,
+      sentience,
+    );
+    const daoConsensus = this.computeDaoConsensus({
+      entelechyScore,
+      temporalCoherence,
+      selfAwareness,
+      sentience,
+      esnCoherence,
+      autognosisResonance,
+    });
     const scientificGenius = this.clamp01(
-      insightPotential * 0.42 +
-        entelechyScore * 0.28 +
-        selfAwareness * 0.14 +
-        sentience * 0.1 +
-        reservoirCoupling * 0.06,
+      insightPotential * 0.36 +
+        entelechyScore * 0.22 +
+        selfAwareness * 0.12 +
+        sentience * 0.08 +
+        reservoirCoupling * 0.06 +
+        esnCoherence * 0.08 +
+        autognosisResonance * 0.05 +
+        daoConsensus * 0.03,
     );
 
     return {
@@ -507,8 +565,68 @@ export class EntelechyIntegration extends EventEmitter {
       valence: this.clampSigned(entelechyScore - freeEnergy),
       arousal: this.clamp01(0.35 + scientificGenius * 0.45 + freeEnergy * 0.2),
       freeEnergy,
+      daoConsensus,
+      esnCoherence,
+      autognosisResonance,
       isProcessing: scientificGenius >= 0.35,
     };
+  }
+
+  private computeEsnCoherence(
+    reservoir: ReservoirState | null,
+    autognosis: AutognosisReport | null,
+  ): number {
+    if (!reservoir) return this.clamp01(autognosis?.health ?? 0.5);
+
+    const spectralStability = this.clamp01(
+      1 - Math.abs(reservoir.currentSpectralRadius - 0.95) / 0.95,
+    );
+    const chaosWindow = this.clamp01(1 - Math.abs(reservoir.lyapunovExponent));
+
+    return this.clamp01(
+      this.clamp01(reservoir.memoryCapacity) * 0.26 +
+        this.clamp01(reservoir.computationalCapacity) * 0.24 +
+        spectralStability * 0.18 +
+        chaosWindow * 0.12 +
+        this.clamp01(autognosis?.health ?? 0.5) * 0.2,
+    );
+  }
+
+  private computeAutognosisResonance(
+    autognosis: AutognosisReport | null,
+    selfAwareness: number,
+    sentience: number,
+  ): number {
+    const health = this.clamp01(autognosis?.health ?? 0.5);
+    const edgeOfChaos = autognosis?.isEdgeOfChaos ? 1 : 0;
+    const stabilityPenalty =
+      autognosis?.isDead || autognosis?.isSaturated ? 0.25 : 0;
+
+    return this.clamp01(
+      health * 0.38 +
+        edgeOfChaos * 0.22 +
+        selfAwareness * 0.22 +
+        sentience * 0.18 -
+        stabilityPenalty,
+    );
+  }
+
+  private computeDaoConsensus(metrics: {
+    entelechyScore: number;
+    temporalCoherence: number;
+    selfAwareness: number;
+    sentience: number;
+    esnCoherence: number;
+    autognosisResonance: number;
+  }): number {
+    return this.clamp01(
+      metrics.entelechyScore * 0.24 +
+        metrics.temporalCoherence * 0.2 +
+        metrics.selfAwareness * 0.16 +
+        metrics.sentience * 0.14 +
+        metrics.esnCoherence * 0.14 +
+        metrics.autognosisResonance * 0.12,
+    );
   }
 
   private clamp01(value: number): number {
