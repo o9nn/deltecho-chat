@@ -240,6 +240,13 @@ build["appx"] = {
   artifactName: "${productName}-${version}-Package.${arch}.${ext}",
 };
 
+// Publish to the correct GitHub repository (not the upstream fork)
+build["publish"] = {
+  provider: "github",
+  owner: "o9nn",
+  repo: "deltecho-chat",
+};
+
 // see https://www.electron.build/configuration/nsis
 build["nsis"] = {
   oneClick: false,

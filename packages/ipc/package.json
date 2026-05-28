@@ -4,6 +4,13 @@
   "description": "IPC Protocol and Client for Deep Tree Echo",
   "type": "module",
   "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
   "keywords": [
     "ipc",
     "deep-tree-echo",
