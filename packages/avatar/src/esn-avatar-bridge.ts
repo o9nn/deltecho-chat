@@ -62,6 +62,16 @@ export interface ReservoirAnimationParams {
     auraIntensity: number;
     auraColor: string;
   };
+  /** Scientific-genius / autognosis resonance overlay for Live2D companion shells */
+  scientificGeniusOverlay: {
+    activation: number; // 0-1
+    daoConsensus: number; // 0-1
+    esnCoherence: number; // 0-1
+    autognosisResonance: number; // 0-1
+    haloPulseHz: number; // Hz
+    epistemicTemperature: number; // 0-1, lower means more consensus
+    hypothesisFlux: number; // 0-1
+  };
   /** Edge-of-chaos indicator */
   edgeOfChaos: {
     isActive: boolean;
@@ -98,6 +108,11 @@ export interface EntelechyInput {
   reservoirCoupling: number;
   temporalSynchrony: number;
   insightPotential: number;
+  scientificGenius?: number;
+  daoConsensus?: number;
+  esnCoherence?: number;
+  autognosisResonance?: number;
+  freeEnergy?: number;
 }
 
 /**
@@ -166,6 +181,15 @@ export class ESNAvatarBridge extends EventEmitter {
         particleSpeed: 0,
         auraIntensity: 0,
         auraColor: "#4a90d9",
+      },
+      scientificGeniusOverlay: {
+        activation: 0,
+        daoConsensus: 0,
+        esnCoherence: 0,
+        autognosisResonance: 0,
+        haloPulseHz: 0.5,
+        epistemicTemperature: 1,
+        hypothesisFlux: 0,
       },
       edgeOfChaos: {
         isActive: false,
@@ -252,15 +276,72 @@ export class ESNAvatarBridge extends EventEmitter {
       entelechial: "#aaddff",
     };
 
-    this.currentParams.entelechyVisualization = {
-      level: input.level,
-      particleCount: Math.floor(input.patternCount * 10),
-      particleSpeed: input.insightPotential,
-      auraIntensity: input.score,
-      auraColor: levelColors[input.level] || "#4a90d9",
+    const daoConsensus = clamp01(
+      input.daoConsensus ??
+        input.score * 0.48 + input.temporalSynchrony * 0.52,
+    );
+    const esnCoherence = clamp01(
+      input.esnCoherence ??
+        input.reservoirCoupling * 0.62 + input.temporalSynchrony * 0.38,
+    );
+    const autognosisResonance = clamp01(
+      input.autognosisResonance ??
+        input.score * 0.42 +
+          input.insightPotential * 0.34 +
+          daoConsensus * 0.24,
+    );
+    const scientificGenius = clamp01(
+      input.scientificGenius ??
+        input.insightPotential * 0.42 +
+          esnCoherence * 0.28 +
+          autognosisResonance * 0.3,
+    );
+    const activation = clamp01(
+      scientificGenius * 0.42 +
+        daoConsensus * 0.2 +
+        esnCoherence * 0.2 +
+        autognosisResonance * 0.18,
+    );
+    const freeEnergy = clamp01(input.freeEnergy ?? 1 - daoConsensus);
+
+    this.currentParams.scientificGeniusOverlay = {
+      activation,
+      daoConsensus,
+      esnCoherence,
+      autognosisResonance,
+      haloPulseHz: Number(
+        (0.5 + activation * 2.7 + esnCoherence * 0.6).toFixed(3),
+      ),
+      epistemicTemperature: Number(
+        clamp(1 - daoConsensus * 0.58 + freeEnergy * 0.22, 0.2, 1).toFixed(
+          3,
+        ),
+      ),
+      hypothesisFlux: Number(
+        clamp(
+          scientificGenius * 0.56 + esnCoherence * 0.3 + freeEnergy * 0.14,
+          0,
+          1,
+        ).toFixed(3),
+      ),
     };
 
-    this.emit("entelechy-update", this.currentParams.entelechyVisualization);
+    this.currentParams.entelechyVisualization = {
+      level: input.level,
+      particleCount: Math.floor(input.patternCount * (10 + activation * 6)),
+      particleSpeed: clamp01(input.insightPotential * 0.72 + activation * 0.28),
+      auraIntensity: clamp01(Math.max(input.score, activation * 0.92)),
+      auraColor: this.scientificGeniusColor(
+        levelColors[input.level] || "#4a90d9",
+        activation,
+        daoConsensus,
+      ),
+    };
+
+    this.emit("entelechy-update", {
+      ...this.currentParams.entelechyVisualization,
+      scientificGeniusOverlay: this.currentParams.scientificGeniusOverlay,
+    });
   }
 
   /**
@@ -273,6 +354,22 @@ export class ESNAvatarBridge extends EventEmitter {
   /**
    * Map health and chaos state to glow color
    */
+  private scientificGeniusColor(
+    baseColor: string,
+    activation: number,
+    daoConsensus: number,
+  ): string {
+    if (activation < 0.58) return baseColor;
+
+    const warmth = Math.floor(170 + daoConsensus * 70);
+    const blue = Math.floor(190 + activation * 55);
+    return `#${warmth.toString(16).padStart(2, "0")}${Math.floor(
+      190 + activation * 45,
+    )
+      .toString(16)
+      .padStart(2, "0")}${blue.toString(16).padStart(2, "0")}`;
+  }
+
   private healthToColor(health: number, isEdgeOfChaos: boolean): string {
     if (isEdgeOfChaos) {
       // Golden glow at edge of chaos
@@ -314,9 +411,18 @@ export class ESNAvatarBridge extends EventEmitter {
         0,
       )}%, ` +
       `breath=${p.breathingModulation.rate.toFixed(0)}bpm, ` +
+      `genius=${(p.scientificGeniusOverlay.activation * 100).toFixed(0)}%, ` +
       `entelechy=${p.entelechyVisualization.level}${chaos}`
     );
   }
+}
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.max(min, Math.min(max, value));
+}
+
+function clamp01(value: number): number {
+  return clamp(Number.isFinite(value) ? value : 0, 0, 1);
 }
 
 // Singleton instance

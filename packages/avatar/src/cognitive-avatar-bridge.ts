@@ -50,6 +50,9 @@ export interface CognitiveStateInput {
   insightPotential?: number; // 0-1 Entelechy insight potential
   entelechyScore?: number; // 0-1 Entelechy realization score
   freeEnergy?: number; // 0-1 unresolved surprise/rigor pressure
+  daoConsensus?: number; // 0-1 distributed consensus around current inference
+  esnCoherence?: number; // 0-1 reservoir phase coherence
+  autognosisResonance?: number; // 0-1 self-observation / reservoir resonance
 
   // EchoBeats state
   echoBeatsPhase?: number; // 0-11
@@ -257,6 +260,9 @@ export class CognitiveAvatarBridge extends EventEmitter {
       state.scientificGenius ?? 0,
       state.insightPotential ?? 0,
       state.entelechyScore ?? 0,
+      state.daoConsensus ?? 0,
+      state.esnCoherence ?? 0,
+      state.autognosisResonance ?? 0,
       emotions.interest ?? 0,
     );
     const cognitiveVisualState: Live2DCognitiveVisualState = {
@@ -275,6 +281,9 @@ export class CognitiveAvatarBridge extends EventEmitter {
       insightPotential: state.insightPotential,
       entelechyScore: state.entelechyScore,
       freeEnergy: state.freeEnergy,
+      daoConsensus: state.daoConsensus,
+      esnCoherence: state.esnCoherence,
+      autognosisResonance: state.autognosisResonance,
       isProcessing: state.isProcessing,
       isSpeaking: state.isSpeaking,
       audioLevel: state.audioLevel,
@@ -308,8 +317,17 @@ export class CognitiveAvatarBridge extends EventEmitter {
     const headTilt =
       (emotions.interest || 0) * 15 - (emotions.sadness || 0) * 10;
 
-    // Calculate consciousness glow from sentience level
-    const consciousnessGlow = state.sentienceLevel * state.phi;
+    // Calculate consciousness glow from sentience level, with a small scientific-genius
+    // boost when backend autognosis and DAO consensus are phase-aligned.
+    const resonanceGlow =
+      ((state.daoConsensus ?? 0) +
+        (state.esnCoherence ?? 0) +
+        (state.autognosisResonance ?? 0)) /
+      3;
+    const consciousnessGlow = Math.min(
+      1,
+      state.sentienceLevel * state.phi + resonanceGlow * 0.18,
+    );
 
     return {
       expression,
