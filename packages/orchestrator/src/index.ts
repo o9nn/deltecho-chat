@@ -156,7 +156,10 @@ export type {
   BridgeResponse,
 } from "./deltachat-autonomy-bridge.js";
 export { AutonomyLifecycleCoordinator } from "./autonomy-lifecycle.js";
-export type { AutonomyLifecycleConfig } from "./autonomy-lifecycle.js";
+export type {
+  AutonomyLifecycleConfig,
+  ScientificAutonomySignal,
+} from "./autonomy-lifecycle.js";
 export { ReservoirFeedbackLoop } from "./reservoir-feedback-loop.js";
 export type {
   ReservoirFeedbackConfig,

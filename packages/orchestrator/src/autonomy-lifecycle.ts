@@ -21,7 +21,13 @@
  * with coherence tracking and self-fulfilling prophecy dynamics.
  */
 import { EventEmitter } from "events";
-import { getLogger } from "deep-tree-echo-core";
+import {
+  getLogger,
+  ScientificDomain,
+  type Hypothesis,
+  type ScientificGeniusEngine,
+  type ScientificInsight,
+} from "deep-tree-echo-core";
 import type { CognitiveTickProcessor } from "./cognitive-tick-processor.js";
 import type { Echobeats } from "./echobeats.js";
 import type {
@@ -95,6 +101,25 @@ export interface DevelopmentalCycleResult {
   timestamp: number;
 }
 
+export interface ScientificAutonomySignal {
+  insightPotential: number;
+  averagePhi: number;
+  averageNovelty: number;
+  averageSignificance: number;
+  hypothesisConfidence: number;
+  freeEnergyPressure: number;
+  recentInsightCount: number;
+  lastInsightContent?: string;
+  lastDomain?: ScientificDomain;
+  lastReasoningAt?: number;
+}
+
+interface HypothesisEvaluationEvent {
+  hypothesis: Hypothesis;
+  freeEnergy: number;
+  posterior: number;
+}
+
 /**
  * Lifecycle configuration
  */
@@ -107,6 +132,12 @@ export interface AutonomyLifecycleConfig {
   verbose: boolean;
   /** Maximum cycles before self-assessment */
   selfAssessmentInterval: number;
+  /** Enable optional ScientificGeniusEngine phase hooks when wired. */
+  enableScientificGenius: boolean;
+  /** Minimum complete-cycle interval between lifecycle-driven scientific inquiries. */
+  scientificInquiryInterval: number;
+  /** Maximum recent insights retained as autonomy feedback. */
+  maxScientificInsights: number;
 }
 
 const DEFAULT_CONFIG: AutonomyLifecycleConfig = {
@@ -114,6 +145,9 @@ const DEFAULT_CONFIG: AutonomyLifecycleConfig = {
   coherenceThreshold: 0.6,
   verbose: false,
   selfAssessmentInterval: 10,
+  enableScientificGenius: true,
+  scientificInquiryInterval: 3,
+  maxScientificInsights: 12,
 };
 
 /**
@@ -142,6 +176,14 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
 
   // Reservoir feedback loop (for online learning and avgPredictionError)
   private reservoirFeedback?: ReservoirFeedbackLoop;
+
+  // Scientific Genius feedback (for reflective inquiry and autonomy coherence)
+  private scientificGenius?: ScientificGeniusEngine;
+  private recentScientificInsights: ScientificInsight[] = [];
+  private lastHypothesisEvaluation?: HypothesisEvaluationEvent;
+  private lastScientificInquiryCycle: number = 0;
+  private onScientificInsight?: (event: { insight: ScientificInsight }) => void;
+  private onHypothesisEvaluated?: (event: HypothesisEvaluationEvent) => void;
 
   constructor(
     config: Partial<AutonomyLifecycleConfig> = {},
@@ -252,10 +294,12 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
       this.cycleInterval = undefined;
     }
 
+    this.detachScientificGeniusListeners();
     this.running = false;
+    log.info("Autonomy Lifecycle Coordinator stopped");
     this.emit("stopped");
-    log.info(`Autonomy lifecycle stopped after ${this.cycleCount} cycles`);
   }
+
 
   /**
    * Run a complete developmental cycle
@@ -410,6 +454,12 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
       this.virtualAgent.selfAwareness.perceivedAccuracy = latest.coherenceScore;
     }
 
+    const generatedInsights = await this.runScientificReflectionInquiry(cycleId);
+    const scientificSignal = this.getScientificAutonomySignal();
+    if (scientificSignal.lastInsightContent) {
+      this.integrateScientificInsight(scientificSignal.lastInsightContent);
+    }
+
     return {
       cycleNumber: cycleId,
       phase: "reflection",
@@ -417,6 +467,8 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
       stateChanges: {
         dominantMode: latest?.dominantCognitiveMode ?? "unknown",
         ontogeneticProgress: latest?.ontogeneticProgress ?? 0,
+        scientificInsights: generatedInsights.length,
+        scientificSignal,
       },
       timestamp: Date.now(),
     };
@@ -506,6 +558,7 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
             .length,
         energyModulation,
         echobeatsFeedback: this.echobeats?.isRunning() ?? false,
+        scientificSignal: this.getScientificAutonomySignal(),
       },
       timestamp: Date.now(),
     };
@@ -545,10 +598,12 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
       // Get real avgPredictionError from reservoir feedback loop
       const avgPredictionError =
         this.reservoirFeedback?.getAvgPredictionError() ?? 0;
+      const scientificSignal = this.getScientificAutonomySignal();
+      const scientificPredictionPressure = scientificSignal.freeEnergyPressure * 0.1;
 
       const proposals = this.selfModEngine.proposeModifications(
         coherence,
-        avgPredictionError,
+        avgPredictionError + scientificPredictionPressure,
         activeGoals.length,
         memRatio,
       );
@@ -581,6 +636,7 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
         activeGoals: activeGoals.length,
         selfModifications: modifications.length,
         appliedModifications: appliedMods.length,
+        scientificSignal: this.getScientificAutonomySignal(),
         modificationDetails: appliedMods.map(
           (m) =>
             `${m.key}: ${m.previousValue.toFixed(4)} → ${m.newValue.toFixed(
@@ -593,9 +649,128 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
   }
 
   /**
-   * Compute overall coherence score
+   * Run Scientific Genius reflection at a bounded cadence so the lifecycle can
+   * use explicit hypothesis/insight telemetry without turning every phase into
+   * an expensive inquiry.
    */
-  private computeCoherence(): number {
+  private async runScientificReflectionInquiry(
+    cycleId: number,
+  ): Promise<ScientificInsight[]> {
+    if (
+      !this.config.enableScientificGenius ||
+      !this.scientificGenius ||
+      this.config.scientificInquiryInterval <= 0
+    ) {
+      return [];
+    }
+
+    if (
+      cycleId - this.lastScientificInquiryCycle <
+      this.config.scientificInquiryInterval
+    ) {
+      return [];
+    }
+
+    this.lastScientificInquiryCycle = cycleId;
+    const query = this.buildScientificInquiryQuery();
+    const domain = this.selectScientificDomainForLifecycle();
+
+    try {
+      const insights = await this.scientificGenius.processScientificQuery(
+        query,
+        domain,
+      );
+      this.captureScientificInsights(insights);
+      this.emit("scientific:inquiry_complete", {
+        cycleId,
+        domain,
+        query,
+        insights,
+        signal: this.getScientificAutonomySignal(),
+      });
+      return insights;
+    } catch (error) {
+      this.emit("scientific:inquiry_error", { cycleId, query, error });
+      log.warn("Scientific Genius lifecycle inquiry failed:", error);
+      return [];
+    }
+  }
+
+  private buildScientificInquiryQuery(): string {
+    const coherence = this.computeBaseCoherence();
+    const misalignments = this.identifyMisalignments();
+    const activeQuestions = this.virtualAgent.selfAwareness.activeQuestions;
+    const goals = this.virtualAgent.currentGoals;
+
+    return [
+      "Integrate Deep Tree Echo autonomy lifecycle state",
+      `phase=${this.currentPhase}`,
+      `coherence=${coherence.toFixed(3)}`,
+      `dominantMode=${this.virtualAgent.selfImage.dominantCognitiveMode}`,
+      `ontogeneticProgress=${this.virtualAgent.selfImage.ontogeneticProgress.toFixed(3)}`,
+      `goals=${goals.slice(0, 3).join("; ") || "maintain coherent autonomy"}`,
+      `misalignments=${misalignments.join("; ") || "none"}`,
+      `questions=${activeQuestions.slice(0, 3).join("; ")}`,
+    ].join(" | ");
+  }
+
+  private selectScientificDomainForLifecycle(): ScientificDomain {
+    const misalignments = this.identifyMisalignments();
+    if (misalignments.some((m) => m.includes("memory"))) {
+      return ScientificDomain.Neuroscience;
+    }
+    if (misalignments.some((m) => m.includes("goal"))) {
+      return ScientificDomain.SystemsTheory;
+    }
+    if (this.currentPhase === AutonomyPhase.MIRRORING) {
+      return ScientificDomain.Philosophy;
+    }
+    return ScientificDomain.CognitiveScience;
+  }
+
+  private captureScientificInsights(insights: ScientificInsight[]): void {
+    if (insights.length === 0) return;
+
+    const existingIds = new Set(
+      this.recentScientificInsights.map((insight) => insight.id),
+    );
+    for (const insight of insights) {
+      if (!existingIds.has(insight.id)) {
+        this.recentScientificInsights.push(insight);
+        existingIds.add(insight.id);
+      }
+    }
+
+    const max = Math.max(1, this.config.maxScientificInsights);
+    if (this.recentScientificInsights.length > max) {
+      this.recentScientificInsights = this.recentScientificInsights.slice(-max);
+    }
+  }
+
+  private integrateScientificInsight(content: string): void {
+    const compactInsight =
+      content.length > 220 ? `${content.slice(0, 217)}...` : content;
+
+    if (
+      !this.virtualAgent.perceivedCapabilities.includes("scientific_reasoning")
+    ) {
+      this.virtualAgent.perceivedCapabilities.push("scientific_reasoning");
+    }
+
+    if (!this.virtualAgent.selfStory.includes(compactInsight)) {
+      this.virtualAgent.selfStory = `${this.virtualAgent.selfStory} Scientific reflection: ${compactInsight}`;
+      if (this.virtualAgent.selfStory.length > 1_500) {
+        this.virtualAgent.selfStory = this.virtualAgent.selfStory.slice(-1_500);
+      }
+    }
+
+    this.virtualAgent.selfAwareness.activeQuestions = [
+      `How should I enact this insight: ${compactInsight}`,
+      ...this.virtualAgent.selfAwareness.activeQuestions,
+    ].slice(0, 6);
+  }
+
+  private computeBaseCoherence(): number {
     const cogState = this.cognitiveProcessor?.getState();
     if (!cogState) return 0.5;
 
@@ -609,9 +784,39 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
         : 0.5;
     const selfImageStability = cogState.latestSelfImage?.coherenceScore ?? 0.5;
 
-    return (
-      memoryCoherence * 0.4 + goalEfficiency * 0.3 + selfImageStability * 0.3
+    return this.clamp01(
+      memoryCoherence * 0.4 + goalEfficiency * 0.3 + selfImageStability * 0.3,
     );
+  }
+
+  /**
+   * Compute overall coherence score
+   */
+  private computeCoherence(): number {
+    const baseCoherence = this.computeBaseCoherence();
+    const scientificSignal = this.getScientificAutonomySignal();
+
+    if (!this.scientificGenius || scientificSignal.recentInsightCount === 0) {
+      return baseCoherence;
+    }
+
+    const scientificCoherence = this.clamp01(
+      scientificSignal.averageSignificance * 0.35 +
+        scientificSignal.averageNovelty * 0.2 +
+        this.clamp01(scientificSignal.averagePhi / 10) * 0.25 +
+        scientificSignal.hypothesisConfidence * 0.2,
+    );
+
+    return this.clamp01(
+      baseCoherence * 0.86 +
+        scientificCoherence * 0.14 -
+        scientificSignal.freeEnergyPressure * 0.08,
+    );
+  }
+
+  private clamp01(value: number): number {
+    if (!Number.isFinite(value)) return 0;
+    return Math.min(1, Math.max(0, value));
   }
 
   /**
@@ -698,6 +903,47 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
     return [...this.coherenceHistory];
   }
 
+  public getScientificAutonomySignal(): ScientificAutonomySignal {
+    const insights = this.recentScientificInsights;
+    const count = insights.length;
+    const lastInsight = insights[count - 1];
+
+    const average = (selector: (insight: ScientificInsight) => number): number =>
+      count > 0
+        ? insights.reduce((sum, insight) => sum + selector(insight), 0) / count
+        : 0;
+
+    const averagePhi = average((insight) => insight.phi);
+    const averageNovelty = average((insight) => insight.novelty);
+    const averageSignificance = average((insight) => insight.significance);
+    const hypothesisConfidence = this.clamp01(
+      this.lastHypothesisEvaluation?.posterior ?? 0.5,
+    );
+    const freeEnergyPressure = this.clamp01(
+      (this.lastHypothesisEvaluation?.freeEnergy ?? 0) / 2,
+    );
+    const insightPotential = this.clamp01(
+      averageNovelty * 0.35 +
+        averageSignificance * 0.35 +
+        this.clamp01(averagePhi / 10) * 0.2 +
+        hypothesisConfidence * 0.1 -
+        freeEnergyPressure * 0.05,
+    );
+
+    return {
+      insightPotential,
+      averagePhi,
+      averageNovelty,
+      averageSignificance,
+      hypothesisConfidence,
+      freeEnergyPressure,
+      recentInsightCount: count,
+      lastInsightContent: lastInsight?.content,
+      lastDomain: lastInsight?.domain,
+      lastReasoningAt: lastInsight?.timestamp,
+    };
+  }
+
   public isRunning(): boolean {
     return this.running;
   }
@@ -748,6 +994,59 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
       echobeatsFeedback: this.echobeats?.isRunning() ?? false,
       system5Active: this.echobeats?.isSystem5Active() ?? false,
     };
+  }
+
+  /**
+   * Wire a ScientificGeniusEngine for reflective inquiry, hypothesis evaluation,
+   * and insight telemetry that can bias autonomy coherence and ENACTION tuning.
+   */
+  public wireScientificGenius(engine: ScientificGeniusEngine): void {
+    this.detachScientificGeniusListeners();
+    this.scientificGenius = engine;
+
+    this.onScientificInsight = (event) => {
+      this.captureScientificInsights([event.insight]);
+      this.integrateScientificInsight(event.insight.content);
+      this.emit("scientific:insight", {
+        insight: event.insight,
+        signal: this.getScientificAutonomySignal(),
+      });
+    };
+
+    this.onHypothesisEvaluated = (event) => {
+      this.lastHypothesisEvaluation = event;
+      this.emit("scientific:hypothesis_evaluated", {
+        ...event,
+        signal: this.getScientificAutonomySignal(),
+      });
+    };
+
+    engine.on("insight_broadcast", this.onScientificInsight);
+    engine.on("hypothesis_evaluated", this.onHypothesisEvaluated);
+    log.info(
+      "ScientificGeniusEngine wired to autonomy lifecycle (reflection feedback active)",
+    );
+  }
+
+  /**
+   * Get the ScientificGeniusEngine dependency, when wired.
+   */
+  public getScientificGenius(): ScientificGeniusEngine | undefined {
+    return this.scientificGenius;
+  }
+
+  private detachScientificGeniusListeners(): void {
+    if (this.scientificGenius && this.onScientificInsight) {
+      this.scientificGenius.off("insight_broadcast", this.onScientificInsight);
+    }
+    if (this.scientificGenius && this.onHypothesisEvaluated) {
+      this.scientificGenius.off(
+        "hypothesis_evaluated",
+        this.onHypothesisEvaluated,
+      );
+    }
+    this.onScientificInsight = undefined;
+    this.onHypothesisEvaluated = undefined;
   }
 
   /**

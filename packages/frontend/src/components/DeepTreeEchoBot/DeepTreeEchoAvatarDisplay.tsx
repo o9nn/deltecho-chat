@@ -48,6 +48,11 @@ function getCognitiveStateSignature(
       cognitiveState.scientificGeniusVisualState?.entelechyScore,
     ),
     roundAvatarSignal(cognitiveState.scientificGeniusVisualState?.freeEnergy),
+    roundAvatarSignal(cognitiveState.scientificGeniusVisualState?.daoConsensus),
+    roundAvatarSignal(cognitiveState.scientificGeniusVisualState?.esnCoherence),
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.autognosisResonance,
+    ),
     cognitiveState.scientificGeniusVisualState?.mode ?? "no-genius-mode",
     persona?.currentMood ?? "unknown-mood",
     roundAvatarSignal(reasoning?.confidenceLevel),
@@ -282,16 +287,18 @@ function mapCognitiveStateToVisualState(
     entelechyScore: geniusSignal?.entelechyScore ?? 0,
     freeEnergy: geniusSignal?.freeEnergy ?? 0,
     daoConsensus:
-      geniusSignal?.entelechyScore ??
+      geniusSignal?.daoConsensus ??
       (consciousness?.phi ?? salience * 0.65) * 0.55 +
         (consciousness?.temporalCoherence ?? 0.6) * 0.45,
     esnCoherence:
+      geniusSignal?.esnCoherence ??
       geniusSignal?.flow ??
       consciousness?.flowState ??
       (processingState === BotProcessingState.THINKING
         ? 0.72
         : salience * 0.55),
     autognosisResonance:
+      geniusSignal?.autognosisResonance ??
       geniusSignal?.selfAwareness ??
       consciousness?.selfAwareness ??
       Math.max(0.35, salience * 0.7),

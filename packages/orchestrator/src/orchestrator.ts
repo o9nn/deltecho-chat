@@ -4,6 +4,7 @@ import {
   RAGMemoryStore,
   PersonaCore,
   InMemoryStorage,
+  scientificGeniusEngine,
 } from "deep-tree-echo-core";
 import {
   CognitiveOrchestrator,
@@ -444,6 +445,7 @@ export class Orchestrator {
             ...this.config.autonomyLifecycle,
           });
           this.autonomyLifecycle.wireEchobeats(this.echobeats);
+          this.autonomyLifecycle.wireScientificGenius(scientificGeniusEngine);
           await this.autonomyLifecycle.start();
           log.info("AutonomyLifecycleCoordinator started (5-phase cycle)");
 
