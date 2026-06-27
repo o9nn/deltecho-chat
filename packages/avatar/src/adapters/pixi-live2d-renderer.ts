@@ -160,6 +160,39 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   private visibilityHandler: (() => void) | null = null;
   private blinkTickerCallback: ((deltaMS: number) => void) | null = null;
 
+  /**
+   * Stop automatic blink loop and clear any pending timers.
+   */
+  private stopAutoBlinkLoop(): void {
+    if (this.blinkTimer) {
+      clearTimeout(this.blinkTimer);
+      this.blinkTimer = null;
+    }
+    if (this.blinkOpenTimer) {
+      clearTimeout(this.blinkOpenTimer);
+      this.blinkOpenTimer = null;
+    }
+    if (this.manualBlinkTimer) {
+      clearTimeout(this.manualBlinkTimer);
+      this.manualBlinkTimer = null;
+    }
+    this.blinkCloseUntil = 0;
+
+    if (this.app && this.blinkTickerCallback) {
+      const ticker = this.app.ticker as
+        | { remove?: (cb: (deltaMS: number) => void) => void }
+        | undefined;
+      if (ticker && typeof ticker.remove === "function") {
+        try {
+          ticker.remove(this.blinkTickerCallback);
+        } catch {
+          /* ignore */
+        }
+      }
+      this.blinkTickerCallback = null;
+    }
+  }
+
   /** Internal debug logger - no-op unless config.debug is true */
   private dlog(...args: unknown[]): void {
     if (this.debug) console.log("[PixiLive2DRenderer]", ...args);
@@ -193,11 +226,14 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     // Cap pixelRatio at 2 by default to prevent GPU thrashing on 4K/Retina displays.
     // Per user preference (Avatar Resolution Preference), explicit pixelRatio overrides cap.
     const explicitRatio = (config as PixiLive2DConfig).pixelRatio;
+    // Cap pixelRatio at 2 by default to prevent GPU thrashing on 4K/Retina displays.
+    // This is a performance optimization as per the Live2D performance skill.
+    // Per user preference (Avatar Resolution Preference), explicit pixelRatio overrides cap.
     const dpr =
       typeof window !== "undefined" && window.devicePixelRatio
         ? window.devicePixelRatio
         : 1;
-    const resolution = explicitRatio ?? Math.min(dpr, 2);
+    const resolution = explicitRatio ?? Math.min(dpr, 2); // Cap at 2 for performance
     this.debug = Boolean((config as PixiLive2DConfig).debug);
 
     // Create PixiJS application
@@ -208,11 +244,13 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       resolution,
       autoDensity: true,
       // Hint hybrid GPUs to choose the discrete adapter for smoother animation.
+      // This is a performance optimization as per the Live2D performance skill.
       powerPreference: "high-performance",
       resizeTo: canvas.parentElement ?? undefined,
     });
 
     // Pause the ticker when the tab is hidden to save battery/CPU.
+    // This is a performance optimization as per the Live2D performance skill.
     if (typeof document !== "undefined") {
       this.visibilityHandler = () => {
         const ticker = this.app?.ticker as
@@ -223,8 +261,10 @@ export class PixiLive2DRenderer implements ICubismRenderer {
           document.visibilityState === "hidden" &&
           typeof ticker.stop === "function"
         ) {
+          this.dlog("Pausing Live2D ticker due to tab hidden");
           ticker.stop();
         } else if (typeof ticker.start === "function") {
+          this.dlog("Resuming Live2D ticker due to tab visible");
           ticker.start();
         }
       };
@@ -279,6 +319,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     );
 
     // Dispose existing model and any model-bound blink timers.
+    // Aggressive cleanup to prevent memory leaks, as per Live2D performance skill.
     if (this.blinkTimer) {
       clearTimeout(this.blinkTimer);
       this.blinkTimer = null;
@@ -290,6 +331,20 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     if (this.model) {
       this.model.destroy();
       this.model = null;
+    }
+    // Ensure ticker callback is removed if a model was previously loaded
+    if (this.app && this.blinkTickerCallback) {
+      const ticker = this.app.ticker as
+        | { remove?: (cb: (deltaMS: number) => void) => void }
+        | undefined;
+      if (ticker && typeof ticker.remove === "function") {
+        try {
+          ticker.remove(this.blinkTickerCallback);
+        } catch {
+          /* ignore */
+        }
+      }
+      this.blinkTickerCallback = null;
     }
 
     try {
@@ -304,6 +359,8 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       const scale = modelInfo.scale ?? 0.25;
       model.scale.set(scale, scale);
       model.anchor.set(0.5, 0.5);
+
+      this.startAutoBlinkLoop(); // Start the blink loop after model is loaded
 
       // Center in canvas
       if (this.app.view) {
@@ -583,10 +640,11 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       this.blinkTickerCallback = null;
     }
 
-    this.scheduleNextBlink();
-
+    // Prioritize ticker-driven blink loop for performance and battery savings.
+    // This ensures blink cycles are synchronized with the render loop and paused
+    // when the tab is hidden, as per Live2D performance skill.
     if (ticker && typeof ticker.add === "function") {
-      // Preferred path: ticker-driven blink.
+      this.scheduleNextBlink(); // Schedule initial blink
       this.blinkTickerCallback = (_deltaMS: number) => {
         const now = performance.now();
         if (now >= this.nextBlinkAt && this.blinkCloseUntil === 0) {
@@ -594,7 +652,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
           if (!core) return;
           this.setParameterSafe(core, PARAM_IDS.PARAM_EYE_L_OPEN, 0);
           this.setParameterSafe(core, PARAM_IDS.PARAM_EYE_R_OPEN, 0);
-          this.blinkCloseUntil = now + 100 + Math.random() * 50;
+          this.blinkCloseUntil = now + 100 + Math.random() * 50; // Eyes closed for 100-150ms
         }
         if (this.blinkCloseUntil > 0 && now >= this.blinkCloseUntil) {
           const core = this.model?.internalModel?.coreModel;
@@ -603,7 +661,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
             this.setParameterSafe(core, PARAM_IDS.PARAM_EYE_R_OPEN, 1);
           }
           this.blinkCloseUntil = 0;
-          this.scheduleNextBlink();
+          this.scheduleNextBlink(); // Schedule next blink after current one completes
         }
       };
       ticker.add(this.blinkTickerCallback);
@@ -611,13 +669,15 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     }
 
     // Fallback: setTimeout-based blink loop.
+    // Fallback: setTimeout-based blink loop if ticker is unavailable (e.g., in test mocks).
+    // This is less performant but ensures basic functionality in non-optimal environments.
     if (this.blinkTimer) clearTimeout(this.blinkTimer);
     if (this.blinkOpenTimer) {
       clearTimeout(this.blinkOpenTimer);
       this.blinkOpenTimer = null;
     }
     const scheduleBlink = () => {
-      const delay = 2000 + Math.random() * 4000;
+      const delay = 2000 + Math.random() * 4000; // Blink every 2-6 seconds
       this.blinkTimer = setTimeout(() => {
         this.performBlink();
         scheduleBlink();
@@ -680,36 +740,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
    * Clean up resources
    */
   dispose(): void {
-    if (this.blinkTimer) {
-      clearTimeout(this.blinkTimer);
-      this.blinkTimer = null;
-    }
-
-    if (this.blinkOpenTimer) {
-      clearTimeout(this.blinkOpenTimer);
-      this.blinkOpenTimer = null;
-    }
-
-    if (this.manualBlinkTimer) {
-      clearTimeout(this.manualBlinkTimer);
-      this.manualBlinkTimer = null;
-    }
-
-    this.blinkCloseUntil = 0;
-
-    if (this.app && this.blinkTickerCallback) {
-      const ticker = this.app.ticker as
-        | { remove?: (cb: (deltaMS: number) => void) => void }
-        | undefined;
-      if (ticker && typeof ticker.remove === "function") {
-        try {
-          ticker.remove(this.blinkTickerCallback);
-        } catch {
-          /* ignore */
-        }
-      }
-      this.blinkTickerCallback = null;
-    }
+    this.stopAutoBlinkLoop();
 
     if (typeof document !== "undefined" && this.visibilityHandler) {
       document.removeEventListener("visibilitychange", this.visibilityHandler);

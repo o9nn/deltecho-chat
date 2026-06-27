@@ -54,6 +54,7 @@ const log = getLogger("deep-tree-echo-orchestrator/EntelechyIntegration");
  * Configuration for the Entelechy integration
  */
 export interface EntelechyIntegrationConfig {
+  cognitiveProcessor?: CognitiveTickProcessor;
   /** Enable the ESN reservoir */
   enableReservoir: boolean;
   /** Enable EchoBeats synchronization */
@@ -146,16 +147,20 @@ export interface EntelechyProcessingResult {
 // ENTELECHY INTEGRATION
 // ============================================================
 
+import type { CognitiveTickProcessor } from "./cognitive-tick-processor";
+
 export class EntelechyIntegration extends EventEmitter {
   private config: EntelechyIntegrationConfig;
   private running: boolean = false;
   private backgroundTimer: ReturnType<typeof setInterval> | null = null;
   private tickCount: number = 0;
+  private cognitiveProcessor?: CognitiveTickProcessor;
   private lastSnapshot: CognitiveSnapshot | null = null;
 
-  constructor(config: Partial<EntelechyIntegrationConfig> = {}) {
+  constructor(config: Partial<EntelechyIntegrationConfig> = {}, cognitiveProcessor?: CognitiveTickProcessor) {
     super();
     this.config = { ...DEFAULT_CONFIG, ...config };
+    this.cognitiveProcessor = cognitiveProcessor || config.cognitiveProcessor;
   }
 
   /**
@@ -609,6 +614,14 @@ export class EntelechyIntegration extends EventEmitter {
         sentience * 0.18 -
         stabilityPenalty,
     );
+  }
+
+  public getDaoConsensus(): number {
+    return this.cognitiveProcessor?.getDaoConsensus() ?? 0.5;
+  }
+
+  public getEsnAutognosis(): number {
+    return this.cognitiveProcessor?.getEsnAutognosis() ?? 0.5;
   }
 
   private computeDaoConsensus(metrics: {

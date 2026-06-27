@@ -43,6 +43,7 @@ export {
   type GlobalWorkspaceState,
   type StrangeLoopState,
   type ScientificGeniusConfig,
+  type HypothesisEvaluationEvent,
 } from "./ScientificGeniusEngine.js";
 
 export {

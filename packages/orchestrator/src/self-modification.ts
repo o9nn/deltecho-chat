@@ -74,6 +74,10 @@ export interface ModificationRequest {
 export interface ModificationResult {
   /** Whether the modification was applied */
   applied: boolean;
+  /** The type of modification (e.g., 'parameter_change', 'revert') */
+  type: string;
+  /** Whether the modification was successful */
+  success: boolean;
   /** The parameter that was modified */
   key: string;
   /** Previous value */
@@ -88,6 +92,8 @@ export interface ModificationResult {
   timestamp: number;
   /** Modification index */
   index: number;
+  /** Optional details about the modification */
+  details?: Record<string, unknown>;
 }
 
 export interface SelfModificationConfig {
@@ -336,6 +342,8 @@ export class SelfModificationEngine extends EventEmitter {
 
     const result: ModificationResult = {
       applied: true,
+      type: "parameter_change",
+      success: true,
       key: request.key,
       previousValue,
       newValue,
@@ -343,7 +351,6 @@ export class SelfModificationEngine extends EventEmitter {
       timestamp: now,
       index: this.totalModifications,
     };
-
     this.history.push(result);
     if (this.history.length > this.config.maxHistorySize) {
       this.history.shift();
@@ -398,6 +405,8 @@ export class SelfModificationEngine extends EventEmitter {
           newValue: param.defaultValue,
           reason: "Dead man's switch — coherence critically low",
           timestamp: Date.now(),
+          type: "reset",
+          success: true,
           index: ++this.totalModifications,
         };
 
@@ -418,17 +427,20 @@ export class SelfModificationEngine extends EventEmitter {
     request: ModificationRequest,
     reason: string,
     timestamp: number,
+    param?: ModifiableParameter,
   ): ModificationResult {
     this.totalRejections++;
 
     const result: ModificationResult = {
       applied: false,
+      type: "parameter_change",
+      success: false,
       key: request.key,
-      previousValue: this.parameters.get(request.key)?.currentValue ?? 0,
+      previousValue: param?.currentValue ?? 0,
       newValue: request.newValue,
       reason: request.reason,
       rejectionReason: reason,
-      timestamp,
+      timestamp: timestamp,
       index: this.totalModifications,
     };
 

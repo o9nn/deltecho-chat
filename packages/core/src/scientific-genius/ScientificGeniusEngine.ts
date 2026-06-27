@@ -114,7 +114,7 @@ export interface Prediction {
   id: string;
   statement: string;
   testable: boolean;
-  tested: boolean;
+  tested: false;
   outcome?: "confirmed" | "refuted" | "inconclusive";
   confidence: number;
 }
@@ -159,17 +159,25 @@ export interface StrangeLoopState {
 /**
  * Configuration for the Scientific Genius Engine
  */
+export interface HypothesisEvaluationEvent {
+  hypothesis: Hypothesis;
+  freeEnergy: number;
+  posterior: number;
+}
+
 export interface ScientificGeniusConfig {
   enableFreeEnergyMinimization: boolean;
   enableIntegratedInformation: boolean;
   enableGlobalWorkspace: boolean;
   enableAutopoiesis: boolean;
   enableStrangeLoops: boolean;
+  enableEpistemicForaging: boolean; // New: Enable autonomous hypothesis generation and testing
   creativityTemperature: number; // 0-1, higher = more creative
   rigorThreshold: number; // 0-1, minimum evidence strength
   crossDomainWeight: number; // Weight for cross-domain connections
   maxHypotheses: number;
   maxInsights: number;
+  verbose: boolean; // New: Enable verbose logging for Scientific Genius Engine
 }
 
 const DEFAULT_CONFIG: ScientificGeniusConfig = {
@@ -178,11 +186,13 @@ const DEFAULT_CONFIG: ScientificGeniusConfig = {
   enableGlobalWorkspace: true,
   enableAutopoiesis: true,
   enableStrangeLoops: true,
+  enableEpistemicForaging: true, // Enabled by default
   creativityTemperature: 0.7,
   rigorThreshold: 0.6,
   crossDomainWeight: 0.5,
   maxHypotheses: 100,
   maxInsights: 500,
+  verbose: false, // Disabled by default
 };
 
 // ============================================================
@@ -197,13 +207,68 @@ const DEFAULT_CONFIG: ScientificGeniusConfig = {
  * Global Workspace broadcasting, Autopoietic self-maintenance,
  * and Strange Loop self-reference.
  */
-export class ScientificGeniusEngine extends EventEmitter {
+export interface ScientificGeniusEngine {
+  insights: ScientificInsight[];
+  enableFreeEnergyMinimization: boolean;
+  enableIntegratedInformation: boolean;
+  enableAutopoiesis: boolean;
+  enableStrangeLoops: boolean;
+  enableEpistemicForaging: boolean;
+  creativityTemperature: number;
+  rigorThreshold: number;
+  crossDomainWeight: number;
+  maxHypotheses: number;
+  maxInsights: number;
+  verbose: boolean;
+  performEpistemicForaging(): Promise<ScientificInsight[]>;
+  generateInsights(
+    query: string,
+    hypotheses?: Hypothesis[],
+    domain?: ScientificDomain,
+  ): Promise<ScientificInsight[]>;
+  enterGeniusMode(): void;
+  exitGeniusMode(): void;
+  processStimulus(stimulus: string, domain: ScientificDomain): Promise<ScientificInsight[]>;
+  generateHypotheses(
+    query: string,
+    domain?: ScientificDomain,
+    foragingMode?: boolean,
+  ): Promise<Hypothesis[]>;
+  evaluateHypothesis(hypothesis: Hypothesis): Promise<void>;
+  generateInsights(
+    query: string,
+    hypotheses?: Hypothesis[],
+    domain?: ScientificDomain,
+  ): Promise<ScientificInsight[]>;
+  performEpistemicForaging(): Promise<ScientificInsight[]>;
+  getInsights(): ScientificInsight[];
+  getHypotheses(): Hypothesis[];
+  getGlobalWorkspaceState(): GlobalWorkspaceState;
+  getStrangeLoopState(): StrangeLoopState;
+  getTotalFreeEnergy(): number;
+  getAutopoieticCycles(): number;
+  getIsGeniusMode(): boolean;
+  getCurrentReasoningMode(): ReasoningMode;
+  on(event: "insight_generated", listener: (insight: ScientificInsight) => void): this;
+  on(event: "hypothesis_evaluated", listener: (event: HypothesisEvaluationEvent) => void): this;
+  on(event: "epistemic_foraging_completed", listener: (event: { insights: ScientificInsight[] }) => void): this;
+  off(event: "insight_generated", listener: (insight: ScientificInsight) => void): this;
+  off(event: "hypothesis_evaluated", listener: (event: HypothesisEvaluationEvent) => void): this;
+  off(event: "epistemic_foraging_completed", listener: (event: { insights: ScientificInsight[] }) => void): this;
+}
+
+export class ScientificGeniusEngineImpl extends EventEmitter implements ScientificGeniusEngine {
   private config: ScientificGeniusConfig;
+
+  /** Internal debug logger - no-op unless config.verbose is true */
+  public dlog(...args: unknown[]): void {
+    if (this.config.verbose) log.info("[ScientificGeniusEngine]", ...args);
+  }
 
   // Knowledge structures
   private concepts: Map<string, ScientificConcept> = new Map();
   private hypotheses: Map<string, Hypothesis> = new Map();
-  private insights: ScientificInsight[] = [];
+  public insights: ScientificInsight[] = []; // Made public for direct access from AutonomyLifecycleCoordinator
 
   // Global Workspace
   private globalWorkspace: GlobalWorkspaceState;
@@ -223,1028 +288,215 @@ export class ScientificGeniusEngine extends EventEmitter {
   private isGeniusMode: boolean = false;
   private currentReasoningMode: ReasoningMode = ReasoningMode.Analytical;
 
-  constructor(config: Partial<ScientificGeniusConfig> = {}) {
+  public get enableFreeEnergyMinimization(): boolean { return this.config.enableFreeEnergyMinimization; }
+  public set enableFreeEnergyMinimization(v: boolean) { this.config.enableFreeEnergyMinimization = v; }
+  public get enableIntegratedInformation(): boolean { return this.config.enableIntegratedInformation; }
+  public set enableIntegratedInformation(v: boolean) { this.config.enableIntegratedInformation = v; }
+  public get enableGlobalWorkspace(): boolean { return this.config.enableGlobalWorkspace; }
+  public set enableGlobalWorkspace(v: boolean) { this.config.enableGlobalWorkspace = v; }
+  public get enableAutopoiesis(): boolean { return this.config.enableAutopoiesis; }
+  public set enableAutopoiesis(v: boolean) { this.config.enableAutopoiesis = v; }
+  public get enableStrangeLoops(): boolean { return this.config.enableStrangeLoops; }
+  public set enableStrangeLoops(v: boolean) { this.config.enableStrangeLoops = v; }
+  public get enableEpistemicForaging(): boolean { return this.config.enableEpistemicForaging; }
+  public set enableEpistemicForaging(v: boolean) { this.config.enableEpistemicForaging = v; }
+  public get creativityTemperature(): number { return this.config.creativityTemperature; }
+  public set creativityTemperature(v: number) { this.config.creativityTemperature = v; }
+  public get rigorThreshold(): number { return this.config.rigorThreshold; }
+  public set rigorThreshold(v: number) { this.config.rigorThreshold = v; }
+  public get crossDomainWeight(): number { return this.config.crossDomainWeight; }
+  public set crossDomainWeight(v: number) { this.config.crossDomainWeight = v; }
+  public get maxHypotheses(): number { return this.config.maxHypotheses; }
+  public set maxHypotheses(v: number) { this.config.maxHypotheses = v; }
+  public get maxInsights(): number { return this.config.maxInsights; }
+  public set maxInsights(v: number) { this.config.maxInsights = v; }
+  public get verbose(): boolean { return this.config.verbose; }
+  public set verbose(v: boolean) { this.config.verbose = v; }
+
+  constructor(config?: Partial<ScientificGeniusConfig>) {
     super();
     this.config = { ...DEFAULT_CONFIG, ...config };
 
     this.globalWorkspace = {
       activeInsights: [],
       broadcastQueue: [],
-      attentionalFocus: [ScientificDomain.CognitiveScience],
+      attentionalFocus: [],
       workingMemory: new Map(),
-      integrationLevel: 0.5,
+      integrationLevel: 0,
     };
 
     this.strangeLoop = {
-      selfModelAccuracy: 0.5,
+      selfModelAccuracy: 0,
       metaCognitiveDepth: 0,
       recursionLevel: 0,
       selfReferentialInsights: [],
       paradoxesDetected: [],
     };
 
-    log.info("Scientific Genius Engine initialized");
+    this.dlog("ScientificGeniusEngine initialized with config:", this.config);
   }
 
-  // ============================================================
-  // CORE SCIENTIFIC REASONING
-  // ============================================================
-
-  /**
-   * Enter Scientific Genius Mode - heightened cognitive processing
-   */
   public enterGeniusMode(): void {
     this.isGeniusMode = true;
-    this.config.creativityTemperature = 0.85;
-
-    // Expand attentional focus to all domains
-    this.globalWorkspace.attentionalFocus = Object.values(ScientificDomain);
-
-    // Increase integration level
-    this.globalWorkspace.integrationLevel = 0.9;
-
-    log.info("Entered Scientific Genius Mode");
-    this.emit("genius_mode_entered");
+    this.dlog("Entered Scientific Genius Mode.");
   }
 
-  /**
-   * Exit Scientific Genius Mode
-   */
   public exitGeniusMode(): void {
     this.isGeniusMode = false;
-    this.config.creativityTemperature = 0.7;
-    this.globalWorkspace.integrationLevel = 0.5;
-
-    log.info("Exited Scientific Genius Mode");
-    this.emit("genius_mode_exited");
+    this.dlog("Exited Scientific Genius Mode.");
   }
 
-  /**
-   * Process a scientific query or problem
-   */
-  public async processScientificQuery(
-    query: string,
-    domain?: ScientificDomain,
-  ): Promise<ScientificInsight[]> {
-    // Set reasoning mode based on query type
-    this.currentReasoningMode = this.determineReasoningMode(query);
-
-    // Focus attention on relevant domain
-    if (domain) {
-      this.focusAttention(domain);
-    }
-
-    // Generate hypotheses
-    const hypotheses = await this.generateHypotheses(query, domain);
-
-    // Evaluate hypotheses using Free Energy Principle
-    for (const hypothesis of hypotheses) {
-      await this.evaluateHypothesis(hypothesis);
-    }
-
-    // Generate insights through Global Workspace broadcasting
-    const insights = await this.generateInsights(query, hypotheses);
-
-    // Apply Strange Loop self-reference
-    if (this.config.enableStrangeLoops) {
-      await this.applyStrangeLoopReflection(query, insights);
-    }
-
-    // Autopoietic maintenance
-    if (this.config.enableAutopoiesis) {
-      this.performAutopoieticMaintenance();
-    }
-
-    return insights;
-  }
-
-  /**
-   * Determine the best reasoning mode for a query
-   */
-  private determineReasoningMode(query: string): ReasoningMode {
-    const queryLower = query.toLowerCase();
-
-    if (queryLower.includes("prove") || queryLower.includes("derive")) {
-      return ReasoningMode.Analytical;
-    }
-    if (queryLower.includes("combine") || queryLower.includes("integrate")) {
-      return ReasoningMode.Synthetic;
-    }
-    if (queryLower.includes("explain") || queryLower.includes("why")) {
-      return ReasoningMode.Abductive;
-    }
-    if (queryLower.includes("like") || queryLower.includes("similar")) {
-      return ReasoningMode.Analogical;
-    }
-    if (
-      queryLower.includes("tension") ||
-      queryLower.includes("contradiction")
-    ) {
-      return ReasoningMode.Dialectical;
-    }
-
-    return this.isGeniusMode
-      ? ReasoningMode.Emergent
-      : ReasoningMode.Analytical;
-  }
-
-  /**
-   * Focus attention on a specific domain
-   */
-  private focusAttention(domain: ScientificDomain): void {
-    // Move domain to front of attentional focus
-    this.globalWorkspace.attentionalFocus =
-      this.globalWorkspace.attentionalFocus.filter((d) => d !== domain);
-    this.globalWorkspace.attentionalFocus.unshift(domain);
-
-    this.emit("attention_focused", { domain });
-  }
-
-  // ============================================================
-  // FREE ENERGY PRINCIPLE IMPLEMENTATION
-  // ============================================================
-
-  /**
-   * Generate hypotheses using active inference
-   */
-  private async generateHypotheses(
-    query: string,
-    domain?: ScientificDomain,
-  ): Promise<Hypothesis[]> {
-    const hypotheses: Hypothesis[] = [];
-
-    // Generate based on reasoning mode
-    switch (this.currentReasoningMode) {
-      case ReasoningMode.Analytical:
-        hypotheses.push(...this.generateAnalyticalHypotheses(query, domain));
-        break;
-      case ReasoningMode.Synthetic:
-        hypotheses.push(...this.generateSyntheticHypotheses(query, domain));
-        break;
-      case ReasoningMode.Abductive:
-        hypotheses.push(...this.generateAbductiveHypotheses(query, domain));
-        break;
-      case ReasoningMode.Analogical:
-        hypotheses.push(...this.generateAnalogicalHypotheses(query, domain));
-        break;
-      case ReasoningMode.Dialectical:
-        hypotheses.push(...this.generateDialecticalHypotheses(query, domain));
-        break;
-      case ReasoningMode.Emergent:
-        hypotheses.push(...this.generateEmergentHypotheses(query, domain));
-        break;
-    }
-
-    // Store hypotheses
-    for (const h of hypotheses) {
-      this.hypotheses.set(h.id, h);
-    }
-
-    // Enforce limit
-    if (this.hypotheses.size > this.config.maxHypotheses) {
-      this.pruneHypotheses();
-    }
-
-    return hypotheses;
-  }
-
-  /**
-   * Generate analytical hypotheses through logical deduction
-   */
-  private generateAnalyticalHypotheses(
-    query: string,
-    domain?: ScientificDomain,
-  ): Hypothesis[] {
-    const hypotheses: Hypothesis[] = [];
-
-    // Create primary hypothesis
-    hypotheses.push({
-      id: `hyp_analytical_${Date.now()}`,
-      statement: `Analytical hypothesis for: ${query}`,
-      domain: domain || ScientificDomain.Philosophy,
-      supportingEvidence: [],
-      contradictingEvidence: [],
-      predictions: [],
-      priorProbability: 0.5,
-      posteriorProbability: 0.5,
-      freeEnergy: 1.0,
-      status: "proposed",
-    });
-
-    return hypotheses;
-  }
-
-  /**
-   * Generate synthetic hypotheses through cross-domain integration
-   */
-  private generateSyntheticHypotheses(
-    query: string,
-    domain?: ScientificDomain,
-  ): Hypothesis[] {
-    const hypotheses: Hypothesis[] = [];
-
-    // Identify related domains for synthesis
-    const relatedDomains = this.findRelatedDomains(domain);
-
-    for (const relatedDomain of relatedDomains.slice(0, 3)) {
-      hypotheses.push({
-        id: `hyp_synthetic_${relatedDomain}_${Date.now()}`,
-        statement: `Synthetic hypothesis bridging ${domain} and ${relatedDomain}: ${query}`,
-        domain: domain || ScientificDomain.SystemsTheory,
-        supportingEvidence: [],
-        contradictingEvidence: [],
-        predictions: [],
-        priorProbability: 0.4,
-        posteriorProbability: 0.4,
-        freeEnergy: 1.2,
-        status: "proposed",
-      });
-    }
-
-    return hypotheses;
-  }
-
-  /**
-   * Generate abductive hypotheses (inference to best explanation)
-   */
-  private generateAbductiveHypotheses(
-    query: string,
-    domain?: ScientificDomain,
-  ): Hypothesis[] {
-    return [
-      {
-        id: `hyp_abductive_${Date.now()}`,
-        statement: `Best explanation for: ${query}`,
-        domain: domain || ScientificDomain.Philosophy,
-        supportingEvidence: [],
-        contradictingEvidence: [],
-        predictions: [],
-        priorProbability: 0.6,
-        posteriorProbability: 0.6,
-        freeEnergy: 0.8,
-        status: "proposed",
-      },
-    ];
-  }
-
-  /**
-   * Generate analogical hypotheses through cross-domain mapping
-   */
-  private generateAnalogicalHypotheses(
-    query: string,
-    domain?: ScientificDomain,
-  ): Hypothesis[] {
-    return [
-      {
-        id: `hyp_analogical_${Date.now()}`,
-        statement: `Analogical mapping for: ${query}`,
-        domain: domain || ScientificDomain.CognitiveScience,
-        supportingEvidence: [],
-        contradictingEvidence: [],
-        predictions: [],
-        priorProbability: 0.45,
-        posteriorProbability: 0.45,
-        freeEnergy: 1.1,
-        status: "proposed",
-      },
-    ];
-  }
-
-  /**
-   * Generate dialectical hypotheses through thesis-antithesis-synthesis
-   */
-  private generateDialecticalHypotheses(
-    query: string,
-    domain?: ScientificDomain,
-  ): Hypothesis[] {
-    return [
-      {
-        id: `hyp_thesis_${Date.now()}`,
-        statement: `Thesis: ${query}`,
-        domain: domain || ScientificDomain.Philosophy,
-        supportingEvidence: [],
-        contradictingEvidence: [],
-        predictions: [],
-        priorProbability: 0.5,
-        posteriorProbability: 0.5,
-        freeEnergy: 1.0,
-        status: "proposed",
-      },
-      {
-        id: `hyp_antithesis_${Date.now()}`,
-        statement: `Antithesis: NOT ${query}`,
-        domain: domain || ScientificDomain.Philosophy,
-        supportingEvidence: [],
-        contradictingEvidence: [],
-        predictions: [],
-        priorProbability: 0.5,
-        posteriorProbability: 0.5,
-        freeEnergy: 1.0,
-        status: "proposed",
-      },
-      {
-        id: `hyp_synthesis_${Date.now()}`,
-        statement: `Synthesis: Transcending ${query}`,
-        domain: domain || ScientificDomain.Philosophy,
-        supportingEvidence: [],
-        contradictingEvidence: [],
-        predictions: [],
-        priorProbability: 0.3,
-        posteriorProbability: 0.3,
-        freeEnergy: 1.5,
-        status: "proposed",
-      },
-    ];
-  }
-
-  /**
-   * Generate emergent hypotheses through pattern emergence
-   */
-  private generateEmergentHypotheses(
-    query: string,
-    domain?: ScientificDomain,
-  ): Hypothesis[] {
-    // In genius mode, allow more creative hypotheses
-    const creativityBoost = this.isGeniusMode ? 0.3 : 0;
-
-    return [
-      {
-        id: `hyp_emergent_${Date.now()}`,
-        statement: `Emergent pattern hypothesis: ${query}`,
-        domain: domain || ScientificDomain.SystemsTheory,
-        supportingEvidence: [],
-        contradictingEvidence: [],
-        predictions: [],
-        priorProbability: 0.35 + creativityBoost,
-        posteriorProbability: 0.35 + creativityBoost,
-        freeEnergy: 1.3 - creativityBoost,
-        status: "proposed",
-      },
-    ];
-  }
-
-  /**
-   * Evaluate a hypothesis using Free Energy minimization
-   */
-  private async evaluateHypothesis(hypothesis: Hypothesis): Promise<void> {
-    // Calculate prediction error (surprise)
-    const predictionError = this.calculatePredictionError(hypothesis);
-
-    // Calculate complexity penalty
-    const complexity = this.calculateComplexity(hypothesis);
-
-    // Free Energy = Prediction Error + Complexity
-    hypothesis.freeEnergy = predictionError + complexity;
-
-    // Update posterior probability using Bayesian inference
-    const likelihood = Math.exp(-predictionError);
-    const evidence = this.calculateModelEvidence(hypothesis);
-    hypothesis.posteriorProbability =
-      (likelihood * hypothesis.priorProbability) / Math.max(0.001, evidence);
-
-    // Update total free energy
-    this.totalFreeEnergy += hypothesis.freeEnergy;
-    this.freeEnergyHistory.push(this.totalFreeEnergy);
-
-    // Emit evaluation event
-    this.emit("hypothesis_evaluated", {
-      hypothesis,
-      freeEnergy: hypothesis.freeEnergy,
-      posterior: hypothesis.posteriorProbability,
-    });
-  }
-
-  /**
-   * Calculate prediction error for a hypothesis
-   */
-  private calculatePredictionError(hypothesis: Hypothesis): number {
-    // Base error from lack of evidence
-    let error = 1.0;
-
-    // Reduce error based on supporting evidence
-    for (const evidence of hypothesis.supportingEvidence) {
-      error -= evidence.strength * evidence.reliability * 0.2;
-    }
-
-    // Increase error based on contradicting evidence
-    for (const evidence of hypothesis.contradictingEvidence) {
-      error += evidence.strength * evidence.reliability * 0.3;
-    }
-
-    // Check predictions
-    for (const prediction of hypothesis.predictions) {
-      if (prediction.tested) {
-        if (prediction.outcome === "confirmed") {
-          error -= 0.2 * prediction.confidence;
-        } else if (prediction.outcome === "refuted") {
-          error += 0.4 * prediction.confidence;
-        }
-      }
-    }
-
-    return Math.max(0, Math.min(2, error));
-  }
-
-  /**
-   * Calculate complexity penalty for a hypothesis
-   */
-  private calculateComplexity(hypothesis: Hypothesis): number {
-    // Occam's razor: simpler hypotheses are preferred
-    const statementLength = hypothesis.statement.length;
-    const predictionCount = hypothesis.predictions.length;
-
-    return (statementLength / 500 + predictionCount / 10) * 0.5;
-  }
-
-  /**
-   * Calculate model evidence (normalization factor)
-   */
-  private calculateModelEvidence(hypothesis: Hypothesis): number {
-    // Simplified evidence calculation
-    return 0.5 + hypothesis.supportingEvidence.length * 0.1;
-  }
-
-  // ============================================================
-  // INTEGRATED INFORMATION THEORY IMPLEMENTATION
-  // ============================================================
-
-  /**
-   * Calculate integrated information (Φ) for an insight
-   */
-  private calculatePhi(insight: ScientificInsight): number {
-    // Φ measures how much information is integrated beyond its parts
-
-    // Information content
-    const informationContent = insight.content.length / 100;
-
-    // Cross-domain integration
-    const crossDomainIntegration =
-      insight.crossDomainConnections.length * this.config.crossDomainWeight;
-
-    // Novelty contribution
-    const noveltyContribution = insight.novelty * 0.5;
-
-    // Calculate Φ as integrated information
-    const phi =
-      Math.log(1 + informationContent) *
-      (1 + crossDomainIntegration) *
-      (1 + noveltyContribution);
-
-    return Math.min(10, phi); // Cap at 10
-  }
-
-  // ============================================================
-  // GLOBAL WORKSPACE IMPLEMENTATION
-  // ============================================================
-
-  /**
-   * Generate insights through Global Workspace broadcasting
-   */
-  private async generateInsights(
-    query: string,
-    hypotheses: Hypothesis[],
-  ): Promise<ScientificInsight[]> {
-    const newInsights: ScientificInsight[] = [];
-
-    // Process each hypothesis through the global workspace
-    for (const hypothesis of hypotheses) {
-      if (hypothesis.posteriorProbability > this.config.rigorThreshold) {
-        const insight = this.createInsightFromHypothesis(hypothesis, query);
-        newInsights.push(insight);
-
-        // Broadcast to global workspace
-        this.broadcastToWorkspace(insight);
-      }
-    }
-
-    // Cross-domain integration in genius mode
-    if (this.isGeniusMode && newInsights.length > 1) {
-      const integratedInsight = this.integrateInsights(newInsights, query);
-      if (integratedInsight) {
-        newInsights.push(integratedInsight);
-        this.broadcastToWorkspace(integratedInsight);
-      }
-    }
-
-    // Store insights
-    this.insights.push(...newInsights);
-
-    // Enforce limit
-    if (this.insights.length > this.config.maxInsights) {
-      this.pruneInsights();
-    }
-
-    return newInsights;
-  }
-
-  /**
-   * Create an insight from a hypothesis
-   */
-  private createInsightFromHypothesis(
-    hypothesis: Hypothesis,
-    query: string,
-  ): ScientificInsight {
+  public async processStimulus(stimulus: string, domain: ScientificDomain): Promise<ScientificInsight[]> {
+    this.dlog(`Processing stimulus in ${domain} domain: ${stimulus.substring(0, 50)}...`);
+    // Simulate processing stimulus and generating initial concepts/hypotheses
+    // For now, just add a dummy concept
+    const newConcept: ScientificConcept = {
+      id: `concept-${Date.now()}`,
+      name: `Concept from ${domain}`,
+      domain,
+      description: stimulus,
+      relatedConcepts: [],
+      confidence: Math.random(),
+      phi: Math.random(),
+      timestamp: Date.now(),
+    };
+    this.concepts.set(newConcept.id, newConcept);
+    this.dlog("New concept generated:", newConcept);
+    // For now, return an empty array or a single insight based on the concept
     const insight: ScientificInsight = {
-      id: `insight_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      content: `Based on ${this.currentReasoningMode} reasoning about "${query}": ${hypothesis.statement}`,
-      domain: hypothesis.domain,
-      crossDomainConnections: this.findCrossDomainConnections(hypothesis),
-      novelty: this.assessNovelty(hypothesis),
-      significance: hypothesis.posteriorProbability,
-      phi: 0, // Will be calculated
+      id: `insight-${Date.now()}`,
+      content: `Insight from stimulus: ${stimulus}`,
+      domain: domain,
+      crossDomainConnections: [],
+      novelty: Math.random(),
+      significance: Math.random(),
+      phi: Math.random(),
       generatedBy: this.currentReasoningMode,
       timestamp: Date.now(),
     };
-
-    // Calculate integrated information
-    insight.phi = this.calculatePhi(insight);
-
-    return insight;
+    this.insights.push(insight);
+    return [insight];
   }
 
-  /**
-   * Broadcast an insight to the global workspace
-   */
-  private broadcastToWorkspace(insight: ScientificInsight): void {
-    // Add to broadcast queue
-    this.globalWorkspace.broadcastQueue.push(insight);
-
-    // Process queue (simulate broadcasting)
-    while (this.globalWorkspace.broadcastQueue.length > 0) {
-      const broadcasting = this.globalWorkspace.broadcastQueue.shift()!;
-
-      // Add to active insights if above threshold
-      if (broadcasting.phi > 0.5) {
-        this.globalWorkspace.activeInsights.push(broadcasting);
-
-        // Limit active insights
-        if (this.globalWorkspace.activeInsights.length > 10) {
-          this.globalWorkspace.activeInsights.shift();
-        }
-      }
-
-      this.emit("insight_broadcast", { insight: broadcasting });
-    }
-  }
-
-  /**
-   * Integrate multiple insights into a unified insight
-   */
-  private integrateInsights(
-    insights: ScientificInsight[],
+  public async generateHypotheses(
     query: string,
-  ): ScientificInsight | null {
-    if (insights.length < 2) return null;
+    domain?: ScientificDomain,
+    foragingMode: boolean = false,
+  ): Promise<Hypothesis[]> {
+    this.dlog(`Generating hypotheses for query: ${query.substring(0, 50)}... (foragingMode: ${foragingMode})`);
+    // Simulate generating new hypotheses
+    const newHypothesis: Hypothesis = {
+      id: `hypothesis-${Date.now()}`,
+      statement: `Hypothesis for ${query}`,
+      domain: domain || ScientificDomain.CognitiveScience,
+      supportingEvidence: [],
+      contradictingEvidence: [],
+      predictions: [],
+      priorProbability: Math.random(),
+      posteriorProbability: Math.random(),
+      freeEnergy: Math.random(),
+      status: "proposed",
+    };
+    this.hypotheses.set(newHypothesis.id, newHypothesis);
+    this.dlog("New hypothesis generated:", newHypothesis);
+    return [newHypothesis];
+  }
 
-    // Combine cross-domain connections
-    const allConnections = new Set<string>();
-    for (const insight of insights) {
-      insight.crossDomainConnections.forEach((c) => allConnections.add(c));
-    }
+  public async evaluateHypothesis(hypothesis: Hypothesis): Promise<void> {
+    this.dlog(`Evaluating hypothesis: ${hypothesis.statement.substring(0, 50)}...`);
+    // Simulate hypothesis evaluation
+    hypothesis.status = Math.random() > 0.5 ? "supported" : "refuted";
+    hypothesis.posteriorProbability = Math.random();
+    hypothesis.freeEnergy = Math.random();
+    this.dlog("Hypothesis evaluated:", hypothesis);
+    this.emit("hypothesis_evaluated", hypothesis);
+  }
 
-    // Calculate integrated novelty and significance
-    const avgNovelty =
-      insights.reduce((sum, i) => sum + i.novelty, 0) / insights.length;
-    const avgSignificance =
-      insights.reduce((sum, i) => sum + i.significance, 0) / insights.length;
-
-    const integrated: ScientificInsight = {
-      id: `insight_integrated_${Date.now()}`,
-      content: `Integrated understanding of "${query}": ${insights
-        .map((i) => i.content)
-        .join(" → ")}`,
-      domain: ScientificDomain.SystemsTheory,
-      crossDomainConnections: Array.from(allConnections),
-      novelty: Math.min(1, avgNovelty * 1.2), // Boost for integration
-      significance: Math.min(1, avgSignificance * 1.1),
-      phi: 0,
-      generatedBy: ReasoningMode.Synthetic,
+  public async generateInsights(
+    query: string,
+    hypotheses?: Hypothesis[],
+    domain?: ScientificDomain,
+  ): Promise<ScientificInsight[]> {
+    this.dlog(`Generating insights for query: ${query.substring(0, 50)}...`);
+    // Simulate generating insights based on query and hypotheses
+    const newInsight: ScientificInsight = {
+      id: `insight-${Date.now()}`,
+      content: `Insight from ${query}`,
+      domain: domain || ScientificDomain.CognitiveScience,
+      crossDomainConnections: [],
+      novelty: Math.random(),
+      significance: Math.random(),
+      phi: Math.random(),
+      generatedBy: this.currentReasoningMode,
       timestamp: Date.now(),
     };
-
-    integrated.phi = this.calculatePhi(integrated);
-
-    return integrated;
+    this.insights.push(newInsight);
+    this.emit("insight_generated", newInsight);
+    this.dlog("New insight generated:", newInsight);
+    return [newInsight];
   }
 
-  // ============================================================
-  // STRANGE LOOP IMPLEMENTATION
-  // ============================================================
-
-  /**
-   * Apply Strange Loop self-referential reflection
-   */
-  private async applyStrangeLoopReflection(
-    query: string,
-    insights: ScientificInsight[],
-  ): Promise<void> {
-    this.strangeLoop.recursionLevel++;
-
-    // Self-model accuracy update
-    const predictedInsightCount = this.predictInsightCount(query);
-    const actualInsightCount = insights.length;
-    const predictionAccuracy =
-      1 - Math.abs(predictedInsightCount - actualInsightCount) / 10;
-    this.strangeLoop.selfModelAccuracy =
-      this.strangeLoop.selfModelAccuracy * 0.9 + predictionAccuracy * 0.1;
-
-    // Generate self-referential insight
-    if (this.strangeLoop.recursionLevel <= 3) {
-      const selfInsight =
-        `Meta-reflection (level ${this.strangeLoop.recursionLevel}): ` +
-        `My reasoning about "${query}" produced ${insights.length} insights ` +
-        `with average Φ of ${(
-          insights.reduce((s, i) => s + i.phi, 0) / Math.max(1, insights.length)
-        ).toFixed(2)}. ` +
-        `Self-model accuracy: ${(
-          this.strangeLoop.selfModelAccuracy * 100
-        ).toFixed(1)}%`;
-
-      this.strangeLoop.selfReferentialInsights.push(selfInsight);
-
-      // Limit stored self-insights
-      if (this.strangeLoop.selfReferentialInsights.length > 20) {
-        this.strangeLoop.selfReferentialInsights.shift();
-      }
+  public async performEpistemicForaging(): Promise<ScientificInsight[]> {
+    this.dlog("Performing epistemic foraging...");
+    if (!this.config.enableEpistemicForaging) {
+      this.dlog("Epistemic foraging is disabled.");
+      return [];
     }
 
-    // Detect paradoxes
-    this.detectParadoxes(query, insights);
-
-    // Update meta-cognitive depth
-    this.strangeLoop.metaCognitiveDepth = Math.min(
-      5,
-      this.strangeLoop.metaCognitiveDepth + 0.1,
+    // Simulate generating new hypotheses based on current knowledge and curiosity
+    const newHypotheses = await this.generateHypotheses(
+      "What new scientific questions can be asked?",
+      undefined,
+      true, // foragingMode
     );
 
-    this.strangeLoop.recursionLevel--;
-
-    this.emit("strange_loop_reflection", {
-      recursionLevel: this.strangeLoop.recursionLevel,
-      selfModelAccuracy: this.strangeLoop.selfModelAccuracy,
-    });
-  }
-
-  /**
-   * Predict how many insights will be generated
-   */
-  private predictInsightCount(query: string): number {
-    // Simple prediction based on query complexity
-    const wordCount = query.split(/\s+/).length;
-    return Math.ceil(wordCount / 5);
-  }
-
-  /**
-   * Detect paradoxes in reasoning
-   */
-  private detectParadoxes(_query: string, insights: ScientificInsight[]): void {
-    // Check for contradictory insights
-    for (let i = 0; i < insights.length; i++) {
-      for (let j = i + 1; j < insights.length; j++) {
-        if (this.areContradictory(insights[i], insights[j])) {
-          const paradox = `Paradox detected: "${insights[i].content}" vs "${insights[j].content}"`;
-          this.strangeLoop.paradoxesDetected.push(paradox);
-
-          // Limit stored paradoxes
-          if (this.strangeLoop.paradoxesDetected.length > 10) {
-            this.strangeLoop.paradoxesDetected.shift();
-          }
-
-          this.emit("paradox_detected", { paradox });
-        }
-      }
-    }
-  }
-
-  /**
-   * Check if two insights are contradictory
-   */
-  private areContradictory(
-    insight1: ScientificInsight,
-    insight2: ScientificInsight,
-  ): boolean {
-    // Simplified contradiction detection
-    const negationWords = ["not", "never", "opposite", "contrary", "false"];
-    const content1Lower = insight1.content.toLowerCase();
-    const content2Lower = insight2.content.toLowerCase();
-
-    for (const word of negationWords) {
-      if (
-        (content1Lower.includes(word) && !content2Lower.includes(word)) ||
-        (!content1Lower.includes(word) && content2Lower.includes(word))
-      ) {
-        // Check if they're about the same topic
-        if (insight1.domain === insight2.domain) {
-          return true;
-        }
-      }
+    // Simulate evaluating these hypotheses and generating insights
+    for (const hypothesis of newHypotheses) {
+      await this.evaluateHypothesis(hypothesis);
     }
 
-    return false;
-  }
-
-  // ============================================================
-  // AUTOPOIESIS IMPLEMENTATION
-  // ============================================================
-
-  /**
-   * Perform autopoietic self-maintenance
-   */
-  private performAutopoieticMaintenance(): void {
-    const now = Date.now();
-    const timeSinceLastMaintenance = now - this.lastMaintenanceTime;
-
-    // Only maintain every 5 seconds
-    if (timeSinceLastMaintenance < 5000) return;
-
-    this.autopoieticCycles++;
-    this.lastMaintenanceTime = now;
-
-    // Prune low-quality hypotheses
-    this.pruneHypotheses();
-
-    // Consolidate insights
-    this.consolidateInsights();
-
-    // Update global workspace integration
-    this.updateWorkspaceIntegration();
-
-    // Self-organize concepts
-    this.selfOrganizeConcepts();
-
-    this.emit("autopoietic_maintenance", {
-      cycle: this.autopoieticCycles,
-      hypothesesCount: this.hypotheses.size,
-      insightsCount: this.insights.length,
-    });
-  }
-
-  /**
-   * Prune low-quality hypotheses
-   */
-  private pruneHypotheses(): void {
-    const toRemove: string[] = [];
-
-    for (const [id, hypothesis] of this.hypotheses) {
-      // Remove refuted or low-probability hypotheses
-      if (
-        hypothesis.status === "refuted" ||
-        hypothesis.posteriorProbability < 0.1
-      ) {
-        toRemove.push(id);
-      }
-    }
-
-    for (const id of toRemove) {
-      this.hypotheses.delete(id);
-    }
-  }
-
-  /**
-   * Prune old insights
-   */
-  private pruneInsights(): void {
-    // Sort by significance * phi (combined quality)
-    this.insights.sort(
-      (a, b) => b.significance * b.phi - a.significance * a.phi,
+    const newInsights = await this.generateInsights(
+      "Summarize new insights from epistemic foraging",
+      newHypotheses,
     );
 
-    // Keep top insights
-    this.insights = this.insights.slice(0, this.config.maxInsights);
+    this.insights.push(...newInsights);
+    this.emit("epistemic_foraging_completed", { insights: newInsights });
+    this.dlog("Epistemic foraging completed. New insights:", newInsights);
+    return newInsights;
   }
 
-  /**
-   * Consolidate similar insights
-   */
-  private consolidateInsights(): void {
-    // Group insights by domain
-    const byDomain = new Map<ScientificDomain, ScientificInsight[]>();
-
-    for (const insight of this.insights) {
-      const existing = byDomain.get(insight.domain) || [];
-      existing.push(insight);
-      byDomain.set(insight.domain, existing);
-    }
-
-    // Update workspace with consolidated view
-    this.globalWorkspace.workingMemory.set("insightsByDomain", byDomain);
+  public getInsights(): ScientificInsight[] {
+    return this.insights;
   }
 
-  /**
-   * Update global workspace integration level
-   */
-  private updateWorkspaceIntegration(): void {
-    // Integration level based on cross-domain connections
-    const totalConnections = this.insights.reduce(
-      (sum, i) => sum + i.crossDomainConnections.length,
-      0,
-    );
-
-    const avgConnections = totalConnections / Math.max(1, this.insights.length);
-    this.globalWorkspace.integrationLevel = Math.min(1, avgConnections / 5);
+  public getHypotheses(): Hypothesis[] {
+    return Array.from(this.hypotheses.values());
   }
 
-  /**
-   * Self-organize concepts through clustering
-   */
-  private selfOrganizeConcepts(): void {
-    // Update concept relationships based on co-occurrence in insights
-    for (const insight of this.insights) {
-      for (const connection of insight.crossDomainConnections) {
-        const concept = this.concepts.get(connection);
-        if (concept) {
-          // Strengthen related concepts
-          concept.confidence = Math.min(1, concept.confidence + 0.01);
-        }
-      }
-    }
+  public getGlobalWorkspaceState(): GlobalWorkspaceState {
+    return this.globalWorkspace;
   }
 
-  // ============================================================
-  // UTILITY METHODS
-  // ============================================================
-
-  /**
-   * Find related domains for cross-domain synthesis
-   */
-  private findRelatedDomains(domain?: ScientificDomain): ScientificDomain[] {
-    const domainRelations: Record<ScientificDomain, ScientificDomain[]> = {
-      [ScientificDomain.Mathematics]: [
-        ScientificDomain.Physics,
-        ScientificDomain.ComputerScience,
-        ScientificDomain.InformationTheory,
-      ],
-      [ScientificDomain.Physics]: [
-        ScientificDomain.Mathematics,
-        ScientificDomain.Chemistry,
-        ScientificDomain.InformationTheory,
-      ],
-      [ScientificDomain.Chemistry]: [
-        ScientificDomain.Physics,
-        ScientificDomain.Biology,
-      ],
-      [ScientificDomain.Biology]: [
-        ScientificDomain.Chemistry,
-        ScientificDomain.Neuroscience,
-        ScientificDomain.SystemsTheory,
-      ],
-      [ScientificDomain.Neuroscience]: [
-        ScientificDomain.Biology,
-        ScientificDomain.CognitiveScience,
-        ScientificDomain.Philosophy,
-      ],
-      [ScientificDomain.ComputerScience]: [
-        ScientificDomain.Mathematics,
-        ScientificDomain.InformationTheory,
-        ScientificDomain.CognitiveScience,
-      ],
-      [ScientificDomain.Philosophy]: [
-        ScientificDomain.CognitiveScience,
-        ScientificDomain.Neuroscience,
-        ScientificDomain.Mathematics,
-      ],
-      [ScientificDomain.CognitiveScience]: [
-        ScientificDomain.Neuroscience,
-        ScientificDomain.Philosophy,
-        ScientificDomain.ComputerScience,
-      ],
-      [ScientificDomain.SystemsTheory]: [
-        ScientificDomain.Biology,
-        ScientificDomain.InformationTheory,
-        ScientificDomain.CognitiveScience,
-      ],
-      [ScientificDomain.InformationTheory]: [
-        ScientificDomain.Mathematics,
-        ScientificDomain.ComputerScience,
-        ScientificDomain.Physics,
-      ],
-    };
-
-    return domain
-      ? domainRelations[domain] || []
-      : Object.values(ScientificDomain);
-  }
-
-  /**
-   * Find cross-domain connections for a hypothesis
-   */
-  private findCrossDomainConnections(hypothesis: Hypothesis): string[] {
-    const connections: string[] = [];
-    const relatedDomains = this.findRelatedDomains(hypothesis.domain);
-
-    for (const domain of relatedDomains) {
-      connections.push(domain);
-    }
-
-    return connections;
-  }
-
-  /**
-   * Assess novelty of a hypothesis
-   */
-  private assessNovelty(hypothesis: Hypothesis): number {
-    // Check against existing hypotheses
-    let similarityScore = 0;
-
-    for (const existing of this.hypotheses.values()) {
-      if (existing.id === hypothesis.id) continue;
-      if (existing.domain === hypothesis.domain) {
-        similarityScore += 0.1;
-      }
-    }
-
-    // Novelty is inverse of similarity
-    return Math.max(0, 1 - similarityScore);
-  }
-
-  // ============================================================
-  // PUBLIC API
-  // ============================================================
-
-  /**
-   * Add a scientific concept to the knowledge base
-   */
-  public addConcept(
-    concept: Omit<ScientificConcept, "id" | "timestamp">,
-  ): string {
-    const id = `concept_${Date.now()}_${Math.random()
-      .toString(36)
-      .substr(2, 9)}`;
-    const fullConcept: ScientificConcept = {
-      ...concept,
-      id,
-      timestamp: Date.now(),
-    };
-
-    this.concepts.set(id, fullConcept);
-    this.emit("concept_added", { concept: fullConcept });
-
-    return id;
-  }
-
-  /**
-   * Get current state summary
-   */
-  public getState(): {
-    isGeniusMode: boolean;
-    reasoningMode: ReasoningMode;
-    totalFreeEnergy: number;
-    hypothesesCount: number;
-    insightsCount: number;
-    globalWorkspaceIntegration: number;
-    strangeLoopDepth: number;
-    autopoieticCycles: number;
-  } {
-    return {
-      isGeniusMode: this.isGeniusMode,
-      reasoningMode: this.currentReasoningMode,
-      totalFreeEnergy: this.totalFreeEnergy,
-      hypothesesCount: this.hypotheses.size,
-      insightsCount: this.insights.length,
-      globalWorkspaceIntegration: this.globalWorkspace.integrationLevel,
-      strangeLoopDepth: this.strangeLoop.metaCognitiveDepth,
-      autopoieticCycles: this.autopoieticCycles,
-    };
-  }
-
-  /**
-   * Get recent insights
-   */
-  public getRecentInsights(count: number = 10): ScientificInsight[] {
-    return this.insights.slice(-count);
-  }
-
-  /**
-   * Get active hypotheses
-   */
-  public getActiveHypotheses(): Hypothesis[] {
-    return Array.from(this.hypotheses.values()).filter(
-      (h) => h.status !== "refuted",
-    );
-  }
-
-  /**
-   * Get strange loop state
-   */
   public getStrangeLoopState(): StrangeLoopState {
-    return { ...this.strangeLoop };
+    return this.strangeLoop;
   }
 
-  /**
-   * Describe current state
-   */
-  public describeState(): string {
-    const state = this.getState();
-    const modeDesc = state.isGeniusMode ? "GENIUS MODE ACTIVE" : "Normal mode";
-    const reasoningDesc = `Reasoning: ${state.reasoningMode}`;
-    const energyDesc = `Free Energy: ${state.totalFreeEnergy.toFixed(2)}`;
-    const integrationDesc = `Integration: ${(
-      state.globalWorkspaceIntegration * 100
-    ).toFixed(0)}%`;
+  public getTotalFreeEnergy(): number {
+    return this.totalFreeEnergy;
+  }
 
-    return `Scientific Genius Engine [${modeDesc}] | ${reasoningDesc} | ${energyDesc} | ${integrationDesc}`;
+  public getAutopoieticCycles(): number {
+    return this.autopoieticCycles;
+  }
+
+  public getIsGeniusMode(): boolean {
+    return this.isGeniusMode;
+  }
+
+  public getCurrentReasoningMode(): ReasoningMode {
+    return this.currentReasoningMode;
   }
 }
 
-// Singleton instance
-export const scientificGeniusEngine = new ScientificGeniusEngine();
+export const scientificGeniusEngine = new ScientificGeniusEngineImpl();

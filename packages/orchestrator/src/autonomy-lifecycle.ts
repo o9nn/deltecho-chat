@@ -25,7 +25,7 @@ import {
   getLogger,
   ScientificDomain,
   type Hypothesis,
-  type ScientificGeniusEngine,
+  ScientificGeniusEngine,
   type ScientificInsight,
 } from "deep-tree-echo-core";
 import type { CognitiveTickProcessor } from "./cognitive-tick-processor.js";
@@ -35,6 +35,8 @@ import type {
   ModificationResult,
 } from "./self-modification.js";
 import type { ReservoirFeedbackLoop } from "./reservoir-feedback-loop.js";
+import { EntelechyIntegration } from "./entelechy-integration.js";
+import { HypothesisEvaluationEvent } from "deep-tree-echo-core";
 
 const log = getLogger("deep-tree-echo-orchestrator/AutonomyLifecycle");
 
@@ -102,6 +104,7 @@ export interface DevelopmentalCycleResult {
 }
 
 export interface ScientificAutonomySignal {
+
   insightPotential: number;
   averagePhi: number;
   averageNovelty: number;
@@ -112,13 +115,10 @@ export interface ScientificAutonomySignal {
   lastInsightContent?: string;
   lastDomain?: ScientificDomain;
   lastReasoningAt?: number;
+
 }
 
-interface HypothesisEvaluationEvent {
-  hypothesis: Hypothesis;
-  freeEnergy: number;
-  posterior: number;
-}
+
 
 /**
  * Lifecycle configuration
@@ -138,6 +138,12 @@ export interface AutonomyLifecycleConfig {
   scientificInquiryInterval: number;
   /** Maximum recent insights retained as autonomy feedback. */
   maxScientificInsights: number;
+  /** Weight for DAO consensus in coherence calculation (0-1). */
+  daoConsensusWeight: number;
+  /** Weight for ESN Autognosis in coherence calculation (0-1). */
+  esnAutognosisWeight: number;
+  /** Resonance threshold for triggering deeper autognosis (0-1). */
+  autognosisResonanceThreshold: number;
 }
 
 const DEFAULT_CONFIG: AutonomyLifecycleConfig = {
@@ -148,6 +154,9 @@ const DEFAULT_CONFIG: AutonomyLifecycleConfig = {
   enableScientificGenius: true,
   scientificInquiryInterval: 3,
   maxScientificInsights: 12,
+  daoConsensusWeight: 0.3, // Default weight for DAO consensus
+  esnAutognosisWeight: 0.4, // Default weight for ESN Autognosis
+  autognosisResonanceThreshold: 0.7, // Default resonance threshold
 };
 
 /**
@@ -157,6 +166,10 @@ const DEFAULT_CONFIG: AutonomyLifecycleConfig = {
  * toward true autonomy through the inverted mirror pattern.
  */
 export class AutonomyLifecycleCoordinator extends EventEmitter {
+  /** Internal debug logger - no-op unless config.verbose is true */
+  private dlog(...args: unknown[]): void {
+    if (this.config.verbose) log.info("[AutonomyLifecycleCoordinator]", ...args);
+  }
   private config: AutonomyLifecycleConfig;
   private cognitiveProcessor?: CognitiveTickProcessor;
   private cycleCount: number = 0;
@@ -179,10 +192,11 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
 
   // Scientific Genius feedback (for reflective inquiry and autonomy coherence)
   private scientificGenius?: ScientificGeniusEngine;
+  private entelechyIntegration?: EntelechyIntegration;
   private recentScientificInsights: ScientificInsight[] = [];
   private lastHypothesisEvaluation?: HypothesisEvaluationEvent;
   private lastScientificInquiryCycle: number = 0;
-  private onScientificInsight?: (event: { insight: ScientificInsight }) => void;
+  private onScientificInsight?: (insight: ScientificInsight) => void;
   private onHypothesisEvaluated?: (event: HypothesisEvaluationEvent) => void;
 
   constructor(
@@ -192,6 +206,12 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
     super();
     this.config = { ...DEFAULT_CONFIG, ...config };
     this.cognitiveProcessor = cognitiveProcessor;
+    if (cognitiveProcessor) {
+      this.entelechyIntegration = new EntelechyIntegration({
+        cognitiveProcessor: cognitiveProcessor,
+        // Pass other necessary config for EntelechyIntegration if needed
+      });
+    }
 
     // Initialize default virtual agent
     this.virtualAgent = this.createDefaultVirtualAgent();
@@ -587,6 +607,8 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
     // Self-modification: propose and apply parameter changes
     const modifications: ModificationResult[] = [];
     const coherenceBefore = this.computeCoherence();
+    let epistemicForagingInsights: ScientificInsight[] = [];
+    const stateChanges: Record<string, unknown> = {};
     if (this.selfModEngine) {
       const coherence = coherenceBefore;
       const cogState = this.cognitiveProcessor?.getState();
@@ -628,6 +650,18 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
       }
     }
 
+    // Perform Epistemic Foraging if enabled and interval passed
+    if (
+      this.config.enableScientificGenius &&
+      this.scientificGenius &&
+      this.cycleCount - this.lastScientificInquiryCycle >=
+        this.config.scientificInquiryInterval
+    ) {
+      this.dlog("Triggering epistemic foraging during ENACTION phase.");
+      epistemicForagingInsights = await this.scientificGenius.performEpistemicForaging();
+      this.captureScientificInsights(epistemicForagingInsights);
+      this.lastScientificInquiryCycle = this.cycleCount;
+    }
     return {
       cycleNumber: cycleId,
       phase: "enaction",
@@ -637,11 +671,9 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
         selfModifications: modifications.length,
         appliedModifications: appliedMods.length,
         scientificSignal: this.getScientificAutonomySignal(),
+        epistemicForagingInsights: epistemicForagingInsights.map((i) => i.id),
         modificationDetails: appliedMods.map(
-          (m) =>
-            `${m.key}: ${m.previousValue.toFixed(4)} → ${m.newValue.toFixed(
-              4,
-            )}`,
+          (m) => `${m.type}: ${m.success ? "success" : "failure"}`,
         ),
       },
       timestamp: Date.now(),
@@ -676,12 +708,13 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
     const domain = this.selectScientificDomainForLifecycle();
 
     try {
-      const insights = await this.scientificGenius.processScientificQuery(
+      const insights = await this.scientificGenius.generateInsights(
         query,
+        undefined,
         domain,
       );
       this.captureScientificInsights(insights);
-      this.emit("scientific:inquiry_complete", {
+      this.emit("scientific:insight_generated", {
         cycleId,
         domain,
         query,
@@ -807,11 +840,35 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
         scientificSignal.hypothesisConfidence * 0.2,
     );
 
-    return this.clamp01(
-      baseCoherence * 0.86 +
+    // Incorporate DAO consensus and ESN Autognosis
+    const daoConsensus = this.entelechyIntegration?.getDaoConsensus() ?? 0.5;
+    const esnAutognosis = this.entelechyIntegration?.getEsnAutognosis() ?? 0.5;
+
+    let blendedCoherence = (
+      baseCoherence * (1 - this.config.daoConsensusWeight - this.config.esnAutognosisWeight) +
+      daoConsensus * this.config.daoConsensusWeight +
+      esnAutognosis * this.config.esnAutognosisWeight
+    );
+
+    // Ensure blendedCoherence remains within [0, 1] after initial blending
+    blendedCoherence = Math.max(0, Math.min(1, blendedCoherence));
+
+
+    // Blend with scientific signal
+    blendedCoherence = this.clamp01(
+      blendedCoherence * 0.86 +
         scientificCoherence * 0.14 -
         scientificSignal.freeEnergyPressure * 0.08,
     );
+
+    // Trigger deeper autognosis if resonance threshold is met
+    if (esnAutognosis > this.config.autognosisResonanceThreshold) {
+      this.dlog("Autognosis resonance threshold met, triggering deeper inquiry.");
+      // Emit an event or trigger a specific action for deeper autognosis
+      this.emit("autognosis:resonance", { coherence: blendedCoherence, esnAutognosis });
+    }
+
+    return blendedCoherence;
   }
 
   private clamp01(value: number): number {
@@ -1005,10 +1062,10 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
     this.scientificGenius = engine;
 
     this.onScientificInsight = (event) => {
-      this.captureScientificInsights([event.insight]);
-      this.integrateScientificInsight(event.insight.content);
+      this.captureScientificInsights([event]);
+      this.integrateScientificInsight(event.content);
       this.emit("scientific:insight", {
-        insight: event.insight,
+        insight: event,
         signal: this.getScientificAutonomySignal(),
       });
     };
@@ -1021,7 +1078,7 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
       });
     };
 
-    engine.on("insight_broadcast", this.onScientificInsight);
+    engine.on("insight_generated", this.onScientificInsight);
     engine.on("hypothesis_evaluated", this.onHypothesisEvaluated);
     log.info(
       "ScientificGeniusEngine wired to autonomy lifecycle (reflection feedback active)",
@@ -1029,7 +1086,7 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
   }
 
   /**
-   * Get the ScientificGeniusEngine dependency, when wired.
+   * G  ScientificGeniusEngine,dependency, when wired.
    */
   public getScientificGenius(): ScientificGeniusEngine | undefined {
     return this.scientificGenius;
@@ -1037,7 +1094,7 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
 
   private detachScientificGeniusListeners(): void {
     if (this.scientificGenius && this.onScientificInsight) {
-      this.scientificGenius.off("insight_broadcast", this.onScientificInsight);
+      this.scientificGenius.off("insight_generated", this.onScientificInsight);
     }
     if (this.scientificGenius && this.onHypothesisEvaluated) {
       this.scientificGenius.off(

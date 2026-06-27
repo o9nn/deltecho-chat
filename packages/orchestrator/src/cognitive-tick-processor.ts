@@ -115,14 +115,33 @@ const DEFAULT_CONFIG: CognitiveTickProcessorConfig = {
   identityVectorDim: 16,
 };
 
-/**
- * CognitiveTickProcessor
- *
- * Provides real cognitive processing for each phase of the proactive loop.
- * Maintains episodic memory, goal state, and self-image across ticks.
- */
-export class CognitiveTickProcessor extends EventEmitter {
+  export class CognitiveTickProcessor extends EventEmitter {
   private config: CognitiveTickProcessorConfig;
+
+    /**
+     * Get the current DAO consensus score (0-1).
+     * Placeholder for actual DAO integration.
+     */
+    public getDaoConsensus(): number {
+      // Placeholder: In a real DAO, this would query a decentralized ledger or voting system.
+      // For now, return a value based on internal state or a simulated process.
+      return this.clamp01(0.5 + Math.sin(this.tickCount / 100) * 0.1); // Simulated fluctuation
+    }
+
+    /**
+     * Get the current ESN Autognosis score (0-1).
+     * Placeholder for actual ESN Autognosis integration.
+     */
+    public getEsnAutognosis(): number {
+      // Placeholder: In a real ESN Autognosis, this would come from the ESN's self-assessment.
+      // For now, return a value based on internal state or a simulated process.
+      return this.clamp01(0.6 + Math.cos(this.tickCount / 150) * 0.15); // Simulated fluctuation
+    }
+
+    private clamp01(value: number): number {
+      return Math.min(1, Math.max(0, value));
+    }
+
   private episodicMemories: EpisodicMemory[] = [];
   private goals: Map<string, CognitiveGoal> = new Map();
   private perceptBuffer: CognitivePercept[] = [];
