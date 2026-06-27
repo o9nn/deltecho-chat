@@ -492,6 +492,80 @@ export class CognitiveAvatarBridge extends EventEmitter {
   }
 
   /**
+   * Drive the avatar directly from the ScientificGeniusEngine's live visual
+   * state (see ScientificGeniusEngine.getVisualState). This closes the
+   * cognition -> embodiment loop: the avatar's "Scientific Genius" face is a
+   * faithful projection of genuine epistemic metrics (Φ, free energy,
+   * ESN coherence, autognosis resonance) rather than scripted animation.
+   *
+   * @param genius   Normalized visual state from the engine (all fields 0..1).
+   * @param context  Optional speaking/processing flags and audio level.
+   */
+  public updateFromScientificGenius(
+    genius: {
+      scientificGenius: number;
+      insightPotential: number;
+      phi: number;
+      freeEnergy: number;
+      esnCoherence: number;
+      autognosisResonance: number;
+    },
+    context: {
+      isProcessing?: boolean;
+      isSpeaking?: boolean;
+      audioLevel?: number;
+      daoConsensus?: number;
+      entelechyScore?: number;
+      temporalCoherence?: number;
+    } = {},
+  ): void {
+    // Derive affect from epistemic state: high insight + low residual free
+    // energy reads as positive, energized valence; unresolved surprise raises
+    // arousal (vigilance) without necessarily lowering valence.
+    const valence = Math.max(
+      -1,
+      Math.min(
+        1,
+        0.55 * genius.insightPotential +
+          0.35 * genius.esnCoherence -
+          0.3 * genius.freeEnergy,
+      ),
+    );
+    const arousal = Math.max(
+      0,
+      Math.min(
+        1,
+        0.5 * genius.scientificGenius +
+          0.3 * genius.freeEnergy +
+          0.2 * genius.insightPotential,
+      ),
+    );
+
+    this.updateFromCognitiveState({
+      sentienceLevel: genius.autognosisResonance,
+      selfAwareness: genius.autognosisResonance,
+      phi: genius.phi,
+      flowState: genius.esnCoherence,
+      emotionalValence: valence,
+      emotionalArousal: arousal,
+      // Let the projector infer "Scientific Genius" when activation is high.
+      mode: genius.scientificGenius >= 0.62 ? "Scientific Genius" : undefined,
+      salience: Math.max(genius.scientificGenius, genius.insightPotential),
+      temporalCoherence: context.temporalCoherence ?? genius.esnCoherence,
+      scientificGenius: genius.scientificGenius,
+      insightPotential: genius.insightPotential,
+      entelechyScore: context.entelechyScore,
+      freeEnergy: genius.freeEnergy,
+      daoConsensus: context.daoConsensus,
+      esnCoherence: genius.esnCoherence,
+      autognosisResonance: genius.autognosisResonance,
+      isProcessing: context.isProcessing ?? false,
+      isSpeaking: context.isSpeaking ?? false,
+      audioLevel: context.audioLevel,
+    });
+  }
+
+  /**
    * Describe current state
    */
   public describeState(): string {
