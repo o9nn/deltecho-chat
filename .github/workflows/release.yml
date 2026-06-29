@@ -59,7 +59,7 @@ jobs:
           pnpm --filter=@deltachat-desktop/target-electron pack:patch-node-modules
           # Use npx to invoke electron-builder directly in the target-electron directory
           cd packages/target-electron
-          npx electron-builder --config ./electron-builder.json5 --win nsis portable
+          npx electron-builder --config ./electron-builder.json5 --win nsis portable --publish never
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
