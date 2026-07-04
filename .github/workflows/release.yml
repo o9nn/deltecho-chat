@@ -59,7 +59,7 @@ jobs:
           pnpm --filter=@deltachat-desktop/target-electron pack:patch-node-modules
           # Use npx to invoke electron-builder directly in the target-electron directory
           cd packages/target-electron
-          npx electron-builder --config ./electron-builder.json5 --win nsis portable
+          npx electron-builder --config ./electron-builder.json5 --win nsis portable --publish never
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -153,16 +153,26 @@ jobs:
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
 
-      - name: Build Core
+      - name: Build Workspace Dependencies
         run: |
-          pnpm build:core
+          # Build workspace packages in dependency order so tsc
+          # can resolve cross-package type declarations via symlinks.
+          # Leaf packages first (no workspace deps), then dependents.
+          pnpm --filter=deep-tree-echo-core build
+          pnpm --filter=@deltecho/sys6-triality build
+          pnpm --filter=@deltecho/dove9 build
+          pnpm --filter=@deltecho/ipc build
+          pnpm --filter=@deltecho/cognitive build
+          pnpm --filter=deep-tree-echo-orchestrator build
+
+      - name: Pack Core
+        run: |
           cd packages/core
           pnpm pack
           mv deep-tree-echo-core-*.tgz ../../deep-tree-echo-core.tgz
 
-      - name: Build Orchestrator
+      - name: Pack Orchestrator
         run: |
-          pnpm build:orchestrator
           cd packages/orchestrator
           pnpm pack
           mv deep-tree-echo-orchestrator-*.tgz ../../deep-tree-echo-orchestrator.tgz

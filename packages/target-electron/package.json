@@ -6,7 +6,7 @@
   "description": "Desktop Application for delta.chat",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/deltachat/deltachat-desktop.git"
+    "url": "git+ssh://git@github.com/o9nn/deltecho-chat.git"
   },
   "keywords": [
     "deltachat",
