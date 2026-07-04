@@ -8,9 +8,22 @@ import { ScientificDomain, ReasoningMode } from "deep-tree-echo-core";
 
 class MockScientificGeniusEngine extends EventEmitter {
   public queries: Array<{ query: string; domain?: ScientificDomain }> = [];
+  public insights: Array<{ id: string; [key: string]: unknown }> = [];
+  public enableFreeEnergyMinimization = true;
+  public enableIntegratedInformation = true;
+  public enableAutopoiesis = true;
+  public enableStrangeLoops = true;
+  public enableEpistemicForaging = true;
+  public creativityTemperature = 0.7;
+  public rigorThreshold = 0.6;
+  public crossDomainWeight = 0.5;
+  public maxHypotheses = 100;
+  public maxInsights = 500;
+  public verbose = false;
 
-  public async processScientificQuery(
+  public async generateInsights(
     query: string,
+    _hypotheses?: unknown,
     domain?: ScientificDomain,
   ) {
     this.queries.push({ query, domain });
@@ -47,8 +60,31 @@ class MockScientificGeniusEngine extends EventEmitter {
       timestamp: Date.now(),
     };
 
-    this.emit("insight_broadcast", { insight });
+    this.insights.push(insight);
     return [insight];
+  }
+
+  public async processScientificQuery(
+    query: string,
+    domain?: ScientificDomain,
+  ) {
+    return this.generateInsights(query, undefined, domain);
+  }
+
+  public async performEpistemicForaging() {
+    return [];
+  }
+
+  public detectResonanceCascade() {
+    return null;
+  }
+
+  public on(event: string, listener: (...args: unknown[]) => void): this {
+    return super.on(event, listener);
+  }
+
+  public off(event: string, listener: (...args: unknown[]) => void): this {
+    return super.off(event, listener);
   }
 }
 
@@ -91,6 +127,8 @@ describe("AutonomyLifecycleCoordinator scientific-genius wiring", () => {
         dependencies: [],
       },
     ]),
+    getDaoConsensus: jest.fn(() => 0.75),
+    getEsnAutognosis: jest.fn(() => 0.72),
   } as any;
 
   it("feeds scientific insights into reflection state, coherence telemetry, and the virtual agent self-model", async () => {

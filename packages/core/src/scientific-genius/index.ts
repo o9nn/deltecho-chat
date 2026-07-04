@@ -44,6 +44,7 @@ export {
   type StrangeLoopState,
   type ScientificGeniusConfig,
   type HypothesisEvaluationEvent,
+  type EpistemicResonanceCascade,
 } from "./ScientificGeniusEngine.js";
 
 export {

@@ -222,6 +222,37 @@ const DEFAULT_CONFIG: ScientificGeniusConfig = {
 // ============================================================
 
 /**
+ * Epistemic Resonance Cascade — the "eureka moment" event.
+ *
+ * Triggered when a cluster of recent insights achieves critical mass:
+ * high mean Φ, strong cross-domain connectivity, and elevated novelty.
+ * The cascade amplifies the avatar's genius overlay and broadcasts
+ * a DAO-level governance signal for elevated spectral radius.
+ */
+export interface EpistemicResonanceCascade {
+  /** Unique cascade event ID */
+  id: string;
+  /** The insight cluster that triggered the cascade */
+  triggeringInsights: ScientificInsight[];
+  /** Mean integrated information of the cluster */
+  clusterPhi: number;
+  /** Mean novelty of the cluster */
+  clusterNovelty: number;
+  /** Number of unique domains spanned */
+  domainSpan: number;
+  /** Cascade intensity (0–1): how far above the threshold the cluster sits */
+  intensity: number;
+  /** Recommended spectral radius elevation for the ESN reservoir */
+  spectralRadiusBoost: number;
+  /** Recommended halo pulse frequency for the avatar overlay */
+  haloPulseHz: number;
+  /** Recommended epistemic temperature drop (negative = cooling toward certainty) */
+  epistemicTemperatureDelta: number;
+  /** Timestamp of cascade detection */
+  timestamp: number;
+}
+
+/**
  * Scientific Genius Engine
  *
  * Implements a multi-theoretic approach to scientific reasoning,
@@ -294,12 +325,24 @@ export interface ScientificGeniusEngine {
   getAutopoieticCycles(): number;
   getIsGeniusMode(): boolean;
   getCurrentReasoningMode(): ReasoningMode;
+  /**
+   * Detect and trigger an Epistemic Resonance Cascade.
+   * A cascade occurs when multiple recent insights form a high-Φ cluster
+   * (strongly interconnected, cross-domain, high novelty). This is the
+   * "eureka moment" — a genuine emergent event where scientific discovery
+   * physically manifests through the avatar.
+   *
+   * Returns null if no cascade condition is met.
+   */
+  detectResonanceCascade(): EpistemicResonanceCascade | null;
   on(event: "insight_generated", listener: (insight: ScientificInsight) => void): this;
   on(event: "hypothesis_evaluated", listener: (event: HypothesisEvaluationEvent) => void): this;
   on(event: "epistemic_foraging_completed", listener: (event: { insights: ScientificInsight[] }) => void): this;
+  on(event: "resonance_cascade", listener: (cascade: EpistemicResonanceCascade) => void): this;
   off(event: "insight_generated", listener: (insight: ScientificInsight) => void): this;
   off(event: "hypothesis_evaluated", listener: (event: HypothesisEvaluationEvent) => void): this;
   off(event: "epistemic_foraging_completed", listener: (event: { insights: ScientificInsight[] }) => void): this;
+  off(event: "resonance_cascade", listener: (cascade: EpistemicResonanceCascade) => void): this;
 }
 
 export class ScientificGeniusEngineImpl extends EventEmitter implements ScientificGeniusEngine {
@@ -995,6 +1038,91 @@ export class ScientificGeniusEngineImpl extends EventEmitter implements Scientif
   /** Internal helper exposing self-model accuracy for the visual projection. */
   private selfModelAccuracyProxy(): number {
     return clamp01(this.strangeLoop.selfModelAccuracy);
+  }
+
+  // ============================================================
+  // EPISTEMIC RESONANCE CASCADE
+  // ============================================================
+
+  /**
+   * Detect an Epistemic Resonance Cascade from recent insight activity.
+   *
+   * A cascade fires when the last N insights (window = 8) satisfy:
+   *   1. Mean Φ > 0.6 (high integrated information)
+   *   2. Mean novelty > 0.5 (genuinely new territory)
+   *   3. Domain span ≥ 3 (cross-domain synthesis)
+   *
+   * The cascade intensity is proportional to how far above threshold
+   * the cluster sits. The output prescribes avatar overlay and ESN
+   * parameter changes that the orchestrator can apply.
+   *
+   * This is NOT random — it emerges deterministically from the engine's
+   * accumulated knowledge state and the genuine metrics of recent insights.
+   */
+  public detectResonanceCascade(): EpistemicResonanceCascade | null {
+    const WINDOW = 8;
+    const PHI_THRESHOLD = 0.6;
+    const NOVELTY_THRESHOLD = 0.5;
+    const DOMAIN_SPAN_THRESHOLD = 3;
+
+    // Take the most recent insights within the window
+    const recentInsights = this.insights.slice(-WINDOW);
+    if (recentInsights.length < 3) return null; // Need minimum cluster size
+
+    // Compute cluster metrics
+    const meanPhi =
+      recentInsights.reduce((s, i) => s + i.phi, 0) / recentInsights.length;
+    const meanNovelty =
+      recentInsights.reduce((s, i) => s + i.novelty, 0) / recentInsights.length;
+    const uniqueDomains = new Set(recentInsights.map((i) => i.domain));
+    const domainSpan = uniqueDomains.size;
+
+    // Check cascade conditions
+    if (
+      meanPhi < PHI_THRESHOLD ||
+      meanNovelty < NOVELTY_THRESHOLD ||
+      domainSpan < DOMAIN_SPAN_THRESHOLD
+    ) {
+      return null;
+    }
+
+    // Compute intensity: geometric mean of how far each metric exceeds threshold
+    const phiExcess = (meanPhi - PHI_THRESHOLD) / (1 - PHI_THRESHOLD);
+    const noveltyExcess =
+      (meanNovelty - NOVELTY_THRESHOLD) / (1 - NOVELTY_THRESHOLD);
+    const domainExcess =
+      (domainSpan - DOMAIN_SPAN_THRESHOLD) /
+      (Object.keys(ScientificDomain).length / 2 - DOMAIN_SPAN_THRESHOLD);
+    const intensity = clamp01(
+      Math.cbrt(phiExcess * noveltyExcess * Math.max(0.01, domainExcess)),
+    );
+
+    // Prescribe avatar/ESN parameter changes proportional to intensity
+    const cascade: EpistemicResonanceCascade = {
+      id: `cascade_${Date.now()}_${Math.floor(intensity * 1000)}`,
+      triggeringInsights: recentInsights,
+      clusterPhi: meanPhi,
+      clusterNovelty: meanNovelty,
+      domainSpan,
+      intensity,
+      // Boost spectral radius toward edge of chaos (max +0.15)
+      spectralRadiusBoost: intensity * 0.15,
+      // Elevate halo pulse: baseline 1.2Hz → up to 4.8Hz during cascade
+      haloPulseHz: 1.2 + intensity * 3.6,
+      // Cool epistemic temperature (certainty crystallizing)
+      epistemicTemperatureDelta: -intensity * 0.4,
+      timestamp: Date.now(),
+    };
+
+    this.dlog("RESONANCE CASCADE DETECTED:", {
+      intensity: intensity.toFixed(3),
+      phi: meanPhi.toFixed(3),
+      novelty: meanNovelty.toFixed(3),
+      domains: [...uniqueDomains],
+    });
+
+    this.emit("resonance_cascade", cascade);
+    return cascade;
   }
 
   /**

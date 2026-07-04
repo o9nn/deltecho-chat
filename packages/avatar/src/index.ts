@@ -101,3 +101,13 @@ export {
   type EntelechyInput,
   type ESNAvatarBridgeConfig,
 } from "./esn-avatar-bridge";
+
+// Self-Model Avatar Feedback (Loop 4: perceive → correct → self-model)
+export {
+  SelfModelAvatarFeedback,
+  selfModelAvatarFeedback,
+  type CubismParamSnapshot,
+  type ExpressionExperience,
+  type ProjectionCalibration,
+  type SelfModelFeedbackConfig,
+} from "./self-model-avatar-feedback";

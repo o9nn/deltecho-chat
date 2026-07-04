@@ -136,6 +136,9 @@ export class SelfModificationEngine extends EventEmitter {
   private totalRejections = 0;
   private onApplyCallbacks: Map<string, (value: number) => void> = new Map();
 
+  /** Avatar self-model accuracy fed from the SelfModelAvatarFeedback loop (Loop 4). */
+  private avatarSelfModelAccuracy?: number;
+
   constructor(config: Partial<SelfModificationConfig> = {}) {
     super();
     this.config = { ...DEFAULT_CONFIG, ...config };
@@ -221,6 +224,28 @@ export class SelfModificationEngine extends EventEmitter {
         max: 1.0,
         maxDeltaFraction: 0.2,
         category: "inference",
+      },
+
+      // Avatar self-model parameters
+      {
+        key: "avatar.projectionLearningRate",
+        description: "Learning rate for avatar projection law calibration (Loop 4)",
+        currentValue: 0.08,
+        defaultValue: 0.08,
+        min: 0.01,
+        max: 0.3,
+        maxDeltaFraction: 0.3,
+        category: "learning",
+      },
+      {
+        key: "avatar.calibrationThreshold",
+        description: "Minimum expression error to trigger projection calibration",
+        currentValue: 0.05,
+        defaultValue: 0.05,
+        min: 0.01,
+        max: 0.2,
+        maxDeltaFraction: 0.3,
+        category: "learning",
       },
 
       // Goal parameters
@@ -567,6 +592,36 @@ export class SelfModificationEngine extends EventEmitter {
       });
     }
 
+    // If avatar self-model accuracy is low, increase projection learning rate
+    // This wires Autognosis → SelfModification for closed-loop self-improvement
+    // through the avatar's perceive→correct→self-model loop (Loop 4)
+    if (this.avatarSelfModelAccuracy !== undefined) {
+      if (this.avatarSelfModelAccuracy < 0.6) {
+        proposals.push({
+          key: "avatar.projectionLearningRate",
+          newValue: Math.min(
+            0.3,
+            (this.parameters.get("avatar.projectionLearningRate")?.currentValue ?? 0.08) * 1.25,
+          ),
+          reason: `Low avatar self-model accuracy (${this.avatarSelfModelAccuracy.toFixed(3)}) — increasing projection learning rate`,
+          source: "enaction",
+          coherenceAtRequest: coherence,
+        });
+      } else if (this.avatarSelfModelAccuracy > 0.9) {
+        // High accuracy: tighten calibration threshold for finer expression
+        proposals.push({
+          key: "avatar.calibrationThreshold",
+          newValue: Math.max(
+            0.01,
+            (this.parameters.get("avatar.calibrationThreshold")?.currentValue ?? 0.05) * 0.85,
+          ),
+          reason: `High avatar self-model accuracy (${this.avatarSelfModelAccuracy.toFixed(3)}) — tightening calibration threshold`,
+          source: "enaction",
+          coherenceAtRequest: coherence,
+        });
+      }
+    }
+
     return proposals;
   }
 
@@ -614,5 +669,15 @@ export class SelfModificationEngine extends EventEmitter {
    */
   registerParameter(param: ModifiableParameter): void {
     this.parameters.set(param.key, param);
+  }
+
+  /**
+   * Update the avatar self-model accuracy from the SelfModelAvatarFeedback loop.
+   * This closes the Autognosis → SelfModification wire: the avatar's
+   * perceive→correct→self-model loop feeds its accuracy estimate here,
+   * and proposeModifications uses it to tune projection parameters.
+   */
+  updateAvatarSelfModelAccuracy(accuracy: number): void {
+    this.avatarSelfModelAccuracy = Math.max(0, Math.min(1, accuracy));
   }
 }

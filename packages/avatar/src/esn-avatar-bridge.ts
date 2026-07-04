@@ -345,6 +345,55 @@ export class ESNAvatarBridge extends EventEmitter {
   }
 
   /**
+   * Inject somatic marker activations into the reservoir state as bias.
+   * This implements Loop 2 from the cognitive-wiring schema: emotional
+   * memories bias the reservoir, which the readout then projects as
+   * continuous animation modulation (breathing amplitude, micro-sway,
+   * chaotic jitter). The somatic markers are NOT overriding the reservoir
+   * — they inject a bias that the reservoir's dynamics integrate.
+   *
+   * @param valence  Emotional valence (-1 to 1)
+   * @param arousal  Emotional arousal (0 to 1)
+   * @param weight   Injection strength (0 to 1, default 0.3)
+   */
+  public injectSomaticMarker(
+    valence: number,
+    arousal: number,
+    weight: number = 0.3,
+  ): void {
+    const w = clamp01(weight);
+    const v = clamp(valence, -1, 1);
+    const a = clamp01(arousal);
+
+    // Bias the smoothed activations: valence shifts brow/mouth symmetrically,
+    // arousal amplifies all channels and adds irregularity to breathing.
+    for (let i = 0; i < this.smoothedActivations.length; i++) {
+      // Even indices get valence bias, odd get arousal bias
+      const bias = i % 2 === 0 ? v * w * 0.5 : a * w * 0.4;
+      this.smoothedActivations[i] += bias;
+    }
+
+    // Arousal directly modulates breathing irregularity and depth
+    this.currentParams.breathingModulation.irregularity = clamp01(
+      this.currentParams.breathingModulation.irregularity + a * w * 0.2,
+    );
+    this.currentParams.breathingModulation.depth = clamp01(
+      this.currentParams.breathingModulation.depth + a * w * 0.15,
+    );
+
+    // Valence shifts consciousness glow color temperature
+    if (v > 0.3) {
+      // Warm (positive memory)
+      this.currentParams.consciousnessGlow.color = "#7ad98a";
+    } else if (v < -0.3) {
+      // Cool/dim (negative memory)
+      this.currentParams.consciousnessGlow.color = "#8a6ad9";
+    }
+
+    this.emit("somatic-injection", { valence: v, arousal: a, weight: w });
+  }
+
+  /**
    * Get current animation parameters
    */
   public getParams(): ReservoirAnimationParams {

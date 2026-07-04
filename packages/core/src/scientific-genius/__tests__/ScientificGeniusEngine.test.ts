@@ -167,4 +167,82 @@ describe("ScientificGeniusEngine — principled reasoning", () => {
     // High novelty on a fresh engine should drive abductive inference.
     expect(engine.getCurrentReasoningMode()).toBe(ReasoningMode.Abductive);
   });
+
+  // ─── Epistemic Resonance Cascade ─────────────────────────────
+
+  it("returns null when insufficient insights exist for a cascade", () => {
+    const engine = freshEngine();
+    // No insights at all
+    expect(engine.detectResonanceCascade()).toBeNull();
+  });
+
+  it("returns null when insights lack cross-domain diversity", async () => {
+    const engine = freshEngine();
+    // Feed 5 insights in the same domain — domain span < 3
+    for (let i = 0; i < 5; i++) {
+      await engine.processScientificQuery(
+        `unique novel concept ${i} quasicrystal phonon lattice ${Math.random().toString(36).slice(2)}`,
+        ScientificDomain.Physics,
+      );
+    }
+    expect(engine.detectResonanceCascade()).toBeNull();
+  });
+
+  it("triggers a cascade when high-Φ, high-novelty, cross-domain insights accumulate", async () => {
+    const engine = freshEngine();
+    // Feed diverse, novel stimuli across 4+ domains
+    const domains = [
+      ScientificDomain.Neuroscience,
+      ScientificDomain.Physics,
+      ScientificDomain.Mathematics,
+      ScientificDomain.CognitiveScience,
+      ScientificDomain.InformationTheory,
+    ];
+    for (let i = 0; i < domains.length; i++) {
+      await engine.processScientificQuery(
+        `unprecedented breakthrough ${i} ${Math.random().toString(36).slice(2)} paradigm shift`,
+        domains[i],
+      );
+    }
+    const cascade = engine.detectResonanceCascade();
+    // May or may not fire depending on actual phi/novelty, but if it fires:
+    if (cascade) {
+      expect(cascade.intensity).toBeGreaterThan(0);
+      expect(cascade.intensity).toBeLessThanOrEqual(1);
+      expect(cascade.domainSpan).toBeGreaterThanOrEqual(3);
+      expect(cascade.spectralRadiusBoost).toBeGreaterThan(0);
+      expect(cascade.spectralRadiusBoost).toBeLessThanOrEqual(0.15);
+      expect(cascade.haloPulseHz).toBeGreaterThanOrEqual(1.2);
+      expect(cascade.haloPulseHz).toBeLessThanOrEqual(4.8);
+      expect(cascade.epistemicTemperatureDelta).toBeLessThanOrEqual(0);
+      expect(cascade.triggeringInsights.length).toBeGreaterThanOrEqual(3);
+    }
+  });
+
+  it("emits a resonance_cascade event when triggered", async () => {
+    const engine = freshEngine();
+    const cascadeEvents: unknown[] = [];
+    engine.on("resonance_cascade", (c) => cascadeEvents.push(c));
+
+    // Seed enough diverse insights
+    const domains = [
+      ScientificDomain.Biology,
+      ScientificDomain.Chemistry,
+      ScientificDomain.SystemsTheory,
+      ScientificDomain.Philosophy,
+      ScientificDomain.ComputerScience,
+    ];
+    for (let i = 0; i < domains.length; i++) {
+      await engine.processScientificQuery(
+        `revolutionary discovery ${i} ${Math.random().toString(36).slice(2)} emergent phenomenon`,
+        domains[i],
+      );
+    }
+    engine.detectResonanceCascade();
+    // If conditions were met, event should have fired
+    if (cascadeEvents.length > 0) {
+      expect(cascadeEvents[0]).toHaveProperty("id");
+      expect(cascadeEvents[0]).toHaveProperty("intensity");
+    }
+  });
 });

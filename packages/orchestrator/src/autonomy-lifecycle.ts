@@ -36,7 +36,7 @@ import type {
 } from "./self-modification.js";
 import type { ReservoirFeedbackLoop } from "./reservoir-feedback-loop.js";
 import { EntelechyIntegration } from "./entelechy-integration.js";
-import { HypothesisEvaluationEvent } from "deep-tree-echo-core";
+import { HypothesisEvaluationEvent, type EpistemicResonanceCascade } from "deep-tree-echo-core";
 
 const log = getLogger("deep-tree-echo-orchestrator/AutonomyLifecycle");
 
@@ -1080,8 +1080,30 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
 
     engine.on("insight_generated", this.onScientificInsight);
     engine.on("hypothesis_evaluated", this.onHypothesisEvaluated);
+
+    // Wire Epistemic Resonance Cascade: when a cascade fires, apply the
+    // prescribed spectral radius boost and emit the event for the avatar
+    // bridge to amplify the genius overlay (halo pulse, temperature).
+    engine.on("resonance_cascade", (cascade) => {
+      if (this.selfModEngine && cascade.spectralRadiusBoost > 0) {
+        const currentRadius =
+          this.selfModEngine.getParameter("reservoir.spectralRadius")?.currentValue ?? 0.95;
+        this.selfModEngine.modify({
+          key: "reservoir.spectralRadius",
+          newValue: Math.min(1.5, currentRadius + cascade.spectralRadiusBoost),
+          reason: `Epistemic Resonance Cascade (intensity=${cascade.intensity.toFixed(3)}) — boosting spectral radius toward edge of chaos`,
+          source: "enaction",
+          coherenceAtRequest: this.computeCoherence(),
+        });
+      }
+      this.emit("scientific:resonance_cascade", cascade);
+      log.info(
+        `RESONANCE CASCADE: intensity=${cascade.intensity.toFixed(3)} domains=${cascade.domainSpan} Φ=${cascade.clusterPhi.toFixed(3)}`,
+      );
+    });
+
     log.info(
-      "ScientificGeniusEngine wired to autonomy lifecycle (reflection feedback active)",
+      "ScientificGeniusEngine wired to autonomy lifecycle (reflection + cascade feedback active)",
     );
   }
 
@@ -1104,6 +1126,35 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
     }
     this.onScientificInsight = undefined;
     this.onHypothesisEvaluated = undefined;
+  }
+
+  /**
+   * Wire Avatar Self-Model Feedback (Loop 4: perceive → correct → self-model).
+   * This connects the avatar's autognosis loop to the ENACTION phase:
+   * - The avatar's self-model accuracy feeds into the SelfModificationEngine
+   * - ENACTION proposes projection law parameter changes based on accuracy
+   * - The avatar learns to express DTE's cognitive state more accurately over time
+   *
+   * This implements the "next evolution target": wiring Autognosis to SelfModification
+   * for closed-loop self-improvement through the face.
+   */
+  public wireAvatarFeedback(feedback: {
+    on(event: string, listener: (...args: unknown[]) => void): void;
+    getSelfModelAccuracy(): number;
+  }): void {
+    feedback.on("self-model-update", (data: unknown) => {
+      const update = data as { accuracy: number; meanError: number };
+      // Feed accuracy into the self-modification engine
+      if (this.selfModEngine) {
+        this.selfModEngine.updateAvatarSelfModelAccuracy(update.accuracy);
+      }
+      // Update the virtual agent's perceived accuracy
+      this.virtualAgent.selfAwareness.perceivedAccuracy = update.accuracy;
+      this.emit("avatar:self-model-update", update);
+    });
+    log.info(
+      "Avatar SelfModelFeedback wired to autonomy lifecycle (Loop 4 autognosis active)",
+    );
   }
 
   /**
