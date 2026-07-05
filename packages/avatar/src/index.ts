@@ -120,3 +120,11 @@ export {
   type LorenzState,
   type PlayfulMicroGesture,
 } from "./chaotic-micro-expression-layer";
+
+// Signature Gesture Controller (DTE identity echo across modes)
+export {
+  SignatureGestureController,
+  type SignatureGestureState,
+  type SignatureGestureOverlay,
+  type SignatureGestureConfig,
+} from "./signature-gesture-controller";

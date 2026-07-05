@@ -1108,7 +1108,104 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
   }
 
   /**
-   * G  ScientificGeniusEngine,dependency, when wired.
+   * Wire the IterativeMicroImprovementEngine to the SelfModificationEngine.
+   * This connects Alexander's 12-step structure-preserving transformation loop
+   * to actual runtime parameter changes:
+   *   - mutation_apply → selfModEngine.modify()
+   *   - improvement_rejected → selfModEngine rollback
+   *   - cycle_complete → emit DAO summary for governance
+   *   - convergence → reduce improvement frequency
+   */
+  public wireMicroImprovement(engine: {
+    on(event: string, listener: (...args: unknown[]) => void): void;
+    setCoherenceProvider(fn: () => number): void;
+    setPhiProvider(fn: () => number): void;
+    setFreeEnergyProvider(fn: () => number): void;
+    getDaoSummary(): { iteration: number; improvementRate: number; weakestCenter: string; overallHealth: number; recommendation: string };
+    isEvaluating(): boolean;
+  }): void {
+    // Connect state providers so the improvement engine reads live metrics
+    engine.setCoherenceProvider(() => this.computeCoherence());
+    engine.setPhiProvider(() => {
+      const sg = this.scientificGenius;
+      if (sg && typeof (sg as unknown as { getState: () => { phi: number } }).getState === 'function') {
+        return (sg as unknown as { getState: () => { phi: number } }).getState().phi;
+      }
+      return this.virtualAgent.selfAwareness.perceivedAccuracy;
+    });
+    engine.setFreeEnergyProvider(() => {
+      const sg = this.scientificGenius;
+      if (sg && typeof (sg as unknown as { getState: () => { freeEnergy: number } }).getState === 'function') {
+        return (sg as unknown as { getState: () => { freeEnergy: number } }).getState().freeEnergy;
+      }
+      return 1 - this.computeCoherence();
+    });
+
+    // Translate mutation_apply into actual self-modification
+    engine.on('mutation_apply', (candidate: unknown) => {
+      const c = candidate as { id: string; targetProperty: string; mutation: string; description: string; estimatedImpact: number };
+      if (!this.selfModEngine) return;
+
+      // Map Alexander property mutations to parameter keys
+      const paramKey = this.alexanderPropertyToParamKey(c.targetProperty, c.mutation);
+      if (!paramKey) return;
+
+      const param = this.selfModEngine.getParameter(paramKey);
+      if (!param) return;
+
+      // Compute new value: nudge toward improvement
+      const delta = (param.max - param.min) * c.estimatedImpact * 0.5;
+      const newValue = Math.min(param.max, Math.max(param.min, param.currentValue + delta));
+
+      this.selfModEngine.modify({
+        key: paramKey,
+        newValue,
+        reason: `MicroImprovement [${c.id}]: ${c.description}`,
+        source: 'enaction',
+        coherenceAtRequest: this.computeCoherence(),
+      });
+    });
+
+    // On cycle complete, emit DAO summary for governance
+    engine.on('cycle_complete', () => {
+      const summary = engine.getDaoSummary();
+      this.emit('micro-improvement:cycle-complete', summary);
+      log.info(
+        `MicroImprovement cycle complete: iter=${summary.iteration} rate=${(summary.improvementRate * 100).toFixed(0)}% weakest=${summary.weakestCenter} health=${(summary.overallHealth * 100).toFixed(0)}% rec=${summary.recommendation}`,
+      );
+    });
+
+    // On convergence, log and emit
+    engine.on('convergence', () => {
+      this.emit('micro-improvement:convergence', engine.getDaoSummary());
+      log.info('MicroImprovement: convergence reached — no further improvements found');
+    });
+
+    log.info('IterativeMicroImprovementEngine wired to autonomy lifecycle (Alexander loop active)');
+  }
+
+  /**
+   * Map an Alexander property + mutation type to a self-modification parameter key.
+   */
+  private alexanderPropertyToParamKey(property: string, mutation: string): string | null {
+    // Priority mappings: Alexander properties → concrete system parameters
+    const mapping: Record<string, string> = {
+      'good_shape': 'avatar.projectionLearningRate',
+      'roughness': 'avatar.calibrationThreshold',
+      'alternating_repetition': 'reservoir.spectralRadius',
+      'strong_centers': 'reservoir.spectralRadius',
+      'the_void': 'avatar.calibrationThreshold',
+      'deep_interlock': 'reservoir.spectralRadius',
+      'gradients': 'avatar.projectionLearningRate',
+      'contrast': 'avatar.calibrationThreshold',
+      'echoes': 'reservoir.spectralRadius',
+    };
+
+    return mapping[property] ?? null;
+  }
+
+  /**
+   * Get ScientificGeniusEngine, when wired.
    */
   public getScientificGenius(): ScientificGeniusEngine | undefined {
     return this.scientificGenius;

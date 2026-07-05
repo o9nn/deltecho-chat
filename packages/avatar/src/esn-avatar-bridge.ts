@@ -22,6 +22,12 @@
  */
 
 import { EventEmitter } from "events";
+import {
+  ChaoticMicroExpressionLayer,
+  type EndocrineInput,
+  type MicroExpressionDeltas,
+} from "./chaotic-micro-expression-layer.js";
+import { SignatureGestureController } from "./signature-gesture-controller.js";
 // Types from ./types available if needed for future integration
 
 // ============================================================
@@ -150,10 +156,24 @@ export class ESNAvatarBridge extends EventEmitter {
   private breathPhase: number = 0;
   private tickCount: number = 0;
 
+  // Chaotic micro-expression layer (Lorenz attractor)
+  private chaosLayer: ChaoticMicroExpressionLayer;
+  private signatureGestureCtrl: SignatureGestureController;
+  private lastEndocrine: EndocrineInput = {
+    cortisol: 0.2, norepinephrine: 0.3, dopaminePhasic: 0, serotonin: 0.5, oxytocin: 0.3,
+  };
+  private currentFreeEnergy: number = 0;
+  private echobeatsPhase: number = 1;
+  private echobeatsFrameInPhase: number = 0;
+  private isEvaluatingSelf: boolean = false;
+  private signatureGesture: string | null = null;
+
   constructor(config: Partial<ESNAvatarBridgeConfig> = {}) {
     super();
     this.config = { ...DEFAULT_CONFIG, ...config };
     this.smoothedActivations = new Array(this.config.projectionDim).fill(0);
+    this.chaosLayer = new ChaoticMicroExpressionLayer();
+    this.signatureGestureCtrl = new SignatureGestureController();
 
     this.currentParams = {
       microExpressions: {
@@ -258,6 +278,9 @@ export class ESNAvatarBridge extends EventEmitter {
         visualIntensity: input.isEdgeOfChaos ? 0.7 : 0.2,
       };
     }
+
+    // 6. Compose chaotic micro-expression layer (Lorenz-driven organic roughness)
+    this.composeChaosLayer();
 
     this.emit("reservoir-update", this.currentParams);
   }
@@ -447,6 +470,99 @@ export class ESNAvatarBridge extends EventEmitter {
       .padStart(2, "0")}${Math.floor(dim * 0.6)
       .toString(16)
       .padStart(2, "0")}${dim.toString(16).padStart(2, "0")}`;
+  }
+
+  // ─── Chaotic Layer Integration ─────────────────────────────────────────────
+
+  /**
+   * Compose the Lorenz-driven chaotic micro-expression layer onto the
+   * reservoir-driven micro-expressions. This is additive: the reservoir
+   * provides the base signal, the chaos layer adds organic roughness.
+   */
+  private composeChaosLayer(): void {
+    // 1. Compute Lorenz-driven deltas
+    const deltas = this.chaosLayer.computeDeltas(this.lastEndocrine);
+
+    // 2. Additively blend onto reservoir micro-expressions
+    this.currentParams.microExpressions.browLeftOffset += deltas.paramBrowLY;
+    this.currentParams.microExpressions.browRightOffset += deltas.paramBrowRY;
+    this.currentParams.microExpressions.eyeLeftOffset += deltas.paramEyeLOpen;
+    this.currentParams.microExpressions.eyeRightOffset += deltas.paramEyeROpen;
+    this.currentParams.microExpressions.mouthOffset += deltas.paramMouthForm;
+    this.currentParams.microExpressions.headTiltOffset += deltas.paramAngleZ;
+
+    // 3. Uncertainty expression (The Void — visible searching face)
+    const uncertainty = this.chaosLayer.computeUncertaintyExpression(this.currentFreeEnergy);
+    if (uncertainty.paramBrowLY !== undefined) {
+      this.currentParams.microExpressions.browLeftOffset += uncertainty.paramBrowLY;
+      this.currentParams.microExpressions.browRightOffset += (uncertainty.paramBrowRY ?? 0);
+      this.currentParams.microExpressions.mouthOffset += (uncertainty.paramMouthOpenY ?? 0);
+    }
+
+    // 4. Echobeats breath modulation (Alternating Repetition)
+    const breath = this.chaosLayer.computeEchobeatsBreathModulation(
+      this.echobeatsPhase, this.echobeatsFrameInPhase,
+    );
+    this.currentParams.breathingModulation.rate *= breath.breathRate;
+    this.currentParams.breathingModulation.depth *= breath.breathDepth;
+
+    // 5. Meta-awareness expression (self-improvement evaluation)
+    const meta = this.chaosLayer.computeMetaAwarenessExpression(this.isEvaluatingSelf);
+    if (meta.paramEyeLOpen !== undefined) {
+      this.currentParams.microExpressions.eyeLeftOffset += meta.paramEyeLOpen;
+      this.currentParams.microExpressions.eyeRightOffset += (meta.paramEyeROpen ?? 0);
+      this.currentParams.microExpressions.headTiltOffset += (meta.paramAngleZ ?? 0);
+      this.currentParams.microExpressions.mouthOffset += (meta.paramMouthForm ?? 0);
+    }
+
+    // 6. Track signature gesture (the DTE identity echo across modes)
+    this.signatureGesture = this.chaosLayer.getActiveGesture();
+
+    // 7. Signature gesture overlay (periodic identity echo)
+    const lorenzState = this.chaosLayer.getLorenzState();
+    const sigOverlay = this.signatureGestureCtrl.tick(lorenzState.z);
+    this.currentParams.microExpressions.browLeftOffset += sigOverlay.paramBrowLY;
+    this.currentParams.microExpressions.browRightOffset += sigOverlay.paramBrowRY;
+    this.currentParams.microExpressions.eyeLeftOffset += sigOverlay.paramEyeLOpen;
+    this.currentParams.microExpressions.mouthOffset += sigOverlay.paramMouthForm;
+  }
+
+  /**
+   * Update endocrine state for the chaos layer.
+   * Called by the orchestrator when virtual endocrine system updates.
+   */
+  public updateEndocrineState(endocrine: EndocrineInput): void {
+    this.lastEndocrine = endocrine;
+  }
+
+  /**
+   * Update free energy for uncertainty expression.
+   */
+  public updateFreeEnergy(freeEnergy: number): void {
+    this.currentFreeEnergy = clamp01(freeEnergy);
+  }
+
+  /**
+   * Update Echobeats phase for breath modulation.
+   */
+  public updateEchobeatsPhase(phase: number, frameInPhase: number = 0): void {
+    this.echobeatsPhase = phase;
+    this.echobeatsFrameInPhase = frameInPhase;
+  }
+
+  /**
+   * Signal whether the iterative micro-improvement engine is evaluating.
+   */
+  public setEvaluatingSelf(evaluating: boolean): void {
+    this.isEvaluatingSelf = evaluating;
+  }
+
+  /**
+   * Get the current signature gesture (DTE identity echo).
+   * Returns null if no gesture is active.
+   */
+  public getSignatureGesture(): string | null {
+    return this.signatureGesture;
   }
 
   /**
