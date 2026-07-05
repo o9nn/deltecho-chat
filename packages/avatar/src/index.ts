@@ -111,3 +111,12 @@ export {
   type ProjectionCalibration,
   type SelfModelFeedbackConfig,
 } from "./self-model-avatar-feedback";
+
+// Chaotic Micro-Expression Layer (Lorenz attractor-driven organic roughness)
+export {
+  ChaoticMicroExpressionLayer,
+  type EndocrineInput as ChaoticEndocrineInput,
+  type MicroExpressionDeltas,
+  type LorenzState,
+  type PlayfulMicroGesture,
+} from "./chaotic-micro-expression-layer";

@@ -171,3 +171,15 @@ export { ProactiveLoop } from "./proactive-loop.js";
 export { Echobeats } from "./echobeats.js";
 export * from "./perception/index.js";
 export * from "./tools/index.js";
+
+// Iterative Micro-Improvement Engine (autonomous self-improvement loop)
+export {
+  IterativeMicroImprovementEngine,
+  iterativeMicroImprovement,
+  type AlexanderPropertyScore,
+  type ImprovementCandidate,
+  type ImprovementResult,
+  type MicroImprovementState,
+  type MicroImprovementConfig,
+  type MutationType,
+} from "./iterative-micro-improvement.js";
