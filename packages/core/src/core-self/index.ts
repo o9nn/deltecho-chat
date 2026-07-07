@@ -51,3 +51,12 @@ export {
   type LearningUpdate,
   type LearnerState,
 } from "./OnlineReservoirLearner.js";
+
+export {
+  NeonIdentityPersistence,
+  type NeonIdentityConfig,
+  type IdentityAtom,
+  type IdentityEdge,
+  type BackupResult,
+  type RestoreResult,
+} from "./NeonIdentityPersistence.js";

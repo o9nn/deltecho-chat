@@ -128,3 +128,20 @@ export {
   type SignatureGestureOverlay,
   type SignatureGestureConfig,
 } from "./signature-gesture-controller";
+
+// CogMorph Glyph → Cubism Parameter Mapper (visual self-representation)
+export {
+  CogMorphCubismMapper,
+  type CogMorphGlyphState,
+  type CogMorphCubismOverlay,
+  type CogMorphCubismConfig,
+} from "./cogmorph-cubism-mapper";
+
+// Meshy3D Avatar Bridge (3D model generation from cognitive state)
+export {
+  Meshy3DAvatarBridge,
+  type Meshy3DConfig,
+  type AvatarStateSnapshot,
+  type Meshy3DTask,
+  type GenerationResult,
+} from "./meshy3d-avatar-bridge";

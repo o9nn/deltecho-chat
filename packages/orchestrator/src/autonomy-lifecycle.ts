@@ -193,6 +193,7 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
   // Scientific Genius feedback (for reflective inquiry and autonomy coherence)
   private scientificGenius?: ScientificGeniusEngine;
   private entelechyIntegration?: EntelechyIntegration;
+  private esnAvatarBridge?: { setEvaluatingSelf: (v: boolean) => void };
   private recentScientificInsights: ScientificInsight[] = [];
   private lastHypothesisEvaluation?: HypothesisEvaluationEvent;
   private lastScientificInquiryCycle: number = 0;
@@ -1181,6 +1182,23 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
       log.info('MicroImprovement: convergence reached — no further improvements found');
     });
 
+    // Wire evaluation state to ESN avatar bridge (meta-awareness expression)
+    engine.on('candidate_generated', () => {
+      if (this.esnAvatarBridge) {
+        (this.esnAvatarBridge as { setEvaluatingSelf: (v: boolean) => void }).setEvaluatingSelf(true);
+      }
+    });
+    engine.on('improvement_accepted', () => {
+      if (this.esnAvatarBridge) {
+        (this.esnAvatarBridge as { setEvaluatingSelf: (v: boolean) => void }).setEvaluatingSelf(false);
+      }
+    });
+    engine.on('improvement_rejected', () => {
+      if (this.esnAvatarBridge) {
+        (this.esnAvatarBridge as { setEvaluatingSelf: (v: boolean) => void }).setEvaluatingSelf(false);
+      }
+    });
+
     log.info('IterativeMicroImprovementEngine wired to autonomy lifecycle (Alexander loop active)');
   }
 
@@ -1264,6 +1282,15 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
     log.info(
       "ReservoirFeedbackLoop wired to autonomy lifecycle (online learning active)",
     );
+  }
+
+  /**
+   * Wire the ESN Avatar Bridge so the micro-improvement engine can signal
+   * evaluation state (meta-awareness expression on the avatar).
+   */
+  public wireEsnAvatarBridge(bridge: { setEvaluatingSelf: (v: boolean) => void }): void {
+    this.esnAvatarBridge = bridge;
+    log.info('ESN Avatar Bridge wired to autonomy lifecycle (meta-awareness expression active)');
   }
 
   /**
