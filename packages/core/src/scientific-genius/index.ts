@@ -45,6 +45,7 @@ export {
   type ScientificGeniusConfig,
   type HypothesisEvaluationEvent,
   type EpistemicResonanceCascade,
+  type PredictiveInsightCrystal,
 } from "./ScientificGeniusEngine.js";
 
 export {

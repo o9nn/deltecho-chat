@@ -1103,8 +1103,24 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
       );
     });
 
+    // Wire Predictive Insight Crystallization events
+    engine.on("predictive_crystallization" as any, (crystal: any) => {
+      // Apply the prescribed avatar effect via ESN bridge
+      if (this.esnAvatarBridge) {
+        this.esnAvatarBridge.setEvaluatingSelf(true); // Trigger meta-awareness face
+        // Schedule release after crystallization settles (2s)
+        setTimeout(() => {
+          if (this.esnAvatarBridge) this.esnAvatarBridge.setEvaluatingSelf(false);
+        }, 2000);
+      }
+      this.emit("scientific:predictive_crystallization", crystal);
+      log.info(
+        `PREDICTIVE CRYSTAL: ${crystal.targetConcept} (confidence=${crystal.confidence.toFixed(3)}) via [${crystal.sourceConcepts.join(", ")}]`,
+      );
+    });
+
     log.info(
-      "ScientificGeniusEngine wired to autonomy lifecycle (reflection + cascade feedback active)",
+      "ScientificGeniusEngine wired to autonomy lifecycle (reflection + cascade + crystallization active)",
     );
   }
 

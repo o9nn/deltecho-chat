@@ -38,6 +38,7 @@ import {
   type AARState,
   type ESNReservoirConfig,
 } from "./ReservoirBridge.js";
+import { NeonIdentityPersistence, type NeonIdentityConfig } from "./NeonIdentityPersistence.js";
 
 // ─── Types ─────────────────────────────────────────────────────────────
 
@@ -64,6 +65,10 @@ export interface CoreSelfConfig {
   apiLlmApiKey?: string;
   /** Maximum conversation history to maintain */
   maxConversationHistory: number;
+  /** Neon PostgreSQL persistence config (optional — enables hypergraph identity backup) */
+  neonPersistence?: Partial<NeonIdentityConfig> & { connectionString: string };
+  /** Auto-backup interval in milliseconds (default: 5 minutes) */
+  autoBackupIntervalMs?: number;
 }
 
 export interface CoreSelfResponse {
@@ -129,6 +134,8 @@ export class CoreSelfEngine extends EventEmitter {
   private conversationHistory: ChatMessage[] = [];
   private totalInteractions = 0;
   private running = false;
+  private neonPersistence: NeonIdentityPersistence | null = null;
+  private autoBackupTimer: ReturnType<typeof setInterval> | null = null;
 
   constructor(config: Partial<CoreSelfConfig> = {}) {
     super();
@@ -153,8 +160,15 @@ export class CoreSelfEngine extends EventEmitter {
       "stage_evolved",
       (evolution: { from: string; to: string }) => {
         this.emit("stage_evolved", evolution);
+        // Auto-backup to Neon on ontogenetic stage transitions
+        this.backupToNeon().catch(() => {/* non-fatal */});
       },
     );
+
+    // Initialize Neon persistence if configured
+    if (this.config.neonPersistence?.connectionString) {
+      this.neonPersistence = new NeonIdentityPersistence(this.config.neonPersistence);
+    }
   }
 
   // ─── Lifecycle ─────────────────────────────────────────────────────
@@ -162,6 +176,26 @@ export class CoreSelfEngine extends EventEmitter {
   async start(): Promise<void> {
     await this.identity.start();
     await this.lucy.start();
+
+    // Initialize Neon persistence and attempt restore
+    if (this.neonPersistence) {
+      await this.neonPersistence.initialize();
+      const restored = await this.neonPersistence.restore();
+      if (restored) {
+        const stateData = typeof restored.state === 'string'
+          ? JSON.parse(restored.state)
+          : restored.state;
+        this.importFullState(stateData);
+        this.emit("identity_restored_from_neon", { version: restored.version });
+      }
+    }
+
+    // Start periodic auto-backup
+    const interval = this.config.autoBackupIntervalMs ?? 300_000; // 5 min default
+    this.autoBackupTimer = setInterval(() => {
+      this.backupToNeon().catch(() => {/* non-fatal */});
+    }, interval);
+
     this.running = true;
     this.emit("started", {
       lucyHealthy: this.lucy.isHealthy(),
@@ -171,6 +205,15 @@ export class CoreSelfEngine extends EventEmitter {
 
   async stop(): Promise<void> {
     this.running = false;
+    if (this.autoBackupTimer) {
+      clearInterval(this.autoBackupTimer);
+      this.autoBackupTimer = null;
+    }
+    // Final backup before shutdown
+    await this.backupToNeon().catch(() => {/* non-fatal */});
+    if (this.neonPersistence) {
+      await this.neonPersistence.shutdown();
+    }
     await this.lucy.stop();
     await this.identity.stop();
     this.emit("stopped");
@@ -493,6 +536,26 @@ export class CoreSelfEngine extends EventEmitter {
    */
   clearConversation(): void {
     this.conversationHistory = [];
+  }
+
+  /**
+   * Backup current state to Neon PostgreSQL hypergraph.
+   * Non-fatal: silently skips if Neon is not configured.
+   */
+  private async backupToNeon(): Promise<void> {
+    if (!this.neonPersistence) return;
+    const state = this.exportFullState();
+    const stage = this.identity.getStage();
+    await this.neonPersistence.backup(JSON.stringify(state), stage);
+    this.emit("neon_backup_complete", { stage });
+  }
+
+  /**
+   * Get Neon persistence version history (for autognosis self-observation).
+   */
+  async getNeonVersionHistory(): Promise<Array<{ version: number; stage: string; createdAt: Date; sizeBytes: number }>> {
+    if (!this.neonPersistence) return [];
+    return this.neonPersistence.getVersionHistory();
   }
 
   /**

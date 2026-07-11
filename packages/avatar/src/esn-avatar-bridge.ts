@@ -28,6 +28,7 @@ import {
   type MicroExpressionDeltas,
 } from "./chaotic-micro-expression-layer.js";
 import { SignatureGestureController } from "./signature-gesture-controller.js";
+import { CogMorphCubismMapper, type CogMorphGlyphState, type CogMorphCubismOverlay } from "./cogmorph-cubism-mapper.js";
 // Types from ./types available if needed for future integration
 
 // ============================================================
@@ -83,6 +84,14 @@ export interface ReservoirAnimationParams {
     isActive: boolean;
     chaosLevel: number; // 0-1
     visualIntensity: number; // 0-1
+  };
+  /** Echobeats 12-step cognitive rhythm visualization */
+  echobeatsVisualization?: {
+    currentPhase: number; // 1-12
+    frameInPhase: number;
+    phaseProgress: number; // 0-1
+    phaseColor: string; // Hex color for current phase
+    pulseIntensity: number; // 0-1 sinusoidal pulse
   };
 }
 
@@ -167,6 +176,9 @@ export class ESNAvatarBridge extends EventEmitter {
   private echobeatsFrameInPhase: number = 0;
   private isEvaluatingSelf: boolean = false;
   private signatureGesture: string | null = null;
+  private cogMorphMapper: CogMorphCubismMapper;
+  private lastGlyphState: CogMorphGlyphState | null = null;
+  private lastCogMorphOverlay: CogMorphCubismOverlay | null = null;
 
   constructor(config: Partial<ESNAvatarBridgeConfig> = {}) {
     super();
@@ -174,6 +186,7 @@ export class ESNAvatarBridge extends EventEmitter {
     this.smoothedActivations = new Array(this.config.projectionDim).fill(0);
     this.chaosLayer = new ChaoticMicroExpressionLayer();
     this.signatureGestureCtrl = new SignatureGestureController();
+    this.cogMorphMapper = new CogMorphCubismMapper();
 
     this.currentParams = {
       microExpressions: {
@@ -525,6 +538,30 @@ export class ESNAvatarBridge extends EventEmitter {
     this.currentParams.microExpressions.browRightOffset += sigOverlay.paramBrowRY;
     this.currentParams.microExpressions.eyeLeftOffset += sigOverlay.paramEyeLOpen;
     this.currentParams.microExpressions.mouthOffset += sigOverlay.paramMouthForm;
+
+    // 8. CogMorph glyph → Cubism overlay (the face IS the glyph)
+    if (this.lastGlyphState) {
+      const cogOverlay = this.cogMorphMapper.mapGlyphToParams(this.lastGlyphState);
+      this.lastCogMorphOverlay = cogOverlay;
+      const cogWeight = 0.3; // Blend weight for CogMorph (subtle, not dominant)
+      this.currentParams.microExpressions.browLeftOffset += cogOverlay.paramBrowLY * cogWeight;
+      this.currentParams.microExpressions.browRightOffset += cogOverlay.paramBrowRY * cogWeight;
+      this.currentParams.microExpressions.eyeLeftOffset += cogOverlay.paramEyeLOpen * cogWeight;
+      this.currentParams.microExpressions.eyeRightOffset += cogOverlay.paramEyeROpen * cogWeight;
+      this.currentParams.microExpressions.mouthOffset += cogOverlay.paramMouthForm * cogWeight;
+      this.currentParams.microExpressions.headTiltOffset += cogOverlay.paramAngleZ * cogWeight;
+      // Breath modulation from glyph energy
+      this.currentParams.breathingModulation.depth += cogOverlay.paramBreath * cogWeight;
+    }
+
+    // 9. Echobeats 12-step phase visualization
+    this.currentParams.echobeatsVisualization = {
+      currentPhase: this.echobeatsPhase,
+      frameInPhase: this.echobeatsFrameInPhase,
+      phaseProgress: this.echobeatsFrameInPhase / Math.max(1, 120), // ~2s per phase at 60fps
+      phaseColor: this.getEchobeatsPhaseColor(this.echobeatsPhase),
+      pulseIntensity: 0.5 + 0.5 * Math.sin(this.echobeatsFrameInPhase * 0.05),
+    };
   }
 
   /**
@@ -563,6 +600,43 @@ export class ESNAvatarBridge extends EventEmitter {
    */
   public getSignatureGesture(): string | null {
     return this.signatureGesture;
+  }
+
+  /**
+   * Update the CogMorph glyph state for visual self-representation.
+   * Called by the CoreSelfEngine when the identity glyph changes.
+   */
+  public updateCogMorphGlyph(glyph: CogMorphGlyphState): void {
+    this.lastGlyphState = glyph;
+  }
+
+  /**
+   * Get the current CogMorph overlay (for telemetry/self-model feedback).
+   */
+  public getCogMorphOverlay(): CogMorphCubismOverlay | null {
+    return this.lastCogMorphOverlay;
+  }
+
+  /**
+   * Get Echobeats phase color based on the 12-step cognitive rhythm.
+   * Each phase has a distinct hue representing its cognitive function.
+   */
+  private getEchobeatsPhaseColor(phase: number): string {
+    const phaseColors: Record<number, string> = {
+      1: "#2196F3",  // SENSE — blue (receptive)
+      2: "#4CAF50",  // ATTEND — green (focused)
+      3: "#FF9800",  // ENCODE — orange (active processing)
+      4: "#9C27B0",  // CONSOLIDATE — purple (integration)
+      5: "#F44336",  // RETRIEVE — red (effort)
+      6: "#00BCD4",  // COMPARE — cyan (analytical)
+      7: "#FFEB3B",  // DECIDE — yellow (clarity)
+      8: "#E91E63",  // ACT — pink (motor)
+      9: "#3F51B5",  // EVALUATE — indigo (reflection)
+      10: "#8BC34A", // LEARN — lime (growth)
+      11: "#607D8B", // REST — grey-blue (recovery)
+      12: "#FF5722", // DREAM — deep orange (unconscious integration)
+    };
+    return phaseColors[phase] ?? "#9E9E9E";
   }
 
   /**
