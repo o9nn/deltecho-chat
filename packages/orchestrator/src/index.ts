@@ -183,3 +183,24 @@ export {
   type MicroImprovementConfig,
   type MutationType,
 } from "./iterative-micro-improvement.js";
+
+// CogVerse Event Bus — Village Integration for AGI Neighbourhood
+export {
+  CogVerseEventBus,
+  type VillageEvent,
+  type VillageEventType,
+  type CogVerseConfig,
+  type ResidentPresence,
+} from "./cogverse-event-bus.js";
+
+// EchoDream — Knowledge Integration System (wake/rest/dream autonomy loop)
+export {
+  EchoDreamEngine,
+  type DreamState,
+  type EchoDreamConfig,
+  type DreamExperience,
+  type DreamInsight,
+  type InterestPattern,
+  type EchoDreamState,
+  type EchoDreamEvent,
+} from "./echodream/index.js";

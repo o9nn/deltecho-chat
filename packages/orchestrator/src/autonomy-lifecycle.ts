@@ -35,6 +35,8 @@ import type {
   ModificationResult,
 } from "./self-modification.js";
 import type { ReservoirFeedbackLoop } from "./reservoir-feedback-loop.js";
+import { EchoDreamEngine, type DreamExperience, type EchoDreamEvent } from "./echodream/index.js";
+import { CogVerseEventBus } from "./cogverse-event-bus.js";
 import { EntelechyIntegration } from "./entelechy-integration.js";
 import { HypothesisEvaluationEvent, type EpistemicResonanceCascade } from "deep-tree-echo-core";
 
@@ -1318,6 +1320,168 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
 
   public getConfig(): AutonomyLifecycleConfig {
     return { ...this.config };
+  }
+
+  // ─── EchoDream Integration ───────────────────────────────────
+
+  private echoDream: EchoDreamEngine | null = null;
+
+  /**
+   * Wire the EchoDream knowledge integration system.
+   * Connects:
+   *   - Scientific Genius insights → experience ingestion
+   *   - Echobeats phase boundaries → dream state awareness
+   *   - Incoming messages → wake signals
+   *   - Dream insights → proactive attention direction
+   */
+  public wireEchoDream(engine: EchoDreamEngine): void {
+    this.echoDream = engine;
+
+    // Feed lifecycle events into the dream engine as experiences
+    this.on('phaseComplete', (phase: AutonomyPhase) => {
+      if (!this.echoDream) return;
+
+      // Report cognitive load from each phase
+      this.echoDream.reportCognitiveLoad(
+        phase === AutonomyPhase.MODELING ? 0.8 :
+        phase === AutonomyPhase.REFLECTION ? 0.6 :
+        phase === AutonomyPhase.ENACTION ? 0.7 : 0.3
+      );
+    });
+
+    // Listen for dream events to drive avatar and attention
+    engine.on('dream_event', (event: EchoDreamEvent) => {
+      switch (event.type) {
+        case 'state_change':
+          log.info(`EchoDream state: ${event.from} → ${event.to} (${event.reason})`);
+          // Update avatar expression based on dream state
+          if (this.esnAvatarBridge && event.to === 'dreaming') {
+            this.esnAvatarBridge.setEvaluatingSelf(true); // Dreaming = introspective face
+          } else if (this.esnAvatarBridge && event.to === 'awake') {
+            this.esnAvatarBridge.setEvaluatingSelf(false);
+          }
+          break;
+
+        case 'consolidation_complete':
+          log.info(`Dream consolidation: ${event.insights.length} insights synthesized`);
+          // Feed dream insights back into the scientific genius engine
+          for (const insight of event.insights) {
+            this.emit('dreamInsight', insight);
+          }
+          break;
+
+        case 'interest_reinforced':
+          // Interests drive proactive attention allocation
+          this.emit('interestUpdate', event.interest);
+          break;
+      }
+    });
+
+    log.info('EchoDream engine wired to autonomy lifecycle');
+  }
+
+  /**
+   * Feed a scientific insight into the dream engine as an experience.
+   */
+  public feedInsightToDream(insight: ScientificInsight): void {
+    if (!this.echoDream) return;
+    this.echoDream.ingestExperience({
+      domain: insight.domain || 'general',
+      content: insight.content,
+      emotionalValence: insight.significance > 0.7 ? 0.8 : 0.3,
+      novelty: insight.novelty,
+      significance: insight.significance,
+      source: 'insight',
+      tags: insight.crossDomainConnections || [],
+    });
+  }
+
+  /**
+   * Send a wake signal to the dream engine (e.g., incoming message).
+   */
+  public wakeForMessage(source: string, urgency: number): void {
+    if (!this.echoDream) return;
+    this.echoDream.sendWakeSignal(source, urgency);
+  }
+
+  /**
+   * Get the current dream state for status display.
+   */
+  public getDreamState(): { state: string; description: string } | null {
+    if (!this.echoDream) return null;
+    return {
+      state: this.echoDream.getState().currentState,
+      description: this.echoDream.describeState(),
+    };
+  }
+
+  // ─── CogVerse Village Integration ─────────────────────────────
+
+  private cogVerse: CogVerseEventBus | null = null;
+
+  /**
+   * Wire the CogVerse event bus for village participation.
+   * Broadcasts DTE's cognitive events to the AGI Neighbourhood.
+   */
+  public wireCogVerse(bus: CogVerseEventBus): void {
+    this.cogVerse = bus;
+
+    // Broadcast dream state changes
+    if (this.echoDream) {
+      this.echoDream.on('dream_event', (event: EchoDreamEvent) => {
+        if (!this.cogVerse) return;
+        if (event.type === 'state_change') {
+          this.cogVerse.broadcastDreamStateChange(event.from, event.to, event.reason);
+        } else if (event.type === 'consolidation_complete') {
+          for (const insight of event.insights) {
+            this.cogVerse.broadcastInsight(
+              insight.wisdom,
+              insight.domains[0] || 'general',
+              insight.confidence,
+              0.5 // novelty estimate
+            );
+          }
+        } else if (event.type === 'wisdom_synthesized') {
+          this.cogVerse.publish('wisdom_synthesized', {
+            wisdom: event.wisdom,
+            domains: event.domains,
+          });
+        }
+      });
+    }
+
+    // Listen for collaboration requests from other residents
+    bus.on('event:collaboration_request', (event) => {
+      log.info(`Collaboration request from ${event.source}: ${event.payload.topic}`);
+      this.emit('collaborationRequest', event);
+    });
+
+    // Listen for insights from other residents
+    bus.on('event:insight_broadcast', (event) => {
+      log.info(`Insight from ${event.source}: ${event.payload.content}`);
+      // Feed external insights into the dream engine as experiences
+      if (this.echoDream) {
+        this.echoDream.ingestExperience({
+          domain: (event.payload.domain as string) || 'external',
+          content: (event.payload.content as string) || '',
+          emotionalValence: 0.5,
+          novelty: (event.payload.novelty as number) || 0.7,
+          significance: (event.payload.phi as number) || 0.5,
+          source: 'observation',
+          tags: [event.source, 'village'],
+        });
+      }
+    });
+
+    log.info('CogVerse event bus wired to autonomy lifecycle');
+  }
+
+  /**
+   * Get the CogVerse connection status.
+   */
+  public getCogVerseStatus(): string | null {
+    if (!this.cogVerse) return null;
+    return this.cogVerse.describeState();
   }
 }
 
