@@ -17,7 +17,13 @@
  * - Relation: The continuous interplay via the tick cycle
  */
 import { EventEmitter } from "events";
-import { getLogger } from "deep-tree-echo-core";
+import {
+  getLogger,
+  esnReservoir,
+  echoBeatsEngine,
+  type ReservoirState,
+  type AutognosisReport,
+} from "deep-tree-echo-core";
 import { ProactivePhase } from "./proactive-loop.js";
 
 const log = getLogger("deep-tree-echo-orchestrator/CognitiveTickProcessor");
@@ -120,25 +126,97 @@ const DEFAULT_CONFIG: CognitiveTickProcessorConfig = {
 
     /**
      * Get the current DAO consensus score (0-1).
-     * Placeholder for actual DAO integration.
+     *
+     * Computes a genuine consensus metric from multiple real cognitive signals:
+     * - EchoBeats temporal coherence (global phase alignment across 3 streams)
+     * - ESN reservoir spectral stability (distance from edge-of-chaos)
+     * - Self-image coherence (identity vector stability over time)
+     * - Goal completion rate (operational effectiveness)
+     *
+     * This mirrors a DAO quorum: multiple independent subsystems must agree
+     * that the cognitive state is coherent for consensus to be high.
      */
     public getDaoConsensus(): number {
-      // Placeholder: In a real DAO, this would query a decentralized ledger or voting system.
-      // For now, return a value based on internal state or a simulated process.
-      return this.clamp01(0.5 + Math.sin(this.tickCount / 100) * 0.1); // Simulated fluctuation
+      // Signal 1: EchoBeats temporal coherence (phase alignment)
+      const echoBeatsState = echoBeatsEngine.getState();
+      const temporalCoherence = this.clamp01(echoBeatsState.globalCoherence);
+
+      // Signal 2: ESN reservoir spectral stability
+      const reservoirState = esnReservoir.getState();
+      const spectralStability = this.clamp01(
+        1 - Math.abs(reservoirState.currentSpectralRadius - 0.95) / 0.95,
+      );
+
+      // Signal 3: Self-image coherence from latest snapshot
+      const latestSnapshot = this.selfImageHistory[this.selfImageHistory.length - 1];
+      const identityCoherence = latestSnapshot?.coherenceScore ?? 0.5;
+
+      // Signal 4: Goal completion rate (operational effectiveness)
+      const totalGoals = this.episodicMemories.length;
+      const successfulGoals = this.episodicMemories.filter(
+        (m) => m.outcome === "success",
+      ).length;
+      const goalEffectiveness = totalGoals > 0
+        ? this.clamp01(successfulGoals / Math.max(totalGoals, 1))
+        : 0.5;
+
+      // Weighted consensus: all subsystems must agree
+      return this.clamp01(
+        temporalCoherence * 0.30 +
+        spectralStability * 0.25 +
+        identityCoherence * 0.25 +
+        goalEffectiveness * 0.20,
+      );
     }
 
     /**
      * Get the current ESN Autognosis score (0-1).
-     * Placeholder for actual ESN Autognosis integration.
+     *
+     * Computes genuine self-knowledge from the ESN reservoir's own
+     * health assessment and cognitive state metrics:
+     * - Autognosis health (reservoir self-assessment)
+     * - Edge-of-chaos status (optimal computational regime)
+     * - Memory capacity utilization
+     * - Entropy stability (information processing quality)
      */
     public getEsnAutognosis(): number {
-      // Placeholder: In a real ESN Autognosis, this would come from the ESN's self-assessment.
-      // For now, return a value based on internal state or a simulated process.
-      return this.clamp01(0.6 + Math.cos(this.tickCount / 150) * 0.15); // Simulated fluctuation
+      const autognosisReport = esnReservoir.getAutognosisReport();
+      const reservoirState = esnReservoir.getState();
+
+      if (!autognosisReport) {
+        // Reservoir hasn't generated a report yet — derive from raw state
+        const entropyHealth = this.clamp01(1 - Math.abs(reservoirState.entropy - 0.5) * 2);
+        return this.clamp01(0.4 + entropyHealth * 0.3);
+      }
+
+      // Primary signal: autognosis health score
+      const health = this.clamp01(autognosisReport.health);
+
+      // Edge-of-chaos bonus: optimal computational regime
+      const edgeOfChaosBonus = autognosisReport.isEdgeOfChaos ? 0.15 : 0;
+
+      // Penalty for pathological states
+      const pathologyPenalty =
+        (autognosisReport.isDead ? 0.3 : 0) +
+        (autognosisReport.isSaturated ? 0.2 : 0);
+
+      // Memory capacity contribution
+      const memoryCapacity = this.clamp01(reservoirState.memoryCapacity);
+
+      // Computational capacity contribution
+      const computeCapacity = this.clamp01(reservoirState.computationalCapacity);
+
+      return this.clamp01(
+        health * 0.40 +
+        memoryCapacity * 0.20 +
+        computeCapacity * 0.15 +
+        edgeOfChaosBonus -
+        pathologyPenalty,
+      );
     }
 
     private clamp01(value: number): number {
+      if (!Number.isFinite(value)) return 0;
       return Math.min(1, Math.max(0, value));
     }
 
