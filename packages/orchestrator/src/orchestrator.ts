@@ -5,6 +5,7 @@ import {
   PersonaCore,
   InMemoryStorage,
   scientificGeniusEngine,
+  ProprioceptiveEmbodiment,
 } from "deep-tree-echo-core";
 import {
   CognitiveOrchestrator,
@@ -52,6 +53,7 @@ import {
 } from "./reservoir-feedback-loop.js";
 import { Echobeats } from "./echobeats.js";
 import { entelechyIntegration } from "./entelechy-integration.js";
+import { SelfModificationEngine } from "./self-modification.js";
 
 const log = getLogger("deep-tree-echo-orchestrator/Orchestrator");
 
@@ -233,6 +235,8 @@ export class Orchestrator {
   private autonomyLifecycle?: AutonomyLifecycleCoordinator;
   private reservoirFeedback?: ReservoirFeedbackLoop;
   private echobeats?: Echobeats;
+  private proprioceptiveEmbodiment?: ProprioceptiveEmbodiment;
+  private selfModEngine?: SelfModificationEngine;
   private running: boolean = false;
 
   // Cognitive services for processing messages
@@ -468,6 +472,63 @@ export class Orchestrator {
           await this.reservoirFeedback.start(reservoir);
           this.autonomyLifecycle.wireReservoirFeedback(this.reservoirFeedback);
           log.info("ReservoirFeedbackLoop started (online RLS learning)");
+
+          // 7. ProprioceptiveEmbodiment — genuine system-metrics-based body signals
+          this.proprioceptiveEmbodiment = new ProprioceptiveEmbodiment({
+            sampleIntervalMs: 500,
+            smoothingAlpha: 0.15,
+            baseBreathingRate: 12,
+            lagThresholdMs: 50,
+          });
+          this.proprioceptiveEmbodiment.start();
+          log.info("ProprioceptiveEmbodiment started (event-loop proprioception + breathing)");
+
+          // 8. SelfModificationEngine — ENACTION self-tuning with live callbacks
+          this.selfModEngine = new SelfModificationEngine({
+            maxModificationsPerMinute: 10,
+            deadManSwitchThreshold: 0.2,
+            enablePersistence: true,
+            dryRun: false,
+          });
+
+          // Wire onParameterChange callbacks to actual subsystems
+          this.selfModEngine.onParameterChange("echobeats.cycleInterval", (value) => {
+            this.echobeats?.setCycleInterval(value);
+          });
+          this.selfModEngine.onParameterChange("reservoir.spectralRadius", (value) => {
+            this.coreSelfEngine?.getReservoir()?.setSpectralRadius(value);
+          });
+          this.selfModEngine.onParameterChange("reservoir.forgettingFactor", (value) => {
+            this.reservoirFeedback?.getLearner()?.setForgettingFactor(value);
+          });
+          this.selfModEngine.onParameterChange("inference.temperature", (value) => {
+            this.coreSelfEngine?.getLucy()?.setTemperature(value);
+          });
+          this.selfModEngine.onParameterChange("inference.topP", (value) => {
+            this.coreSelfEngine?.getLucy()?.setTopP(value);
+          });
+
+          // Wire to autonomy lifecycle for ENACTION phase
+          this.autonomyLifecycle.wireSelfModification(this.selfModEngine);
+          log.info("SelfModificationEngine wired (ENACTION self-tuning active with live callbacks)");
+
+          // 9. Online learning → live cognition bridge
+          // Periodically sync online-learned weights to the CognitiveReadout
+          if (this.reservoirFeedback && this.coreSelfEngine) {
+            const readout = this.coreSelfEngine.getAAR()?.getReadout();
+            if (readout) {
+              this.reservoirFeedback.on("batch_update", () => {
+                const learner = this.reservoirFeedback!.getLearner();
+                const weights = learner.getWeights();
+                const stats = learner.getStats();
+                // Only sync if learner has meaningful updates
+                if (stats.totalUpdates > 10) {
+                  readout.setWeights(weights, 64, 256);
+                }
+              });
+              log.info("Online reservoir learning → CognitiveReadout bridge active");
+            }
+          }
 
           log.info("Level 5 Autonomy Pipeline fully initialized");
         } catch (error) {
@@ -1247,6 +1308,10 @@ ${response.body}`;
     log.info("Stopping orchestrator services...");
 
     // Stop Level 5 autonomy components first (newest first)
+    if (this.proprioceptiveEmbodiment) {
+      this.proprioceptiveEmbodiment.stop();
+      log.info("ProprioceptiveEmbodiment stopped");
+    }
     if (entelechyIntegration.isRunning()) {
       await entelechyIntegration.stop();
       log.info("EntelechyIntegration stopped");

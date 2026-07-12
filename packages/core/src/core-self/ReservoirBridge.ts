@@ -338,6 +338,30 @@ export class EchoReservoir {
   isInitialized(): boolean {
     return this.initialized;
   }
+
+  /**
+   * Runtime mutator: update spectral radius and rescale recurrent weights.
+   * Used by SelfModificationEngine ENACTION phase.
+   */
+  setSpectralRadius(newRadius: number): void {
+    if (!this.W || !this.initialized) return;
+    const oldRadius = this.config.spectralRadius;
+    if (oldRadius <= 0 || newRadius <= 0) return;
+    const scale = newRadius / oldRadius;
+    for (let i = 0; i < this.W.length; i++) {
+      this.W[i] *= scale;
+    }
+    this.config.spectralRadius = newRadius;
+  }
+
+  /**
+   * Runtime mutator: update leak rates.
+   * Used by SelfModificationEngine ENACTION phase.
+   */
+  setLeakRates(fast?: number, slow?: number): void {
+    if (fast !== undefined) this.config.leakRateFast = Math.max(0.01, Math.min(1, fast));
+    if (slow !== undefined) this.config.leakRateSlow = Math.max(0.01, Math.min(1, slow));
+  }
 }
 
 // ─── Cognitive Readout (Agent) ─────────────────────────────────────────
@@ -448,6 +472,26 @@ export class CognitiveReadout {
 
   isTrained(): boolean {
     return this.trained;
+  }
+
+  /**
+   * Runtime mutator: inject online-learned weights from OnlineReservoirLearner.
+   * Enables the ReservoirFeedbackLoop to affect live cognition.
+   */
+  setWeights(weights: Float64Array, outputDim: number, inputDim: number): void {
+    if (weights.length !== inputDim * outputDim) return;
+    this.weights = new Float64Array(weights);
+    this.inputDim = inputDim;
+    this.outputDim = outputDim;
+    this.bias = this.bias ?? new Float64Array(outputDim);
+    this.trained = true;
+  }
+
+  /**
+   * Get the current weight dimensions for inspection.
+   */
+  getDimensions(): { inputDim: number; outputDim: number } {
+    return { inputDim: this.inputDim, outputDim: this.outputDim };
   }
 }
 

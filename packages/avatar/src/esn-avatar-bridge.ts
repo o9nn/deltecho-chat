@@ -640,6 +640,65 @@ export class ESNAvatarBridge extends EventEmitter {
   }
 
   /**
+   * Update avatar breathing and body parameters from ProprioceptiveEmbodiment signals.
+   * This connects the genuine system-metrics-based proprioception to the Live2D
+   * avatar's chest/shoulder breathing animation and tension-based micro-movements.
+   *
+   * @param proprioceptiveState - Full state from ProprioceptiveEmbodiment.getFullState()
+   */
+  public updateFromProprioception(proprioceptiveState: {
+    presence: number;
+    groundedness: number;
+    energy: number;
+    tension: number;
+    breathing: {
+      phase: "inhale" | "exhale" | "pause";
+      depth: number;
+      rate: number;
+      regularity: number;
+    };
+  }): void {
+    const { presence, groundedness, energy, tension, breathing } = proprioceptiveState;
+
+    // 1. Override breathing modulation with genuine proprioceptive breathing
+    this.currentParams.breathingModulation = {
+      rate: breathing.rate,
+      depth: breathing.depth * (0.5 + energy * 0.5), // Energy modulates breath depth
+      irregularity: clamp01(1 - breathing.regularity + tension * 0.3), // Tension adds irregularity
+    };
+
+    // 2. Modulate consciousness glow from presence (event loop health = awareness)
+    this.currentParams.consciousnessGlow.intensity = clamp01(
+      this.currentParams.consciousnessGlow.intensity * 0.7 + presence * 0.3,
+    );
+
+    // 3. Tension affects micro-expression amplitude (more tension = more subtle jitter)
+    const tensionJitter = tension * 0.05;
+    this.currentParams.microExpressions.browLeftOffset += (Math.random() - 0.5) * tensionJitter;
+    this.currentParams.microExpressions.browRightOffset += (Math.random() - 0.5) * tensionJitter;
+
+    // 4. Groundedness stabilizes head tilt (less grounded = more drift)
+    const stabilityFactor = groundedness;
+    this.currentParams.microExpressions.headTiltOffset *= stabilityFactor;
+
+    // 5. Emit breathing phase for Live2D ParamBreath / chest-shoulder parameters
+    //    The breathing.depth value (0-1) maps directly to Cubism ParamBreath
+    //    which controls chest expansion in the Live2D model
+    this.emit("proprioceptive:breathing", {
+      paramBreath: breathing.depth, // 0-1: chest expansion
+      breathPhase: breathing.phase, // inhale/exhale/pause
+      shoulderOffset: breathing.phase === "inhale"
+        ? breathing.depth * 0.02 // Slight shoulder rise on inhale
+        : breathing.phase === "exhale"
+          ? -breathing.depth * 0.01 // Slight drop on exhale
+          : 0,
+      bodySwayX: (1 - groundedness) * 0.005 * Math.sin(this.tickCount * 0.1), // Subtle sway when ungrounded
+    });
+
+    this.emit("proprioceptive:state", proprioceptiveState);
+  }
+
+  /**
    * Describe current state
    */
   public describeState(): string {

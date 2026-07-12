@@ -397,6 +397,14 @@ export class OnlineReservoirLearner extends EventEmitter {
   }
 
   /**
+   * Runtime mutator: update forgetting factor for adaptation speed.
+   * Used by SelfModificationEngine ENACTION phase.
+   */
+  setForgettingFactor(factor: number): void {
+    this.config.forgettingFactor = Math.max(0.9, Math.min(0.9999, factor));
+  }
+
+  /**
    * Reset the learner to initial state.
    */
   reset(): void {

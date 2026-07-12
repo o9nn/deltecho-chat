@@ -415,4 +415,20 @@ export class LucyInferenceDriver extends EventEmitter {
     this.config.baseUrl = url;
     this.metrics.isHealthy = false;
   }
+
+  /**
+   * Runtime mutator: update temperature for inference.
+   * Used by SelfModificationEngine ENACTION phase.
+   */
+  setTemperature(temp: number): void {
+    this.config.temperature = Math.max(0.1, Math.min(2.0, temp));
+  }
+
+  /**
+   * Runtime mutator: update top-p for inference.
+   * Used by SelfModificationEngine ENACTION phase.
+   */
+  setTopP(topP: number): void {
+    this.config.topP = Math.max(0.1, Math.min(1.0, topP));
+  }
 }
