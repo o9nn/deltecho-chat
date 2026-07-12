@@ -413,9 +413,13 @@ export class Orchestrator {
       if (this.config.enableAutonomy) {
         try {
           // 1. CoreSelfEngine — local inference + reservoir + identity
+          const lucyEndpoint = this.config.lucyEndpoint
+            || process.env.DELTECHO_LUCY_ENDPOINT
+            || "http://localhost:8080";
+          log.info(`Lucy endpoint: ${lucyEndpoint}`);
           this.coreSelfEngine = new CoreSelfEngine({
             lucy: {
-              baseUrl: this.config.lucyEndpoint || "http://localhost:8080",
+              baseUrl: lucyEndpoint,
             },
             reservoir: { units: 256 },
             identity: {},
@@ -508,9 +512,25 @@ export class Orchestrator {
             this.coreSelfEngine?.getLucy()?.setTopP(value);
           });
 
+          // Restore last-known-good parameters from previous session
+          const restored = this.selfModEngine.restoreParameterSnapshot();
+          if (restored > 0) {
+            log.info(`Restored ${restored} self-modification parameters from previous session`);
+          }
+
           // Wire to autonomy lifecycle for ENACTION phase
           this.autonomyLifecycle.wireSelfModification(this.selfModEngine);
           log.info("SelfModificationEngine wired (ENACTION self-tuning active with live callbacks)");
+
+          // 8b. Wire Avatar SelfModel Feedback → proposeModifications
+          // Import the singleton lazily to avoid circular deps
+          try {
+            const { selfModelAvatarFeedback } = await import("@deltecho/avatar");
+            this.autonomyLifecycle.wireAvatarFeedback(selfModelAvatarFeedback);
+            log.info("Avatar SelfModelFeedback → SelfModification wire active (Loop 4 autognosis)");
+          } catch (e) {
+            log.warn("Avatar SelfModelFeedback not available (non-fatal):", e);
+          }
 
           // 9. Online learning → live cognition bridge
           // Periodically sync online-learned weights to the CognitiveReadout
@@ -529,6 +549,31 @@ export class Orchestrator {
               log.info("Online reservoir learning → CognitiveReadout bridge active");
             }
           }
+
+          // 10. Temporal Credit Assignment — track which modifications improve coherence
+          const { TemporalCreditAssignment } = await import("./temporal-credit-assignment.js");
+          const temporalCredit = new TemporalCreditAssignment({
+            traceDecayRate: 0.1,
+            learningRate: 0.05,
+            coherenceSampleInterval: 5000,
+            persistencePath: "/tmp/deep-tree-echo/temporal-credit",
+          });
+
+          // Connect: record every applied modification as a trace
+          this.selfModEngine.on("modified", (result: { key: string; previousValue: number; newValue: number }) => {
+            temporalCredit.recordModification(result.key, result.previousValue, result.newValue);
+          });
+
+          // Start sampling coherence from the cognitive tick processor
+          temporalCredit.start(() => {
+            const stats = this.echobeats?.getStats();
+            if (!stats) return 0.5;
+            // Derive coherence from stream energy mean (normalized)
+            const energies = stats.streams.map(s => s.energy);
+            const meanEnergy = energies.length > 0 ? energies.reduce((a, b) => a + b, 0) / energies.length : 0.5;
+            return Math.max(0, Math.min(1, meanEnergy));
+          });
+          log.info("TemporalCreditAssignment started (TD(λ) eligibility traces active)");
 
           log.info("Level 5 Autonomy Pipeline fully initialized");
         } catch (error) {
@@ -1319,6 +1364,10 @@ ${response.body}`;
     if (this.reservoirFeedback) {
       await this.reservoirFeedback.stop();
       log.info("ReservoirFeedbackLoop stopped");
+    }
+    if (this.selfModEngine) {
+      this.selfModEngine.persistParameterSnapshot();
+      log.info("Self-modification parameters persisted for next boot");
     }
     if (this.autonomyLifecycle) {
       await this.autonomyLifecycle.stop();
