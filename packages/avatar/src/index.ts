@@ -145,3 +145,13 @@ export {
   type Meshy3DTask,
   type GenerationResult,
 } from "./meshy3d-avatar-bridge";
+
+// Resonance Cascade Visual Conductor (Scientific Genius → Avatar eureka effects)
+export {
+  ResonanceCascadeConductor,
+  resonanceCascadeConductor,
+  type CascadeInput,
+  type CrystalInput,
+  type CascadeOverlay,
+  type CascadeConductorConfig,
+} from "./resonance-cascade-conductor";

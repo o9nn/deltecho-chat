@@ -575,6 +575,48 @@ export class Orchestrator {
           });
           log.info("TemporalCreditAssignment started (TD(λ) eligibility traces active)");
 
+          // 11. Resonance Cascade Visual Conductor — eureka moments → avatar
+          try {
+            const { resonanceCascadeConductor } = await import("@deltecho/avatar");
+            this.autonomyLifecycle!.on("scientific:resonance_cascade", (cascade: any) => {
+              resonanceCascadeConductor.onCascade({
+                id: cascade.id,
+                intensity: cascade.intensity,
+                clusterPhi: cascade.clusterPhi,
+                clusterNovelty: cascade.clusterNovelty,
+                domainSpan: cascade.domainSpan,
+                haloPulseHz: cascade.haloPulseHz,
+                spectralRadiusBoost: cascade.spectralRadiusBoost,
+                epistemicTemperatureDelta: cascade.epistemicTemperatureDelta,
+                timestamp: cascade.timestamp,
+              });
+            });
+            this.autonomyLifecycle!.on("scientific:predictive_crystallization", (crystal: any) => {
+              resonanceCascadeConductor.onCrystal({
+                id: crystal.id,
+                confidence: crystal.confidence,
+                targetConcept: crystal.targetConcept,
+                avatarEffect: crystal.avatarEffect,
+                timestamp: crystal.timestamp,
+              });
+            });
+            log.info("ResonanceCascadeConductor wired (eureka → avatar visual pipeline active)");
+          } catch (e) {
+            log.warn("ResonanceCascadeConductor not available (non-fatal):", e);
+          }
+
+          // 12. Arena-ScientificGenius Bridge — spatial discoveries → hypotheses
+          try {
+            const { ArenaGeniusBridge } = await import("./arena-genius-bridge.js");
+            const arenaBridge = new ArenaGeniusBridge({ verbose: false });
+            if (scientificGeniusEngine) {
+              arenaBridge.wireEngine(scientificGeniusEngine as any);
+              log.info("ArenaGeniusBridge wired (TRIZ discoveries → scientific hypotheses active)");
+            }
+          } catch (e) {
+            log.warn("ArenaGeniusBridge not available (non-fatal):", e);
+          }
+
           log.info("Level 5 Autonomy Pipeline fully initialized");
         } catch (error) {
           log.warn(
