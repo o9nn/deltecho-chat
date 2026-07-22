@@ -1,0 +1,772 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Deep Tree Echo — DAO-AGI Digital Twin
+  AnyLogic Multi-Paradigm Simulation Model
+  
+  Three Simulation Methods:
+    1. DISCRETE EVENT SIMULATION (DES) — Cognitive Pipeline Processing
+    2. AGENT-BASED MODELING (ABM) — ESN Reservoir Node Population
+    3. SYSTEM DYNAMICS (SD) — Virtual Endocrine System Hormone Flows
+  
+  Architecture:
+    ESN Reservoir = Arena (state manifold) = Agent Population
+    Readout = Agent (urge-to-act) = DES Pipeline Output
+    AAR = Self = SD Feedback Loops
+    Hormones = Collective Mood = SD Stock-Flow
+    DAO Voting = ABM Emergent Consensus
+-->
+<AnyLogicModel version="8.8" name="DTE_DAO_DigitalTwin">
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- MODEL CONFIGURATION                                            -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  
+  <ModelProperties>
+    <property name="simulationTimeUnits" value="MILLISECOND"/>
+    <property name="stopTime" value="86400000"/> <!-- 24 hours -->
+    <property name="randomSeed" value="42"/>
+    <property name="parallelExecution" value="true"/>
+  </ModelProperties>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- METHOD 1: DISCRETE EVENT SIMULATION (DES)                      -->
+  <!-- Cognitive Pipeline: stimulus → perception → reservoir →        -->
+  <!--   readout → consensus → action                                 -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  
+  <DiscreteEventSimulation name="CognitivePipeline">
+    
+    <!-- Entity Types (cognitive tokens flowing through pipeline) -->
+    <EntityType name="CognitiveEntity">
+      <attribute name="type" type="String"/> <!-- stimulus|percept|proposal|action|reflection|cascade -->
+      <attribute name="priority" type="double" default="0.5"/>
+      <attribute name="coherence" type="double" default="0.0"/>
+      <attribute name="hormoneModulation" type="double" default="1.0"/>
+      <attribute name="createdAt" type="double"/>
+      <attribute name="payload" type="Object"/>
+    </EntityType>
+
+    <!-- Source: External stimuli arrive (Poisson process, λ modulated by arousal) -->
+    <Source name="StimulusSource">
+      <interarrivalTime distribution="exponential">
+        <parameter name="rate" expression="baseArrivalRate * norepinephrine_level"/>
+      </interarrivalTime>
+      <entityType ref="CognitiveEntity"/>
+      <onGeneration>
+        entity.type = "stimulus";
+        entity.priority = uniform(0.1, 1.0);
+        entity.createdAt = time();
+        entity.hormoneModulation = getHormoneModulation();
+      </onGeneration>
+    </Source>
+
+    <!-- Stage 1: ATTENTION (ECAN-like priority filtering) -->
+    <ProcessingStage name="AttentionGate">
+      <capacity value="4"/> <!-- bounded attention span -->
+      <processingTime distribution="triangular">
+        <parameter name="min" expression="10 * thyroid_speed_factor"/>
+        <parameter name="mode" expression="25 * thyroid_speed_factor"/>
+        <parameter name="max" expression="80 * thyroid_speed_factor"/>
+      </processingTime>
+      <priorityQueue enabled="true" attribute="priority"/>
+      <failureRate expression="0.05 * cortisol_level"/> <!-- stress increases drops -->
+      <onEntry>
+        entity.priority *= (1.0 + phasic_dopamine * 0.3);
+        // ECAN: spread activation to neighbors
+        spreadAttention(entity, 0.2);
+      </onEntry>
+      <onExit>
+        entity.type = "percept";
+        recordStageMetrics("attention", entity);
+      </onExit>
+    </ProcessingStage>
+
+    <!-- Stage 2: PERCEPTION (pattern recognition) -->
+    <ProcessingStage name="PerceptionBinding">
+      <capacity value="8"/>
+      <processingTime distribution="triangular">
+        <parameter name="min" expression="15"/>
+        <parameter name="mode" expression="40"/>
+        <parameter name="max" expression="120"/>
+      </processingTime>
+      <onEntry>
+        // Bind percept with context from reservoir state
+        entity.coherence = computePerceptualCoherence(entity, reservoirState);
+      </onEntry>
+      <onExit>
+        entity.type = "reservoir_state";
+      </onExit>
+    </ProcessingStage>
+
+    <!-- Stage 3: RESERVOIR (ESN state update — bridges to ABM) -->
+    <ProcessingStage name="ReservoirProcessing">
+      <capacity value="256"/> <!-- matches ESN node count -->
+      <processingTime distribution="triangular">
+        <parameter name="min" expression="5"/>
+        <parameter name="mode" expression="15"/>
+        <parameter name="max" expression="50"/>
+      </processingTime>
+      <onEntry>
+        // Inject into ABM reservoir population
+        injectIntoReservoir(entity);
+        entity.coherence = getReservoirCoherence();
+      </onEntry>
+      <onExit>
+        entity.type = "proposal";
+        // Reservoir echo — entity carries activation pattern
+        entity.payload = captureReservoirSnapshot();
+      </onExit>
+    </ProcessingStage>
+
+    <!-- Stage 4: READOUT (linear combination → action proposal) -->
+    <ProcessingStage name="ReadoutProjection">
+      <capacity value="1"/> <!-- bottleneck: one readout at a time -->
+      <processingTime distribution="triangular">
+        <parameter name="min" expression="2"/>
+        <parameter name="mode" expression="8"/>
+        <parameter name="max" expression="20"/>
+      </processingTime>
+      <onEntry>
+        // Apply learned weights to reservoir state
+        entity.coherence = applyReadoutWeights(entity.payload);
+        entity.priority = entity.coherence; // confidence = priority
+      </onEntry>
+    </ProcessingStage>
+
+    <!-- Stage 5: DAO CONSENSUS (bridges to ABM voting) -->
+    <ProcessingStage name="DAOConsensus">
+      <capacity value="7"/> <!-- 7 voter subpopulations -->
+      <processingTime distribution="triangular">
+        <parameter name="min" expression="20"/>
+        <parameter name="mode" expression="50"/>
+        <parameter name="max" expression="200"/>
+      </processingTime>
+      <onEntry>
+        // Submit proposal to ABM voter agents
+        submitToDAO(entity);
+      </onEntry>
+      <onExit>
+        ConsensusResult result = getConsensusResult(entity);
+        if (result.approved) {
+          entity.type = "action";
+          entity.coherence = result.confidence;
+        } else {
+          // Rejected — recycle to reservoir for refinement
+          recycleToReservoir(entity);
+          return; // entity exits pipeline
+        }
+      </onExit>
+    </ProcessingStage>
+
+    <!-- Stage 6: ACTION EXECUTION -->
+    <ProcessingStage name="ActionExecution">
+      <capacity value="3"/>
+      <processingTime distribution="triangular">
+        <parameter name="min" expression="10"/>
+        <parameter name="mode" expression="30"/>
+        <parameter name="max" expression="100"/>
+      </processingTime>
+      <onEntry>
+        executeAction(entity);
+        // Feed reward signal back to SD endocrine system
+        emitRewardSignal(entity.coherence);
+      </onEntry>
+      <onExit>
+        // Completed cognitive cycle
+        recordCompletedCycle(entity);
+        updateAutognosisMetrics(entity);
+      </onExit>
+    </ProcessingStage>
+
+    <!-- Sink: completed entities -->
+    <Sink name="CompletedActions"/>
+
+    <!-- Flow connections -->
+    <Connection from="StimulusSource" to="AttentionGate"/>
+    <Connection from="AttentionGate" to="PerceptionBinding"/>
+    <Connection from="PerceptionBinding" to="ReservoirProcessing"/>
+    <Connection from="ReservoirProcessing" to="ReadoutProjection"/>
+    <Connection from="ReadoutProjection" to="DAOConsensus"/>
+    <Connection from="DAOConsensus" to="ActionExecution"/>
+    <Connection from="ActionExecution" to="CompletedActions"/>
+
+    <!-- DES Parameters -->
+    <Parameter name="baseArrivalRate" type="double" default="0.04"/> <!-- ~25 stimuli/sec -->
+    <Parameter name="thyroid_speed_factor" type="double" default="1.0"/>
+    
+  </DiscreteEventSimulation>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- METHOD 2: AGENT-BASED MODELING (ABM)                           -->
+  <!-- ESN Reservoir Population: 256 nodes as autonomous agents       -->
+  <!-- 7 DAO Voter Subpopulations                                     -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  
+  <AgentBasedModel name="ReservoirPopulation">
+    
+    <!-- Agent Type: Reservoir Node -->
+    <AgentType name="ReservoirNode">
+      <population size="256"/>
+      
+      <!-- State Variables -->
+      <stateVariable name="activation" type="double" default="0.0"/>
+      <stateVariable name="leakRate" type="double" default="0.3"/>
+      <stateVariable name="spectralContribution" type="double" default="0.0"/>
+      <stateVariable name="subpopulation" type="int"/> <!-- 0-6: voter group -->
+      <stateVariable name="connectionWeights" type="double[]"/>
+      <stateVariable name="inputWeight" type="double"/>
+      <stateVariable name="bias" type="double" default="0.0"/>
+      <stateVariable name="firingHistory" type="double[]" size="100"/>
+      <stateVariable name="edgeOfChaos" type="boolean" default="false"/>
+      
+      <!-- Statechart: Node Lifecycle -->
+      <Statechart name="NodeBehavior">
+        <State name="Quiescent" initial="true">
+          <transition to="Active" condition="activation > 0.3"/>
+        </State>
+        <State name="Active">
+          <transition to="Saturated" condition="activation > 0.95"/>
+          <transition to="Quiescent" condition="activation < 0.1"/>
+          <onEntry>
+            edgeOfChaos = (activation > 0.6 &amp;&amp; activation &lt; 0.85);
+          </onEntry>
+        </State>
+        <State name="Saturated">
+          <transition to="Active" condition="activation < 0.9"/>
+          <onEntry>
+            // Pathology: saturated nodes don't contribute to computation
+            reportPathology("reservoir_saturation", this);
+          </onEntry>
+        </State>
+      </Statechart>
+      
+      <!-- Behavior: ESN Update Rule -->
+      <behavior name="updateActivation" trigger="onStep">
+        <![CDATA[
+          // ESN state update: x(t+1) = (1-α)x(t) + α·tanh(W·x(t) + W_in·u(t) + b)
+          double input = getInputSignal();
+          double recurrent = 0.0;
+          for (int i = 0; i < connectionWeights.length; i++) {
+            ReservoirNode neighbor = getNeighbor(i);
+            if (neighbor != null) {
+              recurrent += connectionWeights[i] * neighbor.activation;
+            }
+          }
+          double preActivation = recurrent + inputWeight * input + bias;
+          double newActivation = (1.0 - leakRate) * activation + leakRate * Math.tanh(preActivation);
+          
+          // Hormone modulation: cortisol increases leak rate (faster forgetting)
+          newActivation *= (1.0 - cortisol_level * 0.1);
+          
+          // Anandamide promotes edge-of-chaos (flow state)
+          if (anandamide_level > 0.6) {
+            // Gently push toward critical regime
+            if (newActivation < 0.5) newActivation += 0.02;
+            if (newActivation > 0.85) newActivation -= 0.02;
+          }
+          
+          activation = Math.max(0.0, Math.min(1.0, newActivation));
+          
+          // Update firing history (ring buffer)
+          shiftHistory(firingHistory, activation);
+          
+          // Compute spectral contribution
+          spectralContribution = computeLocalLyapunov(firingHistory);
+        ]]>
+      </behavior>
+      
+      <!-- Behavior: DAO Voting -->
+      <behavior name="castVote" trigger="onMessage" messageType="ProposalBallot">
+        <![CDATA[
+          ProposalBallot ballot = getMessage();
+          double vote = evaluateProposal(ballot, subpopulation);
+          // Vote weight = activation magnitude (stake)
+          double weight = activation;
+          sendMessage(new Vote(ballot.proposalId, vote, weight), "DAOTally");
+        ]]>
+      </behavior>
+      
+      <!-- Initialization -->
+      <initialization>
+        <![CDATA[
+          subpopulation = getIndex() % 7;
+          leakRate = uniform(0.1, 0.5);
+          inputWeight = normal(0, 1.0 / Math.sqrt(256));
+          bias = normal(0, 0.01);
+          connectionWeights = generateSparseWeights(256, 0.1, spectralRadius);
+          firingHistory = new double[100];
+        ]]>
+      </initialization>
+    </AgentType>
+
+    <!-- Agent Type: DAO Voter (7 specialized evaluators) -->
+    <AgentType name="DAOVoter">
+      <population size="7"/>
+      
+      <stateVariable name="voterRole" type="String"/>
+      <stateVariable name="stake" type="double" default="1.0"/>
+      <stateVariable name="votingHistory" type="double[]" size="50"/>
+      <stateVariable name="polarization" type="double" default="0.0"/>
+      
+      <!-- Voter Roles -->
+      <initialization>
+        <![CDATA[
+          String[] roles = {
+            "risk_assessment",      // Evaluates downside risk
+            "opportunity_cost",     // What we lose by NOT acting
+            "coherence_check",      // Does this fit our identity?
+            "resource_audit",       // Can we afford this?
+            "temporal_fit",         // Is the timing right?
+            "social_alignment",     // Does this serve the collective?
+            "self_preservation"     // Does this threaten our existence?
+          };
+          voterRole = roles[getIndex()];
+          stake = 1.0 + uniform(-0.2, 0.2); // Slight stake variation
+        ]]>
+      </initialization>
+      
+      <!-- Behavior: Evaluate Proposal -->
+      <behavior name="evaluateProposal" trigger="onMessage" messageType="DAOProposal">
+        <![CDATA[
+          DAOProposal proposal = getMessage();
+          double evaluation = 0.0;
+          
+          switch (voterRole) {
+            case "risk_assessment":
+              evaluation = 1.0 - proposal.riskLevel;
+              evaluation *= (1.0 - cortisol_level * 0.3); // Stress → risk-averse
+              break;
+            case "opportunity_cost":
+              evaluation = proposal.expectedReward - proposal.alternativeCost;
+              evaluation *= (1.0 + phasic_dopamine * 0.4); // Dopamine → opportunity-seeking
+              break;
+            case "coherence_check":
+              evaluation = proposal.identityAlignment;
+              evaluation *= (1.0 + serotonin_level * 0.2); // Serotonin → stability-seeking
+              break;
+            case "resource_audit":
+              evaluation = proposal.resourceAvailability;
+              evaluation *= (1.0 - insulin_level * 0.2); // Low resources → conservative
+              break;
+            case "temporal_fit":
+              evaluation = proposal.temporalUrgency * proposal.readiness;
+              break;
+            case "social_alignment":
+              evaluation = proposal.socialBenefit;
+              evaluation *= (1.0 + oxytocin_level * 0.3); // Oxytocin → pro-social
+              break;
+            case "self_preservation":
+              evaluation = 1.0 - proposal.selfRisk;
+              evaluation *= (1.0 + norepinephrine_level * 0.2); // Alert → cautious
+              break;
+          }
+          
+          // Cast weighted vote
+          double weight = stake * getSubpopulationActivation(voterRole);
+          Vote vote = new Vote(proposal.id, evaluation, weight);
+          sendMessage(vote, "ConsensusAggregator");
+          
+          // Track polarization
+          shiftHistory(votingHistory, evaluation);
+          polarization = computeVariance(votingHistory);
+        ]]>
+      </behavior>
+    </AgentType>
+
+    <!-- Agent Type: Autognosis Monitor -->
+    <AgentType name="AutognosisAgent">
+      <population size="1"/>
+      
+      <stateVariable name="health" type="double" default="1.0"/>
+      <stateVariable name="pathologies" type="String[]"/>
+      <stateVariable name="spectralRadius" type="double" default="0.95"/>
+      <stateVariable name="memoryCapacity" type="double" default="0.0"/>
+      
+      <!-- Periodic health check every 1000ms -->
+      <behavior name="healthCheck" trigger="cyclic" period="1000">
+        <![CDATA[
+          pathologies = new String[0];
+          
+          // Check reservoir saturation
+          int saturatedCount = countNodesInState("Saturated");
+          if (saturatedCount > 25) { // >10% saturated
+            addPathology("reservoir_saturation");
+          }
+          
+          // Check reservoir death
+          int quiescentCount = countNodesInState("Quiescent");
+          if (quiescentCount > 200) { // >78% dead
+            addPathology("reservoir_death");
+          }
+          
+          // Check spectral instability
+          double currentSpectral = computeSpectralRadius();
+          if (currentSpectral > 1.05 || currentSpectral < 0.5) {
+            addPathology("spectral_instability");
+          }
+          
+          // Check voter polarization
+          double maxPolarization = getMaxVoterPolarization();
+          if (maxPolarization > 0.8) {
+            addPathology("voter_polarization");
+          }
+          
+          // Check consensus deadlock
+          double recentApprovalRate = getRecentApprovalRate(50);
+          if (recentApprovalRate < 0.1) {
+            addPathology("consensus_deadlock");
+          }
+          
+          // Compute overall health
+          health = 1.0 - (pathologies.length * 0.15);
+          health = Math.max(0.0, Math.min(1.0, health));
+          
+          // Emit autognosis report to SD system
+          emitAutognosisReport(health, pathologies, spectralRadius);
+          
+          // Adaptive governance: adjust spectral radius
+          if (health < 0.6) {
+            spectralRadius *= 0.98; // Contract toward stability
+          } else if (health > 0.9) {
+            spectralRadius = Math.min(1.05, spectralRadius * 1.005); // Expand toward edge-of-chaos
+          }
+          applySpectralRadius(spectralRadius);
+        ]]>
+      </behavior>
+    </AgentType>
+
+    <!-- ABM Parameters -->
+    <Parameter name="spectralRadius" type="double" default="0.95"/>
+    <Parameter name="sparsity" type="double" default="0.1"/>
+    <Parameter name="quorumThreshold" type="double" default="0.5"/>
+    
+    <!-- Spatial Layout: Reservoir nodes on a torus -->
+    <Space name="ReservoirSpace" type="continuous" dimensions="2" wrap="true">
+      <size width="16" height="16"/>
+    </Space>
+    
+  </AgentBasedModel>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- METHOD 3: SYSTEM DYNAMICS (SD)                                 -->
+  <!-- Virtual Endocrine System: Hormone Stock-Flow Model             -->
+  <!-- 10 Glands, 16 Hormones, Feedback Loops                        -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  
+  <SystemDynamics name="VirtualEndocrineSystem">
+    
+    <!-- ─── STOCKS (Hormone Concentrations) ─── -->
+    
+    <!-- HPA Axis -->
+    <Stock name="CRH" initial="0.1" nonNegative="true">
+      <inflow ref="CRH_secretion"/>
+      <outflow ref="CRH_decay"/>
+    </Stock>
+    <Stock name="ACTH" initial="0.1" nonNegative="true">
+      <inflow ref="ACTH_secretion"/>
+      <outflow ref="ACTH_decay"/>
+    </Stock>
+    <Stock name="Cortisol" initial="0.2" nonNegative="true">
+      <inflow ref="Cortisol_secretion"/>
+      <outflow ref="Cortisol_decay"/>
+      <outflow ref="Cortisol_negative_feedback"/>
+    </Stock>
+    
+    <!-- Dopaminergic -->
+    <Stock name="TonicDopamine" initial="0.4" nonNegative="true">
+      <inflow ref="TonicDA_secretion"/>
+      <outflow ref="TonicDA_decay"/>
+    </Stock>
+    <Stock name="PhasicDopamine" initial="0.0" nonNegative="true">
+      <inflow ref="PhasicDA_burst"/>
+      <outflow ref="PhasicDA_decay"/>
+    </Stock>
+    
+    <!-- Serotonergic -->
+    <Stock name="Serotonin" initial="0.5" nonNegative="true">
+      <inflow ref="Serotonin_secretion"/>
+      <outflow ref="Serotonin_decay"/>
+    </Stock>
+    
+    <!-- Noradrenergic -->
+    <Stock name="Norepinephrine" initial="0.3" nonNegative="true">
+      <inflow ref="NE_secretion"/>
+      <outflow ref="NE_decay"/>
+    </Stock>
+    
+    <!-- Oxytocinergic -->
+    <Stock name="Oxytocin" initial="0.2" nonNegative="true">
+      <inflow ref="Oxytocin_secretion"/>
+      <outflow ref="Oxytocin_decay"/>
+    </Stock>
+    
+    <!-- Thyroid -->
+    <Stock name="T3" initial="0.6" nonNegative="true">
+      <inflow ref="T3_secretion"/>
+      <outflow ref="T3_decay"/>
+    </Stock>
+    <Stock name="T4" initial="0.5" nonNegative="true">
+      <inflow ref="T4_secretion"/>
+      <outflow ref="T4_decay"/>
+    </Stock>
+    
+    <!-- Circadian -->
+    <Stock name="Melatonin" initial="0.1" nonNegative="true">
+      <inflow ref="Melatonin_secretion"/>
+      <outflow ref="Melatonin_decay"/>
+    </Stock>
+    
+    <!-- Pancreatic -->
+    <Stock name="Insulin" initial="0.3" nonNegative="true">
+      <inflow ref="Insulin_secretion"/>
+      <outflow ref="Insulin_decay"/>
+    </Stock>
+    <Stock name="Glucagon" initial="0.2" nonNegative="true">
+      <inflow ref="Glucagon_secretion"/>
+      <outflow ref="Glucagon_decay"/>
+    </Stock>
+    
+    <!-- Immune -->
+    <Stock name="IL6" initial="0.1" nonNegative="true">
+      <inflow ref="IL6_secretion"/>
+      <outflow ref="IL6_decay"/>
+    </Stock>
+    <Stock name="TNFalpha" initial="0.05" nonNegative="true">
+      <inflow ref="TNFa_secretion"/>
+      <outflow ref="TNFa_decay"/>
+    </Stock>
+    
+    <!-- Endocannabinoid -->
+    <Stock name="Anandamide" initial="0.3" nonNegative="true">
+      <inflow ref="Anandamide_secretion"/>
+      <outflow ref="Anandamide_decay"/>
+    </Stock>
+
+    <!-- ─── FLOWS (Secretion and Decay Rates) ─── -->
+    
+    <!-- HPA Axis Flows -->
+    <Flow name="CRH_secretion" expression="stressSignal * 0.1 * (1.0 - Cortisol * 0.5)"/>
+    <Flow name="CRH_decay" expression="CRH * 0.05"/>
+    <Flow name="ACTH_secretion" expression="CRH * 0.15"/>
+    <Flow name="ACTH_decay" expression="ACTH * 0.08"/>
+    <Flow name="Cortisol_secretion" expression="ACTH * 0.12"/>
+    <Flow name="Cortisol_decay" expression="Cortisol * 0.05"/>
+    <Flow name="Cortisol_negative_feedback" expression="Cortisol * Cortisol * 0.03"/>
+    
+    <!-- Dopaminergic Flows -->
+    <Flow name="TonicDA_secretion" expression="baselineReward * 0.05 * (1.0 + Serotonin * 0.2)"/>
+    <Flow name="TonicDA_decay" expression="TonicDopamine * 0.08"/>
+    <Flow name="PhasicDA_burst" expression="rewardPredictionError * 0.3"/>
+    <Flow name="PhasicDA_decay" expression="PhasicDopamine * 0.20"/>
+    
+    <!-- Serotonergic Flows -->
+    <Flow name="Serotonin_secretion" expression="socialSignal * 0.04 + baselineSerotonin * 0.02"/>
+    <Flow name="Serotonin_decay" expression="Serotonin * 0.03"/>
+    
+    <!-- Noradrenergic Flows -->
+    <Flow name="NE_secretion" expression="noveltySignal * 0.12 + threatSignal * 0.15"/>
+    <Flow name="NE_decay" expression="Norepinephrine * 0.15"/>
+    
+    <!-- Oxytocinergic Flows -->
+    <Flow name="Oxytocin_secretion" expression="socialBondSignal * 0.08"/>
+    <Flow name="Oxytocin_decay" expression="Oxytocin * 0.08"/>
+    
+    <!-- Thyroid Flows -->
+    <Flow name="T3_secretion" expression="metabolicDemand * 0.03"/>
+    <Flow name="T3_decay" expression="T3 * 0.02"/>
+    <Flow name="T4_secretion" expression="metabolicDemand * 0.025"/>
+    <Flow name="T4_decay" expression="T4 * 0.015"/>
+    
+    <!-- Circadian Flows -->
+    <Flow name="Melatonin_secretion" expression="circadianPhase * 0.05 * (1.0 - Norepinephrine * 0.3)"/>
+    <Flow name="Melatonin_decay" expression="Melatonin * 0.04"/>
+    
+    <!-- Pancreatic Flows -->
+    <Flow name="Insulin_secretion" expression="cognitiveLoad * 0.06"/>
+    <Flow name="Insulin_decay" expression="Insulin * 0.10"/>
+    <Flow name="Glucagon_secretion" expression="(1.0 - cognitiveLoad) * 0.04"/>
+    <Flow name="Glucagon_decay" expression="Glucagon * 0.08"/>
+    
+    <!-- Immune Flows -->
+    <Flow name="IL6_secretion" expression="errorSignal * 0.05 + Cortisol * 0.03"/>
+    <Flow name="IL6_decay" expression="IL6 * 0.07"/>
+    <Flow name="TNFa_secretion" expression="threatSignal * 0.04"/>
+    <Flow name="TNFa_decay" expression="TNFalpha * 0.09"/>
+    
+    <!-- Endocannabinoid Flows -->
+    <Flow name="Anandamide_secretion" expression="flowStateSignal * 0.08 + (1.0 - Cortisol) * 0.03"/>
+    <Flow name="Anandamide_decay" expression="Anandamide * 0.12"/>
+
+    <!-- ─── AUXILIARY VARIABLES (Computed Signals) ─── -->
+    
+    <Auxiliary name="stressSignal" expression="errorRate * 0.5 + cognitiveOverload * 0.3 + threatSignal * 0.2"/>
+    <Auxiliary name="rewardPredictionError" expression="actualReward - expectedReward"/>
+    <Auxiliary name="socialSignal" expression="interactionFrequency * interactionQuality"/>
+    <Auxiliary name="noveltySignal" expression="informationEntropy * (1.0 - familiarity)"/>
+    <Auxiliary name="threatSignal" expression="pathologyCount * 0.2 + externalThreat"/>
+    <Auxiliary name="socialBondSignal" expression="trustLevel * reciprocity"/>
+    <Auxiliary name="metabolicDemand" expression="cognitiveLoad * 0.6 + actionRate * 0.4"/>
+    <Auxiliary name="circadianPhase" expression="sin(2 * PI * time() / 86400000) * 0.5 + 0.5"/>
+    <Auxiliary name="cognitiveLoad" expression="pipelineUtilization"/>
+    <Auxiliary name="flowStateSignal" expression="max(0, edgeOfChaosRatio - 0.5) * 2.0"/>
+    <Auxiliary name="errorSignal" expression="1.0 - autognosisHealth"/>
+    <Auxiliary name="cognitiveOverload" expression="max(0, pipelineUtilization - 0.8) * 5.0"/>
+    
+    <!-- ─── COGNITIVE MODE COMPUTATION ─── -->
+    
+    <Auxiliary name="cognitiveMode" expression="computeNearestMode()">
+      <!-- 
+        10 Modes computed from nearest-centroid in 16D hormone space:
+        EXPLORATORY: high NE + high Anandamide + low Cortisol
+        STRESSED: high Cortisol + high CRH + high NE
+        SOCIAL: high Oxytocin + high Serotonin
+        FOCUSED: high T3 + low Melatonin + moderate DA
+        THREAT: high NE + high TNFα + high Cortisol
+        REFLECTIVE: high Melatonin + moderate Serotonin + low NE
+        REWARD: high PhasicDA + high TonicDA
+        FLOW: high Anandamide + moderate NE + low Cortisol
+        REST: high Melatonin + low NE + low Cortisol
+        DEFENSIVE: high IL6 + high TNFα + high Glucagon
+      -->
+    </Auxiliary>
+
+    <!-- ─── FEEDBACK LOOPS ─── -->
+    
+    <!-- Negative: Cortisol suppresses CRH (HPA axis regulation) -->
+    <!-- Positive: Dopamine → action → reward → more dopamine -->
+    <!-- Negative: Melatonin suppresses norepinephrine (rest) -->
+    <!-- Positive: IL6 + Cortisol amplification (chronic stress) -->
+    <!-- Negative: Anandamide suppresses cortisol (flow dampens stress) -->
+    <!-- Positive: Oxytocin → social → more oxytocin (bonding loop) -->
+    
+    <!-- ─── SD PARAMETERS (External Inputs from DES/ABM) ─── -->
+    
+    <Parameter name="errorRate" type="double" default="0.1"/>
+    <Parameter name="actualReward" type="double" default="0.5"/>
+    <Parameter name="expectedReward" type="double" default="0.5"/>
+    <Parameter name="interactionFrequency" type="double" default="0.3"/>
+    <Parameter name="interactionQuality" type="double" default="0.7"/>
+    <Parameter name="informationEntropy" type="double" default="0.5"/>
+    <Parameter name="familiarity" type="double" default="0.5"/>
+    <Parameter name="externalThreat" type="double" default="0.0"/>
+    <Parameter name="trustLevel" type="double" default="0.5"/>
+    <Parameter name="reciprocity" type="double" default="0.5"/>
+    <Parameter name="pipelineUtilization" type="double" default="0.5"/>
+    <Parameter name="edgeOfChaosRatio" type="double" default="0.5"/>
+    <Parameter name="autognosisHealth" type="double" default="0.8"/>
+    <Parameter name="pathologyCount" type="int" default="0"/>
+    <Parameter name="actionRate" type="double" default="0.3"/>
+    <Parameter name="baselineReward" type="double" default="0.4"/>
+    <Parameter name="baselineSerotonin" type="double" default="0.3"/>
+    
+    <!-- Integration method -->
+    <IntegrationMethod type="RungeKutta4" stepSize="10"/> <!-- 10ms steps -->
+    
+  </SystemDynamics>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- CROSS-PARADIGM BRIDGES                                         -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  
+  <Bridges>
+    <!-- DES → ABM: Cognitive entities injected into reservoir -->
+    <Bridge name="DES_to_ABM" from="CognitivePipeline.ReservoirProcessing" to="ReservoirPopulation">
+      <mapping>
+        <rule>On entity entry to ReservoirProcessing, broadcast InputSignal to all ReservoirNodes</rule>
+      </mapping>
+    </Bridge>
+    
+    <!-- ABM → DES: Reservoir coherence feeds back to pipeline timing -->
+    <Bridge name="ABM_to_DES" from="ReservoirPopulation.AutognosisAgent" to="CognitivePipeline">
+      <mapping>
+        <rule>Autognosis health modulates DES processing times via thyroid_speed_factor</rule>
+        <rule>Spectral radius feeds back to reservoir processing capacity</rule>
+      </mapping>
+    </Bridge>
+    
+    <!-- ABM → SD: Reservoir activity drives endocrine secretion signals -->
+    <Bridge name="ABM_to_SD" from="ReservoirPopulation" to="VirtualEndocrineSystem">
+      <mapping>
+        <rule>edgeOfChaosRatio = count(nodes in Active state with edgeOfChaos=true) / 256</rule>
+        <rule>pipelineUtilization = mean(node.activation) across all nodes</rule>
+        <rule>pathologyCount = autognosisAgent.pathologies.length</rule>
+        <rule>autognosisHealth = autognosisAgent.health</rule>
+      </mapping>
+    </Bridge>
+    
+    <!-- SD → ABM: Hormones modulate agent behavior -->
+    <Bridge name="SD_to_ABM" from="VirtualEndocrineSystem" to="ReservoirPopulation">
+      <mapping>
+        <rule>cortisol_level = Cortisol (increases leak rate, stress response)</rule>
+        <rule>anandamide_level = Anandamide (promotes edge-of-chaos)</rule>
+        <rule>phasic_dopamine = PhasicDopamine (reward signal)</rule>
+        <rule>serotonin_level = Serotonin (stability preference)</rule>
+        <rule>oxytocin_level = Oxytocin (social alignment)</rule>
+        <rule>norepinephrine_level = Norepinephrine (alertness, voting caution)</rule>
+        <rule>insulin_level = Insulin (resource conservation)</rule>
+      </mapping>
+    </Bridge>
+    
+    <!-- SD → DES: Hormones modulate pipeline processing -->
+    <Bridge name="SD_to_DES" from="VirtualEndocrineSystem" to="CognitivePipeline">
+      <mapping>
+        <rule>thyroid_speed_factor = 0.5 + T3 (processing speed)</rule>
+        <rule>Norepinephrine modulates stimulus arrival rate</rule>
+        <rule>Cortisol increases attention gate failure rate</rule>
+      </mapping>
+    </Bridge>
+    
+    <!-- DES → SD: Pipeline outcomes drive endocrine signals -->
+    <Bridge name="DES_to_SD" from="CognitivePipeline" to="VirtualEndocrineSystem">
+      <mapping>
+        <rule>Completed actions → actualReward signal</rule>
+        <rule>Pipeline utilization → cognitiveLoad</rule>
+        <rule>Action execution rate → actionRate</rule>
+        <rule>Entity drop rate → errorRate</rule>
+      </mapping>
+    </Bridge>
+  </Bridges>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- EXPERIMENTS                                                     -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  
+  <Experiments>
+    <Experiment name="BaselineRun" type="simulation">
+      <description>Normal operation — observe emergent cognitive modes</description>
+      <stopTime value="86400000"/>
+      <replications value="10"/>
+    </Experiment>
+    
+    <Experiment name="StressTest" type="parameterVariation">
+      <description>Increase external threat, observe HPA cascade and mode shift</description>
+      <parameter name="externalThreat" from="0.0" to="1.0" step="0.1"/>
+      <replications value="5"/>
+    </Experiment>
+    
+    <Experiment name="SpectralSweep" type="parameterVariation">
+      <description>Vary spectral radius to find edge-of-chaos sweet spot</description>
+      <parameter name="spectralRadius" from="0.7" to="1.1" step="0.02"/>
+      <replications value="10"/>
+    </Experiment>
+    
+    <Experiment name="FlowStateInduction" type="simulation">
+      <description>Optimal conditions for flow state emergence</description>
+      <initialCondition>
+        <set parameter="externalThreat" value="0.0"/>
+        <set parameter="interactionQuality" value="0.9"/>
+        <set parameter="informationEntropy" value="0.7"/>
+        <set parameter="familiarity" value="0.3"/>
+      </initialCondition>
+    </Experiment>
+    
+    <Experiment name="DAODeadlockRecovery" type="simulation">
+      <description>Induce consensus deadlock and observe autognosis recovery</description>
+      <initialCondition>
+        <set parameter="quorumThreshold" value="0.9"/>
+        <!-- High quorum → deadlock → autognosis detects → lowers threshold -->
+      </initialCondition>
+    </Experiment>
+  </Experiments>
+
+</AnyLogicModel>
