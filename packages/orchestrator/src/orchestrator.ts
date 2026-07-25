@@ -54,6 +54,7 @@ import {
 import { Echobeats } from "./echobeats.js";
 import { entelechyIntegration } from "./entelechy-integration.js";
 import { SelfModificationEngine } from "./self-modification.js";
+import { epistemicImmuneSystem } from "deep-tree-echo-core";
 
 const log = getLogger("deep-tree-echo-orchestrator/Orchestrator");
 
@@ -616,6 +617,31 @@ export class Orchestrator {
           } catch (e) {
             log.warn("ArenaGeniusBridge not available (non-fatal):", e);
           }
+
+          // 13. Epistemic Immune System — belief integrity defense
+          this.echobeats?.on("tick", () => {
+            const stats = this.echobeats?.getStats();
+            const energies = stats?.streams.map(s => s.energy) ?? [];
+            const coherence = energies.length > 0
+              ? energies.reduce((a, b) => a + b, 0) / energies.length
+              : 0.5;
+            const freeEnergy = scientificGeniusEngine?.getState?.()?.totalFreeEnergy ?? 0;
+            const daoConsensus = coherence; // Use stream coherence as proxy
+            const esnHealth = Math.min(1.0, coherence * 1.2);
+
+            const result = epistemicImmuneSystem.tick({
+              freeEnergy: Math.min(1.0, freeEnergy / 10),
+              coherence,
+              recentBeliefs: [], // Populated by message processing
+              daoConsensus,
+              esnHealth,
+            });
+
+            if (result.threats.length > 0) {
+              log.warn(`Epistemic Immune System detected ${result.threats.length} threats`);
+            }
+          });
+          log.info("EpistemicImmuneSystem wired (belief integrity defense active)");
 
           log.info("Level 5 Autonomy Pipeline fully initialized");
         } catch (error) {

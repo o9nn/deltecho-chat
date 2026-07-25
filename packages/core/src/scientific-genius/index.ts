@@ -64,3 +64,17 @@ export {
   type EntelechyState,
   type EntelechyConfig,
 } from "./EntelechyEmergenceEngine.js";
+
+export {
+  EpistemicImmuneSystem,
+  epistemicImmuneSystem,
+  ThreatClass,
+  ImmuneResponse,
+  type EpistemicThreat,
+  type Antibody,
+  type MemoryCell,
+  type InflammationState,
+  type ImmuneSystemState,
+  type QuarantineEntry,
+  type EpistemicImmuneConfig,
+} from "./EpistemicImmuneSystem.js";
