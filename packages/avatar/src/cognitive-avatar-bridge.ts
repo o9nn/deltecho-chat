@@ -25,6 +25,11 @@ import type {
 } from "./dtecho-expression-driver";
 import { projectDTEchoCognitiveState } from "./dtecho-expression-driver";
 import { ExpressionMapper } from "./expression-mapper";
+import {
+  EmotionalInertiaController,
+  type InertiaOutput,
+  type FidgetDeltas,
+} from "./emotional-inertia-controller";
 
 /**
  * Cognitive state input from consciousness modules
@@ -133,11 +138,14 @@ export class CognitiveAvatarBridge extends EventEmitter {
   private smoothedArousal: number = 0.5;
   private smoothedCoherence: number = 1.0;
 
+  // Emotional inertia controller for smooth transitions + cognitive load speed + fidgets
+  private inertiaController: EmotionalInertiaController;
+
   constructor(config: Partial<CognitiveAvatarBridgeConfig> = {}) {
     super();
     this.config = { ...DEFAULT_CONFIG, ...config };
     this.expressionMapper = new ExpressionMapper();
-
+    this.inertiaController = new EmotionalInertiaController();
     const initialProjection = projectDTEchoCognitiveState({ mode: "Idle" });
     this.currentState = {
       expression: initialProjection.avatarExpression,
@@ -175,12 +183,27 @@ export class CognitiveAvatarBridge extends EventEmitter {
   }
 
   /**
+   * Get the emotional inertia controller for external access
+   */
+  public getInertiaController(): EmotionalInertiaController {
+    return this.inertiaController;
+  }
+
+  /**
+   * Get current animation speed multiplier from cognitive load
+   */
+  public getAnimationSpeedMultiplier(): number {
+    return this.inertiaController.getSpeedMultiplier();
+  }
+
+  /**
    * Start the bridge
    */
-  public start(): void {
+    public start(): void {
     if (this.running) return;
     this.running = true;
-
+    // Start the emotional inertia controller alongside the bridge
+    this.inertiaController.start();
     this.updateInterval = setInterval(() => {
       this.applyCurrentState();
     }, this.config.updateIntervalMs);
@@ -234,20 +257,31 @@ export class CognitiveAvatarBridge extends EventEmitter {
     // Convert cognitive state to emotional vector for expression mapping
     const emotionalVector = this.cognitiveToEmotional(state);
 
-    // Update expression mapper
-    this.expressionMapper.update(emotionalVector);
+    // Feed emotions and cognitive load into inertia controller
+    this.inertiaController.feedEmotions(emotionalVector);
+    const cogLoad = Math.max(
+      state.processingIntensity ?? 0,
+      state.isProcessing ? 0.5 : 0,
+      (state.scientificGenius ?? 0) * 0.7,
+    );
+    this.inertiaController.feedCognitiveLoad(cogLoad);
+
+    // Use inertia-filtered emotions for expression mapping
+    const inertiaOutput = this.inertiaController.getOutput();
+    this.expressionMapper.update(inertiaOutput.smoothedEmotions);
 
     // Calculate avatar response
     const response = this.calculateAvatarResponse(state, emotionalVector);
 
-    // Apply smoothing
-    this.applySmoothing(response, state);
+    // Apply smoothing (now enhanced with inertia output)
+    this.applySmoothing(response, state, inertiaOutput);
 
     // Store for reference
     this.previousCognitiveState = state;
 
-    // Emit update event
+    // Emit update event with inertia metadata
     this.emit("state_updated", this.currentState);
+    this.emit("inertia_output", inertiaOutput);
   }
 
   /**
@@ -405,6 +439,7 @@ export class CognitiveAvatarBridge extends EventEmitter {
   private applySmoothing(
     response: AvatarResponseState,
     state: CognitiveStateInput,
+    inertiaOutput?: InertiaOutput,
   ): void {
     const factor = this.config.smoothingFactor;
     const invFactor = 1 - factor;
@@ -423,11 +458,25 @@ export class CognitiveAvatarBridge extends EventEmitter {
     this.smoothedCoherence =
       this.smoothedCoherence * factor + coherence * invFactor;
 
+    // Apply fidget deltas to head tilt and eye movement if inertia provides them
+    let headTiltWithFidget = response.headTilt;
+    let eyeWithFidget = response.eyeMovement;
+    if (inertiaOutput) {
+      const fd = inertiaOutput.fidgetDeltas;
+      headTiltWithFidget += fd.headAngleZ;
+      eyeWithFidget = {
+        x: eyeWithFidget.x + fd.eyeDriftX,
+        y: eyeWithFidget.y + fd.eyeDriftY,
+      };
+    }
+
     // Apply smoothed values
     this.currentState = {
       ...response,
       expressionIntensity: this.smoothedExpression,
       consciousnessGlow: response.consciousnessGlow * this.smoothedCoherence,
+      headTilt: headTiltWithFidget,
+      eyeMovement: eyeWithFidget,
     };
   }
 

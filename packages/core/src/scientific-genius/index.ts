@@ -78,3 +78,15 @@ export {
   type QuarantineEntry,
   type EpistemicImmuneConfig,
 } from "./EpistemicImmuneSystem.js";
+
+export {
+  ConceptualMetabolism,
+  conceptualMetabolism,
+  MetabolicReaction,
+  MetabolicPhase,
+  DEFAULT_METABOLISM_CONFIG,
+  type KnowledgeUnit,
+  type MetabolicEvent,
+  type MetabolicState,
+  type ConceptualMetabolismConfig,
+} from "./ConceptualMetabolism.js";

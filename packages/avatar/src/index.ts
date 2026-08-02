@@ -146,6 +146,19 @@ export {
   type GenerationResult,
 } from "./meshy3d-avatar-bridge";
 
+// Emotional Inertia Controller (smooth transitions + cognitive load speed + idle fidgets)
+export {
+  EmotionalInertiaController,
+  emotionalInertiaController,
+  type EmotionInertiaProfile,
+  type CognitiveLoadSpeedConfig,
+  type IdleFidgetConfig,
+  type EmotionalInertiaConfig,
+  type InertiaOutput,
+  type FidgetDeltas,
+  DEFAULT_EMOTIONAL_INERTIA_CONFIG,
+} from "./emotional-inertia-controller";
+
 // Resonance Cascade Visual Conductor (Scientific Genius → Avatar eureka effects)
 export {
   ResonanceCascadeConductor,
