@@ -90,3 +90,16 @@ export {
   type MetabolicState,
   type ConceptualMetabolismConfig,
 } from "./ConceptualMetabolism.js";
+
+export {
+  EpistemicDreaming,
+  epistemicDreaming,
+  BridgeType,
+  DreamPhase,
+  DEFAULT_DREAMING_CONFIG,
+  type DreamFragment,
+  type DreamInsight,
+  type DreamSessionState,
+  type EpistemicDreamingConfig,
+  type KnowledgeGraphView,
+} from "./EpistemicDreaming.js";

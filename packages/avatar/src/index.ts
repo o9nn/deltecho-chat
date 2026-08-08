@@ -168,3 +168,13 @@ export {
   type CascadeOverlay,
   type CascadeConductorConfig,
 } from "./resonance-cascade-conductor";
+
+// Metabolic Avatar Bridge (ConceptualMetabolism → avatar visual parameters)
+export {
+  MetabolicAvatarBridge,
+  metabolicAvatarBridge,
+  type MetabolicVisualInput,
+  type MetabolicAvatarDeltas,
+  type MetabolicAvatarBridgeConfig,
+  DEFAULT_METABOLIC_AVATAR_CONFIG,
+} from "./metabolic-avatar-bridge";
