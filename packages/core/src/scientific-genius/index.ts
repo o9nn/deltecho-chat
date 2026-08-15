@@ -103,3 +103,14 @@ export {
   type EpistemicDreamingConfig,
   type KnowledgeGraphView,
 } from "./EpistemicDreaming.js";
+
+export {
+  CognitiveResonanceField,
+  cognitiveResonanceField,
+  DEFAULT_RESONANCE_FIELD_CONFIG,
+  type IdeaWave,
+  type ResonanceNode,
+  type FieldState,
+  type CognitiveResonanceFieldConfig,
+  type FieldKnowledgeGraph,
+} from "./CognitiveResonanceField.js";

@@ -643,6 +643,37 @@ export class Orchestrator {
           });
           log.info("EpistemicImmuneSystem wired (belief integrity defense active)");
 
+          // 14. Metabolic Avatar Bridge — ConceptualMetabolism → Live2D visual parameters
+          try {
+            const { metabolicAvatarBridge } = await import("@deltecho/avatar");
+            const { conceptualMetabolism, epistemicDreaming } = await import("deep-tree-echo-core");
+
+            // Feed metabolic state into avatar bridge on each Echobeats tick
+            this.echobeats?.on("tick", () => {
+              const visualState = conceptualMetabolism.getVisualState();
+              metabolicAvatarBridge.feedMetabolicState(visualState);
+
+              // Trigger dream sessions when metabolic phase enters consolidating/resting
+              if (
+                (visualState.metabolicPhase === "consolidating" || visualState.metabolicPhase === "resting") &&
+                !epistemicDreaming.isRunning()
+              ) {
+                epistemicDreaming.beginDreamSession();
+              } else if (
+                visualState.metabolicPhase === "active" &&
+                epistemicDreaming.isRunning()
+              ) {
+                epistemicDreaming.endDreamSession();
+              }
+            });
+
+            metabolicAvatarBridge.start();
+            log.info("MetabolicAvatarBridge wired (metabolism → avatar visual pipeline active)");
+            log.info("EpistemicDreaming wired (dream sessions triggered by metabolic rest phases)");
+          } catch (e) {
+            log.warn("MetabolicAvatarBridge/EpistemicDreaming not available (non-fatal):", e);
+          }
+
           log.info("Level 5 Autonomy Pipeline fully initialized");
         } catch (error) {
           log.warn(
