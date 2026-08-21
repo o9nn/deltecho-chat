@@ -15,11 +15,18 @@ export interface FileSystemStorageConfig {
   storagePath: string;
   /** File extension for storage files */
   extension?: string;
+  /**
+   * Create the storage directory if it does not exist.
+   * Defaults to true for existing autonomy-pipeline callers.
+   * Memory lever opens pass false so a missing path is an error.
+   */
+  createIfMissing?: boolean;
 }
 
 export class FileSystemStorage implements MemoryStorage {
   private storagePath: string;
   private extension: string;
+  private createIfMissing: boolean;
   private initialized: boolean = false;
   private initPromise: Promise<void> | null = null;
   // In-memory cache for fast reads
@@ -28,6 +35,7 @@ export class FileSystemStorage implements MemoryStorage {
   constructor(config: FileSystemStorageConfig) {
     this.storagePath = config.storagePath;
     this.extension = config.extension || ".json";
+    this.createIfMissing = config.createIfMissing !== false;
   }
 
   private async ensureInit(): Promise<void> {
@@ -40,10 +48,19 @@ export class FileSystemStorage implements MemoryStorage {
   private async initialize(): Promise<void> {
     try {
       const fs = await import("node:fs/promises");
-      await fs.mkdir(this.storagePath, { recursive: true });
+      if (this.createIfMissing) {
+        await fs.mkdir(this.storagePath, { recursive: true });
+      } else {
+        await fs.access(this.storagePath);
+      }
       this.initialized = true;
       log.info(`FileSystemStorage initialized at ${this.storagePath}`);
     } catch (error) {
+      if (!this.createIfMissing) {
+        this.initialized = false;
+        this.initPromise = null;
+        throw error;
+      }
       log.error("Failed to initialize FileSystemStorage:", error);
       // Still mark as initialized — will fall back to cache-only mode
       this.initialized = true;

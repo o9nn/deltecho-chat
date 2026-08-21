@@ -8,8 +8,7 @@ describe("RAGMemoryStore", () => {
   beforeEach(async () => {
     storage = new InMemoryStorage();
     ragMemory = new RAGMemoryStore(storage);
-    // Wait for async initialization
-    await new Promise((resolve) => setTimeout(resolve, 50));
+    await ragMemory.ready();
   });
 
   describe("initialization", () => {
@@ -259,6 +258,96 @@ describe("RAGMemoryStore", () => {
 
       const reflections = ragMemory.getRecentReflections(10);
       expect(reflections.length).toBe(0);
+    });
+  });
+
+  describe("list replace tombstone and ready", () => {
+    beforeEach(() => {
+      ragMemory.setEnabled(true);
+    });
+
+    it("lists memories including tombstones while search skips them", async () => {
+      await ragMemory.storeMemory({
+        chatId: 1,
+        messageId: 1,
+        sender: "user",
+        text: "Keep this live memory",
+      });
+      await ragMemory.storeMemory({
+        chatId: 1,
+        messageId: 2,
+        sender: "user",
+        text: "Archive this memory soon",
+      });
+      const listed = ragMemory.listMemories();
+      await ragMemory.tombstoneMemory(listed[1].id);
+      expect(ragMemory.listMemories().length).toBe(2);
+      expect(ragMemory.getMemoriesByChat(1).length).toBe(1);
+      expect(ragMemory.searchMemories("Archive").every((m) => !m.tombstoned)).toBe(
+        true,
+      );
+    });
+
+    it("replaceMemory updates text for later search", async () => {
+      await ragMemory.storeMemory({
+        chatId: 1,
+        messageId: 1,
+        sender: "user",
+        text: "Original wording about cats",
+      });
+      const id = ragMemory.listMemories()[0].id;
+      await ragMemory.replaceMemory(id, { text: "Updated wording about dogs" });
+      const results = ragMemory.searchMemories("dogs");
+      expect(results[0].text).toContain("dogs");
+    });
+
+    it("tombstoneMemory throws on unknown id without dropping rows", async () => {
+      await ragMemory.storeMemory({
+        chatId: 1,
+        messageId: 1,
+        sender: "user",
+        text: "Survives unknown tombstone",
+      });
+      await expect(ragMemory.tombstoneMemory("missing")).rejects.toThrow(
+        "Unknown memory id",
+      );
+      expect(ragMemory.listMemories().length).toBe(1);
+    });
+
+    it("ready rejects invalid JSON", async () => {
+      const bad = new InMemoryStorage();
+      await bad.save("deepTreeEchoBotMemories", "{not-json");
+      const store = new RAGMemoryStore(bad);
+      await expect(store.ready()).rejects.toThrow("Invalid JSON");
+    });
+
+    it("does not evict live memories to make room for tombstones", async () => {
+      const tight = new RAGMemoryStore(storage, { memoryLimit: 2 });
+      await tight.ready();
+      tight.setEnabled(true);
+      await tight.storeMemory({
+        chatId: 1,
+        messageId: 1,
+        sender: "user",
+        text: "first live",
+      });
+      await tight.storeMemory({
+        chatId: 1,
+        messageId: 2,
+        sender: "user",
+        text: "second live",
+      });
+      const firstId = tight.listMemories()[0].id;
+      await tight.tombstoneMemory(firstId);
+      await tight.storeMemory({
+        chatId: 1,
+        messageId: 3,
+        sender: "user",
+        text: "third live",
+      });
+      const listed = tight.listMemories();
+      expect(listed.some((m) => m.id === firstId && m.tombstoned)).toBe(true);
+      expect(listed.filter((m) => !m.tombstoned).length).toBe(2);
     });
   });
 });
