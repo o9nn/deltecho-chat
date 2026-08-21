@@ -3,6 +3,8 @@ import { getLogger } from "../utils/logger";
 import {
   RAGMemoryStore,
   UnknownMemoryError,
+  RAG_MEMORY_KEY,
+  RAG_REFLECTION_KEY,
   type Memory,
   type ReflectionMemory,
   type ScoredMemory,
@@ -12,8 +14,7 @@ import { FileSystemStorage } from "./FileSystemStorage";
 
 const log = getLogger("deep-tree-echo-core/memory/MemoryLever");
 
-export const RAG_MEMORY_KEY = "deepTreeEchoBotMemories";
-export const RAG_REFLECTION_KEY = "deepTreeEchoBotReflections";
+export { RAG_MEMORY_KEY, RAG_REFLECTION_KEY };
 export const VECTOR_MEMORY_KEY = "vectorMemoryStore_memories";
 
 const DEFAULT_THRESHOLD = 0.5;
@@ -22,11 +23,20 @@ const OPPOSITION: Record<string, string> = {
   ecs: "vercel",
   vercel: "ecs",
 };
-const NEGATION = new Set(["not", "never", "no"]);
+
+export type MemoryLeverErrorCode =
+  | "missing_store"
+  | "missing_or_invalid"
+  | "unapproved"
+  | "hash_mismatch"
+  | "locked"
+  | "unknown_id"
+  | "invalid_command"
+  | "unknown_flag";
 
 export class MemoryLeverError extends Error {
   constructor(
-    public readonly code: string,
+    public readonly code: MemoryLeverErrorCode,
     message: string,
   ) {
     super(message);
@@ -150,16 +160,30 @@ function significantTokens(text: string): string[] {
     .toLowerCase()
     .replace(/[^\w\s]/g, " ")
     .split(/\s+/)
-    .filter((word) => word.length > 2);
+    .filter(Boolean);
+}
+
+function hasNegation(text: string): boolean {
+  const lower = text.toLowerCase();
+  if (lower.includes("no longer")) {
+    return true;
+  }
+  return significantTokens(text).some(
+    (token) => token === "not" || token === "never" || token === "no",
+  );
 }
 
 function uniqueNounSet(text: string): string {
-  return [...new Set(significantTokens(text))].sort().join(" ");
+  return [
+    ...new Set(significantTokens(text).filter((word) => word.length > 2)),
+  ]
+    .sort()
+    .join(" ");
 }
 
 function isContradictionPair(a: Memory, b: Memory): boolean {
-  const tokensA = significantTokens(a.text);
-  const tokensB = significantTokens(b.text);
+  const tokensA = significantTokens(a.text).filter((word) => word.length > 2);
+  const tokensB = significantTokens(b.text).filter((word) => word.length > 2);
   const setA = new Set(tokensA);
   const setB = new Set(tokensB);
   const shared = tokensA.filter((token) => setB.has(token));
@@ -174,9 +198,9 @@ function isContradictionPair(a: Memory, b: Memory): boolean {
       return true;
     }
   }
-  const aNeg = tokensA.some((token) => NEGATION.has(token));
-  const bNeg = tokensB.some((token) => NEGATION.has(token));
-  return aNeg !== bNeg && shared.length >= 2;
+  const aNeg = hasNegation(a.text);
+  const bNeg = hasNegation(b.text);
+  return aNeg !== bNeg && shared.length >= 1;
 }
 
 function toHit(scored: ScoredMemory): MemoryHit {
@@ -241,8 +265,7 @@ export class MemoryLever {
       );
     }
     const unusedStores: string[] = [];
-    const sanitized = VECTOR_MEMORY_KEY.replace(/[^a-zA-Z0-9_-]/g, "_");
-    if (keys.includes(sanitized) || keys.includes(VECTOR_MEMORY_KEY)) {
+    if (keys.includes(VECTOR_MEMORY_KEY)) {
       unusedStores.push("vectorMemoryStore");
     }
     try {
@@ -257,11 +280,9 @@ export class MemoryLever {
 
   search(query: string, filters: SearchFilters = {}): SearchResult {
     const limit = filters.limit ?? 50;
-    const liveCount = this.store
-      .listMemories()
-      .filter((memory) => !memory.tombstoned).length;
+    const live = this.store.listLiveMemories();
     const scored = this.store
-      .searchMemoriesWithScores(query, Math.max(liveCount, limit, 1))
+      .searchMemoriesWithScores(query, Math.max(live.length, limit, 1))
       .filter((item) => item.tfidfScore + item.embeddingScore > 0)
       .filter((item) => {
         const memory = item.memory;
@@ -324,9 +345,7 @@ export class MemoryLever {
     const threshold = options.threshold ?? DEFAULT_THRESHOLD;
     const retentionDays = options.retentionDays ?? DEFAULT_RETENTION_DAYS;
     const cutoff = Date.now() - retentionDays * 24 * 60 * 60 * 1000;
-    const live = this.store
-      .listMemories()
-      .filter((memory) => !memory.tombstoned);
+    const live = this.store.listLiveMemories();
 
     const contradictionIds = new Set<string>();
     const contradictions: DreamContradiction[] = [];
@@ -360,7 +379,6 @@ export class MemoryLever {
         .findSimilarMemoriesWithScores(memory.id, threshold)
         .filter(
           (item) =>
-            !item.memory.tombstoned &&
             !contradictionIds.has(item.memory.id) &&
             !assigned.has(item.memory.id),
         );
@@ -391,10 +409,18 @@ export class MemoryLever {
       });
     }
 
+    const mergeGroupIds = new Set(
+      merges.flatMap((group) => [group.survivorId, ...group.loserIds]),
+    );
     const mergeLoserIds = new Set(merges.flatMap((group) => group.loserIds));
     const nounCounts = new Map<string, number>();
+    const nounKeys = new Map<string, string>();
     for (const memory of live) {
+      if (mergeLoserIds.has(memory.id)) {
+        continue;
+      }
       const key = uniqueNounSet(memory.text);
+      nounKeys.set(memory.id, key);
       nounCounts.set(key, (nounCounts.get(key) || 0) + 1);
     }
     const prunes: DreamPruneCandidate[] = [];
@@ -405,10 +431,10 @@ export class MemoryLever {
       if (memory.pinned === true) {
         continue;
       }
-      if (contradictionIds.has(memory.id) || mergeLoserIds.has(memory.id)) {
+      if (contradictionIds.has(memory.id) || mergeGroupIds.has(memory.id)) {
         continue;
       }
-      const key = uniqueNounSet(memory.text);
+      const key = nounKeys.get(memory.id) || uniqueNounSet(memory.text);
       if ((nounCounts.get(key) || 0) <= 1) {
         continue;
       }
@@ -436,12 +462,8 @@ export class MemoryLever {
       throw new MemoryLeverError("unapproved", "Apply requires approve === true");
     }
     const expected = options.expectedHash ?? plan.hash;
-    const recomputed = hashPlanBody({
-      merges: plan.merges,
-      contradictions: plan.contradictions,
-      prunes: plan.prunes,
-      unused_stores: plan.unused_stores,
-    });
+    const { hash: _ignored, ...body } = plan;
+    const recomputed = hashPlanBody(body);
     if (expected !== recomputed || plan.hash !== recomputed) {
       throw new MemoryLeverError(
         "hash_mismatch",
@@ -471,6 +493,30 @@ export class MemoryLever {
     const appliedPrunes: string[] = [];
     const skipped: string[] = [];
     const contradictionIds = new Set(plan.contradictions.flatMap((item) => item.ids));
+    try {
+      for (const group of plan.merges) {
+        this.store.getMemory(group.survivorId);
+        for (const loserId of group.loserIds) {
+          this.store.getMemory(loserId);
+        }
+      }
+      for (const prune of plan.prunes) {
+        this.store.getMemory(prune.id);
+      }
+    } catch (error) {
+      if (error instanceof UnknownMemoryError) {
+        throw new MemoryLeverError("unknown_id", error.message);
+      }
+      throw error;
+    }
+
+    const backupMemories = this.store.listMemories().map((memory) => ({
+      ...memory,
+      embedding: memory.embedding ? [...memory.embedding] : undefined,
+    }));
+    const backupReflections = this.store.listReflections().map((item) => ({
+      ...item,
+    }));
 
     try {
       for (const group of plan.merges) {
@@ -498,9 +544,16 @@ export class MemoryLever {
         appliedPrunes.push(prune.id);
       }
     } catch (error) {
-      if (hooks.restore) {
-        await hooks.restore();
-        await this.store.reload();
+      try {
+        if (hooks.restore) {
+          await hooks.restore();
+        }
+        await this.store.restoreLists(backupMemories, backupReflections);
+      } catch (restoreError) {
+        throw new MemoryLeverError(
+          "missing_or_invalid",
+          `Apply failed and restore failed: ${error instanceof Error ? error.message : String(error)}; ${restoreError instanceof Error ? restoreError.message : String(restoreError)}`,
+        );
       }
       if (error instanceof UnknownMemoryError) {
         throw new MemoryLeverError("unknown_id", error.message);

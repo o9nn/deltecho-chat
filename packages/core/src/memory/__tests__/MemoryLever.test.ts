@@ -1,6 +1,7 @@
 import { InMemoryStorage } from "../storage";
 import {
   RAGMemoryStore,
+  UnknownMemoryError,
   type Memory,
 } from "../RAGMemoryStore";
 import { MemoryLever, MemoryLeverError } from "../MemoryLever";
@@ -153,6 +154,52 @@ describe("MemoryLever search", () => {
     expect(result.hits).toEqual([]);
     expect(result.reflections).toEqual([]);
   });
+
+  it("includes keyword-matching reflections without type filters", async () => {
+    const { lever } = await leverFromMemories(
+      [memory({ id: "m", text: "hello" })],
+      [
+        {
+          id: "r1",
+          timestamp: 1,
+          content: "TypeScript patterns in the neighborhood",
+          type: "periodic",
+        },
+        {
+          id: "r2",
+          timestamp: 2,
+          content: "unrelated grocery note",
+          type: "periodic",
+        },
+      ],
+    );
+    expect(
+      lever.search("TypeScript").reflections.map((item) => item.id),
+    ).toEqual(["r1"]);
+  });
+
+  it("breaks equal scores by newer timestamp then id", async () => {
+    const { lever } = await leverFromMemories([
+      memory({
+        id: "b",
+        text: "TypeScript programming",
+        timestamp: 100,
+      }),
+      memory({
+        id: "a",
+        text: "TypeScript programming",
+        timestamp: 100,
+      }),
+      memory({
+        id: "newer",
+        text: "TypeScript programming",
+        timestamp: 200,
+      }),
+    ]);
+    const ids = lever.search("TypeScript").hits.map((hit) => hit.id);
+    expect(ids[0]).toBe("newer");
+    expect(ids.slice(1)).toEqual(["a", "b"]);
+  });
 });
 
 describe("MemoryLever dream", () => {
@@ -191,6 +238,37 @@ describe("MemoryLever dream", () => {
     expect(plan.contradictions).toHaveLength(1);
     expect(plan.merges).toHaveLength(0);
     expect(plan.contradictions[0].ids.sort()).toEqual(["ecs", "vercel"]);
+  });
+
+  it("flags not/never pairs as contradictions", async () => {
+    const { lever } = await leverFromMemories([
+      memory({ id: "yes", text: "feature X is enabled for production" }),
+      memory({ id: "nope", text: "feature X is not enabled for production" }),
+    ]);
+    const plan = lever.dream();
+    expect(plan.contradictions).toHaveLength(1);
+    expect(plan.merges).toHaveLength(0);
+  });
+
+  it("does not prune merge survivors of old near-duplicates", async () => {
+    const old = Date.now() - 100 * 24 * 60 * 60 * 1000;
+    const { lever } = await leverFromMemories([
+      memory({
+        id: "keep",
+        text: "TypeScript is a typed superset of JavaScript",
+        timestamp: old + 1,
+      }),
+      memory({
+        id: "drop",
+        text: "TypeScript is a typed JavaScript superset",
+        timestamp: old,
+      }),
+    ]);
+    const plan = lever.dream();
+    expect(plan.merges).toHaveLength(1);
+    expect(plan.prunes.map((item) => item.id)).not.toContain(
+      plan.merges[0].survivorId,
+    );
   });
 
   it("prunes old generic duplicates but not new or pinned or unique facts", async () => {
@@ -268,9 +346,6 @@ describe("MemoryLever apply", () => {
     const { lever, storage } = await duplicateStore();
     const before = await storage.load("deepTreeEchoBotMemories");
     const plan = lever.dream();
-    expect(() => {
-      throw Object.assign(new Error("sync"), { plan });
-    }).toBeDefined();
     await expect(lever.apply(plan, { approve: false })).rejects.toMatchObject({
       code: "unapproved",
     });
@@ -368,5 +443,42 @@ describe("MemoryLever apply", () => {
     expect(restored).toBe(true);
     expect(store.getMemory("m1").tombstoned).toBeFalsy();
     expect(store.getMemory("m2").tombstoned).toBeFalsy();
+    expect(store.isEnabled()).toBe(true);
+  });
+
+  it("maps unknown ids to unknown_id and leaves storage unchanged", async () => {
+    const { lever, store, storage } = await duplicateStore();
+    const before = await storage.load("deepTreeEchoBotMemories");
+    const plan = lever.dream();
+    const originalReplace = store.replaceMemory.bind(store);
+    store.replaceMemory = async (id, patch) => {
+      if (id === plan.merges[0].survivorId) {
+        throw new UnknownMemoryError("missing");
+      }
+      return originalReplace(id, patch);
+    };
+    await expect(
+      lever.apply(plan, { approve: true, expectedHash: plan.hash }),
+    ).rejects.toMatchObject({ code: "unknown_id" });
+    expect(store.getMemory("m1").tombstoned).toBeFalsy();
+    expect(store.getMemory("m2").tombstoned).toBeFalsy();
+  });
+
+  it("snapshot throw leaves store unchanged", async () => {
+    const { lever, storage } = await duplicateStore();
+    const before = await storage.load("deepTreeEchoBotMemories");
+    const plan = lever.dream();
+    await expect(
+      lever.apply(
+        plan,
+        { approve: true, expectedHash: plan.hash },
+        {
+          snapshot: async () => {
+            throw new Error("snap fail");
+          },
+        },
+      ),
+    ).rejects.toThrow("snap fail");
+    expect(await storage.load("deepTreeEchoBotMemories")).toBe(before);
   });
 });

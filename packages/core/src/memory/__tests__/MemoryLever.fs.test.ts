@@ -22,6 +22,16 @@ async function seedDir(dir: string, memories: Memory[], extraFiles: Record<strin
 }
 
 describe("MemoryLever filesystem open", () => {
+  it("errors on invalid RAG JSON", async () => {
+    const dir = await mkdtemp(join(tmpdir(), "dte-bad-json-"));
+    await writeFile(join(dir, "deepTreeEchoBotMemories.json"), "{not-json", "utf8");
+    await writeFile(join(dir, "deepTreeEchoBotReflections.json"), "[]", "utf8");
+    await expect(MemoryLever.openPath(dir)).rejects.toMatchObject({
+      code: "missing_or_invalid",
+    });
+    await rm(dir, { recursive: true, force: true });
+  });
+
   it("errors on a missing directory and creates no files", async () => {
     const missing = join(tmpdir(), `dte-absent-${Date.now()}`);
     await expect(MemoryLever.openPath(missing)).rejects.toMatchObject({

@@ -11,13 +11,14 @@
  *   pnpm memory:lever apply --storage-path ./memory --approve --plan plan.json
  */
 
-import { open, readFile, writeFile } from "node:fs/promises";
+import { open, readFile, unlink, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { stdin } from "node:process";
 import { getLogger } from "../packages/core/src/utils/logger";
 import {
   MemoryLever,
   MemoryLeverError,
+  RAG_MEMORY_KEY,
+  RAG_REFLECTION_KEY,
   type DreamPlan,
   type SearchFilters,
 } from "../packages/core/src/memory/MemoryLever";
@@ -91,7 +92,13 @@ function parseArgs(argv: string[]): Flags {
         i++;
         break;
       case "--sender":
-        flags.sender = next as "user" | "bot";
+        if (next !== "user" && next !== "bot") {
+          throw new MemoryLeverError(
+            "unknown_flag",
+            `Invalid --sender (expected user|bot): ${next}`,
+          );
+        }
+        flags.sender = next;
         i++;
         break;
       case "--from":
@@ -103,7 +110,13 @@ function parseArgs(argv: string[]): Flags {
         i++;
         break;
       case "--reflection-type":
-        flags.reflectionType = next as "periodic" | "focused";
+        if (next !== "periodic" && next !== "focused") {
+          throw new MemoryLeverError(
+            "unknown_flag",
+            `Invalid --reflection-type (expected periodic|focused): ${next}`,
+          );
+        }
+        flags.reflectionType = next;
         i++;
         break;
       case "--reflection-aspect":
@@ -121,6 +134,9 @@ function parseArgs(argv: string[]): Flags {
         flags.approve = true;
         break;
       default:
+        if (token.startsWith("-")) {
+          throw new MemoryLeverError("unknown_flag", `Unknown flag: ${token}`);
+        }
         break;
     }
   }
@@ -141,19 +157,27 @@ function resolveStoragePath(flags: Flags): string {
   );
 }
 
-async function readStdin(): Promise<string> {
-  const chunks: Buffer[] = [];
-  for await (const chunk of stdin) {
-    chunks.push(Buffer.from(chunk));
-  }
-  return Buffer.concat(chunks).toString("utf8");
-}
-
 async function loadPlan(planFlag?: string): Promise<DreamPlan> {
-  if (!planFlag || planFlag === "-") {
-    return JSON.parse(await readStdin()) as DreamPlan;
+  if (!planFlag) {
+    throw new MemoryLeverError(
+      "missing_or_invalid",
+      "apply requires --plan <file> or --plan -",
+    );
   }
-  return JSON.parse(await readFile(planFlag, "utf8")) as DreamPlan;
+  const raw =
+    planFlag === "-" ? await readFile(0, "utf8") : await readFile(planFlag, "utf8");
+  const parsed: unknown = JSON.parse(raw);
+  if (
+    !parsed ||
+    typeof parsed !== "object" ||
+    !Array.isArray((parsed as DreamPlan).merges) ||
+    !Array.isArray((parsed as DreamPlan).contradictions) ||
+    !Array.isArray((parsed as DreamPlan).prunes) ||
+    typeof (parsed as DreamPlan).hash !== "string"
+  ) {
+    throw new MemoryLeverError("missing_or_invalid", "Plan JSON is not a DreamPlan");
+  }
+  return parsed as DreamPlan;
 }
 
 async function withApplyLock(
@@ -168,39 +192,51 @@ async function withApplyLock(
     throw new MemoryLeverError("locked", `Exclusive lock held: ${lockPath}`);
   }
   try {
-    const memoriesPath = join(storagePath, "deepTreeEchoBotMemories.json");
-    const reflectionsPath = join(
-      storagePath,
-      "deepTreeEchoBotReflections.json",
-    );
+    const memoriesPath = join(storagePath, `${RAG_MEMORY_KEY}.json`);
+    const reflectionsPath = join(storagePath, `${RAG_REFLECTION_KEY}.json`);
     const stamp = Date.now();
     const memoriesBak = `${memoriesPath}.bak-${stamp}`;
     const reflectionsBak = `${reflectionsPath}.bak-${stamp}`;
     let memories: string;
     let reflections: string;
     try {
-      memories = await readFile(memoriesPath, "utf8");
-      reflections = await readFile(reflectionsPath, "utf8");
+      [memories, reflections] = await Promise.all([
+        readFile(memoriesPath, "utf8"),
+        readFile(reflectionsPath, "utf8"),
+      ]);
     } catch (error) {
       throw new MemoryLeverError(
         "missing_or_invalid",
         error instanceof Error ? error.message : String(error),
       );
     }
-    await writeFile(memoriesBak, memories, { mode: 0o600 });
-    await writeFile(reflectionsBak, reflections, { mode: 0o600 });
+    await Promise.all([
+      writeFile(memoriesBak, memories, { mode: 0o600 }),
+      writeFile(reflectionsBak, reflections, { mode: 0o600 }),
+    ]);
     try {
       return await run();
     } catch (error) {
-      await writeFile(memoriesPath, memories, "utf8");
-      await writeFile(reflectionsPath, reflections, "utf8");
+      try {
+        await Promise.all([
+          writeFile(memoriesPath, memories, "utf8"),
+          writeFile(reflectionsPath, reflections, "utf8"),
+        ]);
+      } catch (restoreError) {
+        throw new MemoryLeverError(
+          "missing_or_invalid",
+          `Apply failed and restore failed: ${error instanceof Error ? error.message : String(error)}; ${restoreError instanceof Error ? restoreError.message : String(restoreError)}`,
+        );
+      }
       throw error;
     }
   } finally {
     await handle.close();
-    await import("node:fs/promises").then((fs) =>
-      fs.unlink(lockPath).catch(() => undefined),
-    );
+    try {
+      await unlink(lockPath);
+    } catch {
+      log.error("failed to release apply lock", { code: "locked" });
+    }
   }
 }
 
@@ -209,11 +245,21 @@ function emit(value: unknown): void {
 }
 
 async function main(): Promise<void> {
-  const flags = parseArgs(process.argv.slice(2));
   try {
+    const flags = parseArgs(process.argv.slice(2));
+    if (
+      flags.command !== "search" &&
+      flags.command !== "dream" &&
+      flags.command !== "apply"
+    ) {
+      throw new MemoryLeverError(
+        "invalid_command",
+        "Command must be search, dream, or apply",
+      );
+    }
     const storagePath = resolveStoragePath(flags);
-    const lever = await MemoryLever.openPath(storagePath);
     if (flags.command === "search") {
+      const lever = await MemoryLever.openPath(storagePath);
       const filters: SearchFilters = {
         limit: flags.limit,
         budgetChars: flags.budgetChars,
@@ -228,25 +274,33 @@ async function main(): Promise<void> {
       return;
     }
     if (flags.command === "dream" && !flags.apply) {
+      const lever = await MemoryLever.openPath(storagePath);
       emit(lever.dream({
         threshold: flags.threshold,
         retentionDays: flags.retentionDays,
       }));
       return;
     }
-    const plan =
-      flags.command === "apply"
-        ? await loadPlan(flags.plan)
-        : lever.dream({
-            threshold: flags.threshold,
-            retentionDays: flags.retentionDays,
-          });
+    if (flags.command !== "apply" && !(flags.command === "dream" && flags.apply)) {
+      throw new MemoryLeverError(
+        "invalid_command",
+        "Command must be search, dream, or apply",
+      );
+    }
     if (!flags.approve) {
       throw new MemoryLeverError("unapproved", "Apply requires --approve");
     }
-    const audit = await withApplyLock(storagePath, () =>
-      lever.apply(plan, { approve: true, expectedHash: plan.hash }),
-    );
+    const audit = await withApplyLock(storagePath, async () => {
+      const lever = await MemoryLever.openPath(storagePath);
+      const plan =
+        flags.command === "apply"
+          ? await loadPlan(flags.plan)
+          : lever.dream({
+              threshold: flags.threshold,
+              retentionDays: flags.retentionDays,
+            });
+      return lever.apply(plan, { approve: true, expectedHash: plan.hash });
+    });
     emit(audit);
   } catch (error) {
     const code =

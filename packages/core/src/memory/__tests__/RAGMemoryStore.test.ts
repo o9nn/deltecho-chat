@@ -288,6 +288,25 @@ describe("RAGMemoryStore", () => {
       );
     });
 
+    it("replaceMemory and tombstoneMemory error when disabled", async () => {
+      await ragMemory.storeMemory({
+        chatId: 1,
+        messageId: 1,
+        sender: "user",
+        text: "stays put",
+      });
+      const id = ragMemory.listMemories()[0].id;
+      ragMemory.setEnabled(false);
+      await expect(
+        ragMemory.replaceMemory(id, { text: "nope" }),
+      ).rejects.toThrow("Memory system is disabled");
+      await expect(ragMemory.tombstoneMemory(id)).rejects.toThrow(
+        "Memory system is disabled",
+      );
+      ragMemory.setEnabled(true);
+      expect(ragMemory.listMemories()[0].text).toBe("stays put");
+    });
+
     it("replaceMemory updates text for later search", async () => {
       await ragMemory.storeMemory({
         chatId: 1,

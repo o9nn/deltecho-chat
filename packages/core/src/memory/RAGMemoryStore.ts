@@ -3,6 +3,10 @@ import { MemoryStorage, InMemoryStorage } from "./storage";
 
 const log = getLogger("deep-tree-echo-core/memory/RAGMemoryStore");
 
+export const RAG_MEMORY_KEY = "deepTreeEchoBotMemories";
+export const RAG_REFLECTION_KEY = "deepTreeEchoBotReflections";
+export const MEMORY_ENABLED_KEY = "deepTreeEchoBotMemoryEnabled";
+
 // Default configuration
 const DEFAULT_MEMORY_LIMIT = 1000;
 const DEFAULT_REFLECTION_LIMIT = 100;
@@ -88,12 +92,29 @@ export class RAGMemoryStore {
    * Used after apply-restore so in-memory rows match snapshot bytes.
    */
   public async reload(): Promise<void> {
+    const enabled = this.enabled;
     this.memories = [];
     this.reflections = [];
     this.idfScoresCache = null;
     this.loadError = null;
     this.loadPromise = this.loadMemories();
     await this.ready();
+    this.enabled = enabled;
+  }
+
+  public async restoreLists(
+    memories: Memory[],
+    reflections: ReflectionMemory[],
+  ): Promise<void> {
+    const enabled = this.enabled;
+    this.memories = memories.map((memory) => ({
+      ...memory,
+      embedding: memory.embedding ? [...memory.embedding] : undefined,
+    }));
+    this.reflections = reflections.map((item) => ({ ...item }));
+    this.idfScoresCache = null;
+    await this.saveMemories();
+    this.enabled = enabled;
   }
 
   /**
@@ -117,7 +138,7 @@ export class RAGMemoryStore {
   private async loadMemories(): Promise<void> {
     try {
       // Load conversation memories
-      const memoriesData = await this.storage.load("deepTreeEchoBotMemories");
+      const memoriesData = await this.storage.load(RAG_MEMORY_KEY);
       if (memoriesData) {
         try {
           this.memories = JSON.parse(memoriesData);
@@ -132,7 +153,7 @@ export class RAGMemoryStore {
           log.info(`Loaded ${this.memories.length} conversation memories`);
         } catch (error) {
           this.loadError = new Error(
-            "Invalid JSON in deepTreeEchoBotMemories",
+            `Invalid JSON in ${RAG_MEMORY_KEY}`,
             { cause: error },
           );
           log.error("Failed to parse conversation memories:", error);
@@ -141,16 +162,14 @@ export class RAGMemoryStore {
       }
 
       // Load reflection memories
-      const reflectionsData = await this.storage.load(
-        "deepTreeEchoBotReflections",
-      );
+      const reflectionsData = await this.storage.load(RAG_REFLECTION_KEY);
       if (reflectionsData) {
         try {
           this.reflections = JSON.parse(reflectionsData);
           log.info(`Loaded ${this.reflections.length} reflection memories`);
         } catch (error) {
           this.loadError = new Error(
-            "Invalid JSON in deepTreeEchoBotReflections",
+            `Invalid JSON in ${RAG_REFLECTION_KEY}`,
             { cause: error },
           );
           log.error("Failed to parse reflection memories:", error);
@@ -159,9 +178,7 @@ export class RAGMemoryStore {
       }
 
       // Load memory enabled setting
-      const enabledData = await this.storage.load(
-        "deepTreeEchoBotMemoryEnabled",
-      );
+      const enabledData = await this.storage.load(MEMORY_ENABLED_KEY);
       this.enabled = enabledData === "true";
     } catch (error) {
       log.error("Failed to load memories:", error);
@@ -178,14 +195,14 @@ export class RAGMemoryStore {
       const trimmedMemories = this.trimLiveMemories(this.memories);
       this.memories = trimmedMemories;
       await this.storage.save(
-        "deepTreeEchoBotMemories",
+        RAG_MEMORY_KEY,
         JSON.stringify(trimmedMemories),
       );
 
       const trimmedReflections = this.reflections.slice(-this.reflectionLimit);
       this.reflections = trimmedReflections;
       await this.storage.save(
-        "deepTreeEchoBotReflections",
+        RAG_REFLECTION_KEY,
         JSON.stringify(trimmedReflections),
       );
 
@@ -746,6 +763,10 @@ export class RAGMemoryStore {
     return [...this.memories];
   }
 
+  public listLiveMemories(): Memory[] {
+    return this.liveMemories();
+  }
+
   public listReflections(): ReflectionMemory[] {
     return [...this.reflections];
   }
@@ -788,9 +809,5 @@ export class RAGMemoryStore {
 
   public async tombstoneMemory(id: string): Promise<Memory> {
     return this.replaceMemory(id, { tombstoned: true });
-  }
-
-  public tokenizeText(text: string): string[] {
-    return this.tokenize(text);
   }
 }

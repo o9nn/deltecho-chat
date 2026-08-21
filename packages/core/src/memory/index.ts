@@ -3,6 +3,8 @@ export { InMemoryStorage } from "./storage";
 export {
   RAGMemoryStore,
   UnknownMemoryError,
+  RAG_MEMORY_KEY,
+  RAG_REFLECTION_KEY,
   type Memory,
   type ReflectionMemory,
   type ScoredMemory,
@@ -11,8 +13,7 @@ export {
   MemoryLever,
   MemoryLeverError,
   VECTOR_MEMORY_KEY,
-  RAG_MEMORY_KEY,
-  RAG_REFLECTION_KEY,
+  type MemoryLeverErrorCode,
   type MemoryHit,
   type SearchResult,
   type SearchFilters,
