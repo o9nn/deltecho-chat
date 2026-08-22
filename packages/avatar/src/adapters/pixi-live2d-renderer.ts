@@ -212,7 +212,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     const [{ Application }, { Live2DModel: Live2DModelClass }] =
       await Promise.all([
         import("pixi.js"),
-        import("pixi-live2d-display-lipsyncpatch"),
+        import("pixi-live2d-display-lipsyncpatch/cubism4"),
       ]);
 
     // Get or create canvas element
@@ -319,7 +319,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
 
     // Dynamically import Live2DModel
     const { Live2DModel: Live2DModelClass } = await import(
-      "pixi-live2d-display-lipsyncpatch"
+      "pixi-live2d-display-lipsyncpatch/cubism4"
     );
 
     // Dispose existing model and any model-bound blink timers.

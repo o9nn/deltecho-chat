@@ -26,7 +26,7 @@ jest.mock("pixi.js", () => ({
   })),
 }));
 
-jest.mock("pixi-live2d-display-lipsyncpatch", () => ({
+jest.mock("pixi-live2d-display-lipsyncpatch/cubism4", () => ({
   Live2DModel: {
     registerTicker: jest.fn(),
     from: jest.fn().mockResolvedValue({
