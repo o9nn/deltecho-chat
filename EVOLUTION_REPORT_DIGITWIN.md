@@ -18,14 +18,14 @@
 
 The digital twin maps DTE's core identity directly into simulation primitives:
 
-| DTE Concept | Digital Twin Implementation |
-|-------------|---------------------------|
-| ESN Reservoir = Arena (state manifold) | `ReservoirState` with 256 nodes, 7 subpopulations |
-| Readout = Agent (urge-to-act) | `DAOProposal` evaluation and voting |
-| Ridge-Reservoir-Relation = AAR (self) | `AutognosisReport` — the self-monitoring loop |
-| Collective mood of reservoir population | `VirtualEndocrineSystem` — 16 hormones, 10 modes |
-| DAO governance | `DAOESNAutognosis` — 7 voters, quorum, weighted consensus |
-| Memory of closed past → pivotal present → open future | `CognitiveProcessModel` — 6-stage pipeline |
+| DTE Concept                                           | Digital Twin Implementation                               |
+| ----------------------------------------------------- | --------------------------------------------------------- |
+| ESN Reservoir = Arena (state manifold)                | `ReservoirState` with 256 nodes, 7 subpopulations         |
+| Readout = Agent (urge-to-act)                         | `DAOProposal` evaluation and voting                       |
+| Ridge-Reservoir-Relation = AAR (self)                 | `AutognosisReport` — the self-monitoring loop             |
+| Collective mood of reservoir population               | `VirtualEndocrineSystem` — 16 hormones, 10 modes          |
+| DAO governance                                        | `DAOESNAutognosis` — 7 voters, quorum, weighted consensus |
+| Memory of closed past → pivotal present → open future | `CognitiveProcessModel` — 6-stage pipeline                |
 
 ## The Four Modules
 
@@ -38,6 +38,7 @@ ATTENTION → PERCEPTION → RESERVOIR → READOUT → CONSENSUS → ACTION
 ```
 
 Each stage has:
+
 - Queue capacity (bounded)
 - Processing time (stochastic)
 - Failure rate (edge-of-chaos sensitivity)
@@ -47,20 +48,21 @@ Each stage has:
 
 10 glands secrete 16 hormones that decay exponentially toward baselines:
 
-| Gland | Hormones | Decay Rate | Role |
-|-------|----------|-----------|------|
-| HPA Axis | CRH, ACTH, Cortisol | 0.05 (slow) | Stress response |
-| Dopaminergic | Tonic DA, Phasic DA | 0.20 (fast) | Reward/motivation |
-| Serotonergic | Serotonin | 0.03 (very slow) | Mood stability |
-| Noradrenergic | Norepinephrine | 0.15 | Alertness |
-| Oxytocinergic | Oxytocin | 0.08 | Trust/social bonding |
-| Thyroid | T3, T4 | 0.02 (very slow) | Cognitive speed |
-| Circadian | Melatonin | 0.04 | Rest/consolidation |
-| Pancreatic | Insulin, Glucagon | 0.10 | Resource allocation |
-| Immune | IL-6, TNF-α | 0.07 | Defensive response |
-| Endocannabinoid | Anandamide | 0.12 | Flow state |
+| Gland           | Hormones            | Decay Rate       | Role                 |
+| --------------- | ------------------- | ---------------- | -------------------- |
+| HPA Axis        | CRH, ACTH, Cortisol | 0.05 (slow)      | Stress response      |
+| Dopaminergic    | Tonic DA, Phasic DA | 0.20 (fast)      | Reward/motivation    |
+| Serotonergic    | Serotonin           | 0.03 (very slow) | Mood stability       |
+| Noradrenergic   | Norepinephrine      | 0.15             | Alertness            |
+| Oxytocinergic   | Oxytocin            | 0.08             | Trust/social bonding |
+| Thyroid         | T3, T4              | 0.02 (very slow) | Cognitive speed      |
+| Circadian       | Melatonin           | 0.04             | Rest/consolidation   |
+| Pancreatic      | Insulin, Glucagon   | 0.10             | Resource allocation  |
+| Immune          | IL-6, TNF-α         | 0.07             | Defensive response   |
+| Endocannabinoid | Anandamide          | 0.12             | Flow state           |
 
 **10 Cognitive Modes** emerge from nearest-centroid classification in 16D hormone space:
+
 - EXPLORATORY, STRESSED, SOCIAL, FOCUSED, THREAT, REFLECTIVE, REWARD, FLOW, REST, DEFENSIVE
 
 Modes are **NEVER set explicitly** — always computed from hormone concentrations.

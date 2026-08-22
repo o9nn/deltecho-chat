@@ -838,8 +838,9 @@ export class LLMService {
     try {
       // Attempt delegation to UnifiedLLMService (production-ready provider system)
       const unifiedConfigured =
-        unifiedLLMService.isConfigured(UnifiedCognitiveFunction.COGNITIVE_CORE) ||
-        unifiedLLMService.isConfigured(UnifiedCognitiveFunction.GENERAL);
+        unifiedLLMService.isConfigured(
+          UnifiedCognitiveFunction.COGNITIVE_CORE,
+        ) || unifiedLLMService.isConfigured(UnifiedCognitiveFunction.GENERAL);
 
       if (unifiedConfigured) {
         log.info("Generating self-reflection via UnifiedLLMService");
@@ -919,8 +920,9 @@ export class LLMService {
     try {
       // Attempt delegation to UnifiedLLMService (has real JSON-parsing evaluation)
       const unifiedConfigured =
-        unifiedLLMService.isConfigured(UnifiedCognitiveFunction.CONTENT_EVALUATION) ||
-        unifiedLLMService.isConfigured(UnifiedCognitiveFunction.GENERAL);
+        unifiedLLMService.isConfigured(
+          UnifiedCognitiveFunction.CONTENT_EVALUATION,
+        ) || unifiedLLMService.isConfigured(UnifiedCognitiveFunction.GENERAL);
 
       if (unifiedConfigured) {
         log.info("Evaluating content sensitivity via UnifiedLLMService");
@@ -928,9 +930,18 @@ export class LLMService {
         // Map UnifiedLLMService response shape to legacy interface
         return {
           isSensitive: result.isSensitive,
-          category: result.category === "harmful" ? "other" : result.category as "violence" | "sexual" | "other" | undefined,
+          category:
+            result.category === "harmful"
+              ? "other"
+              : (result.category as
+                  | "violence"
+                  | "sexual"
+                  | "other"
+                  | undefined),
           explanation: result.explanation,
-          recommendedAction: this.mapRecommendedAction(result.recommendedAction),
+          recommendedAction: this.mapRecommendedAction(
+            result.recommendedAction,
+          ),
         };
       }
 
@@ -1014,7 +1025,10 @@ export class LLMService {
       return result.description;
     } catch (error) {
       // If MultiModalProcessor fails (e.g., no API key), try legacy path
-      log.warn("MultiModalProcessor image analysis failed, trying legacy path:", error);
+      log.warn(
+        "MultiModalProcessor image analysis failed, trying legacy path:",
+        error,
+      );
 
       const generalFunction = this.cognitiveFunctions.get(
         CognitiveFunctionType.GENERAL,
@@ -1026,7 +1040,10 @@ export class LLMService {
       }
 
       // Use text-based description request via the configured LLM
-      const descriptionPrompt = `Analyze the following image data and describe what you observe. Image data reference: ${_imageData.slice(0, 100)}...`;
+      const descriptionPrompt = `Analyze the following image data and describe what you observe. Image data reference: ${_imageData.slice(
+        0,
+        100,
+      )}...`;
       return this.generateResponseWithFunction(
         CognitiveFunctionType.GENERAL,
         descriptionPrompt,

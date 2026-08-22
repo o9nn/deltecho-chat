@@ -39,6 +39,15 @@ export type AvatarMotion =
 // Compatible with both @deltecho/cognitive and @deltecho/avatar types
 export type EmotionalVector = Record<string, number | string | undefined>;
 
+export interface MetabolicVisualState {
+  metabolicPhase: "active" | "integrating" | "consolidating" | "resting";
+  energyLevel: number;
+  anabolicBalance: number;
+  isEnergyCrisis: boolean;
+  myelinationProgress: number;
+  knowledgeDensity: number;
+}
+
 export interface CognitiveVisualState {
   mode?: string;
   currentState?: string;
@@ -64,6 +73,13 @@ export interface CognitiveVisualState {
   esnCoherence?: number;
   /** Self-observation intensity for luminous inference resonance. */
   autognosisResonance?: number;
+  causalRigor?: number;
+  falsificationPressure?: number;
+  epistemicSurprise?: number;
+  daoEvidenceConsensus?: number;
+  activeExperimentation?: number;
+  /** ConceptualMetabolism state used for embodied energy and phase rendering. */
+  metabolic?: MetabolicVisualState;
   isProcessing?: boolean;
   isSpeaking?: boolean;
   audioLevel?: number;

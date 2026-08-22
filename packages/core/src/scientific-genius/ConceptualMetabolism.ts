@@ -71,20 +71,20 @@ export interface KnowledgeUnit {
  */
 export enum MetabolicReaction {
   // Anabolic (building)
-  SYNTHESIS = "synthesis",           // Combine units into new compound
+  SYNTHESIS = "synthesis", // Combine units into new compound
   CRYSTALLIZATION = "crystallization", // Pattern solidifies into schema
-  INTEGRATION = "integration",       // Connect to existing graph
-  MYELINATION = "myelination",       // Pathway optimization
+  INTEGRATION = "integration", // Connect to existing graph
+  MYELINATION = "myelination", // Pathway optimization
 
   // Catabolic (breaking down)
-  DECAY = "decay",                   // Unused unit fades
+  DECAY = "decay", // Unused unit fades
   SIMPLIFICATION = "simplification", // Complex → simpler representation
   CONTRADICTION_RESOLVE = "contradiction_resolve", // Conflict resolution
-  ABSTRACTION = "abstraction",       // Concrete → general principle
+  ABSTRACTION = "abstraction", // Concrete → general principle
 
   // Homeostatic (maintenance)
-  REPAIR = "repair",                 // Fix damaged connections
-  CONSOLIDATION = "consolidation",   // Sleep-like memory consolidation
+  REPAIR = "repair", // Fix damaged connections
+  CONSOLIDATION = "consolidation", // Sleep-like memory consolidation
 }
 
 /**
@@ -292,7 +292,11 @@ export class ConceptualMetabolism extends EventEmitter {
   ): KnowledgeUnit | null {
     const cost = this.config.synthesisCost * (complexity ?? 3);
     if (this.energy < cost) {
-      this.emit("energy_insufficient", { reaction: MetabolicReaction.SYNTHESIS, needed: cost, available: this.energy });
+      this.emit("energy_insufficient", {
+        reaction: MetabolicReaction.SYNTHESIS,
+        needed: cost,
+        available: this.energy,
+      });
       return null;
     }
 
@@ -307,7 +311,8 @@ export class ConceptualMetabolism extends EventEmitter {
       domain,
       complexity: complexity ?? Math.min(10, components.length + 1),
       activation: 1.0,
-      maintenanceCost: (complexity ?? 3) * 0.1 * this.config.maintenanceCostMult,
+      maintenanceCost:
+        (complexity ?? 3) * 0.1 * this.config.maintenanceCostMult,
       connectionCount: components.length,
       lastAccessedAt: Date.now(),
       createdAt: Date.now(),
@@ -346,7 +351,9 @@ export class ConceptualMetabolism extends EventEmitter {
       timestamp: Date.now(),
       success: true,
       resultId: unit.id,
-      description: `Synthesized "${label}" from ${components.length} components (cost: ${cost.toFixed(1)} energy)`,
+      description: `Synthesized "${label}" from ${
+        components.length
+      } components (cost: ${cost.toFixed(1)} energy)`,
     });
 
     this.emit("synthesis", unit);
@@ -363,7 +370,11 @@ export class ConceptualMetabolism extends EventEmitter {
 
     const cost = this.config.integrationCost * relatedIds.length;
     if (this.energy < cost) {
-      this.emit("energy_insufficient", { reaction: MetabolicReaction.INTEGRATION, needed: cost, available: this.energy });
+      this.emit("energy_insufficient", {
+        reaction: MetabolicReaction.INTEGRATION,
+        needed: cost,
+        available: this.energy,
+      });
       return false;
     }
 
@@ -381,7 +392,10 @@ export class ConceptualMetabolism extends EventEmitter {
 
     this.connections.set(unitId, unitConns);
     unit.connectionCount = unitConns.size;
-    unit.localCoherence = Math.min(1, unit.localCoherence + newConnections * 0.05);
+    unit.localCoherence = Math.min(
+      1,
+      unit.localCoherence + newConnections * 0.05,
+    );
     unit.activation = Math.min(1, unit.activation + 0.1);
 
     this.energy -= cost;
@@ -427,7 +441,10 @@ export class ConceptualMetabolism extends EventEmitter {
       energyDelta: -cost,
       timestamp: Date.now(),
       success: true,
-      description: `Myelinated "${unit.label}" — maintenance cost reduced by ${((1 - this.config.myelinationCostReduction) * 100).toFixed(0)}%`,
+      description: `Myelinated "${unit.label}" — maintenance cost reduced by ${(
+        (1 - this.config.myelinationCostReduction) *
+        100
+      ).toFixed(0)}%`,
     });
 
     this.emit("myelination", unit);
@@ -472,7 +489,9 @@ export class ConceptualMetabolism extends EventEmitter {
       energyDelta: released,
       timestamp: Date.now(),
       success: true,
-      description: `Decayed "${unit.label}" — released ${released.toFixed(1)} energy`,
+      description: `Decayed "${unit.label}" — released ${released.toFixed(
+        1,
+      )} energy`,
     });
 
     this.emit("decay", { unitId, label: unit.label, released });
@@ -486,17 +505,24 @@ export class ConceptualMetabolism extends EventEmitter {
   abstract(unitIds: string[], abstractLabel: string): KnowledgeUnit | null {
     if (unitIds.length < 2) return null;
 
-    const units = unitIds.map((id) => this.units.get(id)).filter(Boolean) as KnowledgeUnit[];
+    const units = unitIds
+      .map((id) => this.units.get(id))
+      .filter(Boolean) as KnowledgeUnit[];
     if (units.length < 2) return null;
 
     const cost = this.config.abstractionCost;
     if (this.energy < cost) {
-      this.emit("energy_insufficient", { reaction: MetabolicReaction.ABSTRACTION, needed: cost, available: this.energy });
+      this.emit("energy_insufficient", {
+        reaction: MetabolicReaction.ABSTRACTION,
+        needed: cost,
+        available: this.energy,
+      });
       return null;
     }
 
     // Calculate abstraction properties
-    const avgComplexity = units.reduce((s, u) => s + u.complexity, 0) / units.length;
+    const avgComplexity =
+      units.reduce((s, u) => s + u.complexity, 0) / units.length;
     const totalConnections = new Set<string>();
     for (const u of units) {
       const conns = this.connections.get(u.id) ?? new Set();
@@ -555,7 +581,9 @@ export class ConceptualMetabolism extends EventEmitter {
       timestamp: Date.now(),
       success: true,
       resultId: abstractUnit.id,
-      description: `Abstracted ${units.length} units into "${abstractLabel}" (net energy: ${netEnergy.toFixed(1)})`,
+      description: `Abstracted ${
+        units.length
+      } units into "${abstractLabel}" (net energy: ${netEnergy.toFixed(1)})`,
     });
 
     this.emit("abstraction", { abstractUnit, replacedCount: units.length });
@@ -578,7 +606,10 @@ export class ConceptualMetabolism extends EventEmitter {
     unit.accessCount++;
 
     // Check myelination eligibility
-    if (!unit.isMyelinated && unit.accessCount >= this.config.myelinationThreshold) {
+    if (
+      !unit.isMyelinated &&
+      unit.accessCount >= this.config.myelinationThreshold
+    ) {
       this.myelinate(unitId);
     }
 
@@ -588,13 +619,20 @@ export class ConceptualMetabolism extends EventEmitter {
   /**
    * Ingest raw stimulus — creates a new basic knowledge unit.
    */
-  ingest(label: string, domain: string, complexity: number = 2): KnowledgeUnit | null {
+  ingest(
+    label: string,
+    domain: string,
+    complexity: number = 2,
+  ): KnowledgeUnit | null {
     const cost = complexity * 0.5;
     if (this.energy < cost) return null;
 
     // Check capacity
     if (this.units.size >= this.config.maxUnits) {
-      this.emit("capacity_pressure", { current: this.units.size, max: this.config.maxUnits });
+      this.emit("capacity_pressure", {
+        current: this.units.size,
+        max: this.config.maxUnits,
+      });
       // Force decay of weakest unit
       this.decayWeakest();
     }
@@ -631,10 +669,17 @@ export class ConceptualMetabolism extends EventEmitter {
 
   getState(): MetabolicState {
     const activeUnits = [...this.units.values()].filter((u) => !u.isDecaying);
-    const myelinatedUnits = [...this.units.values()].filter((u) => u.isMyelinated);
-    const totalMaintenance = [...this.units.values()].reduce((s, u) => s + u.maintenanceCost, 0);
-    const totalConnections = [...this.connections.values()].reduce((s, c) => s + c.size, 0) / 2;
-    const density = this.units.size > 0 ? totalConnections / this.units.size : 0;
+    const myelinatedUnits = [...this.units.values()].filter(
+      (u) => u.isMyelinated,
+    );
+    const totalMaintenance = [...this.units.values()].reduce(
+      (s, u) => s + u.maintenanceCost,
+      0,
+    );
+    const totalConnections =
+      [...this.connections.values()].reduce((s, c) => s + c.size, 0) / 2;
+    const density =
+      this.units.size > 0 ? totalConnections / this.units.size : 0;
 
     // Entropy: distribution of activation levels
     const activations = [...this.units.values()].map((u) => u.activation);
@@ -642,14 +687,16 @@ export class ConceptualMetabolism extends EventEmitter {
 
     // Anabolic balance
     const total = this.recentAnabolicEvents + this.recentCatabolicEvents;
-    const balance = total > 0
-      ? (this.recentAnabolicEvents - this.recentCatabolicEvents) / total
-      : 0;
+    const balance =
+      total > 0
+        ? (this.recentAnabolicEvents - this.recentCatabolicEvents) / total
+        : 0;
 
     // Efficiency
-    const efficiency = this.totalEnergySpent > 0
-      ? this.totalUsefulWork / this.totalEnergySpent
-      : 1.0;
+    const efficiency =
+      this.totalEnergySpent > 0
+        ? this.totalUsefulWork / this.totalEnergySpent
+        : 1.0;
 
     return {
       energy: this.energy,
@@ -713,8 +760,14 @@ export class ConceptualMetabolism extends EventEmitter {
     this.executePhaseLogic();
 
     // 5. Energy regeneration during rest
-    if (this.phase === MetabolicPhase.RESTING || this.phase === MetabolicPhase.CONSOLIDATING) {
-      this.energy = Math.min(this.config.maxEnergy, this.energy + this.config.restRegenRate);
+    if (
+      this.phase === MetabolicPhase.RESTING ||
+      this.phase === MetabolicPhase.CONSOLIDATING
+    ) {
+      this.energy = Math.min(
+        this.config.maxEnergy,
+        this.energy + this.config.restRegenRate,
+      );
     }
 
     // 6. Reset recent counters periodically
@@ -735,7 +788,12 @@ export class ConceptualMetabolism extends EventEmitter {
 
     if (this.phaseTicksElapsed >= phaseDuration) {
       this.phaseTicksElapsed = 0;
-      const phases = [MetabolicPhase.ACTIVE, MetabolicPhase.INTEGRATING, MetabolicPhase.CONSOLIDATING, MetabolicPhase.RESTING];
+      const phases = [
+        MetabolicPhase.ACTIVE,
+        MetabolicPhase.INTEGRATING,
+        MetabolicPhase.CONSOLIDATING,
+        MetabolicPhase.RESTING,
+      ];
       const currentIdx = phases.indexOf(this.phase);
       const nextIdx = (currentIdx + 1) % phases.length;
       const oldPhase = this.phase;
@@ -745,7 +803,12 @@ export class ConceptualMetabolism extends EventEmitter {
   }
 
   private getCurrentPhaseDuration(): number {
-    const phases = [MetabolicPhase.ACTIVE, MetabolicPhase.INTEGRATING, MetabolicPhase.CONSOLIDATING, MetabolicPhase.RESTING];
+    const phases = [
+      MetabolicPhase.ACTIVE,
+      MetabolicPhase.INTEGRATING,
+      MetabolicPhase.CONSOLIDATING,
+      MetabolicPhase.RESTING,
+    ];
     const idx = phases.indexOf(this.phase);
     return this.config.phaseDurations[idx] ?? 60;
   }
@@ -767,7 +830,9 @@ export class ConceptualMetabolism extends EventEmitter {
     // If energy goes negative, force catabolism
     if (this.energy < 0) {
       this.emit("energy_crisis", { deficit: -this.energy });
-      this.forceCatabolism(Math.ceil(-this.energy / this.config.decayEnergyRelease));
+      this.forceCatabolism(
+        Math.ceil(-this.energy / this.config.decayEnergyRelease),
+      );
       this.energy = Math.max(0, this.energy);
     }
   }
@@ -795,7 +860,10 @@ export class ConceptualMetabolism extends EventEmitter {
         // During consolidation, auto-myelinate eligible units
         if (this.tickCount % 10 === 0) {
           for (const unit of this.units.values()) {
-            if (!unit.isMyelinated && unit.accessCount >= this.config.myelinationThreshold) {
+            if (
+              !unit.isMyelinated &&
+              unit.accessCount >= this.config.myelinationThreshold
+            ) {
               this.myelinate(unit.id);
               break; // One per cycle
             }
@@ -841,7 +909,8 @@ export class ConceptualMetabolism extends EventEmitter {
 
     for (const unit of this.units.values()) {
       // Score: lower = more expendable
-      const score = unit.activation * 2 +
+      const score =
+        unit.activation * 2 +
         unit.connectionCount * 0.5 +
         unit.accessCount * 0.1 +
         (unit.isMyelinated ? 5 : 0);
@@ -888,8 +957,13 @@ export class ConceptualMetabolism extends EventEmitter {
     // - High entropy (disorganized knowledge)
     // - Low efficiency (wasted energy)
     // - High maintenance cost relative to energy
-    const maintenancePressure = state.totalMaintenanceCost / Math.max(1, state.energy);
-    return state.entropy * 0.4 + (1 - state.efficiency) * 0.3 + maintenancePressure * 0.3;
+    const maintenancePressure =
+      state.totalMaintenanceCost / Math.max(1, state.energy);
+    return (
+      state.entropy * 0.4 +
+      (1 - state.efficiency) * 0.3 +
+      maintenancePressure * 0.3
+    );
   }
 
   /**
@@ -909,7 +983,8 @@ export class ConceptualMetabolism extends EventEmitter {
       energyLevel: state.energy / state.maxEnergy,
       anabolicBalance: state.anabolicBalance,
       isEnergyCrisis: state.energy < state.totalMaintenanceCost * 5,
-      myelinationProgress: state.totalUnits > 0 ? state.myelinatedUnits / state.totalUnits : 0,
+      myelinationProgress:
+        state.totalUnits > 0 ? state.myelinatedUnits / state.totalUnits : 0,
       knowledgeDensity: state.knowledgeDensity,
     };
   }

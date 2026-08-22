@@ -23,6 +23,9 @@
  */
 
 import { EventEmitter } from "events";
+import { getLogger } from "deep-tree-echo-core/logger";
+
+const log = getLogger("@deltecho/avatar/ResonanceCascadeConductor");
 
 // ═══════════════════════════════════════════════════════════════
 // Types
@@ -30,11 +33,11 @@ import { EventEmitter } from "events";
 
 export interface CascadeInput {
   id: string;
-  intensity: number;        // 0-1
-  clusterPhi: number;       // integrated information of triggering cluster
-  clusterNovelty: number;   // novelty of the cluster
-  domainSpan: number;       // number of domains spanned
-  haloPulseHz: number;      // recommended halo frequency
+  intensity: number; // 0-1
+  clusterPhi: number; // integrated information of triggering cluster
+  clusterNovelty: number; // novelty of the cluster
+  domainSpan: number; // number of domains spanned
+  haloPulseHz: number; // recommended halo frequency
   spectralRadiusBoost: number;
   epistemicTemperatureDelta: number;
   timestamp: number;
@@ -187,7 +190,9 @@ export class ResonanceCascadeConductor extends EventEmitter {
   onCascade(cascade: CascadeInput): void {
     if (cascade.intensity < this.config.minIntensity) {
       if (this.config.verbose) {
-        console.log(`[CascadeConductor] Sub-threshold cascade (${cascade.intensity.toFixed(3)}) — ignored`);
+        log.debug("Sub-threshold cascade ignored", {
+          intensity: cascade.intensity,
+        });
       }
       return;
     }
@@ -209,7 +214,10 @@ export class ResonanceCascadeConductor extends EventEmitter {
 
     this.cascades.push(timeline);
     this.totalCascades++;
-    this.peakIntensityEver = Math.max(this.peakIntensityEver, cascade.intensity);
+    this.peakIntensityEver = Math.max(
+      this.peakIntensityEver,
+      cascade.intensity,
+    );
 
     this.emit("cascade_started", {
       id: cascade.id,
@@ -218,10 +226,11 @@ export class ResonanceCascadeConductor extends EventEmitter {
     });
 
     if (this.config.verbose) {
-      console.log(
-        `[CascadeConductor] CASCADE STARTED: intensity=${cascade.intensity.toFixed(3)} ` +
-        `Φ=${cascade.clusterPhi.toFixed(3)} domains=${cascade.domainSpan}`
-      );
+      log.debug("Resonance cascade started", {
+        intensity: cascade.intensity,
+        clusterPhi: cascade.clusterPhi,
+        domainSpan: cascade.domainSpan,
+      });
     }
   }
 
@@ -289,7 +298,7 @@ export class ResonanceCascadeConductor extends EventEmitter {
   } {
     return {
       activeCascades: this.cascades.length,
-      activeCrystals: this.crystals.filter(c => !c.done).length,
+      activeCrystals: this.crystals.filter((c) => !c.done).length,
       totalCascades: this.totalCascades,
       totalCrystals: this.totalCrystals,
       peakIntensityEver: this.peakIntensityEver,
@@ -343,7 +352,7 @@ export class ResonanceCascadeConductor extends EventEmitter {
 
     // Remove completed timelines
     const before = this.cascades.length;
-    this.cascades = this.cascades.filter(t => t.phase !== "done");
+    this.cascades = this.cascades.filter((t) => t.phase !== "done");
     if (before > this.cascades.length) {
       this.emit("cascade_completed", { remaining: this.cascades.length });
     }
@@ -351,11 +360,14 @@ export class ResonanceCascadeConductor extends EventEmitter {
 
   private advanceCrystals(now: number): void {
     for (const crystal of this.crystals) {
-      if (!crystal.done && now - crystal.startTime >= this.config.crystalDurationMs) {
+      if (
+        !crystal.done &&
+        now - crystal.startTime >= this.config.crystalDurationMs
+      ) {
         crystal.done = true;
       }
     }
-    this.crystals = this.crystals.filter(c => !c.done);
+    this.crystals = this.crystals.filter((c) => !c.done);
   }
 
   // ─────────────────────────────────────────────────────────────
@@ -385,19 +397,38 @@ export class ResonanceCascadeConductor extends EventEmitter {
     for (let i = 0; i < this.cascades.length; i++) {
       const timeline = this.cascades[i];
       const weight = (i + 1) / this.cascades.length; // Newer = higher weight
-      const contribution = this.computeCascadeContribution(timeline, now, deltaMs);
+      const contribution = this.computeCascadeContribution(
+        timeline,
+        now,
+        deltaMs,
+      );
 
       eyeOpenBoost = Math.max(eyeOpenBoost, contribution.eyeOpenBoost * weight);
-      pupilDilation = Math.max(pupilDilation, contribution.pupilDilation * weight);
+      pupilDilation = Math.max(
+        pupilDilation,
+        contribution.pupilDilation * weight,
+      );
       browRaise = Math.max(browRaise, contribution.browRaise * weight);
       browAsymmetry += contribution.browAsymmetry * weight * 0.5;
       insightSmile = Math.max(insightSmile, contribution.insightSmile * weight);
-      breathingMultiplier = Math.min(breathingMultiplier, contribution.breathingMultiplier);
-      headTiltDelta = Math.max(headTiltDelta, contribution.headTiltDelta * weight);
-      bodyLeanDelta = Math.max(bodyLeanDelta, contribution.bodyLeanDelta * weight);
+      breathingMultiplier = Math.min(
+        breathingMultiplier,
+        contribution.breathingMultiplier,
+      );
+      headTiltDelta = Math.max(
+        headTiltDelta,
+        contribution.headTiltDelta * weight,
+      );
+      bodyLeanDelta = Math.max(
+        bodyLeanDelta,
+        contribution.bodyLeanDelta * weight,
+      );
       haloPulse = Math.max(haloPulse, contribution.haloPulse * weight);
       haloPulsePhase = contribution.haloPulsePhase; // Use latest
-      cascadeIntensity = Math.max(cascadeIntensity, contribution.cascadeIntensity);
+      cascadeIntensity = Math.max(
+        cascadeIntensity,
+        contribution.cascadeIntensity,
+      );
       microTremor = Math.max(microTremor, contribution.microTremor * weight);
 
       if (contribution.cascadeIntensity > 0.1) {
@@ -407,13 +438,24 @@ export class ResonanceCascadeConductor extends EventEmitter {
 
     // Blend crystal contributions (additive, subtle)
     for (const crystal of this.crystals) {
-      const t = clamp((now - crystal.startTime) / this.config.crystalDurationMs, 0, 1);
-      const envelope = t < 0.2 ? easeOutCubic(t / 0.2) : 1 - easeOutExpo((t - 0.2) / 0.8);
+      const t = clamp(
+        (now - crystal.startTime) / this.config.crystalDurationMs,
+        0,
+        1,
+      );
+      const envelope =
+        t < 0.2 ? easeOutCubic(t / 0.2) : 1 - easeOutExpo((t - 0.2) / 0.8);
       const effect = crystal.input.avatarEffect;
 
-      pupilDilation = Math.max(pupilDilation, effect.eyeFocusIntensity * envelope * 0.6);
+      pupilDilation = Math.max(
+        pupilDilation,
+        effect.eyeFocusIntensity * envelope * 0.6,
+      );
       browAsymmetry += effect.browRaiseAsymmetry * envelope * 0.4;
-      insightSmile = Math.max(insightSmile, effect.microSmileIntensity * envelope * 0.5);
+      insightSmile = Math.max(
+        insightSmile,
+        effect.microSmileIntensity * envelope * 0.5,
+      );
 
       if (dominantPhase === "idle") dominantPhase = "sustain";
     }
@@ -445,7 +487,8 @@ export class ResonanceCascadeConductor extends EventEmitter {
     const intensity = timeline.peakIntensity;
 
     // Accumulate halo pulse phase
-    timeline.haloPulseAccumulator += deltaMs * 0.001 * timeline.input.haloPulseHz * Math.PI * 2;
+    timeline.haloPulseAccumulator +=
+      deltaMs * 0.001 * timeline.input.haloPulseHz * Math.PI * 2;
 
     switch (timeline.phase) {
       case "attack": {
@@ -455,7 +498,8 @@ export class ResonanceCascadeConductor extends EventEmitter {
           eyeOpenBoost: curve * intensity * 0.85,
           pupilDilation: curve * intensity * 0.92,
           browRaise: curve * intensity * 0.78,
-          browAsymmetry: curve * intensity * 0.15 * (timeline.input.domainSpan > 2 ? 1 : -1),
+          browAsymmetry:
+            curve * intensity * 0.15 * (timeline.input.domainSpan > 2 ? 1 : -1),
           insightSmile: 0, // No smile during attack (surprise phase)
           breathingMultiplier: 1 - curve * 0.7, // Breath holds during attack
           headTiltDelta: curve * intensity * 4.5, // Slight upward tilt
@@ -482,7 +526,8 @@ export class ResonanceCascadeConductor extends EventEmitter {
           breathingMultiplier: 0.4 + t * 0.6, // Breathing slowly returns
           headTiltDelta: intensity * 3.8,
           bodyLeanDelta: intensity * 2.5,
-          haloPulse: intensity * (0.85 + Math.sin(timeline.haloPulseAccumulator) * 0.15),
+          haloPulse:
+            intensity * (0.85 + Math.sin(timeline.haloPulseAccumulator) * 0.15),
           haloPulsePhase: timeline.haloPulseAccumulator,
           cascadeIntensity: intensity * (0.9 + breathe),
           active: true,

@@ -30,20 +30,20 @@ import { EventEmitter } from "events";
 // ═══════════════════════════════════════════════════════════════
 
 export type CognitiveEntityType =
-  | "stimulus"      // External input (message, sensor, timer)
-  | "percept"       // Processed perception
+  | "stimulus" // External input (message, sensor, timer)
+  | "percept" // Processed perception
   | "reservoir_state" // ESN activation pattern
-  | "proposal"      // Action proposal for DAO vote
-  | "action"        // Approved action for execution
-  | "reflection"    // Self-referential thought (autognosis)
-  | "dream"         // Background consolidation entity
-  | "cascade"       // Scientific insight cascade;
+  | "proposal" // Action proposal for DAO vote
+  | "action" // Approved action for execution
+  | "reflection" // Self-referential thought (autognosis)
+  | "dream" // Background consolidation entity
+  | "cascade"; // Scientific insight cascade;
 
 export interface CognitiveEntity {
   id: string;
   type: CognitiveEntityType;
-  priority: number;         // ECAN STI-like attention value [0, 1]
-  createdAt: number;        // Simulation time (ms)
+  priority: number; // ECAN STI-like attention value [0, 1]
+  createdAt: number; // Simulation time (ms)
   payload: Record<string, unknown>;
   hormoneContext: HormoneSnapshot;
   /** Track which stages this entity has passed through */
@@ -73,10 +73,10 @@ export interface HormoneSnapshot {
 
 export interface StageConfig {
   name: string;
-  capacity: number;           // Max concurrent entities being processed
+  capacity: number; // Max concurrent entities being processed
   baseProcessingTime: number; // Mean processing time in ms
-  variability: number;        // Processing time variability (0-1)
-  dropThreshold: number;      // Priority below which entities are dropped
+  variability: number; // Processing time variability (0-1)
+  dropThreshold: number; // Priority below which entities are dropped
 }
 
 export interface StageStats {
@@ -92,21 +92,29 @@ export interface StageStats {
 class ProcessingStage {
   readonly config: StageConfig;
   private queue: CognitiveEntity[] = [];
-  private processing: Map<string, { entity: CognitiveEntity; finishAt: number }> = new Map();
-  private stats = { processed: 0, dropped: 0, totalWait: 0, totalProcessing: 0 };
+  private processing: Map<
+    string,
+    { entity: CognitiveEntity; finishAt: number }
+  > = new Map();
+  private stats = {
+    processed: 0,
+    dropped: 0,
+    totalWait: 0,
+    totalProcessing: 0,
+  };
 
   constructor(config: StageConfig) {
     this.config = config;
   }
 
   /** Enqueue an entity for processing */
-  enqueue(entity: CognitiveEntity, simTime: number): boolean {
+  enqueue(entity: CognitiveEntity, _simTime: number): boolean {
     if (entity.priority < this.config.dropThreshold) {
       this.stats.dropped++;
       return false;
     }
     // Priority insertion (highest priority first)
-    const idx = this.queue.findIndex(e => e.priority < entity.priority);
+    const idx = this.queue.findIndex((e) => e.priority < entity.priority);
     if (idx === -1) {
       this.queue.push(entity);
     } else {
@@ -124,9 +132,14 @@ class ProcessingStage {
       if (simTime >= item.finishAt) {
         item.entity.trace.push({
           stage: this.config.name,
-          enteredAt: item.finishAt - (item.finishAt - (item.entity.trace.at(-1)?.exitedAt ?? item.entity.createdAt)),
+          enteredAt:
+            item.finishAt -
+            (item.finishAt -
+              (item.entity.trace.at(-1)?.exitedAt ?? item.entity.createdAt)),
           exitedAt: simTime,
-          processingTime: simTime - (item.entity.trace.at(-1)?.exitedAt ?? item.entity.createdAt),
+          processingTime:
+            simTime -
+            (item.entity.trace.at(-1)?.exitedAt ?? item.entity.createdAt),
           resourceUsed: this.config.name,
         });
         completed.push(item.entity);
@@ -136,7 +149,10 @@ class ProcessingStage {
     }
 
     // Start processing queued entities (up to capacity)
-    while (this.queue.length > 0 && this.processing.size < this.config.capacity) {
+    while (
+      this.queue.length > 0 &&
+      this.processing.size < this.config.capacity
+    ) {
       const entity = this.queue.shift()!;
       const waitTime = simTime - entity.createdAt;
       this.stats.totalWait += waitTime;
@@ -145,8 +161,12 @@ class ProcessingStage {
       // High cortisol → faster but less accurate (fight-or-flight)
       // High serotonin → slower but more thorough
       const hormoneMultiplier = 1.0 - (hormoneModulation - 0.5) * 0.4;
-      const variability = 1 + (Math.random() - 0.5) * 2 * this.config.variability;
-      const processingTime = Math.max(1, this.config.baseProcessingTime * hormoneMultiplier * variability);
+      const variability =
+        1 + (Math.random() - 0.5) * 2 * this.config.variability;
+      const processingTime = Math.max(
+        1,
+        this.config.baseProcessingTime * hormoneMultiplier * variability,
+      );
 
       this.stats.totalProcessing += processingTime;
       this.processing.set(entity.id, {
@@ -158,7 +178,7 @@ class ProcessingStage {
     return completed;
   }
 
-  getStats(simTime: number): StageStats {
+  getStats(_simTime: number): StageStats {
     const total = this.stats.processed + this.stats.dropped;
     return {
       name: this.config.name,
@@ -166,7 +186,10 @@ class ProcessingStage {
       dropped: this.stats.dropped,
       currentLoad: this.processing.size + this.queue.length,
       averageWait: total > 0 ? this.stats.totalWait / total : 0,
-      averageProcessing: this.stats.processed > 0 ? this.stats.totalProcessing / this.stats.processed : 0,
+      averageProcessing:
+        this.stats.processed > 0
+          ? this.stats.totalProcessing / this.stats.processed
+          : 0,
       utilization: this.processing.size / this.config.capacity,
     };
   }
@@ -210,14 +233,14 @@ export interface CognitiveProcessConfig {
 }
 
 const DEFAULT_CONFIG: CognitiveProcessConfig = {
-  attentionCapacity: 7,      // Miller's 7±2
-  perceptionSlots: 3,        // Parallel perception channels
-  reservoirNodes: 64,        // ESN reservoir width
-  readoutSlots: 4,           // Parallel readout computations
-  daoVoters: 5,              // DAO consensus quorum
-  actionSlots: 2,            // Concurrent action execution
-  tickInterval: 16,          // ~60fps
-  timeMultiplier: 10,        // 10x cognitive time acceleration
+  attentionCapacity: 7, // Miller's 7±2
+  perceptionSlots: 3, // Parallel perception channels
+  reservoirNodes: 64, // ESN reservoir width
+  readoutSlots: 4, // Parallel readout computations
+  daoVoters: 5, // DAO consensus quorum
+  actionSlots: 2, // Concurrent action execution
+  tickInterval: 16, // ~60fps
+  timeMultiplier: 10, // 10x cognitive time acceleration
 };
 
 export class CognitiveProcessModel extends EventEmitter {
@@ -258,15 +281,15 @@ export class CognitiveProcessModel extends EventEmitter {
     this.attention = new ProcessingStage({
       name: "attention_buffer",
       capacity: this.config.attentionCapacity,
-      baseProcessingTime: 20,    // 20ms attention allocation
+      baseProcessingTime: 20, // 20ms attention allocation
       variability: 0.3,
-      dropThreshold: 0.05,       // Very low threshold — almost everything gets attention
+      dropThreshold: 0.05, // Very low threshold — almost everything gets attention
     });
 
     this.perception = new ProcessingStage({
       name: "perception",
       capacity: this.config.perceptionSlots,
-      baseProcessingTime: 120,   // 120ms perception (feature extraction)
+      baseProcessingTime: 120, // 120ms perception (feature extraction)
       variability: 0.4,
       dropThreshold: 0.1,
     });
@@ -274,15 +297,15 @@ export class CognitiveProcessModel extends EventEmitter {
     this.reservoir = new ProcessingStage({
       name: "esn_reservoir",
       capacity: this.config.reservoirNodes,
-      baseProcessingTime: 50,    // 50ms reservoir computation
-      variability: 0.2,          // Low variability (parallel matrix multiply)
-      dropThreshold: 0.0,        // Reservoir processes everything
+      baseProcessingTime: 50, // 50ms reservoir computation
+      variability: 0.2, // Low variability (parallel matrix multiply)
+      dropThreshold: 0.0, // Reservoir processes everything
     });
 
     this.readout = new ProcessingStage({
       name: "readout_decision",
       capacity: this.config.readoutSlots,
-      baseProcessingTime: 30,    // 30ms linear readout
+      baseProcessingTime: 30, // 30ms linear readout
       variability: 0.15,
       dropThreshold: 0.15,
     });
@@ -290,17 +313,17 @@ export class CognitiveProcessModel extends EventEmitter {
     this.consensus = new ProcessingStage({
       name: "dao_consensus",
       capacity: this.config.daoVoters,
-      baseProcessingTime: 250,   // 250ms consensus (multi-voter deliberation)
-      variability: 0.5,          // High variability (depends on agreement)
-      dropThreshold: 0.2,        // Only significant proposals reach consensus
+      baseProcessingTime: 250, // 250ms consensus (multi-voter deliberation)
+      variability: 0.5, // High variability (depends on agreement)
+      dropThreshold: 0.2, // Only significant proposals reach consensus
     });
 
     this.action = new ProcessingStage({
       name: "action_execution",
       capacity: this.config.actionSlots,
-      baseProcessingTime: 80,    // 80ms action execution
+      baseProcessingTime: 80, // 80ms action execution
       variability: 0.3,
-      dropThreshold: 0.25,       // Only approved actions execute
+      dropThreshold: 0.25, // Only approved actions execute
     });
   }
 
@@ -330,7 +353,11 @@ export class CognitiveProcessModel extends EventEmitter {
   }
 
   /** Inject a stimulus into the cognitive pipeline */
-  injectStimulus(type: CognitiveEntityType, priority: number, payload: Record<string, unknown> = {}): string {
+  injectStimulus(
+    type: CognitiveEntityType,
+    priority: number,
+    payload: Record<string, unknown> = {},
+  ): string {
     const entity: CognitiveEntity = {
       id: `dte-${++this.entityCounter}`,
       type,
@@ -345,7 +372,11 @@ export class CognitiveProcessModel extends EventEmitter {
     const accepted = this.attention.enqueue(entity, this.simTime);
     if (!accepted) {
       this.droppedEntities++;
-      this.emit("entity_dropped", { id: entity.id, stage: "attention", reason: "below_threshold" });
+      this.emit("entity_dropped", {
+        id: entity.id,
+        stage: "attention",
+        reason: "below_threshold",
+      });
     } else {
       this.emit("entity_injected", { id: entity.id, type, priority });
     }
@@ -365,7 +396,12 @@ export class CognitiveProcessModel extends EventEmitter {
     running: boolean;
     hormones: HormoneSnapshot;
     stages: StageStats[];
-    metrics: { total: number; completed: number; dropped: number; throughput: number };
+    metrics: {
+      total: number;
+      completed: number;
+      dropped: number;
+      throughput: number;
+    };
   } {
     const stages = [
       this.attention.getStats(this.simTime),
@@ -385,15 +421,26 @@ export class CognitiveProcessModel extends EventEmitter {
         total: this.totalEntities,
         completed: this.completedEntities,
         dropped: this.droppedEntities,
-        throughput: this.simTime > 0 ? (this.completedEntities / this.simTime) * 1000 : 0,
+        throughput:
+          this.simTime > 0 ? (this.completedEntities / this.simTime) * 1000 : 0,
       },
     };
   }
 
   /** Get the current cognitive load (0-1) */
   getCognitiveLoad(): number {
-    const stages = [this.attention, this.perception, this.reservoir, this.readout, this.consensus, this.action];
-    const totalLoad = stages.reduce((sum, s) => sum + s.getStats(this.simTime).utilization, 0);
+    const stages = [
+      this.attention,
+      this.perception,
+      this.reservoir,
+      this.readout,
+      this.consensus,
+      this.action,
+    ];
+    const totalLoad = stages.reduce(
+      (sum, s) => sum + s.getStats(this.simTime).utilization,
+      0,
+    );
     return totalLoad / stages.length;
   }
 
@@ -422,7 +469,11 @@ export class CognitiveProcessModel extends EventEmitter {
     this.simTime += dt;
 
     // Compute hormone modulation factor (arousal-like)
-    const arousal = (this.hormones.cortisol + this.hormones.norepinephrine + this.hormones.dopamine) / 3;
+    const arousal =
+      (this.hormones.cortisol +
+        this.hormones.norepinephrine +
+        this.hormones.dopamine) /
+      3;
 
     // Process each stage and pass completed entities to the next
     const fromAttention = this.attention.tick(this.simTime, arousal);
@@ -452,7 +503,8 @@ export class CognitiveProcessModel extends EventEmitter {
       // Readout transforms reservoir_state → proposal
       entity.type = "proposal";
       entity.payload.proposedAction = this.generateProposal(entity);
-      entity.payload.confidence = entity.priority * (entity.payload.spectralEnergy as number ?? 0.5);
+      entity.payload.confidence =
+        entity.priority * ((entity.payload.spectralEnergy as number) ?? 0.5);
       this.consensus.enqueue(entity, this.simTime);
     }
 
@@ -468,7 +520,10 @@ export class CognitiveProcessModel extends EventEmitter {
       } else {
         entity.payload.approved = false;
         this.droppedEntities++;
-        this.emit("proposal_rejected", { id: entity.id, reason: "consensus_failed" });
+        this.emit("proposal_rejected", {
+          id: entity.id,
+          reason: "consensus_failed",
+        });
       }
     }
 
@@ -490,7 +545,13 @@ export class CognitiveProcessModel extends EventEmitter {
   }
 
   private generateProposal(entity: CognitiveEntity): string {
-    const types = ["respond", "reflect", "explore", "consolidate", "modify_self"];
+    const types = [
+      "respond",
+      "reflect",
+      "explore",
+      "consolidate",
+      "modify_self",
+    ];
     // Higher arousal → more action-oriented proposals
     const arousal = (this.hormones.cortisol + this.hormones.norepinephrine) / 2;
     if (arousal > 0.7) return "respond";
@@ -511,7 +572,8 @@ export class CognitiveProcessModel extends EventEmitter {
       // Each voter has a different threshold based on their "personality"
       const voterThreshold = 0.3 + (i / voters) * 0.4; // Range: 0.3 to 0.7
       // Hormone modulation: high oxytocin → more agreeable, high cortisol → more cautious
-      const modulation = this.hormones.oxytocin * 0.15 - this.hormones.cortisol * 0.1;
+      const modulation =
+        this.hormones.oxytocin * 0.15 - this.hormones.cortisol * 0.1;
       if (confidence + modulation > voterThreshold) {
         approvals++;
       }

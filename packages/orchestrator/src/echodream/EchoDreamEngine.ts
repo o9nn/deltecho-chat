@@ -57,7 +57,12 @@ export interface DreamExperience {
   emotionalValence: number;
   novelty: number;
   significance: number;
-  source: "conversation" | "insight" | "observation" | "practice" | "reflection";
+  source:
+    | "conversation"
+    | "insight"
+    | "observation"
+    | "practice"
+    | "reflection";
   tags: string[];
   consolidated: boolean;
 }
@@ -172,7 +177,8 @@ export class EchoDreamEngine extends EventEmitter {
     this.circadianPhase = (2 * Math.PI * elapsed) / this.config.circadianPeriod;
 
     // Circadian drive: sinusoidal sleepiness (peaks at π, troughs at 0/2π)
-    const circadianDrive = (1 + Math.sin(this.circadianPhase - Math.PI / 2)) / 2;
+    const circadianDrive =
+      (1 + Math.sin(this.circadianPhase - Math.PI / 2)) / 2;
 
     switch (this.state) {
       case "awake":
@@ -195,25 +201,37 @@ export class EchoDreamEngine extends EventEmitter {
     this.fatigue = Math.min(1, this.fatigue + this.config.fatigueRate);
 
     // Update dream pressure from unconsolidated experiences
-    const unconsolidated = this.experiences.filter((e) => !e.consolidated).length;
+    const unconsolidated = this.experiences.filter(
+      (e) => !e.consolidated,
+    ).length;
     this.dreamPressure = Math.min(1, unconsolidated / 50); // Normalize to 50 experiences
 
     // Check transition to drowsy
-    const sleepDrive = this.fatigue * 0.4 + this.dreamPressure * 0.3 + circadianDrive * 0.3;
+    const sleepDrive =
+      this.fatigue * 0.4 + this.dreamPressure * 0.3 + circadianDrive * 0.3;
     const timeSinceChange = now - this.lastStateChange;
 
-    if (sleepDrive > this.config.dreamPressureThreshold && timeSinceChange > this.config.minAwakeDuration) {
-      this.transitionTo("drowsy", `sleep drive ${sleepDrive.toFixed(3)} exceeded threshold`);
+    if (
+      sleepDrive > this.config.dreamPressureThreshold &&
+      timeSinceChange > this.config.minAwakeDuration
+    ) {
+      this.transitionTo(
+        "drowsy",
+        `sleep drive ${sleepDrive.toFixed(3)} exceeded threshold`,
+      );
     }
   }
 
-  private tickDrowsy(now: number, circadianDrive: number): void {
+  private tickDrowsy(now: number, _circadianDrive: number): void {
     // Brief transition state — move to dreaming quickly unless interrupted
     const timeSinceChange = now - this.lastStateChange;
 
     if (timeSinceChange > 5000) {
       // 5 seconds of drowsiness → enter dream
-      this.transitionTo("dreaming", "drowsy period complete, entering dream consolidation");
+      this.transitionTo(
+        "dreaming",
+        "drowsy period complete, entering dream consolidation",
+      );
     }
   }
 
@@ -224,7 +242,10 @@ export class EchoDreamEngine extends EventEmitter {
     this.fatigue = Math.max(0, this.fatigue - this.config.recoveryRate);
 
     // Increase dream depth over time (deeper = more abstract consolidation)
-    this.currentDreamDepth = Math.min(1, timeSinceChange / this.config.maxDreamDuration);
+    this.currentDreamDepth = Math.min(
+      1,
+      timeSinceChange / this.config.maxDreamDuration,
+    );
 
     // Run consolidation at intervals
     if (timeSinceChange % 10000 < 1000) {
@@ -276,7 +297,9 @@ export class EchoDreamEngine extends EventEmitter {
 
   // ─── Experience Ingestion ────────────────────────────────────
 
-  ingestExperience(input: Omit<DreamExperience, "id" | "timestamp" | "consolidated">): DreamExperience {
+  ingestExperience(
+    input: Omit<DreamExperience, "id" | "timestamp" | "consolidated">,
+  ): DreamExperience {
     const experience: DreamExperience = {
       ...input,
       id: `exp_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
@@ -287,10 +310,16 @@ export class EchoDreamEngine extends EventEmitter {
     this.experiences.push(experience);
 
     // Reinforce interest in this domain
-    this.reinforceInterest(experience.domain, experience.significance, "experience");
+    this.reinforceInterest(
+      experience.domain,
+      experience.significance,
+      "experience",
+    );
 
     // Update dream pressure
-    const unconsolidated = this.experiences.filter((e) => !e.consolidated).length;
+    const unconsolidated = this.experiences.filter(
+      (e) => !e.consolidated,
+    ).length;
     this.dreamPressure = Math.min(1, unconsolidated / 50);
 
     const event: EchoDreamEvent = {
@@ -299,7 +328,10 @@ export class EchoDreamEngine extends EventEmitter {
     };
     this.emit("dream_event", event);
 
-    log.debug("Experience ingested", { domain: experience.domain, source: experience.source });
+    log.debug("Experience ingested", {
+      domain: experience.domain,
+      source: experience.source,
+    });
     return experience;
   }
 
@@ -352,15 +384,28 @@ export class EchoDreamEngine extends EventEmitter {
       }
 
       // Strongest co-occurrence becomes the pattern description
-      const strongestPair = [...coOccurrence.entries()]
-        .sort((a, b) => b[1] - a[1])[0];
+      const strongestPair = [...coOccurrence.entries()].sort(
+        (a, b) => b[1] - a[1],
+      )[0];
 
       // Compute confidence from consistency and depth
-      const avgSignificance = experiences.reduce((s, e) => s + e.significance, 0) / experiences.length;
-      const confidence = Math.min(1, (patterns.length / 5) * 0.4 + avgSignificance * 0.3 + this.currentDreamDepth * 0.3);
+      const avgSignificance =
+        experiences.reduce((s, e) => s + e.significance, 0) /
+        experiences.length;
+      const confidence = Math.min(
+        1,
+        (patterns.length / 5) * 0.4 +
+          avgSignificance * 0.3 +
+          this.currentDreamDepth * 0.3,
+      );
 
       // Synthesize wisdom
-      const wisdom = this.synthesizeWisdom(domain, patterns, experiences, strongestPair);
+      const wisdom = this.synthesizeWisdom(
+        domain,
+        patterns,
+        experiences,
+        strongestPair,
+      );
 
       const insight: DreamInsight = {
         id: `dream_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
@@ -383,7 +428,9 @@ export class EchoDreamEngine extends EventEmitter {
 
     // Cross-domain consolidation (at deeper dream levels)
     if (this.currentDreamDepth > 0.5 && domainGroups.size >= 2) {
-      const crossDomainInsight = this.crossDomainConsolidation([...domainGroups.keys()]);
+      const crossDomainInsight = this.crossDomainConsolidation([
+        ...domainGroups.keys(),
+      ]);
       if (crossDomainInsight) {
         insights.push(crossDomainInsight);
       }
@@ -391,7 +438,10 @@ export class EchoDreamEngine extends EventEmitter {
 
     if (insights.length > 0) {
       this.dreamInsights.push(...insights);
-      this.dreamPressure = Math.max(0, this.dreamPressure - insights.length * 0.1);
+      this.dreamPressure = Math.max(
+        0,
+        this.dreamPressure - insights.length * 0.1,
+      );
 
       const event: EchoDreamEvent = {
         type: "consolidation_complete",
@@ -406,12 +456,15 @@ export class EchoDreamEngine extends EventEmitter {
     domain: string,
     patterns: string[],
     experiences: DreamExperience[],
-    strongestPair?: [string, number]
+    strongestPair?: [string, number],
   ): string {
     // Dimension-mapped wisdom synthesis
     // Maps patterns to wisdom dimensions: causal, temporal, structural, relational
-    const avgValence = experiences.reduce((s, e) => s + e.emotionalValence, 0) / experiences.length;
-    const avgNovelty = experiences.reduce((s, e) => s + e.novelty, 0) / experiences.length;
+    const avgValence =
+      experiences.reduce((s, e) => s + e.emotionalValence, 0) /
+      experiences.length;
+    const avgNovelty =
+      experiences.reduce((s, e) => s + e.novelty, 0) / experiences.length;
 
     const dimensions: string[] = [];
 
@@ -427,16 +480,22 @@ export class EchoDreamEngine extends EventEmitter {
       dimensions.push(`strong co-occurrence: ${strongestPair[0]}`);
     }
     if (patterns.length > 3) {
-      dimensions.push(`rich pattern cluster (${patterns.length} recurring themes)`);
+      dimensions.push(
+        `rich pattern cluster (${patterns.length} recurring themes)`,
+      );
     }
 
-    return `[${domain}] ${dimensions.join("; ")} — from ${experiences.length} experiences`;
+    return `[${domain}] ${dimensions.join("; ")} — from ${
+      experiences.length
+    } experiences`;
   }
 
   private crossDomainConsolidation(domains: string[]): DreamInsight | null {
     // Find concepts that bridge multiple domains
     const domainTags = new Map<string, Set<string>>();
-    for (const exp of this.experiences.filter((e) => domains.includes(e.domain))) {
+    for (const exp of this.experiences.filter((e) =>
+      domains.includes(e.domain),
+    )) {
       const tags = domainTags.get(exp.domain) || new Set();
       exp.tags.forEach((t) => tags.add(t));
       domainTags.set(exp.domain, tags);
@@ -446,7 +505,9 @@ export class EchoDreamEngine extends EventEmitter {
     const allTagSets = [...domainTags.values()];
     if (allTagSets.length < 2) return null;
 
-    const sharedTags = [...allTagSets[0]].filter((tag) => allTagSets.slice(1).every((set) => set.has(tag)));
+    const sharedTags = [...allTagSets[0]].filter((tag) =>
+      allTagSets.slice(1).every((set) => set.has(tag)),
+    );
 
     if (sharedTags.length === 0) return null;
 
@@ -455,8 +516,13 @@ export class EchoDreamEngine extends EventEmitter {
       timestamp: Date.now(),
       domains,
       pattern: `cross-domain bridge: ${sharedTags.join(", ")}`,
-      wisdom: `[CROSS-DOMAIN] Concepts ${sharedTags.join(", ")} bridge ${domains.join(" ↔ ")} — potential for transfer learning`,
-      confidence: Math.min(1, sharedTags.length * 0.2 + this.currentDreamDepth * 0.3),
+      wisdom: `[CROSS-DOMAIN] Concepts ${sharedTags.join(
+        ", ",
+      )} bridge ${domains.join(" ↔ ")} — potential for transfer learning`,
+      confidence: Math.min(
+        1,
+        sharedTags.length * 0.2 + this.currentDreamDepth * 0.3,
+      ),
       sourceExperienceIds: [],
       appliedToInterests: false,
     };
@@ -464,7 +530,11 @@ export class EchoDreamEngine extends EventEmitter {
 
   // ─── Interest Pattern Management ────────────────────────────
 
-  private reinforceInterest(domain: string, strength: number, source: string): void {
+  private reinforceInterest(
+    domain: string,
+    strength: number,
+    source: string,
+  ): void {
     const existing = this.interests.get(domain);
     if (existing) {
       existing.strength = Math.min(1, existing.strength + strength * 0.1);
@@ -503,13 +573,18 @@ export class EchoDreamEngine extends EventEmitter {
     const now = Date.now();
     for (const [domain, interest] of this.interests) {
       const age = now - interest.lastReinforced;
-      interest.strength = Math.max(0, interest.strength - interest.decayRate * (age / 1000));
+      interest.strength = Math.max(
+        0,
+        interest.strength - interest.decayRate * (age / 1000),
+      );
       if (interest.strength <= 0) {
         this.interests.delete(domain);
       }
     }
 
-    log.info(`Applied ${unapplied.length} dream insights to interests, ${this.interests.size} active interests`);
+    log.info(
+      `Applied ${unapplied.length} dream insights to interests, ${this.interests.size} active interests`,
+    );
   }
 
   // ─── External Wake Signal ────────────────────────────────────
@@ -526,8 +601,16 @@ export class EchoDreamEngine extends EventEmitter {
 
     if (this.state === "dreaming" || this.state === "drowsy") {
       const timeSinceChange = Date.now() - this.lastStateChange;
-      if (effectiveUrgency > 0.7 || timeSinceChange > this.config.minDreamDuration) {
-        this.transitionTo("waking", `external wake signal from ${source} (urgency: ${urgency.toFixed(2)})`);
+      if (
+        effectiveUrgency > 0.7 ||
+        timeSinceChange > this.config.minDreamDuration
+      ) {
+        this.transitionTo(
+          "waking",
+          `external wake signal from ${source} (urgency: ${urgency.toFixed(
+            2,
+          )})`,
+        );
       }
     }
   }
@@ -536,7 +619,10 @@ export class EchoDreamEngine extends EventEmitter {
 
   reportCognitiveLoad(load: number): void {
     // Higher cognitive load → faster fatigue accumulation
-    this.fatigue = Math.min(1, this.fatigue + load * this.config.fatigueRate * 2);
+    this.fatigue = Math.min(
+      1,
+      this.fatigue + load * this.config.fatigueRate * 2,
+    );
   }
 
   // ─── State Queries ───────────────────────────────────────────
@@ -549,9 +635,12 @@ export class EchoDreamEngine extends EventEmitter {
       circadianPhase: this.circadianPhase,
       lastStateChange: this.lastStateChange,
       totalExperiences: this.experiences.length,
-      unconsolidatedCount: this.experiences.filter((e) => !e.consolidated).length,
+      unconsolidatedCount: this.experiences.filter((e) => !e.consolidated)
+        .length,
       dreamInsightCount: this.dreamInsights.length,
-      activeInterests: [...this.interests.values()].sort((a, b) => b.strength - a.strength),
+      activeInterests: [...this.interests.values()].sort(
+        (a, b) => b.strength - a.strength,
+      ),
       currentDreamDepth: this.currentDreamDepth,
     };
   }
@@ -565,7 +654,9 @@ export class EchoDreamEngine extends EventEmitter {
   }
 
   getTopInterests(n = 5): InterestPattern[] {
-    return [...this.interests.values()].sort((a, b) => b.strength - a.strength).slice(0, n);
+    return [...this.interests.values()]
+      .sort((a, b) => b.strength - a.strength)
+      .slice(0, n);
   }
 
   getRecentInsights(n = 10): DreamInsight[] {
@@ -574,8 +665,15 @@ export class EchoDreamEngine extends EventEmitter {
 
   describeState(): string {
     const s = this.getState();
-    const stateEmoji = { awake: "🌞", drowsy: "🌅", dreaming: "🌙", waking: "🌄" };
-    const topInterests = this.getTopInterests(3).map((i) => `${i.domain}(${i.strength.toFixed(2)})`).join(", ");
+    const stateEmoji = {
+      awake: "🌞",
+      drowsy: "🌅",
+      dreaming: "🌙",
+      waking: "🌄",
+    };
+    const topInterests = this.getTopInterests(3)
+      .map((i) => `${i.domain}(${i.strength.toFixed(2)})`)
+      .join(", ");
 
     return [
       `${stateEmoji[s.currentState]} ${s.currentState.toUpperCase()}`,
@@ -584,7 +682,9 @@ export class EchoDreamEngine extends EventEmitter {
       `experiences: ${s.totalExperiences} (${s.unconsolidatedCount} unconsolidated)`,
       `insights: ${s.dreamInsightCount}`,
       `interests: ${topInterests || "none yet"}`,
-      s.currentState === "dreaming" ? `depth: ${(s.currentDreamDepth * 100).toFixed(0)}%` : "",
+      s.currentState === "dreaming"
+        ? `depth: ${(s.currentDreamDepth * 100).toFixed(0)}%`
+        : "",
     ]
       .filter(Boolean)
       .join(" | ");

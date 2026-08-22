@@ -53,6 +53,10 @@
     "./scientific-genius": {
       "import": "./dist/scientific-genius/index.js",
       "types": "./dist/scientific-genius/index.d.ts"
+    },
+    "./logger": {
+      "import": "./dist/utils/logger.js",
+      "types": "./dist/utils/logger.d.ts"
     }
   },
   "scripts": {

@@ -34,13 +34,68 @@ const log = getLogger(
 
 /** Common English stopwords filtered out before concept/novelty analysis. */
 const STOPWORDS = new Set<string>([
-  "the", "and", "for", "are", "but", "not", "you", "all", "can", "her",
-  "was", "one", "our", "out", "his", "has", "had", "how", "who", "why",
-  "what", "when", "where", "which", "that", "this", "with", "from", "have",
-  "will", "would", "could", "should", "about", "into", "than", "then",
-  "them", "they", "there", "their", "been", "being", "does", "did", "done",
-  "such", "some", "any", "each", "more", "most", "other", "over", "only",
-  "also", "its", "his", "her", "because", "between", "both",
+  "the",
+  "and",
+  "for",
+  "are",
+  "but",
+  "not",
+  "you",
+  "all",
+  "can",
+  "her",
+  "was",
+  "one",
+  "our",
+  "out",
+  "his",
+  "has",
+  "had",
+  "how",
+  "who",
+  "why",
+  "what",
+  "when",
+  "where",
+  "which",
+  "that",
+  "this",
+  "with",
+  "from",
+  "have",
+  "will",
+  "would",
+  "could",
+  "should",
+  "about",
+  "into",
+  "than",
+  "then",
+  "them",
+  "they",
+  "there",
+  "their",
+  "been",
+  "being",
+  "does",
+  "did",
+  "done",
+  "such",
+  "some",
+  "any",
+  "each",
+  "more",
+  "most",
+  "other",
+  "over",
+  "only",
+  "also",
+  "its",
+  "his",
+  "her",
+  "because",
+  "between",
+  "both",
 ]);
 
 /** Clamp a value into [min, max]; NaN collapses to min for safety. */
@@ -316,7 +371,10 @@ export interface ScientificGeniusEngine {
   ): Promise<ScientificInsight[]>;
   enterGeniusMode(): void;
   exitGeniusMode(): void;
-  processStimulus(stimulus: string, domain: ScientificDomain): Promise<ScientificInsight[]>;
+  processStimulus(
+    stimulus: string,
+    domain: ScientificDomain,
+  ): Promise<ScientificInsight[]>;
   processScientificQuery(
     query: string,
     domain?: ScientificDomain,
@@ -369,16 +427,46 @@ export interface ScientificGeniusEngine {
    * Returns null if no cascade condition is met.
    */
   detectResonanceCascade(): EpistemicResonanceCascade | null;
-  on(event: "insight_generated", listener: (insight: ScientificInsight) => void): this;
-  on(event: "hypothesis_evaluated", listener: (event: HypothesisEvaluationEvent) => void): this;
-  on(event: "epistemic_foraging_completed", listener: (event: { insights: ScientificInsight[] }) => void): this;
-  on(event: "resonance_cascade", listener: (cascade: EpistemicResonanceCascade) => void): this;
-  off(event: "insight_generated", listener: (insight: ScientificInsight) => void): this;
-  off(event: "hypothesis_evaluated", listener: (event: HypothesisEvaluationEvent) => void): this;
-  off(event: "epistemic_foraging_completed", listener: (event: { insights: ScientificInsight[] }) => void): this;
-  off(event: "resonance_cascade", listener: (cascade: EpistemicResonanceCascade) => void): this;
-  off(event: "predictive_crystallization", listener: (crystal: PredictiveInsightCrystal) => void): this;
-  on(event: "predictive_crystallization", listener: (crystal: PredictiveInsightCrystal) => void): this;
+  on(
+    event: "insight_generated",
+    listener: (insight: ScientificInsight) => void,
+  ): this;
+  on(
+    event: "hypothesis_evaluated",
+    listener: (event: HypothesisEvaluationEvent) => void,
+  ): this;
+  on(
+    event: "epistemic_foraging_completed",
+    listener: (event: { insights: ScientificInsight[] }) => void,
+  ): this;
+  on(
+    event: "resonance_cascade",
+    listener: (cascade: EpistemicResonanceCascade) => void,
+  ): this;
+  off(
+    event: "insight_generated",
+    listener: (insight: ScientificInsight) => void,
+  ): this;
+  off(
+    event: "hypothesis_evaluated",
+    listener: (event: HypothesisEvaluationEvent) => void,
+  ): this;
+  off(
+    event: "epistemic_foraging_completed",
+    listener: (event: { insights: ScientificInsight[] }) => void,
+  ): this;
+  off(
+    event: "resonance_cascade",
+    listener: (cascade: EpistemicResonanceCascade) => void,
+  ): this;
+  off(
+    event: "predictive_crystallization",
+    listener: (crystal: PredictiveInsightCrystal) => void,
+  ): this;
+  on(
+    event: "predictive_crystallization",
+    listener: (crystal: PredictiveInsightCrystal) => void,
+  ): this;
   /**
    * Predictive Insight Crystallization — the engine predicts future insight
    * trajectories from concept graph topology and crystallizes them before
@@ -390,7 +478,10 @@ export interface ScientificGeniusEngine {
   crystallizePredictiveInsights(): PredictiveInsightCrystal[];
 }
 
-export class ScientificGeniusEngineImpl extends EventEmitter implements ScientificGeniusEngine {
+export class ScientificGeniusEngineImpl
+  extends EventEmitter
+  implements ScientificGeniusEngine
+{
   private config: ScientificGeniusConfig;
 
   /** Internal debug logger - no-op unless config.verbose is true */
@@ -421,30 +512,78 @@ export class ScientificGeniusEngineImpl extends EventEmitter implements Scientif
   private isGeniusMode: boolean = false;
   private currentReasoningMode: ReasoningMode = ReasoningMode.Analytical;
 
-  public get enableFreeEnergyMinimization(): boolean { return this.config.enableFreeEnergyMinimization; }
-  public set enableFreeEnergyMinimization(v: boolean) { this.config.enableFreeEnergyMinimization = v; }
-  public get enableIntegratedInformation(): boolean { return this.config.enableIntegratedInformation; }
-  public set enableIntegratedInformation(v: boolean) { this.config.enableIntegratedInformation = v; }
-  public get enableGlobalWorkspace(): boolean { return this.config.enableGlobalWorkspace; }
-  public set enableGlobalWorkspace(v: boolean) { this.config.enableGlobalWorkspace = v; }
-  public get enableAutopoiesis(): boolean { return this.config.enableAutopoiesis; }
-  public set enableAutopoiesis(v: boolean) { this.config.enableAutopoiesis = v; }
-  public get enableStrangeLoops(): boolean { return this.config.enableStrangeLoops; }
-  public set enableStrangeLoops(v: boolean) { this.config.enableStrangeLoops = v; }
-  public get enableEpistemicForaging(): boolean { return this.config.enableEpistemicForaging; }
-  public set enableEpistemicForaging(v: boolean) { this.config.enableEpistemicForaging = v; }
-  public get creativityTemperature(): number { return this.config.creativityTemperature; }
-  public set creativityTemperature(v: number) { this.config.creativityTemperature = v; }
-  public get rigorThreshold(): number { return this.config.rigorThreshold; }
-  public set rigorThreshold(v: number) { this.config.rigorThreshold = v; }
-  public get crossDomainWeight(): number { return this.config.crossDomainWeight; }
-  public set crossDomainWeight(v: number) { this.config.crossDomainWeight = v; }
-  public get maxHypotheses(): number { return this.config.maxHypotheses; }
-  public set maxHypotheses(v: number) { this.config.maxHypotheses = v; }
-  public get maxInsights(): number { return this.config.maxInsights; }
-  public set maxInsights(v: number) { this.config.maxInsights = v; }
-  public get verbose(): boolean { return this.config.verbose; }
-  public set verbose(v: boolean) { this.config.verbose = v; }
+  public get enableFreeEnergyMinimization(): boolean {
+    return this.config.enableFreeEnergyMinimization;
+  }
+  public set enableFreeEnergyMinimization(v: boolean) {
+    this.config.enableFreeEnergyMinimization = v;
+  }
+  public get enableIntegratedInformation(): boolean {
+    return this.config.enableIntegratedInformation;
+  }
+  public set enableIntegratedInformation(v: boolean) {
+    this.config.enableIntegratedInformation = v;
+  }
+  public get enableGlobalWorkspace(): boolean {
+    return this.config.enableGlobalWorkspace;
+  }
+  public set enableGlobalWorkspace(v: boolean) {
+    this.config.enableGlobalWorkspace = v;
+  }
+  public get enableAutopoiesis(): boolean {
+    return this.config.enableAutopoiesis;
+  }
+  public set enableAutopoiesis(v: boolean) {
+    this.config.enableAutopoiesis = v;
+  }
+  public get enableStrangeLoops(): boolean {
+    return this.config.enableStrangeLoops;
+  }
+  public set enableStrangeLoops(v: boolean) {
+    this.config.enableStrangeLoops = v;
+  }
+  public get enableEpistemicForaging(): boolean {
+    return this.config.enableEpistemicForaging;
+  }
+  public set enableEpistemicForaging(v: boolean) {
+    this.config.enableEpistemicForaging = v;
+  }
+  public get creativityTemperature(): number {
+    return this.config.creativityTemperature;
+  }
+  public set creativityTemperature(v: number) {
+    this.config.creativityTemperature = v;
+  }
+  public get rigorThreshold(): number {
+    return this.config.rigorThreshold;
+  }
+  public set rigorThreshold(v: number) {
+    this.config.rigorThreshold = v;
+  }
+  public get crossDomainWeight(): number {
+    return this.config.crossDomainWeight;
+  }
+  public set crossDomainWeight(v: number) {
+    this.config.crossDomainWeight = v;
+  }
+  public get maxHypotheses(): number {
+    return this.config.maxHypotheses;
+  }
+  public set maxHypotheses(v: number) {
+    this.config.maxHypotheses = v;
+  }
+  public get maxInsights(): number {
+    return this.config.maxInsights;
+  }
+  public set maxInsights(v: number) {
+    this.config.maxInsights = v;
+  }
+  public get verbose(): boolean {
+    return this.config.verbose;
+  }
+  public set verbose(v: boolean) {
+    this.config.verbose = v;
+  }
 
   constructor(config?: Partial<ScientificGeniusConfig>) {
     super();
@@ -524,7 +663,10 @@ export class ScientificGeniusEngineImpl extends EventEmitter implements Scientif
    * that relates to many others, weighted by how interconnected *those*
    * neighbours are (clustering), integrates more information.
    */
-  private computePhi(relatedConcepts: string[], domain: ScientificDomain): number {
+  private computePhi(
+    relatedConcepts: string[],
+    domain: ScientificDomain,
+  ): number {
     const totalConcepts = Math.max(this.concepts.size, 1);
     // Connectivity term: fraction of the graph this concept reaches.
     const connectivity = clamp01(relatedConcepts.length / totalConcepts);
@@ -586,7 +728,10 @@ export class ScientificGeniusEngineImpl extends EventEmitter implements Scientif
     domain: ScientificDomain,
   ): Promise<ScientificInsight[]> {
     this.dlog(
-      `Processing stimulus in ${domain} domain: ${stimulus.substring(0, 50)}...`,
+      `Processing stimulus in ${domain} domain: ${stimulus.substring(
+        0,
+        50,
+      )}...`,
     );
 
     const tokens = this.tokenize(stimulus);
@@ -602,7 +747,8 @@ export class ScientificGeniusEngineImpl extends EventEmitter implements Scientif
     }
 
     const phi = this.computePhi(related, domain);
-    const name = tokens.slice(0, 3).join(" ") || `stimulus-${this.concepts.size + 1}`;
+    const name =
+      tokens.slice(0, 3).join(" ") || `stimulus-${this.concepts.size + 1}`;
 
     const newConcept: ScientificConcept = {
       id: `concept-${Date.now()}-${this.concepts.size}`,
@@ -661,7 +807,10 @@ export class ScientificGeniusEngineImpl extends EventEmitter implements Scientif
     foragingMode: boolean = false,
   ): Promise<Hypothesis[]> {
     this.dlog(
-      `Generating hypotheses for query: ${query.substring(0, 50)}... (foragingMode: ${foragingMode})`,
+      `Generating hypotheses for query: ${query.substring(
+        0,
+        50,
+      )}... (foragingMode: ${foragingMode})`,
     );
     const dom = domain || ScientificDomain.CognitiveScience;
     const tokens = this.tokenize(query);
@@ -687,8 +836,12 @@ export class ScientificGeniusEngineImpl extends EventEmitter implements Scientif
       : prior;
 
     const statement = foragingMode
-      ? `Conjecture: an unexamined ${dom} mechanism links "${tokens.slice(0, 4).join(", ")}" to a higher-order regularity.`
-      : `Hypothesis: "${tokens.slice(0, 6).join(", ")}" admits a ${dom} explanation with testable predictions.`;
+      ? `Conjecture: an unexamined ${dom} mechanism links "${tokens
+          .slice(0, 4)
+          .join(", ")}" to a higher-order regularity.`
+      : `Hypothesis: "${tokens
+          .slice(0, 6)
+          .join(", ")}" admits a ${dom} explanation with testable predictions.`;
 
     const hypothesis: Hypothesis = {
       id: `hypothesis-${Date.now()}-${this.hypotheses.size}`,
@@ -901,7 +1054,9 @@ export class ScientificGeniusEngineImpl extends EventEmitter implements Scientif
           : "speculative";
     const bridge =
       crossDomain.length > 1
-        ? ` It bridges ${crossDomain.join(", ")}, suggesting a transdisciplinary regularity.`
+        ? ` It bridges ${crossDomain.join(
+            ", ",
+          )}, suggesting a transdisciplinary regularity.`
         : "";
     return `Via ${mode} reasoning, "${subject}" yields a ${confidence} ${domain} account.${bridge}`;
   }
@@ -1033,7 +1188,9 @@ export class ScientificGeniusEngineImpl extends EventEmitter implements Scientif
       ),
       meanPhi: Number(meanPhi.toFixed(4)),
       autopoieticCycles: this.autopoieticCycles,
-      metaCognitiveDepth: Number(this.strangeLoop.metaCognitiveDepth.toFixed(4)),
+      metaCognitiveDepth: Number(
+        this.strangeLoop.metaCognitiveDepth.toFixed(4),
+      ),
       recursionLevel: this.strangeLoop.recursionLevel,
     };
   }
@@ -1053,19 +1210,17 @@ export class ScientificGeniusEngineImpl extends EventEmitter implements Scientif
   } {
     const s = this.getState();
     // Genius activation: rich integration + active hypothesis flux while in mode.
-    const flux = clamp01(s.hypothesisCount / Math.max(this.config.maxHypotheses, 1));
+    const flux = clamp01(
+      s.hypothesisCount / Math.max(this.config.maxHypotheses, 1),
+    );
     const scientificGenius = clamp01(
-      (this.isGeniusMode ? 0.35 : 0) +
-        0.4 * s.integrationLevel +
-        0.25 * flux,
+      (this.isGeniusMode ? 0.35 : 0) + 0.4 * s.integrationLevel + 0.25 * flux,
     );
     // Recent novelty drives insight potential.
     const recentNovelty =
       this.insights.length === 0
         ? 0
-        : this.insights
-            .slice(-8)
-            .reduce((m, i) => Math.max(m, i.novelty), 0);
+        : this.insights.slice(-8).reduce((m, i) => Math.max(m, i.novelty), 0);
     return {
       scientificGenius,
       insightPotential: clamp01(0.6 * recentNovelty + 0.4 * s.meanPhi),
@@ -1187,10 +1342,18 @@ export class ScientificGeniusEngineImpl extends EventEmitter implements Scientif
         ? this.globalWorkspace.attentionalFocus.join(", ")
         : "unfocused";
     return [
-      `${s.isGeniusMode ? "GENIUS MODE ACTIVE" : "standby"} · reasoning=${s.reasoningMode}`,
+      `${s.isGeniusMode ? "GENIUS MODE ACTIVE" : "standby"} · reasoning=${
+        s.reasoningMode
+      }`,
       `concepts=${s.conceptCount} hypotheses=${s.hypothesisCount} insights=${s.insightCount}`,
-      `Φ(mean)=${s.meanPhi.toFixed(2)} integration=${s.integrationLevel.toFixed(2)} freeEnergy=${s.totalFreeEnergy.toFixed(2)} (${trend})`,
-      `autopoietic-cycles=${s.autopoieticCycles} meta-depth=${s.metaCognitiveDepth.toFixed(2)} recursion=${s.recursionLevel} · focus: ${focus}`,
+      `Φ(mean)=${s.meanPhi.toFixed(2)} integration=${s.integrationLevel.toFixed(
+        2,
+      )} freeEnergy=${s.totalFreeEnergy.toFixed(2)} (${trend})`,
+      `autopoietic-cycles=${
+        s.autopoieticCycles
+      } meta-depth=${s.metaCognitiveDepth.toFixed(2)} recursion=${
+        s.recursionLevel
+      } · focus: ${focus}`,
     ].join("\n");
   }
 
@@ -1215,18 +1378,24 @@ export class ScientificGeniusEngineImpl extends EventEmitter implements Scientif
     if (conceptList.length < 3) return crystals;
 
     // Build co-occurrence adjacency from insights
-    const adjacency = new Map<string, Map<string, { phi: number; strength: number }>>();
+    const adjacency = new Map<
+      string,
+      Map<string, { phi: number; strength: number }>
+    >();
     for (const insight of this.insights) {
       // Extract concept names mentioned in this insight
-      const mentionedConcepts = conceptList.filter(
-        (c) => insight.content.toLowerCase().includes(c.name.toLowerCase()),
+      const mentionedConcepts = conceptList.filter((c) =>
+        insight.content.toLowerCase().includes(c.name.toLowerCase()),
       );
       // Create edges between all pairs in this insight
       for (let i = 0; i < mentionedConcepts.length; i++) {
         for (let j = i + 1; j < mentionedConcepts.length; j++) {
           const a = mentionedConcepts[i].name;
           const b = mentionedConcepts[j].name;
-          const phi = Math.min(mentionedConcepts[i].phi, mentionedConcepts[j].phi);
+          const phi = Math.min(
+            mentionedConcepts[i].phi,
+            mentionedConcepts[j].phi,
+          );
           const strength = (insight.novelty + insight.significance) / 2;
           if (!adjacency.has(a)) adjacency.set(a, new Map());
           if (!adjacency.has(b)) adjacency.set(b, new Map());
@@ -1259,12 +1428,18 @@ export class ScientificGeniusEngineImpl extends EventEmitter implements Scientif
             existingPredictions.add(key);
             const conceptA = this.concepts.get(a);
             const conceptB = this.concepts.get(b);
-            const domain = conceptA?.domain ?? conceptB?.domain ?? "general" as ScientificDomain;
+            const domain =
+              conceptA?.domain ??
+              conceptB?.domain ??
+              ("general" as ScientificDomain);
 
             const crystal: PredictiveInsightCrystal = {
               id: `crystal_${Date.now()}_${crystals.length}`,
-              prediction: `Predicted connection: ${a} → ${b} (via ${c}) — ` +
-                `these concepts share structural affinity through ${c} with Φ=${pathPhi.toFixed(2)}`,
+              prediction:
+                `Predicted connection: ${a} → ${b} (via ${c}) — ` +
+                `these concepts share structural affinity through ${c} with Φ=${pathPhi.toFixed(
+                  2,
+                )}`,
               sourceConcepts: [a, c],
               targetConcept: b,
               confidence,

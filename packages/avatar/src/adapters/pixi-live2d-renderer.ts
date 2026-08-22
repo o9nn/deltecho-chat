@@ -103,6 +103,8 @@ const PARAM_IDS = {
   // Eye parameters
   PARAM_EYE_L_OPEN: "ParamEyeLOpen",
   PARAM_EYE_R_OPEN: "ParamEyeROpen",
+  PARAM_EYE_BALL_X: "ParamEyeBallX",
+  PARAM_EYE_BALL_Y: "ParamEyeBallY",
   // Brow parameters
   PARAM_BROW_L_Y: "ParamBrowLY",
   PARAM_BROW_R_Y: "ParamBrowRY",
@@ -114,6 +116,7 @@ const PARAM_IDS = {
   PARAM_ANGLE_X: "ParamAngleX",
   PARAM_ANGLE_Y: "ParamAngleY",
   PARAM_ANGLE_Z: "ParamAngleZ",
+  PARAM_BREATH: "ParamBreath",
 };
 
 /**
@@ -159,6 +162,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   private debug = false;
   private visibilityHandler: (() => void) | null = null;
   private blinkTickerCallback: ((deltaMS: number) => void) | null = null;
+  private frameListeners = new Set<(deltaTime: number) => void>();
 
   /**
    * Stop automatic blink loop and clear any pending timers.
@@ -742,6 +746,16 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   dispose(): void {
     this.stopAutoBlinkLoop();
 
+    const ticker = this.app?.ticker as
+      | { remove?: (listener: (deltaTime: number) => void) => void }
+      | undefined;
+    if (ticker?.remove) {
+      for (const listener of this.frameListeners) {
+        ticker.remove(listener);
+      }
+    }
+    this.frameListeners.clear();
+
     if (typeof document !== "undefined" && this.visibilityHandler) {
       document.removeEventListener("visibilitychange", this.visibilityHandler);
       this.visibilityHandler = null;
@@ -800,8 +814,54 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     try {
       this.model.internalModel.coreModel.setParameterValueById(paramId, value);
     } catch {
-      console.warn("[PixiLive2DRenderer] Parameter not found:", paramId);
+      this.dlog("Parameter not found", { paramId });
     }
+  }
+
+  /**
+   * Register work on the native Pixi frame ticker. Listeners are removed during
+   * disposal and inherit visibility-pause behavior from the renderer.
+   */
+  addFrameListener(listener: (deltaTime: number) => void): void {
+    const ticker = this.app?.ticker as
+      | { add?: (callback: (deltaTime: number) => void) => void }
+      | undefined;
+    if (!ticker?.add || this.frameListeners.has(listener)) return;
+    this.frameListeners.add(listener);
+    ticker.add(listener);
+  }
+
+  removeFrameListener(listener: (deltaTime: number) => void): void {
+    const ticker = this.app?.ticker as
+      | { remove?: (callback: (deltaTime: number) => void) => void }
+      | undefined;
+    ticker?.remove?.(listener);
+    this.frameListeners.delete(listener);
+  }
+
+  /**
+   * Modulate the Pixi ticker speed for cognitive/metabolic pacing.
+   */
+  setAnimationSpeed(multiplier: number): void {
+    const ticker = this.app?.ticker as { speed?: number } | undefined;
+    if (!ticker) return;
+    ticker.speed = Math.max(0.25, Math.min(1.5, multiplier));
+  }
+
+  /**
+   * Dim the model when epistemic energy is depleted. Values above 1 retain
+   * full brightness because the default Pixi tint cannot over-brighten white.
+   */
+  setVisualVitality(multiplier: number): void {
+    if (!this.model) return;
+    const vitality = Math.max(0.5, Math.min(1.2, multiplier));
+    const visual = this.model as Live2DModel & {
+      alpha?: number;
+      tint?: number;
+    };
+    visual.alpha = Math.min(1, vitality);
+    const channel = Math.round(255 * Math.min(1, vitality));
+    visual.tint = (channel << 16) | (channel << 8) | channel;
   }
 
   /**

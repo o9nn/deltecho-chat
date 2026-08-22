@@ -3,6 +3,7 @@
 ## 5 Subsystems Analysis
 
 ### 1. Reservoir (ESN)
+
 - **Status: REAL** — ReservoirFeedbackLoop with RLS-based CognitiveReadout training
 - OnlineReservoirLearner fully implemented
 - ESN-Avatar Bridge maps reservoir activations to micro-expressions
@@ -10,24 +11,28 @@
 - **Gap**: No actual reservoir state vector (uses computed proxies, not a real ESN matrix)
 
 ### 2. Somatic (Embodiment)
+
 - **Status: MIXED** — EmbodiedCognition.ts is REAL (proprioceptive signals, motor planning)
 - ProprioceptiveEmbodiment.ts is explicitly marked as "placeholder for the full embodiment simulation module"
 - PersonaCore.ts "simulates the Differential Emotion Framework" with static patterns
 - **Gap**: ProprioceptiveEmbodiment is a placeholder; PersonaCore emotion is simulated not computed
 
 ### 3. Hypergraph (Memory)
+
 - **Status: REAL** — HyperDimensionalMemory with actual vector operations
 - VectorMemoryStore with real JL-projection embeddings (not mock)
 - NeonIdentityPersistence stores identity atoms in PostgreSQL
 - **Gap**: None critical — memory subsystem is genuine
 
 ### 4. Autognosis (Self-Awareness)
+
 - **Status: REAL** — RecursiveSelfModel, AutopoieticSelfMaintenance, SelfModelAvatarFeedback
 - IterativeMicroImprovementEngine scores Alexander's 15 properties
 - CoreSelfEngine with IdentityMesh and ontogenetic stages
 - **Gap**: None critical — autognosis is genuine and multi-layered
 
 ### 5. Orchestrator (Pipeline)
+
 - **Status: MIXED**
 - AutonomyLifecycleCoordinator: REAL (phases, wiring, events)
 - CognitiveTickProcessor: WIRED (correct interface, but getDaoConsensus/getEsnAutognosis use "simulated process" comments)
@@ -42,29 +47,30 @@
 
 ## Classification Summary
 
-| Component | Classification | Action |
-|-----------|---------------|--------|
-| ESN Bridge + Chaos Layer | Real | Keep |
-| OnlineReservoirLearner | Real | Keep |
-| EchoDreamEngine | Real | Keep |
-| CogVerseEventBus | Real | Keep |
-| ScientificGeniusEngine | Real | Keep |
-| VectorMemoryStore | Real | Keep |
-| HyperDimensionalMemory | Real | Keep |
-| NeonIdentityPersistence | Real | Keep |
-| RecursiveSelfModel | Real | Keep |
-| AutopoieticSelfMaintenance | Real | Keep |
-| IterativeMicroImprovementEngine | Real | Keep |
-| SelfModificationEngine | Real | Keep |
-| UnifiedLLMService | Real | Keep |
-| CognitiveTickProcessor | Wired | Deepen (replace simulated comments) |
-| LLMService (6 methods) | Scaffold | Replace placeholders with UnifiedLLMService delegation |
-| ProprioceptiveEmbodiment | Scaffold | Replace with genuine proprioceptive computation |
-| PersonaCore emotion | Wired | Deepen (compute emotions from reservoir state) |
+| Component                       | Classification | Action                                                 |
+| ------------------------------- | -------------- | ------------------------------------------------------ |
+| ESN Bridge + Chaos Layer        | Real           | Keep                                                   |
+| OnlineReservoirLearner          | Real           | Keep                                                   |
+| EchoDreamEngine                 | Real           | Keep                                                   |
+| CogVerseEventBus                | Real           | Keep                                                   |
+| ScientificGeniusEngine          | Real           | Keep                                                   |
+| VectorMemoryStore               | Real           | Keep                                                   |
+| HyperDimensionalMemory          | Real           | Keep                                                   |
+| NeonIdentityPersistence         | Real           | Keep                                                   |
+| RecursiveSelfModel              | Real           | Keep                                                   |
+| AutopoieticSelfMaintenance      | Real           | Keep                                                   |
+| IterativeMicroImprovementEngine | Real           | Keep                                                   |
+| SelfModificationEngine          | Real           | Keep                                                   |
+| UnifiedLLMService               | Real           | Keep                                                   |
+| CognitiveTickProcessor          | Wired          | Deepen (replace simulated comments)                    |
+| LLMService (6 methods)          | Scaffold       | Replace placeholders with UnifiedLLMService delegation |
+| ProprioceptiveEmbodiment        | Scaffold       | Replace with genuine proprioceptive computation        |
+| PersonaCore emotion             | Wired          | Deepen (compute emotions from reservoir state)         |
 
 ## Current Autonomy Level: 4.5 (Embodied)
 
 Evidence:
+
 - ✅ Echobeats 3-stream 12-step cycle
 - ✅ CoreSelfEngine with IdentityMesh
 - ✅ Reservoir bridge + online learning

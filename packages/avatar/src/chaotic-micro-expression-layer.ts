@@ -16,11 +16,11 @@
  */
 
 export interface EndocrineInput {
-  cortisol: number;       // 0-1: stress level
+  cortisol: number; // 0-1: stress level
   norepinephrine: number; // 0-1: arousal/alertness
   dopaminePhasic: number; // 0-1: reward/surprise burst
-  serotonin: number;      // 0-1: calm/contentment
-  oxytocin: number;       // 0-1: social bonding
+  serotonin: number; // 0-1: calm/contentment
+  oxytocin: number; // 0-1: social bonding
 }
 
 export interface MicroExpressionDeltas {
@@ -62,35 +62,49 @@ const LORENZ_DT = 0.005; // Integration step
 const LORENZ_NORMALIZE = 30; // Approximate max amplitude for normalization
 
 // Playful micro-gesture library (Lucy's chaotic vocabulary)
-const MICRO_GESTURE_LIBRARY: Array<{ name: string; deltas: Partial<MicroExpressionDeltas>; durationFrames: number }> = [
+const MICRO_GESTURE_LIBRARY: Array<{
+  name: string;
+  deltas: Partial<MicroExpressionDeltas>;
+  durationFrames: number;
+}> = [
   {
-    name: 'asymmetric_brow_raise',
+    name: "asymmetric_brow_raise",
     deltas: { paramBrowLY: 0.4, paramBrowRY: -0.1 },
     durationFrames: 5,
   },
   {
-    name: 'corner_smirk',
+    name: "corner_smirk",
     deltas: { paramMouthForm: 0.3, paramAngleZ: 2 },
     durationFrames: 4,
   },
   {
-    name: 'quick_head_tilt',
+    name: "quick_head_tilt",
     deltas: { paramAngleZ: 6, paramAngleY: 3 },
     durationFrames: 6,
   },
   {
-    name: 'knowing_squint',
+    name: "knowing_squint",
     deltas: { paramEyeLOpen: -0.15, paramEyeROpen: -0.15, paramMouthForm: 0.1 },
     durationFrames: 8,
   },
   {
-    name: 'surprise_flash',
-    deltas: { paramEyeLOpen: 0.2, paramEyeROpen: 0.2, paramBrowLY: 0.3, paramBrowRY: 0.3 },
+    name: "surprise_flash",
+    deltas: {
+      paramEyeLOpen: 0.2,
+      paramEyeROpen: 0.2,
+      paramBrowLY: 0.3,
+      paramBrowRY: 0.3,
+    },
     durationFrames: 3,
   },
   {
-    name: 'lip_bite_concentration',
-    deltas: { paramMouthOpenY: 0.08, paramMouthForm: -0.2, paramBrowLY: -0.15, paramBrowRY: -0.15 },
+    name: "lip_bite_concentration",
+    deltas: {
+      paramMouthOpenY: 0.08,
+      paramMouthForm: -0.2,
+      paramBrowLY: -0.15,
+      paramBrowRY: -0.15,
+    },
     durationFrames: 10,
   },
 ];
@@ -112,9 +126,12 @@ export class ChaoticMicroExpressionLayer {
     gestureMinInterval?: number;
     gestureProbabilityBase?: number;
   }) {
-    if (config?.maxAmplitude !== undefined) this.maxAmplitude = config.maxAmplitude;
-    if (config?.gestureMinInterval !== undefined) this.gestureMinInterval = config.gestureMinInterval;
-    if (config?.gestureProbabilityBase !== undefined) this.gestureProbabilityBase = config.gestureProbabilityBase;
+    if (config?.maxAmplitude !== undefined)
+      this.maxAmplitude = config.maxAmplitude;
+    if (config?.gestureMinInterval !== undefined)
+      this.gestureMinInterval = config.gestureMinInterval;
+    if (config?.gestureProbabilityBase !== undefined)
+      this.gestureProbabilityBase = config.gestureProbabilityBase;
   }
 
   /**
@@ -165,7 +182,10 @@ export class ChaoticMicroExpressionLayer {
     return {
       nx: Math.max(-1, Math.min(1, this.lorenz.x / LORENZ_NORMALIZE)),
       ny: Math.max(-1, Math.min(1, this.lorenz.y / LORENZ_NORMALIZE)),
-      nz: Math.max(-1, Math.min(1, (this.lorenz.z - LORENZ_RHO) / LORENZ_NORMALIZE)),
+      nz: Math.max(
+        -1,
+        Math.min(1, (this.lorenz.z - LORENZ_RHO) / LORENZ_NORMALIZE),
+      ),
     };
   }
 
@@ -185,7 +205,8 @@ export class ChaoticMicroExpressionLayer {
     const { nx, ny, nz } = this.normalizedLorenz();
 
     // Amplitude modulated by cortisol, damped by serotonin
-    const amplitude = this.maxAmplitude *
+    const amplitude =
+      this.maxAmplitude *
       (0.3 + 0.7 * endocrine.cortisol) *
       (1.0 - 0.6 * endocrine.serotonin);
 
@@ -215,7 +236,10 @@ export class ChaoticMicroExpressionLayer {
   /**
    * Manage playful micro-gestures — short, stochastic asymmetric expressions.
    */
-  private updatePlayfulGesture(endocrine: EndocrineInput, deltas: MicroExpressionDeltas): void {
+  private updatePlayfulGesture(
+    endocrine: EndocrineInput,
+    deltas: MicroExpressionDeltas,
+  ): void {
     // Decay active gesture
     if (this.activeGesture) {
       this.activeGesture.framesRemaining--;
@@ -223,11 +247,15 @@ export class ChaoticMicroExpressionLayer {
         this.activeGesture = null;
       } else {
         // Apply gesture with fade-in/fade-out envelope
-        const progress = 1 - (this.activeGesture.framesRemaining / this.activeGesture.durationFrames);
+        const progress =
+          1 -
+          this.activeGesture.framesRemaining /
+            this.activeGesture.durationFrames;
         const envelope = Math.sin(progress * Math.PI); // Smooth bell curve
         for (const [key, value] of Object.entries(this.activeGesture.deltas)) {
           if (value !== undefined && key in deltas) {
-            (deltas as unknown as Record<string, number>)[key] += value * envelope;
+            (deltas as unknown as Record<string, number>)[key] +=
+              value * envelope;
           }
         }
       }
@@ -235,16 +263,20 @@ export class ChaoticMicroExpressionLayer {
     }
 
     // Check if enough time has passed since last gesture
-    if (this.frameCount - this.lastGestureFrame < this.gestureMinInterval) return;
+    if (this.frameCount - this.lastGestureFrame < this.gestureMinInterval)
+      return;
 
     // Probability modulated by dopamine phasic (reward/surprise triggers gestures)
-    const probability = this.gestureProbabilityBase * (1 + endocrine.dopaminePhasic * 4);
+    const probability =
+      this.gestureProbabilityBase * (1 + endocrine.dopaminePhasic * 4);
 
     // Use Lorenz state as deterministic pseudo-random source (no Math.random!)
     const trigger = Math.abs(this.lorenz.x * this.lorenz.y) % 1;
     if (trigger < probability) {
       // Select gesture based on Lorenz z-coordinate
-      const idx = Math.abs(Math.floor(this.lorenz.z * 100)) % MICRO_GESTURE_LIBRARY.length;
+      const idx =
+        Math.abs(Math.floor(this.lorenz.z * 100)) %
+        MICRO_GESTURE_LIBRARY.length;
       const template = MICRO_GESTURE_LIBRARY[idx];
       this.activeGesture = {
         ...template,
@@ -258,14 +290,17 @@ export class ChaoticMicroExpressionLayer {
    * Generate the "searching" expression for high uncertainty states.
    * Called when free energy > threshold (the system genuinely doesn't know).
    */
-  public computeUncertaintyExpression(freeEnergy: number, threshold: number = 0.7): Partial<MicroExpressionDeltas> {
+  public computeUncertaintyExpression(
+    freeEnergy: number,
+    threshold: number = 0.7,
+  ): Partial<MicroExpressionDeltas> {
     if (freeEnergy <= threshold) return {};
 
     const intensity = Math.min(1, (freeEnergy - threshold) / (1 - threshold));
     const { nx } = this.normalizedLorenz();
 
     return {
-      paramBrowLY: -0.3 * intensity,  // Furrowed brow
+      paramBrowLY: -0.3 * intensity, // Furrowed brow
       paramBrowRY: -0.25 * intensity, // Slight asymmetry
       paramMouthOpenY: 0.12 * intensity, // Slightly parted lips
       paramEyeBallX: nx * 0.2 * intensity, // Eyes scanning (Lorenz-driven)
@@ -279,7 +314,10 @@ export class ChaoticMicroExpressionLayer {
    * Generate Echobeats-driven breath rate modulation.
    * Phase 1-4: normal, Phase 5-8: accelerated, Phase 9-12: deep/slow.
    */
-  public computeEchobeatsBreathModulation(echobeatsPhase: number, frameInPhase: number): {
+  public computeEchobeatsBreathModulation(
+    echobeatsPhase: number,
+    _frameInPhase: number,
+  ): {
     breathRate: number; // Multiplier on base breath frequency
     breathDepth: number; // Multiplier on base breath amplitude
   } {
@@ -299,15 +337,17 @@ export class ChaoticMicroExpressionLayer {
    * Generate the "meta-awareness" expression for when the system
    * is evaluating its own improvement (iterative-micro-improvement signal).
    */
-  public computeMetaAwarenessExpression(evaluating: boolean): Partial<MicroExpressionDeltas> {
+  public computeMetaAwarenessExpression(
+    evaluating: boolean,
+  ): Partial<MicroExpressionDeltas> {
     if (!evaluating) return {};
     return {
-      paramEyeLOpen: -0.12,  // Slight squint
+      paramEyeLOpen: -0.12, // Slight squint
       paramEyeROpen: -0.12,
-      paramAngleZ: 4,        // Head tilted
-      paramMouthForm: 0.15,  // One corner up (asymmetric — knowing look)
-      paramBrowLY: -0.1,     // Slight furrow
-      paramBrowRY: 0.05,     // Asymmetric — one brow slightly raised
+      paramAngleZ: 4, // Head tilted
+      paramMouthForm: 0.15, // One corner up (asymmetric — knowing look)
+      paramBrowLY: -0.1, // Slight furrow
+      paramBrowRY: 0.05, // Asymmetric — one brow slightly raised
     };
   }
 
@@ -333,12 +373,19 @@ export class ChaoticMicroExpressionLayer {
 
   private zeroDeltas(): MicroExpressionDeltas {
     return {
-      paramBrowLY: 0, paramBrowRY: 0,
-      paramEyeLOpen: 0, paramEyeROpen: 0,
-      paramEyeBallX: 0, paramEyeBallY: 0,
-      paramMouthForm: 0, paramMouthOpenY: 0,
-      paramAngleX: 0, paramAngleY: 0, paramAngleZ: 0,
-      paramBodyAngleX: 0, paramBodyAngleZ: 0,
+      paramBrowLY: 0,
+      paramBrowRY: 0,
+      paramEyeLOpen: 0,
+      paramEyeROpen: 0,
+      paramEyeBallX: 0,
+      paramEyeBallY: 0,
+      paramMouthForm: 0,
+      paramMouthOpenY: 0,
+      paramAngleX: 0,
+      paramAngleY: 0,
+      paramAngleZ: 0,
+      paramBodyAngleX: 0,
+      paramBodyAngleZ: 0,
     };
   }
 

@@ -40,6 +40,8 @@ import {
   entelechyEngine,
   type EntelechyState,
   EmergenceLevel,
+  conceptualMetabolism,
+  causalHypothesisForge,
   // Logger
   getLogger,
 } from "deep-tree-echo-core";
@@ -81,6 +83,15 @@ const DEFAULT_CONFIG: EntelechyIntegrationConfig = {
 /**
  * Full cognitive state snapshot
  */
+export interface ConceptualMetabolismVisualSignal {
+  metabolicPhase: "active" | "integrating" | "consolidating" | "resting";
+  energyLevel: number;
+  anabolicBalance: number;
+  isEnergyCrisis: boolean;
+  myelinationProgress: number;
+  knowledgeDensity: number;
+}
+
 export interface ScientificGeniusVisualSignal {
   /** DTEcho expression-driver mode hint consumed by Live2D avatar packages. */
   mode: "Scientific Genius" | "Synthesis Phase" | "Idle";
@@ -113,6 +124,14 @@ export interface ScientificGeniusVisualSignal {
   esnCoherence: number;
   /** Autognosis resonance derived from ESN health, edge-of-chaos status, and self-awareness. */
   autognosisResonance: number;
+  /** Authoritative conceptual-metabolism state projected into the Live2D body. */
+  metabolic: ConceptualMetabolismVisualSignal;
+  /** Experimental rigor and surprise from the causal falsification layer. */
+  causalRigor: number;
+  falsificationPressure: number;
+  epistemicSurprise: number;
+  daoEvidenceConsensus: number;
+  activeExperimentation: number;
   isProcessing: boolean;
 }
 
@@ -157,7 +176,10 @@ export class EntelechyIntegration extends EventEmitter {
   private cognitiveProcessor?: CognitiveTickProcessor;
   private lastSnapshot: CognitiveSnapshot | null = null;
 
-  constructor(config: Partial<EntelechyIntegrationConfig> = {}, cognitiveProcessor?: CognitiveTickProcessor) {
+  constructor(
+    config: Partial<EntelechyIntegrationConfig> = {},
+    cognitiveProcessor?: CognitiveTickProcessor,
+  ) {
     super();
     this.config = { ...DEFAULT_CONFIG, ...config };
     this.cognitiveProcessor = cognitiveProcessor || config.cognitiveProcessor;
@@ -408,7 +430,6 @@ export class EntelechyIntegration extends EventEmitter {
     if (!this.lastSnapshot || input.length < 8 || gain <= 0) return;
 
     const visual = this.lastSnapshot.scientificGeniusVisual;
-    const autognosis = this.lastSnapshot.autognosis;
     const reservoir = this.lastSnapshot.reservoir;
     const markers = [
       visual.valence,
@@ -538,6 +559,8 @@ export class EntelechyIntegration extends EventEmitter {
       esnCoherence,
       autognosisResonance,
     });
+    const metabolic = conceptualMetabolism.getVisualState();
+    const causal = causalHypothesisForge.getVisualState();
     const scientificGenius = this.clamp01(
       insightPotential * 0.36 +
         entelechyScore * 0.22 +
@@ -573,7 +596,14 @@ export class EntelechyIntegration extends EventEmitter {
       daoConsensus,
       esnCoherence,
       autognosisResonance,
-      isProcessing: scientificGenius >= 0.35,
+      metabolic,
+      causalRigor: causal.causalRigor,
+      falsificationPressure: causal.falsificationPressure,
+      epistemicSurprise: causal.epistemicSurprise,
+      daoEvidenceConsensus: causal.daoEvidenceConsensus,
+      activeExperimentation: causal.activeExperimentation,
+      isProcessing:
+        scientificGenius >= 0.35 || causal.activeExperimentation > 0,
     };
   }
 

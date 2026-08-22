@@ -15,7 +15,6 @@ import {
   type HexCoord,
   type ArenaObject,
   type SpatialRelationship,
-  type Vector2,
   hexDistance,
   hexAngle,
   hexNeighbors,
@@ -48,12 +47,12 @@ export interface GestaltSnapshot {
 export interface ObjectCluster {
   center: HexCoord;
   members: string[]; // object ids
-  cohesion: number;  // how tightly bound
+  cohesion: number; // how tightly bound
   role: "gathering" | "procession" | "constellation" | "pair" | "singleton";
 }
 
 export interface Hierarchy {
-  root: string;       // object id
+  root: string; // object id
   children: string[]; // object ids that "serve" the root
   depth: number;
 }
@@ -61,7 +60,11 @@ export interface Hierarchy {
 export interface RelationalMap {
   clusters: ObjectCluster[];
   hierarchies: Hierarchy[];
-  tensions: { a: string; b: string; type: "opposition" | "competition" | "conflict" }[];
+  tensions: {
+    a: string;
+    b: string;
+    type: "opposition" | "competition" | "conflict";
+  }[];
   harmonies: { a: string; b: string; type: "resonance" | "support" | "echo" }[];
 }
 
@@ -70,30 +73,30 @@ export interface RelationalMap {
 // ═══════════════════════════════════════════════════════════════
 
 export type PlaceType =
-  | "study"       // contemplation, single focal point
-  | "gathering"   // social, multiple equal objects
-  | "workshop"    // creation, high reactivity
-  | "sanctuary"   // protection, low reactivity, high coherence
+  | "study" // contemplation, single focal point
+  | "gathering" // social, multiple equal objects
+  | "workshop" // creation, high reactivity
+  | "sanctuary" // protection, low reactivity, high coherence
   | "marketplace" // exchange, high diversity
-  | "threshold"   // transition, boundary zone
-  | "void"        // empty, waiting to be filled
+  | "threshold" // transition, boundary zone
+  | "void" // empty, waiting to be filled
   | "unknown";
 
 export type AgentRole =
-  | "observer"    // watch and learn
+  | "observer" // watch and learn
   | "participant" // join the activity
-  | "creator"     // make something new
-  | "guardian"    // protect what's here
-  | "seeker"      // looking for something
-  | "teacher"     // share knowledge
-  | "guest";      // passing through
+  | "creator" // make something new
+  | "guardian" // protect what's here
+  | "seeker" // looking for something
+  | "teacher" // share knowledge
+  | "guest"; // passing through
 
 export interface SemanticInference {
   placeType: PlaceType;
   importantThing: string | null; // object id of the most important thing
   agentRole: AgentRole;
-  appropriateBehavior: string;   // natural language suggestion
-  confidence: number;            // 0-1
+  appropriateBehavior: string; // natural language suggestion
+  confidence: number; // 0-1
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -104,7 +107,7 @@ export interface ObjectInspection {
   object: ArenaObject;
   relationships: SpatialRelationship[];
   gestaltContribution: number; // how much this object contributes to overall coherence
-  affordances: string[];       // what can the agent do with this object
+  affordances: string[]; // what can the agent do with this object
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -142,16 +145,20 @@ export class GestaltPerception {
     const objects = this.grid.getAllObjects();
 
     // Dominant color (average HSL)
-    const avgH = objects.reduce((s, o) => s + o.color[0], 0) / Math.max(objects.length, 1);
-    const avgS = objects.reduce((s, o) => s + o.color[1], 0) / Math.max(objects.length, 1);
-    const avgL = objects.reduce((s, o) => s + o.color[2], 0) / Math.max(objects.length, 1);
+    const avgH =
+      objects.reduce((s, o) => s + o.color[0], 0) / Math.max(objects.length, 1);
+    const avgS =
+      objects.reduce((s, o) => s + o.color[1], 0) / Math.max(objects.length, 1);
+    const avgL =
+      objects.reduce((s, o) => s + o.color[2], 0) / Math.max(objects.length, 1);
 
     // Energy level (from reactivity, vibration, forces)
-    const energy = objects.reduce((s, o) => {
-      const vibrating = o.metadata.vibrating ? 0.3 : 0;
-      const forces = o.force_vectors.length * 0.1;
-      return s + o.material.reactivity * 0.4 + vibrating + forces;
-    }, 0) / Math.max(objects.length, 1);
+    const energy =
+      objects.reduce((s, o) => {
+        const vibrating = o.metadata.vibrating ? 0.3 : 0;
+        const forces = o.force_vectors.length * 0.1;
+        return s + o.material.reactivity * 0.4 + vibrating + forces;
+      }, 0) / Math.max(objects.length, 1);
 
     return {
       timestamp: Date.now(),
@@ -180,7 +187,10 @@ export class GestaltPerception {
   }
 
   /** Stage 3: Semantic Inference — what is this place, what should I do */
-  inferSemantics(gestalt: GestaltSnapshot, relations: RelationalMap): SemanticInference {
+  inferSemantics(
+    gestalt: GestaltSnapshot,
+    relations: RelationalMap,
+  ): SemanticInference {
     const objects = this.grid.getAllObjects();
 
     // Determine place type
@@ -193,12 +203,25 @@ export class GestaltPerception {
     const agentRole = this.inferAgentRole(placeType, gestalt);
 
     // Suggest appropriate behavior
-    const appropriateBehavior = this.suggestBehavior(placeType, agentRole, gestalt);
+    const appropriateBehavior = this.suggestBehavior(
+      placeType,
+      agentRole,
+      gestalt,
+    );
 
     // Confidence based on coherence and object count
-    const confidence = Math.min(1, gestalt.coherence * 0.6 + (objects.length > 2 ? 0.4 : 0.2));
+    const confidence = Math.min(
+      1,
+      gestalt.coherence * 0.6 + (objects.length > 2 ? 0.4 : 0.2),
+    );
 
-    return { placeType, importantThing, agentRole, appropriateBehavior, confidence };
+    return {
+      placeType,
+      importantThing,
+      agentRole,
+      appropriateBehavior,
+      confidence,
+    };
   }
 
   /** Stage 4: Detailed Inspection — examine a specific object */
@@ -248,9 +271,13 @@ export class GestaltPerception {
       }
 
       // Compute cluster center
-      const members = cluster.map(id => objects.find(o => o.id === id)!);
-      const centerQ = Math.round(members.reduce((s, m) => s + m.position.q, 0) / members.length);
-      const centerR = Math.round(members.reduce((s, m) => s + m.position.r, 0) / members.length);
+      const members = cluster.map((id) => objects.find((o) => o.id === id)!);
+      const centerQ = Math.round(
+        members.reduce((s, m) => s + m.position.q, 0) / members.length,
+      );
+      const centerR = Math.round(
+        members.reduce((s, m) => s + m.position.r, 0) / members.length,
+      );
 
       // Cohesion = inverse of average internal distance
       let totalDist = 0;
@@ -272,7 +299,12 @@ export class GestaltPerception {
       else if (cohesion > 0.7) role = "gathering";
       else role = "procession";
 
-      clusters.push({ center: { q: centerQ, r: centerR }, members: cluster, cohesion, role });
+      clusters.push({
+        center: { q: centerQ, r: centerR },
+        members: cluster,
+        cohesion,
+        role,
+      });
     }
 
     return clusters;
@@ -282,14 +314,20 @@ export class GestaltPerception {
     const hierarchies: Hierarchy[] = [];
 
     // Objects with high centrality/radiance are potential roots
-    const anchors = objects.filter(o => o.aesthetic.semanticWeight === "anchor" || o.aesthetic.centrality > 0.7);
+    const anchors = objects.filter(
+      (o) =>
+        o.aesthetic.semanticWeight === "anchor" || o.aesthetic.centrality > 0.7,
+    );
 
     for (const anchor of anchors) {
-      const children = objects.filter(o =>
-        o.id !== anchor.id &&
-        hexDistance(o.position, anchor.position) <= 3 &&
-        o.aesthetic.centrality < anchor.aesthetic.centrality
-      ).map(o => o.id);
+      const children = objects
+        .filter(
+          (o) =>
+            o.id !== anchor.id &&
+            hexDistance(o.position, anchor.position) <= 3 &&
+            o.aesthetic.centrality < anchor.aesthetic.centrality,
+        )
+        .map((o) => o.id);
 
       if (children.length > 0) {
         hierarchies.push({ root: anchor.id, children, depth: 1 });
@@ -299,7 +337,10 @@ export class GestaltPerception {
     return hierarchies;
   }
 
-  private findTensions(objects: ArenaObject[], relationships: SpatialRelationship[]): RelationalMap["tensions"] {
+  private findTensions(
+    objects: ArenaObject[],
+    relationships: SpatialRelationship[],
+  ): RelationalMap["tensions"] {
     const tensions: RelationalMap["tensions"] = [];
 
     // Objects with opposing forces
@@ -311,16 +352,19 @@ export class GestaltPerception {
         // Opposition: facing away from each other at close range
         if (hexDistance(a.position, b.position) <= 2) {
           const angleAtoB = hexAngle(a.position, b.position);
-          const facingAway = Math.abs(angleDiff(a.orientation, angleAtoB)) > 120;
+          const facingAway =
+            Math.abs(angleDiff(a.orientation, angleAtoB)) > 120;
           if (facingAway) {
             tensions.push({ a: a.id, b: b.id, type: "opposition" });
           }
         }
 
         // Conflict: same semantic weight competing for centrality
-        if (a.aesthetic.semanticWeight === b.aesthetic.semanticWeight &&
-            a.aesthetic.semanticWeight === "anchor" &&
-            hexDistance(a.position, b.position) <= 3) {
+        if (
+          a.aesthetic.semanticWeight === b.aesthetic.semanticWeight &&
+          a.aesthetic.semanticWeight === "anchor" &&
+          hexDistance(a.position, b.position) <= 3
+        ) {
           tensions.push({ a: a.id, b: b.id, type: "competition" });
         }
       }
@@ -336,7 +380,10 @@ export class GestaltPerception {
     return tensions;
   }
 
-  private findHarmonies(objects: ArenaObject[], relationships: SpatialRelationship[]): RelationalMap["harmonies"] {
+  private findHarmonies(
+    objects: ArenaObject[],
+    relationships: SpatialRelationship[],
+  ): RelationalMap["harmonies"] {
     const harmonies: RelationalMap["harmonies"] = [];
 
     for (let i = 0; i < objects.length; i++) {
@@ -368,28 +415,38 @@ export class GestaltPerception {
     return harmonies;
   }
 
-  private inferPlaceType(gestalt: GestaltSnapshot, relations: RelationalMap, objects: ArenaObject[]): PlaceType {
+  private inferPlaceType(
+    gestalt: GestaltSnapshot,
+    relations: RelationalMap,
+    objects: ArenaObject[],
+  ): PlaceType {
     if (objects.length === 0) return "void";
 
     // High coherence + single focal point = study
-    if (gestalt.focalStrength > 0.7 && relations.hierarchies.length > 0) return "study";
+    if (gestalt.focalStrength > 0.7 && relations.hierarchies.length > 0)
+      return "study";
 
     // Multiple equal objects in a gathering cluster = gathering
-    const gatheringCluster = relations.clusters.find(c => c.role === "gathering");
-    if (gatheringCluster && gatheringCluster.members.length >= 4) return "gathering";
+    const gatheringCluster = relations.clusters.find(
+      (c) => c.role === "gathering",
+    );
+    if (gatheringCluster && gatheringCluster.members.length >= 4)
+      return "gathering";
 
     // High energy/reactivity = workshop
     if (gestalt.energyLevel > 0.6) return "workshop";
 
     // High coherence + low energy = sanctuary
-    if (gestalt.coherence > 0.6 && gestalt.energyLevel < 0.3) return "sanctuary";
+    if (gestalt.coherence > 0.6 && gestalt.energyLevel < 0.3)
+      return "sanctuary";
 
     // High diversity of materials/colors = marketplace
-    const phases = new Set(objects.map(o => o.material.phase));
+    const phases = new Set(objects.map((o) => o.material.phase));
     if (phases.size >= 3 && objects.length >= 5) return "marketplace";
 
     // Tensions present = threshold
-    if (relations.tensions.length > relations.harmonies.length) return "threshold";
+    if (relations.tensions.length > relations.harmonies.length)
+      return "threshold";
 
     return "unknown";
   }
@@ -402,9 +459,10 @@ export class GestaltPerception {
     let bestScore = -1;
 
     for (const obj of objects) {
-      const score = obj.aesthetic.centrality * 0.4 +
-                    obj.aesthetic.radiance * 0.35 +
-                    obj.aesthetic.scaleRelative * 0.25;
+      const score =
+        obj.aesthetic.centrality * 0.4 +
+        obj.aesthetic.radiance * 0.35 +
+        obj.aesthetic.scaleRelative * 0.25;
       if (score > bestScore) {
         bestScore = score;
         best = obj;
@@ -414,27 +472,47 @@ export class GestaltPerception {
     return best?.id ?? null;
   }
 
-  private inferAgentRole(placeType: PlaceType, gestalt: GestaltSnapshot): AgentRole {
+  private inferAgentRole(
+    placeType: PlaceType,
+    _gestalt: GestaltSnapshot,
+  ): AgentRole {
     switch (placeType) {
-      case "study": return "observer";
-      case "gathering": return "participant";
-      case "workshop": return "creator";
-      case "sanctuary": return "guardian";
-      case "marketplace": return "seeker";
-      case "threshold": return "guest";
-      case "void": return "creator";
-      default: return "observer";
+      case "study":
+        return "observer";
+      case "gathering":
+        return "participant";
+      case "workshop":
+        return "creator";
+      case "sanctuary":
+        return "guardian";
+      case "marketplace":
+        return "seeker";
+      case "threshold":
+        return "guest";
+      case "void":
+        return "creator";
+      default:
+        return "observer";
     }
   }
 
-  private suggestBehavior(placeType: PlaceType, role: AgentRole, gestalt: GestaltSnapshot): string {
+  private suggestBehavior(
+    placeType: PlaceType,
+    _role: AgentRole,
+    _gestalt: GestaltSnapshot,
+  ): string {
     const behaviors: Record<PlaceType, string> = {
-      study: "Approach the focal point quietly. Observe before acting. The arrangement tells you what matters.",
-      gathering: "Join the circle. Face inward. Contribute your perspective alongside others.",
-      workshop: "Engage actively. Create, transform, experiment. The space invites making.",
+      study:
+        "Approach the focal point quietly. Observe before acting. The arrangement tells you what matters.",
+      gathering:
+        "Join the circle. Face inward. Contribute your perspective alongside others.",
+      workshop:
+        "Engage actively. Create, transform, experiment. The space invites making.",
       sanctuary: "Move slowly. Respect the stillness. Protect what is here.",
-      marketplace: "Browse with curiosity. Compare, evaluate, exchange. Diversity is the resource.",
-      threshold: "Pause at the boundary. Acknowledge the transition. Choose your direction consciously.",
+      marketplace:
+        "Browse with curiosity. Compare, evaluate, exchange. Diversity is the resource.",
+      threshold:
+        "Pause at the boundary. Acknowledge the transition. Choose your direction consciously.",
       void: "This space awaits your intention. What you place here will define it.",
       unknown: "Observe carefully. The space has not yet revealed its nature.",
     };
@@ -446,12 +524,16 @@ export class GestaltPerception {
 
     if (obj.material.flexibility > 0.5) affordances.push("bend", "reshape");
     if (obj.material.porosity > 0.5) affordances.push("flow_through", "absorb");
-    if (obj.material.reactivity > 0.5) affordances.push("catalyze", "transform");
-    if (obj.material.replaceability > 0.7) affordances.push("discard", "replace");
+    if (obj.material.reactivity > 0.5)
+      affordances.push("catalyze", "transform");
+    if (obj.material.replaceability > 0.7)
+      affordances.push("discard", "replace");
     if (obj.simplex.volume > 0.5) affordances.push("enter", "contain");
     if (obj.simplex.edge > 0.5) affordances.push("traverse", "follow");
-    if (obj.aesthetic.radiance > 0.7) affordances.push("contemplate", "be_drawn_to");
-    if (obj.contains && obj.contains.length > 0) affordances.push("open", "examine_contents");
+    if (obj.aesthetic.radiance > 0.7)
+      affordances.push("contemplate", "be_drawn_to");
+    if (obj.contains && obj.contains.length > 0)
+      affordances.push("open", "examine_contents");
     if (obj.metadata.vibrating) affordances.push("resonate_with", "dampen");
     if (obj.force_vectors.length > 0) affordances.push("resist", "ride");
 
@@ -463,13 +545,17 @@ export class GestaltPerception {
 // Aesthetic Navigation — navigate with meaning, not just cost
 // ═══════════════════════════════════════════════════════════════
 
-export type NavigationStyle = "respectful" | "purposeful" | "contemplative" | "urgent";
+export type NavigationStyle =
+  | "respectful"
+  | "purposeful"
+  | "contemplative"
+  | "urgent";
 
 export interface NavigationPath {
   waypoints: HexCoord[];
   style: NavigationStyle;
-  totalCoherence: number;  // sum of aesthetic field along path
-  meaning: string;         // why this path was chosen
+  totalCoherence: number; // sum of aesthetic field along path
+  meaning: string; // why this path was chosen
 }
 
 export class AestheticNavigation {
@@ -479,19 +565,27 @@ export class AestheticNavigation {
   ) {}
 
   /** Find a path that respects the space's intention */
-  pathTo(from: HexCoord, to: HexCoord, style: NavigationStyle = "respectful"): NavigationPath {
+  pathTo(
+    from: HexCoord,
+    to: HexCoord,
+    style: NavigationStyle = "respectful",
+  ): NavigationPath {
     switch (style) {
-      case "respectful": return this.respectfulPath(from, to);
-      case "purposeful": return this.purposefulPath(from, to);
-      case "contemplative": return this.contemplativePath(from, to);
-      case "urgent": return this.urgentPath(from, to);
+      case "respectful":
+        return this.respectfulPath(from, to);
+      case "purposeful":
+        return this.purposefulPath(from, to);
+      case "contemplative":
+        return this.contemplativePath(from, to);
+      case "urgent":
+        return this.urgentPath(from, to);
     }
   }
 
   /** Respectful: avoid crossing focal points, follow natural flow lines */
   private respectfulPath(from: HexCoord, to: HexCoord): NavigationPath {
     const foci = this.field.focalPoints();
-    const focalSet = new Set(foci.map(f => hexKey(f.coord)));
+    const focalSet = new Set(foci.map((f) => hexKey(f.coord)));
 
     // A* with penalty for crossing focal points and bonus for high-coherence cells
     const path = this.astar(from, to, (coord) => {
@@ -505,7 +599,8 @@ export class AestheticNavigation {
       waypoints: path,
       style: "respectful",
       totalCoherence: path.reduce((s, c) => s + this.field.coherenceAt(c), 0),
-      meaning: "Following the natural flow of the space, avoiding sacred centers",
+      meaning:
+        "Following the natural flow of the space, avoiding sacred centers",
     };
   }
 
@@ -521,7 +616,8 @@ export class AestheticNavigation {
       waypoints: path,
       style: "purposeful",
       totalCoherence: path.reduce((s, c) => s + this.field.coherenceAt(c), 0),
-      meaning: "Moving with intention toward the destination, drawn by coherence",
+      meaning:
+        "Moving with intention toward the destination, drawn by coherence",
     };
   }
 
@@ -538,8 +634,16 @@ export class AestheticNavigation {
 
     // Approach to orbit distance
     const approachTarget: HexCoord = {
-      q: mainFocus.q + Math.round(Math.cos(hexAngle(mainFocus, from) * Math.PI / 180) * orbitRadius),
-      r: mainFocus.r + Math.round(Math.sin(hexAngle(mainFocus, from) * Math.PI / 180) * orbitRadius),
+      q:
+        mainFocus.q +
+        Math.round(
+          Math.cos((hexAngle(mainFocus, from) * Math.PI) / 180) * orbitRadius,
+        ),
+      r:
+        mainFocus.r +
+        Math.round(
+          Math.sin((hexAngle(mainFocus, from) * Math.PI) / 180) * orbitRadius,
+        ),
     };
     waypoints.push(approachTarget);
 
@@ -549,7 +653,7 @@ export class AestheticNavigation {
     const endAngle = hexAngle(mainFocus, to);
     for (let i = 1; i <= steps; i++) {
       const angle = startAngle + (endAngle - startAngle) * (i / (steps + 1));
-      const rad = angle * Math.PI / 180;
+      const rad = (angle * Math.PI) / 180;
       waypoints.push({
         q: mainFocus.q + Math.round(Math.cos(rad) * orbitRadius),
         r: mainFocus.r + Math.round(Math.sin(rad) * orbitRadius),
@@ -561,8 +665,12 @@ export class AestheticNavigation {
     return {
       waypoints,
       style: "contemplative",
-      totalCoherence: waypoints.reduce((s, c) => s + this.field.coherenceAt(c), 0),
-      meaning: "Orbiting the center at golden-ratio distance, contemplating from multiple angles",
+      totalCoherence: waypoints.reduce(
+        (s, c) => s + this.field.coherenceAt(c),
+        0,
+      ),
+      meaning:
+        "Orbiting the center at golden-ratio distance, contemplating from multiple angles",
     };
   }
 
@@ -578,12 +686,24 @@ export class AestheticNavigation {
   }
 
   /** Simple A* pathfinding with configurable cost function */
-  private astar(from: HexCoord, to: HexCoord, cost: (coord: HexCoord) => number): HexCoord[] {
-    const openSet = new Map<string, { coord: HexCoord; g: number; f: number; parent: string | null }>();
+  private astar(
+    from: HexCoord,
+    to: HexCoord,
+    cost: (coord: HexCoord) => number,
+  ): HexCoord[] {
+    const openSet = new Map<
+      string,
+      { coord: HexCoord; g: number; f: number; parent: string | null }
+    >();
     const closedSet = new Set<string>();
 
     const startKey = hexKey(from);
-    openSet.set(startKey, { coord: from, g: 0, f: hexDistance(from, to), parent: null });
+    openSet.set(startKey, {
+      coord: from,
+      g: 0,
+      f: hexDistance(from, to),
+      parent: null,
+    });
 
     const maxIterations = 500;
     let iterations = 0;
@@ -628,7 +748,7 @@ export class AestheticNavigation {
   }
 
   private reconstructPath(
-    closedSet: Set<string>,
+    _closedSet: Set<string>,
     end: { coord: HexCoord; parent: string | null },
     start: HexCoord,
   ): HexCoord[] {
@@ -641,7 +761,7 @@ export class AestheticNavigation {
 // --- Utility ---
 
 function angleDiff(a: number, b: number): number {
-  let diff = ((b - a) % 360 + 360) % 360;
+  let diff = (((b - a) % 360) + 360) % 360;
   if (diff > 180) diff -= 360;
   return diff;
 }

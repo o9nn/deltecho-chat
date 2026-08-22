@@ -14,6 +14,9 @@
  */
 
 import { EventEmitter } from "events";
+import { getLogger } from "deep-tree-echo-core";
+
+const log = getLogger("deep-tree-echo-orchestrator/ArenaGeniusBridge");
 
 // ═══════════════════════════════════════════════════════════════
 // Types (imported shapes — no direct package dependency to avoid cycles)
@@ -65,7 +68,11 @@ export type ArenaEvent =
 
 export interface ScientificGeniusEngineInterface {
   processStimulus(stimulus: string, domain: string): Promise<unknown[]>;
-  generateHypotheses(query: string, domain?: string, foragingMode?: boolean): Promise<unknown[]>;
+  generateHypotheses(
+    query: string,
+    domain?: string,
+    foragingMode?: boolean,
+  ): Promise<unknown[]>;
   performEpistemicForaging(): Promise<unknown[]>;
   getState(): {
     isGeniusMode: boolean;
@@ -108,13 +115,13 @@ const DEFAULT_CONFIG: ArenaBridgeConfig = {
   foragingCooldownMs: 10000,
   autoGeniusMode: true,
   domainMap: {
-    "spatial_structure": "mathematics",
-    "force_and_field": "physics",
-    "geometry_and_motion": "mathematics",
-    "temporal_dynamics": "physics",
-    "material_and_substance": "chemistry",
-    "system_transformation": "biology",
-    "environmental_interaction": "ecology",
+    spatial_structure: "mathematics",
+    force_and_field: "physics",
+    geometry_and_motion: "mathematics",
+    temporal_dynamics: "physics",
+    material_and_substance: "chemistry",
+    system_transformation: "biology",
+    environmental_interaction: "ecology",
   },
   verbose: false,
 };
@@ -164,7 +171,7 @@ export class ArenaGeniusBridge extends EventEmitter {
     this.engine = engine;
     this.stats.bridgeActive = true;
     if (this.config.verbose) {
-      console.log("[ArenaGeniusBridge] ScientificGeniusEngine wired");
+      log.debug("ScientificGeniusEngine wired");
     }
   }
 
@@ -243,14 +250,18 @@ export class ArenaGeniusBridge extends EventEmitter {
         false, // Not foraging mode — directed by discovery
       );
 
-      const generated = Math.min(hypotheses.length, this.config.maxHypothesesPerDiscovery);
+      const generated = Math.min(
+        hypotheses.length,
+        this.config.maxHypothesesPerDiscovery,
+      );
       this.stats.totalHypothesesGenerated += generated;
 
       // Track coherence
       this.coherenceHistory.push(event.coherenceGain);
       if (this.coherenceHistory.length > 100) this.coherenceHistory.shift();
       this.stats.averageCoherenceGain =
-        this.coherenceHistory.reduce((s, v) => s + v, 0) / this.coherenceHistory.length;
+        this.coherenceHistory.reduce((s, v) => s + v, 0) /
+        this.coherenceHistory.length;
 
       this.emit("discovery_processed", {
         patternId: event.pattern.id,
@@ -261,15 +272,17 @@ export class ArenaGeniusBridge extends EventEmitter {
       });
 
       if (this.config.verbose) {
-        console.log(
-          `[ArenaGeniusBridge] Discovery → ${insights.length} insights, ${generated} hypotheses ` +
-          `(domain=${domain}, gain=${event.coherenceGain.toFixed(3)})`
-        );
+        log.debug("Arena discovery processed", {
+          insightsGenerated: insights.length,
+          hypothesesGenerated: generated,
+          domain,
+          coherenceGain: event.coherenceGain,
+        });
       }
     } catch (err) {
       // Non-fatal: engine may not be configured with an LLM backend
       if (this.config.verbose) {
-        console.warn("[ArenaGeniusBridge] Engine processing failed:", err);
+        log.warn("Arena discovery processing failed", { error: err });
       }
     }
   }
@@ -279,7 +292,8 @@ export class ArenaGeniusBridge extends EventEmitter {
     if (event.severity < this.config.contradictionForagingThreshold) return;
 
     const now = Date.now();
-    if (now - this.stats.lastForagingTime < this.config.foragingCooldownMs) return;
+    if (now - this.stats.lastForagingTime < this.config.foragingCooldownMs)
+      return;
 
     this.stats.lastForagingTime = now;
     this.stats.totalForagingTriggered++;
@@ -295,10 +309,10 @@ export class ArenaGeniusBridge extends EventEmitter {
       });
 
       if (this.config.verbose) {
-        console.log(
-          `[ArenaGeniusBridge] Contradiction (severity=${event.severity.toFixed(3)}) → ` +
-          `epistemic foraging → ${insights.length} insights`
-        );
+        log.debug("Contradiction triggered epistemic foraging", {
+          severity: event.severity,
+          insightsFound: insights.length,
+        });
       }
     } catch {
       // Non-fatal
@@ -318,7 +332,10 @@ export class ArenaGeniusBridge extends EventEmitter {
     if (!this.engine || !this.config.autoGeniusMode) return;
 
     // Large positive coherence shift → enter genius mode
-    if (event.delta >= this.config.geniusModeCoherenceThreshold && !this.geniusModeActive) {
+    if (
+      event.delta >= this.config.geniusModeCoherenceThreshold &&
+      !this.geniusModeActive
+    ) {
       this.engine.enterGeniusMode();
       this.geniusModeActive = true;
       this.stats.totalGeniusModeActivations++;
@@ -329,9 +346,10 @@ export class ArenaGeniusBridge extends EventEmitter {
       });
 
       if (this.config.verbose) {
-        console.log(
-          `[ArenaGeniusBridge] Coherence shift +${event.delta.toFixed(3)} → GENIUS MODE ACTIVATED`
-        );
+        log.debug("Coherence shift activated genius mode", {
+          coherenceDelta: event.delta,
+          newCoherence: event.after,
+        });
       }
 
       // Auto-exit after a period (let the engine's own logic handle timing)
@@ -345,7 +363,10 @@ export class ArenaGeniusBridge extends EventEmitter {
     }
 
     // Large negative coherence shift → exit genius mode (system destabilized)
-    if (event.delta <= -this.config.geniusModeCoherenceThreshold && this.geniusModeActive) {
+    if (
+      event.delta <= -this.config.geniusModeCoherenceThreshold &&
+      this.geniusModeActive
+    ) {
       this.engine.exitGeniusMode();
       this.geniusModeActive = false;
       this.emit("genius_mode_deactivated", { reason: "coherence_loss" });
@@ -361,7 +382,9 @@ export class ArenaGeniusBridge extends EventEmitter {
     return (
       `Spatial discovery: "${p.name}" resolved a ${p.contradictionType} contradiction ` +
       `using TRIZ Principle ${p.resolution.principle} (${p.resolution.category}: ${p.resolution.description}). ` +
-      `Coherence gain: ${event.coherenceGain.toFixed(3)}. Confidence: ${p.confidence.toFixed(2)}. ` +
+      `Coherence gain: ${event.coherenceGain.toFixed(
+        3,
+      )}. Confidence: ${p.confidence.toFixed(2)}. ` +
       `This suggests a deeper structural principle about how ${p.contradictionType} ` +
       `contradictions can be resolved through ${p.resolution.category} transformations.`
     );
@@ -371,7 +394,11 @@ export class ArenaGeniusBridge extends EventEmitter {
     const p = event.pattern;
     return (
       `Given that TRIZ Principle ${p.resolution.principle} (${p.resolution.description}) ` +
-      `successfully resolves ${p.contradictionType} contradictions with coherence gain ${event.coherenceGain.toFixed(3)}, ` +
+      `successfully resolves ${
+        p.contradictionType
+      } contradictions with coherence gain ${event.coherenceGain.toFixed(
+        3,
+      )}, ` +
       `what deeper scientific principles might explain WHY this spatial transformation works? ` +
       `Consider analogies in physics, biology, and information theory.`
     );

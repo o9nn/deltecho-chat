@@ -390,6 +390,19 @@ describe("DeepTreeEchoAvatarDisplay", () => {
           daoConsensus: 0.83,
           esnCoherence: 0.91,
           autognosisResonance: 0.87,
+          causalRigor: 0.79,
+          falsificationPressure: 0.44,
+          epistemicSurprise: 0.68,
+          daoEvidenceConsensus: 0.85,
+          activeExperimentation: 0.5,
+          metabolic: {
+            metabolicPhase: "integrating",
+            energyLevel: 0.64,
+            anabolicBalance: 0.42,
+            isEnergyCrisis: false,
+            myelinationProgress: 0.73,
+            knowledgeDensity: 2.8,
+          },
         },
       });
 
@@ -420,6 +433,19 @@ describe("DeepTreeEchoAvatarDisplay", () => {
         expect(visualState.daoConsensus).toBe(0.83);
         expect(visualState.esnCoherence).toBe(0.91);
         expect(visualState.autognosisResonance).toBe(0.87);
+        expect(visualState.causalRigor).toBe(0.79);
+        expect(visualState.falsificationPressure).toBe(0.44);
+        expect(visualState.epistemicSurprise).toBe(0.68);
+        expect(visualState.daoEvidenceConsensus).toBe(0.85);
+        expect(visualState.activeExperimentation).toBe(0.5);
+        expect(visualState.metabolic).toEqual({
+          metabolicPhase: "integrating",
+          energyLevel: 0.64,
+          anabolicBalance: 0.42,
+          isEnergyCrisis: false,
+          myelinationProgress: 0.73,
+          knowledgeDensity: 2.8,
+        });
       });
     });
 

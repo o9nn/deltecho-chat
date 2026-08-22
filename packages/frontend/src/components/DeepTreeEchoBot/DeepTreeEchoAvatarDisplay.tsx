@@ -53,6 +53,36 @@ function getCognitiveStateSignature(
     roundAvatarSignal(
       cognitiveState.scientificGeniusVisualState?.autognosisResonance,
     ),
+    roundAvatarSignal(cognitiveState.scientificGeniusVisualState?.causalRigor),
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.falsificationPressure,
+    ),
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.epistemicSurprise,
+    ),
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.daoEvidenceConsensus,
+    ),
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.activeExperimentation,
+    ),
+    cognitiveState.scientificGeniusVisualState?.metabolic?.metabolicPhase ??
+      "no-metabolic-phase",
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.metabolic?.energyLevel,
+    ),
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.metabolic?.anabolicBalance,
+    ),
+    cognitiveState.scientificGeniusVisualState?.metabolic?.isEnergyCrisis ??
+      false,
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.metabolic
+        ?.myelinationProgress,
+    ),
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.metabolic?.knowledgeDensity,
+    ),
     cognitiveState.scientificGeniusVisualState?.mode ?? "no-genius-mode",
     persona?.currentMood ?? "unknown-mood",
     roundAvatarSignal(reasoning?.confidenceLevel),
@@ -302,6 +332,14 @@ function mapCognitiveStateToVisualState(
       geniusSignal?.selfAwareness ??
       consciousness?.selfAwareness ??
       Math.max(0.35, salience * 0.7),
+    causalRigor: geniusSignal?.causalRigor ?? 0,
+    falsificationPressure:
+      geniusSignal?.falsificationPressure ?? geniusSignal?.freeEnergy ?? 0,
+    epistemicSurprise: geniusSignal?.epistemicSurprise ?? 0,
+    daoEvidenceConsensus:
+      geniusSignal?.daoEvidenceConsensus ?? geniusSignal?.daoConsensus ?? 0,
+    activeExperimentation: geniusSignal?.activeExperimentation ?? 0,
+    metabolic: geniusSignal?.metabolic,
     isProcessing:
       processingState === BotProcessingState.THINKING ||
       processingState === BotProcessingState.RESPONDING,

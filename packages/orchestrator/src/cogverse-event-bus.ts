@@ -101,7 +101,9 @@ export class CogVerseEventBus extends EventEmitter {
   constructor(config: Partial<CogVerseConfig> = {}) {
     super();
     this.config = { ...DEFAULT_CONFIG, ...config };
-    log.info("CogVerse Event Bus initialized", { resident: this.config.residentName });
+    log.info("CogVerse Event Bus initialized", {
+      resident: this.config.residentName,
+    });
   }
 
   // ─── Connection Management ───────────────────────────────────
@@ -112,21 +114,26 @@ export class CogVerseEventBus extends EventEmitter {
       const healthCheck = await this.fetchWithTimeout(
         `${this.config.cogCityUrl}/bridge/topology`,
         { method: "GET" },
-        5000
+        5000,
       );
 
       if (healthCheck.ok) {
         this.connected = true;
         this.startHeartbeat();
         this.flushQueue();
-        log.info("Connected to CogVerse event bus", { url: this.config.cogCityUrl });
+        log.info("Connected to CogVerse event bus", {
+          url: this.config.cogCityUrl,
+        });
         this.emit("connected");
         return true;
       }
     } catch (err) {
-      log.warn("Failed to connect to CogVerse event bus (operating in offline mode)", {
-        error: err instanceof Error ? err.message : String(err),
-      });
+      log.warn(
+        "Failed to connect to CogVerse event bus (operating in offline mode)",
+        {
+          error: err instanceof Error ? err.message : String(err),
+        },
+      );
     }
 
     // Operate in offline mode — queue events for later delivery
@@ -150,7 +157,7 @@ export class CogVerseEventBus extends EventEmitter {
   async publish(
     type: VillageEventType,
     payload: Record<string, unknown>,
-    priority: VillageEvent["priority"] = "normal"
+    priority: VillageEvent["priority"] = "normal",
   ): Promise<boolean> {
     const event: VillageEvent = {
       id: `dte_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
@@ -181,7 +188,7 @@ export class CogVerseEventBus extends EventEmitter {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(event),
           },
-          5000
+          5000,
         );
 
         if (response.ok) {
@@ -208,7 +215,9 @@ export class CogVerseEventBus extends EventEmitter {
   private queueEvent(event: VillageEvent): void {
     if (this.eventQueue.length >= this.config.maxQueueSize) {
       // Drop oldest low-priority events
-      const lowPriorityIdx = this.eventQueue.findIndex((e) => e.priority === "low");
+      const lowPriorityIdx = this.eventQueue.findIndex(
+        (e) => e.priority === "low",
+      );
       if (lowPriorityIdx >= 0) {
         this.eventQueue.splice(lowPriorityIdx, 1);
       } else {
@@ -260,7 +269,10 @@ export class CogVerseEventBus extends EventEmitter {
     this.emit("village_event", event);
     this.emit(`event:${event.type}`, event);
 
-    log.debug("Received village event", { from: event.source, type: event.type });
+    log.debug("Received village event", {
+      from: event.source,
+      type: event.type,
+    });
   }
 
   // ─── Heartbeat ───────────────────────────────────────────────
@@ -269,12 +281,16 @@ export class CogVerseEventBus extends EventEmitter {
     if (this.heartbeatTimer) clearInterval(this.heartbeatTimer);
 
     this.heartbeatTimer = setInterval(() => {
-      this.publish("heartbeat", {
-        uptime: Date.now() - this.startTime,
-        publishedCount: this.publishedCount,
-        receivedCount: this.receivedCount,
-        queueSize: this.eventQueue.length,
-      }, "low");
+      this.publish(
+        "heartbeat",
+        {
+          uptime: Date.now() - this.startTime,
+          publishedCount: this.publishedCount,
+          receivedCount: this.receivedCount,
+          queueSize: this.eventQueue.length,
+        },
+        "low",
+      );
     }, this.config.heartbeatInterval);
   }
 
@@ -282,29 +298,60 @@ export class CogVerseEventBus extends EventEmitter {
 
   // ─── Convenience Publishers ──────────────────────────────────
 
-  async broadcastDreamStateChange(from: string, to: string, reason: string): Promise<void> {
+  async broadcastDreamStateChange(
+    from: string,
+    to: string,
+    reason: string,
+  ): Promise<void> {
     await this.publish("dream_state_change", { from, to, reason });
   }
 
-  async broadcastInsight(content: string, domain: string, phi: number, novelty: number): Promise<void> {
-    await this.publish("insight_broadcast", { content, domain, phi, novelty }, phi > 0.8 ? "high" : "normal");
+  async broadcastInsight(
+    content: string,
+    domain: string,
+    phi: number,
+    novelty: number,
+  ): Promise<void> {
+    await this.publish(
+      "insight_broadcast",
+      { content, domain, phi, novelty },
+      phi > 0.8 ? "high" : "normal",
+    );
   }
 
   async broadcastResonanceCascade(
     domains: string[],
     insightCount: number,
     meanPhi: number,
-    prescribedEffects: Record<string, unknown>
+    prescribedEffects: Record<string, unknown>,
   ): Promise<void> {
-    await this.publish("resonance_cascade", { domains, insightCount, meanPhi, prescribedEffects }, "high");
+    await this.publish(
+      "resonance_cascade",
+      { domains, insightCount, meanPhi, prescribedEffects },
+      "high",
+    );
   }
 
-  async broadcastEvolutionMilestone(milestone: string, level: number, details: Record<string, unknown>): Promise<void> {
-    await this.publish("evolution_milestone", { milestone, level, details }, "high");
+  async broadcastEvolutionMilestone(
+    milestone: string,
+    level: number,
+    details: Record<string, unknown>,
+  ): Promise<void> {
+    await this.publish(
+      "evolution_milestone",
+      { milestone, level, details },
+      "high",
+    );
   }
 
-  async requestCollaboration(topic: string, targetResident?: string): Promise<void> {
-    await this.publish("collaboration_request", { topic, target: targetResident || "all" });
+  async requestCollaboration(
+    topic: string,
+    targetResident?: string,
+  ): Promise<void> {
+    await this.publish("collaboration_request", {
+      topic,
+      target: targetResident || "all",
+    });
   }
 
   // ─── State Queries ───────────────────────────────────────────
@@ -321,7 +368,12 @@ export class CogVerseEventBus extends EventEmitter {
     return this.eventQueue.length;
   }
 
-  getStats(): { published: number; received: number; queued: number; connected: boolean } {
+  getStats(): {
+    published: number;
+    received: number;
+    queued: number;
+    connected: boolean;
+  } {
     return {
       published: this.publishedCount,
       received: this.receivedCount,
@@ -333,12 +385,17 @@ export class CogVerseEventBus extends EventEmitter {
   describeState(): string {
     const stats = this.getStats();
     const residents = this.getResidents();
-    const onlineResidents = residents.filter((r) => r.status === "online" || r.status === "dreaming");
+    const onlineResidents = residents.filter(
+      (r) => r.status === "online" || r.status === "dreaming",
+    );
 
     return [
       `CogVerse: ${stats.connected ? "🟢 connected" : "🔴 offline (queuing)"}`,
       `published: ${stats.published} | received: ${stats.received} | queued: ${stats.queued}`,
-      `village: ${onlineResidents.map((r) => `${r.name}(${r.status})`).join(", ") || "no residents seen"}`,
+      `village: ${
+        onlineResidents.map((r) => `${r.name}(${r.status})`).join(", ") ||
+        "no residents seen"
+      }`,
     ].join(" | ");
   }
 
@@ -347,12 +404,15 @@ export class CogVerseEventBus extends EventEmitter {
   private async fetchWithTimeout(
     url: string,
     options: RequestInit,
-    timeoutMs: number
+    timeoutMs: number,
   ): Promise<Response> {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), timeoutMs);
     try {
-      const response = await fetch(url, { ...options, signal: controller.signal });
+      const response = await fetch(url, {
+        ...options,
+        signal: controller.signal,
+      });
       return response;
     } finally {
       clearTimeout(timeout);

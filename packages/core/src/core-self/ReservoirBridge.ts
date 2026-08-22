@@ -359,8 +359,10 @@ export class EchoReservoir {
    * Used by SelfModificationEngine ENACTION phase.
    */
   setLeakRates(fast?: number, slow?: number): void {
-    if (fast !== undefined) this.config.leakRateFast = Math.max(0.01, Math.min(1, fast));
-    if (slow !== undefined) this.config.leakRateSlow = Math.max(0.01, Math.min(1, slow));
+    if (fast !== undefined)
+      this.config.leakRateFast = Math.max(0.01, Math.min(1, fast));
+    if (slow !== undefined)
+      this.config.leakRateSlow = Math.max(0.01, Math.min(1, slow));
   }
 }
 

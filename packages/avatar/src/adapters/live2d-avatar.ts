@@ -15,6 +15,11 @@ import type { CubismModelInfo } from "./cubism-adapter";
 import type { PixiLive2DRenderer } from "./pixi-live2d-renderer";
 import type { DTEchoCognitiveMode } from "../dtecho-expression-driver";
 import { projectDTEchoCognitiveState } from "../dtecho-expression-driver";
+import {
+  MetabolicAvatarBridge,
+  type MetabolicAvatarDeltas,
+  type MetabolicVisualInput,
+} from "../metabolic-avatar-bridge";
 
 /**
  * Props for the Live2DAvatar component
@@ -82,6 +87,13 @@ export interface Live2DCognitiveVisualState {
   daoConsensus?: number; // 0..1
   esnCoherence?: number; // 0..1
   autognosisResonance?: number; // 0..1
+  causalRigor?: number; // 0..1
+  falsificationPressure?: number; // 0..1
+  epistemicSurprise?: number; // 0..1
+  daoEvidenceConsensus?: number; // 0..1
+  activeExperimentation?: number; // 0..1
+  /** Authoritative conceptual-metabolism state for embodied energy/phase rendering. */
+  metabolic?: MetabolicVisualInput;
   isProcessing?: boolean;
   isSpeaking?: boolean;
   audioLevel?: number;
@@ -119,6 +131,21 @@ export class Live2DAvatarManager {
   private isLoaded = false;
   private isDisposed = false;
   private modelInfo: CubismModelInfo | null = null;
+  private metabolicBridge: MetabolicAvatarBridge | null = null;
+  private metabolicFrameAccumulatorMs = 0;
+  private lastProjectedCubism: Record<string, number> = {};
+  private readonly onMetabolicDeltas = (
+    deltas: MetabolicAvatarDeltas,
+  ): void => {
+    this.applyMetabolicDeltas(deltas);
+  };
+  private readonly onMetabolicFrame = (deltaTime: number): void => {
+    const deltaMs = deltaTime > 10 ? deltaTime : deltaTime * (1000 / 60);
+    this.metabolicFrameAccumulatorMs += deltaMs;
+    if (this.metabolicFrameAccumulatorMs < 1000 / 30) return;
+    this.metabolicFrameAccumulatorMs %= 1000 / 30;
+    this.metabolicBridge?.step();
+  };
 
   /**
    * Initialize the avatar on a canvas element
@@ -175,6 +202,7 @@ export class Live2DAvatarManager {
       await this.renderer.loadModel(this.modelInfo);
 
       this.isLoaded = true;
+      this.startMetabolicProjection();
       props.onLoad?.();
 
       if (props.debug) {
@@ -247,6 +275,11 @@ export class Live2DAvatarManager {
     if (!this.renderer || !this.isLoaded) return;
 
     const projection = projectDTEchoCognitiveState(state);
+    this.lastProjectedCubism = { ...projection.cubism };
+    if (state.metabolic) {
+      this.metabolicBridge?.feedMetabolicState(state.metabolic);
+    }
+
     this.renderer.setExpression(
       projection.avatarExpression,
       projection.intensity,
@@ -267,7 +300,10 @@ export class Live2DAvatarManager {
     if (typeof this.renderer.focusEyes === "function" && this.canvas) {
       const selfAwareness = this.clamp01(state.selfAwareness ?? 0.45);
       const phi = this.clamp01(state.phi ?? 0.45);
-      const salience = this.clamp01(state.salience ?? 0.5);
+      const metabolicFocus = this.metabolicBridge?.getDeltas().gazeFocus ?? 0.5;
+      const salience = this.clamp01(
+        (state.salience ?? 0.5) * (0.65 + metabolicFocus * 0.7),
+      );
       const x =
         this.canvas.width / 2 +
         (selfAwareness - 0.5) * this.canvas.width * (0.12 + salience * 0.1);
@@ -276,6 +312,83 @@ export class Live2DAvatarManager {
         (phi - 0.5) * this.canvas.height * (0.1 + salience * 0.08);
       this.renderer.focusEyes(x, y);
     }
+  }
+
+  private startMetabolicProjection(): void {
+    this.stopMetabolicProjection();
+    this.metabolicBridge = new MetabolicAvatarBridge();
+    this.metabolicBridge.on("deltas_updated", this.onMetabolicDeltas);
+    this.metabolicFrameAccumulatorMs = 0;
+
+    const renderer = this.renderer as PixiLive2DRenderer & {
+      addFrameListener?: (listener: (deltaTime: number) => void) => void;
+    };
+    renderer.addFrameListener?.(this.onMetabolicFrame);
+    this.metabolicBridge.step();
+  }
+
+  private stopMetabolicProjection(): void {
+    const renderer = this.renderer as
+      | (PixiLive2DRenderer & {
+          removeFrameListener?: (listener: (deltaTime: number) => void) => void;
+        })
+      | null;
+    renderer?.removeFrameListener?.(this.onMetabolicFrame);
+    this.metabolicFrameAccumulatorMs = 0;
+    if (this.metabolicBridge) {
+      this.metabolicBridge.off("deltas_updated", this.onMetabolicDeltas);
+      this.metabolicBridge.stop();
+      this.metabolicBridge = null;
+    }
+  }
+
+  private applyMetabolicDeltas(deltas: MetabolicAvatarDeltas): void {
+    if (!this.renderer || !this.isLoaded) return;
+
+    const base = (id: string, fallback: number): number =>
+      this.lastProjectedCubism[id] ?? fallback;
+    const set = (id: string, value: number, min: number, max: number): void => {
+      this.renderer?.setParameter(id, Math.max(min, Math.min(max, value)));
+    };
+
+    set(
+      "ParamEyeLOpen",
+      base("ParamEyeLOpen", 1) + deltas.eyeOpenDelta + deltas.pupilDelta * 0.2,
+      0,
+      1.5,
+    );
+    set(
+      "ParamEyeROpen",
+      base("ParamEyeROpen", 1) + deltas.eyeOpenDelta + deltas.pupilDelta * 0.2,
+      0,
+      1.5,
+    );
+    set(
+      "ParamMouthForm",
+      base("ParamMouthForm", 0) + deltas.mouthFormDelta,
+      -1,
+      1,
+    );
+    set("ParamBrowLY", base("ParamBrowLY", 0) + deltas.browDelta, -1, 1);
+    set("ParamBrowRY", base("ParamBrowRY", 0) + deltas.browDelta, -1, 1);
+    set("ParamAngleY", base("ParamAngleY", 0) + deltas.headNodDelta, -30, 30);
+    set("ParamAngleZ", base("ParamAngleZ", 0) + deltas.headTiltDelta, -30, 30);
+
+    const now =
+      typeof performance !== "undefined" ? performance.now() : Date.now();
+    const breathPhase =
+      (now / 1000) * Math.PI * 2 * 0.22 * deltas.breathRateMult;
+    const breath = 0.5 + Math.sin(breathPhase) * 0.5 * deltas.breathDepthMult;
+    set("ParamBreath", breath, 0, 1);
+
+    const renderer = this.renderer as PixiLive2DRenderer & {
+      setAnimationSpeed?: (multiplier: number) => void;
+      setVisualVitality?: (multiplier: number) => void;
+    };
+    renderer.setAnimationSpeed?.(
+      deltas.animSpeedMult * (0.75 + deltas.movementFluidity * 0.5),
+    );
+    renderer.setVisualVitality?.(deltas.vitalityMult);
   }
 
   private clamp01(value: number): number {
@@ -288,6 +401,8 @@ export class Live2DAvatarManager {
    */
   dispose(): void {
     this.isDisposed = true;
+    this.stopMetabolicProjection();
+    this.lastProjectedCubism = {};
     this.renderer?.dispose();
     this.renderer = null;
 

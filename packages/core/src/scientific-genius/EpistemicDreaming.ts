@@ -246,7 +246,10 @@ export class EpistemicDreaming extends EventEmitter {
 
     const unitIds = this.knowledgeGraph.getUnitIds();
     if (unitIds.length < this.config.minUnitsForDreaming) {
-      this.emit("dream_insufficient_knowledge", { units: unitIds.length, required: this.config.minUnitsForDreaming });
+      this.emit("dream_insufficient_knowledge", {
+        units: unitIds.length,
+        required: this.config.minUnitsForDreaming,
+      });
       return;
     }
 
@@ -390,7 +393,11 @@ export class EpistemicDreaming extends EventEmitter {
     const oldPhase = this.phase;
     this.phase = phase;
     this.phaseTicks = 0;
-    this.emit("dream_phase_changed", { from: oldPhase, to: phase, depth: this.depth });
+    this.emit("dream_phase_changed", {
+      from: oldPhase,
+      to: phase,
+      depth: this.depth,
+    });
   }
 
   // ============================================================
@@ -404,7 +411,8 @@ export class EpistemicDreaming extends EventEmitter {
 
   private executeREM(): void {
     if (!this.knowledgeGraph) return;
-    if (this.currentFragments.length >= this.config.maxFragmentsPerSession) return;
+    if (this.currentFragments.length >= this.config.maxFragmentsPerSession)
+      return;
 
     // Perform a random walk and generate a dream fragment
     const fragment = this.performRandomWalk();
@@ -443,7 +451,10 @@ export class EpistemicDreaming extends EventEmitter {
     // During emergence, review fragments one more time for any missed insights
     for (const fragment of this.currentFragments) {
       if (fragment.promoted) continue;
-      if (fragment.quality > 0.6 && this.insights.length < this.config.maxInsightsPerSession) {
+      if (
+        fragment.quality > 0.6 &&
+        this.insights.length < this.config.maxInsightsPerSession
+      ) {
         const insight = this.promoteToInsight(fragment);
         if (insight) {
           this.insights.push(insight);
@@ -518,7 +529,10 @@ export class EpistemicDreaming extends EventEmitter {
     const path = [startId];
     let current = startId;
     const visited = new Set([startId]);
-    const maxLen = Math.min(this.config.maxWalkLength, Math.ceil(3 + this.depth * 4));
+    const maxLen = Math.min(
+      this.config.maxWalkLength,
+      Math.ceil(3 + this.depth * 4),
+    );
 
     for (let step = 0; step < maxLen; step++) {
       const connections = this.knowledgeGraph!.getConnections(current);
@@ -536,7 +550,8 @@ export class EpistemicDreaming extends EventEmitter {
         if (unvisited.length === 0) {
           // Allow revisiting with low probability in deep dreams
           if (this.depth > 0.5 && connections.length > 0) {
-            current = connections[Math.floor(Math.random() * connections.length)];
+            current =
+              connections[Math.floor(Math.random() * connections.length)];
           } else {
             break;
           }
@@ -556,7 +571,11 @@ export class EpistemicDreaming extends EventEmitter {
   // EVALUATION
   // ============================================================
 
-  private evaluateNovelty(startId: string, endId: string, path: string[]): number {
+  private evaluateNovelty(
+    startId: string,
+    endId: string,
+    path: string[],
+  ): number {
     if (!this.knowledgeGraph) return 0;
 
     // Novelty is high when:
@@ -576,7 +595,11 @@ export class EpistemicDreaming extends EventEmitter {
     return Math.min(1, domainDiff + lengthBonus + noDirectLink);
   }
 
-  private evaluateCoherence(startId: string, endId: string, path: string[]): number {
+  private evaluateCoherence(
+    startId: string,
+    endId: string,
+    path: string[],
+  ): number {
     if (!this.knowledgeGraph) return 0;
 
     // Coherence is high when:
@@ -587,18 +610,29 @@ export class EpistemicDreaming extends EventEmitter {
     const targetAct = this.knowledgeGraph.getUnitActivation(endId);
     const activationScore = (sourceAct + targetAct) / 2;
 
-    const pathConnectedness = path.reduce((sum, id) => {
-      return sum + Math.min(1, this.knowledgeGraph!.getConnections(id).length / 5);
-    }, 0) / path.length;
+    const pathConnectedness =
+      path.reduce((sum, id) => {
+        return (
+          sum + Math.min(1, this.knowledgeGraph!.getConnections(id).length / 5)
+        );
+      }, 0) / path.length;
 
     const sourceComplexity = this.knowledgeGraph.getUnitComplexity(startId);
     const targetComplexity = this.knowledgeGraph.getUnitComplexity(endId);
-    const complexityCompat = 1 - Math.abs(sourceComplexity - targetComplexity) / 10;
+    const complexityCompat =
+      1 - Math.abs(sourceComplexity - targetComplexity) / 10;
 
-    return Math.min(1, activationScore * 0.3 + pathConnectedness * 0.4 + complexityCompat * 0.3);
+    return Math.min(
+      1,
+      activationScore * 0.3 + pathConnectedness * 0.4 + complexityCompat * 0.3,
+    );
   }
 
-  private classifyBridge(startId: string, endId: string, path: string[]): BridgeType {
+  private classifyBridge(
+    startId: string,
+    endId: string,
+    path: string[],
+  ): BridgeType {
     if (!this.knowledgeGraph) return BridgeType.SERENDIPITY;
 
     const sourceDomain = this.knowledgeGraph.getUnitDomain(startId);
@@ -644,14 +678,21 @@ export class EpistemicDreaming extends EventEmitter {
 
     // Generate a hypothesis from the fragment
     const hypothesis = this.generateHypothesis(fragment);
-    const confidence = fragment.quality * 0.7 + (fragment.novelty > 0.7 ? 0.15 : 0) + (fragment.coherence > 0.7 ? 0.15 : 0);
-    const impactPotential = fragment.novelty * 0.5 + fragment.coherence * 0.3 + (fragment.bridgeType === BridgeType.STRUCTURAL_ANALOGY ? 0.2 : 0.1);
+    const confidence =
+      fragment.quality * 0.7 +
+      (fragment.novelty > 0.7 ? 0.15 : 0) +
+      (fragment.coherence > 0.7 ? 0.15 : 0);
+    const impactPotential =
+      fragment.novelty * 0.5 +
+      fragment.coherence * 0.3 +
+      (fragment.bridgeType === BridgeType.STRUCTURAL_ANALOGY ? 0.2 : 0.1);
 
     return {
       fragment,
       hypothesis,
       confidence: Math.min(1, confidence),
-      domain: this.knowledgeGraph?.getUnitDomain(fragment.sourceId) ?? "unknown",
+      domain:
+        this.knowledgeGraph?.getUnitDomain(fragment.sourceId) ?? "unknown",
       integrated: false,
       impactPotential: Math.min(1, impactPotential),
     };
@@ -665,12 +706,17 @@ export class EpistemicDreaming extends EventEmitter {
       [BridgeType.CAUSAL_CHAIN]: "may causally relate to",
       [BridgeType.METAPHOR]: "maps metaphorically onto",
       [BridgeType.TEMPORAL_CO_OCCURRENCE]: "co-occurs temporally with",
-      [BridgeType.SCALE_INVARIANT]: "exhibits scale-invariant patterns similar to",
+      [BridgeType.SCALE_INVARIANT]:
+        "exhibits scale-invariant patterns similar to",
       [BridgeType.SERENDIPITY]: "has an unexpected connection to",
     };
 
     const bridge = bridgeDescriptions[fragment.bridgeType] ?? "relates to";
-    return `"${fragment.sourceLabel}" ${bridge} "${fragment.targetLabel}" (via ${fragment.pathIds.length} intermediate concepts, novelty=${fragment.novelty.toFixed(2)})`;
+    return `"${fragment.sourceLabel}" ${bridge} "${
+      fragment.targetLabel
+    }" (via ${
+      fragment.pathIds.length
+    } intermediate concepts, novelty=${fragment.novelty.toFixed(2)})`;
   }
 
   // ============================================================

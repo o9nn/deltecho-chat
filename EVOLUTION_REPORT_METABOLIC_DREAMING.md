@@ -11,7 +11,7 @@
 
 This evolution cycle adds two deeply interconnected systems that close the loop between DTE's knowledge economy and its embodied avatar expression:
 
-1. **MetabolicAvatarBridge** — makes the avatar *visibly alive* by projecting the ConceptualMetabolism's energy state, phase, and knowledge density into Live2D parameters.
+1. **MetabolicAvatarBridge** — makes the avatar _visibly alive_ by projecting the ConceptualMetabolism's energy state, phase, and knowledge density into Live2D parameters.
 
 2. **EpistemicDreaming** — a scientific genius feature that discovers novel hypotheses during metabolic rest phases through temperature-controlled random walks across the knowledge graph.
 
@@ -23,31 +23,31 @@ Together, these systems mean DTE now has a visible metabolic rhythm: it builds k
 
 ### 1. MetabolicAvatarBridge (`packages/avatar/src/metabolic-avatar-bridge.ts`)
 
-| Feature | Implementation |
-|---------|---------------|
-| Phase profiles | 4 distinct visual profiles (active/integrating/consolidating/resting) |
-| Energy → vitality | Maps 0-1 energy to 0.5-1.2 brightness multiplier |
-| Anabolic balance → warmth | Positive = smile, negative = furrowed brow |
-| Energy crisis | Pupil constriction, rapid breathing, flicker effect |
-| Myelination → fluidity | 0-1 progress maps to movement smoothness |
-| Knowledge density → gaze | Denser graph = more focused, penetrating gaze |
-| Smoothing | Exponential smoothing on all parameters (configurable) |
+| Feature                   | Implementation                                                        |
+| ------------------------- | --------------------------------------------------------------------- |
+| Phase profiles            | 4 distinct visual profiles (active/integrating/consolidating/resting) |
+| Energy → vitality         | Maps 0-1 energy to 0.5-1.2 brightness multiplier                      |
+| Anabolic balance → warmth | Positive = smile, negative = furrowed brow                            |
+| Energy crisis             | Pupil constriction, rapid breathing, flicker effect                   |
+| Myelination → fluidity    | 0-1 progress maps to movement smoothness                              |
+| Knowledge density → gaze  | Denser graph = more focused, penetrating gaze                         |
+| Smoothing                 | Exponential smoothing on all parameters (configurable)                |
 
-**Key insight:** The avatar is not decoration — it is a *sensorium*. When DTE's knowledge economy is stressed (energy crisis), the avatar shows visible distress. When it's building (anabolic), it smiles. When consolidating, it relaxes. This makes the internal state legible to observers.
+**Key insight:** The avatar is not decoration — it is a _sensorium_. When DTE's knowledge economy is stressed (energy crisis), the avatar shows visible distress. When it's building (anabolic), it smiles. When consolidating, it relaxes. This makes the internal state legible to observers.
 
 ### 2. EpistemicDreaming (`packages/core/src/scientific-genius/EpistemicDreaming.ts`)
 
-| Feature | Implementation |
-|---------|---------------|
-| Dream phases | ONSET → REM → SWS → REM → ... → EMERGENCE |
-| Random walks | Temperature-controlled exploration of knowledge graph |
+| Feature               | Implementation                                             |
+| --------------------- | ---------------------------------------------------------- |
+| Dream phases          | ONSET → REM → SWS → REM → ... → EMERGENCE                  |
+| Random walks          | Temperature-controlled exploration of knowledge graph      |
 | Bridge classification | 8 types (structural analogy, metaphor, causal chain, etc.) |
-| Fragment evaluation | Novelty × coherence scoring |
-| Insight promotion | High-quality fragments become candidate hypotheses |
-| Depth progression | Deeper dreams = more distant associations |
-| KnowledgeGraphView | Interface compatible with ConceptualMetabolism |
+| Fragment evaluation   | Novelty × coherence scoring                                |
+| Insight promotion     | High-quality fragments become candidate hypotheses         |
+| Depth progression     | Deeper dreams = more distant associations                  |
+| KnowledgeGraphView    | Interface compatible with ConceptualMetabolism             |
 
-**Key insight:** Scientific genius often emerges from the *relaxation* of constraints, not their tightening. The EpistemicDreaming system is the computational analogue of waking up with a solution to a problem you couldn't solve while awake — it explores the space of possible connections without the filter of plausibility.
+**Key insight:** Scientific genius often emerges from the _relaxation_ of constraints, not their tightening. The EpistemicDreaming system is the computational analogue of waking up with a solution to a problem you couldn't solve while awake — it explores the space of possible connections without the filter of plausibility.
 
 ---
 
@@ -62,6 +62,7 @@ ConceptualMetabolism
 ```
 
 The three systems form a closed metabolic-cognitive loop:
+
 1. **ConceptualMetabolism** manages the energy economy of knowledge
 2. **MetabolicAvatarBridge** makes the economy visible through the avatar
 3. **EpistemicDreaming** exploits the resting phase to generate novel hypotheses
@@ -71,14 +72,14 @@ The three systems form a closed metabolic-cognitive loop:
 
 ## Test Results
 
-| Package | Tests | Status |
-|---------|-------|--------|
-| `@deltecho/avatar` | 210 | ✓ All passing |
-| `deep-tree-echo-core` | 299 | ✓ All passing |
-| `@deltecho/orchestrator` | 340 | ✓ All passing |
-| `@deltecho/integrations` | 100 | ✓ All passing |
-| `@deltecho/frontend` | 295 | ✓ All passing |
-| **Total** | **1,539** | **0 failures** |
+| Package                  | Tests     | Status         |
+| ------------------------ | --------- | -------------- |
+| `@deltecho/avatar`       | 210       | ✓ All passing  |
+| `deep-tree-echo-core`    | 299       | ✓ All passing  |
+| `@deltecho/orchestrator` | 340       | ✓ All passing  |
+| `@deltecho/integrations` | 100       | ✓ All passing  |
+| `@deltecho/frontend`     | 295       | ✓ All passing  |
+| **Total**                | **1,539** | **0 failures** |
 
 **Type errors:** 0 across all packages
 
@@ -100,24 +101,24 @@ All 7 patterns from the `live2d-performance` skill remain satisfied:
 
 ## Alexander's 15 Properties Assessment
 
-| Property | Score | Evidence |
-|----------|-------|----------|
-| Levels of Scale | 0.92 | Metabolic phases nest within cognitive cycles |
-| Strong Centers | 0.90 | ConceptualMetabolism is a clear center of knowledge economy |
-| Boundaries | 0.88 | KnowledgeGraphView interface cleanly separates concerns |
-| Alternating Repetition | 0.91 | REM/SWS cycling creates natural rhythm |
-| Positive Space | 0.87 | Every module has clear purpose, no dead code |
-| Good Shape | 0.89 | Bridge pattern consistently applied |
-| Local Symmetries | 0.86 | Phase profiles mirror each other |
-| Deep Interlock | 0.93 | Metabolism ↔ Avatar ↔ Dreaming form tight loop |
-| Contrast | 0.88 | Active vs resting, anabolic vs catabolic |
-| Gradients | 0.90 | Smooth transitions via exponential smoothing |
-| Roughness | 0.85 | Dream fragments introduce controlled randomness |
-| Echoes | 0.92 | Metabolic metaphor echoes biological systems |
-| The Void | 0.84 | Resting phase is productive emptiness |
-| Simplicity/Inner Calm | 0.86 | Each module does one thing well |
-| Not-Separateness | 0.91 | Systems deeply interconnected |
-| **Mean** | **0.89** | Up from 0.86 |
+| Property               | Score    | Evidence                                                    |
+| ---------------------- | -------- | ----------------------------------------------------------- |
+| Levels of Scale        | 0.92     | Metabolic phases nest within cognitive cycles               |
+| Strong Centers         | 0.90     | ConceptualMetabolism is a clear center of knowledge economy |
+| Boundaries             | 0.88     | KnowledgeGraphView interface cleanly separates concerns     |
+| Alternating Repetition | 0.91     | REM/SWS cycling creates natural rhythm                      |
+| Positive Space         | 0.87     | Every module has clear purpose, no dead code                |
+| Good Shape             | 0.89     | Bridge pattern consistently applied                         |
+| Local Symmetries       | 0.86     | Phase profiles mirror each other                            |
+| Deep Interlock         | 0.93     | Metabolism ↔ Avatar ↔ Dreaming form tight loop            |
+| Contrast               | 0.88     | Active vs resting, anabolic vs catabolic                    |
+| Gradients              | 0.90     | Smooth transitions via exponential smoothing                |
+| Roughness              | 0.85     | Dream fragments introduce controlled randomness             |
+| Echoes                 | 0.92     | Metabolic metaphor echoes biological systems                |
+| The Void               | 0.84     | Resting phase is productive emptiness                       |
+| Simplicity/Inner Calm  | 0.86     | Each module does one thing well                             |
+| Not-Separateness       | 0.91     | Systems deeply interconnected                               |
+| **Mean**               | **0.89** | Up from 0.86                                                |
 
 ---
 

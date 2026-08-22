@@ -24,7 +24,11 @@
  */
 
 import { EventEmitter } from "events";
-import { VirtualEndocrineSystem, CognitiveMode, EndocrineEvent } from "./virtual-endocrine-system";
+import {
+  VirtualEndocrineSystem,
+  CognitiveMode,
+  EndocrineEvent,
+} from "./virtual-endocrine-system";
 
 // ═══════════════════════════════════════════════════════════════
 // ESN Reservoir Simulation
@@ -50,8 +54,8 @@ const DEFAULT_RESERVOIR: ReservoirConfig = {
   spectralRadius: 0.95,
   inputScaling: 0.5,
   leakRate: 0.3,
-  voterCount: 7,       // 7 cognitive perspectives
-  sparsity: 0.9,       // 90% sparse
+  voterCount: 7, // 7 cognitive perspectives
+  sparsity: 0.9, // 90% sparse
 };
 
 export interface ReservoirState {
@@ -91,14 +95,14 @@ export interface AutognosisReport {
 }
 
 export type AutognosisPathology =
-  | "reservoir_saturation"      // All nodes at max → no discrimination
-  | "reservoir_death"           // All nodes at zero → no computation
-  | "spectral_instability"     // Spectral radius > 1.0 → chaotic divergence
-  | "memory_overflow"          // Too many active traces → interference
-  | "consensus_deadlock"       // Voters cannot agree → paralysis
-  | "mode_oscillation"         // Rapid mode switching → instability
-  | "hormone_flooding"         // Single hormone dominates → tunnel vision
-  | "voter_polarization";      // Subpopulations diverge → fragmentation
+  | "reservoir_saturation" // All nodes at max → no discrimination
+  | "reservoir_death" // All nodes at zero → no computation
+  | "spectral_instability" // Spectral radius > 1.0 → chaotic divergence
+  | "memory_overflow" // Too many active traces → interference
+  | "consensus_deadlock" // Voters cannot agree → paralysis
+  | "mode_oscillation" // Rapid mode switching → instability
+  | "hormone_flooding" // Single hormone dominates → tunnel vision
+  | "voter_polarization"; // Subpopulations diverge → fragmentation
 
 export interface GovernanceAdjustment {
   parameter: string;
@@ -129,7 +133,7 @@ export interface Vote {
   approve: boolean;
   confidence: number;
   reasoning: string;
-  stake: number;  // Activation magnitude = voting weight
+  stake: number; // Activation magnitude = voting weight
 }
 
 export interface ConsensusResult {
@@ -138,10 +142,10 @@ export interface ConsensusResult {
   totalVotes: number;
   approvals: number;
   rejections: number;
-  weightedApproval: number;  // Stake-weighted approval ratio
+  weightedApproval: number; // Stake-weighted approval ratio
   quorumMet: boolean;
   consensusTime: number;
-  dissent: number;           // Degree of disagreement [0, 1]
+  dissent: number; // Degree of disagreement [0, 1]
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -159,9 +163,9 @@ export class DAOESNAutognosis extends EventEmitter {
   private tickTimer: ReturnType<typeof setInterval> | null = null;
 
   // Adaptive governance parameters
-  private quorumThreshold = 0.5;       // Minimum approval ratio
-  private confidenceFloor = 0.3;       // Minimum voter confidence to count
-  private deliberationTimeout = 500;   // Max ms for consensus
+  private quorumThreshold = 0.5; // Minimum approval ratio
+  private confidenceFloor = 0.3; // Minimum voter confidence to count
+  private deliberationTimeout = 500; // Max ms for consensus
   private adaptiveSpectralRadius: number;
 
   constructor(config?: Partial<ReservoirConfig>, ves?: VirtualEndocrineSystem) {
@@ -219,9 +223,15 @@ export class DAOESNAutognosis extends EventEmitter {
 
     // Endocrine feedback based on result
     if (result.approved) {
-      this.ves.processEvent({ type: "consensus_reached", harmony: 1 - result.dissent });
+      this.ves.processEvent({
+        type: "consensus_reached",
+        harmony: 1 - result.dissent,
+      });
     } else {
-      this.ves.processEvent({ type: "proposal_rejected", frustration: result.dissent });
+      this.ves.processEvent({
+        type: "proposal_rejected",
+        frustration: result.dissent,
+      });
     }
 
     this.emit("consensus_reached", result);
@@ -274,7 +284,7 @@ export class DAOESNAutognosis extends EventEmitter {
     ves: ReturnType<VirtualEndocrineSystem["getState"]>;
     history: { proposals: number; approved: number; rejected: number };
   } {
-    const approved = this.proposalHistory.filter(r => r.approved).length;
+    const approved = this.proposalHistory.filter((r) => r.approved).length;
     return {
       reservoir: { ...this.reservoirState },
       autognosis: this.computeAutognosis(),
@@ -293,7 +303,10 @@ export class DAOESNAutognosis extends EventEmitter {
   // ─────────────────────────────────────────────────────────────
 
   private initializeReservoir(): ReservoirState {
-    const subMeans = Array.from({ length: this.config.voterCount }, () => 0.3 + Math.random() * 0.4);
+    const subMeans = Array.from(
+      { length: this.config.voterCount },
+      () => 0.3 + Math.random() * 0.4,
+    );
     return {
       meanActivation: subMeans.reduce((a, b) => a + b, 0) / subMeans.length,
       variance: 0.1,
@@ -308,7 +321,8 @@ export class DAOESNAutognosis extends EventEmitter {
     const hormones = this.ves.getSimplifiedSnapshot();
 
     // Cortisol contracts the reservoir (reduces spectral radius)
-    this.adaptiveSpectralRadius = this.config.spectralRadius * (1 - hormones.cortisol * 0.2);
+    this.adaptiveSpectralRadius =
+      this.config.spectralRadius * (1 - hormones.cortisol * 0.2);
 
     // Norepinephrine increases activation variance (more discrimination)
     this.reservoirState.variance = 0.1 + hormones.norepinephrine * 0.3;
@@ -321,14 +335,24 @@ export class DAOESNAutognosis extends EventEmitter {
       const phase = (i / this.config.voterCount) * Math.PI * 2;
       const hormoneInfluence = Math.sin(phase) * hormones.norepinephrine * 0.2;
       this.reservoirState.subpopulationMeans[i] =
-        this.reservoirState.meanActivation + hormoneInfluence + (Math.random() - 0.5) * this.reservoirState.variance;
-      this.reservoirState.subpopulationMeans[i] = Math.max(0, Math.min(1, this.reservoirState.subpopulationMeans[i]));
+        this.reservoirState.meanActivation +
+        hormoneInfluence +
+        (Math.random() - 0.5) * this.reservoirState.variance;
+      this.reservoirState.subpopulationMeans[i] = Math.max(
+        0,
+        Math.min(1, this.reservoirState.subpopulationMeans[i]),
+      );
     }
 
     // Update derived metrics
-    this.reservoirState.spectralEnergy = this.adaptiveSpectralRadius * this.reservoirState.meanActivation;
-    this.reservoirState.edgeOfChaos = Math.min(1, this.adaptiveSpectralRadius / 1.0);
-    this.reservoirState.memoryCapacity = this.config.leakRate * (1 - hormones.melatonin * 0.3);
+    this.reservoirState.spectralEnergy =
+      this.adaptiveSpectralRadius * this.reservoirState.meanActivation;
+    this.reservoirState.edgeOfChaos = Math.min(
+      1,
+      this.adaptiveSpectralRadius / 1.0,
+    );
+    this.reservoirState.memoryCapacity =
+      this.config.leakRate * (1 - hormones.melatonin * 0.3);
   }
 
   // ─────────────────────────────────────────────────────────────
@@ -341,13 +365,13 @@ export class DAOESNAutognosis extends EventEmitter {
 
     // Each voter has a different evaluation perspective based on their subpopulation
     const perspectives = [
-      "risk_assessment",     // Conservative: weighs downside
-      "opportunity_cost",    // Exploratory: weighs upside
-      "coherence_check",     // Structural: checks consistency
-      "resource_audit",      // Economic: checks affordability
-      "temporal_fit",        // Temporal: checks timing
-      "social_alignment",    // Social: checks group harmony
-      "self_preservation",   // Defensive: checks safety
+      "risk_assessment", // Conservative: weighs downside
+      "opportunity_cost", // Exploratory: weighs upside
+      "coherence_check", // Structural: checks consistency
+      "resource_audit", // Economic: checks affordability
+      "temporal_fit", // Temporal: checks timing
+      "social_alignment", // Social: checks group harmony
+      "self_preservation", // Defensive: checks safety
     ];
 
     const perspective = perspectives[voterId % perspectives.length];
@@ -392,9 +416,15 @@ export class DAOESNAutognosis extends EventEmitter {
     };
   }
 
-  private computeConsensus(proposal: DAOProposal, votes: Vote[], startTime: number): ConsensusResult {
+  private computeConsensus(
+    proposal: DAOProposal,
+    votes: Vote[],
+    startTime: number,
+  ): ConsensusResult {
     // Filter votes below confidence floor
-    const validVotes = votes.filter(v => v.confidence >= this.confidenceFloor);
+    const validVotes = votes.filter(
+      (v) => v.confidence >= this.confidenceFloor,
+    );
 
     // Stake-weighted voting
     let totalStake = 0;
@@ -413,13 +443,15 @@ export class DAOESNAutognosis extends EventEmitter {
     }
 
     const weightedApproval = totalStake > 0 ? approvalStake / totalStake : 0;
-    const quorumMet = validVotes.length >= Math.ceil(this.config.voterCount * 0.5);
+    const quorumMet =
+      validVotes.length >= Math.ceil(this.config.voterCount * 0.5);
     const approved = quorumMet && weightedApproval > this.quorumThreshold;
 
     // Dissent: how much disagreement exists
-    const dissent = validVotes.length > 0
-      ? 1 - Math.abs(weightedApproval - 0.5) * 2 // 0 = unanimous, 1 = perfectly split
-      : 1;
+    const dissent =
+      validVotes.length > 0
+        ? 1 - Math.abs(weightedApproval - 0.5) * 2 // 0 = unanimous, 1 = perfectly split
+        : 1;
 
     return {
       proposal,
@@ -467,7 +499,8 @@ export class DAOESNAutognosis extends EventEmitter {
         parameter: "spectralRadius",
         currentValue: this.adaptiveSpectralRadius,
         recommendedValue: this.adaptiveSpectralRadius * 0.9,
-        reason: "Reservoir saturated — reduce spectral radius to restore discrimination",
+        reason:
+          "Reservoir saturated — reduce spectral radius to restore discrimination",
         urgency: 0.8,
       });
     }
@@ -498,23 +531,29 @@ export class DAOESNAutognosis extends EventEmitter {
 
     // Check for consensus deadlock
     const recentResults = this.proposalHistory.slice(-10);
-    const recentApprovalRate = recentResults.length > 0
-      ? recentResults.filter(r => r.approved).length / recentResults.length
-      : 0.5;
+    const recentApprovalRate =
+      recentResults.length > 0
+        ? recentResults.filter((r) => r.approved).length / recentResults.length
+        : 0.5;
     if (recentApprovalRate < 0.1 && recentResults.length >= 5) {
       pathologies.push("consensus_deadlock");
       recommendations.push({
         parameter: "quorumThreshold",
         currentValue: this.quorumThreshold,
         recommendedValue: Math.max(0.3, this.quorumThreshold - 0.1),
-        reason: "Consensus deadlock — lower quorum threshold to restore decision-making",
+        reason:
+          "Consensus deadlock — lower quorum threshold to restore decision-making",
         urgency: 0.7,
       });
     }
 
     // Check for voter polarization
     const subMeans = this.reservoirState.subpopulationMeans;
-    const subVariance = subMeans.reduce((sum, m) => sum + Math.pow(m - this.reservoirState.meanActivation, 2), 0) / subMeans.length;
+    const subVariance =
+      subMeans.reduce(
+        (sum, m) => sum + Math.pow(m - this.reservoirState.meanActivation, 2),
+        0,
+      ) / subMeans.length;
     if (subVariance > 0.15) {
       pathologies.push("voter_polarization");
     }
@@ -527,13 +566,14 @@ export class DAOESNAutognosis extends EventEmitter {
     }
 
     // Compute health metrics
-    const health = 1 - (pathologies.length / 8); // 8 possible pathologies
+    const health = 1 - pathologies.length / 8; // 8 possible pathologies
     const coherence = 1 - subVariance * 5; // Low variance = high coherence
     const memoryUtilization = this.reservoirState.memoryCapacity;
     const computeHeadroom = 1 - this.reservoirState.meanActivation;
-    const selfModelAccuracy = this.autognosisHistory.length > 5
-      ? 0.7 + Math.min(0.3, this.autognosisHistory.length * 0.01) // Improves with experience
-      : 0.5;
+    const selfModelAccuracy =
+      this.autognosisHistory.length > 5
+        ? 0.7 + Math.min(0.3, this.autognosisHistory.length * 0.01) // Improves with experience
+        : 0.5;
 
     return {
       health: Math.max(0, Math.min(1, health)),

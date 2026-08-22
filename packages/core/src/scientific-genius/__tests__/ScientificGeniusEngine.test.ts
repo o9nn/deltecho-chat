@@ -106,7 +106,9 @@ describe("ScientificGeniusEngine — principled reasoning", () => {
     expect(hypothesis.freeEnergy).toBeGreaterThanOrEqual(0);
     expect(hypothesis.freeEnergy).toBeLessThanOrEqual(1);
     // Strong supporting evidence should not lower belief below the prior.
-    expect(hypothesis.posteriorProbability).toBeGreaterThanOrEqual(prior - 1e-9);
+    expect(hypothesis.posteriorProbability).toBeGreaterThanOrEqual(
+      prior - 1e-9,
+    );
     expect(["supported", "refuted", "revised", "testing"]).toContain(
       hypothesis.status,
     );
@@ -181,7 +183,9 @@ describe("ScientificGeniusEngine — principled reasoning", () => {
     // Feed 5 insights in the same domain — domain span < 3
     for (let i = 0; i < 5; i++) {
       await engine.processScientificQuery(
-        `unique novel concept ${i} quasicrystal phonon lattice ${Math.random().toString(36).slice(2)}`,
+        `unique novel concept ${i} quasicrystal phonon lattice ${Math.random()
+          .toString(36)
+          .slice(2)}`,
         ScientificDomain.Physics,
       );
     }
@@ -200,7 +204,9 @@ describe("ScientificGeniusEngine — principled reasoning", () => {
     ];
     for (let i = 0; i < domains.length; i++) {
       await engine.processScientificQuery(
-        `unprecedented breakthrough ${i} ${Math.random().toString(36).slice(2)} paradigm shift`,
+        `unprecedented breakthrough ${i} ${Math.random()
+          .toString(36)
+          .slice(2)} paradigm shift`,
         domains[i],
       );
     }
@@ -234,7 +240,9 @@ describe("ScientificGeniusEngine — principled reasoning", () => {
     ];
     for (let i = 0; i < domains.length; i++) {
       await engine.processScientificQuery(
-        `revolutionary discovery ${i} ${Math.random().toString(36).slice(2)} emergent phenomenon`,
+        `revolutionary discovery ${i} ${Math.random()
+          .toString(36)
+          .slice(2)} emergent phenomenon`,
         domains[i],
       );
     }
@@ -250,7 +258,10 @@ describe("ScientificGeniusEngine — principled reasoning", () => {
 
   it("returns empty crystals when fewer than 3 concepts exist", async () => {
     const engine = freshEngine();
-    await engine.processScientificQuery("single concept", ScientificDomain.Physics);
+    await engine.processScientificQuery(
+      "single concept",
+      ScientificDomain.Physics,
+    );
     const crystals = engine.crystallizePredictiveInsights();
     expect(crystals).toEqual([]);
   });
@@ -284,7 +295,9 @@ describe("ScientificGeniusEngine — principled reasoning", () => {
       expect(crystal.confidence).toBeGreaterThan(0.4);
       expect(crystal.confidence).toBeLessThanOrEqual(1);
       expect(crystal.avatarEffect.eyeFocusIntensity).toBeGreaterThanOrEqual(0);
-      expect(crystal.avatarEffect.haloCrystallizationHz).toBeGreaterThanOrEqual(0.5);
+      expect(crystal.avatarEffect.haloCrystallizationHz).toBeGreaterThanOrEqual(
+        0.5,
+      );
       expect(crystal.confirmed).toBe(false);
     }
   });
@@ -292,7 +305,9 @@ describe("ScientificGeniusEngine — principled reasoning", () => {
   it("emits predictive_crystallization events for each crystal", async () => {
     const engine = freshEngine();
     const crystalEvents: any[] = [];
-    engine.on("predictive_crystallization" as any, (c: any) => crystalEvents.push(c));
+    engine.on("predictive_crystallization" as any, (c: any) =>
+      crystalEvents.push(c),
+    );
 
     // Build rich concept graph
     await engine.processScientificQuery(
@@ -314,6 +329,8 @@ describe("ScientificGeniusEngine — principled reasoning", () => {
 
     engine.crystallizePredictiveInsights();
     // Events should match returned crystals count
-    expect(crystalEvents.length).toEqual(engine.crystallizePredictiveInsights().length);
+    expect(crystalEvents.length).toEqual(
+      engine.crystallizePredictiveInsights().length,
+    );
   });
 });

@@ -92,6 +92,25 @@ export {
 } from "./ConceptualMetabolism.js";
 
 export {
+  CausalHypothesisForge,
+  causalHypothesisForge,
+  CausalHypothesisStatus,
+  DEFAULT_CAUSAL_FORGE_CONFIG,
+  type HypothesisOrigin,
+  type CausalDirection,
+  type CausalHypothesisInput,
+  type CausalHypothesis,
+  type InterventionDesign,
+  type CounterfactualTrial,
+  type TrialOutcome,
+  type DaoEvidenceVote,
+  type DaoRatificationResult,
+  type CausalForgeState,
+  type CausalForgeVisualState,
+  type CausalHypothesisForgeConfig,
+} from "./CausalHypothesisForge.js";
+
+export {
   EpistemicDreaming,
   epistemicDreaming,
   BridgeType,

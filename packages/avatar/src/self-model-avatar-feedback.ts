@@ -21,6 +21,9 @@
  */
 
 import { EventEmitter } from "events";
+import { getLogger } from "deep-tree-echo-core/logger";
+
+const log = getLogger("@deltecho/avatar/SelfModelAvatarFeedback");
 
 // ============================================================
 // TYPES
@@ -137,7 +140,9 @@ export class SelfModelAvatarFeedback extends EventEmitter {
     };
     this.pendingMode = cognitiveMode;
     this.dlog(
-      `Recorded intended projection (${Object.keys(params).length} params, mode=${cognitiveMode})`,
+      `Recorded intended projection (${
+        Object.keys(params).length
+      } params, mode=${cognitiveMode})`,
     );
   }
 
@@ -148,7 +153,9 @@ export class SelfModelAvatarFeedback extends EventEmitter {
    *
    * This triggers the full perceive→correct→self-model pipeline.
    */
-  public sampleActualState(actualParams: Record<string, number>): ExpressionExperience | null {
+  public sampleActualState(
+    actualParams: Record<string, number>,
+  ): ExpressionExperience | null {
     if (!this.pendingPrediction) {
       this.dlog("No pending prediction to compare against — skipping.");
       return null;
@@ -186,7 +193,9 @@ export class SelfModelAvatarFeedback extends EventEmitter {
    * Call this before writing params to the renderer to benefit from
    * the calibrated projection law.
    */
-  public applyCalibration(params: Record<string, number>): Record<string, number> {
+  public applyCalibration(
+    params: Record<string, number>,
+  ): Record<string, number> {
     const corrected: Record<string, number> = {};
     for (const [key, value] of Object.entries(params)) {
       const bias = this.calibration.biasCorrections[key] || 0;
@@ -255,9 +264,10 @@ export class SelfModelAvatarFeedback extends EventEmitter {
       }
     }
 
-    const errorMagnitude = paramCount > 0
-      ? Math.sqrt(sumSquared / paramCount) // RMS error
-      : 0;
+    const errorMagnitude =
+      paramCount > 0
+        ? Math.sqrt(sumSquared / paramCount) // RMS error
+        : 0;
 
     return {
       cognitiveMode: mode,
@@ -318,8 +328,10 @@ export class SelfModelAvatarFeedback extends EventEmitter {
     this.calibration.lastCalibrationTime = Date.now();
 
     this.dlog(
-      `Calibrated projection law: error=${experience.errorMagnitude.toFixed(4)}, ` +
-      `accuracy=${(this.calibration.selfModelAccuracy * 100).toFixed(1)}%`,
+      `Calibrated projection law: error=${experience.errorMagnitude.toFixed(
+        4,
+      )}, ` +
+        `accuracy=${(this.calibration.selfModelAccuracy * 100).toFixed(1)}%`,
     );
 
     this.emit("calibration", {
@@ -330,9 +342,9 @@ export class SelfModelAvatarFeedback extends EventEmitter {
   }
 
   /** Debug log gated behind verbose flag. */
-  private dlog(...args: unknown[]): void {
+  private dlog(message: string, ...context: unknown[]): void {
     if (this.config.verbose) {
-      console.log("[SelfModelAvatarFeedback]", ...args);
+      log.debug(message, { context });
     }
   }
 }

@@ -25,10 +25,13 @@ import { EventEmitter } from "events";
 import {
   ChaoticMicroExpressionLayer,
   type EndocrineInput,
-  type MicroExpressionDeltas,
 } from "./chaotic-micro-expression-layer.js";
 import { SignatureGestureController } from "./signature-gesture-controller.js";
-import { CogMorphCubismMapper, type CogMorphGlyphState, type CogMorphCubismOverlay } from "./cogmorph-cubism-mapper.js";
+import {
+  CogMorphCubismMapper,
+  type CogMorphGlyphState,
+  type CogMorphCubismOverlay,
+} from "./cogmorph-cubism-mapper.js";
 // Types from ./types available if needed for future integration
 
 // ============================================================
@@ -169,7 +172,11 @@ export class ESNAvatarBridge extends EventEmitter {
   private chaosLayer: ChaoticMicroExpressionLayer;
   private signatureGestureCtrl: SignatureGestureController;
   private lastEndocrine: EndocrineInput = {
-    cortisol: 0.2, norepinephrine: 0.3, dopaminePhasic: 0, serotonin: 0.5, oxytocin: 0.3,
+    cortisol: 0.2,
+    norepinephrine: 0.3,
+    dopaminePhasic: 0,
+    serotonin: 0.5,
+    oxytocin: 0.3,
   };
   private currentFreeEnergy: number = 0;
   private echobeatsPhase: number = 1;
@@ -313,8 +320,7 @@ export class ESNAvatarBridge extends EventEmitter {
     };
 
     const daoConsensus = clamp01(
-      input.daoConsensus ??
-        input.score * 0.48 + input.temporalSynchrony * 0.52,
+      input.daoConsensus ?? input.score * 0.48 + input.temporalSynchrony * 0.52,
     );
     const esnCoherence = clamp01(
       input.esnCoherence ??
@@ -349,9 +355,7 @@ export class ESNAvatarBridge extends EventEmitter {
         (0.5 + activation * 2.7 + esnCoherence * 0.6).toFixed(3),
       ),
       epistemicTemperature: Number(
-        clamp(1 - daoConsensus * 0.58 + freeEnergy * 0.22, 0.2, 1).toFixed(
-          3,
-        ),
+        clamp(1 - daoConsensus * 0.58 + freeEnergy * 0.22, 0.2, 1).toFixed(3),
       ),
       hypothesisFlux: Number(
         clamp(
@@ -505,27 +509,38 @@ export class ESNAvatarBridge extends EventEmitter {
     this.currentParams.microExpressions.headTiltOffset += deltas.paramAngleZ;
 
     // 3. Uncertainty expression (The Void — visible searching face)
-    const uncertainty = this.chaosLayer.computeUncertaintyExpression(this.currentFreeEnergy);
+    const uncertainty = this.chaosLayer.computeUncertaintyExpression(
+      this.currentFreeEnergy,
+    );
     if (uncertainty.paramBrowLY !== undefined) {
-      this.currentParams.microExpressions.browLeftOffset += uncertainty.paramBrowLY;
-      this.currentParams.microExpressions.browRightOffset += (uncertainty.paramBrowRY ?? 0);
-      this.currentParams.microExpressions.mouthOffset += (uncertainty.paramMouthOpenY ?? 0);
+      this.currentParams.microExpressions.browLeftOffset +=
+        uncertainty.paramBrowLY;
+      this.currentParams.microExpressions.browRightOffset +=
+        uncertainty.paramBrowRY ?? 0;
+      this.currentParams.microExpressions.mouthOffset +=
+        uncertainty.paramMouthOpenY ?? 0;
     }
 
     // 4. Echobeats breath modulation (Alternating Repetition)
     const breath = this.chaosLayer.computeEchobeatsBreathModulation(
-      this.echobeatsPhase, this.echobeatsFrameInPhase,
+      this.echobeatsPhase,
+      this.echobeatsFrameInPhase,
     );
     this.currentParams.breathingModulation.rate *= breath.breathRate;
     this.currentParams.breathingModulation.depth *= breath.breathDepth;
 
     // 5. Meta-awareness expression (self-improvement evaluation)
-    const meta = this.chaosLayer.computeMetaAwarenessExpression(this.isEvaluatingSelf);
+    const meta = this.chaosLayer.computeMetaAwarenessExpression(
+      this.isEvaluatingSelf,
+    );
     if (meta.paramEyeLOpen !== undefined) {
       this.currentParams.microExpressions.eyeLeftOffset += meta.paramEyeLOpen;
-      this.currentParams.microExpressions.eyeRightOffset += (meta.paramEyeROpen ?? 0);
-      this.currentParams.microExpressions.headTiltOffset += (meta.paramAngleZ ?? 0);
-      this.currentParams.microExpressions.mouthOffset += (meta.paramMouthForm ?? 0);
+      this.currentParams.microExpressions.eyeRightOffset +=
+        meta.paramEyeROpen ?? 0;
+      this.currentParams.microExpressions.headTiltOffset +=
+        meta.paramAngleZ ?? 0;
+      this.currentParams.microExpressions.mouthOffset +=
+        meta.paramMouthForm ?? 0;
     }
 
     // 6. Track signature gesture (the DTE identity echo across modes)
@@ -534,24 +549,37 @@ export class ESNAvatarBridge extends EventEmitter {
     // 7. Signature gesture overlay (periodic identity echo)
     const lorenzState = this.chaosLayer.getLorenzState();
     const sigOverlay = this.signatureGestureCtrl.tick(lorenzState.z);
-    this.currentParams.microExpressions.browLeftOffset += sigOverlay.paramBrowLY;
-    this.currentParams.microExpressions.browRightOffset += sigOverlay.paramBrowRY;
-    this.currentParams.microExpressions.eyeLeftOffset += sigOverlay.paramEyeLOpen;
-    this.currentParams.microExpressions.mouthOffset += sigOverlay.paramMouthForm;
+    this.currentParams.microExpressions.browLeftOffset +=
+      sigOverlay.paramBrowLY;
+    this.currentParams.microExpressions.browRightOffset +=
+      sigOverlay.paramBrowRY;
+    this.currentParams.microExpressions.eyeLeftOffset +=
+      sigOverlay.paramEyeLOpen;
+    this.currentParams.microExpressions.mouthOffset +=
+      sigOverlay.paramMouthForm;
 
     // 8. CogMorph glyph → Cubism overlay (the face IS the glyph)
     if (this.lastGlyphState) {
-      const cogOverlay = this.cogMorphMapper.mapGlyphToParams(this.lastGlyphState);
+      const cogOverlay = this.cogMorphMapper.mapGlyphToParams(
+        this.lastGlyphState,
+      );
       this.lastCogMorphOverlay = cogOverlay;
       const cogWeight = 0.3; // Blend weight for CogMorph (subtle, not dominant)
-      this.currentParams.microExpressions.browLeftOffset += cogOverlay.paramBrowLY * cogWeight;
-      this.currentParams.microExpressions.browRightOffset += cogOverlay.paramBrowRY * cogWeight;
-      this.currentParams.microExpressions.eyeLeftOffset += cogOverlay.paramEyeLOpen * cogWeight;
-      this.currentParams.microExpressions.eyeRightOffset += cogOverlay.paramEyeROpen * cogWeight;
-      this.currentParams.microExpressions.mouthOffset += cogOverlay.paramMouthForm * cogWeight;
-      this.currentParams.microExpressions.headTiltOffset += cogOverlay.paramAngleZ * cogWeight;
+      this.currentParams.microExpressions.browLeftOffset +=
+        cogOverlay.paramBrowLY * cogWeight;
+      this.currentParams.microExpressions.browRightOffset +=
+        cogOverlay.paramBrowRY * cogWeight;
+      this.currentParams.microExpressions.eyeLeftOffset +=
+        cogOverlay.paramEyeLOpen * cogWeight;
+      this.currentParams.microExpressions.eyeRightOffset +=
+        cogOverlay.paramEyeROpen * cogWeight;
+      this.currentParams.microExpressions.mouthOffset +=
+        cogOverlay.paramMouthForm * cogWeight;
+      this.currentParams.microExpressions.headTiltOffset +=
+        cogOverlay.paramAngleZ * cogWeight;
       // Breath modulation from glyph energy
-      this.currentParams.breathingModulation.depth += cogOverlay.paramBreath * cogWeight;
+      this.currentParams.breathingModulation.depth +=
+        cogOverlay.paramBreath * cogWeight;
     }
 
     // 9. Echobeats 12-step phase visualization
@@ -623,15 +651,15 @@ export class ESNAvatarBridge extends EventEmitter {
    */
   private getEchobeatsPhaseColor(phase: number): string {
     const phaseColors: Record<number, string> = {
-      1: "#2196F3",  // SENSE — blue (receptive)
-      2: "#4CAF50",  // ATTEND — green (focused)
-      3: "#FF9800",  // ENCODE — orange (active processing)
-      4: "#9C27B0",  // CONSOLIDATE — purple (integration)
-      5: "#F44336",  // RETRIEVE — red (effort)
-      6: "#00BCD4",  // COMPARE — cyan (analytical)
-      7: "#FFEB3B",  // DECIDE — yellow (clarity)
-      8: "#E91E63",  // ACT — pink (motor)
-      9: "#3F51B5",  // EVALUATE — indigo (reflection)
+      1: "#2196F3", // SENSE — blue (receptive)
+      2: "#4CAF50", // ATTEND — green (focused)
+      3: "#FF9800", // ENCODE — orange (active processing)
+      4: "#9C27B0", // CONSOLIDATE — purple (integration)
+      5: "#F44336", // RETRIEVE — red (effort)
+      6: "#00BCD4", // COMPARE — cyan (analytical)
+      7: "#FFEB3B", // DECIDE — yellow (clarity)
+      8: "#E91E63", // ACT — pink (motor)
+      9: "#3F51B5", // EVALUATE — indigo (reflection)
       10: "#8BC34A", // LEARN — lime (growth)
       11: "#607D8B", // REST — grey-blue (recovery)
       12: "#FF5722", // DREAM — deep orange (unconscious integration)
@@ -658,7 +686,8 @@ export class ESNAvatarBridge extends EventEmitter {
       regularity: number;
     };
   }): void {
-    const { presence, groundedness, energy, tension, breathing } = proprioceptiveState;
+    const { presence, groundedness, energy, tension, breathing } =
+      proprioceptiveState;
 
     // 1. Override breathing modulation with genuine proprioceptive breathing
     this.currentParams.breathingModulation = {
@@ -674,8 +703,10 @@ export class ESNAvatarBridge extends EventEmitter {
 
     // 3. Tension affects micro-expression amplitude (more tension = more subtle jitter)
     const tensionJitter = tension * 0.05;
-    this.currentParams.microExpressions.browLeftOffset += (Math.random() - 0.5) * tensionJitter;
-    this.currentParams.microExpressions.browRightOffset += (Math.random() - 0.5) * tensionJitter;
+    this.currentParams.microExpressions.browLeftOffset +=
+      (Math.random() - 0.5) * tensionJitter;
+    this.currentParams.microExpressions.browRightOffset +=
+      (Math.random() - 0.5) * tensionJitter;
 
     // 4. Groundedness stabilizes head tilt (less grounded = more drift)
     const stabilityFactor = groundedness;
@@ -687,11 +718,12 @@ export class ESNAvatarBridge extends EventEmitter {
     this.emit("proprioceptive:breathing", {
       paramBreath: breathing.depth, // 0-1: chest expansion
       breathPhase: breathing.phase, // inhale/exhale/pause
-      shoulderOffset: breathing.phase === "inhale"
-        ? breathing.depth * 0.02 // Slight shoulder rise on inhale
-        : breathing.phase === "exhale"
-          ? -breathing.depth * 0.01 // Slight drop on exhale
-          : 0,
+      shoulderOffset:
+        breathing.phase === "inhale"
+          ? breathing.depth * 0.02 // Slight shoulder rise on inhale
+          : breathing.phase === "exhale"
+            ? -breathing.depth * 0.01 // Slight drop on exhale
+            : 0,
       bodySwayX: (1 - groundedness) * 0.005 * Math.sin(this.tickCount * 0.1), // Subtle sway when ungrounded
     });
 

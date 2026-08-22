@@ -122,7 +122,11 @@ export class TemporalCreditAssignment extends EventEmitter {
   /**
    * Record a modification event (called when SelfModificationEngine applies a change).
    */
-  recordModification(key: string, previousValue: number, newValue: number): void {
+  recordModification(
+    key: string,
+    previousValue: number,
+    newValue: number,
+  ): void {
     const direction = newValue > previousValue ? 1 : -1;
     const magnitude = Math.abs(newValue - previousValue);
 
@@ -170,7 +174,8 @@ export class TemporalCreditAssignment extends EventEmitter {
     for (const trace of this.activeTraces) {
       // Credit = learning_rate × eligibility × coherence_delta × direction_alignment
       // direction_alignment: +1 if coherence improved in same direction as modification
-      const directionAlignment = coherenceDelta > 0 ? trace.direction : -trace.direction;
+      const directionAlignment =
+        coherenceDelta > 0 ? trace.direction : -trace.direction;
       const credit =
         this.config.learningRate *
         trace.eligibility *
@@ -213,10 +218,17 @@ export class TemporalCreditAssignment extends EventEmitter {
     record.credit += creditDelta;
     record.modificationCount++;
     record.avgCoherenceDelta =
-      (record.avgCoherenceDelta * (record.modificationCount - 1) + coherenceDelta) /
+      (record.avgCoherenceDelta * (record.modificationCount - 1) +
+        coherenceDelta) /
       record.modificationCount;
-    record.bestCoherenceDelta = Math.max(record.bestCoherenceDelta, coherenceDelta);
-    record.worstCoherenceDelta = Math.min(record.worstCoherenceDelta, coherenceDelta);
+    record.bestCoherenceDelta = Math.max(
+      record.bestCoherenceDelta,
+      coherenceDelta,
+    );
+    record.worstCoherenceDelta = Math.min(
+      record.worstCoherenceDelta,
+      coherenceDelta,
+    );
     record.lastUpdated = Date.now();
   }
 
@@ -298,7 +310,10 @@ export class TemporalCreditAssignment extends EventEmitter {
     if (!this.config.enablePersistence) return;
     try {
       fs.mkdirSync(this.config.persistencePath, { recursive: true });
-      const file = path.join(this.config.persistencePath, "credit-records.json");
+      const file = path.join(
+        this.config.persistencePath,
+        "credit-records.json",
+      );
       const data = {
         timestamp: Date.now(),
         records: Object.fromEntries(this.creditRecords),

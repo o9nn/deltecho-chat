@@ -10,11 +10,7 @@
  * - Knowledge density → gaze focus
  * - Smooth transitions between states
  */
-import {
-  MetabolicAvatarBridge,
-  DEFAULT_METABOLIC_AVATAR_CONFIG,
-  type MetabolicVisualInput,
-} from "../metabolic-avatar-bridge";
+import { MetabolicAvatarBridge } from "../metabolic-avatar-bridge";
 
 describe("MetabolicAvatarBridge", () => {
   let bridge: MetabolicAvatarBridge;
@@ -273,7 +269,10 @@ describe("MetabolicAvatarBridge", () => {
 
   describe("Configuration", () => {
     it("should accept config overrides", () => {
-      const custom = new MetabolicAvatarBridge({ influence: 0.3, smoothing: 0.5 });
+      const custom = new MetabolicAvatarBridge({
+        influence: 0.3,
+        smoothing: 0.5,
+      });
       expect(custom.getConfig().influence).toBe(0.3);
       expect(custom.getConfig().smoothing).toBe(0.5);
     });

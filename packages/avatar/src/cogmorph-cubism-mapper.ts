@@ -166,7 +166,8 @@ export class CogMorphCubismMapper extends EventEmitter {
     const maxB = this.config.maxBodyAngle;
 
     // Symmetry breaking: odd symmetry orders create asymmetric head turn
-    const symmetryBreak = g.symmetryOrder % 2 === 0 ? 0 : (1 / (g.symmetryOrder + 1));
+    const symmetryBreak =
+      g.symmetryOrder % 2 === 0 ? 0 : 1 / (g.symmetryOrder + 1);
 
     // Self-reference creates a subtle recursive tilt
     const selfRefTilt = this.config.enableSelfReference
@@ -200,7 +201,7 @@ export class CogMorphCubismMapper extends EventEmitter {
    */
   private smooth(
     current: CogMorphCubismOverlay,
-    previous: CogMorphCubismOverlay
+    previous: CogMorphCubismOverlay,
   ): CogMorphCubismOverlay {
     const α = 1 - this.config.smoothing;
     const result: CogMorphCubismOverlay = {} as CogMorphCubismOverlay;
@@ -212,11 +213,17 @@ export class CogMorphCubismMapper extends EventEmitter {
 
   private zeroOverlay(): CogMorphCubismOverlay {
     return {
-      paramAngleX: 0, paramAngleY: 0, paramAngleZ: 0,
-      paramEyeLOpen: 0.8, paramEyeROpen: 0.8,
-      paramBrowLY: 0, paramBrowRY: 0,
-      paramMouthForm: 0, paramMouthOpenY: 0,
-      paramBodyAngleX: 0, paramBodyAngleZ: 0,
+      paramAngleX: 0,
+      paramAngleY: 0,
+      paramAngleZ: 0,
+      paramEyeLOpen: 0.8,
+      paramEyeROpen: 0.8,
+      paramBrowLY: 0,
+      paramBrowRY: 0,
+      paramMouthForm: 0,
+      paramMouthOpenY: 0,
+      paramBodyAngleX: 0,
+      paramBodyAngleZ: 0,
       paramBreath: 0.5,
     };
   }

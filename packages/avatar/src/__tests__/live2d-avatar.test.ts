@@ -35,6 +35,11 @@ jest.mock("../adapters/pixi-live2d-renderer", () => ({
     updateLipSync: jest.fn(),
     setBlinking: jest.fn(),
     setParameter: jest.fn(),
+    focusEyes: jest.fn(),
+    addFrameListener: jest.fn(),
+    removeFrameListener: jest.fn(),
+    setAnimationSpeed: jest.fn(),
+    setVisualVitality: jest.fn(),
     dispose: jest.fn(),
   })),
 }));
@@ -202,6 +207,75 @@ describe("Live2DAvatarManager", () => {
       };
 
       expect(() => manager.updateEmotionalState(state)).not.toThrow();
+    });
+  });
+
+  describe("cognitive metabolic projection", () => {
+    it("applies metabolic state through the Pixi frame ticker", async () => {
+      const controller = await manager.initialize(mockContainer, {
+        modelPath: "/test/model.json",
+      });
+      const renderer = controller.getRenderer() as unknown as {
+        setParameter: jest.Mock;
+        addFrameListener: jest.Mock;
+        setAnimationSpeed: jest.Mock;
+        setVisualVitality: jest.Mock;
+      };
+      const frameListener = renderer.addFrameListener.mock.calls[0][0] as (
+        deltaTime: number,
+      ) => void;
+      renderer.setParameter.mockClear();
+      renderer.setAnimationSpeed.mockClear();
+      renderer.setVisualVitality.mockClear();
+
+      controller.updateCognitiveState({
+        mode: "Knowledge Integration",
+        valence: 0.2,
+        arousal: 0.5,
+        metabolic: {
+          metabolicPhase: "integrating",
+          energyLevel: 0.42,
+          anabolicBalance: 0.6,
+          isEnergyCrisis: false,
+          myelinationProgress: 0.8,
+          knowledgeDensity: 3.2,
+        },
+      });
+      frameListener(2);
+
+      expect(renderer.setParameter).toHaveBeenCalledWith(
+        "ParamBreath",
+        expect.any(Number),
+      );
+      expect(renderer.setParameter).toHaveBeenCalledWith(
+        "ParamMouthForm",
+        expect.any(Number),
+      );
+      expect(renderer.setParameter).toHaveBeenCalledWith(
+        "ParamAngleZ",
+        expect.any(Number),
+      );
+      expect(renderer.setAnimationSpeed).toHaveBeenCalledWith(
+        expect.any(Number),
+      );
+      expect(renderer.setVisualVitality).toHaveBeenCalledWith(
+        expect.any(Number),
+      );
+    });
+
+    it("removes the metabolic frame listener during disposal", async () => {
+      const controller = await manager.initialize(mockContainer, {
+        modelPath: "/test/model.json",
+      });
+      const renderer = controller.getRenderer() as unknown as {
+        addFrameListener: jest.Mock;
+        removeFrameListener: jest.Mock;
+      };
+      const frameListener = renderer.addFrameListener.mock.calls[0][0];
+
+      manager.dispose();
+
+      expect(renderer.removeFrameListener).toHaveBeenCalledWith(frameListener);
     });
   });
 

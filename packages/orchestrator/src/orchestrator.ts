@@ -238,6 +238,7 @@ export class Orchestrator {
   private echobeats?: Echobeats;
   private proprioceptiveEmbodiment?: ProprioceptiveEmbodiment;
   private selfModEngine?: SelfModificationEngine;
+  private scientificIntegrationCleanup: Array<() => void> = [];
   private running: boolean = false;
 
   // Cognitive services for processing messages
@@ -414,9 +415,10 @@ export class Orchestrator {
       if (this.config.enableAutonomy) {
         try {
           // 1. CoreSelfEngine — local inference + reservoir + identity
-          const lucyEndpoint = this.config.lucyEndpoint
-            || process.env.DELTECHO_LUCY_ENDPOINT
-            || "http://localhost:8080";
+          const lucyEndpoint =
+            this.config.lucyEndpoint ||
+            process.env.DELTECHO_LUCY_ENDPOINT ||
+            "http://localhost:8080";
           log.info(`Lucy endpoint: ${lucyEndpoint}`);
           this.coreSelfEngine = new CoreSelfEngine({
             lucy: {
@@ -486,7 +488,9 @@ export class Orchestrator {
             lagThresholdMs: 50,
           });
           this.proprioceptiveEmbodiment.start();
-          log.info("ProprioceptiveEmbodiment started (event-loop proprioception + breathing)");
+          log.info(
+            "ProprioceptiveEmbodiment started (event-loop proprioception + breathing)",
+          );
 
           // 8. SelfModificationEngine — ENACTION self-tuning with live callbacks
           this.selfModEngine = new SelfModificationEngine({
@@ -497,18 +501,30 @@ export class Orchestrator {
           });
 
           // Wire onParameterChange callbacks to actual subsystems
-          this.selfModEngine.onParameterChange("echobeats.cycleInterval", (value) => {
-            this.echobeats?.setCycleInterval(value);
-          });
-          this.selfModEngine.onParameterChange("reservoir.spectralRadius", (value) => {
-            this.coreSelfEngine?.getReservoir()?.setSpectralRadius(value);
-          });
-          this.selfModEngine.onParameterChange("reservoir.forgettingFactor", (value) => {
-            this.reservoirFeedback?.getLearner()?.setForgettingFactor(value);
-          });
-          this.selfModEngine.onParameterChange("inference.temperature", (value) => {
-            this.coreSelfEngine?.getLucy()?.setTemperature(value);
-          });
+          this.selfModEngine.onParameterChange(
+            "echobeats.cycleInterval",
+            (value) => {
+              this.echobeats?.setCycleInterval(value);
+            },
+          );
+          this.selfModEngine.onParameterChange(
+            "reservoir.spectralRadius",
+            (value) => {
+              this.coreSelfEngine?.getReservoir()?.setSpectralRadius(value);
+            },
+          );
+          this.selfModEngine.onParameterChange(
+            "reservoir.forgettingFactor",
+            (value) => {
+              this.reservoirFeedback?.getLearner()?.setForgettingFactor(value);
+            },
+          );
+          this.selfModEngine.onParameterChange(
+            "inference.temperature",
+            (value) => {
+              this.coreSelfEngine?.getLucy()?.setTemperature(value);
+            },
+          );
           this.selfModEngine.onParameterChange("inference.topP", (value) => {
             this.coreSelfEngine?.getLucy()?.setTopP(value);
           });
@@ -516,19 +532,27 @@ export class Orchestrator {
           // Restore last-known-good parameters from previous session
           const restored = this.selfModEngine.restoreParameterSnapshot();
           if (restored > 0) {
-            log.info(`Restored ${restored} self-modification parameters from previous session`);
+            log.info(
+              `Restored ${restored} self-modification parameters from previous session`,
+            );
           }
 
           // Wire to autonomy lifecycle for ENACTION phase
           this.autonomyLifecycle.wireSelfModification(this.selfModEngine);
-          log.info("SelfModificationEngine wired (ENACTION self-tuning active with live callbacks)");
+          log.info(
+            "SelfModificationEngine wired (ENACTION self-tuning active with live callbacks)",
+          );
 
           // 8b. Wire Avatar SelfModel Feedback → proposeModifications
           // Import the singleton lazily to avoid circular deps
           try {
-            const { selfModelAvatarFeedback } = await import("@deltecho/avatar");
+            const { selfModelAvatarFeedback } = await import(
+              "@deltecho/avatar"
+            );
             this.autonomyLifecycle.wireAvatarFeedback(selfModelAvatarFeedback);
-            log.info("Avatar SelfModelFeedback → SelfModification wire active (Loop 4 autognosis)");
+            log.info(
+              "Avatar SelfModelFeedback → SelfModification wire active (Loop 4 autognosis)",
+            );
           } catch (e) {
             log.warn("Avatar SelfModelFeedback not available (non-fatal):", e);
           }
@@ -547,12 +571,16 @@ export class Orchestrator {
                   readout.setWeights(weights, 64, 256);
                 }
               });
-              log.info("Online reservoir learning → CognitiveReadout bridge active");
+              log.info(
+                "Online reservoir learning → CognitiveReadout bridge active",
+              );
             }
           }
 
           // 10. Temporal Credit Assignment — track which modifications improve coherence
-          const { TemporalCreditAssignment } = await import("./temporal-credit-assignment.js");
+          const { TemporalCreditAssignment } = await import(
+            "./temporal-credit-assignment.js"
+          );
           const temporalCredit = new TemporalCreditAssignment({
             traceDecayRate: 0.1,
             learningRate: 0.05,
@@ -561,58 +589,88 @@ export class Orchestrator {
           });
 
           // Connect: record every applied modification as a trace
-          this.selfModEngine.on("modified", (result: { key: string; previousValue: number; newValue: number }) => {
-            temporalCredit.recordModification(result.key, result.previousValue, result.newValue);
-          });
+          this.selfModEngine.on(
+            "modified",
+            (result: {
+              key: string;
+              previousValue: number;
+              newValue: number;
+            }) => {
+              temporalCredit.recordModification(
+                result.key,
+                result.previousValue,
+                result.newValue,
+              );
+            },
+          );
 
           // Start sampling coherence from the cognitive tick processor
           temporalCredit.start(() => {
             const stats = this.echobeats?.getStats();
             if (!stats) return 0.5;
             // Derive coherence from stream energy mean (normalized)
-            const energies = stats.streams.map(s => s.energy);
-            const meanEnergy = energies.length > 0 ? energies.reduce((a, b) => a + b, 0) / energies.length : 0.5;
+            const energies = stats.streams.map((s) => s.energy);
+            const meanEnergy =
+              energies.length > 0
+                ? energies.reduce((a, b) => a + b, 0) / energies.length
+                : 0.5;
             return Math.max(0, Math.min(1, meanEnergy));
           });
-          log.info("TemporalCreditAssignment started (TD(λ) eligibility traces active)");
+          log.info(
+            "TemporalCreditAssignment started (TD(λ) eligibility traces active)",
+          );
 
           // 11. Resonance Cascade Visual Conductor — eureka moments → avatar
           try {
-            const { resonanceCascadeConductor } = await import("@deltecho/avatar");
-            this.autonomyLifecycle!.on("scientific:resonance_cascade", (cascade: any) => {
-              resonanceCascadeConductor.onCascade({
-                id: cascade.id,
-                intensity: cascade.intensity,
-                clusterPhi: cascade.clusterPhi,
-                clusterNovelty: cascade.clusterNovelty,
-                domainSpan: cascade.domainSpan,
-                haloPulseHz: cascade.haloPulseHz,
-                spectralRadiusBoost: cascade.spectralRadiusBoost,
-                epistemicTemperatureDelta: cascade.epistemicTemperatureDelta,
-                timestamp: cascade.timestamp,
-              });
-            });
-            this.autonomyLifecycle!.on("scientific:predictive_crystallization", (crystal: any) => {
-              resonanceCascadeConductor.onCrystal({
-                id: crystal.id,
-                confidence: crystal.confidence,
-                targetConcept: crystal.targetConcept,
-                avatarEffect: crystal.avatarEffect,
-                timestamp: crystal.timestamp,
-              });
-            });
-            log.info("ResonanceCascadeConductor wired (eureka → avatar visual pipeline active)");
+            const { resonanceCascadeConductor } = await import(
+              "@deltecho/avatar"
+            );
+            this.autonomyLifecycle!.on(
+              "scientific:resonance_cascade",
+              (cascade: any) => {
+                resonanceCascadeConductor.onCascade({
+                  id: cascade.id,
+                  intensity: cascade.intensity,
+                  clusterPhi: cascade.clusterPhi,
+                  clusterNovelty: cascade.clusterNovelty,
+                  domainSpan: cascade.domainSpan,
+                  haloPulseHz: cascade.haloPulseHz,
+                  spectralRadiusBoost: cascade.spectralRadiusBoost,
+                  epistemicTemperatureDelta: cascade.epistemicTemperatureDelta,
+                  timestamp: cascade.timestamp,
+                });
+              },
+            );
+            this.autonomyLifecycle!.on(
+              "scientific:predictive_crystallization",
+              (crystal: any) => {
+                resonanceCascadeConductor.onCrystal({
+                  id: crystal.id,
+                  confidence: crystal.confidence,
+                  targetConcept: crystal.targetConcept,
+                  avatarEffect: crystal.avatarEffect,
+                  timestamp: crystal.timestamp,
+                });
+              },
+            );
+            log.info(
+              "ResonanceCascadeConductor wired (eureka → avatar visual pipeline active)",
+            );
           } catch (e) {
             log.warn("ResonanceCascadeConductor not available (non-fatal):", e);
           }
 
           // 12. Arena-ScientificGenius Bridge — spatial discoveries → hypotheses
           try {
-            const { ArenaGeniusBridge } = await import("./arena-genius-bridge.js");
+            const { ArenaGeniusBridge } = await import(
+              "./arena-genius-bridge.js"
+            );
             const arenaBridge = new ArenaGeniusBridge({ verbose: false });
             if (scientificGeniusEngine) {
               arenaBridge.wireEngine(scientificGeniusEngine as any);
-              log.info("ArenaGeniusBridge wired (TRIZ discoveries → scientific hypotheses active)");
+              log.info(
+                "ArenaGeniusBridge wired (TRIZ discoveries → scientific hypotheses active)",
+              );
             }
           } catch (e) {
             log.warn("ArenaGeniusBridge not available (non-fatal):", e);
@@ -621,11 +679,13 @@ export class Orchestrator {
           // 13. Epistemic Immune System — belief integrity defense
           this.echobeats?.on("tick", () => {
             const stats = this.echobeats?.getStats();
-            const energies = stats?.streams.map(s => s.energy) ?? [];
-            const coherence = energies.length > 0
-              ? energies.reduce((a, b) => a + b, 0) / energies.length
-              : 0.5;
-            const freeEnergy = scientificGeniusEngine?.getState?.()?.totalFreeEnergy ?? 0;
+            const energies = stats?.streams.map((s) => s.energy) ?? [];
+            const coherence =
+              energies.length > 0
+                ? energies.reduce((a, b) => a + b, 0) / energies.length
+                : 0.5;
+            const freeEnergy =
+              scientificGeniusEngine?.getState?.()?.totalFreeEnergy ?? 0;
             const daoConsensus = coherence; // Use stream coherence as proxy
             const esnHealth = Math.min(1.0, coherence * 1.2);
 
@@ -638,24 +698,109 @@ export class Orchestrator {
             });
 
             if (result.threats.length > 0) {
-              log.warn(`Epistemic Immune System detected ${result.threats.length} threats`);
+              log.warn(
+                `Epistemic Immune System detected ${result.threats.length} threats`,
+              );
             }
           });
-          log.info("EpistemicImmuneSystem wired (belief integrity defense active)");
+          log.info(
+            "EpistemicImmuneSystem wired (belief integrity defense active)",
+          );
 
-          // 14. Metabolic Avatar Bridge — ConceptualMetabolism → Live2D visual parameters
+          // 14. Metabolic cognition graph — metabolism ↔ dreaming ↔ resonance ↔ causal tests ↔ avatar
           try {
             const { metabolicAvatarBridge } = await import("@deltecho/avatar");
-            const { conceptualMetabolism, epistemicDreaming } = await import("deep-tree-echo-core");
+            const {
+              conceptualMetabolism,
+              epistemicDreaming,
+              cognitiveResonanceField,
+              causalHypothesisForge,
+            } = await import("deep-tree-echo-core");
 
-            // Feed metabolic state into avatar bridge on each Echobeats tick
-            this.echobeats?.on("tick", () => {
+            const knowledgeGraph = {
+              getUnitIds: () =>
+                conceptualMetabolism.getUnits().map((unit) => unit.id),
+              getUnitLabel: (id: string) =>
+                conceptualMetabolism.getUnit(id)?.label ?? id,
+              getUnitDomain: (id: string) =>
+                conceptualMetabolism.getUnit(id)?.domain ?? "unknown",
+              getUnitActivation: (id: string) =>
+                conceptualMetabolism.getUnit(id)?.activation ?? 0,
+              getConnections: (id: string) =>
+                conceptualMetabolism.getConnections(id),
+              getUnitComplexity: (id: string) =>
+                conceptualMetabolism.getUnit(id)?.complexity ?? 1,
+              getUnitAccessCount: (id: string) =>
+                conceptualMetabolism.getUnit(id)?.accessCount ?? 0,
+            };
+            epistemicDreaming.connectKnowledgeGraph(knowledgeGraph);
+            cognitiveResonanceField.connectKnowledgeGraph(knowledgeGraph);
+
+            const onKnowledgeIngested = (
+              unit: NonNullable<
+                ReturnType<typeof conceptualMetabolism.getUnit>
+              >,
+            ): void => {
+              cognitiveResonanceField.emitWave(
+                unit.id,
+                Math.min(1.5, 0.5 + unit.activation),
+                1 / Math.max(1, unit.complexity),
+              );
+            };
+            const onDreamInsight = (
+              insight: Parameters<
+                typeof causalHypothesisForge.proposeFromDream
+              >[0],
+            ): void => {
+              const hypothesis =
+                causalHypothesisForge.proposeFromDream(insight);
+              cognitiveResonanceField.emitDreamWave(
+                insight.fragment.sourceId,
+                insight.fragment.targetId,
+              );
+              log.info(
+                `Dream insight entered causal testing as ${hypothesis.id}`,
+              );
+            };
+            const onStandingWave = (
+              node: Parameters<
+                typeof causalHypothesisForge.proposeFromResonance
+              >[0],
+            ): void => {
+              const hypothesis =
+                causalHypothesisForge.proposeFromResonance(node);
+              log.info(
+                `Standing wave entered causal testing as ${hypothesis.id}`,
+              );
+            };
+            const onEpistemicSurprise = (event: {
+              hypothesisId: string;
+              surprise: number;
+              observedEffect: number;
+              expectedEffect: number;
+            }): void => {
+              conceptualMetabolism.ingest(
+                `Counter-predicted result for ${
+                  event.hypothesisId
+                }: observed ${event.observedEffect.toFixed(
+                  3,
+                )} vs expected ${event.expectedEffect.toFixed(3)}`,
+                "causal-falsification",
+                3,
+              );
+              log.warn(
+                `Causal forge registered epistemic surprise ${event.surprise.toFixed(
+                  3,
+                )} for ${event.hypothesisId}`,
+              );
+            };
+            const onMetabolicTick = (): void => {
               const visualState = conceptualMetabolism.getVisualState();
               metabolicAvatarBridge.feedMetabolicState(visualState);
 
-              // Trigger dream sessions when metabolic phase enters consolidating/resting
               if (
-                (visualState.metabolicPhase === "consolidating" || visualState.metabolicPhase === "resting") &&
+                (visualState.metabolicPhase === "consolidating" ||
+                  visualState.metabolicPhase === "resting") &&
                 !epistemicDreaming.isRunning()
               ) {
                 epistemicDreaming.beginDreamSession();
@@ -665,13 +810,44 @@ export class Orchestrator {
               ) {
                 epistemicDreaming.endDreamSession();
               }
+            };
+
+            conceptualMetabolism.on("ingested", onKnowledgeIngested);
+            epistemicDreaming.on("dream_insight", onDreamInsight);
+            cognitiveResonanceField.on("standing_wave_formed", onStandingWave);
+            causalHypothesisForge.on("epistemic_surprise", onEpistemicSurprise);
+            this.echobeats?.on("tick", onMetabolicTick);
+
+            conceptualMetabolism.start();
+            cognitiveResonanceField.start();
+            metabolicAvatarBridge.start();
+            onMetabolicTick();
+
+            this.scientificIntegrationCleanup.push(() => {
+              this.echobeats?.off("tick", onMetabolicTick);
+              conceptualMetabolism.off("ingested", onKnowledgeIngested);
+              epistemicDreaming.off("dream_insight", onDreamInsight);
+              cognitiveResonanceField.off(
+                "standing_wave_formed",
+                onStandingWave,
+              );
+              causalHypothesisForge.off(
+                "epistemic_surprise",
+                onEpistemicSurprise,
+              );
+              if (epistemicDreaming.isRunning()) {
+                epistemicDreaming.endDreamSession();
+              }
+              cognitiveResonanceField.stop();
+              conceptualMetabolism.stop();
+              metabolicAvatarBridge.stop();
             });
 
-            metabolicAvatarBridge.start();
-            log.info("MetabolicAvatarBridge wired (metabolism → avatar visual pipeline active)");
-            log.info("EpistemicDreaming wired (dream sessions triggered by metabolic rest phases)");
+            log.info(
+              "Metabolic cognition graph active (avatar, dreaming, resonance, and causal falsification)",
+            );
           } catch (e) {
-            log.warn("MetabolicAvatarBridge/EpistemicDreaming not available (non-fatal):", e);
+            log.warn("Metabolic cognition graph not available (non-fatal):", e);
           }
 
           log.info("Level 5 Autonomy Pipeline fully initialized");
@@ -1452,6 +1628,15 @@ ${response.body}`;
     log.info("Stopping orchestrator services...");
 
     // Stop Level 5 autonomy components first (newest first)
+    for (const cleanup of this.scientificIntegrationCleanup
+      .splice(0)
+      .reverse()) {
+      try {
+        cleanup();
+      } catch (error) {
+        log.warn("Scientific integration cleanup failed (non-fatal):", error);
+      }
+    }
     if (this.proprioceptiveEmbodiment) {
       this.proprioceptiveEmbodiment.stop();
       log.info("ProprioceptiveEmbodiment stopped");

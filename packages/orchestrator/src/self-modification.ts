@@ -174,11 +174,17 @@ export class SelfModificationEngine extends EventEmitter {
         parameters: Object.fromEntries(
           Array.from(this.parameters.entries()).map(([key, param]) => [
             key,
-            { currentValue: param.currentValue, defaultValue: param.defaultValue },
+            {
+              currentValue: param.currentValue,
+              defaultValue: param.defaultValue,
+            },
           ]),
         ),
       };
-      const file = path.join(this.config.persistencePath, "parameters-snapshot.json");
+      const file = path.join(
+        this.config.persistencePath,
+        "parameters-snapshot.json",
+      );
       const tmpFile = file + ".tmp";
       fs.writeFileSync(tmpFile, JSON.stringify(snapshot, null, 2));
       fs.renameSync(tmpFile, file); // Atomic write
@@ -195,14 +201,20 @@ export class SelfModificationEngine extends EventEmitter {
    */
   restoreParameterSnapshot(): number {
     if (!this.config.enablePersistence) return 0;
-    const file = path.join(this.config.persistencePath, "parameters-snapshot.json");
+    const file = path.join(
+      this.config.persistencePath,
+      "parameters-snapshot.json",
+    );
     try {
       if (!fs.existsSync(file)) return 0;
       const raw = fs.readFileSync(file, "utf-8");
       const snapshot = JSON.parse(raw) as {
         timestamp: number;
         totalModifications: number;
-        parameters: Record<string, { currentValue: number; defaultValue: number }>;
+        parameters: Record<
+          string,
+          { currentValue: number; defaultValue: number }
+        >;
       };
 
       let restored = 0;
@@ -214,7 +226,10 @@ export class SelfModificationEngine extends EventEmitter {
         if (Math.abs(saved.currentValue - param.defaultValue) < 1e-10) continue;
 
         // Validate within bounds
-        const value = Math.max(param.min, Math.min(param.max, saved.currentValue));
+        const value = Math.max(
+          param.min,
+          Math.min(param.max, saved.currentValue),
+        );
         param.currentValue = value;
 
         // Fire callback to apply to live subsystem
@@ -232,7 +247,9 @@ export class SelfModificationEngine extends EventEmitter {
 
       if (restored > 0) {
         log.info(
-          `Restored ${restored} parameters from snapshot (age: ${Math.round((Date.now() - snapshot.timestamp) / 1000)}s)`,
+          `Restored ${restored} parameters from snapshot (age: ${Math.round(
+            (Date.now() - snapshot.timestamp) / 1000,
+          )}s)`,
         );
       }
       return restored;
@@ -326,7 +343,8 @@ export class SelfModificationEngine extends EventEmitter {
       // Avatar self-model parameters
       {
         key: "avatar.projectionLearningRate",
-        description: "Learning rate for avatar projection law calibration (Loop 4)",
+        description:
+          "Learning rate for avatar projection law calibration (Loop 4)",
         currentValue: 0.08,
         defaultValue: 0.08,
         min: 0.01,
@@ -336,7 +354,8 @@ export class SelfModificationEngine extends EventEmitter {
       },
       {
         key: "avatar.calibrationThreshold",
-        description: "Minimum expression error to trigger projection calibration",
+        description:
+          "Minimum expression error to trigger projection calibration",
         currentValue: 0.05,
         defaultValue: 0.05,
         min: 0.01,
@@ -698,9 +717,12 @@ export class SelfModificationEngine extends EventEmitter {
           key: "avatar.projectionLearningRate",
           newValue: Math.min(
             0.3,
-            (this.parameters.get("avatar.projectionLearningRate")?.currentValue ?? 0.08) * 1.25,
+            (this.parameters.get("avatar.projectionLearningRate")
+              ?.currentValue ?? 0.08) * 1.25,
           ),
-          reason: `Low avatar self-model accuracy (${this.avatarSelfModelAccuracy.toFixed(3)}) — increasing projection learning rate`,
+          reason: `Low avatar self-model accuracy (${this.avatarSelfModelAccuracy.toFixed(
+            3,
+          )}) — increasing projection learning rate`,
           source: "enaction",
           coherenceAtRequest: coherence,
         });
@@ -710,9 +732,12 @@ export class SelfModificationEngine extends EventEmitter {
           key: "avatar.calibrationThreshold",
           newValue: Math.max(
             0.01,
-            (this.parameters.get("avatar.calibrationThreshold")?.currentValue ?? 0.05) * 0.85,
+            (this.parameters.get("avatar.calibrationThreshold")?.currentValue ??
+              0.05) * 0.85,
           ),
-          reason: `High avatar self-model accuracy (${this.avatarSelfModelAccuracy.toFixed(3)}) — tightening calibration threshold`,
+          reason: `High avatar self-model accuracy (${this.avatarSelfModelAccuracy.toFixed(
+            3,
+          )}) — tightening calibration threshold`,
           source: "enaction",
           coherenceAtRequest: coherence,
         });
@@ -815,7 +840,11 @@ export class SelfModificationEngine extends EventEmitter {
       return {
         type: "add_stream",
         targetStream: overloaded[0],
-        reason: `Stream '${overloaded[0]}' overloaded (util > 0.95) with high coherence (${coherence.toFixed(3)})`,
+        reason: `Stream '${
+          overloaded[0]
+        }' overloaded (util > 0.95) with high coherence (${coherence.toFixed(
+          3,
+        )})`,
         coherenceAtRequest: coherence,
         timestamp: now,
         config: {
@@ -827,7 +856,11 @@ export class SelfModificationEngine extends EventEmitter {
     }
 
     // If a stream is underutilized and we have more than minimum streams, propose removal
-    if (underutilized.length > 0 && streamUtilization.size > 3 && activeGoals < 5) {
+    if (
+      underutilized.length > 0 &&
+      streamUtilization.size > 3 &&
+      activeGoals < 5
+    ) {
       this.lastStructuralModTime = now;
       return {
         type: "remove_stream",
@@ -844,7 +877,9 @@ export class SelfModificationEngine extends EventEmitter {
       return {
         type: "add_stream",
         targetStream: "planning",
-        reason: `High coherence (${coherence.toFixed(3)}) + many goals (${activeGoals}) — adding dedicated planning stream`,
+        reason: `High coherence (${coherence.toFixed(
+          3,
+        )}) + many goals (${activeGoals}) — adding dedicated planning stream`,
         coherenceAtRequest: coherence,
         timestamp: now,
         config: {

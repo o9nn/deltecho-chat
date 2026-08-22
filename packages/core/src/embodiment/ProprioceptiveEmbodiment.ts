@@ -16,7 +16,9 @@
  */
 import { getLogger } from "../utils/logger";
 
-const log = getLogger("deep-tree-echo-core/embodiment/ProprioceptiveEmbodiment");
+const log = getLogger(
+  "deep-tree-echo-core/embodiment/ProprioceptiveEmbodiment",
+);
 
 /**
  * Breathing state with physiological-analog parameters
@@ -88,7 +90,10 @@ export class ProprioceptiveEmbodiment {
       this.sample();
     }, this.config.sampleIntervalMs);
     // Allow the timer to not block process exit
-    if (this.sampleTimer && typeof (this.sampleTimer as any).unref === "function") {
+    if (
+      this.sampleTimer &&
+      typeof (this.sampleTimer as any).unref === "function"
+    ) {
       (this.sampleTimer as any).unref();
     }
     log.info("Proprioceptive sampling started");
@@ -219,7 +224,7 @@ export class ProprioceptiveEmbodiment {
 
     // ENERGY: Based on how much headroom remains (inverse of heap + lag combined)
     const energySignal = this.clamp01(
-      1 - (avgHeap * 0.6 + avgLag / this.config.lagThresholdMs * 0.4),
+      1 - (avgHeap * 0.6 + (avgLag / this.config.lagThresholdMs) * 0.4),
     );
     this.state.energy = this.ema(this.state.energy, energySignal, alpha);
 
@@ -239,8 +244,7 @@ export class ProprioceptiveEmbodiment {
   }
 
   private updateBreathing(deltaMs: number): void {
-    const cycleDurationMs =
-      (60 / this.config.baseBreathingRate) * 1000;
+    const cycleDurationMs = (60 / this.config.baseBreathingRate) * 1000;
     this.breathingPhaseTime =
       (this.breathingPhaseTime + deltaMs) % cycleDurationMs;
 
@@ -277,10 +281,7 @@ export class ProprioceptiveEmbodiment {
       return mem.heapTotal > 0 ? mem.heapUsed / mem.heapTotal : 0.5;
     }
     // Browser environment: use performance.memory if available
-    if (
-      typeof performance !== "undefined" &&
-      (performance as any).memory
-    ) {
+    if (typeof performance !== "undefined" && (performance as any).memory) {
       const mem = (performance as any).memory;
       return mem.totalJSHeapSize > 0
         ? mem.usedJSHeapSize / mem.totalJSHeapSize

@@ -24,7 +24,6 @@ import { EventEmitter } from "events";
 import {
   getLogger,
   ScientificDomain,
-  type Hypothesis,
   ScientificGeniusEngine,
   type ScientificInsight,
 } from "deep-tree-echo-core";
@@ -35,10 +34,10 @@ import type {
   ModificationResult,
 } from "./self-modification.js";
 import type { ReservoirFeedbackLoop } from "./reservoir-feedback-loop.js";
-import { EchoDreamEngine, type DreamExperience, type EchoDreamEvent } from "./echodream/index.js";
+import { EchoDreamEngine, type EchoDreamEvent } from "./echodream/index.js";
 import { CogVerseEventBus } from "./cogverse-event-bus.js";
 import { EntelechyIntegration } from "./entelechy-integration.js";
-import { HypothesisEvaluationEvent, type EpistemicResonanceCascade } from "deep-tree-echo-core";
+import { HypothesisEvaluationEvent } from "deep-tree-echo-core";
 
 const log = getLogger("deep-tree-echo-orchestrator/AutonomyLifecycle");
 
@@ -106,7 +105,6 @@ export interface DevelopmentalCycleResult {
 }
 
 export interface ScientificAutonomySignal {
-
   insightPotential: number;
   averagePhi: number;
   averageNovelty: number;
@@ -117,10 +115,7 @@ export interface ScientificAutonomySignal {
   lastInsightContent?: string;
   lastDomain?: ScientificDomain;
   lastReasoningAt?: number;
-
 }
-
-
 
 /**
  * Lifecycle configuration
@@ -170,7 +165,8 @@ const DEFAULT_CONFIG: AutonomyLifecycleConfig = {
 export class AutonomyLifecycleCoordinator extends EventEmitter {
   /** Internal debug logger - no-op unless config.verbose is true */
   private dlog(...args: unknown[]): void {
-    if (this.config.verbose) log.info("[AutonomyLifecycleCoordinator]", ...args);
+    if (this.config.verbose)
+      log.info("[AutonomyLifecycleCoordinator]", ...args);
   }
   private config: AutonomyLifecycleConfig;
   private cognitiveProcessor?: CognitiveTickProcessor;
@@ -322,7 +318,6 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
     log.info("Autonomy Lifecycle Coordinator stopped");
     this.emit("stopped");
   }
-
 
   /**
    * Run a complete developmental cycle
@@ -477,7 +472,8 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
       this.virtualAgent.selfAwareness.perceivedAccuracy = latest.coherenceScore;
     }
 
-    const generatedInsights = await this.runScientificReflectionInquiry(cycleId);
+    const generatedInsights =
+      await this.runScientificReflectionInquiry(cycleId);
     const scientificSignal = this.getScientificAutonomySignal();
     if (scientificSignal.lastInsightContent) {
       this.integrateScientificInsight(scientificSignal.lastInsightContent);
@@ -611,7 +607,6 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
     const modifications: ModificationResult[] = [];
     const coherenceBefore = this.computeCoherence();
     let epistemicForagingInsights: ScientificInsight[] = [];
-    const stateChanges: Record<string, unknown> = {};
     if (this.selfModEngine) {
       const coherence = coherenceBefore;
       const cogState = this.cognitiveProcessor?.getState();
@@ -624,7 +619,8 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
       const avgPredictionError =
         this.reservoirFeedback?.getAvgPredictionError() ?? 0;
       const scientificSignal = this.getScientificAutonomySignal();
-      const scientificPredictionPressure = scientificSignal.freeEnergyPressure * 0.1;
+      const scientificPredictionPressure =
+        scientificSignal.freeEnergyPressure * 0.1;
 
       const proposals = this.selfModEngine.proposeModifications(
         coherence,
@@ -661,7 +657,8 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
         this.config.scientificInquiryInterval
     ) {
       this.dlog("Triggering epistemic foraging during ENACTION phase.");
-      epistemicForagingInsights = await this.scientificGenius.performEpistemicForaging();
+      epistemicForagingInsights =
+        await this.scientificGenius.performEpistemicForaging();
       this.captureScientificInsights(epistemicForagingInsights);
       this.lastScientificInquiryCycle = this.cycleCount;
     }
@@ -743,7 +740,9 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
       `phase=${this.currentPhase}`,
       `coherence=${coherence.toFixed(3)}`,
       `dominantMode=${this.virtualAgent.selfImage.dominantCognitiveMode}`,
-      `ontogeneticProgress=${this.virtualAgent.selfImage.ontogeneticProgress.toFixed(3)}`,
+      `ontogeneticProgress=${this.virtualAgent.selfImage.ontogeneticProgress.toFixed(
+        3,
+      )}`,
       `goals=${goals.slice(0, 3).join("; ") || "maintain coherent autonomy"}`,
       `misalignments=${misalignments.join("; ") || "none"}`,
       `questions=${activeQuestions.slice(0, 3).join("; ")}`,
@@ -847,15 +846,14 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
     const daoConsensus = this.entelechyIntegration?.getDaoConsensus() ?? 0.5;
     const esnAutognosis = this.entelechyIntegration?.getEsnAutognosis() ?? 0.5;
 
-    let blendedCoherence = (
-      baseCoherence * (1 - this.config.daoConsensusWeight - this.config.esnAutognosisWeight) +
+    let blendedCoherence =
+      baseCoherence *
+        (1 - this.config.daoConsensusWeight - this.config.esnAutognosisWeight) +
       daoConsensus * this.config.daoConsensusWeight +
-      esnAutognosis * this.config.esnAutognosisWeight
-    );
+      esnAutognosis * this.config.esnAutognosisWeight;
 
     // Ensure blendedCoherence remains within [0, 1] after initial blending
     blendedCoherence = Math.max(0, Math.min(1, blendedCoherence));
-
 
     // Blend with scientific signal
     blendedCoherence = this.clamp01(
@@ -866,9 +864,14 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
 
     // Trigger deeper autognosis if resonance threshold is met
     if (esnAutognosis > this.config.autognosisResonanceThreshold) {
-      this.dlog("Autognosis resonance threshold met, triggering deeper inquiry.");
+      this.dlog(
+        "Autognosis resonance threshold met, triggering deeper inquiry.",
+      );
       // Emit an event or trigger a specific action for deeper autognosis
-      this.emit("autognosis:resonance", { coherence: blendedCoherence, esnAutognosis });
+      this.emit("autognosis:resonance", {
+        coherence: blendedCoherence,
+        esnAutognosis,
+      });
     }
 
     return blendedCoherence;
@@ -968,7 +971,9 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
     const count = insights.length;
     const lastInsight = insights[count - 1];
 
-    const average = (selector: (insight: ScientificInsight) => number): number =>
+    const average = (
+      selector: (insight: ScientificInsight) => number,
+    ): number =>
       count > 0
         ? insights.reduce((sum, insight) => sum + selector(insight), 0) / count
         : 0;
@@ -1090,18 +1095,23 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
     engine.on("resonance_cascade", (cascade) => {
       if (this.selfModEngine && cascade.spectralRadiusBoost > 0) {
         const currentRadius =
-          this.selfModEngine.getParameter("reservoir.spectralRadius")?.currentValue ?? 0.95;
+          this.selfModEngine.getParameter("reservoir.spectralRadius")
+            ?.currentValue ?? 0.95;
         this.selfModEngine.modify({
           key: "reservoir.spectralRadius",
           newValue: Math.min(1.5, currentRadius + cascade.spectralRadiusBoost),
-          reason: `Epistemic Resonance Cascade (intensity=${cascade.intensity.toFixed(3)}) — boosting spectral radius toward edge of chaos`,
+          reason: `Epistemic Resonance Cascade (intensity=${cascade.intensity.toFixed(
+            3,
+          )}) — boosting spectral radius toward edge of chaos`,
           source: "enaction",
           coherenceAtRequest: this.computeCoherence(),
         });
       }
       this.emit("scientific:resonance_cascade", cascade);
       log.info(
-        `RESONANCE CASCADE: intensity=${cascade.intensity.toFixed(3)} domains=${cascade.domainSpan} Φ=${cascade.clusterPhi.toFixed(3)}`,
+        `RESONANCE CASCADE: intensity=${cascade.intensity.toFixed(3)} domains=${
+          cascade.domainSpan
+        } Φ=${cascade.clusterPhi.toFixed(3)}`,
       );
     });
 
@@ -1112,12 +1122,17 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
         this.esnAvatarBridge.setEvaluatingSelf(true); // Trigger meta-awareness face
         // Schedule release after crystallization settles (2s)
         setTimeout(() => {
-          if (this.esnAvatarBridge) this.esnAvatarBridge.setEvaluatingSelf(false);
+          if (this.esnAvatarBridge)
+            this.esnAvatarBridge.setEvaluatingSelf(false);
         }, 2000);
       }
       this.emit("scientific:predictive_crystallization", crystal);
       log.info(
-        `PREDICTIVE CRYSTAL: ${crystal.targetConcept} (confidence=${crystal.confidence.toFixed(3)}) via [${crystal.sourceConcepts.join(", ")}]`,
+        `PREDICTIVE CRYSTAL: ${
+          crystal.targetConcept
+        } (confidence=${crystal.confidence.toFixed(
+          3,
+        )}) via [${crystal.sourceConcepts.join(", ")}]`,
       );
     });
 
@@ -1140,33 +1155,59 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
     setCoherenceProvider(fn: () => number): void;
     setPhiProvider(fn: () => number): void;
     setFreeEnergyProvider(fn: () => number): void;
-    getDaoSummary(): { iteration: number; improvementRate: number; weakestCenter: string; overallHealth: number; recommendation: string };
+    getDaoSummary(): {
+      iteration: number;
+      improvementRate: number;
+      weakestCenter: string;
+      overallHealth: number;
+      recommendation: string;
+    };
     isEvaluating(): boolean;
   }): void {
     // Connect state providers so the improvement engine reads live metrics
     engine.setCoherenceProvider(() => this.computeCoherence());
     engine.setPhiProvider(() => {
       const sg = this.scientificGenius;
-      if (sg && typeof (sg as unknown as { getState: () => { phi: number } }).getState === 'function') {
-        return (sg as unknown as { getState: () => { phi: number } }).getState().phi;
+      if (
+        sg &&
+        typeof (sg as unknown as { getState: () => { phi: number } })
+          .getState === "function"
+      ) {
+        return (sg as unknown as { getState: () => { phi: number } }).getState()
+          .phi;
       }
       return this.virtualAgent.selfAwareness.perceivedAccuracy;
     });
     engine.setFreeEnergyProvider(() => {
       const sg = this.scientificGenius;
-      if (sg && typeof (sg as unknown as { getState: () => { freeEnergy: number } }).getState === 'function') {
-        return (sg as unknown as { getState: () => { freeEnergy: number } }).getState().freeEnergy;
+      if (
+        sg &&
+        typeof (sg as unknown as { getState: () => { freeEnergy: number } })
+          .getState === "function"
+      ) {
+        return (
+          sg as unknown as { getState: () => { freeEnergy: number } }
+        ).getState().freeEnergy;
       }
       return 1 - this.computeCoherence();
     });
 
     // Translate mutation_apply into actual self-modification
-    engine.on('mutation_apply', (candidate: unknown) => {
-      const c = candidate as { id: string; targetProperty: string; mutation: string; description: string; estimatedImpact: number };
+    engine.on("mutation_apply", (candidate: unknown) => {
+      const c = candidate as {
+        id: string;
+        targetProperty: string;
+        mutation: string;
+        description: string;
+        estimatedImpact: number;
+      };
       if (!this.selfModEngine) return;
 
       // Map Alexander property mutations to parameter keys
-      const paramKey = this.alexanderPropertyToParamKey(c.targetProperty, c.mutation);
+      const paramKey = this.alexanderPropertyToParamKey(
+        c.targetProperty,
+        c.mutation,
+      );
       if (!paramKey) return;
 
       const param = this.selfModEngine.getParameter(paramKey);
@@ -1174,67 +1215,87 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
 
       // Compute new value: nudge toward improvement
       const delta = (param.max - param.min) * c.estimatedImpact * 0.5;
-      const newValue = Math.min(param.max, Math.max(param.min, param.currentValue + delta));
+      const newValue = Math.min(
+        param.max,
+        Math.max(param.min, param.currentValue + delta),
+      );
 
       this.selfModEngine.modify({
         key: paramKey,
         newValue,
         reason: `MicroImprovement [${c.id}]: ${c.description}`,
-        source: 'enaction',
+        source: "enaction",
         coherenceAtRequest: this.computeCoherence(),
       });
     });
 
     // On cycle complete, emit DAO summary for governance
-    engine.on('cycle_complete', () => {
+    engine.on("cycle_complete", () => {
       const summary = engine.getDaoSummary();
-      this.emit('micro-improvement:cycle-complete', summary);
+      this.emit("micro-improvement:cycle-complete", summary);
       log.info(
-        `MicroImprovement cycle complete: iter=${summary.iteration} rate=${(summary.improvementRate * 100).toFixed(0)}% weakest=${summary.weakestCenter} health=${(summary.overallHealth * 100).toFixed(0)}% rec=${summary.recommendation}`,
+        `MicroImprovement cycle complete: iter=${summary.iteration} rate=${(
+          summary.improvementRate * 100
+        ).toFixed(0)}% weakest=${summary.weakestCenter} health=${(
+          summary.overallHealth * 100
+        ).toFixed(0)}% rec=${summary.recommendation}`,
       );
     });
 
     // On convergence, log and emit
-    engine.on('convergence', () => {
-      this.emit('micro-improvement:convergence', engine.getDaoSummary());
-      log.info('MicroImprovement: convergence reached — no further improvements found');
+    engine.on("convergence", () => {
+      this.emit("micro-improvement:convergence", engine.getDaoSummary());
+      log.info(
+        "MicroImprovement: convergence reached — no further improvements found",
+      );
     });
 
     // Wire evaluation state to ESN avatar bridge (meta-awareness expression)
-    engine.on('candidate_generated', () => {
+    engine.on("candidate_generated", () => {
       if (this.esnAvatarBridge) {
-        (this.esnAvatarBridge as { setEvaluatingSelf: (v: boolean) => void }).setEvaluatingSelf(true);
+        (
+          this.esnAvatarBridge as { setEvaluatingSelf: (v: boolean) => void }
+        ).setEvaluatingSelf(true);
       }
     });
-    engine.on('improvement_accepted', () => {
+    engine.on("improvement_accepted", () => {
       if (this.esnAvatarBridge) {
-        (this.esnAvatarBridge as { setEvaluatingSelf: (v: boolean) => void }).setEvaluatingSelf(false);
+        (
+          this.esnAvatarBridge as { setEvaluatingSelf: (v: boolean) => void }
+        ).setEvaluatingSelf(false);
       }
     });
-    engine.on('improvement_rejected', () => {
+    engine.on("improvement_rejected", () => {
       if (this.esnAvatarBridge) {
-        (this.esnAvatarBridge as { setEvaluatingSelf: (v: boolean) => void }).setEvaluatingSelf(false);
+        (
+          this.esnAvatarBridge as { setEvaluatingSelf: (v: boolean) => void }
+        ).setEvaluatingSelf(false);
       }
     });
 
-    log.info('IterativeMicroImprovementEngine wired to autonomy lifecycle (Alexander loop active)');
+    log.info(
+      "IterativeMicroImprovementEngine wired to autonomy lifecycle (Alexander loop active)",
+    );
   }
 
   /**
    * Map an Alexander property + mutation type to a self-modification parameter key.
    */
-  private alexanderPropertyToParamKey(property: string, mutation: string): string | null {
+  private alexanderPropertyToParamKey(
+    property: string,
+    _mutation: string,
+  ): string | null {
     // Priority mappings: Alexander properties → concrete system parameters
     const mapping: Record<string, string> = {
-      'good_shape': 'avatar.projectionLearningRate',
-      'roughness': 'avatar.calibrationThreshold',
-      'alternating_repetition': 'reservoir.spectralRadius',
-      'strong_centers': 'reservoir.spectralRadius',
-      'the_void': 'avatar.calibrationThreshold',
-      'deep_interlock': 'reservoir.spectralRadius',
-      'gradients': 'avatar.projectionLearningRate',
-      'contrast': 'avatar.calibrationThreshold',
-      'echoes': 'reservoir.spectralRadius',
+      good_shape: "avatar.projectionLearningRate",
+      roughness: "avatar.calibrationThreshold",
+      alternating_repetition: "reservoir.spectralRadius",
+      strong_centers: "reservoir.spectralRadius",
+      the_void: "avatar.calibrationThreshold",
+      deep_interlock: "reservoir.spectralRadius",
+      gradients: "avatar.projectionLearningRate",
+      contrast: "avatar.calibrationThreshold",
+      echoes: "reservoir.spectralRadius",
     };
 
     return mapping[property] ?? null;
@@ -1306,9 +1367,13 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
    * Wire the ESN Avatar Bridge so the micro-improvement engine can signal
    * evaluation state (meta-awareness expression on the avatar).
    */
-  public wireEsnAvatarBridge(bridge: { setEvaluatingSelf: (v: boolean) => void }): void {
+  public wireEsnAvatarBridge(bridge: {
+    setEvaluatingSelf: (v: boolean) => void;
+  }): void {
     this.esnAvatarBridge = bridge;
-    log.info('ESN Avatar Bridge wired to autonomy lifecycle (meta-awareness expression active)');
+    log.info(
+      "ESN Avatar Bridge wired to autonomy lifecycle (meta-awareness expression active)",
+    );
   }
 
   /**
@@ -1338,46 +1403,54 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
     this.echoDream = engine;
 
     // Feed lifecycle events into the dream engine as experiences
-    this.on('phaseComplete', (phase: AutonomyPhase) => {
+    this.on("phaseComplete", (phase: AutonomyPhase) => {
       if (!this.echoDream) return;
 
       // Report cognitive load from each phase
       this.echoDream.reportCognitiveLoad(
-        phase === AutonomyPhase.MODELING ? 0.8 :
-        phase === AutonomyPhase.REFLECTION ? 0.6 :
-        phase === AutonomyPhase.ENACTION ? 0.7 : 0.3
+        phase === AutonomyPhase.MODELING
+          ? 0.8
+          : phase === AutonomyPhase.REFLECTION
+            ? 0.6
+            : phase === AutonomyPhase.ENACTION
+              ? 0.7
+              : 0.3,
       );
     });
 
     // Listen for dream events to drive avatar and attention
-    engine.on('dream_event', (event: EchoDreamEvent) => {
+    engine.on("dream_event", (event: EchoDreamEvent) => {
       switch (event.type) {
-        case 'state_change':
-          log.info(`EchoDream state: ${event.from} → ${event.to} (${event.reason})`);
+        case "state_change":
+          log.info(
+            `EchoDream state: ${event.from} → ${event.to} (${event.reason})`,
+          );
           // Update avatar expression based on dream state
-          if (this.esnAvatarBridge && event.to === 'dreaming') {
+          if (this.esnAvatarBridge && event.to === "dreaming") {
             this.esnAvatarBridge.setEvaluatingSelf(true); // Dreaming = introspective face
-          } else if (this.esnAvatarBridge && event.to === 'awake') {
+          } else if (this.esnAvatarBridge && event.to === "awake") {
             this.esnAvatarBridge.setEvaluatingSelf(false);
           }
           break;
 
-        case 'consolidation_complete':
-          log.info(`Dream consolidation: ${event.insights.length} insights synthesized`);
+        case "consolidation_complete":
+          log.info(
+            `Dream consolidation: ${event.insights.length} insights synthesized`,
+          );
           // Feed dream insights back into the scientific genius engine
           for (const insight of event.insights) {
-            this.emit('dreamInsight', insight);
+            this.emit("dreamInsight", insight);
           }
           break;
 
-        case 'interest_reinforced':
+        case "interest_reinforced":
           // Interests drive proactive attention allocation
-          this.emit('interestUpdate', event.interest);
+          this.emit("interestUpdate", event.interest);
           break;
       }
     });
 
-    log.info('EchoDream engine wired to autonomy lifecycle');
+    log.info("EchoDream engine wired to autonomy lifecycle");
   }
 
   /**
@@ -1386,12 +1459,12 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
   public feedInsightToDream(insight: ScientificInsight): void {
     if (!this.echoDream) return;
     this.echoDream.ingestExperience({
-      domain: insight.domain || 'general',
+      domain: insight.domain || "general",
       content: insight.content,
       emotionalValence: insight.significance > 0.7 ? 0.8 : 0.3,
       novelty: insight.novelty,
       significance: insight.significance,
-      source: 'insight',
+      source: "insight",
       tags: insight.crossDomainConnections || [],
     });
   }
@@ -1428,21 +1501,25 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
 
     // Broadcast dream state changes
     if (this.echoDream) {
-      this.echoDream.on('dream_event', (event: EchoDreamEvent) => {
+      this.echoDream.on("dream_event", (event: EchoDreamEvent) => {
         if (!this.cogVerse) return;
-        if (event.type === 'state_change') {
-          this.cogVerse.broadcastDreamStateChange(event.from, event.to, event.reason);
-        } else if (event.type === 'consolidation_complete') {
+        if (event.type === "state_change") {
+          this.cogVerse.broadcastDreamStateChange(
+            event.from,
+            event.to,
+            event.reason,
+          );
+        } else if (event.type === "consolidation_complete") {
           for (const insight of event.insights) {
             this.cogVerse.broadcastInsight(
               insight.wisdom,
-              insight.domains[0] || 'general',
+              insight.domains[0] || "general",
               insight.confidence,
-              0.5 // novelty estimate
+              0.5, // novelty estimate
             );
           }
-        } else if (event.type === 'wisdom_synthesized') {
-          this.cogVerse.publish('wisdom_synthesized', {
+        } else if (event.type === "wisdom_synthesized") {
+          this.cogVerse.publish("wisdom_synthesized", {
             wisdom: event.wisdom,
             domains: event.domains,
           });
@@ -1451,29 +1528,31 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
     }
 
     // Listen for collaboration requests from other residents
-    bus.on('event:collaboration_request', (event) => {
-      log.info(`Collaboration request from ${event.source}: ${event.payload.topic}`);
-      this.emit('collaborationRequest', event);
+    bus.on("event:collaboration_request", (event) => {
+      log.info(
+        `Collaboration request from ${event.source}: ${event.payload.topic}`,
+      );
+      this.emit("collaborationRequest", event);
     });
 
     // Listen for insights from other residents
-    bus.on('event:insight_broadcast', (event) => {
+    bus.on("event:insight_broadcast", (event) => {
       log.info(`Insight from ${event.source}: ${event.payload.content}`);
       // Feed external insights into the dream engine as experiences
       if (this.echoDream) {
         this.echoDream.ingestExperience({
-          domain: (event.payload.domain as string) || 'external',
-          content: (event.payload.content as string) || '',
+          domain: (event.payload.domain as string) || "external",
+          content: (event.payload.content as string) || "",
           emotionalValence: 0.5,
           novelty: (event.payload.novelty as number) || 0.7,
           significance: (event.payload.phi as number) || 0.5,
-          source: 'observation',
-          tags: [event.source, 'village'],
+          source: "observation",
+          tags: [event.source, "village"],
         });
       }
     });
 
-    log.info('CogVerse event bus wired to autonomy lifecycle');
+    log.info("CogVerse event bus wired to autonomy lifecycle");
   }
 
   /**

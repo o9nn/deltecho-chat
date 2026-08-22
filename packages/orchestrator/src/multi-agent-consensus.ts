@@ -18,7 +18,6 @@
 import { EventEmitter } from "events";
 import type {
   ModificationRequest,
-  ModificationResult,
   SelfModificationEngine,
 } from "./self-modification.js";
 
@@ -205,13 +204,17 @@ export class MultiAgentConsensus extends EventEmitter {
     // Reject if local coherence is too low (system is unstable)
     if (this.localCoherence < this.config.minCoherenceToApprove) {
       approve = false;
-      reason = `Rejected: local coherence ${this.localCoherence.toFixed(3)} below threshold`;
+      reason = `Rejected: local coherence ${this.localCoherence.toFixed(
+        3,
+      )} below threshold`;
     }
 
     // Reject if the modification seems too aggressive
     if (modification.coherenceAtRequest < 0.3) {
       approve = false;
-      reason = `Rejected: proposer coherence ${modification.coherenceAtRequest.toFixed(3)} too low`;
+      reason = `Rejected: proposer coherence ${modification.coherenceAtRequest.toFixed(
+        3,
+      )} too low`;
     }
 
     return {
@@ -301,7 +304,10 @@ export class MultiAgentConsensus extends EventEmitter {
       ).length;
       const totalVotes = proposal.votes.size;
 
-      if (totalVotes > 0 && approvals / totalVotes > this.config.quorumFraction) {
+      if (
+        totalVotes > 0 &&
+        approvals / totalVotes > this.config.quorumFraction
+      ) {
         proposal.status = "approved";
         proposal.quorumReached = true;
         this.emit("proposal:approved", proposal);
@@ -367,8 +373,10 @@ export class MultiAgentConsensus extends EventEmitter {
       healthyPeers: this.getHealthyPeerCount(),
       totalPeers: this.peers.size,
       totalProposals: proposals.length,
-      approvedProposals: proposals.filter((p) => p.status === "approved").length,
-      rejectedProposals: proposals.filter((p) => p.status === "rejected").length,
+      approvedProposals: proposals.filter((p) => p.status === "approved")
+        .length,
+      rejectedProposals: proposals.filter((p) => p.status === "rejected")
+        .length,
     };
   }
 

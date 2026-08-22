@@ -224,7 +224,11 @@ export class CognitiveResonanceField extends EventEmitter {
    * @param amplitude - Initial wave amplitude (0-3)
    * @param frequency - Wave frequency (related to idea complexity)
    */
-  emitWave(sourceId: string, amplitude: number = 1.0, frequency: number = 1.0): IdeaWave | null {
+  emitWave(
+    sourceId: string,
+    amplitude: number = 1.0,
+    frequency: number = 1.0,
+  ): IdeaWave | null {
     if (!this.graph) return null;
     if (this.waves.size >= this.config.maxWaves) {
       // Remove the weakest wave to make room
@@ -240,7 +244,8 @@ export class CognitiveResonanceField extends EventEmitter {
     const complexity = this.graph.getUnitComplexity(sourceId);
 
     // Velocity inversely proportional to complexity (simple ideas spread faster)
-    const velocity = Math.max(1, 3 - complexity * 0.3) * this.spectralRadiusModulator;
+    const velocity =
+      Math.max(1, 3 - complexity * 0.3) * this.spectralRadiusModulator;
 
     const wave: IdeaWave = {
       id: `wave_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
@@ -269,12 +274,20 @@ export class CognitiveResonanceField extends EventEmitter {
    * Seed a wave from a dream fragment (cross-domain association)
    */
   emitDreamWave(sourceId: string, targetId: string): IdeaWave | null {
-    // Dream waves have higher amplitude but faster decay (fragile insights)
-    const wave = this.emitWave(sourceId, 2.0, 0.5);
-    if (wave) {
-      wave.decayRate = this.config.baseDecayRate * 1.5; // Faster decay
+    // Dream associations are represented by phase-aligned waves launched from
+    // both concepts. Their convergence can create a cross-domain resonance node.
+    const sourceWave = this.emitWave(sourceId, 2.0, 0.5);
+    if (!sourceWave) return null;
+
+    sourceWave.decayRate = this.config.baseDecayRate * 1.5;
+    const targetWave = this.emitWave(targetId, 2.0, 0.5);
+    if (targetWave) {
+      targetWave.decayRate = this.config.baseDecayRate * 1.5;
+      targetWave.phase = sourceWave.phase;
+      this.emit("dream_wave_pair", { sourceWave, targetWave });
     }
-    return wave;
+
+    return sourceWave;
   }
 
   /**
@@ -301,16 +314,18 @@ export class CognitiveResonanceField extends EventEmitter {
       }
     }
 
-    const standingWaves = Array.from(this.resonanceNodes.values())
-      .filter((n) => n.isStandingWave).length;
+    const standingWaves = Array.from(this.resonanceNodes.values()).filter(
+      (n) => n.isStandingWave,
+    ).length;
 
     // Coherence: ratio of energy in standing waves vs total
     const standingEnergy = Array.from(this.resonanceNodes.values())
       .filter((n) => n.isStandingWave)
       .reduce((sum, n) => sum + n.combinedAmplitude, 0);
-    const coherence = this.totalEnergy > 0
-      ? Math.min(1, standingEnergy / (this.totalEnergy + 0.01))
-      : 0;
+    const coherence =
+      this.totalEnergy > 0
+        ? Math.min(1, standingEnergy / (this.totalEnergy + 0.01))
+        : 0;
 
     return {
       activeWaves: activeCount,
@@ -329,7 +344,9 @@ export class CognitiveResonanceField extends EventEmitter {
   }
 
   getStandingWaves(): ResonanceNode[] {
-    return Array.from(this.resonanceNodes.values()).filter((n) => n.isStandingWave);
+    return Array.from(this.resonanceNodes.values()).filter(
+      (n) => n.isStandingWave,
+    );
   }
 
   getWaves(): IdeaWave[] {
@@ -395,7 +412,7 @@ export class CognitiveResonanceField extends EventEmitter {
       }
 
       // Decay amplitude
-      wave.amplitude *= (1 - wave.decayRate);
+      wave.amplitude *= 1 - wave.decayRate;
 
       // Update wavefront
       wave.wavefront = newFront;
@@ -484,7 +501,10 @@ export class CognitiveResonanceField extends EventEmitter {
 
   private updateStandingWaves(): void {
     for (const node of this.resonanceNodes.values()) {
-      if (!node.isStandingWave && node.stability >= this.config.standingWaveThreshold) {
+      if (
+        !node.isStandingWave &&
+        node.stability >= this.config.standingWaveThreshold
+      ) {
         node.isStandingWave = true;
         this.emit("standing_wave_formed", node);
       }
@@ -492,7 +512,10 @@ export class CognitiveResonanceField extends EventEmitter {
 
     // Remove standing waves that have decayed
     for (const [id, node] of this.resonanceNodes) {
-      if (node.isStandingWave && node.combinedAmplitude < this.config.resonanceThreshold * 0.5) {
+      if (
+        node.isStandingWave &&
+        node.combinedAmplitude < this.config.resonanceThreshold * 0.5
+      ) {
         this.resonanceNodes.delete(id);
         this.emit("standing_wave_collapsed", node);
       }

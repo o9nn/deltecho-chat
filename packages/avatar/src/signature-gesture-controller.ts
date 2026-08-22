@@ -34,8 +34,8 @@ export interface SignatureGestureState {
 }
 
 export interface SignatureGestureOverlay {
-  paramBrowLY: number;   // Left brow (raised)
-  paramBrowRY: number;   // Right brow (neutral or slight lower)
+  paramBrowLY: number; // Left brow (raised)
+  paramBrowRY: number; // Right brow (neutral or slight lower)
   paramEyeLOpen: number; // Slight widening of left eye
   paramMouthForm: number; // Subtle corner lift
 }
@@ -54,9 +54,9 @@ export interface SignatureGestureConfig {
 }
 
 const DEFAULT_CONFIG: SignatureGestureConfig = {
-  baseInterval: 180,      // ~3 seconds at 60fps
-  intervalJitter: 0.4,    // ±40% variation
-  gestureDuration: 24,    // ~0.4 seconds
+  baseInterval: 180, // ~3 seconds at 60fps
+  intervalJitter: 0.4, // ±40% variation
+  gestureDuration: 24, // ~0.4 seconds
   baseAmplitude: 0.7,
   modeAmplitudes: {
     scientific_genius: 1.0,
@@ -155,17 +155,18 @@ export class SignatureGestureController extends EventEmitter {
   private computeOverlay(): SignatureGestureOverlay {
     // Ease-in-out-back for organic feel
     const t = this.gestureProgress;
-    const ease = t < 0.5
-      ? 2 * t * t * (1 + 0.3 * Math.sin(t * Math.PI))
-      : 1 - 2 * (1 - t) * (1 - t) * (1 + 0.3 * Math.sin((1 - t) * Math.PI));
+    const ease =
+      t < 0.5
+        ? 2 * t * t * (1 + 0.3 * Math.sin(t * Math.PI))
+        : 1 - 2 * (1 - t) * (1 - t) * (1 + 0.3 * Math.sin((1 - t) * Math.PI));
 
     const a = this.currentAmplitude * ease;
 
     return {
-      paramBrowLY: 0.35 * a,       // Left brow raised (the signature)
-      paramBrowRY: -0.08 * a,      // Right brow slightly lowered (asymmetry)
-      paramEyeLOpen: 0.1 * a,      // Left eye slightly wider
-      paramMouthForm: 0.12 * a,    // Subtle knowing smile
+      paramBrowLY: 0.35 * a, // Left brow raised (the signature)
+      paramBrowRY: -0.08 * a, // Right brow slightly lowered (asymmetry)
+      paramEyeLOpen: 0.1 * a, // Left eye slightly wider
+      paramMouthForm: 0.12 * a, // Subtle knowing smile
     };
   }
 
@@ -176,7 +177,10 @@ export class SignatureGestureController extends EventEmitter {
     const modeMultiplier = this.config.modeAmplitudes[this.currentMode] ?? 0.7;
     // Lorenz z modulates ±15% around the mode amplitude
     const lorenzMod = 1 + (this.lorenzZ / 50) * 0.15;
-    return Math.max(0, Math.min(1.5, this.config.baseAmplitude * modeMultiplier * lorenzMod));
+    return Math.max(
+      0,
+      Math.min(1.5, this.config.baseAmplitude * modeMultiplier * lorenzMod),
+    );
   }
 
   /**
@@ -191,6 +195,11 @@ export class SignatureGestureController extends EventEmitter {
   }
 
   private zeroOverlay(): SignatureGestureOverlay {
-    return { paramBrowLY: 0, paramBrowRY: 0, paramEyeLOpen: 0, paramMouthForm: 0 };
+    return {
+      paramBrowLY: 0,
+      paramBrowRY: 0,
+      paramEyeLOpen: 0,
+      paramMouthForm: 0,
+    };
   }
 }

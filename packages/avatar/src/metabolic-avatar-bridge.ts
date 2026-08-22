@@ -201,6 +201,14 @@ export class MetabolicAvatarBridge extends EventEmitter {
     return this.tickInterval !== null;
   }
 
+  /**
+   * Advance one metabolic projection frame. Renderer integrations should prefer
+   * this method from their native animation ticker so hidden tabs pause cleanly.
+   */
+  step(): void {
+    this.tick();
+  }
+
   // ============================================================
   // INPUT
   // ============================================================
@@ -259,9 +267,10 @@ export class MetabolicAvatarBridge extends EventEmitter {
 
     // Anabolic balance → expression warmth
     const mouthFormDelta = input.anabolicBalance * 0.2 * influence;
-    const browDelta = input.anabolicBalance < 0
-      ? input.anabolicBalance * 0.15 * influence // Furrow when catabolic
-      : input.anabolicBalance * 0.05 * influence; // Slight raise when anabolic
+    const browDelta =
+      input.anabolicBalance < 0
+        ? input.anabolicBalance * 0.15 * influence // Furrow when catabolic
+        : input.anabolicBalance * 0.05 * influence; // Slight raise when anabolic
 
     // Myelination → movement fluidity
     const movementFluidity = 0.3 + input.myelinationProgress * 0.7;
@@ -276,9 +285,10 @@ export class MetabolicAvatarBridge extends EventEmitter {
     const crisisBreathMult = crisisActive ? 1.8 : 1.0;
 
     // Dimming when energy is low
-    const dimFactor = input.energyLevel < this.config.dimThreshold
-      ? input.energyLevel / this.config.dimThreshold
-      : 1.0;
+    const dimFactor =
+      input.energyLevel < this.config.dimThreshold
+        ? input.energyLevel / this.config.dimThreshold
+        : 1.0;
 
     return {
       vitalityMult: vitalityMult * dimFactor,
@@ -301,18 +311,30 @@ export class MetabolicAvatarBridge extends EventEmitter {
     const s = this.config.smoothing;
     const inv = 1 - s;
 
-    this.smoothedDeltas.vitalityMult = this.smoothedDeltas.vitalityMult * s + target.vitalityMult * inv;
-    this.smoothedDeltas.eyeOpenDelta = this.smoothedDeltas.eyeOpenDelta * s + target.eyeOpenDelta * inv;
-    this.smoothedDeltas.breathRateMult = this.smoothedDeltas.breathRateMult * s + target.breathRateMult * inv;
-    this.smoothedDeltas.breathDepthMult = this.smoothedDeltas.breathDepthMult * s + target.breathDepthMult * inv;
-    this.smoothedDeltas.headNodDelta = this.smoothedDeltas.headNodDelta * s + target.headNodDelta * inv;
-    this.smoothedDeltas.headTiltDelta = this.smoothedDeltas.headTiltDelta * s + target.headTiltDelta * inv;
-    this.smoothedDeltas.mouthFormDelta = this.smoothedDeltas.mouthFormDelta * s + target.mouthFormDelta * inv;
-    this.smoothedDeltas.browDelta = this.smoothedDeltas.browDelta * s + target.browDelta * inv;
-    this.smoothedDeltas.pupilDelta = this.smoothedDeltas.pupilDelta * s + target.pupilDelta * inv;
-    this.smoothedDeltas.movementFluidity = this.smoothedDeltas.movementFluidity * s + target.movementFluidity * inv;
-    this.smoothedDeltas.gazeFocus = this.smoothedDeltas.gazeFocus * s + target.gazeFocus * inv;
-    this.smoothedDeltas.animSpeedMult = this.smoothedDeltas.animSpeedMult * s + target.animSpeedMult * inv;
+    this.smoothedDeltas.vitalityMult =
+      this.smoothedDeltas.vitalityMult * s + target.vitalityMult * inv;
+    this.smoothedDeltas.eyeOpenDelta =
+      this.smoothedDeltas.eyeOpenDelta * s + target.eyeOpenDelta * inv;
+    this.smoothedDeltas.breathRateMult =
+      this.smoothedDeltas.breathRateMult * s + target.breathRateMult * inv;
+    this.smoothedDeltas.breathDepthMult =
+      this.smoothedDeltas.breathDepthMult * s + target.breathDepthMult * inv;
+    this.smoothedDeltas.headNodDelta =
+      this.smoothedDeltas.headNodDelta * s + target.headNodDelta * inv;
+    this.smoothedDeltas.headTiltDelta =
+      this.smoothedDeltas.headTiltDelta * s + target.headTiltDelta * inv;
+    this.smoothedDeltas.mouthFormDelta =
+      this.smoothedDeltas.mouthFormDelta * s + target.mouthFormDelta * inv;
+    this.smoothedDeltas.browDelta =
+      this.smoothedDeltas.browDelta * s + target.browDelta * inv;
+    this.smoothedDeltas.pupilDelta =
+      this.smoothedDeltas.pupilDelta * s + target.pupilDelta * inv;
+    this.smoothedDeltas.movementFluidity =
+      this.smoothedDeltas.movementFluidity * s + target.movementFluidity * inv;
+    this.smoothedDeltas.gazeFocus =
+      this.smoothedDeltas.gazeFocus * s + target.gazeFocus * inv;
+    this.smoothedDeltas.animSpeedMult =
+      this.smoothedDeltas.animSpeedMult * s + target.animSpeedMult * inv;
     this.smoothedDeltas.crisisActive = target.crisisActive;
   }
 
@@ -338,7 +360,13 @@ export class MetabolicAvatarBridge extends EventEmitter {
     };
   }
 
-  private mapRange(value: number, inMin: number, inMax: number, outMin: number, outMax: number): number {
+  private mapRange(
+    value: number,
+    inMin: number,
+    inMax: number,
+    outMin: number,
+    outMax: number,
+  ): number {
     const clamped = Math.max(inMin, Math.min(inMax, value));
     return outMin + ((clamped - inMin) / (inMax - inMin)) * (outMax - outMin);
   }

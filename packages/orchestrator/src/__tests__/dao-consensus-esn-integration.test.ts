@@ -22,7 +22,8 @@ jest.mock("deep-tree-echo-core", () => ({
   }),
   esnReservoir: {
     getState: (...args: unknown[]) => mockGetState(...args),
-    getAutognosisReport: (...args: unknown[]) => mockGetAutognosisReport(...args),
+    getAutognosisReport: (...args: unknown[]) =>
+      mockGetAutognosisReport(...args),
   },
   echoBeatsEngine: {
     getState: (...args: unknown[]) => mockEchoBeatsGetState(...args),
@@ -69,7 +70,7 @@ describe("DAO Consensus ↔ ESN Integration", () => {
       lyapunovExponent: 0.01,
       effectiveDimensionality: 128,
       memoryCapacity: 0.75,
-      computationalCapacity: 0.80,
+      computationalCapacity: 0.8,
       currentSpectralRadius: 0.95,
       tick: 1000,
     });
@@ -91,7 +92,7 @@ describe("DAO Consensus ↔ ESN Integration", () => {
       triadGroup: 1,
     });
     mockGetAutognosisReport.mockReturnValue({
-      health: 0.20,
+      health: 0.2,
       isEdgeOfChaos: false,
       isSaturated: true,
       isDead: false,
@@ -107,7 +108,7 @@ describe("DAO Consensus ↔ ESN Integration", () => {
       lyapunovExponent: -0.5,
       effectiveDimensionality: 10,
       memoryCapacity: 0.15,
-      computationalCapacity: 0.10,
+      computationalCapacity: 0.1,
       currentSpectralRadius: 1.4,
       tick: 500,
     });
@@ -169,32 +170,53 @@ describe("DAO Consensus ↔ ESN Integration", () => {
   it("should give edge-of-chaos bonus to autognosis", () => {
     // Base state
     const baseState = {
-      activations: new Float64Array(256), entropy: 0.5,
-      lyapunovExponent: 0.01, effectiveDimensionality: 64,
-      memoryCapacity: 0.5, computationalCapacity: 0.5,
-      currentSpectralRadius: 0.95, tick: 100,
+      activations: new Float64Array(256),
+      entropy: 0.5,
+      lyapunovExponent: 0.01,
+      effectiveDimensionality: 64,
+      memoryCapacity: 0.5,
+      computationalCapacity: 0.5,
+      currentSpectralRadius: 0.95,
+      tick: 100,
     };
     mockGetState.mockReturnValue(baseState);
     mockEchoBeatsGetState.mockReturnValue({
-      globalStep: 6, globalDegrees: 180, streams: [],
-      globalSalience: 0.5, globalCoherence: 0.7,
-      stepType: "DECIDE", stepMode: "active", triadGroup: 2,
+      globalStep: 6,
+      globalDegrees: 180,
+      streams: [],
+      globalSalience: 0.5,
+      globalCoherence: 0.7,
+      stepType: "DECIDE",
+      stepMode: "active",
+      triadGroup: 2,
     });
 
     // At edge of chaos
     mockGetAutognosisReport.mockReturnValue({
-      health: 0.6, isEdgeOfChaos: true, isSaturated: false, isDead: false,
-      entropyTrend: "stable", spectralRadiusAdjustment: 0,
-      leakRateAdjustment: 0, narrative: "Edge of chaos", timestamp: Date.now(),
+      health: 0.6,
+      isEdgeOfChaos: true,
+      isSaturated: false,
+      isDead: false,
+      entropyTrend: "stable",
+      spectralRadiusAdjustment: 0,
+      leakRateAdjustment: 0,
+      narrative: "Edge of chaos",
+      timestamp: Date.now(),
     });
     const processorA = new CognitiveTickProcessor();
     const withEdge = processorA.getEsnAutognosis();
 
     // Not at edge of chaos (same health otherwise)
     mockGetAutognosisReport.mockReturnValue({
-      health: 0.6, isEdgeOfChaos: false, isSaturated: false, isDead: false,
-      entropyTrend: "stable", spectralRadiusAdjustment: 0,
-      leakRateAdjustment: 0, narrative: "Not edge", timestamp: Date.now(),
+      health: 0.6,
+      isEdgeOfChaos: false,
+      isSaturated: false,
+      isDead: false,
+      entropyTrend: "stable",
+      spectralRadiusAdjustment: 0,
+      leakRateAdjustment: 0,
+      narrative: "Not edge",
+      timestamp: Date.now(),
     });
     const processorB = new CognitiveTickProcessor();
     const withoutEdge = processorB.getEsnAutognosis();
@@ -204,20 +226,35 @@ describe("DAO Consensus ↔ ESN Integration", () => {
 
   it("should clamp all values to [0, 1] range even with extreme inputs", () => {
     mockEchoBeatsGetState.mockReturnValue({
-      globalStep: 1, globalDegrees: 30, streams: [],
-      globalSalience: 0, globalCoherence: -0.5,
-      stepType: "SENSE", stepMode: "passive", triadGroup: 1,
+      globalStep: 1,
+      globalDegrees: 30,
+      streams: [],
+      globalSalience: 0,
+      globalCoherence: -0.5,
+      stepType: "SENSE",
+      stepMode: "passive",
+      triadGroup: 1,
     });
     mockGetState.mockReturnValue({
-      activations: new Float64Array(256), entropy: 0,
-      lyapunovExponent: 5, effectiveDimensionality: 0,
-      memoryCapacity: -1, computationalCapacity: -1,
-      currentSpectralRadius: 5, tick: 0,
+      activations: new Float64Array(256),
+      entropy: 0,
+      lyapunovExponent: 5,
+      effectiveDimensionality: 0,
+      memoryCapacity: -1,
+      computationalCapacity: -1,
+      currentSpectralRadius: 5,
+      tick: 0,
     });
     mockGetAutognosisReport.mockReturnValue({
-      health: -1, isEdgeOfChaos: false, isSaturated: true, isDead: true,
-      entropyTrend: "decreasing", spectralRadiusAdjustment: -1,
-      leakRateAdjustment: 1, narrative: "Dead and saturated", timestamp: Date.now(),
+      health: -1,
+      isEdgeOfChaos: false,
+      isSaturated: true,
+      isDead: true,
+      entropyTrend: "decreasing",
+      spectralRadiusAdjustment: -1,
+      leakRateAdjustment: 1,
+      narrative: "Dead and saturated",
+      timestamp: Date.now(),
     });
 
     const processor = new CognitiveTickProcessor();
@@ -232,32 +269,52 @@ describe("DAO Consensus ↔ ESN Integration", () => {
 
   it("should derive consensus from actual EchoBeats globalCoherence field", () => {
     const baseReservoirState = {
-      activations: new Float64Array(256), entropy: 0.5,
-      lyapunovExponent: 0, effectiveDimensionality: 128,
-      memoryCapacity: 0.5, computationalCapacity: 0.5,
-      currentSpectralRadius: 0.95, tick: 100,
+      activations: new Float64Array(256),
+      entropy: 0.5,
+      lyapunovExponent: 0,
+      effectiveDimensionality: 128,
+      memoryCapacity: 0.5,
+      computationalCapacity: 0.5,
+      currentSpectralRadius: 0.95,
+      tick: 100,
     };
     mockGetState.mockReturnValue(baseReservoirState);
     mockGetAutognosisReport.mockReturnValue({
-      health: 0.5, isEdgeOfChaos: false, isSaturated: false, isDead: false,
-      entropyTrend: "stable", spectralRadiusAdjustment: 0,
-      leakRateAdjustment: 0, narrative: "Normal", timestamp: Date.now(),
+      health: 0.5,
+      isEdgeOfChaos: false,
+      isSaturated: false,
+      isDead: false,
+      entropyTrend: "stable",
+      spectralRadiusAdjustment: 0,
+      leakRateAdjustment: 0,
+      narrative: "Normal",
+      timestamp: Date.now(),
     });
 
     // High coherence
     mockEchoBeatsGetState.mockReturnValue({
-      globalStep: 6, globalDegrees: 180, streams: [],
-      globalSalience: 0.5, globalCoherence: 1.0,
-      stepType: "DECIDE", stepMode: "active", triadGroup: 2,
+      globalStep: 6,
+      globalDegrees: 180,
+      streams: [],
+      globalSalience: 0.5,
+      globalCoherence: 1.0,
+      stepType: "DECIDE",
+      stepMode: "active",
+      triadGroup: 2,
     });
     const processorHigh = new CognitiveTickProcessor();
     const highCoherenceConsensus = processorHigh.getDaoConsensus();
 
     // Low coherence
     mockEchoBeatsGetState.mockReturnValue({
-      globalStep: 6, globalDegrees: 180, streams: [],
-      globalSalience: 0.5, globalCoherence: 0.0,
-      stepType: "DECIDE", stepMode: "active", triadGroup: 2,
+      globalStep: 6,
+      globalDegrees: 180,
+      streams: [],
+      globalSalience: 0.5,
+      globalCoherence: 0.0,
+      stepType: "DECIDE",
+      stepMode: "active",
+      triadGroup: 2,
     });
     const processorLow = new CognitiveTickProcessor();
     const lowCoherenceConsensus = processorLow.getDaoConsensus();

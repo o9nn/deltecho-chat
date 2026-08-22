@@ -16,9 +16,22 @@
  */
 
 import { EventEmitter } from "events";
-import { DAOESNAutognosis, DAOProposal, ConsensusResult, ReservoirState, AutognosisReport } from "./dao-esn-autognosis";
-import { VirtualEndocrineSystem, CognitiveMode, EndocrineEvent, ValenceSignature } from "./virtual-endocrine-system";
-import { CognitiveProcessModel, CognitiveEntity } from "./cognitive-process-model";
+import {
+  DAOESNAutognosis,
+  DAOProposal,
+  ConsensusResult,
+  ReservoirState,
+  AutognosisReport,
+} from "./dao-esn-autognosis";
+import {
+  CognitiveMode,
+  EndocrineEvent,
+  ValenceSignature,
+} from "./virtual-endocrine-system";
+import {
+  CognitiveProcessModel,
+  CognitiveEntity,
+} from "./cognitive-process-model";
 
 // ═══════════════════════════════════════════════════════════════
 // Bridge Configuration
@@ -66,7 +79,11 @@ export interface ScenarioResult {
   startState: DigitwinSnapshot;
   endState: DigitwinSnapshot;
   consensusResults: ConsensusResult[];
-  modeTransitions: Array<{ from: CognitiveMode; to: CognitiveMode; time: number }>;
+  modeTransitions: Array<{
+    from: CognitiveMode;
+    to: CognitiveMode;
+    time: number;
+  }>;
   pathologiesDetected: string[];
   coherenceDelta: number;
   duration: number;
@@ -157,10 +174,16 @@ export class DigitwinOrchestratorBridge extends EventEmitter {
   }): void {
     // Feed live metrics as endocrine events
     if (liveState.meanActivation > 0.8) {
-      this.daoEngine.processEvent({ type: "cognitive_load_high", load: liveState.meanActivation });
+      this.daoEngine.processEvent({
+        type: "cognitive_load_high",
+        load: liveState.meanActivation,
+      });
     }
     if (liveState.memoryCapacity < 0.2) {
-      this.daoEngine.processEvent({ type: "resource_depleted", urgency: 1 - liveState.memoryCapacity });
+      this.daoEngine.processEvent({
+        type: "resource_depleted",
+        urgency: 1 - liveState.memoryCapacity,
+      });
     }
   }
 
@@ -172,11 +195,18 @@ export class DigitwinOrchestratorBridge extends EventEmitter {
     phase: string;
   }): void {
     // Translate cognitive tick into process model stimulus
-    this.processModel.injectStimulus("reflection", tickData.coherence, tickData);
+    this.processModel.injectStimulus(
+      "reflection",
+      tickData.coherence,
+      tickData,
+    );
 
     // High coherence = reward
     if (tickData.coherence > 0.8) {
-      this.daoEngine.processEvent({ type: "insight_achieved", magnitude: tickData.coherence });
+      this.daoEngine.processEvent({
+        type: "insight_achieved",
+        magnitude: tickData.coherence,
+      });
     }
   }
 
@@ -210,10 +240,16 @@ export class DigitwinOrchestratorBridge extends EventEmitter {
     pattern?: string;
   }): void {
     if (discovery.coherenceDelta > 0) {
-      this.daoEngine.processEvent({ type: "novelty_encountered", intensity: discovery.coherenceDelta });
+      this.daoEngine.processEvent({
+        type: "novelty_encountered",
+        intensity: discovery.coherenceDelta,
+      });
     }
     if (discovery.pattern) {
-      this.daoEngine.processEvent({ type: "insight_achieved", magnitude: discovery.coherenceDelta });
+      this.daoEngine.processEvent({
+        type: "insight_achieved",
+        magnitude: discovery.coherenceDelta,
+      });
     }
   }
 
@@ -222,8 +258,14 @@ export class DigitwinOrchestratorBridge extends EventEmitter {
     magnitude: number;
     insightCount: number;
   }): void {
-    this.daoEngine.processEvent({ type: "flow_achieved", depth: cascade.magnitude });
-    this.daoEngine.processEvent({ type: "reward_received", magnitude: cascade.magnitude * 0.8 });
+    this.daoEngine.processEvent({
+      type: "flow_achieved",
+      depth: cascade.magnitude,
+    });
+    this.daoEngine.processEvent({
+      type: "reward_received",
+      magnitude: cascade.magnitude * 0.8,
+    });
   }
 
   // ─────────────────────────────────────────────────────────────
@@ -243,14 +285,23 @@ export class DigitwinOrchestratorBridge extends EventEmitter {
   runScenario(scenario: WhatIfScenario): ScenarioResult {
     const startState = this.captureSnapshot();
     const startTime = Date.now();
-    const modeTransitions: Array<{ from: CognitiveMode; to: CognitiveMode; time: number }> = [];
+    const modeTransitions: Array<{
+      from: CognitiveMode;
+      to: CognitiveMode;
+      time: number;
+    }> = [];
     const consensusResults: ConsensusResult[] = [];
 
     // Track mode changes during scenario
-    let lastMode = this.daoEngine.getVES().getCognitiveMode();
-    const modeListener = (data: { previous: CognitiveMode; current: CognitiveMode }) => {
-      modeTransitions.push({ from: data.previous, to: data.current, time: Date.now() - startTime });
-      lastMode = data.current;
+    const modeListener = (data: {
+      previous: CognitiveMode;
+      current: CognitiveMode;
+    }) => {
+      modeTransitions.push({
+        from: data.previous,
+        to: data.current,
+        time: Date.now() - startTime,
+      });
     };
     this.daoEngine.getVES().on("mode_changed", modeListener);
 
@@ -269,7 +320,8 @@ export class DigitwinOrchestratorBridge extends EventEmitter {
     this.daoEngine.getVES().off("mode_changed", modeListener);
 
     const endState = this.captureSnapshot();
-    const coherenceDelta = endState.autognosis.coherence - startState.autognosis.coherence;
+    const coherenceDelta =
+      endState.autognosis.coherence - startState.autognosis.coherence;
 
     const result: ScenarioResult = {
       scenario,
@@ -381,7 +433,9 @@ export class DigitwinOrchestratorBridge extends EventEmitter {
     // DAO autognosis reports → process model feedback
     this.daoEngine.on("autognosis_report", (report: AutognosisReport) => {
       if (report.pathologies.length > 0) {
-        this.processModel.injectStimulus("reflection", 1 - report.health, { pathologies: report.pathologies });
+        this.processModel.injectStimulus("reflection", 1 - report.health, {
+          pathologies: report.pathologies,
+        });
       }
       this.emit("autognosis", report);
     });
@@ -397,10 +451,16 @@ export class DigitwinOrchestratorBridge extends EventEmitter {
     });
 
     // Process model entity state changes → endocrine events
-    this.processModel.on("entity_processed", (data: { entity: CognitiveEntity; processingTime: number }) => {
-      if (data.processingTime > 100) {
-        this.daoEngine.processEvent({ type: "cognitive_load_high", load: Math.min(1, data.processingTime / 500) });
-      }
-    });
+    this.processModel.on(
+      "entity_processed",
+      (data: { entity: CognitiveEntity; processingTime: number }) => {
+        if (data.processingTime > 100) {
+          this.daoEngine.processEvent({
+            type: "cognitive_load_high",
+            load: Math.min(1, data.processingTime / 500),
+          });
+        }
+      },
+    );
   }
 }

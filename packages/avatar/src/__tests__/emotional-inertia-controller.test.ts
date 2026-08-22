@@ -8,10 +8,7 @@
  * - Deep thought mode activation
  * - Integration with CognitiveAvatarBridge
  */
-import {
-  EmotionalInertiaController,
-  DEFAULT_EMOTIONAL_INERTIA_CONFIG,
-} from "../emotional-inertia-controller";
+import { EmotionalInertiaController } from "../emotional-inertia-controller";
 import { CognitiveAvatarBridge } from "../cognitive-avatar-bridge";
 
 describe("EmotionalInertiaController", () => {

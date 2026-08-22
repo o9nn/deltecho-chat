@@ -16,7 +16,7 @@
  * autonomous improvement loop that the DAO can govern.
  */
 
-import { EventEmitter } from 'events';
+import { EventEmitter } from "events";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -64,22 +64,22 @@ export interface MicroImprovementState {
 }
 
 export type MutationType =
-  | 'parameter_tune'      // Adjust a numerical parameter
-  | 'threshold_shift'     // Move a decision threshold
-  | 'weight_redistribute' // Redistribute attention weights
-  | 'connection_add'      // Add a new signal connection
-  | 'connection_remove'   // Remove a weak connection
-  | 'rhythm_adjust'       // Modify temporal rhythm/frequency
-  | 'amplitude_scale'     // Scale signal amplitude
-  | 'decay_modify';       // Modify decay/memory constants
+  | "parameter_tune" // Adjust a numerical parameter
+  | "threshold_shift" // Move a decision threshold
+  | "weight_redistribute" // Redistribute attention weights
+  | "connection_add" // Add a new signal connection
+  | "connection_remove" // Remove a weak connection
+  | "rhythm_adjust" // Modify temporal rhythm/frequency
+  | "amplitude_scale" // Scale signal amplitude
+  | "decay_modify"; // Modify decay/memory constants
 
 export interface MicroImprovementConfig {
-  maxIterationsPerCycle: number;      // Max iterations before pause (default: 12)
-  minImprovementThreshold: number;    // Minimum delta to accept (default: 0.01)
-  riskTolerance: number;              // Max acceptable risk (default: 0.3)
-  cooldownMs: number;                 // Pause between iterations (default: 1000)
+  maxIterationsPerCycle: number; // Max iterations before pause (default: 12)
+  minImprovementThreshold: number; // Minimum delta to accept (default: 0.01)
+  riskTolerance: number; // Max acceptable risk (default: 0.3)
+  cooldownMs: number; // Pause between iterations (default: 1000)
   alexanderWeights: Record<string, number>; // Importance weights for properties
-  enableAutoRun: boolean;             // Auto-start improvement loop
+  enableAutoRun: boolean; // Auto-start improvement loop
 }
 
 const DEFAULT_CONFIG: MicroImprovementConfig = {
@@ -88,21 +88,21 @@ const DEFAULT_CONFIG: MicroImprovementConfig = {
   riskTolerance: 0.3,
   cooldownMs: 1000,
   alexanderWeights: {
-    'levels_of_scale': 1.0,
-    'strong_centers': 1.2,
-    'boundaries': 0.8,
-    'alternating_repetition': 1.0,
-    'positive_space': 0.7,
-    'good_shape': 1.3,
-    'local_symmetries': 0.8,
-    'deep_interlock': 1.1,
-    'contrast': 0.9,
-    'gradients': 1.0,
-    'roughness': 1.1,
-    'echoes': 0.9,
-    'the_void': 1.0,
-    'simplicity_inner_calm': 0.7,
-    'not_separateness': 1.0,
+    levels_of_scale: 1.0,
+    strong_centers: 1.2,
+    boundaries: 0.8,
+    alternating_repetition: 1.0,
+    positive_space: 0.7,
+    good_shape: 1.3,
+    local_symmetries: 0.8,
+    deep_interlock: 1.1,
+    contrast: 0.9,
+    gradients: 1.0,
+    roughness: 1.1,
+    echoes: 0.9,
+    the_void: 1.0,
+    simplicity_inner_calm: 0.7,
+    not_separateness: 1.0,
   },
   enableAutoRun: false,
 };
@@ -110,21 +110,21 @@ const DEFAULT_CONFIG: MicroImprovementConfig = {
 // ─── Alexander's 15 Properties ───────────────────────────────────────────────
 
 const ALEXANDER_PROPERTIES = [
-  'levels_of_scale',
-  'strong_centers',
-  'boundaries',
-  'alternating_repetition',
-  'positive_space',
-  'good_shape',
-  'local_symmetries',
-  'deep_interlock',
-  'contrast',
-  'gradients',
-  'roughness',
-  'echoes',
-  'the_void',
-  'simplicity_inner_calm',
-  'not_separateness',
+  "levels_of_scale",
+  "strong_centers",
+  "boundaries",
+  "alternating_repetition",
+  "positive_space",
+  "good_shape",
+  "local_symmetries",
+  "deep_interlock",
+  "contrast",
+  "gradients",
+  "roughness",
+  "echoes",
+  "the_void",
+  "simplicity_inner_calm",
+  "not_separateness",
 ] as const;
 
 // ─── Engine ──────────────────────────────────────────────────────────────────
@@ -149,14 +149,14 @@ export class IterativeMicroImprovementEngine extends EventEmitter {
     this.propertyScorer = (property: string) => ({
       name: property,
       score: 0.5,
-      evidence: 'No external scorer connected',
+      evidence: "No external scorer connected",
     });
 
     this.state = {
       iteration: 0,
       totalImprovements: 0,
       totalRejections: 0,
-      currentWeakestCenter: '',
+      currentWeakestCenter: "",
       currentWeakestScore: 1.0,
       overallCoherence: 0.5,
       overallPhi: 0.5,
@@ -182,7 +182,9 @@ export class IterativeMicroImprovementEngine extends EventEmitter {
     this.freeEnergyProvider = fn;
   }
 
-  public setPropertyScorer(fn: (property: string) => AlexanderPropertyScore): void {
+  public setPropertyScorer(
+    fn: (property: string) => AlexanderPropertyScore,
+  ): void {
     this.propertyScorer = fn;
   }
 
@@ -193,13 +195,13 @@ export class IterativeMicroImprovementEngine extends EventEmitter {
    */
   public async runCycle(): Promise<ImprovementResult[]> {
     if (this.running) {
-      this.emit('warning', 'Cycle already running');
+      this.emit("warning", "Cycle already running");
       return [];
     }
 
     this.running = true;
     this.state.isRunning = true;
-    this.emit('cycle_start', { iteration: this.state.iteration });
+    this.emit("cycle_start", { iteration: this.state.iteration });
 
     const results: ImprovementResult[] = [];
 
@@ -210,7 +212,10 @@ export class IterativeMicroImprovementEngine extends EventEmitter {
       if (!result.applied) {
         // If we can't improve, stop early (convergence)
         if (i > 2) {
-          this.emit('convergence', { iteration: this.state.iteration, results });
+          this.emit("convergence", {
+            iteration: this.state.iteration,
+            results,
+          });
           break;
         }
       }
@@ -223,7 +228,7 @@ export class IterativeMicroImprovementEngine extends EventEmitter {
 
     this.running = false;
     this.state.isRunning = false;
-    this.emit('cycle_complete', { iteration: this.state.iteration, results });
+    this.emit("cycle_complete", { iteration: this.state.iteration, results });
 
     return results;
   }
@@ -247,7 +252,7 @@ export class IterativeMicroImprovementEngine extends EventEmitter {
 
     // 3. MUTATE — Generate improvement candidate
     const candidate = this.generateCandidate(weakest);
-    this.emit('candidate_generated', candidate);
+    this.emit("candidate_generated", candidate);
 
     // 4. Capture before-state
     const beforeCoherence = this.coherenceProvider();
@@ -257,7 +262,7 @@ export class IterativeMicroImprovementEngine extends EventEmitter {
 
     // 5. Apply mutation (simulated — the actual mutation is applied by the
     //    self-modification engine; we signal intent and measure result)
-    this.emit('mutation_apply', candidate);
+    this.emit("mutation_apply", candidate);
 
     // Allow time for the mutation to propagate
     await this.sleep(100);
@@ -275,7 +280,8 @@ export class IterativeMicroImprovementEngine extends EventEmitter {
     const freeEnergyChange = afterFreeEnergy - beforeFreeEnergy;
 
     // Accept if: improvement exceeds threshold AND no significant regression
-    const accepted = delta >= this.config.minImprovementThreshold &&
+    const accepted =
+      delta >= this.config.minImprovementThreshold &&
       coherenceChange >= -0.05 &&
       freeEnergyChange <= 0.1; // Free energy should decrease or stay stable
 
@@ -293,12 +299,12 @@ export class IterativeMicroImprovementEngine extends EventEmitter {
 
     if (accepted) {
       this.state.totalImprovements++;
-      this.emit('improvement_accepted', result);
+      this.emit("improvement_accepted", result);
     } else {
       this.state.totalRejections++;
-      this.emit('improvement_rejected', result);
+      this.emit("improvement_rejected", result);
       // Signal rollback
-      this.emit('mutation_rollback', candidate);
+      this.emit("mutation_rollback", candidate);
     }
 
     // Update overall state
@@ -318,10 +324,12 @@ export class IterativeMicroImprovementEngine extends EventEmitter {
   // ─── Introspection ─────────────────────────────────────────────────────────
 
   private introspect(): AlexanderPropertyScore[] {
-    return ALEXANDER_PROPERTIES.map(prop => this.propertyScorer(prop));
+    return ALEXANDER_PROPERTIES.map((prop) => this.propertyScorer(prop));
   }
 
-  private findWeakestCenter(scores: AlexanderPropertyScore[]): AlexanderPropertyScore {
+  private findWeakestCenter(
+    scores: AlexanderPropertyScore[],
+  ): AlexanderPropertyScore {
     let weakest = scores[0];
     let lowestWeightedScore = Infinity;
 
@@ -339,14 +347,17 @@ export class IterativeMicroImprovementEngine extends EventEmitter {
 
   // ─── Mutation Generation ───────────────────────────────────────────────────
 
-  private generateCandidate(weakest: AlexanderPropertyScore): ImprovementCandidate {
+  private generateCandidate(
+    weakest: AlexanderPropertyScore,
+  ): ImprovementCandidate {
     // Map Alexander properties to mutation strategies
     const strategy = this.getMutationStrategy(weakest.name);
 
     return {
       id: `iter-${this.state.iteration}-${weakest.name}`,
       targetProperty: weakest.name,
-      description: weakest.strengthenMove ?? `Strengthen ${weakest.name} via ${strategy}`,
+      description:
+        weakest.strengthenMove ?? `Strengthen ${weakest.name} via ${strategy}`,
       mutation: strategy,
       estimatedImpact: Math.min(0.5, (1 - weakest.score) * 0.3),
       risk: this.estimateRisk(strategy),
@@ -355,35 +366,35 @@ export class IterativeMicroImprovementEngine extends EventEmitter {
 
   private getMutationStrategy(property: string): MutationType {
     const strategies: Record<string, MutationType> = {
-      'levels_of_scale': 'connection_add',
-      'strong_centers': 'weight_redistribute',
-      'boundaries': 'threshold_shift',
-      'alternating_repetition': 'rhythm_adjust',
-      'positive_space': 'connection_remove',
-      'good_shape': 'amplitude_scale',
-      'local_symmetries': 'parameter_tune',
-      'deep_interlock': 'connection_add',
-      'contrast': 'amplitude_scale',
-      'gradients': 'decay_modify',
-      'roughness': 'amplitude_scale',
-      'echoes': 'rhythm_adjust',
-      'the_void': 'threshold_shift',
-      'simplicity_inner_calm': 'connection_remove',
-      'not_separateness': 'connection_add',
+      levels_of_scale: "connection_add",
+      strong_centers: "weight_redistribute",
+      boundaries: "threshold_shift",
+      alternating_repetition: "rhythm_adjust",
+      positive_space: "connection_remove",
+      good_shape: "amplitude_scale",
+      local_symmetries: "parameter_tune",
+      deep_interlock: "connection_add",
+      contrast: "amplitude_scale",
+      gradients: "decay_modify",
+      roughness: "amplitude_scale",
+      echoes: "rhythm_adjust",
+      the_void: "threshold_shift",
+      simplicity_inner_calm: "connection_remove",
+      not_separateness: "connection_add",
     };
-    return strategies[property] ?? 'parameter_tune';
+    return strategies[property] ?? "parameter_tune";
   }
 
   private estimateRisk(mutation: MutationType): number {
     const risks: Record<MutationType, number> = {
-      'parameter_tune': 0.1,
-      'threshold_shift': 0.15,
-      'weight_redistribute': 0.2,
-      'connection_add': 0.25,
-      'connection_remove': 0.3,
-      'rhythm_adjust': 0.15,
-      'amplitude_scale': 0.1,
-      'decay_modify': 0.2,
+      parameter_tune: 0.1,
+      threshold_shift: 0.15,
+      weight_redistribute: 0.2,
+      connection_add: 0.25,
+      connection_remove: 0.3,
+      rhythm_adjust: 0.15,
+      amplitude_scale: 0.1,
+      decay_modify: 0.2,
     };
     return risks[mutation] ?? 0.2;
   }
@@ -428,14 +439,17 @@ export class IterativeMicroImprovementEngine extends EventEmitter {
     overallHealth: number;
     recommendation: string;
   } {
-    const health = this.state.alexanderScores.length > 0
-      ? this.state.alexanderScores.reduce((sum, s) => sum + s.score, 0) / this.state.alexanderScores.length
-      : 0.5;
+    const health =
+      this.state.alexanderScores.length > 0
+        ? this.state.alexanderScores.reduce((sum, s) => sum + s.score, 0) /
+          this.state.alexanderScores.length
+        : 0.5;
 
-    let recommendation = 'continue';
-    if (health > 0.85) recommendation = 'consolidate';
-    else if (health < 0.4) recommendation = 'major_restructure';
-    else if (this.getImprovementRate() < 0.2) recommendation = 'change_strategy';
+    let recommendation = "continue";
+    if (health > 0.85) recommendation = "consolidate";
+    else if (health < 0.4) recommendation = "major_restructure";
+    else if (this.getImprovementRate() < 0.2)
+      recommendation = "change_strategy";
 
     return {
       iteration: this.state.iteration,
@@ -455,7 +469,7 @@ export class IterativeMicroImprovementEngine extends EventEmitter {
       clearTimeout(this.iterationTimer);
       this.iterationTimer = null;
     }
-    this.emit('stopped');
+    this.emit("stopped");
   }
 
   public reset(): void {
@@ -464,7 +478,7 @@ export class IterativeMicroImprovementEngine extends EventEmitter {
       iteration: 0,
       totalImprovements: 0,
       totalRejections: 0,
-      currentWeakestCenter: '',
+      currentWeakestCenter: "",
       currentWeakestScore: 1.0,
       overallCoherence: 0.5,
       overallPhi: 0.5,
@@ -474,13 +488,13 @@ export class IterativeMicroImprovementEngine extends EventEmitter {
       isRunning: false,
       lastIterationTime: 0,
     };
-    this.emit('reset');
+    this.emit("reset");
   }
 
   // ─── Utilities ─────────────────────────────────────────────────────────────
 
   private sleep(ms: number): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       this.iterationTimer = setTimeout(resolve, ms);
     });
   }

@@ -14,27 +14,29 @@ Six autonomous INTROSPECT→MUTATE→EVALUATE→SELECT iterations applied to the
 
 ## Iteration Results
 
-| # | Mutation | Files Changed | Status |
-|---|---------|---------------|--------|
-| 1 | Lucy GGUF deployment | `deploy/cogcity-lucy/*`, `orchestrator.ts` | ✓ Ready to deploy |
-| 2 | Structural self-modification | `self-modification.ts` | ✓ Stream add/remove |
-| 3 | Avatar self-model feedback | `orchestrator.ts`, `package.json` | ✓ Loop 4 closed |
-| 4 | Persistence across restarts | `self-modification.ts`, `orchestrator.ts` | ✓ Atomic snapshot |
-| 5 | Multi-agent consensus | `multi-agent-consensus.ts` | ✓ Quorum voting |
-| 6 | Temporal credit assignment | `temporal-credit-assignment.ts`, `orchestrator.ts` | ✓ TD(λ) traces |
+| #   | Mutation                     | Files Changed                                      | Status              |
+| --- | ---------------------------- | -------------------------------------------------- | ------------------- |
+| 1   | Lucy GGUF deployment         | `deploy/cogcity-lucy/*`, `orchestrator.ts`         | ✓ Ready to deploy   |
+| 2   | Structural self-modification | `self-modification.ts`                             | ✓ Stream add/remove |
+| 3   | Avatar self-model feedback   | `orchestrator.ts`, `package.json`                  | ✓ Loop 4 closed     |
+| 4   | Persistence across restarts  | `self-modification.ts`, `orchestrator.ts`          | ✓ Atomic snapshot   |
+| 5   | Multi-agent consensus        | `multi-agent-consensus.ts`                         | ✓ Quorum voting     |
+| 6   | Temporal credit assignment   | `temporal-credit-assignment.ts`, `orchestrator.ts` | ✓ TD(λ) traces      |
 
 ---
 
 ## Iteration 1: Lucy GGUF Deployment
 
 **Mutation:** Created `deploy/cogcity-lucy/` with:
+
 - `deploy.sh` — systemd service installer for llama-server on CogCity (RTX 4000 SFF Ada 20GB)
 - `docker-compose.yml` — containerized alternative with GPU passthrough
 - `README.md` — deployment documentation
 
 **Orchestrator change:** `DELTECHO_LUCY_ENDPOINT` env var auto-detection:
+
 ```typescript
-baseUrl: process.env.DELTECHO_LUCY_ENDPOINT || "http://localhost:8080"
+baseUrl: process.env.DELTECHO_LUCY_ENDPOINT || "http://localhost:8080";
 ```
 
 **Evaluation:** Typecheck clean. Deployment awaits SSH access to CogCity.
@@ -44,6 +46,7 @@ baseUrl: process.env.DELTECHO_LUCY_ENDPOINT || "http://localhost:8080"
 ## Iteration 2: Structural Self-Modification
 
 **Mutation:** Extended `SelfModificationEngine` with:
+
 ```typescript
 interface StructuralModification {
   type: "add_stream" | "remove_stream" | "replace_stream";
@@ -55,6 +58,7 @@ interface StructuralModification {
 ```
 
 **Safety constraints:**
+
 - Maximum 3 structural modifications per hour
 - Cannot remove streams below minimum count (3)
 - Rollback on apply failure
@@ -67,12 +71,14 @@ interface StructuralModification {
 ## Iteration 3: Avatar Self-Model Feedback
 
 **Mutation:** Wired `selfModelAvatarFeedback` singleton from `@deltecho/avatar` into orchestrator:
+
 ```typescript
 const { selfModelAvatarFeedback } = await import("@deltecho/avatar");
 this.autonomyLifecycle.wireAvatarFeedback(selfModelAvatarFeedback);
 ```
 
 **Effect:** Loop 4 autognosis is now closed:
+
 ```
 Avatar expression → SelfModelAvatarFeedback.accuracy → proposeModifications()
   → avatar.projectionLearningRate adjustment → better expressions → ...
@@ -85,10 +91,12 @@ Avatar expression → SelfModelAvatarFeedback.accuracy → proposeModifications(
 ## Iteration 4: Persistence Across Restarts
 
 **Mutation:** Added to `SelfModificationEngine`:
+
 - `persistParameterSnapshot()` — atomic write (tmp + rename) of all parameter values
 - `restoreParameterSnapshot()` — loads snapshot, validates bounds, fires callbacks
 
 **Boot sequence:**
+
 ```
 1. initializeDefaultParameters()  → defaults loaded
 2. Register onParameterChange callbacks → live subsystem hooks ready
@@ -97,6 +105,7 @@ Avatar expression → SelfModelAvatarFeedback.accuracy → proposeModifications(
 ```
 
 **Shutdown sequence:**
+
 ```
 1. persistParameterSnapshot()  → save current state
 2. autonomyLifecycle.stop()  → clean shutdown
@@ -111,6 +120,7 @@ Avatar expression → SelfModelAvatarFeedback.accuracy → proposeModifications(
 **Mutation:** Created `multi-agent-consensus.ts` (320 lines):
 
 **Protocol:**
+
 1. Instance proposes modification
 2. Broadcast to healthy peers via HTTP POST
 3. Each peer evaluates based on local coherence
@@ -118,6 +128,7 @@ Avatar expression → SelfModelAvatarFeedback.accuracy → proposeModifications(
 5. Timeout → decide based on votes received
 
 **Key features:**
+
 - `evaluateProposal()` — rejects if local coherence < threshold
 - `broadcastProposal()` — parallel HTTP with 5s timeout per peer
 - `waitForQuorum()` — configurable vote timeout (default 10s)
@@ -133,6 +144,7 @@ Avatar expression → SelfModelAvatarFeedback.accuracy → proposeModifications(
 **Mutation:** Created `temporal-credit-assignment.ts` (340 lines):
 
 **Algorithm:** TD(λ)-inspired eligibility traces:
+
 ```
 1. recordModification(key, prev, new) → create trace with eligibility=1.0
 2. Every 5s: sample coherence → compute delta
@@ -143,6 +155,7 @@ Avatar expression → SelfModelAvatarFeedback.accuracy → proposeModifications(
 ```
 
 **Query interface for proposeModifications():**
+
 - `getCredit(key)` — cumulative credit score
 - `getRecommendedDirection(key)` — +1, -1, or 0
 - `getConfidence(key)` — sample count × consistency factor
@@ -178,14 +191,14 @@ Avatar expression → SelfModelAvatarFeedback.accuracy → proposeModifications(
 
 ## Verification
 
-| Metric | Value |
-|--------|-------|
-| Packages typecheck | 23/23 (zero errors) |
-| Tests pass | 1456/1458 (2 skipped, 0 failures) |
-| New files | 4 (deploy scripts + 2 modules) |
-| Modified files | 4 (orchestrator, self-mod, package.json, lockfile) |
-| Lines added | ~1619 |
-| Alexander 15 Properties mean | **0.87** |
+| Metric                       | Value                                              |
+| ---------------------------- | -------------------------------------------------- |
+| Packages typecheck           | 23/23 (zero errors)                                |
+| Tests pass                   | 1456/1458 (2 skipped, 0 failures)                  |
+| New files                    | 4 (deploy scripts + 2 modules)                     |
+| Modified files               | 4 (orchestrator, self-mod, package.json, lockfile) |
+| Lines added                  | ~1619                                              |
+| Alexander 15 Properties mean | **0.87**                                           |
 
 ---
 

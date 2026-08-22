@@ -77,6 +77,46 @@ describe("DTEcho expression driver", () => {
     expect(projection.cubism[PARAM_IDS.PARAM_BODY_ANGLE_Z]).toBeGreaterThan(1);
   });
 
+  it("embodies counter-predicted evidence as bounded epistemic surprise", () => {
+    const baseline = projectDTEchoCognitiveState({
+      mode: "Scientific Genius",
+      arousal: 0.4,
+      causalRigor: 0.8,
+      falsificationPressure: 0.7,
+      epistemicSurprise: 0,
+    });
+    const surprised = projectDTEchoCognitiveState({
+      mode: "Scientific Genius",
+      arousal: 0.4,
+      causalRigor: 0.8,
+      falsificationPressure: 0.7,
+      epistemicSurprise: 0.9,
+    });
+
+    expect(surprised.emotionalState.surprise).toBeCloseTo(0.9);
+    expect(surprised.emotionalState.rigor).toBeGreaterThan(0.4);
+    expect(surprised.cubism[PARAM_IDS.PARAM_EYE_L_OPEN]).toBeGreaterThan(
+      baseline.cubism[PARAM_IDS.PARAM_EYE_L_OPEN],
+    );
+    expect(surprised.cubism[PARAM_IDS.PARAM_BROW_L_Y]).toBeGreaterThan(
+      baseline.cubism[PARAM_IDS.PARAM_BROW_L_Y],
+    );
+    expect(surprised.cubism[PARAM_IDS.PARAM_EYE_L_OPEN]).toBeLessThanOrEqual(
+      1.2,
+    );
+  });
+
+  it("uses evidence-specific DAO consensus in genius resonance", () => {
+    const projection = projectDTEchoCognitiveState({
+      mode: "Scientific Genius",
+      daoConsensus: 0.25,
+      daoEvidenceConsensus: 0.91,
+      scientificGenius: 0.8,
+    });
+
+    expect(projection.geniusResonance.daoConsensus).toBeCloseTo(0.91);
+  });
+
   it("projects speaking state into lip sync and open-vowel expression", () => {
     const projection = projectDTEchoCognitiveState({
       isSpeaking: true,

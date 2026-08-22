@@ -10,11 +10,25 @@
  */
 
 import { HexGrid, type ArenaObject, type HexCoord } from "./hex-grid.js";
-import { AestheticField, type AestheticFieldConfig } from "./aesthetic-field.js";
+import {
+  AestheticField,
+  type AestheticFieldConfig,
+} from "./aesthetic-field.js";
 import { ArenaActions, type ActionResult } from "./arena-actions.js";
-import { GestaltPerception, type PerceptionResult } from "./gestalt-perception.js";
-import { AestheticNavigation, type NavigationPath } from "./gestalt-perception.js";
-import { DiscoveryLoop, type DiscoveryCycleSummary, type DiscoveryState, type DiscoveredPattern } from "./discovery-loop.js";
+import {
+  GestaltPerception,
+  type PerceptionResult,
+} from "./gestalt-perception.js";
+import {
+  AestheticNavigation,
+  type NavigationPath,
+} from "./gestalt-perception.js";
+import {
+  DiscoveryLoop,
+  type DiscoveryCycleSummary,
+  type DiscoveryState,
+  type DiscoveredPattern,
+} from "./discovery-loop.js";
 
 // ═══════════════════════════════════════════════════════════════
 // Configuration
@@ -50,7 +64,12 @@ const DEFAULT_CONFIG: ArenaOrchestratorConfig = {
 export type ArenaEvent =
   | { type: "discovery"; pattern: DiscoveredPattern; coherenceGain: number }
   | { type: "contradiction_detected"; count: number; severity: number }
-  | { type: "experiment_result"; principle: number; success: boolean; delta: number }
+  | {
+      type: "experiment_result";
+      principle: number;
+      success: boolean;
+      delta: number;
+    }
   | { type: "coherence_shift"; before: number; after: number; delta: number }
   | { type: "cycle_complete"; summary: DiscoveryCycleSummary };
 
@@ -119,8 +138,14 @@ export class ArenaOrchestrator {
 
     // Emit events based on tick result
     if (result.contradictions.length > 0) {
-      const maxSeverity = Math.max(...result.contradictions.map(c => c.severity));
-      this.emit({ type: "contradiction_detected", count: result.contradictions.length, severity: maxSeverity });
+      const maxSeverity = Math.max(
+        ...result.contradictions.map((c) => c.severity),
+      );
+      this.emit({
+        type: "contradiction_detected",
+        count: result.contradictions.length,
+        severity: maxSeverity,
+      });
     }
 
     if (result.experiment) {
@@ -132,7 +157,9 @@ export class ArenaOrchestrator {
       });
 
       // Report reward to TemporalCreditAssignment
-      if (Math.abs(result.experiment.coherenceDelta) > this.config.rewardThreshold) {
+      if (
+        Math.abs(result.experiment.coherenceDelta) > this.config.rewardThreshold
+      ) {
         this.totalReward += result.experiment.coherenceDelta;
         this.emit({
           type: "coherence_shift",
@@ -144,7 +171,11 @@ export class ArenaOrchestrator {
     }
 
     if (result.pattern) {
-      this.emit({ type: "discovery", pattern: result.pattern, coherenceGain: result.pattern.coherenceGain });
+      this.emit({
+        type: "discovery",
+        pattern: result.pattern,
+        coherenceGain: result.pattern.coherenceGain,
+      });
     }
 
     // Check if a full cycle completed (step wrapped back to 1)
@@ -166,7 +197,7 @@ export class ArenaOrchestrator {
   on(handler: ArenaEventHandler): () => void {
     this.eventHandlers.push(handler);
     return () => {
-      this.eventHandlers = this.eventHandlers.filter(h => h !== handler);
+      this.eventHandlers = this.eventHandlers.filter((h) => h !== handler);
     };
   }
 
@@ -179,7 +210,9 @@ export class ArenaOrchestrator {
       coherence: gestalt.coherence,
       energy: gestalt.energyLevel,
       mood: moodToFloat(gestalt.mood),
-      contradictionPressure: state.activeContradictions.reduce((s, c) => s + c.severity, 0) / Math.max(state.activeContradictions.length, 1),
+      contradictionPressure:
+        state.activeContradictions.reduce((s, c) => s + c.severity, 0) /
+        Math.max(state.activeContradictions.length, 1),
       discoveryRate: state.totalDiscoveries / Math.max(this.cycleCount, 1),
       successRate: state.successRate,
       patternCount: state.discoveredPatterns.length,
@@ -210,7 +243,11 @@ export class ArenaOrchestrator {
   }
 
   /** Navigate through the arena */
-  navigate(from: HexCoord, to: HexCoord, style?: "respectful" | "purposeful" | "contemplative" | "urgent"): NavigationPath {
+  navigate(
+    from: HexCoord,
+    to: HexCoord,
+    style?: "respectful" | "purposeful" | "contemplative" | "urgent",
+  ): NavigationPath {
     return this.navigation.pathTo(from, to, style);
   }
 
@@ -218,22 +255,57 @@ export class ArenaOrchestrator {
   act(principle: number, ...args: unknown[]): ActionResult | null {
     // Delegate to the appropriate action method
     const methodMap: Record<number, string> = {
-      1: "segment", 2: "extract", 3: "differentiate", 4: "breakSymmetry",
-      5: "merge", 6: "multiPurpose", 7: "nest", 8: "counterbalance",
-      9: "preStress", 10: "prePosition", 11: "addBackup", 12: "flattenField",
-      13: "invert", 14: "curve", 15: "makeFlexible", 16: "overshoot",
-      17: "addDimension", 18: "vibrate", 19: "pulse", 20: "sustain",
-      21: "skipThrough", 22: "reframeHarm", 23: "addFeedback", 24: "mediate",
-      25: "selfServe", 26: "copy", 27: "makeDisposable", 28: "replaceWithField",
-      29: "fluidize", 30: "makeMembrane", 31: "makePorous", 32: "changeColor",
-      33: "homogenize", 34: "recycle", 35: "changeParameter", 36: "exploitTransition",
-      37: "expandDifferentially", 38: "catalyze", 39: "protect", 40: "compose",
+      1: "segment",
+      2: "extract",
+      3: "differentiate",
+      4: "breakSymmetry",
+      5: "merge",
+      6: "multiPurpose",
+      7: "nest",
+      8: "counterbalance",
+      9: "preStress",
+      10: "prePosition",
+      11: "addBackup",
+      12: "flattenField",
+      13: "invert",
+      14: "curve",
+      15: "makeFlexible",
+      16: "overshoot",
+      17: "addDimension",
+      18: "vibrate",
+      19: "pulse",
+      20: "sustain",
+      21: "skipThrough",
+      22: "reframeHarm",
+      23: "addFeedback",
+      24: "mediate",
+      25: "selfServe",
+      26: "copy",
+      27: "makeDisposable",
+      28: "replaceWithField",
+      29: "fluidize",
+      30: "makeMembrane",
+      31: "makePorous",
+      32: "changeColor",
+      33: "homogenize",
+      34: "recycle",
+      35: "changeParameter",
+      36: "exploitTransition",
+      37: "expandDifferentially",
+      38: "catalyze",
+      39: "protect",
+      40: "compose",
     };
 
     const method = methodMap[principle];
     if (!method || !(method in this.actions)) return null;
 
-    return (this.actions as unknown as Record<string, (...a: unknown[]) => ActionResult>)[method](...args);
+    return (
+      this.actions as unknown as Record<
+        string,
+        (...a: unknown[]) => ActionResult
+      >
+    )[method](...args);
   }
 
   /** Place an object in the arena */
@@ -300,33 +372,117 @@ export class ArenaOrchestrator {
       {
         name: "origin_stone",
         position: { q: 0, r: 0 },
-        simplex: { level: 2, volume: 0.6, surface: 0.4, edge: 0.3, vertex: 0.1 },
-        aesthetic: { centrality: 0.9, radiance: 0.7, patina: 0.5, scaleRelative: 0.3, semanticWeight: "anchor" },
-        material: { cost: 0.8, durability: 0.9, replaceability: 0.1, flexibility: 0.1, porosity: 0.1, reactivity: 0.1, temperature: 0, phase: "solid" },
+        simplex: {
+          level: 2,
+          volume: 0.6,
+          surface: 0.4,
+          edge: 0.3,
+          vertex: 0.1,
+        },
+        aesthetic: {
+          centrality: 0.9,
+          radiance: 0.7,
+          patina: 0.5,
+          scaleRelative: 0.3,
+          semanticWeight: "anchor",
+        },
+        material: {
+          cost: 0.8,
+          durability: 0.9,
+          replaceability: 0.1,
+          flexibility: 0.1,
+          porosity: 0.1,
+          reactivity: 0.1,
+          temperature: 0,
+          phase: "solid",
+        },
         color: [220, 0.3, 0.4], // Deep blue
       },
       {
         name: "growth_seed",
         position: { q: 2, r: -1 },
-        simplex: { level: 1, volume: 0.2, surface: 0.3, edge: 0.2, vertex: 0.3 },
-        aesthetic: { centrality: 0.3, radiance: 0.5, patina: 0, scaleRelative: 0.1, semanticWeight: "satellite" },
-        material: { cost: 0.2, durability: 0.3, replaceability: 0.8, flexibility: 0.9, porosity: 0.6, reactivity: 0.7, temperature: 0.3, phase: "membrane" },
+        simplex: {
+          level: 1,
+          volume: 0.2,
+          surface: 0.3,
+          edge: 0.2,
+          vertex: 0.3,
+        },
+        aesthetic: {
+          centrality: 0.3,
+          radiance: 0.5,
+          patina: 0,
+          scaleRelative: 0.1,
+          semanticWeight: "satellite",
+        },
+        material: {
+          cost: 0.2,
+          durability: 0.3,
+          replaceability: 0.8,
+          flexibility: 0.9,
+          porosity: 0.6,
+          reactivity: 0.7,
+          temperature: 0.3,
+          phase: "membrane",
+        },
         color: [120, 0.7, 0.5], // Vibrant green
       },
       {
         name: "resonance_crystal",
         position: { q: -1, r: 2 },
-        simplex: { level: 1, volume: 0.3, surface: 0.5, edge: 0.6, vertex: 0.4 },
-        aesthetic: { centrality: 0.5, radiance: 0.8, patina: 0.2, scaleRelative: 0.15, semanticWeight: "connector" },
-        material: { cost: 0.6, durability: 0.7, replaceability: 0.3, flexibility: 0.2, porosity: 0.0, reactivity: 0.3, temperature: -0.2, phase: "solid" },
+        simplex: {
+          level: 1,
+          volume: 0.3,
+          surface: 0.5,
+          edge: 0.6,
+          vertex: 0.4,
+        },
+        aesthetic: {
+          centrality: 0.5,
+          radiance: 0.8,
+          patina: 0.2,
+          scaleRelative: 0.15,
+          semanticWeight: "connector",
+        },
+        material: {
+          cost: 0.6,
+          durability: 0.7,
+          replaceability: 0.3,
+          flexibility: 0.2,
+          porosity: 0.0,
+          reactivity: 0.3,
+          temperature: -0.2,
+          phase: "solid",
+        },
         color: [280, 0.5, 0.6], // Purple
       },
       {
         name: "flow_stream",
         position: { q: -2, r: 0 },
-        simplex: { level: 1, volume: 0.4, surface: 0.2, edge: 0.8, vertex: 0.0 },
-        aesthetic: { centrality: 0.2, radiance: 0.3, patina: 0.1, scaleRelative: 0.2, semanticWeight: "satellite" },
-        material: { cost: 0.1, durability: 0.2, replaceability: 1.0, flexibility: 1.0, porosity: 1.0, reactivity: 0.1, temperature: 0.1, phase: "fluid" },
+        simplex: {
+          level: 1,
+          volume: 0.4,
+          surface: 0.2,
+          edge: 0.8,
+          vertex: 0.0,
+        },
+        aesthetic: {
+          centrality: 0.2,
+          radiance: 0.3,
+          patina: 0.1,
+          scaleRelative: 0.2,
+          semanticWeight: "satellite",
+        },
+        material: {
+          cost: 0.1,
+          durability: 0.2,
+          replaceability: 1.0,
+          flexibility: 1.0,
+          porosity: 1.0,
+          reactivity: 0.1,
+          temperature: 0.1,
+          phase: "fluid",
+        },
         color: [200, 0.6, 0.7], // Light blue
       },
     ];
@@ -337,9 +493,30 @@ export class ArenaOrchestrator {
         id: `seed_${++idCounter}`,
         name: seed.name ?? `seed_${idCounter}`,
         position: seed.position ?? { q: 0, r: 0 },
-        simplex: seed.simplex ?? { level: 0, volume: 0.5, surface: 0.5, edge: 0.5, vertex: 0.5 },
-        aesthetic: seed.aesthetic ?? { centrality: 0.5, radiance: 0.5, patina: 0, scaleRelative: 0.1, semanticWeight: "satellite" },
-        material: seed.material ?? { cost: 0.5, durability: 0.5, replaceability: 0.5, flexibility: 0.5, porosity: 0.5, reactivity: 0.5, temperature: 0, phase: "solid" },
+        simplex: seed.simplex ?? {
+          level: 0,
+          volume: 0.5,
+          surface: 0.5,
+          edge: 0.5,
+          vertex: 0.5,
+        },
+        aesthetic: seed.aesthetic ?? {
+          centrality: 0.5,
+          radiance: 0.5,
+          patina: 0,
+          scaleRelative: 0.1,
+          semanticWeight: "satellite",
+        },
+        material: seed.material ?? {
+          cost: 0.5,
+          durability: 0.5,
+          replaceability: 0.5,
+          flexibility: 0.5,
+          porosity: 0.5,
+          reactivity: 0.5,
+          temperature: 0,
+          phase: "solid",
+        },
         color: seed.color ?? [0, 0, 0.5],
         orientation: Math.random() * 360,
         symmetry: 0.5,
@@ -358,14 +535,14 @@ export class ArenaOrchestrator {
 // ═══════════════════════════════════════════════════════════════
 
 export interface ArenaESNInput {
-  coherence: number;            // 0-1
-  energy: number;               // 0-1
-  mood: number;                 // -1 to 1 (cool to warm)
+  coherence: number; // 0-1
+  energy: number; // 0-1
+  mood: number; // -1 to 1 (cool to warm)
   contradictionPressure: number; // 0-1
-  discoveryRate: number;        // discoveries per cycle
-  successRate: number;          // 0-1
-  patternCount: number;         // absolute count
-  phase: number;                // 0-1 (which phase of the cycle)
+  discoveryRate: number; // discoveries per cycle
+  successRate: number; // 0-1
+  patternCount: number; // absolute count
+  phase: number; // 0-1 (which phase of the cycle)
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -374,14 +551,22 @@ export interface ArenaESNInput {
 
 function moodToFloat(mood: string): number {
   const map: Record<string, number> = {
-    warm: 0.8, cool: -0.5, active: 0.6, still: -0.2, sacred: 0.3, mundane: -0.8,
+    warm: 0.8,
+    cool: -0.5,
+    active: 0.6,
+    still: -0.2,
+    sacred: 0.3,
+    mundane: -0.8,
   };
   return map[mood] ?? 0;
 }
 
 function phaseToFloat(phase: string): number {
   const map: Record<string, number> = {
-    contradiction: 0.125, experiment: 0.375, crystallize: 0.625, teach: 0.875,
+    contradiction: 0.125,
+    experiment: 0.375,
+    crystallize: 0.625,
+    teach: 0.875,
   };
   return map[phase] ?? 0.5;
 }

@@ -56,7 +56,11 @@ const DEFAULT_CONFIG: NeonIdentityConfig = {
 
 export interface IdentityAtom {
   id: string;
-  type: "identity_snapshot" | "stage_marker" | "reservoir_weights" | "governance_proposal";
+  type:
+    | "identity_snapshot"
+    | "stage_marker"
+    | "reservoir_weights"
+    | "governance_proposal";
   version: number;
   stage: string;
   stateJson: string;
@@ -97,7 +101,9 @@ export class NeonIdentityPersistence extends EventEmitter {
   private autoBackupTimer: ReturnType<typeof setInterval> | null = null;
   private lastBackupChecksum: string = "";
 
-  constructor(config: Partial<NeonIdentityConfig> & { connectionString: string }) {
+  constructor(
+    config: Partial<NeonIdentityConfig> & { connectionString: string },
+  ) {
     super();
     this.config = { ...DEFAULT_CONFIG, ...config };
   }
@@ -165,9 +171,13 @@ export class NeonIdentityPersistence extends EventEmitter {
 
     const version = ++this.currentVersion;
     const atomId = `dte_identity_v${version}_${Date.now()}`;
-    const compressed = this.config.compress ? await this.compress(stateStr) : stateStr;
+    const compressed = this.config.compress
+      ? await this.compress(stateStr)
+      : stateStr;
 
-    const pool = this.pool as { query: (sql: string, params?: unknown[]) => Promise<unknown> };
+    const pool = this.pool as {
+      query: (sql: string, params?: unknown[]) => Promise<unknown>;
+    };
 
     // Insert the identity atom
     await pool.query(
@@ -186,7 +196,12 @@ export class NeonIdentityPersistence extends EventEmitter {
           `INSERT INTO ${this.config.schema}.identity_edges
            (source_id, target_id, edge_type, metadata)
            VALUES ($1, $2, $3, $4)`,
-          [prevAtomId, atomId, "temporal_next", JSON.stringify({ delta_ms: Date.now() })],
+          [
+            prevAtomId,
+            atomId,
+            "temporal_next",
+            JSON.stringify({ delta_ms: Date.now() }),
+          ],
         );
         edgeCount++;
       }
@@ -200,13 +215,25 @@ export class NeonIdentityPersistence extends EventEmitter {
         `INSERT INTO ${this.config.schema}.identity_atoms
          (id, type, version, stage, state_json, checksum, created_at)
          VALUES ($1, $2, $3, $4, $5, $6, NOW())`,
-        [stageMarkerId, "stage_marker", version, stage, JSON.stringify({ from: prevStage, to: stage }), ""],
+        [
+          stageMarkerId,
+          "stage_marker",
+          version,
+          stage,
+          JSON.stringify({ from: prevStage, to: stage }),
+          "",
+        ],
       );
       await pool.query(
         `INSERT INTO ${this.config.schema}.identity_edges
          (source_id, target_id, edge_type, metadata)
          VALUES ($1, $2, $3, $4)`,
-        [atomId, stageMarkerId, "stage_transition", JSON.stringify({ from: prevStage, to: stage })],
+        [
+          atomId,
+          stageMarkerId,
+          "stage_transition",
+          JSON.stringify({ from: prevStage, to: stage }),
+        ],
       );
       edgeCount++;
     }
@@ -227,7 +254,9 @@ export class NeonIdentityPersistence extends EventEmitter {
       edges: edgeCount,
     };
 
-    log.info(`Identity backup v${version} (stage=${stage}, ${compressed.length}B, ${edgeCount} edges)`);
+    log.info(
+      `Identity backup v${version} (stage=${stage}, ${compressed.length}B, ${edgeCount} edges)`,
+    );
     this.emit("backup_complete", result);
     return result;
   }
@@ -238,7 +267,14 @@ export class NeonIdentityPersistence extends EventEmitter {
   async restore(version?: number): Promise<RestoreResult | null> {
     if (!this.initialized) await this.initialize();
 
-    const pool = this.pool as { query: (sql: string, params?: unknown[]) => Promise<{ rows: { state_json: string; stage: string; version: number }[] }> };
+    const pool = this.pool as {
+      query: (
+        sql: string,
+        params?: unknown[],
+      ) => Promise<{
+        rows: { state_json: string; stage: string; version: number }[];
+      }>;
+    };
 
     const targetVersion = version ?? this.currentVersion;
     const result = await pool.query(
@@ -254,7 +290,9 @@ export class NeonIdentityPersistence extends EventEmitter {
     }
 
     const row = result.rows[0];
-    const stateStr = this.config.compress ? await this.decompress(row.state_json) : row.state_json;
+    const stateStr = this.config.compress
+      ? await this.decompress(row.state_json)
+      : row.state_json;
     const state = JSON.parse(stateStr);
 
     const restoreResult: RestoreResult = {
@@ -272,10 +310,26 @@ export class NeonIdentityPersistence extends EventEmitter {
   /**
    * Get the full temporal chain of identity versions.
    */
-  async getVersionHistory(): Promise<Array<{ version: number; stage: string; createdAt: Date; sizeBytes: number }>> {
+  async getVersionHistory(): Promise<
+    Array<{
+      version: number;
+      stage: string;
+      createdAt: Date;
+      sizeBytes: number;
+    }>
+  > {
     if (!this.initialized) await this.initialize();
 
-    const pool = this.pool as { query: (sql: string) => Promise<{ rows: Array<{ version: number; stage: string; created_at: Date; state_json: string }> }> };
+    const pool = this.pool as {
+      query: (sql: string) => Promise<{
+        rows: Array<{
+          version: number;
+          stage: string;
+          created_at: Date;
+          state_json: string;
+        }>;
+      }>;
+    };
 
     const result = await pool.query(
       `SELECT version, stage, created_at, LENGTH(state_json) as size_bytes
@@ -365,7 +419,11 @@ export class NeonIdentityPersistence extends EventEmitter {
   }
 
   private async loadCurrentVersion(): Promise<void> {
-    const pool = this.pool as { query: (sql: string) => Promise<{ rows: Array<{ max_version: number | null }> }> };
+    const pool = this.pool as {
+      query: (
+        sql: string,
+      ) => Promise<{ rows: Array<{ max_version: number | null }> }>;
+    };
 
     const result = await pool.query(
       `SELECT MAX(version) as max_version FROM ${this.config.schema}.identity_atoms WHERE type = 'identity_snapshot'`,
@@ -375,7 +433,12 @@ export class NeonIdentityPersistence extends EventEmitter {
   }
 
   private async getAtomIdByVersion(version: number): Promise<string | null> {
-    const pool = this.pool as { query: (sql: string, params: unknown[]) => Promise<{ rows: Array<{ id: string }> }> };
+    const pool = this.pool as {
+      query: (
+        sql: string,
+        params: unknown[],
+      ) => Promise<{ rows: Array<{ id: string }> }>;
+    };
 
     const result = await pool.query(
       `SELECT id FROM ${this.config.schema}.identity_atoms
@@ -389,7 +452,12 @@ export class NeonIdentityPersistence extends EventEmitter {
   private async getStageAtVersion(version: number): Promise<string | null> {
     if (version < 1) return null;
 
-    const pool = this.pool as { query: (sql: string, params: unknown[]) => Promise<{ rows: Array<{ stage: string }> }> };
+    const pool = this.pool as {
+      query: (
+        sql: string,
+        params: unknown[],
+      ) => Promise<{ rows: Array<{ stage: string }> }>;
+    };
 
     const result = await pool.query(
       `SELECT stage FROM ${this.config.schema}.identity_atoms
@@ -401,7 +469,9 @@ export class NeonIdentityPersistence extends EventEmitter {
   }
 
   private async pruneOldVersions(olderThan: number): Promise<void> {
-    const pool = this.pool as { query: (sql: string, params: unknown[]) => Promise<unknown> };
+    const pool = this.pool as {
+      query: (sql: string, params: unknown[]) => Promise<unknown>;
+    };
 
     // Keep stage markers (they're small and important for history)
     await pool.query(

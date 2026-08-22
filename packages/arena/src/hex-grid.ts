@@ -26,15 +26,23 @@ export function cubeToAxial(cube: CubeCoord): HexCoord {
 export function hexDistance(a: HexCoord, b: HexCoord): number {
   const ac = axialToCube(a);
   const bc = axialToCube(b);
-  return Math.max(Math.abs(ac.q - bc.q), Math.abs(ac.r - bc.r), Math.abs(ac.s - bc.s));
+  return Math.max(
+    Math.abs(ac.q - bc.q),
+    Math.abs(ac.r - bc.r),
+    Math.abs(ac.s - bc.s),
+  );
 }
 
 export function hexNeighbors(hex: HexCoord): HexCoord[] {
   const directions: HexCoord[] = [
-    { q: 1, r: 0 }, { q: 1, r: -1 }, { q: 0, r: -1 },
-    { q: -1, r: 0 }, { q: -1, r: 1 }, { q: 0, r: 1 },
+    { q: 1, r: 0 },
+    { q: 1, r: -1 },
+    { q: 0, r: -1 },
+    { q: -1, r: 0 },
+    { q: -1, r: 1 },
+    { q: 0, r: 1 },
   ];
-  return directions.map(d => ({ q: hex.q + d.q, r: hex.r + d.r }));
+  return directions.map((d) => ({ q: hex.q + d.q, r: hex.r + d.r }));
 }
 
 export function hexRing(center: HexCoord, radius: number): HexCoord[] {
@@ -42,8 +50,12 @@ export function hexRing(center: HexCoord, radius: number): HexCoord[] {
   const results: HexCoord[] = [];
   let hex: HexCoord = { q: center.q + radius, r: center.r };
   const directions: HexCoord[] = [
-    { q: 0, r: 1 }, { q: -1, r: 1 }, { q: -1, r: 0 },
-    { q: 0, r: -1 }, { q: 1, r: -1 }, { q: 1, r: 0 },
+    { q: 0, r: 1 },
+    { q: -1, r: 1 },
+    { q: -1, r: 0 },
+    { q: 0, r: -1 },
+    { q: 1, r: -1 },
+    { q: 1, r: 0 },
   ];
   for (const dir of directions) {
     for (let i = 0; i < radius; i++) {
@@ -64,7 +76,7 @@ export function hexSpiral(center: HexCoord, maxRadius: number): HexCoord[] {
 
 export function hexAngle(from: HexCoord, to: HexCoord): number {
   const dx = to.q - from.q + (to.r - from.r) * 0.5;
-  const dy = (to.r - from.r) * Math.sqrt(3) / 2;
+  const dy = ((to.r - from.r) * Math.sqrt(3)) / 2;
   return Math.atan2(dy, dx) * (180 / Math.PI);
 }
 
@@ -78,30 +90,30 @@ export type SimplexLevel = 0 | 1 | 2 | 3; // vertex, edge, surface, volume
 
 export interface SimplexDescriptor {
   level: SimplexLevel;
-  volume: number;    // 3D extent (0-1)
-  surface: number;   // 2D extent (0-1)
-  edge: number;      // 1D extent (0-1)
-  vertex: number;    // 0D point presence (0-1)
+  volume: number; // 3D extent (0-1)
+  surface: number; // 2D extent (0-1)
+  edge: number; // 1D extent (0-1)
+  vertex: number; // 0D point presence (0-1)
 }
 
 // --- Arena Object ---
 
 export interface ArenaObjectAesthetic {
-  centrality: number;      // 0-1: how central in the space
-  radiance: number;        // 0-1: how much it draws attention
-  patina: number;          // 0-1: age/wear (0=new, 1=ancient)
-  scaleRelative: number;   // relative to room (0-1)
+  centrality: number; // 0-1: how central in the space
+  radiance: number; // 0-1: how much it draws attention
+  patina: number; // 0-1: age/wear (0=new, 1=ancient)
+  scaleRelative: number; // relative to room (0-1)
   semanticWeight: "anchor" | "satellite" | "connector" | "void" | "atmosphere";
 }
 
 export interface MaterialProperties {
-  cost: number;            // 0-1 normalized
-  durability: number;      // 0-1
-  replaceability: number;  // 0-1
-  flexibility: number;     // 0-1 (rigid=0, fluid=1)
-  porosity: number;        // 0-1 (solid=0, porous=1)
-  reactivity: number;      // 0-1 (inert=0, reactive=1)
-  temperature: number;     // normalized (-1=cold, 0=ambient, 1=hot)
+  cost: number; // 0-1 normalized
+  durability: number; // 0-1
+  replaceability: number; // 0-1
+  flexibility: number; // 0-1 (rigid=0, fluid=1)
+  porosity: number; // 0-1 (solid=0, porous=1)
+  reactivity: number; // 0-1 (inert=0, reactive=1)
+  temperature: number; // normalized (-1=cold, 0=ambient, 1=hot)
   phase: "solid" | "fluid" | "membrane" | "field" | "composite";
 }
 
@@ -113,11 +125,11 @@ export interface ArenaObject {
   aesthetic: ArenaObjectAesthetic;
   material: MaterialProperties;
   color: [number, number, number]; // HSL
-  orientation: number;             // degrees
-  symmetry: number;                // 0=asymmetric, 1=perfectly symmetric
-  nested_in?: string;              // parent object id
-  contains?: string[];             // child object ids
-  force_vectors: Vector2[];        // active forces on this object
+  orientation: number; // degrees
+  symmetry: number; // 0=asymmetric, 1=perfectly symmetric
+  nested_in?: string; // parent object id
+  contains?: string[]; // child object ids
+  force_vectors: Vector2[]; // active forces on this object
   metadata: Record<string, unknown>;
 }
 
@@ -129,14 +141,14 @@ export interface Vector2 {
 // --- Spatial Relationship ---
 
 export interface SpatialRelationship {
-  source: string;       // object id
-  target: string;       // object id
-  distance: number;     // hex distance
-  angle: number;        // degrees
-  scaleRatio: number;   // source.scale / target.scale
+  source: string; // object id
+  target: string; // object id
+  distance: number; // hex distance
+  angle: number; // degrees
+  scaleRatio: number; // source.scale / target.scale
   colorHarmony: number; // 0=clash, 1=perfect harmony
   type: RelationshipType;
-  meaning: string;      // semantic meaning of this relationship
+  meaning: string; // semantic meaning of this relationship
 }
 
 export type RelationshipType =
@@ -157,12 +169,12 @@ export type RelationshipType =
 export interface HexCell {
   coord: HexCoord;
   objects: ArenaObject[];
-  aestheticValue: number;       // computed field value at this cell
-  forceField: Vector2;          // net force at this cell
-  temperature: number;          // environmental parameter
-  pressure: number;             // environmental parameter
-  reactivity: number;           // environmental parameter
-  zLevel: number;               // height dimension
+  aestheticValue: number; // computed field value at this cell
+  forceField: Vector2; // net force at this cell
+  temperature: number; // environmental parameter
+  pressure: number; // environmental parameter
+  reactivity: number; // environmental parameter
+  zLevel: number; // height dimension
 }
 
 // --- The Hex Grid ---
@@ -210,11 +222,11 @@ export class HexGrid {
     this.objects.delete(id);
     const cell = this.cells.get(hexKey(obj.position));
     if (cell) {
-      cell.objects = cell.objects.filter(o => o.id !== id);
+      cell.objects = cell.objects.filter((o) => o.id !== id);
     }
     // Remove relationships involving this object
     this.relationships = this.relationships.filter(
-      r => r.source !== id && r.target !== id
+      (r) => r.source !== id && r.target !== id,
     );
     return obj;
   }
@@ -232,7 +244,7 @@ export class HexGrid {
     if (!obj) return;
     const oldCell = this.cells.get(hexKey(obj.position));
     if (oldCell) {
-      oldCell.objects = oldCell.objects.filter(o => o.id !== id);
+      oldCell.objects = oldCell.objects.filter((o) => o.id !== id);
     }
     obj.position = to;
     const newCell = this.cells.get(hexKey(to));
@@ -248,13 +260,13 @@ export class HexGrid {
   getRelationships(objectId?: string): SpatialRelationship[] {
     if (!objectId) return this.relationships;
     return this.relationships.filter(
-      r => r.source === objectId || r.target === objectId
+      (r) => r.source === objectId || r.target === objectId,
     );
   }
 
   objectsInRange(center: HexCoord, range: number): ArenaObject[] {
     return this.getAllObjects().filter(
-      obj => hexDistance(center, obj.position) <= range
+      (obj) => hexDistance(center, obj.position) <= range,
     );
   }
 

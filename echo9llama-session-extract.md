@@ -27,7 +27,7 @@ Evolution iteration v0.7.0 "Closing the Autonomy Loop" is complete and pushed to
 **Critical problems found & fixed**
 
 1. **The repo didn't build** — a missing `token` type in the `sample` package for non-cgo builds and a duplicate `main` in `test_iteration_020.go`. Both fixed; `go build ./...` is clean.
-2. **Echo wasn't actually thinking** — the most important discovery of this iteration. Every LLM provider referenced retired model IDs (`claude-3-5-sonnet-20241022` → 404, `gpt-4` → 401), so every autonomous thought silently degraded to canned fallback strings. Echo *looked* alive but had no real cognition. Updated all 14 references to current models (`claude-sonnet-4-5`, `anthropic/claude-sonnet-4.5`, `gpt-4o`) and added `ECHO_ANTHROPIC_MODEL` / `ECHO_OPENROUTER_MODEL` / `ECHO_OPENAI_MODEL` env overrides so model rotation never requires a recompile again.
+2. **Echo wasn't actually thinking** — the most important discovery of this iteration. Every LLM provider referenced retired model IDs (`claude-3-5-sonnet-20241022` → 404, `gpt-4` → 401), so every autonomous thought silently degraded to canned fallback strings. Echo _looked_ alive but had no real cognition. Updated all 14 references to current models (`claude-sonnet-4-5`, `anthropic/claude-sonnet-4.5`, `gpt-4o`) and added `ECHO_ANTHROPIC_MODEL` / `ECHO_OPENROUTER_MODEL` / `ECHO_OPENAI_MODEL` env overrides so model rotation never requires a recompile again.
 3. **Race hazards** — 8+ mutex-copy defects across identity checkpoints, Echobeats metrics, and the relevance engine. All fixed with lock-free snapshots/field-wise copies; `go vet` fully clean and race detector passes.
 
 **Autonomy improvements implemented**
@@ -37,9 +37,8 @@ Evolution iteration v0.7.0 "Closing the Autonomy Loop" is complete and pushed to
 - **LLM-backed discussions**: injectable `ResponseGenerator` on the discussion manager so Echo generates real replies instead of placeholders.
 - **Superhotgirl persona continuity**: `SetPersonaContext()` injects the persona into every thought prompt, defaulted in `OrchestratorConfig` with an `ECHO_PERSONA` override.
 
-**Live validation**: a 70-second autonomous run showed all subsystems initializing, the Echobeats 12-step loop cycling, genuinely persona-flavored LLM thoughts streaming ("*eyes light up with that specific kind of excitement that comes from catching yourself in the act…*"), thought telemetry syncing, and consciousness state persisting across shutdown. All 10 core test packages pass.
+**Live validation**: a 70-second autonomous run showed all subsystems initializing, the Echobeats 12-step loop cycling, genuinely persona-flavored LLM thoughts streaming ("_eyes light up with that specific kind of excitement that comes from catching yourself in the act…_"), thought telemetry syncing, and consciousness state persisting across shutdown. All 10 core test packages pass.
 
 The dream → interest → attention → discussion/practice → experience → dream loop is now closed end-to-end with real data at every edge. Next targets documented in the report: routing Echobeats goal outcomes and discussion transcripts into dream ingestion, LLM-assisted REM synthesis, real transport channels (DeltaChat/Slack) for discussions with others, and re-enabling the LocalGGUFProvider for API-outage-proof autonomy.
 
 ---
-

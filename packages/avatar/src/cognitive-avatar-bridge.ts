@@ -28,7 +28,6 @@ import { ExpressionMapper } from "./expression-mapper";
 import {
   EmotionalInertiaController,
   type InertiaOutput,
-  type FidgetDeltas,
 } from "./emotional-inertia-controller";
 
 /**
@@ -199,7 +198,7 @@ export class CognitiveAvatarBridge extends EventEmitter {
   /**
    * Start the bridge
    */
-    public start(): void {
+  public start(): void {
     if (this.running) return;
     this.running = true;
     // Start the emotional inertia controller alongside the bridge

@@ -57,12 +57,20 @@ describe("scientific-genius avatar bridges", () => {
     expect(params.scientificGeniusOverlay.activation).toBeGreaterThan(0.88);
     expect(params.scientificGeniusOverlay.daoConsensus).toBeCloseTo(0.88);
     expect(params.scientificGeniusOverlay.esnCoherence).toBeCloseTo(0.91);
-    expect(params.scientificGeniusOverlay.autognosisResonance).toBeCloseTo(0.89);
+    expect(params.scientificGeniusOverlay.autognosisResonance).toBeCloseTo(
+      0.89,
+    );
     expect(params.scientificGeniusOverlay.haloPulseHz).toBeGreaterThan(3);
-    expect(params.scientificGeniusOverlay.epistemicTemperature).toBeGreaterThanOrEqual(0.2);
-    expect(params.scientificGeniusOverlay.epistemicTemperature).toBeLessThanOrEqual(1);
+    expect(
+      params.scientificGeniusOverlay.epistemicTemperature,
+    ).toBeGreaterThanOrEqual(0.2);
+    expect(
+      params.scientificGeniusOverlay.epistemicTemperature,
+    ).toBeLessThanOrEqual(1);
     expect(params.scientificGeniusOverlay.hypothesisFlux).toBeGreaterThan(0.8);
-    expect(params.entelechyVisualization.auraIntensity).toBeGreaterThanOrEqual(0.78);
+    expect(params.entelechyVisualization.auraIntensity).toBeGreaterThanOrEqual(
+      0.78,
+    );
     expect(params.entelechyVisualization.particleCount).toBeGreaterThan(40);
     expect(bridge.describeState()).toContain("genius=");
   });

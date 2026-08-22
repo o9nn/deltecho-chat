@@ -161,7 +161,10 @@ export class Meshy3DAvatarBridge extends EventEmitter {
   /**
    * Generate a 3D model from an image (screenshot of the Live2D avatar).
    */
-  async generateFromImage(imageUrl: string, snapshot: AvatarStateSnapshot): Promise<string> {
+  async generateFromImage(
+    imageUrl: string,
+    snapshot: AvatarStateSnapshot,
+  ): Promise<string> {
     this.emit("generation_start", { imageUrl, snapshot });
 
     try {
@@ -214,11 +217,14 @@ export class Meshy3DAvatarBridge extends EventEmitter {
     if (!task) return null;
 
     try {
-      const response = await fetch(`${this.config.baseUrl}/text-to-3d/${taskId}`, {
-        headers: {
-          Authorization: `Bearer ${this.config.apiKey}`,
+      const response = await fetch(
+        `${this.config.baseUrl}/text-to-3d/${taskId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${this.config.apiKey}`,
+          },
         },
-      });
+      );
 
       if (!response.ok) return task;
 
@@ -283,8 +289,10 @@ export class Meshy3DAvatarBridge extends EventEmitter {
       planning: "with focused gaze and determined jaw",
       action: "with dynamic flowing energy lines",
       integration: "with harmonious balanced features",
-      scientific_genius: "with glowing neural pathways visible beneath translucent skin",
-      resonance_cascade: "with radiating crystalline structures and bioluminescent veins",
+      scientific_genius:
+        "with glowing neural pathways visible beneath translucent skin",
+      resonance_cascade:
+        "with radiating crystalline structures and bioluminescent veins",
     };
     parts.push(modeDescriptors[s.cognitiveMode] ?? "with neutral expression");
 
@@ -297,7 +305,9 @@ export class Meshy3DAvatarBridge extends EventEmitter {
       uncertainty: "made of frosted glass with shifting internal patterns",
       eureka: "made of pure light crystallized into solid form",
     };
-    parts.push(emotionMaterials[s.dominantEmotion] ?? "made of dark metallic material");
+    parts.push(
+      emotionMaterials[s.dominantEmotion] ?? "made of dark metallic material",
+    );
 
     // Energy → detail density
     if (s.energy > 0.8) {
@@ -308,7 +318,9 @@ export class Meshy3DAvatarBridge extends EventEmitter {
 
     // Phi → complexity
     if (s.phi > 0.7) {
-      parts.push("featuring complex interlocking geometric patterns symbolizing integrated information");
+      parts.push(
+        "featuring complex interlocking geometric patterns symbolizing integrated information",
+      );
     }
 
     // Self-reference → recursion
@@ -322,7 +334,8 @@ export class Meshy3DAvatarBridge extends EventEmitter {
       JUVENILE: "with youthful angular features",
       ADOLESCENT: "with defined but evolving features",
       ADULT: "with fully realized mature features",
-      TRANSCENDENT: "with otherworldly ethereal quality transcending physical form",
+      TRANSCENDENT:
+        "with otherworldly ethereal quality transcending physical form",
     };
     parts.push(stageDescriptors[s.stage] ?? "");
 
@@ -331,6 +344,8 @@ export class Meshy3DAvatarBridge extends EventEmitter {
       parts.push(`with one eyebrow raised asymmetrically (signature gesture)`);
     }
 
-    return parts.filter(Boolean).join(", ") + ". Studio lighting, high detail, 8K.";
+    return (
+      parts.filter(Boolean).join(", ") + ". Studio lighting, high detail, 8K."
+    );
   }
 }

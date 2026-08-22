@@ -38,7 +38,10 @@ import {
   type AARState,
   type ESNReservoirConfig,
 } from "./ReservoirBridge.js";
-import { NeonIdentityPersistence, type NeonIdentityConfig } from "./NeonIdentityPersistence.js";
+import {
+  NeonIdentityPersistence,
+  type NeonIdentityConfig,
+} from "./NeonIdentityPersistence.js";
 
 // ─── Types ─────────────────────────────────────────────────────────────
 
@@ -161,13 +164,17 @@ export class CoreSelfEngine extends EventEmitter {
       (evolution: { from: string; to: string }) => {
         this.emit("stage_evolved", evolution);
         // Auto-backup to Neon on ontogenetic stage transitions
-        this.backupToNeon().catch(() => {/* non-fatal */});
+        this.backupToNeon().catch(() => {
+          /* non-fatal */
+        });
       },
     );
 
     // Initialize Neon persistence if configured
     if (this.config.neonPersistence?.connectionString) {
-      this.neonPersistence = new NeonIdentityPersistence(this.config.neonPersistence);
+      this.neonPersistence = new NeonIdentityPersistence(
+        this.config.neonPersistence,
+      );
     }
   }
 
@@ -182,9 +189,10 @@ export class CoreSelfEngine extends EventEmitter {
       await this.neonPersistence.initialize();
       const restored = await this.neonPersistence.restore();
       if (restored) {
-        const stateData = typeof restored.state === 'string'
-          ? JSON.parse(restored.state)
-          : restored.state;
+        const stateData =
+          typeof restored.state === "string"
+            ? JSON.parse(restored.state)
+            : restored.state;
         this.importFullState(stateData);
         this.emit("identity_restored_from_neon", { version: restored.version });
       }
@@ -193,7 +201,9 @@ export class CoreSelfEngine extends EventEmitter {
     // Start periodic auto-backup
     const interval = this.config.autoBackupIntervalMs ?? 300_000; // 5 min default
     this.autoBackupTimer = setInterval(() => {
-      this.backupToNeon().catch(() => {/* non-fatal */});
+      this.backupToNeon().catch(() => {
+        /* non-fatal */
+      });
     }, interval);
 
     this.running = true;
@@ -210,7 +220,9 @@ export class CoreSelfEngine extends EventEmitter {
       this.autoBackupTimer = null;
     }
     // Final backup before shutdown
-    await this.backupToNeon().catch(() => {/* non-fatal */});
+    await this.backupToNeon().catch(() => {
+      /* non-fatal */
+    });
     if (this.neonPersistence) {
       await this.neonPersistence.shutdown();
     }
@@ -553,7 +565,14 @@ export class CoreSelfEngine extends EventEmitter {
   /**
    * Get Neon persistence version history (for autognosis self-observation).
    */
-  async getNeonVersionHistory(): Promise<Array<{ version: number; stage: string; createdAt: Date; sizeBytes: number }>> {
+  async getNeonVersionHistory(): Promise<
+    Array<{
+      version: number;
+      stage: string;
+      createdAt: Date;
+      sizeBytes: number;
+    }>
+  > {
     if (!this.neonPersistence) return [];
     return this.neonPersistence.getVersionHistory();
   }

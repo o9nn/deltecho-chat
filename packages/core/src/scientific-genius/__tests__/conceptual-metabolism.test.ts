@@ -13,7 +13,6 @@
 import {
   ConceptualMetabolism,
   MetabolicPhase,
-  MetabolicReaction,
   DEFAULT_METABOLISM_CONFIG,
 } from "../ConceptualMetabolism";
 
@@ -41,7 +40,9 @@ describe("ConceptualMetabolism", () => {
     });
 
     it("should have initial energy", () => {
-      expect(metabolism.getEnergy()).toBe(DEFAULT_METABOLISM_CONFIG.initialEnergy);
+      expect(metabolism.getEnergy()).toBe(
+        DEFAULT_METABOLISM_CONFIG.initialEnergy,
+      );
     });
 
     it("should start in ACTIVE phase", () => {
@@ -134,10 +135,7 @@ describe("ConceptualMetabolism", () => {
       const b = metabolism.ingest("Cat", "biology", 2)!;
       const c = metabolism.ingest("Horse", "biology", 2)!;
 
-      const abstract = metabolism.abstract(
-        [a.id, b.id, c.id],
-        "Mammal",
-      );
+      const abstract = metabolism.abstract([a.id, b.id, c.id], "Mammal");
       expect(abstract).not.toBeNull();
       expect(abstract!.label).toBe("Mammal");
       // Original units should be gone
@@ -173,7 +171,9 @@ describe("ConceptualMetabolism", () => {
       metabolism.start();
       return new Promise<void>((resolve) => {
         setTimeout(() => {
-          expect(metabolism.getEnergy()).toBeLessThan(DEFAULT_METABOLISM_CONFIG.initialEnergy);
+          expect(metabolism.getEnergy()).toBeLessThan(
+            DEFAULT_METABOLISM_CONFIG.initialEnergy,
+          );
           resolve();
         }, 200);
       });
@@ -226,7 +226,9 @@ describe("ConceptualMetabolism", () => {
         initialEnergy: 1000,
       });
       let called = false;
-      met.on("capacity_pressure", () => { called = true; });
+      met.on("capacity_pressure", () => {
+        called = true;
+      });
 
       for (let i = 0; i < 6; i++) {
         met.ingest(`Unit ${i}`, "test", 1);
@@ -287,7 +289,9 @@ describe("ConceptualMetabolism", () => {
       metabolism.synthesize("AB", "test", [a.id, b.id], 3);
       const state = metabolism.getState();
       expect(state.totalUnits).toBe(3); // A, B, AB
-      expect(state.energy).toBeLessThan(DEFAULT_METABOLISM_CONFIG.initialEnergy);
+      expect(state.energy).toBeLessThan(
+        DEFAULT_METABOLISM_CONFIG.initialEnergy,
+      );
       expect(state.phase).toBe(MetabolicPhase.ACTIVE);
       expect(state.efficiency).toBeGreaterThan(0);
     });
@@ -297,7 +301,9 @@ describe("ConceptualMetabolism", () => {
       metabolism.ingest("B", "test", 2);
       metabolism.reset();
       expect(metabolism.getUnits().length).toBe(0);
-      expect(metabolism.getEnergy()).toBe(DEFAULT_METABOLISM_CONFIG.initialEnergy);
+      expect(metabolism.getEnergy()).toBe(
+        DEFAULT_METABOLISM_CONFIG.initialEnergy,
+      );
       expect(metabolism.getPhase()).toBe(MetabolicPhase.ACTIVE);
     });
   });

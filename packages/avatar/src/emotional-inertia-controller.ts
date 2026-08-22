@@ -149,21 +149,61 @@ export interface FidgetDeltas {
 /** Default inertia profiles per emotion dimension */
 const DEFAULT_EMOTION_PROFILES: Record<string, EmotionInertiaProfile> = {
   // Joy rises moderately, falls slowly (happiness lingers)
-  joy: { riseTimeMs: 400, fallTimeMs: 1200, deadzone: 0.02, maxDeltaPerFrame: 0.08 },
+  joy: {
+    riseTimeMs: 400,
+    fallTimeMs: 1200,
+    deadzone: 0.02,
+    maxDeltaPerFrame: 0.08,
+  },
   // Interest rises fast (attention snaps), falls moderately
-  interest: { riseTimeMs: 200, fallTimeMs: 600, deadzone: 0.02, maxDeltaPerFrame: 0.12 },
+  interest: {
+    riseTimeMs: 200,
+    fallTimeMs: 600,
+    deadzone: 0.02,
+    maxDeltaPerFrame: 0.12,
+  },
   // Surprise rises instantly, falls fast (brief startle)
-  surprise: { riseTimeMs: 80, fallTimeMs: 300, deadzone: 0.03, maxDeltaPerFrame: 0.25 },
+  surprise: {
+    riseTimeMs: 80,
+    fallTimeMs: 300,
+    deadzone: 0.03,
+    maxDeltaPerFrame: 0.25,
+  },
   // Sadness rises slowly (builds), falls very slowly (lingers long)
-  sadness: { riseTimeMs: 800, fallTimeMs: 2500, deadzone: 0.02, maxDeltaPerFrame: 0.04 },
+  sadness: {
+    riseTimeMs: 800,
+    fallTimeMs: 2500,
+    deadzone: 0.02,
+    maxDeltaPerFrame: 0.04,
+  },
   // Anger rises moderately, falls slowly (hard to let go)
-  anger: { riseTimeMs: 350, fallTimeMs: 1800, deadzone: 0.02, maxDeltaPerFrame: 0.06 },
+  anger: {
+    riseTimeMs: 350,
+    fallTimeMs: 1800,
+    deadzone: 0.02,
+    maxDeltaPerFrame: 0.06,
+  },
   // Fear rises fast (survival), falls moderately
-  fear: { riseTimeMs: 150, fallTimeMs: 800, deadzone: 0.02, maxDeltaPerFrame: 0.15 },
+  fear: {
+    riseTimeMs: 150,
+    fallTimeMs: 800,
+    deadzone: 0.02,
+    maxDeltaPerFrame: 0.15,
+  },
   // Disgust rises fast, falls moderately
-  disgust: { riseTimeMs: 200, fallTimeMs: 700, deadzone: 0.02, maxDeltaPerFrame: 0.10 },
+  disgust: {
+    riseTimeMs: 200,
+    fallTimeMs: 700,
+    deadzone: 0.02,
+    maxDeltaPerFrame: 0.1,
+  },
   // Contempt rises slowly, falls very slowly (deep-seated)
-  contempt: { riseTimeMs: 600, fallTimeMs: 2000, deadzone: 0.02, maxDeltaPerFrame: 0.04 },
+  contempt: {
+    riseTimeMs: 600,
+    fallTimeMs: 2000,
+    deadzone: 0.02,
+    maxDeltaPerFrame: 0.04,
+  },
 };
 
 export const DEFAULT_EMOTIONAL_INERTIA_CONFIG: EmotionalInertiaConfig = {
@@ -206,7 +246,7 @@ class ValueNoise1D {
   }
 
   private hash(n: number): number {
-    let x = Math.sin(n * 127.1 + this.seed) * 43758.5453;
+    const x = Math.sin(n * 127.1 + this.seed) * 43758.5453;
     return x - Math.floor(x);
   }
 
@@ -369,7 +409,10 @@ export class EmotionalInertiaController extends EventEmitter {
    */
   feedCognitiveLoad(load: number): void {
     const clamped = Math.max(0, Math.min(1, load));
-    if (Math.abs(clamped - this.currentCognitiveLoad) > this.significantChangeThreshold) {
+    if (
+      Math.abs(clamped - this.currentCognitiveLoad) >
+      this.significantChangeThreshold
+    ) {
       this.lastSignificantInputTime = Date.now();
     }
     this.currentCognitiveLoad = clamped;
@@ -451,7 +494,8 @@ export class EmotionalInertiaController extends EventEmitter {
       const isRising = delta > 0;
 
       // Select time constant based on direction
-      const timeConstantMs = (isRising ? profile.riseTimeMs : profile.fallTimeMs) * globalMult;
+      const timeConstantMs =
+        (isRising ? profile.riseTimeMs : profile.fallTimeMs) * globalMult;
 
       // Exponential decay factor: alpha = 1 - e^(-dt/tau)
       const alpha = 1 - Math.exp(-dtMs / timeConstantMs);
@@ -493,12 +537,15 @@ export class EmotionalInertiaController extends EventEmitter {
       targetSpeed = cfg.deepThoughtSpeed;
     } else {
       // Linear interpolation between max (at load=0) and min (at load=1)
-      targetSpeed = cfg.maxSpeedMultiplier - load * (cfg.maxSpeedMultiplier - cfg.minSpeedMultiplier);
+      targetSpeed =
+        cfg.maxSpeedMultiplier -
+        load * (cfg.maxSpeedMultiplier - cfg.minSpeedMultiplier);
     }
 
     // Smooth adaptation
     const adaptAlpha = 1 - Math.exp(-dtMs / (1000 / cfg.speedAdaptationRate));
-    this.currentSpeedMultiplier += (targetSpeed - this.currentSpeedMultiplier) * adaptAlpha;
+    this.currentSpeedMultiplier +=
+      (targetSpeed - this.currentSpeedMultiplier) * adaptAlpha;
 
     // Emit mode change
     if (wasDeepThought !== this.isDeepThought) {
@@ -529,7 +576,8 @@ export class EmotionalInertiaController extends EventEmitter {
     // Micro-sigh check
     if (this.idleDurationSec > this.config.idleFidget.activationDelaySec * 2) {
       this.sighTimer += dtSec;
-      const sighInterval = 60 / Math.max(0.01, this.config.idleFidget.microSighProbability);
+      const sighInterval =
+        60 / Math.max(0.01, this.config.idleFidget.microSighProbability);
       if (this.sighTimer > sighInterval && !this.sighActive) {
         this.sighActive = true;
         this.sighProgress = 0;
@@ -561,7 +609,10 @@ export class EmotionalInertiaController extends EventEmitter {
     const cfg = this.config.idleFidget;
 
     // Base fidget intensity: ramps up with idle time, suppressed by cognitive load
-    const idleRamp = Math.min(1, Math.max(0, this.idleDurationSec - cfg.activationDelaySec) / 5);
+    const idleRamp = Math.min(
+      1,
+      Math.max(0, this.idleDurationSec - cfg.activationDelaySec) / 5,
+    );
     const loadSuppress = 1 - this.currentCognitiveLoad * cfg.loadSuppression;
     const intensity = cfg.baseIntensity * idleRamp * loadSuppress;
 
@@ -582,19 +633,41 @@ export class EmotionalInertiaController extends EventEmitter {
     const t = this.fidgetTime;
 
     // Head micro-sway (very slow, organic)
-    const headX = this.fidgetNoiseX.sampleCentered(t * 0.7) * cfg.headSwayAmplitude * intensity;
-    const headY = this.fidgetNoiseY.sampleCentered(t * 0.5) * cfg.headSwayAmplitude * 0.6 * intensity;
-    const headZ = this.fidgetNoiseZ.sampleCentered(t * 0.3) * cfg.headSwayAmplitude * 0.4 * intensity;
+    const headX =
+      this.fidgetNoiseX.sampleCentered(t * 0.7) *
+      cfg.headSwayAmplitude *
+      intensity;
+    const headY =
+      this.fidgetNoiseY.sampleCentered(t * 0.5) *
+      cfg.headSwayAmplitude *
+      0.6 *
+      intensity;
+    const headZ =
+      this.fidgetNoiseZ.sampleCentered(t * 0.3) *
+      cfg.headSwayAmplitude *
+      0.4 *
+      intensity;
 
     // Eye drift (slightly faster than head)
-    const eyeX = this.fidgetNoiseEyeX.sampleCentered(t * 1.2) * cfg.eyeDriftMaxOffset * intensity;
-    const eyeY = this.fidgetNoiseEyeY.sampleCentered(t * 0.9) * cfg.eyeDriftMaxOffset * 0.7 * intensity;
+    const eyeX =
+      this.fidgetNoiseEyeX.sampleCentered(t * 1.2) *
+      cfg.eyeDriftMaxOffset *
+      intensity;
+    const eyeY =
+      this.fidgetNoiseEyeY.sampleCentered(t * 0.9) *
+      cfg.eyeDriftMaxOffset *
+      0.7 *
+      intensity;
 
     // Body tension (very slow oscillation)
-    const bodyY = this.fidgetNoiseZ.sampleCentered(t * 0.2) * cfg.shoulderTensionAmplitude * intensity;
+    const bodyY =
+      this.fidgetNoiseZ.sampleCentered(t * 0.2) *
+      cfg.shoulderTensionAmplitude *
+      intensity;
 
     // Mouth micro-movement (subtle lip press)
-    const mouth = this.fidgetNoiseMouth.sampleCentered(t * 0.4) * 0.05 * intensity;
+    const mouth =
+      this.fidgetNoiseMouth.sampleCentered(t * 0.4) * 0.05 * intensity;
 
     // Sigh depth boost (bell curve during sigh)
     const sighBoost = this.sighActive
@@ -645,7 +718,10 @@ export class EmotionalInertiaController extends EventEmitter {
   updateConfig(partial: Partial<EmotionalInertiaConfig>): void {
     this.config = { ...this.config, ...partial };
     if (partial.emotionProfiles) {
-      this.config.emotionProfiles = { ...DEFAULT_EMOTION_PROFILES, ...partial.emotionProfiles };
+      this.config.emotionProfiles = {
+        ...DEFAULT_EMOTION_PROFILES,
+        ...partial.emotionProfiles,
+      };
     }
   }
 

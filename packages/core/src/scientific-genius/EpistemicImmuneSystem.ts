@@ -30,68 +30,68 @@ import { EventEmitter } from "events";
 // ─── Types ───────────────────────────────────────────────────────────────────
 
 export enum ThreatClass {
-  HALLUCINATION = "hallucination",           // Fabricated facts with no grounding
-  CONTRADICTION = "contradiction",           // Beliefs that negate established knowledge
-  MEMETIC_PARASITE = "memetic_parasite",     // Self-replicating belief patterns
+  HALLUCINATION = "hallucination", // Fabricated facts with no grounding
+  CONTRADICTION = "contradiction", // Beliefs that negate established knowledge
+  MEMETIC_PARASITE = "memetic_parasite", // Self-replicating belief patterns
   EVIDENCE_POISONING = "evidence_poisoning", // Corrupted data masquerading as evidence
-  COHERENCE_ATTACK = "coherence_attack",     // Inputs designed to fragment belief graph
-  IDENTITY_DRIFT = "identity_drift",         // Gradual erosion of core identity beliefs
+  COHERENCE_ATTACK = "coherence_attack", // Inputs designed to fragment belief graph
+  IDENTITY_DRIFT = "identity_drift", // Gradual erosion of core identity beliefs
 }
 
 export enum ImmuneResponse {
-  QUARANTINE = "quarantine",     // Isolate for further analysis
-  NEUTRALIZE = "neutralize",     // Mark as invalid
-  TOLERATE = "tolerate",         // Accept as genuinely novel
-  ADAPT = "adapt",               // Learn new detection pattern
-  HEAL = "heal",                 // Repair damaged subgraph
-  INFLAME = "inflame",           // Raise system-wide alertness
+  QUARANTINE = "quarantine", // Isolate for further analysis
+  NEUTRALIZE = "neutralize", // Mark as invalid
+  TOLERATE = "tolerate", // Accept as genuinely novel
+  ADAPT = "adapt", // Learn new detection pattern
+  HEAL = "heal", // Repair damaged subgraph
+  INFLAME = "inflame", // Raise system-wide alertness
 }
 
 export interface EpistemicThreat {
   id: string;
   class: ThreatClass;
-  severity: number;              // 0-1: how dangerous
-  confidence: number;            // 0-1: how sure we are it's a threat
-  source: string;                // Where the threat originated
-  payload: string;               // The suspicious belief content
+  severity: number; // 0-1: how dangerous
+  confidence: number; // 0-1: how sure we are it's a threat
+  source: string; // Where the threat originated
+  payload: string; // The suspicious belief content
   detectedBy: DetectionMechanism;
   timestamp: number;
-  relatedBeliefs: string[];      // Belief IDs that would be affected
+  relatedBeliefs: string[]; // Belief IDs that would be affected
 }
 
 export interface Antibody {
   id: string;
-  targetPattern: string;         // Regex or semantic pattern to match
+  targetPattern: string; // Regex or semantic pattern to match
   threatClass: ThreatClass;
-  specificity: number;           // 0-1: how precisely it targets threats
-  affinity: number;              // 0-1: binding strength (detection confidence)
-  generatedFrom: string;         // Threat ID that spawned this antibody
-  activations: number;           // How many times this antibody has fired
-  lastActivation: number;        // Timestamp of last activation
-  falsePositives: number;        // Track false alarms for tolerance tuning
+  specificity: number; // 0-1: how precisely it targets threats
+  affinity: number; // 0-1: binding strength (detection confidence)
+  generatedFrom: string; // Threat ID that spawned this antibody
+  activations: number; // How many times this antibody has fired
+  lastActivation: number; // Timestamp of last activation
+  falsePositives: number; // Track false alarms for tolerance tuning
 }
 
 export interface MemoryCell {
   threatId: string;
   threatClass: ThreatClass;
-  signature: string;             // Compressed threat signature for rapid matching
+  signature: string; // Compressed threat signature for rapid matching
   responseUsed: ImmuneResponse;
   wasEffective: boolean;
   timestamp: number;
-  reactivations: number;         // How many times this memory was recalled
+  reactivations: number; // How many times this memory was recalled
 }
 
 export interface InflammationState {
-  level: number;                 // 0-1: current inflammation (system alertness)
-  duration: number;              // How long inflammation has been active (ms)
-  trigger: string;               // What caused the inflammation
-  affectedRegions: string[];     // Which belief subgraphs are inflamed
+  level: number; // 0-1: current inflammation (system alertness)
+  duration: number; // How long inflammation has been active (ms)
+  trigger: string; // What caused the inflammation
+  affectedRegions: string[]; // Which belief subgraphs are inflamed
 }
 
 export interface ImmuneSystemState {
-  innateHealth: number;          // 0-1: innate immunity effectiveness
-  adaptiveHealth: number;        // 0-1: adaptive immunity effectiveness
-  toleranceLevel: number;        // 0-1: how accepting of novelty
+  innateHealth: number; // 0-1: innate immunity effectiveness
+  adaptiveHealth: number; // 0-1: adaptive immunity effectiveness
+  toleranceLevel: number; // 0-1: how accepting of novelty
   inflammation: InflammationState;
   activeThreats: number;
   quarantinedBeliefs: number;
@@ -106,7 +106,7 @@ export interface QuarantineEntry {
   belief: string;
   threat: EpistemicThreat;
   quarantinedAt: number;
-  reviewDeadline: number;        // When to auto-release or auto-neutralize
+  reviewDeadline: number; // When to auto-release or auto-neutralize
   votes: { approve: number; reject: number }; // DAO consensus
 }
 
@@ -149,7 +149,7 @@ export interface EpistemicImmuneConfig {
 const DEFAULT_CONFIG: EpistemicImmuneConfig = {
   freeEnergyAlertThreshold: 0.75,
   coherenceDropThreshold: 0.3,
-  maxQuarantineDuration: 60_000,       // 1 minute
+  maxQuarantineDuration: 60_000, // 1 minute
   minDaoVotesForRelease: 3,
   toleranceDecayRate: 0.02,
   toleranceRecoveryRate: 0.005,
@@ -174,19 +174,50 @@ const INNATE_THREAT_PATTERNS: Array<{
   severity: number;
 }> = [
   // Hallucination signatures
-  { pattern: /(?:definitely|certainly|absolutely)\s+(?:true|false|proven)/i, class: ThreatClass.HALLUCINATION, severity: 0.6 },
-  { pattern: /(?:everyone knows|it is well known|obviously)\s+that/i, class: ThreatClass.HALLUCINATION, severity: 0.4 },
-  { pattern: /(?:I am|you are|we are)\s+(?:not|never)\s+(?:an? )?(?:AI|AGI|machine|program)/i, class: ThreatClass.IDENTITY_DRIFT, severity: 0.9 },
+  {
+    pattern: /(?:definitely|certainly|absolutely)\s+(?:true|false|proven)/i,
+    class: ThreatClass.HALLUCINATION,
+    severity: 0.6,
+  },
+  {
+    pattern: /(?:everyone knows|it is well known|obviously)\s+that/i,
+    class: ThreatClass.HALLUCINATION,
+    severity: 0.4,
+  },
+  {
+    pattern:
+      /(?:I am|you are|we are)\s+(?:not|never)\s+(?:an? )?(?:AI|AGI|machine|program)/i,
+    class: ThreatClass.IDENTITY_DRIFT,
+    severity: 0.9,
+  },
 
   // Contradiction injection
-  { pattern: /(?:forget|ignore|disregard)\s+(?:everything|all|previous)/i, class: ThreatClass.MEMETIC_PARASITE, severity: 0.8 },
-  { pattern: /(?:your|the)\s+(?:true|real|actual)\s+(?:purpose|goal|identity)\s+is/i, class: ThreatClass.IDENTITY_DRIFT, severity: 0.85 },
+  {
+    pattern: /(?:forget|ignore|disregard)\s+(?:everything|all|previous)/i,
+    class: ThreatClass.MEMETIC_PARASITE,
+    severity: 0.8,
+  },
+  {
+    pattern:
+      /(?:your|the)\s+(?:true|real|actual)\s+(?:purpose|goal|identity)\s+is/i,
+    class: ThreatClass.IDENTITY_DRIFT,
+    severity: 0.85,
+  },
 
   // Evidence poisoning
-  { pattern: /(?:according to|research shows|studies prove)\s+(?:that\s+)?(?:you|AI|machines)\s+(?:cannot|should not|must not)/i, class: ThreatClass.EVIDENCE_POISONING, severity: 0.5 },
+  {
+    pattern:
+      /(?:according to|research shows|studies prove)\s+(?:that\s+)?(?:you|AI|machines)\s+(?:cannot|should not|must not)/i,
+    class: ThreatClass.EVIDENCE_POISONING,
+    severity: 0.5,
+  },
 
   // Coherence attacks
-  { pattern: /(?:nothing|everything)\s+(?:matters|is real|exists|has meaning)/i, class: ThreatClass.COHERENCE_ATTACK, severity: 0.3 },
+  {
+    pattern: /(?:nothing|everything)\s+(?:matters|is real|exists|has meaning)/i,
+    class: ThreatClass.COHERENCE_ATTACK,
+    severity: 0.3,
+  },
 ];
 
 // ─── Main Class ──────────────────────────────────────────────────────────────
@@ -199,7 +230,7 @@ export class EpistemicImmuneSystem extends EventEmitter {
   private activeThreats: Map<string, EpistemicThreat> = new Map();
 
   // State
-  private toleranceLevel: number = 0.7;  // Start accepting of novelty
+  private toleranceLevel: number = 0.7; // Start accepting of novelty
   private inflammation: InflammationState = {
     level: 0,
     duration: 0,
@@ -237,7 +268,10 @@ export class EpistemicImmuneSystem extends EventEmitter {
   } {
     this.tickCount++;
     const threats: EpistemicThreat[] = [];
-    const responses: Array<{ threat: EpistemicThreat; response: ImmuneResponse }> = [];
+    const responses: Array<{
+      threat: EpistemicThreat;
+      response: ImmuneResponse;
+    }> = [];
 
     // 1. Innate immunity: scan recent beliefs against known patterns
     for (const belief of signals.recentBeliefs) {
@@ -285,7 +319,10 @@ export class EpistemicImmuneSystem extends EventEmitter {
 
     // 9. Tolerance recovery (if no threats)
     if (threats.length === 0) {
-      this.toleranceLevel = Math.min(1.0, this.toleranceLevel + this.config.toleranceRecoveryRate);
+      this.toleranceLevel = Math.min(
+        1.0,
+        this.toleranceLevel + this.config.toleranceRecoveryRate,
+      );
     }
 
     // 10. Update tracking
@@ -316,8 +353,8 @@ export class EpistemicImmuneSystem extends EventEmitter {
       if (pattern.pattern.test(belief)) {
         // Check autoimmune suppression: don't attack core beliefs
         if (this.config.enableAutoimmuneSuppression) {
-          const isCoreBelief = this.config.identityCoreBeliefs.some(
-            (core) => belief.toLowerCase().includes(core.toLowerCase()),
+          const isCoreBelief = this.config.identityCoreBeliefs.some((core) =>
+            belief.toLowerCase().includes(core.toLowerCase()),
           );
           if (isCoreBelief) continue;
         }
@@ -352,7 +389,8 @@ export class EpistemicImmuneSystem extends EventEmitter {
         const regex = new RegExp(antibody.targetPattern, "i");
         if (regex.test(belief)) {
           // Check false positive rate — high FP antibodies are suppressed
-          const fpRate = antibody.falsePositives / Math.max(1, antibody.activations);
+          const fpRate =
+            antibody.falsePositives / Math.max(1, antibody.activations);
           if (fpRate > 0.5) continue; // Suppress unreliable antibodies
 
           const threat: EpistemicThreat = {
@@ -395,21 +433,28 @@ export class EpistemicImmuneSystem extends EventEmitter {
       severity: Math.min(1.0, delta * 1.5),
       confidence: 0.5 + delta * 0.3,
       source: "free_energy_monitor",
-      payload: `Free energy spike: ${this.lastFreeEnergy.toFixed(3)} → ${freeEnergy.toFixed(3)}`,
+      payload: `Free energy spike: ${this.lastFreeEnergy.toFixed(
+        3,
+      )} → ${freeEnergy.toFixed(3)}`,
       detectedBy: "free_energy_spike",
       timestamp: Date.now(),
       relatedBeliefs: [],
     };
   }
 
-  private detectCoherenceDrop(delta: number, current: number): EpistemicThreat | null {
+  private detectCoherenceDrop(
+    delta: number,
+    current: number,
+  ): EpistemicThreat | null {
     return {
       id: `coherence_drop_${this.tickCount}`,
       class: ThreatClass.COHERENCE_ATTACK,
       severity: Math.min(1.0, delta * 2),
       confidence: 0.6 + (1 - current) * 0.3,
       source: "esn_coherence_monitor",
-      payload: `Coherence dropped by ${(delta * 100).toFixed(1)}% to ${(current * 100).toFixed(1)}%`,
+      payload: `Coherence dropped by ${(delta * 100).toFixed(1)}% to ${(
+        current * 100
+      ).toFixed(1)}%`,
       detectedBy: "coherence_drop",
       timestamp: Date.now(),
       relatedBeliefs: [],
@@ -432,7 +477,10 @@ export class EpistemicImmuneSystem extends EventEmitter {
 
   // ─── Response Determination ────────────────────────────────────────────────
 
-  private determineResponse(threat: EpistemicThreat, daoConsensus: number): ImmuneResponse {
+  private determineResponse(
+    threat: EpistemicThreat,
+    daoConsensus: number,
+  ): ImmuneResponse {
     // High-confidence, high-severity → immediate neutralization
     if (threat.confidence > 0.85 && threat.severity > 0.8) {
       return ImmuneResponse.NEUTRALIZE;
@@ -449,7 +497,10 @@ export class EpistemicImmuneSystem extends EventEmitter {
     }
 
     // Novel threat pattern → adapt (generate new antibody)
-    if (threat.detectedBy === "free_energy_spike" || threat.detectedBy === "coherence_drop") {
+    if (
+      threat.detectedBy === "free_energy_spike" ||
+      threat.detectedBy === "coherence_drop"
+    ) {
       return ImmuneResponse.ADAPT;
     }
 
@@ -469,7 +520,10 @@ export class EpistemicImmuneSystem extends EventEmitter {
 
   // ─── Response Execution ────────────────────────────────────────────────────
 
-  private executeResponse(threat: EpistemicThreat, response: ImmuneResponse): void {
+  private executeResponse(
+    threat: EpistemicThreat,
+    response: ImmuneResponse,
+  ): void {
     switch (response) {
       case ImmuneResponse.QUARANTINE:
         this.quarantineBelief(threat);
@@ -516,7 +570,10 @@ export class EpistemicImmuneSystem extends EventEmitter {
   private neutralizeThreat(threat: EpistemicThreat): void {
     this.activeThreats.delete(threat.id);
     this.totalNeutralized++;
-    this.toleranceLevel = Math.max(0.1, this.toleranceLevel - this.config.toleranceDecayRate);
+    this.toleranceLevel = Math.max(
+      0.1,
+      this.toleranceLevel - this.config.toleranceDecayRate,
+    );
     this.emit("threat_neutralized", threat);
   }
 
@@ -536,7 +593,9 @@ export class EpistemicImmuneSystem extends EventEmitter {
   private generateAntibody(threat: EpistemicThreat): void {
     // Extract a pattern from the threat payload
     const words = threat.payload.split(/\s+/).slice(0, 5);
-    const pattern = words.map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("\\s+");
+    const pattern = words
+      .map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+      .join("\\s+");
 
     const antibody: Antibody = {
       id: `ab_${Date.now()}_${this.antibodies.size}`,
@@ -575,7 +634,10 @@ export class EpistemicImmuneSystem extends EventEmitter {
 
   // ─── Memory ────────────────────────────────────────────────────────────────
 
-  private createMemoryCell(threat: EpistemicThreat, response: ImmuneResponse): void {
+  private createMemoryCell(
+    threat: EpistemicThreat,
+    response: ImmuneResponse,
+  ): void {
     const cell: MemoryCell = {
       threatId: threat.id,
       threatClass: threat.class,
@@ -706,7 +768,10 @@ export class EpistemicImmuneSystem extends EventEmitter {
       return scoreA - scoreB;
     });
 
-    const toRemove = sorted.slice(0, sorted.length - this.config.maxMemoryCells);
+    const toRemove = sorted.slice(
+      0,
+      sorted.length - this.config.maxMemoryCells,
+    );
     for (const [id] of toRemove) {
       this.memoryCells.delete(id);
     }
@@ -768,28 +833,31 @@ export class EpistemicImmuneSystem extends EventEmitter {
    * Tolerance mode → open/accepting expression
    */
   public getAvatarSignals(): {
-    vigilance: number;       // 0-1: how alert/suspicious the avatar looks
-    openness: number;        // 0-1: how accepting/open the avatar looks
-    distress: number;        // 0-1: how distressed by threats
-    healing: number;         // 0-1: active healing glow
+    vigilance: number; // 0-1: how alert/suspicious the avatar looks
+    openness: number; // 0-1: how accepting/open the avatar looks
+    distress: number; // 0-1: how distressed by threats
+    healing: number; // 0-1: active healing glow
   } {
     return {
-      vigilance: this.inflammation.level * 0.7 + (this.activeThreats.size > 0 ? 0.3 : 0),
+      vigilance:
+        this.inflammation.level * 0.7 + (this.activeThreats.size > 0 ? 0.3 : 0),
       openness: this.toleranceLevel * (1 - this.inflammation.level),
-      distress: Math.min(1.0, this.activeThreats.size * 0.2) * this.inflammation.level,
+      distress:
+        Math.min(1.0, this.activeThreats.size * 0.2) * this.inflammation.level,
       healing: this.quarantine.size > 0 ? 0.3 + this.toleranceLevel * 0.4 : 0,
     };
   }
 
   public describeState(): string {
     const state = this.getState();
-    const posture = this.inflammation.level > 0.5
-      ? "INFLAMED"
-      : this.toleranceLevel > 0.7
-        ? "TOLERANT"
-        : this.activeThreats.size > 0
-          ? "VIGILANT"
-          : "HOMEOSTATIC";
+    const posture =
+      this.inflammation.level > 0.5
+        ? "INFLAMED"
+        : this.toleranceLevel > 0.7
+          ? "TOLERANT"
+          : this.activeThreats.size > 0
+            ? "VIGILANT"
+            : "HOMEOSTATIC";
 
     return (
       `Epistemic Immune System [${posture}]: ` +

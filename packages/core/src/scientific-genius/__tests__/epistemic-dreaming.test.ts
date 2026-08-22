@@ -32,7 +32,13 @@ function createMockGraph(unitCount: number = 10): KnowledgeGraphView {
     connections: string[];
   }> = [];
 
-  const domains = ["physics", "biology", "math", "philosophy", "computer_science"];
+  const domains = [
+    "physics",
+    "biology",
+    "math",
+    "philosophy",
+    "computer_science",
+  ];
 
   for (let i = 0; i < unitCount; i++) {
     units.push({
@@ -53,7 +59,10 @@ function createMockGraph(unitCount: number = 10): KnowledgeGraphView {
     units[(i + 1) % unitCount].connections.push(units[i].id);
     // Random connection
     const randomTarget = Math.floor(Math.random() * unitCount);
-    if (randomTarget !== i && !units[i].connections.includes(units[randomTarget].id)) {
+    if (
+      randomTarget !== i &&
+      !units[i].connections.includes(units[randomTarget].id)
+    ) {
       units[i].connections.push(units[randomTarget].id);
       units[randomTarget].connections.push(units[i].id);
     }
@@ -61,12 +70,18 @@ function createMockGraph(unitCount: number = 10): KnowledgeGraphView {
 
   return {
     getUnitIds: () => units.map((u) => u.id),
-    getUnitLabel: (id: string) => units.find((u) => u.id === id)?.label ?? "unknown",
-    getUnitDomain: (id: string) => units.find((u) => u.id === id)?.domain ?? "unknown",
-    getUnitActivation: (id: string) => units.find((u) => u.id === id)?.activation ?? 0,
-    getConnections: (id: string) => units.find((u) => u.id === id)?.connections ?? [],
-    getUnitComplexity: (id: string) => units.find((u) => u.id === id)?.complexity ?? 1,
-    getUnitAccessCount: (id: string) => units.find((u) => u.id === id)?.accessCount ?? 0,
+    getUnitLabel: (id: string) =>
+      units.find((u) => u.id === id)?.label ?? "unknown",
+    getUnitDomain: (id: string) =>
+      units.find((u) => u.id === id)?.domain ?? "unknown",
+    getUnitActivation: (id: string) =>
+      units.find((u) => u.id === id)?.activation ?? 0,
+    getConnections: (id: string) =>
+      units.find((u) => u.id === id)?.connections ?? [],
+    getUnitComplexity: (id: string) =>
+      units.find((u) => u.id === id)?.complexity ?? 1,
+    getUnitAccessCount: (id: string) =>
+      units.find((u) => u.id === id)?.accessCount ?? 0,
   };
 }
 
@@ -120,7 +135,9 @@ describe("EpistemicDreaming", () => {
       const sparse = new EpistemicDreaming({ minUnitsForDreaming: 100 });
       sparse.connectKnowledgeGraph(graph);
       let emitted = false;
-      sparse.on("dream_insufficient_knowledge", () => { emitted = true; });
+      sparse.on("dream_insufficient_knowledge", () => {
+        emitted = true;
+      });
       sparse.beginDreamSession();
       expect(sparse.getState().isDreaming).toBe(false);
       expect(emitted).toBe(true);
@@ -198,7 +215,9 @@ describe("EpistemicDreaming", () => {
     it("should emit dream_fragment events", () => {
       dreaming.beginDreamSession();
       let fragmentCount = 0;
-      dreaming.on("dream_fragment", () => { fragmentCount++; });
+      dreaming.on("dream_fragment", () => {
+        fragmentCount++;
+      });
 
       return new Promise<void>((resolve) => {
         setTimeout(() => {
@@ -278,7 +297,9 @@ describe("EpistemicDreaming", () => {
           if (insights.length > 0) {
             easy.markInsightIntegrated(insights[0].fragment.id);
             expect(insights[0].integrated).toBe(true);
-            expect(easy.getUnintegratedInsights().length).toBe(insights.length - 1);
+            expect(easy.getUnintegratedInsights().length).toBe(
+              insights.length - 1,
+            );
           }
           easy.stop();
           resolve();
@@ -290,13 +311,17 @@ describe("EpistemicDreaming", () => {
   describe("Configuration", () => {
     it("should use default config", () => {
       const d = new EpistemicDreaming();
-      expect(d.getConfig().baseTemperature).toBe(DEFAULT_DREAMING_CONFIG.baseTemperature);
+      expect(d.getConfig().baseTemperature).toBe(
+        DEFAULT_DREAMING_CONFIG.baseTemperature,
+      );
     });
 
     it("should accept partial overrides", () => {
       const d = new EpistemicDreaming({ baseTemperature: 3.0 });
       expect(d.getConfig().baseTemperature).toBe(3.0);
-      expect(d.getConfig().maxWalkLength).toBe(DEFAULT_DREAMING_CONFIG.maxWalkLength);
+      expect(d.getConfig().maxWalkLength).toBe(
+        DEFAULT_DREAMING_CONFIG.maxWalkLength,
+      );
     });
   });
 

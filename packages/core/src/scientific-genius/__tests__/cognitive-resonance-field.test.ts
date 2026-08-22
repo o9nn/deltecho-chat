@@ -52,10 +52,14 @@ function createTestGraph(nodeCount: number = 10): FieldKnowledgeGraph {
   return {
     getUnitIds: () => nodes.map((n) => n.id),
     getUnitLabel: (id: string) => nodes.find((n) => n.id === id)?.label ?? "?",
-    getUnitDomain: (id: string) => nodes.find((n) => n.id === id)?.domain ?? "?",
-    getUnitActivation: (id: string) => nodes.find((n) => n.id === id)?.activation ?? 0,
-    getConnections: (id: string) => nodes.find((n) => n.id === id)?.connections ?? [],
-    getUnitComplexity: (id: string) => nodes.find((n) => n.id === id)?.complexity ?? 1,
+    getUnitDomain: (id: string) =>
+      nodes.find((n) => n.id === id)?.domain ?? "?",
+    getUnitActivation: (id: string) =>
+      nodes.find((n) => n.id === id)?.activation ?? 0,
+    getConnections: (id: string) =>
+      nodes.find((n) => n.id === id)?.connections ?? [],
+    getUnitComplexity: (id: string) =>
+      nodes.find((n) => n.id === id)?.complexity ?? 1,
   };
 }
 
@@ -148,6 +152,7 @@ describe("CognitiveResonanceField", () => {
 
     it("should decay amplitude over time", () => {
       const wave = field.emitWave("n0", 2.0);
+      expect(wave).not.toBeNull();
       field.start();
 
       return new Promise<void>((resolve) => {
@@ -197,10 +202,11 @@ describe("CognitiveResonanceField", () => {
       return new Promise<void>((resolve) => {
         setTimeout(() => {
           const standing = field.getStandingWaves();
-          // Standing waves may or may not form depending on timing
-          // but the field should have processed the waves
+          // Standing waves may or may not form depending on timing,
+          // but the public state must agree with the tracked collection.
           const state = field.getState();
           expect(state.tickCount).toBeGreaterThan(0);
+          expect(state.standingWaves).toBe(standing.length);
           field.stop();
           resolve();
         }, 500);
@@ -228,7 +234,9 @@ describe("CognitiveResonanceField", () => {
       const wave = field.emitDreamWave("n0", "n5");
       expect(wave).not.toBeNull();
       expect(wave!.amplitude).toBe(2.0);
-      expect(wave!.decayRate).toBeGreaterThan(DEFAULT_RESONANCE_FIELD_CONFIG.baseDecayRate);
+      expect(wave!.decayRate).toBeGreaterThan(
+        DEFAULT_RESONANCE_FIELD_CONFIG.baseDecayRate,
+      );
     });
   });
 

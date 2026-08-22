@@ -15,7 +15,6 @@ import {
   type HexCoord,
   type HexGrid,
   type ArenaObject,
-  type SpatialRelationship,
   type Vector2,
   hexDistance,
   hexAngle,
@@ -42,16 +41,16 @@ export interface AestheticFieldConfig {
 const DEFAULT_CONFIG: AestheticFieldConfig = {
   proximityDecay: 0.5,
   positionWeight: 0.25,
-  scaleWeight: 0.20,
-  colorWeight: 0.20,
+  scaleWeight: 0.2,
+  colorWeight: 0.2,
   materialWeight: 0.15,
-  orientationWeight: 0.20,
+  orientationWeight: 0.2,
 };
 
 export interface FieldSample {
   coord: HexCoord;
-  value: number;       // 0-1 aliveness
-  gradient: Vector2;   // direction of increasing aliveness
+  value: number; // 0-1 aliveness
+  gradient: Vector2; // direction of increasing aliveness
 }
 
 export interface SpaceGestalt {
@@ -106,7 +105,8 @@ export class AestheticField {
       }
     }
 
-    const value = pairCount > 0 ? Math.min(1, totalCoherence / Math.sqrt(pairCount)) : 0;
+    const value =
+      pairCount > 0 ? Math.min(1, totalCoherence / Math.sqrt(pairCount)) : 0;
     this.fieldCache.set(key, value);
     return value;
   }
@@ -128,7 +128,7 @@ export class AestheticField {
     for (const n of neighbors) {
       const val = this.coherenceAt(n);
       const dx = n.q - coord.q + (n.r - coord.r) * 0.5;
-      const dy = (n.r - coord.r) * Math.sqrt(3) / 2;
+      const dy = ((n.r - coord.r) * Math.sqrt(3)) / 2;
       gx += (val - center) * dx;
       gy += (val - center) * dy;
     }
@@ -194,8 +194,12 @@ export class AestheticField {
     const focalStrength = foci.length > 0 ? foci[0].strength : 0;
 
     // Mood (from average color temperature and material properties)
-    const avgTemp = objects.reduce((s, o) => s + o.material.temperature, 0) / Math.max(objects.length, 1);
-    const avgReactivity = objects.reduce((s, o) => s + o.material.reactivity, 0) / Math.max(objects.length, 1);
+    const avgTemp =
+      objects.reduce((s, o) => s + o.material.temperature, 0) /
+      Math.max(objects.length, 1);
+    const avgReactivity =
+      objects.reduce((s, o) => s + o.material.reactivity, 0) /
+      Math.max(objects.length, 1);
     let mood: SpaceGestalt["mood"];
     if (avgTemp > 0.3) mood = "warm";
     else if (avgTemp < -0.3) mood = "cool";
@@ -205,22 +209,37 @@ export class AestheticField {
     else mood = "still";
 
     // Scale and density
-    const occupiedCells = cells.filter(c => c.objects.length > 0).length;
+    const occupiedCells = cells.filter((c) => c.objects.length > 0).length;
     const totalCells = cells.length;
     const occupancyRatio = occupiedCells / Math.max(totalCells, 1);
 
     const density: SpaceGestalt["density"] =
-      occupancyRatio > 0.5 ? "dense" : occupancyRatio > 0.2 ? "balanced" : "sparse";
+      occupancyRatio > 0.5
+        ? "dense"
+        : occupancyRatio > 0.2
+          ? "balanced"
+          : "sparse";
 
     const scale: SpaceGestalt["scale"] =
-      this.grid.radius <= 3 ? "intimate" : this.grid.radius <= 7 ? "moderate" : "vast";
+      this.grid.radius <= 3
+        ? "intimate"
+        : this.grid.radius <= 7
+          ? "moderate"
+          : "vast";
 
-    return { overallCoherence, mood, focalPoint, focalStrength, scale, density };
+    return {
+      overallCoherence,
+      mood,
+      focalPoint,
+      focalStrength,
+      scale,
+      density,
+    };
   }
 
   /** Sample the entire field for visualization */
   sampleField(): FieldSample[] {
-    return this.grid.getAllCells().map(cell => ({
+    return this.grid.getAllCells().map((cell) => ({
       coord: cell.coord,
       value: this.coherenceAt(cell.coord),
       gradient: this.gradientAt(cell.coord),
@@ -272,7 +291,7 @@ export class AestheticField {
     const normalizedDiff = Math.min(hueDiff, 360 - hueDiff) / 180; // 0-1
 
     // Complementary (180°) = 0.9, Analogous (30°) = 0.8, Triadic (120°) = 0.7
-    if (normalizedDiff > 0.9) return 0.9;  // complementary
+    if (normalizedDiff > 0.9) return 0.9; // complementary
     if (normalizedDiff < 0.17) return 0.8; // analogous
     if (Math.abs(normalizedDiff - 0.67) < 0.1) return 0.7; // triadic
     // Everything else decays
@@ -283,7 +302,9 @@ export class AestheticField {
   private materialCoherence(a: ArenaObject, b: ArenaObject): number {
     // Same phase = moderate, complementary properties = high
     const phaseSame = a.material.phase === b.material.phase ? 0.6 : 0.3;
-    const textureContrast = Math.abs(a.material.flexibility - b.material.flexibility);
+    const textureContrast = Math.abs(
+      a.material.flexibility - b.material.flexibility,
+    );
     const ageContrast = Math.abs(a.aesthetic.patina - b.aesthetic.patina);
     // Complementary textures (one rough, one smooth) add coherence
     return phaseSame + textureContrast * 0.2 + ageContrast * 0.1;
@@ -303,7 +324,11 @@ export class AestheticField {
   }
 
   /** How much does this point "feel" the coherence between two objects? */
-  private computeProximity(a: ArenaObject, b: ArenaObject, point: HexCoord): number {
+  private computeProximity(
+    a: ArenaObject,
+    b: ArenaObject,
+    point: HexCoord,
+  ): number {
     const distA = hexDistance(a.position, point);
     const distB = hexDistance(b.position, point);
     const midDist = (distA + distB) / 2;
@@ -314,7 +339,7 @@ export class AestheticField {
 // --- Utility ---
 
 function angleDiff(a: number, b: number): number {
-  let diff = ((b - a) % 360 + 360) % 360;
+  let diff = (((b - a) % 360) + 360) % 360;
   if (diff > 180) diff -= 360;
   return diff;
 }
