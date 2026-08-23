@@ -17,6 +17,7 @@ test_exports.ts
 
 # CLI tools and bots (console output is expected)
 bin/deltecho-bot.ts
+bin/dte-memory-lever.ts
 bin/deploy-optimization-agents.ts
 deltecho-bot-smol.ts
 packages/discord/src/bot.ts
