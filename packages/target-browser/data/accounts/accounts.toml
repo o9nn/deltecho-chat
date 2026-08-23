@@ -1,7 +1,12 @@
-selected_account = 2
-next_id = 5
+selected_account = 5
+next_id = 6
 
 [[accounts]]
 id = 2
 dir = "0be31df7-9224-474d-9253-c3c680977a10"
 uuid = "0be31df7-9224-474d-9253-c3c680977a10"
+
+[[accounts]]
+id = 5
+dir = "69352ffb-551d-4ab1-bdd2-32052d94ef95"
+uuid = "69352ffb-551d-4ab1-bdd2-32052d94ef95"
