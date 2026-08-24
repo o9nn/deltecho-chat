@@ -318,8 +318,35 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
 
   useEffect(() => {
     if (!state.isLoaded) return;
+    if (fillContainer) {
+      const element = containerRef.current;
+      if (element && element.clientWidth > 0 && element.clientHeight > 0) {
+        managerRef.current?.resize(
+          element.clientWidth,
+          element.clientHeight,
+          scale,
+        );
+        return;
+      }
+    }
     managerRef.current?.resize(width, height, scale);
-  }, [width, height, scale, state.isLoaded]);
+  }, [width, height, scale, state.isLoaded, fillContainer]);
+
+  useEffect(() => {
+    if (!fillContainer || !state.isLoaded) return undefined;
+    const element = containerRef.current;
+    if (!element || typeof ResizeObserver === "undefined") return undefined;
+    const apply = () => {
+      const nextWidth = Math.round(element.clientWidth);
+      const nextHeight = Math.round(element.clientHeight);
+      if (nextWidth <= 0 || nextHeight <= 0) return;
+      managerRef.current?.resize(nextWidth, nextHeight, scale);
+    };
+    apply();
+    const observer = new ResizeObserver(apply);
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [fillContainer, state.isLoaded, scale]);
 
   // Update emotional state
   useEffect(() => {
@@ -351,7 +378,11 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
     return (
       <div
         className={`live2d-avatar-container ${className || ""}`}
-        style={{ width, height, position: "relative" }}
+        style={
+          fillContainer
+            ? { width: "100%", height: "100%", position: "relative" }
+            : { width, height, position: "relative" }
+        }
       >
         <ResponsiveSpriteAvatar
           emotionalState={emotionalState}
@@ -369,7 +400,11 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
   return (
     <div
       className={`live2d-avatar-container ${className || ""}`}
-      style={{ width, height, position: "relative" }}
+      style={
+        fillContainer
+          ? { width: "100%", height: "100%", position: "relative" }
+          : { width, height, position: "relative" }
+      }
     >
       {/* Main Live2D canvas container - always rendered for initialization */}
       <div

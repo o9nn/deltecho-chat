@@ -912,18 +912,25 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       | undefined;
     if (typeof ticker?.addOnce !== "function") return;
     const generation = this.loadGeneration;
-    ticker.addOnce(() => {
-      ticker.addOnce?.(() => {
-        if (
-          generation !== this.loadGeneration ||
-          !this.model ||
-          !this.initialized
-        ) {
-          return;
-        }
-        this.correctScaleFromVisiblePixels();
-      });
-    });
+    const run = () => {
+      if (
+        generation !== this.loadGeneration ||
+        !this.model ||
+        !this.initialized
+      ) {
+        return;
+      }
+      this.correctScaleFromVisiblePixels();
+    };
+    if (typeof ticker?.addOnce === "function") {
+      ticker.addOnce(run);
+    }
+    if (
+      typeof window !== "undefined" &&
+      typeof window.setTimeout === "function"
+    ) {
+      window.setTimeout(run, 300);
+    }
   }
 
   private correctScaleFromVisiblePixels(): void {
