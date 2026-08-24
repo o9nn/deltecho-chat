@@ -36,6 +36,11 @@ interface Live2DModel {
     };
     width?: number;
     height?: number;
+    getDrawableIDs?: () => string[];
+    getDrawableBounds?: (
+      index: number,
+      bounds?: { x: number; y: number; width: number; height: number },
+    ) => { x: number; y: number; width: number; height: number };
     coreModel: {
       setParameterValueById: (id: string, value: number) => void;
       getParameterValueById: (id: string) => number;
@@ -165,6 +170,8 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   /** How much of the view the full figure should occupy (0-1). */
   private viewFill = 0.9;
   private modelNativeSize: { width: number; height: number } | null = null;
+  /** Offset from canvas center to the visual figure center, in native units. */
+  private modelVisualCenterOffset = { x: 0, y: 0 };
   private currentExpression: Expression = "neutral";
   private lipSyncValue = 0;
   private isBlinking = false;
@@ -371,7 +378,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       // Add to stage before measuring bounds so width/height are valid.
       this.app.stage.addChild(model as unknown as Container);
       this.model.scale.set(1, 1);
-      this.modelNativeSize = this.getModelNativeSize();
+      this.captureModelNativeMetrics();
       this.fitModelToView(modelInfo.scale, modelInfo.offset);
 
       // Start auto-blink (ticker-based for proper sync with PixiJS rAF loop)
@@ -730,30 +737,88 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     const view = this.app.view as HTMLCanvasElement | undefined;
     const width = screen?.width || view?.clientWidth || view?.width || 0;
     const height = screen?.height || view?.clientHeight || view?.height || 0;
-    const native = this.modelNativeSize ?? this.getModelNativeSize();
+    const native = this.modelNativeSize ?? this.measureModelNativeSize();
     if (native.width > 0 && native.height > 0 && width > 0 && height > 0) {
       const nextScale =
         Math.min(width / native.width, height / native.height) * this.viewFill;
       this.model.scale.set(nextScale, nextScale);
-    } else {
-      this.model.scale.set(this.viewFill, this.viewFill);
+      this.model.anchor.set(0.5, 0.5);
+      this.model.x =
+        width / 2 -
+        this.modelVisualCenterOffset.x * nextScale +
+        (offset?.x ?? this.config?.model.offset?.x ?? 0);
+      this.model.y =
+        height / 2 -
+        this.modelVisualCenterOffset.y * nextScale +
+        (offset?.y ?? this.config?.model.offset?.y ?? 0);
+      return;
     }
+    this.model.scale.set(this.viewFill, this.viewFill);
     this.model.anchor.set(0.5, 0.5);
     this.model.x = width / 2 + (offset?.x ?? this.config?.model.offset?.x ?? 0);
     this.model.y =
       height / 2 + (offset?.y ?? this.config?.model.offset?.y ?? 0);
   }
 
-  /** Unscaled model size in Cubism/Pixi units. */
-  private getModelNativeSize(): { width: number; height: number } {
+  private captureModelNativeMetrics(): void {
+    this.modelNativeSize = this.measureModelNativeSize();
+  }
+
+  /**
+   * Visual figure size in native Cubism units. Prefers the union of drawable
+   * meshes so empty canvas padding does not shrink the character in the strip.
+   */
+  private measureModelNativeSize(): { width: number; height: number } {
     if (!this.model) return { width: 0, height: 0 };
     const scaleX = Math.abs(this.model.scale.x) || 1;
     const scaleY = Math.abs(this.model.scale.y) || 1;
-    const width =
-      this.model.width || this.model.internalModel?.width || 0;
-    const height =
-      this.model.height || this.model.internalModel?.height || 0;
-    return { width: width / scaleX, height: height / scaleY };
+    const canvasWidth =
+      (this.model.internalModel?.width || this.model.width || 0) / scaleX;
+    const canvasHeight =
+      (this.model.internalModel?.height || this.model.height || 0) / scaleY;
+    const tight = this.measureDrawableBounds();
+    if (tight && tight.width > 0 && tight.height > 0) {
+      this.modelVisualCenterOffset = {
+        x: tight.x + tight.width / 2 - canvasWidth / 2,
+        y: tight.y + tight.height / 2 - canvasHeight / 2,
+      };
+      return { width: tight.width, height: tight.height };
+    }
+    this.modelVisualCenterOffset = { x: 0, y: 0 };
+    return { width: canvasWidth, height: canvasHeight };
+  }
+
+  private measureDrawableBounds(): {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  } | null {
+    const internal = this.model?.internalModel;
+    if (
+      !internal ||
+      typeof internal.getDrawableIDs !== "function" ||
+      typeof internal.getDrawableBounds !== "function"
+    ) {
+      return null;
+    }
+    const ids = internal.getDrawableIDs();
+    if (!ids.length) return null;
+    let minX = Infinity;
+    let minY = Infinity;
+    let maxX = -Infinity;
+    let maxY = -Infinity;
+    const box = { x: 0, y: 0, width: 0, height: 0 };
+    for (let i = 0; i < ids.length; i++) {
+      const bounds = internal.getDrawableBounds(i, box);
+      if (!bounds || bounds.width <= 1 || bounds.height <= 1) continue;
+      minX = Math.min(minX, bounds.x);
+      minY = Math.min(minY, bounds.y);
+      maxX = Math.max(maxX, bounds.x + bounds.width);
+      maxY = Math.max(maxY, bounds.y + bounds.height);
+    }
+    if (!Number.isFinite(minX) || maxX <= minX || maxY <= minY) return null;
+    return { x: minX, y: minY, width: maxX - minX, height: maxY - minY };
   }
 
   /**
@@ -798,6 +863,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   dispose(): void {
     this.loadGeneration += 1;
     this.modelNativeSize = null;
+    this.modelVisualCenterOffset = { x: 0, y: 0 };
 
     if (this.blinkTimer) {
       clearTimeout(this.blinkTimer);

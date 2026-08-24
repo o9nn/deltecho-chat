@@ -334,6 +334,64 @@ describe("PixiLive2DRenderer", () => {
       expect(renderer.getModel()?.scale.x).toBeCloseTo(0.125);
     });
 
+    it("scales to drawable bounds so empty canvas padding does not shrink the figure", async () => {
+      const cubism4 = await import("pixi-live2d-display-lipsyncpatch/cubism4");
+      (cubism4.Live2DModel.from as jest.Mock).mockImplementationOnce(() => {
+        const scale = {
+          x: 1,
+          y: 1,
+          set(x: number, y?: number) {
+            this.x = x;
+            this.y = y ?? x;
+          },
+        };
+        return Promise.resolve({
+          x: 0,
+          y: 0,
+          width: 800,
+          height: 1600,
+          scale,
+          anchor: { x: 0.5, y: 0.5, set: jest.fn() },
+          internalModel: {
+            width: 800,
+            height: 1600,
+            getDrawableIDs: () => ["body"],
+            getDrawableBounds: () => ({
+              x: 200,
+              y: 400,
+              width: 400,
+              height: 800,
+            }),
+            motionManager: {
+              startMotion: jest.fn().mockResolvedValue(true),
+              stopAllMotions: jest.fn(),
+            },
+            coreModel: {
+              setParameterValueById: jest.fn(),
+              getParameterValueById: jest.fn().mockReturnValue(0),
+            },
+          },
+          expression: jest.fn(),
+          motion: jest.fn().mockResolvedValue(true),
+          speak: jest.fn(),
+          stopSpeaking: jest.fn(),
+          destroy: jest.fn(),
+        });
+      });
+      const config: CubismAdapterConfig = {
+        canvas: mockCanvas,
+        model: {
+          modelPath: "/test/model.json",
+          name: "Test Model",
+          scale: 1,
+        },
+      };
+      await renderer.initialize(config);
+      await renderer.loadModel(config.model);
+      // Tight 400x800 in a 400x400 view at fill 1 → height-limited 0.5
+      expect(renderer.getModel()?.scale.x).toBeCloseTo(0.5);
+    });
+
     it("contain-fits the full figure inside the view", async () => {
       const config: CubismAdapterConfig = {
         canvas: mockCanvas,
