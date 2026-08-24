@@ -10,6 +10,7 @@ import {
   PARAM_IDS,
   loadCubism4Settings,
 } from "../adapters/pixi-live2d-renderer";
+import { FIGURE_BOUNDS_PAD } from "../adapters/live2d-figure-bounds";
 import type { CubismAdapterConfig } from "../adapters/cubism-adapter";
 
 // Mock the dynamic imports for Node.js environment
@@ -122,9 +123,7 @@ describe("PixiLive2DRenderer", () => {
       expect(installUnsafeEval).toHaveBeenCalled();
       const cubism4 = await import("pixi-live2d-display-lipsyncpatch/cubism4");
       expect(cubism4.cubism4Ready).toHaveBeenCalled();
-      expect(
-        (window as Window & { PIXI?: unknown }).PIXI,
-      ).toBeDefined();
+      expect((window as Window & { PIXI?: unknown }).PIXI).toBeDefined();
     });
 
     it("should throw if canvas element not found by ID", async () => {
@@ -388,8 +387,73 @@ describe("PixiLive2DRenderer", () => {
       };
       await renderer.initialize(config);
       await renderer.loadModel(config.model);
-      // Padded tight 464x928 in a 400x400 view at fill 1 → height-limited
-      expect(renderer.getModel()?.scale.x).toBeCloseTo(400 / (800 * 1.16));
+      // Padded tight figure in a 400x400 view at fill 1 → height-limited
+      expect(renderer.getModel()?.scale.x).toBeCloseTo(
+        400 / (800 * FIGURE_BOUNDS_PAD),
+      );
+    });
+
+    it("ignores water and canvas-sized planes so the figure fills the view", async () => {
+      const cubism4 = await import("pixi-live2d-display-lipsyncpatch/cubism4");
+      (cubism4.Live2DModel.from as jest.Mock).mockImplementationOnce(() => {
+        const scale = {
+          x: 1,
+          y: 1,
+          set(x: number, y?: number) {
+            this.x = x;
+            this.y = y ?? x;
+          },
+        };
+        const drawables = [
+          { id: "body", x: 200, y: 200, width: 400, height: 800 },
+          { id: "WaterSurface1", x: 0, y: 1000, width: 800, height: 600 },
+          { id: "ArtMeshBg", x: 0, y: 0, width: 800, height: 1600 },
+        ];
+        return Promise.resolve({
+          x: 0,
+          y: 0,
+          width: 800,
+          height: 1600,
+          scale,
+          anchor: { x: 0.5, y: 0.5, set: jest.fn() },
+          internalModel: {
+            width: 800,
+            height: 1600,
+            getDrawableIDs: () => drawables.map((drawable) => drawable.id),
+            getDrawableBounds: (index: number) => drawables[index],
+            motionManager: {
+              startMotion: jest.fn().mockResolvedValue(true),
+              stopAllMotions: jest.fn(),
+            },
+            coreModel: {
+              setParameterValueById: jest.fn(),
+              getParameterValueById: jest.fn().mockReturnValue(0),
+            },
+          },
+          expression: jest.fn(),
+          motion: jest.fn().mockResolvedValue(true),
+          speak: jest.fn(),
+          stopSpeaking: jest.fn(),
+          destroy: jest.fn(),
+        });
+      });
+      const config: CubismAdapterConfig = {
+        canvas: mockCanvas,
+        model: {
+          modelPath: "/test/model.json",
+          name: "Test Model",
+          scale: 1,
+        },
+      };
+      await renderer.initialize(config);
+      await renderer.loadModel(config.model);
+      expect(renderer.getNativeSize()).toEqual({
+        width: 400 * FIGURE_BOUNDS_PAD,
+        height: 800 * FIGURE_BOUNDS_PAD,
+      });
+      expect(renderer.getModel()?.scale.x).toBeCloseTo(
+        400 / (800 * FIGURE_BOUNDS_PAD),
+      );
     });
 
     it("contain-fits the full figure inside the view", async () => {
@@ -464,9 +528,9 @@ describe("loadCubism4Settings", () => {
 
   it("falls back to the model path when fetch fails", async () => {
     globalThis.fetch = jest.fn().mockRejectedValue(new Error("blocked"));
-    await expect(loadCubism4Settings("/models/miara.model3.json")).resolves.toBe(
-      "/models/miara.model3.json",
-    );
+    await expect(
+      loadCubism4Settings("/models/miara.model3.json"),
+    ).resolves.toBe("/models/miara.model3.json");
   });
 });
 

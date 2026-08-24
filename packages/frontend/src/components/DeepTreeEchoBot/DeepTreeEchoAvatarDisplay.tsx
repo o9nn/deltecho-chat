@@ -360,8 +360,8 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
     fillsConversationStrip && stripSize.height > 0
       ? stripSize.height
       : configuredHeight;
-  // Fill factor for contain-fit: the full figure stays inside the strip.
-  const stripScale = fillsConversationStrip ? 0.88 : 0.85;
+  // Fill factor for contain-fit: the standing figure should fill the strip.
+  const stripScale = fillsConversationStrip ? 0.97 : 0.92;
 
   const avatarController = useRef<Live2DAvatarController | null>(null);
   const updateIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -399,9 +399,18 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
       avatarController.current = controller;
       // Register controller with context if available
       avatarContext?.setController(controller);
-      const nativeSize = controller.getNativeSize?.();
-      if (nativeSize && nativeSize.width > 0 && nativeSize.height > 0) {
-        onNativeSize?.(nativeSize);
+      const reportNativeSize = () => {
+        const nativeSize = controller.getNativeSize?.();
+        if (nativeSize && nativeSize.width > 0 && nativeSize.height > 0) {
+          onNativeSize?.(nativeSize);
+        }
+      };
+      reportNativeSize();
+      // Mesh bounds settle after the first Cubism update / layout pass.
+      if (typeof requestAnimationFrame === "function") {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(reportNativeSize);
+        });
       }
       onReady?.();
     },

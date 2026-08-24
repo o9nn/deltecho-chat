@@ -14,6 +14,12 @@ import type {
   CubismAdapterConfig,
   CubismModelInfo,
 } from "./cubism-adapter";
+import {
+  FIGURE_BOUNDS_PAD,
+  measureFigureBounds,
+  padFigureBounds,
+  type DrawableBox,
+} from "./live2d-figure-bounds";
 
 /**
  * Live2D model reference type (from pixi-live2d-display)
@@ -41,6 +47,7 @@ interface Live2DModel {
       index: number,
       bounds?: { x: number; y: number; width: number; height: number },
     ) => { x: number; y: number; width: number; height: number };
+    update?: (dt: number, now: number) => void;
     coreModel: {
       setParameterValueById: (id: string, value: number) => void;
       getParameterValueById: (id: string) => number;
@@ -378,8 +385,8 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       // Add to stage before measuring bounds so width/height are valid.
       this.app.stage.addChild(model as unknown as Container);
       this.model.scale.set(1, 1);
-      this.captureModelNativeMetrics();
-      this.fitModelToView(modelInfo.scale, modelInfo.offset);
+      this.refreshModelLayout(modelInfo.scale, modelInfo.offset);
+      this.scheduleNativeMetricsRefresh();
 
       // Start auto-blink (ticker-based for proper sync with PixiJS rAF loop)
       this.startAutoBlinkLoop();
@@ -721,10 +728,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
    * Scale the full figure to fit inside the current Pixi screen (contain),
    * then center it. `scale` is a fill factor (0-1), not a raw Cubism scale.
    */
-  fitModelToView(
-    scale?: number,
-    offset?: { x?: number; y?: number },
-  ): void {
+  fitModelToView(scale?: number, offset?: { x?: number; y?: number }): void {
     if (!this.model || !this.app) return;
     if (typeof scale === "number" && Number.isFinite(scale) && scale > 0) {
       this.viewFill = Math.min(1, Math.max(0.1, scale));
@@ -764,9 +768,55 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     this.modelNativeSize = this.measureModelNativeSize();
   }
 
+  private refreshModelLayout(
+    scale?: number,
+    offset?: { x?: number; y?: number },
+  ): void {
+    this.syncInternalModel();
+    this.captureModelNativeMetrics();
+    this.fitModelToView(scale, offset);
+  }
+
   /**
-   * Visual figure size in native Cubism units. Prefers the union of drawable
-   * meshes so empty canvas padding does not shrink the character in the strip.
+   * Vertices are empty until Cubism runs one update. Push that update now,
+   * then again on the next ticker tick once motions have sampled.
+   */
+  private syncInternalModel(): void {
+    const update = this.model?.internalModel?.update;
+    if (typeof update !== "function") return;
+    try {
+      const now =
+        typeof performance !== "undefined" &&
+        typeof performance.now === "function"
+          ? performance.now()
+          : Date.now();
+      update.call(this.model?.internalModel, 16, now);
+    } catch {
+      /* model may not be ready for a manual update */
+    }
+  }
+
+  private scheduleNativeMetricsRefresh(): void {
+    const ticker = this.app?.ticker as
+      | { addOnce?: (cb: () => void) => void }
+      | undefined;
+    if (typeof ticker?.addOnce !== "function") return;
+    const generation = this.loadGeneration;
+    ticker.addOnce(() => {
+      if (
+        generation !== this.loadGeneration ||
+        !this.model ||
+        !this.initialized
+      ) {
+        return;
+      }
+      this.refreshModelLayout();
+    });
+  }
+
+  /**
+   * Visual figure size in native Cubism units. Prefers the standing-character
+   * mesh cluster so water / background planes do not shrink the figure.
    */
   private measureModelNativeSize(): { width: number; height: number } {
     if (!this.model) return { width: 0, height: 0 };
@@ -776,20 +826,23 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       (this.model.internalModel?.width || this.model.width || 0) / scaleX;
     const canvasHeight =
       (this.model.internalModel?.height || this.model.height || 0) / scaleY;
-    const tight = this.measureDrawableBounds();
+    const tight = this.measureDrawableBounds(canvasWidth, canvasHeight);
     if (tight && tight.width > 0 && tight.height > 0) {
-      // Hair, feet, and effects sit outside the dense mesh. Expand so
-      // contain-fit still shows the full figure while filling the strip.
-      const paddedWidth = tight.width * 1.16;
-      const paddedHeight = tight.height * 1.16;
-      this.modelVisualCenterOffset = { x: 0, y: 0 };
-      return { width: paddedWidth, height: paddedHeight };
+      const padded = padFigureBounds(tight, FIGURE_BOUNDS_PAD);
+      this.modelVisualCenterOffset = {
+        x: padded.x + padded.width / 2 - canvasWidth / 2,
+        y: padded.y + padded.height / 2 - canvasHeight / 2,
+      };
+      return { width: padded.width, height: padded.height };
     }
     this.modelVisualCenterOffset = { x: 0, y: 0 };
     return { width: canvasWidth, height: canvasHeight };
   }
 
-  private measureDrawableBounds(): {
+  private measureDrawableBounds(
+    canvasWidth: number,
+    canvasHeight: number,
+  ): {
     x: number;
     y: number;
     width: number;
@@ -805,21 +858,28 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     }
     const ids = internal.getDrawableIDs();
     if (!ids.length) return null;
-    let minX = Infinity;
-    let minY = Infinity;
-    let maxX = -Infinity;
-    let maxY = -Infinity;
+    const drawables: DrawableBox[] = [];
     const box = { x: 0, y: 0, width: 0, height: 0 };
     for (let i = 0; i < ids.length; i++) {
-      const bounds = internal.getDrawableBounds(i, box);
+      let bounds: { x: number; y: number; width: number; height: number };
+      try {
+        bounds = internal.getDrawableBounds(i, box);
+      } catch {
+        continue;
+      }
       if (!bounds || bounds.width <= 1 || bounds.height <= 1) continue;
-      minX = Math.min(minX, bounds.x);
-      minY = Math.min(minY, bounds.y);
-      maxX = Math.max(maxX, bounds.x + bounds.width);
-      maxY = Math.max(maxY, bounds.y + bounds.height);
+      drawables.push({
+        id: ids[i] ?? `drawable-${i}`,
+        x: bounds.x,
+        y: bounds.y,
+        width: bounds.width,
+        height: bounds.height,
+      });
     }
-    if (!Number.isFinite(minX) || maxX <= minX || maxY <= minY) return null;
-    return { x: minX, y: minY, width: maxX - minX, height: maxY - minY };
+    return measureFigureBounds(drawables, {
+      width: canvasWidth,
+      height: canvasHeight,
+    });
   }
 
   /**
