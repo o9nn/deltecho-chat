@@ -4,6 +4,7 @@
 @use "sass:math";
 
 .message-list-and-composer {
+  position: relative;
   display: flex;
   flex-direction: column;
   flex-grow: 1;

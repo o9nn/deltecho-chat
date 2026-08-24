@@ -9,21 +9,6 @@ export {
   type ReflectionMemory,
   type ScoredMemory,
 } from "./RAGMemoryStore";
-export {
-  MemoryLever,
-  MemoryLeverError,
-  VECTOR_MEMORY_KEY,
-  type MemoryLeverErrorCode,
-  type MemoryHit,
-  type SearchResult,
-  type SearchFilters,
-  type DreamPlan,
-  type DreamMergeGroup,
-  type DreamContradiction,
-  type DreamPruneCandidate,
-  type ApplyAudit,
-  type ApplyHooks,
-} from "./MemoryLever";
 export { HyperDimensionalMemory } from "./HyperDimensionalMemory";
 export {
   IntegratedMemorySystem,
@@ -35,4 +20,5 @@ export {
 // Level 5: Vector Memory Store and Embedding Service
 export * from "./VectorMemoryStore.js";
 export * from "./EmbeddingService.js";
-export * from "./FileSystemStorage.js";
+
+// MemoryLever and FileSystemStorage stay on ./node — they import Node builtins.
