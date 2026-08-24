@@ -92,6 +92,8 @@ export interface DesktopSettingsType {
   deepTreeEchoBotWelcomedContacts?: string;
   /** Avatar display settings */
   deepTreeEchoBotAvatarEnabled?: boolean;
+  /** Conversation-strip width in px. `0` means auto-fit for full figure height. */
+  deepTreeEchoBotAvatarStripWidth?: number;
 }
 
 export interface RC_Config {

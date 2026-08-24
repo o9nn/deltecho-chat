@@ -20,7 +20,14 @@ jest.mock("@deltachat-desktop/runtime-interface", () => ({
 }));
 
 jest.mock("../../../stores/settings", () => ({
+  __esModule: true,
   useSettingsStore: jest.fn(),
+  default: { effect: { setDesktopSetting: jest.fn() } },
+}));
+
+jest.mock("../../../hooks/useTranslationFunction", () => ({
+  __esModule: true,
+  default: () => (key: string) => key,
 }));
 
 jest.mock("../../../hooks/dialog/useDialog", () => ({
@@ -96,6 +103,50 @@ function setDesktopSettings(partial: Record<string, unknown>) {
     { desktopSettings: partial },
   ]);
 }
+
+describe("MessageListAndComposer Live2D strip", () => {
+  it("reserves a full-height right-hand avatar strip when the bot is enabled", () => {
+    setDesktopSettings({
+      deepTreeEchoBotEnabled: true,
+      deepTreeEchoBotAvatarEnabled: true,
+    });
+
+    const { container } = render(
+      <MessageListAndComposer accountId={1} chat={chat} />,
+    );
+
+    expect(screen.getByTestId("live2d-avatar-strip")).toBeInTheDocument();
+    expect(
+      container.querySelector(".message-list-and-composer--with-avatar"),
+    ).toBeInTheDocument();
+    expect(
+      container.querySelector(".message-list-and-composer__conversation"),
+    ).toBeInTheDocument();
+    expect(screen.getByTestId("live2d-avatar-strip-resize")).toBeInTheDocument();
+  });
+
+  it("applies a saved strip width when the user has resized it", () => {
+    setDesktopSettings({
+      deepTreeEchoBotEnabled: true,
+      deepTreeEchoBotAvatarEnabled: true,
+      deepTreeEchoBotAvatarStripWidth: 360,
+    });
+
+    render(<MessageListAndComposer accountId={1} chat={chat} />);
+    expect(screen.getByTestId("live2d-avatar-strip")).toHaveStyle({
+      width: "360px",
+    });
+  });
+
+  it("hides the avatar strip when the bot is disabled", () => {
+    setDesktopSettings({
+      deepTreeEchoBotEnabled: false,
+    });
+
+    render(<MessageListAndComposer accountId={1} chat={chat} />);
+    expect(screen.queryByTestId("live2d-avatar-strip")).not.toBeInTheDocument();
+  });
+});
 
 describe("MessageListAndComposer proactive indicator (AE6)", () => {
   it("renders the indicator when both flags are true", () => {

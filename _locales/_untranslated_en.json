@@ -79,5 +79,8 @@
   },
   "need_to_be_logged_out": {
     "message": "Please log out first"
+  },
+  "avatar_strip_resize": {
+    "message": "Drag to change avatar width. Double-click to fit the full figure height."
   }
 }

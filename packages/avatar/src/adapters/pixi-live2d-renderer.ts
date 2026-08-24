@@ -14,6 +14,13 @@ import type {
   CubismAdapterConfig,
   CubismModelInfo,
 } from "./cubism-adapter";
+import {
+  FIGURE_BOUNDS_PAD,
+  measureFigureBounds,
+  measureOpaquePixelBounds,
+  padFigureBounds,
+  type DrawableBox,
+} from "./live2d-figure-bounds";
 
 /**
  * Live2D model reference type (from pixi-live2d-display)
@@ -21,6 +28,8 @@ import type {
 interface Live2DModel {
   x: number;
   y: number;
+  width?: number;
+  height?: number;
   scale: { x: number; y: number; set: (x: number, y?: number) => void };
   anchor: { x: number; y: number; set: (x: number, y?: number) => void };
   internalModel: {
@@ -32,6 +41,14 @@ interface Live2DModel {
       ) => Promise<boolean>;
       stopAllMotions: () => void;
     };
+    width?: number;
+    height?: number;
+    getDrawableIDs?: () => string[];
+    getDrawableBounds?: (
+      index: number,
+      bounds?: { x: number; y: number; width: number; height: number },
+    ) => { x: number; y: number; width: number; height: number };
+    update?: (dt: number, now: number) => void;
     coreModel: {
       setParameterValueById: (id: string, value: number) => void;
       getParameterValueById: (id: string) => number;
@@ -140,11 +157,30 @@ export interface PixiLive2DConfig extends Omit<CubismAdapterConfig, "canvas"> {
  * - Real-time lip sync from audio levels
  * - Eye blinking
  */
+/** Serialize Cubism `from()` so two Pixi GL contexts cannot share one runtime. */
+let live2dFromLock: Promise<void> = Promise.resolve();
+
+function withLive2DFromLock<T>(fn: () => Promise<T>): Promise<T> {
+  const previous = live2dFromLock;
+  let release: () => void = () => undefined;
+  live2dFromLock = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  return previous.then(fn).finally(() => release());
+}
+
 export class PixiLive2DRenderer implements ICubismRenderer {
   private app: Application | null = null;
   private model: Live2DModel | null = null;
   private config: PixiLive2DConfig | null = null;
   private initialized = false;
+  private loadGeneration = 0;
+  /** How much of the view the full figure should occupy (0-1). */
+  private viewFill = 0.9;
+  private modelNativeSize: { width: number; height: number } | null = null;
+  private modelCanvasSize: { width: number; height: number } | null = null;
+  /** Offset from canvas center to the visual figure center, in native units. */
+  private modelVisualCenterOffset = { x: 0, y: 0 };
   private currentExpression: Expression = "neutral";
   private lipSyncValue = 0;
   private isBlinking = false;
@@ -171,12 +207,26 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   async initialize(config: CubismAdapterConfig): Promise<void> {
     this.config = config as PixiLive2DConfig;
 
-    // Dynamically import PixiJS and pixi-live2d-display-lipsyncpatch
-    const [{ Application }, { Live2DModel: Live2DModelClass }] =
-      await Promise.all([
-        import("pixi.js"),
-        import("pixi-live2d-display-lipsyncpatch"),
-      ]);
+    // Dynamically import PixiJS and the Cubism 4 Live2D factory.
+    // The cubism4 entry registers Cubism 3/4 settings; the package root
+    // can leave model3.json unrecognized ("Unknown settings format").
+    const [pixi, live2d, { install }] = await Promise.all([
+      import("pixi.js"),
+      import("pixi-live2d-display-lipsyncpatch/cubism4"),
+      import("@pixi/unsafe-eval"),
+    ]);
+    // Desktop CSP forbids eval; patch Pixi shaders before Application exists.
+    install(pixi);
+    // pixi-live2d-display looks up PIXI.Ticker on the global when no ticker
+    // is passed to Live2DModel.from().
+    if (typeof window !== "undefined") {
+      (window as Window & { PIXI?: typeof pixi }).PIXI = pixi;
+    }
+    if (typeof live2d.cubism4Ready === "function") {
+      await live2d.cubism4Ready();
+    }
+    const { Live2DModel: Live2DModelClass } = live2d;
+    const { Application } = pixi;
 
     // Get or create canvas element
     let canvas: HTMLCanvasElement;
@@ -273,10 +323,18 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       throw new Error("Renderer not initialized");
     }
 
-    // Dynamically import Live2DModel
-    const { Live2DModel: Live2DModelClass } = await import(
-      "pixi-live2d-display-lipsyncpatch"
+    // Dynamically import the Cubism 4 Live2D factory (registers model3.json).
+    const { Live2DModel: Live2DModelClass, cubism4Ready } = await import(
+      "pixi-live2d-display-lipsyncpatch/cubism4"
     );
+    if (typeof cubism4Ready === "function") {
+      await cubism4Ready();
+    }
+
+    const source = await loadCubism4Settings(modelInfo.modelPath);
+    if (!this.app || !this.initialized) {
+      return;
+    }
 
     // Dispose existing model and any model-bound blink timers.
     if (this.blinkTimer) {
@@ -292,25 +350,30 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       this.model = null;
     }
 
+    const generation = ++this.loadGeneration;
+
     try {
-      // Load the model with autoInteract for cursor eye-tracking
-      const model = (await Live2DModelClass.from(modelInfo.modelPath, {
-        autoInteract: true,
-        autoUpdate: true,
-      })) as unknown as Live2DModel;
-      this.model = model;
+      // Pass parsed settings (with url) so file:// XHR JSON MIME issues
+      // cannot collapse model3.json into "Unknown settings format".
+      const model = (await withLive2DFromLock(() =>
+        Live2DModelClass.from(source, {
+          ticker: this.app?.ticker,
+          autoFocus: true,
+          autoHitTest: true,
+          autoUpdate: true,
+        }),
+      )) as unknown as Live2DModel;
 
-      // Position and scale the model
-      const scale = modelInfo.scale ?? 0.25;
-      model.scale.set(scale, scale);
-      model.anchor.set(0.5, 0.5);
-
-      // Center in canvas
-      if (this.app.view) {
-        const canvas = this.app.view as HTMLCanvasElement;
-        model.x = canvas.width / 2 + (modelInfo.offset?.x ?? 0);
-        model.y = canvas.height / 2 + (modelInfo.offset?.y ?? 0);
+      if (
+        generation !== this.loadGeneration ||
+        !this.app ||
+        !this.initialized
+      ) {
+        model.destroy();
+        return;
       }
+
+      this.model = model;
 
       // Defensively clear stage in case a previous model left children behind.
       // Guarded for compatibility with PixiJS test mocks that may not implement
@@ -321,8 +384,13 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       if (typeof stageWithRemove.removeChildren === "function") {
         stageWithRemove.removeChildren();
       }
-      // Add to stage
+      // Add to stage before measuring bounds so width/height are valid.
       this.app.stage.addChild(model as unknown as Container);
+      this.model.scale.set(1, 1);
+      this.modelCanvasSize = null;
+      this.refreshModelLayout(modelInfo.scale, modelInfo.offset);
+      this.scheduleNativeMetricsRefresh();
+      this.scheduleVisibleFillCorrection();
 
       // Start auto-blink (ticker-based for proper sync with PixiJS rAF loop)
       this.startAutoBlinkLoop();
@@ -661,6 +729,289 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   }
 
   /**
+   * Scale the full figure to fit inside the current Pixi screen (contain),
+   * then center it. `scale` is a fill factor (0-1), not a raw Cubism scale.
+   */
+  fitModelToView(scale?: number, offset?: { x?: number; y?: number }): void {
+    if (!this.model || !this.app) return;
+    if (typeof scale === "number" && Number.isFinite(scale) && scale > 0) {
+      this.viewFill = Math.min(1, Math.max(0.1, scale));
+    }
+    const screen = (
+      this.app as Application & {
+        screen?: { width: number; height: number };
+      }
+    ).screen;
+    const view = this.app.view as HTMLCanvasElement | undefined;
+    const width = screen?.width || view?.clientWidth || view?.width || 0;
+    const height = screen?.height || view?.clientHeight || view?.height || 0;
+    const native = this.modelNativeSize ?? this.measureModelNativeSize();
+    if (native.width > 0 && native.height > 0 && width > 0 && height > 0) {
+      const nextScale =
+        Math.min(width / native.width, height / native.height) * this.viewFill;
+      this.model.scale.set(nextScale, nextScale);
+      this.model.anchor.set(0.5, 0.5);
+      this.model.x =
+        width / 2 -
+        this.modelVisualCenterOffset.x * nextScale +
+        (offset?.x ?? this.config?.model.offset?.x ?? 0);
+      this.model.y =
+        height / 2 -
+        this.modelVisualCenterOffset.y * nextScale +
+        (offset?.y ?? this.config?.model.offset?.y ?? 0);
+      return;
+    }
+    this.model.scale.set(this.viewFill, this.viewFill);
+    this.model.anchor.set(0.5, 0.5);
+    this.model.x = width / 2 + (offset?.x ?? this.config?.model.offset?.x ?? 0);
+    this.model.y =
+      height / 2 + (offset?.y ?? this.config?.model.offset?.y ?? 0);
+  }
+
+  private captureModelNativeMetrics(): void {
+    this.modelNativeSize = this.measureModelNativeSize();
+  }
+
+  private refreshModelLayout(
+    scale?: number,
+    offset?: { x?: number; y?: number },
+  ): void {
+    this.syncInternalModel();
+    this.captureModelNativeMetrics();
+    this.fitModelToView(scale, offset);
+  }
+
+  /**
+   * Vertices are empty until Cubism runs one update. Push that update now,
+   * then again on the next ticker tick once motions have sampled.
+   */
+  private syncInternalModel(): void {
+    const update = this.model?.internalModel?.update;
+    if (typeof update !== "function") return;
+    try {
+      const now =
+        typeof performance !== "undefined" &&
+        typeof performance.now === "function"
+          ? performance.now()
+          : Date.now();
+      update.call(this.model?.internalModel, 16, now);
+    } catch {
+      /* model may not be ready for a manual update */
+    }
+  }
+
+  private scheduleNativeMetricsRefresh(): void {
+    const ticker = this.app?.ticker as
+      | { addOnce?: (cb: () => void) => void }
+      | undefined;
+    if (typeof ticker?.addOnce !== "function") return;
+    const generation = this.loadGeneration;
+    ticker.addOnce(() => {
+      if (
+        generation !== this.loadGeneration ||
+        !this.model ||
+        !this.initialized
+      ) {
+        return;
+      }
+      this.refreshModelLayout();
+    });
+  }
+
+  /**
+   * Visual figure size in native Cubism units. Prefers the standing-character
+   * mesh cluster so water / background planes do not shrink the figure.
+   */
+  private getModelCanvasSize(): { width: number; height: number } {
+    if (this.modelCanvasSize) return this.modelCanvasSize;
+    if (!this.model) return { width: 0, height: 0 };
+    const internalWidth = this.model.internalModel?.width;
+    const internalHeight = this.model.internalModel?.height;
+    const scaleX = Math.abs(this.model.scale.x) || 1;
+    const scaleY = Math.abs(this.model.scale.y) || 1;
+    const size =
+      internalWidth && internalHeight
+        ? { width: internalWidth, height: internalHeight }
+        : {
+            width: (this.model.width || 0) / scaleX,
+            height: (this.model.height || 0) / scaleY,
+          };
+    if (size.width > 0 && size.height > 0) {
+      this.modelCanvasSize = size;
+    }
+    return size;
+  }
+
+  private measureModelNativeSize(): { width: number; height: number } {
+    if (!this.model) return { width: 0, height: 0 };
+    const { width: canvasWidth, height: canvasHeight } =
+      this.getModelCanvasSize();
+    const tight = this.measureDrawableBounds(canvasWidth, canvasHeight);
+    if (tight && tight.width > 0 && tight.height > 0) {
+      const padded = padFigureBounds(tight, FIGURE_BOUNDS_PAD);
+      this.modelVisualCenterOffset = {
+        x: padded.x + padded.width / 2 - canvasWidth / 2,
+        y: padded.y + padded.height / 2 - canvasHeight / 2,
+      };
+      return { width: padded.width, height: padded.height };
+    }
+    this.modelVisualCenterOffset = { x: 0, y: 0 };
+    return { width: canvasWidth, height: canvasHeight };
+  }
+
+  private measureDrawableBounds(
+    canvasWidth: number,
+    canvasHeight: number,
+  ): {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  } | null {
+    const internal = this.model?.internalModel;
+    if (
+      !internal ||
+      typeof internal.getDrawableIDs !== "function" ||
+      typeof internal.getDrawableBounds !== "function"
+    ) {
+      return null;
+    }
+    const ids = internal.getDrawableIDs();
+    if (!ids.length) return null;
+    const drawables: DrawableBox[] = [];
+    const box = { x: 0, y: 0, width: 0, height: 0 };
+    for (let i = 0; i < ids.length; i++) {
+      let bounds: { x: number; y: number; width: number; height: number };
+      try {
+        bounds = internal.getDrawableBounds(i, box);
+      } catch {
+        continue;
+      }
+      if (!bounds || bounds.width <= 1 || bounds.height <= 1) continue;
+      drawables.push({
+        id: ids[i] ?? `drawable-${i}`,
+        x: bounds.x,
+        y: bounds.y,
+        width: bounds.width,
+        height: bounds.height,
+      });
+    }
+    return measureFigureBounds(drawables, {
+      width: canvasWidth,
+      height: canvasHeight,
+    });
+  }
+
+  /**
+   * After the first painted frames, scale from the visible pixels so unnamed
+   * water / background meshes cannot keep the standing figure at half size.
+   */
+  private scheduleVisibleFillCorrection(): void {
+    const ticker = this.app?.ticker as
+      | { addOnce?: (cb: () => void) => void }
+      | undefined;
+    if (typeof ticker?.addOnce !== "function") return;
+    const generation = this.loadGeneration;
+    const run = () => {
+      if (
+        generation !== this.loadGeneration ||
+        !this.model ||
+        !this.initialized
+      ) {
+        return;
+      }
+      this.correctScaleFromVisiblePixels();
+    };
+    if (typeof ticker?.addOnce === "function") {
+      ticker.addOnce(run);
+    }
+    if (
+      typeof window !== "undefined" &&
+      typeof window.setTimeout === "function"
+    ) {
+      window.setTimeout(run, 300);
+    }
+  }
+
+  private correctScaleFromVisiblePixels(): void {
+    if (!this.model || !this.app) return;
+    const renderer = this.app as Application & {
+      renderer?: {
+        extract?: { pixels?: (target?: unknown) => Uint8Array };
+        width?: number;
+        height?: number;
+        resolution?: number;
+      };
+      screen?: { width: number; height: number };
+    };
+    const extract = renderer.renderer?.extract;
+    if (typeof extract?.pixels !== "function") return;
+    let pixels: ArrayLike<number>;
+    try {
+      pixels = extract.pixels(this.model) ?? extract.pixels();
+    } catch {
+      try {
+        pixels = extract.pixels();
+      } catch {
+        return;
+      }
+    }
+    const pixelWidth = renderer.renderer?.width || 0;
+    const pixelHeight = renderer.renderer?.height || 0;
+    const visible = measureOpaquePixelBounds(pixels, pixelWidth, pixelHeight);
+    if (!visible) return;
+    const resolution = renderer.renderer?.resolution || 1;
+    const view = (
+      this.app as Application & {
+        screen?: { width: number; height: number };
+      }
+    ).screen;
+    const canvas = this.app.view as HTMLCanvasElement | undefined;
+    const viewWidth = view?.width || canvas?.clientWidth || pixelWidth;
+    const viewHeight = view?.height || canvas?.clientHeight || pixelHeight;
+    if (viewWidth <= 0 || viewHeight <= 0) return;
+    const boxWidth = visible.width / resolution;
+    const boxHeight = visible.height / resolution;
+    if (boxWidth < 8 || boxHeight < 8) return;
+    const currentFill = Math.max(boxWidth / viewWidth, boxHeight / viewHeight);
+    if (!Number.isFinite(currentFill) || currentFill < 0.08) return;
+    if (currentFill >= this.viewFill * 0.92) return;
+    const boost = this.viewFill / currentFill;
+    if (!Number.isFinite(boost) || boost <= 1.02 || boost > 8) return;
+    const nextScaleX = (this.model.scale.x || 1) * boost;
+    const nextScaleY = (this.model.scale.y || 1) * boost;
+    this.model.scale.set(nextScaleX, nextScaleY);
+    this.modelNativeSize = {
+      width: boxWidth / Math.abs(this.model.scale.x / boost),
+      height: boxHeight / Math.abs(this.model.scale.y / boost),
+    };
+    const boxCenterX = (visible.x + visible.width / 2) / resolution;
+    const boxCenterY = (visible.y + visible.height / 2) / resolution;
+    this.model.x += viewWidth / 2 - boxCenterX;
+    this.model.y += viewHeight / 2 - boxCenterY;
+  }
+
+  /**
+   * Resize the view without tearing down the WebGL context.
+   */
+  resize(width?: number, height?: number, scale?: number): void {
+    if (!this.app || !this.initialized) return;
+    const renderer = this.app as Application & {
+      renderer?: { resize?: (w: number, h: number) => void };
+    };
+    if (
+      typeof width === "number" &&
+      typeof height === "number" &&
+      width > 0 &&
+      height > 0 &&
+      typeof renderer.renderer?.resize === "function"
+    ) {
+      renderer.renderer.resize(width, height);
+    }
+    this.fitModelToView(scale);
+  }
+
+  /**
    * Update model (called in render loop)
    */
   update(_deltaTime: number): void {
@@ -680,6 +1031,11 @@ export class PixiLive2DRenderer implements ICubismRenderer {
    * Clean up resources
    */
   dispose(): void {
+    this.loadGeneration += 1;
+    this.modelNativeSize = null;
+    this.modelCanvasSize = null;
+    this.modelVisualCenterOffset = { x: 0, y: 0 };
+
     if (this.blinkTimer) {
       clearTimeout(this.blinkTimer);
       this.blinkTimer = null;
@@ -747,6 +1103,13 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   }
 
   /**
+   * Native visual size used for contain-fit, or null before the model loads.
+   */
+  getNativeSize(): { width: number; height: number } | null {
+    return this.modelNativeSize;
+  }
+
+  /**
    * Get the loaded model (for advanced usage)
    */
   getModel(): Live2DModel | null {
@@ -799,6 +1162,38 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       // focus() may not be available on all model versions
     }
   }
+}
+
+/**
+ * Fetch Cubism 4 model3.json and attach the source URL so relative moc/texture
+ * paths resolve. Falls back to the raw URL if fetch is unavailable (tests).
+ */
+export async function loadCubism4Settings(
+  modelPath: string,
+): Promise<string | Record<string, unknown>> {
+  if (typeof fetch !== "function") {
+    return modelPath;
+  }
+  try {
+    const response = await fetch(modelPath);
+    if (!response.ok) {
+      return modelPath;
+    }
+    const json: unknown = await response.json();
+    if (
+      json &&
+      typeof json === "object" &&
+      (json as { FileReferences?: { Moc?: unknown } }).FileReferences &&
+      typeof (json as { FileReferences: { Moc?: unknown } }).FileReferences
+        .Moc === "string"
+    ) {
+      (json as { url?: string }).url = modelPath;
+      return json as Record<string, unknown>;
+    }
+  } catch {
+    // Network / parse / CSP: Live2DModel.from() can still try the URL.
+  }
+  return modelPath;
 }
 
 /**
