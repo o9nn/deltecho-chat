@@ -117,6 +117,7 @@ A1 can enable DTE and proactive messaging, see status in chat, persist trigger a
 - New desktop shell, Tauri-only work, Discord/Telegram connectors, Live2D/avatar, Mem0, the memory-lever CLI, a new MCP server.
 
 <!-- ce-section: work-relationships -->
+
 ### Work Relationships
 
 This plan owns last-mile desktop proactive messaging on the existing Electron + frontend stack.
@@ -341,14 +342,14 @@ U1 engine fixes first. U2 persistence. U3 settings mount (depends on U2). U4 sta
 
 ## Verification Contract
 
-| Gate | Command | Applies to | Done signal |
-| --- | --- | --- | --- |
-| Engine + persistence | `pnpm --filter=@deltachat-desktop/frontend test -- ProactiveMessaging.test.ts` | U1, U2 | AE2–AE5 encoded |
-| Settings | `pnpm --filter=@deltachat-desktop/frontend test -- BotSettings.test.tsx` | U3 | Toggle sync covered |
-| Status | frontend Jest for the U4 indicator mount test | U4 | AE6 encoded |
-| Agent | frontend Jest for `AgentToolExecutor` | U5 | AE1, AE3, AE7 |
-| Types | `pnpm --filter=@deltachat-desktop/frontend check:types` after shared rebuild if types changed | U2 | `tsc` clean |
-| Behavior | Fixture AE1–AE7 | U1–U5 | Disabled, welcome-once, quiet hours, null send, persist, status, agent queue |
+| Gate                 | Command                                                                                       | Applies to | Done signal                                                                  |
+| -------------------- | --------------------------------------------------------------------------------------------- | ---------- | ---------------------------------------------------------------------------- |
+| Engine + persistence | `pnpm --filter=@deltachat-desktop/frontend test -- ProactiveMessaging.test.ts`                | U1, U2     | AE2–AE5 encoded                                                              |
+| Settings             | `pnpm --filter=@deltachat-desktop/frontend test -- BotSettings.test.tsx`                      | U3         | Toggle sync covered                                                          |
+| Status               | frontend Jest for the U4 indicator mount test                                                 | U4         | AE6 encoded                                                                  |
+| Agent                | frontend Jest for `AgentToolExecutor`                                                         | U5         | AE1, AE3, AE7                                                                |
+| Types                | `pnpm --filter=@deltachat-desktop/frontend check:types` after shared rebuild if types changed | U2         | `tsc` clean                                                                  |
+| Behavior             | Fixture AE1–AE7                                                                               | U1–U5      | Disabled, welcome-once, quiet hours, null send, persist, status, agent queue |
 
 Do not require `pnpm e2e` or a headed Electron session as a merge gate.
 
