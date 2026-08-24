@@ -4,7 +4,7 @@ For general project overview, architecture, and the full command list, see `CLAU
 
 ## Cursor Cloud specific instructions
 
-This is a pnpm monorepo (Node >=20, pnpm 9.15.0). The Cloud Agent install script is `scripts/cloud-agent-install.sh` (same frozen lockfile plus the internal package build order). The team environment is dashboard-managed: do not commit `.cursor/environment.json`, which would override that dashboard. Propose `install` (the script), `terminals`, and port 3000 in the dashboard; named terminals (`browser-dev`, `orchestrator`) exist only after a human Saves. Until then start the same processes with the commands below. Leave `DELTECHO_AUTONOMY_STORAGE_PATH` and `DELTECHO_MEMORY_LEVER_APPLY` unset in the baseline environment.
+This is a pnpm monorepo (Node >=20, pnpm 9.15.0). The Cloud Agent install script is `scripts/cloud-agent-install.sh` (same frozen lockfile plus the internal package build order). The team environment is dashboard-managed: do not commit `.cursor/environment.json`, which would override that dashboard. The dashboard `install` proposal is a guarded wrapper: it runs that script when the file is executable, otherwise the same inline `pnpm install --frozen-lockfile` plus CI-order package builds (the script is absent on `main` until the setup PR merges). The `propose-environment-json` schema accepts only `install` and `start`; named `terminals` (`browser-dev`, `orchestrator`) and port 3000 live here until a human adds them in the Environment panel and Saves. Until then start the same processes with the commands below. Leave `DELTECHO_AUTONOMY_STORAGE_PATH` and `DELTECHO_MEMORY_LEVER_APPLY` unset in the baseline environment.
 
 ### Build workspace deps before type-checking
 
