@@ -320,10 +320,12 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
   onReady,
 }) => {
   const avatarContext = useDeepTreeEchoAvatarOptional();
+  const stripRef = useRef<HTMLDivElement>(null);
+  const [stripSize, setStripSize] = useState({ width: 0, height: 0 });
 
   // Use context values if available, otherwise use props
-  const finalWidth = width ?? avatarContext?.state.config.width ?? 300;
-  const finalHeight = height ?? avatarContext?.state.config.height ?? 300;
+  const configuredWidth = width ?? avatarContext?.state.config.width ?? 300;
+  const configuredHeight = height ?? avatarContext?.state.config.height ?? 300;
   const finalVisible = visible ?? avatarContext?.state.config.visible ?? true;
   const finalPosition =
     position ?? avatarContext?.state.config.position ?? "floating";
@@ -346,9 +348,49 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
       mapCognitiveStateToVisualState(null, BotProcessingState.IDLE, false, 0),
     );
 
+  const fillsConversationStrip = finalPosition === "floating";
+  const finalWidth =
+    fillsConversationStrip && stripSize.width > 0
+      ? stripSize.width
+      : configuredWidth;
+  const finalHeight =
+    fillsConversationStrip && stripSize.height > 0
+      ? stripSize.height
+      : configuredHeight;
+  const stripScale =
+    fillsConversationStrip && finalHeight > 0
+      ? Math.min(0.85, Math.max(0.25, finalHeight / 1400))
+      : 0.25;
+
   const avatarController = useRef<Live2DAvatarController | null>(null);
   const updateIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const lastCognitiveSignatureRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!fillsConversationStrip) return undefined;
+    const element = stripRef.current;
+    if (!element || typeof ResizeObserver === "undefined") return undefined;
+
+    const applySize = (nextWidth: number, nextHeight: number) => {
+      const widthPx = Math.round(nextWidth);
+      const heightPx = Math.round(nextHeight);
+      if (widthPx <= 0 || heightPx <= 0) return;
+      setStripSize((previous) =>
+        previous.width === widthPx && previous.height === heightPx
+          ? previous
+          : { width: widthPx, height: heightPx },
+      );
+    };
+
+    applySize(element.clientWidth, element.clientHeight);
+    const observer = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      if (!entry) return;
+      applySize(entry.contentRect.width, entry.contentRect.height);
+    });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [fillsConversationStrip, finalVisible]);
 
   // Handle avatar controller ready
   const handleAvatarReady = useCallback(
@@ -466,12 +508,13 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
   }`;
 
   return (
-    <div className={containerClass}>
+    <div className={containerClass} ref={stripRef}>
       <Live2DAvatar
         model={avatarContext?.state.config.model ?? "miara"}
         width={finalWidth}
         height={finalHeight}
-        scale={0.25}
+        scale={stripScale}
+        fillContainer={fillsConversationStrip}
         emotionalState={emotionalVector}
         cognitiveVisualState={cognitiveVisualState}
         audioLevel={audioLevel}

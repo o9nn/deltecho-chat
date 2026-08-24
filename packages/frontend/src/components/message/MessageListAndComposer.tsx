@@ -297,6 +297,14 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
   }, [onMouseUp]);
 
   const settingsStore = useSettingsStore()[0];
+  const showAvatar = Boolean(
+    settingsStore?.desktopSettings?.deepTreeEchoBotEnabled &&
+      settingsStore?.desktopSettings?.deepTreeEchoBotAvatarEnabled !== false,
+  );
+  const showProactive = Boolean(
+    settingsStore?.desktopSettings?.deepTreeEchoBotEnabled &&
+      settingsStore?.desktopSettings?.deepTreeEchoBotProactiveEnabled,
+  );
   // If you want to update this, don't forget to update
   // the `.background-preview` element as well.
   const style = settingsStore
@@ -317,45 +325,46 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
 
       // NoChatSelected also has this ID and class.
       id="message-list-and-composer"
-      className="message-list-and-composer"
+      className={
+        showAvatar
+          ? "message-list-and-composer message-list-and-composer--with-avatar"
+          : "message-list-and-composer"
+      }
       style={style}
       ref={conversationRef}
       onDrop={onDrop.bind({ props: { chat } })}
       onDragOver={onDragOver}
     >
-      <div className="message-list-and-composer__message-list">
-        <RecoverableCrashScreen reset_on_change_key={chat.id}>
-          <ReactionsBarProvider>
-            <MessageList
-              accountId={accountId}
-              chat={chat}
-              refComposer={refComposer}
-            />
-          </ReactionsBarProvider>
-        </RecoverableCrashScreen>
-      </div>
-      <Composer
-        ref={refComposer}
-        selectedChat={chat}
-        isContactRequest={chat.isContactRequest}
-        isProtectionBroken={chat.isProtectionBroken}
-        regularMessageInputRef={regularMessageInputRef}
-        editMessageInputRef={editMessageInputRef}
-        draftState={draftState}
-        updateDraftText={updateDraftText}
-        onSelectReplyToShortcut={onSelectReplyToShortcut}
-        removeQuote={removeQuote}
-        addFileToDraft={addFileToDraft}
-        removeFile={removeFile}
-        clearDraftStateButKeepTextareaValue={
-          clearDraftStateButKeepTextareaValue
-        }
-      />
-      {settingsStore?.desktopSettings?.deepTreeEchoBotEnabled &&
-        settingsStore?.desktopSettings?.deepTreeEchoBotAvatarEnabled !==
-          false && <DeepTreeEchoAvatarDisplay position="floating" />}
-      {settingsStore?.desktopSettings?.deepTreeEchoBotEnabled &&
-        settingsStore?.desktopSettings?.deepTreeEchoBotProactiveEnabled && (
+      <div className="message-list-and-composer__conversation">
+        <div className="message-list-and-composer__message-list">
+          <RecoverableCrashScreen reset_on_change_key={chat.id}>
+            <ReactionsBarProvider>
+              <MessageList
+                accountId={accountId}
+                chat={chat}
+                refComposer={refComposer}
+              />
+            </ReactionsBarProvider>
+          </RecoverableCrashScreen>
+        </div>
+        <Composer
+          ref={refComposer}
+          selectedChat={chat}
+          isContactRequest={chat.isContactRequest}
+          isProtectionBroken={chat.isProtectionBroken}
+          regularMessageInputRef={regularMessageInputRef}
+          editMessageInputRef={editMessageInputRef}
+          draftState={draftState}
+          updateDraftText={updateDraftText}
+          onSelectReplyToShortcut={onSelectReplyToShortcut}
+          removeQuote={removeQuote}
+          addFileToDraft={addFileToDraft}
+          removeFile={removeFile}
+          clearDraftStateButKeepTextareaValue={
+            clearDraftStateButKeepTextareaValue
+          }
+        />
+        {showProactive && (
           <ProactiveStatusIndicator
             accountId={accountId}
             chatId={chat.id}
@@ -368,6 +377,16 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
             }
           />
         )}
+      </div>
+      {showAvatar && (
+        <aside
+          className="message-list-and-composer__avatar-strip"
+          data-testid="live2d-avatar-strip"
+          aria-label="Deep Tree Echo avatar"
+        >
+          <DeepTreeEchoAvatarDisplay position="floating" />
+        </aside>
+      )}
     </div>
   );
 }

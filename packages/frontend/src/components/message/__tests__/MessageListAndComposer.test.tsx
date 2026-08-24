@@ -97,6 +97,36 @@ function setDesktopSettings(partial: Record<string, unknown>) {
   ]);
 }
 
+describe("MessageListAndComposer Live2D strip", () => {
+  it("reserves a full-height right-hand avatar strip when the bot is enabled", () => {
+    setDesktopSettings({
+      deepTreeEchoBotEnabled: true,
+      deepTreeEchoBotAvatarEnabled: true,
+    });
+
+    const { container } = render(
+      <MessageListAndComposer accountId={1} chat={chat} />,
+    );
+
+    expect(screen.getByTestId("live2d-avatar-strip")).toBeInTheDocument();
+    expect(
+      container.querySelector(".message-list-and-composer--with-avatar"),
+    ).toBeInTheDocument();
+    expect(
+      container.querySelector(".message-list-and-composer__conversation"),
+    ).toBeInTheDocument();
+  });
+
+  it("hides the avatar strip when the bot is disabled", () => {
+    setDesktopSettings({
+      deepTreeEchoBotEnabled: false,
+    });
+
+    render(<MessageListAndComposer accountId={1} chat={chat} />);
+    expect(screen.queryByTestId("live2d-avatar-strip")).not.toBeInTheDocument();
+  });
+});
+
 describe("MessageListAndComposer proactive indicator (AE6)", () => {
   it("renders the indicator when both flags are true", () => {
     setDesktopSettings({

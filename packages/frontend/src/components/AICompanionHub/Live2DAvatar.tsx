@@ -120,6 +120,8 @@ export interface Live2DAvatarComponentProps {
   onControllerReady?: (controller: Live2DAvatarController) => void;
   /** Rendering mode */
   mode?: "live2d" | "sprite";
+  /** Fill a rectangular parent instead of a circular card */
+  fillContainer?: boolean;
 }
 
 export interface Live2DAvatarState {
@@ -152,6 +154,7 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
   showError = true,
   onControllerReady,
   mode = "live2d",
+  fillContainer = false,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const managerRef = useRef<any>(null);
@@ -335,6 +338,7 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
           isSpeaking={isSpeaking}
           width={width}
           height={height}
+          rounded={!fillContainer}
         />
       </div>
     );
@@ -393,6 +397,7 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
             isSpeaking={isSpeaking}
             width={width}
             height={height}
+            rounded={!fillContainer}
           />
           <div
             className="live2d-error-overlay"

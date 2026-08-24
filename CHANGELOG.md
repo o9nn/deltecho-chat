@@ -8,6 +8,8 @@
 
 ### Changed
 
+- Deep Tree Echo: the Live2D avatar occupies a full-height right-hand strip of the conversation pane (one third of its width) instead of a floating overlay.
+
 ### Fixed
 
 <a id="1_58_2"></a>
