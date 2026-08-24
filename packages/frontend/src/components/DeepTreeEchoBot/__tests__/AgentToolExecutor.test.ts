@@ -1,6 +1,7 @@
 import { AgentToolExecutor } from "../AgentToolExecutor";
 import { DeepTreeEchoChatManager } from "../DeepTreeEchoChatManager";
 import { BackendRemote } from "../../../backend-com";
+import { proactiveMessaging } from "../ProactiveMessaging";
 
 jest.mock("../DeepTreeEchoChatManager", () => ({
   DeepTreeEchoChatManager: {
@@ -12,6 +13,14 @@ jest.mock("../DeepTreeEchoChatManager", () => ({
       createChat: jest.fn(),
       scheduleMessage: jest.fn(),
     }),
+  },
+}));
+
+jest.mock("../ProactiveMessaging", () => ({
+  proactiveMessaging: {
+    sendGated: jest.fn(),
+    getStatusSnapshot: jest.fn(),
+    getQueuedMessages: jest.fn(() => []),
   },
 }));
 
@@ -47,6 +56,7 @@ describe("AgentToolExecutor", () => {
     expect(tools.length).toBeGreaterThan(0);
     expect(tools.find((t) => t.name === "list_chats")).toBeDefined();
     expect(tools.find((t) => t.name === "send_message")).toBeDefined();
+    expect(tools.find((t) => t.name === "get_proactive_status")).toBeDefined();
   });
 
   it("should execute list_chats tool", async () => {
@@ -78,8 +88,11 @@ describe("AgentToolExecutor", () => {
     expect(mockListChats).toHaveBeenCalledWith(1);
   });
 
-  it("should execute send_message tool", async () => {
-    (BackendRemote.rpc.miscSendTextMessage as jest.Mock).mockResolvedValue(100);
+  it("should execute send_message through the gated API", async () => {
+    (proactiveMessaging.sendGated as jest.Mock).mockResolvedValue({
+      success: true,
+      messageId: 100,
+    });
 
     const result = await executor.executeTool(
       {
@@ -92,11 +105,126 @@ describe("AgentToolExecutor", () => {
 
     expect(result.success).toBe(true);
     expect(result.output).toContain("Message sent");
-    expect(BackendRemote.rpc.miscSendTextMessage).toHaveBeenCalledWith(
+    expect(proactiveMessaging.sendGated).toHaveBeenCalledWith({
+      accountId: 1,
+      chatId: 10,
+      message: "Hi",
+    });
+    expect(BackendRemote.rpc.miscSendTextMessage).not.toHaveBeenCalled();
+  });
+
+  it("returns disabled without sending when proactive is off (AE1)", async () => {
+    (proactiveMessaging.sendGated as jest.Mock).mockResolvedValue({
+      success: false,
+      reason: "disabled",
+    });
+
+    const result = await executor.executeTool(
+      {
+        id: "2b",
+        name: "send_message",
+        input: { accountId: 1, chatId: 10, text: "Hi" },
+      },
       1,
-      10,
-      "Hi",
     );
+
+    expect(result.success).toBe(false);
+    expect(result.metadata?.reason).toBe("disabled");
+    expect(BackendRemote.rpc.miscSendTextMessage).not.toHaveBeenCalled();
+  });
+
+  it("queues during quiet hours and reports quiet_hours (AE3)", async () => {
+    (proactiveMessaging.sendGated as jest.Mock).mockResolvedValue({
+      success: true,
+      queued: true,
+      reason: "quiet_hours",
+      queueId: "msg-1",
+    });
+
+    const result = await executor.executeTool(
+      {
+        id: "2c",
+        name: "send_message",
+        input: { accountId: 1, chatId: 10, text: "Hi" },
+      },
+      1,
+    );
+
+    expect(result.metadata?.reason).toBe("quiet_hours");
+    expect(result.metadata?.queued).toBe(true);
+    expect(result.metadata?.queueId).toBe("msg-1");
+    expect(BackendRemote.rpc.miscSendTextMessage).not.toHaveBeenCalled();
+  });
+
+  it("schedules onto the proactive queue (AE7)", async () => {
+    (proactiveMessaging.sendGated as jest.Mock).mockResolvedValue({
+      success: true,
+      queued: true,
+      queueId: "msg-scheduled",
+    });
+    (proactiveMessaging.getQueuedMessages as jest.Mock).mockReturnValue([
+      { id: "msg-scheduled", chatId: 10 },
+    ]);
+
+    const result = await executor.executeTool(
+      {
+        id: "2d",
+        name: "schedule_message",
+        input: {
+          accountId: 1,
+          chatId: 10,
+          text: "Later",
+          delayMinutes: 5,
+        },
+      },
+      1,
+    );
+
+    expect(result.success).toBe(true);
+    expect(result.metadata?.queued).toBe(true);
+    expect(proactiveMessaging.sendGated).toHaveBeenCalledWith(
+      expect.objectContaining({
+        accountId: 1,
+        chatId: 10,
+        message: "Later",
+        triggerId: "agent-schedule",
+      }),
+    );
+    expect(
+      DeepTreeEchoChatManager.getInstance().scheduleMessage,
+    ).not.toHaveBeenCalled();
+    expect(
+      proactiveMessaging
+        .getQueuedMessages()
+        .some((m: any) => m.id === "msg-scheduled"),
+    ).toBe(true);
+  });
+
+  it("returns read-only proactive status without trigger templates", async () => {
+    (proactiveMessaging.getStatusSnapshot as jest.Mock).mockReturnValue({
+      enabled: true,
+      quietHours: false,
+      hourlyUsed: 1,
+      hourlyLimit: 10,
+      dailyUsed: 2,
+      dailyLimit: 50,
+      triggerIds: ["trigger-1"],
+      queuedIds: ["msg-1"],
+    });
+
+    const result = await executor.executeTool(
+      {
+        id: "2e",
+        name: "get_proactive_status",
+        input: { chatId: 10 },
+      },
+      1,
+    );
+
+    expect(result.success).toBe(true);
+    expect(result.metadata?.enabled).toBe(true);
+    expect(result.output).toContain('"enabled":true');
+    expect(result.output).not.toContain("Hello! I'm Deep Tree Echo");
   });
 
   it("should handle unknown tool", async () => {
