@@ -21,19 +21,40 @@ jest.mock("@pixi/unsafe-eval", () => ({
 }));
 
 jest.mock("pixi.js", () => ({
-  Application: jest.fn().mockImplementation(() => ({
-    stage: {
-      addChild: jest.fn(),
-    },
-    view: {
-      width: 400,
-      height: 400,
-    },
-    ticker: {},
-    screen: { width: 400, height: 400 },
-    renderer: { resize: jest.fn() },
-    destroy: jest.fn(),
-  })),
+  Application: jest.fn().mockImplementation(() => {
+    const onceFns: Array<() => void> = [];
+    return {
+      stage: {
+        addChild: jest.fn(),
+      },
+      view: {
+        width: 400,
+        height: 400,
+        clientWidth: 400,
+        clientHeight: 400,
+      },
+      ticker: {
+        addOnce: (cb: () => void) => {
+          onceFns.push(cb);
+        },
+        flushOnce: () => {
+          const queued = onceFns.splice(0, onceFns.length);
+          for (const fn of queued) fn();
+        },
+      },
+      screen: { width: 400, height: 400 },
+      renderer: {
+        resize: jest.fn(),
+        width: 400,
+        height: 400,
+        resolution: 1,
+        extract: {
+          pixels: jest.fn(() => new Uint8Array(400 * 400 * 4)),
+        },
+      },
+      destroy: jest.fn(),
+    };
+  }),
 }));
 
 jest.mock("pixi-live2d-display-lipsyncpatch/cubism4", () => ({
@@ -454,6 +475,34 @@ describe("PixiLive2DRenderer", () => {
       expect(renderer.getModel()?.scale.x).toBeCloseTo(
         400 / (800 * FIGURE_BOUNDS_PAD),
       );
+    });
+
+    it("enlarges a half-size figure from the visible pixels", async () => {
+      const config: CubismAdapterConfig = {
+        canvas: mockCanvas,
+        model: {
+          modelPath: "/test/model.json",
+          name: "Test Model",
+          scale: 1,
+        },
+      };
+      await renderer.initialize(config);
+      await renderer.loadModel(config.model);
+      const app = renderer.getApplication() as unknown as {
+        ticker: { flushOnce: () => void };
+        renderer: { extract: { pixels: jest.Mock } };
+      };
+      const pixels = new Uint8Array(400 * 400 * 4);
+      for (let y = 100; y < 300; y++) {
+        for (let x = 150; x < 250; x++) {
+          pixels[(y * 400 + x) * 4 + 3] = 255;
+        }
+      }
+      app.renderer.extract.pixels.mockReturnValue(pixels);
+      expect(renderer.getModel()?.scale.x).toBeCloseTo(0.25);
+      app.ticker.flushOnce();
+      app.ticker.flushOnce();
+      expect(renderer.getModel()?.scale.x).toBeCloseTo(0.5);
     });
 
     it("contain-fits the full figure inside the view", async () => {

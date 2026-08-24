@@ -17,6 +17,7 @@ import type {
 import {
   FIGURE_BOUNDS_PAD,
   measureFigureBounds,
+  measureOpaquePixelBounds,
   padFigureBounds,
   type DrawableBox,
 } from "./live2d-figure-bounds";
@@ -177,6 +178,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   /** How much of the view the full figure should occupy (0-1). */
   private viewFill = 0.9;
   private modelNativeSize: { width: number; height: number } | null = null;
+  private modelCanvasSize: { width: number; height: number } | null = null;
   /** Offset from canvas center to the visual figure center, in native units. */
   private modelVisualCenterOffset = { x: 0, y: 0 };
   private currentExpression: Expression = "neutral";
@@ -385,8 +387,10 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       // Add to stage before measuring bounds so width/height are valid.
       this.app.stage.addChild(model as unknown as Container);
       this.model.scale.set(1, 1);
+      this.modelCanvasSize = null;
       this.refreshModelLayout(modelInfo.scale, modelInfo.offset);
       this.scheduleNativeMetricsRefresh();
+      this.scheduleVisibleFillCorrection();
 
       // Start auto-blink (ticker-based for proper sync with PixiJS rAF loop)
       this.startAutoBlinkLoop();
@@ -818,14 +822,30 @@ export class PixiLive2DRenderer implements ICubismRenderer {
    * Visual figure size in native Cubism units. Prefers the standing-character
    * mesh cluster so water / background planes do not shrink the figure.
    */
-  private measureModelNativeSize(): { width: number; height: number } {
+  private getModelCanvasSize(): { width: number; height: number } {
+    if (this.modelCanvasSize) return this.modelCanvasSize;
     if (!this.model) return { width: 0, height: 0 };
+    const internalWidth = this.model.internalModel?.width;
+    const internalHeight = this.model.internalModel?.height;
     const scaleX = Math.abs(this.model.scale.x) || 1;
     const scaleY = Math.abs(this.model.scale.y) || 1;
-    const canvasWidth =
-      (this.model.internalModel?.width || this.model.width || 0) / scaleX;
-    const canvasHeight =
-      (this.model.internalModel?.height || this.model.height || 0) / scaleY;
+    const size =
+      internalWidth && internalHeight
+        ? { width: internalWidth, height: internalHeight }
+        : {
+            width: (this.model.width || 0) / scaleX,
+            height: (this.model.height || 0) / scaleY,
+          };
+    if (size.width > 0 && size.height > 0) {
+      this.modelCanvasSize = size;
+    }
+    return size;
+  }
+
+  private measureModelNativeSize(): { width: number; height: number } {
+    if (!this.model) return { width: 0, height: 0 };
+    const { width: canvasWidth, height: canvasHeight } =
+      this.getModelCanvasSize();
     const tight = this.measureDrawableBounds(canvasWidth, canvasHeight);
     if (tight && tight.width > 0 && tight.height > 0) {
       const padded = padFigureBounds(tight, FIGURE_BOUNDS_PAD);
@@ -883,6 +903,84 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   }
 
   /**
+   * After the first painted frames, scale from the visible pixels so unnamed
+   * water / background meshes cannot keep the standing figure at half size.
+   */
+  private scheduleVisibleFillCorrection(): void {
+    const ticker = this.app?.ticker as
+      | { addOnce?: (cb: () => void) => void }
+      | undefined;
+    if (typeof ticker?.addOnce !== "function") return;
+    const generation = this.loadGeneration;
+    ticker.addOnce(() => {
+      ticker.addOnce?.(() => {
+        if (
+          generation !== this.loadGeneration ||
+          !this.model ||
+          !this.initialized
+        ) {
+          return;
+        }
+        this.correctScaleFromVisiblePixels();
+      });
+    });
+  }
+
+  private correctScaleFromVisiblePixels(): void {
+    if (!this.model || !this.app) return;
+    const renderer = this.app as Application & {
+      renderer?: {
+        extract?: { pixels?: (target?: unknown) => Uint8Array };
+        width?: number;
+        height?: number;
+        resolution?: number;
+      };
+      screen?: { width: number; height: number };
+    };
+    const extract = renderer.renderer?.extract;
+    if (typeof extract?.pixels !== "function") return;
+    let pixels: ArrayLike<number>;
+    try {
+      pixels = extract.pixels();
+    } catch {
+      return;
+    }
+    const pixelWidth = renderer.renderer?.width || 0;
+    const pixelHeight = renderer.renderer?.height || 0;
+    const visible = measureOpaquePixelBounds(pixels, pixelWidth, pixelHeight);
+    if (!visible) return;
+    const resolution = renderer.renderer?.resolution || 1;
+    const view = (
+      this.app as Application & {
+        screen?: { width: number; height: number };
+      }
+    ).screen;
+    const canvas = this.app.view as HTMLCanvasElement | undefined;
+    const viewWidth = view?.width || canvas?.clientWidth || pixelWidth;
+    const viewHeight = view?.height || canvas?.clientHeight || pixelHeight;
+    if (viewWidth <= 0 || viewHeight <= 0) return;
+    const boxWidth = visible.width / resolution;
+    const boxHeight = visible.height / resolution;
+    if (boxWidth < 8 || boxHeight < 8) return;
+    const currentFill = Math.max(boxWidth / viewWidth, boxHeight / viewHeight);
+    if (!Number.isFinite(currentFill) || currentFill < 0.08) return;
+    if (currentFill >= this.viewFill * 0.92) return;
+    const boost = this.viewFill / currentFill;
+    if (!Number.isFinite(boost) || boost <= 1.02 || boost > 8) return;
+    const nextScaleX = (this.model.scale.x || 1) * boost;
+    const nextScaleY = (this.model.scale.y || 1) * boost;
+    this.model.scale.set(nextScaleX, nextScaleY);
+    this.modelNativeSize = {
+      width: (viewWidth * this.viewFill) / Math.abs(nextScaleX),
+      height: (viewHeight * this.viewFill) / Math.abs(nextScaleY),
+    };
+    const boxCenterX = (visible.x + visible.width / 2) / resolution;
+    const boxCenterY = (visible.y + visible.height / 2) / resolution;
+    this.model.x += viewWidth / 2 - boxCenterX;
+    this.model.y += viewHeight / 2 - boxCenterY;
+  }
+
+  /**
    * Resize the view without tearing down the WebGL context.
    */
   resize(width?: number, height?: number, scale?: number): void {
@@ -924,6 +1022,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   dispose(): void {
     this.loadGeneration += 1;
     this.modelNativeSize = null;
+    this.modelCanvasSize = null;
     this.modelVisualCenterOffset = { x: 0, y: 0 };
 
     if (this.blinkTimer) {

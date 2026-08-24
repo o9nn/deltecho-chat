@@ -3,6 +3,7 @@ import {
   isIgnoredDrawableId,
   isScenePlaneDrawable,
   measureFigureBounds,
+  measureOpaquePixelBounds,
   padFigureBounds,
 } from "../adapters/live2d-figure-bounds";
 
@@ -56,5 +57,23 @@ describe("live2d-figure-bounds", () => {
     expect(padded.height).toBeCloseTo(800 * FIGURE_BOUNDS_PAD);
     expect(padded.x + padded.width / 2).toBeCloseTo(400);
     expect(padded.y + padded.height / 2).toBeCloseTo(600);
+  });
+
+  it("finds the opaque pixel box of a centered figure", () => {
+    const width = 20;
+    const height = 20;
+    const pixels = new Uint8Array(width * height * 4);
+    for (let y = 4; y <= 15; y++) {
+      for (let x = 6; x <= 13; x++) {
+        const i = (y * width + x) * 4;
+        pixels[i + 3] = 255;
+      }
+    }
+    expect(measureOpaquePixelBounds(pixels, width, height, 12, 1)).toEqual({
+      x: 6,
+      y: 4,
+      width: 8,
+      height: 12,
+    });
   });
 });
