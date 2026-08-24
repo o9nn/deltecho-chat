@@ -1,10 +1,20 @@
 import { describe, it, expect, beforeEach, afterEach } from "@jest/globals";
-import { mkdtemp, rm, writeFile, readFile, open } from "node:fs/promises";
+import {
+  mkdtemp,
+  rm,
+  writeFile,
+  readFile,
+  open,
+  stat,
+  access,
+  readdir,
+} from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { TaskScheduler } from "../scheduler/task-scheduler.js";
 import {
   DEFAULT_MEMORY_LEVER_INTERVAL_MS,
+  MEMORY_LEVER_TASK_NAME,
   MIN_MEMORY_LEVER_INTERVAL_MS,
   registerMemoryLeverSchedule,
   resolveMemoryLeverIntervalMs,
@@ -117,7 +127,7 @@ describe("registerMemoryLeverSchedule", () => {
     const id = registerMemoryLeverSchedule(scheduler, { storagePath: "" });
     expect(id).toBeUndefined();
     expect(
-      scheduler.getAllTasks().some((task) => task.name === "memory-lever-dream"),
+      scheduler.getAllTasks().some((task) => task.name === MEMORY_LEVER_TASK_NAME),
     ).toBe(false);
   });
 
@@ -127,8 +137,36 @@ describe("registerMemoryLeverSchedule", () => {
       intervalMs: 3_600_000,
     });
     expect(id).toBeDefined();
-    const task = scheduler.getAllTasks().find((t) => t.name === "memory-lever-dream");
+    const task = scheduler.getAllTasks().find((t) => t.name === MEMORY_LEVER_TASK_NAME);
     expect(task?.interval).toBe(3_600_000);
+    expect(task?.timeout).toBe(3_600_000);
+  });
+
+  it("clamps a sub-minute register interval to 60 seconds", () => {
+    registerMemoryLeverSchedule(scheduler, {
+      storagePath: "/tmp/dte-rag-fixture",
+      intervalMs: 1000,
+    });
+    const task = scheduler.getAllTasks().find((t) => t.name === MEMORY_LEVER_TASK_NAME);
+    expect(task?.interval).toBe(MIN_MEMORY_LEVER_INTERVAL_MS);
+  });
+
+  it("falls back to 6 hours when the interval env is non-numeric", () => {
+    const previous = process.env.DELTECHO_MEMORY_LEVER_INTERVAL_MS;
+    process.env.DELTECHO_MEMORY_LEVER_INTERVAL_MS = "abc";
+    try {
+      registerMemoryLeverSchedule(scheduler, {
+        storagePath: "/tmp/dte-rag-fixture",
+      });
+      const task = scheduler.getAllTasks().find((t) => t.name === MEMORY_LEVER_TASK_NAME);
+      expect(task?.interval).toBe(DEFAULT_MEMORY_LEVER_INTERVAL_MS);
+    } finally {
+      if (previous === undefined) {
+        delete process.env.DELTECHO_MEMORY_LEVER_INTERVAL_MS;
+      } else {
+        process.env.DELTECHO_MEMORY_LEVER_INTERVAL_MS = previous;
+      }
+    }
   });
 });
 
@@ -166,7 +204,7 @@ describe("runMemoryLeverTick", () => {
     const missing = join(tmpdir(), `dte-absent-${Date.now()}`);
     const result = await runMemoryLeverTick({ storagePath: missing });
     expect(result.skipped).toBe("missing_store");
-    await expect(readFile(missing, "utf8")).rejects.toThrow();
+    await expect(stat(missing)).rejects.toThrow();
   });
 
   it("apply env 1 tombstones losers and a second dream has no same-id merge", async () => {
@@ -178,6 +216,15 @@ describe("runMemoryLeverTick", () => {
     });
     expect(first.applied).toBe(true);
     expect(first.plan?.merges).toBeGreaterThanOrEqual(1);
+    const applied = JSON.parse(
+      await readFile(join(dir, "deepTreeEchoBotMemories.json"), "utf8"),
+    ) as Array<{ id: string; tombstoned?: boolean }>;
+    expect(applied.some((row) => row.tombstoned === true)).toBe(true);
+    const snapshots = (await readdir(dir)).filter((name) =>
+      name.includes(".json.bak-"),
+    );
+    expect(snapshots.length).toBeGreaterThanOrEqual(1);
+    await expect(access(join(dir, ".lock"))).rejects.toThrow();
     const second = await runMemoryLeverTick({
       storagePath: dir,
       applyEnv: "1",
@@ -239,7 +286,56 @@ describe("runMemoryLeverTick", () => {
   });
 });
 
+describe("scheduled handler", () => {
+  it("runs the registered handler as a dry-run without throwing", async () => {
+    const scheduler = new TaskScheduler({ checkInterval: 10_000 });
+    const dir = await mkdtemp(join(tmpdir(), "dte-tick-handler-"));
+    await seedRag(dir, duplicateMemories());
+    const before = await readFile(join(dir, "deepTreeEchoBotMemories.json"), "utf8");
+    try {
+      const id = registerMemoryLeverSchedule(scheduler, { storagePath: dir });
+      expect(id).toBeDefined();
+      const task = scheduler.getTask(id!);
+      await task!.handler();
+      expect(await readFile(join(dir, "deepTreeEchoBotMemories.json"), "utf8")).toBe(
+        before,
+      );
+    } finally {
+      await scheduler.stop();
+      await rm(dir, { recursive: true, force: true });
+    }
+  });
+});
+
 describe("apply env parsing", () => {
+  it("applies when applyEnv is TRUE or yes", async () => {
+    for (const applyEnv of ["TRUE", "yes"] as const) {
+      const dir = await mkdtemp(join(tmpdir(), `dte-tick-${applyEnv}-`));
+      await seedRag(dir, duplicateMemories());
+      const result = await runMemoryLeverTick({ storagePath: dir, applyEnv });
+      expect(result.applied).toBe(true);
+      await rm(dir, { recursive: true, force: true });
+    }
+  });
+
+  it("applies when the process apply env is 1", async () => {
+    const dir = await mkdtemp(join(tmpdir(), "dte-tick-env-1-"));
+    await seedRag(dir, duplicateMemories());
+    const previous = process.env.DELTECHO_MEMORY_LEVER_APPLY;
+    process.env.DELTECHO_MEMORY_LEVER_APPLY = "1";
+    try {
+      const result = await runMemoryLeverTick({ storagePath: dir });
+      expect(result.applied).toBe(true);
+    } finally {
+      if (previous === undefined) {
+        delete process.env.DELTECHO_MEMORY_LEVER_APPLY;
+      } else {
+        process.env.DELTECHO_MEMORY_LEVER_APPLY = previous;
+      }
+      await rm(dir, { recursive: true, force: true });
+    }
+  });
+
   it("treats unknown apply values as dry-run", async () => {
     const dir = await mkdtemp(join(tmpdir(), "dte-tick-env-"));
     await seedRag(dir, duplicateMemories());

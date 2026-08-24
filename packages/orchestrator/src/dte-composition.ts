@@ -1,6 +1,7 @@
 import { ProactiveLoop } from "./proactive-loop.js";
 import {
   registerMemoryLeverSchedule,
+  resolveStoragePath,
   type MemoryLeverTickOptions,
 } from "./memory-lever-schedule.js";
 import type { TaskScheduler } from "./scheduler/task-scheduler.js";
@@ -19,10 +20,7 @@ export type MemoryLeverRegistrar = (
   options?: MemoryLeverTickOptions,
 ) => string | undefined;
 
-/**
- * Start one ProactiveLoop and attach it to the autonomy pipeline.
- * This is process liveness only — it does not send DeltaChat messages.
- */
+/** Process liveness only — does not send DeltaChat messages. */
 export async function attachProactiveLoop(
   pipeline: AutonomyPipelineLike,
   loop: ProactiveLoop = new ProactiveLoop(),
@@ -39,19 +37,14 @@ export async function detachProactiveLoop(
   await loop.stop();
 }
 
-/**
- * Register MemoryLever hygiene when a scheduler and a non-empty store path exist.
- * Empty or unset paths skip the registrar entirely.
- */
+/** Empty or unset path must skip the registrar, not call it. */
 export function attachMemoryLeverSchedule(
   scheduler: Pick<TaskScheduler, "scheduleInterval"> | undefined,
   options: MemoryLeverTickOptions = {},
   registrar: MemoryLeverRegistrar = registerMemoryLeverSchedule,
 ): string | undefined {
   if (!scheduler) return undefined;
-  const storagePath = (
-    options.storagePath ?? process.env.DELTECHO_AUTONOMY_STORAGE_PATH ?? ""
-  ).trim();
+  const storagePath = resolveStoragePath(options);
   if (!storagePath) return undefined;
   return registrar(scheduler, { ...options, storagePath });
 }
