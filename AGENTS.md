@@ -34,3 +34,18 @@ Non-obvious caveats for the browser target:
 ### Known app-level quirk (not an environment problem)
 
 In the browser build's self-chat ("Saved Messages"), the fork's custom Deep Tree Echo Live2D avatar overlay ("Live2D Failed / Retry") can overlap the conversation pane and prevent message bubbles from rendering in the main view, even though messages are sent, delivered, and stored correctly (visible in the chat-list preview and DB). Don't mistake this for a broken setup.
+
+### Deep Tree Echo operations
+
+These commands and env vars are the agent-facing ops surface for daemon composition. Do not copy January integration task lists (`docs/INTEGRATION_TASKS.md` and siblings); those packages already exist. Current plans: `docs/plans/2026-08-21-001-feat-dte-memory-lever-plan.md`, `docs/plans/2026-08-24-001-feat-desktop-proactive-messaging-plan.md`, `docs/plans/2026-08-24-002-feat-dte-orchestrate-learn-plan.md`.
+
+- `pnpm start:orchestrator` starts the daemon. With `enableScheduler` (default), it registers `memory-lever-dream` only when `DELTECHO_AUTONOMY_STORAGE_PATH` is a non-empty path to an existing filesystem RAG store. Unset or empty path skips registration; the daemon still starts.
+- `pnpm memory:lever` is the CLI for search / dry-run dream / gated apply against the same filesystem RAG store. Prefer it for one-off hygiene.
+- `pnpm start:bot` is the standalone DeltaChat bot (`bin/deltecho-bot.ts`). It is not the orchestrator and is not started by `start:orchestrator`.
+- `DELTECHO_AUTONOMY_STORAGE_PATH` must already contain live RAG key `deepTreeEchoBotMemories` (`deepTreeEchoBotMemories.json` on disk). Vector-only directories (`vectorMemoryStore_memories`) and desktop settings JSON are a different store; the scheduled lever does not open them and skips with `no_rag_keys`.
+- Scheduled ticks default to dry-run. Apply is a standing process-local grant: set `DELTECHO_MEMORY_LEVER_APPLY` to exactly `1`, `true`, or `yes` (case-insensitive) in the orchestrator process environment. Any other value, including unset, stays dry-run.
+- Interval default is 6 hours. Override with `DELTECHO_MEMORY_LEVER_INTERVAL_MS`. Values below 60 seconds clamp to 60 seconds.
+- Library apply writes `*.json.bak-*` snapshots that contain full pre-apply memory text. This composition does not expire those snapshots.
+- Dual proactive systems: renderer `ProactiveMessaging` (desktop UI, see the August 24 desktop plan) is independent of daemon `ProactiveLoop`. Loop attach is process liveness only; it does not send DeltaChat messages and does not construct `DeltaChatAutonomyBridge`.
+- Dual consolidation paths: AutonomyPipeline LLM `runConsolidation` is unchanged. MemoryLever `dream`/`apply` is scheduled RAG hygiene on the filesystem store. Do not call MemoryLever from ProactiveLoop INTEGRATE.
+- Frontend RAG (`deepTreeEchoBotMemories` in desktop settings JSON) is not the filesystem store the lever opens. Export/migration is later work.

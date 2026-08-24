@@ -41,6 +41,12 @@ import {
   type AutonomyPipelineConfig,
 } from "./autonomy-pipeline.js";
 import { DeltaChatAutonomyBridge } from "./deltachat-autonomy-bridge.js";
+import { ProactiveLoop } from "./proactive-loop.js";
+import {
+  attachMemoryLeverSchedule,
+  attachProactiveLoop,
+  detachProactiveLoop,
+} from "./dte-composition.js";
 import {
   AutonomyLifecycleCoordinator,
   type AutonomyLifecycleConfig,
@@ -228,6 +234,7 @@ export class Orchestrator {
   // Level 5: Autonomy components
   private coreSelfEngine?: CoreSelfEngine;
   private autonomyPipeline?: AutonomyPipeline;
+  private proactiveLoop?: ProactiveLoop;
   private autonomyBridge?: DeltaChatAutonomyBridge;
   private autonomyLifecycle?: AutonomyLifecycleCoordinator;
   private reservoirFeedback?: ReservoirFeedbackLoop;
@@ -436,6 +443,9 @@ export class Orchestrator {
           await this.autonomyPipeline.start();
           log.info("AutonomyPipeline started");
 
+          this.proactiveLoop = await attachProactiveLoop(this.autonomyPipeline);
+          log.info("ProactiveLoop started (process liveness)");
+
           // 4. AutonomyLifecycleCoordinator — 5-phase autonomy cycle
           this.autonomyLifecycle = new AutonomyLifecycleCoordinator({
             cycleIntervalMs: 30_000,
@@ -474,6 +484,10 @@ export class Orchestrator {
             error,
           );
         }
+      }
+
+      if (this.scheduler) {
+        attachMemoryLeverSchedule(this.scheduler);
       }
 
       this.running = true;
@@ -1256,6 +1270,11 @@ ${response.body}`;
     if (this.autonomyLifecycle) {
       await this.autonomyLifecycle.stop();
       log.info("AutonomyLifecycleCoordinator stopped");
+    }
+    if (this.proactiveLoop) {
+      await detachProactiveLoop(this.proactiveLoop);
+      this.proactiveLoop = undefined;
+      log.info("ProactiveLoop stopped");
     }
     if (this.autonomyPipeline) {
       await this.autonomyPipeline.stop();
