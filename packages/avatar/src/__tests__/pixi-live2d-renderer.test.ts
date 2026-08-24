@@ -12,6 +12,12 @@ import {
 import type { CubismAdapterConfig } from "../adapters/cubism-adapter";
 
 // Mock the dynamic imports for Node.js environment
+const installUnsafeEval = jest.fn();
+
+jest.mock("@pixi/unsafe-eval", () => ({
+  install: (...args: unknown[]) => installUnsafeEval(...args),
+}));
+
 jest.mock("pixi.js", () => ({
   Application: jest.fn().mockImplementation(() => ({
     stage: {
@@ -58,6 +64,7 @@ describe("PixiLive2DRenderer", () => {
   let mockCanvas: HTMLCanvasElement;
 
   beforeEach(() => {
+    installUnsafeEval.mockClear();
     renderer = new PixiLive2DRenderer();
     // Create a mock canvas element
     mockCanvas = {
@@ -96,6 +103,7 @@ describe("PixiLive2DRenderer", () => {
 
       await renderer.initialize(config);
       expect(renderer.isInitialized()).toBe(true);
+      expect(installUnsafeEval).toHaveBeenCalled();
     });
 
     it("should throw if canvas element not found by ID", async () => {

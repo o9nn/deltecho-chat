@@ -79,13 +79,25 @@ export interface Live2DAvatarController {
   setParameter: (paramId: string, value: number) => void;
 }
 
-// Model paths - local models are served from /models/ in the build output
+const LOCAL_MIARA_MODEL = "models/miara/miara_pro_t03.model3.json";
+
+// Model paths - local models are served next to main.html in the build output.
+// Electron loads that page as file://, so a leading slash would resolve to
+// file:///models/... and never find the assets.
 const CDN_MODELS = {
-  miara: "/models/miara/miara_pro_t03.model3.json",
+  miara: LOCAL_MIARA_MODEL,
   shizuku:
     "https://cdn.jsdelivr.net/gh/guansss/pixi-live2d-display/test/assets/shizuku/shizuku.model.json",
   haru: "https://cdn.jsdelivr.net/gh/guansss/pixi-live2d-display/test/assets/haru/haru_greeter_t03.model3.json",
 };
+
+export function resolveLive2DModelUrl(model: string): string {
+  const mapped = CDN_MODELS[model as keyof typeof CDN_MODELS] || model;
+  if (!mapped.startsWith("http") && typeof window !== "undefined") {
+    return new URL(mapped, window.location.href).href;
+  }
+  return mapped;
+}
 
 export interface Live2DAvatarComponentProps {
   /** Model URL or preset name ('shizuku' | 'haru') */
@@ -180,7 +192,7 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
   }, []);
 
   // Resolve model URL from preset or use as-is
-  const modelUrl = CDN_MODELS[model as keyof typeof CDN_MODELS] || model;
+  const modelUrl = resolveLive2DModelUrl(model);
 
   // Initialize the avatar
   useEffect(() => {

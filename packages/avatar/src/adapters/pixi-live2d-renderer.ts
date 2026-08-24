@@ -172,11 +172,15 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     this.config = config as PixiLive2DConfig;
 
     // Dynamically import PixiJS and pixi-live2d-display-lipsyncpatch
-    const [{ Application }, { Live2DModel: Live2DModelClass }] =
+    const [pixi, { Live2DModel: Live2DModelClass }, { install }] =
       await Promise.all([
         import("pixi.js"),
         import("pixi-live2d-display-lipsyncpatch"),
+        import("@pixi/unsafe-eval"),
       ]);
+    // Desktop CSP forbids eval; patch Pixi shaders before Application exists.
+    install(pixi);
+    const { Application } = pixi;
 
     // Get or create canvas element
     let canvas: HTMLCanvasElement;
