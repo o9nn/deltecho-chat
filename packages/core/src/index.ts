@@ -7,8 +7,9 @@ export * from "./adapters";
 // Export integration modules
 export * from "./integration";
 
-// Export memory modules
+// Export memory modules (browser-safe barrel + Node-only lever/fs)
 export * from "./memory";
+export * from "./memory/node";
 
 // Export personality modules
 export * from "./personality";
