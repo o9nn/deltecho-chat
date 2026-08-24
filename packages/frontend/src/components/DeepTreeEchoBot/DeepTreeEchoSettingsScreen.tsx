@@ -16,6 +16,7 @@ interface DeepTreeEchoSettingsScreenProps {
   onNavigateToMain?: () => void;
   embedded?: boolean;
   accountId?: number;
+  initialTab?: SettingsTab;
 }
 
 /**
@@ -26,12 +27,13 @@ const DeepTreeEchoSettingsScreen: React.FC<DeepTreeEchoSettingsScreenProps> = ({
   onNavigateToMain,
   embedded = false,
   accountId = 1,
+  initialTab = "general",
 }) => {
   const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState("");
   const [botVersion, setBotVersion] = useState("1.0.0");
   const [statusMessage, setStatusMessage] = useState("");
-  const [activeTab, setActiveTab] = useState<SettingsTab>("general");
+  const [activeTab, setActiveTab] = useState<SettingsTab>(initialTab);
 
   // Handle saving settings
   const handleSaveSettings = async (settings: any) => {

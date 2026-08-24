@@ -20,6 +20,7 @@ import useDialog from "../../hooks/dialog/useDialog";
 import useTranslationFunction from "../../hooks/useTranslationFunction";
 import BotSettings from "./BotSettings";
 import AICompanionSettings from "../Settings/AICompanionSettings";
+import DeepTreeEchoSettingsScreen from "../DeepTreeEchoBot/DeepTreeEchoSettingsScreen";
 
 import { Brain } from "lucide-react";
 import type { DialogProps } from "../../contexts/DialogContext";
@@ -31,14 +32,20 @@ type SettingsView =
   | "appearance"
   | "advanced"
   | "bot_settings"
+  | "bot_proactive"
   | "ai_companion_settings";
 
-export default function Settings({ onClose }: DialogProps) {
+export default function Settings({
+  onClose,
+  initialMode,
+}: DialogProps & { initialMode?: SettingsView }) {
   const { openDialog, closeDialog, openDialogIds } = useDialog();
 
   const settingsStore = useSettingsStore()[0];
   const tx = useTranslationFunction();
-  const [settingsMode, setSettingsMode] = useState<SettingsView>("main");
+  const [settingsMode, setSettingsMode] = useState<SettingsView>(
+    initialMode || "main",
+  );
 
   useEffect(() => {
     const handler = (evt: KeyboardEvent) => {
@@ -264,7 +271,25 @@ export default function Settings({ onClose }: DialogProps) {
           <DialogBody>
             <BotSettings
               settingsStore={settingsStore}
-              onNavigateToAdvanced={() => setSettingsMode("advanced")}
+              onNavigateToProactive={() => setSettingsMode("bot_proactive")}
+            />
+          </DialogBody>
+        </>
+      )}
+      {settingsMode === "bot_proactive" && (
+        <>
+          <DialogHeader
+            title="Proactive Triggers & Policy"
+            onClickBack={() => setSettingsMode("bot_settings")}
+            onClose={onClose}
+            dataTestid="settings-bot-proactive"
+          />
+          <DialogBody>
+            <DeepTreeEchoSettingsScreen
+              embedded
+              accountId={settingsStore.accountId}
+              initialTab="proactive"
+              onNavigateToMain={() => setSettingsMode("bot_settings")}
             />
           </DialogBody>
         </>
