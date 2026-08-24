@@ -42,7 +42,7 @@
  */
 
 import { getLogger } from "@deltachat-desktop/shared/logger";
-import { BackendRemote } from "../../backend-com";
+import { BackendRemote, C } from "../../backend-com";
 import { chatManager, ChatSummary } from "./DeepTreeEchoChatManager";
 import { uiBridge as _uiBridge } from "./DeepTreeEchoUIBridge";
 
@@ -141,6 +141,28 @@ export interface QueuedMessage {
   createdAt: number;
   sentAt?: number;
   error?: string;
+  contactId?: number;
+}
+
+export type GatedSendReason = "disabled" | "quiet_hours" | "rate_limit";
+
+export interface GatedSendResult {
+  success: boolean;
+  queued?: boolean;
+  messageId?: number;
+  queueId?: string;
+  reason?: GatedSendReason;
+}
+
+export interface ProactiveStatusSnapshot {
+  enabled: boolean;
+  quietHours: boolean;
+  hourlyUsed: number;
+  hourlyLimit: number;
+  dailyUsed: number;
+  dailyLimit: number;
+  triggerIds: string[];
+  queuedIds: string[];
 }
 
 /**
@@ -196,6 +218,11 @@ export class ProactiveMessaging {
 
   // LLM service reference
   private llmService: any = null;
+
+  // Welcome-once tracking (session + persisted ids)
+  private welcomedContactIds: Set<number> = new Set();
+  private sessionHandledContactIds: Set<number> = new Set();
+  private welcomePersistHandler: ((ids: number[]) => void) | null = null;
 
   private constructor() {
     this.initializeDefaultTriggers();
@@ -313,6 +340,45 @@ export class ProactiveMessaging {
   }
 
   /**
+   * Replace the in-memory trigger map. Used when loading persisted JSON.
+   */
+  public replaceTriggers(triggers: ProactiveTrigger[]): void {
+    this.triggers.clear();
+    for (const trigger of triggers) {
+      const id =
+        trigger.id ||
+        `trigger-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      this.triggers.set(id, {
+        ...trigger,
+        id,
+        triggerCount: trigger.triggerCount ?? 0,
+      });
+    }
+    log().info(`Replaced triggers: ${this.triggers.size}`);
+  }
+
+  /**
+   * Seed already-known contact ids so name-only edits do not welcome.
+   */
+  public seedWelcomedContacts(ids: number[]): void {
+    for (const id of ids) {
+      if (typeof id !== "number") continue;
+      this.welcomedContactIds.add(id);
+      this.sessionHandledContactIds.add(id);
+    }
+  }
+
+  public getWelcomedContactIds(): number[] {
+    return Array.from(this.welcomedContactIds);
+  }
+
+  public setWelcomePersistHandler(
+    handler: ((ids: number[]) => void) | null,
+  ): void {
+    this.welcomePersistHandler = handler;
+  }
+
+  /**
    * Get a specific trigger
    */
   public getTrigger(id: string): ProactiveTrigger | undefined {
@@ -425,7 +491,7 @@ export class ProactiveMessaging {
   /**
    * Check all triggers
    */
-  private async checkTriggers(): Promise<void> {
+  public async checkTriggers(): Promise<void> {
     if (!this.config.enabled) return;
     if (this.isQuietHours()) return;
 
@@ -506,10 +572,17 @@ export class ProactiveMessaging {
         return false;
       }
 
-      case "silence_duration":
-        // This would need to track last message times per chat
-        // For now, return false
+      case "silence_duration": {
+        const threshold = trigger.condition.threshold || 0;
+        const accounts = await BackendRemote.rpc.getAllAccounts();
+        for (const account of accounts) {
+          const chats = await chatManager.listChats(account.id);
+          if (chats.some((chat) => this.isChatSilent(chat, threshold))) {
+            return true;
+          }
+        }
         return false;
+      }
 
       case "custom":
         return trigger.condition.customCheck
@@ -580,8 +653,15 @@ export class ProactiveMessaging {
         }
         return [];
 
-      case "all_chats":
-        return chatManager.listChats(accountId);
+      case "all_chats": {
+        const chats = await chatManager.listChats(accountId);
+        if (trigger.condition?.type === "silence_duration") {
+          return chats.filter((chat) =>
+            this.isChatSilent(chat, trigger.condition?.threshold || 0),
+          );
+        }
+        return chats;
+      }
 
       case "unread_chats":
         return chatManager.getUnreadChats(accountId);
@@ -628,8 +708,21 @@ export class ProactiveMessaging {
   /**
    * Handle an event that might trigger messages
    */
-  public async handleEvent(eventType: EventType, _data?: any): Promise<void> {
+  public async handleEvent(
+    eventType: EventType,
+    data?: {
+      accountId?: number;
+      contactId?: number;
+      chatId?: number;
+      [key: string]: unknown;
+    },
+  ): Promise<void> {
     if (!this.config.enabled) return;
+
+    if (eventType === "new_contact") {
+      await this.handleNewContactEvent(data);
+      return;
+    }
 
     for (const trigger of this.triggers.values()) {
       if (!trigger.enabled) continue;
@@ -638,6 +731,91 @@ export class ProactiveMessaging {
 
       await this.executeTrigger(trigger);
     }
+  }
+
+  private async handleNewContactEvent(data?: {
+    accountId?: number;
+    contactId?: number;
+    chatId?: number;
+  }): Promise<void> {
+    const contactId = data?.contactId;
+    const accountId = data?.accountId;
+    if (!contactId || !accountId) return;
+    if (
+      this.sessionHandledContactIds.has(contactId) ||
+      this.welcomedContactIds.has(contactId)
+    ) {
+      return;
+    }
+
+    const chatId = await BackendRemote.rpc.getChatIdByContactId(
+      accountId,
+      contactId,
+    );
+    if (!chatId) return;
+
+    const fullChat = await BackendRemote.rpc.getFullChatById(accountId, chatId);
+    if (this.shouldSkipWelcomeChat(fullChat)) return;
+
+    const welcomeTriggers = Array.from(this.triggers.values()).filter(
+      (trigger) =>
+        trigger.enabled &&
+        trigger.type === "event" &&
+        trigger.eventType === "new_contact",
+    );
+    if (welcomeTriggers.length === 0) return;
+
+    const chat: ChatSummary = {
+      id: chatId,
+      name: fullChat?.name || "",
+      isGroup:
+        fullChat?.chatType === C.DC_CHAT_TYPE_GROUP ||
+        fullChat?.chatType === C.DC_CHAT_TYPE_BROADCAST,
+      isArchived: Boolean(fullChat?.archived),
+      isMuted: Boolean(fullChat?.isMuted),
+      unreadCount: 0,
+      lastMessageTimestamp: 0,
+      lastMessagePreview: "",
+      contactIds: fullChat?.contactIds || [contactId],
+    };
+
+    if (this.config.respectMutedChats && chat.isMuted) return;
+    if (this.config.respectArchivedChats && chat.isArchived) return;
+
+    for (const trigger of welcomeTriggers) {
+      const message = await this.generateMessage(trigger, chat);
+      this.queueMessage({
+        triggerId: trigger.id,
+        accountId,
+        chatId,
+        message,
+        contactId,
+      });
+      trigger.lastTriggered = Date.now();
+      trigger.triggerCount++;
+    }
+
+    this.sessionHandledContactIds.add(contactId);
+  }
+
+  private shouldSkipWelcomeChat(
+    fullChat: {
+      isSelfTalk?: boolean;
+      isDeviceTalk?: boolean;
+      chatType?: number;
+    } | null,
+  ): boolean {
+    if (!fullChat) return true;
+    if (fullChat.isSelfTalk || fullChat.isDeviceTalk) return true;
+    if (fullChat.chatType === C.DC_CHAT_TYPE_BROADCAST) return true;
+    if (fullChat.chatType === C.DC_CHAT_TYPE_MAILINGLIST) return true;
+    return false;
+  }
+
+  private isChatSilent(chat: ChatSummary, thresholdMinutes: number): boolean {
+    if (!chat.lastMessageTimestamp || thresholdMinutes <= 0) return false;
+    const lastMs = chat.lastMessageTimestamp * 1000;
+    return Date.now() - lastMs >= thresholdMinutes * 60 * 1000;
   }
 
   // ============================================================
@@ -654,6 +832,7 @@ export class ProactiveMessaging {
     message: string;
     priority?: "low" | "normal" | "high";
     scheduledTime?: number;
+    contactId?: number;
   }): string {
     const id = `msg-${Date.now()}-${Math.random().toString(36).slice(2)}`;
 
@@ -669,6 +848,7 @@ export class ProactiveMessaging {
       attempts: 0,
       maxAttempts: 3,
       createdAt: Date.now(),
+      contactId: params.contactId,
     };
 
     this.messageQueue.push(queuedMessage);
@@ -698,7 +878,7 @@ export class ProactiveMessaging {
   /**
    * Process the message queue
    */
-  private async processQueue(): Promise<void> {
+  public async processQueue(): Promise<void> {
     if (!this.config.enabled) return;
     if (this.isQuietHours()) return;
     if (!this.canSendMessage()) return;
@@ -715,12 +895,27 @@ export class ProactiveMessaging {
         msg.status = "sending";
         msg.attempts++;
 
-        await chatManager.sendMessage(msg.accountId, msg.chatId, msg.message);
+        const messageId = await chatManager.sendMessage(
+          msg.accountId,
+          msg.chatId,
+          msg.message,
+        );
+
+        if (typeof messageId !== "number") {
+          if (msg.attempts >= msg.maxAttempts) {
+            msg.status = "failed";
+            msg.error = "null send result";
+          } else {
+            msg.status = "queued";
+          }
+          continue;
+        }
 
         msg.status = "sent";
         msg.sentAt = Date.now();
         this.messagesSentThisHour++;
         this.messagesSentToday++;
+        this.markContactWelcomed(msg.contactId);
 
         log().info(`Sent queued message ${msg.id}`);
       } catch (error) {
@@ -809,16 +1004,55 @@ export class ProactiveMessaging {
     const hour = new Date().getHours();
 
     if (this.config.quietHoursStart < this.config.quietHoursEnd) {
-      // Normal range (e.g., 22-8 means 22:00 to 08:00)
-      return (
-        hour >= this.config.quietHoursStart || hour < this.config.quietHoursEnd
-      );
-    } else {
-      // Wrapped range
+      // Same-day window (e.g. 09 to 17)
       return (
         hour >= this.config.quietHoursStart && hour < this.config.quietHoursEnd
       );
     }
+    // Overnight window (e.g. 22 to 08)
+    return (
+      hour >= this.config.quietHoursStart || hour < this.config.quietHoursEnd
+    );
+  }
+
+  public getRateUsage(): { hourly: number; daily: number } {
+    return {
+      hourly: this.messagesSentThisHour,
+      daily: this.messagesSentToday,
+    };
+  }
+
+  public getStatusSnapshot(chatId?: number): ProactiveStatusSnapshot {
+    const queued = this.messageQueue.filter((m) => m.status === "queued");
+    return {
+      enabled: this.config.enabled,
+      quietHours: this.isQuietHours(),
+      hourlyUsed: this.messagesSentThisHour,
+      hourlyLimit: this.config.maxMessagesPerHour,
+      dailyUsed: this.messagesSentToday,
+      dailyLimit: this.config.maxMessagesPerDay,
+      triggerIds: this.getTriggers()
+        .filter(
+          (t) =>
+            t.enabled &&
+            (chatId === undefined ||
+              t.targetType === "all_chats" ||
+              t.targetType === "unread_chats" ||
+              t.targetType === "new_contacts" ||
+              t.targetChatId === chatId),
+        )
+        .map((t) => t.id),
+      queuedIds: queued
+        .filter((m) => chatId === undefined || m.chatId === chatId)
+        .map((m) => m.id),
+    };
+  }
+
+  private markContactWelcomed(contactId?: number): void {
+    if (typeof contactId !== "number") return;
+    this.welcomedContactIds.add(contactId);
+    this.sessionHandledContactIds.add(contactId);
+    this.welcomePersistHandler?.(Array.from(this.welcomedContactIds));
   }
 
   // ============================================================
@@ -826,25 +1060,72 @@ export class ProactiveMessaging {
   // ============================================================
 
   /**
-   * Send a message immediately (bypassing queue)
+   * Gated send/schedule API. Quiet hours and rate limits enqueue.
+   */
+  public async sendGated(params: {
+    accountId: number;
+    chatId: number;
+    message: string;
+    scheduledTime?: number;
+    triggerId?: string;
+    contactId?: number;
+  }): Promise<GatedSendResult> {
+    if (!this.config.enabled) {
+      return { success: false, reason: "disabled" };
+    }
+
+    const triggerId = params.triggerId || "gated-send";
+    const enqueue = (reason?: GatedSendReason): GatedSendResult => {
+      const queueId = this.queueMessage({
+        triggerId,
+        accountId: params.accountId,
+        chatId: params.chatId,
+        message: params.message,
+        scheduledTime: params.scheduledTime,
+        contactId: params.contactId,
+      });
+      return { success: true, queued: true, queueId, reason };
+    };
+
+    if (params.scheduledTime && params.scheduledTime > Date.now()) {
+      return enqueue();
+    }
+    if (this.isQuietHours()) {
+      return enqueue("quiet_hours");
+    }
+    if (!this.canSendMessage()) {
+      return enqueue("rate_limit");
+    }
+
+    try {
+      const messageId = await chatManager.sendMessage(
+        params.accountId,
+        params.chatId,
+        params.message,
+      );
+      if (typeof messageId !== "number") {
+        return { success: false };
+      }
+      this.messagesSentThisHour++;
+      this.messagesSentToday++;
+      this.markContactWelcomed(params.contactId);
+      return { success: true, messageId };
+    } catch (error) {
+      log().error("Failed gated send:", error);
+      return { success: false };
+    }
+  }
+
+  /**
+   * Send a message immediately through the gated API
    */
   public async sendNow(
     accountId: number,
     chatId: number,
     message: string,
   ): Promise<boolean> {
-    if (!this.config.enabled) return false;
-    if (!this.canSendMessage()) return false;
-
-    try {
-      await chatManager.sendMessage(accountId, chatId, message);
-      this.messagesSentThisHour++;
-      this.messagesSentToday++;
-      return true;
-    } catch (error) {
-      log().error("Failed to send immediate message:", error);
-      return false;
-    }
+    const result = await this.sendGated({ accountId, chatId, message });
+    return Boolean(result.success && typeof result.messageId === "number");
   }
 
   /**
