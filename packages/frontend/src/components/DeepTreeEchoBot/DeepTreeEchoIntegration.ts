@@ -153,34 +153,104 @@ function initializeProactiveMessaging(): void {
 /**
  * Load proactive messaging settings from storage
  */
-async function loadProactiveSettings(): Promise<void> {
+export async function loadProactiveSettings(): Promise<void> {
   try {
     const desktopSettings = await runtime.getDesktopSettings();
 
-    // Check for proactive messaging settings
-    const proactiveEnabled = (desktopSettings as any)
-      .deepTreeEchoBotProactiveEnabled;
-    if (proactiveEnabled !== undefined) {
-      proactiveMessaging.setEnabled(proactiveEnabled);
-    }
+    const botEnabled = Boolean(desktopSettings.deepTreeEchoBotEnabled);
+    const proactiveEnabled =
+      desktopSettings.deepTreeEchoBotProactiveEnabled !== false;
+    proactiveMessaging.setEnabled(botEnabled && proactiveEnabled);
 
-    // Load custom triggers if stored
-    const customTriggers = (desktopSettings as any)
-      .deepTreeEchoBotProactiveTriggers;
+    proactiveMessaging.updateConfig({
+      maxMessagesPerHour:
+        desktopSettings.deepTreeEchoBotProactiveMaxMessagesPerHour ?? 10,
+      maxMessagesPerDay:
+        desktopSettings.deepTreeEchoBotProactiveMaxMessagesPerDay ?? 50,
+      quietHoursStart:
+        desktopSettings.deepTreeEchoBotProactiveQuietHoursStart ?? 22,
+      quietHoursEnd: desktopSettings.deepTreeEchoBotProactiveQuietHoursEnd ?? 8,
+      respectMutedChats:
+        desktopSettings.deepTreeEchoBotProactiveRespectMutedChats !== false,
+      respectArchivedChats:
+        desktopSettings.deepTreeEchoBotProactiveRespectArchivedChats !== false,
+    });
+
+    const customTriggers = desktopSettings.deepTreeEchoBotProactiveTriggers;
     if (customTriggers) {
       try {
         const triggers = JSON.parse(customTriggers);
-        // Add custom triggers
-        for (const trigger of triggers) {
-          proactiveMessaging.addTrigger(trigger);
+        if (Array.isArray(triggers)) {
+          proactiveMessaging.replaceTriggers(triggers);
         }
       } catch (error) {
         log.error("Failed to parse custom triggers:", error);
+      }
+    } else {
+      await runtime.setDesktopSetting(
+        "deepTreeEchoBotProactiveTriggers",
+        JSON.stringify(proactiveMessaging.getTriggers()),
+      );
+    }
+
+    proactiveMessaging.setWelcomePersistHandler((ids) => {
+      runtime.setDesktopSetting(
+        "deepTreeEchoBotWelcomedContacts",
+        JSON.stringify(ids),
+      );
+    });
+
+    const welcomedRaw = desktopSettings.deepTreeEchoBotWelcomedContacts;
+    if (
+      welcomedRaw === undefined ||
+      welcomedRaw === null ||
+      welcomedRaw === ""
+    ) {
+      const ids = await collectExistingContactIds();
+      proactiveMessaging.seedWelcomedContacts(ids);
+      await runtime.setDesktopSetting(
+        "deepTreeEchoBotWelcomedContacts",
+        JSON.stringify(ids),
+      );
+    } else {
+      try {
+        const ids = JSON.parse(welcomedRaw);
+        if (Array.isArray(ids)) {
+          proactiveMessaging.seedWelcomedContacts(ids);
+        }
+      } catch (error) {
+        log.error("Failed to parse welcomed contacts:", error);
       }
     }
   } catch (error) {
     log.error("Failed to load proactive settings:", error);
   }
+}
+
+async function collectExistingContactIds(): Promise<number[]> {
+  const ids: number[] = [];
+  try {
+    const accounts = await BackendRemote.rpc.getAllAccounts();
+    for (const account of accounts) {
+      const contacts = await BackendRemote.rpc.getContacts(account.id, 0, null);
+      for (const contact of contacts as Array<number | { id?: number }>) {
+        if (typeof contact === "number") {
+          ids.push(contact);
+        } else if (contact && typeof contact.id === "number") {
+          ids.push(contact.id);
+        }
+      }
+    }
+  } catch (error) {
+    log.error("Failed to collect existing contact ids:", error);
+  }
+  return ids;
+}
+
+export async function persistProactiveTriggers(): Promise<void> {
+  await saveBotSettings({
+    proactiveTriggers: proactiveMessaging.getTriggers(),
+  });
 }
 
 /**
@@ -366,19 +436,48 @@ export async function saveBotSettings(settings: any): Promise<void> {
     // Handle proactive messaging settings
     if (settings.proactiveEnabled !== undefined) {
       await runtime.setDesktopSetting(
-        "deepTreeEchoBotProactiveEnabled" as any,
+        "deepTreeEchoBotProactiveEnabled",
         settings.proactiveEnabled,
       );
-      proactiveMessaging.setEnabled(settings.proactiveEnabled);
+      const desktopSettings = await runtime.getDesktopSettings();
+      proactiveMessaging.setEnabled(
+        Boolean(
+          desktopSettings.deepTreeEchoBotEnabled && settings.proactiveEnabled,
+        ),
+      );
       delete settings.proactiveEnabled;
     }
 
     if (settings.proactiveTriggers) {
       await runtime.setDesktopSetting(
-        "deepTreeEchoBotProactiveTriggers" as any,
+        "deepTreeEchoBotProactiveTriggers",
         JSON.stringify(settings.proactiveTriggers),
       );
       delete settings.proactiveTriggers;
+    }
+
+    const policyUpdates: Partial<
+      import("./ProactiveMessaging").ProactiveConfig
+    > = {};
+    const policyKeyMap: Record<
+      string,
+      keyof import("./ProactiveMessaging").ProactiveConfig
+    > = {
+      proactiveMaxMessagesPerHour: "maxMessagesPerHour",
+      proactiveMaxMessagesPerDay: "maxMessagesPerDay",
+      proactiveQuietHoursStart: "quietHoursStart",
+      proactiveQuietHoursEnd: "quietHoursEnd",
+      proactiveRespectMutedChats: "respectMutedChats",
+      proactiveRespectArchivedChats: "respectArchivedChats",
+    };
+    for (const [settingKey, configKey] of Object.entries(policyKeyMap)) {
+      if (settings[settingKey] !== undefined) {
+        (policyUpdates as Record<string, unknown>)[configKey] =
+          settings[settingKey];
+      }
+    }
+    if (Object.keys(policyUpdates).length > 0) {
+      proactiveMessaging.updateConfig(policyUpdates);
     }
 
     // Update desktop settings for all other properties
