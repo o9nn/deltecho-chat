@@ -4,6 +4,7 @@
 
 ### Added
 
+- Deep Tree Echo: the orchestrator now starts one ProactiveLoop for process liveness and, when `DELTECHO_AUTONOMY_STORAGE_PATH` points at an existing filesystem RAG store, schedules MemoryLever dream hygiene. Ticks stay dry-run unless `DELTECHO_MEMORY_LEVER_APPLY` is `1`, `true`, or `yes`.
 - Deep Tree Echo: proactive messaging is now wired in the desktop app — Settings exposes live triggers and policy, chats show a status indicator, and bot-initiated sends honor quiet hours and rate limits.
 
 ### Changed
