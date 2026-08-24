@@ -4,7 +4,7 @@ For general project overview, architecture, and the full command list, see `CLAU
 
 ## Cursor Cloud specific instructions
 
-This is a pnpm monorepo (Node >=20, pnpm 9.15.0). The startup update script already runs `pnpm install --frozen-lockfile` and builds the internal workspace TS packages, so you normally do not need to reinstall or rebuild those before working.
+This is a pnpm monorepo (Node >=20, pnpm 9.15.0). The Cloud Agent install script is `scripts/cloud-agent-install.sh` (same frozen lockfile plus the internal package build order). The team environment is dashboard-managed: do not commit `.cursor/environment.json`, which would override that dashboard. Propose `install` (the script), `terminals`, and port 3000 in the dashboard; named terminals (`browser-dev`, `orchestrator`) exist only after a human Saves. Until then start the same processes with the commands below. Leave `DELTECHO_AUTONOMY_STORAGE_PATH` and `DELTECHO_MEMORY_LEVER_APPLY` unset in the baseline environment.
 
 ### Build workspace deps before type-checking
 
@@ -20,9 +20,10 @@ This is a pnpm monorepo (Node >=20, pnpm 9.15.0). The startup update script alre
 
 The default/production target is Electron (`pnpm dev`), which needs a display server (e.g. xvfb) — heavy for headless testing. Prefer the **browser target** for manual testing:
 
-1. `pnpm build:browser`
-2. `USE_HTTP_IN_TEST=true WEB_PORT=3000 WEB_PASSWORD=<pick-one> pnpm start:webserver`
-3. Open `http://localhost:3000`, and log in with the `WEB_PASSWORD` you chose.
+1. `USE_HTTP_IN_TEST=true WEB_PORT=3000 WEB_PASSWORD=cloud-dev pnpm start:browser` (`pnpm start:browser` builds, then serves; `start:webserver` needs a prior build)
+2. Open `http://localhost:3000`, and log in with `cloud-dev` (or the `WEB_PASSWORD` you chose)
+
+`WEB_PASSWORD=cloud-dev` is a single-tenant Cloud Agent local gate, not a secret. Do not reuse this password or HTTP mode on a shared or internet-facing deploy. Proposed dashboard port 3000 assumes owner-only or Cursor-authenticated ingress.
 
 Non-obvious caveats for the browser target:
 
@@ -37,10 +38,12 @@ In the browser build's self-chat ("Saved Messages"), the fork's custom Deep Tree
 
 ### Deep Tree Echo operations
 
-These commands and env vars are the agent-facing ops surface for daemon composition. Do not copy January integration task lists (`docs/INTEGRATION_TASKS.md` and siblings); those packages already exist. Current plans: `docs/plans/2026-08-21-001-feat-dte-memory-lever-plan.md`, `docs/plans/2026-08-24-001-feat-desktop-proactive-messaging-plan.md`, `docs/plans/2026-08-24-002-feat-dte-orchestrate-learn-plan.md`.
+These commands and env vars are the agent-facing ops surface for daemon composition. Do not copy January integration task lists (`docs/INTEGRATION_TASKS.md` and siblings); those packages already exist. Current plans: `docs/plans/2026-08-21-001-feat-dte-memory-lever-plan.md`, `docs/plans/2026-08-24-001-feat-desktop-proactive-messaging-plan.md`, `docs/plans/2026-08-24-002-feat-dte-orchestrate-learn-plan.md`, `docs/plans/2026-08-24-003-feat-cloud-env-dte-learn-plan.md`.
 
-- `pnpm start:orchestrator` starts the daemon. With `enableScheduler` (default), it registers `memory-lever-dream` only when `DELTECHO_AUTONOMY_STORAGE_PATH` is a non-empty path to an existing filesystem RAG store. Unset or empty path skips registration; the daemon still starts.
-- `pnpm memory:lever` is the CLI for search / dry-run dream / gated apply against the same filesystem RAG store. Prefer it for one-off hygiene.
+- `pnpm start:orchestrator` starts the daemon. On Cloud Agent VMs, export `DEEP_TREE_ECHO_ENABLE_DOVECOT=false` first: default Dovecot Milter binds `/var/run/deep-tree-echo/milter.sock` and `DovecotInterface.start()` rethrows, so the daemon exits. Webhook default is 8080 (`WebhookServer` DEFAULT_CONFIG); `DEEP_TREE_ECHO_WEBHOOK_PORT` in `daemon.ts` is comment-only and does not collide with browser port 3000.
+- Proposed dashboard terminal `orchestrator` is `DEEP_TREE_ECHO_ENABLE_DOVECOT=false pnpm start:orchestrator`. Proposed `browser-dev` is `USE_HTTP_IN_TEST=true WEB_PORT=3000 WEB_PASSWORD=cloud-dev pnpm start:browser`. Those named terminals appear only after dashboard Save.
+- With `enableScheduler` (default), the daemon registers `memory-lever-dream` only when `DELTECHO_AUTONOMY_STORAGE_PATH` is a non-empty path to an existing filesystem RAG store. Unset or empty path skips registration; the daemon still starts.
+- `pnpm memory:lever` is the CLI for search / dry-run dream / gated apply against the same filesystem RAG store. Prefer it for one-off hygiene. Dry-run against a temp fixture: `pnpm memory:lever dream --storage-path <dir>` where `<dir>` already contains live `deepTreeEchoBotMemories.json`. Omitting `--storage-path` without `DELTECHO_AUTONOMY_STORAGE_PATH` fails as `missing_store`. Record counts, reason codes, and hash only; do not copy DreamPlan JSON (`survivorText`) into AGENTS.md, CHANGELOG, walkthrough artifacts, or committed logs.
 - `pnpm start:bot` is the standalone DeltaChat bot (`bin/deltecho-bot.ts`). It is not the orchestrator and is not started by `start:orchestrator`.
 - `DELTECHO_AUTONOMY_STORAGE_PATH` must already contain live RAG key `deepTreeEchoBotMemories` (`deepTreeEchoBotMemories.json` on disk). Vector-only directories (`vectorMemoryStore_memories`) and desktop settings JSON are a different store; the scheduled lever does not open them and skips with `no_rag_keys`.
 - Scheduled ticks default to dry-run. Apply is a standing process-local grant: set `DELTECHO_MEMORY_LEVER_APPLY` to exactly `1`, `true`, or `yes` (case-insensitive) in the orchestrator process environment. Any other value, including unset, stays dry-run.
