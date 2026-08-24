@@ -37,7 +37,7 @@ The create-environment workflow needs a VM that can install twice, start the bro
 - R1. An idempotent install script at `scripts/cloud-agent-install.sh` refreshes dependencies with `pnpm install --frozen-lockfile` and builds internal TS packages in CI order: `deep-tree-echo-core`, `@deltecho/sys6-triality`, `@deltecho/dove9`, `@deltecho/ipc`, `@deltecho/cognitive`, `deep-tree-echo-orchestrator`.
 - R2. The install script terminates. It does not start the browser server, orchestrator, or any other long-running process.
 - R3. Running the install script twice in a row succeeds without rewriting the lockfile.
-- R4. Proposed Cloud Agent `install` invokes that script. Proposed `terminals` include `browser-dev` (`USE_HTTP_IN_TEST=true WEB_PORT=3000 WEB_PASSWORD=cloud-dev pnpm start:browser`) and `orchestrator` (`DEEP_TREE_ECHO_ENABLE_DOVECOT=false pnpm start:orchestrator`). Proposed `ports` expose 3000 as the browser UI. The proposal is backed by a successful snapshot and draft environment build that records the tested `buildId`.
+- R4. Proposed Cloud Agent `install` invokes that script (or the guarded main-safe wrapper when the script is absent). Proposed `terminals` include `browser-dev` (`USE_HTTP_IN_TEST=true WEB_PORT=3000 WEB_PASSWORD=cloud-dev pnpm start:browser`) and `orchestrator` (`DEEP_TREE_ECHO_ENABLE_DOVECOT=false DEEP_TREE_ECHO_ENABLE_DOUBLE_MEMBRANE=false npx tsx packages/orchestrator/dist/bin/daemon.js`). Proposed `ports` expose 3000 as the browser UI. The proposal is backed by a successful snapshot and draft environment build that records the tested `buildId`.
 - R5. Baseline proposed environment does not set `DELTECHO_AUTONOMY_STORAGE_PATH` or `DELTECHO_MEMORY_LEVER_APPLY`. Unset path keeps scheduled hygiene unregistered. Apply stays dry-run unless an operator exports a grant in their own session.
 
 **Runtime demonstration**
@@ -45,7 +45,7 @@ The create-environment workflow needs a VM that can install twice, start the bro
 - R6. `browser-dev` uses `USE_HTTP_IN_TEST=true` and documented `WEB_PASSWORD=cloud-dev`. It must not set `NODE_ENV=test`, which would serve `test.html` instead of `main.html`. `pnpm start:browser` owns the frontend build cost.
 - R7. `orchestrator` starts with `DEEP_TREE_ECHO_ENABLE_DOVECOT=false` so Milter does not bind `/var/run/deep-tree-echo/milter.sock`. Webhook default is 8080 from `WebhookServer` DEFAULT_CONFIG; `DEEP_TREE_ECHO_WEBHOOK_PORT` is comment-only in `daemon.ts` and is not required for browser port 3000.
 - R8. With storage path unset, orchestrator start remains successful and does not register `memory-lever-dream`.
-- R9. Against a temp filesystem RAG fixture that already contains live key `deepTreeEchoBotMemories`, `pnpm memory:lever dream --storage-path <temp>` leaves store bytes unchanged. Verification evidence may record counts, reason codes, and hash only. Full DreamPlan JSON including `survivorText` stays on the local tty.
+- R9. Against a temp filesystem RAG fixture that already contains live key `deepTreeEchoBotMemories`, `npx tsx bin/dte-memory-lever.ts dream --storage-path <temp>` leaves store bytes unchanged. Verification evidence may record counts, reason codes, and hash only. Full DreamPlan JSON including `survivorText` stays on the local tty.
 
 **Continual learning**
 
@@ -77,7 +77,7 @@ The create-environment workflow needs a VM that can install twice, start the bro
   - **Steps:** Start daemon. Observe start logs.
   - **Outcome:** Daemon stays up. No `memory-lever-dream` registration.
 - F4. Fixture dream
-  - **Trigger:** Operator or agent runs `pnpm memory:lever dream --storage-path <temp>` against a seeded temp store.
+  - **Trigger:** Operator or agent runs `npx tsx bin/dte-memory-lever.ts dream --storage-path <temp>` against a seeded temp store.
   - **Actors:** A1, A3
   - **Steps:** Seed `deepTreeEchoBotMemories.json`. Dream with `--storage-path`. Compare bytes. Record counts only.
   - **Outcome:** Store unchanged. AGENTS.md untouched. No survivor text in repo evidence.
@@ -97,7 +97,7 @@ The create-environment workflow needs a VM that can install twice, start the bro
 - AE1. Covers R1, R2, R3. Given a completed first install, when the script runs again, then it exits 0 and `pnpm-lock.yaml` is byte-identical.
 - AE2. Covers R6, F2. Given `USE_HTTP_IN_TEST=true` and `WEB_PASSWORD=cloud-dev`, when a client logs in at `http://localhost:3000`, then the response is the real app (`main.html` path), not `test.html`.
 - AE3. Covers R7, R8, F3. Given Dovecot disabled and storage path unset, when the orchestrator starts, then it stays up and does not register `memory-lever-dream`.
-- AE4. Covers R9, F4. Given a temp RAG fixture with two near-duplicate memories, when `pnpm memory:lever dream --storage-path <temp>` runs, then the fixture bytes are unchanged and recorded evidence contains counts only.
+- AE4. Covers R9, F4. Given a temp RAG fixture with two near-duplicate memories, when `npx tsx bin/dte-memory-lever.ts dream --storage-path <temp>` runs, then the fixture bytes are unchanged and recorded evidence contains counts only.
 - AE5. Covers R10, R11, R12, F5. Given the updated AGENTS.md, when an agent searches for cloud install, terminals, Dovecot disable, Save caveat, or fixture dream, then those topics are present and no memory text appears.
 - AE6. Covers R4, F6. Given successful local install and demo evidence, when the environment is proposed, then the proposal includes `install` pointing at the script, the two terminal commands, port 3000, and the tested draft `buildId`.
 
@@ -153,7 +153,7 @@ This plan owns Cloud Agent environment composition and the continual-learning si
 - KTD1. Keep the Cloud Agent environment dashboard-managed. Propose install/terminals/ports via the environment panel. Do not commit `.cursor/environment.json` in this slice, because a committed file overrides the team environment. Governs R4.
 - KTD2. Put dependency install and the six internal package builds in `scripts/cloud-agent-install.sh`. Put long-running servers in proposed `terminals`, not `install` or `start`. Governs R1, R2.
 - KTD3. Browser terminal is `USE_HTTP_IN_TEST=true WEB_PORT=3000 WEB_PASSWORD=cloud-dev pnpm start:browser`. The password is a single-tenant Cloud Agent local gate, not a secret. Proposed `ports: [3000]` assumes owner-only or Cursor-authenticated ingress. Do not reuse this password or HTTP mode for a shared or internet-facing deploy. Governs R6.
-- KTD4. Orchestrator terminal exports `DEEP_TREE_ECHO_ENABLE_DOVECOT=false` and leaves autonomy storage unset. Webhook disable is optional; default webhook port is 8080, not 3000. Governs R5, R7, R8.
+- KTD4. Orchestrator terminal is `DEEP_TREE_ECHO_ENABLE_DOVECOT=false DEEP_TREE_ECHO_ENABLE_DOUBLE_MEMBRANE=false npx tsx packages/orchestrator/dist/bin/daemon.js` and leaves autonomy storage unset. Webhook disable is optional; default webhook port is 8080, not 3000. Governs R5, R7, R8.
 - KTD5. Continual learning is a PR edit to AGENTS.md. Dream JSON may appear on the local tty. Repo and walkthrough evidence record counts, reason codes, and hash only. Governs R10, R12.
 - KTD6. Reuse shipped orchestrator Jest as the compose-plan regression gate. Do not add `pnpm e2e` as a merge gate. Governs demonstration of the already-landed compose-plan U1–U3 from `docs/plans/2026-08-24-002-feat-dte-orchestrate-learn-plan.md`.
 - KTD7. Product Contract preservation relative to the shipped compose plan: unchanged for compose-plan R1–R12. This artifact adds a new Cloud/learn contract and does not reopen apply, lock, or store-split decisions.
@@ -165,7 +165,7 @@ flowchart LR
   Install[cloud-agent-install.sh]
   Browser[browser-dev terminal]
   Orch[orchestrator terminal]
-  Lever[pnpm memory:lever dream]
+  Lever[tsx memory lever dream]
   Agents[AGENTS.md]
   Propose[dashboard proposal]
 
@@ -255,7 +255,7 @@ U1 lands the install script. U2 documents the prescribed R11 contract, including
   1. Run U1 twice.
   2. Run shipped orchestrator Jest for `memory-lever-schedule` and `dte-composition` (compose-plan AE1, AE2, AE7, AE8).
   3. Start `USE_HTTP_IN_TEST=true WEB_PORT=3000 WEB_PASSWORD=cloud-dev pnpm start:browser`. Log in. Confirm real UI.
-  4. Start `DEEP_TREE_ECHO_ENABLE_DOVECOT=false pnpm start:orchestrator`. Confirm AE3.
+  4. Start `DEEP_TREE_ECHO_ENABLE_DOVECOT=false DEEP_TREE_ECHO_ENABLE_DOUBLE_MEMBRANE=false npx tsx packages/orchestrator/dist/bin/daemon.js`. Confirm AE3.
   5. Seed a temp RAG fixture and run dry-run dream with `--storage-path` (AE4). Record counts only.
   6. Snapshot the install-ready VM, trigger a draft build with the proposed `environmentJson`, and propose with that `buildId`.
 - **Patterns to follow:** `packages/orchestrator/src/__tests__/memory-lever-schedule.test.ts` fixture shape.
@@ -271,8 +271,8 @@ U1 lands the install script. U2 documents the prescribed R11 contract, including
 | Install twice | `./scripts/cloud-agent-install.sh` | U1 | AE1 |
 | Compose-plan tests | `pnpm --filter=deep-tree-echo-orchestrator test -- memory-lever-schedule dte-composition` | U3 | compose-plan AE1, AE2, AE7, AE8 stay green |
 | Browser | `USE_HTTP_IN_TEST=true WEB_PORT=3000 WEB_PASSWORD=cloud-dev pnpm start:browser` | U3 | AE2 |
-| Orchestrator | `DEEP_TREE_ECHO_ENABLE_DOVECOT=false pnpm start:orchestrator` | U3 | AE3 |
-| Fixture dream | `pnpm memory:lever dream --storage-path <temp>` | U3 | AE4 counts only |
+| Orchestrator | `DEEP_TREE_ECHO_ENABLE_DOVECOT=false DEEP_TREE_ECHO_ENABLE_DOUBLE_MEMBRANE=false npx tsx packages/orchestrator/dist/bin/daemon.js` | U3 | AE3 |
+| Fixture dream | `npx tsx bin/dte-memory-lever.ts dream --storage-path <temp>` | U3 | AE4 counts only |
 | Guidance | Read `AGENTS.md` | U2 | AE5 |
 | Proposal | snapshot + draft build + propose | U3 | AE6 |
 

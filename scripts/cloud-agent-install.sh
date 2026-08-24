@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
-# Idempotent Cloud Agent bootstrap: lockfile install plus internal TS packages
-# in CI order. Does not start servers. See AGENTS.md and
-# docs/plans/2026-08-24-003-feat-cloud-env-dte-learn-plan.md.
+# Does not start servers. Build order matches CI so workspace packages
+# resolve each other's generated dist/ types.
 set -euo pipefail
 
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
