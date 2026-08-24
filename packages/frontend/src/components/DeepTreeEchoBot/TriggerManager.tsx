@@ -18,6 +18,7 @@ import {
   EventType,
 } from "./ProactiveMessaging";
 import { chatManager } from "./DeepTreeEchoChatManager";
+import { persistProactiveTriggers } from "./DeepTreeEchoIntegration";
 
 const log = getLogger("render/components/DeepTreeEchoBot/TriggerManager");
 
@@ -158,7 +159,7 @@ const TriggerManager: React.FC<TriggerManagerProps> = ({
   };
 
   // Handle save
-  const handleSave = () => {
+  const handleSave = async () => {
     try {
       if (isCreating) {
         // Create new trigger
@@ -179,6 +180,7 @@ const TriggerManager: React.FC<TriggerManagerProps> = ({
         log.info("Updated trigger:", formData.name);
       }
 
+      await persistProactiveTriggers();
       loadTriggers();
       setIsCreating(false);
       setIsEditing(false);
@@ -189,9 +191,10 @@ const TriggerManager: React.FC<TriggerManagerProps> = ({
   };
 
   // Handle delete
-  const handleDelete = (triggerId: string) => {
+  const handleDelete = async (triggerId: string) => {
     if (confirm("Are you sure you want to delete this trigger?")) {
       proactiveMessaging.removeTrigger(triggerId);
+      await persistProactiveTriggers();
       loadTriggers();
       setSelectedTrigger(null);
       log.info("Deleted trigger:", triggerId);
@@ -199,8 +202,9 @@ const TriggerManager: React.FC<TriggerManagerProps> = ({
   };
 
   // Handle toggle enabled
-  const handleToggleEnabled = (triggerId: string, enabled: boolean) => {
+  const handleToggleEnabled = async (triggerId: string, enabled: boolean) => {
     proactiveMessaging.setTriggerEnabled(triggerId, enabled);
+    await persistProactiveTriggers();
     loadTriggers();
   };
 

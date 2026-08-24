@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { getLogger } from "../../../../shared/logger";
 import { runtime } from "@deltachat-desktop/runtime-interface";
-import { saveBotSettings } from "../DeepTreeEchoBot";
+import {
+  cleanupBot,
+  initDeepTreeEchoBot,
+  saveBotSettings,
+} from "../DeepTreeEchoBot";
+import { proactiveMessaging } from "../DeepTreeEchoBot/ProactiveMessaging";
 import { PersonaCore } from "../DeepTreeEchoBot/PersonaCore";
 import type { SettingsStoreState } from "../../stores/settings";
 import SettingsHeading from "./SettingsHeading";
@@ -17,12 +22,12 @@ const log = getLogger("render/components/Settings/BotSettings");
 
 type Props = {
   settingsStore: SettingsStoreState;
-  onNavigateToAdvanced?: () => void;
+  onNavigateToProactive?: () => void;
 };
 
 export default function BotSettings({
   settingsStore,
-  onNavigateToAdvanced,
+  onNavigateToProactive,
 }: Props) {
   const [isLoading, setIsLoading] = useState(true);
   const [personaCore, setPersonaCore] = useState<PersonaCore | null>(null);
@@ -32,8 +37,6 @@ export default function BotSettings({
   const [apiKey, setApiKey] = useState("");
   const [apiEndpoint, setApiEndpoint] = useState("");
   const [personality, setPersonality] = useState("");
-  const [proactiveEnabled, setProactiveEnabled] = useState(false);
-  const [_proactiveTriggers, setProactiveTriggers] = useState("");
 
   // Load settings on component mount
   useEffect(() => {
@@ -46,12 +49,6 @@ export default function BotSettings({
         setPersonality(
           desktopSettings.deepTreeEchoBotPersonality ||
             "Deep Tree Echo is a helpful, friendly AI assistant that provides thoughtful responses to users in Delta Chat.",
-        );
-        setProactiveEnabled(
-          desktopSettings.deepTreeEchoBotProactiveEnabled || false,
-        );
-        setProactiveTriggers(
-          desktopSettings.deepTreeEchoBotProactiveTriggers || "[]",
         );
 
         // Initialize persona core if bot is enabled
@@ -124,6 +121,16 @@ export default function BotSettings({
         settingsKey="deepTreeEchoBotEnabled"
         label="Enable Deep Tree Echo Bot"
         description="When enabled, Deep Tree Echo will automatically respond to messages in your chats."
+        callback={async () => {
+          const enabling =
+            !settingsStore.desktopSettings.deepTreeEchoBotEnabled;
+          if (enabling) {
+            await initDeepTreeEchoBot();
+          } else {
+            proactiveMessaging.setEnabled(false);
+            cleanupBot();
+          }
+        }}
       />
 
       {feedbackMessage && <Callout>{feedbackMessage}</Callout>}
@@ -187,11 +194,18 @@ export default function BotSettings({
         label="Enable Proactive Messaging"
         description="Allow Deep Tree Echo to initiate conversations, send greetings, and follow up autonomously."
         disabled={!isBotEnabled}
+        callback={() => {
+          const next =
+            !settingsStore.desktopSettings.deepTreeEchoBotProactiveEnabled;
+          proactiveMessaging.setEnabled(Boolean(isBotEnabled && next));
+        }}
       />
 
       <div
         className={`${styles.proactiveTriggersContainer} ${
-          !proactiveEnabled ? styles.dimmed : ""
+          !settingsStore.desktopSettings.deepTreeEchoBotProactiveEnabled
+            ? styles.dimmed
+            : ""
         }`}
       >
         <div className={styles.proactiveTriggersLabel}>Active Triggers</div>
@@ -257,10 +271,10 @@ export default function BotSettings({
 
       <SettingsSeparator />
       <SettingsButton
-        onClick={() => onNavigateToAdvanced?.()}
-        disabled={!isBotEnabled || !onNavigateToAdvanced}
+        onClick={() => onNavigateToProactive?.()}
+        disabled={!isBotEnabled || !onNavigateToProactive}
       >
-        Advanced Settings
+        Proactive Triggers & Policy
       </SettingsButton>
 
       <div

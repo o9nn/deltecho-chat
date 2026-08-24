@@ -108,6 +108,8 @@ export type {
 export {
   initDeepTreeEchoBot,
   saveBotSettings,
+  loadProactiveSettings,
+  persistProactiveTriggers,
   getBotInstance,
   cleanupBot,
   resetBotInstance,

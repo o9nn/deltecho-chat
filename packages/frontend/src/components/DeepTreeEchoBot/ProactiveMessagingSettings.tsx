@@ -11,13 +11,13 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { getLogger } from "../../../../shared/logger";
-import { runtime } from "@deltachat-desktop/runtime-interface";
 import {
   proactiveMessaging,
   ProactiveConfig,
   ProactiveTrigger,
   TriggerType as _TriggerType,
 } from "./ProactiveMessaging";
+import { saveBotSettings } from "./DeepTreeEchoIntegration";
 
 const log = getLogger(
   "render/components/DeepTreeEchoBot/ProactiveMessagingSettings",
@@ -103,15 +103,12 @@ const ProactiveMessagingSettings: React.FC<ProactiveMessagingSettingsProps> = ({
     try {
       proactiveMessaging.updateConfig({ [key]: value });
 
-      // Persist to desktop settings
-      await runtime.setDesktopSetting(
-        `deepTreeEchoBotProactive${
-          key.charAt(0).toUpperCase() + key.slice(1)
-        }` as any,
-        value,
-      );
+      const persistKey = `proactive${key.charAt(0).toUpperCase()}${key.slice(
+        1,
+      )}`;
+      await saveBotSettings({ [persistKey]: value });
 
-      log.info(`Updated proactive config: ${key} = ${value}`);
+      log.info(`Updated proactive config: ${key}`);
     } catch (error) {
       log.error(`Failed to update proactive config ${key}:`, error);
     }
@@ -119,7 +116,6 @@ const ProactiveMessagingSettings: React.FC<ProactiveMessagingSettingsProps> = ({
 
   // Handle enabling/disabling proactive messaging
   const handleEnabledChange = (enabled: boolean) => {
-    proactiveMessaging.setEnabled(enabled);
     handleConfigChange("enabled", enabled);
   };
 

@@ -23,6 +23,7 @@ import { getLogger } from "@deltachat-desktop/shared/logger";
 import { BackendRemote } from "../../backend-com";
 import { DeepTreeEchoChatManager } from "./DeepTreeEchoChatManager";
 import { DeepTreeEchoUIBridge } from "./DeepTreeEchoUIBridge";
+import { proactiveMessaging } from "./ProactiveMessaging";
 
 const log = getLogger("render/components/DeepTreeEchoBot/AgentToolExecutor");
 
@@ -404,6 +405,21 @@ export class AgentToolExecutor {
         },
       },
       {
+        name: "get_proactive_status",
+        description:
+          "Read-only proactive messaging status: enabled flag, quiet hours, rate headroom, and per-chat trigger/queue ids",
+        parameters: {
+          type: "object",
+          properties: {
+            chatId: {
+              type: "number",
+              description: "Optional chat ID to scope trigger and queue ids",
+            },
+          },
+          required: [],
+        },
+      },
+      {
         name: "get_current_time",
         description: "Get the current date and time",
         parameters: {
@@ -602,14 +618,26 @@ export class AgentToolExecutor {
         }
 
         case "send_message": {
-          await BackendRemote.rpc.miscSendTextMessage(
-            toolCall.input.accountId || accountId,
-            toolCall.input.chatId,
-            toolCall.input.text,
-          );
+          const result = await proactiveMessaging.sendGated({
+            accountId: toolCall.input.accountId || accountId,
+            chatId: toolCall.input.chatId,
+            message: toolCall.input.text,
+          });
+          let output = `Message blocked: ${result.reason || "failed"}`;
+          if (result.queued) {
+            output = `Message queued for chat ${toolCall.input.chatId}`;
+          } else if (result.success) {
+            output = `Message sent to chat ${toolCall.input.chatId}`;
+          }
           return {
-            success: true,
-            output: `Message sent to chat ${toolCall.input.chatId}`,
+            success: result.success,
+            output,
+            metadata: {
+              reason: result.reason,
+              queued: result.queued,
+              messageId: result.messageId,
+              queueId: result.queueId,
+            },
           };
         }
 
@@ -973,20 +1001,48 @@ export class AgentToolExecutor {
         case "schedule_message": {
           const scheduledTime =
             Date.now() + toolCall.input.delayMinutes * 60 * 1000;
-          const reason = toolCall.input.reason || "Scheduled by agentic tool";
-          const msgId = this.chatManager.scheduleMessage(
-            toolCall.input.accountId || accountId,
-            toolCall.input.chatId,
-            toolCall.input.text,
+          const result = await proactiveMessaging.sendGated({
+            accountId: toolCall.input.accountId || accountId,
+            chatId: toolCall.input.chatId,
+            message: toolCall.input.text,
             scheduledTime,
-            reason,
+            triggerId: "agent-schedule",
+          });
+          let output = `Schedule blocked: ${result.reason || "failed"}`;
+          if (result.queued) {
+            output = `Message scheduled for ${new Date(
+              scheduledTime,
+            ).toISOString()}`;
+          } else if (result.success) {
+            output = `Message sent to chat ${toolCall.input.chatId}`;
+          }
+          return {
+            success: result.success,
+            output,
+            metadata: {
+              reason: result.reason,
+              queued: result.queued,
+              queueId: result.queueId,
+              scheduledTime,
+            },
+          };
+        }
+
+        case "get_proactive_status": {
+          const snapshot = proactiveMessaging.getStatusSnapshot(
+            toolCall.input.chatId,
           );
           return {
             success: true,
-            output: `Message scheduled for ${new Date(
-              scheduledTime,
-            ).toISOString()}`,
-            metadata: { messageId: msgId, scheduledTime },
+            output: JSON.stringify({
+              enabled: snapshot.enabled,
+              quietHours: snapshot.quietHours,
+              hourlyRemaining: snapshot.hourlyLimit - snapshot.hourlyUsed,
+              dailyRemaining: snapshot.dailyLimit - snapshot.dailyUsed,
+              triggerIds: snapshot.triggerIds,
+              queuedIds: snapshot.queuedIds,
+            }),
+            metadata: { enabled: snapshot.enabled },
           };
         }
 

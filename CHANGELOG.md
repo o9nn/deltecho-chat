@@ -4,6 +4,8 @@
 
 ### Added
 
+- Deep Tree Echo: proactive messaging is now wired in the desktop app — Settings exposes live triggers and policy, chats show a status indicator, and bot-initiated sends honor quiet hours and rate limits.
+
 ### Changed
 
 ### Fixed
