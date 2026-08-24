@@ -15,6 +15,8 @@ import { ReactionsBarProvider } from "../ReactionsBar";
 import useDialog from "../../hooks/dialog/useDialog";
 import useMessage from "../../hooks/chat/useMessage";
 import { DeepTreeEchoAvatarDisplay } from "../DeepTreeEchoBot/DeepTreeEchoAvatarDisplay";
+import ProactiveStatusIndicator from "../DeepTreeEchoBot/ProactiveStatusIndicator";
+import Settings from "../Settings/Settings";
 
 const log = getLogger("renderer/MessageListAndComposer");
 
@@ -352,6 +354,20 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
       {settingsStore?.desktopSettings?.deepTreeEchoBotEnabled &&
         settingsStore?.desktopSettings?.deepTreeEchoBotAvatarEnabled !==
           false && <DeepTreeEchoAvatarDisplay position="floating" />}
+      {settingsStore?.desktopSettings?.deepTreeEchoBotEnabled &&
+        settingsStore?.desktopSettings?.deepTreeEchoBotProactiveEnabled && (
+          <ProactiveStatusIndicator
+            accountId={accountId}
+            chatId={chat.id}
+            compact
+            onOpenSettings={() =>
+              openDialog(Settings, { initialMode: "bot_settings" })
+            }
+            onOpenTriggers={() =>
+              openDialog(Settings, { initialMode: "bot_proactive" })
+            }
+          />
+        )}
     </div>
   );
 }

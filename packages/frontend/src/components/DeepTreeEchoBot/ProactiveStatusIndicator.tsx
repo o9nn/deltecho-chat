@@ -79,14 +79,16 @@ const ProactiveStatusIndicator: React.FC<ProactiveStatusIndicatorProps> = ({
     if (!quickMessage.trim()) return;
 
     try {
-      const success = await proactiveMessaging.sendNow(
+      const result = await proactiveMessaging.sendGated({
         accountId,
         chatId,
-        quickMessage,
-      );
-      if (success) {
+        message: quickMessage,
+      });
+      if (result.success && !result.queued) {
         setQuickMessage("");
         log.info("Quick message sent successfully");
+      } else if (result.reason) {
+        log.info(`Quick send ${result.reason}`);
       }
     } catch (error) {
       log.error("Failed to send quick message:", error);
@@ -94,7 +96,7 @@ const ProactiveStatusIndicator: React.FC<ProactiveStatusIndicatorProps> = ({
   };
 
   // Handle schedule message
-  const handleSchedule = () => {
+  const handleSchedule = async () => {
     if (!quickMessage.trim() || !scheduleTime) return;
 
     try {
@@ -104,16 +106,20 @@ const ProactiveStatusIndicator: React.FC<ProactiveStatusIndicatorProps> = ({
         return;
       }
 
-      proactiveMessaging.scheduleOneTime(
+      const result = await proactiveMessaging.sendGated({
         accountId,
         chatId,
-        quickMessage,
+        message: quickMessage,
         scheduledTime,
-      );
-      setQuickMessage("");
-      setScheduleTime("");
-      setShowScheduler(false);
-      log.info("Message scheduled successfully");
+      });
+      if (result.success) {
+        setQuickMessage("");
+        setScheduleTime("");
+        setShowScheduler(false);
+        log.info("Message scheduled successfully");
+      } else if (result.reason) {
+        log.info(`Schedule ${result.reason}`);
+      }
     } catch (error) {
       log.error("Failed to schedule message:", error);
     }
