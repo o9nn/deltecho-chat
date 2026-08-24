@@ -365,6 +365,7 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
 
   const avatarController = useRef<Live2DAvatarController | null>(null);
   const updateIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const nativeSizeTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
   const lastCognitiveSignatureRef = useRef<string | null>(null);
 
   useEffect(() => {
@@ -406,12 +407,18 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
         }
       };
       reportNativeSize();
-      // Mesh bounds settle after the first Cubism update / layout pass.
+      // Mesh bounds settle after the first Cubism update; pixel fit follows.
       if (typeof requestAnimationFrame === "function") {
         requestAnimationFrame(() => {
           requestAnimationFrame(reportNativeSize);
         });
       }
+      for (const timer of nativeSizeTimersRef.current) {
+        clearTimeout(timer);
+      }
+      nativeSizeTimersRef.current = [250, 700].map((delay) =>
+        setTimeout(reportNativeSize, delay),
+      );
       onReady?.();
     },
     [onReady, onNativeSize, avatarContext],
@@ -456,6 +463,10 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
         clearInterval(updateIntervalRef.current);
         updateIntervalRef.current = null;
       }
+      for (const timer of nativeSizeTimersRef.current) {
+        clearTimeout(timer);
+      }
+      nativeSizeTimersRef.current = [];
     };
   }, [finalVisible]);
 

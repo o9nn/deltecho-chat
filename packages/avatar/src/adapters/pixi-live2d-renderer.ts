@@ -971,8 +971,8 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     const nextScaleY = (this.model.scale.y || 1) * boost;
     this.model.scale.set(nextScaleX, nextScaleY);
     this.modelNativeSize = {
-      width: (viewWidth * this.viewFill) / Math.abs(nextScaleX),
-      height: (viewHeight * this.viewFill) / Math.abs(nextScaleY),
+      width: boxWidth / Math.abs(this.model.scale.x / boost),
+      height: boxHeight / Math.abs(this.model.scale.y / boost),
     };
     const boxCenterX = (visible.x + visible.width / 2) / resolution;
     const boxCenterY = (visible.y + visible.height / 2) / resolution;

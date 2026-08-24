@@ -124,31 +124,80 @@ export function measureOpaquePixelBounds(
   alphaThreshold = 12,
   step = 2,
 ): AxisAlignedBounds | null {
+  return measureCoreOpaqueBounds(pixels, width, height, alphaThreshold, step);
+}
+
+/**
+ * AABB of the largest opaque blob. The standing body is that blob;
+ * a side fairy / sparkle must not widen the fit and shrink the figure.
+ */
+export function measureCoreOpaqueBounds(
+  pixels: ArrayLike<number>,
+  width: number,
+  height: number,
+  alphaThreshold = 12,
+  step = 2,
+): AxisAlignedBounds | null {
   if (width <= 0 || height <= 0 || pixels.length < width * height * 4) {
     return null;
   }
-  let minX = width;
-  let minY = height;
-  let maxX = -1;
-  let maxY = -1;
   const stride = Math.max(1, step);
+  const gridWidth = Math.ceil(width / stride);
+  const gridHeight = Math.ceil(height / stride);
+  const occupied = new Uint8Array(gridWidth * gridHeight);
   for (let y = 0; y < height; y += stride) {
+    const gy = Math.floor(y / stride);
     for (let x = 0; x < width; x += stride) {
-      const alpha = pixels[(y * width + x) * 4 + 3];
-      if (alpha < alphaThreshold) continue;
-      if (x < minX) minX = x;
-      if (y < minY) minY = y;
-      if (x > maxX) maxX = x;
-      if (y > maxY) maxY = y;
+      if (pixels[(y * width + x) * 4 + 3] < alphaThreshold) continue;
+      occupied[gy * gridWidth + Math.floor(x / stride)] = 1;
     }
   }
-  if (maxX < minX || maxY < minY) return null;
-  return {
-    x: minX,
-    y: minY,
-    width: maxX - minX + 1,
-    height: maxY - minY + 1,
-  };
+
+  const seen = new Uint8Array(occupied.length);
+  let bestCount = 0;
+  let best: AxisAlignedBounds | null = null;
+  const stack: number[] = [];
+  for (let start = 0; start < occupied.length; start++) {
+    if (!occupied[start] || seen[start]) continue;
+    let count = 0;
+    let minX = gridWidth;
+    let minY = gridHeight;
+    let maxX = -1;
+    let maxY = -1;
+    stack.push(start);
+    seen[start] = 1;
+    while (stack.length) {
+      const index = stack.pop() as number;
+      count += 1;
+      const gx = index % gridWidth;
+      const gy = (index - gx) / gridWidth;
+      if (gx < minX) minX = gx;
+      if (gy < minY) minY = gy;
+      if (gx > maxX) maxX = gx;
+      if (gy > maxY) maxY = gy;
+      const tryPush = (nx: number, ny: number) => {
+        if (nx < 0 || ny < 0 || nx >= gridWidth || ny >= gridHeight) return;
+        const next = ny * gridWidth + nx;
+        if (!occupied[next] || seen[next]) return;
+        seen[next] = 1;
+        stack.push(next);
+      };
+      tryPush(gx - 1, gy);
+      tryPush(gx + 1, gy);
+      tryPush(gx, gy - 1);
+      tryPush(gx, gy + 1);
+    }
+    if (count > bestCount) {
+      bestCount = count;
+      best = {
+        x: minX * stride,
+        y: minY * stride,
+        width: (maxX - minX + 1) * stride,
+        height: (maxY - minY + 1) * stride,
+      };
+    }
+  }
+  return best;
 }
 
 export function padFigureBounds(

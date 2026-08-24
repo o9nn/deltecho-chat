@@ -76,4 +76,26 @@ describe("live2d-figure-bounds", () => {
       height: 12,
     });
   });
+
+  it("uses the standing body blob and ignores a side familiar", () => {
+    const width = 40;
+    const height = 40;
+    const pixels = new Uint8Array(width * height * 4);
+    for (let y = 4; y <= 35; y++) {
+      for (let x = 12; x <= 23; x++) {
+        pixels[(y * width + x) * 4 + 3] = 255;
+      }
+    }
+    for (let y = 10; y <= 16; y++) {
+      for (let x = 32; x <= 37; x++) {
+        pixels[(y * width + x) * 4 + 3] = 255;
+      }
+    }
+    expect(measureOpaquePixelBounds(pixels, width, height, 12, 1)).toEqual({
+      x: 12,
+      y: 4,
+      width: 12,
+      height: 32,
+    });
+  });
 });
