@@ -623,13 +623,15 @@ export class AgentToolExecutor {
             chatId: toolCall.input.chatId,
             message: toolCall.input.text,
           });
+          let output = `Message blocked: ${result.reason || "failed"}`;
+          if (result.queued) {
+            output = `Message queued for chat ${toolCall.input.chatId}`;
+          } else if (result.success) {
+            output = `Message sent to chat ${toolCall.input.chatId}`;
+          }
           return {
             success: result.success,
-            output: result.queued
-              ? `Message queued for chat ${toolCall.input.chatId}`
-              : result.success
-                ? `Message sent to chat ${toolCall.input.chatId}`
-                : `Message blocked: ${result.reason || "failed"}`,
+            output,
             metadata: {
               reason: result.reason,
               queued: result.queued,
@@ -1006,13 +1008,17 @@ export class AgentToolExecutor {
             scheduledTime,
             triggerId: "agent-schedule",
           });
+          let output = `Schedule blocked: ${result.reason || "failed"}`;
+          if (result.queued) {
+            output = `Message scheduled for ${new Date(
+              scheduledTime,
+            ).toISOString()}`;
+          } else if (result.success) {
+            output = `Message sent to chat ${toolCall.input.chatId}`;
+          }
           return {
             success: result.success,
-            output: result.queued
-              ? `Message scheduled for ${new Date(scheduledTime).toISOString()}`
-              : result.success
-                ? `Message sent to chat ${toolCall.input.chatId}`
-                : `Schedule blocked: ${result.reason || "failed"}`,
+            output,
             metadata: {
               reason: result.reason,
               queued: result.queued,

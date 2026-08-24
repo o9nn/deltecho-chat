@@ -103,10 +103,9 @@ const ProactiveMessagingSettings: React.FC<ProactiveMessagingSettingsProps> = ({
     try {
       proactiveMessaging.updateConfig({ [key]: value });
 
-      const persistKey =
-        key === "enabled"
-          ? "proactiveEnabled"
-          : `proactive${key.charAt(0).toUpperCase()}${key.slice(1)}`;
+      const persistKey = `proactive${key.charAt(0).toUpperCase()}${key.slice(
+        1,
+      )}`;
       await saveBotSettings({ [persistKey]: value });
 
       log.info(`Updated proactive config: ${key}`);
@@ -117,7 +116,6 @@ const ProactiveMessagingSettings: React.FC<ProactiveMessagingSettingsProps> = ({
 
   // Handle enabling/disabling proactive messaging
   const handleEnabledChange = (enabled: boolean) => {
-    proactiveMessaging.setEnabled(botEnabled && enabled);
     handleConfigChange("enabled", enabled);
   };
 

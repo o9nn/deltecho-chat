@@ -22,13 +22,11 @@ const log = getLogger("render/components/Settings/BotSettings");
 
 type Props = {
   settingsStore: SettingsStoreState;
-  onNavigateToAdvanced?: () => void;
   onNavigateToProactive?: () => void;
 };
 
 export default function BotSettings({
   settingsStore,
-  onNavigateToAdvanced,
   onNavigateToProactive,
 }: Props) {
   const [isLoading, setIsLoading] = useState(true);
@@ -39,8 +37,6 @@ export default function BotSettings({
   const [apiKey, setApiKey] = useState("");
   const [apiEndpoint, setApiEndpoint] = useState("");
   const [personality, setPersonality] = useState("");
-  const [proactiveEnabled, setProactiveEnabled] = useState(false);
-  const [_proactiveTriggers, setProactiveTriggers] = useState("");
 
   // Load settings on component mount
   useEffect(() => {
@@ -53,12 +49,6 @@ export default function BotSettings({
         setPersonality(
           desktopSettings.deepTreeEchoBotPersonality ||
             "Deep Tree Echo is a helpful, friendly AI assistant that provides thoughtful responses to users in Delta Chat.",
-        );
-        setProactiveEnabled(
-          desktopSettings.deepTreeEchoBotProactiveEnabled || false,
-        );
-        setProactiveTriggers(
-          desktopSettings.deepTreeEchoBotProactiveTriggers || "[]",
         );
 
         // Initialize persona core if bot is enabled
@@ -136,10 +126,6 @@ export default function BotSettings({
             !settingsStore.desktopSettings.deepTreeEchoBotEnabled;
           if (enabling) {
             await initDeepTreeEchoBot();
-            proactiveMessaging.setEnabled(
-              settingsStore.desktopSettings.deepTreeEchoBotProactiveEnabled !==
-                false,
-            );
           } else {
             proactiveMessaging.setEnabled(false);
             cleanupBot();
@@ -217,7 +203,9 @@ export default function BotSettings({
 
       <div
         className={`${styles.proactiveTriggersContainer} ${
-          !proactiveEnabled ? styles.dimmed : ""
+          !settingsStore.desktopSettings.deepTreeEchoBotProactiveEnabled
+            ? styles.dimmed
+            : ""
         }`}
       >
         <div className={styles.proactiveTriggersLabel}>Active Triggers</div>
@@ -283,10 +271,8 @@ export default function BotSettings({
 
       <SettingsSeparator />
       <SettingsButton
-        onClick={() => (onNavigateToProactive || onNavigateToAdvanced)?.()}
-        disabled={
-          !isBotEnabled || !(onNavigateToProactive || onNavigateToAdvanced)
-        }
+        onClick={() => onNavigateToProactive?.()}
+        disabled={!isBotEnabled || !onNavigateToProactive}
       >
         Proactive Triggers & Policy
       </SettingsButton>

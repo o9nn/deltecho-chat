@@ -13,6 +13,7 @@
  */
 
 import { getLogger } from "@deltachat-desktop/shared/logger";
+import { getDefaultState } from "../../../../shared/state";
 import { BackendRemote, Type as _T } from "../../backend-com";
 import { runtime } from "@deltachat-desktop/runtime-interface";
 import { DeepTreeEchoBot } from "./DeepTreeEchoBot";
@@ -95,7 +96,7 @@ export async function initDeepTreeEchoBot(): Promise<void> {
 
     // Initialize subsystems
     initializeChatManager();
-    initializeProactiveMessaging();
+    await initializeProactiveMessaging();
 
     // Register message event handlers
     registerMessageHandlers();
@@ -135,7 +136,7 @@ function initializeChatManager(): void {
 /**
  * Initialize Proactive Messaging
  */
-function initializeProactiveMessaging(): void {
+async function initializeProactiveMessaging(): Promise<void> {
   // Connect LLM service if available
   if (botInstance) {
     const llmService = botInstance.getLLMService();
@@ -144,8 +145,8 @@ function initializeProactiveMessaging(): void {
     }
   }
 
-  // Load proactive messaging settings
-  loadProactiveSettings();
+  await loadProactiveSettings();
+  proactiveMessaging.startProcessing();
 
   log.info("Proactive Messaging initialized");
 }
@@ -162,14 +163,24 @@ export async function loadProactiveSettings(): Promise<void> {
       desktopSettings.deepTreeEchoBotProactiveEnabled !== false;
     proactiveMessaging.setEnabled(botEnabled && proactiveEnabled);
 
+    const defaults = getDefaultState();
     proactiveMessaging.updateConfig({
       maxMessagesPerHour:
-        desktopSettings.deepTreeEchoBotProactiveMaxMessagesPerHour ?? 10,
+        desktopSettings.deepTreeEchoBotProactiveMaxMessagesPerHour ??
+        defaults.deepTreeEchoBotProactiveMaxMessagesPerHour ??
+        10,
       maxMessagesPerDay:
-        desktopSettings.deepTreeEchoBotProactiveMaxMessagesPerDay ?? 50,
+        desktopSettings.deepTreeEchoBotProactiveMaxMessagesPerDay ??
+        defaults.deepTreeEchoBotProactiveMaxMessagesPerDay ??
+        50,
       quietHoursStart:
-        desktopSettings.deepTreeEchoBotProactiveQuietHoursStart ?? 22,
-      quietHoursEnd: desktopSettings.deepTreeEchoBotProactiveQuietHoursEnd ?? 8,
+        desktopSettings.deepTreeEchoBotProactiveQuietHoursStart ??
+        defaults.deepTreeEchoBotProactiveQuietHoursStart ??
+        22,
+      quietHoursEnd:
+        desktopSettings.deepTreeEchoBotProactiveQuietHoursEnd ??
+        defaults.deepTreeEchoBotProactiveQuietHoursEnd ??
+        8,
       respectMutedChats:
         desktopSettings.deepTreeEchoBotProactiveRespectMutedChats !== false,
       respectArchivedChats:
@@ -194,10 +205,14 @@ export async function loadProactiveSettings(): Promise<void> {
     }
 
     proactiveMessaging.setWelcomePersistHandler((ids) => {
-      runtime.setDesktopSetting(
-        "deepTreeEchoBotWelcomedContacts",
-        JSON.stringify(ids),
-      );
+      void runtime
+        .setDesktopSetting(
+          "deepTreeEchoBotWelcomedContacts",
+          JSON.stringify(ids),
+        )
+        .catch((error) => {
+          log.error("Failed to persist welcomed contacts:", error);
+        });
     });
 
     const welcomedRaw = desktopSettings.deepTreeEchoBotWelcomedContacts;
@@ -207,11 +222,13 @@ export async function loadProactiveSettings(): Promise<void> {
       welcomedRaw === ""
     ) {
       const ids = await collectExistingContactIds();
-      proactiveMessaging.seedWelcomedContacts(ids);
-      await runtime.setDesktopSetting(
-        "deepTreeEchoBotWelcomedContacts",
-        JSON.stringify(ids),
-      );
+      if (ids) {
+        proactiveMessaging.seedWelcomedContacts(ids);
+        await runtime.setDesktopSetting(
+          "deepTreeEchoBotWelcomedContacts",
+          JSON.stringify(ids),
+        );
+      }
     } else {
       try {
         const ids = JSON.parse(welcomedRaw);
@@ -227,24 +244,19 @@ export async function loadProactiveSettings(): Promise<void> {
   }
 }
 
-async function collectExistingContactIds(): Promise<number[]> {
-  const ids: number[] = [];
+async function collectExistingContactIds(): Promise<number[] | null> {
   try {
     const accounts = await BackendRemote.rpc.getAllAccounts();
-    for (const account of accounts) {
-      const contacts = await BackendRemote.rpc.getContacts(account.id, 0, null);
-      for (const contact of contacts as Array<number | { id?: number }>) {
-        if (typeof contact === "number") {
-          ids.push(contact);
-        } else if (contact && typeof contact.id === "number") {
-          ids.push(contact.id);
-        }
-      }
-    }
+    const perAccount = await Promise.all(
+      accounts.map((account) =>
+        BackendRemote.rpc.getContactIds(account.id, 0, null),
+      ),
+    );
+    return perAccount.flat();
   } catch (error) {
     log.error("Failed to collect existing contact ids:", error);
+    return null;
   }
-  return ids;
 }
 
 export async function persistProactiveTriggers(): Promise<void> {
@@ -337,7 +349,7 @@ function registerChatEventHandlers(): void {
             contactId,
           );
           if (contact) {
-            proactiveMessaging.handleEvent("new_contact", {
+            await proactiveMessaging.handleEvent("new_contact", {
               accountId,
               contactId,
               contact,

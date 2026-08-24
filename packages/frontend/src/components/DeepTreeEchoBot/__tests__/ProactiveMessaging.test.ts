@@ -46,6 +46,7 @@ jest.mock("../../../backend-com", () => ({
       getChatIdByContactId: jest.fn().mockResolvedValue(0),
       getFreshMsgCnt: jest.fn().mockResolvedValue(0),
       getContacts: jest.fn().mockResolvedValue([]),
+      getContactIds: jest.fn().mockResolvedValue([]),
     },
     on: jest.fn(),
     off: jest.fn(),
@@ -525,6 +526,32 @@ describe("ProactiveMessaging", () => {
       expect(proactiveMessaging.getQueuedMessages()).toHaveLength(1);
     });
 
+    it("does not queue interval silence checks during overnight quiet hours", async () => {
+      jest.setSystemTime(new Date("2026-08-24T23:00:00"));
+      const silence = proactiveMessaging
+        .getTriggers()
+        .find((t: any) => t.name === "Check In After Silence");
+      proactiveMessaging.setTriggerEnabled(silence.id, true);
+      BackendRemote.rpc.getChatlistEntries.mockResolvedValue([100]);
+      BackendRemote.rpc.getBasicChatInfo.mockResolvedValue({
+        name: "Quiet Chat",
+        chatType: 100,
+        archived: false,
+        isMuted: false,
+      });
+      BackendRemote.rpc.getMessageIds.mockResolvedValue([1]);
+      BackendRemote.rpc.getMessage.mockResolvedValue({
+        id: 1,
+        text: "old",
+        fromId: 2,
+        timestamp: Math.floor(Date.now() / 1000) - 25 * 60 * 60,
+      });
+
+      await proactiveMessaging.checkTriggers();
+
+      expect(proactiveMessaging.getQueuedMessages()).toHaveLength(0);
+    });
+
     it("does not send from processQueue during same-day quiet hours", async () => {
       jest.setSystemTime(new Date("2026-08-24T10:00:00"));
       proactiveMessaging.updateConfig({
@@ -596,6 +623,10 @@ describe("ProactiveMessaging", () => {
       ["self-talk", { isSelfTalk: true, isDeviceTalk: false }],
       ["device-talk", { isSelfTalk: false, isDeviceTalk: true }],
       ["broadcast", { isSelfTalk: false, isDeviceTalk: false, chatType: 160 }],
+      [
+        "mailing-list",
+        { isSelfTalk: false, isDeviceTalk: false, chatType: 140 },
+      ],
     ])("skips %s chats", async (_label, extra) => {
       BackendRemote.rpc.getChatIdByContactId.mockResolvedValue(55);
       BackendRemote.rpc.getFullChatById.mockResolvedValue({
@@ -806,6 +837,48 @@ describe("ProactiveMessaging", () => {
       expect(result.success).toBe(false);
       expect(result.reason).toBe("disabled");
       expect(BackendRemote.rpc.miscSendTextMessage).not.toHaveBeenCalled();
+    });
+
+    it("queues a future scheduledTime without sending", async () => {
+      jest.setSystemTime(new Date("2026-08-24T12:00:00"));
+      BackendRemote.rpc.miscSendTextMessage.mockClear();
+
+      const result = await proactiveMessaging.sendGated({
+        accountId: 1,
+        chatId: 100,
+        message: "later",
+        scheduledTime: Date.now() + 60_000,
+      });
+
+      expect(result.queued).toBe(true);
+      expect(result.queueId).toMatch(/^msg-/);
+      expect(BackendRemote.rpc.miscSendTextMessage).not.toHaveBeenCalled();
+      expect(
+        proactiveMessaging
+          .getQueuedMessages()
+          .some((m: any) => m.id === result.queueId),
+      ).toBe(true);
+    });
+
+    it("restarts queue processing after cleanup", async () => {
+      jest.setSystemTime(new Date("2026-08-24T12:00:00"));
+      proactiveMessaging.cleanup();
+      proactiveMessaging.setEnabled(true);
+      BackendRemote.rpc.miscSendTextMessage.mockResolvedValue(202);
+
+      proactiveMessaging.queueMessage({
+        triggerId: "test",
+        accountId: 1,
+        chatId: 100,
+        message: "after restart",
+      });
+      await proactiveMessaging.processQueue();
+
+      expect(BackendRemote.rpc.miscSendTextMessage).toHaveBeenCalledWith(
+        1,
+        100,
+        "after restart",
+      );
     });
 
     it("queues during quiet hours and reports quiet_hours", async () => {

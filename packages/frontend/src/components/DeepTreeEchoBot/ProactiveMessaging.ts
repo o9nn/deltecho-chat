@@ -271,6 +271,9 @@ export class ProactiveMessaging {
    */
   public setEnabled(enabled: boolean): void {
     this.config.enabled = enabled;
+    if (enabled) {
+      this.startProcessing();
+    }
     log().info(`ProactiveMessaging ${enabled ? "enabled" : "disabled"}`);
   }
 
@@ -368,10 +371,6 @@ export class ProactiveMessaging {
     }
   }
 
-  public getWelcomedContactIds(): number[] {
-    return Array.from(this.welcomedContactIds);
-  }
-
   public setWelcomePersistHandler(
     handler: ((ids: number[]) => void) | null,
   ): void {
@@ -464,7 +463,14 @@ export class ProactiveMessaging {
   /**
    * Start processing triggers and queue
    */
-  private startProcessing(): void {
+  public startProcessing(): void {
+    if (
+      this.triggerCheckInterval ||
+      this.queueProcessInterval ||
+      this.rateLimitResetInterval
+    ) {
+      return;
+    }
     // Check triggers every minute
     // Note: async callbacks in setInterval must handle errors internally
     this.triggerCheckInterval = setInterval(() => {
@@ -748,6 +754,14 @@ export class ProactiveMessaging {
       return;
     }
 
+    const welcomeTriggers = Array.from(this.triggers.values()).filter(
+      (trigger) =>
+        trigger.enabled &&
+        trigger.type === "event" &&
+        trigger.eventType === "new_contact",
+    );
+    if (welcomeTriggers.length === 0) return;
+
     const chatId = await BackendRemote.rpc.getChatIdByContactId(
       accountId,
       contactId,
@@ -756,14 +770,6 @@ export class ProactiveMessaging {
 
     const fullChat = await BackendRemote.rpc.getFullChatById(accountId, chatId);
     if (this.shouldSkipWelcomeChat(fullChat)) return;
-
-    const welcomeTriggers = Array.from(this.triggers.values()).filter(
-      (trigger) =>
-        trigger.enabled &&
-        trigger.type === "event" &&
-        trigger.eventType === "new_contact",
-    );
-    if (welcomeTriggers.length === 0) return;
 
     const chat: ChatSummary = {
       id: chatId,
@@ -1050,6 +1056,7 @@ export class ProactiveMessaging {
 
   private markContactWelcomed(contactId?: number): void {
     if (typeof contactId !== "number") return;
+    if (this.welcomedContactIds.has(contactId)) return;
     this.welcomedContactIds.add(contactId);
     this.sessionHandledContactIds.add(contactId);
     this.welcomePersistHandler?.(Array.from(this.welcomedContactIds));
@@ -1197,6 +1204,9 @@ export class ProactiveMessaging {
     }
     this.triggers.clear();
     this.messageQueue = [];
+    this.sessionHandledContactIds.clear();
+    this.welcomedContactIds.clear();
+    this.welcomePersistHandler = null;
     log().info("ProactiveMessaging cleaned up");
   }
 }

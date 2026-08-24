@@ -162,9 +162,6 @@ describe("AgentToolExecutor", () => {
       queued: true,
       queueId: "msg-scheduled",
     });
-    (proactiveMessaging.getQueuedMessages as jest.Mock).mockReturnValue([
-      { id: "msg-scheduled", chatId: 10 },
-    ]);
 
     const result = await executor.executeTool(
       {
@@ -182,22 +179,16 @@ describe("AgentToolExecutor", () => {
 
     expect(result.success).toBe(true);
     expect(result.metadata?.queued).toBe(true);
-    expect(proactiveMessaging.sendGated).toHaveBeenCalledWith(
-      expect.objectContaining({
-        accountId: 1,
-        chatId: 10,
-        message: "Later",
-        triggerId: "agent-schedule",
-      }),
-    );
+    const gatedCall = (proactiveMessaging.sendGated as jest.Mock).mock
+      .calls[0][0];
+    expect(gatedCall.accountId).toBe(1);
+    expect(gatedCall.chatId).toBe(10);
+    expect(gatedCall.message).toBe("Later");
+    expect(gatedCall.triggerId).toBe("agent-schedule");
+    expect(gatedCall.scheduledTime).toBeGreaterThan(Date.now() - 1000);
     expect(
       DeepTreeEchoChatManager.getInstance().scheduleMessage,
     ).not.toHaveBeenCalled();
-    expect(
-      proactiveMessaging
-        .getQueuedMessages()
-        .some((m: any) => m.id === "msg-scheduled"),
-    ).toBe(true);
   });
 
   it("returns read-only proactive status without trigger templates", async () => {
