@@ -9,7 +9,7 @@
 ### Changed
 
 - Deep Tree Echo: the Live2D avatar occupies a full-height right-hand strip of the conversation pane (one third of its width) instead of a floating overlay.
-- Deep Tree Echo: Live2D initializes under the desktop CSP (Pixi unsafe-eval patch), registers the Cubism 4 factory, and loads the local Miara model from the Electron `file://` page.
+- Deep Tree Echo: Live2D initializes under the desktop CSP (Pixi unsafe-eval patch), registers the Cubism 4 factory, and loads the local Miara model from the Electron `file://` page. The avatar keeps one WebGL context when the conversation strip resizes so Cubism textures stay valid.
 
 ### Fixed
 

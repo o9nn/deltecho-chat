@@ -29,6 +29,8 @@ jest.mock("pixi.js", () => ({
       height: 400,
     },
     ticker: {},
+    screen: { width: 400, height: 400 },
+    renderer: { resize: jest.fn() },
     destroy: jest.fn(),
   })),
 }));
@@ -299,6 +301,23 @@ describe("PixiLive2DRenderer", () => {
       expect(renderer.isInitialized()).toBe(false);
       expect(renderer.getModel()).toBeNull();
       expect(renderer.getApplication()).toBeNull();
+    });
+
+    it("should resize the existing view without creating a new app", async () => {
+      const config: CubismAdapterConfig = {
+        canvas: mockCanvas,
+        model: {
+          modelPath: "/test/model.json",
+          name: "Test Model",
+        },
+      };
+      await renderer.initialize(config);
+      await renderer.loadModel(config.model);
+      const appBefore = renderer.getApplication();
+      renderer.resize(640, 1080, 0.5);
+      expect(renderer.getApplication()).toBe(appBefore);
+      expect(renderer.getModel()?.x).toBe(200);
+      expect(renderer.getModel()?.y).toBe(200);
     });
 
     it("should be safe to call dispose multiple times", () => {

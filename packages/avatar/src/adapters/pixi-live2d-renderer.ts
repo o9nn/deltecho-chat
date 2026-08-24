@@ -140,11 +140,24 @@ export interface PixiLive2DConfig extends Omit<CubismAdapterConfig, "canvas"> {
  * - Real-time lip sync from audio levels
  * - Eye blinking
  */
+/** Serialize Cubism `from()` so two Pixi GL contexts cannot share one runtime. */
+let live2dFromLock: Promise<void> = Promise.resolve();
+
+function withLive2DFromLock<T>(fn: () => Promise<T>): Promise<T> {
+  const previous = live2dFromLock;
+  let release: () => void = () => undefined;
+  live2dFromLock = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  return previous.then(fn).finally(() => release());
+}
+
 export class PixiLive2DRenderer implements ICubismRenderer {
   private app: Application | null = null;
   private model: Live2DModel | null = null;
   private config: PixiLive2DConfig | null = null;
   private initialized = false;
+  private loadGeneration = 0;
   private currentExpression: Expression = "neutral";
   private lipSyncValue = 0;
   private isBlinking = false;
@@ -296,6 +309,9 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     }
 
     const source = await loadCubism4Settings(modelInfo.modelPath);
+    if (!this.app || !this.initialized) {
+      return;
+    }
 
     // Dispose existing model and any model-bound blink timers.
     if (this.blinkTimer) {
@@ -311,28 +327,31 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       this.model = null;
     }
 
+    const generation = ++this.loadGeneration;
+
     try {
       // Pass parsed settings (with url) so file:// XHR JSON MIME issues
       // cannot collapse model3.json into "Unknown settings format".
-      const model = (await Live2DModelClass.from(source, {
-        ticker: this.app.ticker,
-        autoFocus: true,
-        autoHitTest: true,
-        autoUpdate: true,
-      })) as unknown as Live2DModel;
-      this.model = model;
+      const model = (await withLive2DFromLock(() =>
+        Live2DModelClass.from(source, {
+          ticker: this.app?.ticker,
+          autoFocus: true,
+          autoHitTest: true,
+          autoUpdate: true,
+        }),
+      )) as unknown as Live2DModel;
 
-      // Position and scale the model
-      const scale = modelInfo.scale ?? 0.25;
-      model.scale.set(scale, scale);
-      model.anchor.set(0.5, 0.5);
-
-      // Center in canvas
-      if (this.app.view) {
-        const canvas = this.app.view as HTMLCanvasElement;
-        model.x = canvas.width / 2 + (modelInfo.offset?.x ?? 0);
-        model.y = canvas.height / 2 + (modelInfo.offset?.y ?? 0);
+      if (
+        generation !== this.loadGeneration ||
+        !this.app ||
+        !this.initialized
+      ) {
+        model.destroy();
+        return;
       }
+
+      this.model = model;
+      this.fitModelToView(modelInfo.scale, modelInfo.offset);
 
       // Defensively clear stage in case a previous model left children behind.
       // Guarded for compatibility with PixiJS test mocks that may not implement
@@ -683,6 +702,50 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   }
 
   /**
+   * Center the model in the current Pixi screen and apply scale.
+   * Uses CSS-pixel screen size (not the backing-store canvas.width).
+   */
+  fitModelToView(
+    scale?: number,
+    offset?: { x?: number; y?: number },
+  ): void {
+    if (!this.model || !this.app) return;
+    const nextScale = scale ?? this.config?.model.scale ?? 0.25;
+    this.model.scale.set(nextScale, nextScale);
+    this.model.anchor.set(0.5, 0.5);
+    const screen = (
+      this.app as Application & {
+        screen?: { width: number; height: number };
+      }
+    ).screen;
+    const view = this.app.view as HTMLCanvasElement | undefined;
+    const width = screen?.width || view?.clientWidth || view?.width || 0;
+    const height = screen?.height || view?.clientHeight || view?.height || 0;
+    this.model.x = width / 2 + (offset?.x ?? this.config?.model.offset?.x ?? 0);
+    this.model.y = height / 2 + (offset?.y ?? this.config?.model.offset?.y ?? 0);
+  }
+
+  /**
+   * Resize the view without tearing down the WebGL context.
+   */
+  resize(width?: number, height?: number, scale?: number): void {
+    if (!this.app || !this.initialized) return;
+    const renderer = this.app as Application & {
+      renderer?: { resize?: (w: number, h: number) => void };
+    };
+    if (
+      typeof width === "number" &&
+      typeof height === "number" &&
+      width > 0 &&
+      height > 0 &&
+      typeof renderer.renderer?.resize === "function"
+    ) {
+      renderer.renderer.resize(width, height);
+    }
+    this.fitModelToView(scale);
+  }
+
+  /**
    * Update model (called in render loop)
    */
   update(_deltaTime: number): void {
@@ -702,6 +765,8 @@ export class PixiLive2DRenderer implements ICubismRenderer {
    * Clean up resources
    */
   dispose(): void {
+    this.loadGeneration += 1;
+
     if (this.blinkTimer) {
       clearTimeout(this.blinkTimer);
       this.blinkTimer = null;

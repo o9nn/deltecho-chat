@@ -35,6 +35,7 @@ jest.mock("../adapters/pixi-live2d-renderer", () => ({
     updateLipSync: jest.fn(),
     setBlinking: jest.fn(),
     setParameter: jest.fn(),
+    resize: jest.fn(),
     dispose: jest.fn(),
   })),
 }));
@@ -80,6 +81,21 @@ describe("Live2DAvatarManager", () => {
       expect(controller.triggerBlink).toBeDefined();
       expect(controller.setParameter).toBeDefined();
       expect(controller.getRenderer).toBeDefined();
+      expect(controller.resize).toBeDefined();
+    });
+
+    it("should resize the existing renderer instead of reinitializing", async () => {
+      const props: Live2DAvatarProps = {
+        modelPath: "/test/model.json",
+        width: 400,
+        height: 400,
+      };
+      const controller = await manager.initialize(mockContainer, props);
+      controller.resize(640, 1080, 0.6);
+      const renderer = controller.getRenderer() as {
+        resize: jest.Mock;
+      } | null;
+      expect(renderer?.resize).toHaveBeenCalledWith(640, 1080, 0.6);
     });
 
     it("should create a canvas element in the container", async () => {

@@ -310,8 +310,15 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
       controllerRef.current = null;
       lastLipSyncLevelRef.current = null;
     };
+    // Size/scale changes must not rebuild the WebGL context — Cubism textures
+    // from a torn-down Pixi app fail with "object does not belong to this context".
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modelUrl, width, height, scale, pixelRatio, state.retryCount]);
+  }, [modelUrl, pixelRatio, state.retryCount]);
+
+  useEffect(() => {
+    if (!state.isLoaded) return;
+    managerRef.current?.resize(width, height, scale);
+  }, [width, height, scale, state.isLoaded]);
 
   // Update emotional state
   useEffect(() => {

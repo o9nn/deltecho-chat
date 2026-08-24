@@ -105,6 +105,8 @@ export interface Live2DAvatarController {
   setParameter: (paramId: string, value: number) => void;
   /** Get renderer instance */
   getRenderer: () => PixiLive2DRenderer | null;
+  /** Resize the existing view without recreating the WebGL context */
+  resize: (width?: number, height?: number, scale?: number) => void;
 }
 
 /**
@@ -172,7 +174,19 @@ export class Live2DAvatarManager {
         debug: props.debug,
       });
 
+      if (this.isDisposed) {
+        this.renderer.dispose();
+        this.renderer = null;
+        return this.createController();
+      }
+
       await this.renderer.loadModel(this.modelInfo);
+
+      if (this.isDisposed) {
+        this.renderer.dispose();
+        this.renderer = null;
+        return this.createController();
+      }
 
       this.isLoaded = true;
       props.onLoad?.();
@@ -224,6 +238,9 @@ export class Live2DAvatarManager {
         this.renderer?.setParameter(paramId, value);
       },
       getRenderer: () => this.renderer,
+      resize: (width, height, scale) => {
+        this.resize(width, height, scale);
+      },
     };
   }
 
@@ -276,6 +293,18 @@ export class Live2DAvatarManager {
         (phi - 0.5) * this.canvas.height * (0.1 + salience * 0.08);
       this.renderer.focusEyes(x, y);
     }
+  }
+
+  /**
+   * Resize the existing WebGL view. Do not re-create the Cubism runtime —
+   * a second Pixi context makes Live2D textures "not belong to this context".
+   */
+  resize(width?: number, height?: number, scale?: number): void {
+    if (!this.renderer || !this.isLoaded) return;
+    if (this.modelInfo && typeof scale === "number") {
+      this.modelInfo.scale = scale;
+    }
+    this.renderer.resize(width, height, scale);
   }
 
   private clamp01(value: number): number {
