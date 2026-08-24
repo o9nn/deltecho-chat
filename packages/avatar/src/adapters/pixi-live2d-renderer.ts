@@ -171,15 +171,25 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   async initialize(config: CubismAdapterConfig): Promise<void> {
     this.config = config as PixiLive2DConfig;
 
-    // Dynamically import PixiJS and pixi-live2d-display-lipsyncpatch
-    const [pixi, { Live2DModel: Live2DModelClass }, { install }] =
-      await Promise.all([
-        import("pixi.js"),
-        import("pixi-live2d-display-lipsyncpatch"),
-        import("@pixi/unsafe-eval"),
-      ]);
+    // Dynamically import PixiJS and the Cubism 4 Live2D factory.
+    // The cubism4 entry registers Cubism 3/4 settings; the package root
+    // can leave model3.json unrecognized ("Unknown settings format").
+    const [pixi, live2d, { install }] = await Promise.all([
+      import("pixi.js"),
+      import("pixi-live2d-display-lipsyncpatch/cubism4"),
+      import("@pixi/unsafe-eval"),
+    ]);
     // Desktop CSP forbids eval; patch Pixi shaders before Application exists.
     install(pixi);
+    // pixi-live2d-display looks up PIXI.Ticker on the global when no ticker
+    // is passed to Live2DModel.from().
+    if (typeof window !== "undefined") {
+      (window as Window & { PIXI?: typeof pixi }).PIXI = pixi;
+    }
+    if (typeof live2d.cubism4Ready === "function") {
+      await live2d.cubism4Ready();
+    }
+    const { Live2DModel: Live2DModelClass } = live2d;
     const { Application } = pixi;
 
     // Get or create canvas element
@@ -277,10 +287,15 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       throw new Error("Renderer not initialized");
     }
 
-    // Dynamically import Live2DModel
-    const { Live2DModel: Live2DModelClass } = await import(
-      "pixi-live2d-display-lipsyncpatch"
+    // Dynamically import the Cubism 4 Live2D factory (registers model3.json).
+    const { Live2DModel: Live2DModelClass, cubism4Ready } = await import(
+      "pixi-live2d-display-lipsyncpatch/cubism4"
     );
+    if (typeof cubism4Ready === "function") {
+      await cubism4Ready();
+    }
+
+    const source = await loadCubism4Settings(modelInfo.modelPath);
 
     // Dispose existing model and any model-bound blink timers.
     if (this.blinkTimer) {
@@ -297,9 +312,12 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     }
 
     try {
-      // Load the model with autoInteract for cursor eye-tracking
-      const model = (await Live2DModelClass.from(modelInfo.modelPath, {
-        autoInteract: true,
+      // Pass parsed settings (with url) so file:// XHR JSON MIME issues
+      // cannot collapse model3.json into "Unknown settings format".
+      const model = (await Live2DModelClass.from(source, {
+        ticker: this.app.ticker,
+        autoFocus: true,
+        autoHitTest: true,
         autoUpdate: true,
       })) as unknown as Live2DModel;
       this.model = model;
@@ -803,6 +821,38 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       // focus() may not be available on all model versions
     }
   }
+}
+
+/**
+ * Fetch Cubism 4 model3.json and attach the source URL so relative moc/texture
+ * paths resolve. Falls back to the raw URL if fetch is unavailable (tests).
+ */
+export async function loadCubism4Settings(
+  modelPath: string,
+): Promise<string | Record<string, unknown>> {
+  if (typeof fetch !== "function") {
+    return modelPath;
+  }
+  try {
+    const response = await fetch(modelPath);
+    if (!response.ok) {
+      return modelPath;
+    }
+    const json: unknown = await response.json();
+    if (
+      json &&
+      typeof json === "object" &&
+      (json as { FileReferences?: { Moc?: unknown } }).FileReferences &&
+      typeof (json as { FileReferences: { Moc?: unknown } }).FileReferences
+        .Moc === "string"
+    ) {
+      (json as { url?: string }).url = modelPath;
+      return json as Record<string, unknown>;
+    }
+  } catch {
+    // Network / parse / CSP: Live2DModel.from() can still try the URL.
+  }
+  return modelPath;
 }
 
 /**

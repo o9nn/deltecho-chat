@@ -8,6 +8,7 @@
 import {
   PixiLive2DRenderer,
   PARAM_IDS,
+  loadCubism4Settings,
 } from "../adapters/pixi-live2d-renderer";
 import type { CubismAdapterConfig } from "../adapters/cubism-adapter";
 
@@ -32,7 +33,8 @@ jest.mock("pixi.js", () => ({
   })),
 }));
 
-jest.mock("pixi-live2d-display-lipsyncpatch", () => ({
+jest.mock("pixi-live2d-display-lipsyncpatch/cubism4", () => ({
+  cubism4Ready: jest.fn().mockResolvedValue(undefined),
   Live2DModel: {
     registerTicker: jest.fn(),
     from: jest.fn().mockResolvedValue({
@@ -104,6 +106,11 @@ describe("PixiLive2DRenderer", () => {
       await renderer.initialize(config);
       expect(renderer.isInitialized()).toBe(true);
       expect(installUnsafeEval).toHaveBeenCalled();
+      const cubism4 = await import("pixi-live2d-display-lipsyncpatch/cubism4");
+      expect(cubism4.cubism4Ready).toHaveBeenCalled();
+      expect(
+        (window as Window & { PIXI?: unknown }).PIXI,
+      ).toBeDefined();
     });
 
     it("should throw if canvas element not found by ID", async () => {
@@ -315,6 +322,42 @@ describe("PixiLive2DRenderer", () => {
       expect(PARAM_IDS.PARAM_ANGLE_Y).toBe("ParamAngleY");
       expect(PARAM_IDS.PARAM_ANGLE_Z).toBe("ParamAngleZ");
     });
+  });
+});
+
+describe("loadCubism4Settings", () => {
+  const originalFetch = globalThis.fetch;
+
+  afterEach(() => {
+    globalThis.fetch = originalFetch;
+  });
+
+  it("attaches the source URL to fetched Cubism 4 settings", async () => {
+    globalThis.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        Version: 3,
+        FileReferences: {
+          Moc: "miara.moc3",
+          Textures: ["texture_00.png"],
+        },
+      }),
+    }) as unknown as typeof fetch;
+
+    const settings = await loadCubism4Settings(
+      "file:///app/models/miara.model3.json",
+    );
+    expect(settings).toMatchObject({
+      url: "file:///app/models/miara.model3.json",
+      FileReferences: { Moc: "miara.moc3" },
+    });
+  });
+
+  it("falls back to the model path when fetch fails", async () => {
+    globalThis.fetch = jest.fn().mockRejectedValue(new Error("blocked"));
+    await expect(loadCubism4Settings("/models/miara.model3.json")).resolves.toBe(
+      "/models/miara.model3.json",
+    );
   });
 });
 
