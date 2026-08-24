@@ -388,8 +388,8 @@ describe("PixiLive2DRenderer", () => {
       };
       await renderer.initialize(config);
       await renderer.loadModel(config.model);
-      // Tight 400x800 in a 400x400 view at fill 1 → height-limited 0.5
-      expect(renderer.getModel()?.scale.x).toBeCloseTo(0.5);
+      // Padded tight 464x928 in a 400x400 view at fill 1 → height-limited
+      expect(renderer.getModel()?.scale.x).toBeCloseTo(400 / (800 * 1.16));
     });
 
     it("contain-fits the full figure inside the view", async () => {

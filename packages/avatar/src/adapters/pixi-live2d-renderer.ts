@@ -778,11 +778,12 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       (this.model.internalModel?.height || this.model.height || 0) / scaleY;
     const tight = this.measureDrawableBounds();
     if (tight && tight.width > 0 && tight.height > 0) {
-      this.modelVisualCenterOffset = {
-        x: tight.x + tight.width / 2 - canvasWidth / 2,
-        y: tight.y + tight.height / 2 - canvasHeight / 2,
-      };
-      return { width: tight.width, height: tight.height };
+      // Hair, feet, and effects sit outside the dense mesh. Expand so
+      // contain-fit still shows the full figure while filling the strip.
+      const paddedWidth = tight.width * 1.16;
+      const paddedHeight = tight.height * 1.16;
+      this.modelVisualCenterOffset = { x: 0, y: 0 };
+      return { width: paddedWidth, height: paddedHeight };
     }
     this.modelVisualCenterOffset = { x: 0, y: 0 };
     return { width: canvasWidth, height: canvasHeight };
