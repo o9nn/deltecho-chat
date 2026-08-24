@@ -150,24 +150,36 @@ const ProactiveStatusIndicator: React.FC<ProactiveStatusIndicatorProps> = ({
   }
 
   if (compact) {
-    // Compact mode - just show an indicator
     return (
       <div
-        className="proactive-status-compact"
-        onClick={() => setIsExpanded(!isExpanded)}
-        title="Proactive messaging active"
+        className="proactive-status-compact-wrap"
+        data-testid="proactive-status"
       >
         <style>{`
+          .proactive-status-compact-wrap {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            z-index: 1100;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+            max-width: min(360px, calc(100% - 24px));
+          }
+
           .proactive-status-compact {
             display: inline-flex;
             align-items: center;
             gap: 4px;
             padding: 4px 8px;
-            background: var(--accent-color-bg, #e9456020);
+            background: var(--bg-primary, #fff);
+            border: 1px solid var(--accent-color, #e94560);
             border-radius: 12px;
             cursor: pointer;
             font-size: 12px;
             color: var(--accent-color, #e94560);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
           }
 
           .proactive-status-compact:hover {
@@ -182,15 +194,106 @@ const ProactiveStatusIndicator: React.FC<ProactiveStatusIndicatorProps> = ({
             animation: pulse 2s infinite;
           }
 
+          .proactive-status-compact-panel {
+            width: 280px;
+            background: var(--bg-primary, #fff);
+            color: var(--text-primary, #222);
+            border: 1px solid var(--border-color, #ddd);
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+          }
+
+          .proactive-status-compact-panel .quick-actions {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+          }
+
+          .proactive-status-compact-panel .quick-btn,
+          .proactive-status-compact-panel .send-btn {
+            flex: 1;
+            padding: 6px 8px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color, #ccc);
+            background: var(--bg-color-secondary, #f5f5f5);
+            cursor: pointer;
+            font-size: 12px;
+          }
+
+          .proactive-status-compact-panel .quick-send-row {
+            display: flex;
+            gap: 6px;
+          }
+
+          .proactive-status-compact-panel .quick-input {
+            flex: 1;
+            padding: 6px 8px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color, #ccc);
+            font-size: 12px;
+          }
+
           @keyframes pulse {
             0% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.5; transform: scale(1.2); }
             100% { opacity: 1; transform: scale(1); }
           }
         `}</style>
-        <span className="pulse"></span>
-        <span>🤖 {activeTriggers.length}</span>
-        {queuedMessages.length > 0 && <span>📬 {queuedMessages.length}</span>}
+        <button
+          type="button"
+          className="proactive-status-compact"
+          onClick={() => setIsExpanded(!isExpanded)}
+          title="Proactive messaging active"
+        >
+          <span className="pulse"></span>
+          <span>🤖 {activeTriggers.length}</span>
+          {queuedMessages.length > 0 && <span>📬 {queuedMessages.length}</span>}
+        </button>
+        {isExpanded && (
+          <div className="proactive-status-compact-panel">
+            <div className="quick-actions">
+              <button
+                type="button"
+                className="quick-btn"
+                onClick={onOpenSettings}
+              >
+                Settings
+              </button>
+              <button
+                type="button"
+                className="quick-btn"
+                onClick={onOpenTriggers}
+              >
+                Triggers
+              </button>
+            </div>
+            <div className="quick-send-row">
+              <input
+                type="text"
+                className="quick-input"
+                placeholder="Type a message..."
+                value={quickMessage}
+                onChange={(e) => setQuickMessage(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    void handleQuickSend();
+                  }
+                }}
+              />
+              <button
+                type="button"
+                className="send-btn"
+                onClick={() => {
+                  void handleQuickSend();
+                }}
+                disabled={!quickMessage.trim()}
+              >
+                Send
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
