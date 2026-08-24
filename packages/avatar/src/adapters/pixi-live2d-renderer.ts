@@ -948,9 +948,13 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     if (typeof extract?.pixels !== "function") return;
     let pixels: ArrayLike<number>;
     try {
-      pixels = extract.pixels();
+      pixels = extract.pixels(this.model) ?? extract.pixels();
     } catch {
-      return;
+      try {
+        pixels = extract.pixels();
+      } catch {
+        return;
+      }
     }
     const pixelWidth = renderer.renderer?.width || 0;
     const pixelHeight = renderer.renderer?.height || 0;

@@ -1,5 +1,5 @@
 /** Standing-figure fallback until the Live2D model reports mesh bounds. */
-export const DEFAULT_AVATAR_ASPECT = 0.55;
+export const DEFAULT_AVATAR_ASPECT = 0.42;
 
 export const AVATAR_STRIP_MIN_WIDTH = 180;
 export const AVATAR_STRIP_MAX_PANE_FRACTION = 0.55;
@@ -32,5 +32,8 @@ export function clampAvatarStripWidth(
       ? Math.round(paneWidth * AVATAR_STRIP_MAX_PANE_FRACTION)
       : nextWidth;
   const maxWidth = Math.max(AVATAR_STRIP_MIN_WIDTH, maxFromPane);
-  return Math.min(Math.max(Math.round(nextWidth), AVATAR_STRIP_MIN_WIDTH), maxWidth);
+  return Math.min(
+    Math.max(Math.round(nextWidth), AVATAR_STRIP_MIN_WIDTH),
+    maxWidth,
+  );
 }
