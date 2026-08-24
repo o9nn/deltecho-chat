@@ -21,6 +21,8 @@ import type {
 interface Live2DModel {
   x: number;
   y: number;
+  width?: number;
+  height?: number;
   scale: { x: number; y: number; set: (x: number, y?: number) => void };
   anchor: { x: number; y: number; set: (x: number, y?: number) => void };
   internalModel: {
@@ -32,6 +34,8 @@ interface Live2DModel {
       ) => Promise<boolean>;
       stopAllMotions: () => void;
     };
+    width?: number;
+    height?: number;
     coreModel: {
       setParameterValueById: (id: string, value: number) => void;
       getParameterValueById: (id: string) => number;
@@ -158,6 +162,9 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   private config: PixiLive2DConfig | null = null;
   private initialized = false;
   private loadGeneration = 0;
+  /** How much of the view the full figure should occupy (0-1). */
+  private viewFill = 0.9;
+  private modelNativeSize: { width: number; height: number } | null = null;
   private currentExpression: Expression = "neutral";
   private lipSyncValue = 0;
   private isBlinking = false;
@@ -351,7 +358,6 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       }
 
       this.model = model;
-      this.fitModelToView(modelInfo.scale, modelInfo.offset);
 
       // Defensively clear stage in case a previous model left children behind.
       // Guarded for compatibility with PixiJS test mocks that may not implement
@@ -362,8 +368,11 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       if (typeof stageWithRemove.removeChildren === "function") {
         stageWithRemove.removeChildren();
       }
-      // Add to stage
+      // Add to stage before measuring bounds so width/height are valid.
       this.app.stage.addChild(model as unknown as Container);
+      this.model.scale.set(1, 1);
+      this.modelNativeSize = this.getModelNativeSize();
+      this.fitModelToView(modelInfo.scale, modelInfo.offset);
 
       // Start auto-blink (ticker-based for proper sync with PixiJS rAF loop)
       this.startAutoBlinkLoop();
@@ -702,17 +711,17 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   }
 
   /**
-   * Center the model in the current Pixi screen and apply scale.
-   * Uses CSS-pixel screen size (not the backing-store canvas.width).
+   * Scale the full figure to fit inside the current Pixi screen (contain),
+   * then center it. `scale` is a fill factor (0-1), not a raw Cubism scale.
    */
   fitModelToView(
     scale?: number,
     offset?: { x?: number; y?: number },
   ): void {
     if (!this.model || !this.app) return;
-    const nextScale = scale ?? this.config?.model.scale ?? 0.25;
-    this.model.scale.set(nextScale, nextScale);
-    this.model.anchor.set(0.5, 0.5);
+    if (typeof scale === "number" && Number.isFinite(scale) && scale > 0) {
+      this.viewFill = Math.min(1, Math.max(0.1, scale));
+    }
     const screen = (
       this.app as Application & {
         screen?: { width: number; height: number };
@@ -721,8 +730,30 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     const view = this.app.view as HTMLCanvasElement | undefined;
     const width = screen?.width || view?.clientWidth || view?.width || 0;
     const height = screen?.height || view?.clientHeight || view?.height || 0;
+    const native = this.modelNativeSize ?? this.getModelNativeSize();
+    if (native.width > 0 && native.height > 0 && width > 0 && height > 0) {
+      const nextScale =
+        Math.min(width / native.width, height / native.height) * this.viewFill;
+      this.model.scale.set(nextScale, nextScale);
+    } else {
+      this.model.scale.set(this.viewFill, this.viewFill);
+    }
+    this.model.anchor.set(0.5, 0.5);
     this.model.x = width / 2 + (offset?.x ?? this.config?.model.offset?.x ?? 0);
-    this.model.y = height / 2 + (offset?.y ?? this.config?.model.offset?.y ?? 0);
+    this.model.y =
+      height / 2 + (offset?.y ?? this.config?.model.offset?.y ?? 0);
+  }
+
+  /** Unscaled model size in Cubism/Pixi units. */
+  private getModelNativeSize(): { width: number; height: number } {
+    if (!this.model) return { width: 0, height: 0 };
+    const scaleX = Math.abs(this.model.scale.x) || 1;
+    const scaleY = Math.abs(this.model.scale.y) || 1;
+    const width =
+      this.model.width || this.model.internalModel?.width || 0;
+    const height =
+      this.model.height || this.model.internalModel?.height || 0;
+    return { width: width / scaleX, height: height / scaleY };
   }
 
   /**
@@ -766,6 +797,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
    */
   dispose(): void {
     this.loadGeneration += 1;
+    this.modelNativeSize = null;
 
     if (this.blinkTimer) {
       clearTimeout(this.blinkTimer);

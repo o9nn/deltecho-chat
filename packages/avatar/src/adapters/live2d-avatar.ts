@@ -26,7 +26,7 @@ export interface Live2DAvatarProps {
   width?: number;
   /** Height of the canvas */
   height?: number;
-  /** Scale factor for the model */
+  /** How much of the view the full figure should occupy (0-1, contain-fit) */
   scale?: number;
   /** Current emotional state to drive expressions */
   emotionalState?: EmotionalVector;
@@ -163,7 +163,7 @@ export class Live2DAvatarManager {
     this.modelInfo = {
       modelPath: props.modelPath,
       name: "Avatar",
-      scale: props.scale ?? 0.25,
+      scale: props.scale ?? 0.9,
     };
 
     try {
@@ -372,6 +372,6 @@ export const SAMPLE_MODELS = {
 export const DEFAULT_MODEL_CONFIG: CubismModelInfo = {
   modelPath: SAMPLE_MODELS.shizuku,
   name: "Deep Tree Echo Avatar",
-  scale: 0.25,
+  scale: 0.9,
   offset: { x: 0, y: 50 },
 };

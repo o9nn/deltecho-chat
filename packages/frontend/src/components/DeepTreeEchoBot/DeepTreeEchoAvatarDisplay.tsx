@@ -357,10 +357,8 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
     fillsConversationStrip && stripSize.height > 0
       ? stripSize.height
       : configuredHeight;
-  const stripScale =
-    fillsConversationStrip && finalHeight > 0
-      ? Math.min(0.85, Math.max(0.25, finalHeight / 1400))
-      : 0.25;
+  // Fill factor for contain-fit: the full figure stays inside the strip.
+  const stripScale = fillsConversationStrip ? 0.9 : 0.85;
 
   const avatarController = useRef<Live2DAvatarController | null>(null);
   const updateIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);

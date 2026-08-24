@@ -39,26 +39,38 @@ jest.mock("pixi-live2d-display-lipsyncpatch/cubism4", () => ({
   cubism4Ready: jest.fn().mockResolvedValue(undefined),
   Live2DModel: {
     registerTicker: jest.fn(),
-    from: jest.fn().mockResolvedValue({
-      x: 0,
-      y: 0,
-      scale: { x: 1, y: 1, set: jest.fn() },
-      anchor: { x: 0.5, y: 0.5, set: jest.fn() },
-      internalModel: {
-        motionManager: {
-          startMotion: jest.fn().mockResolvedValue(true),
-          stopAllMotions: jest.fn(),
+    from: jest.fn().mockImplementation(() => {
+      const scale = {
+        x: 1,
+        y: 1,
+        set(x: number, y?: number) {
+          this.x = x;
+          this.y = y ?? x;
         },
-        coreModel: {
-          setParameterValueById: jest.fn(),
-          getParameterValueById: jest.fn().mockReturnValue(0),
+      };
+      return Promise.resolve({
+        x: 0,
+        y: 0,
+        width: 800,
+        height: 1600,
+        scale,
+        anchor: { x: 0.5, y: 0.5, set: jest.fn() },
+        internalModel: {
+          motionManager: {
+            startMotion: jest.fn().mockResolvedValue(true),
+            stopAllMotions: jest.fn(),
+          },
+          coreModel: {
+            setParameterValueById: jest.fn(),
+            getParameterValueById: jest.fn().mockReturnValue(0),
+          },
         },
-      },
-      expression: jest.fn(),
-      motion: jest.fn().mockResolvedValue(true),
-      speak: jest.fn(),
-      stopSpeaking: jest.fn(),
-      destroy: jest.fn(),
+        expression: jest.fn(),
+        motion: jest.fn().mockResolvedValue(true),
+        speak: jest.fn(),
+        stopSpeaking: jest.fn(),
+        destroy: jest.fn(),
+      });
     }),
   },
 }));
@@ -316,6 +328,25 @@ describe("PixiLive2DRenderer", () => {
       const appBefore = renderer.getApplication();
       renderer.resize(640, 1080, 0.5);
       expect(renderer.getApplication()).toBe(appBefore);
+      expect(renderer.getModel()?.x).toBe(200);
+      expect(renderer.getModel()?.y).toBe(200);
+      // 800x1600 model in a 400x400 view at 50% fill → 0.125
+      expect(renderer.getModel()?.scale.x).toBeCloseTo(0.125);
+    });
+
+    it("contain-fits the full figure inside the view", async () => {
+      const config: CubismAdapterConfig = {
+        canvas: mockCanvas,
+        model: {
+          modelPath: "/test/model.json",
+          name: "Test Model",
+          scale: 1,
+        },
+      };
+      await renderer.initialize(config);
+      await renderer.loadModel(config.model);
+      // 800x1600 in 400x400 at fill 1 → limited by height: 400/1600 = 0.25
+      expect(renderer.getModel()?.scale.x).toBeCloseTo(0.25);
       expect(renderer.getModel()?.x).toBe(200);
       expect(renderer.getModel()?.y).toBe(200);
     });

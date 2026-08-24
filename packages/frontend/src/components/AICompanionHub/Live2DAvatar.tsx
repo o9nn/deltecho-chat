@@ -106,7 +106,7 @@ export interface Live2DAvatarComponentProps {
   width?: number;
   /** Height in pixels */
   height?: number;
-  /** Scale factor for the model (0-1) */
+  /** How much of the view the full figure should occupy (0-1, contain-fit) */
   scale?: number;
   /** Optional Live2D render pixel-ratio override; omit to use the renderer's capped default. */
   pixelRatio?: number;
@@ -153,7 +153,7 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
   model = "miara",
   width = 400,
   height = 400,
-  scale = 0.25,
+  scale = 0.9,
   pixelRatio,
   emotionalState,
   cognitiveVisualState,
