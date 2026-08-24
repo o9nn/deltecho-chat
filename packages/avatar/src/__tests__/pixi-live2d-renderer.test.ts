@@ -407,6 +407,7 @@ describe("PixiLive2DRenderer", () => {
       expect(renderer.getModel()?.scale.x).toBeCloseTo(0.25);
       expect(renderer.getModel()?.x).toBe(200);
       expect(renderer.getModel()?.y).toBe(200);
+      expect(renderer.getNativeSize()).toEqual({ width: 800, height: 1600 });
     });
 
     it("should be safe to call dispose multiple times", () => {

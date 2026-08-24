@@ -51,6 +51,7 @@ export function getDefaultState(): DesktopSettingsType {
     deepTreeEchoBotProactiveRespectMutedChats: true,
     deepTreeEchoBotProactiveRespectArchivedChats: true,
     deepTreeEchoBotAvatarEnabled: true,
+    deepTreeEchoBotAvatarStripWidth: 0,
     galleryImageKeepAspectRatio: false,
     useSystemUIFont: false,
     contentProtectionEnabled: false,

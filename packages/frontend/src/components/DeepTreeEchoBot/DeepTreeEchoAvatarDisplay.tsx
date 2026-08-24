@@ -113,6 +113,8 @@ export interface DeepTreeEchoAvatarDisplayProps {
   position?: "inline" | "floating";
   /** Callback when avatar is ready */
   onReady?: () => void;
+  /** Native visual size after the Cubism model loads */
+  onNativeSize?: (size: { width: number; height: number }) => void;
 }
 
 /**
@@ -318,6 +320,7 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
   className = "",
   position,
   onReady,
+  onNativeSize,
 }) => {
   const avatarContext = useDeepTreeEchoAvatarOptional();
   const stripRef = useRef<HTMLDivElement>(null);
@@ -396,9 +399,13 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
       avatarController.current = controller;
       // Register controller with context if available
       avatarContext?.setController(controller);
+      const nativeSize = controller.getNativeSize?.();
+      if (nativeSize && nativeSize.width > 0 && nativeSize.height > 0) {
+        onNativeSize?.(nativeSize);
+      }
       onReady?.();
     },
-    [onReady, avatarContext],
+    [onReady, onNativeSize, avatarContext],
   );
 
   // Update cognitive state from orchestrator. The avatar is a visual expression

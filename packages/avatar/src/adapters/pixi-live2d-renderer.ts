@@ -933,6 +933,13 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   }
 
   /**
+   * Native visual size used for contain-fit, or null before the model loads.
+   */
+  getNativeSize(): { width: number; height: number } | null {
+    return this.modelNativeSize;
+  }
+
+  /**
    * Get the loaded model (for advanced usage)
    */
   getModel(): Live2DModel | null {

@@ -36,6 +36,7 @@ jest.mock("../adapters/pixi-live2d-renderer", () => ({
     setBlinking: jest.fn(),
     setParameter: jest.fn(),
     resize: jest.fn(),
+    getNativeSize: jest.fn().mockReturnValue({ width: 800, height: 1600 }),
     dispose: jest.fn(),
   })),
 }));
@@ -82,6 +83,11 @@ describe("Live2DAvatarManager", () => {
       expect(controller.setParameter).toBeDefined();
       expect(controller.getRenderer).toBeDefined();
       expect(controller.resize).toBeDefined();
+      expect(controller.getNativeSize).toBeDefined();
+      expect(controller.getNativeSize()).toEqual({
+        width: 800,
+        height: 1600,
+      });
     });
 
     it("should resize the existing renderer instead of reinitializing", async () => {

@@ -107,6 +107,8 @@ export interface Live2DAvatarController {
   getRenderer: () => PixiLive2DRenderer | null;
   /** Resize the existing view without recreating the WebGL context */
   resize: (width?: number, height?: number, scale?: number) => void;
+  /** Native visual size used to size the conversation strip */
+  getNativeSize: () => { width: number; height: number } | null;
 }
 
 /**
@@ -241,6 +243,7 @@ export class Live2DAvatarManager {
       resize: (width, height, scale) => {
         this.resize(width, height, scale);
       },
+      getNativeSize: () => this.renderer?.getNativeSize() ?? null,
     };
   }
 

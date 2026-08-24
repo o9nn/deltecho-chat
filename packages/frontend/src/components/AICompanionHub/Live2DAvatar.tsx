@@ -77,6 +77,7 @@ export interface Live2DAvatarController {
   updateCognitiveState?: (state: CognitiveVisualState) => void;
   triggerBlink: () => void;
   setParameter: (paramId: string, value: number) => void;
+  getNativeSize?: () => { width: number; height: number } | null;
 }
 
 const LOCAL_MIARA_MODEL = "models/miara/miara_pro_t03.model3.json";
