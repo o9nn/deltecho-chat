@@ -54,7 +54,7 @@ describe("StandaloneBotMemory", () => {
         enabled = value;
       },
       searchMemories(query, limit) {
-        searchArgs = [query, limit];
+        searchArgs = [query, limit ?? -1];
         return [memory("The launch codename is silver orchard.")];
       },
       async storeMemory() {},
