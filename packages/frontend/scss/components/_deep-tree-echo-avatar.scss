@@ -38,6 +38,19 @@
     }
   }
 
+  .miara-outfit-picker {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    z-index: 12;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: flex-start;
+    pointer-events: auto;
+  }
+
   .avatar-status-indicator {
     position: absolute;
     bottom: 8px;
@@ -95,5 +108,53 @@
 
   50% {
     opacity: 0.8;
+  }
+}
+
+.miara-outfit-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  align-items: center;
+  color: var(--colorTextPrimary);
+  font-size: 12px;
+
+  select,
+  input[type="range"] {
+    max-width: 100%;
+  }
+
+  &__label,
+  &__toggle,
+  &__hue {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  &__customize {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    width: 100%;
+    padding: 8px;
+    border-radius: 8px;
+    background: var(--colorBackgroundPrimary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  }
+
+  &__customize-toggle {
+    border: 0;
+    border-radius: 12px;
+    padding: 4px 10px;
+    background: var(--colorBackgroundPrimary);
+    color: inherit;
+    cursor: pointer;
+  }
+
+  &--panel {
+    position: static;
+    flex-direction: column;
+    align-items: stretch;
   }
 }

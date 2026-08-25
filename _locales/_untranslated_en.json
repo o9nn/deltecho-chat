@@ -82,5 +82,59 @@
   },
   "avatar_strip_resize": {
     "message": "Drag to change avatar width. Double-click to fit the full figure height."
+  },
+  "miara_outfit_label": {
+    "message": "Outfit"
+  },
+  "miara_outfit_customize": {
+    "message": "Customize"
+  },
+  "miara_outfit_hue": {
+    "message": "Clothing color"
+  },
+  "miara_outfit_official": {
+    "message": "Official"
+  },
+  "miara_outfit_casual": {
+    "message": "Casual"
+  },
+  "miara_outfit_lagoon": {
+    "message": "Lagoon"
+  },
+  "miara_outfit_fairy": {
+    "message": "Fairy"
+  },
+  "miara_outfit_unadorned": {
+    "message": "Unadorned"
+  },
+  "miara_outfit_rose": {
+    "message": "Rose"
+  },
+  "miara_outfit_midnight": {
+    "message": "Midnight"
+  },
+  "miara_outfit_gold": {
+    "message": "Gold"
+  },
+  "miara_outfit_custom": {
+    "message": "Custom"
+  },
+  "miara_outfit_group_fairy": {
+    "message": "Fairy wings"
+  },
+  "miara_outfit_group_hair_accessory": {
+    "message": "Hair clip"
+  },
+  "miara_outfit_group_chest_cloth": {
+    "message": "Chest cloth"
+  },
+  "miara_outfit_group_sparkle": {
+    "message": "Sparkle"
+  },
+  "miara_outfit_group_water": {
+    "message": "Water"
+  },
+  "miara_outfit_group_background": {
+    "message": "Background"
   }
 }

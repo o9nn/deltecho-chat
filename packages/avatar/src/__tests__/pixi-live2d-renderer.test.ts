@@ -85,6 +85,7 @@ jest.mock("pixi-live2d-display-lipsyncpatch/cubism4", () => ({
           coreModel: {
             setParameterValueById: jest.fn(),
             getParameterValueById: jest.fn().mockReturnValue(0),
+            setPartOpacityById: jest.fn(),
           },
         },
         expression: jest.fn(),
@@ -110,6 +111,7 @@ describe("PixiLive2DRenderer", () => {
       height: 400,
       parentElement: { clientWidth: 400, clientHeight: 400 },
       getContext: jest.fn(),
+      style: { filter: "" },
     } as unknown as HTMLCanvasElement;
 
     // Mock document.getElementById
@@ -253,6 +255,42 @@ describe("PixiLive2DRenderer", () => {
       renderer.dispose();
       const newRenderer = new PixiLive2DRenderer();
       expect(newRenderer.getParameter(PARAM_IDS.PARAM_ANGLE_X)).toBeUndefined();
+    });
+  });
+
+  describe("outfit wardrobe", () => {
+    beforeEach(async () => {
+      const config: CubismAdapterConfig = {
+        canvas: mockCanvas,
+        model: {
+          modelPath: "/test/model.json",
+          name: "Test Model",
+        },
+      };
+      await renderer.initialize(config);
+      await renderer.loadModel(config.model);
+    });
+
+    it("hides casual accessory parts and keeps the dress visible", () => {
+      renderer.applyOutfit({ id: "casual" });
+      const core = renderer.getModel()?.internalModel.coreModel;
+      expect(core?.setPartOpacityById).toHaveBeenCalledWith("PartFairy", 0);
+      expect(core?.setPartOpacityById).toHaveBeenCalledWith(
+        "PartWaterSurface",
+        0,
+      );
+      expect(core?.setPartOpacityById).toHaveBeenCalledWith(
+        "PartChestClothLRotation",
+        1,
+      );
+      expect(renderer.getAppliedOutfit()?.id).toBe("casual");
+    });
+
+    it("hue-rotates the canvas for clothing colorways", () => {
+      renderer.applyOutfit({ id: "rose" });
+      expect(mockCanvas.style.filter).toBe("hue-rotate(310deg)");
+      renderer.applyOutfit({ id: "official" });
+      expect(mockCanvas.style.filter).toBe("");
     });
   });
 

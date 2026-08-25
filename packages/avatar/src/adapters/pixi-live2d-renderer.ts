@@ -21,6 +21,12 @@ import {
   padFigureBounds,
   type DrawableBox,
 } from "./live2d-figure-bounds";
+import {
+  ALL_MIARA_WARDROBE_PART_IDS,
+  collectHiddenPartIds,
+  resolveMiaraOutfit,
+  type MiaraOutfitState,
+} from "../miara-outfits";
 
 /**
  * Live2D model reference type (from pixi-live2d-display)
@@ -52,6 +58,10 @@ interface Live2DModel {
     coreModel: {
       setParameterValueById: (id: string, value: number) => void;
       getParameterValueById: (id: string) => number;
+      setPartOpacityById?: (id: string, value: number) => void;
+      getPartOpacityById?: (id: string) => number;
+      setPartOpacity?: (index: number, value: number) => void;
+      getPartIndex?: (id: string) => number;
     };
   };
   expression: (name?: string) => void;
@@ -195,6 +205,8 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   private debug = false;
   private visibilityHandler: (() => void) | null = null;
   private blinkTickerCallback: ((deltaMS: number) => void) | null = null;
+  private viewCanvas: HTMLCanvasElement | null = null;
+  private appliedOutfit: MiaraOutfitState | null = null;
 
   /** Internal debug logger - no-op unless config.debug is true */
   private dlog(...args: unknown[]): void {
@@ -311,6 +323,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       };
     }
 
+    this.viewCanvas = canvas;
     this.initialized = true;
     this.dlog("Initialized successfully");
   }
@@ -394,6 +407,10 @@ export class PixiLive2DRenderer implements ICubismRenderer {
 
       // Start auto-blink (ticker-based for proper sync with PixiJS rAF loop)
       this.startAutoBlinkLoop();
+
+      if (this.appliedOutfit) {
+        this.applyOutfit(this.appliedOutfit);
+      }
 
       this.dlog(`Model loaded: ${modelInfo.name}`);
     } catch (error) {
@@ -1072,6 +1089,11 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       this.visibilityHandler = null;
     }
 
+    if (this.viewCanvas?.style) {
+      this.viewCanvas.style.filter = "";
+    }
+    this.viewCanvas = null;
+
     if (this.model) {
       this.model.destroy();
       this.model = null;
@@ -1133,6 +1155,63 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       this.model.internalModel.coreModel.setParameterValueById(paramId, value);
     } catch {
       console.warn("[PixiLive2DRenderer] Parameter not found:", paramId);
+    }
+  }
+
+  /**
+   * Show or hide a Cubism part by id. Used for Miara wardrobe layers.
+   */
+  setPartOpacity(partId: string, opacity: number): void {
+    const core = this.model?.internalModel?.coreModel;
+    if (!core) return;
+    const clamped = Math.min(1, Math.max(0, opacity));
+    try {
+      if (typeof core.setPartOpacityById === "function") {
+        core.setPartOpacityById(partId, clamped);
+        return;
+      }
+      if (
+        typeof core.getPartIndex === "function" &&
+        typeof core.setPartOpacity === "function"
+      ) {
+        const index = core.getPartIndex(partId);
+        if (typeof index === "number" && index >= 0) {
+          core.setPartOpacity(index, clamped);
+        }
+      }
+    } catch {
+      this.dlog("Part opacity not available:", partId);
+    }
+  }
+
+  /**
+   * Apply a Miara outfit: hide wardrobe parts and hue-shift clothing colorways.
+   */
+  applyOutfit(state: Partial<MiaraOutfitState> | null | undefined): void {
+    const resolved = resolveMiaraOutfit(state);
+    this.appliedOutfit = resolved;
+    if (!this.model || !this.initialized) return;
+
+    const hidden = new Set(collectHiddenPartIds(resolved.hiddenGroups));
+    for (const partId of ALL_MIARA_WARDROBE_PART_IDS) {
+      this.setPartOpacity(partId, hidden.has(partId) ? 0 : 1);
+    }
+    this.applyOutfitHue(resolved.hueShift);
+    this.dlog(
+      `Outfit applied: ${resolved.id} hidden=${
+        resolved.hiddenGroups.join(",") || "none"
+      } hue=${resolved.hueShift}`,
+    );
+  }
+
+  getAppliedOutfit(): MiaraOutfitState | null {
+    return this.appliedOutfit;
+  }
+
+  private applyOutfitHue(hueShift: number): void {
+    const hue = ((Math.round(hueShift) % 360) + 360) % 360;
+    if (this.viewCanvas?.style) {
+      this.viewCanvas.style.filter = hue === 0 ? "" : `hue-rotate(${hue}deg)`;
     }
   }
 

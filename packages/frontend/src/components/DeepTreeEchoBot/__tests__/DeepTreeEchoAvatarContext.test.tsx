@@ -5,7 +5,7 @@
  */
 
 import React from "react";
-import { render, screen, act } from "@testing-library/react";
+import { render, screen, act, waitFor } from "@testing-library/react";
 import {
   DeepTreeEchoAvatarProvider,
   useDeepTreeEchoAvatar,
@@ -23,6 +23,8 @@ function TestConsumer() {
         {avatar.state.isSpeaking.toString()}
       </span>
       <span data-testid="audio-level">{avatar.state.audioLevel}</span>
+      <span data-testid="outfit">{avatar.state.config.outfit}</span>
+      <span data-testid="outfit-hue">{avatar.state.config.outfitHueShift}</span>
       <button
         type="button"
         data-testid="set-listening"
@@ -45,6 +47,19 @@ function TestConsumer() {
         onClick={() => avatar.setAudioLevel(0.75)}
       >
         Set Audio
+      </button>
+      <button
+        type="button"
+        data-testid="set-rose-outfit"
+        onClick={() =>
+          avatar.updateConfig({
+            outfit: "rose",
+            outfitHiddenGroups: [],
+            outfitHueShift: 310,
+          })
+        }
+      >
+        Set Rose
       </button>
     </div>
   );
@@ -168,6 +183,59 @@ describe("DeepTreeEchoAvatarContext", () => {
       expect(screen.getByTestId("optional-state")).toHaveTextContent(
         AvatarProcessingState.IDLE,
       );
+    });
+  });
+
+  describe("outfit persistence", () => {
+    it("defaults to the official Miara outfit", () => {
+      render(
+        <DeepTreeEchoAvatarProvider>
+          <TestConsumer />
+        </DeepTreeEchoAvatarProvider>,
+      );
+      expect(screen.getByTestId("outfit")).toHaveTextContent("official");
+      expect(screen.getByTestId("outfit-hue")).toHaveTextContent("0");
+    });
+
+    it("persists the selected outfit to localStorage", () => {
+      render(
+        <DeepTreeEchoAvatarProvider>
+          <TestConsumer />
+        </DeepTreeEchoAvatarProvider>,
+      );
+
+      act(() => {
+        screen.getByTestId("set-rose-outfit").click();
+      });
+
+      expect(screen.getByTestId("outfit")).toHaveTextContent("rose");
+      const saved = JSON.parse(
+        window.localStorage.getItem("deepTreeEchoAvatarConfig") || "{}",
+      );
+      expect(saved.outfit).toBe("rose");
+      expect(saved.outfitHueShift).toBe(310);
+    });
+
+    it("restores the selected outfit on a later session", async () => {
+      window.localStorage.setItem(
+        "deepTreeEchoAvatarConfig",
+        JSON.stringify({
+          outfit: "midnight",
+          outfitHiddenGroups: [],
+          outfitHueShift: 210,
+        }),
+      );
+
+      render(
+        <DeepTreeEchoAvatarProvider>
+          <TestConsumer />
+        </DeepTreeEchoAvatarProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByTestId("outfit")).toHaveTextContent("midnight");
+      });
+      expect(screen.getByTestId("outfit-hue")).toHaveTextContent("210");
     });
   });
 

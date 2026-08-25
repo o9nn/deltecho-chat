@@ -5,6 +5,26 @@
  * from emotional state and Live2D Cubism integration.
  */
 
+// Miara wardrobe
+export {
+  MIARA_OUTFIT_IDS,
+  DEFAULT_MIARA_OUTFIT_ID,
+  MIARA_PART_GROUPS,
+  MIARA_PART_GROUP_IDS,
+  ALL_MIARA_WARDROBE_PART_IDS,
+  MIARA_OUTFIT_PRESETS,
+  isMiaraOutfitId,
+  isMiaraPartGroup,
+  getMiaraOutfitPreset,
+  collectHiddenPartIds,
+  resolveMiaraOutfit,
+  outfitFromCustomAdjustments,
+  type MiaraOutfitId,
+  type MiaraPartGroup,
+  type MiaraOutfitSpec,
+  type MiaraOutfitState,
+} from "./miara-outfits";
+
 // Types
 export {
   Expression,

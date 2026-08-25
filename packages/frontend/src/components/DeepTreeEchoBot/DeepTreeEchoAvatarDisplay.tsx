@@ -5,7 +5,14 @@
  * cognitive and emotional state of the Deep Tree Echo AI companion.
  */
 
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+  useMemo,
+} from "react";
+import { resolveMiaraOutfit } from "@deltecho/avatar";
 import { Live2DAvatar } from "../AICompanionHub/Live2DAvatar";
 import type {
   Live2DAvatarController,
@@ -14,6 +21,7 @@ import type {
   EmotionalVector,
   CognitiveVisualState,
 } from "../AICompanionHub/Live2DAvatar";
+import { MiaraOutfitPicker } from "./MiaraOutfitPicker";
 import { getOrchestrator } from "./CognitiveBridge";
 import type { UnifiedCognitiveState } from "./CognitiveBridge";
 import {
@@ -362,6 +370,19 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
       : configuredHeight;
   // Fill factor for contain-fit: the standing figure should fill the strip.
   const stripScale = fillsConversationStrip ? 0.97 : 0.92;
+  const outfit = useMemo(
+    () =>
+      resolveMiaraOutfit({
+        id: avatarContext?.state.config.outfit,
+        hiddenGroups: avatarContext?.state.config.outfitHiddenGroups,
+        hueShift: avatarContext?.state.config.outfitHueShift,
+      }),
+    [
+      avatarContext?.state.config.outfit,
+      avatarContext?.state.config.outfitHiddenGroups,
+      avatarContext?.state.config.outfitHueShift,
+    ],
+  );
 
   const avatarController = useRef<Live2DAvatarController | null>(null);
   const updateIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -419,9 +440,10 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
       nativeSizeTimersRef.current = [250, 700].map((delay) =>
         setTimeout(reportNativeSize, delay),
       );
+      controller.applyOutfit?.(outfit);
       onReady?.();
     },
-    [onReady, onNativeSize, avatarContext],
+    [onReady, onNativeSize, avatarContext, outfit],
   );
 
   // Update cognitive state from orchestrator. The avatar is a visual expression
@@ -534,6 +556,7 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
 
   return (
     <div className={containerClass} ref={stripRef}>
+      <MiaraOutfitPicker variant="compact" />
       <Live2DAvatar
         model={avatarContext?.state.config.model ?? "miara"}
         width={finalWidth}
@@ -544,6 +567,7 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
         cognitiveVisualState={cognitiveVisualState}
         audioLevel={audioLevel}
         isSpeaking={isSpeaking}
+        outfit={outfit}
         onControllerReady={handleAvatarReady}
         showLoading={true}
         showError={true}

@@ -35,6 +35,7 @@ jest.mock("../adapters/pixi-live2d-renderer", () => ({
     updateLipSync: jest.fn(),
     setBlinking: jest.fn(),
     setParameter: jest.fn(),
+    applyOutfit: jest.fn(),
     resize: jest.fn(),
     getNativeSize: jest.fn().mockReturnValue({ width: 800, height: 1600 }),
     dispose: jest.fn(),
@@ -81,6 +82,7 @@ describe("Live2DAvatarManager", () => {
       expect(controller.updateLipSync).toBeDefined();
       expect(controller.triggerBlink).toBeDefined();
       expect(controller.setParameter).toBeDefined();
+      expect(controller.applyOutfit).toBeDefined();
       expect(controller.getRenderer).toBeDefined();
       expect(controller.resize).toBeDefined();
       expect(controller.getNativeSize).toBeDefined();
@@ -281,6 +283,19 @@ describe("Live2DAvatarManager", () => {
       const controller = await manager.initialize(mockContainer, props);
 
       expect(() => controller.setParameter("ParamAngleX", 15)).not.toThrow();
+    });
+
+    it("should provide applyOutfit method", async () => {
+      const props: Live2DAvatarProps = {
+        modelPath: "/test/model.json",
+      };
+
+      const controller = await manager.initialize(mockContainer, props);
+
+      expect(() => controller.applyOutfit({ id: "rose" })).not.toThrow();
+      expect(controller.getRenderer()?.applyOutfit).toHaveBeenCalledWith({
+        id: "rose",
+      });
     });
 
     it("should provide getRenderer method", async () => {

@@ -6,7 +6,13 @@
 
 import "@testing-library/jest-dom";
 import React from "react";
-import { render, screen, waitFor, act } from "@testing-library/react";
+import {
+  render,
+  screen,
+  waitFor,
+  act,
+  fireEvent,
+} from "@testing-library/react";
 import { DeepTreeEchoAvatarDisplay } from "../DeepTreeEchoAvatarDisplay";
 import {
   DeepTreeEchoAvatarProvider,
@@ -30,6 +36,7 @@ jest.mock("../../AICompanionHub/Live2DAvatar", () => ({
     height,
     model,
     cognitiveVisualState,
+    outfit,
   }: any) => (
     <div
       data-testid="mock-live2d-avatar"
@@ -40,6 +47,7 @@ jest.mock("../../AICompanionHub/Live2DAvatar", () => ({
       data-width={width}
       data-height={height}
       data-model={model}
+      data-outfit={JSON.stringify(outfit ?? null)}
     >
       <button
         type="button"
@@ -51,6 +59,7 @@ jest.mock("../../AICompanionHub/Live2DAvatar", () => ({
             updateLipSync: jest.fn(),
             triggerBlink: jest.fn(),
             setParameter: jest.fn(),
+            applyOutfit: jest.fn(),
           })
         }
       >
@@ -534,6 +543,42 @@ describe("DeepTreeEchoAvatarDisplay", () => {
 
       const avatar = screen.getByTestId("mock-live2d-avatar");
       expect(avatar).toHaveAttribute("data-model", "miara");
+    });
+  });
+
+  describe("Outfit wardrobe", () => {
+    it("renders the outfit picker and official look by default", () => {
+      render(
+        <DeepTreeEchoAvatarProvider>
+          <DeepTreeEchoAvatarDisplay />
+        </DeepTreeEchoAvatarProvider>,
+      );
+
+      expect(screen.getByTestId("miara-outfit-picker")).toBeInTheDocument();
+      const avatar = screen.getByTestId("mock-live2d-avatar");
+      expect(JSON.parse(avatar.getAttribute("data-outfit") || "{}")).toEqual(
+        expect.objectContaining({ id: "official", hueShift: 0 }),
+      );
+    });
+
+    it("swaps the rendered outfit when a preset is chosen", () => {
+      render(
+        <DeepTreeEchoAvatarProvider>
+          <DeepTreeEchoAvatarDisplay />
+        </DeepTreeEchoAvatarProvider>,
+      );
+
+      fireEvent.change(screen.getByTestId("miara-outfit-select"), {
+        target: { value: "casual" },
+      });
+
+      const avatar = screen.getByTestId("mock-live2d-avatar");
+      expect(JSON.parse(avatar.getAttribute("data-outfit") || "{}")).toEqual(
+        expect.objectContaining({
+          id: "casual",
+          hiddenGroups: expect.arrayContaining(["fairy", "water"]),
+        }),
+      );
     });
   });
 

@@ -6,6 +6,7 @@
  */
 
 import React, { useRef, useEffect, useState, useCallback } from "react";
+import type { MiaraOutfitState } from "@deltecho/avatar";
 import { ResponsiveSpriteAvatar } from "./ResponsiveSpriteAvatar";
 
 // Local types that are compatible with both @deltecho/avatar and @deltecho/cognitive
@@ -77,6 +78,7 @@ export interface Live2DAvatarController {
   updateCognitiveState?: (state: CognitiveVisualState) => void;
   triggerBlink: () => void;
   setParameter: (paramId: string, value: number) => void;
+  applyOutfit?: (outfit: Partial<MiaraOutfitState> | null | undefined) => void;
   getNativeSize?: () => { width: number; height: number } | null;
 }
 
@@ -135,6 +137,8 @@ export interface Live2DAvatarComponentProps {
   mode?: "live2d" | "sprite";
   /** Fill a rectangular parent instead of a circular card */
   fillContainer?: boolean;
+  /** Miara wardrobe to apply after the model loads */
+  outfit?: Partial<MiaraOutfitState> | null;
 }
 
 export interface Live2DAvatarState {
@@ -168,6 +172,7 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
   onControllerReady,
   mode = "live2d",
   fillContainer = false,
+  outfit,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const managerRef = useRef<any>(null);
@@ -372,6 +377,11 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
     lastLipSyncLevelRef.current = nextLevel;
     controllerRef.current.updateLipSync(nextLevel);
   }, [audioLevel, isSpeaking, state.isLoaded]);
+
+  useEffect(() => {
+    if (!state.isLoaded || !outfit) return;
+    controllerRef.current?.applyOutfit?.(outfit);
+  }, [outfit, state.isLoaded]);
 
   // Sprite-only mode: render sprite without Live2D container
   if (mode === "sprite") {
