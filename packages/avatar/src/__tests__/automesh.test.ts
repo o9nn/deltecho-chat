@@ -436,6 +436,11 @@ describe("identity physics retarget", () => {
     const character = textureStats.character ?? textureStats;
     expect(character.purple).toBeGreaterThan(character.teal);
     expect(character.mean[0]).toBeGreaterThan(40);
+    const hair = textureStats.hairPixels;
+    expect(hair).toBeDefined();
+    expect(hair.purple).toBeGreaterThan(hair.teal);
+    expect(hair.mean[2]).toBeGreaterThan(hair.mean[1]);
+    expect(hair.mean[0]).toBeGreaterThan(70);
     expect(
       existsSync(
         join(models, "deep-tree-echo/deep-tree-echo_t03.model3.json"),
