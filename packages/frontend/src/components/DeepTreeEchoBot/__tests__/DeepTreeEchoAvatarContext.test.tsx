@@ -106,6 +106,9 @@ function TestConsumer() {
         }
       >
         Set Automesh
+      </button>
+      <button
+        type="button"
         data-testid="set-smile-expression"
         onClick={() =>
           avatar.updateConfig({
@@ -316,6 +319,27 @@ describe("DeepTreeEchoAvatarContext", () => {
 
   describe("automesh persistence", () => {
     it("persists a trained Melody mapping", () => {
+      render(
+        <DeepTreeEchoAvatarProvider>
+          <TestConsumer />
+        </DeepTreeEchoAvatarProvider>,
+      );
+
+      act(() => {
+        screen.getByTestId("set-automesh").click();
+      });
+
+      expect(screen.getByTestId("automesh-identity")).toHaveTextContent(
+        "melody",
+      );
+      const saved = JSON.parse(
+        window.localStorage.getItem("deepTreeEchoAvatarConfig") || "{}",
+      );
+      expect(saved.automeshMapping.identity).toBe("melody");
+      expect(saved.automeshAtlas).toBe("data:image/png;base64,abc");
+    });
+  });
+
   describe("expression persistence", () => {
     it("defaults to live expression", () => {
       render(
@@ -334,11 +358,6 @@ describe("DeepTreeEchoAvatarContext", () => {
       );
 
       act(() => {
-        screen.getByTestId("set-automesh").click();
-      });
-
-      expect(screen.getByTestId("automesh-identity")).toHaveTextContent(
-        "melody",
         screen.getByTestId("set-smile-expression").click();
       });
 
@@ -348,8 +367,6 @@ describe("DeepTreeEchoAvatarContext", () => {
       const saved = JSON.parse(
         window.localStorage.getItem("deepTreeEchoAvatarConfig") || "{}",
       );
-      expect(saved.automeshMapping.identity).toBe("melody");
-      expect(saved.automeshAtlas).toBe("data:image/png;base64,abc");
       expect(saved.expression).toBe("JOY_01_BroadSmile");
     });
 
