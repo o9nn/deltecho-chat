@@ -40,8 +40,10 @@ export const MESH_REGIONS = [
   "chestCloth",
   "body",
   "skirt",
-  "arms",
-  "legs",
+  "armL",
+  "armR",
+  "legL",
+  "legR",
   "accessory",
 ] as const;
 
@@ -95,6 +97,80 @@ export const KNOWN_WING_IDS = [
   "ArtMesh109",
   "ArtMesh179",
   "ArtMesh181",
+  "ArtMesh185",
+  "ArtMesh186",
+  "ArtMesh190",
+  "ArtMesh191",
+] as const;
+
+/** Cubism PartLegL — character left / viewer right. */
+export const KNOWN_LEG_L_IDS = [
+  "ArtMesh83",
+  "ArtMesh85",
+  "ArtMesh86",
+  "ArtMesh87",
+  "ArtMesh88",
+  "ArtMesh89",
+  "ArtMesh90",
+  "ArtMesh91",
+  "ArtMesh92",
+  "ArtMesh93",
+] as const;
+
+/** Cubism PartLegR — character right / viewer left. */
+export const KNOWN_LEG_R_IDS = [
+  "ArtMesh94",
+  "ArtMesh95",
+  "ArtMesh97",
+  "ArtMesh98",
+  "ArtMesh99",
+  "ArtMesh100",
+  "ArtMesh101",
+  "ArtMesh102",
+  "ArtMesh103",
+  "ArtMesh104",
+  "ArtMesh105",
+  "ArtMesh152",
+  "ArtMesh153",
+  "ArtMesh154",
+] as const;
+
+/** Cubism PartArmL + PartHandL. */
+export const KNOWN_ARM_L_IDS = [
+  "ArtMesh10",
+  "ArtMesh16",
+  "ArtMesh21",
+  "ArtMesh135",
+  "ArtMesh158",
+  "ArtMesh159",
+] as const;
+
+/** Cubism PartArmR. Far-lateral cyan sheets are wings, not this arm. */
+export const KNOWN_ARM_R_IDS = [
+  "ArtMesh80",
+  "ArtMesh117",
+  "ArtMesh119",
+  "ArtMesh120",
+  "ArtMesh173",
+  "ArtMesh174",
+  "ArtMesh175",
+] as const;
+
+export const KNOWN_SKIRT_IDS = [
+  "ArtMesh82",
+  "ArtMesh84",
+  "ArtMesh96",
+  "ArtMesh106",
+  "ArtMesh107",
+  "ArtMesh145",
+  "ArtMesh149",
+  "ArtMesh150",
+  "ArtMesh151",
+  "ArtMesh156",
+  "ArtMesh157",
+  "ArtMesh166",
+  "ArtMesh167",
+  "ArtMesh168",
 ] as const;
 
 export const KNOWN_SPARKLE_IDS = [
@@ -159,14 +235,29 @@ export const REGION_MOTION_BINDINGS: readonly RegionMotionBinding[] = [
     parameters: ["ParamBodyAngleX", "ParamBodyAngleZ"],
   },
   {
-    region: "arms",
-    physics: ["SleeveL", "SleeveR"],
-    parameters: ["ParamArmL", "ParamArmR", "ParamSleeveL", "ParamSleeveR"],
+    region: "armL",
+    physics: ["SleeveL"],
+    parameters: ["ParamArmL1", "ParamArmL2", "ParamArmL3", "ParamSleeveL"],
   },
   {
-    region: "legs",
+    region: "armR",
+    physics: ["SleeveR"],
+    parameters: ["ParamArmR1", "ParamArmR2", "ParamArmR3", "ParamSleeve"],
+  },
+  {
+    region: "legL",
     physics: [],
-    parameters: ["ParamLegL", "ParamLegR"],
+    parameters: ["ParamLegL1X", "ParamLegL2X", "ParamLegL3X"],
+  },
+  {
+    region: "legR",
+    physics: [],
+    parameters: [
+      "ParamLegR1X",
+      "ParamLegR2X",
+      "ParamLegR3X",
+      "ParamLegRibbonR1",
+    ],
   },
   {
     region: "wings",
@@ -218,20 +309,48 @@ export function isEnvironmentUv(uv: UvIsland): boolean {
   return false;
 }
 
+function hasKnownId(id: string, known: readonly string[]): boolean {
+  return known.includes(id);
+}
+
+/** Cubism +X is the character's left (viewer's right). */
+export function lateralityFromFigureX(x: number): "L" | "R" {
+  return x >= 0 ? "L" : "R";
+}
+
+export function isLegRegion(region: MeshRegion): boolean {
+  return region === "legL" || region === "legR";
+}
+
+export function isArmRegion(region: MeshRegion): boolean {
+  return region === "armL" || region === "armR";
+}
+
 export function classifyDrawable(input: ClassifyDrawableInput): MeshRegion {
   const { id, uv, figure, area } = input;
-  if (
-    KNOWN_CHEST_CLOTH_IDS.includes(
-      id as (typeof KNOWN_CHEST_CLOTH_IDS)[number],
-    )
-  ) {
+  if (hasKnownId(id, KNOWN_CHEST_CLOTH_IDS)) {
     return "chestCloth";
   }
-  if (KNOWN_WING_IDS.includes(id as (typeof KNOWN_WING_IDS)[number])) {
+  if (hasKnownId(id, KNOWN_WING_IDS)) {
     return "wings";
   }
-  if (KNOWN_SPARKLE_IDS.includes(id as (typeof KNOWN_SPARKLE_IDS)[number])) {
+  if (hasKnownId(id, KNOWN_SPARKLE_IDS)) {
     return "sparkle";
+  }
+  if (hasKnownId(id, KNOWN_LEG_L_IDS)) {
+    return "legL";
+  }
+  if (hasKnownId(id, KNOWN_LEG_R_IDS)) {
+    return "legR";
+  }
+  if (hasKnownId(id, KNOWN_ARM_L_IDS)) {
+    return "armL";
+  }
+  if (hasKnownId(id, KNOWN_ARM_R_IDS)) {
+    return "armR";
+  }
+  if (hasKnownId(id, KNOWN_SKIRT_IDS)) {
+    return "skirt";
   }
   if (isEnvironmentUv(uv)) {
     return "environment";
@@ -239,6 +358,8 @@ export function classifyDrawable(input: ClassifyDrawableInput): MeshRegion {
 
   const { x, y } = figure;
   const absX = Math.abs(x);
+  const arm = x >= 0 ? "armL" : "armR";
+  const leg = x >= 0 ? "legL" : "legR";
 
   if (y > 0.36) {
     if (absX > 0.08 && absX < 0.18 && y < 0.48 && area < 0.006) {
@@ -256,33 +377,39 @@ export function classifyDrawable(input: ClassifyDrawableInput): MeshRegion {
     return "hair";
   }
   if (y > 0.2 && y <= 0.24) {
+    if (absX > 0.25) {
+      return "wings";
+    }
     if (absX > 0.13) {
-      return "arms";
+      return arm;
     }
     return "body";
   }
   if (y > 0.04 && y <= 0.2) {
+    if (absX > 0.2) {
+      return "wings";
+    }
     if (absX > 0.13) {
-      return absX > 0.2 ? "wings" : "arms";
+      return arm;
     }
     return "body";
   }
   if (y > -0.12 && y <= 0.04) {
     if (absX > 0.14) {
-      return "arms";
+      return arm;
     }
     return "skirt";
   }
   if (y > -0.42 && y <= -0.12) {
-    if (absX > 0.16) {
+    if (absX > 0.16 && y > -0.2) {
       return "accessory";
     }
-    return "legs";
+    return leg;
   }
   if (absX > 0.18) {
     return "accessory";
   }
-  return "legs";
+  return leg;
 }
 
 export function uvIslandBox(uvs?: ArrayLike<number>): UvIsland | null {
@@ -370,6 +497,27 @@ export function buildIdentityMeshMap(input: {
     sourceModel: input.sourceModel,
     identity: input.identity,
     figure: refineFigureFromDrawables(drawables, input.figure),
+    regions,
+    drawables,
+    motions: [...REGION_MOTION_BINDINGS],
+  };
+}
+
+export function reclassifyIdentityMeshMap(
+  meshMap: IdentityMeshMap,
+): IdentityMeshMap {
+  const drawables = meshMap.drawables.map((drawable) => ({
+    ...drawable,
+    region: classifyDrawable(drawable),
+  }));
+  const regions = Object.fromEntries(
+    MESH_REGIONS.map((region) => [region, [] as string[]]),
+  ) as Record<MeshRegion, string[]>;
+  for (const drawable of drawables) {
+    regions[drawable.region].push(drawable.id);
+  }
+  return {
+    ...meshMap,
     regions,
     drawables,
     motions: [...REGION_MOTION_BINDINGS],

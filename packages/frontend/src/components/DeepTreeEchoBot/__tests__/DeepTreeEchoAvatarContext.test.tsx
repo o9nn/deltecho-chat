@@ -278,7 +278,13 @@ describe("DeepTreeEchoAvatarContext", () => {
       expect(saved.outfit).toBe("aria");
       expect(saved.outfitHueShift).toBe(0);
       expect(saved.outfitHiddenGroups).toEqual(
-        expect.arrayContaining(["water", "background", "chestCloth"]),
+        expect.arrayContaining([
+          "water",
+          "background",
+          "chestCloth",
+          "sparkle",
+          "hairAccessory",
+        ]),
       );
       expect(screen.getByTestId("outfit-hidden").textContent).toContain(
         "chestCloth",

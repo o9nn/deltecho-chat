@@ -418,6 +418,11 @@ describe("identity physics retarget", () => {
       true,
     );
     expect(existsSync(join(models, "melody/mesh-map.json"))).toBe(true);
+    expect(existsSync(join(models, "melody/pose-map.json"))).toBe(true);
+    expect(existsSync(join(models, "melody/tile-map.json"))).toBe(true);
+    expect(existsSync(join(models, "melody/avatar-mesh-map.json"))).toBe(
+      true,
+    );
     expect(existsSync(join(models, "miara/mesh-map.json"))).toBe(true);
     const melodyMap = JSON.parse(
       readFileSync(join(models, "melody/mesh-map.json"), "utf8"),
@@ -426,6 +431,37 @@ describe("identity physics retarget", () => {
     expect(melodyMap.sourceModel).toBe(
       "models/melody/melody_t03.model3.json",
     );
+    expect(melodyMap.regions.legL).toEqual(
+      expect.arrayContaining(["ArtMesh91", "ArtMesh87"]),
+    );
+    expect(melodyMap.regions.legR).toEqual(
+      expect.arrayContaining(["ArtMesh100", "ArtMesh152"]),
+    );
+    expect(melodyMap.regions.armL).toEqual(
+      expect.arrayContaining(["ArtMesh16", "ArtMesh158"]),
+    );
+    expect(melodyMap.regions.armR).toEqual(
+      expect.arrayContaining(["ArtMesh80", "ArtMesh117"]),
+    );
+    expect(melodyMap.regions.skirt).toHaveLength(14);
+    expect(melodyMap.regions.arms).toBeUndefined();
+    expect(melodyMap.regions.legs).toBeUndefined();
+    const textureStats = JSON.parse(
+      readFileSync(join(models, "melody/textures/texture-stats.json"), "utf8"),
+    );
+    const character = textureStats.character ?? textureStats;
+    expect(character.purple).toBeGreaterThan(character.teal);
+    expect(character.mean[0]).toBeGreaterThan(40);
+    const hair = textureStats.hairPixels;
+    expect(hair).toBeDefined();
+    expect(hair.purple).toBeGreaterThan(hair.teal);
+    expect(hair.mean[2]).toBeGreaterThan(hair.mean[1]);
+    expect(hair.mean[0]).toBeGreaterThan(70);
+    expect(textureStats.regions.legL.opaque).toBeGreaterThan(1000);
+    expect(textureStats.regions.legR.opaque).toBeGreaterThan(1000);
+    expect(textureStats.regions.armL.opaque).toBeGreaterThan(1000);
+    expect(textureStats.regions.armR.opaque).toBeGreaterThan(1000);
+    expect(textureStats.regions.skirt.opaque).toBeGreaterThan(1000);
     expect(
       existsSync(
         join(models, "deep-tree-echo/deep-tree-echo_t03.model3.json"),
