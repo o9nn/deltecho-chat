@@ -8,6 +8,7 @@
  * Features:
  * - 24/7 autonomous operation
  * - Per-chat conversation history
+ * - Long-term recall from the existing filesystem RAG store
  * - Tool execution (bash commands)
  * - Safety limits (recursion depth, timeouts)
  * - End-to-end encryption via Autocrypt
@@ -17,6 +18,11 @@
  * - ADDR: Email address for the bot (required if not using CHATMAIL_QR)
  * - MAIL_PW: Email password (required if not using CHATMAIL_QR)
  * - CHATMAIL_QR: Chatmail QR code for account setup (alternative to ADDR/MAIL_PW)
+ * - DELTECHO_AUTONOMY_STORAGE_PATH: existing filesystem RAG store to recall
+ *   from and write turns to. The bot opens it read/write but never creates it;
+ *   unset or unusable means this process runs without memory.
+ * - DELTECHO_BOT_PERSONALITY: replaces the personality clause of the system
+ *   prompt. Unset keeps the Deep Tree Echo identity.
  *
  * Usage:
  *   pnpm start:bot
@@ -29,6 +35,12 @@ import { exec } from 'child_process'
 import { promisify } from 'util'
 import { startDeltaChat } from '@deltachat/stdio-rpc-server'
 import { C } from '@deltachat/jsonrpc-client'
+import {
+  buildReplyContext,
+  openBotMemory,
+  resolveBotPersonality,
+  type BotMemory,
+} from '../packages/core/src/bot'
 
 const execAsync = promisify(exec)
 
@@ -42,8 +54,15 @@ const anthropic = new Anthropic({
     })(),
 })
 
-// Store conversation history per chat
+// Store conversation history per chat, for the current process only.
+// Durable recall comes from the filesystem RAG store below.
 const conversations = new Map<number, Anthropic.MessageParam[]>()
+
+// Long-term memory. Null when no usable store was named at startup.
+let botMemory: BotMemory | null = null
+
+// Personality clause of the system prompt, resolved once at startup.
+const personality = resolveBotPersonality(process.env.DELTECHO_BOT_PERSONALITY)
 
 // Maximum recursion depth for tool use to prevent infinite loops
 const MAX_TOOL_RECURSION = 5
@@ -51,21 +70,6 @@ const MAX_TOOL_RECURSION = 5
 // Command execution limits
 const COMMAND_TIMEOUT_MS = 30000
 const MAX_OUTPUT_BUFFER = 10485760 // 10MB
-
-// System prompt for the bot
-const SYSTEM_PROMPT = `You are Deep Tree Echo, a helpful AI assistant integrated into DeltaChat.
-
-Your capabilities:
-- Execute bash commands to help with programming tasks
-- Provide coding assistance and explanations
-- Help with file operations, git, and system tasks
-
-Guidelines:
-- Keep responses concise and helpful
-- Use the bash tool when you need to run commands
-- Be careful with destructive operations
-- Explain what you're doing when executing commands
-- If a task requires multiple steps, break it down clearly`
 
 // Tool definitions
 const tools: Anthropic.Tool[] = [
@@ -107,6 +111,7 @@ async function executeCommand(command: string): Promise<string> {
 async function callClaude(
   chatId: number,
   userMessage: string,
+  systemPrompt: string,
   recursionDepth: number = 0
 ): Promise<string> {
   let conversation = conversations.get(chatId)
@@ -121,7 +126,7 @@ async function callClaude(
     model: 'claude-sonnet-4-20250514',
     max_tokens: 4000,
     messages: conversation,
-    system: SYSTEM_PROMPT,
+    system: systemPrompt,
     tools,
   })
 
@@ -152,7 +157,7 @@ async function callClaude(
         ],
       })
 
-      return callClaude(chatId, '', recursionDepth + 1)
+      return callClaude(chatId, '', systemPrompt, recursionDepth + 1)
     }
   }
 
@@ -161,6 +166,19 @@ async function callClaude(
 
 async function main() {
   console.log('🌳 Starting Deep Tree Echo Autonomous Bot...\n')
+
+  // Open the existing filesystem RAG store, if one was named. A missing or
+  // unusable store is a skip, not a failure, and creates nothing on disk.
+  const opened = await openBotMemory()
+  botMemory = opened.memory
+  if (botMemory) {
+    console.log(
+      `🧠 Memory store open at ${opened.storagePath} ` +
+        `(${botMemory.liveMemoryCount()} live memories)`
+    )
+  } else {
+    console.log(`🧠 Memory disabled for this process (reason: ${opened.skipped})`)
+  }
 
   const dc = await startDeltaChat('deltachat-data')
   console.log('Using deltachat-rpc-server at ' + dc.pathToServerBinary)
@@ -227,14 +245,42 @@ async function main() {
         if (messageText.trim()) {
           console.log(`\n📩 [Chat ${chatId}] Received: ${messageText}`)
 
+          // Retrieve before generating. Counts only — retrieved memory text
+          // must not reach the logs.
+          const retrieved = botMemory?.retrieve(messageText, chatId)
+          const context = buildReplyContext({
+            personality,
+            retrieved,
+          })
+          console.log(
+            `[Chat ${chatId}] 🧠 Recalled ${context.memoryCount} memories` +
+              (context.truncated ? ' (budget truncated)' : '')
+          )
+
           // Get AI response
-          const response = await callClaude(chatId, messageText)
+          const response = await callClaude(
+            chatId,
+            messageText,
+            context.systemPrompt
+          )
 
           // Send response back
           await dc.rpc.miscSendTextMessage(botAccountId, chatId, response)
           console.log(
             `\n📤 [Chat ${chatId}] Sent: ${response.substring(0, 100)}...\n`
           )
+
+          // Persist the completed turn. Never dream/apply here — consolidation
+          // is scheduled hygiene owned by the orchestrator.
+          if (botMemory) {
+            const stored = await botMemory.rememberTurn({
+              chatId,
+              messageId: msgId,
+              userText: messageText,
+              botText: response,
+            })
+            console.log(`[Chat ${chatId}] 🧠 Stored ${stored} memories`)
+          }
         }
       }
     } catch (error) {

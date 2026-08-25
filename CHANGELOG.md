@@ -8,6 +8,7 @@
 - Cloud Agent: `scripts/cloud-agent-install.sh` wraps frozen-lockfile install and the internal package build chain. Named `browser-dev` / `orchestrator` terminals exist only after a human Saves the dashboard environment proposal.
 - Deep Tree Echo: the orchestrator now starts one ProactiveLoop for process liveness and, when `DELTECHO_AUTONOMY_STORAGE_PATH` points at an existing filesystem RAG store, schedules MemoryLever dream hygiene. Ticks stay dry-run unless `DELTECHO_MEMORY_LEVER_APPLY` is `1`, `true`, or `yes`.
 - Deep Tree Echo: proactive messaging is now wired in the desktop app — Settings exposes live triggers and policy, chats show a status indicator, and bot-initiated sends honor quiet hours and rate limits.
+- Deep Tree Echo: the standalone bot (`start:bot`) now remembers. When `DELTECHO_AUTONOMY_STORAGE_PATH` points at an existing filesystem RAG store it recalls relevant memories into each reply and writes the turn back; an unset or unusable path leaves the disk untouched and the bot answers without memory. `DELTECHO_BOT_PERSONALITY` overrides the personality clause of its system prompt.
 
 ### Changed
 

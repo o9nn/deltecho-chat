@@ -22,6 +22,10 @@
       "import": "./dist/memory/node.js",
       "types": "./dist/memory/node.d.ts"
     },
+    "./bot": {
+      "import": "./dist/bot/index.js",
+      "types": "./dist/bot/index.d.ts"
+    },
     "./personality": {
       "import": "./dist/personality/index.js",
       "types": "./dist/personality/index.d.ts"
