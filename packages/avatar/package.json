@@ -18,6 +18,7 @@
     "test": "jest --runInBand --forceExit",
     "test:coverage": "jest --coverage",
     "train:melody-atlas": "node ./scripts/train-melody-atlas.mjs",
+    "index:mesh-map": "node ./scripts/index-mesh-map.mjs",
     "bake:identity-models": "node --experimental-strip-types ./scripts/bake-identity-models.mjs"
   },
   "keywords": [

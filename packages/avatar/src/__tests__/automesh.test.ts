@@ -414,6 +414,8 @@ describe("identity physics retarget", () => {
     expect(existsSync(join(models, "melody/textures/texture_00.png"))).toBe(
       true,
     );
+    expect(existsSync(join(models, "melody/mesh-map.json"))).toBe(true);
+    expect(existsSync(join(models, "miara/mesh-map.json"))).toBe(true);
     expect(
       existsSync(join(models, "deep-tree-echo/deep-tree-echo.model3.json")),
     ).toBe(true);

@@ -25,6 +25,11 @@ const melodyStillAtlas = join(
   repoRoot,
   "frontend/static/images/avatar/identities/melody-atlas.png",
 );
+const melodyStill = join(
+  repoRoot,
+  "frontend/static/images/avatar/identities/melody.webp",
+);
+const paintScript = join(here, "paint-identity-texture.py");
 
 const SHARED_FILES = ["miara_pro_t03.moc3", "miara_pro_t03.cdi3.json"];
 
@@ -77,6 +82,33 @@ function bakeMelodyTexture(destDir) {
   }
   const official = join(miaraDir, "miara_pro_t03.4096/texture_00.png");
   const dest = join(textureDir, "texture_00.png");
+  const meshMap = join(destDir, "mesh-map.json");
+  if (existsSync(paintScript) && existsSync(meshMap) && existsSync(melodyStill)) {
+    const result = spawnSync(
+      "python3",
+      [
+        paintScript,
+        "melody",
+        official,
+        melodyStill,
+        melodyStillAtlas,
+        meshMap,
+        dest,
+      ],
+      { encoding: "utf8" },
+    );
+    if (result.status === 0) {
+      console.log(
+        "[bake-identity-models] melody region paint",
+        result.stdout.trim(),
+      );
+      return;
+    }
+    console.warn(
+      "[bake-identity-models] melody region paint failed; compositing atlas",
+      result.stderr || result.stdout,
+    );
+  }
   const py = `
 from pathlib import Path
 from PIL import Image
@@ -106,6 +138,25 @@ function bakeGroveTexture(destDir) {
   mkdirSync(textureDir, { recursive: true });
   const official = join(miaraDir, "miara_pro_t03.4096/texture_00.png");
   const dest = join(textureDir, "texture_00.png");
+  const meshMap = join(destDir, "mesh-map.json");
+  if (existsSync(paintScript) && existsSync(meshMap)) {
+    const result = spawnSync(
+      "python3",
+      [paintScript, "grove", official, meshMap, dest],
+      { encoding: "utf8" },
+    );
+    if (result.status === 0) {
+      console.log(
+        "[bake-identity-models] grove region recast",
+        result.stdout.trim(),
+      );
+      return;
+    }
+    console.warn(
+      "[bake-identity-models] grove region recast failed",
+      result.stderr || result.stdout,
+    );
+  }
   const py = `
 from pathlib import Path
 try:
@@ -115,7 +166,6 @@ except ImportError:
 src = Path(${JSON.stringify(official)})
 dst = Path(${JSON.stringify(dest)})
 im = Image.open(src).convert("RGBA")
-im = im.resize((2048, 2048), Image.Resampling.LANCZOS)
 pixels = im.load()
 w, h = im.size
 for y in range(h):
@@ -182,10 +232,12 @@ async function main() {
 Complete Live2D model for the Melody identity.
 
 - \`miara_pro_t03.moc3\` — official Miara topology (Cubism Editor owns mesh edits)
-- \`textures/texture_00.png\` — triangle-reprojected Melody atlas
+- \`mesh-map.json\` — ArtMesh UV-island index (region + motion/physics bindings)
+- \`textures/texture_00.png\` — official 4096 atlas, region-tinted from Melody still
 - \`melody.physics3.json\` — heavier ponytail, damped fairy cloth, musical wings
 
-Regenerate with \`pnpm --filter=@deltecho/avatar bake:identity-models\`.
+Regenerate the index with \`pnpm --filter=@deltecho/avatar index:mesh-map\`, then
+\`pnpm --filter=@deltecho/avatar bake:identity-models\`.
 `,
   );
   writeReadme(
@@ -195,7 +247,8 @@ Regenerate with \`pnpm --filter=@deltecho/avatar bake:identity-models\`.
 Complete Live2D model for the Deep Tree Echo identity.
 
 - \`miara_pro_t03.moc3\` — official Miara topology (Cubism Editor owns mesh edits)
-- \`textures/texture_00.png\` — moss/grove recast of the official atlas
+- \`mesh-map.json\` — shared ArtMesh UV-island index (same topology as Miara)
+- \`textures/texture_00.png\` — moss/grove recast of character islands only
 - \`deep-tree-echo.physics3.json\` — slower hair, living wings
 
 Regenerate with \`pnpm --filter=@deltecho/avatar bake:identity-models\`.
@@ -208,9 +261,13 @@ Regenerate with \`pnpm --filter=@deltecho/avatar bake:identity-models\`.
     `
 Each identity has its own folder so mesh, texture, and physics can converge independently:
 
-- \`miara/\` — official baked package
+- \`miara/\` — official baked package + source \`mesh-map.json\`
 - \`deep-tree-echo/\` — grove texture + living-wing physics
-- \`melody/\` — Melody atlas + aria-style physics
+- \`melody/\` — region-tinted 4096 atlas + aria-style physics
+
+\`mesh-map.json\` indexes each \`ArtMeshN\` UV island to a body region and the
+physics/motion parameters that drive it. Rebuild with
+\`pnpm --filter=@deltecho/avatar index:mesh-map\`.
 
 All three currently share Miara \`.moc3\` topology. Sculpt per-character meshes in Cubism Editor and replace the \`.moc3\` in that folder.
 `,

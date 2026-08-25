@@ -76,6 +76,11 @@ export {
   type AutomeshDrawable,
   type AutomeshMapping,
   type AutomeshRaster,
+  buildIdentityMeshMap,
+  classifyDrawable,
+  regionForDrawable,
+  type IdentityMeshMap,
+  type MeshRegion,
 } from "./automesh";
 
 export {
