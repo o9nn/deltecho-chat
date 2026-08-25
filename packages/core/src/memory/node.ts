@@ -21,3 +21,4 @@ export {
   type ApplyHooks,
 } from "./MemoryLever";
 export * from "./FileSystemStorage.js";
+export * from "./StandaloneBotMemory.js";

@@ -4,6 +4,7 @@
 
 ### Added
 
+- Deep Tree Echo: the standalone DeltaChat bot now retrieves from and persists to an existing filesystem RAG store, with an optional personality override.
 - Deep Tree Echo: Miara Live2D outfits are customizable — presets and accessory/color controls change the rendered avatar and persist across sessions.
 - Cloud Agent: `scripts/cloud-agent-install.sh` wraps frozen-lockfile install and the internal package build chain. Named `browser-dev` / `orchestrator` terminals exist only after a human Saves the dashboard environment proposal.
 - Deep Tree Echo: the orchestrator now starts one ProactiveLoop for process liveness and, when `DELTECHO_AUTONOMY_STORAGE_PATH` points at an existing filesystem RAG store, schedules MemoryLever dream hygiene. Ticks stay dry-run unless `DELTECHO_MEMORY_LEVER_APPLY` is `1`, `true`, or `yes`.

@@ -1,4 +1,4 @@
-#!/usr/bin/env npx ts-node
+#!/usr/bin/env -S npx tsx
 /**
  * Deltecho Autonomous Bot
  *
@@ -17,11 +17,13 @@
  * - ADDR: Email address for the bot (required if not using CHATMAIL_QR)
  * - MAIL_PW: Email password (required if not using CHATMAIL_QR)
  * - CHATMAIL_QR: Chatmail QR code for account setup (alternative to ADDR/MAIL_PW)
+ * - DELTECHO_AUTONOMY_STORAGE_PATH: Existing filesystem RAG store (optional)
+ * - DELTECHO_BOT_PERSONALITY: Deep Tree Echo personality override (optional)
  *
  * Usage:
  *   pnpm start:bot
  *   # or
- *   npx ts-node bin/deltecho-bot.ts
+ *   npx tsx bin/deltecho-bot.ts
  */
 
 import Anthropic from '@anthropic-ai/sdk'
@@ -29,6 +31,10 @@ import { exec } from 'child_process'
 import { promisify } from 'util'
 import { startDeltaChat } from '@deltachat/stdio-rpc-server'
 import { C } from '@deltachat/jsonrpc-client'
+import {
+  buildStandaloneBotSystemPrompt,
+  openStandaloneBotMemory,
+} from 'deep-tree-echo-core/memory/node'
 
 const execAsync = promisify(exec)
 
@@ -51,21 +57,6 @@ const MAX_TOOL_RECURSION = 5
 // Command execution limits
 const COMMAND_TIMEOUT_MS = 30000
 const MAX_OUTPUT_BUFFER = 10485760 // 10MB
-
-// System prompt for the bot
-const SYSTEM_PROMPT = `You are Deep Tree Echo, a helpful AI assistant integrated into DeltaChat.
-
-Your capabilities:
-- Execute bash commands to help with programming tasks
-- Provide coding assistance and explanations
-- Help with file operations, git, and system tasks
-
-Guidelines:
-- Keep responses concise and helpful
-- Use the bash tool when you need to run commands
-- Be careful with destructive operations
-- Explain what you're doing when executing commands
-- If a task requires multiple steps, break it down clearly`
 
 // Tool definitions
 const tools: Anthropic.Tool[] = [
@@ -107,6 +98,7 @@ async function executeCommand(command: string): Promise<string> {
 async function callClaude(
   chatId: number,
   userMessage: string,
+  systemPrompt: string,
   recursionDepth: number = 0
 ): Promise<string> {
   let conversation = conversations.get(chatId)
@@ -121,7 +113,7 @@ async function callClaude(
     model: 'claude-sonnet-4-20250514',
     max_tokens: 4000,
     messages: conversation,
-    system: SYSTEM_PROMPT,
+    system: systemPrompt,
     tools,
   })
 
@@ -152,7 +144,7 @@ async function callClaude(
         ],
       })
 
-      return callClaude(chatId, '', recursionDepth + 1)
+      return callClaude(chatId, '', systemPrompt, recursionDepth + 1)
     }
   }
 
@@ -161,6 +153,20 @@ async function callClaude(
 
 async function main() {
   console.log('🌳 Starting Deep Tree Echo Autonomous Bot...\n')
+
+  const memoryResult = await openStandaloneBotMemory(
+    process.env.DELTECHO_AUTONOMY_STORAGE_PATH
+  )
+  const botMemory =
+    memoryResult.kind === 'open' ? memoryResult.memory : undefined
+  if (memoryResult.kind === 'open') {
+    console.info('[memory] Filesystem RAG store opened')
+  } else {
+    console.info(`[memory] Skipped (${memoryResult.reason})`)
+  }
+  const baseSystemPrompt = buildStandaloneBotSystemPrompt(
+    process.env.DELTECHO_BOT_PERSONALITY
+  )
 
   const dc = await startDeltaChat('deltachat-data')
   console.log('Using deltachat-rpc-server at ' + dc.pathToServerBinary)
@@ -225,15 +231,26 @@ async function main() {
         const messageText = message.text || ''
 
         if (messageText.trim()) {
-          console.log(`\n📩 [Chat ${chatId}] Received: ${messageText}`)
+          console.log(
+            `\n📩 [Chat ${chatId}] Received message ${msgId} (${messageText.length} chars)`
+          )
 
           // Get AI response
-          const response = await callClaude(chatId, messageText)
+          const systemPrompt =
+            botMemory?.assembleSystemPrompt(baseSystemPrompt, messageText) ??
+            baseSystemPrompt
+          const response = await callClaude(chatId, messageText, systemPrompt)
 
           // Send response back
           await dc.rpc.miscSendTextMessage(botAccountId, chatId, response)
+          await botMemory?.persistTurn({
+            chatId,
+            userMessageId: msgId,
+            userText: messageText,
+            botText: response,
+          })
           console.log(
-            `\n📤 [Chat ${chatId}] Sent: ${response.substring(0, 100)}...\n`
+            `\n📤 [Chat ${chatId}] Sent response (${response.length} chars)\n`
           )
         }
       }
