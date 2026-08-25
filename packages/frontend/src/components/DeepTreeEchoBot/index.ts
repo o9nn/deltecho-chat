@@ -134,6 +134,7 @@ export { default as ProactiveStatusIndicator } from "./ProactiveStatusIndicator"
 
 // Avatar Components
 export { DeepTreeEchoAvatarDisplay } from "./DeepTreeEchoAvatarDisplay";
+export { AvatarIdentityPicker } from "./AvatarIdentityPicker";
 export { MiaraOutfitPicker } from "./MiaraOutfitPicker";
 export {
   DeepTreeEchoAvatarProvider,

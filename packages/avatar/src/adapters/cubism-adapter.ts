@@ -79,6 +79,7 @@ export interface ICubismRenderer {
 
   /** Set expression on the model */
   setExpression(expression: Expression, intensity: number): void;
+  setNamedExpression?(name: string): boolean;
 
   /** Play a motion animation */
   playMotion(motion: AvatarMotion, priority?: number): void;

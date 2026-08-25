@@ -29,6 +29,8 @@ const PRESET_LABELS: Record<Exclude<MiaraOutfitId, "custom">, string> = {
   rose: "miara_outfit_rose",
   midnight: "miara_outfit_midnight",
   gold: "miara_outfit_gold",
+  grove: "miara_outfit_grove",
+  aria: "miara_outfit_aria",
 };
 
 export interface MiaraOutfitPickerProps {

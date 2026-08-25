@@ -94,6 +94,7 @@ export interface Live2DCognitiveVisualState {
 export interface Live2DAvatarController {
   /** Set expression with intensity */
   setExpression: (expression: Expression, intensity?: number) => void;
+  setNamedExpression?: (name: string) => boolean;
   /** Play a motion animation */
   playMotion: (motion: AvatarMotion) => void;
   /** Update lip sync value */
@@ -216,6 +217,9 @@ export class Live2DAvatarManager {
       setExpression: (expression, intensity = 0.7) => {
         this.renderer?.setExpression(expression, intensity);
       },
+      setNamedExpression: (name) => {
+        return this.renderer?.setNamedExpression?.(name) ?? false;
+      },
       playMotion: (motion) => {
         this.renderer?.playMotion(motion);
       },
@@ -273,10 +277,15 @@ export class Live2DAvatarManager {
     if (!this.renderer || !this.isLoaded) return;
 
     const projection = projectDTEchoCognitiveState(state);
-    this.renderer.setExpression(
-      projection.avatarExpression,
-      projection.intensity,
+    const playedNamed = this.renderer.setNamedExpression?.(
+      projection.expressionName,
     );
+    if (!playedNamed) {
+      this.renderer.setExpression(
+        projection.avatarExpression,
+        projection.intensity,
+      );
+    }
 
     if (projection.motion) {
       this.renderer.playMotion(projection.motion);

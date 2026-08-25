@@ -29,10 +29,13 @@ export type DTEchoExpressionName =
   | "JOY_02_Laughing"
   | "JOY_03_GentleSmile"
   | "JOY_05_Blissful"
+  | "NEUTRAL_Reset"
   | "PHOTO_Awe"
   | "PHOTO_ExuberantLaugh"
   | "PHOTO_UpwardGaze"
+  | "SADNESS_01_Melancholy"
   | "SPEAK_01_OpenVowel"
+  | "SURPRISE_01_Startled"
   | "GENIUS_01_LuminousInference"
   | "WONDER_02_CuriousGaze"
   | "WONDER_03_Contemplative";
@@ -342,6 +345,50 @@ const PROFILE_ATLAS: Record<DTEchoExpressionName, DTEchoExpressionProfile> = {
     },
     description:
       "Deep-thought expression for self-reference and evolutionary pruning.",
+  },
+  NEUTRAL_Reset: {
+    expressionName: "NEUTRAL_Reset",
+    avatarExpression: "neutral",
+    motion: "idle",
+    cognitiveMode: "RESTING",
+    hormones: hormone({ serotonin: 0.45 }),
+    cubism: {
+      [PARAM_IDS.PARAM_EYE_L_OPEN]: 1,
+      [PARAM_IDS.PARAM_EYE_R_OPEN]: 1,
+      [PARAM_IDS.PARAM_MOUTH_FORM]: 0,
+      [PARAM_IDS.PARAM_MOUTH_OPEN_Y]: 0,
+    },
+    description:
+      "Neutral reset face shipped with the Miara Cubism expressions.",
+  },
+  SADNESS_01_Melancholy: {
+    expressionName: "SADNESS_01_Melancholy",
+    avatarExpression: "concerned",
+    motion: "idle",
+    cognitiveMode: "REFLECTIVE",
+    hormones: hormone({ serotonin: 0.28, oxytocin: 0.22 }),
+    cubism: {
+      [PARAM_IDS.PARAM_EYE_L_OPEN]: 0.55,
+      [PARAM_IDS.PARAM_EYE_R_OPEN]: 0.55,
+      [PARAM_IDS.PARAM_MOUTH_FORM]: -0.4,
+      [PARAM_IDS.PARAM_ANGLE_Y]: -6,
+    },
+    description: "Melancholy face from the Miara Cubism expression pack.",
+  },
+  SURPRISE_01_Startled: {
+    expressionName: "SURPRISE_01_Startled",
+    avatarExpression: "surprised",
+    motion: "tilting_head",
+    cognitiveMode: "VIGILANT",
+    hormones: hormone({ norepinephrine: 0.8, dopaminePhasic: 0.55 }),
+    cubism: {
+      [PARAM_IDS.PARAM_EYE_L_OPEN]: 1,
+      [PARAM_IDS.PARAM_EYE_R_OPEN]: 1,
+      [PARAM_IDS.PARAM_MOUTH_OPEN_Y]: 0.7,
+      [PARAM_IDS.PARAM_BROW_L_Y]: 0.7,
+      [PARAM_IDS.PARAM_BROW_R_Y]: 0.7,
+    },
+    description: "Startled face from the Miara Cubism expression pack.",
   },
 };
 

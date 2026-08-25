@@ -5,6 +5,7 @@
  * canvas support, these tests focus on the API contract and mock behavior.
  */
 
+import { Live2DModel } from "pixi-live2d-display-lipsyncpatch/cubism4";
 import {
   PixiLive2DRenderer,
   PARAM_IDS,
@@ -204,6 +205,15 @@ describe("PixiLive2DRenderer", () => {
         renderer.setExpression(expression, 0.7);
         expect(renderer.getExpression()).toBe(expression);
       }
+    });
+
+    it("plays the shipped Miara Cubism expression for happy", async () => {
+      const fromMock = Live2DModel.from as jest.Mock;
+      const model = await fromMock.mock.results.at(-1)?.value;
+      renderer.setExpression("happy", 0.8);
+      expect(model.expression).toHaveBeenCalledWith("JOY_01_BroadSmile");
+      expect(renderer.setNamedExpression("SURPRISE_01_Startled")).toBe(true);
+      expect(model.expression).toHaveBeenCalledWith("SURPRISE_01_Startled");
     });
   });
 

@@ -73,6 +73,7 @@ export interface CognitiveVisualState {
 // Controller interface for external control of the avatar
 export interface Live2DAvatarController {
   setExpression: (expression: Expression, intensity?: number) => void;
+  setNamedExpression?: (name: string) => boolean;
   playMotion: (motion: AvatarMotion) => void;
   updateLipSync: (audioLevel: number) => void;
   updateCognitiveState?: (state: CognitiveVisualState) => void;
@@ -89,6 +90,8 @@ const LOCAL_MIARA_MODEL = "models/miara/miara_pro_t03.model3.json";
 // file:///models/... and never find the assets.
 const CDN_MODELS = {
   miara: LOCAL_MIARA_MODEL,
+  "deep-tree-echo": LOCAL_MIARA_MODEL,
+  melody: LOCAL_MIARA_MODEL,
   shizuku:
     "https://cdn.jsdelivr.net/gh/guansss/pixi-live2d-display/test/assets/shizuku/shizuku.model.json",
   haru: "https://cdn.jsdelivr.net/gh/guansss/pixi-live2d-display/test/assets/haru/haru_greeter_t03.model3.json",

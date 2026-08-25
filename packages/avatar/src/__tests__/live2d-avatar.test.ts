@@ -31,6 +31,7 @@ jest.mock("../adapters/pixi-live2d-renderer", () => ({
     initialize: jest.fn().mockResolvedValue(undefined),
     loadModel: jest.fn().mockResolvedValue(undefined),
     setExpression: jest.fn(),
+    setNamedExpression: jest.fn().mockReturnValue(true),
     playMotion: jest.fn(),
     updateLipSync: jest.fn(),
     setBlinking: jest.fn(),
@@ -238,6 +239,7 @@ describe("Live2DAvatarManager", () => {
       const controller = await manager.initialize(mockContainer, props);
 
       expect(() => controller.setExpression("happy", 0.8)).not.toThrow();
+      expect(controller.setNamedExpression?.("JOY_01_BroadSmile")).toBe(true);
     });
 
     it("should provide playMotion method", async () => {
