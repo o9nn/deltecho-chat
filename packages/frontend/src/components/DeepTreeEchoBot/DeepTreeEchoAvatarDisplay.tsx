@@ -556,7 +556,6 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
 
   return (
     <div className={containerClass} ref={stripRef}>
-      <MiaraOutfitPicker variant="compact" />
       <Live2DAvatar
         model={avatarContext?.state.config.model ?? "miara"}
         width={finalWidth}
@@ -573,6 +572,7 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
         showError={true}
         mode="live2d"
       />
+      <MiaraOutfitPicker variant="compact" />
       {processingState !== BotProcessingState.IDLE && (
         <div className="avatar-status-indicator">
           <span className={`status-badge status-${processingState}`}>

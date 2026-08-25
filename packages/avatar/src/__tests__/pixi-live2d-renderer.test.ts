@@ -271,18 +271,25 @@ describe("PixiLive2DRenderer", () => {
       await renderer.loadModel(config.model);
     });
 
-    it("hides casual accessory parts and keeps the dress visible", () => {
+    it("hides casual accessory parts by matching Cubism part ids", async () => {
+      const core = renderer.getModel()?.internalModel.coreModel as unknown as {
+        getPartCount: jest.Mock;
+        getPartId: jest.Mock;
+        setPartOpacityByIndex: jest.Mock;
+        setPartOpacityById: jest.Mock;
+      };
+      Object.assign(core, {
+        getPartCount: jest.fn(() => 3),
+        getPartId: jest.fn(
+          (index: number) =>
+            ["PartFairy", "PartWaterSurface", "PartChestClothLRotation"][index],
+        ),
+        setPartOpacityByIndex: jest.fn(),
+      });
       renderer.applyOutfit({ id: "casual" });
-      const core = renderer.getModel()?.internalModel.coreModel;
-      expect(core?.setPartOpacityById).toHaveBeenCalledWith("PartFairy", 0);
-      expect(core?.setPartOpacityById).toHaveBeenCalledWith(
-        "PartWaterSurface",
-        0,
-      );
-      expect(core?.setPartOpacityById).toHaveBeenCalledWith(
-        "PartChestClothLRotation",
-        1,
-      );
+      expect(core.setPartOpacityByIndex).toHaveBeenCalledWith(0, 0);
+      expect(core.setPartOpacityByIndex).toHaveBeenCalledWith(1, 0);
+      expect(core.setPartOpacityByIndex).toHaveBeenCalledWith(2, 1);
       expect(renderer.getAppliedOutfit()?.id).toBe("casual");
     });
 

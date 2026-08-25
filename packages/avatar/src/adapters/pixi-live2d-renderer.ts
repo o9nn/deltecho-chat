@@ -60,8 +60,18 @@ interface Live2DModel {
       getParameterValueById: (id: string) => number;
       setPartOpacityById?: (id: string, value: number) => void;
       getPartOpacityById?: (id: string) => number;
+      setPartOpacityByIndex?: (index: number, value: number) => void;
       setPartOpacity?: (index: number, value: number) => void;
       getPartIndex?: (id: string) => number;
+      getPartCount?: () => number;
+      getPartId?: (index: number) => unknown;
+      getModel?: () => {
+        parts?: {
+          count: number;
+          ids: ArrayLike<string>;
+          opacities: Float32Array | number[];
+        };
+      };
     };
   };
   expression: (name?: string) => void;
@@ -170,6 +180,23 @@ export interface PixiLive2DConfig extends Omit<CubismAdapterConfig, "canvas"> {
 /** Serialize Cubism `from()` so two Pixi GL contexts cannot share one runtime. */
 let live2dFromLock: Promise<void> = Promise.resolve();
 
+function cubismIdToString(id: unknown): string {
+  if (typeof id === "string") return id;
+  if (id && typeof id === "object") {
+    const handle = id as {
+      getString?: () => string;
+      s?: string;
+      id?: string;
+    };
+    if (typeof handle.getString === "function") {
+      return handle.getString();
+    }
+    if (typeof handle.s === "string") return handle.s;
+    if (typeof handle.id === "string") return handle.id;
+  }
+  return String(id ?? "");
+}
+
 function withLive2DFromLock<T>(fn: () => Promise<T>): Promise<T> {
   const previous = live2dFromLock;
   let release: () => void = () => undefined;
@@ -207,6 +234,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   private blinkTickerCallback: ((deltaMS: number) => void) | null = null;
   private viewCanvas: HTMLCanvasElement | null = null;
   private appliedOutfit: MiaraOutfitState | null = null;
+  private hiddenWardrobePartIds = new Set<string>();
 
   /** Internal debug logger - no-op unless config.debug is true */
   private dlog(...args: unknown[]): void {
@@ -673,6 +701,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     if (ticker && typeof ticker.add === "function") {
       // Preferred path: ticker-driven blink.
       this.blinkTickerCallback = (_deltaMS: number) => {
+        this.enforceHiddenWardrobeParts();
         const now = performance.now();
         if (now >= this.nextBlinkAt && this.blinkCloseUntil === 0) {
           const core = this.model?.internalModel?.coreModel;
@@ -1093,6 +1122,8 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       this.viewCanvas.style.filter = "";
     }
     this.viewCanvas = null;
+    this.hiddenWardrobePartIds.clear();
+    this.appliedOutfit = null;
 
     if (this.model) {
       this.model.destroy();
@@ -1160,24 +1191,41 @@ export class PixiLive2DRenderer implements ICubismRenderer {
 
   /**
    * Show or hide a Cubism part by id. Used for Miara wardrobe layers.
+   * Walks part indices so string IDs match interned CubismIdHandle values.
    */
   setPartOpacity(partId: string, opacity: number): void {
     const core = this.model?.internalModel?.coreModel;
     if (!core) return;
     const clamped = Math.min(1, Math.max(0, opacity));
     try {
-      if (typeof core.setPartOpacityById === "function") {
-        core.setPartOpacityById(partId, clamped);
-        return;
+      const native = core.getModel?.();
+      if (native?.parts?.ids && native.parts.opacities) {
+        const count = native.parts.count ?? native.parts.ids.length;
+        for (let index = 0; index < count; index++) {
+          if (cubismIdToString(native.parts.ids[index]) === partId) {
+            native.parts.opacities[index] = clamped;
+          }
+        }
       }
       if (
-        typeof core.getPartIndex === "function" &&
-        typeof core.setPartOpacity === "function"
+        typeof core.getPartCount === "function" &&
+        typeof core.getPartId === "function"
       ) {
-        const index = core.getPartIndex(partId);
-        if (typeof index === "number" && index >= 0) {
-          core.setPartOpacity(index, clamped);
+        const count = core.getPartCount();
+        for (let index = 0; index < count; index++) {
+          if (cubismIdToString(core.getPartId(index)) !== partId) continue;
+          if (typeof core.setPartOpacityByIndex === "function") {
+            core.setPartOpacityByIndex(index, clamped);
+            return;
+          }
+          if (typeof core.setPartOpacity === "function") {
+            core.setPartOpacity(index, clamped);
+            return;
+          }
         }
+      }
+      if (typeof core.setPartOpacityById === "function") {
+        core.setPartOpacityById(partId, clamped);
       }
     } catch {
       this.dlog("Part opacity not available:", partId);
@@ -1193,6 +1241,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     if (!this.model || !this.initialized) return;
 
     const hidden = new Set(collectHiddenPartIds(resolved.hiddenGroups));
+    this.hiddenWardrobePartIds = hidden;
     for (const partId of ALL_MIARA_WARDROBE_PART_IDS) {
       this.setPartOpacity(partId, hidden.has(partId) ? 0 : 1);
     }
@@ -1206,6 +1255,13 @@ export class PixiLive2DRenderer implements ICubismRenderer {
 
   getAppliedOutfit(): MiaraOutfitState | null {
     return this.appliedOutfit;
+  }
+
+  private enforceHiddenWardrobeParts(): void {
+    if (this.hiddenWardrobePartIds.size === 0) return;
+    for (const partId of this.hiddenWardrobePartIds) {
+      this.setPartOpacity(partId, 0);
+    }
   }
 
   private applyOutfitHue(hueShift: number): void {
