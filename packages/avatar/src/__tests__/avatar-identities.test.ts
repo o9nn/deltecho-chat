@@ -35,7 +35,7 @@ describe("avatar identities", () => {
     expect(applied.identity).toBe("melody");
     expect(applied.model).toBe("miara");
     expect(applied.outfit.id).toBe("aria");
-    expect(applied.outfit.hueShift).toBe(270);
+    expect(applied.outfit.hueShift).toBe(325);
     expect(applied.outfit.hiddenGroups).toEqual(
       expect.arrayContaining(["water", "background"]),
     );

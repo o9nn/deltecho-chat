@@ -59,7 +59,7 @@ describe("AvatarIdentityPicker", () => {
     expect(saved.identity).toBe("melody");
     expect(saved.model).toBe("miara");
     expect(saved.outfit).toBe("aria");
-    expect(saved.outfitHueShift).toBe(270);
+    expect(saved.outfitHueShift).toBe(325);
     expect(saved.outfitHiddenGroups).toEqual(
       expect.arrayContaining(["water", "background"]),
     );

@@ -71,7 +71,7 @@ function TestConsumer() {
             model: "miara",
             outfit: "aria",
             outfitHiddenGroups: ["water", "background"],
-            outfitHueShift: 270,
+            outfitHueShift: 325,
           })
         }
       >

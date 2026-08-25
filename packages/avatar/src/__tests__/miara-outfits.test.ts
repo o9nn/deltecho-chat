@@ -52,7 +52,7 @@ describe("miara outfits", () => {
     expect(grove.hiddenGroups).toEqual([]);
     expect(grove.hueShift).toBe(95);
     const aria = resolveMiaraOutfit({ id: "aria" });
-    expect(aria.hueShift).toBe(270);
+    expect(aria.hueShift).toBe(325);
     expect(aria.hiddenGroups).toEqual(
       expect.arrayContaining(["water", "background"]),
     );

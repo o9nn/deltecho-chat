@@ -159,7 +159,7 @@ export const MIARA_OUTFIT_PRESETS: readonly MiaraOutfitSpec[] = [
     description:
       "Same Miara mesh shifted toward Melody — iridescent colorway, wings and sparkle, no water stage.",
     hiddenGroups: ["water", "background"],
-    hueShift: 270,
+    hueShift: 325,
   },
 ];
 
