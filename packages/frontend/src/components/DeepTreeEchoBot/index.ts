@@ -136,6 +136,7 @@ export { default as ProactiveStatusIndicator } from "./ProactiveStatusIndicator"
 export { DeepTreeEchoAvatarDisplay } from "./DeepTreeEchoAvatarDisplay";
 export { AvatarIdentityPicker } from "./AvatarIdentityPicker";
 export { AutomeshStudio } from "./AutomeshStudio";
+export { MiaraExpressionPicker } from "./MiaraExpressionPicker";
 export { MiaraOutfitPicker } from "./MiaraOutfitPicker";
 export {
   DeepTreeEchoAvatarProvider,

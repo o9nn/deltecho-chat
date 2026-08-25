@@ -33,16 +33,21 @@ import {
   MemoryBrowser,
 } from "@deltecho/ui-components";
 import type { UnifiedCognitiveState, Atom } from "@deltecho/cognitive";
-import { resolveMiaraOutfit } from "@deltecho/avatar";
+import {
+  LIVE_AVATAR_EXPRESSION,
+  isMiaraCubismExpressionName,
+  resolveAvatarExpression,
+  resolveMiaraOutfit,
+} from "@deltecho/avatar";
 import { Live2DAvatar } from "./Live2DAvatar";
 import type {
   Live2DAvatarController,
-  Expression,
   AvatarMotion,
   EmotionalVector,
 } from "./Live2DAvatar";
 import { AvatarIdentityPicker } from "../DeepTreeEchoBot/AvatarIdentityPicker";
 import { AutomeshStudio } from "../DeepTreeEchoBot/AutomeshStudio";
+import { MiaraExpressionPicker } from "../DeepTreeEchoBot/MiaraExpressionPicker";
 import { MiaraOutfitPicker } from "../DeepTreeEchoBot/MiaraOutfitPicker";
 import { useDeepTreeEchoAvatarOptional } from "../DeepTreeEchoBot/DeepTreeEchoAvatarContext";
 import "./Live2DAvatar.scss";
@@ -197,8 +202,6 @@ const AICompanionHubContent: React.FC = () => {
   const [avatarController, setAvatarController] =
     useState<Live2DAvatarController | null>(null);
   const [avatarLoaded, setAvatarLoaded] = useState(false);
-  const [currentExpression, setCurrentExpression] =
-    useState<Expression>("neutral");
   const [avatarAudioLevel, setAvatarAudioLevel] = useState(0);
   const avatarContext = useDeepTreeEchoAvatarOptional();
   const miaraOutfit = resolveMiaraOutfit({
@@ -206,6 +209,13 @@ const AICompanionHubContent: React.FC = () => {
     hiddenGroups: avatarContext?.state.config.outfitHiddenGroups,
     hueShift: avatarContext?.state.config.outfitHueShift,
   });
+  const lockedExpression = resolveAvatarExpression(
+    avatarContext?.state.config.expression,
+  );
+  const expressionLocked = lockedExpression !== LIVE_AVATAR_EXPRESSION;
+  const manualExpression = isMiaraCubismExpressionName(lockedExpression)
+    ? lockedExpression
+    : undefined;
 
   // Simulate real-time cognitive state updates
   useEffect(() => {
@@ -692,12 +702,15 @@ const AICompanionHubContent: React.FC = () => {
                     height={320}
                     scale={0.3}
                     emotionalState={
-                      cognitiveState?.emotionalState as
-                        | EmotionalVector
-                        | undefined
+                      expressionLocked
+                        ? undefined
+                        : (cognitiveState?.emotionalState as
+                            | EmotionalVector
+                            | undefined)
                     }
                     audioLevel={avatarAudioLevel}
                     outfit={miaraOutfit}
+                    manualExpression={manualExpression}
                     onLoad={() => setAvatarLoaded(true)}
                     onError={(err) => console.error("Avatar error:", err)}
                     onControllerReady={(controller) => {
@@ -711,45 +724,7 @@ const AICompanionHubContent: React.FC = () => {
                 </div>
                 <AvatarIdentityPicker variant="panel" />
                 <MiaraOutfitPicker variant="panel" />
-                <div className="avatar-controls">
-                  <div className="expression-buttons">
-                    {(
-                      [
-                        "neutral",
-                        "happy",
-                        "surprised",
-                        "curious",
-                        "concerned",
-                        "focused",
-                      ] as Expression[]
-                    ).map((expr) => (
-                      <button
-                        type="button"
-                        key={expr}
-                        className={`expression-btn ${
-                          currentExpression === expr ? "active" : ""
-                        }`}
-                        onClick={() => {
-                          setCurrentExpression(expr);
-                          avatarController?.setExpression(expr, 0.8);
-                        }}
-                      >
-                        {expr === "neutral"
-                          ? "😐"
-                          : expr === "happy"
-                            ? "😊"
-                            : expr === "surprised"
-                              ? "😲"
-                              : expr === "curious"
-                                ? "🤔"
-                                : expr === "concerned"
-                                  ? "😟"
-                                  : "🎯"}{" "}
-                        {expr}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+                <MiaraExpressionPicker variant="panel" />
               </div>
               <div className="avatar-motion-section">
                 <h4>Motions</h4>

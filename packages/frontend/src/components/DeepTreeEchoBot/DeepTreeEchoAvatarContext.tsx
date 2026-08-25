@@ -16,11 +16,14 @@ import React, {
 import {
   DEFAULT_AVATAR_IDENTITY_ID,
   DEFAULT_MIARA_OUTFIT_ID,
+  LIVE_AVATAR_EXPRESSION,
   SHARED_AVATAR_MESH,
+  resolveAvatarExpression,
   resolveAvatarIdentity,
   resolveAutomeshMapping,
   resolveMiaraOutfit,
   type AutomeshMapping,
+  type AvatarExpressionId,
   type AvatarIdentityId,
   type MiaraOutfitId,
   type MiaraPartGroup,
@@ -55,6 +58,7 @@ export interface AvatarConfig {
   outfitHueShift: number;
   automeshMapping: AutomeshMapping | null;
   automeshAtlas: string | null;
+  expression: AvatarExpressionId;
 }
 
 // Avatar state
@@ -91,6 +95,7 @@ const DEFAULT_AVATAR_CONFIG: AvatarConfig = {
   outfitHueShift: 0,
   automeshMapping: null,
   automeshAtlas: null,
+  expression: LIVE_AVATAR_EXPRESSION,
 };
 
 function sanitizeAvatarConfig(
@@ -115,6 +120,7 @@ function sanitizeAvatarConfig(
       config.automeshAtlas.startsWith("data:image/")
         ? config.automeshAtlas
         : null,
+    expression: resolveAvatarExpression(config.expression),
   };
 }
 

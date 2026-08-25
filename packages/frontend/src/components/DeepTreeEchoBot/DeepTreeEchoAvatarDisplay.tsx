@@ -12,7 +12,12 @@ import React, {
   useCallback,
   useMemo,
 } from "react";
-import { resolveMiaraOutfit } from "@deltecho/avatar";
+import {
+  LIVE_AVATAR_EXPRESSION,
+  isMiaraCubismExpressionName,
+  resolveAvatarExpression,
+  resolveMiaraOutfit,
+} from "@deltecho/avatar";
 import { Live2DAvatar } from "../AICompanionHub/Live2DAvatar";
 import type {
   Live2DAvatarController,
@@ -22,6 +27,7 @@ import type {
   CognitiveVisualState,
 } from "../AICompanionHub/Live2DAvatar";
 import { AvatarIdentityPicker } from "./AvatarIdentityPicker";
+import { MiaraExpressionPicker } from "./MiaraExpressionPicker";
 import { MiaraOutfitPicker } from "./MiaraOutfitPicker";
 import { getOrchestrator } from "./CognitiveBridge";
 import type { UnifiedCognitiveState } from "./CognitiveBridge";
@@ -571,6 +577,10 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
   }
 
   const identity = avatarContext?.state.config.identity ?? "miara";
+  const lockedExpression = resolveAvatarExpression(
+    avatarContext?.state.config.expression,
+  );
+  const expressionLocked = lockedExpression !== LIVE_AVATAR_EXPRESSION;
   const containerClass = `deep-tree-echo-avatar-display ${className} ${
     finalPosition === "floating" ? "floating-avatar" : "inline-avatar"
   }`;
@@ -580,6 +590,7 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
       className={containerClass}
       ref={stripRef}
       data-identity={identity}
+      data-expression={lockedExpression}
       data-testid="deep-tree-echo-avatar-display"
     >
       <Live2DAvatar
@@ -588,11 +599,18 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
         height={finalHeight}
         scale={stripScale}
         fillContainer={fillsConversationStrip}
-        emotionalState={emotionalVector}
-        cognitiveVisualState={cognitiveVisualState}
+        emotionalState={expressionLocked ? undefined : emotionalVector}
+        cognitiveVisualState={
+          expressionLocked ? undefined : cognitiveVisualState
+        }
         audioLevel={audioLevel}
         isSpeaking={isSpeaking}
         outfit={outfit}
+        manualExpression={
+          isMiaraCubismExpressionName(lockedExpression)
+            ? lockedExpression
+            : undefined
+        }
         onControllerReady={handleAvatarReady}
         showLoading={true}
         showError={true}
@@ -601,6 +619,7 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
       <div className="avatar-look-controls">
         <AvatarIdentityPicker variant="compact" />
         <MiaraOutfitPicker variant="compact" />
+        <MiaraExpressionPicker variant="compact" />
       </div>
       {processingState !== BotProcessingState.IDLE && (
         <div className="avatar-status-indicator">

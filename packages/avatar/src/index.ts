@@ -32,7 +32,12 @@ export {
   MIARA_EXPRESSION_MAP,
   isMiaraCubismExpressionName,
   cubismExpressionFile,
+  LIVE_AVATAR_EXPRESSION,
+  AVATAR_EXPRESSION_CHOICES,
+  resolveAvatarExpression,
   type MiaraCubismExpressionName,
+  type AvatarExpressionId,
+  type AvatarExpressionChoice,
 } from "./miara-expressions";
 
 export {

@@ -29,6 +29,7 @@ function TestConsumer() {
       <span data-testid="automesh-identity">
         {avatar.state.config.automeshMapping?.identity ?? "none"}
       </span>
+      <span data-testid="expression">{avatar.state.config.expression}</span>
       <button
         type="button"
         data-testid="set-listening"
@@ -105,6 +106,14 @@ function TestConsumer() {
         }
       >
         Set Automesh
+        data-testid="set-smile-expression"
+        onClick={() =>
+          avatar.updateConfig({
+            expression: "JOY_01_BroadSmile",
+          })
+        }
+      >
+        Set Smile
       </button>
     </div>
   );
@@ -307,6 +316,17 @@ describe("DeepTreeEchoAvatarContext", () => {
 
   describe("automesh persistence", () => {
     it("persists a trained Melody mapping", () => {
+  describe("expression persistence", () => {
+    it("defaults to live expression", () => {
+      render(
+        <DeepTreeEchoAvatarProvider>
+          <TestConsumer />
+        </DeepTreeEchoAvatarProvider>,
+      );
+      expect(screen.getByTestId("expression")).toHaveTextContent("live");
+    });
+
+    it("persists a locked Cubism expression to localStorage", () => {
       render(
         <DeepTreeEchoAvatarProvider>
           <TestConsumer />
@@ -319,12 +339,39 @@ describe("DeepTreeEchoAvatarContext", () => {
 
       expect(screen.getByTestId("automesh-identity")).toHaveTextContent(
         "melody",
+        screen.getByTestId("set-smile-expression").click();
+      });
+
+      expect(screen.getByTestId("expression")).toHaveTextContent(
+        "JOY_01_BroadSmile",
       );
       const saved = JSON.parse(
         window.localStorage.getItem("deepTreeEchoAvatarConfig") || "{}",
       );
       expect(saved.automeshMapping.identity).toBe("melody");
       expect(saved.automeshAtlas).toBe("data:image/png;base64,abc");
+      expect(saved.expression).toBe("JOY_01_BroadSmile");
+    });
+
+    it("restores a locked Cubism expression on a later session", async () => {
+      window.localStorage.setItem(
+        "deepTreeEchoAvatarConfig",
+        JSON.stringify({
+          expression: "SURPRISE_01_Startled",
+        }),
+      );
+
+      render(
+        <DeepTreeEchoAvatarProvider>
+          <TestConsumer />
+        </DeepTreeEchoAvatarProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByTestId("expression")).toHaveTextContent(
+          "SURPRISE_01_Startled",
+        );
+      });
     });
   });
 

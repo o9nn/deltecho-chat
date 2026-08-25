@@ -37,6 +37,7 @@ jest.mock("../../AICompanionHub/Live2DAvatar", () => ({
     model,
     cognitiveVisualState,
     outfit,
+    manualExpression,
   }: any) => (
     <div
       data-testid="mock-live2d-avatar"
@@ -48,6 +49,7 @@ jest.mock("../../AICompanionHub/Live2DAvatar", () => ({
       data-height={height}
       data-model={model}
       data-outfit={JSON.stringify(outfit ?? null)}
+      data-manual-expression={manualExpression ?? ""}
     >
       <button
         type="button"
@@ -55,6 +57,7 @@ jest.mock("../../AICompanionHub/Live2DAvatar", () => ({
         onClick={() =>
           onControllerReady?.({
             setExpression: jest.fn(),
+            setNamedExpression: jest.fn(),
             playMotion: jest.fn(),
             updateLipSync: jest.fn(),
             triggerBlink: jest.fn(),
@@ -604,6 +607,63 @@ describe("DeepTreeEchoAvatarDisplay", () => {
           hiddenGroups: expect.arrayContaining(["fairy", "water"]),
         }),
       );
+    });
+  });
+
+  describe("Expression lock", () => {
+    it("renders the expression picker in live mode by default", () => {
+      render(
+        <DeepTreeEchoAvatarProvider>
+          <DeepTreeEchoAvatarDisplay />
+        </DeepTreeEchoAvatarProvider>,
+      );
+
+      expect(screen.getByTestId("miara-expression-picker")).toBeInTheDocument();
+      expect(screen.getByTestId("miara-expression-select")).toHaveValue("live");
+      expect(
+        screen.getByTestId("deep-tree-echo-avatar-display"),
+      ).toHaveAttribute("data-expression", "live");
+      expect(screen.getByTestId("mock-live2d-avatar")).toHaveAttribute(
+        "data-manual-expression",
+        "",
+      );
+    });
+
+    it("locks a named Cubism expression and skips live cognitive updates", async () => {
+      const mockGetState = jest.fn().mockReturnValue({
+        cognitiveContext: {
+          emotionalValence: 0.8,
+          emotionalArousal: 0.6,
+          salienceScore: 0.9,
+          relevantMemories: [],
+          attentionWeight: 0.5,
+          activeCouplings: [],
+        },
+      });
+      (CognitiveBridge.getOrchestrator as jest.Mock).mockReturnValue({
+        getState: mockGetState,
+      });
+
+      render(
+        <DeepTreeEchoAvatarProvider>
+          <DeepTreeEchoAvatarDisplay />
+        </DeepTreeEchoAvatarProvider>,
+      );
+
+      fireEvent.change(screen.getByTestId("miara-expression-select"), {
+        target: { value: "JOY_01_BroadSmile" },
+      });
+
+      const avatar = screen.getByTestId("mock-live2d-avatar");
+      expect(
+        screen.getByTestId("deep-tree-echo-avatar-display"),
+      ).toHaveAttribute("data-expression", "JOY_01_BroadSmile");
+      expect(avatar).toHaveAttribute(
+        "data-manual-expression",
+        "JOY_01_BroadSmile",
+      );
+      expect(avatar.getAttribute("data-emotional-state")).toBeNull();
+      expect(avatar.getAttribute("data-cognitive-visual-state")).toBeNull();
     });
   });
 
