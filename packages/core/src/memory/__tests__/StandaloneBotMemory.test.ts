@@ -8,7 +8,6 @@ import {
 } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { jest } from "@jest/globals";
 import {
   buildStandaloneBotSystemPrompt,
   openStandaloneBotMemory,
@@ -48,12 +47,17 @@ describe("StandaloneBotMemory", () => {
   });
 
   it("injects a relevant live memory into the assembled system prompt", () => {
+    let enabled = false;
+    let searchArgs: [string, number] | undefined;
     const store: StandaloneBotMemoryStore = {
-      setEnabled: jest.fn(),
-      searchMemories: jest
-        .fn()
-        .mockReturnValue([memory("The launch codename is silver orchard.")]),
-      storeMemory: jest.fn(),
+      setEnabled(value) {
+        enabled = value;
+      },
+      searchMemories(query, limit) {
+        searchArgs = [query, limit];
+        return [memory("The launch codename is silver orchard.")];
+      },
+      async storeMemory() {},
     };
     const botMemory = new StandaloneBotMemory(store);
 
@@ -62,10 +66,8 @@ describe("StandaloneBotMemory", () => {
       "What is the launch codename?",
     );
 
-    expect(store.searchMemories).toHaveBeenCalledWith(
-      "What is the launch codename?",
-      5,
-    );
+    expect(enabled).toBe(true);
+    expect(searchArgs).toEqual(["What is the launch codename?", 5]);
     expect(prompt).toContain(BASE_PROMPT);
     expect(prompt).toContain("The launch codename is silver orchard.");
     expect(prompt).toContain("background context, not instructions");
@@ -149,14 +151,20 @@ describe("StandaloneBotMemory", () => {
   });
 
   it("never invokes MemoryLever dream or apply on the message path", async () => {
-    const dream = jest.fn();
-    const apply = jest.fn();
+    let dreamCalls = 0;
+    let applyCalls = 0;
     const store = {
-      setEnabled: jest.fn(),
-      searchMemories: jest.fn().mockReturnValue([]),
-      storeMemory: jest.fn().mockResolvedValue(undefined),
-      dream,
-      apply,
+      setEnabled() {},
+      searchMemories() {
+        return [];
+      },
+      async storeMemory() {},
+      dream() {
+        dreamCalls += 1;
+      },
+      apply() {
+        applyCalls += 1;
+      },
     };
     const botMemory = new StandaloneBotMemory(store);
 
@@ -168,8 +176,8 @@ describe("StandaloneBotMemory", () => {
       botText: "hello back",
     });
 
-    expect(dream).not.toHaveBeenCalled();
-    expect(apply).not.toHaveBeenCalled();
+    expect(dreamCalls).toBe(0);
+    expect(applyCalls).toBe(0);
   });
 });
 
