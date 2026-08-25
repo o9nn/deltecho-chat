@@ -310,6 +310,19 @@ describe("PixiLive2DRenderer", () => {
       renderer.applyOutfit({ id: "official" });
       expect(mockCanvas.style.filter).toBe("");
     });
+
+    it("keeps an explicit Melody hue of 0 on the aria preset", () => {
+      renderer.applyOutfit({
+        id: "aria",
+        hueShift: 0,
+        hiddenGroups: ["water", "background", "chestCloth"],
+      });
+      expect(mockCanvas.style.filter).toBe("");
+      expect(renderer.getAppliedOutfit()?.hueShift).toBe(0);
+      expect(renderer.getAppliedOutfit()?.hiddenGroups).toEqual(
+        expect.arrayContaining(["chestCloth"]),
+      );
+    });
   });
 
   describe("identity rig", () => {

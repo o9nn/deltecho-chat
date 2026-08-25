@@ -251,6 +251,28 @@ export function resolveMiaraOutfit(
   };
 }
 
+/**
+ * Named presets ignore caller hue/hides. Identity looks (Melody hue 0,
+ * extra chestCloth) pass those fields after resolve — keep them.
+ */
+export function finalizeMiaraOutfit(
+  state: Partial<MiaraOutfitState> | null | undefined,
+): MiaraOutfitState {
+  const resolved = resolveMiaraOutfit(state);
+  return {
+    ...resolved,
+    hiddenGroups: Array.isArray(state?.hiddenGroups)
+      ? sanitizeHiddenGroups(state.hiddenGroups)
+      : resolved.hiddenGroups,
+    hueShift:
+      state != null &&
+      typeof state.hueShift === "number" &&
+      Number.isFinite(state.hueShift)
+        ? sanitizeHueShift(state.hueShift)
+        : resolved.hueShift,
+  };
+}
+
 export function outfitFromCustomAdjustments(input: {
   hiddenGroups: readonly MiaraPartGroup[];
   hueShift: number;

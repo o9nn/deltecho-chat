@@ -20,6 +20,7 @@ export {
   partIdMatchesHiddenGroups,
   MIARA_PART_GROUP_MATCHERS,
   resolveMiaraOutfit,
+  finalizeMiaraOutfit,
   outfitFromCustomAdjustments,
   type MiaraOutfitId,
   type MiaraPartGroup,

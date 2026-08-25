@@ -6,6 +6,7 @@ import {
   isMiaraOutfitId,
   outfitFromCustomAdjustments,
   partIdMatchesHiddenGroups,
+  finalizeMiaraOutfit,
   resolveMiaraOutfit,
 } from "../miara-outfits";
 
@@ -56,6 +57,20 @@ describe("miara outfits", () => {
     expect(aria.hiddenGroups).toEqual(
       expect.arrayContaining(["water", "background"]),
     );
+  });
+
+  it("keeps identity hue and extra hides on a named preset", () => {
+    const melody = finalizeMiaraOutfit({
+      id: "aria",
+      hiddenGroups: ["water", "background", "chestCloth"],
+      hueShift: 0,
+    });
+    expect(melody.id).toBe("aria");
+    expect(melody.hueShift).toBe(0);
+    expect(melody.hiddenGroups).toEqual(
+      expect.arrayContaining(["water", "background", "chestCloth"]),
+    );
+    expect(finalizeMiaraOutfit({ id: "aria" }).hueShift).toBe(325);
   });
 
   it("keeps custom hidden groups and hue", () => {

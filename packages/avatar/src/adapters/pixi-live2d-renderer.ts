@@ -25,7 +25,7 @@ import {
   ALL_MIARA_WARDROBE_PART_IDS,
   collectHiddenPartIds,
   partIdMatchesHiddenGroups,
-  resolveMiaraOutfit,
+  finalizeMiaraOutfit,
   type MiaraOutfitState,
 } from "../miara-outfits";
 import { MIARA_EXPRESSION_MAP } from "../miara-expressions";
@@ -238,17 +238,32 @@ function withLive2DFromLock<T>(fn: () => Promise<T>): Promise<T> {
   return previous.then(fn).finally(() => release());
 }
 
+function resolveTextureSource(source: string): string {
+  if (source.startsWith("data:") || /^https?:\/\//i.test(source)) {
+    return source;
+  }
+  if (typeof window !== "undefined" && window.location?.href) {
+    try {
+      return new URL(source, window.location.href).href;
+    } catch {
+      return source;
+    }
+  }
+  return source;
+}
+
 async function loadPixiTexture(source: string): Promise<unknown> {
+  const resolved = resolveTextureSource(source);
   const { Texture } = await import("pixi.js");
   const fromUrl = (
     Texture as {
       fromURL?: (url: string) => Promise<unknown>;
     }
   ).fromURL;
-  if (typeof fromUrl === "function" && !source.startsWith("data:")) {
-    return fromUrl(source);
+  if (typeof fromUrl === "function" && !resolved.startsWith("data:")) {
+    return fromUrl(resolved);
   }
-  const texture = Texture.from(source) as {
+  const texture = Texture.from(resolved) as {
     baseTexture?: {
       valid?: boolean;
       once?: (event: string, listener: () => void) => void;
@@ -1344,7 +1359,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
    * Apply a Miara outfit: hide wardrobe parts and hue-shift clothing colorways.
    */
   applyOutfit(state: Partial<MiaraOutfitState> | null | undefined): void {
-    const resolved = resolveMiaraOutfit(state);
+    const resolved = finalizeMiaraOutfit(state);
     this.appliedOutfit = resolved;
     if (!this.model || !this.initialized) return;
 
