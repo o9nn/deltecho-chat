@@ -81,6 +81,23 @@ export {
   regionForDrawable,
   type IdentityMeshMap,
   type MeshRegion,
+  DEFAULT_MELODY_POSE_ID,
+  MELODY_POSES,
+  MELODY_POSE_IDS,
+  isMelodyPoseId,
+  parametersForMelodyPose,
+  poseForExpression,
+  poseForMotion,
+  resolveMelodyPose,
+  serializeMelodyPoseMap,
+  MELODY_AVATAR_MESH_MAP,
+  mesh3dGroupsForRegion,
+  live2dRegionsForMesh3d,
+  resolveAvatarMeshMap,
+  type MelodyPose,
+  type MelodyPoseId,
+  type IdentityAvatarMeshMap,
+  type MelodyMesh3dGroup,
 } from "./automesh";
 
 export {

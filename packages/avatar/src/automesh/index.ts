@@ -35,6 +35,39 @@ export {
 export { MELODY_PARAMETER_PROFILE, mergeParameterProfile } from "./parameters";
 
 export {
+  DEFAULT_MELODY_POSE_ID,
+  MELODY_POSES,
+  MELODY_POSE_IDS,
+  MELODY_POSE_MAP_VERSION,
+  isMelodyPoseId,
+  parametersForMelodyPose,
+  poseForExpression,
+  poseForMotion,
+  resolveMelodyPose,
+  serializeMelodyPoseMap,
+  type MelodyPose,
+  type MelodyPoseId,
+  type MelodyPoseMotionGroup,
+} from "./pose-map";
+
+export {
+  AVATAR_MESH_KINDS,
+  AVATAR_MESH_MAP_VERSION,
+  MELODY_AVATAR_MESH_MAP,
+  MELODY_LIVE2D_TO_3D,
+  MELODY_MESH3D_GROUPS,
+  MELODY_MESH3D_GROUP_SPECS,
+  live2dRegionsForMesh3d,
+  mesh3dGroupsForRegion,
+  resolveAvatarMeshMap,
+  type AvatarMeshKind,
+  type IdentityAvatarMeshMap,
+  type Live2dTo3dBinding,
+  type MelodyMesh3dGroup,
+  type Mesh3dGroupSpec,
+} from "./avatar-mesh-map";
+
+export {
   normalizeDrawableId,
   drawableMatchesHints,
   boundsCentroid,

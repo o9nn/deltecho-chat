@@ -3,7 +3,7 @@
  * Melody loads `models/melody/melody_t03.model3.json`, not Miara.
  */
 
-import { MELODY_PARAMETER_PROFILE } from "./automesh/parameters";
+import { parametersForMelodyPose } from "./automesh/pose-map";
 import { resolveIdentityRig, type IdentityRig } from "./automesh/identity-rig";
 import {
   IDENTITY_MODEL3_PATHS,
@@ -90,7 +90,7 @@ export const AVATAR_IDENTITIES: readonly AvatarIdentitySpec[] = [
     outfitId: "aria",
     portrait: "./images/avatar/identities/melody.webp",
     overlay: SHIPPED_MELODY_ATLAS,
-    extraHiddenGroups: ["chestCloth"],
+    extraHiddenGroups: ["chestCloth", "sparkle", "hairAccessory"],
     bakedLook: true,
   },
 ];
@@ -190,7 +190,7 @@ export function resolveIdentityParameters(
   if (mappingParameters && Object.keys(mappingParameters).length > 0) {
     return mappingParameters;
   }
-  return { ...MELODY_PARAMETER_PROFILE };
+  return parametersForMelodyPose("a-pose");
 }
 
 export type IdentityLookController = {

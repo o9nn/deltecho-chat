@@ -418,6 +418,10 @@ describe("identity physics retarget", () => {
       true,
     );
     expect(existsSync(join(models, "melody/mesh-map.json"))).toBe(true);
+    expect(existsSync(join(models, "melody/pose-map.json"))).toBe(true);
+    expect(existsSync(join(models, "melody/avatar-mesh-map.json"))).toBe(
+      true,
+    );
     expect(existsSync(join(models, "miara/mesh-map.json"))).toBe(true);
     const melodyMap = JSON.parse(
       readFileSync(join(models, "melody/mesh-map.json"), "utf8"),

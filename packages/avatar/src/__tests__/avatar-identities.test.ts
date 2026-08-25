@@ -55,7 +55,13 @@ describe("avatar identities", () => {
     expect(applied.outfit.hueShift).toBe(0);
     expect(applied.overlay).toBe(SHIPPED_MELODY_ATLAS);
     expect(applied.outfit.hiddenGroups).toEqual(
-      expect.arrayContaining(["water", "background", "chestCloth"]),
+      expect.arrayContaining([
+        "water",
+        "background",
+        "chestCloth",
+        "sparkle",
+        "hairAccessory",
+      ]),
     );
     expect(applied.rig?.id).toBe("melody");
     expect(lookForAvatarIdentity("melody").hueShift).toBe(325);
@@ -81,6 +87,9 @@ describe("avatar identities", () => {
     );
     expect(resolveIdentityOverlay("miara", SHIPPED_MELODY_ATLAS)).toBeNull();
     expect(resolveIdentityParameters("melody")?.ParamMouthForm).toBe(0.45);
+    expect(resolveIdentityParameters("melody")?.ParamArmL1).toBeGreaterThan(
+      0.3,
+    );
     expect(resolveIdentityParameters("miara")).toBeNull();
   });
 
