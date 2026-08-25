@@ -41,6 +41,7 @@ import type {
   AvatarMotion,
   EmotionalVector,
 } from "./Live2DAvatar";
+import { AvatarIdentityPicker } from "../DeepTreeEchoBot/AvatarIdentityPicker";
 import { MiaraOutfitPicker } from "../DeepTreeEchoBot/MiaraOutfitPicker";
 import { useDeepTreeEchoAvatarOptional } from "../DeepTreeEchoBot/DeepTreeEchoAvatarContext";
 import "./Live2DAvatar.scss";
@@ -692,6 +693,7 @@ const AICompanionHubContent: React.FC = () => {
                     onControllerReady={setAvatarController}
                   />
                 </div>
+                <AvatarIdentityPicker variant="panel" />
                 <MiaraOutfitPicker variant="panel" />
                 <div className="avatar-controls">
                   <div className="expression-buttons">

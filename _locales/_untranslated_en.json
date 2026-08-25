@@ -116,6 +116,24 @@
   "miara_outfit_gold": {
     "message": "Gold"
   },
+  "miara_outfit_grove": {
+    "message": "Grove"
+  },
+  "miara_outfit_aria": {
+    "message": "Aria"
+  },
+  "avatar_identity_label": {
+    "message": "Avatar"
+  },
+  "avatar_identity_miara": {
+    "message": "Miara"
+  },
+  "avatar_identity_deep_tree_echo": {
+    "message": "Deep Tree Echo"
+  },
+  "avatar_identity_melody": {
+    "message": "Melody"
+  },
   "miara_outfit_custom": {
     "message": "Custom"
   },

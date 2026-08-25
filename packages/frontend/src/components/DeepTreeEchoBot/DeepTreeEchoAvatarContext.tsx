@@ -14,8 +14,12 @@ import React, {
   useEffect,
 } from "react";
 import {
+  DEFAULT_AVATAR_IDENTITY_ID,
   DEFAULT_MIARA_OUTFIT_ID,
+  SHARED_AVATAR_MESH,
+  resolveAvatarIdentity,
   resolveMiaraOutfit,
+  type AvatarIdentityId,
   type MiaraOutfitId,
   type MiaraPartGroup,
 } from "@deltecho/avatar";
@@ -43,6 +47,7 @@ export interface AvatarConfig {
   width: number;
   height: number;
   model: string;
+  identity: AvatarIdentityId;
   outfit: MiaraOutfitId;
   outfitHiddenGroups: MiaraPartGroup[];
   outfitHueShift: number;
@@ -75,7 +80,8 @@ const DEFAULT_AVATAR_CONFIG: AvatarConfig = {
   position: "floating",
   width: 300,
   height: 300,
-  model: "miara",
+  model: SHARED_AVATAR_MESH,
+  identity: DEFAULT_AVATAR_IDENTITY_ID,
   outfit: DEFAULT_MIARA_OUTFIT_ID,
   outfitHiddenGroups: [],
   outfitHueShift: 0,
@@ -92,6 +98,8 @@ function sanitizeAvatarConfig(
   });
   return {
     ...config,
+    identity: resolveAvatarIdentity(config.identity),
+    model: SHARED_AVATAR_MESH,
     outfit: resolved.id,
     outfitHiddenGroups: [...resolved.hiddenGroups],
     outfitHueShift: resolved.hueShift,

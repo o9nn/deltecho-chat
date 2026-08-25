@@ -47,6 +47,17 @@ describe("miara outfits", () => {
     expect(rose.hueShift).toBe(310);
   });
 
+  it("applies grove and aria identity colorways on the same mesh", () => {
+    const grove = resolveMiaraOutfit({ id: "grove" });
+    expect(grove.hiddenGroups).toEqual([]);
+    expect(grove.hueShift).toBe(95);
+    const aria = resolveMiaraOutfit({ id: "aria" });
+    expect(aria.hueShift).toBe(270);
+    expect(aria.hiddenGroups).toEqual(
+      expect.arrayContaining(["water", "background"]),
+    );
+  });
+
   it("keeps custom hidden groups and hue", () => {
     const custom = resolveMiaraOutfit({
       id: "custom",

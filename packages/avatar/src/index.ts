@@ -27,6 +27,20 @@ export {
   type MiaraOutfitState,
 } from "./miara-outfits";
 
+export {
+  AVATAR_IDENTITY_IDS,
+  DEFAULT_AVATAR_IDENTITY_ID,
+  SHARED_AVATAR_MESH,
+  AVATAR_IDENTITIES,
+  isAvatarIdentityId,
+  getAvatarIdentity,
+  resolveAvatarIdentity,
+  lookForAvatarIdentity,
+  applyAvatarIdentity,
+  type AvatarIdentityId,
+  type AvatarIdentitySpec,
+} from "./avatar-identities";
+
 // Types
 export {
   Expression,

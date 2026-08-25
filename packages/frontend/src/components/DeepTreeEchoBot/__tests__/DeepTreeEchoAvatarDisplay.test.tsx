@@ -554,26 +554,51 @@ describe("DeepTreeEchoAvatarDisplay", () => {
         </DeepTreeEchoAvatarProvider>,
       );
 
+      expect(screen.getByTestId("avatar-identity-picker")).toBeInTheDocument();
       expect(screen.getByTestId("miara-outfit-picker")).toBeInTheDocument();
+      expect(
+        screen.getByTestId("deep-tree-echo-avatar-display"),
+      ).toHaveAttribute("data-identity", "miara");
       const avatar = screen.getByTestId("mock-live2d-avatar");
       expect(JSON.parse(avatar.getAttribute("data-outfit") || "{}")).toEqual(
         expect.objectContaining({ id: "official", hueShift: 0 }),
       );
     });
 
-    it("swaps the rendered outfit when a preset is chosen", () => {
+    it("swaps the rendered identity and outfit on the same mesh", () => {
       render(
         <DeepTreeEchoAvatarProvider>
           <DeepTreeEchoAvatarDisplay />
         </DeepTreeEchoAvatarProvider>,
       );
 
+      fireEvent.click(screen.getByTestId("avatar-identity-melody"));
+      expect(
+        screen.getByTestId("deep-tree-echo-avatar-display"),
+      ).toHaveAttribute("data-identity", "melody");
+      expect(
+        JSON.parse(
+          screen
+            .getByTestId("mock-live2d-avatar")
+            .getAttribute("data-outfit") || "{}",
+        ),
+      ).toEqual(expect.objectContaining({ id: "aria", hueShift: 270 }));
+      expect(screen.getByTestId("mock-live2d-avatar")).toHaveAttribute(
+        "data-model",
+        "miara",
+      );
+
       fireEvent.change(screen.getByTestId("miara-outfit-select"), {
         target: { value: "casual" },
       });
 
-      const avatar = screen.getByTestId("mock-live2d-avatar");
-      expect(JSON.parse(avatar.getAttribute("data-outfit") || "{}")).toEqual(
+      expect(
+        JSON.parse(
+          screen
+            .getByTestId("mock-live2d-avatar")
+            .getAttribute("data-outfit") || "{}",
+        ),
+      ).toEqual(
         expect.objectContaining({
           id: "casual",
           hiddenGroups: expect.arrayContaining(["fairy", "water"]),

@@ -275,6 +275,8 @@ describe("BotSettings", () => {
       expect(screen.getByText("General")).toBeInTheDocument();
     });
 
+    expect(screen.getByText("Avatars")).toBeInTheDocument();
+    expect(screen.getByTestId("avatar-identity-picker")).toBeInTheDocument();
     expect(screen.getByText("Capabilities")).toBeInTheDocument();
     expect(screen.getByText("API Configuration")).toBeInTheDocument();
     expect(screen.getByText("Personality")).toBeInTheDocument();

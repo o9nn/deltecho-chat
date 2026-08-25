@@ -21,6 +21,7 @@ import type {
   EmotionalVector,
   CognitiveVisualState,
 } from "../AICompanionHub/Live2DAvatar";
+import { AvatarIdentityPicker } from "./AvatarIdentityPicker";
 import { MiaraOutfitPicker } from "./MiaraOutfitPicker";
 import { getOrchestrator } from "./CognitiveBridge";
 import type { UnifiedCognitiveState } from "./CognitiveBridge";
@@ -550,12 +551,18 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
     return null;
   }
 
+  const identity = avatarContext?.state.config.identity ?? "miara";
   const containerClass = `deep-tree-echo-avatar-display ${className} ${
     finalPosition === "floating" ? "floating-avatar" : "inline-avatar"
   }`;
 
   return (
-    <div className={containerClass} ref={stripRef}>
+    <div
+      className={containerClass}
+      ref={stripRef}
+      data-identity={identity}
+      data-testid="deep-tree-echo-avatar-display"
+    >
       <Live2DAvatar
         model={avatarContext?.state.config.model ?? "miara"}
         width={finalWidth}
@@ -572,7 +579,10 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
         showError={true}
         mode="live2d"
       />
-      <MiaraOutfitPicker variant="compact" />
+      <div className="avatar-look-controls">
+        <AvatarIdentityPicker variant="compact" />
+        <MiaraOutfitPicker variant="compact" />
+      </div>
       {processingState !== BotProcessingState.IDLE && (
         <div className="avatar-status-indicator">
           <span className={`status-badge status-${processingState}`}>

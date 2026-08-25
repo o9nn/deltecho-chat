@@ -15,6 +15,8 @@ export const MIARA_OUTFIT_IDS = [
   "rose",
   "midnight",
   "gold",
+  "grove",
+  "aria",
   "custom",
 ] as const;
 
@@ -142,6 +144,22 @@ export const MIARA_OUTFIT_PRESETS: readonly MiaraOutfitSpec[] = [
     description: "Official layers with a warm gold clothing colorway.",
     hiddenGroups: [],
     hueShift: 45,
+  },
+  {
+    id: "grove",
+    label: "Grove",
+    description:
+      "Same Miara mesh shifted toward Deep Tree Echo — moss colorway, wings and lagoon kept.",
+    hiddenGroups: [],
+    hueShift: 95,
+  },
+  {
+    id: "aria",
+    label: "Aria",
+    description:
+      "Same Miara mesh shifted toward Melody — iridescent colorway, wings and sparkle, no water stage.",
+    hiddenGroups: ["water", "background"],
+    hueShift: 270,
   },
 ];
 

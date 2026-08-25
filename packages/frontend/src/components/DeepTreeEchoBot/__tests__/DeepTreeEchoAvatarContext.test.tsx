@@ -23,6 +23,7 @@ function TestConsumer() {
         {avatar.state.isSpeaking.toString()}
       </span>
       <span data-testid="audio-level">{avatar.state.audioLevel}</span>
+      <span data-testid="identity">{avatar.state.config.identity}</span>
       <span data-testid="outfit">{avatar.state.config.outfit}</span>
       <span data-testid="outfit-hue">{avatar.state.config.outfitHueShift}</span>
       <button
@@ -60,6 +61,21 @@ function TestConsumer() {
         }
       >
         Set Rose
+      </button>
+      <button
+        type="button"
+        data-testid="set-melody-identity"
+        onClick={() =>
+          avatar.updateConfig({
+            identity: "melody",
+            model: "miara",
+            outfit: "aria",
+            outfitHiddenGroups: ["water", "background"],
+            outfitHueShift: 270,
+          })
+        }
+      >
+        Set Melody
       </button>
     </div>
   );
@@ -193,8 +209,29 @@ describe("DeepTreeEchoAvatarContext", () => {
           <TestConsumer />
         </DeepTreeEchoAvatarProvider>,
       );
+      expect(screen.getByTestId("identity")).toHaveTextContent("miara");
       expect(screen.getByTestId("outfit")).toHaveTextContent("official");
       expect(screen.getByTestId("outfit-hue")).toHaveTextContent("0");
+    });
+
+    it("persists a selected identity to localStorage", () => {
+      render(
+        <DeepTreeEchoAvatarProvider>
+          <TestConsumer />
+        </DeepTreeEchoAvatarProvider>,
+      );
+
+      act(() => {
+        screen.getByTestId("set-melody-identity").click();
+      });
+
+      expect(screen.getByTestId("identity")).toHaveTextContent("melody");
+      const saved = JSON.parse(
+        window.localStorage.getItem("deepTreeEchoAvatarConfig") || "{}",
+      );
+      expect(saved.identity).toBe("melody");
+      expect(saved.model).toBe("miara");
+      expect(saved.outfit).toBe("aria");
     });
 
     it("persists the selected outfit to localStorage", () => {
