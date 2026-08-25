@@ -75,7 +75,30 @@ function bakeMelodyTexture(destDir) {
   if (!existsSync(melodyStillAtlas)) {
     throw new Error(`Melody atlas missing: ${melodyStillAtlas}`);
   }
-  copyFileSync(melodyStillAtlas, join(textureDir, "texture_00.png"));
+  const official = join(miaraDir, "miara_pro_t03.4096/texture_00.png");
+  const dest = join(textureDir, "texture_00.png");
+  const py = `
+from pathlib import Path
+from PIL import Image
+official = Image.open(${JSON.stringify(official)}).convert("RGBA")
+atlas = Image.open(${JSON.stringify(melodyStillAtlas)}).convert("RGBA")
+atlas = atlas.resize(official.size, Image.Resampling.LANCZOS)
+# Sparse automesh islands sit on the official UV layout. Keep unpainted
+# islands so the mesh does not collapse into floating fragments.
+official.paste(atlas, (0, 0), atlas)
+official.save(${JSON.stringify(dest)}, optimize=True)
+print(Path(${JSON.stringify(dest)}).stat().st_size)
+`;
+  const result = spawnSync("python3", ["-c", py], { encoding: "utf8" });
+  if (result.status !== 0) {
+    console.warn(
+      "[bake-identity-models] melody composite failed; copying atlas",
+      result.stderr || result.stdout,
+    );
+    copyFileSync(melodyStillAtlas, dest);
+    return;
+  }
+  console.log("[bake-identity-models] melody texture bytes", result.stdout.trim());
 }
 
 function bakeGroveTexture(destDir) {
