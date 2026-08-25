@@ -5,6 +5,7 @@
  * wardrobe presets plus a portrait used by the picker.
  */
 
+import { MELODY_PARAMETER_PROFILE } from "./automesh/parameters";
 import {
   resolveMiaraOutfit,
   type MiaraOutfitId,
@@ -24,6 +25,10 @@ export const DEFAULT_AVATAR_IDENTITY_ID: AvatarIdentityId = "miara";
 /** Every identity loads the same Live2D body. */
 export const SHARED_AVATAR_MESH = "miara";
 
+/** Shipped triangle-reprojected Melody atlas on the official Miara UV layout. */
+export const SHIPPED_MELODY_ATLAS =
+  "./images/avatar/identities/melody-atlas.png";
+
 export interface AvatarIdentitySpec {
   id: AvatarIdentityId;
   label: string;
@@ -34,6 +39,8 @@ export interface AvatarIdentitySpec {
   outfitId: Exclude<MiaraOutfitId, "custom">;
   /** Picker portrait, relative to the app html root. */
   portrait?: string;
+  /** Optional remapped Cubism atlas bound when this identity is selected. */
+  overlay?: string;
 }
 
 export const AVATAR_IDENTITIES: readonly AvatarIdentitySpec[] = [
@@ -57,10 +64,11 @@ export const AVATAR_IDENTITIES: readonly AvatarIdentitySpec[] = [
     id: "melody",
     label: "Melody",
     description:
-      "Same body mesh, iterated toward harmonic muse — iridescent color, sparkle wings, no water stage.",
+      "Same body mesh, fitted to the Melody still — remapped atlas, open-eye smile, no water stage.",
     model: SHARED_AVATAR_MESH,
     outfitId: "aria",
     portrait: "./images/avatar/identities/melody.webp",
+    overlay: SHIPPED_MELODY_ATLAS,
   },
 ];
 
@@ -90,11 +98,42 @@ export function applyAvatarIdentity(id: unknown): {
   identity: AvatarIdentityId;
   model: typeof SHARED_AVATAR_MESH;
   outfit: MiaraOutfitState;
+  overlay: string | null;
 } {
   const spec = getAvatarIdentity(id);
+  const outfit = resolveMiaraOutfit({ id: spec.outfitId });
   return {
     identity: spec.id,
     model: spec.model,
-    outfit: resolveMiaraOutfit({ id: spec.outfitId }),
+    // Remapped atlases already carry Melody color; do not hue-rotate them.
+    outfit: spec.overlay ? { ...outfit, hueShift: 0 } : outfit,
+    overlay: spec.overlay ?? null,
   };
+}
+
+export function defaultAtlasForIdentity(id: unknown): string | null {
+  return getAvatarIdentity(id).overlay ?? null;
+}
+
+/** Custom trained atlas wins; otherwise the identity's shipped overlay. */
+export function resolveIdentityOverlay(
+  identity: unknown,
+  customAtlas?: string | null,
+): string | null {
+  if (resolveAvatarIdentity(identity) !== "melody") return null;
+  if (typeof customAtlas === "string" && customAtlas.length > 0) {
+    return customAtlas;
+  }
+  return defaultAtlasForIdentity(identity);
+}
+
+export function resolveIdentityParameters(
+  identity: unknown,
+  mappingParameters?: Record<string, number> | null,
+): Record<string, number> | null {
+  if (resolveAvatarIdentity(identity) !== "melody") return null;
+  if (mappingParameters && Object.keys(mappingParameters).length > 0) {
+    return mappingParameters;
+  }
+  return { ...MELODY_PARAMETER_PROFILE };
 }

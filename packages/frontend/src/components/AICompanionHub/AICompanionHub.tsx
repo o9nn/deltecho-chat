@@ -37,6 +37,8 @@ import {
   LIVE_AVATAR_EXPRESSION,
   isMiaraCubismExpressionName,
   resolveAvatarExpression,
+  resolveIdentityOverlay,
+  resolveIdentityParameters,
   resolveMiaraOutfit,
 } from "@deltecho/avatar";
 import { Live2DAvatar } from "./Live2DAvatar";
@@ -204,7 +206,7 @@ const AICompanionHubContent: React.FC = () => {
   const [avatarLoaded, setAvatarLoaded] = useState(false);
   const [avatarAudioLevel, setAvatarAudioLevel] = useState(0);
   const avatarContext = useDeepTreeEchoAvatarOptional();
-  const miaraOutfit = resolveMiaraOutfit({
+  const resolvedOutfit = resolveMiaraOutfit({
     id: avatarContext?.state.config.outfit,
     hiddenGroups: avatarContext?.state.config.outfitHiddenGroups,
     hueShift: avatarContext?.state.config.outfitHueShift,
@@ -216,6 +218,35 @@ const AICompanionHubContent: React.FC = () => {
   const manualExpression = isMiaraCubismExpressionName(lockedExpression)
     ? lockedExpression
     : undefined;
+  const storedHue = avatarContext?.state.config.outfitHueShift;
+  const miaraOutfit =
+    typeof storedHue === "number"
+      ? { ...resolvedOutfit, hueShift: storedHue }
+      : resolvedOutfit;
+
+  useEffect(() => {
+    if (!avatarController) return;
+    const overlay = resolveIdentityOverlay(
+      avatarContext?.state.config.identity,
+      avatarContext?.state.config.automeshAtlas,
+    );
+    if (overlay) {
+      void avatarController.applyTextureOverlay?.(overlay);
+      avatarController.applyParameterProfile?.(
+        resolveIdentityParameters(
+          avatarContext?.state.config.identity,
+          avatarContext?.state.config.automeshMapping?.parameters,
+        ),
+      );
+      return;
+    }
+    void avatarController.clearTextureOverlay?.();
+  }, [
+    avatarController,
+    avatarContext?.state.config.automeshAtlas,
+    avatarContext?.state.config.automeshMapping?.parameters,
+    avatarContext?.state.config.identity,
+  ]);
 
   // Simulate real-time cognitive state updates
   useEffect(() => {
@@ -715,9 +746,21 @@ const AICompanionHubContent: React.FC = () => {
                     onError={(err) => console.error("Avatar error:", err)}
                     onControllerReady={(controller) => {
                       setAvatarController(controller);
-                      const atlas = avatarContext?.state.config.automeshAtlas;
-                      if (atlas) {
-                        void controller.applyTextureOverlay?.(atlas);
+                      const overlay = resolveIdentityOverlay(
+                        avatarContext?.state.config.identity,
+                        avatarContext?.state.config.automeshAtlas,
+                      );
+                      if (overlay) {
+                        void controller.applyTextureOverlay?.(overlay);
+                        controller.applyParameterProfile?.(
+                          resolveIdentityParameters(
+                            avatarContext?.state.config.identity,
+                            avatarContext?.state.config.automeshMapping
+                              ?.parameters,
+                          ),
+                        );
+                      } else {
+                        void controller.clearTextureOverlay?.();
                       }
                     }}
                   />

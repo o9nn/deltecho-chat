@@ -109,6 +109,7 @@ export interface Live2DAvatarController {
   applyOutfit: (outfit: Partial<MiaraOutfitState> | null | undefined) => void;
   inspectMesh?: () => import("../automesh").AutomeshDrawable[];
   applyTextureOverlay?: (source: string) => Promise<boolean>;
+  clearTextureOverlay?: () => Promise<boolean>;
   applyParameterProfile?: (profile: Record<string, number> | null) => void;
   /** Get renderer instance */
   getRenderer: () => PixiLive2DRenderer | null;
@@ -255,6 +256,8 @@ export class Live2DAvatarManager {
       inspectMesh: () => this.renderer?.inspectMesh() ?? [],
       applyTextureOverlay: (source) =>
         this.renderer?.applyTextureOverlay(source) ?? Promise.resolve(false),
+      clearTextureOverlay: () =>
+        this.renderer?.clearTextureOverlay() ?? Promise.resolve(false),
       applyParameterProfile: (profile) =>
         this.renderer?.applyParameterProfile(profile),
       getRenderer: () => this.renderer,

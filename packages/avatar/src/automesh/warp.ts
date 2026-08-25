@@ -113,6 +113,58 @@ export function warpRasterToAtlas(
   return { width, height, data };
 }
 
+/**
+ * Punch the still's edge-connected backdrop to alpha 0. Interior dark
+ * clothing (Melody's skirt) stays opaque so it can paint the atlas.
+ */
+export function punchOpaqueBackground(
+  raster: AutomeshRaster,
+  threshold = 18,
+): AutomeshRaster {
+  const { width, height, data } = raster;
+  const next = new Uint8ClampedArray(data);
+  const seen = new Uint8Array(width * height);
+  const stack: number[] = [];
+  const dark = (index: number) =>
+    next[index] < threshold &&
+    next[index + 1] < threshold &&
+    next[index + 2] < threshold;
+
+  const seed = (x: number, y: number) => {
+    if (x < 0 || y < 0 || x >= width || y >= height) return;
+    const pixel = y * width + x;
+    if (seen[pixel]) return;
+    seen[pixel] = 1;
+    if (dark(pixel * 4)) stack.push(pixel);
+  };
+
+  for (let x = 0; x < width; x++) {
+    seed(x, 0);
+    seed(x, height - 1);
+  }
+  for (let y = 0; y < height; y++) {
+    seed(0, y);
+    seed(width - 1, y);
+  }
+
+  while (stack.length) {
+    const pixel = stack.pop() as number;
+    const dest = pixel * 4;
+    next[dest] = 0;
+    next[dest + 1] = 0;
+    next[dest + 2] = 0;
+    next[dest + 3] = 0;
+    const x = pixel % width;
+    const y = (pixel - x) / width;
+    seed(x - 1, y);
+    seed(x + 1, y);
+    seed(x, y - 1);
+    seed(x, y + 1);
+  }
+
+  return { width, height, data: next };
+}
+
 export function rasterToDataUrl(
   raster: AutomeshRaster,
   createCanvas: (width: number, height: number) => {

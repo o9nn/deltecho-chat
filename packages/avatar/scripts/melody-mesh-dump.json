@@ -1,0 +1,618 @@
+{
+  "drawableCount": 187,
+  "triangleDrawables": 181,
+  "environmentDrawables": 0,
+  "figure": {
+    "x": -0.24144454300403595,
+    "y": -0.5662366020679473,
+    "width": 0.5478474050760269,
+    "height": 1.227481130361557
+  },
+  "painted": 662584,
+  "purplePixels": 106853,
+  "goldPixels": 2493,
+  "meanRgb": [
+    110,
+    75,
+    82
+  ],
+  "triangles": 6412,
+  "envSkipped": 0,
+  "residual": 0,
+  "atlasWidth": 2048,
+  "atlasHeight": 2048,
+  "opaquePixels": 629755,
+  "photoWidth": 512,
+  "photoHeight": 768,
+  "ids": [
+    "ArtMesh0",
+    "ArtMesh1",
+    "ArtMesh2",
+    "ArtMesh3",
+    "ArtMesh4",
+    "ArtMesh5",
+    "ArtMesh8",
+    "ArtMesh9",
+    "ArtMesh126",
+    "ArtMesh127",
+    "ArtMesh128",
+    "ArtMesh130",
+    "ArtMesh27",
+    "ArtMesh28",
+    "ArtMesh29",
+    "ArtMesh32",
+    "ArtMesh33",
+    "ArtMesh36",
+    "ArtMesh37",
+    "ArtMesh38",
+    "ArtMesh39",
+    "ArtMesh40",
+    "ArtMesh41",
+    "ArtMesh46",
+    "ArtMesh47",
+    "ArtMesh48",
+    "ArtMesh49",
+    "ArtMesh50",
+    "ArtMesh51",
+    "ArtMesh52",
+    "ArtMesh53",
+    "ArtMesh54",
+    "ArtMesh62",
+    "ArtMesh63",
+    "ArtMesh64",
+    "ArtMesh65",
+    "ArtMesh66",
+    "ArtMesh67",
+    "ArtMesh69",
+    "ArtMesh16",
+    "ArtMesh17",
+    "ArtMesh18",
+    "ArtMesh19",
+    "ArtMesh24",
+    "ArtMesh78",
+    "ArtMesh79",
+    "ArtMesh80",
+    "ArtMesh81",
+    "ArtMesh82",
+    "ArtMesh83",
+    "ArtMesh84",
+    "ArtMesh86",
+    "ArtMesh87",
+    "ArtMesh90",
+    "ArtMesh91",
+    "ArtMesh92",
+    "ArtMesh93",
+    "ArtMesh94",
+    "ArtMesh96",
+    "ArtMesh97",
+    "ArtMesh98",
+    "ArtMesh101",
+    "ArtMesh104",
+    "ArtMesh105",
+    "ArtMesh106",
+    "ArtMesh132",
+    "ArtMesh133",
+    "ArtMesh134",
+    "ArtMesh135",
+    "ArtMesh138",
+    "ArtMesh139",
+    "ArtMesh140",
+    "ArtMesh141",
+    "ArtMesh73",
+    "ArtMesh137",
+    "ArtMesh25",
+    "ArtMesh30",
+    "ArtMesh26",
+    "ArtMesh131",
+    "ArtMesh125",
+    "ArtMesh7",
+    "ArtMesh129",
+    "ArtMesh68",
+    "ArtMesh42",
+    "ArtMesh43",
+    "ArtMesh44",
+    "ArtMesh107",
+    "ArtMesh95",
+    "ArtMesh6",
+    "ArtMesh100",
+    "ArtMesh31",
+    "ArtMesh71",
+    "ArtMesh70",
+    "ArtMesh99",
+    "ArtMesh111",
+    "ArtMesh115",
+    "ArtMesh110",
+    "ArtMesh136",
+    "ArtMesh75",
+    "ArtMesh103",
+    "ArtMesh102",
+    "ArtMesh116",
+    "ArtMesh35",
+    "ArtMesh34",
+    "ArtMesh55",
+    "ArtMesh56",
+    "ArtMesh145",
+    "ArtMesh144",
+    "ArtMesh143",
+    "ArtMesh",
+    "ArtMesh142",
+    "ArtMesh61",
+    "ArtMesh57",
+    "ArtMesh45",
+    "ArtMesh74",
+    "ArtMesh72",
+    "ArtMesh88",
+    "ArtMesh89",
+    "ArtMesh85",
+    "ArtMesh22",
+    "ArtMesh23",
+    "ArtMesh15",
+    "ArtMesh10",
+    "ArtMesh13",
+    "ArtMesh21",
+    "ArtMesh11",
+    "ArtMesh12",
+    "ArtMesh14",
+    "ArtMesh123",
+    "ArtMesh121",
+    "ArtMesh118",
+    "ArtMesh117",
+    "ArtMesh122",
+    "ArtMesh124",
+    "ArtMesh112",
+    "ArtMesh113",
+    "ArtMesh114",
+    "ArtMesh58",
+    "ArtMesh59",
+    "ArtMesh60",
+    "ArtMesh147",
+    "ArtMesh146",
+    "ArtMesh20",
+    "ArtMesh119",
+    "ArtMesh120",
+    "ArtMesh180",
+    "ArtMesh178",
+    "ArtMesh177",
+    "ArtMesh176",
+    "ArtMesh148",
+    "ArtMesh149",
+    "ArtMesh150",
+    "ArtMesh151",
+    "ArtMesh152",
+    "ArtMesh153",
+    "ArtMesh154",
+    "ArtMesh155",
+    "ArtMesh156",
+    "ArtMesh157",
+    "ArtMesh158",
+    "ArtMesh159",
+    "ArtMesh160",
+    "ArtMesh161",
+    "ArtMesh162",
+    "ArtMesh163",
+    "ArtMesh164",
+    "ArtMesh165",
+    "ArtMesh166",
+    "ArtMesh167",
+    "ArtMesh168",
+    "ArtMesh169",
+    "ArtMesh170",
+    "ArtMesh171",
+    "ArtMesh172",
+    "ArtMesh173",
+    "ArtMesh174",
+    "ArtMesh175",
+    "ArtMesh182",
+    "ArtMesh183",
+    "ArtMesh184",
+    "ArtMesh185",
+    "ArtMesh186",
+    "ArtMesh187",
+    "ArtMesh188",
+    "ArtMesh189",
+    "ArtMesh190",
+    "ArtMesh191"
+  ],
+  "mapping": {
+    "version": 1,
+    "identity": "melody",
+    "landmarks": [
+      {
+        "id": "eyeL",
+        "label": "Left eye",
+        "source": {
+          "x": 0.45,
+          "y": 0.145
+        },
+        "atlas": {
+          "x": 0.34,
+          "y": 0.3
+        },
+        "drawableHints": [
+          "eyel",
+          "eye_l",
+          "parteye"
+        ]
+      },
+      {
+        "id": "eyeR",
+        "label": "Right eye",
+        "source": {
+          "x": 0.55,
+          "y": 0.145
+        },
+        "atlas": {
+          "x": 0.46,
+          "y": 0.3
+        },
+        "drawableHints": [
+          "eyer",
+          "eye_r",
+          "parteye"
+        ]
+      },
+      {
+        "id": "browL",
+        "label": "Left brow",
+        "source": {
+          "x": 0.44,
+          "y": 0.12
+        },
+        "atlas": {
+          "x": 0.33,
+          "y": 0.24
+        },
+        "drawableHints": [
+          "browl",
+          "brow_l",
+          "partbrow"
+        ]
+      },
+      {
+        "id": "browR",
+        "label": "Right brow",
+        "source": {
+          "x": 0.56,
+          "y": 0.12
+        },
+        "atlas": {
+          "x": 0.47,
+          "y": 0.24
+        },
+        "drawableHints": [
+          "browr",
+          "brow_r",
+          "partbrow"
+        ]
+      },
+      {
+        "id": "nose",
+        "label": "Nose",
+        "source": {
+          "x": 0.5,
+          "y": 0.165
+        },
+        "atlas": {
+          "x": 0.4,
+          "y": 0.36
+        },
+        "drawableHints": [
+          "nose",
+          "partface"
+        ]
+      },
+      {
+        "id": "mouth",
+        "label": "Mouth",
+        "source": {
+          "x": 0.5,
+          "y": 0.185
+        },
+        "atlas": {
+          "x": 0.4,
+          "y": 0.44
+        },
+        "drawableHints": [
+          "mouth",
+          "partmouth"
+        ]
+      },
+      {
+        "id": "chin",
+        "label": "Chin",
+        "source": {
+          "x": 0.5,
+          "y": 0.205
+        },
+        "atlas": {
+          "x": 0.4,
+          "y": 0.52
+        },
+        "drawableHints": [
+          "face",
+          "partface"
+        ]
+      },
+      {
+        "id": "cheekL",
+        "label": "Left cheek",
+        "source": {
+          "x": 0.43,
+          "y": 0.17
+        },
+        "atlas": {
+          "x": 0.3,
+          "y": 0.38
+        },
+        "drawableHints": [
+          "face",
+          "partface"
+        ]
+      },
+      {
+        "id": "cheekR",
+        "label": "Right cheek",
+        "source": {
+          "x": 0.57,
+          "y": 0.17
+        },
+        "atlas": {
+          "x": 0.5,
+          "y": 0.38
+        },
+        "drawableHints": [
+          "face",
+          "partface"
+        ]
+      },
+      {
+        "id": "hairline",
+        "label": "Hairline",
+        "source": {
+          "x": 0.5,
+          "y": 0.08
+        },
+        "atlas": {
+          "x": 0.4,
+          "y": 0.16
+        },
+        "drawableHints": [
+          "hairfront",
+          "parthairfront"
+        ]
+      },
+      {
+        "id": "hairL",
+        "label": "Hair left",
+        "source": {
+          "x": 0.38,
+          "y": 0.16
+        },
+        "atlas": {
+          "x": 0.22,
+          "y": 0.32
+        },
+        "drawableHints": [
+          "hairl",
+          "hair_l",
+          "parthairl",
+          "parthairsidel"
+        ]
+      },
+      {
+        "id": "hairR",
+        "label": "Hair right",
+        "source": {
+          "x": 0.62,
+          "y": 0.16
+        },
+        "atlas": {
+          "x": 0.58,
+          "y": 0.32
+        },
+        "drawableHints": [
+          "hairr",
+          "hair_r",
+          "parthairr",
+          "parthairsider"
+        ]
+      },
+      {
+        "id": "earL",
+        "label": "Left ear / headset",
+        "source": {
+          "x": 0.4,
+          "y": 0.155
+        },
+        "atlas": {
+          "x": 0.24,
+          "y": 0.34
+        },
+        "drawableHints": [
+          "ear",
+          "hairacc",
+          "hairaccfront"
+        ]
+      },
+      {
+        "id": "earR",
+        "label": "Right ear / headset",
+        "source": {
+          "x": 0.6,
+          "y": 0.155
+        },
+        "atlas": {
+          "x": 0.56,
+          "y": 0.34
+        },
+        "drawableHints": [
+          "ear",
+          "hairacc",
+          "hairaccfront"
+        ]
+      },
+      {
+        "id": "collar",
+        "label": "Collar",
+        "source": {
+          "x": 0.5,
+          "y": 0.24
+        },
+        "atlas": {
+          "x": 0.4,
+          "y": 0.62
+        },
+        "drawableHints": [
+          "body",
+          "upperbody",
+          "partbody"
+        ]
+      },
+      {
+        "id": "shoulderL",
+        "label": "Left shoulder",
+        "source": {
+          "x": 0.38,
+          "y": 0.28
+        },
+        "atlas": {
+          "x": 0.32,
+          "y": 0.68
+        },
+        "drawableHints": [
+          "arml",
+          "partarml"
+        ]
+      },
+      {
+        "id": "shoulderR",
+        "label": "Right shoulder",
+        "source": {
+          "x": 0.62,
+          "y": 0.28
+        },
+        "atlas": {
+          "x": 0.48,
+          "y": 0.68
+        },
+        "drawableHints": [
+          "armr",
+          "partarmr"
+        ]
+      },
+      {
+        "id": "handL",
+        "label": "Left hand",
+        "source": {
+          "x": 0.28,
+          "y": 0.46
+        },
+        "atlas": {
+          "x": 0.26,
+          "y": 0.78
+        },
+        "drawableHints": [
+          "handl",
+          "parthandl"
+        ]
+      },
+      {
+        "id": "handR",
+        "label": "Right hand",
+        "source": {
+          "x": 0.72,
+          "y": 0.46
+        },
+        "atlas": {
+          "x": 0.54,
+          "y": 0.78
+        },
+        "drawableHints": [
+          "handr",
+          "parthandr"
+        ]
+      },
+      {
+        "id": "hipL",
+        "label": "Left hip",
+        "source": {
+          "x": 0.44,
+          "y": 0.52
+        },
+        "atlas": {
+          "x": 0.36,
+          "y": 0.82
+        },
+        "drawableHints": [
+          "legl",
+          "partlegl",
+          "lowerbody"
+        ]
+      },
+      {
+        "id": "hipR",
+        "label": "Right hip",
+        "source": {
+          "x": 0.56,
+          "y": 0.52
+        },
+        "atlas": {
+          "x": 0.44,
+          "y": 0.82
+        },
+        "drawableHints": [
+          "legr",
+          "partlegr",
+          "lowerbody"
+        ]
+      },
+      {
+        "id": "footL",
+        "label": "Left foot",
+        "source": {
+          "x": 0.42,
+          "y": 0.92
+        },
+        "atlas": {
+          "x": 0.36,
+          "y": 0.94
+        },
+        "drawableHints": [
+          "legl",
+          "partlegl"
+        ]
+      },
+      {
+        "id": "footR",
+        "label": "Right foot",
+        "source": {
+          "x": 0.58,
+          "y": 0.92
+        },
+        "atlas": {
+          "x": 0.44,
+          "y": 0.94
+        },
+        "drawableHints": [
+          "legr",
+          "partlegr"
+        ]
+      }
+    ],
+    "residual": 0,
+    "trainedAt": 1787632499058,
+    "parameters": {
+      "ParamEyeLOpen": 0.92,
+      "ParamEyeROpen": 0.92,
+      "ParamEyeLSmile": 0.35,
+      "ParamEyeRSmile": 0.35,
+      "ParamMouthForm": 0.45,
+      "ParamMouthOpenY": 0.08,
+      "ParamBrowLY": 0.15,
+      "ParamBrowRY": 0.15,
+      "ParamAngleX": 0,
+      "ParamAngleY": 0,
+      "ParamAngleZ": 0
+    }
+  }
+}

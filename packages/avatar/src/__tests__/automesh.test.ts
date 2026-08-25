@@ -4,15 +4,19 @@ import {
   cloneMelodyLandmarks,
   cubismEditorRequest,
   drawableMatchesHints,
+  figureFromDrawables,
   fitSimilarity,
   applySimilarity,
+  isEnvironmentDrawable,
   mapPoint,
   mappingResidual,
+  modelDestForLandmark,
   parseCubismEditorMessage,
   resolveAutomeshMapping,
   projectPhotoOntoAtlas,
   trainAutomeshMapping,
   uvCentroid,
+  punchOpaqueBackground,
   warpRasterToAtlas,
   MELODY_PARAMETER_PROFILE,
 } from "../automesh";
@@ -54,6 +58,35 @@ describe("automesh mapping", () => {
     const ay = Math.min(7, Math.round(mouth.atlas.y * 8 - 0.5));
     const atlasIndex = (ay * 8 + ax) * 4;
     expect(atlas.data[atlasIndex + 3]).toBeGreaterThan(0);
+  });
+
+  it("punches edge-connected backdrop but keeps interior dark clothing", () => {
+    const width = 5;
+    const raster = {
+      width,
+      height: 5,
+      data: new Uint8ClampedArray(5 * 5 * 4),
+    };
+    const setPixel = (x: number, y: number, r: number, g: number, b: number) => {
+      const index = (y * width + x) * 4;
+      raster.data[index] = r;
+      raster.data[index + 1] = g;
+      raster.data[index + 2] = b;
+      raster.data[index + 3] = 255;
+    };
+    for (let y = 0; y < 5; y++) {
+      for (let x = 0; x < 5; x++) {
+        const edge = x === 0 || y === 0 || x === 4 || y === 4;
+        const ring = x === 1 || y === 1 || x === 3 || y === 3;
+        if (edge) setPixel(x, y, 0, 0, 0);
+        else if (ring) setPixel(x, y, 200, 80, 160);
+        else setPixel(x, y, 8, 8, 8);
+      }
+    }
+    const punched = punchOpaqueBackground(raster);
+    expect(punched.data[3]).toBe(0);
+    expect(punched.data[(2 * 5 + 2) * 4 + 3]).toBe(255);
+    expect(punched.data[(2 * 5 + 1) * 4]).toBe(200);
   });
 
   it("fits an identity similarity transform", () => {
@@ -98,6 +131,59 @@ describe("automesh mapping", () => {
     expect(resolveAutomeshMapping(mapping)?.identity).toBe("melody");
     expect(resolveAutomeshMapping({ version: 2 })).toBeNull();
     expect(mappingResidual(mapping.landmarks)).toBeCloseTo(mapping.residual, 5);
+  });
+
+  it("fits unnamed ArtMesh landmarks onto the character figure", () => {
+    const drawables = [
+      {
+        id: "ArtMesh12",
+        bounds: { x: 10, y: 20, width: 80, height: 160 },
+        uvs: [0.1, 0.1, 0.2, 0.1, 0.1, 0.2],
+      },
+      {
+        id: "ArtMesh200",
+        bounds: { x: 0, y: 0, width: 400, height: 400 },
+        uvs: [0.7, 0.1, 0.95, 0.1, 0.7, 0.4],
+      },
+    ];
+    expect(isEnvironmentDrawable(drawables[1]!)).toBe(true);
+    const figure = figureFromDrawables(drawables);
+    expect(figure?.width).toBeCloseTo(80 * 1.16, 5);
+    expect(figure?.height).toBeCloseTo(160 * 1.16, 5);
+    const dest = modelDestForLandmark(
+      {
+        id: "hairline",
+        label: "Hairline",
+        source: { x: 0.5, y: 0.1 },
+        atlas: { x: 0.4, y: 0.16 },
+        drawableHints: ["hairfront"],
+      },
+      drawables,
+    );
+    expect(dest.x).toBeCloseTo(figure!.x + 0.5 * figure!.width, 5);
+    expect(dest.y).toBeCloseTo(figure!.y + 0.1 * figure!.height, 5);
+  });
+
+  it("inverts Y when fitting a still onto Cubism vertex positions", () => {
+    const dest = modelDestForLandmark(
+      {
+        id: "hairline",
+        label: "Hairline",
+        source: { x: 0.5, y: 0.1 },
+        atlas: { x: 0.4, y: 0.16 },
+        drawableHints: ["hairfront"],
+      },
+      [
+        {
+          id: "ArtMesh1",
+          bounds: { x: 0, y: 0, width: 1, height: 1 },
+          positions: [0, 0, 100, 0, 0, 200, 100, 200],
+          uvs: [0.1, 0.1, 0.2, 0.1, 0.1, 0.2, 0.2, 0.2],
+        },
+      ],
+    );
+    expect(dest.x).toBeCloseTo(50, 5);
+    expect(dest.y).toBeCloseTo(192.8, 5);
   });
 
   it("reprojects a photo through drawable triangles onto atlas islands", () => {

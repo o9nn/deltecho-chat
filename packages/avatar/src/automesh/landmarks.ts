@@ -100,14 +100,14 @@ export const MELODY_AUTOMESH_LANDMARKS: readonly AutomeshLandmark[] = [
     label: "Left ear / headset",
     source: { x: 0.4, y: 0.155 },
     atlas: { x: 0.24, y: 0.34 },
-    drawableHints: ["ear", "hairacc"],
+    drawableHints: ["ear", "hairacc", "hairaccfront"],
   },
   {
     id: "earR",
     label: "Right ear / headset",
     source: { x: 0.6, y: 0.155 },
     atlas: { x: 0.56, y: 0.34 },
-    drawableHints: ["ear", "hairacc"],
+    drawableHints: ["ear", "hairacc", "hairaccfront"],
   },
   {
     id: "collar",

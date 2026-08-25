@@ -585,7 +585,7 @@ describe("DeepTreeEchoAvatarDisplay", () => {
             .getByTestId("mock-live2d-avatar")
             .getAttribute("data-outfit") || "{}",
         ),
-      ).toEqual(expect.objectContaining({ id: "aria", hueShift: 325 }));
+      ).toEqual(expect.objectContaining({ id: "aria", hueShift: 0 }));
       expect(screen.getByTestId("mock-live2d-avatar")).toHaveAttribute(
         "data-model",
         "miara",

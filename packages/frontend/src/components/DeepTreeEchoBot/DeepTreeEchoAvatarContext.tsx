@@ -18,6 +18,7 @@ import {
   DEFAULT_MIARA_OUTFIT_ID,
   LIVE_AVATAR_EXPRESSION,
   SHARED_AVATAR_MESH,
+  defaultAtlasForIdentity,
   resolveAvatarExpression,
   resolveAvatarIdentity,
   resolveAutomeshMapping,
@@ -98,10 +99,20 @@ const DEFAULT_AVATAR_CONFIG: AvatarConfig = {
   expression: LIVE_AVATAR_EXPRESSION,
 };
 
+function resolveAutomeshAtlas(value: unknown): string | null {
+  if (typeof value !== "string" || value.length === 0) return null;
+  if (value.startsWith("data:image/")) return value;
+  if (value.startsWith("./images/") || value.startsWith("images/")) {
+    return value;
+  }
+  return null;
+}
+
 function sanitizeAvatarConfig(
   config: Partial<AvatarConfig> | null | undefined,
 ): Partial<AvatarConfig> {
   if (!config || typeof config !== "object") return {};
+  const identity = resolveAvatarIdentity(config.identity);
   const resolved = resolveMiaraOutfit({
     id: config.outfit,
     hiddenGroups: config.outfitHiddenGroups,
@@ -109,17 +120,16 @@ function sanitizeAvatarConfig(
   });
   return {
     ...config,
-    identity: resolveAvatarIdentity(config.identity),
+    identity,
     model: SHARED_AVATAR_MESH,
     outfit: resolved.id,
     outfitHiddenGroups: [...resolved.hiddenGroups],
-    outfitHueShift: resolved.hueShift,
+    // Remapped Melody atlas already has its color; do not hue-rotate it.
+    outfitHueShift: defaultAtlasForIdentity(identity)
+      ? 0
+      : resolved.hueShift,
     automeshMapping: resolveAutomeshMapping(config.automeshMapping),
-    automeshAtlas:
-      typeof config.automeshAtlas === "string" &&
-      config.automeshAtlas.startsWith("data:image/")
-        ? config.automeshAtlas
-        : null,
+    automeshAtlas: resolveAutomeshAtlas(config.automeshAtlas),
     expression: resolveAvatarExpression(config.expression),
   };
 }

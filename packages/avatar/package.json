@@ -16,7 +16,8 @@
     "check:types": "tsc --noEmit",
     "clean": "rm -rf dist",
     "test": "jest --runInBand --forceExit",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "train:melody-atlas": "node ./scripts/train-melody-atlas.mjs"
   },
   "keywords": [
     "avatar",

@@ -72,8 +72,11 @@ interface Live2DModel {
       getPartCount?: () => number;
       getPartId?: (index: number) => unknown;
       getDrawableVertexUvs?: (index: number) => ArrayLike<number>;
+      getDrawableUvs?: (index: number) => ArrayLike<number>;
       getDrawableVertexPositions?: (index: number) => ArrayLike<number>;
+      getDrawableVertices?: (index: number) => ArrayLike<number>;
       getDrawableVertexIndices?: (index: number) => ArrayLike<number>;
+      getDrawableIndices?: (index: number) => ArrayLike<number>;
       getModel?: () => {
         parts?: {
           count: number;
@@ -82,8 +85,11 @@ interface Live2DModel {
         };
         drawables?: {
           vertexUvs?: Array<ArrayLike<number>>;
+          uvs?: Array<ArrayLike<number>>;
           vertexPositions?: Array<ArrayLike<number>>;
+          positions?: Array<ArrayLike<number>>;
           indices?: Array<ArrayLike<number>>;
+          vertexIndices?: Array<ArrayLike<number>>;
         };
       };
     };
@@ -212,6 +218,34 @@ function withLive2DFromLock<T>(fn: () => Promise<T>): Promise<T> {
   return previous.then(fn).finally(() => release());
 }
 
+async function loadPixiTexture(source: string): Promise<unknown> {
+  const { Texture } = await import("pixi.js");
+  const fromUrl = (
+    Texture as {
+      fromURL?: (url: string) => Promise<unknown>;
+    }
+  ).fromURL;
+  if (typeof fromUrl === "function" && !source.startsWith("data:")) {
+    return fromUrl(source);
+  }
+  const texture = Texture.from(source) as {
+    baseTexture?: {
+      valid?: boolean;
+      once?: (event: string, listener: () => void) => void;
+    };
+  };
+  const base = texture.baseTexture;
+  if (base && !base.valid && typeof base.once === "function") {
+    await new Promise<void>((resolve, reject) => {
+      base.once?.("loaded", () => resolve());
+      base.once?.("error", () =>
+        reject(new Error(`texture overlay failed: ${source}`)),
+      );
+    });
+  }
+  return texture;
+}
+
 export class PixiLive2DRenderer implements ICubismRenderer {
   private app: Application | null = null;
   private model: Live2DModel | null = null;
@@ -227,6 +261,8 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   private currentExpression: Expression = "neutral";
   private lipSyncValue = 0;
   private isBlinking = false;
+  private originalTexture0: unknown = null;
+  private overlaySource: string | null = null;
   private blinkTimer: ReturnType<typeof setTimeout> | null = null;
   private blinkOpenTimer: ReturnType<typeof setTimeout> | null = null;
   private manualBlinkTimer: ReturnType<typeof setTimeout> | null = null;
@@ -423,6 +459,8 @@ export class PixiLive2DRenderer implements ICubismRenderer {
 
       this.detachWardrobeHook();
       this.model = model;
+      this.originalTexture0 = model.textures?.[0] ?? null;
+      this.overlaySource = null;
       this.attachWardrobeHook();
 
       // Defensively clear stage in case a previous model left children behind.
@@ -1323,16 +1361,26 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       let positions: ArrayLike<number> | undefined;
       let indices: ArrayLike<number> | undefined;
       try {
-        uvs = core.getDrawableVertexUvs?.(index) ?? native?.vertexUvs?.[index];
+        uvs =
+          core.getDrawableVertexUvs?.(index) ??
+          core.getDrawableUvs?.(index) ??
+          native?.vertexUvs?.[index] ??
+          native?.uvs?.[index];
         positions =
           core.getDrawableVertexPositions?.(index) ??
-          native?.vertexPositions?.[index];
+          core.getDrawableVertices?.(index) ??
+          native?.vertexPositions?.[index] ??
+          native?.positions?.[index];
         indices =
-          core.getDrawableVertexIndices?.(index) ?? native?.indices?.[index];
+          core.getDrawableVertexIndices?.(index) ??
+          core.getDrawableIndices?.(index) ??
+          native?.indices?.[index] ??
+          native?.vertexIndices?.[index];
       } catch {
-        uvs = native?.vertexUvs?.[index];
-        positions = native?.vertexPositions?.[index];
-        indices = native?.indices?.[index];
+        uvs = native?.vertexUvs?.[index] ?? native?.uvs?.[index];
+        positions =
+          native?.vertexPositions?.[index] ?? native?.positions?.[index];
+        indices = native?.indices?.[index] ?? native?.vertexIndices?.[index];
       }
       inspected.push({
         id: ids[index] ?? `drawable-${index}`,
@@ -1353,16 +1401,29 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   async applyTextureOverlay(source: string): Promise<boolean> {
     if (!this.model || !source) return false;
     try {
-      const { Texture } = await import("pixi.js");
-      const texture = Texture.from(source);
+      if (!this.originalTexture0 && this.model.textures?.[0]) {
+        this.originalTexture0 = this.model.textures[0];
+      }
+      const texture = await loadPixiTexture(source);
       if (!this.model.textures) {
         return false;
       }
       this.model.textures[0] = texture;
+      this.overlaySource = source;
       return true;
     } catch {
       return false;
     }
+  }
+
+  async clearTextureOverlay(): Promise<boolean> {
+    if (!this.model?.textures || !this.originalTexture0) {
+      this.overlaySource = null;
+      return false;
+    }
+    this.model.textures[0] = this.originalTexture0 as (typeof this.model.textures)[0];
+    this.overlaySource = null;
+    return true;
   }
 
   applyParameterProfile(profile: Record<string, number> | null | undefined): void {

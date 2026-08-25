@@ -16,6 +16,8 @@ import {
   LIVE_AVATAR_EXPRESSION,
   isMiaraCubismExpressionName,
   resolveAvatarExpression,
+  resolveIdentityOverlay,
+  resolveIdentityParameters,
   resolveMiaraOutfit,
 } from "@deltecho/avatar";
 import { Live2DAvatar } from "../AICompanionHub/Live2DAvatar";
@@ -377,19 +379,19 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
       : configuredHeight;
   // Fill factor for contain-fit: the standing figure should fill the strip.
   const stripScale = fillsConversationStrip ? 0.97 : 0.92;
-  const outfit = useMemo(
-    () =>
-      resolveMiaraOutfit({
-        id: avatarContext?.state.config.outfit,
-        hiddenGroups: avatarContext?.state.config.outfitHiddenGroups,
-        hueShift: avatarContext?.state.config.outfitHueShift,
-      }),
-    [
-      avatarContext?.state.config.outfit,
-      avatarContext?.state.config.outfitHiddenGroups,
-      avatarContext?.state.config.outfitHueShift,
-    ],
-  );
+  const outfit = useMemo(() => {
+    const resolved = resolveMiaraOutfit({
+      id: avatarContext?.state.config.outfit,
+      hiddenGroups: avatarContext?.state.config.outfitHiddenGroups,
+      hueShift: avatarContext?.state.config.outfitHueShift,
+    });
+    const hue = avatarContext?.state.config.outfitHueShift;
+    return typeof hue === "number" ? { ...resolved, hueShift: hue } : resolved;
+  }, [
+    avatarContext?.state.config.outfit,
+    avatarContext?.state.config.outfitHiddenGroups,
+    avatarContext?.state.config.outfitHueShift,
+  ]);
 
   const avatarController = useRef<Live2DAvatarController | null>(null);
   const updateIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -448,12 +450,20 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
         setTimeout(reportNativeSize, delay),
       );
       controller.applyOutfit?.(outfit);
-      const atlas = avatarContext?.state.config.automeshAtlas;
-      if (atlas && avatarContext?.state.config.identity === "melody") {
-        void controller.applyTextureOverlay?.(atlas);
+      const overlay = resolveIdentityOverlay(
+        avatarContext?.state.config.identity,
+        avatarContext?.state.config.automeshAtlas,
+      );
+      if (overlay) {
+        void controller.applyTextureOverlay?.(overlay);
         controller.applyParameterProfile?.(
-          avatarContext.state.config.automeshMapping?.parameters ?? null,
+          resolveIdentityParameters(
+            avatarContext?.state.config.identity,
+            avatarContext?.state.config.automeshMapping?.parameters,
+          ),
         );
+      } else {
+        void controller.clearTextureOverlay?.();
       }
       onReady?.();
     },
@@ -461,14 +471,24 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
   );
 
   useEffect(() => {
-    const atlas = avatarContext?.state.config.automeshAtlas;
-    if (!atlas || avatarContext?.state.config.identity !== "melody") return;
-    void avatarController.current?.applyTextureOverlay?.(atlas);
-    avatarController.current?.applyParameterProfile?.(
-      avatarContext.state.config.automeshMapping?.parameters ?? null,
+    const overlay = resolveIdentityOverlay(
+      avatarContext?.state.config.identity,
+      avatarContext?.state.config.automeshAtlas,
     );
+    if (overlay) {
+      void avatarController.current?.applyTextureOverlay?.(overlay);
+      avatarController.current?.applyParameterProfile?.(
+        resolveIdentityParameters(
+          avatarContext?.state.config.identity,
+          avatarContext?.state.config.automeshMapping?.parameters,
+        ),
+      );
+      return;
+    }
+    void avatarController.current?.clearTextureOverlay?.();
   }, [
     avatarContext?.state.config.automeshAtlas,
+    avatarContext?.state.config.automeshMapping?.parameters,
     avatarContext?.state.config.identity,
   ]);
 

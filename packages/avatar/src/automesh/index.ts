@@ -19,7 +19,12 @@ export {
   sanitizePoint,
 } from "./landmarks";
 
-export { mapPoint, warpRasterToAtlas, rasterToDataUrl } from "./warp";
+export {
+  mapPoint,
+  warpRasterToAtlas,
+  punchOpaqueBackground,
+  rasterToDataUrl,
+} from "./warp";
 
 export {
   projectPhotoOntoAtlas,
@@ -38,6 +43,11 @@ export {
   boundsCentroid,
   assignAtlasFromDrawables,
   uvCentroid,
+  uvIsland,
+  isGenericArtMeshId,
+  isEnvironmentDrawable,
+  unionDrawableBounds,
+  figureFromDrawables,
 } from "./inspect";
 
 export {
