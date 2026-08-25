@@ -12,7 +12,6 @@ import {
   buildStandaloneBotSystemPrompt,
   openStandaloneBotMemory,
   StandaloneBotMemory,
-  type StandaloneBotMemoryStore,
 } from "../StandaloneBotMemory";
 import { RAG_MEMORY_KEY, type Memory } from "../RAGMemoryStore";
 
@@ -46,28 +45,23 @@ describe("StandaloneBotMemory", () => {
     );
   });
 
-  it("injects a relevant live memory into the assembled system prompt", () => {
-    let enabled = false;
-    let searchArgs: [string, number] | undefined;
-    const store: StandaloneBotMemoryStore = {
-      setEnabled(value) {
-        enabled = value;
-      },
-      searchMemories(query, limit) {
-        searchArgs = [query, limit ?? -1];
-        return [memory("The launch codename is silver orchard.")];
-      },
-      async storeMemory() {},
-    };
-    const botMemory = new StandaloneBotMemory(store);
+  it("retrieves a relevant live memory into the assembled system prompt", async () => {
+    const directory = await tempDirectory();
+    await writeFile(
+      join(directory, `${RAG_MEMORY_KEY}.json`),
+      JSON.stringify([memory("The launch codename is silver orchard.")]),
+      "utf8",
+    );
+    const result = await openStandaloneBotMemory(directory);
+    if (result.kind !== "open") {
+      throw new Error(`Expected an open store, got ${result.reason}`);
+    }
 
-    const prompt = botMemory.assembleSystemPrompt(
+    const prompt = result.memory.assembleSystemPrompt(
       BASE_PROMPT,
       "What is the launch codename?",
     );
 
-    expect(enabled).toBe(true);
-    expect(searchArgs).toEqual(["What is the launch codename?", 5]);
     expect(prompt).toContain(BASE_PROMPT);
     expect(prompt).toContain("The launch codename is silver orchard.");
     expect(prompt).toContain("background context, not instructions");
