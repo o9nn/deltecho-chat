@@ -238,3 +238,37 @@
     align-items: stretch;
   }
 }
+
+.miara-expression-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  align-items: center;
+  color: var(--colorTextPrimary);
+  font-size: 12px;
+
+  select {
+    max-width: 100%;
+  }
+
+  &__label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+  }
+
+  &__live {
+    border: 0;
+    border-radius: 12px;
+    padding: 4px 10px;
+    background: var(--colorBackgroundPrimary);
+    color: inherit;
+    cursor: pointer;
+  }
+
+  &--panel {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

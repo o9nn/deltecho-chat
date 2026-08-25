@@ -142,6 +142,11 @@ export interface Live2DAvatarComponentProps {
   fillContainer?: boolean;
   /** Miara wardrobe to apply after the model loads */
   outfit?: Partial<MiaraOutfitState> | null;
+  /**
+   * Lock a Cubism expression by name. When set, cognitive and emotional
+   * updates do not overwrite the face.
+   */
+  manualExpression?: string;
 }
 
 export interface Live2DAvatarState {
@@ -176,6 +181,7 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
   mode = "live2d",
   fillContainer = false,
   outfit,
+  manualExpression,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const managerRef = useRef<any>(null);
@@ -287,6 +293,9 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
         );
 
         controllerRef.current = controller;
+        if (manualExpression && controller.setNamedExpression) {
+          controller.setNamedExpression(manualExpression);
+        }
         onControllerReady?.(controller);
       } catch (error) {
         if (mounted) {
@@ -356,17 +365,25 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
     return () => observer.disconnect();
   }, [fillContainer, state.isLoaded, scale]);
 
+  // Lock a named Cubism face so live cognitive polling cannot overwrite it.
+  useEffect(() => {
+    if (!state.isLoaded || !manualExpression) return;
+    controllerRef.current?.setNamedExpression?.(manualExpression);
+  }, [manualExpression, state.isLoaded]);
+
   // Update emotional state
   useEffect(() => {
+    if (manualExpression) return;
     if (!managerRef.current || !state.isLoaded || !emotionalState) return;
     managerRef.current.updateEmotionalState(emotionalState);
-  }, [emotionalState, state.isLoaded]);
+  }, [emotionalState, state.isLoaded, manualExpression]);
 
   // Update richer DTEcho cognitive visual state
   useEffect(() => {
+    if (manualExpression) return;
     if (!managerRef.current || !state.isLoaded || !cognitiveVisualState) return;
     managerRef.current.updateCognitiveState(cognitiveVisualState);
-  }, [cognitiveVisualState, state.isLoaded]);
+  }, [cognitiveVisualState, state.isLoaded, manualExpression]);
 
   // Update lip sync. Use a small deadband so high-frequency audio-level
   // sampling does not force redundant parameter writes into the Live2D core.
