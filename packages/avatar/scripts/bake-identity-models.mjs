@@ -236,6 +236,20 @@ async function main() {
   bakeMelodyTexture(melodyDir);
   bakeGroveTexture(groveDir);
 
+  if (existsSync(join(melodyDir, "mesh-map.json"))) {
+    const tileMap = spawnSync(
+      process.execPath,
+      [join(here, "write-tile-map.mjs")],
+      { encoding: "utf8" },
+    );
+    if (tileMap.status !== 0) {
+      console.warn(
+        "[bake-identity-models] tile-map write failed",
+        tileMap.stderr || tileMap.stdout,
+      );
+    }
+  }
+
   writeModel3(melodyDir, "melody", "textures/texture_00.png");
   writeModel3(groveDir, "deep-tree-echo", "textures/texture_00.png");
 
@@ -248,10 +262,12 @@ Complete Live2D model for the Melody identity.
 - \`melody_t03.model3.json\` — Melody's Cubism entry (\`sourceModel\` in mesh-map)
 - \`melody_t03.moc3\` — Melody mesh (replace this file to sculpt her figure)
 - \`mesh-map.json\` — ArtMesh UV-island index (region + motion/physics bindings)
+- \`tile-map.json\` — per-ArtMesh still box, segment, chain/joint, and Cubism params
 - \`textures/texture_00.png\` — official 4096 atlas, region-tinted from Melody still
 - \`melody_t03.physics3.json\` — heavier ponytail, damped fairy cloth, musical wings
 
 Regenerate the index with \`pnpm --filter=@deltecho/avatar index:mesh-map\`, then
+\`pnpm --filter=@deltecho/avatar index:tile-map\` and
 \`pnpm --filter=@deltecho/avatar bake:identity-models\`.
 `,
   );
@@ -282,8 +298,10 @@ Each identity has its own folder so mesh, texture, and physics can converge inde
 - \`melody/\` — region-tinted 4096 atlas + aria-style physics
 
 \`mesh-map.json\` indexes each \`ArtMeshN\` UV island to a body region and the
-physics/motion parameters that drive it. Rebuild with
-\`pnpm --filter=@deltecho/avatar index:mesh-map\`.
+physics/motion parameters that drive it. \`tile-map.json\` then maps every
+island onto the A-pose still with segment, chain/joint, and Cubism params.
+Rebuild with \`pnpm --filter=@deltecho/avatar index:mesh-map\` and
+\`pnpm --filter=@deltecho/avatar index:tile-map\`.
 
 Each identity has its own \`*_t03.moc3\`. Sculpt that file in Cubism Editor;
 it does not affect the other identities.

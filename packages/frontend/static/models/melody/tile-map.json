@@ -1,0 +1,8767 @@
+{
+  "version": 1,
+  "identity": "melody",
+  "sourceModel": "models/melody/melody_t03.model3.json",
+  "still": "./images/avatar/identities/melody.webp",
+  "meshMap": "models/melody/mesh-map.json",
+  "figure": {
+    "x": -0.34402619953338914,
+    "y": -0.5634805364587477,
+    "w": 0.5861969309663161,
+    "h": 1.1595569490339783
+  },
+  "tiles": [
+    {
+      "id": "ArtMesh0",
+      "index": 0,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "C",
+      "segment": "crown",
+      "chain": "hair",
+      "joint": 0,
+      "figure": {
+        "x": -0.016445184693388317,
+        "y": 0.45837008693943854
+      },
+      "uv": {
+        "x": 0.05638416111469269,
+        "y": 0.0015888810157775879,
+        "w": 0.027053818106651306,
+        "h": 0.037504613399505615
+      },
+      "stillCentroid": {
+        "u": 0.5588241724500332,
+        "v": 0.1187577080629929
+      },
+      "still": {
+        "x": 0.5088241724500332,
+        "y": 0.0787577080629929,
+        "w": 0.1,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "hairCrown"
+      ]
+    },
+    {
+      "id": "ArtMesh1",
+      "index": 1,
+      "region": "hair",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": 0.024530784899575844,
+        "y": 0.43803593295591847
+      },
+      "uv": {
+        "x": 0.49509966373443604,
+        "y": 0.5898181796073914,
+        "w": 0.027743279933929443,
+        "h": 0.04985898733139038
+      },
+      "stillCentroid": {
+        "u": 0.6287255442047732,
+        "v": 0.13629384891442786
+      },
+      "still": {
+        "x": 0.5937255442047732,
+        "y": 0.10629384891442786,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh2",
+      "index": 2,
+      "region": "hair",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": 0.040149715983054855,
+        "y": 0.4202324693853205
+      },
+      "uv": {
+        "x": 0.029417963698506355,
+        "y": 0.16270524263381958,
+        "w": 0.0660566370934248,
+        "h": 0.030742764472961426
+      },
+      "stillCentroid": {
+        "u": 0.6553700560716845,
+        "v": 0.15164752652847702
+      },
+      "still": {
+        "x": 0.6203700560716845,
+        "y": 0.12164752652847702,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh3",
+      "index": 3,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "C",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": -0.004584520777326918,
+        "y": 0.4430571054258654
+      },
+      "uv": {
+        "x": 0.179047092795372,
+        "y": 0.09408754110336304,
+        "w": 0.028800949454307556,
+        "h": 0.05239683389663696
+      },
+      "stillCentroid": {
+        "u": 0.5790574136860623,
+        "v": 0.13196359805945257
+      },
+      "still": {
+        "x": 0.5440574136860623,
+        "y": 0.10196359805945257,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh4",
+      "index": 4,
+      "region": "hair",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "sideHair",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": 0.05115776775138719,
+        "y": 0.37047908845401945
+      },
+      "uv": {
+        "x": 0.09186005592346191,
+        "y": 0.536705493927002,
+        "w": 0.01866927742958069,
+        "h": 0.021755576133728027
+      },
+      "stillCentroid": {
+        "u": 0.6741488165646577,
+        "v": 0.19455476016866202
+      },
+      "still": {
+        "x": 0.6341488165646577,
+        "y": 0.15455476016866201,
+        "w": 0.08,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamHairSide",
+        "HairSideShake"
+      ],
+      "physics": [
+        "HairSide"
+      ],
+      "mesh3d": [
+        "hairCrown",
+        "hairPonytail"
+      ]
+    },
+    {
+      "id": "ArtMesh5",
+      "index": 5,
+      "region": "hair",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": 0.03893756691366434,
+        "y": 0.38932928919792176
+      },
+      "uv": {
+        "x": 0.004112867638468742,
+        "y": 0.087890625,
+        "w": 0.04520353488624096,
+        "h": 0.026743531227111816
+      },
+      "stillCentroid": {
+        "u": 0.6533022372119162,
+        "v": 0.17829837814309069
+      },
+      "still": {
+        "x": 0.6183022372119161,
+        "y": 0.1482983781430907,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh8",
+      "index": 6,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": -0.029630216617329883,
+        "y": 0.4293566654468405
+      },
+      "uv": {
+        "x": 0.04318775236606598,
+        "y": 0.21111071109771729,
+        "w": 0.04342059791088104,
+        "h": 0.0584525465965271
+      },
+      "stillCentroid": {
+        "u": 0.5363316767929736,
+        "v": 0.14377883489662457
+      },
+      "still": {
+        "x": 0.5013316767929735,
+        "y": 0.11377883489662458,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh9",
+      "index": 7,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": -0.04799669056228595,
+        "y": 0.4082387937232852
+      },
+      "uv": {
+        "x": 0.429137647151947,
+        "y": 0.7270013093948364,
+        "w": 0.05594196915626526,
+        "h": 0.0782131552696228
+      },
+      "stillCentroid": {
+        "u": 0.5050001003640764,
+        "v": 0.16199085263421698
+      },
+      "still": {
+        "x": 0.47000010036407636,
+        "y": 0.13199085263421698,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh126",
+      "index": 8,
+      "region": "headset",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "headsetBand",
+      "chain": "headset",
+      "joint": 0,
+      "figure": {
+        "x": -0.1431450864364361,
+        "y": 0.4204946129486479
+      },
+      "uv": {
+        "x": 0.07053893804550171,
+        "y": 0.09198009967803955,
+        "w": 0.06904050707817078,
+        "h": 0.028555333614349365
+      },
+      "stillCentroid": {
+        "u": 0.34268537156243833,
+        "v": 0.1514214543519049
+      },
+      "still": {
+        "x": 0.29268537156243835,
+        "y": 0.1264214543519049,
+        "w": 0.1,
+        "h": 0.05
+      },
+      "parameters": [
+        "ParamAngleX",
+        "ParamAngleY",
+        "ParamAngleZ"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "headsetBand"
+      ]
+    },
+    {
+      "id": "ArtMesh127",
+      "index": 9,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "sideHair",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": -0.10366811369674216,
+        "y": 0.4122264164275137
+      },
+      "uv": {
+        "x": 0.26171875,
+        "y": 0.5048925280570984,
+        "w": 0.1009516716003418,
+        "h": 0.07896596193313599
+      },
+      "stillCentroid": {
+        "u": 0.41002958756612523,
+        "v": 0.1585519333922163
+      },
+      "still": {
+        "x": 0.37002958756612525,
+        "y": 0.11855193339221629,
+        "w": 0.08,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamHairSide",
+        "HairSideShake"
+      ],
+      "physics": [
+        "HairSide"
+      ],
+      "mesh3d": [
+        "hairCrown",
+        "hairPonytail"
+      ]
+    },
+    {
+      "id": "ArtMesh128",
+      "index": 10,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": -0.06662271950732578,
+        "y": 0.43296201120723377
+      },
+      "uv": {
+        "x": 0.027396023273468018,
+        "y": 0.8132091760635376,
+        "w": 0.02677854895591736,
+        "h": 0.021067559719085693
+      },
+      "stillCentroid": {
+        "u": 0.47322574611364426,
+        "v": 0.14066959066036966
+      },
+      "still": {
+        "x": 0.4382257461136443,
+        "y": 0.11066959066036966,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh130",
+      "index": 11,
+      "region": "headset",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "headsetBand",
+      "chain": "headset",
+      "joint": 0,
+      "figure": {
+        "x": -0.10580933035204285,
+        "y": 0.3999342808597966
+      },
+      "uv": {
+        "x": 0.4404762387275696,
+        "y": 0.5476692914962769,
+        "w": 0.06393736600875854,
+        "h": 0.050984740257263184
+      },
+      "stillCentroid": {
+        "u": 0.40637686176326066,
+        "v": 0.16915265082826592
+      },
+      "still": {
+        "x": 0.35637686176326067,
+        "y": 0.14415265082826592,
+        "w": 0.1,
+        "h": 0.05
+      },
+      "parameters": [
+        "ParamAngleX",
+        "ParamAngleY",
+        "ParamAngleZ"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "headsetBand"
+      ]
+    },
+    {
+      "id": "ArtMesh27",
+      "index": 12,
+      "region": "headset",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "headsetCup",
+      "chain": "headset",
+      "joint": 1,
+      "figure": {
+        "x": 0.11589286817858617,
+        "y": 0.36277346685528755
+      },
+      "uv": {
+        "x": 0.08716055750846863,
+        "y": 0.2985496520996094,
+        "w": 0.03614571690559387,
+        "h": 0.04071706533432007
+      },
+      "stillCentroid": {
+        "u": 0.7845811593619604,
+        "v": 0.2012000755239376
+      },
+      "still": {
+        "x": 0.7495811593619603,
+        "y": 0.1662000755239376,
+        "w": 0.07,
+        "h": 0.07
+      },
+      "parameters": [
+        "ParamAngleX",
+        "ParamAngleY",
+        "ParamAngleZ"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "headsetCups"
+      ]
+    },
+    {
+      "id": "ArtMesh28",
+      "index": 13,
+      "region": "headset",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "headsetCup",
+      "chain": "headset",
+      "joint": 1,
+      "figure": {
+        "x": 0.12804918374038404,
+        "y": 0.35419420649607974
+      },
+      "uv": {
+        "x": 0.4086211621761322,
+        "y": 0.768909215927124,
+        "w": 0.04086008667945862,
+        "h": 0.07324624061584473
+      },
+      "stillCentroid": {
+        "u": 0.8053187560971715,
+        "v": 0.20859881550506143
+      },
+      "still": {
+        "x": 0.7703187560971715,
+        "y": 0.17359881550506143,
+        "w": 0.07,
+        "h": 0.07
+      },
+      "parameters": [
+        "ParamAngleX",
+        "ParamAngleY",
+        "ParamAngleZ"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "headsetCups"
+      ]
+    },
+    {
+      "id": "ArtMesh29",
+      "index": 14,
+      "region": "headset",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "headsetCup",
+      "chain": "headset",
+      "joint": 1,
+      "figure": {
+        "x": 0.10893736629092947,
+        "y": 0.3604524833090762
+      },
+      "uv": {
+        "x": 0.47412109375,
+        "y": 0.641357421875,
+        "w": 0.076171875,
+        "h": 0.07080078125
+      },
+      "stillCentroid": {
+        "u": 0.7727156897215941,
+        "v": 0.20320168790541215
+      },
+      "still": {
+        "x": 0.7377156897215941,
+        "y": 0.16820168790541215,
+        "w": 0.07,
+        "h": 0.07
+      },
+      "parameters": [
+        "ParamAngleX",
+        "ParamAngleY",
+        "ParamAngleZ"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "headsetCups"
+      ]
+    },
+    {
+      "id": "ArtMesh32",
+      "index": 15,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "C",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": -0.00429813884598527,
+        "y": 0.3876875911069953
+      },
+      "uv": {
+        "x": 0.09063063561916351,
+        "y": 0.08770155906677246,
+        "w": 0.008480474352836609,
+        "h": 0.009987831115722656
+      },
+      "stillCentroid": {
+        "u": 0.5795459558742132,
+        "v": 0.17971417586850136
+      },
+      "still": {
+        "x": 0.5445459558742132,
+        "y": 0.14971417586850136,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh33",
+      "index": 16,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "C",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": -0.0013992786552989855,
+        "y": 0.386656079441309
+      },
+      "uv": {
+        "x": 0.4830394685268402,
+        "y": 0.654201865196228,
+        "w": 0.0066973865032196045,
+        "h": 0.009093880653381348
+      },
+      "stillCentroid": {
+        "u": 0.5844911543860984,
+        "v": 0.18060374982737049
+      },
+      "still": {
+        "x": 0.5494911543860984,
+        "y": 0.1506037498273705,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh36",
+      "index": 17,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "C",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": -0.022684041087572673,
+        "y": 0.41244664909888284
+      },
+      "uv": {
+        "x": 0.23261228203773499,
+        "y": 0.675452709197998,
+        "w": 0.017287105321884155,
+        "h": 0.013421058654785156
+      },
+      "stillCentroid": {
+        "u": 0.548181236493511,
+        "v": 0.1583620050997313
+      },
+      "still": {
+        "x": 0.513181236493511,
+        "y": 0.1283620050997313,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh37",
+      "index": 18,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "C",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": -0.020907836966216564,
+        "y": 0.41872934997081757
+      },
+      "uv": {
+        "x": 0.23716655373573303,
+        "y": 0.7429397106170654,
+        "w": 0.005003094673156738,
+        "h": 0.004281818866729736
+      },
+      "stillCentroid": {
+        "u": 0.5512112832705014,
+        "v": 0.15294381423194436
+      },
+      "still": {
+        "x": 0.5162112832705014,
+        "y": 0.12294381423194436,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh38",
+      "index": 19,
+      "region": "wings",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "wingRoot",
+      "chain": "wingR",
+      "joint": 0,
+      "figure": {
+        "x": -0.02855542846597158,
+        "y": 0.4194540266807263
+      },
+      "uv": {
+        "x": 0.06178736686706543,
+        "y": 0.2172340750694275,
+        "w": 0.0050483644008636475,
+        "h": 0.004369974136352539
+      },
+      "stillCentroid": {
+        "u": 0.5381651701031254,
+        "v": 0.15231885423277192
+      },
+      "still": {
+        "x": 0.5081651701031253,
+        "y": 0.12731885423277192,
+        "w": 0.06,
+        "h": 0.05
+      },
+      "parameters": [
+        "ParamFlapping3",
+        "ParamFlapping7"
+      ],
+      "physics": [
+        "WingL",
+        "WingR"
+      ],
+      "mesh3d": [
+        "wingBones"
+      ]
+    },
+    {
+      "id": "ArtMesh39",
+      "index": 20,
+      "region": "wings",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "wingRoot",
+      "chain": "wingR",
+      "joint": 0,
+      "figure": {
+        "x": -0.03629300163851844,
+        "y": 0.4099566439787547
+      },
+      "uv": {
+        "x": 0.09423430263996124,
+        "y": 0.33826208114624023,
+        "w": 0.004600599408149719,
+        "h": 0.0065132975578308105
+      },
+      "stillCentroid": {
+        "u": 0.524965556178515,
+        "v": 0.16050938140772775
+      },
+      "still": {
+        "x": 0.494965556178515,
+        "y": 0.13550938140772775,
+        "w": 0.06,
+        "h": 0.05
+      },
+      "parameters": [
+        "ParamFlapping3",
+        "ParamFlapping7"
+      ],
+      "physics": [
+        "WingL",
+        "WingR"
+      ],
+      "mesh3d": [
+        "wingBones"
+      ]
+    },
+    {
+      "id": "ArtMesh40",
+      "index": 21,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": -0.027072721406033163,
+        "y": 0.3982229609238474
+      },
+      "uv": {
+        "x": 0.22717532515525818,
+        "y": 0.6701920628547668,
+        "w": 0.008816257119178772,
+        "h": 0.006842255592346191
+      },
+      "stillCentroid": {
+        "u": 0.5406945369107855,
+        "v": 0.17062849031797367
+      },
+      "still": {
+        "x": 0.5056945369107855,
+        "y": 0.14062849031797367,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh41",
+      "index": 22,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "C",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": -0.021842367425560952,
+        "y": 0.4185378670692444
+      },
+      "uv": {
+        "x": 0.4084169268608093,
+        "y": 0.6877249479293823,
+        "w": 0.014552116394042969,
+        "h": 0.009415984153747559
+      },
+      "stillCentroid": {
+        "u": 0.5496170571495903,
+        "v": 0.15310894877038395
+      },
+      "still": {
+        "x": 0.5146170571495903,
+        "y": 0.12310894877038395,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh46",
+      "index": 23,
+      "region": "hair",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": 0.025544498302042484,
+        "y": 0.3882180174191793
+      },
+      "uv": {
+        "x": 0.25539451837539673,
+        "y": 0.7543841600418091,
+        "w": 0.012203812599182129,
+        "h": 0.011041522026062012
+      },
+      "stillCentroid": {
+        "u": 0.6304548494073706,
+        "v": 0.17925673709188428
+      },
+      "still": {
+        "x": 0.5954548494073706,
+        "y": 0.14925673709188428,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh47",
+      "index": 24,
+      "region": "hair",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": 0.023855324958761533,
+        "y": 0.39370086789131165
+      },
+      "uv": {
+        "x": 0.05757647752761841,
+        "y": 0.13567334413528442,
+        "w": 0.005947619676589966,
+        "h": 0.0031132102012634277
+      },
+      "stillCentroid": {
+        "u": 0.6275732694228141,
+        "v": 0.17452833588942496
+      },
+      "still": {
+        "x": 0.5925732694228141,
+        "y": 0.14452833588942496,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh48",
+      "index": 25,
+      "region": "hair",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": 0.03196013206616044,
+        "y": 0.39063039794564247
+      },
+      "uv": {
+        "x": 0.133975088596344,
+        "y": 0.5238967537879944,
+        "w": 0.0068822503089904785,
+        "h": 0.004212439060211182
+      },
+      "stillCentroid": {
+        "u": 0.6413993518863278,
+        "v": 0.17717630410541219
+      },
+      "still": {
+        "x": 0.6063993518863278,
+        "y": 0.1471763041054122,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh49",
+      "index": 26,
+      "region": "hair",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": 0.032113899414738016,
+        "y": 0.380304608742396
+      },
+      "uv": {
+        "x": 0.3021537661552429,
+        "y": 0.5721758604049683,
+        "w": 0.004484385251998901,
+        "h": 0.005719959735870361
+      },
+      "stillCentroid": {
+        "u": 0.6416616653520842,
+        "v": 0.18608124768049816
+      },
+      "still": {
+        "x": 0.6066616653520842,
+        "y": 0.15608124768049816,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh50",
+      "index": 27,
+      "region": "hair",
+      "laterality": "L",
+      "stillLaterality": "C",
+      "segment": "sideHair",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": 0.019359928604803588,
+        "y": 0.3754243521313918
+      },
+      "uv": {
+        "x": 0.398438960313797,
+        "y": 0.6907885670661926,
+        "w": 0.006323754787445068,
+        "h": 0.005517065525054932
+      },
+      "stillCentroid": {
+        "u": 0.6199045217435188,
+        "v": 0.19028997293118122
+      },
+      "still": {
+        "x": 0.5799045217435188,
+        "y": 0.1502899729311812,
+        "w": 0.08,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamHairSide",
+        "HairSideShake"
+      ],
+      "physics": [
+        "HairSide"
+      ],
+      "mesh3d": [
+        "hairCrown",
+        "hairPonytail"
+      ]
+    },
+    {
+      "id": "ArtMesh51",
+      "index": 28,
+      "region": "hair",
+      "laterality": "L",
+      "stillLaterality": "C",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": 0.018344110809266567,
+        "y": 0.38955219302858624
+      },
+      "uv": {
+        "x": 0.28048720955848694,
+        "y": 0.5765901803970337,
+        "w": 0.004166275262832642,
+        "h": 0.003513038158416748
+      },
+      "stillCentroid": {
+        "u": 0.6181716266328903,
+        "v": 0.17810614624723586
+      },
+      "still": {
+        "x": 0.5831716266328902,
+        "y": 0.14810614624723586,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh52",
+      "index": 29,
+      "region": "hair",
+      "laterality": "L",
+      "stillLaterality": "C",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": 0.021492301300168038,
+        "y": 0.3865438163280487
+      },
+      "uv": {
+        "x": 0.2830183207988739,
+        "y": 0.6165592670440674,
+        "w": 0.002078503370285034,
+        "h": 0.0019439458847045898
+      },
+      "stillCentroid": {
+        "u": 0.6235421605347172,
+        "v": 0.18070056535105283
+      },
+      "still": {
+        "x": 0.5885421605347172,
+        "y": 0.15070056535105283,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh53",
+      "index": 30,
+      "region": "hair",
+      "laterality": "L",
+      "stillLaterality": "C",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": 0.021530212322250008,
+        "y": 0.38359947949647905
+      },
+      "uv": {
+        "x": 0.09403818845748901,
+        "y": 0.3158004879951477,
+        "w": 0.011083006858825684,
+        "h": 0.011601030826568604
+      },
+      "stillCentroid": {
+        "u": 0.6236068333777146,
+        "v": 0.18323975657751446
+      },
+      "still": {
+        "x": 0.5886068333777146,
+        "y": 0.15323975657751446,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh54",
+      "index": 31,
+      "region": "hair",
+      "laterality": "L",
+      "stillLaterality": "C",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": 0.0210140330147826,
+        "y": 0.3830275866720412
+      },
+      "uv": {
+        "x": 0.021664559841156006,
+        "y": 0.8428158760070801,
+        "w": 0.012769430875778198,
+        "h": 0.012026309967041016
+      },
+      "stillCentroid": {
+        "u": 0.6227262772365958,
+        "v": 0.18373295600589468
+      },
+      "still": {
+        "x": 0.5877262772365958,
+        "y": 0.15373295600589468,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh62",
+      "index": 32,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "C",
+      "segment": "sideHair",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": -0.01794320301940808,
+        "y": 0.36155664462309617
+      },
+      "uv": {
+        "x": 0.3459722399711609,
+        "y": 0.7980992794036865,
+        "w": 0.005885481834411621,
+        "h": 0.006043493747711182
+      },
+      "stillCentroid": {
+        "u": 0.5562686859797265,
+        "v": 0.20224946100966568
+      },
+      "still": {
+        "x": 0.5162686859797264,
+        "y": 0.16224946100966567,
+        "w": 0.08,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamHairSide",
+        "HairSideShake"
+      ],
+      "physics": [
+        "HairSide"
+      ],
+      "mesh3d": [
+        "hairCrown",
+        "hairPonytail"
+      ]
+    },
+    {
+      "id": "ArtMesh63",
+      "index": 33,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "C",
+      "segment": "sideHair",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": -0.01688545075012371,
+        "y": 0.36247095903929544
+      },
+      "uv": {
+        "x": 0.47300487756729126,
+        "y": 0.6018913984298706,
+        "w": 0.018529266119003296,
+        "h": 0.01672077178955078
+      },
+      "stillCentroid": {
+        "u": 0.5580731175852293,
+        "v": 0.20146095776542128
+      },
+      "still": {
+        "x": 0.5180731175852292,
+        "y": 0.16146095776542127,
+        "w": 0.08,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamHairSide",
+        "HairSideShake"
+      ],
+      "physics": [
+        "HairSide"
+      ],
+      "mesh3d": [
+        "hairCrown",
+        "hairPonytail"
+      ]
+    },
+    {
+      "id": "ArtMesh64",
+      "index": 34,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "C",
+      "segment": "sideHair",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": -0.015607552359473299,
+        "y": 0.36691837961023505
+      },
+      "uv": {
+        "x": 0.020848378539085388,
+        "y": 0.1178504228591919,
+        "w": 0.015435293316841125,
+        "h": 0.012713253498077393
+      },
+      "stillCentroid": {
+        "u": 0.5602530989586285,
+        "v": 0.19762550960166825
+      },
+      "still": {
+        "x": 0.5202530989586285,
+        "y": 0.15762550960166824,
+        "w": 0.08,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamHairSide",
+        "HairSideShake"
+      ],
+      "physics": [
+        "HairSide"
+      ],
+      "mesh3d": [
+        "hairCrown",
+        "hairPonytail"
+      ]
+    },
+    {
+      "id": "ArtMesh65",
+      "index": 35,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "C",
+      "segment": "sideHair",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": -0.016240756389581494,
+        "y": 0.3642372406191296
+      },
+      "uv": {
+        "x": 0.0055495500564575195,
+        "y": 0.8505350351333618,
+        "w": 0.017232626676559448,
+        "h": 0.015765666961669922
+      },
+      "stillCentroid": {
+        "u": 0.5591729090145011,
+        "v": 0.19993771944469407
+      },
+      "still": {
+        "x": 0.5191729090145011,
+        "y": 0.15993771944469407,
+        "w": 0.08,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamHairSide",
+        "HairSideShake"
+      ],
+      "physics": [
+        "HairSide"
+      ],
+      "mesh3d": [
+        "hairCrown",
+        "hairPonytail"
+      ]
+    },
+    {
+      "id": "ArtMesh66",
+      "index": 36,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "C",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": -0.009832917993631342,
+        "y": 0.43408771321691314
+      },
+      "uv": {
+        "x": 0.18018634617328644,
+        "y": 0.8824072480201721,
+        "w": 0.032545968890190125,
+        "h": 0.04068845510482788
+      },
+      "stillCentroid": {
+        "u": 0.5701041132863951,
+        "v": 0.1396987871042208
+      },
+      "still": {
+        "x": 0.5351041132863951,
+        "y": 0.10969878710422079,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh67",
+      "index": 37,
+      "region": "hair",
+      "laterality": "L",
+      "stillLaterality": "C",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": 0.01860107390354548,
+        "y": 0.41396111969290106
+      },
+      "uv": {
+        "x": 0.09519338607788086,
+        "y": 0.18137770891189575,
+        "w": 0.025218695402145386,
+        "h": 0.05204218626022339
+      },
+      "stillCentroid": {
+        "u": 0.6186099828928853,
+        "v": 0.15705592815777525
+      },
+      "still": {
+        "x": 0.5836099828928852,
+        "y": 0.12705592815777525,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh69",
+      "index": 38,
+      "region": "hair",
+      "laterality": "L",
+      "stillLaterality": "C",
+      "segment": "sideHair",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": 0.02008269988000393,
+        "y": 0.3679549992084503
+      },
+      "uv": {
+        "x": 0.1158129870891571,
+        "y": 0.11587178707122803,
+        "w": 0.002311497926712036,
+        "h": 0.002163410186767578
+      },
+      "stillCentroid": {
+        "u": 0.6211375054679626,
+        "v": 0.1967315305702123
+      },
+      "still": {
+        "x": 0.5811375054679626,
+        "y": 0.1567315305702123,
+        "w": 0.08,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamHairSide",
+        "HairSideShake"
+      ],
+      "physics": [
+        "HairSide"
+      ],
+      "mesh3d": [
+        "hairCrown",
+        "hairPonytail"
+      ]
+    },
+    {
+      "id": "ArtMesh16",
+      "index": 39,
+      "region": "armL",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "forearm",
+      "chain": "armL",
+      "joint": 1,
+      "figure": {
+        "x": 0.15545513374464853,
+        "y": 0.1668304279446602
+      },
+      "uv": {
+        "x": 0.46219319105148315,
+        "y": 0.706725001335144,
+        "w": 0.09713566303253174,
+        "h": 0.07374674081802368
+      },
+      "stillCentroid": {
+        "u": 0.8520708773665325,
+        "v": 0.370181029045769
+      },
+      "still": {
+        "x": 0.8070708773665325,
+        "y": 0.330181029045769,
+        "w": 0.09,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamArmL2",
+        "ParamSleeveL"
+      ],
+      "physics": [
+        "SleeveL",
+        "SleeveR"
+      ],
+      "mesh3d": [
+        "gloveL"
+      ]
+    },
+    {
+      "id": "ArtMesh17",
+      "index": 40,
+      "region": "wings",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "ribbon",
+      "chain": "wingL",
+      "joint": 2,
+      "figure": {
+        "x": 0.2725326885347781,
+        "y": 0.1200787910948629
+      },
+      "uv": {
+        "x": 0.0668480396270752,
+        "y": 0.273212730884552,
+        "w": 0.02792307734489441,
+        "h": 0.024197041988372803
+      },
+      "stillCentroid": {
+        "u": 1.0517948073385524,
+        "v": 0.41049956354185035
+      },
+      "still": {
+        "x": 0.9299999999999999,
+        "y": 0.3804995635418503,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamFlapping3",
+        "ParamFlapping4"
+      ],
+      "physics": [
+        "WingL",
+        "WingR"
+      ],
+      "mesh3d": [
+        "energyRibbons"
+      ]
+    },
+    {
+      "id": "ArtMesh18",
+      "index": 41,
+      "region": "wings",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "ribbon",
+      "chain": "wingL",
+      "joint": 2,
+      "figure": {
+        "x": 0.2829367241689137,
+        "y": 0.11249644805987676
+      },
+      "uv": {
+        "x": 0.08514592051506042,
+        "y": 0.236308753490448,
+        "w": 0.03643617033958435,
+        "h": 0.018574059009552002
+      },
+      "stillCentroid": {
+        "u": 1.0695431698504223,
+        "v": 0.4170385636671162
+      },
+      "still": {
+        "x": 0.9299999999999999,
+        "y": 0.3870385636671162,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamFlapping3",
+        "ParamFlapping4"
+      ],
+      "physics": [
+        "WingL",
+        "WingR"
+      ],
+      "mesh3d": [
+        "energyRibbons"
+      ]
+    },
+    {
+      "id": "ArtMesh19",
+      "index": 42,
+      "region": "body",
+      "laterality": "C",
+      "stillLaterality": "L",
+      "segment": "crop",
+      "chain": "spine",
+      "joint": 0,
+      "figure": {
+        "x": 0.10844556270883633,
+        "y": 0.20252369688107416
+      },
+      "uv": {
+        "x": 0.076465904712677,
+        "y": 0.46096372604370117,
+        "w": 0.03220176696777344,
+        "h": 0.04835319519042969
+      },
+      "stillCentroid": {
+        "u": 0.7718767164071442,
+        "v": 0.33939921279590746
+      },
+      "still": {
+        "x": 0.7218767164071441,
+        "y": 0.2993992127959075,
+        "w": 0.1,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamBreath",
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ"
+      ],
+      "physics": [
+        "Body",
+        "Chest"
+      ],
+      "mesh3d": [
+        "cropTop"
+      ]
+    },
+    {
+      "id": "ArtMesh24",
+      "index": 43,
+      "region": "body",
+      "laterality": "C",
+      "stillLaterality": "L",
+      "segment": "crop",
+      "chain": "spine",
+      "joint": 0,
+      "figure": {
+        "x": 0.074449073523283,
+        "y": 0.21587916016578673
+      },
+      "uv": {
+        "x": 0.060119301080703735,
+        "y": 0.8071327209472656,
+        "w": 0.01978600025177002,
+        "h": 0.013538718223571777
+      },
+      "stillCentroid": {
+        "u": 0.7138817195218623,
+        "v": 0.32788148329082456
+      },
+      "still": {
+        "x": 0.6638817195218623,
+        "y": 0.2878814832908246,
+        "w": 0.1,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamBreath",
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ"
+      ],
+      "physics": [
+        "Body",
+        "Chest"
+      ],
+      "mesh3d": [
+        "cropTop"
+      ]
+    },
+    {
+      "id": "ArtMesh78",
+      "index": 44,
+      "region": "body",
+      "laterality": "C",
+      "stillLaterality": "R",
+      "segment": "crop",
+      "chain": "spine",
+      "joint": 0,
+      "figure": {
+        "x": -0.04823192160079457,
+        "y": 0.2043638755944935
+      },
+      "uv": {
+        "x": 0.17451943457126617,
+        "y": 0.7613942623138428,
+        "w": 0.08329306542873383,
+        "h": 0.12352609634399414
+      },
+      "stillCentroid": {
+        "u": 0.5045988170647577,
+        "v": 0.33781224570907964
+      },
+      "still": {
+        "x": 0.45459881706475774,
+        "y": 0.29781224570907966,
+        "w": 0.1,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamBreath",
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ"
+      ],
+      "physics": [
+        "Body",
+        "Chest"
+      ],
+      "mesh3d": [
+        "cropTop"
+      ]
+    },
+    {
+      "id": "ArtMesh79",
+      "index": 45,
+      "region": "body",
+      "laterality": "C",
+      "stillLaterality": "C",
+      "segment": "midriff",
+      "chain": "spine",
+      "joint": 1,
+      "figure": {
+        "x": 0.020898011016348996,
+        "y": 0.09840009175240993
+      },
+      "uv": {
+        "x": 0.2778240442276001,
+        "y": 0.8234174251556396,
+        "w": 0.11346721649169922,
+        "h": 0.06648659706115723
+      },
+      "stillCentroid": {
+        "u": 0.6225283539921967,
+        "v": 0.42919523809281857
+      },
+      "still": {
+        "x": 0.5725283539921967,
+        "y": 0.3891952380928186,
+        "w": 0.1,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamBreath",
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ"
+      ],
+      "physics": [
+        "Body",
+        "Chest"
+      ],
+      "mesh3d": [
+        "cropTop"
+      ]
+    },
+    {
+      "id": "ArtMesh80",
+      "index": 46,
+      "region": "armR",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "forearm",
+      "chain": "armR",
+      "joint": 1,
+      "figure": {
+        "x": -0.1360642616237913,
+        "y": 0.08784603306225368
+      },
+      "uv": {
+        "x": 0.05680745840072632,
+        "y": 0.5439212322235107,
+        "w": 0.0677163153886795,
+        "h": 0.06252408027648926
+      },
+      "stillCentroid": {
+        "u": 0.35476463100341227,
+        "v": 0.43829704089685406
+      },
+      "still": {
+        "x": 0.3097646310034123,
+        "y": 0.3982970408968541,
+        "w": 0.09,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamArmR2",
+        "ParamSleeve"
+      ],
+      "physics": [
+        "SleeveL",
+        "SleeveR"
+      ],
+      "mesh3d": [
+        "gloveR"
+      ]
+    },
+    {
+      "id": "ArtMesh81",
+      "index": 47,
+      "region": "body",
+      "laterality": "C",
+      "stillLaterality": "R",
+      "segment": "midriff",
+      "chain": "spine",
+      "joint": 1,
+      "figure": {
+        "x": -0.05405170481664116,
+        "y": 0.05483294981562037
+      },
+      "uv": {
+        "x": 0.12522725760936737,
+        "y": 0.8910459280014038,
+        "w": 0.09225140511989594,
+        "h": 0.10530424118041992
+      },
+      "stillCentroid": {
+        "u": 0.49467078280116483,
+        "v": 0.46676746942917957
+      },
+      "still": {
+        "x": 0.44467078280116484,
+        "y": 0.4267674694291796,
+        "w": 0.1,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamBreath",
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ"
+      ],
+      "physics": [
+        "Body",
+        "Chest"
+      ],
+      "mesh3d": [
+        "cropTop"
+      ]
+    },
+    {
+      "id": "ArtMesh82",
+      "index": 48,
+      "region": "skirt",
+      "laterality": "C",
+      "stillLaterality": "C",
+      "segment": "waist",
+      "chain": "skirt",
+      "joint": 0,
+      "figure": {
+        "x": -0.0034553007795833624,
+        "y": 0.018658130943106536
+      },
+      "uv": {
+        "x": 0.32949894666671753,
+        "y": 0.7351114749908447,
+        "w": 0.0845566987991333,
+        "h": 0.05691373348236084
+      },
+      "stillCentroid": {
+        "u": 0.5809837629009621,
+        "v": 0.4979645735495515
+      },
+      "still": {
+        "x": 0.530983762900962,
+        "y": 0.46796457354955145,
+        "w": 0.1,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ",
+        "ParamCloth1",
+        "ParamCloth2"
+      ],
+      "physics": [
+        "Skirt"
+      ],
+      "mesh3d": [
+        "skirt"
+      ]
+    },
+    {
+      "id": "ArtMesh83",
+      "index": 49,
+      "region": "legL",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "thigh",
+      "chain": "legL",
+      "joint": 0,
+      "figure": {
+        "x": 0.02904107320641184,
+        "y": -0.1308545523176068
+      },
+      "uv": {
+        "x": 0.164284810423851,
+        "y": 0.575160026550293,
+        "w": 0.05516396462917328,
+        "h": 0.08840328454971313
+      },
+      "stillCentroid": {
+        "u": 0.636419696235561,
+        "v": 0.6269040649520838
+      },
+      "still": {
+        "x": 0.586419696235561,
+        "y": 0.5669040649520838,
+        "w": 0.1,
+        "h": 0.12
+      },
+      "parameters": [
+        "ParamLegL1X",
+        "ParamLegL1Z"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "bootL"
+      ]
+    },
+    {
+      "id": "ArtMesh84",
+      "index": 50,
+      "region": "skirt",
+      "laterality": "C",
+      "stillLaterality": "C",
+      "segment": "hem",
+      "chain": "skirt",
+      "joint": 2,
+      "figure": {
+        "x": 0.013817448189947755,
+        "y": -0.024398106848821044
+      },
+      "uv": {
+        "x": 0.46502014994621277,
+        "y": 0.8188295364379883,
+        "w": 0.0995359718799591,
+        "h": 0.056675076484680176
+      },
+      "stillCentroid": {
+        "u": 0.6104495414765302,
+        "v": 0.5350962019941894
+      },
+      "still": {
+        "x": 0.5604495414765301,
+        "y": 0.5000962019941894,
+        "w": 0.1,
+        "h": 0.07
+      },
+      "parameters": [
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ",
+        "ParamCloth1",
+        "ParamCloth2"
+      ],
+      "physics": [
+        "Skirt"
+      ],
+      "mesh3d": [
+        "skirt"
+      ]
+    },
+    {
+      "id": "ArtMesh86",
+      "index": 51,
+      "region": "legL",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "boot",
+      "chain": "legL",
+      "joint": 2,
+      "figure": {
+        "x": 0.13833132684230803,
+        "y": -0.40516080856323244
+      },
+      "uv": {
+        "x": 0.3360029458999634,
+        "y": 0.79393470287323,
+        "w": 0.005021125078201294,
+        "h": 0.006455719470977783
+      },
+      "stillCentroid": {
+        "u": 0.8228591807544183,
+        "v": 0.8634653278328324
+      },
+      "still": {
+        "x": 0.7878591807544183,
+        "y": 0.8284653278328323,
+        "w": 0.07,
+        "h": 0.07
+      },
+      "parameters": [
+        "ParamLegL3X",
+        "ParamLegL3Z"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "bootL"
+      ]
+    },
+    {
+      "id": "ArtMesh87",
+      "index": 52,
+      "region": "legL",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "boot",
+      "chain": "legL",
+      "joint": 2,
+      "figure": {
+        "x": 0.10466477150718372,
+        "y": -0.4803800458709399
+      },
+      "uv": {
+        "x": 0.0033516287803649902,
+        "y": 0.23008286952972412,
+        "w": 0.030846059322357178,
+        "h": 0.022309541702270508
+      },
+      "stillCentroid": {
+        "u": 0.765427021770531,
+        "v": 0.9283342740026366
+      },
+      "still": {
+        "x": 0.730427021770531,
+        "y": 0.8933342740026365,
+        "w": 0.07,
+        "h": 0.07
+      },
+      "parameters": [
+        "ParamLegL3X",
+        "ParamLegL3Z"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "bootL"
+      ]
+    },
+    {
+      "id": "ArtMesh90",
+      "index": 53,
+      "region": "legL",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "boot",
+      "chain": "legL",
+      "joint": 2,
+      "figure": {
+        "x": 0.12022759153374604,
+        "y": -0.4509633257985115
+      },
+      "uv": {
+        "x": 0.4580078125,
+        "y": 0.505859375,
+        "w": 0.03807511925697327,
+        "h": 0.0425991415977478
+      },
+      "stillCentroid": {
+        "u": 0.7919758131483837,
+        "v": 0.9029653431390551
+      },
+      "still": {
+        "x": 0.7569758131483837,
+        "y": 0.867965343139055,
+        "w": 0.07,
+        "h": 0.07
+      },
+      "parameters": [
+        "ParamLegL3X",
+        "ParamLegL3Z"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "bootL"
+      ]
+    },
+    {
+      "id": "ArtMesh91",
+      "index": 54,
+      "region": "legL",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "shin",
+      "chain": "legL",
+      "joint": 1,
+      "figure": {
+        "x": 0.08669092072902815,
+        "y": -0.2938610538840294
+      },
+      "uv": {
+        "x": 0.2677100896835327,
+        "y": 0.7081737518310547,
+        "w": 0.0616379976272583,
+        "h": 0.12960857152938843
+      },
+      "stillCentroid": {
+        "u": 0.7347652256595779,
+        "v": 0.7674806030015713
+      },
+      "still": {
+        "x": 0.6897652256595779,
+        "y": 0.7124806030015712,
+        "w": 0.09,
+        "h": 0.11
+      },
+      "parameters": [
+        "ParamLegL2X",
+        "ParamLegL2Z"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "bootL"
+      ]
+    },
+    {
+      "id": "ArtMesh92",
+      "index": 55,
+      "region": "legL",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "boot",
+      "chain": "legL",
+      "joint": 2,
+      "figure": {
+        "x": 0.11906644092364745,
+        "y": -0.39037429880012164
+      },
+      "uv": {
+        "x": 0.012160539627075195,
+        "y": 0.05661153793334961,
+        "w": 0.027669250965118408,
+        "h": 0.027175188064575195
+      },
+      "stillCentroid": {
+        "u": 0.7899949931393392,
+        "v": 0.8507134662054847
+      },
+      "still": {
+        "x": 0.7549949931393392,
+        "y": 0.8157134662054847,
+        "w": 0.07,
+        "h": 0.07
+      },
+      "parameters": [
+        "ParamLegL3X",
+        "ParamLegL3Z"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "bootL"
+      ]
+    },
+    {
+      "id": "ArtMesh93",
+      "index": 56,
+      "region": "legL",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "boot",
+      "chain": "legL",
+      "joint": 2,
+      "figure": {
+        "x": 0.1476882267743349,
+        "y": -0.39151476323604584
+      },
+      "uv": {
+        "x": 0.0495951771736145,
+        "y": 0.4342721700668335,
+        "w": 0.020690083503723145,
+        "h": 0.022946834564208984
+      },
+      "stillCentroid": {
+        "u": 0.8388212225832667,
+        "v": 0.8516970008536745
+      },
+      "still": {
+        "x": 0.8038212225832667,
+        "y": 0.8166970008536745,
+        "w": 0.07,
+        "h": 0.07
+      },
+      "parameters": [
+        "ParamLegL3X",
+        "ParamLegL3Z"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "bootL"
+      ]
+    },
+    {
+      "id": "ArtMesh94",
+      "index": 57,
+      "region": "legR",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "shin",
+      "chain": "legR",
+      "joint": 1,
+      "figure": {
+        "x": -0.09309301744489108,
+        "y": -0.21963445929919972
+      },
+      "uv": {
+        "x": 0.3199983239173889,
+        "y": 0.774509847164154,
+        "w": 0.018736064434051514,
+        "h": 0.01458430290222168
+      },
+      "stillCentroid": {
+        "u": 0.42806976432791516,
+        "v": 0.7034677102784779
+      },
+      "still": {
+        "x": 0.3830697643279152,
+        "y": 0.6484677102784778,
+        "w": 0.09,
+        "h": 0.11
+      },
+      "parameters": [
+        "ParamLegR2X",
+        "ParamLegR2"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "bootR"
+      ]
+    },
+    {
+      "id": "ArtMesh96",
+      "index": 58,
+      "region": "skirt",
+      "laterality": "C",
+      "stillLaterality": "R",
+      "segment": "hem",
+      "chain": "skirt",
+      "joint": 2,
+      "figure": {
+        "x": -0.09561373641093572,
+        "y": -0.03203286597210232
+      },
+      "uv": {
+        "x": 0.1816236823797226,
+        "y": 0.6689279675483704,
+        "w": 0.04893265664577484,
+        "h": 0.10181576013565063
+      },
+      "stillCentroid": {
+        "u": 0.4237696412244226,
+        "v": 0.5416804056675335
+      },
+      "still": {
+        "x": 0.37376964122442263,
+        "y": 0.5066804056675335,
+        "w": 0.1,
+        "h": 0.07
+      },
+      "parameters": [
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ",
+        "ParamCloth1",
+        "ParamCloth2"
+      ],
+      "physics": [
+        "Skirt"
+      ],
+      "mesh3d": [
+        "skirt"
+      ]
+    },
+    {
+      "id": "ArtMesh97",
+      "index": 59,
+      "region": "legR",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "boot",
+      "chain": "legR",
+      "joint": 2,
+      "figure": {
+        "x": -0.0874222100135826,
+        "y": -0.4835110916977837
+      },
+      "uv": {
+        "x": 0.021478667855262756,
+        "y": 0.12859028577804565,
+        "w": 0.031255707144737244,
+        "h": 0.031077682971954346
+      },
+      "stillCentroid": {
+        "u": 0.4377436591092482,
+        "v": 0.9310344827586207
+      },
+      "still": {
+        "x": 0.40274365910924814,
+        "y": 0.8960344827586206,
+        "w": 0.07,
+        "h": 0.07
+      },
+      "parameters": [
+        "ParamLegR3X",
+        "ParamLegR3Z"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "bootR"
+      ]
+    },
+    {
+      "id": "ArtMesh98",
+      "index": 60,
+      "region": "legR",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "boot",
+      "chain": "legR",
+      "joint": 2,
+      "figure": {
+        "x": -0.08097580474402223,
+        "y": -0.4082171086754118
+      },
+      "uv": {
+        "x": 0.0033231228590011597,
+        "y": 0.16632592678070068,
+        "w": 0.02116277813911438,
+        "h": 0.021282196044921875
+      },
+      "stillCentroid": {
+        "u": 0.44874065504870797,
+        "v": 0.8661010760077932
+      },
+      "still": {
+        "x": 0.41374065504870794,
+        "y": 0.8311010760077931,
+        "w": 0.07,
+        "h": 0.07
+      },
+      "parameters": [
+        "ParamLegR3X",
+        "ParamLegR3Z"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "bootR"
+      ]
+    },
+    {
+      "id": "ArtMesh101",
+      "index": 61,
+      "region": "legR",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "boot",
+      "chain": "legR",
+      "joint": 2,
+      "figure": {
+        "x": -0.08186913426551554,
+        "y": -0.39587506651878357
+      },
+      "uv": {
+        "x": 0.031107768416404724,
+        "y": 0.10180318355560303,
+        "w": 0.023204639554023743,
+        "h": 0.016493499279022217
+      },
+      "stillCentroid": {
+        "u": 0.44721671407545743,
+        "v": 0.8554573192117942
+      },
+      "still": {
+        "x": 0.41221671407545746,
+        "y": 0.8204573192117942,
+        "w": 0.07,
+        "h": 0.07
+      },
+      "parameters": [
+        "ParamLegR3X",
+        "ParamLegR3Z"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "bootR"
+      ]
+    },
+    {
+      "id": "ArtMesh104",
+      "index": 62,
+      "region": "legR",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "boot",
+      "chain": "legR",
+      "joint": 2,
+      "figure": {
+        "x": -0.10095305927097797,
+        "y": -0.40989163766304654
+      },
+      "uv": {
+        "x": 0.10173572599887848,
+        "y": 0.15843117237091064,
+        "w": 0.018670812249183655,
+        "h": 0.01793009042739868
+      },
+      "stillCentroid": {
+        "u": 0.4146612297367667,
+        "v": 0.867545187044366
+      },
+      "still": {
+        "x": 0.37966122973676675,
+        "y": 0.832545187044366,
+        "w": 0.07,
+        "h": 0.07
+      },
+      "parameters": [
+        "ParamLegR3X",
+        "ParamLegR3Z"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "bootR"
+      ]
+    },
+    {
+      "id": "ArtMesh105",
+      "index": 63,
+      "region": "legR",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "boot",
+      "chain": "legR",
+      "joint": 2,
+      "figure": {
+        "x": -0.1038455837406218,
+        "y": -0.4363112673163414
+      },
+      "uv": {
+        "x": 0.09772108495235443,
+        "y": 0.36434781551361084,
+        "w": 0.017535105347633362,
+        "h": 0.024371743202209473
+      },
+      "stillCentroid": {
+        "u": 0.4097268394033413,
+        "v": 0.8903294320745949
+      },
+      "still": {
+        "x": 0.3747268394033413,
+        "y": 0.8553294320745949,
+        "w": 0.07,
+        "h": 0.07
+      },
+      "parameters": [
+        "ParamLegR3X",
+        "ParamLegR3Z"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "bootR"
+      ]
+    },
+    {
+      "id": "ArtMesh106",
+      "index": 64,
+      "region": "skirt",
+      "laterality": "C",
+      "stillLaterality": "C",
+      "segment": "waist",
+      "chain": "skirt",
+      "joint": 0,
+      "figure": {
+        "x": -0.021246037380292248,
+        "y": 0.021709283581003547
+      },
+      "uv": {
+        "x": 0.30598583817481995,
+        "y": 0.6725317239761353,
+        "w": 0.08671164512634277,
+        "h": 0.037185072898864746
+      },
+      "stillCentroid": {
+        "u": 0.5506343433443264,
+        "v": 0.49533326454792037
+      },
+      "still": {
+        "x": 0.5006343433443263,
+        "y": 0.46533326454792034,
+        "w": 0.1,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ",
+        "ParamCloth1",
+        "ParamCloth2"
+      ],
+      "physics": [
+        "Skirt"
+      ],
+      "mesh3d": [
+        "skirt"
+      ]
+    },
+    {
+      "id": "ArtMesh132",
+      "index": 65,
+      "region": "face",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "eye",
+      "chain": "head",
+      "joint": 1,
+      "figure": {
+        "x": 0.06358887546230108,
+        "y": 0.35258181020617485
+      },
+      "uv": {
+        "x": 0.0060319602489471436,
+        "y": 0.36061275005340576,
+        "w": 0.034181416034698486,
+        "h": 0.05979740619659424
+      },
+      "stillCentroid": {
+        "u": 0.695355184346935,
+        "v": 0.2099893434056085
+      },
+      "still": {
+        "x": 0.670355184346935,
+        "y": 0.1849893434056085,
+        "w": 0.05,
+        "h": 0.05
+      },
+      "parameters": [
+        "ParamEyeLOpen",
+        "ParamEyeLSmile",
+        "ParamEyeBallX",
+        "ParamEyeBallY"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "eyes"
+      ]
+    },
+    {
+      "id": "ArtMesh133",
+      "index": 66,
+      "region": "face",
+      "laterality": "R",
+      "stillLaterality": "C",
+      "segment": "eye",
+      "chain": "head",
+      "joint": 1,
+      "figure": {
+        "x": 0.019014732968626602,
+        "y": 0.3474438018871076
+      },
+      "uv": {
+        "x": 0.5196852684020996,
+        "y": 0.5972944498062134,
+        "w": 0.04623270034790039,
+        "h": 0.05700242519378662
+      },
+      "stillCentroid": {
+        "u": 0.6193156485885402,
+        "v": 0.21442035330412845
+      },
+      "still": {
+        "x": 0.5943156485885401,
+        "y": 0.18942035330412846,
+        "w": 0.05,
+        "h": 0.05
+      },
+      "parameters": [
+        "ParamEyeROpen",
+        "ParamEyeRSmile",
+        "ParamEyeBallX",
+        "ParamEyeBallY"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "eyes"
+      ]
+    },
+    {
+      "id": "ArtMesh134",
+      "index": 67,
+      "region": "hair",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "ponytail",
+      "chain": "hair",
+      "joint": 2,
+      "figure": {
+        "x": 0.09812713374604325,
+        "y": 0.24752726386252202
+      },
+      "uv": {
+        "x": 0.042409077286720276,
+        "y": 0.8289636969566345,
+        "w": 0.1394599825143814,
+        "h": 0.11270910501480103
+      },
+      "stillCentroid": {
+        "u": 0.7542743912878646,
+        "v": 0.3005882108706117
+      },
+      "still": {
+        "x": 0.6842743912878646,
+        "y": 0.24058821087061172,
+        "w": 0.14,
+        "h": 0.12
+      },
+      "parameters": [
+        "ParamHairBack",
+        "ParamHairTail",
+        "HairBackShake"
+      ],
+      "physics": [
+        "HairBack"
+      ],
+      "mesh3d": [
+        "hairPonytail"
+      ]
+    },
+    {
+      "id": "ArtMesh135",
+      "index": 68,
+      "region": "armL",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "forearm",
+      "chain": "armL",
+      "joint": 1,
+      "figure": {
+        "x": 0.1388674143113588,
+        "y": 0.20647557707209335
+      },
+      "uv": {
+        "x": 0.0025468170642852783,
+        "y": 0.194091796875,
+        "w": 0.09176561236381531,
+        "h": 0.03074038028717041
+      },
+      "stillCentroid": {
+        "u": 0.8237736984544122,
+        "v": 0.33599111783833646
+      },
+      "still": {
+        "x": 0.7787736984544121,
+        "y": 0.2959911178383365,
+        "w": 0.09,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamArmL2",
+        "ParamSleeveL"
+      ],
+      "physics": [
+        "SleeveL",
+        "SleeveR"
+      ],
+      "mesh3d": [
+        "gloveL"
+      ]
+    },
+    {
+      "id": "ArtMesh138",
+      "index": 69,
+      "region": "sparkle",
+      "laterality": "C",
+      "stillLaterality": "R",
+      "segment": "sparkle",
+      "chain": "fx",
+      "joint": 0,
+      "figure": {
+        "x": -0.10065993072930723,
+        "y": 0.3495128955692053
+      },
+      "uv": {
+        "x": 0.36430901288986206,
+        "y": 0.7923006415367126,
+        "w": 0.03752952814102173,
+        "h": 0.045494019985198975
+      },
+      "stillCentroid": {
+        "u": 0.41516128104407657,
+        "v": 0.21263597032593895
+      },
+      "still": {
+        "x": 0.3751612810440766,
+        "y": 0.17263597032593894,
+        "w": 0.08,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamBreath"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "energyRibbons"
+      ]
+    },
+    {
+      "id": "ArtMesh139",
+      "index": 70,
+      "region": "sparkle",
+      "laterality": "C",
+      "stillLaterality": "R",
+      "segment": "sparkle",
+      "chain": "fx",
+      "joint": 0,
+      "figure": {
+        "x": -0.10066027455031872,
+        "y": 0.3434312537312508
+      },
+      "uv": {
+        "x": 0.22692294418811798,
+        "y": 0.6987800002098083,
+        "w": 0.017698198556900024,
+        "h": 0.02819228172302246
+      },
+      "stillCentroid": {
+        "u": 0.4151606945159094,
+        "v": 0.21788076821449542
+      },
+      "still": {
+        "x": 0.37516069451590944,
+        "y": 0.17788076821449542,
+        "w": 0.08,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamBreath"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "energyRibbons"
+      ]
+    },
+    {
+      "id": "ArtMesh140",
+      "index": 71,
+      "region": "sparkle",
+      "laterality": "C",
+      "stillLaterality": "R",
+      "segment": "sparkle",
+      "chain": "fx",
+      "joint": 0,
+      "figure": {
+        "x": -0.06922225123553565,
+        "y": 0.3770383849288478
+      },
+      "uv": {
+        "x": 0.143798828125,
+        "y": 0.09130859375,
+        "w": 0.03840841352939606,
+        "h": 0.06005859375
+      },
+      "stillCentroid": {
+        "u": 0.468791175424363,
+        "v": 0.18889803370922176
+      },
+      "still": {
+        "x": 0.428791175424363,
+        "y": 0.14889803370922175,
+        "w": 0.08,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamBreath"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "energyRibbons"
+      ]
+    },
+    {
+      "id": "ArtMesh141",
+      "index": 72,
+      "region": "headset",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "headsetBand",
+      "chain": "headset",
+      "joint": 0,
+      "figure": {
+        "x": -0.08424074873328209,
+        "y": 0.37901809414227805
+      },
+      "uv": {
+        "x": 0.4462087154388428,
+        "y": 0.6105638742446899,
+        "w": 0.02634519338607788,
+        "h": 0.03950214385986328
+      },
+      "stillCentroid": {
+        "u": 0.4431709500284552,
+        "v": 0.18719073574935918
+      },
+      "still": {
+        "x": 0.3931709500284552,
+        "y": 0.1621907357493592,
+        "w": 0.1,
+        "h": 0.05
+      },
+      "parameters": [
+        "ParamAngleX",
+        "ParamAngleY",
+        "ParamAngleZ"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "headsetBand"
+      ]
+    },
+    {
+      "id": "ArtMesh73",
+      "index": 73,
+      "region": "face",
+      "laterality": "C",
+      "stillLaterality": "R",
+      "segment": "face",
+      "chain": "head",
+      "joint": 0,
+      "figure": {
+        "x": -0.06455246619487637,
+        "y": 0.255556944497796
+      },
+      "uv": {
+        "x": 0.21210022270679474,
+        "y": 0.941710352897644,
+        "w": 0.07670985162258148,
+        "h": 0.058203160762786865
+      },
+      "stillCentroid": {
+        "u": 0.47675741474424715,
+        "v": 0.29366342753680175
+      },
+      "still": {
+        "x": 0.4367574147442472,
+        "y": 0.25366342753680177,
+        "w": 0.08,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamAngleX",
+        "ParamAngleY",
+        "ParamAngleZ"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "face"
+      ]
+    },
+    {
+      "id": "ArtMesh137",
+      "index": 74,
+      "region": "sparkle",
+      "laterality": "C",
+      "stillLaterality": "C",
+      "segment": "sparkle",
+      "chain": "fx",
+      "joint": 0,
+      "figure": {
+        "x": -0.003486335952169238,
+        "y": 0.4171077670195164
+      },
+      "uv": {
+        "x": 0.001708984375,
+        "y": 0.927734375,
+        "w": 0.0732421875,
+        "h": 0.07080078125
+      },
+      "stillCentroid": {
+        "u": 0.5809308196476858,
+        "v": 0.15434226469412493
+      },
+      "still": {
+        "x": 0.5409308196476857,
+        "y": 0.11434226469412492,
+        "w": 0.08,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamBreath"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "energyRibbons"
+      ]
+    },
+    {
+      "id": "ArtMesh25",
+      "index": 75,
+      "region": "hair",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": 0.06708127390028852,
+        "y": 0.4377142001282085
+      },
+      "uv": {
+        "x": 0.01220703125,
+        "y": 0.4313402771949768,
+        "w": 0.0405004620552063,
+        "h": 0.03652137517929077
+      },
+      "stillCentroid": {
+        "u": 0.7013129064937064,
+        "v": 0.13657131077430296
+      },
+      "still": {
+        "x": 0.6663129064937063,
+        "y": 0.10657131077430296,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh30",
+      "index": 76,
+      "region": "hair",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": 0.06905545896062484,
+        "y": 0.4350606810588103
+      },
+      "uv": {
+        "x": 0.11669921875,
+        "y": 0.11561781167984009,
+        "w": 0.03541213274002075,
+        "h": 0.032673418521881104
+      },
+      "stillCentroid": {
+        "u": 0.7046806912023059,
+        "v": 0.13885970124241132
+      },
+      "still": {
+        "x": 0.6696806912023059,
+        "y": 0.10885970124241132,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh26",
+      "index": 77,
+      "region": "hair",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": 0.06730918541550636,
+        "y": 0.38420854926109316
+      },
+      "uv": {
+        "x": 0.0010255873203277588,
+        "y": 0.7590378522872925,
+        "w": 0.01884371042251587,
+        "h": 0.05162405967712402
+      },
+      "stillCentroid": {
+        "u": 0.70170170333514,
+        "v": 0.18271449581725463
+      },
+      "still": {
+        "x": 0.66670170333514,
+        "y": 0.15271449581725463,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh131",
+      "index": 78,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "crown",
+      "chain": "hair",
+      "joint": 0,
+      "figure": {
+        "x": -0.03575005120364949,
+        "y": 0.4839192494750023
+      },
+      "uv": {
+        "x": 0.034711092710494995,
+        "y": 0.396731972694397,
+        "w": 0.030090004205703735,
+        "h": 0.030954837799072266
+      },
+      "stillCentroid": {
+        "u": 0.5258917814898177,
+        "v": 0.09672415243914145
+      },
+      "still": {
+        "x": 0.47589178148981776,
+        "y": 0.05672415243914145,
+        "w": 0.1,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "hairCrown"
+      ]
+    },
+    {
+      "id": "ArtMesh125",
+      "index": 79,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "crown",
+      "chain": "hair",
+      "joint": 0,
+      "figure": {
+        "x": -0.02746480183718218,
+        "y": 0.48022529686039145
+      },
+      "uv": {
+        "x": 0.21348802745342255,
+        "y": 0.8881822824478149,
+        "w": 0.03331442177295685,
+        "h": 0.03805553913116455
+      },
+      "stillCentroid": {
+        "u": 0.5400256824517512,
+        "v": 0.09990981108030461
+      },
+      "still": {
+        "x": 0.4900256824517512,
+        "y": 0.05990981108030461,
+        "w": 0.1,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "hairCrown"
+      ]
+    },
+    {
+      "id": "ArtMesh7",
+      "index": 80,
+      "region": "hair",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "crown",
+      "chain": "hair",
+      "joint": 0,
+      "figure": {
+        "x": 0.06320255149550962,
+        "y": 0.47448541991638415
+      },
+      "uv": {
+        "x": 0.11328023672103882,
+        "y": 0.8509650230407715,
+        "w": 0.04977685213088989,
+        "h": 0.03651738166809082
+      },
+      "stillCentroid": {
+        "u": 0.6946961499058051,
+        "v": 0.10485987148810882
+      },
+      "still": {
+        "x": 0.644696149905805,
+        "y": 0.06485987148810882,
+        "w": 0.1,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "hairCrown"
+      ]
+    },
+    {
+      "id": "ArtMesh129",
+      "index": 81,
+      "region": "headset",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "headsetBand",
+      "chain": "headset",
+      "joint": 0,
+      "figure": {
+        "x": -0.17550560204606308,
+        "y": 0.4079475889080449
+      },
+      "uv": {
+        "x": 0.07053893804550171,
+        "y": 0.0004477500915527344,
+        "w": 0.027159303426742554,
+        "h": 0.0232735276222229
+      },
+      "stillCentroid": {
+        "u": 0.287481200574572,
+        "v": 0.16224198718649818
+      },
+      "still": {
+        "x": 0.237481200574572,
+        "y": 0.1372419871864982,
+        "w": 0.1,
+        "h": 0.05
+      },
+      "parameters": [
+        "ParamAngleX",
+        "ParamAngleY",
+        "ParamAngleZ"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "headsetBand"
+      ]
+    },
+    {
+      "id": "ArtMesh68",
+      "index": 82,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": -0.028097552433609962,
+        "y": 0.39362046122550964
+      },
+      "uv": {
+        "x": 0.09563317894935608,
+        "y": 0.131855309009552,
+        "w": 0.002997472882270813,
+        "h": 0.00256192684173584
+      },
+      "stillCentroid": {
+        "u": 0.5389462660252874,
+        "v": 0.1745976784653709
+      },
+      "still": {
+        "x": 0.5039462660252874,
+        "y": 0.1445976784653709,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh42",
+      "index": 83,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": -0.029986916376011714,
+        "y": 0.4129523975508554
+      },
+      "uv": {
+        "x": 0.0945470929145813,
+        "y": 0.3289090394973755,
+        "w": 0.004691451787948608,
+        "h": 0.004395723342895508
+      },
+      "stillCentroid": {
+        "u": 0.5357231786248002,
+        "v": 0.157925848469051
+      },
+      "still": {
+        "x": 0.5007231786248002,
+        "y": 0.127925848469051,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh43",
+      "index": 84,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": -0.026506200964961733,
+        "y": 0.4099090184484209
+      },
+      "uv": {
+        "x": 0.2890561819076538,
+        "y": 0.5691851377487183,
+        "w": 0.002241164445877075,
+        "h": 0.0022708773612976074
+      },
+      "stillCentroid": {
+        "u": 0.5416609705632741,
+        "v": 0.16055045358652265
+      },
+      "still": {
+        "x": 0.5066609705632741,
+        "y": 0.13055045358652265,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh44",
+      "index": 85,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "C",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": -0.02305165295930285,
+        "y": 0.4069888434912029
+      },
+      "uv": {
+        "x": 0.4758742153644562,
+        "y": 0.6207097172737122,
+        "w": 0.013658106327056885,
+        "h": 0.013860166072845459
+      },
+      "stillCentroid": {
+        "u": 0.5475541232277964,
+        "v": 0.16306880765240184
+      },
+      "still": {
+        "x": 0.5125541232277964,
+        "y": 0.13306880765240184,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh107",
+      "index": 86,
+      "region": "skirt",
+      "laterality": "C",
+      "stillLaterality": "R",
+      "segment": "waist",
+      "chain": "skirt",
+      "joint": 0,
+      "figure": {
+        "x": -0.051071877423368515,
+        "y": 0.01689365498920078
+      },
+      "uv": {
+        "x": 0.406924843788147,
+        "y": 0.8290342092514038,
+        "w": 0.09354996681213379,
+        "h": 0.06062793731689453
+      },
+      "stillCentroid": {
+        "u": 0.49975410418321403,
+        "v": 0.4994862547014567
+      },
+      "still": {
+        "x": 0.44975410418321404,
+        "y": 0.46948625470145666,
+        "w": 0.1,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ",
+        "ParamCloth1",
+        "ParamCloth2"
+      ],
+      "physics": [
+        "Skirt"
+      ],
+      "mesh3d": [
+        "skirt"
+      ]
+    },
+    {
+      "id": "ArtMesh95",
+      "index": 87,
+      "region": "legR",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "thigh",
+      "chain": "legR",
+      "joint": 0,
+      "figure": {
+        "x": -0.09314145977524194,
+        "y": -0.142039033499631
+      },
+      "uv": {
+        "x": 0.24535563588142395,
+        "y": 0.6588925123214722,
+        "w": 0.043982237577438354,
+        "h": 0.09584546089172363
+      },
+      "stillCentroid": {
+        "u": 0.4279871260065731,
+        "v": 0.6365495430731386
+      },
+      "still": {
+        "x": 0.37798712600657314,
+        "y": 0.5765495430731387,
+        "w": 0.1,
+        "h": 0.12
+      },
+      "parameters": [
+        "ParamLegR1X",
+        "ParamLegR1Z"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "bootR"
+      ]
+    },
+    {
+      "id": "ArtMesh6",
+      "index": 88,
+      "region": "hair",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "crown",
+      "chain": "hair",
+      "joint": 0,
+      "figure": {
+        "x": 0.0455681112507591,
+        "y": 0.5161069678142667
+      },
+      "uv": {
+        "x": 0.4323427677154541,
+        "y": 0.6320873498916626,
+        "w": 0.04985123872756958,
+        "h": 0.04090595245361328
+      },
+      "stillCentroid": {
+        "u": 0.6646133580773302,
+        "v": 0.06896551724137912
+      },
+      "still": {
+        "x": 0.6146133580773302,
+        "y": 0.028965517241379114,
+        "w": 0.1,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "hairCrown"
+      ]
+    },
+    {
+      "id": "ArtMesh100",
+      "index": 89,
+      "region": "legR",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "shin",
+      "chain": "legR",
+      "joint": 1,
+      "figure": {
+        "x": -0.08765365548121433,
+        "y": -0.29871985999246436
+      },
+      "uv": {
+        "x": 0.22980253398418427,
+        "y": 0.5286080837249756,
+        "w": 0.034047260880470276,
+        "h": 0.11950075626373291
+      },
+      "stillCentroid": {
+        "u": 0.4373488336582684,
+        "v": 0.771670829374224
+      },
+      "still": {
+        "x": 0.3923488336582684,
+        "y": 0.716670829374224,
+        "w": 0.09,
+        "h": 0.11
+      },
+      "parameters": [
+        "ParamLegR2X",
+        "ParamLegR2"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "bootR"
+      ]
+    },
+    {
+      "id": "ArtMesh31",
+      "index": 90,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "sideHair",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": -0.05221094253162543,
+        "y": 0.37793801724910736
+      },
+      "uv": {
+        "x": 0.008984789252281189,
+        "y": 0.303935706615448,
+        "w": 0.00990121066570282,
+        "h": 0.01749861240386963
+      },
+      "stillCentroid": {
+        "u": 0.4978109600825118,
+        "v": 0.1881221922802958
+      },
+      "still": {
+        "x": 0.4578109600825118,
+        "y": 0.1481221922802958,
+        "w": 0.08,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamHairSide",
+        "HairSideShake"
+      ],
+      "physics": [
+        "HairSide"
+      ],
+      "mesh3d": [
+        "hairCrown",
+        "hairPonytail"
+      ]
+    },
+    {
+      "id": "ArtMesh71",
+      "index": 91,
+      "region": "face",
+      "laterality": "C",
+      "stillLaterality": "L",
+      "segment": "eye",
+      "chain": "head",
+      "joint": 1,
+      "figure": {
+        "x": 0.03271370567381382,
+        "y": 0.3516323149204254
+      },
+      "uv": {
+        "x": 0.09331580996513367,
+        "y": 0.34774988889694214,
+        "w": 0.007101237773895264,
+        "h": 0.0140877366065979
+      },
+      "stillCentroid": {
+        "u": 0.6426848816594215,
+        "v": 0.21080818657371725
+      },
+      "still": {
+        "x": 0.6176848816594215,
+        "y": 0.18580818657371725,
+        "w": 0.05,
+        "h": 0.05
+      },
+      "parameters": [
+        "ParamEyeLOpen",
+        "ParamEyeROpen",
+        "ParamEyeBallX",
+        "ParamEyeBallY"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "eyes"
+      ]
+    },
+    {
+      "id": "ArtMesh70",
+      "index": 92,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "C",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": -0.0061099401933865415,
+        "y": 0.3996999952528212
+      },
+      "uv": {
+        "x": 0.4951110780239105,
+        "y": 0.7533472180366516,
+        "w": 0.059818536043167114,
+        "h": 0.06209057569503784
+      },
+      "stillCentroid": {
+        "u": 0.5764551833851547,
+        "v": 0.16935469834923567
+      },
+      "still": {
+        "x": 0.5414551833851546,
+        "y": 0.13935469834923567,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh99",
+      "index": 93,
+      "region": "legR",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "shin",
+      "chain": "legR",
+      "joint": 1,
+      "figure": {
+        "x": -0.1003118056584807,
+        "y": -0.23736881946816163
+      },
+      "uv": {
+        "x": 0.08790156245231628,
+        "y": 0.6365861892700195,
+        "w": 0.01422235369682312,
+        "h": 0.018842458724975586
+      },
+      "stillCentroid": {
+        "u": 0.41575515155488374,
+        "v": 0.7187617932329513
+      },
+      "still": {
+        "x": 0.37075515155488376,
+        "y": 0.6637617932329513,
+        "w": 0.09,
+        "h": 0.11
+      },
+      "parameters": [
+        "ParamLegR2X",
+        "ParamLegR2"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "bootR"
+      ]
+    },
+    {
+      "id": "ArtMesh111",
+      "index": 94,
+      "region": "wings",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "ribbon",
+      "chain": "wingR",
+      "joint": 2,
+      "figure": {
+        "x": -0.2647785176249111,
+        "y": 0.14935125410556793
+      },
+      "uv": {
+        "x": 0.26372602581977844,
+        "y": 0.7607669830322266,
+        "w": 0.020429551601409912,
+        "h": 0.012752711772918701
+      },
+      "stillCentroid": {
+        "u": 0.1351895203167342,
+        "v": 0.3852550397303275
+      },
+      "still": {
+        "x": 0.1001895203167342,
+        "y": 0.35525503973032746,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamFlapping3",
+        "ParamFlapping4"
+      ],
+      "physics": [
+        "WingL",
+        "WingR"
+      ],
+      "mesh3d": [
+        "energyRibbons"
+      ]
+    },
+    {
+      "id": "ArtMesh115",
+      "index": 95,
+      "region": "wings",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "wingFeather",
+      "chain": "wingR",
+      "joint": 1,
+      "figure": {
+        "x": -0.247208411693573,
+        "y": 0.1735072022676468
+      },
+      "uv": {
+        "x": 0.33604565262794495,
+        "y": 0.579944372177124,
+        "w": 0.03356659412384033,
+        "h": 0.029134035110473633
+      },
+      "stillCentroid": {
+        "u": 0.16516256350953068,
+        "v": 0.36442298988387267
+      },
+      "still": {
+        "x": 0.12516256350953067,
+        "y": 0.33442298988387265,
+        "w": 0.08,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamFlapping4",
+        "ParamFlapping8"
+      ],
+      "physics": [
+        "WingL",
+        "WingR"
+      ],
+      "mesh3d": [
+        "wingFeathers"
+      ]
+    },
+    {
+      "id": "ArtMesh110",
+      "index": 96,
+      "region": "wings",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "ribbon",
+      "chain": "wingR",
+      "joint": 2,
+      "figure": {
+        "x": -0.2531649251778921,
+        "y": 0.1522296130657196
+      },
+      "uv": {
+        "x": 0.018760912120342255,
+        "y": 0.8283283710479736,
+        "w": 0.014356739819049835,
+        "h": 0.014439702033996582
+      },
+      "stillCentroid": {
+        "u": 0.15500127952856532,
+        "v": 0.3827727477113373
+      },
+      "still": {
+        "x": 0.12000127952856532,
+        "y": 0.35277274771133726,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamFlapping3",
+        "ParamFlapping4"
+      ],
+      "physics": [
+        "WingL",
+        "WingR"
+      ],
+      "mesh3d": [
+        "energyRibbons"
+      ]
+    },
+    {
+      "id": "ArtMesh136",
+      "index": 97,
+      "region": "hair",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "ponytail",
+      "chain": "hair",
+      "joint": 2,
+      "figure": {
+        "x": 0.07432363039503495,
+        "y": 0.2705195263028145
+      },
+      "uv": {
+        "x": 0.0581115186214447,
+        "y": 0.1334090232849121,
+        "w": 0.04246944189071655,
+        "h": 0.02849280834197998
+      },
+      "stillCentroid": {
+        "u": 0.7136677246651487,
+        "v": 0.2807597216709675
+      },
+      "still": {
+        "x": 0.6436677246651488,
+        "y": 0.22075972167096752,
+        "w": 0.14,
+        "h": 0.12
+      },
+      "parameters": [
+        "ParamHairBack",
+        "ParamHairTail",
+        "HairBackShake"
+      ],
+      "physics": [
+        "HairBack"
+      ],
+      "mesh3d": [
+        "hairPonytail"
+      ]
+    },
+    {
+      "id": "ArtMesh75",
+      "index": 98,
+      "region": "face",
+      "laterality": "C",
+      "stillLaterality": "R",
+      "segment": "face",
+      "chain": "head",
+      "joint": 0,
+      "figure": {
+        "x": -0.02857968585449271,
+        "y": 0.3389735996723175
+      },
+      "uv": {
+        "x": 0.2584387958049774,
+        "y": 0.8893111944198608,
+        "w": 0.03392374515533447,
+        "h": 0.04941779375076294
+      },
+      "stillCentroid": {
+        "u": 0.5381237891486377,
+        "v": 0.22172504172141294
+      },
+      "still": {
+        "x": 0.4981237891486377,
+        "y": 0.18172504172141293,
+        "w": 0.08,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamAngleX",
+        "ParamAngleY",
+        "ParamAngleZ"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "face"
+      ]
+    },
+    {
+      "id": "ArtMesh103",
+      "index": 99,
+      "region": "legR",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "boot",
+      "chain": "legR",
+      "joint": 2,
+      "figure": {
+        "x": -0.08216566795652563,
+        "y": -0.4613144655119289
+      },
+      "uv": {
+        "x": 0.19617901742458344,
+        "y": 0.5042216181755066,
+        "w": 0.03243066370487213,
+        "h": 0.03973668813705444
+      },
+      "stillCentroid": {
+        "u": 0.4467108538852287,
+        "v": 0.9118921489522934
+      },
+      "still": {
+        "x": 0.41171085388522866,
+        "y": 0.8768921489522934,
+        "w": 0.07,
+        "h": 0.07
+      },
+      "parameters": [
+        "ParamLegR3X",
+        "ParamLegR3Z"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "bootR"
+      ]
+    },
+    {
+      "id": "ArtMesh102",
+      "index": 100,
+      "region": "legR",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "boot",
+      "chain": "legR",
+      "joint": 2,
+      "figure": {
+        "x": -0.0828722293543465,
+        "y": -0.44847580965827494
+      },
+      "uv": {
+        "x": 0.08183223009109497,
+        "y": 0.728786826133728,
+        "w": 0.028585657477378845,
+        "h": 0.03694605827331543
+      },
+      "stillCentroid": {
+        "u": 0.44550552277464756,
+        "v": 0.9008201133232113
+      },
+      "still": {
+        "x": 0.4105055227746476,
+        "y": 0.8658201133232113,
+        "w": 0.07,
+        "h": 0.07
+      },
+      "parameters": [
+        "ParamLegR3X",
+        "ParamLegR3Z"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "bootR"
+      ]
+    },
+    {
+      "id": "ArtMesh116",
+      "index": 101,
+      "region": "body",
+      "laterality": "C",
+      "stillLaterality": "R",
+      "segment": "crop",
+      "chain": "spine",
+      "joint": 0,
+      "figure": {
+        "x": -0.12722334753850412,
+        "y": 0.2194161476760075
+      },
+      "uv": {
+        "x": 0.00547163188457489,
+        "y": 0.15148764848709106,
+        "w": 0.030420079827308655,
+        "h": 0.01533287763595581
+      },
+      "stillCentroid": {
+        "u": 0.36984644671799366,
+        "v": 0.3248311910967522
+      },
+      "still": {
+        "x": 0.31984644671799367,
+        "y": 0.2848311910967522,
+        "w": 0.1,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamBreath",
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ"
+      ],
+      "physics": [
+        "Body",
+        "Chest"
+      ],
+      "mesh3d": [
+        "cropTop"
+      ]
+    },
+    {
+      "id": "ArtMesh35",
+      "index": 102,
+      "region": "hair",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": 0.023596846653769415,
+        "y": 0.4096141482392947
+      },
+      "uv": {
+        "x": 0.025470703840255737,
+        "y": 0.18904197216033936,
+        "w": 0.016030848026275635,
+        "h": 0.007874369621276855
+      },
+      "stillCentroid": {
+        "u": 0.6271323283476604,
+        "v": 0.16080474916844478
+      },
+      "still": {
+        "x": 0.5921323283476604,
+        "y": 0.13080474916844478,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh34",
+      "index": 103,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "C",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": -0.004152838117443025,
+        "y": 0.4233335554599762
+      },
+      "uv": {
+        "x": 0.008162438869476318,
+        "y": 0.18632721900939941,
+        "w": 0.010946214199066162,
+        "h": 0.01615697145462036
+      },
+      "stillCentroid": {
+        "u": 0.5797938260367246,
+        "v": 0.14897315501335717
+      },
+      "still": {
+        "x": 0.5447938260367245,
+        "y": 0.11897315501335717,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh55",
+      "index": 104,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "C",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": -0.010620762270668315,
+        "y": 0.4164166781637404
+      },
+      "uv": {
+        "x": 0.46537691354751587,
+        "y": 0.6216554045677185,
+        "w": 0.008444547653198242,
+        "h": 0.012798488140106201
+      },
+      "stillCentroid": {
+        "u": 0.5687601207893033,
+        "v": 0.15493825858330101
+      },
+      "still": {
+        "x": 0.5337601207893032,
+        "y": 0.12493825858330102,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh56",
+      "index": 105,
+      "region": "hair",
+      "laterality": "L",
+      "stillLaterality": "C",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": 0.020939014106988906,
+        "y": 0.4065661489963531
+      },
+      "uv": {
+        "x": 0.22437968850135803,
+        "y": 0.6630052924156189,
+        "w": 0.00925368070602417,
+        "h": 0.005462348461151123
+      },
+      "stillCentroid": {
+        "u": 0.6225983016300534,
+        "v": 0.16343333868746823
+      },
+      "still": {
+        "x": 0.5875983016300533,
+        "y": 0.13343333868746823,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh145",
+      "index": 106,
+      "region": "skirt",
+      "laterality": "C",
+      "stillLaterality": "L",
+      "segment": "belt",
+      "chain": "skirt",
+      "joint": 1,
+      "figure": {
+        "x": 0.13129940283734623,
+        "y": 0.025990292165859987
+      },
+      "uv": {
+        "x": 0.0064878761768341064,
+        "y": 0.32591891288757324,
+        "w": 0.08199799060821533,
+        "h": 0.03480929136276245
+      },
+      "stillCentroid": {
+        "u": 0.8108633417564727,
+        "v": 0.49164132980644615
+      },
+      "still": {
+        "x": 0.7708633417564726,
+        "y": 0.4666413298064461,
+        "w": 0.08,
+        "h": 0.05
+      },
+      "parameters": [
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ",
+        "ParamCloth1",
+        "ParamCloth2"
+      ],
+      "physics": [
+        "Skirt"
+      ],
+      "mesh3d": [
+        "skirtBelts"
+      ]
+    },
+    {
+      "id": "ArtMesh144",
+      "index": 107,
+      "region": "body",
+      "laterality": "C",
+      "stillLaterality": "L",
+      "segment": "midriff",
+      "chain": "spine",
+      "joint": 1,
+      "figure": {
+        "x": 0.04178196951628677,
+        "y": 0.09096366238395964
+      },
+      "uv": {
+        "x": 0.0021922439336776733,
+        "y": 0.7843227386474609,
+        "w": 0.1278298944234848,
+        "h": 0.1602623462677002
+      },
+      "stillCentroid": {
+        "u": 0.6581545359060318,
+        "v": 0.43560840251276833
+      },
+      "still": {
+        "x": 0.6081545359060317,
+        "y": 0.39560840251276835,
+        "w": 0.1,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamBreath",
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ"
+      ],
+      "physics": [
+        "Body",
+        "Chest"
+      ],
+      "mesh3d": [
+        "cropTop"
+      ]
+    },
+    {
+      "id": "ArtMesh143",
+      "index": 108,
+      "region": "body",
+      "laterality": "C",
+      "stillLaterality": "L",
+      "segment": "midriff",
+      "chain": "spine",
+      "joint": 1,
+      "figure": {
+        "x": 0.08479838209805658,
+        "y": 0.09740167896489839
+      },
+      "uv": {
+        "x": 0.336669921875,
+        "y": 0.7010173797607422,
+        "w": 0.09654903411865234,
+        "h": 0.04393494129180908
+      },
+      "stillCentroid": {
+        "u": 0.7315367225218153,
+        "v": 0.43005626763375093
+      },
+      "still": {
+        "x": 0.6815367225218153,
+        "y": 0.39005626763375095,
+        "w": 0.1,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamBreath",
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ"
+      ],
+      "physics": [
+        "Body",
+        "Chest"
+      ],
+      "mesh3d": [
+        "cropTop"
+      ]
+    },
+    {
+      "id": "ArtMesh",
+      "index": 109,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": -0.06878694679055895,
+        "y": 0.43569672391528175
+      },
+      "uv": {
+        "x": 0.09144482016563416,
+        "y": 0.4144585132598877,
+        "w": 0.028307363390922546,
+        "h": 0.05675220489501953
+      },
+      "stillCentroid": {
+        "u": 0.46953376621933546,
+        "v": 0.13831117893222966
+      },
+      "still": {
+        "x": 0.4345337662193355,
+        "y": 0.10831117893222966,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh142",
+      "index": 110,
+      "region": "body",
+      "laterality": "C",
+      "stillLaterality": "L",
+      "segment": "crop",
+      "chain": "spine",
+      "joint": 0,
+      "figure": {
+        "x": 0.05179733042700254,
+        "y": 0.15815487971567377
+      },
+      "uv": {
+        "x": 0.0006871819496154785,
+        "y": 0.7479051351547241,
+        "w": 0.13498693704605103,
+        "h": 0.09913337230682373
+      },
+      "stillCentroid": {
+        "u": 0.6752398537943495,
+        "v": 0.37766280752695003
+      },
+      "still": {
+        "x": 0.6252398537943494,
+        "y": 0.33766280752695005,
+        "w": 0.1,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamBreath",
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ"
+      ],
+      "physics": [
+        "Body",
+        "Chest"
+      ],
+      "mesh3d": [
+        "cropTop"
+      ]
+    },
+    {
+      "id": "ArtMesh61",
+      "index": 111,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "C",
+      "segment": "sideHair",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": -0.014555941420198627,
+        "y": 0.36855112654822214
+      },
+      "uv": {
+        "x": 0.0821341872215271,
+        "y": 0.6154941320419312,
+        "w": 0.018082767724990845,
+        "h": 0.014964282512664795
+      },
+      "stillCentroid": {
+        "u": 0.5620470539995415,
+        "v": 0.19621743133578629
+      },
+      "still": {
+        "x": 0.5220470539995414,
+        "y": 0.15621743133578628,
+        "w": 0.08,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamHairSide",
+        "HairSideShake"
+      ],
+      "physics": [
+        "HairSide"
+      ],
+      "mesh3d": [
+        "hairCrown",
+        "hairPonytail"
+      ]
+    },
+    {
+      "id": "ArtMesh57",
+      "index": 112,
+      "region": "hair",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": 0.027864541076123715,
+        "y": 0.39248745679855346
+      },
+      "uv": {
+        "x": 0.07588452100753784,
+        "y": 0.3835746645927429,
+        "w": 0.010140717029571533,
+        "h": 0.009512484073638916
+      },
+      "stillCentroid": {
+        "u": 0.634412636716589,
+        "v": 0.17557477961413293
+      },
+      "still": {
+        "x": 0.599412636716589,
+        "y": 0.14557477961413293,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh45",
+      "index": 113,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": -0.026386397425085306,
+        "y": 0.4070812099509769
+      },
+      "uv": {
+        "x": 0.07958984375,
+        "y": 0.5927637815475464,
+        "w": 0.016576826572418213,
+        "h": 0.014902234077453613
+      },
+      "stillCentroid": {
+        "u": 0.5418653447821548,
+        "v": 0.16298915096986366
+      },
+      "still": {
+        "x": 0.5068653447821547,
+        "y": 0.13298915096986366,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh74",
+      "index": 114,
+      "region": "body",
+      "laterality": "C",
+      "stillLaterality": "R",
+      "segment": "crop",
+      "chain": "spine",
+      "joint": 0,
+      "figure": {
+        "x": -0.09579288853066308,
+        "y": 0.20088940220219748
+      },
+      "uv": {
+        "x": 0.2762638032436371,
+        "y": 0.5838292837142944,
+        "w": 0.018536776304244995,
+        "h": 0.02997535467147827
+      },
+      "stillCentroid": {
+        "u": 0.4234640235893524,
+        "v": 0.34080862583097926
+      },
+      "still": {
+        "x": 0.37346402358935243,
+        "y": 0.3008086258309793,
+        "w": 0.1,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamBreath",
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ"
+      ],
+      "physics": [
+        "Body",
+        "Chest"
+      ],
+      "mesh3d": [
+        "cropTop"
+      ]
+    },
+    {
+      "id": "ArtMesh72",
+      "index": 115,
+      "region": "body",
+      "laterality": "C",
+      "stillLaterality": "R",
+      "segment": "crop",
+      "chain": "spine",
+      "joint": 0,
+      "figure": {
+        "x": -0.0909412285046918,
+        "y": 0.20425368632589067
+      },
+      "uv": {
+        "x": 0.050083011388778687,
+        "y": 0.4930739998817444,
+        "w": 0.043864890933036804,
+        "h": 0.046394407749176025
+      },
+      "stillCentroid": {
+        "u": 0.431740525511622,
+        "v": 0.3379072727525506
+      },
+      "still": {
+        "x": 0.381740525511622,
+        "y": 0.29790727275255063,
+        "w": 0.1,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamBreath",
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ"
+      ],
+      "physics": [
+        "Body",
+        "Chest"
+      ],
+      "mesh3d": [
+        "cropTop"
+      ]
+    },
+    {
+      "id": "ArtMesh88",
+      "index": 116,
+      "region": "legL",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "boot",
+      "chain": "legL",
+      "joint": 2,
+      "figure": {
+        "x": 0.12196114052225042,
+        "y": -0.40017699974554555
+      },
+      "uv": {
+        "x": 0.005222022533416748,
+        "y": 0.27908968925476074,
+        "w": 0.024714738130569458,
+        "h": 0.026754260063171387
+      },
+      "stillCentroid": {
+        "u": 0.7949330940499517,
+        "v": 0.8591672993299297
+      },
+      "still": {
+        "x": 0.7599330940499517,
+        "y": 0.8241672993299297,
+        "w": 0.07,
+        "h": 0.07
+      },
+      "parameters": [
+        "ParamLegL3X",
+        "ParamLegL3Z"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "bootL"
+      ]
+    },
+    {
+      "id": "ArtMesh89",
+      "index": 117,
+      "region": "legL",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "boot",
+      "chain": "legL",
+      "joint": 2,
+      "figure": {
+        "x": 0.1270303213968873,
+        "y": -0.43679006695747374
+      },
+      "uv": {
+        "x": 0.09096264839172363,
+        "y": 0.2614455223083496,
+        "w": 0.028004556894302368,
+        "h": 0.03495442867279053
+      },
+      "stillCentroid": {
+        "u": 0.8035806672576118,
+        "v": 0.8907423480952623
+      },
+      "still": {
+        "x": 0.7685806672576118,
+        "y": 0.8557423480952623,
+        "w": 0.07,
+        "h": 0.07
+      },
+      "parameters": [
+        "ParamLegL3X",
+        "ParamLegL3Z"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "bootL"
+      ]
+    },
+    {
+      "id": "ArtMesh85",
+      "index": 118,
+      "region": "legL",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "boot",
+      "chain": "legL",
+      "joint": 2,
+      "figure": {
+        "x": 0.15864905067112134,
+        "y": -0.41893799149471783
+      },
+      "uv": {
+        "x": 0.5035752058029175,
+        "y": 0.5655945539474487,
+        "w": 0.025507330894470215,
+        "h": 0.02242225408554077
+      },
+      "stillCentroid": {
+        "u": 0.8575194165139617,
+        "v": 0.8753467476656083
+      },
+      "still": {
+        "x": 0.8225194165139617,
+        "y": 0.8403467476656082,
+        "w": 0.07,
+        "h": 0.07
+      },
+      "parameters": [
+        "ParamLegL3X",
+        "ParamLegL3Z"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "bootL"
+      ]
+    },
+    {
+      "id": "ArtMesh22",
+      "index": 119,
+      "region": "face",
+      "laterality": "C",
+      "stillLaterality": "L",
+      "segment": "mouth",
+      "chain": "head",
+      "joint": 1,
+      "figure": {
+        "x": 0.039492810127773774,
+        "y": 0.25359328201523534
+      },
+      "uv": {
+        "x": 0.14694008231163025,
+        "y": 0.5055186152458191,
+        "w": 0.04934898018836975,
+        "h": 0.0618550181388855
+      },
+      "stillCentroid": {
+        "u": 0.6542494329148929,
+        "v": 0.29535688682243366
+      },
+      "still": {
+        "x": 0.6292494329148929,
+        "y": 0.27035688682243364,
+        "w": 0.05,
+        "h": 0.05
+      },
+      "parameters": [
+        "ParamMouthForm",
+        "ParamMouthOpenY"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "mouth"
+      ]
+    },
+    {
+      "id": "ArtMesh23",
+      "index": 120,
+      "region": "face",
+      "laterality": "C",
+      "stillLaterality": "C",
+      "segment": "mouth",
+      "chain": "head",
+      "joint": 1,
+      "figure": {
+        "x": 0.018672379620728038,
+        "y": 0.25140218152886346
+      },
+      "uv": {
+        "x": 0.07285141944885254,
+        "y": 0.8812882900238037,
+        "w": 0.018250882625579834,
+        "h": 0.018016457557678223
+      },
+      "stillCentroid": {
+        "u": 0.6187316241254058,
+        "v": 0.29724648826736244
+      },
+      "still": {
+        "x": 0.5937316241254058,
+        "y": 0.2722464882673624,
+        "w": 0.05,
+        "h": 0.05
+      },
+      "parameters": [
+        "ParamMouthForm",
+        "ParamMouthOpenY"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "mouth"
+      ]
+    },
+    {
+      "id": "ArtMesh15",
+      "index": 121,
+      "region": "headset",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "headsetCup",
+      "chain": "headset",
+      "joint": 1,
+      "figure": {
+        "x": 0.15003443111975986,
+        "y": 0.24567727148532867
+      },
+      "uv": {
+        "x": 0.3891822397708893,
+        "y": 0.5030951499938965,
+        "w": 0.03908547759056091,
+        "h": 0.027922868728637695
+      },
+      "stillCentroid": {
+        "u": 0.8428236392140691,
+        "v": 0.30218364124488917
+      },
+      "still": {
+        "x": 0.8078236392140691,
+        "y": 0.26718364124488914,
+        "w": 0.07,
+        "h": 0.07
+      },
+      "parameters": [
+        "ParamAngleX",
+        "ParamAngleY",
+        "ParamAngleZ"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "headsetCups"
+      ]
+    },
+    {
+      "id": "ArtMesh10",
+      "index": 122,
+      "region": "armL",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "upperArm",
+      "chain": "armL",
+      "joint": 0,
+      "figure": {
+        "x": 0.1640205727173732,
+        "y": 0.23203783081128046
+      },
+      "uv": {
+        "x": 0.07042112946510315,
+        "y": 0.3091505765914917,
+        "w": 0.012824803590774536,
+        "h": 0.016453862190246582
+      },
+      "stillCentroid": {
+        "u": 0.8666827569589504,
+        "v": 0.31394627238207573
+      },
+      "still": {
+        "x": 0.8216827569589503,
+        "y": 0.27394627238207575,
+        "w": 0.09,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamArmL1"
+      ],
+      "physics": [
+        "SleeveL",
+        "SleeveR"
+      ],
+      "mesh3d": [
+        "gloveL"
+      ]
+    },
+    {
+      "id": "ArtMesh13",
+      "index": 123,
+      "region": "headset",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "headsetCup",
+      "chain": "headset",
+      "joint": 1,
+      "figure": {
+        "x": 0.19776694670967435,
+        "y": 0.2560817307752112
+      },
+      "uv": {
+        "x": 0.0722832977771759,
+        "y": 0.15572524070739746,
+        "w": 0.025655686855316162,
+        "h": 0.01896083354949951
+      },
+      "stillCentroid": {
+        "u": 0.9242510794963474,
+        "v": 0.2932108527168653
+      },
+      "still": {
+        "x": 0.8892510794963474,
+        "y": 0.2582108527168653,
+        "w": 0.07,
+        "h": 0.07
+      },
+      "parameters": [
+        "ParamAngleX",
+        "ParamAngleY",
+        "ParamAngleZ"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "headsetCups"
+      ]
+    },
+    {
+      "id": "ArtMesh21",
+      "index": 124,
+      "region": "armL",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "forearm",
+      "chain": "armL",
+      "joint": 1,
+      "figure": {
+        "x": 0.15898906660300713,
+        "y": 0.18879234625233543
+      },
+      "uv": {
+        "x": 0.2833510935306549,
+        "y": 0.6095994114875793,
+        "w": 0.06528171896934509,
+        "h": 0.06300801038742065
+      },
+      "stillCentroid": {
+        "u": 0.8580994535525817,
+        "v": 0.3512411069264012
+      },
+      "still": {
+        "x": 0.8130994535525816,
+        "y": 0.3112411069264012,
+        "w": 0.09,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamArmL2",
+        "ParamSleeveL"
+      ],
+      "physics": [
+        "SleeveL",
+        "SleeveR"
+      ],
+      "mesh3d": [
+        "gloveL"
+      ]
+    },
+    {
+      "id": "ArtMesh11",
+      "index": 125,
+      "region": "headset",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "headsetCup",
+      "chain": "headset",
+      "joint": 1,
+      "figure": {
+        "x": 0.16922323033213615,
+        "y": 0.240724328905344
+      },
+      "uv": {
+        "x": 0.0013856887817382812,
+        "y": 0.12832820415496826,
+        "w": 0.01876315474510193,
+        "h": 0.02227085828781128
+      },
+      "stillCentroid": {
+        "u": 0.8755580296530373,
+        "v": 0.30645505075531543
+      },
+      "still": {
+        "x": 0.8405580296530373,
+        "y": 0.2714550507553154,
+        "w": 0.07,
+        "h": 0.07
+      },
+      "parameters": [
+        "ParamAngleX",
+        "ParamAngleY",
+        "ParamAngleZ"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "headsetCups"
+      ]
+    },
+    {
+      "id": "ArtMesh12",
+      "index": 126,
+      "region": "headset",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "headsetCup",
+      "chain": "headset",
+      "joint": 1,
+      "figure": {
+        "x": 0.18354283521572748,
+        "y": 0.2521975777215428
+      },
+      "uv": {
+        "x": 0.07407262921333313,
+        "y": 0.3980611562728882,
+        "w": 0.014354526996612549,
+        "h": 0.03004235029220581
+      },
+      "stillCentroid": {
+        "u": 0.8999860062034881,
+        "v": 0.2965605399029101
+      },
+      "still": {
+        "x": 0.8649860062034881,
+        "y": 0.26156053990291006,
+        "w": 0.07,
+        "h": 0.07
+      },
+      "parameters": [
+        "ParamAngleX",
+        "ParamAngleY",
+        "ParamAngleZ"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "headsetCups"
+      ]
+    },
+    {
+      "id": "ArtMesh14",
+      "index": 127,
+      "region": "headset",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "headsetCup",
+      "chain": "headset",
+      "joint": 1,
+      "figure": {
+        "x": 0.15713140275329351,
+        "y": 0.2727239700034261
+      },
+      "uv": {
+        "x": 0.003591477870941162,
+        "y": 0.5000876188278198,
+        "w": 0.01969572901725769,
+        "h": 0.015193462371826172
+      },
+      "stillCentroid": {
+        "u": 0.8549304437001224,
+        "v": 0.27885861306008985
+      },
+      "still": {
+        "x": 0.8199304437001224,
+        "y": 0.24385861306008985,
+        "w": 0.07,
+        "h": 0.07
+      },
+      "parameters": [
+        "ParamAngleX",
+        "ParamAngleY",
+        "ParamAngleZ"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "headsetCups"
+      ]
+    },
+    {
+      "id": "ArtMesh123",
+      "index": 128,
+      "region": "wings",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "wingFeather",
+      "chain": "wingR",
+      "joint": 1,
+      "figure": {
+        "x": -0.20929942693975237,
+        "y": 0.13344629715990136
+      },
+      "uv": {
+        "x": 0.006103515625,
+        "y": 0.650094747543335,
+        "w": 0.03567764163017273,
+        "h": 0.07573533058166504
+      },
+      "stillCentroid": {
+        "u": 0.22983193100575686,
+        "v": 0.39897144836288057
+      },
+      "still": {
+        "x": 0.18983193100575685,
+        "y": 0.36897144836288054,
+        "w": 0.08,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamFlapping4",
+        "ParamFlapping8"
+      ],
+      "physics": [
+        "WingL",
+        "WingR"
+      ],
+      "mesh3d": [
+        "wingFeathers"
+      ]
+    },
+    {
+      "id": "ArtMesh121",
+      "index": 129,
+      "region": "wings",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "wingFeather",
+      "chain": "wingR",
+      "joint": 1,
+      "figure": {
+        "x": -0.20024243132634598,
+        "y": 0.18409395692023364
+      },
+      "uv": {
+        "x": 0.14035415649414062,
+        "y": 0.8846054077148438,
+        "w": 0.038566768169403076,
+        "h": 0.02468818426132202
+      },
+      "stillCentroid": {
+        "u": 0.2452823626524671,
+        "v": 0.35529299013577353
+      },
+      "still": {
+        "x": 0.2052823626524671,
+        "y": 0.3252929901357735,
+        "w": 0.08,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamFlapping4",
+        "ParamFlapping8"
+      ],
+      "physics": [
+        "WingL",
+        "WingR"
+      ],
+      "mesh3d": [
+        "wingFeathers"
+      ]
+    },
+    {
+      "id": "ArtMesh118",
+      "index": 130,
+      "region": "body",
+      "laterality": "C",
+      "stillLaterality": "R",
+      "segment": "crop",
+      "chain": "spine",
+      "joint": 0,
+      "figure": {
+        "x": -0.1122247961371444,
+        "y": 0.20387065341306287
+      },
+      "uv": {
+        "x": 0.04170987010002136,
+        "y": 0.3488118648529053,
+        "w": 0.031784042716026306,
+        "h": 0.04478645324707031
+      },
+      "stillCentroid": {
+        "u": 0.39543264584161475,
+        "v": 0.33823759970470835
+      },
+      "still": {
+        "x": 0.34543264584161476,
+        "y": 0.29823759970470837,
+        "w": 0.1,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamBreath",
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ"
+      ],
+      "physics": [
+        "Body",
+        "Chest"
+      ],
+      "mesh3d": [
+        "cropTop"
+      ]
+    },
+    {
+      "id": "ArtMesh117",
+      "index": 131,
+      "region": "armR",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "upperArm",
+      "chain": "armR",
+      "joint": 0,
+      "figure": {
+        "x": -0.16071816245394369,
+        "y": 0.1498465525106557
+      },
+      "uv": {
+        "x": 0.0739542692899704,
+        "y": 0.8930621147155762,
+        "w": 0.05982844531536102,
+        "h": 0.1041364073753357
+      },
+      "stillCentroid": {
+        "u": 0.3127072616659241,
+        "v": 0.3848278952028419
+      },
+      "still": {
+        "x": 0.2677072616659241,
+        "y": 0.3448278952028419,
+        "w": 0.09,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamArmR1"
+      ],
+      "physics": [
+        "SleeveL",
+        "SleeveR"
+      ],
+      "mesh3d": [
+        "gloveR"
+      ]
+    },
+    {
+      "id": "ArtMesh122",
+      "index": 132,
+      "region": "headset",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "headsetCup",
+      "chain": "headset",
+      "joint": 1,
+      "figure": {
+        "x": -0.09388283579736142,
+        "y": 0.2823073022268914
+      },
+      "uv": {
+        "x": 0.4072265625,
+        "y": 0.5309044718742371,
+        "w": 0.04265734553337097,
+        "h": 0.07334953546524048
+      },
+      "stillCentroid": {
+        "u": 0.4267224042331287,
+        "v": 0.2705939631595834
+      },
+      "still": {
+        "x": 0.39172240423312865,
+        "y": 0.2355939631595834,
+        "w": 0.07,
+        "h": 0.07
+      },
+      "parameters": [
+        "ParamAngleX",
+        "ParamAngleY",
+        "ParamAngleZ"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "headsetCups"
+      ]
+    },
+    {
+      "id": "ArtMesh124",
+      "index": 133,
+      "region": "body",
+      "laterality": "C",
+      "stillLaterality": "R",
+      "segment": "crop",
+      "chain": "spine",
+      "joint": 0,
+      "figure": {
+        "x": -0.12832730836593187,
+        "y": 0.21848869782227737
+      },
+      "uv": {
+        "x": 0.0711417943239212,
+        "y": 0.7910447120666504,
+        "w": 0.016992971301078796,
+        "h": 0.020899176597595215
+      },
+      "stillCentroid": {
+        "u": 0.3679631874085191,
+        "v": 0.3256310223206542
+      },
+      "still": {
+        "x": 0.3179631874085191,
+        "y": 0.28563102232065424,
+        "w": 0.1,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamBreath",
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ"
+      ],
+      "physics": [
+        "Body",
+        "Chest"
+      ],
+      "mesh3d": [
+        "cropTop"
+      ]
+    },
+    {
+      "id": "ArtMesh112",
+      "index": 134,
+      "region": "wings",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "wingFeather",
+      "chain": "wingR",
+      "joint": 1,
+      "figure": {
+        "x": -0.2671822526238181,
+        "y": 0.1872537172201908
+      },
+      "uv": {
+        "x": 0.05878666043281555,
+        "y": 0.225350022315979,
+        "w": 0.03266654908657074,
+        "h": 0.013401508331298828
+      },
+      "stillCentroid": {
+        "u": 0.1310889614909748,
+        "v": 0.35256801806554494
+      },
+      "still": {
+        "x": 0.09108896149097478,
+        "y": 0.3225680180655449,
+        "w": 0.08,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamFlapping4",
+        "ParamFlapping8"
+      ],
+      "physics": [
+        "WingL",
+        "WingR"
+      ],
+      "mesh3d": [
+        "wingFeathers"
+      ]
+    },
+    {
+      "id": "ArtMesh113",
+      "index": 135,
+      "region": "wings",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "ribbon",
+      "chain": "wingR",
+      "joint": 2,
+      "figure": {
+        "x": -0.2791816985065287,
+        "y": 0.1520693457939408
+      },
+      "uv": {
+        "x": 0.09090469777584076,
+        "y": 0.6052910089492798,
+        "w": 0.021635107696056366,
+        "h": 0.010759830474853516
+      },
+      "stillCentroid": {
+        "u": 0.11061897052235939,
+        "v": 0.3829109619421367
+      },
+      "still": {
+        "x": 0.07561897052235939,
+        "y": 0.35291096194213667,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamFlapping3",
+        "ParamFlapping4"
+      ],
+      "physics": [
+        "WingL",
+        "WingR"
+      ],
+      "mesh3d": [
+        "energyRibbons"
+      ]
+    },
+    {
+      "id": "ArtMesh114",
+      "index": 136,
+      "region": "wings",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "ribbon",
+      "chain": "wingR",
+      "joint": 2,
+      "figure": {
+        "x": -0.2849200430015723,
+        "y": 0.1593842419485251
+      },
+      "uv": {
+        "x": 0.0166015625,
+        "y": 0.21923828125,
+        "w": 0.02197265625,
+        "h": 0.01611328125
+      },
+      "stillCentroid": {
+        "u": 0.10082986349720957,
+        "v": 0.37660260756533936
+      },
+      "still": {
+        "x": 0.06582986349720957,
+        "y": 0.34660260756533934,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamFlapping3",
+        "ParamFlapping4"
+      ],
+      "physics": [
+        "WingL",
+        "WingR"
+      ],
+      "mesh3d": [
+        "energyRibbons"
+      ]
+    },
+    {
+      "id": "ArtMesh58",
+      "index": 137,
+      "region": "hair",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "sideHair",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": 0.04007804927726587,
+        "y": 0.3723340729872386
+      },
+      "uv": {
+        "x": 0.057536423206329346,
+        "y": 0.1068277359008789,
+        "w": 0.008989334106445312,
+        "h": 0.007417917251586914
+      },
+      "stillCentroid": {
+        "u": 0.6552477990246017,
+        "v": 0.1929550245672632
+      },
+      "still": {
+        "x": 0.6152477990246017,
+        "y": 0.1529550245672632,
+        "w": 0.08,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamHairSide",
+        "HairSideShake"
+      ],
+      "physics": [
+        "HairSide"
+      ],
+      "mesh3d": [
+        "hairCrown",
+        "hairPonytail"
+      ]
+    },
+    {
+      "id": "ArtMesh59",
+      "index": 138,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "sideHair",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": -0.048878382492278306,
+        "y": 0.3688975189413343
+      },
+      "uv": {
+        "x": 0.016108393669128418,
+        "y": 0.10407668352127075,
+        "w": 0.01030518114566803,
+        "h": 0.024653732776641846
+      },
+      "stillCentroid": {
+        "u": 0.5034960120902962,
+        "v": 0.19591870310738768
+      },
+      "still": {
+        "x": 0.46349601209029617,
+        "y": 0.15591870310738767,
+        "w": 0.08,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamHairSide",
+        "HairSideShake"
+      ],
+      "physics": [
+        "HairSide"
+      ],
+      "mesh3d": [
+        "hairCrown",
+        "hairPonytail"
+      ]
+    },
+    {
+      "id": "ArtMesh60",
+      "index": 139,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "bang",
+      "chain": "hair",
+      "joint": 1,
+      "figure": {
+        "x": -0.04092638780518124,
+        "y": 0.40554287657141685
+      },
+      "uv": {
+        "x": 0.04832964763045311,
+        "y": 0.03624546527862549,
+        "w": 0.059599291533231735,
+        "h": 0.030508756637573242
+      },
+      "stillCentroid": {
+        "u": 0.5170614101110409,
+        "v": 0.1643158071387062
+      },
+      "still": {
+        "x": 0.48206141011104087,
+        "y": 0.1343158071387062,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamHairFront",
+        "ParamHairSide"
+      ],
+      "physics": [
+        "HairFront",
+        "HairSide"
+      ],
+      "mesh3d": [
+        "bangs"
+      ]
+    },
+    {
+      "id": "ArtMesh147",
+      "index": 140,
+      "region": "sparkle",
+      "laterality": "C",
+      "stillLaterality": "L",
+      "segment": "sparkle",
+      "chain": "fx",
+      "joint": 0,
+      "figure": {
+        "x": 0.0557514958120152,
+        "y": 0.12476011504437409
+      },
+      "uv": {
+        "x": 0.28529471158981323,
+        "y": 0.6052170991897583,
+        "w": 0.10863494873046875,
+        "h": 0.1090625524520874
+      },
+      "stillCentroid": {
+        "u": 0.6819853094187835,
+        "v": 0.40646239749027246
+      },
+      "still": {
+        "x": 0.6419853094187835,
+        "y": 0.3664623974902725,
+        "w": 0.08,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamBreath"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "energyRibbons"
+      ]
+    },
+    {
+      "id": "ArtMesh146",
+      "index": 141,
+      "region": "body",
+      "laterality": "C",
+      "stillLaterality": "L",
+      "segment": "midriff",
+      "chain": "spine",
+      "joint": 1,
+      "figure": {
+        "x": 0.07275809448860261,
+        "y": 0.058149481416204137
+      },
+      "uv": {
+        "x": 0.01738254725933075,
+        "y": 0.42771410942077637,
+        "w": 0.0674041360616684,
+        "h": 0.06984448432922363
+      },
+      "stillCentroid": {
+        "u": 0.7109970591878464,
+        "v": 0.4639072980479061
+      },
+      "still": {
+        "x": 0.6609970591878463,
+        "y": 0.4239072980479061,
+        "w": 0.1,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamBreath",
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ"
+      ],
+      "physics": [
+        "Body",
+        "Chest"
+      ],
+      "mesh3d": [
+        "cropTop"
+      ]
+    },
+    {
+      "id": "ArtMesh20",
+      "index": 142,
+      "region": "body",
+      "laterality": "C",
+      "stillLaterality": "L",
+      "segment": "crop",
+      "chain": "spine",
+      "joint": 0,
+      "figure": {
+        "x": 0.07108641830423186,
+        "y": 0.1946522117622437
+      },
+      "uv": {
+        "x": 0.38268882036209106,
+        "y": 0.6178940534591675,
+        "w": 0.04245999455451965,
+        "h": 0.04924798011779785
+      },
+      "stillCentroid": {
+        "u": 0.7081453278053311,
+        "v": 0.3461875685773015
+      },
+      "still": {
+        "x": 0.6581453278053311,
+        "y": 0.3061875685773015,
+        "w": 0.1,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamBreath",
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ"
+      ],
+      "physics": [
+        "Body",
+        "Chest"
+      ],
+      "mesh3d": [
+        "cropTop"
+      ]
+    },
+    {
+      "id": "ArtMesh119",
+      "index": 143,
+      "region": "armR",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "forearm",
+      "chain": "armR",
+      "joint": 1,
+      "figure": {
+        "x": -0.15450738448845713,
+        "y": 0.012238128355851299
+      },
+      "uv": {
+        "x": 0.0686456561088562,
+        "y": 0.07488584518432617,
+        "w": 0.024520620703697205,
+        "h": 0.014707803726196289
+      },
+      "stillCentroid": {
+        "u": 0.3233022983121385,
+        "v": 0.503501173190133
+      },
+      "still": {
+        "x": 0.27830229831213854,
+        "y": 0.463501173190133,
+        "w": 0.09,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamArmR2",
+        "ParamSleeve"
+      ],
+      "physics": [
+        "SleeveL",
+        "SleeveR"
+      ],
+      "mesh3d": [
+        "gloveR"
+      ]
+    },
+    {
+      "id": "ArtMesh120",
+      "index": 144,
+      "region": "armR",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "forearm",
+      "chain": "armR",
+      "joint": 1,
+      "figure": {
+        "x": -0.15270864414541344,
+        "y": 0.020915566502433074
+      },
+      "uv": {
+        "x": 0.15153400599956512,
+        "y": 0.8780311346054077,
+        "w": 0.024247244000434875,
+        "h": 0.009538590908050537
+      },
+      "stillCentroid": {
+        "u": 0.3263707898855737,
+        "v": 0.49601776484713533
+      },
+      "still": {
+        "x": 0.28137078988557374,
+        "y": 0.45601776484713535,
+        "w": 0.09,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamArmR2",
+        "ParamSleeve"
+      ],
+      "physics": [
+        "SleeveL",
+        "SleeveR"
+      ],
+      "mesh3d": [
+        "gloveR"
+      ]
+    },
+    {
+      "id": "ArtMesh180",
+      "index": 145,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "ribbon",
+      "chain": "hair",
+      "joint": 2,
+      "figure": {
+        "x": -0.39620079431268906,
+        "y": 0.3303550225165155
+      },
+      "uv": {
+        "x": 0.00634765625,
+        "y": 0.29296875,
+        "w": 0.06494140625,
+        "h": 0.04052734375
+      },
+      "stillCentroid": {
+        "u": -0.08900523360518577,
+        "v": 0.22915768844306128
+      },
+      "still": {
+        "x": 0,
+        "y": 0.19915768844306128,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamFlapping3",
+        "ParamFlapping4"
+      ],
+      "physics": [
+        "WingL",
+        "WingR"
+      ],
+      "mesh3d": [
+        "energyRibbons"
+      ]
+    },
+    {
+      "id": "ArtMesh178",
+      "index": 146,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "ribbon",
+      "chain": "hair",
+      "joint": 2,
+      "figure": {
+        "x": -0.26483997537030113,
+        "y": 0.33037463741170037
+      },
+      "uv": {
+        "x": 0.007017552852630615,
+        "y": 0.248779296875,
+        "w": 0.06494140625,
+        "h": 0.04052734375
+      },
+      "stillCentroid": {
+        "u": 0.13508467885110473,
+        "v": 0.22914077258981125
+      },
+      "still": {
+        "x": 0.10008467885110472,
+        "y": 0.19914077258981125,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamFlapping3",
+        "ParamFlapping4"
+      ],
+      "physics": [
+        "WingL",
+        "WingR"
+      ],
+      "mesh3d": [
+        "energyRibbons"
+      ]
+    },
+    {
+      "id": "ArtMesh177",
+      "index": 147,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "ribbon",
+      "chain": "hair",
+      "joint": 2,
+      "figure": {
+        "x": -0.33061994296131714,
+        "y": 0.3107417009093545
+      },
+      "uv": {
+        "x": 0.23970454931259155,
+        "y": 0.6513867974281311,
+        "w": 0.008953481912612915,
+        "h": 0.016197681427001953
+      },
+      "stillCentroid": {
+        "u": 0.022869885296008745,
+        "v": 0.24607218464223524
+      },
+      "still": {
+        "x": 0,
+        "y": 0.21607218464223524,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamFlapping3",
+        "ParamFlapping4"
+      ],
+      "physics": [
+        "WingL",
+        "WingR"
+      ],
+      "mesh3d": [
+        "energyRibbons"
+      ]
+    },
+    {
+      "id": "ArtMesh176",
+      "index": 148,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "ribbon",
+      "chain": "hair",
+      "joint": 2,
+      "figure": {
+        "x": -0.3306940197944641,
+        "y": 0.31064701080322266
+      },
+      "uv": {
+        "x": 0.509765625,
+        "y": 0.503662109375,
+        "w": 0.055908203125,
+        "h": 0.054931640625
+      },
+      "stillCentroid": {
+        "u": 0.02274351678530218,
+        "v": 0.2461538452335591
+      },
+      "still": {
+        "x": 0,
+        "y": 0.2161538452335591,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamFlapping3",
+        "ParamFlapping4"
+      ],
+      "physics": [
+        "WingL",
+        "WingR"
+      ],
+      "mesh3d": [
+        "energyRibbons"
+      ]
+    },
+    {
+      "id": "ArtMesh148",
+      "index": 149,
+      "region": "sparkle",
+      "laterality": "C",
+      "stillLaterality": "R",
+      "segment": "sparkle",
+      "chain": "fx",
+      "joint": 0,
+      "figure": {
+        "x": -0.07595705911517144,
+        "y": 0.054839924164116385
+      },
+      "uv": {
+        "x": 0.0370396226644516,
+        "y": 0.636767566204071,
+        "w": 0.04405292868614197,
+        "h": 0.03609895706176758
+      },
+      "stillCentroid": {
+        "u": 0.4573021901979583,
+        "v": 0.4667614547625417
+      },
+      "still": {
+        "x": 0.41730219019795833,
+        "y": 0.42676145476254174,
+        "w": 0.08,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamBreath"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "energyRibbons"
+      ]
+    },
+    {
+      "id": "ArtMesh149",
+      "index": 150,
+      "region": "skirt",
+      "laterality": "C",
+      "stillLaterality": "R",
+      "segment": "belt",
+      "chain": "skirt",
+      "joint": 1,
+      "figure": {
+        "x": -0.0881957583129406,
+        "y": 0.024201492639258505
+      },
+      "uv": {
+        "x": 0.022355303168296814,
+        "y": 0.6138350963592529,
+        "w": 0.05873724818229675,
+        "h": 0.04801821708679199
+      },
+      "stillCentroid": {
+        "u": 0.43642405428279013,
+        "v": 0.49318398756731907
+      },
+      "still": {
+        "x": 0.39642405428279015,
+        "y": 0.46818398756731905,
+        "w": 0.08,
+        "h": 0.05
+      },
+      "parameters": [
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ",
+        "ParamCloth1",
+        "ParamCloth2"
+      ],
+      "physics": [
+        "Skirt"
+      ],
+      "mesh3d": [
+        "skirtBelts"
+      ]
+    },
+    {
+      "id": "ArtMesh150",
+      "index": 151,
+      "region": "skirt",
+      "laterality": "C",
+      "stillLaterality": "R",
+      "segment": "hem",
+      "chain": "skirt",
+      "joint": 2,
+      "figure": {
+        "x": -0.10414753978451093,
+        "y": -0.022872397928343464
+      },
+      "uv": {
+        "x": 0.012234166264533997,
+        "y": 0.5951385498046875,
+        "w": 0.06504020094871521,
+        "h": 0.04897117614746094
+      },
+      "stillCentroid": {
+        "u": 0.4092117291597729,
+        "v": 0.5337804331380339
+      },
+      "still": {
+        "x": 0.3592117291597729,
+        "y": 0.4987804331380339,
+        "w": 0.1,
+        "h": 0.07
+      },
+      "parameters": [
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ",
+        "ParamCloth1",
+        "ParamCloth2"
+      ],
+      "physics": [
+        "Skirt"
+      ],
+      "mesh3d": [
+        "skirt"
+      ]
+    },
+    {
+      "id": "ArtMesh151",
+      "index": 152,
+      "region": "skirt",
+      "laterality": "C",
+      "stillLaterality": "R",
+      "segment": "hem",
+      "chain": "skirt",
+      "joint": 2,
+      "figure": {
+        "x": -0.11359968936691682,
+        "y": -0.08382724318653345
+      },
+      "uv": {
+        "x": 0.00974242389202118,
+        "y": 0.5654770135879517,
+        "w": 0.06411062180995941,
+        "h": 0.045387983322143555
+      },
+      "stillCentroid": {
+        "u": 0.3930871998709134,
+        "v": 0.5863477911353889
+      },
+      "still": {
+        "x": 0.3430871998709134,
+        "y": 0.5513477911353889,
+        "w": 0.1,
+        "h": 0.07
+      },
+      "parameters": [
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ",
+        "ParamCloth1",
+        "ParamCloth2"
+      ],
+      "physics": [
+        "Skirt"
+      ],
+      "mesh3d": [
+        "skirt"
+      ]
+    },
+    {
+      "id": "ArtMesh152",
+      "index": 153,
+      "region": "legR",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "strap",
+      "chain": "legR",
+      "joint": 0,
+      "figure": {
+        "x": -0.12625264252225557,
+        "y": -0.14175285523136458
+      },
+      "uv": {
+        "x": 0.00974242389202118,
+        "y": 0.5304659605026245,
+        "w": 0.060453519225120544,
+        "h": 0.0586695671081543
+      },
+      "stillCentroid": {
+        "u": 0.37150238342624015,
+        "v": 0.6363027434066757
+      },
+      "still": {
+        "x": 0.33650238342624017,
+        "y": 0.6013027434066757,
+        "w": 0.07,
+        "h": 0.07
+      },
+      "parameters": [
+        "ParamLegRibbonR1",
+        "ParamLegRibbonR2"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "thighStrap"
+      ]
+    },
+    {
+      "id": "ArtMesh153",
+      "index": 154,
+      "region": "legR",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "strap",
+      "chain": "legR",
+      "joint": 0,
+      "figure": {
+        "x": -0.12633444368839264,
+        "y": -0.19677872508764266
+      },
+      "uv": {
+        "x": 0.02079916000366211,
+        "y": 0.5097255110740662,
+        "w": 0.028553754091262817,
+        "h": 0.04921829700469971
+      },
+      "stillCentroid": {
+        "u": 0.3713628378881865,
+        "v": 0.6837569627980733
+      },
+      "still": {
+        "x": 0.33636283788818655,
+        "y": 0.6487569627980733,
+        "w": 0.07,
+        "h": 0.07
+      },
+      "parameters": [
+        "ParamLegRibbonR1",
+        "ParamLegRibbonR2"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "thighStrap"
+      ]
+    },
+    {
+      "id": "ArtMesh154",
+      "index": 155,
+      "region": "legR",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "shin",
+      "chain": "legR",
+      "joint": 1,
+      "figure": {
+        "x": -0.1235587690025568,
+        "y": -0.23039579391479492
+      },
+      "uv": {
+        "x": 0.028378084301948547,
+        "y": 0.5097255110740662,
+        "w": 0.017846211791038513,
+        "h": 0.015034615993499756
+      },
+      "stillCentroid": {
+        "u": 0.37609789284874434,
+        "v": 0.712748267498682
+      },
+      "still": {
+        "x": 0.33109789284874436,
+        "y": 0.657748267498682,
+        "w": 0.09,
+        "h": 0.11
+      },
+      "parameters": [
+        "ParamLegR2X",
+        "ParamLegR2"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "bootR"
+      ]
+    },
+    {
+      "id": "ArtMesh155",
+      "index": 156,
+      "region": "body",
+      "laterality": "C",
+      "stillLaterality": "C",
+      "segment": "midriff",
+      "chain": "spine",
+      "joint": 1,
+      "figure": {
+        "x": 0.013217612299033336,
+        "y": 0.07767048188381726
+      },
+      "uv": {
+        "x": 0.011962890625,
+        "y": 0.7337287664413452,
+        "w": 0.031218767166137695,
+        "h": 0.039952874183654785
+      },
+      "stillCentroid": {
+        "u": 0.6094262746199031,
+        "v": 0.4470724194471819
+      },
+      "still": {
+        "x": 0.559426274619903,
+        "y": 0.4070724194471819,
+        "w": 0.1,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamBreath",
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ"
+      ],
+      "physics": [
+        "Body",
+        "Chest"
+      ],
+      "mesh3d": [
+        "cropTop"
+      ]
+    },
+    {
+      "id": "ArtMesh156",
+      "index": 157,
+      "region": "skirt",
+      "laterality": "C",
+      "stillLaterality": "L",
+      "segment": "waist",
+      "chain": "skirt",
+      "joint": 0,
+      "figure": {
+        "x": 0.0530118455286496,
+        "y": 0.03385662814029134
+      },
+      "uv": {
+        "x": 0.0205078125,
+        "y": 0.7022705078125,
+        "w": 0.05812200903892517,
+        "h": 0.0604248046875
+      },
+      "stillCentroid": {
+        "u": 0.6773117088954075,
+        "v": 0.4848574146386877
+      },
+      "still": {
+        "x": 0.6273117088954074,
+        "y": 0.4548574146386877,
+        "w": 0.1,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ",
+        "ParamCloth1",
+        "ParamCloth2"
+      ],
+      "physics": [
+        "Skirt"
+      ],
+      "mesh3d": [
+        "skirt"
+      ]
+    },
+    {
+      "id": "ArtMesh157",
+      "index": 158,
+      "region": "skirt",
+      "laterality": "C",
+      "stillLaterality": "L",
+      "segment": "belt",
+      "chain": "skirt",
+      "joint": 1,
+      "figure": {
+        "x": 0.09316289265240942,
+        "y": 0.0011392641879085983
+      },
+      "uv": {
+        "x": 0.0333251953125,
+        "y": 0.6871917843818665,
+        "w": 0.06633293628692627,
+        "h": 0.059634387493133545
+      },
+      "stillCentroid": {
+        "u": 0.7458058360440653,
+        "v": 0.5130728153394808
+      },
+      "still": {
+        "x": 0.7058058360440652,
+        "y": 0.48807281533948077,
+        "w": 0.08,
+        "h": 0.05
+      },
+      "parameters": [
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ",
+        "ParamCloth1",
+        "ParamCloth2"
+      ],
+      "physics": [
+        "Skirt"
+      ],
+      "mesh3d": [
+        "skirtBelts"
+      ]
+    },
+    {
+      "id": "ArtMesh158",
+      "index": 159,
+      "region": "armL",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "glove",
+      "chain": "armL",
+      "joint": 2,
+      "figure": {
+        "x": 0.1516130647311608,
+        "y": -0.03694604065579673
+      },
+      "uv": {
+        "x": 0.06420281529426575,
+        "y": 0.6778095960617065,
+        "w": 0.059094369411468506,
+        "h": 0.04374194145202637
+      },
+      "stillCentroid": {
+        "u": 0.8455166482149841,
+        "v": 0.5459175194098018
+      },
+      "still": {
+        "x": 0.810516648214984,
+        "y": 0.5059175194098018,
+        "w": 0.07,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamArmL3",
+        "ParamSleeveL2"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "gloveL"
+      ]
+    },
+    {
+      "id": "ArtMesh159",
+      "index": 160,
+      "region": "armL",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "glove",
+      "chain": "armL",
+      "joint": 2,
+      "figure": {
+        "x": 0.19066432916692325,
+        "y": -0.09622528843049492
+      },
+      "uv": {
+        "x": 0.08180570602416992,
+        "y": 0.6367372274398804,
+        "w": 0.05432334542274475,
+        "h": 0.07518726587295532
+      },
+      "stillCentroid": {
+        "u": 0.9121346435896586,
+        "v": 0.5970398449015195
+      },
+      "still": {
+        "x": 0.8771346435896585,
+        "y": 0.5570398449015195,
+        "w": 0.07,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamArmL3",
+        "ParamSleeveL2"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "gloveL"
+      ]
+    },
+    {
+      "id": "ArtMesh160",
+      "index": 161,
+      "region": "accessory",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "accessory",
+      "chain": null,
+      "joint": 0,
+      "figure": {
+        "x": 0.19994022821386656,
+        "y": -0.14935210595528284
+      },
+      "uv": {
+        "x": 0.0968017578125,
+        "y": 0.6160579323768616,
+        "w": 0.03932729363441467,
+        "h": 0.06053978204727173
+      },
+      "stillCentroid": {
+        "u": 0.9279585050889885,
+        "v": 0.642856324694985
+      },
+      "still": {
+        "x": 0.8979585050889884,
+        "y": 0.612856324694985,
+        "w": 0.06,
+        "h": 0.06
+      },
+      "parameters": [],
+      "physics": [],
+      "mesh3d": [
+        "thighStrap",
+        "skirtBelts"
+      ]
+    },
+    {
+      "id": "ArtMesh161",
+      "index": 162,
+      "region": "accessory",
+      "laterality": "L",
+      "stillLaterality": "L",
+      "segment": "accessory",
+      "chain": null,
+      "joint": 0,
+      "figure": {
+        "x": 0.20174335688352585,
+        "y": -0.19203468412160873
+      },
+      "uv": {
+        "x": 0.11040955781936646,
+        "y": 0.6160579323768616,
+        "w": 0.01800626516342163,
+        "h": 0.015494585037231445
+      },
+      "stillCentroid": {
+        "u": 0.9310344827586207,
+        "v": 0.6796657096949064
+      },
+      "still": {
+        "x": 0.9010344827586206,
+        "y": 0.6496657096949063,
+        "w": 0.06,
+        "h": 0.06
+      },
+      "parameters": [],
+      "physics": [],
+      "mesh3d": [
+        "thighStrap",
+        "skirtBelts"
+      ]
+    },
+    {
+      "id": "ArtMesh162",
+      "index": 163,
+      "region": "body",
+      "laterality": "C",
+      "stillLaterality": "R",
+      "segment": "crop",
+      "chain": "spine",
+      "joint": 0,
+      "figure": {
+        "x": -0.048595580738037825,
+        "y": 0.22771687805652618
+      },
+      "uv": {
+        "x": 0.12789352238178253,
+        "y": 0.8015710115432739,
+        "w": 0.04212178289890289,
+        "h": 0.025903046131134033
+      },
+      "stillCentroid": {
+        "u": 0.5039784468136823,
+        "v": 0.3176726549097766
+      },
+      "still": {
+        "x": 0.4539784468136823,
+        "y": 0.2776726549097766,
+        "w": 0.1,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamBreath",
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ"
+      ],
+      "physics": [
+        "Body",
+        "Chest"
+      ],
+      "mesh3d": [
+        "cropTop"
+      ]
+    },
+    {
+      "id": "ArtMesh163",
+      "index": 164,
+      "region": "body",
+      "laterality": "C",
+      "stillLaterality": "R",
+      "segment": "crop",
+      "chain": "spine",
+      "joint": 0,
+      "figure": {
+        "x": -0.044881610450549767,
+        "y": 0.18995114243947542
+      },
+      "uv": {
+        "x": 0.1299707591533661,
+        "y": 0.7791535258293152,
+        "w": 0.040044546127319336,
+        "h": 0.036785900592803955
+      },
+      "stillCentroid": {
+        "u": 0.5103141508941621,
+        "v": 0.3502417630062036
+      },
+      "still": {
+        "x": 0.4603141508941621,
+        "y": 0.3102417630062036,
+        "w": 0.1,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamBreath",
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ"
+      ],
+      "physics": [
+        "Body",
+        "Chest"
+      ],
+      "mesh3d": [
+        "cropTop"
+      ]
+    },
+    {
+      "id": "ArtMesh164",
+      "index": 165,
+      "region": "body",
+      "laterality": "C",
+      "stillLaterality": "R",
+      "segment": "midriff",
+      "chain": "spine",
+      "joint": 1,
+      "figure": {
+        "x": -0.042745112241911035,
+        "y": 0.1465905542884554
+      },
+      "uv": {
+        "x": 0.13665784895420074,
+        "y": 0.7516655921936035,
+        "w": 0.030405402183532715,
+        "h": 0.04471951723098755
+      },
+      "stillCentroid": {
+        "u": 0.5139588274452946,
+        "v": 0.3876358626984554
+      },
+      "still": {
+        "x": 0.46395882744529465,
+        "y": 0.3476358626984554,
+        "w": 0.1,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamBreath",
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ"
+      ],
+      "physics": [
+        "Body",
+        "Chest"
+      ],
+      "mesh3d": [
+        "cropTop"
+      ]
+    },
+    {
+      "id": "ArtMesh165",
+      "index": 166,
+      "region": "body",
+      "laterality": "C",
+      "stillLaterality": "R",
+      "segment": "midriff",
+      "chain": "spine",
+      "joint": 1,
+      "figure": {
+        "x": -0.038928909943653986,
+        "y": 0.09692105221060607
+      },
+      "uv": {
+        "x": 0.1414751559495926,
+        "y": 0.7254481315612793,
+        "w": 0.030281588435173035,
+        "h": 0.04863005876541138
+      },
+      "stillCentroid": {
+        "u": 0.5204689302736499,
+        "v": 0.4304707593537933
+      },
+      "still": {
+        "x": 0.47046893027364994,
+        "y": 0.39047075935379333,
+        "w": 0.1,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamBreath",
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ"
+      ],
+      "physics": [
+        "Body",
+        "Chest"
+      ],
+      "mesh3d": [
+        "cropTop"
+      ]
+    },
+    {
+      "id": "ArtMesh166",
+      "index": 167,
+      "region": "skirt",
+      "laterality": "C",
+      "stillLaterality": "R",
+      "segment": "waist",
+      "chain": "skirt",
+      "joint": 0,
+      "figure": {
+        "x": -0.03453965490916744,
+        "y": 0.016014648572308943
+      },
+      "uv": {
+        "x": 0.13670507073402405,
+        "y": 0.6866509318351746,
+        "w": 0.04301103949546814,
+        "h": 0.05583077669143677
+      },
+      "stillCentroid": {
+        "u": 0.5279566102709694,
+        "v": 0.5002443083853436
+      },
+      "still": {
+        "x": 0.4779566102709694,
+        "y": 0.4702443083853436,
+        "w": 0.1,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ",
+        "ParamCloth1",
+        "ParamCloth2"
+      ],
+      "physics": [
+        "Skirt"
+      ],
+      "mesh3d": [
+        "skirt"
+      ]
+    },
+    {
+      "id": "ArtMesh167",
+      "index": 168,
+      "region": "skirt",
+      "laterality": "C",
+      "stillLaterality": "C",
+      "segment": "hem",
+      "chain": "skirt",
+      "joint": 2,
+      "figure": {
+        "x": -0.022773061118399104,
+        "y": -0.02757383737092217
+      },
+      "uv": {
+        "x": 0.13670507073402405,
+        "y": 0.6612180471420288,
+        "w": 0.044847846031188965,
+        "h": 0.05437910556793213
+      },
+      "stillCentroid": {
+        "u": 0.5480293762122235,
+        "v": 0.53783494675765
+      },
+      "still": {
+        "x": 0.4980293762122235,
+        "y": 0.50283494675765,
+        "w": 0.1,
+        "h": 0.07
+      },
+      "parameters": [
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ",
+        "ParamCloth1",
+        "ParamCloth2"
+      ],
+      "physics": [
+        "Skirt"
+      ],
+      "mesh3d": [
+        "skirt"
+      ]
+    },
+    {
+      "id": "ArtMesh168",
+      "index": 169,
+      "region": "skirt",
+      "laterality": "C",
+      "stillLaterality": "C",
+      "segment": "hem",
+      "chain": "skirt",
+      "joint": 2,
+      "figure": {
+        "x": -0.0013444948475807906,
+        "y": -0.06579836159944534
+      },
+      "uv": {
+        "x": 0.1627352237701416,
+        "y": 0.6612180471420288,
+        "w": 0.01881769299507141,
+        "h": 0.019954442977905273
+      },
+      "stillCentroid": {
+        "u": 0.5845846107056801,
+        "v": 0.5707997133957765
+      },
+      "still": {
+        "x": 0.5345846107056801,
+        "y": 0.5357997133957765,
+        "w": 0.1,
+        "h": 0.07
+      },
+      "parameters": [
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ",
+        "ParamCloth1",
+        "ParamCloth2"
+      ],
+      "physics": [
+        "Skirt"
+      ],
+      "mesh3d": [
+        "skirt"
+      ]
+    },
+    {
+      "id": "ArtMesh169",
+      "index": 170,
+      "region": "body",
+      "laterality": "C",
+      "stillLaterality": "R",
+      "segment": "crop",
+      "chain": "spine",
+      "joint": 0,
+      "figure": {
+        "x": -0.10184617009427813,
+        "y": 0.23320451047685412
+      },
+      "uv": {
+        "x": 0.1368444263935089,
+        "y": 0.6388211250305176,
+        "w": 0.022470995783805847,
+        "h": 0.025372326374053955
+      },
+      "stillCentroid": {
+        "u": 0.41313766184324685,
+        "v": 0.31294012976308183
+      },
+      "still": {
+        "x": 0.36313766184324686,
+        "y": 0.27294012976308185,
+        "w": 0.1,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamBreath",
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ"
+      ],
+      "physics": [
+        "Body",
+        "Chest"
+      ],
+      "mesh3d": [
+        "cropTop"
+      ]
+    },
+    {
+      "id": "ArtMesh170",
+      "index": 171,
+      "region": "body",
+      "laterality": "C",
+      "stillLaterality": "R",
+      "segment": "crop",
+      "chain": "spine",
+      "joint": 0,
+      "figure": {
+        "x": -0.09970003440976143,
+        "y": 0.1893388569355011
+      },
+      "uv": {
+        "x": 0.13840608298778534,
+        "y": 0.6137538552284241,
+        "w": 0.020201772451400757,
+        "h": 0.03946971893310547
+      },
+      "stillCentroid": {
+        "u": 0.41679877907389984,
+        "v": 0.35076979701478284
+      },
+      "still": {
+        "x": 0.36679877907389985,
+        "y": 0.31076979701478286,
+        "w": 0.1,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamBreath",
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ"
+      ],
+      "physics": [
+        "Body",
+        "Chest"
+      ],
+      "mesh3d": [
+        "cropTop"
+      ]
+    },
+    {
+      "id": "ArtMesh171",
+      "index": 172,
+      "region": "body",
+      "laterality": "C",
+      "stillLaterality": "R",
+      "segment": "midriff",
+      "chain": "spine",
+      "joint": 1,
+      "figure": {
+        "x": -0.10114715940185956,
+        "y": 0.1386904524905341
+      },
+      "uv": {
+        "x": 0.13633276522159576,
+        "y": 0.5803484320640564,
+        "w": 0.02218829095363617,
+        "h": 0.05274564027786255
+      },
+      "stillCentroid": {
+        "u": 0.41433011211975423,
+        "v": 0.3944488974566903
+      },
+      "still": {
+        "x": 0.36433011211975425,
+        "y": 0.35444889745669034,
+        "w": 0.1,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamBreath",
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ"
+      ],
+      "physics": [
+        "Body",
+        "Chest"
+      ],
+      "mesh3d": [
+        "cropTop"
+      ]
+    },
+    {
+      "id": "ArtMesh172",
+      "index": 173,
+      "region": "body",
+      "laterality": "C",
+      "stillLaterality": "R",
+      "segment": "midriff",
+      "chain": "spine",
+      "joint": 1,
+      "figure": {
+        "x": -0.11688063790400822,
+        "y": 0.07732216529548168
+      },
+      "uv": {
+        "x": 0.12212245166301727,
+        "y": 0.5455566644668579,
+        "w": 0.03249460458755493,
+        "h": 0.06291484832763672
+      },
+      "stillCentroid": {
+        "u": 0.3874901925108051,
+        "v": 0.447372807098367
+      },
+      "still": {
+        "x": 0.3374901925108051,
+        "y": 0.40737280709836704,
+        "w": 0.1,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamBreath",
+        "ParamBodyAngleX",
+        "ParamBodyAngleZ"
+      ],
+      "physics": [
+        "Body",
+        "Chest"
+      ],
+      "mesh3d": [
+        "cropTop"
+      ]
+    },
+    {
+      "id": "ArtMesh173",
+      "index": 174,
+      "region": "armR",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "forearm",
+      "chain": "armR",
+      "joint": 1,
+      "figure": {
+        "x": -0.1408514305949211,
+        "y": 0.022404495665493112
+      },
+      "uv": {
+        "x": 0.10948853194713593,
+        "y": 0.5251293182373047,
+        "w": 0.03854244947433472,
+        "h": 0.04943966865539551
+      },
+      "stillCentroid": {
+        "u": 0.3465981451038044,
+        "v": 0.4947337147931036
+      },
+      "still": {
+        "x": 0.3015981451038044,
+        "y": 0.4547337147931036,
+        "w": 0.09,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamArmR2",
+        "ParamSleeve"
+      ],
+      "physics": [
+        "SleeveL",
+        "SleeveR"
+      ],
+      "mesh3d": [
+        "gloveR"
+      ]
+    },
+    {
+      "id": "ArtMesh174",
+      "index": 175,
+      "region": "armR",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "glove",
+      "chain": "armR",
+      "joint": 2,
+      "figure": {
+        "x": -0.16801131410258158,
+        "y": -0.021086250764450858
+      },
+      "uv": {
+        "x": 0.10476446151733398,
+        "y": 0.505752682685852,
+        "w": 0.024625316262245178,
+        "h": 0.043025970458984375
+      },
+      "stillCentroid": {
+        "u": 0.30026579146474874,
+        "v": 0.5322400627703856
+      },
+      "still": {
+        "x": 0.2652657914647487,
+        "y": 0.4922400627703856,
+        "w": 0.07,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamArmR3",
+        "ParamSleeve2"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "gloveR"
+      ]
+    },
+    {
+      "id": "ArtMesh175",
+      "index": 176,
+      "region": "armR",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "glove",
+      "chain": "armR",
+      "joint": 2,
+      "figure": {
+        "x": -0.18811298161745071,
+        "y": -0.054329851642251015
+      },
+      "uv": {
+        "x": 0.10476446151733398,
+        "y": 0.505752682685852,
+        "w": 0.002610504627227783,
+        "h": 0.015072107315063477
+      },
+      "stillCentroid": {
+        "u": 0.2659741286241867,
+        "v": 0.5609092893275592
+      },
+      "still": {
+        "x": 0.23097412862418668,
+        "y": 0.5209092893275592,
+        "w": 0.07,
+        "h": 0.08
+      },
+      "parameters": [
+        "ParamArmR3",
+        "ParamSleeve2"
+      ],
+      "physics": [],
+      "mesh3d": [
+        "gloveR"
+      ]
+    },
+    {
+      "id": "ArtMesh182",
+      "index": 177,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "ribbon",
+      "chain": "hair",
+      "joint": 2,
+      "figure": {
+        "x": -0.34268164363774384,
+        "y": 0.2954323169859973
+      },
+      "uv": {
+        "x": 0.3904399871826172,
+        "y": 0.5868115425109863,
+        "w": 0.02008172869682312,
+        "h": 0.020780205726623535
+      },
+      "stillCentroid": {
+        "u": 0.0022936931679749203,
+        "v": 0.25927497208282746
+      },
+      "still": {
+        "x": 0,
+        "y": 0.22927497208282746,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamFlapping3",
+        "ParamFlapping4"
+      ],
+      "physics": [
+        "WingL",
+        "WingR"
+      ],
+      "mesh3d": [
+        "energyRibbons"
+      ]
+    },
+    {
+      "id": "ArtMesh183",
+      "index": 178,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "ribbon",
+      "chain": "hair",
+      "joint": 2,
+      "figure": {
+        "x": -0.35312969324200655,
+        "y": 0.2726519437030304
+      },
+      "uv": {
+        "x": 0.3811338543891907,
+        "y": 0.5722688436508179,
+        "w": 0.02840825915336609,
+        "h": 0.028955519199371338
+      },
+      "stillCentroid": {
+        "u": -0.015529753275253001,
+        "v": 0.27892072842273385
+      },
+      "still": {
+        "x": 0,
+        "y": 0.24892072842273386,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamFlapping3",
+        "ParamFlapping4"
+      ],
+      "physics": [
+        "WingL",
+        "WingR"
+      ],
+      "mesh3d": [
+        "energyRibbons"
+      ]
+    },
+    {
+      "id": "ArtMesh184",
+      "index": 179,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "ribbon",
+      "chain": "hair",
+      "joint": 2,
+      "figure": {
+        "x": -0.3641493523374517,
+        "y": 0.2524689198174375
+      },
+      "uv": {
+        "x": 0.3806440532207489,
+        "y": 0.5591017603874207,
+        "w": 0.02693885564804077,
+        "h": 0.03183680772781372
+      },
+      "stillCentroid": {
+        "u": -0.034328314839333206,
+        "v": 0.2963265349270261
+      },
+      "still": {
+        "x": 0,
+        "y": 0.26632653492702607,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamFlapping3",
+        "ParamFlapping4"
+      ],
+      "physics": [
+        "WingL",
+        "WingR"
+      ],
+      "mesh3d": [
+        "energyRibbons"
+      ]
+    },
+    {
+      "id": "ArtMesh185",
+      "index": 180,
+      "region": "wings",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "ribbon",
+      "chain": "wingR",
+      "joint": 2,
+      "figure": {
+        "x": -0.37218408630444455,
+        "y": 0.23266701171031365
+      },
+      "uv": {
+        "x": 0.3806440532207489,
+        "y": 0.5522445440292358,
+        "w": 0.019127845764160156,
+        "h": 0.025677144527435303
+      },
+      "stillCentroid": {
+        "u": -0.048034858737043454,
+        "v": 0.31340366781266904
+      },
+      "still": {
+        "x": 0,
+        "y": 0.283403667812669,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamFlapping3",
+        "ParamFlapping4"
+      ],
+      "physics": [
+        "WingL",
+        "WingR"
+      ],
+      "mesh3d": [
+        "energyRibbons"
+      ]
+    },
+    {
+      "id": "ArtMesh186",
+      "index": 181,
+      "region": "wings",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "ribbon",
+      "chain": "wingR",
+      "joint": 2,
+      "figure": {
+        "x": -0.3728761225938797,
+        "y": 0.20954648902018866
+      },
+      "uv": {
+        "x": 0.3850522041320801,
+        "y": 0.5522445440292358,
+        "w": 0.005387783050537109,
+        "h": 0.006744265556335449
+      },
+      "stillCentroid": {
+        "u": -0.049215411300316626,
+        "v": 0.33334276844018595
+      },
+      "still": {
+        "x": 0,
+        "y": 0.30334276844018593,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamFlapping3",
+        "ParamFlapping4"
+      ],
+      "physics": [
+        "WingL",
+        "WingR"
+      ],
+      "mesh3d": [
+        "energyRibbons"
+      ]
+    },
+    {
+      "id": "ArtMesh187",
+      "index": 182,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "ribbon",
+      "chain": "hair",
+      "joint": 2,
+      "figure": {
+        "x": -0.3138931646943092,
+        "y": 0.29994263499975204
+      },
+      "uv": {
+        "x": 0.3458153307437897,
+        "y": 0.5306880474090576,
+        "w": 0.018612295389175415,
+        "h": 0.020081758499145508
+      },
+      "stillCentroid": {
+        "u": 0.05140428625139189,
+        "v": 0.2553852812681484
+      },
+      "still": {
+        "x": 0.016404286251391884,
+        "y": 0.2253852812681484,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamFlapping3",
+        "ParamFlapping4"
+      ],
+      "physics": [
+        "WingL",
+        "WingR"
+      ],
+      "mesh3d": [
+        "energyRibbons"
+      ]
+    },
+    {
+      "id": "ArtMesh188",
+      "index": 183,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "ribbon",
+      "chain": "hair",
+      "joint": 2,
+      "figure": {
+        "x": -0.30359882498398805,
+        "y": 0.2779194735563718
+      },
+      "uv": {
+        "x": 0.3291047215461731,
+        "y": 0.5228513479232788,
+        "w": 0.028955549001693726,
+        "h": 0.02693885564804077
+      },
+      "stillCentroid": {
+        "u": 0.06896551724137928,
+        "v": 0.27437801936671924
+      },
+      "still": {
+        "x": 0.03396551724137928,
+        "y": 0.24437801936671924,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamFlapping3",
+        "ParamFlapping4"
+      ],
+      "physics": [
+        "WingL",
+        "WingR"
+      ],
+      "mesh3d": [
+        "energyRibbons"
+      ]
+    },
+    {
+      "id": "ArtMesh189",
+      "index": 184,
+      "region": "hair",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "ribbon",
+      "chain": "hair",
+      "joint": 2,
+      "figure": {
+        "x": -0.29261009333034355,
+        "y": 0.25584807929893333
+      },
+      "uv": {
+        "x": 0.3158246874809265,
+        "y": 0.5208921432495117,
+        "w": 0.03194981813430786,
+        "h": 0.027918457984924316
+      },
+      "stillCentroid": {
+        "u": 0.08771131933135293,
+        "v": 0.2934123533645673
+      },
+      "still": {
+        "x": 0.052711319331352924,
+        "y": 0.26341235336456725,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamFlapping3",
+        "ParamFlapping4"
+      ],
+      "physics": [
+        "WingL",
+        "WingR"
+      ],
+      "mesh3d": [
+        "energyRibbons"
+      ]
+    },
+    {
+      "id": "ArtMesh190",
+      "index": 185,
+      "region": "wings",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "ribbon",
+      "chain": "wingR",
+      "joint": 2,
+      "figure": {
+        "x": -0.28456084264649284,
+        "y": 0.23642858586929463
+      },
+      "uv": {
+        "x": 0.30908048152923584,
+        "y": 0.5208921432495117,
+        "w": 0.025677114725112915,
+        "h": 0.02071988582611084
+      },
+      "stillCentroid": {
+        "u": 0.10144262746116849,
+        "v": 0.3101596924631921
+      },
+      "still": {
+        "x": 0.06644262746116848,
+        "y": 0.28015969246319206,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamFlapping3",
+        "ParamFlapping4"
+      ],
+      "physics": [
+        "WingL",
+        "WingR"
+      ],
+      "mesh3d": [
+        "energyRibbons"
+      ]
+    },
+    {
+      "id": "ArtMesh191",
+      "index": 186,
+      "region": "wings",
+      "laterality": "R",
+      "stillLaterality": "R",
+      "segment": "ribbon",
+      "chain": "wingR",
+      "joint": 2,
+      "figure": {
+        "x": -0.281381219625473,
+        "y": 0.21174902617931365
+      },
+      "uv": {
+        "x": 0.30908048152923584,
+        "y": 0.5253002643585205,
+        "w": 0.003918379545211792,
+        "h": 0.005387783050537109
+      },
+      "stillCentroid": {
+        "u": 0.10686678247299765,
+        "v": 0.3314433040275412
+      },
+      "still": {
+        "x": 0.07186678247299765,
+        "y": 0.30144330402754116,
+        "w": 0.07,
+        "h": 0.06
+      },
+      "parameters": [
+        "ParamFlapping3",
+        "ParamFlapping4"
+      ],
+      "physics": [
+        "WingL",
+        "WingR"
+      ],
+      "mesh3d": [
+        "energyRibbons"
+      ]
+    }
+  ],
+  "byRegion": {
+    "environment": [],
+    "wings": [
+      "ArtMesh38",
+      "ArtMesh39",
+      "ArtMesh17",
+      "ArtMesh18",
+      "ArtMesh111",
+      "ArtMesh115",
+      "ArtMesh110",
+      "ArtMesh123",
+      "ArtMesh121",
+      "ArtMesh112",
+      "ArtMesh113",
+      "ArtMesh114",
+      "ArtMesh185",
+      "ArtMesh186",
+      "ArtMesh190",
+      "ArtMesh191"
+    ],
+    "sparkle": [
+      "ArtMesh138",
+      "ArtMesh139",
+      "ArtMesh140",
+      "ArtMesh137",
+      "ArtMesh147",
+      "ArtMesh148"
+    ],
+    "hair": [
+      "ArtMesh0",
+      "ArtMesh1",
+      "ArtMesh2",
+      "ArtMesh3",
+      "ArtMesh4",
+      "ArtMesh5",
+      "ArtMesh8",
+      "ArtMesh9",
+      "ArtMesh127",
+      "ArtMesh128",
+      "ArtMesh32",
+      "ArtMesh33",
+      "ArtMesh36",
+      "ArtMesh37",
+      "ArtMesh40",
+      "ArtMesh41",
+      "ArtMesh46",
+      "ArtMesh47",
+      "ArtMesh48",
+      "ArtMesh49",
+      "ArtMesh50",
+      "ArtMesh51",
+      "ArtMesh52",
+      "ArtMesh53",
+      "ArtMesh54",
+      "ArtMesh62",
+      "ArtMesh63",
+      "ArtMesh64",
+      "ArtMesh65",
+      "ArtMesh66",
+      "ArtMesh67",
+      "ArtMesh69",
+      "ArtMesh134",
+      "ArtMesh25",
+      "ArtMesh30",
+      "ArtMesh26",
+      "ArtMesh131",
+      "ArtMesh125",
+      "ArtMesh7",
+      "ArtMesh68",
+      "ArtMesh42",
+      "ArtMesh43",
+      "ArtMesh44",
+      "ArtMesh6",
+      "ArtMesh31",
+      "ArtMesh70",
+      "ArtMesh136",
+      "ArtMesh35",
+      "ArtMesh34",
+      "ArtMesh55",
+      "ArtMesh56",
+      "ArtMesh",
+      "ArtMesh61",
+      "ArtMesh57",
+      "ArtMesh45",
+      "ArtMesh58",
+      "ArtMesh59",
+      "ArtMesh60",
+      "ArtMesh180",
+      "ArtMesh178",
+      "ArtMesh177",
+      "ArtMesh176",
+      "ArtMesh182",
+      "ArtMesh183",
+      "ArtMesh184",
+      "ArtMesh187",
+      "ArtMesh188",
+      "ArtMesh189"
+    ],
+    "headset": [
+      "ArtMesh126",
+      "ArtMesh130",
+      "ArtMesh27",
+      "ArtMesh28",
+      "ArtMesh29",
+      "ArtMesh141",
+      "ArtMesh129",
+      "ArtMesh15",
+      "ArtMesh13",
+      "ArtMesh11",
+      "ArtMesh12",
+      "ArtMesh14",
+      "ArtMesh122"
+    ],
+    "face": [
+      "ArtMesh132",
+      "ArtMesh133",
+      "ArtMesh73",
+      "ArtMesh71",
+      "ArtMesh75",
+      "ArtMesh22",
+      "ArtMesh23"
+    ],
+    "chestCloth": [],
+    "body": [
+      "ArtMesh19",
+      "ArtMesh24",
+      "ArtMesh78",
+      "ArtMesh79",
+      "ArtMesh81",
+      "ArtMesh116",
+      "ArtMesh144",
+      "ArtMesh143",
+      "ArtMesh142",
+      "ArtMesh74",
+      "ArtMesh72",
+      "ArtMesh118",
+      "ArtMesh124",
+      "ArtMesh146",
+      "ArtMesh20",
+      "ArtMesh155",
+      "ArtMesh162",
+      "ArtMesh163",
+      "ArtMesh164",
+      "ArtMesh165",
+      "ArtMesh169",
+      "ArtMesh170",
+      "ArtMesh171",
+      "ArtMesh172"
+    ],
+    "skirt": [
+      "ArtMesh82",
+      "ArtMesh84",
+      "ArtMesh96",
+      "ArtMesh106",
+      "ArtMesh107",
+      "ArtMesh145",
+      "ArtMesh149",
+      "ArtMesh150",
+      "ArtMesh151",
+      "ArtMesh156",
+      "ArtMesh157",
+      "ArtMesh166",
+      "ArtMesh167",
+      "ArtMesh168"
+    ],
+    "armL": [
+      "ArtMesh16",
+      "ArtMesh135",
+      "ArtMesh10",
+      "ArtMesh21",
+      "ArtMesh158",
+      "ArtMesh159"
+    ],
+    "armR": [
+      "ArtMesh80",
+      "ArtMesh117",
+      "ArtMesh119",
+      "ArtMesh120",
+      "ArtMesh173",
+      "ArtMesh174",
+      "ArtMesh175"
+    ],
+    "legL": [
+      "ArtMesh83",
+      "ArtMesh86",
+      "ArtMesh87",
+      "ArtMesh90",
+      "ArtMesh91",
+      "ArtMesh92",
+      "ArtMesh93",
+      "ArtMesh88",
+      "ArtMesh89",
+      "ArtMesh85"
+    ],
+    "legR": [
+      "ArtMesh94",
+      "ArtMesh97",
+      "ArtMesh98",
+      "ArtMesh101",
+      "ArtMesh104",
+      "ArtMesh105",
+      "ArtMesh95",
+      "ArtMesh100",
+      "ArtMesh99",
+      "ArtMesh103",
+      "ArtMesh102",
+      "ArtMesh152",
+      "ArtMesh153",
+      "ArtMesh154"
+    ],
+    "accessory": [
+      "ArtMesh160",
+      "ArtMesh161"
+    ]
+  },
+  "bySegment": {
+    "crown": [
+      "ArtMesh0",
+      "ArtMesh131",
+      "ArtMesh125",
+      "ArtMesh7",
+      "ArtMesh6"
+    ],
+    "bang": [
+      "ArtMesh1",
+      "ArtMesh2",
+      "ArtMesh3",
+      "ArtMesh5",
+      "ArtMesh8",
+      "ArtMesh9",
+      "ArtMesh128",
+      "ArtMesh32",
+      "ArtMesh33",
+      "ArtMesh36",
+      "ArtMesh37",
+      "ArtMesh40",
+      "ArtMesh41",
+      "ArtMesh46",
+      "ArtMesh47",
+      "ArtMesh48",
+      "ArtMesh49",
+      "ArtMesh51",
+      "ArtMesh52",
+      "ArtMesh53",
+      "ArtMesh54",
+      "ArtMesh66",
+      "ArtMesh67",
+      "ArtMesh25",
+      "ArtMesh30",
+      "ArtMesh26",
+      "ArtMesh68",
+      "ArtMesh42",
+      "ArtMesh43",
+      "ArtMesh44",
+      "ArtMesh70",
+      "ArtMesh35",
+      "ArtMesh34",
+      "ArtMesh55",
+      "ArtMesh56",
+      "ArtMesh",
+      "ArtMesh57",
+      "ArtMesh45",
+      "ArtMesh60"
+    ],
+    "sideHair": [
+      "ArtMesh4",
+      "ArtMesh127",
+      "ArtMesh50",
+      "ArtMesh62",
+      "ArtMesh63",
+      "ArtMesh64",
+      "ArtMesh65",
+      "ArtMesh69",
+      "ArtMesh31",
+      "ArtMesh61",
+      "ArtMesh58",
+      "ArtMesh59"
+    ],
+    "headsetBand": [
+      "ArtMesh126",
+      "ArtMesh130",
+      "ArtMesh141",
+      "ArtMesh129"
+    ],
+    "headsetCup": [
+      "ArtMesh27",
+      "ArtMesh28",
+      "ArtMesh29",
+      "ArtMesh15",
+      "ArtMesh13",
+      "ArtMesh11",
+      "ArtMesh12",
+      "ArtMesh14",
+      "ArtMesh122"
+    ],
+    "wingRoot": [
+      "ArtMesh38",
+      "ArtMesh39"
+    ],
+    "forearm": [
+      "ArtMesh16",
+      "ArtMesh80",
+      "ArtMesh135",
+      "ArtMesh21",
+      "ArtMesh119",
+      "ArtMesh120",
+      "ArtMesh173"
+    ],
+    "ribbon": [
+      "ArtMesh17",
+      "ArtMesh18",
+      "ArtMesh111",
+      "ArtMesh110",
+      "ArtMesh113",
+      "ArtMesh114",
+      "ArtMesh180",
+      "ArtMesh178",
+      "ArtMesh177",
+      "ArtMesh176",
+      "ArtMesh182",
+      "ArtMesh183",
+      "ArtMesh184",
+      "ArtMesh185",
+      "ArtMesh186",
+      "ArtMesh187",
+      "ArtMesh188",
+      "ArtMesh189",
+      "ArtMesh190",
+      "ArtMesh191"
+    ],
+    "crop": [
+      "ArtMesh19",
+      "ArtMesh24",
+      "ArtMesh78",
+      "ArtMesh116",
+      "ArtMesh142",
+      "ArtMesh74",
+      "ArtMesh72",
+      "ArtMesh118",
+      "ArtMesh124",
+      "ArtMesh20",
+      "ArtMesh162",
+      "ArtMesh163",
+      "ArtMesh169",
+      "ArtMesh170"
+    ],
+    "midriff": [
+      "ArtMesh79",
+      "ArtMesh81",
+      "ArtMesh144",
+      "ArtMesh143",
+      "ArtMesh146",
+      "ArtMesh155",
+      "ArtMesh164",
+      "ArtMesh165",
+      "ArtMesh171",
+      "ArtMesh172"
+    ],
+    "waist": [
+      "ArtMesh82",
+      "ArtMesh106",
+      "ArtMesh107",
+      "ArtMesh156",
+      "ArtMesh166"
+    ],
+    "thigh": [
+      "ArtMesh83",
+      "ArtMesh95"
+    ],
+    "hem": [
+      "ArtMesh84",
+      "ArtMesh96",
+      "ArtMesh150",
+      "ArtMesh151",
+      "ArtMesh167",
+      "ArtMesh168"
+    ],
+    "boot": [
+      "ArtMesh86",
+      "ArtMesh87",
+      "ArtMesh90",
+      "ArtMesh92",
+      "ArtMesh93",
+      "ArtMesh97",
+      "ArtMesh98",
+      "ArtMesh101",
+      "ArtMesh104",
+      "ArtMesh105",
+      "ArtMesh103",
+      "ArtMesh102",
+      "ArtMesh88",
+      "ArtMesh89",
+      "ArtMesh85"
+    ],
+    "shin": [
+      "ArtMesh91",
+      "ArtMesh94",
+      "ArtMesh100",
+      "ArtMesh99",
+      "ArtMesh154"
+    ],
+    "eye": [
+      "ArtMesh132",
+      "ArtMesh133",
+      "ArtMesh71"
+    ],
+    "ponytail": [
+      "ArtMesh134",
+      "ArtMesh136"
+    ],
+    "sparkle": [
+      "ArtMesh138",
+      "ArtMesh139",
+      "ArtMesh140",
+      "ArtMesh137",
+      "ArtMesh147",
+      "ArtMesh148"
+    ],
+    "face": [
+      "ArtMesh73",
+      "ArtMesh75"
+    ],
+    "wingFeather": [
+      "ArtMesh115",
+      "ArtMesh123",
+      "ArtMesh121",
+      "ArtMesh112"
+    ],
+    "belt": [
+      "ArtMesh145",
+      "ArtMesh149",
+      "ArtMesh157"
+    ],
+    "mouth": [
+      "ArtMesh22",
+      "ArtMesh23"
+    ],
+    "upperArm": [
+      "ArtMesh10",
+      "ArtMesh117"
+    ],
+    "strap": [
+      "ArtMesh152",
+      "ArtMesh153"
+    ],
+    "glove": [
+      "ArtMesh158",
+      "ArtMesh159",
+      "ArtMesh174",
+      "ArtMesh175"
+    ],
+    "accessory": [
+      "ArtMesh160",
+      "ArtMesh161"
+    ]
+  },
+  "byChain": {
+    "hair": [
+      "ArtMesh0",
+      "ArtMesh1",
+      "ArtMesh2",
+      "ArtMesh3",
+      "ArtMesh4",
+      "ArtMesh5",
+      "ArtMesh8",
+      "ArtMesh9",
+      "ArtMesh127",
+      "ArtMesh128",
+      "ArtMesh32",
+      "ArtMesh33",
+      "ArtMesh36",
+      "ArtMesh37",
+      "ArtMesh40",
+      "ArtMesh41",
+      "ArtMesh46",
+      "ArtMesh47",
+      "ArtMesh48",
+      "ArtMesh49",
+      "ArtMesh50",
+      "ArtMesh51",
+      "ArtMesh52",
+      "ArtMesh53",
+      "ArtMesh54",
+      "ArtMesh62",
+      "ArtMesh63",
+      "ArtMesh64",
+      "ArtMesh65",
+      "ArtMesh66",
+      "ArtMesh67",
+      "ArtMesh69",
+      "ArtMesh134",
+      "ArtMesh25",
+      "ArtMesh30",
+      "ArtMesh26",
+      "ArtMesh131",
+      "ArtMesh125",
+      "ArtMesh7",
+      "ArtMesh68",
+      "ArtMesh42",
+      "ArtMesh43",
+      "ArtMesh44",
+      "ArtMesh6",
+      "ArtMesh31",
+      "ArtMesh70",
+      "ArtMesh136",
+      "ArtMesh35",
+      "ArtMesh34",
+      "ArtMesh55",
+      "ArtMesh56",
+      "ArtMesh",
+      "ArtMesh61",
+      "ArtMesh57",
+      "ArtMesh45",
+      "ArtMesh58",
+      "ArtMesh59",
+      "ArtMesh60",
+      "ArtMesh180",
+      "ArtMesh178",
+      "ArtMesh177",
+      "ArtMesh176",
+      "ArtMesh182",
+      "ArtMesh183",
+      "ArtMesh184",
+      "ArtMesh187",
+      "ArtMesh188",
+      "ArtMesh189"
+    ],
+    "headset": [
+      "ArtMesh126",
+      "ArtMesh130",
+      "ArtMesh27",
+      "ArtMesh28",
+      "ArtMesh29",
+      "ArtMesh141",
+      "ArtMesh129",
+      "ArtMesh15",
+      "ArtMesh13",
+      "ArtMesh11",
+      "ArtMesh12",
+      "ArtMesh14",
+      "ArtMesh122"
+    ],
+    "wingR": [
+      "ArtMesh38",
+      "ArtMesh39",
+      "ArtMesh111",
+      "ArtMesh115",
+      "ArtMesh110",
+      "ArtMesh123",
+      "ArtMesh121",
+      "ArtMesh112",
+      "ArtMesh113",
+      "ArtMesh114",
+      "ArtMesh185",
+      "ArtMesh186",
+      "ArtMesh190",
+      "ArtMesh191"
+    ],
+    "armL": [
+      "ArtMesh16",
+      "ArtMesh135",
+      "ArtMesh10",
+      "ArtMesh21",
+      "ArtMesh158",
+      "ArtMesh159"
+    ],
+    "wingL": [
+      "ArtMesh17",
+      "ArtMesh18"
+    ],
+    "spine": [
+      "ArtMesh19",
+      "ArtMesh24",
+      "ArtMesh78",
+      "ArtMesh79",
+      "ArtMesh81",
+      "ArtMesh116",
+      "ArtMesh144",
+      "ArtMesh143",
+      "ArtMesh142",
+      "ArtMesh74",
+      "ArtMesh72",
+      "ArtMesh118",
+      "ArtMesh124",
+      "ArtMesh146",
+      "ArtMesh20",
+      "ArtMesh155",
+      "ArtMesh162",
+      "ArtMesh163",
+      "ArtMesh164",
+      "ArtMesh165",
+      "ArtMesh169",
+      "ArtMesh170",
+      "ArtMesh171",
+      "ArtMesh172"
+    ],
+    "armR": [
+      "ArtMesh80",
+      "ArtMesh117",
+      "ArtMesh119",
+      "ArtMesh120",
+      "ArtMesh173",
+      "ArtMesh174",
+      "ArtMesh175"
+    ],
+    "skirt": [
+      "ArtMesh82",
+      "ArtMesh84",
+      "ArtMesh96",
+      "ArtMesh106",
+      "ArtMesh107",
+      "ArtMesh145",
+      "ArtMesh149",
+      "ArtMesh150",
+      "ArtMesh151",
+      "ArtMesh156",
+      "ArtMesh157",
+      "ArtMesh166",
+      "ArtMesh167",
+      "ArtMesh168"
+    ],
+    "legL": [
+      "ArtMesh83",
+      "ArtMesh86",
+      "ArtMesh87",
+      "ArtMesh90",
+      "ArtMesh91",
+      "ArtMesh92",
+      "ArtMesh93",
+      "ArtMesh88",
+      "ArtMesh89",
+      "ArtMesh85"
+    ],
+    "legR": [
+      "ArtMesh94",
+      "ArtMesh97",
+      "ArtMesh98",
+      "ArtMesh101",
+      "ArtMesh104",
+      "ArtMesh105",
+      "ArtMesh95",
+      "ArtMesh100",
+      "ArtMesh99",
+      "ArtMesh103",
+      "ArtMesh102",
+      "ArtMesh152",
+      "ArtMesh153",
+      "ArtMesh154"
+    ],
+    "head": [
+      "ArtMesh132",
+      "ArtMesh133",
+      "ArtMesh73",
+      "ArtMesh71",
+      "ArtMesh75",
+      "ArtMesh22",
+      "ArtMesh23"
+    ],
+    "fx": [
+      "ArtMesh138",
+      "ArtMesh139",
+      "ArtMesh140",
+      "ArtMesh137",
+      "ArtMesh147",
+      "ArtMesh148"
+    ]
+  },
+  "byParameter": {
+    "ParamHairFront": [
+      "ArtMesh0",
+      "ArtMesh1",
+      "ArtMesh2",
+      "ArtMesh3",
+      "ArtMesh5",
+      "ArtMesh8",
+      "ArtMesh9",
+      "ArtMesh128",
+      "ArtMesh32",
+      "ArtMesh33",
+      "ArtMesh36",
+      "ArtMesh37",
+      "ArtMesh40",
+      "ArtMesh41",
+      "ArtMesh46",
+      "ArtMesh47",
+      "ArtMesh48",
+      "ArtMesh49",
+      "ArtMesh51",
+      "ArtMesh52",
+      "ArtMesh53",
+      "ArtMesh54",
+      "ArtMesh66",
+      "ArtMesh67",
+      "ArtMesh25",
+      "ArtMesh30",
+      "ArtMesh26",
+      "ArtMesh131",
+      "ArtMesh125",
+      "ArtMesh7",
+      "ArtMesh68",
+      "ArtMesh42",
+      "ArtMesh43",
+      "ArtMesh44",
+      "ArtMesh6",
+      "ArtMesh70",
+      "ArtMesh35",
+      "ArtMesh34",
+      "ArtMesh55",
+      "ArtMesh56",
+      "ArtMesh",
+      "ArtMesh57",
+      "ArtMesh45",
+      "ArtMesh60"
+    ],
+    "ParamHairSide": [
+      "ArtMesh0",
+      "ArtMesh1",
+      "ArtMesh2",
+      "ArtMesh3",
+      "ArtMesh4",
+      "ArtMesh5",
+      "ArtMesh8",
+      "ArtMesh9",
+      "ArtMesh127",
+      "ArtMesh128",
+      "ArtMesh32",
+      "ArtMesh33",
+      "ArtMesh36",
+      "ArtMesh37",
+      "ArtMesh40",
+      "ArtMesh41",
+      "ArtMesh46",
+      "ArtMesh47",
+      "ArtMesh48",
+      "ArtMesh49",
+      "ArtMesh50",
+      "ArtMesh51",
+      "ArtMesh52",
+      "ArtMesh53",
+      "ArtMesh54",
+      "ArtMesh62",
+      "ArtMesh63",
+      "ArtMesh64",
+      "ArtMesh65",
+      "ArtMesh66",
+      "ArtMesh67",
+      "ArtMesh69",
+      "ArtMesh25",
+      "ArtMesh30",
+      "ArtMesh26",
+      "ArtMesh131",
+      "ArtMesh125",
+      "ArtMesh7",
+      "ArtMesh68",
+      "ArtMesh42",
+      "ArtMesh43",
+      "ArtMesh44",
+      "ArtMesh6",
+      "ArtMesh31",
+      "ArtMesh70",
+      "ArtMesh35",
+      "ArtMesh34",
+      "ArtMesh55",
+      "ArtMesh56",
+      "ArtMesh",
+      "ArtMesh61",
+      "ArtMesh57",
+      "ArtMesh45",
+      "ArtMesh58",
+      "ArtMesh59",
+      "ArtMesh60"
+    ],
+    "HairSideShake": [
+      "ArtMesh4",
+      "ArtMesh127",
+      "ArtMesh50",
+      "ArtMesh62",
+      "ArtMesh63",
+      "ArtMesh64",
+      "ArtMesh65",
+      "ArtMesh69",
+      "ArtMesh31",
+      "ArtMesh61",
+      "ArtMesh58",
+      "ArtMesh59"
+    ],
+    "ParamAngleX": [
+      "ArtMesh126",
+      "ArtMesh130",
+      "ArtMesh27",
+      "ArtMesh28",
+      "ArtMesh29",
+      "ArtMesh141",
+      "ArtMesh73",
+      "ArtMesh129",
+      "ArtMesh75",
+      "ArtMesh15",
+      "ArtMesh13",
+      "ArtMesh11",
+      "ArtMesh12",
+      "ArtMesh14",
+      "ArtMesh122"
+    ],
+    "ParamAngleY": [
+      "ArtMesh126",
+      "ArtMesh130",
+      "ArtMesh27",
+      "ArtMesh28",
+      "ArtMesh29",
+      "ArtMesh141",
+      "ArtMesh73",
+      "ArtMesh129",
+      "ArtMesh75",
+      "ArtMesh15",
+      "ArtMesh13",
+      "ArtMesh11",
+      "ArtMesh12",
+      "ArtMesh14",
+      "ArtMesh122"
+    ],
+    "ParamAngleZ": [
+      "ArtMesh126",
+      "ArtMesh130",
+      "ArtMesh27",
+      "ArtMesh28",
+      "ArtMesh29",
+      "ArtMesh141",
+      "ArtMesh73",
+      "ArtMesh129",
+      "ArtMesh75",
+      "ArtMesh15",
+      "ArtMesh13",
+      "ArtMesh11",
+      "ArtMesh12",
+      "ArtMesh14",
+      "ArtMesh122"
+    ],
+    "ParamFlapping3": [
+      "ArtMesh38",
+      "ArtMesh39",
+      "ArtMesh17",
+      "ArtMesh18",
+      "ArtMesh111",
+      "ArtMesh110",
+      "ArtMesh113",
+      "ArtMesh114",
+      "ArtMesh180",
+      "ArtMesh178",
+      "ArtMesh177",
+      "ArtMesh176",
+      "ArtMesh182",
+      "ArtMesh183",
+      "ArtMesh184",
+      "ArtMesh185",
+      "ArtMesh186",
+      "ArtMesh187",
+      "ArtMesh188",
+      "ArtMesh189",
+      "ArtMesh190",
+      "ArtMesh191"
+    ],
+    "ParamFlapping7": [
+      "ArtMesh38",
+      "ArtMesh39"
+    ],
+    "ParamArmL2": [
+      "ArtMesh16",
+      "ArtMesh135",
+      "ArtMesh21"
+    ],
+    "ParamSleeveL": [
+      "ArtMesh16",
+      "ArtMesh135",
+      "ArtMesh21"
+    ],
+    "ParamFlapping4": [
+      "ArtMesh17",
+      "ArtMesh18",
+      "ArtMesh111",
+      "ArtMesh115",
+      "ArtMesh110",
+      "ArtMesh123",
+      "ArtMesh121",
+      "ArtMesh112",
+      "ArtMesh113",
+      "ArtMesh114",
+      "ArtMesh180",
+      "ArtMesh178",
+      "ArtMesh177",
+      "ArtMesh176",
+      "ArtMesh182",
+      "ArtMesh183",
+      "ArtMesh184",
+      "ArtMesh185",
+      "ArtMesh186",
+      "ArtMesh187",
+      "ArtMesh188",
+      "ArtMesh189",
+      "ArtMesh190",
+      "ArtMesh191"
+    ],
+    "ParamBreath": [
+      "ArtMesh19",
+      "ArtMesh24",
+      "ArtMesh78",
+      "ArtMesh79",
+      "ArtMesh81",
+      "ArtMesh138",
+      "ArtMesh139",
+      "ArtMesh140",
+      "ArtMesh137",
+      "ArtMesh116",
+      "ArtMesh144",
+      "ArtMesh143",
+      "ArtMesh142",
+      "ArtMesh74",
+      "ArtMesh72",
+      "ArtMesh118",
+      "ArtMesh124",
+      "ArtMesh147",
+      "ArtMesh146",
+      "ArtMesh20",
+      "ArtMesh148",
+      "ArtMesh155",
+      "ArtMesh162",
+      "ArtMesh163",
+      "ArtMesh164",
+      "ArtMesh165",
+      "ArtMesh169",
+      "ArtMesh170",
+      "ArtMesh171",
+      "ArtMesh172"
+    ],
+    "ParamBodyAngleX": [
+      "ArtMesh19",
+      "ArtMesh24",
+      "ArtMesh78",
+      "ArtMesh79",
+      "ArtMesh81",
+      "ArtMesh82",
+      "ArtMesh84",
+      "ArtMesh96",
+      "ArtMesh106",
+      "ArtMesh107",
+      "ArtMesh116",
+      "ArtMesh145",
+      "ArtMesh144",
+      "ArtMesh143",
+      "ArtMesh142",
+      "ArtMesh74",
+      "ArtMesh72",
+      "ArtMesh118",
+      "ArtMesh124",
+      "ArtMesh146",
+      "ArtMesh20",
+      "ArtMesh149",
+      "ArtMesh150",
+      "ArtMesh151",
+      "ArtMesh155",
+      "ArtMesh156",
+      "ArtMesh157",
+      "ArtMesh162",
+      "ArtMesh163",
+      "ArtMesh164",
+      "ArtMesh165",
+      "ArtMesh166",
+      "ArtMesh167",
+      "ArtMesh168",
+      "ArtMesh169",
+      "ArtMesh170",
+      "ArtMesh171",
+      "ArtMesh172"
+    ],
+    "ParamBodyAngleZ": [
+      "ArtMesh19",
+      "ArtMesh24",
+      "ArtMesh78",
+      "ArtMesh79",
+      "ArtMesh81",
+      "ArtMesh82",
+      "ArtMesh84",
+      "ArtMesh96",
+      "ArtMesh106",
+      "ArtMesh107",
+      "ArtMesh116",
+      "ArtMesh145",
+      "ArtMesh144",
+      "ArtMesh143",
+      "ArtMesh142",
+      "ArtMesh74",
+      "ArtMesh72",
+      "ArtMesh118",
+      "ArtMesh124",
+      "ArtMesh146",
+      "ArtMesh20",
+      "ArtMesh149",
+      "ArtMesh150",
+      "ArtMesh151",
+      "ArtMesh155",
+      "ArtMesh156",
+      "ArtMesh157",
+      "ArtMesh162",
+      "ArtMesh163",
+      "ArtMesh164",
+      "ArtMesh165",
+      "ArtMesh166",
+      "ArtMesh167",
+      "ArtMesh168",
+      "ArtMesh169",
+      "ArtMesh170",
+      "ArtMesh171",
+      "ArtMesh172"
+    ],
+    "ParamArmR2": [
+      "ArtMesh80",
+      "ArtMesh119",
+      "ArtMesh120",
+      "ArtMesh173"
+    ],
+    "ParamSleeve": [
+      "ArtMesh80",
+      "ArtMesh119",
+      "ArtMesh120",
+      "ArtMesh173"
+    ],
+    "ParamCloth1": [
+      "ArtMesh82",
+      "ArtMesh84",
+      "ArtMesh96",
+      "ArtMesh106",
+      "ArtMesh107",
+      "ArtMesh145",
+      "ArtMesh149",
+      "ArtMesh150",
+      "ArtMesh151",
+      "ArtMesh156",
+      "ArtMesh157",
+      "ArtMesh166",
+      "ArtMesh167",
+      "ArtMesh168"
+    ],
+    "ParamCloth2": [
+      "ArtMesh82",
+      "ArtMesh84",
+      "ArtMesh96",
+      "ArtMesh106",
+      "ArtMesh107",
+      "ArtMesh145",
+      "ArtMesh149",
+      "ArtMesh150",
+      "ArtMesh151",
+      "ArtMesh156",
+      "ArtMesh157",
+      "ArtMesh166",
+      "ArtMesh167",
+      "ArtMesh168"
+    ],
+    "ParamLegL1X": [
+      "ArtMesh83"
+    ],
+    "ParamLegL1Z": [
+      "ArtMesh83"
+    ],
+    "ParamLegL3X": [
+      "ArtMesh86",
+      "ArtMesh87",
+      "ArtMesh90",
+      "ArtMesh92",
+      "ArtMesh93",
+      "ArtMesh88",
+      "ArtMesh89",
+      "ArtMesh85"
+    ],
+    "ParamLegL3Z": [
+      "ArtMesh86",
+      "ArtMesh87",
+      "ArtMesh90",
+      "ArtMesh92",
+      "ArtMesh93",
+      "ArtMesh88",
+      "ArtMesh89",
+      "ArtMesh85"
+    ],
+    "ParamLegL2X": [
+      "ArtMesh91"
+    ],
+    "ParamLegL2Z": [
+      "ArtMesh91"
+    ],
+    "ParamLegR2X": [
+      "ArtMesh94",
+      "ArtMesh100",
+      "ArtMesh99",
+      "ArtMesh154"
+    ],
+    "ParamLegR2": [
+      "ArtMesh94",
+      "ArtMesh100",
+      "ArtMesh99",
+      "ArtMesh154"
+    ],
+    "ParamLegR3X": [
+      "ArtMesh97",
+      "ArtMesh98",
+      "ArtMesh101",
+      "ArtMesh104",
+      "ArtMesh105",
+      "ArtMesh103",
+      "ArtMesh102"
+    ],
+    "ParamLegR3Z": [
+      "ArtMesh97",
+      "ArtMesh98",
+      "ArtMesh101",
+      "ArtMesh104",
+      "ArtMesh105",
+      "ArtMesh103",
+      "ArtMesh102"
+    ],
+    "ParamEyeLOpen": [
+      "ArtMesh132",
+      "ArtMesh71"
+    ],
+    "ParamEyeLSmile": [
+      "ArtMesh132"
+    ],
+    "ParamEyeBallX": [
+      "ArtMesh132",
+      "ArtMesh133",
+      "ArtMesh71"
+    ],
+    "ParamEyeBallY": [
+      "ArtMesh132",
+      "ArtMesh133",
+      "ArtMesh71"
+    ],
+    "ParamEyeROpen": [
+      "ArtMesh133",
+      "ArtMesh71"
+    ],
+    "ParamEyeRSmile": [
+      "ArtMesh133"
+    ],
+    "ParamHairBack": [
+      "ArtMesh134",
+      "ArtMesh136"
+    ],
+    "ParamHairTail": [
+      "ArtMesh134",
+      "ArtMesh136"
+    ],
+    "HairBackShake": [
+      "ArtMesh134",
+      "ArtMesh136"
+    ],
+    "ParamLegR1X": [
+      "ArtMesh95"
+    ],
+    "ParamLegR1Z": [
+      "ArtMesh95"
+    ],
+    "ParamFlapping8": [
+      "ArtMesh115",
+      "ArtMesh123",
+      "ArtMesh121",
+      "ArtMesh112"
+    ],
+    "ParamMouthForm": [
+      "ArtMesh22",
+      "ArtMesh23"
+    ],
+    "ParamMouthOpenY": [
+      "ArtMesh22",
+      "ArtMesh23"
+    ],
+    "ParamArmL1": [
+      "ArtMesh10"
+    ],
+    "ParamArmR1": [
+      "ArtMesh117"
+    ],
+    "ParamLegRibbonR1": [
+      "ArtMesh152",
+      "ArtMesh153"
+    ],
+    "ParamLegRibbonR2": [
+      "ArtMesh152",
+      "ArtMesh153"
+    ],
+    "ParamArmL3": [
+      "ArtMesh158",
+      "ArtMesh159"
+    ],
+    "ParamSleeveL2": [
+      "ArtMesh158",
+      "ArtMesh159"
+    ],
+    "ParamArmR3": [
+      "ArtMesh174",
+      "ArtMesh175"
+    ],
+    "ParamSleeve2": [
+      "ArtMesh174",
+      "ArtMesh175"
+    ]
+  }
+}

@@ -91,13 +91,23 @@ export {
   resolveMelodyPose,
   serializeMelodyPoseMap,
   MELODY_AVATAR_MESH_MAP,
+  MESH_TILE_MAP_VERSION,
+  TILE_SEGMENTS,
+  buildIdentityTileMap,
+  tileForDrawable,
+  tilesForChain,
+  tilesForParameter,
+  serializeMelodyTileMap,
   mesh3dGroupsForRegion,
   live2dRegionsForMesh3d,
   resolveAvatarMeshMap,
   type MelodyPose,
   type MelodyPoseId,
   type IdentityAvatarMeshMap,
+  type IdentityTileMap,
   type MelodyMesh3dGroup,
+  type MeshTile,
+  type TileSegment,
 } from "./automesh";
 
 export {

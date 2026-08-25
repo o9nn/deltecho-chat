@@ -68,6 +68,25 @@ export {
 } from "./avatar-mesh-map";
 
 export {
+  MESH_TILE_MAP_VERSION,
+  TILE_SEGMENTS,
+  TILE_CHAINS,
+  MELODY_STILL_PATH,
+  MELODY_STILL_MIDLINE,
+  KNOWN_STRAP_IDS,
+  buildIdentityTileMap,
+  tileForDrawable,
+  tilesForChain,
+  tilesForParameter,
+  serializeMelodyTileMap,
+  type MeshTile,
+  type IdentityTileMap,
+  type TileSegment,
+  type TileChain,
+  type TileLaterality,
+} from "./tile-map";
+
+export {
   normalizeDrawableId,
   drawableMatchesHints,
   boundsCentroid,

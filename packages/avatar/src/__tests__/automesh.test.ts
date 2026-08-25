@@ -419,6 +419,7 @@ describe("identity physics retarget", () => {
     );
     expect(existsSync(join(models, "melody/mesh-map.json"))).toBe(true);
     expect(existsSync(join(models, "melody/pose-map.json"))).toBe(true);
+    expect(existsSync(join(models, "melody/tile-map.json"))).toBe(true);
     expect(existsSync(join(models, "melody/avatar-mesh-map.json"))).toBe(
       true,
     );

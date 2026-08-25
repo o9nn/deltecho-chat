@@ -125,6 +125,8 @@ describe("Melody 2D / 3D avatar mesh map", () => {
     );
     expect(shipped.identity).toBe("melody");
     expect(shipped.live2d.moc3).toBe("models/melody/melody_t03.moc3");
+    expect(shipped.live2d.tileMap).toBe("models/melody/tile-map.json");
+    expect(shipped.live2d.poseMap).toBe("models/melody/pose-map.json");
     expect(shipped.mesh3d.groups).toHaveLength(MELODY_MESH3D_GROUPS.length);
     expect(
       shipped.live2dTo3d.find((row: { region: string }) => row.region === "wings")

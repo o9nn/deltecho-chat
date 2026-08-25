@@ -67,6 +67,8 @@ export type IdentityAvatarMeshMap = {
     readonly moc3: string;
     readonly texture: string;
     readonly meshMap: string;
+    readonly poseMap: string;
+    readonly tileMap: string;
     readonly physics: string;
   };
   readonly mesh3d: {
@@ -287,6 +289,8 @@ export const MELODY_AVATAR_MESH_MAP: IdentityAvatarMeshMap = {
     moc3: "models/melody/melody_t03.moc3",
     texture: "models/melody/textures/texture_00.png",
     meshMap: "models/melody/mesh-map.json",
+    poseMap: "models/melody/pose-map.json",
+    tileMap: "models/melody/tile-map.json",
     physics: "models/melody/melody_t03.physics3.json",
   },
   mesh3d: {
