@@ -14,6 +14,7 @@ describe("AutomeshStudio", () => {
 
     expect(screen.getByTestId("automesh-studio")).toBeInTheDocument();
     expect(screen.getByTestId("automesh-train")).toBeInTheDocument();
+    expect(screen.getByTestId("automesh-load-melody")).toBeInTheDocument();
   });
 
   it("asks for a live mesh when inspect runs without a controller", () => {

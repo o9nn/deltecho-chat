@@ -1,4 +1,5 @@
 import { cloneMelodyLandmarks } from "./landmarks";
+import { MELODY_PARAMETER_PROFILE } from "./parameters";
 import { assignAtlasFromDrawables } from "./inspect";
 import { mapPoint } from "./warp";
 import {
@@ -111,6 +112,10 @@ export function trainAutomeshMapping(input: {
     landmarks,
     residual: mappingResidual(landmarks),
     trainedAt: Date.now(),
+    parameters:
+      (input.identity ?? "melody") === "melody"
+        ? { ...MELODY_PARAMETER_PROFILE }
+        : undefined,
   };
 }
 

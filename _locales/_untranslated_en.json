@@ -164,6 +164,9 @@
   "automesh_load": {
     "message": "Load reference"
   },
+  "automesh_load_melody": {
+    "message": "Use shipped Melody still"
+  },
   "automesh_inspect": {
     "message": "Inspect mesh"
   },

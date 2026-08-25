@@ -72,6 +72,8 @@ interface Live2DModel {
       getPartCount?: () => number;
       getPartId?: (index: number) => unknown;
       getDrawableVertexUvs?: (index: number) => ArrayLike<number>;
+      getDrawableVertexPositions?: (index: number) => ArrayLike<number>;
+      getDrawableVertexIndices?: (index: number) => ArrayLike<number>;
       getModel?: () => {
         parts?: {
           count: number;
@@ -80,6 +82,8 @@ interface Live2DModel {
         };
         drawables?: {
           vertexUvs?: Array<ArrayLike<number>>;
+          vertexPositions?: Array<ArrayLike<number>>;
+          indices?: Array<ArrayLike<number>>;
         };
       };
     };
@@ -1305,7 +1309,6 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     }
     const ids = internal.getDrawableIDs();
     const core = internal.coreModel;
-    const nativeUvs = core.getModel?.()?.drawables?.vertexUvs;
     const inspected: AutomeshDrawable[] = [];
     const box = { x: 0, y: 0, width: 0, height: 0 };
     for (let index = 0; index < ids.length; index++) {
@@ -1315,16 +1318,29 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       } catch {
         continue;
       }
+      const native = core.getModel?.()?.drawables;
       let uvs: ArrayLike<number> | undefined;
+      let positions: ArrayLike<number> | undefined;
+      let indices: ArrayLike<number> | undefined;
       try {
-        uvs = core.getDrawableVertexUvs?.(index) ?? nativeUvs?.[index];
+        uvs = core.getDrawableVertexUvs?.(index) ?? native?.vertexUvs?.[index];
+        positions =
+          core.getDrawableVertexPositions?.(index) ??
+          native?.vertexPositions?.[index];
+        indices =
+          core.getDrawableVertexIndices?.(index) ?? native?.indices?.[index];
       } catch {
-        uvs = nativeUvs?.[index];
+        uvs = native?.vertexUvs?.[index];
+        positions = native?.vertexPositions?.[index];
+        indices = native?.indices?.[index];
       }
       inspected.push({
         id: ids[index] ?? `drawable-${index}`,
         bounds: { ...bounds },
         uvCentroid: uvs ? uvCentroid(uvs) : undefined,
+        positions: positions ? Array.from(positions) : undefined,
+        uvs: uvs ? Array.from(uvs) : undefined,
+        indices: indices ? Array.from(indices) : undefined,
       });
     }
     return inspected;
@@ -1346,6 +1362,15 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       return true;
     } catch {
       return false;
+    }
+  }
+
+  applyParameterProfile(profile: Record<string, number> | null | undefined): void {
+    if (!profile) return;
+    for (const [paramId, value] of Object.entries(profile)) {
+      if (typeof value === "number") {
+        this.setParameter(paramId, value);
+      }
     }
   }
 

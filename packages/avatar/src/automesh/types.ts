@@ -27,6 +27,14 @@ export const AUTOMESH_LANDMARK_IDS = [
   "earL",
   "earR",
   "collar",
+  "shoulderL",
+  "shoulderR",
+  "handL",
+  "handR",
+  "hipL",
+  "hipR",
+  "footL",
+  "footR",
 ] as const;
 
 export type AutomeshLandmarkId = (typeof AUTOMESH_LANDMARK_IDS)[number];
@@ -46,6 +54,12 @@ export interface AutomeshDrawable {
   id: string;
   bounds: { x: number; y: number; width: number; height: number };
   uvCentroid?: Point2;
+  /** Interleaved model-space xy vertex positions. */
+  positions?: number[];
+  /** Interleaved atlas UV pairs. */
+  uvs?: number[];
+  /** Triangle indices into positions/uvs. */
+  indices?: number[];
 }
 
 export interface AutomeshMapping {
@@ -54,6 +68,8 @@ export interface AutomeshMapping {
   landmarks: AutomeshLandmark[];
   residual: number;
   trainedAt: number;
+  /** Cubism parameter offsets applied with the remapped atlas. */
+  parameters?: Record<string, number>;
 }
 
 export interface AutomeshRaster {

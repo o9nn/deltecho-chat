@@ -1,6 +1,7 @@
 import React, { useMemo, useRef, useState } from "react";
 import {
   cloneMelodyLandmarks,
+  projectPhotoOntoAtlas,
   rasterToDataUrl,
   trainAutomeshMapping,
   warpRasterToAtlas,
@@ -51,13 +52,20 @@ export function AutomeshStudio() {
     );
   };
 
-  const loadFile = (file: File) => {
-    const url = URL.createObjectURL(file);
+  const loadImageUrl = (url: string) => {
     setImageUrl(url);
     const image = new Image();
     image.onload = () => setImageEl(image);
     image.src = url;
     setStatus(tx("automesh_status_loaded"));
+  };
+
+  const loadFile = (file: File) => {
+    loadImageUrl(URL.createObjectURL(file));
+  };
+
+  const loadShippedMelody = () => {
+    loadImageUrl("./images/avatar/identities/melody.webp");
   };
 
   const inspectLiveMesh = () => {
@@ -86,18 +94,30 @@ export function AutomeshStudio() {
     }
     setBusy(true);
     try {
+      const drawables = avatar?.controller?.inspectMesh?.() ?? [];
       const mapping = trainAutomeshMapping({
         identity: "melody",
         landmarks,
-        drawables: avatar?.controller?.inspectMesh?.(),
+        drawables,
       });
       const raster = imageToRaster(imageEl);
-      const atlas = warpRasterToAtlas(
-        raster,
-        mapping.landmarks,
-        ATLAS_SIZE,
-        ATLAS_SIZE,
+      const hasTriangles = drawables.some(
+        (item) => (item.indices?.length ?? 0) >= 3,
       );
+      const atlas = hasTriangles
+        ? projectPhotoOntoAtlas({
+            photo: raster,
+            drawables,
+            landmarks: mapping.landmarks,
+            atlasWidth: ATLAS_SIZE,
+            atlasHeight: ATLAS_SIZE,
+          })
+        : warpRasterToAtlas(
+            raster,
+            mapping.landmarks,
+            ATLAS_SIZE,
+            ATLAS_SIZE,
+          );
       const atlasUrl = rasterToDataUrl(atlas);
       avatar?.updateConfig({
         identity: "melody",
@@ -107,6 +127,7 @@ export function AutomeshStudio() {
         automeshAtlas: atlasUrl,
       });
       const applied = await avatar?.controller?.applyTextureOverlay?.(atlasUrl);
+      avatar?.controller?.applyParameterProfile?.(mapping.parameters ?? null);
       setLandmarks(mapping.landmarks);
       setStatus(
         applied
@@ -144,6 +165,13 @@ export function AutomeshStudio() {
           onClick={() => fileRef.current?.click()}
         >
           {tx("automesh_load")}
+        </button>
+        <button
+          type="button"
+          data-testid="automesh-load-melody"
+          onClick={loadShippedMelody}
+        >
+          {tx("automesh_load_melody")}
         </button>
         <button
           type="button"

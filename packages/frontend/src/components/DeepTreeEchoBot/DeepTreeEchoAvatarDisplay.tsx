@@ -445,6 +445,9 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
       const atlas = avatarContext?.state.config.automeshAtlas;
       if (atlas && avatarContext?.state.config.identity === "melody") {
         void controller.applyTextureOverlay?.(atlas);
+        controller.applyParameterProfile?.(
+          avatarContext.state.config.automeshMapping?.parameters ?? null,
+        );
       }
       onReady?.();
     },
@@ -455,6 +458,9 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
     const atlas = avatarContext?.state.config.automeshAtlas;
     if (!atlas || avatarContext?.state.config.identity !== "melody") return;
     void avatarController.current?.applyTextureOverlay?.(atlas);
+    avatarController.current?.applyParameterProfile?.(
+      avatarContext.state.config.automeshMapping?.parameters ?? null,
+    );
   }, [
     avatarContext?.state.config.automeshAtlas,
     avatarContext?.state.config.identity,

@@ -12,6 +12,7 @@ export {
 
 export {
   MELODY_AUTOMESH_LANDMARKS,
+  MELODY_PORTRAIT_LANDMARKS,
   cloneMelodyLandmarks,
   isAutomeshLandmarkId,
   clamp01,
@@ -19,6 +20,17 @@ export {
 } from "./landmarks";
 
 export { mapPoint, warpRasterToAtlas, rasterToDataUrl } from "./warp";
+
+export {
+  projectPhotoOntoAtlas,
+  fitPhotoToMesh,
+  modelDestForLandmark,
+} from "./project";
+
+export {
+  MELODY_PARAMETER_PROFILE,
+  mergeParameterProfile,
+} from "./parameters";
 
 export {
   normalizeDrawableId,

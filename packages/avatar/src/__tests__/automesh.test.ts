@@ -10,9 +10,11 @@ import {
   mappingResidual,
   parseCubismEditorMessage,
   resolveAutomeshMapping,
+  projectPhotoOntoAtlas,
   trainAutomeshMapping,
   uvCentroid,
   warpRasterToAtlas,
+  MELODY_PARAMETER_PROFILE,
 } from "../automesh";
 
 describe("automesh mapping", () => {
@@ -88,11 +90,48 @@ describe("automesh mapping", () => {
   it("trains a persistable Melody mapping", () => {
     const mapping = trainAutomeshMapping({ identity: "melody" });
     expect(mapping.identity).toBe("melody");
-    expect(mapping.landmarks).toHaveLength(15);
+    expect(mapping.landmarks.length).toBeGreaterThanOrEqual(15);
+    expect(mapping.parameters?.ParamMouthForm).toBe(
+      MELODY_PARAMETER_PROFILE.ParamMouthForm,
+    );
     expect(mapping.residual).toBeGreaterThanOrEqual(0);
     expect(resolveAutomeshMapping(mapping)?.identity).toBe("melody");
     expect(resolveAutomeshMapping({ version: 2 })).toBeNull();
     expect(mappingResidual(mapping.landmarks)).toBeCloseTo(mapping.residual, 5);
+  });
+
+  it("reprojects a photo through drawable triangles onto atlas islands", () => {
+    const photo = {
+      width: 2,
+      height: 2,
+      data: new Uint8ClampedArray([
+        200, 10, 10, 255, 200, 10, 10, 255, 200, 10, 10, 255, 200, 10, 10, 255,
+      ]),
+    };
+    const landmarks = cloneMelodyLandmarks().map((item) =>
+      item.id === "mouth"
+        ? { ...item, source: { x: 0.5, y: 0.5 } }
+        : item,
+    );
+    const drawables = [
+      {
+        id: "PartMouth",
+        bounds: { x: 0, y: 0, width: 1, height: 1 },
+        positions: [0, 0, 1, 0, 0, 1],
+        uvs: [0, 0, 1, 0, 0, 1],
+        indices: [0, 1, 2],
+      },
+    ];
+    const atlas = projectPhotoOntoAtlas({
+      photo,
+      drawables,
+      landmarks,
+      atlasWidth: 4,
+      atlasHeight: 4,
+    });
+    const index = (1 * 4 + 1) * 4;
+    expect(atlas.data[index]).toBeGreaterThan(100);
+    expect(atlas.data[index + 3]).toBe(255);
   });
 });
 
