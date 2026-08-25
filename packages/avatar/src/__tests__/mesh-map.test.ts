@@ -1,10 +1,13 @@
 import {
+  IDENTITY_MODEL3_PATHS,
   KNOWN_CHEST_CLOTH_IDS,
   KNOWN_WING_IDS,
   REGION_MOTION_BINDINGS,
   buildIdentityMeshMap,
   classifyDrawable,
   figureCentroidFromPositions,
+  identityCubismStem,
+  identityModel3Path,
   isEnvironmentUv,
   regionCounts,
   regionForDrawable,
@@ -111,7 +114,7 @@ describe("mesh-map region classifier", () => {
   it("builds a durable identity index with motion bindings", () => {
     const meshMap = buildIdentityMeshMap({
       identity: "melody",
-      sourceModel: "models/miara/miara_pro_t03.model3.json",
+      sourceModel: IDENTITY_MODEL3_PATHS.melody,
       figure: { x: -0.24, y: -0.57, w: 0.55, h: 1.23 },
       drawables: [
         {
@@ -131,6 +134,11 @@ describe("mesh-map region classifier", () => {
       ],
     });
     expect(meshMap.version).toBe(1);
+    expect(meshMap.identity).toBe("melody");
+    expect(meshMap.sourceModel).toBe("models/melody/melody_t03.model3.json");
+    expect(identityModel3Path("melody")).toBe(IDENTITY_MODEL3_PATHS.melody);
+    expect(identityCubismStem("melody")).toBe("melody_t03");
+    expect(identityCubismStem("miara")).toBe("miara_pro_t03");
     expect(regionForDrawable(meshMap, "ArtMesh76")).toBe("chestCloth");
     expect(regionForDrawable(meshMap, "ArtMesh10")).toBe("hair");
     expect(regionCounts(meshMap).chestCloth).toBe(1);

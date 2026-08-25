@@ -29,7 +29,7 @@ import {
   retargetPhysics3Document,
 } from "../automesh";
 
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 describe("automesh mapping", () => {
@@ -410,14 +410,26 @@ describe("identity physics retarget", () => {
 
   it("ships dedicated Cubism packages for Melody and Deep Tree Echo", () => {
     const models = join(process.cwd(), "../frontend/static/models");
-    expect(existsSync(join(models, "melody/melody.model3.json"))).toBe(true);
+    expect(existsSync(join(models, "melody/melody_t03.model3.json"))).toBe(
+      true,
+    );
+    expect(existsSync(join(models, "melody/melody_t03.moc3"))).toBe(true);
     expect(existsSync(join(models, "melody/textures/texture_00.png"))).toBe(
       true,
     );
     expect(existsSync(join(models, "melody/mesh-map.json"))).toBe(true);
     expect(existsSync(join(models, "miara/mesh-map.json"))).toBe(true);
+    const melodyMap = JSON.parse(
+      readFileSync(join(models, "melody/mesh-map.json"), "utf8"),
+    );
+    expect(melodyMap.identity).toBe("melody");
+    expect(melodyMap.sourceModel).toBe(
+      "models/melody/melody_t03.model3.json",
+    );
     expect(
-      existsSync(join(models, "deep-tree-echo/deep-tree-echo.model3.json")),
+      existsSync(
+        join(models, "deep-tree-echo/deep-tree-echo_t03.model3.json"),
+      ),
     ).toBe(true);
     expect(
       existsSync(join(models, "deep-tree-echo/textures/texture_00.png")),

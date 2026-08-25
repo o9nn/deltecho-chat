@@ -86,7 +86,7 @@ export {
 export {
   AVATAR_IDENTITY_IDS,
   DEFAULT_AVATAR_IDENTITY_ID,
-  SHARED_AVATAR_MESH,
+  IDENTITY_MODEL3_PATHS,
   SHIPPED_MELODY_ATLAS,
   AVATAR_IDENTITIES,
   isAvatarIdentityId,
@@ -100,6 +100,8 @@ export {
   identityHasBakedLook,
   mergeIdentityHiddenGroups,
   modelForAvatarIdentity,
+  model3PathForAvatarIdentity,
+  identityModel3Path,
   resolveIdentityOverlay,
   resolveIdentityParameters,
   resolveIdentityRig,

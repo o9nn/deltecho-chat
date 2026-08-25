@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * Inspect official Miara drawables in Chromium and write a durable
- * ArtMesh → region → motion index for Melody (same topology as Miara).
+ * Inspect each identity's Cubism package and write that folder's mesh-map.
+ * Melody's index always names `models/melody/melody_t03.model3.json`.
  */
 import http from "node:http";
 import fs from "node:fs/promises";
@@ -104,10 +104,11 @@ function startServer() {
   });
 }
 
-function withIdentity(meshMap, identity) {
+function withIdentity(meshMap, identity, sourceModel) {
   return {
     ...meshMap,
     identity,
+    sourceModel,
   };
 }
 
@@ -131,9 +132,12 @@ async function main() {
         console.error("console", message.text());
       }
     });
-    await page.goto(`http://127.0.0.1:${port}/scripts/index-mesh-map.html`, {
-      waitUntil: "domcontentloaded",
-    });
+    await page.goto(
+      `http://127.0.0.1:${port}/scripts/index-mesh-map.html?identity=melody`,
+      {
+        waitUntil: "domcontentloaded",
+      },
+    );
     const resultHandle = await page.waitForFunction(
       () => window.__MESH_MAP_RESULT__ || window.__MESH_MAP_ERROR__,
       null,
@@ -149,12 +153,32 @@ async function main() {
 
     const pretty = (document) => `${JSON.stringify(document, null, 2)}\n`;
     await fs.mkdir(path.dirname(melodyMap), { recursive: true });
-    await fs.writeFile(melodyMap, pretty(withIdentity(value.meshMap, "melody")));
-    await fs.writeFile(miaraMap, pretty(withIdentity(value.meshMap, "miara")));
+    const identityModel3Path = (identity) =>
+      ({
+        miara: "models/miara/miara_pro_t03.model3.json",
+        melody: "models/melody/melody_t03.model3.json",
+        "deep-tree-echo": "models/deep-tree-echo/deep-tree-echo_t03.model3.json",
+      })[identity] ?? `models/${identity}/${identity}_t03.model3.json`;
+    await fs.writeFile(
+      melodyMap,
+      pretty(
+        withIdentity(value.meshMap, "melody", identityModel3Path("melody")),
+      ),
+    );
+    await fs.writeFile(
+      miaraMap,
+      pretty(withIdentity(value.meshMap, "miara", identityModel3Path("miara"))),
+    );
     await fs.mkdir(path.dirname(groveMap), { recursive: true });
     await fs.writeFile(
       groveMap,
-      pretty(withIdentity(value.meshMap, "deep-tree-echo")),
+      pretty(
+        withIdentity(
+          value.meshMap,
+          "deep-tree-echo",
+          identityModel3Path("deep-tree-echo"),
+        ),
+      ),
     );
 
     console.log(

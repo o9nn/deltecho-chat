@@ -26,11 +26,14 @@
         MELODY_PARAMETER_PROFILE,
         buildIdentityMeshMap,
         figureFromDrawables,
+        identityModel3Path,
         regionCounts,
         uvCentroid,
       } from "/avatar-dist/automesh/index.js";
 
-      const MODEL_URL = "/models/miara/miara_pro_t03.model3.json";
+      const identity =
+        new URLSearchParams(location.search).get("identity") || "melody";
+      const MODEL_URL = `/${identityModel3Path(identity)}`;
       const statusEl = document.getElementById("status");
       const setStatus = (text) => {
         statusEl.textContent = text;
@@ -131,8 +134,8 @@
             }
           : { x: -0.24, y: -0.57, w: 0.55, h: 1.23 };
         const meshMap = buildIdentityMeshMap({
-          identity: "melody",
-          sourceModel: "models/miara/miara_pro_t03.model3.json",
+          identity,
+          sourceModel: identityModel3Path(identity),
           figure,
           drawables,
         });

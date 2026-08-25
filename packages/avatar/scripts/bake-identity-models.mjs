@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /**
- * Clone the official Miara Cubism package into per-identity folders and
- * bake texture + physics for Deep Tree Echo and Melody.
+ * Bake a complete Cubism package per identity.
  *
- * Topology (`.moc3`) stays shared. Each folder is a complete loadable model.
+ * Each folder owns its own `*_t03.moc3` / model3 / mesh-map. Melody never
+ * loads Miara's model path.
  */
 import {
   cpSync,
@@ -11,6 +11,7 @@ import {
   existsSync,
   mkdirSync,
   readFileSync,
+  unlinkSync,
   writeFileSync,
 } from "node:fs";
 import { dirname, join } from "node:path";
@@ -31,28 +32,48 @@ const melodyStill = join(
 );
 const paintScript = join(here, "paint-identity-texture.py");
 
-const SHARED_FILES = ["miara_pro_t03.moc3", "miara_pro_t03.cdi3.json"];
+function identityStem(identity) {
+  return identity === "miara" ? "miara_pro_t03" : `${identity}_t03`;
+}
 
-function copySharedTree(destDir) {
+function copyIdentityTree(destDir, identity) {
   mkdirSync(destDir, { recursive: true });
-  for (const file of SHARED_FILES) {
-    copyFileSync(join(miaraDir, file), join(destDir, file));
-  }
+  const stem = identityStem(identity);
+  copyFileSync(join(miaraDir, "miara_pro_t03.moc3"), join(destDir, `${stem}.moc3`));
+  copyFileSync(
+    join(miaraDir, "miara_pro_t03.cdi3.json"),
+    join(destDir, `${stem}.cdi3.json`),
+  );
   cpSync(join(miaraDir, "expressions"), join(destDir, "expressions"), {
     recursive: true,
   });
   cpSync(join(miaraDir, "motion"), join(destDir, "motion"), {
     recursive: true,
   });
+  for (const leftover of [
+    "miara_pro_t03.moc3",
+    "miara_pro_t03.cdi3.json",
+    `${identity}.model3.json`,
+    `${identity}.physics3.json`,
+  ]) {
+    const path = join(destDir, leftover);
+    if (existsSync(path)) unlinkSync(path);
+  }
 }
 
-function writeModel3(destDir, fileName, physicsFile, textureFile) {
+function writeModel3(destDir, identity, textureFile) {
+  const stem = identityStem(identity);
   const model = JSON.parse(
     readFileSync(join(miaraDir, "miara_pro_t03.model3.json"), "utf8"),
   );
-  model.FileReferences.Physics = physicsFile;
+  model.FileReferences.Moc = `${stem}.moc3`;
+  model.FileReferences.DisplayInfo = `${stem}.cdi3.json`;
+  model.FileReferences.Physics = `${stem}.physics3.json`;
   model.FileReferences.Textures = [textureFile];
-  writeFileSync(join(destDir, fileName), `${JSON.stringify(model, null, 2)}\n`);
+  writeFileSync(
+    join(destDir, `${stem}.model3.json`),
+    `${JSON.stringify(model, null, 2)}\n`,
+  );
 }
 
 function writeReadme(destDir, title, body) {
@@ -203,27 +224,20 @@ async function main() {
 
   const melodyDir = join(modelsRoot, "melody");
   const groveDir = join(modelsRoot, "deep-tree-echo");
-  copySharedTree(melodyDir);
-  copySharedTree(groveDir);
+  copyIdentityTree(melodyDir, "melody");
+  copyIdentityTree(groveDir, "deep-tree-echo");
 
-  await bakePhysics(join(melodyDir, "melody.physics3.json"), "melody");
-  await bakePhysics(join(groveDir, "deep-tree-echo.physics3.json"), "grove");
+  await bakePhysics(join(melodyDir, "melody_t03.physics3.json"), "melody");
+  await bakePhysics(
+    join(groveDir, "deep-tree-echo_t03.physics3.json"),
+    "grove",
+  );
 
   bakeMelodyTexture(melodyDir);
   bakeGroveTexture(groveDir);
 
-  writeModel3(
-    melodyDir,
-    "melody.model3.json",
-    "melody.physics3.json",
-    "textures/texture_00.png",
-  );
-  writeModel3(
-    groveDir,
-    "deep-tree-echo.model3.json",
-    "deep-tree-echo.physics3.json",
-    "textures/texture_00.png",
-  );
+  writeModel3(melodyDir, "melody", "textures/texture_00.png");
+  writeModel3(groveDir, "deep-tree-echo", "textures/texture_00.png");
 
   writeReadme(
     melodyDir,
@@ -231,10 +245,11 @@ async function main() {
     `
 Complete Live2D model for the Melody identity.
 
-- \`miara_pro_t03.moc3\` — official Miara topology (Cubism Editor owns mesh edits)
+- \`melody_t03.model3.json\` — Melody's Cubism entry (\`sourceModel\` in mesh-map)
+- \`melody_t03.moc3\` — Melody mesh (replace this file to sculpt her figure)
 - \`mesh-map.json\` — ArtMesh UV-island index (region + motion/physics bindings)
 - \`textures/texture_00.png\` — official 4096 atlas, region-tinted from Melody still
-- \`melody.physics3.json\` — heavier ponytail, damped fairy cloth, musical wings
+- \`melody_t03.physics3.json\` — heavier ponytail, damped fairy cloth, musical wings
 
 Regenerate the index with \`pnpm --filter=@deltecho/avatar index:mesh-map\`, then
 \`pnpm --filter=@deltecho/avatar bake:identity-models\`.
@@ -246,10 +261,11 @@ Regenerate the index with \`pnpm --filter=@deltecho/avatar index:mesh-map\`, the
     `
 Complete Live2D model for the Deep Tree Echo identity.
 
-- \`miara_pro_t03.moc3\` — official Miara topology (Cubism Editor owns mesh edits)
-- \`mesh-map.json\` — shared ArtMesh UV-island index (same topology as Miara)
+- \`deep-tree-echo_t03.model3.json\` — Deep Tree Echo's Cubism entry
+- \`deep-tree-echo_t03.moc3\` — grove mesh (replace this file to sculpt her figure)
+- \`mesh-map.json\` — ArtMesh UV-island index for this model
 - \`textures/texture_00.png\` — moss/grove recast of character islands only
-- \`deep-tree-echo.physics3.json\` — slower hair, living wings
+- \`deep-tree-echo_t03.physics3.json\` — slower hair, living wings
 
 Regenerate with \`pnpm --filter=@deltecho/avatar bake:identity-models\`.
 `,
@@ -269,7 +285,8 @@ Each identity has its own folder so mesh, texture, and physics can converge inde
 physics/motion parameters that drive it. Rebuild with
 \`pnpm --filter=@deltecho/avatar index:mesh-map\`.
 
-All three currently share Miara \`.moc3\` topology. Sculpt per-character meshes in Cubism Editor and replace the \`.moc3\` in that folder.
+Each identity has its own \`*_t03.moc3\`. Sculpt that file in Cubism Editor;
+it does not affect the other identities.
 `,
   );
 

@@ -91,8 +91,9 @@ export interface Live2DAvatarController {
 }
 
 const LOCAL_MIARA_MODEL = "models/miara/miara_pro_t03.model3.json";
-const LOCAL_GROVE_MODEL = "models/deep-tree-echo/deep-tree-echo.model3.json";
-const LOCAL_MELODY_MODEL = "models/melody/melody.model3.json";
+const LOCAL_GROVE_MODEL =
+  "models/deep-tree-echo/deep-tree-echo_t03.model3.json";
+const LOCAL_MELODY_MODEL = "models/melody/melody_t03.model3.json";
 
 // Model paths - local models are served next to main.html in the build output.
 // Electron loads that page as file://, so a leading slash would resolve to

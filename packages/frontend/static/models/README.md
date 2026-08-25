@@ -10,4 +10,5 @@ Each identity has its own folder so mesh, texture, and physics can converge inde
 physics/motion parameters that drive it. Rebuild with
 `pnpm --filter=@deltecho/avatar index:mesh-map`.
 
-All three currently share Miara `.moc3` topology. Sculpt per-character meshes in Cubism Editor and replace the `.moc3` in that folder.
+Each identity owns its `*_t03.moc3`. Melody's map names
+`models/melody/melody_t03.model3.json`, not Miara.

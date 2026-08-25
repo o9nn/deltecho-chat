@@ -11,6 +11,25 @@ import { uvIsland } from "./inspect";
 
 export const MESH_MAP_VERSION = 1 as const;
 
+export const IDENTITY_MODEL3_PATHS = {
+  miara: "models/miara/miara_pro_t03.model3.json",
+  melody: "models/melody/melody_t03.model3.json",
+  "deep-tree-echo": "models/deep-tree-echo/deep-tree-echo_t03.model3.json",
+} as const;
+
+export type IdentityModelId = keyof typeof IDENTITY_MODEL3_PATHS;
+
+export function identityCubismStem(identity: IdentityModelId): string {
+  return identity === "miara" ? "miara_pro_t03" : `${identity}_t03`;
+}
+
+export function identityModel3Path(identity: string): string {
+  if (identity in IDENTITY_MODEL3_PATHS) {
+    return IDENTITY_MODEL3_PATHS[identity as IdentityModelId];
+  }
+  return `models/${identity}/${identity}_t03.model3.json`;
+}
+
 export const MESH_REGIONS = [
   "environment",
   "wings",

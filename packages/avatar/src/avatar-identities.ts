@@ -1,12 +1,14 @@
 /**
- * Companion identities, each with its own Cubism model folder.
- *
- * Topology still starts from official Miara `.moc3`. Texture and physics
- * live under `models/{identity}/` so the looks can diverge.
+ * Companion identities, each with its own Cubism model folder and mesh.
+ * Melody loads `models/melody/melody_t03.model3.json`, not Miara.
  */
 
 import { MELODY_PARAMETER_PROFILE } from "./automesh/parameters";
 import { resolveIdentityRig, type IdentityRig } from "./automesh/identity-rig";
+import {
+  IDENTITY_MODEL3_PATHS,
+  identityModel3Path,
+} from "./automesh/mesh-map";
 import {
   resolveMiaraOutfit,
   type MiaraOutfitId,
@@ -24,11 +26,14 @@ export type AvatarIdentityId = (typeof AVATAR_IDENTITY_IDS)[number];
 
 export const DEFAULT_AVATAR_IDENTITY_ID: AvatarIdentityId = "miara";
 
-/** Official topology source. Each identity now has its own model package. */
-export const SHARED_AVATAR_MESH = "miara";
+export { IDENTITY_MODEL3_PATHS, identityModel3Path };
 
 export function modelForAvatarIdentity(id: unknown): AvatarIdentityId {
   return resolveAvatarIdentity(id);
+}
+
+export function model3PathForAvatarIdentity(id: unknown): string {
+  return identityModel3Path(resolveAvatarIdentity(id));
 }
 
 /** Shipped triangle-reprojected Melody atlas on the official Miara UV layout. */
@@ -39,8 +44,10 @@ export interface AvatarIdentitySpec {
   id: AvatarIdentityId;
   label: string;
   description: string;
-  /** Live2D preset name. Loads `models/{id}/`. */
+  /** Live2D preset name. Loads that identity's `*_t03.model3.json`. */
   model: AvatarIdentityId;
+  /** Explicit Cubism model3 path for this identity. Never a shared mesh. */
+  model3Path: string;
   /** Wardrobe look applied when this identity is selected. */
   outfitId: Exclude<MiaraOutfitId, "custom">;
   /** Picker portrait, relative to the app html root. */
@@ -59,6 +66,7 @@ export const AVATAR_IDENTITIES: readonly AvatarIdentitySpec[] = [
     label: "Miara",
     description: "Official baked mesh and lagoon fairy look.",
     model: "miara",
+    model3Path: IDENTITY_MODEL3_PATHS.miara,
     outfitId: "official",
   },
   {
@@ -67,6 +75,7 @@ export const AVATAR_IDENTITIES: readonly AvatarIdentitySpec[] = [
     description:
       "Dedicated grove model — moss atlas, living-wing physics, bioluminescent lagoon.",
     model: "deep-tree-echo",
+    model3Path: IDENTITY_MODEL3_PATHS["deep-tree-echo"],
     outfitId: "grove",
     portrait: "./images/avatar/identities/deep-tree-echo.webp",
     bakedLook: true,
@@ -77,6 +86,7 @@ export const AVATAR_IDENTITIES: readonly AvatarIdentitySpec[] = [
     description:
       "Dedicated Melody model — remapped atlas, crop silhouette, headset motion, no water stage.",
     model: "melody",
+    model3Path: IDENTITY_MODEL3_PATHS.melody,
     outfitId: "aria",
     portrait: "./images/avatar/identities/melody.webp",
     overlay: SHIPPED_MELODY_ATLAS,

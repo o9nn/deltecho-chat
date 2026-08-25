@@ -107,6 +107,9 @@ export {
 export {
   MESH_MAP_VERSION,
   MESH_REGIONS,
+  IDENTITY_MODEL3_PATHS,
+  identityCubismStem,
+  identityModel3Path,
   KNOWN_CHEST_CLOTH_IDS,
   KNOWN_WING_IDS,
   KNOWN_SPARKLE_IDS,
@@ -124,6 +127,7 @@ export {
   type DrawableMeshIndex,
   type FigurePoint,
   type IdentityMeshMap,
+  type IdentityModelId,
   type InspectedDrawable,
   type MeshRegion,
   type RegionMotionBinding,

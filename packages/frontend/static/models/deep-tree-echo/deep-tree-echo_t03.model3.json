@@ -1,12 +1,12 @@
 {
   "Version": 3,
   "FileReferences": {
-    "Moc": "miara_pro_t03.moc3",
+    "Moc": "deep-tree-echo_t03.moc3",
     "Textures": [
       "textures/texture_00.png"
     ],
-    "Physics": "melody.physics3.json",
-    "DisplayInfo": "miara_pro_t03.cdi3.json",
+    "Physics": "deep-tree-echo_t03.physics3.json",
+    "DisplayInfo": "deep-tree-echo_t03.cdi3.json",
     "Expressions": [
       {
         "Name": "JOY_01_BroadSmile",

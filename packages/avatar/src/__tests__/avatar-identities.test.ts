@@ -1,8 +1,9 @@
 import {
   AVATAR_IDENTITIES,
   DEFAULT_AVATAR_IDENTITY_ID,
-  SHARED_AVATAR_MESH,
+  IDENTITY_MODEL3_PATHS,
   SHIPPED_MELODY_ATLAS,
+  model3PathForAvatarIdentity,
   applyAvatarIdentity,
   applyIdentityLook,
   defaultAtlasForIdentity,
@@ -26,7 +27,14 @@ describe("avatar identities", () => {
       "deep-tree-echo",
       "melody",
     ]);
-    expect(SHARED_AVATAR_MESH).toBe("miara");
+    expect(AVATAR_IDENTITIES.map((identity) => identity.model3Path)).toEqual([
+      IDENTITY_MODEL3_PATHS.miara,
+      IDENTITY_MODEL3_PATHS["deep-tree-echo"],
+      IDENTITY_MODEL3_PATHS.melody,
+    ]);
+    expect(model3PathForAvatarIdentity("melody")).toBe(
+      "models/melody/melody_t03.model3.json",
+    );
   });
 
   it("applies grove look for Deep Tree Echo", () => {
