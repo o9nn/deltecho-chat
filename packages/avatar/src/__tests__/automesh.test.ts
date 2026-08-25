@@ -426,6 +426,12 @@ describe("identity physics retarget", () => {
     expect(melodyMap.sourceModel).toBe(
       "models/melody/melody_t03.model3.json",
     );
+    const textureStats = JSON.parse(
+      readFileSync(join(models, "melody/textures/texture-stats.json"), "utf8"),
+    );
+    const character = textureStats.character ?? textureStats;
+    expect(character.purple).toBeGreaterThan(character.teal);
+    expect(character.mean[0]).toBeGreaterThan(40);
     expect(
       existsSync(
         join(models, "deep-tree-echo/deep-tree-echo_t03.model3.json"),
