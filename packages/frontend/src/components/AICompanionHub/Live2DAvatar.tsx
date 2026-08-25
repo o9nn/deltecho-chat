@@ -91,14 +91,16 @@ export interface Live2DAvatarController {
 }
 
 const LOCAL_MIARA_MODEL = "models/miara/miara_pro_t03.model3.json";
+const LOCAL_GROVE_MODEL = "models/deep-tree-echo/deep-tree-echo.model3.json";
+const LOCAL_MELODY_MODEL = "models/melody/melody.model3.json";
 
 // Model paths - local models are served next to main.html in the build output.
 // Electron loads that page as file://, so a leading slash would resolve to
 // file:///models/... and never find the assets.
 const CDN_MODELS = {
   miara: LOCAL_MIARA_MODEL,
-  "deep-tree-echo": LOCAL_MIARA_MODEL,
-  melody: LOCAL_MIARA_MODEL,
+  "deep-tree-echo": LOCAL_GROVE_MODEL,
+  melody: LOCAL_MELODY_MODEL,
   shizuku:
     "https://cdn.jsdelivr.net/gh/guansss/pixi-live2d-display/test/assets/shizuku/shizuku.model.json",
   haru: "https://cdn.jsdelivr.net/gh/guansss/pixi-live2d-display/test/assets/haru/haru_greeter_t03.model3.json",

@@ -17,7 +17,8 @@
     "clean": "rm -rf dist",
     "test": "jest --runInBand --forceExit",
     "test:coverage": "jest --coverage",
-    "train:melody-atlas": "node ./scripts/train-melody-atlas.mjs"
+    "train:melody-atlas": "node ./scripts/train-melody-atlas.mjs",
+    "bake:identity-models": "node --experimental-strip-types ./scripts/bake-identity-models.mjs"
   },
   "keywords": [
     "avatar",

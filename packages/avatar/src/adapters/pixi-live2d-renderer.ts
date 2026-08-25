@@ -509,7 +509,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       this.overlaySource = null;
       this.attachWardrobeHook();
       this.attachDeformHook();
-      if (this.identityRig) {
+      if (this.identityRig?.physics && !this.identityRig.bakedPhysics) {
         this.applyPhysicsProfile(this.identityRig.physics);
       }
 
@@ -1503,7 +1503,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     this.deformSkipIds.clear();
     this.deformFrame = 0;
     this.attachDeformHook();
-    if (this.identityRig?.physics) {
+    if (this.identityRig?.physics && !this.identityRig.bakedPhysics) {
       this.applyPhysicsProfile(this.identityRig.physics);
       return;
     }

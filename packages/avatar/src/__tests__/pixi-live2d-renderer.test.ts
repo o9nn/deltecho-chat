@@ -338,7 +338,7 @@ describe("PixiLive2DRenderer", () => {
       await renderer.loadModel(config.model);
     });
 
-    it("deforms vertices after Cubism update and retargets physics", () => {
+    it("deforms vertices after Cubism update without re-scaling baked physics", () => {
       const positions = new Float32Array([0.5, 0.2]);
       const particles = [{ mobility: 1, delay: 1, acceleration: 1, radius: 1 }];
       const outputs = [{ angleScale: 1, weight: 1 }];
@@ -400,7 +400,7 @@ describe("PixiLive2DRenderer", () => {
       model.internalModel.coreModel.getDrawableCount = () => 1;
 
       renderer.applyIdentityRig(MELODY_IDENTITY_RIG);
-      expect(particles[0].mobility).toBeLessThan(1);
+      expect(particles[0].mobility).toBe(1);
       model.internalModel.update(16, 0);
       expect(cubismUpdated).toBe(true);
       expect(positions[1]).toBeGreaterThan(0.2);

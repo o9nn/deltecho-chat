@@ -19,19 +19,22 @@ describe("avatar identities", () => {
     expect(resolveAvatarIdentity("not-real")).toBe(DEFAULT_AVATAR_IDENTITY_ID);
   });
 
-  it("keeps every identity on the shared Miara mesh", () => {
+  it("gives each identity its own Cubism model package", () => {
     expect(AVATAR_IDENTITIES).toHaveLength(3);
-    for (const identity of AVATAR_IDENTITIES) {
-      expect(identity.model).toBe(SHARED_AVATAR_MESH);
-    }
+    expect(AVATAR_IDENTITIES.map((identity) => identity.model)).toEqual([
+      "miara",
+      "deep-tree-echo",
+      "melody",
+    ]);
+    expect(SHARED_AVATAR_MESH).toBe("miara");
   });
 
   it("applies grove look for Deep Tree Echo", () => {
     const applied = applyAvatarIdentity("deep-tree-echo");
     expect(applied.identity).toBe("deep-tree-echo");
-    expect(applied.model).toBe("miara");
+    expect(applied.model).toBe("deep-tree-echo");
     expect(applied.outfit.id).toBe("grove");
-    expect(applied.outfit.hueShift).toBe(95);
+    expect(applied.outfit.hueShift).toBe(0);
     expect(applied.outfit.hiddenGroups).toEqual([]);
     expect(lookForAvatarIdentity("deep-tree-echo").id).toBe("grove");
   });
@@ -39,7 +42,7 @@ describe("avatar identities", () => {
   it("applies aria look for Melody", () => {
     const applied = applyAvatarIdentity("melody");
     expect(applied.identity).toBe("melody");
-    expect(applied.model).toBe("miara");
+    expect(applied.model).toBe("melody");
     expect(applied.outfit.id).toBe("aria");
     expect(applied.outfit.hueShift).toBe(0);
     expect(applied.overlay).toBe(SHIPPED_MELODY_ATLAS);
@@ -64,7 +67,7 @@ describe("avatar identities", () => {
     expect(defaultAtlasForIdentity("miara")).toBeNull();
     expect(defaultAtlasForIdentity("deep-tree-echo")).toBeNull();
     expect(defaultAtlasForIdentity("melody")).toBe(SHIPPED_MELODY_ATLAS);
-    expect(resolveIdentityOverlay("melody", null)).toBe(SHIPPED_MELODY_ATLAS);
+    expect(resolveIdentityOverlay("melody", null)).toBeNull();
     expect(resolveIdentityOverlay("melody", "data:image/png;base64,abc")).toBe(
       "data:image/png;base64,abc",
     );
@@ -84,13 +87,16 @@ describe("avatar identities", () => {
     expect(controller.applyIdentityRig).toHaveBeenCalledWith(
       expect.objectContaining({ id: "melody" }),
     );
-    expect(controller.applyTextureOverlay).toHaveBeenCalledWith(
-      SHIPPED_MELODY_ATLAS,
-    );
+    expect(controller.applyTextureOverlay).not.toHaveBeenCalled();
+    expect(controller.clearTextureOverlay).toHaveBeenCalled();
     expect(controller.applyParameterProfile).toHaveBeenCalled();
+
+    applyIdentityLook(controller, "melody", "data:image/png;base64,abc");
+    expect(controller.applyTextureOverlay).toHaveBeenCalledWith(
+      "data:image/png;base64,abc",
+    );
 
     applyIdentityLook(controller, "miara");
     expect(controller.applyIdentityRig).toHaveBeenCalledWith(null);
-    expect(controller.clearTextureOverlay).toHaveBeenCalled();
   });
 });

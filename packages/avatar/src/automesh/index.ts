@@ -71,6 +71,7 @@ export {
   MELODY_PHYSICS_RETARGET,
   MIARA_PHYSICS_SETTING_NAMES,
   applyPhysicsRetarget,
+  retargetPhysics3Document,
   classifyPhysicsSettingName,
   namePhysicsSettings,
   readPhysicsDictionaryNames,

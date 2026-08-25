@@ -26,7 +26,11 @@ import {
   classifyPhysicsSettingName,
   namePhysicsSettings,
   snapshotPhysicsRig,
+  retargetPhysics3Document,
 } from "../automesh";
+
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 
 describe("automesh mapping", () => {
   it("maps landmark source points onto their atlas targets", () => {
@@ -377,5 +381,44 @@ describe("identity physics retarget", () => {
     expect(clothRig.outputs[0].angleScale).toBeCloseTo(
       MELODY_PHYSICS_RETARGET.groups.cloth.angleScale ?? 1,
     );
+  });
+
+  it("bakes a physics3 document so identity folders can ship their own motion", () => {
+    const document = {
+      Meta: {
+        PhysicsDictionary: [{ Name: "Twin tail" }, { Name: "Sleeve Left" }],
+      },
+      PhysicsSettings: [
+        {
+          Vertices: [{ Mobility: 1, Delay: 1, Acceleration: 1, Radius: 10 }],
+          Output: [{ Scale: 1, Weight: 100 }],
+        },
+        {
+          Vertices: [{ Mobility: 1, Delay: 1, Acceleration: 1, Radius: 10 }],
+          Output: [{ Scale: 1, Weight: 100 }],
+        },
+      ],
+    };
+    const baked = retargetPhysics3Document(document, MELODY_PHYSICS_RETARGET);
+    expect(baked.PhysicsSettings?.[0].Vertices?.[0].Delay).toBeCloseTo(
+      MELODY_PHYSICS_RETARGET.groups.hair.delay ?? 1,
+    );
+    expect(baked.PhysicsSettings?.[1].Vertices?.[0].Mobility).toBeCloseTo(
+      MELODY_PHYSICS_RETARGET.groups.cloth.mobility ?? 1,
+    );
+  });
+
+  it("ships dedicated Cubism packages for Melody and Deep Tree Echo", () => {
+    const models = join(process.cwd(), "../frontend/static/models");
+    expect(existsSync(join(models, "melody/melody.model3.json"))).toBe(true);
+    expect(existsSync(join(models, "melody/textures/texture_00.png"))).toBe(
+      true,
+    );
+    expect(
+      existsSync(join(models, "deep-tree-echo/deep-tree-echo.model3.json")),
+    ).toBe(true);
+    expect(
+      existsSync(join(models, "deep-tree-echo/textures/texture_00.png")),
+    ).toBe(true);
   });
 });

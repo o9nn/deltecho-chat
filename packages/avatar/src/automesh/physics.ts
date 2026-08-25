@@ -307,3 +307,71 @@ export function readPhysicsDictionaryNames(physics3: {
     (entry) => entry.Name ?? "",
   );
 }
+
+export type Physics3Vertex = {
+  Mobility?: number;
+  Delay?: number;
+  Acceleration?: number;
+  Radius?: number;
+  [key: string]: unknown;
+};
+
+export type Physics3Output = {
+  Scale?: number;
+  Weight?: number;
+  [key: string]: unknown;
+};
+
+export type Physics3Setting = {
+  Id?: string;
+  Vertices?: Physics3Vertex[];
+  Output?: Physics3Output[];
+  [key: string]: unknown;
+};
+
+export type Physics3Document = {
+  Meta?: { PhysicsDictionary?: readonly { Name?: string }[] };
+  PhysicsSettings?: Physics3Setting[];
+  [key: string]: unknown;
+};
+
+/**
+ * Bake a physics3.json document toward an identity profile.
+ * Used to write per-character model folders instead of mutating live rigs.
+ */
+export function retargetPhysics3Document(
+  document: Physics3Document,
+  profile: PhysicsRetargetProfile,
+): Physics3Document {
+  const names = readPhysicsDictionaryNames(document);
+  const settings = (document.PhysicsSettings ?? []).map((setting, index) => {
+    const kind = classifyPhysicsSettingName(names[index] ?? setting.Id ?? "");
+    if (!kind) {
+      return {
+        ...setting,
+        Vertices: setting.Vertices?.map((vertex) => ({ ...vertex })),
+        Output: setting.Output?.map((output) => ({ ...output })),
+      };
+    }
+    const scale = profile.groups[kind];
+    return {
+      ...setting,
+      Vertices: (setting.Vertices ?? []).map((vertex) => ({
+        ...vertex,
+        Mobility: (vertex.Mobility ?? 1) * (scale.mobility ?? 1),
+        Delay: (vertex.Delay ?? 1) * (scale.delay ?? 1),
+        Acceleration: (vertex.Acceleration ?? 1) * (scale.acceleration ?? 1),
+        Radius: (vertex.Radius ?? 0) * (scale.radius ?? 1),
+      })),
+      Output: (setting.Output ?? []).map((output) => ({
+        ...output,
+        Scale: (output.Scale ?? 1) * (scale.angleScale ?? 1),
+        Weight: (output.Weight ?? 100) * (scale.weight ?? 1),
+      })),
+    };
+  });
+  return {
+    ...document,
+    PhysicsSettings: settings,
+  };
+}

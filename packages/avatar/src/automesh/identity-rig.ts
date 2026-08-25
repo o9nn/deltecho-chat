@@ -21,19 +21,23 @@ export type IdentityRigId = "melody" | "deep-tree-echo";
 export type IdentityRig = {
   readonly id: IdentityRigId;
   readonly deform: MeshDeformProfile;
+  /** Present for bake/tests. Runtime skips this when the model folder already baked physics. */
   readonly physics: PhysicsRetargetProfile;
+  readonly bakedPhysics?: boolean;
 };
 
 export const MELODY_IDENTITY_RIG: IdentityRig = {
   id: "melody",
   deform: MELODY_MESH_DEFORM,
   physics: MELODY_PHYSICS_RETARGET,
+  bakedPhysics: true,
 };
 
 export const GROVE_IDENTITY_RIG: IdentityRig = {
   id: "deep-tree-echo",
   deform: GROVE_MESH_DEFORM,
   physics: GROVE_PHYSICS_RETARGET,
+  bakedPhysics: true,
 };
 
 const IDENTITY_RIGS: Readonly<Record<IdentityRigId, IdentityRig>> = {

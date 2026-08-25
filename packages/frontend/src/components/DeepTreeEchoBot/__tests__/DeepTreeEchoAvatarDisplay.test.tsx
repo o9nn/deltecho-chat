@@ -568,7 +568,7 @@ describe("DeepTreeEchoAvatarDisplay", () => {
       );
     });
 
-    it("swaps the rendered identity and outfit on the same mesh", () => {
+    it("swaps the rendered identity, model package, and outfit", () => {
       render(
         <DeepTreeEchoAvatarProvider>
           <DeepTreeEchoAvatarDisplay />
@@ -588,7 +588,7 @@ describe("DeepTreeEchoAvatarDisplay", () => {
       ).toEqual(expect.objectContaining({ id: "aria", hueShift: 0 }));
       expect(screen.getByTestId("mock-live2d-avatar")).toHaveAttribute(
         "data-model",
-        "miara",
+        "melody",
       );
 
       fireEvent.change(screen.getByTestId("miara-outfit-select"), {

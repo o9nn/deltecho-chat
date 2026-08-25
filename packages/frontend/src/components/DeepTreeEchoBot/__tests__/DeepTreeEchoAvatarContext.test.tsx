@@ -274,7 +274,7 @@ describe("DeepTreeEchoAvatarContext", () => {
         window.localStorage.getItem("deepTreeEchoAvatarConfig") || "{}",
       );
       expect(saved.identity).toBe("melody");
-      expect(saved.model).toBe("miara");
+      expect(saved.model).toBe("melody");
       expect(saved.outfit).toBe("aria");
       expect(saved.outfitHueShift).toBe(0);
       expect(saved.outfitHiddenGroups).toEqual(

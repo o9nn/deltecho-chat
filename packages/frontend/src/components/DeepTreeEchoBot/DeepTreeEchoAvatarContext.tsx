@@ -18,7 +18,7 @@ import {
   DEFAULT_MIARA_OUTFIT_ID,
   LIVE_AVATAR_EXPRESSION,
   SHARED_AVATAR_MESH,
-  defaultAtlasForIdentity,
+  identityHasBakedLook,
   mergeIdentityHiddenGroups,
   resolveAvatarExpression,
   resolveAvatarIdentity,
@@ -122,14 +122,14 @@ function sanitizeAvatarConfig(
   return {
     ...config,
     identity,
-    model: SHARED_AVATAR_MESH,
+    model: identity,
     outfit: resolved.id,
     outfitHiddenGroups: mergeIdentityHiddenGroups(
       identity,
       resolved.hiddenGroups,
     ),
-    // Remapped Melody atlas already has its color; do not hue-rotate it.
-    outfitHueShift: defaultAtlasForIdentity(identity) ? 0 : resolved.hueShift,
+    // Baked identity atlases already have their color; do not hue-rotate them.
+    outfitHueShift: identityHasBakedLook(identity) ? 0 : resolved.hueShift,
     automeshMapping: resolveAutomeshMapping(config.automeshMapping),
     automeshAtlas: resolveAutomeshAtlas(config.automeshAtlas),
     expression: resolveAvatarExpression(config.expression),
