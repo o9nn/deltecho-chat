@@ -28,6 +28,14 @@ export {
 } from "./miara-outfits";
 
 export {
+  MIARA_CUBISM_EXPRESSION_NAMES,
+  MIARA_EXPRESSION_MAP,
+  isMiaraCubismExpressionName,
+  cubismExpressionFile,
+  type MiaraCubismExpressionName,
+} from "./miara-expressions";
+
+export {
   AVATAR_IDENTITY_IDS,
   DEFAULT_AVATAR_IDENTITY_ID,
   SHARED_AVATAR_MESH,

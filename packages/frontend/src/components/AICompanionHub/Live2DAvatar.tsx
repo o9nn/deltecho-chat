@@ -73,6 +73,7 @@ export interface CognitiveVisualState {
 // Controller interface for external control of the avatar
 export interface Live2DAvatarController {
   setExpression: (expression: Expression, intensity?: number) => void;
+  setNamedExpression?: (name: string) => boolean;
   playMotion: (motion: AvatarMotion) => void;
   updateLipSync: (audioLevel: number) => void;
   updateCognitiveState?: (state: CognitiveVisualState) => void;

@@ -28,6 +28,7 @@ import {
   resolveMiaraOutfit,
   type MiaraOutfitState,
 } from "../miara-outfits";
+import { MIARA_EXPRESSION_MAP } from "../miara-expressions";
 
 /**
  * Live2D model reference type (from pixi-live2d-display)
@@ -96,16 +97,7 @@ interface Live2DModel {
  * Expression to Live2D expression name mapping
  */
 const DEFAULT_EXPRESSION_MAP: Record<Expression, string> = {
-  neutral: "neutral",
-  happy: "happy",
-  thinking: "thinking",
-  curious: "curious",
-  surprised: "surprised",
-  concerned: "sad",
-  focused: "focused",
-  playful: "happy",
-  contemplative: "thinking",
-  empathetic: "neutral",
+  ...MIARA_EXPRESSION_MAP,
 };
 
 /**
@@ -463,8 +455,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     const expressionName = this.expressionMap[expression] ?? "neutral";
 
     try {
-      // Try to set expression using the expression() method
-      this.model.expression(expressionName);
+      this.applyCubismExpression(expressionName);
 
       // Also adjust facial parameters based on intensity
       this.adjustFacialParameters(expression, intensity);
@@ -479,6 +470,27 @@ export class PixiLive2DRenderer implements ICubismRenderer {
         "[PixiLive2DRenderer] Expression not available:",
         expressionName,
       );
+    }
+  }
+
+  /**
+   * Play a named Cubism expression from the model3.json Expressions list.
+   * Returns false when the runtime or name is unavailable.
+   */
+  setNamedExpression(name: string): boolean {
+    if (!this.model || !this.initialized) return false;
+    return this.applyCubismExpression(name);
+  }
+
+  private applyCubismExpression(name: string): boolean {
+    if (!this.model) return false;
+    try {
+      this.model.expression(name);
+      this.dlog(`Cubism expression: ${name}`);
+      return true;
+    } catch (_error) {
+      console.warn("[PixiLive2DRenderer] Expression not available:", name);
+      return false;
     }
   }
 
