@@ -442,10 +442,23 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
         setTimeout(reportNativeSize, delay),
       );
       controller.applyOutfit?.(outfit);
+      const atlas = avatarContext?.state.config.automeshAtlas;
+      if (atlas && avatarContext?.state.config.identity === "melody") {
+        void controller.applyTextureOverlay?.(atlas);
+      }
       onReady?.();
     },
     [onReady, onNativeSize, avatarContext, outfit],
   );
+
+  useEffect(() => {
+    const atlas = avatarContext?.state.config.automeshAtlas;
+    if (!atlas || avatarContext?.state.config.identity !== "melody") return;
+    void avatarController.current?.applyTextureOverlay?.(atlas);
+  }, [
+    avatarContext?.state.config.automeshAtlas,
+    avatarContext?.state.config.identity,
+  ]);
 
   // Update cognitive state from orchestrator. The avatar is a visual expression
   // layer, so it should follow meaningful cognitive drift rather than every raw

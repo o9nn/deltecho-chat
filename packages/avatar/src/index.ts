@@ -36,6 +36,36 @@ export {
 } from "./miara-expressions";
 
 export {
+  AUTOMESH_LANDMARK_IDS,
+  AUTOMESH_MAPPING_VERSION,
+  MELODY_AUTOMESH_LANDMARKS,
+  cloneMelodyLandmarks,
+  isAutomeshLandmarkId,
+  mapPoint,
+  warpRasterToAtlas,
+  rasterToDataUrl,
+  assignAtlasFromDrawables,
+  uvCentroid,
+  trainAutomeshMapping,
+  resolveAutomeshMapping,
+  mappingResidual,
+  fitSimilarity,
+  applySimilarity,
+  cubismEditorRequest,
+  parseCubismEditorMessage,
+  cubismEditorUrl,
+  CubismEditorBridge,
+  createBrowserCubismEditorBridge,
+  CUBISM_EDITOR_DEFAULT_PORT,
+  type Point2,
+  type AutomeshLandmarkId,
+  type AutomeshLandmark,
+  type AutomeshDrawable,
+  type AutomeshMapping,
+  type AutomeshRaster,
+} from "./automesh";
+
+export {
   AVATAR_IDENTITY_IDS,
   DEFAULT_AVATAR_IDENTITY_ID,
   SHARED_AVATAR_MESH,

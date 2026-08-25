@@ -29,6 +29,7 @@ import {
   type MiaraOutfitState,
 } from "../miara-outfits";
 import { MIARA_EXPRESSION_MAP } from "../miara-expressions";
+import { uvCentroid, type AutomeshDrawable } from "../automesh";
 
 /**
  * Live2D model reference type (from pixi-live2d-display)
@@ -59,6 +60,7 @@ interface Live2DModel {
       bounds?: { x: number; y: number; width: number; height: number },
     ) => { x: number; y: number; width: number; height: number };
     update?: (dt: number, now: number) => void;
+    textures?: unknown[];
     coreModel: {
       setParameterValueById: (id: string, value: number) => void;
       getParameterValueById: (id: string) => number;
@@ -69,15 +71,20 @@ interface Live2DModel {
       getPartIndex?: (id: string) => number;
       getPartCount?: () => number;
       getPartId?: (index: number) => unknown;
+      getDrawableVertexUvs?: (index: number) => ArrayLike<number>;
       getModel?: () => {
         parts?: {
           count: number;
           ids: ArrayLike<string>;
           opacities: Float32Array | number[];
         };
+        drawables?: {
+          vertexUvs?: Array<ArrayLike<number>>;
+        };
       };
     };
   };
+  textures?: Array<{ destroy?: (destroyBase?: boolean) => void } | unknown>;
   expression: (name?: string) => void;
   motion: (
     group: string,
@@ -1282,6 +1289,64 @@ export class PixiLive2DRenderer implements ICubismRenderer {
 
   getAppliedOutfit(): MiaraOutfitState | null {
     return this.appliedOutfit;
+  }
+
+  /**
+   * Editor-style mesh inspect: drawable ids, bounds, and UV centroids.
+   */
+  inspectMesh(): AutomeshDrawable[] {
+    const internal = this.model?.internalModel;
+    if (
+      !internal ||
+      typeof internal.getDrawableIDs !== "function" ||
+      typeof internal.getDrawableBounds !== "function"
+    ) {
+      return [];
+    }
+    const ids = internal.getDrawableIDs();
+    const core = internal.coreModel;
+    const nativeUvs = core.getModel?.()?.drawables?.vertexUvs;
+    const inspected: AutomeshDrawable[] = [];
+    const box = { x: 0, y: 0, width: 0, height: 0 };
+    for (let index = 0; index < ids.length; index++) {
+      let bounds: { x: number; y: number; width: number; height: number };
+      try {
+        bounds = internal.getDrawableBounds(index, box);
+      } catch {
+        continue;
+      }
+      let uvs: ArrayLike<number> | undefined;
+      try {
+        uvs = core.getDrawableVertexUvs?.(index) ?? nativeUvs?.[index];
+      } catch {
+        uvs = nativeUvs?.[index];
+      }
+      inspected.push({
+        id: ids[index] ?? `drawable-${index}`,
+        bounds: { ...bounds },
+        uvCentroid: uvs ? uvCentroid(uvs) : undefined,
+      });
+    }
+    return inspected;
+  }
+
+  /**
+   * Bind a remapped atlas onto texture slot 0 — the Cubism SDK BindTexture
+   * equivalent for pixi-live2d-display.
+   */
+  async applyTextureOverlay(source: string): Promise<boolean> {
+    if (!this.model || !source) return false;
+    try {
+      const { Texture } = await import("pixi.js");
+      const texture = Texture.from(source);
+      if (!this.model.textures) {
+        return false;
+      }
+      this.model.textures[0] = texture;
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   private listPartIds(): string[] {

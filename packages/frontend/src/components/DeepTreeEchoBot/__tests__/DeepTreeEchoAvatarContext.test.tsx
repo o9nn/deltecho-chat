@@ -26,6 +26,9 @@ function TestConsumer() {
       <span data-testid="identity">{avatar.state.config.identity}</span>
       <span data-testid="outfit">{avatar.state.config.outfit}</span>
       <span data-testid="outfit-hue">{avatar.state.config.outfitHueShift}</span>
+      <span data-testid="automesh-identity">
+        {avatar.state.config.automeshMapping?.identity ?? "none"}
+      </span>
       <button
         type="button"
         data-testid="set-listening"
@@ -76,6 +79,32 @@ function TestConsumer() {
         }
       >
         Set Melody
+      </button>
+      <button
+        type="button"
+        data-testid="set-automesh"
+        onClick={() =>
+          avatar.updateConfig({
+            automeshMapping: {
+              version: 1,
+              identity: "melody",
+              residual: 0.02,
+              trainedAt: 1,
+              landmarks: [
+                {
+                  id: "mouth",
+                  label: "Mouth",
+                  source: { x: 0.5, y: 0.56 },
+                  atlas: { x: 0.4, y: 0.44 },
+                  drawableHints: ["mouth"],
+                },
+              ],
+            },
+            automeshAtlas: "data:image/png;base64,abc",
+          })
+        }
+      >
+        Set Automesh
       </button>
     </div>
   );
@@ -273,6 +302,29 @@ describe("DeepTreeEchoAvatarContext", () => {
         expect(screen.getByTestId("outfit")).toHaveTextContent("midnight");
       });
       expect(screen.getByTestId("outfit-hue")).toHaveTextContent("210");
+    });
+  });
+
+  describe("automesh persistence", () => {
+    it("persists a trained Melody mapping", () => {
+      render(
+        <DeepTreeEchoAvatarProvider>
+          <TestConsumer />
+        </DeepTreeEchoAvatarProvider>,
+      );
+
+      act(() => {
+        screen.getByTestId("set-automesh").click();
+      });
+
+      expect(screen.getByTestId("automesh-identity")).toHaveTextContent(
+        "melody",
+      );
+      const saved = JSON.parse(
+        window.localStorage.getItem("deepTreeEchoAvatarConfig") || "{}",
+      );
+      expect(saved.automeshMapping.identity).toBe("melody");
+      expect(saved.automeshAtlas).toBe("data:image/png;base64,abc");
     });
   });
 

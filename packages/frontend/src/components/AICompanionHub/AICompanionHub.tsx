@@ -42,6 +42,7 @@ import type {
   EmotionalVector,
 } from "./Live2DAvatar";
 import { AvatarIdentityPicker } from "../DeepTreeEchoBot/AvatarIdentityPicker";
+import { AutomeshStudio } from "../DeepTreeEchoBot/AutomeshStudio";
 import { MiaraOutfitPicker } from "../DeepTreeEchoBot/MiaraOutfitPicker";
 import { useDeepTreeEchoAvatarOptional } from "../DeepTreeEchoBot/DeepTreeEchoAvatarContext";
 import "./Live2DAvatar.scss";
@@ -186,6 +187,7 @@ const AICompanionHubContent: React.FC = () => {
     | "create"
     | "cognitive"
     | "avatar"
+    | "automesh"
     | "calibration"
   >("chat");
   const [_isCreatingCompanion, _setIsCreatingCompanion] = useState(false);
@@ -496,6 +498,14 @@ const AICompanionHubContent: React.FC = () => {
                   </button>
                   <button
                     type="button"
+                    className={`tab ${view === "automesh" ? "active" : ""}`}
+                    onClick={() => setView("automesh")}
+                  >
+                    <Sparkles size={18} />
+                    <span>Automesh</span>
+                  </button>
+                  <button
+                    type="button"
                     className={`tab ${view === "calibration" ? "active" : ""}`}
                     onClick={() => setView("calibration")}
                   >
@@ -690,7 +700,13 @@ const AICompanionHubContent: React.FC = () => {
                     outfit={miaraOutfit}
                     onLoad={() => setAvatarLoaded(true)}
                     onError={(err) => console.error("Avatar error:", err)}
-                    onControllerReady={setAvatarController}
+                    onControllerReady={(controller) => {
+                      setAvatarController(controller);
+                      const atlas = avatarContext?.state.config.automeshAtlas;
+                      if (atlas) {
+                        void controller.applyTextureOverlay?.(atlas);
+                      }
+                    }}
                   />
                 </div>
                 <AvatarIdentityPicker variant="panel" />
@@ -783,6 +799,8 @@ const AICompanionHubContent: React.FC = () => {
                 </div>
               </div>
             </div>
+          ) : view === "automesh" ? (
+            <AutomeshStudio />
           ) : view === "calibration" ? (
             <VideoCalibrationLab />
           ) : null}

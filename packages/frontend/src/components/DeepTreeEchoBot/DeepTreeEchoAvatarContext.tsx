@@ -18,7 +18,9 @@ import {
   DEFAULT_MIARA_OUTFIT_ID,
   SHARED_AVATAR_MESH,
   resolveAvatarIdentity,
+  resolveAutomeshMapping,
   resolveMiaraOutfit,
+  type AutomeshMapping,
   type AvatarIdentityId,
   type MiaraOutfitId,
   type MiaraPartGroup,
@@ -51,6 +53,8 @@ export interface AvatarConfig {
   outfit: MiaraOutfitId;
   outfitHiddenGroups: MiaraPartGroup[];
   outfitHueShift: number;
+  automeshMapping: AutomeshMapping | null;
+  automeshAtlas: string | null;
 }
 
 // Avatar state
@@ -85,6 +89,8 @@ const DEFAULT_AVATAR_CONFIG: AvatarConfig = {
   outfit: DEFAULT_MIARA_OUTFIT_ID,
   outfitHiddenGroups: [],
   outfitHueShift: 0,
+  automeshMapping: null,
+  automeshAtlas: null,
 };
 
 function sanitizeAvatarConfig(
@@ -103,6 +109,12 @@ function sanitizeAvatarConfig(
     outfit: resolved.id,
     outfitHiddenGroups: [...resolved.hiddenGroups],
     outfitHueShift: resolved.hueShift,
+    automeshMapping: resolveAutomeshMapping(config.automeshMapping),
+    automeshAtlas:
+      typeof config.automeshAtlas === "string" &&
+      config.automeshAtlas.startsWith("data:image/")
+        ? config.automeshAtlas
+        : null,
   };
 }
 
