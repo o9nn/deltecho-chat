@@ -33,6 +33,7 @@ import {
   MemoryBrowser,
 } from "@deltecho/ui-components";
 import type { UnifiedCognitiveState, Atom } from "@deltecho/cognitive";
+import { resolveMiaraOutfit } from "@deltecho/avatar";
 import { Live2DAvatar } from "./Live2DAvatar";
 import type {
   Live2DAvatarController,
@@ -40,6 +41,8 @@ import type {
   AvatarMotion,
   EmotionalVector,
 } from "./Live2DAvatar";
+import { MiaraOutfitPicker } from "../DeepTreeEchoBot/MiaraOutfitPicker";
+import { useDeepTreeEchoAvatarOptional } from "../DeepTreeEchoBot/DeepTreeEchoAvatarContext";
 import "./Live2DAvatar.scss";
 
 // Companion Card Component
@@ -194,6 +197,12 @@ const AICompanionHubContent: React.FC = () => {
   const [currentExpression, setCurrentExpression] =
     useState<Expression>("neutral");
   const [avatarAudioLevel, setAvatarAudioLevel] = useState(0);
+  const avatarContext = useDeepTreeEchoAvatarOptional();
+  const miaraOutfit = resolveMiaraOutfit({
+    id: avatarContext?.state.config.outfit,
+    hiddenGroups: avatarContext?.state.config.outfitHiddenGroups,
+    hueShift: avatarContext?.state.config.outfitHueShift,
+  });
 
   // Simulate real-time cognitive state updates
   useEffect(() => {
@@ -677,11 +686,13 @@ const AICompanionHubContent: React.FC = () => {
                         | undefined
                     }
                     audioLevel={avatarAudioLevel}
+                    outfit={miaraOutfit}
                     onLoad={() => setAvatarLoaded(true)}
                     onError={(err) => console.error("Avatar error:", err)}
                     onControllerReady={setAvatarController}
                   />
                 </div>
+                <MiaraOutfitPicker variant="panel" />
                 <div className="avatar-controls">
                   <div className="expression-buttons">
                     {(

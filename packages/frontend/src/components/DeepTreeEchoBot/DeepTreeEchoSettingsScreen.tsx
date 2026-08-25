@@ -3,6 +3,7 @@ import { getLogger } from "@deltachat-desktop/shared/logger";
 import BotSettings from "./BotSettings";
 import ProactiveMessagingSettings from "./ProactiveMessagingSettings";
 import TriggerManager from "./TriggerManager";
+import { MiaraOutfitPicker } from "./MiaraOutfitPicker";
 import { saveBotSettings, getBotInstance } from "./DeepTreeEchoIntegration";
 import { runtime } from "@deltachat-desktop/runtime-interface";
 
@@ -10,7 +11,7 @@ const log = getLogger(
   "render/components/DeepTreeEchoBot/DeepTreeEchoSettingsScreen",
 );
 
-type SettingsTab = "general" | "proactive" | "triggers";
+type SettingsTab = "general" | "avatar" | "proactive" | "triggers";
 
 interface DeepTreeEchoSettingsScreenProps {
   onNavigateToMain?: () => void;
@@ -211,6 +212,14 @@ const DeepTreeEchoSettingsScreen: React.FC<DeepTreeEchoSettingsScreenProps> = ({
         </button>
         <button
           type="button"
+          className={`tab ${activeTab === "avatar" ? "active" : ""}`}
+          onClick={() => setActiveTab("avatar")}
+        >
+          <span className="tab-icon">👗</span>
+          Avatar
+        </button>
+        <button
+          type="button"
           className={`tab ${activeTab === "proactive" ? "active" : ""}`}
           onClick={() => setActiveTab("proactive")}
         >
@@ -260,6 +269,18 @@ const DeepTreeEchoSettingsScreen: React.FC<DeepTreeEchoSettingsScreenProps> = ({
               </div>
             </div>
           </>
+        )}
+
+        {activeTab === "avatar" && (
+          <div className="avatar-outfit-settings">
+            <h3>Miara outfits</h3>
+            <p>
+              Choose a wardrobe preset or customize accessory layers and
+              clothing color. The selected look renders on the Live2D avatar and
+              is remembered across sessions.
+            </p>
+            <MiaraOutfitPicker variant="panel" />
+          </div>
         )}
 
         {activeTab === "proactive" && (

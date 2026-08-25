@@ -15,6 +15,7 @@ import type { CubismModelInfo } from "./cubism-adapter";
 import type { PixiLive2DRenderer } from "./pixi-live2d-renderer";
 import type { DTEchoCognitiveMode } from "../dtecho-expression-driver";
 import { projectDTEchoCognitiveState } from "../dtecho-expression-driver";
+import type { MiaraOutfitState } from "../miara-outfits";
 
 /**
  * Props for the Live2DAvatar component
@@ -103,6 +104,8 @@ export interface Live2DAvatarController {
   triggerBlink: () => void;
   /** Set a model parameter directly */
   setParameter: (paramId: string, value: number) => void;
+  /** Apply a Miara wardrobe outfit (part opacity + clothing colorway) */
+  applyOutfit: (outfit: Partial<MiaraOutfitState> | null | undefined) => void;
   /** Get renderer instance */
   getRenderer: () => PixiLive2DRenderer | null;
   /** Resize the existing view without recreating the WebGL context */
@@ -238,6 +241,9 @@ export class Live2DAvatarManager {
       },
       setParameter: (paramId, value) => {
         this.renderer?.setParameter(paramId, value);
+      },
+      applyOutfit: (outfit) => {
+        this.renderer?.applyOutfit(outfit);
       },
       getRenderer: () => this.renderer,
       resize: (width, height, scale) => {

@@ -85,6 +85,7 @@ jest.mock("pixi-live2d-display-lipsyncpatch/cubism4", () => ({
           coreModel: {
             setParameterValueById: jest.fn(),
             getParameterValueById: jest.fn().mockReturnValue(0),
+            setPartOpacityById: jest.fn(),
           },
         },
         expression: jest.fn(),
@@ -110,6 +111,7 @@ describe("PixiLive2DRenderer", () => {
       height: 400,
       parentElement: { clientWidth: 400, clientHeight: 400 },
       getContext: jest.fn(),
+      style: { filter: "" },
     } as unknown as HTMLCanvasElement;
 
     // Mock document.getElementById
@@ -253,6 +255,49 @@ describe("PixiLive2DRenderer", () => {
       renderer.dispose();
       const newRenderer = new PixiLive2DRenderer();
       expect(newRenderer.getParameter(PARAM_IDS.PARAM_ANGLE_X)).toBeUndefined();
+    });
+  });
+
+  describe("outfit wardrobe", () => {
+    beforeEach(async () => {
+      const config: CubismAdapterConfig = {
+        canvas: mockCanvas,
+        model: {
+          modelPath: "/test/model.json",
+          name: "Test Model",
+        },
+      };
+      await renderer.initialize(config);
+      await renderer.loadModel(config.model);
+    });
+
+    it("hides casual accessory parts by matching Cubism part ids", async () => {
+      const core = renderer.getModel()?.internalModel.coreModel as unknown as {
+        getPartCount: jest.Mock;
+        getPartId: jest.Mock;
+        setPartOpacityByIndex: jest.Mock;
+        setPartOpacityById: jest.Mock;
+      };
+      Object.assign(core, {
+        getPartCount: jest.fn(() => 3),
+        getPartId: jest.fn(
+          (index: number) =>
+            ["PartFairy", "PartWaterSurface", "PartChestClothLRotation"][index],
+        ),
+        setPartOpacityByIndex: jest.fn(),
+      });
+      renderer.applyOutfit({ id: "casual" });
+      expect(core.setPartOpacityByIndex).toHaveBeenCalledWith(0, 0);
+      expect(core.setPartOpacityByIndex).toHaveBeenCalledWith(1, 0);
+      expect(core.setPartOpacityByIndex).toHaveBeenCalledWith(2, 1);
+      expect(renderer.getAppliedOutfit()?.id).toBe("casual");
+    });
+
+    it("hue-rotates the canvas for clothing colorways", () => {
+      renderer.applyOutfit({ id: "rose" });
+      expect(mockCanvas.style.filter).toBe("hue-rotate(310deg)");
+      renderer.applyOutfit({ id: "official" });
+      expect(mockCanvas.style.filter).toBe("");
     });
   });
 

@@ -17,6 +17,7 @@ import { DeltaInput, DeltaTextarea } from "../Login-Styles";
 import Callout from "../Callout";
 import styles from "./styles.module.scss";
 import { DivergenceMonitor } from "../DeepTreeEchoBot/DivergenceMonitor";
+import { MiaraOutfitPicker } from "../DeepTreeEchoBot/MiaraOutfitPicker";
 
 const log = getLogger("render/components/Settings/BotSettings");
 
@@ -134,6 +135,15 @@ export default function BotSettings({
       />
 
       {feedbackMessage && <Callout>{feedbackMessage}</Callout>}
+
+      <SettingsSeparator />
+      <SettingsHeading>Miara outfits</SettingsHeading>
+      <p className={styles.metaLabel}>
+        Choose a wardrobe preset or customize accessory layers and clothing
+        color. The selected look renders on the Live2D avatar and is remembered
+        across sessions.
+      </p>
+      <MiaraOutfitPicker variant="panel" />
 
       <SettingsSeparator />
       <SettingsHeading>Capabilities</SettingsHeading>

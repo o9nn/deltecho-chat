@@ -21,6 +21,13 @@ import {
   padFigureBounds,
   type DrawableBox,
 } from "./live2d-figure-bounds";
+import {
+  ALL_MIARA_WARDROBE_PART_IDS,
+  collectHiddenPartIds,
+  partIdMatchesHiddenGroups,
+  resolveMiaraOutfit,
+  type MiaraOutfitState,
+} from "../miara-outfits";
 
 /**
  * Live2D model reference type (from pixi-live2d-display)
@@ -43,6 +50,8 @@ interface Live2DModel {
     };
     width?: number;
     height?: number;
+    on?: (event: string, listener: () => void) => void;
+    off?: (event: string, listener: () => void) => void;
     getDrawableIDs?: () => string[];
     getDrawableBounds?: (
       index: number,
@@ -52,6 +61,20 @@ interface Live2DModel {
     coreModel: {
       setParameterValueById: (id: string, value: number) => void;
       getParameterValueById: (id: string) => number;
+      setPartOpacityById?: (id: string, value: number) => void;
+      getPartOpacityById?: (id: string) => number;
+      setPartOpacityByIndex?: (index: number, value: number) => void;
+      setPartOpacity?: (index: number, value: number) => void;
+      getPartIndex?: (id: string) => number;
+      getPartCount?: () => number;
+      getPartId?: (index: number) => unknown;
+      getModel?: () => {
+        parts?: {
+          count: number;
+          ids: ArrayLike<string>;
+          opacities: Float32Array | number[];
+        };
+      };
     };
   };
   expression: (name?: string) => void;
@@ -160,6 +183,23 @@ export interface PixiLive2DConfig extends Omit<CubismAdapterConfig, "canvas"> {
 /** Serialize Cubism `from()` so two Pixi GL contexts cannot share one runtime. */
 let live2dFromLock: Promise<void> = Promise.resolve();
 
+function cubismIdToString(id: unknown): string {
+  if (typeof id === "string") return id;
+  if (id && typeof id === "object") {
+    const handle = id as {
+      getString?: () => string;
+      s?: string;
+      id?: string;
+    };
+    if (typeof handle.getString === "function") {
+      return handle.getString();
+    }
+    if (typeof handle.s === "string") return handle.s;
+    if (typeof handle.id === "string") return handle.id;
+  }
+  return String(id ?? "");
+}
+
 function withLive2DFromLock<T>(fn: () => Promise<T>): Promise<T> {
   const previous = live2dFromLock;
   let release: () => void = () => undefined;
@@ -195,6 +235,10 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   private debug = false;
   private visibilityHandler: (() => void) | null = null;
   private blinkTickerCallback: ((deltaMS: number) => void) | null = null;
+  private viewCanvas: HTMLCanvasElement | null = null;
+  private appliedOutfit: MiaraOutfitState | null = null;
+  private hiddenWardrobePartIds = new Set<string>();
+  private wardrobeUpdateHook: (() => void) | null = null;
 
   /** Internal debug logger - no-op unless config.debug is true */
   private dlog(...args: unknown[]): void {
@@ -311,6 +355,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       };
     }
 
+    this.viewCanvas = canvas;
     this.initialized = true;
     this.dlog("Initialized successfully");
   }
@@ -373,7 +418,9 @@ export class PixiLive2DRenderer implements ICubismRenderer {
         return;
       }
 
+      this.detachWardrobeHook();
       this.model = model;
+      this.attachWardrobeHook();
 
       // Defensively clear stage in case a previous model left children behind.
       // Guarded for compatibility with PixiJS test mocks that may not implement
@@ -394,6 +441,10 @@ export class PixiLive2DRenderer implements ICubismRenderer {
 
       // Start auto-blink (ticker-based for proper sync with PixiJS rAF loop)
       this.startAutoBlinkLoop();
+
+      if (this.appliedOutfit) {
+        this.applyOutfit(this.appliedOutfit);
+      }
 
       this.dlog(`Model loaded: ${modelInfo.name}`);
     } catch (error) {
@@ -656,6 +707,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     if (ticker && typeof ticker.add === "function") {
       // Preferred path: ticker-driven blink.
       this.blinkTickerCallback = (_deltaMS: number) => {
+        this.enforceHiddenWardrobeParts();
         const now = performance.now();
         if (now >= this.nextBlinkAt && this.blinkCloseUntil === 0) {
           const core = this.model?.internalModel?.coreModel;
@@ -1072,6 +1124,14 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       this.visibilityHandler = null;
     }
 
+    if (this.viewCanvas?.style) {
+      this.viewCanvas.style.filter = "";
+    }
+    this.detachWardrobeHook();
+    this.viewCanvas = null;
+    this.hiddenWardrobePartIds.clear();
+    this.appliedOutfit = null;
+
     if (this.model) {
       this.model.destroy();
       this.model = null;
@@ -1133,6 +1193,136 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       this.model.internalModel.coreModel.setParameterValueById(paramId, value);
     } catch {
       console.warn("[PixiLive2DRenderer] Parameter not found:", paramId);
+    }
+  }
+
+  /**
+   * Show or hide a Cubism part by id. Used for Miara wardrobe layers.
+   * Walks part indices so string IDs match interned CubismIdHandle values.
+   */
+  setPartOpacity(partId: string, opacity: number): void {
+    const core = this.model?.internalModel?.coreModel;
+    if (!core) return;
+    const clamped = Math.min(1, Math.max(0, opacity));
+    try {
+      const native = core.getModel?.();
+      if (native?.parts?.ids && native.parts.opacities) {
+        const count = native.parts.count ?? native.parts.ids.length;
+        for (let index = 0; index < count; index++) {
+          if (cubismIdToString(native.parts.ids[index]) === partId) {
+            native.parts.opacities[index] = clamped;
+          }
+        }
+      }
+      if (
+        typeof core.getPartCount === "function" &&
+        typeof core.getPartId === "function"
+      ) {
+        const count = core.getPartCount();
+        for (let index = 0; index < count; index++) {
+          if (cubismIdToString(core.getPartId(index)) !== partId) continue;
+          if (typeof core.setPartOpacityByIndex === "function") {
+            core.setPartOpacityByIndex(index, clamped);
+            return;
+          }
+          if (typeof core.setPartOpacity === "function") {
+            core.setPartOpacity(index, clamped);
+            return;
+          }
+        }
+      }
+      if (typeof core.setPartOpacityById === "function") {
+        core.setPartOpacityById(partId, clamped);
+      }
+    } catch {
+      this.dlog("Part opacity not available:", partId);
+    }
+  }
+
+  /**
+   * Apply a Miara outfit: hide wardrobe parts and hue-shift clothing colorways.
+   */
+  applyOutfit(state: Partial<MiaraOutfitState> | null | undefined): void {
+    const resolved = resolveMiaraOutfit(state);
+    this.appliedOutfit = resolved;
+    if (!this.model || !this.initialized) return;
+
+    const hidden = new Set([
+      ...collectHiddenPartIds(resolved.hiddenGroups),
+      ...this.listPartIds().filter((partId) =>
+        partIdMatchesHiddenGroups(partId, resolved.hiddenGroups),
+      ),
+    ]);
+    this.hiddenWardrobePartIds = hidden;
+    for (const partId of new Set([
+      ...ALL_MIARA_WARDROBE_PART_IDS,
+      ...this.listPartIds(),
+    ])) {
+      this.setPartOpacity(partId, hidden.has(partId) ? 0 : 1);
+    }
+    this.applyOutfitHue(resolved.hueShift);
+    this.dlog(
+      `Outfit applied: ${resolved.id} hidden=${
+        resolved.hiddenGroups.join(",") || "none"
+      } hue=${resolved.hueShift}`,
+    );
+  }
+
+  getAppliedOutfit(): MiaraOutfitState | null {
+    return this.appliedOutfit;
+  }
+
+  private listPartIds(): string[] {
+    const core = this.model?.internalModel?.coreModel;
+    if (!core) return [];
+    const ids: string[] = [];
+    const native = core.getModel?.();
+    if (native?.parts?.ids) {
+      const count = native.parts.count ?? native.parts.ids.length;
+      for (let index = 0; index < count; index++) {
+        ids.push(cubismIdToString(native.parts.ids[index]));
+      }
+      return ids;
+    }
+    if (typeof core.getPartCount === "function") {
+      const count = core.getPartCount();
+      for (let index = 0; index < count; index++) {
+        ids.push(cubismIdToString(core.getPartId?.(index)));
+      }
+    }
+    return ids;
+  }
+
+  private attachWardrobeHook(): void {
+    const internal = this.model?.internalModel;
+    if (!internal?.on) return;
+    this.wardrobeUpdateHook = () => this.enforceHiddenWardrobeParts();
+    internal.on("beforeModelUpdate", this.wardrobeUpdateHook);
+  }
+
+  private detachWardrobeHook(): void {
+    const internal = this.model?.internalModel;
+    if (internal?.off && this.wardrobeUpdateHook) {
+      try {
+        internal.off("beforeModelUpdate", this.wardrobeUpdateHook);
+      } catch {
+        /* ignore */
+      }
+    }
+    this.wardrobeUpdateHook = null;
+  }
+
+  private enforceHiddenWardrobeParts(): void {
+    if (this.hiddenWardrobePartIds.size === 0) return;
+    for (const partId of this.hiddenWardrobePartIds) {
+      this.setPartOpacity(partId, 0);
+    }
+  }
+
+  private applyOutfitHue(hueShift: number): void {
+    const hue = ((Math.round(hueShift) % 360) + 360) % 360;
+    if (this.viewCanvas?.style) {
+      this.viewCanvas.style.filter = hue === 0 ? "" : `hue-rotate(${hue}deg)`;
     }
   }
 

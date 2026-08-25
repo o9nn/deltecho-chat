@@ -13,6 +13,12 @@ import React, {
   useCallback,
   useEffect,
 } from "react";
+import {
+  DEFAULT_MIARA_OUTFIT_ID,
+  resolveMiaraOutfit,
+  type MiaraOutfitId,
+  type MiaraPartGroup,
+} from "@deltecho/avatar";
 import type { Live2DAvatarController } from "../AICompanionHub/Live2DAvatar";
 import { getLogger } from "@deltachat-desktop/shared/logger";
 import { registerAvatarStateControl } from "./AvatarStateManager";
@@ -37,6 +43,9 @@ export interface AvatarConfig {
   width: number;
   height: number;
   model: string;
+  outfit: MiaraOutfitId;
+  outfitHiddenGroups: MiaraPartGroup[];
+  outfitHueShift: number;
 }
 
 // Avatar state
@@ -67,7 +76,27 @@ const DEFAULT_AVATAR_CONFIG: AvatarConfig = {
   width: 300,
   height: 300,
   model: "miara",
+  outfit: DEFAULT_MIARA_OUTFIT_ID,
+  outfitHiddenGroups: [],
+  outfitHueShift: 0,
 };
+
+function sanitizeAvatarConfig(
+  config: Partial<AvatarConfig> | null | undefined,
+): Partial<AvatarConfig> {
+  if (!config || typeof config !== "object") return {};
+  const resolved = resolveMiaraOutfit({
+    id: config.outfit,
+    hiddenGroups: config.outfitHiddenGroups,
+    hueShift: config.outfitHueShift,
+  });
+  return {
+    ...config,
+    outfit: resolved.id,
+    outfitHiddenGroups: [...resolved.hiddenGroups],
+    outfitHueShift: resolved.hueShift,
+  };
+}
 
 // Default avatar state
 const DEFAULT_AVATAR_STATE: AvatarState = {
@@ -97,7 +126,7 @@ export const DeepTreeEchoAvatarProvider: React.FC<{
         // Try to load saved avatar config from settings
         const savedConfig = localStorage.getItem("deepTreeEchoAvatarConfig");
         if (savedConfig) {
-          const config = JSON.parse(savedConfig);
+          const config = sanitizeAvatarConfig(JSON.parse(savedConfig));
           setState((prev) => ({
             ...prev,
             config: { ...prev.config, ...config },
@@ -159,7 +188,10 @@ export const DeepTreeEchoAvatarProvider: React.FC<{
   const updateConfig = useCallback((configUpdate: Partial<AvatarConfig>) => {
     setState((prev) => ({
       ...prev,
-      config: { ...prev.config, ...configUpdate },
+      config: {
+        ...prev.config,
+        ...sanitizeAvatarConfig({ ...prev.config, ...configUpdate }),
+      },
     }));
   }, []);
 
