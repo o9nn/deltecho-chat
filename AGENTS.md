@@ -4,11 +4,11 @@ For general project overview, architecture, and the full command list, see `CLAU
 
 ## Cursor Cloud specific instructions
 
-This is a pnpm monorepo (Node >=20, pnpm 9.15.0). The Cloud Agent install script is `scripts/cloud-agent-install.sh` (same frozen lockfile plus the internal package build order). The team environment is dashboard-managed: do not commit `.cursor/environment.json`, which would override that dashboard. The dashboard `install` proposal is a guarded wrapper: it runs that script when the file is executable, otherwise the same inline `pnpm install --frozen-lockfile` plus CI-order package builds (the script is absent on `main` until the setup PR merges). The `propose-environment-json` schema accepts only `install` and `start`; named `terminals` (`browser-dev`, `orchestrator`) and port 3000 live here until a human adds them in the Environment panel and Saves. Until then start the same processes with the commands below. Leave `DELTECHO_AUTONOMY_STORAGE_PATH` and `DELTECHO_MEMORY_LEVER_APPLY` unset in the baseline environment.
+This is a pnpm monorepo (Node >=20, pnpm 9.15.0). The Cloud Agent install script is `scripts/cloud-agent-install.sh` (frozen lockfile, CI-order workspace builds, `@deltecho/avatar`, then `pnpm build:browser`). The team environment is dashboard-managed: do not commit `.cursor/environment.json`, which would override that dashboard. Proposed dashboard `install` is the same command list inline so a promotable `main` checkout still builds avatar + browser before this script change merges. Proposed `start` is `USE_HTTP_IN_TEST=true WEB_PORT=3000 WEB_PASSWORD=cloud-dev pnpm start:webserver` (needs the install-time browser build; do not use `NODE_ENV=test`). The `propose-environment-json` schema accepts only `install` and `start`; named `terminals` (`browser-dev`, `orchestrator`) and port 3000 live here until a human adds them in the Environment panel and Saves. Leave `DELTECHO_AUTONOMY_STORAGE_PATH` and `DELTECHO_MEMORY_LEVER_APPLY` unset in the baseline environment.
 
 ### Build workspace deps before type-checking
 
-`pnpm check` / `check:types` and the app targets rely on the internal TS packages being compiled first (they resolve each other's generated `dist/` type declarations via symlinks). The required order is: `deep-tree-echo-core` -> `@deltecho/sys6-triality` -> `@deltecho/dove9` -> `@deltecho/ipc` -> `@deltecho/cognitive` -> `deep-tree-echo-orchestrator` (see `.github/workflows/ci.yml`). The update script does this on boot; if you change one of these packages, rebuild it (`pnpm --filter=<pkg> build`) so dependents see the new types.
+`pnpm check` / `check:types` and the app targets rely on the internal TS packages being compiled first (they resolve each other's generated `dist/` type declarations via symlinks). The required order is: `deep-tree-echo-core` -> `@deltecho/sys6-triality` -> `@deltecho/dove9` -> `@deltecho/ipc` -> `@deltecho/cognitive` -> `deep-tree-echo-orchestrator` (see `.github/workflows/ci.yml`), then `@deltecho/avatar` and `pnpm build:browser` so Melody/Live2D assets are in the browser target. The update script does this on boot; if you change one of these packages, rebuild it (`pnpm --filter=<pkg> build`) so dependents see the new types.
 
 ### Standard checks/tests (already documented, listed here for convenience)
 
@@ -20,7 +20,7 @@ This is a pnpm monorepo (Node >=20, pnpm 9.15.0). The Cloud Agent install script
 
 The default/production target is Electron (`pnpm dev`), which needs a display server (e.g. xvfb) — heavy for headless testing. Prefer the **browser target** for manual testing:
 
-1. `USE_HTTP_IN_TEST=true WEB_PORT=3000 WEB_PASSWORD=cloud-dev pnpm start:browser` (`pnpm start:browser` builds, then serves; `start:webserver` needs a prior build)
+1. After install, `USE_HTTP_IN_TEST=true WEB_PORT=3000 WEB_PASSWORD=cloud-dev pnpm start:webserver`. Use `pnpm start:browser` only when you need to rebuild, then serve.
 2. Open `http://localhost:3000`, and log in with `cloud-dev` (or the `WEB_PASSWORD` you chose)
 
 `WEB_PASSWORD=cloud-dev` is a single-tenant Cloud Agent local gate, not a secret. Do not reuse this password or HTTP mode on a shared or internet-facing deploy. Proposed dashboard port 3000 assumes owner-only or Cursor-authenticated ingress.

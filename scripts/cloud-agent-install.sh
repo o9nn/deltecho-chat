@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Does not start servers. Build order matches CI so workspace packages
-# resolve each other's generated dist/ types.
+# Does not start servers. CI-order workspace packages first, then avatar
+# and the browser target so Melody/Live2D assets are ready for start:webserver.
 set -euo pipefail
 
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -13,3 +13,5 @@ pnpm --filter=@deltecho/dove9 build
 pnpm --filter=@deltecho/ipc build
 pnpm --filter=@deltecho/cognitive build
 pnpm --filter=deep-tree-echo-orchestrator build
+pnpm --filter=@deltecho/avatar build
+pnpm build:browser
