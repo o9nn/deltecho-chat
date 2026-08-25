@@ -21,3 +21,16 @@ export {
   type ApplyHooks,
 } from "./MemoryLever";
 export * from "./FileSystemStorage.js";
+export {
+  openBotMemorySession,
+  assembleReplyContext,
+  assembleBotSystemPrompt,
+  persistBotTurn,
+  retrieveRelevantMemories,
+  resolveBotPersonality,
+  DEFAULT_BOT_PERSONALITY,
+  BOT_OPERATING_GUIDE,
+  BOT_MEMORY_HIT_LIMIT,
+  type BotMemorySession,
+  type BotMemorySkipReason,
+} from "./StandaloneBotMemory";

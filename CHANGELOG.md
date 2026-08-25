@@ -4,6 +4,7 @@
 
 ### Added
 
+- Deep Tree Echo: `pnpm start:bot` reads live memories from an existing `DELTECHO_AUTONOMY_STORAGE_PATH` filesystem RAG store and may override the personality clause with `DELTECHO_BOT_PERSONALITY`. Missing or invalid storage skips memory and does not create store files.
 - Deep Tree Echo: Miara Live2D outfits are customizable — presets and accessory/color controls change the rendered avatar and persist across sessions.
 - Cloud Agent: `scripts/cloud-agent-install.sh` wraps frozen-lockfile install and the internal package build chain. Named `browser-dev` / `orchestrator` terminals exist only after a human Saves the dashboard environment proposal.
 - Deep Tree Echo: the orchestrator now starts one ProactiveLoop for process liveness and, when `DELTECHO_AUTONOMY_STORAGE_PATH` points at an existing filesystem RAG store, schedules MemoryLever dream hygiene. Ticks stay dry-run unless `DELTECHO_MEMORY_LEVER_APPLY` is `1`, `true`, or `yes`.
