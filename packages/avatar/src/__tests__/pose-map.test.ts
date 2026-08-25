@@ -100,7 +100,13 @@ describe("Melody 2D / 3D avatar mesh map", () => {
       "headsetCups",
     ]);
     expect(live2dRegionsForMesh3d("cropTop")).toEqual(["body"]);
+    expect(live2dRegionsForMesh3d("bootL")).toEqual(["legL"]);
+    expect(live2dRegionsForMesh3d("bootR")).toEqual(["legR"]);
+    expect(live2dRegionsForMesh3d("gloveL")).toEqual(["armL"]);
+    expect(live2dRegionsForMesh3d("gloveR")).toEqual(["armR"]);
     expect(live2dRegionsForMesh3d("wingFeathers")).toEqual(["wings"]);
+    expect(mesh3dGroupsForRegion("legL")).toEqual(["bootL"]);
+    expect(mesh3dGroupsForRegion("legR")).toEqual(["bootR", "thighStrap"]);
     expect(resolveAvatarMeshMap("melody")?.still).toBe(
       "./images/avatar/identities/melody.webp",
     );

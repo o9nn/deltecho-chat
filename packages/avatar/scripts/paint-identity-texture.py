@@ -21,6 +21,7 @@ from PIL import Image
 
 
 # Melody still: purple hair, gold headset, silver crop, black skirt, skin, pink wings.
+# Limb colors match the A-pose still (white boots, bare thighs, purple gloves).
 REGION_FALLBACK = {
     "hair": (132, 58, 186),
     "headset": (228, 168, 48),
@@ -28,12 +29,33 @@ REGION_FALLBACK = {
     "body": (198, 206, 214),
     "chestCloth": (20, 20, 24),
     "skirt": (18, 16, 24),
-    "arms": (236, 186, 164),
-    "legs": (228, 178, 156),
+    "armL": (236, 186, 164),
+    "armR": (236, 186, 164),
+    "legL": (228, 178, 156),
+    "legR": (228, 178, 156),
     "wings": (232, 176, 214),
     "sparkle": (255, 220, 120),
     "accessory": (210, 168, 72),
 }
+
+BOOT = (236, 236, 242)
+BOOT_SOLE = (32, 26, 24)
+THIGH_SKIN = (228, 176, 154)
+THIGH_STRAP = (96, 46, 122)
+GLOVE = (88, 40, 108)
+ARM_SKIN = (236, 186, 164)
+
+# Viewer-space boxes on the A-pose still (Y-down). Cubism +X is character left.
+STILL_LIMB_BOX = {
+    "legL": (0.50, 0.50, 0.82, 0.99),
+    "legR": (0.18, 0.50, 0.50, 0.99),
+    "armL": (0.52, 0.26, 0.96, 0.56),
+    "armR": (0.04, 0.26, 0.48, 0.56),
+    "skirt": (0.34, 0.46, 0.66, 0.58),
+}
+
+# Paint limbs in the order the still is mapped: first leg, other leg, arm, arm 2, skirt.
+LIMB_PAINT_ORDER = ("legL", "legR", "armL", "armR", "skirt")
 
 SKIP_REGIONS = {"environment"}
 LUMA = np.array([0.2126, 0.7152, 0.0722], dtype=np.float32)
@@ -179,6 +201,75 @@ def texture_stats(arr: np.ndarray) -> dict:
     }
 
 
+def sample_still_limb(
+    still: np.ndarray,
+    figure: dict,
+    point: dict,
+    region: str,
+) -> tuple[int, int, int] | None:
+    """Map a Cubism figure point onto the A-pose still, clamped to that limb."""
+    height, width = still.shape[:2]
+    fig_w = max(float(figure.get("w") or figure.get("width") or 1), 1e-6)
+    fig_h = max(float(figure.get("h") or figure.get("height") or 1), 1e-6)
+    u = (float(point["x"]) - float(figure["x"])) / fig_w
+    v = 1.0 - (float(point["y"]) - float(figure["y"])) / fig_h
+    box = STILL_LIMB_BOX.get(region)
+    if box:
+        u = min(box[2], max(box[0], u))
+        v = min(box[3], max(box[1], v))
+    if u < 0 or u > 1 or v < 0 or v > 1:
+        return None
+    px = min(width - 1, max(0, int(u * (width - 1))))
+    py = min(height - 1, max(0, int(v * (height - 1))))
+    pixel = still[py, px]
+    if pixel[3] < 16:
+        return None
+    return int(pixel[0]), int(pixel[1]), int(pixel[2])
+
+
+def still_matches_limb(rgb: tuple[int, int, int], region: str) -> bool:
+    r, g, b = rgb
+    if max(rgb) <= 28:
+        return False
+    purple_hair = r > 70 and b > 90 and g < r * 0.9 and b > g * 0.85 and r - g > 20
+    if purple_hair and region != "skirt":
+        return False
+    if region.startswith("leg"):
+        skin = r > 130 and r > g and r > b - 10
+        boot = r > 170 and g > 170 and b > 170
+        strap = 40 < r < 140 and b > 70 and r >= g
+        sole = max(rgb) < 80
+        return skin or boot or strap or sole
+    if region.startswith("arm"):
+        skin = r > 130 and r > g and r > b - 10
+        glove = r < 140 and b > 60 and r >= g - 10
+        return skin or glove
+    if region == "skirt":
+        return max(rgb) < 90
+    return True
+
+
+def limb_fallback(drawable: dict) -> tuple[int, int, int]:
+    region = drawable.get("region")
+    y = float((drawable.get("figure") or {}).get("y") or 0)
+    drawable_id = drawable.get("id")
+    if region in {"legL", "legR"}:
+        if drawable_id in {"ArtMesh152", "ArtMesh153"}:
+            return THIGH_STRAP
+        if y < -0.42:
+            return BOOT_SOLE if y < -0.47 else BOOT
+        if y < -0.36:
+            return BOOT
+        return THIGH_SKIN
+    if region in {"armL", "armR"}:
+        if y < 0.02:
+            return GLOVE
+        return ARM_SKIN
+    if region == "skirt":
+        return REGION_FALLBACK["skirt"]
+    return REGION_FALLBACK.get(region, THIGH_SKIN)
+
+
 def region_stats(
     arr: np.ndarray, owner: np.ndarray, drawables: list
 ) -> dict[str, dict]:
@@ -208,9 +299,10 @@ def paint_melody(
     dest: Path,
 ) -> int:
     del atlas_path  # sparse atlas overlay shatters the live mesh
-    del still_path  # still-band medians sampled the black backdrop
     mesh_map = json.loads(mesh_map_path.read_text())
     official = Image.open(official_path).convert("RGBA")
+    still = np.array(Image.open(still_path).convert("RGBA"))
+    figure = mesh_map.get("figure") or {}
     arr = np.array(official)
     src_rgb = arr[..., :3].copy()
     drawables = list(mesh_map.get("drawables") or [])
@@ -235,14 +327,9 @@ def paint_melody(
     # are water and hex FX — painting those AABBs is what made square shards.
     env_zone = (xx / max(width - 1, 1) > 0.55) | (yy / max(height - 1, 1) > 0.62)
 
-    # Hanging ponytail islands sit in body/skirt bands. FX shards do not.
-    hair_host = (
-        owned_region("hair")
-        | owned_region("body")
-        | owned_region("skirt")
-        | owned_region("arms")
-        | owned_region("legs")
-    ) & ~env_zone
+    # Limb islands keep their official cyan pixels so the still can recast
+    # stockings / sleeves. Only hair + body host hanging-strand fallback.
+    hair_host = (owned_region("hair") | owned_region("body")) & ~env_zone
     hair_px = hair_host & hair_like(src_rgb) & ~owned_region("face") & ~skin_px
     rgb = arr[..., :3]
     painted = 0
@@ -259,18 +346,36 @@ def paint_melody(
     painted += int(face.sum())
 
     figure = owned & ~env_zone
+    painted_limbs = np.zeros(owner.shape, dtype=bool)
 
-    # Skirt / dark cloth, but never on cyan hair or skin.
-    skirt = (
-        (owned_region("skirt") | owned_region("chestCloth"))
-        & figure
-        & ~hair_px
-        & ~skin_px
-    )
-    replace_toward(rgb, skirt, REGION_FALLBACK["skirt"], 0.94)
-    painted += int(skirt.sum())
+    # Map one limb at a time from the still: leg, leg 2, arm, arm 2, skirt.
+    for region in LIMB_PAINT_ORDER:
+        for index in region_index.get(region) or []:
+            drawable = drawables[index]
+            mask = (owner == index) & figure
+            if region == "skirt":
+                mask = mask & ~skin_px & ~hair_px
+            if not np.any(mask):
+                continue
+            target = limb_fallback(drawable)
+            sampled = sample_still_limb(
+                still,
+                mesh_map.get("figure") or {},
+                drawable.get("figure") or {},
+                region,
+            )
+            if sampled is not None and still_matches_limb(sampled, region):
+                target = sampled
+            if region == "skirt":
+                replace_toward(rgb, mask, target, 0.94)
+            elif region in {"legL", "legR"}:
+                replace_toward(rgb, mask, target, 0.9)
+            else:
+                tint_toward(rgb, mask, target, 0.88, 1.06)
+            painted_limbs |= mask
+            painted += int(mask.sum())
 
-    body = owned_region("body") & figure & ~hair_px & ~skin_px & ~skirt
+    body = owned_region("body") & figure & ~hair_px & ~skin_px & ~painted_limbs
     tint_toward(rgb, body, REGION_FALLBACK["body"], 0.82, 1.08)
     painted += int(body.sum())
 
@@ -291,20 +396,22 @@ def paint_melody(
     tint_toward(rgb, headset, REGION_FALLBACK["headset"], 0.58, 1.06)
     painted += int(headset.sum())
 
-    arms = owned_region("arms") & figure & ~hair_px & ~skin_px
-    tint_toward(rgb, arms, REGION_FALLBACK["arms"], 0.9, 1.05)
-    painted += int(arms.sum())
-
-    legs = owned_region("legs") & figure & ~hair_px & ~skin_px
-    tint_toward(rgb, legs, REGION_FALLBACK["legs"], 0.88, 1.06)
-    painted += int(legs.sum())
+    chest = owned_region("chestCloth") & figure & ~hair_px & ~skin_px
+    replace_toward(rgb, chest, REGION_FALLBACK["chestCloth"], 0.9)
+    painted += int(chest.sum())
 
     # Hair-owned figure pixels (env sheets excluded) plus cyan hanging strands.
     hair = hair_px | (owned_region("hair") & figure & ~skin_px)
     tint_toward(rgb, hair, REGION_FALLBACK["hair"], 0.72, 1.08)
     painted += int(hair.sum())
 
-    leftover_teal = figure & hair_like(src_rgb) & ~hair & ~owned_region("sparkle")
+    leftover_teal = (
+        figure
+        & hair_like(src_rgb)
+        & ~hair
+        & ~owned_region("sparkle")
+        & ~painted_limbs
+    )
     tint_toward(
         rgb,
         leftover_teal & (owned_region("face") | owned_region("body")),

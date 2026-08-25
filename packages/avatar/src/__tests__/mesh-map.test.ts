@@ -60,7 +60,7 @@ describe("mesh-map region classifier", () => {
   it("bands Y-up figure space into hair, face, body, skirt, and legs", () => {
     expect(
       classifyDrawable({
-        id: "ArtMesh10",
+        id: "ArtMesh210",
         uv: { x: 0.3, y: 0.2, w: 0.15, h: 0.15 },
         figure: { x: 0, y: 0.48 },
         area: 0.02,
@@ -97,13 +97,64 @@ describe("mesh-map region classifier", () => {
         figure: { x: 0.03, y: -0.28 },
         area: 0.011,
       }),
-    ).toBe("legs");
+    ).toBe("legL");
+    expect(
+      classifyDrawable({
+        id: "ArtMesh15",
+        uv: { x: 0.35, y: 0.7, w: 0.08, h: 0.14 },
+        figure: { x: -0.08, y: -0.28 },
+        area: 0.011,
+      }),
+    ).toBe("legR");
+  });
+
+  it("pins official Cubism limb parts to left/right legs and arms", () => {
+    expect(
+      classifyDrawable({
+        id: "ArtMesh91",
+        uv: { x: 0.2, y: 0.2, w: 0.05, h: 0.05 },
+        figure: { x: 0.2, y: 0.5 },
+        area: 0.002,
+      }),
+    ).toBe("legL");
+    expect(
+      classifyDrawable({
+        id: "ArtMesh100",
+        uv: { x: 0.2, y: 0.2, w: 0.05, h: 0.05 },
+        figure: { x: -0.2, y: 0.5 },
+        area: 0.002,
+      }),
+    ).toBe("legR");
+    expect(
+      classifyDrawable({
+        id: "ArtMesh16",
+        uv: { x: 0.2, y: 0.2, w: 0.05, h: 0.05 },
+        figure: { x: 0, y: 0.5 },
+        area: 0.002,
+      }),
+    ).toBe("armL");
+    expect(
+      classifyDrawable({
+        id: "ArtMesh80",
+        uv: { x: 0.2, y: 0.2, w: 0.05, h: 0.05 },
+        figure: { x: 0, y: 0.5 },
+        area: 0.002,
+      }),
+    ).toBe("armR");
+    expect(
+      classifyDrawable({
+        id: "ArtMesh84",
+        uv: { x: 0.2, y: 0.2, w: 0.05, h: 0.05 },
+        figure: { x: 0, y: 0.5 },
+        area: 0.002,
+      }),
+    ).toBe("skirt");
   });
 
   it("marks compact ear-level islands as headset", () => {
     expect(
       classifyDrawable({
-        id: "ArtMesh90",
+        id: "ArtMesh210",
         uv: { x: 0.28, y: 0.22, w: 0.04, h: 0.04 },
         figure: { x: 0.1, y: 0.42 },
         area: 0.0016,
@@ -127,7 +178,7 @@ describe("mesh-map region classifier", () => {
           renderOrder: 10,
         },
         {
-          id: "ArtMesh10",
+          id: "ArtMesh210",
           uvs: [0.3, 0.2, 0.4, 0.2, 0.35, 0.3],
           positions: [0, 0.48, 0.02, 0.5, -0.02, 0.46],
         },
@@ -140,7 +191,7 @@ describe("mesh-map region classifier", () => {
     expect(identityCubismStem("melody")).toBe("melody_t03");
     expect(identityCubismStem("miara")).toBe("miara_pro_t03");
     expect(regionForDrawable(meshMap, "ArtMesh76")).toBe("chestCloth");
-    expect(regionForDrawable(meshMap, "ArtMesh10")).toBe("hair");
+    expect(regionForDrawable(meshMap, "ArtMesh210")).toBe("hair");
     expect(regionCounts(meshMap).chestCloth).toBe(1);
     expect(regionCounts(meshMap).hair).toBe(1);
     expect(
@@ -148,7 +199,7 @@ describe("mesh-map region classifier", () => {
     ).toEqual(
       expect.arrayContaining(["ParamHairFront", "HairFrontShake"]),
     );
-    expect(REGION_MOTION_BINDINGS).toHaveLength(12);
+    expect(REGION_MOTION_BINDINGS).toHaveLength(14);
   });
 
   it("reads UV islands and Y-up centroids from live inspect buffers", () => {

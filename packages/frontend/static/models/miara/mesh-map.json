@@ -22,7 +22,11 @@
       "ArtMesh121",
       "ArtMesh112",
       "ArtMesh113",
-      "ArtMesh114"
+      "ArtMesh114",
+      "ArtMesh185",
+      "ArtMesh186",
+      "ArtMesh190",
+      "ArtMesh191"
     ],
     "sparkle": [
       "ArtMesh138",
@@ -169,26 +173,24 @@
       "ArtMesh167",
       "ArtMesh168"
     ],
-    "arms": [
+    "armL": [
       "ArtMesh16",
-      "ArtMesh80",
       "ArtMesh135",
       "ArtMesh10",
       "ArtMesh21",
+      "ArtMesh158",
+      "ArtMesh159"
+    ],
+    "armR": [
+      "ArtMesh80",
       "ArtMesh117",
       "ArtMesh119",
       "ArtMesh120",
-      "ArtMesh158",
-      "ArtMesh159",
       "ArtMesh173",
       "ArtMesh174",
-      "ArtMesh175",
-      "ArtMesh185",
-      "ArtMesh186",
-      "ArtMesh190",
-      "ArtMesh191"
+      "ArtMesh175"
     ],
-    "legs": [
+    "legL": [
       "ArtMesh83",
       "ArtMesh86",
       "ArtMesh87",
@@ -196,6 +198,11 @@
       "ArtMesh91",
       "ArtMesh92",
       "ArtMesh93",
+      "ArtMesh88",
+      "ArtMesh89",
+      "ArtMesh85"
+    ],
+    "legR": [
       "ArtMesh94",
       "ArtMesh97",
       "ArtMesh98",
@@ -207,9 +214,6 @@
       "ArtMesh99",
       "ArtMesh103",
       "ArtMesh102",
-      "ArtMesh88",
-      "ArtMesh89",
-      "ArtMesh85",
       "ArtMesh152",
       "ArtMesh153",
       "ArtMesh154"
@@ -503,7 +507,7 @@
         "x": -0.00429813884598527,
         "y": 0.3876875911069953
       },
-      "area": 0.00008470154561734944,
+      "area": 8.470154561734944e-05,
       "opacity": 1,
       "renderOrder": 139,
       "region": "hair"
@@ -521,7 +525,7 @@
         "x": -0.0013992786552989855,
         "y": 0.386656079441309
       },
-      "area": 0.000060905233549846116,
+      "area": 6.0905233549846116e-05,
       "opacity": 1,
       "renderOrder": 138,
       "region": "hair"
@@ -557,7 +561,7 @@
         "x": -0.020907836966216564,
         "y": 0.41872934997081757
       },
-      "area": 0.000021422345163557566,
+      "area": 2.1422345163557566e-05,
       "opacity": 1,
       "renderOrder": 134,
       "region": "hair"
@@ -575,7 +579,7 @@
         "x": -0.02855542846597158,
         "y": 0.4194540266807263
       },
-      "area": 0.00002206122186265702,
+      "area": 2.206122186265702e-05,
       "opacity": 1,
       "renderOrder": 133,
       "region": "wings"
@@ -593,7 +597,7 @@
         "x": -0.03629300163851844,
         "y": 0.4099566439787547
       },
-      "area": 0.00002996507288965944,
+      "area": 2.996507288965944e-05,
       "opacity": 1,
       "renderOrder": 132,
       "region": "wings"
@@ -611,7 +615,7 @@
         "x": -0.027072721406033163,
         "y": 0.3982229609238474
       },
-      "area": 0.000060323084577262875,
+      "area": 6.0323084577262875e-05,
       "opacity": 1,
       "renderOrder": 131,
       "region": "hair"
@@ -665,7 +669,7 @@
         "x": 0.023855324958761533,
         "y": 0.39370086789131165
       },
-      "area": 0.00001851619025039497,
+      "area": 1.851619025039497e-05,
       "opacity": 1,
       "renderOrder": 124,
       "region": "hair"
@@ -683,7 +687,7 @@
         "x": 0.03196013206616044,
         "y": 0.39063039794564247
       },
-      "area": 0.000028991060023741966,
+      "area": 2.8991060023741966e-05,
       "opacity": 1,
       "renderOrder": 123,
       "region": "hair"
@@ -701,7 +705,7 @@
         "x": 0.032113899414738016,
         "y": 0.380304608742396
       },
-      "area": 0.00002565050308156458,
+      "area": 2.565050308156458e-05,
       "opacity": 1,
       "renderOrder": 122,
       "region": "hair"
@@ -719,7 +723,7 @@
         "x": 0.019359928604803588,
         "y": 0.3754243521313918
       },
-      "area": 0.000034888569526714264,
+      "area": 3.4888569526714264e-05,
       "opacity": 1,
       "renderOrder": 121,
       "region": "hair"
@@ -737,7 +741,7 @@
         "x": 0.018344110809266567,
         "y": 0.38955219302858624
       },
-      "area": 0.000014636283976798836,
+      "area": 1.4636283976798836e-05,
       "opacity": 1,
       "renderOrder": 120,
       "region": "hair"
@@ -755,7 +759,7 @@
         "x": 0.021492301300168038,
         "y": 0.3865438163280487
       },
-      "area": 0.0000040404980730102125,
+      "area": 4.0404980730102125e-06,
       "opacity": 1,
       "renderOrder": 119,
       "region": "hair"
@@ -809,7 +813,7 @@
         "x": -0.01794320301940808,
         "y": 0.36155664462309617
       },
-      "area": 0.00003556887266853437,
+      "area": 3.556887266853437e-05,
       "opacity": 1,
       "renderOrder": 109,
       "region": "hair"
@@ -917,7 +921,7 @@
         "x": 0.02008269988000393,
         "y": 0.3679549992084503
       },
-      "area": 0.000005000718161340956,
+      "area": 5.000718161340956e-06,
       "opacity": 1,
       "renderOrder": 102,
       "region": "hair"
@@ -938,7 +942,7 @@
       "area": 0.007163438565847002,
       "opacity": 1,
       "renderOrder": 155,
-      "region": "arms"
+      "region": "armL"
     },
     {
       "id": "ArtMesh17",
@@ -1064,7 +1068,7 @@
       "area": 0.004233900339389862,
       "opacity": 1,
       "renderOrder": 79,
-      "region": "arms"
+      "region": "armR"
     },
     {
       "id": "ArtMesh81",
@@ -1118,7 +1122,7 @@
       "area": 0.004876675662003116,
       "opacity": 1,
       "renderOrder": 76,
-      "region": "legs"
+      "region": "legL"
     },
     {
       "id": "ArtMesh84",
@@ -1151,10 +1155,10 @@
         "x": 0.13833132684230803,
         "y": -0.40516080856323244
       },
-      "area": 0.00003241497493355894,
+      "area": 3.241497493355894e-05,
       "opacity": 1,
       "renderOrder": 73,
-      "region": "legs"
+      "region": "legL"
     },
     {
       "id": "ArtMesh87",
@@ -1172,7 +1176,7 @@
       "area": 0.0006881614468028374,
       "opacity": 1,
       "renderOrder": 72,
-      "region": "legs"
+      "region": "legL"
     },
     {
       "id": "ArtMesh90",
@@ -1190,7 +1194,7 @@
       "area": 0.0016219673965789383,
       "opacity": 1,
       "renderOrder": 69,
-      "region": "legs"
+      "region": "legL"
     },
     {
       "id": "ArtMesh91",
@@ -1208,7 +1212,7 @@
       "area": 0.007988812824400782,
       "opacity": 1,
       "renderOrder": 68,
-      "region": "legs"
+      "region": "legL"
     },
     {
       "id": "ArtMesh92",
@@ -1226,7 +1230,7 @@
       "area": 0.0007519170985830215,
       "opacity": 1,
       "renderOrder": 67,
-      "region": "legs"
+      "region": "legL"
     },
     {
       "id": "ArtMesh93",
@@ -1244,7 +1248,7 @@
       "area": 0.0004747719232796044,
       "opacity": 1,
       "renderOrder": 66,
-      "region": "legs"
+      "region": "legL"
     },
     {
       "id": "ArtMesh94",
@@ -1262,7 +1266,7 @@
       "area": 0.0002732524389017499,
       "opacity": 1,
       "renderOrder": 65,
-      "region": "legs"
+      "region": "legR"
     },
     {
       "id": "ArtMesh96",
@@ -1298,7 +1302,7 @@
       "area": 0.0009713549577083924,
       "opacity": 1,
       "renderOrder": 62,
-      "region": "legs"
+      "region": "legR"
     },
     {
       "id": "ArtMesh98",
@@ -1316,7 +1320,7 @@
       "area": 0.0004503903932118192,
       "opacity": 1,
       "renderOrder": 61,
-      "region": "legs"
+      "region": "legR"
     },
     {
       "id": "ArtMesh101",
@@ -1334,7 +1338,7 @@
       "area": 0.000382725705754261,
       "opacity": 1,
       "renderOrder": 58,
-      "region": "legs"
+      "region": "legR"
     },
     {
       "id": "ArtMesh104",
@@ -1352,7 +1356,7 @@
       "area": 0.0003347693519808459,
       "opacity": 1,
       "renderOrder": 55,
-      "region": "legs"
+      "region": "legR"
     },
     {
       "id": "ArtMesh105",
@@ -1370,7 +1374,7 @@
       "area": 0.00042736108455621036,
       "opacity": 1,
       "renderOrder": 54,
-      "region": "legs"
+      "region": "legR"
     },
     {
       "id": "ArtMesh106",
@@ -1460,7 +1464,7 @@
       "area": 0.0028209098213487493,
       "opacity": 1,
       "renderOrder": 43,
-      "region": "arms"
+      "region": "armL"
     },
     {
       "id": "ArtMesh138",
@@ -1709,7 +1713,7 @@
         "x": -0.028097552433609962,
         "y": 0.39362046122550964
       },
-      "area": 0.000007679306234464889,
+      "area": 7.679306234464889e-06,
       "opacity": 1,
       "renderOrder": 103,
       "region": "hair"
@@ -1727,7 +1731,7 @@
         "x": -0.029986916376011714,
         "y": 0.4129523975508554
       },
-      "area": 0.000020622324136354564,
+      "area": 2.0622324136354564e-05,
       "opacity": 1,
       "renderOrder": 129,
       "region": "hair"
@@ -1745,7 +1749,7 @@
         "x": -0.026506200964961733,
         "y": 0.4099090184484209
       },
-      "area": 0.000005089409603087347,
+      "area": 5.089409603087347e-06,
       "opacity": 1,
       "renderOrder": 128,
       "region": "hair"
@@ -1802,7 +1806,7 @@
       "area": 0.004215497831658865,
       "opacity": 1,
       "renderOrder": 64,
-      "region": "legs"
+      "region": "legR"
     },
     {
       "id": "ArtMesh6",
@@ -1838,7 +1842,7 @@
       "area": 0.004068673423924807,
       "opacity": 1,
       "renderOrder": 59,
-      "region": "legs"
+      "region": "legR"
     },
     {
       "id": "ArtMesh31",
@@ -1910,7 +1914,7 @@
       "area": 0.0002679841125043936,
       "opacity": 1,
       "renderOrder": 60,
-      "region": "legs"
+      "region": "legR"
     },
     {
       "id": "ArtMesh111",
@@ -2018,7 +2022,7 @@
       "area": 0.0012886871697181945,
       "opacity": 1,
       "renderOrder": 56,
-      "region": "legs"
+      "region": "legR"
     },
     {
       "id": "ArtMesh102",
@@ -2036,7 +2040,7 @@
       "area": 0.0010561273669402738,
       "opacity": 1,
       "renderOrder": 57,
-      "region": "legs"
+      "region": "legR"
     },
     {
       "id": "ArtMesh116",
@@ -2123,7 +2127,7 @@
         "x": 0.020939014106988906,
         "y": 0.4065661489963531
       },
-      "area": 0.00005054682856453496,
+      "area": 5.054682856453496e-05,
       "opacity": 1,
       "renderOrder": 115,
       "region": "hair"
@@ -2249,7 +2253,7 @@
         "x": 0.027864541076123715,
         "y": 0.39248745679855346
       },
-      "area": 0.00009646340923907815,
+      "area": 9.646340923907815e-05,
       "opacity": 1,
       "renderOrder": 114,
       "region": "hair"
@@ -2324,7 +2328,7 @@
       "area": 0.0006612245313384335,
       "opacity": 1,
       "renderOrder": 71,
-      "region": "legs"
+      "region": "legL"
     },
     {
       "id": "ArtMesh89",
@@ -2342,7 +2346,7 @@
       "area": 0.0009788832864749963,
       "opacity": 1,
       "renderOrder": 70,
-      "region": "legs"
+      "region": "legL"
     },
     {
       "id": "ArtMesh85",
@@ -2360,7 +2364,7 @@
       "area": 0.0005719318543597751,
       "opacity": 1,
       "renderOrder": 74,
-      "region": "legs"
+      "region": "legL"
     },
     {
       "id": "ArtMesh22",
@@ -2432,7 +2436,7 @@
       "area": 0.00021101755089958374,
       "opacity": 1,
       "renderOrder": 161,
-      "region": "arms"
+      "region": "armL"
     },
     {
       "id": "ArtMesh13",
@@ -2468,7 +2472,7 @@
       "area": 0.004113271226929172,
       "opacity": 1,
       "renderOrder": 150,
-      "region": "arms"
+      "region": "armL"
     },
     {
       "id": "ArtMesh11",
@@ -2594,7 +2598,7 @@
       "area": 0.00623031935399343,
       "opacity": 1,
       "renderOrder": 7,
-      "region": "arms"
+      "region": "armR"
     },
     {
       "id": "ArtMesh122",
@@ -2699,7 +2703,7 @@
         "x": 0.04007804927726587,
         "y": 0.3723340729872386
       },
-      "area": 0.00006668213654847932,
+      "area": 6.668213654847932e-05,
       "opacity": 1,
       "renderOrder": 113,
       "region": "hair"
@@ -2810,7 +2814,7 @@
       "area": 0.0003606444765544836,
       "opacity": 1,
       "renderOrder": 1,
-      "region": "arms"
+      "region": "armR"
     },
     {
       "id": "ArtMesh120",
@@ -2828,7 +2832,7 @@
       "area": 0.00023128454116783104,
       "opacity": 1,
       "renderOrder": 0,
-      "region": "arms"
+      "region": "armR"
     },
     {
       "id": "ArtMesh180",
@@ -2990,7 +2994,7 @@
       "area": 0.0035467818031023057,
       "opacity": 1,
       "renderOrder": 17,
-      "region": "legs"
+      "region": "legR"
     },
     {
       "id": "ArtMesh153",
@@ -3008,7 +3012,7 @@
       "area": 0.0014053671494629327,
       "opacity": 1,
       "renderOrder": 16,
-      "region": "legs"
+      "region": "legR"
     },
     {
       "id": "ArtMesh154",
@@ -3026,7 +3030,7 @@
       "area": 0.00026831094121693155,
       "opacity": 1,
       "renderOrder": 15,
-      "region": "legs"
+      "region": "legR"
     },
     {
       "id": "ArtMesh155",
@@ -3098,7 +3102,7 @@
       "area": 0.0025849024469408732,
       "opacity": 1,
       "renderOrder": 25,
-      "region": "arms"
+      "region": "armL"
     },
     {
       "id": "ArtMesh159",
@@ -3116,7 +3120,7 @@
       "area": 0.0040844238154083,
       "opacity": 1,
       "renderOrder": 24,
-      "region": "arms"
+      "region": "armL"
     },
     {
       "id": "ArtMesh160",
@@ -3368,7 +3372,7 @@
       "area": 0.0019055259311784312,
       "opacity": 1,
       "renderOrder": 84,
-      "region": "arms"
+      "region": "armR"
     },
     {
       "id": "ArtMesh174",
@@ -3386,7 +3390,7 @@
       "area": 0.0010595281300425086,
       "opacity": 1,
       "renderOrder": 83,
-      "region": "arms"
+      "region": "armR"
     },
     {
       "id": "ArtMesh175",
@@ -3401,10 +3405,10 @@
         "x": -0.18811298161745071,
         "y": -0.054329851642251015
       },
-      "area": 0.000039345805888046925,
+      "area": 3.9345805888046925e-05,
       "opacity": 1,
       "renderOrder": 82,
-      "region": "arms"
+      "region": "armR"
     },
     {
       "id": "ArtMesh182",
@@ -3476,7 +3480,7 @@
       "area": 0.0004911484601848315,
       "opacity": 1,
       "renderOrder": 174,
-      "region": "arms"
+      "region": "wings"
     },
     {
       "id": "ArtMesh186",
@@ -3491,10 +3495,10 @@
         "x": -0.3728761225938797,
         "y": 0.20954648902018866
       },
-      "area": 0.00003633663965274536,
+      "area": 3.633663965274536e-05,
       "opacity": 1,
       "renderOrder": 173,
-      "region": "arms"
+      "region": "wings"
     },
     {
       "id": "ArtMesh187",
@@ -3566,7 +3570,7 @@
       "area": 0.000532026885448289,
       "opacity": 1,
       "renderOrder": 180,
-      "region": "arms"
+      "region": "wings"
     },
     {
       "id": "ArtMesh191",
@@ -3581,10 +3585,10 @@
         "x": -0.281381219625473,
         "y": 0.21174902617931365
       },
-      "area": 0.0000211113788992634,
+      "area": 2.11113788992634e-05,
       "opacity": 1,
       "renderOrder": 179,
-      "region": "arms"
+      "region": "wings"
     }
   ],
   "motions": [
@@ -3659,24 +3663,46 @@
       ]
     },
     {
-      "region": "arms",
+      "region": "armL",
       "physics": [
-        "SleeveL",
-        "SleeveR"
+        "SleeveL"
       ],
       "parameters": [
-        "ParamArmL",
-        "ParamArmR",
-        "ParamSleeveL",
-        "ParamSleeveR"
+        "ParamArmL1",
+        "ParamArmL2",
+        "ParamArmL3",
+        "ParamSleeveL"
       ]
     },
     {
-      "region": "legs",
+      "region": "armR",
+      "physics": [
+        "SleeveR"
+      ],
+      "parameters": [
+        "ParamArmR1",
+        "ParamArmR2",
+        "ParamArmR3",
+        "ParamSleeve"
+      ]
+    },
+    {
+      "region": "legL",
       "physics": [],
       "parameters": [
-        "ParamLegL",
-        "ParamLegR"
+        "ParamLegL1X",
+        "ParamLegL2X",
+        "ParamLegL3X"
+      ]
+    },
+    {
+      "region": "legR",
+      "physics": [],
+      "parameters": [
+        "ParamLegR1X",
+        "ParamLegR2X",
+        "ParamLegR3X",
+        "ParamLegRibbonR1"
       ]
     },
     {

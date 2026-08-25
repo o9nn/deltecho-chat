@@ -18,61 +18,112 @@
       {
         "id": "hairCrown",
         "label": "Crown / volume",
-        "live2dRegions": ["hair"],
-        "physics": ["HairFront", "HairSide"],
-        "parameters": ["ParamHairFront", "ParamHairSide"],
-        "deformBands": ["hair-volume", "hair-sides"],
+        "live2dRegions": [
+          "hair"
+        ],
+        "physics": [
+          "HairFront",
+          "HairSide"
+        ],
+        "parameters": [
+          "ParamHairFront",
+          "ParamHairSide"
+        ],
+        "deformBands": [
+          "hair-volume",
+          "hair-sides"
+        ],
         "visibleInAPose": true
       },
       {
         "id": "hairPonytail",
         "label": "High ponytail",
-        "live2dRegions": ["hair"],
-        "physics": ["HairBack"],
-        "parameters": ["ParamHairBack", "ParamHairTail"],
-        "deformBands": ["hair-volume"],
+        "live2dRegions": [
+          "hair"
+        ],
+        "physics": [
+          "HairBack"
+        ],
+        "parameters": [
+          "ParamHairBack",
+          "ParamHairTail"
+        ],
+        "deformBands": [
+          "hair-volume"
+        ],
         "visibleInAPose": true
       },
       {
         "id": "bangs",
         "label": "Bangs",
-        "live2dRegions": ["hair"],
-        "physics": ["HairFront"],
-        "parameters": ["ParamHairFront"],
-        "deformBands": ["hair-volume"],
+        "live2dRegions": [
+          "hair"
+        ],
+        "physics": [
+          "HairFront"
+        ],
+        "parameters": [
+          "ParamHairFront"
+        ],
+        "deformBands": [
+          "hair-volume"
+        ],
         "visibleInAPose": true
       },
       {
         "id": "headsetBand",
         "label": "Headset band",
-        "live2dRegions": ["headset"],
+        "live2dRegions": [
+          "headset"
+        ],
         "physics": [],
-        "parameters": ["ParamAngleX", "ParamAngleY", "ParamAngleZ"],
-        "deformBands": ["headset"],
+        "parameters": [
+          "ParamAngleX",
+          "ParamAngleY",
+          "ParamAngleZ"
+        ],
+        "deformBands": [
+          "headset"
+        ],
         "visibleInAPose": true
       },
       {
         "id": "headsetCups",
         "label": "Gold ear cups",
-        "live2dRegions": ["headset"],
+        "live2dRegions": [
+          "headset"
+        ],
         "physics": [],
-        "parameters": ["ParamAngleX", "ParamAngleY"],
-        "deformBands": ["headset"],
+        "parameters": [
+          "ParamAngleX",
+          "ParamAngleY"
+        ],
+        "deformBands": [
+          "headset"
+        ],
         "visibleInAPose": true
       },
       {
         "id": "face",
         "label": "Face / skin",
-        "live2dRegions": ["face"],
+        "live2dRegions": [
+          "face"
+        ],
         "physics": [],
-        "parameters": ["ParamAngleX", "ParamAngleY", "ParamAngleZ"],
+        "parameters": [
+          "ParamAngleX",
+          "ParamAngleY",
+          "ParamAngleZ"
+        ],
         "deformBands": [],
         "visibleInAPose": true
       },
       {
         "id": "eyes",
         "label": "Eyes",
-        "live2dRegions": ["face"],
+        "live2dRegions": [
+          "face"
+        ],
         "physics": [],
         "parameters": [
           "ParamEyeLOpen",
@@ -88,107 +139,308 @@
       {
         "id": "mouth",
         "label": "Mouth",
-        "live2dRegions": ["face"],
+        "live2dRegions": [
+          "face"
+        ],
         "physics": [],
-        "parameters": ["ParamMouthForm", "ParamMouthOpenY"],
+        "parameters": [
+          "ParamMouthForm",
+          "ParamMouthOpenY"
+        ],
         "deformBands": [],
         "visibleInAPose": true
       },
       {
         "id": "cropTop",
         "label": "Iridescent silver crop",
-        "live2dRegions": ["body"],
-        "physics": ["Body", "Chest"],
-        "parameters": ["ParamBreath", "ParamBodyAngleX", "ParamBodyAngleZ"],
-        "deformBands": ["waist-crop"],
+        "live2dRegions": [
+          "body"
+        ],
+        "physics": [
+          "Body",
+          "Chest"
+        ],
+        "parameters": [
+          "ParamBreath",
+          "ParamBodyAngleX",
+          "ParamBodyAngleZ"
+        ],
+        "deformBands": [
+          "waist-crop"
+        ],
         "visibleInAPose": true
       },
       {
-        "id": "gloves",
-        "label": "Fingerless gloves",
-        "live2dRegions": ["arms"],
-        "physics": ["SleeveL", "SleeveR"],
-        "parameters": ["ParamArmL1", "ParamArmR1", "ParamSleeveL", "ParamSleeve"],
+        "id": "gloveL",
+        "label": "Left fingerless glove",
+        "live2dRegions": [
+          "armL"
+        ],
+        "physics": [
+          "SleeveL"
+        ],
+        "parameters": [
+          "ParamArmL1",
+          "ParamArmL2",
+          "ParamSleeveL"
+        ],
+        "deformBands": [],
+        "visibleInAPose": true
+      },
+      {
+        "id": "gloveR",
+        "label": "Right fingerless glove",
+        "live2dRegions": [
+          "armR"
+        ],
+        "physics": [
+          "SleeveR"
+        ],
+        "parameters": [
+          "ParamArmR1",
+          "ParamArmR2",
+          "ParamSleeve"
+        ],
         "deformBands": [],
         "visibleInAPose": true
       },
       {
         "id": "skirt",
         "label": "Black pleated miniskirt",
-        "live2dRegions": ["skirt"],
-        "physics": ["Skirt"],
-        "parameters": ["ParamBodyAngleX", "ParamBodyAngleZ", "ParamCloth1"],
-        "deformBands": ["skirt-hem"],
+        "live2dRegions": [
+          "skirt"
+        ],
+        "physics": [
+          "Skirt"
+        ],
+        "parameters": [
+          "ParamBodyAngleX",
+          "ParamBodyAngleZ",
+          "ParamCloth1"
+        ],
+        "deformBands": [
+          "skirt-hem"
+        ],
         "visibleInAPose": true
       },
       {
         "id": "skirtBelts",
         "label": "Purple cross belts",
-        "live2dRegions": ["skirt", "accessory"],
-        "physics": ["Skirt"],
-        "parameters": ["ParamCloth1", "ParamCloth2"],
-        "deformBands": ["skirt-hem"],
+        "live2dRegions": [
+          "skirt",
+          "accessory"
+        ],
+        "physics": [
+          "Skirt"
+        ],
+        "parameters": [
+          "ParamCloth1",
+          "ParamCloth2"
+        ],
+        "deformBands": [
+          "skirt-hem"
+        ],
         "visibleInAPose": true
       },
       {
         "id": "thighStrap",
         "label": "Right-thigh strap",
-        "live2dRegions": ["legs", "accessory"],
+        "live2dRegions": [
+          "legR",
+          "accessory"
+        ],
         "physics": [],
-        "parameters": ["ParamLegRibbonR1", "ParamLegRibbonR2"],
+        "parameters": [
+          "ParamLegRibbonR1",
+          "ParamLegRibbonR2"
+        ],
         "deformBands": [],
         "visibleInAPose": true
       },
       {
-        "id": "boots",
-        "label": "White platform boots",
-        "live2dRegions": ["legs"],
+        "id": "bootL",
+        "label": "Left white platform boot",
+        "live2dRegions": [
+          "legL"
+        ],
         "physics": [],
-        "parameters": ["ParamLegL1X", "ParamLegR1X"],
-        "deformBands": ["boots"],
+        "parameters": [
+          "ParamLegL1X",
+          "ParamLegL2X",
+          "ParamLegL3X"
+        ],
+        "deformBands": [
+          "boots"
+        ],
+        "visibleInAPose": true
+      },
+      {
+        "id": "bootR",
+        "label": "Right white platform boot",
+        "live2dRegions": [
+          "legR"
+        ],
+        "physics": [],
+        "parameters": [
+          "ParamLegR1X",
+          "ParamLegR2X",
+          "ParamLegR3X"
+        ],
+        "deformBands": [
+          "boots"
+        ],
         "visibleInAPose": true
       },
       {
         "id": "wingBones",
         "label": "Silver wing frame",
-        "live2dRegions": ["wings"],
-        "physics": ["WingL", "WingR"],
-        "parameters": ["ParamFlapping3", "ParamFlapping4"],
-        "deformBands": ["wings"],
+        "live2dRegions": [
+          "wings"
+        ],
+        "physics": [
+          "WingL",
+          "WingR"
+        ],
+        "parameters": [
+          "ParamFlapping3",
+          "ParamFlapping4"
+        ],
+        "deformBands": [
+          "wings"
+        ],
         "visibleInAPose": true
       },
       {
         "id": "wingFeathers",
         "label": "Pink / silver feathers",
-        "live2dRegions": ["wings"],
-        "physics": ["WingL", "WingR"],
-        "parameters": ["ParamFlapping7", "ParamFlapping8"],
-        "deformBands": ["wings"],
+        "live2dRegions": [
+          "wings"
+        ],
+        "physics": [
+          "WingL",
+          "WingR"
+        ],
+        "parameters": [
+          "ParamFlapping7",
+          "ParamFlapping8"
+        ],
+        "deformBands": [
+          "wings"
+        ],
         "visibleInAPose": true
       },
       {
         "id": "energyRibbons",
         "label": "Translucent musical ribbons",
-        "live2dRegions": ["wings", "sparkle"],
-        "physics": ["WingL", "WingR"],
-        "parameters": ["ParamFlapping3", "ParamFlapping7"],
-        "deformBands": ["wings"],
+        "live2dRegions": [
+          "wings",
+          "sparkle"
+        ],
+        "physics": [
+          "WingL",
+          "WingR"
+        ],
+        "parameters": [
+          "ParamFlapping3",
+          "ParamFlapping7"
+        ],
+        "deformBands": [
+          "wings"
+        ],
         "visibleInAPose": true
       }
     ]
   },
   "live2dTo3d": [
-    { "region": "hair", "mesh3d": ["hairCrown", "hairPonytail", "bangs"] },
-    { "region": "headset", "mesh3d": ["headsetBand", "headsetCups"] },
-    { "region": "face", "mesh3d": ["face", "eyes", "mouth"] },
-    { "region": "body", "mesh3d": ["cropTop"] },
-    { "region": "arms", "mesh3d": ["gloves"] },
-    { "region": "skirt", "mesh3d": ["skirt", "skirtBelts"] },
-    { "region": "legs", "mesh3d": ["boots", "thighStrap"] },
-    { "region": "wings", "mesh3d": ["wingBones", "wingFeathers", "energyRibbons"] },
-    { "region": "sparkle", "mesh3d": ["energyRibbons"] },
-    { "region": "accessory", "mesh3d": ["thighStrap", "skirtBelts"] },
-    { "region": "chestCloth", "mesh3d": [] },
-    { "region": "environment", "mesh3d": [] }
+    {
+      "region": "hair",
+      "mesh3d": [
+        "hairCrown",
+        "hairPonytail",
+        "bangs"
+      ]
+    },
+    {
+      "region": "headset",
+      "mesh3d": [
+        "headsetBand",
+        "headsetCups"
+      ]
+    },
+    {
+      "region": "face",
+      "mesh3d": [
+        "face",
+        "eyes",
+        "mouth"
+      ]
+    },
+    {
+      "region": "body",
+      "mesh3d": [
+        "cropTop"
+      ]
+    },
+    {
+      "region": "armL",
+      "mesh3d": [
+        "gloveL"
+      ]
+    },
+    {
+      "region": "armR",
+      "mesh3d": [
+        "gloveR"
+      ]
+    },
+    {
+      "region": "skirt",
+      "mesh3d": [
+        "skirt",
+        "skirtBelts"
+      ]
+    },
+    {
+      "region": "legL",
+      "mesh3d": [
+        "bootL"
+      ]
+    },
+    {
+      "region": "legR",
+      "mesh3d": [
+        "bootR",
+        "thighStrap"
+      ]
+    },
+    {
+      "region": "wings",
+      "mesh3d": [
+        "wingBones",
+        "wingFeathers",
+        "energyRibbons"
+      ]
+    },
+    {
+      "region": "sparkle",
+      "mesh3d": [
+        "energyRibbons"
+      ]
+    },
+    {
+      "region": "accessory",
+      "mesh3d": [
+        "thighStrap",
+        "skirtBelts"
+      ]
+    },
+    {
+      "region": "chestCloth",
+      "mesh3d": []
+    },
+    {
+      "region": "environment",
+      "mesh3d": []
+    }
   ]
 }
