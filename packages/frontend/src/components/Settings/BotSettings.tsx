@@ -17,6 +17,8 @@ import { DeltaInput, DeltaTextarea } from "../Login-Styles";
 import Callout from "../Callout";
 import styles from "./styles.module.scss";
 import { DivergenceMonitor } from "../DeepTreeEchoBot/DivergenceMonitor";
+import { AvatarIdentityPicker } from "../DeepTreeEchoBot/AvatarIdentityPicker";
+import { MiaraOutfitPicker } from "../DeepTreeEchoBot/MiaraOutfitPicker";
 
 const log = getLogger("render/components/Settings/BotSettings");
 
@@ -134,6 +136,22 @@ export default function BotSettings({
       />
 
       {feedbackMessage && <Callout>{feedbackMessage}</Callout>}
+
+      <SettingsSeparator />
+      <SettingsHeading>Avatars</SettingsHeading>
+      <p className={styles.metaLabel}>
+        Deep Tree Echo and Melody start from the same Miara body mesh, then
+        shift color and layers toward grove or harmonic looks. The live avatar
+        uses that shared Cubism model; portraits show the target convergence.
+      </p>
+      <AvatarIdentityPicker variant="panel" />
+      <SettingsHeading>Miara outfits</SettingsHeading>
+      <p className={styles.metaLabel}>
+        Choose a wardrobe preset or customize accessory layers and clothing
+        color. The selected look renders on the Live2D avatar and is remembered
+        across sessions.
+      </p>
+      <MiaraOutfitPicker variant="panel" />
 
       <SettingsSeparator />
       <SettingsHeading>Capabilities</SettingsHeading>

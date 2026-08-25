@@ -15,6 +15,7 @@ import type { CubismModelInfo } from "./cubism-adapter";
 import type { PixiLive2DRenderer } from "./pixi-live2d-renderer";
 import type { DTEchoCognitiveMode } from "../dtecho-expression-driver";
 import { projectDTEchoCognitiveState } from "../dtecho-expression-driver";
+import type { MiaraOutfitState } from "../miara-outfits";
 
 /**
  * Props for the Live2DAvatar component
@@ -93,6 +94,7 @@ export interface Live2DCognitiveVisualState {
 export interface Live2DAvatarController {
   /** Set expression with intensity */
   setExpression: (expression: Expression, intensity?: number) => void;
+  setNamedExpression?: (name: string) => boolean;
   /** Play a motion animation */
   playMotion: (motion: AvatarMotion) => void;
   /** Update lip sync value */
@@ -103,6 +105,13 @@ export interface Live2DAvatarController {
   triggerBlink: () => void;
   /** Set a model parameter directly */
   setParameter: (paramId: string, value: number) => void;
+  /** Apply a Miara wardrobe outfit (part opacity + clothing colorway) */
+  applyOutfit: (outfit: Partial<MiaraOutfitState> | null | undefined) => void;
+  inspectMesh?: () => import("../automesh").AutomeshDrawable[];
+  applyTextureOverlay?: (source: string) => Promise<boolean>;
+  clearTextureOverlay?: () => Promise<boolean>;
+  applyParameterProfile?: (profile: Record<string, number> | null) => void;
+  applyIdentityRig?: (rig: import("../automesh").IdentityRig | null) => void;
   /** Get renderer instance */
   getRenderer: () => PixiLive2DRenderer | null;
   /** Resize the existing view without recreating the WebGL context */
@@ -213,6 +222,9 @@ export class Live2DAvatarManager {
       setExpression: (expression, intensity = 0.7) => {
         this.renderer?.setExpression(expression, intensity);
       },
+      setNamedExpression: (name) => {
+        return this.renderer?.setNamedExpression?.(name) ?? false;
+      },
       playMotion: (motion) => {
         this.renderer?.playMotion(motion);
       },
@@ -239,6 +251,17 @@ export class Live2DAvatarManager {
       setParameter: (paramId, value) => {
         this.renderer?.setParameter(paramId, value);
       },
+      applyOutfit: (outfit) => {
+        this.renderer?.applyOutfit(outfit);
+      },
+      inspectMesh: () => this.renderer?.inspectMesh() ?? [],
+      applyTextureOverlay: (source) =>
+        this.renderer?.applyTextureOverlay(source) ?? Promise.resolve(false),
+      clearTextureOverlay: () =>
+        this.renderer?.clearTextureOverlay() ?? Promise.resolve(false),
+      applyParameterProfile: (profile) =>
+        this.renderer?.applyParameterProfile(profile),
+      applyIdentityRig: (rig) => this.renderer?.applyIdentityRig(rig),
       getRenderer: () => this.renderer,
       resize: (width, height, scale) => {
         this.resize(width, height, scale);
@@ -267,10 +290,15 @@ export class Live2DAvatarManager {
     if (!this.renderer || !this.isLoaded) return;
 
     const projection = projectDTEchoCognitiveState(state);
-    this.renderer.setExpression(
-      projection.avatarExpression,
-      projection.intensity,
+    const playedNamed = this.renderer.setNamedExpression?.(
+      projection.expressionName,
     );
+    if (!playedNamed) {
+      this.renderer.setExpression(
+        projection.avatarExpression,
+        projection.intensity,
+      );
+    }
 
     if (projection.motion) {
       this.renderer.playMotion(projection.motion);

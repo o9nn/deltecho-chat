@@ -6,6 +6,7 @@
  */
 
 import React, { useRef, useEffect, useState, useCallback } from "react";
+import type { MiaraOutfitState } from "@deltecho/avatar";
 import { ResponsiveSpriteAvatar } from "./ResponsiveSpriteAvatar";
 
 // Local types that are compatible with both @deltecho/avatar and @deltecho/cognitive
@@ -72,21 +73,35 @@ export interface CognitiveVisualState {
 // Controller interface for external control of the avatar
 export interface Live2DAvatarController {
   setExpression: (expression: Expression, intensity?: number) => void;
+  setNamedExpression?: (name: string) => boolean;
   playMotion: (motion: AvatarMotion) => void;
   updateLipSync: (audioLevel: number) => void;
   updateCognitiveState?: (state: CognitiveVisualState) => void;
   triggerBlink: () => void;
   setParameter: (paramId: string, value: number) => void;
+  applyOutfit?: (outfit: Partial<MiaraOutfitState> | null | undefined) => void;
+  inspectMesh?: () => import("@deltecho/avatar").AutomeshDrawable[];
+  applyTextureOverlay?: (source: string) => Promise<boolean>;
+  clearTextureOverlay?: () => Promise<boolean>;
+  applyParameterProfile?: (profile: Record<string, number> | null) => void;
+  applyIdentityRig?: (
+    rig: import("@deltecho/avatar").IdentityRig | null,
+  ) => void;
   getNativeSize?: () => { width: number; height: number } | null;
 }
 
 const LOCAL_MIARA_MODEL = "models/miara/miara_pro_t03.model3.json";
+const LOCAL_GROVE_MODEL =
+  "models/deep-tree-echo/deep-tree-echo_t03.model3.json";
+const LOCAL_MELODY_MODEL = "models/melody/melody_t03.model3.json";
 
 // Model paths - local models are served next to main.html in the build output.
 // Electron loads that page as file://, so a leading slash would resolve to
 // file:///models/... and never find the assets.
 const CDN_MODELS = {
   miara: LOCAL_MIARA_MODEL,
+  "deep-tree-echo": LOCAL_GROVE_MODEL,
+  melody: LOCAL_MELODY_MODEL,
   shizuku:
     "https://cdn.jsdelivr.net/gh/guansss/pixi-live2d-display/test/assets/shizuku/shizuku.model.json",
   haru: "https://cdn.jsdelivr.net/gh/guansss/pixi-live2d-display/test/assets/haru/haru_greeter_t03.model3.json",
@@ -135,6 +150,13 @@ export interface Live2DAvatarComponentProps {
   mode?: "live2d" | "sprite";
   /** Fill a rectangular parent instead of a circular card */
   fillContainer?: boolean;
+  /** Miara wardrobe to apply after the model loads */
+  outfit?: Partial<MiaraOutfitState> | null;
+  /**
+   * Lock a Cubism expression by name. When set, cognitive and emotional
+   * updates do not overwrite the face.
+   */
+  manualExpression?: string;
 }
 
 export interface Live2DAvatarState {
@@ -168,6 +190,8 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
   onControllerReady,
   mode = "live2d",
   fillContainer = false,
+  outfit,
+  manualExpression,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const managerRef = useRef<any>(null);
@@ -279,6 +303,9 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
         );
 
         controllerRef.current = controller;
+        if (manualExpression && controller.setNamedExpression) {
+          controller.setNamedExpression(manualExpression);
+        }
         onControllerReady?.(controller);
       } catch (error) {
         if (mounted) {
@@ -348,17 +375,25 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
     return () => observer.disconnect();
   }, [fillContainer, state.isLoaded, scale]);
 
+  // Lock a named Cubism face so live cognitive polling cannot overwrite it.
+  useEffect(() => {
+    if (!state.isLoaded || !manualExpression) return;
+    controllerRef.current?.setNamedExpression?.(manualExpression);
+  }, [manualExpression, state.isLoaded]);
+
   // Update emotional state
   useEffect(() => {
+    if (manualExpression) return;
     if (!managerRef.current || !state.isLoaded || !emotionalState) return;
     managerRef.current.updateEmotionalState(emotionalState);
-  }, [emotionalState, state.isLoaded]);
+  }, [emotionalState, state.isLoaded, manualExpression]);
 
   // Update richer DTEcho cognitive visual state
   useEffect(() => {
+    if (manualExpression) return;
     if (!managerRef.current || !state.isLoaded || !cognitiveVisualState) return;
     managerRef.current.updateCognitiveState(cognitiveVisualState);
-  }, [cognitiveVisualState, state.isLoaded]);
+  }, [cognitiveVisualState, state.isLoaded, manualExpression]);
 
   // Update lip sync. Use a small deadband so high-frequency audio-level
   // sampling does not force redundant parameter writes into the Live2D core.
@@ -372,6 +407,11 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
     lastLipSyncLevelRef.current = nextLevel;
     controllerRef.current.updateLipSync(nextLevel);
   }, [audioLevel, isSpeaking, state.isLoaded]);
+
+  useEffect(() => {
+    if (!state.isLoaded || !outfit) return;
+    controllerRef.current?.applyOutfit?.(outfit);
+  }, [outfit, state.isLoaded]);
 
   // Sprite-only mode: render sprite without Live2D container
   if (mode === "sprite") {

@@ -38,6 +38,34 @@
     }
   }
 
+  .avatar-look-controls {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    pointer-events: auto;
+    padding: 6px 8px;
+    border-radius: 10px;
+    background: color-mix(
+      in srgb,
+      var(--colorBackgroundPrimary) 88%,
+      transparent
+    );
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+  }
+
+  &[data-identity="deep-tree-echo"] {
+    box-shadow: inset 0 0 40px rgba(46, 139, 87, 0.22);
+  }
+
+  &[data-identity="melody"] {
+    box-shadow: inset 0 0 40px rgba(168, 85, 247, 0.22);
+  }
+
   .avatar-status-indicator {
     position: absolute;
     bottom: 8px;
@@ -95,5 +123,195 @@
 
   50% {
     opacity: 0.8;
+  }
+}
+
+.avatar-identity-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--colorTextPrimary);
+  font-size: 12px;
+
+  &__label {
+    font-weight: 600;
+  }
+
+  &__choices {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  &__choice {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-width: 72px;
+    padding: 4px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    background: var(--colorBackgroundPrimary);
+    color: inherit;
+    cursor: pointer;
+
+    &.is-active {
+      border-color: var(--colorPrimary, #6366f1);
+      box-shadow: 0 0 0 1px var(--colorPrimary, #6366f1);
+    }
+  }
+
+  &__portrait {
+    width: 56px;
+    height: 72px;
+    object-fit: cover;
+    border-radius: 8px;
+    background: var(--colorBackgroundSecondary);
+
+    &.is-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+  }
+
+  &__name {
+    max-width: 88px;
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  &--panel {
+    .avatar-identity-picker__portrait {
+      width: 88px;
+      height: 118px;
+    }
+  }
+}
+
+.miara-outfit-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  align-items: center;
+  color: var(--colorTextPrimary);
+  font-size: 12px;
+
+  select,
+  input[type="range"] {
+    max-width: 100%;
+  }
+
+  &__label,
+  &__toggle,
+  &__hue {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  &__customize {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    width: 100%;
+    padding: 8px;
+    border-radius: 8px;
+    background: var(--colorBackgroundPrimary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  }
+
+  &__customize-toggle {
+    border: 0;
+    border-radius: 12px;
+    padding: 4px 10px;
+    background: var(--colorBackgroundPrimary);
+    color: inherit;
+    cursor: pointer;
+  }
+
+  &--panel {
+    position: static;
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.automesh-studio {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  color: var(--colorTextPrimary);
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  &__status {
+    font-size: 12px;
+    opacity: 0.85;
+  }
+
+  &__stage {
+    position: relative;
+    width: min(100%, 420px);
+    cursor: crosshair;
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+  }
+
+  &__pin {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    margin: -5px 0 0 -5px;
+    border-radius: 50%;
+    background: #f472b6;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.45);
+    pointer-events: none;
+  }
+}
+
+.miara-expression-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  align-items: center;
+  color: var(--colorTextPrimary);
+  font-size: 12px;
+
+  select {
+    max-width: 100%;
+  }
+
+  &__label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+  }
+
+  &__live {
+    border: 0;
+    border-radius: 12px;
+    padding: 4px 10px;
+    background: var(--colorBackgroundPrimary);
+    color: inherit;
+    cursor: pointer;
+  }
+
+  &--panel {
+    flex-direction: column;
+    align-items: stretch;
   }
 }
