@@ -3,6 +3,7 @@ import { getLogger } from "@deltachat-desktop/shared/logger";
 import BotSettings from "./BotSettings";
 import ProactiveMessagingSettings from "./ProactiveMessagingSettings";
 import TriggerManager from "./TriggerManager";
+import { AutomeshStudio } from "./AutomeshStudio";
 import { AvatarIdentityPicker } from "./AvatarIdentityPicker";
 import { MiaraExpressionPicker } from "./MiaraExpressionPicker";
 import { MiaraOutfitPicker } from "./MiaraOutfitPicker";
@@ -13,7 +14,7 @@ const log = getLogger(
   "render/components/DeepTreeEchoBot/DeepTreeEchoSettingsScreen",
 );
 
-type SettingsTab = "general" | "avatar" | "proactive" | "triggers";
+type SettingsTab = "general" | "avatar" | "automesh" | "proactive" | "triggers";
 
 interface DeepTreeEchoSettingsScreenProps {
   onNavigateToMain?: () => void;
@@ -222,6 +223,14 @@ const DeepTreeEchoSettingsScreen: React.FC<DeepTreeEchoSettingsScreenProps> = ({
         </button>
         <button
           type="button"
+          className={`tab ${activeTab === "automesh" ? "active" : ""}`}
+          onClick={() => setActiveTab("automesh")}
+        >
+          <span className="tab-icon">🧭</span>
+          Automesh
+        </button>
+        <button
+          type="button"
           className={`tab ${activeTab === "proactive" ? "active" : ""}`}
           onClick={() => setActiveTab("proactive")}
         >
@@ -286,6 +295,8 @@ const DeepTreeEchoSettingsScreen: React.FC<DeepTreeEchoSettingsScreenProps> = ({
             <MiaraExpressionPicker variant="panel" />
           </div>
         )}
+
+        {activeTab === "automesh" && <AutomeshStudio />}
 
         {activeTab === "proactive" && (
           <ProactiveMessagingSettings

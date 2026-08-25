@@ -80,6 +80,9 @@ export interface Live2DAvatarController {
   triggerBlink: () => void;
   setParameter: (paramId: string, value: number) => void;
   applyOutfit?: (outfit: Partial<MiaraOutfitState> | null | undefined) => void;
+  inspectMesh?: () => import("@deltecho/avatar").AutomeshDrawable[];
+  applyTextureOverlay?: (source: string) => Promise<boolean>;
+  applyParameterProfile?: (profile: Record<string, number> | null) => void;
   getNativeSize?: () => { width: number; height: number } | null;
 }
 

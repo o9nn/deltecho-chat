@@ -107,6 +107,9 @@ export interface Live2DAvatarController {
   setParameter: (paramId: string, value: number) => void;
   /** Apply a Miara wardrobe outfit (part opacity + clothing colorway) */
   applyOutfit: (outfit: Partial<MiaraOutfitState> | null | undefined) => void;
+  inspectMesh?: () => import("../automesh").AutomeshDrawable[];
+  applyTextureOverlay?: (source: string) => Promise<boolean>;
+  applyParameterProfile?: (profile: Record<string, number> | null) => void;
   /** Get renderer instance */
   getRenderer: () => PixiLive2DRenderer | null;
   /** Resize the existing view without recreating the WebGL context */
@@ -249,6 +252,11 @@ export class Live2DAvatarManager {
       applyOutfit: (outfit) => {
         this.renderer?.applyOutfit(outfit);
       },
+      inspectMesh: () => this.renderer?.inspectMesh() ?? [],
+      applyTextureOverlay: (source) =>
+        this.renderer?.applyTextureOverlay(source) ?? Promise.resolve(false),
+      applyParameterProfile: (profile) =>
+        this.renderer?.applyParameterProfile(profile),
       getRenderer: () => this.renderer,
       resize: (width, height, scale) => {
         this.resize(width, height, scale);

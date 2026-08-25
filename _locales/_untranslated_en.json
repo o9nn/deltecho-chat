@@ -155,6 +155,47 @@
   "miara_outfit_group_background": {
     "message": "Background"
   },
+  "automesh_title": {
+    "message": "Automesh Melody"
+  },
+  "automesh_blurb": {
+    "message": "Map a reference portrait onto the official Miara Cubism mesh. Landmarks are the Editor-style mesh-to-art pins. Inspect reads live drawable UVs; Train warps the photo onto the texture atlas and binds it as Melody."
+  },
+  "automesh_load": {
+    "message": "Load reference"
+  },
+  "automesh_load_melody": {
+    "message": "Use shipped Melody still"
+  },
+  "automesh_inspect": {
+    "message": "Inspect mesh"
+  },
+  "automesh_train": {
+    "message": "Train and apply"
+  },
+  "automesh_status_loaded": {
+    "message": "Reference loaded. Drag pins onto eyes, mouth, hair, and collar."
+  },
+  "automesh_status_no_mesh": {
+    "message": "Live mesh is not ready. Open the avatar strip first."
+  },
+  "automesh_status_inspected": {
+    "message": "Read drawables"
+  },
+  "automesh_status_need_image": {
+    "message": "Load a Melody reference image first."
+  },
+  "automesh_status_applied": {
+    "message": "Melody atlas bound."
+  },
+  "automesh_status_saved": {
+    "message": "Mapping saved. Reopen the avatar to bind the atlas."
+  },
+  "automesh_status_failed": {
+    "message": "Automesh failed."
+  },
+  "automesh_saved_residual": {
+    "message": "Saved mapping residual"
   "avatar_expression_label": {
     "message": "Expression"
   },
