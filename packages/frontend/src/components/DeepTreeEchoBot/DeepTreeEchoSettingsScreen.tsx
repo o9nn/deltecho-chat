@@ -3,6 +3,8 @@ import { getLogger } from "@deltachat-desktop/shared/logger";
 import BotSettings from "./BotSettings";
 import ProactiveMessagingSettings from "./ProactiveMessagingSettings";
 import TriggerManager from "./TriggerManager";
+import { AvatarIdentityPicker } from "./AvatarIdentityPicker";
+import { MiaraExpressionPicker } from "./MiaraExpressionPicker";
 import { MiaraOutfitPicker } from "./MiaraOutfitPicker";
 import { saveBotSettings, getBotInstance } from "./DeepTreeEchoIntegration";
 import { runtime } from "@deltachat-desktop/runtime-interface";
@@ -273,13 +275,15 @@ const DeepTreeEchoSettingsScreen: React.FC<DeepTreeEchoSettingsScreenProps> = ({
 
         {activeTab === "avatar" && (
           <div className="avatar-outfit-settings">
-            <h3>Miara outfits</h3>
+            <h3>Avatars</h3>
             <p>
-              Choose a wardrobe preset or customize accessory layers and
-              clothing color. The selected look renders on the Live2D avatar and
-              is remembered across sessions.
+              Named looks share the official Miara mesh. Choose an identity,
+              wardrobe, or lock a Cubism face so live cognitive updates do not
+              overwrite it.
             </p>
+            <AvatarIdentityPicker variant="panel" />
             <MiaraOutfitPicker variant="panel" />
+            <MiaraExpressionPicker variant="panel" />
           </div>
         )}
 

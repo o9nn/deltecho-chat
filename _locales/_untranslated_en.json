@@ -154,5 +154,41 @@
   },
   "miara_outfit_group_background": {
     "message": "Background"
+  },
+  "avatar_expression_label": {
+    "message": "Expression"
+  },
+  "avatar_expression_live": {
+    "message": "Live"
+  },
+  "avatar_expression_neutral": {
+    "message": "Neutral"
+  },
+  "avatar_expression_smile": {
+    "message": "Smile"
+  },
+  "avatar_expression_laugh": {
+    "message": "Laugh"
+  },
+  "avatar_expression_gentle": {
+    "message": "Gentle"
+  },
+  "avatar_expression_speak": {
+    "message": "Speak"
+  },
+  "avatar_expression_awe": {
+    "message": "Awe"
+  },
+  "avatar_expression_surprise": {
+    "message": "Surprise"
+  },
+  "avatar_expression_curious": {
+    "message": "Curious"
+  },
+  "avatar_expression_think": {
+    "message": "Think"
+  },
+  "avatar_expression_sad": {
+    "message": "Sad"
   }
 }

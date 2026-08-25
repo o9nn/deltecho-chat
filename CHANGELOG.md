@@ -7,6 +7,7 @@
 - Deep Tree Echo: Miara Live2D outfits are customizable — presets and accessory/color controls change the rendered avatar and persist across sessions.
 - Deep Tree Echo: two additional avatars — Deep Tree Echo and Melody — start from the same Miara body mesh and persist as named looks (grove / aria).
 - Deep Tree Echo: Miara now ships Cubism expression files (joy, wonder, speak, surprise, sadness, photo, neutral) and plays them on the live avatar.
+- Deep Tree Echo: an expression picker can lock a named Cubism face (smile, laugh, speak, awe, surprise, and the rest) so live cognitive updates do not overwrite it until Live is selected again.
 - Cloud Agent: `scripts/cloud-agent-install.sh` wraps frozen-lockfile install and the internal package build chain. Named `browser-dev` / `orchestrator` terminals exist only after a human Saves the dashboard environment proposal.
 - Deep Tree Echo: the orchestrator now starts one ProactiveLoop for process liveness and, when `DELTECHO_AUTONOMY_STORAGE_PATH` points at an existing filesystem RAG store, schedules MemoryLever dream hygiene. Ticks stay dry-run unless `DELTECHO_MEMORY_LEVER_APPLY` is `1`, `true`, or `yes`.
 - Deep Tree Echo: proactive messaging is now wired in the desktop app — Settings exposes live triggers and policy, chats show a status indicator, and bot-initiated sends honor quiet hours and rate limits.

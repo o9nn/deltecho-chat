@@ -52,3 +52,35 @@ export function isMiaraCubismExpressionName(
 export function cubismExpressionFile(name: MiaraCubismExpressionName): string {
   return `expressions/${name}.exp3.json`;
 }
+
+export const LIVE_AVATAR_EXPRESSION = "live";
+
+export type AvatarExpressionId =
+  | typeof LIVE_AVATAR_EXPRESSION
+  | MiaraCubismExpressionName;
+
+export interface AvatarExpressionChoice {
+  id: AvatarExpressionId;
+  label: string;
+}
+
+/** Faces a user can lock on the shared Miara mesh. */
+export const AVATAR_EXPRESSION_CHOICES: readonly AvatarExpressionChoice[] = [
+  { id: LIVE_AVATAR_EXPRESSION, label: "Live" },
+  { id: "NEUTRAL_Reset", label: "Neutral" },
+  { id: "JOY_01_BroadSmile", label: "Smile" },
+  { id: "JOY_02_Laughing", label: "Laugh" },
+  { id: "JOY_03_GentleSmile", label: "Gentle" },
+  { id: "SPEAK_01_OpenVowel", label: "Speak" },
+  { id: "PHOTO_Awe", label: "Awe" },
+  { id: "SURPRISE_01_Startled", label: "Surprise" },
+  { id: "WONDER_02_CuriousGaze", label: "Curious" },
+  { id: "WONDER_03_Contemplative", label: "Think" },
+  { id: "SADNESS_01_Melancholy", label: "Sad" },
+];
+
+export function resolveAvatarExpression(value: unknown): AvatarExpressionId {
+  if (value === LIVE_AVATAR_EXPRESSION) return LIVE_AVATAR_EXPRESSION;
+  if (isMiaraCubismExpressionName(value)) return value;
+  return LIVE_AVATAR_EXPRESSION;
+}

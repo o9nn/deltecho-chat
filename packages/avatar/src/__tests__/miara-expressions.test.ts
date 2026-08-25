@@ -1,10 +1,13 @@
 import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import {
+  AVATAR_EXPRESSION_CHOICES,
+  LIVE_AVATAR_EXPRESSION,
   MIARA_CUBISM_EXPRESSION_NAMES,
   MIARA_EXPRESSION_MAP,
   cubismExpressionFile,
   isMiaraCubismExpressionName,
+  resolveAvatarExpression,
 } from "../miara-expressions";
 
 const modelDir = join(process.cwd(), "../frontend/static/models/miara");
@@ -42,5 +45,17 @@ describe("miara cubism expressions", () => {
     expect(isMiaraCubismExpressionName("GENIUS_01_LuminousInference")).toBe(
       false,
     );
+  });
+
+  it("resolves live, named, and unknown expression choices", () => {
+    expect(resolveAvatarExpression(undefined)).toBe(LIVE_AVATAR_EXPRESSION);
+    expect(resolveAvatarExpression("happy")).toBe(LIVE_AVATAR_EXPRESSION);
+    expect(resolveAvatarExpression("JOY_01_BroadSmile")).toBe(
+      "JOY_01_BroadSmile",
+    );
+    expect(AVATAR_EXPRESSION_CHOICES.map((choice) => choice.id)).toContain(
+      "PHOTO_Awe",
+    );
+    expect(AVATAR_EXPRESSION_CHOICES[0]?.id).toBe(LIVE_AVATAR_EXPRESSION);
   });
 });

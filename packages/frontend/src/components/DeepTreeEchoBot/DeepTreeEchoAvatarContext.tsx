@@ -16,9 +16,12 @@ import React, {
 import {
   DEFAULT_AVATAR_IDENTITY_ID,
   DEFAULT_MIARA_OUTFIT_ID,
+  LIVE_AVATAR_EXPRESSION,
   SHARED_AVATAR_MESH,
+  resolveAvatarExpression,
   resolveAvatarIdentity,
   resolveMiaraOutfit,
+  type AvatarExpressionId,
   type AvatarIdentityId,
   type MiaraOutfitId,
   type MiaraPartGroup,
@@ -51,6 +54,7 @@ export interface AvatarConfig {
   outfit: MiaraOutfitId;
   outfitHiddenGroups: MiaraPartGroup[];
   outfitHueShift: number;
+  expression: AvatarExpressionId;
 }
 
 // Avatar state
@@ -85,6 +89,7 @@ const DEFAULT_AVATAR_CONFIG: AvatarConfig = {
   outfit: DEFAULT_MIARA_OUTFIT_ID,
   outfitHiddenGroups: [],
   outfitHueShift: 0,
+  expression: LIVE_AVATAR_EXPRESSION,
 };
 
 function sanitizeAvatarConfig(
@@ -103,6 +108,7 @@ function sanitizeAvatarConfig(
     outfit: resolved.id,
     outfitHiddenGroups: [...resolved.hiddenGroups],
     outfitHueShift: resolved.hueShift,
+    expression: resolveAvatarExpression(config.expression),
   };
 }
 
