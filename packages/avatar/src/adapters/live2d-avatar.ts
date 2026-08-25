@@ -111,6 +111,7 @@ export interface Live2DAvatarController {
   applyTextureOverlay?: (source: string) => Promise<boolean>;
   clearTextureOverlay?: () => Promise<boolean>;
   applyParameterProfile?: (profile: Record<string, number> | null) => void;
+  applyIdentityRig?: (rig: import("../automesh").IdentityRig | null) => void;
   /** Get renderer instance */
   getRenderer: () => PixiLive2DRenderer | null;
   /** Resize the existing view without recreating the WebGL context */
@@ -260,6 +261,7 @@ export class Live2DAvatarManager {
         this.renderer?.clearTextureOverlay() ?? Promise.resolve(false),
       applyParameterProfile: (profile) =>
         this.renderer?.applyParameterProfile(profile),
+      applyIdentityRig: (rig) => this.renderer?.applyIdentityRig(rig),
       getRenderer: () => this.renderer,
       resize: (width, height, scale) => {
         this.resize(width, height, scale);

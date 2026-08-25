@@ -37,8 +37,8 @@ import {
   LIVE_AVATAR_EXPRESSION,
   isMiaraCubismExpressionName,
   resolveAvatarExpression,
-  resolveIdentityOverlay,
-  resolveIdentityParameters,
+  applyIdentityLook,
+  mergeIdentityHiddenGroups,
   resolveMiaraOutfit,
 } from "@deltecho/avatar";
 import { Live2DAvatar } from "./Live2DAvatar";
@@ -219,28 +219,27 @@ const AICompanionHubContent: React.FC = () => {
     ? lockedExpression
     : undefined;
   const storedHue = avatarContext?.state.config.outfitHueShift;
+  const identityHidden = mergeIdentityHiddenGroups(
+    avatarContext?.state.config.identity,
+    resolvedOutfit.hiddenGroups,
+  );
   const miaraOutfit =
     typeof storedHue === "number"
-      ? { ...resolvedOutfit, hueShift: storedHue }
-      : resolvedOutfit;
+      ? {
+          ...resolvedOutfit,
+          hiddenGroups: identityHidden,
+          hueShift: storedHue,
+        }
+      : { ...resolvedOutfit, hiddenGroups: identityHidden };
 
   useEffect(() => {
     if (!avatarController) return;
-    const overlay = resolveIdentityOverlay(
+    applyIdentityLook(
+      avatarController,
       avatarContext?.state.config.identity,
       avatarContext?.state.config.automeshAtlas,
+      avatarContext?.state.config.automeshMapping?.parameters,
     );
-    if (overlay) {
-      void avatarController.applyTextureOverlay?.(overlay);
-      avatarController.applyParameterProfile?.(
-        resolveIdentityParameters(
-          avatarContext?.state.config.identity,
-          avatarContext?.state.config.automeshMapping?.parameters,
-        ),
-      );
-      return;
-    }
-    void avatarController.clearTextureOverlay?.();
   }, [
     avatarController,
     avatarContext?.state.config.automeshAtlas,
@@ -746,22 +745,12 @@ const AICompanionHubContent: React.FC = () => {
                     onError={(err) => console.error("Avatar error:", err)}
                     onControllerReady={(controller) => {
                       setAvatarController(controller);
-                      const overlay = resolveIdentityOverlay(
+                      applyIdentityLook(
+                        controller,
                         avatarContext?.state.config.identity,
                         avatarContext?.state.config.automeshAtlas,
+                        avatarContext?.state.config.automeshMapping?.parameters,
                       );
-                      if (overlay) {
-                        void controller.applyTextureOverlay?.(overlay);
-                        controller.applyParameterProfile?.(
-                          resolveIdentityParameters(
-                            avatarContext?.state.config.identity,
-                            avatarContext?.state.config.automeshMapping
-                              ?.parameters,
-                          ),
-                        );
-                      } else {
-                        void controller.clearTextureOverlay?.();
-                      }
                     }}
                   />
                 </div>

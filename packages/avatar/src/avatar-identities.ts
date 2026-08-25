@@ -6,10 +6,12 @@
  */
 
 import { MELODY_PARAMETER_PROFILE } from "./automesh/parameters";
+import { resolveIdentityRig, type IdentityRig } from "./automesh/identity-rig";
 import {
   resolveMiaraOutfit,
   type MiaraOutfitId,
   type MiaraOutfitState,
+  type MiaraPartGroup,
 } from "./miara-outfits";
 
 export const AVATAR_IDENTITY_IDS = [
@@ -41,6 +43,8 @@ export interface AvatarIdentitySpec {
   portrait?: string;
   /** Optional remapped Cubism atlas bound when this identity is selected. */
   overlay?: string;
+  /** Extra wardrobe hides that stay on even when the named preset is applied. */
+  extraHiddenGroups?: readonly MiaraPartGroup[];
 }
 
 export const AVATAR_IDENTITIES: readonly AvatarIdentitySpec[] = [
@@ -55,7 +59,7 @@ export const AVATAR_IDENTITIES: readonly AvatarIdentitySpec[] = [
     id: "deep-tree-echo",
     label: "Deep Tree Echo",
     description:
-      "Same body mesh, iterated toward grove consciousness — moss color, living wings, bioluminescent lagoon.",
+      "Same body mesh, converged toward grove consciousness — moss color, living wings, bioluminescent lagoon.",
     model: SHARED_AVATAR_MESH,
     outfitId: "grove",
     portrait: "./images/avatar/identities/deep-tree-echo.webp",
@@ -64,13 +68,31 @@ export const AVATAR_IDENTITIES: readonly AvatarIdentitySpec[] = [
     id: "melody",
     label: "Melody",
     description:
-      "Same body mesh, fitted to the Melody still — remapped atlas, open-eye smile, no water stage.",
+      "Same body mesh, converged to the Melody still — remapped atlas, crop silhouette, headset motion, no water stage.",
     model: SHARED_AVATAR_MESH,
     outfitId: "aria",
     portrait: "./images/avatar/identities/melody.webp",
     overlay: SHIPPED_MELODY_ATLAS,
+    extraHiddenGroups: ["chestCloth"],
   },
 ];
+
+export function extraHiddenGroupsForIdentity(
+  id: unknown,
+): readonly MiaraPartGroup[] {
+  return getAvatarIdentity(id).extraHiddenGroups ?? [];
+}
+
+export function mergeIdentityHiddenGroups(
+  identity: unknown,
+  groups: readonly MiaraPartGroup[],
+): MiaraPartGroup[] {
+  const merged = new Set<MiaraPartGroup>(groups);
+  for (const group of extraHiddenGroupsForIdentity(identity)) {
+    merged.add(group);
+  }
+  return [...merged];
+}
 
 export function isAvatarIdentityId(value: unknown): value is AvatarIdentityId {
   return (
@@ -99,17 +121,25 @@ export function applyAvatarIdentity(id: unknown): {
   model: typeof SHARED_AVATAR_MESH;
   outfit: MiaraOutfitState;
   overlay: string | null;
+  rig: IdentityRig | null;
 } {
   const spec = getAvatarIdentity(id);
   const outfit = resolveMiaraOutfit({ id: spec.outfitId });
+  const hiddenGroups = mergeIdentityHiddenGroups(spec.id, outfit.hiddenGroups);
   return {
     identity: spec.id,
     model: spec.model,
     // Remapped atlases already carry Melody color; do not hue-rotate them.
-    outfit: spec.overlay ? { ...outfit, hueShift: 0 } : outfit,
+    outfit: spec.overlay
+      ? { ...outfit, hiddenGroups, hueShift: 0 }
+      : { ...outfit, hiddenGroups },
     overlay: spec.overlay ?? null,
+    rig: resolveIdentityRig(spec.id),
   };
 }
+
+export { resolveIdentityRig };
+export type { IdentityRig };
 
 export function defaultAtlasForIdentity(id: unknown): string | null {
   return getAvatarIdentity(id).overlay ?? null;
@@ -136,4 +166,31 @@ export function resolveIdentityParameters(
     return mappingParameters;
   }
   return { ...MELODY_PARAMETER_PROFILE };
+}
+
+export type IdentityLookController = {
+  applyTextureOverlay?: (source: string) => Promise<boolean>;
+  clearTextureOverlay?: () => Promise<boolean>;
+  applyParameterProfile?: (profile: Record<string, number> | null) => void;
+  applyIdentityRig?: (rig: IdentityRig | null) => void;
+};
+
+/** Bind texture, face parameters, mesh deform, and physics for an identity. */
+export function applyIdentityLook(
+  controller: IdentityLookController | null | undefined,
+  identity: unknown,
+  customAtlas?: string | null,
+  mappingParameters?: Record<string, number> | null,
+): void {
+  if (!controller) return;
+  controller.applyIdentityRig?.(resolveIdentityRig(identity));
+  const overlay = resolveIdentityOverlay(identity, customAtlas);
+  if (overlay) {
+    void controller.applyTextureOverlay?.(overlay);
+    controller.applyParameterProfile?.(
+      resolveIdentityParameters(identity, mappingParameters),
+    );
+    return;
+  }
+  void controller.clearTextureOverlay?.();
 }

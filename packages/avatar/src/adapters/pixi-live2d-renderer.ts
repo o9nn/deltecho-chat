@@ -29,7 +29,22 @@ import {
   type MiaraOutfitState,
 } from "../miara-outfits";
 import { MIARA_EXPRESSION_MAP } from "../miara-expressions";
-import { uvCentroid, type AutomeshDrawable } from "../automesh";
+import {
+  applyMeshDeform,
+  applyPhysicsRetarget,
+  figureFromDrawables,
+  isEnvironmentDrawable,
+  namePhysicsSettings,
+  restorePhysicsRig,
+  snapshotPhysicsRig,
+  uvCentroid,
+  type AutomeshDrawable,
+  type FigureBounds,
+  type IdentityRig,
+  type MutablePositions,
+  type PhysicsRigLike,
+  type PhysicsRigSnapshot,
+} from "../automesh";
 
 /**
  * Live2D model reference type (from pixi-live2d-display)
@@ -61,6 +76,10 @@ interface Live2DModel {
     ) => { x: number; y: number; width: number; height: number };
     update?: (dt: number, now: number) => void;
     textures?: unknown[];
+    physics?: {
+      _physicsRig?: PhysicsRigLike;
+      rig?: PhysicsRigLike;
+    };
     coreModel: {
       setParameterValueById: (id: string, value: number) => void;
       getParameterValueById: (id: string) => number;
@@ -73,8 +92,9 @@ interface Live2DModel {
       getPartId?: (index: number) => unknown;
       getDrawableVertexUvs?: (index: number) => ArrayLike<number>;
       getDrawableUvs?: (index: number) => ArrayLike<number>;
-      getDrawableVertexPositions?: (index: number) => ArrayLike<number>;
-      getDrawableVertices?: (index: number) => ArrayLike<number>;
+      getDrawableVertexPositions?: (index: number) => MutablePositions;
+      getDrawableVertices?: (index: number) => MutablePositions;
+      getDrawableCount?: () => number;
       getDrawableVertexIndices?: (index: number) => ArrayLike<number>;
       getDrawableIndices?: (index: number) => ArrayLike<number>;
       getModel?: () => {
@@ -278,6 +298,14 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   private appliedOutfit: MiaraOutfitState | null = null;
   private hiddenWardrobePartIds = new Set<string>();
   private wardrobeUpdateHook: (() => void) | null = null;
+  private identityRig: IdentityRig | null = null;
+  private deformFigure: FigureBounds | null = null;
+  private deformSkipIds = new Set<string>();
+  private deformFrame = 0;
+  private deformHookAttached = false;
+  private originalInternalUpdate: ((dt: number, now: number) => void) | null =
+    null;
+  private physicsSnapshot: PhysicsRigSnapshot | null = null;
 
   /** Internal debug logger - no-op unless config.debug is true */
   private dlog(...args: unknown[]): void {
@@ -458,10 +486,17 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       }
 
       this.detachWardrobeHook();
+      this.detachDeformHook();
+      this.physicsSnapshot = null;
+      this.deformFigure = null;
       this.model = model;
       this.originalTexture0 = model.textures?.[0] ?? null;
       this.overlaySource = null;
       this.attachWardrobeHook();
+      this.attachDeformHook();
+      if (this.identityRig) {
+        this.applyPhysicsProfile(this.identityRig.physics);
+      }
 
       // Defensively clear stage in case a previous model left children behind.
       // Guarded for compatibility with PixiJS test mocks that may not implement
@@ -1189,6 +1224,11 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       this.viewCanvas.style.filter = "";
     }
     this.detachWardrobeHook();
+    this.detachDeformHook();
+    this.identityRig = null;
+    this.deformFigure = null;
+    this.deformSkipIds.clear();
+    this.physicsSnapshot = null;
     this.viewCanvas = null;
     this.hiddenWardrobePartIds.clear();
     this.appliedOutfit = null;
@@ -1421,18 +1461,42 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       this.overlaySource = null;
       return false;
     }
-    this.model.textures[0] = this.originalTexture0 as (typeof this.model.textures)[0];
+    this.model.textures[0] = this
+      .originalTexture0 as (typeof this.model.textures)[0];
     this.overlaySource = null;
     return true;
   }
 
-  applyParameterProfile(profile: Record<string, number> | null | undefined): void {
+  applyParameterProfile(
+    profile: Record<string, number> | null | undefined,
+  ): void {
     if (!profile) return;
     for (const [paramId, value] of Object.entries(profile)) {
       if (typeof value === "number") {
         this.setParameter(paramId, value);
       }
     }
+  }
+
+  /**
+   * After Cubism physics, reshape vertices and retarget the physics rig
+   * toward the selected identity. Null restores official Miara motion.
+   */
+  applyIdentityRig(rig: IdentityRig | null | undefined): void {
+    this.identityRig = rig ?? null;
+    this.deformFigure = null;
+    this.deformSkipIds.clear();
+    this.deformFrame = 0;
+    this.attachDeformHook();
+    if (this.identityRig?.physics) {
+      this.applyPhysicsProfile(this.identityRig.physics);
+      return;
+    }
+    this.restorePhysicsSnapshot();
+  }
+
+  clearIdentityRig(): void {
+    this.applyIdentityRig(null);
   }
 
   private listPartIds(): string[] {
@@ -1473,6 +1537,88 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       }
     }
     this.wardrobeUpdateHook = null;
+  }
+
+  private attachDeformHook(): void {
+    const internal = this.model?.internalModel;
+    if (!internal || typeof internal.update !== "function") return;
+    if (this.deformHookAttached) return;
+    this.originalInternalUpdate = internal.update.bind(internal);
+    internal.update = (dt: number, now: number) => {
+      this.originalInternalUpdate?.(dt, now);
+      this.enforceIdentityDeform();
+    };
+    this.deformHookAttached = true;
+  }
+
+  private detachDeformHook(): void {
+    const internal = this.model?.internalModel;
+    if (internal && this.originalInternalUpdate) {
+      internal.update = this.originalInternalUpdate;
+    }
+    this.originalInternalUpdate = null;
+    this.deformHookAttached = false;
+  }
+
+  private enforceIdentityDeform(): void {
+    const profile = this.identityRig?.deform;
+    const core = this.model?.internalModel?.coreModel;
+    if (!profile || !core) return;
+    this.deformFrame += 1;
+    if (!this.deformFigure || this.deformFrame % 48 === 1) {
+      const drawables = this.inspectMesh();
+      this.deformFigure = figureFromDrawables(drawables);
+      this.deformSkipIds = new Set(
+        drawables
+          .filter((drawable) => isEnvironmentDrawable(drawable))
+          .map((drawable) => drawable.id),
+      );
+    }
+    if (!this.deformFigure) return;
+    const ids = this.model?.internalModel.getDrawableIDs?.() ?? [];
+    const count =
+      ids.length ||
+      (typeof core.getDrawableCount === "function"
+        ? core.getDrawableCount()
+        : 0);
+    for (let index = 0; index < count; index++) {
+      const id = ids[index];
+      if (id && this.deformSkipIds.has(id)) continue;
+      const positions =
+        core.getDrawableVertexPositions?.(index) ??
+        core.getDrawableVertices?.(index);
+      if (!positions || positions.length < 2) continue;
+      applyMeshDeform(positions, this.deformFigure, profile);
+    }
+  }
+
+  private getPhysicsRig(): PhysicsRigLike | null {
+    const physics = this.model?.internalModel?.physics;
+    const rig = physics?._physicsRig ?? physics?.rig;
+    if (!rig?.settings || !rig.particles || !rig.outputs) return null;
+    return rig;
+  }
+
+  private applyPhysicsProfile(profile: IdentityRig["physics"]): void {
+    const rig = this.getPhysicsRig();
+    if (!rig) return;
+    if (!this.physicsSnapshot) {
+      this.physicsSnapshot = snapshotPhysicsRig(rig);
+    }
+    applyPhysicsRetarget(
+      {
+        ...rig,
+        settings: namePhysicsSettings(rig.settings),
+      },
+      this.physicsSnapshot,
+      profile,
+    );
+  }
+
+  private restorePhysicsSnapshot(): void {
+    const rig = this.getPhysicsRig();
+    if (!rig || !this.physicsSnapshot) return;
+    restorePhysicsRig(rig, this.physicsSnapshot);
   }
 
   private enforceHiddenWardrobeParts(): void {

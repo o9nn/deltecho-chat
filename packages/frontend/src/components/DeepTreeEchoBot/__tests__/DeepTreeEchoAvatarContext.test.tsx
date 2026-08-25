@@ -26,6 +26,9 @@ function TestConsumer() {
       <span data-testid="identity">{avatar.state.config.identity}</span>
       <span data-testid="outfit">{avatar.state.config.outfit}</span>
       <span data-testid="outfit-hue">{avatar.state.config.outfitHueShift}</span>
+      <span data-testid="outfit-hidden">
+        {(avatar.state.config.outfitHiddenGroups ?? []).join(",")}
+      </span>
       <span data-testid="automesh-identity">
         {avatar.state.config.automeshMapping?.identity ?? "none"}
       </span>
@@ -273,6 +276,13 @@ describe("DeepTreeEchoAvatarContext", () => {
       expect(saved.identity).toBe("melody");
       expect(saved.model).toBe("miara");
       expect(saved.outfit).toBe("aria");
+      expect(saved.outfitHueShift).toBe(0);
+      expect(saved.outfitHiddenGroups).toEqual(
+        expect.arrayContaining(["water", "background", "chestCloth"]),
+      );
+      expect(screen.getByTestId("outfit-hidden").textContent).toContain(
+        "chestCloth",
+      );
     });
 
     it("persists the selected outfit to localStorage", () => {

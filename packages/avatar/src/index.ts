@@ -88,11 +88,17 @@ export {
   resolveAvatarIdentity,
   lookForAvatarIdentity,
   applyAvatarIdentity,
+  applyIdentityLook,
   defaultAtlasForIdentity,
+  extraHiddenGroupsForIdentity,
+  mergeIdentityHiddenGroups,
   resolveIdentityOverlay,
   resolveIdentityParameters,
+  resolveIdentityRig,
   type AvatarIdentityId,
   type AvatarIdentitySpec,
+  type IdentityLookController,
+  type IdentityRig,
 } from "./avatar-identities";
 
 // Types

@@ -19,6 +19,13 @@ import {
   punchOpaqueBackground,
   warpRasterToAtlas,
   MELODY_PARAMETER_PROFILE,
+  MELODY_MESH_DEFORM,
+  MELODY_PHYSICS_RETARGET,
+  applyMeshDeform,
+  applyPhysicsRetarget,
+  classifyPhysicsSettingName,
+  namePhysicsSettings,
+  snapshotPhysicsRig,
 } from "../automesh";
 
 describe("automesh mapping", () => {
@@ -67,7 +74,13 @@ describe("automesh mapping", () => {
       height: 5,
       data: new Uint8ClampedArray(5 * 5 * 4),
     };
-    const setPixel = (x: number, y: number, r: number, g: number, b: number) => {
+    const setPixel = (
+      x: number,
+      y: number,
+      r: number,
+      g: number,
+      b: number,
+    ) => {
       const index = (y * width + x) * 4;
       raster.data[index] = r;
       raster.data[index + 1] = g;
@@ -195,9 +208,7 @@ describe("automesh mapping", () => {
       ]),
     };
     const landmarks = cloneMelodyLandmarks().map((item) =>
-      item.id === "mouth"
-        ? { ...item, source: { x: 0.5, y: 0.5 } }
-        : item,
+      item.id === "mouth" ? { ...item, source: { x: 0.5, y: 0.5 } } : item,
     );
     const drawables = [
       {
@@ -223,9 +234,13 @@ describe("automesh mapping", () => {
 
 describe("cubism editor bridge", () => {
   it("builds and parses External API envelopes", () => {
-    const request = cubismEditorRequest("GetCurrentModelUID", {}, {
-      requestId: "13",
-    });
+    const request = cubismEditorRequest(
+      "GetCurrentModelUID",
+      {},
+      {
+        requestId: "13",
+      },
+    );
     expect(request.Type).toBe("Request");
     expect(request.Method).toBe("GetCurrentModelUID");
     expect(parseCubismEditorMessage(JSON.stringify(request))?.Method).toBe(
@@ -248,15 +263,16 @@ describe("cubism editor bridge", () => {
           request.Method === "RegisterPlugin"
             ? { Token: "tok-1" }
             : { ModelUID: "model-9" };
-        queueMicrotask(() =>
-          onMessage?.({
-            data: JSON.stringify({
-              Type: "Response",
-              Method: request.Method,
-              RequestId: request.RequestId,
-              Data: dataPayload,
+        queueMicrotask(
+          () =>
+            onMessage?.({
+              data: JSON.stringify({
+                Type: "Response",
+                Method: request.Method,
+                RequestId: request.RequestId,
+                Data: dataPayload,
+              }),
             }),
-          }),
         );
       },
       close: () => undefined,
@@ -270,5 +286,96 @@ describe("cubism editor bridge", () => {
     expect(await bridge.getCurrentModelUID()).toBe("model-9");
     expect(sent[0]).toContain("RegisterPlugin");
     bridge.disconnect();
+  });
+});
+
+describe("identity mesh deform", () => {
+  const figure = { x: 0, y: 0, width: 1, height: 1 };
+
+  it("crops the waist and shortens the fairy hem toward a miniskirt", () => {
+    const positions = new Float32Array([
+      0.62,
+      0.49, // waist
+      0.5,
+      0.2, // hem
+    ]);
+    applyMeshDeform(positions, figure, MELODY_MESH_DEFORM);
+    expect(positions[0]).toBeLessThan(0.62);
+    expect(positions[0]).toBeGreaterThan(0.5);
+    expect(positions[3]).toBeGreaterThan(0.2);
+  });
+
+  it("spreads wing vertices without widening the torso column", () => {
+    const positions = new Float32Array([
+      0.05,
+      0.55, // left wing
+      0.5,
+      0.55, // torso
+    ]);
+    applyMeshDeform(positions, figure, MELODY_MESH_DEFORM);
+    expect(positions[0]).toBeLessThan(0.05);
+    expect(positions[2]).toBeCloseTo(0.5, 3);
+  });
+});
+
+describe("identity physics retarget", () => {
+  it("classifies official Miara physics dictionary names", () => {
+    expect(classifyPhysicsSettingName("Twin tail")).toBe("hair");
+    expect(classifyPhysicsSettingName("Sleeve Left")).toBe("cloth");
+    expect(classifyPhysicsSettingName("Fairy wings fluctuate")).toBe("wings");
+    expect(classifyPhysicsSettingName("Right hair accessory")).toBe(
+      "accessory",
+    );
+    expect(classifyPhysicsSettingName("Move Bust X")).toBeNull();
+  });
+
+  it("scales hair and damps cloth from a Miara snapshot", () => {
+    const rig = {
+      settings: namePhysicsSettings([
+        {
+          baseParticleIndex: 0,
+          particleCount: 1,
+          baseOutputIndex: 0,
+          outputCount: 1,
+        },
+        {
+          baseParticleIndex: 1,
+          particleCount: 1,
+          baseOutputIndex: 1,
+          outputCount: 1,
+        },
+      ]),
+      particles: [
+        { mobility: 1, delay: 1, acceleration: 1, radius: 1 },
+        { mobility: 1, delay: 1, acceleration: 1, radius: 1 },
+      ],
+      outputs: [
+        { angleScale: 1, weight: 1 },
+        { angleScale: 1, weight: 1 },
+      ],
+    };
+    expect(rig.settings[0]?.name).toBe("Twin tail");
+    expect(rig.settings[1]?.name).toBe("Front hair");
+    const clothRig = {
+      settings: [
+        {
+          name: "Sleeve Left",
+          baseParticleIndex: 0,
+          particleCount: 1,
+          baseOutputIndex: 0,
+          outputCount: 1,
+        },
+      ],
+      particles: [{ mobility: 1, delay: 1, acceleration: 1, radius: 1 }],
+      outputs: [{ angleScale: 1, weight: 1 }],
+    };
+    const snapshot = snapshotPhysicsRig(clothRig);
+    applyPhysicsRetarget(clothRig, snapshot, MELODY_PHYSICS_RETARGET);
+    expect(clothRig.particles[0].mobility).toBeCloseTo(
+      MELODY_PHYSICS_RETARGET.groups.cloth.mobility ?? 1,
+    );
+    expect(clothRig.outputs[0].angleScale).toBeCloseTo(
+      MELODY_PHYSICS_RETARGET.groups.cloth.angleScale ?? 1,
+    );
   });
 });

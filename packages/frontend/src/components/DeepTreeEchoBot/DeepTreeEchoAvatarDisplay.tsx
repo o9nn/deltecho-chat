@@ -16,8 +16,8 @@ import {
   LIVE_AVATAR_EXPRESSION,
   isMiaraCubismExpressionName,
   resolveAvatarExpression,
-  resolveIdentityOverlay,
-  resolveIdentityParameters,
+  applyIdentityLook,
+  mergeIdentityHiddenGroups,
   resolveMiaraOutfit,
 } from "@deltecho/avatar";
 import { Live2DAvatar } from "../AICompanionHub/Live2DAvatar";
@@ -386,7 +386,13 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
       hueShift: avatarContext?.state.config.outfitHueShift,
     });
     const hue = avatarContext?.state.config.outfitHueShift;
-    return typeof hue === "number" ? { ...resolved, hueShift: hue } : resolved;
+    const hiddenGroups = mergeIdentityHiddenGroups(
+      avatarContext?.state.config.identity,
+      resolved.hiddenGroups,
+    );
+    return typeof hue === "number"
+      ? { ...resolved, hiddenGroups, hueShift: hue }
+      : { ...resolved, hiddenGroups };
   }, [
     avatarContext?.state.config.outfit,
     avatarContext?.state.config.outfitHiddenGroups,
@@ -450,42 +456,24 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
         setTimeout(reportNativeSize, delay),
       );
       controller.applyOutfit?.(outfit);
-      const overlay = resolveIdentityOverlay(
+      applyIdentityLook(
+        controller,
         avatarContext?.state.config.identity,
         avatarContext?.state.config.automeshAtlas,
+        avatarContext?.state.config.automeshMapping?.parameters,
       );
-      if (overlay) {
-        void controller.applyTextureOverlay?.(overlay);
-        controller.applyParameterProfile?.(
-          resolveIdentityParameters(
-            avatarContext?.state.config.identity,
-            avatarContext?.state.config.automeshMapping?.parameters,
-          ),
-        );
-      } else {
-        void controller.clearTextureOverlay?.();
-      }
       onReady?.();
     },
     [onReady, onNativeSize, avatarContext, outfit],
   );
 
   useEffect(() => {
-    const overlay = resolveIdentityOverlay(
+    applyIdentityLook(
+      avatarController.current,
       avatarContext?.state.config.identity,
       avatarContext?.state.config.automeshAtlas,
+      avatarContext?.state.config.automeshMapping?.parameters,
     );
-    if (overlay) {
-      void avatarController.current?.applyTextureOverlay?.(overlay);
-      avatarController.current?.applyParameterProfile?.(
-        resolveIdentityParameters(
-          avatarContext?.state.config.identity,
-          avatarContext?.state.config.automeshMapping?.parameters,
-        ),
-      );
-      return;
-    }
-    void avatarController.current?.clearTextureOverlay?.();
   }, [
     avatarContext?.state.config.automeshAtlas,
     avatarContext?.state.config.automeshMapping?.parameters,

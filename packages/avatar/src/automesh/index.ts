@@ -32,10 +32,7 @@ export {
   modelDestForLandmark,
 } from "./project";
 
-export {
-  MELODY_PARAMETER_PROFILE,
-  mergeParameterProfile,
-} from "./parameters";
+export { MELODY_PARAMETER_PROFILE, mergeParameterProfile } from "./parameters";
 
 export {
   normalizeDrawableId,
@@ -57,6 +54,42 @@ export {
   trainAutomeshMapping,
   resolveAutomeshMapping,
 } from "./fit";
+
+export {
+  GROVE_MESH_DEFORM,
+  MELODY_MESH_DEFORM,
+  applyMeshDeform,
+  applyMeshDeformToDrawables,
+  type FigureBounds,
+  type MeshDeformBand,
+  type MeshDeformProfile,
+  type MutablePositions,
+} from "./deform";
+
+export {
+  GROVE_PHYSICS_RETARGET,
+  MELODY_PHYSICS_RETARGET,
+  MIARA_PHYSICS_SETTING_NAMES,
+  applyPhysicsRetarget,
+  classifyPhysicsSettingName,
+  namePhysicsSettings,
+  readPhysicsDictionaryNames,
+  restorePhysicsRig,
+  snapshotPhysicsRig,
+  type PhysicsGroupKind,
+  type PhysicsGroupScale,
+  type PhysicsRetargetProfile,
+  type PhysicsRigLike,
+  type PhysicsRigSnapshot,
+} from "./physics";
+
+export {
+  GROVE_IDENTITY_RIG,
+  MELODY_IDENTITY_RIG,
+  resolveIdentityRig,
+  type IdentityRig,
+  type IdentityRigId,
+} from "./identity-rig";
 
 export {
   CUBISM_EDITOR_DEFAULT_PORT,

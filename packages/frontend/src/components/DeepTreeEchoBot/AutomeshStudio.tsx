@@ -1,5 +1,6 @@
 import React, { useMemo, useRef, useState } from "react";
 import {
+  applyIdentityLook,
   cloneMelodyLandmarks,
   projectPhotoOntoAtlas,
   rasterToDataUrl,
@@ -46,9 +47,7 @@ export function AutomeshStudio() {
 
   const moveLandmark = (id: string, source: { x: number; y: number }) => {
     setLandmarks((current) =>
-      current.map((item) =>
-        item.id === id ? { ...item, source } : item,
-      ),
+      current.map((item) => (item.id === id ? { ...item, source } : item)),
     );
   };
 
@@ -81,9 +80,9 @@ export function AutomeshStudio() {
     });
     setLandmarks(mapping.landmarks);
     setStatus(
-      `${tx("automesh_status_inspected")} ${drawables.length} · residual ${
-        mapping.residual.toFixed(4)
-      }`,
+      `${tx("automesh_status_inspected")} ${
+        drawables.length
+      } · residual ${mapping.residual.toFixed(4)}`,
     );
   };
 
@@ -112,12 +111,7 @@ export function AutomeshStudio() {
             atlasWidth: ATLAS_SIZE,
             atlasHeight: ATLAS_SIZE,
           })
-        : warpRasterToAtlas(
-            raster,
-            mapping.landmarks,
-            ATLAS_SIZE,
-            ATLAS_SIZE,
-          );
+        : warpRasterToAtlas(raster, mapping.landmarks, ATLAS_SIZE, ATLAS_SIZE);
       const atlasUrl = rasterToDataUrl(atlas);
       avatar?.updateConfig({
         identity: "melody",
@@ -126,12 +120,19 @@ export function AutomeshStudio() {
         automeshMapping: mapping,
         automeshAtlas: atlasUrl,
       });
-      const applied = await avatar?.controller?.applyTextureOverlay?.(atlasUrl);
-      avatar?.controller?.applyParameterProfile?.(mapping.parameters ?? null);
+      applyIdentityLook(
+        avatar?.controller,
+        "melody",
+        atlasUrl,
+        mapping.parameters ?? null,
+      );
+      const applied = Boolean(avatar?.controller);
       setLandmarks(mapping.landmarks);
       setStatus(
         applied
-          ? `${tx("automesh_status_applied")} residual ${mapping.residual.toFixed(4)}`
+          ? `${tx(
+              "automesh_status_applied",
+            )} residual ${mapping.residual.toFixed(4)}`
           : tx("automesh_status_saved"),
       );
     } catch (error) {
@@ -209,12 +210,15 @@ export function AutomeshStudio() {
               x: (event.clientX - rect.left) / rect.width,
               y: (event.clientY - rect.top) / rect.height,
             };
-            const nearest = previewLandmarks.reduce((best, item) => {
-              const dx = item.source.x - source.x;
-              const dy = item.source.y - source.y;
-              const distance = dx * dx + dy * dy;
-              return distance < best.distance ? { item, distance } : best;
-            }, { item: previewLandmarks[0], distance: Number.POSITIVE_INFINITY });
+            const nearest = previewLandmarks.reduce(
+              (best, item) => {
+                const dx = item.source.x - source.x;
+                const dy = item.source.y - source.y;
+                const distance = dx * dx + dy * dy;
+                return distance < best.distance ? { item, distance } : best;
+              },
+              { item: previewLandmarks[0], distance: Number.POSITIVE_INFINITY },
+            );
             if (nearest.item) moveLandmark(nearest.item.id, source);
           }}
         >

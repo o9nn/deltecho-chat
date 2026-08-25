@@ -84,6 +84,9 @@ export interface Live2DAvatarController {
   applyTextureOverlay?: (source: string) => Promise<boolean>;
   clearTextureOverlay?: () => Promise<boolean>;
   applyParameterProfile?: (profile: Record<string, number> | null) => void;
+  applyIdentityRig?: (
+    rig: import("@deltecho/avatar").IdentityRig | null,
+  ) => void;
   getNativeSize?: () => { width: number; height: number } | null;
 }
 

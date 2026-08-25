@@ -19,6 +19,7 @@ import {
   LIVE_AVATAR_EXPRESSION,
   SHARED_AVATAR_MESH,
   defaultAtlasForIdentity,
+  mergeIdentityHiddenGroups,
   resolveAvatarExpression,
   resolveAvatarIdentity,
   resolveAutomeshMapping,
@@ -123,11 +124,12 @@ function sanitizeAvatarConfig(
     identity,
     model: SHARED_AVATAR_MESH,
     outfit: resolved.id,
-    outfitHiddenGroups: [...resolved.hiddenGroups],
+    outfitHiddenGroups: mergeIdentityHiddenGroups(
+      identity,
+      resolved.hiddenGroups,
+    ),
     // Remapped Melody atlas already has its color; do not hue-rotate it.
-    outfitHueShift: defaultAtlasForIdentity(identity)
-      ? 0
-      : resolved.hueShift,
+    outfitHueShift: defaultAtlasForIdentity(identity) ? 0 : resolved.hueShift,
     automeshMapping: resolveAutomeshMapping(config.automeshMapping),
     automeshAtlas: resolveAutomeshAtlas(config.automeshAtlas),
     expression: resolveAvatarExpression(config.expression),

@@ -4,11 +4,13 @@ import {
   SHARED_AVATAR_MESH,
   SHIPPED_MELODY_ATLAS,
   applyAvatarIdentity,
+  applyIdentityLook,
   defaultAtlasForIdentity,
   lookForAvatarIdentity,
   resolveAvatarIdentity,
   resolveIdentityOverlay,
   resolveIdentityParameters,
+  resolveIdentityRig,
 } from "../avatar-identities";
 
 describe("avatar identities", () => {
@@ -42,9 +44,20 @@ describe("avatar identities", () => {
     expect(applied.outfit.hueShift).toBe(0);
     expect(applied.overlay).toBe(SHIPPED_MELODY_ATLAS);
     expect(applied.outfit.hiddenGroups).toEqual(
-      expect.arrayContaining(["water", "background"]),
+      expect.arrayContaining(["water", "background", "chestCloth"]),
     );
+    expect(applied.rig?.id).toBe("melody");
     expect(lookForAvatarIdentity("melody").hueShift).toBe(325);
+  });
+
+  it("resolves a grove shape and physics rig for Deep Tree Echo", () => {
+    const applied = applyAvatarIdentity("deep-tree-echo");
+    expect(applied.rig?.id).toBe("deep-tree-echo");
+    expect(
+      applied.rig?.deform.bands.some((band) => band.id === "grove-wings"),
+    ).toBe(true);
+    expect(resolveIdentityRig("miara")).toBeNull();
+    expect(resolveIdentityRig("melody")?.physics.id).toBe("melody");
   });
 
   it("binds the shipped Melody atlas unless a custom overlay is set", () => {
@@ -58,5 +71,26 @@ describe("avatar identities", () => {
     expect(resolveIdentityOverlay("miara", SHIPPED_MELODY_ATLAS)).toBeNull();
     expect(resolveIdentityParameters("melody")?.ParamMouthForm).toBe(0.45);
     expect(resolveIdentityParameters("miara")).toBeNull();
+  });
+
+  it("binds overlay, parameters, and rig together when applying a look", () => {
+    const controller = {
+      applyTextureOverlay: jest.fn().mockResolvedValue(true),
+      clearTextureOverlay: jest.fn().mockResolvedValue(true),
+      applyParameterProfile: jest.fn(),
+      applyIdentityRig: jest.fn(),
+    };
+    applyIdentityLook(controller, "melody");
+    expect(controller.applyIdentityRig).toHaveBeenCalledWith(
+      expect.objectContaining({ id: "melody" }),
+    );
+    expect(controller.applyTextureOverlay).toHaveBeenCalledWith(
+      SHIPPED_MELODY_ATLAS,
+    );
+    expect(controller.applyParameterProfile).toHaveBeenCalled();
+
+    applyIdentityLook(controller, "miara");
+    expect(controller.applyIdentityRig).toHaveBeenCalledWith(null);
+    expect(controller.clearTextureOverlay).toHaveBeenCalled();
   });
 });
