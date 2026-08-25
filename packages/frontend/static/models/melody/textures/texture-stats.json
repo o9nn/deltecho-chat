@@ -1,23 +1,157 @@
 {
   "opaque": 6759503,
   "mean": [
-    94,
-    170,
-    184
+    89,
+    169,
+    187
   ],
-  "purple": 904351,
-  "teal": 4415728,
-  "gold": 110530,
-  "painted": 1354971,
+  "purple": 780601,
+  "teal": 4671885,
+  "gold": 71154,
+  "painted": 541664,
   "character": {
+    "opaque": 494889,
+    "mean": [
+      142,
+      83,
+      168
+    ],
+    "purple": 406031,
+    "teal": 8134,
+    "gold": 22253
+  },
+  "characterAabb": {
     "opaque": 988390,
     "mean": [
-      174,
-      151,
-      164
+      143,
+      147,
+      189
     ],
-    "purple": 559880,
-    "teal": 101463,
-    "gold": 84663
+    "purple": 436130,
+    "teal": 357620,
+    "gold": 45287
+  },
+  "regions": {
+    "hair": {
+      "opaque": 269371,
+      "mean": [
+        139,
+        93,
+        182
+      ],
+      "purple": 204871,
+      "teal": 42555,
+      "gold": 8179
+    },
+    "headset": {
+      "opaque": 76727,
+      "mean": [
+        148,
+        124,
+        155
+      ],
+      "purple": 38350,
+      "teal": 16354,
+      "gold": 21422
+    },
+    "face": {
+      "opaque": 38821,
+      "mean": [
+        179,
+        227,
+        232
+      ],
+      "purple": 1298,
+      "teal": 22289,
+      "gold": 0
+    },
+    "body": {
+      "opaque": 189139,
+      "mean": [
+        160,
+        184,
+        202
+      ],
+      "purple": 47830,
+      "teal": 83455,
+      "gold": 5119
+    },
+    "skirt": {
+      "opaque": 118779,
+      "mean": [
+        120,
+        174,
+        189
+      ],
+      "purple": 15735,
+      "teal": 68649,
+      "gold": 3319
+    },
+    "arms": {
+      "opaque": 78939,
+      "mean": [
+        144,
+        175,
+        196
+      ],
+      "purple": 31950,
+      "teal": 36445,
+      "gold": 1470
+    },
+    "legs": {
+      "opaque": 104659,
+      "mean": [
+        152,
+        129,
+        191
+      ],
+      "purple": 75058,
+      "teal": 26258,
+      "gold": 643
+    },
+    "wings": {
+      "opaque": 40087,
+      "mean": [
+        156,
+        120,
+        148
+      ],
+      "purple": 18964,
+      "teal": 6007,
+      "gold": 4322
+    },
+    "sparkle": {
+      "opaque": 69669,
+      "mean": [
+        104,
+        204,
+        211
+      ],
+      "purple": 1769,
+      "teal": 55153,
+      "gold": 325
+    },
+    "accessory": {
+      "opaque": 2199,
+      "mean": [
+        187,
+        167,
+        129
+      ],
+      "purple": 305,
+      "teal": 455,
+      "gold": 488
+    }
+  },
+  "hairPixels": {
+    "opaque": 309509,
+    "mean": [
+      127,
+      55,
+      179
+    ],
+    "purple": 309509,
+    "teal": 0,
+    "gold": 0
   }
 }
