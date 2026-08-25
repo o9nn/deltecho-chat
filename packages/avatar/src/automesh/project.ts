@@ -1,5 +1,11 @@
 import { applySimilarity, fitSimilarity } from "./fit";
-import { drawableMatchesHints } from "./inspect";
+import { punchOpaqueBackground } from "./warp";
+import {
+  drawableMatchesHints,
+  figureFromDrawables,
+  isEnvironmentDrawable,
+  isGenericArtMeshId,
+} from "./inspect";
 import type {
   AutomeshDrawable,
   AutomeshLandmark,
@@ -7,8 +13,6 @@ import type {
   Point2,
   SimilarityTransform,
 } from "./types";
-
-const SKIP_DRAWABLE = /water|background|sparkle/i;
 
 function invertSimilarity(transform: SimilarityTransform): SimilarityTransform {
   const scale = transform.scale === 0 ? 1 : 1 / transform.scale;
@@ -77,15 +81,34 @@ export function modelDestForLandmark(
   landmark: AutomeshLandmark,
   drawables: readonly AutomeshDrawable[],
 ): Point2 {
-  const hit = drawables.find((drawable) =>
-    drawableMatchesHints(drawable.id, landmark.drawableHints),
+  const hit = drawables.find(
+    (drawable) =>
+      !isGenericArtMeshId(drawable.id) &&
+      drawableMatchesHints(drawable.id, landmark.drawableHints),
   );
-  if (!hit) {
+  if (hit) {
+    const box =
+      hit.positions && hit.positions.length >= 6
+        ? figureFromDrawables([hit])
+        : hit.bounds;
+    if (box) {
+      return {
+        x: box.x + box.width / 2,
+        y: box.y + box.height / 2,
+      };
+    }
+  }
+  const figure = figureFromDrawables(drawables);
+  if (!figure) {
     return { x: landmark.atlas.x, y: landmark.atlas.y };
   }
+  // Native Cubism vertex Y is up. The still is Y-down, so invert Y.
+  const yUp = drawables.some((item) => (item.positions?.length ?? 0) >= 6);
   return {
-    x: hit.bounds.x + hit.bounds.width / 2,
-    y: hit.bounds.y + hit.bounds.height / 2,
+    x: figure.x + landmark.source.x * figure.width,
+    y: yUp
+      ? figure.y + (1 - landmark.source.y) * figure.height
+      : figure.y + landmark.source.y * figure.height,
   };
 }
 
@@ -109,6 +132,7 @@ export function projectPhotoOntoAtlas(input: {
   base?: AutomeshRaster;
   atlasWidth: number;
   atlasHeight: number;
+  stats?: { painted: number; triangles: number; envSkipped: number };
 }): AutomeshRaster {
   const width = Math.max(1, Math.floor(input.atlasWidth));
   const height = Math.max(1, Math.floor(input.atlasHeight));
@@ -117,11 +141,18 @@ export function projectPhotoOntoAtlas(input: {
     data.set(input.base.data);
   }
 
+  const photo = punchOpaqueBackground(input.photo);
   const photoToModel = fitPhotoToMesh(input.landmarks, input.drawables);
   const modelToPhoto = invertSimilarity(photoToModel);
+  let painted = 0;
+  let triangles = 0;
+  let envSkipped = 0;
 
   for (const drawable of input.drawables) {
-    if (SKIP_DRAWABLE.test(drawable.id)) continue;
+    if (isEnvironmentDrawable(drawable)) {
+      envSkipped += 1;
+      continue;
+    }
     const positions = drawable.positions;
     const uvs = drawable.uvs;
     const indices = drawable.indices;
@@ -146,6 +177,7 @@ export function projectPhotoOntoAtlas(input: {
       const x1 = Math.ceil(maxU * width);
       const y0 = Math.floor(minV * height);
       const y1 = Math.ceil(maxV * height);
+      triangles += 1;
 
       for (let y = y0; y < y1; y++) {
         for (let x = x0; x < x1; x++) {
@@ -156,11 +188,11 @@ export function projectPhotoOntoAtlas(input: {
             x: weights[0] * a.x + weights[1] * b.x + weights[2] * c.x,
             y: weights[0] * a.y + weights[1] * b.y + weights[2] * c.y,
           };
-          const photo = applySimilarity(modelToPhoto, model);
+          const mapped = applySimilarity(modelToPhoto, model);
           const sample = sampleBilinear(
-            input.photo,
-            photo.x * (input.photo.width - 1),
-            photo.y * (input.photo.height - 1),
+            photo,
+            mapped.x * (photo.width - 1),
+            mapped.y * (photo.height - 1),
           );
           if (sample[3] < 8) continue;
           const dest = (y * width + x) * 4;
@@ -168,9 +200,16 @@ export function projectPhotoOntoAtlas(input: {
           data[dest + 1] = sample[1];
           data[dest + 2] = sample[2];
           data[dest + 3] = 255;
+          painted += 1;
         }
       }
     }
+  }
+
+  if (input.stats) {
+    input.stats.painted = painted;
+    input.stats.triangles = triangles;
+    input.stats.envSkipped = envSkipped;
   }
 
   return { width, height, data };

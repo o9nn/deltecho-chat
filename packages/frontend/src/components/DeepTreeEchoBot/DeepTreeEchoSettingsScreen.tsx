@@ -286,7 +286,7 @@ const DeepTreeEchoSettingsScreen: React.FC<DeepTreeEchoSettingsScreenProps> = ({
           <div className="avatar-outfit-settings">
             <h3>Avatars</h3>
             <p>
-              Named looks share the official Miara mesh. Choose an identity,
+              Each identity loads its own Cubism model folder. Choose one,
               wardrobe, or lock a Cubism face so live cognitive updates do not
               overwrite it.
             </p>

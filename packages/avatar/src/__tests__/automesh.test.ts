@@ -4,18 +4,33 @@ import {
   cloneMelodyLandmarks,
   cubismEditorRequest,
   drawableMatchesHints,
+  figureFromDrawables,
   fitSimilarity,
   applySimilarity,
+  isEnvironmentDrawable,
   mapPoint,
   mappingResidual,
+  modelDestForLandmark,
   parseCubismEditorMessage,
   resolveAutomeshMapping,
   projectPhotoOntoAtlas,
   trainAutomeshMapping,
   uvCentroid,
+  punchOpaqueBackground,
   warpRasterToAtlas,
   MELODY_PARAMETER_PROFILE,
+  MELODY_MESH_DEFORM,
+  MELODY_PHYSICS_RETARGET,
+  applyMeshDeform,
+  applyPhysicsRetarget,
+  classifyPhysicsSettingName,
+  namePhysicsSettings,
+  snapshotPhysicsRig,
+  retargetPhysics3Document,
 } from "../automesh";
+
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
 
 describe("automesh mapping", () => {
   it("maps landmark source points onto their atlas targets", () => {
@@ -54,6 +69,41 @@ describe("automesh mapping", () => {
     const ay = Math.min(7, Math.round(mouth.atlas.y * 8 - 0.5));
     const atlasIndex = (ay * 8 + ax) * 4;
     expect(atlas.data[atlasIndex + 3]).toBeGreaterThan(0);
+  });
+
+  it("punches edge-connected backdrop but keeps interior dark clothing", () => {
+    const width = 5;
+    const raster = {
+      width,
+      height: 5,
+      data: new Uint8ClampedArray(5 * 5 * 4),
+    };
+    const setPixel = (
+      x: number,
+      y: number,
+      r: number,
+      g: number,
+      b: number,
+    ) => {
+      const index = (y * width + x) * 4;
+      raster.data[index] = r;
+      raster.data[index + 1] = g;
+      raster.data[index + 2] = b;
+      raster.data[index + 3] = 255;
+    };
+    for (let y = 0; y < 5; y++) {
+      for (let x = 0; x < 5; x++) {
+        const edge = x === 0 || y === 0 || x === 4 || y === 4;
+        const ring = x === 1 || y === 1 || x === 3 || y === 3;
+        if (edge) setPixel(x, y, 0, 0, 0);
+        else if (ring) setPixel(x, y, 200, 80, 160);
+        else setPixel(x, y, 8, 8, 8);
+      }
+    }
+    const punched = punchOpaqueBackground(raster);
+    expect(punched.data[3]).toBe(0);
+    expect(punched.data[(2 * 5 + 2) * 4 + 3]).toBe(255);
+    expect(punched.data[(2 * 5 + 1) * 4]).toBe(200);
   });
 
   it("fits an identity similarity transform", () => {
@@ -100,6 +150,59 @@ describe("automesh mapping", () => {
     expect(mappingResidual(mapping.landmarks)).toBeCloseTo(mapping.residual, 5);
   });
 
+  it("fits unnamed ArtMesh landmarks onto the character figure", () => {
+    const drawables = [
+      {
+        id: "ArtMesh12",
+        bounds: { x: 10, y: 20, width: 80, height: 160 },
+        uvs: [0.1, 0.1, 0.2, 0.1, 0.1, 0.2],
+      },
+      {
+        id: "ArtMesh200",
+        bounds: { x: 0, y: 0, width: 400, height: 400 },
+        uvs: [0.7, 0.1, 0.95, 0.1, 0.7, 0.4],
+      },
+    ];
+    expect(isEnvironmentDrawable(drawables[1]!)).toBe(true);
+    const figure = figureFromDrawables(drawables);
+    expect(figure?.width).toBeCloseTo(80 * 1.16, 5);
+    expect(figure?.height).toBeCloseTo(160 * 1.16, 5);
+    const dest = modelDestForLandmark(
+      {
+        id: "hairline",
+        label: "Hairline",
+        source: { x: 0.5, y: 0.1 },
+        atlas: { x: 0.4, y: 0.16 },
+        drawableHints: ["hairfront"],
+      },
+      drawables,
+    );
+    expect(dest.x).toBeCloseTo(figure!.x + 0.5 * figure!.width, 5);
+    expect(dest.y).toBeCloseTo(figure!.y + 0.1 * figure!.height, 5);
+  });
+
+  it("inverts Y when fitting a still onto Cubism vertex positions", () => {
+    const dest = modelDestForLandmark(
+      {
+        id: "hairline",
+        label: "Hairline",
+        source: { x: 0.5, y: 0.1 },
+        atlas: { x: 0.4, y: 0.16 },
+        drawableHints: ["hairfront"],
+      },
+      [
+        {
+          id: "ArtMesh1",
+          bounds: { x: 0, y: 0, width: 1, height: 1 },
+          positions: [0, 0, 100, 0, 0, 200, 100, 200],
+          uvs: [0.1, 0.1, 0.2, 0.1, 0.1, 0.2, 0.2, 0.2],
+        },
+      ],
+    );
+    expect(dest.x).toBeCloseTo(50, 5);
+    expect(dest.y).toBeCloseTo(192.8, 5);
+  });
+
   it("reprojects a photo through drawable triangles onto atlas islands", () => {
     const photo = {
       width: 2,
@@ -109,9 +212,7 @@ describe("automesh mapping", () => {
       ]),
     };
     const landmarks = cloneMelodyLandmarks().map((item) =>
-      item.id === "mouth"
-        ? { ...item, source: { x: 0.5, y: 0.5 } }
-        : item,
+      item.id === "mouth" ? { ...item, source: { x: 0.5, y: 0.5 } } : item,
     );
     const drawables = [
       {
@@ -137,9 +238,13 @@ describe("automesh mapping", () => {
 
 describe("cubism editor bridge", () => {
   it("builds and parses External API envelopes", () => {
-    const request = cubismEditorRequest("GetCurrentModelUID", {}, {
-      requestId: "13",
-    });
+    const request = cubismEditorRequest(
+      "GetCurrentModelUID",
+      {},
+      {
+        requestId: "13",
+      },
+    );
     expect(request.Type).toBe("Request");
     expect(request.Method).toBe("GetCurrentModelUID");
     expect(parseCubismEditorMessage(JSON.stringify(request))?.Method).toBe(
@@ -162,15 +267,16 @@ describe("cubism editor bridge", () => {
           request.Method === "RegisterPlugin"
             ? { Token: "tok-1" }
             : { ModelUID: "model-9" };
-        queueMicrotask(() =>
-          onMessage?.({
-            data: JSON.stringify({
-              Type: "Response",
-              Method: request.Method,
-              RequestId: request.RequestId,
-              Data: dataPayload,
+        queueMicrotask(
+          () =>
+            onMessage?.({
+              data: JSON.stringify({
+                Type: "Response",
+                Method: request.Method,
+                RequestId: request.RequestId,
+                Data: dataPayload,
+              }),
             }),
-          }),
         );
       },
       close: () => undefined,
@@ -184,5 +290,149 @@ describe("cubism editor bridge", () => {
     expect(await bridge.getCurrentModelUID()).toBe("model-9");
     expect(sent[0]).toContain("RegisterPlugin");
     bridge.disconnect();
+  });
+});
+
+describe("identity mesh deform", () => {
+  const figure = { x: 0, y: 0, width: 1, height: 1 };
+
+  it("crops the waist and shortens the fairy hem toward a miniskirt", () => {
+    const positions = new Float32Array([
+      0.62,
+      0.49, // waist
+      0.5,
+      0.2, // hem
+    ]);
+    applyMeshDeform(positions, figure, MELODY_MESH_DEFORM);
+    expect(positions[0]).toBeLessThan(0.62);
+    expect(positions[0]).toBeGreaterThan(0.5);
+    expect(positions[3]).toBeGreaterThan(0.2);
+  });
+
+  it("spreads wing vertices without widening the torso column", () => {
+    const positions = new Float32Array([
+      0.05,
+      0.55, // left wing
+      0.5,
+      0.55, // torso
+    ]);
+    applyMeshDeform(positions, figure, MELODY_MESH_DEFORM);
+    expect(positions[0]).toBeLessThan(0.05);
+    expect(positions[2]).toBeCloseTo(0.5, 3);
+  });
+});
+
+describe("identity physics retarget", () => {
+  it("classifies official Miara physics dictionary names", () => {
+    expect(classifyPhysicsSettingName("Twin tail")).toBe("hair");
+    expect(classifyPhysicsSettingName("Sleeve Left")).toBe("cloth");
+    expect(classifyPhysicsSettingName("Fairy wings fluctuate")).toBe("wings");
+    expect(classifyPhysicsSettingName("Right hair accessory")).toBe(
+      "accessory",
+    );
+    expect(classifyPhysicsSettingName("Move Bust X")).toBeNull();
+  });
+
+  it("scales hair and damps cloth from a Miara snapshot", () => {
+    const rig = {
+      settings: namePhysicsSettings([
+        {
+          baseParticleIndex: 0,
+          particleCount: 1,
+          baseOutputIndex: 0,
+          outputCount: 1,
+        },
+        {
+          baseParticleIndex: 1,
+          particleCount: 1,
+          baseOutputIndex: 1,
+          outputCount: 1,
+        },
+      ]),
+      particles: [
+        { mobility: 1, delay: 1, acceleration: 1, radius: 1 },
+        { mobility: 1, delay: 1, acceleration: 1, radius: 1 },
+      ],
+      outputs: [
+        { angleScale: 1, weight: 1 },
+        { angleScale: 1, weight: 1 },
+      ],
+    };
+    expect(rig.settings[0]?.name).toBe("Twin tail");
+    expect(rig.settings[1]?.name).toBe("Front hair");
+    const clothRig = {
+      settings: [
+        {
+          name: "Sleeve Left",
+          baseParticleIndex: 0,
+          particleCount: 1,
+          baseOutputIndex: 0,
+          outputCount: 1,
+        },
+      ],
+      particles: [{ mobility: 1, delay: 1, acceleration: 1, radius: 1 }],
+      outputs: [{ angleScale: 1, weight: 1 }],
+    };
+    const snapshot = snapshotPhysicsRig(clothRig);
+    applyPhysicsRetarget(clothRig, snapshot, MELODY_PHYSICS_RETARGET);
+    expect(clothRig.particles[0].mobility).toBeCloseTo(
+      MELODY_PHYSICS_RETARGET.groups.cloth.mobility ?? 1,
+    );
+    expect(clothRig.outputs[0].angleScale).toBeCloseTo(
+      MELODY_PHYSICS_RETARGET.groups.cloth.angleScale ?? 1,
+    );
+  });
+
+  it("bakes a physics3 document so identity folders can ship their own motion", () => {
+    const document = {
+      Meta: {
+        PhysicsDictionary: [{ Name: "Twin tail" }, { Name: "Sleeve Left" }],
+      },
+      PhysicsSettings: [
+        {
+          Vertices: [{ Mobility: 1, Delay: 1, Acceleration: 1, Radius: 10 }],
+          Output: [{ Scale: 1, Weight: 100 }],
+        },
+        {
+          Vertices: [{ Mobility: 1, Delay: 1, Acceleration: 1, Radius: 10 }],
+          Output: [{ Scale: 1, Weight: 100 }],
+        },
+      ],
+    };
+    const baked = retargetPhysics3Document(document, MELODY_PHYSICS_RETARGET);
+    expect(baked.PhysicsSettings?.[0].Vertices?.[0].Delay).toBeCloseTo(
+      MELODY_PHYSICS_RETARGET.groups.hair.delay ?? 1,
+    );
+    expect(baked.PhysicsSettings?.[1].Vertices?.[0].Mobility).toBeCloseTo(
+      MELODY_PHYSICS_RETARGET.groups.cloth.mobility ?? 1,
+    );
+  });
+
+  it("ships dedicated Cubism packages for Melody and Deep Tree Echo", () => {
+    const models = join(process.cwd(), "../frontend/static/models");
+    expect(existsSync(join(models, "melody/melody_t03.model3.json"))).toBe(
+      true,
+    );
+    expect(existsSync(join(models, "melody/melody_t03.moc3"))).toBe(true);
+    expect(existsSync(join(models, "melody/textures/texture_00.png"))).toBe(
+      true,
+    );
+    expect(existsSync(join(models, "melody/mesh-map.json"))).toBe(true);
+    expect(existsSync(join(models, "miara/mesh-map.json"))).toBe(true);
+    const melodyMap = JSON.parse(
+      readFileSync(join(models, "melody/mesh-map.json"), "utf8"),
+    );
+    expect(melodyMap.identity).toBe("melody");
+    expect(melodyMap.sourceModel).toBe(
+      "models/melody/melody_t03.model3.json",
+    );
+    expect(
+      existsSync(
+        join(models, "deep-tree-echo/deep-tree-echo_t03.model3.json"),
+      ),
+    ).toBe(true);
+    expect(
+      existsSync(join(models, "deep-tree-echo/textures/texture_00.png")),
+    ).toBe(true);
   });
 });

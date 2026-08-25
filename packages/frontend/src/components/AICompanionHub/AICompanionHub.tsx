@@ -37,6 +37,8 @@ import {
   LIVE_AVATAR_EXPRESSION,
   isMiaraCubismExpressionName,
   resolveAvatarExpression,
+  applyIdentityLook,
+  mergeIdentityHiddenGroups,
   resolveMiaraOutfit,
 } from "@deltecho/avatar";
 import { Live2DAvatar } from "./Live2DAvatar";
@@ -204,7 +206,7 @@ const AICompanionHubContent: React.FC = () => {
   const [avatarLoaded, setAvatarLoaded] = useState(false);
   const [avatarAudioLevel, setAvatarAudioLevel] = useState(0);
   const avatarContext = useDeepTreeEchoAvatarOptional();
-  const miaraOutfit = resolveMiaraOutfit({
+  const resolvedOutfit = resolveMiaraOutfit({
     id: avatarContext?.state.config.outfit,
     hiddenGroups: avatarContext?.state.config.outfitHiddenGroups,
     hueShift: avatarContext?.state.config.outfitHueShift,
@@ -216,6 +218,34 @@ const AICompanionHubContent: React.FC = () => {
   const manualExpression = isMiaraCubismExpressionName(lockedExpression)
     ? lockedExpression
     : undefined;
+  const storedHue = avatarContext?.state.config.outfitHueShift;
+  const identityHidden = mergeIdentityHiddenGroups(
+    avatarContext?.state.config.identity,
+    resolvedOutfit.hiddenGroups,
+  );
+  const miaraOutfit =
+    typeof storedHue === "number"
+      ? {
+          ...resolvedOutfit,
+          hiddenGroups: identityHidden,
+          hueShift: storedHue,
+        }
+      : { ...resolvedOutfit, hiddenGroups: identityHidden };
+
+  useEffect(() => {
+    if (!avatarController) return;
+    applyIdentityLook(
+      avatarController,
+      avatarContext?.state.config.identity,
+      avatarContext?.state.config.automeshAtlas,
+      avatarContext?.state.config.automeshMapping?.parameters,
+    );
+  }, [
+    avatarController,
+    avatarContext?.state.config.automeshAtlas,
+    avatarContext?.state.config.automeshMapping?.parameters,
+    avatarContext?.state.config.identity,
+  ]);
 
   // Simulate real-time cognitive state updates
   useEffect(() => {
@@ -697,7 +727,7 @@ const AICompanionHubContent: React.FC = () => {
                 </div>
                 <div className="avatar-display-container">
                   <Live2DAvatar
-                    model="miara"
+                    model={avatarContext?.state.config.model ?? "miara"}
                     width={320}
                     height={320}
                     scale={0.3}
@@ -715,10 +745,12 @@ const AICompanionHubContent: React.FC = () => {
                     onError={(err) => console.error("Avatar error:", err)}
                     onControllerReady={(controller) => {
                       setAvatarController(controller);
-                      const atlas = avatarContext?.state.config.automeshAtlas;
-                      if (atlas) {
-                        void controller.applyTextureOverlay?.(atlas);
-                      }
+                      applyIdentityLook(
+                        controller,
+                        avatarContext?.state.config.identity,
+                        avatarContext?.state.config.automeshAtlas,
+                        avatarContext?.state.config.automeshMapping?.parameters,
+                      );
                     }}
                   />
                 </div>

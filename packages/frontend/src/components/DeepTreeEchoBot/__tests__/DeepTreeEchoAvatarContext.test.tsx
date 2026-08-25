@@ -26,6 +26,9 @@ function TestConsumer() {
       <span data-testid="identity">{avatar.state.config.identity}</span>
       <span data-testid="outfit">{avatar.state.config.outfit}</span>
       <span data-testid="outfit-hue">{avatar.state.config.outfitHueShift}</span>
+      <span data-testid="outfit-hidden">
+        {(avatar.state.config.outfitHiddenGroups ?? []).join(",")}
+      </span>
       <span data-testid="automesh-identity">
         {avatar.state.config.automeshMapping?.identity ?? "none"}
       </span>
@@ -106,6 +109,9 @@ function TestConsumer() {
         }
       >
         Set Automesh
+      </button>
+      <button
+        type="button"
         data-testid="set-smile-expression"
         onClick={() =>
           avatar.updateConfig({
@@ -268,8 +274,15 @@ describe("DeepTreeEchoAvatarContext", () => {
         window.localStorage.getItem("deepTreeEchoAvatarConfig") || "{}",
       );
       expect(saved.identity).toBe("melody");
-      expect(saved.model).toBe("miara");
+      expect(saved.model).toBe("melody");
       expect(saved.outfit).toBe("aria");
+      expect(saved.outfitHueShift).toBe(0);
+      expect(saved.outfitHiddenGroups).toEqual(
+        expect.arrayContaining(["water", "background", "chestCloth"]),
+      );
+      expect(screen.getByTestId("outfit-hidden").textContent).toContain(
+        "chestCloth",
+      );
     });
 
     it("persists the selected outfit to localStorage", () => {
@@ -316,6 +329,27 @@ describe("DeepTreeEchoAvatarContext", () => {
 
   describe("automesh persistence", () => {
     it("persists a trained Melody mapping", () => {
+      render(
+        <DeepTreeEchoAvatarProvider>
+          <TestConsumer />
+        </DeepTreeEchoAvatarProvider>,
+      );
+
+      act(() => {
+        screen.getByTestId("set-automesh").click();
+      });
+
+      expect(screen.getByTestId("automesh-identity")).toHaveTextContent(
+        "melody",
+      );
+      const saved = JSON.parse(
+        window.localStorage.getItem("deepTreeEchoAvatarConfig") || "{}",
+      );
+      expect(saved.automeshMapping.identity).toBe("melody");
+      expect(saved.automeshAtlas).toBe("data:image/png;base64,abc");
+    });
+  });
+
   describe("expression persistence", () => {
     it("defaults to live expression", () => {
       render(
@@ -334,11 +368,6 @@ describe("DeepTreeEchoAvatarContext", () => {
       );
 
       act(() => {
-        screen.getByTestId("set-automesh").click();
-      });
-
-      expect(screen.getByTestId("automesh-identity")).toHaveTextContent(
-        "melody",
         screen.getByTestId("set-smile-expression").click();
       });
 
@@ -348,8 +377,6 @@ describe("DeepTreeEchoAvatarContext", () => {
       const saved = JSON.parse(
         window.localStorage.getItem("deepTreeEchoAvatarConfig") || "{}",
       );
-      expect(saved.automeshMapping.identity).toBe("melody");
-      expect(saved.automeshAtlas).toBe("data:image/png;base64,abc");
       expect(saved.expression).toBe("JOY_01_BroadSmile");
     });
 

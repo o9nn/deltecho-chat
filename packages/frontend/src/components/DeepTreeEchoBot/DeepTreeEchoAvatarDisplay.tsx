@@ -16,6 +16,8 @@ import {
   LIVE_AVATAR_EXPRESSION,
   isMiaraCubismExpressionName,
   resolveAvatarExpression,
+  applyIdentityLook,
+  mergeIdentityHiddenGroups,
   resolveMiaraOutfit,
 } from "@deltecho/avatar";
 import { Live2DAvatar } from "../AICompanionHub/Live2DAvatar";
@@ -377,19 +379,25 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
       : configuredHeight;
   // Fill factor for contain-fit: the standing figure should fill the strip.
   const stripScale = fillsConversationStrip ? 0.97 : 0.92;
-  const outfit = useMemo(
-    () =>
-      resolveMiaraOutfit({
-        id: avatarContext?.state.config.outfit,
-        hiddenGroups: avatarContext?.state.config.outfitHiddenGroups,
-        hueShift: avatarContext?.state.config.outfitHueShift,
-      }),
-    [
-      avatarContext?.state.config.outfit,
-      avatarContext?.state.config.outfitHiddenGroups,
-      avatarContext?.state.config.outfitHueShift,
-    ],
-  );
+  const outfit = useMemo(() => {
+    const resolved = resolveMiaraOutfit({
+      id: avatarContext?.state.config.outfit,
+      hiddenGroups: avatarContext?.state.config.outfitHiddenGroups,
+      hueShift: avatarContext?.state.config.outfitHueShift,
+    });
+    const hue = avatarContext?.state.config.outfitHueShift;
+    const hiddenGroups = mergeIdentityHiddenGroups(
+      avatarContext?.state.config.identity,
+      resolved.hiddenGroups,
+    );
+    return typeof hue === "number"
+      ? { ...resolved, hiddenGroups, hueShift: hue }
+      : { ...resolved, hiddenGroups };
+  }, [
+    avatarContext?.state.config.outfit,
+    avatarContext?.state.config.outfitHiddenGroups,
+    avatarContext?.state.config.outfitHueShift,
+  ]);
 
   const avatarController = useRef<Live2DAvatarController | null>(null);
   const updateIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -448,27 +456,27 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
         setTimeout(reportNativeSize, delay),
       );
       controller.applyOutfit?.(outfit);
-      const atlas = avatarContext?.state.config.automeshAtlas;
-      if (atlas && avatarContext?.state.config.identity === "melody") {
-        void controller.applyTextureOverlay?.(atlas);
-        controller.applyParameterProfile?.(
-          avatarContext.state.config.automeshMapping?.parameters ?? null,
-        );
-      }
+      applyIdentityLook(
+        controller,
+        avatarContext?.state.config.identity,
+        avatarContext?.state.config.automeshAtlas,
+        avatarContext?.state.config.automeshMapping?.parameters,
+      );
       onReady?.();
     },
     [onReady, onNativeSize, avatarContext, outfit],
   );
 
   useEffect(() => {
-    const atlas = avatarContext?.state.config.automeshAtlas;
-    if (!atlas || avatarContext?.state.config.identity !== "melody") return;
-    void avatarController.current?.applyTextureOverlay?.(atlas);
-    avatarController.current?.applyParameterProfile?.(
-      avatarContext.state.config.automeshMapping?.parameters ?? null,
+    applyIdentityLook(
+      avatarController.current,
+      avatarContext?.state.config.identity,
+      avatarContext?.state.config.automeshAtlas,
+      avatarContext?.state.config.automeshMapping?.parameters,
     );
   }, [
     avatarContext?.state.config.automeshAtlas,
+    avatarContext?.state.config.automeshMapping?.parameters,
     avatarContext?.state.config.identity,
   ]);
 

@@ -39,12 +39,12 @@ describe("AvatarIdentityPicker", () => {
       window.localStorage.getItem("deepTreeEchoAvatarConfig") || "{}",
     );
     expect(saved.identity).toBe("deep-tree-echo");
-    expect(saved.model).toBe("miara");
+    expect(saved.model).toBe("deep-tree-echo");
     expect(saved.outfit).toBe("grove");
-    expect(saved.outfitHueShift).toBe(95);
+    expect(saved.outfitHueShift).toBe(0);
   });
 
-  it("applies the Melody aria look on the same mesh", () => {
+  it("applies the Melody model package and aria wardrobe", () => {
     render(
       <DeepTreeEchoAvatarProvider>
         <AvatarIdentityPicker variant="panel" />
@@ -57,9 +57,9 @@ describe("AvatarIdentityPicker", () => {
       window.localStorage.getItem("deepTreeEchoAvatarConfig") || "{}",
     );
     expect(saved.identity).toBe("melody");
-    expect(saved.model).toBe("miara");
+    expect(saved.model).toBe("melody");
     expect(saved.outfit).toBe("aria");
-    expect(saved.outfitHueShift).toBe(325);
+    expect(saved.outfitHueShift).toBe(0);
     expect(saved.outfitHiddenGroups).toEqual(
       expect.arrayContaining(["water", "background"]),
     );

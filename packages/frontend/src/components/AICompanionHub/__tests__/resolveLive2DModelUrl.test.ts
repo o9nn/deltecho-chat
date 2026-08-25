@@ -22,10 +22,10 @@ describe("resolveLive2DModelUrl", () => {
       "file:///workspace/packages/target-electron/html-dist/models/miara/miara_pro_t03.model3.json",
     );
     expect(resolveLive2DModelUrl("deep-tree-echo")).toBe(
-      resolveLive2DModelUrl("miara"),
+      "file:///workspace/packages/target-electron/html-dist/models/deep-tree-echo/deep-tree-echo_t03.model3.json",
     );
     expect(resolveLive2DModelUrl("melody")).toBe(
-      resolveLive2DModelUrl("miara"),
+      "file:///workspace/packages/target-electron/html-dist/models/melody/melody_t03.model3.json",
     );
   });
 

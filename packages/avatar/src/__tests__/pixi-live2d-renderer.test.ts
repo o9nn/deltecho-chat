@@ -13,6 +13,7 @@ import {
 } from "../adapters/pixi-live2d-renderer";
 import { FIGURE_BOUNDS_PAD } from "../adapters/live2d-figure-bounds";
 import type { CubismAdapterConfig } from "../adapters/cubism-adapter";
+import { MELODY_IDENTITY_RIG } from "../automesh";
 
 // Mock the dynamic imports for Node.js environment
 const installUnsafeEval = jest.fn();
@@ -308,6 +309,104 @@ describe("PixiLive2DRenderer", () => {
       expect(mockCanvas.style.filter).toBe("hue-rotate(310deg)");
       renderer.applyOutfit({ id: "official" });
       expect(mockCanvas.style.filter).toBe("");
+    });
+
+    it("keeps an explicit Melody hue of 0 on the aria preset", () => {
+      renderer.applyOutfit({
+        id: "aria",
+        hueShift: 0,
+        hiddenGroups: ["water", "background", "chestCloth"],
+      });
+      expect(mockCanvas.style.filter).toBe("");
+      expect(renderer.getAppliedOutfit()?.hueShift).toBe(0);
+      expect(renderer.getAppliedOutfit()?.hiddenGroups).toEqual(
+        expect.arrayContaining(["chestCloth"]),
+      );
+    });
+  });
+
+  describe("identity rig", () => {
+    beforeEach(async () => {
+      const config: CubismAdapterConfig = {
+        canvas: mockCanvas,
+        model: {
+          modelPath: "/test/model.json",
+          name: "Test Model",
+        },
+      };
+      await renderer.initialize(config);
+      await renderer.loadModel(config.model);
+    });
+
+    it("deforms vertices after Cubism update without re-scaling baked physics", () => {
+      const positions = new Float32Array([0.5, 0.2]);
+      const particles = [{ mobility: 1, delay: 1, acceleration: 1, radius: 1 }];
+      const outputs = [{ angleScale: 1, weight: 1 }];
+      const model = renderer.getModel() as unknown as {
+        internalModel: {
+          update: (dt: number, now: number) => void;
+          getDrawableIDs: () => string[];
+          getDrawableBounds: (
+            index: number,
+            box?: { x: number; y: number; width: number; height: number },
+          ) => { x: number; y: number; width: number; height: number };
+          physics: {
+            _physicsRig: {
+              settings: Array<{
+                baseParticleIndex: number;
+                particleCount: number;
+                baseOutputIndex: number;
+                outputCount: number;
+              }>;
+              particles: typeof particles;
+              outputs: typeof outputs;
+            };
+          };
+          coreModel: {
+            getDrawableVertexPositions: (index: number) => Float32Array;
+            getDrawableCount: () => number;
+          };
+        };
+      };
+      let cubismUpdated = false;
+      model.internalModel.update = () => {
+        cubismUpdated = true;
+        positions[0] = 0.5;
+        positions[1] = 0.2;
+      };
+      model.internalModel.getDrawableIDs = () => ["ArtMesh0"];
+      model.internalModel.getDrawableBounds = () => ({
+        x: 0,
+        y: 0,
+        width: 1,
+        height: 1,
+      });
+      model.internalModel.physics = {
+        _physicsRig: {
+          settings: [
+            {
+              baseParticleIndex: 0,
+              particleCount: 1,
+              baseOutputIndex: 0,
+              outputCount: 1,
+            },
+          ],
+          particles,
+          outputs,
+        },
+      };
+      model.internalModel.coreModel.getDrawableVertexPositions = () =>
+        positions;
+      model.internalModel.coreModel.getDrawableCount = () => 1;
+
+      renderer.applyIdentityRig(MELODY_IDENTITY_RIG);
+      expect(particles[0].mobility).toBe(1);
+      model.internalModel.update(16, 0);
+      expect(cubismUpdated).toBe(true);
+      expect(positions[1]).toBeGreaterThan(0.2);
+
+      renderer.clearIdentityRig();
+      expect(particles[0].mobility).toBe(1);
     });
   });
 
