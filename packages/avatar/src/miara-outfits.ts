@@ -165,6 +165,18 @@ export function getMiaraOutfitPreset(
   return MIARA_OUTFIT_PRESETS.find((preset) => preset.id === id);
 }
 
+export const MIARA_PART_GROUP_MATCHERS: Record<
+  MiaraPartGroup,
+  (partId: string) => boolean
+> = {
+  fairy: (partId) => /fairy|wing/i.test(partId),
+  hairAccessory: (partId) => /hairacc/i.test(partId),
+  chestCloth: (partId) => /chestcloth/i.test(partId),
+  sparkle: (partId) => /sparkle/i.test(partId),
+  water: (partId) => /water/i.test(partId),
+  background: (partId) => /background/i.test(partId),
+};
+
 export function collectHiddenPartIds(
   hiddenGroups: readonly MiaraPartGroup[],
 ): string[] {
@@ -175,6 +187,16 @@ export function collectHiddenPartIds(
     }
   }
   return Array.from(ids);
+}
+
+export function partIdMatchesHiddenGroups(
+  partId: string,
+  hiddenGroups: readonly MiaraPartGroup[],
+): boolean {
+  return hiddenGroups.some((group) => {
+    if (MIARA_PART_GROUP_IDS[group].includes(partId)) return true;
+    return MIARA_PART_GROUP_MATCHERS[group](partId);
+  });
 }
 
 function sanitizeHiddenGroups(

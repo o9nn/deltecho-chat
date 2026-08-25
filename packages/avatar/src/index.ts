@@ -17,6 +17,8 @@ export {
   isMiaraPartGroup,
   getMiaraOutfitPreset,
   collectHiddenPartIds,
+  partIdMatchesHiddenGroups,
+  MIARA_PART_GROUP_MATCHERS,
   resolveMiaraOutfit,
   outfitFromCustomAdjustments,
   type MiaraOutfitId,

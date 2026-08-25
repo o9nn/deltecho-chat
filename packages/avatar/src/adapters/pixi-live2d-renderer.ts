@@ -24,6 +24,7 @@ import {
 import {
   ALL_MIARA_WARDROBE_PART_IDS,
   collectHiddenPartIds,
+  partIdMatchesHiddenGroups,
   resolveMiaraOutfit,
   type MiaraOutfitState,
 } from "../miara-outfits";
@@ -49,6 +50,8 @@ interface Live2DModel {
     };
     width?: number;
     height?: number;
+    on?: (event: string, listener: () => void) => void;
+    off?: (event: string, listener: () => void) => void;
     getDrawableIDs?: () => string[];
     getDrawableBounds?: (
       index: number,
@@ -235,6 +238,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   private viewCanvas: HTMLCanvasElement | null = null;
   private appliedOutfit: MiaraOutfitState | null = null;
   private hiddenWardrobePartIds = new Set<string>();
+  private wardrobeUpdateHook: (() => void) | null = null;
 
   /** Internal debug logger - no-op unless config.debug is true */
   private dlog(...args: unknown[]): void {
@@ -414,7 +418,9 @@ export class PixiLive2DRenderer implements ICubismRenderer {
         return;
       }
 
+      this.detachWardrobeHook();
       this.model = model;
+      this.attachWardrobeHook();
 
       // Defensively clear stage in case a previous model left children behind.
       // Guarded for compatibility with PixiJS test mocks that may not implement
@@ -1121,6 +1127,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     if (this.viewCanvas?.style) {
       this.viewCanvas.style.filter = "";
     }
+    this.detachWardrobeHook();
     this.viewCanvas = null;
     this.hiddenWardrobePartIds.clear();
     this.appliedOutfit = null;
@@ -1240,9 +1247,17 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     this.appliedOutfit = resolved;
     if (!this.model || !this.initialized) return;
 
-    const hidden = new Set(collectHiddenPartIds(resolved.hiddenGroups));
+    const hidden = new Set([
+      ...collectHiddenPartIds(resolved.hiddenGroups),
+      ...this.listPartIds().filter((partId) =>
+        partIdMatchesHiddenGroups(partId, resolved.hiddenGroups),
+      ),
+    ]);
     this.hiddenWardrobePartIds = hidden;
-    for (const partId of ALL_MIARA_WARDROBE_PART_IDS) {
+    for (const partId of new Set([
+      ...ALL_MIARA_WARDROBE_PART_IDS,
+      ...this.listPartIds(),
+    ])) {
       this.setPartOpacity(partId, hidden.has(partId) ? 0 : 1);
     }
     this.applyOutfitHue(resolved.hueShift);
@@ -1255,6 +1270,46 @@ export class PixiLive2DRenderer implements ICubismRenderer {
 
   getAppliedOutfit(): MiaraOutfitState | null {
     return this.appliedOutfit;
+  }
+
+  private listPartIds(): string[] {
+    const core = this.model?.internalModel?.coreModel;
+    if (!core) return [];
+    const ids: string[] = [];
+    const native = core.getModel?.();
+    if (native?.parts?.ids) {
+      const count = native.parts.count ?? native.parts.ids.length;
+      for (let index = 0; index < count; index++) {
+        ids.push(cubismIdToString(native.parts.ids[index]));
+      }
+      return ids;
+    }
+    if (typeof core.getPartCount === "function") {
+      const count = core.getPartCount();
+      for (let index = 0; index < count; index++) {
+        ids.push(cubismIdToString(core.getPartId?.(index)));
+      }
+    }
+    return ids;
+  }
+
+  private attachWardrobeHook(): void {
+    const internal = this.model?.internalModel;
+    if (!internal?.on) return;
+    this.wardrobeUpdateHook = () => this.enforceHiddenWardrobeParts();
+    internal.on("beforeModelUpdate", this.wardrobeUpdateHook);
+  }
+
+  private detachWardrobeHook(): void {
+    const internal = this.model?.internalModel;
+    if (internal?.off && this.wardrobeUpdateHook) {
+      try {
+        internal.off("beforeModelUpdate", this.wardrobeUpdateHook);
+      } catch {
+        /* ignore */
+      }
+    }
+    this.wardrobeUpdateHook = null;
   }
 
   private enforceHiddenWardrobeParts(): void {

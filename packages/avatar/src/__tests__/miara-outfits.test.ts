@@ -5,6 +5,7 @@ import {
   collectHiddenPartIds,
   isMiaraOutfitId,
   outfitFromCustomAdjustments,
+  partIdMatchesHiddenGroups,
   resolveMiaraOutfit,
 } from "../miara-outfits";
 
@@ -73,6 +74,16 @@ describe("miara outfits", () => {
     expect(new Set(ALL_MIARA_WARDROBE_PART_IDS).size).toBe(
       ALL_MIARA_WARDROBE_PART_IDS.length,
     );
+  });
+
+  it("matches live Cubism part ids for hidden wardrobe groups", () => {
+    expect(partIdMatchesHiddenGroups("PartFairyUpperWingL", ["fairy"])).toBe(
+      true,
+    );
+    expect(partIdMatchesHiddenGroups("PartWaterSurfaceBack", ["water"])).toBe(
+      true,
+    );
+    expect(partIdMatchesHiddenGroups("PartFace", ["fairy"])).toBe(false);
   });
 
   it("accepts only catalog outfit ids", () => {
