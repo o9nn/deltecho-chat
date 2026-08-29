@@ -47,6 +47,13 @@ jest.mock("deep-tree-echo-core", () => ({
     updateEmotionalState: jest.fn(),
   })),
   InMemoryStorage: jest.fn().mockImplementation(() => ({})),
+  AutognosisAutogenesisCoupler: jest.fn().mockImplementation(() => ({
+    couple: jest.fn().mockReturnValue({
+      skipped: true,
+      reason: "couple_disabled",
+    }),
+    attachIdentity: jest.fn(),
+  })),
 }));
 
 // Mock Sys6 Bridge
