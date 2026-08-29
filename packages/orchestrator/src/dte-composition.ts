@@ -37,6 +37,30 @@ export async function detachProactiveLoop(
   await loop.stop();
 }
 
+export interface EntelechyAttachLike {
+  attachIdentity(identity: unknown): void;
+  start(): Promise<void>;
+}
+
+/** Attach CoreSelf identity when present; always start Entelechy. */
+export function attachEntelechyIdentity(
+  entelechy: Pick<EntelechyAttachLike, "attachIdentity">,
+  identity: unknown | undefined,
+): boolean {
+  if (!identity) return false;
+  entelechy.attachIdentity(identity);
+  return true;
+}
+
+export async function startEntelechyWithOptionalIdentity(
+  entelechy: EntelechyAttachLike,
+  identity: unknown | undefined,
+): Promise<{ attached: boolean }> {
+  const attached = attachEntelechyIdentity(entelechy, identity);
+  await entelechy.start();
+  return { attached };
+}
+
 /** Empty or unset path must skip the registrar, not call it. */
 export function attachMemoryLeverSchedule(
   scheduler: Pick<TaskScheduler, "scheduleInterval"> | undefined,

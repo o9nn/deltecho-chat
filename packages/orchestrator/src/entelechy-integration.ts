@@ -40,6 +40,9 @@ import {
   entelechyEngine,
   type EntelechyState,
   EmergenceLevel,
+  AutognosisAutogenesisCoupler,
+  intentionalityEngine,
+  type IdentityMesh,
   // Logger
   getLogger,
 } from "deep-tree-echo-core";
@@ -140,16 +143,43 @@ export interface EntelechyProcessingResult {
 // ENTELECHY INTEGRATION
 // ============================================================
 
+export interface EntelechyCoupleLike {
+  couple(): { reason?: string; adopted?: boolean };
+  attachIdentity(identity: IdentityMesh): void;
+}
+
+export interface EntelechyIntegrationDeps {
+  coupler?: EntelechyCoupleLike;
+  reportPresent?: () => boolean;
+}
+
 export class EntelechyIntegration extends EventEmitter {
   private config: EntelechyIntegrationConfig;
   private running: boolean = false;
   private backgroundTimer: ReturnType<typeof setInterval> | null = null;
   private tickCount: number = 0;
   private lastSnapshot: CognitiveSnapshot | null = null;
+  private coupler: EntelechyCoupleLike;
+  private reportPresent: () => boolean;
 
-  constructor(config: Partial<EntelechyIntegrationConfig> = {}) {
+  constructor(
+    config: Partial<EntelechyIntegrationConfig> = {},
+    deps: EntelechyIntegrationDeps = {},
+  ) {
     super();
     this.config = { ...DEFAULT_CONFIG, ...config };
+    this.coupler = deps.coupler ?? this.createDefaultCoupler();
+    this.reportPresent =
+      deps.reportPresent ?? (() => esnReservoir.getAutognosisReport() != null);
+  }
+
+  public attachIdentity(identity: IdentityMesh): void {
+    this.coupler.attachIdentity(identity);
+  }
+
+  /** Test and interval helper — runs one background cognitive tick. */
+  public tickOnce(): void {
+    this.backgroundTick();
   }
 
   /**
@@ -239,10 +269,13 @@ export class EntelechyIntegration extends EventEmitter {
         });
       }
 
-      // 4. Take snapshot
+      // 4. Couple autognosis ↔ autogenesis when a report exists
+      this.invokeCouple();
+
+      // 5. Take snapshot
       this.lastSnapshot = this.takeSnapshot();
 
-      // 5. Emit periodic events
+      // 6. Emit periodic events
       if (this.tickCount % 12 === 0) {
         this.emit("cycle-complete", this.lastSnapshot);
       }
@@ -304,7 +337,10 @@ export class EntelechyIntegration extends EventEmitter {
       });
     }
 
-    // 5. Take snapshot
+    // 5. Couple autognosis ↔ autogenesis when a report exists
+    this.invokeCouple();
+
+    // 6. Take snapshot
     const snapshot = this.takeSnapshot();
     this.lastSnapshot = snapshot;
 
@@ -387,6 +423,33 @@ export class EntelechyIntegration extends EventEmitter {
   // ==========================================================================
   // STATE ACCESSORS
   // ==========================================================================
+
+  private createDefaultCoupler(): EntelechyCoupleLike {
+    return new AutognosisAutogenesisCoupler({
+      reservoir: {
+        getAutognosisReport: () => esnReservoir.getAutognosisReport(),
+        getState: () => esnReservoir.getState(),
+        step: (input) => esnReservoir.step(input),
+        inputDim: this.config.inputDim,
+      },
+      intentionality: {
+        generateGoal: (params) => intentionalityEngine.generateGoal(params),
+        getActiveGoals: () => intentionalityEngine.getActiveGoals(),
+      },
+    });
+  }
+
+  private invokeCouple(): void {
+    if (!this.reportPresent()) return;
+    try {
+      const result = this.coupler.couple();
+      log.info(
+        `couple reason=${result.reason ?? "ok"} adopted=${result.adopted ?? false}`,
+      );
+    } catch (error) {
+      log.error("couple failed");
+    }
+  }
 
   /**
    * Take a full cognitive snapshot

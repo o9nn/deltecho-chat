@@ -24,7 +24,27 @@ export {
   type IdentityAgentState,
   type IdentityArenaState,
   type IdentityRelationState,
+  type IdentityAutognosisSignal,
+  type IdentityGovernanceProposal,
 } from "./IdentityMesh.js";
+
+export {
+  AutognosisAutogenesisCoupler,
+  isCoupleGranted,
+  deriveAutogenesisKind,
+  autogenesisGoalId,
+  encodeAutogenesisVector,
+  l2Normalize,
+  AUTOGENESIS_COUPLE_ENV,
+  CONSENSUS_SLOT,
+  ADOPTED_SLOT,
+  DEFAULT_INPUT_DIM,
+  DEFAULT_GOAL_CAP,
+  type AutogenesisKind,
+  type CoupleResult,
+  type ReservoirAccessors,
+  type IntentionalityAccessors,
+} from "./AutognosisAutogenesisCoupler.js";
 
 export {
   LucyInferenceDriver,
