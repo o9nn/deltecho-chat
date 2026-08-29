@@ -129,12 +129,13 @@ test.describe("Orchestrator Integration", () => {
         await page.locator("#composer-textarea").fill(testMessage);
         await page.locator("button.send-button").click();
 
-        // Verify message was sent
+        // Verify this exact message, not whichever concurrent DTE status
+        // update happens to be the final outgoing message.
         const sentMessage = page
-          .locator(".message.outgoing")
-          .last()
-          .locator(".msg-body .text");
-        await expect(sentMessage).toContainText("Orchestrator test");
+          .locator(".message.outgoing .msg-body .text")
+          .filter({ hasText: testMessage })
+          .last();
+        await expect(sentMessage).toContainText(testMessage);
       }
     });
 
@@ -178,13 +179,14 @@ test.describe("Orchestrator Integration", () => {
         if (chatExistsB) {
           await chatItemB.click();
 
-          // Verify message was received
+          // Verify the exact cross-account payload; unrelated incoming mail can
+          // arrive concurrently on the shared CI accounts.
           const receivedMessage = page
-            .locator(".message.incoming")
-            .last()
-            .locator(".msg-body .text");
+            .locator(".message.incoming .msg-body .text")
+            .filter({ hasText: syncMessage })
+            .last();
 
-          await expect(receivedMessage).toContainText("Sync test");
+          await expect(receivedMessage).toContainText(syncMessage);
         }
       }
     });
@@ -257,20 +259,20 @@ test.describe("Orchestrator Integration", () => {
       if (chatExists) {
         await chatItem.click();
 
-        // Send a message that triggers cognitive processing
-        const cognitiveMessage = "Testing Dove9 cognitive processing";
+        // Send a uniquely identifiable message that triggers cognitive processing.
+        const cognitiveMessage = `Testing Dove9 cognitive processing ${Date.now()}`;
         await page.locator("#composer-textarea").fill(cognitiveMessage);
         await page.locator("button.send-button").click();
 
         // Wait for cognitive processing
         await page.waitForTimeout(2000);
 
-        // Verify message was processed
+        // Verify this exact cognitive payload rather than global message order.
         const sentMessage = page
-          .locator(".message.outgoing")
-          .last()
-          .locator(".msg-body .text");
-        await expect(sentMessage).toContainText("Dove9");
+          .locator(".message.outgoing .msg-body .text")
+          .filter({ hasText: cognitiveMessage })
+          .last();
+        await expect(sentMessage).toContainText(cognitiveMessage);
       }
     });
 

@@ -66,12 +66,13 @@ test.describe("Cognitive Memory System", () => {
         // Wait for memory storage
         await page.waitForTimeout(1000);
 
-        // Verify message was sent (memory storage happens in background)
+        // Verify this exact payload was sent. Concurrent DTE status output can
+        // otherwise become the final outgoing message on the shared CI account.
         const sentMessage = page
-          .locator(".message.outgoing")
-          .last()
-          .locator(".msg-body .text");
-        await expect(sentMessage).toContainText("Remember this");
+          .locator(".message.outgoing .msg-body .text")
+          .filter({ hasText: memoryTestMessage })
+          .last();
+        await expect(sentMessage).toContainText(memoryTestMessage);
       }
     });
 
@@ -174,9 +175,11 @@ test.describe("Cognitive Memory System", () => {
           await expect(composer).toHaveValue(msg);
           await sendButton.click();
           await expect(composer).toHaveValue("");
-          await expect(page.locator(".message.outgoing").last()).toContainText(
-            msg,
-          );
+          const sentMessage = page
+            .locator(".message.outgoing .msg-body .text")
+            .filter({ hasText: msg })
+            .last();
+          await expect(sentMessage).toContainText(msg);
         }
       }
     });
@@ -201,36 +204,18 @@ test.describe("Cognitive Memory System", () => {
       if (chatExists) {
         await chatItem.click();
 
-        // Query for semantically related content
-        const queryMessage = "Tell me about programming languages";
+        // Query for semantically related content with a unique run marker.
+        const queryMessage = `Tell me about programming languages ${Date.now()}`;
         await page.locator("#composer-textarea").fill(queryMessage);
         await page.locator("button.send-button").click();
 
-        await page.waitForTimeout(1000);
-
-        // Verify query was sent - find the specific message containing our query text
-        // Using .last() can pick up a bot response instead of the sent message,
-        // so we filter for the exact message we sent
-        const sentMessages = page.locator(".message.outgoing .msg-body .text");
-        const count = await sentMessages.count();
-        let found = false;
-        for (let i = count - 1; i >= 0; i--) {
-          const text = await sentMessages.nth(i).textContent();
-          if (text && text.includes("programming")) {
-            found = true;
-            break;
-          }
-        }
-        // If no outgoing messages found yet, check if API key is unconfigured (CI environment)
-        if (!found && count > 0) {
-          const lastText = await sentMessages.nth(count - 1).textContent();
-          if (lastText && lastText.includes("not fully configured")) {
-            // API key not configured in CI - skip gracefully
-            test.skip();
-            return;
-          }
-        }
-        expect(found).toBe(true);
+        // Verify this exact semantic query entered the conversation. External
+        // provider configuration is not required to prove the memory input path.
+        const sentMessage = page
+          .locator(".message.outgoing .msg-body .text")
+          .filter({ hasText: queryMessage })
+          .last();
+        await expect(sentMessage).toContainText(queryMessage);
       }
     });
   });
@@ -256,23 +241,28 @@ test.describe("Cognitive Memory System", () => {
       if (chatExists) {
         await chatItem.click();
 
-        // Send context-building messages
-        await page.locator("#composer-textarea").fill("My name is Alice");
-        await page.locator("button.send-button").click();
-        await page.waitForTimeout(500);
+        // Send a uniquely identifiable context sequence so each lifecycle can
+        // be verified independently of concurrent bot and test-worker output.
+        const runId = Date.now();
+        const contextMessages = [
+          `My name is Alice [${runId}]`,
+          `I work as a developer [${runId}]`,
+          `What do I do for work? [${runId}]`,
+        ];
+        const composer = page.locator("#composer-textarea");
+        const sendButton = page.locator("button.send-button");
 
-        await page.locator("#composer-textarea").fill("I work as a developer");
-        await page.locator("button.send-button").click();
-        await page.waitForTimeout(500);
-
-        // Query that requires context
-        await page.locator("#composer-textarea").fill("What do I do for work?");
-        await page.locator("button.send-button").click();
-
-        // Verify messages were sent
-        const outgoingMessages = page.locator(".message.outgoing");
-        const count = await outgoingMessages.count();
-        expect(count).toBeGreaterThanOrEqual(3);
+        for (const message of contextMessages) {
+          await composer.fill(message);
+          await expect(composer).toHaveValue(message);
+          await sendButton.click();
+          await expect(composer).toHaveValue("");
+          const sentMessage = page
+            .locator(".message.outgoing .msg-body .text")
+            .filter({ hasText: message })
+            .last();
+          await expect(sentMessage).toContainText(message);
+        }
       }
     });
 
