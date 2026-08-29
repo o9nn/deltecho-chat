@@ -25,6 +25,7 @@
 ### Fixed
 
 - Deep Tree Echo: the autognosis–autogenesis coupler re-enters on a later reservoir emission even when `Date.now()` reuses the previous report millisecond.
+- Deep Tree Echo: the default Entelechy coupler now uses IntentionalityEngine's active-goal cap when deciding whether to generate an autogenesis goal.
 
 <a id="1_58_2"></a>
 

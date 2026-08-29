@@ -286,6 +286,7 @@ function makeLiveCoupler(options: { grant: boolean }) {
     intentionality: {
       getActiveGoals: () => intentionalityEngine.getActiveGoals(),
       generateGoal: (params) => intentionalityEngine.generateGoal(params),
+      maxActiveGoals: intentionalityEngine.maxActiveGoals,
     },
     readGrant: () => options.grant,
   });

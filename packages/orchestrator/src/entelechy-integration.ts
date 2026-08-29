@@ -435,6 +435,7 @@ export class EntelechyIntegration extends EventEmitter {
       intentionality: {
         generateGoal: (params) => intentionalityEngine.generateGoal(params),
         getActiveGoals: () => intentionalityEngine.getActiveGoals(),
+        maxActiveGoals: intentionalityEngine.maxActiveGoals,
       },
     });
   }
