@@ -13,7 +13,7 @@
   // Dockerfile is at repo root, path is relative to this wrangler.jsonc file
   "containers": [
     {
-      "class_name": "DeltEchoContainer",
+      "class_name": "DeltEchoApp",
       "image": "../../Dockerfile.cloudflare",
       "max_instances": 10,
       // Use immediate rollout to avoid gradual rollout issues
@@ -26,22 +26,64 @@
     "bindings": [
       {
         "name": "DELTECHO_CONTAINER",
-        "class_name": "DeltEchoContainer"
+        "class_name": "DeltEchoApp"
       }
     ]
   },
 
-  // Required migration for Durable Objects with SQLite
+  // Preserve the production namespace lineage already deployed on Cloudflare:
+  // DeltEchoContainer was created at v1 and renamed to DeltEchoApp at v2.
   "migrations": [
     {
       "tag": "v1",
       "new_sqlite_classes": ["DeltEchoContainer"]
+    },
+    {
+      "tag": "v2",
+      "renamed_classes": [
+        {
+          "from": "DeltEchoContainer",
+          "to": "DeltEchoApp"
+        }
+      ]
     }
   ],
 
   // Environment variables (secrets should be set via wrangler secret)
   "vars": {
     "ENVIRONMENT": "preview"
+  },
+
+  // The preview Worker already owns a v1 DeltEchoApp namespace. Bind it
+  // explicitly instead of replaying the production rename into that namespace.
+  "env": {
+    "preview": {
+      "containers": [
+        {
+          "class_name": "DeltEchoApp",
+          "image": "../../Dockerfile.cloudflare",
+          "max_instances": 10,
+          "rollout_step_percentage": [100]
+        }
+      ],
+      "durable_objects": {
+        "bindings": [
+          {
+            "name": "DELTECHO_CONTAINER",
+            "class_name": "DeltEchoApp"
+          }
+        ]
+      },
+      "migrations": [
+        {
+          "tag": "v1",
+          "new_sqlite_classes": ["DeltEchoApp"]
+        }
+      ],
+      "vars": {
+        "ENVIRONMENT": "preview"
+      }
+    }
   },
 
   // Development settings
