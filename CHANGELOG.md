@@ -15,6 +15,7 @@
 - Cloud Agent: `scripts/cloud-agent-install.sh` wraps frozen-lockfile install and the internal package build chain. Named `browser-dev` / `orchestrator` terminals exist only after a human Saves the dashboard environment proposal.
 - Deep Tree Echo: the orchestrator now starts one ProactiveLoop for process liveness and, when `DELTECHO_AUTONOMY_STORAGE_PATH` points at an existing filesystem RAG store, schedules MemoryLever dream hygiene. Ticks stay dry-run unless `DELTECHO_MEMORY_LEVER_APPLY` is `1`, `true`, or `yes`.
 - Deep Tree Echo: proactive messaging is now wired in the desktop app — Settings exposes live triggers and policy, chats show a status indicator, and bot-initiated sends honor quiet hours and rate limits.
+- Deep Tree Echo: Entelechy ticks now close the autognosis–autogenesis couple when CoreSelf identity is attached and `DELTECHO_AUTOGENESIS_COUPLE` is `1`, `true`, or `yes`. Unset stays off.
 
 ### Changed
 
@@ -22,6 +23,9 @@
 - Deep Tree Echo: Live2D initializes under the desktop CSP (Pixi unsafe-eval patch), registers the Cubism 4 factory, and loads the local Miara model from the Electron `file://` page. The avatar keeps one WebGL context when the conversation strip resizes so Cubism textures stay valid.
 
 ### Fixed
+
+- Deep Tree Echo: the autognosis–autogenesis coupler re-enters on a later reservoir emission even when `Date.now()` reuses the previous report millisecond.
+- Deep Tree Echo: the default Entelechy coupler now uses IntentionalityEngine's active-goal cap when deciding whether to generate an autogenesis goal.
 
 <a id="1_58_2"></a>
 

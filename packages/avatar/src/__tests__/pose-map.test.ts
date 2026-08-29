@@ -87,9 +87,9 @@ describe("Melody 2D / 3D avatar mesh map", () => {
       IDENTITY_MODEL3_PATHS.melody,
     );
     expect(MELODY_AVATAR_MESH_MAP.mesh3d.bindPose).toBe("a-pose");
-    expect(MELODY_AVATAR_MESH_MAP.mesh3d.groups.map((group) => group.id)).toEqual(
-      [...MELODY_MESH3D_GROUPS],
-    );
+    expect(
+      MELODY_AVATAR_MESH_MAP.mesh3d.groups.map((group) => group.id),
+    ).toEqual([...MELODY_MESH3D_GROUPS]);
     expect(mesh3dGroupsForRegion("hair")).toEqual([
       "hairCrown",
       "hairPonytail",
@@ -129,8 +129,9 @@ describe("Melody 2D / 3D avatar mesh map", () => {
     expect(shipped.live2d.poseMap).toBe("models/melody/pose-map.json");
     expect(shipped.mesh3d.groups).toHaveLength(MELODY_MESH3D_GROUPS.length);
     expect(
-      shipped.live2dTo3d.find((row: { region: string }) => row.region === "wings")
-        .mesh3d,
+      shipped.live2dTo3d.find(
+        (row: { region: string }) => row.region === "wings",
+      ).mesh3d,
     ).toEqual(["wingBones", "wingFeathers", "energyRibbons"]);
   });
 });

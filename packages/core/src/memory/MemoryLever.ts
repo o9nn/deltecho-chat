@@ -174,9 +174,7 @@ function hasNegation(text: string): boolean {
 }
 
 function uniqueNounSet(text: string): string {
-  return [
-    ...new Set(significantTokens(text).filter((word) => word.length > 2)),
-  ]
+  return [...new Set(significantTokens(text).filter((word) => word.length > 2))]
     .sort()
     .join(" ");
 }
@@ -317,7 +315,10 @@ export class MemoryLever {
       ) {
         return false;
       }
-      if (filters.reflectionType === undefined && filters.reflectionAspect === undefined) {
+      if (
+        filters.reflectionType === undefined &&
+        filters.reflectionAspect === undefined
+      ) {
         const haystack = reflection.content.toLowerCase();
         return query
           .toLowerCase()
@@ -446,7 +447,9 @@ export class MemoryLever {
 
     const body: Omit<DreamPlan, "hash"> = {
       merges: merges.sort((a, b) => a.survivorId.localeCompare(b.survivorId)),
-      contradictions: contradictions.sort((a, b) => a.ids[0].localeCompare(b.ids[0])),
+      contradictions: contradictions.sort((a, b) =>
+        a.ids[0].localeCompare(b.ids[0]),
+      ),
       prunes: prunes.sort((a, b) => a.id.localeCompare(b.id)),
       unused_stores: this.unusedStores,
     };
@@ -459,7 +462,10 @@ export class MemoryLever {
     hooks: ApplyHooks = {},
   ): Promise<ApplyAudit> {
     if (options.approve !== true) {
-      throw new MemoryLeverError("unapproved", "Apply requires approve === true");
+      throw new MemoryLeverError(
+        "unapproved",
+        "Apply requires approve === true",
+      );
     }
     const expected = options.expectedHash ?? plan.hash;
     const { hash: _ignored, ...body } = plan;
@@ -492,7 +498,9 @@ export class MemoryLever {
     const appliedMerges: string[] = [];
     const appliedPrunes: string[] = [];
     const skipped: string[] = [];
-    const contradictionIds = new Set(plan.contradictions.flatMap((item) => item.ids));
+    const contradictionIds = new Set(
+      plan.contradictions.flatMap((item) => item.ids),
+    );
     try {
       for (const group of plan.merges) {
         this.store.getMemory(group.survivorId);
@@ -552,7 +560,13 @@ export class MemoryLever {
       } catch (restoreError) {
         throw new MemoryLeverError(
           "missing_or_invalid",
-          `Apply failed and restore failed: ${error instanceof Error ? error.message : String(error)}; ${restoreError instanceof Error ? restoreError.message : String(restoreError)}`,
+          `Apply failed and restore failed: ${
+            error instanceof Error ? error.message : String(error)
+          }; ${
+            restoreError instanceof Error
+              ? restoreError.message
+              : String(restoreError)
+          }`,
         );
       }
       if (error instanceof UnknownMemoryError) {
@@ -575,9 +589,7 @@ export class MemoryLever {
   }
 
   private packContext(hits: MemoryHit[], budgetChars?: number): string {
-    const lines = hits.map(
-      (hit) => `${hit.id} ${hit.sender}: ${hit.text}`,
-    );
+    const lines = hits.map((hit) => `${hit.id} ${hit.sender}: ${hit.text}`);
     if (budgetChars === undefined) {
       return lines.join("\n");
     }

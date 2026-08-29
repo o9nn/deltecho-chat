@@ -75,7 +75,9 @@ export function applySimilarity(
   };
 }
 
-export function mappingResidual(landmarks: readonly AutomeshLandmark[]): number {
+export function mappingResidual(
+  landmarks: readonly AutomeshLandmark[],
+): number {
   if (landmarks.length === 0) return 0;
   let sum = 0;
   for (const landmark of landmarks) {

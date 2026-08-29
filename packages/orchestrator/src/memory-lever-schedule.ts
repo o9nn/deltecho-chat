@@ -15,7 +15,10 @@ export const MEMORY_LEVER_TASK_NAME = "memory-lever-dream";
 export const DEFAULT_MEMORY_LEVER_INTERVAL_MS = 6 * 60 * 60 * 1000;
 export const MIN_MEMORY_LEVER_INTERVAL_MS = 60 * 1000;
 
-export type TickSkipReason = MemoryLeverErrorCode | "unset_path" | "no_rag_keys";
+export type TickSkipReason =
+  | MemoryLeverErrorCode
+  | "unset_path"
+  | "no_rag_keys";
 
 export interface TickLog {
   info: (message: string, extra?: Record<string, unknown>) => void;
@@ -46,7 +49,10 @@ function defaultLog(): TickLog {
   };
 }
 
-function skipTick(logger: TickLog, code: TickSkipReason): MemoryLeverTickResult {
+function skipTick(
+  logger: TickLog,
+  code: TickSkipReason,
+): MemoryLeverTickResult {
   logger.warn(`${MEMORY_LEVER_TASK_NAME} skipped`, { code });
   return { skipped: code, applied: false };
 }
@@ -71,8 +77,11 @@ export function resolveMemoryLeverIntervalMs(
 }
 
 export function resolveStoragePath(options: MemoryLeverTickOptions): string {
-  return (options.storagePath ?? process.env.DELTECHO_AUTONOMY_STORAGE_PATH ?? "")
-    .trim();
+  return (
+    options.storagePath ??
+    process.env.DELTECHO_AUTONOMY_STORAGE_PATH ??
+    ""
+  ).trim();
 }
 
 async function hasRagKey(storagePath: string): Promise<boolean> {
@@ -114,7 +123,9 @@ async function withApplyLock(
     }
     await Promise.all([
       writeFile(`${memoriesPath}.bak-${stamp}`, memories, { mode: 0o600 }),
-      writeFile(`${reflectionsPath}.bak-${stamp}`, reflections, { mode: 0o600 }),
+      writeFile(`${reflectionsPath}.bak-${stamp}`, reflections, {
+        mode: 0o600,
+      }),
     ]);
     try {
       await run();
@@ -127,7 +138,13 @@ async function withApplyLock(
       } catch (restoreError) {
         throw new MemoryLeverError(
           "missing_or_invalid",
-          `Apply failed and restore failed: ${error instanceof Error ? error.message : String(error)}; ${restoreError instanceof Error ? restoreError.message : String(restoreError)}`,
+          `Apply failed and restore failed: ${
+            error instanceof Error ? error.message : String(error)
+          }; ${
+            restoreError instanceof Error
+              ? restoreError.message
+              : String(restoreError)
+          }`,
         );
       }
       throw error;

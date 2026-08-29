@@ -122,7 +122,9 @@ describe("MessageListAndComposer Live2D strip", () => {
     expect(
       container.querySelector(".message-list-and-composer__conversation"),
     ).toBeInTheDocument();
-    expect(screen.getByTestId("live2d-avatar-strip-resize")).toBeInTheDocument();
+    expect(
+      screen.getByTestId("live2d-avatar-strip-resize"),
+    ).toBeInTheDocument();
   });
 
   it("applies a saved strip width when the user has resized it", () => {

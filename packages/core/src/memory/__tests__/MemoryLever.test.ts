@@ -6,7 +6,9 @@ import {
 } from "../RAGMemoryStore";
 import { MemoryLever, MemoryLeverError } from "../MemoryLever";
 
-function memory(partial: Partial<Memory> & Pick<Memory, "id" | "text">): Memory {
+function memory(
+  partial: Partial<Memory> & Pick<Memory, "id" | "text">,
+): Memory {
   return {
     timestamp: Date.now(),
     chatId: 1,
@@ -19,13 +21,14 @@ function memory(partial: Partial<Memory> & Pick<Memory, "id" | "text">): Memory 
 async function leverFromMemories(
   memories: Memory[],
   reflections: Array<Record<string, unknown>> = [],
-): Promise<{ lever: MemoryLever; storage: InMemoryStorage; store: RAGMemoryStore }> {
+): Promise<{
+  lever: MemoryLever;
+  storage: InMemoryStorage;
+  store: RAGMemoryStore;
+}> {
   const storage = new InMemoryStorage();
   await storage.save("deepTreeEchoBotMemories", JSON.stringify(memories));
-  await storage.save(
-    "deepTreeEchoBotReflections",
-    JSON.stringify(reflections),
-  );
+  await storage.save("deepTreeEchoBotReflections", JSON.stringify(reflections));
   const store = new RAGMemoryStore(storage);
   await store.ready();
   store.setEnabled(true);
@@ -81,21 +84,23 @@ describe("MemoryLever search", () => {
         timestamp: now - 10_000,
       }),
     ]);
-    expect(lever.search("TypeScript", { chatId: 1 }).hits.map((h) => h.id)).toEqual(
-      expect.arrayContaining(["in", "bot", "old"]),
-    );
     expect(
-      lever.search("TypeScript", { chatId: 1 }).hits.some((h) => h.id === "otherChat"),
+      lever.search("TypeScript", { chatId: 1 }).hits.map((h) => h.id),
+    ).toEqual(expect.arrayContaining(["in", "bot", "old"]));
+    expect(
+      lever
+        .search("TypeScript", { chatId: 1 })
+        .hits.some((h) => h.id === "otherChat"),
     ).toBe(false);
     expect(
-      lever.search("TypeScript", { sender: "user", chatId: 1 }).hits.every(
-        (h) => h.sender === "user",
-      ),
+      lever
+        .search("TypeScript", { sender: "user", chatId: 1 })
+        .hits.every((h) => h.sender === "user"),
     ).toBe(true);
     expect(
-      lever.search("TypeScript", { from: now - 1000, chatId: 1 }).hits.map(
-        (h) => h.id,
-      ),
+      lever
+        .search("TypeScript", { from: now - 1000, chatId: 1 })
+        .hits.map((h) => h.id),
     ).not.toContain("old");
   });
 
@@ -447,8 +452,7 @@ describe("MemoryLever apply", () => {
   });
 
   it("maps unknown ids to unknown_id and leaves storage unchanged", async () => {
-    const { lever, store, storage } = await duplicateStore();
-    const before = await storage.load("deepTreeEchoBotMemories");
+    const { lever, store } = await duplicateStore();
     const plan = lever.dream();
     const originalReplace = store.replaceMemory.bind(store);
     store.replaceMemory = async (id, patch) => {

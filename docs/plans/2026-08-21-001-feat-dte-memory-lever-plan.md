@@ -354,12 +354,12 @@ U1 store primitives → U2 search lever → U3 dream planner → U4 gated apply 
 
 ## Verification Contract
 
-| Gate | Command | Applies to | Done signal |
-| --- | --- | --- | --- |
-| Unit + integration | `pnpm --filter=deep-tree-echo-core test` | U1–U5 | All tests pass, including `MemoryLever`, RAG primitives, and FileSystemStorage `createIfMissing` |
-| Types | `pnpm --filter=deep-tree-echo-core check:types` | U1–U5 | `tsc --noEmit` clean |
-| Log convention | `pnpm check:log-conventions` if new files use logging | U2, U5 | No raw console in lever/CLI |
-| Behavior | Fixture AE1–AE6 encoded as tests | U2–U5 | Dry-run vs apply vs contradiction vs missing-path proven |
+| Gate               | Command                                               | Applies to | Done signal                                                                                      |
+| ------------------ | ----------------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------ |
+| Unit + integration | `pnpm --filter=deep-tree-echo-core test`              | U1–U5      | All tests pass, including `MemoryLever`, RAG primitives, and FileSystemStorage `createIfMissing` |
+| Types              | `pnpm --filter=deep-tree-echo-core check:types`       | U1–U5      | `tsc --noEmit` clean                                                                             |
+| Log convention     | `pnpm check:log-conventions` if new files use logging | U2, U5     | No raw console in lever/CLI                                                                      |
+| Behavior           | Fixture AE1–AE6 encoded as tests                      | U2–U5      | Dry-run vs apply vs contradiction vs missing-path proven                                         |
 
 Do not require `pnpm e2e` or Electron. This change has no UI.
 

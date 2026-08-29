@@ -266,15 +266,15 @@ U1 lands the install script. U2 documents the prescribed R11 contract, including
 
 ## Verification Contract
 
-| Gate | Command | Applies to | Done signal |
-| --- | --- | --- | --- |
-| Install twice | `./scripts/cloud-agent-install.sh` | U1 | AE1 |
-| Compose-plan tests | `pnpm --filter=deep-tree-echo-orchestrator test -- memory-lever-schedule dte-composition` | U3 | compose-plan AE1, AE2, AE7, AE8 stay green |
-| Browser | `USE_HTTP_IN_TEST=true WEB_PORT=3000 WEB_PASSWORD=cloud-dev pnpm start:browser` | U3 | AE2 |
-| Orchestrator | `DEEP_TREE_ECHO_ENABLE_DOVECOT=false DEEP_TREE_ECHO_ENABLE_DOUBLE_MEMBRANE=false npx tsx packages/orchestrator/dist/bin/daemon.js` | U3 | AE3 |
-| Fixture dream | `npx tsx bin/dte-memory-lever.ts dream --storage-path <temp>` | U3 | AE4 counts only |
-| Guidance | Read `AGENTS.md` | U2 | AE5 |
-| Proposal | snapshot + draft build + propose | U3 | AE6 |
+| Gate               | Command                                                                                                                            | Applies to | Done signal                                |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------- | ---------- | ------------------------------------------ |
+| Install twice      | `./scripts/cloud-agent-install.sh`                                                                                                 | U1         | AE1                                        |
+| Compose-plan tests | `pnpm --filter=deep-tree-echo-orchestrator test -- memory-lever-schedule dte-composition`                                          | U3         | compose-plan AE1, AE2, AE7, AE8 stay green |
+| Browser            | `USE_HTTP_IN_TEST=true WEB_PORT=3000 WEB_PASSWORD=cloud-dev pnpm start:browser`                                                    | U3         | AE2                                        |
+| Orchestrator       | `DEEP_TREE_ECHO_ENABLE_DOVECOT=false DEEP_TREE_ECHO_ENABLE_DOUBLE_MEMBRANE=false npx tsx packages/orchestrator/dist/bin/daemon.js` | U3         | AE3                                        |
+| Fixture dream      | `npx tsx bin/dte-memory-lever.ts dream --storage-path <temp>`                                                                      | U3         | AE4 counts only                            |
+| Guidance           | Read `AGENTS.md`                                                                                                                   | U2         | AE5                                        |
+| Proposal           | snapshot + draft build + propose                                                                                                   | U3         | AE6                                        |
 
 Do not require `pnpm e2e` or headed Electron.
 

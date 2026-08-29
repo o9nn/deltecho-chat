@@ -5,17 +5,17 @@ import { MemoryLever, MemoryLeverError } from "../MemoryLever";
 import { RAGMemoryStore, type Memory } from "../RAGMemoryStore";
 import { InMemoryStorage } from "../storage";
 
-async function seedDir(dir: string, memories: Memory[], extraFiles: Record<string, string> = {}) {
+async function seedDir(
+  dir: string,
+  memories: Memory[],
+  extraFiles: Record<string, string> = {},
+) {
   await writeFile(
     join(dir, "deepTreeEchoBotMemories.json"),
     JSON.stringify(memories),
     "utf8",
   );
-  await writeFile(
-    join(dir, "deepTreeEchoBotReflections.json"),
-    "[]",
-    "utf8",
-  );
+  await writeFile(join(dir, "deepTreeEchoBotReflections.json"), "[]", "utf8");
   for (const [name, body] of Object.entries(extraFiles)) {
     await writeFile(join(dir, name), body, "utf8");
   }
@@ -24,7 +24,11 @@ async function seedDir(dir: string, memories: Memory[], extraFiles: Record<strin
 describe("MemoryLever filesystem open", () => {
   it("errors on invalid RAG JSON", async () => {
     const dir = await mkdtemp(join(tmpdir(), "dte-bad-json-"));
-    await writeFile(join(dir, "deepTreeEchoBotMemories.json"), "{not-json", "utf8");
+    await writeFile(
+      join(dir, "deepTreeEchoBotMemories.json"),
+      "{not-json",
+      "utf8",
+    );
     await writeFile(join(dir, "deepTreeEchoBotReflections.json"), "[]", "utf8");
     await expect(MemoryLever.openPath(dir)).rejects.toMatchObject({
       code: "missing_or_invalid",
@@ -68,7 +72,9 @@ describe("MemoryLever filesystem open", () => {
     const store = new RAGMemoryStore(storage);
     await store.ready();
     store.setEnabled(true);
-    const fromMemory = new MemoryLever(store).search("TypeScript", { chatId: 1 });
+    const fromMemory = new MemoryLever(store).search("TypeScript", {
+      chatId: 1,
+    });
     expect(fromPath.hits.map((hit) => hit.id)).toEqual(
       fromMemory.hits.map((hit) => hit.id),
     );

@@ -20,7 +20,6 @@
  */
 
 import { getLogger } from "@deltachat-desktop/shared/logger";
-import { BackendRemote } from "../../backend-com";
 import { DeepTreeEchoChatManager } from "./DeepTreeEchoChatManager";
 import { DeepTreeEchoUIBridge } from "./DeepTreeEchoUIBridge";
 import { proactiveMessaging } from "./ProactiveMessaging";

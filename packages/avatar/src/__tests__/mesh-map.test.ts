@@ -196,9 +196,7 @@ describe("mesh-map region classifier", () => {
     expect(regionCounts(meshMap).hair).toBe(1);
     expect(
       meshMap.motions.find((binding) => binding.region === "hair")?.parameters,
-    ).toEqual(
-      expect.arrayContaining(["ParamHairFront", "HairFrontShake"]),
-    );
+    ).toEqual(expect.arrayContaining(["ParamHairFront", "HairFrontShake"]));
     expect(REGION_MOTION_BINDINGS).toHaveLength(14);
   });
 

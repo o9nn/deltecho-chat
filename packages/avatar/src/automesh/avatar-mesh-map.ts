@@ -314,8 +314,8 @@ export function live2dRegionsForMesh3d(
   group: MelodyMesh3dGroup,
 ): readonly MeshRegion[] {
   return (
-    MELODY_MESH3D_GROUP_SPECS.find((item) => item.id === group)?.live2dRegions ??
-    []
+    MELODY_MESH3D_GROUP_SPECS.find((item) => item.id === group)
+      ?.live2dRegions ?? []
   );
 }
 

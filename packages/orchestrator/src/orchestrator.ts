@@ -46,6 +46,8 @@ import {
   attachMemoryLeverSchedule,
   attachProactiveLoop,
   detachProactiveLoop,
+  startEntelechyWithOptionalIdentity,
+  tryStartCoreSelf,
 } from "./dte-composition.js";
 import {
   AutonomyLifecycleCoordinator,
@@ -415,17 +417,28 @@ export class Orchestrator {
       if (this.config.enableAutonomy) {
         try {
           // 1. CoreSelfEngine — local inference + reservoir + identity
-          this.coreSelfEngine = new CoreSelfEngine({
-            lucy: {
-              baseUrl: this.config.lucyEndpoint || "http://localhost:8080",
+          this.coreSelfEngine = await tryStartCoreSelf(
+            async () => {
+              const engine = new CoreSelfEngine({
+                lucy: {
+                  baseUrl: this.config.lucyEndpoint || "http://localhost:8080",
+                },
+                reservoir: { units: 256 },
+                identity: {},
+                readoutDim: 64,
+                embeddingDim: 128,
+              });
+              await engine.start();
+              log.info("CoreSelfEngine started (Lucy + Reservoir + Identity)");
+              return engine;
             },
-            reservoir: { units: 256 },
-            identity: {},
-            readoutDim: 64,
-            embeddingDim: 128,
-          });
-          await this.coreSelfEngine.start();
-          log.info("CoreSelfEngine started (Lucy + Reservoir + Identity)");
+            (error) => {
+              log.warn(
+                "CoreSelfEngine failed to initialize (Entelechy still starts):",
+                error,
+              );
+            },
+          );
 
           // 2. Echobeats — 3-stream, 12-step cognitive loop
           this.echobeats = new Echobeats({
@@ -458,9 +471,15 @@ export class Orchestrator {
           log.info("AutonomyLifecycleCoordinator started (5-phase cycle)");
 
           // 5. EntelechyIntegration — ESN Autognosis + EchoBeats + scientific-genius visual signal
-          await entelechyIntegration.start();
+          const identity = this.coreSelfEngine?.getIdentity();
+          const { attached } = await startEntelechyWithOptionalIdentity(
+            entelechyIntegration,
+            identity,
+          );
           log.info(
-            "EntelechyIntegration started (ESN Autognosis → Scientific Genius → Live2D signal)",
+            attached
+              ? "EntelechyIntegration started with CoreSelf identity attached"
+              : "EntelechyIntegration started without identity attach",
           );
 
           // 6. ReservoirFeedbackLoop — online RLS learning
@@ -472,7 +491,7 @@ export class Orchestrator {
             minRewardMagnitude: 0.01,
             ...this.config.reservoirFeedback,
           });
-          const reservoir = this.coreSelfEngine.getReservoir?.();
+          const reservoir = this.coreSelfEngine?.getReservoir?.();
           await this.reservoirFeedback.start(reservoir);
           this.autonomyLifecycle.wireReservoirFeedback(this.reservoirFeedback);
           log.info("ReservoirFeedbackLoop started (online RLS learning)");

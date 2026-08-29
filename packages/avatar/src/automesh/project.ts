@@ -137,7 +137,11 @@ export function projectPhotoOntoAtlas(input: {
   const width = Math.max(1, Math.floor(input.atlasWidth));
   const height = Math.max(1, Math.floor(input.atlasHeight));
   const data = new Uint8ClampedArray(width * height * 4);
-  if (input.base && input.base.width === width && input.base.height === height) {
+  if (
+    input.base &&
+    input.base.width === width &&
+    input.base.height === height
+  ) {
     data.set(input.base.data);
   }
 

@@ -130,7 +130,9 @@ export class CubismEditorBridge {
   }
 
   async getParameterValues(modelUID: string): Promise<unknown> {
-    const response = await this.request("GetParameterValues", { ModelUID: modelUID });
+    const response = await this.request("GetParameterValues", {
+      ModelUID: modelUID,
+    });
     return response.Data.Parameters;
   }
 

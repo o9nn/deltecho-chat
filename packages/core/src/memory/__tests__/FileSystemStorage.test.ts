@@ -5,7 +5,10 @@ import { FileSystemStorage } from "../FileSystemStorage";
 
 describe("FileSystemStorage", () => {
   it("createIfMissing false does not mkdir", async () => {
-    const missing = join(tmpdir(), `dte-missing-${Date.now()}-${Math.random()}`);
+    const missing = join(
+      tmpdir(),
+      `dte-missing-${Date.now()}-${Math.random()}`,
+    );
     const storage = new FileSystemStorage({
       storagePath: missing,
       createIfMissing: false,
