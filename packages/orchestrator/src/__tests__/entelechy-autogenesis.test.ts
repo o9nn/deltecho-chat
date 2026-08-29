@@ -3,6 +3,7 @@ import {
   AutognosisAutogenesisCoupler,
   IdentityMesh,
   esnReservoir,
+  intentionalityEngine,
 } from "deep-tree-echo-core";
 import {
   EntelechyIntegration,
@@ -109,7 +110,8 @@ describe("EntelechyIntegration autogenesis couple", () => {
     expect(text).not.toContain("must-not-appear-in-goals");
   });
 
-  it("tick drives a real coupler into identity and a reservoir step", () => {
+  it("tick drives a real coupler into identity, intentionality, and a reservoir step", () => {
+    clearAutogenesisGoals();
     const { integration, identity, steps } = makeLiveCoupler({ grant: true });
 
     integration.tickOnce();
@@ -120,6 +122,13 @@ describe("EntelechyIntegration autogenesis couple", () => {
     expect(identity.generateSystemPrompt()).toContain(
       "autogenesis:edge-of-chaos",
     );
+    const created = autogenesisGoals().filter(
+      (goal) => goal.content === "autogenesis:edge-of-chaos",
+    );
+    expect(created).toHaveLength(1);
+    expect(created[0]?.origin.source).toBe("intrinsic");
+    expect(created[0]?.origin.reasoning).toContain("autogenesis:edge-of-chaos");
+    expect(created[0]?.origin.fromStates).toEqual([]);
     expect(steps).toHaveLength(1);
     const norm = Math.sqrt(
       steps[0].reduce((sum, value) => sum + value * value, 0),
@@ -128,11 +137,13 @@ describe("EntelechyIntegration autogenesis couple", () => {
   });
 
   it("tick does not mutate identity when the couple grant is off", () => {
+    clearAutogenesisGoals();
     const { integration, identity, steps } = makeLiveCoupler({ grant: false });
 
     integration.tickOnce();
 
     expect(identity.getState().agent.goals).toHaveLength(0);
+    expect(autogenesisGoals()).toHaveLength(0);
     expect(steps).toHaveLength(0);
   });
 
@@ -161,6 +172,18 @@ describe("EntelechyIntegration autogenesis couple", () => {
     });
   });
 });
+
+function autogenesisGoals() {
+  return intentionalityEngine
+    .getActiveGoals()
+    .filter((goal) => goal.content.startsWith("autogenesis:"));
+}
+
+function clearAutogenesisGoals() {
+  for (const goal of autogenesisGoals()) {
+    intentionalityEngine.abandonGoal(goal.id, "test-reset");
+  }
+}
 
 function warmupUntilReport(integration: EntelechyIntegration) {
   for (let i = 0; i < 24 && esnReservoir.getAutognosisReport() == null; i++) {
@@ -245,8 +268,8 @@ function makeLiveCoupler(options: { grant: boolean }) {
       },
     },
     intentionality: {
-      getActiveGoals: () => [],
-      generateGoal: () => undefined,
+      getActiveGoals: () => intentionalityEngine.getActiveGoals(),
+      generateGoal: (params) => intentionalityEngine.generateGoal(params),
     },
     readGrant: () => options.grant,
   });
