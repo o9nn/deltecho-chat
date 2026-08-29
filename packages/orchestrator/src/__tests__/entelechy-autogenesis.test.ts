@@ -2,6 +2,7 @@ import { describe, expect, it, jest } from "@jest/globals";
 import {
   AutognosisAutogenesisCoupler,
   IdentityMesh,
+  esnReservoir,
 } from "deep-tree-echo-core";
 import {
   EntelechyIntegration,
@@ -112,6 +113,49 @@ describe("EntelechyIntegration autogenesis couple", () => {
 
     expect(identity.getState().agent.goals).toHaveLength(0);
     expect(steps).toHaveLength(0);
+  });
+
+  it("default coupler adds an autogenesis reservoir step after a live report", () => {
+    const previous = process.env.DELTECHO_AUTOGENESIS_COUPLE;
+    delete process.env.DELTECHO_AUTOGENESIS_COUPLE;
+    const identity = new IdentityMesh({ autoSaveInterval: 0 });
+    const integration = new EntelechyIntegration({
+      enableReservoir: true,
+      enableEchoBeats: false,
+      enableEntelechy: false,
+      enableConsciousness: false,
+    });
+    integration.attachIdentity(identity);
+
+    const originalStep = esnReservoir.step;
+    let stepCount = 0;
+    esnReservoir.step = ((input: number[]) => {
+      stepCount += 1;
+      return originalStep.call(esnReservoir, input);
+    }) as typeof esnReservoir.step;
+
+    try {
+      for (let i = 0; i < 24 && esnReservoir.getAutognosisReport() == null; i++) {
+        integration.tickOnce();
+      }
+      expect(esnReservoir.getAutognosisReport()).not.toBeNull();
+
+      const beforeDisabled = stepCount;
+      integration.tickOnce();
+      expect(stepCount).toBe(beforeDisabled + 1);
+
+      process.env.DELTECHO_AUTOGENESIS_COUPLE = "1";
+      const beforeGranted = stepCount;
+      integration.tickOnce();
+      expect(stepCount).toBe(beforeGranted + 2);
+    } finally {
+      esnReservoir.step = originalStep;
+      if (previous === undefined) {
+        delete process.env.DELTECHO_AUTOGENESIS_COUPLE;
+      } else {
+        process.env.DELTECHO_AUTOGENESIS_COUPLE = previous;
+      }
+    }
   });
 });
 
