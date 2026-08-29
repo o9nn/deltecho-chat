@@ -54,6 +54,18 @@ jest.mock("deep-tree-echo-core", () => ({
     }),
     attachIdentity: jest.fn(),
   })),
+  intentionalityEngine: {
+    generateGoal: jest.fn(),
+    getActiveGoals: jest.fn().mockReturnValue([]),
+    maxActiveGoals: 20,
+  },
+  esnReservoir: {
+    getAutognosisReport: jest.fn().mockReturnValue(null),
+    getState: jest.fn(),
+    step: jest.fn(),
+    reset: jest.fn(),
+  },
+  l2Normalize: (values: number[]) => values,
 }));
 
 // Mock Sys6 Bridge
