@@ -24,6 +24,8 @@
 
 ### Fixed
 
+- Deep Tree Echo: the autognosis–autogenesis coupler re-enters on a later reservoir emission even when `Date.now()` reuses the previous report millisecond.
+
 <a id="1_58_2"></a>
 
 ## [1.58.2] - 2025-05-14

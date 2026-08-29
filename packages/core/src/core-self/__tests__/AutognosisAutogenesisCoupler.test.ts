@@ -5,12 +5,14 @@ import {
   CONSENSUS_SLOT,
   DEFAULT_INPUT_DIM,
   autogenesisGoalId,
+  deriveAutogenesisKind,
   type ActiveGoalLike,
   type GenerateGoalParams,
 } from "../AutognosisAutogenesisCoupler.js";
-import type {
-  AutognosisReport as Report,
-  ReservoirState as ESNState,
+import {
+  ESNAutognosisReservoir,
+  type AutognosisReport as Report,
+  type ReservoirState as ESNState,
 } from "../../cognitive/ESNAutognosisReservoir.js";
 
 function healthyReport(overrides: Partial<Report> = {}): Report {
@@ -179,7 +181,9 @@ describe("AutognosisAutogenesisCoupler", () => {
     coupler.couple();
     const vector = steps[0];
     expect(vector).toHaveLength(DEFAULT_INPUT_DIM);
-    const norm = Math.sqrt(vector.reduce((sum, value) => sum + value * value, 0));
+    const norm = Math.sqrt(
+      vector.reduce((sum, value) => sum + value * value, 0),
+    );
     expect(norm).toBeCloseTo(1, 8);
     expect(vector.every((value) => Number.isFinite(value))).toBe(true);
   });
@@ -249,4 +253,126 @@ describe("AutognosisAutogenesisCoupler", () => {
     });
     expect(coupler.couple().kind).toBe("regulate");
   });
+
+  it("re-enters when a later report object reuses the previous timestamp", () => {
+    const first = healthyReport({ timestamp: 50 });
+    const later = healthyReport({ timestamp: 50 });
+    let current = first;
+    const steps: number[][] = [];
+    const coupler = new AutognosisAutogenesisCoupler({
+      identity: new IdentityMesh({ autoSaveInterval: 0 }),
+      reservoir: {
+        inputDim: DEFAULT_INPUT_DIM,
+        getAutognosisReport: () => current,
+        getState: () => reservoirState(),
+        step: (input: number[]) => {
+          steps.push(input);
+        },
+      },
+      intentionality: {
+        getActiveGoals: () => [],
+        generateGoal: () => undefined,
+      },
+      readGrant: () => true,
+    });
+
+    expect(coupler.couple().skipped).toBe(false);
+    current = later;
+    const second = coupler.couple();
+
+    expect(second.skipped).toBe(false);
+    expect(second.stepped).toBe(true);
+    expect(steps).toHaveLength(2);
+  });
+
+  it("feeds self-state back so a later live report diverges from ambient-only", () => {
+    const coupled = new ESNAutognosisReservoir({
+      seed: 42,
+      noiseAmplitude: 0,
+    });
+    const control = new ESNAutognosisReservoir({
+      seed: 42,
+      noiseAmplitude: 0,
+    });
+    let tick = 1;
+    while (coupled.getAutognosisReport() == null) {
+      coupled.step(ambientInput(tick));
+      control.step(ambientInput(tick));
+      tick += 1;
+    }
+    const firstKind = deriveAutogenesisKind(coupled.getAutognosisReport()!);
+    const before = coupled.getState().activations.slice();
+    const controlBefore = control.getState().activations.slice();
+
+    const coupler = new AutognosisAutogenesisCoupler({
+      identity: new IdentityMesh({ autoSaveInterval: 0 }),
+      reservoir: {
+        inputDim: 64,
+        getAutognosisReport: () => coupled.getAutognosisReport(),
+        getState: () => coupled.getState(),
+        step: (input) => coupled.step(input),
+      },
+      intentionality: {
+        getActiveGoals: () => [],
+        generateGoal: () => undefined,
+      },
+      readGrant: () => true,
+    });
+
+    const first = coupler.couple();
+    control.step(ambientInput(tick));
+    tick += 1;
+    expect(first.skipped).toBe(false);
+    expect(first.kind).toBe(firstKind);
+    expect(first.stepped).toBe(true);
+    expect(
+      activationDistance(before, coupled.getState().activations),
+    ).toBeGreaterThan(
+      activationDistance(controlBefore, control.getState().activations),
+    );
+    expect(coupler.couple().reason).toBe("already_coupled");
+
+    let diverged = false;
+    let laterKind: ReturnType<typeof deriveAutogenesisKind> | undefined;
+    for (let cycle = 0; cycle < 8 && !diverged; cycle++) {
+      for (let i = 0; i < 12; i++) {
+        coupled.step(ambientInput(tick));
+        control.step(ambientInput(tick));
+        tick += 1;
+      }
+      const coupledReport = coupled.getAutognosisReport();
+      const controlReport = control.getAutognosisReport();
+      if (!coupledReport || !controlReport) continue;
+      laterKind = deriveAutogenesisKind(coupledReport);
+      const later = coupler.couple();
+      expect(later.skipped).toBe(false);
+      expect(later.stepped).toBe(true);
+      diverged =
+        coupledReport.isDead !== controlReport.isDead ||
+        laterKind !== deriveAutogenesisKind(controlReport);
+    }
+
+    expect(diverged).toBe(true);
+    expect(laterKind).not.toBe(firstKind);
+  });
 });
+
+function ambientInput(tick: number, dim = 64): number[] {
+  const input = new Array(dim).fill(0);
+  for (let i = 0; i < dim; i++) {
+    input[i] = 0.01 * Math.sin((2 * Math.PI * (i + 1) * tick) / 100);
+  }
+  return input;
+}
+
+function activationDistance(
+  left: ArrayLike<number>,
+  right: ArrayLike<number>,
+): number {
+  let sum = 0;
+  for (let i = 0; i < left.length; i++) {
+    const delta = (left[i] ?? 0) - (right[i] ?? 0);
+    sum += delta * delta;
+  }
+  return Math.sqrt(sum);
+}

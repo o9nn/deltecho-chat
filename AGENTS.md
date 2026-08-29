@@ -56,5 +56,5 @@ These commands and env vars are the agent-facing ops surface for daemon composit
 - Unattached identity skips both directions with `identity_unattached` (no `integrateAutognosis`, no autogenesis reservoir step).
 - Couple mutations stay off unless `DELTECHO_AUTOGENESIS_COUPLE` is exactly `1`, `true`, or `yes` (case-insensitive). Unset, empty, and any other value log `couple_disabled` and no-op both directions. Leave this unset in the baseline Cloud environment.
 - Adopted kinds are a closed set: `edge-of-chaos`, `regulate`, `recover-pathology`. Identity goal id and intrinsic goal content are `autogenesis:<kind>`.
-- `integrateAutognosis` runs only when the report timestamp is new and the derived kind or health rounded to one decimal differs from the last integrated report. Same timestamp is a full skip (`already_coupled`).
+- `integrateAutognosis` runs when the current report has not just been coupled and the derived kind or health rounded to one decimal differs from the last integrated report. Repeating the same report object and timestamp is a full skip (`already_coupled`); a later emission still couples even if `Date.now()` reused the millisecond.
 - This couple is independent of MemoryLever dream hygiene and of desktop `ProactiveMessaging`. Do not call the coupler from ProactiveLoop INTEGRATE.

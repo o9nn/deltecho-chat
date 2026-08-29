@@ -18,7 +18,9 @@ import type {
   IdentityGovernanceProposal,
 } from "./IdentityMesh.js";
 
-const log = getLogger("deep-tree-echo-core/core-self/AutognosisAutogenesisCoupler");
+const log = getLogger(
+  "deep-tree-echo-core/core-self/AutognosisAutogenesisCoupler",
+);
 
 export const AUTOGENESIS_COUPLE_ENV = "DELTECHO_AUTOGENESIS_COUPLE";
 export const CONSENSUS_SLOT = 0;
@@ -150,6 +152,7 @@ export class AutognosisAutogenesisCoupler {
   private readonly intentionality: IntentionalityAccessors;
   private readonly readGrant: () => boolean;
   private lastCoupledTimestamp: number | null = null;
+  private lastCoupledReport: AutognosisReport | null = null;
   private lastIntegratedKind: AutogenesisKind | null = null;
   private lastIntegratedHealth: number | null = null;
 
@@ -181,7 +184,10 @@ export class AutognosisAutogenesisCoupler {
       log.info("couple skip reason=couple_disabled");
       return { skipped: true, reason: "couple_disabled" };
     }
-    if (this.lastCoupledTimestamp === report.timestamp) {
+    if (
+      this.lastCoupledReport === report &&
+      this.lastCoupledTimestamp === report.timestamp
+    ) {
       log.debug("couple skip reason=already_coupled");
       return { skipped: true, reason: "already_coupled" };
     }
@@ -233,9 +239,12 @@ export class AutognosisAutogenesisCoupler {
       risk: latestProposal?.risk ?? 0,
       adopted: latestProposal?.adopted ?? false,
       health: report.health,
-      goals: this.intentionality.getActiveGoals().filter(isActiveAutogenesisGoal),
+      goals: this.intentionality
+        .getActiveGoals()
+        .filter(isActiveAutogenesisGoal),
     });
     this.reservoir.step(vector);
+    this.lastCoupledReport = report;
     this.lastCoupledTimestamp = report.timestamp;
 
     log.info(
