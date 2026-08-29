@@ -13,6 +13,7 @@
   // Dockerfile is at repo root, path is relative to this wrangler.jsonc file
   "containers": [
     {
+      "name": "deltecho-chat-production-deltechoapp",
       "class_name": "DeltEchoApp",
       "image": "../../Dockerfile.cloudflare",
       "max_instances": 10,
@@ -60,6 +61,7 @@
     "preview": {
       "containers": [
         {
+          "name": "deltecho-chat-preview-deltechoapp",
           "class_name": "DeltEchoApp",
           "image": "../../Dockerfile.cloudflare",
           "max_instances": 10,
