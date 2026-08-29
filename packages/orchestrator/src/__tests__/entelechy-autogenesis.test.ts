@@ -171,6 +171,21 @@ describe("EntelechyIntegration autogenesis couple", () => {
       expect(ctx.stepCount).toBe(beforeGranted + 2);
     });
   });
+
+  it("default coupler live ticks reach an adopted intrinsic goal", () => {
+    withDefaultLiveCoupler((ctx) => {
+      clearAutogenesisGoals();
+      warmupUntilReport(ctx.integration);
+      process.env.DELTECHO_AUTOGENESIS_COUPLE = "1";
+      for (let i = 0; i < 250 && autogenesisGoals().length === 0; i++) {
+        ctx.integration.tickOnce();
+      }
+      const created = autogenesisGoals();
+      expect(created.length).toBeGreaterThan(0);
+      expect(created[0]?.content.startsWith("autogenesis:")).toBe(true);
+      expect(created[0]?.origin.source).toBe("intrinsic");
+    });
+  });
 });
 
 function autogenesisGoals() {
@@ -197,6 +212,7 @@ function withDefaultLiveCoupler<T>(
 ): T {
   const previous = process.env.DELTECHO_AUTOGENESIS_COUPLE;
   delete process.env.DELTECHO_AUTOGENESIS_COUPLE;
+  esnReservoir.reset();
   const identity = new IdentityMesh({ autoSaveInterval: 0 });
   const integration = new EntelechyIntegration({
     enableReservoir: true,
