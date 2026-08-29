@@ -103,12 +103,13 @@ test.describe("Cognitive Memory System", () => {
         // Wait for potential AI response with memory context
         await page.waitForTimeout(2000);
 
-        // Verify message was sent
+        // Verify this exact query was sent. Other DTE workers may emit outgoing
+        // messages concurrently on the shared CI account, so `.last()` is racy.
         const sentMessage = page
-          .locator(".message.outgoing")
-          .last()
-          .locator(".msg-body .text");
-        await expect(sentMessage).toContainText("secret code");
+          .locator(".message.outgoing .msg-body .text")
+          .filter({ hasText: queryMessage })
+          .last();
+        await expect(sentMessage).toContainText(queryMessage);
       }
     });
 

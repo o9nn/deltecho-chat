@@ -282,15 +282,16 @@ test.describe("Deep Tree Echo Chat Integration", () => {
             await sendButton.click();
             await page.waitForTimeout(500);
 
-            // Verify message appears
-            const sentMessage = page.locator(".message.outgoing").last();
-            const messageText = await sentMessage
-              .locator(".msg-body .text, .text")
-              .textContent()
-              .catch(() => "");
+            // Verify this exact timestamped message appears. The DTE bot may
+            // concurrently emit a provider-status message on an unconfigured CI
+            // runner, so asserting against the final outgoing message is racy.
+            const sentMessage = page
+              .locator(".message.outgoing .msg-body .text, .message.outgoing .text")
+              .filter({ hasText: testMessage })
+              .last();
 
+            await expect(sentMessage).toContainText(testMessage);
             console.log(`AI sent message: "${testMessage.slice(0, 30)}..."`);
-            expect(messageText).toContain("AI test message");
           } else {
             // Try pressing Enter to send
             await page.keyboard.press("Enter");
