@@ -116,48 +116,80 @@ describe("EntelechyIntegration autogenesis couple", () => {
   });
 
   it("default coupler adds an autogenesis reservoir step after a live report", () => {
-    const previous = process.env.DELTECHO_AUTOGENESIS_COUPLE;
-    delete process.env.DELTECHO_AUTOGENESIS_COUPLE;
-    const identity = new IdentityMesh({ autoSaveInterval: 0 });
-    const integration = new EntelechyIntegration({
-      enableReservoir: true,
-      enableEchoBeats: false,
-      enableEntelechy: false,
-      enableConsciousness: false,
-    });
-    integration.attachIdentity(identity);
-
-    const originalStep = esnReservoir.step;
-    let stepCount = 0;
-    esnReservoir.step = ((input: number[]) => {
-      stepCount += 1;
-      return originalStep.call(esnReservoir, input);
-    }) as typeof esnReservoir.step;
-
-    try {
-      for (let i = 0; i < 24 && esnReservoir.getAutognosisReport() == null; i++) {
-        integration.tickOnce();
-      }
-      expect(esnReservoir.getAutognosisReport()).not.toBeNull();
-
-      const beforeDisabled = stepCount;
-      integration.tickOnce();
-      expect(stepCount).toBe(beforeDisabled + 1);
+    withDefaultLiveCoupler((ctx) => {
+      warmupUntilReport(ctx.integration);
+      const beforeDisabled = ctx.stepCount;
+      ctx.integration.tickOnce();
+      expect(ctx.stepCount).toBe(beforeDisabled + 1);
 
       process.env.DELTECHO_AUTOGENESIS_COUPLE = "1";
-      const beforeGranted = stepCount;
-      integration.tickOnce();
-      expect(stepCount).toBe(beforeGranted + 2);
-    } finally {
-      esnReservoir.step = originalStep;
-      if (previous === undefined) {
-        delete process.env.DELTECHO_AUTOGENESIS_COUPLE;
-      } else {
-        process.env.DELTECHO_AUTOGENESIS_COUPLE = previous;
-      }
-    }
+      const beforeGranted = ctx.stepCount;
+      ctx.integration.tickOnce();
+      expect(ctx.stepCount).toBe(beforeGranted + 2);
+    });
+  });
+
+  it("default coupler couples on processMessage after a live report", async () => {
+    await withDefaultLiveCoupler(async (ctx) => {
+      warmupUntilReport(ctx.integration);
+      process.env.DELTECHO_AUTOGENESIS_COUPLE = "1";
+      const beforeGranted = ctx.stepCount;
+      const result = await ctx.integration.processMessage("hello");
+      expect(result.response).toBeDefined();
+      expect(ctx.stepCount).toBe(beforeGranted + 2);
+    });
   });
 });
+
+function warmupUntilReport(integration: EntelechyIntegration) {
+  for (let i = 0; i < 24 && esnReservoir.getAutognosisReport() == null; i++) {
+    integration.tickOnce();
+  }
+  expect(esnReservoir.getAutognosisReport()).not.toBeNull();
+}
+
+function withDefaultLiveCoupler<T>(
+  run: (ctx: { integration: EntelechyIntegration; stepCount: number }) => T,
+): T {
+  const previous = process.env.DELTECHO_AUTOGENESIS_COUPLE;
+  delete process.env.DELTECHO_AUTOGENESIS_COUPLE;
+  const identity = new IdentityMesh({ autoSaveInterval: 0 });
+  const integration = new EntelechyIntegration({
+    enableReservoir: true,
+    enableEchoBeats: false,
+    enableEntelechy: false,
+    enableConsciousness: false,
+  });
+  integration.attachIdentity(identity);
+
+  const originalStep = esnReservoir.step;
+  const ctx = { integration, stepCount: 0 };
+  esnReservoir.step = ((input: number[]) => {
+    ctx.stepCount += 1;
+    return originalStep.call(esnReservoir, input);
+  }) as typeof esnReservoir.step;
+
+  const finish = () => {
+    esnReservoir.step = originalStep;
+    if (previous === undefined) {
+      delete process.env.DELTECHO_AUTOGENESIS_COUPLE;
+    } else {
+      process.env.DELTECHO_AUTOGENESIS_COUPLE = previous;
+    }
+  };
+
+  try {
+    const result = run(ctx);
+    if (result && typeof result === "object" && "then" in result) {
+      return Promise.resolve(result).finally(finish) as T;
+    }
+    finish();
+    return result;
+  } catch (error) {
+    finish();
+    throw error;
+  }
+}
 
 function makeLiveCoupler(options: { grant: boolean }) {
   const steps: number[][] = [];
