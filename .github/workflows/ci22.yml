@@ -39,6 +39,7 @@ jobs:
           pnpm --filter=@deltecho/dove9 build
           pnpm --filter=@deltecho/ipc build
           pnpm --filter=@deltecho/cognitive build
+          pnpm --filter=@deltecho/avatar build
           pnpm --filter=deep-tree-echo-orchestrator build
 
       - name: Check (Lint, Types, Format)
