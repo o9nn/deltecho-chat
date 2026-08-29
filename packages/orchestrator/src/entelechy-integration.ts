@@ -42,6 +42,8 @@ import {
   EmergenceLevel,
   AutognosisAutogenesisCoupler,
   intentionalityEngine,
+  l2Normalize,
+  type CoupleResult,
   type IdentityMesh,
   // Logger
   getLogger,
@@ -144,7 +146,7 @@ export interface EntelechyProcessingResult {
 // ============================================================
 
 export interface EntelechyCoupleLike {
-  couple(): { reason?: string; adopted?: boolean; skipped?: boolean };
+  couple(): CoupleResult;
   attachIdentity(identity: IdentityMesh): void;
 }
 
@@ -399,9 +401,7 @@ export class EntelechyIntegration extends EventEmitter {
       encoded[dim - 1] = text.split(/\s+/).length / 100; // Word count feature
     }
 
-    // Normalize
-    const norm = Math.sqrt(encoded.reduce((s, v) => s + v * v, 0)) || 1;
-    return encoded.map((v) => v / norm);
+    return l2Normalize(encoded);
   }
 
   /**
@@ -443,10 +443,12 @@ export class EntelechyIntegration extends EventEmitter {
     if (!this.reportPresent()) return;
     try {
       const result = this.coupler.couple();
-      log.info(
-        `couple reason=${result.reason ?? "ok"} adopted=${result.adopted ?? false}`,
-      );
-    } catch (error) {
+      if (result.reason !== "already_coupled") {
+        log.info(
+          `couple reason=${result.reason ?? "ok"} adopted=${result.adopted ?? false}`,
+        );
+      }
+    } catch {
       log.error("couple failed");
     }
   }

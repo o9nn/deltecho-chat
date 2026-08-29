@@ -65,7 +65,6 @@ function makeHarness(options: {
   const steps: number[][] = [];
   const generated: GenerateGoalParams[] = [];
   const goals = options.goals ?? [];
-  const logs: string[] = [];
   const reservoir = {
     inputDim: DEFAULT_INPUT_DIM,
     getAutognosisReport: () => options.report,
@@ -98,7 +97,7 @@ function makeHarness(options: {
     intentionality,
     readGrant: () => options.grant ?? true,
   });
-  return { coupler, identity, steps, generated, goals, logs };
+  return { coupler, identity, steps, generated, goals };
 }
 
 describe("AutognosisAutogenesisCoupler", () => {

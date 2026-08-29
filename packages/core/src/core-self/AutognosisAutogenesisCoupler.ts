@@ -182,7 +182,7 @@ export class AutognosisAutogenesisCoupler {
       return { skipped: true, reason: "couple_disabled" };
     }
     if (this.lastCoupledTimestamp === report.timestamp) {
-      log.info("couple skip reason=already_coupled");
+      log.debug("couple skip reason=already_coupled");
       return { skipped: true, reason: "already_coupled" };
     }
 
@@ -223,11 +223,12 @@ export class AutognosisAutogenesisCoupler {
     }
 
     const inputDim = this.reservoir.inputDim ?? DEFAULT_INPUT_DIM;
+    const identityState = this.identity.getState();
     const latestProposal =
-      proposal ?? this.identity.getState().relation.governanceProposals[0];
+      proposal ?? identityState.relation.governanceProposals[0];
     const vector = encodeAutogenesisVector({
       inputDim,
-      traits: this.identity.getState().relation.traits,
+      traits: identityState.relation.traits,
       consensus: latestProposal?.consensus ?? 0,
       risk: latestProposal?.risk ?? 0,
       adopted: latestProposal?.adopted ?? false,
@@ -254,13 +255,13 @@ export class AutognosisAutogenesisCoupler {
     proposal: IdentityGovernanceProposal,
   ): void {
     const content = autogenesisGoalId(kind);
-    const active = this.intentionality.getActiveGoals().filter((goal) => {
-      const isActive = !goal.status || goal.status === "active";
-      return isActive && goal.content === content;
-    });
+    const activeGoals = this.intentionality.getActiveGoals();
+    const matching = activeGoals.filter(
+      (goal) => isActiveGoal(goal) && goal.content === content,
+    );
     const cap = this.intentionality.maxActiveGoals ?? DEFAULT_GOAL_CAP;
-    if (active.length > 0) return;
-    if (this.intentionality.getActiveGoals().length >= cap) return;
+    if (matching.length > 0) return;
+    if (activeGoals.length >= cap) return;
     this.intentionality.generateGoal({
       content,
       priority: proposal.consensus,
@@ -273,7 +274,10 @@ export class AutognosisAutogenesisCoupler {
   }
 }
 
+function isActiveGoal(goal: ActiveGoalLike): boolean {
+  return !goal.status || goal.status === "active";
+}
+
 function isActiveAutogenesisGoal(goal: ActiveGoalLike): boolean {
-  const active = !goal.status || goal.status === "active";
-  return active && goal.content.startsWith("autogenesis:");
+  return isActiveGoal(goal) && goal.content.startsWith("autogenesis:");
 }
