@@ -6,6 +6,7 @@ import {
   DEFAULT_INPUT_DIM,
   autogenesisGoalId,
   deriveAutogenesisKind,
+  isCoupleGranted,
   type ActiveGoalLike,
   type GenerateGoalParams,
 } from "../AutognosisAutogenesisCoupler.js";
@@ -116,8 +117,20 @@ describe("AutognosisAutogenesisCoupler", () => {
     expect(state.agent.goals[0]?.id).toBe("autogenesis:edge-of-chaos");
     expect(generated).toHaveLength(1);
     expect(generated[0].content).toBe("autogenesis:edge-of-chaos");
+    expect(generated[0].priority).toBe(
+      state.relation.governanceProposals[0]?.consensus,
+    );
     expect(generated[0].origin.source).toBe("intrinsic");
+    expect(generated[0].origin.reasoning).toContain(
+      "autogenesis:edge-of-chaos",
+    );
     expect(generated[0].origin.fromStates).toEqual([]);
+    expect(state.agent.goals[0]?.description).toContain(
+      "autogenesis:edge-of-chaos",
+    );
+    expect(state.agent.goals[0]?.description).toContain(
+      state.relation.governanceProposals[0]?.title ?? "",
+    );
     expect(identity!.generateSystemPrompt()).toContain(
       "autogenesis:edge-of-chaos",
     );
@@ -208,6 +221,56 @@ describe("AutognosisAutogenesisCoupler", () => {
     expect(result.reason).toBe("couple_disabled");
     expect(steps).toHaveLength(0);
     expect(generated).toHaveLength(0);
+  });
+
+  it("isCoupleGranted accepts only 1/true/yes case-insensitively", () => {
+    expect(isCoupleGranted("1")).toBe(true);
+    expect(isCoupleGranted("true")).toBe(true);
+    expect(isCoupleGranted("YES")).toBe(true);
+    expect(isCoupleGranted(" True ")).toBe(true);
+    expect(isCoupleGranted(undefined)).toBe(false);
+    expect(isCoupleGranted("")).toBe(false);
+    expect(isCoupleGranted("0")).toBe(false);
+    expect(isCoupleGranted("false")).toBe(false);
+    expect(isCoupleGranted("on")).toBe(false);
+  });
+
+  it("default grant reader stays couple_disabled until env is granted", () => {
+    const previous = process.env.DELTECHO_AUTOGENESIS_COUPLE;
+    const steps: number[][] = [];
+    const coupler = new AutognosisAutogenesisCoupler({
+      identity: new IdentityMesh({ autoSaveInterval: 0 }),
+      reservoir: {
+        inputDim: DEFAULT_INPUT_DIM,
+        getAutognosisReport: () => healthyReport(),
+        getState: () => reservoirState(),
+        step: (input: number[]) => {
+          steps.push(input);
+        },
+      },
+      intentionality: {
+        getActiveGoals: () => [],
+        generateGoal: () => undefined,
+      },
+    });
+    try {
+      delete process.env.DELTECHO_AUTOGENESIS_COUPLE;
+      const disabled = coupler.couple();
+      expect(disabled.reason).toBe("couple_disabled");
+      expect(steps).toHaveLength(0);
+
+      process.env.DELTECHO_AUTOGENESIS_COUPLE = "yes";
+      const enabled = coupler.couple();
+      expect(enabled.skipped).toBe(false);
+      expect(enabled.stepped).toBe(true);
+      expect(steps).toHaveLength(1);
+    } finally {
+      if (previous === undefined) {
+        delete process.env.DELTECHO_AUTOGENESIS_COUPLE;
+      } else {
+        process.env.DELTECHO_AUTOGENESIS_COUPLE = previous;
+      }
+    }
   });
 
   it("AE10 reserved slots differ between adopted and rejected", () => {
