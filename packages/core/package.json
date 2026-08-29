@@ -18,6 +18,10 @@
       "import": "./dist/memory/index.js",
       "types": "./dist/memory/index.d.ts"
     },
+    "./memory/node": {
+      "import": "./dist/memory/node.js",
+      "types": "./dist/memory/node.d.ts"
+    },
     "./personality": {
       "import": "./dist/personality/index.js",
       "types": "./dist/personality/index.d.ts"

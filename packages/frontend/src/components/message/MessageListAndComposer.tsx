@@ -1,4 +1,10 @@
-import React, { useRef, useEffect, useCallback } from "react";
+import React, {
+  useRef,
+  useEffect,
+  useCallback,
+  useLayoutEffect,
+  useState,
+} from "react";
 import { basename, join, parse } from "path";
 import { T } from "@deltachat/jsonrpc-client";
 
@@ -9,12 +15,20 @@ import type ComposerMessageInput from "../composer/ComposerMessageInput";
 import { DesktopSettingsType } from "../../../../shared/shared-types";
 import { runtime } from "@deltachat-desktop/runtime-interface";
 import { RecoverableCrashScreen } from "../screens/RecoverableCrashScreen";
-import { useSettingsStore } from "../../stores/settings";
+import SettingsStoreInstance, { useSettingsStore } from "../../stores/settings";
+import useTranslationFunction from "../../hooks/useTranslationFunction";
+import {
+  clampAvatarStripWidth,
+  DEFAULT_AVATAR_ASPECT,
+  optimalAvatarStripWidth,
+} from "./avatarStripWidth";
 import ConfirmSendingFiles from "../dialogs/ConfirmSendingFiles";
 import { ReactionsBarProvider } from "../ReactionsBar";
 import useDialog from "../../hooks/dialog/useDialog";
 import useMessage from "../../hooks/chat/useMessage";
 import { DeepTreeEchoAvatarDisplay } from "../DeepTreeEchoBot/DeepTreeEchoAvatarDisplay";
+import ProactiveStatusIndicator from "../DeepTreeEchoBot/ProactiveStatusIndicator";
+import Settings from "../Settings/Settings";
 
 const log = getLogger("renderer/MessageListAndComposer");
 
@@ -87,8 +101,13 @@ type Props = {
 };
 
 export default function MessageListAndComposer({ accountId, chat }: Props) {
-  const conversationRef = useRef(null);
+  const conversationRef = useRef<HTMLDivElement>(null);
   const refComposer = useRef(null);
+  const tx = useTranslationFunction();
+  const [paneSize, setPaneSize] = useState({ width: 0, height: 0 });
+  const [avatarAspect, setAvatarAspect] = useState(DEFAULT_AVATAR_ASPECT);
+  const [dragWidth, setDragWidth] = useState<number | null>(null);
+  const draggingRef = useRef(false);
 
   const { openDialog, hasOpenDialogs } = useDialog();
   const { sendMessage } = useMessage();
@@ -295,6 +314,104 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
   }, [onMouseUp]);
 
   const settingsStore = useSettingsStore()[0];
+  const showAvatar = Boolean(
+    settingsStore?.desktopSettings?.deepTreeEchoBotEnabled &&
+      settingsStore?.desktopSettings?.deepTreeEchoBotAvatarEnabled !== false,
+  );
+  const savedStripWidth =
+    settingsStore?.desktopSettings?.deepTreeEchoBotAvatarStripWidth ?? 0;
+  const autoStripWidth = optimalAvatarStripWidth(
+    paneSize.height,
+    paneSize.width,
+    avatarAspect,
+  );
+  const stripWidth =
+    dragWidth ??
+    (savedStripWidth > 0
+      ? clampAvatarStripWidth(savedStripWidth, paneSize.width)
+      : autoStripWidth);
+
+  useLayoutEffect(() => {
+    if (!showAvatar) return undefined;
+    const element = conversationRef.current;
+    if (!element || typeof ResizeObserver === "undefined") return undefined;
+    const apply = () => {
+      const width = Math.round(element.clientWidth);
+      const height = Math.round(element.clientHeight);
+      setPaneSize((previous) =>
+        previous.width === width && previous.height === height
+          ? previous
+          : { width, height },
+      );
+    };
+    apply();
+    const observer = new ResizeObserver(apply);
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [showAvatar]);
+
+  const persistStripWidth = useCallback((width: number) => {
+    void SettingsStoreInstance.effect.setDesktopSetting(
+      "deepTreeEchoBotAvatarStripWidth",
+      width,
+    );
+  }, []);
+
+  const onNativeSize = useCallback(
+    (size: { width: number; height: number }) => {
+      if (size.width <= 0 || size.height <= 0) return;
+      setAvatarAspect(size.width / size.height);
+    },
+    [],
+  );
+
+  const onStripResizePointerDown = useCallback(
+    (event: React.PointerEvent<HTMLButtonElement>) => {
+      if (event.button !== 0) return;
+      event.preventDefault();
+      draggingRef.current = true;
+      event.currentTarget.setPointerCapture(event.pointerId);
+    },
+    [],
+  );
+
+  const onStripResizePointerMove = useCallback(
+    (event: React.PointerEvent<HTMLButtonElement>) => {
+      if (!draggingRef.current || !conversationRef.current) return;
+      const pane = conversationRef.current.getBoundingClientRect();
+      setDragWidth(
+        clampAvatarStripWidth(pane.right - event.clientX, pane.width),
+      );
+    },
+    [],
+  );
+
+  const onStripResizePointerUp = useCallback(
+    (event: React.PointerEvent<HTMLButtonElement>) => {
+      if (!draggingRef.current) return;
+      draggingRef.current = false;
+      if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+        event.currentTarget.releasePointerCapture(event.pointerId);
+      }
+      const pane = conversationRef.current?.getBoundingClientRect();
+      const next = clampAvatarStripWidth(
+        (pane?.right ?? 0) - event.clientX,
+        pane?.width ?? 0,
+      );
+      setDragWidth(null);
+      persistStripWidth(next);
+    },
+    [persistStripWidth],
+  );
+
+  const onStripResizeReset = useCallback(() => {
+    setDragWidth(null);
+    persistStripWidth(0);
+  }, [persistStripWidth]);
+  const showProactive = Boolean(
+    settingsStore?.desktopSettings?.deepTreeEchoBotEnabled &&
+      settingsStore?.desktopSettings?.deepTreeEchoBotProactiveEnabled,
+  );
   // If you want to update this, don't forget to update
   // the `.background-preview` element as well.
   const style = settingsStore
@@ -315,43 +432,84 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
 
       // NoChatSelected also has this ID and class.
       id="message-list-and-composer"
-      className="message-list-and-composer"
+      className={
+        showAvatar
+          ? "message-list-and-composer message-list-and-composer--with-avatar"
+          : "message-list-and-composer"
+      }
       style={style}
       ref={conversationRef}
       onDrop={onDrop.bind({ props: { chat } })}
       onDragOver={onDragOver}
     >
-      <div className="message-list-and-composer__message-list">
-        <RecoverableCrashScreen reset_on_change_key={chat.id}>
-          <ReactionsBarProvider>
-            <MessageList
-              accountId={accountId}
-              chat={chat}
-              refComposer={refComposer}
-            />
-          </ReactionsBarProvider>
-        </RecoverableCrashScreen>
+      <div className="message-list-and-composer__conversation">
+        <div className="message-list-and-composer__message-list">
+          <RecoverableCrashScreen reset_on_change_key={chat.id}>
+            <ReactionsBarProvider>
+              <MessageList
+                accountId={accountId}
+                chat={chat}
+                refComposer={refComposer}
+              />
+            </ReactionsBarProvider>
+          </RecoverableCrashScreen>
+        </div>
+        <Composer
+          ref={refComposer}
+          selectedChat={chat}
+          isContactRequest={chat.isContactRequest}
+          isProtectionBroken={chat.isProtectionBroken}
+          regularMessageInputRef={regularMessageInputRef}
+          editMessageInputRef={editMessageInputRef}
+          draftState={draftState}
+          updateDraftText={updateDraftText}
+          onSelectReplyToShortcut={onSelectReplyToShortcut}
+          removeQuote={removeQuote}
+          addFileToDraft={addFileToDraft}
+          removeFile={removeFile}
+          clearDraftStateButKeepTextareaValue={
+            clearDraftStateButKeepTextareaValue
+          }
+        />
+        {showProactive && (
+          <ProactiveStatusIndicator
+            accountId={accountId}
+            chatId={chat.id}
+            compact
+            onOpenSettings={() =>
+              openDialog(Settings, { initialMode: "bot_settings" })
+            }
+            onOpenTriggers={() =>
+              openDialog(Settings, { initialMode: "bot_proactive" })
+            }
+          />
+        )}
       </div>
-      <Composer
-        ref={refComposer}
-        selectedChat={chat}
-        isContactRequest={chat.isContactRequest}
-        isProtectionBroken={chat.isProtectionBroken}
-        regularMessageInputRef={regularMessageInputRef}
-        editMessageInputRef={editMessageInputRef}
-        draftState={draftState}
-        updateDraftText={updateDraftText}
-        onSelectReplyToShortcut={onSelectReplyToShortcut}
-        removeQuote={removeQuote}
-        addFileToDraft={addFileToDraft}
-        removeFile={removeFile}
-        clearDraftStateButKeepTextareaValue={
-          clearDraftStateButKeepTextareaValue
-        }
-      />
-      {settingsStore?.desktopSettings?.deepTreeEchoBotEnabled &&
-        settingsStore?.desktopSettings?.deepTreeEchoBotAvatarEnabled !==
-          false && <DeepTreeEchoAvatarDisplay position="floating" />}
+      {showAvatar && (
+        <aside
+          className="message-list-and-composer__avatar-strip"
+          data-testid="live2d-avatar-strip"
+          aria-label="Deep Tree Echo avatar"
+          style={{ width: stripWidth }}
+        >
+          <button
+            type="button"
+            className="message-list-and-composer__avatar-resize"
+            data-testid="live2d-avatar-strip-resize"
+            aria-label={tx("avatar_strip_resize")}
+            title={tx("avatar_strip_resize")}
+            onPointerDown={onStripResizePointerDown}
+            onPointerMove={onStripResizePointerMove}
+            onPointerUp={onStripResizePointerUp}
+            onPointerCancel={onStripResizePointerUp}
+            onDoubleClick={onStripResizeReset}
+          />
+          <DeepTreeEchoAvatarDisplay
+            position="floating"
+            onNativeSize={onNativeSize}
+          />
+        </aside>
+      )}
     </div>
   );
 }

@@ -31,15 +31,21 @@ jest.mock("../adapters/pixi-live2d-renderer", () => ({
     initialize: jest.fn().mockResolvedValue(undefined),
     loadModel: jest.fn().mockResolvedValue(undefined),
     setExpression: jest.fn(),
+    setNamedExpression: jest.fn().mockReturnValue(true),
     playMotion: jest.fn(),
     updateLipSync: jest.fn(),
     setBlinking: jest.fn(),
     setParameter: jest.fn(),
+    getParameter: jest.fn().mockReturnValue(0),
     focusEyes: jest.fn(),
     addFrameListener: jest.fn(),
     removeFrameListener: jest.fn(),
     setAnimationSpeed: jest.fn(),
     setVisualVitality: jest.fn(),
+    applyOutfit: jest.fn(),
+    applyIdentityRig: jest.fn(),
+    resize: jest.fn(),
+    getNativeSize: jest.fn().mockReturnValue({ width: 800, height: 1600 }),
     dispose: jest.fn(),
   })),
 }));
@@ -84,7 +90,28 @@ describe("Live2DAvatarManager", () => {
       expect(controller.updateLipSync).toBeDefined();
       expect(controller.triggerBlink).toBeDefined();
       expect(controller.setParameter).toBeDefined();
+      expect(controller.applyOutfit).toBeDefined();
       expect(controller.getRenderer).toBeDefined();
+      expect(controller.resize).toBeDefined();
+      expect(controller.getNativeSize).toBeDefined();
+      expect(controller.getNativeSize()).toEqual({
+        width: 800,
+        height: 1600,
+      });
+    });
+
+    it("should resize the existing renderer instead of reinitializing", async () => {
+      const props: Live2DAvatarProps = {
+        modelPath: "/test/model.json",
+        width: 400,
+        height: 400,
+      };
+      const controller = await manager.initialize(mockContainer, props);
+      controller.resize(640, 1080, 0.6);
+      const renderer = controller.getRenderer() as {
+        resize: jest.Mock;
+      } | null;
+      expect(renderer?.resize).toHaveBeenCalledWith(640, 1080, 0.6);
     });
 
     it("should create a canvas element in the container", async () => {
@@ -263,6 +290,49 @@ describe("Live2DAvatarManager", () => {
       );
     });
 
+    it("samples rendered Cubism state into the avatar self-model", async () => {
+      const controller = await manager.initialize(mockContainer, {
+        modelPath: "/test/model.json",
+      });
+      const renderer = controller.getRenderer() as unknown as {
+        addFrameListener: jest.Mock;
+        getParameter: jest.Mock;
+      };
+      const selfModelFrame = renderer.addFrameListener.mock.calls[1][0] as (
+        deltaTime: number,
+      ) => void;
+
+      controller.updateCognitiveState({
+        mode: "Scientific Genius",
+        scientificGenius: 0.92,
+        insightPotential: 0.84,
+        metabolic: {
+          metabolicPhase: "integrating",
+          energyLevel: 0.74,
+          anabolicBalance: 0.45,
+          isEnergyCrisis: false,
+          myelinationProgress: 0.6,
+          knowledgeDensity: 2.8,
+        },
+      });
+
+      expect(controller.getLastExpressionExperience()).toBeNull();
+      selfModelFrame(1);
+      selfModelFrame(1);
+
+      expect(renderer.getParameter).toHaveBeenCalled();
+      expect(controller.getLastExpressionExperience()).toEqual(
+        expect.objectContaining({
+          cognitiveMode: "Scientific Genius",
+          predicted: expect.objectContaining({ params: expect.any(Object) }),
+          actual: expect.objectContaining({ params: expect.any(Object) }),
+          errorMagnitude: expect.any(Number),
+        }),
+      );
+      expect(controller.getSelfModelAccuracy()).toBeGreaterThanOrEqual(0);
+      expect(controller.getSelfModelAccuracy()).toBeLessThanOrEqual(1);
+    });
+
     it("removes the metabolic frame listener during disposal", async () => {
       const controller = await manager.initialize(mockContainer, {
         modelPath: "/test/model.json",
@@ -271,11 +341,17 @@ describe("Live2DAvatarManager", () => {
         addFrameListener: jest.Mock;
         removeFrameListener: jest.Mock;
       };
-      const frameListener = renderer.addFrameListener.mock.calls[0][0];
+      const metabolicFrameListener = renderer.addFrameListener.mock.calls[0][0];
+      const selfModelFrameListener = renderer.addFrameListener.mock.calls[1][0];
 
       manager.dispose();
 
-      expect(renderer.removeFrameListener).toHaveBeenCalledWith(frameListener);
+      expect(renderer.removeFrameListener).toHaveBeenCalledWith(
+        metabolicFrameListener,
+      );
+      expect(renderer.removeFrameListener).toHaveBeenCalledWith(
+        selfModelFrameListener,
+      );
     });
   });
 
@@ -288,6 +364,7 @@ describe("Live2DAvatarManager", () => {
       const controller = await manager.initialize(mockContainer, props);
 
       expect(() => controller.setExpression("happy", 0.8)).not.toThrow();
+      expect(controller.setNamedExpression?.("JOY_01_BroadSmile")).toBe(true);
     });
 
     it("should provide playMotion method", async () => {
@@ -333,6 +410,19 @@ describe("Live2DAvatarManager", () => {
       const controller = await manager.initialize(mockContainer, props);
 
       expect(() => controller.setParameter("ParamAngleX", 15)).not.toThrow();
+    });
+
+    it("should provide applyOutfit method", async () => {
+      const props: Live2DAvatarProps = {
+        modelPath: "/test/model.json",
+      };
+
+      const controller = await manager.initialize(mockContainer, props);
+
+      expect(() => controller.applyOutfit({ id: "rose" })).not.toThrow();
+      expect(controller.getRenderer()?.applyOutfit).toHaveBeenCalledWith({
+        id: "rose",
+      });
     });
 
     it("should provide getRenderer method", async () => {

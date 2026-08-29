@@ -4,6 +4,7 @@
 @use "sass:math";
 
 .message-list-and-composer {
+  position: relative;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -15,6 +16,11 @@
   background-color: var(--chatViewBg);
 
   overflow: hidden;
+
+  &--with-avatar {
+    flex-direction: row;
+    align-items: stretch;
+  }
 
   .jump-down-button {
     $heightUnreadCounter: 20px;
@@ -85,6 +91,53 @@
       }
     }
   }
+}
+
+.message-list-and-composer__conversation {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+
+  .message-list-and-composer--with-avatar & {
+    flex: 1 1 auto;
+  }
+}
+
+.message-list-and-composer__avatar-strip {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  flex: 0 0 auto;
+  align-self: stretch;
+  min-width: 0;
+  min-height: 0;
+  height: auto;
+  overflow: hidden;
+  border-left: 1px solid var(--colorBorderPrimary, rgba(0, 0, 0, 0.12));
+  background: var(--colorBackgroundSecondary, #111118);
+}
+
+.message-list-and-composer__avatar-resize {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  width: 10px;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: col-resize;
+}
+
+.message-list-and-composer__avatar-resize:hover,
+.message-list-and-composer__avatar-resize:focus-visible {
+  background: color-mix(in srgb, var(--colorPrimary, #6c5ce7) 35%, transparent);
 }
 
 .message-list-and-composer__message-list {

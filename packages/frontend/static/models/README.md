@@ -1,0 +1,16 @@
+# Avatar Cubism models
+
+Each identity has its own folder so mesh, texture, and physics can converge independently:
+
+- `miara/` — official baked package + source `mesh-map.json`
+- `deep-tree-echo/` — grove texture + living-wing physics
+- `melody/` — region-tinted 4096 atlas + aria-style physics
+
+`mesh-map.json` indexes each `ArtMeshN` UV island to a body region and the
+physics/motion parameters that drive it. Melody's `tile-map.json` then maps
+every island onto the A-pose still with segment, chain/joint, and Cubism
+params. Rebuild with `pnpm --filter=@deltecho/avatar index:mesh-map` and
+`pnpm --filter=@deltecho/avatar index:tile-map`.
+
+Each identity owns its `*_t03.moc3`. Melody's map names
+`models/melody/melody_t03.model3.json`, not Miara.

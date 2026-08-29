@@ -133,3 +133,15 @@ export {
   type CognitiveResonanceFieldConfig,
   type FieldKnowledgeGraph,
 } from "./CognitiveResonanceField.js";
+
+export {
+  ActiveInferenceExperimentScheduler,
+  activeInferenceExperimentScheduler,
+  DEFAULT_ACTIVE_INFERENCE_SCHEDULER_CONFIG,
+  type ExperimentForge,
+  type AutognosticExperimentContext,
+  type ExperimentCandidate,
+  type ExperimentScheduleDecision,
+  type ActiveInferenceSchedulerState,
+  type ActiveInferenceExperimentSchedulerConfig,
+} from "./ActiveInferenceExperimentScheduler.js";

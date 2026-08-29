@@ -42,6 +42,11 @@ import {
   EmergenceLevel,
   conceptualMetabolism,
   causalHypothesisForge,
+  AutognosisAutogenesisCoupler,
+  intentionalityEngine,
+  l2Normalize,
+  type CoupleResult,
+  type IdentityMesh,
   // Logger
   getLogger,
 } from "deep-tree-echo-core";
@@ -168,6 +173,16 @@ export interface EntelechyProcessingResult {
 
 import type { CognitiveTickProcessor } from "./cognitive-tick-processor";
 
+export interface EntelechyCoupleLike {
+  couple(): CoupleResult;
+  attachIdentity(identity: IdentityMesh): void;
+}
+
+export interface EntelechyIntegrationDeps {
+  coupler?: EntelechyCoupleLike;
+  reportPresent?: () => boolean;
+}
+
 export class EntelechyIntegration extends EventEmitter {
   private config: EntelechyIntegrationConfig;
   private running: boolean = false;
@@ -175,14 +190,28 @@ export class EntelechyIntegration extends EventEmitter {
   private tickCount: number = 0;
   private cognitiveProcessor?: CognitiveTickProcessor;
   private lastSnapshot: CognitiveSnapshot | null = null;
+  private coupler: EntelechyCoupleLike;
+  private reportPresent: () => boolean;
 
   constructor(
     config: Partial<EntelechyIntegrationConfig> = {},
-    cognitiveProcessor?: CognitiveTickProcessor,
+    deps: EntelechyIntegrationDeps = {},
   ) {
     super();
     this.config = { ...DEFAULT_CONFIG, ...config };
-    this.cognitiveProcessor = cognitiveProcessor || config.cognitiveProcessor;
+    this.cognitiveProcessor = config.cognitiveProcessor;
+    this.coupler = deps.coupler ?? this.createDefaultCoupler();
+    this.reportPresent =
+      deps.reportPresent ?? (() => esnReservoir.getAutognosisReport() != null);
+  }
+
+  public attachIdentity(identity: IdentityMesh): void {
+    this.coupler.attachIdentity(identity);
+  }
+
+  /** Test and interval helper — runs one background cognitive tick. */
+  public tickOnce(): void {
+    this.backgroundTick();
   }
 
   /**
@@ -272,10 +301,13 @@ export class EntelechyIntegration extends EventEmitter {
         });
       }
 
-      // 4. Take snapshot
+      // 4. Couple autognosis ↔ autogenesis when a report exists
+      this.invokeCouple();
+
+      // 5. Take snapshot
       this.lastSnapshot = this.takeSnapshot();
 
-      // 5. Emit periodic events
+      // 6. Emit periodic events
       if (this.tickCount % 12 === 0) {
         this.emit("cycle-complete", this.lastSnapshot);
       }
@@ -337,7 +369,10 @@ export class EntelechyIntegration extends EventEmitter {
       });
     }
 
-    // 5. Take snapshot
+    // 5. Couple autognosis ↔ autogenesis when a report exists
+    this.invokeCouple();
+
+    // 6. Take snapshot
     const snapshot = this.takeSnapshot();
     this.lastSnapshot = snapshot;
 
@@ -397,10 +432,7 @@ export class EntelechyIntegration extends EventEmitter {
     }
 
     this.applySomaticMarkerChannels(encoded, 0.18);
-
-    // Normalize
-    const norm = Math.sqrt(encoded.reduce((s, v) => s + v * v, 0)) || 1;
-    return encoded.map((v) => v / norm);
+    return l2Normalize(encoded);
   }
 
   /**
@@ -451,6 +483,38 @@ export class EntelechyIntegration extends EventEmitter {
   // ==========================================================================
   // STATE ACCESSORS
   // ==========================================================================
+
+  private createDefaultCoupler(): EntelechyCoupleLike {
+    return new AutognosisAutogenesisCoupler({
+      reservoir: {
+        getAutognosisReport: () => esnReservoir.getAutognosisReport(),
+        getState: () => esnReservoir.getState(),
+        step: (input) => esnReservoir.step(input),
+        inputDim: this.config.inputDim,
+      },
+      intentionality: {
+        generateGoal: (params) => intentionalityEngine.generateGoal(params),
+        getActiveGoals: () => intentionalityEngine.getActiveGoals(),
+        maxActiveGoals: intentionalityEngine?.maxActiveGoals,
+      },
+    });
+  }
+
+  private invokeCouple(): void {
+    if (!this.reportPresent()) return;
+    try {
+      const result = this.coupler.couple();
+      if (result.reason !== "already_coupled") {
+        log.info(
+          `couple reason=${result.reason ?? "ok"} kind=${
+            result.kind ?? "none"
+          } adopted=${result.adopted ?? false}`,
+        );
+      }
+    } catch {
+      log.error("couple failed");
+    }
+  }
 
   /**
    * Take a full cognitive snapshot

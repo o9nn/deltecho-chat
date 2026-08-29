@@ -52,16 +52,34 @@ test.describe("Deep Tree Echo Live2D Cubism avatar", () => {
 
     const canvas = avatar.locator("canvas");
     await expect(canvas).toBeVisible();
-    await expect(canvas).toHaveJSProperty("width", 300);
-    await expect(canvas).toHaveJSProperty("height", 300);
+    const canvasMetrics = await canvas.evaluate((element) => {
+      const canvasElement = element as HTMLCanvasElement;
+      return {
+        width: canvasElement.width,
+        height: canvasElement.height,
+        clientWidth: canvasElement.clientWidth,
+        clientHeight: canvasElement.clientHeight,
+      };
+    });
+    expect(canvasMetrics.width).toBeGreaterThan(0);
+    expect(canvasMetrics.height).toBeGreaterThan(0);
+    expect(canvasMetrics.clientWidth).toBeGreaterThan(0);
+    expect(canvasMetrics.clientHeight).toBeGreaterThan(0);
+    expect(canvasMetrics.width / canvasMetrics.height).toBeCloseTo(
+      canvasMetrics.clientWidth / canvasMetrics.clientHeight,
+      1,
+    );
+    expect(canvasMetrics.width / canvasMetrics.clientWidth).toBeLessThanOrEqual(
+      2.1,
+    );
+    expect(
+      canvasMetrics.height / canvasMetrics.clientHeight,
+    ).toBeLessThanOrEqual(2.1);
 
     const runtimeState = await page.evaluate(() => {
       const resourceNames = performance
         .getEntriesByType("resource")
         .map((entry) => entry.name);
-      const canvasElement = document.querySelector(
-        ".live2d-avatar canvas",
-      ) as HTMLCanvasElement | null;
 
       return {
         cubismCoreReady: Boolean(
@@ -80,9 +98,6 @@ test.describe("Deep Tree Echo Live2D Cubism avatar", () => {
         hasPhysics: resourceNames.some((name) =>
           name.endsWith("/models/miara/miara_pro_t03.physics3.json"),
         ),
-        canvasArea: canvasElement
-          ? canvasElement.width * canvasElement.height
-          : 0,
         fallbackPresent: Boolean(
           [...document.images].find((image) =>
             image.src.includes("sprite_neutral.jpg"),
@@ -97,7 +112,6 @@ test.describe("Deep Tree Echo Live2D Cubism avatar", () => {
       hasMoc: true,
       hasTexture: true,
       hasPhysics: true,
-      canvasArea: 90_000,
       fallbackPresent: false,
     });
 

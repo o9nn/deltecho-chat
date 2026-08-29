@@ -43,6 +43,14 @@ import {
   type AutonomyPipelineConfig,
 } from "./autonomy-pipeline.js";
 import { DeltaChatAutonomyBridge } from "./deltachat-autonomy-bridge.js";
+import { ProactiveLoop } from "./proactive-loop.js";
+import {
+  attachMemoryLeverSchedule,
+  attachProactiveLoop,
+  detachProactiveLoop,
+  startEntelechyWithOptionalIdentity,
+  tryStartCoreSelf,
+} from "./dte-composition.js";
 import {
   AutonomyLifecycleCoordinator,
   type AutonomyLifecycleConfig,
@@ -232,6 +240,7 @@ export class Orchestrator {
   // Level 5: Autonomy components
   private coreSelfEngine?: CoreSelfEngine;
   private autonomyPipeline?: AutonomyPipeline;
+  private proactiveLoop?: ProactiveLoop;
   private autonomyBridge?: DeltaChatAutonomyBridge;
   private autonomyLifecycle?: AutonomyLifecycleCoordinator;
   private reservoirFeedback?: ReservoirFeedbackLoop;
@@ -420,17 +429,28 @@ export class Orchestrator {
             process.env.DELTECHO_LUCY_ENDPOINT ||
             "http://localhost:8080";
           log.info(`Lucy endpoint: ${lucyEndpoint}`);
-          this.coreSelfEngine = new CoreSelfEngine({
-            lucy: {
-              baseUrl: lucyEndpoint,
+          this.coreSelfEngine = await tryStartCoreSelf(
+            async () => {
+              const engine = new CoreSelfEngine({
+                lucy: {
+                  baseUrl: lucyEndpoint,
+                },
+                reservoir: { units: 256 },
+                identity: {},
+                readoutDim: 64,
+                embeddingDim: 128,
+              });
+              await engine.start();
+              log.info("CoreSelfEngine started (Lucy + Reservoir + Identity)");
+              return engine;
             },
-            reservoir: { units: 256 },
-            identity: {},
-            readoutDim: 64,
-            embeddingDim: 128,
-          });
-          await this.coreSelfEngine.start();
-          log.info("CoreSelfEngine started (Lucy + Reservoir + Identity)");
+            (error) => {
+              log.warn(
+                "CoreSelfEngine failed to initialize (Entelechy still starts):",
+                error,
+              );
+            },
+          );
 
           // 2. Echobeats — 3-stream, 12-step cognitive loop
           this.echobeats = new Echobeats({
@@ -448,6 +468,9 @@ export class Orchestrator {
           await this.autonomyPipeline.start();
           log.info("AutonomyPipeline started");
 
+          this.proactiveLoop = await attachProactiveLoop(this.autonomyPipeline);
+          log.info("ProactiveLoop started (process liveness)");
+
           // 4. AutonomyLifecycleCoordinator — 5-phase autonomy cycle
           this.autonomyLifecycle = new AutonomyLifecycleCoordinator({
             cycleIntervalMs: 30_000,
@@ -461,9 +484,15 @@ export class Orchestrator {
           log.info("AutonomyLifecycleCoordinator started (5-phase cycle)");
 
           // 5. EntelechyIntegration — ESN Autognosis + EchoBeats + scientific-genius visual signal
-          await entelechyIntegration.start();
+          const identity = this.coreSelfEngine?.getIdentity();
+          const { attached } = await startEntelechyWithOptionalIdentity(
+            entelechyIntegration,
+            identity,
+          );
           log.info(
-            "EntelechyIntegration started (ESN Autognosis → Scientific Genius → Live2D signal)",
+            attached
+              ? "EntelechyIntegration started with CoreSelf identity attached"
+              : "EntelechyIntegration started without identity attach",
           );
 
           // 6. ReservoirFeedbackLoop — online RLS learning
@@ -475,7 +504,7 @@ export class Orchestrator {
             minRewardMagnitude: 0.01,
             ...this.config.reservoirFeedback,
           });
-          const reservoir = this.coreSelfEngine.getReservoir?.();
+          const reservoir = this.coreSelfEngine?.getReservoir?.();
           await this.reservoirFeedback.start(reservoir);
           this.autonomyLifecycle.wireReservoirFeedback(this.reservoirFeedback);
           log.info("ReservoirFeedbackLoop started (online RLS learning)");
@@ -715,6 +744,7 @@ export class Orchestrator {
               epistemicDreaming,
               cognitiveResonanceField,
               causalHypothesisForge,
+              activeInferenceExperimentScheduler,
             } = await import("deep-tree-echo-core");
 
             const knowledgeGraph = {
@@ -735,6 +765,39 @@ export class Orchestrator {
             };
             epistemicDreaming.connectKnowledgeGraph(knowledgeGraph);
             cognitiveResonanceField.connectKnowledgeGraph(knowledgeGraph);
+
+            let activeInferenceTicks = 0;
+            const scheduleActiveInference = (): void => {
+              const forgeState = causalHypothesisForge.getState();
+              if (
+                forgeState.proposed +
+                  forgeState.testing +
+                  forgeState.supported ===
+                0
+              ) {
+                return;
+              }
+
+              const snapshot = entelechyIntegration.takeSnapshot();
+              const metabolic = conceptualMetabolism.getVisualState();
+              const decision = activeInferenceExperimentScheduler.scheduleNext({
+                reservoirHealth: snapshot.autognosis?.health ?? 0.5,
+                reservoirEntropy: snapshot.reservoir?.entropy ?? 0.5,
+                isEdgeOfChaos: snapshot.autognosis?.isEdgeOfChaos ?? false,
+                daoConsensus: snapshot.scientificGeniusVisual.daoConsensus,
+                energyLevel: metabolic.energyLevel,
+                isEnergyCrisis: metabolic.isEnergyCrisis,
+              });
+
+              if (decision.scheduled && decision.trial) {
+                log.info(
+                  `Active inference scheduled ${decision.trial.id} for ${decision.trial.hypothesisId} ` +
+                    `(informationGain=${decision.candidate?.expectedInformationGain.toFixed(
+                      3,
+                    )}, score=${decision.candidate?.score.toFixed(3)})`,
+                );
+              }
+            };
 
             const onKnowledgeIngested = (
               unit: NonNullable<
@@ -773,6 +836,9 @@ export class Orchestrator {
                 `Standing wave entered causal testing as ${hypothesis.id}`,
               );
             };
+            const onHypothesisProposed = (): void => {
+              scheduleActiveInference();
+            };
             const onEpistemicSurprise = (event: {
               hypothesisId: string;
               surprise: number;
@@ -810,11 +876,22 @@ export class Orchestrator {
               ) {
                 epistemicDreaming.endDreamSession();
               }
+
+              // Retry deferred scientific initiatives once per 12-step
+              // Echobeats cycle as energy, DAO agreement, and ESN health evolve.
+              activeInferenceTicks++;
+              if (activeInferenceTicks % 12 === 0) {
+                scheduleActiveInference();
+              }
             };
 
             conceptualMetabolism.on("ingested", onKnowledgeIngested);
             epistemicDreaming.on("dream_insight", onDreamInsight);
             cognitiveResonanceField.on("standing_wave_formed", onStandingWave);
+            causalHypothesisForge.on(
+              "hypothesis_proposed",
+              onHypothesisProposed,
+            );
             causalHypothesisForge.on("epistemic_surprise", onEpistemicSurprise);
             this.echobeats?.on("tick", onMetabolicTick);
 
@@ -832,6 +909,10 @@ export class Orchestrator {
                 onStandingWave,
               );
               causalHypothesisForge.off(
+                "hypothesis_proposed",
+                onHypothesisProposed,
+              );
+              causalHypothesisForge.off(
                 "epistemic_surprise",
                 onEpistemicSurprise,
               );
@@ -844,7 +925,7 @@ export class Orchestrator {
             });
 
             log.info(
-              "Metabolic cognition graph active (avatar, dreaming, resonance, and causal falsification)",
+              "Metabolic cognition graph active (avatar, dreaming, resonance, causal falsification, and active-inference experiment scheduling)",
             );
           } catch (e) {
             log.warn("Metabolic cognition graph not available (non-fatal):", e);
@@ -857,6 +938,10 @@ export class Orchestrator {
             error,
           );
         }
+      }
+
+      if (this.scheduler) {
+        attachMemoryLeverSchedule(this.scheduler);
       }
 
       this.running = true;
@@ -1656,6 +1741,11 @@ ${response.body}`;
     if (this.autonomyLifecycle) {
       await this.autonomyLifecycle.stop();
       log.info("AutonomyLifecycleCoordinator stopped");
+    }
+    if (this.proactiveLoop) {
+      await detachProactiveLoop(this.proactiveLoop);
+      this.proactiveLoop = undefined;
+      log.info("ProactiveLoop stopped");
     }
     if (this.autonomyPipeline) {
       await this.autonomyPipeline.stop();

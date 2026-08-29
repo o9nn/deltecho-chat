@@ -82,8 +82,18 @@ export interface DesktopSettingsType {
   /** Proactive messaging settings */
   deepTreeEchoBotProactiveEnabled?: boolean;
   deepTreeEchoBotProactiveTriggers?: string;
+  deepTreeEchoBotProactiveMaxMessagesPerHour?: number;
+  deepTreeEchoBotProactiveMaxMessagesPerDay?: number;
+  deepTreeEchoBotProactiveQuietHoursStart?: number;
+  deepTreeEchoBotProactiveQuietHoursEnd?: number;
+  deepTreeEchoBotProactiveRespectMutedChats?: boolean;
+  deepTreeEchoBotProactiveRespectArchivedChats?: boolean;
+  /** JSON array of contact ids already welcomed or seeded as known */
+  deepTreeEchoBotWelcomedContacts?: string;
   /** Avatar display settings */
   deepTreeEchoBotAvatarEnabled?: boolean;
+  /** Conversation-strip width in px. `0` means auto-fit for full figure height. */
+  deepTreeEchoBotAvatarStripWidth?: number;
 }
 
 export interface RC_Config {

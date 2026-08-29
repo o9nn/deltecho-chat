@@ -5,50 +5,97 @@
  * canvas support, these tests focus on the API contract and mock behavior.
  */
 
+import { Live2DModel } from "pixi-live2d-display-lipsyncpatch/cubism4";
 import {
   PixiLive2DRenderer,
   PARAM_IDS,
+  loadCubism4Settings,
 } from "../adapters/pixi-live2d-renderer";
+import { FIGURE_BOUNDS_PAD } from "../adapters/live2d-figure-bounds";
 import type { CubismAdapterConfig } from "../adapters/cubism-adapter";
+import { MELODY_IDENTITY_RIG } from "../automesh";
 
 // Mock the dynamic imports for Node.js environment
+const installUnsafeEval = jest.fn();
+
+jest.mock("@pixi/unsafe-eval", () => ({
+  install: (...args: unknown[]) => installUnsafeEval(...args),
+}));
+
 jest.mock("pixi.js", () => ({
-  Application: jest.fn().mockImplementation(() => ({
-    stage: {
-      addChild: jest.fn(),
-    },
-    view: {
-      width: 400,
-      height: 400,
-    },
-    ticker: {},
-    destroy: jest.fn(),
-  })),
+  Application: jest.fn().mockImplementation(() => {
+    const onceFns: Array<() => void> = [];
+    return {
+      stage: {
+        addChild: jest.fn(),
+      },
+      view: {
+        width: 400,
+        height: 400,
+        clientWidth: 400,
+        clientHeight: 400,
+      },
+      ticker: {
+        addOnce: (cb: () => void) => {
+          onceFns.push(cb);
+        },
+        flushOnce: () => {
+          const queued = onceFns.splice(0, onceFns.length);
+          for (const fn of queued) fn();
+        },
+      },
+      screen: { width: 400, height: 400 },
+      renderer: {
+        resize: jest.fn(),
+        width: 400,
+        height: 400,
+        resolution: 1,
+        extract: {
+          pixels: jest.fn(() => new Uint8Array(400 * 400 * 4)),
+        },
+      },
+      destroy: jest.fn(),
+    };
+  }),
 }));
 
 jest.mock("pixi-live2d-display-lipsyncpatch/cubism4", () => ({
+  cubism4Ready: jest.fn().mockResolvedValue(undefined),
   Live2DModel: {
     registerTicker: jest.fn(),
-    from: jest.fn().mockResolvedValue({
-      x: 0,
-      y: 0,
-      scale: { x: 1, y: 1, set: jest.fn() },
-      anchor: { x: 0.5, y: 0.5, set: jest.fn() },
-      internalModel: {
-        motionManager: {
-          startMotion: jest.fn().mockResolvedValue(true),
-          stopAllMotions: jest.fn(),
+    from: jest.fn().mockImplementation(() => {
+      const scale = {
+        x: 1,
+        y: 1,
+        set(x: number, y?: number) {
+          this.x = x;
+          this.y = y ?? x;
         },
-        coreModel: {
-          setParameterValueById: jest.fn(),
-          getParameterValueById: jest.fn().mockReturnValue(0),
+      };
+      return Promise.resolve({
+        x: 0,
+        y: 0,
+        width: 800,
+        height: 1600,
+        scale,
+        anchor: { x: 0.5, y: 0.5, set: jest.fn() },
+        internalModel: {
+          motionManager: {
+            startMotion: jest.fn().mockResolvedValue(true),
+            stopAllMotions: jest.fn(),
+          },
+          coreModel: {
+            setParameterValueById: jest.fn(),
+            getParameterValueById: jest.fn().mockReturnValue(0),
+            setPartOpacityById: jest.fn(),
+          },
         },
-      },
-      expression: jest.fn(),
-      motion: jest.fn().mockResolvedValue(true),
-      speak: jest.fn(),
-      stopSpeaking: jest.fn(),
-      destroy: jest.fn(),
+        expression: jest.fn(),
+        motion: jest.fn().mockResolvedValue(true),
+        speak: jest.fn(),
+        stopSpeaking: jest.fn(),
+        destroy: jest.fn(),
+      });
     }),
   },
 }));
@@ -58,6 +105,7 @@ describe("PixiLive2DRenderer", () => {
   let mockCanvas: HTMLCanvasElement;
 
   beforeEach(() => {
+    installUnsafeEval.mockClear();
     renderer = new PixiLive2DRenderer();
     // Create a mock canvas element
     mockCanvas = {
@@ -65,6 +113,7 @@ describe("PixiLive2DRenderer", () => {
       height: 400,
       parentElement: { clientWidth: 400, clientHeight: 400 },
       getContext: jest.fn(),
+      style: { filter: "" },
     } as unknown as HTMLCanvasElement;
 
     // Mock document.getElementById
@@ -96,6 +145,10 @@ describe("PixiLive2DRenderer", () => {
 
       await renderer.initialize(config);
       expect(renderer.isInitialized()).toBe(true);
+      expect(installUnsafeEval).toHaveBeenCalled();
+      const cubism4 = await import("pixi-live2d-display-lipsyncpatch/cubism4");
+      expect(cubism4.cubism4Ready).toHaveBeenCalled();
+      expect((window as Window & { PIXI?: unknown }).PIXI).toBeDefined();
     });
 
     it("should throw if canvas element not found by ID", async () => {
@@ -154,6 +207,15 @@ describe("PixiLive2DRenderer", () => {
         expect(renderer.getExpression()).toBe(expression);
       }
     });
+
+    it("plays the shipped Miara Cubism expression for happy", async () => {
+      const fromMock = Live2DModel.from as jest.Mock;
+      const model = await fromMock.mock.results.at(-1)?.value;
+      renderer.setExpression("happy", 0.8);
+      expect(model.expression).toHaveBeenCalledWith("JOY_01_BroadSmile");
+      expect(renderer.setNamedExpression("SURPRISE_01_Startled")).toBe(true);
+      expect(model.expression).toHaveBeenCalledWith("SURPRISE_01_Startled");
+    });
   });
 
   describe("lip sync", () => {
@@ -204,6 +266,147 @@ describe("PixiLive2DRenderer", () => {
       renderer.dispose();
       const newRenderer = new PixiLive2DRenderer();
       expect(newRenderer.getParameter(PARAM_IDS.PARAM_ANGLE_X)).toBeUndefined();
+    });
+  });
+
+  describe("outfit wardrobe", () => {
+    beforeEach(async () => {
+      const config: CubismAdapterConfig = {
+        canvas: mockCanvas,
+        model: {
+          modelPath: "/test/model.json",
+          name: "Test Model",
+        },
+      };
+      await renderer.initialize(config);
+      await renderer.loadModel(config.model);
+    });
+
+    it("hides casual accessory parts by matching Cubism part ids", async () => {
+      const core = renderer.getModel()?.internalModel.coreModel as unknown as {
+        getPartCount: jest.Mock;
+        getPartId: jest.Mock;
+        setPartOpacityByIndex: jest.Mock;
+        setPartOpacityById: jest.Mock;
+      };
+      Object.assign(core, {
+        getPartCount: jest.fn(() => 3),
+        getPartId: jest.fn(
+          (index: number) =>
+            ["PartFairy", "PartWaterSurface", "PartChestClothLRotation"][index],
+        ),
+        setPartOpacityByIndex: jest.fn(),
+      });
+      renderer.applyOutfit({ id: "casual" });
+      expect(core.setPartOpacityByIndex).toHaveBeenCalledWith(0, 0);
+      expect(core.setPartOpacityByIndex).toHaveBeenCalledWith(1, 0);
+      expect(core.setPartOpacityByIndex).toHaveBeenCalledWith(2, 1);
+      expect(renderer.getAppliedOutfit()?.id).toBe("casual");
+    });
+
+    it("hue-rotates the canvas for clothing colorways", () => {
+      renderer.applyOutfit({ id: "rose" });
+      expect(mockCanvas.style.filter).toBe("hue-rotate(310deg)");
+      renderer.applyOutfit({ id: "official" });
+      expect(mockCanvas.style.filter).toBe("");
+    });
+
+    it("keeps an explicit Melody hue of 0 on the aria preset", () => {
+      renderer.applyOutfit({
+        id: "aria",
+        hueShift: 0,
+        hiddenGroups: ["water", "background", "chestCloth"],
+      });
+      expect(mockCanvas.style.filter).toBe("");
+      expect(renderer.getAppliedOutfit()?.hueShift).toBe(0);
+      expect(renderer.getAppliedOutfit()?.hiddenGroups).toEqual(
+        expect.arrayContaining(["chestCloth"]),
+      );
+    });
+  });
+
+  describe("identity rig", () => {
+    beforeEach(async () => {
+      const config: CubismAdapterConfig = {
+        canvas: mockCanvas,
+        model: {
+          modelPath: "/test/model.json",
+          name: "Test Model",
+        },
+      };
+      await renderer.initialize(config);
+      await renderer.loadModel(config.model);
+    });
+
+    it("deforms vertices after Cubism update without re-scaling baked physics", () => {
+      const positions = new Float32Array([0.5, 0.2]);
+      const particles = [{ mobility: 1, delay: 1, acceleration: 1, radius: 1 }];
+      const outputs = [{ angleScale: 1, weight: 1 }];
+      const model = renderer.getModel() as unknown as {
+        internalModel: {
+          update: (dt: number, now: number) => void;
+          getDrawableIDs: () => string[];
+          getDrawableBounds: (
+            index: number,
+            box?: { x: number; y: number; width: number; height: number },
+          ) => { x: number; y: number; width: number; height: number };
+          physics: {
+            _physicsRig: {
+              settings: Array<{
+                baseParticleIndex: number;
+                particleCount: number;
+                baseOutputIndex: number;
+                outputCount: number;
+              }>;
+              particles: typeof particles;
+              outputs: typeof outputs;
+            };
+          };
+          coreModel: {
+            getDrawableVertexPositions: (index: number) => Float32Array;
+            getDrawableCount: () => number;
+          };
+        };
+      };
+      let cubismUpdated = false;
+      model.internalModel.update = () => {
+        cubismUpdated = true;
+        positions[0] = 0.5;
+        positions[1] = 0.2;
+      };
+      model.internalModel.getDrawableIDs = () => ["ArtMesh0"];
+      model.internalModel.getDrawableBounds = () => ({
+        x: 0,
+        y: 0,
+        width: 1,
+        height: 1,
+      });
+      model.internalModel.physics = {
+        _physicsRig: {
+          settings: [
+            {
+              baseParticleIndex: 0,
+              particleCount: 1,
+              baseOutputIndex: 0,
+              outputCount: 1,
+            },
+          ],
+          particles,
+          outputs,
+        },
+      };
+      model.internalModel.coreModel.getDrawableVertexPositions = () =>
+        positions;
+      model.internalModel.coreModel.getDrawableCount = () => 1;
+
+      renderer.applyIdentityRig(MELODY_IDENTITY_RIG);
+      expect(particles[0].mobility).toBe(1);
+      model.internalModel.update(16, 0);
+      expect(cubismUpdated).toBe(true);
+      expect(positions[1]).toBeGreaterThan(0.2);
+
+      renderer.clearIdentityRig();
+      expect(particles[0].mobility).toBe(1);
     });
   });
 
@@ -286,6 +489,194 @@ describe("PixiLive2DRenderer", () => {
       expect(renderer.getApplication()).toBeNull();
     });
 
+    it("should resize the existing view without creating a new app", async () => {
+      const config: CubismAdapterConfig = {
+        canvas: mockCanvas,
+        model: {
+          modelPath: "/test/model.json",
+          name: "Test Model",
+        },
+      };
+      await renderer.initialize(config);
+      await renderer.loadModel(config.model);
+      const appBefore = renderer.getApplication();
+      renderer.resize(640, 1080, 0.5);
+      expect(renderer.getApplication()).toBe(appBefore);
+      expect(renderer.getModel()?.x).toBe(200);
+      expect(renderer.getModel()?.y).toBe(200);
+      // 800x1600 model in a 400x400 view at 50% fill → 0.125
+      expect(renderer.getModel()?.scale.x).toBeCloseTo(0.125);
+    });
+
+    it("scales to drawable bounds so empty canvas padding does not shrink the figure", async () => {
+      const cubism4 = await import("pixi-live2d-display-lipsyncpatch/cubism4");
+      (cubism4.Live2DModel.from as jest.Mock).mockImplementationOnce(() => {
+        const scale = {
+          x: 1,
+          y: 1,
+          set(x: number, y?: number) {
+            this.x = x;
+            this.y = y ?? x;
+          },
+        };
+        return Promise.resolve({
+          x: 0,
+          y: 0,
+          width: 800,
+          height: 1600,
+          scale,
+          anchor: { x: 0.5, y: 0.5, set: jest.fn() },
+          internalModel: {
+            width: 800,
+            height: 1600,
+            getDrawableIDs: () => ["body"],
+            getDrawableBounds: () => ({
+              x: 200,
+              y: 400,
+              width: 400,
+              height: 800,
+            }),
+            motionManager: {
+              startMotion: jest.fn().mockResolvedValue(true),
+              stopAllMotions: jest.fn(),
+            },
+            coreModel: {
+              setParameterValueById: jest.fn(),
+              getParameterValueById: jest.fn().mockReturnValue(0),
+            },
+          },
+          expression: jest.fn(),
+          motion: jest.fn().mockResolvedValue(true),
+          speak: jest.fn(),
+          stopSpeaking: jest.fn(),
+          destroy: jest.fn(),
+        });
+      });
+      const config: CubismAdapterConfig = {
+        canvas: mockCanvas,
+        model: {
+          modelPath: "/test/model.json",
+          name: "Test Model",
+          scale: 1,
+        },
+      };
+      await renderer.initialize(config);
+      await renderer.loadModel(config.model);
+      // Padded tight figure in a 400x400 view at fill 1 → height-limited
+      expect(renderer.getModel()?.scale.x).toBeCloseTo(
+        400 / (800 * FIGURE_BOUNDS_PAD),
+      );
+    });
+
+    it("ignores water and canvas-sized planes so the figure fills the view", async () => {
+      const cubism4 = await import("pixi-live2d-display-lipsyncpatch/cubism4");
+      (cubism4.Live2DModel.from as jest.Mock).mockImplementationOnce(() => {
+        const scale = {
+          x: 1,
+          y: 1,
+          set(x: number, y?: number) {
+            this.x = x;
+            this.y = y ?? x;
+          },
+        };
+        const drawables = [
+          { id: "body", x: 200, y: 200, width: 400, height: 800 },
+          { id: "WaterSurface1", x: 0, y: 1000, width: 800, height: 600 },
+          { id: "ArtMeshBg", x: 0, y: 0, width: 800, height: 1600 },
+        ];
+        return Promise.resolve({
+          x: 0,
+          y: 0,
+          width: 800,
+          height: 1600,
+          scale,
+          anchor: { x: 0.5, y: 0.5, set: jest.fn() },
+          internalModel: {
+            width: 800,
+            height: 1600,
+            getDrawableIDs: () => drawables.map((drawable) => drawable.id),
+            getDrawableBounds: (index: number) => drawables[index],
+            motionManager: {
+              startMotion: jest.fn().mockResolvedValue(true),
+              stopAllMotions: jest.fn(),
+            },
+            coreModel: {
+              setParameterValueById: jest.fn(),
+              getParameterValueById: jest.fn().mockReturnValue(0),
+            },
+          },
+          expression: jest.fn(),
+          motion: jest.fn().mockResolvedValue(true),
+          speak: jest.fn(),
+          stopSpeaking: jest.fn(),
+          destroy: jest.fn(),
+        });
+      });
+      const config: CubismAdapterConfig = {
+        canvas: mockCanvas,
+        model: {
+          modelPath: "/test/model.json",
+          name: "Test Model",
+          scale: 1,
+        },
+      };
+      await renderer.initialize(config);
+      await renderer.loadModel(config.model);
+      expect(renderer.getNativeSize()).toEqual({
+        width: 400 * FIGURE_BOUNDS_PAD,
+        height: 800 * FIGURE_BOUNDS_PAD,
+      });
+      expect(renderer.getModel()?.scale.x).toBeCloseTo(
+        400 / (800 * FIGURE_BOUNDS_PAD),
+      );
+    });
+
+    it("enlarges a half-size figure from the visible pixels", async () => {
+      const config: CubismAdapterConfig = {
+        canvas: mockCanvas,
+        model: {
+          modelPath: "/test/model.json",
+          name: "Test Model",
+          scale: 1,
+        },
+      };
+      await renderer.initialize(config);
+      await renderer.loadModel(config.model);
+      const app = renderer.getApplication() as unknown as {
+        ticker: { flushOnce: () => void };
+        renderer: { extract: { pixels: jest.Mock } };
+      };
+      const pixels = new Uint8Array(400 * 400 * 4);
+      for (let y = 100; y < 300; y++) {
+        for (let x = 150; x < 250; x++) {
+          pixels[(y * 400 + x) * 4 + 3] = 255;
+        }
+      }
+      app.renderer.extract.pixels.mockReturnValue(pixels);
+      expect(renderer.getModel()?.scale.x).toBeCloseTo(0.25);
+      app.ticker.flushOnce();
+      app.ticker.flushOnce();
+      expect(renderer.getModel()?.scale.x).toBeCloseTo(0.5);
+    });
+
+    it("contain-fits the full figure inside the view", async () => {
+      const config: CubismAdapterConfig = {
+        canvas: mockCanvas,
+        model: {
+          modelPath: "/test/model.json",
+          name: "Test Model",
+          scale: 1,
+        },
+      };
+      await renderer.initialize(config);
+      await renderer.loadModel(config.model);
+      // 800x1600 in 400x400 at fill 1 → limited by height: 400/1600 = 0.25
+      expect(renderer.getModel()?.scale.x).toBeCloseTo(0.25);
+      expect(renderer.getModel()?.x).toBe(200);
+      expect(renderer.getModel()?.y).toBe(200);
+      expect(renderer.getNativeSize()).toEqual({ width: 800, height: 1600 });
+    });
+
     it("should be safe to call dispose multiple times", () => {
       expect(() => {
         renderer.dispose();
@@ -307,6 +698,42 @@ describe("PixiLive2DRenderer", () => {
       expect(PARAM_IDS.PARAM_ANGLE_Y).toBe("ParamAngleY");
       expect(PARAM_IDS.PARAM_ANGLE_Z).toBe("ParamAngleZ");
     });
+  });
+});
+
+describe("loadCubism4Settings", () => {
+  const originalFetch = globalThis.fetch;
+
+  afterEach(() => {
+    globalThis.fetch = originalFetch;
+  });
+
+  it("attaches the source URL to fetched Cubism 4 settings", async () => {
+    globalThis.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        Version: 3,
+        FileReferences: {
+          Moc: "miara.moc3",
+          Textures: ["texture_00.png"],
+        },
+      }),
+    }) as unknown as typeof fetch;
+
+    const settings = await loadCubism4Settings(
+      "file:///app/models/miara.model3.json",
+    );
+    expect(settings).toMatchObject({
+      url: "file:///app/models/miara.model3.json",
+      FileReferences: { Moc: "miara.moc3" },
+    });
+  });
+
+  it("falls back to the model path when fetch fails", async () => {
+    globalThis.fetch = jest.fn().mockRejectedValue(new Error("blocked"));
+    await expect(
+      loadCubism4Settings("/models/miara.model3.json"),
+    ).resolves.toBe("/models/miara.model3.json");
   });
 });
 

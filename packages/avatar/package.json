@@ -16,7 +16,11 @@
     "check:types": "tsc --noEmit",
     "clean": "rm -rf dist",
     "test": "jest --runInBand --forceExit",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "train:melody-atlas": "node ./scripts/train-melody-atlas.mjs",
+    "index:mesh-map": "node ./scripts/index-mesh-map.mjs",
+    "index:tile-map": "WRITE_TILE_MAP=1 jest --runInBand --forceExit src/__tests__/tile-map.test.ts",
+    "bake:identity-models": "node --experimental-strip-types ./scripts/bake-identity-models.mjs"
   },
   "keywords": [
     "avatar",
@@ -28,8 +32,9 @@
   "author": "",
   "license": "GPL-3.0-or-later",
   "dependencies": {
-    "pixi.js": "^7.4.2",
-    "pixi-live2d-display-lipsyncpatch": "^0.5.0-ls-8"
+    "@pixi/unsafe-eval": "^7.4.3",
+    "pixi-live2d-display-lipsyncpatch": "^0.5.0-ls-8",
+    "pixi.js": "^7.4.2"
   },
   "peerDependencies": {
     "deep-tree-echo-core": "workspace:*"

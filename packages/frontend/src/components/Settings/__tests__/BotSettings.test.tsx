@@ -33,8 +33,20 @@ jest.mock("../../../../../shared/logger", () => ({
 }));
 
 // Mock saveBotSettings
+const mockSetEnabled = jest.fn();
+const mockInitBot = jest.fn();
+const mockCleanupBot = jest.fn();
+
 jest.mock("../../DeepTreeEchoBot", () => ({
   saveBotSettings: jest.fn(),
+  initDeepTreeEchoBot: (...args: unknown[]) => mockInitBot(...args),
+  cleanupBot: (...args: unknown[]) => mockCleanupBot(...args),
+}));
+
+jest.mock("../../DeepTreeEchoBot/ProactiveMessaging", () => ({
+  proactiveMessaging: {
+    setEnabled: (...args: unknown[]) => mockSetEnabled(...args),
+  },
 }));
 
 // Mock PersonaCore
@@ -69,11 +81,13 @@ jest.mock("../DesktopSettingsSwitch", () => ({
     label,
     description,
     disabled,
+    callback,
   }: {
     settingsKey: string;
     label: string;
     description?: string;
     disabled?: boolean;
+    callback?: () => void;
   }) => (
     <div data-testid={`switch-${settingsKey}`}>
       <input
@@ -82,6 +96,7 @@ jest.mock("../DesktopSettingsSwitch", () => ({
         aria-label={label}
         disabled={disabled}
         data-settings-key={settingsKey}
+        onChange={() => callback?.()}
       />
       <span>{label}</span>
       {description && <span data-testid="description">{description}</span>}
@@ -260,6 +275,8 @@ describe("BotSettings", () => {
       expect(screen.getByText("General")).toBeInTheDocument();
     });
 
+    expect(screen.getByText("Avatars")).toBeInTheDocument();
+    expect(screen.getByTestId("avatar-identity-picker")).toBeInTheDocument();
     expect(screen.getByText("Capabilities")).toBeInTheDocument();
     expect(screen.getByText("API Configuration")).toBeInTheDocument();
     expect(screen.getByText("Personality")).toBeInTheDocument();
@@ -375,14 +392,14 @@ describe("BotSettings", () => {
     });
   });
 
-  it("renders advanced settings button", async () => {
+  it("renders proactive triggers & policy button", async () => {
     const mockOnNavigate = jest.fn();
 
     await act(async () => {
       render(
         <BotSettings
           settingsStore={mockSettingsStore}
-          onNavigateToAdvanced={mockOnNavigate}
+          onNavigateToProactive={mockOnNavigate}
         />,
       );
       jest.runAllTimers();
@@ -390,9 +407,32 @@ describe("BotSettings", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByRole("button", { name: "Advanced Settings" }),
+        screen.getByRole("button", { name: "Proactive Triggers & Policy" }),
       ).toBeInTheDocument();
     });
+  });
+
+  it("syncs the in-process engine when proactive is toggled while the bot is on", async () => {
+    await act(async () => {
+      render(<BotSettings settingsStore={mockSettingsStore} />);
+      jest.runAllTimers();
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId("switch-deepTreeEchoBotProactiveEnabled"),
+      ).toBeInTheDocument();
+    });
+
+    const checkbox = screen
+      .getByTestId("switch-deepTreeEchoBotProactiveEnabled")
+      .querySelector("input") as HTMLInputElement;
+
+    await act(async () => {
+      checkbox.click();
+    });
+
+    expect(mockSetEnabled).toHaveBeenCalledWith(true);
   });
 
   it("disables capability switches when bot is disabled", async () => {

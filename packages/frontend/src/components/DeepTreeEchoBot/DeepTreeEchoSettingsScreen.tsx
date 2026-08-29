@@ -3,6 +3,10 @@ import { getLogger } from "@deltachat-desktop/shared/logger";
 import BotSettings from "./BotSettings";
 import ProactiveMessagingSettings from "./ProactiveMessagingSettings";
 import TriggerManager from "./TriggerManager";
+import { AutomeshStudio } from "./AutomeshStudio";
+import { AvatarIdentityPicker } from "./AvatarIdentityPicker";
+import { MiaraExpressionPicker } from "./MiaraExpressionPicker";
+import { MiaraOutfitPicker } from "./MiaraOutfitPicker";
 import { saveBotSettings, getBotInstance } from "./DeepTreeEchoIntegration";
 import { runtime } from "@deltachat-desktop/runtime-interface";
 
@@ -10,12 +14,13 @@ const log = getLogger(
   "render/components/DeepTreeEchoBot/DeepTreeEchoSettingsScreen",
 );
 
-type SettingsTab = "general" | "proactive" | "triggers";
+type SettingsTab = "general" | "avatar" | "automesh" | "proactive" | "triggers";
 
 interface DeepTreeEchoSettingsScreenProps {
   onNavigateToMain?: () => void;
   embedded?: boolean;
   accountId?: number;
+  initialTab?: SettingsTab;
 }
 
 /**
@@ -26,12 +31,13 @@ const DeepTreeEchoSettingsScreen: React.FC<DeepTreeEchoSettingsScreenProps> = ({
   onNavigateToMain,
   embedded = false,
   accountId = 1,
+  initialTab = "general",
 }) => {
   const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState("");
   const [botVersion, setBotVersion] = useState("1.0.0");
   const [statusMessage, setStatusMessage] = useState("");
-  const [activeTab, setActiveTab] = useState<SettingsTab>("general");
+  const [activeTab, setActiveTab] = useState<SettingsTab>(initialTab);
 
   // Handle saving settings
   const handleSaveSettings = async (settings: any) => {
@@ -209,6 +215,22 @@ const DeepTreeEchoSettingsScreen: React.FC<DeepTreeEchoSettingsScreenProps> = ({
         </button>
         <button
           type="button"
+          className={`tab ${activeTab === "avatar" ? "active" : ""}`}
+          onClick={() => setActiveTab("avatar")}
+        >
+          <span className="tab-icon">👗</span>
+          Avatar
+        </button>
+        <button
+          type="button"
+          className={`tab ${activeTab === "automesh" ? "active" : ""}`}
+          onClick={() => setActiveTab("automesh")}
+        >
+          <span className="tab-icon">🧭</span>
+          Automesh
+        </button>
+        <button
+          type="button"
           className={`tab ${activeTab === "proactive" ? "active" : ""}`}
           onClick={() => setActiveTab("proactive")}
         >
@@ -259,6 +281,22 @@ const DeepTreeEchoSettingsScreen: React.FC<DeepTreeEchoSettingsScreenProps> = ({
             </div>
           </>
         )}
+
+        {activeTab === "avatar" && (
+          <div className="avatar-outfit-settings">
+            <h3>Avatars</h3>
+            <p>
+              Each identity loads its own Cubism model folder. Choose one,
+              wardrobe, or lock a Cubism face so live cognitive updates do not
+              overwrite it.
+            </p>
+            <AvatarIdentityPicker variant="panel" />
+            <MiaraOutfitPicker variant="panel" />
+            <MiaraExpressionPicker variant="panel" />
+          </div>
+        )}
+
+        {activeTab === "automesh" && <AutomeshStudio />}
 
         {activeTab === "proactive" && (
           <ProactiveMessagingSettings

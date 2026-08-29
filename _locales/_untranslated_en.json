@@ -79,5 +79,158 @@
   },
   "need_to_be_logged_out": {
     "message": "Please log out first"
+  },
+  "avatar_strip_resize": {
+    "message": "Drag to change avatar width. Double-click to fit the full figure height."
+  },
+  "miara_outfit_label": {
+    "message": "Outfit"
+  },
+  "miara_outfit_customize": {
+    "message": "Customize"
+  },
+  "miara_outfit_hue": {
+    "message": "Clothing color"
+  },
+  "miara_outfit_official": {
+    "message": "Official"
+  },
+  "miara_outfit_casual": {
+    "message": "Casual"
+  },
+  "miara_outfit_lagoon": {
+    "message": "Lagoon"
+  },
+  "miara_outfit_fairy": {
+    "message": "Fairy"
+  },
+  "miara_outfit_unadorned": {
+    "message": "Unadorned"
+  },
+  "miara_outfit_rose": {
+    "message": "Rose"
+  },
+  "miara_outfit_midnight": {
+    "message": "Midnight"
+  },
+  "miara_outfit_gold": {
+    "message": "Gold"
+  },
+  "miara_outfit_grove": {
+    "message": "Grove"
+  },
+  "miara_outfit_aria": {
+    "message": "Aria"
+  },
+  "avatar_identity_label": {
+    "message": "Avatar"
+  },
+  "avatar_identity_miara": {
+    "message": "Miara"
+  },
+  "avatar_identity_deep_tree_echo": {
+    "message": "Deep Tree Echo"
+  },
+  "avatar_identity_melody": {
+    "message": "Melody"
+  },
+  "miara_outfit_custom": {
+    "message": "Custom"
+  },
+  "miara_outfit_group_fairy": {
+    "message": "Fairy wings"
+  },
+  "miara_outfit_group_hair_accessory": {
+    "message": "Hair clip"
+  },
+  "miara_outfit_group_chest_cloth": {
+    "message": "Chest cloth"
+  },
+  "miara_outfit_group_sparkle": {
+    "message": "Sparkle"
+  },
+  "miara_outfit_group_water": {
+    "message": "Water"
+  },
+  "miara_outfit_group_background": {
+    "message": "Background"
+  },
+  "automesh_title": {
+    "message": "Automesh Melody"
+  },
+  "automesh_blurb": {
+    "message": "Map a reference portrait onto the official Miara Cubism mesh. Landmarks are the Editor-style mesh-to-art pins. Inspect reads live drawable UVs; Train warps the photo onto the texture atlas and binds it as Melody."
+  },
+  "automesh_load": {
+    "message": "Load reference"
+  },
+  "automesh_load_melody": {
+    "message": "Use shipped Melody still"
+  },
+  "automesh_inspect": {
+    "message": "Inspect mesh"
+  },
+  "automesh_train": {
+    "message": "Train and apply"
+  },
+  "automesh_status_loaded": {
+    "message": "Reference loaded. Drag pins onto eyes, mouth, hair, and collar."
+  },
+  "automesh_status_no_mesh": {
+    "message": "Live mesh is not ready. Open the avatar strip first."
+  },
+  "automesh_status_inspected": {
+    "message": "Read drawables"
+  },
+  "automesh_status_need_image": {
+    "message": "Load a Melody reference image first."
+  },
+  "automesh_status_applied": {
+    "message": "Melody atlas bound."
+  },
+  "automesh_status_saved": {
+    "message": "Mapping saved. Reopen the avatar to bind the atlas."
+  },
+  "automesh_status_failed": {
+    "message": "Automesh failed."
+  },
+  "automesh_saved_residual": {
+    "message": "Saved mapping residual"
+  },
+  "avatar_expression_label": {
+    "message": "Expression"
+  },
+  "avatar_expression_live": {
+    "message": "Live"
+  },
+  "avatar_expression_neutral": {
+    "message": "Neutral"
+  },
+  "avatar_expression_smile": {
+    "message": "Smile"
+  },
+  "avatar_expression_laugh": {
+    "message": "Laugh"
+  },
+  "avatar_expression_gentle": {
+    "message": "Gentle"
+  },
+  "avatar_expression_speak": {
+    "message": "Speak"
+  },
+  "avatar_expression_awe": {
+    "message": "Awe"
+  },
+  "avatar_expression_surprise": {
+    "message": "Surprise"
+  },
+  "avatar_expression_curious": {
+    "message": "Curious"
+  },
+  "avatar_expression_think": {
+    "message": "Think"
+  },
+  "avatar_expression_sad": {
+    "message": "Sad"
   }
 }

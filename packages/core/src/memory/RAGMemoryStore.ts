@@ -3,6 +3,10 @@ import { MemoryStorage, InMemoryStorage } from "./storage";
 
 const log = getLogger("deep-tree-echo-core/memory/RAGMemoryStore");
 
+export const RAG_MEMORY_KEY = "deepTreeEchoBotMemories";
+export const RAG_REFLECTION_KEY = "deepTreeEchoBotReflections";
+export const MEMORY_ENABLED_KEY = "deepTreeEchoBotMemoryEnabled";
+
 // Default configuration
 const DEFAULT_MEMORY_LIMIT = 1000;
 const DEFAULT_REFLECTION_LIMIT = 100;
@@ -19,6 +23,22 @@ export interface Memory {
   sender: "user" | "bot";
   text: string;
   embedding?: number[]; // Vector embedding for semantic search
+  tombstoned?: boolean;
+  pinned?: boolean;
+}
+
+export interface ScoredMemory {
+  memory: Memory;
+  score: number;
+  tfidfScore: number;
+  embeddingScore: number;
+}
+
+export class UnknownMemoryError extends Error {
+  constructor(public readonly memoryId: string) {
+    super(`Unknown memory id: ${memoryId}`);
+    this.name = "UnknownMemoryError";
+  }
 }
 
 /**
@@ -44,6 +64,8 @@ export class RAGMemoryStore {
   private memoryLimit: number;
   private reflectionLimit: number;
   private idfScoresCache: Map<string, number> | null = null;
+  private loadPromise: Promise<void>;
+  private loadError: Error | null = null;
 
   constructor(
     storage?: MemoryStorage,
@@ -52,7 +74,47 @@ export class RAGMemoryStore {
     this.storage = storage || new InMemoryStorage();
     this.memoryLimit = options?.memoryLimit || DEFAULT_MEMORY_LIMIT;
     this.reflectionLimit = options?.reflectionLimit || DEFAULT_REFLECTION_LIMIT;
-    this.loadMemories();
+    this.loadPromise = this.loadMemories();
+  }
+
+  /**
+   * Wait for initial load. Rejects when a RAG JSON key fails to parse.
+   */
+  public async ready(): Promise<void> {
+    await this.loadPromise;
+    if (this.loadError) {
+      throw this.loadError;
+    }
+  }
+
+  /**
+   * Re-read conversation and reflection keys from storage.
+   * Used after apply-restore so in-memory rows match snapshot bytes.
+   */
+  public async reload(): Promise<void> {
+    const enabled = this.enabled;
+    this.memories = [];
+    this.reflections = [];
+    this.idfScoresCache = null;
+    this.loadError = null;
+    this.loadPromise = this.loadMemories();
+    await this.ready();
+    this.enabled = enabled;
+  }
+
+  public async restoreLists(
+    memories: Memory[],
+    reflections: ReflectionMemory[],
+  ): Promise<void> {
+    const enabled = this.enabled;
+    this.memories = memories.map((memory) => ({
+      ...memory,
+      embedding: memory.embedding ? [...memory.embedding] : undefined,
+    }));
+    this.reflections = reflections.map((item) => ({ ...item }));
+    this.idfScoresCache = null;
+    await this.saveMemories();
+    this.enabled = enabled;
   }
 
   /**
@@ -76,40 +138,54 @@ export class RAGMemoryStore {
   private async loadMemories(): Promise<void> {
     try {
       // Load conversation memories
-      const memoriesData = await this.storage.load("deepTreeEchoBotMemories");
+      const memoriesData = await this.storage.load(RAG_MEMORY_KEY);
       if (memoriesData) {
         try {
           this.memories = JSON.parse(memoriesData);
+          for (const memory of this.memories) {
+            if (
+              !memory.embedding ||
+              memory.embedding.length !== EMBEDDING_DIMENSIONS
+            ) {
+              memory.embedding = this.generateEmbedding(memory.text);
+            }
+          }
           log.info(`Loaded ${this.memories.length} conversation memories`);
         } catch (error) {
+          this.loadError = new Error(
+            `Invalid JSON in ${RAG_MEMORY_KEY}: ${
+              error instanceof Error ? error.message : String(error)
+            }`,
+          );
           log.error("Failed to parse conversation memories:", error);
-          this.memories = [];
+          return;
         }
       }
 
       // Load reflection memories
-      const reflectionsData = await this.storage.load(
-        "deepTreeEchoBotReflections",
-      );
+      const reflectionsData = await this.storage.load(RAG_REFLECTION_KEY);
       if (reflectionsData) {
         try {
           this.reflections = JSON.parse(reflectionsData);
           log.info(`Loaded ${this.reflections.length} reflection memories`);
         } catch (error) {
+          this.loadError = new Error(
+            `Invalid JSON in ${RAG_REFLECTION_KEY}: ${
+              error instanceof Error ? error.message : String(error)
+            }`,
+          );
           log.error("Failed to parse reflection memories:", error);
-          this.reflections = [];
+          return;
         }
       }
 
       // Load memory enabled setting
-      const enabledData = await this.storage.load(
-        "deepTreeEchoBotMemoryEnabled",
-      );
+      const enabledData = await this.storage.load(MEMORY_ENABLED_KEY);
       this.enabled = enabledData === "true";
     } catch (error) {
       log.error("Failed to load memories:", error);
-      this.memories = [];
-      this.reflections = [];
+      this.loadError =
+        error instanceof Error ? error : new Error(String(error));
     }
   }
 
@@ -118,17 +194,14 @@ export class RAGMemoryStore {
    */
   private async saveMemories(): Promise<void> {
     try {
-      // Save conversation memories - limit to configured max to prevent excessive storage
-      const trimmedMemories = this.memories.slice(-this.memoryLimit);
-      await this.storage.save(
-        "deepTreeEchoBotMemories",
-        JSON.stringify(trimmedMemories),
-      );
+      const trimmedMemories = this.trimLiveMemories(this.memories);
+      this.memories = trimmedMemories;
+      await this.storage.save(RAG_MEMORY_KEY, JSON.stringify(trimmedMemories));
 
-      // Save reflection memories - limit to configured max
       const trimmedReflections = this.reflections.slice(-this.reflectionLimit);
+      this.reflections = trimmedReflections;
       await this.storage.save(
-        "deepTreeEchoBotReflections",
+        RAG_REFLECTION_KEY,
         JSON.stringify(trimmedReflections),
       );
 
@@ -136,6 +209,21 @@ export class RAGMemoryStore {
     } catch (error) {
       log.error("Failed to save memories:", error);
     }
+  }
+
+  private trimLiveMemories(memories: Memory[]): Memory[] {
+    const liveIds = memories
+      .filter((memory) => !memory.tombstoned)
+      .slice(-this.memoryLimit)
+      .map((memory) => memory.id);
+    const keepLive = new Set(liveIds);
+    return memories.filter(
+      (memory) => memory.tombstoned || keepLive.has(memory.id),
+    );
+  }
+
+  private liveMemories(): Memory[] {
+    return this.memories.filter((memory) => !memory.tombstoned);
   }
 
   /**
@@ -259,7 +347,7 @@ export class RAGMemoryStore {
    * Retrieve all memories for a specific chat
    */
   public getMemoriesByChat(chatId: number): Memory[] {
-    return this.memories
+    return this.liveMemories()
       .filter((mem) => mem.chatId === chatId)
       .sort((a, b) => a.timestamp - b.timestamp);
   }
@@ -268,7 +356,7 @@ export class RAGMemoryStore {
    * Retrieve recent memories across all chats, ordered by timestamp
    */
   public retrieveRecentMemories(count: number = 10): string[] {
-    return this.memories
+    return this.liveMemories()
       .sort((a, b) => b.timestamp - a.timestamp)
       .slice(0, count)
       .map(
@@ -313,20 +401,28 @@ export class RAGMemoryStore {
    * Ranks results by relevance score combining term frequency, embedding similarity, and recency
    */
   public searchMemories(query: string, limit: number = 5): Memory[] {
-    if (this.memories.length === 0) return [];
+    return this.searchMemoriesWithScores(query, limit).map(
+      (item) => item.memory,
+    );
+  }
 
-    // Tokenize query
+  /**
+   * Search memories and keep component scores for ranking callers.
+   */
+  public searchMemoriesWithScores(
+    query: string,
+    limit: number = 5,
+  ): ScoredMemory[] {
+    const live = this.liveMemories();
+    if (live.length === 0) return [];
+
     const queryTokens = this.tokenize(query);
     if (queryTokens.length === 0) return [];
 
-    // Generate query embedding for semantic similarity
     const queryEmbedding = this.generateEmbedding(query);
-
-    // Calculate IDF for all terms in corpus
     const idfScores = this.calculateIDF();
 
-    // Score each memory
-    const scoredMemories = this.memories.map((memory) => {
+    const scoredMemories = live.map((memory) => {
       const memoryTokens = this.tokenize(memory.text);
       const tfidfScore = this.calculateTFIDF(
         queryTokens,
@@ -334,7 +430,6 @@ export class RAGMemoryStore {
         idfScores,
       );
 
-      // Calculate embedding similarity if embeddings exist
       let embeddingScore = 0;
       if (
         memory.embedding &&
@@ -346,23 +441,19 @@ export class RAGMemoryStore {
         );
       }
 
-      // Apply recency boost (more recent = higher boost)
       const ageInDays = (Date.now() - memory.timestamp) / (1000 * 60 * 60 * 24);
-      const recencyBoost = Math.exp(-ageInDays / 30); // Decay over 30 days
+      const recencyBoost = Math.exp(-ageInDays / 30);
 
-      // Combine scores: 40% TF-IDF, 40% embedding, 20% recency
-      const finalScore =
+      const score =
         tfidfScore * 0.4 + embeddingScore * 0.4 + recencyBoost * 0.2;
 
-      return { memory, score: finalScore };
+      return { memory, score, tfidfScore, embeddingScore };
     });
 
-    // Filter out zero-score results and sort by score
     return scoredMemories
       .filter((item) => item.score > 0)
       .sort((a, b) => b.score - a.score)
-      .slice(0, limit)
-      .map((item) => item.memory);
+      .slice(0, limit);
   }
 
   /**
@@ -373,7 +464,7 @@ export class RAGMemoryStore {
 
     const queryEmbedding = this.generateEmbedding(query);
 
-    const scoredMemories = this.memories
+    const scoredMemories = this.liveMemories()
       .filter((m) => m.embedding && m.embedding.length === EMBEDDING_DIMENSIONS)
       .map((memory) => ({
         memory,
@@ -497,10 +588,10 @@ export class RAGMemoryStore {
     }
 
     const documentFrequency = new Map<string, number>();
-    const totalDocs = this.memories.length;
+    const live = this.liveMemories();
+    const totalDocs = live.length;
 
-    // Count document frequency for each term
-    this.memories.forEach((memory) => {
+    live.forEach((memory) => {
       const uniqueTokens = new Set(this.tokenize(memory.text));
       uniqueTokens.forEach((token) => {
         documentFrequency.set(token, (documentFrequency.get(token) || 0) + 1);
@@ -556,23 +647,31 @@ export class RAGMemoryStore {
     memoryId: string,
     threshold: number = 0.5,
   ): Memory[] {
-    const targetMemory = this.memories.find((m) => m.id === memoryId);
+    return this.findSimilarMemoriesWithScores(memoryId, threshold).map(
+      (item) => item.memory,
+    );
+  }
+
+  public findSimilarMemoriesWithScores(
+    memoryId: string,
+    threshold: number = 0.5,
+  ): Array<{ memory: Memory; score: number }> {
+    const live = this.liveMemories();
+    const targetMemory = live.find((m) => m.id === memoryId);
     if (!targetMemory) return [];
 
     const targetTokens = this.tokenize(targetMemory.text);
     const idfScores = this.calculateIDF();
 
-    return this.memories
+    return live
       .filter((m) => m.id !== memoryId)
       .map((memory) => {
-        // TF-IDF similarity
         const tfidfSim = this.calculateCosineSimilarity(
           targetTokens,
           this.tokenize(memory.text),
           idfScores,
         );
 
-        // Embedding similarity
         let embeddingSim = 0;
         if (
           targetMemory.embedding &&
@@ -586,14 +685,11 @@ export class RAGMemoryStore {
           );
         }
 
-        // Combine: 50% TF-IDF, 50% embedding
-        const similarity = tfidfSim * 0.5 + embeddingSim * 0.5;
-
-        return { memory, similarity };
+        const score = tfidfSim * 0.5 + embeddingSim * 0.5;
+        return { memory, score };
       })
-      .filter((item) => item.similarity >= threshold)
-      .sort((a, b) => b.similarity - a.similarity)
-      .map((item) => item.memory);
+      .filter((item) => item.score >= threshold)
+      .sort((a, b) => b.score - a.score);
   }
 
   /**
@@ -656,10 +752,62 @@ export class RAGMemoryStore {
     chatId: number,
     messageLimit: number = 10,
   ): Memory[] {
-    return this.memories
+    return this.liveMemories()
       .filter((mem) => mem.chatId === chatId)
       .sort((a, b) => b.timestamp - a.timestamp)
       .slice(0, messageLimit)
       .sort((a, b) => a.timestamp - b.timestamp);
+  }
+
+  public listMemories(): Memory[] {
+    return [...this.memories];
+  }
+
+  public listLiveMemories(): Memory[] {
+    return this.liveMemories();
+  }
+
+  public listReflections(): ReflectionMemory[] {
+    return [...this.reflections];
+  }
+
+  public getMemory(id: string): Memory {
+    const memory = this.memories.find((item) => item.id === id);
+    if (!memory) {
+      throw new UnknownMemoryError(id);
+    }
+    return memory;
+  }
+
+  public async replaceMemory(
+    id: string,
+    patch: Partial<Pick<Memory, "text" | "pinned" | "tombstoned">>,
+  ): Promise<Memory> {
+    if (!this.enabled) {
+      throw new Error("Memory system is disabled");
+    }
+    const index = this.memories.findIndex((item) => item.id === id);
+    if (index < 0) {
+      throw new UnknownMemoryError(id);
+    }
+    const current = this.memories[index];
+    const nextText = patch.text ?? current.text;
+    const updated: Memory = {
+      ...current,
+      ...patch,
+      text: nextText,
+      embedding:
+        patch.text !== undefined
+          ? this.generateEmbedding(nextText)
+          : current.embedding,
+    };
+    this.memories[index] = updated;
+    this.idfScoresCache = null;
+    await this.saveMemories();
+    return updated;
+  }
+
+  public async tombstoneMemory(id: string): Promise<Memory> {
+    return this.replaceMemory(id, { tombstoned: true });
   }
 }

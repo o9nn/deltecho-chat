@@ -23,6 +23,7 @@ export interface ResponsiveSpriteAvatarProps {
   className?: string;
   width?: number;
   height?: number;
+  rounded?: boolean;
 }
 
 /**
@@ -35,6 +36,7 @@ export const ResponsiveSpriteAvatar: React.FC<ResponsiveSpriteAvatarProps> = ({
   className,
   width,
   height,
+  rounded = true,
 }) => {
   // Determine the best sprite based on state
   const currentSprite = useMemo(() => {
@@ -94,7 +96,7 @@ export const ResponsiveSpriteAvatar: React.FC<ResponsiveSpriteAvatarProps> = ({
         width: width || "100%",
         height: height || "100%",
         overflow: "hidden",
-        borderRadius: "50%", // Assuming circular avatar for now, or use CSS class
+        borderRadius: rounded ? "50%" : 0,
         position: "relative",
         display: "flex",
         alignItems: "center",

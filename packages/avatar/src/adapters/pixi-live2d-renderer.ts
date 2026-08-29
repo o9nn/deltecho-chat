@@ -14,6 +14,37 @@ import type {
   CubismAdapterConfig,
   CubismModelInfo,
 } from "./cubism-adapter";
+import {
+  FIGURE_BOUNDS_PAD,
+  measureFigureBounds,
+  measureOpaquePixelBounds,
+  padFigureBounds,
+  type DrawableBox,
+} from "./live2d-figure-bounds";
+import {
+  ALL_MIARA_WARDROBE_PART_IDS,
+  collectHiddenPartIds,
+  partIdMatchesHiddenGroups,
+  finalizeMiaraOutfit,
+  type MiaraOutfitState,
+} from "../miara-outfits";
+import { MIARA_EXPRESSION_MAP } from "../miara-expressions";
+import {
+  applyMeshDeform,
+  applyPhysicsRetarget,
+  figureFromDrawables,
+  isEnvironmentDrawable,
+  namePhysicsSettings,
+  restorePhysicsRig,
+  snapshotPhysicsRig,
+  uvCentroid,
+  type AutomeshDrawable,
+  type FigureBounds,
+  type IdentityRig,
+  type MutablePositions,
+  type PhysicsRigLike,
+  type PhysicsRigSnapshot,
+} from "../automesh";
 
 /**
  * Live2D model reference type (from pixi-live2d-display)
@@ -21,6 +52,8 @@ import type {
 interface Live2DModel {
   x: number;
   y: number;
+  width?: number;
+  height?: number;
   scale: { x: number; y: number; set: (x: number, y?: number) => void };
   anchor: { x: number; y: number; set: (x: number, y?: number) => void };
   internalModel: {
@@ -32,11 +65,56 @@ interface Live2DModel {
       ) => Promise<boolean>;
       stopAllMotions: () => void;
     };
+    width?: number;
+    height?: number;
+    on?: (event: string, listener: () => void) => void;
+    off?: (event: string, listener: () => void) => void;
+    getDrawableIDs?: () => string[];
+    getDrawableBounds?: (
+      index: number,
+      bounds?: { x: number; y: number; width: number; height: number },
+    ) => { x: number; y: number; width: number; height: number };
+    update?: (dt: number, now: number) => void;
+    textures?: unknown[];
+    physics?: {
+      _physicsRig?: PhysicsRigLike;
+      rig?: PhysicsRigLike;
+    };
     coreModel: {
       setParameterValueById: (id: string, value: number) => void;
       getParameterValueById: (id: string) => number;
+      setPartOpacityById?: (id: string, value: number) => void;
+      getPartOpacityById?: (id: string) => number;
+      setPartOpacityByIndex?: (index: number, value: number) => void;
+      setPartOpacity?: (index: number, value: number) => void;
+      getPartIndex?: (id: string) => number;
+      getPartCount?: () => number;
+      getPartId?: (index: number) => unknown;
+      getDrawableVertexUvs?: (index: number) => ArrayLike<number>;
+      getDrawableUvs?: (index: number) => ArrayLike<number>;
+      getDrawableVertexPositions?: (index: number) => MutablePositions;
+      getDrawableVertices?: (index: number) => MutablePositions;
+      getDrawableCount?: () => number;
+      getDrawableVertexIndices?: (index: number) => ArrayLike<number>;
+      getDrawableIndices?: (index: number) => ArrayLike<number>;
+      getModel?: () => {
+        parts?: {
+          count: number;
+          ids: ArrayLike<string>;
+          opacities: Float32Array | number[];
+        };
+        drawables?: {
+          vertexUvs?: Array<ArrayLike<number>>;
+          uvs?: Array<ArrayLike<number>>;
+          vertexPositions?: Array<ArrayLike<number>>;
+          positions?: Array<ArrayLike<number>>;
+          indices?: Array<ArrayLike<number>>;
+          vertexIndices?: Array<ArrayLike<number>>;
+        };
+      };
     };
   };
+  textures?: Array<{ destroy?: (destroyBase?: boolean) => void } | unknown>;
   expression: (name?: string) => void;
   motion: (
     group: string,
@@ -56,16 +134,7 @@ interface Live2DModel {
  * Expression to Live2D expression name mapping
  */
 const DEFAULT_EXPRESSION_MAP: Record<Expression, string> = {
-  neutral: "neutral",
-  happy: "happy",
-  thinking: "thinking",
-  curious: "curious",
-  surprised: "surprised",
-  concerned: "sad",
-  focused: "focused",
-  playful: "happy",
-  contemplative: "thinking",
-  empathetic: "neutral",
+  ...MIARA_EXPRESSION_MAP,
 };
 
 /**
@@ -143,14 +212,95 @@ export interface PixiLive2DConfig extends Omit<CubismAdapterConfig, "canvas"> {
  * - Real-time lip sync from audio levels
  * - Eye blinking
  */
+/** Serialize Cubism `from()` so two Pixi GL contexts cannot share one runtime. */
+let live2dFromLock: Promise<void> = Promise.resolve();
+
+function cubismIdToString(id: unknown): string {
+  if (typeof id === "string") return id;
+  if (id && typeof id === "object") {
+    const handle = id as {
+      getString?: () => string;
+      s?: string;
+      id?: string;
+    };
+    if (typeof handle.getString === "function") {
+      return handle.getString();
+    }
+    if (typeof handle.s === "string") return handle.s;
+    if (typeof handle.id === "string") return handle.id;
+  }
+  return String(id ?? "");
+}
+
+function withLive2DFromLock<T>(fn: () => Promise<T>): Promise<T> {
+  const previous = live2dFromLock;
+  let release: () => void = () => undefined;
+  live2dFromLock = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  return previous.then(fn).finally(() => release());
+}
+
+function resolveTextureSource(source: string): string {
+  if (source.startsWith("data:") || /^https?:\/\//i.test(source)) {
+    return source;
+  }
+  if (typeof window !== "undefined" && window.location?.href) {
+    try {
+      return new URL(source, window.location.href).href;
+    } catch {
+      return source;
+    }
+  }
+  return source;
+}
+
+async function loadPixiTexture(source: string): Promise<unknown> {
+  const resolved = resolveTextureSource(source);
+  const { Texture } = await import("pixi.js");
+  const fromUrl = (
+    Texture as {
+      fromURL?: (url: string) => Promise<unknown>;
+    }
+  ).fromURL;
+  if (typeof fromUrl === "function" && !resolved.startsWith("data:")) {
+    return fromUrl(resolved);
+  }
+  const texture = Texture.from(resolved) as {
+    baseTexture?: {
+      valid?: boolean;
+      once?: (event: string, listener: () => void) => void;
+    };
+  };
+  const base = texture.baseTexture;
+  if (base && !base.valid && typeof base.once === "function") {
+    await new Promise<void>((resolve, reject) => {
+      base.once?.("loaded", () => resolve());
+      base.once?.("error", () =>
+        reject(new Error(`texture overlay failed: ${source}`)),
+      );
+    });
+  }
+  return texture;
+}
+
 export class PixiLive2DRenderer implements ICubismRenderer {
   private app: Application | null = null;
   private model: Live2DModel | null = null;
   private config: PixiLive2DConfig | null = null;
   private initialized = false;
+  private loadGeneration = 0;
+  /** How much of the view the full figure should occupy (0-1). */
+  private viewFill = 0.9;
+  private modelNativeSize: { width: number; height: number } | null = null;
+  private modelCanvasSize: { width: number; height: number } | null = null;
+  /** Offset from canvas center to the visual figure center, in native units. */
+  private modelVisualCenterOffset = { x: 0, y: 0 };
   private currentExpression: Expression = "neutral";
   private lipSyncValue = 0;
   private isBlinking = false;
+  private originalTexture0: unknown = null;
+  private overlaySource: string | null = null;
   private blinkTimer: ReturnType<typeof setTimeout> | null = null;
   private blinkOpenTimer: ReturnType<typeof setTimeout> | null = null;
   private manualBlinkTimer: ReturnType<typeof setTimeout> | null = null;
@@ -163,6 +313,18 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   private visibilityHandler: (() => void) | null = null;
   private blinkTickerCallback: ((deltaMS: number) => void) | null = null;
   private frameListeners = new Set<(deltaTime: number) => void>();
+  private viewCanvas: HTMLCanvasElement | null = null;
+  private appliedOutfit: MiaraOutfitState | null = null;
+  private hiddenWardrobePartIds = new Set<string>();
+  private wardrobeUpdateHook: (() => void) | null = null;
+  private identityRig: IdentityRig | null = null;
+  private deformFigure: FigureBounds | null = null;
+  private deformSkipIds = new Set<string>();
+  private deformFrame = 0;
+  private deformHookAttached = false;
+  private originalInternalUpdate: ((dt: number, now: number) => void) | null =
+    null;
+  private physicsSnapshot: PhysicsRigSnapshot | null = null;
 
   /**
    * Stop automatic blink loop and clear any pending timers.
@@ -208,12 +370,26 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   async initialize(config: CubismAdapterConfig): Promise<void> {
     this.config = config as PixiLive2DConfig;
 
-    // Dynamically import PixiJS and pixi-live2d-display-lipsyncpatch
-    const [{ Application }, { Live2DModel: Live2DModelClass }] =
-      await Promise.all([
-        import("pixi.js"),
-        import("pixi-live2d-display-lipsyncpatch/cubism4"),
-      ]);
+    // Dynamically import PixiJS and the Cubism 4 Live2D factory.
+    // The cubism4 entry registers Cubism 3/4 settings; the package root
+    // can leave model3.json unrecognized ("Unknown settings format").
+    const [pixi, live2d, { install }] = await Promise.all([
+      import("pixi.js"),
+      import("pixi-live2d-display-lipsyncpatch/cubism4"),
+      import("@pixi/unsafe-eval"),
+    ]);
+    // Desktop CSP forbids eval; patch Pixi shaders before Application exists.
+    install(pixi);
+    // pixi-live2d-display looks up PIXI.Ticker on the global when no ticker
+    // is passed to Live2DModel.from().
+    if (typeof window !== "undefined") {
+      (window as Window & { PIXI?: typeof pixi }).PIXI = pixi;
+    }
+    if (typeof live2d.cubism4Ready === "function") {
+      await live2d.cubism4Ready();
+    }
+    const { Live2DModel: Live2DModelClass } = live2d;
+    const { Application } = pixi;
 
     // Get or create canvas element
     let canvas: HTMLCanvasElement;
@@ -305,6 +481,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       };
     }
 
+    this.viewCanvas = canvas;
     this.initialized = true;
     this.dlog("Initialized successfully");
   }
@@ -317,10 +494,18 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       throw new Error("Renderer not initialized");
     }
 
-    // Dynamically import Live2DModel
-    const { Live2DModel: Live2DModelClass } = await import(
+    // Dynamically import the Cubism 4 Live2D factory (registers model3.json).
+    const { Live2DModel: Live2DModelClass, cubism4Ready } = await import(
       "pixi-live2d-display-lipsyncpatch/cubism4"
     );
+    if (typeof cubism4Ready === "function") {
+      await cubism4Ready();
+    }
+
+    const source = await loadCubism4Settings(modelInfo.modelPath);
+    if (!this.app || !this.initialized) {
+      return;
+    }
 
     // Dispose existing model and any model-bound blink timers.
     // Aggressive cleanup to prevent memory leaks, as per Live2D performance skill.
@@ -351,26 +536,40 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       this.blinkTickerCallback = null;
     }
 
+    const generation = ++this.loadGeneration;
+
     try {
-      // Load the model with autoInteract for cursor eye-tracking
-      const model = (await Live2DModelClass.from(modelInfo.modelPath, {
-        autoInteract: true,
-        autoUpdate: true,
-      })) as unknown as Live2DModel;
+      // Pass parsed settings (with url) so file:// XHR JSON MIME issues
+      // cannot collapse model3.json into "Unknown settings format".
+      const model = (await withLive2DFromLock(() =>
+        Live2DModelClass.from(source, {
+          ticker: this.app?.ticker,
+          autoFocus: true,
+          autoHitTest: true,
+          autoUpdate: true,
+        }),
+      )) as unknown as Live2DModel;
+
+      if (
+        generation !== this.loadGeneration ||
+        !this.app ||
+        !this.initialized
+      ) {
+        model.destroy();
+        return;
+      }
+
+      this.detachWardrobeHook();
+      this.detachDeformHook();
+      this.physicsSnapshot = null;
+      this.deformFigure = null;
       this.model = model;
-
-      // Position and scale the model
-      const scale = modelInfo.scale ?? 0.25;
-      model.scale.set(scale, scale);
-      model.anchor.set(0.5, 0.5);
-
-      this.startAutoBlinkLoop(); // Start the blink loop after model is loaded
-
-      // Center in canvas
-      if (this.app.view) {
-        const canvas = this.app.view as HTMLCanvasElement;
-        model.x = canvas.width / 2 + (modelInfo.offset?.x ?? 0);
-        model.y = canvas.height / 2 + (modelInfo.offset?.y ?? 0);
+      this.originalTexture0 = model.textures?.[0] ?? null;
+      this.overlaySource = null;
+      this.attachWardrobeHook();
+      this.attachDeformHook();
+      if (this.identityRig?.physics && !this.identityRig.bakedPhysics) {
+        this.applyPhysicsProfile(this.identityRig.physics);
       }
 
       // Defensively clear stage in case a previous model left children behind.
@@ -382,11 +581,20 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       if (typeof stageWithRemove.removeChildren === "function") {
         stageWithRemove.removeChildren();
       }
-      // Add to stage
+      // Add to stage before measuring bounds so width/height are valid.
       this.app.stage.addChild(model as unknown as Container);
+      this.model.scale.set(1, 1);
+      this.modelCanvasSize = null;
+      this.refreshModelLayout(modelInfo.scale, modelInfo.offset);
+      this.scheduleNativeMetricsRefresh();
+      this.scheduleVisibleFillCorrection();
 
       // Start auto-blink (ticker-based for proper sync with PixiJS rAF loop)
       this.startAutoBlinkLoop();
+
+      if (this.appliedOutfit) {
+        this.applyOutfit(this.appliedOutfit);
+      }
 
       this.dlog(`Model loaded: ${modelInfo.name}`);
     } catch (error) {
@@ -405,8 +613,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     const expressionName = this.expressionMap[expression] ?? "neutral";
 
     try {
-      // Try to set expression using the expression() method
-      this.model.expression(expressionName);
+      this.applyCubismExpression(expressionName);
 
       // Also adjust facial parameters based on intensity
       this.adjustFacialParameters(expression, intensity);
@@ -421,6 +628,27 @@ export class PixiLive2DRenderer implements ICubismRenderer {
         "[PixiLive2DRenderer] Expression not available:",
         expressionName,
       );
+    }
+  }
+
+  /**
+   * Play a named Cubism expression from the model3.json Expressions list.
+   * Returns false when the runtime or name is unavailable.
+   */
+  setNamedExpression(name: string): boolean {
+    if (!this.model || !this.initialized) return false;
+    return this.applyCubismExpression(name);
+  }
+
+  private applyCubismExpression(name: string): boolean {
+    if (!this.model) return false;
+    try {
+      this.model.expression(name);
+      this.dlog(`Cubism expression: ${name}`);
+      return true;
+    } catch (_error) {
+      console.warn("[PixiLive2DRenderer] Expression not available:", name);
+      return false;
     }
   }
 
@@ -650,6 +878,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     if (ticker && typeof ticker.add === "function") {
       this.scheduleNextBlink(); // Schedule initial blink
       this.blinkTickerCallback = (_deltaMS: number) => {
+        this.enforceHiddenWardrobeParts();
         const now = performance.now();
         if (now >= this.nextBlinkAt && this.blinkCloseUntil === 0) {
           const core = this.model?.internalModel?.coreModel;
@@ -725,6 +954,289 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   }
 
   /**
+   * Scale the full figure to fit inside the current Pixi screen (contain),
+   * then center it. `scale` is a fill factor (0-1), not a raw Cubism scale.
+   */
+  fitModelToView(scale?: number, offset?: { x?: number; y?: number }): void {
+    if (!this.model || !this.app) return;
+    if (typeof scale === "number" && Number.isFinite(scale) && scale > 0) {
+      this.viewFill = Math.min(1, Math.max(0.1, scale));
+    }
+    const screen = (
+      this.app as Application & {
+        screen?: { width: number; height: number };
+      }
+    ).screen;
+    const view = this.app.view as HTMLCanvasElement | undefined;
+    const width = screen?.width || view?.clientWidth || view?.width || 0;
+    const height = screen?.height || view?.clientHeight || view?.height || 0;
+    const native = this.modelNativeSize ?? this.measureModelNativeSize();
+    if (native.width > 0 && native.height > 0 && width > 0 && height > 0) {
+      const nextScale =
+        Math.min(width / native.width, height / native.height) * this.viewFill;
+      this.model.scale.set(nextScale, nextScale);
+      this.model.anchor.set(0.5, 0.5);
+      this.model.x =
+        width / 2 -
+        this.modelVisualCenterOffset.x * nextScale +
+        (offset?.x ?? this.config?.model.offset?.x ?? 0);
+      this.model.y =
+        height / 2 -
+        this.modelVisualCenterOffset.y * nextScale +
+        (offset?.y ?? this.config?.model.offset?.y ?? 0);
+      return;
+    }
+    this.model.scale.set(this.viewFill, this.viewFill);
+    this.model.anchor.set(0.5, 0.5);
+    this.model.x = width / 2 + (offset?.x ?? this.config?.model.offset?.x ?? 0);
+    this.model.y =
+      height / 2 + (offset?.y ?? this.config?.model.offset?.y ?? 0);
+  }
+
+  private captureModelNativeMetrics(): void {
+    this.modelNativeSize = this.measureModelNativeSize();
+  }
+
+  private refreshModelLayout(
+    scale?: number,
+    offset?: { x?: number; y?: number },
+  ): void {
+    this.syncInternalModel();
+    this.captureModelNativeMetrics();
+    this.fitModelToView(scale, offset);
+  }
+
+  /**
+   * Vertices are empty until Cubism runs one update. Push that update now,
+   * then again on the next ticker tick once motions have sampled.
+   */
+  private syncInternalModel(): void {
+    const update = this.model?.internalModel?.update;
+    if (typeof update !== "function") return;
+    try {
+      const now =
+        typeof performance !== "undefined" &&
+        typeof performance.now === "function"
+          ? performance.now()
+          : Date.now();
+      update.call(this.model?.internalModel, 16, now);
+    } catch {
+      /* model may not be ready for a manual update */
+    }
+  }
+
+  private scheduleNativeMetricsRefresh(): void {
+    const ticker = this.app?.ticker as
+      | { addOnce?: (cb: () => void) => void }
+      | undefined;
+    if (typeof ticker?.addOnce !== "function") return;
+    const generation = this.loadGeneration;
+    ticker.addOnce(() => {
+      if (
+        generation !== this.loadGeneration ||
+        !this.model ||
+        !this.initialized
+      ) {
+        return;
+      }
+      this.refreshModelLayout();
+    });
+  }
+
+  /**
+   * Visual figure size in native Cubism units. Prefers the standing-character
+   * mesh cluster so water / background planes do not shrink the figure.
+   */
+  private getModelCanvasSize(): { width: number; height: number } {
+    if (this.modelCanvasSize) return this.modelCanvasSize;
+    if (!this.model) return { width: 0, height: 0 };
+    const internalWidth = this.model.internalModel?.width;
+    const internalHeight = this.model.internalModel?.height;
+    const scaleX = Math.abs(this.model.scale.x) || 1;
+    const scaleY = Math.abs(this.model.scale.y) || 1;
+    const size =
+      internalWidth && internalHeight
+        ? { width: internalWidth, height: internalHeight }
+        : {
+            width: (this.model.width || 0) / scaleX,
+            height: (this.model.height || 0) / scaleY,
+          };
+    if (size.width > 0 && size.height > 0) {
+      this.modelCanvasSize = size;
+    }
+    return size;
+  }
+
+  private measureModelNativeSize(): { width: number; height: number } {
+    if (!this.model) return { width: 0, height: 0 };
+    const { width: canvasWidth, height: canvasHeight } =
+      this.getModelCanvasSize();
+    const tight = this.measureDrawableBounds(canvasWidth, canvasHeight);
+    if (tight && tight.width > 0 && tight.height > 0) {
+      const padded = padFigureBounds(tight, FIGURE_BOUNDS_PAD);
+      this.modelVisualCenterOffset = {
+        x: padded.x + padded.width / 2 - canvasWidth / 2,
+        y: padded.y + padded.height / 2 - canvasHeight / 2,
+      };
+      return { width: padded.width, height: padded.height };
+    }
+    this.modelVisualCenterOffset = { x: 0, y: 0 };
+    return { width: canvasWidth, height: canvasHeight };
+  }
+
+  private measureDrawableBounds(
+    canvasWidth: number,
+    canvasHeight: number,
+  ): {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  } | null {
+    const internal = this.model?.internalModel;
+    if (
+      !internal ||
+      typeof internal.getDrawableIDs !== "function" ||
+      typeof internal.getDrawableBounds !== "function"
+    ) {
+      return null;
+    }
+    const ids = internal.getDrawableIDs();
+    if (!ids.length) return null;
+    const drawables: DrawableBox[] = [];
+    const box = { x: 0, y: 0, width: 0, height: 0 };
+    for (let i = 0; i < ids.length; i++) {
+      let bounds: { x: number; y: number; width: number; height: number };
+      try {
+        bounds = internal.getDrawableBounds(i, box);
+      } catch {
+        continue;
+      }
+      if (!bounds || bounds.width <= 1 || bounds.height <= 1) continue;
+      drawables.push({
+        id: ids[i] ?? `drawable-${i}`,
+        x: bounds.x,
+        y: bounds.y,
+        width: bounds.width,
+        height: bounds.height,
+      });
+    }
+    return measureFigureBounds(drawables, {
+      width: canvasWidth,
+      height: canvasHeight,
+    });
+  }
+
+  /**
+   * After the first painted frames, scale from the visible pixels so unnamed
+   * water / background meshes cannot keep the standing figure at half size.
+   */
+  private scheduleVisibleFillCorrection(): void {
+    const ticker = this.app?.ticker as
+      | { addOnce?: (cb: () => void) => void }
+      | undefined;
+    if (typeof ticker?.addOnce !== "function") return;
+    const generation = this.loadGeneration;
+    const run = () => {
+      if (
+        generation !== this.loadGeneration ||
+        !this.model ||
+        !this.initialized
+      ) {
+        return;
+      }
+      this.correctScaleFromVisiblePixels();
+    };
+    if (typeof ticker?.addOnce === "function") {
+      ticker.addOnce(run);
+    }
+    if (
+      typeof window !== "undefined" &&
+      typeof window.setTimeout === "function"
+    ) {
+      window.setTimeout(run, 300);
+    }
+  }
+
+  private correctScaleFromVisiblePixels(): void {
+    if (!this.model || !this.app) return;
+    const renderer = this.app as Application & {
+      renderer?: {
+        extract?: { pixels?: (target?: unknown) => Uint8Array };
+        width?: number;
+        height?: number;
+        resolution?: number;
+      };
+      screen?: { width: number; height: number };
+    };
+    const extract = renderer.renderer?.extract;
+    if (typeof extract?.pixels !== "function") return;
+    let pixels: ArrayLike<number>;
+    try {
+      pixels = extract.pixels(this.model) ?? extract.pixels();
+    } catch {
+      try {
+        pixels = extract.pixels();
+      } catch {
+        return;
+      }
+    }
+    const pixelWidth = renderer.renderer?.width || 0;
+    const pixelHeight = renderer.renderer?.height || 0;
+    const visible = measureOpaquePixelBounds(pixels, pixelWidth, pixelHeight);
+    if (!visible) return;
+    const resolution = renderer.renderer?.resolution || 1;
+    const view = (
+      this.app as Application & {
+        screen?: { width: number; height: number };
+      }
+    ).screen;
+    const canvas = this.app.view as HTMLCanvasElement | undefined;
+    const viewWidth = view?.width || canvas?.clientWidth || pixelWidth;
+    const viewHeight = view?.height || canvas?.clientHeight || pixelHeight;
+    if (viewWidth <= 0 || viewHeight <= 0) return;
+    const boxWidth = visible.width / resolution;
+    const boxHeight = visible.height / resolution;
+    if (boxWidth < 8 || boxHeight < 8) return;
+    const currentFill = Math.max(boxWidth / viewWidth, boxHeight / viewHeight);
+    if (!Number.isFinite(currentFill) || currentFill < 0.08) return;
+    if (currentFill >= this.viewFill * 0.92) return;
+    const boost = this.viewFill / currentFill;
+    if (!Number.isFinite(boost) || boost <= 1.02 || boost > 8) return;
+    const nextScaleX = (this.model.scale.x || 1) * boost;
+    const nextScaleY = (this.model.scale.y || 1) * boost;
+    this.model.scale.set(nextScaleX, nextScaleY);
+    this.modelNativeSize = {
+      width: boxWidth / Math.abs(this.model.scale.x / boost),
+      height: boxHeight / Math.abs(this.model.scale.y / boost),
+    };
+    const boxCenterX = (visible.x + visible.width / 2) / resolution;
+    const boxCenterY = (visible.y + visible.height / 2) / resolution;
+    this.model.x += viewWidth / 2 - boxCenterX;
+    this.model.y += viewHeight / 2 - boxCenterY;
+  }
+
+  /**
+   * Resize the view without tearing down the WebGL context.
+   */
+  resize(width?: number, height?: number, scale?: number): void {
+    if (!this.app || !this.initialized) return;
+    const renderer = this.app as Application & {
+      renderer?: { resize?: (w: number, h: number) => void };
+    };
+    if (
+      typeof width === "number" &&
+      typeof height === "number" &&
+      width > 0 &&
+      height > 0 &&
+      typeof renderer.renderer?.resize === "function"
+    ) {
+      renderer.renderer.resize(width, height);
+    }
+    this.fitModelToView(scale);
+  }
+
+  /**
    * Update model (called in render loop)
    */
   update(_deltaTime: number): void {
@@ -745,6 +1257,10 @@ export class PixiLive2DRenderer implements ICubismRenderer {
    */
   dispose(): void {
     this.stopAutoBlinkLoop();
+    this.loadGeneration += 1;
+    this.modelNativeSize = null;
+    this.modelCanvasSize = null;
+    this.modelVisualCenterOffset = { x: 0, y: 0 };
 
     const ticker = this.app?.ticker as
       | { remove?: (listener: (deltaTime: number) => void) => void }
@@ -760,6 +1276,19 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       document.removeEventListener("visibilitychange", this.visibilityHandler);
       this.visibilityHandler = null;
     }
+
+    if (this.viewCanvas?.style) {
+      this.viewCanvas.style.filter = "";
+    }
+    this.detachWardrobeHook();
+    this.detachDeformHook();
+    this.identityRig = null;
+    this.deformFigure = null;
+    this.deformSkipIds.clear();
+    this.physicsSnapshot = null;
+    this.viewCanvas = null;
+    this.hiddenWardrobePartIds.clear();
+    this.appliedOutfit = null;
 
     if (this.model) {
       this.model.destroy();
@@ -789,6 +1318,13 @@ export class PixiLive2DRenderer implements ICubismRenderer {
    */
   isInitialized(): boolean {
     return this.initialized;
+  }
+
+  /**
+   * Native visual size used for contain-fit, or null before the model loads.
+   */
+  getNativeSize(): { width: number; height: number } | null {
+    return this.modelNativeSize;
   }
 
   /**
@@ -865,6 +1401,344 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   }
 
   /**
+   * Show or hide a Cubism part by id. Used for Miara wardrobe layers.
+   * Walks part indices so string IDs match interned CubismIdHandle values.
+   */
+  setPartOpacity(partId: string, opacity: number): void {
+    const core = this.model?.internalModel?.coreModel;
+    if (!core) return;
+    const clamped = Math.min(1, Math.max(0, opacity));
+    try {
+      const native = core.getModel?.();
+      if (native?.parts?.ids && native.parts.opacities) {
+        const count = native.parts.count ?? native.parts.ids.length;
+        for (let index = 0; index < count; index++) {
+          if (cubismIdToString(native.parts.ids[index]) === partId) {
+            native.parts.opacities[index] = clamped;
+          }
+        }
+      }
+      if (
+        typeof core.getPartCount === "function" &&
+        typeof core.getPartId === "function"
+      ) {
+        const count = core.getPartCount();
+        for (let index = 0; index < count; index++) {
+          if (cubismIdToString(core.getPartId(index)) !== partId) continue;
+          if (typeof core.setPartOpacityByIndex === "function") {
+            core.setPartOpacityByIndex(index, clamped);
+            return;
+          }
+          if (typeof core.setPartOpacity === "function") {
+            core.setPartOpacity(index, clamped);
+            return;
+          }
+        }
+      }
+      if (typeof core.setPartOpacityById === "function") {
+        core.setPartOpacityById(partId, clamped);
+      }
+    } catch {
+      this.dlog("Part opacity not available:", partId);
+    }
+  }
+
+  /**
+   * Apply a Miara outfit: hide wardrobe parts and hue-shift clothing colorways.
+   */
+  applyOutfit(state: Partial<MiaraOutfitState> | null | undefined): void {
+    const resolved = finalizeMiaraOutfit(state);
+    this.appliedOutfit = resolved;
+    if (!this.model || !this.initialized) return;
+
+    const hidden = new Set([
+      ...collectHiddenPartIds(resolved.hiddenGroups),
+      ...this.listPartIds().filter((partId) =>
+        partIdMatchesHiddenGroups(partId, resolved.hiddenGroups),
+      ),
+    ]);
+    this.hiddenWardrobePartIds = hidden;
+    for (const partId of new Set([
+      ...ALL_MIARA_WARDROBE_PART_IDS,
+      ...this.listPartIds(),
+    ])) {
+      this.setPartOpacity(partId, hidden.has(partId) ? 0 : 1);
+    }
+    this.applyOutfitHue(resolved.hueShift);
+    this.dlog(
+      `Outfit applied: ${resolved.id} hidden=${
+        resolved.hiddenGroups.join(",") || "none"
+      } hue=${resolved.hueShift}`,
+    );
+  }
+
+  getAppliedOutfit(): MiaraOutfitState | null {
+    return this.appliedOutfit;
+  }
+
+  /**
+   * Editor-style mesh inspect: drawable ids, bounds, and UV centroids.
+   */
+  inspectMesh(): AutomeshDrawable[] {
+    const internal = this.model?.internalModel;
+    if (
+      !internal ||
+      typeof internal.getDrawableIDs !== "function" ||
+      typeof internal.getDrawableBounds !== "function"
+    ) {
+      return [];
+    }
+    const ids = internal.getDrawableIDs();
+    const core = internal.coreModel;
+    const inspected: AutomeshDrawable[] = [];
+    const box = { x: 0, y: 0, width: 0, height: 0 };
+    for (let index = 0; index < ids.length; index++) {
+      let bounds: { x: number; y: number; width: number; height: number };
+      try {
+        bounds = internal.getDrawableBounds(index, box);
+      } catch {
+        continue;
+      }
+      const native = core.getModel?.()?.drawables;
+      let uvs: ArrayLike<number> | undefined;
+      let positions: ArrayLike<number> | undefined;
+      let indices: ArrayLike<number> | undefined;
+      try {
+        uvs =
+          core.getDrawableVertexUvs?.(index) ??
+          core.getDrawableUvs?.(index) ??
+          native?.vertexUvs?.[index] ??
+          native?.uvs?.[index];
+        positions =
+          core.getDrawableVertexPositions?.(index) ??
+          core.getDrawableVertices?.(index) ??
+          native?.vertexPositions?.[index] ??
+          native?.positions?.[index];
+        indices =
+          core.getDrawableVertexIndices?.(index) ??
+          core.getDrawableIndices?.(index) ??
+          native?.indices?.[index] ??
+          native?.vertexIndices?.[index];
+      } catch {
+        uvs = native?.vertexUvs?.[index] ?? native?.uvs?.[index];
+        positions =
+          native?.vertexPositions?.[index] ?? native?.positions?.[index];
+        indices = native?.indices?.[index] ?? native?.vertexIndices?.[index];
+      }
+      inspected.push({
+        id: ids[index] ?? `drawable-${index}`,
+        bounds: { ...bounds },
+        uvCentroid: uvs ? uvCentroid(uvs) : undefined,
+        positions: positions ? Array.from(positions) : undefined,
+        uvs: uvs ? Array.from(uvs) : undefined,
+        indices: indices ? Array.from(indices) : undefined,
+      });
+    }
+    return inspected;
+  }
+
+  /**
+   * Bind a remapped atlas onto texture slot 0 — the Cubism SDK BindTexture
+   * equivalent for pixi-live2d-display.
+   */
+  async applyTextureOverlay(source: string): Promise<boolean> {
+    if (!this.model || !source) return false;
+    try {
+      if (!this.originalTexture0 && this.model.textures?.[0]) {
+        this.originalTexture0 = this.model.textures[0];
+      }
+      const texture = await loadPixiTexture(source);
+      if (!this.model.textures) {
+        return false;
+      }
+      this.model.textures[0] = texture;
+      this.overlaySource = source;
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  async clearTextureOverlay(): Promise<boolean> {
+    if (!this.model?.textures || !this.originalTexture0) {
+      this.overlaySource = null;
+      return false;
+    }
+    this.model.textures[0] = this
+      .originalTexture0 as (typeof this.model.textures)[0];
+    this.overlaySource = null;
+    return true;
+  }
+
+  applyParameterProfile(
+    profile: Record<string, number> | null | undefined,
+  ): void {
+    if (!profile) return;
+    for (const [paramId, value] of Object.entries(profile)) {
+      if (typeof value === "number") {
+        this.setParameter(paramId, value);
+      }
+    }
+  }
+
+  /**
+   * After Cubism physics, reshape vertices and retarget the physics rig
+   * toward the selected identity. Null restores official Miara motion.
+   */
+  applyIdentityRig(rig: IdentityRig | null | undefined): void {
+    this.identityRig = rig ?? null;
+    this.deformFigure = null;
+    this.deformSkipIds.clear();
+    this.deformFrame = 0;
+    this.attachDeformHook();
+    if (this.identityRig?.physics && !this.identityRig.bakedPhysics) {
+      this.applyPhysicsProfile(this.identityRig.physics);
+      return;
+    }
+    this.restorePhysicsSnapshot();
+  }
+
+  clearIdentityRig(): void {
+    this.applyIdentityRig(null);
+  }
+
+  private listPartIds(): string[] {
+    const core = this.model?.internalModel?.coreModel;
+    if (!core) return [];
+    const ids: string[] = [];
+    const native = core.getModel?.();
+    if (native?.parts?.ids) {
+      const count = native.parts.count ?? native.parts.ids.length;
+      for (let index = 0; index < count; index++) {
+        ids.push(cubismIdToString(native.parts.ids[index]));
+      }
+      return ids;
+    }
+    if (typeof core.getPartCount === "function") {
+      const count = core.getPartCount();
+      for (let index = 0; index < count; index++) {
+        ids.push(cubismIdToString(core.getPartId?.(index)));
+      }
+    }
+    return ids;
+  }
+
+  private attachWardrobeHook(): void {
+    const internal = this.model?.internalModel;
+    if (!internal?.on) return;
+    this.wardrobeUpdateHook = () => this.enforceHiddenWardrobeParts();
+    internal.on("beforeModelUpdate", this.wardrobeUpdateHook);
+  }
+
+  private detachWardrobeHook(): void {
+    const internal = this.model?.internalModel;
+    if (internal?.off && this.wardrobeUpdateHook) {
+      try {
+        internal.off("beforeModelUpdate", this.wardrobeUpdateHook);
+      } catch {
+        /* ignore */
+      }
+    }
+    this.wardrobeUpdateHook = null;
+  }
+
+  private attachDeformHook(): void {
+    const internal = this.model?.internalModel;
+    if (!internal || typeof internal.update !== "function") return;
+    if (this.deformHookAttached) return;
+    this.originalInternalUpdate = internal.update.bind(internal);
+    internal.update = (dt: number, now: number) => {
+      this.originalInternalUpdate?.(dt, now);
+      this.enforceIdentityDeform();
+    };
+    this.deformHookAttached = true;
+  }
+
+  private detachDeformHook(): void {
+    const internal = this.model?.internalModel;
+    if (internal && this.originalInternalUpdate) {
+      internal.update = this.originalInternalUpdate;
+    }
+    this.originalInternalUpdate = null;
+    this.deformHookAttached = false;
+  }
+
+  private enforceIdentityDeform(): void {
+    const profile = this.identityRig?.deform;
+    const core = this.model?.internalModel?.coreModel;
+    if (!profile || !core) return;
+    this.deformFrame += 1;
+    if (!this.deformFigure || this.deformFrame % 48 === 1) {
+      const drawables = this.inspectMesh();
+      this.deformFigure = figureFromDrawables(drawables);
+      this.deformSkipIds = new Set(
+        drawables
+          .filter((drawable) => isEnvironmentDrawable(drawable))
+          .map((drawable) => drawable.id),
+      );
+    }
+    if (!this.deformFigure) return;
+    const ids = this.model?.internalModel.getDrawableIDs?.() ?? [];
+    const count =
+      ids.length ||
+      (typeof core.getDrawableCount === "function"
+        ? core.getDrawableCount()
+        : 0);
+    for (let index = 0; index < count; index++) {
+      const id = ids[index];
+      if (id && this.deformSkipIds.has(id)) continue;
+      const positions =
+        core.getDrawableVertexPositions?.(index) ??
+        core.getDrawableVertices?.(index);
+      if (!positions || positions.length < 2) continue;
+      applyMeshDeform(positions, this.deformFigure, profile);
+    }
+  }
+
+  private getPhysicsRig(): PhysicsRigLike | null {
+    const physics = this.model?.internalModel?.physics;
+    const rig = physics?._physicsRig ?? physics?.rig;
+    if (!rig?.settings || !rig.particles || !rig.outputs) return null;
+    return rig;
+  }
+
+  private applyPhysicsProfile(profile: IdentityRig["physics"]): void {
+    const rig = this.getPhysicsRig();
+    if (!rig) return;
+    if (!this.physicsSnapshot) {
+      this.physicsSnapshot = snapshotPhysicsRig(rig);
+    }
+    applyPhysicsRetarget(
+      {
+        ...rig,
+        settings: namePhysicsSettings(rig.settings),
+      },
+      this.physicsSnapshot,
+      profile,
+    );
+  }
+
+  private restorePhysicsSnapshot(): void {
+    const rig = this.getPhysicsRig();
+    if (!rig || !this.physicsSnapshot) return;
+    restorePhysicsRig(rig, this.physicsSnapshot);
+  }
+
+  private enforceHiddenWardrobeParts(): void {
+    if (this.hiddenWardrobePartIds.size === 0) return;
+    for (const partId of this.hiddenWardrobePartIds) {
+      this.setPartOpacity(partId, 0);
+    }
+  }
+
+  private applyOutfitHue(hueShift: number): void {
+    const hue = ((Math.round(hueShift) % 360) + 360) % 360;
+    if (this.viewCanvas?.style) {
+      this.viewCanvas.style.filter = hue === 0 ? "" : `hue-rotate(${hue}deg)`;
+    }
+  }
+
+  /**
    * Get a parameter value
    */
   getParameter(paramId: string): number | undefined {
@@ -890,6 +1764,38 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       // focus() may not be available on all model versions
     }
   }
+}
+
+/**
+ * Fetch Cubism 4 model3.json and attach the source URL so relative moc/texture
+ * paths resolve. Falls back to the raw URL if fetch is unavailable (tests).
+ */
+export async function loadCubism4Settings(
+  modelPath: string,
+): Promise<string | Record<string, unknown>> {
+  if (typeof fetch !== "function") {
+    return modelPath;
+  }
+  try {
+    const response = await fetch(modelPath);
+    if (!response.ok) {
+      return modelPath;
+    }
+    const json: unknown = await response.json();
+    if (
+      json &&
+      typeof json === "object" &&
+      (json as { FileReferences?: { Moc?: unknown } }).FileReferences &&
+      typeof (json as { FileReferences: { Moc?: unknown } }).FileReferences
+        .Moc === "string"
+    ) {
+      (json as { url?: string }).url = modelPath;
+      return json as Record<string, unknown>;
+    }
+  } catch {
+    // Network / parse / CSP: Live2DModel.from() can still try the URL.
+  }
+  return modelPath;
 }
 
 /**

@@ -4,9 +4,28 @@
 
 ### Added
 
+- Deep Tree Echo: Miara Live2D outfits are customizable — presets and accessory/color controls change the rendered avatar and persist across sessions.
+- Deep Tree Echo: two additional avatars — Deep Tree Echo and Melody — start from the same Miara body mesh and persist as named looks (grove / aria).
+- Deep Tree Echo: Miara now ships Cubism expression files (joy, wonder, speak, surprise, sadness, photo, neutral) and plays them on the live avatar.
+- Deep Tree Echo: Automesh can map a Melody reference portrait onto the official Miara Cubism mesh — inspect live drawable UVs, reproject the still through Cubism triangles onto atlas islands, apply a Melody face-parameter profile, and bind it as Melody. A Cubism Editor External API client is included for when the desktop Editor is running.
+- Deep Tree Echo: an expression picker can lock a named Cubism face (smile, laugh, speak, awe, surprise, and the rest) so live cognitive updates do not overwrite it until Live is selected again.
+- Deep Tree Echo: Melody now ships a trained Cubism atlas (`melody-atlas.png`) fitted from the standing still through live Miara triangles, and selecting Melody binds that overlay (not a hue-only aria look).
+- Deep Tree Echo: each named avatar now converges the shared Miara mesh, texture, and physics toward its target character — Melody gets crop/skirt/headset deform plus ponytail and musical-wing physics; Deep Tree Echo gets grove wing/crown deform and living-wing motion. Switching back to Miara restores the official physics snapshot.
+- Deep Tree Echo: Miara, Deep Tree Echo, and Melody each have a Cubism model folder (`static/models/{identity}/`) with their own texture and physics. Selecting an identity loads that package instead of hue-rotating the official Miara atlas.
+- Cloud Agent: `scripts/cloud-agent-install.sh` wraps frozen-lockfile install and the internal package build chain. Named `browser-dev` / `orchestrator` terminals exist only after a human Saves the dashboard environment proposal.
+- Deep Tree Echo: the orchestrator now starts one ProactiveLoop for process liveness and, when `DELTECHO_AUTONOMY_STORAGE_PATH` points at an existing filesystem RAG store, schedules MemoryLever dream hygiene. Ticks stay dry-run unless `DELTECHO_MEMORY_LEVER_APPLY` is `1`, `true`, or `yes`.
+- Deep Tree Echo: proactive messaging is now wired in the desktop app — Settings exposes live triggers and policy, chats show a status indicator, and bot-initiated sends honor quiet hours and rate limits.
+- Deep Tree Echo: Entelechy ticks now close the autognosis–autogenesis couple when CoreSelf identity is attached and `DELTECHO_AUTOGENESIS_COUPLE` is `1`, `true`, or `yes`. Unset stays off.
+
 ### Changed
 
+- Deep Tree Echo: the Live2D avatar occupies a full-height right-hand conversation strip. The strip width defaults to the size that lets the full figure fill the available height, and can be dragged (double-click resets to that fit).
+- Deep Tree Echo: Live2D initializes under the desktop CSP (Pixi unsafe-eval patch), registers the Cubism 4 factory, and loads the local Miara model from the Electron `file://` page. The avatar keeps one WebGL context when the conversation strip resizes so Cubism textures stay valid.
+
 ### Fixed
+
+- Deep Tree Echo: the autognosis–autogenesis coupler re-enters on a later reservoir emission even when `Date.now()` reuses the previous report millisecond.
+- Deep Tree Echo: the default Entelechy coupler now uses IntentionalityEngine's active-goal cap when deciding whether to generate an autogenesis goal.
 
 <a id="1_58_2"></a>
 

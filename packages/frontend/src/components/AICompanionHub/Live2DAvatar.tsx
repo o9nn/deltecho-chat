@@ -6,6 +6,7 @@
  */
 
 import React, { useRef, useEffect, useState, useCallback } from "react";
+import type { MiaraOutfitState } from "@deltecho/avatar";
 import { ResponsiveSpriteAvatar } from "./ResponsiveSpriteAvatar";
 
 // Local types that are compatible with both @deltecho/avatar and @deltecho/cognitive
@@ -88,20 +89,47 @@ export interface CognitiveVisualState {
 // Controller interface for external control of the avatar
 export interface Live2DAvatarController {
   setExpression: (expression: Expression, intensity?: number) => void;
+  setNamedExpression?: (name: string) => boolean;
   playMotion: (motion: AvatarMotion) => void;
   updateLipSync: (audioLevel: number) => void;
   updateCognitiveState?: (state: CognitiveVisualState) => void;
   triggerBlink: () => void;
   setParameter: (paramId: string, value: number) => void;
+  applyOutfit?: (outfit: Partial<MiaraOutfitState> | null | undefined) => void;
+  inspectMesh?: () => import("@deltecho/avatar").AutomeshDrawable[];
+  applyTextureOverlay?: (source: string) => Promise<boolean>;
+  clearTextureOverlay?: () => Promise<boolean>;
+  applyParameterProfile?: (profile: Record<string, number> | null) => void;
+  applyIdentityRig?: (
+    rig: import("@deltecho/avatar").IdentityRig | null,
+  ) => void;
+  getNativeSize?: () => { width: number; height: number } | null;
 }
 
-// Model paths - local models are served from /models/ in the build output
+const LOCAL_MIARA_MODEL = "models/miara/miara_pro_t03.model3.json";
+const LOCAL_GROVE_MODEL =
+  "models/deep-tree-echo/deep-tree-echo_t03.model3.json";
+const LOCAL_MELODY_MODEL = "models/melody/melody_t03.model3.json";
+
+// Model paths - local models are served next to main.html in the build output.
+// Electron loads that page as file://, so a leading slash would resolve to
+// file:///models/... and never find the assets.
 const CDN_MODELS = {
-  miara: "/models/miara/miara_pro_t03.model3.json",
+  miara: LOCAL_MIARA_MODEL,
+  "deep-tree-echo": LOCAL_GROVE_MODEL,
+  melody: LOCAL_MELODY_MODEL,
   shizuku:
     "https://cdn.jsdelivr.net/gh/guansss/pixi-live2d-display/test/assets/shizuku/shizuku.model.json",
   haru: "https://cdn.jsdelivr.net/gh/guansss/pixi-live2d-display/test/assets/haru/haru_greeter_t03.model3.json",
 };
+
+export function resolveLive2DModelUrl(model: string): string {
+  const mapped = CDN_MODELS[model as keyof typeof CDN_MODELS] || model;
+  if (!mapped.startsWith("http") && typeof window !== "undefined") {
+    return new URL(mapped, window.location.href).href;
+  }
+  return mapped;
+}
 
 export interface Live2DAvatarComponentProps {
   /** Model URL or preset name ('shizuku' | 'haru') */
@@ -110,7 +138,7 @@ export interface Live2DAvatarComponentProps {
   width?: number;
   /** Height in pixels */
   height?: number;
-  /** Scale factor for the model (0-1) */
+  /** How much of the view the full figure should occupy (0-1, contain-fit) */
   scale?: number;
   /** Optional Live2D render pixel-ratio override; omit to use the renderer's capped default. */
   pixelRatio?: number;
@@ -136,6 +164,15 @@ export interface Live2DAvatarComponentProps {
   onControllerReady?: (controller: Live2DAvatarController) => void;
   /** Rendering mode */
   mode?: "live2d" | "sprite";
+  /** Fill a rectangular parent instead of a circular card */
+  fillContainer?: boolean;
+  /** Miara wardrobe to apply after the model loads */
+  outfit?: Partial<MiaraOutfitState> | null;
+  /**
+   * Lock a Cubism expression by name. When set, cognitive and emotional
+   * updates do not overwrite the face.
+   */
+  manualExpression?: string;
 }
 
 export interface Live2DAvatarState {
@@ -155,7 +192,7 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
   model = "miara",
   width = 400,
   height = 400,
-  scale = 0.25,
+  scale = 0.9,
   pixelRatio,
   emotionalState,
   cognitiveVisualState,
@@ -168,6 +205,9 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
   showError = true,
   onControllerReady,
   mode = "live2d",
+  fillContainer = false,
+  outfit,
+  manualExpression,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const managerRef = useRef<any>(null);
@@ -193,7 +233,7 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
   }, []);
 
   // Resolve model URL from preset or use as-is
-  const modelUrl = CDN_MODELS[model as keyof typeof CDN_MODELS] || model;
+  const modelUrl = resolveLive2DModelUrl(model);
 
   // Initialize the avatar
   useEffect(() => {
@@ -279,6 +319,9 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
         );
 
         controllerRef.current = controller;
+        if (manualExpression && controller.setNamedExpression) {
+          controller.setNamedExpression(manualExpression);
+        }
         onControllerReady?.(controller);
       } catch (error) {
         if (mounted) {
@@ -311,20 +354,62 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
       controllerRef.current = null;
       lastLipSyncLevelRef.current = null;
     };
+    // Size/scale changes must not rebuild the WebGL context — Cubism textures
+    // from a torn-down Pixi app fail with "object does not belong to this context".
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modelUrl, width, height, scale, pixelRatio, state.retryCount]);
+  }, [modelUrl, pixelRatio, state.retryCount]);
+
+  useEffect(() => {
+    if (!state.isLoaded) return;
+    if (fillContainer) {
+      const element = containerRef.current;
+      if (element && element.clientWidth > 0 && element.clientHeight > 0) {
+        managerRef.current?.resize(
+          element.clientWidth,
+          element.clientHeight,
+          scale,
+        );
+        return;
+      }
+    }
+    managerRef.current?.resize(width, height, scale);
+  }, [width, height, scale, state.isLoaded, fillContainer]);
+
+  useEffect(() => {
+    if (!fillContainer || !state.isLoaded) return undefined;
+    const element = containerRef.current;
+    if (!element || typeof ResizeObserver === "undefined") return undefined;
+    const apply = () => {
+      const nextWidth = Math.round(element.clientWidth);
+      const nextHeight = Math.round(element.clientHeight);
+      if (nextWidth <= 0 || nextHeight <= 0) return;
+      managerRef.current?.resize(nextWidth, nextHeight, scale);
+    };
+    apply();
+    const observer = new ResizeObserver(apply);
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [fillContainer, state.isLoaded, scale]);
+
+  // Lock a named Cubism face so live cognitive polling cannot overwrite it.
+  useEffect(() => {
+    if (!state.isLoaded || !manualExpression) return;
+    controllerRef.current?.setNamedExpression?.(manualExpression);
+  }, [manualExpression, state.isLoaded]);
 
   // Update emotional state
   useEffect(() => {
+    if (manualExpression) return;
     if (!managerRef.current || !state.isLoaded || !emotionalState) return;
     managerRef.current.updateEmotionalState(emotionalState);
-  }, [emotionalState, state.isLoaded]);
+  }, [emotionalState, state.isLoaded, manualExpression]);
 
   // Update richer DTEcho cognitive visual state
   useEffect(() => {
+    if (manualExpression) return;
     if (!managerRef.current || !state.isLoaded || !cognitiveVisualState) return;
     managerRef.current.updateCognitiveState(cognitiveVisualState);
-  }, [cognitiveVisualState, state.isLoaded]);
+  }, [cognitiveVisualState, state.isLoaded, manualExpression]);
 
   // Update lip sync. Use a small deadband so high-frequency audio-level
   // sampling does not force redundant parameter writes into the Live2D core.
@@ -339,18 +424,28 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
     controllerRef.current.updateLipSync(nextLevel);
   }, [audioLevel, isSpeaking, state.isLoaded]);
 
+  useEffect(() => {
+    if (!state.isLoaded || !outfit) return;
+    controllerRef.current?.applyOutfit?.(outfit);
+  }, [outfit, state.isLoaded]);
+
   // Sprite-only mode: render sprite without Live2D container
   if (mode === "sprite") {
     return (
       <div
         className={`live2d-avatar-container ${className || ""}`}
-        style={{ width, height, position: "relative" }}
+        style={
+          fillContainer
+            ? { width: "100%", height: "100%", position: "relative" }
+            : { width, height, position: "relative" }
+        }
       >
         <ResponsiveSpriteAvatar
           emotionalState={emotionalState}
           isSpeaking={isSpeaking}
           width={width}
           height={height}
+          rounded={!fillContainer}
         />
       </div>
     );
@@ -361,7 +456,11 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
   return (
     <div
       className={`live2d-avatar-container ${className || ""}`}
-      style={{ width, height, position: "relative" }}
+      style={
+        fillContainer
+          ? { width: "100%", height: "100%", position: "relative" }
+          : { width, height, position: "relative" }
+      }
     >
       {/* Main Live2D canvas container - always rendered for initialization */}
       <div
@@ -409,6 +508,7 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
             isSpeaking={isSpeaking}
             width={width}
             height={height}
+            rounded={!fillContainer}
           />
           <div
             className="live2d-error-overlay"

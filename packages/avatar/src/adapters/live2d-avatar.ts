@@ -20,6 +20,11 @@ import {
   type MetabolicAvatarDeltas,
   type MetabolicVisualInput,
 } from "../metabolic-avatar-bridge";
+import type { MiaraOutfitState } from "../miara-outfits";
+import {
+  selfModelAvatarFeedback,
+  type ExpressionExperience,
+} from "../self-model-avatar-feedback";
 
 /**
  * Props for the Live2DAvatar component
@@ -31,7 +36,7 @@ export interface Live2DAvatarProps {
   width?: number;
   /** Height of the canvas */
   height?: number;
-  /** Scale factor for the model */
+  /** How much of the view the full figure should occupy (0-1, contain-fit) */
   scale?: number;
   /** Current emotional state to drive expressions */
   emotionalState?: EmotionalVector;
@@ -105,6 +110,7 @@ export interface Live2DCognitiveVisualState {
 export interface Live2DAvatarController {
   /** Set expression with intensity */
   setExpression: (expression: Expression, intensity?: number) => void;
+  setNamedExpression?: (name: string) => boolean;
   /** Play a motion animation */
   playMotion: (motion: AvatarMotion) => void;
   /** Update lip sync value */
@@ -115,8 +121,23 @@ export interface Live2DAvatarController {
   triggerBlink: () => void;
   /** Set a model parameter directly */
   setParameter: (paramId: string, value: number) => void;
+  /** Apply a Miara wardrobe outfit (part opacity + clothing colorway) */
+  applyOutfit: (outfit: Partial<MiaraOutfitState> | null | undefined) => void;
+  inspectMesh?: () => import("../automesh").AutomeshDrawable[];
+  applyTextureOverlay?: (source: string) => Promise<boolean>;
+  clearTextureOverlay?: () => Promise<boolean>;
+  applyParameterProfile?: (profile: Record<string, number> | null) => void;
+  applyIdentityRig?: (rig: import("../automesh").IdentityRig | null) => void;
   /** Get renderer instance */
   getRenderer: () => PixiLive2DRenderer | null;
+  /** Resize the existing view without recreating the WebGL context */
+  resize: (width?: number, height?: number, scale?: number) => void;
+  /** Native visual size used to size the conversation strip */
+  getNativeSize: () => { width: number; height: number } | null;
+  /** Avatar self-model confidence learned from rendered Cubism readback. */
+  getSelfModelAccuracy: () => number;
+  /** Most recent predicted-versus-rendered expression experience. */
+  getLastExpressionExperience: () => ExpressionExperience | null;
 }
 
 /**
@@ -134,6 +155,10 @@ export class Live2DAvatarManager {
   private metabolicBridge: MetabolicAvatarBridge | null = null;
   private metabolicFrameAccumulatorMs = 0;
   private lastProjectedCubism: Record<string, number> = {};
+  private observableProjectionIds: string[] = [];
+  private selfModelSampleDelayFrames = 0;
+  private pendingCognitiveMode = "Idle";
+  private lastExpressionExperience: ExpressionExperience | null = null;
   private readonly onMetabolicDeltas = (
     deltas: MetabolicAvatarDeltas,
   ): void => {
@@ -145,6 +170,13 @@ export class Live2DAvatarManager {
     if (this.metabolicFrameAccumulatorMs < 1000 / 30) return;
     this.metabolicFrameAccumulatorMs %= 1000 / 30;
     this.metabolicBridge?.step();
+  };
+  private readonly onSelfModelFrame = (): void => {
+    if (this.selfModelSampleDelayFrames <= 0) return;
+    this.selfModelSampleDelayFrames--;
+    if (this.selfModelSampleDelayFrames === 0) {
+      this.sampleRenderedProjection();
+    }
   };
 
   /**
@@ -188,7 +220,7 @@ export class Live2DAvatarManager {
     this.modelInfo = {
       modelPath: props.modelPath,
       name: "Avatar",
-      scale: props.scale ?? 0.25,
+      scale: props.scale ?? 0.9,
     };
 
     try {
@@ -199,7 +231,19 @@ export class Live2DAvatarManager {
         debug: props.debug,
       });
 
+      if (this.isDisposed) {
+        this.renderer.dispose();
+        this.renderer = null;
+        return this.createController();
+      }
+
       await this.renderer.loadModel(this.modelInfo);
+
+      if (this.isDisposed) {
+        this.renderer.dispose();
+        this.renderer = null;
+        return this.createController();
+      }
 
       this.isLoaded = true;
       this.startMetabolicProjection();
@@ -224,6 +268,9 @@ export class Live2DAvatarManager {
     return {
       setExpression: (expression, intensity = 0.7) => {
         this.renderer?.setExpression(expression, intensity);
+      },
+      setNamedExpression: (name) => {
+        return this.renderer?.setNamedExpression?.(name) ?? false;
       },
       playMotion: (motion) => {
         this.renderer?.playMotion(motion);
@@ -251,7 +298,25 @@ export class Live2DAvatarManager {
       setParameter: (paramId, value) => {
         this.renderer?.setParameter(paramId, value);
       },
+      applyOutfit: (outfit) => {
+        this.renderer?.applyOutfit(outfit);
+      },
+      inspectMesh: () => this.renderer?.inspectMesh() ?? [],
+      applyTextureOverlay: (source) =>
+        this.renderer?.applyTextureOverlay(source) ?? Promise.resolve(false),
+      clearTextureOverlay: () =>
+        this.renderer?.clearTextureOverlay() ?? Promise.resolve(false),
+      applyParameterProfile: (profile) =>
+        this.renderer?.applyParameterProfile(profile),
+      applyIdentityRig: (rig) => this.renderer?.applyIdentityRig(rig),
       getRenderer: () => this.renderer,
+      resize: (width, height, scale) => {
+        this.resize(width, height, scale);
+      },
+      getNativeSize: () => this.renderer?.getNativeSize() ?? null,
+      getSelfModelAccuracy: () =>
+        selfModelAvatarFeedback.getSelfModelAccuracy(),
+      getLastExpressionExperience: () => this.lastExpressionExperience,
     };
   }
 
@@ -275,15 +340,28 @@ export class Live2DAvatarManager {
     if (!this.renderer || !this.isLoaded) return;
 
     const projection = projectDTEchoCognitiveState(state);
-    this.lastProjectedCubism = { ...projection.cubism };
     if (state.metabolic) {
       this.metabolicBridge?.feedMetabolicState(state.metabolic);
     }
 
-    this.renderer.setExpression(
-      projection.avatarExpression,
-      projection.intensity,
+    const calibratedCubism = selfModelAvatarFeedback.applyCalibration(
+      projection.cubism,
     );
+    this.lastProjectedCubism = { ...calibratedCubism };
+    this.pendingCognitiveMode = projection.selectedMode;
+    // Wait one complete Pixi update before reading the core model so motions,
+    // expressions, physics, and metabolic deltas have all settled.
+    this.selfModelSampleDelayFrames = 2;
+
+    const playedNamed = this.renderer.setNamedExpression?.(
+      projection.expressionName,
+    );
+    if (!playedNamed) {
+      this.renderer.setExpression(
+        projection.avatarExpression,
+        projection.intensity,
+      );
+    }
 
     if (projection.motion) {
       this.renderer.playMotion(projection.motion);
@@ -293,7 +371,7 @@ export class Live2DAvatarManager {
 
     this.renderer.updateLipSync(projection.lipSyncLevel);
 
-    for (const [paramId, value] of Object.entries(projection.cubism)) {
+    for (const [paramId, value] of Object.entries(calibratedCubism)) {
       this.renderer.setParameter(paramId, value);
     }
 
@@ -324,6 +402,7 @@ export class Live2DAvatarManager {
       addFrameListener?: (listener: (deltaTime: number) => void) => void;
     };
     renderer.addFrameListener?.(this.onMetabolicFrame);
+    renderer.addFrameListener?.(this.onSelfModelFrame);
     this.metabolicBridge.step();
   }
 
@@ -334,7 +413,9 @@ export class Live2DAvatarManager {
         })
       | null;
     renderer?.removeFrameListener?.(this.onMetabolicFrame);
+    renderer?.removeFrameListener?.(this.onSelfModelFrame);
     this.metabolicFrameAccumulatorMs = 0;
+    this.selfModelSampleDelayFrames = 0;
     if (this.metabolicBridge) {
       this.metabolicBridge.off("deltas_updated", this.onMetabolicDeltas);
       this.metabolicBridge.stop();
@@ -345,10 +426,35 @@ export class Live2DAvatarManager {
   private applyMetabolicDeltas(deltas: MetabolicAvatarDeltas): void {
     if (!this.renderer || !this.isLoaded) return;
 
+    const composed = this.composeMetabolicCubism(
+      this.lastProjectedCubism,
+      deltas,
+    );
+    for (const [paramId, value] of Object.entries(composed)) {
+      this.renderer.setParameter(paramId, value);
+    }
+
+    const renderer = this.renderer as PixiLive2DRenderer & {
+      setAnimationSpeed?: (multiplier: number) => void;
+      setVisualVitality?: (multiplier: number) => void;
+    };
+    renderer.setAnimationSpeed?.(
+      deltas.animSpeedMult * (0.75 + deltas.movementFluidity * 0.5),
+    );
+    renderer.setVisualVitality?.(deltas.vitalityMult);
+  }
+
+  private composeMetabolicCubism(
+    projected: Record<string, number>,
+    deltas?: MetabolicAvatarDeltas,
+  ): Record<string, number> {
+    const composed = { ...projected };
+    if (!deltas) return composed;
+
     const base = (id: string, fallback: number): number =>
-      this.lastProjectedCubism[id] ?? fallback;
+      projected[id] ?? fallback;
     const set = (id: string, value: number, min: number, max: number): void => {
-      this.renderer?.setParameter(id, Math.max(min, Math.min(max, value)));
+      composed[id] = Math.max(min, Math.min(max, value));
     };
 
     set(
@@ -381,14 +487,46 @@ export class Live2DAvatarManager {
     const breath = 0.5 + Math.sin(breathPhase) * 0.5 * deltas.breathDepthMult;
     set("ParamBreath", breath, 0, 1);
 
-    const renderer = this.renderer as PixiLive2DRenderer & {
-      setAnimationSpeed?: (multiplier: number) => void;
-      setVisualVitality?: (multiplier: number) => void;
-    };
-    renderer.setAnimationSpeed?.(
-      deltas.animSpeedMult * (0.75 + deltas.movementFluidity * 0.5),
+    return composed;
+  }
+
+  private sampleRenderedProjection(): void {
+    if (!this.renderer || !this.isLoaded) return;
+
+    const expected = this.composeMetabolicCubism(
+      this.lastProjectedCubism,
+      this.metabolicBridge?.getDeltas(),
     );
-    renderer.setVisualVitality?.(deltas.vitalityMult);
+    this.observableProjectionIds = Object.keys(expected).filter(
+      (paramId) => paramId !== "ParamBreath",
+    );
+    const actual: Record<string, number> = {};
+    for (const paramId of this.observableProjectionIds) {
+      const value = this.renderer.getParameter(paramId);
+      if (typeof value === "number" && Number.isFinite(value)) {
+        actual[paramId] = value;
+      }
+    }
+    if (Object.keys(actual).length === 0) return;
+
+    selfModelAvatarFeedback.recordIntendedProjection(
+      expected,
+      this.pendingCognitiveMode,
+    );
+    this.lastExpressionExperience =
+      selfModelAvatarFeedback.sampleActualState(actual);
+  }
+
+  /**
+   * Resize the existing WebGL view. Do not re-create the Cubism runtime —
+   * a second Pixi context makes Live2D textures "not belong to this context".
+   */
+  resize(width?: number, height?: number, scale?: number): void {
+    if (!this.renderer || !this.isLoaded) return;
+    if (this.modelInfo && typeof scale === "number") {
+      this.modelInfo.scale = scale;
+    }
+    this.renderer.resize(width, height, scale);
   }
 
   private clamp01(value: number): number {
@@ -403,6 +541,9 @@ export class Live2DAvatarManager {
     this.isDisposed = true;
     this.stopMetabolicProjection();
     this.lastProjectedCubism = {};
+    this.observableProjectionIds = [];
+    this.pendingCognitiveMode = "Idle";
+    this.lastExpressionExperience = null;
     this.renderer?.dispose();
     this.renderer = null;
 
@@ -458,6 +599,6 @@ export const SAMPLE_MODELS = {
 export const DEFAULT_MODEL_CONFIG: CubismModelInfo = {
   modelPath: SAMPLE_MODELS.shizuku,
   name: "Deep Tree Echo Avatar",
-  scale: 0.25,
+  scale: 0.9,
   offset: { x: 0, y: 50 },
 };

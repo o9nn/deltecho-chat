@@ -48,15 +48,21 @@ export function hexNeighbors(hex: HexCoord): HexCoord[] {
 export function hexRing(center: HexCoord, radius: number): HexCoord[] {
   if (radius === 0) return [center];
   const results: HexCoord[] = [];
-  let hex: HexCoord = { q: center.q + radius, r: center.r };
   const directions: HexCoord[] = [
-    { q: 0, r: 1 },
-    { q: -1, r: 1 },
-    { q: -1, r: 0 },
-    { q: 0, r: -1 },
-    { q: 1, r: -1 },
     { q: 1, r: 0 },
+    { q: 1, r: -1 },
+    { q: 0, r: -1 },
+    { q: -1, r: 0 },
+    { q: -1, r: 1 },
+    { q: 0, r: 1 },
   ];
+  // Start at the south-west corner, then walk each of the six axial
+  // directions. Starting on the east edge with this direction order folds
+  // through the interior and silently drops ring cells through key collisions.
+  let hex: HexCoord = {
+    q: center.q + directions[4].q * radius,
+    r: center.r + directions[4].r * radius,
+  };
   for (const dir of directions) {
     for (let i = 0; i < radius; i++) {
       results.push(hex);

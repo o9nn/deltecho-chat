@@ -130,9 +130,11 @@ test.describe("Cognitive Memory System", () => {
       await reloadPage(page);
       await switchToProfile(page, existingProfiles[0].id);
 
-      // Verify state persisted
+      // Verify persisted state was not lost. The live chatmail backend can
+      // deliver a new chat while the page reloads, so equality is racy; an
+      // increased count is valid persistence, while a decrease is not.
       const newCount = await chatList.count();
-      expect(newCount).toBe(initialCount);
+      expect(newCount).toBeGreaterThanOrEqual(initialCount);
     });
   });
 
@@ -164,16 +166,17 @@ test.describe("Cognitive Memory System", () => {
           "Node.js enables server-side JavaScript",
         ];
 
+        const composer = page.locator("#composer-textarea");
+        const sendButton = page.locator("button.send-button");
         for (const msg of semanticMessages) {
-          await page.locator("#composer-textarea").fill(msg);
-          await page.locator("button.send-button").click();
-          await page.waitForTimeout(500);
+          await composer.fill(msg);
+          await expect(composer).toHaveValue(msg);
+          await sendButton.click();
+          await expect(composer).toHaveValue("");
+          await expect(page.locator(".message.outgoing").last()).toContainText(
+            msg,
+          );
         }
-
-        // Verify messages were sent
-        const outgoingMessages = page.locator(".message.outgoing");
-        const count = await outgoingMessages.count();
-        expect(count).toBeGreaterThanOrEqual(semanticMessages.length);
       }
     });
 

@@ -5,7 +5,21 @@
  * cognitive and emotional state of the Deep Tree Echo AI companion.
  */
 
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+  useMemo,
+} from "react";
+import {
+  LIVE_AVATAR_EXPRESSION,
+  isMiaraCubismExpressionName,
+  resolveAvatarExpression,
+  applyIdentityLook,
+  mergeIdentityHiddenGroups,
+  resolveMiaraOutfit,
+} from "@deltecho/avatar";
 import { Live2DAvatar } from "../AICompanionHub/Live2DAvatar";
 import type {
   Live2DAvatarController,
@@ -14,6 +28,9 @@ import type {
   EmotionalVector,
   CognitiveVisualState,
 } from "../AICompanionHub/Live2DAvatar";
+import { AvatarIdentityPicker } from "./AvatarIdentityPicker";
+import { MiaraExpressionPicker } from "./MiaraExpressionPicker";
+import { MiaraOutfitPicker } from "./MiaraOutfitPicker";
 import { getOrchestrator } from "./CognitiveBridge";
 import type { UnifiedCognitiveState } from "./CognitiveBridge";
 import {
@@ -148,6 +165,8 @@ export interface DeepTreeEchoAvatarDisplayProps {
   position?: "inline" | "floating";
   /** Callback when avatar is ready */
   onReady?: () => void;
+  /** Native visual size after the Cubism model loads */
+  onNativeSize?: (size: { width: number; height: number }) => void;
 }
 
 /**
@@ -363,12 +382,15 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
   className = "",
   position,
   onReady,
+  onNativeSize,
 }) => {
   const avatarContext = useDeepTreeEchoAvatarOptional();
+  const stripRef = useRef<HTMLDivElement>(null);
+  const [stripSize, setStripSize] = useState({ width: 0, height: 0 });
 
   // Use context values if available, otherwise use props
-  const finalWidth = width ?? avatarContext?.state.config.width ?? 300;
-  const finalHeight = height ?? avatarContext?.state.config.height ?? 300;
+  const configuredWidth = width ?? avatarContext?.state.config.width ?? 300;
+  const configuredHeight = height ?? avatarContext?.state.config.height ?? 300;
   const finalVisible = visible ?? avatarContext?.state.config.visible ?? true;
   const finalPosition =
     position ?? avatarContext?.state.config.position ?? "floating";
@@ -391,9 +413,67 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
       mapCognitiveStateToVisualState(null, BotProcessingState.IDLE, false, 0),
     );
 
+  const fillsConversationStrip = finalPosition === "floating";
+  const finalWidth =
+    fillsConversationStrip && stripSize.width > 0
+      ? stripSize.width
+      : configuredWidth;
+  const finalHeight =
+    fillsConversationStrip && stripSize.height > 0
+      ? stripSize.height
+      : configuredHeight;
+  // Fill factor for contain-fit: the standing figure should fill the strip.
+  const stripScale = fillsConversationStrip ? 0.97 : 0.92;
+  const outfit = useMemo(() => {
+    const resolved = resolveMiaraOutfit({
+      id: avatarContext?.state.config.outfit,
+      hiddenGroups: avatarContext?.state.config.outfitHiddenGroups,
+      hueShift: avatarContext?.state.config.outfitHueShift,
+    });
+    const hue = avatarContext?.state.config.outfitHueShift;
+    const hiddenGroups = mergeIdentityHiddenGroups(
+      avatarContext?.state.config.identity,
+      resolved.hiddenGroups,
+    );
+    return typeof hue === "number"
+      ? { ...resolved, hiddenGroups, hueShift: hue }
+      : { ...resolved, hiddenGroups };
+  }, [
+    avatarContext?.state.config.outfit,
+    avatarContext?.state.config.outfitHiddenGroups,
+    avatarContext?.state.config.outfitHueShift,
+  ]);
+
   const avatarController = useRef<Live2DAvatarController | null>(null);
   const updateIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const nativeSizeTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
   const lastCognitiveSignatureRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!fillsConversationStrip) return undefined;
+    const element = stripRef.current;
+    if (!element || typeof ResizeObserver === "undefined") return undefined;
+
+    const applySize = (nextWidth: number, nextHeight: number) => {
+      const widthPx = Math.round(nextWidth);
+      const heightPx = Math.round(nextHeight);
+      if (widthPx <= 0 || heightPx <= 0) return;
+      setStripSize((previous) =>
+        previous.width === widthPx && previous.height === heightPx
+          ? previous
+          : { width: widthPx, height: heightPx },
+      );
+    };
+
+    applySize(element.clientWidth, element.clientHeight);
+    const observer = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      if (!entry) return;
+      applySize(entry.contentRect.width, entry.contentRect.height);
+    });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [fillsConversationStrip, finalVisible]);
 
   // Handle avatar controller ready
   const handleAvatarReady = useCallback(
@@ -401,10 +481,49 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
       avatarController.current = controller;
       // Register controller with context if available
       avatarContext?.setController(controller);
+      const reportNativeSize = () => {
+        const nativeSize = controller.getNativeSize?.();
+        if (nativeSize && nativeSize.width > 0 && nativeSize.height > 0) {
+          onNativeSize?.(nativeSize);
+        }
+      };
+      reportNativeSize();
+      // Mesh bounds settle after the first Cubism update; pixel fit follows.
+      if (typeof requestAnimationFrame === "function") {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(reportNativeSize);
+        });
+      }
+      for (const timer of nativeSizeTimersRef.current) {
+        clearTimeout(timer);
+      }
+      nativeSizeTimersRef.current = [250, 700].map((delay) =>
+        setTimeout(reportNativeSize, delay),
+      );
+      controller.applyOutfit?.(outfit);
+      applyIdentityLook(
+        controller,
+        avatarContext?.state.config.identity,
+        avatarContext?.state.config.automeshAtlas,
+        avatarContext?.state.config.automeshMapping?.parameters,
+      );
       onReady?.();
     },
-    [onReady, avatarContext],
+    [onReady, onNativeSize, avatarContext, outfit],
   );
+
+  useEffect(() => {
+    applyIdentityLook(
+      avatarController.current,
+      avatarContext?.state.config.identity,
+      avatarContext?.state.config.automeshAtlas,
+      avatarContext?.state.config.automeshMapping?.parameters,
+    );
+  }, [
+    avatarContext?.state.config.automeshAtlas,
+    avatarContext?.state.config.automeshMapping?.parameters,
+    avatarContext?.state.config.identity,
+  ]);
 
   // Update cognitive state from orchestrator. The avatar is a visual expression
   // layer, so it should follow meaningful cognitive drift rather than every raw
@@ -445,6 +564,10 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
         clearInterval(updateIntervalRef.current);
         updateIntervalRef.current = null;
       }
+      for (const timer of nativeSizeTimersRef.current) {
+        clearTimeout(timer);
+      }
+      nativeSizeTimersRef.current = [];
     };
   }, [finalVisible]);
 
@@ -506,26 +629,51 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
     return null;
   }
 
+  const identity = avatarContext?.state.config.identity ?? "miara";
+  const lockedExpression = resolveAvatarExpression(
+    avatarContext?.state.config.expression,
+  );
+  const expressionLocked = lockedExpression !== LIVE_AVATAR_EXPRESSION;
   const containerClass = `deep-tree-echo-avatar-display ${className} ${
     finalPosition === "floating" ? "floating-avatar" : "inline-avatar"
   }`;
 
   return (
-    <div className={containerClass}>
+    <div
+      className={containerClass}
+      ref={stripRef}
+      data-identity={identity}
+      data-expression={lockedExpression}
+      data-testid="deep-tree-echo-avatar-display"
+    >
       <Live2DAvatar
         model={avatarContext?.state.config.model ?? "miara"}
         width={finalWidth}
         height={finalHeight}
-        scale={0.25}
-        emotionalState={emotionalVector}
-        cognitiveVisualState={cognitiveVisualState}
+        scale={stripScale}
+        fillContainer={fillsConversationStrip}
+        emotionalState={expressionLocked ? undefined : emotionalVector}
+        cognitiveVisualState={
+          expressionLocked ? undefined : cognitiveVisualState
+        }
         audioLevel={audioLevel}
         isSpeaking={isSpeaking}
+        outfit={outfit}
+        manualExpression={
+          isMiaraCubismExpressionName(lockedExpression)
+            ? lockedExpression
+            : undefined
+        }
         onControllerReady={handleAvatarReady}
         showLoading={true}
         showError={true}
         mode="live2d"
       />
+      <div className="avatar-look-controls">
+        <AvatarIdentityPicker variant="compact" />
+        <MiaraOutfitPicker variant="compact" />
+        <MiaraExpressionPicker variant="compact" />
+      </div>
       {processingState !== BotProcessingState.IDLE && (
         <div className="avatar-status-indicator">
           <span className={`status-badge status-${processingState}`}>
