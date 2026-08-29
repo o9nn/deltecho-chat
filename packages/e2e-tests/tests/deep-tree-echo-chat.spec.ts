@@ -286,7 +286,9 @@ test.describe("Deep Tree Echo Chat Integration", () => {
             // concurrently emit a provider-status message on an unconfigured CI
             // runner, so asserting against the final outgoing message is racy.
             const sentMessage = page
-              .locator(".message.outgoing .msg-body .text, .message.outgoing .text")
+              .locator(
+                ".message.outgoing .msg-body .text, .message.outgoing .text",
+              )
               .filter({ hasText: testMessage })
               .last();
 
