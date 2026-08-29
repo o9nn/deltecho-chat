@@ -354,18 +354,20 @@ test.describe("Cognitive Memory System", () => {
       if (chatExists) {
         await chatItem.click();
 
+        const queryMessage = `Quick memory test ${Date.now()}`;
         const startTime = Date.now();
 
-        // Send a query
-        await page.locator("#composer-textarea").fill("Quick memory test");
+        // Send a unique query so concurrent DTE output cannot satisfy or mask
+        // the performance probe on the shared CI account.
+        await page.locator("#composer-textarea").fill(queryMessage);
         await page.locator("button.send-button").click();
 
-        // Wait for message to appear
+        // Wait for this exact query to appear.
         const sentMessage = page
-          .locator(".message.outgoing")
-          .last()
-          .locator(".msg-body .text");
-        await expect(sentMessage).toContainText("Quick memory test");
+          .locator(".message.outgoing .msg-body .text")
+          .filter({ hasText: queryMessage })
+          .last();
+        await expect(sentMessage).toContainText(queryMessage);
 
         const endTime = Date.now();
         const responseTime = endTime - startTime;
