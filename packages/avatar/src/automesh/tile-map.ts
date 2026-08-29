@@ -355,7 +355,7 @@ export function classifyTileSegment(
 
 export function chainForTile(
   region: MeshRegion,
-  laterality: TileLaterality,
+  _laterality: TileLaterality,
   still: StillPoint,
 ): TileChain | null {
   if (region === "armL") return "armL"

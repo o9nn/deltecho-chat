@@ -447,8 +447,7 @@ describe("MemoryLever apply", () => {
   });
 
   it("maps unknown ids to unknown_id and leaves storage unchanged", async () => {
-    const { lever, store, storage } = await duplicateStore();
-    const before = await storage.load("deepTreeEchoBotMemories");
+    const { lever, store } = await duplicateStore();
     const plan = lever.dream();
     const originalReplace = store.replaceMemory.bind(store);
     store.replaceMemory = async (id, patch) => {

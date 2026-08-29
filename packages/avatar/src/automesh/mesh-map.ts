@@ -535,7 +535,6 @@ export function refineFigureFromDrawables(
     return fallback;
   }
   const xs = character.map((drawable) => drawable.figure.x);
-  const ys = character.map((drawable) => drawable.figure.y);
   const sortedX = [...xs].sort((left, right) => left - right);
   const medianX = sortedX[Math.floor(sortedX.length / 2)] ?? 0;
   const spanX = Math.max(...xs) - Math.min(...xs);
