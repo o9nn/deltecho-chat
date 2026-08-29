@@ -445,7 +445,9 @@ export class EntelechyIntegration extends EventEmitter {
       const result = this.coupler.couple();
       if (result.reason !== "already_coupled") {
         log.info(
-          `couple reason=${result.reason ?? "ok"} kind=${result.kind ?? "none"} adopted=${result.adopted ?? false}`,
+          `couple reason=${result.reason ?? "ok"} kind=${
+            result.kind ?? "none"
+          } adopted=${result.adopted ?? false}`,
         );
       }
     } catch {

@@ -5,10 +5,7 @@
 
 import { parametersForMelodyPose } from "./automesh/pose-map";
 import { resolveIdentityRig, type IdentityRig } from "./automesh/identity-rig";
-import {
-  IDENTITY_MODEL3_PATHS,
-  identityModel3Path,
-} from "./automesh/mesh-map";
+import { IDENTITY_MODEL3_PATHS, identityModel3Path } from "./automesh/mesh-map";
 import {
   resolveMiaraOutfit,
   type MiaraOutfitId,

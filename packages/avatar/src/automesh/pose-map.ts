@@ -298,9 +298,11 @@ export const MELODY_POSES: readonly MelodyPose[] = [
   ),
 ];
 
-const POSE_BY_ID: Readonly<Record<MelodyPoseId, MelodyPose>> = Object.fromEntries(
-  MELODY_POSES.map((item) => [item.id, item]),
-) as Record<MelodyPoseId, MelodyPose>;
+const POSE_BY_ID: Readonly<Record<MelodyPoseId, MelodyPose>> =
+  Object.fromEntries(MELODY_POSES.map((item) => [item.id, item])) as Record<
+    MelodyPoseId,
+    MelodyPose
+  >;
 
 export function isMelodyPoseId(value: unknown): value is MelodyPoseId {
   return (

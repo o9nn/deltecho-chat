@@ -306,12 +306,12 @@ U1 helper and tests first. U2 wires start/stop. U3 is the remaining orchestrator
 
 ## Verification Contract
 
-| Gate | Command | Applies to | Done signal |
-| --- | --- | --- | --- |
-| Lever tick | `pnpm --filter=deep-tree-echo-orchestrator test -- memory-lever-schedule` | U1 | AE2–AE5 and AE8 encoded |
-| Attach | `pnpm --filter=deep-tree-echo-orchestrator test -- dte-composition` | U3 | AE1 and AE7 encoded |
-| Types | `pnpm --filter=deep-tree-echo-orchestrator check:types` after core rebuild if needed | U1, U2 | `tsc` clean |
-| Guidance | Read `AGENTS.md` | U4 | AE6 topics present |
+| Gate       | Command                                                                              | Applies to | Done signal             |
+| ---------- | ------------------------------------------------------------------------------------ | ---------- | ----------------------- |
+| Lever tick | `pnpm --filter=deep-tree-echo-orchestrator test -- memory-lever-schedule`            | U1         | AE2–AE5 and AE8 encoded |
+| Attach     | `pnpm --filter=deep-tree-echo-orchestrator test -- dte-composition`                  | U3         | AE1 and AE7 encoded     |
+| Types      | `pnpm --filter=deep-tree-echo-orchestrator check:types` after core rebuild if needed | U1, U2     | `tsc` clean             |
+| Guidance   | Read `AGENTS.md`                                                                     | U4         | AE6 topics present      |
 
 Do not require `pnpm e2e` or a headed Electron session.
 

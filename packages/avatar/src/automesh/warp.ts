@@ -21,8 +21,7 @@ export function mapPoint(
   for (const landmark of landmarks) {
     const from =
       direction === "atlasToSource" ? landmark.atlas : landmark.source;
-    const to =
-      direction === "atlasToSource" ? landmark.source : landmark.atlas;
+    const to = direction === "atlasToSource" ? landmark.source : landmark.atlas;
     const dx = point.x - from.x;
     const dy = point.y - from.y;
     const distanceSq = dx * dx + dy * dy;
@@ -167,7 +166,10 @@ export function punchOpaqueBackground(
 
 export function rasterToDataUrl(
   raster: AutomeshRaster,
-  createCanvas: (width: number, height: number) => {
+  createCanvas: (
+    width: number,
+    height: number,
+  ) => {
     getContext: (type: "2d") => CanvasRenderingContext2D | null;
     toDataURL: (type?: string, quality?: number) => string;
   } = (width, height) => {

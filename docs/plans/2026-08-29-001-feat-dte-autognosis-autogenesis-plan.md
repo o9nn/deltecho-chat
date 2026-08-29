@@ -327,13 +327,13 @@ U1 coupler, types, and tests first. U2 wires Entelechy. U3 attaches identity fro
 
 ## Verification Contract
 
-| Gate | Command | Applies to | Done signal |
-| --- | --- | --- | --- |
-| Coupler | `pnpm --filter=deep-tree-echo-core test -- AutognosisAutogenesisCoupler` | U1 | AE1–AE6, AE9, AE10 encoded |
-| Entelechy | `pnpm --filter=deep-tree-echo-orchestrator test -- entelechy-autogenesis` | U2 | Couple invoked on report, skipped without |
-| Attach | `pnpm --filter=deep-tree-echo-orchestrator test -- dte-autogenesis-attach` | U3 | AE7 encoded |
-| Types | Rebuild core, then `pnpm --filter=deep-tree-echo-orchestrator check:types` | U1–U3 | `tsc` clean |
-| Guidance | Read `AGENTS.md` and `CHANGELOG.md` | U4 | AE8 topics present; CHANGELOG notes couple and grant |
+| Gate      | Command                                                                    | Applies to | Done signal                                          |
+| --------- | -------------------------------------------------------------------------- | ---------- | ---------------------------------------------------- |
+| Coupler   | `pnpm --filter=deep-tree-echo-core test -- AutognosisAutogenesisCoupler`   | U1         | AE1–AE6, AE9, AE10 encoded                           |
+| Entelechy | `pnpm --filter=deep-tree-echo-orchestrator test -- entelechy-autogenesis`  | U2         | Couple invoked on report, skipped without            |
+| Attach    | `pnpm --filter=deep-tree-echo-orchestrator test -- dte-autogenesis-attach` | U3         | AE7 encoded                                          |
+| Types     | Rebuild core, then `pnpm --filter=deep-tree-echo-orchestrator check:types` | U1–U3      | `tsc` clean                                          |
+| Guidance  | Read `AGENTS.md` and `CHANGELOG.md`                                        | U4         | AE8 topics present; CHANGELOG notes couple and grant |
 
 Do not require `pnpm e2e` or a headed Electron session.
 

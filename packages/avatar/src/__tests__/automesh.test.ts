@@ -420,17 +420,13 @@ describe("identity physics retarget", () => {
     expect(existsSync(join(models, "melody/mesh-map.json"))).toBe(true);
     expect(existsSync(join(models, "melody/pose-map.json"))).toBe(true);
     expect(existsSync(join(models, "melody/tile-map.json"))).toBe(true);
-    expect(existsSync(join(models, "melody/avatar-mesh-map.json"))).toBe(
-      true,
-    );
+    expect(existsSync(join(models, "melody/avatar-mesh-map.json"))).toBe(true);
     expect(existsSync(join(models, "miara/mesh-map.json"))).toBe(true);
     const melodyMap = JSON.parse(
       readFileSync(join(models, "melody/mesh-map.json"), "utf8"),
     );
     expect(melodyMap.identity).toBe("melody");
-    expect(melodyMap.sourceModel).toBe(
-      "models/melody/melody_t03.model3.json",
-    );
+    expect(melodyMap.sourceModel).toBe("models/melody/melody_t03.model3.json");
     expect(melodyMap.regions.legL).toEqual(
       expect.arrayContaining(["ArtMesh91", "ArtMesh87"]),
     );
@@ -463,9 +459,7 @@ describe("identity physics retarget", () => {
     expect(textureStats.regions.armR.opaque).toBeGreaterThan(1000);
     expect(textureStats.regions.skirt.opaque).toBeGreaterThan(1000);
     expect(
-      existsSync(
-        join(models, "deep-tree-echo/deep-tree-echo_t03.model3.json"),
-      ),
+      existsSync(join(models, "deep-tree-echo/deep-tree-echo_t03.model3.json")),
     ).toBe(true);
     expect(
       existsSync(join(models, "deep-tree-echo/textures/texture_00.png")),

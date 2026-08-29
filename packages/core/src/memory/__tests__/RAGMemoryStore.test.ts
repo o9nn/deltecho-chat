@@ -283,9 +283,9 @@ describe("RAGMemoryStore", () => {
       await ragMemory.tombstoneMemory(listed[1].id);
       expect(ragMemory.listMemories().length).toBe(2);
       expect(ragMemory.getMemoriesByChat(1).length).toBe(1);
-      expect(ragMemory.searchMemories("Archive").every((m) => !m.tombstoned)).toBe(
-        true,
-      );
+      expect(
+        ragMemory.searchMemories("Archive").every((m) => !m.tombstoned),
+      ).toBe(true);
     });
 
     it("replaceMemory and tombstoneMemory error when disabled", async () => {

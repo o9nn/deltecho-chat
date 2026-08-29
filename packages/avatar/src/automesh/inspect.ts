@@ -206,7 +206,8 @@ export function figureFromDrawables(
     Math.max(...used.map((box) => box.x + box.width)) -
     Math.min(...used.map((box) => box.x));
   const column = used.filter(
-    (box) => Math.abs(box.x + box.width / 2 - medianX) <= Math.max(spanX * 0.42, 0.05),
+    (box) =>
+      Math.abs(box.x + box.width / 2 - medianX) <= Math.max(spanX * 0.42, 0.05),
   );
   const union = unionDrawableBounds(
     (column.length ? column : used).map((box) => ({

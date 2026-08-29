@@ -81,7 +81,9 @@ function uniqueMemories(): MemoryRow[] {
   ];
 }
 
-function spyLog(): TickLog & { records: Array<{ level: string; msg: string; extra?: unknown }> } {
+function spyLog(): TickLog & {
+  records: Array<{ level: string; msg: string; extra?: unknown }>;
+} {
   const records: Array<{ level: string; msg: string; extra?: unknown }> = [];
   return {
     records,
@@ -127,7 +129,9 @@ describe("registerMemoryLeverSchedule", () => {
     const id = registerMemoryLeverSchedule(scheduler, { storagePath: "" });
     expect(id).toBeUndefined();
     expect(
-      scheduler.getAllTasks().some((task) => task.name === MEMORY_LEVER_TASK_NAME),
+      scheduler
+        .getAllTasks()
+        .some((task) => task.name === MEMORY_LEVER_TASK_NAME),
     ).toBe(false);
   });
 
@@ -137,7 +141,9 @@ describe("registerMemoryLeverSchedule", () => {
       intervalMs: 3_600_000,
     });
     expect(id).toBeDefined();
-    const task = scheduler.getAllTasks().find((t) => t.name === MEMORY_LEVER_TASK_NAME);
+    const task = scheduler
+      .getAllTasks()
+      .find((t) => t.name === MEMORY_LEVER_TASK_NAME);
     expect(task?.interval).toBe(3_600_000);
     expect(task?.timeout).toBe(3_600_000);
   });
@@ -147,7 +153,9 @@ describe("registerMemoryLeverSchedule", () => {
       storagePath: "/tmp/dte-rag-fixture",
       intervalMs: 1000,
     });
-    const task = scheduler.getAllTasks().find((t) => t.name === MEMORY_LEVER_TASK_NAME);
+    const task = scheduler
+      .getAllTasks()
+      .find((t) => t.name === MEMORY_LEVER_TASK_NAME);
     expect(task?.interval).toBe(MIN_MEMORY_LEVER_INTERVAL_MS);
   });
 
@@ -158,7 +166,9 @@ describe("registerMemoryLeverSchedule", () => {
       registerMemoryLeverSchedule(scheduler, {
         storagePath: "/tmp/dte-rag-fixture",
       });
-      const task = scheduler.getAllTasks().find((t) => t.name === MEMORY_LEVER_TASK_NAME);
+      const task = scheduler
+        .getAllTasks()
+        .find((t) => t.name === MEMORY_LEVER_TASK_NAME);
       expect(task?.interval).toBe(DEFAULT_MEMORY_LEVER_INTERVAL_MS);
     } finally {
       if (previous === undefined) {
@@ -183,7 +193,10 @@ describe("runMemoryLeverTick", () => {
     dir = await mkdtemp(join(tmpdir(), "dte-tick-dry-"));
     const memories = duplicateMemories();
     await seedRag(dir, memories);
-    const before = await readFile(join(dir, "deepTreeEchoBotMemories.json"), "utf8");
+    const before = await readFile(
+      join(dir, "deepTreeEchoBotMemories.json"),
+      "utf8",
+    );
     const log = spyLog();
     const result = await runMemoryLeverTick({
       storagePath: dir,
@@ -193,9 +206,9 @@ describe("runMemoryLeverTick", () => {
     expect(result.skipped).toBeUndefined();
     expect(result.plan?.merges).toBeGreaterThanOrEqual(1);
     expect(result.applied).toBe(false);
-    expect(await readFile(join(dir, "deepTreeEchoBotMemories.json"), "utf8")).toBe(
-      before,
-    );
+    expect(
+      await readFile(join(dir, "deepTreeEchoBotMemories.json"), "utf8"),
+    ).toBe(before);
     expect(logBlob(log)).not.toContain("TypeScript");
     expect(logBlob(log)).not.toContain("user");
   });
@@ -235,7 +248,10 @@ describe("runMemoryLeverTick", () => {
   it("does not call apply when apply env is set but the plan is empty", async () => {
     dir = await mkdtemp(join(tmpdir(), "dte-tick-clean-"));
     await seedRag(dir, uniqueMemories());
-    const before = await readFile(join(dir, "deepTreeEchoBotMemories.json"), "utf8");
+    const before = await readFile(
+      join(dir, "deepTreeEchoBotMemories.json"),
+      "utf8",
+    );
     const result = await runMemoryLeverTick({
       storagePath: dir,
       applyEnv: "1",
@@ -243,14 +259,18 @@ describe("runMemoryLeverTick", () => {
     expect(result.applied).toBe(false);
     expect(result.plan?.merges).toBe(0);
     expect(result.plan?.prunes).toBe(0);
-    expect(await readFile(join(dir, "deepTreeEchoBotMemories.json"), "utf8")).toBe(
-      before,
-    );
+    expect(
+      await readFile(join(dir, "deepTreeEchoBotMemories.json"), "utf8"),
+    ).toBe(before);
   });
 
   it("invalid RAG JSON does not throw", async () => {
     dir = await mkdtemp(join(tmpdir(), "dte-tick-bad-"));
-    await writeFile(join(dir, "deepTreeEchoBotMemories.json"), "{not-json", "utf8");
+    await writeFile(
+      join(dir, "deepTreeEchoBotMemories.json"),
+      "{not-json",
+      "utf8",
+    );
     await writeFile(join(dir, "deepTreeEchoBotReflections.json"), "[]", "utf8");
     const result = await runMemoryLeverTick({ storagePath: dir });
     expect(result.skipped).toBe("missing_or_invalid");
@@ -260,16 +280,19 @@ describe("runMemoryLeverTick", () => {
     dir = await mkdtemp(join(tmpdir(), "dte-tick-lock-"));
     await seedRag(dir, duplicateMemories());
     const handle = await open(join(dir, ".lock"), "wx", 0o600);
-    const before = await readFile(join(dir, "deepTreeEchoBotMemories.json"), "utf8");
+    const before = await readFile(
+      join(dir, "deepTreeEchoBotMemories.json"),
+      "utf8",
+    );
     const result = await runMemoryLeverTick({
       storagePath: dir,
       applyEnv: "1",
     });
     expect(result.skipped).toBe("locked");
     expect(result.applied).toBe(false);
-    expect(await readFile(join(dir, "deepTreeEchoBotMemories.json"), "utf8")).toBe(
-      before,
-    );
+    expect(
+      await readFile(join(dir, "deepTreeEchoBotMemories.json"), "utf8"),
+    ).toBe(before);
     await handle.close();
   });
 
@@ -280,7 +303,10 @@ describe("runMemoryLeverTick", () => {
       JSON.stringify([{ id: "v1" }]),
       "utf8",
     );
-    const result = await runMemoryLeverTick({ storagePath: dir, applyEnv: "1" });
+    const result = await runMemoryLeverTick({
+      storagePath: dir,
+      applyEnv: "1",
+    });
     expect(result.skipped).toBe("no_rag_keys");
     expect(result.applied).toBe(false);
   });
@@ -291,15 +317,18 @@ describe("scheduled handler", () => {
     const scheduler = new TaskScheduler({ checkInterval: 10_000 });
     const dir = await mkdtemp(join(tmpdir(), "dte-tick-handler-"));
     await seedRag(dir, duplicateMemories());
-    const before = await readFile(join(dir, "deepTreeEchoBotMemories.json"), "utf8");
+    const before = await readFile(
+      join(dir, "deepTreeEchoBotMemories.json"),
+      "utf8",
+    );
     try {
       const id = registerMemoryLeverSchedule(scheduler, { storagePath: dir });
       expect(id).toBeDefined();
       const task = scheduler.getTask(id!);
       await task!.handler();
-      expect(await readFile(join(dir, "deepTreeEchoBotMemories.json"), "utf8")).toBe(
-        before,
-      );
+      expect(
+        await readFile(join(dir, "deepTreeEchoBotMemories.json"), "utf8"),
+      ).toBe(before);
     } finally {
       await scheduler.stop();
       await rm(dir, { recursive: true, force: true });
@@ -339,15 +368,18 @@ describe("apply env parsing", () => {
   it("treats unknown apply values as dry-run", async () => {
     const dir = await mkdtemp(join(tmpdir(), "dte-tick-env-"));
     await seedRag(dir, duplicateMemories());
-    const before = await readFile(join(dir, "deepTreeEchoBotMemories.json"), "utf8");
+    const before = await readFile(
+      join(dir, "deepTreeEchoBotMemories.json"),
+      "utf8",
+    );
     const result = await runMemoryLeverTick({
       storagePath: dir,
       applyEnv: "on",
     });
     expect(result.applied).toBe(false);
-    expect(await readFile(join(dir, "deepTreeEchoBotMemories.json"), "utf8")).toBe(
-      before,
-    );
+    expect(
+      await readFile(join(dir, "deepTreeEchoBotMemories.json"), "utf8"),
+    ).toBe(before);
     await rm(dir, { recursive: true, force: true });
   });
 });
