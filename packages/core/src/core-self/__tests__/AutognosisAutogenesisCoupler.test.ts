@@ -18,6 +18,7 @@ import {
   type AutognosisReport as Report,
   type ReservoirState as ESNState,
 } from "../../cognitive/ESNAutognosisReservoir.js";
+import { intentionalityEngine } from "../../consciousness/IntentionalityEngine.js";
 
 function healthyReport(overrides: Partial<Report> = {}): Report {
   return {
@@ -407,18 +408,25 @@ describe("AutognosisAutogenesisCoupler", () => {
         step: (input) => coupled.step(input),
       },
       intentionality: {
-        getActiveGoals: () => [],
-        generateGoal: () => undefined,
+        getActiveGoals: () => intentionalityEngine.getActiveGoals(),
+        generateGoal: (params) => intentionalityEngine.generateGoal(params),
       },
       readGrant: () => true,
     });
 
+    clearLiveAutogenesisGoals();
     const first = coupler.couple();
     control.step(ambientInput(tick));
     tick += 1;
     expect(first.skipped).toBe(false);
     expect(first.kind).toBe(firstKind);
+    expect(first.adopted).toBe(false);
     expect(first.stepped).toBe(true);
+    expect(
+      liveAutogenesisGoals().filter(
+        (goal) => goal.content === `autogenesis:${firstKind}`,
+      ),
+    ).toHaveLength(0);
     expect(
       activationDistance(before, coupled.getState().activations),
     ).toBeGreaterThan(
@@ -428,7 +436,8 @@ describe("AutognosisAutogenesisCoupler", () => {
 
     let diverged = false;
     let laterKind: ReturnType<typeof deriveAutogenesisKind> | undefined;
-    for (let cycle = 0; cycle < 8 && !diverged; cycle++) {
+    let adoptedKind: ReturnType<typeof deriveAutogenesisKind> | undefined;
+    for (let cycle = 0; cycle < 16 && !adoptedKind; cycle++) {
       for (let i = 0; i < 12; i++) {
         coupled.step(ambientInput(tick));
         control.step(ambientInput(tick));
@@ -442,14 +451,36 @@ describe("AutognosisAutogenesisCoupler", () => {
       expect(later.skipped).toBe(false);
       expect(later.stepped).toBe(true);
       diverged =
+        diverged ||
         coupledReport.isDead !== controlReport.isDead ||
         laterKind !== deriveAutogenesisKind(controlReport);
+      if (later.adopted && later.kind) {
+        adoptedKind = later.kind;
+      }
     }
 
     expect(diverged).toBe(true);
     expect(laterKind).not.toBe(firstKind);
+    expect(adoptedKind).toBeDefined();
+    const created = liveAutogenesisGoals().filter(
+      (goal) => goal.content === `autogenesis:${adoptedKind}`,
+    );
+    expect(created).toHaveLength(1);
+    expect(created[0]?.origin.source).toBe("intrinsic");
   });
 });
+
+function liveAutogenesisGoals() {
+  return intentionalityEngine
+    .getActiveGoals()
+    .filter((goal) => goal.content.startsWith("autogenesis:"));
+}
+
+function clearLiveAutogenesisGoals() {
+  for (const goal of liveAutogenesisGoals()) {
+    intentionalityEngine.abandonGoal(goal.id, "test-reset");
+  }
+}
 
 function captureConsole(run: () => void): string[] {
   const lines: string[] = [];
