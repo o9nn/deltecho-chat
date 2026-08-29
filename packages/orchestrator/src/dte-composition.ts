@@ -42,6 +42,19 @@ export interface EntelechyAttachLike {
   start(): Promise<void>;
 }
 
+/** Start CoreSelf in isolation. Failure leaves Entelechy free to start unattached. */
+export async function tryStartCoreSelf<T>(
+  start: () => Promise<T>,
+  onError?: (error: unknown) => void,
+): Promise<T | undefined> {
+  try {
+    return await start();
+  } catch (error) {
+    onError?.(error);
+    return undefined;
+  }
+}
+
 /** Attach CoreSelf identity when present; always start Entelechy. */
 export function attachEntelechyIdentity(
   entelechy: Pick<EntelechyAttachLike, "attachIdentity">,

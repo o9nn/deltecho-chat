@@ -47,6 +47,7 @@ import {
   attachProactiveLoop,
   detachProactiveLoop,
   startEntelechyWithOptionalIdentity,
+  tryStartCoreSelf,
 } from "./dte-composition.js";
 import {
   AutonomyLifecycleCoordinator,
@@ -416,25 +417,28 @@ export class Orchestrator {
       if (this.config.enableAutonomy) {
         try {
           // 1. CoreSelfEngine — local inference + reservoir + identity
-          try {
-            this.coreSelfEngine = new CoreSelfEngine({
-              lucy: {
-                baseUrl: this.config.lucyEndpoint || "http://localhost:8080",
-              },
-              reservoir: { units: 256 },
-              identity: {},
-              readoutDim: 64,
-              embeddingDim: 128,
-            });
-            await this.coreSelfEngine.start();
-            log.info("CoreSelfEngine started (Lucy + Reservoir + Identity)");
-          } catch (error) {
-            this.coreSelfEngine = undefined;
-            log.warn(
-              "CoreSelfEngine failed to initialize (Entelechy still starts):",
-              error,
-            );
-          }
+          this.coreSelfEngine = await tryStartCoreSelf(
+            async () => {
+              const engine = new CoreSelfEngine({
+                lucy: {
+                  baseUrl: this.config.lucyEndpoint || "http://localhost:8080",
+                },
+                reservoir: { units: 256 },
+                identity: {},
+                readoutDim: 64,
+                embeddingDim: 128,
+              });
+              await engine.start();
+              log.info("CoreSelfEngine started (Lucy + Reservoir + Identity)");
+              return engine;
+            },
+            (error) => {
+              log.warn(
+                "CoreSelfEngine failed to initialize (Entelechy still starts):",
+                error,
+              );
+            },
+          );
 
           // 2. Echobeats — 3-stream, 12-step cognitive loop
           this.echobeats = new Echobeats({
