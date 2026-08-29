@@ -1,4 +1,7 @@
-import { IdentityMesh } from "../IdentityMesh.js";
+import {
+  IdentityMesh,
+  type IdentityAutognosisSignal,
+} from "../IdentityMesh.js";
 import {
   ADOPTED_SLOT,
   AutognosisAutogenesisCoupler,
@@ -199,6 +202,34 @@ describe("AutognosisAutogenesisCoupler", () => {
     );
     expect(norm).toBeCloseTo(1, 8);
     expect(vector.every((value) => Number.isFinite(value))).toBe(true);
+  });
+
+  it("R10 logs and identity omit report narrative", () => {
+    const identity = new IdentityMesh({ autoSaveInterval: 0 });
+    const seen: IdentityAutognosisSignal[] = [];
+    const original = identity.integrateAutognosis.bind(identity);
+    identity.integrateAutognosis = (signal: IdentityAutognosisSignal) => {
+      seen.push(signal);
+      return original(signal);
+    };
+    const { coupler } = makeHarness({
+      report: healthyReport(),
+      identity,
+    });
+
+    const lines = captureConsole(() => {
+      coupler.couple();
+    });
+    const text = lines.join("\n");
+
+    expect(text).toContain("couple kind=edge-of-chaos");
+    expect(text).not.toContain("secret narrative");
+    expect(text).not.toContain("must not be logged");
+    expect(seen[0]?.narrative).toBeUndefined();
+    expect(identity.generateSystemPrompt()).not.toContain("secret narrative");
+    expect(
+      identity.getState().relation.governanceProposals[0]?.rationale,
+    ).not.toContain("secret narrative");
   });
 
   it("AE6 skips when identity is unattached", () => {
@@ -419,6 +450,20 @@ describe("AutognosisAutogenesisCoupler", () => {
     expect(laterKind).not.toBe(firstKind);
   });
 });
+
+function captureConsole(run: () => void): string[] {
+  const lines: string[] = [];
+  const originalLog = console.log;
+  console.log = (...args: unknown[]) => {
+    lines.push(args.map(String).join(" "));
+  };
+  try {
+    run();
+    return lines;
+  } finally {
+    console.log = originalLog;
+  }
+}
 
 function ambientInput(tick: number, dim = 64): number[] {
   const input = new Array(dim).fill(0);

@@ -88,6 +88,27 @@ describe("EntelechyIntegration autogenesis couple", () => {
     expect(couple).toHaveBeenCalledTimes(2);
   });
 
+  it("couple logs omit processMessage text and report narrative", async () => {
+    const { integration } = makeLiveCoupler({ grant: true });
+    const secret = "USER_SECRET_TOKEN_9f3";
+    const lines: string[] = [];
+    const originalLog = console.log;
+    console.log = (...args: unknown[]) => {
+      lines.push(args.map(String).join(" "));
+    };
+    try {
+      integration.tickOnce();
+      await integration.processMessage(secret);
+    } finally {
+      console.log = originalLog;
+    }
+    const coupleLines = lines.filter((line) => line.includes("couple "));
+    const text = coupleLines.join("\n");
+    expect(text).toContain("couple kind=edge-of-chaos");
+    expect(text).not.toContain(secret);
+    expect(text).not.toContain("must-not-appear-in-goals");
+  });
+
   it("tick drives a real coupler into identity and a reservoir step", () => {
     const { integration, identity, steps } = makeLiveCoupler({ grant: true });
 
