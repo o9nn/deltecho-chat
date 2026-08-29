@@ -144,7 +144,7 @@ export interface EntelechyProcessingResult {
 // ============================================================
 
 export interface EntelechyCoupleLike {
-  couple(): { reason?: string; adopted?: boolean };
+  couple(): { reason?: string; adopted?: boolean; skipped?: boolean };
   attachIdentity(identity: IdentityMesh): void;
 }
 

@@ -16,7 +16,9 @@ function makeIntegration(deps: EntelechyIntegrationDeps) {
   );
 }
 
-function mockCoupler(couple = jest.fn(() => ({ skipped: false }))) {
+function mockCoupler(
+  couple = jest.fn(() => ({ adopted: false, skipped: false })),
+) {
   return {
     couple,
     attachIdentity: jest.fn(),
@@ -63,7 +65,8 @@ describe("EntelechyIntegration autogenesis couple", () => {
   });
 
   it("swallows coupler throws on tick and still returns processMessage result", async () => {
-    const couple = jest.fn().mockImplementation(() => {
+    const couple = jest.fn(() => ({ adopted: false, skipped: false }));
+    couple.mockImplementation(() => {
       throw new Error("boom");
     });
     const coupler = mockCoupler(couple);

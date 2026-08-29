@@ -54,7 +54,7 @@ export interface ReservoirAccessors {
 }
 
 export interface GoalOrigin {
-  source: "intrinsic" | "derived" | "reactive" | string;
+  source: "intrinsic" | "derived" | "adopted" | "emergent";
   reasoning: string;
   fromStates: string[];
 }
