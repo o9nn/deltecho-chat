@@ -97,6 +97,19 @@ export interface ConceptualMetabolismVisualSignal {
   knowledgeDensity: number;
 }
 
+export interface EmbodimentAutognosisSignal {
+  /** Confidence in the avatar's predicted-versus-rendered expression fidelity. */
+  accuracy: number;
+  /** Exponential moving average of normalized Cubism projection error. */
+  meanError: number;
+  /** Number of real rendered-state experiences incorporated into the estimate. */
+  experienceCount: number;
+  /** Evidence confidence derived from accumulated rendered-state samples. */
+  confidence: number;
+  /** Timestamp of the latest rendered-state self-observation. */
+  lastUpdatedAt: number;
+}
+
 export interface ScientificGeniusVisualSignal {
   /** DTEcho expression-driver mode hint consumed by Live2D avatar packages. */
   mode: "Scientific Genius" | "Synthesis Phase" | "Idle";
@@ -127,8 +140,12 @@ export interface ScientificGeniusVisualSignal {
   daoConsensus: number;
   /** Echo State Network coherence derived from memory, computation, spectral stability, and health. */
   esnCoherence: number;
-  /** Autognosis resonance derived from ESN health, edge-of-chaos status, and self-awareness. */
+  /** Autognosis resonance derived from ESN health, edge-of-chaos status, self-awareness, and embodied fidelity. */
   autognosisResonance: number;
+  /** Rendered-avatar self-model accuracy, projection error, and evidence maturity. */
+  embodimentAccuracy: number;
+  embodimentError: number;
+  embodimentConfidence: number;
   /** Authoritative conceptual-metabolism state projected into the Live2D body. */
   metabolic: ConceptualMetabolismVisualSignal;
   /** Experimental rigor and surprise from the causal falsification layer. */
@@ -192,6 +209,13 @@ export class EntelechyIntegration extends EventEmitter {
   private lastSnapshot: CognitiveSnapshot | null = null;
   private coupler: EntelechyCoupleLike;
   private reportPresent: () => boolean;
+  private embodimentAutognosis: EmbodimentAutognosisSignal = {
+    accuracy: 0.5,
+    meanError: 0,
+    experienceCount: 0,
+    confidence: 0,
+    lastUpdatedAt: 0,
+  };
 
   constructor(
     config: Partial<EntelechyIntegrationConfig> = {},
@@ -207,6 +231,46 @@ export class EntelechyIntegration extends EventEmitter {
 
   public attachIdentity(identity: IdentityMesh): void {
     this.coupler.attachIdentity(identity);
+  }
+
+  /** Attach the live autonomy processor used for genuine DAO/autognosis metrics. */
+  public setCognitiveProcessor(processor: CognitiveTickProcessor): void {
+    this.cognitiveProcessor = processor;
+  }
+
+  /**
+   * Accept a real predicted-versus-rendered Live2D self-observation.
+   * Confidence grows with sample count, so a cold avatar begins neutral rather
+   * than dominating ESN or governance state after a single rendered frame.
+   */
+  public updateEmbodimentAutognosis(
+    signal: Pick<
+      EmbodimentAutognosisSignal,
+      "accuracy" | "meanError" | "experienceCount"
+    > &
+      Partial<Pick<EmbodimentAutognosisSignal, "confidence" | "lastUpdatedAt">>,
+  ): EmbodimentAutognosisSignal {
+    const experienceCount = Math.max(0, Math.floor(signal.experienceCount));
+    const confidence = this.clamp01(
+      signal.confidence ?? 1 - Math.exp(-experienceCount / 12),
+    );
+    this.embodimentAutognosis = {
+      accuracy: this.clamp01(signal.accuracy),
+      meanError: Math.max(
+        0,
+        Number.isFinite(signal.meanError) ? signal.meanError : 0,
+      ),
+      experienceCount,
+      confidence,
+      lastUpdatedAt: Math.max(0, signal.lastUpdatedAt ?? Date.now()),
+    };
+    const snapshot = this.getEmbodimentAutognosis();
+    this.emit("embodiment_autognosis_updated", snapshot);
+    return snapshot;
+  }
+
+  public getEmbodimentAutognosis(): EmbodimentAutognosisSignal {
+    return { ...this.embodimentAutognosis };
   }
 
   /** Test and interval helper — runs one background cognitive tick. */
@@ -466,7 +530,7 @@ export class EntelechyIntegration extends EventEmitter {
     const markers = [
       visual.valence,
       visual.arousal * 2 - 1,
-      visual.selfAwareness * 2 - 1,
+      (visual.selfAwareness * 0.72 + visual.embodimentAccuracy * 0.28) * 2 - 1,
       visual.freeEnergy * 2 - 1,
       visual.daoConsensus * 2 - 1,
       visual.esnCoherence * 2 - 1,
@@ -610,10 +674,18 @@ export class EntelechyIntegration extends EventEmitter {
       state.reservoir,
       state.autognosis,
     );
+    const embodimentAccuracy = this.embodimentAutognosis.accuracy;
+    const embodimentError = this.clamp01(this.embodimentAutognosis.meanError);
+    const embodimentConfidence = this.embodimentAutognosis.confidence;
+    const embodimentGrounding = this.clamp01(
+      0.5 * (1 - embodimentConfidence) +
+        embodimentAccuracy * embodimentConfidence,
+    );
     const autognosisResonance = this.computeAutognosisResonance(
       state.autognosis,
       selfAwareness,
       sentience,
+      embodimentGrounding,
     );
     const daoConsensus = this.computeDaoConsensus({
       entelechyScore,
@@ -622,18 +694,20 @@ export class EntelechyIntegration extends EventEmitter {
       sentience,
       esnCoherence,
       autognosisResonance,
+      embodimentGrounding,
     });
     const metabolic = conceptualMetabolism.getVisualState();
     const causal = causalHypothesisForge.getVisualState();
     const scientificGenius = this.clamp01(
-      insightPotential * 0.36 +
-        entelechyScore * 0.22 +
-        selfAwareness * 0.12 +
-        sentience * 0.08 +
+      insightPotential * 0.33 +
+        entelechyScore * 0.21 +
+        selfAwareness * 0.11 +
+        sentience * 0.07 +
         reservoirCoupling * 0.06 +
         esnCoherence * 0.08 +
-        autognosisResonance * 0.05 +
-        daoConsensus * 0.03,
+        autognosisResonance * 0.06 +
+        daoConsensus * 0.04 +
+        embodimentGrounding * 0.04,
     );
 
     return {
@@ -660,6 +734,9 @@ export class EntelechyIntegration extends EventEmitter {
       daoConsensus,
       esnCoherence,
       autognosisResonance,
+      embodimentAccuracy,
+      embodimentError,
+      embodimentConfidence,
       metabolic,
       causalRigor: causal.causalRigor,
       falsificationPressure: causal.falsificationPressure,
@@ -695,6 +772,7 @@ export class EntelechyIntegration extends EventEmitter {
     autognosis: AutognosisReport | null,
     selfAwareness: number,
     sentience: number,
+    embodimentGrounding: number,
   ): number {
     const health = this.clamp01(autognosis?.health ?? 0.5);
     const edgeOfChaos = autognosis?.isEdgeOfChaos ? 1 : 0;
@@ -702,10 +780,11 @@ export class EntelechyIntegration extends EventEmitter {
       autognosis?.isDead || autognosis?.isSaturated ? 0.25 : 0;
 
     return this.clamp01(
-      health * 0.38 +
-        edgeOfChaos * 0.22 +
-        selfAwareness * 0.22 +
-        sentience * 0.18 -
+      health * 0.33 +
+        edgeOfChaos * 0.2 +
+        selfAwareness * 0.18 +
+        sentience * 0.14 +
+        embodimentGrounding * 0.15 -
         stabilityPenalty,
     );
   }
@@ -725,14 +804,16 @@ export class EntelechyIntegration extends EventEmitter {
     sentience: number;
     esnCoherence: number;
     autognosisResonance: number;
+    embodimentGrounding: number;
   }): number {
     return this.clamp01(
-      metrics.entelechyScore * 0.24 +
-        metrics.temporalCoherence * 0.2 +
-        metrics.selfAwareness * 0.16 +
-        metrics.sentience * 0.14 +
-        metrics.esnCoherence * 0.14 +
-        metrics.autognosisResonance * 0.12,
+      metrics.entelechyScore * 0.2 +
+        metrics.temporalCoherence * 0.18 +
+        metrics.selfAwareness * 0.14 +
+        metrics.sentience * 0.12 +
+        metrics.esnCoherence * 0.13 +
+        metrics.autognosisResonance * 0.13 +
+        metrics.embodimentGrounding * 0.1,
     );
   }
 

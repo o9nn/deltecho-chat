@@ -74,6 +74,10 @@ export interface CognitiveVisualState {
   esnCoherence?: number;
   /** Self-observation intensity for luminous inference resonance. */
   autognosisResonance?: number;
+  /** Confidence-weighted rendered-avatar self-model telemetry. */
+  embodimentAccuracy?: number;
+  embodimentError?: number;
+  embodimentConfidence?: number;
   causalRigor?: number;
   falsificationPressure?: number;
   epistemicSurprise?: number;

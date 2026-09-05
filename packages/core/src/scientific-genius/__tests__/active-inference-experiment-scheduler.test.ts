@@ -256,6 +256,91 @@ describe("ActiveInferenceExperimentScheduler", () => {
     );
   });
 
+  it("authorizes a candidate before committing it to the forge", async () => {
+    const { forge, scheduler } = makeScheduler();
+    propose(forge, "governed experiment");
+    let trialsDuringAuthorization = -1;
+
+    const decision = await scheduler.scheduleNextGoverned(READY_CONTEXT, {
+      authorize: async (candidate) => {
+        trialsDuringAuthorization = forge.getTrials().length;
+        return {
+          approved: true,
+          reason: "quorum",
+          certificateId: `cert:${candidate.hypothesisId}`,
+          governanceScore: 0.82,
+          evidence: { cognitiveConsensus: 0.8 },
+        };
+      },
+    });
+
+    expect(trialsDuringAuthorization).toBe(0);
+    expect(decision.scheduled).toBe(true);
+    expect(decision.governanceDecision).toMatchObject({
+      approved: true,
+      reason: "quorum",
+      governanceScore: 0.82,
+    });
+    expect(forge.getTrials()).toHaveLength(1);
+  });
+
+  it("leaves the causal forge untouched when governance rejects", async () => {
+    const { forge, scheduler } = makeScheduler();
+    propose(forge, "rejected governed experiment");
+
+    const decision = await scheduler.scheduleNextGoverned(READY_CONTEXT, {
+      authorize: async () => ({
+        approved: false,
+        reason: "embodiment_unreliable",
+      }),
+    });
+
+    expect(decision.scheduled).toBe(false);
+    expect(decision.reason).toBe("governance_rejected");
+    expect(decision.governanceDecision?.reason).toBe("embodiment_unreliable");
+    expect(forge.getTrials()).toHaveLength(0);
+    expect(scheduler.getState().rejectedExperiments).toBe(1);
+  });
+
+  it("fails closed when the governance authorizer throws", async () => {
+    const { forge, scheduler } = makeScheduler();
+    propose(forge, "governance error experiment");
+
+    const decision = await scheduler.scheduleNextGoverned(READY_CONTEXT, {
+      authorize: async () => {
+        throw new Error("peer transport unavailable");
+      },
+    });
+
+    expect(decision.reason).toBe("governance_error");
+    expect(decision.governanceDecision?.approved).toBe(false);
+    expect(decision.governanceDecision?.reason).toContain(
+      "peer transport unavailable",
+    );
+    expect(forge.getTrials()).toHaveLength(0);
+  });
+
+  it("returns defensive copies of governance evidence", async () => {
+    const { forge, scheduler } = makeScheduler();
+    propose(forge, "copy-safe governance");
+
+    const decision = await scheduler.scheduleNextGoverned(READY_CONTEXT, {
+      authorize: async () => ({
+        approved: true,
+        reason: "quorum",
+        evidence: { peerConsensus: 0.75 },
+      }),
+    });
+    if (decision.governanceDecision?.evidence) {
+      decision.governanceDecision.evidence.peerConsensus = 0;
+    }
+
+    expect(
+      scheduler.getState().lastDecision?.governanceDecision?.evidence
+        ?.peerConsensus,
+    ).toBe(0.75);
+  });
+
   it("resets all scheduler state without deleting forge knowledge", () => {
     const { forge, scheduler } = makeScheduler();
     propose(forge, "persistent hypothesis");

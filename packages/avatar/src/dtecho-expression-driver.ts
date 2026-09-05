@@ -77,6 +77,10 @@ export interface DTEchoProjectionInput {
   esnCoherence?: number; // 0..1
   /** Explicit autognosis resonance override for self-observation intensity. */
   autognosisResonance?: number; // 0..1
+  /** Confidence-weighted rendered-avatar self-model telemetry. */
+  embodimentAccuracy?: number; // 0..1
+  embodimentError?: number; // >= 0
+  embodimentConfidence?: number; // 0..1
   /** Falsification-grounded scientific-genius channels. */
   causalRigor?: number; // 0..1
   falsificationPressure?: number; // 0..1
@@ -111,6 +115,8 @@ export interface DTEchoGeniusResonance {
   daoConsensus: number;
   esnCoherence: number;
   autognosis: number;
+  embodimentGrounding: number;
+  embodimentUncertainty: number;
   haloPulseHz: number;
   epistemicTemperature: number;
   hypothesisFlux: number;
@@ -414,6 +420,9 @@ export function projectDTEchoCognitiveState(
   const falsificationPressure = clamp01(input.falsificationPressure ?? 0);
   const epistemicSurprise = clamp01(input.epistemicSurprise ?? 0);
   const activeExperimentation = clamp01(input.activeExperimentation ?? 0);
+  const embodimentConfidence = clamp01(input.embodimentConfidence ?? 0);
+  const embodimentAccuracy = clamp01(input.embodimentAccuracy ?? 0.5);
+  const embodimentUncertainty = (1 - embodimentAccuracy) * embodimentConfidence;
   const geniusResonance = computeGeniusResonance(input, scientificGenius);
   const salience = clamp01(
     input.salience ??
@@ -433,7 +442,8 @@ export function projectDTEchoCognitiveState(
       selfAwareness * 0.15 +
       phi * 0.12 +
       salience * 0.11 +
-      scientificGenius * 0.16,
+      scientificGenius * 0.16 +
+      embodimentUncertainty * 0.06,
     0.35,
     1,
   );
@@ -496,28 +506,32 @@ export function projectDTEchoCognitiveState(
       [PARAM_IDS.PARAM_EYE_L_OPEN]: clamp(
         (profile.cubism[PARAM_IDS.PARAM_EYE_L_OPEN] ?? 0.85) +
           arousal * 0.08 +
-          epistemicSurprise * 0.12,
+          epistemicSurprise * 0.12 -
+          embodimentUncertainty * 0.05,
         0.45,
         1.2,
       ),
       [PARAM_IDS.PARAM_EYE_R_OPEN]: clamp(
         (profile.cubism[PARAM_IDS.PARAM_EYE_R_OPEN] ?? 0.85) +
           arousal * 0.08 +
-          epistemicSurprise * 0.12,
+          epistemicSurprise * 0.12 -
+          embodimentUncertainty * 0.05,
         0.45,
         1.2,
       ),
       [PARAM_IDS.PARAM_BROW_L_Y]: clamp(
         (profile.cubism[PARAM_IDS.PARAM_BROW_L_Y] ?? 0) +
           epistemicSurprise * 0.24 -
-          falsificationPressure * 0.1,
+          falsificationPressure * 0.1 -
+          embodimentUncertainty * 0.14,
         -1,
         1,
       ),
       [PARAM_IDS.PARAM_BROW_R_Y]: clamp(
         (profile.cubism[PARAM_IDS.PARAM_BROW_R_Y] ?? 0) +
           epistemicSurprise * 0.2 -
-          falsificationPressure * 0.1,
+          falsificationPressure * 0.1 -
+          embodimentUncertainty * 0.14,
         -1,
         1,
       ),
@@ -531,7 +545,9 @@ export function projectDTEchoCognitiveState(
         1,
       ),
       [PARAM_IDS.PARAM_ANGLE_Y]: clamp(
-        (profile.cubism[PARAM_IDS.PARAM_ANGLE_Y] ?? 0) - scientificGenius * 2.5,
+        (profile.cubism[PARAM_IDS.PARAM_ANGLE_Y] ?? 0) -
+          scientificGenius * 2.5 -
+          embodimentUncertainty * 2,
         -10,
         10,
       ),
@@ -609,11 +625,19 @@ function computeGeniusResonance(
         clamp01(input.insightPotential ?? 0) * 0.34 +
         clamp01(input.sentience ?? 0.5) * 0.28,
   );
+  const embodimentConfidence = clamp01(input.embodimentConfidence ?? 0);
+  const embodimentAccuracy = clamp01(input.embodimentAccuracy ?? 0.5);
+  const embodimentGrounding = clamp01(
+    0.5 * (1 - embodimentConfidence) +
+      embodimentAccuracy * embodimentConfidence,
+  );
+  const embodimentUncertainty = (1 - embodimentAccuracy) * embodimentConfidence;
   const autognosis = clamp01(
     input.autognosisResonance ??
-      clamp01(input.selfAwareness ?? 0) * 0.44 +
-        clamp01(input.phi ?? 0) * 0.36 +
-        scientificGenius * 0.2,
+      clamp01(input.selfAwareness ?? 0) * 0.38 +
+        clamp01(input.phi ?? 0) * 0.3 +
+        scientificGenius * 0.17 +
+        embodimentGrounding * 0.15,
   );
   const activation = clamp01(
     scientificGenius * 0.44 +
@@ -628,6 +652,8 @@ function computeGeniusResonance(
     daoConsensus,
     esnCoherence,
     autognosis,
+    embodimentGrounding,
+    embodimentUncertainty,
     haloPulseHz: Number(
       (0.5 + activation * 2.8 + esnCoherence * 0.7).toFixed(3),
     ),
@@ -643,8 +669,10 @@ function computeGeniusResonance(
     ),
     description:
       activation >= 0.72
-        ? "Luminous ESN Autognosis resonance: DAO-like consensus, hypothesis flux, and self-observation are phase-locked."
-        : "Subthreshold scientific-genius resonance; avatar remains receptive to emergent inference.",
+        ? "Luminous ESN Autognosis resonance: DAO-like consensus, hypothesis flux, and embodied self-observation are phase-locked."
+        : embodimentUncertainty >= 0.3
+          ? "Embodiment calibration is active; the avatar visibly adopts a self-evaluative posture while reducing projection error."
+          : "Subthreshold scientific-genius resonance; avatar remains receptive to emergent inference.",
   };
 }
 

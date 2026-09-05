@@ -92,6 +92,9 @@ export interface Live2DCognitiveVisualState {
   daoConsensus?: number; // 0..1
   esnCoherence?: number; // 0..1
   autognosisResonance?: number; // 0..1
+  embodimentAccuracy?: number; // 0..1
+  embodimentError?: number; // >= 0
+  embodimentConfidence?: number; // 0..1
   causalRigor?: number; // 0..1
   falsificationPressure?: number; // 0..1
   epistemicSurprise?: number; // 0..1

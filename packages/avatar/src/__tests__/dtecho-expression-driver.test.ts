@@ -117,6 +117,47 @@ describe("DTEcho expression driver", () => {
     expect(projection.geniusResonance.daoConsensus).toBeCloseTo(0.91);
   });
 
+  it("embodies measured self-model uncertainty as a bounded self-evaluative posture", () => {
+    const grounded = projectDTEchoCognitiveState({
+      mode: "Scientific Genius",
+      arousal: 0.5,
+      embodimentAccuracy: 0.95,
+      embodimentConfidence: 1,
+    });
+    const uncertain = projectDTEchoCognitiveState({
+      mode: "Scientific Genius",
+      arousal: 0.5,
+      embodimentAccuracy: 0.2,
+      embodimentConfidence: 1,
+    });
+
+    expect(grounded.geniusResonance.embodimentGrounding).toBeCloseTo(0.95);
+    expect(uncertain.geniusResonance.embodimentUncertainty).toBeCloseTo(0.8);
+    expect(uncertain.geniusResonance.description).toContain(
+      "Embodiment calibration",
+    );
+    expect(uncertain.cubism[PARAM_IDS.PARAM_ANGLE_Y]).toBeLessThan(
+      grounded.cubism[PARAM_IDS.PARAM_ANGLE_Y],
+    );
+    expect(uncertain.cubism[PARAM_IDS.PARAM_BROW_L_Y]).toBeLessThan(
+      grounded.cubism[PARAM_IDS.PARAM_BROW_L_Y],
+    );
+    expect(uncertain.cubism[PARAM_IDS.PARAM_EYE_L_OPEN]).toBeGreaterThanOrEqual(
+      0.45,
+    );
+  });
+
+  it("keeps embodiment influence neutral before rendered evidence matures", () => {
+    const coldStart = projectDTEchoCognitiveState({
+      mode: "Scientific Genius",
+      embodimentAccuracy: 0,
+      embodimentConfidence: 0,
+    });
+
+    expect(coldStart.geniusResonance.embodimentGrounding).toBeCloseTo(0.5);
+    expect(coldStart.geniusResonance.embodimentUncertainty).toBe(0);
+  });
+
   it("projects speaking state into lip sync and open-vowel expression", () => {
     const projection = projectDTEchoCognitiveState({
       isSpeaking: true,

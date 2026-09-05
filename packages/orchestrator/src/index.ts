@@ -166,6 +166,25 @@ export type {
   FeedbackEvent,
 } from "./reservoir-feedback-loop.js";
 export { SelfModificationEngine } from "./self-modification.js";
+export {
+  MultiAgentConsensus,
+  multiAgentConsensus,
+  type PeerInstance,
+  type ConsensusProposal,
+  type ConsensusVote,
+  type ExperimentConsensusRequest,
+  type ConsensusActionRequest,
+  type MultiAgentConsensusConfig,
+} from "./multi-agent-consensus.js";
+export {
+  PolycentricExperimentGovernance,
+  DEFAULT_POLYCENTRIC_EXPERIMENT_GOVERNANCE_CONFIG,
+  type PolycentricGovernanceContext,
+  type ExperimentPeerConsensus,
+  type PolycentricExperimentGovernanceConfig,
+  type ExperimentGovernanceCertificate,
+  type PolycentricGovernanceState,
+} from "./polycentric-experiment-governance.js";
 export { CognitiveTickProcessor } from "./cognitive-tick-processor.js";
 export { ProactiveLoop } from "./proactive-loop.js";
 export { Echobeats } from "./echobeats.js";

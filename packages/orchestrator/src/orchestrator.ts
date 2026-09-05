@@ -62,6 +62,14 @@ import {
 import { Echobeats } from "./echobeats.js";
 import { entelechyIntegration } from "./entelechy-integration.js";
 import { SelfModificationEngine } from "./self-modification.js";
+import {
+  MultiAgentConsensus,
+  type ConsensusActionRequest,
+} from "./multi-agent-consensus.js";
+import {
+  PolycentricExperimentGovernance,
+  type PolycentricGovernanceState,
+} from "./polycentric-experiment-governance.js";
 import { epistemicImmuneSystem } from "deep-tree-echo-core";
 
 const log = getLogger("deep-tree-echo-orchestrator/Orchestrator");
@@ -247,6 +255,8 @@ export class Orchestrator {
   private echobeats?: Echobeats;
   private proprioceptiveEmbodiment?: ProprioceptiveEmbodiment;
   private selfModEngine?: SelfModificationEngine;
+  private peerConsensus?: MultiAgentConsensus;
+  private experimentGovernance?: PolycentricExperimentGovernance;
   private scientificIntegrationCleanup: Array<() => void> = [];
   private running: boolean = false;
 
@@ -472,12 +482,22 @@ export class Orchestrator {
           log.info("ProactiveLoop started (process liveness)");
 
           // 4. AutonomyLifecycleCoordinator — 5-phase autonomy cycle
-          this.autonomyLifecycle = new AutonomyLifecycleCoordinator({
-            cycleIntervalMs: 30_000,
-            coherenceThreshold: 0.6,
-            verbose: false,
-            ...this.config.autonomyLifecycle,
-          });
+          // Share the pipeline's genuine processor and one entelechy authority so
+          // lifecycle coherence, experiment governance, and avatar embodiment all
+          // observe the same DAO/ESN autognosis state.
+          const cognitiveProcessor =
+            this.autonomyPipeline.getCognitiveProcessor();
+          entelechyIntegration.setCognitiveProcessor(cognitiveProcessor);
+          this.autonomyLifecycle = new AutonomyLifecycleCoordinator(
+            {
+              cycleIntervalMs: 30_000,
+              coherenceThreshold: 0.6,
+              verbose: false,
+              ...this.config.autonomyLifecycle,
+            },
+            cognitiveProcessor,
+            entelechyIntegration,
+          );
           this.autonomyLifecycle.wireEchobeats(this.echobeats);
           this.autonomyLifecycle.wireScientificGenius(scientificGeniusEngine);
           await this.autonomyLifecycle.start();
@@ -766,37 +786,107 @@ export class Orchestrator {
             epistemicDreaming.connectKnowledgeGraph(knowledgeGraph);
             cognitiveResonanceField.connectKnowledgeGraph(knowledgeGraph);
 
+            const peerEndpoints = (process.env.DTE_CONSENSUS_PEERS ?? "")
+              .split(",")
+              .map((endpoint) => endpoint.trim())
+              .filter(Boolean);
+            const consensusSecret = process.env.DTE_CONSENSUS_SECRET;
+            const peerConsensusEnabled =
+              peerEndpoints.length > 0 && Boolean(consensusSecret);
+            if (peerEndpoints.length > 0 && !consensusSecret) {
+              log.warn(
+                "DTE_CONSENSUS_PEERS configured without DTE_CONSENSUS_SECRET; peer voting remains fail-closed",
+              );
+            }
+            this.peerConsensus = new MultiAgentConsensus({
+              ...(process.env.DTE_INSTANCE_ID
+                ? { instanceId: process.env.DTE_INSTANCE_ID }
+                : {}),
+              peers: peerEndpoints,
+              enabled: peerConsensusEnabled,
+              sharedSecret: consensusSecret,
+            });
+            this.peerConsensus.start();
+            const unregisterConsensusEndpoints = consensusSecret
+              ? this.registerConsensusWebhookEndpoints(consensusSecret)
+              : null;
+            this.experimentGovernance = new PolycentricExperimentGovernance(
+              this.peerConsensus,
+            );
+
             let activeInferenceTicks = 0;
+            let activeInferenceInFlight = false;
             const scheduleActiveInference = (): void => {
               const forgeState = causalHypothesisForge.getState();
               if (
+                activeInferenceInFlight ||
                 forgeState.proposed +
                   forgeState.testing +
                   forgeState.supported ===
-                0
+                  0
               ) {
                 return;
               }
 
               const snapshot = entelechyIntegration.takeSnapshot();
               const metabolic = conceptualMetabolism.getVisualState();
-              const decision = activeInferenceExperimentScheduler.scheduleNext({
-                reservoirHealth: snapshot.autognosis?.health ?? 0.5,
-                reservoirEntropy: snapshot.reservoir?.entropy ?? 0.5,
-                isEdgeOfChaos: snapshot.autognosis?.isEdgeOfChaos ?? false,
-                daoConsensus: snapshot.scientificGeniusVisual.daoConsensus,
+              const embodiment = entelechyIntegration.getEmbodimentAutognosis();
+              const causalVisual = causalHypothesisForge.getVisualState();
+              const cognitiveConsensus = cognitiveProcessor.getDaoConsensus();
+              const cognitiveAutognosis = cognitiveProcessor.getEsnAutognosis();
+              const reservoirHealth = snapshot.autognosis?.health ?? 0.5;
+
+              this.experimentGovernance?.updateContext({
+                cognitiveConsensus,
+                cognitiveAutognosis,
+                evidenceConsensus: causalVisual.daoEvidenceConsensus,
+                embodimentAccuracy: embodiment.accuracy,
+                embodimentConfidence: embodiment.confidence,
+                reservoirHealth,
+                isReservoirDead: snapshot.autognosis?.isDead ?? false,
+                isReservoirSaturated: snapshot.autognosis?.isSaturated ?? false,
                 energyLevel: metabolic.energyLevel,
                 isEnergyCrisis: metabolic.isEnergyCrisis,
               });
 
-              if (decision.scheduled && decision.trial) {
-                log.info(
-                  `Active inference scheduled ${decision.trial.id} for ${decision.trial.hypothesisId} ` +
-                    `(informationGain=${decision.candidate?.expectedInformationGain.toFixed(
-                      3,
-                    )}, score=${decision.candidate?.score.toFixed(3)})`,
-                );
-              }
+              activeInferenceInFlight = true;
+              void activeInferenceExperimentScheduler
+                .scheduleNextGoverned(
+                  {
+                    reservoirHealth,
+                    reservoirEntropy: snapshot.reservoir?.entropy ?? 0.5,
+                    isEdgeOfChaos: snapshot.autognosis?.isEdgeOfChaos ?? false,
+                    daoConsensus: cognitiveConsensus,
+                    energyLevel: metabolic.energyLevel,
+                    isEnergyCrisis: metabolic.isEnergyCrisis,
+                  },
+                  this.experimentGovernance!,
+                )
+                .then((decision) => {
+                  if (decision.scheduled && decision.trial) {
+                    log.info(
+                      `Governed active inference scheduled ${decision.trial.id} for ${decision.trial.hypothesisId} ` +
+                        `(informationGain=${decision.candidate?.expectedInformationGain.toFixed(
+                          3,
+                        )}, governance=${decision.governanceDecision?.governanceScore?.toFixed(
+                          3,
+                        )}, certificate=${decision.governanceDecision
+                          ?.certificateId})`,
+                    );
+                  } else if (
+                    decision.reason === "governance_rejected" ||
+                    decision.reason === "governance_error"
+                  ) {
+                    log.warn(
+                      `Active inference deferred by governance: ${
+                        decision.governanceDecision?.reason ?? decision.reason
+                      }`,
+                    );
+                  }
+                })
+                .finally(() => {
+                  activeInferenceInFlight = false;
+                });
             };
 
             const onKnowledgeIngested = (
@@ -922,10 +1012,14 @@ export class Orchestrator {
               cognitiveResonanceField.stop();
               conceptualMetabolism.stop();
               metabolicAvatarBridge.stop();
+              unregisterConsensusEndpoints?.();
+              this.peerConsensus?.stop();
+              this.peerConsensus = undefined;
+              this.experimentGovernance = undefined;
             });
 
             log.info(
-              "Metabolic cognition graph active (avatar, dreaming, resonance, causal falsification, and active-inference experiment scheduling)",
+              `Metabolic cognition graph active (avatar, dreaming, resonance, causal falsification, and polycentric active-inference governance; peers=${peerEndpoints.length}, peerVoting=${peerConsensusEnabled})`,
             );
           } catch (e) {
             log.warn("Metabolic cognition graph not available (non-fatal):", e);
@@ -1919,9 +2013,20 @@ ${response.body}`;
   public getDoubleMembraneIntegration(): DoubleMembraneIntegration | undefined {
     return this.doubleMembraneIntegration;
   }
-
+  /** Inspect scientific experiment authorization and live peer-quorum health. */
+  public getPolycentricExperimentGovernanceState(): {
+    governance: PolycentricGovernanceState;
+    peers: ReturnType<MultiAgentConsensus["getStats"]>;
+  } | null {
+    if (!this.experimentGovernance || !this.peerConsensus) return null;
+    return {
+      governance: this.experimentGovernance.getState(),
+      peers: this.peerConsensus.getStats(),
+    };
+  }
   /**
    * Get current cognitive tier mode
+
    */
   public getCognitiveTierMode(): CognitiveTierMode {
     return this.config.cognitiveTierMode;
@@ -1991,6 +2096,59 @@ ${response.body}`;
     };
   }
 
+  /** Register HMAC-protected peer-governance endpoints on the webhook server. */
+  private registerConsensusWebhookEndpoints(
+    secret: string,
+  ): (() => void) | null {
+    if (!this.webhookServer || !this.peerConsensus) return null;
+
+    const healthPath = "/consensus/health";
+    const proposalPath = "/consensus/propose";
+    this.webhookServer.registerEndpoint({
+      name: "DTE Consensus Health",
+      path: healthPath,
+      secret,
+      eventTypes: [],
+      rateLimit: { maxRequests: 60, windowMs: 60_000 },
+      handler: async () => ({
+        coherence: this.peerConsensus?.getLocalCoherence() ?? 0,
+        instanceId: this.peerConsensus?.getInstanceId() ?? "inactive",
+      }),
+    });
+    this.webhookServer.registerEndpoint({
+      name: "DTE Consensus Proposal",
+      path: proposalPath,
+      secret,
+      eventTypes: [],
+      rateLimit: { maxRequests: 30, windowMs: 60_000 },
+      handler: async (payload: unknown) => {
+        const action = (payload as { modification?: unknown })?.modification;
+        if (
+          !action ||
+          typeof action !== "object" ||
+          typeof (action as { key?: unknown }).key !== "string" ||
+          typeof (action as { reason?: unknown }).reason !== "string" ||
+          !Number.isFinite(
+            (action as { coherenceAtRequest?: number }).coherenceAtRequest,
+          )
+        ) {
+          throw new Error("Invalid consensus action payload");
+        }
+        if (!this.peerConsensus) {
+          throw new Error("Consensus engine is not active");
+        }
+        return this.peerConsensus.evaluateProposal(
+          action as ConsensusActionRequest,
+        );
+      },
+    });
+
+    return () => {
+      this.webhookServer?.unregisterEndpoint(healthPath);
+      this.webhookServer?.unregisterEndpoint(proposalPath);
+    };
+  }
+
   /**
    * Register handlers for IPC server
    *
@@ -2016,6 +2174,7 @@ ${response.body}`;
       const _sys6State = this.sys6Bridge?.getState();
       const _membraneStatus = this.doubleMembraneIntegration?.getStatus();
       const _aarState = this.aarSystem?.getState();
+      const governanceState = this.getPolycentricExperimentGovernanceState();
 
       return {
         running: this.running,
@@ -2048,6 +2207,12 @@ ${response.body}`;
           dovecot: {
             status: this.dovecotInterface?.isRunning() ? "running" : "stopped",
           },
+          experimentGovernance: governanceState
+            ? {
+                status: "active",
+                ...governanceState,
+              }
+            : { status: "inactive" },
         },
         processingStats: this.processingStats,
       };

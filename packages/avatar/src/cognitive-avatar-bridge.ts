@@ -57,6 +57,9 @@ export interface CognitiveStateInput {
   daoConsensus?: number; // 0-1 distributed consensus around current inference
   esnCoherence?: number; // 0-1 reservoir phase coherence
   autognosisResonance?: number; // 0-1 self-observation / reservoir resonance
+  embodimentAccuracy?: number; // 0-1 rendered-state projection fidelity
+  embodimentError?: number; // normalized RMS Cubism projection error
+  embodimentConfidence?: number; // 0-1 evidence maturity
 
   // EchoBeats state
   echoBeatsPhase?: number; // 0-11
@@ -343,6 +346,9 @@ export class CognitiveAvatarBridge extends EventEmitter {
       daoConsensus: state.daoConsensus,
       esnCoherence: state.esnCoherence,
       autognosisResonance: state.autognosisResonance,
+      embodimentAccuracy: state.embodimentAccuracy,
+      embodimentError: state.embodimentError,
+      embodimentConfidence: state.embodimentConfidence,
       isProcessing: state.isProcessing,
       isSpeaking: state.isSpeaking,
       audioLevel: state.audioLevel,
@@ -583,6 +589,9 @@ export class CognitiveAvatarBridge extends EventEmitter {
       freeEnergy: number;
       esnCoherence: number;
       autognosisResonance: number;
+      embodimentAccuracy?: number;
+      embodimentError?: number;
+      embodimentConfidence?: number;
     },
     context: {
       isProcessing?: boolean;
@@ -633,6 +642,9 @@ export class CognitiveAvatarBridge extends EventEmitter {
       daoConsensus: context.daoConsensus,
       esnCoherence: genius.esnCoherence,
       autognosisResonance: genius.autognosisResonance,
+      embodimentAccuracy: genius.embodimentAccuracy,
+      embodimentError: genius.embodimentError,
+      embodimentConfidence: genius.embodimentConfidence,
       isProcessing: context.isProcessing ?? false,
       isSpeaking: context.isSpeaking ?? false,
       audioLevel: context.audioLevel,

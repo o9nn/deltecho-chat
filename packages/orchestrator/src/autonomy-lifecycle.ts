@@ -201,16 +201,16 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
   constructor(
     config: Partial<AutonomyLifecycleConfig> = {},
     cognitiveProcessor?: CognitiveTickProcessor,
+    entelechyIntegration?: EntelechyIntegration,
   ) {
     super();
     this.config = { ...DEFAULT_CONFIG, ...config };
     this.cognitiveProcessor = cognitiveProcessor;
-    if (cognitiveProcessor) {
-      this.entelechyIntegration = new EntelechyIntegration({
-        cognitiveProcessor: cognitiveProcessor,
-        // Pass other necessary config for EntelechyIntegration if needed
-      });
-    }
+    this.entelechyIntegration =
+      entelechyIntegration ??
+      (cognitiveProcessor
+        ? new EntelechyIntegration({ cognitiveProcessor })
+        : undefined);
 
     // Initialize default virtual agent
     this.virtualAgent = this.createDefaultVirtualAgent();
@@ -1337,7 +1337,13 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
     getSelfModelAccuracy(): number;
   }): void {
     feedback.on("self-model-update", (data: unknown) => {
-      const update = data as { accuracy: number; meanError: number };
+      const update = data as {
+        accuracy: number;
+        meanError: number;
+        experienceCount: number;
+      };
+      // Feed the rendered-state evidence into the shared cognitive body model.
+      this.entelechyIntegration?.updateEmbodimentAutognosis(update);
       // Feed accuracy into the self-modification engine
       if (this.selfModEngine) {
         this.selfModEngine.updateAvatarSelfModelAccuracy(update.accuracy);

@@ -193,6 +193,9 @@ export interface ScientificGeniusVisualState {
   daoConsensus?: number;
   esnCoherence?: number;
   autognosisResonance?: number;
+  embodimentAccuracy?: number;
+  embodimentError?: number;
+  embodimentConfidence?: number;
   /** ConceptualMetabolism state, authoritative when supplied by the backend. */
   metabolic?: MetabolicVisualState;
   causalRigor?: number;

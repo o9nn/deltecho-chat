@@ -16,6 +16,7 @@
  */
 
 import { EventEmitter } from "events";
+import * as crypto from "crypto";
 import type {
   ModificationRequest,
   SelfModificationEngine,
@@ -31,14 +32,34 @@ export interface PeerInstance {
   isHealthy: boolean;
 }
 
+export interface ExperimentConsensusRequest {
+  /** Stable action key carried by the existing peer-consensus transport. */
+  key: string;
+  /** Candidate utility supplied for generic action comparison. */
+  newValue: number;
+  reason: string;
+  source: "scientific_experiment";
+  coherenceAtRequest: number;
+  hypothesisId: string;
+  estimatedRisk: number;
+  expectedInformationGain: number;
+  embodimentAccuracy: number;
+}
+
+export type ConsensusActionRequest =
+  | ModificationRequest
+  | ExperimentConsensusRequest;
+
 export interface ConsensusProposal {
   id: string;
   proposerId: string;
-  modification: ModificationRequest;
+  modification: ConsensusActionRequest;
   timestamp: number;
   votes: Map<string, ConsensusVote>;
   status: "pending" | "approved" | "rejected" | "timeout";
   quorumReached: boolean;
+  /** Voter set frozen when the proposal opens; prevents quorum shrinkage on timeout. */
+  eligibleVoterCount?: number;
 }
 
 export interface ConsensusVote {
@@ -64,6 +85,8 @@ export interface MultiAgentConsensusConfig {
   healthCheckInterval: number;
   /** Enable consensus (false = single-instance mode, apply immediately) */
   enabled: boolean;
+  /** Optional HMAC secret shared by peer webhook endpoints. */
+  sharedSecret?: string;
 }
 
 const DEFAULT_CONFIG: MultiAgentConsensusConfig = {
@@ -131,6 +154,12 @@ export class MultiAgentConsensus extends EventEmitter {
     this.emit("started", { instanceId: this.config.instanceId });
   }
 
+  /** Perform an immediate peer-health refresh outside the interval cadence. */
+  async refreshPeerHealth(): Promise<void> {
+    if (!this.config.enabled) return;
+    await this.checkPeerHealth();
+  }
+
   /**
    * Stop the consensus engine.
    */
@@ -149,6 +178,19 @@ export class MultiAgentConsensus extends EventEmitter {
   async proposeModification(
     modification: ModificationRequest,
   ): Promise<ConsensusProposal> {
+    return this.proposeAction(modification);
+  }
+
+  /** Propose a falsifiable scientific experiment through the same peer quorum. */
+  async proposeExperiment(
+    experiment: ExperimentConsensusRequest,
+  ): Promise<ConsensusProposal> {
+    return this.proposeAction(experiment);
+  }
+
+  private async proposeAction(
+    modification: ConsensusActionRequest,
+  ): Promise<ConsensusProposal> {
     const proposalId = `${this.config.instanceId}-${Date.now().toString(36)}`;
 
     const proposal: ConsensusProposal = {
@@ -159,6 +201,7 @@ export class MultiAgentConsensus extends EventEmitter {
       votes: new Map(),
       status: "pending",
       quorumReached: false,
+      eligibleVoterCount: 1,
     };
 
     // Single-instance mode: auto-approve
@@ -177,7 +220,8 @@ export class MultiAgentConsensus extends EventEmitter {
       return proposal;
     }
 
-    // Multi-instance mode: broadcast and collect votes
+    // Multi-instance mode: freeze the eligible voter set, then collect votes.
+    proposal.eligibleVoterCount = this.getHealthyPeerCount() + 1;
     this.proposals.set(proposalId, proposal);
 
     // Self-vote first
@@ -197,7 +241,7 @@ export class MultiAgentConsensus extends EventEmitter {
    * Evaluate a received proposal from a peer.
    * Returns a vote based on local coherence and safety checks.
    */
-  evaluateProposal(modification: ModificationRequest): ConsensusVote {
+  evaluateProposal(modification: ConsensusActionRequest): ConsensusVote {
     let approve = true;
     let reason = "Approved: coherence sufficient";
 
@@ -240,8 +284,9 @@ export class MultiAgentConsensus extends EventEmitter {
   // ─── Private Methods ────────────────────────────────────────────
 
   private checkQuorum(proposal: ConsensusProposal): void {
-    const totalVoters = this.getHealthyPeerCount() + 1; // +1 for self
-    const requiredVotes = Math.ceil(totalVoters * this.config.quorumFraction);
+    const totalVoters =
+      proposal.eligibleVoterCount ?? this.getHealthyPeerCount() + 1;
+    const requiredVotes = this.getRequiredApprovals(totalVoters);
     const approvals = Array.from(proposal.votes.values()).filter(
       (v) => v.approve,
     ).length;
@@ -270,7 +315,11 @@ export class MultiAgentConsensus extends EventEmitter {
         try {
           const response = await fetch(`${peer.endpoint}/consensus/propose`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: this.createPeerHeaders({
+              proposalId: proposal.id,
+              proposerId: proposal.proposerId,
+              modification: proposal.modification,
+            }),
             body: JSON.stringify({
               proposalId: proposal.id,
               proposerId: proposal.proposerId,
@@ -298,16 +347,16 @@ export class MultiAgentConsensus extends EventEmitter {
     }
 
     if (proposal.status === "pending") {
-      // Timeout — decide based on votes received so far
+      // Timeout — never shrink the original voter set to the responses that
+      // happened to arrive; otherwise a self-vote could approve a peer action.
       const approvals = Array.from(proposal.votes.values()).filter(
         (v) => v.approve,
       ).length;
-      const totalVotes = proposal.votes.size;
+      const requiredApprovals = this.getRequiredApprovals(
+        proposal.eligibleVoterCount ?? this.getHealthyPeerCount() + 1,
+      );
 
-      if (
-        totalVotes > 0 &&
-        approvals / totalVotes > this.config.quorumFraction
-      ) {
+      if (approvals >= requiredApprovals) {
         proposal.status = "approved";
         proposal.quorumReached = true;
         this.emit("proposal:approved", proposal);
@@ -322,6 +371,7 @@ export class MultiAgentConsensus extends EventEmitter {
     for (const peer of this.peers.values()) {
       try {
         const response = await fetch(`${peer.endpoint}/consensus/health`, {
+          headers: this.createPeerHeaders({}),
           signal: AbortSignal.timeout(3000),
         });
         if (response.ok) {
@@ -345,10 +395,36 @@ export class MultiAgentConsensus extends EventEmitter {
     return Array.from(this.peers.values()).filter((p) => p.isHealthy).length;
   }
 
+  private getRequiredApprovals(totalVoters: number): number {
+    return Math.max(
+      1,
+      Math.floor(totalVoters * this.config.quorumFraction) + 1,
+    );
+  }
+
+  private createPeerHeaders(payload: unknown): Record<string, string> {
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+    if (this.config.sharedSecret) {
+      const body = JSON.stringify(payload);
+      const signature = crypto
+        .createHmac("sha256", this.config.sharedSecret)
+        .update(body)
+        .digest("hex");
+      headers["X-Webhook-Signature"] = `sha256=${signature}`;
+    }
+    return headers;
+  }
+
   // ─── Accessors ──────────────────────────────────────────────────
 
   getInstanceId(): string {
     return this.config.instanceId;
+  }
+
+  getLocalCoherence(): number {
+    return this.localCoherence;
   }
 
   getPeers(): PeerInstance[] {

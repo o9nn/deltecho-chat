@@ -45,21 +45,48 @@ export interface ExperimentCandidate {
   design: InterventionDesign;
 }
 
+export interface ExperimentGovernanceDecision {
+  approved: boolean;
+  reason: string;
+  certificateId?: string;
+  governanceScore?: number;
+  peerConsensus?: number;
+  quorumReached?: boolean;
+  evidence?: Record<string, number | boolean | string>;
+}
+
+export interface ExperimentGovernanceAuthorizer {
+  authorize(
+    candidate: ExperimentCandidate,
+  ): Promise<ExperimentGovernanceDecision>;
+}
+
+export type ExperimentScheduleRejectionReason =
+  | "energy_crisis"
+  | "low_energy"
+  | "refractory"
+  | "capacity"
+  | "no_candidate"
+  | "below_threshold"
+  | "forge_rejected"
+  | "governance_rejected"
+  | "governance_error";
+
 export interface ExperimentScheduleDecision {
   scheduled: boolean;
-  reason:
-    | "scheduled"
-    | "energy_crisis"
-    | "low_energy"
-    | "refractory"
-    | "capacity"
-    | "no_candidate"
-    | "below_threshold"
-    | "forge_rejected";
+  reason: "scheduled" | ExperimentScheduleRejectionReason;
   timestamp: number;
   explorationTemperature: number;
   candidate: ExperimentCandidate | null;
   trial: CounterfactualTrial | null;
+  governanceDecision: ExperimentGovernanceDecision | null;
+}
+
+interface ExperimentSchedulePreparation {
+  timestamp: number;
+  explorationTemperature: number;
+  candidate: ExperimentCandidate | null;
+  rejectionReason: ExperimentScheduleRejectionReason | null;
 }
 
 export interface ActiveInferenceSchedulerState {
@@ -168,47 +195,128 @@ export class ActiveInferenceExperimentScheduler extends EventEmitter {
   scheduleNext(
     context: AutognosticExperimentContext,
   ): ExperimentScheduleDecision {
+    const preparation = this.prepareSchedule(context);
+    this.decisions++;
+    if (preparation.rejectionReason || !preparation.candidate) {
+      return this.reject(
+        preparation.rejectionReason ?? "no_candidate",
+        preparation.timestamp,
+        preparation.explorationTemperature,
+        preparation.candidate,
+      );
+    }
+    return this.commitCandidate(preparation, null);
+  }
+
+  /**
+   * Authorize the selected intervention through an asynchronous governance
+   * layer before mutating the causal forge. This keeps candidate scoring
+   * replayable while allowing real peer quorum and embodied-autognosis gates.
+   */
+  async scheduleNextGoverned(
+    context: AutognosticExperimentContext,
+    authorizer: ExperimentGovernanceAuthorizer,
+  ): Promise<ExperimentScheduleDecision> {
+    const preparation = this.prepareSchedule(context);
+    this.decisions++;
+    if (preparation.rejectionReason || !preparation.candidate) {
+      return this.reject(
+        preparation.rejectionReason ?? "no_candidate",
+        preparation.timestamp,
+        preparation.explorationTemperature,
+        preparation.candidate,
+      );
+    }
+
+    let governanceDecision: ExperimentGovernanceDecision;
+    try {
+      governanceDecision = await authorizer.authorize(preparation.candidate);
+    } catch (error) {
+      const reason = error instanceof Error ? error.message : String(error);
+      return this.reject(
+        "governance_error",
+        preparation.timestamp,
+        preparation.explorationTemperature,
+        preparation.candidate,
+        {
+          approved: false,
+          reason,
+        },
+      );
+    }
+
+    if (!governanceDecision.approved) {
+      return this.reject(
+        "governance_rejected",
+        preparation.timestamp,
+        preparation.explorationTemperature,
+        preparation.candidate,
+        governanceDecision,
+      );
+    }
+
+    return this.commitCandidate(preparation, governanceDecision);
+  }
+
+  private prepareSchedule(
+    context: AutognosticExperimentContext,
+  ): ExperimentSchedulePreparation {
     const normalized = this.normalizeContext(context);
     const timestamp = normalized.now;
     const explorationTemperature =
       this.computeExplorationTemperature(normalized);
-    this.decisions++;
+    let rejectionReason: ExperimentScheduleRejectionReason | null = null;
 
-    if (normalized.isEnergyCrisis) {
-      return this.reject("energy_crisis", timestamp, explorationTemperature);
-    }
-    if (normalized.energyLevel < this.config.minimumEnergy) {
-      return this.reject("low_energy", timestamp, explorationTemperature);
-    }
-    if (
+    if (normalized.isEnergyCrisis) rejectionReason = "energy_crisis";
+    else if (normalized.energyLevel < this.config.minimumEnergy)
+      rejectionReason = "low_energy";
+    else if (
       this.lastScheduledAt !== null &&
       timestamp - this.lastScheduledAt < this.config.refractoryMs
-    ) {
-      return this.reject("refractory", timestamp, explorationTemperature);
+    )
+      rejectionReason = "refractory";
+    else {
+      const activeTrials = this.forge
+        .getTrials()
+        .filter((trial) => trial.status === "designed").length;
+      if (activeTrials >= this.config.maximumActiveTrials)
+        rejectionReason = "capacity";
     }
 
-    const activeTrials = this.forge
-      .getTrials()
-      .filter((trial) => trial.status === "designed").length;
-    if (activeTrials >= this.config.maximumActiveTrials) {
-      return this.reject("capacity", timestamp, explorationTemperature);
+    if (rejectionReason) {
+      return {
+        timestamp,
+        explorationTemperature,
+        candidate: null,
+        rejectionReason,
+      };
     }
 
     const candidates = this.evaluateCandidates(normalized);
     if (candidates.length === 0) {
-      return this.reject("no_candidate", timestamp, explorationTemperature);
+      return {
+        timestamp,
+        explorationTemperature,
+        candidate: null,
+        rejectionReason: "no_candidate",
+      };
     }
 
     const candidate = this.selectCandidate(candidates, explorationTemperature);
-    if (candidate.score < this.config.minimumScore) {
-      return this.reject(
-        "below_threshold",
-        timestamp,
-        explorationTemperature,
-        candidate,
-      );
-    }
+    return {
+      timestamp,
+      explorationTemperature,
+      candidate,
+      rejectionReason:
+        candidate.score < this.config.minimumScore ? "below_threshold" : null,
+    };
+  }
 
+  private commitCandidate(
+    preparation: ExperimentSchedulePreparation,
+    governanceDecision: ExperimentGovernanceDecision | null,
+  ): ExperimentScheduleDecision {
+    const candidate = preparation.candidate!;
     const trial = this.forge.designIntervention(
       candidate.hypothesisId,
       candidate.design,
@@ -216,23 +324,25 @@ export class ActiveInferenceExperimentScheduler extends EventEmitter {
     if (!trial) {
       return this.reject(
         "forge_rejected",
-        timestamp,
-        explorationTemperature,
+        preparation.timestamp,
+        preparation.explorationTemperature,
         candidate,
+        governanceDecision,
       );
     }
 
     const decision: ExperimentScheduleDecision = {
       scheduled: true,
       reason: "scheduled",
-      timestamp,
-      explorationTemperature,
+      timestamp: preparation.timestamp,
+      explorationTemperature: preparation.explorationTemperature,
       candidate,
       trial,
+      governanceDecision,
     };
     this.scheduledExperiments++;
     this.totalExpectedInformationGain += candidate.expectedInformationGain;
-    this.lastScheduledAt = timestamp;
+    this.lastScheduledAt = preparation.timestamp;
     this.lastDecision = decision;
     this.emit("experiment_scheduled", decision);
     return this.copyDecision(decision);
@@ -398,10 +508,11 @@ export class ActiveInferenceExperimentScheduler extends EventEmitter {
   }
 
   private reject(
-    reason: Exclude<ExperimentScheduleDecision["reason"], "scheduled">,
+    reason: ExperimentScheduleRejectionReason,
     timestamp: number,
     explorationTemperature: number,
     candidate: ExperimentCandidate | null = null,
+    governanceDecision: ExperimentGovernanceDecision | null = null,
   ): ExperimentScheduleDecision {
     const decision: ExperimentScheduleDecision = {
       scheduled: false,
@@ -410,6 +521,7 @@ export class ActiveInferenceExperimentScheduler extends EventEmitter {
       explorationTemperature,
       candidate,
       trial: null,
+      governanceDecision,
     };
     this.rejectedExperiments++;
     this.lastDecision = decision;
@@ -429,6 +541,14 @@ export class ActiveInferenceExperimentScheduler extends EventEmitter {
               ...decision.candidate.design,
               confoundControls: [...decision.candidate.design.confoundControls],
             },
+          }
+        : null,
+      governanceDecision: decision.governanceDecision
+        ? {
+            ...decision.governanceDecision,
+            evidence: decision.governanceDecision.evidence
+              ? { ...decision.governanceDecision.evidence }
+              : undefined,
           }
         : null,
       trial: decision.trial

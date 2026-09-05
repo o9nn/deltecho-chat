@@ -70,6 +70,15 @@ function getCognitiveStateSignature(
     roundAvatarSignal(
       cognitiveState.scientificGeniusVisualState?.autognosisResonance,
     ),
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.embodimentAccuracy,
+    ),
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.embodimentError,
+    ),
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.embodimentConfidence,
+    ),
     roundAvatarSignal(cognitiveState.scientificGeniusVisualState?.causalRigor),
     roundAvatarSignal(
       cognitiveState.scientificGeniusVisualState?.falsificationPressure,
@@ -351,6 +360,9 @@ function mapCognitiveStateToVisualState(
       geniusSignal?.selfAwareness ??
       consciousness?.selfAwareness ??
       Math.max(0.35, salience * 0.7),
+    embodimentAccuracy: geniusSignal?.embodimentAccuracy ?? 0.5,
+    embodimentError: geniusSignal?.embodimentError ?? 0,
+    embodimentConfidence: geniusSignal?.embodimentConfidence ?? 0,
     causalRigor: geniusSignal?.causalRigor ?? 0,
     falsificationPressure:
       geniusSignal?.falsificationPressure ?? geniusSignal?.freeEnergy ?? 0,
@@ -439,6 +451,7 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
       ? { ...resolved, hiddenGroups, hueShift: hue }
       : { ...resolved, hiddenGroups };
   }, [
+    avatarContext?.state.config.identity,
     avatarContext?.state.config.outfit,
     avatarContext?.state.config.outfitHiddenGroups,
     avatarContext?.state.config.outfitHueShift,
