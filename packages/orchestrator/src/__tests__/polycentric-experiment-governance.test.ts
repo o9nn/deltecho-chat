@@ -107,6 +107,7 @@ describe("PolycentricExperimentGovernance", () => {
 
     expect(decision.approved).toBe(true);
     expect(decision.reason).toBe("polycentric_local_quorum");
+    expect(decision.peerConsensus).toBe(0);
     expect(decision.governanceScore).toBeGreaterThan(0.7);
     expect(decision.certificateId).toContain(CANDIDATE.hypothesisId);
     expect(governance.getState()).toMatchObject({

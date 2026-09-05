@@ -192,7 +192,7 @@ export class PolycentricExperimentGovernance
       );
     }
 
-    let peerConsensus = 1;
+    let peerConsensus = 0;
     let quorumReached = false;
     const peerStats = this.peers?.getStats() ?? {
       healthyPeers: 0,
