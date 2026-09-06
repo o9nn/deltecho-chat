@@ -316,7 +316,7 @@ pub fn run() -> i32 {
                     "main",
                     WebviewUrl::App("tauri_main.html".into()),
                 )
-                .title("Delta Chat Tauri")
+                .title("DeltEcho Chat")
                 .inner_size(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
 
                 #[cfg(target_os = "macos")]
@@ -332,7 +332,7 @@ pub fn run() -> i32 {
             {
                 // app_data_dir should be custom for iOS
                 // should be sth like private/var/mobile/Containers/Data/Application/1348A16B-81C7-46C4-9441-0E2A31D362D9/
-                // currently is private/var/mobile/Containers/Data/Application/1348A16B-81C7-46C4-9441-0E2A31D362D9/Library/Application Support/chat.delta.desktop.tauri
+                // currently is private/var/mobile/Containers/Data/Application/1348A16B-81C7-46C4-9441-0E2A31D362D9/Library/Application Support/chat.deltecho.desktop.tauri
                 // the latter is a problem, becuase the directories don't exist, so as quick fix we create them here
                 std::fs::create_dir_all(app.path().app_data_dir()?)?;
                 // same for app_log_dir and probably all other dirs

@@ -72,14 +72,25 @@ protocol.registerSchemesAsPrivileged([
 const app = rawApp as ExtendedAppMainProcess;
 app.rc = rc;
 
+// DeltEcho embeds the Delta Chat core, but owns an independent desktop identity.
+// Set this before the single-instance lock so an installed upstream Delta Chat
+// process cannot share the lock or Chromium profile with this application.
+const DELTECHO_APP_NAME = "DeltEcho Chat";
+const DELTECHO_APP_ID = "chat.deltecho.desktop.electron";
+const deltechoUserDataPath = process.env.DC_TEST_DIR
+  ? join(process.env.DC_TEST_DIR, "ChromiumProfile")
+  : join(rawApp.getPath("appData"), "DeltEcho Chat");
+rawApp.setName(DELTECHO_APP_NAME);
+rawApp.setPath("userData", deltechoUserDataPath);
+process.title = "DeltEchoChat";
+if (process.platform === "win32") {
+  rawApp.setAppUserModelId(DELTECHO_APP_ID);
+}
+
 // requestSingleInstanceLock always returns false on mas (mac app store) builds
 // due to electron issue https://github.com/electron/electron/issues/35540
 // dc-desktop issue: https://github.com/deltachat/deltachat-desktop/issues/3938
-if (
-  !process.mas &&
-  !app.requestSingleInstanceLock() &&
-  !process.env.DC_TEST_DIR
-) {
+if (!process.mas && !app.requestSingleInstanceLock()) {
   /* ignore-console-log */
   console.error("Only one instance allowed. Quitting.");
   app.quit();

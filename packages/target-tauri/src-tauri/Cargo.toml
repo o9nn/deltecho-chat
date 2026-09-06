@@ -1,8 +1,8 @@
 [package]
-name = "deltachat-tauri"
+name = "deltecho-chat"
 version = "1.0.0"
-description = "Delta Chat Desktop: Tauri Edition. Secure, cross-platform, decentralized super-app messenger."
-authors = ["DeltaChat Contributors"]
+description = "DeltEcho Chat: Delta Chat core with Deep Tree Echo cognitive orchestration."
+authors = ["DeltEcho contributors"]
 edition = "2021"
 rust-version = "1.85"
 
@@ -12,7 +12,7 @@ rust-version = "1.85"
 # The `_lib` suffix may seem redundant but it is necessary
 # to make the lib name unique and wouldn't conflict with the bin name.
 # This seems to be only an issue on Windows, see https://github.com/rust-lang/cargo/issues/8519
-name = "deltachat_tauri_lib"
+name = "deltecho_chat_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]

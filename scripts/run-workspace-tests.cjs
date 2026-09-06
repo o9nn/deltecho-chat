@@ -31,9 +31,26 @@ const packages = [
 const perPackageTimeoutMs =
   Number.parseInt(process.env.DELTECHO_TEST_TIMEOUT_MS || "", 10) || 600_000;
 
+function pnpmInvocation(args) {
+  if (process.env.npm_execpath) {
+    return {
+      command: process.execPath,
+      args: [process.env.npm_execpath, ...args],
+    };
+  }
+  if (process.platform === "win32") {
+    return {
+      command: process.env.ComSpec || "cmd.exe",
+      args: ["/d", "/s", "/c", "pnpm.cmd", ...args],
+    };
+  }
+  return { command: "pnpm", args };
+}
+
 for (const pkg of packages) {
   console.log(`\n=== [deltecho-test] ${pkg} ===`);
-  const result = spawnSync("pnpm", ["--filter", pkg, "test"], {
+  const invocation = pnpmInvocation(["--filter", pkg, "test"]);
+  const result = spawnSync(invocation.command, invocation.args, {
     cwd: process.cwd(),
     env: { ...process.env, CI: process.env.CI || "true" },
     stdio: "inherit",
