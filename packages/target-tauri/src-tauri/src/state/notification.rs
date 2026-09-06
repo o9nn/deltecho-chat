@@ -28,7 +28,7 @@ pub(crate) struct Notifications {
 impl Notifications {
     pub fn new(app_id: String) -> Self {
         Self {
-            manager: get_notification_manager(app_id, Some("dcnotification".to_owned())), // - windows: we don't have deeplinking yet and this makes windows ignore the handelers
+            manager: get_notification_manager(app_id, Some("deltecho-notification".to_owned())), // Windows notification activation stays inside the DeltEcho protocol namespace.
                                                                                           // manager: get_notification_manager(app_id, None),
         }
     }

@@ -3,7 +3,7 @@
   "type": "module",
   "name": "@deltachat-desktop/target-electron",
   "version": "1.0.0",
-  "description": "Desktop Application for delta.chat",
+  "description": "DeltEcho Chat desktop application with Deep Tree Echo cognitive orchestration",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/o9nn/deltecho-chat.git"
@@ -15,19 +15,19 @@
     "desktop"
   ],
   "author": {
-    "name": "DeltaChat Developers",
-    "email": "delta-systems@codespeak.net"
+    "name": "DeltEcho contributors",
+    "email": "d@rzo.io"
   },
   "main": "index.js",
   "license": "GPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/deltachat/deltachat-desktop/issues"
+    "url": "https://github.com/o9nn/deltecho-chat/issues"
   },
   "engines": {
     "node": ">=20.0.0"
   },
-  "productName": "DeltEcho",
-  "homepage": "https://delta.chat",
+  "productName": "DeltEcho Chat",
+  "homepage": "https://github.com/o9nn/deltecho-chat",
   "scripts": {
     "check:types": "tsc --noEmit && tsc --noEmit -p runtime-electron || node ./bin/printCheckWarning.js",
     "build4production": "cross-env NODE_ENV=production pnpm build && pnpm -w check:types",

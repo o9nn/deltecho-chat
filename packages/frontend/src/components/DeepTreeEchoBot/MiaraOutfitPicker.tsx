@@ -8,10 +8,11 @@ import {
   type MiaraOutfitState,
   type MiaraPartGroup,
 } from "@deltecho/avatar";
+import type { TranslationKey } from "@deltachat-desktop/shared/translationKeyType";
 import useTranslationFunction from "../../hooks/useTranslationFunction";
 import { useDeepTreeEchoAvatarOptional } from "./DeepTreeEchoAvatarContext";
 
-const PART_GROUP_LABELS: Record<MiaraPartGroup, string> = {
+const PART_GROUP_LABELS: Record<MiaraPartGroup, TranslationKey> = {
   fairy: "miara_outfit_group_fairy",
   hairAccessory: "miara_outfit_group_hair_accessory",
   chestCloth: "miara_outfit_group_chest_cloth",
@@ -20,7 +21,10 @@ const PART_GROUP_LABELS: Record<MiaraPartGroup, string> = {
   background: "miara_outfit_group_background",
 };
 
-const PRESET_LABELS: Record<Exclude<MiaraOutfitId, "custom">, string> = {
+const PRESET_LABELS: Record<
+  Exclude<MiaraOutfitId, "custom">,
+  TranslationKey
+> = {
   official: "miara_outfit_official",
   casual: "miara_outfit_casual",
   lagoon: "miara_outfit_lagoon",

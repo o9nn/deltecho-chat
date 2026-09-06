@@ -6,6 +6,8 @@ import useDialog from "../../../hooks/dialog/useDialog";
 import useTranslationFunction from "../../../hooks/useTranslationFunction";
 import { DialogBody, DialogContent, DialogHeader } from "../../Dialog";
 
+import { appName } from "../../../../../shared/constants";
+
 import styles from "./styles.module.scss";
 
 type Props = {
@@ -39,7 +41,7 @@ export default function OnboardingScreen(props: Props) {
         title={
           props.hasConfiguredAccounts
             ? tx("add_account")
-            : tx("welcome_desktop")
+            : `Welcome to ${appName}`
         }
       />
       <DialogBody>

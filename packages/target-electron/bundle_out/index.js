@@ -30326,9 +30326,9 @@ init_cjs_shim();
 
 // ../shared/constants.ts
 init_cjs_shim();
-var appName = "Delta Chat";
-var homePageUrl = "https://delta.chat";
-var gitHubUrl = "https://github.com/deltachat/deltachat-desktop";
+var appName = "DeltEcho Chat";
+var homePageUrl = "https://github.com/o9nn/deltecho-chat";
+var gitHubUrl = "https://github.com/o9nn/deltecho-chat";
 var gitHubIssuesUrl = gitHubUrl + "/issues";
 var gitHubLicenseUrl = gitHubUrl + "/blob/main/LICENSE";
 var donationUrl = "https://delta.chat/donate";
@@ -30449,6 +30449,8 @@ function getDraftTempDir() {
   return join2(app.getPath("temp"), "chat.deltecho.desktop-draft");
 }
 var supportedURISchemes = [
+  "DELTECHO-ACCOUNT:",
+  "DELTECHO-LOGIN:",
   "OPENPGP4FPR:",
   "MAILTO:",
   "DCACCOUNT:",
@@ -30540,7 +30542,14 @@ function getDefaultState() {
     deepTreeEchoBotUseParallelProcessing: true,
     deepTreeEchoBotScientificGeniusMode: false,
     deepTreeEchoBotProactiveEnabled: true,
+    deepTreeEchoBotProactiveMaxMessagesPerHour: 10,
+    deepTreeEchoBotProactiveMaxMessagesPerDay: 50,
+    deepTreeEchoBotProactiveQuietHoursStart: 22,
+    deepTreeEchoBotProactiveQuietHoursEnd: 8,
+    deepTreeEchoBotProactiveRespectMutedChats: true,
+    deepTreeEchoBotProactiveRespectArchivedChats: true,
     deepTreeEchoBotAvatarEnabled: true,
+    deepTreeEchoBotAvatarStripWidth: 0,
     galleryImageKeepAspectRatio: false,
     useSystemUIFont: false,
     contentProtectionEnabled: false,
@@ -30753,7 +30762,7 @@ function renderTrayIcon() {
   }
   log4.info("add icon tray");
   tray = TrayIcon();
-  tray.setToolTip("Delta Chat");
+  tray.setToolTip("DeltEcho Chat");
   if (process.platform === "darwin") {
     tray.on("click", () => tray?.popUpContextMenu(getTrayMenu()));
     tray.on("right-click", () => tray?.popUpContextMenu(getTrayMenu()));
@@ -47351,22 +47360,28 @@ import { platform as platform5 } from "os";
 var log10 = getLogger("main/open_url");
 var app4 = rawApp2;
 if (platform5() !== "linux") {
-  app4.setAsDefaultProtocolClient("openpgp4fpr");
-  app4.setAsDefaultProtocolClient("OPENPGP4FPR");
-  app4.setAsDefaultProtocolClient("dcaccount");
-  app4.setAsDefaultProtocolClient("DCACCOUNT");
-  app4.setAsDefaultProtocolClient("dclogin");
-  app4.setAsDefaultProtocolClient("DCLOGIN");
+  app4.setAsDefaultProtocolClient("deltecho-account");
+  app4.setAsDefaultProtocolClient("deltecho-login");
+}
+function normalizeDeltEchoUrl(url2) {
+  if (/^deltecho-account:/i.test(url2)) {
+    return url2.replace(/^deltecho-account:/i, "dcaccount:");
+  }
+  if (/^deltecho-login:/i.test(url2)) {
+    return url2.replace(/^deltecho-login:/i, "dclogin:");
+  }
+  return url2;
 }
 var frontend_ready = false;
 ipcMain2.once("frontendReady", () => {
   frontend_ready = true;
 });
 function sendToFrontend(url2) {
-  if (url2.toUpperCase().startsWith("OPENPGP4FPR") && url2.indexOf("#") === -1) {
-    send("open-url", url2.replace("%23", "#"));
+  const normalizedUrl = normalizeDeltEchoUrl(url2);
+  if (normalizedUrl.toUpperCase().startsWith("OPENPGP4FPR") && normalizedUrl.indexOf("#") === -1) {
+    send("open-url", normalizedUrl.replace("%23", "#"));
   } else {
-    send("open-url", url2);
+    send("open-url", normalizedUrl);
   }
 }
 var open_url = function(url2) {
@@ -48898,7 +48913,7 @@ init_cjs_shim();
 
 // src/get-build-info.ts
 init_cjs_shim();
-var BuildInfo = JSON.parse('{"VERSION":"1.0.0","BUILD_TIMESTAMP":1778453509084,"GIT_REF":"v99.1.0-89-g24a4257"}');
+var BuildInfo = JSON.parse('{"VERSION":"1.0.0","BUILD_TIMESTAMP":1788694262770,"GIT_REF":"v100.0.0-72-g619266d-dte-autonomy-avatar-evolution"}');
 
 // src/deltachat/stdio_server.ts
 import { spawn } from "child_process";
@@ -50041,6 +50056,15 @@ protocol2.registerSchemesAsPrivileged([
 ]);
 var app12 = rawApp6;
 app12.rc = rc_default;
+var DELTECHO_APP_NAME = "DeltEcho Chat";
+var DELTECHO_APP_ID = "chat.deltecho.desktop.electron";
+var deltechoUserDataPath = join17(rawApp6.getPath("appData"), "DeltEcho Chat");
+rawApp6.setName(DELTECHO_APP_NAME);
+rawApp6.setPath("userData", deltechoUserDataPath);
+process.title = "DeltEchoChat";
+if (process.platform === "win32") {
+  rawApp6.setAppUserModelId(DELTECHO_APP_ID);
+}
 if (!process.mas && !app12.requestSingleInstanceLock() && !process.env.DC_TEST_DIR) {
   console.error("Only one instance allowed. Quitting.");
   app12.quit();

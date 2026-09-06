@@ -399,6 +399,22 @@ describe("DeepTreeEchoAvatarDisplay", () => {
           entelechyScore: 0.76,
           freeEnergy: 0.24,
           salience: 0.88,
+          daoConsensus: 0.83,
+          esnCoherence: 0.91,
+          autognosisResonance: 0.87,
+          causalRigor: 0.79,
+          falsificationPressure: 0.44,
+          epistemicSurprise: 0.68,
+          daoEvidenceConsensus: 0.85,
+          activeExperimentation: 0.5,
+          metabolic: {
+            metabolicPhase: "integrating",
+            energyLevel: 0.64,
+            anabolicBalance: 0.42,
+            isEnergyCrisis: false,
+            myelinationProgress: 0.73,
+            knowledgeDensity: 2.8,
+          },
         },
       });
 
@@ -426,6 +442,80 @@ describe("DeepTreeEchoAvatarDisplay", () => {
         expect(visualState.insightPotential).toBe(0.81);
         expect(visualState.entelechyScore).toBe(0.76);
         expect(visualState.freeEnergy).toBe(0.24);
+        expect(visualState.daoConsensus).toBe(0.83);
+        expect(visualState.esnCoherence).toBe(0.91);
+        expect(visualState.autognosisResonance).toBe(0.87);
+        expect(visualState.causalRigor).toBe(0.79);
+        expect(visualState.falsificationPressure).toBe(0.44);
+        expect(visualState.epistemicSurprise).toBe(0.68);
+        expect(visualState.daoEvidenceConsensus).toBe(0.85);
+        expect(visualState.activeExperimentation).toBe(0.5);
+        expect(visualState.metabolic).toEqual({
+          metabolicPhase: "integrating",
+          energyLevel: 0.64,
+          anabolicBalance: 0.42,
+          isEnergyCrisis: false,
+          myelinationProgress: 0.73,
+          knowledgeDensity: 2.8,
+        });
+      });
+    });
+
+    it("preserves dedicated DAO, ESN, and autognosis channels instead of falling back to generic fields", async () => {
+      const mockGetState = jest.fn().mockReturnValue({
+        cognitiveContext: {
+          emotionalValence: 0.12,
+          emotionalArousal: 0.66,
+          salienceScore: 0.7,
+          relevantMemories: ["dao-consensus", "reservoir-phase"],
+          attentionWeight: 0.64,
+          activeCouplings: ["dao", "esn", "autognosis"],
+        },
+        consciousness: {
+          phi: 0.44,
+          selfAwareness: 0.41,
+          flowState: 0.39,
+          temporalCoherence: 0.52,
+        },
+        scientificGeniusVisualState: {
+          mode: "Scientific Genius",
+          scientificGenius: 0.91,
+          insightPotential: 0.79,
+          entelechyScore: 0.33,
+          freeEnergy: 0.2,
+          salience: 0.77,
+          flow: 0.22,
+          selfAwareness: 0.24,
+          daoConsensus: 0.88,
+          esnCoherence: 0.93,
+          autognosisResonance: 0.86,
+        },
+      });
+
+      (CognitiveBridge.getOrchestrator as jest.Mock).mockReturnValue({
+        getState: mockGetState,
+      });
+
+      render(
+        <DeepTreeEchoAvatarProvider>
+          <DeepTreeEchoAvatarDisplay
+            processingState={AvatarProcessingState.THINKING}
+          />
+        </DeepTreeEchoAvatarProvider>,
+      );
+
+      await waitFor(() => {
+        const avatar = screen.getByTestId("mock-live2d-avatar");
+        const visualState = JSON.parse(
+          avatar.getAttribute("data-cognitive-visual-state") || "{}",
+        );
+
+        expect(visualState.daoConsensus).toBe(0.88);
+        expect(visualState.esnCoherence).toBe(0.93);
+        expect(visualState.autognosisResonance).toBe(0.86);
+        expect(visualState.daoConsensus).not.toBe(visualState.entelechyScore);
+        expect(visualState.esnCoherence).not.toBe(0.22);
+        expect(visualState.autognosisResonance).not.toBe(0.24);
       });
     });
 

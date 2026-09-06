@@ -28,19 +28,19 @@ const env = process.env;
 
 /** @type {import('./types').DeepWriteable<import('electron-builder').Configuration>} */
 const build = {};
-build["appId"] = "chat.delta.desktop.electron";
+build["appId"] = "chat.deltecho.desktop.electron";
 build["extraMetadata"] = {
   //@ts-ignore
-  // restore old name before mono-repo
-  name: "deltachat-desktop",
+  name: "deltecho-chat",
+  productName: "DeltEcho Chat",
 };
 
 if (previewBuild) {
-  build.appId = "chat.delta.desktop.electron.dev";
+  build.appId = "chat.deltecho.desktop.electron.dev";
   //@ts-ignore
-  build.extraMetadata.name = "deltachat-desktop-dev";
+  build.extraMetadata.name = "deltecho-chat-dev";
   //@ts-ignore
-  build.extraMetadata.productName = "DeltaChat-DevBuild";
+  build.extraMetadata.productName = "DeltEcho Chat DevBuild";
   const p = JSON.parse(
     readFileSync(join(__dirname, "../package.json"), { encoding: "utf-8" }),
   );
@@ -48,28 +48,18 @@ if (previewBuild) {
   build.extraMetadata.version = p.version + "-DevBuild";
 }
 
+// DeltEcho deliberately owns only its private deep-link namespace. Standard
+// Delta Chat protocols and .xdc associations remain available to an installed
+// upstream client, allowing the two desktop applications to coexist.
 build["protocols"] = [
   {
-    name: "QR code data",
+    name: "DeltEcho deep link",
     role: "Viewer",
-    schemes: ["openpgp4fpr", "dcaccount", "dclogin"],
-  },
-  {
-    name: "Send Mails via MailTo Scheme",
-    // https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html#//apple_ref/doc/uid/TP40009249-102207-TPXREF115
-    role: "Viewer",
-    schemes: ["mailto"],
+    schemes: ["deltecho-account", "deltecho-login"],
   },
 ];
 
-build["fileAssociations"] = [
-  {
-    ext: "xdc",
-    name: "Webxdc app",
-    // icon - default, which means build/ext\.(ico|icns)
-    mimeType: "application/x-webxdc",
-  },
-];
+build["fileAssociations"] = [];
 
 build["files"] = files;
 build["asarUnpack"] = []; // ['./node_modules/@deltachat/stdio-rpc-server']
@@ -93,8 +83,8 @@ const PREBUILD_FILTERS = {
 
 build["mac"] = {
   appId: previewBuild
-    ? "chat.delta.desktop.electron.devbuild"
-    : "chat.delta.desktop.electron",
+    ? "chat.deltecho.desktop.electron.devbuild"
+    : "chat.deltecho.desktop.electron",
   category: "public.app-category.social-networking",
   entitlements: "build/entitlements.mac.plist",
   entitlementsInherit: "build/entitlements.mac.plist",
@@ -137,12 +127,12 @@ build["linux"] = {
   target: ["AppImage", "deb"],
   category: "Network;Chat;InstantMessaging;",
   desktop: {
-    Comment: "Delta Chat email-based messenger",
-    Keywords: "dc;chat;delta;messaging;messenger;email",
+    Comment: "DeltEcho cognitive email messenger",
+    Keywords: "deltecho;deep-tree-echo;chat;messaging;messenger;email",
   },
   files: [...files, PREBUILD_FILTERS.NOT_MAC, PREBUILD_FILTERS.NOT_WINDOWS],
   icon: "build/icon.icns", // electron builder gets the icon out of the mac icon archive
-  description: "The Email messenger (https://delta.chat)",
+  description: "DeltEcho Chat with Deep Tree Echo cognitive orchestration",
 };
 
 build["appImage"] = {
@@ -150,7 +140,7 @@ build["appImage"] = {
 };
 
 build["deb"] = {
-  packageName: previewBuild ? "deltachat-desktop-preview" : "deltachat-desktop",
+  packageName: previewBuild ? "deltecho-chat-preview" : "deltecho-chat",
   depends: [
     "libasound2",
     "libgtk-3-0",
@@ -167,6 +157,7 @@ build["deb"] = {
 
 build["win"] = {
   icon: "html-dist/images/deltachat.ico",
+  executableName: "DeltEchoChat",
   artifactName: "${productName}-${version}-Setup.${arch}.${ext}", // specifying it inside of build['nsis'] does not work for unknown reasons.
   files: [...files, PREBUILD_FILTERS.NOT_MAC, PREBUILD_FILTERS.NOT_LINUX],
 };
@@ -234,8 +225,8 @@ if (unsupported_languages.length > 0) {
 build["appx"] = {
   applicationId: build["appId"],
   publisher: "CN=C13753E5-D590-467C-9FCA-6799E1A5EC1E",
-  publisherDisplayName: "merlinux",
-  identityName: "merlinux.DeltaChat",
+  publisherDisplayName: "o9nn",
+  identityName: "o9nn.DeltEchoChat",
   languages,
   artifactName: "${productName}-${version}-Package.${arch}.${ext}",
 };

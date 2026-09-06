@@ -18,6 +18,10 @@ COPY packages/runtime/package.json ./packages/runtime/
 COPY packages/avatar/package.json ./packages/avatar/
 COPY packages/cognitive/package.json ./packages/cognitive/
 COPY packages/core/package.json ./packages/core/
+COPY packages/dove9/package.json ./packages/dove9/
+COPY packages/ipc/package.json ./packages/ipc/
+COPY packages/orchestrator/package.json ./packages/orchestrator/
+COPY packages/sys6-triality/package.json ./packages/sys6-triality/
 COPY packages/reasoning/package.json ./packages/reasoning/
 COPY packages/ui-components/package.json ./packages/ui-components/
 
@@ -36,7 +40,7 @@ ENV CLOUDFLARE_BUILD=true
 # Pass git ref from build args to avoid git describe errors in Docker (no .git dir)
 ARG VERSION_INFO_GIT_REF=unknown
 ENV VERSION_INFO_GIT_REF=${VERSION_INFO_GIT_REF}
-RUN pnpm build:browser
+RUN pnpm run build:type-deps && pnpm build:browser
 
 # Stage 2: Production image (minimal)
 FROM node:20-slim AS runner

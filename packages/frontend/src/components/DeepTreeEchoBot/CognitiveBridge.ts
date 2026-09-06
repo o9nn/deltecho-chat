@@ -162,6 +162,15 @@ export interface UnifiedCognitiveState {
   scientificGeniusVisualState?: ScientificGeniusVisualState;
 }
 
+export interface MetabolicVisualState {
+  metabolicPhase: "active" | "integrating" | "consolidating" | "resting";
+  energyLevel: number;
+  anabolicBalance: number;
+  isEnergyCrisis: boolean;
+  myelinationProgress: number;
+  knowledgeDensity: number;
+}
+
 export interface ScientificGeniusVisualState {
   mode:
     | "Scientific Genius"
@@ -184,6 +193,16 @@ export interface ScientificGeniusVisualState {
   daoConsensus?: number;
   esnCoherence?: number;
   autognosisResonance?: number;
+  embodimentAccuracy?: number;
+  embodimentError?: number;
+  embodimentConfidence?: number;
+  /** ConceptualMetabolism state, authoritative when supplied by the backend. */
+  metabolic?: MetabolicVisualState;
+  causalRigor?: number;
+  falsificationPressure?: number;
+  epistemicSurprise?: number;
+  daoEvidenceConsensus?: number;
+  activeExperimentation?: number;
   isProcessing?: boolean;
 }
 
@@ -575,6 +594,61 @@ export class CognitiveOrchestrator {
     const freeEnergy = this.clamp01(
       urgency * 0.5 + arousal * 0.35 + (1 - salience) * 0.15,
     );
+    const daoConsensus = this.clamp01(
+      entelechyScore * 0.38 +
+        salience * 0.24 +
+        semanticBreadth * 0.2 +
+        positiveValence * 0.18,
+    );
+    const esnCoherence = this.clamp01(
+      salience * 0.32 +
+        insightPotential * 0.28 +
+        semanticBreadth * 0.22 +
+        (1 - freeEnergy) * 0.18,
+    );
+    const autognosisResonance = this.clamp01(
+      scientificGenius * 0.34 +
+        daoConsensus * 0.26 +
+        esnCoherence * 0.24 +
+        arousal * 0.16,
+    );
+    const energyLevel = this.clamp01(
+      1 - freeEnergy * 0.65 + entelechyScore * 0.25,
+    );
+    const metabolicPhase: MetabolicVisualState["metabolicPhase"] =
+      scientificGenius >= 0.65
+        ? "active"
+        : insightPotential >= 0.5
+          ? "integrating"
+          : salience <= 0.25
+            ? "resting"
+            : "consolidating";
+    const metabolic: MetabolicVisualState = {
+      metabolicPhase,
+      energyLevel,
+      anabolicBalance: Math.max(
+        -1,
+        Math.min(1, insightPotential + positiveValence * 0.4 - freeEnergy),
+      ),
+      isEnergyCrisis: energyLevel < 0.2 || freeEnergy > 0.85,
+      myelinationProgress: esnCoherence,
+      knowledgeDensity: Math.min(
+        5,
+        semanticBreadth * 3 + (this.state?.reasoning.atomspaceSize ?? 0) / 1000,
+      ),
+    };
+
+    const causalRigor = this.clamp01(
+      esnCoherence * 0.35 + daoConsensus * 0.3 + semanticBreadth * 0.35,
+    );
+    const falsificationPressure = freeEnergy;
+    const epistemicSurprise = this.clamp01(
+      urgency * (1 - salience) * 0.7 + noveltyBias * 1.5,
+    );
+    const daoEvidenceConsensus = daoConsensus;
+    const activeExperimentation = relevanceInsights.shouldPrioritize
+      ? this.clamp01(urgency * 0.7 + salience * 0.3)
+      : 0;
 
     const mode: ScientificGeniusVisualState["mode"] =
       scientificGenius >= 0.72
@@ -592,6 +666,15 @@ export class CognitiveOrchestrator {
       entelechyScore,
       freeEnergy,
       salience,
+      daoConsensus,
+      esnCoherence,
+      autognosisResonance,
+      metabolic,
+      causalRigor,
+      falsificationPressure,
+      epistemicSurprise,
+      daoEvidenceConsensus,
+      activeExperimentation,
     };
   }
 
@@ -858,7 +941,12 @@ Respond in a way that reflects these characteristics while being helpful and inf
     if (signal.mode === "Scientific Genius") {
       this.state.persona.currentMood = "scientific-genius";
       this.state.reasoning.confidenceLevel = this.clamp01(
-        Math.max(this.state.reasoning.confidenceLevel, signal.entelechyScore),
+        Math.max(
+          this.state.reasoning.confidenceLevel,
+          signal.entelechyScore,
+          signal.daoConsensus ?? 0,
+          signal.esnCoherence ?? 0,
+        ),
       );
       this.state.reasoning.attentionFocus = Array.from(
         new Set([

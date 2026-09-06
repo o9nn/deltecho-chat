@@ -5,10 +5,11 @@ import {
   resolveAvatarIdentity,
   type AvatarIdentityId,
 } from "@deltecho/avatar";
+import type { TranslationKey } from "@deltachat-desktop/shared/translationKeyType";
 import useTranslationFunction from "../../hooks/useTranslationFunction";
 import { useDeepTreeEchoAvatarOptional } from "./DeepTreeEchoAvatarContext";
 
-const IDENTITY_LABELS: Record<AvatarIdentityId, string> = {
+const IDENTITY_LABELS: Record<AvatarIdentityId, TranslationKey> = {
   miara: "avatar_identity_miara",
   "deep-tree-echo": "avatar_identity_deep_tree_echo",
   melody: "avatar_identity_melody",

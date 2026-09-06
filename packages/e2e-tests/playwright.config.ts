@@ -5,6 +5,8 @@ const port = process.env.PORT ?? 3000;
 // Use HTTP in CI environment to avoid SSL certificate issues
 const protocol = process.env.CI ? "http" : "https";
 const baseURL = `${protocol}://localhost:${port}`;
+const chromiumExecutablePath =
+  process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined;
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -34,11 +36,17 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
-    video: "retain-on-failure",
+    video:
+      process.env.PLAYWRIGHT_DISABLE_VIDEO === "true"
+        ? "off"
+        : "retain-on-failure",
     screenshot: "only-on-failure",
     permissions: ["notifications"],
     ignoreHTTPSErrors: true,
     launchOptions: {
+      ...(chromiumExecutablePath
+        ? { executablePath: chromiumExecutablePath }
+        : {}),
       args: ["--ignore-certificate-errors"],
     },
   },

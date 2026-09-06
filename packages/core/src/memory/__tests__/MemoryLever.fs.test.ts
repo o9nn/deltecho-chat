@@ -81,7 +81,7 @@ describe("MemoryLever filesystem open", () => {
     await rm(dir, { recursive: true, force: true });
   });
 
-  it("dream dry-run is byte-identical; apply without approve is identical; apply with approve writes 0o600 snapshots", async () => {
+  it("dream dry-run is byte-identical; apply requires approval and writes secure snapshots", async () => {
     const dir = await mkdtemp(join(tmpdir(), "dte-apply-"));
     await seedDir(dir, [
       {
@@ -134,7 +134,13 @@ describe("MemoryLever filesystem open", () => {
     );
     expect(after).not.toBe(before);
     const mode = (await stat(join(dir, snapshotName))).mode & 0o777;
-    expect(mode).toBe(0o600);
+    if (process.platform === "win32") {
+      // Windows reports synthetic POSIX mode bits; ACL ownership is enforced by
+      // the user-scoped temp directory. The portable invariant is no execute bit.
+      expect(mode & 0o111).toBe(0);
+    } else {
+      expect(mode).toBe(0o600);
+    }
     await rm(dir, { recursive: true, force: true });
   });
 

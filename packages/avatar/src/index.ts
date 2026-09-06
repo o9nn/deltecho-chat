@@ -234,3 +234,80 @@ export {
   type EntelechyInput,
   type ESNAvatarBridgeConfig,
 } from "./esn-avatar-bridge";
+
+// Self-Model Avatar Feedback (Loop 4: perceive → correct → self-model)
+export {
+  SelfModelAvatarFeedback,
+  selfModelAvatarFeedback,
+  type CubismParamSnapshot,
+  type ExpressionExperience,
+  type ProjectionCalibration,
+  type SelfModelFeedbackConfig,
+} from "./self-model-avatar-feedback";
+
+// Chaotic Micro-Expression Layer (Lorenz attractor-driven organic roughness)
+export {
+  ChaoticMicroExpressionLayer,
+  type EndocrineInput as ChaoticEndocrineInput,
+  type MicroExpressionDeltas,
+  type LorenzState,
+  type PlayfulMicroGesture,
+} from "./chaotic-micro-expression-layer";
+
+// Signature Gesture Controller (DTE identity echo across modes)
+export {
+  SignatureGestureController,
+  type SignatureGestureState,
+  type SignatureGestureOverlay,
+  type SignatureGestureConfig,
+} from "./signature-gesture-controller";
+
+// CogMorph Glyph → Cubism Parameter Mapper (visual self-representation)
+export {
+  CogMorphCubismMapper,
+  type CogMorphGlyphState,
+  type CogMorphCubismOverlay,
+  type CogMorphCubismConfig,
+} from "./cogmorph-cubism-mapper";
+
+// Meshy3D Avatar Bridge (3D model generation from cognitive state)
+export {
+  Meshy3DAvatarBridge,
+  type Meshy3DConfig,
+  type AvatarStateSnapshot,
+  type Meshy3DTask,
+  type GenerationResult,
+} from "./meshy3d-avatar-bridge";
+
+// Emotional Inertia Controller (smooth transitions + cognitive load speed + idle fidgets)
+export {
+  EmotionalInertiaController,
+  emotionalInertiaController,
+  type EmotionInertiaProfile,
+  type CognitiveLoadSpeedConfig,
+  type IdleFidgetConfig,
+  type EmotionalInertiaConfig,
+  type InertiaOutput,
+  type FidgetDeltas,
+  DEFAULT_EMOTIONAL_INERTIA_CONFIG,
+} from "./emotional-inertia-controller";
+
+// Resonance Cascade Visual Conductor (Scientific Genius → Avatar eureka effects)
+export {
+  ResonanceCascadeConductor,
+  resonanceCascadeConductor,
+  type CascadeInput,
+  type CrystalInput,
+  type CascadeOverlay,
+  type CascadeConductorConfig,
+} from "./resonance-cascade-conductor";
+
+// Metabolic Avatar Bridge (ConceptualMetabolism → avatar visual parameters)
+export {
+  MetabolicAvatarBridge,
+  metabolicAvatarBridge,
+  type MetabolicVisualInput,
+  type MetabolicAvatarDeltas,
+  type MetabolicAvatarBridgeConfig,
+  DEFAULT_METABOLIC_AVATAR_CONFIG,
+} from "./metabolic-avatar-bridge";

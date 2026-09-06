@@ -72,6 +72,8 @@ export function getDraftTempDir() {
 }
 
 export const supportedURISchemes = [
+  "DELTECHO-ACCOUNT:",
+  "DELTECHO-LOGIN:",
   "OPENPGP4FPR:",
   "MAILTO:",
   "DCACCOUNT:",

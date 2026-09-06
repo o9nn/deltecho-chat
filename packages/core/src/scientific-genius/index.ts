@@ -43,6 +43,9 @@ export {
   type GlobalWorkspaceState,
   type StrangeLoopState,
   type ScientificGeniusConfig,
+  type HypothesisEvaluationEvent,
+  type EpistemicResonanceCascade,
+  type PredictiveInsightCrystal,
 } from "./ScientificGeniusEngine.js";
 
 export {
@@ -61,3 +64,87 @@ export {
   type EntelechyState,
   type EntelechyConfig,
 } from "./EntelechyEmergenceEngine.js";
+
+export {
+  EpistemicImmuneSystem,
+  epistemicImmuneSystem,
+  ThreatClass,
+  ImmuneResponse,
+  type EpistemicThreat,
+  type Antibody,
+  type MemoryCell,
+  type InflammationState,
+  type ImmuneSystemState,
+  type QuarantineEntry,
+  type EpistemicImmuneConfig,
+} from "./EpistemicImmuneSystem.js";
+
+export {
+  ConceptualMetabolism,
+  conceptualMetabolism,
+  MetabolicReaction,
+  MetabolicPhase,
+  DEFAULT_METABOLISM_CONFIG,
+  type KnowledgeUnit,
+  type MetabolicEvent,
+  type MetabolicState,
+  type ConceptualMetabolismConfig,
+} from "./ConceptualMetabolism.js";
+
+export {
+  CausalHypothesisForge,
+  causalHypothesisForge,
+  CausalHypothesisStatus,
+  DEFAULT_CAUSAL_FORGE_CONFIG,
+  type HypothesisOrigin,
+  type CausalDirection,
+  type CausalHypothesisInput,
+  type CausalHypothesis,
+  type InterventionDesign,
+  type CounterfactualTrial,
+  type TrialOutcome,
+  type DaoEvidenceVote,
+  type DaoRatificationResult,
+  type CausalForgeState,
+  type CausalForgeVisualState,
+  type CausalHypothesisForgeConfig,
+} from "./CausalHypothesisForge.js";
+
+export {
+  EpistemicDreaming,
+  epistemicDreaming,
+  BridgeType,
+  DreamPhase,
+  DEFAULT_DREAMING_CONFIG,
+  type DreamFragment,
+  type DreamInsight,
+  type DreamSessionState,
+  type EpistemicDreamingConfig,
+  type KnowledgeGraphView,
+} from "./EpistemicDreaming.js";
+
+export {
+  CognitiveResonanceField,
+  cognitiveResonanceField,
+  DEFAULT_RESONANCE_FIELD_CONFIG,
+  type IdeaWave,
+  type ResonanceNode,
+  type FieldState,
+  type CognitiveResonanceFieldConfig,
+  type FieldKnowledgeGraph,
+} from "./CognitiveResonanceField.js";
+
+export {
+  ActiveInferenceExperimentScheduler,
+  activeInferenceExperimentScheduler,
+  DEFAULT_ACTIVE_INFERENCE_SCHEDULER_CONFIG,
+  type ExperimentForge,
+  type AutognosticExperimentContext,
+  type ExperimentCandidate,
+  type ExperimentGovernanceDecision,
+  type ExperimentGovernanceAuthorizer,
+  type ExperimentScheduleRejectionReason,
+  type ExperimentScheduleDecision,
+  type ActiveInferenceSchedulerState,
+  type ActiveInferenceExperimentSchedulerConfig,
+} from "./ActiveInferenceExperimentScheduler.js";

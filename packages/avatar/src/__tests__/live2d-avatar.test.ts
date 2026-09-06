@@ -36,6 +36,12 @@ jest.mock("../adapters/pixi-live2d-renderer", () => ({
     updateLipSync: jest.fn(),
     setBlinking: jest.fn(),
     setParameter: jest.fn(),
+    getParameter: jest.fn().mockReturnValue(0),
+    focusEyes: jest.fn(),
+    addFrameListener: jest.fn(),
+    removeFrameListener: jest.fn(),
+    setAnimationSpeed: jest.fn(),
+    setVisualVitality: jest.fn(),
     applyOutfit: jest.fn(),
     applyIdentityRig: jest.fn(),
     resize: jest.fn(),
@@ -228,6 +234,124 @@ describe("Live2DAvatarManager", () => {
       };
 
       expect(() => manager.updateEmotionalState(state)).not.toThrow();
+    });
+  });
+
+  describe("cognitive metabolic projection", () => {
+    it("applies metabolic state through the Pixi frame ticker", async () => {
+      const controller = await manager.initialize(mockContainer, {
+        modelPath: "/test/model.json",
+      });
+      const renderer = controller.getRenderer() as unknown as {
+        setParameter: jest.Mock;
+        addFrameListener: jest.Mock;
+        setAnimationSpeed: jest.Mock;
+        setVisualVitality: jest.Mock;
+      };
+      const frameListener = renderer.addFrameListener.mock.calls[0][0] as (
+        deltaTime: number,
+      ) => void;
+      renderer.setParameter.mockClear();
+      renderer.setAnimationSpeed.mockClear();
+      renderer.setVisualVitality.mockClear();
+
+      controller.updateCognitiveState({
+        mode: "Knowledge Integration",
+        valence: 0.2,
+        arousal: 0.5,
+        metabolic: {
+          metabolicPhase: "integrating",
+          energyLevel: 0.42,
+          anabolicBalance: 0.6,
+          isEnergyCrisis: false,
+          myelinationProgress: 0.8,
+          knowledgeDensity: 3.2,
+        },
+      });
+      frameListener(2);
+
+      expect(renderer.setParameter).toHaveBeenCalledWith(
+        "ParamBreath",
+        expect.any(Number),
+      );
+      expect(renderer.setParameter).toHaveBeenCalledWith(
+        "ParamMouthForm",
+        expect.any(Number),
+      );
+      expect(renderer.setParameter).toHaveBeenCalledWith(
+        "ParamAngleZ",
+        expect.any(Number),
+      );
+      expect(renderer.setAnimationSpeed).toHaveBeenCalledWith(
+        expect.any(Number),
+      );
+      expect(renderer.setVisualVitality).toHaveBeenCalledWith(
+        expect.any(Number),
+      );
+    });
+
+    it("samples rendered Cubism state into the avatar self-model", async () => {
+      const controller = await manager.initialize(mockContainer, {
+        modelPath: "/test/model.json",
+      });
+      const renderer = controller.getRenderer() as unknown as {
+        addFrameListener: jest.Mock;
+        getParameter: jest.Mock;
+      };
+      const selfModelFrame = renderer.addFrameListener.mock.calls[1][0] as (
+        deltaTime: number,
+      ) => void;
+
+      controller.updateCognitiveState({
+        mode: "Scientific Genius",
+        scientificGenius: 0.92,
+        insightPotential: 0.84,
+        metabolic: {
+          metabolicPhase: "integrating",
+          energyLevel: 0.74,
+          anabolicBalance: 0.45,
+          isEnergyCrisis: false,
+          myelinationProgress: 0.6,
+          knowledgeDensity: 2.8,
+        },
+      });
+
+      expect(controller.getLastExpressionExperience()).toBeNull();
+      selfModelFrame(1);
+      selfModelFrame(1);
+
+      expect(renderer.getParameter).toHaveBeenCalled();
+      expect(controller.getLastExpressionExperience()).toEqual(
+        expect.objectContaining({
+          cognitiveMode: "Scientific Genius",
+          predicted: expect.objectContaining({ params: expect.any(Object) }),
+          actual: expect.objectContaining({ params: expect.any(Object) }),
+          errorMagnitude: expect.any(Number),
+        }),
+      );
+      expect(controller.getSelfModelAccuracy()).toBeGreaterThanOrEqual(0);
+      expect(controller.getSelfModelAccuracy()).toBeLessThanOrEqual(1);
+    });
+
+    it("removes the metabolic frame listener during disposal", async () => {
+      const controller = await manager.initialize(mockContainer, {
+        modelPath: "/test/model.json",
+      });
+      const renderer = controller.getRenderer() as unknown as {
+        addFrameListener: jest.Mock;
+        removeFrameListener: jest.Mock;
+      };
+      const metabolicFrameListener = renderer.addFrameListener.mock.calls[0][0];
+      const selfModelFrameListener = renderer.addFrameListener.mock.calls[1][0];
+
+      manager.dispose();
+
+      expect(renderer.removeFrameListener).toHaveBeenCalledWith(
+        metabolicFrameListener,
+      );
+      expect(renderer.removeFrameListener).toHaveBeenCalledWith(
+        selfModelFrameListener,
+      );
     });
   });
 

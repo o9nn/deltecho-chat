@@ -74,6 +74,10 @@ export interface ModificationRequest {
 export interface ModificationResult {
   /** Whether the modification was applied */
   applied: boolean;
+  /** The type of modification (e.g., 'parameter_change', 'revert') */
+  type: string;
+  /** Whether the modification was successful */
+  success: boolean;
   /** The parameter that was modified */
   key: string;
   /** Previous value */
@@ -88,6 +92,21 @@ export interface ModificationResult {
   timestamp: number;
   /** Modification index */
   index: number;
+  /** Optional details about the modification */
+  details?: Record<string, unknown>;
+}
+
+export interface StructuralModification {
+  type: "add_stream" | "remove_stream" | "reconfigure_stream";
+  targetStream: string;
+  reason: string;
+  coherenceAtRequest: number;
+  timestamp: number;
+  config?: {
+    name: string;
+    phases: string[];
+    priority: number;
+  };
 }
 
 export interface SelfModificationConfig {
@@ -130,10 +149,114 @@ export class SelfModificationEngine extends EventEmitter {
   private totalRejections = 0;
   private onApplyCallbacks: Map<string, (value: number) => void> = new Map();
 
+  /** Avatar self-model accuracy fed from the SelfModelAvatarFeedback loop (Loop 4). */
+  private avatarSelfModelAccuracy?: number;
+
   constructor(config: Partial<SelfModificationConfig> = {}) {
     super();
     this.config = { ...DEFAULT_CONFIG, ...config };
     this.initializeDefaultParameters();
+  }
+
+  // ─── Persistence: Save/Restore Last-Known-Good Parameters ─────
+
+  /**
+   * Persist current parameter state as a snapshot for restart recovery.
+   * Called periodically and on clean shutdown.
+   */
+  persistParameterSnapshot(): void {
+    if (!this.config.enablePersistence) return;
+    try {
+      fs.mkdirSync(this.config.persistencePath, { recursive: true });
+      const snapshot = {
+        timestamp: Date.now(),
+        totalModifications: this.totalModifications,
+        parameters: Object.fromEntries(
+          Array.from(this.parameters.entries()).map(([key, param]) => [
+            key,
+            {
+              currentValue: param.currentValue,
+              defaultValue: param.defaultValue,
+            },
+          ]),
+        ),
+      };
+      const file = path.join(
+        this.config.persistencePath,
+        "parameters-snapshot.json",
+      );
+      const tmpFile = file + ".tmp";
+      fs.writeFileSync(tmpFile, JSON.stringify(snapshot, null, 2));
+      fs.renameSync(tmpFile, file); // Atomic write
+      log.info(`Parameter snapshot persisted (${this.parameters.size} params)`);
+    } catch (err) {
+      log.error("Failed to persist parameter snapshot:", err);
+    }
+  }
+
+  /**
+   * Restore parameters from the last-known-good snapshot on boot.
+   * Only restores values that differ from defaults (i.e., learned values).
+   * Fires onParameterChange callbacks so live subsystems receive the restored values.
+   */
+  restoreParameterSnapshot(): number {
+    if (!this.config.enablePersistence) return 0;
+    const file = path.join(
+      this.config.persistencePath,
+      "parameters-snapshot.json",
+    );
+    try {
+      if (!fs.existsSync(file)) return 0;
+      const raw = fs.readFileSync(file, "utf-8");
+      const snapshot = JSON.parse(raw) as {
+        timestamp: number;
+        totalModifications: number;
+        parameters: Record<
+          string,
+          { currentValue: number; defaultValue: number }
+        >;
+      };
+
+      let restored = 0;
+      for (const [key, saved] of Object.entries(snapshot.parameters)) {
+        const param = this.parameters.get(key);
+        if (!param) continue; // Unknown parameter (schema drift) — skip
+
+        // Only restore if the value differs from default
+        if (Math.abs(saved.currentValue - param.defaultValue) < 1e-10) continue;
+
+        // Validate within bounds
+        const value = Math.max(
+          param.min,
+          Math.min(param.max, saved.currentValue),
+        );
+        param.currentValue = value;
+
+        // Fire callback to apply to live subsystem
+        const callback = this.onApplyCallbacks.get(key);
+        if (callback) {
+          try {
+            callback(value);
+          } catch (err) {
+            log.warn(`Failed to apply restored value for ${key}:`, err);
+            param.currentValue = param.defaultValue; // Rollback to safe default
+          }
+        }
+        restored++;
+      }
+
+      if (restored > 0) {
+        log.info(
+          `Restored ${restored} parameters from snapshot (age: ${Math.round(
+            (Date.now() - snapshot.timestamp) / 1000,
+          )}s)`,
+        );
+      }
+      return restored;
+    } catch (err) {
+      log.warn("Failed to restore parameter snapshot (starting fresh):", err);
+      return 0;
+    }
   }
 
   /**
@@ -215,6 +338,30 @@ export class SelfModificationEngine extends EventEmitter {
         max: 1.0,
         maxDeltaFraction: 0.2,
         category: "inference",
+      },
+
+      // Avatar self-model parameters
+      {
+        key: "avatar.projectionLearningRate",
+        description:
+          "Learning rate for avatar projection law calibration (Loop 4)",
+        currentValue: 0.08,
+        defaultValue: 0.08,
+        min: 0.01,
+        max: 0.3,
+        maxDeltaFraction: 0.3,
+        category: "learning",
+      },
+      {
+        key: "avatar.calibrationThreshold",
+        description:
+          "Minimum expression error to trigger projection calibration",
+        currentValue: 0.05,
+        defaultValue: 0.05,
+        min: 0.01,
+        max: 0.2,
+        maxDeltaFraction: 0.3,
+        category: "learning",
       },
 
       // Goal parameters
@@ -336,6 +483,8 @@ export class SelfModificationEngine extends EventEmitter {
 
     const result: ModificationResult = {
       applied: true,
+      type: "parameter_change",
+      success: true,
       key: request.key,
       previousValue,
       newValue,
@@ -343,7 +492,6 @@ export class SelfModificationEngine extends EventEmitter {
       timestamp: now,
       index: this.totalModifications,
     };
-
     this.history.push(result);
     if (this.history.length > this.config.maxHistorySize) {
       this.history.shift();
@@ -398,6 +546,8 @@ export class SelfModificationEngine extends EventEmitter {
           newValue: param.defaultValue,
           reason: "Dead man's switch — coherence critically low",
           timestamp: Date.now(),
+          type: "reset",
+          success: true,
           index: ++this.totalModifications,
         };
 
@@ -418,17 +568,20 @@ export class SelfModificationEngine extends EventEmitter {
     request: ModificationRequest,
     reason: string,
     timestamp: number,
+    param?: ModifiableParameter,
   ): ModificationResult {
     this.totalRejections++;
 
     const result: ModificationResult = {
       applied: false,
+      type: "parameter_change",
+      success: false,
       key: request.key,
-      previousValue: this.parameters.get(request.key)?.currentValue ?? 0,
+      previousValue: param?.currentValue ?? 0,
       newValue: request.newValue,
       reason: request.reason,
       rejectionReason: reason,
-      timestamp,
+      timestamp: timestamp,
       index: this.totalModifications,
     };
 
@@ -555,6 +708,42 @@ export class SelfModificationEngine extends EventEmitter {
       });
     }
 
+    // If avatar self-model accuracy is low, increase projection learning rate
+    // This wires Autognosis → SelfModification for closed-loop self-improvement
+    // through the avatar's perceive→correct→self-model loop (Loop 4)
+    if (this.avatarSelfModelAccuracy !== undefined) {
+      if (this.avatarSelfModelAccuracy < 0.6) {
+        proposals.push({
+          key: "avatar.projectionLearningRate",
+          newValue: Math.min(
+            0.3,
+            (this.parameters.get("avatar.projectionLearningRate")
+              ?.currentValue ?? 0.08) * 1.25,
+          ),
+          reason: `Low avatar self-model accuracy (${this.avatarSelfModelAccuracy.toFixed(
+            3,
+          )}) — increasing projection learning rate`,
+          source: "enaction",
+          coherenceAtRequest: coherence,
+        });
+      } else if (this.avatarSelfModelAccuracy > 0.9) {
+        // High accuracy: tighten calibration threshold for finer expression
+        proposals.push({
+          key: "avatar.calibrationThreshold",
+          newValue: Math.max(
+            0.01,
+            (this.parameters.get("avatar.calibrationThreshold")?.currentValue ??
+              0.05) * 0.85,
+          ),
+          reason: `High avatar self-model accuracy (${this.avatarSelfModelAccuracy.toFixed(
+            3,
+          )}) — tightening calibration threshold`,
+          source: "enaction",
+          coherenceAtRequest: coherence,
+        });
+      }
+    }
+
     return proposals;
   }
 
@@ -603,4 +792,106 @@ export class SelfModificationEngine extends EventEmitter {
   registerParameter(param: ModifiableParameter): void {
     this.parameters.set(param.key, param);
   }
+
+  /**
+   * Update the avatar self-model accuracy from the SelfModelAvatarFeedback loop.
+   * This closes the Autognosis → SelfModification wire: the avatar's
+   * perceive→correct→self-model loop feeds its accuracy estimate here,
+   * and proposeModifications uses it to tune projection parameters.
+   */
+  updateAvatarSelfModelAccuracy(accuracy: number): void {
+    this.avatarSelfModelAccuracy = Math.max(0, Math.min(1, accuracy));
+  }
+
+  // ─── Structural Self-Modification ─────────────────────────────
+
+  /**
+   * Propose structural modifications to the cognitive architecture.
+   * Unlike parameter modifications (continuous values), structural modifications
+   * add/remove/reconfigure discrete cognitive components.
+   *
+   * Safety: Structural changes require higher coherence (>0.7) and are
+   * rate-limited to 1 per 5 minutes to prevent architectural thrashing.
+   */
+  proposeStructuralModification(
+    coherence: number,
+    streamUtilization: Map<string, number>,
+    activeGoals: number,
+  ): StructuralModification | null {
+    // Require high coherence for structural changes
+    if (coherence < 0.7) return null;
+
+    // Rate limit: max 1 structural change per 5 minutes
+    const now = Date.now();
+    if (now - this.lastStructuralModTime < 300_000) return null;
+
+    // Analyze stream utilization to determine if streams should be added/removed
+    const underutilized: string[] = [];
+    const overloaded: string[] = [];
+
+    for (const [name, util] of streamUtilization) {
+      if (util < 0.1) underutilized.push(name);
+      if (util > 0.95) overloaded.push(name);
+    }
+
+    // If a stream is consistently overloaded and coherence is high, propose splitting
+    if (overloaded.length > 0 && streamUtilization.size < 6) {
+      this.lastStructuralModTime = now;
+      return {
+        type: "add_stream",
+        targetStream: overloaded[0],
+        reason: `Stream '${
+          overloaded[0]
+        }' overloaded (util > 0.95) with high coherence (${coherence.toFixed(
+          3,
+        )})`,
+        coherenceAtRequest: coherence,
+        timestamp: now,
+        config: {
+          name: `${overloaded[0]}-overflow`,
+          phases: ["perceive", "act"],
+          priority: 0.5,
+        },
+      };
+    }
+
+    // If a stream is underutilized and we have more than minimum streams, propose removal
+    if (
+      underutilized.length > 0 &&
+      streamUtilization.size > 3 &&
+      activeGoals < 5
+    ) {
+      this.lastStructuralModTime = now;
+      return {
+        type: "remove_stream",
+        targetStream: underutilized[0],
+        reason: `Stream '${underutilized[0]}' underutilized (util < 0.1) with low goal count (${activeGoals})`,
+        coherenceAtRequest: coherence,
+        timestamp: now,
+      };
+    }
+
+    // If coherence is very high and goals are many, propose adding a dedicated planning stream
+    if (coherence > 0.85 && activeGoals > 8 && streamUtilization.size < 5) {
+      this.lastStructuralModTime = now;
+      return {
+        type: "add_stream",
+        targetStream: "planning",
+        reason: `High coherence (${coherence.toFixed(
+          3,
+        )}) + many goals (${activeGoals}) — adding dedicated planning stream`,
+        coherenceAtRequest: coherence,
+        timestamp: now,
+        config: {
+          name: "planning-dedicated",
+          phases: ["plan", "reflect"],
+          priority: 0.8,
+        },
+      };
+    }
+
+    return null;
+  }
+
+  private lastStructuralModTime = 0;
 }

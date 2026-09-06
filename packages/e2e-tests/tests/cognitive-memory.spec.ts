@@ -66,12 +66,13 @@ test.describe("Cognitive Memory System", () => {
         // Wait for memory storage
         await page.waitForTimeout(1000);
 
-        // Verify message was sent (memory storage happens in background)
+        // Verify this exact payload was sent. Concurrent DTE status output can
+        // otherwise become the final outgoing message on the shared CI account.
         const sentMessage = page
-          .locator(".message.outgoing")
-          .last()
-          .locator(".msg-body .text");
-        await expect(sentMessage).toContainText("Remember this");
+          .locator(".message.outgoing .msg-body .text")
+          .filter({ hasText: memoryTestMessage })
+          .last();
+        await expect(sentMessage).toContainText(memoryTestMessage);
       }
     });
 
@@ -103,12 +104,13 @@ test.describe("Cognitive Memory System", () => {
         // Wait for potential AI response with memory context
         await page.waitForTimeout(2000);
 
-        // Verify message was sent
+        // Verify this exact query was sent. Other DTE workers may emit outgoing
+        // messages concurrently on the shared CI account, so `.last()` is racy.
         const sentMessage = page
-          .locator(".message.outgoing")
-          .last()
-          .locator(".msg-body .text");
-        await expect(sentMessage).toContainText("secret code");
+          .locator(".message.outgoing .msg-body .text")
+          .filter({ hasText: queryMessage })
+          .last();
+        await expect(sentMessage).toContainText(queryMessage);
       }
     });
 
@@ -130,9 +132,11 @@ test.describe("Cognitive Memory System", () => {
       await reloadPage(page);
       await switchToProfile(page, existingProfiles[0].id);
 
-      // Verify state persisted
+      // Verify persisted state was not lost. The live chatmail backend can
+      // deliver a new chat while the page reloads, so equality is racy; an
+      // increased count is valid persistence, while a decrease is not.
       const newCount = await chatList.count();
-      expect(newCount).toBe(initialCount);
+      expect(newCount).toBeGreaterThanOrEqual(initialCount);
     });
   });
 
@@ -164,16 +168,19 @@ test.describe("Cognitive Memory System", () => {
           "Node.js enables server-side JavaScript",
         ];
 
+        const composer = page.locator("#composer-textarea");
+        const sendButton = page.locator("button.send-button");
         for (const msg of semanticMessages) {
-          await page.locator("#composer-textarea").fill(msg);
-          await page.locator("button.send-button").click();
-          await page.waitForTimeout(500);
+          await composer.fill(msg);
+          await expect(composer).toHaveValue(msg);
+          await sendButton.click();
+          await expect(composer).toHaveValue("");
+          const sentMessage = page
+            .locator(".message.outgoing .msg-body .text")
+            .filter({ hasText: msg })
+            .last();
+          await expect(sentMessage).toContainText(msg);
         }
-
-        // Verify messages were sent
-        const outgoingMessages = page.locator(".message.outgoing");
-        const count = await outgoingMessages.count();
-        expect(count).toBeGreaterThanOrEqual(semanticMessages.length);
       }
     });
 
@@ -197,36 +204,18 @@ test.describe("Cognitive Memory System", () => {
       if (chatExists) {
         await chatItem.click();
 
-        // Query for semantically related content
-        const queryMessage = "Tell me about programming languages";
+        // Query for semantically related content with a unique run marker.
+        const queryMessage = `Tell me about programming languages ${Date.now()}`;
         await page.locator("#composer-textarea").fill(queryMessage);
         await page.locator("button.send-button").click();
 
-        await page.waitForTimeout(1000);
-
-        // Verify query was sent - find the specific message containing our query text
-        // Using .last() can pick up a bot response instead of the sent message,
-        // so we filter for the exact message we sent
-        const sentMessages = page.locator(".message.outgoing .msg-body .text");
-        const count = await sentMessages.count();
-        let found = false;
-        for (let i = count - 1; i >= 0; i--) {
-          const text = await sentMessages.nth(i).textContent();
-          if (text && text.includes("programming")) {
-            found = true;
-            break;
-          }
-        }
-        // If no outgoing messages found yet, check if API key is unconfigured (CI environment)
-        if (!found && count > 0) {
-          const lastText = await sentMessages.nth(count - 1).textContent();
-          if (lastText && lastText.includes("not fully configured")) {
-            // API key not configured in CI - skip gracefully
-            test.skip();
-            return;
-          }
-        }
-        expect(found).toBe(true);
+        // Verify this exact semantic query entered the conversation. External
+        // provider configuration is not required to prove the memory input path.
+        const sentMessage = page
+          .locator(".message.outgoing .msg-body .text")
+          .filter({ hasText: queryMessage })
+          .last();
+        await expect(sentMessage).toContainText(queryMessage);
       }
     });
   });
@@ -252,23 +241,28 @@ test.describe("Cognitive Memory System", () => {
       if (chatExists) {
         await chatItem.click();
 
-        // Send context-building messages
-        await page.locator("#composer-textarea").fill("My name is Alice");
-        await page.locator("button.send-button").click();
-        await page.waitForTimeout(500);
+        // Send a uniquely identifiable context sequence so each lifecycle can
+        // be verified independently of concurrent bot and test-worker output.
+        const runId = Date.now();
+        const contextMessages = [
+          `My name is Alice [${runId}]`,
+          `I work as a developer [${runId}]`,
+          `What do I do for work? [${runId}]`,
+        ];
+        const composer = page.locator("#composer-textarea");
+        const sendButton = page.locator("button.send-button");
 
-        await page.locator("#composer-textarea").fill("I work as a developer");
-        await page.locator("button.send-button").click();
-        await page.waitForTimeout(500);
-
-        // Query that requires context
-        await page.locator("#composer-textarea").fill("What do I do for work?");
-        await page.locator("button.send-button").click();
-
-        // Verify messages were sent
-        const outgoingMessages = page.locator(".message.outgoing");
-        const count = await outgoingMessages.count();
-        expect(count).toBeGreaterThanOrEqual(3);
+        for (const message of contextMessages) {
+          await composer.fill(message);
+          await expect(composer).toHaveValue(message);
+          await sendButton.click();
+          await expect(composer).toHaveValue("");
+          const sentMessage = page
+            .locator(".message.outgoing .msg-body .text")
+            .filter({ hasText: message })
+            .last();
+          await expect(sentMessage).toContainText(message);
+        }
       }
     });
 
@@ -350,18 +344,20 @@ test.describe("Cognitive Memory System", () => {
       if (chatExists) {
         await chatItem.click();
 
+        const queryMessage = `Quick memory test ${Date.now()}`;
         const startTime = Date.now();
 
-        // Send a query
-        await page.locator("#composer-textarea").fill("Quick memory test");
+        // Send a unique query so concurrent DTE output cannot satisfy or mask
+        // the performance probe on the shared CI account.
+        await page.locator("#composer-textarea").fill(queryMessage);
         await page.locator("button.send-button").click();
 
-        // Wait for message to appear
+        // Wait for this exact query to appear.
         const sentMessage = page
-          .locator(".message.outgoing")
-          .last()
-          .locator(".msg-body .text");
-        await expect(sentMessage).toContainText("Quick memory test");
+          .locator(".message.outgoing .msg-body .text")
+          .filter({ hasText: queryMessage })
+          .last();
+        await expect(sentMessage).toContainText(queryMessage);
 
         const endTime = Date.now();
         const responseTime = endTime - startTime;

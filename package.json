@@ -7,11 +7,13 @@
   "version": "1.0.0",
   "scripts": {
     "preinstall": "node ./bin/check-nodejs-version.js",
-    "check": "pnpm check:types && pnpm check:lint && pnpm check:format && pnpm check:target-versions && pnpm check:log-conventions",
-    "check:types": "pnpm -r --no-bail check:types",
+    "check": "pnpm check:types && pnpm check:lint && pnpm check:format && pnpm check:target-versions && pnpm check:log-conventions && pnpm check:desktop-coexistence",
+    "check:types": "pnpm run build:type-deps && pnpm -r --no-bail check:types",
+    "build:type-deps": "pnpm --filter=\"deep-tree-echo-orchestrator^...\" --if-present run build",
     "check:lint": "eslint . --ext .js,.ts,.tsx",
     "check:format": "prettier --check \"**/*.scss\" \"packages/**/*.{js,ts,tsx,json}\" \"**/*.md\"",
     "check:log-conventions": "node ./bin/log-conventions",
+    "check:desktop-coexistence": "node ./scripts/check-desktop-coexistence.mjs",
     "fix": "pnpm fix:lint && pnpm fix:format",
     "fix:lint": "eslint . --ext .js,.ts,.tsx --fix || true",
     "fix:format": "prettier --write \"**/*.scss\" \"packages/**/*.{js,ts,tsx,json}\" \"**/*.md\"",
@@ -43,7 +45,7 @@
   },
   "engineStrict": true,
   "engines": {
-    "node": ">=20",
+    "node": ">=20 <25",
     "pnpm": ">=9.6.0"
   },
   "devDependencies": {

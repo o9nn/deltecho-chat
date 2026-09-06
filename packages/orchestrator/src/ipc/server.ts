@@ -30,6 +30,17 @@ const DEFAULT_CONFIG: IPCServerConfig = {
   maxConnections: 10,
 };
 
+function resolveLocalIpcEndpoint(socketPath: string): string {
+  if (process.platform !== "win32") return socketPath;
+  if (socketPath.startsWith("\\\\.\\pipe\\")) return socketPath;
+
+  const socketName = path
+    .basename(socketPath)
+    .replace(/\.sock$/i, "")
+    .replace(/[^a-zA-Z0-9._-]/g, "-");
+  return `\\\\.\\pipe\\deltecho-${socketName || "orchestrator"}`;
+}
+
 /**
  * IPC Server for communication with desktop applications
  * Provides a protocol for desktop apps to interact with the orchestrator
@@ -43,6 +54,7 @@ export class IPCServer extends EventEmitter {
   private running: boolean = false;
   private clientIdCounter: number = 0;
   private storageManager: StorageManager;
+  private activeSocketPath: string | null = null;
 
   constructor(config: Partial<IPCServerConfig> = {}) {
     super();
@@ -185,25 +197,27 @@ export class IPCServer extends EventEmitter {
             resolve();
           });
         } else {
-          // Unix socket server
-          const socketPath = this.config.socketPath!;
+          // Unix domain socket on POSIX; DeltEcho-namespaced named pipe on Windows.
+          const socketPath = resolveLocalIpcEndpoint(this.config.socketPath!);
+          this.activeSocketPath = socketPath;
 
-          // Remove existing socket file if it exists
-          if (fs.existsSync(socketPath)) {
-            fs.unlinkSync(socketPath);
-          }
+          if (process.platform !== "win32") {
+            // Remove an abandoned Unix socket file before binding.
+            if (fs.existsSync(socketPath)) {
+              fs.unlinkSync(socketPath);
+            }
 
-          // Ensure directory exists
-          const socketDir = path.dirname(socketPath);
-          if (!fs.existsSync(socketDir)) {
-            fs.mkdirSync(socketDir, { recursive: true });
+            const socketDir = path.dirname(socketPath);
+            if (!fs.existsSync(socketDir)) {
+              fs.mkdirSync(socketDir, { recursive: true });
+            }
           }
 
           this.server = net.createServer((socket) =>
             this.handleConnection(socket),
           );
           this.server.listen(socketPath, () => {
-            log.info(`IPC server listening on socket ${socketPath}`);
+            log.info(`IPC server listening on local endpoint ${socketPath}`);
             this.running = true;
             resolve();
           });
@@ -413,17 +427,22 @@ export class IPCServer extends EventEmitter {
 
       if (this.server) {
         this.server.close(() => {
-          // Clean up socket file
-          if (!this.config.useTcp && this.config.socketPath) {
+          // Named pipes are released by server.close(); only Unix sockets are files.
+          if (
+            process.platform !== "win32" &&
+            !this.config.useTcp &&
+            this.activeSocketPath
+          ) {
             try {
-              if (fs.existsSync(this.config.socketPath)) {
-                fs.unlinkSync(this.config.socketPath);
+              if (fs.existsSync(this.activeSocketPath)) {
+                fs.unlinkSync(this.activeSocketPath);
               }
             } catch (error) {
               log.warn("Failed to clean up socket file:", error);
             }
           }
 
+          this.activeSocketPath = null;
           this.server = null;
           this.running = false;
           log.info("IPC server stopped");

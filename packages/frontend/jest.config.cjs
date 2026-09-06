@@ -32,6 +32,7 @@ module.exports = {
     '^@deltecho/sys6-triality$': '<rootDir>/../sys6-triality/src/index.ts',
     '^@deltecho/dove9$': '<rootDir>/../dove9/src/index.ts',
     '^deep-tree-echo-core$': '<rootDir>/../core/src/index.ts',
+    '^deep-tree-echo-core/logger$': '<rootDir>/../core/src/utils/logger.ts',
     '^deep-tree-echo-core/(.*)$': '<rootDir>/../core/src/$1/index.ts',
     // Handle .js extensions in ESM-style imports (strip for Jest/TS)
     '^@deltecho/reasoning/(.*)\\.js$': '<rootDir>/../reasoning/src/$1.ts',

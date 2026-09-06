@@ -25,6 +25,10 @@ import type {
 } from "./dtecho-expression-driver";
 import { projectDTEchoCognitiveState } from "./dtecho-expression-driver";
 import { ExpressionMapper } from "./expression-mapper";
+import {
+  EmotionalInertiaController,
+  type InertiaOutput,
+} from "./emotional-inertia-controller";
 
 /**
  * Cognitive state input from consciousness modules
@@ -50,6 +54,12 @@ export interface CognitiveStateInput {
   insightPotential?: number; // 0-1 Entelechy insight potential
   entelechyScore?: number; // 0-1 Entelechy realization score
   freeEnergy?: number; // 0-1 unresolved surprise/rigor pressure
+  daoConsensus?: number; // 0-1 distributed consensus around current inference
+  esnCoherence?: number; // 0-1 reservoir phase coherence
+  autognosisResonance?: number; // 0-1 self-observation / reservoir resonance
+  embodimentAccuracy?: number; // 0-1 rendered-state projection fidelity
+  embodimentError?: number; // normalized RMS Cubism projection error
+  embodimentConfidence?: number; // 0-1 evidence maturity
 
   // EchoBeats state
   echoBeatsPhase?: number; // 0-11
@@ -122,17 +132,22 @@ export class CognitiveAvatarBridge extends EventEmitter {
   private previousCognitiveState: CognitiveStateInput | null = null;
   private running: boolean = false;
   private updateInterval: ReturnType<typeof setInterval> | null = null;
+  private visibilityHandler: (() => void) | null = null;
+  private wasRunningBeforeHide: boolean = false;
 
   // Smoothed values for transitions
   private smoothedExpression: number = 0.5;
   private smoothedArousal: number = 0.5;
   private smoothedCoherence: number = 1.0;
 
+  // Emotional inertia controller for smooth transitions + cognitive load speed + fidgets
+  private inertiaController: EmotionalInertiaController;
+
   constructor(config: Partial<CognitiveAvatarBridgeConfig> = {}) {
     super();
     this.config = { ...DEFAULT_CONFIG, ...config };
     this.expressionMapper = new ExpressionMapper();
-
+    this.inertiaController = new EmotionalInertiaController();
     const initialProjection = projectDTEchoCognitiveState({ mode: "Idle" });
     this.currentState = {
       expression: initialProjection.avatarExpression,
@@ -170,15 +185,48 @@ export class CognitiveAvatarBridge extends EventEmitter {
   }
 
   /**
+   * Get the emotional inertia controller for external access
+   */
+  public getInertiaController(): EmotionalInertiaController {
+    return this.inertiaController;
+  }
+
+  /**
+   * Get current animation speed multiplier from cognitive load
+   */
+  public getAnimationSpeedMultiplier(): number {
+    return this.inertiaController.getSpeedMultiplier();
+  }
+
+  /**
    * Start the bridge
    */
   public start(): void {
     if (this.running) return;
     this.running = true;
-
+    // Start the emotional inertia controller alongside the bridge
+    this.inertiaController.start();
     this.updateInterval = setInterval(() => {
       this.applyCurrentState();
     }, this.config.updateIntervalMs);
+
+    // Pause cognitive updates when tab is hidden (saves ~5-10% CPU in background)
+    if (typeof document !== "undefined" && !this.visibilityHandler) {
+      this.visibilityHandler = () => {
+        if (document.visibilityState === "hidden") {
+          this.wasRunningBeforeHide = this.running;
+          if (this.updateInterval) {
+            clearInterval(this.updateInterval);
+            this.updateInterval = null;
+          }
+        } else if (this.wasRunningBeforeHide && !this.updateInterval) {
+          this.updateInterval = setInterval(() => {
+            this.applyCurrentState();
+          }, this.config.updateIntervalMs);
+        }
+      };
+      document.addEventListener("visibilitychange", this.visibilityHandler);
+    }
 
     this.emit("started");
   }
@@ -195,6 +243,12 @@ export class CognitiveAvatarBridge extends EventEmitter {
       this.updateInterval = null;
     }
 
+    // Remove visibility listener on stop
+    if (typeof document !== "undefined" && this.visibilityHandler) {
+      document.removeEventListener("visibilitychange", this.visibilityHandler);
+      this.visibilityHandler = null;
+    }
+
     this.emit("stopped");
   }
 
@@ -205,20 +259,31 @@ export class CognitiveAvatarBridge extends EventEmitter {
     // Convert cognitive state to emotional vector for expression mapping
     const emotionalVector = this.cognitiveToEmotional(state);
 
-    // Update expression mapper
-    this.expressionMapper.update(emotionalVector);
+    // Feed emotions and cognitive load into inertia controller
+    this.inertiaController.feedEmotions(emotionalVector);
+    const cogLoad = Math.max(
+      state.processingIntensity ?? 0,
+      state.isProcessing ? 0.5 : 0,
+      (state.scientificGenius ?? 0) * 0.7,
+    );
+    this.inertiaController.feedCognitiveLoad(cogLoad);
+
+    // Use inertia-filtered emotions for expression mapping
+    const inertiaOutput = this.inertiaController.getOutput();
+    this.expressionMapper.update(inertiaOutput.smoothedEmotions);
 
     // Calculate avatar response
     const response = this.calculateAvatarResponse(state, emotionalVector);
 
-    // Apply smoothing
-    this.applySmoothing(response, state);
+    // Apply smoothing (now enhanced with inertia output)
+    this.applySmoothing(response, state, inertiaOutput);
 
     // Store for reference
     this.previousCognitiveState = state;
 
-    // Emit update event
+    // Emit update event with inertia metadata
     this.emit("state_updated", this.currentState);
+    this.emit("inertia_output", inertiaOutput);
   }
 
   /**
@@ -257,6 +322,9 @@ export class CognitiveAvatarBridge extends EventEmitter {
       state.scientificGenius ?? 0,
       state.insightPotential ?? 0,
       state.entelechyScore ?? 0,
+      state.daoConsensus ?? 0,
+      state.esnCoherence ?? 0,
+      state.autognosisResonance ?? 0,
       emotions.interest ?? 0,
     );
     const cognitiveVisualState: Live2DCognitiveVisualState = {
@@ -275,6 +343,12 @@ export class CognitiveAvatarBridge extends EventEmitter {
       insightPotential: state.insightPotential,
       entelechyScore: state.entelechyScore,
       freeEnergy: state.freeEnergy,
+      daoConsensus: state.daoConsensus,
+      esnCoherence: state.esnCoherence,
+      autognosisResonance: state.autognosisResonance,
+      embodimentAccuracy: state.embodimentAccuracy,
+      embodimentError: state.embodimentError,
+      embodimentConfidence: state.embodimentConfidence,
       isProcessing: state.isProcessing,
       isSpeaking: state.isSpeaking,
       audioLevel: state.audioLevel,
@@ -308,8 +382,17 @@ export class CognitiveAvatarBridge extends EventEmitter {
     const headTilt =
       (emotions.interest || 0) * 15 - (emotions.sadness || 0) * 10;
 
-    // Calculate consciousness glow from sentience level
-    const consciousnessGlow = state.sentienceLevel * state.phi;
+    // Calculate consciousness glow from sentience level, with a small scientific-genius
+    // boost when backend autognosis and DAO consensus are phase-aligned.
+    const resonanceGlow =
+      ((state.daoConsensus ?? 0) +
+        (state.esnCoherence ?? 0) +
+        (state.autognosisResonance ?? 0)) /
+      3;
+    const consciousnessGlow = Math.min(
+      1,
+      state.sentienceLevel * state.phi + resonanceGlow * 0.18,
+    );
 
     return {
       expression,
@@ -361,6 +444,7 @@ export class CognitiveAvatarBridge extends EventEmitter {
   private applySmoothing(
     response: AvatarResponseState,
     state: CognitiveStateInput,
+    inertiaOutput?: InertiaOutput,
   ): void {
     const factor = this.config.smoothingFactor;
     const invFactor = 1 - factor;
@@ -379,11 +463,25 @@ export class CognitiveAvatarBridge extends EventEmitter {
     this.smoothedCoherence =
       this.smoothedCoherence * factor + coherence * invFactor;
 
+    // Apply fidget deltas to head tilt and eye movement if inertia provides them
+    let headTiltWithFidget = response.headTilt;
+    let eyeWithFidget = response.eyeMovement;
+    if (inertiaOutput) {
+      const fd = inertiaOutput.fidgetDeltas;
+      headTiltWithFidget += fd.headAngleZ;
+      eyeWithFidget = {
+        x: eyeWithFidget.x + fd.eyeDriftX,
+        y: eyeWithFidget.y + fd.eyeDriftY,
+      };
+    }
+
     // Apply smoothed values
     this.currentState = {
       ...response,
       expressionIntensity: this.smoothedExpression,
       consciousnessGlow: response.consciousnessGlow * this.smoothedCoherence,
+      headTilt: headTiltWithFidget,
+      eyeMovement: eyeWithFidget,
     };
   }
 
@@ -471,6 +569,86 @@ export class CognitiveAvatarBridge extends EventEmitter {
       levelActivations: [0.5, 0.5, 0.5, 0.5, 0.5], // Default
       curvatureVisualization: prev?.riemannianCurvature ?? 0,
     };
+  }
+
+  /**
+   * Drive the avatar directly from the ScientificGeniusEngine's live visual
+   * state (see ScientificGeniusEngine.getVisualState). This closes the
+   * cognition -> embodiment loop: the avatar's "Scientific Genius" face is a
+   * faithful projection of genuine epistemic metrics (Φ, free energy,
+   * ESN coherence, autognosis resonance) rather than scripted animation.
+   *
+   * @param genius   Normalized visual state from the engine (all fields 0..1).
+   * @param context  Optional speaking/processing flags and audio level.
+   */
+  public updateFromScientificGenius(
+    genius: {
+      scientificGenius: number;
+      insightPotential: number;
+      phi: number;
+      freeEnergy: number;
+      esnCoherence: number;
+      autognosisResonance: number;
+      embodimentAccuracy?: number;
+      embodimentError?: number;
+      embodimentConfidence?: number;
+    },
+    context: {
+      isProcessing?: boolean;
+      isSpeaking?: boolean;
+      audioLevel?: number;
+      daoConsensus?: number;
+      entelechyScore?: number;
+      temporalCoherence?: number;
+    } = {},
+  ): void {
+    // Derive affect from epistemic state: high insight + low residual free
+    // energy reads as positive, energized valence; unresolved surprise raises
+    // arousal (vigilance) without necessarily lowering valence.
+    const valence = Math.max(
+      -1,
+      Math.min(
+        1,
+        0.55 * genius.insightPotential +
+          0.35 * genius.esnCoherence -
+          0.3 * genius.freeEnergy,
+      ),
+    );
+    const arousal = Math.max(
+      0,
+      Math.min(
+        1,
+        0.5 * genius.scientificGenius +
+          0.3 * genius.freeEnergy +
+          0.2 * genius.insightPotential,
+      ),
+    );
+
+    this.updateFromCognitiveState({
+      sentienceLevel: genius.autognosisResonance,
+      selfAwareness: genius.autognosisResonance,
+      phi: genius.phi,
+      flowState: genius.esnCoherence,
+      emotionalValence: valence,
+      emotionalArousal: arousal,
+      // Let the projector infer "Scientific Genius" when activation is high.
+      mode: genius.scientificGenius >= 0.62 ? "Scientific Genius" : undefined,
+      salience: Math.max(genius.scientificGenius, genius.insightPotential),
+      temporalCoherence: context.temporalCoherence ?? genius.esnCoherence,
+      scientificGenius: genius.scientificGenius,
+      insightPotential: genius.insightPotential,
+      entelechyScore: context.entelechyScore,
+      freeEnergy: genius.freeEnergy,
+      daoConsensus: context.daoConsensus,
+      esnCoherence: genius.esnCoherence,
+      autognosisResonance: genius.autognosisResonance,
+      embodimentAccuracy: genius.embodimentAccuracy,
+      embodimentError: genius.embodimentError,
+      embodimentConfidence: genius.embodimentConfidence,
+      isProcessing: context.isProcessing ?? false,
+      isSpeaking: context.isSpeaking ?? false,
+      audioLevel: context.audioLevel,
+    });
   }
 
   /**

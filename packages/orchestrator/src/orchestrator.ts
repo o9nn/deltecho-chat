@@ -4,6 +4,8 @@ import {
   RAGMemoryStore,
   PersonaCore,
   InMemoryStorage,
+  scientificGeniusEngine,
+  ProprioceptiveEmbodiment,
 } from "deep-tree-echo-core";
 import {
   CognitiveOrchestrator,
@@ -59,6 +61,16 @@ import {
 } from "./reservoir-feedback-loop.js";
 import { Echobeats } from "./echobeats.js";
 import { entelechyIntegration } from "./entelechy-integration.js";
+import { SelfModificationEngine } from "./self-modification.js";
+import {
+  MultiAgentConsensus,
+  type ConsensusActionRequest,
+} from "./multi-agent-consensus.js";
+import {
+  PolycentricExperimentGovernance,
+  type PolycentricGovernanceState,
+} from "./polycentric-experiment-governance.js";
+import { epistemicImmuneSystem } from "deep-tree-echo-core";
 
 const log = getLogger("deep-tree-echo-orchestrator/Orchestrator");
 
@@ -241,6 +253,11 @@ export class Orchestrator {
   private autonomyLifecycle?: AutonomyLifecycleCoordinator;
   private reservoirFeedback?: ReservoirFeedbackLoop;
   private echobeats?: Echobeats;
+  private proprioceptiveEmbodiment?: ProprioceptiveEmbodiment;
+  private selfModEngine?: SelfModificationEngine;
+  private peerConsensus?: MultiAgentConsensus;
+  private experimentGovernance?: PolycentricExperimentGovernance;
+  private scientificIntegrationCleanup: Array<() => void> = [];
   private running: boolean = false;
 
   // Cognitive services for processing messages
@@ -417,11 +434,16 @@ export class Orchestrator {
       if (this.config.enableAutonomy) {
         try {
           // 1. CoreSelfEngine — local inference + reservoir + identity
+          const lucyEndpoint =
+            this.config.lucyEndpoint ||
+            process.env.DELTECHO_LUCY_ENDPOINT ||
+            "http://localhost:8080";
+          log.info(`Lucy endpoint: ${lucyEndpoint}`);
           this.coreSelfEngine = await tryStartCoreSelf(
             async () => {
               const engine = new CoreSelfEngine({
                 lucy: {
-                  baseUrl: this.config.lucyEndpoint || "http://localhost:8080",
+                  baseUrl: lucyEndpoint,
                 },
                 reservoir: { units: 256 },
                 identity: {},
@@ -460,13 +482,24 @@ export class Orchestrator {
           log.info("ProactiveLoop started (process liveness)");
 
           // 4. AutonomyLifecycleCoordinator — 5-phase autonomy cycle
-          this.autonomyLifecycle = new AutonomyLifecycleCoordinator({
-            cycleIntervalMs: 30_000,
-            coherenceThreshold: 0.6,
-            verbose: false,
-            ...this.config.autonomyLifecycle,
-          });
+          // Share the pipeline's genuine processor and one entelechy authority so
+          // lifecycle coherence, experiment governance, and avatar embodiment all
+          // observe the same DAO/ESN autognosis state.
+          const cognitiveProcessor =
+            this.autonomyPipeline.getCognitiveProcessor();
+          entelechyIntegration.setCognitiveProcessor(cognitiveProcessor);
+          this.autonomyLifecycle = new AutonomyLifecycleCoordinator(
+            {
+              cycleIntervalMs: 30_000,
+              coherenceThreshold: 0.6,
+              verbose: false,
+              ...this.config.autonomyLifecycle,
+            },
+            cognitiveProcessor,
+            entelechyIntegration,
+          );
           this.autonomyLifecycle.wireEchobeats(this.echobeats);
+          this.autonomyLifecycle.wireScientificGenius(scientificGeniusEngine);
           await this.autonomyLifecycle.start();
           log.info("AutonomyLifecycleCoordinator started (5-phase cycle)");
 
@@ -495,6 +528,502 @@ export class Orchestrator {
           await this.reservoirFeedback.start(reservoir);
           this.autonomyLifecycle.wireReservoirFeedback(this.reservoirFeedback);
           log.info("ReservoirFeedbackLoop started (online RLS learning)");
+
+          // 7. ProprioceptiveEmbodiment — genuine system-metrics-based body signals
+          this.proprioceptiveEmbodiment = new ProprioceptiveEmbodiment({
+            sampleIntervalMs: 500,
+            smoothingAlpha: 0.15,
+            baseBreathingRate: 12,
+            lagThresholdMs: 50,
+          });
+          this.proprioceptiveEmbodiment.start();
+          log.info(
+            "ProprioceptiveEmbodiment started (event-loop proprioception + breathing)",
+          );
+
+          // 8. SelfModificationEngine — ENACTION self-tuning with live callbacks
+          this.selfModEngine = new SelfModificationEngine({
+            maxModificationsPerMinute: 10,
+            deadManSwitchThreshold: 0.2,
+            enablePersistence: true,
+            dryRun: false,
+          });
+
+          // Wire onParameterChange callbacks to actual subsystems
+          this.selfModEngine.onParameterChange(
+            "echobeats.cycleInterval",
+            (value) => {
+              this.echobeats?.setCycleInterval(value);
+            },
+          );
+          this.selfModEngine.onParameterChange(
+            "reservoir.spectralRadius",
+            (value) => {
+              this.coreSelfEngine?.getReservoir()?.setSpectralRadius(value);
+            },
+          );
+          this.selfModEngine.onParameterChange(
+            "reservoir.forgettingFactor",
+            (value) => {
+              this.reservoirFeedback?.getLearner()?.setForgettingFactor(value);
+            },
+          );
+          this.selfModEngine.onParameterChange(
+            "inference.temperature",
+            (value) => {
+              this.coreSelfEngine?.getLucy()?.setTemperature(value);
+            },
+          );
+          this.selfModEngine.onParameterChange("inference.topP", (value) => {
+            this.coreSelfEngine?.getLucy()?.setTopP(value);
+          });
+
+          // Restore last-known-good parameters from previous session
+          const restored = this.selfModEngine.restoreParameterSnapshot();
+          if (restored > 0) {
+            log.info(
+              `Restored ${restored} self-modification parameters from previous session`,
+            );
+          }
+
+          // Wire to autonomy lifecycle for ENACTION phase
+          this.autonomyLifecycle.wireSelfModification(this.selfModEngine);
+          log.info(
+            "SelfModificationEngine wired (ENACTION self-tuning active with live callbacks)",
+          );
+
+          // 8b. Wire Avatar SelfModel Feedback → proposeModifications
+          // Import the singleton lazily to avoid circular deps
+          try {
+            const { selfModelAvatarFeedback } = await import(
+              "@deltecho/avatar"
+            );
+            this.autonomyLifecycle.wireAvatarFeedback(selfModelAvatarFeedback);
+            log.info(
+              "Avatar SelfModelFeedback → SelfModification wire active (Loop 4 autognosis)",
+            );
+          } catch (e) {
+            log.warn("Avatar SelfModelFeedback not available (non-fatal):", e);
+          }
+
+          // 9. Online learning → live cognition bridge
+          // Periodically sync online-learned weights to the CognitiveReadout
+          if (this.reservoirFeedback && this.coreSelfEngine) {
+            const readout = this.coreSelfEngine.getAAR()?.getReadout();
+            if (readout) {
+              this.reservoirFeedback.on("batch_update", () => {
+                const learner = this.reservoirFeedback!.getLearner();
+                const weights = learner.getWeights();
+                const stats = learner.getStats();
+                // Only sync if learner has meaningful updates
+                if (stats.totalUpdates > 10) {
+                  readout.setWeights(weights, 64, 256);
+                }
+              });
+              log.info(
+                "Online reservoir learning → CognitiveReadout bridge active",
+              );
+            }
+          }
+
+          // 10. Temporal Credit Assignment — track which modifications improve coherence
+          const { TemporalCreditAssignment } = await import(
+            "./temporal-credit-assignment.js"
+          );
+          const temporalCredit = new TemporalCreditAssignment({
+            traceDecayRate: 0.1,
+            learningRate: 0.05,
+            coherenceSampleInterval: 5000,
+            persistencePath: "/tmp/deep-tree-echo/temporal-credit",
+          });
+
+          // Connect: record every applied modification as a trace
+          this.selfModEngine.on(
+            "modified",
+            (result: {
+              key: string;
+              previousValue: number;
+              newValue: number;
+            }) => {
+              temporalCredit.recordModification(
+                result.key,
+                result.previousValue,
+                result.newValue,
+              );
+            },
+          );
+
+          // Start sampling coherence from the cognitive tick processor
+          temporalCredit.start(() => {
+            const stats = this.echobeats?.getStats();
+            if (!stats) return 0.5;
+            // Derive coherence from stream energy mean (normalized)
+            const energies = stats.streams.map((s) => s.energy);
+            const meanEnergy =
+              energies.length > 0
+                ? energies.reduce((a, b) => a + b, 0) / energies.length
+                : 0.5;
+            return Math.max(0, Math.min(1, meanEnergy));
+          });
+          log.info(
+            "TemporalCreditAssignment started (TD(λ) eligibility traces active)",
+          );
+
+          // 11. Resonance Cascade Visual Conductor — eureka moments → avatar
+          try {
+            const { resonanceCascadeConductor } = await import(
+              "@deltecho/avatar"
+            );
+            this.autonomyLifecycle!.on(
+              "scientific:resonance_cascade",
+              (cascade: any) => {
+                resonanceCascadeConductor.onCascade({
+                  id: cascade.id,
+                  intensity: cascade.intensity,
+                  clusterPhi: cascade.clusterPhi,
+                  clusterNovelty: cascade.clusterNovelty,
+                  domainSpan: cascade.domainSpan,
+                  haloPulseHz: cascade.haloPulseHz,
+                  spectralRadiusBoost: cascade.spectralRadiusBoost,
+                  epistemicTemperatureDelta: cascade.epistemicTemperatureDelta,
+                  timestamp: cascade.timestamp,
+                });
+              },
+            );
+            this.autonomyLifecycle!.on(
+              "scientific:predictive_crystallization",
+              (crystal: any) => {
+                resonanceCascadeConductor.onCrystal({
+                  id: crystal.id,
+                  confidence: crystal.confidence,
+                  targetConcept: crystal.targetConcept,
+                  avatarEffect: crystal.avatarEffect,
+                  timestamp: crystal.timestamp,
+                });
+              },
+            );
+            log.info(
+              "ResonanceCascadeConductor wired (eureka → avatar visual pipeline active)",
+            );
+          } catch (e) {
+            log.warn("ResonanceCascadeConductor not available (non-fatal):", e);
+          }
+
+          // 12. Arena-ScientificGenius Bridge — spatial discoveries → hypotheses
+          try {
+            const { ArenaGeniusBridge } = await import(
+              "./arena-genius-bridge.js"
+            );
+            const arenaBridge = new ArenaGeniusBridge({ verbose: false });
+            if (scientificGeniusEngine) {
+              arenaBridge.wireEngine(scientificGeniusEngine as any);
+              log.info(
+                "ArenaGeniusBridge wired (TRIZ discoveries → scientific hypotheses active)",
+              );
+            }
+          } catch (e) {
+            log.warn("ArenaGeniusBridge not available (non-fatal):", e);
+          }
+
+          // 13. Epistemic Immune System — belief integrity defense
+          this.echobeats?.on("tick", () => {
+            const stats = this.echobeats?.getStats();
+            const energies = stats?.streams.map((s) => s.energy) ?? [];
+            const coherence =
+              energies.length > 0
+                ? energies.reduce((a, b) => a + b, 0) / energies.length
+                : 0.5;
+            const freeEnergy =
+              scientificGeniusEngine?.getState?.()?.totalFreeEnergy ?? 0;
+            const daoConsensus = coherence; // Use stream coherence as proxy
+            const esnHealth = Math.min(1.0, coherence * 1.2);
+
+            const result = epistemicImmuneSystem.tick({
+              freeEnergy: Math.min(1.0, freeEnergy / 10),
+              coherence,
+              recentBeliefs: [], // Populated by message processing
+              daoConsensus,
+              esnHealth,
+            });
+
+            if (result.threats.length > 0) {
+              log.warn(
+                `Epistemic Immune System detected ${result.threats.length} threats`,
+              );
+            }
+          });
+          log.info(
+            "EpistemicImmuneSystem wired (belief integrity defense active)",
+          );
+
+          // 14. Metabolic cognition graph — metabolism ↔ dreaming ↔ resonance ↔ causal tests ↔ avatar
+          try {
+            const { metabolicAvatarBridge } = await import("@deltecho/avatar");
+            const {
+              conceptualMetabolism,
+              epistemicDreaming,
+              cognitiveResonanceField,
+              causalHypothesisForge,
+              activeInferenceExperimentScheduler,
+            } = await import("deep-tree-echo-core");
+
+            const knowledgeGraph = {
+              getUnitIds: () =>
+                conceptualMetabolism.getUnits().map((unit) => unit.id),
+              getUnitLabel: (id: string) =>
+                conceptualMetabolism.getUnit(id)?.label ?? id,
+              getUnitDomain: (id: string) =>
+                conceptualMetabolism.getUnit(id)?.domain ?? "unknown",
+              getUnitActivation: (id: string) =>
+                conceptualMetabolism.getUnit(id)?.activation ?? 0,
+              getConnections: (id: string) =>
+                conceptualMetabolism.getConnections(id),
+              getUnitComplexity: (id: string) =>
+                conceptualMetabolism.getUnit(id)?.complexity ?? 1,
+              getUnitAccessCount: (id: string) =>
+                conceptualMetabolism.getUnit(id)?.accessCount ?? 0,
+            };
+            epistemicDreaming.connectKnowledgeGraph(knowledgeGraph);
+            cognitiveResonanceField.connectKnowledgeGraph(knowledgeGraph);
+
+            const peerEndpoints = (process.env.DTE_CONSENSUS_PEERS ?? "")
+              .split(",")
+              .map((endpoint) => endpoint.trim())
+              .filter(Boolean);
+            const consensusSecret = process.env.DTE_CONSENSUS_SECRET;
+            const peerConsensusEnabled =
+              peerEndpoints.length > 0 && Boolean(consensusSecret);
+            if (peerEndpoints.length > 0 && !consensusSecret) {
+              log.warn(
+                "DTE_CONSENSUS_PEERS configured without DTE_CONSENSUS_SECRET; peer voting remains fail-closed",
+              );
+            }
+            this.peerConsensus = new MultiAgentConsensus({
+              ...(process.env.DTE_INSTANCE_ID
+                ? { instanceId: process.env.DTE_INSTANCE_ID }
+                : {}),
+              peers: peerEndpoints,
+              enabled: peerConsensusEnabled,
+              sharedSecret: consensusSecret,
+            });
+            this.peerConsensus.start();
+            const unregisterConsensusEndpoints = consensusSecret
+              ? this.registerConsensusWebhookEndpoints(consensusSecret)
+              : null;
+            this.experimentGovernance = new PolycentricExperimentGovernance(
+              this.peerConsensus,
+            );
+
+            let activeInferenceTicks = 0;
+            let activeInferenceInFlight = false;
+            const scheduleActiveInference = (): void => {
+              const forgeState = causalHypothesisForge.getState();
+              if (
+                activeInferenceInFlight ||
+                forgeState.proposed +
+                  forgeState.testing +
+                  forgeState.supported ===
+                  0
+              ) {
+                return;
+              }
+
+              const snapshot = entelechyIntegration.takeSnapshot();
+              const metabolic = conceptualMetabolism.getVisualState();
+              const embodiment = entelechyIntegration.getEmbodimentAutognosis();
+              const causalVisual = causalHypothesisForge.getVisualState();
+              const cognitiveConsensus = cognitiveProcessor.getDaoConsensus();
+              const cognitiveAutognosis = cognitiveProcessor.getEsnAutognosis();
+              const reservoirHealth = snapshot.autognosis?.health ?? 0.5;
+
+              this.experimentGovernance?.updateContext({
+                cognitiveConsensus,
+                cognitiveAutognosis,
+                evidenceConsensus: causalVisual.daoEvidenceConsensus,
+                embodimentAccuracy: embodiment.accuracy,
+                embodimentConfidence: embodiment.confidence,
+                reservoirHealth,
+                isReservoirDead: snapshot.autognosis?.isDead ?? false,
+                isReservoirSaturated: snapshot.autognosis?.isSaturated ?? false,
+                energyLevel: metabolic.energyLevel,
+                isEnergyCrisis: metabolic.isEnergyCrisis,
+              });
+
+              activeInferenceInFlight = true;
+              void activeInferenceExperimentScheduler
+                .scheduleNextGoverned(
+                  {
+                    reservoirHealth,
+                    reservoirEntropy: snapshot.reservoir?.entropy ?? 0.5,
+                    isEdgeOfChaos: snapshot.autognosis?.isEdgeOfChaos ?? false,
+                    daoConsensus: cognitiveConsensus,
+                    energyLevel: metabolic.energyLevel,
+                    isEnergyCrisis: metabolic.isEnergyCrisis,
+                  },
+                  this.experimentGovernance!,
+                )
+                .then((decision) => {
+                  if (decision.scheduled && decision.trial) {
+                    log.info(
+                      `Governed active inference scheduled ${decision.trial.id} for ${decision.trial.hypothesisId} ` +
+                        `(informationGain=${decision.candidate?.expectedInformationGain.toFixed(
+                          3,
+                        )}, governance=${decision.governanceDecision?.governanceScore?.toFixed(
+                          3,
+                        )}, certificate=${decision.governanceDecision
+                          ?.certificateId})`,
+                    );
+                  } else if (
+                    decision.reason === "governance_rejected" ||
+                    decision.reason === "governance_error"
+                  ) {
+                    log.warn(
+                      `Active inference deferred by governance: ${
+                        decision.governanceDecision?.reason ?? decision.reason
+                      }`,
+                    );
+                  }
+                })
+                .finally(() => {
+                  activeInferenceInFlight = false;
+                });
+            };
+
+            const onKnowledgeIngested = (
+              unit: NonNullable<
+                ReturnType<typeof conceptualMetabolism.getUnit>
+              >,
+            ): void => {
+              cognitiveResonanceField.emitWave(
+                unit.id,
+                Math.min(1.5, 0.5 + unit.activation),
+                1 / Math.max(1, unit.complexity),
+              );
+            };
+            const onDreamInsight = (
+              insight: Parameters<
+                typeof causalHypothesisForge.proposeFromDream
+              >[0],
+            ): void => {
+              const hypothesis =
+                causalHypothesisForge.proposeFromDream(insight);
+              cognitiveResonanceField.emitDreamWave(
+                insight.fragment.sourceId,
+                insight.fragment.targetId,
+              );
+              log.info(
+                `Dream insight entered causal testing as ${hypothesis.id}`,
+              );
+            };
+            const onStandingWave = (
+              node: Parameters<
+                typeof causalHypothesisForge.proposeFromResonance
+              >[0],
+            ): void => {
+              const hypothesis =
+                causalHypothesisForge.proposeFromResonance(node);
+              log.info(
+                `Standing wave entered causal testing as ${hypothesis.id}`,
+              );
+            };
+            const onHypothesisProposed = (): void => {
+              scheduleActiveInference();
+            };
+            const onEpistemicSurprise = (event: {
+              hypothesisId: string;
+              surprise: number;
+              observedEffect: number;
+              expectedEffect: number;
+            }): void => {
+              conceptualMetabolism.ingest(
+                `Counter-predicted result for ${
+                  event.hypothesisId
+                }: observed ${event.observedEffect.toFixed(
+                  3,
+                )} vs expected ${event.expectedEffect.toFixed(3)}`,
+                "causal-falsification",
+                3,
+              );
+              log.warn(
+                `Causal forge registered epistemic surprise ${event.surprise.toFixed(
+                  3,
+                )} for ${event.hypothesisId}`,
+              );
+            };
+            const onMetabolicTick = (): void => {
+              const visualState = conceptualMetabolism.getVisualState();
+              metabolicAvatarBridge.feedMetabolicState(visualState);
+
+              if (
+                (visualState.metabolicPhase === "consolidating" ||
+                  visualState.metabolicPhase === "resting") &&
+                !epistemicDreaming.isRunning()
+              ) {
+                epistemicDreaming.beginDreamSession();
+              } else if (
+                visualState.metabolicPhase === "active" &&
+                epistemicDreaming.isRunning()
+              ) {
+                epistemicDreaming.endDreamSession();
+              }
+
+              // Retry deferred scientific initiatives once per 12-step
+              // Echobeats cycle as energy, DAO agreement, and ESN health evolve.
+              activeInferenceTicks++;
+              if (activeInferenceTicks % 12 === 0) {
+                scheduleActiveInference();
+              }
+            };
+
+            conceptualMetabolism.on("ingested", onKnowledgeIngested);
+            epistemicDreaming.on("dream_insight", onDreamInsight);
+            cognitiveResonanceField.on("standing_wave_formed", onStandingWave);
+            causalHypothesisForge.on(
+              "hypothesis_proposed",
+              onHypothesisProposed,
+            );
+            causalHypothesisForge.on("epistemic_surprise", onEpistemicSurprise);
+            this.echobeats?.on("tick", onMetabolicTick);
+
+            conceptualMetabolism.start();
+            cognitiveResonanceField.start();
+            metabolicAvatarBridge.start();
+            onMetabolicTick();
+
+            this.scientificIntegrationCleanup.push(() => {
+              this.echobeats?.off("tick", onMetabolicTick);
+              conceptualMetabolism.off("ingested", onKnowledgeIngested);
+              epistemicDreaming.off("dream_insight", onDreamInsight);
+              cognitiveResonanceField.off(
+                "standing_wave_formed",
+                onStandingWave,
+              );
+              causalHypothesisForge.off(
+                "hypothesis_proposed",
+                onHypothesisProposed,
+              );
+              causalHypothesisForge.off(
+                "epistemic_surprise",
+                onEpistemicSurprise,
+              );
+              if (epistemicDreaming.isRunning()) {
+                epistemicDreaming.endDreamSession();
+              }
+              cognitiveResonanceField.stop();
+              conceptualMetabolism.stop();
+              metabolicAvatarBridge.stop();
+              unregisterConsensusEndpoints?.();
+              this.peerConsensus?.stop();
+              this.peerConsensus = undefined;
+              this.experimentGovernance = undefined;
+            });
+
+            log.info(
+              `Metabolic cognition graph active (avatar, dreaming, resonance, causal falsification, and polycentric active-inference governance; peers=${peerEndpoints.length}, peerVoting=${peerConsensusEnabled})`,
+            );
+          } catch (e) {
+            log.warn("Metabolic cognition graph not available (non-fatal):", e);
+          }
 
           log.info("Level 5 Autonomy Pipeline fully initialized");
         } catch (error) {
@@ -1278,6 +1807,19 @@ ${response.body}`;
     log.info("Stopping orchestrator services...");
 
     // Stop Level 5 autonomy components first (newest first)
+    for (const cleanup of this.scientificIntegrationCleanup
+      .splice(0)
+      .reverse()) {
+      try {
+        cleanup();
+      } catch (error) {
+        log.warn("Scientific integration cleanup failed (non-fatal):", error);
+      }
+    }
+    if (this.proprioceptiveEmbodiment) {
+      this.proprioceptiveEmbodiment.stop();
+      log.info("ProprioceptiveEmbodiment stopped");
+    }
     if (entelechyIntegration.isRunning()) {
       await entelechyIntegration.stop();
       log.info("EntelechyIntegration stopped");
@@ -1285,6 +1827,10 @@ ${response.body}`;
     if (this.reservoirFeedback) {
       await this.reservoirFeedback.stop();
       log.info("ReservoirFeedbackLoop stopped");
+    }
+    if (this.selfModEngine) {
+      this.selfModEngine.persistParameterSnapshot();
+      log.info("Self-modification parameters persisted for next boot");
     }
     if (this.autonomyLifecycle) {
       await this.autonomyLifecycle.stop();
@@ -1467,9 +2013,20 @@ ${response.body}`;
   public getDoubleMembraneIntegration(): DoubleMembraneIntegration | undefined {
     return this.doubleMembraneIntegration;
   }
-
+  /** Inspect scientific experiment authorization and live peer-quorum health. */
+  public getPolycentricExperimentGovernanceState(): {
+    governance: PolycentricGovernanceState;
+    peers: ReturnType<MultiAgentConsensus["getStats"]>;
+  } | null {
+    if (!this.experimentGovernance || !this.peerConsensus) return null;
+    return {
+      governance: this.experimentGovernance.getState(),
+      peers: this.peerConsensus.getStats(),
+    };
+  }
   /**
    * Get current cognitive tier mode
+
    */
   public getCognitiveTierMode(): CognitiveTierMode {
     return this.config.cognitiveTierMode;
@@ -1539,6 +2096,59 @@ ${response.body}`;
     };
   }
 
+  /** Register HMAC-protected peer-governance endpoints on the webhook server. */
+  private registerConsensusWebhookEndpoints(
+    secret: string,
+  ): (() => void) | null {
+    if (!this.webhookServer || !this.peerConsensus) return null;
+
+    const healthPath = "/consensus/health";
+    const proposalPath = "/consensus/propose";
+    this.webhookServer.registerEndpoint({
+      name: "DTE Consensus Health",
+      path: healthPath,
+      secret,
+      eventTypes: [],
+      rateLimit: { maxRequests: 60, windowMs: 60_000 },
+      handler: async () => ({
+        coherence: this.peerConsensus?.getLocalCoherence() ?? 0,
+        instanceId: this.peerConsensus?.getInstanceId() ?? "inactive",
+      }),
+    });
+    this.webhookServer.registerEndpoint({
+      name: "DTE Consensus Proposal",
+      path: proposalPath,
+      secret,
+      eventTypes: [],
+      rateLimit: { maxRequests: 30, windowMs: 60_000 },
+      handler: async (payload: unknown) => {
+        const action = (payload as { modification?: unknown })?.modification;
+        if (
+          !action ||
+          typeof action !== "object" ||
+          typeof (action as { key?: unknown }).key !== "string" ||
+          typeof (action as { reason?: unknown }).reason !== "string" ||
+          !Number.isFinite(
+            (action as { coherenceAtRequest?: number }).coherenceAtRequest,
+          )
+        ) {
+          throw new Error("Invalid consensus action payload");
+        }
+        if (!this.peerConsensus) {
+          throw new Error("Consensus engine is not active");
+        }
+        return this.peerConsensus.evaluateProposal(
+          action as ConsensusActionRequest,
+        );
+      },
+    });
+
+    return () => {
+      this.webhookServer?.unregisterEndpoint(healthPath);
+      this.webhookServer?.unregisterEndpoint(proposalPath);
+    };
+  }
+
   /**
    * Register handlers for IPC server
    *
@@ -1564,6 +2174,7 @@ ${response.body}`;
       const _sys6State = this.sys6Bridge?.getState();
       const _membraneStatus = this.doubleMembraneIntegration?.getStatus();
       const _aarState = this.aarSystem?.getState();
+      const governanceState = this.getPolycentricExperimentGovernanceState();
 
       return {
         running: this.running,
@@ -1596,6 +2207,12 @@ ${response.body}`;
           dovecot: {
             status: this.dovecotInterface?.isRunning() ? "running" : "stopped",
           },
+          experimentGovernance: governanceState
+            ? {
+                status: "active",
+                ...governanceState,
+              }
+            : { status: "inactive" },
         },
         processingStats: this.processingStats,
       };
