@@ -45,7 +45,7 @@
   },
   "engineStrict": true,
   "engines": {
-    "node": ">=20 <23",
+    "node": ">=20 <25",
     "pnpm": ">=9.6.0"
   },
   "devDependencies": {

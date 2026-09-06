@@ -31,7 +31,7 @@ DeltEcho can still process a standard Delta Chat link when the user explicitly o
 
 ## Verification
 
-Use **Node.js 20–22 LTS** and the repository-pinned pnpm version. Newer Node releases are rejected because the desktop dependency graph and test tooling are validated only on this LTS range.
+The repository accepts **Node.js 20–24 LTS** with the pinned pnpm version; Node 25+ is rejected. The Windows desktop build and full native test matrix documented here were specifically validated with **Node.js 22 x64**.
 
 Run the permanent identity and storage regression gate:
 

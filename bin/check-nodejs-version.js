@@ -2,7 +2,7 @@
 import { versions } from "process";
 
 const MIN_NODE_VERSION = 20;
-const MAX_NODE_VERSION = 22;
+const MAX_NODE_VERSION = 24;
 
 const majorVersion = Number(versions.node.split(".")[0]);
 if (majorVersion < MIN_NODE_VERSION || majorVersion > MAX_NODE_VERSION) {
