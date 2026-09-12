@@ -24,7 +24,13 @@ import type { MiaraOutfitState } from "../miara-outfits";
 import {
   selfModelAvatarFeedback,
   type ExpressionExperience,
+  type CanonicalCoreSelfExpressionContext,
 } from "../self-model-avatar-feedback";
+import {
+  ResonanceCascadeConductor,
+  type CascadeInput,
+  type CascadeOverlay,
+} from "../resonance-cascade-conductor";
 
 /**
  * Props for the Live2DAvatar component
@@ -72,6 +78,8 @@ export interface Live2DAvatarState {
  * High-level DTE cognitive state that can be projected onto Cubism parameters.
  * Values are normalized unless otherwise noted.
  */
+export type EpistemicResonanceVisualState = CascadeInput;
+
 export interface Live2DCognitiveVisualState {
   /** Optional named DTEcho mode; when omitted, the manager infers one from numeric state. */
   mode?: DTEchoCognitiveMode | string;
@@ -102,6 +110,10 @@ export interface Live2DCognitiveVisualState {
   activeExperimentation?: number; // 0..1
   /** Authoritative conceptual-metabolism state for embodied energy/phase rendering. */
   metabolic?: MetabolicVisualInput;
+  /** Accepted canonical identity state anchoring transient expression. */
+  coreSelf?: CanonicalCoreSelfExpressionContext;
+  /** Latest genuine ScientificGeniusEngine eureka event. */
+  resonanceCascade?: EpistemicResonanceVisualState;
   isProcessing?: boolean;
   isSpeaking?: boolean;
   audioLevel?: number;
@@ -162,6 +174,11 @@ export class Live2DAvatarManager {
   private selfModelSampleDelayFrames = 0;
   private pendingCognitiveMode = "Idle";
   private lastExpressionExperience: ExpressionExperience | null = null;
+  private lastCanonicalCoreSelf: CanonicalCoreSelfExpressionContext | null =
+    null;
+  private readonly resonanceConductor = new ResonanceCascadeConductor();
+  private lastResonanceCascadeId: string | null = null;
+  private resonanceOverlay: CascadeOverlay | null = null;
   private readonly onMetabolicDeltas = (
     deltas: MetabolicAvatarDeltas,
   ): void => {
@@ -179,6 +196,14 @@ export class Live2DAvatarManager {
     this.selfModelSampleDelayFrames--;
     if (this.selfModelSampleDelayFrames === 0) {
       this.sampleRenderedProjection();
+    }
+  };
+  private readonly onResonanceFrame = (deltaTime: number): void => {
+    const deltaMs = deltaTime > 10 ? deltaTime : deltaTime * (1000 / 60);
+    const wasActive = this.resonanceOverlay?.active ?? false;
+    this.resonanceOverlay = this.resonanceConductor.tick(deltaMs);
+    if (this.resonanceOverlay.active || wasActive) {
+      this.applyComposedProjection();
     }
   };
 
@@ -346,6 +371,16 @@ export class Live2DAvatarManager {
     if (state.metabolic) {
       this.metabolicBridge?.feedMetabolicState(state.metabolic);
     }
+    this.lastCanonicalCoreSelf = state.coreSelf ? { ...state.coreSelf } : null;
+    if (
+      state.resonanceCascade &&
+      state.coreSelf?.initialized !== false &&
+      state.resonanceCascade.id !== this.lastResonanceCascadeId
+    ) {
+      this.lastResonanceCascadeId = state.resonanceCascade.id;
+      this.resonanceConductor.onCascade(state.resonanceCascade);
+      this.resonanceOverlay = this.resonanceConductor.tick(0);
+    }
 
     const calibratedCubism = selfModelAvatarFeedback.applyCalibration(
       projection.cubism,
@@ -374,9 +409,7 @@ export class Live2DAvatarManager {
 
     this.renderer.updateLipSync(projection.lipSyncLevel);
 
-    for (const [paramId, value] of Object.entries(calibratedCubism)) {
-      this.renderer.setParameter(paramId, value);
-    }
+    this.applyComposedProjection();
 
     if (typeof this.renderer.focusEyes === "function" && this.canvas) {
       const selfAwareness = this.clamp01(state.selfAwareness ?? 0.45);
@@ -406,6 +439,7 @@ export class Live2DAvatarManager {
     };
     renderer.addFrameListener?.(this.onMetabolicFrame);
     renderer.addFrameListener?.(this.onSelfModelFrame);
+    renderer.addFrameListener?.(this.onResonanceFrame);
     this.metabolicBridge.step();
   }
 
@@ -417,6 +451,7 @@ export class Live2DAvatarManager {
       | null;
     renderer?.removeFrameListener?.(this.onMetabolicFrame);
     renderer?.removeFrameListener?.(this.onSelfModelFrame);
+    renderer?.removeFrameListener?.(this.onResonanceFrame);
     this.metabolicFrameAccumulatorMs = 0;
     this.selfModelSampleDelayFrames = 0;
     if (this.metabolicBridge) {
@@ -429,12 +464,10 @@ export class Live2DAvatarManager {
   private applyMetabolicDeltas(deltas: MetabolicAvatarDeltas): void {
     if (!this.renderer || !this.isLoaded) return;
 
-    const composed = this.composeMetabolicCubism(
-      this.lastProjectedCubism,
-      deltas,
-    );
-    for (const [paramId, value] of Object.entries(composed)) {
-      this.renderer.setParameter(paramId, value);
+    // During a short resonance cascade, the 60 Hz resonance listener already
+    // composes the latest metabolic deltas. Avoid a duplicate 30 Hz Cubism pass.
+    if (!this.resonanceOverlay?.active) {
+      this.applyComposedProjection(deltas);
     }
 
     const renderer = this.renderer as PixiLive2DRenderer & {
@@ -445,6 +478,18 @@ export class Live2DAvatarManager {
       deltas.animSpeedMult * (0.75 + deltas.movementFluidity * 0.5),
     );
     renderer.setVisualVitality?.(deltas.vitalityMult);
+  }
+
+  private applyComposedProjection(deltas?: MetabolicAvatarDeltas): void {
+    if (!this.renderer || !this.isLoaded) return;
+    const metabolic = deltas ?? this.metabolicBridge?.getDeltas();
+    const composed = this.composeResonanceCubism(
+      this.composeMetabolicCubism(this.lastProjectedCubism, metabolic),
+      this.resonanceOverlay,
+    );
+    for (const [paramId, value] of Object.entries(composed)) {
+      this.renderer.setParameter(paramId, value);
+    }
   }
 
   private composeMetabolicCubism(
@@ -493,12 +538,78 @@ export class Live2DAvatarManager {
     return composed;
   }
 
+  private composeResonanceCubism(
+    projected: Record<string, number>,
+    overlay?: CascadeOverlay | null,
+  ): Record<string, number> {
+    if (!overlay?.active) return { ...projected };
+
+    const composed = { ...projected };
+    const base = (id: string, fallback: number): number =>
+      projected[id] ?? fallback;
+    const set = (id: string, value: number, min: number, max: number): void => {
+      composed[id] = Math.max(min, Math.min(max, value));
+    };
+    const luminousEyeBoost =
+      overlay.eyeOpenBoost * 0.28 +
+      overlay.pupilDilation * 0.08 +
+      overlay.haloPulse * 0.04;
+    set("ParamEyeLOpen", base("ParamEyeLOpen", 1) + luminousEyeBoost, 0, 1.5);
+    set("ParamEyeROpen", base("ParamEyeROpen", 1) + luminousEyeBoost, 0, 1.5);
+    set(
+      "ParamBrowLY",
+      base("ParamBrowLY", 0) +
+        overlay.browRaise * 0.45 -
+        overlay.browAsymmetry * 0.12,
+      -1,
+      1,
+    );
+    set(
+      "ParamBrowRY",
+      base("ParamBrowRY", 0) +
+        overlay.browRaise * 0.45 +
+        overlay.browAsymmetry * 0.12,
+      -1,
+      1,
+    );
+    set(
+      "ParamMouthForm",
+      base("ParamMouthForm", 0) + overlay.insightSmile * 0.35,
+      -1,
+      1,
+    );
+    set(
+      "ParamBreath",
+      base("ParamBreath", 0.5) * overlay.breathingMultiplier,
+      0,
+      1,
+    );
+    const tremor =
+      Math.sin(overlay.haloPulsePhase * 1.618) * overlay.microTremor * 0.6;
+    set(
+      "ParamAngleZ",
+      base("ParamAngleZ", 0) + overlay.headTiltDelta + tremor,
+      -30,
+      30,
+    );
+    set(
+      "ParamBodyAngleY",
+      base("ParamBodyAngleY", 0) + overlay.bodyLeanDelta,
+      -30,
+      30,
+    );
+    return composed;
+  }
+
   private sampleRenderedProjection(): void {
     if (!this.renderer || !this.isLoaded) return;
 
-    const expected = this.composeMetabolicCubism(
-      this.lastProjectedCubism,
-      this.metabolicBridge?.getDeltas(),
+    const expected = this.composeResonanceCubism(
+      this.composeMetabolicCubism(
+        this.lastProjectedCubism,
+        this.metabolicBridge?.getDeltas(),
+      ),
+      this.resonanceOverlay,
     );
     this.observableProjectionIds = Object.keys(expected).filter(
       (paramId) => paramId !== "ParamBreath",
@@ -515,6 +626,7 @@ export class Live2DAvatarManager {
     selfModelAvatarFeedback.recordIntendedProjection(
       expected,
       this.pendingCognitiveMode,
+      this.lastCanonicalCoreSelf ?? undefined,
     );
     this.lastExpressionExperience =
       selfModelAvatarFeedback.sampleActualState(actual);
@@ -544,9 +656,13 @@ export class Live2DAvatarManager {
     this.isDisposed = true;
     this.stopMetabolicProjection();
     this.lastProjectedCubism = {};
+    this.lastCanonicalCoreSelf = null;
     this.observableProjectionIds = [];
     this.pendingCognitiveMode = "Idle";
     this.lastExpressionExperience = null;
+    this.resonanceConductor.clear();
+    this.resonanceOverlay = null;
+    this.lastResonanceCascadeId = null;
     this.renderer?.dispose();
     this.renderer = null;
 

@@ -44,6 +44,9 @@ export {
   type CoupleResult,
   type ReservoirAccessors,
   type IntentionalityAccessors,
+  type CanonicalGovernanceProposalSink,
+  type CanonicalCoreSelfStatusLike,
+  type CanonicalEmbodimentAttestation,
 } from "./AutognosisAutogenesisCoupler.js";
 
 export {
@@ -80,3 +83,7 @@ export {
   type BackupResult,
   type RestoreResult,
 } from "./NeonIdentityPersistence.js";
+
+// Deterministic identity trust root: proposals, policy, accepted history,
+// replayable projection, typed hypergraph, portable capsules, and evidence KSM.
+export * from "./kernel/index.js";

@@ -42,6 +42,7 @@ import {
   NeonIdentityPersistence,
   type NeonIdentityConfig,
 } from "./NeonIdentityPersistence.js";
+import { DeltEchoCoreSelfAuthority } from "./kernel/authority.js";
 
 // ─── Types ─────────────────────────────────────────────────────────────
 
@@ -110,6 +111,11 @@ export interface CoreSelfStatus {
   identityCoherence: number;
   conversationLength: number;
   totalInteractions: number;
+  canonicalInitialized: boolean;
+  canonicalLedgerHead: string | null;
+  canonicalStateDigest: string;
+  canonicalAcceptedEvents: number;
+  canonicalPendingProposals: number;
 }
 
 // ─── Default Configuration ─────────────────────────────────────────────
@@ -134,6 +140,7 @@ export class CoreSelfEngine extends EventEmitter {
   private readout: CognitiveReadout;
   private aar: AARRelation;
   private identity: IdentityMesh;
+  private readonly canonicalAuthority: DeltEchoCoreSelfAuthority;
   private conversationHistory: ChatMessage[] = [];
   private totalInteractions = 0;
   private running = false;
@@ -150,6 +157,7 @@ export class CoreSelfEngine extends EventEmitter {
     this.readout = new CognitiveReadout(this.config.readoutDim);
     this.aar = new AARRelation(this.reservoir, this.readout);
     this.identity = new IdentityMesh(this.config.identity);
+    this.canonicalAuthority = new DeltEchoCoreSelfAuthority();
 
     // Wire events
     this.aar.on("cycle_complete", (state: AARState) => {
@@ -511,6 +519,7 @@ export class CoreSelfEngine extends EventEmitter {
 
   getStatus(): CoreSelfStatus {
     const reservoirState = this.reservoir.getState();
+    const canonicalStatus = this.canonicalAuthority.getStatus();
     return {
       lucyHealthy: this.lucy.isHealthy(),
       reservoirInitialized: this.reservoir.isInitialized(),
@@ -520,11 +529,20 @@ export class CoreSelfEngine extends EventEmitter {
       identityCoherence: this.identity.getCoherence(),
       conversationLength: this.conversationHistory.length,
       totalInteractions: this.totalInteractions,
+      canonicalInitialized: canonicalStatus.initialized,
+      canonicalLedgerHead: canonicalStatus.ledgerHead,
+      canonicalStateDigest: canonicalStatus.projectedStateDigest,
+      canonicalAcceptedEvents: canonicalStatus.acceptedEventCount,
+      canonicalPendingProposals: canonicalStatus.pendingProposalCount,
     };
   }
 
   getIdentity(): IdentityMesh {
     return this.identity;
+  }
+
+  getCanonicalAuthority(): DeltEchoCoreSelfAuthority {
+    return this.canonicalAuthority;
   }
 
   getReservoir(): EchoReservoir {

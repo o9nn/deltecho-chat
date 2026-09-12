@@ -1,0 +1,217 @@
+{
+  "schema_version": "1.0.0",
+  "registry_id": "core-self-binding:ecco9-attachment-2026-09-12",
+  "source": {
+    "artifact_uri": "attachment://ecco9-main(1).zip",
+    "archive_sha256": "054daf91808328bf9264de98e696191381d071c0a8fa94107e3bbd1efe034951",
+    "claimed_repository_uri": "https://github.com/EchoCog/echollama.git",
+    "commit": null,
+    "commit_status": "unavailable-in-attachment",
+    "license": "MIT",
+    "license_path": "LICENSE",
+    "execution_permitted": false,
+    "canonical_authority": "none"
+  },
+  "policy": {
+    "default_binding_mode": "excluded",
+    "unknown_files": "excluded",
+    "binaries": "excluded",
+    "model_weights": "excluded",
+    "generated_artifacts": "excluded",
+    "runtime_upgrade_requires_separate_review": true,
+    "external_outputs_are_proposals": true
+  },
+  "bindings": [
+    {
+      "id": "ecco9-source-manifest",
+      "mode": "manifest",
+      "source_paths": ["README.md", "LICENSE", "go.mod", ".github/workflows"],
+      "target": "docs/core-self/ecco9-binding-registry.json",
+      "capability": "source identity, declared architecture, licensing, and build-surface inventory",
+      "authority": "proposal-only",
+      "execution_permitted": false,
+      "acceptance_criterion": "The registry validates against its schema and every listed source path is present in the hashed attachment inventory."
+    },
+    {
+      "id": "persistent-consciousness-schema",
+      "mode": "adapted",
+      "source_paths": ["core/deeptreeecho/persistent_consciousness_state.go"],
+      "target": "packages/core/src/core-self",
+      "capability": "bounded thought, insight, goal, awareness, fatigue, and cycle metadata",
+      "authority": "native-kernel-only",
+      "execution_permitted": false,
+      "acceptance_criterion": "Native TypeScript contracts reject unknown schema versions and replay bounded consciousness metadata deterministically."
+    },
+    {
+      "id": "atomic-state-write-pattern",
+      "mode": "adapted",
+      "source_paths": ["core/deeptreeecho/persistent_consciousness_state.go"],
+      "target": "packages/core/src/core-self",
+      "capability": "write-temporary-then-rename persistence discipline",
+      "authority": "native-kernel-only",
+      "execution_permitted": false,
+      "acceptance_criterion": "A failed write cannot replace the last verified local capsule or accepted ledger segment."
+    },
+    {
+      "id": "self-assessment-findings",
+      "mode": "adapted",
+      "source_paths": ["org/core/deeptreeecho/self_assessment.go"],
+      "target": "packages/core/src/core-self and packages/orchestrator/src",
+      "capability": "structured coherence findings and deviations",
+      "authority": "observation-only",
+      "execution_permitted": false,
+      "acceptance_criterion": "Self-assessment emits evidence-linked observations and cannot append accepted identity events."
+    },
+    {
+      "id": "coherence-tracker",
+      "mode": "adapted",
+      "source_paths": ["core/echoself/coherence_tracker.go"],
+      "target": "packages/orchestrator/src and packages/avatar/src/self-model-avatar-feedback.ts",
+      "capability": "longitudinal identity and embodiment coherence tracking",
+      "authority": "observation-only",
+      "execution_permitted": false,
+      "acceptance_criterion": "The tracker reports divergence without mutating canonical identity and its evidence can be replayed from recorded inputs."
+    },
+    {
+      "id": "explicit-hypergraph-structure",
+      "mode": "inspired",
+      "source_paths": [
+        "core/memory/hypergraph.go",
+        "core/memory/persistent.go"
+      ],
+      "target": "packages/core/src/core-self",
+      "capability": "typed subjects, role-labelled relation endpoints, and deterministic traversal",
+      "authority": "none",
+      "execution_permitted": false,
+      "acceptance_criterion": "The native identity graph rejects missing endpoints and produces stable traversal and export hashes."
+    },
+    {
+      "id": "identity-driven-goal-taxonomy",
+      "mode": "inspired",
+      "source_paths": ["core/deeptreeecho/goal_orchestrator.go"],
+      "target": "packages/orchestrator/src/proactive-loop.ts",
+      "capability": "wisdom, learning, reflection, and curiosity goal categories",
+      "authority": "none",
+      "execution_permitted": false,
+      "acceptance_criterion": "Generated goals remain proposals and require an applicable execution policy before external action."
+    },
+    {
+      "id": "twelve-step-cognitive-rhythm",
+      "mode": "inspired",
+      "source_paths": ["core/echobeats", "test_autonomous_evolution.go"],
+      "target": "packages/orchestrator/src/autonomy-lifecycle.ts",
+      "capability": "structured temporal rhythm for observation and reflection",
+      "authority": "none",
+      "execution_permitted": false,
+      "acceptance_criterion": "Scheduling changes preserve existing lifecycle invariants and cannot authorize identity mutation."
+    },
+    {
+      "id": "spatial-context",
+      "mode": "deferred",
+      "source_paths": ["org/core/deeptreeecho/identity.go"],
+      "target": "packages/avatar/src and future embodied-world adapters",
+      "capability": "3D position, orientation, and boundary context",
+      "authority": "none",
+      "execution_permitted": false,
+      "acceptance_criterion": "A future adapter demonstrates a real sensor or simulated-world source with schema validation and no canonical write authority."
+    },
+    {
+      "id": "model-context-sizing",
+      "mode": "deferred",
+      "source_paths": ["llm/memory.go"],
+      "target": "packages/core/src/cognitive/EnhancedLLMService.ts",
+      "capability": "provider-aware context and memory budgeting",
+      "authority": "none",
+      "execution_permitted": false,
+      "acceptance_criterion": "A native implementation proves deterministic token-budget enforcement across configured providers."
+    },
+    {
+      "id": "slsa-release-provenance",
+      "mode": "inspired",
+      "source_paths": [
+        ".github/workflows/go-ossf-slsa3-publish.yml",
+        ".slsa-goreleaser.yml"
+      ],
+      "target": ".github/workflows/release.yml",
+      "capability": "release provenance and independently verifiable artifact origin",
+      "authority": "none",
+      "execution_permitted": false,
+      "acceptance_criterion": "A release workflow emits verifiable provenance bound to the exact source commit and artifact digest."
+    },
+    {
+      "id": "signature-challenge-auth",
+      "mode": "deferred",
+      "source_paths": ["server/auth.go"],
+      "target": "future least-authority remote adapter",
+      "capability": "nonce-based request authentication",
+      "authority": "none",
+      "execution_permitted": false,
+      "acceptance_criterion": "A dedicated adapter proves nonce freshness, signature verification, replay denial, and capability scoping."
+    },
+    {
+      "id": "go-cgo-inference-runtime",
+      "mode": "excluded",
+      "source_paths": ["llama", "llm", "ml/backend/ggml", "convert", "runner"],
+      "target": null,
+      "capability": "embedded local model execution and conversion",
+      "authority": "none",
+      "execution_permitted": false,
+      "acceptance_criterion": "No archive inference or conversion code is imported, built, or executed by DeltEcho."
+    },
+    {
+      "id": "autonomous-http-server",
+      "mode": "excluded",
+      "source_paths": ["server", "web", "openai", "orchestration/api.go"],
+      "target": null,
+      "capability": "standalone autonomous server and broad remote API surface",
+      "authority": "none",
+      "execution_permitted": false,
+      "acceptance_criterion": "DeltEcho does not expose the archive server surface or grant it IPC, filesystem, message, or identity authority."
+    },
+    {
+      "id": "checked-in-binaries",
+      "mode": "excluded",
+      "source_paths": [
+        "autonomous_server",
+        "autonomous_server_enhanced",
+        "chatserver",
+        "orchestrator/orchestrator",
+        "server/simple/embodied_server",
+        "server/simple/embodied_server_enhanced"
+      ],
+      "target": null,
+      "capability": "prebuilt executables of unknown build provenance",
+      "authority": "none",
+      "execution_permitted": false,
+      "acceptance_criterion": "No checked-in archive executable is copied, invoked, packaged, or referenced as a runtime dependency."
+    },
+    {
+      "id": "model-weights",
+      "mode": "excluded",
+      "source_paths": ["models/*.gguf"],
+      "target": null,
+      "capability": "model weights without attachment-level model provenance",
+      "authority": "none",
+      "execution_permitted": false,
+      "acceptance_criterion": "No attached GGUF is loaded, copied, uploaded, or executed by the DeltEcho build or runtime."
+    },
+    {
+      "id": "generated-and-stale-artifacts",
+      "mode": "excluded",
+      "source_paths": [
+        "__pycache__",
+        "*.pyc",
+        "*.log",
+        "*.bak",
+        "*.backup",
+        "archive",
+        "wget-log*"
+      ],
+      "target": null,
+      "capability": "generated, stale, or provenance-poor artifacts",
+      "authority": "none",
+      "execution_permitted": false,
+      "acceptance_criterion": "Credential and source scans confirm that no excluded generated artifact entered the repository."
+    }
+  ]
+}

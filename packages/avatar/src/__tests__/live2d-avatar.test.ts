@@ -9,6 +9,7 @@ import {
   DEFAULT_MODEL_CONFIG,
 } from "../adapters/live2d-avatar";
 import type { Live2DAvatarProps } from "../adapters/live2d-avatar";
+import { ResonanceCascadeConductor } from "../resonance-cascade-conductor";
 import type { EmotionalVector } from "../types";
 
 // Mock the PixiLive2DRenderer
@@ -290,6 +291,115 @@ describe("Live2DAvatarManager", () => {
       );
     });
 
+    it("ingests each genuine resonance cascade once and applies it on the Pixi ticker", async () => {
+      const onCascade = jest.spyOn(
+        ResonanceCascadeConductor.prototype,
+        "onCascade",
+      );
+      const now = jest.spyOn(performance, "now");
+      let time = 1_000;
+      now.mockImplementation(() => time);
+
+      try {
+        const controller = await manager.initialize(mockContainer, {
+          modelPath: "/test/model.json",
+        });
+        const renderer = controller.getRenderer() as unknown as {
+          addFrameListener: jest.Mock;
+          setParameter: jest.Mock;
+        };
+        const resonanceFrame = renderer.addFrameListener.mock.calls[2][0] as (
+          deltaTime: number,
+        ) => void;
+        const visualState = {
+          mode: "Scientific Genius",
+          scientificGenius: 0.94,
+          insightPotential: 0.9,
+          coreSelf: {
+            initialized: true,
+            ledgerHead: "a".repeat(64),
+            projectedStateDigest: "b".repeat(64),
+            acceptedEventCount: 1,
+            pendingProposalCount: 0,
+          },
+          resonanceCascade: {
+            id: "cascade-render-1",
+            intensity: 0.9,
+            clusterPhi: 0.82,
+            clusterNovelty: 0.76,
+            domainSpan: 4,
+            haloPulseHz: 4.44,
+            spectralRadiusBoost: 0.135,
+            epistemicTemperatureDelta: -0.36,
+            timestamp: 1_000,
+          },
+        };
+
+        controller.updateCognitiveState(visualState);
+        controller.updateCognitiveState(visualState);
+        expect(onCascade).toHaveBeenCalledTimes(1);
+
+        renderer.setParameter.mockClear();
+        time += 225;
+        resonanceFrame(1);
+
+        expect(renderer.setParameter).toHaveBeenCalledWith(
+          "ParamEyeLOpen",
+          expect.any(Number),
+        );
+        expect(renderer.setParameter).toHaveBeenCalledWith(
+          "ParamBrowLY",
+          expect.any(Number),
+        );
+        expect(renderer.setParameter).toHaveBeenCalledWith(
+          "ParamBreath",
+          expect.any(Number),
+        );
+        for (const [, value] of renderer.setParameter.mock.calls) {
+          expect(Number.isFinite(value)).toBe(true);
+        }
+      } finally {
+        onCascade.mockRestore();
+        now.mockRestore();
+      }
+    });
+
+    it("does not express a resonance cascade against explicitly uninitialized identity", async () => {
+      const onCascade = jest.spyOn(
+        ResonanceCascadeConductor.prototype,
+        "onCascade",
+      );
+      try {
+        const controller = await manager.initialize(mockContainer, {
+          modelPath: "/test/model.json",
+        });
+        controller.updateCognitiveState({
+          mode: "Scientific Genius",
+          coreSelf: {
+            initialized: false,
+            ledgerHead: null,
+            projectedStateDigest: "",
+            acceptedEventCount: 0,
+            pendingProposalCount: 0,
+          },
+          resonanceCascade: {
+            id: "cascade-unanchored",
+            intensity: 1,
+            clusterPhi: 1,
+            clusterNovelty: 1,
+            domainSpan: 3,
+            haloPulseHz: 4.44,
+            spectralRadiusBoost: 0.1,
+            epistemicTemperatureDelta: -0.2,
+            timestamp: 1_000,
+          },
+        });
+        expect(onCascade).not.toHaveBeenCalled();
+      } finally {
+        onCascade.mockRestore();
+      }
+    });
+
     it("samples rendered Cubism state into the avatar self-model", async () => {
       const controller = await manager.initialize(mockContainer, {
         modelPath: "/test/model.json",
@@ -302,10 +412,18 @@ describe("Live2DAvatarManager", () => {
         deltaTime: number,
       ) => void;
 
+      const coreSelf = {
+        initialized: true,
+        ledgerHead: "c".repeat(64),
+        projectedStateDigest: "d".repeat(64),
+        acceptedEventCount: 1,
+        pendingProposalCount: 2,
+      };
       controller.updateCognitiveState({
         mode: "Scientific Genius",
         scientificGenius: 0.92,
         insightPotential: 0.84,
+        coreSelf,
         metabolic: {
           metabolicPhase: "integrating",
           energyLevel: 0.74,
@@ -326,6 +444,7 @@ describe("Live2DAvatarManager", () => {
           cognitiveMode: "Scientific Genius",
           predicted: expect.objectContaining({ params: expect.any(Object) }),
           actual: expect.objectContaining({ params: expect.any(Object) }),
+          coreSelf,
           errorMagnitude: expect.any(Number),
         }),
       );
@@ -343,6 +462,7 @@ describe("Live2DAvatarManager", () => {
       };
       const metabolicFrameListener = renderer.addFrameListener.mock.calls[0][0];
       const selfModelFrameListener = renderer.addFrameListener.mock.calls[1][0];
+      const resonanceFrameListener = renderer.addFrameListener.mock.calls[2][0];
 
       manager.dispose();
 
@@ -351,6 +471,9 @@ describe("Live2DAvatarManager", () => {
       );
       expect(renderer.removeFrameListener).toHaveBeenCalledWith(
         selfModelFrameListener,
+      );
+      expect(renderer.removeFrameListener).toHaveBeenCalledWith(
+        resonanceFrameListener,
       );
     });
   });

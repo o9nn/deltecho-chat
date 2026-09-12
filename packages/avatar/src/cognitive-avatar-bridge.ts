@@ -15,6 +15,7 @@
 import { EventEmitter } from "events";
 import type { Expression, EmotionalVector, AvatarMotion } from "./types";
 import type {
+  EpistemicResonanceVisualState,
   Live2DAvatarController,
   Live2DCognitiveVisualState,
 } from "./adapters/live2d-avatar";
@@ -60,6 +61,7 @@ export interface CognitiveStateInput {
   embodimentAccuracy?: number; // 0-1 rendered-state projection fidelity
   embodimentError?: number; // normalized RMS Cubism projection error
   embodimentConfidence?: number; // 0-1 evidence maturity
+  resonanceCascade?: EpistemicResonanceVisualState;
 
   // EchoBeats state
   echoBeatsPhase?: number; // 0-11
@@ -349,6 +351,7 @@ export class CognitiveAvatarBridge extends EventEmitter {
       embodimentAccuracy: state.embodimentAccuracy,
       embodimentError: state.embodimentError,
       embodimentConfidence: state.embodimentConfidence,
+      resonanceCascade: state.resonanceCascade,
       isProcessing: state.isProcessing,
       isSpeaking: state.isSpeaking,
       audioLevel: state.audioLevel,
@@ -493,22 +496,11 @@ export class CognitiveAvatarBridge extends EventEmitter {
 
     const state = this.currentState;
 
+    // The rich projection path owns named expressions, motion, lip sync,
+    // self-model calibration, metabolic composition, and resonance overlays.
+    // Writing the legacy fields again here would bypass calibration and make
+    // rendered-state autognosis observe a target that was immediately replaced.
     this.avatarController.updateCognitiveState(state.cognitiveVisualState);
-
-    // Keep direct calls as a compatibility layer for renderers that do not consume
-    // every field of the DTEcho cognitive projection.
-    this.avatarController.setExpression(
-      state.expression,
-      state.expressionIntensity,
-    );
-
-    this.avatarController.updateLipSync(state.lipSyncLevel);
-
-    for (const [paramId, value] of Object.entries(state.cubism)) {
-      this.avatarController.setParameter(paramId, value);
-    }
-
-    this.avatarController.playMotion(state.motion);
   }
 
   /**

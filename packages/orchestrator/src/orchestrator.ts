@@ -6,6 +6,7 @@ import {
   InMemoryStorage,
   scientificGeniusEngine,
   ProprioceptiveEmbodiment,
+  type EpistemicResonanceCascade,
 } from "deep-tree-echo-core";
 import {
   CognitiveOrchestrator,
@@ -62,6 +63,7 @@ import {
 import { Echobeats } from "./echobeats.js";
 import { entelechyIntegration } from "./entelechy-integration.js";
 import { SelfModificationEngine } from "./self-modification.js";
+import type { TemporalCreditAssignment } from "./temporal-credit-assignment.js";
 import {
   MultiAgentConsensus,
   type ConsensusActionRequest,
@@ -257,6 +259,7 @@ export class Orchestrator {
   private selfModEngine?: SelfModificationEngine;
   private peerConsensus?: MultiAgentConsensus;
   private experimentGovernance?: PolycentricExperimentGovernance;
+  private temporalCredit?: TemporalCreditAssignment;
   private scientificIntegrationCleanup: Array<() => void> = [];
   private running: boolean = false;
 
@@ -505,14 +508,23 @@ export class Orchestrator {
 
           // 5. EntelechyIntegration — ESN Autognosis + EchoBeats + scientific-genius visual signal
           const identity = this.coreSelfEngine?.getIdentity();
-          const { attached } = await startEntelechyWithOptionalIdentity(
-            entelechyIntegration,
-            identity,
-          );
+          const canonicalAuthority =
+            this.coreSelfEngine?.getCanonicalAuthority();
+          const { attached, canonicalAttached } =
+            await startEntelechyWithOptionalIdentity(
+              entelechyIntegration,
+              identity,
+              canonicalAuthority,
+            );
           log.info(
             attached
               ? "EntelechyIntegration started with CoreSelf identity attached"
               : "EntelechyIntegration started without identity attach",
+          );
+          log.info(
+            canonicalAttached
+              ? "EntelechyIntegration canonical proposal sink attached"
+              : "EntelechyIntegration started without canonical proposal sink",
           );
 
           // 6. ReservoirFeedbackLoop — online RLS learning
@@ -636,6 +648,8 @@ export class Orchestrator {
             coherenceSampleInterval: 5000,
             persistencePath: "/tmp/deep-tree-echo/temporal-credit",
           });
+          this.temporalCredit = temporalCredit;
+          this.selfModEngine.wireTemporalCredit(temporalCredit);
 
           // Connect: record every applied modification as a trace
           this.selfModEngine.on(
@@ -669,45 +683,28 @@ export class Orchestrator {
             "TemporalCreditAssignment started (TD(λ) eligibility traces active)",
           );
 
-          // 11. Resonance Cascade Visual Conductor — eureka moments → avatar
-          try {
-            const { resonanceCascadeConductor } = await import(
-              "@deltecho/avatar"
-            );
-            this.autonomyLifecycle!.on(
-              "scientific:resonance_cascade",
-              (cascade: any) => {
-                resonanceCascadeConductor.onCascade({
-                  id: cascade.id,
-                  intensity: cascade.intensity,
-                  clusterPhi: cascade.clusterPhi,
-                  clusterNovelty: cascade.clusterNovelty,
-                  domainSpan: cascade.domainSpan,
-                  haloPulseHz: cascade.haloPulseHz,
-                  spectralRadiusBoost: cascade.spectralRadiusBoost,
-                  epistemicTemperatureDelta: cascade.epistemicTemperatureDelta,
-                  timestamp: cascade.timestamp,
-                });
-              },
-            );
-            this.autonomyLifecycle!.on(
-              "scientific:predictive_crystallization",
-              (crystal: any) => {
-                resonanceCascadeConductor.onCrystal({
-                  id: crystal.id,
-                  confidence: crystal.confidence,
-                  targetConcept: crystal.targetConcept,
-                  avatarEffect: crystal.avatarEffect,
-                  timestamp: crystal.timestamp,
-                });
-              },
-            );
-            log.info(
-              "ResonanceCascadeConductor wired (eureka → avatar visual pipeline active)",
-            );
-          } catch (e) {
-            log.warn("ResonanceCascadeConductor not available (non-fatal):", e);
-          }
+          // 11. Governed Epistemic Resonance — genuine eureka events cross the
+          // existing pure-data snapshot/IPC boundary. The renderer owns its local
+          // timeline so no Pixi/WebGL state leaks into the orchestrator process.
+          const onResonanceCascade = (
+            cascade: EpistemicResonanceCascade,
+          ): void => {
+            entelechyIntegration.setResonanceCascade(cascade);
+          };
+          this.autonomyLifecycle!.on(
+            "scientific:resonance_cascade",
+            onResonanceCascade,
+          );
+          this.scientificIntegrationCleanup.push(
+            () =>
+              this.autonomyLifecycle?.off(
+                "scientific:resonance_cascade",
+                onResonanceCascade,
+              ),
+          );
+          log.info(
+            "Governed Epistemic Resonance transport active (eureka → entelechy snapshot → avatar)",
+          );
 
           // 12. Arena-ScientificGenius Bridge — spatial discoveries → hypotheses
           try {
@@ -1827,6 +1824,11 @@ ${response.body}`;
     if (this.reservoirFeedback) {
       await this.reservoirFeedback.stop();
       log.info("ReservoirFeedbackLoop stopped");
+    }
+    if (this.temporalCredit) {
+      this.temporalCredit.stop();
+      this.temporalCredit = undefined;
+      log.info("TemporalCreditAssignment stopped");
     }
     if (this.selfModEngine) {
       this.selfModEngine.persistParameterSnapshot();

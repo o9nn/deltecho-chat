@@ -37,6 +37,14 @@ export interface CubismParamSnapshot {
   params: Record<string, number>;
 }
 
+export interface CanonicalCoreSelfExpressionContext {
+  initialized: boolean;
+  ledgerHead: string | null;
+  projectedStateDigest: string;
+  acceptedEventCount: number;
+  pendingProposalCount: number;
+}
+
 /** A (predicted, actual) pair for self-model training. */
 export interface ExpressionExperience {
   /** The cognitive mode that generated the prediction */
@@ -49,6 +57,8 @@ export interface ExpressionExperience {
   delta: Record<string, number>;
   /** L2 norm of the delta vector — overall expression error */
   errorMagnitude: number;
+  /** Canonical identity state that anchored the predicted expression. */
+  coreSelf?: CanonicalCoreSelfExpressionContext;
   /** Whether this experience triggered a calibration update */
   triggeredCalibration: boolean;
 }
@@ -108,6 +118,7 @@ export class SelfModelAvatarFeedback extends EventEmitter {
   private experienceBuffer: ExpressionExperience[] = [];
   private pendingPrediction: CubismParamSnapshot | null = null;
   private pendingMode: string = "Idle";
+  private pendingCoreSelf: CanonicalCoreSelfExpressionContext | null = null;
 
   constructor(config: Partial<SelfModelFeedbackConfig> = {}) {
     super();
@@ -133,12 +144,14 @@ export class SelfModelAvatarFeedback extends EventEmitter {
   public recordIntendedProjection(
     params: Record<string, number>,
     cognitiveMode: string,
+    coreSelf?: CanonicalCoreSelfExpressionContext,
   ): void {
     this.pendingPrediction = {
       timestamp: Date.now(),
       params: { ...params },
     };
     this.pendingMode = cognitiveMode;
+    this.pendingCoreSelf = coreSelf ? { ...coreSelf } : null;
     this.dlog(
       `Recorded intended projection (${
         Object.keys(params).length
@@ -171,6 +184,7 @@ export class SelfModelAvatarFeedback extends EventEmitter {
       this.pendingPrediction,
       actual,
       this.pendingMode,
+      this.pendingCoreSelf,
     );
 
     // Phase 4: Feed into self-model training
@@ -182,8 +196,9 @@ export class SelfModelAvatarFeedback extends EventEmitter {
       experience.triggeredCalibration = true;
     }
 
-    // Clear the pending prediction
+    // Clear the pending prediction and its accepted identity anchor.
     this.pendingPrediction = null;
+    this.pendingCoreSelf = null;
 
     return experience;
   }
@@ -248,6 +263,7 @@ export class SelfModelAvatarFeedback extends EventEmitter {
     predicted: CubismParamSnapshot,
     actual: CubismParamSnapshot,
     mode: string,
+    coreSelf: CanonicalCoreSelfExpressionContext | null,
   ): ExpressionExperience {
     const delta: Record<string, number> = {};
     let sumSquared = 0;
@@ -274,6 +290,7 @@ export class SelfModelAvatarFeedback extends EventEmitter {
       predicted,
       actual,
       delta,
+      ...(coreSelf ? { coreSelf: { ...coreSelf } } : {}),
       errorMagnitude,
       triggeredCalibration: false,
     };
@@ -307,6 +324,8 @@ export class SelfModelAvatarFeedback extends EventEmitter {
         accuracy: this.calibration.selfModelAccuracy,
         meanError: this.calibration.meanError,
         experienceCount: this.calibration.experienceCount,
+        cognitiveMode: experience.cognitiveMode,
+        ...(experience.coreSelf ? { ...experience.coreSelf } : {}),
       });
     }
   }

@@ -241,6 +241,7 @@ export {
   selfModelAvatarFeedback,
   type CubismParamSnapshot,
   type ExpressionExperience,
+  type CanonicalCoreSelfExpressionContext,
   type ProjectionCalibration,
   type SelfModelFeedbackConfig,
 } from "./self-model-avatar-feedback";

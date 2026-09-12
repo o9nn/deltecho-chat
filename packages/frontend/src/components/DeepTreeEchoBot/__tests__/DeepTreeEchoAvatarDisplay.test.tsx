@@ -407,6 +407,24 @@ describe("DeepTreeEchoAvatarDisplay", () => {
           epistemicSurprise: 0.68,
           daoEvidenceConsensus: 0.85,
           activeExperimentation: 0.5,
+          coreSelf: {
+            initialized: true,
+            ledgerHead: "a".repeat(64),
+            projectedStateDigest: "b".repeat(64),
+            acceptedEventCount: 1,
+            pendingProposalCount: 2,
+          },
+          resonanceCascade: {
+            id: "cascade-ui-1",
+            timestamp: 5_000,
+            intensity: 0.84,
+            clusterPhi: 0.81,
+            clusterNovelty: 0.77,
+            domainSpan: 5,
+            haloPulseHz: 4.22,
+            spectralRadiusBoost: 0.126,
+            epistemicTemperatureDelta: -0.336,
+          },
           metabolic: {
             metabolicPhase: "integrating",
             energyLevel: 0.64,
@@ -450,6 +468,24 @@ describe("DeepTreeEchoAvatarDisplay", () => {
         expect(visualState.epistemicSurprise).toBe(0.68);
         expect(visualState.daoEvidenceConsensus).toBe(0.85);
         expect(visualState.activeExperimentation).toBe(0.5);
+        expect(visualState.coreSelf).toEqual({
+          initialized: true,
+          ledgerHead: "a".repeat(64),
+          projectedStateDigest: "b".repeat(64),
+          acceptedEventCount: 1,
+          pendingProposalCount: 2,
+        });
+        expect(visualState.resonanceCascade).toEqual({
+          id: "cascade-ui-1",
+          timestamp: 5_000,
+          intensity: 0.84,
+          clusterPhi: 0.81,
+          clusterNovelty: 0.77,
+          domainSpan: 5,
+          haloPulseHz: 4.22,
+          spectralRadiusBoost: 0.126,
+          epistemicTemperatureDelta: -0.336,
+        });
         expect(visualState.metabolic).toEqual({
           metabolicPhase: "integrating",
           energyLevel: 0.64,

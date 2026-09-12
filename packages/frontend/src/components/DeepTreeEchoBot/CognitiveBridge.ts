@@ -171,6 +171,26 @@ export interface MetabolicVisualState {
   knowledgeDensity: number;
 }
 
+export interface EpistemicResonanceVisualState {
+  id: string;
+  timestamp: number;
+  intensity: number;
+  clusterPhi: number;
+  clusterNovelty: number;
+  domainSpan: number;
+  haloPulseHz: number;
+  spectralRadiusBoost: number;
+  epistemicTemperatureDelta: number;
+}
+
+export interface CanonicalCoreSelfVisualState {
+  initialized: boolean;
+  ledgerHead: string | null;
+  projectedStateDigest: string;
+  acceptedEventCount: number;
+  pendingProposalCount: number;
+}
+
 export interface ScientificGeniusVisualState {
   mode:
     | "Scientific Genius"
@@ -203,6 +223,8 @@ export interface ScientificGeniusVisualState {
   epistemicSurprise?: number;
   daoEvidenceConsensus?: number;
   activeExperimentation?: number;
+  coreSelf?: CanonicalCoreSelfVisualState;
+  resonanceCascade?: EpistemicResonanceVisualState;
   isProcessing?: boolean;
 }
 

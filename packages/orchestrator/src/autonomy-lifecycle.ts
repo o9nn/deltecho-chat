@@ -1341,6 +1341,9 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
         accuracy: number;
         meanError: number;
         experienceCount: number;
+        cognitiveMode?: string;
+        ledgerHead?: string | null;
+        projectedStateDigest?: string;
       };
       // Feed the rendered-state evidence into the shared cognitive body model.
       this.entelechyIntegration?.updateEmbodimentAutognosis(update);

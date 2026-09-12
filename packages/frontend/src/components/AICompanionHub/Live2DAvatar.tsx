@@ -49,6 +49,26 @@ export interface MetabolicVisualState {
   knowledgeDensity: number;
 }
 
+export interface EpistemicResonanceVisualState {
+  id: string;
+  timestamp: number;
+  intensity: number;
+  clusterPhi: number;
+  clusterNovelty: number;
+  domainSpan: number;
+  haloPulseHz: number;
+  spectralRadiusBoost: number;
+  epistemicTemperatureDelta: number;
+}
+
+export interface CanonicalCoreSelfVisualState {
+  initialized: boolean;
+  ledgerHead: string | null;
+  projectedStateDigest: string;
+  acceptedEventCount: number;
+  pendingProposalCount: number;
+}
+
 export interface CognitiveVisualState {
   mode?: string;
   currentState?: string;
@@ -85,6 +105,10 @@ export interface CognitiveVisualState {
   activeExperimentation?: number;
   /** ConceptualMetabolism state used for embodied energy and phase rendering. */
   metabolic?: MetabolicVisualState;
+  /** Accepted canonical identity state anchoring transient expression. */
+  coreSelf?: CanonicalCoreSelfVisualState;
+  /** Latest genuine ScientificGeniusEngine eureka event. */
+  resonanceCascade?: EpistemicResonanceVisualState;
   isProcessing?: boolean;
   isSpeaking?: boolean;
   audioLevel?: number;

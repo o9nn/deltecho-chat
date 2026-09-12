@@ -109,6 +109,11 @@ export interface StructuralModification {
   };
 }
 
+export interface TemporalCreditGuidance {
+  getRecommendedDirection(key: string): number;
+  getConfidence(key: string): number;
+}
+
 export interface SelfModificationConfig {
   /** Maximum modifications per minute */
   maxModificationsPerMinute: number;
@@ -151,11 +156,23 @@ export class SelfModificationEngine extends EventEmitter {
 
   /** Avatar self-model accuracy fed from the SelfModelAvatarFeedback loop (Loop 4). */
   private avatarSelfModelAccuracy?: number;
+  private temporalCredit?: TemporalCreditGuidance;
+  private temporalCreditGuidedProposals = 0;
+  private temporalCreditVetoedProposals = 0;
 
   constructor(config: Partial<SelfModificationConfig> = {}) {
     super();
     this.config = { ...DEFAULT_CONFIG, ...config };
     this.initializeDefaultParameters();
+  }
+
+  /**
+   * Attach the temporal-credit query surface after both engines exist. Keeping
+   * this as a narrow interface avoids lifecycle coupling and makes the safety
+   * boundary explicit: credit can guide proposals, never apply them directly.
+   */
+  wireTemporalCredit(guidance: TemporalCreditGuidance): void {
+    this.temporalCredit = guidance;
   }
 
   // ─── Persistence: Save/Restore Last-Known-Good Parameters ─────
@@ -744,7 +761,88 @@ export class SelfModificationEngine extends EventEmitter {
       }
     }
 
-    return proposals;
+    return this.applyTemporalCreditGuidance(proposals);
+  }
+
+  private applyTemporalCreditGuidance(
+    proposals: ModificationRequest[],
+  ): ModificationRequest[] {
+    const temporalCredit = this.temporalCredit;
+    if (!temporalCredit) return proposals;
+
+    return proposals.flatMap((proposal) => {
+      const parameter = this.parameters.get(proposal.key);
+      if (!parameter) return [proposal];
+
+      const proposedDirection = Math.sign(
+        proposal.newValue - parameter.currentValue,
+      );
+      const recommendedDirection = Math.sign(
+        temporalCredit.getRecommendedDirection(proposal.key),
+      );
+      const confidence = Math.max(
+        0,
+        Math.min(1, temporalCredit.getConfidence(proposal.key)),
+      );
+
+      // TemporalCreditAssignment itself requires at least three observations.
+      // Demand additional confidence here so sparse history never overrides
+      // the current cognitive state.
+      if (
+        proposedDirection === 0 ||
+        recommendedDirection === 0 ||
+        confidence < 0.35
+      ) {
+        return [proposal];
+      }
+
+      if (recommendedDirection !== proposedDirection) {
+        this.temporalCreditVetoedProposals++;
+        this.emit("temporal_credit:proposal_vetoed", {
+          key: proposal.key,
+          proposedDirection,
+          recommendedDirection,
+          confidence,
+        });
+        log.info(
+          `Temporal credit vetoed ${proposal.key} proposal ` +
+            `(proposed=${proposedDirection}, learned=${recommendedDirection}, confidence=${confidence.toFixed(
+              3,
+            )})`,
+        );
+        return [];
+      }
+
+      const reinforcement = 1 + Math.min(0.15, confidence * 0.15);
+      const guidedValue = Math.max(
+        parameter.min,
+        Math.min(
+          parameter.max,
+          parameter.currentValue +
+            (proposal.newValue - parameter.currentValue) * reinforcement,
+        ),
+      );
+      this.temporalCreditGuidedProposals++;
+      this.emit("temporal_credit:proposal_guided", {
+        key: proposal.key,
+        direction: proposedDirection,
+        confidence,
+        originalValue: proposal.newValue,
+        guidedValue,
+      });
+
+      return [
+        {
+          ...proposal,
+          newValue: guidedValue,
+          reason: `${
+            proposal.reason
+          }; temporal credit confirms direction (${confidence.toFixed(
+            2,
+          )} confidence)`,
+        },
+      ];
+    });
   }
 
   // ─── Accessors ───────────────────────────────────────────────
@@ -768,6 +866,8 @@ export class SelfModificationEngine extends EventEmitter {
     deadManSwitchActive: boolean;
     parameterCount: number;
     recentModificationsPerMinute: number;
+    temporalCreditGuidedProposals: number;
+    temporalCreditVetoedProposals: number;
   } {
     const now = Date.now();
     return {
@@ -779,6 +879,8 @@ export class SelfModificationEngine extends EventEmitter {
       recentModificationsPerMinute: this.recentModifications.filter(
         (t) => now - t < 60000,
       ).length,
+      temporalCreditGuidedProposals: this.temporalCreditGuidedProposals,
+      temporalCreditVetoedProposals: this.temporalCreditVetoedProposals,
     };
   }
 

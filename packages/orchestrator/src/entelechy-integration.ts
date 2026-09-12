@@ -47,6 +47,9 @@ import {
   l2Normalize,
   type CoupleResult,
   type IdentityMesh,
+  type CanonicalGovernanceProposalSink,
+  type CanonicalCoreSelfStatusLike,
+  type EpistemicResonanceCascade,
   // Logger
   getLogger,
 } from "deep-tree-echo-core";
@@ -85,6 +88,9 @@ const DEFAULT_CONFIG: EntelechyIntegrationConfig = {
   inputDim: 64,
 };
 
+/** Full attack + sustain + decay + afterglow lifetime of the avatar conductor. */
+export const RESONANCE_CASCADE_VISUAL_TTL_MS = 7_500;
+
 /**
  * Full cognitive state snapshot
  */
@@ -108,6 +114,26 @@ export interface EmbodimentAutognosisSignal {
   confidence: number;
   /** Timestamp of the latest rendered-state self-observation. */
   lastUpdatedAt: number;
+}
+
+export interface EpistemicResonanceVisualSignal {
+  id: string;
+  timestamp: number;
+  intensity: number;
+  clusterPhi: number;
+  clusterNovelty: number;
+  domainSpan: number;
+  haloPulseHz: number;
+  spectralRadiusBoost: number;
+  epistemicTemperatureDelta: number;
+}
+
+export interface CanonicalCoreSelfVisualSignal {
+  initialized: boolean;
+  ledgerHead: string | null;
+  projectedStateDigest: string;
+  acceptedEventCount: number;
+  pendingProposalCount: number;
 }
 
 export interface ScientificGeniusVisualSignal {
@@ -154,6 +180,10 @@ export interface ScientificGeniusVisualSignal {
   epistemicSurprise: number;
   daoEvidenceConsensus: number;
   activeExperimentation: number;
+  /** Latest accepted canonical identity state anchoring this transient expression. */
+  coreSelf: CanonicalCoreSelfVisualSignal;
+  /** Latest genuine eureka event, retained only for its bounded visual lifetime. */
+  resonanceCascade?: EpistemicResonanceVisualSignal;
   isProcessing: boolean;
 }
 
@@ -193,6 +223,9 @@ import type { CognitiveTickProcessor } from "./cognitive-tick-processor";
 export interface EntelechyCoupleLike {
   couple(): CoupleResult;
   attachIdentity(identity: IdentityMesh): void;
+  attachCanonicalProposalSink?(
+    sink: CanonicalGovernanceProposalSink | null | undefined,
+  ): void;
 }
 
 export interface EntelechyIntegrationDeps {
@@ -209,6 +242,8 @@ export class EntelechyIntegration extends EventEmitter {
   private lastSnapshot: CognitiveSnapshot | null = null;
   private coupler: EntelechyCoupleLike;
   private reportPresent: () => boolean;
+  private canonicalProposalSink: CanonicalGovernanceProposalSink | null = null;
+  private lastCanonicalEmbodimentExperienceCount = -1;
   private embodimentAutognosis: EmbodimentAutognosisSignal = {
     accuracy: 0.5,
     meanError: 0,
@@ -216,6 +251,10 @@ export class EntelechyIntegration extends EventEmitter {
     confidence: 0,
     lastUpdatedAt: 0,
   };
+  private latestResonanceCascade: {
+    signal: EpistemicResonanceVisualSignal;
+    receivedAt: number;
+  } | null = null;
 
   constructor(
     config: Partial<EntelechyIntegrationConfig> = {},
@@ -233,6 +272,13 @@ export class EntelechyIntegration extends EventEmitter {
     this.coupler.attachIdentity(identity);
   }
 
+  public attachCanonicalProposalSink(
+    sink: CanonicalGovernanceProposalSink | null | undefined,
+  ): void {
+    this.canonicalProposalSink = sink ?? null;
+    this.coupler.attachCanonicalProposalSink?.(sink);
+  }
+
   /** Attach the live autonomy processor used for genuine DAO/autognosis metrics. */
   public setCognitiveProcessor(processor: CognitiveTickProcessor): void {
     this.cognitiveProcessor = processor;
@@ -248,7 +294,13 @@ export class EntelechyIntegration extends EventEmitter {
       EmbodimentAutognosisSignal,
       "accuracy" | "meanError" | "experienceCount"
     > &
-      Partial<Pick<EmbodimentAutognosisSignal, "confidence" | "lastUpdatedAt">>,
+      Partial<
+        Pick<EmbodimentAutognosisSignal, "confidence" | "lastUpdatedAt">
+      > & {
+        cognitiveMode?: string;
+        ledgerHead?: string | null;
+        projectedStateDigest?: string;
+      },
   ): EmbodimentAutognosisSignal {
     const experienceCount = Math.max(0, Math.floor(signal.experienceCount));
     const confidence = this.clamp01(
@@ -265,12 +317,87 @@ export class EntelechyIntegration extends EventEmitter {
       lastUpdatedAt: Math.max(0, signal.lastUpdatedAt ?? Date.now()),
     };
     const snapshot = this.getEmbodimentAutognosis();
+    if (
+      this.canonicalProposalSink?.observeEmbodiment &&
+      experienceCount > this.lastCanonicalEmbodimentExperienceCount
+    ) {
+      try {
+        this.canonicalProposalSink.observeEmbodiment(
+          {
+            accuracy: snapshot.accuracy,
+            meanError: snapshot.meanError,
+            experienceCount,
+            ...(signal.cognitiveMode
+              ? { cognitiveMode: signal.cognitiveMode }
+              : {}),
+            ...(signal.ledgerHead !== undefined
+              ? { ledgerHead: signal.ledgerHead }
+              : {}),
+            ...(signal.projectedStateDigest
+              ? { projectedStateDigest: signal.projectedStateDigest }
+              : {}),
+          },
+          new Date(snapshot.lastUpdatedAt || Date.now()).toISOString(),
+        );
+        this.lastCanonicalEmbodimentExperienceCount = experienceCount;
+      } catch {
+        log.error("canonical embodiment proposal failed");
+      }
+    }
     this.emit("embodiment_autognosis_updated", snapshot);
     return snapshot;
   }
 
   public getEmbodimentAutognosis(): EmbodimentAutognosisSignal {
     return { ...this.embodimentAutognosis };
+  }
+
+  /**
+   * Retain the latest genuine ScientificGeniusEngine cascade long enough for the
+   * renderer process to observe it. Heavy triggering-insight payloads are
+   * deliberately omitted from the cross-process visual contract.
+   */
+  public setResonanceCascade(
+    cascade: EpistemicResonanceCascade,
+  ): EpistemicResonanceVisualSignal {
+    if (this.latestResonanceCascade?.signal.id === cascade.id) {
+      return { ...this.latestResonanceCascade.signal };
+    }
+
+    const signal: EpistemicResonanceVisualSignal = {
+      id: cascade.id,
+      timestamp: Number.isFinite(cascade.timestamp)
+        ? Math.max(0, cascade.timestamp)
+        : Date.now(),
+      intensity: this.clamp01(cascade.intensity),
+      clusterPhi: this.clamp01(cascade.clusterPhi),
+      clusterNovelty: this.clamp01(cascade.clusterNovelty),
+      domainSpan: Math.max(0, Math.floor(cascade.domainSpan)),
+      haloPulseHz: Math.max(0, Math.min(10, cascade.haloPulseHz)),
+      spectralRadiusBoost: Math.max(
+        0,
+        Math.min(0.5, cascade.spectralRadiusBoost),
+      ),
+      epistemicTemperatureDelta: Math.max(
+        -1,
+        Math.min(1, cascade.epistemicTemperatureDelta),
+      ),
+    };
+    this.latestResonanceCascade = { signal, receivedAt: Date.now() };
+    this.emit("resonance_cascade_updated", { ...signal });
+    return { ...signal };
+  }
+
+  public getActiveResonanceCascade(
+    now: number = Date.now(),
+  ): EpistemicResonanceVisualSignal | undefined {
+    const latest = this.latestResonanceCascade;
+    if (!latest) return undefined;
+    if (now - latest.receivedAt > RESONANCE_CASCADE_VISUAL_TTL_MS) {
+      this.latestResonanceCascade = null;
+      return undefined;
+    }
+    return { ...latest.signal };
   }
 
   /** Test and interval helper — runs one background cognitive tick. */
@@ -572,7 +699,9 @@ export class EntelechyIntegration extends EventEmitter {
         log.info(
           `couple reason=${result.reason ?? "ok"} kind=${
             result.kind ?? "none"
-          } adopted=${result.adopted ?? false}`,
+          } adopted=${result.adopted ?? false} canonicalProposed=${
+            result.canonicalProposed ?? false
+          }`,
         );
       }
     } catch {
@@ -625,10 +754,14 @@ export class EntelechyIntegration extends EventEmitter {
   public getScientificGeniusVisualState(
     snapshot: CognitiveSnapshot | null = this.lastSnapshot,
   ): ScientificGeniusVisualSignal {
-    return (
+    const base =
       snapshot?.scientificGeniusVisual ??
-      this.takeSnapshot().scientificGeniusVisual
-    );
+      this.takeSnapshot().scientificGeniusVisual;
+    const { resonanceCascade: _staleCascade, ...withoutStaleCascade } = base;
+    const resonanceCascade = this.getActiveResonanceCascade();
+    return resonanceCascade
+      ? { ...withoutStaleCascade, resonanceCascade }
+      : withoutStaleCascade;
   }
 
   /**
@@ -698,6 +831,7 @@ export class EntelechyIntegration extends EventEmitter {
     });
     const metabolic = conceptualMetabolism.getVisualState();
     const causal = causalHypothesisForge.getVisualState();
+    const resonanceCascade = this.getActiveResonanceCascade();
     const scientificGenius = this.clamp01(
       insightPotential * 0.33 +
         entelechyScore * 0.21 +
@@ -737,15 +871,37 @@ export class EntelechyIntegration extends EventEmitter {
       embodimentAccuracy,
       embodimentError,
       embodimentConfidence,
+      coreSelf: this.getCanonicalCoreSelfVisualSignal(),
       metabolic,
       causalRigor: causal.causalRigor,
       falsificationPressure: causal.falsificationPressure,
       epistemicSurprise: causal.epistemicSurprise,
       daoEvidenceConsensus: causal.daoEvidenceConsensus,
       activeExperimentation: causal.activeExperimentation,
+      ...(resonanceCascade ? { resonanceCascade } : {}),
       isProcessing:
         scientificGenius >= 0.35 || causal.activeExperimentation > 0,
     };
+  }
+
+  private getCanonicalCoreSelfVisualSignal(): CanonicalCoreSelfVisualSignal {
+    const status: CanonicalCoreSelfStatusLike | undefined =
+      this.canonicalProposalSink?.getStatus?.();
+    return status
+      ? {
+          initialized: status.initialized,
+          ledgerHead: status.ledgerHead,
+          projectedStateDigest: status.projectedStateDigest,
+          acceptedEventCount: status.acceptedEventCount,
+          pendingProposalCount: status.pendingProposalCount,
+        }
+      : {
+          initialized: false,
+          ledgerHead: null,
+          projectedStateDigest: "",
+          acceptedEventCount: 0,
+          pendingProposalCount: 0,
+        };
   }
 
   private computeEsnCoherence(
