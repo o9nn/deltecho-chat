@@ -18,13 +18,35 @@ describe("startEntelechyWithOptionalIdentity", () => {
       },
     };
 
-    const { attached } = await startEntelechyWithOptionalIdentity(
-      entelechy,
-      identity,
-    );
+    const { attached, canonicalAttached } =
+      await startEntelechyWithOptionalIdentity(entelechy, identity);
 
     expect(attached).toBe(true);
+    expect(canonicalAttached).toBe(false);
     expect(events).toEqual(["attach:same", "start"]);
+  });
+
+  it("attaches adaptive identity and canonical proposal sink before start", async () => {
+    const events: string[] = [];
+    const identity = { id: "core-self-identity" };
+    const canonical = {
+      observeAdaptiveGovernance: () => undefined,
+    };
+    const result = await startEntelechyWithOptionalIdentity(
+      {
+        attachIdentity: () => events.push("identity"),
+        attachCanonicalProposalSink: (sink) =>
+          events.push(sink === canonical ? "canonical" : "wrong-canonical"),
+        start: async () => {
+          events.push("start");
+        },
+      },
+      identity,
+      canonical,
+    );
+
+    expect(result).toEqual({ attached: true, canonicalAttached: true });
+    expect(events).toEqual(["identity", "canonical", "start"]);
   });
 
   it("starts Entelechy without attaching when CoreSelf is absent", async () => {
@@ -38,12 +60,11 @@ describe("startEntelechyWithOptionalIdentity", () => {
       },
     };
 
-    const { attached } = await startEntelechyWithOptionalIdentity(
-      entelechy,
-      undefined,
-    );
+    const { attached, canonicalAttached } =
+      await startEntelechyWithOptionalIdentity(entelechy, undefined);
 
     expect(attached).toBe(false);
+    expect(canonicalAttached).toBe(false);
     expect(events).toEqual(["start"]);
   });
 

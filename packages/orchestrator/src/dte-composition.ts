@@ -5,6 +5,7 @@ import {
   type MemoryLeverTickOptions,
 } from "./memory-lever-schedule.js";
 import type { TaskScheduler } from "./scheduler/task-scheduler.js";
+import type { CanonicalGovernanceProposalSink } from "deep-tree-echo-core";
 
 export interface ProactiveLoopLike {
   start(): Promise<void>;
@@ -39,6 +40,9 @@ export async function detachProactiveLoop(
 
 export interface EntelechyAttachLike {
   attachIdentity(identity: unknown): void;
+  attachCanonicalProposalSink?(
+    sink: CanonicalGovernanceProposalSink | null | undefined,
+  ): void;
   start(): Promise<void>;
 }
 
@@ -68,10 +72,17 @@ export function attachEntelechyIdentity(
 export async function startEntelechyWithOptionalIdentity(
   entelechy: EntelechyAttachLike,
   identity: unknown | undefined,
-): Promise<{ attached: boolean }> {
+  canonicalProposalSink?: CanonicalGovernanceProposalSink,
+): Promise<{ attached: boolean; canonicalAttached: boolean }> {
   const attached = attachEntelechyIdentity(entelechy, identity);
+  const canonicalAttached = Boolean(
+    canonicalProposalSink && entelechy.attachCanonicalProposalSink,
+  );
+  if (canonicalAttached) {
+    entelechy.attachCanonicalProposalSink?.(canonicalProposalSink);
+  }
   await entelechy.start();
-  return { attached };
+  return { attached, canonicalAttached };
 }
 
 /** Empty or unset path must skip the registrar, not call it. */

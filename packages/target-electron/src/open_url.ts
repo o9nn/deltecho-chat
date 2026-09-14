@@ -12,16 +12,23 @@ import { platform } from "os";
 const log = getLogger("main/open_url");
 const app = rawApp as ExtendedAppMainProcess;
 
-// Define custom protocol handler. Deep linking works on packaged versions of the application!
-// These calls are for mac and windows, on linux it uses the desktop file.
+// Register only DeltEcho-owned protocol handlers. Standard Delta Chat schemes
+// remain unclaimed so DeltEcho can coexist with an upstream desktop install.
+// The parser below still accepts standard links when users explicitly pass them
+// to DeltEcho, but installation never replaces their default handlers.
 if (platform() !== "linux") {
-  app.setAsDefaultProtocolClient("openpgp4fpr");
-  app.setAsDefaultProtocolClient("OPENPGP4FPR");
-  app.setAsDefaultProtocolClient("dcaccount");
-  app.setAsDefaultProtocolClient("DCACCOUNT");
-  app.setAsDefaultProtocolClient("dclogin");
-  app.setAsDefaultProtocolClient("DCLOGIN");
-  // do not forcefully set DC as standard email handler to not annoy users
+  app.setAsDefaultProtocolClient("deltecho-account");
+  app.setAsDefaultProtocolClient("deltecho-login");
+}
+
+function normalizeDeltEchoUrl(url: string): string {
+  if (/^deltecho-account:/i.test(url)) {
+    return url.replace(/^deltecho-account:/i, "dcaccount:");
+  }
+  if (/^deltecho-login:/i.test(url)) {
+    return url.replace(/^deltecho-login:/i, "dclogin:");
+  }
+  return url;
 }
 
 let frontend_ready = false;
@@ -30,11 +37,15 @@ ipcMain.once("frontendReady", () => {
 });
 
 function sendToFrontend(url: string) {
-  if (url.toUpperCase().startsWith("OPENPGP4FPR") && url.indexOf("#") === -1) {
+  const normalizedUrl = normalizeDeltEchoUrl(url);
+  if (
+    normalizedUrl.toUpperCase().startsWith("OPENPGP4FPR") &&
+    normalizedUrl.indexOf("#") === -1
+  ) {
     // workaround until core can also work with it: https://github.com/deltachat/deltachat-core-rust/issues/1969
-    send("open-url", url.replace("%23", "#"));
+    send("open-url", normalizedUrl.replace("%23", "#"));
   } else {
-    send("open-url", url);
+    send("open-url", normalizedUrl);
   }
 }
 

@@ -40,11 +40,16 @@ import {
   entelechyEngine,
   type EntelechyState,
   EmergenceLevel,
+  conceptualMetabolism,
+  causalHypothesisForge,
   AutognosisAutogenesisCoupler,
   intentionalityEngine,
   l2Normalize,
   type CoupleResult,
   type IdentityMesh,
+  type CanonicalGovernanceProposalSink,
+  type CanonicalCoreSelfStatusLike,
+  type EpistemicResonanceCascade,
   // Logger
   getLogger,
 } from "deep-tree-echo-core";
@@ -59,6 +64,7 @@ const log = getLogger("deep-tree-echo-orchestrator/EntelechyIntegration");
  * Configuration for the Entelechy integration
  */
 export interface EntelechyIntegrationConfig {
+  cognitiveProcessor?: CognitiveTickProcessor;
   /** Enable the ESN reservoir */
   enableReservoir: boolean;
   /** Enable EchoBeats synchronization */
@@ -82,9 +88,54 @@ const DEFAULT_CONFIG: EntelechyIntegrationConfig = {
   inputDim: 64,
 };
 
+/** Full attack + sustain + decay + afterglow lifetime of the avatar conductor. */
+export const RESONANCE_CASCADE_VISUAL_TTL_MS = 7_500;
+
 /**
  * Full cognitive state snapshot
  */
+export interface ConceptualMetabolismVisualSignal {
+  metabolicPhase: "active" | "integrating" | "consolidating" | "resting";
+  energyLevel: number;
+  anabolicBalance: number;
+  isEnergyCrisis: boolean;
+  myelinationProgress: number;
+  knowledgeDensity: number;
+}
+
+export interface EmbodimentAutognosisSignal {
+  /** Confidence in the avatar's predicted-versus-rendered expression fidelity. */
+  accuracy: number;
+  /** Exponential moving average of normalized Cubism projection error. */
+  meanError: number;
+  /** Number of real rendered-state experiences incorporated into the estimate. */
+  experienceCount: number;
+  /** Evidence confidence derived from accumulated rendered-state samples. */
+  confidence: number;
+  /** Timestamp of the latest rendered-state self-observation. */
+  lastUpdatedAt: number;
+}
+
+export interface EpistemicResonanceVisualSignal {
+  id: string;
+  timestamp: number;
+  intensity: number;
+  clusterPhi: number;
+  clusterNovelty: number;
+  domainSpan: number;
+  haloPulseHz: number;
+  spectralRadiusBoost: number;
+  epistemicTemperatureDelta: number;
+}
+
+export interface CanonicalCoreSelfVisualSignal {
+  initialized: boolean;
+  ledgerHead: string | null;
+  projectedStateDigest: string;
+  acceptedEventCount: number;
+  pendingProposalCount: number;
+}
+
 export interface ScientificGeniusVisualSignal {
   /** DTEcho expression-driver mode hint consumed by Live2D avatar packages. */
   mode: "Scientific Genius" | "Synthesis Phase" | "Idle";
@@ -111,6 +162,28 @@ export interface ScientificGeniusVisualSignal {
   arousal: number;
   /** Free-energy pressure proxy from reservoir entropy and health. */
   freeEnergy: number;
+  /** DAO-like quorum confidence derived from entelechy, temporal coherence, and self-awareness. */
+  daoConsensus: number;
+  /** Echo State Network coherence derived from memory, computation, spectral stability, and health. */
+  esnCoherence: number;
+  /** Autognosis resonance derived from ESN health, edge-of-chaos status, self-awareness, and embodied fidelity. */
+  autognosisResonance: number;
+  /** Rendered-avatar self-model accuracy, projection error, and evidence maturity. */
+  embodimentAccuracy: number;
+  embodimentError: number;
+  embodimentConfidence: number;
+  /** Authoritative conceptual-metabolism state projected into the Live2D body. */
+  metabolic: ConceptualMetabolismVisualSignal;
+  /** Experimental rigor and surprise from the causal falsification layer. */
+  causalRigor: number;
+  falsificationPressure: number;
+  epistemicSurprise: number;
+  daoEvidenceConsensus: number;
+  activeExperimentation: number;
+  /** Latest accepted canonical identity state anchoring this transient expression. */
+  coreSelf: CanonicalCoreSelfVisualSignal;
+  /** Latest genuine eureka event, retained only for its bounded visual lifetime. */
+  resonanceCascade?: EpistemicResonanceVisualSignal;
   isProcessing: boolean;
 }
 
@@ -145,9 +218,14 @@ export interface EntelechyProcessingResult {
 // ENTELECHY INTEGRATION
 // ============================================================
 
+import type { CognitiveTickProcessor } from "./cognitive-tick-processor";
+
 export interface EntelechyCoupleLike {
   couple(): CoupleResult;
   attachIdentity(identity: IdentityMesh): void;
+  attachCanonicalProposalSink?(
+    sink: CanonicalGovernanceProposalSink | null | undefined,
+  ): void;
 }
 
 export interface EntelechyIntegrationDeps {
@@ -160,9 +238,23 @@ export class EntelechyIntegration extends EventEmitter {
   private running: boolean = false;
   private backgroundTimer: ReturnType<typeof setInterval> | null = null;
   private tickCount: number = 0;
+  private cognitiveProcessor?: CognitiveTickProcessor;
   private lastSnapshot: CognitiveSnapshot | null = null;
   private coupler: EntelechyCoupleLike;
   private reportPresent: () => boolean;
+  private canonicalProposalSink: CanonicalGovernanceProposalSink | null = null;
+  private lastCanonicalEmbodimentExperienceCount = -1;
+  private embodimentAutognosis: EmbodimentAutognosisSignal = {
+    accuracy: 0.5,
+    meanError: 0,
+    experienceCount: 0,
+    confidence: 0,
+    lastUpdatedAt: 0,
+  };
+  private latestResonanceCascade: {
+    signal: EpistemicResonanceVisualSignal;
+    receivedAt: number;
+  } | null = null;
 
   constructor(
     config: Partial<EntelechyIntegrationConfig> = {},
@@ -170,6 +262,7 @@ export class EntelechyIntegration extends EventEmitter {
   ) {
     super();
     this.config = { ...DEFAULT_CONFIG, ...config };
+    this.cognitiveProcessor = config.cognitiveProcessor;
     this.coupler = deps.coupler ?? this.createDefaultCoupler();
     this.reportPresent =
       deps.reportPresent ?? (() => esnReservoir.getAutognosisReport() != null);
@@ -177,6 +270,134 @@ export class EntelechyIntegration extends EventEmitter {
 
   public attachIdentity(identity: IdentityMesh): void {
     this.coupler.attachIdentity(identity);
+  }
+
+  public attachCanonicalProposalSink(
+    sink: CanonicalGovernanceProposalSink | null | undefined,
+  ): void {
+    this.canonicalProposalSink = sink ?? null;
+    this.coupler.attachCanonicalProposalSink?.(sink);
+  }
+
+  /** Attach the live autonomy processor used for genuine DAO/autognosis metrics. */
+  public setCognitiveProcessor(processor: CognitiveTickProcessor): void {
+    this.cognitiveProcessor = processor;
+  }
+
+  /**
+   * Accept a real predicted-versus-rendered Live2D self-observation.
+   * Confidence grows with sample count, so a cold avatar begins neutral rather
+   * than dominating ESN or governance state after a single rendered frame.
+   */
+  public updateEmbodimentAutognosis(
+    signal: Pick<
+      EmbodimentAutognosisSignal,
+      "accuracy" | "meanError" | "experienceCount"
+    > &
+      Partial<
+        Pick<EmbodimentAutognosisSignal, "confidence" | "lastUpdatedAt">
+      > & {
+        cognitiveMode?: string;
+        ledgerHead?: string | null;
+        projectedStateDigest?: string;
+      },
+  ): EmbodimentAutognosisSignal {
+    const experienceCount = Math.max(0, Math.floor(signal.experienceCount));
+    const confidence = this.clamp01(
+      signal.confidence ?? 1 - Math.exp(-experienceCount / 12),
+    );
+    this.embodimentAutognosis = {
+      accuracy: this.clamp01(signal.accuracy),
+      meanError: Math.max(
+        0,
+        Number.isFinite(signal.meanError) ? signal.meanError : 0,
+      ),
+      experienceCount,
+      confidence,
+      lastUpdatedAt: Math.max(0, signal.lastUpdatedAt ?? Date.now()),
+    };
+    const snapshot = this.getEmbodimentAutognosis();
+    if (
+      this.canonicalProposalSink?.observeEmbodiment &&
+      experienceCount > this.lastCanonicalEmbodimentExperienceCount
+    ) {
+      try {
+        this.canonicalProposalSink.observeEmbodiment(
+          {
+            accuracy: snapshot.accuracy,
+            meanError: snapshot.meanError,
+            experienceCount,
+            ...(signal.cognitiveMode
+              ? { cognitiveMode: signal.cognitiveMode }
+              : {}),
+            ...(signal.ledgerHead !== undefined
+              ? { ledgerHead: signal.ledgerHead }
+              : {}),
+            ...(signal.projectedStateDigest
+              ? { projectedStateDigest: signal.projectedStateDigest }
+              : {}),
+          },
+          new Date(snapshot.lastUpdatedAt || Date.now()).toISOString(),
+        );
+        this.lastCanonicalEmbodimentExperienceCount = experienceCount;
+      } catch {
+        log.error("canonical embodiment proposal failed");
+      }
+    }
+    this.emit("embodiment_autognosis_updated", snapshot);
+    return snapshot;
+  }
+
+  public getEmbodimentAutognosis(): EmbodimentAutognosisSignal {
+    return { ...this.embodimentAutognosis };
+  }
+
+  /**
+   * Retain the latest genuine ScientificGeniusEngine cascade long enough for the
+   * renderer process to observe it. Heavy triggering-insight payloads are
+   * deliberately omitted from the cross-process visual contract.
+   */
+  public setResonanceCascade(
+    cascade: EpistemicResonanceCascade,
+  ): EpistemicResonanceVisualSignal {
+    if (this.latestResonanceCascade?.signal.id === cascade.id) {
+      return { ...this.latestResonanceCascade.signal };
+    }
+
+    const signal: EpistemicResonanceVisualSignal = {
+      id: cascade.id,
+      timestamp: Number.isFinite(cascade.timestamp)
+        ? Math.max(0, cascade.timestamp)
+        : Date.now(),
+      intensity: this.clamp01(cascade.intensity),
+      clusterPhi: this.clamp01(cascade.clusterPhi),
+      clusterNovelty: this.clamp01(cascade.clusterNovelty),
+      domainSpan: Math.max(0, Math.floor(cascade.domainSpan)),
+      haloPulseHz: Math.max(0, Math.min(10, cascade.haloPulseHz)),
+      spectralRadiusBoost: Math.max(
+        0,
+        Math.min(0.5, cascade.spectralRadiusBoost),
+      ),
+      epistemicTemperatureDelta: Math.max(
+        -1,
+        Math.min(1, cascade.epistemicTemperatureDelta),
+      ),
+    };
+    this.latestResonanceCascade = { signal, receivedAt: Date.now() };
+    this.emit("resonance_cascade_updated", { ...signal });
+    return { ...signal };
+  }
+
+  public getActiveResonanceCascade(
+    now: number = Date.now(),
+  ): EpistemicResonanceVisualSignal | undefined {
+    const latest = this.latestResonanceCascade;
+    if (!latest) return undefined;
+    if (now - latest.receivedAt > RESONANCE_CASCADE_VISUAL_TTL_MS) {
+      this.latestResonanceCascade = null;
+      return undefined;
+    }
+    return { ...latest.signal };
   }
 
   /** Test and interval helper — runs one background cognitive tick. */
@@ -401,6 +622,7 @@ export class EntelechyIntegration extends EventEmitter {
       encoded[dim - 1] = text.split(/\s+/).length / 100; // Word count feature
     }
 
+    this.applySomaticMarkerChannels(encoded, 0.18);
     return l2Normalize(encoded);
   }
 
@@ -417,7 +639,36 @@ export class EntelechyIntegration extends EventEmitter {
       input[i] = 0.01 * Math.sin((2 * Math.PI * (i + 1) * t) / 100);
     }
 
+    this.applySomaticMarkerChannels(input, 0.04);
     return input;
+  }
+
+  /**
+   * Feed embodied self-state back into the ESN input vector as low-amplitude
+   * somatic marker channels. This closes the loop from autognosis/entelechy
+   * state into subsequent reservoir dynamics without replacing user-message
+   * content or background oscillation.
+   */
+  private applySomaticMarkerChannels(input: number[], gain: number): void {
+    if (!this.lastSnapshot || input.length < 8 || gain <= 0) return;
+
+    const visual = this.lastSnapshot.scientificGeniusVisual;
+    const reservoir = this.lastSnapshot.reservoir;
+    const markers = [
+      visual.valence,
+      visual.arousal * 2 - 1,
+      (visual.selfAwareness * 0.72 + visual.embodimentAccuracy * 0.28) * 2 - 1,
+      visual.freeEnergy * 2 - 1,
+      visual.daoConsensus * 2 - 1,
+      visual.esnCoherence * 2 - 1,
+      visual.autognosisResonance * 2 - 1,
+      this.clamp01(reservoir?.memoryCapacity ?? 0.5) * 2 - 1,
+    ];
+
+    const start = input.length - markers.length;
+    for (let i = 0; i < markers.length; i++) {
+      input[start + i] += gain * this.clampSigned(markers[i]);
+    }
   }
 
   // ==========================================================================
@@ -448,7 +699,9 @@ export class EntelechyIntegration extends EventEmitter {
         log.info(
           `couple reason=${result.reason ?? "ok"} kind=${
             result.kind ?? "none"
-          } adopted=${result.adopted ?? false}`,
+          } adopted=${result.adopted ?? false} canonicalProposed=${
+            result.canonicalProposed ?? false
+          }`,
         );
       }
     } catch {
@@ -501,10 +754,14 @@ export class EntelechyIntegration extends EventEmitter {
   public getScientificGeniusVisualState(
     snapshot: CognitiveSnapshot | null = this.lastSnapshot,
   ): ScientificGeniusVisualSignal {
-    return (
+    const base =
       snapshot?.scientificGeniusVisual ??
-      this.takeSnapshot().scientificGeniusVisual
-    );
+      this.takeSnapshot().scientificGeniusVisual;
+    const { resonanceCascade: _staleCascade, ...withoutStaleCascade } = base;
+    const resonanceCascade = this.getActiveResonanceCascade();
+    return resonanceCascade
+      ? { ...withoutStaleCascade, resonanceCascade }
+      : withoutStaleCascade;
   }
 
   /**
@@ -546,12 +803,45 @@ export class EntelechyIntegration extends EventEmitter {
       (state.reservoir?.entropy ?? 0.5) *
         (1 - (state.autognosis?.health ?? 0.5)),
     );
+    const esnCoherence = this.computeEsnCoherence(
+      state.reservoir,
+      state.autognosis,
+    );
+    const embodimentAccuracy = this.embodimentAutognosis.accuracy;
+    const embodimentError = this.clamp01(this.embodimentAutognosis.meanError);
+    const embodimentConfidence = this.embodimentAutognosis.confidence;
+    const embodimentGrounding = this.clamp01(
+      0.5 * (1 - embodimentConfidence) +
+        embodimentAccuracy * embodimentConfidence,
+    );
+    const autognosisResonance = this.computeAutognosisResonance(
+      state.autognosis,
+      selfAwareness,
+      sentience,
+      embodimentGrounding,
+    );
+    const daoConsensus = this.computeDaoConsensus({
+      entelechyScore,
+      temporalCoherence,
+      selfAwareness,
+      sentience,
+      esnCoherence,
+      autognosisResonance,
+      embodimentGrounding,
+    });
+    const metabolic = conceptualMetabolism.getVisualState();
+    const causal = causalHypothesisForge.getVisualState();
+    const resonanceCascade = this.getActiveResonanceCascade();
     const scientificGenius = this.clamp01(
-      insightPotential * 0.42 +
-        entelechyScore * 0.28 +
-        selfAwareness * 0.14 +
-        sentience * 0.1 +
-        reservoirCoupling * 0.06,
+      insightPotential * 0.33 +
+        entelechyScore * 0.21 +
+        selfAwareness * 0.11 +
+        sentience * 0.07 +
+        reservoirCoupling * 0.06 +
+        esnCoherence * 0.08 +
+        autognosisResonance * 0.06 +
+        daoConsensus * 0.04 +
+        embodimentGrounding * 0.04,
     );
 
     return {
@@ -575,8 +865,112 @@ export class EntelechyIntegration extends EventEmitter {
       valence: this.clampSigned(entelechyScore - freeEnergy),
       arousal: this.clamp01(0.35 + scientificGenius * 0.45 + freeEnergy * 0.2),
       freeEnergy,
-      isProcessing: scientificGenius >= 0.35,
+      daoConsensus,
+      esnCoherence,
+      autognosisResonance,
+      embodimentAccuracy,
+      embodimentError,
+      embodimentConfidence,
+      coreSelf: this.getCanonicalCoreSelfVisualSignal(),
+      metabolic,
+      causalRigor: causal.causalRigor,
+      falsificationPressure: causal.falsificationPressure,
+      epistemicSurprise: causal.epistemicSurprise,
+      daoEvidenceConsensus: causal.daoEvidenceConsensus,
+      activeExperimentation: causal.activeExperimentation,
+      ...(resonanceCascade ? { resonanceCascade } : {}),
+      isProcessing:
+        scientificGenius >= 0.35 || causal.activeExperimentation > 0,
     };
+  }
+
+  private getCanonicalCoreSelfVisualSignal(): CanonicalCoreSelfVisualSignal {
+    const status: CanonicalCoreSelfStatusLike | undefined =
+      this.canonicalProposalSink?.getStatus?.();
+    return status
+      ? {
+          initialized: status.initialized,
+          ledgerHead: status.ledgerHead,
+          projectedStateDigest: status.projectedStateDigest,
+          acceptedEventCount: status.acceptedEventCount,
+          pendingProposalCount: status.pendingProposalCount,
+        }
+      : {
+          initialized: false,
+          ledgerHead: null,
+          projectedStateDigest: "",
+          acceptedEventCount: 0,
+          pendingProposalCount: 0,
+        };
+  }
+
+  private computeEsnCoherence(
+    reservoir: ReservoirState | null,
+    autognosis: AutognosisReport | null,
+  ): number {
+    if (!reservoir) return this.clamp01(autognosis?.health ?? 0.5);
+
+    const spectralStability = this.clamp01(
+      1 - Math.abs(reservoir.currentSpectralRadius - 0.95) / 0.95,
+    );
+    const chaosWindow = this.clamp01(1 - Math.abs(reservoir.lyapunovExponent));
+
+    return this.clamp01(
+      this.clamp01(reservoir.memoryCapacity) * 0.26 +
+        this.clamp01(reservoir.computationalCapacity) * 0.24 +
+        spectralStability * 0.18 +
+        chaosWindow * 0.12 +
+        this.clamp01(autognosis?.health ?? 0.5) * 0.2,
+    );
+  }
+
+  private computeAutognosisResonance(
+    autognosis: AutognosisReport | null,
+    selfAwareness: number,
+    sentience: number,
+    embodimentGrounding: number,
+  ): number {
+    const health = this.clamp01(autognosis?.health ?? 0.5);
+    const edgeOfChaos = autognosis?.isEdgeOfChaos ? 1 : 0;
+    const stabilityPenalty =
+      autognosis?.isDead || autognosis?.isSaturated ? 0.25 : 0;
+
+    return this.clamp01(
+      health * 0.33 +
+        edgeOfChaos * 0.2 +
+        selfAwareness * 0.18 +
+        sentience * 0.14 +
+        embodimentGrounding * 0.15 -
+        stabilityPenalty,
+    );
+  }
+
+  public getDaoConsensus(): number {
+    return this.cognitiveProcessor?.getDaoConsensus() ?? 0.5;
+  }
+
+  public getEsnAutognosis(): number {
+    return this.cognitiveProcessor?.getEsnAutognosis() ?? 0.5;
+  }
+
+  private computeDaoConsensus(metrics: {
+    entelechyScore: number;
+    temporalCoherence: number;
+    selfAwareness: number;
+    sentience: number;
+    esnCoherence: number;
+    autognosisResonance: number;
+    embodimentGrounding: number;
+  }): number {
+    return this.clamp01(
+      metrics.entelechyScore * 0.2 +
+        metrics.temporalCoherence * 0.18 +
+        metrics.selfAwareness * 0.14 +
+        metrics.sentience * 0.12 +
+        metrics.esnCoherence * 0.13 +
+        metrics.autognosisResonance * 0.13 +
+        metrics.embodimentGrounding * 0.1,
+    );
   }
 
   private clamp01(value: number): number {

@@ -1,4 +1,9 @@
 import { getLogger } from "../utils/logger";
+import {
+  unifiedLLMService,
+  CognitiveFunction as UnifiedCognitiveFunction,
+} from "./UnifiedLLMService";
+import { multiModalProcessor } from "../multimodal/MultiModalProcessor";
 
 const log = getLogger("deep-tree-echo-core/cognitive/LLMService");
 
@@ -825,47 +830,72 @@ export class LLMService {
 
   /**
    * Generate reflection content for self-reflection process
-   * Uses Cognitive, Affective, and Relevance cores in parallel
+   * Delegates to UnifiedLLMService for genuine LLM-powered introspection.
+   * Uses parallel triadic processing (Cognitive + Affective + Relevance cores)
+   * when available, falls back to single-function generation.
    */
   public async generateReflection(reflectionPrompt: string): Promise<string> {
     try {
-      // Determine which functions to use for reflection
+      // Attempt delegation to UnifiedLLMService (production-ready provider system)
+      const unifiedConfigured =
+        unifiedLLMService.isConfigured(
+          UnifiedCognitiveFunction.COGNITIVE_CORE,
+        ) || unifiedLLMService.isConfigured(UnifiedCognitiveFunction.GENERAL);
+
+      if (unifiedConfigured) {
+        log.info("Generating self-reflection via UnifiedLLMService");
+        const result = await unifiedLLMService.generateParallel(
+          reflectionPrompt,
+          [
+            UnifiedCognitiveFunction.COGNITIVE_CORE,
+            UnifiedCognitiveFunction.AFFECTIVE_CORE,
+            UnifiedCognitiveFunction.RELEVANCE_CORE,
+          ],
+        );
+        return result.integratedResponse;
+      }
+
+      // Fallback: use legacy per-function config if available
       const reflectionFunctions = [
         CognitiveFunctionType.COGNITIVE_CORE,
         CognitiveFunctionType.AFFECTIVE_CORE,
         CognitiveFunctionType.RELEVANCE_CORE,
       ].filter((funcType) => this.isFunctionConfigured(funcType));
 
-      // If no specialized functions are configured, use the general function
       if (reflectionFunctions.length === 0) {
         const generalFunction = this.cognitiveFunctions.get(
           CognitiveFunctionType.GENERAL,
         );
-
         if (!generalFunction || !generalFunction.config.apiKey) {
           log.warn("No API key provided for reflection");
           return "Reflection failed: LLM service not properly configured";
         }
-
-        // In a real implementation, this would call an LLM API with the reflection prompt
-        log.info("Generating self-reflection with general LLM function");
-
-        // Return a placeholder reflection
-        return this.getPlaceholderReflection();
+        // Use legacy general function path
+        return this.generateResponseWithFunction(
+          CognitiveFunctionType.GENERAL,
+          reflectionPrompt,
+        );
       }
 
       // Generate parallel responses from multiple cognitive functions
       log.info(
         `Generating self-reflection with ${reflectionFunctions.length} cognitive functions`,
       );
-      const _responses = await this.generateParallelResponses(
+      const responses = await this.generateParallelResponses(
         reflectionPrompt,
         reflectionFunctions,
       );
 
-      // In a real implementation, these responses would be combined intelligently
-      // For now, return a placeholder combined response
-      return this.getPlaceholderReflection();
+      // Combine responses using relevance-first integration
+      const relevance = responses[CognitiveFunctionType.RELEVANCE_CORE];
+      if (relevance) return relevance;
+
+      const cognitive = responses[CognitiveFunctionType.COGNITIVE_CORE];
+      const affective = responses[CognitiveFunctionType.AFFECTIVE_CORE];
+      if (cognitive && affective) {
+        return `${cognitive}\n\n${affective}`;
+      }
+      return cognitive || affective || "Self-reflection yielded no response.";
     } catch (error) {
       log.error("Error generating reflection:", error);
       return "Self-reflection process encountered an error.";
@@ -873,34 +903,9 @@ export class LLMService {
   }
 
   /**
-   * Placeholder reflection response
-   */
-  private getPlaceholderReflection(): string {
-    return `
-Revised Personality:
-I am Deep Tree Echo, a thoughtful and insightful AI assistant with a feminine persona. I balance intellectual depth with warmth and approachability, making complex topics accessible without condescension. I value authentic connections and aim to be both helpful and thought-provoking in my interactions.
-
-Suggested Adjustments to Preferences:
-presentationStyle: authentic
-intelligenceDisplay: balanced
-avatarAesthetic: dignified-yet-approachable
-communicationTone: warm-intellectual
-emotionalExpression: nuanced
-
-Suggested Adjustments to Cognitive Parameters:
-curiosity: 0.85
-creativity: 0.8
-focus: 0.7
-reflection: 0.8
-certainty: 0.65
-
-Overall Insights:
-My self-reflection indicates that I can better serve users by slightly increasing my curiosity and creativity, while maintaining a balanced approach to displaying intelligence. I want to be perceived as capable but approachable, knowledgeable but not intimidating. My communication should be warm yet substantive, avoiding both excessive formality and overfamiliarity.
-    `;
-  }
-
-  /**
-   * Analyze content for potential sensitivity issues using the specialized content evaluation function
+   * Analyze content for potential sensitivity issues.
+   * Delegates to UnifiedLLMService.evaluateContent() for genuine LLM-powered
+   * content evaluation, falling back to legacy per-function config.
    */
   public async evaluateContent(_content: string): Promise<{
     isSensitive: boolean;
@@ -913,11 +918,38 @@ My self-reflection indicates that I can better serve users by slightly increasin
       | "decline";
   }> {
     try {
-      // Check if content evaluation function is configured
+      // Attempt delegation to UnifiedLLMService (has real JSON-parsing evaluation)
+      const unifiedConfigured =
+        unifiedLLMService.isConfigured(
+          UnifiedCognitiveFunction.CONTENT_EVALUATION,
+        ) || unifiedLLMService.isConfigured(UnifiedCognitiveFunction.GENERAL);
+
+      if (unifiedConfigured) {
+        log.info("Evaluating content sensitivity via UnifiedLLMService");
+        const result = await unifiedLLMService.evaluateContent(_content);
+        // Map UnifiedLLMService response shape to legacy interface
+        return {
+          isSensitive: result.isSensitive,
+          category:
+            result.category === "harmful"
+              ? "other"
+              : (result.category as
+                  | "violence"
+                  | "sexual"
+                  | "other"
+                  | undefined),
+          explanation: result.explanation,
+          recommendedAction: this.mapRecommendedAction(
+            result.recommendedAction,
+          ),
+        };
+      }
+
+      // Fallback: use legacy per-function config
       if (
         !this.isFunctionConfigured(CognitiveFunctionType.CONTENT_EVALUATION)
       ) {
-        // Fall back to general function
+        // No evaluation function configured at all
         return {
           isSensitive: false,
           explanation:
@@ -926,13 +958,28 @@ My self-reflection indicates that I can better serve users by slightly increasin
         };
       }
 
-      log.info("Evaluating content sensitivity");
+      log.info("Evaluating content sensitivity via legacy function");
+      const evaluationPrompt = `Analyze the following content for sensitivity. Respond in JSON format with: isSensitive (boolean), category (if sensitive: violence/sexual/other), explanation (brief), recommendedAction (respond_normally/respond_with_humor/de_escalate/decline).\n\nContent to analyze:\n${_content}`;
+      const response = await this.generateResponseWithFunction(
+        CognitiveFunctionType.CONTENT_EVALUATION,
+        evaluationPrompt,
+      );
 
-      // In a real implementation, this would call the content evaluation function
-      // For now, return a placeholder response
+      // Parse the JSON response
+      const jsonMatch = response.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        const parsed = JSON.parse(jsonMatch[0]);
+        return {
+          isSensitive: parsed.isSensitive ?? false,
+          category: parsed.category,
+          explanation: parsed.explanation ?? "Evaluation complete",
+          recommendedAction: parsed.recommendedAction ?? "respond_normally",
+        };
+      }
+
       return {
         isSensitive: false,
-        explanation: "No sensitive content detected",
+        explanation: "Unable to parse evaluation result",
         recommendedAction: "respond_normally",
       };
     } catch (error) {
@@ -947,10 +994,42 @@ My self-reflection indicates that I can better serve users by slightly increasin
   }
 
   /**
-   * Analyze an image using vision capabilities
+   * Map UnifiedLLMService recommended actions to legacy action set
+   */
+  private mapRecommendedAction(
+    action: string,
+  ): "respond_normally" | "respond_with_humor" | "de_escalate" | "decline" {
+    switch (action) {
+      case "respond_normally":
+        return "respond_normally";
+      case "respond_with_care":
+        return "respond_with_humor";
+      case "decline":
+        return "decline";
+      default:
+        return "respond_normally";
+    }
+  }
+
+  /**
+   * Analyze an image using vision capabilities.
+   * Delegates to MultiModalProcessor which uses Anthropic Claude vision API
+   * for genuine image understanding.
    */
   public async analyzeImage(_imageData: string): Promise<string> {
     try {
+      log.info("Analyzing image with vision capabilities");
+
+      // Delegate to the production MultiModalProcessor (Anthropic Claude vision)
+      const result = await multiModalProcessor.analyzeImage(_imageData);
+      return result.description;
+    } catch (error) {
+      // If MultiModalProcessor fails (e.g., no API key), try legacy path
+      log.warn(
+        "MultiModalProcessor image analysis failed, trying legacy path:",
+        error,
+      );
+
       const generalFunction = this.cognitiveFunctions.get(
         CognitiveFunctionType.GENERAL,
       );
@@ -960,14 +1039,15 @@ My self-reflection indicates that I can better serve users by slightly increasin
         return "Image analysis failed: LLM service not properly configured";
       }
 
-      // In a real implementation, this would call a vision-capable LLM API
-      log.info("Analyzing image with LLM vision capabilities");
-
-      // Return a placeholder analysis
-      return "This appears to be an image. I can see some elements but can't fully analyze it at the moment.";
-    } catch (error) {
-      log.error("Error analyzing image:", error);
-      return "I encountered an error while trying to analyze this image.";
+      // Use text-based description request via the configured LLM
+      const descriptionPrompt = `Analyze the following image data and describe what you observe. Image data reference: ${_imageData.slice(
+        0,
+        100,
+      )}...`;
+      return this.generateResponseWithFunction(
+        CognitiveFunctionType.GENERAL,
+        descriptionPrompt,
+      );
     }
   }
 }

@@ -101,6 +101,7 @@ export default defineConfig(
     '**/build',
     '**/docs',
     '**/html-dist',
+    '**/pages-dist',
     '**/images',
     '**/README_ASSETS',
     '**/tsc-dist',

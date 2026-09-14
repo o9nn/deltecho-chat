@@ -19,6 +19,7 @@ import {
   type ReservoirState as ESNState,
 } from "../../cognitive/ESNAutognosisReservoir.js";
 import { intentionalityEngine } from "../../consciousness/IntentionalityEngine.js";
+import { DeltEchoCoreSelfAuthority } from "../kernel/authority.js";
 
 function healthyReport(overrides: Partial<Report> = {}): Report {
   return {
@@ -68,6 +69,7 @@ function makeHarness(options: {
   grant?: boolean;
   goals?: ActiveGoalLike[];
   maxActiveGoals?: number;
+  canonicalAuthority?: DeltEchoCoreSelfAuthority;
 }) {
   const steps: number[][] = [];
   const generated: GenerateGoalParams[] = [];
@@ -103,11 +105,29 @@ function makeHarness(options: {
     reservoir,
     intentionality,
     readGrant: () => options.grant ?? true,
+    canonicalProposalSink: options.canonicalAuthority,
   });
   return { coupler, identity, steps, generated, goals };
 }
 
 describe("AutognosisAutogenesisCoupler", () => {
+  it("submits adaptive ESN/DAO governance to the canonical ledger as a proposal only", () => {
+    const canonicalAuthority = new DeltEchoCoreSelfAuthority();
+    const before = canonicalAuthority.getStatus();
+    const { coupler } = makeHarness({
+      report: healthyReport(),
+      canonicalAuthority,
+    });
+
+    const result = coupler.couple();
+    const after = canonicalAuthority.getStatus();
+
+    expect(result.canonicalProposed).toBe(true);
+    expect(after.ledgerHead).toBe(before.ledgerHead);
+    expect(after.acceptedEventCount).toBe(1);
+    expect(after.pendingProposalCount).toBe(1);
+  });
+
   it("AE1 adopts edge-of-chaos and writes autogenesis ids", () => {
     const { coupler, identity, generated } = makeHarness({
       report: healthyReport(),

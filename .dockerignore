@@ -50,7 +50,6 @@ packages/target-tauri
 
 # Other packages not needed for browser target container
 packages/integrations
-packages/orchestrator
 packages/mcp
 # packages/reasoning - REQUIRED: frontend depends on @deltecho/reasoning
 
