@@ -50,14 +50,14 @@ function roundAvatarSignal(value: number | undefined): number {
 function getCognitiveStateSignature(
   cognitiveState: UnifiedCognitiveState | null,
 ): string {
-  if (!cognitiveState?.cognitiveContext) return "no-context";
+  if (!cognitiveState) return "no-state";
 
   const { cognitiveContext, persona, reasoning } = cognitiveState;
   return [
-    roundAvatarSignal(cognitiveContext.emotionalValence),
-    roundAvatarSignal(cognitiveContext.emotionalArousal),
-    roundAvatarSignal(cognitiveContext.salienceScore),
-    roundAvatarSignal(cognitiveContext.attentionWeight),
+    roundAvatarSignal(cognitiveContext?.emotionalValence),
+    roundAvatarSignal(cognitiveContext?.emotionalArousal),
+    roundAvatarSignal(cognitiveContext?.salienceScore),
+    roundAvatarSignal(cognitiveContext?.attentionWeight),
     roundAvatarSignal(
       cognitiveState.scientificGeniusVisualState?.scientificGenius,
     ),
@@ -65,7 +65,64 @@ function getCognitiveStateSignature(
       cognitiveState.scientificGeniusVisualState?.entelechyScore,
     ),
     roundAvatarSignal(cognitiveState.scientificGeniusVisualState?.freeEnergy),
+    roundAvatarSignal(cognitiveState.scientificGeniusVisualState?.daoConsensus),
+    roundAvatarSignal(cognitiveState.scientificGeniusVisualState?.esnCoherence),
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.autognosisResonance,
+    ),
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.embodimentAccuracy,
+    ),
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.embodimentError,
+    ),
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.embodimentConfidence,
+    ),
+    roundAvatarSignal(cognitiveState.scientificGeniusVisualState?.causalRigor),
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.falsificationPressure,
+    ),
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.epistemicSurprise,
+    ),
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.daoEvidenceConsensus,
+    ),
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.activeExperimentation,
+    ),
+    cognitiveState.scientificGeniusVisualState?.metabolic?.metabolicPhase ??
+      "no-metabolic-phase",
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.metabolic?.energyLevel,
+    ),
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.metabolic?.anabolicBalance,
+    ),
+    cognitiveState.scientificGeniusVisualState?.metabolic?.isEnergyCrisis ??
+      false,
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.metabolic
+        ?.myelinationProgress,
+    ),
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.metabolic?.knowledgeDensity,
+    ),
     cognitiveState.scientificGeniusVisualState?.mode ?? "no-genius-mode",
+    cognitiveState.scientificGeniusVisualState?.coreSelf?.initialized ?? false,
+    cognitiveState.scientificGeniusVisualState?.coreSelf?.ledgerHead ??
+      "no-core-self-head",
+    cognitiveState.scientificGeniusVisualState?.coreSelf
+      ?.projectedStateDigest ?? "no-core-self-state",
+    cognitiveState.scientificGeniusVisualState?.coreSelf?.acceptedEventCount ??
+      0,
+    cognitiveState.scientificGeniusVisualState?.coreSelf
+      ?.pendingProposalCount ?? 0,
+    cognitiveState.scientificGeniusVisualState?.resonanceCascade?.id ??
+      "no-resonance-cascade",
+    cognitiveState.scientificGeniusVisualState?.resonanceCascade?.timestamp ??
+      0,
     persona?.currentMood ?? "unknown-mood",
     roundAvatarSignal(reasoning?.confidenceLevel),
     reasoning?.activeGoals?.length ?? 0,
@@ -301,19 +358,34 @@ function mapCognitiveStateToVisualState(
     entelechyScore: geniusSignal?.entelechyScore ?? 0,
     freeEnergy: geniusSignal?.freeEnergy ?? 0,
     daoConsensus:
-      geniusSignal?.entelechyScore ??
+      geniusSignal?.daoConsensus ??
       (consciousness?.phi ?? salience * 0.65) * 0.55 +
         (consciousness?.temporalCoherence ?? 0.6) * 0.45,
     esnCoherence:
+      geniusSignal?.esnCoherence ??
       geniusSignal?.flow ??
       consciousness?.flowState ??
       (processingState === BotProcessingState.THINKING
         ? 0.72
         : salience * 0.55),
     autognosisResonance:
+      geniusSignal?.autognosisResonance ??
       geniusSignal?.selfAwareness ??
       consciousness?.selfAwareness ??
       Math.max(0.35, salience * 0.7),
+    embodimentAccuracy: geniusSignal?.embodimentAccuracy ?? 0.5,
+    embodimentError: geniusSignal?.embodimentError ?? 0,
+    embodimentConfidence: geniusSignal?.embodimentConfidence ?? 0,
+    causalRigor: geniusSignal?.causalRigor ?? 0,
+    falsificationPressure:
+      geniusSignal?.falsificationPressure ?? geniusSignal?.freeEnergy ?? 0,
+    epistemicSurprise: geniusSignal?.epistemicSurprise ?? 0,
+    daoEvidenceConsensus:
+      geniusSignal?.daoEvidenceConsensus ?? geniusSignal?.daoConsensus ?? 0,
+    activeExperimentation: geniusSignal?.activeExperimentation ?? 0,
+    metabolic: geniusSignal?.metabolic,
+    coreSelf: geniusSignal?.coreSelf,
+    resonanceCascade: geniusSignal?.resonanceCascade,
     isProcessing:
       processingState === BotProcessingState.THINKING ||
       processingState === BotProcessingState.RESPONDING,
@@ -394,6 +466,7 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
       ? { ...resolved, hiddenGroups, hueShift: hue }
       : { ...resolved, hiddenGroups };
   }, [
+    avatarContext?.state.config.identity,
     avatarContext?.state.config.outfit,
     avatarContext?.state.config.outfitHiddenGroups,
     avatarContext?.state.config.outfitHueShift,

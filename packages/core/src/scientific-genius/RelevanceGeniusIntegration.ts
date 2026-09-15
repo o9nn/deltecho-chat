@@ -233,7 +233,7 @@ export class RelevanceGeniusIntegration extends EventEmitter {
     // Step 5: Process through scientific genius engine
     const insights: ScientificInsight[] = [];
     for (const domain of scientificDomains) {
-      const domainInsights = await this.geniusEngine.processScientificQuery(
+      const domainInsights = await this.geniusEngine.processStimulus(
         query,
         domain,
       );

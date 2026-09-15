@@ -181,7 +181,7 @@ function renderTrayIcon() {
   log.info("add icon tray");
   tray = TrayIcon();
 
-  tray.setToolTip("Delta Chat");
+  tray.setToolTip("DeltEcho Chat");
 
   if (process.platform === "darwin") {
     tray.on("click", () => tray?.popUpContextMenu(getTrayMenu()));
