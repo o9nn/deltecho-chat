@@ -58,3 +58,17 @@ These commands and env vars are the agent-facing ops surface for daemon composit
 - Adopted kinds are a closed set: `edge-of-chaos`, `regulate`, `recover-pathology`. Identity goal id and intrinsic goal content are `autogenesis:<kind>`.
 - `integrateAutognosis` runs when the current report has not just been coupled and the derived kind or health rounded to one decimal differs from the last integrated report. Repeating the same report object and timestamp is a full skip (`already_coupled`); a later emission still couples even if `Date.now()` reused the millisecond.
 - This couple is independent of MemoryLever dream hygiene and of desktop `ProactiveMessaging`. Do not call the coupler from ProactiveLoop INTEGRATE.
+
+## Learned User Preferences
+
+- Keep `AutognosisAutogenesisCoupler` as a standalone helper; do not fold it into `ESNAutognosisReservoir` or `IdentityMesh`.
+- Keep the `DELTECHO_AUTOGENESIS_COUPLE` grant parser separate from the MemoryLever apply grant parser.
+- Do not rewrite ESN math or AAR votes, add an LLM goal generator, or wire the autognosis-autogenesis couple into MemoryLever apply, DeltaChat send, or Live2D.
+- Do not replace Entelechy ambient keep-alive with the autogenesis feedback vector; both may run on the same tick.
+- Treat instant (~0s) Cloudflare Workers Builds failures with empty GitHub logs as infra noise unless the diff is missing the `DeltEchoApp` export or touches wrangler, worker, or deploy files.
+
+## Learned Workspace Facts
+
+- Cloudflare Workers Builds for `deltecho-chat-preview` uses root `wrangler.jsonc`. Bind `DeltEchoApp` there (v1 `DeltEchoContainer`, v2 rename) and keep exporting `DeltEchoApp` from `packages/target-browser/cloudflare/worker.ts` so existing objects do not fail Cloudflare API 10064.
+- GitHub Actions `Deploy to Cloudflare Containers` uses `packages/target-browser/wrangler.jsonc` and can go green on `deltecho-chat-preview-preview` while Workers Builds stays red on the git-connected `deltecho-chat-preview` script unless root wrangler matches that live namespace.
+- Entelechy autogenesis feedback steps `esnReservoir`; CoreSelf `EchoReservoir` is a separate reservoir and must stay separate.
