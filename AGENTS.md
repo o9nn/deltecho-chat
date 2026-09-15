@@ -65,10 +65,10 @@ These commands and env vars are the agent-facing ops surface for daemon composit
 - Keep the `DELTECHO_AUTOGENESIS_COUPLE` grant parser separate from the MemoryLever apply grant parser.
 - Do not rewrite ESN math or AAR votes, add an LLM goal generator, or wire the autognosis-autogenesis couple into MemoryLever apply, DeltaChat send, or Live2D.
 - Do not replace Entelechy ambient keep-alive with the autogenesis feedback vector; both may run on the same tick.
-- Treat instant (~0s) Cloudflare Workers Builds failures with empty GitHub logs as infra noise unless the diff touches wrangler, worker, or deploy files.
+- Treat instant (~0s) Cloudflare Workers Builds failures with empty GitHub logs as infra noise unless the diff is missing the `DeltEchoApp` export or touches wrangler, worker, or deploy files.
 
 ## Learned Workspace Facts
 
-- Cloudflare preview Worker `deltecho-chat-preview` (live script `deltecho-chat-preview-preview`) exports Durable Object class `DeltEchoContainer` only; wrangler `v1` migrations add that class and have no `rename-class`/`delete-class` for the previously bound `DeltEchoApp`, so deploy fails with Cloudflare API 10064 until a dedicated migration or re-export lands.
+- Cloudflare Workers Builds for `deltecho-chat-preview` uses root `wrangler.jsonc` (`DeltEchoContainer` bindings) plus `packages/target-browser/cloudflare/worker.ts`. Keep exporting `DeltEchoApp` as a `DeltEchoContainer` subclass so existing objects do not fail Cloudflare API 10064.
+- GitHub Actions `Deploy to Cloudflare Containers` uses `packages/target-browser/wrangler.jsonc` and can go green on `deltecho-chat-preview-preview` while Workers Builds stays red on the git-connected `deltecho-chat-preview` script.
 - Entelechy autogenesis feedback steps `esnReservoir`; CoreSelf `EchoReservoir` is a separate reservoir and must stay separate.
-- Workers Builds for `deltecho-chat-preview` often fail in ~0s with no GitHub log; the dashboard holds the error, typically the same `DeltEchoApp` class mismatch, independent of DTE couple diffs.
