@@ -10,10 +10,13 @@
   },
 
   // Container configuration
-  // Dockerfile is at repo root
+  // Dockerfile is at repo root. Workers Builds uses this file, not
+  // packages/target-browser/wrangler.jsonc, so keep the live DeltEchoApp
+  // namespace here or Cloudflare API 10064 rejects the upload.
   "containers": [
     {
-      "class_name": "DeltEchoContainer",
+      "name": "deltecho-chat-production-deltechoapp",
+      "class_name": "DeltEchoApp",
       "image": "./Dockerfile.cloudflare",
       "max_instances": 10,
       // Use immediate rollout to avoid gradual rollout issues
@@ -26,16 +29,26 @@
     "bindings": [
       {
         "name": "DELTECHO_CONTAINER",
-        "class_name": "DeltEchoContainer"
+        "class_name": "DeltEchoApp"
       }
     ]
   },
 
-  // Required migration for Durable Objects with SQLite
+  // Preserve the production namespace lineage already deployed on Cloudflare:
+  // DeltEchoContainer was created at v1 and renamed to DeltEchoApp at v2.
   "migrations": [
     {
       "tag": "v1",
       "new_sqlite_classes": ["DeltEchoContainer"]
+    },
+    {
+      "tag": "v2",
+      "renamed_classes": [
+        {
+          "from": "DeltEchoContainer",
+          "to": "DeltEchoApp"
+        }
+      ]
     }
   ],
 

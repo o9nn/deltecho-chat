@@ -69,6 +69,6 @@ These commands and env vars are the agent-facing ops surface for daemon composit
 
 ## Learned Workspace Facts
 
-- Cloudflare Workers Builds for `deltecho-chat-preview` uses root `wrangler.jsonc` (`DeltEchoContainer` bindings) plus `packages/target-browser/cloudflare/worker.ts`. Keep exporting `DeltEchoApp` as a `DeltEchoContainer` subclass so existing objects do not fail Cloudflare API 10064.
-- GitHub Actions `Deploy to Cloudflare Containers` uses `packages/target-browser/wrangler.jsonc` and can go green on `deltecho-chat-preview-preview` while Workers Builds stays red on the git-connected `deltecho-chat-preview` script.
+- Cloudflare Workers Builds for `deltecho-chat-preview` uses root `wrangler.jsonc`. Bind `DeltEchoApp` there (v1 `DeltEchoContainer`, v2 rename) and keep exporting `DeltEchoApp` from `packages/target-browser/cloudflare/worker.ts` so existing objects do not fail Cloudflare API 10064.
+- GitHub Actions `Deploy to Cloudflare Containers` uses `packages/target-browser/wrangler.jsonc` and can go green on `deltecho-chat-preview-preview` while Workers Builds stays red on the git-connected `deltecho-chat-preview` script unless root wrangler matches that live namespace.
 - Entelechy autogenesis feedback steps `esnReservoir`; CoreSelf `EchoReservoir` is a separate reservoir and must stay separate.
