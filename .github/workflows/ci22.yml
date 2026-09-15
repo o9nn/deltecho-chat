@@ -30,6 +30,9 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Check preview Durable Object namespace
+        run: node scripts/check-cloudflare-preview-namespace.mjs
+
       - name: Build Workspace Dependencies
         run: |
           # Build workspace packages in dependency order so check:types
