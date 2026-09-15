@@ -33,6 +33,11 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build Workspace Dependencies
+        run: |
+          pnpm run build:type-deps
+          pnpm --filter=@deltecho/avatar build
+
       - name: Build Browser Target
         run: pnpm build:browser
 

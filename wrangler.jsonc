@@ -10,13 +10,15 @@
   },
 
   // Container configuration
-  // Dockerfile is at repo root. Workers Builds uses this file, not
-  // packages/target-browser/wrangler.jsonc, so keep the live DeltEchoApp
-  // namespace here or Cloudflare API 10064 rejects the upload.
+  // Workers Builds deploys this file onto live script deltecho-chat-preview.
+  // That script's remote binding is DeltEchoContainer. Do not rename it to
+  // DeltEchoApp: Cloudflare API 10074 rejects renaming onto a class that
+  // existing Durable Objects already depend on. Keep exporting DeltEchoApp
+  // from worker.ts so leftover App instances do not 10064.
   "containers": [
     {
       "name": "deltecho-chat-production-deltechoapp",
-      "class_name": "DeltEchoApp",
+      "class_name": "DeltEchoContainer",
       "image": "./Dockerfile.cloudflare",
       "max_instances": 10,
       // Use immediate rollout to avoid gradual rollout issues
@@ -29,26 +31,17 @@
     "bindings": [
       {
         "name": "DELTECHO_CONTAINER",
-        "class_name": "DeltEchoApp"
+        "class_name": "DeltEchoContainer"
       }
     ]
   },
 
-  // Preserve the production namespace lineage already deployed on Cloudflare:
-  // DeltEchoContainer was created at v1 and renamed to DeltEchoApp at v2.
+  // v1 created DeltEchoContainer on this script. Do not add a v2 rename
+  // from DeltEchoContainer to DeltEchoApp.
   "migrations": [
     {
       "tag": "v1",
       "new_sqlite_classes": ["DeltEchoContainer"]
-    },
-    {
-      "tag": "v2",
-      "renamed_classes": [
-        {
-          "from": "DeltEchoContainer",
-          "to": "DeltEchoApp"
-        }
-      ]
     }
   ],
 

@@ -101,6 +101,20 @@ The Worker that:
 3. **Sleep**: After 30 minutes of inactivity, container sleeps
 4. **Wake**: Next request wakes the container (~2-5s)
 
+## Login (Access vs app password)
+
+Internet-facing preview URLs such as `https://deltecho-chat-preview.d-d1f.workers.dev` and `https://deltecho-chat-preview-preview.d-d1f.workers.dev` are behind **Cloudflare Access** first (`rzo.cloudflareaccess.com`, typically titled "Log in to All Workers"). That gate is Cloudflare Zero Trust: account-member OAuth or email OTP. It is not the Delta Chat login form and it does not accept the local Cloud Agent password `cloud-dev`.
+
+After Access, the container serves `login.html`. That form posts to `/authenticate` and must match Worker secret `WEB_PASSWORD` (`wrangler secret put WEB_PASSWORD` for the preview Worker). The Worker returns HTTP 500 with a configuration error if that secret is unset. `GET /_debug` reports `hasWebPassword` without revealing the value.
+
+Local Cloud Agent / browser-target login is separate:
+
+```bash
+USE_HTTP_IN_TEST=true WEB_PORT=3000 WEB_PASSWORD=cloud-dev pnpm start:webserver
+```
+
+`cloud-dev` is a single-tenant local gate. Do not reuse it on a shared or internet-facing deploy, and do not commit real preview/production passwords.
+
 ## Environment Variables
 
 | Variable           | Description                 | Default          |
