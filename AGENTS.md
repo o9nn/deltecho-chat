@@ -65,10 +65,11 @@ These commands and env vars are the agent-facing ops surface for daemon composit
 - Keep the `DELTECHO_AUTOGENESIS_COUPLE` grant parser separate from the MemoryLever apply grant parser.
 - Do not rewrite ESN math or AAR votes, add an LLM goal generator, or wire the autognosis-autogenesis couple into MemoryLever apply, DeltaChat send, or Live2D.
 - Do not replace Entelechy ambient keep-alive with the autogenesis feedback vector; both may run on the same tick.
-- Treat instant (~0s) Cloudflare Workers Builds failures with empty GitHub logs as infra noise unless the diff is missing the `DeltEchoApp` export or touches wrangler, worker, or deploy files.
+- Treat instant (~0s) Cloudflare Workers Builds failures with empty GitHub logs as infra noise unless the diff is missing the `DeltEchoApp` export or touches wrangler, worker, or deploy files. A real post-merge failure on `deltecho-chat-preview` with GHA logs showing Cloudflare API 10074 is not infra noise: do not rename `DeltEchoContainer` to `DeltEchoApp`.
 
 ## Learned Workspace Facts
 
-- Cloudflare Workers Builds for `deltecho-chat-preview` uses root `wrangler.jsonc`. Bind `DeltEchoApp` there (v1 `DeltEchoContainer`, v2 rename) and keep exporting `DeltEchoApp` from `packages/target-browser/cloudflare/worker.ts` so existing objects do not fail Cloudflare API 10064.
-- GitHub Actions `Deploy to Cloudflare Containers` uses `packages/target-browser/wrangler.jsonc` and can go green on `deltecho-chat-preview-preview` while Workers Builds stays red on the git-connected `deltecho-chat-preview` script unless root wrangler matches that live namespace.
+- Cloudflare Workers Builds for `deltecho-chat-preview` uses root `wrangler.jsonc`. Bind `DeltEchoContainer` there (v1 only) and keep exporting both `DeltEchoContainer` and `DeltEchoApp` from `packages/target-browser/cloudflare/worker.ts`. A v2 rename onto `DeltEchoApp` fails Cloudflare API 10074 because App is already depended on; dropping the App export fails 10064.
+- GitHub Actions `Deploy to Cloudflare Containers` uses `packages/target-browser/wrangler.jsonc`. PRs deploy `--env preview` to `deltecho-chat-preview-preview` (v1 `DeltEchoApp`). Main deploys the default config onto git-connected `deltecho-chat-preview` and must match that live `DeltEchoContainer` namespace.
+- Preview URLs (`*.d-d1f.workers.dev`) are behind Cloudflare Access first (`rzo.cloudflareaccess.com`, "Log in to All Workers") — Cloudflare account OAuth or email OTP, not `cloud-dev`. After Access, Delta Chat `login.html` uses Worker secret `WEB_PASSWORD` (`wrangler secret put WEB_PASSWORD`). Local Cloud Agent login remains `USE_HTTP_IN_TEST=true WEB_PORT=3000 WEB_PASSWORD=cloud-dev`. Do not put production passwords in this file.
 - Entelechy autogenesis feedback steps `esnReservoir`; CoreSelf `EchoReservoir` is a separate reservoir and must stay separate.

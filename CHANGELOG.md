@@ -24,6 +24,7 @@
 
 ### Fixed
 
+- Cloudflare preview: stop renaming Durable Object class `DeltEchoContainer` to `DeltEchoApp` on git-connected `deltecho-chat-preview` (Cloudflare API 10074). GitHub Pages browser builds now compile workspace type deps first.
 - Deep Tree Echo: the autognosis–autogenesis coupler re-enters on a later reservoir emission even when `Date.now()` reuses the previous report millisecond.
 - Deep Tree Echo: the default Entelechy coupler now uses IntentionalityEngine's active-goal cap when deciding whether to generate an autogenesis goal.
 
