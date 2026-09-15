@@ -1,0 +1,115 @@
+{
+  "Version": 3,
+  "FileReferences": {
+    "Moc": "melody_t03.moc3",
+    "Textures": [
+      "textures/texture_00.png"
+    ],
+    "Physics": "melody_t03.physics3.json",
+    "DisplayInfo": "melody_t03.cdi3.json",
+    "Expressions": [
+      {
+        "Name": "JOY_01_BroadSmile",
+        "File": "expressions/JOY_01_BroadSmile.exp3.json"
+      },
+      {
+        "Name": "JOY_02_Laughing",
+        "File": "expressions/JOY_02_Laughing.exp3.json"
+      },
+      {
+        "Name": "JOY_03_GentleSmile",
+        "File": "expressions/JOY_03_GentleSmile.exp3.json"
+      },
+      {
+        "Name": "JOY_05_Blissful",
+        "File": "expressions/JOY_05_Blissful.exp3.json"
+      },
+      {
+        "Name": "NEUTRAL_Reset",
+        "File": "expressions/NEUTRAL_Reset.exp3.json"
+      },
+      {
+        "Name": "PHOTO_Awe",
+        "File": "expressions/PHOTO_Awe.exp3.json"
+      },
+      {
+        "Name": "PHOTO_ExuberantLaugh",
+        "File": "expressions/PHOTO_ExuberantLaugh.exp3.json"
+      },
+      {
+        "Name": "PHOTO_UpwardGaze",
+        "File": "expressions/PHOTO_UpwardGaze.exp3.json"
+      },
+      {
+        "Name": "SADNESS_01_Melancholy",
+        "File": "expressions/SADNESS_01_Melancholy.exp3.json"
+      },
+      {
+        "Name": "SPEAK_01_OpenVowel",
+        "File": "expressions/SPEAK_01_OpenVowel.exp3.json"
+      },
+      {
+        "Name": "SURPRISE_01_Startled",
+        "File": "expressions/SURPRISE_01_Startled.exp3.json"
+      },
+      {
+        "Name": "WONDER_02_CuriousGaze",
+        "File": "expressions/WONDER_02_CuriousGaze.exp3.json"
+      },
+      {
+        "Name": "WONDER_03_Contemplative",
+        "File": "expressions/WONDER_03_Contemplative.exp3.json"
+      }
+    ],
+    "Motions": {
+      "Idle": [
+        {
+          "File": "motion/Scene1.motion3.json",
+          "FadeInTime": 0.5,
+          "FadeOutTime": 0.5
+        }
+      ],
+      "Tap": [
+        {
+          "File": "motion/Scene2.motion3.json",
+          "FadeInTime": 0.3,
+          "FadeOutTime": 0.5
+        }
+      ],
+      "Flic": [
+        {
+          "File": "motion/Scene3.motion3.json",
+          "FadeInTime": 0.3,
+          "FadeOutTime": 0.5
+        }
+      ]
+    }
+  },
+  "Groups": [
+    {
+      "Target": "Parameter",
+      "Name": "LipSync",
+      "Ids": [
+        "ParamMouthOpenY"
+      ]
+    },
+    {
+      "Target": "Parameter",
+      "Name": "EyeBlink",
+      "Ids": [
+        "ParamEyeLOpen",
+        "ParamEyeROpen"
+      ]
+    }
+  ],
+  "HitAreas": [
+    {
+      "Name": "Head",
+      "Id": "HitAreaHead"
+    },
+    {
+      "Name": "Body",
+      "Id": "HitAreaBody"
+    }
+  ]
+}

@@ -23,3 +23,8 @@ package-lock.json
 # Coverage and test outputs
 coverage/
 .nyc_output/
+packages/e2e-tests/test-results/
+
+# Cubism / generated avatar assets (binary-adjacent JSON)
+packages/frontend/static/models/
+packages/avatar/scripts/*.json

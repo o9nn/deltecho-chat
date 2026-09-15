@@ -41,6 +41,7 @@
   "license": "GPL-3.0-or-later",
   "dependencies": {
     "deep-tree-echo-core": "workspace:*",
+    "@deltecho/avatar": "workspace:*",
     "@deltecho/cognitive": "workspace:*",
     "@deltecho/dove9": "workspace:*",
     "@deltecho/ipc": "workspace:*",

@@ -49,6 +49,12 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Check preview Durable Object namespace
+        run: node scripts/check-cloudflare-preview-namespace.mjs
+
+      - name: Build Workspace Dependencies
+        run: pnpm run build:type-deps
+
       - name: Build Browser Target
         env:
           VERSION_INFO_GIT_REF: ${{ github.sha }}

@@ -1,0 +1,2843 @@
+{
+  "cog001": {
+    "acceptance_result": {
+      "artifact_digest": "65bbaf69aaaefaa65a171dd906371c2c2f8966fbd32eab785df73bdeea6a45f2",
+      "command": "pnpm check:core-self",
+      "criterion": "A test proves experimental cognition cannot mutate the canonical root subject without an accepted event.",
+      "observed": "pass: deterministic kernel, governance, replay, graph, capsule, and integration regressions"
+    },
+    "evidence": [
+      "file:packages/core/src/core-self/kernel/authority.ts#sha256:bb9a9e74dd6b497ee81696341faa86c9650810552c6ff3115b407178d3731ca8",
+      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:68f9cb446818c5002a50689ad856eff203c84ed1afc49b802a3c3d94b16e80b2"
+    ],
+    "evidence_kind": "source-and-test",
+    "status": "verified"
+  },
+  "cog002": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL002 THE DISTRIBUTION OF TOWNS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog003": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL003 CITY COUNTRY FINGERS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog004": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL004 AGRICULTURAL VALLEYS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog005": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL005 LACE OF COUNTRY STREETS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog006": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL006 6 COUNTRY TOWNS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog007": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL007 7 THE COUNTRYSIDE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog008": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL008 8 MOSAIC OF SUBCULTURES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog009": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL009 9 SCATTERED WORK remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog010": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL010 10 MAGIC OF THE CITY remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog011": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL011 LOCAL TRANSPORT AREAS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog012": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL012 COMMUNITY OF 7000 remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog013": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL013 SUBCULTURE BOUNDARY remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog014": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL014 IDENTIFIABLE NEIGHBORHOOD remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog015": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL015 NEIGHBORHOOD BOUNDARY remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog016": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL016 WEB OF PUBLIC TRANSPORTATION remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog017": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL017 RING ROADS has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog018": {
+    "acceptance_result": {
+      "artifact_digest": "f3989764df8432e57169cfd94a1cfe5126a603d4ae891a5e679650b1939144e0",
+      "command": "pnpm check:core-self",
+      "criterion": "The deterministic KSM cycle selects its weakest center exclusively from inspectable evidence records.",
+      "observed": "pass: deterministic kernel, governance, replay, graph, capsule, and integration regressions"
+    },
+    "evidence": [
+      "file:packages/core/src/core-self/kernel/ksm.ts#sha256:ab5578b020319e83bcd59f07fc8fde4f7674607a2a477226e6844f99e4fb76e2",
+      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:68f9cb446818c5002a50689ad856eff203c84ed1afc49b802a3c3d94b16e80b2"
+    ],
+    "evidence_kind": "source-and-test",
+    "status": "verified"
+  },
+  "cog019": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL019 WEB OF SHOPPING remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog020": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL020 20 MINI-BUSES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog021": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL021 21 FOUR-STORY LIMIT remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog022": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL022 22 NINE PER CENT PARKING has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog023": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL023 23 PARALLEL ROADS has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog024": {
+    "acceptance_result": {
+      "artifact_digest": "c7605fed49ca68f6860e421a850446841e344f610ec7b456e59715a784b07a6d",
+      "command": "pnpm check:core-self",
+      "criterion": "A standard decision attempting to change a protected root field is rejected before ledger append.",
+      "observed": "pass: deterministic kernel, governance, replay, graph, capsule, and integration regressions"
+    },
+    "evidence": [
+      "file:packages/core/src/core-self/kernel/policy.ts#sha256:54dd95decbc12b89ed52da40ee82afecd6fa8c4e0f1a38d009f3251b3e766126",
+      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:68f9cb446818c5002a50689ad856eff203c84ed1afc49b802a3c3d94b16e80b2"
+    ],
+    "evidence_kind": "source-and-test",
+    "status": "verified"
+  },
+  "cog025": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL025 25 ACCESS TO WATER remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog026": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL026 26 LIFE CYCLE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog027": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL027 27 MEN AND WOMEN remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog028": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL028 28 ECCENTRIC NUCLEUS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog029": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL029 29 DENSITY RINGS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog030": {
+    "acceptance_result": {
+      "artifact_digest": "b829c5a7a100d31599abd9860bb90dad2ce930a77772708d8a5ab803160f3cd2",
+      "command": "pnpm check:core-self",
+      "criterion": "Every accepted mutation is represented by exactly one digest-linked event and replayed state matches the live projection.",
+      "observed": "pass: deterministic kernel, governance, replay, graph, capsule, and integration regressions"
+    },
+    "evidence": [
+      "file:packages/core/src/core-self/kernel/ledger.ts#sha256:5900c2261758ac009ce564fca3abcfcfeeb5052b5223d551090ce6b4dfbad8c5",
+      "file:packages/core/src/core-self/kernel/projector.ts#sha256:d8ee634940393cad0fa5cac782a7c555fde1c77a274741768ee61ca004221a5e",
+      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:68f9cb446818c5002a50689ad856eff203c84ed1afc49b802a3c3d94b16e80b2"
+    ],
+    "evidence_kind": "source-and-test",
+    "status": "verified"
+  },
+  "cog031": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL031 31 PROMENADE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog032": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL032 32 SHOPPING STREET remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog033": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL033 33 NIGHT LIFE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog034": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL034 34 INTERCHANGE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog035": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL035 35 HOUSEHOLD MIX remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog036": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL036 36 DEGREES OF PUBLICNESS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog037": {
+    "acceptance_result": {
+      "artifact_digest": "bda209fbffeb2e6579a45ead6aa7dc48c4fe0b38f8a8b294c77c81fbefa5dcc7",
+      "command": "pnpm check:core-self",
+      "criterion": "A graph test preserves distinct subject IDs while traversing their shared typed relations deterministically.",
+      "observed": "pass: deterministic kernel, governance, replay, graph, capsule, and integration regressions"
+    },
+    "evidence": [
+      "file:packages/core/src/core-self/kernel/hypergraph.ts#sha256:860cb25edcffa843a1ba554fc55403a82416cbeb1c0c87174cbb30f81879eeaf",
+      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:68f9cb446818c5002a50689ad856eff203c84ed1afc49b802a3c3d94b16e80b2"
+    ],
+    "evidence_kind": "source-and-test",
+    "status": "verified"
+  },
+  "cog038": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL038 38 ROW HOUSES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog039": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL039 39 HOUSING HILL remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog040": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL040 40 OLD PEOPLE EVERYWHERE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog041": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL041 41 WORK COMMUNITY remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog042": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL042 42 INDUSTRIAL RIBBON remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog043": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL043 43 UNIVERSITY AS MARKETPLACE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog044": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL044 44 LOCAL TOWN HALL remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog045": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL045 45 NECKLACE OF COMMUNITY PROJECTS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog046": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL046 46 MARKET OF MANY SHOPS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog047": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL047 47 HEALTH CENTER remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog048": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL048 48 HOUSING IN BETWEEN remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog049": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL049 49 LOOPED LOCAL ROADS has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog050": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL050 50 T JUNCTIONS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog051": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL051 51 GREEN STREETS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog052": {
+    "acceptance_result": {
+      "artifact_digest": "bda209fbffeb2e6579a45ead6aa7dc48c4fe0b38f8a8b294c77c81fbefa5dcc7",
+      "command": "pnpm check:core-self",
+      "criterion": "Equivalent hypergraphs return byte-identical ordered traversal and export results.",
+      "observed": "pass: deterministic kernel, governance, replay, graph, capsule, and integration regressions"
+    },
+    "evidence": [
+      "file:packages/core/src/core-self/kernel/hypergraph.ts#sha256:860cb25edcffa843a1ba554fc55403a82416cbeb1c0c87174cbb30f81879eeaf",
+      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:68f9cb446818c5002a50689ad856eff203c84ed1afc49b802a3c3d94b16e80b2"
+    ],
+    "evidence_kind": "source-and-test",
+    "status": "verified"
+  },
+  "cog053": {
+    "acceptance_result": {
+      "artifact_digest": "c7605fed49ca68f6860e421a850446841e344f610ec7b456e59715a784b07a6d",
+      "command": "pnpm check:core-self",
+      "criterion": "A proposal with no independent authorized reviewer cannot enter accepted history.",
+      "observed": "pass: deterministic kernel, governance, replay, graph, capsule, and integration regressions"
+    },
+    "evidence": [
+      "file:packages/core/src/core-self/kernel/policy.ts#sha256:54dd95decbc12b89ed52da40ee82afecd6fa8c4e0f1a38d009f3251b3e766126",
+      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:68f9cb446818c5002a50689ad856eff203c84ed1afc49b802a3c3d94b16e80b2"
+    ],
+    "evidence_kind": "source-and-test",
+    "status": "verified"
+  },
+  "cog054": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL054 54 ROAD CROSSING has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog055": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL055 55 RAISED WALK remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog056": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL056 BIKE PATHS AND RACKS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog057": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL057 57 CHILDREN IN THE CITY remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog058": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL058 58 CARNIVAL remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog059": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL059 59 QUIET BACKS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog060": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL060 60 ACCESSIBLE GREEN remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog061": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL061 61 SMALL PUBLIC SQUARES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog062": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL062 62 HIGH PLACES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog063": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL063 63 DANCING IN THE STREETS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog064": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL064 64 POOLS AND STREAMS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog065": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL065 65 BIRTH PLACES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog066": {
+    "acceptance_result": {
+      "artifact_digest": "c7605fed49ca68f6860e421a850446841e344f610ec7b456e59715a784b07a6d",
+      "command": "pnpm check:core-self",
+      "criterion": "Only a protected decision with steward participation can alter an immutable-core path.",
+      "observed": "pass: deterministic kernel, governance, replay, graph, capsule, and integration regressions"
+    },
+    "evidence": [
+      "file:packages/core/src/core-self/kernel/policy.ts#sha256:54dd95decbc12b89ed52da40ee82afecd6fa8c4e0f1a38d009f3251b3e766126",
+      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:68f9cb446818c5002a50689ad856eff203c84ed1afc49b802a3c3d94b16e80b2"
+    ],
+    "evidence_kind": "source-and-test",
+    "status": "verified"
+  },
+  "cog067": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL067 67 COMMON LAND remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog068": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL068 68 CONNECTED PLAY remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog069": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL069 69 PUBLIC OUTDOOR ROOM has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog070": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL070 70 GRAVE SITES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog071": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL071 71 STILL WATER remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog072": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL072 72 LOCAL SPORTS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog073": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "An adapter test for APL073 73 ADVENTURE PLAYGROUND proves the external surface emits a typed proposal and has no direct ledger-append capability.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog074": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL074 74 ANIMALS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog075": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL075 75 THE FAMILY remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog076": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL076 76 HOUSE FOR A SMALL FAMILY remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog077": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL077 77 HOUSE FOR A COUPLE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog078": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL078 78 HOUSE FOR ONE PERSON remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog079": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL079 79 YOUR OWN HOME remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog080": {
+    "acceptance_result": {
+      "artifact_digest": "def698ac5e1b66616de10d18e1484592de12d43d300a6c2d6512952482a8ba4c",
+      "command": "pnpm check:core-self",
+      "criterion": "An ESN or DAO actor may submit evidence and proposals but cannot review or accept its own proposal.",
+      "observed": "pass: deterministic kernel, governance, replay, graph, capsule, and integration regressions"
+    },
+    "evidence": [
+      "file:packages/core/src/core-self/AutognosisAutogenesisCoupler.ts#sha256:5ef3b829540a957801d73d2149358c2ff03e886b2b1705766830b5e4b709fd00",
+      "file:packages/core/src/core-self/__tests__/AutognosisAutogenesisCoupler.test.ts#sha256:3d123ac5e16fca545154b8aeb73104e8a1b8069cadd6773034d8f8dde257fd56"
+    ],
+    "evidence_kind": "source-and-test",
+    "status": "verified"
+  },
+  "cog081": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL081 81 SMALL SERVICES WITHOUT RED TAPE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog082": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL082 82 OFFICE CONNECTIONS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog083": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL083 83 MASTER AND APRENTICES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog084": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL084 84 TEENAGE SOCIETY remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog085": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL085 85 SHOPFRONT SCHOOLS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog086": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL086 86 CHILDREN'S HOME remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog087": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL087 87 INDIVIDUALLY OWNED SHOPS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog088": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL088 88 STREET CAFE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog089": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL089 89 CORNER GROCERY remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog090": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL090 90 BEER HALL remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog091": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL091 91 TRAVELLER'S INN remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog092": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL092 92 BUS STOP remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog093": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL093 93 FOOD STANDS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog094": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL094 94 SLEEPING IN PUBLIC remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog095": {
+    "acceptance_result": {
+      "artifact_digest": "b2cdfeaa326822dc5f3fba84febf2079688595c54d47f3bb14ebb59f0f1b6d7f",
+      "command": "pnpm check:core-self",
+      "criterion": "The public core-self barrel exposes contracts, policy, ledger, projector, graph, capsule, and manifest adapter without a runtime dependency on the archive.",
+      "observed": "pass: deterministic kernel, governance, replay, graph, capsule, and integration regressions"
+    },
+    "evidence": [
+      "file:packages/core/src/core-self/kernel/index.ts#sha256:bf25745ded8a5ee3bc11eb818a6fbc89775eec9ec16be91d89fea03b4b4a6247",
+      "file:packages/core/src/core-self/index.ts#sha256:237b168e64260d3bb2859fcab95fe6c71334f7e9d027ae6aded607a05426bfd9"
+    ],
+    "evidence_kind": "source-and-test",
+    "status": "verified"
+  },
+  "cog096": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL096 96 NUMBER OF STORIES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog097": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL097 97 SHIELDED PARKING has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog098": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL098 98 CIRCULATION REALMS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog099": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL099 99 MAIN BUILDING remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog100": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL100 PEDESTRIAN STREET has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog101": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL101 BUILDING THOROUGHFARE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog102": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL102 FAMILY OF ENTRANCES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog103": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL103 SMALL PARKING LOTS has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog104": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL104 SITE REPAIR remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog105": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL105 SOUTH FACING OUTDOORS has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog106": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL106 POSITIVE OUTDOOR SPACE has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog107": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL107 WINGS OF LIGHT remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog108": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL108 CONNECTED BUILDINGS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog109": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL109 LONG THIN HOUSE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog110": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL110 MAIN ENTRANCE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog111": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL111 HALF-HIDDEN GARDEN remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog112": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL112 ENTRANCE TRANSITION has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog113": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL113 CAR CONNECTION remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog114": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL114 HIERARCHY OF OPEN SPACE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog115": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL115 COURTYARDS WHICH LIVE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog116": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL116 CASCADE OF ROOFS has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog117": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL117 SHELTERING ROOF has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog118": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL118 ROOF GARDEN has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog119": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL119 ARCADES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog120": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL120 PATHS AND GOALS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog121": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL121 PATH SHAPE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog122": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL122 BUILDING FRONTS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog123": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL123 PEDESTRIAN DENSITY remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog124": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL124 ACTIVITY POCKETS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog125": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL125 STAIR SEATS has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog126": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL126 SOMETHING ROUGHLY IN THE MIDDLE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog127": {
+    "acceptance_result": {
+      "artifact_digest": "c7605fed49ca68f6860e421a850446841e344f610ec7b456e59715a784b07a6d",
+      "command": "pnpm check:core-self",
+      "criterion": "Actor capability tests reject every operation above the actor’s registered authority level.",
+      "observed": "pass: deterministic kernel, governance, replay, graph, capsule, and integration regressions"
+    },
+    "evidence": [
+      "file:packages/core/src/core-self/kernel/policy.ts#sha256:54dd95decbc12b89ed52da40ee82afecd6fa8c4e0f1a38d009f3251b3e766126",
+      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:68f9cb446818c5002a50689ad856eff203c84ed1afc49b802a3c3d94b16e80b2"
+    ],
+    "evidence_kind": "source-and-test",
+    "status": "verified"
+  },
+  "cog128": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL128 INDOOR SUNLIGHT has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog129": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL129 COMMON AREAS AT THE HEART remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog130": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL130 ENTRANCE ROOM remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog131": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL131 THE FLOW THROUGH ROOMS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog132": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL132 SHORT PASSAGES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog133": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL133 STAIRCASE AS A STAGE has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog134": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL134 ZEN VIEW remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog135": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL135 TAPESTRY OF LIGHT AND DARK remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog136": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL136 COUPLE'S REALM remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog137": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL137 CHILDREN'S REALM remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog138": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL138 SLEEPING TO THE EAST remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog139": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL139 FARMHOUSE KITCHEN has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog140": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL140 PRIVATE TERRACE ON THE STREET remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog141": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL141 A ROOM OF ONE'S OWN remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog142": {
+    "acceptance_result": {
+      "artifact_digest": "489dbc2c6382103cefb52fa206abdf45898ece8abb8524f89be23c0344950147",
+      "command": "pnpm check:core-self",
+      "criterion": "Replaying the same ordered accepted events produces identical ledger head and projected-state digests.",
+      "observed": "pass: deterministic kernel, governance, replay, graph, capsule, and integration regressions"
+    },
+    "evidence": [
+      "file:packages/core/src/core-self/kernel/ledger.ts#sha256:5900c2261758ac009ce564fca3abcfcfeeb5052b5223d551090ce6b4dfbad8c5",
+      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:68f9cb446818c5002a50689ad856eff203c84ed1afc49b802a3c3d94b16e80b2"
+    ],
+    "evidence_kind": "source-and-test",
+    "status": "verified"
+  },
+  "cog143": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL143 BED CLUSTER has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog144": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL144 BATHING ROOM has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog145": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL145 BULK STORAGE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog146": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL146 FLEXIBLE OFFICE SPACE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog147": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL147 COMMUNAL EATING remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog148": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL148 SMALL WORK GROUPS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog149": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL149 RECEPTION WELCOMES YOU remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog150": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL150 A PLACE TO WAIT remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog151": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL151 SMALL MEETING ROOMS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog152": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL152 HALF-PRIVATE OFFICE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog153": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL153 ROOMS TO RENT remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog154": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL154 ...TEENAGER'S COTTAGE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog155": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL155 OLD AGE COTTAGE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog156": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL156 SETTLED WORK remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog157": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL157 HOME WORKSHOP remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog158": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL158 OPEN STAIRS has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog159": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "An adapter test for APL159 LIGHT ON TWO SIDES OF EVERY ROOM proves the external surface emits a typed proposal and has no direct ledger-append capability.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog160": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL160 BUILDING EDGE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog161": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL161 SUNNY PLACE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog162": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL162 NORTH FACE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog163": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL163 OUTDOOR ROOM has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog164": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL164 STREET WINDOWS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog165": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL165 OPENING TO THE STREET remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog166": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL166 GALLERY SURROUND remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog167": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL167 SIX-FOOT BALCONY remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog168": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "An adapter test for APL168 CONNECTION TO THE EARTH proves the external surface emits a typed proposal and has no direct ledger-append capability.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog169": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL169 TERRACED SLOPE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog170": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL170 FRUIT TREES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog171": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL171 TREE PLACES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog172": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL172 GARDEN GROWING WILD remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog173": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL173 GARDEN WALL has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog174": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL174 TRELLISED WALK remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog175": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL175 GREENHOUSE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog176": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL176 GARDEN SEAT remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog177": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL177 VEGETABLE GARDEN remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog178": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL178 COMPOST remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog179": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL179 ALCOVES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog180": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL180 WINDOW PLACE has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog181": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL181 THE FIRE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog182": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL182 EATING ATMOSPHERE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog183": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL183 WORKSPACE ENCLOSURE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog184": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL184 COOKING LAYOUT remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog185": {
+    "acceptance_result": {
+      "artifact_digest": "c7605fed49ca68f6860e421a850446841e344f610ec7b456e59715a784b07a6d",
+      "command": "pnpm check:core-self",
+      "criterion": "Protected and recovery events fail unless reviewer IDs include an authorized steward distinct from the proposer.",
+      "observed": "pass: deterministic kernel, governance, replay, graph, capsule, and integration regressions"
+    },
+    "evidence": [
+      "file:packages/core/src/core-self/kernel/policy.ts#sha256:54dd95decbc12b89ed52da40ee82afecd6fa8c4e0f1a38d009f3251b3e766126",
+      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:68f9cb446818c5002a50689ad856eff203c84ed1afc49b802a3c3d94b16e80b2"
+    ],
+    "evidence_kind": "source-and-test",
+    "status": "verified"
+  },
+  "cog186": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL186 COMMUNAL SLEEPING remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog187": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL187 MARRIAGE BED has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog188": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL188 BED ALCOVE has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog189": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL189 DRESSING ROOM remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog190": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL190 CEILING HEIGHT VARIETY has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog191": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL191 THE SHAPE OF INDOOR SPACE has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog192": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL192 192 WINDOWS OVERLOOKING LIFE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog193": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL193 193 HALF-OPEN WALL has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog194": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL194 194 INTERIOR WINDOWS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog195": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL195 195 STAIRCASE VOLUME has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog196": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL196 196 CORNER DOORS has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog197": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL197 197 THICK WALLS has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog198": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL198 198 CLOSETS BETWEEN ROOMS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog199": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL199 SUNNY COUNTER remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog200": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL200 200 OPEN SHELVES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog201": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL201 201 WAIST-HIGH SHELF remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog202": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL202 202 BUILT-IN SEATS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog203": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL203 203 CHILD CAVES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog204": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL204 204 SECRET PLACE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog205": {
+    "acceptance_result": {
+      "artifact_digest": "ae542a51781e5c1a674fe53560f989e43dde1edf604766b78681478fc789252f",
+      "command": "pnpm check:core-self",
+      "criterion": "The implementation contains physically distinct proposal, policy-decision, accepted-event, and projection modules.",
+      "observed": "pass: deterministic kernel, governance, replay, graph, capsule, and integration regressions"
+    },
+    "evidence": [
+      "file:packages/core/src/core-self/kernel/contracts.ts#sha256:b91ecbea06fd0a03c8a22c0222fe676601ff2a52558c682ea61139fe3146c725",
+      "file:packages/core/src/core-self/kernel/policy.ts#sha256:54dd95decbc12b89ed52da40ee82afecd6fa8c4e0f1a38d009f3251b3e766126",
+      "file:packages/core/src/core-self/kernel/ledger.ts#sha256:5900c2261758ac009ce564fca3abcfcfeeb5052b5223d551090ce6b4dfbad8c5",
+      "file:packages/core/src/core-self/kernel/projector.ts#sha256:d8ee634940393cad0fa5cac782a7c555fde1c77a274741768ee61ca004221a5e"
+    ],
+    "evidence_kind": "source-and-test",
+    "status": "verified"
+  },
+  "cog206": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL206 206 EFFICIENT STRUCTURE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog207": {
+    "acceptance_result": {
+      "artifact_digest": "23d172ec469cd2f06dee034b7eec5e3921c4eee95775b95290260fae5af3eb3a",
+      "command": "pnpm check:core-self",
+      "criterion": "Canonicalization rejects unsupported values and produces the same SHA-256 digest for differently ordered equivalent objects.",
+      "observed": "pass: deterministic kernel, governance, replay, graph, capsule, and integration regressions"
+    },
+    "evidence": [
+      "file:packages/core/src/core-self/kernel/canonical.ts#sha256:fa7d3ef4e35a7f185ac048380940ce5daf21c543c7fe6c0045a2db73be19c2c2",
+      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:68f9cb446818c5002a50689ad856eff203c84ed1afc49b802a3c3d94b16e80b2"
+    ],
+    "evidence_kind": "source-and-test",
+    "status": "verified"
+  },
+  "cog208": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL208 208 GRADUAL STIFFENING remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog209": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL209 209 ROOF LAYOUT has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog210": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL210 210 FLOOR AND CEILING LAYOUT has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog211": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL211 211 THICKENING THE OUTER WALLS has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog212": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL212 212 COLUMNS AT THE CORNERS has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog213": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL213 213 FINAL COLUMN DISTRIBUTION has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog214": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL214 214 ROOT FOUNDATIONS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog215": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL215 215 GROUND FLOOR SLAB has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog216": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL216 216 BOX COLUMNS has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog217": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL217 217 PERIMETER BEAMS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog218": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL218 218 WALL MEMBRANE has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog219": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL219 FLOOR-CEILING VAULTS has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog220": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL220 220 ROOF VAULTS has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog221": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL221 221 NATURAL DOORS AND WINDOWS has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog222": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL222 222 LOW SILL remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog223": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL223 223 DEEP REVEALS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog224": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL224 224 LOW DOORWAY has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog225": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL225 225 FRAMES AS THICKENED EDGES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog226": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL226 226 COLUMN PLACE has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog227": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL227 227 COLUMN CONNECTIONS has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog228": {
+    "acceptance_result": {
+      "artifact_digest": "489dbc2c6382103cefb52fa206abdf45898ece8abb8524f89be23c0344950147",
+      "command": "pnpm check:core-self",
+      "criterion": "A stale previous-event digest is quarantined as a fork and leaves projected state unchanged.",
+      "observed": "pass: deterministic kernel, governance, replay, graph, capsule, and integration regressions"
+    },
+    "evidence": [
+      "file:packages/core/src/core-self/kernel/ledger.ts#sha256:5900c2261758ac009ce564fca3abcfcfeeb5052b5223d551090ce6b4dfbad8c5",
+      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:68f9cb446818c5002a50689ad856eff203c84ed1afc49b802a3c3d94b16e80b2"
+    ],
+    "evidence_kind": "source-and-test",
+    "status": "verified"
+  },
+  "cog229": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "An adapter test for APL229 229 DUCT SPACE proves the external surface emits a typed proposal and has no direct ledger-append capability.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog230": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL230 230 RADIANT HEAT remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog231": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL231 231 DORMER WINDOWS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog232": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL232 232 ROOF CAPS has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog233": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL233 233 FLOOR SURFACE has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog234": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL234 234 LAPPED OUTSIDE WALLS has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog235": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL235 235 SOFT INSIDE WALLS has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog236": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL236 236 WINDOWS WHICH OPEN WIDE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog237": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "An adapter test for APL237 237 SOLID DOORS WITH GLASS proves the external surface emits a typed proposal and has no direct ledger-append capability.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog238": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL238 238 FILTERED LIGHT remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog239": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL239 239 SMALL PANES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog240": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL240 240 HALF-INCH TRIM remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog241": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL241 241 SEAT SPOTS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog242": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL242 242 FRONT DOOR BENCH has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog243": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL243 243 SITTING WALL has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog244": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "The release inventory confirms APL244 244 CANVAS ROOFS has no runtime dependency or canonical-authority implementation.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog245": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL245 245 RAISED FLOWERS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog246": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL246 246 CLIMBING PLANTS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog247": {
+    "acceptance_result": {
+      "artifact_digest": "010290c7dea2e36ffe8b1ee93a93259a7f6f0b71807f034d6b1391144f271790",
+      "command": "pnpm check:core-self",
+      "criterion": "A verified capsule round trip reconstructs the same state, while a one-byte mutation fails verification.",
+      "observed": "pass: deterministic kernel, governance, replay, graph, capsule, and integration regressions"
+    },
+    "evidence": [
+      "file:packages/core/src/core-self/kernel/capsule.ts#sha256:aff8cafdcc5fa1e3fcbc4823c1992f5113567d2296192a5bf11a7db6c2368c11",
+      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:68f9cb446818c5002a50689ad856eff203c84ed1afc49b802a3c3d94b16e80b2"
+    ],
+    "evidence_kind": "source-and-test",
+    "status": "verified"
+  },
+  "cog248": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL248 248 SOFT TILE AND BRICK remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog249": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "An adapter test for APL249 249 ORNAMENT proves the external surface emits a typed proposal and has no direct ledger-append capability.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog250": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL250 250 WARM COLORS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog251": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL251 251 DIFFERENT CHAIRS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog252": {
+    "acceptance_result": {
+      "artifact_digest": null,
+      "command": "pnpm check:core-self",
+      "criterion": "APL252 252 POOLS OF LIGHT remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "observed": "not-run"
+    },
+    "evidence": [],
+    "evidence_kind": "design",
+    "status": "planned"
+  },
+  "cog253": {
+    "acceptance_result": {
+      "artifact_digest": "cb3233b5f3749c274e4cc7d8ea15c51ef8d532a1194713675798aca1a404b75a",
+      "command": "pnpm check:core-self",
+      "criterion": "An evidence-linked autobiographical assertion survives export, verified import, and replay with the same digest.",
+      "observed": "pass: deterministic kernel, governance, replay, graph, capsule, and integration regressions"
+    },
+    "evidence": [
+      "file:packages/core/src/core-self/kernel/authority.ts#sha256:bb9a9e74dd6b497ee81696341faa86c9650810552c6ff3115b407178d3731ca8",
+      "file:packages/avatar/src/self-model-avatar-feedback.ts#sha256:03b93635a8b1abf9107a92e5d46f1d5b9871b6846c80047a2e7b3fb552dc5e21",
+      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:68f9cb446818c5002a50689ad856eff203c84ed1afc49b802a3c3d94b16e80b2"
+    ],
+    "evidence_kind": "source-and-test",
+    "status": "verified"
+  }
+}

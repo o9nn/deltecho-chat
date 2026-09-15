@@ -18,4 +18,9 @@ export {
   type ConsciousnessEffect,
 } from "./EmbodiedCognition.js";
 
-export { ProprioceptiveEmbodiment } from "./ProprioceptiveEmbodiment.js";
+export {
+  ProprioceptiveEmbodiment,
+  type ProprioceptiveConfig,
+  type ProprioceptiveState,
+  type BreathingState,
+} from "./ProprioceptiveEmbodiment.js";

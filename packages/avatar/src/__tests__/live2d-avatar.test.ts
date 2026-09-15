@@ -9,6 +9,7 @@ import {
   DEFAULT_MODEL_CONFIG,
 } from "../adapters/live2d-avatar";
 import type { Live2DAvatarProps } from "../adapters/live2d-avatar";
+import { ResonanceCascadeConductor } from "../resonance-cascade-conductor";
 import type { EmotionalVector } from "../types";
 
 // Mock the PixiLive2DRenderer
@@ -31,10 +32,19 @@ jest.mock("../adapters/pixi-live2d-renderer", () => ({
     initialize: jest.fn().mockResolvedValue(undefined),
     loadModel: jest.fn().mockResolvedValue(undefined),
     setExpression: jest.fn(),
+    setNamedExpression: jest.fn().mockReturnValue(true),
     playMotion: jest.fn(),
     updateLipSync: jest.fn(),
     setBlinking: jest.fn(),
     setParameter: jest.fn(),
+    getParameter: jest.fn().mockReturnValue(0),
+    focusEyes: jest.fn(),
+    addFrameListener: jest.fn(),
+    removeFrameListener: jest.fn(),
+    setAnimationSpeed: jest.fn(),
+    setVisualVitality: jest.fn(),
+    applyOutfit: jest.fn(),
+    applyIdentityRig: jest.fn(),
     resize: jest.fn(),
     getNativeSize: jest.fn().mockReturnValue({ width: 800, height: 1600 }),
     dispose: jest.fn(),
@@ -81,6 +91,7 @@ describe("Live2DAvatarManager", () => {
       expect(controller.updateLipSync).toBeDefined();
       expect(controller.triggerBlink).toBeDefined();
       expect(controller.setParameter).toBeDefined();
+      expect(controller.applyOutfit).toBeDefined();
       expect(controller.getRenderer).toBeDefined();
       expect(controller.resize).toBeDefined();
       expect(controller.getNativeSize).toBeDefined();
@@ -227,6 +238,246 @@ describe("Live2DAvatarManager", () => {
     });
   });
 
+  describe("cognitive metabolic projection", () => {
+    it("applies metabolic state through the Pixi frame ticker", async () => {
+      const controller = await manager.initialize(mockContainer, {
+        modelPath: "/test/model.json",
+      });
+      const renderer = controller.getRenderer() as unknown as {
+        setParameter: jest.Mock;
+        addFrameListener: jest.Mock;
+        setAnimationSpeed: jest.Mock;
+        setVisualVitality: jest.Mock;
+      };
+      const frameListener = renderer.addFrameListener.mock.calls[0][0] as (
+        deltaTime: number,
+      ) => void;
+      renderer.setParameter.mockClear();
+      renderer.setAnimationSpeed.mockClear();
+      renderer.setVisualVitality.mockClear();
+
+      controller.updateCognitiveState({
+        mode: "Knowledge Integration",
+        valence: 0.2,
+        arousal: 0.5,
+        metabolic: {
+          metabolicPhase: "integrating",
+          energyLevel: 0.42,
+          anabolicBalance: 0.6,
+          isEnergyCrisis: false,
+          myelinationProgress: 0.8,
+          knowledgeDensity: 3.2,
+        },
+      });
+      frameListener(2);
+
+      expect(renderer.setParameter).toHaveBeenCalledWith(
+        "ParamBreath",
+        expect.any(Number),
+      );
+      expect(renderer.setParameter).toHaveBeenCalledWith(
+        "ParamMouthForm",
+        expect.any(Number),
+      );
+      expect(renderer.setParameter).toHaveBeenCalledWith(
+        "ParamAngleZ",
+        expect.any(Number),
+      );
+      expect(renderer.setAnimationSpeed).toHaveBeenCalledWith(
+        expect.any(Number),
+      );
+      expect(renderer.setVisualVitality).toHaveBeenCalledWith(
+        expect.any(Number),
+      );
+    });
+
+    it("ingests each genuine resonance cascade once and applies it on the Pixi ticker", async () => {
+      const onCascade = jest.spyOn(
+        ResonanceCascadeConductor.prototype,
+        "onCascade",
+      );
+      const now = jest.spyOn(performance, "now");
+      let time = 1_000;
+      now.mockImplementation(() => time);
+
+      try {
+        const controller = await manager.initialize(mockContainer, {
+          modelPath: "/test/model.json",
+        });
+        const renderer = controller.getRenderer() as unknown as {
+          addFrameListener: jest.Mock;
+          setParameter: jest.Mock;
+        };
+        const resonanceFrame = renderer.addFrameListener.mock.calls[2][0] as (
+          deltaTime: number,
+        ) => void;
+        const visualState = {
+          mode: "Scientific Genius",
+          scientificGenius: 0.94,
+          insightPotential: 0.9,
+          coreSelf: {
+            initialized: true,
+            ledgerHead: "a".repeat(64),
+            projectedStateDigest: "b".repeat(64),
+            acceptedEventCount: 1,
+            pendingProposalCount: 0,
+          },
+          resonanceCascade: {
+            id: "cascade-render-1",
+            intensity: 0.9,
+            clusterPhi: 0.82,
+            clusterNovelty: 0.76,
+            domainSpan: 4,
+            haloPulseHz: 4.44,
+            spectralRadiusBoost: 0.135,
+            epistemicTemperatureDelta: -0.36,
+            timestamp: 1_000,
+          },
+        };
+
+        controller.updateCognitiveState(visualState);
+        controller.updateCognitiveState(visualState);
+        expect(onCascade).toHaveBeenCalledTimes(1);
+
+        renderer.setParameter.mockClear();
+        time += 225;
+        resonanceFrame(1);
+
+        expect(renderer.setParameter).toHaveBeenCalledWith(
+          "ParamEyeLOpen",
+          expect.any(Number),
+        );
+        expect(renderer.setParameter).toHaveBeenCalledWith(
+          "ParamBrowLY",
+          expect.any(Number),
+        );
+        expect(renderer.setParameter).toHaveBeenCalledWith(
+          "ParamBreath",
+          expect.any(Number),
+        );
+        for (const [, value] of renderer.setParameter.mock.calls) {
+          expect(Number.isFinite(value)).toBe(true);
+        }
+      } finally {
+        onCascade.mockRestore();
+        now.mockRestore();
+      }
+    });
+
+    it("does not express a resonance cascade against explicitly uninitialized identity", async () => {
+      const onCascade = jest.spyOn(
+        ResonanceCascadeConductor.prototype,
+        "onCascade",
+      );
+      try {
+        const controller = await manager.initialize(mockContainer, {
+          modelPath: "/test/model.json",
+        });
+        controller.updateCognitiveState({
+          mode: "Scientific Genius",
+          coreSelf: {
+            initialized: false,
+            ledgerHead: null,
+            projectedStateDigest: "",
+            acceptedEventCount: 0,
+            pendingProposalCount: 0,
+          },
+          resonanceCascade: {
+            id: "cascade-unanchored",
+            intensity: 1,
+            clusterPhi: 1,
+            clusterNovelty: 1,
+            domainSpan: 3,
+            haloPulseHz: 4.44,
+            spectralRadiusBoost: 0.1,
+            epistemicTemperatureDelta: -0.2,
+            timestamp: 1_000,
+          },
+        });
+        expect(onCascade).not.toHaveBeenCalled();
+      } finally {
+        onCascade.mockRestore();
+      }
+    });
+
+    it("samples rendered Cubism state into the avatar self-model", async () => {
+      const controller = await manager.initialize(mockContainer, {
+        modelPath: "/test/model.json",
+      });
+      const renderer = controller.getRenderer() as unknown as {
+        addFrameListener: jest.Mock;
+        getParameter: jest.Mock;
+      };
+      const selfModelFrame = renderer.addFrameListener.mock.calls[1][0] as (
+        deltaTime: number,
+      ) => void;
+
+      const coreSelf = {
+        initialized: true,
+        ledgerHead: "c".repeat(64),
+        projectedStateDigest: "d".repeat(64),
+        acceptedEventCount: 1,
+        pendingProposalCount: 2,
+      };
+      controller.updateCognitiveState({
+        mode: "Scientific Genius",
+        scientificGenius: 0.92,
+        insightPotential: 0.84,
+        coreSelf,
+        metabolic: {
+          metabolicPhase: "integrating",
+          energyLevel: 0.74,
+          anabolicBalance: 0.45,
+          isEnergyCrisis: false,
+          myelinationProgress: 0.6,
+          knowledgeDensity: 2.8,
+        },
+      });
+
+      expect(controller.getLastExpressionExperience()).toBeNull();
+      selfModelFrame(1);
+      selfModelFrame(1);
+
+      expect(renderer.getParameter).toHaveBeenCalled();
+      expect(controller.getLastExpressionExperience()).toEqual(
+        expect.objectContaining({
+          cognitiveMode: "Scientific Genius",
+          predicted: expect.objectContaining({ params: expect.any(Object) }),
+          actual: expect.objectContaining({ params: expect.any(Object) }),
+          coreSelf,
+          errorMagnitude: expect.any(Number),
+        }),
+      );
+      expect(controller.getSelfModelAccuracy()).toBeGreaterThanOrEqual(0);
+      expect(controller.getSelfModelAccuracy()).toBeLessThanOrEqual(1);
+    });
+
+    it("removes the metabolic frame listener during disposal", async () => {
+      const controller = await manager.initialize(mockContainer, {
+        modelPath: "/test/model.json",
+      });
+      const renderer = controller.getRenderer() as unknown as {
+        addFrameListener: jest.Mock;
+        removeFrameListener: jest.Mock;
+      };
+      const metabolicFrameListener = renderer.addFrameListener.mock.calls[0][0];
+      const selfModelFrameListener = renderer.addFrameListener.mock.calls[1][0];
+      const resonanceFrameListener = renderer.addFrameListener.mock.calls[2][0];
+
+      manager.dispose();
+
+      expect(renderer.removeFrameListener).toHaveBeenCalledWith(
+        metabolicFrameListener,
+      );
+      expect(renderer.removeFrameListener).toHaveBeenCalledWith(
+        selfModelFrameListener,
+      );
+      expect(renderer.removeFrameListener).toHaveBeenCalledWith(
+        resonanceFrameListener,
+      );
+    });
+  });
+
   describe("controller interface", () => {
     it("should provide setExpression method", async () => {
       const props: Live2DAvatarProps = {
@@ -236,6 +487,7 @@ describe("Live2DAvatarManager", () => {
       const controller = await manager.initialize(mockContainer, props);
 
       expect(() => controller.setExpression("happy", 0.8)).not.toThrow();
+      expect(controller.setNamedExpression?.("JOY_01_BroadSmile")).toBe(true);
     });
 
     it("should provide playMotion method", async () => {
@@ -281,6 +533,19 @@ describe("Live2DAvatarManager", () => {
       const controller = await manager.initialize(mockContainer, props);
 
       expect(() => controller.setParameter("ParamAngleX", 15)).not.toThrow();
+    });
+
+    it("should provide applyOutfit method", async () => {
+      const props: Live2DAvatarProps = {
+        modelPath: "/test/model.json",
+      };
+
+      const controller = await manager.initialize(mockContainer, props);
+
+      expect(() => controller.applyOutfit({ id: "rose" })).not.toThrow();
+      expect(controller.getRenderer()?.applyOutfit).toHaveBeenCalledWith({
+        id: "rose",
+      });
     });
 
     it("should provide getRenderer method", async () => {

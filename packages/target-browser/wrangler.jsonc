@@ -10,9 +10,13 @@
   },
 
   // Container configuration
-  // Dockerfile is at repo root, path is relative to this wrangler.jsonc file
+  // Dockerfile is at repo root, path is relative to this wrangler.jsonc file.
+  // GitHub Actions on main deploys this default config onto
+  // deltecho-chat-preview, whose remote binding is DeltEchoContainer.
+  // Do not rename that class to DeltEchoApp (Cloudflare API 10074).
   "containers": [
     {
+      "name": "deltecho-chat-production-deltechoapp",
       "class_name": "DeltEchoContainer",
       "image": "../../Dockerfile.cloudflare",
       "max_instances": 10,
@@ -31,7 +35,9 @@
     ]
   },
 
-  // Required migration for Durable Objects with SQLite
+  // v1 created DeltEchoContainer on deltecho-chat-preview. Do not add a
+  // v2 rename onto DeltEchoApp; leftover App instances stay alive because
+  // worker.ts still exports that class.
   "migrations": [
     {
       "tag": "v1",
@@ -42,6 +48,39 @@
   // Environment variables (secrets should be set via wrangler secret)
   "vars": {
     "ENVIRONMENT": "preview"
+  },
+
+  // The preview Worker already owns a v1 DeltEchoApp namespace. Bind it
+  // explicitly instead of replaying the production rename into that namespace.
+  "env": {
+    "preview": {
+      "containers": [
+        {
+          "name": "deltecho-chat-preview-deltechoapp",
+          "class_name": "DeltEchoApp",
+          "image": "../../Dockerfile.cloudflare",
+          "max_instances": 10,
+          "rollout_step_percentage": [100]
+        }
+      ],
+      "durable_objects": {
+        "bindings": [
+          {
+            "name": "DELTECHO_CONTAINER",
+            "class_name": "DeltEchoApp"
+          }
+        ]
+      },
+      "migrations": [
+        {
+          "tag": "v1",
+          "new_sqlite_classes": ["DeltEchoApp"]
+        }
+      ],
+      "vars": {
+        "ENVIRONMENT": "preview"
+      }
+    }
   },
 
   // Development settings

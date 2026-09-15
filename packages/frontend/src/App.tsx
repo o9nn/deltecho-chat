@@ -12,6 +12,7 @@ import { getLogger } from "../../shared/logger";
 import { BackendRemote } from "./backend-com";
 import { runPostponedFunctions } from "./onready";
 import { I18nContext } from "./contexts/I18nContext";
+import { DeepTreeEchoAvatarProvider } from "./components/DeepTreeEchoBot/DeepTreeEchoAvatarContext";
 
 export default function App(_props: any) {
   const [localeData, setLocaleData] = useState<LocaleData | null>(null);
@@ -80,7 +81,9 @@ export default function App(_props: any) {
     <CrashScreen>
       <ThemeContextWrapper>
         <I18nContext.Provider value={window.static_translate}>
-          <ScreenController />
+          <DeepTreeEchoAvatarProvider>
+            <ScreenController />
+          </DeepTreeEchoAvatarProvider>
         </I18nContext.Provider>
       </ThemeContextWrapper>
     </CrashScreen>

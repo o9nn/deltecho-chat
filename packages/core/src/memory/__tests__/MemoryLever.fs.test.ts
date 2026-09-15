@@ -5,17 +5,17 @@ import { MemoryLever, MemoryLeverError } from "../MemoryLever";
 import { RAGMemoryStore, type Memory } from "../RAGMemoryStore";
 import { InMemoryStorage } from "../storage";
 
-async function seedDir(dir: string, memories: Memory[], extraFiles: Record<string, string> = {}) {
+async function seedDir(
+  dir: string,
+  memories: Memory[],
+  extraFiles: Record<string, string> = {},
+) {
   await writeFile(
     join(dir, "deepTreeEchoBotMemories.json"),
     JSON.stringify(memories),
     "utf8",
   );
-  await writeFile(
-    join(dir, "deepTreeEchoBotReflections.json"),
-    "[]",
-    "utf8",
-  );
+  await writeFile(join(dir, "deepTreeEchoBotReflections.json"), "[]", "utf8");
   for (const [name, body] of Object.entries(extraFiles)) {
     await writeFile(join(dir, name), body, "utf8");
   }
@@ -24,7 +24,11 @@ async function seedDir(dir: string, memories: Memory[], extraFiles: Record<strin
 describe("MemoryLever filesystem open", () => {
   it("errors on invalid RAG JSON", async () => {
     const dir = await mkdtemp(join(tmpdir(), "dte-bad-json-"));
-    await writeFile(join(dir, "deepTreeEchoBotMemories.json"), "{not-json", "utf8");
+    await writeFile(
+      join(dir, "deepTreeEchoBotMemories.json"),
+      "{not-json",
+      "utf8",
+    );
     await writeFile(join(dir, "deepTreeEchoBotReflections.json"), "[]", "utf8");
     await expect(MemoryLever.openPath(dir)).rejects.toMatchObject({
       code: "missing_or_invalid",
@@ -68,14 +72,16 @@ describe("MemoryLever filesystem open", () => {
     const store = new RAGMemoryStore(storage);
     await store.ready();
     store.setEnabled(true);
-    const fromMemory = new MemoryLever(store).search("TypeScript", { chatId: 1 });
+    const fromMemory = new MemoryLever(store).search("TypeScript", {
+      chatId: 1,
+    });
     expect(fromPath.hits.map((hit) => hit.id)).toEqual(
       fromMemory.hits.map((hit) => hit.id),
     );
     await rm(dir, { recursive: true, force: true });
   });
 
-  it("dream dry-run is byte-identical; apply without approve is identical; apply with approve writes 0o600 snapshots", async () => {
+  it("dream dry-run is byte-identical; apply requires approval and writes secure snapshots", async () => {
     const dir = await mkdtemp(join(tmpdir(), "dte-apply-"));
     await seedDir(dir, [
       {
@@ -128,7 +134,13 @@ describe("MemoryLever filesystem open", () => {
     );
     expect(after).not.toBe(before);
     const mode = (await stat(join(dir, snapshotName))).mode & 0o777;
-    expect(mode).toBe(0o600);
+    if (process.platform === "win32") {
+      // Windows reports synthetic POSIX mode bits; ACL ownership is enforced by
+      // the user-scoped temp directory. The portable invariant is no execute bit.
+      expect(mode & 0o111).toBe(0);
+    } else {
+      expect(mode).toBe(0o600);
+    }
     await rm(dir, { recursive: true, force: true });
   });
 

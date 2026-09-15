@@ -1,0 +1,275 @@
+{
+  "schema_version": "1.0.0",
+  "engine_version": "1.0.0",
+  "cycle_id": "ksm_87422d1aba28e0fe",
+  "observed_at": "2026-09-12T22:00:00.000Z",
+  "input_hashes": {
+    "mapping_hash": "b855b6b62480b8e57fa6da41fb0dbee41f8b4d1a28db9e0b6c25935f6967580c",
+    "definitions_hash": "bef6fc5c459431726d6ac09a3ffc720256078cd03e496cb21085a7d9b6c9036c",
+    "evidence_hash": "f713513ab1f773afbdb7262e5a0050ea7a784c88921459ab28c55a686b7340d7",
+    "ledger_head": "6d9f27347eb9757f13c6316b601647ae871f8f7f7ded527acbf188c41fd7d91b",
+    "engine_version": "1.0.0"
+  },
+  "property_coherence": 1,
+  "loss": 0,
+  "converged": true,
+  "weakest_center": "control",
+  "metrics": [
+    {
+      "center_id": "control",
+      "score": 1,
+      "minimum": 0.5,
+      "verified_count": 6,
+      "total_count": 6,
+      "additional_to_minimum": 0,
+      "verified_evidence": [
+        "cog024",
+        "cog053",
+        "cog066",
+        "cog080",
+        "cog127",
+        "cog185"
+      ]
+    },
+    {
+      "center_id": "process",
+      "score": 1,
+      "minimum": 0.5,
+      "verified_count": 6,
+      "total_count": 6,
+      "additional_to_minimum": 0,
+      "verified_evidence": [
+        "cog018",
+        "cog030",
+        "cog142",
+        "cog228",
+        "cog247",
+        "cog253"
+      ]
+    },
+    {
+      "center_id": "structure",
+      "score": 1,
+      "minimum": 0.5,
+      "verified_count": 6,
+      "total_count": 6,
+      "additional_to_minimum": 0,
+      "verified_evidence": [
+        "cog001",
+        "cog037",
+        "cog052",
+        "cog095",
+        "cog205",
+        "cog207"
+      ]
+    }
+  ],
+  "repair": {
+    "center_id": "control",
+    "selected_pattern_ids": [],
+    "acceptance_criteria": [],
+    "candidate_count": 0,
+    "projected_score": 1,
+    "remaining_to_minimum": 0
+  },
+  "steps": [
+    {
+      "step": 1,
+      "verb": "observe",
+      "category": "existence",
+      "output": {
+        "input_hashes": {
+          "mapping_hash": "b855b6b62480b8e57fa6da41fb0dbee41f8b4d1a28db9e0b6c25935f6967580c",
+          "definitions_hash": "bef6fc5c459431726d6ac09a3ffc720256078cd03e496cb21085a7d9b6c9036c",
+          "evidence_hash": "f713513ab1f773afbdb7262e5a0050ea7a784c88921459ab28c55a686b7340d7",
+          "ledger_head": "6d9f27347eb9757f13c6316b601647ae871f8f7f7ded527acbf188c41fd7d91b",
+          "engine_version": "1.0.0"
+        },
+        "metrics": [
+          {
+            "center_id": "control",
+            "score": 1,
+            "minimum": 0.5,
+            "verified_count": 6,
+            "total_count": 6,
+            "additional_to_minimum": 0,
+            "verified_evidence": [
+              "cog024",
+              "cog053",
+              "cog066",
+              "cog080",
+              "cog127",
+              "cog185"
+            ]
+          },
+          {
+            "center_id": "process",
+            "score": 1,
+            "minimum": 0.5,
+            "verified_count": 6,
+            "total_count": 6,
+            "additional_to_minimum": 0,
+            "verified_evidence": [
+              "cog018",
+              "cog030",
+              "cog142",
+              "cog228",
+              "cog247",
+              "cog253"
+            ]
+          },
+          {
+            "center_id": "structure",
+            "score": 1,
+            "minimum": 0.5,
+            "verified_count": 6,
+            "total_count": 6,
+            "additional_to_minimum": 0,
+            "verified_evidence": [
+              "cog001",
+              "cog037",
+              "cog052",
+              "cog095",
+              "cog205",
+              "cog207"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "step": 2,
+      "verb": "identify",
+      "category": "distinction",
+      "output": {
+        "centers": [
+          "control",
+          "process",
+          "structure"
+        ],
+        "metric": "verified-core-pattern-ratio"
+      }
+    },
+    {
+      "step": 3,
+      "verb": "find-weakness",
+      "category": "disjunction",
+      "output": {
+        "selected": "control",
+        "score": 1,
+        "minimum": 0.5
+      }
+    },
+    {
+      "step": 4,
+      "verb": "analyze",
+      "category": "conjunction",
+      "output": {
+        "verified_evidence": [
+          "cog024",
+          "cog053",
+          "cog066",
+          "cog080",
+          "cog127",
+          "cog185"
+        ],
+        "missing_requirements": []
+      }
+    },
+    {
+      "step": 5,
+      "verb": "discover",
+      "category": "transition",
+      "output": {
+        "transition": "strengthen:control",
+        "repair": {
+          "center_id": "control",
+          "selected_pattern_ids": [],
+          "acceptance_criteria": [],
+          "candidate_count": 0,
+          "projected_score": 1,
+          "remaining_to_minimum": 0
+        }
+      }
+    },
+    {
+      "step": 6,
+      "verb": "inspect",
+      "category": "existence",
+      "output": {
+        "definitions": 61,
+        "patterns": 253,
+        "verified_patterns": 18
+      }
+    },
+    {
+      "step": 7,
+      "verb": "measure-error",
+      "category": "distinction",
+      "output": {
+        "loss": 0,
+        "deficits": {
+          "control": 0,
+          "process": 0,
+          "structure": 0
+        }
+      }
+    },
+    {
+      "step": 8,
+      "verb": "calculate-gradient",
+      "category": "disjunction",
+      "output": {
+        "gradients": {
+          "control": 0,
+          "process": 0,
+          "structure": 0
+        },
+        "steepest": "control"
+      }
+    },
+    {
+      "step": 9,
+      "verb": "aggregate",
+      "category": "conjunction",
+      "output": {
+        "center_id": "control",
+        "selected_pattern_ids": [],
+        "acceptance_criteria": [],
+        "candidate_count": 0,
+        "projected_score": 1,
+        "remaining_to_minimum": 0
+      }
+    },
+    {
+      "step": 10,
+      "verb": "nest",
+      "category": "transition",
+      "output": {
+        "scope": "center:control",
+        "parent": "core-self"
+      }
+    },
+    {
+      "step": 11,
+      "verb": "seal",
+      "category": "closure",
+      "output": {
+        "candidate_hash": "8d9b8fc73831bba9efad8a7e8ca979ffb36dd69a38dd52f005901cd6d121fdfe",
+        "closed": true
+      }
+    },
+    {
+      "step": 12,
+      "verb": "bootstrap",
+      "category": "recursion",
+      "output": {
+        "action": "submit-evidence-backed-proposal",
+        "direct_mutation": false,
+        "next_cycle_from_accepted_evidence": true
+      }
+    }
+  ],
+  "advisory": true,
+  "cycle_hash": "ae1667af290e9ab85bd89e92e6c452ab93aa9999649e3e95131d8d342c4e7bf5"
+}

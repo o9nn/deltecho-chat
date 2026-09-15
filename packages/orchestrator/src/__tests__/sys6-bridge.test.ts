@@ -14,6 +14,24 @@
 import { describe, it, expect, beforeEach, afterEach } from "@jest/globals";
 import { Sys6OrchestratorBridge } from "../sys6-bridge/index.js";
 
+function waitForCycle(
+  bridge: Sys6OrchestratorBridge,
+  timeoutMs = 2_000,
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const onCycle = () => {
+      clearTimeout(timeout);
+      resolve();
+    };
+
+    const timeout = setTimeout(() => {
+      bridge.off("cycle_complete", onCycle);
+      reject(new Error(`Cycle did not complete within ${timeoutMs}ms`));
+    }, timeoutMs);
+    bridge.once("cycle_complete", onCycle);
+  });
+}
+
 describe("Sys6OrchestratorBridge", () => {
   let bridge: Sys6OrchestratorBridge;
 
@@ -136,21 +154,11 @@ describe("Sys6OrchestratorBridge", () => {
     });
 
     it("should emit cycle_complete event after 30 steps", async () => {
-      const cycleCompletePromise = new Promise<unknown>((resolve) => {
-        bridge.once("cycle_complete", resolve);
-      });
+      const cycleCompletePromise = waitForCycle(bridge);
 
       await bridge.start();
-
-      // Wait for cycle completion (30 steps * 10ms = 300ms + buffer)
-      const result = await Promise.race([
-        cycleCompletePromise,
-        new Promise((resolve) => setTimeout(() => resolve(null), 500)),
-      ]);
-
+      await expect(cycleCompletePromise).resolves.toBeUndefined();
       await bridge.stop();
-
-      expect(result).not.toBeNull();
     });
   });
 
@@ -242,11 +250,9 @@ describe("Sys6OrchestratorBridge", () => {
         phasesSeen.add(event.step.phase);
       });
 
+      const cycleCompletePromise = waitForCycle(bridge);
       await bridge.start();
-
-      // Wait for full cycle
-      await new Promise((resolve) => setTimeout(resolve, 400));
-
+      await cycleCompletePromise;
       await bridge.stop();
 
       expect(phasesSeen.has(1)).toBe(true); // Perception-Orientation
@@ -257,10 +263,11 @@ describe("Sys6OrchestratorBridge", () => {
 
   describe("Triadic Stream Processing", () => {
     it("should update stream salience during processing", async () => {
+      const stepCompletePromise = new Promise<void>((resolve) => {
+        bridge.once("step_complete", () => resolve());
+      });
       await bridge.start();
-
-      // Wait for some processing
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      await stepCompletePromise;
 
       const state = bridge.getState();
       const saliences = state.streams.map((s) => s.salience);
@@ -272,9 +279,11 @@ describe("Sys6OrchestratorBridge", () => {
     });
 
     it("should maintain stream phase assignments", async () => {
+      const stepCompletePromise = new Promise<void>((resolve) => {
+        bridge.once("step_complete", () => resolve());
+      });
       await bridge.start();
-
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      await stepCompletePromise;
 
       const state = bridge.getState();
 
@@ -300,10 +309,11 @@ describe("Sys6OrchestratorBridge", () => {
     });
 
     it("should detect affordances based on salience", async () => {
+      const stepCompletePromise = new Promise<void>((resolve) => {
+        bridge.once("step_complete", () => resolve());
+      });
       await bridge.start();
-
-      // Wait for processing
-      await new Promise((resolve) => setTimeout(resolve, 200));
+      await stepCompletePromise;
 
       const state = bridge.getState();
 
@@ -321,11 +331,11 @@ describe("Sys6OrchestratorBridge", () => {
       const agentInvocations: unknown[] = [];
       bridge.on("agent_invoked", (event) => agentInvocations.push(event));
 
+      const invocationPromise = new Promise<void>((resolve) => {
+        bridge.once("agent_invoked", () => resolve());
+      });
       await bridge.start();
-
-      // Wait for processing through multiple phases
-      await new Promise((resolve) => setTimeout(resolve, 200));
-
+      await invocationPromise;
       await bridge.stop();
 
       // Should have invoked agents
@@ -392,11 +402,9 @@ describe("Sys6OrchestratorBridge", () => {
 
   describe("Telemetry and Metrics", () => {
     it("should collect telemetry during operation", async () => {
+      const cycleCompletePromise = waitForCycle(bridge);
       await bridge.start();
-
-      // Wait for cycle completion
-      await new Promise((resolve) => setTimeout(resolve, 400));
-
+      await cycleCompletePromise;
       await bridge.stop();
 
       const history = bridge.getTelemetryHistory();
@@ -422,11 +430,9 @@ describe("Sys6OrchestratorBridge", () => {
       const cycleEvents: unknown[] = [];
       bridge.on("cycle_complete", (event) => cycleEvents.push(event));
 
+      const cycleCompletePromise = waitForCycle(bridge);
       await bridge.start();
-
-      // Wait for at least one cycle
-      await new Promise((resolve) => setTimeout(resolve, 400));
-
+      await cycleCompletePromise;
       await bridge.stop();
 
       const metrics = bridge.getMetrics();
@@ -441,11 +447,9 @@ describe("Sys6OrchestratorBridge", () => {
         enableTelemetry: true,
       });
 
+      const cycleCompletePromise = waitForCycle(fastBridge);
       await fastBridge.start();
-
-      // Run for a while to generate many cycles
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
+      await cycleCompletePromise;
       await fastBridge.stop();
 
       const history = fastBridge.getTelemetryHistory();

@@ -17,11 +17,23 @@ const BASE64_ENGINE: base64::engine::GeneralPurpose = base64::engine::GeneralPur
         .with_decode_padding_mode(base64::engine::DecodePaddingMode::Indifferent),
 );
 
+fn normalize_deltecho_link(link: String) -> String {
+    let lower = link.to_lowercase();
+    if lower.starts_with("deltecho-account:") {
+        return format!("dcaccount:{}", &link["deltecho-account:".len()..]);
+    }
+    if lower.starts_with("deltecho-login:") {
+        return format!("dclogin:{}", &link["deltecho-login:".len()..]);
+    }
+    link
+}
+
 pub async fn handle_deep_link(
     app: &AppHandle,
     alternative_cwd: Option<PathBuf>,
     deeplink_or_xdc: String,
 ) -> Result<(), anyhow::Error> {
+    let deeplink_or_xdc = normalize_deltecho_link(deeplink_or_xdc);
     log::info!("handle_deep_link: {deeplink_or_xdc}");
     let main_window_channel = app.state::<MainWindowChannels>();
 
@@ -51,7 +63,10 @@ pub async fn handle_deep_link(
     if let Some(potential_scheme) = potential_scheme.as_ref() {
         if matches!(
             potential_scheme.as_str(),
-            "openpgp4fpr" | "dcaccount" | "dclogin" | "mailto"
+            "openpgp4fpr"
+                | "dcaccount"
+                | "dclogin"
+                | "mailto"
         ) || (potential_scheme == "https"
             && deeplink_or_xdc.starts_with("https://i.delta.chat/"))
         {
@@ -63,7 +78,7 @@ pub async fn handle_deep_link(
         }
 
         #[cfg(target_os = "windows")]
-        if potential_scheme == "dcnotification" {
+        if potential_scheme == "deltecho-notification" {
             use user_notify::windows::decode_deeplink;
 
             let response = decode_deeplink(&deeplink_or_xdc)?;
@@ -135,7 +150,37 @@ pub(crate) struct DeepLinkInvocation {
 }
 
 pub fn register() {
-    register_as_default_handler("openpgp4fpr");
-    register_as_default_handler("dcaccount");
-    register_as_default_handler("dclogin");
+    // Claim only the DeltEcho namespace. Standard Delta Chat protocols remain
+    // available to an independently installed upstream client.
+    register_as_default_handler("deltecho-account");
+    register_as_default_handler("deltecho-login");
+}
+
+#[cfg(test)]
+mod tests {
+    use super::normalize_deltecho_link;
+
+    #[test]
+    fn normalizes_private_account_and_login_links_for_the_core() {
+        assert_eq!(
+            normalize_deltecho_link("deltecho-account:payload".to_owned()),
+            "dcaccount:payload"
+        );
+        assert_eq!(
+            normalize_deltecho_link("DELTECHO-LOGIN:payload".to_owned()),
+            "dclogin:payload"
+        );
+    }
+
+    #[test]
+    fn preserves_explicit_standard_links() {
+        assert_eq!(
+            normalize_deltecho_link("dcaccount:payload".to_owned()),
+            "dcaccount:payload"
+        );
+        assert_eq!(
+            normalize_deltecho_link("openpgp4fpr:ABC".to_owned()),
+            "openpgp4fpr:ABC"
+        );
+    }
 }

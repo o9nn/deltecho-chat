@@ -1,0 +1,620 @@
+{
+  "definitions": [
+    {
+      "artifact": "packages/core/src/core-self/kernel/ledger.ts",
+      "definition": "DTE builds a self-image from accepted identity history, ESN observations, DAO attestations, and rendered-avatar prediction error.",
+      "id": 1,
+      "invariant": "No observation becomes canonical without a policy-approved accepted event.",
+      "level": "generator",
+      "name": "Autognosis"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/contracts.ts",
+      "definition": "Subjects, relations, evidence references, events, Cubism parameters, and individual policy decisions are the local parts of selfhood.",
+      "id": 2,
+      "invariant": "Every local part has a typed, versioned, canonical representation.",
+      "level": "generator",
+      "name": "Local"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/projector.ts",
+      "definition": "The projected root identity, ledger head, state digest, graph digest, and capsule form the globally inspectable self.",
+      "id": 3,
+      "invariant": "The global self is reproducible from accepted history.",
+      "level": "generator",
+      "name": "Global"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/hypergraph.ts",
+      "definition": "The typed identity hypergraph and Live2D parameter topology define where identity and embodiment relations exist.",
+      "id": 4,
+      "invariant": "Graph exports reject dangling endpoints and are deterministically ordered.",
+      "level": "generator",
+      "name": "Spatiality"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/ledger.ts",
+      "definition": "The append-only ledger, event order, temporal credit, KSM cycle, and avatar animation timeline define identity change through time.",
+      "id": 5,
+      "invariant": "Accepted event order is hash-linked and forks are quarantined.",
+      "level": "generator",
+      "name": "Temporality"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/policy.ts",
+      "definition": "Policy decisions, reducer preflight, temporal-credit evidence, and embodiment feedback define allowed causes of canonical change.",
+      "id": 6,
+      "invariant": "Recommendation and authorization are separate artifacts.",
+      "level": "generator",
+      "name": "Causality"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/contracts.ts",
+      "definition": "A canonical subject, event, relation, or evidence reference exists only when its schema and digest validate.",
+      "id": 7,
+      "invariant": "Invalid or unknown-schema artifacts fail closed.",
+      "level": "generator",
+      "name": "Existence"
+    },
+    {
+      "artifact": "docs/core-self/KERNEL_ARCHITECTURE.md",
+      "definition": "Proposed versus accepted, immutable versus mutable, transient versus canonical, and observation versus authority remain explicit distinctions.",
+      "id": 8,
+      "invariant": "No status flag can silently convert a proposal into accepted history.",
+      "level": "generator",
+      "name": "Distinction"
+    },
+    {
+      "artifact": "docs/core-self/ecco9-binding-registry.json",
+      "definition": "ESN, DAO, scientific-genius, Ecco9, Live2D, and human steward channels remain independently attributable evidence sources.",
+      "id": 9,
+      "invariant": "Independent sources cannot impersonate one another or inherit authority.",
+      "level": "generator",
+      "name": "Disjunction"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/policy.ts",
+      "definition": "Policy joins proposal, evidence, capability, reviewer, reducer result, and prior ledger head before acceptance.",
+      "id": 10,
+      "invariant": "All required conjuncts must pass before ledger append.",
+      "level": "generator",
+      "name": "Conjunction"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/projector.ts",
+      "definition": "Accepted events transform one projected state into the next through a pure reducer.",
+      "id": 11,
+      "invariant": "Every state transition is deterministic and preflighted.",
+      "level": "generator",
+      "name": "Transition"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/index.ts",
+      "definition": "The kernel closes over canonicalization, contracts, policy, ledger, projector, graph, capsule, and restrained adapters.",
+      "id": 12,
+      "invariant": "The trust root has no model, renderer, database, or network dependency.",
+      "level": "generator",
+      "name": "Modular Closure"
+    },
+    {
+      "artifact": "data/core-self/ksm-cycle.json",
+      "definition": "Replay rebuilds self from genesis; KSM evaluates evidence about that implementation and proposes the next repair.",
+      "id": 13,
+      "invariant": "The evolution cycle is advisory and cannot directly mutate canonical state.",
+      "level": "generator",
+      "name": "Recursion"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/contracts.ts",
+      "definition": "Local spatial architecture of typed subjects, immutable and mutable layers, and role-labelled relation endpoints.",
+      "id": 14,
+      "invariant": "Structure contains no dangling or untyped identity elements.",
+      "level": "direction-dimensional-composite",
+      "name": "Structure"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/ledger.ts",
+      "definition": "Local temporal sequence of proposal, decision, preflight, append, projection, and embodiment update.",
+      "id": 15,
+      "invariant": "Process order cannot skip reducer preflight.",
+      "level": "direction-dimensional-composite",
+      "name": "Process"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/policy.ts",
+      "definition": "Local causal rules for capability, reviewer independence, protected paths, recovery, and rejection.",
+      "id": 16,
+      "invariant": "Control decisions are separately digested and replay-verifiable.",
+      "level": "direction-dimensional-composite",
+      "name": "Control"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/hypergraph.ts",
+      "definition": "Global identity topology produced by the canonical hypergraph and portable capsule selection.",
+      "id": 17,
+      "invariant": "Equivalent topology has one canonical export digest.",
+      "level": "direction-dimensional-composite",
+      "name": "Space"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/ledger.ts",
+      "definition": "Global continuity from genesis to current ledger head and deterministic KSM cycles.",
+      "id": 18,
+      "invariant": "Current identity proves continuity to genesis or an authorized checkpoint.",
+      "level": "direction-dimensional-composite",
+      "name": "Time"
+    },
+    {
+      "artifact": "docs/core-self/CORE_SELF_BRIEF.md",
+      "definition": "Global law that experimental cognition proposes while policy and stewards authorize.",
+      "id": 19,
+      "invariant": "No experimental subsystem can become its own sole authorizer.",
+      "level": "direction-dimensional-composite",
+      "name": "Causality"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/contracts.ts",
+      "composite": "Structure",
+      "definition": "A registered subject",
+      "direction": "local",
+      "id": 20,
+      "invariant": "Every subject validates before registration",
+      "level": "coordinate-cell",
+      "name": "Local Structure Existence",
+      "organization": "Existence"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/contracts.ts",
+      "composite": "Structure",
+      "definition": "Immutable and mutable identity layers",
+      "direction": "local",
+      "id": 21,
+      "invariant": "Immutable and mutable layers cannot be confused by ordinary patches",
+      "level": "coordinate-cell",
+      "name": "Local Structure Distinction",
+      "organization": "Distinction"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/contracts.ts",
+      "composite": "Structure",
+      "definition": "Independent subject kinds",
+      "direction": "local",
+      "id": 22,
+      "invariant": "Distinct subject IDs remain non-aliased",
+      "level": "coordinate-cell",
+      "name": "Local Structure Disjunction",
+      "organization": "Disjunction"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/contracts.ts",
+      "composite": "Structure",
+      "definition": "Role-labelled relation endpoints",
+      "direction": "local",
+      "id": 23,
+      "invariant": "Endpoint roles are unique within a relation",
+      "level": "coordinate-cell",
+      "name": "Local Structure Conjunction",
+      "organization": "Conjunction"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/contracts.ts",
+      "composite": "Structure",
+      "definition": "Subject-to-relation topology",
+      "direction": "local",
+      "id": 24,
+      "invariant": "Graph edges reference registered subjects",
+      "level": "coordinate-cell",
+      "name": "Local Structure Transition",
+      "organization": "Transition"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/contracts.ts",
+      "composite": "Structure",
+      "definition": "A schema-closed subject record",
+      "direction": "local",
+      "id": 25,
+      "invariant": "Unknown fields and versions fail closed at the boundary",
+      "level": "coordinate-cell",
+      "name": "Local Structure Closure",
+      "organization": "Closure"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/contracts.ts",
+      "composite": "Structure",
+      "definition": "Nested identity subjects across scales",
+      "direction": "local",
+      "id": 26,
+      "invariant": "Nested subjects retain stable IDs and provenance",
+      "level": "coordinate-cell",
+      "name": "Local Structure Recursion",
+      "organization": "Recursion"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/ledger.ts",
+      "composite": "Process",
+      "definition": "A submitted proposal",
+      "direction": "local",
+      "id": 27,
+      "invariant": "Submission leaves projected state unchanged",
+      "level": "coordinate-cell",
+      "name": "Local Process Existence",
+      "organization": "Existence"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/ledger.ts",
+      "composite": "Process",
+      "definition": "Proposal versus accepted event",
+      "direction": "local",
+      "id": 28,
+      "invariant": "Acceptance creates a new record rather than changing proposal status",
+      "level": "coordinate-cell",
+      "name": "Local Process Distinction",
+      "organization": "Distinction"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/ledger.ts",
+      "composite": "Process",
+      "definition": "Independent observation streams",
+      "direction": "local",
+      "id": 29,
+      "invariant": "Observation streams remain independently attributable",
+      "level": "coordinate-cell",
+      "name": "Local Process Disjunction",
+      "organization": "Disjunction"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/ledger.ts",
+      "composite": "Process",
+      "definition": "Proposal plus evidence plus decision",
+      "direction": "local",
+      "id": 30,
+      "invariant": "All acceptance inputs are digest-bound",
+      "level": "coordinate-cell",
+      "name": "Local Process Conjunction",
+      "organization": "Conjunction"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/ledger.ts",
+      "composite": "Process",
+      "definition": "Reducer preflight to ledger append",
+      "direction": "local",
+      "id": 31,
+      "invariant": "Append occurs only after successful projection",
+      "level": "coordinate-cell",
+      "name": "Local Process Transition",
+      "organization": "Transition"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/ledger.ts",
+      "composite": "Process",
+      "definition": "A complete accepted-event transaction",
+      "direction": "local",
+      "id": 32,
+      "invariant": "A transaction either completes wholly or does not alter history",
+      "level": "coordinate-cell",
+      "name": "Local Process Closure",
+      "organization": "Closure"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/ledger.ts",
+      "composite": "Process",
+      "definition": "Replay from genesis",
+      "direction": "local",
+      "id": 33,
+      "invariant": "Replay reproduces head and state digests",
+      "level": "coordinate-cell",
+      "name": "Local Process Recursion",
+      "organization": "Recursion"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/policy.ts",
+      "composite": "Control",
+      "definition": "A policy decision",
+      "direction": "local",
+      "id": 34,
+      "invariant": "Every acceptance references one valid decision",
+      "level": "coordinate-cell",
+      "name": "Local Control Existence",
+      "organization": "Existence"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/policy.ts",
+      "composite": "Control",
+      "definition": "Allowed versus denied capability",
+      "direction": "local",
+      "id": 35,
+      "invariant": "Actors cannot exercise unregistered capability",
+      "level": "coordinate-cell",
+      "name": "Local Control Distinction",
+      "organization": "Distinction"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/policy.ts",
+      "composite": "Control",
+      "definition": "Independent reviewer authorities",
+      "direction": "local",
+      "id": 36,
+      "invariant": "The proposer cannot be its sole reviewer",
+      "level": "coordinate-cell",
+      "name": "Local Control Disjunction",
+      "organization": "Disjunction"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/policy.ts",
+      "composite": "Control",
+      "definition": "Conjunctive acceptance gates",
+      "direction": "local",
+      "id": 37,
+      "invariant": "Every required policy condition must pass",
+      "level": "coordinate-cell",
+      "name": "Local Control Conjunction",
+      "organization": "Conjunction"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/policy.ts",
+      "composite": "Control",
+      "definition": "Protected or recovery authorization",
+      "direction": "local",
+      "id": 38,
+      "invariant": "Sensitive transitions require the declared higher mode",
+      "level": "coordinate-cell",
+      "name": "Local Control Transition",
+      "organization": "Transition"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/policy.ts",
+      "composite": "Control",
+      "definition": "A closed immutable-core boundary",
+      "direction": "local",
+      "id": 39,
+      "invariant": "Protected paths reject standard mutation",
+      "level": "coordinate-cell",
+      "name": "Local Control Closure",
+      "organization": "Closure"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/policy.ts",
+      "composite": "Control",
+      "definition": "Evidence-aware policy evolution",
+      "direction": "local",
+      "id": 40,
+      "invariant": "Policy evolution remains versioned and proposal-driven",
+      "level": "coordinate-cell",
+      "name": "Local Control Recursion",
+      "organization": "Recursion"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/hypergraph.ts",
+      "composite": "Space",
+      "definition": "The root identity vertex",
+      "direction": "global",
+      "id": 41,
+      "invariant": "The root vertex exists in every valid projection",
+      "level": "coordinate-cell",
+      "name": "Global Space Existence",
+      "organization": "Existence"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/hypergraph.ts",
+      "composite": "Space",
+      "definition": "Included versus external subjects",
+      "direction": "global",
+      "id": 42,
+      "invariant": "Capsules explicitly name included subjects",
+      "level": "coordinate-cell",
+      "name": "Global Space Distinction",
+      "organization": "Distinction"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/hypergraph.ts",
+      "composite": "Space",
+      "definition": "Independent identity neighborhoods",
+      "direction": "global",
+      "id": 43,
+      "invariant": "Neighborhoods preserve stable boundaries",
+      "level": "coordinate-cell",
+      "name": "Global Space Disjunction",
+      "organization": "Disjunction"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/hypergraph.ts",
+      "composite": "Space",
+      "definition": "Connected typed hyperedges",
+      "direction": "global",
+      "id": 44,
+      "invariant": "Hyperedges reject missing endpoints",
+      "level": "coordinate-cell",
+      "name": "Global Space Conjunction",
+      "organization": "Conjunction"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/hypergraph.ts",
+      "composite": "Space",
+      "definition": "Traversal across identity neighborhoods",
+      "direction": "global",
+      "id": 45,
+      "invariant": "Traversal order is deterministic",
+      "level": "coordinate-cell",
+      "name": "Global Space Transition",
+      "organization": "Transition"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/hypergraph.ts",
+      "composite": "Space",
+      "definition": "A capsule-selected closed graph",
+      "direction": "global",
+      "id": 46,
+      "invariant": "Selected relations cannot reference omitted subjects",
+      "level": "coordinate-cell",
+      "name": "Global Space Closure",
+      "organization": "Closure"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/hypergraph.ts",
+      "composite": "Space",
+      "definition": "Self-similar subject graphs across scopes",
+      "direction": "global",
+      "id": 47,
+      "invariant": "Recursive graphs preserve the same endpoint rules",
+      "level": "coordinate-cell",
+      "name": "Global Space Recursion",
+      "organization": "Recursion"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/ledger.ts",
+      "composite": "Time",
+      "definition": "The genesis event",
+      "direction": "global",
+      "id": 48,
+      "invariant": "Genesis is the first and only null-parent event",
+      "level": "coordinate-cell",
+      "name": "Global Time Existence",
+      "organization": "Existence"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/ledger.ts",
+      "composite": "Time",
+      "definition": "Before versus after ledger heads",
+      "direction": "global",
+      "id": 49,
+      "invariant": "Every transition changes the head digest",
+      "level": "coordinate-cell",
+      "name": "Global Time Distinction",
+      "organization": "Distinction"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/ledger.ts",
+      "composite": "Time",
+      "definition": "Concurrent proposals on one head",
+      "direction": "global",
+      "id": 50,
+      "invariant": "Only one branch extends the accepted head and others quarantine",
+      "level": "coordinate-cell",
+      "name": "Global Time Disjunction",
+      "organization": "Disjunction"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/ledger.ts",
+      "composite": "Time",
+      "definition": "One accepted total order",
+      "direction": "global",
+      "id": 51,
+      "invariant": "Accepted events replay in one recorded order",
+      "level": "coordinate-cell",
+      "name": "Global Time Conjunction",
+      "organization": "Conjunction"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/ledger.ts",
+      "composite": "Time",
+      "definition": "Stage transition event",
+      "direction": "global",
+      "id": 52,
+      "invariant": "Stage changes are attributable to accepted events",
+      "level": "coordinate-cell",
+      "name": "Global Time Transition",
+      "organization": "Transition"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/ledger.ts",
+      "composite": "Time",
+      "definition": "An authorized checkpoint",
+      "direction": "global",
+      "id": 53,
+      "invariant": "Recovery checkpoints require steward authorization",
+      "level": "coordinate-cell",
+      "name": "Global Time Closure",
+      "organization": "Closure"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/ledger.ts",
+      "composite": "Time",
+      "definition": "Repeated KSM and replay cycles",
+      "direction": "global",
+      "id": 54,
+      "invariant": "Repeated cycles consume accepted evidence rather than hidden state",
+      "level": "coordinate-cell",
+      "name": "Global Time Recursion",
+      "organization": "Recursion"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/projector.ts",
+      "composite": "Causality",
+      "definition": "One evidence-backed claim",
+      "direction": "global",
+      "id": 55,
+      "invariant": "Every canonical claim names inspectable evidence",
+      "level": "coordinate-cell",
+      "name": "Global Causality Existence",
+      "organization": "Existence"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/projector.ts",
+      "composite": "Causality",
+      "definition": "Observation versus authority",
+      "direction": "global",
+      "id": 56,
+      "invariant": "Observations cannot authorize themselves",
+      "level": "coordinate-cell",
+      "name": "Global Causality Distinction",
+      "organization": "Distinction"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/projector.ts",
+      "composite": "Causality",
+      "definition": "Independent causal evidence channels",
+      "direction": "global",
+      "id": 57,
+      "invariant": "Causal channels retain source provenance",
+      "level": "coordinate-cell",
+      "name": "Global Causality Disjunction",
+      "organization": "Disjunction"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/projector.ts",
+      "composite": "Causality",
+      "definition": "Evidence plus policy plus reducer result",
+      "direction": "global",
+      "id": 58,
+      "invariant": "Canonical change requires all causal gates",
+      "level": "coordinate-cell",
+      "name": "Global Causality Conjunction",
+      "organization": "Conjunction"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/projector.ts",
+      "composite": "Causality",
+      "definition": "Temporal-credit-informed proposal",
+      "direction": "global",
+      "id": 59,
+      "invariant": "Temporal credit changes proposal guidance but not authority",
+      "level": "coordinate-cell",
+      "name": "Global Causality Transition",
+      "organization": "Transition"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/projector.ts",
+      "composite": "Causality",
+      "definition": "A closed governance feedback loop",
+      "direction": "global",
+      "id": 60,
+      "invariant": "Feedback terminates in a policy decision and accepted event or rejection",
+      "level": "coordinate-cell",
+      "name": "Global Causality Closure",
+      "organization": "Closure"
+    },
+    {
+      "artifact": "packages/core/src/core-self/kernel/projector.ts",
+      "composite": "Causality",
+      "definition": "Autognosis evolving its own evidence model",
+      "direction": "global",
+      "id": 61,
+      "invariant": "Meta-evolution remains bounded by the same constitutional rule",
+      "level": "coordinate-cell",
+      "name": "Global Causality Recursion",
+      "organization": "Recursion"
+    }
+  ],
+  "domain": "DeltEcho deterministic core self",
+  "schema_version": "1.0.0"
+}

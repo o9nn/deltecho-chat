@@ -10,9 +10,14 @@
   },
 
   // Container configuration
-  // Dockerfile is at repo root
+  // Workers Builds deploys this file onto live script deltecho-chat-preview.
+  // That script's remote binding is DeltEchoContainer. Do not rename it to
+  // DeltEchoApp: Cloudflare API 10074 rejects renaming onto a class that
+  // existing Durable Objects already depend on. Keep exporting DeltEchoApp
+  // from worker.ts so leftover App instances do not 10064.
   "containers": [
     {
+      "name": "deltecho-chat-production-deltechoapp",
       "class_name": "DeltEchoContainer",
       "image": "./Dockerfile.cloudflare",
       "max_instances": 10,
@@ -31,7 +36,8 @@
     ]
   },
 
-  // Required migration for Durable Objects with SQLite
+  // v1 created DeltEchoContainer on this script. Do not add a v2 rename
+  // from DeltEchoContainer to DeltEchoApp.
   "migrations": [
     {
       "tag": "v1",

@@ -16,7 +16,11 @@
     "check:types": "tsc --noEmit",
     "clean": "rm -rf dist",
     "test": "jest --runInBand --forceExit",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "train:melody-atlas": "node ./scripts/train-melody-atlas.mjs",
+    "index:mesh-map": "node ./scripts/index-mesh-map.mjs",
+    "index:tile-map": "WRITE_TILE_MAP=1 jest --runInBand --forceExit src/__tests__/tile-map.test.ts",
+    "bake:identity-models": "node --experimental-strip-types ./scripts/bake-identity-models.mjs"
   },
   "keywords": [
     "avatar",

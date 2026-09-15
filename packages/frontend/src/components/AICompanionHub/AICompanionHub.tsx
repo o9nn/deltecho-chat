@@ -33,13 +33,25 @@ import {
   MemoryBrowser,
 } from "@deltecho/ui-components";
 import type { UnifiedCognitiveState, Atom } from "@deltecho/cognitive";
+import {
+  LIVE_AVATAR_EXPRESSION,
+  isMiaraCubismExpressionName,
+  resolveAvatarExpression,
+  applyIdentityLook,
+  mergeIdentityHiddenGroups,
+  resolveMiaraOutfit,
+} from "@deltecho/avatar";
 import { Live2DAvatar } from "./Live2DAvatar";
 import type {
   Live2DAvatarController,
-  Expression,
   AvatarMotion,
   EmotionalVector,
 } from "./Live2DAvatar";
+import { AvatarIdentityPicker } from "../DeepTreeEchoBot/AvatarIdentityPicker";
+import { AutomeshStudio } from "../DeepTreeEchoBot/AutomeshStudio";
+import { MiaraExpressionPicker } from "../DeepTreeEchoBot/MiaraExpressionPicker";
+import { MiaraOutfitPicker } from "../DeepTreeEchoBot/MiaraOutfitPicker";
+import { useDeepTreeEchoAvatarOptional } from "../DeepTreeEchoBot/DeepTreeEchoAvatarContext";
 import "./Live2DAvatar.scss";
 
 // Companion Card Component
@@ -182,6 +194,7 @@ const AICompanionHubContent: React.FC = () => {
     | "create"
     | "cognitive"
     | "avatar"
+    | "automesh"
     | "calibration"
   >("chat");
   const [_isCreatingCompanion, _setIsCreatingCompanion] = useState(false);
@@ -191,9 +204,48 @@ const AICompanionHubContent: React.FC = () => {
   const [avatarController, setAvatarController] =
     useState<Live2DAvatarController | null>(null);
   const [avatarLoaded, setAvatarLoaded] = useState(false);
-  const [currentExpression, setCurrentExpression] =
-    useState<Expression>("neutral");
   const [avatarAudioLevel, setAvatarAudioLevel] = useState(0);
+  const avatarContext = useDeepTreeEchoAvatarOptional();
+  const resolvedOutfit = resolveMiaraOutfit({
+    id: avatarContext?.state.config.outfit,
+    hiddenGroups: avatarContext?.state.config.outfitHiddenGroups,
+    hueShift: avatarContext?.state.config.outfitHueShift,
+  });
+  const lockedExpression = resolveAvatarExpression(
+    avatarContext?.state.config.expression,
+  );
+  const expressionLocked = lockedExpression !== LIVE_AVATAR_EXPRESSION;
+  const manualExpression = isMiaraCubismExpressionName(lockedExpression)
+    ? lockedExpression
+    : undefined;
+  const storedHue = avatarContext?.state.config.outfitHueShift;
+  const identityHidden = mergeIdentityHiddenGroups(
+    avatarContext?.state.config.identity,
+    resolvedOutfit.hiddenGroups,
+  );
+  const miaraOutfit =
+    typeof storedHue === "number"
+      ? {
+          ...resolvedOutfit,
+          hiddenGroups: identityHidden,
+          hueShift: storedHue,
+        }
+      : { ...resolvedOutfit, hiddenGroups: identityHidden };
+
+  useEffect(() => {
+    if (!avatarController) return;
+    applyIdentityLook(
+      avatarController,
+      avatarContext?.state.config.identity,
+      avatarContext?.state.config.automeshAtlas,
+      avatarContext?.state.config.automeshMapping?.parameters,
+    );
+  }, [
+    avatarController,
+    avatarContext?.state.config.automeshAtlas,
+    avatarContext?.state.config.automeshMapping?.parameters,
+    avatarContext?.state.config.identity,
+  ]);
 
   // Simulate real-time cognitive state updates
   useEffect(() => {
@@ -486,6 +538,14 @@ const AICompanionHubContent: React.FC = () => {
                   </button>
                   <button
                     type="button"
+                    className={`tab ${view === "automesh" ? "active" : ""}`}
+                    onClick={() => setView("automesh")}
+                  >
+                    <Sparkles size={18} />
+                    <span>Automesh</span>
+                  </button>
+                  <button
+                    type="button"
                     className={`tab ${view === "calibration" ? "active" : ""}`}
                     onClick={() => setView("calibration")}
                   >
@@ -667,60 +727,36 @@ const AICompanionHubContent: React.FC = () => {
                 </div>
                 <div className="avatar-display-container">
                   <Live2DAvatar
-                    model="miara"
+                    model={avatarContext?.state.config.model ?? "miara"}
                     width={320}
                     height={320}
                     scale={0.3}
                     emotionalState={
-                      cognitiveState?.emotionalState as
-                        | EmotionalVector
-                        | undefined
+                      expressionLocked
+                        ? undefined
+                        : (cognitiveState?.emotionalState as
+                            | EmotionalVector
+                            | undefined)
                     }
                     audioLevel={avatarAudioLevel}
+                    outfit={miaraOutfit}
+                    manualExpression={manualExpression}
                     onLoad={() => setAvatarLoaded(true)}
                     onError={(err) => console.error("Avatar error:", err)}
-                    onControllerReady={setAvatarController}
+                    onControllerReady={(controller) => {
+                      setAvatarController(controller);
+                      applyIdentityLook(
+                        controller,
+                        avatarContext?.state.config.identity,
+                        avatarContext?.state.config.automeshAtlas,
+                        avatarContext?.state.config.automeshMapping?.parameters,
+                      );
+                    }}
                   />
                 </div>
-                <div className="avatar-controls">
-                  <div className="expression-buttons">
-                    {(
-                      [
-                        "neutral",
-                        "happy",
-                        "surprised",
-                        "curious",
-                        "concerned",
-                        "focused",
-                      ] as Expression[]
-                    ).map((expr) => (
-                      <button
-                        type="button"
-                        key={expr}
-                        className={`expression-btn ${
-                          currentExpression === expr ? "active" : ""
-                        }`}
-                        onClick={() => {
-                          setCurrentExpression(expr);
-                          avatarController?.setExpression(expr, 0.8);
-                        }}
-                      >
-                        {expr === "neutral"
-                          ? "😐"
-                          : expr === "happy"
-                            ? "😊"
-                            : expr === "surprised"
-                              ? "😲"
-                              : expr === "curious"
-                                ? "🤔"
-                                : expr === "concerned"
-                                  ? "😟"
-                                  : "🎯"}{" "}
-                        {expr}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+                <AvatarIdentityPicker variant="panel" />
+                <MiaraOutfitPicker variant="panel" />
+                <MiaraExpressionPicker variant="panel" />
               </div>
               <div className="avatar-motion-section">
                 <h4>Motions</h4>
@@ -770,6 +806,8 @@ const AICompanionHubContent: React.FC = () => {
                 </div>
               </div>
             </div>
+          ) : view === "automesh" ? (
+            <AutomeshStudio />
           ) : view === "calibration" ? (
             <VideoCalibrationLab />
           ) : null}

@@ -13,6 +13,22 @@ import React, {
   useCallback,
   useEffect,
 } from "react";
+import {
+  DEFAULT_AVATAR_IDENTITY_ID,
+  DEFAULT_MIARA_OUTFIT_ID,
+  LIVE_AVATAR_EXPRESSION,
+  identityHasBakedLook,
+  mergeIdentityHiddenGroups,
+  resolveAvatarExpression,
+  resolveAvatarIdentity,
+  resolveAutomeshMapping,
+  resolveMiaraOutfit,
+  type AutomeshMapping,
+  type AvatarExpressionId,
+  type AvatarIdentityId,
+  type MiaraOutfitId,
+  type MiaraPartGroup,
+} from "@deltecho/avatar";
 import type { Live2DAvatarController } from "../AICompanionHub/Live2DAvatar";
 import { getLogger } from "@deltachat-desktop/shared/logger";
 import { registerAvatarStateControl } from "./AvatarStateManager";
@@ -37,6 +53,13 @@ export interface AvatarConfig {
   width: number;
   height: number;
   model: string;
+  identity: AvatarIdentityId;
+  outfit: MiaraOutfitId;
+  outfitHiddenGroups: MiaraPartGroup[];
+  outfitHueShift: number;
+  automeshMapping: AutomeshMapping | null;
+  automeshAtlas: string | null;
+  expression: AvatarExpressionId;
 }
 
 // Avatar state
@@ -66,8 +89,51 @@ const DEFAULT_AVATAR_CONFIG: AvatarConfig = {
   position: "floating",
   width: 300,
   height: 300,
-  model: "miara",
+  model: DEFAULT_AVATAR_IDENTITY_ID,
+  identity: DEFAULT_AVATAR_IDENTITY_ID,
+  outfit: DEFAULT_MIARA_OUTFIT_ID,
+  outfitHiddenGroups: [],
+  outfitHueShift: 0,
+  automeshMapping: null,
+  automeshAtlas: null,
+  expression: LIVE_AVATAR_EXPRESSION,
 };
+
+function resolveAutomeshAtlas(value: unknown): string | null {
+  if (typeof value !== "string" || value.length === 0) return null;
+  if (value.startsWith("data:image/")) return value;
+  if (value.startsWith("./images/") || value.startsWith("images/")) {
+    return value;
+  }
+  return null;
+}
+
+function sanitizeAvatarConfig(
+  config: Partial<AvatarConfig> | null | undefined,
+): Partial<AvatarConfig> {
+  if (!config || typeof config !== "object") return {};
+  const identity = resolveAvatarIdentity(config.identity);
+  const resolved = resolveMiaraOutfit({
+    id: config.outfit,
+    hiddenGroups: config.outfitHiddenGroups,
+    hueShift: config.outfitHueShift,
+  });
+  return {
+    ...config,
+    identity,
+    model: identity,
+    outfit: resolved.id,
+    outfitHiddenGroups: mergeIdentityHiddenGroups(
+      identity,
+      resolved.hiddenGroups,
+    ),
+    // Baked identity atlases already have their color; do not hue-rotate them.
+    outfitHueShift: identityHasBakedLook(identity) ? 0 : resolved.hueShift,
+    automeshMapping: resolveAutomeshMapping(config.automeshMapping),
+    automeshAtlas: resolveAutomeshAtlas(config.automeshAtlas),
+    expression: resolveAvatarExpression(config.expression),
+  };
+}
 
 // Default avatar state
 const DEFAULT_AVATAR_STATE: AvatarState = {
@@ -97,7 +163,7 @@ export const DeepTreeEchoAvatarProvider: React.FC<{
         // Try to load saved avatar config from settings
         const savedConfig = localStorage.getItem("deepTreeEchoAvatarConfig");
         if (savedConfig) {
-          const config = JSON.parse(savedConfig);
+          const config = sanitizeAvatarConfig(JSON.parse(savedConfig));
           setState((prev) => ({
             ...prev,
             config: { ...prev.config, ...config },
@@ -159,7 +225,10 @@ export const DeepTreeEchoAvatarProvider: React.FC<{
   const updateConfig = useCallback((configUpdate: Partial<AvatarConfig>) => {
     setState((prev) => ({
       ...prev,
-      config: { ...prev.config, ...configUpdate },
+      config: {
+        ...prev.config,
+        ...sanitizeAvatarConfig({ ...prev.config, ...configUpdate }),
+      },
     }));
   }, []);
 

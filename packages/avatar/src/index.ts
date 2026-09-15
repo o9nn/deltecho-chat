@@ -5,6 +5,139 @@
  * from emotional state and Live2D Cubism integration.
  */
 
+// Miara wardrobe
+export {
+  MIARA_OUTFIT_IDS,
+  DEFAULT_MIARA_OUTFIT_ID,
+  MIARA_PART_GROUPS,
+  MIARA_PART_GROUP_IDS,
+  ALL_MIARA_WARDROBE_PART_IDS,
+  MIARA_OUTFIT_PRESETS,
+  isMiaraOutfitId,
+  isMiaraPartGroup,
+  getMiaraOutfitPreset,
+  collectHiddenPartIds,
+  partIdMatchesHiddenGroups,
+  MIARA_PART_GROUP_MATCHERS,
+  resolveMiaraOutfit,
+  finalizeMiaraOutfit,
+  outfitFromCustomAdjustments,
+  type MiaraOutfitId,
+  type MiaraPartGroup,
+  type MiaraOutfitSpec,
+  type MiaraOutfitState,
+} from "./miara-outfits";
+
+export {
+  MIARA_CUBISM_EXPRESSION_NAMES,
+  MIARA_EXPRESSION_MAP,
+  isMiaraCubismExpressionName,
+  cubismExpressionFile,
+  LIVE_AVATAR_EXPRESSION,
+  AVATAR_EXPRESSION_CHOICES,
+  resolveAvatarExpression,
+  type MiaraCubismExpressionName,
+  type AvatarExpressionId,
+  type AvatarExpressionChoice,
+} from "./miara-expressions";
+
+export {
+  AUTOMESH_LANDMARK_IDS,
+  AUTOMESH_MAPPING_VERSION,
+  MELODY_AUTOMESH_LANDMARKS,
+  MELODY_PORTRAIT_LANDMARKS,
+  MELODY_PARAMETER_PROFILE,
+  cloneMelodyLandmarks,
+  projectPhotoOntoAtlas,
+  isAutomeshLandmarkId,
+  mapPoint,
+  warpRasterToAtlas,
+  punchOpaqueBackground,
+  rasterToDataUrl,
+  assignAtlasFromDrawables,
+  uvCentroid,
+  uvIsland,
+  isEnvironmentDrawable,
+  figureFromDrawables,
+  trainAutomeshMapping,
+  resolveAutomeshMapping,
+  mappingResidual,
+  fitSimilarity,
+  applySimilarity,
+  cubismEditorRequest,
+  parseCubismEditorMessage,
+  cubismEditorUrl,
+  CubismEditorBridge,
+  createBrowserCubismEditorBridge,
+  CUBISM_EDITOR_DEFAULT_PORT,
+  type Point2,
+  type AutomeshLandmarkId,
+  type AutomeshLandmark,
+  type AutomeshDrawable,
+  type AutomeshMapping,
+  type AutomeshRaster,
+  buildIdentityMeshMap,
+  classifyDrawable,
+  regionForDrawable,
+  type IdentityMeshMap,
+  type MeshRegion,
+  DEFAULT_MELODY_POSE_ID,
+  MELODY_POSES,
+  MELODY_POSE_IDS,
+  isMelodyPoseId,
+  parametersForMelodyPose,
+  poseForExpression,
+  poseForMotion,
+  resolveMelodyPose,
+  serializeMelodyPoseMap,
+  MELODY_AVATAR_MESH_MAP,
+  MESH_TILE_MAP_VERSION,
+  TILE_SEGMENTS,
+  buildIdentityTileMap,
+  tileForDrawable,
+  tilesForChain,
+  tilesForParameter,
+  serializeMelodyTileMap,
+  mesh3dGroupsForRegion,
+  live2dRegionsForMesh3d,
+  resolveAvatarMeshMap,
+  type MelodyPose,
+  type MelodyPoseId,
+  type IdentityAvatarMeshMap,
+  type IdentityTileMap,
+  type MelodyMesh3dGroup,
+  type MeshTile,
+  type TileSegment,
+} from "./automesh";
+
+export {
+  AVATAR_IDENTITY_IDS,
+  DEFAULT_AVATAR_IDENTITY_ID,
+  IDENTITY_MODEL3_PATHS,
+  SHIPPED_MELODY_ATLAS,
+  AVATAR_IDENTITIES,
+  isAvatarIdentityId,
+  getAvatarIdentity,
+  resolveAvatarIdentity,
+  lookForAvatarIdentity,
+  applyAvatarIdentity,
+  applyIdentityLook,
+  defaultAtlasForIdentity,
+  extraHiddenGroupsForIdentity,
+  identityHasBakedLook,
+  mergeIdentityHiddenGroups,
+  modelForAvatarIdentity,
+  model3PathForAvatarIdentity,
+  identityModel3Path,
+  resolveIdentityOverlay,
+  resolveIdentityParameters,
+  resolveIdentityRig,
+  type AvatarIdentityId,
+  type AvatarIdentitySpec,
+  type IdentityLookController,
+  type IdentityRig,
+} from "./avatar-identities";
+
 // Types
 export {
   Expression,
@@ -101,3 +234,81 @@ export {
   type EntelechyInput,
   type ESNAvatarBridgeConfig,
 } from "./esn-avatar-bridge";
+
+// Self-Model Avatar Feedback (Loop 4: perceive → correct → self-model)
+export {
+  SelfModelAvatarFeedback,
+  selfModelAvatarFeedback,
+  type CubismParamSnapshot,
+  type ExpressionExperience,
+  type CanonicalCoreSelfExpressionContext,
+  type ProjectionCalibration,
+  type SelfModelFeedbackConfig,
+} from "./self-model-avatar-feedback";
+
+// Chaotic Micro-Expression Layer (Lorenz attractor-driven organic roughness)
+export {
+  ChaoticMicroExpressionLayer,
+  type EndocrineInput as ChaoticEndocrineInput,
+  type MicroExpressionDeltas,
+  type LorenzState,
+  type PlayfulMicroGesture,
+} from "./chaotic-micro-expression-layer";
+
+// Signature Gesture Controller (DTE identity echo across modes)
+export {
+  SignatureGestureController,
+  type SignatureGestureState,
+  type SignatureGestureOverlay,
+  type SignatureGestureConfig,
+} from "./signature-gesture-controller";
+
+// CogMorph Glyph → Cubism Parameter Mapper (visual self-representation)
+export {
+  CogMorphCubismMapper,
+  type CogMorphGlyphState,
+  type CogMorphCubismOverlay,
+  type CogMorphCubismConfig,
+} from "./cogmorph-cubism-mapper";
+
+// Meshy3D Avatar Bridge (3D model generation from cognitive state)
+export {
+  Meshy3DAvatarBridge,
+  type Meshy3DConfig,
+  type AvatarStateSnapshot,
+  type Meshy3DTask,
+  type GenerationResult,
+} from "./meshy3d-avatar-bridge";
+
+// Emotional Inertia Controller (smooth transitions + cognitive load speed + idle fidgets)
+export {
+  EmotionalInertiaController,
+  emotionalInertiaController,
+  type EmotionInertiaProfile,
+  type CognitiveLoadSpeedConfig,
+  type IdleFidgetConfig,
+  type EmotionalInertiaConfig,
+  type InertiaOutput,
+  type FidgetDeltas,
+  DEFAULT_EMOTIONAL_INERTIA_CONFIG,
+} from "./emotional-inertia-controller";
+
+// Resonance Cascade Visual Conductor (Scientific Genius → Avatar eureka effects)
+export {
+  ResonanceCascadeConductor,
+  resonanceCascadeConductor,
+  type CascadeInput,
+  type CrystalInput,
+  type CascadeOverlay,
+  type CascadeConductorConfig,
+} from "./resonance-cascade-conductor";
+
+// Metabolic Avatar Bridge (ConceptualMetabolism → avatar visual parameters)
+export {
+  MetabolicAvatarBridge,
+  metabolicAvatarBridge,
+  type MetabolicVisualInput,
+  type MetabolicAvatarDeltas,
+  type MetabolicAvatarBridgeConfig,
+  DEFAULT_METABOLIC_AVATAR_CONFIG,
+} from "./metabolic-avatar-bridge";

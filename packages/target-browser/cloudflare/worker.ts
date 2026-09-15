@@ -65,6 +65,18 @@ export class DeltEchoContainer extends Container {
   }
 }
 
+/**
+ * Legacy Durable Object export retained for migration compatibility.
+ *
+ * Some existing objects still depend on `DeltEchoApp`. Cloudflare rejects a
+ * worker version that drops that export (error 10064). The git-connected
+ * `deltecho-chat-preview` script binds `DeltEchoContainer`; do not rename
+ * Container onto App (error 10074). GitHub Actions PR previews
+ * (`deltecho-chat-preview-preview`) bind `DeltEchoApp` with a separate
+ * v1 namespace.
+ */
+export class DeltEchoApp extends DeltEchoContainer {}
+
 // Fixed container ID for shared instance mode
 // All users share the same container in preview mode
 const SHARED_CONTAINER_ID = "deltecho-shared-preview";

@@ -5,7 +5,21 @@
  * cognitive and emotional state of the Deep Tree Echo AI companion.
  */
 
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+  useMemo,
+} from "react";
+import {
+  LIVE_AVATAR_EXPRESSION,
+  isMiaraCubismExpressionName,
+  resolveAvatarExpression,
+  applyIdentityLook,
+  mergeIdentityHiddenGroups,
+  resolveMiaraOutfit,
+} from "@deltecho/avatar";
 import { Live2DAvatar } from "../AICompanionHub/Live2DAvatar";
 import type {
   Live2DAvatarController,
@@ -14,6 +28,9 @@ import type {
   EmotionalVector,
   CognitiveVisualState,
 } from "../AICompanionHub/Live2DAvatar";
+import { AvatarIdentityPicker } from "./AvatarIdentityPicker";
+import { MiaraExpressionPicker } from "./MiaraExpressionPicker";
+import { MiaraOutfitPicker } from "./MiaraOutfitPicker";
 import { getOrchestrator } from "./CognitiveBridge";
 import type { UnifiedCognitiveState } from "./CognitiveBridge";
 import {
@@ -33,14 +50,14 @@ function roundAvatarSignal(value: number | undefined): number {
 function getCognitiveStateSignature(
   cognitiveState: UnifiedCognitiveState | null,
 ): string {
-  if (!cognitiveState?.cognitiveContext) return "no-context";
+  if (!cognitiveState) return "no-state";
 
   const { cognitiveContext, persona, reasoning } = cognitiveState;
   return [
-    roundAvatarSignal(cognitiveContext.emotionalValence),
-    roundAvatarSignal(cognitiveContext.emotionalArousal),
-    roundAvatarSignal(cognitiveContext.salienceScore),
-    roundAvatarSignal(cognitiveContext.attentionWeight),
+    roundAvatarSignal(cognitiveContext?.emotionalValence),
+    roundAvatarSignal(cognitiveContext?.emotionalArousal),
+    roundAvatarSignal(cognitiveContext?.salienceScore),
+    roundAvatarSignal(cognitiveContext?.attentionWeight),
     roundAvatarSignal(
       cognitiveState.scientificGeniusVisualState?.scientificGenius,
     ),
@@ -48,7 +65,64 @@ function getCognitiveStateSignature(
       cognitiveState.scientificGeniusVisualState?.entelechyScore,
     ),
     roundAvatarSignal(cognitiveState.scientificGeniusVisualState?.freeEnergy),
+    roundAvatarSignal(cognitiveState.scientificGeniusVisualState?.daoConsensus),
+    roundAvatarSignal(cognitiveState.scientificGeniusVisualState?.esnCoherence),
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.autognosisResonance,
+    ),
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.embodimentAccuracy,
+    ),
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.embodimentError,
+    ),
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.embodimentConfidence,
+    ),
+    roundAvatarSignal(cognitiveState.scientificGeniusVisualState?.causalRigor),
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.falsificationPressure,
+    ),
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.epistemicSurprise,
+    ),
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.daoEvidenceConsensus,
+    ),
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.activeExperimentation,
+    ),
+    cognitiveState.scientificGeniusVisualState?.metabolic?.metabolicPhase ??
+      "no-metabolic-phase",
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.metabolic?.energyLevel,
+    ),
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.metabolic?.anabolicBalance,
+    ),
+    cognitiveState.scientificGeniusVisualState?.metabolic?.isEnergyCrisis ??
+      false,
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.metabolic
+        ?.myelinationProgress,
+    ),
+    roundAvatarSignal(
+      cognitiveState.scientificGeniusVisualState?.metabolic?.knowledgeDensity,
+    ),
     cognitiveState.scientificGeniusVisualState?.mode ?? "no-genius-mode",
+    cognitiveState.scientificGeniusVisualState?.coreSelf?.initialized ?? false,
+    cognitiveState.scientificGeniusVisualState?.coreSelf?.ledgerHead ??
+      "no-core-self-head",
+    cognitiveState.scientificGeniusVisualState?.coreSelf
+      ?.projectedStateDigest ?? "no-core-self-state",
+    cognitiveState.scientificGeniusVisualState?.coreSelf?.acceptedEventCount ??
+      0,
+    cognitiveState.scientificGeniusVisualState?.coreSelf
+      ?.pendingProposalCount ?? 0,
+    cognitiveState.scientificGeniusVisualState?.resonanceCascade?.id ??
+      "no-resonance-cascade",
+    cognitiveState.scientificGeniusVisualState?.resonanceCascade?.timestamp ??
+      0,
     persona?.currentMood ?? "unknown-mood",
     roundAvatarSignal(reasoning?.confidenceLevel),
     reasoning?.activeGoals?.length ?? 0,
@@ -284,19 +358,34 @@ function mapCognitiveStateToVisualState(
     entelechyScore: geniusSignal?.entelechyScore ?? 0,
     freeEnergy: geniusSignal?.freeEnergy ?? 0,
     daoConsensus:
-      geniusSignal?.entelechyScore ??
+      geniusSignal?.daoConsensus ??
       (consciousness?.phi ?? salience * 0.65) * 0.55 +
         (consciousness?.temporalCoherence ?? 0.6) * 0.45,
     esnCoherence:
+      geniusSignal?.esnCoherence ??
       geniusSignal?.flow ??
       consciousness?.flowState ??
       (processingState === BotProcessingState.THINKING
         ? 0.72
         : salience * 0.55),
     autognosisResonance:
+      geniusSignal?.autognosisResonance ??
       geniusSignal?.selfAwareness ??
       consciousness?.selfAwareness ??
       Math.max(0.35, salience * 0.7),
+    embodimentAccuracy: geniusSignal?.embodimentAccuracy ?? 0.5,
+    embodimentError: geniusSignal?.embodimentError ?? 0,
+    embodimentConfidence: geniusSignal?.embodimentConfidence ?? 0,
+    causalRigor: geniusSignal?.causalRigor ?? 0,
+    falsificationPressure:
+      geniusSignal?.falsificationPressure ?? geniusSignal?.freeEnergy ?? 0,
+    epistemicSurprise: geniusSignal?.epistemicSurprise ?? 0,
+    daoEvidenceConsensus:
+      geniusSignal?.daoEvidenceConsensus ?? geniusSignal?.daoConsensus ?? 0,
+    activeExperimentation: geniusSignal?.activeExperimentation ?? 0,
+    metabolic: geniusSignal?.metabolic,
+    coreSelf: geniusSignal?.coreSelf,
+    resonanceCascade: geniusSignal?.resonanceCascade,
     isProcessing:
       processingState === BotProcessingState.THINKING ||
       processingState === BotProcessingState.RESPONDING,
@@ -362,6 +451,26 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
       : configuredHeight;
   // Fill factor for contain-fit: the standing figure should fill the strip.
   const stripScale = fillsConversationStrip ? 0.97 : 0.92;
+  const outfit = useMemo(() => {
+    const resolved = resolveMiaraOutfit({
+      id: avatarContext?.state.config.outfit,
+      hiddenGroups: avatarContext?.state.config.outfitHiddenGroups,
+      hueShift: avatarContext?.state.config.outfitHueShift,
+    });
+    const hue = avatarContext?.state.config.outfitHueShift;
+    const hiddenGroups = mergeIdentityHiddenGroups(
+      avatarContext?.state.config.identity,
+      resolved.hiddenGroups,
+    );
+    return typeof hue === "number"
+      ? { ...resolved, hiddenGroups, hueShift: hue }
+      : { ...resolved, hiddenGroups };
+  }, [
+    avatarContext?.state.config.identity,
+    avatarContext?.state.config.outfit,
+    avatarContext?.state.config.outfitHiddenGroups,
+    avatarContext?.state.config.outfitHueShift,
+  ]);
 
   const avatarController = useRef<Live2DAvatarController | null>(null);
   const updateIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -419,10 +528,30 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
       nativeSizeTimersRef.current = [250, 700].map((delay) =>
         setTimeout(reportNativeSize, delay),
       );
+      controller.applyOutfit?.(outfit);
+      applyIdentityLook(
+        controller,
+        avatarContext?.state.config.identity,
+        avatarContext?.state.config.automeshAtlas,
+        avatarContext?.state.config.automeshMapping?.parameters,
+      );
       onReady?.();
     },
-    [onReady, onNativeSize, avatarContext],
+    [onReady, onNativeSize, avatarContext, outfit],
   );
+
+  useEffect(() => {
+    applyIdentityLook(
+      avatarController.current,
+      avatarContext?.state.config.identity,
+      avatarContext?.state.config.automeshAtlas,
+      avatarContext?.state.config.automeshMapping?.parameters,
+    );
+  }, [
+    avatarContext?.state.config.automeshAtlas,
+    avatarContext?.state.config.automeshMapping?.parameters,
+    avatarContext?.state.config.identity,
+  ]);
 
   // Update cognitive state from orchestrator. The avatar is a visual expression
   // layer, so it should follow meaningful cognitive drift rather than every raw
@@ -528,27 +657,51 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
     return null;
   }
 
+  const identity = avatarContext?.state.config.identity ?? "miara";
+  const lockedExpression = resolveAvatarExpression(
+    avatarContext?.state.config.expression,
+  );
+  const expressionLocked = lockedExpression !== LIVE_AVATAR_EXPRESSION;
   const containerClass = `deep-tree-echo-avatar-display ${className} ${
     finalPosition === "floating" ? "floating-avatar" : "inline-avatar"
   }`;
 
   return (
-    <div className={containerClass} ref={stripRef}>
+    <div
+      className={containerClass}
+      ref={stripRef}
+      data-identity={identity}
+      data-expression={lockedExpression}
+      data-testid="deep-tree-echo-avatar-display"
+    >
       <Live2DAvatar
         model={avatarContext?.state.config.model ?? "miara"}
         width={finalWidth}
         height={finalHeight}
         scale={stripScale}
         fillContainer={fillsConversationStrip}
-        emotionalState={emotionalVector}
-        cognitiveVisualState={cognitiveVisualState}
+        emotionalState={expressionLocked ? undefined : emotionalVector}
+        cognitiveVisualState={
+          expressionLocked ? undefined : cognitiveVisualState
+        }
         audioLevel={audioLevel}
         isSpeaking={isSpeaking}
+        outfit={outfit}
+        manualExpression={
+          isMiaraCubismExpressionName(lockedExpression)
+            ? lockedExpression
+            : undefined
+        }
         onControllerReady={handleAvatarReady}
         showLoading={true}
         showError={true}
         mode="live2d"
       />
+      <div className="avatar-look-controls">
+        <AvatarIdentityPicker variant="compact" />
+        <MiaraOutfitPicker variant="compact" />
+        <MiaraExpressionPicker variant="compact" />
+      </div>
       {processingState !== BotProcessingState.IDLE && (
         <div className="avatar-status-indicator">
           <span className={`status-badge status-${processingState}`}>

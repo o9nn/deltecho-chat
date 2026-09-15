@@ -1,0 +1,182 @@
+{
+  "version": 1,
+  "updatedAtMs": 1789431214086,
+  "localRootsChecked": [
+    "/home/ubuntu/.cursor/projects/workspace/agent-transcripts",
+    "/home/ubuntu/.cursor/projects"
+  ],
+  "localTranscripts": {},
+  "cloudAgents": {
+    "bc-2ffd32dd-8e13-5a0f-a6de-8b6ad16918e2": {
+      "name": "Feasibility plan review",
+      "updatedAtMs": 1787986638074,
+      "lastMessageActivityAtMs": 1787986373596,
+      "transcriptSha256": "a90300b4c32ea50e8a3410d594c084133a65d22d08c1fe84455ed228402fe66e",
+      "transcriptBytes": 413461,
+      "transcriptMtimeMs": 1789431022499,
+      "mined": true
+    },
+    "bc-4aad647d-d00a-5a2e-a5b9-6bf7d9c0bd0f": {
+      "name": "Adversarial plan review",
+      "updatedAtMs": 1787986605567,
+      "lastMessageActivityAtMs": 1787986373608,
+      "transcriptSha256": "02aa725e185745478e127485db8b94ca62cc62fdd756f5a759c31af488ea6a2a",
+      "transcriptBytes": 337227,
+      "transcriptMtimeMs": 1789431022011,
+      "mined": true
+    },
+    "bc-2d79099d-82fe-53f6-b608-ee07850123b1": {
+      "name": "Scope-guardian plan review",
+      "updatedAtMs": 1787986723299,
+      "lastMessageActivityAtMs": 1787986373612,
+      "transcriptSha256": "f2702c7cfa404136b605195190173e3119fc474a1dfdc56acd74a23034d21af5",
+      "transcriptBytes": 264021,
+      "transcriptMtimeMs": 1789431021583,
+      "mined": true
+    },
+    "bc-c546cc9e-aaf0-5ee0-8475-c46514c9315b": {
+      "name": "Quality review couple diff",
+      "updatedAtMs": 1787987486034,
+      "lastMessageActivityAtMs": 1787987401621,
+      "transcriptSha256": "560d026709a0deb5be1c5da13d73890a0348b529e6c705d254232f04e7a9b325",
+      "transcriptBytes": 217250,
+      "transcriptMtimeMs": 1789431020667,
+      "mined": true
+    },
+    "bc-70676c9f-6943-4224-a8b2-7ff4f605f96c": {
+      "name": "Deep tree autognosis autogenesis",
+      "updatedAtMs": 1789429274763,
+      "lastMessageActivityAtMs": 1789043807190,
+      "transcriptSha256": "cb50b940d9692eca5db91de8a62d81e2df7fa09d655edfa27c85e302ba7f801e",
+      "transcriptBytes": 9265969,
+      "transcriptMtimeMs": 1789431035403,
+      "mined": true
+    },
+    "bc-1d767866-6cdf-5642-8b1f-ce4efdf4d138": {
+      "name": "Product-lens plan review",
+      "updatedAtMs": 1787986578273,
+      "lastMessageActivityAtMs": 1787986373619,
+      "transcriptSha256": "4e3d3998c787826ddbaf5c2bb7ba4cc89e6b6a536df7e1751d825f13cd2ba090",
+      "transcriptBytes": 331524,
+      "transcriptMtimeMs": 1789431021315,
+      "mined": true
+    },
+    "bc-7c71af16-7858-5641-bbc6-c35b41fedbd8": {
+      "name": "Coherence plan review",
+      "updatedAtMs": 1787986636007,
+      "lastMessageActivityAtMs": 1787986373375,
+      "transcriptSha256": "68648e6e8a15a9dae82889b4cf8aae737abe1421aff1d28db04e962a8ade3a14",
+      "transcriptBytes": 79780,
+      "transcriptMtimeMs": 1789431022915,
+      "mined": true
+    },
+    "bc-3c6e61bd-c68f-590b-84a9-a97b5f5daac7": {
+      "name": "Reuse review couple diff",
+      "updatedAtMs": 1787987492244,
+      "lastMessageActivityAtMs": 1787987401650,
+      "transcriptSha256": "02315b5ba1b06e40814db34b2636dd6055c73660707f653b347529171f1526ca",
+      "transcriptBytes": 395632,
+      "transcriptMtimeMs": 1789431020803,
+      "mined": true
+    },
+    "bc-287e0052-12a3-5079-be77-ad2b075e459b": {
+      "name": "Efficiency review couple diff",
+      "updatedAtMs": 1787987472724,
+      "lastMessageActivityAtMs": 1787987402288,
+      "transcriptSha256": "7b17ae76322d1427aeb1d19c7fec91bd3b7e372bb7ea3f73523af694f1a75238",
+      "transcriptBytes": 117970,
+      "transcriptMtimeMs": 1789431020487,
+      "mined": true
+    },
+    "bc-ca829a3d-262a-58fa-8f0a-1d270df9e6ae": {
+      "name": "Investigate Workers Builds",
+      "updatedAtMs": 1787992925461,
+      "lastMessageActivityAtMs": 1787990493435,
+      "transcriptSha256": "ea5785216063761c40d2b137cac921c2278cbb78b6e8e0fc32d3d9ef4af8d0fd",
+      "transcriptBytes": 49914,
+      "transcriptMtimeMs": 1789431020547,
+      "mined": true
+    },
+    "bc-8e226105-d8e8-5381-806f-4fdacbc3e3b0": {
+      "name": "Investigate Workers Builds",
+      "updatedAtMs": 1787990349878,
+      "lastMessageActivityAtMs": 1787990270929,
+      "transcriptSha256": "0e5a2719b9ba9ab433ff833f3f5e4b136c8aefb0c97411a379c53cefa0ad5de6",
+      "transcriptBytes": 57399,
+      "transcriptMtimeMs": 1789431022139,
+      "mined": true
+    },
+    "bc-42e49922-34b6-5916-8580-9799b18939a5": {
+      "name": "Investigate Cloudflare deploy",
+      "updatedAtMs": 1787990300287,
+      "lastMessageActivityAtMs": 1787990271715,
+      "transcriptSha256": "fbd8242735355b29d2b9619b7e6e92e07d0304cb33620dabd9ad3df76d75e9d4",
+      "transcriptBytes": 58215,
+      "transcriptMtimeMs": 1789431021595,
+      "mined": true
+    },
+    "bc-f652a039-ad1c-51e2-9946-eb65f63b3d52": {
+      "name": "Investigate Cloudflare deploy",
+      "updatedAtMs": 1787990523605,
+      "lastMessageActivityAtMs": 1787990493424,
+      "transcriptSha256": "5277e7263ecb9ae8e57cd820881a659bb866160d6ea28f753e7aaa00a6402e4e",
+      "transcriptBytes": 32327,
+      "transcriptMtimeMs": 1789431021307,
+      "mined": true
+    },
+    "bc-a92962a4-c50c-5fde-b6e9-0dfad783c671": {
+      "name": "Investigate CI22 check",
+      "updatedAtMs": 1787990560650,
+      "lastMessageActivityAtMs": 1787990493018,
+      "transcriptSha256": "0fa47f0e842be71b75288393fec955ab67c2491aaadcd0be02a3956e3b5c32b1",
+      "transcriptBytes": 65788,
+      "transcriptMtimeMs": 1789431021351,
+      "mined": true
+    },
+    "bc-14ddcf8b-399f-56d2-8624-ce7ddf956238": {
+      "name": "CI Investigator",
+      "updatedAtMs": 1789043763427,
+      "lastMessageActivityAtMs": 1789043690090,
+      "transcriptSha256": "3a25370de21d41e1a54fbe73932de54ee949fc3c9b83106b6c9a2a4a883438db",
+      "transcriptBytes": 93417,
+      "transcriptMtimeMs": 1789431020691,
+      "mined": true
+    },
+    "bc-87a6fe0b-ed4b-53d8-b026-16b2abe93d85": {
+      "name": "Investigate CI22 check",
+      "updatedAtMs": 1787990341656,
+      "lastMessageActivityAtMs": 1787990271884,
+      "transcriptSha256": "e0429d74e0e6417c5ae76ce605327b9341bfcee5082eeac3619c39189a2a2af7",
+      "transcriptBytes": 137847,
+      "transcriptMtimeMs": 1789431021731,
+      "mined": true
+    },
+    "bc-5ab4be4f-9591-5565-9fab-c1e83dee817a": {
+      "name": "CI Investigator",
+      "updatedAtMs": 1789043787184,
+      "lastMessageActivityAtMs": 1789043689520,
+      "transcriptSha256": "0dbc87312c4d2e316e852a98e97bc65adda4a84ab4b391b420852ca6deb3b6a8",
+      "transcriptBytes": 111026,
+      "transcriptMtimeMs": 1789431020667,
+      "mined": true
+    },
+    "bc-f19a5e13-79c1-569b-9aa0-5b0f57ee01bc": {
+      "name": "CI Investigator",
+      "updatedAtMs": 1789043726086,
+      "lastMessageActivityAtMs": 1789043689586,
+      "transcriptSha256": "9752f045440fc0ff6eff6b3fb0d2d860317d04cc00aeebb94f295aa94276ada8",
+      "transcriptBytes": 55145,
+      "transcriptMtimeMs": 1789431020575,
+      "mined": true
+    },
+    "bc-faaa652b-c21a-4e68-a4c2-e4dcf88425fe": {
+      "name": "Continual learning orchestration",
+      "updatedAtMs": 1789430998850,
+      "lastMessageActivityAtMs": 1789430995983,
+      "transcriptSha256": null,
+      "transcriptBytes": null,
+      "transcriptMtimeMs": null,
+      "mined": false
+    }
+  }
+}

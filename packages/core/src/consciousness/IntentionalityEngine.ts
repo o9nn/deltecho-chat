@@ -197,6 +197,11 @@ export class IntentionalityEngine {
     return IntentionalityEngine.instance;
   }
 
+  /** Standing cap used by pruneOldGoals and by the autogenesis coupler. */
+  public get maxActiveGoals(): number {
+    return this.MAX_ACTIVE_GOALS;
+  }
+
   /**
    * Initialize the conative core with fundamental drives
    */

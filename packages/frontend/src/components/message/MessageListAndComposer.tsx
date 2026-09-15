@@ -15,9 +15,7 @@ import type ComposerMessageInput from "../composer/ComposerMessageInput";
 import { DesktopSettingsType } from "../../../../shared/shared-types";
 import { runtime } from "@deltachat-desktop/runtime-interface";
 import { RecoverableCrashScreen } from "../screens/RecoverableCrashScreen";
-import SettingsStoreInstance, {
-  useSettingsStore,
-} from "../../stores/settings";
+import SettingsStoreInstance, { useSettingsStore } from "../../stores/settings";
 import useTranslationFunction from "../../hooks/useTranslationFunction";
 import {
   clampAvatarStripWidth,

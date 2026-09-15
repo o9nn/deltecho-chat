@@ -153,8 +153,9 @@ export class RAGMemoryStore {
           log.info(`Loaded ${this.memories.length} conversation memories`);
         } catch (error) {
           this.loadError = new Error(
-            `Invalid JSON in ${RAG_MEMORY_KEY}`,
-            { cause: error },
+            `Invalid JSON in ${RAG_MEMORY_KEY}: ${
+              error instanceof Error ? error.message : String(error)
+            }`,
           );
           log.error("Failed to parse conversation memories:", error);
           return;
@@ -169,8 +170,9 @@ export class RAGMemoryStore {
           log.info(`Loaded ${this.reflections.length} reflection memories`);
         } catch (error) {
           this.loadError = new Error(
-            `Invalid JSON in ${RAG_REFLECTION_KEY}`,
-            { cause: error },
+            `Invalid JSON in ${RAG_REFLECTION_KEY}: ${
+              error instanceof Error ? error.message : String(error)
+            }`,
           );
           log.error("Failed to parse reflection memories:", error);
           return;
@@ -194,10 +196,7 @@ export class RAGMemoryStore {
     try {
       const trimmedMemories = this.trimLiveMemories(this.memories);
       this.memories = trimmedMemories;
-      await this.storage.save(
-        RAG_MEMORY_KEY,
-        JSON.stringify(trimmedMemories),
-      );
+      await this.storage.save(RAG_MEMORY_KEY, JSON.stringify(trimmedMemories));
 
       const trimmedReflections = this.reflections.slice(-this.reflectionLimit);
       this.reflections = trimmedReflections;
@@ -445,7 +444,8 @@ export class RAGMemoryStore {
       const ageInDays = (Date.now() - memory.timestamp) / (1000 * 60 * 60 * 24);
       const recencyBoost = Math.exp(-ageInDays / 30);
 
-      const score = tfidfScore * 0.4 + embeddingScore * 0.4 + recencyBoost * 0.2;
+      const score =
+        tfidfScore * 0.4 + embeddingScore * 0.4 + recencyBoost * 0.2;
 
       return { memory, score, tfidfScore, embeddingScore };
     });

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Train Melody atlas</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        background: #111;
+        color: #eee;
+        margin: 16px;
+      }
+      #status {
+        white-space: pre-wrap;
+      }
+      canvas {
+        background: #000;
+        max-width: 360px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Melody automesh train</h1>
+    <p id="status">starting</p>
+    <canvas id="stage" width="512" height="512"></canvas>
+    <script src="/demo/lib/live2dcubismcore.min.js"></script>
+    <script src="/demo/lib/pixi6.min.js"></script>
+    <script src="/demo/lib/pixi-live2d-display-cubism4.min.js"></script>
+    <script type="module">
+      import {
+        MELODY_AUTOMESH_LANDMARKS,
+        MELODY_PARAMETER_PROFILE,
+        figureFromDrawables,
+        isEnvironmentDrawable,
+        projectPhotoOntoAtlas,
+        rasterToDataUrl,
+        trainAutomeshMapping,
+        uvCentroid,
+      } from "/avatar-dist/automesh/index.js";
+
+      const MODEL_URL = "/models/miara/miara_pro_t03.model3.json";
+      const PHOTO_URL = "/images/avatar/identities/melody.webp";
+      const ATLAS_SIZE = 2048;
+
+      const statusEl = document.getElementById("status");
+      const setStatus = (text) => {
+        statusEl.textContent = text;
+      };
+
+      function inspectModel(model) {
+        const internal = model.internalModel;
+        const ids =
+          typeof internal.getDrawableIDs === "function"
+            ? internal.getDrawableIDs()
+            : [];
+        const core = internal.coreModel;
+        const native = core.getModel?.()?.drawables;
+        const box = { x: 0, y: 0, width: 0, height: 0 };
+        const inspected = [];
+        for (let index = 0; index < ids.length; index++) {
+          let bounds = { x: 0, y: 0, width: 0, height: 0 };
+          try {
+            bounds = internal.getDrawableBounds(index, box);
+          } catch {
+            continue;
+          }
+          let uvs;
+          let positions;
+          let indices;
+          try {
+            uvs =
+              core.getDrawableVertexUvs?.(index) ??
+              core.getDrawableUvs?.(index) ??
+              native?.vertexUvs?.[index] ??
+              native?.uvs?.[index];
+            positions =
+              core.getDrawableVertexPositions?.(index) ??
+              core.getDrawableVertices?.(index) ??
+              native?.vertexPositions?.[index] ??
+              native?.positions?.[index];
+            indices =
+              core.getDrawableVertexIndices?.(index) ??
+              core.getDrawableIndices?.(index) ??
+              native?.indices?.[index] ??
+              native?.vertexIndices?.[index];
+          } catch {
+            uvs = native?.vertexUvs?.[index] ?? native?.uvs?.[index];
+            positions =
+              native?.vertexPositions?.[index] ?? native?.positions?.[index];
+            indices = native?.indices?.[index] ?? native?.vertexIndices?.[index];
+          }
+          inspected.push({
+            id: ids[index] ?? `drawable-${index}`,
+            bounds: { ...bounds },
+            uvCentroid: uvs ? uvCentroid(uvs) : undefined,
+            positions: positions ? Array.from(positions) : undefined,
+            uvs: uvs ? Array.from(uvs) : undefined,
+            indices: indices ? Array.from(indices) : undefined,
+          });
+        }
+        return inspected;
+      }
+
+      async function loadImage(url) {
+        const image = new Image();
+        image.decoding = "async";
+        image.src = url;
+        await image.decode();
+        return image;
+      }
+
+      function imageToRaster(image, width, height) {
+        const canvas = document.createElement("canvas");
+        canvas.width = width ?? image.naturalWidth ?? image.width;
+        canvas.height = height ?? image.naturalHeight ?? image.height;
+        const context = canvas.getContext("2d");
+        if (!context) {
+          return { width: 1, height: 1, data: new Uint8ClampedArray(4) };
+        }
+        context.drawImage(image, 0, 0, canvas.width, canvas.height);
+        return {
+          width: canvas.width,
+          height: canvas.height,
+          data: context.getImageData(0, 0, canvas.width, canvas.height).data,
+        };
+      }
+
+      function countOpaque(raster) {
+        let count = 0;
+        for (let index = 3; index < raster.data.length; index += 4) {
+          if ((raster.data[index] ?? 0) > 8) count += 1;
+        }
+        return count;
+      }
+
+      async function main() {
+        setStatus("loading model");
+        const canvas = document.getElementById("stage");
+        const app = new PIXI.Application({
+          view: canvas,
+          backgroundAlpha: 0,
+          width: 512,
+          height: 512,
+        });
+        const { Live2DModel } = PIXI.live2d;
+        const model = await Live2DModel.from(MODEL_URL, { autoUpdate: true });
+        model.anchor.set(0.5, 0.5);
+        model.x = 256;
+        model.y = 256;
+        const scale = Math.min(512 / model.width, 512 / model.height) * 0.92;
+        model.scale.set(scale);
+        app.stage.addChild(model);
+
+        const core = model.internalModel?.coreModel;
+        if (core?.setParameterValueById) {
+          for (const [paramId, value] of Object.entries(MELODY_PARAMETER_PROFILE)) {
+            core.setParameterValueById(paramId, value);
+          }
+        }
+        model.internalModel?.update?.(16, performance.now());
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+        model.internalModel?.update?.(16, performance.now());
+
+        setStatus("inspecting mesh");
+        const drawables = inspectModel(model);
+        const triangleDrawables = drawables.filter(
+          (item) => (item.indices?.length ?? 0) >= 3,
+        ).length;
+        const environmentDrawables = drawables.filter((item) =>
+          isEnvironmentDrawable(item),
+        ).length;
+        const figure = figureFromDrawables(drawables);
+        if (triangleDrawables === 0) {
+          throw new Error("live Cubism inspect returned no triangles");
+        }
+        const withUvs = drawables.filter((item) => (item.uvs?.length ?? 0) >= 6)
+          .length;
+        const withPositions = drawables.filter(
+          (item) => (item.positions?.length ?? 0) >= 6,
+        ).length;
+        const sample = drawables.find((item) => (item.indices?.length ?? 0) >= 3);
+        const coreKeys = core
+          ? Object.getOwnPropertyNames(Object.getPrototypeOf(core) ?? {}).concat(
+              Object.keys(core),
+            )
+          : [];
+
+        setStatus("loading stills");
+        const photoImage = await loadImage(PHOTO_URL);
+        const photo = imageToRaster(photoImage);
+        const mapping = trainAutomeshMapping({
+          identity: "melody",
+          landmarks: MELODY_AUTOMESH_LANDMARKS,
+          drawables,
+        });
+
+        setStatus(
+          `reprojecting ${triangleDrawables}/${drawables.length} drawables`,
+        );
+        const stats = { painted: 0, triangles: 0, envSkipped: 0 };
+        const atlas = projectPhotoOntoAtlas({
+          photo,
+          drawables,
+          landmarks: mapping.landmarks,
+          atlasWidth: ATLAS_SIZE,
+          atlasHeight: ATLAS_SIZE,
+          stats,
+        });
+        const atlasDataUrl = rasterToDataUrl(atlas);
+        const overlay = PIXI.Texture.from(atlasDataUrl);
+        if (model.textures) {
+          model.textures[0] = overlay;
+        }
+
+        let purplePixels = 0;
+        let goldPixels = 0;
+        let mean = [0, 0, 0];
+        let meanCount = 0;
+        for (let index = 0; index < atlas.data.length; index += 4) {
+          const r = atlas.data[index] ?? 0;
+          const g = atlas.data[index + 1] ?? 0;
+          const b = atlas.data[index + 2] ?? 0;
+          const a = atlas.data[index + 3] ?? 0;
+          if (a < 8) continue;
+          mean[0] += r;
+          mean[1] += g;
+          mean[2] += b;
+          meanCount += 1;
+          if (r > 70 && b > 90 && g < r * 0.9 && b > g) purplePixels += 1;
+          if (r > 160 && g > 80 && g < 180 && b < 80) goldPixels += 1;
+        }
+
+        const result = {
+          ok: true,
+          drawableCount: drawables.length,
+          triangleDrawables,
+          environmentDrawables,
+          figure,
+          painted: stats.painted,
+          purplePixels,
+          goldPixels,
+          meanRgb: meanCount
+            ? mean.map((value) => Math.round(value / meanCount))
+            : [0, 0, 0],
+          triangles: stats.triangles,
+          envSkipped: stats.envSkipped,
+          withUvs,
+          withPositions,
+          coreKeys: [...new Set(coreKeys)].sort(),
+          sample: sample
+            ? {
+                id: sample.id,
+                uvLen: sample.uvs?.length ?? 0,
+                posLen: sample.positions?.length ?? 0,
+                idxLen: sample.indices?.length ?? 0,
+                uvHead: sample.uvs?.slice(0, 6) ?? [],
+                posHead: sample.positions?.slice(0, 6) ?? [],
+              }
+            : null,
+          residual: mapping.residual,
+          atlasWidth: atlas.width,
+          atlasHeight: atlas.height,
+          opaquePixels: countOpaque(atlas),
+          photoWidth: photo.width,
+          photoHeight: photo.height,
+          ids: drawables.map((item) => item.id),
+          atlasDataUrl,
+          mapping,
+        };
+        window.__TRAIN_RESULT__ = result;
+        setStatus(
+          [
+            "trained",
+            `drawables ${drawables.length}`,
+            `triangles ${triangleDrawables}`,
+            `painted ${stats.painted}`,
+            `env ${stats.envSkipped}`,
+            `residual ${mapping.residual.toFixed(4)}`,
+            `opaque ${result.opaquePixels}`,
+          ].join("\n"),
+        );
+      }
+
+      main().catch((error) => {
+        const message = error instanceof Error ? error.message : String(error);
+        window.__TRAIN_ERROR__ = message;
+        setStatus(`failed: ${message}`);
+      });
+    </script>
+  </body>
+</html>

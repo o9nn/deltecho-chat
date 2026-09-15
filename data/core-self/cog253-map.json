@@ -1,0 +1,4059 @@
+{
+  "domain": "DeltEcho deterministic core self",
+  "patterns": [
+    {
+      "acceptance_criterion": "A test proves experimental cognition cannot mutate the canonical root subject without an accepted event.",
+      "core_self_role": "Defines independently bounded identity regions and prevents one subsystem from becoming the whole self.",
+      "id": "cog001",
+      "implementation_tier": "core",
+      "ksm_anchor": "structure",
+      "name": "INDEPENDENT REGIONS",
+      "relevance_score": 0.98,
+      "source_pattern_id": 1,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL002 THE DISTRIBUTION OF TOWNS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'THE DISTRIBUTION OF TOWNS' that requires a concrete identity problem before implementation.",
+      "id": "cog002",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "THE DISTRIBUTION OF TOWNS",
+      "relevance_score": 0.43,
+      "source_pattern_id": 2,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL003 CITY COUNTRY FINGERS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'CITY COUNTRY FINGERS' that requires a concrete identity problem before implementation.",
+      "id": "cog003",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "CITY COUNTRY FINGERS",
+      "relevance_score": 0.47,
+      "source_pattern_id": 3,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL004 AGRICULTURAL VALLEYS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'AGRICULTURAL VALLEYS' that requires a concrete identity problem before implementation.",
+      "id": "cog004",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "AGRICULTURAL VALLEYS",
+      "relevance_score": 0.51,
+      "source_pattern_id": 4,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL005 LACE OF COUNTRY STREETS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'LACE OF COUNTRY STREETS' that requires a concrete identity problem before implementation.",
+      "id": "cog005",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "LACE OF COUNTRY STREETS",
+      "relevance_score": 0.55,
+      "source_pattern_id": 5,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL006 6 COUNTRY TOWNS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '6 COUNTRY TOWNS' that requires a concrete identity problem before implementation.",
+      "id": "cog006",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "6 COUNTRY TOWNS",
+      "relevance_score": 0.35,
+      "source_pattern_id": 6,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL007 7 THE COUNTRYSIDE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '7 THE COUNTRYSIDE' that requires a concrete identity problem before implementation.",
+      "id": "cog007",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "7 THE COUNTRYSIDE",
+      "relevance_score": 0.39,
+      "source_pattern_id": 7,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL008 8 MOSAIC OF SUBCULTURES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '8 MOSAIC OF SUBCULTURES' that requires a concrete identity problem before implementation.",
+      "id": "cog008",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "8 MOSAIC OF SUBCULTURES",
+      "relevance_score": 0.43,
+      "source_pattern_id": 8,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL009 9 SCATTERED WORK remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '9 SCATTERED WORK' that requires a concrete identity problem before implementation.",
+      "id": "cog009",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "9 SCATTERED WORK",
+      "relevance_score": 0.47,
+      "source_pattern_id": 9,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL010 10 MAGIC OF THE CITY remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '10 MAGIC OF THE CITY' that requires a concrete identity problem before implementation.",
+      "id": "cog010",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "10 MAGIC OF THE CITY",
+      "relevance_score": 0.51,
+      "source_pattern_id": 10,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL011 LOCAL TRANSPORT AREAS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'LOCAL TRANSPORT AREAS' that requires a concrete identity problem before implementation.",
+      "id": "cog011",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "LOCAL TRANSPORT AREAS",
+      "relevance_score": 0.55,
+      "source_pattern_id": 11,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL012 COMMUNITY OF 7000 remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'COMMUNITY OF 7000' that requires a concrete identity problem before implementation.",
+      "id": "cog012",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "COMMUNITY OF 7000",
+      "relevance_score": 0.35,
+      "source_pattern_id": 12,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL013 SUBCULTURE BOUNDARY remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'SUBCULTURE BOUNDARY' that requires a concrete identity problem before implementation.",
+      "id": "cog013",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "SUBCULTURE BOUNDARY",
+      "relevance_score": 0.39,
+      "source_pattern_id": 13,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL014 IDENTIFIABLE NEIGHBORHOOD remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'IDENTIFIABLE NEIGHBORHOOD' that requires a concrete identity problem before implementation.",
+      "id": "cog014",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "IDENTIFIABLE NEIGHBORHOOD",
+      "relevance_score": 0.43,
+      "source_pattern_id": 14,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL015 NEIGHBORHOOD BOUNDARY remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'NEIGHBORHOOD BOUNDARY' that requires a concrete identity problem before implementation.",
+      "id": "cog015",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "NEIGHBORHOOD BOUNDARY",
+      "relevance_score": 0.47,
+      "source_pattern_id": 15,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL016 WEB OF PUBLIC TRANSPORTATION remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'WEB OF PUBLIC TRANSPORTATION' that requires a concrete identity problem before implementation.",
+      "id": "cog016",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "WEB OF PUBLIC TRANSPORTATION",
+      "relevance_score": 0.51,
+      "source_pattern_id": 16,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL017 RING ROADS has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern 'RING ROADS' is intentionally outside the canonical identity trust root.",
+      "id": "cog017",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "process",
+      "name": "RING ROADS",
+      "relevance_score": 0.1,
+      "source_pattern_id": 17,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The deterministic KSM cycle selects its weakest center exclusively from inspectable evidence records.",
+      "core_self_role": "Makes autognosis an evidence-linked learning network rather than an opaque inference result.",
+      "id": "cog018",
+      "implementation_tier": "core",
+      "ksm_anchor": "process",
+      "name": "NETWORK OF LEARNING",
+      "relevance_score": 0.96,
+      "source_pattern_id": 18,
+      "x86eli_binding": {
+        "binding_id": "self-assessment-findings",
+        "binding_mode": "adapted",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL019 WEB OF SHOPPING remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'WEB OF SHOPPING' that requires a concrete identity problem before implementation.",
+      "id": "cog019",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "WEB OF SHOPPING",
+      "relevance_score": 0.39,
+      "source_pattern_id": 19,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL020 20 MINI-BUSES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '20 MINI-BUSES' that requires a concrete identity problem before implementation.",
+      "id": "cog020",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "20 MINI-BUSES",
+      "relevance_score": 0.43,
+      "source_pattern_id": 20,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL021 21 FOUR-STORY LIMIT remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '21 FOUR-STORY LIMIT' that requires a concrete identity problem before implementation.",
+      "id": "cog021",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "21 FOUR-STORY LIMIT",
+      "relevance_score": 0.47,
+      "source_pattern_id": 21,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL022 22 NINE PER CENT PARKING has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern '22 NINE PER CENT PARKING' is intentionally outside the canonical identity trust root.",
+      "id": "cog022",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "structure",
+      "name": "22 NINE PER CENT PARKING",
+      "relevance_score": 0.1,
+      "source_pattern_id": 22,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL023 23 PARALLEL ROADS has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern '23 PARALLEL ROADS' is intentionally outside the canonical identity trust root.",
+      "id": "cog023",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "process",
+      "name": "23 PARALLEL ROADS",
+      "relevance_score": 0.1,
+      "source_pattern_id": 23,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "A standard decision attempting to change a protected root field is rejected before ledger append.",
+      "core_self_role": "Protects the immutable constitutional center through explicit steward policy.",
+      "id": "cog024",
+      "implementation_tier": "core",
+      "ksm_anchor": "control",
+      "name": "24 SACRED SITES",
+      "relevance_score": 0.95,
+      "source_pattern_id": 24,
+      "x86eli_binding": {
+        "binding_id": "persistent-consciousness-schema",
+        "binding_mode": "adapted",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL025 25 ACCESS TO WATER remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '25 ACCESS TO WATER' that requires a concrete identity problem before implementation.",
+      "id": "cog025",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "25 ACCESS TO WATER",
+      "relevance_score": 0.39,
+      "source_pattern_id": 25,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL026 26 LIFE CYCLE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '26 LIFE CYCLE' that requires a concrete identity problem before implementation.",
+      "id": "cog026",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "26 LIFE CYCLE",
+      "relevance_score": 0.43,
+      "source_pattern_id": 26,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL027 27 MEN AND WOMEN remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '27 MEN AND WOMEN' that requires a concrete identity problem before implementation.",
+      "id": "cog027",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "27 MEN AND WOMEN",
+      "relevance_score": 0.47,
+      "source_pattern_id": 27,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL028 28 ECCENTRIC NUCLEUS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '28 ECCENTRIC NUCLEUS' that requires a concrete identity problem before implementation.",
+      "id": "cog028",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "28 ECCENTRIC NUCLEUS",
+      "relevance_score": 0.51,
+      "source_pattern_id": 28,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL029 29 DENSITY RINGS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '29 DENSITY RINGS' that requires a concrete identity problem before implementation.",
+      "id": "cog029",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "29 DENSITY RINGS",
+      "relevance_score": 0.55,
+      "source_pattern_id": 29,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "Every accepted mutation is represented by exactly one digest-linked event and replayed state matches the live projection.",
+      "core_self_role": "Treats accepted identity events as inspectable activity nodes in an append-only history.",
+      "id": "cog030",
+      "implementation_tier": "core",
+      "ksm_anchor": "process",
+      "name": "30 ACTIVITY NODES",
+      "relevance_score": 0.99,
+      "source_pattern_id": 30,
+      "x86eli_binding": {
+        "binding_id": "atomic-state-write-pattern",
+        "binding_mode": "adapted",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL031 31 PROMENADE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '31 PROMENADE' that requires a concrete identity problem before implementation.",
+      "id": "cog031",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "31 PROMENADE",
+      "relevance_score": 0.39,
+      "source_pattern_id": 31,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL032 32 SHOPPING STREET remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '32 SHOPPING STREET' that requires a concrete identity problem before implementation.",
+      "id": "cog032",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "32 SHOPPING STREET",
+      "relevance_score": 0.43,
+      "source_pattern_id": 32,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL033 33 NIGHT LIFE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '33 NIGHT LIFE' that requires a concrete identity problem before implementation.",
+      "id": "cog033",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "33 NIGHT LIFE",
+      "relevance_score": 0.47,
+      "source_pattern_id": 33,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL034 34 INTERCHANGE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '34 INTERCHANGE' that requires a concrete identity problem before implementation.",
+      "id": "cog034",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "34 INTERCHANGE",
+      "relevance_score": 0.51,
+      "source_pattern_id": 34,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL035 35 HOUSEHOLD MIX remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '35 HOUSEHOLD MIX' that requires a concrete identity problem before implementation.",
+      "id": "cog035",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "35 HOUSEHOLD MIX",
+      "relevance_score": 0.55,
+      "source_pattern_id": 35,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL036 36 DEGREES OF PUBLICNESS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '36 DEGREES OF PUBLICNESS' that requires a concrete identity problem before implementation.",
+      "id": "cog036",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "36 DEGREES OF PUBLICNESS",
+      "relevance_score": 0.35,
+      "source_pattern_id": 36,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "A graph test preserves distinct subject IDs while traversing their shared typed relations deterministically.",
+      "core_self_role": "Clusters subjects into coherent identity neighborhoods without erasing their boundaries.",
+      "id": "cog037",
+      "implementation_tier": "core",
+      "ksm_anchor": "structure",
+      "name": "37 HOUSE CLUSTER",
+      "relevance_score": 0.97,
+      "source_pattern_id": 37,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL038 38 ROW HOUSES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '38 ROW HOUSES' that requires a concrete identity problem before implementation.",
+      "id": "cog038",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "38 ROW HOUSES",
+      "relevance_score": 0.43,
+      "source_pattern_id": 38,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL039 39 HOUSING HILL remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '39 HOUSING HILL' that requires a concrete identity problem before implementation.",
+      "id": "cog039",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "39 HOUSING HILL",
+      "relevance_score": 0.47,
+      "source_pattern_id": 39,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL040 40 OLD PEOPLE EVERYWHERE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '40 OLD PEOPLE EVERYWHERE' that requires a concrete identity problem before implementation.",
+      "id": "cog040",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "40 OLD PEOPLE EVERYWHERE",
+      "relevance_score": 0.51,
+      "source_pattern_id": 40,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL041 41 WORK COMMUNITY remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '41 WORK COMMUNITY' that requires a concrete identity problem before implementation.",
+      "id": "cog041",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "41 WORK COMMUNITY",
+      "relevance_score": 0.55,
+      "source_pattern_id": 41,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL042 42 INDUSTRIAL RIBBON remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '42 INDUSTRIAL RIBBON' that requires a concrete identity problem before implementation.",
+      "id": "cog042",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "42 INDUSTRIAL RIBBON",
+      "relevance_score": 0.35,
+      "source_pattern_id": 42,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL043 43 UNIVERSITY AS MARKETPLACE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '43 UNIVERSITY AS MARKETPLACE' that requires a concrete identity problem before implementation.",
+      "id": "cog043",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "43 UNIVERSITY AS MARKETPLACE",
+      "relevance_score": 0.39,
+      "source_pattern_id": 43,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL044 44 LOCAL TOWN HALL remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '44 LOCAL TOWN HALL' that requires a concrete identity problem before implementation.",
+      "id": "cog044",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "44 LOCAL TOWN HALL",
+      "relevance_score": 0.43,
+      "source_pattern_id": 44,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL045 45 NECKLACE OF COMMUNITY PROJECTS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '45 NECKLACE OF COMMUNITY PROJECTS' that requires a concrete identity problem before implementation.",
+      "id": "cog045",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "45 NECKLACE OF COMMUNITY PROJECTS",
+      "relevance_score": 0.47,
+      "source_pattern_id": 45,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL046 46 MARKET OF MANY SHOPS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '46 MARKET OF MANY SHOPS' that requires a concrete identity problem before implementation.",
+      "id": "cog046",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "46 MARKET OF MANY SHOPS",
+      "relevance_score": 0.51,
+      "source_pattern_id": 46,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL047 47 HEALTH CENTER remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '47 HEALTH CENTER' that requires a concrete identity problem before implementation.",
+      "id": "cog047",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "47 HEALTH CENTER",
+      "relevance_score": 0.55,
+      "source_pattern_id": 47,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL048 48 HOUSING IN BETWEEN remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '48 HOUSING IN BETWEEN' that requires a concrete identity problem before implementation.",
+      "id": "cog048",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "48 HOUSING IN BETWEEN",
+      "relevance_score": 0.35,
+      "source_pattern_id": 48,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL049 49 LOOPED LOCAL ROADS has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern '49 LOOPED LOCAL ROADS' is intentionally outside the canonical identity trust root.",
+      "id": "cog049",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "structure",
+      "name": "49 LOOPED LOCAL ROADS",
+      "relevance_score": 0.1,
+      "source_pattern_id": 49,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL050 50 T JUNCTIONS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '50 T JUNCTIONS' that requires a concrete identity problem before implementation.",
+      "id": "cog050",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "50 T JUNCTIONS",
+      "relevance_score": 0.43,
+      "source_pattern_id": 50,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL051 51 GREEN STREETS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '51 GREEN STREETS' that requires a concrete identity problem before implementation.",
+      "id": "cog051",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "51 GREEN STREETS",
+      "relevance_score": 0.47,
+      "source_pattern_id": 51,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "Equivalent hypergraphs return byte-identical ordered traversal and export results.",
+      "core_self_role": "Defines typed relation paths and deterministic traversal through the identity hypergraph.",
+      "id": "cog052",
+      "implementation_tier": "core",
+      "ksm_anchor": "structure",
+      "name": "52 NETWORK OF PATHS AND CARS",
+      "relevance_score": 0.97,
+      "source_pattern_id": 52,
+      "x86eli_binding": {
+        "binding_id": "explicit-hypergraph-structure",
+        "binding_mode": "inspired",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "A proposal with no independent authorized reviewer cannot enter accepted history.",
+      "core_self_role": "Provides the explicit policy gateway between proposals and accepted identity history.",
+      "id": "cog053",
+      "implementation_tier": "core",
+      "ksm_anchor": "control",
+      "name": "53 MAIN GATEWAYS",
+      "relevance_score": 0.96,
+      "source_pattern_id": 53,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL054 54 ROAD CROSSING has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern '54 ROAD CROSSING' is intentionally outside the canonical identity trust root.",
+      "id": "cog054",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "control",
+      "name": "54 ROAD CROSSING",
+      "relevance_score": 0.1,
+      "source_pattern_id": 54,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL055 55 RAISED WALK remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '55 RAISED WALK' that requires a concrete identity problem before implementation.",
+      "id": "cog055",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "55 RAISED WALK",
+      "relevance_score": 0.39,
+      "source_pattern_id": 55,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL056 BIKE PATHS AND RACKS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'BIKE PATHS AND RACKS' that requires a concrete identity problem before implementation.",
+      "id": "cog056",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "BIKE PATHS AND RACKS",
+      "relevance_score": 0.43,
+      "source_pattern_id": 56,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL057 57 CHILDREN IN THE CITY remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '57 CHILDREN IN THE CITY' that requires a concrete identity problem before implementation.",
+      "id": "cog057",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "57 CHILDREN IN THE CITY",
+      "relevance_score": 0.47,
+      "source_pattern_id": 57,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL058 58 CARNIVAL remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '58 CARNIVAL' that requires a concrete identity problem before implementation.",
+      "id": "cog058",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "58 CARNIVAL",
+      "relevance_score": 0.51,
+      "source_pattern_id": 58,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL059 59 QUIET BACKS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '59 QUIET BACKS' that requires a concrete identity problem before implementation.",
+      "id": "cog059",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "59 QUIET BACKS",
+      "relevance_score": 0.55,
+      "source_pattern_id": 59,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL060 60 ACCESSIBLE GREEN remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '60 ACCESSIBLE GREEN' that requires a concrete identity problem before implementation.",
+      "id": "cog060",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "60 ACCESSIBLE GREEN",
+      "relevance_score": 0.35,
+      "source_pattern_id": 60,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL061 61 SMALL PUBLIC SQUARES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '61 SMALL PUBLIC SQUARES' that requires a concrete identity problem before implementation.",
+      "id": "cog061",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "61 SMALL PUBLIC SQUARES",
+      "relevance_score": 0.39,
+      "source_pattern_id": 61,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL062 62 HIGH PLACES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '62 HIGH PLACES' that requires a concrete identity problem before implementation.",
+      "id": "cog062",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "62 HIGH PLACES",
+      "relevance_score": 0.43,
+      "source_pattern_id": 62,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL063 63 DANCING IN THE STREETS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '63 DANCING IN THE STREETS' that requires a concrete identity problem before implementation.",
+      "id": "cog063",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "63 DANCING IN THE STREETS",
+      "relevance_score": 0.47,
+      "source_pattern_id": 63,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL064 64 POOLS AND STREAMS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '64 POOLS AND STREAMS' that requires a concrete identity problem before implementation.",
+      "id": "cog064",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "64 POOLS AND STREAMS",
+      "relevance_score": 0.51,
+      "source_pattern_id": 64,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL065 65 BIRTH PLACES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '65 BIRTH PLACES' that requires a concrete identity problem before implementation.",
+      "id": "cog065",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "65 BIRTH PLACES",
+      "relevance_score": 0.55,
+      "source_pattern_id": 65,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "Only a protected decision with steward participation can alter an immutable-core path.",
+      "core_self_role": "Marks canonical identity invariants as protected ground requiring steward authority.",
+      "id": "cog066",
+      "implementation_tier": "core",
+      "ksm_anchor": "control",
+      "name": "66 HOLY GROUND",
+      "relevance_score": 0.98,
+      "source_pattern_id": 66,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL067 67 COMMON LAND remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '67 COMMON LAND' that requires a concrete identity problem before implementation.",
+      "id": "cog067",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "67 COMMON LAND",
+      "relevance_score": 0.39,
+      "source_pattern_id": 67,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL068 68 CONNECTED PLAY remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '68 CONNECTED PLAY' that requires a concrete identity problem before implementation.",
+      "id": "cog068",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "68 CONNECTED PLAY",
+      "relevance_score": 0.43,
+      "source_pattern_id": 68,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL069 69 PUBLIC OUTDOOR ROOM has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern '69 PUBLIC OUTDOOR ROOM' is intentionally outside the canonical identity trust root.",
+      "id": "cog069",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "control",
+      "name": "69 PUBLIC OUTDOOR ROOM",
+      "relevance_score": 0.1,
+      "source_pattern_id": 69,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL070 70 GRAVE SITES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '70 GRAVE SITES' that requires a concrete identity problem before implementation.",
+      "id": "cog070",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "70 GRAVE SITES",
+      "relevance_score": 0.51,
+      "source_pattern_id": 70,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL071 71 STILL WATER remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '71 STILL WATER' that requires a concrete identity problem before implementation.",
+      "id": "cog071",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "71 STILL WATER",
+      "relevance_score": 0.55,
+      "source_pattern_id": 71,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL072 72 LOCAL SPORTS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '72 LOCAL SPORTS' that requires a concrete identity problem before implementation.",
+      "id": "cog072",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "72 LOCAL SPORTS",
+      "relevance_score": 0.35,
+      "source_pattern_id": 72,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "An adapter test for APL073 73 ADVENTURE PLAYGROUND proves the external surface emits a typed proposal and has no direct ledger-append capability.",
+      "core_self_role": "Sandboxed experimental cognition may play and propose without receiving canonical authority.",
+      "id": "cog073",
+      "implementation_tier": "adapter",
+      "ksm_anchor": "structure",
+      "name": "73 ADVENTURE PLAYGROUND",
+      "relevance_score": 0.76,
+      "source_pattern_id": 73,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL074 74 ANIMALS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '74 ANIMALS' that requires a concrete identity problem before implementation.",
+      "id": "cog074",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "74 ANIMALS",
+      "relevance_score": 0.43,
+      "source_pattern_id": 74,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL075 75 THE FAMILY remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '75 THE FAMILY' that requires a concrete identity problem before implementation.",
+      "id": "cog075",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "75 THE FAMILY",
+      "relevance_score": 0.47,
+      "source_pattern_id": 75,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL076 76 HOUSE FOR A SMALL FAMILY remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '76 HOUSE FOR A SMALL FAMILY' that requires a concrete identity problem before implementation.",
+      "id": "cog076",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "76 HOUSE FOR A SMALL FAMILY",
+      "relevance_score": 0.51,
+      "source_pattern_id": 76,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL077 77 HOUSE FOR A COUPLE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '77 HOUSE FOR A COUPLE' that requires a concrete identity problem before implementation.",
+      "id": "cog077",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "77 HOUSE FOR A COUPLE",
+      "relevance_score": 0.55,
+      "source_pattern_id": 77,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL078 78 HOUSE FOR ONE PERSON remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '78 HOUSE FOR ONE PERSON' that requires a concrete identity problem before implementation.",
+      "id": "cog078",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "78 HOUSE FOR ONE PERSON",
+      "relevance_score": 0.35,
+      "source_pattern_id": 78,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL079 79 YOUR OWN HOME remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '79 YOUR OWN HOME' that requires a concrete identity problem before implementation.",
+      "id": "cog079",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "79 YOUR OWN HOME",
+      "relevance_score": 0.39,
+      "source_pattern_id": 79,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "An ESN or DAO actor may submit evidence and proposals but cannot review or accept its own proposal.",
+      "core_self_role": "Preserves DAO-like self-governance while separating recommendation from authorization.",
+      "id": "cog080",
+      "implementation_tier": "core",
+      "ksm_anchor": "control",
+      "name": "80 SELF-GOVERNING WORKSHOPS AND OFFICES",
+      "relevance_score": 0.99,
+      "source_pattern_id": 80,
+      "x86eli_binding": {
+        "binding_id": "identity-driven-goal-taxonomy",
+        "binding_mode": "inspired",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL081 81 SMALL SERVICES WITHOUT RED TAPE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '81 SMALL SERVICES WITHOUT RED TAPE' that requires a concrete identity problem before implementation.",
+      "id": "cog081",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "81 SMALL SERVICES WITHOUT RED TAPE",
+      "relevance_score": 0.47,
+      "source_pattern_id": 81,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL082 82 OFFICE CONNECTIONS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '82 OFFICE CONNECTIONS' that requires a concrete identity problem before implementation.",
+      "id": "cog082",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "82 OFFICE CONNECTIONS",
+      "relevance_score": 0.51,
+      "source_pattern_id": 82,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL083 83 MASTER AND APRENTICES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '83 MASTER AND APRENTICES' that requires a concrete identity problem before implementation.",
+      "id": "cog083",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "83 MASTER AND APRENTICES",
+      "relevance_score": 0.55,
+      "source_pattern_id": 83,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL084 84 TEENAGE SOCIETY remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '84 TEENAGE SOCIETY' that requires a concrete identity problem before implementation.",
+      "id": "cog084",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "84 TEENAGE SOCIETY",
+      "relevance_score": 0.35,
+      "source_pattern_id": 84,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL085 85 SHOPFRONT SCHOOLS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '85 SHOPFRONT SCHOOLS' that requires a concrete identity problem before implementation.",
+      "id": "cog085",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "85 SHOPFRONT SCHOOLS",
+      "relevance_score": 0.39,
+      "source_pattern_id": 85,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL086 86 CHILDREN'S HOME remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '86 CHILDREN'S HOME' that requires a concrete identity problem before implementation.",
+      "id": "cog086",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "86 CHILDREN'S HOME",
+      "relevance_score": 0.43,
+      "source_pattern_id": 86,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL087 87 INDIVIDUALLY OWNED SHOPS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '87 INDIVIDUALLY OWNED SHOPS' that requires a concrete identity problem before implementation.",
+      "id": "cog087",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "87 INDIVIDUALLY OWNED SHOPS",
+      "relevance_score": 0.47,
+      "source_pattern_id": 87,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL088 88 STREET CAFE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '88 STREET CAFE' that requires a concrete identity problem before implementation.",
+      "id": "cog088",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "88 STREET CAFE",
+      "relevance_score": 0.51,
+      "source_pattern_id": 88,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL089 89 CORNER GROCERY remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '89 CORNER GROCERY' that requires a concrete identity problem before implementation.",
+      "id": "cog089",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "89 CORNER GROCERY",
+      "relevance_score": 0.55,
+      "source_pattern_id": 89,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL090 90 BEER HALL remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '90 BEER HALL' that requires a concrete identity problem before implementation.",
+      "id": "cog090",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "90 BEER HALL",
+      "relevance_score": 0.35,
+      "source_pattern_id": 90,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL091 91 TRAVELLER'S INN remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '91 TRAVELLER'S INN' that requires a concrete identity problem before implementation.",
+      "id": "cog091",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "91 TRAVELLER'S INN",
+      "relevance_score": 0.39,
+      "source_pattern_id": 91,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL092 92 BUS STOP remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '92 BUS STOP' that requires a concrete identity problem before implementation.",
+      "id": "cog092",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "92 BUS STOP",
+      "relevance_score": 0.43,
+      "source_pattern_id": 92,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL093 93 FOOD STANDS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '93 FOOD STANDS' that requires a concrete identity problem before implementation.",
+      "id": "cog093",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "93 FOOD STANDS",
+      "relevance_score": 0.47,
+      "source_pattern_id": 93,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL094 94 SLEEPING IN PUBLIC remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '94 SLEEPING IN PUBLIC' that requires a concrete identity problem before implementation.",
+      "id": "cog094",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "94 SLEEPING IN PUBLIC",
+      "relevance_score": 0.51,
+      "source_pattern_id": 94,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The public core-self barrel exposes contracts, policy, ledger, projector, graph, capsule, and manifest adapter without a runtime dependency on the archive.",
+      "core_self_role": "Composes canonical contracts, policy, ledger, projector, graph, capsule, and adapters as one bounded complex.",
+      "id": "cog095",
+      "implementation_tier": "core",
+      "ksm_anchor": "structure",
+      "name": "95 BUILDING COMPLEX",
+      "relevance_score": 0.99,
+      "source_pattern_id": 95,
+      "x86eli_binding": {
+        "binding_id": "ecco9-source-manifest",
+        "binding_mode": "manifest",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL096 96 NUMBER OF STORIES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '96 NUMBER OF STORIES' that requires a concrete identity problem before implementation.",
+      "id": "cog096",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "96 NUMBER OF STORIES",
+      "relevance_score": 0.35,
+      "source_pattern_id": 96,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL097 97 SHIELDED PARKING has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern '97 SHIELDED PARKING' is intentionally outside the canonical identity trust root.",
+      "id": "cog097",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "structure",
+      "name": "97 SHIELDED PARKING",
+      "relevance_score": 0.1,
+      "source_pattern_id": 97,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL098 98 CIRCULATION REALMS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '98 CIRCULATION REALMS' that requires a concrete identity problem before implementation.",
+      "id": "cog098",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "98 CIRCULATION REALMS",
+      "relevance_score": 0.43,
+      "source_pattern_id": 98,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL099 99 MAIN BUILDING remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '99 MAIN BUILDING' that requires a concrete identity problem before implementation.",
+      "id": "cog099",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "99 MAIN BUILDING",
+      "relevance_score": 0.47,
+      "source_pattern_id": 99,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL100 PEDESTRIAN STREET has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern 'PEDESTRIAN STREET' is intentionally outside the canonical identity trust root.",
+      "id": "cog100",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "structure",
+      "name": "PEDESTRIAN STREET",
+      "relevance_score": 0.1,
+      "source_pattern_id": 100,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL101 BUILDING THOROUGHFARE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'BUILDING THOROUGHFARE' that requires a concrete identity problem before implementation.",
+      "id": "cog101",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "BUILDING THOROUGHFARE",
+      "relevance_score": 0.55,
+      "source_pattern_id": 101,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL102 FAMILY OF ENTRANCES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'FAMILY OF ENTRANCES' that requires a concrete identity problem before implementation.",
+      "id": "cog102",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "FAMILY OF ENTRANCES",
+      "relevance_score": 0.35,
+      "source_pattern_id": 102,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL103 SMALL PARKING LOTS has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern 'SMALL PARKING LOTS' is intentionally outside the canonical identity trust root.",
+      "id": "cog103",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "structure",
+      "name": "SMALL PARKING LOTS",
+      "relevance_score": 0.1,
+      "source_pattern_id": 103,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL104 SITE REPAIR remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'SITE REPAIR' that requires a concrete identity problem before implementation.",
+      "id": "cog104",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "SITE REPAIR",
+      "relevance_score": 0.43,
+      "source_pattern_id": 104,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL105 SOUTH FACING OUTDOORS has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern 'SOUTH FACING OUTDOORS' is intentionally outside the canonical identity trust root.",
+      "id": "cog105",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "control",
+      "name": "SOUTH FACING OUTDOORS",
+      "relevance_score": 0.1,
+      "source_pattern_id": 105,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL106 POSITIVE OUTDOOR SPACE has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern 'POSITIVE OUTDOOR SPACE' is intentionally outside the canonical identity trust root.",
+      "id": "cog106",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "structure",
+      "name": "POSITIVE OUTDOOR SPACE",
+      "relevance_score": 0.1,
+      "source_pattern_id": 106,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL107 WINGS OF LIGHT remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'WINGS OF LIGHT' that requires a concrete identity problem before implementation.",
+      "id": "cog107",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "WINGS OF LIGHT",
+      "relevance_score": 0.55,
+      "source_pattern_id": 107,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL108 CONNECTED BUILDINGS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'CONNECTED BUILDINGS' that requires a concrete identity problem before implementation.",
+      "id": "cog108",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "CONNECTED BUILDINGS",
+      "relevance_score": 0.35,
+      "source_pattern_id": 108,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL109 LONG THIN HOUSE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'LONG THIN HOUSE' that requires a concrete identity problem before implementation.",
+      "id": "cog109",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "LONG THIN HOUSE",
+      "relevance_score": 0.39,
+      "source_pattern_id": 109,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL110 MAIN ENTRANCE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'MAIN ENTRANCE' that requires a concrete identity problem before implementation.",
+      "id": "cog110",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "MAIN ENTRANCE",
+      "relevance_score": 0.43,
+      "source_pattern_id": 110,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL111 HALF-HIDDEN GARDEN remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'HALF-HIDDEN GARDEN' that requires a concrete identity problem before implementation.",
+      "id": "cog111",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "HALF-HIDDEN GARDEN",
+      "relevance_score": 0.47,
+      "source_pattern_id": 111,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL112 ENTRANCE TRANSITION has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern 'ENTRANCE TRANSITION' is intentionally outside the canonical identity trust root.",
+      "id": "cog112",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "structure",
+      "name": "ENTRANCE TRANSITION",
+      "relevance_score": 0.1,
+      "source_pattern_id": 112,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL113 CAR CONNECTION remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'CAR CONNECTION' that requires a concrete identity problem before implementation.",
+      "id": "cog113",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "CAR CONNECTION",
+      "relevance_score": 0.55,
+      "source_pattern_id": 113,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL114 HIERARCHY OF OPEN SPACE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'HIERARCHY OF OPEN SPACE' that requires a concrete identity problem before implementation.",
+      "id": "cog114",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "HIERARCHY OF OPEN SPACE",
+      "relevance_score": 0.35,
+      "source_pattern_id": 114,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL115 COURTYARDS WHICH LIVE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'COURTYARDS WHICH LIVE' that requires a concrete identity problem before implementation.",
+      "id": "cog115",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "COURTYARDS WHICH LIVE",
+      "relevance_score": 0.39,
+      "source_pattern_id": 115,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL116 CASCADE OF ROOFS has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern 'CASCADE OF ROOFS' is intentionally outside the canonical identity trust root.",
+      "id": "cog116",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "process",
+      "name": "CASCADE OF ROOFS",
+      "relevance_score": 0.1,
+      "source_pattern_id": 116,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL117 SHELTERING ROOF has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern 'SHELTERING ROOF' is intentionally outside the canonical identity trust root.",
+      "id": "cog117",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "control",
+      "name": "SHELTERING ROOF",
+      "relevance_score": 0.1,
+      "source_pattern_id": 117,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL118 ROOF GARDEN has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern 'ROOF GARDEN' is intentionally outside the canonical identity trust root.",
+      "id": "cog118",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "structure",
+      "name": "ROOF GARDEN",
+      "relevance_score": 0.1,
+      "source_pattern_id": 118,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL119 ARCADES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'ARCADES' that requires a concrete identity problem before implementation.",
+      "id": "cog119",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "ARCADES",
+      "relevance_score": 0.55,
+      "source_pattern_id": 119,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL120 PATHS AND GOALS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'PATHS AND GOALS' that requires a concrete identity problem before implementation.",
+      "id": "cog120",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "PATHS AND GOALS",
+      "relevance_score": 0.35,
+      "source_pattern_id": 120,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL121 PATH SHAPE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'PATH SHAPE' that requires a concrete identity problem before implementation.",
+      "id": "cog121",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "PATH SHAPE",
+      "relevance_score": 0.39,
+      "source_pattern_id": 121,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL122 BUILDING FRONTS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'BUILDING FRONTS' that requires a concrete identity problem before implementation.",
+      "id": "cog122",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "BUILDING FRONTS",
+      "relevance_score": 0.43,
+      "source_pattern_id": 122,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL123 PEDESTRIAN DENSITY remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'PEDESTRIAN DENSITY' that requires a concrete identity problem before implementation.",
+      "id": "cog123",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "PEDESTRIAN DENSITY",
+      "relevance_score": 0.47,
+      "source_pattern_id": 123,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL124 ACTIVITY POCKETS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'ACTIVITY POCKETS' that requires a concrete identity problem before implementation.",
+      "id": "cog124",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "ACTIVITY POCKETS",
+      "relevance_score": 0.51,
+      "source_pattern_id": 124,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL125 STAIR SEATS has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern 'STAIR SEATS' is intentionally outside the canonical identity trust root.",
+      "id": "cog125",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "process",
+      "name": "STAIR SEATS",
+      "relevance_score": 0.1,
+      "source_pattern_id": 125,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL126 SOMETHING ROUGHLY IN THE MIDDLE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'SOMETHING ROUGHLY IN THE MIDDLE' that requires a concrete identity problem before implementation.",
+      "id": "cog126",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "SOMETHING ROUGHLY IN THE MIDDLE",
+      "relevance_score": 0.35,
+      "source_pattern_id": 126,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "Actor capability tests reject every operation above the actor’s registered authority level.",
+      "core_self_role": "Implements a gradient of intimacy from observation to proposal, review, protected ratification, and recovery.",
+      "id": "cog127",
+      "implementation_tier": "core",
+      "ksm_anchor": "control",
+      "name": "INTIMACY GRADIENT",
+      "relevance_score": 0.97,
+      "source_pattern_id": 127,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL128 INDOOR SUNLIGHT has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern 'INDOOR SUNLIGHT' is intentionally outside the canonical identity trust root.",
+      "id": "cog128",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "process",
+      "name": "INDOOR SUNLIGHT",
+      "relevance_score": 0.1,
+      "source_pattern_id": 128,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL129 COMMON AREAS AT THE HEART remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'COMMON AREAS AT THE HEART' that requires a concrete identity problem before implementation.",
+      "id": "cog129",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "COMMON AREAS AT THE HEART",
+      "relevance_score": 0.47,
+      "source_pattern_id": 129,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL130 ENTRANCE ROOM remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'ENTRANCE ROOM' that requires a concrete identity problem before implementation.",
+      "id": "cog130",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "ENTRANCE ROOM",
+      "relevance_score": 0.51,
+      "source_pattern_id": 130,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL131 THE FLOW THROUGH ROOMS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'THE FLOW THROUGH ROOMS' that requires a concrete identity problem before implementation.",
+      "id": "cog131",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "THE FLOW THROUGH ROOMS",
+      "relevance_score": 0.55,
+      "source_pattern_id": 131,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL132 SHORT PASSAGES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'SHORT PASSAGES' that requires a concrete identity problem before implementation.",
+      "id": "cog132",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "SHORT PASSAGES",
+      "relevance_score": 0.35,
+      "source_pattern_id": 132,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL133 STAIRCASE AS A STAGE has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern 'STAIRCASE AS A STAGE' is intentionally outside the canonical identity trust root.",
+      "id": "cog133",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "structure",
+      "name": "STAIRCASE AS A STAGE",
+      "relevance_score": 0.1,
+      "source_pattern_id": 133,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL134 ZEN VIEW remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'ZEN VIEW' that requires a concrete identity problem before implementation.",
+      "id": "cog134",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "ZEN VIEW",
+      "relevance_score": 0.43,
+      "source_pattern_id": 134,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL135 TAPESTRY OF LIGHT AND DARK remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'TAPESTRY OF LIGHT AND DARK' that requires a concrete identity problem before implementation.",
+      "id": "cog135",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "TAPESTRY OF LIGHT AND DARK",
+      "relevance_score": 0.47,
+      "source_pattern_id": 135,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL136 COUPLE'S REALM remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'COUPLE'S REALM' that requires a concrete identity problem before implementation.",
+      "id": "cog136",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "COUPLE'S REALM",
+      "relevance_score": 0.51,
+      "source_pattern_id": 136,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL137 CHILDREN'S REALM remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'CHILDREN'S REALM' that requires a concrete identity problem before implementation.",
+      "id": "cog137",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "CHILDREN'S REALM",
+      "relevance_score": 0.55,
+      "source_pattern_id": 137,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL138 SLEEPING TO THE EAST remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'SLEEPING TO THE EAST' that requires a concrete identity problem before implementation.",
+      "id": "cog138",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "SLEEPING TO THE EAST",
+      "relevance_score": 0.35,
+      "source_pattern_id": 138,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL139 FARMHOUSE KITCHEN has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern 'FARMHOUSE KITCHEN' is intentionally outside the canonical identity trust root.",
+      "id": "cog139",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "structure",
+      "name": "FARMHOUSE KITCHEN",
+      "relevance_score": 0.1,
+      "source_pattern_id": 139,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL140 PRIVATE TERRACE ON THE STREET remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'PRIVATE TERRACE ON THE STREET' that requires a concrete identity problem before implementation.",
+      "id": "cog140",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "PRIVATE TERRACE ON THE STREET",
+      "relevance_score": 0.43,
+      "source_pattern_id": 140,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL141 A ROOM OF ONE'S OWN remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'A ROOM OF ONE'S OWN' that requires a concrete identity problem before implementation.",
+      "id": "cog141",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "A ROOM OF ONE'S OWN",
+      "relevance_score": 0.47,
+      "source_pattern_id": 141,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "Replaying the same ordered accepted events produces identical ledger head and projected-state digests.",
+      "core_self_role": "Orders identity events and KSM steps into a reproducible temporal sequence.",
+      "id": "cog142",
+      "implementation_tier": "core",
+      "ksm_anchor": "process",
+      "name": "SEQUENCE OF SITTING SPACES",
+      "relevance_score": 0.97,
+      "source_pattern_id": 142,
+      "x86eli_binding": {
+        "binding_id": "twelve-step-cognitive-rhythm",
+        "binding_mode": "inspired",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL143 BED CLUSTER has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern 'BED CLUSTER' is intentionally outside the canonical identity trust root.",
+      "id": "cog143",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "process",
+      "name": "BED CLUSTER",
+      "relevance_score": 0.1,
+      "source_pattern_id": 143,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL144 BATHING ROOM has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern 'BATHING ROOM' is intentionally outside the canonical identity trust root.",
+      "id": "cog144",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "control",
+      "name": "BATHING ROOM",
+      "relevance_score": 0.1,
+      "source_pattern_id": 144,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL145 BULK STORAGE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'BULK STORAGE' that requires a concrete identity problem before implementation.",
+      "id": "cog145",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "BULK STORAGE",
+      "relevance_score": 0.39,
+      "source_pattern_id": 145,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL146 FLEXIBLE OFFICE SPACE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'FLEXIBLE OFFICE SPACE' that requires a concrete identity problem before implementation.",
+      "id": "cog146",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "FLEXIBLE OFFICE SPACE",
+      "relevance_score": 0.43,
+      "source_pattern_id": 146,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL147 COMMUNAL EATING remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'COMMUNAL EATING' that requires a concrete identity problem before implementation.",
+      "id": "cog147",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "COMMUNAL EATING",
+      "relevance_score": 0.47,
+      "source_pattern_id": 147,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL148 SMALL WORK GROUPS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'SMALL WORK GROUPS' that requires a concrete identity problem before implementation.",
+      "id": "cog148",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "SMALL WORK GROUPS",
+      "relevance_score": 0.51,
+      "source_pattern_id": 148,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL149 RECEPTION WELCOMES YOU remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'RECEPTION WELCOMES YOU' that requires a concrete identity problem before implementation.",
+      "id": "cog149",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "RECEPTION WELCOMES YOU",
+      "relevance_score": 0.55,
+      "source_pattern_id": 149,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL150 A PLACE TO WAIT remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'A PLACE TO WAIT' that requires a concrete identity problem before implementation.",
+      "id": "cog150",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "A PLACE TO WAIT",
+      "relevance_score": 0.35,
+      "source_pattern_id": 150,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL151 SMALL MEETING ROOMS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'SMALL MEETING ROOMS' that requires a concrete identity problem before implementation.",
+      "id": "cog151",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "SMALL MEETING ROOMS",
+      "relevance_score": 0.39,
+      "source_pattern_id": 151,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL152 HALF-PRIVATE OFFICE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'HALF-PRIVATE OFFICE' that requires a concrete identity problem before implementation.",
+      "id": "cog152",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "HALF-PRIVATE OFFICE",
+      "relevance_score": 0.43,
+      "source_pattern_id": 152,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL153 ROOMS TO RENT remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'ROOMS TO RENT' that requires a concrete identity problem before implementation.",
+      "id": "cog153",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "ROOMS TO RENT",
+      "relevance_score": 0.47,
+      "source_pattern_id": 153,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL154 ...TEENAGER'S COTTAGE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '...TEENAGER'S COTTAGE' that requires a concrete identity problem before implementation.",
+      "id": "cog154",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "...TEENAGER'S COTTAGE",
+      "relevance_score": 0.51,
+      "source_pattern_id": 154,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL155 OLD AGE COTTAGE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'OLD AGE COTTAGE' that requires a concrete identity problem before implementation.",
+      "id": "cog155",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "OLD AGE COTTAGE",
+      "relevance_score": 0.55,
+      "source_pattern_id": 155,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL156 SETTLED WORK remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'SETTLED WORK' that requires a concrete identity problem before implementation.",
+      "id": "cog156",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "SETTLED WORK",
+      "relevance_score": 0.35,
+      "source_pattern_id": 156,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL157 HOME WORKSHOP remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'HOME WORKSHOP' that requires a concrete identity problem before implementation.",
+      "id": "cog157",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "HOME WORKSHOP",
+      "relevance_score": 0.39,
+      "source_pattern_id": 157,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL158 OPEN STAIRS has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern 'OPEN STAIRS' is intentionally outside the canonical identity trust root.",
+      "id": "cog158",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "process",
+      "name": "OPEN STAIRS",
+      "relevance_score": 0.1,
+      "source_pattern_id": 158,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "An adapter test for APL159 LIGHT ON TWO SIDES OF EVERY ROOM proves the external surface emits a typed proposal and has no direct ledger-append capability.",
+      "core_self_role": "Independent verification observes the same ledger and capsule through a separate implementation boundary.",
+      "id": "cog159",
+      "implementation_tier": "adapter",
+      "ksm_anchor": "control",
+      "name": "LIGHT ON TWO SIDES OF EVERY ROOM",
+      "relevance_score": 0.72,
+      "source_pattern_id": 159,
+      "x86eli_binding": {
+        "binding_id": "slsa-release-provenance",
+        "binding_mode": "inspired",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL160 BUILDING EDGE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'BUILDING EDGE' that requires a concrete identity problem before implementation.",
+      "id": "cog160",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "BUILDING EDGE",
+      "relevance_score": 0.51,
+      "source_pattern_id": 160,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL161 SUNNY PLACE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'SUNNY PLACE' that requires a concrete identity problem before implementation.",
+      "id": "cog161",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "SUNNY PLACE",
+      "relevance_score": 0.55,
+      "source_pattern_id": 161,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL162 NORTH FACE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'NORTH FACE' that requires a concrete identity problem before implementation.",
+      "id": "cog162",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "NORTH FACE",
+      "relevance_score": 0.35,
+      "source_pattern_id": 162,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL163 OUTDOOR ROOM has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern 'OUTDOOR ROOM' is intentionally outside the canonical identity trust root.",
+      "id": "cog163",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "structure",
+      "name": "OUTDOOR ROOM",
+      "relevance_score": 0.1,
+      "source_pattern_id": 163,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL164 STREET WINDOWS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'STREET WINDOWS' that requires a concrete identity problem before implementation.",
+      "id": "cog164",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "STREET WINDOWS",
+      "relevance_score": 0.43,
+      "source_pattern_id": 164,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL165 OPENING TO THE STREET remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'OPENING TO THE STREET' that requires a concrete identity problem before implementation.",
+      "id": "cog165",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "OPENING TO THE STREET",
+      "relevance_score": 0.47,
+      "source_pattern_id": 165,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL166 GALLERY SURROUND remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'GALLERY SURROUND' that requires a concrete identity problem before implementation.",
+      "id": "cog166",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "GALLERY SURROUND",
+      "relevance_score": 0.51,
+      "source_pattern_id": 166,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL167 SIX-FOOT BALCONY remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'SIX-FOOT BALCONY' that requires a concrete identity problem before implementation.",
+      "id": "cog167",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "SIX-FOOT BALCONY",
+      "relevance_score": 0.55,
+      "source_pattern_id": 167,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "An adapter test for APL168 CONNECTION TO THE EARTH proves the external surface emits a typed proposal and has no direct ledger-append capability.",
+      "core_self_role": "Every external source remains connected to immutable repository and content provenance.",
+      "id": "cog168",
+      "implementation_tier": "adapter",
+      "ksm_anchor": "control",
+      "name": "CONNECTION TO THE EARTH",
+      "relevance_score": 0.78,
+      "source_pattern_id": 168,
+      "x86eli_binding": {
+        "binding_id": "ecco9-source-manifest",
+        "binding_mode": "manifest",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL169 TERRACED SLOPE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'TERRACED SLOPE' that requires a concrete identity problem before implementation.",
+      "id": "cog169",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "TERRACED SLOPE",
+      "relevance_score": 0.39,
+      "source_pattern_id": 169,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL170 FRUIT TREES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'FRUIT TREES' that requires a concrete identity problem before implementation.",
+      "id": "cog170",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "FRUIT TREES",
+      "relevance_score": 0.43,
+      "source_pattern_id": 170,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL171 TREE PLACES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'TREE PLACES' that requires a concrete identity problem before implementation.",
+      "id": "cog171",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "TREE PLACES",
+      "relevance_score": 0.47,
+      "source_pattern_id": 171,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL172 GARDEN GROWING WILD remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'GARDEN GROWING WILD' that requires a concrete identity problem before implementation.",
+      "id": "cog172",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "GARDEN GROWING WILD",
+      "relevance_score": 0.51,
+      "source_pattern_id": 172,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL173 GARDEN WALL has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern 'GARDEN WALL' is intentionally outside the canonical identity trust root.",
+      "id": "cog173",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "process",
+      "name": "GARDEN WALL",
+      "relevance_score": 0.1,
+      "source_pattern_id": 173,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL174 TRELLISED WALK remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'TRELLISED WALK' that requires a concrete identity problem before implementation.",
+      "id": "cog174",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "TRELLISED WALK",
+      "relevance_score": 0.35,
+      "source_pattern_id": 174,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL175 GREENHOUSE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'GREENHOUSE' that requires a concrete identity problem before implementation.",
+      "id": "cog175",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "GREENHOUSE",
+      "relevance_score": 0.39,
+      "source_pattern_id": 175,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL176 GARDEN SEAT remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'GARDEN SEAT' that requires a concrete identity problem before implementation.",
+      "id": "cog176",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "GARDEN SEAT",
+      "relevance_score": 0.43,
+      "source_pattern_id": 176,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL177 VEGETABLE GARDEN remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'VEGETABLE GARDEN' that requires a concrete identity problem before implementation.",
+      "id": "cog177",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "VEGETABLE GARDEN",
+      "relevance_score": 0.47,
+      "source_pattern_id": 177,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL178 COMPOST remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'COMPOST' that requires a concrete identity problem before implementation.",
+      "id": "cog178",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "COMPOST",
+      "relevance_score": 0.51,
+      "source_pattern_id": 178,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL179 ALCOVES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'ALCOVES' that requires a concrete identity problem before implementation.",
+      "id": "cog179",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "ALCOVES",
+      "relevance_score": 0.55,
+      "source_pattern_id": 179,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL180 WINDOW PLACE has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern 'WINDOW PLACE' is intentionally outside the canonical identity trust root.",
+      "id": "cog180",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "control",
+      "name": "WINDOW PLACE",
+      "relevance_score": 0.1,
+      "source_pattern_id": 180,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL181 THE FIRE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'THE FIRE' that requires a concrete identity problem before implementation.",
+      "id": "cog181",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "THE FIRE",
+      "relevance_score": 0.39,
+      "source_pattern_id": 181,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL182 EATING ATMOSPHERE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'EATING ATMOSPHERE' that requires a concrete identity problem before implementation.",
+      "id": "cog182",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "EATING ATMOSPHERE",
+      "relevance_score": 0.43,
+      "source_pattern_id": 182,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL183 WORKSPACE ENCLOSURE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'WORKSPACE ENCLOSURE' that requires a concrete identity problem before implementation.",
+      "id": "cog183",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "WORKSPACE ENCLOSURE",
+      "relevance_score": 0.47,
+      "source_pattern_id": 183,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL184 COOKING LAYOUT remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'COOKING LAYOUT' that requires a concrete identity problem before implementation.",
+      "id": "cog184",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "COOKING LAYOUT",
+      "relevance_score": 0.51,
+      "source_pattern_id": 184,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "Protected and recovery events fail unless reviewer IDs include an authorized steward distinct from the proposer.",
+      "core_self_role": "Requires an independent reviewer or steward quorum for consequential changes.",
+      "id": "cog185",
+      "implementation_tier": "core",
+      "ksm_anchor": "control",
+      "name": "SITTING CIRCLE",
+      "relevance_score": 0.99,
+      "source_pattern_id": 185,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL186 COMMUNAL SLEEPING remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'COMMUNAL SLEEPING' that requires a concrete identity problem before implementation.",
+      "id": "cog186",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "COMMUNAL SLEEPING",
+      "relevance_score": 0.35,
+      "source_pattern_id": 186,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL187 MARRIAGE BED has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern 'MARRIAGE BED' is intentionally outside the canonical identity trust root.",
+      "id": "cog187",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "structure",
+      "name": "MARRIAGE BED",
+      "relevance_score": 0.1,
+      "source_pattern_id": 187,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL188 BED ALCOVE has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern 'BED ALCOVE' is intentionally outside the canonical identity trust root.",
+      "id": "cog188",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "process",
+      "name": "BED ALCOVE",
+      "relevance_score": 0.1,
+      "source_pattern_id": 188,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL189 DRESSING ROOM remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'DRESSING ROOM' that requires a concrete identity problem before implementation.",
+      "id": "cog189",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "DRESSING ROOM",
+      "relevance_score": 0.47,
+      "source_pattern_id": 189,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL190 CEILING HEIGHT VARIETY has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern 'CEILING HEIGHT VARIETY' is intentionally outside the canonical identity trust root.",
+      "id": "cog190",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "structure",
+      "name": "CEILING HEIGHT VARIETY",
+      "relevance_score": 0.1,
+      "source_pattern_id": 190,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL191 THE SHAPE OF INDOOR SPACE has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern 'THE SHAPE OF INDOOR SPACE' is intentionally outside the canonical identity trust root.",
+      "id": "cog191",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "process",
+      "name": "THE SHAPE OF INDOOR SPACE",
+      "relevance_score": 0.1,
+      "source_pattern_id": 191,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL192 192 WINDOWS OVERLOOKING LIFE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '192 WINDOWS OVERLOOKING LIFE' that requires a concrete identity problem before implementation.",
+      "id": "cog192",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "192 WINDOWS OVERLOOKING LIFE",
+      "relevance_score": 0.35,
+      "source_pattern_id": 192,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL193 193 HALF-OPEN WALL has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern '193 HALF-OPEN WALL' is intentionally outside the canonical identity trust root.",
+      "id": "cog193",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "structure",
+      "name": "193 HALF-OPEN WALL",
+      "relevance_score": 0.1,
+      "source_pattern_id": 193,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL194 194 INTERIOR WINDOWS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '194 INTERIOR WINDOWS' that requires a concrete identity problem before implementation.",
+      "id": "cog194",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "194 INTERIOR WINDOWS",
+      "relevance_score": 0.43,
+      "source_pattern_id": 194,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL195 195 STAIRCASE VOLUME has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern '195 STAIRCASE VOLUME' is intentionally outside the canonical identity trust root.",
+      "id": "cog195",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "control",
+      "name": "195 STAIRCASE VOLUME",
+      "relevance_score": 0.1,
+      "source_pattern_id": 195,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL196 196 CORNER DOORS has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern '196 CORNER DOORS' is intentionally outside the canonical identity trust root.",
+      "id": "cog196",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "structure",
+      "name": "196 CORNER DOORS",
+      "relevance_score": 0.1,
+      "source_pattern_id": 196,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL197 197 THICK WALLS has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern '197 THICK WALLS' is intentionally outside the canonical identity trust root.",
+      "id": "cog197",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "process",
+      "name": "197 THICK WALLS",
+      "relevance_score": 0.1,
+      "source_pattern_id": 197,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL198 198 CLOSETS BETWEEN ROOMS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '198 CLOSETS BETWEEN ROOMS' that requires a concrete identity problem before implementation.",
+      "id": "cog198",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "198 CLOSETS BETWEEN ROOMS",
+      "relevance_score": 0.35,
+      "source_pattern_id": 198,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL199 SUNNY COUNTER remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for 'SUNNY COUNTER' that requires a concrete identity problem before implementation.",
+      "id": "cog199",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "SUNNY COUNTER",
+      "relevance_score": 0.39,
+      "source_pattern_id": 199,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL200 200 OPEN SHELVES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '200 OPEN SHELVES' that requires a concrete identity problem before implementation.",
+      "id": "cog200",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "200 OPEN SHELVES",
+      "relevance_score": 0.43,
+      "source_pattern_id": 200,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL201 201 WAIST-HIGH SHELF remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '201 WAIST-HIGH SHELF' that requires a concrete identity problem before implementation.",
+      "id": "cog201",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "201 WAIST-HIGH SHELF",
+      "relevance_score": 0.47,
+      "source_pattern_id": 201,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL202 202 BUILT-IN SEATS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '202 BUILT-IN SEATS' that requires a concrete identity problem before implementation.",
+      "id": "cog202",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "202 BUILT-IN SEATS",
+      "relevance_score": 0.51,
+      "source_pattern_id": 202,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL203 203 CHILD CAVES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '203 CHILD CAVES' that requires a concrete identity problem before implementation.",
+      "id": "cog203",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "203 CHILD CAVES",
+      "relevance_score": 0.55,
+      "source_pattern_id": 203,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL204 204 SECRET PLACE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '204 SECRET PLACE' that requires a concrete identity problem before implementation.",
+      "id": "cog204",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "204 SECRET PLACE",
+      "relevance_score": 0.35,
+      "source_pattern_id": 204,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The implementation contains physically distinct proposal, policy-decision, accepted-event, and projection modules.",
+      "core_self_role": "Makes module structure follow the social reality of proposer, reviewer, steward, and observer roles.",
+      "id": "cog205",
+      "implementation_tier": "core",
+      "ksm_anchor": "structure",
+      "name": "205 STRUCTURE FOLLOWS SOCIAL SPACES",
+      "relevance_score": 0.99,
+      "source_pattern_id": 205,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL206 206 EFFICIENT STRUCTURE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '206 EFFICIENT STRUCTURE' that requires a concrete identity problem before implementation.",
+      "id": "cog206",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "206 EFFICIENT STRUCTURE",
+      "relevance_score": 0.43,
+      "source_pattern_id": 206,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "Canonicalization rejects unsupported values and produces the same SHA-256 digest for differently ordered equivalent objects.",
+      "core_self_role": "Requires canonical, typed, digestible materials for every trusted identity artifact.",
+      "id": "cog207",
+      "implementation_tier": "core",
+      "ksm_anchor": "structure",
+      "name": "207 GOOD MATERIALS",
+      "relevance_score": 0.97,
+      "source_pattern_id": 207,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL208 208 GRADUAL STIFFENING remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '208 GRADUAL STIFFENING' that requires a concrete identity problem before implementation.",
+      "id": "cog208",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "208 GRADUAL STIFFENING",
+      "relevance_score": 0.51,
+      "source_pattern_id": 208,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL209 209 ROOF LAYOUT has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern '209 ROOF LAYOUT' is intentionally outside the canonical identity trust root.",
+      "id": "cog209",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "process",
+      "name": "209 ROOF LAYOUT",
+      "relevance_score": 0.1,
+      "source_pattern_id": 209,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL210 210 FLOOR AND CEILING LAYOUT has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern '210 FLOOR AND CEILING LAYOUT' is intentionally outside the canonical identity trust root.",
+      "id": "cog210",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "control",
+      "name": "210 FLOOR AND CEILING LAYOUT",
+      "relevance_score": 0.1,
+      "source_pattern_id": 210,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL211 211 THICKENING THE OUTER WALLS has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern '211 THICKENING THE OUTER WALLS' is intentionally outside the canonical identity trust root.",
+      "id": "cog211",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "structure",
+      "name": "211 THICKENING THE OUTER WALLS",
+      "relevance_score": 0.1,
+      "source_pattern_id": 211,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL212 212 COLUMNS AT THE CORNERS has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern '212 COLUMNS AT THE CORNERS' is intentionally outside the canonical identity trust root.",
+      "id": "cog212",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "process",
+      "name": "212 COLUMNS AT THE CORNERS",
+      "relevance_score": 0.1,
+      "source_pattern_id": 212,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL213 213 FINAL COLUMN DISTRIBUTION has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern '213 FINAL COLUMN DISTRIBUTION' is intentionally outside the canonical identity trust root.",
+      "id": "cog213",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "control",
+      "name": "213 FINAL COLUMN DISTRIBUTION",
+      "relevance_score": 0.1,
+      "source_pattern_id": 213,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL214 214 ROOT FOUNDATIONS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '214 ROOT FOUNDATIONS' that requires a concrete identity problem before implementation.",
+      "id": "cog214",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "214 ROOT FOUNDATIONS",
+      "relevance_score": 0.51,
+      "source_pattern_id": 214,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL215 215 GROUND FLOOR SLAB has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern '215 GROUND FLOOR SLAB' is intentionally outside the canonical identity trust root.",
+      "id": "cog215",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "process",
+      "name": "215 GROUND FLOOR SLAB",
+      "relevance_score": 0.1,
+      "source_pattern_id": 215,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL216 216 BOX COLUMNS has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern '216 BOX COLUMNS' is intentionally outside the canonical identity trust root.",
+      "id": "cog216",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "control",
+      "name": "216 BOX COLUMNS",
+      "relevance_score": 0.1,
+      "source_pattern_id": 216,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL217 217 PERIMETER BEAMS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '217 PERIMETER BEAMS' that requires a concrete identity problem before implementation.",
+      "id": "cog217",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "217 PERIMETER BEAMS",
+      "relevance_score": 0.39,
+      "source_pattern_id": 217,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL218 218 WALL MEMBRANE has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern '218 WALL MEMBRANE' is intentionally outside the canonical identity trust root.",
+      "id": "cog218",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "process",
+      "name": "218 WALL MEMBRANE",
+      "relevance_score": 0.1,
+      "source_pattern_id": 218,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL219 FLOOR-CEILING VAULTS has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern 'FLOOR-CEILING VAULTS' is intentionally outside the canonical identity trust root.",
+      "id": "cog219",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "control",
+      "name": "FLOOR-CEILING VAULTS",
+      "relevance_score": 0.1,
+      "source_pattern_id": 219,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL220 220 ROOF VAULTS has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern '220 ROOF VAULTS' is intentionally outside the canonical identity trust root.",
+      "id": "cog220",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "structure",
+      "name": "220 ROOF VAULTS",
+      "relevance_score": 0.1,
+      "source_pattern_id": 220,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL221 221 NATURAL DOORS AND WINDOWS has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern '221 NATURAL DOORS AND WINDOWS' is intentionally outside the canonical identity trust root.",
+      "id": "cog221",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "process",
+      "name": "221 NATURAL DOORS AND WINDOWS",
+      "relevance_score": 0.1,
+      "source_pattern_id": 221,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL222 222 LOW SILL remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '222 LOW SILL' that requires a concrete identity problem before implementation.",
+      "id": "cog222",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "222 LOW SILL",
+      "relevance_score": 0.35,
+      "source_pattern_id": 222,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL223 223 DEEP REVEALS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '223 DEEP REVEALS' that requires a concrete identity problem before implementation.",
+      "id": "cog223",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "223 DEEP REVEALS",
+      "relevance_score": 0.39,
+      "source_pattern_id": 223,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL224 224 LOW DOORWAY has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern '224 LOW DOORWAY' is intentionally outside the canonical identity trust root.",
+      "id": "cog224",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "process",
+      "name": "224 LOW DOORWAY",
+      "relevance_score": 0.1,
+      "source_pattern_id": 224,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL225 225 FRAMES AS THICKENED EDGES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '225 FRAMES AS THICKENED EDGES' that requires a concrete identity problem before implementation.",
+      "id": "cog225",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "225 FRAMES AS THICKENED EDGES",
+      "relevance_score": 0.47,
+      "source_pattern_id": 225,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL226 226 COLUMN PLACE has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern '226 COLUMN PLACE' is intentionally outside the canonical identity trust root.",
+      "id": "cog226",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "structure",
+      "name": "226 COLUMN PLACE",
+      "relevance_score": 0.1,
+      "source_pattern_id": 226,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL227 227 COLUMN CONNECTIONS has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern '227 COLUMN CONNECTIONS' is intentionally outside the canonical identity trust root.",
+      "id": "cog227",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "process",
+      "name": "227 COLUMN CONNECTIONS",
+      "relevance_score": 0.1,
+      "source_pattern_id": 227,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "A stale previous-event digest is quarantined as a fork and leaves projected state unchanged.",
+      "core_self_role": "Models stage and state transitions as accepted events rather than silent replacement.",
+      "id": "cog228",
+      "implementation_tier": "core",
+      "ksm_anchor": "process",
+      "name": "228 STAIR VAULT",
+      "relevance_score": 0.96,
+      "source_pattern_id": 228,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "An adapter test for APL229 229 DUCT SPACE proves the external surface emits a typed proposal and has no direct ledger-append capability.",
+      "core_self_role": "Narrow adapter channels carry typed proposals without opening the kernel to ambient execution.",
+      "id": "cog229",
+      "implementation_tier": "adapter",
+      "ksm_anchor": "structure",
+      "name": "229 DUCT SPACE",
+      "relevance_score": 0.76,
+      "source_pattern_id": 229,
+      "x86eli_binding": {
+        "binding_id": "signature-challenge-auth",
+        "binding_mode": "deferred",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL230 230 RADIANT HEAT remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '230 RADIANT HEAT' that requires a concrete identity problem before implementation.",
+      "id": "cog230",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "230 RADIANT HEAT",
+      "relevance_score": 0.43,
+      "source_pattern_id": 230,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL231 231 DORMER WINDOWS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '231 DORMER WINDOWS' that requires a concrete identity problem before implementation.",
+      "id": "cog231",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "231 DORMER WINDOWS",
+      "relevance_score": 0.47,
+      "source_pattern_id": 231,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL232 232 ROOF CAPS has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern '232 ROOF CAPS' is intentionally outside the canonical identity trust root.",
+      "id": "cog232",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "structure",
+      "name": "232 ROOF CAPS",
+      "relevance_score": 0.1,
+      "source_pattern_id": 232,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL233 233 FLOOR SURFACE has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern '233 FLOOR SURFACE' is intentionally outside the canonical identity trust root.",
+      "id": "cog233",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "process",
+      "name": "233 FLOOR SURFACE",
+      "relevance_score": 0.1,
+      "source_pattern_id": 233,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL234 234 LAPPED OUTSIDE WALLS has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern '234 LAPPED OUTSIDE WALLS' is intentionally outside the canonical identity trust root.",
+      "id": "cog234",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "control",
+      "name": "234 LAPPED OUTSIDE WALLS",
+      "relevance_score": 0.1,
+      "source_pattern_id": 234,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL235 235 SOFT INSIDE WALLS has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern '235 SOFT INSIDE WALLS' is intentionally outside the canonical identity trust root.",
+      "id": "cog235",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "structure",
+      "name": "235 SOFT INSIDE WALLS",
+      "relevance_score": 0.1,
+      "source_pattern_id": 235,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL236 236 WINDOWS WHICH OPEN WIDE remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '236 WINDOWS WHICH OPEN WIDE' that requires a concrete identity problem before implementation.",
+      "id": "cog236",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "236 WINDOWS WHICH OPEN WIDE",
+      "relevance_score": 0.43,
+      "source_pattern_id": 236,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "An adapter test for APL237 237 SOLID DOORS WITH GLASS proves the external surface emits a typed proposal and has no direct ledger-append capability.",
+      "core_self_role": "Policy gates remain inspectable while still blocking unauthorized mutation.",
+      "id": "cog237",
+      "implementation_tier": "adapter",
+      "ksm_anchor": "control",
+      "name": "237 SOLID DOORS WITH GLASS",
+      "relevance_score": 0.76,
+      "source_pattern_id": 237,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL238 238 FILTERED LIGHT remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '238 FILTERED LIGHT' that requires a concrete identity problem before implementation.",
+      "id": "cog238",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "238 FILTERED LIGHT",
+      "relevance_score": 0.51,
+      "source_pattern_id": 238,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL239 239 SMALL PANES remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '239 SMALL PANES' that requires a concrete identity problem before implementation.",
+      "id": "cog239",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "239 SMALL PANES",
+      "relevance_score": 0.55,
+      "source_pattern_id": 239,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL240 240 HALF-INCH TRIM remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '240 HALF-INCH TRIM' that requires a concrete identity problem before implementation.",
+      "id": "cog240",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "240 HALF-INCH TRIM",
+      "relevance_score": 0.35,
+      "source_pattern_id": 240,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL241 241 SEAT SPOTS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '241 SEAT SPOTS' that requires a concrete identity problem before implementation.",
+      "id": "cog241",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "241 SEAT SPOTS",
+      "relevance_score": 0.39,
+      "source_pattern_id": 241,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL242 242 FRONT DOOR BENCH has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern '242 FRONT DOOR BENCH' is intentionally outside the canonical identity trust root.",
+      "id": "cog242",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "process",
+      "name": "242 FRONT DOOR BENCH",
+      "relevance_score": 0.1,
+      "source_pattern_id": 242,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL243 243 SITTING WALL has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern '243 SITTING WALL' is intentionally outside the canonical identity trust root.",
+      "id": "cog243",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "control",
+      "name": "243 SITTING WALL",
+      "relevance_score": 0.1,
+      "source_pattern_id": 243,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "The release inventory confirms APL244 244 CANVAS ROOFS has no runtime dependency or canonical-authority implementation.",
+      "core_self_role": "Physical pattern '244 CANVAS ROOFS' is intentionally outside the canonical identity trust root.",
+      "id": "cog244",
+      "implementation_tier": "exclude",
+      "ksm_anchor": "structure",
+      "name": "244 CANVAS ROOFS",
+      "relevance_score": 0.1,
+      "source_pattern_id": 244,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL245 245 RAISED FLOWERS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '245 RAISED FLOWERS' that requires a concrete identity problem before implementation.",
+      "id": "cog245",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "245 RAISED FLOWERS",
+      "relevance_score": 0.55,
+      "source_pattern_id": 245,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL246 246 CLIMBING PLANTS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '246 CLIMBING PLANTS' that requires a concrete identity problem before implementation.",
+      "id": "cog246",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "246 CLIMBING PLANTS",
+      "relevance_score": 0.35,
+      "source_pattern_id": 246,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "A verified capsule round trip reconstructs the same state, while a one-byte mutation fails verification.",
+      "core_self_role": "Supports repair through verified replay, fork quarantine, and replaceable projections.",
+      "id": "cog247",
+      "implementation_tier": "core",
+      "ksm_anchor": "process",
+      "name": "247 PAVING WITH CRACKS BETWEEN THE STONES",
+      "relevance_score": 0.97,
+      "source_pattern_id": 247,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL248 248 SOFT TILE AND BRICK remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '248 SOFT TILE AND BRICK' that requires a concrete identity problem before implementation.",
+      "id": "cog248",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "248 SOFT TILE AND BRICK",
+      "relevance_score": 0.43,
+      "source_pattern_id": 248,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "An adapter test for APL249 249 ORNAMENT proves the external surface emits a typed proposal and has no direct ledger-append capability.",
+      "core_self_role": "Live2D expression decorates accepted and transient cognitive state without becoming identity authority.",
+      "id": "cog249",
+      "implementation_tier": "adapter",
+      "ksm_anchor": "control",
+      "name": "249 ORNAMENT",
+      "relevance_score": 0.76,
+      "source_pattern_id": 249,
+      "x86eli_binding": {
+        "binding_id": "coherence-tracker",
+        "binding_mode": "adapted",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL250 250 WARM COLORS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '250 WARM COLORS' that requires a concrete identity problem before implementation.",
+      "id": "cog250",
+      "implementation_tier": "future",
+      "ksm_anchor": "structure",
+      "name": "250 WARM COLORS",
+      "relevance_score": 0.51,
+      "source_pattern_id": 250,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL251 251 DIFFERENT CHAIRS remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '251 DIFFERENT CHAIRS' that requires a concrete identity problem before implementation.",
+      "id": "cog251",
+      "implementation_tier": "future",
+      "ksm_anchor": "process",
+      "name": "251 DIFFERENT CHAIRS",
+      "relevance_score": 0.55,
+      "source_pattern_id": 251,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "APL252 252 POOLS OF LIGHT remains future-only until a reviewed proposal links one inspectable source artifact and one passing falsification test.",
+      "core_self_role": "Potential future analogy for '252 POOLS OF LIGHT' that requires a concrete identity problem before implementation.",
+      "id": "cog252",
+      "implementation_tier": "future",
+      "ksm_anchor": "control",
+      "name": "252 POOLS OF LIGHT",
+      "relevance_score": 0.35,
+      "source_pattern_id": 252,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    },
+    {
+      "acceptance_criterion": "An evidence-linked autobiographical assertion survives export, verified import, and replay with the same digest.",
+      "core_self_role": "Grounds autobiographical identity in evidence-linked events that remain portable and replayable.",
+      "id": "cog253",
+      "implementation_tier": "core",
+      "ksm_anchor": "process",
+      "name": "253 THINGS FROM YOUR LIFE",
+      "relevance_score": 0.96,
+      "source_pattern_id": 253,
+      "x86eli_binding": {
+        "binding_id": null,
+        "binding_mode": "none",
+        "canonical_authority": "none",
+        "execution_permitted": false
+      }
+    }
+  ],
+  "schema_version": "1.0.0",
+  "source": {
+    "pattern_language": "Christopher Alexander's A Pattern Language",
+    "record_count": 253,
+    "source_skill": "apl253"
+  }
+}

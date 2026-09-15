@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Index Miara mesh map</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        background: #111;
+        color: #eee;
+        margin: 16px;
+      }
+      #status {
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Miara mesh-map index</h1>
+    <p id="status">starting</p>
+    <script src="/demo/lib/live2dcubismcore.min.js"></script>
+    <script src="/demo/lib/pixi6.min.js"></script>
+    <script src="/demo/lib/pixi-live2d-display-cubism4.min.js"></script>
+    <script type="module">
+      import {
+        MELODY_PARAMETER_PROFILE,
+        buildIdentityMeshMap,
+        figureFromDrawables,
+        identityModel3Path,
+        regionCounts,
+        uvCentroid,
+      } from "/avatar-dist/automesh/index.js";
+
+      const identity =
+        new URLSearchParams(location.search).get("identity") || "melody";
+      const MODEL_URL = `/${identityModel3Path(identity)}`;
+      const statusEl = document.getElementById("status");
+      const setStatus = (text) => {
+        statusEl.textContent = text;
+      };
+
+      function inspectModel(model) {
+        const internal = model.internalModel;
+        const ids =
+          typeof internal.getDrawableIDs === "function"
+            ? internal.getDrawableIDs()
+            : [];
+        const core = internal.coreModel;
+        const native = core.getModel?.()?.drawables;
+        const box = { x: 0, y: 0, width: 0, height: 0 };
+        const inspected = [];
+        for (let index = 0; index < ids.length; index++) {
+          let bounds = { x: 0, y: 0, width: 0, height: 0 };
+          try {
+            bounds = internal.getDrawableBounds(index, box);
+          } catch {
+            continue;
+          }
+          let uvs;
+          let positions;
+          let opacity = 1;
+          let renderOrder = index;
+          try {
+            uvs =
+              core.getDrawableVertexUvs?.(index) ??
+              core.getDrawableUvs?.(index) ??
+              native?.vertexUvs?.[index] ??
+              native?.uvs?.[index];
+            positions =
+              core.getDrawableVertexPositions?.(index) ??
+              core.getDrawableVertices?.(index) ??
+              native?.vertexPositions?.[index] ??
+              native?.positions?.[index];
+            opacity =
+              core.getDrawableOpacity?.(index) ??
+              native?.opacities?.[index] ??
+              1;
+            renderOrder =
+              core.getDrawableRenderOrders?.()?.[index] ??
+              native?.renderOrders?.[index] ??
+              index;
+          } catch {
+            uvs = native?.vertexUvs?.[index] ?? native?.uvs?.[index];
+            positions =
+              native?.vertexPositions?.[index] ?? native?.positions?.[index];
+          }
+          inspected.push({
+            id: ids[index] ?? `drawable-${index}`,
+            index,
+            bounds: { ...bounds },
+            uvCentroid: uvs ? uvCentroid(uvs) : undefined,
+            positions: positions ? Array.from(positions) : undefined,
+            uvs: uvs ? Array.from(uvs) : undefined,
+            opacity,
+            renderOrder,
+          });
+        }
+        return inspected;
+      }
+
+      async function main() {
+        setStatus("loading model");
+        const canvas = document.createElement("canvas");
+        canvas.width = 64;
+        canvas.height = 64;
+        const app = new PIXI.Application({
+          view: canvas,
+          backgroundAlpha: 0,
+          width: 64,
+          height: 64,
+        });
+        const { Live2DModel } = PIXI.live2d;
+        const model = await Live2DModel.from(MODEL_URL, { autoUpdate: true });
+        const core = model.internalModel?.coreModel;
+        if (core?.setParameterValueById) {
+          for (const [paramId, value] of Object.entries(
+            MELODY_PARAMETER_PROFILE,
+          )) {
+            core.setParameterValueById(paramId, value);
+          }
+        }
+        model.internalModel?.update?.(16, performance.now());
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+        model.internalModel?.update?.(16, performance.now());
+
+        const drawables = inspectModel(model);
+        const figureBox = figureFromDrawables(drawables);
+        const figure = figureBox
+          ? {
+              x: figureBox.x,
+              y: figureBox.y,
+              w: figureBox.width,
+              h: figureBox.height,
+            }
+          : { x: -0.24, y: -0.57, w: 0.55, h: 1.23 };
+        const meshMap = buildIdentityMeshMap({
+          identity,
+          sourceModel: identityModel3Path(identity),
+          figure,
+          drawables,
+        });
+        const counts = regionCounts(meshMap);
+        window.__MESH_MAP_RESULT__ = {
+          ok: true,
+          meshMap,
+          counts,
+          drawableCount: drawables.length,
+        };
+        setStatus(
+          [
+            "indexed",
+            `drawables ${drawables.length}`,
+            ...Object.entries(counts).map(
+              ([region, count]) => `${region} ${count}`,
+            ),
+          ].join("\n"),
+        );
+        app.destroy(true);
+      }
+
+      main().catch((error) => {
+        const message = error instanceof Error ? error.message : String(error);
+        window.__MESH_MAP_ERROR__ = message;
+        setStatus(`failed: ${message}`);
+      });
+    </script>
+  </body>
+</html>

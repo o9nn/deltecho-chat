@@ -47,6 +47,25 @@ jest.mock("deep-tree-echo-core", () => ({
     updateEmotionalState: jest.fn(),
   })),
   InMemoryStorage: jest.fn().mockImplementation(() => ({})),
+  AutognosisAutogenesisCoupler: jest.fn().mockImplementation(() => ({
+    couple: jest.fn().mockReturnValue({
+      skipped: true,
+      reason: "couple_disabled",
+    }),
+    attachIdentity: jest.fn(),
+  })),
+  intentionalityEngine: {
+    generateGoal: jest.fn(),
+    getActiveGoals: jest.fn().mockReturnValue([]),
+    maxActiveGoals: 20,
+  },
+  esnReservoir: {
+    getAutognosisReport: jest.fn().mockReturnValue(null),
+    getState: jest.fn(),
+    step: jest.fn(),
+    reset: jest.fn(),
+  },
+  l2Normalize: (values: number[]) => values,
 }));
 
 // Mock Sys6 Bridge

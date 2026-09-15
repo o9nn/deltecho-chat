@@ -1,0 +1,179 @@
+{
+  "opaque": 6759503,
+  "mean": [
+    90,
+    170,
+    187
+  ],
+  "purple": 716158,
+  "teal": 4680364,
+  "gold": 72023,
+  "painted": 556222,
+  "character": {
+    "opaque": 494889,
+    "mean": [
+      147,
+      97,
+      163
+    ],
+    "purple": 341588,
+    "teal": 16613,
+    "gold": 23122
+  },
+  "characterAabb": {
+    "opaque": 988390,
+    "mean": [
+      146,
+      154,
+      186
+    ],
+    "purple": 371687,
+    "teal": 366099,
+    "gold": 46156
+  },
+  "regions": {
+    "hair": {
+      "opaque": 269371,
+      "mean": [
+        139,
+        93,
+        182
+      ],
+      "purple": 204871,
+      "teal": 42555,
+      "gold": 8179
+    },
+    "headset": {
+      "opaque": 76727,
+      "mean": [
+        148,
+        124,
+        155
+      ],
+      "purple": 38350,
+      "teal": 16354,
+      "gold": 21422
+    },
+    "face": {
+      "opaque": 38821,
+      "mean": [
+        179,
+        227,
+        232
+      ],
+      "purple": 1298,
+      "teal": 22289,
+      "gold": 0
+    },
+    "body": {
+      "opaque": 189139,
+      "mean": [
+        160,
+        184,
+        202
+      ],
+      "purple": 47830,
+      "teal": 83455,
+      "gold": 5119
+    },
+    "skirt": {
+      "opaque": 118779,
+      "mean": [
+        114,
+        172,
+        178
+      ],
+      "purple": 10095,
+      "teal": 68649,
+      "gold": 3319
+    },
+    "armL": {
+      "opaque": 43285,
+      "mean": [
+        168,
+        196,
+        190
+      ],
+      "purple": 16130,
+      "teal": 18773,
+      "gold": 1040
+    },
+    "armR": {
+      "opaque": 33270,
+      "mean": [
+        135,
+        184,
+        194
+      ],
+      "purple": 13674,
+      "teal": 17672,
+      "gold": 430
+    },
+    "legL": {
+      "opaque": 50190,
+      "mean": [
+        187,
+        217,
+        221
+      ],
+      "purple": 2136,
+      "teal": 26301,
+      "gold": 0
+    },
+    "legR": {
+      "opaque": 54469,
+      "mean": [
+        151,
+        151,
+        145
+      ],
+      "purple": 14313,
+      "teal": 11073,
+      "gold": 605
+    },
+    "wings": {
+      "opaque": 42471,
+      "mean": [
+        155,
+        116,
+        149
+      ],
+      "purple": 21348,
+      "teal": 6007,
+      "gold": 4322
+    },
+    "sparkle": {
+      "opaque": 69669,
+      "mean": [
+        118,
+        212,
+        210
+      ],
+      "purple": 1337,
+      "teal": 52516,
+      "gold": 1232
+    },
+    "accessory": {
+      "opaque": 2199,
+      "mean": [
+        187,
+        167,
+        129
+      ],
+      "purple": 305,
+      "teal": 455,
+      "gold": 488
+    }
+  },
+  "hairPixels": {
+    "opaque": 226441,
+    "mean": [
+      127,
+      55,
+      180
+    ],
+    "purple": 226441,
+    "teal": 0,
+    "gold": 0
+  }
+}

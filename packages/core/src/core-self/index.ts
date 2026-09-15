@@ -24,7 +24,30 @@ export {
   type IdentityAgentState,
   type IdentityArenaState,
   type IdentityRelationState,
+  type IdentityAutognosisSignal,
+  type IdentityGovernanceProposal,
 } from "./IdentityMesh.js";
+
+export {
+  AutognosisAutogenesisCoupler,
+  isCoupleGranted,
+  deriveAutogenesisKind,
+  autogenesisGoalId,
+  encodeAutogenesisVector,
+  l2Normalize,
+  AUTOGENESIS_COUPLE_ENV,
+  CONSENSUS_SLOT,
+  ADOPTED_SLOT,
+  DEFAULT_INPUT_DIM,
+  DEFAULT_GOAL_CAP,
+  type AutogenesisKind,
+  type CoupleResult,
+  type ReservoirAccessors,
+  type IntentionalityAccessors,
+  type CanonicalGovernanceProposalSink,
+  type CanonicalCoreSelfStatusLike,
+  type CanonicalEmbodimentAttestation,
+} from "./AutognosisAutogenesisCoupler.js";
 
 export {
   LucyInferenceDriver,
@@ -51,3 +74,16 @@ export {
   type LearningUpdate,
   type LearnerState,
 } from "./OnlineReservoirLearner.js";
+
+export {
+  NeonIdentityPersistence,
+  type NeonIdentityConfig,
+  type IdentityAtom,
+  type IdentityEdge,
+  type BackupResult,
+  type RestoreResult,
+} from "./NeonIdentityPersistence.js";
+
+// Deterministic identity trust root: proposals, policy, accepted history,
+// replayable projection, typed hypergraph, portable capsules, and evidence KSM.
+export * from "./kernel/index.js";
