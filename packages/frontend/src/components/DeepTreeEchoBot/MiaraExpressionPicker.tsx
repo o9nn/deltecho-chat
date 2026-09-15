@@ -5,10 +5,11 @@ import {
   resolveAvatarExpression,
   type AvatarExpressionId,
 } from "@deltecho/avatar";
+import type { TranslationKey } from "@deltachat-desktop/shared/translationKeyType";
 import useTranslationFunction from "../../hooks/useTranslationFunction";
 import { useDeepTreeEchoAvatarOptional } from "./DeepTreeEchoAvatarContext";
 
-const EXPRESSION_LABELS: Record<string, string> = {
+const EXPRESSION_LABELS: Partial<Record<AvatarExpressionId, TranslationKey>> = {
   live: "avatar_expression_live",
   NEUTRAL_Reset: "avatar_expression_neutral",
   JOY_01_BroadSmile: "avatar_expression_smile",
@@ -55,11 +56,14 @@ export function MiaraExpressionPicker({
             selectExpression(event.target.value as AvatarExpressionId)
           }
         >
-          {AVATAR_EXPRESSION_CHOICES.map((choice) => (
-            <option key={choice.id} value={choice.id}>
-              {tx(EXPRESSION_LABELS[choice.id] ?? choice.label)}
-            </option>
-          ))}
+          {AVATAR_EXPRESSION_CHOICES.map((choice) => {
+            const translationKey = EXPRESSION_LABELS[choice.id];
+            return (
+              <option key={choice.id} value={choice.id}>
+                {translationKey ? tx(translationKey) : choice.label}
+              </option>
+            );
+          })}
         </select>
       </label>
       {selected !== LIVE_AVATAR_EXPRESSION && (

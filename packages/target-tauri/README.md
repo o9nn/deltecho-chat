@@ -65,19 +65,19 @@ pnpm tauri dev -f=crabnebula_extras
 
 ## Log location
 
-| platform | location                                |
-| -------- | --------------------------------------- |
-| linux    | ~/.config/chat.delta.desktop.tauri      |
-| macOS    | ~/Library/Logs/chat.delta.desktop.tauri |
-| windows  | %AppData%\chat.delta.desktop.tauri      |
+| platform | location                                   |
+| -------- | ------------------------------------------ |
+| linux    | ~/.config/chat.deltecho.desktop.tauri      |
+| macOS    | ~/Library/Logs/chat.deltecho.desktop.tauri |
+| windows  | %AppData%\chat.deltecho.desktop.tauri      |
 
 ## Data location
 
-| platform | location                                               |
-| -------- | ------------------------------------------------------ |
-| linux    | ~/.config/chat.delta.desktop.tauri                     |
-| macOS    | ~/Library/Application Support/chat.delta.desktop.tauri |
-| windows  | %AppData%\chat.delta.desktop.tauri                     |
+| platform | location                                                  |
+| -------- | --------------------------------------------------------- |
+| linux    | ~/.config/chat.deltecho.desktop.tauri                     |
+| macOS    | ~/Library/Application Support/chat.deltecho.desktop.tauri |
+| windows  | %AppData%\chat.deltecho.desktop.tauri                     |
 
 ## Funding
 

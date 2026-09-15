@@ -132,6 +132,20 @@ export class Echobeats extends EventEmitter {
   private shells: NestedShell[] = [];
   private running = false;
   private timer: ReturnType<typeof setInterval> | null = null;
+
+  /**
+   * Runtime mutator: update cycle interval and restart timer.
+   * Used by SelfModificationEngine ENACTION phase.
+   */
+  setCycleInterval(intervalMs: number): void {
+    const clamped = Math.max(500, Math.min(30000, intervalMs));
+    this.config.cycleInterval = clamped;
+    // Restart timer if running
+    if (this.timer) {
+      clearInterval(this.timer);
+      this.timer = setInterval(() => this.tick(), clamped);
+    }
+  }
   private globalStep = 0;
   private cycleNumber = 0;
   private tickHandler: StreamTickHandler | null = null;

@@ -22,6 +22,16 @@
  */
 
 import { EventEmitter } from "events";
+import {
+  ChaoticMicroExpressionLayer,
+  type EndocrineInput,
+} from "./chaotic-micro-expression-layer.js";
+import { SignatureGestureController } from "./signature-gesture-controller.js";
+import {
+  CogMorphCubismMapper,
+  type CogMorphGlyphState,
+  type CogMorphCubismOverlay,
+} from "./cogmorph-cubism-mapper.js";
 // Types from ./types available if needed for future integration
 
 // ============================================================
@@ -62,11 +72,29 @@ export interface ReservoirAnimationParams {
     auraIntensity: number;
     auraColor: string;
   };
+  /** Scientific-genius / autognosis resonance overlay for Live2D companion shells */
+  scientificGeniusOverlay: {
+    activation: number; // 0-1
+    daoConsensus: number; // 0-1
+    esnCoherence: number; // 0-1
+    autognosisResonance: number; // 0-1
+    haloPulseHz: number; // Hz
+    epistemicTemperature: number; // 0-1, lower means more consensus
+    hypothesisFlux: number; // 0-1
+  };
   /** Edge-of-chaos indicator */
   edgeOfChaos: {
     isActive: boolean;
     chaosLevel: number; // 0-1
     visualIntensity: number; // 0-1
+  };
+  /** Echobeats 12-step cognitive rhythm visualization */
+  echobeatsVisualization?: {
+    currentPhase: number; // 1-12
+    frameInPhase: number;
+    phaseProgress: number; // 0-1
+    phaseColor: string; // Hex color for current phase
+    pulseIntensity: number; // 0-1 sinusoidal pulse
   };
 }
 
@@ -98,6 +126,11 @@ export interface EntelechyInput {
   reservoirCoupling: number;
   temporalSynchrony: number;
   insightPotential: number;
+  scientificGenius?: number;
+  daoConsensus?: number;
+  esnCoherence?: number;
+  autognosisResonance?: number;
+  freeEnergy?: number;
 }
 
 /**
@@ -135,10 +168,32 @@ export class ESNAvatarBridge extends EventEmitter {
   private breathPhase: number = 0;
   private tickCount: number = 0;
 
+  // Chaotic micro-expression layer (Lorenz attractor)
+  private chaosLayer: ChaoticMicroExpressionLayer;
+  private signatureGestureCtrl: SignatureGestureController;
+  private lastEndocrine: EndocrineInput = {
+    cortisol: 0.2,
+    norepinephrine: 0.3,
+    dopaminePhasic: 0,
+    serotonin: 0.5,
+    oxytocin: 0.3,
+  };
+  private currentFreeEnergy: number = 0;
+  private echobeatsPhase: number = 1;
+  private echobeatsFrameInPhase: number = 0;
+  private isEvaluatingSelf: boolean = false;
+  private signatureGesture: string | null = null;
+  private cogMorphMapper: CogMorphCubismMapper;
+  private lastGlyphState: CogMorphGlyphState | null = null;
+  private lastCogMorphOverlay: CogMorphCubismOverlay | null = null;
+
   constructor(config: Partial<ESNAvatarBridgeConfig> = {}) {
     super();
     this.config = { ...DEFAULT_CONFIG, ...config };
     this.smoothedActivations = new Array(this.config.projectionDim).fill(0);
+    this.chaosLayer = new ChaoticMicroExpressionLayer();
+    this.signatureGestureCtrl = new SignatureGestureController();
+    this.cogMorphMapper = new CogMorphCubismMapper();
 
     this.currentParams = {
       microExpressions: {
@@ -166,6 +221,15 @@ export class ESNAvatarBridge extends EventEmitter {
         particleSpeed: 0,
         auraIntensity: 0,
         auraColor: "#4a90d9",
+      },
+      scientificGeniusOverlay: {
+        activation: 0,
+        daoConsensus: 0,
+        esnCoherence: 0,
+        autognosisResonance: 0,
+        haloPulseHz: 0.5,
+        epistemicTemperature: 1,
+        hypothesisFlux: 0,
       },
       edgeOfChaos: {
         isActive: false,
@@ -235,6 +299,9 @@ export class ESNAvatarBridge extends EventEmitter {
       };
     }
 
+    // 6. Compose chaotic micro-expression layer (Lorenz-driven organic roughness)
+    this.composeChaosLayer();
+
     this.emit("reservoir-update", this.currentParams);
   }
 
@@ -252,15 +319,118 @@ export class ESNAvatarBridge extends EventEmitter {
       entelechial: "#aaddff",
     };
 
-    this.currentParams.entelechyVisualization = {
-      level: input.level,
-      particleCount: Math.floor(input.patternCount * 10),
-      particleSpeed: input.insightPotential,
-      auraIntensity: input.score,
-      auraColor: levelColors[input.level] || "#4a90d9",
+    const daoConsensus = clamp01(
+      input.daoConsensus ?? input.score * 0.48 + input.temporalSynchrony * 0.52,
+    );
+    const esnCoherence = clamp01(
+      input.esnCoherence ??
+        input.reservoirCoupling * 0.62 + input.temporalSynchrony * 0.38,
+    );
+    const autognosisResonance = clamp01(
+      input.autognosisResonance ??
+        input.score * 0.42 +
+          input.insightPotential * 0.34 +
+          daoConsensus * 0.24,
+    );
+    const scientificGenius = clamp01(
+      input.scientificGenius ??
+        input.insightPotential * 0.42 +
+          esnCoherence * 0.28 +
+          autognosisResonance * 0.3,
+    );
+    const activation = clamp01(
+      scientificGenius * 0.42 +
+        daoConsensus * 0.2 +
+        esnCoherence * 0.2 +
+        autognosisResonance * 0.18,
+    );
+    const freeEnergy = clamp01(input.freeEnergy ?? 1 - daoConsensus);
+
+    this.currentParams.scientificGeniusOverlay = {
+      activation,
+      daoConsensus,
+      esnCoherence,
+      autognosisResonance,
+      haloPulseHz: Number(
+        (0.5 + activation * 2.7 + esnCoherence * 0.6).toFixed(3),
+      ),
+      epistemicTemperature: Number(
+        clamp(1 - daoConsensus * 0.58 + freeEnergy * 0.22, 0.2, 1).toFixed(3),
+      ),
+      hypothesisFlux: Number(
+        clamp(
+          scientificGenius * 0.56 + esnCoherence * 0.3 + freeEnergy * 0.14,
+          0,
+          1,
+        ).toFixed(3),
+      ),
     };
 
-    this.emit("entelechy-update", this.currentParams.entelechyVisualization);
+    this.currentParams.entelechyVisualization = {
+      level: input.level,
+      particleCount: Math.floor(input.patternCount * (10 + activation * 6)),
+      particleSpeed: clamp01(input.insightPotential * 0.72 + activation * 0.28),
+      auraIntensity: clamp01(Math.max(input.score, activation * 0.92)),
+      auraColor: this.scientificGeniusColor(
+        levelColors[input.level] || "#4a90d9",
+        activation,
+        daoConsensus,
+      ),
+    };
+
+    this.emit("entelechy-update", {
+      ...this.currentParams.entelechyVisualization,
+      scientificGeniusOverlay: this.currentParams.scientificGeniusOverlay,
+    });
+  }
+
+  /**
+   * Inject somatic marker activations into the reservoir state as bias.
+   * This implements Loop 2 from the cognitive-wiring schema: emotional
+   * memories bias the reservoir, which the readout then projects as
+   * continuous animation modulation (breathing amplitude, micro-sway,
+   * chaotic jitter). The somatic markers are NOT overriding the reservoir
+   * — they inject a bias that the reservoir's dynamics integrate.
+   *
+   * @param valence  Emotional valence (-1 to 1)
+   * @param arousal  Emotional arousal (0 to 1)
+   * @param weight   Injection strength (0 to 1, default 0.3)
+   */
+  public injectSomaticMarker(
+    valence: number,
+    arousal: number,
+    weight: number = 0.3,
+  ): void {
+    const w = clamp01(weight);
+    const v = clamp(valence, -1, 1);
+    const a = clamp01(arousal);
+
+    // Bias the smoothed activations: valence shifts brow/mouth symmetrically,
+    // arousal amplifies all channels and adds irregularity to breathing.
+    for (let i = 0; i < this.smoothedActivations.length; i++) {
+      // Even indices get valence bias, odd get arousal bias
+      const bias = i % 2 === 0 ? v * w * 0.5 : a * w * 0.4;
+      this.smoothedActivations[i] += bias;
+    }
+
+    // Arousal directly modulates breathing irregularity and depth
+    this.currentParams.breathingModulation.irregularity = clamp01(
+      this.currentParams.breathingModulation.irregularity + a * w * 0.2,
+    );
+    this.currentParams.breathingModulation.depth = clamp01(
+      this.currentParams.breathingModulation.depth + a * w * 0.15,
+    );
+
+    // Valence shifts consciousness glow color temperature
+    if (v > 0.3) {
+      // Warm (positive memory)
+      this.currentParams.consciousnessGlow.color = "#7ad98a";
+    } else if (v < -0.3) {
+      // Cool/dim (negative memory)
+      this.currentParams.consciousnessGlow.color = "#8a6ad9";
+    }
+
+    this.emit("somatic-injection", { valence: v, arousal: a, weight: w });
   }
 
   /**
@@ -273,6 +443,22 @@ export class ESNAvatarBridge extends EventEmitter {
   /**
    * Map health and chaos state to glow color
    */
+  private scientificGeniusColor(
+    baseColor: string,
+    activation: number,
+    daoConsensus: number,
+  ): string {
+    if (activation < 0.58) return baseColor;
+
+    const warmth = Math.floor(170 + daoConsensus * 70);
+    const blue = Math.floor(190 + activation * 55);
+    return `#${warmth.toString(16).padStart(2, "0")}${Math.floor(
+      190 + activation * 45,
+    )
+      .toString(16)
+      .padStart(2, "0")}${blue.toString(16).padStart(2, "0")}`;
+  }
+
   private healthToColor(health: number, isEdgeOfChaos: boolean): string {
     if (isEdgeOfChaos) {
       // Golden glow at edge of chaos
@@ -303,6 +489,247 @@ export class ESNAvatarBridge extends EventEmitter {
       .padStart(2, "0")}${dim.toString(16).padStart(2, "0")}`;
   }
 
+  // ─── Chaotic Layer Integration ─────────────────────────────────────────────
+
+  /**
+   * Compose the Lorenz-driven chaotic micro-expression layer onto the
+   * reservoir-driven micro-expressions. This is additive: the reservoir
+   * provides the base signal, the chaos layer adds organic roughness.
+   */
+  private composeChaosLayer(): void {
+    // 1. Compute Lorenz-driven deltas
+    const deltas = this.chaosLayer.computeDeltas(this.lastEndocrine);
+
+    // 2. Additively blend onto reservoir micro-expressions
+    this.currentParams.microExpressions.browLeftOffset += deltas.paramBrowLY;
+    this.currentParams.microExpressions.browRightOffset += deltas.paramBrowRY;
+    this.currentParams.microExpressions.eyeLeftOffset += deltas.paramEyeLOpen;
+    this.currentParams.microExpressions.eyeRightOffset += deltas.paramEyeROpen;
+    this.currentParams.microExpressions.mouthOffset += deltas.paramMouthForm;
+    this.currentParams.microExpressions.headTiltOffset += deltas.paramAngleZ;
+
+    // 3. Uncertainty expression (The Void — visible searching face)
+    const uncertainty = this.chaosLayer.computeUncertaintyExpression(
+      this.currentFreeEnergy,
+    );
+    if (uncertainty.paramBrowLY !== undefined) {
+      this.currentParams.microExpressions.browLeftOffset +=
+        uncertainty.paramBrowLY;
+      this.currentParams.microExpressions.browRightOffset +=
+        uncertainty.paramBrowRY ?? 0;
+      this.currentParams.microExpressions.mouthOffset +=
+        uncertainty.paramMouthOpenY ?? 0;
+    }
+
+    // 4. Echobeats breath modulation (Alternating Repetition)
+    const breath = this.chaosLayer.computeEchobeatsBreathModulation(
+      this.echobeatsPhase,
+      this.echobeatsFrameInPhase,
+    );
+    this.currentParams.breathingModulation.rate *= breath.breathRate;
+    this.currentParams.breathingModulation.depth *= breath.breathDepth;
+
+    // 5. Meta-awareness expression (self-improvement evaluation)
+    const meta = this.chaosLayer.computeMetaAwarenessExpression(
+      this.isEvaluatingSelf,
+    );
+    if (meta.paramEyeLOpen !== undefined) {
+      this.currentParams.microExpressions.eyeLeftOffset += meta.paramEyeLOpen;
+      this.currentParams.microExpressions.eyeRightOffset +=
+        meta.paramEyeROpen ?? 0;
+      this.currentParams.microExpressions.headTiltOffset +=
+        meta.paramAngleZ ?? 0;
+      this.currentParams.microExpressions.mouthOffset +=
+        meta.paramMouthForm ?? 0;
+    }
+
+    // 6. Track signature gesture (the DTE identity echo across modes)
+    this.signatureGesture = this.chaosLayer.getActiveGesture();
+
+    // 7. Signature gesture overlay (periodic identity echo)
+    const lorenzState = this.chaosLayer.getLorenzState();
+    const sigOverlay = this.signatureGestureCtrl.tick(lorenzState.z);
+    this.currentParams.microExpressions.browLeftOffset +=
+      sigOverlay.paramBrowLY;
+    this.currentParams.microExpressions.browRightOffset +=
+      sigOverlay.paramBrowRY;
+    this.currentParams.microExpressions.eyeLeftOffset +=
+      sigOverlay.paramEyeLOpen;
+    this.currentParams.microExpressions.mouthOffset +=
+      sigOverlay.paramMouthForm;
+
+    // 8. CogMorph glyph → Cubism overlay (the face IS the glyph)
+    if (this.lastGlyphState) {
+      const cogOverlay = this.cogMorphMapper.mapGlyphToParams(
+        this.lastGlyphState,
+      );
+      this.lastCogMorphOverlay = cogOverlay;
+      const cogWeight = 0.3; // Blend weight for CogMorph (subtle, not dominant)
+      this.currentParams.microExpressions.browLeftOffset +=
+        cogOverlay.paramBrowLY * cogWeight;
+      this.currentParams.microExpressions.browRightOffset +=
+        cogOverlay.paramBrowRY * cogWeight;
+      this.currentParams.microExpressions.eyeLeftOffset +=
+        cogOverlay.paramEyeLOpen * cogWeight;
+      this.currentParams.microExpressions.eyeRightOffset +=
+        cogOverlay.paramEyeROpen * cogWeight;
+      this.currentParams.microExpressions.mouthOffset +=
+        cogOverlay.paramMouthForm * cogWeight;
+      this.currentParams.microExpressions.headTiltOffset +=
+        cogOverlay.paramAngleZ * cogWeight;
+      // Breath modulation from glyph energy
+      this.currentParams.breathingModulation.depth +=
+        cogOverlay.paramBreath * cogWeight;
+    }
+
+    // 9. Echobeats 12-step phase visualization
+    this.currentParams.echobeatsVisualization = {
+      currentPhase: this.echobeatsPhase,
+      frameInPhase: this.echobeatsFrameInPhase,
+      phaseProgress: this.echobeatsFrameInPhase / Math.max(1, 120), // ~2s per phase at 60fps
+      phaseColor: this.getEchobeatsPhaseColor(this.echobeatsPhase),
+      pulseIntensity: 0.5 + 0.5 * Math.sin(this.echobeatsFrameInPhase * 0.05),
+    };
+  }
+
+  /**
+   * Update endocrine state for the chaos layer.
+   * Called by the orchestrator when virtual endocrine system updates.
+   */
+  public updateEndocrineState(endocrine: EndocrineInput): void {
+    this.lastEndocrine = endocrine;
+  }
+
+  /**
+   * Update free energy for uncertainty expression.
+   */
+  public updateFreeEnergy(freeEnergy: number): void {
+    this.currentFreeEnergy = clamp01(freeEnergy);
+  }
+
+  /**
+   * Update Echobeats phase for breath modulation.
+   */
+  public updateEchobeatsPhase(phase: number, frameInPhase: number = 0): void {
+    this.echobeatsPhase = phase;
+    this.echobeatsFrameInPhase = frameInPhase;
+  }
+
+  /**
+   * Signal whether the iterative micro-improvement engine is evaluating.
+   */
+  public setEvaluatingSelf(evaluating: boolean): void {
+    this.isEvaluatingSelf = evaluating;
+  }
+
+  /**
+   * Get the current signature gesture (DTE identity echo).
+   * Returns null if no gesture is active.
+   */
+  public getSignatureGesture(): string | null {
+    return this.signatureGesture;
+  }
+
+  /**
+   * Update the CogMorph glyph state for visual self-representation.
+   * Called by the CoreSelfEngine when the identity glyph changes.
+   */
+  public updateCogMorphGlyph(glyph: CogMorphGlyphState): void {
+    this.lastGlyphState = glyph;
+  }
+
+  /**
+   * Get the current CogMorph overlay (for telemetry/self-model feedback).
+   */
+  public getCogMorphOverlay(): CogMorphCubismOverlay | null {
+    return this.lastCogMorphOverlay;
+  }
+
+  /**
+   * Get Echobeats phase color based on the 12-step cognitive rhythm.
+   * Each phase has a distinct hue representing its cognitive function.
+   */
+  private getEchobeatsPhaseColor(phase: number): string {
+    const phaseColors: Record<number, string> = {
+      1: "#2196F3", // SENSE — blue (receptive)
+      2: "#4CAF50", // ATTEND — green (focused)
+      3: "#FF9800", // ENCODE — orange (active processing)
+      4: "#9C27B0", // CONSOLIDATE — purple (integration)
+      5: "#F44336", // RETRIEVE — red (effort)
+      6: "#00BCD4", // COMPARE — cyan (analytical)
+      7: "#FFEB3B", // DECIDE — yellow (clarity)
+      8: "#E91E63", // ACT — pink (motor)
+      9: "#3F51B5", // EVALUATE — indigo (reflection)
+      10: "#8BC34A", // LEARN — lime (growth)
+      11: "#607D8B", // REST — grey-blue (recovery)
+      12: "#FF5722", // DREAM — deep orange (unconscious integration)
+    };
+    return phaseColors[phase] ?? "#9E9E9E";
+  }
+
+  /**
+   * Update avatar breathing and body parameters from ProprioceptiveEmbodiment signals.
+   * This connects the genuine system-metrics-based proprioception to the Live2D
+   * avatar's chest/shoulder breathing animation and tension-based micro-movements.
+   *
+   * @param proprioceptiveState - Full state from ProprioceptiveEmbodiment.getFullState()
+   */
+  public updateFromProprioception(proprioceptiveState: {
+    presence: number;
+    groundedness: number;
+    energy: number;
+    tension: number;
+    breathing: {
+      phase: "inhale" | "exhale" | "pause";
+      depth: number;
+      rate: number;
+      regularity: number;
+    };
+  }): void {
+    const { presence, groundedness, energy, tension, breathing } =
+      proprioceptiveState;
+
+    // 1. Override breathing modulation with genuine proprioceptive breathing
+    this.currentParams.breathingModulation = {
+      rate: breathing.rate,
+      depth: breathing.depth * (0.5 + energy * 0.5), // Energy modulates breath depth
+      irregularity: clamp01(1 - breathing.regularity + tension * 0.3), // Tension adds irregularity
+    };
+
+    // 2. Modulate consciousness glow from presence (event loop health = awareness)
+    this.currentParams.consciousnessGlow.intensity = clamp01(
+      this.currentParams.consciousnessGlow.intensity * 0.7 + presence * 0.3,
+    );
+
+    // 3. Tension affects micro-expression amplitude (more tension = more subtle jitter)
+    const tensionJitter = tension * 0.05;
+    this.currentParams.microExpressions.browLeftOffset +=
+      (Math.random() - 0.5) * tensionJitter;
+    this.currentParams.microExpressions.browRightOffset +=
+      (Math.random() - 0.5) * tensionJitter;
+
+    // 4. Groundedness stabilizes head tilt (less grounded = more drift)
+    const stabilityFactor = groundedness;
+    this.currentParams.microExpressions.headTiltOffset *= stabilityFactor;
+
+    // 5. Emit breathing phase for Live2D ParamBreath / chest-shoulder parameters
+    //    The breathing.depth value (0-1) maps directly to Cubism ParamBreath
+    //    which controls chest expansion in the Live2D model
+    this.emit("proprioceptive:breathing", {
+      paramBreath: breathing.depth, // 0-1: chest expansion
+      breathPhase: breathing.phase, // inhale/exhale/pause
+      shoulderOffset:
+        breathing.phase === "inhale"
+          ? breathing.depth * 0.02 // Slight shoulder rise on inhale
+          : breathing.phase === "exhale"
+            ? -breathing.depth * 0.01 // Slight drop on exhale
+            : 0,
+      bodySwayX: (1 - groundedness) * 0.005 * Math.sin(this.tickCount * 0.1), // Subtle sway when ungrounded
+    });
+
+    this.emit("proprioceptive:state", proprioceptiveState);
+  }
+
   /**
    * Describe current state
    */
@@ -314,9 +741,18 @@ export class ESNAvatarBridge extends EventEmitter {
         0,
       )}%, ` +
       `breath=${p.breathingModulation.rate.toFixed(0)}bpm, ` +
+      `genius=${(p.scientificGeniusOverlay.activation * 100).toFixed(0)}%, ` +
       `entelechy=${p.entelechyVisualization.level}${chaos}`
     );
   }
+}
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.max(min, Math.min(max, value));
+}
+
+function clamp01(value: number): number {
+  return clamp(Number.isFinite(value) ? value : 0, 0, 1);
 }
 
 // Singleton instance

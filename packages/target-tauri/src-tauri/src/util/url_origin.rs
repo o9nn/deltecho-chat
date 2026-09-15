@@ -17,7 +17,7 @@ impl UrlOriginExtension for url::Url {
     /// ```
     /// # use url::Url;
     /// # use std::str::FromStr;
-    /// # use deltachat_tauri_lib::util::url_origin::UrlOriginExtension;
+    /// # use deltecho_chat_lib::util::url_origin::UrlOriginExtension;
     /// let url_1 = Url::from_str("webxdc://dummy.host/index.html").unwrap();
     ///
     /// let url_2 = Url::from_str("webxdc://dummy.host/other.html").unwrap();

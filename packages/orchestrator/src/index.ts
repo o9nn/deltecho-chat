@@ -156,15 +156,70 @@ export type {
   BridgeResponse,
 } from "./deltachat-autonomy-bridge.js";
 export { AutonomyLifecycleCoordinator } from "./autonomy-lifecycle.js";
-export type { AutonomyLifecycleConfig } from "./autonomy-lifecycle.js";
+export type {
+  AutonomyLifecycleConfig,
+  ScientificAutonomySignal,
+} from "./autonomy-lifecycle.js";
 export { ReservoirFeedbackLoop } from "./reservoir-feedback-loop.js";
 export type {
   ReservoirFeedbackConfig,
   FeedbackEvent,
 } from "./reservoir-feedback-loop.js";
 export { SelfModificationEngine } from "./self-modification.js";
+export {
+  MultiAgentConsensus,
+  multiAgentConsensus,
+  type PeerInstance,
+  type ConsensusProposal,
+  type ConsensusVote,
+  type ExperimentConsensusRequest,
+  type ConsensusActionRequest,
+  type MultiAgentConsensusConfig,
+} from "./multi-agent-consensus.js";
+export {
+  PolycentricExperimentGovernance,
+  DEFAULT_POLYCENTRIC_EXPERIMENT_GOVERNANCE_CONFIG,
+  type PolycentricGovernanceContext,
+  type ExperimentPeerConsensus,
+  type PolycentricExperimentGovernanceConfig,
+  type ExperimentGovernanceCertificate,
+  type PolycentricGovernanceState,
+} from "./polycentric-experiment-governance.js";
 export { CognitiveTickProcessor } from "./cognitive-tick-processor.js";
 export { ProactiveLoop } from "./proactive-loop.js";
 export { Echobeats } from "./echobeats.js";
 export * from "./perception/index.js";
 export * from "./tools/index.js";
+
+// Iterative Micro-Improvement Engine (autonomous self-improvement loop)
+export {
+  IterativeMicroImprovementEngine,
+  iterativeMicroImprovement,
+  type AlexanderPropertyScore,
+  type ImprovementCandidate,
+  type ImprovementResult,
+  type MicroImprovementState,
+  type MicroImprovementConfig,
+  type MutationType,
+} from "./iterative-micro-improvement.js";
+
+// CogVerse Event Bus — Village Integration for AGI Neighbourhood
+export {
+  CogVerseEventBus,
+  type VillageEvent,
+  type VillageEventType,
+  type CogVerseConfig,
+  type ResidentPresence,
+} from "./cogverse-event-bus.js";
+
+// EchoDream — Knowledge Integration System (wake/rest/dream autonomy loop)
+export {
+  EchoDreamEngine,
+  type DreamState,
+  type EchoDreamConfig,
+  type DreamExperience,
+  type DreamInsight,
+  type InterestPattern,
+  type EchoDreamState,
+  type EchoDreamEvent,
+} from "./echodream/index.js";

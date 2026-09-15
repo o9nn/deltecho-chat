@@ -46,6 +46,7 @@ export interface CoupleResult {
   adopted?: boolean;
   integrated?: boolean;
   stepped?: boolean;
+  canonicalProposed?: boolean;
 }
 
 export interface ReservoirAccessors {
@@ -80,11 +81,41 @@ export interface IntentionalityAccessors {
   maxActiveGoals?: number;
 }
 
+export interface CanonicalCoreSelfStatusLike {
+  initialized: boolean;
+  ledgerHead: string | null;
+  projectedStateDigest: string;
+  acceptedEventCount: number;
+  pendingProposalCount: number;
+}
+
+export interface CanonicalEmbodimentAttestation {
+  accuracy: number;
+  meanError: number;
+  experienceCount: number;
+  cognitiveMode?: string;
+  ledgerHead?: string | null;
+  projectedStateDigest?: string;
+}
+
+export interface CanonicalGovernanceProposalSink {
+  observeAdaptiveGovernance(
+    governance: IdentityGovernanceProposal,
+    observedAt: string,
+  ): unknown;
+  observeEmbodiment?(
+    embodiment: CanonicalEmbodimentAttestation,
+    observedAt: string,
+  ): unknown;
+  getStatus?(): CanonicalCoreSelfStatusLike;
+}
+
 export interface AutognosisAutogenesisCouplerDeps {
   identity?: IdentityMesh | null;
   reservoir: ReservoirAccessors;
   intentionality: IntentionalityAccessors;
   readGrant?: () => boolean;
+  canonicalProposalSink?: CanonicalGovernanceProposalSink | null;
 }
 
 export function isCoupleGranted(
@@ -151,6 +182,7 @@ export class AutognosisAutogenesisCoupler {
   private readonly reservoir: ReservoirAccessors;
   private readonly intentionality: IntentionalityAccessors;
   private readonly readGrant: () => boolean;
+  private canonicalProposalSink: CanonicalGovernanceProposalSink | null;
   private lastCoupledTimestamp: number | null = null;
   private lastCoupledReport: AutognosisReport | null = null;
   private lastIntegratedKind: AutogenesisKind | null = null;
@@ -161,6 +193,7 @@ export class AutognosisAutogenesisCoupler {
     this.reservoir = deps.reservoir;
     this.intentionality = deps.intentionality;
     this.readGrant = deps.readGrant ?? isCoupleGranted;
+    this.canonicalProposalSink = deps.canonicalProposalSink ?? null;
   }
 
   attachIdentity(identity: IdentityMesh | null | undefined): void {
@@ -169,6 +202,12 @@ export class AutognosisAutogenesisCoupler {
 
   getIdentity(): IdentityMesh | null {
     return this.identity;
+  }
+
+  attachCanonicalProposalSink(
+    sink: CanonicalGovernanceProposalSink | null | undefined,
+  ): void {
+    this.canonicalProposalSink = sink ?? null;
   }
 
   couple(): CoupleResult {
@@ -200,6 +239,7 @@ export class AutognosisAutogenesisCoupler {
 
     let proposal: IdentityGovernanceProposal | undefined;
     let adopted = false;
+    let canonicalProposed = false;
     if (shouldIntegrate) {
       const reservoirState = this.reservoir.getState();
       const signal: IdentityAutognosisSignal = {
@@ -214,6 +254,17 @@ export class AutognosisAutogenesisCoupler {
       };
       proposal = this.identity.integrateAutognosis(signal);
       adopted = proposal.adopted;
+      if (this.canonicalProposalSink) {
+        try {
+          this.canonicalProposalSink.observeAdaptiveGovernance(
+            proposal,
+            new Date(report.timestamp).toISOString(),
+          );
+          canonicalProposed = true;
+        } catch {
+          log.error("canonical governance proposal failed");
+        }
+      }
       this.lastIntegratedKind = kind;
       this.lastIntegratedHealth = healthKey;
 
@@ -256,6 +307,7 @@ export class AutognosisAutogenesisCoupler {
       adopted,
       integrated: shouldIntegrate,
       stepped: true,
+      canonicalProposed,
     };
   }
 
