@@ -168,6 +168,28 @@ describe("deterministic DeltEcho core-self kernel", () => {
     });
   });
 
+  it("bounds canonical proposal IDs for long untrusted observation identifiers", () => {
+    const authority = new DeltEchoCoreSelfAuthority();
+    const before = authority.getStatus();
+    const proposal = authority.observeAdaptiveGovernance(
+      {
+        ...governanceAttestation(),
+        id: `${"-".repeat(10_000)}Signal${"-".repeat(10_000)}`,
+      },
+      OBSERVED_AT,
+    );
+
+    expect(proposal.proposalId).toMatch(
+      /^proposal:governance\.attest:o9nn\/signal-[a-f0-9]{12}$/,
+    );
+    expect(proposal.proposalId.length).toBeLessThan(100);
+    expect(authority.getStatus()).toMatchObject({
+      ledgerHead: before.ledgerHead,
+      acceptedEventCount: before.acceptedEventCount,
+      pendingProposalCount: 1,
+    });
+  });
+
   it("rejects a stale rendered-state identity anchor", () => {
     const authority = new DeltEchoCoreSelfAuthority();
     expect(() =>

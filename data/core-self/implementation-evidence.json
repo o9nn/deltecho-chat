@@ -1,14 +1,14 @@
 {
   "cog001": {
     "acceptance_result": {
-      "artifact_digest": "65bbaf69aaaefaa65a171dd906371c2c2f8966fbd32eab785df73bdeea6a45f2",
+      "artifact_digest": "bd2e99d8c73d6290b23bc10d3c92128e623ac488a68117eb605e4875792a0642",
       "command": "pnpm check:core-self",
       "criterion": "A test proves experimental cognition cannot mutate the canonical root subject without an accepted event.",
       "observed": "pass: deterministic kernel, governance, replay, graph, capsule, and integration regressions"
     },
     "evidence": [
-      "file:packages/core/src/core-self/kernel/authority.ts#sha256:bb9a9e74dd6b497ee81696341faa86c9650810552c6ff3115b407178d3731ca8",
-      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:68f9cb446818c5002a50689ad856eff203c84ed1afc49b802a3c3d94b16e80b2"
+      "file:packages/core/src/core-self/kernel/authority.ts#sha256:4ea7c6bef6284b88445636f63c0065b4d2075482d766a19d3254b2a1305e2a67",
+      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:580bab66f8b2cbdd663ef46a5c4b341c005499e5b52cf7bbe52b8d7f62c2dc7c"
     ],
     "evidence_kind": "source-and-test",
     "status": "verified"
@@ -191,14 +191,14 @@
   },
   "cog018": {
     "acceptance_result": {
-      "artifact_digest": "f3989764df8432e57169cfd94a1cfe5126a603d4ae891a5e679650b1939144e0",
+      "artifact_digest": "6c64612eef9bf0ad6af2f34e5532ba89aa24f652cb6bfdceb5dd9c5689f89e16",
       "command": "pnpm check:core-self",
       "criterion": "The deterministic KSM cycle selects its weakest center exclusively from inspectable evidence records.",
       "observed": "pass: deterministic kernel, governance, replay, graph, capsule, and integration regressions"
     },
     "evidence": [
       "file:packages/core/src/core-self/kernel/ksm.ts#sha256:ab5578b020319e83bcd59f07fc8fde4f7674607a2a477226e6844f99e4fb76e2",
-      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:68f9cb446818c5002a50689ad856eff203c84ed1afc49b802a3c3d94b16e80b2"
+      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:580bab66f8b2cbdd663ef46a5c4b341c005499e5b52cf7bbe52b8d7f62c2dc7c"
     ],
     "evidence_kind": "source-and-test",
     "status": "verified"
@@ -260,14 +260,14 @@
   },
   "cog024": {
     "acceptance_result": {
-      "artifact_digest": "c7605fed49ca68f6860e421a850446841e344f610ec7b456e59715a784b07a6d",
+      "artifact_digest": "c42e10b382fa75a1d4f8a7e81bdd721b7569657ee8a6f20215a84c105ee09891",
       "command": "pnpm check:core-self",
       "criterion": "A standard decision attempting to change a protected root field is rejected before ledger append.",
       "observed": "pass: deterministic kernel, governance, replay, graph, capsule, and integration regressions"
     },
     "evidence": [
       "file:packages/core/src/core-self/kernel/policy.ts#sha256:54dd95decbc12b89ed52da40ee82afecd6fa8c4e0f1a38d009f3251b3e766126",
-      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:68f9cb446818c5002a50689ad856eff203c84ed1afc49b802a3c3d94b16e80b2"
+      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:580bab66f8b2cbdd663ef46a5c4b341c005499e5b52cf7bbe52b8d7f62c2dc7c"
     ],
     "evidence_kind": "source-and-test",
     "status": "verified"
@@ -329,7 +329,7 @@
   },
   "cog030": {
     "acceptance_result": {
-      "artifact_digest": "b829c5a7a100d31599abd9860bb90dad2ce930a77772708d8a5ab803160f3cd2",
+      "artifact_digest": "a2525023bbd79411c1f292c9f066d93130bc42c5ad4677d2eab763e8f652c985",
       "command": "pnpm check:core-self",
       "criterion": "Every accepted mutation is represented by exactly one digest-linked event and replayed state matches the live projection.",
       "observed": "pass: deterministic kernel, governance, replay, graph, capsule, and integration regressions"
@@ -337,7 +337,7 @@
     "evidence": [
       "file:packages/core/src/core-self/kernel/ledger.ts#sha256:5900c2261758ac009ce564fca3abcfcfeeb5052b5223d551090ce6b4dfbad8c5",
       "file:packages/core/src/core-self/kernel/projector.ts#sha256:d8ee634940393cad0fa5cac782a7c555fde1c77a274741768ee61ca004221a5e",
-      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:68f9cb446818c5002a50689ad856eff203c84ed1afc49b802a3c3d94b16e80b2"
+      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:580bab66f8b2cbdd663ef46a5c4b341c005499e5b52cf7bbe52b8d7f62c2dc7c"
     ],
     "evidence_kind": "source-and-test",
     "status": "verified"
@@ -410,14 +410,14 @@
   },
   "cog037": {
     "acceptance_result": {
-      "artifact_digest": "bda209fbffeb2e6579a45ead6aa7dc48c4fe0b38f8a8b294c77c81fbefa5dcc7",
+      "artifact_digest": "cec073cf4ee65a859c0e6cd47426857685e401c391f4893e66c2f7d3e29fb1f7",
       "command": "pnpm check:core-self",
       "criterion": "A graph test preserves distinct subject IDs while traversing their shared typed relations deterministically.",
       "observed": "pass: deterministic kernel, governance, replay, graph, capsule, and integration regressions"
     },
     "evidence": [
       "file:packages/core/src/core-self/kernel/hypergraph.ts#sha256:860cb25edcffa843a1ba554fc55403a82416cbeb1c0c87174cbb30f81879eeaf",
-      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:68f9cb446818c5002a50689ad856eff203c84ed1afc49b802a3c3d94b16e80b2"
+      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:580bab66f8b2cbdd663ef46a5c4b341c005499e5b52cf7bbe52b8d7f62c2dc7c"
     ],
     "evidence_kind": "source-and-test",
     "status": "verified"
@@ -578,28 +578,28 @@
   },
   "cog052": {
     "acceptance_result": {
-      "artifact_digest": "bda209fbffeb2e6579a45ead6aa7dc48c4fe0b38f8a8b294c77c81fbefa5dcc7",
+      "artifact_digest": "cec073cf4ee65a859c0e6cd47426857685e401c391f4893e66c2f7d3e29fb1f7",
       "command": "pnpm check:core-self",
       "criterion": "Equivalent hypergraphs return byte-identical ordered traversal and export results.",
       "observed": "pass: deterministic kernel, governance, replay, graph, capsule, and integration regressions"
     },
     "evidence": [
       "file:packages/core/src/core-self/kernel/hypergraph.ts#sha256:860cb25edcffa843a1ba554fc55403a82416cbeb1c0c87174cbb30f81879eeaf",
-      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:68f9cb446818c5002a50689ad856eff203c84ed1afc49b802a3c3d94b16e80b2"
+      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:580bab66f8b2cbdd663ef46a5c4b341c005499e5b52cf7bbe52b8d7f62c2dc7c"
     ],
     "evidence_kind": "source-and-test",
     "status": "verified"
   },
   "cog053": {
     "acceptance_result": {
-      "artifact_digest": "c7605fed49ca68f6860e421a850446841e344f610ec7b456e59715a784b07a6d",
+      "artifact_digest": "c42e10b382fa75a1d4f8a7e81bdd721b7569657ee8a6f20215a84c105ee09891",
       "command": "pnpm check:core-self",
       "criterion": "A proposal with no independent authorized reviewer cannot enter accepted history.",
       "observed": "pass: deterministic kernel, governance, replay, graph, capsule, and integration regressions"
     },
     "evidence": [
       "file:packages/core/src/core-self/kernel/policy.ts#sha256:54dd95decbc12b89ed52da40ee82afecd6fa8c4e0f1a38d009f3251b3e766126",
-      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:68f9cb446818c5002a50689ad856eff203c84ed1afc49b802a3c3d94b16e80b2"
+      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:580bab66f8b2cbdd663ef46a5c4b341c005499e5b52cf7bbe52b8d7f62c2dc7c"
     ],
     "evidence_kind": "source-and-test",
     "status": "verified"
@@ -738,14 +738,14 @@
   },
   "cog066": {
     "acceptance_result": {
-      "artifact_digest": "c7605fed49ca68f6860e421a850446841e344f610ec7b456e59715a784b07a6d",
+      "artifact_digest": "c42e10b382fa75a1d4f8a7e81bdd721b7569657ee8a6f20215a84c105ee09891",
       "command": "pnpm check:core-self",
       "criterion": "Only a protected decision with steward participation can alter an immutable-core path.",
       "observed": "pass: deterministic kernel, governance, replay, graph, capsule, and integration regressions"
     },
     "evidence": [
       "file:packages/core/src/core-self/kernel/policy.ts#sha256:54dd95decbc12b89ed52da40ee82afecd6fa8c4e0f1a38d009f3251b3e766126",
-      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:68f9cb446818c5002a50689ad856eff203c84ed1afc49b802a3c3d94b16e80b2"
+      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:580bab66f8b2cbdd663ef46a5c4b341c005499e5b52cf7bbe52b8d7f62c2dc7c"
     ],
     "evidence_kind": "source-and-test",
     "status": "verified"
@@ -1418,14 +1418,14 @@
   },
   "cog127": {
     "acceptance_result": {
-      "artifact_digest": "c7605fed49ca68f6860e421a850446841e344f610ec7b456e59715a784b07a6d",
+      "artifact_digest": "c42e10b382fa75a1d4f8a7e81bdd721b7569657ee8a6f20215a84c105ee09891",
       "command": "pnpm check:core-self",
       "criterion": "Actor capability tests reject every operation above the actor’s registered authority level.",
       "observed": "pass: deterministic kernel, governance, replay, graph, capsule, and integration regressions"
     },
     "evidence": [
       "file:packages/core/src/core-self/kernel/policy.ts#sha256:54dd95decbc12b89ed52da40ee82afecd6fa8c4e0f1a38d009f3251b3e766126",
-      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:68f9cb446818c5002a50689ad856eff203c84ed1afc49b802a3c3d94b16e80b2"
+      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:580bab66f8b2cbdd663ef46a5c4b341c005499e5b52cf7bbe52b8d7f62c2dc7c"
     ],
     "evidence_kind": "source-and-test",
     "status": "verified"
@@ -1586,14 +1586,14 @@
   },
   "cog142": {
     "acceptance_result": {
-      "artifact_digest": "489dbc2c6382103cefb52fa206abdf45898ece8abb8524f89be23c0344950147",
+      "artifact_digest": "ada229aefe5d757d910043b0722e0c66f386b98efe2f1d3119518043966769b2",
       "command": "pnpm check:core-self",
       "criterion": "Replaying the same ordered accepted events produces identical ledger head and projected-state digests.",
       "observed": "pass: deterministic kernel, governance, replay, graph, capsule, and integration regressions"
     },
     "evidence": [
       "file:packages/core/src/core-self/kernel/ledger.ts#sha256:5900c2261758ac009ce564fca3abcfcfeeb5052b5223d551090ce6b4dfbad8c5",
-      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:68f9cb446818c5002a50689ad856eff203c84ed1afc49b802a3c3d94b16e80b2"
+      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:580bab66f8b2cbdd663ef46a5c4b341c005499e5b52cf7bbe52b8d7f62c2dc7c"
     ],
     "evidence_kind": "source-and-test",
     "status": "verified"
@@ -2062,14 +2062,14 @@
   },
   "cog185": {
     "acceptance_result": {
-      "artifact_digest": "c7605fed49ca68f6860e421a850446841e344f610ec7b456e59715a784b07a6d",
+      "artifact_digest": "c42e10b382fa75a1d4f8a7e81bdd721b7569657ee8a6f20215a84c105ee09891",
       "command": "pnpm check:core-self",
       "criterion": "Protected and recovery events fail unless reviewer IDs include an authorized steward distinct from the proposer.",
       "observed": "pass: deterministic kernel, governance, replay, graph, capsule, and integration regressions"
     },
     "evidence": [
       "file:packages/core/src/core-self/kernel/policy.ts#sha256:54dd95decbc12b89ed52da40ee82afecd6fa8c4e0f1a38d009f3251b3e766126",
-      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:68f9cb446818c5002a50689ad856eff203c84ed1afc49b802a3c3d94b16e80b2"
+      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:580bab66f8b2cbdd663ef46a5c4b341c005499e5b52cf7bbe52b8d7f62c2dc7c"
     ],
     "evidence_kind": "source-and-test",
     "status": "verified"
@@ -2312,14 +2312,14 @@
   },
   "cog207": {
     "acceptance_result": {
-      "artifact_digest": "23d172ec469cd2f06dee034b7eec5e3921c4eee95775b95290260fae5af3eb3a",
+      "artifact_digest": "5a66ae44d91b16db7e9f8d8551956a2423aec60aecd89c6a89438e941a9125ad",
       "command": "pnpm check:core-self",
       "criterion": "Canonicalization rejects unsupported values and produces the same SHA-256 digest for differently ordered equivalent objects.",
       "observed": "pass: deterministic kernel, governance, replay, graph, capsule, and integration regressions"
     },
     "evidence": [
       "file:packages/core/src/core-self/kernel/canonical.ts#sha256:fa7d3ef4e35a7f185ac048380940ce5daf21c543c7fe6c0045a2db73be19c2c2",
-      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:68f9cb446818c5002a50689ad856eff203c84ed1afc49b802a3c3d94b16e80b2"
+      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:580bab66f8b2cbdd663ef46a5c4b341c005499e5b52cf7bbe52b8d7f62c2dc7c"
     ],
     "evidence_kind": "source-and-test",
     "status": "verified"
@@ -2546,14 +2546,14 @@
   },
   "cog228": {
     "acceptance_result": {
-      "artifact_digest": "489dbc2c6382103cefb52fa206abdf45898ece8abb8524f89be23c0344950147",
+      "artifact_digest": "ada229aefe5d757d910043b0722e0c66f386b98efe2f1d3119518043966769b2",
       "command": "pnpm check:core-self",
       "criterion": "A stale previous-event digest is quarantined as a fork and leaves projected state unchanged.",
       "observed": "pass: deterministic kernel, governance, replay, graph, capsule, and integration regressions"
     },
     "evidence": [
       "file:packages/core/src/core-self/kernel/ledger.ts#sha256:5900c2261758ac009ce564fca3abcfcfeeb5052b5223d551090ce6b4dfbad8c5",
-      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:68f9cb446818c5002a50689ad856eff203c84ed1afc49b802a3c3d94b16e80b2"
+      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:580bab66f8b2cbdd663ef46a5c4b341c005499e5b52cf7bbe52b8d7f62c2dc7c"
     ],
     "evidence_kind": "source-and-test",
     "status": "verified"
@@ -2758,14 +2758,14 @@
   },
   "cog247": {
     "acceptance_result": {
-      "artifact_digest": "010290c7dea2e36ffe8b1ee93a93259a7f6f0b71807f034d6b1391144f271790",
+      "artifact_digest": "7f021b783ae231a8f65527fe47513072897f67bb9aea436939b207a76c3c1d02",
       "command": "pnpm check:core-self",
       "criterion": "A verified capsule round trip reconstructs the same state, while a one-byte mutation fails verification.",
       "observed": "pass: deterministic kernel, governance, replay, graph, capsule, and integration regressions"
     },
     "evidence": [
       "file:packages/core/src/core-self/kernel/capsule.ts#sha256:aff8cafdcc5fa1e3fcbc4823c1992f5113567d2296192a5bf11a7db6c2368c11",
-      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:68f9cb446818c5002a50689ad856eff203c84ed1afc49b802a3c3d94b16e80b2"
+      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:580bab66f8b2cbdd663ef46a5c4b341c005499e5b52cf7bbe52b8d7f62c2dc7c"
     ],
     "evidence_kind": "source-and-test",
     "status": "verified"
@@ -2827,15 +2827,15 @@
   },
   "cog253": {
     "acceptance_result": {
-      "artifact_digest": "cb3233b5f3749c274e4cc7d8ea15c51ef8d532a1194713675798aca1a404b75a",
+      "artifact_digest": "645ae8e704aab45d70f10725e78198e878e86785d0d638147fca5340552cf56f",
       "command": "pnpm check:core-self",
       "criterion": "An evidence-linked autobiographical assertion survives export, verified import, and replay with the same digest.",
       "observed": "pass: deterministic kernel, governance, replay, graph, capsule, and integration regressions"
     },
     "evidence": [
-      "file:packages/core/src/core-self/kernel/authority.ts#sha256:bb9a9e74dd6b497ee81696341faa86c9650810552c6ff3115b407178d3731ca8",
+      "file:packages/core/src/core-self/kernel/authority.ts#sha256:4ea7c6bef6284b88445636f63c0065b4d2075482d766a19d3254b2a1305e2a67",
       "file:packages/avatar/src/self-model-avatar-feedback.ts#sha256:03b93635a8b1abf9107a92e5d46f1d5b9871b6846c80047a2e7b3fb552dc5e21",
-      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:68f9cb446818c5002a50689ad856eff203c84ed1afc49b802a3c3d94b16e80b2"
+      "file:packages/core/src/core-self/__tests__/CoreSelfKernel.test.ts#sha256:580bab66f8b2cbdd663ef46a5c4b341c005499e5b52cf7bbe52b8d7f62c2dc7c"
     ],
     "evidence_kind": "source-and-test",
     "status": "verified"

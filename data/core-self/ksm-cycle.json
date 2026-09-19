@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0.0",
   "engine_version": "1.0.0",
-  "cycle_id": "ksm_87422d1aba28e0fe",
+  "cycle_id": "ksm_df53ed91882a7420",
   "observed_at": "2026-09-12T22:00:00.000Z",
   "input_hashes": {
     "mapping_hash": "b855b6b62480b8e57fa6da41fb0dbee41f8b4d1a28db9e0b6c25935f6967580c",
     "definitions_hash": "bef6fc5c459431726d6ac09a3ffc720256078cd03e496cb21085a7d9b6c9036c",
-    "evidence_hash": "f713513ab1f773afbdb7262e5a0050ea7a784c88921459ab28c55a686b7340d7",
+    "evidence_hash": "8dd24434e63bf88ea2fa23b13fb867cca02c5367bade36e25fbf26b682cfdb8b",
     "ledger_head": "6d9f27347eb9757f13c6316b601647ae871f8f7f7ded527acbf188c41fd7d91b",
     "engine_version": "1.0.0"
   },
@@ -81,7 +81,7 @@
         "input_hashes": {
           "mapping_hash": "b855b6b62480b8e57fa6da41fb0dbee41f8b4d1a28db9e0b6c25935f6967580c",
           "definitions_hash": "bef6fc5c459431726d6ac09a3ffc720256078cd03e496cb21085a7d9b6c9036c",
-          "evidence_hash": "f713513ab1f773afbdb7262e5a0050ea7a784c88921459ab28c55a686b7340d7",
+          "evidence_hash": "8dd24434e63bf88ea2fa23b13fb867cca02c5367bade36e25fbf26b682cfdb8b",
           "ledger_head": "6d9f27347eb9757f13c6316b601647ae871f8f7f7ded527acbf188c41fd7d91b",
           "engine_version": "1.0.0"
         },
@@ -255,7 +255,7 @@
       "verb": "seal",
       "category": "closure",
       "output": {
-        "candidate_hash": "8d9b8fc73831bba9efad8a7e8ca979ffb36dd69a38dd52f005901cd6d121fdfe",
+        "candidate_hash": "5f763e36c86c335c8da862482cdc499fb51b552f5c84cd46e5103942b0c27461",
         "closed": true
       }
     },
@@ -271,5 +271,5 @@
     }
   ],
   "advisory": true,
-  "cycle_hash": "ae1667af290e9ab85bd89e92e6c452ab93aa9999649e3e95131d8d342c4e7bf5"
+  "cycle_hash": "649688e0da4ff01caaa50bafc7f58fd2c4740603a018747405d2cea83759c4a4"
 }
