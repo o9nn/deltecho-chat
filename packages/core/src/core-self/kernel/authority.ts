@@ -60,11 +60,12 @@ function clamp01(value: number): number {
 }
 
 function canonicalObservationId(prefix: string, value: string): string {
-  const normalized = value
-    .toLowerCase()
-    .replace(/[^a-z0-9._-]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .slice(0, 40);
+  const sanitized = value.toLowerCase().replace(/[^a-z0-9._-]+/g, "-");
+  let start = 0;
+  let end = sanitized.length;
+  while (start < end && sanitized[start] === "-") start += 1;
+  while (end > start && sanitized[end - 1] === "-") end -= 1;
+  const normalized = sanitized.slice(start, end).slice(0, 40);
   const suffix = sha256Hex(value).slice(0, 12);
   return `${prefix}/${normalized || "observation"}-${suffix}`;
 }
