@@ -5,6 +5,7 @@ Diagnose and fix Live2D Cubism avatar loading issues in the DeltaChat interface.
 ## When to use
 
 Invoke this skill when:
+
 - Live2D avatar is stuck on "Loading Avatar..."
 - Avatar fails to load with error
 - Avatar shows sprite fallback unexpectedly
@@ -13,13 +14,13 @@ Invoke this skill when:
 
 ## Key Files
 
-| File | Purpose |
-|------|---------|
-| `packages/frontend/src/components/AICompanionHub/Live2DAvatar.tsx` | React component wrapper |
-| `packages/avatar/src/adapters/live2d-avatar.ts` | Avatar manager class |
-| `packages/avatar/src/adapters/pixi-live2d-renderer.ts` | PixiJS Live2D renderer |
-| `packages/avatar/src/adapters/cubism-adapter.ts` | Cubism adapter interface |
-| `packages/frontend/static/models/` | Model files directory |
+| File                                                               | Purpose                  |
+| ------------------------------------------------------------------ | ------------------------ |
+| `packages/frontend/src/components/AICompanionHub/Live2DAvatar.tsx` | React component wrapper  |
+| `packages/avatar/src/adapters/live2d-avatar.ts`                    | Avatar manager class     |
+| `packages/avatar/src/adapters/pixi-live2d-renderer.ts`             | PixiJS Live2D renderer   |
+| `packages/avatar/src/adapters/cubism-adapter.ts`                   | Cubism adapter interface |
+| `packages/frontend/static/models/`                                 | Model files directory    |
 
 ## Diagnostic Checklist
 
@@ -31,16 +32,19 @@ Invoke this skill when:
 
 ```tsx
 // WRONG: Container only rendered after load
-if (state.isLoading) return <LoadingSpinner />
-return <div ref={containerRef} /> // Never reached!
+if (state.isLoading) return <LoadingSpinner />;
+return <div ref={containerRef} />; // Never reached!
 
 // CORRECT: Always render container, overlay states
 return (
   <div className="container">
-    <div ref={containerRef} style={{ visibility: state.isLoaded ? 'visible' : 'hidden' }} />
+    <div
+      ref={containerRef}
+      style={{ visibility: state.isLoaded ? "visible" : "hidden" }}
+    />
     {state.isLoading && <LoadingOverlay />}
   </div>
-)
+);
 ```
 
 ### 2. Model Path Issues
@@ -51,13 +55,14 @@ return (
 
 ```typescript
 // WRONG
-const modelPath = "/static/models/miara/miara_pro_t03.model3.json"
+const modelPath = "/static/models/miara/miara_pro_t03.model3.json";
 
-// CORRECT  
-const modelPath = "/models/miara/miara_pro_t03.model3.json"
+// CORRECT
+const modelPath = "/models/miara/miara_pro_t03.model3.json";
 ```
 
 **Verify paths:**
+
 ```bash
 # Check model files exist
 ls -la packages/frontend/static/models/
@@ -71,16 +76,18 @@ cat packages/frontend/static/models/miara/miara_pro_t03.model3.json
 **Symptoms:** Motions not playing, console warnings about missing groups
 
 **Check:** Model motion groups may use different naming conventions:
+
 - Standard models: `"idle"`, `"tap_body"`, `"shake"`, `"flick_head"` (lowercase)
 - Cubism Editor exports: `"Idle"`, `"Tap"`, `"Flic"` (capitalized, abbreviated)
 
 **Solution:** Use fallback array for motion groups:
+
 ```typescript
 const MOTION_MAP = {
   idle: { groups: ["Idle", "idle"], index: 0 },
   talking: { groups: ["Tap", "tap_body", "tap"], index: 0 },
   // Try each group name until one works
-}
+};
 ```
 
 ### 4. Timeout Configuration
@@ -88,6 +95,7 @@ const MOTION_MAP = {
 **Current timeout:** 10 seconds (line ~140 in Live2DAvatar.tsx)
 
 If models are large or network is slow, this may not be enough. Consider:
+
 - Increasing timeout for slow connections
 - Adding progress indicators
 - Implementing retry logic (up to 3 retries)
@@ -97,15 +105,17 @@ If models are large or network is slow, this may not be enough. Consider:
 **Symptoms:** Silent failures, no error callbacks triggered
 
 **Check:** Ensure `@deltecho/avatar` package is built:
+
 ```bash
 cd packages/avatar && pnpm build
 ```
 
 **Verify import works:**
+
 ```typescript
 // Check if import resolves
-const { Live2DAvatarManager } = await import("@deltecho/avatar")
-console.log("Manager loaded:", Live2DAvatarManager)
+const { Live2DAvatarManager } = await import("@deltecho/avatar");
+console.log("Manager loaded:", Live2DAvatarManager);
 ```
 
 ## Common Fixes
@@ -145,7 +155,7 @@ useEffect(() => {
 // In pixi-live2d-renderer.ts
 playMotion(motion: AvatarMotion): void {
   const motionDef = this.motionMap[motion]
-  
+
   // Try each group name until one works
   for (const group of motionDef.groups) {
     try {
@@ -183,15 +193,17 @@ pnpm build:core  # Builds @deltecho packages
 ## Debug Mode
 
 Enable debug logging in development:
+
 ```typescript
 // In Live2DAvatar.tsx initialization
 await managerRef.current.initialize(containerRef.current, {
   ...props,
   debug: process.env.NODE_ENV === "development",
-})
+});
 ```
 
 Console will show:
+
 - `[Live2DAvatarManager] Model loaded successfully`
 - `[PixiLive2DRenderer] Expression set: happy (happy) at 70%`
 - `[PixiLive2DRenderer] Motion played: idle (Idle[0])`
