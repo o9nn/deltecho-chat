@@ -110,6 +110,7 @@ function getCognitiveStateSignature(
       cognitiveState.scientificGeniusVisualState?.metabolic?.knowledgeDensity,
     ),
     cognitiveState.scientificGeniusVisualState?.mode ?? "no-genius-mode",
+    cognitiveState.scientificGeniusVisualState?.origin ?? "unverified-origin",
     cognitiveState.scientificGeniusVisualState?.coreSelf?.initialized ?? false,
     cognitiveState.scientificGeniusVisualState?.coreSelf?.ledgerHead ??
       "no-core-self-head",
@@ -288,7 +289,8 @@ function mapProcessingStateToDTEchoMode(
   processingState: BotProcessingState,
   cognitiveState: UnifiedCognitiveState | null,
 ): string {
-  const geniusSignal = cognitiveState?.scientificGeniusVisualState;
+  const rawSignal = cognitiveState?.scientificGeniusVisualState;
+  const geniusSignal = rawSignal?.origin === "entelechy" ? rawSignal : null;
   if (
     geniusSignal?.mode === "Scientific Genius" &&
     geniusSignal.scientificGenius >= 0.72
@@ -333,7 +335,8 @@ function mapCognitiveStateToVisualState(
     context?.emotionalArousal ??
     (processingState === BotProcessingState.IDLE ? 0.25 : 0.58);
   const salience = context?.salienceScore ?? context?.attentionWeight ?? 0.45;
-  const geniusSignal = cognitiveState?.scientificGeniusVisualState;
+  const rawSignal = cognitiveState?.scientificGeniusVisualState;
+  const geniusSignal = rawSignal?.origin === "entelechy" ? rawSignal : null;
   const mode = mapProcessingStateToDTEchoMode(processingState, cognitiveState);
 
   return {
@@ -357,22 +360,9 @@ function mapCognitiveStateToVisualState(
     insightPotential: geniusSignal?.insightPotential ?? 0,
     entelechyScore: geniusSignal?.entelechyScore ?? 0,
     freeEnergy: geniusSignal?.freeEnergy ?? 0,
-    daoConsensus:
-      geniusSignal?.daoConsensus ??
-      (consciousness?.phi ?? salience * 0.65) * 0.55 +
-        (consciousness?.temporalCoherence ?? 0.6) * 0.45,
-    esnCoherence:
-      geniusSignal?.esnCoherence ??
-      geniusSignal?.flow ??
-      consciousness?.flowState ??
-      (processingState === BotProcessingState.THINKING
-        ? 0.72
-        : salience * 0.55),
-    autognosisResonance:
-      geniusSignal?.autognosisResonance ??
-      geniusSignal?.selfAwareness ??
-      consciousness?.selfAwareness ??
-      Math.max(0.35, salience * 0.7),
+    daoConsensus: geniusSignal?.daoConsensus ?? 0,
+    esnCoherence: geniusSignal?.esnCoherence ?? 0,
+    autognosisResonance: geniusSignal?.autognosisResonance ?? 0,
     embodimentAccuracy: geniusSignal?.embodimentAccuracy ?? 0.5,
     embodimentError: geniusSignal?.embodimentError ?? 0,
     embodimentConfidence: geniusSignal?.embodimentConfidence ?? 0,
@@ -576,7 +566,10 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
       if (signature === lastCognitiveSignatureRef.current) return;
 
       lastCognitiveSignatureRef.current = signature;
-      setCognitiveState(state);
+      // The browser orchestrator mutates its state object in place. A changed
+      // signature must produce a new React value or the real Live2D view will
+      // silently retain its old expression and miss genuine resonance events.
+      setCognitiveState(state ? { ...state } : null);
     };
 
     // Initial update
