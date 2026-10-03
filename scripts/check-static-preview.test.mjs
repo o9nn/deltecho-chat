@@ -67,3 +67,19 @@ test("a CSS illustration cannot masquerade as a Cubism renderer or FPS source", 
     /frame data/,
   );
 });
+
+test("GitHub Pages install must skip the unused Electron binary download", () => {
+  const workflow = readFileSync(
+    new URL("../.github/workflows/deploy-preview.yml", import.meta.url),
+    "utf8",
+  );
+  const installStep = workflow.match(
+    /name:\s*Install Dependencies\n[\s\S]*?run:\s*pnpm install --frozen-lockfile/,
+  )?.[0];
+  assert.ok(installStep, "Pages workflow must keep a frozen-lockfile install");
+  assert.match(
+    installStep,
+    /ELECTRON_SKIP_BINARY_DOWNLOAD:\s*["']?1["']?/,
+    "Pages install must skip Electron so a GitHub 503 cannot fail the static preview",
+  );
+});
