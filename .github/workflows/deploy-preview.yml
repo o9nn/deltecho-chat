@@ -31,6 +31,9 @@ jobs:
           # cache: "pnpm"  # Disabled for fresh builds
 
       - name: Install Dependencies
+        env:
+          # Pages builds browser assets only; avoid the Electron postinstall CDN.
+          ELECTRON_SKIP_BINARY_DOWNLOAD: "1"
         run: pnpm install --frozen-lockfile
 
       - name: Build Workspace Dependencies
