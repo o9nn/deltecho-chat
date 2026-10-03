@@ -23,6 +23,7 @@ describe("EntelechyIntegration", () => {
 
     const visual = integration.getScientificGeniusVisualState();
 
+    expect(visual.origin).toBe("entelechy");
     expect(visual.mode).toMatch(/^(Scientific Genius|Synthesis Phase|Idle)$/);
     for (const value of [
       visual.scientificGenius,

@@ -192,6 +192,8 @@ export interface CanonicalCoreSelfVisualState {
 }
 
 export interface ScientificGeniusVisualState {
+  /** Application-level source label; only Entelechy may assert scientific evidence. */
+  origin: "entelechy" | "local-observation";
   mode:
     | "Scientific Genius"
     | "Synthesis Phase"
@@ -314,6 +316,11 @@ export class CognitiveOrchestrator {
   private llmConfig: LLMProviderConfig | null = null;
   private integratedMemory: IntegratedMemorySystem | null = null;
   private currentChatId: number | null = null;
+  private localVisualObservation: ScientificGeniusVisualState | null = null;
+  private localAttentionWeight = 0.5;
+  private authoritativeVisualSignal: ScientificGeniusVisualState | null = null;
+  private authoritativeVisualReceivedAt = 0;
+  private static readonly AUTHORITY_FRESHNESS_MS = 5_000;
 
   constructor(config: DeepTreeEchoBotConfig) {
     this.config = config;
@@ -391,6 +398,11 @@ export class CognitiveOrchestrator {
         },
       ),
     };
+    this.localVisualObservation =
+      this.state.scientificGeniusVisualState ?? null;
+    this.localAttentionWeight = 0.5;
+    this.authoritativeVisualSignal = null;
+    this.authoritativeVisualReceivedAt = 0;
     this.conversationHistory = [];
     log.info("CognitiveOrchestrator initialized");
   }
@@ -498,8 +510,12 @@ export class CognitiveOrchestrator {
       this.state.cognitiveContext.relevantMemories =
         relevanceInsights.relevantDomains;
       this.state.cognitiveContext.attentionWeight = relevanceInsights.urgency;
-      this.state.scientificGeniusVisualState =
-        this.deriveScientificGeniusVisualState(sentiment, relevanceInsights);
+      this.localAttentionWeight = relevanceInsights.urgency;
+      this.localVisualObservation = this.deriveScientificGeniusVisualState(
+        sentiment,
+        relevanceInsights,
+      );
+      this.refreshVisualSignal();
     }
 
     return {
@@ -590,113 +606,18 @@ export class CognitiveOrchestrator {
       shouldPrioritize: boolean;
     },
   ): ScientificGeniusVisualState {
-    const salience = this.clamp01(relevanceInsights.overallSalience);
-    const urgency = this.clamp01(relevanceInsights.urgency);
-    const arousal = this.clamp01(sentiment.arousal);
-    const positiveValence = this.clamp01(Math.max(0, sentiment.valence));
-    const semanticBreadth = this.clamp01(
-      relevanceInsights.relevantDomains.length / 4,
-    );
-    const noveltyBias = relevanceInsights.shouldPrioritize ? 0.16 : 0;
-
-    const scientificGenius = this.clamp01(
-      salience * 0.42 +
-        urgency * 0.18 +
-        arousal * 0.14 +
-        semanticBreadth * 0.16 +
-        positiveValence * 0.1 +
-        noveltyBias,
-    );
-    const insightPotential = this.clamp01(
-      salience * 0.46 + semanticBreadth * 0.24 + urgency * 0.2 + arousal * 0.1,
-    );
-    const entelechyScore = this.clamp01(
-      scientificGenius * 0.45 + insightPotential * 0.35 + positiveValence * 0.2,
-    );
-    const freeEnergy = this.clamp01(
-      urgency * 0.5 + arousal * 0.35 + (1 - salience) * 0.15,
-    );
-    const daoConsensus = this.clamp01(
-      entelechyScore * 0.38 +
-        salience * 0.24 +
-        semanticBreadth * 0.2 +
-        positiveValence * 0.18,
-    );
-    const esnCoherence = this.clamp01(
-      salience * 0.32 +
-        insightPotential * 0.28 +
-        semanticBreadth * 0.22 +
-        (1 - freeEnergy) * 0.18,
-    );
-    const autognosisResonance = this.clamp01(
-      scientificGenius * 0.34 +
-        daoConsensus * 0.26 +
-        esnCoherence * 0.24 +
-        arousal * 0.16,
-    );
-    const energyLevel = this.clamp01(
-      1 - freeEnergy * 0.65 + entelechyScore * 0.25,
-    );
-    const metabolicPhase: MetabolicVisualState["metabolicPhase"] =
-      scientificGenius >= 0.65
-        ? "active"
-        : insightPotential >= 0.5
-          ? "integrating"
-          : salience <= 0.25
-            ? "resting"
-            : "consolidating";
-    const metabolic: MetabolicVisualState = {
-      metabolicPhase,
-      energyLevel,
-      anabolicBalance: Math.max(
-        -1,
-        Math.min(1, insightPotential + positiveValence * 0.4 - freeEnergy),
-      ),
-      isEnergyCrisis: energyLevel < 0.2 || freeEnergy > 0.85,
-      myelinationProgress: esnCoherence,
-      knowledgeDensity: Math.min(
-        5,
-        semanticBreadth * 3 + (this.state?.reasoning.atomspaceSize ?? 0) / 1000,
-      ),
-    };
-
-    const causalRigor = this.clamp01(
-      esnCoherence * 0.35 + daoConsensus * 0.3 + semanticBreadth * 0.35,
-    );
-    const falsificationPressure = freeEnergy;
-    const epistemicSurprise = this.clamp01(
-      urgency * (1 - salience) * 0.7 + noveltyBias * 1.5,
-    );
-    const daoEvidenceConsensus = daoConsensus;
-    const activeExperimentation = relevanceInsights.shouldPrioritize
-      ? this.clamp01(urgency * 0.7 + salience * 0.3)
-      : 0;
-
-    const mode: ScientificGeniusVisualState["mode"] =
-      scientificGenius >= 0.72
-        ? "Scientific Genius"
-        : insightPotential >= 0.58
-          ? "Knowledge Integration"
-          : salience >= 0.48
-            ? "Recursive Expansion"
-            : "Idle";
-
+    // Relevance and sentiment are observations of the message, not evidence of
+    // ESN health, DAO votes, scientific discovery, or metabolic state.
     return {
-      mode,
-      scientificGenius,
-      insightPotential,
-      entelechyScore,
-      freeEnergy,
-      salience,
-      daoConsensus,
-      esnCoherence,
-      autognosisResonance,
-      metabolic,
-      causalRigor,
-      falsificationPressure,
-      epistemicSurprise,
-      daoEvidenceConsensus,
-      activeExperimentation,
+      origin: "local-observation",
+      mode: "Idle",
+      scientificGenius: 0,
+      insightPotential: 0,
+      entelechyScore: 0,
+      freeEnergy: 0,
+      salience: this.clamp01(relevanceInsights.overallSalience),
+      valence: Math.max(-1, Math.min(1, sentiment.valence)),
+      arousal: this.clamp01(sentiment.arousal),
     };
   }
 
@@ -921,26 +842,95 @@ Respond in a way that reflects these characteristics while being helpful and inf
     );
   }
 
+  private refreshVisualSignal(): void {
+    if (!this.state) return;
+    const age = Date.now() - this.authoritativeVisualReceivedAt;
+    if (age < 0 || age > CognitiveOrchestrator.AUTHORITY_FRESHNESS_MS) {
+      this.authoritativeVisualSignal = null;
+    }
+    this.state.scientificGeniusVisualState =
+      this.authoritativeVisualSignal ??
+      this.localVisualObservation ??
+      this.state.scientificGeniusVisualState;
+    if (
+      !this.authoritativeVisualSignal &&
+      this.localVisualObservation &&
+      this.state.cognitiveContext
+    ) {
+      this.state.cognitiveContext.salienceScore =
+        this.localVisualObservation.salience;
+      this.state.cognitiveContext.attentionWeight = this.localAttentionWeight;
+      this.state.cognitiveContext.emotionalValence =
+        this.localVisualObservation.valence ?? 0;
+      this.state.cognitiveContext.emotionalArousal =
+        this.localVisualObservation.arousal ?? 0;
+    }
+  }
+
   getState(): UnifiedCognitiveState | null {
+    this.refreshVisualSignal();
     return this.state;
   }
 
   getScientificGeniusVisualState(): ScientificGeniusVisualState | null {
+    this.refreshVisualSignal();
     return this.state?.scientificGeniusVisualState ?? null;
   }
 
   /**
-   * Merge an authoritative backend ESN/Autognosis visual signal into the
-   * renderer-local bridge. This preserves the browser-safe fallback model while
-   * letting the desktop orchestrator drive the Live2D avatar when its autonomy
-   * pipeline is running.
+   * Accept a genuinely sourced backend snapshot for a short, bounded interval.
+   * This label is an application-level contract, not an IPC authentication proof.
+   * Missing or malformed signals revoke authority instead of fabricating DAO or
+   * scientific evidence from the renderer's sentiment/relevance observations.
    */
   applyScientificGeniusVisualState(
     signal: ScientificGeniusVisualState | null | undefined,
   ): void {
-    if (!signal || !this.state) return;
+    if (!this.state) return;
+    const valid =
+      signal?.origin === "entelechy" &&
+      [
+        "Scientific Genius",
+        "Synthesis Phase",
+        "Knowledge Integration",
+        "Recursive Expansion",
+        "Idle",
+      ].includes(signal.mode) &&
+      [
+        signal.scientificGenius,
+        signal.insightPotential,
+        signal.entelechyScore,
+        signal.freeEnergy,
+        signal.salience,
+        signal.daoConsensus,
+        signal.esnCoherence,
+        signal.autognosisResonance,
+      ].every(
+        (value) =>
+          value === undefined ||
+          (Number.isFinite(value) && value >= 0 && value <= 1),
+      ) &&
+      [
+        signal.scientificGenius,
+        signal.insightPotential,
+        signal.entelechyScore,
+        signal.freeEnergy,
+        signal.salience,
+      ].every((value) => typeof value === "number" && Number.isFinite(value));
 
-    this.state.scientificGeniusVisualState = signal;
+    if (!valid || !signal) {
+      if (signal)
+        log.warn(
+          "Ignoring scientific visual state without valid Entelechy provenance",
+        );
+      this.authoritativeVisualSignal = null;
+      this.refreshVisualSignal();
+      return;
+    }
+
+    this.authoritativeVisualSignal = signal;
+    this.authoritativeVisualReceivedAt = Date.now();
+    this.refreshVisualSignal();
 
     if (this.state.cognitiveContext) {
       this.state.cognitiveContext.salienceScore = this.clamp01(signal.salience);
@@ -960,25 +950,8 @@ Respond in a way that reflects these characteristics while being helpful and inf
       }
     }
 
-    if (signal.mode === "Scientific Genius") {
-      this.state.persona.currentMood = "scientific-genius";
-      this.state.reasoning.confidenceLevel = this.clamp01(
-        Math.max(
-          this.state.reasoning.confidenceLevel,
-          signal.entelechyScore,
-          signal.daoConsensus ?? 0,
-          signal.esnCoherence ?? 0,
-        ),
-      );
-      this.state.reasoning.attentionFocus = Array.from(
-        new Set([
-          ...this.state.reasoning.attentionFocus,
-          "ESN Autognosis",
-          "luminous inference",
-          "scientific synthesis",
-        ]),
-      ).slice(-6);
-    }
+    // Ephemeral visual telemetry must not silently become durable reasoning
+    // confidence, persona mood, or autobiographical attention evidence.
   }
 
   clearHistory(): void {

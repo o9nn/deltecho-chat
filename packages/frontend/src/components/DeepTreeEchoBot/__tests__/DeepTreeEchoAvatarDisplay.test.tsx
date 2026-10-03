@@ -318,6 +318,59 @@ describe("DeepTreeEchoAvatarDisplay", () => {
       expect(mockGetState).toHaveBeenCalledTimes(2);
     });
 
+    it("re-renders for fresh Entelechy evidence on the same mutable orchestrator state", () => {
+      const state = {
+        cognitiveContext: {
+          emotionalValence: 0.2,
+          emotionalArousal: 0.6,
+          salienceScore: 0.8,
+          attentionWeight: 0.6,
+          relevantMemories: [],
+          activeCouplings: [],
+        },
+        scientificGeniusVisualState: {
+          origin: "local-observation",
+          mode: "Idle",
+          scientificGenius: 0,
+          insightPotential: 0,
+          entelechyScore: 0,
+          freeEnergy: 0,
+          salience: 0.8,
+          daoConsensus: 0,
+        },
+      };
+      (CognitiveBridge.getOrchestrator as jest.Mock).mockReturnValue({
+        getState: () => state,
+      });
+      render(
+        <DeepTreeEchoAvatarProvider>
+          <DeepTreeEchoAvatarDisplay
+            processingState={AvatarProcessingState.THINKING}
+          />
+        </DeepTreeEchoAvatarProvider>,
+      );
+      const avatar = screen.getByTestId("mock-live2d-avatar");
+      expect(
+        JSON.parse(avatar.getAttribute("data-cognitive-visual-state") || "{}")
+          .scientificGenius,
+      ).toBe(0);
+
+      state.scientificGeniusVisualState.origin = "entelechy";
+      state.scientificGeniusVisualState.mode = "Scientific Genius";
+      state.scientificGeniusVisualState.scientificGenius = 0.91;
+      state.scientificGeniusVisualState.daoConsensus = 0.82;
+      act(() => {
+        jest.advanceTimersByTime(500);
+      });
+
+      const visual = JSON.parse(
+        avatar.getAttribute("data-cognitive-visual-state") || "{}",
+      );
+      expect(visual.mode).toBe("Scientific Genius");
+      expect(visual.scientificGenius).toBe(0.91);
+      expect(visual.daoConsensus).toBe(0.82);
+    });
+
     it("should update emotional vector based on cognitive state", async () => {
       const mockGetState = jest.fn().mockReturnValue({
         cognitiveContext: {
@@ -393,6 +446,7 @@ describe("DeepTreeEchoAvatarDisplay", () => {
           activeCouplings: ["entelechy", "scientific-genius"],
         },
         scientificGeniusVisualState: {
+          origin: "entelechy",
           mode: "Scientific Genius",
           scientificGenius: 0.92,
           insightPotential: 0.81,
@@ -514,6 +568,7 @@ describe("DeepTreeEchoAvatarDisplay", () => {
           temporalCoherence: 0.52,
         },
         scientificGeniusVisualState: {
+          origin: "entelechy",
           mode: "Scientific Genius",
           scientificGenius: 0.91,
           insightPotential: 0.79,
@@ -554,6 +609,66 @@ describe("DeepTreeEchoAvatarDisplay", () => {
         expect(visualState.autognosisResonance).not.toBe(0.24);
       });
     });
+
+    it.each(["local-observation", undefined])(
+      "abstains from unverified scientific claims with %s origin",
+      async (origin) => {
+        (CognitiveBridge.getOrchestrator as jest.Mock).mockReturnValue({
+          getState: () => ({
+            cognitiveContext: {
+              emotionalValence: 0.3,
+              emotionalArousal: 0.85,
+              salienceScore: 0.92,
+              attentionWeight: 0.85,
+              relevantMemories: [],
+              activeCouplings: [],
+            },
+            scientificGeniusVisualState: {
+              origin,
+              mode: "Scientific Genius",
+              scientificGenius: 0.99,
+              insightPotential: 0.98,
+              entelechyScore: 0.97,
+              freeEnergy: 0.81,
+              salience: 0.92,
+              daoConsensus: 0.96,
+              esnCoherence: 0.95,
+              autognosisResonance: 0.94,
+              causalRigor: 0.93,
+              resonanceCascade: {
+                id: "unsupported-eureka",
+                timestamp: 1_000,
+                intensity: 1,
+              },
+            },
+          }),
+        });
+
+        render(
+          <DeepTreeEchoAvatarProvider>
+            <DeepTreeEchoAvatarDisplay
+              processingState={AvatarProcessingState.THINKING}
+            />
+          </DeepTreeEchoAvatarProvider>,
+        );
+
+        await waitFor(() => {
+          const avatar = screen.getByTestId("mock-live2d-avatar");
+          const visual = JSON.parse(
+            avatar.getAttribute("data-cognitive-visual-state") || "{}",
+          );
+          expect(visual.mode).toBe("Recursive Expansion");
+          expect(visual.salience).toBe(0.92);
+          expect(visual.arousal).toBe(0.85);
+          expect(visual.scientificGenius).toBe(0);
+          expect(visual.daoConsensus).toBe(0);
+          expect(visual.esnCoherence).toBe(0);
+          expect(visual.autognosisResonance).toBe(0);
+          expect(visual.causalRigor).toBe(0);
+          expect(visual.resonanceCascade).toBeUndefined();
+        });
+      },
+    );
 
     it("should handle null orchestrator gracefully", () => {
       (CognitiveBridge.getOrchestrator as jest.Mock).mockReturnValue(null);

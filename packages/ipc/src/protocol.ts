@@ -150,6 +150,8 @@ export interface CognitiveQuickProcessResponse {
 
 /** Avatar-ready autonomy signal emitted by the DTE ESN/Autognosis/Entelechy loop. */
 export interface ScientificGeniusVisualSignal {
+  /** Application-level source marker; not a cryptographic attestation. */
+  origin: "entelechy";
   mode:
     | "Scientific Genius"
     | "Synthesis Phase"

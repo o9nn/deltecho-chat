@@ -137,6 +137,8 @@ export interface CanonicalCoreSelfVisualSignal {
 }
 
 export interface ScientificGeniusVisualSignal {
+  /** Application-level provenance, not a cryptographic transport attestation. */
+  origin: "entelechy";
   /** DTEcho expression-driver mode hint consumed by Live2D avatar packages. */
   mode: "Scientific Genius" | "Synthesis Phase" | "Idle";
   /** Combined autonomy/scientific-reasoning activation, normalized 0..1. */
@@ -845,6 +847,7 @@ export class EntelechyIntegration extends EventEmitter {
     );
 
     return {
+      origin: "entelechy",
       mode:
         scientificGenius >= 0.62
           ? "Scientific Genius"
