@@ -41,6 +41,9 @@ jobs:
       - name: Build Browser Target
         run: pnpm build:browser
 
+      - name: Verify static preview evidence claims
+        run: pnpm check:static-preview
+
       - name: Prepare static-safe Pages preview
         run: |
           mkdir -p packages/target-browser/pages-dist

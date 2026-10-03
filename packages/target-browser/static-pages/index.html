@@ -210,8 +210,7 @@
           inset 0 0 36px rgba(255, 255, 255, 0.34),
           0 0 44px rgba(86, 244, 255, 0.42),
           0 28px 90px rgba(0, 0, 0, 0.45);
-        transform: translateY(var(--bob, 0px)) rotate(var(--tilt, 0deg));
-        transition: transform 140ms ease-out;
+        animation: float 5s ease-in-out infinite;
       }
 
       .avatar::before,
@@ -286,28 +285,23 @@
         border: 1px solid rgba(147, 167, 196, 0.18);
       }
 
-      .bar {
-        height: 8px;
-        margin-top: 12px;
-        border-radius: 999px;
-        background: rgba(147, 167, 196, 0.18);
-        overflow: hidden;
+      .meter .value {
+        color: var(--gold);
       }
-
-      .bar > i {
-        display: block;
-        width: calc(var(--level) * 100%);
-        height: 100%;
-        border-radius: inherit;
-        background: linear-gradient(
-          90deg,
-          var(--cyan),
-          var(--violet),
-          var(--gold)
-        );
-        box-shadow: 0 0 18px rgba(86, 244, 255, 0.46);
+      .meter .detail,
+      .illustration-note {
+        color: var(--muted);
+        font-size: 0.86rem;
+        line-height: 1.5;
       }
-
+      .illustration-note {
+        position: absolute;
+        bottom: 20px;
+        left: 28px;
+        right: 28px;
+        margin: 0;
+        text-align: center;
+      }
       .footer-note {
         margin-top: 18px;
         color: var(--muted);
@@ -317,6 +311,12 @@
 
       code {
         color: var(--green);
+      }
+
+      @keyframes float {
+        50% {
+          transform: translateY(-7px) rotate(2deg);
+        }
       }
 
       @keyframes spin {
@@ -329,6 +329,14 @@
         50% {
           transform: scale(1.8);
           opacity: 0.36;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .aura,
+        .avatar,
+        .synapse {
+          animation: none;
         }
       }
 
@@ -353,41 +361,40 @@
           aria-label="Deep Tree Echo deployment status"
         >
           <p class="eyebrow">DeltEcho Chat · GitHub Pages Preview</p>
-          <h1>Deep Tree <span>Echo</span> is awake.</h1>
+          <h1>Deep Tree <span>Echo</span> preview.</h1>
           <p class="lede">
-            This static deployment verifies the browser-safe Deep Tree Echo
-            surface without requiring the server-side Delta Chat runtime. The
-            full desktop and Cloudflare-container targets remain available for
-            authenticated messaging; this page confirms the repaired autonomy,
-            ESN autognosis, DAO-consensus, and Live2D projection layers can load
-            safely in a static host.
+            This GitHub Pages deployment is a static visual preview. It does not
+            connect to the Deep Tree Echo orchestrator, ESN autognosis, DAO
+            governance, or a Live2D Cubism renderer. Use the desktop app or the
+            authenticated Cloudflare target to test those live systems.
           </p>
           <div class="status-row">
             <div class="status-card">
               <div class="label">Runtime</div>
-              <div class="value" id="runtimeStatus">ready</div>
+              <div class="value" id="runtimeStatus">static page</div>
             </div>
             <div class="status-card">
-              <div class="label">Frame Budget</div>
-              <div class="value" id="frameBudget">measuring</div>
+              <div class="label">Live2D renderer</div>
+              <div class="value">not loaded</div>
             </div>
             <div class="status-card">
-              <div class="label">Autonomy Mode</div>
-              <div class="value">scientific genius</div>
+              <div class="label">Autonomy mode</div>
+              <div class="value">not connected</div>
             </div>
           </div>
           <p class="footer-note">
             The dynamic app previously failed on GitHub Pages because it needs
             server routes such as
             <code>/authenticate</code> and WebSocket-backed runtime calls. This
-            verified preview is deliberately static, while the Electron desktop
-            build uses the full runtime.
+            preview is deliberately static. It reports no cognitive metrics or
+            Cubism frame measurements; the Electron desktop build uses the full
+            runtime.
           </p>
         </article>
 
         <aside
           class="panel avatar-stage"
-          aria-label="Live2D autonomy projection preview"
+          aria-label="Decorative CSS avatar illustration, not Live2D Cubism"
         >
           <div class="avatar-shell" id="avatarShell">
             <div class="aura"></div>
@@ -396,76 +403,43 @@
             <span class="synapse"></span>
             <span class="synapse"></span>
           </div>
+          <p class="illustration-note">
+            CSS illustration only — no Live2D model is running on this page.
+          </p>
         </aside>
       </section>
 
-      <section class="telemetry" aria-label="Autonomy telemetry">
-        <div class="meter" style="--level: 0.94">
-          <div class="label">ESN Autognosis</div>
-          <div class="value">0.94</div>
-          <div class="bar"><i></i></div>
+      <section class="telemetry" aria-label="Evidence availability">
+        <div class="meter" data-evidence-state="unavailable">
+          <div class="label">ESN autognosis</div>
+          <div class="value">not connected</div>
+          <p class="detail">Requires a live reservoir and measured state.</p>
         </div>
-        <div class="meter" style="--level: 0.88">
-          <div class="label">DAO Consensus</div>
-          <div class="value">0.88</div>
-          <div class="bar"><i></i></div>
+        <div class="meter" data-evidence-state="unavailable">
+          <div class="label">DAO consensus</div>
+          <div class="value">not connected</div>
+          <p class="detail">Requires real governance decisions.</p>
         </div>
-        <div class="meter" style="--level: 0.91">
-          <div class="label">Entelic Drift</div>
-          <div class="value">0.91</div>
-          <div class="bar"><i></i></div>
+        <div class="meter" data-evidence-state="unavailable">
+          <div class="label">Scientific insight</div>
+          <div class="value">not connected</div>
+          <p class="detail">Requires an Entelechy-origin signal.</p>
         </div>
-        <div class="meter" style="--level: 0.97">
-          <div class="label">Live2D Stability</div>
-          <div class="value" id="live2dStability">0.97</div>
-          <div class="bar"><i></i></div>
+        <div class="meter" data-evidence-state="unavailable">
+          <div class="label">Live2D runtime</div>
+          <div class="value">not loaded</div>
+          <p class="detail">The illustration above is not a Cubism model.</p>
         </div>
       </section>
     </main>
 
     <script>
-      const avatar = document.getElementById("avatar");
-      const frameBudget = document.getElementById("frameBudget");
-      let last = performance.now();
-      let frames = 0;
-      let acc = 0;
-
-      function animate(now) {
-        const dt = now - last;
-        last = now;
-        frames += 1;
-        acc += dt;
-
-        const t = now / 1000;
-        const bob = Math.sin(t * 1.7) * 7;
-        const tilt = Math.sin(t * 0.9) * 2.8;
-        avatar.style.setProperty("--bob", `${bob.toFixed(2)}px`);
-        avatar.style.setProperty("--tilt", `${tilt.toFixed(2)}deg`);
-
-        if (acc >= 1000) {
-          const fps = Math.round((frames * 1000) / acc);
-          frameBudget.textContent = `${fps} fps`;
-          frameBudget.style.color =
-            fps >= 50
-              ? "var(--green)"
-              : fps >= 30
-                ? "var(--gold)"
-                : "var(--danger)";
-          frames = 0;
-          acc = 0;
-        }
-
-        requestAnimationFrame(animate);
-      }
-
-      requestAnimationFrame(animate);
-      window.__DTE_PAGES_PREVIEW__ = {
-        status: "ready",
-        mode: "scientific-genius",
-        esnAutognosis: 0.94,
-        daoConsensus: 0.88,
-        live2dProjection: "static-safe-preview",
-      };
+      window.__DTE_PAGES_PREVIEW__ = Object.freeze({
+        status: "static-preview",
+        telemetry: "unavailable",
+        live2d: false,
+        illustration: "css-only",
+      });
     </script>
   </body>
 </html>
