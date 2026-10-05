@@ -24,6 +24,8 @@
 
 ### Fixed
 
+- Frontend: colocated Live2D / companion `.scss` now compiles in the browser esbuild graph, so CI22 E2E, GitHub Pages, and Cloudflare can finish `pnpm build:browser`.
+- Browser version info no longer logs `git describe: No names found` as Error on untagged CI clones; CI22, Pages, and the other E2E browser builds pass `VERSION_INFO_GIT_REF` like Cloudflare.
 - Deep Tree Echo: the Live2D Failed / Retry banner stays inside the avatar strip (`contain: layout paint`) so it cannot cover the conversation pane.
 - CI22 now runs the Cubism/AIRI interchange contract (previously only on the disabled `CI` workflow) and cancels superseded runs instead of leaving them queued until they fail.
 - Cloudflare preview: stop renaming Durable Object class `DeltEchoContainer` to `DeltEchoApp` on git-connected `deltecho-chat-preview` (Cloudflare API 10074). GitHub Pages browser builds now compile workspace type deps first.
