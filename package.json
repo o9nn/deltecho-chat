@@ -7,7 +7,7 @@
   "version": "1.0.0",
   "scripts": {
     "preinstall": "node ./bin/check-nodejs-version.js",
-    "check": "pnpm check:types && pnpm check:lint && pnpm check:format && pnpm check:target-versions && pnpm check:log-conventions && pnpm check:core-self && pnpm check:live2d-assets && pnpm check:desktop-coexistence && pnpm check:desktop-visual-bridge && pnpm check:cloudflare-preview && pnpm check:static-preview && pnpm check:cubism-airi",
+    "check": "pnpm check:types && pnpm check:lint && pnpm check:format && pnpm check:target-versions && pnpm check:log-conventions && pnpm check:core-self && pnpm check:live2d-assets && pnpm check:desktop-coexistence && pnpm check:desktop-visual-bridge && pnpm check:cloudflare-preview && pnpm check:static-preview && pnpm check:cli-entrypoints && pnpm check:cubism-airi",
     "check:types": "pnpm run build:type-deps && pnpm -r --no-bail check:types",
     "build:type-deps": "pnpm --filter=\"deep-tree-echo-orchestrator^...\" --if-present run build",
     "check:lint": "eslint . --ext .js,.ts,.tsx",
@@ -16,6 +16,7 @@
     "check:core-self": "node ./scripts/check-core-self.mjs && pnpm --filter=deep-tree-echo-core test -- --runInBand src/core-self/__tests__/CoreSelfKernel.test.ts src/core-self/__tests__/AutognosisAutogenesisCoupler.test.ts",
     "check:cloudflare-preview": "node ./scripts/check-cloudflare-preview-namespace.mjs",
     "check:static-preview": "node --test ./scripts/check-static-preview.test.mjs && node ./scripts/check-static-preview.mjs",
+    "check:cli-entrypoints": "node --test ./scripts/check-cli-entrypoints.test.mjs",
     "refresh:core-self-evidence": "pnpm --filter=deep-tree-echo-core build && node ./scripts/refresh-core-self-evidence.mjs",
     "check:live2d-assets": "node ./scripts/check-live2d-assets.mjs",
     "check:desktop-coexistence": "node ./scripts/check-desktop-coexistence.mjs",
@@ -46,8 +47,8 @@
     "build:orchestrator": "pnpm --filter=deep-tree-echo-orchestrator build",
     "start:orchestrator": "pnpm --filter=deep-tree-echo-orchestrator start",
     "build:tauri": "pnpm --filter=@deltachat-desktop/target-tauri tauri build",
-    "start:bot": "npx ts-node bin/deltecho-bot.ts",
-    "memory:lever": "npx ts-node bin/dte-memory-lever.ts",
+    "start:bot": "npx tsx bin/deltecho-bot.ts",
+    "memory:lever": "npx tsx bin/dte-memory-lever.ts",
     "reset:node_modules": "rm -rf node_modules && rm -rf packages/*/node_modules || true && pnpm i"
   },
   "engineStrict": true,
