@@ -8,7 +8,6 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import type { MiaraOutfitState } from "@deltecho/avatar";
 import { ResponsiveSpriteAvatar } from "./ResponsiveSpriteAvatar";
-import "./Live2DAvatar.scss";
 
 // Local types that are compatible with both @deltecho/avatar and @deltecho/cognitive
 export type Expression =
