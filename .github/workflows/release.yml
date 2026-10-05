@@ -80,8 +80,19 @@ jobs:
         with:
           node-version: 20
           cache: "pnpm"
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm build:browser
+      - name: Install Dependencies
+        env:
+          # Browser packaging never launches Electron; skip the postinstall CDN.
+          ELECTRON_SKIP_BINARY_DOWNLOAD: "1"
+        run: pnpm install --frozen-lockfile
+      - name: Build Workspace Dependencies
+        run: |
+          pnpm run build:type-deps
+          pnpm --filter=@deltecho/avatar build
+      - name: Build Browser Target
+        env:
+          VERSION_INFO_GIT_REF: ${{ github.sha }}
+        run: pnpm build:browser
       - name: Archive Browser Build
         run: tar -czf browser-build.tar.gz -C packages/target-browser/dist .
       - uses: actions/upload-artifact@v4
@@ -176,7 +187,7 @@ jobs:
           cd packages/orchestrator
           pnpm pack
           mv deep-tree-echo-orchestrator-*.tgz ../../deep-tree-echo-orchestrator.tgz
-      
+
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:

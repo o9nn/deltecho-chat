@@ -42,6 +42,10 @@ jobs:
           pnpm --filter=@deltecho/avatar build
 
       - name: Build Browser Target
+        env:
+          # Shallow Pages checkouts have no tags; gather-version-info
+          # otherwise prints "fatal: No names found, cannot describe anything".
+          VERSION_INFO_GIT_REF: ${{ github.sha }}
         run: pnpm build:browser
 
       - name: Verify static preview evidence claims

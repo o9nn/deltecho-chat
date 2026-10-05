@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { AICompanionProvider, useAICompanion } from "./AICompanionController";
 import { AIMemory } from "./MemoryPersistenceLayer";
+import "./MemoryVisualization.scss";
 
 // Force 3D graph rendering on canvas rather than WebGL when needed
 const _forceCanvas = false;
@@ -83,6 +84,8 @@ const MemoryVisualizationContent: React.FC = () => {
     links: [],
   });
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [reloadToken, setReloadToken] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<AIMemory[]>([]);
   const [highlightedNodes, setHighlightedNodes] = useState<Set<string>>(
@@ -98,22 +101,34 @@ const MemoryVisualizationContent: React.FC = () => {
 
   // Dynamic import of 3D graph libraries
   useEffect(() => {
+    let cancelled = false;
     const loadDependencies = async () => {
+      setLoadError(null);
+      setLoading(true);
       try {
         // Dynamic imports
         const ForceGraph3DModule = await import("3d-force-graph");
-        const ThreeModule = await import("three");
+        const SpriteTextModule = await import("three-spritetext");
         ForceGraph3D = ForceGraph3DModule.default;
-        SpriteText = ThreeModule.SpriteText;
+        SpriteText = SpriteTextModule.default;
 
-        setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+        }
       } catch (error) {
         console.error("Failed to load 3D graph dependencies:", error);
+        if (!cancelled) {
+          setLoadError(error instanceof Error ? error.message : String(error));
+          setLoading(false);
+        }
       }
     };
 
     loadDependencies();
-  }, []);
+    return () => {
+      cancelled = true;
+    };
+  }, [reloadToken]);
 
   // Build memory graph from AI memories
   useEffect(() => {
@@ -553,6 +568,20 @@ const MemoryVisualizationContent: React.FC = () => {
           <div className="loading-container">
             <Loader size={48} className="spinner" />
             <p>Building consciousness graph...</p>
+          </div>
+        )}
+        {!loading && loadError && (
+          <div className="loading-container" role="alert">
+            <p>Consciousness graph failed to load</p>
+            <p>
+              <small>{loadError}</small>
+            </p>
+            <button
+              type="button"
+              onClick={() => setReloadToken((token) => token + 1)}
+            >
+              Retry
+            </button>
           </div>
         )}
       </div>
