@@ -117,6 +117,54 @@ test("browser-only CI and deploy installs must skip the unused Electron binary d
   }
 });
 
+test("Release build-browser install must skip the unused Electron binary download", () => {
+  const workflow = parseYaml(
+    readFileSync(
+      new URL("../.github/workflows/release.yml", import.meta.url),
+      "utf8",
+    ),
+  );
+  const job = workflow.jobs?.["build-browser"];
+  assert.ok(job, "release.yml must keep a build-browser job");
+  const install = (job.steps ?? []).find(
+    (step) => step?.run?.trim() === "pnpm install --frozen-lockfile",
+  );
+  assert.ok(
+    install,
+    "release.yml build-browser must keep a frozen-lockfile install",
+  );
+  const skip = install.env?.ELECTRON_SKIP_BINARY_DOWNLOAD;
+  assert.ok(
+    skip === 1 || skip === "1",
+    "release.yml build-browser must skip Electron so a GitHub 503 cannot fail a browser-only install",
+  );
+  const workspace = (job.steps ?? []).find((step) =>
+    /Build Workspace Dependencies/.test(step?.name ?? ""),
+  );
+  assert.match(
+    workspace?.run ?? "",
+    /@deltecho\/avatar build/,
+    "release.yml build-browser must compile @deltecho/avatar before pnpm build:browser",
+  );
+});
+
+test("legacy CI builds @deltecho/avatar before check", () => {
+  const workflow = parseYaml(
+    readFileSync(
+      new URL("../.github/workflows/ci.yml", import.meta.url),
+      "utf8",
+    ),
+  );
+  const step = (workflow.jobs?.["check-and-test"]?.steps ?? []).find((item) =>
+    /Build Workspace Dependencies/.test(item?.name ?? ""),
+  );
+  assert.match(
+    step?.run ?? "",
+    /@deltecho\/avatar build/,
+    "ci.yml must build @deltecho/avatar so check:types can resolve avatar dist, matching CI22",
+  );
+});
+
 test("cloud-agent browser install must skip the unused Electron binary download", () => {
   const installScript = readFileSync(
     new URL("./cloud-agent-install.sh", import.meta.url),

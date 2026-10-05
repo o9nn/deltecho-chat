@@ -56,7 +56,9 @@ jobs:
         run: node scripts/check-cloudflare-preview-namespace.mjs
 
       - name: Build Workspace Dependencies
-        run: pnpm run build:type-deps
+        run: |
+          pnpm run build:type-deps
+          pnpm --filter=@deltecho/avatar build
 
       - name: Build Browser Target
         env:

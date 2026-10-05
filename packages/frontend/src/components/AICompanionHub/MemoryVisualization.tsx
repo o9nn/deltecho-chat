@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { AICompanionProvider, useAICompanion } from "./AICompanionController";
 import { AIMemory } from "./MemoryPersistenceLayer";
+import "./MemoryVisualization.scss";
 
 // Force 3D graph rendering on canvas rather than WebGL when needed
 const _forceCanvas = false;
@@ -107,9 +108,9 @@ const MemoryVisualizationContent: React.FC = () => {
       try {
         // Dynamic imports
         const ForceGraph3DModule = await import("3d-force-graph");
-        const ThreeModule = await import("three");
+        const SpriteTextModule = await import("three-spritetext");
         ForceGraph3D = ForceGraph3DModule.default;
-        SpriteText = ThreeModule.SpriteText;
+        SpriteText = SpriteTextModule.default;
 
         if (!cancelled) {
           setLoading(false);

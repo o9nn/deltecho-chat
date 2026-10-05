@@ -25,7 +25,8 @@
 ### Fixed
 
 - Browser target: colocated Live2D / hub `.scss` imports now compile in the frontend esbuild step, so GitHub Pages and Cloudflare `pnpm build:browser` no longer fail with "No loader is configured for .scss files".
-- Deep Tree Echo: the memory consciousness graph announces a load failure and offers Retry instead of staying on "Building consciousness graph..." when `3d-force-graph` cannot be imported.
+- Deep Tree Echo: the memory consciousness graph announces a load failure and offers Retry instead of staying on "Building consciousness graph..." when `3d-force-graph` cannot be imported. `3d-force-graph` and `three-spritetext` are now declared frontend dependencies so Retry can load the graph.
+- Release `build-browser` and remaining browser-only installs skip the unused Electron download; `ci.yml` now builds `@deltecho/avatar` before `pnpm check`, matching CI22.
 - Deep Tree Echo: the Live2D Failed / Retry banner stays inside the avatar strip (`contain: layout paint`) so it cannot cover the conversation pane.
 - CI22 now runs the Cubism/AIRI interchange contract (previously only on the disabled `CI` workflow) and cancels superseded runs instead of leaving them queued until they fail.
 - Cloudflare preview: stop renaming Durable Object class `DeltEchoContainer` to `DeltEchoApp` on git-connected `deltecho-chat-preview` (Cloudflare API 10074). GitHub Pages browser builds now compile workspace type deps first.

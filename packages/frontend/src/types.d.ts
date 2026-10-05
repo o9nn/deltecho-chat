@@ -2,6 +2,7 @@ declare module "@mapbox/geojson-extent";
 declare module "@deltachat/react-qr-reader";
 declare module "3d-force-graph";
 declare module "three";
+declare module "three-spritetext";
 
 // Tell tsc that CSS modules are alright
 declare module "*.module.css";
