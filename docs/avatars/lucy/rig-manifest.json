@@ -1,0 +1,468 @@
+{
+  "schemaVersion": 1,
+  "identity": "lucy",
+  "status": "artwork_not_separated_no_moc3",
+  "sourceEvidence": {
+    "uvAtlasPsdSha256": "adaba232b9219be0f34f6f33b149567cae946b07a4faf0ed6110014c043cbe89",
+    "uvAtlasDimensions": [2048, 2048],
+    "uvAtlasLayers": 1,
+    "uvAtlasClassification": "3D UV albedo reference; cannot yield 2D layers by splitting pixels alone",
+    "frontReferenceSha256": "2218bb0a393b90126325e84b3b31028758df91af3d3c1dfbb2a78d9130fecead",
+    "frontReferenceDimensions": [1024, 1536]
+  },
+  "conventions": {
+    "laterality": "L/R are character left/right, not viewer left/right",
+    "sourceForAllLayers": "new part-separated illustration based on front reference; UV atlas is colour/material reference only",
+    "zOrder": "lower values render behind higher values; artist must verify actual occlusion",
+    "exportFolder": "packages/frontend/static/models/lucy",
+    "expectedFiles": [
+      "lucy.model3.json",
+      "lucy.moc3",
+      "textures/*.png",
+      "expressions/*.exp3.json",
+      "motion/*.motion3.json"
+    ]
+  },
+  "layers": [
+    {
+      "id": "wingL_base",
+      "group": "wings",
+      "z": 10,
+      "redraw": "complete root concealed behind torso",
+      "deformer": "WingRootL",
+      "parameters": ["ParamWingL"]
+    },
+    {
+      "id": "wingL_primaryFeathers",
+      "group": "wings",
+      "z": 11,
+      "redraw": "feather shafts and overlap undersides",
+      "deformer": "WingFeatherL",
+      "parameters": ["ParamWingL"]
+    },
+    {
+      "id": "wingL_glow",
+      "group": "wings",
+      "z": 12,
+      "redraw": "transparent emissive overlay only",
+      "deformer": "WingRootL",
+      "parameters": ["ParamWingL"]
+    },
+    {
+      "id": "wingR_base",
+      "group": "wings",
+      "z": 13,
+      "redraw": "complete root concealed behind torso",
+      "deformer": "WingRootR",
+      "parameters": ["ParamWingR"]
+    },
+    {
+      "id": "wingR_primaryFeathers",
+      "group": "wings",
+      "z": 14,
+      "redraw": "feather shafts and overlap undersides",
+      "deformer": "WingFeatherR",
+      "parameters": ["ParamWingR"]
+    },
+    {
+      "id": "wingR_glow",
+      "group": "wings",
+      "z": 15,
+      "redraw": "transparent emissive overlay only",
+      "deformer": "WingRootR",
+      "parameters": ["ParamWingR"]
+    },
+    {
+      "id": "hairBack_mass",
+      "group": "hair",
+      "z": 20,
+      "redraw": "whole rear scalp and hair concealed by head and shoulders",
+      "deformer": "HairBack",
+      "parameters": ["ParamAngleX", "ParamHairBack"]
+    },
+    {
+      "id": "hairBack_ponytail",
+      "group": "hair",
+      "z": 21,
+      "redraw": "ponytail attachment and hidden strands",
+      "deformer": "Ponytail",
+      "parameters": ["ParamHairBack"]
+    },
+    {
+      "id": "hairBack_leftTrail",
+      "group": "hair",
+      "z": 22,
+      "redraw": "hair continuing under wing and arm",
+      "deformer": "HairSideL",
+      "parameters": ["ParamHairSide"]
+    },
+    {
+      "id": "hairBack_rightTrail",
+      "group": "hair",
+      "z": 23,
+      "redraw": "hair continuing under wing and arm",
+      "deformer": "HairSideR",
+      "parameters": ["ParamHairSide"]
+    },
+    {
+      "id": "legL_skin",
+      "group": "body",
+      "z": 30,
+      "redraw": "upper thigh under skirt and boot",
+      "deformer": "LegL",
+      "parameters": ["ParamBodyAngleX", "ParamBodyAngleZ"]
+    },
+    {
+      "id": "legR_skin",
+      "group": "body",
+      "z": 31,
+      "redraw": "upper thigh under skirt and boot",
+      "deformer": "LegR",
+      "parameters": ["ParamBodyAngleX", "ParamBodyAngleZ"]
+    },
+    {
+      "id": "bootL",
+      "group": "clothes",
+      "z": 32,
+      "redraw": "toe, heel and concealed ankle",
+      "deformer": "LegL",
+      "parameters": ["ParamBodyAngleZ"]
+    },
+    {
+      "id": "bootR",
+      "group": "clothes",
+      "z": 33,
+      "redraw": "toe, heel and concealed ankle",
+      "deformer": "LegR",
+      "parameters": ["ParamBodyAngleZ"]
+    },
+    {
+      "id": "skirtBack",
+      "group": "clothes",
+      "z": 34,
+      "redraw": "back panels behind legs and belt",
+      "deformer": "SkirtBack",
+      "parameters": ["ParamBodyAngleX", "ParamBodyAngleZ"]
+    },
+    {
+      "id": "torso_skin",
+      "group": "body",
+      "z": 40,
+      "redraw": "continuous chest/abdomen under garment and arms",
+      "deformer": "BodyRoot",
+      "parameters": ["ParamBodyAngleX", "ParamBodyAngleY", "ParamBreath"]
+    },
+    {
+      "id": "neck",
+      "group": "body",
+      "z": 41,
+      "redraw": "full neck under face, hair and top",
+      "deformer": "Neck",
+      "parameters": ["ParamAngleX", "ParamBodyAngleX"]
+    },
+    {
+      "id": "armL_skin",
+      "group": "body",
+      "z": 42,
+      "redraw": "upper arm beneath glove and top strap",
+      "deformer": "ArmL",
+      "parameters": ["ParamBodyAngleX"]
+    },
+    {
+      "id": "handL",
+      "group": "body",
+      "z": 43,
+      "redraw": "fingers and wrist under glove",
+      "deformer": "HandL",
+      "parameters": []
+    },
+    {
+      "id": "armR_skin",
+      "group": "body",
+      "z": 44,
+      "redraw": "upper arm beneath glove and top strap",
+      "deformer": "ArmR",
+      "parameters": ["ParamBodyAngleX"]
+    },
+    {
+      "id": "handR",
+      "group": "body",
+      "z": 45,
+      "redraw": "fingers and wrist under glove",
+      "deformer": "HandR",
+      "parameters": []
+    },
+    {
+      "id": "top_front",
+      "group": "clothes",
+      "z": 50,
+      "redraw": "fabric extending behind straps and along side seams",
+      "deformer": "ChestCloth",
+      "parameters": ["ParamBreath", "ParamBodyAngleX"]
+    },
+    {
+      "id": "top_straps",
+      "group": "clothes",
+      "z": 51,
+      "redraw": "separate front/back strap overlays",
+      "deformer": "ChestCloth",
+      "parameters": ["ParamBreath"]
+    },
+    {
+      "id": "skirtFront",
+      "group": "clothes",
+      "z": 52,
+      "redraw": "panels and hidden pleats beneath belt",
+      "deformer": "SkirtFront",
+      "parameters": ["ParamBodyAngleX", "ParamBodyAngleZ"]
+    },
+    {
+      "id": "belt_and_straps",
+      "group": "clothes",
+      "z": 53,
+      "redraw": "belt sections with independent overlaps",
+      "deformer": "BodyRoot",
+      "parameters": ["ParamBodyAngleX"]
+    },
+    {
+      "id": "gloveL",
+      "group": "clothes",
+      "z": 54,
+      "redraw": "glove cuff and concealed fingers",
+      "deformer": "HandL",
+      "parameters": []
+    },
+    {
+      "id": "gloveR",
+      "group": "clothes",
+      "z": 55,
+      "redraw": "glove cuff and concealed fingers",
+      "deformer": "HandR",
+      "parameters": []
+    },
+    {
+      "id": "face_base",
+      "group": "face",
+      "z": 60,
+      "redraw": "whole face/ears under hair, eye layers and jaw turn",
+      "deformer": "HeadRoot",
+      "parameters": ["ParamAngleX", "ParamAngleY", "ParamAngleZ"]
+    },
+    {
+      "id": "earL",
+      "group": "face",
+      "z": 61,
+      "redraw": "ear behind side hair and earpiece",
+      "deformer": "HeadRoot",
+      "parameters": ["ParamAngleX"]
+    },
+    {
+      "id": "earR",
+      "group": "face",
+      "z": 62,
+      "redraw": "ear behind side hair and earpiece",
+      "deformer": "HeadRoot",
+      "parameters": ["ParamAngleX"]
+    },
+    {
+      "id": "eyeL_sclera",
+      "group": "eyes",
+      "z": 63,
+      "redraw": "complete eye white behind iris and lids",
+      "deformer": "EyeL",
+      "parameters": ["ParamEyeLOpen"]
+    },
+    {
+      "id": "eyeL_iris_pupil",
+      "group": "eyes",
+      "z": 64,
+      "redraw": "whole iris and pupil behind upper lash",
+      "deformer": "EyeL",
+      "parameters": ["ParamEyeBallX", "ParamEyeBallY"]
+    },
+    {
+      "id": "eyeL_highlight",
+      "group": "eyes",
+      "z": 65,
+      "redraw": "catchlight independent of pupil motion",
+      "deformer": "EyeL",
+      "parameters": ["ParamEyeLOpen"]
+    },
+    {
+      "id": "eyeL_upperLash",
+      "group": "eyes",
+      "z": 66,
+      "redraw": "lash line and folded lid for blink",
+      "deformer": "EyeLidL",
+      "parameters": ["ParamEyeLOpen", "ParamEyeLSmile"]
+    },
+    {
+      "id": "eyeL_lowerLash",
+      "group": "eyes",
+      "z": 67,
+      "redraw": "lower rim under iris",
+      "deformer": "EyeLidL",
+      "parameters": ["ParamEyeLOpen"]
+    },
+    {
+      "id": "eyeR_sclera",
+      "group": "eyes",
+      "z": 68,
+      "redraw": "complete eye white behind iris and lids",
+      "deformer": "EyeR",
+      "parameters": ["ParamEyeROpen"]
+    },
+    {
+      "id": "eyeR_iris_pupil",
+      "group": "eyes",
+      "z": 69,
+      "redraw": "whole iris and pupil behind upper lash",
+      "deformer": "EyeR",
+      "parameters": ["ParamEyeBallX", "ParamEyeBallY"]
+    },
+    {
+      "id": "eyeR_highlight",
+      "group": "eyes",
+      "z": 70,
+      "redraw": "catchlight independent of pupil motion",
+      "deformer": "EyeR",
+      "parameters": ["ParamEyeROpen"]
+    },
+    {
+      "id": "eyeR_upperLash",
+      "group": "eyes",
+      "z": 71,
+      "redraw": "lash line and folded lid for blink",
+      "deformer": "EyeLidR",
+      "parameters": ["ParamEyeROpen", "ParamEyeRSmile"]
+    },
+    {
+      "id": "eyeR_lowerLash",
+      "group": "eyes",
+      "z": 72,
+      "redraw": "lower rim under iris",
+      "deformer": "EyeLidR",
+      "parameters": ["ParamEyeROpen"]
+    },
+    {
+      "id": "browL",
+      "group": "face",
+      "z": 73,
+      "redraw": "full brow below bangs",
+      "deformer": "BrowL",
+      "parameters": ["ParamBrowLY", "ParamBrowLAngle"]
+    },
+    {
+      "id": "browR",
+      "group": "face",
+      "z": 74,
+      "redraw": "full brow below bangs",
+      "deformer": "BrowR",
+      "parameters": ["ParamBrowRY", "ParamBrowRAngle"]
+    },
+    {
+      "id": "nose",
+      "group": "face",
+      "z": 75,
+      "redraw": "bridge, highlight and turn-side shadow",
+      "deformer": "HeadRoot",
+      "parameters": ["ParamAngleX"]
+    },
+    {
+      "id": "mouth_cavity",
+      "group": "mouth",
+      "z": 76,
+      "redraw": "dark oral cavity absent in closed-mouth concept",
+      "deformer": "MouthRoot",
+      "parameters": ["ParamMouthOpenY"]
+    },
+    {
+      "id": "mouth_tongue",
+      "group": "mouth",
+      "z": 77,
+      "redraw": "tongue with hidden base",
+      "deformer": "MouthRoot",
+      "parameters": ["ParamMouthOpenY"]
+    },
+    {
+      "id": "mouth_teeth",
+      "group": "mouth",
+      "z": 78,
+      "redraw": "teeth above cavity for smile and vowels",
+      "deformer": "MouthRoot",
+      "parameters": ["ParamMouthOpenY"]
+    },
+    {
+      "id": "mouth_lips",
+      "group": "mouth",
+      "z": 79,
+      "redraw": "separate upper/lower lips for fully closed/open poses",
+      "deformer": "MouthRoot",
+      "parameters": ["ParamMouthForm", "ParamMouthOpenY"]
+    },
+    {
+      "id": "face_decals",
+      "group": "face",
+      "z": 80,
+      "redraw": "independent cheek decals with head-turn compensation",
+      "deformer": "HeadRoot",
+      "parameters": ["ParamAngleX"]
+    },
+    {
+      "id": "hairFront_fringe",
+      "group": "hair",
+      "z": 85,
+      "redraw": "scalp and entire bangs beneath headset",
+      "deformer": "HairFront",
+      "parameters": ["ParamHairFront", "ParamAngleX"]
+    },
+    {
+      "id": "hairFront_lockL",
+      "group": "hair",
+      "z": 86,
+      "redraw": "full side lock including hidden roots",
+      "deformer": "HairSideL",
+      "parameters": ["ParamHairSide"]
+    },
+    {
+      "id": "hairFront_lockR",
+      "group": "hair",
+      "z": 87,
+      "redraw": "full side lock including hidden roots",
+      "deformer": "HairSideR",
+      "parameters": ["ParamHairSide"]
+    },
+    {
+      "id": "headset_band",
+      "group": "accessory",
+      "z": 90,
+      "redraw": "band behind bangs and ponytail",
+      "deformer": "HeadRoot",
+      "parameters": ["ParamAngleX", "ParamAngleZ"]
+    },
+    {
+      "id": "headset_earL",
+      "group": "accessory",
+      "z": 91,
+      "redraw": "entire cup with concealed ear-side surface",
+      "deformer": "HeadRoot",
+      "parameters": ["ParamAngleX"]
+    },
+    {
+      "id": "headset_earR",
+      "group": "accessory",
+      "z": 92,
+      "redraw": "entire cup with concealed ear-side surface",
+      "deformer": "HeadRoot",
+      "parameters": ["ParamAngleX"]
+    },
+    {
+      "id": "headset_glow",
+      "group": "accessory",
+      "z": 93,
+      "redraw": "isolated non-emissive/illuminated variants",
+      "deformer": "HeadRoot",
+      "parameters": []
+    }
+  ]
+}

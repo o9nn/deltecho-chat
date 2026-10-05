@@ -49,6 +49,9 @@ jobs:
         timeout-minutes: 30
         run: pnpm test
 
+      - name: Cubism/AIRI interchange contract
+        run: python3 -m unittest discover -s scripts -p 'test_cubism_airi_interchange.py' -v
+
       - name: Build for E2E
         run: pnpm build:browser
 
