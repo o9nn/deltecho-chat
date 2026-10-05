@@ -1,5 +1,8 @@
 name: CI
 
+# disabled_manually in GitHub Actions. Live required checks are CI22
+# (.github/workflows/ci22.yml). Keep new gates there, not only here.
+
 on:
   push:
     branches: [main]
