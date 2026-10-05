@@ -117,6 +117,23 @@ test("browser-only CI and deploy installs must skip the unused Electron binary d
   }
 });
 
+test("release browser-only install must skip the unused Electron binary download", () => {
+  const steps = frozenLockfileInstallSteps(
+    "../.github/workflows/release.yml",
+  ).filter(({ jobName }) => jobName === "build-browser");
+  assert.ok(
+    steps.length > 0,
+    "release.yml build-browser must keep a frozen-lockfile install",
+  );
+  for (const { step } of steps) {
+    const skip = step.env?.ELECTRON_SKIP_BINARY_DOWNLOAD;
+    assert.ok(
+      skip === 1 || skip === "1",
+      "release.yml build-browser must skip Electron; packaging jobs stay unskipped",
+    );
+  }
+});
+
 test("cloud-agent browser install must skip the unused Electron binary download", () => {
   const installScript = readFileSync(
     new URL("./cloud-agent-install.sh", import.meta.url),
