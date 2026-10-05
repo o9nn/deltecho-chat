@@ -77,7 +77,7 @@ test("GitHub Pages install must skip the unused Electron binary download", () =>
     ),
   );
   const installStep = (workflow.jobs?.build?.steps ?? []).find(
-    step =>
+    (step) =>
       step?.name === "Install Dependencies" &&
       step?.run === "pnpm install --frozen-lockfile",
   );
@@ -87,4 +87,71 @@ test("GitHub Pages install must skip the unused Electron binary download", () =>
     skip === 1 || skip === "1",
     "Pages install must skip Electron so a GitHub 503 cannot fail the static preview",
   );
+});
+
+function stepRun(step) {
+  return typeof step?.run === "string" ? step.run : "";
+}
+
+function buildsCoreLoggerExport(run) {
+  return (
+    run.includes("build:type-deps") ||
+    run.includes("pnpm --filter=deep-tree-echo-core build")
+  );
+}
+
+function buildsAvatarPackage(run) {
+  return (
+    run.includes("build:type-deps") ||
+    run.includes("pnpm --filter=@deltecho/avatar build")
+  );
+}
+
+test("Release frontend jobs emit core logger dist before bundling avatar source", () => {
+  const workflow = parseYaml(
+    readFileSync(
+      new URL("../.github/workflows/release.yml", import.meta.url),
+      "utf8",
+    ),
+  );
+  const appBuild = /pnpm build:browser|target-electron build|pnpm build:tauri/;
+  for (const name of ["build-browser", "build-electron", "build-tauri"]) {
+    const steps = workflow.jobs?.[name]?.steps ?? [];
+    const appIdx = steps.findIndex((step) => appBuild.test(stepRun(step)));
+    assert.ok(appIdx >= 0, `${name} must keep an app build step`);
+    const depIdx = steps.findIndex((step) =>
+      buildsCoreLoggerExport(stepRun(step)),
+    );
+    assert.ok(
+      depIdx >= 0 && depIdx < appIdx,
+      `${name} must build deep-tree-echo-core (or type-deps) before the app so avatar can resolve deep-tree-echo-core/logger`,
+    );
+  }
+});
+
+test("Release package job builds avatar before orchestrator tsc", () => {
+  const workflow = parseYaml(
+    readFileSync(
+      new URL("../.github/workflows/release.yml", import.meta.url),
+      "utf8",
+    ),
+  );
+  const steps = workflow.jobs?.["build-packages"]?.steps ?? [];
+  const depStep = steps.find(
+    (step) => step?.name === "Build Workspace Dependencies",
+  );
+  const run = stepRun(depStep);
+  assert.ok(run.length > 0, "build-packages must keep a workspace dep build");
+  assert.ok(
+    buildsAvatarPackage(run),
+    "build-packages must compile @deltecho/avatar so orchestrator tsc can resolve it",
+  );
+  const avatarAt = run.indexOf("@deltecho/avatar build");
+  const orchestratorAt = run.indexOf("deep-tree-echo-orchestrator build");
+  if (!run.includes("build:type-deps")) {
+    assert.ok(
+      avatarAt >= 0 && orchestratorAt > avatarAt,
+      "explicit avatar build must precede the orchestrator build",
+    );
+  }
 });
