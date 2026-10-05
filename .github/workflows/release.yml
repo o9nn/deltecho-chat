@@ -80,7 +80,10 @@ jobs:
         with:
           node-version: 20
           cache: "pnpm"
-      - run: pnpm install --frozen-lockfile
+      - name: Install Dependencies
+        env:
+          ELECTRON_SKIP_BINARY_DOWNLOAD: "1"
+        run: pnpm install --frozen-lockfile
       - run: pnpm build:browser
       - name: Archive Browser Build
         run: tar -czf browser-build.tar.gz -C packages/target-browser/dist .
