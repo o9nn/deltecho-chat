@@ -6,7 +6,7 @@ import { readFileSync, existsSync } from "fs";
 import esbuild from "esbuild";
 import inlineWorkerPlugin from "esbuild-plugin-inline-worker";
 import { ESLint } from "eslint";
-import { compile } from "sass";
+import { sassPlugin } from "./sass-plugin.mjs";
 
 /**
  * Load build-time env from .env.local (and .env) in the current dir.
@@ -129,19 +129,6 @@ const eslintPlugin = {
           errors: [{ text: `${errors} errors were found by eslint!` }],
         }),
       };
-    });
-  },
-};
-
-/**
- * `esbuild` plugin to allow SCSS in CSS modules.
- */
-const sassPlugin = {
-  name: "sass",
-  setup(build) {
-    build.onLoad({ filter: /\.module\.scss$/ }, (args) => {
-      const { css } = compile(args.path);
-      return { contents: css, loader: "local-css" };
     });
   },
 };
