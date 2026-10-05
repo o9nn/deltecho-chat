@@ -42,6 +42,8 @@ jobs:
           pnpm --filter=@deltecho/avatar build
 
       - name: Build Browser Target
+        env:
+          VERSION_INFO_GIT_REF: ${{ github.sha }}
         run: pnpm build:browser
 
       - name: Verify static preview evidence claims

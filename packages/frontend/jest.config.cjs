@@ -19,6 +19,8 @@ module.exports = {
     // Mock ESM-only modules
     '^react-force-graph-2d$': '<rootDir>/__mocks__/styleMock.js',
     '^react-force-graph-3d$': '<rootDir>/__mocks__/styleMock.js',
+    '^3d-force-graph$': '<rootDir>/__mocks__/forceGraphThrow.js',
+    '^three-spritetext$': '<rootDir>/__mocks__/forceGraphThrow.js',
     '^d3-.*$': '<rootDir>/__mocks__/styleMock.js',
     // Mock WASM modules
     '@deltachat/message_parser_wasm/message_parser_wasm': '<rootDir>/__mocks__/styleMock.js',
