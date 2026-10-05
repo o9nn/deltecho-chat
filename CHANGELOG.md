@@ -24,6 +24,8 @@
 
 ### Fixed
 
+- Frontend esbuild now compiles colocated component SCSS (Live2D overlay and VideoCalibrationLab), so GitHub Pages, Cloudflare, and CI22 E2E browser builds no longer die with `No loader is configured for ".scss" files`.
+- Browser-target CI jobs set `VERSION_INFO_GIT_REF`, and `git describe` uses `--always`, so missing tags no longer announce `fatal: No names found, cannot describe anything`.
 - Deep Tree Echo: the Live2D Failed / Retry banner stays inside the avatar strip (`contain: layout paint`) so it cannot cover the conversation pane.
 - CI22 now runs the Cubism/AIRI interchange contract (previously only on the disabled `CI` workflow) and cancels superseded runs instead of leaving them queued until they fail.
 - Cloudflare preview: stop renaming Durable Object class `DeltEchoContainer` to `DeltEchoApp` on git-connected `deltecho-chat-preview` (Cloudflare API 10074). GitHub Pages browser builds now compile workspace type deps first.
