@@ -24,6 +24,7 @@
 
 ### Fixed
 
+- Browser / GitHub Pages: esbuild now compiles colocated `.scss` imports (not only `*.module.scss`) so `Live2DAvatar.scss` overlay styles enter the frontend bundle.
 - Deep Tree Echo: the Live2D Failed / Retry banner stays inside the avatar strip (`contain: layout paint`) so it cannot cover the conversation pane.
 - CI22 now runs the Cubism/AIRI interchange contract (previously only on the disabled `CI` workflow) and cancels superseded runs instead of leaving them queued until they fail.
 - Cloudflare preview: stop renaming Durable Object class `DeltEchoContainer` to `DeltEchoApp` on git-connected `deltecho-chat-preview` (Cloudflare API 10074). GitHub Pages browser builds now compile workspace type deps first.
