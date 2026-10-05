@@ -69,22 +69,70 @@ test("a CSS illustration cannot masquerade as a Cubism renderer or FPS source", 
   );
 });
 
-test("GitHub Pages install must skip the unused Electron binary download", () => {
-  const workflow = parseYaml(
+function readWorkflow(name) {
+  return parseYaml(
     readFileSync(
-      new URL("../.github/workflows/deploy-preview.yml", import.meta.url),
+      new URL(`../.github/workflows/${name}`, import.meta.url),
       "utf8",
     ),
   );
-  const installStep = (workflow.jobs?.build?.steps ?? []).find(
-    step =>
-      step?.name === "Install Dependencies" &&
-      step?.run === "pnpm install --frozen-lockfile",
+}
+
+function frozenInstallSteps(job) {
+  return (job?.steps ?? []).filter(
+    (step) =>
+      typeof step?.run === "string" &&
+      step.run.includes("pnpm install --frozen-lockfile"),
   );
-  assert.ok(installStep, "Pages workflow must keep a frozen-lockfile install");
-  const skip = installStep.env?.ELECTRON_SKIP_BINARY_DOWNLOAD;
+}
+
+function assertInstallSkipsElectron(workflowFile, jobName, reason) {
+  const workflow = readWorkflow(workflowFile);
+  const steps = frozenInstallSteps(workflow.jobs?.[jobName]);
   assert.ok(
-    skip === 1 || skip === "1",
+    steps.length > 0,
+    `${workflowFile} ${jobName} must keep a frozen-lockfile install`,
+  );
+  for (const step of steps) {
+    const skip = step.env?.ELECTRON_SKIP_BINARY_DOWNLOAD;
+    assert.ok(skip === 1 || skip === "1", reason);
+  }
+}
+
+test("GitHub Pages install must skip the unused Electron binary download", () => {
+  assertInstallSkipsElectron(
+    "deploy-preview.yml",
+    "build",
     "Pages install must skip Electron so a GitHub 503 cannot fail the static preview",
   );
+});
+
+test("browser-only CI and deploy installs must skip the unused Electron binary download", () => {
+  const reason =
+    "browser-only install must skip Electron so a GitHub 503 cannot fail CI or deploy";
+  assertInstallSkipsElectron("ci.yml", "check-and-test", reason);
+  assertInstallSkipsElectron("ci22.yml", "check-and-test", reason);
+  assertInstallSkipsElectron("deploy-cloudflare.yml", "deploy", reason);
+  assertInstallSkipsElectron(
+    "test-edit-message.yml",
+    "test-edit-message",
+    reason,
+  );
+  assertInstallSkipsElectron("release.yml", "build-browser", reason);
+});
+
+test("Electron release packaging must still download the Electron binary", () => {
+  const steps = frozenInstallSteps(
+    readWorkflow("release.yml").jobs?.["build-electron"],
+  );
+  assert.ok(
+    steps.length > 0,
+    "release.yml build-electron must keep a frozen-lockfile install",
+  );
+  for (const step of steps) {
+    assert.ok(
+      step.env?.ELECTRON_SKIP_BINARY_DOWNLOAD == null,
+      "Electron packaging install must not skip the Electron binary",
+    );
+  }
 });
