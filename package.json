@@ -7,7 +7,7 @@
   "version": "1.0.0",
   "scripts": {
     "preinstall": "node ./bin/check-nodejs-version.js",
-    "check": "pnpm check:types && pnpm check:lint && pnpm check:format && pnpm check:target-versions && pnpm check:log-conventions && pnpm check:core-self && pnpm check:live2d-assets && pnpm check:desktop-coexistence && pnpm check:desktop-visual-bridge && pnpm check:cloudflare-preview && pnpm check:static-preview && pnpm check:cli-entrypoints && pnpm check:cubism-airi",
+    "check": "pnpm check:types && pnpm check:lint && pnpm check:format && pnpm check:target-versions && pnpm check:log-conventions && pnpm check:core-self && pnpm check:live2d-assets && pnpm check:desktop-coexistence && pnpm check:desktop-visual-bridge && pnpm check:cloudflare-preview && pnpm check:static-preview && pnpm check:cli-entrypoints && pnpm check:frontend-scss-loader && pnpm check:cubism-airi",
     "check:types": "pnpm run build:type-deps && pnpm -r --no-bail check:types",
     "build:type-deps": "pnpm --filter=\"deep-tree-echo-orchestrator^...\" --if-present run build",
     "check:lint": "eslint . --ext .js,.ts,.tsx",
@@ -17,6 +17,7 @@
     "check:cloudflare-preview": "node ./scripts/check-cloudflare-preview-namespace.mjs",
     "check:static-preview": "node --test ./scripts/check-static-preview.test.mjs && node ./scripts/check-static-preview.mjs",
     "check:cli-entrypoints": "node --test ./scripts/check-cli-entrypoints.test.mjs",
+    "check:frontend-scss-loader": "node --test ./scripts/check-frontend-scss-loader.test.mjs",
     "refresh:core-self-evidence": "pnpm --filter=deep-tree-echo-core build && node ./scripts/refresh-core-self-evidence.mjs",
     "check:live2d-assets": "node ./scripts/check-live2d-assets.mjs",
     "check:desktop-coexistence": "node ./scripts/check-desktop-coexistence.mjs",
