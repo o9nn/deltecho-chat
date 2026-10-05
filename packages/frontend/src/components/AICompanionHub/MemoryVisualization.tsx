@@ -83,6 +83,8 @@ const MemoryVisualizationContent: React.FC = () => {
     links: [],
   });
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [loadGeneration, setLoadGeneration] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<AIMemory[]>([]);
   const [highlightedNodes, setHighlightedNodes] = useState<Set<string>>(
@@ -98,22 +100,38 @@ const MemoryVisualizationContent: React.FC = () => {
 
   // Dynamic import of 3D graph libraries
   useEffect(() => {
+    let cancelled = false;
+
     const loadDependencies = async () => {
+      setLoading(true);
+      setLoadError(null);
       try {
         // Dynamic imports
         const ForceGraph3DModule = await import("3d-force-graph");
         const ThreeModule = await import("three");
+        if (cancelled) return;
         ForceGraph3D = ForceGraph3DModule.default;
         SpriteText = ThreeModule.SpriteText;
 
         setLoading(false);
       } catch (error) {
         console.error("Failed to load 3D graph dependencies:", error);
+        if (!cancelled) {
+          setLoadError(
+            error instanceof Error
+              ? error.message
+              : "Failed to load 3D graph dependencies",
+          );
+          setLoading(false);
+        }
       }
     };
 
     loadDependencies();
-  }, []);
+    return () => {
+      cancelled = true;
+    };
+  }, [loadGeneration]);
 
   // Build memory graph from AI memories
   useEffect(() => {
@@ -553,6 +571,18 @@ const MemoryVisualizationContent: React.FC = () => {
           <div className="loading-container">
             <Loader size={48} className="spinner" />
             <p>Building consciousness graph...</p>
+          </div>
+        )}
+        {!loading && loadError && (
+          <div className="loading-container" role="alert">
+            <p>Consciousness graph failed to load</p>
+            <p title={loadError}>{loadError}</p>
+            <button
+              type="button"
+              onClick={() => setLoadGeneration((generation) => generation + 1)}
+            >
+              Retry
+            </button>
           </div>
         )}
       </div>
