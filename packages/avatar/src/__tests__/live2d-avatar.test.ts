@@ -400,6 +400,132 @@ describe("Live2DAvatarManager", () => {
       }
     });
 
+    it("renders a tentative crystal once through the existing ticker and samples the composed expression", async () => {
+      const onCrystal = jest.spyOn(
+        ResonanceCascadeConductor.prototype,
+        "onCrystal",
+      );
+      const now = jest.spyOn(performance, "now");
+      const wallClock = jest.spyOn(Date, "now").mockReturnValue(10_000);
+      let time = 1_000;
+      now.mockImplementation(() => time);
+      try {
+        const controller = await manager.initialize(mockContainer, {
+          modelPath: "/test/model.json",
+        });
+        const renderer = controller.getRenderer() as unknown as {
+          addFrameListener: jest.Mock;
+          setParameter: jest.Mock;
+        };
+        const resonanceFrame = renderer.addFrameListener.mock.calls[2][0] as (
+          deltaTime: number,
+        ) => void;
+        const selfModelFrame = renderer.addFrameListener.mock.calls[1][0] as (
+          deltaTime: number,
+        ) => void;
+        const coreSelf = {
+          initialized: true,
+          ledgerHead: "a".repeat(64),
+          projectedStateDigest: "b".repeat(64),
+          acceptedEventCount: 1,
+          pendingProposalCount: 0,
+        };
+        const base = { mode: "Idle", coreSelf };
+        controller.updateCognitiveState(base);
+        const lastValue = (id: string): number | undefined =>
+          renderer.setParameter.mock.calls
+            .filter(([paramId]) => paramId === id)
+            .at(-1)?.[1];
+        const neutralMouth = lastValue("ParamMouthForm");
+        const neutralEye = lastValue("ParamEyeLOpen") ?? 0;
+        const visualState = {
+          ...base,
+          predictiveCrystal: {
+            id: "crystal-mounted-1",
+            timestamp: 10_000,
+            confidence: 0.7,
+            status: "tentative" as const,
+            avatarEffect: {
+              eyeFocusIntensity: 0.5,
+              browRaiseAsymmetry: 0.3,
+            },
+          },
+        };
+        controller.updateCognitiveState(visualState);
+        controller.updateCognitiveState(visualState);
+        expect(onCrystal).toHaveBeenCalledTimes(1);
+        expect(renderer.addFrameListener).toHaveBeenCalledTimes(3);
+        time += 200;
+        renderer.setParameter.mockClear();
+        resonanceFrame(1);
+        expect(lastValue("ParamEyeLOpen")).toBeGreaterThan(neutralEye);
+        expect(lastValue("ParamBrowLY")).not.toBe(lastValue("ParamBrowRY"));
+        expect(lastValue("ParamMouthForm")).toBe(neutralMouth);
+        selfModelFrame(1);
+        selfModelFrame(1);
+        expect(controller.getLastExpressionExperience()).toEqual(
+          expect.objectContaining({
+            coreSelf,
+            predicted: expect.objectContaining({
+              params: expect.objectContaining({
+                ParamEyeLOpen: expect.any(Number),
+                ParamBrowLY: expect.any(Number),
+              }),
+            }),
+          }),
+        );
+      } finally {
+        onCrystal.mockRestore();
+        now.mockRestore();
+        wallClock.mockRestore();
+      }
+    });
+
+    it("suppresses a tentative crystal against explicitly uninitialized identity", async () => {
+      const onCrystal = jest.spyOn(
+        ResonanceCascadeConductor.prototype,
+        "onCrystal",
+      );
+      const now = jest.spyOn(Date, "now").mockReturnValue(10_000);
+      try {
+        const controller = await manager.initialize(mockContainer, {
+          modelPath: "/test/model.json",
+        });
+        controller.updateCognitiveState({
+          mode: "Idle",
+          coreSelf: {
+            initialized: false,
+            ledgerHead: null,
+            projectedStateDigest: "",
+            acceptedEventCount: 0,
+            pendingProposalCount: 0,
+          },
+          predictiveCrystal: {
+            id: "crystal-unanchored",
+            timestamp: 10_000,
+            confidence: 0.8,
+            status: "tentative",
+            avatarEffect: { eyeFocusIntensity: 0.4, browRaiseAsymmetry: 0.2 },
+          },
+        });
+        expect(onCrystal).not.toHaveBeenCalled();
+        controller.updateCognitiveState({
+          mode: "Idle",
+          predictiveCrystal: {
+            id: "crystal-missing-anchor",
+            timestamp: 10_000,
+            confidence: 0.8,
+            status: "tentative",
+            avatarEffect: { eyeFocusIntensity: 0.4, browRaiseAsymmetry: 0.2 },
+          },
+        });
+        expect(onCrystal).not.toHaveBeenCalled();
+      } finally {
+        onCrystal.mockRestore();
+        now.mockRestore();
+      }
+    });
+
     it("samples rendered Cubism state into the avatar self-model", async () => {
       const controller = await manager.initialize(mockContainer, {
         modelPath: "/test/model.json",

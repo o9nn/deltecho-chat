@@ -9,6 +9,7 @@ import { ScientificDomain, ReasoningMode } from "deep-tree-echo-core";
 class MockScientificGeniusEngine extends EventEmitter {
   public queries: Array<{ query: string; domain?: ScientificDomain }> = [];
   public insights: Array<{ id: string; [key: string]: unknown }> = [];
+  public crystalScans = 0;
   public enableFreeEnergyMinimization = true;
   public enableIntegratedInformation = true;
   public enableAutopoiesis = true;
@@ -69,6 +70,32 @@ class MockScientificGeniusEngine extends EventEmitter {
     domain?: ScientificDomain,
   ) {
     return this.generateInsights(query, undefined, domain);
+  }
+
+  public async processStimulus(query: string, domain: ScientificDomain) {
+    return this.generateInsights(query, undefined, domain);
+  }
+
+  public crystallizePredictiveInsights() {
+    this.crystalScans++;
+    const crystal = {
+      id: "crystal_test_conjecture",
+      confidence: 0.58,
+      timestamp: Date.now(),
+      confirmed: false,
+      prediction: "Untested graph relation",
+      sourceConcepts: ["concept_a", "concept_c"],
+      targetConcept: "concept_b",
+      domain: ScientificDomain.CognitiveScience,
+      avatarEffect: {
+        eyeFocusIntensity: 0.25,
+        browRaiseAsymmetry: 0.1,
+        microSmileIntensity: 0,
+        haloCrystallizationHz: 0.5,
+      },
+    };
+    this.emit("predictive_crystallization", crystal);
+    return [crystal];
   }
 
   public async performEpistemicForaging() {
@@ -148,6 +175,7 @@ describe("AutonomyLifecycleCoordinator scientific-genius wiring", () => {
     const agent = lifecycle.getVirtualAgent();
 
     expect(scientificGenius.queries).toHaveLength(1);
+    expect(scientificGenius.crystalScans).toBe(1);
     expect(scientificGenius.queries[0].query).toContain(
       "Integrate Deep Tree Echo autonomy lifecycle state",
     );
@@ -162,5 +190,29 @@ describe("AutonomyLifecycleCoordinator scientific-genius wiring", () => {
     );
     expect(result.coherenceAfter).toBeGreaterThan(0);
     expect(result.coherenceAfter).toBeLessThanOrEqual(1);
+  });
+
+  it("routes a tentative graph link once per scheduled reflection without mutating self-modification or leaking old engine listeners", async () => {
+    const lifecycle = new AutonomyLifecycleCoordinator(
+      { cycleIntervalMs: 0, scientificInquiryInterval: 3 },
+      cognitiveProcessor,
+    );
+    const oldEngine = new MockScientificGeniusEngine();
+    const engine = new MockScientificGeniusEngine();
+    const events: unknown[] = [];
+    lifecycle.on("scientific:predictive_crystallization", (event) =>
+      events.push(event),
+    );
+    lifecycle.wireScientificGenius(oldEngine as any);
+    lifecycle.wireScientificGenius(engine as any);
+    expect(oldEngine.listenerCount("predictive_crystallization")).toBe(0);
+    await lifecycle.executePhase(AutonomyPhase.REFLECTION, 1);
+    await lifecycle.executePhase(AutonomyPhase.REFLECTION, 2);
+    expect(engine.crystalScans).toBe(0);
+    await lifecycle.executePhase(AutonomyPhase.REFLECTION, 3);
+    expect(engine.crystalScans).toBe(1);
+    expect(events).toHaveLength(1);
+    expect(events[0]).toMatchObject({ confirmed: false });
+    expect(lifecycle.getSelfModificationEngine()).toBeUndefined();
   });
 });

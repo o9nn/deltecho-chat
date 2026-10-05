@@ -133,6 +133,9 @@ class ElectronRuntime implements Runtime {
   onShowDialog:
     | ((kind: "about" | "keybindings" | "settings") => void)
     | undefined;
+  getDteScientificVisualState(): Promise<unknown | null> {
+    return ipcBackend.invoke("dte-read-scientific-visual");
+  }
   onDragFileOut(file: string): void {
     ipcBackend.send("ondragstart", file);
   }

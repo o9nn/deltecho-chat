@@ -75,6 +75,8 @@ export interface Runtime {
    * get the additional info about the runtime
    */
   getRuntimeInfo(): RuntimeInfo;
+  /** Optional read-only visual state from a running DeltEcho orchestrator. No daemon or evidence means null. */
+  getDteScientificVisualState?(): Promise<unknown | null>;
   /**
    * Opens a link in a new Window or in the Browser
    * @param link

@@ -183,6 +183,18 @@ export interface EpistemicResonanceVisualState {
   epistemicTemperatureDelta: number;
 }
 
+export interface TentativeCrystalVisualState {
+  id: string;
+  timestamp: number;
+  /** Bounded structural support; not calibrated confidence in truth. */
+  confidence: number;
+  status: "tentative";
+  avatarEffect: {
+    eyeFocusIntensity: number;
+    browRaiseAsymmetry: number;
+  };
+}
+
 export interface CanonicalCoreSelfVisualState {
   initialized: boolean;
   ledgerHead: string | null;
@@ -227,6 +239,7 @@ export interface ScientificGeniusVisualState {
   activeExperimentation?: number;
   coreSelf?: CanonicalCoreSelfVisualState;
   resonanceCascade?: EpistemicResonanceVisualState;
+  predictiveCrystal?: TentativeCrystalVisualState;
   isProcessing?: boolean;
 }
 
@@ -321,6 +334,7 @@ export class CognitiveOrchestrator {
   private authoritativeVisualSignal: ScientificGeniusVisualState | null = null;
   private authoritativeVisualReceivedAt = 0;
   private static readonly AUTHORITY_FRESHNESS_MS = 5_000;
+  private static readonly CRYSTAL_FRESHNESS_MS = 2_500;
 
   constructor(config: DeepTreeEchoBotConfig) {
     this.config = config;
@@ -848,6 +862,17 @@ Respond in a way that reflects these characteristics while being helpful and inf
     if (age < 0 || age > CognitiveOrchestrator.AUTHORITY_FRESHNESS_MS) {
       this.authoritativeVisualSignal = null;
     }
+    const crystal = this.authoritativeVisualSignal?.predictiveCrystal;
+    if (
+      crystal &&
+      (Date.now() < crystal.timestamp ||
+        Date.now() - crystal.timestamp >
+          CognitiveOrchestrator.CRYSTAL_FRESHNESS_MS)
+    ) {
+      const { predictiveCrystal: _expired, ...stillAuthoritative } =
+        this.authoritativeVisualSignal!;
+      this.authoritativeVisualSignal = stillAuthoritative;
+    }
     this.state.scientificGeniusVisualState =
       this.authoritativeVisualSignal ??
       this.localVisualObservation ??
@@ -928,7 +953,40 @@ Respond in a way that reflects these characteristics while being helpful and inf
       return;
     }
 
-    this.authoritativeVisualSignal = signal;
+    const { predictiveCrystal, ...baseSignal } = signal;
+    const crystalAge = predictiveCrystal
+      ? Date.now() - predictiveCrystal.timestamp
+      : Number.POSITIVE_INFINITY;
+    const validCrystal =
+      predictiveCrystal?.status === "tentative" &&
+      typeof predictiveCrystal.id === "string" &&
+      predictiveCrystal.id.length > 0 &&
+      predictiveCrystal.id.length <= 200 &&
+      Number.isFinite(crystalAge) &&
+      crystalAge >= 0 &&
+      crystalAge <= CognitiveOrchestrator.CRYSTAL_FRESHNESS_MS &&
+      [
+        predictiveCrystal.confidence,
+        predictiveCrystal.avatarEffect?.eyeFocusIntensity,
+        predictiveCrystal.avatarEffect?.browRaiseAsymmetry,
+      ].every(
+        (value) =>
+          typeof value === "number" &&
+          Number.isFinite(value) &&
+          value >= 0 &&
+          value <= 1,
+      );
+    this.authoritativeVisualSignal = {
+      ...baseSignal,
+      ...(validCrystal && predictiveCrystal
+        ? {
+            predictiveCrystal: {
+              ...predictiveCrystal,
+              avatarEffect: { ...predictiveCrystal.avatarEffect },
+            },
+          }
+        : {}),
+    };
     this.authoritativeVisualReceivedAt = Date.now();
     this.refreshVisualSignal();
 
