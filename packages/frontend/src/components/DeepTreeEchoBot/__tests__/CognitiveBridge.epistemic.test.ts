@@ -76,6 +76,7 @@ describe("CognitiveBridge scientific evidence abstention", () => {
     expect(signal?.autognosisResonance).toBeUndefined();
     expect(signal?.metabolic).toBeUndefined();
     expect(signal?.resonanceCascade).toBeUndefined();
+    expect(signal?.predictiveCrystal).toBeUndefined();
   });
 
   it("retains real scientific evidence across local messages and expires it after five seconds", async () => {
@@ -112,6 +113,69 @@ describe("CognitiveBridge scientific evidence abstention", () => {
     expect(state?.cognitiveContext?.salienceScore).toBe(
       state?.scientificGeniusVisualState?.salience,
     );
+  });
+
+  it("retains only a fresh tentative link and revokes the cue before the wider authority lease ends", async () => {
+    const orchestrator = new CognitiveOrchestrator(configuration);
+    await orchestrator.initialize();
+    const cue = {
+      id: "crystal-scientific-1",
+      timestamp: 10_000,
+      confidence: 0.62,
+      status: "tentative" as const,
+      avatarEffect: { eyeFocusIntensity: 0.35, browRaiseAsymmetry: 0.2 },
+    };
+    orchestrator.applyScientificGeniusVisualState({
+      ...measuredSignal(),
+      predictiveCrystal: cue,
+    });
+    expect(
+      orchestrator.getScientificGeniusVisualState()?.predictiveCrystal,
+    ).toEqual(cue);
+    now.mockReturnValue(12_501);
+    expect(orchestrator.getScientificGeniusVisualState()?.origin).toBe(
+      "entelechy",
+    );
+    expect(
+      orchestrator.getScientificGeniusVisualState()?.predictiveCrystal,
+    ).toBeUndefined();
+    expect(orchestrator.getState()?.persona.currentMood).toBe("neutral");
+    expect(orchestrator.getState()?.reasoning.confidenceLevel).toBe(0.5);
+  });
+
+  it("strips malformed or stale tentative cues without inventing local crystal telemetry", async () => {
+    const orchestrator = new CognitiveOrchestrator(configuration);
+    await orchestrator.initialize();
+    orchestrator.applyScientificGeniusVisualState({
+      ...measuredSignal(),
+      predictiveCrystal: {
+        id: "malformed",
+        timestamp: 10_000,
+        confidence: Number.POSITIVE_INFINITY,
+        status: "tentative",
+        avatarEffect: { eyeFocusIntensity: 0.4, browRaiseAsymmetry: 0.2 },
+      },
+    });
+    expect(orchestrator.getScientificGeniusVisualState()?.origin).toBe(
+      "entelechy",
+    );
+    expect(
+      orchestrator.getScientificGeniusVisualState()?.predictiveCrystal,
+    ).toBeUndefined();
+
+    orchestrator.applyScientificGeniusVisualState({
+      ...measuredSignal(),
+      predictiveCrystal: {
+        id: "stale",
+        timestamp: 1_000,
+        confidence: 0.7,
+        status: "tentative",
+        avatarEffect: { eyeFocusIntensity: 0.4, browRaiseAsymmetry: 0.2 },
+      },
+    });
+    expect(
+      orchestrator.getScientificGeniusVisualState()?.predictiveCrystal,
+    ).toBeUndefined();
   });
 
   it("revokes authority for null, missing provenance, or non-finite evidence", async () => {

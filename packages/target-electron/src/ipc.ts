@@ -47,6 +47,7 @@ import DeltaChatController from "./deltachat/controller.js";
 import { BuildInfo } from "./get-build-info.js";
 import { updateContentProtectionOnAllActiveWindows } from "./content-protection.js";
 import { MediaType } from "@deltachat-desktop/runtime-interface";
+import { readDteScientificVisualState } from "./dte-scientific-visual.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -90,6 +91,17 @@ export async function init(cwd: string, logHandler: LogHandler) {
 
     rawApp.exit(1);
   }
+
+  ipcMain.handle("dte-read-scientific-visual", async (event) => {
+    if (
+      !mainWindow.window ||
+      event.sender !== mainWindow.window.webContents ||
+      event.senderFrame !== mainWindow.window.webContents.mainFrame
+    ) {
+      return null;
+    }
+    return readDteScientificVisualState();
+  });
 
   ipcMain.once("ipcReady", (_e) => {
     app.ipcReady = true;
@@ -474,6 +486,7 @@ export async function init(cwd: string, logHandler: LogHandler) {
 
   return () => {
     // the shutdown function
+    ipcMain.removeHandler("dte-read-scientific-visual");
     dcController.jsonrpcRemote.rpc.stopIoForAllAccounts();
   };
 }

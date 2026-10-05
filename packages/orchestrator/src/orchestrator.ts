@@ -7,6 +7,7 @@ import {
   scientificGeniusEngine,
   ProprioceptiveEmbodiment,
   type EpistemicResonanceCascade,
+  type PredictiveInsightCrystal,
 } from "deep-tree-echo-core";
 import {
   CognitiveOrchestrator,
@@ -704,6 +705,25 @@ export class Orchestrator {
           );
           log.info(
             "Governed Epistemic Resonance transport active (eureka → entelechy snapshot → avatar)",
+          );
+
+          // Tentative graph links travel the same visual-only route. Unlike
+          // eureka cascades they never authorize an ESN/DAO state change.
+          const onPredictiveCrystal = (
+            crystal: PredictiveInsightCrystal,
+          ): void => {
+            entelechyIntegration.setPredictiveCrystal(crystal);
+          };
+          this.autonomyLifecycle!.on(
+            "scientific:predictive_crystallization",
+            onPredictiveCrystal,
+          );
+          this.scientificIntegrationCleanup.push(
+            () =>
+              this.autonomyLifecycle?.off(
+                "scientific:predictive_crystallization",
+                onPredictiveCrystal,
+              ),
           );
 
           // 12. Arena-ScientificGenius Bridge — spatial discoveries → hypotheses

@@ -173,6 +173,17 @@ export interface ScientificGeniusVisualSignal {
   daoConsensus?: number;
   esnCoherence?: number;
   autognosisResonance?: number;
+  /** Short-lived, unconfirmed concept-link attention cue; never an evidence claim. */
+  predictiveCrystal?: {
+    id: string;
+    timestamp: number;
+    confidence: number;
+    status: "tentative";
+    avatarEffect: {
+      eyeFocusIntensity: number;
+      browRaiseAsymmetry: number;
+    };
+  };
   isProcessing: boolean;
 }
 

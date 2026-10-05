@@ -21,6 +21,7 @@ import {
   resolveMiaraOutfit,
 } from "@deltecho/avatar";
 import { Live2DAvatar } from "../AICompanionHub/Live2DAvatar";
+import { runtime } from "@deltachat-desktop/runtime-interface";
 import type {
   Live2DAvatarController,
   Expression,
@@ -32,7 +33,10 @@ import { AvatarIdentityPicker } from "./AvatarIdentityPicker";
 import { MiaraExpressionPicker } from "./MiaraExpressionPicker";
 import { MiaraOutfitPicker } from "./MiaraOutfitPicker";
 import { getOrchestrator } from "./CognitiveBridge";
-import type { UnifiedCognitiveState } from "./CognitiveBridge";
+import type {
+  ScientificGeniusVisualState,
+  UnifiedCognitiveState,
+} from "./CognitiveBridge";
 import {
   useDeepTreeEchoAvatarOptional,
   AvatarProcessingState as BotProcessingState,
@@ -123,6 +127,10 @@ function getCognitiveStateSignature(
     cognitiveState.scientificGeniusVisualState?.resonanceCascade?.id ??
       "no-resonance-cascade",
     cognitiveState.scientificGeniusVisualState?.resonanceCascade?.timestamp ??
+      0,
+    cognitiveState.scientificGeniusVisualState?.predictiveCrystal?.id ??
+      "no-predictive-crystal",
+    cognitiveState.scientificGeniusVisualState?.predictiveCrystal?.timestamp ??
       0,
     persona?.currentMood ?? "unknown-mood",
     roundAvatarSignal(reasoning?.confidenceLevel),
@@ -376,6 +384,10 @@ function mapCognitiveStateToVisualState(
     metabolic: geniusSignal?.metabolic,
     coreSelf: geniusSignal?.coreSelf,
     resonanceCascade: geniusSignal?.resonanceCascade,
+    predictiveCrystal:
+      geniusSignal?.predictiveCrystal?.status === "tentative"
+        ? geniusSignal.predictiveCrystal
+        : undefined,
     isProcessing:
       processingState === BotProcessingState.THINKING ||
       processingState === BotProcessingState.RESPONDING,
@@ -542,6 +554,55 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
     avatarContext?.state.config.automeshMapping?.parameters,
     avatarContext?.state.config.identity,
   ]);
+
+  // The optional Electron main-process bridge reads only the DTE daemon's
+  // scientific visual projection. Browser/Tauri without a genuine daemon stay
+  // on local observations; a failed or vanished daemon immediately revokes the
+  // authority lease. Never overlap requests or let an unmounted view apply one.
+  useEffect(() => {
+    const readVisual = runtime?.getDteScientificVisualState;
+    if (!finalVisible || typeof readVisual !== "function") return undefined;
+    let mounted = true;
+    let pending = false;
+    const poll = async (): Promise<void> => {
+      if (!mounted || pending || document.visibilityState === "hidden") return;
+      const orchestrator = getOrchestrator();
+      if (
+        !orchestrator ||
+        typeof orchestrator.applyScientificGeniusVisualState !== "function"
+      ) {
+        return;
+      }
+      pending = true;
+      try {
+        const response = await readVisual.call(runtime);
+        if (!mounted) return;
+        const scientific =
+          response &&
+          typeof response === "object" &&
+          !Array.isArray(response) &&
+          (response as Record<string, unknown>).origin === "entelechy"
+            ? (response as ScientificGeniusVisualState)
+            : null;
+        orchestrator.applyScientificGeniusVisualState(scientific);
+      } catch {
+        if (mounted) orchestrator.applyScientificGeniusVisualState(null);
+      } finally {
+        pending = false;
+      }
+    };
+    void poll();
+    const timer = setInterval(() => void poll(), 1_500);
+    const onVisibility = (): void => {
+      if (document.visibilityState === "visible") void poll();
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      mounted = false;
+      clearInterval(timer);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, [finalVisible]);
 
   // Update cognitive state from orchestrator. The avatar is a visual expression
   // layer, so it should follow meaningful cognitive drift rather than every raw

@@ -19,6 +19,11 @@ import {
   AvatarProcessingState,
 } from "../DeepTreeEchoAvatarContext";
 import * as CognitiveBridge from "../CognitiveBridge";
+import { runtime } from "@deltachat-desktop/runtime-interface";
+
+jest.mock("@deltachat-desktop/runtime-interface", () => ({
+  runtime: { getDteScientificVisualState: jest.fn() },
+}));
 
 // Mock the CognitiveBridge module
 jest.mock("../CognitiveBridge", () => ({
@@ -81,12 +86,125 @@ describe("DeepTreeEchoAvatarDisplay", () => {
   beforeEach(() => {
     jest.useFakeTimers();
     jest.clearAllMocks();
+    (runtime.getDteScientificVisualState as jest.Mock).mockResolvedValue(null);
     // Default mock returns null orchestrator
     (CognitiveBridge.getOrchestrator as jest.Mock).mockReturnValue(null);
   });
 
   afterEach(() => {
     jest.useRealTimers();
+  });
+
+  describe("read-only DeltEcho scientific IPC", () => {
+    const local = {
+      origin: "local-observation",
+      mode: "Idle",
+      scientificGenius: 0,
+      insightPotential: 0,
+      entelechyScore: 0,
+      freeEnergy: 0,
+      salience: 0.5,
+    };
+    const genuine = () => ({
+      origin: "entelechy",
+      mode: "Scientific Genius",
+      scientificGenius: 0.8,
+      insightPotential: 0.7,
+      entelechyScore: 0.75,
+      freeEnergy: 0.2,
+      salience: 0.7,
+      predictiveCrystal: {
+        id: "crystal-ipc-mounted",
+        timestamp: Date.now(),
+        confidence: 0.6,
+        status: "tentative",
+        avatarEffect: { eyeFocusIntensity: 0.35, browRaiseAsymmetry: 0.2 },
+      },
+    });
+
+    it("ingests a genuine daemon visual cue and revokes it when the daemon disappears", async () => {
+      const state = {
+        cognitiveContext: {
+          emotionalValence: 0,
+          emotionalArousal: 0.4,
+          salienceScore: 0.5,
+          attentionWeight: 0.5,
+          relevantMemories: [],
+          activeCouplings: [],
+        },
+        scientificGeniusVisualState: local,
+      };
+      const apply = jest.fn((signal) => {
+        state.scientificGeniusVisualState = signal ?? local;
+      });
+      (CognitiveBridge.getOrchestrator as jest.Mock).mockReturnValue({
+        getState: () => state,
+        applyScientificGeniusVisualState: apply,
+      });
+      const read = runtime.getDteScientificVisualState as jest.Mock;
+      read.mockResolvedValueOnce(genuine()).mockResolvedValue(null);
+      render(
+        <DeepTreeEchoAvatarProvider>
+          <DeepTreeEchoAvatarDisplay visible={true} />
+        </DeepTreeEchoAvatarProvider>,
+      );
+      await act(async () => {
+        await Promise.resolve();
+      });
+      act(() => {
+        jest.advanceTimersByTime(500);
+      });
+      const visual = () =>
+        JSON.parse(
+          screen
+            .getByTestId("mock-live2d-avatar")
+            .getAttribute("data-cognitive-visual-state") || "{}",
+        );
+      expect(visual().predictiveCrystal?.id).toBe("crystal-ipc-mounted");
+      expect(visual().mode).toBe("Scientific Genius");
+      await act(async () => {
+        jest.advanceTimersByTime(1_500);
+        await Promise.resolve();
+      });
+      act(() => {
+        jest.advanceTimersByTime(500);
+      });
+      expect(visual().predictiveCrystal).toBeUndefined();
+      expect(visual().scientificGenius).toBe(0);
+      expect(apply).toHaveBeenCalledWith(null);
+    });
+
+    it("never overlaps a pending daemon request or applies one after unmount", async () => {
+      let finish!: (value: unknown) => void;
+      const read = runtime.getDteScientificVisualState as jest.Mock;
+      read.mockImplementation(
+        () =>
+          new Promise((resolve) => {
+            finish = resolve;
+          }),
+      );
+      const apply = jest.fn();
+      (CognitiveBridge.getOrchestrator as jest.Mock).mockReturnValue({
+        getState: () => ({ scientificGeniusVisualState: local }),
+        applyScientificGeniusVisualState: apply,
+      });
+      const view = render(
+        <DeepTreeEchoAvatarProvider>
+          <DeepTreeEchoAvatarDisplay visible={true} />
+        </DeepTreeEchoAvatarProvider>,
+      );
+      expect(read).toHaveBeenCalledTimes(1);
+      act(() => {
+        jest.advanceTimersByTime(4_500);
+      });
+      expect(read).toHaveBeenCalledTimes(1);
+      view.unmount();
+      await act(async () => {
+        finish(genuine());
+        await Promise.resolve();
+      });
+      expect(apply).not.toHaveBeenCalled();
+    });
   });
 
   describe("Basic Rendering", () => {
@@ -468,6 +586,16 @@ describe("DeepTreeEchoAvatarDisplay", () => {
             acceptedEventCount: 1,
             pendingProposalCount: 2,
           },
+          predictiveCrystal: {
+            id: "crystal-ui-1",
+            timestamp: 5_000,
+            confidence: 0.63,
+            status: "tentative",
+            avatarEffect: {
+              eyeFocusIntensity: 0.34,
+              browRaiseAsymmetry: 0.15,
+            },
+          },
           resonanceCascade: {
             id: "cascade-ui-1",
             timestamp: 5_000,
@@ -528,6 +656,16 @@ describe("DeepTreeEchoAvatarDisplay", () => {
           projectedStateDigest: "b".repeat(64),
           acceptedEventCount: 1,
           pendingProposalCount: 2,
+        });
+        expect(visualState.predictiveCrystal).toEqual({
+          id: "crystal-ui-1",
+          timestamp: 5_000,
+          confidence: 0.63,
+          status: "tentative",
+          avatarEffect: {
+            eyeFocusIntensity: 0.34,
+            browRaiseAsymmetry: 0.15,
+          },
         });
         expect(visualState.resonanceCascade).toEqual({
           id: "cascade-ui-1",
@@ -635,6 +773,16 @@ describe("DeepTreeEchoAvatarDisplay", () => {
               esnCoherence: 0.95,
               autognosisResonance: 0.94,
               causalRigor: 0.93,
+              predictiveCrystal: {
+                id: "unsupported-crystal",
+                timestamp: 1_000,
+                confidence: 0.99,
+                status: "tentative",
+                avatarEffect: {
+                  eyeFocusIntensity: 0.5,
+                  browRaiseAsymmetry: 0.2,
+                },
+              },
               resonanceCascade: {
                 id: "unsupported-eureka",
                 timestamp: 1_000,
@@ -666,6 +814,7 @@ describe("DeepTreeEchoAvatarDisplay", () => {
           expect(visual.autognosisResonance).toBe(0);
           expect(visual.causalRigor).toBe(0);
           expect(visual.resonanceCascade).toBeUndefined();
+          expect(visual.predictiveCrystal).toBeUndefined();
         });
       },
     );

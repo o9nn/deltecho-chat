@@ -80,6 +80,18 @@ export interface Live2DAvatarState {
  */
 export type EpistemicResonanceVisualState = CascadeInput;
 
+export interface TentativeCrystalVisualState {
+  id: string;
+  timestamp: number;
+  /** Structural support score only; not a calibrated probability. */
+  confidence: number;
+  status: "tentative";
+  avatarEffect: {
+    eyeFocusIntensity: number;
+    browRaiseAsymmetry: number;
+  };
+}
+
 export interface Live2DCognitiveVisualState {
   /** Optional named DTEcho mode; when omitted, the manager infers one from numeric state. */
   mode?: DTEchoCognitiveMode | string;
@@ -114,6 +126,8 @@ export interface Live2DCognitiveVisualState {
   coreSelf?: CanonicalCoreSelfExpressionContext;
   /** Latest genuine ScientificGeniusEngine eureka event. */
   resonanceCascade?: EpistemicResonanceVisualState;
+  /** Short-lived, unconfirmed concept-link focus cue. */
+  predictiveCrystal?: TentativeCrystalVisualState;
   isProcessing?: boolean;
   isSpeaking?: boolean;
   audioLevel?: number;
@@ -178,6 +192,7 @@ export class Live2DAvatarManager {
     null;
   private readonly resonanceConductor = new ResonanceCascadeConductor();
   private lastResonanceCascadeId: string | null = null;
+  private lastPredictiveCrystalId: string | null = null;
   private resonanceOverlay: CascadeOverlay | null = null;
   private readonly onMetabolicDeltas = (
     deltas: MetabolicAvatarDeltas,
@@ -379,6 +394,38 @@ export class Live2DAvatarManager {
     ) {
       this.lastResonanceCascadeId = state.resonanceCascade.id;
       this.resonanceConductor.onCascade(state.resonanceCascade);
+      this.resonanceOverlay = this.resonanceConductor.tick(0);
+    }
+    const crystal = state.predictiveCrystal;
+    const crystalAge = crystal ? Date.now() - crystal.timestamp : Infinity;
+    if (
+      crystal &&
+      crystal.status === "tentative" &&
+      crystal.id !== this.lastPredictiveCrystalId &&
+      state.coreSelf?.initialized === true &&
+      crystalAge >= 0 &&
+      crystalAge <= 2_500 &&
+      Number.isFinite(crystal.confidence) &&
+      crystal.confidence >= 0 &&
+      crystal.confidence <= 1 &&
+      [
+        crystal.avatarEffect.eyeFocusIntensity,
+        crystal.avatarEffect.browRaiseAsymmetry,
+      ].every((value) => Number.isFinite(value) && value >= 0 && value <= 1)
+    ) {
+      this.lastPredictiveCrystalId = crystal.id;
+      this.resonanceConductor.onCrystal({
+        id: crystal.id,
+        timestamp: crystal.timestamp,
+        confidence: crystal.confidence,
+        targetConcept: crystal.id, // Opaque only: no concept text enters the renderer.
+        avatarEffect: {
+          eyeFocusIntensity: crystal.avatarEffect.eyeFocusIntensity,
+          browRaiseAsymmetry: crystal.avatarEffect.browRaiseAsymmetry,
+          microSmileIntensity: 0,
+          haloCrystallizationHz: 0.5,
+        },
+      });
       this.resonanceOverlay = this.resonanceConductor.tick(0);
     }
 
@@ -663,6 +710,7 @@ export class Live2DAvatarManager {
     this.resonanceConductor.clear();
     this.resonanceOverlay = null;
     this.lastResonanceCascadeId = null;
+    this.lastPredictiveCrystalId = null;
     this.renderer?.dispose();
     this.renderer = null;
 
