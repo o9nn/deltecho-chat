@@ -151,6 +151,29 @@
         font-size: 1.1rem;
         margin: 0;
       }
+
+      .graph-load-error-detail {
+        max-width: 28rem;
+        margin-top: 8px;
+        font-size: 0.9rem;
+        color: #64748b;
+        text-align: center;
+      }
+
+      .graph-retry-button {
+        margin-top: 16px;
+        padding: 8px 16px;
+        border: 1px solid #93c5fd;
+        border-radius: 6px;
+        background-color: #eff6ff;
+        color: #1d4ed8;
+        cursor: pointer;
+      }
+    }
+
+    &.graph-load-error,
+    .graph-load-error {
+      z-index: 6;
     }
   }
 

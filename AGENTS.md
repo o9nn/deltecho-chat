@@ -34,7 +34,7 @@ Non-obvious caveats for the browser target:
 
 ### Known app-level quirk (not an environment problem)
 
-In the browser build's self-chat ("Saved Messages"), the fork's custom Deep Tree Echo Live2D avatar overlay ("Live2D Failed / Retry") can overlap the conversation pane and prevent message bubbles from rendering in the main view, even though messages are sent, delivered, and stored correctly (visible in the chat-list preview and DB). Don't mistake this for a broken setup.
+In the browser build's self-chat ("Saved Messages"), Cubism renders in the dedicated right-hand avatar strip. The Live2D Failed / Retry banner is contained to that strip (`contain: layout paint`) so it cannot cover conversation bubbles.
 
 ### Deep Tree Echo operations
 

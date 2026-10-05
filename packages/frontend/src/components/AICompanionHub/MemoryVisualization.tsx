@@ -83,6 +83,8 @@ const MemoryVisualizationContent: React.FC = () => {
     links: [],
   });
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [loadAttempt, setLoadAttempt] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<AIMemory[]>([]);
   const [highlightedNodes, setHighlightedNodes] = useState<Set<string>>(
@@ -98,22 +100,35 @@ const MemoryVisualizationContent: React.FC = () => {
 
   // Dynamic import of 3D graph libraries
   useEffect(() => {
+    let cancelled = false;
     const loadDependencies = async () => {
+      setLoading(true);
+      setLoadError(null);
       try {
-        // Dynamic imports
         const ForceGraph3DModule = await import("3d-force-graph");
-        const ThreeModule = await import("three");
+        const SpriteTextModule = await import("three-spritetext");
+        if (cancelled) return;
         ForceGraph3D = ForceGraph3DModule.default;
-        SpriteText = ThreeModule.SpriteText;
+        SpriteText = SpriteTextModule.default;
 
         setLoading(false);
       } catch (error) {
         console.error("Failed to load 3D graph dependencies:", error);
+        if (cancelled) return;
+        setLoadError(
+          error instanceof Error
+            ? error.message
+            : "Failed to load 3D graph dependencies",
+        );
+        setLoading(false);
       }
     };
 
     loadDependencies();
-  }, []);
+    return () => {
+      cancelled = true;
+    };
+  }, [loadAttempt]);
 
   // Build memory graph from AI memories
   useEffect(() => {
@@ -553,6 +568,19 @@ const MemoryVisualizationContent: React.FC = () => {
           <div className="loading-container">
             <Loader size={48} className="spinner" />
             <p>Building consciousness graph...</p>
+          </div>
+        )}
+        {loadError && !loading && (
+          <div className="loading-container graph-load-error" role="alert">
+            <p>Consciousness graph failed to load</p>
+            <p className="graph-load-error-detail">{loadError}</p>
+            <button
+              type="button"
+              className="graph-retry-button"
+              onClick={() => setLoadAttempt((attempt) => attempt + 1)}
+            >
+              Retry
+            </button>
           </div>
         )}
       </div>

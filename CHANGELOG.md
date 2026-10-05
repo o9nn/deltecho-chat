@@ -24,6 +24,8 @@
 
 ### Fixed
 
+- `release.yml` `build-browser` skips the unused Electron binary download; `ci.yml` builds `@deltecho/avatar` before `pnpm check`.
+- Deep Tree Echo: the memory 3D graph announces a load failure and offers Retry, and `3d-force-graph` / `three-spritetext` are declared frontend dependencies so Retry can load the graph.
 - Deep Tree Echo: the Live2D Failed / Retry banner stays inside the avatar strip (`contain: layout paint`) so it cannot cover the conversation pane.
 - CI22 now runs the Cubism/AIRI interchange contract (previously only on the disabled `CI` workflow) and cancels superseded runs instead of leaving them queued until they fail.
 - Cloudflare preview: stop renaming Durable Object class `DeltEchoContainer` to `DeltEchoApp` on git-connected `deltecho-chat-preview` (Cloudflare API 10074). GitHub Pages browser builds now compile workspace type deps first.
