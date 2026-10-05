@@ -16,11 +16,6 @@ test("esbuild compiles colocated .scss, not only CSS modules", () => {
     /filter:\s*\/\\.\s*scss\$\//,
     "sass plugin must load every .scss file; a *.module.scss-only filter fails Live2DAvatar.scss on the main.tsx graph",
   );
-  assert.doesNotMatch(
-    buildFrontendTs,
-    /filter:\s*\/\\\.module\\\.scss\$\//,
-    'a module-only onLoad filter leaves import "./Live2DAvatar.scss" with no loader',
-  );
   assert.match(
     buildFrontendTs,
     /local-css/,

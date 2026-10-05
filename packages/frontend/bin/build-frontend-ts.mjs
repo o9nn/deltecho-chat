@@ -135,7 +135,7 @@ const eslintPlugin = {
 
 /**
  * `esbuild` plugin compiling colocated SCSS.
- * CSS modules keep hashed locals; plain `.scss` (Live2DAvatar.scss) is global CSS.
+ * CSS modules keep hashed locals; plain `.scss` is global CSS.
  */
 const sassPlugin = {
   name: "sass",
