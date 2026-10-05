@@ -21,7 +21,9 @@ async function getGitRef() {
 
   let git_describe, git_branch
   try {
-    git_describe = gatherProcessStdout('git', ['describe', '--tags'])
+    // --always prints an abbreviated SHA when the repo has no tags, so Pages
+    // no longer announces `fatal: No names found, cannot describe anything`.
+    git_describe = gatherProcessStdout('git', ['describe', '--tags', '--always'])
     try {
       const git_symbolic_ref =
         process.env.GITHUB_HEAD_REF ||
@@ -35,8 +37,8 @@ async function getGitRef() {
     }
   } catch (err) {
     console.log(err)
-    console.log('Hint: you can set the env var VERSION_INFO_GIT_REF manualy')
-    // Fallback to commit SHA if no tags are present
+    console.log('Hint: you can set the env var VERSION_INFO_GIT_REF manually')
+    // Fallback to commit SHA if describe is unavailable
     try {
       git_describe = gatherProcessStdout('git', ['rev-parse', 'HEAD']).substring(0, 7)
       git_branch = git_branch || 'main'

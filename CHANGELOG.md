@@ -24,6 +24,9 @@
 
 ### Fixed
 
+- Browser / GitHub Pages / Cloudflare: compile colocated global SCSS (`Live2DAvatar.scss`, hub, video lab, memory graph) in the frontend esbuild bundle so `pnpm build:browser` emits `bundle.css` instead of failing with "No loader is configured for .scss files".
+- GitHub Pages: pin `VERSION_INFO_GIT_REF` and use `git describe --tags --always` so untagged clones no longer announce `fatal: No names found, cannot describe anything`.
+- Deep Tree Echo: the memory 3D graph announces a load failure with Retry instead of staying on "Building consciousness graph...".
 - Deep Tree Echo: the Live2D Failed / Retry banner stays inside the avatar strip (`contain: layout paint`) so it cannot cover the conversation pane.
 - CI22 now runs the Cubism/AIRI interchange contract (previously only on the disabled `CI` workflow) and cancels superseded runs instead of leaving them queued until they fail.
 - Cloudflare preview: stop renaming Durable Object class `DeltEchoContainer` to `DeltEchoApp` on git-connected `deltecho-chat-preview` (Cloudflare API 10074). GitHub Pages browser builds now compile workspace type deps first.
