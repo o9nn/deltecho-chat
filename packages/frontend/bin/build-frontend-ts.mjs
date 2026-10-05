@@ -134,14 +134,18 @@ const eslintPlugin = {
 };
 
 /**
- * `esbuild` plugin to allow SCSS in CSS modules.
+ * `esbuild` plugin compiling colocated SCSS.
+ * CSS modules keep hashed locals; plain `.scss` (Live2DAvatar.scss) is global CSS.
  */
 const sassPlugin = {
   name: "sass",
   setup(build) {
-    build.onLoad({ filter: /\.module\.scss$/ }, (args) => {
+    build.onLoad({ filter: /\.scss$/ }, (args) => {
       const { css } = compile(args.path);
-      return { contents: css, loader: "local-css" };
+      return {
+        contents: css,
+        loader: args.path.endsWith(".module.scss") ? "local-css" : "css",
+      };
     });
   },
 };
