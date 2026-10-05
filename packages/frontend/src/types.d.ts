@@ -6,6 +6,7 @@ declare module "three";
 // Tell tsc that CSS modules are alright
 declare module "*.module.css";
 declare module "*.module.scss";
+declare module "*.scss";
 
 type todo = any;
 

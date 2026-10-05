@@ -140,6 +140,13 @@ class InterchangeTest(unittest.TestCase):
         self.assertEqual(json.loads(proc.stderr)["status"], "blocked")
         self.assertFalse(output.exists())
 
+    def test_live_ci22_runs_interchange_contract(self):
+        repo = Path(__file__).resolve().parents[1]
+        ci22 = (repo / ".github/workflows/ci22.yml").read_text(encoding="utf-8")
+        package = (repo / "package.json").read_text(encoding="utf-8")
+        self.assertIn("test_cubism_airi_interchange.py", ci22)
+        self.assertIn("check:cubism-airi", package)
+
     def test_lucy_blueprint_records_target_parts_not_shipped_assets(self):
         manifest = Path(__file__).resolve().parents[1] / "docs/avatars/lucy/rig-manifest.json"
         data = json.loads(manifest.read_text(encoding="utf-8"))
