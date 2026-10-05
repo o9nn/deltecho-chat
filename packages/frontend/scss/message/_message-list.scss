@@ -109,6 +109,9 @@
 
 .message-list-and-composer__avatar-strip {
   position: relative;
+  z-index: 0;
+  isolation: isolate;
+  contain: layout paint;
   display: flex;
   flex-direction: column;
   align-items: stretch;

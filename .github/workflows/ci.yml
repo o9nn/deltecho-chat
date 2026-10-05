@@ -1,5 +1,8 @@
 name: CI
 
+# disabled_manually in GitHub Actions. Live required checks are CI22
+# (.github/workflows/ci22.yml). Keep new gates there, not only here.
+
 on:
   push:
     branches: [main]
@@ -28,6 +31,9 @@ jobs:
           cache: "pnpm"
 
       - name: Install Dependencies
+        env:
+          # Browser/e2e CI never launches Electron; skip the postinstall CDN.
+          ELECTRON_SKIP_BINARY_DOWNLOAD: "1"
         run: pnpm install --frozen-lockfile
 
       - name: Build Workspace Dependencies
