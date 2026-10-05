@@ -64,6 +64,8 @@ jobs:
         run: pnpm test
 
       - name: Build for E2E
+        env:
+          VERSION_INFO_GIT_REF: ${{ github.sha }}
         run: pnpm build:browser
 
       - name: Install Playwright Browsers
