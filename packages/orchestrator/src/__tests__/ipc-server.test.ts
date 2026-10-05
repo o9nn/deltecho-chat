@@ -15,6 +15,7 @@ import { IPCMessageType } from "@deltecho/ipc";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
+import { spawn } from "node:child_process";
 
 describe("IPCServer", () => {
   let server: IPCServer;
@@ -83,6 +84,62 @@ describe("IPCServer", () => {
         }
       },
     );
+
+    onPosix("refuses to steal a live daemon's socket", async () => {
+      const dir = fs.mkdtempSync(path.join(os.tmpdir(), "dte-ipc-test-"));
+      const endpoint = path.join(dir, "deltecho.sock");
+      const first = new IPCServer({ socketPath: endpoint });
+      const second = new IPCServer({ socketPath: endpoint });
+      try {
+        await first.start();
+        const before = fs.lstatSync(endpoint);
+        await expect(second.start()).rejects.toThrow(/live or unverified/);
+        const after = fs.lstatSync(endpoint);
+        expect(after.ino).toBe(before.ino);
+        expect(first.isRunning()).toBe(true);
+      } finally {
+        await second.stop();
+        await first.stop();
+        fs.rmSync(dir, { recursive: true, force: true });
+      }
+    });
+
+    onPosix("reclaims a stale socket after an unclean exit", async () => {
+      const dir = fs.mkdtempSync(path.join(os.tmpdir(), "dte-ipc-test-"));
+      const endpoint = path.join(dir, "deltecho.sock");
+      const child = spawn(
+        process.execPath,
+        [
+          "-e",
+          'require("node:net").createServer().listen(process.argv[1], () => process.stdout.write("ready\\n"))',
+          endpoint,
+        ],
+        { stdio: ["ignore", "pipe", "pipe"] },
+      );
+      const replacement = new IPCServer({ socketPath: endpoint });
+      try {
+        await new Promise<void>((resolve, reject) => {
+          child.stdout!.once("data", () => resolve());
+          child.once("error", reject);
+          child.once("exit", (code) =>
+            reject(new Error(`Child exited ${code}`)),
+          );
+        });
+        expect(fs.lstatSync(endpoint).isSocket()).toBe(true);
+        const exited = new Promise<void>((resolve) =>
+          child.once("exit", () => resolve()),
+        );
+        child.kill("SIGKILL");
+        await exited;
+        expect(fs.lstatSync(endpoint).isSocket()).toBe(true);
+        await replacement.start();
+        expect(replacement.isRunning()).toBe(true);
+      } finally {
+        if (child.exitCode === null) child.kill("SIGKILL");
+        await replacement.stop();
+        fs.rmSync(dir, { recursive: true, force: true });
+      }
+    });
   });
 
   describe("message handlers", () => {
