@@ -284,6 +284,22 @@ async function loadPixiTexture(source: string): Promise<unknown> {
   return texture;
 }
 
+export function isSoftwareWebGLRenderer(canvas: HTMLCanvasElement): boolean {
+  try {
+    const gl = canvas.getContext("webgl2") ?? canvas.getContext("webgl");
+    if (!gl) return false;
+    const info = gl.getExtension("WEBGL_debug_renderer_info") as {
+      UNMASKED_RENDERER_WEBGL: number;
+    } | null;
+    const renderer = String(
+      gl.getParameter(info?.UNMASKED_RENDERER_WEBGL ?? gl.RENDERER) ?? "",
+    );
+    return /swiftshader|llvmpipe|softpipe|software rasterizer/i.test(renderer);
+  } catch {
+    return false;
+  }
+}
+
 export class PixiLive2DRenderer implements ICubismRenderer {
   private app: Application | null = null;
   private model: Live2DModel | null = null;
@@ -428,6 +444,13 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       powerPreference: "high-performance",
       resizeTo: canvas.parentElement ?? undefined,
     });
+
+    // A software WebGL backend can saturate a CPU core at 60 fps in Electron.
+    // Cap only that renderer; hardware WebGL keeps its normal cadence.
+    if (isSoftwareWebGLRenderer(canvas) && "maxFPS" in this.app.ticker) {
+      this.app.ticker.maxFPS = 30;
+      this.dlog("Software WebGL detected; Live2D ticker limited to 30 fps");
+    }
 
     // Pause the ticker when the tab is hidden to save battery/CPU.
     // This is a performance optimization as per the Live2D performance skill.

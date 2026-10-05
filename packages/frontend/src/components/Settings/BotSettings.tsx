@@ -19,6 +19,7 @@ import styles from "./styles.module.scss";
 import { DivergenceMonitor } from "../DeepTreeEchoBot/DivergenceMonitor";
 import { AvatarIdentityPicker } from "../DeepTreeEchoBot/AvatarIdentityPicker";
 import { MiaraOutfitPicker } from "../DeepTreeEchoBot/MiaraOutfitPicker";
+import { AvatarPersonaStyleControl } from "../DeepTreeEchoBot/AvatarPersonaStyleControl";
 
 const log = getLogger("render/components/Settings/BotSettings");
 
@@ -152,6 +153,7 @@ export default function BotSettings({
         across sessions.
       </p>
       <MiaraOutfitPicker variant="panel" />
+      <AvatarPersonaStyleControl />
 
       <SettingsSeparator />
       <SettingsHeading>Capabilities</SettingsHeading>

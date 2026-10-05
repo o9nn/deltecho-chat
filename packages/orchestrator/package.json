@@ -16,12 +16,13 @@
     }
   },
   "bin": {
-    "deep-tree-echo-daemon": "./dist/bin/daemon.js"
+    "deep-tree-echo-daemon": "./dist/bin/daemon.mjs"
   },
   "scripts": {
-    "build": "tsc",
-    "start": "node dist/bin/daemon.js",
-    "dev": "tsc && node dist/bin/daemon.js",
+    "build": "tsc && pnpm build:daemon",
+    "build:daemon": "esbuild src/bin/daemon.ts --bundle --platform=node --format=esm --target=node20 --outfile=dist/bin/daemon.mjs",
+    "start": "node dist/bin/daemon.mjs",
+    "dev": "pnpm build && pnpm start",
     "check:types": "tsc --noEmit",
     "clean": "rm -rf dist",
     "test": "jest --runInBand --forceExit",
@@ -51,6 +52,7 @@
     "@jest/globals": "^29.7.0",
     "@types/jest": "^29.5.14",
     "@types/node": "^20.19.27",
+    "esbuild": "^0.25.12",
     "jest": "^29.7.0",
     "ts-jest": "^29.3.4",
     "typescript": "^5.9.3"

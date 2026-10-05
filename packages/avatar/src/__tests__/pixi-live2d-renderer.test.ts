@@ -8,6 +8,7 @@
 import { Live2DModel } from "pixi-live2d-display-lipsyncpatch/cubism4";
 import {
   PixiLive2DRenderer,
+  isSoftwareWebGLRenderer,
   PARAM_IDS,
   loadCubism4Settings,
 } from "../adapters/pixi-live2d-renderer";
@@ -36,6 +37,7 @@ jest.mock("pixi.js", () => ({
         clientHeight: 400,
       },
       ticker: {
+        maxFPS: 0,
         addOnce: (cb: () => void) => {
           onceFns.push(cb);
         },
@@ -149,6 +151,43 @@ describe("PixiLive2DRenderer", () => {
       const cubism4 = await import("pixi-live2d-display-lipsyncpatch/cubism4");
       expect(cubism4.cubism4Ready).toHaveBeenCalled();
       expect((window as Window & { PIXI?: unknown }).PIXI).toBeDefined();
+    });
+
+    it("caps only software-WebGL renderers while retaining the same Pixi ticker", async () => {
+      const context = {
+        getExtension: jest.fn(() => ({ UNMASKED_RENDERER_WEBGL: 0x9246 })),
+        getParameter: jest.fn(() => "ANGLE (Vulkan SwiftShader Device)"),
+        RENDERER: 0x1f01,
+      };
+      (mockCanvas.getContext as jest.Mock).mockReturnValue(context);
+      expect(isSoftwareWebGLRenderer(mockCanvas)).toBe(true);
+      await renderer.initialize({
+        canvas: mockCanvas,
+        model: { modelPath: "/test/model.json", name: "Test Model" },
+      });
+      const app = (
+        renderer as unknown as { app: { ticker: { maxFPS: number } } }
+      ).app;
+      expect(app.ticker.maxFPS).toBe(30);
+      context.getParameter.mockReturnValue("ANGLE (NVIDIA RTX 4000)");
+      expect(isSoftwareWebGLRenderer(mockCanvas)).toBe(false);
+    });
+
+    it("does not cap hardware, unavailable, or uninspectable WebGL", async () => {
+      expect(isSoftwareWebGLRenderer(mockCanvas)).toBe(false);
+      (mockCanvas.getContext as jest.Mock).mockReturnValue({
+        getExtension: jest.fn(() => null),
+        getParameter: jest.fn(() => "NVIDIA GeForce RTX 4000"),
+        RENDERER: 0x1f01,
+      });
+      await renderer.initialize({
+        canvas: mockCanvas,
+        model: { modelPath: "/test/model.json", name: "Test Model" },
+      });
+      const app = (
+        renderer as unknown as { app: { ticker: { maxFPS: number } } }
+      ).app;
+      expect(app.ticker.maxFPS).toBe(0);
     });
 
     it("should throw if canvas element not found by ID", async () => {

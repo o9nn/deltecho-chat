@@ -48913,7 +48913,7 @@ init_cjs_shim();
 
 // src/get-build-info.ts
 init_cjs_shim();
-var BuildInfo = JSON.parse('{"VERSION":"1.0.0","BUILD_TIMESTAMP":1788694262770,"GIT_REF":"v100.0.0-72-g619266d-dte-autonomy-avatar-evolution"}');
+var BuildInfo = JSON.parse('{"VERSION":"1.0.0","BUILD_TIMESTAMP":1791186654774,"GIT_REF":"v100.0.0-136-g26b6cd6b-desktop-cubism-autonomy"}');
 
 // src/deltachat/stdio_server.ts
 import { spawn } from "child_process";
@@ -49280,6 +49280,74 @@ var DeltaChatController = class extends EventEmitter2 {
   webxdc = new DCWebxdc(this);
 };
 
+// src/dte-scientific-visual.ts
+init_cjs_shim();
+import { randomUUID } from "node:crypto";
+import { createConnection } from "node:net";
+import { isAbsolute as isAbsolute2 } from "node:path";
+var MAX_RESPONSE_BYTES = 64 * 1024;
+var TIMEOUT_MS = 1500;
+function resolveDteScientificVisualSocketPath() {
+  const endpoint = process.env.DEEP_TREE_ECHO_IPC_PATH?.trim();
+  if (!endpoint) {
+    return process.platform === "win32" ? "\\\\.\\pipe\\deltecho-deep-tree-echo" : "/tmp/deep-tree-echo.sock";
+  }
+  if (/[\0\r\n]/.test(endpoint)) return null;
+  if (process.platform === "win32") {
+    return endpoint.startsWith("\\\\.\\pipe\\deltecho-") ? endpoint : null;
+  }
+  return isAbsolute2(endpoint) ? endpoint : null;
+}
+function readDteScientificVisualState(socketPath = resolveDteScientificVisualSocketPath()) {
+  if (!socketPath) return Promise.resolve(null);
+  return new Promise((resolve) => {
+    const id = randomUUID();
+    let settled = false;
+    let buffer = "";
+    const socket = createConnection(socketPath);
+    const finish = (value) => {
+      if (settled) return;
+      settled = true;
+      socket.destroy();
+      resolve(value);
+    };
+    socket.setTimeout(TIMEOUT_MS, () => finish(null));
+    socket.once("connect", () => {
+      socket.write(
+        JSON.stringify({
+          id,
+          type: "cognitive:get_state",
+          payload: {},
+          timestamp: Date.now()
+        }) + "\n"
+      );
+    });
+    socket.on("data", (chunk) => {
+      buffer += chunk.toString("utf8");
+      if (Buffer.byteLength(buffer, "utf8") > MAX_RESPONSE_BYTES) {
+        finish(null);
+        return;
+      }
+      const end2 = buffer.indexOf("\n");
+      if (end2 < 0) return;
+      try {
+        const response = JSON.parse(buffer.slice(0, end2));
+        if (!response || typeof response !== "object") return finish(null);
+        const envelope = response;
+        if (envelope.id !== id || envelope.type !== "response:success" || !envelope.payload || typeof envelope.payload !== "object") {
+          return finish(null);
+        }
+        const visual = envelope.payload.scientificGeniusVisual;
+        finish(visual && typeof visual === "object" ? visual : null);
+      } catch {
+        finish(null);
+      }
+    });
+    socket.once("error", () => finish(null));
+    socket.once("close", () => finish(null));
+  });
+}
+
 // src/ipc.ts
 import { copyFile, writeFile as writeFile2, mkdir as mkdir2, rm as rm2 } from "fs/promises";
 import {
@@ -49340,6 +49408,12 @@ async function init3(cwd, logHandler2) {
     );
     rawApp5.exit(1);
   }
+  ipcMain6.handle("dte-read-scientific-visual", async (event) => {
+    if (!window2 || event.sender !== window2.webContents || event.senderFrame !== window2.webContents.mainFrame) {
+      return null;
+    }
+    return readDteScientificVisualState();
+  });
   ipcMain6.once("ipcReady", (_e) => {
     app9.ipcReady = true;
     app9.emit("ipcReady");
@@ -49647,6 +49721,7 @@ async function init3(cwd, logHandler2) {
     }
   });
   return () => {
+    ipcMain6.removeHandler("dte-read-scientific-visual");
     dcController.jsonrpcRemote.rpc.stopIoForAllAccounts();
   };
 }
@@ -50058,14 +50133,14 @@ var app12 = rawApp6;
 app12.rc = rc_default;
 var DELTECHO_APP_NAME = "DeltEcho Chat";
 var DELTECHO_APP_ID = "chat.deltecho.desktop.electron";
-var deltechoUserDataPath = join17(rawApp6.getPath("appData"), "DeltEcho Chat");
+var deltechoUserDataPath = process.env.DC_TEST_DIR ? join17(process.env.DC_TEST_DIR, "ChromiumProfile") : join17(rawApp6.getPath("appData"), "DeltEcho Chat");
 rawApp6.setName(DELTECHO_APP_NAME);
 rawApp6.setPath("userData", deltechoUserDataPath);
 process.title = "DeltEchoChat";
 if (process.platform === "win32") {
   rawApp6.setAppUserModelId(DELTECHO_APP_ID);
 }
-if (!process.mas && !app12.requestSingleInstanceLock() && !process.env.DC_TEST_DIR) {
+if (!process.mas && !app12.requestSingleInstanceLock()) {
   console.error("Only one instance allowed. Quitting.");
   app12.quit();
   process.exit(0);

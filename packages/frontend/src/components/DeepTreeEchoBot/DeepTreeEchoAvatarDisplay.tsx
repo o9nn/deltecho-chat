@@ -296,8 +296,12 @@ function mapCognitiveStateToEmotionalVector(
 function mapProcessingStateToDTEchoMode(
   processingState: BotProcessingState,
   cognitiveState: UnifiedCognitiveState | null,
+  daemonVisual?: ScientificGeniusVisualState | null,
 ): string {
-  const rawSignal = cognitiveState?.scientificGeniusVisualState;
+  const rawSignal =
+    daemonVisual !== undefined
+      ? daemonVisual
+      : cognitiveState?.scientificGeniusVisualState;
   const geniusSignal = rawSignal?.origin === "entelechy" ? rawSignal : null;
   if (
     geniusSignal?.mode === "Scientific Genius" &&
@@ -327,6 +331,7 @@ function mapCognitiveStateToVisualState(
   processingState: BotProcessingState,
   isSpeaking: boolean,
   audioLevel: number,
+  daemonVisual?: ScientificGeniusVisualState | null,
 ): CognitiveVisualState {
   const context = cognitiveState?.cognitiveContext;
   const consciousness = cognitiveState?.consciousness as
@@ -344,8 +349,21 @@ function mapCognitiveStateToVisualState(
     (processingState === BotProcessingState.IDLE ? 0.25 : 0.58);
   const salience = context?.salienceScore ?? context?.attentionWeight ?? 0.45;
   const rawSignal = cognitiveState?.scientificGeniusVisualState;
-  const geniusSignal = rawSignal?.origin === "entelechy" ? rawSignal : null;
-  const mode = mapProcessingStateToDTEchoMode(processingState, cognitiveState);
+  // Electron's daemon lease is authoritative even when null: a vanished daemon
+  // must not be replaced by stale renderer state. Other runtimes abstain.
+  const geniusSignal =
+    daemonVisual !== undefined
+      ? daemonVisual?.origin === "entelechy"
+        ? daemonVisual
+        : null
+      : rawSignal?.origin === "entelechy"
+        ? rawSignal
+        : null;
+  const mode = mapProcessingStateToDTEchoMode(
+    processingState,
+    cognitiveState,
+    daemonVisual,
+  );
 
   return {
     mode,
@@ -433,6 +451,10 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
 
   const [cognitiveState, setCognitiveState] =
     useState<UnifiedCognitiveState | null>(null);
+  const [daemonVisual, setDaemonVisual] =
+    useState<ScientificGeniusVisualState | null>(null);
+  const daemonBridgeAvailable =
+    typeof runtime?.getDteScientificVisualState === "function";
   const [, setCurrentExpression] = useState<Expression>("neutral");
   const [emotionalVector, setEmotionalVector] = useState<EmotionalVector>({
     neutral: 1.0,
@@ -561,18 +583,15 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
   // authority lease. Never overlap requests or let an unmounted view apply one.
   useEffect(() => {
     const readVisual = runtime?.getDteScientificVisualState;
-    if (!finalVisible || typeof readVisual !== "function") return undefined;
+    if (!finalVisible) {
+      setDaemonVisual(null);
+      return undefined;
+    }
+    if (typeof readVisual !== "function") return undefined;
     let mounted = true;
     let pending = false;
     const poll = async (): Promise<void> => {
       if (!mounted || pending || document.visibilityState === "hidden") return;
-      const orchestrator = getOrchestrator();
-      if (
-        !orchestrator ||
-        typeof orchestrator.applyScientificGeniusVisualState !== "function"
-      ) {
-        return;
-      }
       pending = true;
       try {
         const response = await readVisual.call(runtime);
@@ -584,9 +603,17 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
           (response as Record<string, unknown>).origin === "entelechy"
             ? (response as ScientificGeniusVisualState)
             : null;
-        orchestrator.applyScientificGeniusVisualState(scientific);
+        setDaemonVisual((previous) =>
+          JSON.stringify(previous) === JSON.stringify(scientific)
+            ? previous
+            : scientific,
+        );
+        getOrchestrator()?.applyScientificGeniusVisualState(scientific);
       } catch {
-        if (mounted) orchestrator.applyScientificGeniusVisualState(null);
+        if (mounted) {
+          setDaemonVisual(null);
+          getOrchestrator()?.applyScientificGeniusVisualState(null);
+        }
       } finally {
         pending = false;
       }
@@ -676,13 +703,21 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
       processingState,
       isSpeaking,
       audioLevel,
+      daemonBridgeAvailable ? daemonVisual : undefined,
     );
     setCognitiveVisualState((previous) =>
       cognitiveVisualStatesEqual(previous, nextCognitiveVisualState)
         ? previous
         : nextCognitiveVisualState,
     );
-  }, [cognitiveState, processingState, isSpeaking, audioLevel]);
+  }, [
+    cognitiveState,
+    processingState,
+    isSpeaking,
+    audioLevel,
+    daemonBridgeAvailable,
+    daemonVisual,
+  ]);
 
   // Trigger motion based on processing state changes
   useEffect(() => {
@@ -706,6 +741,22 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
       avatarController.current.playMotion(motion);
     }
   }, [processingState]);
+
+  const adultSelfAttested =
+    avatarContext?.state.config.adultSelfAttested === true;
+  const presentationStyle: "canonical" | "lucy-inspired" =
+    adultSelfAttested &&
+    avatarContext?.state.config.presentationStyle === "lucy-inspired"
+      ? "lucy-inspired"
+      : "canonical";
+  const presentedCognitiveVisualState = useMemo(
+    () => ({
+      ...cognitiveVisualState,
+      presentationStyle,
+      adultSelfAttested,
+    }),
+    [cognitiveVisualState, presentationStyle, adultSelfAttested],
+  );
 
   if (!finalVisible) {
     return null;
@@ -736,7 +787,7 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
         fillContainer={fillsConversationStrip}
         emotionalState={expressionLocked ? undefined : emotionalVector}
         cognitiveVisualState={
-          expressionLocked ? undefined : cognitiveVisualState
+          expressionLocked ? undefined : presentedCognitiveVisualState
         }
         audioLevel={audioLevel}
         isSpeaking={isSpeaking}

@@ -172,6 +172,11 @@ export {
   type DTEchoExpressionProfile,
   type DTEchoVisualProjection,
 } from "./dtecho-expression-driver";
+export {
+  applyPersonaVisualStyle,
+  LUCY_VISUAL_ETHICS,
+  type AvatarPresentationStyle,
+} from "./persona-visual-style";
 
 // Cubism Adapter
 export {

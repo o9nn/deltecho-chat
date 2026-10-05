@@ -41,6 +41,49 @@ function resolveLocalIpcEndpoint(socketPath: string): string {
   return `\\\\.\\pipe\\deltecho-${socketName || "orchestrator"}`;
 }
 
+async function prepareUnixSocket(socketPath: string): Promise<void> {
+  const socketDir = path.dirname(socketPath);
+  if (!fs.existsSync(socketDir)) fs.mkdirSync(socketDir, { recursive: true });
+  if (!fs.existsSync(socketPath)) return;
+
+  const occupant = fs.lstatSync(socketPath);
+  if (!occupant.isSocket()) {
+    throw new Error("IPC endpoint is occupied by a non-socket file");
+  }
+
+  // An existing socket can belong to a still-running daemon. Only a refused
+  // connection proves it is abandoned; timeout/other errors fail closed.
+  const status = await new Promise<"stale" | "occupied">((resolve) => {
+    const probe = net.createConnection(socketPath);
+    let done = false;
+    const finish = (result: "stale" | "occupied") => {
+      if (done) return;
+      done = true;
+      probe.destroy();
+      resolve(result);
+    };
+    probe.once("connect", () => finish("occupied"));
+    probe.once("error", (error: NodeJS.ErrnoException) =>
+      finish(error.code === "ECONNREFUSED" ? "stale" : "occupied"),
+    );
+    probe.setTimeout(500, () => finish("occupied"));
+  });
+  if (status !== "stale") {
+    throw new Error("IPC endpoint is occupied by a live or unverified socket");
+  }
+
+  // Do not remove a different object placed at the path while probing.
+  const current = fs.lstatSync(socketPath);
+  if (
+    !current.isSocket() ||
+    current.dev !== occupant.dev ||
+    current.ino !== occupant.ino
+  ) {
+    throw new Error("IPC endpoint changed during stale-socket check");
+  }
+  fs.unlinkSync(socketPath);
+}
+
 /**
  * IPC Server for communication with desktop applications
  * Provides a protocol for desktop apps to interact with the orchestrator
@@ -58,6 +101,21 @@ export class IPCServer extends EventEmitter {
 
   constructor(config: Partial<IPCServerConfig> = {}) {
     super();
+    if (config.socketPath !== undefined) {
+      const endpoint = config.socketPath;
+      if (
+        typeof endpoint !== "string" ||
+        !endpoint ||
+        /[\0\r\n]/.test(endpoint) ||
+        (process.platform === "win32"
+          ? !endpoint.startsWith("\\\\.\\pipe\\deltecho-")
+          : !path.isAbsolute(endpoint))
+      ) {
+        throw new Error(
+          "IPC socket path must be an absolute local DeltEcho endpoint",
+        );
+      }
+    }
     this.config = { ...DEFAULT_CONFIG, ...config };
     this.storageManager = new StorageManager();
     this.setupDefaultHandlers();
@@ -184,6 +242,10 @@ export class IPCServer extends EventEmitter {
 
     log.info("Starting IPC server...");
 
+    if (!this.config.useTcp && process.platform !== "win32") {
+      await prepareUnixSocket(this.config.socketPath!);
+    }
+
     return new Promise((resolve, reject) => {
       try {
         if (this.config.useTcp) {
@@ -200,18 +262,6 @@ export class IPCServer extends EventEmitter {
           // Unix domain socket on POSIX; DeltEcho-namespaced named pipe on Windows.
           const socketPath = resolveLocalIpcEndpoint(this.config.socketPath!);
           this.activeSocketPath = socketPath;
-
-          if (process.platform !== "win32") {
-            // Remove an abandoned Unix socket file before binding.
-            if (fs.existsSync(socketPath)) {
-              fs.unlinkSync(socketPath);
-            }
-
-            const socketDir = path.dirname(socketPath);
-            if (!fs.existsSync(socketDir)) {
-              fs.mkdirSync(socketDir, { recursive: true });
-            }
-          }
 
           this.server = net.createServer((socket) =>
             this.handleConnection(socket),

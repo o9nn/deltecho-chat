@@ -16,6 +16,10 @@ import type { PixiLive2DRenderer } from "./pixi-live2d-renderer";
 import type { DTEchoCognitiveMode } from "../dtecho-expression-driver";
 import { projectDTEchoCognitiveState } from "../dtecho-expression-driver";
 import {
+  applyPersonaVisualStyle,
+  type AvatarPresentationStyle,
+} from "../persona-visual-style";
+import {
   MetabolicAvatarBridge,
   type MetabolicAvatarDeltas,
   type MetabolicVisualInput,
@@ -128,6 +132,9 @@ export interface Live2DCognitiveVisualState {
   resonanceCascade?: EpistemicResonanceVisualState;
   /** Short-lived, unconfirmed concept-link focus cue. */
   predictiveCrystal?: TentativeCrystalVisualState;
+  /** Local-only, opt-in appearance treatment, not an authoritative DTE state. */
+  presentationStyle?: AvatarPresentationStyle;
+  adultSelfAttested?: boolean;
   isProcessing?: boolean;
   isSpeaking?: boolean;
   audioLevel?: number;
@@ -382,7 +389,10 @@ export class Live2DAvatarManager {
   updateCognitiveState(state: Live2DCognitiveVisualState): void {
     if (!this.renderer || !this.isLoaded) return;
 
-    const projection = projectDTEchoCognitiveState(state);
+    const projection = applyPersonaVisualStyle(
+      projectDTEchoCognitiveState(state),
+      state,
+    );
     if (state.metabolic) {
       this.metabolicBridge?.feedMetabolicState(state.metabolic);
     }
