@@ -24,6 +24,8 @@
 
 ### Fixed
 
+- Deep Tree Echo: the Live2D Failed / Retry banner stays inside the avatar strip (`contain: layout paint`) so it cannot cover the conversation pane.
+- CI22 now runs the Cubism/AIRI interchange contract (previously only on the disabled `CI` workflow) and cancels superseded runs instead of leaving them queued until they fail.
 - Cloudflare preview: stop renaming Durable Object class `DeltEchoContainer` to `DeltEchoApp` on git-connected `deltecho-chat-preview` (Cloudflare API 10074). GitHub Pages browser builds now compile workspace type deps first.
 - Deep Tree Echo: the autognosis–autogenesis coupler re-enters on a later reservoir emission even when `Date.now()` reuses the previous report millisecond.
 - Deep Tree Echo: the default Entelechy coupler now uses IntentionalityEngine's active-goal cap when deciding whether to generate an autogenesis goal.

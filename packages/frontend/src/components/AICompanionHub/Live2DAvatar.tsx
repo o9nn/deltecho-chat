@@ -8,6 +8,7 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import type { MiaraOutfitState } from "@deltecho/avatar";
 import { ResponsiveSpriteAvatar } from "./ResponsiveSpriteAvatar";
+import "./Live2DAvatar.scss";
 
 // Local types that are compatible with both @deltecho/avatar and @deltecho/cognitive
 export type Expression =
@@ -502,8 +503,20 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
       className={`live2d-avatar-container ${className || ""}`}
       style={
         fillContainer
-          ? { width: "100%", height: "100%", position: "relative" }
-          : { width, height, position: "relative" }
+          ? {
+              width: "100%",
+              height: "100%",
+              position: "relative",
+              overflow: "hidden",
+              isolation: "isolate",
+            }
+          : {
+              width,
+              height,
+              position: "relative",
+              overflow: "hidden",
+              isolation: "isolate",
+            }
       }
     >
       {/* Main Live2D canvas container - always rendered for initialization */}
@@ -570,6 +583,9 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
               borderRadius: 6,
               color: "#fff",
               fontSize: 12,
+              maxWidth: "calc(100% - 16px)",
+              zIndex: 2,
+              boxSizing: "border-box",
             }}
           >
             <span title={state.error.message}>⚠️ Live2D Failed</span>

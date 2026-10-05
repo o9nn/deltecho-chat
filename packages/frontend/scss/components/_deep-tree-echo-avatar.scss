@@ -17,6 +17,8 @@
   }
 
   &.floating-avatar {
+    isolation: isolate;
+    contain: layout paint;
     flex: 1 1 auto;
     width: 100%;
     height: auto;
@@ -31,6 +33,18 @@
       width: 100%;
       height: 100%;
       border-radius: 0;
+    }
+
+    .live2d-avatar-container {
+      isolation: isolate;
+      overflow: hidden;
+      contain: layout paint;
+    }
+
+    .live2d-error-overlay {
+      z-index: 2;
+      max-width: calc(100% - 16px);
+      box-sizing: border-box;
     }
 
     .responsive-sprite-avatar img {
