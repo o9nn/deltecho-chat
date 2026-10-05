@@ -39,6 +39,12 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build Workspace Dependencies
+        run: |
+          # Avatar source imports deep-tree-echo-core/logger from dist/.
+          pnpm run build:type-deps
+          pnpm --filter=@deltecho/avatar build
+
       - name: Build Frontend and Electron App
         run: pnpm --filter=@deltachat-desktop/target-electron build
 
@@ -80,8 +86,17 @@ jobs:
         with:
           node-version: 20
           cache: "pnpm"
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm build:browser
+      - name: Install Dependencies
+        env:
+          # Browser release never launches Electron; skip the postinstall CDN.
+          ELECTRON_SKIP_BINARY_DOWNLOAD: "1"
+        run: pnpm install --frozen-lockfile
+      - name: Build Workspace Dependencies
+        run: |
+          pnpm run build:type-deps
+          pnpm --filter=@deltecho/avatar build
+      - name: Build Browser Target
+        run: pnpm build:browser
       - name: Archive Browser Build
         run: tar -czf browser-build.tar.gz -C packages/target-browser/dist .
       - uses: actions/upload-artifact@v4
@@ -123,6 +138,11 @@ jobs:
       - name: Install Frontend Dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build Workspace Dependencies
+        run: |
+          pnpm run build:type-deps
+          pnpm --filter=@deltecho/avatar build
+
       - name: Build Tauri
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -155,14 +175,10 @@ jobs:
 
       - name: Build Workspace Dependencies
         run: |
-          # Build workspace packages in dependency order so tsc
-          # can resolve cross-package type declarations via symlinks.
-          # Leaf packages first (no workspace deps), then dependents.
-          pnpm --filter=deep-tree-echo-core build
-          pnpm --filter=@deltecho/sys6-triality build
-          pnpm --filter=@deltecho/dove9 build
-          pnpm --filter=@deltecho/ipc build
-          pnpm --filter=@deltecho/cognitive build
+          # Orchestrator imports @deltecho/avatar; frontend avatar sources
+          # import deep-tree-echo-core/logger from compiled dist/.
+          pnpm run build:type-deps
+          pnpm --filter=@deltecho/avatar build
           pnpm --filter=deep-tree-echo-orchestrator build
 
       - name: Pack Core
@@ -176,7 +192,7 @@ jobs:
           cd packages/orchestrator
           pnpm pack
           mv deep-tree-echo-orchestrator-*.tgz ../../deep-tree-echo-orchestrator.tgz
-      
+
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
