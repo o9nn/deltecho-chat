@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
+import { parse as parseYaml } from "yaml";
 import { validateStaticPreview } from "./check-static-preview.mjs";
 
 const html = readFileSync(
@@ -65,5 +66,25 @@ test("a CSS illustration cannot masquerade as a Cubism renderer or FPS source", 
   assert.match(
     validateStaticPreview(`${html}\nrequestAnimationFrame(() => {})`).join(" "),
     /frame data/,
+  );
+});
+
+test("GitHub Pages install must skip the unused Electron binary download", () => {
+  const workflow = parseYaml(
+    readFileSync(
+      new URL("../.github/workflows/deploy-preview.yml", import.meta.url),
+      "utf8",
+    ),
+  );
+  const installStep = (workflow.jobs?.build?.steps ?? []).find(
+    step =>
+      step?.name === "Install Dependencies" &&
+      step?.run === "pnpm install --frozen-lockfile",
+  );
+  assert.ok(installStep, "Pages workflow must keep a frozen-lockfile install");
+  const skip = installStep.env?.ELECTRON_SKIP_BINARY_DOWNLOAD;
+  assert.ok(
+    skip === 1 || skip === "1",
+    "Pages install must skip Electron so a GitHub 503 cannot fail the static preview",
   );
 });
