@@ -70,12 +70,7 @@ test("a CSS illustration cannot masquerade as a Cubism renderer or FPS source", 
 });
 
 test("GitHub Pages install must skip the unused Electron binary download", () => {
-  const workflow = parseYaml(
-    readFileSync(
-      new URL("../.github/workflows/deploy-preview.yml", import.meta.url),
-      "utf8",
-    ),
-  );
+  const workflow = loadWorkflow("../.github/workflows/deploy-preview.yml");
   const installStep = (workflow.jobs?.build?.steps ?? []).find(
     (step) =>
       step?.name === "Install Dependencies" &&
@@ -88,6 +83,10 @@ test("GitHub Pages install must skip the unused Electron binary download", () =>
     "Pages install must skip Electron so a GitHub 503 cannot fail the static preview",
   );
 });
+
+function loadWorkflow(relPath) {
+  return parseYaml(readFileSync(new URL(relPath, import.meta.url), "utf8"));
+}
 
 function stepRun(step) {
   return typeof step?.run === "string" ? step.run : "";
@@ -108,12 +107,7 @@ function buildsAvatarPackage(run) {
 }
 
 test("Release frontend jobs emit core logger dist before bundling avatar source", () => {
-  const workflow = parseYaml(
-    readFileSync(
-      new URL("../.github/workflows/release.yml", import.meta.url),
-      "utf8",
-    ),
-  );
+  const workflow = loadWorkflow("../.github/workflows/release.yml");
   const appBuild = /pnpm build:browser|target-electron build|pnpm build:tauri/;
   for (const name of ["build-browser", "build-electron", "build-tauri"]) {
     const steps = workflow.jobs?.[name]?.steps ?? [];
@@ -130,12 +124,7 @@ test("Release frontend jobs emit core logger dist before bundling avatar source"
 });
 
 test("Release package job builds avatar before orchestrator tsc", () => {
-  const workflow = parseYaml(
-    readFileSync(
-      new URL("../.github/workflows/release.yml", import.meta.url),
-      "utf8",
-    ),
-  );
+  const workflow = loadWorkflow("../.github/workflows/release.yml");
   const steps = workflow.jobs?.["build-packages"]?.steps ?? [];
   const depStep = steps.find(
     (step) => step?.name === "Build Workspace Dependencies",
