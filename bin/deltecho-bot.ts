@@ -1,4 +1,4 @@
-#!/usr/bin/env npx ts-node
+#!/usr/bin/env npx tsx
 /**
  * Deltecho Autonomous Bot
  *
@@ -21,7 +21,7 @@
  * Usage:
  *   pnpm start:bot
  *   # or
- *   npx ts-node bin/deltecho-bot.ts
+ *   npx tsx bin/deltecho-bot.ts
  */
 
 import Anthropic from '@anthropic-ai/sdk'
