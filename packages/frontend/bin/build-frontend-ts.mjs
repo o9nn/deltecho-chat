@@ -134,14 +134,20 @@ const eslintPlugin = {
 };
 
 /**
- * `esbuild` plugin to allow SCSS in CSS modules.
+ * `esbuild` plugin for colocated SCSS.
+ * CSS modules stay `local-css`; plain `.scss` imports (Live2DAvatar, hub)
+ * must compile as global CSS or `pnpm build:browser` dies with
+ * "No loader is configured for .scss files".
  */
 const sassPlugin = {
   name: "sass",
   setup(build) {
-    build.onLoad({ filter: /\.module\.scss$/ }, (args) => {
+    build.onLoad({ filter: /\.scss$/ }, (args) => {
       const { css } = compile(args.path);
-      return { contents: css, loader: "local-css" };
+      return {
+        contents: css,
+        loader: args.path.endsWith(".module.scss") ? "local-css" : "css",
+      };
     });
   },
 };
