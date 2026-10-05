@@ -69,22 +69,62 @@ test("a CSS illustration cannot masquerade as a Cubism renderer or FPS source", 
   );
 });
 
-test("GitHub Pages install must skip the unused Electron binary download", () => {
+const BROWSER_ONLY_INSTALL_WORKFLOWS = [
+  "../.github/workflows/deploy-preview.yml",
+  "../.github/workflows/ci.yml",
+  "../.github/workflows/ci22.yml",
+  "../.github/workflows/deploy-cloudflare.yml",
+  "../.github/workflows/test-edit-message.yml",
+];
+
+function frozenLockfileInstallSteps(workflowRelPath) {
   const workflow = parseYaml(
-    readFileSync(
-      new URL("../.github/workflows/deploy-preview.yml", import.meta.url),
-      "utf8",
-    ),
+    readFileSync(new URL(workflowRelPath, import.meta.url), "utf8"),
   );
-  const installStep = (workflow.jobs?.build?.steps ?? []).find(
-    step =>
-      step?.name === "Install Dependencies" &&
-      step?.run === "pnpm install --frozen-lockfile",
-  );
-  assert.ok(installStep, "Pages workflow must keep a frozen-lockfile install");
-  const skip = installStep.env?.ELECTRON_SKIP_BINARY_DOWNLOAD;
+  const steps = [];
+  for (const [jobName, job] of Object.entries(workflow.jobs ?? {})) {
+    for (const step of job.steps ?? []) {
+      if (step?.run?.trim() === "pnpm install --frozen-lockfile") {
+        steps.push({ jobName, step });
+      }
+    }
+  }
+  return steps;
+}
+
+function assertBrowserInstallSkipsElectron(workflowRelPath) {
+  const steps = frozenLockfileInstallSteps(workflowRelPath);
   assert.ok(
-    skip === 1 || skip === "1",
-    "Pages install must skip Electron so a GitHub 503 cannot fail the static preview",
+    steps.length > 0,
+    `${workflowRelPath} must keep a frozen-lockfile install`,
+  );
+  for (const { jobName, step } of steps) {
+    const skip = step.env?.ELECTRON_SKIP_BINARY_DOWNLOAD;
+    assert.ok(
+      skip === 1 || skip === "1",
+      `${workflowRelPath} job ${jobName} must skip Electron so a GitHub 503 cannot fail a browser-only install`,
+    );
+  }
+}
+
+test("GitHub Pages install must skip the unused Electron binary download", () => {
+  assertBrowserInstallSkipsElectron("../.github/workflows/deploy-preview.yml");
+});
+
+test("browser-only CI and deploy installs must skip the unused Electron binary download", () => {
+  for (const workflowRelPath of BROWSER_ONLY_INSTALL_WORKFLOWS) {
+    assertBrowserInstallSkipsElectron(workflowRelPath);
+  }
+});
+
+test("cloud-agent browser install must skip the unused Electron binary download", () => {
+  const installScript = readFileSync(
+    new URL("./cloud-agent-install.sh", import.meta.url),
+    "utf8",
+  );
+  assert.match(
+    installScript,
+    /ELECTRON_SKIP_BINARY_DOWNLOAD=1\s+pnpm install --frozen-lockfile/,
+    "cloud-agent-install.sh must skip Electron so a GitHub 503 cannot fail the browser environment",
   );
 });
