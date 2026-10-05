@@ -24,14 +24,13 @@ await build({
   format: "esm",
   logLevel: "silent",
 });
-const { readDteScientificVisualState } = await import(
-  pathToFileURL(bundle).href
-);
+const { readDteScientificVisualState, resolveDteScientificVisualSocketPath } =
+  await import(pathToFileURL(bundle).href);
 
 async function withServer(responder, callback) {
   const address =
     process.platform === "win32"
-      ? `\\\\.\\pipe\\dte-visual-test-${process.pid}-${Math.random()
+      ? `\\\\.\\pipe\\deltecho-visual-test-${process.pid}-${Math.random()
           .toString(16)
           .slice(2)}`
       : join(temporary, `socket-${Math.random().toString(16).slice(2)}`);
@@ -84,6 +83,36 @@ test("requests only cognitive:get_state and returns only scientific visual metad
       });
     },
   );
+});
+
+test("uses the configured private endpoint and rejects invalid overrides", async () => {
+  const original = process.env.DEEP_TREE_ECHO_IPC_PATH;
+  try {
+    await withServer(
+      (socket, request) => {
+        socket.write(
+          JSON.stringify({
+            id: request.id,
+            type: "response:success",
+            payload: { scientificGeniusVisual: { origin: "entelechy" } },
+          }) + "\n",
+        );
+      },
+      async (address) => {
+        process.env.DEEP_TREE_ECHO_IPC_PATH = address;
+        assert.equal(resolveDteScientificVisualSocketPath(), address);
+        assert.deepEqual(await readDteScientificVisualState(), {
+          origin: "entelechy",
+        });
+        process.env.DEEP_TREE_ECHO_IPC_PATH = "relative.sock";
+        assert.equal(resolveDteScientificVisualSocketPath(), null);
+        assert.equal(await readDteScientificVisualState(), null);
+      },
+    );
+  } finally {
+    if (original === undefined) delete process.env.DEEP_TREE_ECHO_IPC_PATH;
+    else process.env.DEEP_TREE_ECHO_IPC_PATH = original;
+  }
 });
 
 test("abstains when the orchestrator daemon is unavailable", async () => {

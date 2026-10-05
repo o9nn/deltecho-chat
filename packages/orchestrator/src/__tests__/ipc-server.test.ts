@@ -12,6 +12,9 @@ import {
   IPCRequestHandler,
 } from "../ipc/server.js";
 import { IPCMessageType } from "@deltecho/ipc";
+import * as fs from "node:fs";
+import * as os from "node:os";
+import * as path from "node:path";
 
 describe("IPCServer", () => {
   let server: IPCServer;
@@ -38,6 +41,48 @@ describe("IPCServer", () => {
       const tcpServer = new IPCServer({ useTcp: true, tcpPort: 9999 });
       expect(tcpServer).toBeDefined();
     });
+
+    it("rejects relative, empty, and control-character IPC endpoints", () => {
+      expect(() => new IPCServer({ socketPath: "relative.sock" })).toThrow();
+      expect(() => new IPCServer({ socketPath: "" })).toThrow();
+      expect(() => new IPCServer({ socketPath: "/tmp/x\n.sock" })).toThrow();
+    });
+  });
+
+  describe("isolated local socket", () => {
+    const onPosix = process.platform === "win32" ? it.skip : it;
+
+    onPosix("binds to and cleans up an isolated absolute socket", async () => {
+      const dir = fs.mkdtempSync(path.join(os.tmpdir(), "dte-ipc-test-"));
+      const endpoint = path.join(dir, "deltecho.sock");
+      const isolated = new IPCServer({ socketPath: endpoint });
+      try {
+        await isolated.start();
+        expect(fs.lstatSync(endpoint).isSocket()).toBe(true);
+        await isolated.stop();
+        expect(fs.existsSync(endpoint)).toBe(false);
+      } finally {
+        await isolated.stop();
+        fs.rmSync(dir, { recursive: true, force: true });
+      }
+    });
+
+    onPosix(
+      "does not unlink an unrelated file occupying the path",
+      async () => {
+        const dir = fs.mkdtempSync(path.join(os.tmpdir(), "dte-ipc-test-"));
+        const endpoint = path.join(dir, "deltecho.sock");
+        fs.writeFileSync(endpoint, "sentinel contents");
+        const isolated = new IPCServer({ socketPath: endpoint });
+        try {
+          await expect(isolated.start()).rejects.toThrow(/non-socket file/);
+          expect(fs.readFileSync(endpoint, "utf8")).toBe("sentinel contents");
+        } finally {
+          await isolated.stop();
+          fs.rmSync(dir, { recursive: true, force: true });
+        }
+      },
+    );
   });
 
   describe("message handlers", () => {

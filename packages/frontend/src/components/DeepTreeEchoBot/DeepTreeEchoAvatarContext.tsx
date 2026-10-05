@@ -24,6 +24,7 @@ import {
   resolveAutomeshMapping,
   resolveMiaraOutfit,
   type AutomeshMapping,
+  type AvatarPresentationStyle,
   type AvatarExpressionId,
   type AvatarIdentityId,
   type MiaraOutfitId,
@@ -60,6 +61,8 @@ export interface AvatarConfig {
   automeshMapping: AutomeshMapping | null;
   automeshAtlas: string | null;
   expression: AvatarExpressionId;
+  presentationStyle: AvatarPresentationStyle;
+  adultSelfAttested: boolean;
 }
 
 // Avatar state
@@ -97,6 +100,8 @@ const DEFAULT_AVATAR_CONFIG: AvatarConfig = {
   automeshMapping: null,
   automeshAtlas: null,
   expression: LIVE_AVATAR_EXPRESSION,
+  presentationStyle: "canonical",
+  adultSelfAttested: false,
 };
 
 function resolveAutomeshAtlas(value: unknown): string | null {
@@ -113,6 +118,11 @@ function sanitizeAvatarConfig(
 ): Partial<AvatarConfig> {
   if (!config || typeof config !== "object") return {};
   const identity = resolveAvatarIdentity(config.identity);
+  const adultSelfAttested = config.adultSelfAttested === true;
+  const presentationStyle: AvatarPresentationStyle =
+    adultSelfAttested && config.presentationStyle === "lucy-inspired"
+      ? "lucy-inspired"
+      : "canonical";
   const resolved = resolveMiaraOutfit({
     id: config.outfit,
     hiddenGroups: config.outfitHiddenGroups,
@@ -132,6 +142,8 @@ function sanitizeAvatarConfig(
     automeshMapping: resolveAutomeshMapping(config.automeshMapping),
     automeshAtlas: resolveAutomeshAtlas(config.automeshAtlas),
     expression: resolveAvatarExpression(config.expression),
+    presentationStyle,
+    adultSelfAttested,
   };
 }
 

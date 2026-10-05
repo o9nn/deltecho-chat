@@ -7,7 +7,7 @@
  *
  * Usage:
  *   npx deep-tree-echo-daemon
- *   node dist/bin/daemon.js
+ *   node dist/bin/daemon.mjs
  *
  * Environment variables:
  *   DEEP_TREE_ECHO_IPC_PATH - Unix socket path (default: /tmp/deep-tree-echo.sock)
@@ -18,6 +18,7 @@
  *   DEEP_TREE_ECHO_ENABLE_DOUBLE_MEMBRANE - Enable Double Membrane (default: true)
  *   DEEP_TREE_ECHO_ENABLE_AAR - Enable AAR membranes (default: true)
  *   DEEP_TREE_ECHO_ENABLE_SYS6 - Enable Sys6 bridge (default: true)
+ *   DEEP_TREE_ECHO_ENABLE_AUTONOMY - Enable autonomous lifecycle (default: true)
  *   DELTACHAT_RPC_SOCKET - DeltaChat RPC server socket path
  */
 
@@ -47,6 +48,7 @@ function buildConfig(): Partial<OrchestratorConfig> {
     enableDeltaChat: envBool("DEEP_TREE_ECHO_ENABLE_DELTACHAT", true),
     enableDovecot: envBool("DEEP_TREE_ECHO_ENABLE_DOVECOT", true),
     enableIPC: envBool("DEEP_TREE_ECHO_ENABLE_IPC", true),
+    ipcSocketPath: process.env.DEEP_TREE_ECHO_IPC_PATH?.trim() || undefined,
     enableScheduler: envBool("DEEP_TREE_ECHO_ENABLE_SCHEDULER", true),
     enableWebhooks: envBool("DEEP_TREE_ECHO_ENABLE_WEBHOOKS", true),
     enableDove9: envBool("DEEP_TREE_ECHO_ENABLE_DOVE9", true),
@@ -56,6 +58,7 @@ function buildConfig(): Partial<OrchestratorConfig> {
     ),
     enableAAR: envBool("DEEP_TREE_ECHO_ENABLE_AAR", true),
     enableSys6: envBool("DEEP_TREE_ECHO_ENABLE_SYS6", true),
+    enableAutonomy: envBool("DEEP_TREE_ECHO_ENABLE_AUTONOMY", true),
     processIncomingMessages: envBool("DEEP_TREE_ECHO_PROCESS_MESSAGES", true),
     defaultAccountId: process.env.DEEP_TREE_ECHO_DEFAULT_ACCOUNT
       ? parseInt(process.env.DEEP_TREE_ECHO_DEFAULT_ACCOUNT, 10)

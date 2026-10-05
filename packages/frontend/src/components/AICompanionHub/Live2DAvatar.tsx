@@ -122,6 +122,9 @@ export interface CognitiveVisualState {
   resonanceCascade?: EpistemicResonanceVisualState;
   /** Unconfirmed concept-link cue; not a scientific discovery. */
   predictiveCrystal?: TentativeCrystalVisualState;
+  /** Local presentation only; never an authoritative cognitive or scientific claim. */
+  presentationStyle?: "canonical" | "lucy-inspired";
+  adultSelfAttested?: boolean;
   isProcessing?: boolean;
   isSpeaking?: boolean;
   audioLevel?: number;

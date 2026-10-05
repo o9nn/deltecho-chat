@@ -86,7 +86,7 @@ describe("DeepTreeEchoAvatarDisplay", () => {
   beforeEach(() => {
     jest.useFakeTimers();
     jest.clearAllMocks();
-    (runtime.getDteScientificVisualState as jest.Mock).mockResolvedValue(null);
+    Object.assign(runtime, { getDteScientificVisualState: undefined });
     // Default mock returns null orchestrator
     (CognitiveBridge.getOrchestrator as jest.Mock).mockReturnValue(null);
   });
@@ -96,6 +96,12 @@ describe("DeepTreeEchoAvatarDisplay", () => {
   });
 
   describe("read-only DeltEcho scientific IPC", () => {
+    beforeEach(() => {
+      Object.assign(runtime, {
+        getDteScientificVisualState: jest.fn().mockResolvedValue(null),
+      });
+    });
+
     const local = {
       origin: "local-observation",
       mode: "Idle",
@@ -172,6 +178,39 @@ describe("DeepTreeEchoAvatarDisplay", () => {
       expect(visual().predictiveCrystal).toBeUndefined();
       expect(visual().scientificGenius).toBe(0);
       expect(apply).toHaveBeenCalledWith(null);
+    });
+
+    it("polls and revokes Entelechy without a browser orchestrator", async () => {
+      // This is the real Electron Saved Messages path: the avatar is mounted,
+      // but initCognitiveOrchestrator was never called in the renderer.
+      expect(CognitiveBridge.getOrchestrator()).toBeNull();
+      const read = runtime.getDteScientificVisualState as jest.Mock;
+      read.mockResolvedValueOnce(genuine()).mockResolvedValue(null);
+      render(
+        <DeepTreeEchoAvatarProvider>
+          <DeepTreeEchoAvatarDisplay visible={true} />
+        </DeepTreeEchoAvatarProvider>,
+      );
+      const visual = () =>
+        JSON.parse(
+          screen
+            .getByTestId("mock-live2d-avatar")
+            .getAttribute("data-cognitive-visual-state") || "{}",
+        );
+      await act(async () => {
+        await Promise.resolve();
+      });
+      expect(read).toHaveBeenCalledTimes(1);
+      expect(visual().mode).toBe("Scientific Genius");
+      expect(visual().predictiveCrystal?.id).toBe("crystal-ipc-mounted");
+      await act(async () => {
+        jest.advanceTimersByTime(1_500);
+        await Promise.resolve();
+      });
+      expect(read).toHaveBeenCalledTimes(2);
+      expect(visual().predictiveCrystal).toBeUndefined();
+      expect(visual().scientificGenius).toBe(0);
+      expect(CognitiveBridge.getOrchestrator()).toBeNull();
     });
 
     it("never overlaps a pending daemon request or applies one after unmount", async () => {

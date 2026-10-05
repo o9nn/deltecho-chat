@@ -134,6 +134,8 @@ export interface OrchestratorConfig {
   dovecot?: Partial<DovecotConfig>;
   /** Enable IPC server */
   enableIPC: boolean;
+  /** Optional private local IPC endpoint for the desktop cognitive bridge. */
+  ipcSocketPath?: string;
   /** Enable task scheduler */
   enableScheduler: boolean;
   /** Enable webhook server */
@@ -370,7 +372,11 @@ export class Orchestrator {
 
       // Initialize IPC server for desktop app communication
       if (this.config.enableIPC) {
-        this.ipcServer = new IPCServer();
+        this.ipcServer = new IPCServer(
+          this.config.ipcSocketPath
+            ? { socketPath: this.config.ipcSocketPath }
+            : {},
+        );
         this.registerIPCHandlers();
         await this.ipcServer.start();
       }

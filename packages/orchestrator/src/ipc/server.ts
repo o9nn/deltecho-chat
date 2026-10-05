@@ -58,6 +58,21 @@ export class IPCServer extends EventEmitter {
 
   constructor(config: Partial<IPCServerConfig> = {}) {
     super();
+    if (config.socketPath !== undefined) {
+      const endpoint = config.socketPath;
+      if (
+        typeof endpoint !== "string" ||
+        !endpoint ||
+        /[\0\r\n]/.test(endpoint) ||
+        (process.platform === "win32"
+          ? !endpoint.startsWith("\\\\.\\pipe\\deltecho-")
+          : !path.isAbsolute(endpoint))
+      ) {
+        throw new Error(
+          "IPC socket path must be an absolute local DeltEcho endpoint",
+        );
+      }
+    }
     this.config = { ...DEFAULT_CONFIG, ...config };
     this.storageManager = new StorageManager();
     this.setupDefaultHandlers();
@@ -204,6 +219,11 @@ export class IPCServer extends EventEmitter {
           if (process.platform !== "win32") {
             // Remove an abandoned Unix socket file before binding.
             if (fs.existsSync(socketPath)) {
+              if (!fs.lstatSync(socketPath).isSocket()) {
+                throw new Error(
+                  "IPC endpoint is occupied by a non-socket file",
+                );
+              }
               fs.unlinkSync(socketPath);
             }
 
