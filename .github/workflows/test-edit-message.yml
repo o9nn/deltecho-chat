@@ -26,7 +26,15 @@ jobs:
         node-version: 22
 
     - name: Install Dependencies
+      env:
+        # Browser e2e never launches Electron; skip the postinstall CDN.
+        ELECTRON_SKIP_BINARY_DOWNLOAD: "1"
       run: pnpm install --frozen-lockfile
+
+    - name: Build Workspace Dependencies
+      run: |
+        pnpm run build:type-deps
+        pnpm --filter=@deltecho/avatar build
 
     - name: Build for E2E
       run: pnpm build:browser

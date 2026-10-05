@@ -28,6 +28,9 @@ jobs:
           cache: "pnpm"
 
       - name: Install Dependencies
+        env:
+          # Browser/e2e CI never launches Electron; skip the postinstall CDN.
+          ELECTRON_SKIP_BINARY_DOWNLOAD: "1"
         run: pnpm install --frozen-lockfile
 
       - name: Check preview Durable Object namespace
