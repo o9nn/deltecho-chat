@@ -19,32 +19,33 @@ async function getGitRef() {
     return process.env.VERSION_INFO_GIT_REF
   }
 
-  let git_describe, git_branch
+  // --always never fails on a valid git work tree: tag describe or short SHA.
+  // Untagged Actions clones used to throw `No names found` and log Error.
+  let git_describe
   try {
-    git_describe = gatherProcessStdout('git', ['describe', '--tags'])
-    try {
-      const git_symbolic_ref =
-        process.env.GITHUB_HEAD_REF ||
-        process.env.GITHUB_REF ||
-        gatherProcessStdout('git', ['symbolic-ref', 'HEAD'])
-      git_branch = git_symbolic_ref.split('/').pop()
-      console.log(git_symbolic_ref, git_branch)
-    } catch (err) {
-      console.log(err)
-      git_branch = 'main'
-    }
+    git_describe = gatherProcessStdout('git', ['describe', '--tags', '--always'])
   } catch (err) {
+    console.log('Hint: you can set the env var VERSION_INFO_GIT_REF manually')
     console.log(err)
-    console.log('Hint: you can set the env var VERSION_INFO_GIT_REF manualy')
-    // Fallback to commit SHA if no tags are present
     try {
-      git_describe = gatherProcessStdout('git', ['rev-parse', 'HEAD']).substring(0, 7)
-      git_branch = git_branch || 'main'
-    } catch (fallbackErr) {
-      console.log('Fallback to commit SHA also failed:', fallbackErr)
+      git_describe = gatherProcessStdout('git', ['rev-parse', 'HEAD']).substring(
+        0,
+        7
+      )
+    } catch {
       git_describe = 'unknown'
-      git_branch = 'main'
     }
+  }
+
+  let git_branch = 'main'
+  try {
+    const git_symbolic_ref =
+      process.env.GITHUB_HEAD_REF ||
+      process.env.GITHUB_REF ||
+      gatherProcessStdout('git', ['symbolic-ref', 'HEAD'])
+    git_branch = git_symbolic_ref.split('/').pop()
+  } catch {
+    git_branch = 'main'
   }
 
   const git_ref = git_describe + (git_branch === 'main' ? '' : '-' + git_branch)

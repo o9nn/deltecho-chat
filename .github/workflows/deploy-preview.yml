@@ -42,6 +42,9 @@ jobs:
           pnpm --filter=@deltecho/avatar build
 
       - name: Build Browser Target
+        env:
+          # Untagged Actions clones announce `git describe: No names found`.
+          VERSION_INFO_GIT_REF: ${{ github.sha }}
         run: pnpm build:browser
 
       - name: Verify static preview evidence claims
