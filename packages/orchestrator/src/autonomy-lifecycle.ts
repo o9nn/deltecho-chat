@@ -26,6 +26,8 @@ import {
   ScientificDomain,
   ScientificGeniusEngine,
   type ScientificInsight,
+  type EpistemicResonanceCascade,
+  type PredictiveInsightCrystal,
 } from "deep-tree-echo-core";
 import type { CognitiveTickProcessor } from "./cognitive-tick-processor.js";
 import type { Echobeats } from "./echobeats.js";
@@ -197,6 +199,8 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
   private lastScientificInquiryCycle: number = 0;
   private onScientificInsight?: (insight: ScientificInsight) => void;
   private onHypothesisEvaluated?: (event: HypothesisEvaluationEvent) => void;
+  private onResonanceCascade?: (cascade: EpistemicResonanceCascade) => void;
+  private onPredictiveCrystal?: (crystal: PredictiveInsightCrystal) => void;
 
   constructor(
     config: Partial<AutonomyLifecycleConfig> = {},
@@ -708,12 +712,16 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
     const domain = this.selectScientificDomainForLifecycle();
 
     try {
-      const insights = await this.scientificGenius.generateInsights(
+      // Unlike generateInsights alone, processStimulus records a bounded
+      // concept-graph observation before proposing a tentative link.
+      const insights = await this.scientificGenius.processStimulus(
         query,
-        undefined,
         domain,
       );
       this.captureScientificInsights(insights);
+      if (insights.length > 0) {
+        this.scientificGenius.crystallizePredictiveInsights();
+      }
       this.emit("scientific:insight_generated", {
         cycleId,
         domain,
@@ -1092,7 +1100,7 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
     // Wire Epistemic Resonance Cascade: when a cascade fires, apply the
     // prescribed spectral radius boost and emit the event for the avatar
     // bridge to amplify the genius overlay (halo pulse, temperature).
-    engine.on("resonance_cascade", (cascade) => {
+    this.onResonanceCascade = (cascade) => {
       if (this.selfModEngine && cascade.spectralRadiusBoost > 0) {
         const currentRadius =
           this.selfModEngine.getParameter("reservoir.spectralRadius")
@@ -1113,28 +1121,20 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
           cascade.domainSpan
         } Φ=${cascade.clusterPhi.toFixed(3)}`,
       );
-    });
+    };
+    engine.on("resonance_cascade", this.onResonanceCascade);
 
-    // Wire Predictive Insight Crystallization events
-    engine.on("predictive_crystallization" as any, (crystal: any) => {
-      // Apply the prescribed avatar effect via ESN bridge
-      if (this.esnAvatarBridge) {
-        this.esnAvatarBridge.setEvaluatingSelf(true); // Trigger meta-awareness face
-        // Schedule release after crystallization settles (2s)
-        setTimeout(() => {
-          if (this.esnAvatarBridge)
-            this.esnAvatarBridge.setEvaluatingSelf(false);
-        }, 2000);
-      }
+    // A graph-link conjecture is only a transient visual observation. It
+    // cannot trigger a DAO vote, identity acceptance, or ESN parameter change.
+    this.onPredictiveCrystal = (crystal) => {
       this.emit("scientific:predictive_crystallization", crystal);
       log.info(
-        `PREDICTIVE CRYSTAL: ${
-          crystal.targetConcept
-        } (confidence=${crystal.confidence.toFixed(
-          3,
-        )}) via [${crystal.sourceConcepts.join(", ")}]`,
+        `Tentative graph link proposed: id=${
+          crystal.id
+        } support=${crystal.confidence.toFixed(3)}`,
       );
-    });
+    };
+    engine.on("predictive_crystallization", this.onPredictiveCrystal);
 
     log.info(
       "ScientificGeniusEngine wired to autonomy lifecycle (reflection + cascade + crystallization active)",
@@ -1318,8 +1318,19 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
         this.onHypothesisEvaluated,
       );
     }
+    if (this.scientificGenius && this.onResonanceCascade) {
+      this.scientificGenius.off("resonance_cascade", this.onResonanceCascade);
+    }
+    if (this.scientificGenius && this.onPredictiveCrystal) {
+      this.scientificGenius.off(
+        "predictive_crystallization",
+        this.onPredictiveCrystal,
+      );
+    }
     this.onScientificInsight = undefined;
     this.onHypothesisEvaluated = undefined;
+    this.onResonanceCascade = undefined;
+    this.onPredictiveCrystal = undefined;
   }
 
   /**

@@ -1,9 +1,14 @@
 import { describe, expect, it, jest } from "@jest/globals";
 
-import { DeltEchoCoreSelfAuthority } from "deep-tree-echo-core";
+import {
+  DeltEchoCoreSelfAuthority,
+  ScientificDomain,
+  type PredictiveInsightCrystal,
+} from "deep-tree-echo-core";
 import {
   EntelechyIntegration,
   RESONANCE_CASCADE_VISUAL_TTL_MS,
+  PREDICTIVE_CRYSTAL_VISUAL_TTL_MS,
 } from "../entelechy-integration";
 
 function createIntegration(): EntelechyIntegration {
@@ -191,6 +196,56 @@ describe("EntelechyIntegration", () => {
         integration.getScientificGeniusVisualState().resonanceCascade
           ?.intensity,
       ).toBe(1);
+    } finally {
+      nowSpy.mockRestore();
+    }
+  });
+
+  it("transports only bounded tentative-crystal metadata and expires it independently of snapshots", () => {
+    const integration = createIntegration();
+    const nowSpy = jest.spyOn(Date, "now").mockReturnValue(30_000);
+    const crystal: PredictiveInsightCrystal = {
+      id: "crystal-hidden-context",
+      prediction: "private observation text must never reach the avatar",
+      sourceConcepts: ["concept-private-a", "concept-private-c"],
+      targetConcept: "concept-private-b",
+      confidence: 2,
+      domain: ScientificDomain.CognitiveScience,
+      avatarEffect: {
+        eyeFocusIntensity: 1.4,
+        browRaiseAsymmetry: -0.5,
+        microSmileIntensity: 1,
+        haloCrystallizationHz: 4,
+      },
+      timestamp: 30_000,
+      confirmed: false,
+    };
+    try {
+      integration.takeSnapshot();
+      expect(integration.setPredictiveCrystal(crystal)).toEqual({
+        id: crystal.id,
+        timestamp: 30_000,
+        confidence: 1,
+        status: "tentative",
+        avatarEffect: { eyeFocusIntensity: 1, browRaiseAsymmetry: 0 },
+      });
+      const visual = integration.getScientificGeniusVisualState();
+      expect(visual.predictiveCrystal?.id).toBe(crystal.id);
+      expect(JSON.stringify(visual)).not.toContain("private observation text");
+      expect(JSON.stringify(visual)).not.toContain("concept-private-a");
+      visual.predictiveCrystal!.avatarEffect.eyeFocusIntensity = 0;
+      expect(
+        integration.getScientificGeniusVisualState().predictiveCrystal
+          ?.avatarEffect.eyeFocusIntensity,
+      ).toBe(1);
+
+      nowSpy.mockReturnValue(30_000 + PREDICTIVE_CRYSTAL_VISUAL_TTL_MS + 1);
+      expect(
+        integration.getScientificGeniusVisualState().predictiveCrystal,
+      ).toBeUndefined();
+      expect(
+        integration.setPredictiveCrystal({ ...crystal, confirmed: true }),
+      ).toBeUndefined();
     } finally {
       nowSpy.mockRestore();
     }

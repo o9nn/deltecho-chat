@@ -61,6 +61,17 @@ export interface EpistemicResonanceVisualState {
   epistemicTemperatureDelta: number;
 }
 
+export interface TentativeCrystalVisualState {
+  id: string;
+  timestamp: number;
+  confidence: number;
+  status: "tentative";
+  avatarEffect: {
+    eyeFocusIntensity: number;
+    browRaiseAsymmetry: number;
+  };
+}
+
 export interface CanonicalCoreSelfVisualState {
   initialized: boolean;
   ledgerHead: string | null;
@@ -109,6 +120,8 @@ export interface CognitiveVisualState {
   coreSelf?: CanonicalCoreSelfVisualState;
   /** Latest genuine ScientificGeniusEngine eureka event. */
   resonanceCascade?: EpistemicResonanceVisualState;
+  /** Unconfirmed concept-link cue; not a scientific discovery. */
+  predictiveCrystal?: TentativeCrystalVisualState;
   isProcessing?: boolean;
   isSpeaking?: boolean;
   audioLevel?: number;

@@ -1,12 +1,10 @@
 /**
  * Resonance Cascade Visual Conductor
  *
- * Translates ScientificGeniusEngine events (EpistemicResonanceCascade,
- * PredictiveInsightCrystal) into dramatic, time-evolving Live2D avatar
- * parameter overlays. This is the "eureka moment" made visible — when
- * DTE achieves genuine scientific insight, the avatar physically manifests
- * the discovery through luminous expression, expanded awareness, and
- * phase-locked breathing.
+ * Translates confirmed resonance-cascade events and unconfirmed graph-link
+ * conjectures into distinct bounded Live2D overlays. Cascades may show the
+ * eureka halo; tentative crystals cause only subtle, short-lived focus and
+ * brow asymmetry, without claiming a scientific discovery.
  *
  * Architecture:
  *   ScientificGeniusEngine → resonance_cascade event
@@ -452,11 +450,8 @@ export class ResonanceCascadeConductor extends EventEmitter {
         effect.eyeFocusIntensity * envelope * 0.6,
       );
       browAsymmetry += effect.browRaiseAsymmetry * envelope * 0.4;
-      insightSmile = Math.max(
-        insightSmile,
-        effect.microSmileIntensity * envelope * 0.5,
-      );
-
+      // An untested link never earns the eureka smile or halo, even if a
+      // malformed producer supplies a nonzero microSmileIntensity.
       if (dominantPhase === "idle") dominantPhase = "sustain";
     }
 
@@ -472,7 +467,7 @@ export class ResonanceCascadeConductor extends EventEmitter {
       haloPulse: clamp(haloPulse, 0, 1),
       haloPulsePhase,
       cascadeIntensity: clamp(cascadeIntensity, 0, 1),
-      active: cascadeIntensity > 0.01,
+      active: cascadeIntensity > 0.01 || this.crystals.length > 0,
       phase: dominantPhase,
       microTremor: clamp(microTremor, 0, 1),
     };

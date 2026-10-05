@@ -266,71 +266,55 @@ describe("ScientificGeniusEngine — principled reasoning", () => {
     expect(crystals).toEqual([]);
   });
 
-  it("crystallizes predictive insights from transitive concept bridges", async () => {
+  it("proposes exactly one unconfirmed link from real A–C–B concept edges and does not replay it", async () => {
     const engine = freshEngine();
-    // Build a concept graph with transitive structure: A→C and C→B
-    // by processing queries that share vocabulary through a bridge concept
-    await engine.processScientificQuery(
-      "neural oscillations drive consciousness through gamma synchronization",
-      ScientificDomain.Neuroscience,
+    const emitted: string[] = [];
+    engine.on("predictive_crystallization", (crystal) =>
+      emitted.push(crystal.id),
     );
     await engine.processScientificQuery(
-      "gamma synchronization enables integrated information binding",
+      "alpha lattice connects gamma quantum folding",
+      ScientificDomain.Physics,
+    );
+    await engine.processScientificQuery(
+      "gamma quantum folding connects beta cellular signal",
       ScientificDomain.CognitiveScience,
     );
     await engine.processScientificQuery(
-      "integrated information theory measures phi across cortical modules",
-      ScientificDomain.CognitiveScience,
+      "beta cellular signal controls omega transduction",
+      ScientificDomain.Biology,
     );
-    // Now attempt crystallization — should find bridges
+
     const crystals = engine.crystallizePredictiveInsights();
-    // Crystals should be an array (may be empty if confidence threshold not met)
-    expect(Array.isArray(crystals)).toBe(true);
-    // If any crystals formed, validate structure
-    for (const crystal of crystals) {
-      expect(crystal).toHaveProperty("id");
-      expect(crystal).toHaveProperty("prediction");
-      expect(crystal).toHaveProperty("sourceConcepts");
-      expect(crystal).toHaveProperty("targetConcept");
-      expect(crystal.confidence).toBeGreaterThan(0.4);
-      expect(crystal.confidence).toBeLessThanOrEqual(1);
-      expect(crystal.avatarEffect.eyeFocusIntensity).toBeGreaterThanOrEqual(0);
-      expect(crystal.avatarEffect.haloCrystallizationHz).toBeGreaterThanOrEqual(
-        0.5,
-      );
-      expect(crystal.confirmed).toBe(false);
-    }
+    expect(crystals).toHaveLength(1);
+    expect(crystals[0].sourceConcepts).toHaveLength(2);
+    expect(crystals[0].prediction).toContain("Untested connection");
+    expect(crystals[0].confidence).toBeGreaterThanOrEqual(0.48);
+    expect(crystals[0].confidence).toBeLessThanOrEqual(1);
+    expect(crystals[0].confirmed).toBe(false);
+    expect(crystals[0].avatarEffect.microSmileIntensity).toBe(0);
+    expect(emitted).toEqual([crystals[0].id]);
+    expect(engine.crystallizePredictiveInsights()).toEqual([]);
+    expect(emitted).toHaveLength(1);
   });
 
-  it("emits predictive_crystallization events for each crystal", async () => {
+  it("abstains when every node already has a direct link or independent descriptions are absent", async () => {
     const engine = freshEngine();
-    const crystalEvents: any[] = [];
-    engine.on("predictive_crystallization" as any, (c: any) =>
-      crystalEvents.push(c),
-    );
+    for (const suffix of ["alpha", "beta", "theta"]) {
+      await engine.processScientificQuery(
+        `gamma quantum folding ${suffix}`,
+        ScientificDomain.Physics,
+      );
+    }
+    expect(engine.crystallizePredictiveInsights()).toEqual([]);
 
-    // Build rich concept graph
-    await engine.processScientificQuery(
-      "reservoir computing uses echo state networks for temporal processing",
-      ScientificDomain.ComputerScience,
-    );
-    await engine.processScientificQuery(
-      "echo state networks exhibit edge of chaos dynamics in spectral radius",
-      ScientificDomain.Mathematics,
-    );
-    await engine.processScientificQuery(
-      "spectral radius determines Lyapunov exponent and memory capacity",
-      ScientificDomain.Mathematics,
-    );
-    await engine.processScientificQuery(
-      "memory capacity enables temporal credit assignment in reinforcement learning",
-      ScientificDomain.ComputerScience,
-    );
-
-    engine.crystallizePredictiveInsights();
-    // Events should match returned crystals count
-    expect(crystalEvents.length).toEqual(
-      engine.crystallizePredictiveInsights().length,
-    );
+    const duplicate = freshEngine();
+    for (let i = 0; i < 3; i++) {
+      await duplicate.processScientificQuery(
+        "gamma quantum folding stable motif",
+        ScientificDomain.Physics,
+      );
+    }
+    expect(duplicate.crystallizePredictiveInsights()).toEqual([]);
   });
 });

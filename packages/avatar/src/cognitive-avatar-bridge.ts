@@ -16,6 +16,7 @@ import { EventEmitter } from "events";
 import type { Expression, EmotionalVector, AvatarMotion } from "./types";
 import type {
   EpistemicResonanceVisualState,
+  TentativeCrystalVisualState,
   Live2DAvatarController,
   Live2DCognitiveVisualState,
 } from "./adapters/live2d-avatar";
@@ -62,6 +63,7 @@ export interface CognitiveStateInput {
   embodimentError?: number; // normalized RMS Cubism projection error
   embodimentConfidence?: number; // 0-1 evidence maturity
   resonanceCascade?: EpistemicResonanceVisualState;
+  predictiveCrystal?: TentativeCrystalVisualState;
 
   // EchoBeats state
   echoBeatsPhase?: number; // 0-11
@@ -352,6 +354,7 @@ export class CognitiveAvatarBridge extends EventEmitter {
       embodimentError: state.embodimentError,
       embodimentConfidence: state.embodimentConfidence,
       resonanceCascade: state.resonanceCascade,
+      predictiveCrystal: state.predictiveCrystal,
       isProcessing: state.isProcessing,
       isSpeaking: state.isSpeaking,
       audioLevel: state.audioLevel,

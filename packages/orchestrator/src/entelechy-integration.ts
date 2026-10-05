@@ -50,6 +50,7 @@ import {
   type CanonicalGovernanceProposalSink,
   type CanonicalCoreSelfStatusLike,
   type EpistemicResonanceCascade,
+  type PredictiveInsightCrystal,
   // Logger
   getLogger,
 } from "deep-tree-echo-core";
@@ -90,6 +91,8 @@ const DEFAULT_CONFIG: EntelechyIntegrationConfig = {
 
 /** Full attack + sustain + decay + afterglow lifetime of the avatar conductor. */
 export const RESONANCE_CASCADE_VISUAL_TTL_MS = 7_500;
+/** A tentative link must disappear when its short attentional cue ends. */
+export const PREDICTIVE_CRYSTAL_VISUAL_TTL_MS = 2_500;
 
 /**
  * Full cognitive state snapshot
@@ -126,6 +129,18 @@ export interface EpistemicResonanceVisualSignal {
   haloPulseHz: number;
   spectralRadiusBoost: number;
   epistemicTemperatureDelta: number;
+}
+
+export interface TentativeCrystalVisualSignal {
+  id: string;
+  timestamp: number;
+  /** Internal graph support, NOT a calibrated scientific probability. */
+  confidence: number;
+  status: "tentative";
+  avatarEffect: {
+    eyeFocusIntensity: number;
+    browRaiseAsymmetry: number;
+  };
 }
 
 export interface CanonicalCoreSelfVisualSignal {
@@ -186,6 +201,8 @@ export interface ScientificGeniusVisualSignal {
   coreSelf: CanonicalCoreSelfVisualSignal;
   /** Latest genuine eureka event, retained only for its bounded visual lifetime. */
   resonanceCascade?: EpistemicResonanceVisualSignal;
+  /** Untested concept-link cue; no prediction prose or user text crosses IPC. */
+  predictiveCrystal?: TentativeCrystalVisualSignal;
   isProcessing: boolean;
 }
 
@@ -255,6 +272,10 @@ export class EntelechyIntegration extends EventEmitter {
   };
   private latestResonanceCascade: {
     signal: EpistemicResonanceVisualSignal;
+    receivedAt: number;
+  } | null = null;
+  private latestPredictiveCrystal: {
+    signal: TentativeCrystalVisualSignal;
     receivedAt: number;
   } | null = null;
 
@@ -400,6 +421,59 @@ export class EntelechyIntegration extends EventEmitter {
       return undefined;
     }
     return { ...latest.signal };
+  }
+
+  /** Retain only bounded rendering metadata for a fresh, unconfirmed link. */
+  public setPredictiveCrystal(
+    crystal: PredictiveInsightCrystal,
+  ): TentativeCrystalVisualSignal | undefined {
+    if (
+      crystal.confirmed ||
+      typeof crystal.id !== "string" ||
+      !crystal.id ||
+      crystal.id.length > 200
+    ) {
+      return undefined;
+    }
+    if (this.latestPredictiveCrystal?.signal.id === crystal.id) {
+      const previous = this.latestPredictiveCrystal.signal;
+      return { ...previous, avatarEffect: { ...previous.avatarEffect } };
+    }
+    const signal: TentativeCrystalVisualSignal = {
+      id: crystal.id,
+      timestamp: Number.isFinite(crystal.timestamp)
+        ? Math.max(0, crystal.timestamp)
+        : Date.now(),
+      confidence: this.clamp01(crystal.confidence),
+      status: "tentative",
+      avatarEffect: {
+        eyeFocusIntensity: this.clamp01(crystal.avatarEffect.eyeFocusIntensity),
+        browRaiseAsymmetry: this.clamp01(
+          crystal.avatarEffect.browRaiseAsymmetry,
+        ),
+      },
+    };
+    this.latestPredictiveCrystal = { signal, receivedAt: Date.now() };
+    this.emit("predictive_crystal_updated", {
+      ...signal,
+      avatarEffect: { ...signal.avatarEffect },
+    });
+    return { ...signal, avatarEffect: { ...signal.avatarEffect } };
+  }
+
+  public getActivePredictiveCrystal(
+    now: number = Date.now(),
+  ): TentativeCrystalVisualSignal | undefined {
+    const latest = this.latestPredictiveCrystal;
+    if (!latest) return undefined;
+    if (now - latest.receivedAt > PREDICTIVE_CRYSTAL_VISUAL_TTL_MS) {
+      this.latestPredictiveCrystal = null;
+      return undefined;
+    }
+    return {
+      ...latest.signal,
+      avatarEffect: { ...latest.signal.avatarEffect },
+    };
   }
 
   /** Test and interval helper — runs one background cognitive tick. */
@@ -759,11 +833,18 @@ export class EntelechyIntegration extends EventEmitter {
     const base =
       snapshot?.scientificGeniusVisual ??
       this.takeSnapshot().scientificGeniusVisual;
-    const { resonanceCascade: _staleCascade, ...withoutStaleCascade } = base;
+    const {
+      resonanceCascade: _staleCascade,
+      predictiveCrystal: _staleCrystal,
+      ...withoutStaleEvents
+    } = base;
     const resonanceCascade = this.getActiveResonanceCascade();
-    return resonanceCascade
-      ? { ...withoutStaleCascade, resonanceCascade }
-      : withoutStaleCascade;
+    const predictiveCrystal = this.getActivePredictiveCrystal();
+    return {
+      ...withoutStaleEvents,
+      ...(resonanceCascade ? { resonanceCascade } : {}),
+      ...(predictiveCrystal ? { predictiveCrystal } : {}),
+    };
   }
 
   /**
@@ -834,6 +915,7 @@ export class EntelechyIntegration extends EventEmitter {
     const metabolic = conceptualMetabolism.getVisualState();
     const causal = causalHypothesisForge.getVisualState();
     const resonanceCascade = this.getActiveResonanceCascade();
+    const predictiveCrystal = this.getActivePredictiveCrystal();
     const scientificGenius = this.clamp01(
       insightPotential * 0.33 +
         entelechyScore * 0.21 +
@@ -882,6 +964,7 @@ export class EntelechyIntegration extends EventEmitter {
       daoEvidenceConsensus: causal.daoEvidenceConsensus,
       activeExperimentation: causal.activeExperimentation,
       ...(resonanceCascade ? { resonanceCascade } : {}),
+      ...(predictiveCrystal ? { predictiveCrystal } : {}),
       isProcessing:
         scientificGenius >= 0.35 || causal.activeExperimentation > 0,
     };

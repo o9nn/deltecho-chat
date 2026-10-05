@@ -308,8 +308,8 @@ export interface EpistemicResonanceCascade {
 }
 
 /**
- * Predictive Insight Crystal — a pre-cognitive artifact crystallized from
- * concept graph topology before full evidence arrives.
+ * Predictive Insight Crystal — an unconfirmed, graph-derived link conjecture.
+ * This internal structural support is not a scientific finding or calibrated probability.
  */
 export interface PredictiveInsightCrystal {
   /** Unique crystal ID */
@@ -318,9 +318,9 @@ export interface PredictiveInsightCrystal {
   prediction: string;
   /** Source concepts that form the transitive bridge */
   sourceConcepts: string[];
-  /** The predicted target concept (not yet observed) */
+  /** An observed concept; only its direct relation to the source is unobserved. */
   targetConcept: string;
-  /** Confidence in the prediction (0–1): based on path Φ and edge strength */
+  /** Structural support score (0–1), never a calibrated probability of truth. */
   confidence: number;
   /** Domain of the predicted insight */
   domain: ScientificDomain;
@@ -330,14 +330,14 @@ export interface PredictiveInsightCrystal {
     eyeFocusIntensity: number;
     /** Brow raise asymmetry: one brow up = "I see something forming" */
     browRaiseAsymmetry: number;
-    /** Mouth micro-smile: satisfaction of pre-cognition */
+    /** Reserved for confirmed insights; zero for an unverified graph link. */
     microSmileIntensity: number;
-    /** Halo crystallization pulse (Hz): slow, steady, certain */
+    /** Decorative tempo hint; no eureka halo for unverified conjectures. */
     haloCrystallizationHz: number;
   };
   /** Timestamp of crystallization */
   timestamp: number;
-  /** Whether this crystal was later confirmed by actual evidence */
+  /** Always false on creation; later confirmation requires separate evidence. */
   confirmed: boolean;
 }
 
@@ -468,12 +468,10 @@ export interface ScientificGeniusEngine {
     listener: (crystal: PredictiveInsightCrystal) => void,
   ): this;
   /**
-   * Predictive Insight Crystallization — the engine predicts future insight
-   * trajectories from concept graph topology and crystallizes them before
-   * full evidence arrives. This is "pre-cognition" grounded in graph theory:
-   * if concepts A→B and B→C exist with high Φ, then A→C is predicted.
-   * The crystal carries a confidence (how likely the prediction is correct)
-   * and a prescribed avatar effect (the "crystallizing" face).
+   * Generate tentative, unconfirmed transitive-link conjectures from actual
+   * stored concept edges; the support score is not a truth probability.
+   * Calling this method alone cannot accept identity, authorize a DAO vote,
+   * or mutate the ESN.
    */
   crystallizePredictiveInsights(): PredictiveInsightCrystal[];
 }
@@ -493,6 +491,8 @@ export class ScientificGeniusEngineImpl
   private concepts: Map<string, ScientificConcept> = new Map();
   private hypotheses: Map<string, Hypothesis> = new Map();
   public insights: ScientificInsight[] = []; // Made public for direct access from AutonomyLifecycleCoordinator
+  /** Recent unordered concept pairs already announced as tentative links. */
+  private readonly emittedCrystalPairs = new Set<string>();
 
   // Global Workspace
   private globalWorkspace: GlobalWorkspaceState;
@@ -1360,114 +1360,92 @@ export class ScientificGeniusEngineImpl
   // ─── Predictive Insight Crystallization ──────────────────────────────────────
 
   /**
-   * Crystallize predictive insights from concept graph topology.
-   * Uses transitive closure over high-Φ concept pairs to predict
-   * future connections before full evidence arrives.
-   *
-   * Algorithm:
-   *   1. Build adjacency from concepts that co-occur in insights
-   *   2. For each pair (A, B) with shared neighbor C where A→C and C→B
-   *      both have high Φ, predict A→B (transitive bridge)
-   *   3. Confidence = min(Φ_AC, Φ_CB) * edge_strength_product
-   *   4. Filter: only crystals with confidence > 0.4 are emitted
-   *   5. Prescribe avatar effect proportional to confidence
+   * Scan a bounded window of the real concept-ID graph for an unobserved A–B
+   * relation supported by A–C and C–B. One scan proposes at most one *untested*
+   * link. Re-scanning the same graph cannot re-emit that unordered pair.
    */
   crystallizePredictiveInsights(): PredictiveInsightCrystal[] {
-    const crystals: PredictiveInsightCrystal[] = [];
-    const conceptList = Array.from(this.concepts.values());
-    if (conceptList.length < 3) return crystals;
+    const recent = Array.from(this.concepts.values()).slice(-64);
+    if (recent.length < 3) return [];
 
-    // Build co-occurrence adjacency from insights
+    const byId = new Map(recent.map((concept) => [concept.id, concept]));
+    const tokens = new Map(
+      recent.map((concept) => [
+        concept.id,
+        new Set(this.tokenize(concept.description)),
+      ]),
+    );
     const adjacency = new Map<
       string,
       Map<string, { phi: number; strength: number }>
     >();
-    for (const insight of this.insights) {
-      // Extract concept names mentioned in this insight
-      const mentionedConcepts = conceptList.filter((c) =>
-        insight.content.toLowerCase().includes(c.name.toLowerCase()),
-      );
-      // Create edges between all pairs in this insight
-      for (let i = 0; i < mentionedConcepts.length; i++) {
-        for (let j = i + 1; j < mentionedConcepts.length; j++) {
-          const a = mentionedConcepts[i].name;
-          const b = mentionedConcepts[j].name;
-          const phi = Math.min(
-            mentionedConcepts[i].phi,
-            mentionedConcepts[j].phi,
-          );
-          const strength = (insight.novelty + insight.significance) / 2;
-          if (!adjacency.has(a)) adjacency.set(a, new Map());
-          if (!adjacency.has(b)) adjacency.set(b, new Map());
-          adjacency.get(a)!.set(b, { phi, strength });
-          adjacency.get(b)!.set(a, { phi, strength });
+    for (const concept of recent) adjacency.set(concept.id, new Map());
+
+    // Only relations actually stored by processStimulus can support a path.
+    for (const concept of recent) {
+      for (const relatedId of concept.relatedConcepts) {
+        const related = byId.get(relatedId);
+        if (!related || related.id === concept.id) continue;
+        const sourceTokens = tokens.get(concept.id)!;
+        const relatedTokens = tokens.get(related.id)!;
+        let shared = 0;
+        for (const token of sourceTokens) {
+          if (relatedTokens.has(token)) shared++;
         }
+        if (shared < 2) continue;
+        const edge = {
+          phi: clamp01(Math.max(concept.phi, related.phi)),
+          strength: clamp01(shared / 3),
+        };
+        adjacency.get(concept.id)!.set(related.id, edge);
+        adjacency.get(related.id)!.set(concept.id, edge);
       }
     }
 
-    // Find transitive bridges: A→C→B where no direct A→B edge exists
-    const existingPredictions = new Set<string>();
     for (const [a, neighbors] of adjacency) {
       for (const [c, edgeAC] of neighbors) {
-        const cNeighbors = adjacency.get(c);
-        if (!cNeighbors) continue;
-        for (const [b, edgeCB] of cNeighbors) {
-          if (b === a) continue;
-          // Skip if direct edge already exists
-          if (neighbors.has(b)) continue;
-          // Skip if already predicted
+        for (const [b, edgeCB] of adjacency.get(c)!) {
+          if (a === b || neighbors.has(b)) continue;
           const key = [a, b].sort().join("<>");
-          if (existingPredictions.has(key)) continue;
-
-          // Compute confidence from path Φ and edge strengths
+          if (this.emittedCrystalPairs.has(key)) continue;
+          const conceptA = byId.get(a)!;
+          const conceptB = byId.get(b)!;
+          // Repeated descriptions are not independent support for a new link.
+          if (conceptA.description === conceptB.description) continue;
           const pathPhi = Math.min(edgeAC.phi, edgeCB.phi);
-          const pathStrength = edgeAC.strength * edgeCB.strength;
-          const confidence = clamp01(pathPhi * 0.6 + pathStrength * 0.4);
+          const pathStrength = Math.sqrt(edgeAC.strength * edgeCB.strength);
+          const support = clamp01(pathPhi * 0.35 + pathStrength * 0.65);
+          if (support < 0.48) continue;
 
-          if (confidence > 0.4) {
-            existingPredictions.add(key);
-            const conceptA = this.concepts.get(a);
-            const conceptB = this.concepts.get(b);
-            const domain =
-              conceptA?.domain ??
-              conceptB?.domain ??
-              ("general" as ScientificDomain);
-
-            const crystal: PredictiveInsightCrystal = {
-              id: `crystal_${Date.now()}_${crystals.length}`,
-              prediction:
-                `Predicted connection: ${a} → ${b} (via ${c}) — ` +
-                `these concepts share structural affinity through ${c} with Φ=${pathPhi.toFixed(
-                  2,
-                )}`,
-              sourceConcepts: [a, c],
-              targetConcept: b,
-              confidence,
-              domain: domain as ScientificDomain,
-              avatarEffect: {
-                eyeFocusIntensity: clamp01(confidence * 0.8),
-                browRaiseAsymmetry: clamp01(confidence * 0.5),
-                microSmileIntensity: clamp01(confidence * 0.3),
-                haloCrystallizationHz: 0.5 + confidence * 1.5, // 0.5–2.0 Hz
-              },
-              timestamp: Date.now(),
-              confirmed: false,
-            };
-            crystals.push(crystal);
+          const crystal: PredictiveInsightCrystal = {
+            id: `crystal_${a}_${b}`,
+            prediction: `Untested connection between ${conceptA.name} and ${
+              conceptB.name
+            } via ${byId.get(c)!.name}`,
+            sourceConcepts: [a, c],
+            targetConcept: b,
+            confidence: support,
+            domain: conceptA.domain,
+            avatarEffect: {
+              eyeFocusIntensity: clamp01(support * 0.55),
+              browRaiseAsymmetry: clamp01(support * 0.25),
+              microSmileIntensity: 0,
+              haloCrystallizationHz: 0.5,
+            },
+            timestamp: Date.now(),
+            confirmed: false,
+          };
+          if (this.emittedCrystalPairs.size >= 256) {
+            const oldest = this.emittedCrystalPairs.values().next().value;
+            if (oldest) this.emittedCrystalPairs.delete(oldest);
           }
+          this.emittedCrystalPairs.add(key);
+          this.emit("predictive_crystallization", crystal);
+          return [crystal];
         }
       }
     }
-
-    // Emit events for each crystal
-    for (const crystal of crystals) {
-      this.emit("predictive_crystallization", crystal);
-    }
-
-    this.dlog(
-      `Crystallized ${crystals.length} predictive insights from ${adjacency.size} concept nodes`,
-    );
-    return crystals;
+    return [];
   }
 }
 
