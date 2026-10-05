@@ -69,6 +69,48 @@ test("a CSS illustration cannot masquerade as a Cubism renderer or FPS source", 
   );
 });
 
+test("frontend esbuild compiles colocated global SCSS, not only CSS modules", () => {
+  const src = readFileSync(
+    new URL("../packages/frontend/bin/build-frontend-ts.mjs", import.meta.url),
+    "utf8",
+  );
+  assert.match(
+    src,
+    /filter:\s*\/\\.scss\$\//,
+    "sass plugin must load every .scss import, including Live2DAvatar.scss",
+  );
+  assert.match(
+    src,
+    /endsWith\(["']\.module\.scss["']\)\s*\?\s*["']local-css["']\s*:\s*["']css["']/,
+    "CSS modules stay hashed; global Live2D/hub SCSS must use the css loader",
+  );
+
+  const globalScssHosts = [
+    "Live2DAvatar.tsx",
+    "AICompanionHub.tsx",
+    "VideoCalibrationLab.tsx",
+  ];
+  for (const file of globalScssHosts) {
+    const tsx = readFileSync(
+      new URL(
+        `../packages/frontend/src/components/AICompanionHub/${file}`,
+        import.meta.url,
+      ),
+      "utf8",
+    );
+    assert.match(
+      tsx,
+      /import ["'][^"']+\.scss["']/,
+      `${file} must keep its colocated SCSS import`,
+    );
+    assert.doesNotMatch(
+      tsx,
+      /import ["'][^"']+\.module\.scss["']/,
+      `${file} uses global SCSS class names, not CSS modules`,
+    );
+  }
+});
+
 test("GitHub Pages install must skip the unused Electron binary download", () => {
   const workflow = parseYaml(
     readFileSync(
@@ -77,7 +119,7 @@ test("GitHub Pages install must skip the unused Electron binary download", () =>
     ),
   );
   const installStep = (workflow.jobs?.build?.steps ?? []).find(
-    step =>
+    (step) =>
       step?.name === "Install Dependencies" &&
       step?.run === "pnpm install --frozen-lockfile",
   );
