@@ -6,7 +6,7 @@ set -euo pipefail
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$root"
 
-pnpm install --frozen-lockfile
+ELECTRON_SKIP_BINARY_DOWNLOAD=1 pnpm install --frozen-lockfile
 pnpm --filter=deep-tree-echo-core build
 pnpm --filter=@deltecho/sys6-triality build
 pnpm --filter=@deltecho/dove9 build
