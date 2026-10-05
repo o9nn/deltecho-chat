@@ -15,7 +15,7 @@
     "check:log-conventions": "node ./bin/log-conventions",
     "check:core-self": "node ./scripts/check-core-self.mjs && pnpm --filter=deep-tree-echo-core test -- --runInBand src/core-self/__tests__/CoreSelfKernel.test.ts src/core-self/__tests__/AutognosisAutogenesisCoupler.test.ts",
     "check:cloudflare-preview": "node ./scripts/check-cloudflare-preview-namespace.mjs",
-    "check:static-preview": "node --test ./scripts/check-static-preview.test.mjs && node ./scripts/check-static-preview.mjs",
+    "check:static-preview": "node --test ./scripts/check-static-preview.test.mjs ./scripts/check-frontend-bundle-scss.test.mjs && node ./scripts/check-static-preview.mjs",
     "refresh:core-self-evidence": "pnpm --filter=deep-tree-echo-core build && node ./scripts/refresh-core-self-evidence.mjs",
     "check:live2d-assets": "node ./scripts/check-live2d-assets.mjs",
     "check:desktop-coexistence": "node ./scripts/check-desktop-coexistence.mjs",
