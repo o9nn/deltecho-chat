@@ -41,7 +41,7 @@ export interface AiriStageCue {
 
 /** A host-implemented transport owns the loaded AIRI stage and must honor expiresAt and release. */
 export interface AiriStageCueSink {
-  publish(cue: AiriStageCue): void;
+  publish(cue: AiriStageCue): void | boolean;
   release(leaseId: string): void;
 }
 
@@ -231,7 +231,11 @@ export class AiriStageCueAdapter {
       if (typeof this.expiryTimer === "object" && "unref" in this.expiryTimer) {
         this.expiryTimer.unref();
       }
-      this.sink.publish(cue);
+      const accepted = this.sink.publish(cue);
+      if (accepted === false) {
+        this.revoke();
+        return "rejected";
+      }
       // A synchronous host callback may revoke this lease during publish.
       if (
         this.active?.leaseId !== lease.leaseId ||

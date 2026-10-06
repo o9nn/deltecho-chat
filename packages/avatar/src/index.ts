@@ -220,6 +220,14 @@ export {
   type AiriCueResult,
 } from "./adapters/airi-stage-cue-adapter";
 
+// AIRI-side pose compositor. Only accepts model-bound presentation cues.
+export {
+  AiriStageCueHost,
+  type AiriStageHostOptions,
+  type AiriSelectedModel,
+  type AiriStagePose,
+} from "./adapters/airi-stage-host";
+
 // Live2D Avatar Manager
 export {
   Live2DAvatarProps,
