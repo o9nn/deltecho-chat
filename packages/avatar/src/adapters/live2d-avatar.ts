@@ -678,10 +678,18 @@ export class Live2DAvatarManager {
         actual[paramId] = value;
       }
     }
-    if (Object.keys(actual).length === 0) return;
+    if (
+      this.observableProjectionIds.length === 0 ||
+      Object.keys(actual).length !== this.observableProjectionIds.length
+    )
+      return;
+
+    const intended = Object.fromEntries(
+      this.observableProjectionIds.map((id) => [id, expected[id]]),
+    );
 
     selfModelAvatarFeedback.recordIntendedProjection(
-      expected,
+      intended,
       this.pendingCognitiveMode,
       this.lastCanonicalCoreSelf ?? undefined,
     );

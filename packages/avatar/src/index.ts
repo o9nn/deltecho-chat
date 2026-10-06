@@ -209,6 +209,17 @@ export {
   PARAM_IDS,
 } from "./adapters/pixi-live2d-renderer";
 
+// Optional, outbound-only AIRI stage cue boundary (no core-self writes).
+export {
+  AiriStageCueAdapter,
+  type AiriStageCue,
+  type AiriStageCueSink,
+  type AiriStageCueConfig,
+  type AiriStageLease,
+  type AiriOwnedPoseAxis,
+  type AiriCueResult,
+} from "./adapters/airi-stage-cue-adapter";
+
 // Live2D Avatar Manager
 export {
   Live2DAvatarProps,
