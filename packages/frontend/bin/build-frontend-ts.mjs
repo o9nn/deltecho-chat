@@ -133,15 +133,16 @@ const eslintPlugin = {
   },
 };
 
-/**
- * `esbuild` plugin to allow SCSS in CSS modules.
- */
+/** Compile both scoped CSS modules and global component SCSS imports. */
 const sassPlugin = {
   name: "sass",
   setup(build) {
-    build.onLoad({ filter: /\.module\.scss$/ }, (args) => {
+    build.onLoad({ filter: /\.scss$/ }, (args) => {
       const { css } = compile(args.path);
-      return { contents: css, loader: "local-css" };
+      return {
+        contents: css,
+        loader: args.path.endsWith(".module.scss") ? "local-css" : "css",
+      };
     });
   },
 };
