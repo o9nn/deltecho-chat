@@ -24,41 +24,43 @@ jest.mock("@pixi/unsafe-eval", () => ({
 }));
 
 jest.mock("pixi.js", () => ({
-  Application: jest.fn().mockImplementation(() => {
-    const onceFns: Array<() => void> = [];
-    return {
-      stage: {
-        addChild: jest.fn(),
-      },
-      view: {
-        width: 400,
-        height: 400,
-        clientWidth: 400,
-        clientHeight: 400,
-      },
-      ticker: {
-        maxFPS: 0,
-        addOnce: (cb: () => void) => {
-          onceFns.push(cb);
+  Application: jest
+    .fn()
+    .mockImplementation((options: { resolution?: number }) => {
+      const onceFns: Array<() => void> = [];
+      return {
+        stage: {
+          addChild: jest.fn(),
         },
-        flushOnce: () => {
-          const queued = onceFns.splice(0, onceFns.length);
-          for (const fn of queued) fn();
+        view: {
+          width: 400,
+          height: 400,
+          clientWidth: 400,
+          clientHeight: 400,
         },
-      },
-      screen: { width: 400, height: 400 },
-      renderer: {
-        resize: jest.fn(),
-        width: 400,
-        height: 400,
-        resolution: 1,
-        extract: {
-          pixels: jest.fn(() => new Uint8Array(400 * 400 * 4)),
+        ticker: {
+          maxFPS: 0,
+          addOnce: (cb: () => void) => {
+            onceFns.push(cb);
+          },
+          flushOnce: () => {
+            const queued = onceFns.splice(0, onceFns.length);
+            for (const fn of queued) fn();
+          },
         },
-      },
-      destroy: jest.fn(),
-    };
-  }),
+        screen: { width: 400, height: 400 },
+        renderer: {
+          resize: jest.fn(),
+          width: 400,
+          height: 400,
+          resolution: options.resolution ?? 1,
+          extract: {
+            pixels: jest.fn(() => new Uint8Array(400 * 400 * 4)),
+          },
+        },
+        destroy: jest.fn(),
+      };
+    }),
 }));
 
 jest.mock("pixi-live2d-display-lipsyncpatch/cubism4", () => ({
@@ -171,6 +173,53 @@ describe("PixiLive2DRenderer", () => {
       expect(app.ticker.maxFPS).toBe(30);
       context.getParameter.mockReturnValue("ANGLE (NVIDIA RTX 4000)");
       expect(isSoftwareWebGLRenderer(mockCanvas)).toBe(false);
+    });
+
+    it("limits software backing-store DPR without overriding an explicit quality preference", async () => {
+      const originalDpr = Object.getOwnPropertyDescriptor(
+        window,
+        "devicePixelRatio",
+      );
+      Object.defineProperty(window, "devicePixelRatio", {
+        configurable: true,
+        value: 2,
+      });
+      (mockCanvas.getContext as jest.Mock).mockReturnValue({
+        getExtension: jest.fn(() => ({ UNMASKED_RENDERER_WEBGL: 0x9246 })),
+        getParameter: jest.fn(() => "ANGLE (Vulkan SwiftShader Device)"),
+        RENDERER: 0x1f01,
+      });
+      try {
+        const model = { modelPath: "/test/model.json", name: "Test Model" };
+        await renderer.initialize({ canvas: mockCanvas, model });
+        const app = (
+          renderer as unknown as {
+            app: { renderer: { resolution: number; resize: jest.Mock } };
+          }
+        ).app;
+        expect(app.renderer.resolution).toBe(1);
+        expect(app.renderer.resize).toHaveBeenCalledWith(400, 400);
+
+        const explicitlyHighResolution = new PixiLive2DRenderer();
+        try {
+          await explicitlyHighResolution.initialize({
+            canvas: mockCanvas,
+            model,
+            pixelRatio: 2,
+          });
+          const preferred = (
+            explicitlyHighResolution as unknown as {
+              app: { renderer: { resolution: number } };
+            }
+          ).app;
+          expect(preferred.renderer.resolution).toBe(2);
+        } finally {
+          explicitlyHighResolution.dispose();
+        }
+      } finally {
+        if (originalDpr)
+          Object.defineProperty(window, "devicePixelRatio", originalDpr);
+      }
     });
 
     it("does not cap hardware, unavailable, or uninspectable WebGL", async () => {

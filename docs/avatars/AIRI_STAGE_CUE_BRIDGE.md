@@ -27,6 +27,12 @@ Readings with implausible magnitude (above 1,000 in the model's native units) ar
 
 For later evidence promotion, capture a separately reviewed observation artifact with source URI, immutable commit, relative path, SHA-256 of the actual artifact bytes, model identity and package hash, observed time, expected/read-back values and explicit missing fields. Qualify actual rendered frames independently (e.g. selected expression plus visible pose extrema), compare to read-back, and pass a bounded proposal through the existing core-self policy and reducer preflight. Keep the observation artifact physically separate from the accepted ledger. Revoke the proposal on source/session loss or model mismatch.
 
+## Software-renderer quality budget
+
+The Pixi avatar now detects its **actual** WebGL backend after initialization. Only on a recognized software rasterizer and with no explicit `pixelRatio` preference does it lower the backing-store resolution to DPR 1; hardware WebGL retains its DPR 2 default cap, and an explicit quality preference retains its requested resolution. The existing software-only ticker ceiling stays at 30 FPS. This is a presentation-resource decision, not a cognitive-state or model-asset change.
+
+In a single Sandbox headless Chromium/SwiftShader five-second A/B run on a 482×750 CSS canvas at device DPR 2, the old backing store was 964×1500 and measured requestAnimationFrame cadence was 14.9 Hz with p95 interval 216.7 ms. After software-only downscaling it was 482×750, 42.9 Hz and p95 83.3 ms. These are **browser scheduling samples, not actual Cubism draw-call FPS**; they do not certify Electron hardware speed, visual quality, hidden-tab behavior, or a deployed AIRI stage. Repeat the trace on the user's target GPU/device and inspect avatar sharpness before declaring a performance gain there.
+
 ## Acceptance before enabling an AIRI host
 
 1. **Character provenance:** artist-approved layered art, native `.cmo3`, a character-owned `.moc3`/`.model3.json`, local textures, named expressions and Idle motion; attribution/usage rights. Run `python3 scripts/cubism_airi_interchange.py validate <folder> --identity <name>` then package to a fresh external path. Structural ZIP validation alone does not prove a working render.
