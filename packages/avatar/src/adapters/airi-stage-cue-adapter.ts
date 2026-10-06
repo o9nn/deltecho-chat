@@ -63,6 +63,7 @@ const MODEL_ID = /^[a-z0-9][a-z0-9_-]{1,63}$/;
 const LEASE_ID = /^[a-zA-Z0-9_-]{8,64}$/;
 const MAX_AGE_MS = 2_000;
 const MAX_LEASE_MS = 5_000;
+const MAX_RETIRED_LEASES = 1_024;
 
 const AXES: readonly [string, AiriOwnedPoseAxis, number][] = [
   ["ParamEyeBallX", "eyeX", 1],
@@ -124,6 +125,7 @@ export class AiriStageCueAdapter {
   } | null = null;
   private expiryTimer: ReturnType<typeof setTimeout> | null = null;
   private disposed = false;
+  private readonly retiredLeaseIds = new Set<string>();
 
   constructor(
     private readonly sink: AiriStageCueSink,
@@ -173,6 +175,11 @@ export class AiriStageCueAdapter {
       lease.expiresAt <= lease.observedAt ||
       lease.expiresAt - now > this.maxLeaseMs
     ) {
+      this.revoke();
+      return "rejected";
+    }
+    if (this.retiredLeaseIds.has(lease.leaseId)) return "rejected";
+    if (this.retiredLeaseIds.size >= MAX_RETIRED_LEASES) {
       this.revoke();
       return "rejected";
     }
@@ -256,6 +263,7 @@ export class AiriStageCueAdapter {
     this.active = null;
     this.clearTimer();
     if (leaseId) {
+      this.retiredLeaseIds.add(leaseId);
       try {
         this.sink.release(leaseId);
       } catch {

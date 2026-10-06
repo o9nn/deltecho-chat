@@ -167,6 +167,19 @@ describe("DTE-to-AIRI stage cue lease", () => {
     ).toBe("rejected");
   });
 
+  it("never reuses a revoked lease even with a newer observation and valid expiry", () => {
+    const { adapter, sink } = setup();
+    expect(adapter.submit(projection, lease())).toBe("published");
+    adapter.revoke();
+    expect(adapter.submit(projection, lease({ observedAt: 9_960 }))).toBe(
+      "rejected",
+    );
+    expect(sink.publish).toHaveBeenCalledTimes(1);
+    expect(
+      adapter.submit(projection, lease({ leaseId: "dte-session-002" })),
+    ).toBe("published");
+  });
+
   it("does not resurrect ownership if a host revokes synchronously during publish", () => {
     const sink = { publish: jest.fn(), release: jest.fn() };
     const adapter = new AiriStageCueAdapter(sink, {
