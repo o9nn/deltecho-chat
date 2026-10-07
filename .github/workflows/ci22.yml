@@ -26,6 +26,9 @@ jobs:
       - name: Cubism/AIRI interchange contract
         run: python3 -m unittest discover -s scripts -p 'test_cubism_airi_interchange.py' -v
 
+      - name: DTE original avatar authoring blueprints
+        run: python3 -m unittest discover -s tools/dte-avatar-design -p 'test_*.py' -v
+
       - name: Install pnpm
         uses: pnpm/action-setup@v4
 
