@@ -419,8 +419,6 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       canvas = config.canvas;
     }
 
-    // Cap pixelRatio at 2 by default to prevent GPU thrashing on 4K/Retina displays.
-    // Per user preference (Avatar Resolution Preference), explicit pixelRatio overrides cap.
     const explicitRatio = (config as PixiLive2DConfig).pixelRatio;
     // Cap pixelRatio at 2 by default to prevent GPU thrashing on 4K/Retina displays.
     // This is a performance optimization as per the Live2D performance skill.
@@ -445,11 +443,29 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       resizeTo: canvas.parentElement ?? undefined,
     });
 
-    // A software WebGL backend can saturate a CPU core at 60 fps in Electron.
-    // Cap only that renderer; hardware WebGL keeps its normal cadence.
-    if (isSoftwareWebGLRenderer(canvas) && "maxFPS" in this.app.ticker) {
-      this.app.ticker.maxFPS = 30;
-      this.dlog("Software WebGL detected; Live2D ticker limited to 30 fps");
+    // The actual Pixi context, rather than a preflight probe, determines the
+    // software fallback. Its extra DPR backing-store pixels heavily tax CPU
+    // rasterization; keep native device resolution on hardware and respect an
+    // explicit quality preference on either backend.
+    if (isSoftwareWebGLRenderer(canvas)) {
+      const width = canvas.parentElement?.clientWidth ?? canvas.clientWidth;
+      const height = canvas.parentElement?.clientHeight ?? canvas.clientHeight;
+      if (
+        explicitRatio === undefined &&
+        resolution > 1 &&
+        width > 0 &&
+        height > 0
+      ) {
+        this.app.renderer.resolution = 1;
+        this.app.renderer.resize(width, height);
+        this.dlog(
+          "Software WebGL detected; Live2D resolution limited to DPR 1",
+        );
+      }
+      if ("maxFPS" in this.app.ticker) {
+        this.app.ticker.maxFPS = 30;
+        this.dlog("Software WebGL detected; Live2D ticker limited to 30 fps");
+      }
     }
 
     // Pause the ticker when the tab is hidden to save battery/CPU.

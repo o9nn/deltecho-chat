@@ -1037,6 +1037,22 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
 
+  tools/airi-broker:
+    dependencies:
+      '@moeru/eventa':
+        specifier: 1.0.2
+        version: 1.0.2(@tauri-apps/api@2.9.1)(electron@39.2.7)
+    devDependencies:
+      '@types/node':
+        specifier: ^20.19.27
+        version: 20.19.28
+      esbuild:
+        specifier: 0.25.12
+        version: 0.25.12
+      typescript:
+        specifier: 'catalog:'
+        version: 5.5.4
+
 packages:
 
   7zip-bin@5.2.0:
@@ -2404,6 +2420,26 @@ packages:
       zod: ^3.25 || ^4.0
     peerDependenciesMeta:
       '@cfworker/json-schema':
+        optional: true
+
+  '@moeru/eventa@1.0.2':
+    resolution: {integrity: sha512-GlgLTPxVN9A/1lxlAktB/zyjPZc4i6YFYbd6YHY+0dsoOPAjofzV+hzqtKCAzIEZ90waZ5OgiVFlkqcA0lzdkg==}
+    peerDependencies:
+      '@tauri-apps/api': '>=2'
+      electron: '>=39'
+      h3: '>=2.0.1-rc.22'
+      hono: '>=4.12.25'
+      web-worker: ^1.5.0
+    peerDependenciesMeta:
+      '@tauri-apps/api':
+        optional: true
+      electron:
+        optional: true
+      h3:
+        optional: true
+      hono:
+        optional: true
+      web-worker:
         optional: true
 
   '@nodelib/fs.scandir@2.1.5':
@@ -6085,9 +6121,9 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
-  nanoid@3.3.7:
-    resolution: {integrity: sha512-eSRppjcPIatRIMC1U6UngP8XFcz8MQWGQdt1MTBQ7NaAmvXDfvNxbvWV3x2y6CdEUciCSsDHDQZbhYaB8QEo2g==}
-    engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
+  nanoid@6.0.2:
+    resolution: {integrity: sha512-hIvVOb9Qr1p/9CNNLOe0OlWvgx/ziTsVwKN/GDSsuArN2K0wDiafP3s0SWmsm7o2BdnyS8Z9Z64NFBUbn6ziBg==}
+    engines: {node: ^22 || ^24 || >=26}
     hasBin: true
 
   natural-compare@1.4.0:
@@ -6350,6 +6386,10 @@ packages:
 
   picomatch@4.0.3:
     resolution: {integrity: sha512-5gTmgEY/sqK6gFXLIsQNH19lWb4ebPDLA4SdLP7dsWkIXHWlG66oPuVvXSGFPppYZz8ZDZq0dYYrbHfBCVUb1Q==}
+    engines: {node: '>=12'}
+
+  picomatch@4.0.7:
+    resolution: {integrity: sha512-qcJu88Q2IWqJsDD529JKMdwGm/dvInW4HvQnRwiH9JtihJvzGOscDtHE3x1pBKeUOTysQ8kVmLnJ2kJu7yhcGA==}
     engines: {node: '>=12'}
 
   pify@4.0.1:
@@ -9101,6 +9141,14 @@ snapshots:
     transitivePeerDependencies:
       - hono
       - supports-color
+
+  '@moeru/eventa@1.0.2(@tauri-apps/api@2.9.1)(electron@39.2.7)':
+    dependencies:
+      nanoid: 6.0.2
+      picomatch: 4.0.7
+    optionalDependencies:
+      '@tauri-apps/api': 2.9.1
+      electron: 39.2.7
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
@@ -13777,7 +13825,7 @@ snapshots:
 
   nanoid@3.3.11: {}
 
-  nanoid@3.3.7: {}
+  nanoid@6.0.2: {}
 
   natural-compare@1.4.0: {}
 
@@ -14007,6 +14055,8 @@ snapshots:
 
   picomatch@4.0.3: {}
 
+  picomatch@4.0.7: {}
+
   pify@4.0.1:
     optional: true
 
@@ -14113,7 +14163,7 @@ snapshots:
 
   postcss@8.4.41:
     dependencies:
-      nanoid: 3.3.7
+      nanoid: 3.3.11
       picocolors: 1.1.1
       source-map-js: 1.2.0
 
