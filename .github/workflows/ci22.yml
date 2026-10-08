@@ -26,6 +26,14 @@ jobs:
       - name: Cubism/AIRI interchange contract
         run: python3 -m unittest discover -s scripts -p 'test_cubism_airi_interchange.py' -v
 
+      - name: Use Python for original DTE ArtMesh source tests
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install original DTE mesh authoring test dependencies
+        run: python3 -m pip install --disable-pip-version-check -r tools/dte-avatar-design/requirements-mesh.txt
+
       - name: DTE original avatar authoring blueprints
         run: python3 -m unittest discover -s tools/dte-avatar-design -p 'test_*.py' -v
 
