@@ -26,7 +26,7 @@ import {
 } from "../metabolic-avatar-bridge";
 import type { MiaraOutfitState } from "../miara-outfits";
 import {
-  selfModelAvatarFeedback,
+  SelfModelAvatarFeedback,
   type ExpressionExperience,
   type CanonicalCoreSelfExpressionContext,
 } from "../self-model-avatar-feedback";
@@ -140,6 +140,17 @@ export interface Live2DCognitiveVisualState {
   audioLevel?: number;
 }
 
+/** Local parameter readback only: never pixel fidelity or scientific validity. */
+export interface EmbodimentDiagnostics {
+  status: "waiting" | "unavailable" | "observed" | "disposed";
+  sampleCount: number;
+  requestedParameterCount: number;
+  observedParameterCount: number;
+  unavailableParameterIds: string[];
+  lastSampleAt: number | null;
+  rmsError: number | null;
+}
+
 /**
  * Controller interface for external control of the avatar
  */
@@ -174,6 +185,8 @@ export interface Live2DAvatarController {
   getSelfModelAccuracy: () => number;
   /** Most recent predicted-versus-rendered expression experience. */
   getLastExpressionExperience: () => ExpressionExperience | null;
+  /** Read-only scientific lens on this renderer instance's measured parameters. */
+  getEmbodimentDiagnostics: () => EmbodimentDiagnostics;
 }
 
 /**
@@ -189,8 +202,20 @@ export class Live2DAvatarManager {
   private isDisposed = false;
   private modelInfo: CubismModelInfo | null = null;
   private metabolicBridge: MetabolicAvatarBridge | null = null;
+  private hasMetabolicEvidence = false;
   private metabolicFrameAccumulatorMs = 0;
   private lastProjectedCubism: Record<string, number> = {};
+  private lastAppliedCubism: Record<string, number> = {};
+  private feedback = new SelfModelAvatarFeedback();
+  private diagnostics: EmbodimentDiagnostics = {
+    status: "waiting",
+    sampleCount: 0,
+    requestedParameterCount: 0,
+    observedParameterCount: 0,
+    unavailableParameterIds: [],
+    lastSampleAt: null,
+    rmsError: null,
+  };
   private observableProjectionIds: string[] = [];
   private selfModelSampleDelayFrames = 0;
   private pendingCognitiveMode = "Idle";
@@ -239,6 +264,16 @@ export class Live2DAvatarManager {
     // Make repeated initialization idempotent for React remount/retry paths.
     this.dispose();
     this.isDisposed = false;
+    this.feedback = new SelfModelAvatarFeedback();
+    this.diagnostics = {
+      status: "waiting",
+      sampleCount: 0,
+      requestedParameterCount: 0,
+      observedParameterCount: 0,
+      unavailableParameterIds: [],
+      lastSampleAt: null,
+      rmsError: null,
+    };
 
     // Create canvas
     this.canvas = document.createElement("canvas");
@@ -364,9 +399,12 @@ export class Live2DAvatarManager {
         this.resize(width, height, scale);
       },
       getNativeSize: () => this.renderer?.getNativeSize() ?? null,
-      getSelfModelAccuracy: () =>
-        selfModelAvatarFeedback.getSelfModelAccuracy(),
+      getSelfModelAccuracy: () => this.feedback.getSelfModelAccuracy(),
       getLastExpressionExperience: () => this.lastExpressionExperience,
+      getEmbodimentDiagnostics: () => ({
+        ...this.diagnostics,
+        unavailableParameterIds: [...this.diagnostics.unavailableParameterIds],
+      }),
     };
   }
 
@@ -395,11 +433,23 @@ export class Live2DAvatarManager {
     );
     if (state.metabolic) {
       this.metabolicBridge?.feedMetabolicState(state.metabolic);
+      this.hasMetabolicEvidence = true;
+    } else if (this.hasMetabolicEvidence) {
+      this.metabolicBridge?.reset();
+      this.hasMetabolicEvidence = false;
     }
     this.lastCanonicalCoreSelf = state.coreSelf ? { ...state.coreSelf } : null;
+    // Missing/revoked authority must clear a running cue, not merely prevent a
+    // new one. Do not let the conductor's afterglow outlive daemon revocation.
+    if (state.coreSelf?.initialized !== true) {
+      this.resonanceConductor.clear();
+      this.resonanceOverlay = null;
+      this.lastResonanceCascadeId = null;
+      this.lastPredictiveCrystalId = null;
+    }
     if (
       state.resonanceCascade &&
-      state.coreSelf?.initialized !== false &&
+      state.coreSelf?.initialized === true &&
       state.resonanceCascade.id !== this.lastResonanceCascadeId
     ) {
       this.lastResonanceCascadeId = state.resonanceCascade.id;
@@ -439,9 +489,7 @@ export class Live2DAvatarManager {
       this.resonanceOverlay = this.resonanceConductor.tick(0);
     }
 
-    const calibratedCubism = selfModelAvatarFeedback.applyCalibration(
-      projection.cubism,
-    );
+    const calibratedCubism = this.feedback.applyCalibration(projection.cubism);
     this.lastProjectedCubism = { ...calibratedCubism };
     this.pendingCognitiveMode = projection.selectedMode;
     // Wait one complete Pixi update before reading the core model so motions,
@@ -490,6 +538,7 @@ export class Live2DAvatarManager {
     this.metabolicBridge = new MetabolicAvatarBridge();
     this.metabolicBridge.on("deltas_updated", this.onMetabolicDeltas);
     this.metabolicFrameAccumulatorMs = 0;
+    this.hasMetabolicEvidence = false;
 
     const renderer = this.renderer as PixiLive2DRenderer & {
       addFrameListener?: (listener: (deltaTime: number) => void) => void;
@@ -547,6 +596,9 @@ export class Live2DAvatarManager {
     for (const [paramId, value] of Object.entries(composed)) {
       this.renderer.setParameter(paramId, value);
     }
+    // Capture the actual written target. Recomputing breathing/metabolism at
+    // sampling time compares a new prediction against an older model frame.
+    this.lastAppliedCubism = composed;
   }
 
   private composeMetabolicCubism(
@@ -661,13 +713,7 @@ export class Live2DAvatarManager {
   private sampleRenderedProjection(): void {
     if (!this.renderer || !this.isLoaded) return;
 
-    const expected = this.composeResonanceCubism(
-      this.composeMetabolicCubism(
-        this.lastProjectedCubism,
-        this.metabolicBridge?.getDeltas(),
-      ),
-      this.resonanceOverlay,
-    );
+    const expected = this.lastAppliedCubism;
     this.observableProjectionIds = Object.keys(expected).filter(
       (paramId) => paramId !== "ParamBreath",
     );
@@ -678,23 +724,37 @@ export class Live2DAvatarManager {
         actual[paramId] = value;
       }
     }
-    if (
-      this.observableProjectionIds.length === 0 ||
-      Object.keys(actual).length !== this.observableProjectionIds.length
-    )
-      return;
+    const supportedIds = Object.keys(actual);
+    this.diagnostics = {
+      ...this.diagnostics,
+      status: "unavailable",
+      requestedParameterCount: this.observableProjectionIds.length,
+      observedParameterCount: supportedIds.length,
+      unavailableParameterIds: this.observableProjectionIds.filter(
+        (id) => !Object.prototype.hasOwnProperty.call(actual, id),
+      ),
+    };
+    if (supportedIds.length === 0) return;
 
     const intended = Object.fromEntries(
-      this.observableProjectionIds.map((id) => [id, expected[id]]),
+      supportedIds.map((id) => [id, expected[id]]),
     );
 
-    selfModelAvatarFeedback.recordIntendedProjection(
+    this.feedback.recordIntendedProjection(
       intended,
       this.pendingCognitiveMode,
       this.lastCanonicalCoreSelf ?? undefined,
     );
-    this.lastExpressionExperience =
-      selfModelAvatarFeedback.sampleActualState(actual);
+    this.lastExpressionExperience = this.feedback.sampleActualState(actual);
+    if (this.lastExpressionExperience) {
+      this.diagnostics = {
+        ...this.diagnostics,
+        status: "observed",
+        sampleCount: this.feedback.getCalibration().experienceCount,
+        lastSampleAt: this.lastExpressionExperience.actual.timestamp,
+        rmsError: this.lastExpressionExperience.errorMagnitude,
+      };
+    }
   }
 
   /**
@@ -721,6 +781,16 @@ export class Live2DAvatarManager {
     this.isDisposed = true;
     this.stopMetabolicProjection();
     this.lastProjectedCubism = {};
+    this.lastAppliedCubism = {};
+    this.diagnostics = {
+      status: "disposed",
+      sampleCount: 0,
+      requestedParameterCount: 0,
+      observedParameterCount: 0,
+      unavailableParameterIds: [],
+      lastSampleAt: null,
+      rmsError: null,
+    };
     this.lastCanonicalCoreSelf = null;
     this.observableProjectionIds = [];
     this.pendingCognitiveMode = "Idle";

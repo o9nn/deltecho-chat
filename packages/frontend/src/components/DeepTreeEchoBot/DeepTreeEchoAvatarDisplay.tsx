@@ -32,6 +32,7 @@ import type {
 import { AvatarIdentityPicker } from "./AvatarIdentityPicker";
 import { MiaraExpressionPicker } from "./MiaraExpressionPicker";
 import { MiaraOutfitPicker } from "./MiaraOutfitPicker";
+import { ScientificEmbodimentLens } from "./ScientificEmbodimentLens";
 import { getOrchestrator } from "./CognitiveBridge";
 import type {
   ScientificGeniusVisualState,
@@ -497,6 +498,10 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
   ]);
 
   const avatarController = useRef<Live2DAvatarController | null>(null);
+  const [lensController, setLensController] = useState<{
+    controller: Live2DAvatarController;
+    model: string;
+  } | null>(null);
   const updateIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const nativeSizeTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
   const lastCognitiveSignatureRef = useRef<string | null>(null);
@@ -531,6 +536,10 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
   const handleAvatarReady = useCallback(
     (controller: Live2DAvatarController) => {
       avatarController.current = controller;
+      setLensController({
+        controller,
+        model: avatarContext?.state.config.model ?? "miara",
+      });
       // Register controller with context if available
       avatarContext?.setController(controller);
       const reportNativeSize = () => {
@@ -806,6 +815,19 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
         <AvatarIdentityPicker variant="compact" />
         <MiaraOutfitPicker variant="compact" />
         <MiaraExpressionPicker variant="compact" />
+        <ScientificEmbodimentLens
+          controller={
+            lensController?.model ===
+            (avatarContext?.state.config.model ?? "miara")
+              ? lensController.controller
+              : null
+          }
+          visual={cognitiveVisualState}
+          daemonConnected={
+            daemonBridgeAvailable && daemonVisual?.origin === "entelechy"
+          }
+          expressionLocked={expressionLocked}
+        />
       </div>
       {processingState !== BotProcessingState.IDLE && (
         <div className="avatar-status-indicator">

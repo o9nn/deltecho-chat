@@ -10,6 +10,7 @@ import {
 } from "../adapters/live2d-avatar";
 import type { Live2DAvatarProps } from "../adapters/live2d-avatar";
 import { ResonanceCascadeConductor } from "../resonance-cascade-conductor";
+import { MetabolicAvatarBridge } from "../metabolic-avatar-bridge";
 import type { EmotionalVector } from "../types";
 
 // Mock the PixiLive2DRenderer
@@ -576,6 +577,147 @@ describe("Live2DAvatarManager", () => {
       );
       expect(controller.getSelfModelAccuracy()).toBeGreaterThanOrEqual(0);
       expect(controller.getSelfModelAccuracy()).toBeLessThanOrEqual(1);
+    });
+
+    it("learns only from supported parameters and reports missing rig coverage", async () => {
+      const controller = await manager.initialize(mockContainer, {
+        modelPath: "/test/model.json",
+      });
+      const renderer = controller.getRenderer()! as unknown as {
+        getParameter: jest.Mock;
+        addFrameListener: jest.Mock;
+        setParameter: jest.Mock;
+      };
+      renderer.getParameter.mockImplementation((id: string) =>
+        id === "ParamAngleX" ? 2 : undefined,
+      );
+      controller.updateCognitiveState({ mode: "Idle" });
+      const writtenTarget = renderer.setParameter.mock.calls
+        .filter(([id]) => id === "ParamAngleX")
+        .at(-1)![1];
+      const frame = renderer.addFrameListener.mock.calls[1][0];
+      frame(1);
+      frame(1);
+      expect(
+        controller.getLastExpressionExperience()?.predicted.params,
+      ).toEqual({ ParamAngleX: writtenTarget });
+      expect(controller.getLastExpressionExperience()?.actual.params).toEqual({
+        ParamAngleX: 2,
+      });
+      const diagnostics = controller.getEmbodimentDiagnostics();
+      expect(diagnostics).toMatchObject({
+        status: "observed",
+        sampleCount: 1,
+        observedParameterCount: 1,
+      });
+      expect(diagnostics.unavailableParameterIds.length).toBeGreaterThan(0);
+      diagnostics.unavailableParameterIds.push("tampered");
+      expect(
+        controller.getEmbodimentDiagnostics().unavailableParameterIds,
+      ).not.toContain("tampered");
+    });
+
+    it("does not train on absent parameters or share another avatar's calibration", async () => {
+      const controller = await manager.initialize(mockContainer, {
+        modelPath: "/test/model.json",
+      });
+      const renderer = controller.getRenderer()! as unknown as {
+        getParameter: jest.Mock;
+        addFrameListener: jest.Mock;
+      };
+      renderer.getParameter.mockReturnValue(undefined);
+      controller.updateCognitiveState({ mode: "Scientific Genius" });
+      const frame = renderer.addFrameListener.mock.calls[1][0];
+      frame(1);
+      frame(1);
+      expect(controller.getEmbodimentDiagnostics()).toMatchObject({
+        status: "unavailable",
+        sampleCount: 0,
+      });
+      expect(controller.getLastExpressionExperience()).toBeNull();
+      renderer.getParameter.mockReturnValue(20);
+      controller.updateCognitiveState({ mode: "Idle" });
+      frame(1);
+      frame(1);
+      const other = new Live2DAvatarManager();
+      try {
+        const second = await other.initialize(mockContainer, {
+          modelPath: "/test/other.model3.json",
+        });
+        expect(second.getSelfModelAccuracy()).toBe(0.5);
+        expect(second.getEmbodimentDiagnostics().sampleCount).toBe(0);
+      } finally {
+        other.dispose();
+      }
+      manager.dispose();
+      expect(controller.getEmbodimentDiagnostics().status).toBe("disposed");
+    });
+
+    it("immediately clears a running scientific cue when its identity authority disappears", async () => {
+      const clear = jest.spyOn(ResonanceCascadeConductor.prototype, "clear");
+      const cascade = jest.spyOn(
+        ResonanceCascadeConductor.prototype,
+        "onCascade",
+      );
+      try {
+        const controller = await manager.initialize(mockContainer, {
+          modelPath: "/test/model.json",
+        });
+        controller.updateCognitiveState({
+          mode: "Scientific Genius",
+          coreSelf: {
+            initialized: true,
+            ledgerHead: "a",
+            projectedStateDigest: "b",
+            acceptedEventCount: 1,
+            pendingProposalCount: 0,
+          },
+          resonanceCascade: {
+            id: "revoke",
+            timestamp: Date.now(),
+            intensity: 1,
+            clusterPhi: 1,
+            clusterNovelty: 1,
+            domainSpan: 3,
+            haloPulseHz: 4,
+            spectralRadiusBoost: 0.1,
+            epistemicTemperatureDelta: -0.2,
+          },
+        });
+        expect(cascade).toHaveBeenCalledTimes(1);
+        clear.mockClear();
+        controller.updateCognitiveState({ mode: "Idle" });
+        expect(clear).toHaveBeenCalledTimes(1);
+      } finally {
+        clear.mockRestore();
+        cascade.mockRestore();
+      }
+    });
+
+    it("revokes retained metabolic evidence once when the daemon stops projecting it", async () => {
+      const reset = jest.spyOn(MetabolicAvatarBridge.prototype, "reset");
+      try {
+        const controller = await manager.initialize(mockContainer, {
+          modelPath: "/test/model.json",
+        });
+        controller.updateCognitiveState({
+          mode: "Idle",
+          metabolic: {
+            metabolicPhase: "resting",
+            energyLevel: 0.1,
+            anabolicBalance: -0.8,
+            isEnergyCrisis: true,
+            myelinationProgress: 0.1,
+            knowledgeDensity: 2,
+          },
+        });
+        reset.mockClear();
+        controller.updateCognitiveState({ mode: "Idle" });
+        controller.updateCognitiveState({ mode: "Idle" });
+        expect(reset).toHaveBeenCalledTimes(1);
+      } finally {
+        reset.mockRestore();
+      }
     });
 
     it("removes the metabolic frame listener during disposal", async () => {

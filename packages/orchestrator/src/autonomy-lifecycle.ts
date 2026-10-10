@@ -119,6 +119,23 @@ export interface ScientificAutonomySignal {
   lastReasoningAt?: number;
 }
 
+interface AvatarFeedbackSource {
+  on(event: string, listener: (...args: unknown[]) => void): void;
+  off(event: string, listener: (...args: unknown[]) => void): void;
+  getSelfModelAccuracy(): number;
+}
+
+interface AvatarSelfModelUpdate {
+  accuracy: number;
+  meanError: number;
+  experienceCount: number;
+  confidence?: number;
+  lastUpdatedAt?: number;
+  cognitiveMode?: string;
+  ledgerHead?: string | null;
+  projectedStateDigest?: string;
+}
+
 /**
  * Lifecycle configuration
  */
@@ -201,6 +218,8 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
   private onHypothesisEvaluated?: (event: HypothesisEvaluationEvent) => void;
   private onResonanceCascade?: (cascade: EpistemicResonanceCascade) => void;
   private onPredictiveCrystal?: (crystal: PredictiveInsightCrystal) => void;
+  private avatarFeedback?: AvatarFeedbackSource;
+  private onAvatarSelfModelUpdate?: (data: unknown) => void;
 
   constructor(
     config: Partial<AutonomyLifecycleConfig> = {},
@@ -310,6 +329,7 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
    * Stop the lifecycle coordinator
    */
   public stop(): void {
+    this.detachAvatarFeedbackListener();
     if (!this.running) return;
 
     if (this.cycleInterval) {
@@ -1333,6 +1353,80 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
     this.onPredictiveCrystal = undefined;
   }
 
+  private detachAvatarFeedbackListener(): void {
+    if (this.avatarFeedback && this.onAvatarSelfModelUpdate) {
+      this.avatarFeedback.off(
+        "self-model-update",
+        this.onAvatarSelfModelUpdate,
+      );
+    }
+    this.avatarFeedback = undefined;
+    this.onAvatarSelfModelUpdate = undefined;
+  }
+
+  private parseAvatarSelfModelUpdate(
+    data: unknown,
+  ): AvatarSelfModelUpdate | undefined {
+    if (typeof data !== "object" || data === null || Array.isArray(data)) {
+      return undefined;
+    }
+
+    const candidate = data as Record<string, unknown>;
+    const { accuracy, meanError, experienceCount } = candidate;
+    if (
+      typeof accuracy !== "number" ||
+      !Number.isFinite(accuracy) ||
+      accuracy < 0 ||
+      accuracy > 1 ||
+      typeof meanError !== "number" ||
+      !Number.isFinite(meanError) ||
+      meanError < 0 ||
+      typeof experienceCount !== "number" ||
+      !Number.isSafeInteger(experienceCount) ||
+      experienceCount < 0
+    ) {
+      return undefined;
+    }
+
+    const {
+      confidence,
+      lastUpdatedAt,
+      cognitiveMode,
+      ledgerHead,
+      projectedStateDigest,
+    } = candidate;
+    if (
+      (confidence !== undefined &&
+        (typeof confidence !== "number" ||
+          !Number.isFinite(confidence) ||
+          confidence < 0 ||
+          confidence > 1)) ||
+      (lastUpdatedAt !== undefined &&
+        (typeof lastUpdatedAt !== "number" ||
+          !Number.isFinite(lastUpdatedAt) ||
+          lastUpdatedAt < 0)) ||
+      (cognitiveMode !== undefined && typeof cognitiveMode !== "string") ||
+      (ledgerHead !== undefined &&
+        ledgerHead !== null &&
+        typeof ledgerHead !== "string") ||
+      (projectedStateDigest !== undefined &&
+        typeof projectedStateDigest !== "string")
+    ) {
+      return undefined;
+    }
+
+    return {
+      accuracy,
+      meanError,
+      experienceCount,
+      ...(confidence !== undefined ? { confidence } : {}),
+      ...(lastUpdatedAt !== undefined ? { lastUpdatedAt } : {}),
+      ...(cognitiveMode !== undefined ? { cognitiveMode } : {}),
+      ...(ledgerHead !== undefined ? { ledgerHead } : {}),
+      ...(projectedStateDigest !== undefined ? { projectedStateDigest } : {}),
+    };
+  }
+
   /**
    * Wire Avatar Self-Model Feedback (Loop 4: perceive → correct → self-model).
    * This connects the avatar's autognosis loop to the ENACTION phase:
@@ -1343,19 +1437,13 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
    * This implements the "next evolution target": wiring Autognosis to SelfModification
    * for closed-loop self-improvement through the face.
    */
-  public wireAvatarFeedback(feedback: {
-    on(event: string, listener: (...args: unknown[]) => void): void;
-    getSelfModelAccuracy(): number;
-  }): void {
-    feedback.on("self-model-update", (data: unknown) => {
-      const update = data as {
-        accuracy: number;
-        meanError: number;
-        experienceCount: number;
-        cognitiveMode?: string;
-        ledgerHead?: string | null;
-        projectedStateDigest?: string;
-      };
+  public wireAvatarFeedback(feedback: AvatarFeedbackSource): void {
+    this.detachAvatarFeedbackListener();
+    this.avatarFeedback = feedback;
+    this.onAvatarSelfModelUpdate = (data: unknown) => {
+      const update = this.parseAvatarSelfModelUpdate(data);
+      if (!update) return;
+
       // Feed the rendered-state evidence into the shared cognitive body model.
       this.entelechyIntegration?.updateEmbodimentAutognosis(update);
       // Feed accuracy into the self-modification engine
@@ -1365,7 +1453,8 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
       // Update the virtual agent's perceived accuracy
       this.virtualAgent.selfAwareness.perceivedAccuracy = update.accuracy;
       this.emit("avatar:self-model-update", update);
-    });
+    };
+    feedback.on("self-model-update", this.onAvatarSelfModelUpdate);
     log.info(
       "Avatar SelfModelFeedback wired to autonomy lifecycle (Loop 4 autognosis active)",
     );

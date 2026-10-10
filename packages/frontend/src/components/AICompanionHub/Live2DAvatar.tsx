@@ -149,6 +149,7 @@ export interface Live2DAvatarController {
     rig: import("@deltecho/avatar").IdentityRig | null,
   ) => void;
   getNativeSize?: () => { width: number; height: number } | null;
+  getEmbodimentDiagnostics?: () => import("@deltecho/avatar").EmbodimentDiagnostics;
 }
 
 const LOCAL_MIARA_MODEL = "models/miara/miara_pro_t03.model3.json";

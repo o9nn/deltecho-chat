@@ -233,6 +233,7 @@ export {
   Live2DAvatarProps,
   Live2DAvatarState,
   Live2DCognitiveVisualState,
+  type EmbodimentDiagnostics,
   Live2DAvatarController,
   Live2DAvatarManager,
   createLive2DAvatarManager,

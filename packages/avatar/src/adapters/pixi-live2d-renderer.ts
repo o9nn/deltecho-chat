@@ -83,6 +83,8 @@ interface Live2DModel {
     coreModel: {
       setParameterValueById: (id: string, value: number) => void;
       getParameterValueById: (id: string) => number;
+      getParameterCount?: () => number;
+      getParameterIndex?: (id: string) => number;
       setPartOpacityById?: (id: string, value: number) => void;
       getPartOpacityById?: (id: string) => number;
       setPartOpacityByIndex?: (index: number, value: number) => void;
@@ -1783,7 +1785,16 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   getParameter(paramId: string): number | undefined {
     if (!this.model?.internalModel?.coreModel) return undefined;
     try {
-      return this.model.internalModel.coreModel.getParameterValueById(paramId);
+      const core = this.model.internalModel.coreModel;
+      // Cubism caches writes to missing IDs in _notExistParameterValues.
+      // Such virtual values are not measurements of a rigged ArtMesh.
+      if (!core.getParameterCount || !core.getParameterIndex) return undefined;
+      const count = core.getParameterCount();
+      const index = core.getParameterIndex(paramId);
+      if (!Number.isInteger(index) || index < 0 || index >= count)
+        return undefined;
+      const value = core.getParameterValueById(paramId);
+      return Number.isFinite(value) ? value : undefined;
     } catch {
       return undefined;
     }

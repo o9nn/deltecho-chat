@@ -350,6 +350,24 @@ describe("PixiLive2DRenderer", () => {
       ).not.toThrow();
     });
 
+    it("excludes Cubism cached virtual parameters from real rig readback", () => {
+      const core = renderer.getModel()!.internalModel.coreModel;
+      Object.assign(core, {
+        getParameterCount: () => 1,
+        getParameterIndex: (id: string) => (id === "ParamAngleX" ? 0 : 1),
+      });
+      (core.getParameterValueById as jest.Mock).mockReturnValue(0.8);
+      expect(renderer.getParameter("ParamAngleX")).toBe(0.8);
+      expect(renderer.getParameter("ParamGhost")).toBeUndefined();
+      expect(core.getParameterValueById).toHaveBeenCalledTimes(1);
+      (core.getParameterValueById as jest.Mock).mockReturnValue(NaN);
+      expect(renderer.getParameter("ParamAngleX")).toBeUndefined();
+    });
+
+    it("abstains when parameter membership cannot be established", () => {
+      expect(renderer.getParameter("ParamAngleX")).toBeUndefined();
+    });
+
     it("should return undefined for parameters on null model", async () => {
       renderer.dispose();
       const newRenderer = new PixiLive2DRenderer();
