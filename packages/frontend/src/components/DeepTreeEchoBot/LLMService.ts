@@ -244,38 +244,68 @@ export class LLMService {
   }
 
   /**
-   * Verify that a local model endpoint is reachable
-   * Makes a lightweight request to check if the server is responding
+   * Verify that a local model is actually served at the endpoint.
+   * Makes a minimal completion request to confirm the model responds.
    */
   private async verifyLocalEndpoint(endpoint: string): Promise<boolean> {
     try {
-      // Try a simple GET or OPTIONS request to the endpoint
-      // Most OpenAI-compatible servers support /models endpoint
-      const modelsEndpoint = endpoint.replace(
-        /\/chat\/completions\/?$/,
-        "/models",
-      );
-
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
       try {
-        const response = await fetch(modelsEndpoint, {
-          method: "GET",
+        // Make a minimal completion request to verify the model is actually served
+        const response = await fetch(endpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: "default", // Most local servers accept any model name
+            messages: [{ role: "user", content: "." }],
+            max_tokens: 1, // Minimal tokens to verify model responds
+          }),
           signal: controller.signal,
         });
         clearTimeout(timeoutId);
 
-        // Any response (even 401/403) means the server is running
-        return response.status < 500;
-      } catch (_fetchError: any) {
-        clearTimeout(timeoutId);
+        if (!response.ok) {
+          // Try /models endpoint as fallback to check server is up
+          const modelsEndpoint = endpoint.replace(
+            /\/chat\/completions\/?$/,
+            "/models",
+          );
+          const modelsResponse = await fetch(modelsEndpoint, { method: "GET" });
+          if (modelsResponse.ok) {
+            const data = await modelsResponse.json();
+            // Check if any models are actually loaded
+            if (data.data && data.data.length > 0) {
+              log.info(
+                `Local server has ${data.data.length} model(s) available`,
+              );
+              return true;
+            }
+            log.warn("Local server responded but no models are loaded");
+            return false;
+          }
+          log.warn(`Local endpoint returned ${response.status}`);
+          return false;
+        }
 
-        // If /models fails, try a HEAD request to the main endpoint
-        const headResponse = await fetch(endpoint, {
-          method: "HEAD",
-        });
-        return headResponse.status < 500;
+        // Verify we got a valid completion response
+        const data = await response.json();
+        if (data.choices && data.choices.length > 0) {
+          log.info("Local model verified - completion successful");
+          return true;
+        }
+
+        log.warn("Local endpoint responded but no completion returned");
+        return false;
+      } catch (fetchError: any) {
+        clearTimeout(timeoutId);
+        log.warn(
+          `Local model verification request failed: ${fetchError.message}`,
+        );
+        return false;
       }
     } catch (error) {
       log.warn(`Local endpoint verification failed for ${endpoint}:`, error);

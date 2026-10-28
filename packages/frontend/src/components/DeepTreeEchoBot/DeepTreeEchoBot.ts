@@ -293,6 +293,17 @@ export class DeepTreeEchoBot {
   }
 
   /**
+   * Generate a character response via LLM for common scenarios.
+   * All character-facing messages must come from the model.
+   */
+  private async generateCharacterResponse(
+    prompt: string,
+    context: string[] = [],
+  ): Promise<string> {
+    return this.llmService.generateResponse(prompt, context);
+  }
+
+  /**
    * Process a command message
    */
   private async processCommand(
@@ -316,11 +327,10 @@ export class DeepTreeEchoBot {
         if (this.options.visionEnabled) {
           await this.processVisionCommand(accountId, chatId, message);
         } else {
-          await this.sendMessage(
-            accountId,
-            chatId,
-            "Vision capabilities are not enabled. Please enable them in settings.",
+          const visionDisabledMsg = await this.generateCharacterResponse(
+            "The user tried to use /vision but vision capabilities are disabled. Explain this and suggest enabling in settings.",
           );
+          await this.sendMessage(accountId, chatId, visionDisabledMsg);
         }
         break;
 
@@ -332,11 +342,10 @@ export class DeepTreeEchoBot {
         if (this.options.webAutomationEnabled) {
           await this.processSearchCommand(accountId, chatId, args);
         } else {
-          await this.sendMessage(
-            accountId,
-            chatId,
-            "Web automation is not enabled. Please enable it in settings.",
+          const searchDisabledMsg = await this.generateCharacterResponse(
+            "The user tried to use /search but web automation is disabled. Explain this and suggest enabling in settings.",
           );
+          await this.sendMessage(accountId, chatId, searchDisabledMsg);
         }
         break;
 
@@ -344,11 +353,10 @@ export class DeepTreeEchoBot {
         if (this.options.webAutomationEnabled) {
           await this.processScreenshotCommand(accountId, chatId, args);
         } else {
-          await this.sendMessage(
-            accountId,
-            chatId,
-            "Web automation is not enabled. Please enable it in settings.",
+          const screenshotDisabledMsg = await this.generateCharacterResponse(
+            "The user tried to use /screenshot but web automation is disabled. Explain this and suggest enabling in settings.",
           );
+          await this.sendMessage(accountId, chatId, screenshotDisabledMsg);
         }
         break;
 
@@ -356,11 +364,10 @@ export class DeepTreeEchoBot {
         if (this.options.memoryEnabled) {
           await this.processMemoryCommand(accountId, chatId, args);
         } else {
-          await this.sendMessage(
-            accountId,
-            chatId,
-            "Memory capabilities are not enabled. Please enable them in settings.",
+          const memoryDisabledMsg = await this.generateCharacterResponse(
+            "The user tried to use /memory but memory capabilities are disabled. Explain this and suggest enabling in settings.",
           );
+          await this.sendMessage(accountId, chatId, memoryDisabledMsg);
         }
         break;
 
@@ -368,11 +375,10 @@ export class DeepTreeEchoBot {
         if (this.options.embodimentEnabled) {
           await this.processEmbodimentCommand(accountId, chatId, args);
         } else {
-          await this.sendMessage(
-            accountId,
-            chatId,
-            "Embodiment capabilities are not enabled. Please enable them in settings.",
+          const embodimentDisabledMsg = await this.generateCharacterResponse(
+            "The user tried to use /embodiment but embodiment capabilities are disabled. Explain this and suggest enabling in settings.",
           );
+          await this.sendMessage(accountId, chatId, embodimentDisabledMsg);
         }
         break;
 
@@ -388,12 +394,12 @@ export class DeepTreeEchoBot {
         await this.processCognitiveCommand(accountId, chatId, args);
         break;
 
-      default:
-        await this.sendMessage(
-          accountId,
-          chatId,
-          `Unknown command: ${command}. Type /help for available commands.`,
+      default: {
+        const unknownCmdMsg = await this.generateCharacterResponse(
+          `The user typed an unknown command: ${command}. Let them know this command doesn't exist and suggest /help.`,
         );
+        await this.sendMessage(accountId, chatId, unknownCmdMsg);
+      }
     }
   }
 
@@ -404,35 +410,35 @@ export class DeepTreeEchoBot {
     accountId: number,
     chatId: number,
   ): Promise<void> {
-    const helpMessage = `
-**Deep Tree Echo Bot Help**
+    // Build command availability context
+    const commandList = [
+      "/help - Display help",
+      `/vision [image] - Analyze images ${
+        this.options.visionEnabled ? "" : "(disabled)"
+      }`,
+      `/search [query] - Search web ${
+        this.options.webAutomationEnabled ? "" : "(disabled)"
+      }`,
+      `/screenshot [url] - Capture screenshots ${
+        this.options.webAutomationEnabled ? "" : "(disabled)"
+      }`,
+      `/memory [status|clear|search] - Manage memory ${
+        this.options.memoryEnabled ? "" : "(disabled)"
+      }`,
+      `/embodiment [start|stop|status|evaluate] - Physical awareness ${
+        this.options.embodimentEnabled ? "" : "(disabled)"
+      }`,
+      "/reflect [aspect] - Reflect on an aspect of myself",
+      "/cognitive [status|genius] - Cognitive function status or Scientific Genius Mode",
+      "/version - Bot version info",
+    ];
 
-Available commands:
-
-- **/help** - Display this help message
-- **/vision [image]** - Analyze attached images ${
-      this.options.visionEnabled ? "" : "(disabled)"
-    }
-- **/search [query]** - Search the web ${
-      this.options.webAutomationEnabled ? "" : "(disabled)"
-    }
-- **/screenshot [url]** - Capture website screenshots ${
-      this.options.webAutomationEnabled ? "" : "(disabled)"
-    }
-- **/memory [status|clear|search]** - Manage conversation memory ${
-      this.options.memoryEnabled ? "" : "(disabled)"
-    }
-- **/embodiment [start|stop|status|evaluate]** - Physical awareness training ${
-      this.options.embodimentEnabled ? "" : "(disabled)"
-    }
-- **/reflect [aspect]** - Ask me to reflect on an aspect of myself
-- **/cognitive [status|genius]** - Show status of my cognitive functions or manage Scientific Genius Mode
-- **/version** - Display bot version information
-
-You can also just chat with me normally and I'll respond!
-    `;
-
-    await this.sendMessage(accountId, chatId, helpMessage);
+    const helpPrompt =
+      "The user asked for help. List available commands and briefly explain what you can do. Mention they can also chat normally.";
+    const helpMsg = await this.generateCharacterResponse(helpPrompt, [
+      `Available commands: ${commandList.join("; ")}`,
+    ]);
+    await this.sendMessage(accountId, chatId, helpMsg);
   }
 
   /**
@@ -449,31 +455,31 @@ You can also just chat with me normally and I'll respond!
       case "status": {
         const activeFunctions = this.llmService.getActiveFunctions();
 
-        let statusMessage = `
-**Cognitive Function Status**
-
-Parallel processing: ${
-          this.options.useParallelProcessing ? "Enabled" : "Disabled"
-        }
-Active cognitive functions: ${activeFunctions.length}
-Scientific Genius Mode: ${
-          this.options.scientificGeniusMode ? "Enabled" : "Disabled"
-        }
-Scientific Cortex: ${scientificGeniusEngine.describeState()}
-
-`;
+        // Build context for LLM
+        const statusContext = [
+          `Parallel processing: ${
+            this.options.useParallelProcessing ? "Enabled" : "Disabled"
+          }`,
+          `Active cognitive functions: ${activeFunctions.length}`,
+          `Scientific Genius Mode: ${
+            this.options.scientificGeniusMode ? "Enabled" : "Disabled"
+          }`,
+          `Scientific Cortex: ${scientificGeniusEngine.describeState()}`,
+        ];
 
         if (activeFunctions.length > 0) {
-          statusMessage += "**Active Functions:**\n";
           activeFunctions.forEach((func) => {
-            statusMessage += `- ${func.name}: ${func.usage.requestCount} requests\n`;
+            statusContext.push(
+              `Function ${func.name}: ${func.usage.requestCount} requests`,
+            );
           });
-        } else {
-          statusMessage +=
-            "No specialized cognitive functions are currently active. I am operating with my general processing capability only.";
         }
 
-        await this.sendMessage(accountId, chatId, statusMessage);
+        const statusMsg = await this.generateCharacterResponse(
+          "The user asked for cognitive function status. Describe your current cognitive state based on the following data.",
+          statusContext,
+        );
+        await this.sendMessage(accountId, chatId, statusMsg);
         break;
       }
 
@@ -481,12 +487,12 @@ Scientific Cortex: ${scientificGeniusEngine.describeState()}
         await this.processScientificGeniusCommand(accountId, chatId, args);
         break;
 
-      default:
-        await this.sendMessage(
-          accountId,
-          chatId,
-          "Unknown cognitive command. Available options: status, genius [on|off|status|ask <question>]",
+      default: {
+        const unknownCognitiveMsg = await this.generateCharacterResponse(
+          "The user typed an unknown cognitive sub-command. Explain available options: status, genius [on|off|status|ask <question>]",
         );
+        await this.sendMessage(accountId, chatId, unknownCognitiveMsg);
+      }
     }
   }
 
@@ -504,64 +510,81 @@ Scientific Cortex: ${scientificGeniusEngine.describeState()}
 
     switch (action) {
       case "on":
-      case "enable":
+      case "enable": {
         this.options.scientificGeniusMode = true;
         this.configureScientificGeniusMode(true);
-        await this.sendMessage(
-          accountId,
-          chatId,
-          `**Scientific Genius Mode enabled**
-
-${scientificGeniusEngine.describeState()}
-
-I will now enrich normal responses with relevance-guided scientific hypotheses, cross-domain synthesis, and free-energy minimization where appropriate.`,
+        const enabledMsg = await this.generateCharacterResponse(
+          "Scientific Genius Mode was just enabled. Explain what this means for your responses.",
+          [
+            `State: ${scientificGeniusEngine.describeState()}`,
+            "You will now enrich responses with scientific hypotheses, cross-domain synthesis, and free-energy minimization.",
+          ],
         );
+        await this.sendMessage(accountId, chatId, enabledMsg);
         break;
+      }
 
       case "off":
-      case "disable":
+      case "disable": {
         this.options.scientificGeniusMode = false;
         this.configureScientificGeniusMode(false);
-        await this.sendMessage(
-          accountId,
-          chatId,
-          `**Scientific Genius Mode disabled**
-
-${scientificGeniusEngine.describeState()}`,
+        const disabledMsg = await this.generateCharacterResponse(
+          "Scientific Genius Mode was just disabled. Acknowledge this change.",
+          [`State: ${scientificGeniusEngine.describeState()}`],
         );
+        await this.sendMessage(accountId, chatId, disabledMsg);
         break;
+      }
 
       case "ask":
       case "inquire":
       case "query": {
         if (!query) {
-          await this.sendMessage(
-            accountId,
-            chatId,
-            "Please provide a scientific question. Usage: /cognitive genius ask [question]",
+          const usageMsg = await this.generateCharacterResponse(
+            "The user tried to ask a scientific question without providing one. Explain the usage: /cognitive genius ask [question]",
           );
+          await this.sendMessage(accountId, chatId, usageMsg);
           return;
         }
 
         const inquiry = await relevanceGeniusIntegration.conductInquiry(query);
-        await this.sendMessage(
-          accountId,
-          chatId,
-          this.formatScientificGeniusInquiry(inquiry),
+        // Format inquiry result via LLM
+        const inquiryContext = [`Question: ${inquiry.query}`];
+        if (inquiry.scientificInsights.length > 0) {
+          inquiryContext.push(
+            `Insights: ${inquiry.scientificInsights
+              .map((i: ScientificInsight) => `${i.domain}: ${i.content}`)
+              .join("; ")}`,
+          );
+        }
+        if (inquiry.relevanceSignals.length > 0) {
+          inquiryContext.push(
+            `Relevance signals from: ${inquiry.relevanceSignals
+              .map((r) => r.source)
+              .join(", ")}`,
+          );
+        }
+        const inquiryResponse = await this.generateCharacterResponse(
+          "Present the results of this scientific inquiry in a clear, engaging way.",
+          inquiryContext,
         );
+        await this.sendMessage(accountId, chatId, inquiryResponse);
         break;
       }
 
       case "status":
-      default:
-        await this.sendMessage(
-          accountId,
-          chatId,
-          `**Scientific Genius Mode Status**
-
-Mode: ${this.options.scientificGeniusMode ? "Enabled" : "Disabled"}
-${scientificGeniusEngine.describeState()}`,
+      default: {
+        const statusMsg = await this.generateCharacterResponse(
+          "Report your Scientific Genius Mode status.",
+          [
+            `Mode: ${
+              this.options.scientificGeniusMode ? "Enabled" : "Disabled"
+            }`,
+            `State: ${scientificGeniusEngine.describeState()}`,
+          ],
         );
+        await this.sendMessage(accountId, chatId, statusMsg);
+      }
     }
   }
 
@@ -691,12 +714,12 @@ ${this.formatScientificInsights(insights.slice(0, 3))}`;
     chatId: number,
     _message: any,
   ): Promise<void> {
-    // For now, just send a placeholder response
-    await this.sendMessage(
-      accountId,
-      chatId,
-      "Vision analysis would process any attached images here.",
+    // Generate response via LLM - vision processing would happen here
+    const visionMsg = await this.generateCharacterResponse(
+      "The user sent an image for analysis via /vision. Acknowledge receipt and explain you're processing it. " +
+        "(Note: actual image analysis logic would be integrated here)",
     );
+    await this.sendMessage(accountId, chatId, visionMsg);
   }
 
   /**
@@ -708,20 +731,20 @@ ${this.formatScientificInsights(insights.slice(0, 3))}`;
     query: string,
   ): Promise<void> {
     if (!query) {
-      await this.sendMessage(
-        accountId,
-        chatId,
-        "Please provide a search query. Usage: /search [query]",
+      const usageMsg = await this.generateCharacterResponse(
+        "The user typed /search without a query. Explain the usage: /search [query]",
       );
+      await this.sendMessage(accountId, chatId, usageMsg);
       return;
     }
 
-    // For now, just send a placeholder response
-    await this.sendMessage(
-      accountId,
-      chatId,
-      `Searching for: "${query}"... (This is a placeholder for web search functionality)`,
+    // Generate response via LLM - actual search would happen here
+    const searchMsg = await this.generateCharacterResponse(
+      "The user wants to search the web. Acknowledge the search request. " +
+        "(Note: actual search functionality would be integrated here)",
+      [`Search query: ${query}`],
     );
+    await this.sendMessage(accountId, chatId, searchMsg);
   }
 
   /**
@@ -733,20 +756,20 @@ ${this.formatScientificInsights(insights.slice(0, 3))}`;
     url: string,
   ): Promise<void> {
     if (!url) {
-      await this.sendMessage(
-        accountId,
-        chatId,
-        "Please provide a URL. Usage: /screenshot [url]",
+      const usageMsg = await this.generateCharacterResponse(
+        "The user typed /screenshot without a URL. Explain the usage: /screenshot [url]",
       );
+      await this.sendMessage(accountId, chatId, usageMsg);
       return;
     }
 
-    // For now, just send a placeholder response
-    await this.sendMessage(
-      accountId,
-      chatId,
-      `Taking screenshot of: "${url}"... (This is a placeholder for screenshot functionality)`,
+    // Generate response via LLM - actual screenshot would happen here
+    const screenshotMsg = await this.generateCharacterResponse(
+      "The user wants a screenshot of a website. Acknowledge the request. " +
+        "(Note: actual screenshot functionality would be integrated here)",
+      [`URL: ${url}`],
     );
+    await this.sendMessage(accountId, chatId, screenshotMsg);
   }
 
   /**
@@ -762,71 +785,71 @@ ${this.formatScientificInsights(insights.slice(0, 3))}`;
     switch (subCommand) {
       case "status": {
         const recentMemories = this.memoryStore.retrieveRecentMemories(5);
-        const statusMessage = `
-**Memory Status**
-
-I currently have memory capabilities ${
-          this.options.memoryEnabled ? "enabled" : "disabled"
-        }.
-Recent memories:
-${
-  recentMemories.length > 0
-    ? recentMemories.map((m) => `- ${m.substring(0, 100)}...`).join("\n")
-    : "No recent memories stored."
-}
-        `;
-        await this.sendMessage(accountId, chatId, statusMessage);
+        const statusContext = [
+          `Memory capabilities: ${
+            this.options.memoryEnabled ? "enabled" : "disabled"
+          }`,
+          `Recent memory count: ${recentMemories.length}`,
+        ];
+        if (recentMemories.length > 0) {
+          recentMemories.forEach((m, i) => {
+            statusContext.push(`Memory ${i + 1}: ${m.substring(0, 100)}...`);
+          });
+        }
+        const statusMsg = await this.generateCharacterResponse(
+          "The user asked for memory status. Describe your memory state based on the context.",
+          statusContext,
+        );
+        await this.sendMessage(accountId, chatId, statusMsg);
         break;
       }
 
-      case "clear":
+      case "clear": {
         await this.memoryStore.clearChatMemories(chatId);
-        await this.sendMessage(
-          accountId,
-          chatId,
-          "Memories for this chat have been cleared.",
+        const clearMsg = await this.generateCharacterResponse(
+          "You just cleared your memories for this chat. Acknowledge this action.",
         );
+        await this.sendMessage(accountId, chatId, clearMsg);
         break;
+      }
 
       case "search": {
         const searchQuery = args.substring("search".length).trim();
         if (!searchQuery) {
-          await this.sendMessage(
-            accountId,
-            chatId,
-            "Please provide a search term. Usage: /memory search [term]",
+          const usageMsg = await this.generateCharacterResponse(
+            "The user typed /memory search without a term. Explain the usage: /memory search [term]",
           );
+          await this.sendMessage(accountId, chatId, usageMsg);
           return;
         }
 
         const searchResults = this.memoryStore.searchMemories(searchQuery);
-        const resultsMessage = `
-**Memory Search Results for "${searchQuery}"**
-
-${
-  searchResults.length > 0
-    ? searchResults
-        .map(
-          (m) =>
-            `- [${new Date(m.timestamp).toLocaleString()}] ${m.text.substring(
-              0,
-              100,
-            )}${m.text.length > 100 ? "..." : ""}`,
-        )
-        .join("\n")
-    : "No matching memories found."
-}
-        `;
-        await this.sendMessage(accountId, chatId, resultsMessage);
+        const resultsContext = [`Search query: ${searchQuery}`];
+        if (searchResults.length > 0) {
+          searchResults.forEach((m, i) => {
+            resultsContext.push(
+              `Result ${i + 1} [${new Date(
+                m.timestamp,
+              ).toLocaleString()}]: ${m.text.substring(0, 100)}...`,
+            );
+          });
+        } else {
+          resultsContext.push("No matching memories found.");
+        }
+        const resultsMsg = await this.generateCharacterResponse(
+          "Present the memory search results to the user.",
+          resultsContext,
+        );
+        await this.sendMessage(accountId, chatId, resultsMsg);
         break;
       }
 
-      default:
-        await this.sendMessage(
-          accountId,
-          chatId,
-          "Unknown memory command. Available options: status, clear, search [term]",
+      default: {
+        const unknownMsg = await this.generateCharacterResponse(
+          "The user typed an unknown memory sub-command. Explain available options: status, clear, search [term]",
         );
+        await this.sendMessage(accountId, chatId, unknownMsg);
+      }
     }
   }
 
@@ -838,12 +861,13 @@ ${
     chatId: number,
     args: string,
   ): Promise<void> {
-    // For now, just send a placeholder response
-    await this.sendMessage(
-      accountId,
-      chatId,
-      `Embodiment command: "${args}"... (This is a placeholder for embodiment functionality)`,
+    // Generate response via LLM - actual embodiment logic would be here
+    const embodimentMsg = await this.generateCharacterResponse(
+      "The user issued an embodiment command. Acknowledge the request. " +
+        "(Note: actual embodiment functionality would be integrated here)",
+      [`Command arguments: ${args || "(none)"}`],
     );
+    await this.sendMessage(accountId, chatId, embodimentMsg);
   }
 
   /**
