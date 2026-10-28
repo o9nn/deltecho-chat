@@ -37,15 +37,29 @@ jest.mock("@deltachat-desktop/shared/logger", () => ({
 }));
 
 // Mock fetch for LLM API calls
-const mockFetch = jest.fn();
+const mockFetch = jest.fn().mockImplementation(() =>
+  Promise.resolve({
+    ok: true,
+    json: () =>
+      Promise.resolve({
+        choices: [
+          {
+            message: {
+              content: "This is a mock LLM response for testing.",
+            },
+          },
+        ],
+      }),
+  }),
+);
 global.fetch = mockFetch;
 
 describe("CognitiveBridge", () => {
   const defaultConfig: DeepTreeEchoBotConfig = {
     enabled: true,
     enableAsMainUser: false,
-    apiKey: "",
-    apiEndpoint: "",
+    apiKey: "test-api-key-for-testing",
+    apiEndpoint: "https://api.test.com/v1/chat/completions",
     model: "gpt-4",
     temperature: 0.7,
     maxTokens: 1000,
