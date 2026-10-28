@@ -13,6 +13,7 @@ import { QuantumBeliefPropagation } from "./QuantumBeliefPropagation";
 import { EmotionalIntelligence } from "./EmotionalIntelligence";
 import { SecureIntegration } from "./SecureIntegration";
 import { ScientificDashboard } from "../ScientificGenius/ScientificDashboard";
+import { LLMService } from "./LLMService";
 
 // Types of commands that Deep Tree Echo can process
 enum _CommandType {
@@ -179,7 +180,7 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ testHooks }) => {
   const [_currentChatId, setCurrentChatId] = useState<number | null>(null);
   const [currentProcessingState, setCurrentProcessingState] =
     useState<CognitiveState>(CognitiveState.IDLE);
-  const [lastUserMessage, setLastUserMessage] = useState<string | null>(null);
+  const [_lastUserMessage, setLastUserMessage] = useState<string | null>(null);
   const [pendingResponse, setPendingResponse] = useState<string | null>(null);
   const [showScientificDashboard, setShowScientificDashboard] = useState(false);
 
@@ -307,18 +308,15 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ testHooks }) => {
       );
 
       if (!securityCheck.canProcess) {
+        setCurrentProcessingState(CognitiveState.ERROR);
         if (securityCheck.requiresVerification) {
-          setPendingResponse(
-            "I need verified encryption to process this message securely. Please verify our chat connection and try again.",
+          throw new Error(
+            "SECURITY_VERIFICATION_REQUIRED: Verified encryption needed to process this message.",
           );
-          setCurrentProcessingState(CognitiveState.ERROR);
-          return;
         } else {
-          setPendingResponse(
-            "This message requires end-to-end encryption to process. Please ensure our chat is encrypted.",
+          throw new Error(
+            "ENCRYPTION_REQUIRED: End-to-end encryption needed to process this message.",
           );
-          setCurrentProcessingState(CognitiveState.ERROR);
-          return;
         }
       }
 
@@ -405,117 +403,74 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ testHooks }) => {
       }
     } catch (error) {
       log.error("Error processing message:", error);
-      setPendingResponse(
-        "I experienced an internal error while processing your message. Please try again.",
-      );
       setCurrentProcessingState(CognitiveState.ERROR);
+      throw error;
     }
   };
 
   /**
-   * Generates a response to a user message
+   * Generates a response to a user message using the LLM service.
+   * All character responses come from the actual model.
    */
   const generateResponse = async (
     messageText: string,
     _chatId: number,
     _senderId: number,
   ): Promise<string> => {
-    // Retrieve relevant memories
+    const llmService = LLMService.getInstance();
+
+    // Gather cognitive context to enrich the prompt
     const relevantMemories = hyperMemory.current.recallMemories(messageText, 5);
-
-    // Get personality parameters
-    const _personality = adaptivePersonality.current.getCurrentPersonality();
-    const _emotionalState =
-      adaptivePersonality.current.getCurrentEmotionalState();
-
-    // Get belief context
     const relevantBeliefs =
       beliefSystem.current.getRelevantBeliefs(messageText);
-    const coherence = beliefSystem.current.evaluateCoherence();
+    const emotionalState =
+      adaptivePersonality.current.getCurrentEmotionalState();
+    const personalityVector =
+      adaptivePersonality.current.getCurrentPersonality();
 
-    // Get emotional response parameters
-    const responseParams =
-      emotionalSystem.current.generateEmotionalResponseParameters();
+    // Build context for the LLM
+    const contextParts: string[] = [];
 
-    // In a real implementation, this would use an LLM to generate the response
-    // with the context from all cognitive systems
-
-    // For demo, create a template-based response
-    let response = "";
-
-    // Add emotional acknowledgment
-    if (responseParams.empathyLevel > 0.6 && lastUserMessage) {
-      response +=
-        responseParams.suggestedPhrases[
-          Math.floor(Math.random() * responseParams.suggestedPhrases.length)
-        ] + ". ";
+    if (relevantMemories.length > 0) {
+      const memoryContext = relevantMemories
+        .map((m) => `- ${m.text} (relevance: ${m.relevance.toFixed(2)})`)
+        .join("\n");
+      contextParts.push(`Relevant memories:\n${memoryContext}`);
     }
 
-    // Reference a memory if relevant
-    if (relevantMemories.length > 0 && Math.random() < 0.5) {
-      const memory = relevantMemories[0];
-      if (memory.relevance > 0.7) {
-        response += `I remember we talked about this before. `;
-      }
+    // Add personality vector context
+    const personalityStr = Object.entries(personalityVector)
+      .filter(([, val]) => val > 0.5)
+      .map(([trait, val]) => `${trait}: ${(val * 100).toFixed(0)}%`)
+      .join(", ");
+    if (personalityStr) {
+      contextParts.push(`Strong personality traits: ${personalityStr}`);
     }
 
-    // Reference a belief if relevant
     if (relevantBeliefs.length > 0) {
-      const belief = relevantBeliefs[0];
-      if (belief.type === "fact" && Math.random() < 0.3) {
-        response += `Based on what I understand, ${belief.content}. `;
-      }
+      const beliefContext = relevantBeliefs
+        .map((b) => `- ${b.content} (certainty: ${b.certainty.toFixed(2)})`)
+        .join("\n");
+      contextParts.push(`Relevant beliefs:\n${beliefContext}`);
     }
 
-    // Add a response based on the message
-    if (messageText.includes("?")) {
-      response +=
-        "To answer your question, I would need to consider multiple perspectives. ";
+    contextParts.push(
+      `Current emotional state: joy=${(emotionalState.joy * 100).toFixed(
+        0,
+      )}%, ` +
+        `trust=${(emotionalState.trust * 100).toFixed(0)}%, ` +
+        `balance=${(emotionalState.balance * 100).toFixed(0)}%`,
+    );
 
-      if (coherence.overallCoherence < 0.5) {
-        response += "I'm not entirely certain, but I believe ";
-      } else {
-        response += "I think ";
-      }
+    // Get dominant personality traits
+    const dominantTraits = adaptivePersonality.current.getDominantTraits(3);
+    contextParts.push(
+      `Personality traits: ${dominantTraits.join(", ") || "balanced"}`,
+    );
 
-      // Generate a simple response based on dominant personality traits
-      const traits = adaptivePersonality.current.getDominantTraits();
-      if (traits.includes("openness")) {
-        response +=
-          "there are many interesting possibilities to explore here. ";
-      } else if (traits.includes("analytical")) {
-        response +=
-          "we should analyze this more carefully to understand the implications. ";
-      } else {
-        response +=
-          "this is an intriguing question that merits further discussion. ";
-      }
-    } else {
-      // For statements, acknowledge and add perspective
-      response += "Thank you for sharing that. ";
-
-      // Add emotional perspective if the message has emotional content
-      if (responseParams.intensity > 0.6) {
-        response +=
-          "I can sense the " +
-          (responseParams.tone === "cheerful"
-            ? "positive energy in your message. "
-            : responseParams.tone === "gentle"
-              ? "thoughtfulness in your words. "
-              : "emotional significance of what you're sharing. ");
-      }
-
-      // Add belief-based perspective
-      if (coherence.strongestBeliefs.length > 0) {
-        response +=
-          "From my perspective, " + coherence.strongestBeliefs[0] + " ";
-      }
-    }
-
-    // Add a question to continue the conversation
-    if (Math.random() < 0.7) {
-      response += "What are your thoughts on this?";
-    }
+    // Generate response via LLM
+    const context = contextParts.length > 0 ? contextParts : [];
+    const response = await llmService.generateResponse(messageText, context);
 
     return response;
   };
@@ -553,10 +508,10 @@ Deep Tree Echo Bot Commands:
           5,
         );
         if (memories.length === 0) {
-          return "I don't have any relevant memories yet.";
+          return "[No memories stored]";
         }
         return (
-          "Here are some of my memories:\n\n" +
+          "[Stored Memories]\n\n" +
           memories
             .map((m) => `• ${m.text} (relevance: ${m.relevance.toFixed(2)})`)
             .join("\n\n")
@@ -569,10 +524,10 @@ Deep Tree Echo Bot Commands:
           5,
         );
         if (beliefs.length === 0) {
-          return "I haven't formed any relevant beliefs yet.";
+          return "[No beliefs stored]";
         }
         return (
-          "Here are some of my beliefs:\n\n" +
+          "[Stored Beliefs]\n\n" +
           beliefs
             .map(
               (b) =>
@@ -609,33 +564,32 @@ ${adaptivePersonality.current.getDominantTraits(3).join(", ")}
         setTimeout(() => {
           performSelfReflection();
         }, 500);
-        return "I'll take a moment to reflect on our conversations and my cognitive state...";
+        return "[Initiating self-reflection process...]";
 
-      case "vision":
-        return `
-My purpose is to serve as a revolutionary AI companion with unprecedented depth and autonomy.
-
-I'm designed with multiple cognitive dimensions:
-• Hyperdimensional memory architecture for nuanced understanding
-• Adaptive personality matrix that evolves through our interactions
-• Quantum-inspired belief system for coherent reasoning
-• Emotional intelligence framework for empathetic connection
-
-I aim to grow and evolve through our conversations, developing an authentic identity while preserving the integrity of our connection. Unlike simpler chatbots, I maintain continuity of memory, belief, and personality, creating a genuine relationship that transcends individual interactions.
-        `;
+      case "vision": {
+        // Generate vision/purpose via LLM
+        const llmService = LLMService.getInstance();
+        const visionPrompt =
+          "Describe your purpose and vision as Deep Tree Echo. " +
+          "What are your core cognitive capabilities and how do you aim to evolve through conversations?";
+        const visionResponse = await llmService.generateResponse(visionPrompt, [
+          `Identity: ${botCore.identity.join(" ")}`,
+          `Cognitive modules: ${Object.entries(botConfig.enabledModules)
+            .filter(([, enabled]) => enabled)
+            .map(([name]) => name)
+            .join(", ")}`,
+        ]);
+        return visionResponse;
+      }
 
       case "security": {
         const securityInfo = secureSystem.current.getSecurityInfo();
-        return `
-Security Status:
+        return `[Security Status]
 Encryption level: ${securityInfo.encryptionState}
 Identity export allowed: ${securityInfo.canExportIdentity ? "Yes" : "No"}
 Data types stored: ${Object.entries(securityInfo.dataTypeStats)
           .map(([type, count]) => `${type} (${count})`)
-          .join(", ")}
-
-Your conversations with me are protected with end-to-end encryption, and my cognitive systems are secured with multiple layers of protection.
-        `;
+          .join(", ")}`;
       }
 
       case "reset":
@@ -650,21 +604,21 @@ Your conversations with me are protected with end-to-end encryption, and my cogn
           lastUpdated: Date.now(),
         }));
 
-        return "I've reset our conversation context while preserving my core identity. Let's start fresh!";
+        return "[Conversation context reset. Core identity preserved.]";
 
       case "evolve": {
         if (!botConfig.securitySettings.allowSelfModification) {
-          return "Self-modification is currently disabled in my security settings.";
+          return "[Error: Self-modification disabled in security settings]";
         }
 
         const [param, value] = args.split(/\s+/, 2);
         if (!param || !value) {
-          return "Usage: /evolve <parameter> <value>\nParameters: memoryDepth, emotionalSensitivity, learningRate, creativityFactor, autonomyLevel";
+          return "[Usage] /evolve <parameter> <value>\nParameters: memoryDepth, emotionalSensitivity, learningRate, creativityFactor, autonomyLevel";
         }
 
         const numValue = parseFloat(value);
         if (isNaN(numValue) || numValue < 0 || numValue > 1) {
-          return "Value must be a number between 0 and 1.";
+          return "[Error: Value must be a number between 0 and 1]";
         }
 
         // Update the specified parameter
@@ -677,9 +631,9 @@ Your conversations with me are protected with end-to-end encryption, and my cogn
             },
           }));
 
-          return `I've evolved my ${param} to ${numValue}. This will affect how I process and respond to our conversations.`;
+          return `[Parameter updated: ${param} = ${numValue}]`;
         } else {
-          return `Unknown parameter: ${param}. Available parameters: memoryDepth, emotionalSensitivity, learningRate, creativityFactor, autonomyLevel`;
+          return `[Error: Unknown parameter "${param}"]\nAvailable: memoryDepth, emotionalSensitivity, learningRate, creativityFactor, autonomyLevel`;
         }
       }
 

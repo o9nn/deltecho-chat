@@ -1000,16 +1000,12 @@ I'm here to assist you with various tasks and engage in meaningful conversations
           content: "You are Deep Tree Echo, a helpful AI assistant.",
         });
 
-        // 2. Context
+        // 2. Context - inject as system context, not fake assistant response
         if (context.length > 0) {
           const contextStr = context.join("\\n");
           messages.push({
-            role: "user",
-            content: `Here is the recent conversation history for context:\n${contextStr}\n\nPlease keep this in mind when responding to my next message.`,
-          });
-          messages.push({
-            role: "assistant",
-            content: "I'll keep this conversation context in mind.",
+            role: "system",
+            content: `Recent conversation history:\n${contextStr}`,
           });
         }
 
@@ -1098,12 +1094,9 @@ I'm here to assist you with various tasks and engage in meaningful conversations
     } catch (error) {
       log.error("Error generating response:", error);
       setAvatarError();
-      await this.sendMessage(
-        accountId,
-        chatId,
-        "I'm sorry, I had a problem generating a response. Please try again.",
-      );
+      // Do NOT send canned error text as character speech - let the UI handle errors
       setTimeout(() => setAvatarIdle(), 3000);
+      throw error;
     }
   }
 

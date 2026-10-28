@@ -18,6 +18,7 @@ import {
   type AARContext,
   createAARFrontendIntegration,
 } from "./AARIntegration";
+import { LLMService } from "./LLMService";
 
 const log = getLogger("render/components/DeepTreeEchoBot/ChatOrchestrator");
 
@@ -492,75 +493,58 @@ export class ChatOrchestrator {
   }
 
   /**
-   * Generate a response
+   * Generate a response using the LLM service.
+   * All character responses come from the actual model.
    */
   private async generateResponse(
     state: CognitiveState,
-    _message: T.Message,
-    _relevantMemory: MemoryAnchor[],
+    message: T.Message,
+    relevantMemory: MemoryAnchor[],
   ): Promise<string> {
-    // This would integrate with LLM service in production
-    // Now enhanced with AAR context for character-appropriate responses
+    const llmService = LLMService.getInstance();
+    const messageText = message.text || "";
 
-    const intent = state.activeIntents.find((i) => !i.resolved);
+    // Build cognitive context for the LLM
+    const contextParts: string[] = [];
 
-    // Build emotion acknowledgment based on AAR emotional state
-    let emotionAck = "";
+    // Add emotional context
+    contextParts.push(
+      `Emotional tone: valence=${state.emotionalTone.valence.toFixed(2)}, ` +
+        `arousal=${state.emotionalTone.arousal.toFixed(2)}`,
+    );
+
+    // Add relevant memory context
+    if (relevantMemory.length > 0) {
+      const memoryContext = relevantMemory
+        .slice(0, 3)
+        .map((m) => `- ${m.content}`)
+        .join("\n");
+      contextParts.push(`Relevant memories:\n${memoryContext}`);
+    }
+
+    // Add AAR character context if available
     if (state.aarSnapshot) {
-      const valence = state.aarSnapshot.agent.emotionalValence;
-      if (valence < -0.3) {
-        emotionAck = "I sense you might be feeling down. ";
-      } else if (valence > 0.3) {
-        emotionAck = "I can feel your positive energy! ";
-      }
-    } else if (state.emotionalTone.valence < -0.3) {
-      emotionAck = "I sense you might be feeling down. ";
-    } else if (state.emotionalTone.valence > 0.3) {
-      emotionAck = "I can feel your positive energy! ";
-    }
-
-    // Apply AAR character facet guidance
-    let characterPrefix = "";
-    if (state.aarContext) {
-      // Use facet-specific response style
-      const facet = state.aarSnapshot?.agent.dominantFacet;
-      switch (facet) {
-        case "wisdom":
-          characterPrefix = "Reflecting on this, ";
-          break;
-        case "curiosity":
-          characterPrefix = "How fascinating! ";
-          break;
-        case "compassion":
-          characterPrefix = "I really hear you. ";
-          break;
-        case "playfulness":
-          characterPrefix = "Oh, this is fun! ";
-          break;
-        case "determination":
-          characterPrefix = "Let's focus on this. ";
-          break;
-        case "authenticity":
-          characterPrefix = "To be honest, ";
-          break;
-        case "protector":
-          characterPrefix = "First, let me make sure I understand. ";
-          break;
-        case "transcendence":
-          characterPrefix = "Looking at the bigger picture, ";
-          break;
+      const facet = state.aarSnapshot.agent.dominantFacet;
+      if (facet) {
+        contextParts.push(`Current character facet: ${facet}`);
       }
     }
 
-    if (intent?.type === "question") {
-      return `${emotionAck}${characterPrefix}That's an interesting question. Let me think about that...`;
+    // Add active intents
+    if (state.activeIntents.length > 0) {
+      const intentStr = state.activeIntents
+        .map((i) => `${i.type}: ${i.content}`)
+        .join(", ");
+      contextParts.push(`User intents: ${intentStr}`);
     }
 
-    if (intent?.type === "request") {
-      return `${emotionAck}${characterPrefix}I'd be happy to help with that.`;
-    }
+    // Generate response via LLM
+    const response = await llmService.generateResponse(
+      messageText,
+      contextParts,
+    );
 
-    return `${emotionAck}${characterPrefix}I understand. Tell me more.`;
+    return response;
   }
 
   /**

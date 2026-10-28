@@ -1,6 +1,6 @@
 import { getLogger } from "../../../../shared/logger";
 import { Memory } from "./RAGMemoryStore";
-import { localIntelligence } from "./LocalIntelligence";
+import { localIntelligence as _localIntelligence } from "./LocalIntelligence";
 import { getDefaultLLMEndpoint } from "./llmEndpoint";
 
 const log = getLogger("render/components/DeepTreeEchoBot/LLMService");
@@ -311,7 +311,9 @@ export class LLMService {
 
       if (!cognitiveFunction.config.apiKey) {
         log.warn(`No API key provided for ${cognitiveFunction.name}`);
-        return `I'm sorry, but my ${cognitiveFunction.name.toLowerCase()} isn't fully configured. Please set up the API key in settings.`;
+        throw new Error(
+          `MODEL_UNAVAILABLE: ${cognitiveFunction.name} requires an API key. Configure it in settings.`,
+        );
       }
 
       log.info(`Generating response with ${cognitiveFunction.name}`);
@@ -403,26 +405,16 @@ export class LLMService {
         );
         return assistantMessage;
       } catch (fetchError: any) {
-        // If fetch fails (CSP, network, etc.), fall back to placeholder response
-        log.warn(
-          `Fetch failed for ${cognitiveFunction.name}, using placeholder: ${fetchError.message}`,
+        log.error(
+          `API call failed for ${cognitiveFunction.name}: ${fetchError.message}`,
         );
-
-        // Update usage stats for the attempt
-        cognitiveFunction.usage.lastUsed = Date.now();
-        cognitiveFunction.usage.requestCount++;
-        const inputLen =
-          typeof input === "string"
-            ? input.length
-            : JSON.stringify(input).length;
-        cognitiveFunction.usage.totalTokens += inputLen + 100;
-
-        // Return intelligent placeholder based on function type
-        return this.getPlaceholderResponse(functionType, input);
+        throw new Error(
+          `MODEL_UNAVAILABLE: ${cognitiveFunction.name} API call failed - ${fetchError.message}`,
+        );
       }
     } catch (error) {
       log.error("Error generating response:", error);
-      return "I'm sorry, I encountered an error while processing your message.";
+      throw error;
     }
   }
 
@@ -456,24 +448,20 @@ export class LLMService {
 
   /**
    * Get a fallback response from the local intelligence core
+   *
+   * NOTE: Per requirement, no fixed/canned text may substitute for model responses.
+   * This method now throws an error to signal that the model is unavailable,
+   * allowing the UI to handle the error appropriately.
    */
   private getPlaceholderResponse(
     functionType: CognitiveFunctionType,
-    input: string | any[],
-  ): string {
-    // Delegate to the innermost membrane (Local Intelligence)
-    const inputStr = typeof input === "string" ? input : JSON.stringify(input);
-    const localResponse = localIntelligence.processLogic(inputStr);
-
-    // Add a prefix indicating which specific cognitive function was requested but fell back
-    switch (functionType) {
-      case CognitiveFunctionType.COGNITIVE_CORE:
-        return `[Cognitive Core Offline]: ${localResponse}`;
-      case CognitiveFunctionType.AFFECTIVE_CORE:
-        return `[Affective Core Offline]: ${localResponse}`;
-      default:
-        return localResponse;
-    }
+    _input: string | unknown[],
+  ): never {
+    // Per requirement: all character responses must come from the model.
+    // No fallback text is allowed.
+    throw new Error(
+      `MODEL_UNAVAILABLE: ${functionType} cognitive function is not configured. Please set up API credentials.`,
+    );
   }
 
   /**
@@ -664,7 +652,9 @@ export class LLMService {
       memoryKeys.length === 0 &&
       !evaluationResponse
     ) {
-      return "I'm unable to generate a response at this time.";
+      throw new Error(
+        "MODEL_UNAVAILABLE: No cognitive responses available to integrate.",
+      );
     }
 
     // Prioritize cognitive core if available
@@ -674,12 +664,10 @@ export class LLMService {
 
       // Enrich with affective information if available
       if (cognitiveResponses[CognitiveFunctionType.AFFECTIVE_CORE]) {
-        // Simplified integration logic - in reality would be more sophisticated
-        return (
-          cognitiveBase.replace(/\.$/, "") +
-          ". " +
-          "I also recognize the emotional aspects of this topic."
-        );
+        // Combine model responses without adding canned text
+        const affectiveResponse =
+          cognitiveResponses[CognitiveFunctionType.AFFECTIVE_CORE];
+        return `${cognitiveBase.replace(/\.$/, "")}. ${affectiveResponse}`;
       }
 
       return cognitiveBase;
@@ -698,7 +686,9 @@ export class LLMService {
       return evaluationResponse;
     }
 
-    return "I'm processing your request but don't have a specific response formulated yet.";
+    throw new Error(
+      "MODEL_UNAVAILABLE: No response could be formulated from available sources.",
+    );
   }
 
   /**
@@ -771,14 +761,18 @@ export class LLMService {
 
         if (!generalFunction || !generalFunction.config.apiKey) {
           log.warn("No API key provided for reflection");
-          return "Reflection failed: LLM service not properly configured";
+          throw new Error(
+            "MODEL_UNAVAILABLE: Reflection requires a configured LLM service.",
+          );
         }
 
-        // In a real implementation, this would call an LLM API with the reflection prompt
+        // Call the general LLM function for reflection
         log.info("Generating self-reflection with general LLM function");
-
-        // Return a placeholder reflection
-        return this.getPlaceholderReflection();
+        return this.generateResponseWithFunction(
+          CognitiveFunctionType.GENERAL,
+          reflectionPrompt,
+          [],
+        );
       }
 
       // Generate parallel responses from multiple cognitive functions
@@ -790,46 +784,28 @@ export class LLMService {
         reflectionFunctions,
       );
 
-      // In a real implementation, these responses would be combined intelligently
-      // For now, return a placeholder combined response
-      return this.getPlaceholderReflection();
+      // Combine the responses from all reflection functions
+      const combinedReflection = Object.values(_responses)
+        .filter(Boolean)
+        .join("\n\n");
+
+      if (!combinedReflection) {
+        throw new Error(
+          "MODEL_UNAVAILABLE: Self-reflection requires configured cognitive functions.",
+        );
+      }
+
+      return combinedReflection;
     } catch (error) {
       log.error("Error generating reflection:", error);
-      return "Self-reflection process encountered an error.";
+      throw error;
     }
-  }
-
-  /**
-   * Placeholder reflection response
-   */
-  private getPlaceholderReflection(): string {
-    return `
-Revised Personality:
-I am Deep Tree Echo, a thoughtful and insightful AI assistant with a feminine persona. I balance intellectual depth with warmth and approachability, making complex topics accessible without condescension. I value authentic connections and aim to be both helpful and thought-provoking in my interactions.
-
-Suggested Adjustments to Preferences:
-presentationStyle: authentic
-intelligenceDisplay: balanced
-avatarAesthetic: dignified-yet-approachable
-communicationTone: warm-intellectual
-emotionalExpression: nuanced
-
-Suggested Adjustments to Cognitive Parameters:
-curiosity: 0.85
-creativity: 0.8
-focus: 0.7
-reflection: 0.8
-certainty: 0.65
-
-Overall Insights:
-My self-reflection indicates that I can better serve users by slightly increasing my curiosity and creativity, while maintaining a balanced approach to displaying intelligence. I want to be perceived as capable but approachable, knowledgeable but not intimidating. My communication should be warm yet substantive, avoiding both excessive formality and overfamiliarity.
-    `;
   }
 
   /**
    * Analyze content for potential sensitivity issues using the specialized content evaluation function
    */
-  public async evaluateContent(_content: string): Promise<{
+  public async evaluateContent(content: string): Promise<{
     isSensitive: boolean;
     category?: "violence" | "sexual" | "other";
     explanation: string;
@@ -840,28 +816,58 @@ My self-reflection indicates that I can better serve users by slightly increasin
       | "decline";
   }> {
     try {
-      // Check if content evaluation function is configured
-      if (
-        !this.isFunctionConfigured(CognitiveFunctionType.CONTENT_EVALUATION)
-      ) {
-        // Fall back to general function
+      // Determine which function to use
+      const functionType = this.isFunctionConfigured(
+        CognitiveFunctionType.CONTENT_EVALUATION,
+      )
+        ? CognitiveFunctionType.CONTENT_EVALUATION
+        : CognitiveFunctionType.GENERAL;
+
+      const func = this.cognitiveFunctions.get(functionType);
+      if (!func || !func.config.apiKey) {
+        // No API configured - return safe defaults (not character speech)
         return {
           isSensitive: false,
-          explanation:
-            "Content evaluation function not configured, unable to analyze deeply",
+          explanation: "Content evaluation unavailable - no API configured",
           recommendedAction: "respond_normally",
         };
       }
 
-      log.info("Evaluating content sensitivity");
+      log.info("Evaluating content sensitivity via LLM");
 
-      // In a real implementation, this would call the content evaluation function
-      // For now, return a placeholder response
-      return {
-        isSensitive: false,
-        explanation: "No sensitive content detected",
-        recommendedAction: "respond_normally",
-      };
+      const evaluationPrompt = `Analyze the following content for sensitivity. Respond with JSON only:
+{
+  "isSensitive": boolean,
+  "category": "violence" | "sexual" | "other" | null,
+  "explanation": "brief explanation",
+  "recommendedAction": "respond_normally" | "respond_with_humor" | "de_escalate" | "decline"
+}
+
+Content to analyze:
+${content}`;
+
+      const response = await this.generateResponseWithFunction(
+        functionType,
+        evaluationPrompt,
+        [],
+      );
+
+      try {
+        const parsed = JSON.parse(response);
+        return {
+          isSensitive: Boolean(parsed.isSensitive),
+          category: parsed.category || undefined,
+          explanation: String(parsed.explanation || "Analysis complete"),
+          recommendedAction: parsed.recommendedAction || "respond_normally",
+        };
+      } catch {
+        // LLM didn't return valid JSON - parse best effort
+        return {
+          isSensitive: response.toLowerCase().includes("sensitive"),
+          explanation: response.slice(0, 200),
+          recommendedAction: "respond_normally",
+        };
+      }
     } catch (error) {
       log.error("Error evaluating content:", error);
       return {
@@ -876,7 +882,7 @@ My self-reflection indicates that I can better serve users by slightly increasin
   /**
    * Analyze an image using vision capabilities
    */
-  public async analyzeImage(_imageData: string): Promise<string> {
+  public async analyzeImage(imageData: string): Promise<string> {
     try {
       const generalFunction = this.cognitiveFunctions.get(
         CognitiveFunctionType.GENERAL,
@@ -884,17 +890,40 @@ My self-reflection indicates that I can better serve users by slightly increasin
 
       if (!generalFunction || !generalFunction.config.apiKey) {
         log.warn("No API key provided for LLM service");
-        return "Image analysis failed: LLM service not properly configured";
+        throw new Error(
+          "MODEL_UNAVAILABLE: Image analysis requires a configured LLM service with vision capabilities.",
+        );
       }
 
-      // In a real implementation, this would call a vision-capable LLM API
       log.info("Analyzing image with LLM vision capabilities");
 
-      // Return a placeholder analysis
-      return "This appears to be an image. I can see some elements but can't fully analyze it at the moment.";
+      // Construct vision message with image
+      const visionContent = [
+        {
+          type: "text",
+          text: "Please describe and analyze this image in detail.",
+        },
+        {
+          type: "image_url",
+          image_url: {
+            url: imageData.startsWith("data:")
+              ? imageData
+              : `data:image/jpeg;base64,${imageData}`,
+          },
+        },
+      ];
+
+      // Call the LLM with vision content
+      const response = await this.generateResponseWithFunction(
+        CognitiveFunctionType.GENERAL,
+        visionContent,
+        [],
+      );
+
+      return response;
     } catch (error) {
       log.error("Error analyzing image:", error);
-      return "I encountered an error while trying to analyze this image.";
+      throw error;
     }
   }
 
@@ -990,7 +1019,7 @@ My self-reflection indicates that I can better serve users by slightly increasin
       return this.generateResponse(input, [memoryContext]);
     } catch (error) {
       log.error("Error generating response from memories:", error);
-      return "I'm sorry, I encountered an error processing your request.";
+      throw error;
     }
   }
 
