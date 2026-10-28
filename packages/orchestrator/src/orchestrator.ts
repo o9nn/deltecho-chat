@@ -1081,7 +1081,10 @@ export class Orchestrator {
                 message: { chatId: number; messageId: number };
                 response: { text: string };
               }) => {
-                if (event.response.text && this.deltachatInterface?.isConnected()) {
+                if (
+                  event.response.text &&
+                  this.deltachatInterface?.isConnected()
+                ) {
                   const accountId =
                     this.config.defaultAccountId ||
                     (await this.deltachatInterface.getAllAccounts())?.[0]?.id;
@@ -1106,7 +1109,9 @@ export class Orchestrator {
               );
             }
 
-            log.info("DeltaChatAutonomyBridge wired (autonomy → DeltaChat active)");
+            log.info(
+              "DeltaChatAutonomyBridge wired (autonomy → DeltaChat active)",
+            );
           }
 
           log.info("Level 5 Autonomy Pipeline fully initialized");
@@ -1857,7 +1862,8 @@ ${response.body}`;
       let targetChatId = proactiveMsg.chatId;
       if (!targetChatId || targetChatId === 0) {
         // Get the most recent active chat
-        const recentChats = await this.deltachatInterface.getAllChats(accountId);
+        const recentChats =
+          await this.deltachatInterface.getAllChats(accountId);
         if (recentChats.length > 0) {
           // Find first chat that allows sending messages and isn't a device/self chat
           const targetChat = recentChats.find(
@@ -1882,7 +1888,10 @@ ${response.body}`;
       );
 
       log.info(
-        `Proactive message sent to chat ${targetChatId}: ${proactiveMsg.text.substring(0, 50)}...`,
+        `Proactive message sent to chat ${targetChatId}: ${proactiveMsg.text.substring(
+          0,
+          50,
+        )}...`,
       );
     } catch (error) {
       log.error("Failed to check/send proactive message:", error);
