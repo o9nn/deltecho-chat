@@ -507,7 +507,24 @@ export class LLMService {
         }
 
         const data = await response.json();
-        const assistantMessage = data.choices?.[0]?.message?.content || "";
+
+        // Validate response structure - no fallbacks allowed
+        if (
+          !data.choices ||
+          !Array.isArray(data.choices) ||
+          data.choices.length === 0
+        ) {
+          throw new Error(
+            "LLM_EMPTY_RESPONSE: Model returned no choices - cannot generate response",
+          );
+        }
+
+        const assistantMessage = data.choices[0]?.message?.content;
+        if (!assistantMessage || typeof assistantMessage !== "string") {
+          throw new Error(
+            "LLM_MALFORMED_RESPONSE: Model response missing content - cannot generate response",
+          );
+        }
 
         // Update usage stats
         cognitiveFunction.usage.lastUsed = Date.now();
