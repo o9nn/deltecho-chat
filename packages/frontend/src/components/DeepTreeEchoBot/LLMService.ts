@@ -244,6 +244,46 @@ export class LLMService {
   }
 
   /**
+   * Verify that a local model endpoint is reachable
+   * Makes a lightweight request to check if the server is responding
+   */
+  private async verifyLocalEndpoint(endpoint: string): Promise<boolean> {
+    try {
+      // Try a simple GET or OPTIONS request to the endpoint
+      // Most OpenAI-compatible servers support /models endpoint
+      const modelsEndpoint = endpoint.replace(
+        /\/chat\/completions\/?$/,
+        "/models",
+      );
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
+      try {
+        const response = await fetch(modelsEndpoint, {
+          method: "GET",
+          signal: controller.signal,
+        });
+        clearTimeout(timeoutId);
+
+        // Any response (even 401/403) means the server is running
+        return response.status < 500;
+      } catch (_fetchError: any) {
+        clearTimeout(timeoutId);
+
+        // If /models fails, try a HEAD request to the main endpoint
+        const headResponse = await fetch(endpoint, {
+          method: "HEAD",
+        });
+        return headResponse.status < 500;
+      }
+    } catch (error) {
+      log.warn(`Local endpoint verification failed for ${endpoint}:`, error);
+      return false;
+    }
+  }
+
+  /**
    * Get the best available cognitive function for a specific type
    * Falls back to general function if specific function not available
    */
@@ -309,10 +349,33 @@ export class LLMService {
     try {
       const cognitiveFunction = this.getBestAvailableFunction(functionType);
 
-      if (!cognitiveFunction.config.apiKey) {
+      // Check if model is available - different checks for local vs remote
+      const isLocalEndpoint =
+        cognitiveFunction.config.apiEndpoint.includes("localhost") ||
+        cognitiveFunction.config.apiEndpoint.includes("127.0.0.1");
+
+      if (isLocalEndpoint) {
+        // Local model - verify endpoint is actually reachable
+        log.info(
+          `Verifying local model at ${cognitiveFunction.config.apiEndpoint}`,
+        );
+        const isReachable = await this.verifyLocalEndpoint(
+          cognitiveFunction.config.apiEndpoint,
+        );
+        if (!isReachable) {
+          throw new Error(
+            `MODEL_UNAVAILABLE: Local model at ${cognitiveFunction.config.apiEndpoint} is not reachable. ` +
+              `Ensure the local model server is running.`,
+          );
+        }
+        log.info(
+          `Local model verified at ${cognitiveFunction.config.apiEndpoint}`,
+        );
+      } else if (!cognitiveFunction.config.apiKey) {
+        // Remote API - requires API key
         log.warn(`No API key provided for ${cognitiveFunction.name}`);
         throw new Error(
-          `MODEL_UNAVAILABLE: ${cognitiveFunction.name} requires an API key. Configure it in settings.`,
+          `MODEL_UNAVAILABLE: ${cognitiveFunction.name} requires an API key for remote endpoint. Configure it in settings.`,
         );
       }
 

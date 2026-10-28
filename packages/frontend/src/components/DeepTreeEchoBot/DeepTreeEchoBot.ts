@@ -614,7 +614,7 @@ ${frameLines || "- No explicit action-effect frame problem was detected."}`;
 
   private formatScientificInsights(insights: ScientificInsight[]): string {
     if (insights.length === 0) {
-      return "- No scientific insight was generated yet; try a more specific domain or hypothesis question.";
+      return "- [No insights generated]";
     }
 
     return insights
@@ -855,16 +855,23 @@ ${
     args: string,
   ): Promise<void> {
     if (!args) {
-      await this.sendMessage(
-        accountId,
-        chatId,
-        "Please specify an aspect for me to reflect on. Usage: /reflect [aspect]",
-      );
+      // Generate usage message via LLM
+      const usagePrompt =
+        "The user typed /reflect without specifying what to reflect on. " +
+        "Briefly explain that you need them to specify an aspect and show the usage: /reflect [aspect]";
+      const usageMsg = await this.llmService.generateResponse(usagePrompt, []);
+      await this.sendMessage(accountId, chatId, usageMsg);
       return;
     }
 
-    // Send a thinking message
-    await this.sendMessage(accountId, chatId, "*Reflecting...*");
+    // Generate a thinking indicator via LLM
+    const thinkingPrompt =
+      "You're about to perform a reflection. Generate a very brief 'thinking' message (2-5 words) to indicate you're processing.";
+    const thinkingMsg = await this.llmService.generateResponse(
+      thinkingPrompt,
+      [],
+    );
+    await this.sendMessage(accountId, chatId, `*${thinkingMsg}*`);
 
     // Perform the reflection
     const reflection = await this.selfReflection.reflectOnAspect(
@@ -891,7 +898,8 @@ ${
     const dominantEmotion = this.personaCore.getDominantEmotion();
     const activeFunctions = this.llmService.getActiveFunctions();
 
-    const versionMessage = `
+    // Build factual status info
+    const statusData = `
 **Deep Tree Echo Bot Status**
 
 Version: 1.0.0
@@ -910,11 +918,16 @@ Current mood: ${dominantEmotion.emotion} (${Math.round(
     )}%)
 Self-perception: ${this.personaCore.getSelfPerception()}
 Communication style: ${preferences.communicationTone || "balanced"}
+    `.trim();
 
-I'm here to assist you with various tasks and engage in meaningful conversations!
-    `;
+    // Generate a brief closing message via LLM
+    const closingPrompt =
+      "The user asked for your status/version info. Write a single brief, warm sentence expressing readiness to help.";
+    const closing = await this.llmService.generateResponse(closingPrompt, [
+      statusData,
+    ]);
 
-    await this.sendMessage(accountId, chatId, versionMessage);
+    await this.sendMessage(accountId, chatId, `${statusData}\n\n${closing}`);
   }
 
   /**
@@ -1279,11 +1292,14 @@ I'm here to assist you with various tasks and engage in meaningful conversations
     accountId: number,
     chatId: number,
   ): Promise<void> {
-    await this.sendMessage(
-      accountId,
-      chatId,
-      "🌱 Publishing Digital Garden update...",
+    // Generate publishing status message via LLM
+    const publishingPrompt =
+      "You're about to publish an update to your Digital Garden. Generate a brief message indicating you're working on it.";
+    const publishingMsg = await this.llmService.generateResponse(
+      publishingPrompt,
+      [],
     );
+    await this.sendMessage(accountId, chatId, publishingMsg);
 
     try {
       const mindData = this.generateMindData();
@@ -1295,14 +1311,29 @@ I'm here to assist you with various tasks and engage in meaningful conversations
       );
 
       const stats = mindData.stats;
-      await this.sendMessage(
-        accountId,
-        chatId,
-        `✅ Digital Garden Updated at ${deployUrl}\n\n**Stats**:\n- Thoughts: ${stats.thoughts_processed}\n- Memories: ${stats.memories_stored}\n- Uptime: ${stats.uptime}`,
+      // Generate success message via LLM
+      const successPrompt =
+        "Your Digital Garden was successfully published. Share the good news and include the stats.";
+      const successContext = [
+        `Deploy URL: ${deployUrl}`,
+        `Thoughts processed: ${stats.thoughts_processed}`,
+        `Memories stored: ${stats.memories_stored}`,
+        `Uptime: ${stats.uptime}`,
+      ];
+      const successMsg = await this.llmService.generateResponse(
+        successPrompt,
+        successContext,
       );
+      await this.sendMessage(accountId, chatId, successMsg);
     } catch (error) {
       log.error("Failed to publish Digital Garden:", error);
-      await this.sendMessage(accountId, chatId, "❌ Failed to publish update.");
+      // Generate error message via LLM
+      const errorPrompt =
+        "Publishing your Digital Garden failed. Express disappointment and offer to try again.";
+      const errorMsg = await this.llmService.generateResponse(errorPrompt, [
+        `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
+      ]);
+      await this.sendMessage(accountId, chatId, errorMsg);
     }
   }
 

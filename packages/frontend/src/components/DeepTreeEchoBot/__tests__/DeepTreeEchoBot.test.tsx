@@ -75,7 +75,7 @@ jest.mock("../EmotionalIntelligence", () => {
         empathyLevel: 0.5,
         intensity: 0.5,
         tone: "neutral",
-        suggestedPhrases: ["I understand"],
+        emotionalContext: "Overall emotional valence: neutral",
       }),
       analyzeEmotionalTrends: jest.fn().mockReturnValue({
         patterns: [],

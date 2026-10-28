@@ -1002,7 +1002,7 @@ export class QuantumBeliefPropagation {
       belief1.type === BeliefNodeType.FACT &&
       belief2.type === BeliefNodeType.FACT
     ) {
-      return `Based on the facts that ${belief1.content} and ${belief2.content}, it can be inferred that they are related.`;
+      return `[Inferred relation] ${belief1.content} <-> ${belief2.content}`;
     }
 
     // Inference from fact to preference
@@ -1010,11 +1010,11 @@ export class QuantumBeliefPropagation {
       belief1.type === BeliefNodeType.FACT &&
       belief2.type === BeliefNodeType.PREFERENCE
     ) {
-      return `Since ${belief1.content}, it supports the preference that ${belief2.content}`;
+      return `[Inference] ${belief1.content} supports ${belief2.content}`;
     }
 
     // Default pattern when unsure
-    return `There may be a connection between ${belief1.content} and ${belief2.content}`;
+    return `[Possible connection] ${belief1.content} <-> ${belief2.content}`;
   }
 
   /**

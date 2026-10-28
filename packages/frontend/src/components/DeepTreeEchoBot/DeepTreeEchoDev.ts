@@ -141,7 +141,7 @@ export class DeepTreeEchoBot {
       return llmResponse;
     } catch (error) {
       log.error("Error processing message:", error);
-      return "Sorry, I encountered an error while processing your message. Please try again.";
+      throw error;
     }
   }
 
@@ -163,7 +163,9 @@ export class DeepTreeEchoBot {
     const handler = this.commandHandlers.get(command);
 
     if (!handler) {
-      return `Unknown command: ${command}. Try /help for a list of available commands.`;
+      // Generate response via LLM for unknown command
+      const prompt = `The user entered an unknown command: ${command}. Let them know it doesn't exist and suggest using /help.`;
+      return this.llmService.generateResponse(prompt, []);
     }
 
     try {
@@ -194,7 +196,7 @@ export class DeepTreeEchoBot {
       return result.response;
     } catch (error) {
       log.error(`Error processing command ${command}:`, error);
-      return `Error processing command ${command}. Please try again.`;
+      throw error;
     }
   }
 
@@ -202,14 +204,19 @@ export class DeepTreeEchoBot {
    * Register all command handlers
    */
   private registerCommandHandlers(): void {
-    // Help command
+    // Help command - route through LLM
     this.commandHandlers.set("/help", async () => {
       const commands = Array.from(this.commandHandlers.keys())
         .sort()
         .join(", ");
+      const prompt =
+        "The user asked for help with available commands. List your available commands and briefly explain what each does.";
+      const response = await this.llmService.generateResponse(prompt, [
+        `Available commands: ${commands}`,
+      ]);
       return {
         success: true,
-        response: `Available commands: ${commands}\n\nUse /help <command> for more information about a specific command.`,
+        response,
       };
     });
 

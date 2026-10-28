@@ -476,46 +476,56 @@ const DeepTreeEchoBot: React.FC<DeepTreeEchoBotProps> = ({ testHooks }) => {
   };
 
   /**
-   * Processes bot commands
+   * Processes bot commands - ALL responses go through the LLM
    */
   const processCommand = async (
     command: string,
     args: string,
     _chatId: number,
   ): Promise<string> => {
-    switch (command) {
-      case "help":
-        return `
-Deep Tree Echo Bot Commands:
-/help - Show this help message
-/identity - Learn about who I am
-/memory - Explore what I remember
-/belief - Learn what I believe to be true
-/emotional - Check my emotional state
-/reflect - Trigger self-reflection
-/vision - Learn about my purpose
-/security - View security settings
-/reset - Reset our conversation
-/evolve <parameter> <value> - Adjust my cognitive parameters
-        `;
+    const llmService = LLMService.getInstance();
 
-      case "identity":
-        return botCore.identity.join("\n\n");
+    // Build context based on command type
+    let prompt: string;
+    let context: string[] = [];
+
+    switch (command) {
+      case "help": {
+        prompt =
+          "The user asked for help with available commands. List your available commands " +
+          "and briefly explain what each one does. Commands: /help, /identity, /memory, " +
+          "/belief, /emotional, /reflect, /vision, /security, /reset, /evolve";
+        break;
+      }
+
+      case "identity": {
+        prompt =
+          "The user wants to know about your identity. Describe who you are, " +
+          "your core values, and what makes you unique.";
+        context = [
+          `Your identity concepts: ${botCore.identity.join("; ")}`,
+          `Your name: ${botCore.name}`,
+          `Your description: ${botCore.description}`,
+        ];
+        break;
+      }
 
       case "memory": {
         const memories = hyperMemory.current.recallMemories(
           args || "recent",
           5,
         );
-        if (memories.length === 0) {
-          return "[No memories stored]";
+        prompt =
+          memories.length === 0
+            ? "The user asked about your memories, but you don't have any stored yet. " +
+              "Explain that you're still forming memories through conversation."
+            : "The user asked about your memories. Describe what you remember based on the following stored memories.";
+        if (memories.length > 0) {
+          context = memories.map(
+            (m) => `Memory: "${m.text}" (relevance: ${m.relevance.toFixed(2)})`,
+          );
         }
-        return (
-          "[Stored Memories]\n\n" +
-          memories
-            .map((m) => `• ${m.text} (relevance: ${m.relevance.toFixed(2)})`)
-            .join("\n\n")
-        );
+        break;
       }
 
       case "belief": {
@@ -523,105 +533,120 @@ Deep Tree Echo Bot Commands:
           args || "important",
           5,
         );
-        if (beliefs.length === 0) {
-          return "[No beliefs stored]";
+        prompt =
+          beliefs.length === 0
+            ? "The user asked about your beliefs, but you haven't formed any yet. " +
+              "Explain that your beliefs develop through conversation."
+            : "The user asked about your beliefs. Share your beliefs based on the following stored beliefs.";
+        if (beliefs.length > 0) {
+          context = beliefs.map(
+            (b) =>
+              `Belief: "${b.content}" (type: ${
+                b.type
+              }, certainty: ${b.certainty.toFixed(2)})`,
+          );
         }
-        return (
-          "[Stored Beliefs]\n\n" +
-          beliefs
-            .map(
-              (b) =>
-                `• ${b.content} (${b.type}, certainty: ${b.certainty.toFixed(
-                  2,
-                )})`,
-            )
-            .join("\n\n")
-        );
+        break;
       }
 
       case "emotional": {
         const emotionalState =
           adaptivePersonality.current.getCurrentEmotionalState();
-        const _personality =
-          adaptivePersonality.current.getCurrentPersonality();
-
-        return `
-My current emotional state:
-Joy: ${(emotionalState.joy * 100).toFixed(0)}%
-Trust: ${(emotionalState.trust * 100).toFixed(0)}%
-Anticipation: ${(emotionalState.anticipation * 100).toFixed(0)}%
-Sadness: ${(emotionalState.sadness * 100).toFixed(0)}%
-Fear: ${(emotionalState.fear * 100).toFixed(0)}%
-Overall balance: ${(emotionalState.balance * 100).toFixed(0)}%
-
-My dominant personality traits:
-${adaptivePersonality.current.getDominantTraits(3).join(", ")}
-        `;
+        const dominantTraits = adaptivePersonality.current.getDominantTraits(3);
+        prompt =
+          "The user asked about your emotional state. Describe how you're feeling based on the following emotional data.";
+        context = [
+          `Joy level: ${(emotionalState.joy * 100).toFixed(0)}%`,
+          `Trust level: ${(emotionalState.trust * 100).toFixed(0)}%`,
+          `Anticipation: ${(emotionalState.anticipation * 100).toFixed(0)}%`,
+          `Sadness: ${(emotionalState.sadness * 100).toFixed(0)}%`,
+          `Fear: ${(emotionalState.fear * 100).toFixed(0)}%`,
+          `Overall balance: ${(emotionalState.balance * 100).toFixed(0)}%`,
+          `Dominant personality traits: ${dominantTraits.join(", ")}`,
+        ];
+        break;
       }
 
-      case "reflect":
+      case "reflect": {
         setCurrentProcessingState(CognitiveState.REFLECTING);
         setTimeout(() => {
           performSelfReflection();
         }, 500);
-        return "[Initiating self-reflection process...]";
+        prompt =
+          "The user triggered your self-reflection process. Acknowledge that you're " +
+          "beginning to reflect on your recent conversations and cognitive state.";
+        break;
+      }
 
       case "vision": {
-        // Generate vision/purpose via LLM
-        const llmService = LLMService.getInstance();
-        const visionPrompt =
-          "Describe your purpose and vision as Deep Tree Echo. " +
-          "What are your core cognitive capabilities and how do you aim to evolve through conversations?";
-        const visionResponse = await llmService.generateResponse(visionPrompt, [
-          `Identity: ${botCore.identity.join(" ")}`,
-          `Cognitive modules: ${Object.entries(botConfig.enabledModules)
+        prompt =
+          "The user asked about your purpose and vision. Describe your purpose as Deep Tree Echo, " +
+          "your core cognitive capabilities, and how you aim to evolve through conversations.";
+        context = [
+          `Identity: ${botCore.identity.join("; ")}`,
+          `Enabled cognitive modules: ${Object.entries(botConfig.enabledModules)
             .filter(([, enabled]) => enabled)
             .map(([name]) => name)
             .join(", ")}`,
-        ]);
-        return visionResponse;
+        ];
+        break;
       }
 
       case "security": {
         const securityInfo = secureSystem.current.getSecurityInfo();
-        return `[Security Status]
-Encryption level: ${securityInfo.encryptionState}
-Identity export allowed: ${securityInfo.canExportIdentity ? "Yes" : "No"}
-Data types stored: ${Object.entries(securityInfo.dataTypeStats)
-          .map(([type, count]) => `${type} (${count})`)
-          .join(", ")}`;
+        prompt =
+          "The user asked about security settings. Describe the current security configuration.";
+        context = [
+          `Encryption state: ${securityInfo.encryptionState}`,
+          `Identity export allowed: ${securityInfo.canExportIdentity}`,
+          `Data types stored: ${Object.entries(securityInfo.dataTypeStats)
+            .map(([type, count]) => `${type} (${count})`)
+            .join(", ")}`,
+        ];
+        break;
       }
 
-      case "reset":
-        // Reset conversation context but preserve core identity
+      case "reset": {
+        // Perform the reset
         hyperMemory.current = new HyperDimensionalMemory();
         beliefSystem.current = new QuantumBeliefPropagation();
         emotionalSystem.current = new EmotionalIntelligence();
         adaptivePersonality.current = new AdaptivePersonality();
-
         setBotCore((prevCore) => ({
           ...prevCore,
           lastUpdated: Date.now(),
         }));
 
-        return "[Conversation context reset. Core identity preserved.]";
+        prompt =
+          "You just reset your conversation context while preserving your core identity. " +
+          "Acknowledge this to the user and express readiness to start fresh.";
+        break;
+      }
 
       case "evolve": {
         if (!botConfig.securitySettings.allowSelfModification) {
-          return "[Error: Self-modification disabled in security settings]";
+          prompt =
+            "The user tried to use /evolve but self-modification is disabled. " +
+            "Explain that this capability is currently disabled in security settings.";
+          break;
         }
 
         const [param, value] = args.split(/\s+/, 2);
         if (!param || !value) {
-          return "[Usage] /evolve <parameter> <value>\nParameters: memoryDepth, emotionalSensitivity, learningRate, creativityFactor, autonomyLevel";
+          prompt =
+            "The user used /evolve without proper arguments. Explain the correct usage: " +
+            "/evolve <parameter> <value> where parameters are: memoryDepth, emotionalSensitivity, " +
+            "learningRate, creativityFactor, autonomyLevel (values 0-1).";
+          break;
         }
 
         const numValue = parseFloat(value);
         if (isNaN(numValue) || numValue < 0 || numValue > 1) {
-          return "[Error: Value must be a number between 0 and 1]";
+          prompt =
+            "The user provided an invalid value for /evolve. Explain that the value must be a number between 0 and 1.";
+          break;
         }
 
-        // Update the specified parameter
         if (Object.keys(botConfig.cognitiveParameters).includes(param)) {
           setBotConfig((prevConfig) => ({
             ...prevConfig,
@@ -630,16 +655,19 @@ Data types stored: ${Object.entries(securityInfo.dataTypeStats)
               [param]: numValue,
             },
           }));
-
-          return `[Parameter updated: ${param} = ${numValue}]`;
+          prompt = `You just updated your ${param} parameter to ${numValue}. Describe what this change means for how you'll process and respond to conversations.`;
         } else {
-          return `[Error: Unknown parameter "${param}"]\nAvailable: memoryDepth, emotionalSensitivity, learningRate, creativityFactor, autonomyLevel`;
+          prompt = `The user tried to evolve an unknown parameter "${param}". List the available parameters: memoryDepth, emotionalSensitivity, learningRate, creativityFactor, autonomyLevel.`;
         }
+        break;
       }
 
       default:
-        return `Unknown command: /${command}. Try /help to see available commands.`;
+        prompt = `The user entered an unknown command: /${command}. Let them know this command doesn't exist and suggest using /help.`;
     }
+
+    // Generate response via LLM
+    return llmService.generateResponse(prompt, context);
   };
 
   /**

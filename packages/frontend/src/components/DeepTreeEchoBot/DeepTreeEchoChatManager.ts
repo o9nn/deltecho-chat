@@ -1182,7 +1182,7 @@ export class DeepTreeEchoChatManager {
       );
 
       if (messages.length === 0) {
-        return "No previous messages in this conversation.";
+        return "";
       }
 
       // Format messages for context
@@ -1195,7 +1195,7 @@ export class DeepTreeEchoChatManager {
       return formatted.join("\n");
     } catch (error) {
       log().error(`Error getting conversation context for ${chatId}:`, error);
-      return "Unable to retrieve conversation context.";
+      throw error;
     }
   }
 
