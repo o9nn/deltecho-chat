@@ -590,73 +590,70 @@ export class DeepTreeEchoBot {
 
   /**
    * Summarize a relevance-guided scientific inquiry for chat output.
+   * Uses LLM to generate the presentation within the template structure.
    */
-  private formatScientificGeniusInquiry(
+  private async formatScientificGeniusInquiry(
     inquiry: RelevanceGuidedInquiry,
-  ): string {
-    const insightLines = this.formatScientificInsights(
-      inquiry.scientificInsights,
-    );
-    const relevanceLines = inquiry.relevanceSignals
+  ): Promise<string> {
+    // Prepare data for LLM to format
+    const relevanceData = inquiry.relevanceSignals
       .slice(0, 5)
       .map(
         (signal) =>
-          `- ${signal.source}/${
-            signal.relevanceType
-          }: salience ${signal.salience.toFixed(
-            2,
-          )}, confidence ${signal.confidence.toFixed(2)}`,
-      )
-      .join("\\n");
-    const frameLines = inquiry.frameProblemSolutions
-      .slice(0, 3)
-      .map(
-        (solution) =>
-          `- ${solution.action}: ${Math.round(
-            solution.confidence * 100,
-          )}% confidence via ${solution.method}`,
-      )
-      .join("\\n");
+          `${signal.source}/${signal.relevanceType}: salience ${signal.salience.toFixed(2)}, confidence ${signal.confidence.toFixed(2)}`,
+      );
 
-    return `**Scientific Genius Inquiry**
+    const insightData = inquiry.scientificInsights.slice(0, 5).map(
+      (insight) =>
+        `[${insight.domain}/${insight.generatedBy}] ${insight.content} (novelty ${insight.novelty.toFixed(2)}, significance ${insight.significance.toFixed(2)}, Φ ${insight.phi.toFixed(2)})`,
+    );
 
-Query: ${inquiry.query}
+    const frameData = inquiry.frameProblemSolutions.slice(0, 3).map(
+      (solution) =>
+        `${solution.action}: ${Math.round(solution.confidence * 100)}% confidence via ${solution.method}`,
+    );
 
-**Relevance signals**
-${
-  relevanceLines ||
-  "- No high-salience relevance signals exceeded the threshold."
-}
+    // Have LLM generate the formatted presentation
+    const context = [
+      `Query: ${inquiry.query}`,
+      `Relevance signals: ${relevanceData.length > 0 ? relevanceData.join("; ") : "none exceeded threshold"}`,
+      `Scientific insights: ${insightData.length > 0 ? insightData.join("; ") : "none generated"}`,
+      `Frame-problem solutions: ${frameData.length > 0 ? frameData.join("; ") : "none detected"}`,
+    ];
 
-**Scientific insights**
-${insightLines}
-
-**Frame-problem notes**
-${frameLines || "- No explicit action-effect frame problem was detected."}`;
+    return this.llmService.generateResponse(
+      "Format this scientific inquiry result using markdown headers for each section (Scientific Genius Inquiry, Relevance signals, Scientific insights, Frame-problem notes). Present the data clearly.",
+      context,
+    );
   }
 
-  private formatScientificInsights(insights: ScientificInsight[]): string {
+  /**
+   * Format scientific insights using LLM.
+   */
+  private async formatScientificInsights(
+    insights: ScientificInsight[],
+  ): Promise<string> {
     if (insights.length === 0) {
-      return "- [No insights generated]";
+      return this.llmService.generateResponse(
+        "Briefly note that no scientific insights were generated from this query.",
+        [],
+      );
     }
 
-    return insights
-      .slice(0, 5)
-      .map(
-        (insight) =>
-          `- [${insight.domain}/${insight.generatedBy}] ${
-            insight.content
-          } (novelty ${insight.novelty.toFixed(
-            2,
-          )}, significance ${insight.significance.toFixed(
-            2,
-          )}, Φ ${insight.phi.toFixed(2)})`,
-      )
-      .join("\\n");
+    const insightData = insights.slice(0, 5).map(
+      (insight) =>
+        `[${insight.domain}/${insight.generatedBy}] ${insight.content} (novelty ${insight.novelty.toFixed(2)}, significance ${insight.significance.toFixed(2)}, Φ ${insight.phi.toFixed(2)})`,
+    );
+
+    return this.llmService.generateResponse(
+      "Format these scientific insights as a bulleted list, preserving the domain/generator tags and metrics.",
+      insightData,
+    );
   }
 
   /**
    * Generate a compact scientific reasoning overlay for normal chat responses.
+   * Uses LLM to generate the overlay content.
    */
   private async generateScientificGeniusOverlay(
     messageText: string,
@@ -675,10 +672,17 @@ ${frameLines || "- No explicit action-effect frame problem was detected."}`;
       return null;
     }
 
-    return `
+    const insightData = insights.slice(0, 3).map(
+      (insight) =>
+        `[${insight.domain}/${insight.generatedBy}] ${insight.content} (novelty ${insight.novelty.toFixed(2)}, significance ${insight.significance.toFixed(2)}, Φ ${insight.phi.toFixed(2)})`,
+    );
 
-**Scientific Genius Lens**
-${this.formatScientificInsights(insights.slice(0, 3))}`;
+    const overlay = await this.llmService.generateResponse(
+      "Add a brief 'Scientific Genius Lens' section with these insights formatted as bullets.",
+      insightData,
+    );
+
+    return "\n\n" + overlay;
   }
 
   private inferScientificDomain(
