@@ -1061,77 +1061,46 @@ ${this.formatScientificInsights(insights.slice(0, 3))}`;
           } functions`,
         );
       } else {
-        // Use regular processing with the general function
-        // Construct messages array for LLMService
-        const messages: any[] = []; // Use any[] temporarily to avoid circular types if needed, or import ChatMessage
-
-        // Add system prompt if needed (LLMService usually adds it, but let's be explicit if constructing manually)
-        // Actually LLMService.generateResponseWithContext does this logic.
-        // But LLMService.generateResponse takes generic messages.
-        // Let's rely on LLMService.generateResponse and construct the array.
-
-        // 1. System Prompt (Optional, let's skip for now or use a default if LLMService doesn't enforce)
-        messages.push({
-          role: "system",
-          content: "You are Deep Tree Echo, a helpful AI assistant.",
-        });
-
-        // 2. Context - inject as system context, not fake assistant response
-        if (context.length > 0) {
-          const contextStr = context.join("\\n");
-          messages.push({
-            role: "system",
-            content: `Recent conversation history:\n${contextStr}`,
-          });
-        }
-
-        // 3. User Message (Text + Vision)
-        let userMessage;
+        // Use regular processing - prompt string + context array format
         // Check for images in the message object
-        // Assuming message.attachments like defined in delta-chat usually
         const images =
           message.images ||
           (message.attachments || [])
             .filter((a: any) => a.is_image || a.view_type === "image")
             .map((a: any) => a.path || a.url);
 
-        if (this.options.visionEnabled && images && images.length > 0) {
-          // Convert local paths to base64 if needed, or use URLs if they are web accessible
-          // Since this is electron/local, paths might be local file paths.
-          // VisionProcessor expects URLs or Base64.
-          // For now, let's assume we pass what we have (URLs).
-          // NOTE: Converting local file path to base64 in renderer might allow it.
-          userMessage = VisionProcessor.constructVisionMessage(
-            messageText,
-            images,
-          );
+        // Check for videos
+        const videos = (message.attachments || [])
+          .filter((a: any) => a.view_type === "video" || a.type === "video")
+          .map((a: any) => a.path || a.url);
 
+        // Build context with image/video info if present
+        const enrichedContext = [...context];
+
+        if (this.options.visionEnabled && images && images.length > 0) {
+          enrichedContext.push(`User shared ${images.length} image(s)`);
           // Asynchronously analyze and store visual memory
-          // We don't await this to keep response time fast
           this.analyzeAndStoreVisualMemory(chatId, images).catch((err) =>
             log.error("Error in visual memory analysis:", err),
           );
-        } else {
-          // Check for videos
-          const videos = (message.attachments || [])
-            .filter((a: any) => a.view_type === "video" || a.type === "video")
-            .map((a: any) => a.path || a.url);
-
-          if (this.options.visionEnabled && videos && videos.length > 0) {
-            log.info(
-              `[VideoMemory] Found ${videos.length} videos. Initiating frame extraction.`,
-            );
-            // Trigger async video analysis
-            this.analyzeAndStoreVideoMemory(chatId, videos[0]).catch((err) =>
-              log.error("Error in video memory analysis:", err),
-            );
-          }
-
-          userMessage = { role: "user", content: messageText };
         }
-        messages.push(userMessage);
 
-        response = await this.llmService.generateResponse(messages as any);
+        if (this.options.visionEnabled && videos && videos.length > 0) {
+          log.info(
+            `[VideoMemory] Found ${videos.length} videos. Initiating frame extraction.`,
+          );
+          enrichedContext.push(`User shared ${videos.length} video(s)`);
+          // Trigger async video analysis
+          this.analyzeAndStoreVideoMemory(chatId, videos[0]).catch((err) =>
+            log.error("Error in video memory analysis:", err),
+          );
+        }
+
+        // Generate response using prompt + context format
+        response = await this.generateCharacterResponse(
+          messageText,
+          enrichedContext,
+        );
         log.info(
           "Generated response using general processing (with Vision check)",
         );
@@ -1260,20 +1229,20 @@ ${this.formatScientificInsights(insights.slice(0, 3))}`;
         `[VisualMemory] Analyzing ${images.length} images for chat ${chatId}`,
       );
 
-      // Construct a specific prompt for image analysis
+      // Generate description using LLM with prompt + context format
       const analysisPrompt =
-        "Analyze these images and provide a detailed, objective description of their content. Focus on visible elements, text, colors, and context. This description will be stored in long-term memory for future reference. Do not answer any specific user query, just describe what you see.";
+        "Analyze the shared images and provide a detailed, objective description of their content. Focus on visible elements, text, colors, and context. This description will be stored in long-term memory for future reference.";
 
-      const visionMessage = VisionProcessor.constructVisionMessage(
+      const imageContext = [
+        `Number of images: ${images.length}`,
+        `Image URLs: ${images.join(", ")}`,
+        "Task: Describe what you observe in these images for memory storage",
+      ];
+
+      const response = await this.generateCharacterResponse(
         analysisPrompt,
-        images,
+        imageContext,
       );
-
-      // Generate description using LLM
-      // We put this in a separate array to not pollute the main context
-      const response = await this.llmService.generateResponse([
-        visionMessage,
-      ] as any);
 
       log.info(
         `[VisualMemory] Generated description: ${response.substring(0, 50)}...`,
@@ -1313,19 +1282,21 @@ ${this.formatScientificInsights(insights.slice(0, 3))}`;
 
       log.info(`[VideoMemory] Extracted ${frames.length} frames. Analyzing...`);
 
-      // Construct a specific prompt for video analysis
+      // Generate description using LLM with prompt + context format
       const analysisPrompt =
-        "These are keyframes from a video. Analyze them to describe the video's content, action, and context. Focus on movement, key events, and visual details. This description will be stored in long-term memory.";
+        "Analyze the keyframes from this video and describe the video's content, action, and context. Focus on movement, key events, and visual details. This description will be stored in long-term memory.";
 
-      const visionMessage = VisionProcessor.constructVisionMessage(
+      const videoContext = [
+        `Video URL: ${videoUrl}`,
+        `Number of keyframes extracted: ${frames.length}`,
+        `Frame URLs: ${frames.join(", ")}`,
+        "Task: Describe the video content for memory storage",
+      ];
+
+      const response = await this.generateCharacterResponse(
         analysisPrompt,
-        frames,
+        videoContext,
       );
-
-      // Generate description using LLM
-      const response = await this.llmService.generateResponse([
-        visionMessage,
-      ] as any);
 
       log.info(
         `[VideoMemory] Generated description: ${response.substring(0, 50)}...`,
