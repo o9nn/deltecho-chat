@@ -44,7 +44,10 @@ import {
   AutonomyPipeline,
   type AutonomyPipelineConfig,
 } from "./autonomy-pipeline.js";
-import { DeltaChatAutonomyBridge } from "./deltachat-autonomy-bridge.js";
+import {
+  DeltaChatAutonomyBridge,
+  type BridgeConfig,
+} from "./deltachat-autonomy-bridge.js";
 import { ProactiveLoop } from "./proactive-loop.js";
 import {
   attachMemoryLeverSchedule,
@@ -178,6 +181,12 @@ export interface OrchestratorConfig {
   lucyEndpoint?: string;
   /** Complexity threshold for ADAPTIVE mode to escalate from MEMBRANE to CORESELF */
   coreSelfComplexityThreshold: number;
+  /** DeltaChat autonomy bridge configuration */
+  autonomyBridge?: Partial<BridgeConfig>;
+  /** Enable proactive messaging (AI-initiated conversations) */
+  enableProactiveMessaging: boolean;
+  /** Proactive message check interval in milliseconds */
+  proactiveCheckIntervalMs: number;
 }
 
 const DEFAULT_CONFIG: OrchestratorConfig = {
@@ -196,6 +205,8 @@ const DEFAULT_CONFIG: OrchestratorConfig = {
   membraneComplexityThreshold: 0.7,
   enableAutonomy: true,
   coreSelfComplexityThreshold: 0.85,
+  enableProactiveMessaging: envFlag("DELTECHO_PROACTIVE_MESSAGING", true),
+  proactiveCheckIntervalMs: 60_000, // Check for proactive messages every minute
 };
 
 const TRUE_ENV_VALUES = new Set(["1", "true", "yes", "on"]);
@@ -264,6 +275,7 @@ export class Orchestrator {
   private experimentGovernance?: PolycentricExperimentGovernance;
   private temporalCredit?: TemporalCreditAssignment;
   private scientificIntegrationCleanup: Array<() => void> = [];
+  private proactiveCheckTimer?: ReturnType<typeof setInterval>;
   private running: boolean = false;
 
   // Cognitive services for processing messages
@@ -1048,6 +1060,55 @@ export class Orchestrator {
             log.warn("Metabolic cognition graph not available (non-fatal):", e);
           }
 
+          // 15. DeltaChatAutonomyBridge — wires autonomy to DeltaChat messaging
+          if (this.autonomyPipeline && this.deltachatInterface) {
+            this.autonomyBridge = new DeltaChatAutonomyBridge(
+              this.autonomyPipeline,
+              {
+                enableAutonomousResponse: true,
+                preferCoreSelf: Boolean(this.coreSelfEngine),
+                enableProactiveMessaging: this.config.enableProactiveMessaging,
+                proactiveCoherenceThreshold: 0.5,
+                proactiveCooldownMs: 300_000,
+                ...this.config.autonomyBridge,
+              },
+            );
+
+            // Wire bridge responses to DeltaChat
+            this.autonomyBridge.on(
+              "response",
+              async (event: {
+                message: { chatId: number; messageId: number };
+                response: { text: string };
+              }) => {
+                if (event.response.text && this.deltachatInterface?.isConnected()) {
+                  const accountId =
+                    this.config.defaultAccountId ||
+                    (await this.deltachatInterface.getAllAccounts())?.[0]?.id;
+                  if (accountId) {
+                    await this.deltachatInterface.sendMessage(
+                      accountId,
+                      event.message.chatId,
+                      event.response.text,
+                    );
+                  }
+                }
+              },
+            );
+
+            // Start proactive message checking if enabled
+            if (this.config.enableProactiveMessaging) {
+              this.proactiveCheckTimer = setInterval(async () => {
+                await this.checkAndSendProactiveMessage();
+              }, this.config.proactiveCheckIntervalMs);
+              log.info(
+                `Proactive messaging enabled (check interval: ${this.config.proactiveCheckIntervalMs}ms)`,
+              );
+            }
+
+            log.info("DeltaChatAutonomyBridge wired (autonomy → DeltaChat active)");
+          }
+
           log.info("Level 5 Autonomy Pipeline fully initialized");
         } catch (error) {
           log.warn(
@@ -1768,6 +1829,67 @@ ${response.body}`;
   }
 
   /**
+   * Check for and send proactive messages from the autonomy bridge.
+   * This enables DTE to initiate conversations when conditions are met
+   * (high coherence, active communication goals, cooldown elapsed).
+   */
+  private async checkAndSendProactiveMessage(): Promise<void> {
+    if (!this.autonomyBridge || !this.deltachatInterface?.isConnected()) {
+      return;
+    }
+
+    try {
+      const proactiveMsg = await this.autonomyBridge.checkProactiveMessage();
+      if (!proactiveMsg || !proactiveMsg.text) {
+        return;
+      }
+
+      // Get default account and determine target chat
+      const accounts = await this.deltachatInterface.getAllAccounts();
+      if (accounts.length === 0) {
+        log.warn("No DeltaChat accounts available for proactive messaging");
+        return;
+      }
+
+      const accountId = this.config.defaultAccountId || accounts[0].id;
+
+      // Use the chatId from the proactive message, or find the most recent chat
+      let targetChatId = proactiveMsg.chatId;
+      if (!targetChatId || targetChatId === 0) {
+        // Get the most recent active chat
+        const recentChats = await this.deltachatInterface.getAllChats(accountId);
+        if (recentChats.length > 0) {
+          // Find first chat that allows sending messages and isn't a device/self chat
+          const targetChat = recentChats.find(
+            (c) => c.canSend && !c.isDeviceChat && !c.isSelfTalk,
+          );
+          if (targetChat) {
+            targetChatId = targetChat.id;
+          }
+        }
+      }
+
+      if (!targetChatId) {
+        log.debug("No target chat for proactive message");
+        return;
+      }
+
+      // Send the proactive message
+      await this.deltachatInterface.sendMessage(
+        accountId,
+        targetChatId,
+        proactiveMsg.text,
+      );
+
+      log.info(
+        `Proactive message sent to chat ${targetChatId}: ${proactiveMsg.text.substring(0, 50)}...`,
+      );
+    } catch (error) {
+      log.error("Failed to check/send proactive message:", error);
+    }
+  }
+
+  /**
    * Update emotional state based on message content
    */
   private async updateEmotionalState(content: string): Promise<void> {
@@ -1863,6 +1985,18 @@ ${response.body}`;
     if (this.autonomyLifecycle) {
       await this.autonomyLifecycle.stop();
       log.info("AutonomyLifecycleCoordinator stopped");
+    }
+    // Stop proactive messaging timer
+    if (this.proactiveCheckTimer) {
+      clearInterval(this.proactiveCheckTimer);
+      this.proactiveCheckTimer = undefined;
+      log.info("Proactive messaging timer stopped");
+    }
+    // Clear autonomy bridge reference (no explicit stop needed - it's event-driven)
+    if (this.autonomyBridge) {
+      this.autonomyBridge.removeAllListeners();
+      this.autonomyBridge = undefined;
+      log.info("DeltaChatAutonomyBridge disconnected");
     }
     if (this.proactiveLoop) {
       await detachProactiveLoop(this.proactiveLoop);

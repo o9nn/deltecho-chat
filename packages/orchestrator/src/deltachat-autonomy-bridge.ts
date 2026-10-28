@@ -41,8 +41,8 @@ const DEFAULT_CONFIG: BridgeConfig = {
   enableAutonomousResponse: true,
   preferCoreSelf: true,
   maxResponseLength: 2000,
-  enableProactiveMessaging: false,
-  proactiveCoherenceThreshold: 0.7,
+  enableProactiveMessaging: true, // Enabled by default for autonomous operation
+  proactiveCoherenceThreshold: 0.5, // Lower threshold for more proactive behavior
   proactiveCooldownMs: 300_000, // 5 minutes
 };
 
