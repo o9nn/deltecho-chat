@@ -244,62 +244,88 @@ export class LLMService {
   }
 
   /**
-   * Verify that a local model is actually served at the endpoint.
-   * Makes a minimal completion request to confirm the model responds.
+   * Verify that a specific local model is actually served at the endpoint.
+   * First queries available models, then verifies one can generate completions.
    */
   private async verifyLocalEndpoint(endpoint: string): Promise<boolean> {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+      const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
 
       try {
-        // Make a minimal completion request to verify the model is actually served
-        const response = await fetch(endpoint, {
+        // First, query /models to get the list of available models
+        const modelsEndpoint = endpoint.replace(
+          /\/chat\/completions\/?$/,
+          "/models",
+        );
+
+        const modelsResponse = await fetch(modelsEndpoint, {
+          method: "GET",
+          signal: controller.signal,
+        });
+
+        if (!modelsResponse.ok) {
+          clearTimeout(timeoutId);
+          log.warn(
+            `Local server /models endpoint returned ${modelsResponse.status}`,
+          );
+          return false;
+        }
+
+        const modelsData = await modelsResponse.json();
+        if (!modelsData.data || modelsData.data.length === 0) {
+          clearTimeout(timeoutId);
+          log.warn("Local server has no models loaded");
+          return false;
+        }
+
+        // Get the first available model's ID
+        const modelId = modelsData.data[0].id;
+        log.info(`Local server has model: ${modelId}`);
+
+        // Now verify the model can actually generate completions
+        const completionResponse = await fetch(endpoint, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            model: "default", // Most local servers accept any model name
-            messages: [{ role: "user", content: "." }],
+            model: modelId, // Use the actual model ID from /models
+            messages: [{ role: "user", content: "test" }],
             max_tokens: 1, // Minimal tokens to verify model responds
           }),
           signal: controller.signal,
         });
+
         clearTimeout(timeoutId);
 
-        if (!response.ok) {
-          // Try /models endpoint as fallback to check server is up
-          const modelsEndpoint = endpoint.replace(
-            /\/chat\/completions\/?$/,
-            "/models",
+        if (!completionResponse.ok) {
+          log.warn(
+            `Local model ${modelId} completion request failed: ${completionResponse.status}`,
           );
-          const modelsResponse = await fetch(modelsEndpoint, { method: "GET" });
-          if (modelsResponse.ok) {
-            const data = await modelsResponse.json();
-            // Check if any models are actually loaded
-            if (data.data && data.data.length > 0) {
-              log.info(
-                `Local server has ${data.data.length} model(s) available`,
-              );
-              return true;
-            }
-            log.warn("Local server responded but no models are loaded");
-            return false;
-          }
-          log.warn(`Local endpoint returned ${response.status}`);
           return false;
         }
 
-        // Verify we got a valid completion response
-        const data = await response.json();
-        if (data.choices && data.choices.length > 0) {
-          log.info("Local model verified - completion successful");
-          return true;
+        const completionData = await completionResponse.json();
+
+        // Verify we got a valid completion from the specific model
+        if (!completionData.choices || completionData.choices.length === 0) {
+          log.warn(`Local model ${modelId} returned no completion choices`);
+          return false;
         }
 
-        log.warn("Local endpoint responded but no completion returned");
-        return false;
+        // Verify the response came from the model we requested
+        if (completionData.model && completionData.model !== modelId) {
+          log.warn(
+            `Requested model ${modelId} but got response from ${completionData.model}`,
+          );
+          // Still accept if a model responded, but log the mismatch
+        }
+
+        log.info(
+          `Local model ${modelId} verified - completion successful with content`,
+        );
+        return true;
       } catch (fetchError: any) {
         clearTimeout(timeoutId);
         log.warn(

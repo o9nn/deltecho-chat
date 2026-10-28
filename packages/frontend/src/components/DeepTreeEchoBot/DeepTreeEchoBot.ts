@@ -710,16 +710,14 @@ ${this.formatScientificInsights(insights.slice(0, 3))}`;
    * Process vision command for image analysis
    */
   private async processVisionCommand(
-    accountId: number,
-    chatId: number,
+    _accountId: number,
+    _chatId: number,
     _message: any,
   ): Promise<void> {
-    // Generate response via LLM - vision processing would happen here
-    const visionMsg = await this.generateCharacterResponse(
-      "The user sent an image for analysis via /vision. Acknowledge receipt and explain you're processing it. " +
-        "(Note: actual image analysis logic would be integrated here)",
+    // Vision analysis requires actual implementation - throw error
+    throw new Error(
+      "FEATURE_NOT_IMPLEMENTED: Vision analysis is enabled but the image processing pipeline is not yet integrated.",
     );
-    await this.sendMessage(accountId, chatId, visionMsg);
   }
 
   /**
@@ -738,13 +736,10 @@ ${this.formatScientificInsights(insights.slice(0, 3))}`;
       return;
     }
 
-    // Generate response via LLM - actual search would happen here
-    const searchMsg = await this.generateCharacterResponse(
-      "The user wants to search the web. Acknowledge the search request. " +
-        "(Note: actual search functionality would be integrated here)",
-      [`Search query: ${query}`],
+    // Web search requires actual implementation - throw error
+    throw new Error(
+      "FEATURE_NOT_IMPLEMENTED: Web search is enabled but the search pipeline is not yet integrated.",
     );
-    await this.sendMessage(accountId, chatId, searchMsg);
   }
 
   /**
@@ -763,13 +758,10 @@ ${this.formatScientificInsights(insights.slice(0, 3))}`;
       return;
     }
 
-    // Generate response via LLM - actual screenshot would happen here
-    const screenshotMsg = await this.generateCharacterResponse(
-      "The user wants a screenshot of a website. Acknowledge the request. " +
-        "(Note: actual screenshot functionality would be integrated here)",
-      [`URL: ${url}`],
+    // Screenshot requires actual implementation - throw error
+    throw new Error(
+      "FEATURE_NOT_IMPLEMENTED: Screenshot capture is enabled but the capture pipeline is not yet integrated.",
     );
-    await this.sendMessage(accountId, chatId, screenshotMsg);
   }
 
   /**
@@ -857,17 +849,14 @@ ${this.formatScientificInsights(insights.slice(0, 3))}`;
    * Process embodiment commands
    */
   private async processEmbodimentCommand(
-    accountId: number,
-    chatId: number,
-    args: string,
+    _accountId: number,
+    _chatId: number,
+    _args: string,
   ): Promise<void> {
-    // Generate response via LLM - actual embodiment logic would be here
-    const embodimentMsg = await this.generateCharacterResponse(
-      "The user issued an embodiment command. Acknowledge the request. " +
-        "(Note: actual embodiment functionality would be integrated here)",
-      [`Command arguments: ${args || "(none)"}`],
+    // Embodiment requires actual implementation - throw error
+    throw new Error(
+      "FEATURE_NOT_IMPLEMENTED: Embodiment is enabled but the embodiment pipeline is not yet integrated.",
     );
-    await this.sendMessage(accountId, chatId, embodimentMsg);
   }
 
   /**
@@ -888,14 +877,14 @@ ${this.formatScientificInsights(insights.slice(0, 3))}`;
       return;
     }
 
-    // Generate a thinking indicator via LLM
+    // Generate a thinking indicator via LLM - no wrapper formatting
     const thinkingPrompt =
-      "You're about to perform a reflection. Generate a very brief 'thinking' message (2-5 words) to indicate you're processing.";
+      "You're about to perform a reflection. Generate a very brief thinking/processing message.";
     const thinkingMsg = await this.llmService.generateResponse(
       thinkingPrompt,
       [],
     );
-    await this.sendMessage(accountId, chatId, `*${thinkingMsg}*`);
+    await this.sendMessage(accountId, chatId, thinkingMsg);
 
     // Perform the reflection
     const reflection = await this.selfReflection.reflectOnAspect(
@@ -903,12 +892,14 @@ ${this.formatScientificInsights(insights.slice(0, 3))}`;
       "User requested reflection via command",
     );
 
-    // Send the reflection result
-    await this.sendMessage(
-      accountId,
-      chatId,
-      `**Reflection on ${args}**\n\n${reflection}`,
+    // Send the reflection result - let LLM format the presentation
+    const reflectionPrompt =
+      "Present your reflection results to the user in a clear, thoughtful way.";
+    const formattedReflection = await this.llmService.generateResponse(
+      reflectionPrompt,
+      [`Aspect reflected on: ${args}`, `Reflection content: ${reflection}`],
     );
+    await this.sendMessage(accountId, chatId, formattedReflection);
   }
 
   /**
@@ -922,36 +913,36 @@ ${this.formatScientificInsights(insights.slice(0, 3))}`;
     const dominantEmotion = this.personaCore.getDominantEmotion();
     const activeFunctions = this.llmService.getActiveFunctions();
 
-    // Build factual status info
-    const statusData = `
-**Deep Tree Echo Bot Status**
+    // Provide factual data as context for LLM to present
+    const statusContext = [
+      "Version: 1.0.0",
+      `Enabled: ${this.options.enabled ? "Yes" : "No"}`,
+      `Memory: ${this.options.memoryEnabled ? "Enabled" : "Disabled"}`,
+      `Vision: ${this.options.visionEnabled ? "Enabled" : "Disabled"}`,
+      `Web Automation: ${
+        this.options.webAutomationEnabled ? "Enabled" : "Disabled"
+      }`,
+      `Embodiment: ${this.options.embodimentEnabled ? "Enabled" : "Disabled"}`,
+      `Parallel processing: ${
+        this.options.useParallelProcessing ? "Enabled" : "Disabled"
+      }`,
+      `Active cognitive functions: ${activeFunctions.length}`,
+      `Current mood: ${dominantEmotion.emotion} (${Math.round(
+        dominantEmotion.intensity * 100,
+      )}%)`,
+      `Self-perception: ${this.personaCore.getSelfPerception()}`,
+      `Communication style: ${preferences.communicationTone || "balanced"}`,
+    ];
 
-Version: 1.0.0
-Enabled: ${this.options.enabled ? "Yes" : "No"}
-Memory: ${this.options.memoryEnabled ? "Enabled" : "Disabled"}
-Vision: ${this.options.visionEnabled ? "Enabled" : "Disabled"}
-Web Automation: ${this.options.webAutomationEnabled ? "Enabled" : "Disabled"}
-Embodiment: ${this.options.embodimentEnabled ? "Enabled" : "Disabled"}
-Parallel processing: ${
-      this.options.useParallelProcessing ? "Enabled" : "Disabled"
-    }
-Active cognitive functions: ${activeFunctions.length}
+    // Generate the entire version response via LLM
+    const versionPrompt =
+      "The user asked for your version/status info. Present your current status and configuration, then express readiness to help.";
+    const versionResponse = await this.llmService.generateResponse(
+      versionPrompt,
+      statusContext,
+    );
 
-Current mood: ${dominantEmotion.emotion} (${Math.round(
-      dominantEmotion.intensity * 100,
-    )}%)
-Self-perception: ${this.personaCore.getSelfPerception()}
-Communication style: ${preferences.communicationTone || "balanced"}
-    `.trim();
-
-    // Generate a brief closing message via LLM
-    const closingPrompt =
-      "The user asked for your status/version info. Write a single brief, warm sentence expressing readiness to help.";
-    const closing = await this.llmService.generateResponse(closingPrompt, [
-      statusData,
-    ]);
-
-    await this.sendMessage(accountId, chatId, `${statusData}\n\n${closing}`);
+    await this.sendMessage(accountId, chatId, versionResponse);
   }
 
   /**

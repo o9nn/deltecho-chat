@@ -87,7 +87,7 @@ export class DeepTreeEchoBot {
     message: T.Message,
   ): Promise<string> {
     if (!this.options.enabled) {
-      return "";
+      throw new Error("BOT_DISABLED: Deep Tree Echo bot is not enabled.");
     }
 
     try {
