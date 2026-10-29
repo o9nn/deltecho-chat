@@ -174,7 +174,11 @@ async function callClaude(
     }
   }
 
-  return response.content.find(content => content.type === 'text')?.text || ''
+  const textContent = response.content.find(content => content.type === 'text')?.text
+  if (!textContent) {
+    throw new Error('LLM returned no text content')
+  }
+  return textContent
 }
 
 async function main() {
