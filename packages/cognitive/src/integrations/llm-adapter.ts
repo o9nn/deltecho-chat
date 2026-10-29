@@ -152,32 +152,23 @@ export class LLMAdapter {
 
     let content: string;
 
-    try {
-      if (this.customProcessor) {
-        // Use custom processor
-        content = await this.customProcessor(
-          context.message,
-          this.formatContext(context),
-          enrichedSystemPrompt,
-        );
-      } else if (this.llm) {
-        // Use LLM service
-        content = await this.llm.generateResponse(
-          context.message,
-          enrichedHistory,
-          enrichedSystemPrompt,
-        );
-      } else {
-        // Fallback response
-        content = this.getFallbackResponse(context);
-      }
-    } catch (_error) {
-      return {
-        content:
-          "I apologize, but I encountered an error processing your message. Please try again.",
-        processingTime: Date.now() - startTime,
-        finishReason: "error",
-      };
+    if (this.customProcessor) {
+      // Use custom processor
+      content = await this.customProcessor(
+        context.message,
+        this.formatContext(context),
+        enrichedSystemPrompt,
+      );
+    } else if (this.llm) {
+      // Use LLM service
+      content = await this.llm.generateResponse(
+        context.message,
+        enrichedHistory,
+        enrichedSystemPrompt,
+      );
+    } else {
+      // No LLM available - throw error, no fallback text
+      throw new Error("MODEL_UNAVAILABLE: No LLM service configured");
     }
 
     // Cache result
@@ -335,19 +326,6 @@ export class LLMAdapter {
     }
 
     return formatted;
-  }
-
-  /**
-   * Get fallback response when no LLM available
-   */
-  private getFallbackResponse(_context: PromptContext): string {
-    const responses = [
-      "I understand you're reaching out. While I'm currently in a limited mode, I'm here to help.",
-      "Thank you for your message. I'm processing in a simplified mode right now.",
-      "I hear you. Let me think about that...",
-    ];
-
-    return responses[Math.floor(Math.random() * responses.length)];
   }
 
   /**
