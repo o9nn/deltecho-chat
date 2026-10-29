@@ -376,25 +376,23 @@ describe("Sys6OrchestratorBridge", () => {
   });
 
   describe("Message Processing", () => {
-    it("should process messages through cognitive system", async () => {
-      const response = await bridge.processMessage("Hello, Deep Tree Echo!");
-
-      expect(typeof response).toBe("string");
-      expect(response.length).toBeGreaterThan(0);
+    it("should throw when the LLM is not configured instead of canned speech", async () => {
+      await expect(
+        bridge.processMessage("Hello, Deep Tree Echo!"),
+      ).rejects.toThrow(/MODEL_NOT_CONFIGURED/);
     });
 
-    it("should handle empty messages gracefully", async () => {
-      const response = await bridge.processMessage("");
-
-      expect(typeof response).toBe("string");
+    it("should throw on empty messages when the LLM is not configured", async () => {
+      await expect(bridge.processMessage("")).rejects.toThrow(
+        /MODEL_NOT_CONFIGURED/,
+      );
     });
 
-    it("should update emotional state after processing", async () => {
-      // Process a message
-      await bridge.processMessage("This is a test message");
+    it("should remain inspectable after a configuration error", async () => {
+      await expect(
+        bridge.processMessage("This is a test message"),
+      ).rejects.toThrow(/MODEL_NOT_CONFIGURED/);
 
-      // The emotional state should have been updated
-      // (We can't directly verify this without exposing internal state)
       const state = bridge.getState();
       expect(state).toBeDefined();
     });
@@ -458,17 +456,18 @@ describe("Sys6OrchestratorBridge", () => {
   });
 
   describe("Error Handling", () => {
-    it("should handle processing errors gracefully", async () => {
-      // Process should return error message, not throw
-      const response = await bridge.processMessage("test");
-      expect(typeof response).toBe("string");
+    it("should throw processing errors instead of canned character speech", async () => {
+      await expect(bridge.processMessage("test")).rejects.toThrow(
+        /MODEL_NOT_CONFIGURED/,
+      );
     });
 
     it("should continue operation after errors", async () => {
       await bridge.start();
 
-      // Process message (may or may not error)
-      await bridge.processMessage("test");
+      await expect(bridge.processMessage("test")).rejects.toThrow(
+        /MODEL_NOT_CONFIGURED/,
+      );
 
       // Bridge should still be running
       const state = bridge.getState();

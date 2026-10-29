@@ -395,20 +395,20 @@ describe("Orchestration Integration", () => {
   });
 
   describe("Message Processing Integration", () => {
-    it("should process messages through the cognitive system", async () => {
+    it("should throw when the LLM is not configured instead of canned speech", async () => {
       await sys6Bridge.start();
 
-      const response = await sys6Bridge.processMessage("Hello, system!");
-
-      expect(typeof response).toBe("string");
-      expect(response.length).toBeGreaterThan(0);
+      await expect(sys6Bridge.processMessage("Hello, system!")).rejects.toThrow(
+        /MODEL_NOT_CONFIGURED/,
+      );
     });
 
     it("should update telemetry during message processing", async () => {
       await Promise.all([sys6Bridge.start(), telemetryMonitor.start()]);
 
-      // Process a message
-      await sys6Bridge.processMessage("Test message");
+      await expect(sys6Bridge.processMessage("Test message")).rejects.toThrow(
+        /MODEL_NOT_CONFIGURED/,
+      );
 
       await new Promise((resolve) => setTimeout(resolve, 100));
 

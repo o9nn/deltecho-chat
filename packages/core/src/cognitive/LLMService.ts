@@ -379,8 +379,25 @@ export class LLMService {
 
     const data = (await response.json()) as ChatCompletionResponse;
 
+    if (
+      !data.choices ||
+      !Array.isArray(data.choices) ||
+      data.choices.length === 0
+    ) {
+      throw new Error(
+        "LLM_EMPTY_RESPONSE: Model returned no choices - cannot generate response",
+      );
+    }
+
+    const content = data.choices[0]?.message?.content;
+    if (!content || typeof content !== "string") {
+      throw new Error(
+        "LLM_MALFORMED_RESPONSE: Model response missing content - cannot generate response",
+      );
+    }
+
     return {
-      content: data.choices[0]?.message?.content || "",
+      content,
       usage: {
         totalTokens: data.usage?.total_tokens || 0,
       },
@@ -423,8 +440,13 @@ export class LLMService {
 
     const data = (await response.json()) as AnthropicResponse;
 
+    const content = data.content?.[0]?.text;
+    if (!content || typeof content !== "string") {
+      throw new Error("LLM_EMPTY_RESPONSE: Model returned no text content");
+    }
+
     return {
-      content: data.content?.[0]?.text || "",
+      content,
       usage: {
         totalTokens:
           (data.usage?.input_tokens || 0) + (data.usage?.output_tokens || 0),
@@ -522,37 +544,7 @@ export class LLMService {
       return result.content;
     } catch (error) {
       log.error("Error generating response:", error);
-
-      // Fall back to placeholder response on API failure
-      return this.getPlaceholderResponse(functionType, input);
-    }
-  }
-
-  /**
-   * Get a placeholder response for when API calls fail
-   */
-  private getPlaceholderResponse(
-    functionType: CognitiveFunctionType,
-    input: string,
-  ): string {
-    const preview = input.slice(0, 30);
-    switch (functionType) {
-      case CognitiveFunctionType.COGNITIVE_CORE:
-        return `From a logical perspective, I believe the most effective approach to "${preview}..." would involve a structured analysis of the key components.`;
-      case CognitiveFunctionType.AFFECTIVE_CORE:
-        return `I sense that "${preview}..." evokes feelings of curiosity and interest. I'd like to explore this with empathy and emotional awareness.`;
-      case CognitiveFunctionType.RELEVANCE_CORE:
-        return `When considering "${preview}...", the most relevant aspects appear to be the underlying patterns and practical implications.`;
-      case CognitiveFunctionType.SEMANTIC_MEMORY:
-        return `Based on my knowledge, "${preview}..." relates to several key concepts that I can help clarify and expand upon.`;
-      case CognitiveFunctionType.EPISODIC_MEMORY:
-        return `This reminds me of previous conversations we've had about similar topics. Let me recall some relevant context.`;
-      case CognitiveFunctionType.PROCEDURAL_MEMORY:
-        return `Here's how I would approach "${preview}..." step by step, drawing on established methods and best practices.`;
-      case CognitiveFunctionType.CONTENT_EVALUATION:
-        return `I've carefully evaluated "${preview}..." and can provide a thoughtful response that respects appropriate boundaries.`;
-      default:
-        return `I've processed your message about "${preview}..." and here's my response.`;
+      throw error;
     }
   }
 
@@ -873,7 +865,9 @@ export class LLMService {
         );
         if (!generalFunction || !generalFunction.config.apiKey) {
           log.warn("No API key provided for reflection");
-          return "Reflection failed: LLM service not properly configured";
+          throw new Error(
+            "MODEL_NOT_CONFIGURED: Reflection requires a configured LLM service",
+          );
         }
         // Use legacy general function path
         return this.generateResponseWithFunction(
@@ -1046,7 +1040,9 @@ export class LLMService {
 
       if (!generalFunction || !generalFunction.config.apiKey) {
         log.warn("No API key provided for LLM service");
-        return "Image analysis failed: LLM service not properly configured";
+        throw new Error(
+          "MODEL_NOT_CONFIGURED: Image analysis requires a configured LLM service",
+        );
       }
 
       // Use text-based description request via the configured LLM

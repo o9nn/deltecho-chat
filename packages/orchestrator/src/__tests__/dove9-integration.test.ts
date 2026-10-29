@@ -149,7 +149,41 @@ describe("Dove9Integration", () => {
       expect(handler).not.toHaveBeenCalled();
     });
 
-    it("should call response handler when response is ready", async () => {
+    it("should call response handler when a model response is ready", async () => {
+      const handler = jest.fn<(response: unknown) => void>();
+      integration.onResponse(handler);
+      integration.configureApiKeys({ general: "test-key" });
+
+      const originalFetch = global.fetch;
+      global.fetch = jest.fn(async () => ({
+        ok: true,
+        json: async () => ({
+          choices: [{ message: { content: "Mocked response" } }],
+        }),
+      })) as unknown as typeof fetch;
+
+      try {
+        await integration.start();
+
+        const email = createTestEmail({
+          from: "user@example.com",
+          to: ["test-bot@localhost"],
+        });
+
+        await integration.processEmail(email);
+
+        expect(handler).toHaveBeenCalled();
+        expect(handler.mock.calls[0]?.[0]).toEqual(
+          expect.objectContaining({
+            body: "Mocked response",
+          }),
+        );
+      } finally {
+        global.fetch = originalFetch;
+      }
+    });
+
+    it("should not invent canned speech when the LLM is not configured", async () => {
       const handler = jest.fn<(response: unknown) => void>();
       integration.onResponse(handler);
 
@@ -160,12 +194,9 @@ describe("Dove9Integration", () => {
         to: ["test-bot@localhost"],
       });
 
-      await integration.processEmail(email);
-
-      // Wait for async processing
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      expect(handler).toHaveBeenCalled();
+      const result = await integration.processEmail(email);
+      expect(result?.status).toBe("failed");
+      expect(handler).not.toHaveBeenCalled();
     });
   });
 

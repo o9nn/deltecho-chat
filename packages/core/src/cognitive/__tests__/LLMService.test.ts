@@ -197,9 +197,10 @@ describe("LLMService", () => {
   });
 
   describe("generateResponse", () => {
-    it("should return error message when no API key configured", async () => {
-      const response = await llmService.generateResponse("Hello");
-      expect(response).toContain("isn't fully configured");
+    it("should throw when no API key configured", async () => {
+      await expect(llmService.generateResponse("Hello")).rejects.toThrow(
+        /MODEL_NOT_CONFIGURED/,
+      );
     });
 
     it("should generate response with configured API key", async () => {
@@ -208,6 +209,33 @@ describe("LLMService", () => {
 
       // Should return the mocked response
       expect(response).toBe("Mocked response");
+    });
+
+    it("should throw when the model returns no text content", async () => {
+      llmService.setConfig({ apiKey: "test-key" });
+      const fetchMock = global.fetch as any;
+      fetchMock.mockResolvedValue({
+        ok: true,
+        json: async () => ({ choices: [{ message: { content: "" } }] }),
+      });
+
+      await expect(llmService.generateResponse("Hello")).rejects.toThrow(
+        /LLM_MALFORMED_RESPONSE|LLM_EMPTY_RESPONSE/,
+      );
+    });
+
+    it("should throw on API failure instead of returning canned speech", async () => {
+      llmService.setConfig({ apiKey: "test-key" });
+      const fetchMock = global.fetch as any;
+      fetchMock.mockResolvedValue({
+        ok: false,
+        status: 500,
+        text: async () => "Internal Server Error",
+      });
+
+      await expect(llmService.generateResponse("Hello")).rejects.toThrow(
+        /OpenAI API error/,
+      );
     });
   });
 
