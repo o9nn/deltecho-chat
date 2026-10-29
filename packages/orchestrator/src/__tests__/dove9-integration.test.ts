@@ -6,6 +6,7 @@ import {
   afterEach,
   jest,
 } from "@jest/globals";
+import { LLMService } from "deep-tree-echo-core";
 import {
   Dove9Integration,
   Dove9IntegrationConfig,
@@ -44,6 +45,7 @@ describe("Dove9Integration", () => {
   });
 
   afterEach(async () => {
+    jest.restoreAllMocks();
     await integration.stop();
   });
 
@@ -150,6 +152,14 @@ describe("Dove9Integration", () => {
     });
 
     it("should call response handler when response is ready", async () => {
+      jest
+        .spyOn(LLMService.prototype, "generateFullParallelResponse")
+        .mockResolvedValue({
+          processing: {} as Record<string, string>,
+          integratedResponse: "Mocked cognitive response",
+          insights: { processingMethod: "single_function" },
+        });
+
       const handler = jest.fn<(response: unknown) => void>();
       integration.onResponse(handler);
 

@@ -8,7 +8,15 @@
  * - Real-time monitoring during operation
  */
 
-import { describe, it, expect, beforeEach, afterEach } from "@jest/globals";
+import {
+  describe,
+  it,
+  expect,
+  beforeEach,
+  afterEach,
+  jest,
+} from "@jest/globals";
+import { LLMService } from "deep-tree-echo-core";
 import { Sys6OrchestratorBridge } from "../sys6-bridge/index.js";
 import { AgentCoordinator } from "../agents/index.js";
 import { TelemetryMonitor } from "../telemetry/index.js";
@@ -395,7 +403,19 @@ describe("Orchestration Integration", () => {
   });
 
   describe("Message Processing Integration", () => {
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
     it("should process messages through the cognitive system", async () => {
+      jest
+        .spyOn(LLMService.prototype, "generateFullParallelResponse")
+        .mockResolvedValue({
+          processing: {} as Record<string, string>,
+          integratedResponse: "Mocked cognitive response",
+          insights: { processingMethod: "single_function" },
+        });
+
       await sys6Bridge.start();
 
       const response = await sys6Bridge.processMessage("Hello, system!");
@@ -405,6 +425,14 @@ describe("Orchestration Integration", () => {
     });
 
     it("should update telemetry during message processing", async () => {
+      jest
+        .spyOn(LLMService.prototype, "generateFullParallelResponse")
+        .mockResolvedValue({
+          processing: {} as Record<string, string>,
+          integratedResponse: "Mocked cognitive response",
+          insights: { processingMethod: "single_function" },
+        });
+
       await Promise.all([sys6Bridge.start(), telemetryMonitor.start()]);
 
       // Process a message

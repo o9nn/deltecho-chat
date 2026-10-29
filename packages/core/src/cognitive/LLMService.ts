@@ -654,19 +654,7 @@ export class LLMService {
       };
     } catch (error) {
       log.error("Error generating parallel response:", error);
-
-      // Fall back to general function
-      const fallbackResponse = await this.generateResponse(input, context);
-      return {
-        processing: {
-          [CognitiveFunctionType.GENERAL]: fallbackResponse,
-        } as Record<CognitiveFunctionType, string>,
-        integratedResponse: fallbackResponse,
-        insights: {
-          processingMethod: "fallback_single_function",
-          error: "Parallel processing failed",
-        },
-      };
+      throw error;
     }
   }
 
