@@ -10,10 +10,7 @@ import * as fs from "fs";
 import * as path from "path";
 
 describe("Code Path Audit - All Character Responses Through LLM", () => {
-  const botDir = path.resolve(
-    __dirname,
-    "../",
-  );
+  const botDir = path.resolve(__dirname, "../");
 
   describe("DeepTreeEchoBot.ts", () => {
     const filePath = path.join(botDir, "DeepTreeEchoBot.ts");
@@ -31,10 +28,7 @@ describe("Code Path Audit - All Character Responses Through LLM", () => {
     it("all sendMessage calls are preceded by LLM generation", () => {
       const sendMessageLines: number[] = [];
       lines.forEach((line, i) => {
-        if (
-          line.includes("await this.sendMessage(") &&
-          !line.includes("//")
-        ) {
+        if (line.includes("await this.sendMessage(") && !line.includes("//")) {
           sendMessageLines.push(i + 1);
         }
       });
@@ -54,20 +48,23 @@ describe("Code Path Audit - All Character Responses Through LLM", () => {
         if (!hasLLMCall) {
           // Check if the variable being sent was assigned from LLM earlier
           const sendLine = lines[lineNum - 1];
-          const varMatch = sendLine.match(/sendMessage\([^,]+,\s*[^,]+,\s*(\w+)/);
+          const varMatch = sendLine.match(
+            /sendMessage\([^,]+,\s*[^,]+,\s*(\w+)/,
+          );
           if (varMatch) {
             const varName = varMatch[1];
             // Look back further for this variable's assignment
             const fullPrecedingCode = lines
               .slice(Math.max(0, lineNum - 50), lineNum - 1)
               .join("\n");
-            const varAssignment = fullPrecedingCode.includes(
-              `${varName} = await this.generateCharacterResponse`,
-            ) || fullPrecedingCode.includes(
-              `${varName} = await this.llmService.generateResponse`,
-            ) || fullPrecedingCode.includes(
-              `${varName} += scientificOverlay`,
-            );
+            const varAssignment =
+              fullPrecedingCode.includes(
+                `${varName} = await this.generateCharacterResponse`,
+              ) ||
+              fullPrecedingCode.includes(
+                `${varName} = await this.llmService.generateResponse`,
+              ) ||
+              fullPrecedingCode.includes(`${varName} += scientificOverlay`);
             expect(varAssignment).toBe(true);
           }
         } else {
@@ -108,7 +105,9 @@ describe("Code Path Audit - All Character Responses Through LLM", () => {
     });
 
     it("no hardcoded return values with character speech", () => {
-      const returnStatements = content.match(/return\s*\{[^}]*response:[^}]*\}/g);
+      const returnStatements = content.match(
+        /return\s*\{[^}]*response:[^}]*\}/g,
+      );
 
       if (returnStatements) {
         for (const stmt of returnStatements) {
@@ -152,7 +151,8 @@ describe("Code Path Audit - All Character Responses Through LLM", () => {
     });
 
     it("analyzeImage routes through LLM", () => {
-      expect(content).toContain("llmService.generateResponse");
+      // Uses LLMService.analyzeImage which properly sends images as multimodal content
+      expect(content).toContain("llmService.analyzeImage");
     });
   });
 

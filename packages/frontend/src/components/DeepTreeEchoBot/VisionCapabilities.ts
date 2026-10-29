@@ -1,5 +1,5 @@
 import { getLogger } from "../../../../shared/logger";
-import { LLMService } from "./LLMService";
+import { LLMService, CognitiveFunctionType } from "./LLMService";
 
 const log = getLogger("render/components/DeepTreeEchoBot/VisionCapabilities");
 
@@ -50,8 +50,8 @@ export class VisionCapabilities {
       return false;
     }
 
-    // Vision requires LLM service to be configured
-    if (!this.llmService.isConfigured()) {
+    // Vision requires LLM service to be configured with at least GENERAL function
+    if (!this.llmService.isFunctionConfigured(CognitiveFunctionType.GENERAL)) {
       throw new Error(
         "VISION_UNAVAILABLE: Vision requires a configured LLM service with vision capabilities.",
       );
@@ -81,22 +81,9 @@ export class VisionCapabilities {
 
     log.info("Analyzing image with LLM vision capabilities");
 
-    // Use LLMService to analyze the image - all output comes from the model
-    const analysisPrompt = `Analyze this image and provide:
-1. A detailed description of what you see
-2. A list of objects detected with estimated confidence (0-1)
-3. Relevant tags describing the scene
-
-Format your response as JSON:
-{
-  "description": "...",
-  "objects": [{"label": "...", "confidence": 0.95}, ...],
-  "tags": ["tag1", "tag2", ...]
-}`;
-
-    const response = await this.llmService.generateResponse(analysisPrompt, [
-      `[IMAGE_DATA:${imageBase64.substring(0, 100)}...]`,
-    ]);
+    // Use LLMService.analyzeImage which properly sends the image as multimodal content
+    // All output comes from the model - no simulated or fake responses
+    const response = await this.llmService.analyzeImage(imageBase64);
 
     // Parse the LLM response
     try {
@@ -117,7 +104,7 @@ Format your response as JSON:
         objects: [],
         tags: [],
       };
-    } catch (parseError) {
+    } catch (_parseError) {
       // If parsing fails, use raw response
       log.warn("Could not parse structured response, using raw text");
       return {

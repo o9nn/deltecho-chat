@@ -35,9 +35,7 @@ describe("LLM Error Behavior (No Fallbacks)", () => {
         apiKey: "",
       });
 
-      await expect(
-        llmService.generateResponse("Hello", []),
-      ).rejects.toThrow();
+      await expect(llmService.generateResponse("Hello", [])).rejects.toThrow();
     });
   });
 
@@ -53,9 +51,9 @@ describe("LLM Error Behavior (No Fallbacks)", () => {
     it("should throw on network error, not return fallback", async () => {
       global.fetch = jest.fn().mockRejectedValue(new Error("Network error"));
 
-      await expect(
-        llmService.generateResponse("Hello", []),
-      ).rejects.toThrow("Network error");
+      await expect(llmService.generateResponse("Hello", [])).rejects.toThrow(
+        "Network error",
+      );
     });
 
     it("should throw on HTTP 500, not return fallback", async () => {
@@ -66,9 +64,7 @@ describe("LLM Error Behavior (No Fallbacks)", () => {
         json: async () => ({ error: { message: "Server error" } }),
       });
 
-      await expect(
-        llmService.generateResponse("Hello", []),
-      ).rejects.toThrow();
+      await expect(llmService.generateResponse("Hello", [])).rejects.toThrow();
     });
 
     it("should throw on rate limit (429), not return fallback", async () => {
@@ -79,9 +75,7 @@ describe("LLM Error Behavior (No Fallbacks)", () => {
         json: async () => ({ error: { message: "Rate limited" } }),
       });
 
-      await expect(
-        llmService.generateResponse("Hello", []),
-      ).rejects.toThrow();
+      await expect(llmService.generateResponse("Hello", [])).rejects.toThrow();
     });
 
     it("should throw on empty response, not return fallback", async () => {
@@ -90,9 +84,7 @@ describe("LLM Error Behavior (No Fallbacks)", () => {
         json: async () => ({ choices: [] }),
       });
 
-      await expect(
-        llmService.generateResponse("Hello", []),
-      ).rejects.toThrow();
+      await expect(llmService.generateResponse("Hello", [])).rejects.toThrow();
     });
 
     it("should throw on malformed response, not return fallback", async () => {
@@ -101,17 +93,12 @@ describe("LLM Error Behavior (No Fallbacks)", () => {
         json: async () => ({ unexpected: "format" }),
       });
 
-      await expect(
-        llmService.generateResponse("Hello", []),
-      ).rejects.toThrow();
+      await expect(llmService.generateResponse("Hello", [])).rejects.toThrow();
     });
   });
 
   describe("verification that no fallback text exists", () => {
     it("should not contain any hardcoded fallback strings in generateResponse", async () => {
-      // Read the LLMService source to verify no fallback patterns
-      const source = LLMService.toString();
-
       // These patterns would indicate fallback text
       const fallbackPatterns = [
         /I'm sorry/i,
@@ -125,8 +112,7 @@ describe("LLM Error Behavior (No Fallbacks)", () => {
 
       // Check method source doesn't contain fallback patterns
       // (This is a meta-test that verifies the code structure)
-      const generateResponseSource =
-        llmService.generateResponse.toString();
+      const generateResponseSource = llmService.generateResponse.toString();
 
       for (const pattern of fallbackPatterns) {
         expect(generateResponseSource).not.toMatch(pattern);
