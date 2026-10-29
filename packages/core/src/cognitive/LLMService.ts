@@ -487,7 +487,9 @@ export class LLMService {
 
       if (!cognitiveFunction.config.apiKey) {
         log.warn(`No API key provided for ${cognitiveFunction.name}`);
-        return `I'm sorry, but my ${cognitiveFunction.name.toLowerCase()} isn't fully configured. Please set up the API key in settings.`;
+        throw new Error(
+          `MODEL_NOT_CONFIGURED: ${cognitiveFunction.name} API key is not set`,
+        );
       }
 
       log.info(`Generating response with ${cognitiveFunction.name}`);
@@ -742,7 +744,9 @@ export class LLMService {
       memoryKeys.length === 0 &&
       !evaluationResponse
     ) {
-      return "I'm unable to generate a response at this time.";
+      throw new Error(
+        "LLM_NO_RESPONSE: All cognitive functions returned empty responses",
+      );
     }
 
     // Prioritize cognitive core if available
@@ -776,7 +780,8 @@ export class LLMService {
       return evaluationResponse;
     }
 
-    return "I'm processing your request but don't have a specific response formulated yet.";
+    // Should not reach here - all valid responses handled above
+    throw new Error("LLM_RESPONSE_UNHANDLED: No response could be formulated");
   }
 
   /**
@@ -895,10 +900,15 @@ export class LLMService {
       if (cognitive && affective) {
         return `${cognitive}\n\n${affective}`;
       }
-      return cognitive || affective || "Self-reflection yielded no response.";
+      if (!cognitive && !affective) {
+        throw new Error(
+          "REFLECTION_EMPTY: Self-reflection yielded no response",
+        );
+      }
+      return cognitive || affective!;
     } catch (error) {
       log.error("Error generating reflection:", error);
-      return "Self-reflection process encountered an error.";
+      throw error;
     }
   }
 

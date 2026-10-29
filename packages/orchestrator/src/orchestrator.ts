@@ -1510,7 +1510,8 @@ export class Orchestrator {
       return response;
     } catch (error) {
       log.error("Error processing message:", error);
-      return "I'm sorry, I had a problem processing your message. Please try again.";
+      // No fallback text - throw so the error handler at the call site can decide
+      throw error;
     }
   }
 
