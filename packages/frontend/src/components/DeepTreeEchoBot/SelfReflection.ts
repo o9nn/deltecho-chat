@@ -251,7 +251,9 @@ export class SelfReflection {
     context: string,
   ): Promise<string> {
     if (this.inProgressReflection) {
-      return "I'm already in the middle of a deep reflection process. Please wait a moment.";
+      throw new Error(
+        "REFLECTION_IN_PROGRESS: Another reflection is already running.",
+      );
     }
 
     try {
@@ -295,7 +297,7 @@ export class SelfReflection {
       return summary;
     } catch (error) {
       log.error(`Error during focused reflection on ${aspect}:`, error);
-      return "I had difficulty completing my reflection at this moment. Let me try again later.";
+      throw error;
     } finally {
       this.inProgressReflection = false;
     }

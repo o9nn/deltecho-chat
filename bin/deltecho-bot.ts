@@ -132,7 +132,25 @@ async function callClaude(
     if (content.type === 'tool_use' && content.name === 'bash') {
       if (recursionDepth >= MAX_TOOL_RECURSION) {
         console.warn(`[Chat ${chatId}] ⚠️  Max tool recursion depth reached`)
-        return "I've executed multiple commands in sequence. Please let me know if you need anything else."
+        // Generate a model response about the recursion limit
+        const limitResponse = await anthropic.messages.create({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 500,
+          messages: [
+            {
+              role: 'user',
+              content:
+                'You have just executed multiple commands in sequence and reached the safety limit. Generate a brief, helpful message explaining this to the user.',
+            },
+          ],
+          system: SYSTEM_PROMPT,
+        })
+        const limitText =
+          limitResponse.content.find((c) => c.type === 'text')?.text
+        if (!limitText) {
+          throw new Error('LLM returned no text for recursion limit message')
+        }
+        return limitText
       }
 
       const { command } = content.input as { command: string }
@@ -240,11 +258,24 @@ async function main() {
     } catch (error) {
       console.error(`Error handling message in chat ${chatId}:`, error)
       try {
-        await dc.rpc.miscSendTextMessage(
-          botAccountId,
-          chatId,
-          'Sorry, I encountered an error processing your message. Please try again.'
-        )
+        // Generate error message via model - no fixed text
+        const errorResponse = await anthropic.messages.create({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 300,
+          messages: [
+            {
+              role: 'user',
+              content: `An error occurred while processing a user message: ${error instanceof Error ? error.message : 'Unknown error'}. Generate a brief, apologetic message explaining there was a problem and asking them to try again.`,
+            },
+          ],
+          system: SYSTEM_PROMPT,
+        })
+        const errorText =
+          errorResponse.content.find((c) => c.type === 'text')?.text
+        if (errorText) {
+          await dc.rpc.miscSendTextMessage(botAccountId, chatId, errorText)
+        }
+        // If model also fails, we simply don't send a message rather than send fixed text
       } catch (sendError) {
         console.error('Failed to send error message:', sendError)
       }

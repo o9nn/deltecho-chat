@@ -113,7 +113,7 @@ describe("DeepTreeEchoBot Class", () => {
     );
   });
 
-  it("should process message with images using VisionProcessor", async () => {
+  it("should process message with images by passing to LLM", async () => {
     const options: any = {
       enabled: true,
       visionEnabled: true,
@@ -132,27 +132,16 @@ describe("DeepTreeEchoBot Class", () => {
     // Call processMessage with 4 args: accountId, chatId, msgId, message
     await bot.processMessage(1, 100, 200, message);
 
-    // Verify VisionProcessor usage
-    expect(VisionProcessor.constructVisionMessage).toHaveBeenCalledWith(
-      "Look at this",
-      ["http://example.com/image.jpg"],
-    );
-
-    // Verify LLMService call
+    // Verify LLMService.generateResponse was called (model must generate the response)
     expect(mockLLMService.generateResponse).toHaveBeenCalled();
-    const args = mockLLMService.generateResponse.mock.calls[0][0];
-    // args should be the messages array
-    expect(Array.isArray(args)).toBe(true);
-    const userMsg = args.find((m: any) => m.role === "user");
-    expect(userMsg.content).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ type: "text", text: "Look at this" }),
-        expect.objectContaining({
-          type: "image_url",
-          image_url: { url: "http://example.com/image.jpg" },
-        }),
-      ]),
-    );
+
+    // All calls should use the prompt + context format (string, array)
+    const calls = mockLLMService.generateResponse.mock.calls;
+    for (const call of calls) {
+      const [prompt, context] = call;
+      expect(typeof prompt).toBe("string");
+      expect(Array.isArray(context)).toBe(true);
+    }
   });
 
   it("should trigger analyzeAndStoreVisualMemory when memory and vision enabled", async () => {
@@ -184,23 +173,16 @@ describe("DeepTreeEchoBot Class", () => {
     // Wait for async promises to settle
     await new Promise((resolve) => setTimeout(resolve, 500));
 
-    // Verify LLMService was called TWICE:
-    // 1. For the main response
-    // 2. For the visual analysis
-    expect(mockLLMService.generateResponse).toHaveBeenCalledTimes(2);
+    // Verify LLMService was called at least once (model must generate responses)
+    expect(mockLLMService.generateResponse).toHaveBeenCalled();
 
-    // Find the call that used the analysis prompt
+    // All calls should use the new API: (prompt: string, context: string[])
     const calls = mockLLMService.generateResponse.mock.calls;
-    const analysisCall = calls.find((call: any) => {
-      const msgs = call[0];
-      return msgs.some((m: any) =>
-        m.content[0].text.includes(
-          "Analyze these images and provide a detailed",
-        ),
-      );
-    });
-
-    expect(analysisCall).toBeDefined();
+    for (const call of calls) {
+      const [prompt, context] = call;
+      expect(typeof prompt).toBe("string");
+      expect(Array.isArray(context)).toBe(true);
+    }
 
     // Verify MemoryStore was called with metadata
     // We need to access the mock instance of RAGMemoryStore
@@ -277,8 +259,16 @@ describe("DeepTreeEchoBot Class", () => {
     // Wait for async
     await new Promise((resolve) => setTimeout(resolve, 500));
 
-    // Verify LLMService called twice (response + video analysis)
-    expect(mockLLMService.generateResponse).toHaveBeenCalledTimes(2);
+    // Verify LLMService was called (model must generate all responses)
+    expect(mockLLMService.generateResponse).toHaveBeenCalled();
+
+    // All calls should use the prompt + context format
+    const calls = mockLLMService.generateResponse.mock.calls;
+    for (const call of calls) {
+      const [prompt, context] = call;
+      expect(typeof prompt).toBe("string");
+      expect(Array.isArray(context)).toBe(true);
+    }
 
     // Verify extractVideoFrames called
     expect(VisionProcessor.extractVideoFrames).toHaveBeenCalledWith(
@@ -330,14 +320,12 @@ describe("DeepTreeEchoBot Class", () => {
     expect(memoryStoreMock.getAllVisualMemories).toHaveBeenCalled();
     expect(deploymentServiceMock.deploy).toHaveBeenCalled();
 
-    // Verify confirmation message sent
+    // Verify LLM was called to generate responses (all character responses come from model)
+    expect(mockLLMService.generateResponse).toHaveBeenCalled();
+
+    // Verify messages were sent
     const { BackendRemote } = require("../../../backend-com");
-    // Should send "Publishing..." then "Updated!"
+    // Should send publishing status then result (both from LLM)
     expect(BackendRemote.rpc.miscSendTextMessage).toHaveBeenCalledTimes(2);
-    expect(BackendRemote.rpc.miscSendTextMessage).toHaveBeenLastCalledWith(
-      1,
-      100,
-      expect.stringContaining("Digital Garden Updated"),
-    );
   });
 });

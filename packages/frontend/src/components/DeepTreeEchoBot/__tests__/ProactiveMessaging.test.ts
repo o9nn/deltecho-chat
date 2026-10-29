@@ -285,6 +285,18 @@ describe("DeepTreeEchoUIBridge", () => {
 describe("ProactiveMessaging", () => {
   let proactiveMessaging: any;
 
+  // Mock LLM service for proactive message generation
+  const mockLLMService = {
+    generateResponse: jest
+      .fn()
+      .mockImplementation((prompt: string, _context: string[]) => {
+        // Return a response based on the prompt type for testing
+        return Promise.resolve(
+          `[LLM Response to: ${prompt.substring(0, 50)}...]`,
+        );
+      }),
+  };
+
   beforeEach(async () => {
     // Reset singleton instance explicitly
     const {
@@ -302,6 +314,10 @@ describe("ProactiveMessaging", () => {
     DeepTreeEchoUIBridge.resetInstance();
 
     proactiveMessaging = getPM();
+
+    // Set up LLM service - proactive messages require model generation
+    proactiveMessaging.setLLMService(mockLLMService);
+    mockLLMService.generateResponse.mockClear();
   });
 
   afterEach(() => {
