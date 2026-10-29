@@ -522,9 +522,7 @@ export class LLMService {
       return result.content;
     } catch (error) {
       log.error("Error generating response:", error);
-
-      // Fall back to placeholder response on API failure
-      return this.getPlaceholderResponse(functionType, input);
+      throw error;
     }
   }
 

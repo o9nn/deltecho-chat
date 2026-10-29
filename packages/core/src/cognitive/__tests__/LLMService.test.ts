@@ -197,9 +197,10 @@ describe("LLMService", () => {
   });
 
   describe("generateResponse", () => {
-    it("should return error message when no API key configured", async () => {
-      const response = await llmService.generateResponse("Hello");
-      expect(response).toContain("isn't fully configured");
+    it("should throw when no API key configured", async () => {
+      await expect(llmService.generateResponse("Hello")).rejects.toThrow(
+        /MODEL_NOT_CONFIGURED/,
+      );
     });
 
     it("should generate response with configured API key", async () => {

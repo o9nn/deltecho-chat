@@ -24,6 +24,7 @@
 
 ### Fixed
 
+- Deep Tree Echo: unconfigured `LLMService.generateResponse` now throws `MODEL_NOT_CONFIGURED` instead of returning canned placeholder speech.
 - Deep Tree Echo: the Live2D Failed / Retry banner stays inside the avatar strip (`contain: layout paint`) so it cannot cover the conversation pane.
 - CI22 now runs the Cubism/AIRI interchange contract (previously only on the disabled `CI` workflow) and cancels superseded runs instead of leaving them queued until they fail.
 - Cloudflare preview: stop renaming Durable Object class `DeltEchoContainer` to `DeltEchoApp` on git-connected `deltecho-chat-preview` (Cloudflare API 10074). GitHub Pages browser builds now compile workspace type deps first.
