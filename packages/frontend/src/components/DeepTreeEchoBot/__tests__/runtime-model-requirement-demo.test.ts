@@ -13,7 +13,9 @@ import { VisionCapabilities } from "../VisionCapabilities";
 const originalFetch = global.fetch;
 beforeAll(() => {
   // Don't actually call any API
-  global.fetch = jest.fn().mockRejectedValue(new Error("Network disabled for test"));
+  global.fetch = jest
+    .fn()
+    .mockRejectedValue(new Error("Network disabled for test"));
 });
 afterAll(() => {
   global.fetch = originalFetch;

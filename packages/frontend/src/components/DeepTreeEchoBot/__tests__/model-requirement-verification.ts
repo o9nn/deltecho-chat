@@ -144,7 +144,11 @@ function verifyLLMCallSites(): string[] {
             !surroundingCode.includes("generateResponse") &&
             !surroundingCode.includes("llmService")
           ) {
-            issues.push(`${filename}:${lineIndex + 1} - Literal string sent without LLM generation`);
+            issues.push(
+              `${filename}:${
+                lineIndex + 1
+              } - Literal string sent without LLM generation`,
+            );
           }
         }
       }
@@ -168,7 +172,9 @@ if (violations.length > 0) {
     console.log(`    Context: ${v.context}\n`);
   }
 } else {
-  console.log("✓ No fixed character speech patterns found in production code.\n");
+  console.log(
+    "✓ No fixed character speech patterns found in production code.\n",
+  );
 }
 
 console.log("Verifying LLM call sites...\n");
@@ -190,7 +196,9 @@ console.log(`LLM bypass issues: ${llmIssues.length}`);
 
 if (violations.length === 0 && llmIssues.length === 0) {
   console.log("\n✓ Model requirement verification PASSED");
-  console.log("  All character responses are routed through LLMService.generateResponse()");
+  console.log(
+    "  All character responses are routed through LLMService.generateResponse()",
+  );
   process.exit(0);
 } else {
   console.log("\n✗ Model requirement verification FAILED");

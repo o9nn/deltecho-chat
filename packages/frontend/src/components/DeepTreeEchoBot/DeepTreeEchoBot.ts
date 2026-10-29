@@ -600,25 +600,49 @@ export class DeepTreeEchoBot {
       .slice(0, 5)
       .map(
         (signal) =>
-          `${signal.source}/${signal.relevanceType}: salience ${signal.salience.toFixed(2)}, confidence ${signal.confidence.toFixed(2)}`,
+          `${signal.source}/${
+            signal.relevanceType
+          }: salience ${signal.salience.toFixed(
+            2,
+          )}, confidence ${signal.confidence.toFixed(2)}`,
       );
 
-    const insightData = inquiry.scientificInsights.slice(0, 5).map(
-      (insight) =>
-        `[${insight.domain}/${insight.generatedBy}] ${insight.content} (novelty ${insight.novelty.toFixed(2)}, significance ${insight.significance.toFixed(2)}, Φ ${insight.phi.toFixed(2)})`,
-    );
+    const insightData = inquiry.scientificInsights
+      .slice(0, 5)
+      .map(
+        (insight) =>
+          `[${insight.domain}/${insight.generatedBy}] ${
+            insight.content
+          } (novelty ${insight.novelty.toFixed(
+            2,
+          )}, significance ${insight.significance.toFixed(
+            2,
+          )}, Φ ${insight.phi.toFixed(2)})`,
+      );
 
-    const frameData = inquiry.frameProblemSolutions.slice(0, 3).map(
-      (solution) =>
-        `${solution.action}: ${Math.round(solution.confidence * 100)}% confidence via ${solution.method}`,
-    );
+    const frameData = inquiry.frameProblemSolutions
+      .slice(0, 3)
+      .map(
+        (solution) =>
+          `${solution.action}: ${Math.round(
+            solution.confidence * 100,
+          )}% confidence via ${solution.method}`,
+      );
 
     // Have LLM generate the formatted presentation
     const context = [
       `Query: ${inquiry.query}`,
-      `Relevance signals: ${relevanceData.length > 0 ? relevanceData.join("; ") : "none exceeded threshold"}`,
-      `Scientific insights: ${insightData.length > 0 ? insightData.join("; ") : "none generated"}`,
-      `Frame-problem solutions: ${frameData.length > 0 ? frameData.join("; ") : "none detected"}`,
+      `Relevance signals: ${
+        relevanceData.length > 0
+          ? relevanceData.join("; ")
+          : "none exceeded threshold"
+      }`,
+      `Scientific insights: ${
+        insightData.length > 0 ? insightData.join("; ") : "none generated"
+      }`,
+      `Frame-problem solutions: ${
+        frameData.length > 0 ? frameData.join("; ") : "none detected"
+      }`,
     ];
 
     return this.llmService.generateResponse(
@@ -640,10 +664,18 @@ export class DeepTreeEchoBot {
       );
     }
 
-    const insightData = insights.slice(0, 5).map(
-      (insight) =>
-        `[${insight.domain}/${insight.generatedBy}] ${insight.content} (novelty ${insight.novelty.toFixed(2)}, significance ${insight.significance.toFixed(2)}, Φ ${insight.phi.toFixed(2)})`,
-    );
+    const insightData = insights
+      .slice(0, 5)
+      .map(
+        (insight) =>
+          `[${insight.domain}/${insight.generatedBy}] ${
+            insight.content
+          } (novelty ${insight.novelty.toFixed(
+            2,
+          )}, significance ${insight.significance.toFixed(
+            2,
+          )}, Φ ${insight.phi.toFixed(2)})`,
+      );
 
     return this.llmService.generateResponse(
       "Format these scientific insights as a bulleted list, preserving the domain/generator tags and metrics.",
@@ -672,10 +704,18 @@ export class DeepTreeEchoBot {
       return null;
     }
 
-    const insightData = insights.slice(0, 3).map(
-      (insight) =>
-        `[${insight.domain}/${insight.generatedBy}] ${insight.content} (novelty ${insight.novelty.toFixed(2)}, significance ${insight.significance.toFixed(2)}, Φ ${insight.phi.toFixed(2)})`,
-    );
+    const insightData = insights
+      .slice(0, 3)
+      .map(
+        (insight) =>
+          `[${insight.domain}/${insight.generatedBy}] ${
+            insight.content
+          } (novelty ${insight.novelty.toFixed(
+            2,
+          )}, significance ${insight.significance.toFixed(
+            2,
+          )}, Φ ${insight.phi.toFixed(2)})`,
+      );
 
     const overlay = await this.llmService.generateResponse(
       "Add a brief 'Scientific Genius Lens' section with these insights formatted as bullets.",

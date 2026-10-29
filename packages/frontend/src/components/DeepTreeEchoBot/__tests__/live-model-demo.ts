@@ -22,7 +22,9 @@ async function demonstrateLiveModelOutput(): Promise<void> {
     console.error("  - ANTHROPIC_KEY=sk-ant-...\n");
     console.error("Run with:");
     console.error("  OPENAI_API_KEY=sk-... npx tsx live-model-demo.ts\n");
-    console.error("Without an API key, live model output cannot be demonstrated.");
+    console.error(
+      "Without an API key, live model output cannot be demonstrated.",
+    );
     process.exit(1);
   }
 
