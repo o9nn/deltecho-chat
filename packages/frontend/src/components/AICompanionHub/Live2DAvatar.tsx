@@ -149,6 +149,7 @@ export interface Live2DAvatarController {
     rig: import("@deltecho/avatar").IdentityRig | null,
   ) => void;
   getNativeSize?: () => { width: number; height: number } | null;
+  getEmbodimentDiagnostics?: () => import("@deltecho/avatar").EmbodimentDiagnostics;
 }
 
 const LOCAL_MIARA_MODEL = "models/miara/miara_pro_t03.model3.json";
@@ -451,9 +452,11 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
 
   // Update richer DTEcho cognitive visual state
   useEffect(() => {
-    if (manualExpression) return;
     if (!managerRef.current || !state.isLoaded || !cognitiveVisualState) return;
-    managerRef.current.updateCognitiveState(cognitiveVisualState);
+    // A locked face must still consume authority/metabolic revocation.
+    managerRef.current.updateCognitiveState(cognitiveVisualState, {
+      presentationLocked: Boolean(manualExpression),
+    });
   }, [cognitiveVisualState, state.isLoaded, manualExpression]);
 
   // Update lip sync. Use a small deadband so high-frequency audio-level

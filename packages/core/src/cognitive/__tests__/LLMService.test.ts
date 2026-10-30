@@ -197,9 +197,11 @@ describe("LLMService", () => {
   });
 
   describe("generateResponse", () => {
-    it("should return error message when no API key configured", async () => {
-      const response = await llmService.generateResponse("Hello");
-      expect(response).toContain("isn't fully configured");
+    it("should reject when no API key configured", async () => {
+      await expect(llmService.generateResponse("Hello")).rejects.toThrow(
+        /MODEL_NOT_CONFIGURED/,
+      );
+      expect((global.fetch as any).calls).toHaveLength(0);
     });
 
     it("should generate response with configured API key", async () => {
@@ -208,6 +210,30 @@ describe("LLMService", () => {
 
       // Should return the mocked response
       expect(response).toBe("Mocked response");
+    });
+
+    it("should reject an empty provider response", async () => {
+      llmService.setConfig({ apiKey: "test-key" });
+      (global.fetch as any).mockResolvedValue({
+        ok: true,
+        json: async () => ({ choices: [] }),
+      });
+
+      await expect(llmService.generateResponse("Hello")).rejects.toThrow(
+        /LLM_NO_RESPONSE/,
+      );
+    });
+
+    it("should reject blank provider completion content", async () => {
+      llmService.setConfig({ apiKey: "test-key" });
+      (global.fetch as any).mockResolvedValue({
+        ok: true,
+        json: async () => ({ choices: [{ message: { content: "   " } }] }),
+      });
+
+      await expect(llmService.generateResponse("Hello")).rejects.toThrow(
+        /LLM_NO_RESPONSE/,
+      );
     });
   });
 

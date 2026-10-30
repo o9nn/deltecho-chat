@@ -83,6 +83,10 @@ interface Live2DModel {
     coreModel: {
       setParameterValueById: (id: string, value: number) => void;
       getParameterValueById: (id: string) => number;
+      getParameterCount?: () => number;
+      getParameterIndex?: (id: string) => number;
+      getParameterMinimumValue?: (index: number) => number;
+      getParameterMaximumValue?: (index: number) => number;
       setPartOpacityById?: (id: string, value: number) => void;
       getPartOpacityById?: (id: string) => number;
       setPartOpacityByIndex?: (index: number, value: number) => void;
@@ -330,6 +334,18 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   private blinkTickerCallback: ((deltaMS: number) => void) | null = null;
   private frameListeners = new Set<(deltaTime: number) => void>();
   private viewCanvas: HTMLCanvasElement | null = null;
+  private parameterObservers = new Set<() => void>();
+  private observedInternalModel: Live2DModel["internalModel"] | null = null;
+  private readonly parameterObservationHook = (): void => {
+    for (const observer of this.parameterObservers) {
+      try {
+        observer();
+      } catch {
+        // Diagnostics must never interrupt Cubism's model update.
+        this.dlog("Parameter observer failed");
+      }
+    }
+  };
   private appliedOutfit: MiaraOutfitState | null = null;
   private hiddenWardrobePartIds = new Set<string>();
   private wardrobeUpdateHook: (() => void) | null = null;
@@ -556,6 +572,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       clearTimeout(this.blinkOpenTimer);
       this.blinkOpenTimer = null;
     }
+    this.detachParameterObservationHook();
     if (this.model) {
       this.model.destroy();
       this.model = null;
@@ -607,6 +624,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       this.overlaySource = null;
       this.attachWardrobeHook();
       this.attachDeformHook();
+      this.attachParameterObservationHook();
       if (this.identityRig?.physics && !this.identityRig.bakedPhysics) {
         this.applyPhysicsProfile(this.identityRig.physics);
       }
@@ -1298,6 +1316,8 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     this.stopAutoBlinkLoop();
     this.loadGeneration += 1;
     this.modelNativeSize = null;
+    this.detachParameterObservationHook();
+    this.parameterObservers.clear();
     this.modelCanvasSize = null;
     this.modelVisualCenterOffset = { x: 0, y: 0 };
 
@@ -1412,6 +1432,71 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       | undefined;
     ticker?.remove?.(listener);
     this.frameListeners.delete(listener);
+  }
+
+  /**
+   * Read final parameters after motion/expression/physics, immediately before
+   * Cubism consumes them. A later ticker sees loadParameters()'s restored state,
+   * not necessarily the values that generated the visible mesh. No timer fallback.
+   */
+  addParameterObserver(observer: () => void): boolean {
+    if (!this.model?.internalModel.on || !this.model.internalModel.off)
+      return false;
+    this.parameterObservers.add(observer);
+    this.attachParameterObservationHook();
+    return true;
+  }
+
+  removeParameterObserver(observer: () => void): void {
+    this.parameterObservers.delete(observer);
+    if (this.parameterObservers.size === 0)
+      this.detachParameterObservationHook();
+  }
+
+  private attachParameterObservationHook(): void {
+    const internal = this.model?.internalModel;
+    if (!internal?.on || !internal.off || this.parameterObservers.size === 0)
+      return;
+    if (this.observedInternalModel === internal) return;
+    this.detachParameterObservationHook();
+    internal.on("beforeModelUpdate", this.parameterObservationHook);
+    this.observedInternalModel = internal;
+  }
+
+  private detachParameterObservationHook(): void {
+    this.observedInternalModel?.off?.(
+      "beforeModelUpdate",
+      this.parameterObservationHook,
+    );
+    this.observedInternalModel = null;
+  }
+
+  /** Native rig range only. Synthetic/missing IDs must not gain evidence. */
+  getParameterRange(paramId: string): { min: number; max: number } | undefined {
+    const core = this.model?.internalModel.coreModel;
+    if (
+      !core?.getParameterIndex ||
+      !core.getParameterCount ||
+      !core.getParameterMinimumValue ||
+      !core.getParameterMaximumValue
+    )
+      return undefined;
+    try {
+      const index = core.getParameterIndex(paramId);
+      if (
+        !Number.isInteger(index) ||
+        index < 0 ||
+        index >= core.getParameterCount()
+      )
+        return undefined;
+      const min = core.getParameterMinimumValue(index);
+      const max = core.getParameterMaximumValue(index);
+      return Number.isFinite(min) && Number.isFinite(max) && max > min
+        ? { min, max }
+        : undefined;
+    } catch {
+      return undefined;
+    }
   }
 
   /**
@@ -1783,7 +1868,16 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   getParameter(paramId: string): number | undefined {
     if (!this.model?.internalModel?.coreModel) return undefined;
     try {
-      return this.model.internalModel.coreModel.getParameterValueById(paramId);
+      const core = this.model.internalModel.coreModel;
+      // Cubism caches writes to missing IDs in _notExistParameterValues.
+      // Such virtual values are not measurements of a rigged ArtMesh.
+      if (!core.getParameterCount || !core.getParameterIndex) return undefined;
+      const count = core.getParameterCount();
+      const index = core.getParameterIndex(paramId);
+      if (!Number.isInteger(index) || index < 0 || index >= count)
+        return undefined;
+      const value = core.getParameterValueById(paramId);
+      return Number.isFinite(value) ? value : undefined;
     } catch {
       return undefined;
     }

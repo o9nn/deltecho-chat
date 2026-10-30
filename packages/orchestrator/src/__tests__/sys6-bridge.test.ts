@@ -11,8 +11,37 @@
  * - Telemetry and metrics
  */
 
-import { describe, it, expect, beforeEach, afterEach } from "@jest/globals";
+import {
+  describe,
+  it,
+  expect,
+  beforeEach,
+  afterEach,
+  jest,
+} from "@jest/globals";
+import { LLMService, PersonaCore } from "deep-tree-echo-core";
 import { Sys6OrchestratorBridge } from "../sys6-bridge/index.js";
+
+function mockedParallelResult(integratedResponse: string) {
+  return {
+    processing: {} as Record<string, string>,
+    integratedResponse,
+    insights: { processingMethod: "single_function" },
+  };
+}
+
+function mockConfiguredLlm(integratedResponse: string) {
+  return jest
+    .spyOn(LLMService.prototype, "generateFullParallelResponse")
+    .mockResolvedValue(mockedParallelResult(integratedResponse));
+}
+
+function blockNetworkRequests(): () => number {
+  const fetchMock = jest
+    .spyOn(globalThis, "fetch")
+    .mockRejectedValue(new Error("Network access is forbidden in this test"));
+  return () => fetchMock.mock.calls.length;
+}
 
 function waitForCycle(
   bridge: Sys6OrchestratorBridge,
@@ -34,8 +63,10 @@ function waitForCycle(
 
 describe("Sys6OrchestratorBridge", () => {
   let bridge: Sys6OrchestratorBridge;
+  let networkRequestCount: () => number;
 
   beforeEach(() => {
+    networkRequestCount = blockNetworkRequests();
     bridge = new Sys6OrchestratorBridge({
       dim: 64,
       stepDurationMs: 10, // Fast for testing
@@ -50,6 +81,7 @@ describe("Sys6OrchestratorBridge", () => {
     if (bridge) {
       await bridge.stop();
     }
+    jest.restoreAllMocks();
   });
 
   describe("Initialization", () => {
@@ -377,26 +409,48 @@ describe("Sys6OrchestratorBridge", () => {
 
   describe("Message Processing", () => {
     it("should process messages through cognitive system", async () => {
+      const modelResponse = "test-model-response: sys6-message";
+      const generateResponse = mockConfiguredLlm(modelResponse);
       const response = await bridge.processMessage("Hello, Deep Tree Echo!");
 
-      expect(typeof response).toBe("string");
-      expect(response.length).toBeGreaterThan(0);
+      expect(response).toBe(modelResponse);
+      expect(generateResponse).toHaveBeenCalledWith(
+        expect.stringContaining("User message: Hello, Deep Tree Echo!"),
+        expect.any(Array),
+      );
+      expect(networkRequestCount()).toBe(0);
     });
 
     it("should handle empty messages gracefully", async () => {
+      const modelResponse = "test-model-response: empty-input";
+      const generateResponse = mockConfiguredLlm(modelResponse);
       const response = await bridge.processMessage("");
 
-      expect(typeof response).toBe("string");
+      expect(response).toBe(modelResponse);
+      expect(generateResponse).toHaveBeenCalledWith(
+        expect.stringContaining("User message: "),
+        expect.any(Array),
+      );
+      expect(networkRequestCount()).toBe(0);
     });
 
     it("should update emotional state after processing", async () => {
-      // Process a message
-      await bridge.processMessage("This is a test message");
+      const updateEmotionalState = jest
+        .spyOn(PersonaCore.prototype, "updateEmotionalState")
+        .mockResolvedValue(undefined);
+      const modelResponse = "test-model-response: emotional-update";
+      const generateResponse = mockConfiguredLlm(modelResponse);
 
-      // The emotional state should have been updated
-      // (We can't directly verify this without exposing internal state)
-      const state = bridge.getState();
-      expect(state).toBeDefined();
+      // Process a message
+      const response = await bridge.processMessage("This is a test message");
+
+      expect(response).toBe(modelResponse);
+      expect(generateResponse).toHaveBeenCalledTimes(1);
+      expect(updateEmotionalState).toHaveBeenCalledWith({
+        engagement: 0.1,
+        curiosity: 0.05,
+      });
+      expect(networkRequestCount()).toBe(0);
     });
   });
 
@@ -458,21 +512,43 @@ describe("Sys6OrchestratorBridge", () => {
   });
 
   describe("Error Handling", () => {
-    it("should handle processing errors gracefully", async () => {
-      // Process should return error message, not throw
-      const response = await bridge.processMessage("test");
-      expect(typeof response).toBe("string");
+    it("should reject when the LLM is not configured without issuing a model request", async () => {
+      const generateResponse = jest.spyOn(
+        LLMService.prototype,
+        "generateFullParallelResponse",
+      );
+
+      await expect(bridge.processMessage("test")).rejects.toThrow(
+        /MODEL_NOT_CONFIGURED/,
+      );
+      expect(generateResponse).toHaveBeenCalledTimes(1);
+      expect(networkRequestCount()).toBe(0);
     });
 
-    it("should continue operation after errors", async () => {
+    it("should continue operation after an unconfigured-model error and recover with an injected model", async () => {
       await bridge.start();
 
-      // Process message (may or may not error)
-      await bridge.processMessage("test");
+      const generateResponse = jest.spyOn(
+        LLMService.prototype,
+        "generateFullParallelResponse",
+      );
+      await expect(bridge.processMessage("test")).rejects.toThrow(
+        /MODEL_NOT_CONFIGURED/,
+      );
+      expect(networkRequestCount()).toBe(0);
 
       // Bridge should still be running
-      const state = bridge.getState();
-      expect(state.running).toBe(true);
+      expect(bridge.getState().running).toBe(true);
+
+      const recoveryResponse = "test-model-response: recovered";
+      generateResponse.mockResolvedValue(
+        mockedParallelResult(recoveryResponse),
+      );
+      await expect(
+        bridge.processMessage("retry after configuration"),
+      ).resolves.toBe(recoveryResponse);
+      expect(generateResponse).toHaveBeenCalledTimes(2);
+      expect(networkRequestCount()).toBe(0);
 
       await bridge.stop();
     });

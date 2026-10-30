@@ -46,7 +46,9 @@ import {
 } from "./autonomy-pipeline.js";
 import {
   DeltaChatAutonomyBridge,
+  isValidProactiveTarget,
   type BridgeConfig,
+  type ProactiveTarget,
 } from "./deltachat-autonomy-bridge.js";
 import { ProactiveLoop } from "./proactive-loop.js";
 import {
@@ -185,6 +187,8 @@ export interface OrchestratorConfig {
   autonomyBridge?: Partial<BridgeConfig>;
   /** Enable proactive messaging (AI-initiated conversations) */
   enableProactiveMessaging: boolean;
+  /** Explicit user-authorized DeltaChat recipient for proactive outbound messages */
+  proactiveTarget?: ProactiveTarget;
   /** Proactive message check interval in milliseconds */
   proactiveCheckIntervalMs: number;
 }
@@ -205,7 +209,9 @@ const DEFAULT_CONFIG: OrchestratorConfig = {
   membraneComplexityThreshold: 0.7,
   enableAutonomy: true,
   coreSelfComplexityThreshold: 0.85,
-  enableProactiveMessaging: envFlag("DELTECHO_PROACTIVE_MESSAGING", true),
+  // Outbound initiation remains disabled unless the process receives an
+  // affirmative grant plus an explicit recipient target.
+  enableProactiveMessaging: false,
   proactiveCheckIntervalMs: 60_000, // Check for proactive messages every minute
 };
 
@@ -248,6 +254,24 @@ function createAutonomyPipelineStartupConfig(
 }
 
 /**
+ * Build the autonomy bridge input while preserving bridge-owned defaults and
+ * caller-owned response policy. The orchestrator is authoritative only for
+ * proactive outbound authorization: its affirmative grant and exact target.
+ */
+export function createAutonomyBridgeStartupConfig(
+  config: Pick<
+    OrchestratorConfig,
+    "autonomyBridge" | "enableProactiveMessaging" | "proactiveTarget"
+  >,
+): Partial<BridgeConfig> {
+  return {
+    ...config.autonomyBridge,
+    enableProactiveMessaging: config.enableProactiveMessaging,
+    proactiveTarget: config.proactiveTarget,
+  };
+}
+
+/**
  * Main orchestrator that coordinates all Deep Tree Echo services
  */
 export class Orchestrator {
@@ -276,6 +300,7 @@ export class Orchestrator {
   private temporalCredit?: TemporalCreditAssignment;
   private scientificIntegrationCleanup: Array<() => void> = [];
   private proactiveCheckTimer?: ReturnType<typeof setInterval>;
+  private proactiveSendInFlight = false;
   private running: boolean = false;
 
   // Cognitive services for processing messages
@@ -301,7 +326,13 @@ export class Orchestrator {
   };
 
   constructor(config: Partial<OrchestratorConfig> = {}) {
-    this.config = { ...DEFAULT_CONFIG, ...config };
+    // Read process grants only after module initialization. Calling envFlag
+    // in DEFAULT_CONFIG accessed its lookup sets before initialization.
+    this.config = {
+      ...DEFAULT_CONFIG,
+      enableProactiveMessaging: envFlag("DELTECHO_PROACTIVE_MESSAGING", false),
+      ...config,
+    };
 
     // Initialize cognitive services
     this.memoryStore = new RAGMemoryStore(this.storage);
@@ -1064,14 +1095,7 @@ export class Orchestrator {
           if (this.autonomyPipeline && this.deltachatInterface) {
             this.autonomyBridge = new DeltaChatAutonomyBridge(
               this.autonomyPipeline,
-              {
-                enableAutonomousResponse: true,
-                preferCoreSelf: Boolean(this.coreSelfEngine),
-                enableProactiveMessaging: this.config.enableProactiveMessaging,
-                proactiveCoherenceThreshold: 0.5,
-                proactiveCooldownMs: 300_000,
-                ...this.config.autonomyBridge,
-              },
+              createAutonomyBridgeStartupConfig(this.config),
             );
 
             // Wire bridge responses to DeltaChat
@@ -1099,13 +1123,22 @@ export class Orchestrator {
               },
             );
 
-            // Start proactive message checking if enabled
-            if (this.config.enableProactiveMessaging) {
+            // Start proactive checks only after an affirmative opt-in with a
+            // syntactically valid recipient. Availability is checked again
+            // before every proposal and before every send.
+            if (
+              this.config.enableProactiveMessaging &&
+              isValidProactiveTarget(this.config.proactiveTarget)
+            ) {
               this.proactiveCheckTimer = setInterval(async () => {
                 await this.checkAndSendProactiveMessage();
               }, this.config.proactiveCheckIntervalMs);
               log.info(
-                `Proactive messaging enabled (check interval: ${this.config.proactiveCheckIntervalMs}ms)`,
+                `Proactive messaging enabled for configured DeltaChat target (check interval: ${this.config.proactiveCheckIntervalMs}ms)`,
+              );
+            } else if (this.config.enableProactiveMessaging) {
+              log.warn(
+                "Proactive messaging opt-in ignored without a valid explicit target",
               );
             }
 
@@ -1836,66 +1869,141 @@ ${response.body}`;
 
   /**
    * Check for and send proactive messages from the autonomy bridge.
-   * This enables DTE to initiate conversations when conditions are met
-   * (high coherence, active communication goals, cooldown elapsed).
+   * Proactive outbound messages require an affirmative grant and one exact
+   * configured DeltaChat account/chat pair. No account or chat fallback is
+   * permitted: destination availability is verified before proposal generation
+   * and immediately again before delivery.
    */
   private async checkAndSendProactiveMessage(): Promise<void> {
-    if (!this.autonomyBridge || !this.deltachatInterface?.isConnected()) {
+    if (
+      this.proactiveSendInFlight ||
+      !this.autonomyBridge ||
+      !this.deltachatInterface?.isConnected()
+    ) {
       return;
     }
 
+    this.proactiveSendInFlight = true;
     try {
+      const target = this.getAuthorizedProactiveTarget();
+      if (!target || !(await this.isProactiveTargetAvailable(target))) {
+        return;
+      }
+
+      const proposalTarget = this.getAuthorizedProactiveTarget();
+      if (
+        !proposalTarget ||
+        proposalTarget.accountId !== target.accountId ||
+        proposalTarget.chatId !== target.chatId
+      ) {
+        return;
+      }
+
       const proactiveMsg = await this.autonomyBridge.checkProactiveMessage();
       if (!proactiveMsg || !proactiveMsg.text) {
         return;
       }
 
-      // Get default account and determine target chat
-      const accounts = await this.deltachatInterface.getAllAccounts();
-      if (accounts.length === 0) {
-        log.warn("No DeltaChat accounts available for proactive messaging");
+      // A grant, config target, or chat capability can change while a proposal
+      // is being generated. Revalidate all three before the outbound side
+      // effect. The proposal's chatId is intentionally never authoritative.
+      const currentTarget = this.getAuthorizedProactiveTarget();
+      if (
+        !currentTarget ||
+        currentTarget.accountId !== target.accountId ||
+        currentTarget.chatId !== target.chatId ||
+        !(await this.isProactiveTargetAvailable(currentTarget))
+      ) {
         return;
       }
 
-      const accountId = this.config.defaultAccountId || accounts[0].id;
-
-      // Use the chatId from the proactive message, or find the most recent chat
-      let targetChatId = proactiveMsg.chatId;
-      if (!targetChatId || targetChatId === 0) {
-        // Get the most recent active chat
-        const recentChats =
-          await this.deltachatInterface.getAllChats(accountId);
-        if (recentChats.length > 0) {
-          // Find first chat that allows sending messages and isn't a device/self chat
-          const targetChat = recentChats.find(
-            (c) => c.canSend && !c.isDeviceChat && !c.isSelfTalk,
-          );
-          if (targetChat) {
-            targetChatId = targetChat.id;
-          }
-        }
-      }
-
-      if (!targetChatId) {
-        log.debug("No target chat for proactive message");
+      // Availability checks are async. Revoke synchronously at the final
+      // dispatch boundary, with no await between grant validation and send.
+      const deliveryTarget = this.getAuthorizedProactiveTarget();
+      if (
+        !deliveryTarget ||
+        deliveryTarget.accountId !== target.accountId ||
+        deliveryTarget.chatId !== target.chatId ||
+        !this.deltachatInterface.isConnected()
+      )
         return;
-      }
-
-      // Send the proactive message
+      // Keep the bridge that passed the final authorization boundary. Its
+      // completed dispatch must consume cooldown even if its config is revoked
+      // while the already-authorized RPC is in flight.
+      const dispatchedBridge = this.autonomyBridge;
+      if (!dispatchedBridge) return;
       await this.deltachatInterface.sendMessage(
-        accountId,
-        targetChatId,
+        deliveryTarget.accountId,
+        deliveryTarget.chatId,
         proactiveMsg.text,
       );
+      dispatchedBridge.recordProactiveMessageSent();
 
       log.info(
-        `Proactive message sent to chat ${targetChatId}: ${proactiveMsg.text.substring(
-          0,
-          50,
-        )}...`,
+        `Proactive message sent to configured chat ${
+          currentTarget.chatId
+        }: ${proactiveMsg.text.substring(0, 50)}...`,
       );
     } catch (error) {
       log.error("Failed to check/send proactive message:", error);
+    } finally {
+      this.proactiveSendInFlight = false;
+    }
+  }
+
+  /**
+   * Resolve the sole authorized proactive destination. A bridge-level change
+   * can revoke (but never redirect) the orchestrator's configured target.
+   */
+  private getAuthorizedProactiveTarget(): ProactiveTarget | null {
+    if (!this.config.enableProactiveMessaging) return null;
+    if (!isValidProactiveTarget(this.config.proactiveTarget)) return null;
+
+    const bridgeConfig = this.autonomyBridge?.getConfig();
+    if (!bridgeConfig?.enableProactiveMessaging) return null;
+    if (!isValidProactiveTarget(bridgeConfig.proactiveTarget)) return null;
+
+    if (
+      bridgeConfig.proactiveTarget.accountId !==
+        this.config.proactiveTarget.accountId ||
+      bridgeConfig.proactiveTarget.chatId !== this.config.proactiveTarget.chatId
+    ) {
+      return null;
+    }
+
+    return { ...this.config.proactiveTarget };
+  }
+
+  /**
+   * Confirm the configured account and chat still exist and that the exact
+   * chat permits sending. This is verification only, never destination
+   * discovery: account/chat lists are not used as a fallback selector.
+   */
+  private async isProactiveTargetAvailable(
+    target: ProactiveTarget,
+  ): Promise<boolean> {
+    if (!this.deltachatInterface) return false;
+
+    try {
+      const chat = await this.deltachatInterface.getChat(
+        target.accountId,
+        target.chatId,
+      );
+      if (chat.id === target.chatId && chat.canSend === true) {
+        return true;
+      }
+
+      log.debug(
+        `Configured proactive chat ${target.chatId} is unavailable or cannot send`,
+      );
+      return false;
+    } catch (error) {
+      log.debug(
+        `Configured proactive chat ${
+          target.chatId
+        } could not be resolved: ${String(error)}`,
+      );
+      return false;
     }
   }
 
