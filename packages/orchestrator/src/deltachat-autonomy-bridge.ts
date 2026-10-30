@@ -321,7 +321,12 @@ export class DeltaChatAutonomyBridge extends EventEmitter {
       "You are initiating a conversation, not responding. Be concise and purposeful.",
     );
 
-    if (result.content && result.source !== "none") {
+    if (
+      result.content &&
+      result.source !== "none" &&
+      this.config.enableProactiveMessaging &&
+      isValidProactiveTarget(this.config.proactiveTarget)
+    ) {
       return {
         // This is only proposal metadata. The orchestrator resolves the
         // configured target independently immediately before sending.
