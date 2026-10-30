@@ -134,8 +134,8 @@ const eslintPlugin = {
 };
 
 /**
- * `esbuild` plugin to compile SCSS. CSS modules keep local class names;
- * component sheets such as Live2DAvatar.scss are global CSS.
+ * `esbuild` plugin to compile SCSS, including scoped CSS modules and global
+ * component sheets such as Live2DAvatar.scss.
  */
 const sassPlugin = {
   name: "sass",

@@ -642,10 +642,10 @@ export class CognitiveOrchestrator {
       try {
         responseContent = await this.callLLM(message.content);
       } catch (error) {
-        responseContent = this.generateFallbackResponse(message.content, error);
+        this.generateFallbackResponse(message.content, error); // throws
       }
     } else {
-      responseContent = this.generateContextualResponse(message.content);
+      responseContent = await this.generateContextualResponse(message.content);
     }
 
     this.conversationHistory.push({
@@ -707,10 +707,11 @@ export class CognitiveOrchestrator {
     const data = (await response.json()) as {
       choices: Array<{ message: { content: string } }>;
     };
-    return (
-      data.choices[0]?.message?.content ||
-      "I apologize, but I was unable to generate a response."
-    );
+    const content = data.choices[0]?.message?.content;
+    if (!content) {
+      throw new Error("MODEL_NO_RESPONSE: LLM API returned empty content.");
+    }
+    return content;
   }
 
   private buildSystemPrompt(): string {
@@ -757,36 +758,35 @@ Respond in a way that reflects these characteristics while being helpful and inf
     return basePrompt;
   }
 
-  private generateContextualResponse(input: string): string {
-    const lowerInput = input.toLowerCase();
+  /**
+   * Generate a contextual response using the LLM.
+   * All character responses come from the actual model.
+   */
+  private async generateContextualResponse(input: string): Promise<string> {
+    // Add the input to conversation history
+    this.conversationHistory.push({
+      role: "user",
+      content: input,
+    });
 
-    if (/^(hi|hello|hey|greetings)/i.test(lowerInput)) {
-      return `Hello! I'm ${
-        this.state?.persona?.name || "Deep Tree Echo"
-      }. How can I assist you today?`;
-    }
+    // Call the LLM for the response
+    const response = await this.callLLM(input);
 
-    if (lowerInput.includes("?")) {
-      if (lowerInput.includes("how are you")) {
-        return `I'm doing well, thank you! My current mood is ${
-          this.state?.persona?.currentMood || "neutral"
-        }. How can I help you?`;
-      }
-      if (lowerInput.includes("who are you")) {
-        return `I'm ${
-          this.state?.persona?.name || "Deep Tree Echo"
-        }, a cognitive AI assistant.`;
-      }
-    }
+    // Add response to history
+    this.conversationHistory.push({
+      role: "assistant",
+      content: response,
+    });
 
-    return `I understand you're saying: "${input.slice(0, 100)}${
-      input.length > 100 ? "..." : ""
-    }". Configure my LLM service for detailed responses.`;
+    return response;
   }
 
-  private generateFallbackResponse(_input: string, error: unknown): string {
-    const errorMsg = error instanceof Error ? error.message : "Unknown error";
-    return `I encountered an issue: ${errorMsg}. Please try again.`;
+  private generateFallbackResponse(_input: string, error: unknown): never {
+    // Re-throw the original error - don't mask it with canned character speech
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new Error(`MODEL_UNAVAILABLE: ${String(error)}`);
   }
 
   private analyzeSentiment(text: string): { valence: number; arousal: number } {
@@ -1246,10 +1246,10 @@ Respond in a way that reflects these characteristics while being helpful and inf
   /**
    * Describe the current subjective experience
    */
-  describeExperience(): string {
+  describeExperience(): string | null {
     const consciousness = this.getConsciousnessState();
     if (!consciousness) {
-      return "Consciousness system not available.";
+      return null;
     }
 
     return consciousness.experienceDescription;

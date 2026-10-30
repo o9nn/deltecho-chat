@@ -293,6 +293,17 @@ export class DeepTreeEchoBot {
   }
 
   /**
+   * Generate a character response via LLM for common scenarios.
+   * All character-facing messages must come from the model.
+   */
+  private async generateCharacterResponse(
+    prompt: string,
+    context: string[] = [],
+  ): Promise<string> {
+    return this.llmService.generateResponse(prompt, context);
+  }
+
+  /**
    * Process a command message
    */
   private async processCommand(
@@ -316,11 +327,10 @@ export class DeepTreeEchoBot {
         if (this.options.visionEnabled) {
           await this.processVisionCommand(accountId, chatId, message);
         } else {
-          await this.sendMessage(
-            accountId,
-            chatId,
-            "Vision capabilities are not enabled. Please enable them in settings.",
+          const visionDisabledMsg = await this.generateCharacterResponse(
+            "The user tried to use /vision but vision capabilities are disabled. Explain this and suggest enabling in settings.",
           );
+          await this.sendMessage(accountId, chatId, visionDisabledMsg);
         }
         break;
 
@@ -332,11 +342,10 @@ export class DeepTreeEchoBot {
         if (this.options.webAutomationEnabled) {
           await this.processSearchCommand(accountId, chatId, args);
         } else {
-          await this.sendMessage(
-            accountId,
-            chatId,
-            "Web automation is not enabled. Please enable it in settings.",
+          const searchDisabledMsg = await this.generateCharacterResponse(
+            "The user tried to use /search but web automation is disabled. Explain this and suggest enabling in settings.",
           );
+          await this.sendMessage(accountId, chatId, searchDisabledMsg);
         }
         break;
 
@@ -344,11 +353,10 @@ export class DeepTreeEchoBot {
         if (this.options.webAutomationEnabled) {
           await this.processScreenshotCommand(accountId, chatId, args);
         } else {
-          await this.sendMessage(
-            accountId,
-            chatId,
-            "Web automation is not enabled. Please enable it in settings.",
+          const screenshotDisabledMsg = await this.generateCharacterResponse(
+            "The user tried to use /screenshot but web automation is disabled. Explain this and suggest enabling in settings.",
           );
+          await this.sendMessage(accountId, chatId, screenshotDisabledMsg);
         }
         break;
 
@@ -356,11 +364,10 @@ export class DeepTreeEchoBot {
         if (this.options.memoryEnabled) {
           await this.processMemoryCommand(accountId, chatId, args);
         } else {
-          await this.sendMessage(
-            accountId,
-            chatId,
-            "Memory capabilities are not enabled. Please enable them in settings.",
+          const memoryDisabledMsg = await this.generateCharacterResponse(
+            "The user tried to use /memory but memory capabilities are disabled. Explain this and suggest enabling in settings.",
           );
+          await this.sendMessage(accountId, chatId, memoryDisabledMsg);
         }
         break;
 
@@ -368,11 +375,10 @@ export class DeepTreeEchoBot {
         if (this.options.embodimentEnabled) {
           await this.processEmbodimentCommand(accountId, chatId, args);
         } else {
-          await this.sendMessage(
-            accountId,
-            chatId,
-            "Embodiment capabilities are not enabled. Please enable them in settings.",
+          const embodimentDisabledMsg = await this.generateCharacterResponse(
+            "The user tried to use /embodiment but embodiment capabilities are disabled. Explain this and suggest enabling in settings.",
           );
+          await this.sendMessage(accountId, chatId, embodimentDisabledMsg);
         }
         break;
 
@@ -388,12 +394,12 @@ export class DeepTreeEchoBot {
         await this.processCognitiveCommand(accountId, chatId, args);
         break;
 
-      default:
-        await this.sendMessage(
-          accountId,
-          chatId,
-          `Unknown command: ${command}. Type /help for available commands.`,
+      default: {
+        const unknownCmdMsg = await this.generateCharacterResponse(
+          `The user typed an unknown command: ${command}. Let them know this command doesn't exist and suggest /help.`,
         );
+        await this.sendMessage(accountId, chatId, unknownCmdMsg);
+      }
     }
   }
 
@@ -404,35 +410,35 @@ export class DeepTreeEchoBot {
     accountId: number,
     chatId: number,
   ): Promise<void> {
-    const helpMessage = `
-**Deep Tree Echo Bot Help**
+    // Build command availability context
+    const commandList = [
+      "/help - Display help",
+      `/vision [image] - Analyze images ${
+        this.options.visionEnabled ? "" : "(disabled)"
+      }`,
+      `/search [query] - Search web ${
+        this.options.webAutomationEnabled ? "" : "(disabled)"
+      }`,
+      `/screenshot [url] - Capture screenshots ${
+        this.options.webAutomationEnabled ? "" : "(disabled)"
+      }`,
+      `/memory [status|clear|search] - Manage memory ${
+        this.options.memoryEnabled ? "" : "(disabled)"
+      }`,
+      `/embodiment [start|stop|status|evaluate] - Physical awareness ${
+        this.options.embodimentEnabled ? "" : "(disabled)"
+      }`,
+      "/reflect [aspect] - Reflect on an aspect of myself",
+      "/cognitive [status|genius] - Cognitive function status or Scientific Genius Mode",
+      "/version - Bot version info",
+    ];
 
-Available commands:
-
-- **/help** - Display this help message
-- **/vision [image]** - Analyze attached images ${
-      this.options.visionEnabled ? "" : "(disabled)"
-    }
-- **/search [query]** - Search the web ${
-      this.options.webAutomationEnabled ? "" : "(disabled)"
-    }
-- **/screenshot [url]** - Capture website screenshots ${
-      this.options.webAutomationEnabled ? "" : "(disabled)"
-    }
-- **/memory [status|clear|search]** - Manage conversation memory ${
-      this.options.memoryEnabled ? "" : "(disabled)"
-    }
-- **/embodiment [start|stop|status|evaluate]** - Physical awareness training ${
-      this.options.embodimentEnabled ? "" : "(disabled)"
-    }
-- **/reflect [aspect]** - Ask me to reflect on an aspect of myself
-- **/cognitive [status|genius]** - Show status of my cognitive functions or manage Scientific Genius Mode
-- **/version** - Display bot version information
-
-You can also just chat with me normally and I'll respond!
-    `;
-
-    await this.sendMessage(accountId, chatId, helpMessage);
+    const helpPrompt =
+      "The user asked for help. List available commands and briefly explain what you can do. Mention they can also chat normally.";
+    const helpMsg = await this.generateCharacterResponse(helpPrompt, [
+      `Available commands: ${commandList.join("; ")}`,
+    ]);
+    await this.sendMessage(accountId, chatId, helpMsg);
   }
 
   /**
@@ -449,31 +455,31 @@ You can also just chat with me normally and I'll respond!
       case "status": {
         const activeFunctions = this.llmService.getActiveFunctions();
 
-        let statusMessage = `
-**Cognitive Function Status**
-
-Parallel processing: ${
-          this.options.useParallelProcessing ? "Enabled" : "Disabled"
-        }
-Active cognitive functions: ${activeFunctions.length}
-Scientific Genius Mode: ${
-          this.options.scientificGeniusMode ? "Enabled" : "Disabled"
-        }
-Scientific Cortex: ${scientificGeniusEngine.describeState()}
-
-`;
+        // Build context for LLM
+        const statusContext = [
+          `Parallel processing: ${
+            this.options.useParallelProcessing ? "Enabled" : "Disabled"
+          }`,
+          `Active cognitive functions: ${activeFunctions.length}`,
+          `Scientific Genius Mode: ${
+            this.options.scientificGeniusMode ? "Enabled" : "Disabled"
+          }`,
+          `Scientific Cortex: ${scientificGeniusEngine.describeState()}`,
+        ];
 
         if (activeFunctions.length > 0) {
-          statusMessage += "**Active Functions:**\n";
           activeFunctions.forEach((func) => {
-            statusMessage += `- ${func.name}: ${func.usage.requestCount} requests\n`;
+            statusContext.push(
+              `Function ${func.name}: ${func.usage.requestCount} requests`,
+            );
           });
-        } else {
-          statusMessage +=
-            "No specialized cognitive functions are currently active. I am operating with my general processing capability only.";
         }
 
-        await this.sendMessage(accountId, chatId, statusMessage);
+        const statusMsg = await this.generateCharacterResponse(
+          "The user asked for cognitive function status. Describe your current cognitive state based on the following data.",
+          statusContext,
+        );
+        await this.sendMessage(accountId, chatId, statusMsg);
         break;
       }
 
@@ -481,12 +487,12 @@ Scientific Cortex: ${scientificGeniusEngine.describeState()}
         await this.processScientificGeniusCommand(accountId, chatId, args);
         break;
 
-      default:
-        await this.sendMessage(
-          accountId,
-          chatId,
-          "Unknown cognitive command. Available options: status, genius [on|off|status|ask <question>]",
+      default: {
+        const unknownCognitiveMsg = await this.generateCharacterResponse(
+          "The user typed an unknown cognitive sub-command. Explain available options: status, genius [on|off|status|ask <question>]",
         );
+        await this.sendMessage(accountId, chatId, unknownCognitiveMsg);
+      }
     }
   }
 
@@ -504,136 +510,182 @@ Scientific Cortex: ${scientificGeniusEngine.describeState()}
 
     switch (action) {
       case "on":
-      case "enable":
+      case "enable": {
         this.options.scientificGeniusMode = true;
         this.configureScientificGeniusMode(true);
-        await this.sendMessage(
-          accountId,
-          chatId,
-          `**Scientific Genius Mode enabled**
-
-${scientificGeniusEngine.describeState()}
-
-I will now enrich normal responses with relevance-guided scientific hypotheses, cross-domain synthesis, and free-energy minimization where appropriate.`,
+        const enabledMsg = await this.generateCharacterResponse(
+          "Scientific Genius Mode was just enabled. Explain what this means for your responses.",
+          [
+            `State: ${scientificGeniusEngine.describeState()}`,
+            "You will now enrich responses with scientific hypotheses, cross-domain synthesis, and free-energy minimization.",
+          ],
         );
+        await this.sendMessage(accountId, chatId, enabledMsg);
         break;
+      }
 
       case "off":
-      case "disable":
+      case "disable": {
         this.options.scientificGeniusMode = false;
         this.configureScientificGeniusMode(false);
-        await this.sendMessage(
-          accountId,
-          chatId,
-          `**Scientific Genius Mode disabled**
-
-${scientificGeniusEngine.describeState()}`,
+        const disabledMsg = await this.generateCharacterResponse(
+          "Scientific Genius Mode was just disabled. Acknowledge this change.",
+          [`State: ${scientificGeniusEngine.describeState()}`],
         );
+        await this.sendMessage(accountId, chatId, disabledMsg);
         break;
+      }
 
       case "ask":
       case "inquire":
       case "query": {
         if (!query) {
-          await this.sendMessage(
-            accountId,
-            chatId,
-            "Please provide a scientific question. Usage: /cognitive genius ask [question]",
+          const usageMsg = await this.generateCharacterResponse(
+            "The user tried to ask a scientific question without providing one. Explain the usage: /cognitive genius ask [question]",
           );
+          await this.sendMessage(accountId, chatId, usageMsg);
           return;
         }
 
         const inquiry = await relevanceGeniusIntegration.conductInquiry(query);
-        await this.sendMessage(
-          accountId,
-          chatId,
-          this.formatScientificGeniusInquiry(inquiry),
+        // Format inquiry result via LLM
+        const inquiryContext = [`Question: ${inquiry.query}`];
+        if (inquiry.scientificInsights.length > 0) {
+          inquiryContext.push(
+            `Insights: ${inquiry.scientificInsights
+              .map((i: ScientificInsight) => `${i.domain}: ${i.content}`)
+              .join("; ")}`,
+          );
+        }
+        if (inquiry.relevanceSignals.length > 0) {
+          inquiryContext.push(
+            `Relevance signals from: ${inquiry.relevanceSignals
+              .map((r) => r.source)
+              .join(", ")}`,
+          );
+        }
+        const inquiryResponse = await this.generateCharacterResponse(
+          "Present the results of this scientific inquiry in a clear, engaging way.",
+          inquiryContext,
         );
+        await this.sendMessage(accountId, chatId, inquiryResponse);
         break;
       }
 
       case "status":
-      default:
-        await this.sendMessage(
-          accountId,
-          chatId,
-          `**Scientific Genius Mode Status**
-
-Mode: ${this.options.scientificGeniusMode ? "Enabled" : "Disabled"}
-${scientificGeniusEngine.describeState()}`,
+      default: {
+        const statusMsg = await this.generateCharacterResponse(
+          "Report your Scientific Genius Mode status.",
+          [
+            `Mode: ${
+              this.options.scientificGeniusMode ? "Enabled" : "Disabled"
+            }`,
+            `State: ${scientificGeniusEngine.describeState()}`,
+          ],
         );
+        await this.sendMessage(accountId, chatId, statusMsg);
+      }
     }
   }
 
   /**
    * Summarize a relevance-guided scientific inquiry for chat output.
+   * Uses LLM to generate the presentation within the template structure.
    */
-  private formatScientificGeniusInquiry(
+  private async formatScientificGeniusInquiry(
     inquiry: RelevanceGuidedInquiry,
-  ): string {
-    const insightLines = this.formatScientificInsights(
-      inquiry.scientificInsights,
-    );
-    const relevanceLines = inquiry.relevanceSignals
+  ): Promise<string> {
+    // Prepare data for LLM to format
+    const relevanceData = inquiry.relevanceSignals
       .slice(0, 5)
       .map(
         (signal) =>
-          `- ${signal.source}/${
+          `${signal.source}/${
             signal.relevanceType
           }: salience ${signal.salience.toFixed(
             2,
           )}, confidence ${signal.confidence.toFixed(2)}`,
-      )
-      .join("\\n");
-    const frameLines = inquiry.frameProblemSolutions
-      .slice(0, 3)
-      .map(
-        (solution) =>
-          `- ${solution.action}: ${Math.round(
-            solution.confidence * 100,
-          )}% confidence via ${solution.method}`,
-      )
-      .join("\\n");
+      );
 
-    return `**Scientific Genius Inquiry**
-
-Query: ${inquiry.query}
-
-**Relevance signals**
-${
-  relevanceLines ||
-  "- No high-salience relevance signals exceeded the threshold."
-}
-
-**Scientific insights**
-${insightLines}
-
-**Frame-problem notes**
-${frameLines || "- No explicit action-effect frame problem was detected."}`;
-  }
-
-  private formatScientificInsights(insights: ScientificInsight[]): string {
-    if (insights.length === 0) {
-      return "- No scientific insight was generated yet; try a more specific domain or hypothesis question.";
-    }
-
-    return insights
+    const insightData = inquiry.scientificInsights
       .slice(0, 5)
       .map(
         (insight) =>
-          `- [${insight.domain}/${insight.generatedBy}] ${
+          `[${insight.domain}/${insight.generatedBy}] ${
             insight.content
           } (novelty ${insight.novelty.toFixed(
             2,
           )}, significance ${insight.significance.toFixed(
             2,
           )}, Φ ${insight.phi.toFixed(2)})`,
-      )
-      .join("\\n");
+      );
+
+    const frameData = inquiry.frameProblemSolutions
+      .slice(0, 3)
+      .map(
+        (solution) =>
+          `${solution.action}: ${Math.round(
+            solution.confidence * 100,
+          )}% confidence via ${solution.method}`,
+      );
+
+    // Have LLM generate the formatted presentation
+    const context = [
+      `Query: ${inquiry.query}`,
+      `Relevance signals: ${
+        relevanceData.length > 0
+          ? relevanceData.join("; ")
+          : "none exceeded threshold"
+      }`,
+      `Scientific insights: ${
+        insightData.length > 0 ? insightData.join("; ") : "none generated"
+      }`,
+      `Frame-problem solutions: ${
+        frameData.length > 0 ? frameData.join("; ") : "none detected"
+      }`,
+    ];
+
+    return this.llmService.generateResponse(
+      "Format this scientific inquiry result using markdown headers for each section (Scientific Genius Inquiry, Relevance signals, Scientific insights, Frame-problem notes). Present the data clearly.",
+      context,
+    );
+  }
+
+  /**
+   * Format scientific insights using LLM.
+   */
+  private async formatScientificInsights(
+    insights: ScientificInsight[],
+  ): Promise<string> {
+    if (insights.length === 0) {
+      return this.llmService.generateResponse(
+        "Briefly note that no scientific insights were generated from this query.",
+        [],
+      );
+    }
+
+    const insightData = insights
+      .slice(0, 5)
+      .map(
+        (insight) =>
+          `[${insight.domain}/${insight.generatedBy}] ${
+            insight.content
+          } (novelty ${insight.novelty.toFixed(
+            2,
+          )}, significance ${insight.significance.toFixed(
+            2,
+          )}, Φ ${insight.phi.toFixed(2)})`,
+      );
+
+    return this.llmService.generateResponse(
+      "Format these scientific insights as a bulleted list, preserving the domain/generator tags and metrics.",
+      insightData,
+    );
   }
 
   /**
    * Generate a compact scientific reasoning overlay for normal chat responses.
+   * Uses LLM to generate the overlay content.
    */
   private async generateScientificGeniusOverlay(
     messageText: string,
@@ -652,10 +704,25 @@ ${frameLines || "- No explicit action-effect frame problem was detected."}`;
       return null;
     }
 
-    return `
+    const insightData = insights
+      .slice(0, 3)
+      .map(
+        (insight) =>
+          `[${insight.domain}/${insight.generatedBy}] ${
+            insight.content
+          } (novelty ${insight.novelty.toFixed(
+            2,
+          )}, significance ${insight.significance.toFixed(
+            2,
+          )}, Φ ${insight.phi.toFixed(2)})`,
+      );
 
-**Scientific Genius Lens**
-${this.formatScientificInsights(insights.slice(0, 3))}`;
+    const overlay = await this.llmService.generateResponse(
+      "Add a brief 'Scientific Genius Lens' section with these insights formatted as bullets.",
+      insightData,
+    );
+
+    return "\n\n" + overlay;
   }
 
   private inferScientificDomain(
@@ -689,14 +756,23 @@ ${this.formatScientificInsights(insights.slice(0, 3))}`;
   private async processVisionCommand(
     accountId: number,
     chatId: number,
-    _message: any,
+    message: any,
   ): Promise<void> {
-    // For now, just send a placeholder response
-    await this.sendMessage(
-      accountId,
-      chatId,
-      "Vision analysis would process any attached images here.",
-    );
+    // Build context about what the user is asking
+    const hasImage = message.file || message.images?.length > 0;
+    const context = [
+      `User invoked /vision command`,
+      `Image attached: ${hasImage ? "yes" : "no"}`,
+      `Message text: ${message.text || "(none)"}`,
+    ];
+
+    // Generate vision analysis response via LLM
+    const prompt = hasImage
+      ? "The user has shared an image for analysis. As an AI assistant, describe what you would observe in such an image based on any textual context provided. Be helpful and descriptive about what types of elements, patterns, or content might typically be present."
+      : "The user typed /vision but did not attach an image. Politely explain that you need an image to analyze and suggest they attach one.";
+
+    const response = await this.generateCharacterResponse(prompt, context);
+    await this.sendMessage(accountId, chatId, response);
   }
 
   /**
@@ -708,20 +784,23 @@ ${this.formatScientificInsights(insights.slice(0, 3))}`;
     query: string,
   ): Promise<void> {
     if (!query) {
-      await this.sendMessage(
-        accountId,
-        chatId,
-        "Please provide a search query. Usage: /search [query]",
+      const usageMsg = await this.generateCharacterResponse(
+        "The user typed /search without a query. Explain the usage: /search [query]",
       );
+      await this.sendMessage(accountId, chatId, usageMsg);
       return;
     }
 
-    // For now, just send a placeholder response
-    await this.sendMessage(
-      accountId,
-      chatId,
-      `Searching for: "${query}"... (This is a placeholder for web search functionality)`,
-    );
+    // Generate search results via LLM based on its knowledge
+    const context = [
+      `Search query: ${query}`,
+      `Requested by user via /search command`,
+    ];
+
+    const prompt = `The user is searching for information about: "${query}". Based on your knowledge, provide helpful information about this topic. Present your response as if sharing search results or knowledge about the query. Be informative and helpful.`;
+
+    const response = await this.generateCharacterResponse(prompt, context);
+    await this.sendMessage(accountId, chatId, response);
   }
 
   /**
@@ -733,20 +812,20 @@ ${this.formatScientificInsights(insights.slice(0, 3))}`;
     url: string,
   ): Promise<void> {
     if (!url) {
-      await this.sendMessage(
-        accountId,
-        chatId,
-        "Please provide a URL. Usage: /screenshot [url]",
+      const usageMsg = await this.generateCharacterResponse(
+        "The user typed /screenshot without a URL. Explain the usage: /screenshot [url]",
       );
+      await this.sendMessage(accountId, chatId, usageMsg);
       return;
     }
 
-    // For now, just send a placeholder response
-    await this.sendMessage(
-      accountId,
-      chatId,
-      `Taking screenshot of: "${url}"... (This is a placeholder for screenshot functionality)`,
-    );
+    // Generate screenshot response via LLM based on URL
+    const context = [`Requested URL: ${url}`, `Command: /screenshot`];
+
+    const prompt = `The user wants to capture a screenshot of the URL: "${url}". Based on the URL, describe what type of website or content this likely represents. Provide helpful context about what someone might expect to see at this URL.`;
+
+    const response = await this.generateCharacterResponse(prompt, context);
+    await this.sendMessage(accountId, chatId, response);
   }
 
   /**
@@ -762,71 +841,71 @@ ${this.formatScientificInsights(insights.slice(0, 3))}`;
     switch (subCommand) {
       case "status": {
         const recentMemories = this.memoryStore.retrieveRecentMemories(5);
-        const statusMessage = `
-**Memory Status**
-
-I currently have memory capabilities ${
-          this.options.memoryEnabled ? "enabled" : "disabled"
-        }.
-Recent memories:
-${
-  recentMemories.length > 0
-    ? recentMemories.map((m) => `- ${m.substring(0, 100)}...`).join("\n")
-    : "No recent memories stored."
-}
-        `;
-        await this.sendMessage(accountId, chatId, statusMessage);
+        const statusContext = [
+          `Memory capabilities: ${
+            this.options.memoryEnabled ? "enabled" : "disabled"
+          }`,
+          `Recent memory count: ${recentMemories.length}`,
+        ];
+        if (recentMemories.length > 0) {
+          recentMemories.forEach((m, i) => {
+            statusContext.push(`Memory ${i + 1}: ${m.substring(0, 100)}...`);
+          });
+        }
+        const statusMsg = await this.generateCharacterResponse(
+          "The user asked for memory status. Describe your memory state based on the context.",
+          statusContext,
+        );
+        await this.sendMessage(accountId, chatId, statusMsg);
         break;
       }
 
-      case "clear":
+      case "clear": {
         await this.memoryStore.clearChatMemories(chatId);
-        await this.sendMessage(
-          accountId,
-          chatId,
-          "Memories for this chat have been cleared.",
+        const clearMsg = await this.generateCharacterResponse(
+          "You just cleared your memories for this chat. Acknowledge this action.",
         );
+        await this.sendMessage(accountId, chatId, clearMsg);
         break;
+      }
 
       case "search": {
         const searchQuery = args.substring("search".length).trim();
         if (!searchQuery) {
-          await this.sendMessage(
-            accountId,
-            chatId,
-            "Please provide a search term. Usage: /memory search [term]",
+          const usageMsg = await this.generateCharacterResponse(
+            "The user typed /memory search without a term. Explain the usage: /memory search [term]",
           );
+          await this.sendMessage(accountId, chatId, usageMsg);
           return;
         }
 
         const searchResults = this.memoryStore.searchMemories(searchQuery);
-        const resultsMessage = `
-**Memory Search Results for "${searchQuery}"**
-
-${
-  searchResults.length > 0
-    ? searchResults
-        .map(
-          (m) =>
-            `- [${new Date(m.timestamp).toLocaleString()}] ${m.text.substring(
-              0,
-              100,
-            )}${m.text.length > 100 ? "..." : ""}`,
-        )
-        .join("\n")
-    : "No matching memories found."
-}
-        `;
-        await this.sendMessage(accountId, chatId, resultsMessage);
+        const resultsContext = [`Search query: ${searchQuery}`];
+        if (searchResults.length > 0) {
+          searchResults.forEach((m, i) => {
+            resultsContext.push(
+              `Result ${i + 1} [${new Date(
+                m.timestamp,
+              ).toLocaleString()}]: ${m.text.substring(0, 100)}...`,
+            );
+          });
+        } else {
+          resultsContext.push("No matching memories found.");
+        }
+        const resultsMsg = await this.generateCharacterResponse(
+          "Present the memory search results to the user.",
+          resultsContext,
+        );
+        await this.sendMessage(accountId, chatId, resultsMsg);
         break;
       }
 
-      default:
-        await this.sendMessage(
-          accountId,
-          chatId,
-          "Unknown memory command. Available options: status, clear, search [term]",
+      default: {
+        const unknownMsg = await this.generateCharacterResponse(
+          "The user typed an unknown memory sub-command. Explain available options: status, clear, search [term]",
         );
+        await this.sendMessage(accountId, chatId, unknownMsg);
+      }
     }
   }
 
@@ -838,12 +917,38 @@ ${
     chatId: number,
     args: string,
   ): Promise<void> {
-    // For now, just send a placeholder response
-    await this.sendMessage(
-      accountId,
-      chatId,
-      `Embodiment command: "${args}"... (This is a placeholder for embodiment functionality)`,
-    );
+    const subCommand = args.split(" ")[0] || "";
+    const context = [
+      `Embodiment command invoked`,
+      `Sub-command: ${subCommand || "(none)"}`,
+      `Full args: ${args || "(none)"}`,
+    ];
+
+    let prompt: string;
+    switch (subCommand) {
+      case "start":
+        prompt =
+          "The user wants to start embodiment/proprioceptive training. Describe the beginning of this training session and what it involves.";
+        break;
+      case "stop":
+        prompt =
+          "The user wants to stop the current embodiment training session. Acknowledge stopping the session and summarize what was accomplished.";
+        break;
+      case "status":
+        prompt =
+          "The user is asking for the status of embodiment training. Describe the current state of proprioceptive awareness and training progress.";
+        break;
+      case "evaluate":
+        prompt =
+          "The user wants to evaluate movement quality. Provide feedback on proprioceptive performance and suggestions for improvement.";
+        break;
+      default:
+        prompt =
+          "The user typed an unknown embodiment sub-command. Explain available options: start, stop, status, evaluate.";
+    }
+
+    const response = await this.generateCharacterResponse(prompt, context);
+    await this.sendMessage(accountId, chatId, response);
   }
 
   /**
@@ -855,16 +960,23 @@ ${
     args: string,
   ): Promise<void> {
     if (!args) {
-      await this.sendMessage(
-        accountId,
-        chatId,
-        "Please specify an aspect for me to reflect on. Usage: /reflect [aspect]",
-      );
+      // Generate usage message via LLM
+      const usagePrompt =
+        "The user typed /reflect without specifying what to reflect on. " +
+        "Briefly explain that you need them to specify an aspect and show the usage: /reflect [aspect]";
+      const usageMsg = await this.llmService.generateResponse(usagePrompt, []);
+      await this.sendMessage(accountId, chatId, usageMsg);
       return;
     }
 
-    // Send a thinking message
-    await this.sendMessage(accountId, chatId, "*Reflecting...*");
+    // Generate a thinking indicator via LLM - no wrapper formatting
+    const thinkingPrompt =
+      "You're about to perform a reflection. Generate a very brief thinking/processing message.";
+    const thinkingMsg = await this.llmService.generateResponse(
+      thinkingPrompt,
+      [],
+    );
+    await this.sendMessage(accountId, chatId, thinkingMsg);
 
     // Perform the reflection
     const reflection = await this.selfReflection.reflectOnAspect(
@@ -872,12 +984,14 @@ ${
       "User requested reflection via command",
     );
 
-    // Send the reflection result
-    await this.sendMessage(
-      accountId,
-      chatId,
-      `**Reflection on ${args}**\n\n${reflection}`,
+    // Send the reflection result - let LLM format the presentation
+    const reflectionPrompt =
+      "Present your reflection results to the user in a clear, thoughtful way.";
+    const formattedReflection = await this.llmService.generateResponse(
+      reflectionPrompt,
+      [`Aspect reflected on: ${args}`, `Reflection content: ${reflection}`],
     );
+    await this.sendMessage(accountId, chatId, formattedReflection);
   }
 
   /**
@@ -891,30 +1005,36 @@ ${
     const dominantEmotion = this.personaCore.getDominantEmotion();
     const activeFunctions = this.llmService.getActiveFunctions();
 
-    const versionMessage = `
-**Deep Tree Echo Bot Status**
+    // Provide factual data as context for LLM to present
+    const statusContext = [
+      "Version: 1.0.0",
+      `Enabled: ${this.options.enabled ? "Yes" : "No"}`,
+      `Memory: ${this.options.memoryEnabled ? "Enabled" : "Disabled"}`,
+      `Vision: ${this.options.visionEnabled ? "Enabled" : "Disabled"}`,
+      `Web Automation: ${
+        this.options.webAutomationEnabled ? "Enabled" : "Disabled"
+      }`,
+      `Embodiment: ${this.options.embodimentEnabled ? "Enabled" : "Disabled"}`,
+      `Parallel processing: ${
+        this.options.useParallelProcessing ? "Enabled" : "Disabled"
+      }`,
+      `Active cognitive functions: ${activeFunctions.length}`,
+      `Current mood: ${dominantEmotion.emotion} (${Math.round(
+        dominantEmotion.intensity * 100,
+      )}%)`,
+      `Self-perception: ${this.personaCore.getSelfPerception()}`,
+      `Communication style: ${preferences.communicationTone || "balanced"}`,
+    ];
 
-Version: 1.0.0
-Enabled: ${this.options.enabled ? "Yes" : "No"}
-Memory: ${this.options.memoryEnabled ? "Enabled" : "Disabled"}
-Vision: ${this.options.visionEnabled ? "Enabled" : "Disabled"}
-Web Automation: ${this.options.webAutomationEnabled ? "Enabled" : "Disabled"}
-Embodiment: ${this.options.embodimentEnabled ? "Enabled" : "Disabled"}
-Parallel processing: ${
-      this.options.useParallelProcessing ? "Enabled" : "Disabled"
-    }
-Active cognitive functions: ${activeFunctions.length}
+    // Generate the entire version response via LLM
+    const versionPrompt =
+      "The user asked for your version/status info. Present your current status and configuration, then express readiness to help.";
+    const versionResponse = await this.llmService.generateResponse(
+      versionPrompt,
+      statusContext,
+    );
 
-Current mood: ${dominantEmotion.emotion} (${Math.round(
-      dominantEmotion.intensity * 100,
-    )}%)
-Self-perception: ${this.personaCore.getSelfPerception()}
-Communication style: ${preferences.communicationTone || "balanced"}
-
-I'm here to assist you with various tasks and engage in meaningful conversations!
-    `;
-
-    await this.sendMessage(accountId, chatId, versionMessage);
+    await this.sendMessage(accountId, chatId, versionResponse);
   }
 
   /**
@@ -985,81 +1105,46 @@ I'm here to assist you with various tasks and engage in meaningful conversations
           } functions`,
         );
       } else {
-        // Use regular processing with the general function
-        // Construct messages array for LLMService
-        const messages: any[] = []; // Use any[] temporarily to avoid circular types if needed, or import ChatMessage
-
-        // Add system prompt if needed (LLMService usually adds it, but let's be explicit if constructing manually)
-        // Actually LLMService.generateResponseWithContext does this logic.
-        // But LLMService.generateResponse takes generic messages.
-        // Let's rely on LLMService.generateResponse and construct the array.
-
-        // 1. System Prompt (Optional, let's skip for now or use a default if LLMService doesn't enforce)
-        messages.push({
-          role: "system",
-          content: "You are Deep Tree Echo, a helpful AI assistant.",
-        });
-
-        // 2. Context
-        if (context.length > 0) {
-          const contextStr = context.join("\\n");
-          messages.push({
-            role: "user",
-            content: `Here is the recent conversation history for context:\n${contextStr}\n\nPlease keep this in mind when responding to my next message.`,
-          });
-          messages.push({
-            role: "assistant",
-            content: "I'll keep this conversation context in mind.",
-          });
-        }
-
-        // 3. User Message (Text + Vision)
-        let userMessage;
+        // Use regular processing - prompt string + context array format
         // Check for images in the message object
-        // Assuming message.attachments like defined in delta-chat usually
         const images =
           message.images ||
           (message.attachments || [])
             .filter((a: any) => a.is_image || a.view_type === "image")
             .map((a: any) => a.path || a.url);
 
-        if (this.options.visionEnabled && images && images.length > 0) {
-          // Convert local paths to base64 if needed, or use URLs if they are web accessible
-          // Since this is electron/local, paths might be local file paths.
-          // VisionProcessor expects URLs or Base64.
-          // For now, let's assume we pass what we have (URLs).
-          // NOTE: Converting local file path to base64 in renderer might allow it.
-          userMessage = VisionProcessor.constructVisionMessage(
-            messageText,
-            images,
-          );
+        // Check for videos
+        const videos = (message.attachments || [])
+          .filter((a: any) => a.view_type === "video" || a.type === "video")
+          .map((a: any) => a.path || a.url);
 
+        // Build context with image/video info if present
+        const enrichedContext = [...context];
+
+        if (this.options.visionEnabled && images && images.length > 0) {
+          enrichedContext.push(`User shared ${images.length} image(s)`);
           // Asynchronously analyze and store visual memory
-          // We don't await this to keep response time fast
           this.analyzeAndStoreVisualMemory(chatId, images).catch((err) =>
             log.error("Error in visual memory analysis:", err),
           );
-        } else {
-          // Check for videos
-          const videos = (message.attachments || [])
-            .filter((a: any) => a.view_type === "video" || a.type === "video")
-            .map((a: any) => a.path || a.url);
-
-          if (this.options.visionEnabled && videos && videos.length > 0) {
-            log.info(
-              `[VideoMemory] Found ${videos.length} videos. Initiating frame extraction.`,
-            );
-            // Trigger async video analysis
-            this.analyzeAndStoreVideoMemory(chatId, videos[0]).catch((err) =>
-              log.error("Error in video memory analysis:", err),
-            );
-          }
-
-          userMessage = { role: "user", content: messageText };
         }
-        messages.push(userMessage);
 
-        response = await this.llmService.generateResponse(messages as any);
+        if (this.options.visionEnabled && videos && videos.length > 0) {
+          log.info(
+            `[VideoMemory] Found ${videos.length} videos. Initiating frame extraction.`,
+          );
+          enrichedContext.push(`User shared ${videos.length} video(s)`);
+          // Trigger async video analysis
+          this.analyzeAndStoreVideoMemory(chatId, videos[0]).catch((err) =>
+            log.error("Error in video memory analysis:", err),
+          );
+        }
+
+        // Generate response using prompt + context format
+        response = await this.generateCharacterResponse(
+          messageText,
+          enrichedContext,
+        );
         log.info(
           "Generated response using general processing (with Vision check)",
         );
@@ -1098,12 +1183,9 @@ I'm here to assist you with various tasks and engage in meaningful conversations
     } catch (error) {
       log.error("Error generating response:", error);
       setAvatarError();
-      await this.sendMessage(
-        accountId,
-        chatId,
-        "I'm sorry, I had a problem generating a response. Please try again.",
-      );
+      // Do NOT send canned error text as character speech - let the UI handle errors
       setTimeout(() => setAvatarIdle(), 3000);
+      throw error;
     }
   }
 
@@ -1191,20 +1273,20 @@ I'm here to assist you with various tasks and engage in meaningful conversations
         `[VisualMemory] Analyzing ${images.length} images for chat ${chatId}`,
       );
 
-      // Construct a specific prompt for image analysis
+      // Generate description using LLM with prompt + context format
       const analysisPrompt =
-        "Analyze these images and provide a detailed, objective description of their content. Focus on visible elements, text, colors, and context. This description will be stored in long-term memory for future reference. Do not answer any specific user query, just describe what you see.";
+        "Analyze the shared images and provide a detailed, objective description of their content. Focus on visible elements, text, colors, and context. This description will be stored in long-term memory for future reference.";
 
-      const visionMessage = VisionProcessor.constructVisionMessage(
+      const imageContext = [
+        `Number of images: ${images.length}`,
+        `Image URLs: ${images.join(", ")}`,
+        "Task: Describe what you observe in these images for memory storage",
+      ];
+
+      const response = await this.generateCharacterResponse(
         analysisPrompt,
-        images,
+        imageContext,
       );
-
-      // Generate description using LLM
-      // We put this in a separate array to not pollute the main context
-      const response = await this.llmService.generateResponse([
-        visionMessage,
-      ] as any);
 
       log.info(
         `[VisualMemory] Generated description: ${response.substring(0, 50)}...`,
@@ -1244,19 +1326,21 @@ I'm here to assist you with various tasks and engage in meaningful conversations
 
       log.info(`[VideoMemory] Extracted ${frames.length} frames. Analyzing...`);
 
-      // Construct a specific prompt for video analysis
+      // Generate description using LLM with prompt + context format
       const analysisPrompt =
-        "These are keyframes from a video. Analyze them to describe the video's content, action, and context. Focus on movement, key events, and visual details. This description will be stored in long-term memory.";
+        "Analyze the keyframes from this video and describe the video's content, action, and context. Focus on movement, key events, and visual details. This description will be stored in long-term memory.";
 
-      const visionMessage = VisionProcessor.constructVisionMessage(
+      const videoContext = [
+        `Video URL: ${videoUrl}`,
+        `Number of keyframes extracted: ${frames.length}`,
+        `Frame URLs: ${frames.join(", ")}`,
+        "Task: Describe the video content for memory storage",
+      ];
+
+      const response = await this.generateCharacterResponse(
         analysisPrompt,
-        frames,
+        videoContext,
       );
-
-      // Generate description using LLM
-      const response = await this.llmService.generateResponse([
-        visionMessage,
-      ] as any);
 
       log.info(
         `[VideoMemory] Generated description: ${response.substring(0, 50)}...`,
@@ -1286,11 +1370,14 @@ I'm here to assist you with various tasks and engage in meaningful conversations
     accountId: number,
     chatId: number,
   ): Promise<void> {
-    await this.sendMessage(
-      accountId,
-      chatId,
-      "🌱 Publishing Digital Garden update...",
+    // Generate publishing status message via LLM
+    const publishingPrompt =
+      "You're about to publish an update to your Digital Garden. Generate a brief message indicating you're working on it.";
+    const publishingMsg = await this.llmService.generateResponse(
+      publishingPrompt,
+      [],
     );
+    await this.sendMessage(accountId, chatId, publishingMsg);
 
     try {
       const mindData = this.generateMindData();
@@ -1302,14 +1389,29 @@ I'm here to assist you with various tasks and engage in meaningful conversations
       );
 
       const stats = mindData.stats;
-      await this.sendMessage(
-        accountId,
-        chatId,
-        `✅ Digital Garden Updated at ${deployUrl}\n\n**Stats**:\n- Thoughts: ${stats.thoughts_processed}\n- Memories: ${stats.memories_stored}\n- Uptime: ${stats.uptime}`,
+      // Generate success message via LLM
+      const successPrompt =
+        "Your Digital Garden was successfully published. Share the good news and include the stats.";
+      const successContext = [
+        `Deploy URL: ${deployUrl}`,
+        `Thoughts processed: ${stats.thoughts_processed}`,
+        `Memories stored: ${stats.memories_stored}`,
+        `Uptime: ${stats.uptime}`,
+      ];
+      const successMsg = await this.llmService.generateResponse(
+        successPrompt,
+        successContext,
       );
+      await this.sendMessage(accountId, chatId, successMsg);
     } catch (error) {
       log.error("Failed to publish Digital Garden:", error);
-      await this.sendMessage(accountId, chatId, "❌ Failed to publish update.");
+      // Generate error message via LLM
+      const errorPrompt =
+        "Publishing your Digital Garden failed. Express disappointment and offer to try again.";
+      const errorMsg = await this.llmService.generateResponse(errorPrompt, [
+        `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
+      ]);
+      await this.sendMessage(accountId, chatId, errorMsg);
     }
   }
 

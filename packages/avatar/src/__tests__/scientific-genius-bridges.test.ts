@@ -55,6 +55,15 @@ describe("scientific-genius avatar bridges", () => {
       getNativeSize: jest.fn(() => null),
       getSelfModelAccuracy: jest.fn(() => 0.5),
       getLastExpressionExperience: jest.fn(() => null),
+      getEmbodimentDiagnostics: jest.fn(() => ({
+        status: "waiting" as const,
+        sampleCount: 0,
+        requestedParameterCount: 0,
+        observedParameterCount: 0,
+        unavailableParameterIds: [],
+        lastSampleAt: null,
+        rmsError: null,
+      })),
     };
 
     try {

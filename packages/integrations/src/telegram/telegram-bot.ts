@@ -487,10 +487,7 @@ export class TelegramBot implements IPlatformIntegration {
     } catch (error) {
       this.stats.errors++;
       const err = error as Error;
-      await this.sendMessage(message.chat.id.toString(), {
-        content: `❌ I encountered an error: ${err.message}`,
-        replyTo: message.message_id.toString(),
-      });
+      // No canned error response - just log the error
       this.log(`Cognitive error: ${err.message}`, "error");
     }
   }

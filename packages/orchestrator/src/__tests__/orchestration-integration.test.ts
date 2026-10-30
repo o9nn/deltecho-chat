@@ -8,17 +8,49 @@
  * - Real-time monitoring during operation
  */
 
-import { describe, it, expect, beforeEach, afterEach } from "@jest/globals";
+import {
+  describe,
+  it,
+  expect,
+  beforeEach,
+  afterEach,
+  jest,
+} from "@jest/globals";
+import { LLMService } from "deep-tree-echo-core";
 import { Sys6OrchestratorBridge } from "../sys6-bridge/index.js";
 import { AgentCoordinator } from "../agents/index.js";
 import { TelemetryMonitor } from "../telemetry/index.js";
+
+function mockedParallelResult(integratedResponse: string) {
+  return {
+    processing: {} as Record<string, string>,
+    integratedResponse,
+    insights: { processingMethod: "single_function" },
+  };
+}
+
+function mockConfiguredLlm(integratedResponse: string) {
+  return jest
+    .spyOn(LLMService.prototype, "generateFullParallelResponse")
+    .mockResolvedValue(mockedParallelResult(integratedResponse));
+}
+
+function blockNetworkRequests(): () => number {
+  const fetchMock = jest
+    .spyOn(globalThis, "fetch")
+    .mockRejectedValue(new Error("Network access is forbidden in this test"));
+  return () => fetchMock.mock.calls.length;
+}
 
 describe("Orchestration Integration", () => {
   let sys6Bridge: Sys6OrchestratorBridge;
   let agentCoordinator: AgentCoordinator;
   let telemetryMonitor: TelemetryMonitor;
+  let networkRequestCount: () => number;
 
   beforeEach(() => {
+    networkRequestCount = blockNetworkRequests();
+
     // Initialize all components with fast settings for testing
     sys6Bridge = new Sys6OrchestratorBridge({
       dim: 64,
@@ -74,6 +106,7 @@ describe("Orchestration Integration", () => {
       agentCoordinator.stop(),
       telemetryMonitor.stop(),
     ]);
+    jest.restoreAllMocks();
   });
 
   describe("Full System Startup", () => {
@@ -396,25 +429,60 @@ describe("Orchestration Integration", () => {
 
   describe("Message Processing Integration", () => {
     it("should process messages through the cognitive system", async () => {
+      const modelResponse = "test-model-response: orchestration-message";
+      const generateResponse = mockConfiguredLlm(modelResponse);
       await sys6Bridge.start();
 
       const response = await sys6Bridge.processMessage("Hello, system!");
 
-      expect(typeof response).toBe("string");
-      expect(response.length).toBeGreaterThan(0);
+      expect(response).toBe(modelResponse);
+      expect(generateResponse).toHaveBeenCalledWith(
+        expect.stringContaining("User message: Hello, system!"),
+        expect.any(Array),
+      );
+      expect(networkRequestCount()).toBe(0);
     });
 
     it("should update telemetry during message processing", async () => {
+      const modelResponse = "test-model-response: telemetry";
+      const generateResponse = mockConfiguredLlm(modelResponse);
       await Promise.all([sys6Bridge.start(), telemetryMonitor.start()]);
 
       // Process a message
-      await sys6Bridge.processMessage("Test message");
+      const response = await sys6Bridge.processMessage("Test message");
 
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       // Telemetry should have recorded the activity
       const snapshot = telemetryMonitor.getSnapshot();
+      expect(response).toBe(modelResponse);
+      expect(generateResponse).toHaveBeenCalledTimes(1);
       expect(snapshot.metrics["cognitive_steps_total"]).toBeGreaterThan(0);
+      expect(networkRequestCount()).toBe(0);
+    });
+
+    it("should reject an unconfigured model instead of synthesizing a response, then recover with an injected model", async () => {
+      const generateResponse = jest.spyOn(
+        LLMService.prototype,
+        "generateFullParallelResponse",
+      );
+
+      await expect(
+        sys6Bridge.processMessage("No configured model is available"),
+      ).rejects.toThrow(/MODEL_NOT_CONFIGURED/);
+      expect(generateResponse).toHaveBeenCalledTimes(1);
+      expect(networkRequestCount()).toBe(0);
+
+      const recoveryResponse = "test-model-response: recovered";
+      generateResponse.mockResolvedValue(
+        mockedParallelResult(recoveryResponse),
+      );
+
+      await expect(
+        sys6Bridge.processMessage("Recover with the injected model"),
+      ).resolves.toBe(recoveryResponse);
+      expect(generateResponse).toHaveBeenCalledTimes(2);
+      expect(networkRequestCount()).toBe(0);
     });
   });
 

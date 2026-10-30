@@ -689,7 +689,8 @@ ${history.join("\n")}`;
       return result.integratedResponse;
     } catch (error) {
       log.error("Error processing message:", error);
-      return "I apologize, but I encountered an issue processing your message. Please try again.";
+      // No fallback text - rethrow so caller can handle appropriately
+      throw error;
     }
   }
 

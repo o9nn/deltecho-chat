@@ -276,12 +276,15 @@ export class DeepTreeEchoTelegramBot {
       await ctx.sendChatAction("typing");
 
       // Process with cognitive system
-      let response: string;
-      if (this.processor) {
-        response = await this.processor.processMessage(content, messageContext);
-      } else {
-        response = "I am not fully initialized yet. Please try again later.";
+      if (!this.processor) {
+        throw new Error(
+          "BOT_NOT_INITIALIZED: Cognitive processor is not ready",
+        );
       }
+      const response = await this.processor.processMessage(
+        content,
+        messageContext,
+      );
 
       // Split long responses
       const chunks = this.splitResponse(response);
@@ -294,12 +297,8 @@ export class DeepTreeEchoTelegramBot {
       }
     } catch (error) {
       console.error("[Telegram Bot] Error processing message:", error);
-      await ctx.reply(
-        "I encountered an error processing your message. Please try again.",
-        {
-          reply_parameters: { message_id: msg.message_id },
-        },
-      );
+      // No fallback text - silently fail rather than send canned response
+      // The error is logged for debugging
     }
   }
 

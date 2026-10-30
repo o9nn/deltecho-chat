@@ -1,0 +1,22 @@
+{
+  "name": "@deltecho/airi-broker",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "check:types": "tsc --noEmit",
+    "test": "node build.mjs && node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "@moeru/eventa": "1.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.27",
+    "esbuild": "0.25.12",
+    "typescript": "catalog:"
+  }
+}

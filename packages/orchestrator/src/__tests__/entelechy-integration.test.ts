@@ -135,26 +135,47 @@ describe("EntelechyIntegration", () => {
     expect(grounded.daoConsensus).toBeGreaterThan(baseline.daoConsensus);
   });
 
-  it("clamps malformed embodiment telemetry and returns defensive copies", () => {
+  it("rejects malformed embodiment telemetry without mutating prior evidence", () => {
     const integration = createIntegration();
+    const accepted = integration.updateEmbodimentAutognosis({
+      accuracy: 0.8,
+      meanError: 0.1,
+      experienceCount: 4,
+      lastUpdatedAt: 1234,
+    });
     const update = integration.updateEmbodimentAutognosis({
-      accuracy: 2,
+      accuracy: Number.NaN,
       meanError: Number.NaN,
-      experienceCount: -4,
-      confidence: -1,
-      lastUpdatedAt: -10,
+      experienceCount: 4,
+      confidence: Number.POSITIVE_INFINITY,
+      lastUpdatedAt: Number.NaN,
     });
 
-    expect(update).toEqual({
-      accuracy: 1,
-      meanError: 0,
-      experienceCount: 0,
-      confidence: 0,
-      lastUpdatedAt: 0,
-    });
+    expect(update).toEqual(accepted);
+    expect(integration.getEmbodimentAutognosis()).toEqual(accepted);
 
     update.accuracy = 0;
-    expect(integration.getEmbodimentAutognosis().accuracy).toBe(1);
+    expect(integration.getEmbodimentAutognosis().accuracy).toBe(0.8);
+  });
+
+  it("refreshes cached visual evidence immediately after an embodiment update", () => {
+    const integration = createIntegration();
+    integration.tickOnce();
+    expect(integration.getLastSnapshot()).not.toBeNull();
+
+    integration.updateEmbodimentAutognosis({
+      accuracy: 0.94,
+      meanError: 0.03,
+      experienceCount: 18,
+      lastUpdatedAt: 5678,
+    });
+
+    expect(
+      integration.getLastSnapshot()?.scientificGeniusVisual.embodimentAccuracy,
+    ).toBeCloseTo(0.94);
+    expect(
+      integration.getScientificGeniusVisualState().embodimentAccuracy,
+    ).toBeCloseTo(0.94);
   });
 
   it("transports a bounded resonance cascade through cached visual state", () => {
