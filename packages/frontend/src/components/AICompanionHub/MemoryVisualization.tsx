@@ -16,13 +16,42 @@ import {
 } from "lucide-react";
 import { AICompanionProvider, useAICompanion } from "./AICompanionController";
 import { AIMemory } from "./MemoryPersistenceLayer";
+import "./MemoryVisualization.scss";
 
 // Force 3D graph rendering on canvas rather than WebGL when needed
 const _forceCanvas = false;
 
-// Import 3D graph library dynamically to avoid SSR issues
-let ForceGraph3D: any = null;
-let SpriteText: any = null;
+interface GraphDependencies {
+  ForceGraph3D: new (element: HTMLElement, options?: any) => any;
+  SpriteText: new (text: string) => any;
+}
+
+// Import the browser-only renderers lazily so this component remains safe to load
+// in non-DOM contexts. The packages themselves provide the force simulation and
+// sprite implementation; this does not substitute a static visualization.
+const loadGraphDependencies = async (): Promise<GraphDependencies> => {
+  const [forceGraphModule, spriteTextModule] = await Promise.all([
+    import("3d-force-graph"),
+    import("three-spritetext"),
+  ]);
+
+  if (
+    typeof forceGraphModule.default !== "function" ||
+    typeof spriteTextModule.default !== "function"
+  ) {
+    throw new Error("The 3D graph renderer did not expose its required APIs.");
+  }
+
+  return {
+    ForceGraph3D: forceGraphModule.default,
+    SpriteText: spriteTextModule.default,
+  };
+};
+
+const getGraphErrorMessage = (error: unknown) =>
+  error instanceof Error && error.message
+    ? error.message
+    : "The 3D memory graph could not be loaded.";
 
 interface MemoryNode {
   id: string;
@@ -77,12 +106,17 @@ const MemoryVisualizationContent: React.FC = () => {
 
   // Refs & state
   const containerRef = useRef<HTMLDivElement>(null);
+  const graphContainerRef = useRef<HTMLDivElement>(null);
   const graphRef = useRef<any>(null);
   const [graphData, setGraphData] = useState<MemoryGraph>({
     nodes: [],
     links: [],
   });
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [loadAttempt, setLoadAttempt] = useState(0);
+  const [graphDependencies, setGraphDependencies] =
+    useState<GraphDependencies | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<AIMemory[]>([]);
   const [highlightedNodes, setHighlightedNodes] = useState<Set<string>>(
@@ -96,24 +130,32 @@ const MemoryVisualizationContent: React.FC = () => {
   const [showTopics, setShowTopics] = useState(true);
   const [showCompanions, setShowCompanions] = useState(true);
 
-  // Dynamic import of 3D graph libraries
+  // Dynamic import of the actual 3D graph libraries. Cancellation prevents an
+  // unmounted view (or an older retry) from overwriting the current UI state.
   useEffect(() => {
-    const loadDependencies = async () => {
-      try {
-        // Dynamic imports
-        const ForceGraph3DModule = await import("3d-force-graph");
-        const ThreeModule = await import("three");
-        ForceGraph3D = ForceGraph3DModule.default;
-        SpriteText = ThreeModule.SpriteText;
+    let cancelled = false;
 
+    setLoading(true);
+    setLoadError(null);
+    setGraphDependencies(null);
+
+    loadGraphDependencies()
+      .then((dependencies) => {
+        if (cancelled) return;
+        setGraphDependencies(dependencies);
         setLoading(false);
-      } catch (error) {
+      })
+      .catch((error) => {
         console.error("Failed to load 3D graph dependencies:", error);
-      }
-    };
+        if (cancelled) return;
+        setLoadError(getGraphErrorMessage(error));
+        setLoading(false);
+      });
 
-    loadDependencies();
-  }, []);
+    return () => {
+      cancelled = true;
+    };
+  }, [loadAttempt]);
 
   // Build memory graph from AI memories
   useEffect(() => {
@@ -270,138 +312,182 @@ const MemoryVisualizationContent: React.FC = () => {
   useEffect(() => {
     if (
       loading ||
-      !containerRef.current ||
+      !graphContainerRef.current ||
       !graphData.nodes.length ||
-      !ForceGraph3D
+      !graphDependencies
     )
       return;
 
-    // Clear previous graph
-    if (graphRef.current) {
-      containerRef.current.innerHTML = "";
-    }
+    const { ForceGraph3D, SpriteText } = graphDependencies;
+    const container = graphContainerRef.current;
 
-    // Create new graph
-    const Graph = ForceGraph3D({
-      rendererConfig: { antialias: true, alpha: true },
-    });
-    graphRef.current = Graph(containerRef.current)
-      .width(containerRef.current.clientWidth)
-      .height(containerRef.current.clientHeight)
-      .backgroundColor("rgba(248, 250, 252, 0.8)")
-      .nodeVal("val")
-      .nodeLabel((node: MemoryNode) => node.label)
-      .nodeColor((node: MemoryNode) => node.color)
-      .linkWidth((link: MemoryLink) => {
-        const sourceId =
-          typeof link.source === "string" ? link.source : link.source.id;
-        const targetId =
-          typeof link.target === "string" ? link.target : link.target.id;
-        return highlightedLinks.has(`${sourceId}-${targetId}`) ? 2 : 0.5;
-      })
-      .linkColor((link: MemoryLink) => link.color)
-      .nodeThreeObject((node: MemoryNode) => {
-        // Use sprite text for node labels
-        const sprite = new SpriteText(node.label);
-        sprite.color = node.color;
-        sprite.textHeight =
-          highlightedNodes.has(node.id) || node.id === selectedNode?.id ? 3 : 2;
-        sprite.backgroundColor =
-          highlightedNodes.has(node.id) || node.id === selectedNode?.id
-            ? "rgba(255,255,255,0.8)"
-            : "transparent";
-        sprite.padding = 2;
-        return sprite;
-      })
-      .onNodeClick((node: MemoryNode) => {
-        setSelectedNode(node === selectedNode ? null : node);
+    let graph: any = null;
+    let animationFrame: number | undefined;
+    let resizeListenerAttached = false;
+    let disposed = false;
 
-        // Highlight related nodes and links
-        if (node !== selectedNode) {
-          const relatedNodes = new Set<string>([node.id]);
-          const relatedLinks = new Set<string>();
-
-          graphData.links.forEach((link) => {
-            const sourceId =
-              typeof link.source === "string" ? link.source : link.source.id;
-            const targetId =
-              typeof link.target === "string" ? link.target : link.target.id;
-            if (sourceId === node.id || targetId === node.id) {
-              const otherNodeId = sourceId === node.id ? targetId : sourceId;
-              relatedNodes.add(otherNodeId);
-              relatedLinks.add(`${sourceId}-${targetId}`);
-            }
-          });
-
-          setHighlightedNodes(relatedNodes);
-          setHighlightedLinks(relatedLinks);
-        } else {
-          setHighlightedNodes(new Set());
-          setHighlightedLinks(new Set());
-        }
-      })
-      .onNodeHover((node: MemoryNode | null) => {
-        containerRef.current!.style.cursor = node ? "pointer" : "default";
-      })
-      .graphData(graphData);
-
-    // Apply force simulation settings
-    graphRef.current.d3Force("charge").strength(-120);
-
-    graphRef.current.d3Force("link").distance((link: MemoryLink) => {
-      // Different link distances based on link type
-      switch (link.type) {
-        case "memory-topic":
-          return 40;
-        case "memory-companion":
-          return 70;
-        case "memory-emotion":
-          return 50;
-        case "topic-topic":
-          return 30;
-        case "companion-companion":
-          return 80;
-        default:
-          return 50;
-      }
-    });
-
-    // Responsive resize
     const handleResize = () => {
-      if (containerRef.current && graphRef.current) {
-        graphRef.current
+      if (containerRef.current && graphRef.current === graph) {
+        graph
           .width(containerRef.current.clientWidth)
           .height(containerRef.current.clientHeight);
       }
     };
 
-    window.addEventListener("resize", handleResize);
-
-    // Auto-rotate animation
-    let animationFrame: number;
-    const animate = () => {
-      if (graphRef.current) {
-        graphRef.current.rotation({ y: graphRef.current.rotation().y + 0.001 });
-        animationFrame = requestAnimationFrame(animate);
+    // Construction can fail after the renderer appends a canvas. Keep all
+    // cleanup local to this effect so both initialization failures and normal
+    // updates/unmounts release the graph, RAF, listener, and partial canvas.
+    const disposeGraph = () => {
+      if (animationFrame !== undefined) {
+        cancelAnimationFrame(animationFrame);
+        animationFrame = undefined;
+      }
+      if (resizeListenerAttached) {
+        window.removeEventListener("resize", handleResize);
+        resizeListenerAttached = false;
+      }
+      const graphToDispose = graph;
+      if (graphRef.current === graphToDispose) {
+        graphRef.current = null;
+      }
+      try {
+        graphToDispose?._destructor?.();
+      } catch (error) {
+        console.error("Failed to dispose 3D memory graph:", error);
+      } finally {
+        graph = null;
+        if (graphContainerRef.current === container) {
+          container.replaceChildren();
+        }
       }
     };
 
-    // Start animation
-    animate();
+    try {
+      container.replaceChildren();
 
-    // Store container ref for cleanup
-    const container = containerRef.current;
+      // 3d-force-graph v1.80 exposes a constructor, not just its legacy
+      // factory form. This keeps the actual live force simulation and data.
+      graph = new ForceGraph3D(container, {
+        rendererConfig: { antialias: true, alpha: true },
+      });
+      graphRef.current = graph;
+
+      graph
+        .width(container.clientWidth)
+        .height(container.clientHeight)
+        .backgroundColor("rgba(248, 250, 252, 0.8)")
+        .nodeVal("val")
+        .nodeLabel((node: MemoryNode) => node.label)
+        .nodeColor((node: MemoryNode) => node.color)
+        .linkWidth((link: MemoryLink) => {
+          const sourceId =
+            typeof link.source === "string" ? link.source : link.source.id;
+          const targetId =
+            typeof link.target === "string" ? link.target : link.target.id;
+          return highlightedLinks.has(`${sourceId}-${targetId}`) ? 2 : 0.5;
+        })
+        .linkColor((link: MemoryLink) => link.color)
+        .nodeThreeObject((node: MemoryNode) => {
+          // Use sprite text for node labels
+          const sprite = new SpriteText(node.label);
+          sprite.color = node.color;
+          sprite.textHeight =
+            highlightedNodes.has(node.id) || node.id === selectedNode?.id
+              ? 3
+              : 2;
+          sprite.backgroundColor =
+            highlightedNodes.has(node.id) || node.id === selectedNode?.id
+              ? "rgba(255,255,255,0.8)"
+              : "transparent";
+          sprite.padding = 2;
+          return sprite;
+        })
+        .onNodeClick((node: MemoryNode) => {
+          setSelectedNode(node === selectedNode ? null : node);
+
+          // Highlight related nodes and links
+          if (node !== selectedNode) {
+            const relatedNodes = new Set<string>([node.id]);
+            const relatedLinks = new Set<string>();
+
+            graphData.links.forEach((link) => {
+              const sourceId =
+                typeof link.source === "string" ? link.source : link.source.id;
+              const targetId =
+                typeof link.target === "string" ? link.target : link.target.id;
+              if (sourceId === node.id || targetId === node.id) {
+                const otherNodeId = sourceId === node.id ? targetId : sourceId;
+                relatedNodes.add(otherNodeId);
+                relatedLinks.add(`${sourceId}-${targetId}`);
+              }
+            });
+
+            setHighlightedNodes(relatedNodes);
+            setHighlightedLinks(relatedLinks);
+          } else {
+            setHighlightedNodes(new Set());
+            setHighlightedLinks(new Set());
+          }
+        })
+        .onNodeHover((node: MemoryNode | null) => {
+          containerRef.current!.style.cursor = node ? "pointer" : "default";
+        })
+        .graphData(graphData);
+
+      // Apply force simulation settings
+      graph.d3Force("charge").strength(-120);
+
+      graph.d3Force("link").distance((link: MemoryLink) => {
+        // Different link distances based on link type
+        switch (link.type) {
+          case "memory-topic":
+            return 40;
+          case "memory-companion":
+            return 70;
+          case "memory-emotion":
+            return 50;
+          case "topic-topic":
+            return 30;
+          case "companion-companion":
+            return 80;
+          default:
+            return 50;
+        }
+      });
+
+      window.addEventListener("resize", handleResize);
+      resizeListenerAttached = true;
+
+      // The graph API exposes the underlying Three scene. Rotate that scene,
+      // rather than calling the unsupported graph.rotation() method.
+      const scene = graph.scene();
+      if (!scene?.rotation) {
+        throw new Error("The 3D graph renderer did not expose a Three scene.");
+      }
+      const animate = () => {
+        if (disposed || graphRef.current !== graph) return;
+        scene.rotation.y += 0.001;
+        animationFrame = requestAnimationFrame(animate);
+      };
+      animate();
+    } catch (error) {
+      console.error("Failed to initialize 3D memory graph:", error);
+      disposeGraph();
+      setLoadError(getGraphErrorMessage(error));
+    }
 
     return () => {
-      window.removeEventListener("resize", handleResize);
-      cancelAnimationFrame(animationFrame);
-
-      // Clean up graph
-      if (graphRef.current && container) {
-        graphRef.current._destructor();
-      }
+      disposed = true;
+      disposeGraph();
     };
-  }, [graphData, loading, highlightedNodes, highlightedLinks, selectedNode]);
+  }, [
+    graphData,
+    graphDependencies,
+    highlightedNodes,
+    highlightedLinks,
+    loading,
+    selectedNode,
+  ]);
 
   // Handle search
   const handleSearch = async () => {
@@ -549,10 +635,27 @@ const MemoryVisualizationContent: React.FC = () => {
       </div>
 
       <div className="visualization-container" ref={containerRef}>
+        <div
+          aria-hidden="true"
+          ref={graphContainerRef}
+          style={{ position: "absolute", inset: 0 }}
+        />
         {loading && (
           <div className="loading-container">
             <Loader size={48} className="spinner" />
             <p>Building consciousness graph...</p>
+          </div>
+        )}
+        {loadError && (
+          <div className="graph-error" role="alert" aria-live="assertive">
+            <p>Unable to load the 3D memory graph.</p>
+            <p className="graph-error-detail">{loadError}</p>
+            <button
+              type="button"
+              onClick={() => setLoadAttempt((attempt) => attempt + 1)}
+            >
+              Retry graph loading
+            </button>
           </div>
         )}
       </div>

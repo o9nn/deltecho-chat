@@ -128,3 +128,109 @@ test("cloud-agent browser install must skip the unused Electron binary download"
     "cloud-agent-install.sh must skip Electron so a GitHub 503 cannot fail the browser environment",
   );
 });
+
+const RELEASE_WORKFLOW_PATH = "../.github/workflows/release.yml";
+const RELEASE_PREREQUISITES = [
+  "pnpm run build:type-deps",
+  "pnpm --filter=@deltecho/avatar build",
+  "pnpm --filter=deep-tree-echo-orchestrator build",
+];
+
+function releaseWorkflow() {
+  return parseYaml(
+    readFileSync(new URL(RELEASE_WORKFLOW_PATH, import.meta.url), "utf8"),
+  );
+}
+
+function stepIndex(steps, predicate, description) {
+  const index = steps.findIndex(predicate);
+  assert.notEqual(index, -1, description);
+  return index;
+}
+
+function assertReleasePrerequisitesBeforeBuild(jobName, appBuildCommand) {
+  const steps = releaseWorkflow().jobs?.[jobName]?.steps ?? [];
+  const installIndex = stepIndex(
+    steps,
+    (step) => step?.run?.trim() === "pnpm install --frozen-lockfile",
+    `release ${jobName} must install with the frozen lockfile`,
+  );
+  const prerequisiteIndex = stepIndex(
+    steps,
+    (step) =>
+      typeof step?.run === "string" &&
+      RELEASE_PREREQUISITES.every((command) => step.run.includes(command)),
+    `release ${jobName} must build type dependencies, avatar, and orchestrator`,
+  );
+  const appBuildIndex = stepIndex(
+    steps,
+    (step) => step?.run?.trim() === appBuildCommand,
+    `release ${jobName} must retain its application build`,
+  );
+
+  assert.ok(
+    installIndex < prerequisiteIndex,
+    `release ${jobName} must build workspace prerequisites after installation`,
+  );
+  assert.ok(
+    prerequisiteIndex < appBuildIndex,
+    `release ${jobName} must build workspace prerequisites before the application`,
+  );
+}
+
+test("release application builds establish workspace prerequisites before compiling", () => {
+  assertReleasePrerequisitesBeforeBuild(
+    "build-electron",
+    "pnpm --filter=@deltachat-desktop/target-electron build",
+  );
+  assertReleasePrerequisitesBeforeBuild("build-browser", "pnpm build:browser");
+  assertReleasePrerequisitesBeforeBuild("build-tauri", "pnpm build:tauri");
+});
+
+test("release package build establishes avatar before orchestrator", () => {
+  const steps = releaseWorkflow().jobs?.["build-packages"]?.steps ?? [];
+  const workspaceBuildIndex = stepIndex(
+    steps,
+    (step) =>
+      typeof step?.run === "string" &&
+      RELEASE_PREREQUISITES.every((command) => step.run.includes(command)),
+    "release package build must build type dependencies, avatar, and orchestrator",
+  );
+  const corePackIndex = stepIndex(
+    steps,
+    (step) => step?.name === "Pack Core",
+    "release package build must retain Core packaging",
+  );
+  assert.ok(
+    workspaceBuildIndex < corePackIndex,
+    "release package prerequisites must complete before packaging artifacts",
+  );
+});
+
+test("release skips Electron download only for its browser build", () => {
+  const jobs = releaseWorkflow().jobs ?? {};
+  const browserInstallIndex = stepIndex(
+    jobs["build-browser"]?.steps ?? [],
+    (step) => step?.run?.trim() === "pnpm install --frozen-lockfile",
+    "release browser job must install dependencies",
+  );
+  const browserInstall = jobs["build-browser"].steps[browserInstallIndex];
+  assert.equal(
+    browserInstall.env?.ELECTRON_SKIP_BINARY_DOWNLOAD,
+    "1",
+    "release browser install must skip an unused Electron download",
+  );
+
+  for (const jobName of ["build-electron", "build-tauri"]) {
+    const installIndex = stepIndex(
+      jobs[jobName]?.steps ?? [],
+      (step) => step?.run?.trim() === "pnpm install --frozen-lockfile",
+      `release ${jobName} must install dependencies`,
+    );
+    assert.equal(
+      jobs[jobName].steps[installIndex].env?.ELECTRON_SKIP_BINARY_DOWNLOAD,
+      undefined,
+      `release ${jobName} must keep Electron binary downloads enabled for packaging`,
+    );
+  }
+});

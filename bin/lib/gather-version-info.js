@@ -9,8 +9,8 @@ import { fileURLToPath } from 'url'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 function gatherProcessStdout(cmd, args) {
-  const { status, stdout, stderr } = spawnSync(cmd, args)
-  if (status !== 0) throw new Error(stderr)
+  const { status, stdout, stderr, error } = spawnSync(cmd, args)
+  if (status !== 0) throw error || new Error(stderr?.toString() || `${cmd} failed`)
   return stdout.toString().replace(/\n/g, '')
 }
 
@@ -19,36 +19,37 @@ async function getGitRef() {
     return process.env.VERSION_INFO_GIT_REF
   }
 
-  let git_describe, git_branch
+  let git_describe
   try {
-    git_describe = gatherProcessStdout('git', ['describe', '--tags'])
-    try {
-      const git_symbolic_ref =
-        process.env.GITHUB_HEAD_REF ||
-        process.env.GITHUB_REF ||
-        gatherProcessStdout('git', ['symbolic-ref', 'HEAD'])
-      git_branch = git_symbolic_ref.split('/').pop()
-      console.log(git_symbolic_ref, git_branch)
-    } catch (err) {
-      console.log(err)
-      git_branch = 'main'
-    }
-  } catch (err) {
-    console.log(err)
-    console.log('Hint: you can set the env var VERSION_INFO_GIT_REF manualy')
-    // Fallback to commit SHA if no tags are present
+    // A checkout without tags still has a genuine commit identifier.
+    git_describe = gatherProcessStdout('git', ['describe', '--tags', '--always'])
+  } catch {
     try {
       git_describe = gatherProcessStdout('git', ['rev-parse', 'HEAD']).substring(0, 7)
-      git_branch = git_branch || 'main'
-    } catch (fallbackErr) {
-      console.log('Fallback to commit SHA also failed:', fallbackErr)
-      git_describe = 'unknown'
-      git_branch = 'main'
+    } catch {
+      console.warn(
+        'Git version metadata unavailable; set VERSION_INFO_GIT_REF manually for source archives.'
+      )
+      return 'unknown'
     }
   }
 
-  const git_ref = git_describe + (git_branch === 'main' ? '' : '-' + git_branch)
-  return git_ref
+  let git_branch = 'main'
+  const environmentRef = process.env.GITHUB_HEAD_REF || process.env.GITHUB_REF
+  if (environmentRef) {
+    git_branch = environmentRef.split('/').pop() || 'main'
+  } else {
+    try {
+      // Detached CI/release checkouts are normal, not version errors.
+      git_branch =
+        gatherProcessStdout('git', ['symbolic-ref', '--quiet', '--short', 'HEAD'])
+          .split('/')
+          .pop() || 'main'
+    } catch {
+      // With no named branch, the genuine describe/SHA is sufficient.
+    }
+  }
+  return git_describe + (git_branch === 'main' ? '' : '-' + git_branch)
 }
 
 /**

@@ -6,7 +6,7 @@ import { readFileSync, existsSync } from "fs";
 import esbuild from "esbuild";
 import inlineWorkerPlugin from "esbuild-plugin-inline-worker";
 import { ESLint } from "eslint";
-import { compile } from "sass";
+import { sassPlugin } from "./sass-plugin.mjs";
 
 /**
  * Load build-time env from .env.local (and .env) in the current dir.
@@ -128,20 +128,6 @@ const eslintPlugin = {
         ...(errors > 0 && {
           errors: [{ text: `${errors} errors were found by eslint!` }],
         }),
-      };
-    });
-  },
-};
-
-/** Compile both scoped CSS modules and global component SCSS imports. */
-const sassPlugin = {
-  name: "sass",
-  setup(build) {
-    build.onLoad({ filter: /\.scss$/ }, (args) => {
-      const { css } = compile(args.path);
-      return {
-        contents: css,
-        loader: args.path.endsWith(".module.scss") ? "local-css" : "css",
       };
     });
   },

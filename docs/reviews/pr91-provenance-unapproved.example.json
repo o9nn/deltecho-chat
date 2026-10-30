@@ -1,0 +1,30 @@
+{
+  "schema_version": "avatar-provenance-v1",
+  "bundle_id": "dte-authoring-example-unapproved",
+  "status": "unverified",
+  "policy": {
+    "version": "draft-policy-v1",
+    "no_network_paid_generation_default": true,
+    "prohibited_relabeling": true
+  },
+  "assets": [
+    {
+      "asset_id": "placeholder-input-not-an-asset",
+      "role": "source_art",
+      "path": "NOT_A_REAL_FILE__REPLACE_AFTER_REVIEW.png",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "origin_class": "unknown",
+      "rights": {
+        "status": "unverified",
+        "rights_holder": null,
+        "license_or_permission_ref": null,
+        "record_sha256": null,
+        "allowed_acts": [],
+        "attribution": null
+      }
+    }
+  ],
+  "third_party_components": [],
+  "approved_input_attestation": null,
+  "example_notice": "Illustrative only. This contains no real source asset, permission, rights holder, signature, consent, or runtime approval. The listed digest is the SHA-256 of an empty byte stream and must never pass input verification."
+}
