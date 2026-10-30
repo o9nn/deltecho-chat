@@ -173,7 +173,10 @@ export interface Live2DAvatarController {
   /** Update lip sync value */
   updateLipSync: (audioLevel: number) => void;
   /** Project DTE cognitive state into expression, motion, gaze, and Cubism parameters */
-  updateCognitiveState: (state: Live2DCognitiveVisualState) => void;
+  updateCognitiveState: (
+    state: Live2DCognitiveVisualState,
+    options?: { presentationLocked?: boolean },
+  ) => void;
   /** Trigger a blink */
   triggerBlink: () => void;
   /** Set a model parameter directly */
@@ -216,6 +219,7 @@ export class Live2DAvatarManager {
   private metabolicFrameAccumulatorMs = 0;
   private lastProjectedCubism: Record<string, number> = {};
   private lastAppliedCubism: Record<string, number> = {};
+  private presentationLocked = false;
   private feedback = new SelfModelAvatarFeedback();
   private diagnostics: EmbodimentDiagnostics = {
     status: "waiting",
@@ -379,8 +383,8 @@ export class Live2DAvatarManager {
         if (audioLevel !== 0) this.selfModelSampleDelayFrames = 0;
         this.renderer?.updateLipSync(audioLevel);
       },
-      updateCognitiveState: (state) => {
-        this.updateCognitiveState(state);
+      updateCognitiveState: (state, options) => {
+        this.updateCognitiveState(state, options);
       },
       triggerBlink: () => {
         this.selfModelSampleDelayFrames = 0;
@@ -445,13 +449,15 @@ export class Live2DAvatarManager {
    * Project a richer DTE cognitive state into Live2D expression, motion,
    * gaze, lip-sync, and direct Cubism parameter modulation using the DTEcho atlas.
    */
-  updateCognitiveState(state: Live2DCognitiveVisualState): void {
+  updateCognitiveState(
+    state: Live2DCognitiveVisualState,
+    options?: { presentationLocked?: boolean },
+  ): void {
     if (!this.renderer || !this.isLoaded) return;
 
-    const projection = applyPersonaVisualStyle(
-      projectDTEchoCognitiveState(state),
-      state,
-    );
+    // A manual face is a presentation override, never an authority lease.
+    // Set the write gate before feeding/resetting metabolism (which emits deltas).
+    this.presentationLocked = options?.presentationLocked === true;
     if (state.metabolic) {
       this.metabolicBridge?.feedMetabolicState(state.metabolic);
       this.hasMetabolicEvidence = true;
@@ -462,12 +468,22 @@ export class Live2DAvatarManager {
     this.lastCanonicalCoreSelf = state.coreSelf ? { ...state.coreSelf } : null;
     // Missing/revoked authority must clear a running cue, not merely prevent a
     // new one. Do not let the conductor's afterglow outlive daemon revocation.
-    if (state.coreSelf?.initialized !== true) {
+    if (state.coreSelf?.initialized !== true || this.presentationLocked) {
       this.resonanceConductor.clear();
       this.resonanceOverlay = null;
       this.lastResonanceCascadeId = null;
       this.lastPredictiveCrystalId = null;
     }
+    if (this.presentationLocked) {
+      this.selfModelSampleDelayFrames = 0;
+      this.lastProjectedCubism = {};
+      this.lastAppliedCubism = {};
+      return;
+    }
+    const projection = applyPersonaVisualStyle(
+      projectDTEchoCognitiveState(state),
+      state,
+    );
     if (
       state.resonanceCascade &&
       state.coreSelf?.initialized === true &&
@@ -608,7 +624,7 @@ export class Live2DAvatarManager {
   }
 
   private applyComposedProjection(deltas?: MetabolicAvatarDeltas): void {
-    if (!this.renderer || !this.isLoaded) return;
+    if (!this.renderer || !this.isLoaded || this.presentationLocked) return;
     const metabolic = deltas ?? this.metabolicBridge?.getDeltas();
     const composed = this.composeResonanceCubism(
       this.composeMetabolicCubism(this.lastProjectedCubism, metabolic),
@@ -818,6 +834,7 @@ export class Live2DAvatarManager {
     this.stopMetabolicProjection();
     this.lastProjectedCubism = {};
     this.lastAppliedCubism = {};
+    this.presentationLocked = false;
     this.diagnostics = {
       status: "disposed",
       sampleCount: 0,

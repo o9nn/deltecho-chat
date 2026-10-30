@@ -795,9 +795,7 @@ export const DeepTreeEchoAvatarDisplay: React.FC<
         scale={stripScale}
         fillContainer={fillsConversationStrip}
         emotionalState={expressionLocked ? undefined : emotionalVector}
-        cognitiveVisualState={
-          expressionLocked ? undefined : presentedCognitiveVisualState
-        }
+        cognitiveVisualState={presentedCognitiveVisualState}
         audioLevel={audioLevel}
         isSpeaking={isSpeaking}
         outfit={outfit}

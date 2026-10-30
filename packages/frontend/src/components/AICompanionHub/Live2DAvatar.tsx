@@ -452,9 +452,11 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
 
   // Update richer DTEcho cognitive visual state
   useEffect(() => {
-    if (manualExpression) return;
     if (!managerRef.current || !state.isLoaded || !cognitiveVisualState) return;
-    managerRef.current.updateCognitiveState(cognitiveVisualState);
+    // A locked face must still consume authority/metabolic revocation.
+    managerRef.current.updateCognitiveState(cognitiveVisualState, {
+      presentationLocked: Boolean(manualExpression),
+    });
   }, [cognitiveVisualState, state.isLoaded, manualExpression]);
 
   // Update lip sync. Use a small deadband so high-frequency audio-level

@@ -806,6 +806,84 @@ describe("Live2DAvatarManager", () => {
       }
     });
 
+    it("revokes daemon evidence under a manual face lock without rewriting the face or training", async () => {
+      const reset = jest.spyOn(MetabolicAvatarBridge.prototype, "reset");
+      const clear = jest.spyOn(ResonanceCascadeConductor.prototype, "clear");
+      try {
+        const controller = await manager.initialize(mockContainer, {
+          modelPath: "/test/model.json",
+        });
+        const renderer = controller.getRenderer()! as unknown as {
+          setNamedExpression: jest.Mock;
+          setExpression: jest.Mock;
+          setParameter: jest.Mock;
+          addFrameListener: jest.Mock;
+          addParameterObserver: jest.Mock;
+        };
+        const state = {
+          mode: "Scientific Genius",
+          coreSelf: {
+            initialized: true,
+            ledgerHead: "a",
+            projectedStateDigest: "b",
+            acceptedEventCount: 1,
+            pendingProposalCount: 0,
+          },
+          metabolic: {
+            metabolicPhase: "resting" as const,
+            energyLevel: 0.1,
+            anabolicBalance: -0.8,
+            isEnergyCrisis: true,
+            myelinationProgress: 0.1,
+            knowledgeDensity: 2,
+          },
+          resonanceCascade: {
+            id: "locked-revocation",
+            timestamp: Date.now(),
+            intensity: 1,
+            clusterPhi: 1,
+            clusterNovelty: 1,
+            domainSpan: 3,
+            haloPulseHz: 4,
+            spectralRadiusBoost: 0.1,
+            epistemicTemperatureDelta: -0.2,
+          },
+        };
+        controller.updateCognitiveState(state);
+        controller.setNamedExpression!("JOY_01_BroadSmile");
+        controller.updateCognitiveState(state, { presentationLocked: true });
+        reset.mockClear();
+        clear.mockClear();
+        renderer.setParameter.mockClear();
+        renderer.setExpression.mockClear();
+        renderer.setNamedExpression.mockClear();
+        controller.updateCognitiveState(
+          { mode: "Idle" },
+          { presentationLocked: true },
+        );
+        controller.updateCognitiveState(
+          { mode: "Idle" },
+          { presentationLocked: true },
+        );
+        expect(reset).toHaveBeenCalledTimes(1);
+        expect(clear).toHaveBeenCalled();
+        for (const [frame] of renderer.addFrameListener.mock.calls) frame(2);
+        const observe = renderer.addParameterObserver.mock.calls[0][0];
+        observe();
+        observe();
+        expect(renderer.setParameter).not.toHaveBeenCalled();
+        expect(renderer.setExpression).not.toHaveBeenCalled();
+        expect(renderer.setNamedExpression).not.toHaveBeenCalled();
+        expect(controller.getLastExpressionExperience()).toBeNull();
+        controller.updateCognitiveState({ mode: "Idle" });
+        expect(renderer.setParameter).toHaveBeenCalled();
+        expect(renderer.setNamedExpression).toHaveBeenCalled();
+      } finally {
+        reset.mockRestore();
+        clear.mockRestore();
+      }
+    });
+
     it("removes the metabolic frame listener during disposal", async () => {
       const controller = await manager.initialize(mockContainer, {
         modelPath: "/test/model.json",

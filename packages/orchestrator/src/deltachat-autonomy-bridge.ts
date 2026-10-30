@@ -334,18 +334,12 @@ export class DeltaChatAutonomyBridge extends EventEmitter {
   }
 
   /**
-   * Record an actual proactive delivery. Proposal generation alone does not
-   * consume the cooldown, so an unavailable or revoked destination cannot
-   * mutate outbound state.
+   * Record a completed, authorized proactive delivery. Proposal generation
+   * alone does not consume cooldown; callers invoke this only after the send
+   * RPC succeeds. A later config revocation cannot erase accounting for a
+   * dispatch that was already authorized and completed.
    */
   recordProactiveMessageSent(): void {
-    if (
-      !this.config.enableProactiveMessaging ||
-      !isValidProactiveTarget(this.config.proactiveTarget)
-    ) {
-      return;
-    }
-
     this.lastProactiveTime = Date.now();
     this.stats.proactiveMessages++;
   }

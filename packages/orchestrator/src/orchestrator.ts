@@ -254,6 +254,24 @@ function createAutonomyPipelineStartupConfig(
 }
 
 /**
+ * Build the autonomy bridge input while preserving bridge-owned defaults and
+ * caller-owned response policy. The orchestrator is authoritative only for
+ * proactive outbound authorization: its affirmative grant and exact target.
+ */
+export function createAutonomyBridgeStartupConfig(
+  config: Pick<
+    OrchestratorConfig,
+    "autonomyBridge" | "enableProactiveMessaging" | "proactiveTarget"
+  >,
+): Partial<BridgeConfig> {
+  return {
+    ...config.autonomyBridge,
+    enableProactiveMessaging: config.enableProactiveMessaging,
+    proactiveTarget: config.proactiveTarget,
+  };
+}
+
+/**
  * Main orchestrator that coordinates all Deep Tree Echo services
  */
 export class Orchestrator {
@@ -1077,17 +1095,7 @@ export class Orchestrator {
           if (this.autonomyPipeline && this.deltachatInterface) {
             this.autonomyBridge = new DeltaChatAutonomyBridge(
               this.autonomyPipeline,
-              {
-                ...this.config.autonomyBridge,
-                enableAutonomousResponse: true,
-                preferCoreSelf: Boolean(this.coreSelfEngine),
-                enableProactiveMessaging: this.config.enableProactiveMessaging,
-                // The orchestrator owns the explicit outbound authorization
-                // target. Nested bridge configuration cannot redirect it.
-                proactiveTarget: this.config.proactiveTarget,
-                proactiveCoherenceThreshold: 0.5,
-                proactiveCooldownMs: 300_000,
-              },
+              createAutonomyBridgeStartupConfig(this.config),
             );
 
             // Wire bridge responses to DeltaChat
@@ -1910,12 +1918,17 @@ ${response.body}`;
         !this.deltachatInterface.isConnected()
       )
         return;
+      // Keep the bridge that passed the final authorization boundary. Its
+      // completed dispatch must consume cooldown even if its config is revoked
+      // while the already-authorized RPC is in flight.
+      const dispatchedBridge = this.autonomyBridge;
+      if (!dispatchedBridge) return;
       await this.deltachatInterface.sendMessage(
         deliveryTarget.accountId,
         deliveryTarget.chatId,
         proactiveMsg.text,
       );
-      this.autonomyBridge?.recordProactiveMessageSent();
+      dispatchedBridge.recordProactiveMessageSent();
 
       log.info(
         `Proactive message sent to configured chat ${
@@ -1962,24 +1975,27 @@ ${response.body}`;
   ): Promise<boolean> {
     if (!this.deltachatInterface) return false;
 
-    const accounts = await this.deltachatInterface.getAllAccounts();
-    if (!accounts.some((account) => account.id === target.accountId)) {
-      log.debug(
-        `Configured proactive account ${target.accountId} is not available`,
+    try {
+      const chat = await this.deltachatInterface.getChat(
+        target.accountId,
+        target.chatId,
       );
-      return false;
-    }
+      if (chat.id === target.chatId && chat.canSend === true) {
+        return true;
+      }
 
-    const chats = await this.deltachatInterface.getAllChats(target.accountId);
-    const chat = chats.find((candidate) => candidate.id === target.chatId);
-    if (!chat || !chat.canSend) {
       log.debug(
         `Configured proactive chat ${target.chatId} is unavailable or cannot send`,
       );
       return false;
+    } catch (error) {
+      log.debug(
+        `Configured proactive chat ${
+          target.chatId
+        } could not be resolved: ${String(error)}`,
+      );
+      return false;
     }
-
-    return true;
   }
 
   /**
