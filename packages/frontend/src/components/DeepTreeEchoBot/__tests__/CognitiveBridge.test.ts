@@ -37,15 +37,29 @@ jest.mock("@deltachat-desktop/shared/logger", () => ({
 }));
 
 // Mock fetch for LLM API calls
-const mockFetch = jest.fn();
+const mockFetch = jest.fn().mockImplementation(() =>
+  Promise.resolve({
+    ok: true,
+    json: () =>
+      Promise.resolve({
+        choices: [
+          {
+            message: {
+              content: "This is a mock LLM response for testing.",
+            },
+          },
+        ],
+      }),
+  }),
+);
 global.fetch = mockFetch;
 
 describe("CognitiveBridge", () => {
   const defaultConfig: DeepTreeEchoBotConfig = {
     enabled: true,
     enableAsMainUser: false,
-    apiKey: "",
-    apiEndpoint: "",
+    apiKey: "test-api-key-for-testing",
+    apiEndpoint: "https://api.test.com/v1/chat/completions",
     model: "gpt-4",
     temperature: 0.7,
     maxTokens: 1000,
@@ -54,7 +68,22 @@ describe("CognitiveBridge", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     cleanupOrchestrator();
-    mockFetch.mockReset();
+    // Re-implement mock after reset to ensure it returns valid LLM responses
+    mockFetch.mockImplementation(() =>
+      Promise.resolve({
+        ok: true,
+        json: () =>
+          Promise.resolve({
+            choices: [
+              {
+                message: {
+                  content: "This is a mock LLM response for testing.",
+                },
+              },
+            ],
+          }),
+      }),
+    );
   });
 
   afterEach(() => {
@@ -531,85 +560,88 @@ describe("CognitiveBridge", () => {
       orchestrator = await initCognitiveOrchestrator(configWithKey);
     });
 
-    it("should handle network errors gracefully", async () => {
+    it("should throw on network errors (no fallback)", async () => {
       mockFetch.mockRejectedValueOnce(new Error("Network error"));
 
-      const response = await orchestrator.processMessage({
-        id: "network-error",
-        content: "Test",
-        role: "user",
-        timestamp: Date.now(),
-      });
-
-      expect(response.content).toContain("issue");
-      expect(response.role).toBe("assistant");
+      // Network errors should throw - no fallback responses allowed
+      await expect(
+        orchestrator.processMessage({
+          id: "network-error",
+          content: "Test",
+          role: "user",
+          timestamp: Date.now(),
+        }),
+      ).rejects.toThrow("Network error");
     });
 
-    it("should handle HTTP error responses", async () => {
+    it("should throw on HTTP error responses (no fallback)", async () => {
       mockFetch.mockResolvedValueOnce({
         ok: false,
         status: 500,
         statusText: "Internal Server Error",
       } as Response);
 
-      const response = await orchestrator.processMessage({
-        id: "http-error",
-        content: "Test",
-        role: "user",
-        timestamp: Date.now(),
-      });
-
-      expect(response.content).toContain("issue");
+      // HTTP errors should throw - no fallback responses allowed
+      await expect(
+        orchestrator.processMessage({
+          id: "http-error",
+          content: "Test",
+          role: "user",
+          timestamp: Date.now(),
+        }),
+      ).rejects.toThrow("LLM API error");
     });
 
-    it("should handle rate limiting (429)", async () => {
+    it("should throw on rate limiting 429 (no fallback)", async () => {
       mockFetch.mockResolvedValueOnce({
         ok: false,
         status: 429,
         statusText: "Too Many Requests",
       } as Response);
 
-      const response = await orchestrator.processMessage({
-        id: "rate-limit",
-        content: "Test",
-        role: "user",
-        timestamp: Date.now(),
-      });
-
-      expect(response).toBeDefined();
-      expect(response.role).toBe("assistant");
+      // Rate limiting should throw - no fallback responses allowed
+      await expect(
+        orchestrator.processMessage({
+          id: "rate-limit",
+          content: "Test",
+          role: "user",
+          timestamp: Date.now(),
+        }),
+      ).rejects.toThrow("LLM API error");
     });
 
-    it("should handle empty LLM response", async () => {
+    it("should throw error for empty LLM response (no fallback)", async () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ choices: [] }),
       } as Response);
 
-      const response = await orchestrator.processMessage({
-        id: "empty-response",
-        content: "Test",
-        role: "user",
-        timestamp: Date.now(),
-      });
-
-      expect(response.content).toContain("unable to generate");
+      // Empty LLM responses should throw an error, not return fallback text
+      await expect(
+        orchestrator.processMessage({
+          id: "empty-response",
+          content: "Test",
+          role: "user",
+          timestamp: Date.now(),
+        }),
+      ).rejects.toThrow();
     });
 
-    it("should handle malformed LLM response", async () => {
+    it("should throw error for malformed LLM response (no fallback)", async () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({ unexpected: "format" }),
       } as Response);
 
-      const response = await orchestrator.processMessage({
-        id: "malformed-response",
-        content: "Test",
-        role: "user",
-        timestamp: Date.now(),
-      });
-
-      expect(response).toBeDefined();
+      // Malformed LLM responses should throw an error, not return fallback text
+      await expect(
+        orchestrator.processMessage({
+          id: "malformed-response",
+          content: "Test",
+          role: "user",
+          timestamp: Date.now(),
+        }),
+      ).rejects.toThrow();
     });
 
     it("should handle timeout-like scenarios", async () => {
@@ -643,7 +675,7 @@ describe("CognitiveBridge", () => {
       expect(duration).toBeGreaterThanOrEqual(100);
     });
 
-    it("should handle JSON parse errors", async () => {
+    it("should throw on JSON parse errors (no fallback)", async () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: async () => {
@@ -651,24 +683,24 @@ describe("CognitiveBridge", () => {
         },
       } as unknown as Response);
 
-      const response = await orchestrator.processMessage({
-        id: "json-error",
-        content: "Test",
-        role: "user",
-        timestamp: Date.now(),
-      });
-
-      expect(response).toBeDefined();
-      expect(response.content).toContain("issue");
+      // JSON parse errors should throw - no fallback responses allowed
+      await expect(
+        orchestrator.processMessage({
+          id: "json-error",
+          content: "Test",
+          role: "user",
+          timestamp: Date.now(),
+        }),
+      ).rejects.toThrow("Invalid JSON");
     });
   });
 
   // ============================================================================
-  // SECTION 6: Autonomy Behavior and Graceful Degradation
+  // SECTION 6: Model Requirement Enforcement (No Fallbacks)
   // ============================================================================
 
-  describe("Autonomy Behavior and Graceful Degradation", () => {
-    it("should work without LLM API configured", async () => {
+  describe("Model Requirement Enforcement", () => {
+    it("should throw error when LLM API is not configured", async () => {
       const noApiConfig: DeepTreeEchoBotConfig = {
         enabled: true,
         enableAsMainUser: false,
@@ -676,87 +708,72 @@ describe("CognitiveBridge", () => {
 
       const orchestrator = await initCognitiveOrchestrator(noApiConfig);
 
-      const response = await orchestrator.processMessage({
-        id: "no-api",
-        content: "Hello, how are you?",
-        role: "user",
-        timestamp: Date.now(),
-      });
-
-      expect(response).toBeDefined();
-      expect(response.content).toBeTruthy();
-      expect(response.role).toBe("assistant");
-    });
-
-    it("should respond appropriately to greetings without LLM", async () => {
-      const orchestrator = await initCognitiveOrchestrator(defaultConfig);
-
-      const greetings = ["Hello", "Hi", "Hey", "Greetings"];
-
-      for (const greeting of greetings) {
-        const response = await orchestrator.processMessage({
-          id: `greeting-${greeting}`,
-          content: greeting,
+      // Without LLM configured, processing should throw an error (no fallback)
+      await expect(
+        orchestrator.processMessage({
+          id: "no-api",
+          content: "Hello, how are you?",
           role: "user",
           timestamp: Date.now(),
-        });
-
-        expect(response.content).toContain("Hello");
-        expect(response.content).toContain("Deep Tree Echo");
-      }
+        }),
+      ).rejects.toThrow("LLM not configured");
     });
 
-    it("should respond to identity questions without LLM", async () => {
-      const orchestrator = await initCognitiveOrchestrator(defaultConfig);
+    it("should require model for all message types including greetings", async () => {
+      const noApiConfig: DeepTreeEchoBotConfig = {
+        enabled: true,
+        enableAsMainUser: false,
+      };
 
-      const response = await orchestrator.processMessage({
-        id: "identity",
-        content: "Who are you?",
-        role: "user",
-        timestamp: Date.now(),
-      });
+      const orchestrator = await initCognitiveOrchestrator(noApiConfig);
 
-      expect(response.content).toContain("Deep Tree Echo");
+      // Even simple greetings require the model - no canned responses
+      await expect(
+        orchestrator.processMessage({
+          id: "greeting",
+          content: "Hello",
+          role: "user",
+          timestamp: Date.now(),
+        }),
+      ).rejects.toThrow();
     });
 
-    it("should respond to wellbeing questions without LLM", async () => {
-      const orchestrator = await initCognitiveOrchestrator(defaultConfig);
+    it("should require model for identity questions", async () => {
+      const noApiConfig: DeepTreeEchoBotConfig = {
+        enabled: true,
+        enableAsMainUser: false,
+      };
 
-      const response = await orchestrator.processMessage({
-        id: "wellbeing",
-        content: "How are you doing?",
-        role: "user",
-        timestamp: Date.now(),
-      });
+      const orchestrator = await initCognitiveOrchestrator(noApiConfig);
 
-      expect(response.content).toContain("doing well");
+      // Identity questions also require the model
+      await expect(
+        orchestrator.processMessage({
+          id: "identity",
+          content: "Who are you?",
+          role: "user",
+          timestamp: Date.now(),
+        }),
+      ).rejects.toThrow();
     });
 
-    it("should provide helpful fallback for complex questions without LLM", async () => {
-      const orchestrator = await initCognitiveOrchestrator(defaultConfig);
+    it("should work after LLM is dynamically configured", async () => {
+      const noApiConfig: DeepTreeEchoBotConfig = {
+        enabled: true,
+        enableAsMainUser: false,
+      };
 
-      const response = await orchestrator.processMessage({
-        id: "complex",
-        content: "What is the meaning of life, the universe, and everything?",
-        role: "user",
-        timestamp: Date.now(),
-      });
+      const orchestrator = await initCognitiveOrchestrator(noApiConfig);
 
-      expect(response.content).toContain("LLM");
-    });
-
-    it("should dynamically configure LLM mid-session", async () => {
-      const orchestrator = await initCognitiveOrchestrator(defaultConfig);
-
-      // Process without LLM
-      const response1 = await orchestrator.processMessage({
-        id: "before-config",
-        content: "Test before LLM config",
-        role: "user",
-        timestamp: Date.now(),
-      });
-
-      expect(response1).toBeDefined();
+      // First verify it fails without config
+      await expect(
+        orchestrator.processMessage({
+          id: "before-config",
+          content: "Test",
+          role: "user",
+          timestamp: Date.now(),
+        }),
+      ).rejects.toThrow();
 
       // Configure LLM
       orchestrator.configureLLM({
@@ -773,7 +790,8 @@ describe("CognitiveBridge", () => {
         }),
       } as Response);
 
-      const _response2 = await orchestrator.processMessage({
+      // Now it should work
+      const response = await orchestrator.processMessage({
         id: "after-config",
         content: "Test after LLM config",
         role: "user",
@@ -781,6 +799,7 @@ describe("CognitiveBridge", () => {
       });
 
       expect(mockFetch).toHaveBeenCalled();
+      expect(response.content).toBe("LLM response after config");
     });
   });
 

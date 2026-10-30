@@ -103,3 +103,4 @@ packages/digital-garden/
 packages/shared/ts-compiled-for-tests/
 packages/target-electron/bundle_out/
 packages/target-browser/data/
+__pycache__/

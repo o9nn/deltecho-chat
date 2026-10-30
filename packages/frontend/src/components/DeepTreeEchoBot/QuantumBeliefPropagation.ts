@@ -1002,7 +1002,8 @@ export class QuantumBeliefPropagation {
       belief1.type === BeliefNodeType.FACT &&
       belief2.type === BeliefNodeType.FACT
     ) {
-      return `Based on the facts that ${belief1.content} and ${belief2.content}, it can be inferred that they are related.`;
+      // Return null - inference requires LLM to generate actual content
+      return null;
     }
 
     // Inference from fact to preference
@@ -1010,11 +1011,12 @@ export class QuantumBeliefPropagation {
       belief1.type === BeliefNodeType.FACT &&
       belief2.type === BeliefNodeType.PREFERENCE
     ) {
-      return `Since ${belief1.content}, it supports the preference that ${belief2.content}`;
+      // Return null - inference requires LLM to generate actual content
+      return null;
     }
 
-    // Default pattern when unsure
-    return `There may be a connection between ${belief1.content} and ${belief2.content}`;
+    // Default - no inference without LLM
+    return null;
   }
 
   /**

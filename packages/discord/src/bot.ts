@@ -223,12 +223,12 @@ export class DeepTreeEchoDiscordBot {
 
     try {
       // Process with cognitive system
-      let response: string;
-      if (this.processor) {
-        response = await this.processor.processMessage(content, context);
-      } else {
-        response = "I am not fully initialized yet. Please try again later.";
+      if (!this.processor) {
+        throw new Error(
+          "BOT_NOT_INITIALIZED: Cognitive processor is not ready",
+        );
       }
+      const response = await this.processor.processMessage(content, context);
 
       // Split long responses
       const chunks = this.splitResponse(response);
@@ -239,9 +239,8 @@ export class DeepTreeEchoDiscordBot {
       }
     } catch (error) {
       console.error("[Discord Bot] Error processing message:", error);
-      await message.reply(
-        "I encountered an error processing your message. Please try again.",
-      );
+      // No fallback text - silently fail rather than send canned response
+      // The error is logged for debugging
     }
   }
 

@@ -62,3 +62,7 @@ packages/reasoning/src/memory/duckdb-adapter.ts
 
 # Temp agent scripts (CLI output)
 temp-agent-script/
+
+# Model requirement verification scripts (CLI output)
+packages/frontend/src/components/DeepTreeEchoBot/__tests__/model-requirement-verification.ts
+packages/frontend/src/components/DeepTreeEchoBot/__tests__/live-model-demo.ts

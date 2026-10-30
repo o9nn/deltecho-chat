@@ -3,7 +3,30 @@ import {
   type ScientificGeniusVisualState,
 } from "../CognitiveBridge";
 
-const configuration = { enabled: true, enableAsMainUser: false };
+// Mock global fetch for LLM calls
+const mockFetch = jest.fn().mockImplementation(() =>
+  Promise.resolve({
+    ok: true,
+    json: () =>
+      Promise.resolve({
+        choices: [
+          {
+            message: {
+              content:
+                "I understand your concern. Let me help you think this through.",
+            },
+          },
+        ],
+      }),
+  }),
+);
+global.fetch = mockFetch as unknown as typeof fetch;
+
+const configuration = {
+  enabled: true,
+  enableAsMainUser: false,
+  apiKey: "test-api-key",
+};
 
 function measuredSignal(): ScientificGeniusVisualState {
   return {
@@ -43,6 +66,7 @@ describe("CognitiveBridge scientific evidence abstention", () => {
 
   beforeEach(() => {
     now = jest.spyOn(Date, "now").mockReturnValue(10_000);
+    mockFetch.mockClear();
   });
 
   afterEach(() => {
