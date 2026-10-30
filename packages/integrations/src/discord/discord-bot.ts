@@ -532,7 +532,7 @@ export class DiscordBot implements IPlatformIntegration {
     } catch (error) {
       this.stats.errors++;
       const err = error as Error;
-      await message.reply(`❌ I encountered an error: ${err.message}`);
+      // No canned error response - just log the error
       this.log(`Cognitive error: ${err.message}`, "error");
     }
   }

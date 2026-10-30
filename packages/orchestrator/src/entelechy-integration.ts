@@ -325,19 +325,18 @@ export class EntelechyIntegration extends EventEmitter {
         projectedStateDigest?: string;
       },
   ): EmbodimentAutognosisSignal {
-    const experienceCount = Math.max(0, Math.floor(signal.experienceCount));
-    const confidence = this.clamp01(
-      signal.confidence ?? 1 - Math.exp(-experienceCount / 12),
-    );
+    if (!this.isValidEmbodimentAutognosisSignal(signal)) {
+      return this.getEmbodimentAutognosis();
+    }
+
+    const experienceCount = signal.experienceCount;
+    const confidence = signal.confidence ?? 1 - Math.exp(-experienceCount / 12);
     this.embodimentAutognosis = {
-      accuracy: this.clamp01(signal.accuracy),
-      meanError: Math.max(
-        0,
-        Number.isFinite(signal.meanError) ? signal.meanError : 0,
-      ),
+      accuracy: signal.accuracy,
+      meanError: signal.meanError,
       experienceCount,
       confidence,
-      lastUpdatedAt: Math.max(0, signal.lastUpdatedAt ?? Date.now()),
+      lastUpdatedAt: signal.lastUpdatedAt ?? Date.now(),
     };
     const snapshot = this.getEmbodimentAutognosis();
     if (
@@ -367,8 +366,63 @@ export class EntelechyIntegration extends EventEmitter {
         log.error("canonical embodiment proposal failed");
       }
     }
+    this.refreshLastSnapshotVisual();
     this.emit("embodiment_autognosis_updated", snapshot);
     return snapshot;
+  }
+
+  private isValidEmbodimentAutognosisSignal(
+    signal: Pick<
+      EmbodimentAutognosisSignal,
+      "accuracy" | "meanError" | "experienceCount"
+    > &
+      Partial<
+        Pick<EmbodimentAutognosisSignal, "confidence" | "lastUpdatedAt">
+      > & {
+        cognitiveMode?: string;
+        ledgerHead?: string | null;
+        projectedStateDigest?: string;
+      },
+  ): boolean {
+    return (
+      Number.isFinite(signal.accuracy) &&
+      signal.accuracy >= 0 &&
+      signal.accuracy <= 1 &&
+      Number.isFinite(signal.meanError) &&
+      signal.meanError >= 0 &&
+      Number.isSafeInteger(signal.experienceCount) &&
+      signal.experienceCount >= 0 &&
+      (signal.confidence === undefined ||
+        (Number.isFinite(signal.confidence) &&
+          signal.confidence >= 0 &&
+          signal.confidence <= 1)) &&
+      (signal.lastUpdatedAt === undefined ||
+        (Number.isFinite(signal.lastUpdatedAt) && signal.lastUpdatedAt >= 0)) &&
+      (signal.cognitiveMode === undefined ||
+        typeof signal.cognitiveMode === "string") &&
+      (signal.ledgerHead === undefined ||
+        signal.ledgerHead === null ||
+        typeof signal.ledgerHead === "string") &&
+      (signal.projectedStateDigest === undefined ||
+        typeof signal.projectedStateDigest === "string")
+    );
+  }
+
+  private refreshLastSnapshotVisual(): void {
+    if (!this.lastSnapshot) return;
+
+    const { reservoir, autognosis, echoBeats, consciousness, entelechy } =
+      this.lastSnapshot;
+    this.lastSnapshot = {
+      ...this.lastSnapshot,
+      scientificGeniusVisual: this.buildScientificGeniusVisualSignal({
+        reservoir,
+        autognosis,
+        echoBeats,
+        consciousness,
+        entelechy,
+      }),
+    };
   }
 
   public getEmbodimentAutognosis(): EmbodimentAutognosisSignal {

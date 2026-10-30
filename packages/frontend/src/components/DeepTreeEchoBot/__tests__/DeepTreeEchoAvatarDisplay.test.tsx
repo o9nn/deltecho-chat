@@ -213,6 +213,57 @@ describe("DeepTreeEchoAvatarDisplay", () => {
       expect(CognitiveBridge.getOrchestrator()).toBeNull();
     });
 
+    it("propagates daemon revocation while its expression selector remains locked", async () => {
+      const live = {
+        ...genuine(),
+        coreSelf: {
+          initialized: true,
+          ledgerHead: "ledger",
+          projectedStateDigest: "digest",
+          acceptedEventCount: 1,
+          pendingProposalCount: 0,
+        },
+        metabolic: {
+          metabolicPhase: "resting",
+          energyLevel: 0.1,
+          anabolicBalance: -0.8,
+          isEnergyCrisis: true,
+          myelinationProgress: 0.1,
+          knowledgeDensity: 2,
+        },
+      };
+      const read = runtime.getDteScientificVisualState as jest.Mock;
+      read.mockResolvedValueOnce(live).mockResolvedValue(null);
+      render(
+        <DeepTreeEchoAvatarProvider>
+          <DeepTreeEchoAvatarDisplay visible={true} />
+        </DeepTreeEchoAvatarProvider>,
+      );
+      await act(async () => {
+        await Promise.resolve();
+      });
+      fireEvent.change(screen.getByTestId("miara-expression-select"), {
+        target: { value: "JOY_01_BroadSmile" },
+      });
+      const avatar = screen.getByTestId("mock-live2d-avatar");
+      const visual = () =>
+        JSON.parse(avatar.getAttribute("data-cognitive-visual-state") || "{}");
+      expect(visual().coreSelf.initialized).toBe(true);
+      expect(visual().metabolic.energyLevel).toBe(0.1);
+      await act(async () => {
+        jest.advanceTimersByTime(1_500);
+        await Promise.resolve();
+      });
+      expect(avatar).toHaveAttribute(
+        "data-manual-expression",
+        "JOY_01_BroadSmile",
+      );
+      expect(visual().coreSelf).toBeUndefined();
+      expect(visual().metabolic).toBeUndefined();
+      expect(visual().predictiveCrystal).toBeUndefined();
+      expect(visual().scientificGenius).toBe(0);
+    });
+
     it("never overlaps a pending daemon request or applies one after unmount", async () => {
       let finish!: (value: unknown) => void;
       const read = runtime.getDteScientificVisualState as jest.Mock;
@@ -1058,7 +1109,7 @@ describe("DeepTreeEchoAvatarDisplay", () => {
       );
     });
 
-    it("locks a named Cubism expression and skips live cognitive updates", async () => {
+    it("locks a named Cubism expression without hiding its authority state", async () => {
       const mockGetState = jest.fn().mockReturnValue({
         cognitiveContext: {
           emotionalValence: 0.8,
@@ -1092,7 +1143,7 @@ describe("DeepTreeEchoAvatarDisplay", () => {
         "JOY_01_BroadSmile",
       );
       expect(avatar.getAttribute("data-emotional-state")).toBeNull();
-      expect(avatar.getAttribute("data-cognitive-visual-state")).toBeNull();
+      expect(avatar.getAttribute("data-cognitive-visual-state")).not.toBeNull();
     });
   });
 

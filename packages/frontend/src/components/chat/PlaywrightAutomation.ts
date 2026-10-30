@@ -60,7 +60,9 @@ export class PlaywrightAutomation {
     if (!this.initialized) {
       const success = await this.initialize();
       if (!success) {
-        return "I couldn't access web search capabilities at the moment.";
+        throw new Error(
+          "PLAYWRIGHT_UNAVAILABLE: Web search capabilities not available",
+        );
       }
     }
 
@@ -106,11 +108,11 @@ export class PlaywrightAutomation {
         return this.formatSearchResults(results);
       } catch (e) {
         log.error("Failed to parse search results:", e);
-        return "I found some information, but I couldn't process it properly.";
+        throw new Error("SEARCH_PARSE_ERROR: Failed to parse search results");
       }
     } catch (error) {
       log.error("Error searching the web:", error);
-      return "I encountered an error while trying to search the web.";
+      throw error;
     }
   }
 
@@ -181,10 +183,10 @@ export class PlaywrightAutomation {
     results: Array<{ title: string; snippet: string }>,
   ): string {
     if (!results || results.length === 0) {
-      return "I couldn't find any relevant information.";
+      throw new Error("SEARCH_NO_RESULTS: No search results found");
     }
 
-    let formattedResults = "Here's what I found:\n\n";
+    let formattedResults = "Search results:\n\n";
 
     results.forEach((result, index) => {
       formattedResults += `${index + 1}. ${result.title}\n${

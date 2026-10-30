@@ -160,7 +160,7 @@ export class SelfModelAvatarFeedback extends EventEmitter {
   }
 
   /**
-   * Phase 2: Sample the ACTUAL rendered Cubism parameter state.
+   * Phase 2: Sample the Cubism model's parameter readback (not rendered pixels).
    * Call this after the frame has been rendered and the model's
    * parameters have settled (typically on the next tick).
    *
@@ -174,9 +174,30 @@ export class SelfModelAvatarFeedback extends EventEmitter {
       return null;
     }
 
+    const predictedEntries = Object.entries(this.pendingPrediction.params);
+    if (
+      predictedEntries.length === 0 ||
+      !predictedEntries.every(
+        ([id, predicted]) =>
+          Number.isFinite(predicted) &&
+          Math.abs(predicted) <= 1_000 &&
+          Object.prototype.hasOwnProperty.call(actualParams, id) &&
+          Number.isFinite(actualParams[id]) &&
+          Math.abs(actualParams[id]) <= 1_000,
+      )
+    ) {
+      // A missing Cubism parameter is not a perfect expression match. Drop the
+      // entire pair so the next frame cannot be matched to a stale prediction.
+      this.pendingPrediction = null;
+      this.pendingCoreSelf = null;
+      return null;
+    }
+
     const actual: CubismParamSnapshot = {
       timestamp: Date.now(),
-      params: { ...actualParams },
+      params: Object.fromEntries(
+        predictedEntries.map(([id]) => [id, actualParams[id]]),
+      ),
     };
 
     // Phase 3: Compute correction delta

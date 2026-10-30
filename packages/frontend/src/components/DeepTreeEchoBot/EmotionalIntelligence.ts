@@ -209,13 +209,14 @@ export class EmotionalIntelligence {
   }
 
   /**
-   * Maps an emotional state to appropriate response characteristics
+   * Maps an emotional state to appropriate response characteristics.
+   * Returns emotional context for the LLM to use, NOT phrases to output directly.
    */
   public generateEmotionalResponseParameters(targetEmotion?: EmotionProfile): {
     tone: string;
     intensity: number;
     empathyLevel: number;
-    suggestedPhrases: string[];
+    emotionalContext: string;
   } {
     // Use provided emotion profile or current one
     const emotionProfile = targetEmotion || this.currentEmotionProfile;
@@ -229,14 +230,14 @@ export class EmotionalIntelligence {
     // Determine empathy level based on emotion
     const empathyLevel = this.determineEmpathyLevel(emotionProfile);
 
-    // Generate suggested phrases for this emotional context
-    const suggestedPhrases = this.generateEmotionalPhrases(emotionProfile);
+    // Generate emotional context description for LLM (not phrases to output)
+    const emotionalContext = this.describeEmotionalContext(emotionProfile);
 
     return {
       tone,
       intensity,
       empathyLevel,
-      suggestedPhrases,
+      emotionalContext,
     };
   }
 
@@ -913,82 +914,50 @@ export class EmotionalIntelligence {
   }
 
   /**
-   * Generates emotional phrases appropriate for the current context
+   * Describes the emotional context for the LLM to use when generating responses.
+   * This returns descriptive metadata, NOT phrases to output as character speech.
    */
-  private generateEmotionalPhrases(profile: EmotionProfile): string[] {
+  private describeEmotionalContext(profile: EmotionProfile): string {
     const dominantEmotion = profile.dominantEmotion;
     const valence = profile.valence;
 
-    // Default phrases
-    const phrases: string[] = [
-      "I understand",
-      "That makes sense",
-      "I see what you mean",
-    ];
+    const contextParts: string[] = [];
 
-    // Add emotion-specific phrases
+    // Describe the dominant emotion detected
     if (dominantEmotion) {
+      contextParts.push(`Dominant emotion detected: ${dominantEmotion}`);
+
       switch (dominantEmotion) {
         case EmotionDimension.JOY:
-          phrases.push(
-            "That's wonderful!",
-            "I'm happy to hear that",
-            "That sounds delightful",
-          );
+          contextParts.push("User appears to be expressing positive feelings");
           break;
         case EmotionDimension.SADNESS:
-          phrases.push(
-            "I'm sorry to hear that",
-            "That must be difficult",
-            "It's okay to feel this way",
-          );
+          contextParts.push("User may be experiencing difficulty or sadness");
           break;
         case EmotionDimension.ANGER:
-          phrases.push(
-            "I understand your frustration",
-            "That would be upsetting",
-            "Let's work through this together",
-          );
+          contextParts.push("User may be frustrated or upset");
           break;
         case EmotionDimension.FEAR:
-          phrases.push(
-            "It's natural to feel concerned",
-            "I'm here to help with that",
-            "Let's think about this calmly",
-          );
+          contextParts.push("User may be feeling anxious or concerned");
           break;
         case EmotionDimension.SURPRISE:
-          phrases.push(
-            "That's unexpected!",
-            "I can see why that would surprise you",
-            "What an interesting development",
-          );
+          contextParts.push("User appears surprised by something");
           break;
         case EmotionDimension.TRUST:
-          phrases.push(
-            "I value your perspective",
-            "Thank you for sharing that with me",
-            "I appreciate your openness",
-          );
+          contextParts.push("User is being open and trusting");
           break;
       }
     }
 
-    // Add valence-based phrases
+    // Describe overall valence
     if (valence < -0.3) {
-      phrases.push(
-        "Things may improve with time",
-        "Would it help to talk more about this?",
-        "I'm here to listen",
-      );
+      contextParts.push("Overall emotional valence: negative");
     } else if (valence > 0.3) {
-      phrases.push(
-        "That's really positive",
-        "I'm glad to hear things are going well",
-        "It's nice to share good moments",
-      );
+      contextParts.push("Overall emotional valence: positive");
+    } else {
+      contextParts.push("Overall emotional valence: neutral");
     }
 
-    return phrases;
+    return contextParts.join(". ");
   }
 }

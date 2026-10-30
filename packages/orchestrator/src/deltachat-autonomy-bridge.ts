@@ -22,6 +22,16 @@ const log = getLogger("deep-tree-echo-orchestrator/DeltaChatAutonomyBridge");
 
 // ─── Types ─────────────────────────────────────────────────────
 
+/**
+ * A user-authorized DeltaChat destination for proactive outbound messages.
+ * Both identifiers must be positive safe integers before a proposal can be
+ * considered for delivery.
+ */
+export interface ProactiveTarget {
+  accountId: number;
+  chatId: number;
+}
+
 export interface BridgeConfig {
   /** Enable autonomous response generation (vs. just perception) */
   enableAutonomousResponse: boolean;
@@ -31,6 +41,8 @@ export interface BridgeConfig {
   maxResponseLength: number;
   /** Enable proactive messaging (DTE initiates conversation) */
   enableProactiveMessaging: boolean;
+  /** Explicit user-authorized destination for proactive outbound messages */
+  proactiveTarget?: ProactiveTarget;
   /** Minimum coherence to allow proactive messaging */
   proactiveCoherenceThreshold: number;
   /** Cooldown between proactive messages (ms) */
@@ -41,10 +53,28 @@ const DEFAULT_CONFIG: BridgeConfig = {
   enableAutonomousResponse: true,
   preferCoreSelf: true,
   maxResponseLength: 2000,
+  // Outbound initiation requires an explicit grant and recipient target.
   enableProactiveMessaging: false,
-  proactiveCoherenceThreshold: 0.7,
+  proactiveCoherenceThreshold: 0.5, // Lower threshold for more proactive behavior
   proactiveCooldownMs: 300_000, // 5 minutes
 };
+
+/** Return true only for a non-zero DeltaChat account/chat pair. */
+export function isValidProactiveTarget(
+  target: unknown,
+): target is ProactiveTarget {
+  if (!target || typeof target !== "object") return false;
+
+  const candidate = target as Partial<ProactiveTarget>;
+  return (
+    typeof candidate.accountId === "number" &&
+    Number.isSafeInteger(candidate.accountId) &&
+    candidate.accountId > 0 &&
+    typeof candidate.chatId === "number" &&
+    Number.isSafeInteger(candidate.chatId) &&
+    candidate.chatId > 0
+  );
+}
 
 export interface IncomingMessage {
   chatId: number;
@@ -259,6 +289,7 @@ export class DeltaChatAutonomyBridge extends EventEmitter {
     text: string;
   } | null> {
     if (!this.config.enableProactiveMessaging) return null;
+    if (!isValidProactiveTarget(this.config.proactiveTarget)) return null;
 
     const now = Date.now();
     if (now - this.lastProactiveTime < this.config.proactiveCooldownMs)
@@ -290,17 +321,32 @@ export class DeltaChatAutonomyBridge extends EventEmitter {
       "You are initiating a conversation, not responding. Be concise and purposeful.",
     );
 
-    if (result.content && result.source !== "none") {
-      this.lastProactiveTime = now;
-      this.stats.proactiveMessages++;
-
+    if (
+      result.content &&
+      result.source !== "none" &&
+      this.config.enableProactiveMessaging &&
+      isValidProactiveTarget(this.config.proactiveTarget)
+    ) {
       return {
-        chatId: 0, // Caller must determine the appropriate chat
+        // This is only proposal metadata. The orchestrator resolves the
+        // configured target independently immediately before sending.
+        chatId: this.config.proactiveTarget.chatId,
         text: result.content,
       };
     }
 
     return null;
+  }
+
+  /**
+   * Record a completed, authorized proactive delivery. Proposal generation
+   * alone does not consume cooldown; callers invoke this only after the send
+   * RPC succeeds. A later config revocation cannot erase accounting for a
+   * dispatch that was already authorized and completed.
+   */
+  recordProactiveMessageSent(): void {
+    this.lastProactiveTime = Date.now();
+    this.stats.proactiveMessages++;
   }
 
   // ─── Helpers ─────────────────────────────────────────────────
@@ -342,7 +388,12 @@ export class DeltaChatAutonomyBridge extends EventEmitter {
   }
 
   getConfig(): BridgeConfig {
-    return { ...this.config };
+    return {
+      ...this.config,
+      ...(this.config.proactiveTarget
+        ? { proactiveTarget: { ...this.config.proactiveTarget } }
+        : {}),
+    };
   }
 
   updateConfig(updates: Partial<BridgeConfig>): void {

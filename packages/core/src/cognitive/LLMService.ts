@@ -378,9 +378,16 @@ export class LLMService {
     }
 
     const data = (await response.json()) as ChatCompletionResponse;
+    const content = data.choices?.[0]?.message?.content;
+
+    if (typeof content !== "string" || content.trim().length === 0) {
+      throw new Error(
+        "LLM_NO_RESPONSE: OpenAI-compatible provider returned no completion content",
+      );
+    }
 
     return {
-      content: data.choices[0]?.message?.content || "",
+      content,
       usage: {
         totalTokens: data.usage?.total_tokens || 0,
       },
@@ -422,9 +429,16 @@ export class LLMService {
     }
 
     const data = (await response.json()) as AnthropicResponse;
+    const content = data.content?.[0]?.text;
+
+    if (typeof content !== "string" || content.trim().length === 0) {
+      throw new Error(
+        "LLM_NO_RESPONSE: Anthropic provider returned no completion content",
+      );
+    }
 
     return {
-      content: data.content?.[0]?.text || "",
+      content,
       usage: {
         totalTokens:
           (data.usage?.input_tokens || 0) + (data.usage?.output_tokens || 0),
@@ -487,7 +501,9 @@ export class LLMService {
 
       if (!cognitiveFunction.config.apiKey) {
         log.warn(`No API key provided for ${cognitiveFunction.name}`);
-        return `I'm sorry, but my ${cognitiveFunction.name.toLowerCase()} isn't fully configured. Please set up the API key in settings.`;
+        throw new Error(
+          `MODEL_NOT_CONFIGURED: ${cognitiveFunction.name} API key is not set`,
+        );
       }
 
       log.info(`Generating response with ${cognitiveFunction.name}`);
@@ -520,37 +536,7 @@ export class LLMService {
       return result.content;
     } catch (error) {
       log.error("Error generating response:", error);
-
-      // Fall back to placeholder response on API failure
-      return this.getPlaceholderResponse(functionType, input);
-    }
-  }
-
-  /**
-   * Get a placeholder response for when API calls fail
-   */
-  private getPlaceholderResponse(
-    functionType: CognitiveFunctionType,
-    input: string,
-  ): string {
-    const preview = input.slice(0, 30);
-    switch (functionType) {
-      case CognitiveFunctionType.COGNITIVE_CORE:
-        return `From a logical perspective, I believe the most effective approach to "${preview}..." would involve a structured analysis of the key components.`;
-      case CognitiveFunctionType.AFFECTIVE_CORE:
-        return `I sense that "${preview}..." evokes feelings of curiosity and interest. I'd like to explore this with empathy and emotional awareness.`;
-      case CognitiveFunctionType.RELEVANCE_CORE:
-        return `When considering "${preview}...", the most relevant aspects appear to be the underlying patterns and practical implications.`;
-      case CognitiveFunctionType.SEMANTIC_MEMORY:
-        return `Based on my knowledge, "${preview}..." relates to several key concepts that I can help clarify and expand upon.`;
-      case CognitiveFunctionType.EPISODIC_MEMORY:
-        return `This reminds me of previous conversations we've had about similar topics. Let me recall some relevant context.`;
-      case CognitiveFunctionType.PROCEDURAL_MEMORY:
-        return `Here's how I would approach "${preview}..." step by step, drawing on established methods and best practices.`;
-      case CognitiveFunctionType.CONTENT_EVALUATION:
-        return `I've carefully evaluated "${preview}..." and can provide a thoughtful response that respects appropriate boundaries.`;
-      default:
-        return `I've processed your message about "${preview}..." and here's my response.`;
+      throw error;
     }
   }
 
@@ -742,7 +728,9 @@ export class LLMService {
       memoryKeys.length === 0 &&
       !evaluationResponse
     ) {
-      return "I'm unable to generate a response at this time.";
+      throw new Error(
+        "LLM_NO_RESPONSE: All cognitive functions returned empty responses",
+      );
     }
 
     // Prioritize cognitive core if available
@@ -776,7 +764,8 @@ export class LLMService {
       return evaluationResponse;
     }
 
-    return "I'm processing your request but don't have a specific response formulated yet.";
+    // Should not reach here - all valid responses handled above
+    throw new Error("LLM_RESPONSE_UNHANDLED: No response could be formulated");
   }
 
   /**
@@ -895,10 +884,15 @@ export class LLMService {
       if (cognitive && affective) {
         return `${cognitive}\n\n${affective}`;
       }
-      return cognitive || affective || "Self-reflection yielded no response.";
+      if (!cognitive && !affective) {
+        throw new Error(
+          "REFLECTION_EMPTY: Self-reflection yielded no response",
+        );
+      }
+      return cognitive || affective!;
     } catch (error) {
       log.error("Error generating reflection:", error);
-      return "Self-reflection process encountered an error.";
+      throw error;
     }
   }
 

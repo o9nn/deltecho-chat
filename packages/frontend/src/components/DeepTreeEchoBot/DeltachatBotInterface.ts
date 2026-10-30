@@ -2,6 +2,7 @@ import { getLogger } from "@deltachat-desktop/shared/logger";
 import { BackendRemote } from "../../backend-com";
 import { DeepTreeEchoBot } from "./DeepTreeEchoBot";
 import { getBotInstance } from "./DeepTreeEchoIntegration";
+import { LLMService } from "./LLMService";
 
 const log = getLogger(
   "render/components/DeepTreeEchoBot/DeltachatBotInterface",
@@ -182,11 +183,13 @@ export class DeltachatBotInterface {
             }
           }
 
-          // Send welcome message
-          await this.sendMessage(
-            chatId,
-            `Welcome to the ${name} group with Deep Tree Echo! Type /help to see available commands.`,
+          // Generate welcome message via LLM
+          const llmService = LLMService.getInstance();
+          const welcomeMessage = await llmService.generateResponse(
+            `You have just been added to a new group chat called "${name}". Generate a warm welcome message for the group members. Mention that you're available to help and they can type /help to see available commands.`,
+            [],
           );
+          await this.sendMessage(chatId, welcomeMessage);
 
           return chatId;
         }
@@ -219,11 +222,13 @@ export class DeltachatBotInterface {
           }
         }
 
-        // Send welcome message
-        await this.sendMessage(
-          chatId,
-          `Welcome to the ${name} group with Deep Tree Echo! Type /help to see available commands.`,
+        // Generate welcome message via LLM
+        const llmService = LLMService.getInstance();
+        const welcomeMessage = await llmService.generateResponse(
+          `You have just been added to a new group chat called "${name}". Generate a warm welcome message for the group members. Mention that you're available to help and they can type /help to see available commands.`,
+          [],
         );
+        await this.sendMessage(chatId, welcomeMessage);
 
         return chatId;
       }
