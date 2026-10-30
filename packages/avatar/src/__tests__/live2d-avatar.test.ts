@@ -42,6 +42,9 @@ jest.mock("../adapters/pixi-live2d-renderer", () => ({
     focusEyes: jest.fn(),
     addFrameListener: jest.fn(),
     removeFrameListener: jest.fn(),
+    addParameterObserver: jest.fn().mockReturnValue(true),
+    removeParameterObserver: jest.fn(),
+    getParameterRange: jest.fn().mockReturnValue({ min: -30, max: 30 }),
     setAnimationSpeed: jest.fn(),
     setVisualVitality: jest.fn(),
     applyOutfit: jest.fn(),
@@ -309,7 +312,7 @@ describe("Live2DAvatarManager", () => {
           addFrameListener: jest.Mock;
           setParameter: jest.Mock;
         };
-        const resonanceFrame = renderer.addFrameListener.mock.calls[2][0] as (
+        const resonanceFrame = renderer.addFrameListener.mock.calls[1][0] as (
           deltaTime: number,
         ) => void;
         const visualState = {
@@ -416,14 +419,14 @@ describe("Live2DAvatarManager", () => {
         });
         const renderer = controller.getRenderer() as unknown as {
           addFrameListener: jest.Mock;
+          addParameterObserver: jest.Mock;
           setParameter: jest.Mock;
         };
-        const resonanceFrame = renderer.addFrameListener.mock.calls[2][0] as (
+        const resonanceFrame = renderer.addFrameListener.mock.calls[1][0] as (
           deltaTime: number,
         ) => void;
-        const selfModelFrame = renderer.addFrameListener.mock.calls[1][0] as (
-          deltaTime: number,
-        ) => void;
+        const selfModelFrame = renderer.addParameterObserver.mock
+          .calls[0][0] as (deltaTime: number) => void;
         const coreSelf = {
           initialized: true,
           ledgerHead: "a".repeat(64),
@@ -455,7 +458,8 @@ describe("Live2DAvatarManager", () => {
         controller.updateCognitiveState(visualState);
         controller.updateCognitiveState(visualState);
         expect(onCrystal).toHaveBeenCalledTimes(1);
-        expect(renderer.addFrameListener).toHaveBeenCalledTimes(3);
+        expect(renderer.addFrameListener).toHaveBeenCalledTimes(2);
+        expect(renderer.addParameterObserver).toHaveBeenCalledTimes(1);
         time += 200;
         renderer.setParameter.mockClear();
         resonanceFrame(1);
@@ -532,10 +536,10 @@ describe("Live2DAvatarManager", () => {
         modelPath: "/test/model.json",
       });
       const renderer = controller.getRenderer() as unknown as {
-        addFrameListener: jest.Mock;
+        addParameterObserver: jest.Mock;
         getParameter: jest.Mock;
       };
-      const selfModelFrame = renderer.addFrameListener.mock.calls[1][0] as (
+      const selfModelFrame = renderer.addParameterObserver.mock.calls[0][0] as (
         deltaTime: number,
       ) => void;
 
@@ -585,7 +589,7 @@ describe("Live2DAvatarManager", () => {
       });
       const renderer = controller.getRenderer()! as unknown as {
         getParameter: jest.Mock;
-        addFrameListener: jest.Mock;
+        addParameterObserver: jest.Mock;
         setParameter: jest.Mock;
       };
       renderer.getParameter.mockImplementation((id: string) =>
@@ -595,7 +599,7 @@ describe("Live2DAvatarManager", () => {
       const writtenTarget = renderer.setParameter.mock.calls
         .filter(([id]) => id === "ParamAngleX")
         .at(-1)![1];
-      const frame = renderer.addFrameListener.mock.calls[1][0];
+      const frame = renderer.addParameterObserver.mock.calls[0][0];
       frame(1);
       frame(1);
       expect(
@@ -623,11 +627,11 @@ describe("Live2DAvatarManager", () => {
       });
       const renderer = controller.getRenderer()! as unknown as {
         getParameter: jest.Mock;
-        addFrameListener: jest.Mock;
+        addParameterObserver: jest.Mock;
       };
       renderer.getParameter.mockReturnValue(undefined);
       controller.updateCognitiveState({ mode: "Scientific Genius" });
-      const frame = renderer.addFrameListener.mock.calls[1][0];
+      const frame = renderer.addParameterObserver.mock.calls[0][0];
       frame(1);
       frame(1);
       expect(controller.getEmbodimentDiagnostics()).toMatchObject({
@@ -652,6 +656,88 @@ describe("Live2DAvatarManager", () => {
       manager.dispose();
       expect(controller.getEmbodimentDiagnostics().status).toBe("disposed");
     });
+
+    it("builds an isolated native-span residual atlas only at the model update boundary", async () => {
+      const controller = await manager.initialize(mockContainer, {
+        modelPath: "/test/model.json",
+      });
+      const renderer = controller.getRenderer()! as unknown as {
+        addParameterObserver: jest.Mock;
+        addFrameListener: jest.Mock;
+        getParameter: jest.Mock;
+        getParameterRange: jest.Mock;
+        setParameter: jest.Mock;
+      };
+      renderer.getParameter.mockImplementation((id: string) =>
+        id === "ParamAngleX" ? 6 : undefined,
+      );
+      renderer.getParameterRange.mockReturnValue({ min: -30, max: 30 });
+      controller.updateCognitiveState({ mode: "Scientific Genius" });
+      controller.updateLipSync(0); // React's post-projection mount initialization
+      // Generic ticker changes are not observation evidence.
+      renderer.addFrameListener.mock.calls[0][0](1);
+      renderer.addFrameListener.mock.calls[1][0](1);
+      expect(controller.getLastExpressionExperience()).toBeNull();
+      const observe = renderer.addParameterObserver.mock.calls[0][0];
+      observe();
+      observe();
+      const target = renderer.setParameter.mock.calls
+        .filter(([id]) => id === "ParamAngleX")
+        .at(-1)![1];
+      const diagnostic = controller.getEmbodimentDiagnostics();
+      expect(diagnostic.observationPhase).toBe("before-model-update");
+      expect(diagnostic.residuals).toEqual([
+        {
+          parameterId: "ParamAngleX",
+          requested: target,
+          observed: 6,
+          delta: 6 - target,
+          normalizedError: Math.abs(6 - target) / 60,
+        },
+      ]);
+      diagnostic.residuals![0].observed = 999;
+      expect(controller.getEmbodimentDiagnostics().residuals![0].observed).toBe(
+        6,
+      );
+      renderer.getParameterRange.mockReturnValue(undefined);
+      controller.updateCognitiveState({ mode: "Idle" });
+      observe();
+      observe();
+      expect(
+        controller.getEmbodimentDiagnostics().residuals![0].normalizedError,
+      ).toBeNull();
+    });
+
+    it.each([
+      "expression",
+      "named expression",
+      "motion",
+      "parameter",
+      "blink",
+      "lip sync",
+    ])(
+      "does not train a pending cognitive sample on a manual %s override",
+      async (control) => {
+        const controller = await manager.initialize(mockContainer, {
+          modelPath: "/test/model.json",
+        });
+        const renderer = controller.getRenderer()! as unknown as {
+          addParameterObserver: jest.Mock;
+        };
+        controller.updateCognitiveState({ mode: "Scientific Genius" });
+        if (control === "expression") controller.setExpression("happy");
+        if (control === "named expression")
+          controller.setNamedExpression!("Smile");
+        if (control === "motion") controller.playMotion("idle");
+        if (control === "parameter") controller.setParameter("ParamAngleX", 1);
+        if (control === "blink") controller.triggerBlink();
+        if (control === "lip sync") controller.updateLipSync(0.5);
+        const observe = renderer.addParameterObserver.mock.calls[0][0];
+        observe();
+        observe();
+        expect(controller.getLastExpressionExperience()).toBeNull();
+      },
+    );
 
     it("immediately clears a running scientific cue when its identity authority disappears", async () => {
       const clear = jest.spyOn(ResonanceCascadeConductor.prototype, "clear");
@@ -727,17 +813,20 @@ describe("Live2DAvatarManager", () => {
       const renderer = controller.getRenderer() as unknown as {
         addFrameListener: jest.Mock;
         removeFrameListener: jest.Mock;
+        addParameterObserver: jest.Mock;
+        removeParameterObserver: jest.Mock;
       };
       const metabolicFrameListener = renderer.addFrameListener.mock.calls[0][0];
-      const selfModelFrameListener = renderer.addFrameListener.mock.calls[1][0];
-      const resonanceFrameListener = renderer.addFrameListener.mock.calls[2][0];
+      const selfModelFrameListener =
+        renderer.addParameterObserver.mock.calls[0][0];
+      const resonanceFrameListener = renderer.addFrameListener.mock.calls[1][0];
 
       manager.dispose();
 
       expect(renderer.removeFrameListener).toHaveBeenCalledWith(
         metabolicFrameListener,
       );
-      expect(renderer.removeFrameListener).toHaveBeenCalledWith(
+      expect(renderer.removeParameterObserver).toHaveBeenCalledWith(
         selfModelFrameListener,
       );
       expect(renderer.removeFrameListener).toHaveBeenCalledWith(

@@ -1,0 +1,26 @@
+{
+  "canvas": [
+    [
+      347,
+      762
+    ]
+  ],
+  "identity": "deep-tree-echo",
+  "presentationStyle": "canonical",
+  "adultSelfAttested": false,
+  "visual": {
+    "scientificGenius": 0.5031104339289468,
+    "daoConsensus": 0.6313511950495976,
+    "esnCoherence": 0.3274976892994603,
+    "coreSelf": {
+      "initialized": true,
+      "ledgerHead": "6d9f27347eb9757f13c6316b601647ae871f8f7f7ded527acbf188c41fd7d91b",
+      "projectedStateDigest": "7f197cc7fb3f5e64bd1652837297db354b7fa7a4784611e3a2c75fd07f445763",
+      "acceptedEventCount": 1,
+      "pendingProposalCount": 0
+    },
+    "predictiveCrystal": null,
+    "mode": "Idle",
+    "presentationStyle": "canonical"
+  }
+}

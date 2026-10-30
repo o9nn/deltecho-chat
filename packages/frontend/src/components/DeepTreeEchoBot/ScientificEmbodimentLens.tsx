@@ -39,6 +39,11 @@ export function ScientificEmbodimentLens({
     observed && sample.lastSampleAt !== null
       ? Math.max(0, Math.floor((Date.now() - sample.lastSampleAt) / 1000))
       : null;
+  const residuals = observed
+    ? [...(sample.residuals ?? [])]
+        .sort((a, b) => (b.normalizedError ?? -1) - (a.normalizedError ?? -1))
+        .slice(0, 3)
+    : [];
   return (
     <details
       className="scientific-embodiment-lens"
@@ -80,6 +85,12 @@ export function ScientificEmbodimentLens({
                 <dd>{sample.sampleCount}</dd>
                 <dt>Parameter RMS error (mixed model units)</dt>
                 <dd>{sample.rmsError?.toFixed(4) ?? "Unavailable"}</dd>
+                <dt>Observation boundary</dt>
+                <dd>
+                  {sample.observationPhase === "before-model-update"
+                    ? "After physics, before Cubism mesh update"
+                    : "Unspecified"}
+                </dd>
                 <dt>Last observation</dt>
                 <dd>
                   {age} s ago — last observation, not a continuous measurement
@@ -87,6 +98,29 @@ export function ScientificEmbodimentLens({
               </>
             )}
           </dl>
+          {residuals.length > 0 && (
+            <section aria-label="Scientific residual atlas">
+              <h4>Scientific residual atlas</h4>
+              <p>
+                Largest errors relative to each native rig span. This tests
+                expression execution, not a conjecture or DAO consensus.
+              </p>
+              <ul>
+                {residuals.map((residual) => (
+                  <li key={residual.parameterId}>
+                    <code>{residual.parameterId}</code>: requested{" "}
+                    {residual.requested.toFixed(3)}, observed{" "}
+                    {residual.observed.toFixed(3)};{" "}
+                    {residual.normalizedError === null
+                      ? "rig span unavailable"
+                      : `${(residual.normalizedError * 100).toFixed(
+                          1,
+                        )}% of rig span`}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
           {!!sample?.unavailableParameterIds.length && (
             <p>
               Unmeasured rig parameters:{" "}

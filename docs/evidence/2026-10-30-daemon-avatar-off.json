@@ -1,0 +1,20 @@
+{
+  "canvas": [
+    [
+      347,
+      762
+    ]
+  ],
+  "identity": "deep-tree-echo",
+  "presentationStyle": "canonical",
+  "adultSelfAttested": false,
+  "visual": {
+    "scientificGenius": 0,
+    "daoConsensus": 0,
+    "esnCoherence": 0,
+    "coreSelf": null,
+    "predictiveCrystal": null,
+    "mode": "Idle",
+    "presentationStyle": "canonical"
+  }
+}

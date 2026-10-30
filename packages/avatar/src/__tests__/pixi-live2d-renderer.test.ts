@@ -84,6 +84,8 @@ jest.mock("pixi-live2d-display-lipsyncpatch/cubism4", () => ({
         scale,
         anchor: { x: 0.5, y: 0.5, set: jest.fn() },
         internalModel: {
+          on: jest.fn(),
+          off: jest.fn(),
           motionManager: {
             startMotion: jest.fn().mockResolvedValue(true),
             stopAllMotions: jest.fn(),
@@ -366,6 +368,82 @@ describe("PixiLive2DRenderer", () => {
 
     it("abstains when parameter membership cannot be established", () => {
       expect(renderer.getParameter("ParamAngleX")).toBeUndefined();
+    });
+
+    it("observes final parameters before Cubism restores saved values and cleans up on model reload", async () => {
+      const old = renderer.getModel()!.internalModel;
+      Object.assign(old.coreModel, {
+        getParameterCount: () => 1,
+        getParameterIndex: () => 0,
+      });
+      const observed: Array<number | undefined> = [];
+      const observer = () =>
+        observed.push(renderer.getParameter("ParamAngleX"));
+      expect(renderer.addParameterObserver(observer)).toBe(true);
+      expect(renderer.addParameterObserver(observer)).toBe(true);
+      const callbacks = (old.on as jest.Mock).mock.calls.filter(
+        ([event]) => event === "beforeModelUpdate",
+      );
+      // Wardrobe also uses the native event; the observation hook is last.
+      const observe = callbacks.at(-1)![1];
+      (old.coreModel.getParameterValueById as jest.Mock).mockReturnValue(12);
+      observe(); // motion/expression/physics values consumed by model.update()
+      (old.coreModel.getParameterValueById as jest.Mock).mockReturnValue(0); // loadParameters()
+      expect(observed).toEqual([12]);
+      expect(renderer.getParameter("ParamAngleX")).toBe(0);
+      await renderer.loadModel({
+        modelPath: "/test/second.model3.json",
+        name: "second",
+      });
+      expect(old.off).toHaveBeenCalledWith("beforeModelUpdate", observe);
+      const next = renderer.getModel()!.internalModel;
+      expect(next.on).toHaveBeenCalledWith("beforeModelUpdate", observe);
+      renderer.removeParameterObserver(observer);
+      expect(next.off).toHaveBeenCalledWith("beforeModelUpdate", observe);
+      renderer.dispose();
+      observe();
+      expect(observed).toEqual([12]);
+    });
+
+    it("abstains without a removable native event and isolates observer exceptions", () => {
+      const internal = renderer.getModel()!.internalModel;
+      const on = internal.on;
+      internal.on = undefined;
+      expect(renderer.addParameterObserver(jest.fn())).toBe(false);
+      internal.on = on;
+      renderer.addParameterObserver(() => {
+        throw new Error("diagnostic failed");
+      });
+      const next = jest.fn();
+      renderer.addParameterObserver(next);
+      const hook = (internal.on as jest.Mock).mock.calls.at(-1)![1];
+      expect(() => hook()).not.toThrow();
+      expect(next).toHaveBeenCalledTimes(1);
+      renderer.dispose();
+      hook();
+      expect(next).toHaveBeenCalledTimes(1);
+    });
+
+    it("reports ranges only for genuine native parameters with a finite nonzero span", () => {
+      const core = renderer.getModel()!.internalModel.coreModel;
+      const min = jest.fn(() => -30);
+      const max = jest.fn(() => 30);
+      Object.assign(core, {
+        getParameterCount: () => 1,
+        getParameterIndex: (id: string) => (id === "ParamAngleX" ? 0 : 1),
+        getParameterMinimumValue: min,
+        getParameterMaximumValue: max,
+      });
+      expect(renderer.getParameterRange("ParamAngleX")).toEqual({
+        min: -30,
+        max: 30,
+      });
+      expect(renderer.getParameterRange("ParamGhost")).toBeUndefined();
+      expect(min).toHaveBeenCalledTimes(1);
+      max.mockReturnValue(-30);
+      expect(renderer.getParameterRange("ParamAngleX")).toBeUndefined();
+      max.mockReturnValue(Infinity);
+      expect(renderer.getParameterRange("ParamAngleX")).toBeUndefined();
     });
 
     it("should return undefined for parameters on null model", async () => {

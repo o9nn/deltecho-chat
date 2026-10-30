@@ -149,6 +149,16 @@ export interface EmbodimentDiagnostics {
   unavailableParameterIds: string[];
   lastSampleAt: number | null;
   rmsError: number | null;
+  /** Native Cubism snapshot, not rasterized pixels or a scientific truth score. */
+  observationPhase?: "before-model-update";
+  residuals?: Array<{
+    parameterId: string;
+    requested: number;
+    observed: number;
+    delta: number;
+    /** abs(delta) / native rig span; null when the range cannot be observed. */
+    normalizedError: number | null;
+  }>;
 }
 
 /**
@@ -352,21 +362,28 @@ export class Live2DAvatarManager {
   private createController(): Live2DAvatarController {
     return {
       setExpression: (expression, intensity = 0.7) => {
+        this.selfModelSampleDelayFrames = 0;
         this.renderer?.setExpression(expression, intensity);
       },
       setNamedExpression: (name) => {
+        this.selfModelSampleDelayFrames = 0;
         return this.renderer?.setNamedExpression?.(name) ?? false;
       },
       playMotion: (motion) => {
+        this.selfModelSampleDelayFrames = 0;
         this.renderer?.playMotion(motion);
       },
       updateLipSync: (audioLevel) => {
+        // The React mount initializes silence after the cognitive projection.
+        // Nonzero externally driven speech must not become a cognitive sample.
+        if (audioLevel !== 0) this.selfModelSampleDelayFrames = 0;
         this.renderer?.updateLipSync(audioLevel);
       },
       updateCognitiveState: (state) => {
         this.updateCognitiveState(state);
       },
       triggerBlink: () => {
+        this.selfModelSampleDelayFrames = 0;
         const renderer = this.renderer as
           | (PixiLive2DRenderer & {
               triggerBlink?: (durationMs?: number) => void;
@@ -381,6 +398,7 @@ export class Live2DAvatarManager {
         setTimeout(() => renderer?.setBlinking?.(false), 150);
       },
       setParameter: (paramId, value) => {
+        this.selfModelSampleDelayFrames = 0;
         this.renderer?.setParameter(paramId, value);
       },
       applyOutfit: (outfit) => {
@@ -404,6 +422,9 @@ export class Live2DAvatarManager {
       getEmbodimentDiagnostics: () => ({
         ...this.diagnostics,
         unavailableParameterIds: [...this.diagnostics.unavailableParameterIds],
+        residuals: this.diagnostics.residuals?.map((residual) => ({
+          ...residual,
+        })),
       }),
     };
   }
@@ -492,8 +513,8 @@ export class Live2DAvatarManager {
     const calibratedCubism = this.feedback.applyCalibration(projection.cubism);
     this.lastProjectedCubism = { ...calibratedCubism };
     this.pendingCognitiveMode = projection.selectedMode;
-    // Wait one complete Pixi update before reading the core model so motions,
-    // expressions, physics, and metabolic deltas have all settled.
+    // Observe at the second native update boundary, after motion/expression/
+    // physics and before Cubism restores saved parameters. No ticker readback.
     this.selfModelSampleDelayFrames = 2;
 
     const playedNamed = this.renderer.setNamedExpression?.(
@@ -544,8 +565,8 @@ export class Live2DAvatarManager {
       addFrameListener?: (listener: (deltaTime: number) => void) => void;
     };
     renderer.addFrameListener?.(this.onMetabolicFrame);
-    renderer.addFrameListener?.(this.onSelfModelFrame);
     renderer.addFrameListener?.(this.onResonanceFrame);
+    renderer.addParameterObserver?.(this.onSelfModelFrame);
     this.metabolicBridge.step();
   }
 
@@ -556,8 +577,8 @@ export class Live2DAvatarManager {
         })
       | null;
     renderer?.removeFrameListener?.(this.onMetabolicFrame);
-    renderer?.removeFrameListener?.(this.onSelfModelFrame);
     renderer?.removeFrameListener?.(this.onResonanceFrame);
+    renderer?.removeParameterObserver?.(this.onSelfModelFrame);
     this.metabolicFrameAccumulatorMs = 0;
     this.selfModelSampleDelayFrames = 0;
     if (this.metabolicBridge) {
@@ -733,6 +754,7 @@ export class Live2DAvatarManager {
       unavailableParameterIds: this.observableProjectionIds.filter(
         (id) => !Object.prototype.hasOwnProperty.call(actual, id),
       ),
+      residuals: [],
     };
     if (supportedIds.length === 0) return;
 
@@ -753,6 +775,20 @@ export class Live2DAvatarManager {
         sampleCount: this.feedback.getCalibration().experienceCount,
         lastSampleAt: this.lastExpressionExperience.actual.timestamp,
         rmsError: this.lastExpressionExperience.errorMagnitude,
+        observationPhase: "before-model-update",
+        residuals: supportedIds.map((parameterId) => {
+          const delta = actual[parameterId] - expected[parameterId];
+          const range = this.renderer?.getParameterRange?.(parameterId);
+          return {
+            parameterId,
+            requested: expected[parameterId],
+            observed: actual[parameterId],
+            delta,
+            normalizedError: range
+              ? Math.abs(delta) / (range.max - range.min)
+              : null,
+          };
+        }),
       };
     }
   }

@@ -73,4 +73,45 @@ describe("ScientificEmbodimentLens", () => {
     expect(screen.getByText("Waiting for real parameters")).toBeInTheDocument();
     expect(screen.queryByText("9 / 12")).not.toBeInTheDocument();
   });
+  it("shows native-frame residuals without treating unknown rig ranges as zero error", () => {
+    const controller = {
+      getEmbodimentDiagnostics: () => ({
+        ...sample,
+        observationPhase: "before-model-update",
+        residuals: [
+          {
+            parameterId: "ParamAngleX",
+            requested: 0,
+            observed: 6,
+            delta: 6,
+            normalizedError: 0.1,
+          },
+          {
+            parameterId: "ParamEyeLOpen",
+            requested: 1,
+            observed: 0.7,
+            delta: -0.3,
+            normalizedError: null,
+          },
+        ],
+      }),
+    } as unknown as Live2DAvatarController;
+    render(
+      <ScientificEmbodimentLens
+        controller={controller}
+        visual={{}}
+        daemonConnected={false}
+        expressionLocked={false}
+      />,
+    );
+    openLens();
+    expect(
+      screen.getByRole("region", { name: "Scientific residual atlas" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/10.0% of rig span/)).toBeInTheDocument();
+    expect(screen.getByText(/rig span unavailable/)).toBeInTheDocument();
+    expect(
+      screen.getByText("After physics, before Cubism mesh update"),
+    ).toBeInTheDocument();
+  });
 });
