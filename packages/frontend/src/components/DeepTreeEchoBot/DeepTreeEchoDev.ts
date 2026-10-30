@@ -87,7 +87,7 @@ export class DeepTreeEchoBot {
     message: T.Message,
   ): Promise<string> {
     if (!this.options.enabled) {
-      return "";
+      throw new Error("BOT_DISABLED: Deep Tree Echo bot is not enabled.");
     }
 
     try {
@@ -141,7 +141,7 @@ export class DeepTreeEchoBot {
       return llmResponse;
     } catch (error) {
       log.error("Error processing message:", error);
-      return "Sorry, I encountered an error while processing your message. Please try again.";
+      throw error;
     }
   }
 
@@ -163,7 +163,9 @@ export class DeepTreeEchoBot {
     const handler = this.commandHandlers.get(command);
 
     if (!handler) {
-      return `Unknown command: ${command}. Try /help for a list of available commands.`;
+      // Generate response via LLM for unknown command
+      const prompt = `The user entered an unknown command: ${command}. Let them know it doesn't exist and suggest using /help.`;
+      return this.llmService.generateResponse(prompt, []);
     }
 
     try {
@@ -194,7 +196,7 @@ export class DeepTreeEchoBot {
       return result.response;
     } catch (error) {
       log.error(`Error processing command ${command}:`, error);
-      return `Error processing command ${command}. Please try again.`;
+      throw error;
     }
   }
 
@@ -202,33 +204,38 @@ export class DeepTreeEchoBot {
    * Register all command handlers
    */
   private registerCommandHandlers(): void {
-    // Help command
+    // Help command - route through LLM
     this.commandHandlers.set("/help", async () => {
       const commands = Array.from(this.commandHandlers.keys())
         .sort()
         .join(", ");
+      const prompt =
+        "The user asked for help with available commands. List your available commands and briefly explain what each does.";
+      const response = await this.llmService.generateResponse(prompt, [
+        `Available commands: ${commands}`,
+      ]);
       return {
         success: true,
-        response: `Available commands: ${commands}\n\nUse /help <command> for more information about a specific command.`,
+        response,
       };
     });
 
     // Vision command
     this.commandHandlers.set("/vision", async (_args, messageData) => {
       if (!this.options.visionEnabled) {
-        return {
-          success: false,
-          response:
-            "Vision capabilities are disabled. Please enable them in settings.",
-        };
+        const response = await this.llmService.generateResponse(
+          "The user tried to use the /vision command but vision capabilities are disabled. Explain this politely and suggest they enable it in settings.",
+          [],
+        );
+        return { success: false, response };
       }
 
       if (!messageData.file) {
-        return {
-          success: false,
-          response:
-            "Please attach an image to analyze with the /vision command.",
-        };
+        const response = await this.llmService.generateResponse(
+          "The user typed /vision but did not attach an image. Politely ask them to attach an image to analyze.",
+          [],
+        );
+        return { success: false, response };
       }
 
       try {
@@ -237,107 +244,126 @@ export class DeepTreeEchoBot {
         );
 
         if (result.error) {
-          return {
-            success: false,
-            response: `Error analyzing image: ${result.error}`,
-          };
+          const response = await this.llmService.generateResponse(
+            `There was an error analyzing the image. Explain this issue to the user.`,
+            [`Error: ${result.error}`],
+          );
+          return { success: false, response };
         }
 
-        const objectList = result.objects
-          .map(
-            (obj) =>
-              `- ${obj.label} (${Math.round(
-                obj.confidence * 100,
-              )}% confidence)`,
-          )
-          .join("\n");
+        // Build context from analysis results
+        const analysisContext = [
+          `Image description: ${result.description}`,
+          `Detected objects: ${result.objects
+            .map(
+              (obj) =>
+                `${obj.label} (${Math.round(
+                  obj.confidence * 100,
+                )}% confidence)`,
+            )
+            .join(", ")}`,
+          `Tags: ${result.tags.join(", ")}`,
+        ];
+
+        const response = await this.llmService.generateResponse(
+          "Present the image analysis results to the user in a clear, helpful way.",
+          analysisContext,
+        );
 
         return {
           success: true,
-          response: `📷 Image Analysis:\n\n${
-            result.description
-          }\n\nDetected objects:\n${objectList}\n\nTags: ${result.tags.join(
-            ", ",
-          )}`,
+          response,
           data: result,
         };
       } catch (error) {
         log.error("Error in vision command:", error);
-        return {
-          success: false,
-          response:
-            "Error analyzing the image. Please try again with a different image.",
-        };
+        const response = await this.llmService.generateResponse(
+          "There was an unexpected error analyzing the image. Apologize and suggest the user try again with a different image.",
+          [],
+        );
+        return { success: false, response };
       }
     });
 
     // Search command
     this.commandHandlers.set("/search", async (args, _messageData) => {
       if (!this.options.webAutomationEnabled) {
-        return {
-          success: false,
-          response:
-            "Web automation capabilities are disabled. Please enable them in settings.",
-        };
+        const response = await this.llmService.generateResponse(
+          "The user tried to use the /search command but web automation is disabled. Explain this politely and suggest they enable it in settings.",
+          [],
+        );
+        return { success: false, response };
       }
 
       if (!args) {
-        return {
-          success: false,
-          response: "Please provide a search query. Usage: /search <query>",
-        };
+        const response = await this.llmService.generateResponse(
+          "The user typed /search without providing a query. Explain the usage: /search <query>",
+          [],
+        );
+        return { success: false, response };
       }
 
       try {
         const result = await this.webAutomation.searchWeb(args, 3);
 
         if (!result.success || !result.data) {
-          return {
-            success: false,
-            response: `Error performing search: ${
-              result.error || "Unknown error"
-            }`,
-          };
+          const response = await this.llmService.generateResponse(
+            "There was an error performing the web search. Explain this to the user.",
+            [
+              `Search query: ${args}`,
+              `Error: ${result.error || "Unknown error"}`,
+            ],
+          );
+          return { success: false, response };
         }
 
         const searchResults = result.data;
-        const formattedResults = searchResults
-          .map(
+        const resultsContext = [
+          `Search query: ${args}`,
+          ...searchResults.map(
             (r: { title: string; url: string; snippet: string }, i: number) =>
-              `${i + 1}. [${r.title}](${r.url})\n${r.snippet}`,
-          )
-          .join("\n\n");
+              `Result ${i + 1}: Title: ${r.title}, URL: ${r.url}, Snippet: ${
+                r.snippet
+              }`,
+          ),
+        ];
+
+        const response = await this.llmService.generateResponse(
+          "Present these search results to the user in a clear, helpful format.",
+          resultsContext,
+        );
 
         return {
           success: true,
-          response: `🔍 Search results for "${args}":\n\n${formattedResults}`,
+          response,
           data: searchResults,
         };
       } catch (error) {
         log.error("Error in search command:", error);
-        return {
-          success: false,
-          response:
-            "Error performing the search. Please try again with a different query.",
-        };
+        const response = await this.llmService.generateResponse(
+          "There was an unexpected error performing the search. Apologize and suggest trying a different query.",
+          [],
+        );
+        return { success: false, response };
       }
     });
 
     // Screenshot command
     this.commandHandlers.set("/screenshot", async (args, _messageData) => {
       if (!this.options.webAutomationEnabled) {
-        return {
-          success: false,
-          response:
-            "Web automation capabilities are disabled. Please enable them in settings.",
-        };
+        const response = await this.llmService.generateResponse(
+          "The user tried to use the /screenshot command but web automation is disabled. Explain this politely and suggest they enable it in settings.",
+          [],
+        );
+        return { success: false, response };
       }
 
       if (!args) {
-        return {
-          success: false,
-          response: "Please provide a URL. Usage: /screenshot <url>",
-        };
+        const response = await this.llmService.generateResponse(
+          "The user typed /screenshot without providing a URL. Explain the usage: /screenshot <url>",
+          [],
+        );
+        return { success: false, response };
       }
 
       try {
@@ -350,39 +376,41 @@ export class DeepTreeEchoBot {
         const result = await this.webAutomation.takeScreenshot(url);
 
         if (!result.success) {
-          return {
-            success: false,
-            response: `Error taking screenshot: ${
-              result.error || "Unknown error"
-            }`,
-          };
+          const response = await this.llmService.generateResponse(
+            "There was an error taking a screenshot. Explain this to the user.",
+            [`URL: ${url}`, `Error: ${result.error || "Unknown error"}`],
+          );
+          return { success: false, response };
         }
 
-        // In a real implementation, we would save the screenshot to a file
-        // and attach it to the message
+        const response = await this.llmService.generateResponse(
+          "A screenshot was successfully captured. Describe what the user requested and confirm it was captured.",
+          [`URL: ${url}`, `Screenshot captured successfully`],
+        );
+
         return {
           success: true,
-          response: `📸 Screenshot of ${url}\n\nIn a full implementation, this would include the actual screenshot image.`,
+          response,
           data: result.data,
         };
       } catch (error) {
         log.error("Error in screenshot command:", error);
-        return {
-          success: false,
-          response:
-            "Error taking screenshot. Please check the URL and try again.",
-        };
+        const response = await this.llmService.generateResponse(
+          "There was an unexpected error taking a screenshot. Apologize and suggest checking the URL.",
+          [],
+        );
+        return { success: false, response };
       }
     });
 
     // Embodiment commands
     this.commandHandlers.set("/embodiment", async (args, _messageData) => {
       if (!this.options.embodimentEnabled) {
-        return {
-          success: false,
-          response:
-            "Embodiment capabilities are disabled. Please enable them in settings.",
-        };
+        const response = await this.llmService.generateResponse(
+          "The user tried to use the /embodiment command but embodiment capabilities are disabled. Explain this politely and suggest they enable it in settings.",
+          [],
+        );
+        return { success: false, response };
       }
 
       const subcommands = args.split(" ");
@@ -391,22 +419,24 @@ export class DeepTreeEchoBot {
       switch (subcommand) {
         case "start": {
           const startResult = await this.embodiment.startTraining();
-          return {
-            success: startResult,
-            response: startResult
-              ? "Started proprioceptive training. Move the controller to train the system."
-              : "Failed to start proprioceptive training.",
-          };
+          const response = await this.llmService.generateResponse(
+            startResult
+              ? "Proprioceptive training has started successfully. Describe what the user should do next with the controller."
+              : "Failed to start proprioceptive training. Explain this issue to the user.",
+            [`Training started: ${startResult}`],
+          );
+          return { success: startResult, response };
         }
 
         case "stop": {
           const stopResult = await this.embodiment.stopTraining();
-          return {
-            success: stopResult,
-            response: stopResult
-              ? "Stopped proprioceptive training. Training data has been saved."
-              : "Failed to stop proprioceptive training.",
-          };
+          const response = await this.llmService.generateResponse(
+            stopResult
+              ? "Proprioceptive training has stopped and data was saved. Summarize what was accomplished."
+              : "Failed to stop proprioceptive training. Explain this issue to the user.",
+            [`Training stopped: ${stopResult}`],
+          );
+          return { success: stopResult, response };
         }
 
         case "status": {
@@ -414,24 +444,30 @@ export class DeepTreeEchoBot {
           const stats = this.embodiment.getTrainingStats();
 
           if (!movementData) {
-            return {
-              success: false,
-              response:
-                "No movement data available. Make sure training is active and the controller is connected.",
-            };
+            const response = await this.llmService.generateResponse(
+              "No movement data is available. Explain to the user that training must be active and the controller connected.",
+              [],
+            );
+            return { success: false, response };
           }
+
+          const statusContext = [
+            `Sessions completed: ${stats.sessionsCompleted}`,
+            `Total data points: ${stats.totalDataPoints}`,
+            `Average stability score: ${stats.avgStabilityScore.toFixed(2)}`,
+            `Current balance score: ${movementData.balance.stabilityScore.toFixed(
+              2,
+            )}`,
+          ];
+
+          const response = await this.llmService.generateResponse(
+            "Present the embodiment training status to the user in a clear, informative way.",
+            statusContext,
+          );
 
           return {
             success: true,
-            response: `📊 Embodiment Training Status:\n\nSessions completed: ${
-              stats.sessionsCompleted
-            }\nTotal data points: ${
-              stats.totalDataPoints
-            }\nAverage stability score: ${stats.avgStabilityScore.toFixed(
-              2,
-            )}\n\nCurrent balance score: ${movementData.balance.stabilityScore.toFixed(
-              2,
-            )}`,
+            response,
             data: { movementData, stats },
           };
         }
@@ -440,39 +476,48 @@ export class DeepTreeEchoBot {
           const evaluation = await this.embodiment.evaluateMovement();
 
           if (!evaluation) {
-            return {
-              success: false,
-              response:
-                "Cannot evaluate movement. Make sure training is active and the controller is connected.",
-            };
+            const response = await this.llmService.generateResponse(
+              "Cannot evaluate movement. Explain to the user that training must be active and the controller connected.",
+              [],
+            );
+            return { success: false, response };
           }
+
+          const evalContext = [
+            `Score: ${evaluation.score.toFixed(2)}/1.0`,
+            `Feedback: ${evaluation.feedback}`,
+          ];
+
+          const response = await this.llmService.generateResponse(
+            "Present the movement evaluation results to the user with constructive feedback.",
+            evalContext,
+          );
 
           return {
             success: true,
-            response: `🧠 Movement Evaluation:\n\nScore: ${evaluation.score.toFixed(
-              2,
-            )}/1.0\n\n${evaluation.feedback}`,
+            response,
             data: evaluation,
           };
         }
 
-        default:
-          return {
-            success: false,
-            response:
-              "Unknown embodiment subcommand. Available subcommands: start, stop, status, evaluate",
-          };
+        default: {
+          const response = await this.llmService.generateResponse(
+            "The user typed an unknown embodiment subcommand. Explain available options: start, stop, status, evaluate.",
+            [`Unknown subcommand: ${subcommand || "(none)"}`],
+          );
+          return { success: false, response };
+        }
       }
     });
 
     // Memory commands
     this.commandHandlers.set("/memory", async (args, messageData) => {
       if (!this.options.memoryEnabled) {
-        return {
-          success: false,
-          response:
-            "Memory capabilities are disabled. Please enable them in settings.",
-        };
+        const response = await this.llmService.generateResponse(
+          "The user tried to use the /memory command but memory capabilities are disabled. Explain this politely and suggest they enable it in settings.",
+          [],
+        );
+        return { success: false, response };
       }
 
       const subcommands = args.split(" ");
@@ -481,81 +526,101 @@ export class DeepTreeEchoBot {
       switch (subcommand) {
         case "status": {
           const stats = this.memoryStore.getStats();
+          const statusContext = [
+            `Total memories: ${stats.totalMemories}`,
+            `Chat count: ${Object.keys(stats.memoriesByChat).length}`,
+          ];
+          const response = await this.llmService.generateResponse(
+            "Present the memory status to the user in a clear, informative way.",
+            statusContext,
+          );
           return {
             success: true,
-            response: `📚 Memory Status:\n\nTotal memories: ${
-              stats.totalMemories
-            }\nChat count: ${Object.keys(stats.memoriesByChat).length}`,
+            response,
             data: stats,
           };
         }
 
-        case "clear":
+        case "clear": {
           await this.memoryStore.deleteChatMemories(messageData.chatId);
-          return {
-            success: true,
-            response: "Cleared all memories for this chat.",
-          };
+          const response = await this.llmService.generateResponse(
+            "You just cleared all memories for this chat. Acknowledge this action to the user.",
+            [],
+          );
+          return { success: true, response };
+        }
 
         case "search": {
           const query = subcommands.slice(1).join(" ");
           if (!query) {
-            return {
-              success: false,
-              response:
-                "Please provide a search query. Usage: /memory search <query>",
-            };
+            const response = await this.llmService.generateResponse(
+              "The user typed /memory search without a query. Explain the usage: /memory search <query>",
+              [],
+            );
+            return { success: false, response };
           }
 
           const results = this.memoryStore.searchMemories(query, 5);
           if (results.length === 0) {
-            return {
-              success: true,
-              response: `No memories found matching "${query}".`,
-            };
+            const response = await this.llmService.generateResponse(
+              "No memories were found matching the search query. Let the user know kindly.",
+              [`Search query: ${query}`],
+            );
+            return { success: true, response };
           }
 
-          const formattedResults = results
-            .map(
+          const resultsContext = [
+            `Search query: ${query}`,
+            ...results.map(
               (memory, i) =>
-                `${i + 1}. ${
-                  memory.sender === "user" ? "You" : "Bot"
-                }: ${memory.text.substring(0, 100)}${
+                `Result ${i + 1} (${
+                  memory.sender === "user" ? "User" : "Bot"
+                }): ${memory.text.substring(0, 100)}${
                   memory.text.length > 100 ? "..." : ""
                 }`,
-            )
-            .join("\n\n");
+            ),
+          ];
+
+          const response = await this.llmService.generateResponse(
+            "Present these memory search results to the user in a helpful format.",
+            resultsContext,
+          );
 
           return {
             success: true,
-            response: `🔍 Memory search results for "${query}":\n\n${formattedResults}`,
+            response,
             data: results,
           };
         }
 
-        default:
-          return {
-            success: false,
-            response:
-              "Unknown memory subcommand. Available subcommands: status, clear, search",
-          };
+        default: {
+          const response = await this.llmService.generateResponse(
+            "The user typed an unknown memory subcommand. Explain available options: status, clear, search.",
+            [`Unknown subcommand: ${subcommand || "(none)"}`],
+          );
+          return { success: false, response };
+        }
       }
     });
 
     // Version command
     this.commandHandlers.set("/version", async () => {
-      return {
-        success: true,
-        response: `Deep Tree Echo Bot v1.0.0\n\nStatus:\n- Memory: ${
-          this.options.memoryEnabled ? "Enabled" : "Disabled"
-        }\n- Vision: ${
-          this.options.visionEnabled ? "Enabled" : "Disabled"
-        }\n- Web Automation: ${
+      const versionContext = [
+        "Version: Deep Tree Echo Bot v1.0.0",
+        `Memory: ${this.options.memoryEnabled ? "Enabled" : "Disabled"}`,
+        `Vision: ${this.options.visionEnabled ? "Enabled" : "Disabled"}`,
+        `Web Automation: ${
           this.options.webAutomationEnabled ? "Enabled" : "Disabled"
-        }\n- Embodiment: ${
+        }`,
+        `Embodiment: ${
           this.options.embodimentEnabled ? "Enabled" : "Disabled"
         }`,
-      };
+      ];
+      const response = await this.llmService.generateResponse(
+        "Present your version information and capabilities status to the user in a clear, friendly way.",
+        versionContext,
+      );
+      return { success: true, response };
     });
   }
 

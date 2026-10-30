@@ -24,41 +24,43 @@ jest.mock("@pixi/unsafe-eval", () => ({
 }));
 
 jest.mock("pixi.js", () => ({
-  Application: jest.fn().mockImplementation(() => {
-    const onceFns: Array<() => void> = [];
-    return {
-      stage: {
-        addChild: jest.fn(),
-      },
-      view: {
-        width: 400,
-        height: 400,
-        clientWidth: 400,
-        clientHeight: 400,
-      },
-      ticker: {
-        maxFPS: 0,
-        addOnce: (cb: () => void) => {
-          onceFns.push(cb);
+  Application: jest
+    .fn()
+    .mockImplementation((options: { resolution?: number }) => {
+      const onceFns: Array<() => void> = [];
+      return {
+        stage: {
+          addChild: jest.fn(),
         },
-        flushOnce: () => {
-          const queued = onceFns.splice(0, onceFns.length);
-          for (const fn of queued) fn();
+        view: {
+          width: 400,
+          height: 400,
+          clientWidth: 400,
+          clientHeight: 400,
         },
-      },
-      screen: { width: 400, height: 400 },
-      renderer: {
-        resize: jest.fn(),
-        width: 400,
-        height: 400,
-        resolution: 1,
-        extract: {
-          pixels: jest.fn(() => new Uint8Array(400 * 400 * 4)),
+        ticker: {
+          maxFPS: 0,
+          addOnce: (cb: () => void) => {
+            onceFns.push(cb);
+          },
+          flushOnce: () => {
+            const queued = onceFns.splice(0, onceFns.length);
+            for (const fn of queued) fn();
+          },
         },
-      },
-      destroy: jest.fn(),
-    };
-  }),
+        screen: { width: 400, height: 400 },
+        renderer: {
+          resize: jest.fn(),
+          width: 400,
+          height: 400,
+          resolution: options.resolution ?? 1,
+          extract: {
+            pixels: jest.fn(() => new Uint8Array(400 * 400 * 4)),
+          },
+        },
+        destroy: jest.fn(),
+      };
+    }),
 }));
 
 jest.mock("pixi-live2d-display-lipsyncpatch/cubism4", () => ({
@@ -82,6 +84,8 @@ jest.mock("pixi-live2d-display-lipsyncpatch/cubism4", () => ({
         scale,
         anchor: { x: 0.5, y: 0.5, set: jest.fn() },
         internalModel: {
+          on: jest.fn(),
+          off: jest.fn(),
           motionManager: {
             startMotion: jest.fn().mockResolvedValue(true),
             stopAllMotions: jest.fn(),
@@ -171,6 +175,53 @@ describe("PixiLive2DRenderer", () => {
       expect(app.ticker.maxFPS).toBe(30);
       context.getParameter.mockReturnValue("ANGLE (NVIDIA RTX 4000)");
       expect(isSoftwareWebGLRenderer(mockCanvas)).toBe(false);
+    });
+
+    it("limits software backing-store DPR without overriding an explicit quality preference", async () => {
+      const originalDpr = Object.getOwnPropertyDescriptor(
+        window,
+        "devicePixelRatio",
+      );
+      Object.defineProperty(window, "devicePixelRatio", {
+        configurable: true,
+        value: 2,
+      });
+      (mockCanvas.getContext as jest.Mock).mockReturnValue({
+        getExtension: jest.fn(() => ({ UNMASKED_RENDERER_WEBGL: 0x9246 })),
+        getParameter: jest.fn(() => "ANGLE (Vulkan SwiftShader Device)"),
+        RENDERER: 0x1f01,
+      });
+      try {
+        const model = { modelPath: "/test/model.json", name: "Test Model" };
+        await renderer.initialize({ canvas: mockCanvas, model });
+        const app = (
+          renderer as unknown as {
+            app: { renderer: { resolution: number; resize: jest.Mock } };
+          }
+        ).app;
+        expect(app.renderer.resolution).toBe(1);
+        expect(app.renderer.resize).toHaveBeenCalledWith(400, 400);
+
+        const explicitlyHighResolution = new PixiLive2DRenderer();
+        try {
+          await explicitlyHighResolution.initialize({
+            canvas: mockCanvas,
+            model,
+            pixelRatio: 2,
+          });
+          const preferred = (
+            explicitlyHighResolution as unknown as {
+              app: { renderer: { resolution: number } };
+            }
+          ).app;
+          expect(preferred.renderer.resolution).toBe(2);
+        } finally {
+          explicitlyHighResolution.dispose();
+        }
+      } finally {
+        if (originalDpr)
+          Object.defineProperty(window, "devicePixelRatio", originalDpr);
+      }
     });
 
     it("does not cap hardware, unavailable, or uninspectable WebGL", async () => {
@@ -299,6 +350,100 @@ describe("PixiLive2DRenderer", () => {
       expect(() =>
         renderer.setParameter(PARAM_IDS.PARAM_ANGLE_X, 15),
       ).not.toThrow();
+    });
+
+    it("excludes Cubism cached virtual parameters from real rig readback", () => {
+      const core = renderer.getModel()!.internalModel.coreModel;
+      Object.assign(core, {
+        getParameterCount: () => 1,
+        getParameterIndex: (id: string) => (id === "ParamAngleX" ? 0 : 1),
+      });
+      (core.getParameterValueById as jest.Mock).mockReturnValue(0.8);
+      expect(renderer.getParameter("ParamAngleX")).toBe(0.8);
+      expect(renderer.getParameter("ParamGhost")).toBeUndefined();
+      expect(core.getParameterValueById).toHaveBeenCalledTimes(1);
+      (core.getParameterValueById as jest.Mock).mockReturnValue(NaN);
+      expect(renderer.getParameter("ParamAngleX")).toBeUndefined();
+    });
+
+    it("abstains when parameter membership cannot be established", () => {
+      expect(renderer.getParameter("ParamAngleX")).toBeUndefined();
+    });
+
+    it("observes final parameters before Cubism restores saved values and cleans up on model reload", async () => {
+      const old = renderer.getModel()!.internalModel;
+      Object.assign(old.coreModel, {
+        getParameterCount: () => 1,
+        getParameterIndex: () => 0,
+      });
+      const observed: Array<number | undefined> = [];
+      const observer = () =>
+        observed.push(renderer.getParameter("ParamAngleX"));
+      expect(renderer.addParameterObserver(observer)).toBe(true);
+      expect(renderer.addParameterObserver(observer)).toBe(true);
+      const callbacks = (old.on as jest.Mock).mock.calls.filter(
+        ([event]) => event === "beforeModelUpdate",
+      );
+      // Wardrobe also uses the native event; the observation hook is last.
+      const observe = callbacks.at(-1)![1];
+      (old.coreModel.getParameterValueById as jest.Mock).mockReturnValue(12);
+      observe(); // motion/expression/physics values consumed by model.update()
+      (old.coreModel.getParameterValueById as jest.Mock).mockReturnValue(0); // loadParameters()
+      expect(observed).toEqual([12]);
+      expect(renderer.getParameter("ParamAngleX")).toBe(0);
+      await renderer.loadModel({
+        modelPath: "/test/second.model3.json",
+        name: "second",
+      });
+      expect(old.off).toHaveBeenCalledWith("beforeModelUpdate", observe);
+      const next = renderer.getModel()!.internalModel;
+      expect(next.on).toHaveBeenCalledWith("beforeModelUpdate", observe);
+      renderer.removeParameterObserver(observer);
+      expect(next.off).toHaveBeenCalledWith("beforeModelUpdate", observe);
+      renderer.dispose();
+      observe();
+      expect(observed).toEqual([12]);
+    });
+
+    it("abstains without a removable native event and isolates observer exceptions", () => {
+      const internal = renderer.getModel()!.internalModel;
+      const on = internal.on;
+      internal.on = undefined;
+      expect(renderer.addParameterObserver(jest.fn())).toBe(false);
+      internal.on = on;
+      renderer.addParameterObserver(() => {
+        throw new Error("diagnostic failed");
+      });
+      const next = jest.fn();
+      renderer.addParameterObserver(next);
+      const hook = (internal.on as jest.Mock).mock.calls.at(-1)![1];
+      expect(() => hook()).not.toThrow();
+      expect(next).toHaveBeenCalledTimes(1);
+      renderer.dispose();
+      hook();
+      expect(next).toHaveBeenCalledTimes(1);
+    });
+
+    it("reports ranges only for genuine native parameters with a finite nonzero span", () => {
+      const core = renderer.getModel()!.internalModel.coreModel;
+      const min = jest.fn(() => -30);
+      const max = jest.fn(() => 30);
+      Object.assign(core, {
+        getParameterCount: () => 1,
+        getParameterIndex: (id: string) => (id === "ParamAngleX" ? 0 : 1),
+        getParameterMinimumValue: min,
+        getParameterMaximumValue: max,
+      });
+      expect(renderer.getParameterRange("ParamAngleX")).toEqual({
+        min: -30,
+        max: 30,
+      });
+      expect(renderer.getParameterRange("ParamGhost")).toBeUndefined();
+      expect(min).toHaveBeenCalledTimes(1);
+      max.mockReturnValue(-30);
+      expect(renderer.getParameterRange("ParamAngleX")).toBeUndefined();
+      max.mockReturnValue(Infinity);
+      expect(renderer.getParameterRange("ParamAngleX")).toBeUndefined();
     });
 
     it("should return undefined for parameters on null model", async () => {

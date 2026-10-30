@@ -6,11 +6,33 @@ import {
   afterEach,
   jest,
 } from "@jest/globals";
+import { LLMService } from "deep-tree-echo-core";
 import {
   Dove9Integration,
   Dove9IntegrationConfig,
 } from "../dove9-integration.js";
 import { EmailMessage } from "../dovecot-interface/milter-server.js";
+
+function mockedParallelResult(integratedResponse: string) {
+  return {
+    processing: {} as Record<string, string>,
+    integratedResponse,
+    insights: { processingMethod: "single_function" },
+  };
+}
+
+function mockConfiguredLlm(integratedResponse: string) {
+  return jest
+    .spyOn(LLMService.prototype, "generateFullParallelResponse")
+    .mockResolvedValue(mockedParallelResult(integratedResponse));
+}
+
+function blockNetworkRequests(): () => number {
+  const fetchMock = jest
+    .spyOn(globalThis, "fetch")
+    .mockRejectedValue(new Error("Network access is forbidden in this test"));
+  return () => fetchMock.mock.calls.length;
+}
 
 // Helper to create a complete EmailMessage
 function createTestEmail(overrides: Partial<EmailMessage> = {}): EmailMessage {
@@ -31,6 +53,7 @@ function createTestEmail(overrides: Partial<EmailMessage> = {}): EmailMessage {
 
 describe("Dove9Integration", () => {
   let integration: Dove9Integration;
+  let networkRequestCount: () => number;
   const testConfig: Partial<Dove9IntegrationConfig> = {
     enabled: true,
     stepDuration: 50,
@@ -40,11 +63,13 @@ describe("Dove9Integration", () => {
   };
 
   beforeEach(() => {
+    networkRequestCount = blockNetworkRequests();
     integration = new Dove9Integration(testConfig);
   });
 
   afterEach(async () => {
     await integration.stop();
+    jest.restoreAllMocks();
   });
 
   describe("constructor", () => {
@@ -109,14 +134,59 @@ describe("Dove9Integration", () => {
     });
 
     it("should process email addressed to bot", async () => {
+      const modelResponse = "test-model-response: dove9-email";
+      const generateResponse = mockConfiguredLlm(modelResponse);
       const email = createTestEmail({
         from: "user@example.com",
         to: ["test-bot@localhost"],
       });
 
       const result = await integration.processEmail(email);
-      expect(result).not.toBeNull();
+      expect(result).toMatchObject({
+        status: "completed",
+        response: modelResponse,
+      });
       expect(result?.id).toBeDefined();
+      expect(generateResponse).toHaveBeenCalledWith(
+        expect.stringContaining("Subject: Test Subject"),
+        expect.any(Array),
+      );
+      expect(networkRequestCount()).toBe(0);
+    });
+
+    it("should not fabricate a response for an unconfigured model and should recover after model injection", async () => {
+      const handler = jest.fn<(response: unknown) => void>();
+      integration.onResponse(handler);
+      const generateResponse = jest.spyOn(
+        LLMService.prototype,
+        "generateFullParallelResponse",
+      );
+      const email = createTestEmail({ to: ["test-bot@localhost"] });
+
+      const failed = await integration.processEmail(email);
+      expect(failed).toMatchObject({ status: "failed" });
+      expect(failed?.response).toBeUndefined();
+      expect(handler).not.toHaveBeenCalled();
+      expect(generateResponse).toHaveBeenCalledTimes(1);
+      expect(networkRequestCount()).toBe(0);
+
+      const recoveryResponse = "test-model-response: dove9-recovered";
+      generateResponse.mockResolvedValue(
+        mockedParallelResult(recoveryResponse),
+      );
+
+      const recovered = await integration.processEmail(
+        createTestEmail({ to: ["test-bot@localhost"] }),
+      );
+      expect(recovered).toMatchObject({
+        status: "completed",
+        response: recoveryResponse,
+      });
+      expect(handler).toHaveBeenCalledWith(
+        expect.objectContaining({ body: recoveryResponse }),
+      );
+      expect(generateResponse).toHaveBeenCalledTimes(2);
+      expect(networkRequestCount()).toBe(0);
     });
 
     it("should return null for email not addressed to bot", async () => {
@@ -150,6 +220,8 @@ describe("Dove9Integration", () => {
     });
 
     it("should call response handler when response is ready", async () => {
+      const modelResponse = "test-model-response: response-handler";
+      const generateResponse = mockConfiguredLlm(modelResponse);
       const handler = jest.fn<(response: unknown) => void>();
       integration.onResponse(handler);
 
@@ -162,10 +234,14 @@ describe("Dove9Integration", () => {
 
       await integration.processEmail(email);
 
-      // Wait for async processing
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      expect(handler).toHaveBeenCalled();
+      expect(handler).toHaveBeenCalledWith(
+        expect.objectContaining({
+          body: modelResponse,
+          to: "user@example.com",
+        }),
+      );
+      expect(generateResponse).toHaveBeenCalledTimes(1);
+      expect(networkRequestCount()).toBe(0);
     });
   });
 

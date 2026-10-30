@@ -178,13 +178,9 @@ AUTONOMY PRINCIPLES:
     // Check recursion limit
     if (this.toolExecutor.checkRecursionLimit(recursionDepth)) {
       log.warn(`Max tool recursion depth reached for chat ${chatId}`);
-      return {
-        response:
-          "I've executed multiple actions in sequence. Please let me know if you need anything else.",
-        toolsUsed: [],
-        recursionDepth,
-        metadata: { maxRecursionReached: true },
-      };
+      throw new Error(
+        "TOOL_RECURSION_LIMIT: Maximum tool execution depth reached.",
+      );
     }
 
     try {
@@ -258,20 +254,19 @@ AUTONOMY PRINCIPLES:
         .map((c: ContentBlock) => c.text)
         .join("");
 
+      if (!textResponse) {
+        throw new Error("MODEL_NO_RESPONSE: LLM returned no text content.");
+      }
+
       return {
-        response: textResponse || "I'm not sure how to respond to that.",
+        response: textResponse,
         toolsUsed,
         recursionDepth,
         metadata: {},
       };
     } catch (error: any) {
       log.error(`Error in agentic response for chat ${chatId}:`, error);
-      return {
-        response: `I encountered an error: ${error.message}. Please try again.`,
-        toolsUsed: [],
-        recursionDepth,
-        metadata: { error: error.message },
-      };
+      throw error;
     }
   }
 

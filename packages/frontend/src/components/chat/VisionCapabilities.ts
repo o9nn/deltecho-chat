@@ -113,30 +113,25 @@ export class VisionCapabilities {
    * @returns Human-readable description of the image content
    */
   public async generateImageDescription(imageUrl: string): Promise<string> {
-    try {
-      const predictions = await this.analyzeImage(imageUrl);
+    const predictions = await this.analyzeImage(imageUrl);
 
-      if (predictions.length === 0) {
-        return "I couldn't identify anything specific in this image.";
-      }
-
-      // Format the results into a natural language description
-      const topPrediction = predictions[0];
-      let description = `I can see that this image shows ${topPrediction.className}`;
-
-      if (predictions.length > 1) {
-        description += `. It might also contain ${predictions[1].className}`;
-
-        if (predictions.length > 2) {
-          description += ` and possibly ${predictions[2].className}`;
-        }
-      }
-
-      return description;
-    } catch (error) {
-      log.error("Error generating image description:", error);
-      return "I'm unable to analyze this image at the moment.";
+    if (predictions.length === 0) {
+      throw new Error("VISION_NO_PREDICTIONS: No objects identified in image");
     }
+
+    // Format the results into a natural language description
+    const topPrediction = predictions[0];
+    let description = `I can see that this image shows ${topPrediction.className}`;
+
+    if (predictions.length > 1) {
+      description += `. It might also contain ${predictions[1].className}`;
+
+      if (predictions.length > 2) {
+        description += ` and possibly ${predictions[2].className}`;
+      }
+    }
+
+    return description;
   }
 
   /**

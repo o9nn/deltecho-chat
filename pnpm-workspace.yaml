@@ -1,18 +1,19 @@
 packages:
   - packages/*
+  - tools/airi-broker
 
 catalog:
-  '@deltachat/jsonrpc-client': 1.159.4
-  '@deltachat/stdio-rpc-server': 1.159.4
-  '@types/mime-types': ^2.1.4
-  '@webxdc/types': ^2.1.2
+  "@deltachat/jsonrpc-client": 1.159.4
+  "@deltachat/stdio-rpc-server": 1.159.4
+  "@types/mime-types": ^2.1.4
+  "@webxdc/types": ^2.1.2
   mime-types: ^2.1.35
   sass: ^1.86.3
   typescript: ^5.5.4
   typescript-plugin-css-modules: ^5.1.0
 
 onlyBuiltDependencies:
-  - '@parcel/watcher'
+  - "@parcel/watcher"
   - core-js
   - electron
   - esbuild

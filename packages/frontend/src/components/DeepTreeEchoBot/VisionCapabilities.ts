@@ -1,4 +1,5 @@
 import { getLogger } from "../../../../shared/logger";
+import { LLMService, CognitiveFunctionType } from "./LLMService";
 
 const log = getLogger("render/components/DeepTreeEchoBot/VisionCapabilities");
 
@@ -25,20 +26,23 @@ export interface ImageAnalysisResult {
 
 /**
  * VisionCapabilities - Provides image analysis capabilities for the Deep Tree Echo Bot
- * Uses TensorFlow.js to analyze images and generate descriptions
+ *
+ * All image analysis is performed by the LLM with vision capabilities.
+ * No simulated, fake, or demo responses are generated.
  */
 export class VisionCapabilities {
   private options: VisionCapabilitiesOptions;
-  private isInitialized: boolean = false;
+  private llmService: LLMService;
 
   constructor(options: VisionCapabilitiesOptions) {
     this.options = {
       ...options,
     };
+    this.llmService = LLMService.getInstance();
   }
 
   /**
-   * Initialize the vision model (would load TensorFlow.js and models in a real implementation)
+   * Initialize the vision capabilities
    */
   async initialize(): Promise<boolean> {
     if (!this.options.enabled) {
@@ -46,162 +50,86 @@ export class VisionCapabilities {
       return false;
     }
 
-    try {
-      log.info("Initializing vision capabilities");
-
-      // Simulate model loading with a timeout
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      this.isInitialized = true;
-      log.info("Vision capabilities initialized successfully");
-      return true;
-    } catch (error) {
-      log.error("Failed to initialize vision capabilities:", error);
-      this.isInitialized = false;
-      return false;
+    // Vision requires LLM service to be configured with at least GENERAL function
+    if (!this.llmService.isFunctionConfigured(CognitiveFunctionType.GENERAL)) {
+      throw new Error(
+        "VISION_UNAVAILABLE: Vision requires a configured LLM service with vision capabilities.",
+      );
     }
+
+    log.info("Vision capabilities initialized (using LLM vision)");
+    return true;
   }
 
   /**
-   * Analyze an image and return a description
+   * Analyze an image using the LLM's vision capabilities
+   *
+   * All analysis is performed by the model - no simulated or fake responses.
    */
-  async analyzeImage(_imageData: string | Blob): Promise<ImageAnalysisResult> {
+  async analyzeImage(imageData: string | Blob): Promise<ImageAnalysisResult> {
     if (!this.options.enabled) {
-      return {
-        description: "Vision capabilities are disabled",
-        tags: [],
-        objects: [],
-        error: "Vision capabilities are disabled",
-      };
+      throw new Error("VISION_DISABLED: Vision capabilities are disabled.");
     }
 
-    if (!this.isInitialized) {
-      try {
-        const initialized = await this.initialize();
-        if (!initialized) {
-          return {
-            description: "Failed to initialize vision capabilities",
-            tags: [],
-            objects: [],
-            error: "Vision model initialization failed",
-          };
-        }
-      } catch (error) {
-        log.error("Error initializing vision capabilities:", error);
+    // Convert Blob to base64 if needed
+    let imageBase64: string;
+    if (imageData instanceof Blob) {
+      imageBase64 = await this.blobToBase64(imageData);
+    } else {
+      imageBase64 = imageData;
+    }
+
+    log.info("Analyzing image with LLM vision capabilities");
+
+    // Use LLMService.analyzeImage which properly sends the image as multimodal content
+    // All output comes from the model - no simulated or fake responses
+    const response = await this.llmService.analyzeImage(imageBase64);
+
+    // Parse the LLM response
+    try {
+      // Try to extract JSON from the response
+      const jsonMatch = response.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        const parsed = JSON.parse(jsonMatch[0]);
         return {
-          description: "Error initializing vision capabilities",
-          tags: [],
-          objects: [],
-          error: "Vision model initialization failed",
+          description: parsed.description || response,
+          objects: parsed.objects || [],
+          tags: parsed.tags || [],
         };
       }
-    }
 
-    try {
-      log.info("Analyzing image");
-
-      // In a real implementation, this would use TensorFlow.js to analyze the image
-      // For now, we'll return simulated results
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      return this.simulateImageAnalysis();
-    } catch (error) {
-      log.error("Failed to analyze image:", error);
+      // If no JSON, use the raw response as description
       return {
-        description: "Failed to analyze image",
-        tags: [],
+        description: response,
         objects: [],
-        error: "Image analysis failed",
+        tags: [],
+      };
+    } catch (_parseError) {
+      // If parsing fails, use raw response
+      log.warn("Could not parse structured response, using raw text");
+      return {
+        description: response,
+        objects: [],
+        tags: [],
       };
     }
   }
 
   /**
-   * Simulate image analysis for demo purposes
+   * Convert Blob to base64 string
    */
-  private simulateImageAnalysis(): ImageAnalysisResult {
-    // Generate random objects with different confidence levels
-    const possibleObjects = [
-      "person",
-      "car",
-      "chair",
-      "dog",
-      "cat",
-      "tree",
-      "building",
-      "table",
-      "phone",
-      "laptop",
-      "book",
-      "bird",
-      "bicycle",
-    ];
-
-    const objectCount = Math.floor(Math.random() * 5) + 1;
-    const objects = Array(objectCount)
-      .fill(0)
-      .map(() => {
-        const label =
-          possibleObjects[Math.floor(Math.random() * possibleObjects.length)];
-        const confidence = Math.random() * 0.5 + 0.5;
-
-        return {
-          label,
-          confidence,
-          boundingBox: {
-            x: Math.random() * 0.8,
-            y: Math.random() * 0.8,
-            width: Math.random() * 0.3 + 0.1,
-            height: Math.random() * 0.3 + 0.1,
-          },
-        };
-      });
-
-    // Generate random tags
-    const possibleTags = [
-      "indoor",
-      "outdoor",
-      "nature",
-      "urban",
-      "day",
-      "night",
-      "sunny",
-      "colorful",
-      "bright",
-      "dark",
-      "portrait",
-      "landscape",
-      "closeup",
-    ];
-
-    const tagCount = Math.floor(Math.random() * 5) + 2;
-    const tags = Array(tagCount)
-      .fill(0)
-      .map(() => {
-        return possibleTags[Math.floor(Math.random() * possibleTags.length)];
-      });
-
-    // Generate a description based on objects and tags
-    const descriptions = [
-      `An image showing ${objects[0]?.label}`,
-      `A ${tags[0]} scene featuring ${objects.map((o) => o.label).join(", ")}`,
-      `A ${tags[0]} photo with ${objects.length} main objects including ${objects[0]?.label}`,
-      `This appears to be a ${tags.slice(0, 2).join(", ")} image with ${objects
-        .map((o) => o.label)
-        .join(", ")}`,
-      `I can see ${objects.map((o) => o.label).join(", ")} in this ${
-        tags[0]
-      } image`,
-    ];
-
-    const description =
-      descriptions[Math.floor(Math.random() * descriptions.length)];
-
-    return {
-      description,
-      tags: [...new Set(tags)],
-      objects,
-    };
+  private async blobToBase64(blob: Blob): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        // Remove data URL prefix if present
+        const base64 = result.includes(",") ? result.split(",")[1] : result;
+        resolve(base64);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
   }
 
   /**
@@ -212,9 +140,5 @@ export class VisionCapabilities {
       ...this.options,
       ...options,
     };
-
-    if (options.enabled === false) {
-      this.isInitialized = false;
-    }
   }
 }

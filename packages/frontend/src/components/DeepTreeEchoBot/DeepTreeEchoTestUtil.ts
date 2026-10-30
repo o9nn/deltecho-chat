@@ -6,6 +6,7 @@ import {
   cleanupBot,
 } from "./DeepTreeEchoIntegration";
 import { getLogger } from "@deltachat-desktop/shared/logger";
+import { LLMService } from "./LLMService";
 
 const log = getLogger("render/components/DeepTreeEchoBot/DeepTreeEchoTestUtil");
 
@@ -43,11 +44,16 @@ export class DeepTreeEchoTestUtil {
         }
       }
 
-      // Send initial message
+      // Generate and send initial message via LLM
+      const llmService = LLMService.getInstance();
+      const welcomeMessage = await llmService.generateResponse(
+        `You have just been added to a test group called "${groupName}". Generate a friendly welcome message for the group. Mention that you're available to help and they can type /help to see available commands.`,
+        [],
+      );
       await BackendRemote.rpc.miscSendTextMessage(
         accountId,
         chatId,
-        "Deep Tree Echo bot has been added to this group. Type /help to see available commands.",
+        welcomeMessage,
       );
 
       return chatId;

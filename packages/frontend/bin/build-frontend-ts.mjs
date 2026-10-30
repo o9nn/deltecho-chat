@@ -134,7 +134,7 @@ const eslintPlugin = {
 };
 
 /**
- * `esbuild` plugin for CSS modules and sidecar `.scss` imports.
+ * `esbuild` plugin for scoped CSS modules and global component SCSS imports.
  */
 const sassPlugin = {
   name: "sass",
