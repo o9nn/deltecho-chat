@@ -1890,6 +1890,15 @@ ${response.body}`;
         return;
       }
 
+      const proposalTarget = this.getAuthorizedProactiveTarget();
+      if (
+        !proposalTarget ||
+        proposalTarget.accountId !== target.accountId ||
+        proposalTarget.chatId !== target.chatId
+      ) {
+        return;
+      }
+
       const proactiveMsg = await this.autonomyBridge.checkProactiveMessage();
       if (!proactiveMsg || !proactiveMsg.text) {
         return;
