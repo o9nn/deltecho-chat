@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "project": "SakuraMotion/PurismCore",
+  "source_revision": "1069334965522df5d0b791e97f01e26b19c45456",
+  "release": "v1.1.0",
+  "release_url": "https://github.com/SakuraMotion/PurismCore/releases/tag/v1.1.0",
+  "release_archive_sha256": "ee229d1b28c33a9f57f02c777f8633141042cd771e5e47bf4795ba345b3a0b39",
+  "default_backend": "cubism",
+  "purism_host_abi": "v5",
+  "purpose": "Optional evaluator; no PSD-to-MOC3 authoring/export function",
+  "fixture_status": "CC0 per pinned upstream LICENSE_TESTDATA; QA-only, not original DTE and never copied into app bundles",
+  "files": {
+    "1.1.0/core-v5.js": {
+      "sha256": "3eec0b1e6cd20bab0773744228aac21f4c882dbef708c28379ba6315a11b15f4",
+      "bytes": 256528,
+      "license": "MIT"
+    },
+    "1.1.0/core-v6.js": {
+      "sha256": "48ce3fcad8e420c4870d4c7895bafa490527dec21901f965b3ac158554f5de79",
+      "bytes": 257887,
+      "license": "MIT"
+    },
+    "1.1.0/LICENSE": {
+      "sha256": "0c420f717a04a7bbc4cd3c652c83e77d0d7883a14b363d60af94ff6cdf3b7768",
+      "bytes": 1103,
+      "license": "MIT"
+    },
+    "testdata/fixture.moc3": {
+      "sha256": "edd79490147c4920d16dc7c80dffe3fc998db0e599c9024c884fd9d4e1041f9b",
+      "bytes": 849664,
+      "license": "CC0 (upstream assertion)"
+    },
+    "testdata/LICENSE_TESTDATA": {
+      "sha256": "02aac1527d5a54df5ee373fd77899ff44fcdc05629c2fdc1ea35a28aa9ac8da1",
+      "bytes": 184,
+      "license": "CC0 (upstream assertion)"
+    }
+  }
+}

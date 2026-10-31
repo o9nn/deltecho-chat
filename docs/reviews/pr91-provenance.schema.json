@@ -85,6 +85,10 @@
         "approved_uses"
       ],
       "additionalProperties": false
+    },
+    "example_notice": {
+      "type": "string",
+      "minLength": 1
     }
   },
   "$defs": {

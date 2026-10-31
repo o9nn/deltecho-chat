@@ -111,6 +111,7 @@ export default defineConfig(
     '**/.eslintrc.js',
     '**/upstream/**',
     '**/cubism/**',
+    'third_party/purism-core/**',
     '**/TODO/**',
     '**/lib/**',
     '**/*.min.js',
