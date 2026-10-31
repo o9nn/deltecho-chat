@@ -22,19 +22,23 @@ jobs:
         with:
           node-version: 22
 
-      - name: Verify vendored evaluator and CC0 fixture geometry
+      - name: Verify evaluator, CC0 fixture and original procedural models
         env:
           PURISM_CI_REPORT: artifacts/purism-live2d-report.json
+          PURISM_TEMPLATE_REPORT: artifacts/purism-template-report.json
         run: >-
           node --test --test-reporter=spec
           scripts/check-live2d-core-selection.test.mjs
           scripts/check-purism-models.test.mjs
+          tools/purism-template/*.test.mjs
 
       - name: Upload Purism evaluator report
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: purism-live2d-report-${{ github.run_id }}
-          path: artifacts/purism-live2d-report.json
+          path: |
+            artifacts/purism-live2d-report.json
+            artifacts/purism-template-report.json
           if-no-files-found: warn
           retention-days: 14
