@@ -114,4 +114,90 @@ describe("ScientificEmbodimentLens", () => {
       screen.getByText("After physics, before Cubism mesh update"),
     ).toBeInTheDocument();
   });
+  it("shows historical bias and variability without claiming causal calibration improvement", () => {
+    const read = jest.fn(() => ({
+      ...sample,
+      evidenceWindow: {
+        status: "observed",
+        sampleCount: 2,
+        capacity: 32,
+        parameters: [
+          {
+            parameterId: "ParamAngleX",
+            count: 2,
+            meanSignedError: -0.2,
+            variability: 0.1,
+            rmsError: Math.sqrt(0.05),
+          },
+        ],
+      },
+    }));
+    const controller = {
+      getEmbodimentDiagnostics: read,
+    } as unknown as Live2DAvatarController;
+    const view = render(
+      <ScientificEmbodimentLens
+        controller={controller}
+        visual={{}}
+        daemonConnected={false}
+        expressionLocked={false}
+      />,
+    );
+    openLens();
+    expect(
+      screen.getByRole("region", { name: "Scientific evidence window" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/2 \/ 32 recent native observations/),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/bias -20.0%, variability 10.0%, RMS 22.4%/),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/not a controlled experiment/)).toBeInTheDocument();
+    view.rerender(
+      <ScientificEmbodimentLens
+        controller={controller}
+        visual={{}}
+        daemonConnected={false}
+        expressionLocked={true}
+      />,
+    );
+    expect(
+      screen.queryByRole("region", { name: "Scientific evidence window" }),
+    ).not.toBeInTheDocument();
+  });
+  it("does not present one sample's variance as established repeatability", () => {
+    const controller = {
+      getEmbodimentDiagnostics: () => ({
+        ...sample,
+        evidenceWindow: {
+          status: "observed",
+          sampleCount: 1,
+          capacity: 32,
+          parameters: [
+            {
+              parameterId: "ParamEyeLOpen",
+              count: 1,
+              meanSignedError: 0.1,
+              variability: 0,
+              rmsError: 0.1,
+            },
+          ],
+        },
+      }),
+    } as unknown as Live2DAvatarController;
+    render(
+      <ScientificEmbodimentLens
+        controller={controller}
+        visual={{}}
+        daemonConnected={false}
+        expressionLocked={false}
+      />,
+    );
+    openLens();
+    expect(
+      screen.getByText(/one sample cannot establish variability/),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/variability unavailable/)).toBeInTheDocument();
+  });
 });

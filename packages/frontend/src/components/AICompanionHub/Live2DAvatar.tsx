@@ -285,6 +285,19 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
   useEffect(() => {
     let mounted = true;
     let timeoutId: ReturnType<typeof setTimeout> | null = null;
+    let effectManager: typeof managerRef.current = null;
+    let effectController: Live2DAvatarController | null = null;
+    let managerDisposed = false;
+    const disposeOwnedManager = () => {
+      if (!effectManager || managerDisposed) return;
+      managerDisposed = true;
+      effectManager.dispose();
+      if (managerRef.current === effectManager) managerRef.current = null;
+      if (controllerRef.current === effectController) {
+        controllerRef.current = null;
+        lastLipSyncLevelRef.current = null;
+      }
+    };
 
     const initializeAvatar = async () => {
       if (!containerRef.current) return;
@@ -317,59 +330,66 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
       try {
         // Dynamic import to avoid SSR issues
         const { Live2DAvatarManager } = await import("@deltecho/avatar");
+        if (!mounted || !containerRef.current) return;
 
-        // Create manager instance
-        managerRef.current = new Live2DAvatarManager();
+        // This effect owns this manager, even across an asynchronous model load.
+        // A stale continuation must never publish into a newer effect's refs.
+        const manager = new Live2DAvatarManager();
+        effectManager = manager;
+        managerRef.current = manager;
 
         // Initialize with props
-        const controller = await managerRef.current.initialize(
-          containerRef.current,
-          {
-            modelPath: modelUrl,
-            width,
-            height,
-            scale,
-            pixelRatio,
-            onLoad: () => {
-              if (mounted) {
-                if (timeoutId) clearTimeout(timeoutId);
-                setState((prev) => ({
-                  ...prev,
-                  isLoading: false,
-                  isLoaded: true,
-                }));
-                onLoad?.();
-              }
-            },
-            onError: (error: Error) => {
-              if (mounted) {
-                if (timeoutId) clearTimeout(timeoutId);
-                // eslint-disable-next-line no-console
-                console.error(
-                  "[Live2DAvatar] Manager.onError for model",
-                  modelUrl,
-                  ":",
-                  error?.message || error,
-                  error,
-                );
-                setState((prev) => ({
-                  ...prev,
-                  isLoading: false,
-                  error,
-                }));
-                onError?.(error);
-              }
-            },
-            debug: process.env.NODE_ENV === "development",
+        const controller = await manager.initialize(containerRef.current, {
+          modelPath: modelUrl,
+          width,
+          height,
+          scale,
+          pixelRatio,
+          onLoad: () => {
+            if (mounted) {
+              if (timeoutId) clearTimeout(timeoutId);
+              setState((prev) => ({
+                ...prev,
+                isLoading: false,
+                isLoaded: true,
+              }));
+              onLoad?.();
+            }
           },
-        );
+          onError: (error: Error) => {
+            if (mounted) {
+              if (timeoutId) clearTimeout(timeoutId);
+              // eslint-disable-next-line no-console
+              console.error(
+                "[Live2DAvatar] Manager.onError for model",
+                modelUrl,
+                ":",
+                error?.message || error,
+                error,
+              );
+              setState((prev) => ({
+                ...prev,
+                isLoading: false,
+                error,
+              }));
+              onError?.(error);
+            }
+          },
+          debug: process.env.NODE_ENV === "development",
+        });
 
+        if (!mounted || managerRef.current !== manager) {
+          disposeOwnedManager();
+          return;
+        }
+        effectController = controller;
         controllerRef.current = controller;
         if (manualExpression && controller.setNamedExpression) {
           controller.setNamedExpression(manualExpression);
         }
         onControllerReady?.(controller);
       } catch (error) {
+        disposeOwnedManager();
         if (mounted) {
           if (timeoutId) clearTimeout(timeoutId);
           const err = error instanceof Error ? error : new Error(String(error));
@@ -395,10 +415,7 @@ export const Live2DAvatar: React.FC<Live2DAvatarComponentProps> = ({
     return () => {
       mounted = false;
       if (timeoutId) clearTimeout(timeoutId);
-      managerRef.current?.dispose();
-      managerRef.current = null;
-      controllerRef.current = null;
-      lastLipSyncLevelRef.current = null;
+      disposeOwnedManager();
     };
     // Size/scale changes must not rebuild the WebGL context — Cubism textures
     // from a torn-down Pixi app fail with "object does not belong to this context".

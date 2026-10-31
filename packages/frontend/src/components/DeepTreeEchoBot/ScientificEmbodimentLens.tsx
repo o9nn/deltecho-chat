@@ -44,6 +44,13 @@ export function ScientificEmbodimentLens({
         .sort((a, b) => (b.normalizedError ?? -1) - (a.normalizedError ?? -1))
         .slice(0, 3)
     : [];
+  const evidence = sample?.evidenceWindow;
+  const repeatedResiduals =
+    observed && evidence?.status === "observed"
+      ? [...evidence.parameters]
+          .sort((a, b) => b.rmsError - a.rmsError)
+          .slice(0, 3)
+      : [];
   return (
     <details
       className="scientific-embodiment-lens"
@@ -119,6 +126,41 @@ export function ScientificEmbodimentLens({
                   </li>
                 ))}
               </ul>
+            </section>
+          )}
+          {repeatedResiduals.length > 0 && (
+            <section aria-label="Scientific evidence window">
+              <h4>Scientific evidence window</h4>
+              <p>
+                {evidence?.sampleCount} / {evidence?.capacity} recent native
+                observations. Signed bias and variability are fractions of each
+                rig span; RMS² = bias² + variability².
+              </p>
+              {evidence?.sampleCount === 1 && (
+                <p>
+                  Waiting for repeat observations — one sample cannot establish
+                  variability.
+                </p>
+              )}
+              <ul>
+                {repeatedResiduals.map((row) => (
+                  <li key={row.parameterId}>
+                    <code>{row.parameterId}</code>: bias{" "}
+                    {(row.meanSignedError * 100).toFixed(1)}%, variability{" "}
+                    {row.count < 2
+                      ? "unavailable"
+                      : `${(row.variability * 100).toFixed(1)}%`}
+                    , RMS {(row.rmsError * 100).toFixed(1)}%
+                  </li>
+                ))}
+              </ul>
+              <p>
+                Historical execution errors across expression targets, not a
+                controlled experiment, proof of calibration improvement, or
+                scientific correctness. Unknown rig spans are excluded; changing
+                rig coverage resets the window. Learned calibration is
+                unchanged.
+              </p>
             </section>
           )}
           {!!sample?.unavailableParameterIds.length && (
