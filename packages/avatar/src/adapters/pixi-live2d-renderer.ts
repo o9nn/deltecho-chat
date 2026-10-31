@@ -45,6 +45,7 @@ import {
   type PhysicsRigLike,
   type PhysicsRigSnapshot,
 } from "../automesh";
+import { guardCubismRendererRelease } from "./cubism-release-guard";
 
 /**
  * Live2D model reference type (from pixi-live2d-display)
@@ -605,6 +606,9 @@ export class PixiLive2DRenderer implements ICubismRenderer {
           autoUpdate: true,
         }),
       )) as unknown as Live2DModel;
+      guardCubismRendererRelease(
+        (model.internalModel as unknown as { renderer?: unknown })?.renderer,
+      );
 
       if (
         generation !== this.loadGeneration ||
