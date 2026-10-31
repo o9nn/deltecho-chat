@@ -1,10 +1,21 @@
 import { LLMService, CognitiveFunctionType } from "../LLMService";
+import {
+  unifiedLLMService,
+  CognitiveFunction as UnifiedCognitiveFunction,
+} from "../UnifiedLLMService";
+import { multiModalProcessor } from "../../multimodal/MultiModalProcessor";
+
+// This package runs native ESM tests; Jest exposes its API on import.meta.
+const jest = (import.meta as ImportMeta & { jest: typeof globalThis.jest })
+  .jest;
 
 describe("LLMService", () => {
   let llmService: LLMService;
 
   beforeEach(() => {
     llmService = new LLMService();
+
+    jest.restoreAllMocks();
 
     // Mock fetch for all tests to avoid real API calls
     global.fetch = (() => {
@@ -235,6 +246,159 @@ describe("LLMService", () => {
         /LLM_NO_RESPONSE/,
       );
     });
+
+    it("should propagate provider failure instead of returning canned speech", async () => {
+      llmService.setConfig({ apiKey: "test-key" });
+      (global.fetch as any).mockResolvedValue({
+        ok: false,
+        status: 503,
+        text: async () => "provider unavailable",
+      });
+
+      await expect(llmService.generateResponse("Hello")).rejects.toThrow(
+        /OpenAI API error \(503\): provider unavailable/,
+      );
+    });
+  });
+
+  describe("generateReflection", () => {
+    it("should reject when neither Unified nor legacy reflection is configured", async () => {
+      await expect(
+        llmService.generateReflection("Reflect honestly"),
+      ).rejects.toThrow(
+        /MODEL_NOT_CONFIGURED: Reflection requires a configured LLM service/,
+      );
+    });
+
+    it("should return the configured legacy provider response", async () => {
+      llmService.setConfig({ apiKey: "test-key" });
+      (global.fetch as any).mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          choices: [{ message: { content: "Provider-backed reflection" } }],
+        }),
+      });
+
+      await expect(
+        llmService.generateReflection("Reflect honestly"),
+      ).resolves.toBe("Provider-backed reflection");
+    });
+
+    it("should propagate legacy general-provider failures", async () => {
+      llmService.setConfig({ apiKey: "test-key" });
+      (global.fetch as any).mockResolvedValue({
+        ok: false,
+        status: 502,
+        text: async () => "reflection upstream failure",
+      });
+
+      await expect(
+        llmService.generateReflection("Reflect honestly"),
+      ).rejects.toThrow(
+        /OpenAI API error \(502\): reflection upstream failure/,
+      );
+    });
+
+    it("should reject a Unified reflection when every configured provider fails", async () => {
+      jest
+        .spyOn(unifiedLLMService, "isConfigured")
+        .mockImplementation(
+          (functionType: UnifiedCognitiveFunction) =>
+            functionType === UnifiedCognitiveFunction.GENERAL,
+        );
+      jest.spyOn(unifiedLLMService, "generateParallel").mockResolvedValue({
+        responses: new Map(),
+        integratedResponse: "I'm unable to generate a response at this time.",
+        processingTimeMs: 1,
+        insights: {
+          dominantPerspective: UnifiedCognitiveFunction.GENERAL,
+          confidenceLevel: 0,
+        },
+      });
+
+      await expect(
+        llmService.generateReflection("Reflect honestly"),
+      ).rejects.toThrow(/REFLECTION_PROVIDER_FAILURE/);
+    });
+
+    it.each([
+      ["Provider-backed Unified reflection", true],
+      ["   ", false],
+    ])(
+      "validates integrated Unified reflection content %j",
+      async (content, valid) => {
+        jest.spyOn(unifiedLLMService, "isConfigured").mockReturnValue(true);
+        jest.spyOn(unifiedLLMService, "generateParallel").mockResolvedValue({
+          responses: new Map([
+            [
+              UnifiedCognitiveFunction.COGNITIVE_CORE,
+              {
+                content: "Controlled provider fixture",
+                finishReason: "stop",
+                usage: { promptTokens: 1, completionTokens: 1, totalTokens: 2 },
+                model: "test-model",
+                provider: "test-provider",
+              },
+            ],
+          ]),
+          integratedResponse: content as string,
+          processingTimeMs: 1,
+          insights: {
+            dominantPerspective: UnifiedCognitiveFunction.COGNITIVE_CORE,
+            confidenceLevel: 1,
+          },
+        });
+        if (valid) {
+          await expect(
+            llmService.generateReflection("Reflect honestly"),
+          ).resolves.toBe(content);
+        } else {
+          await expect(
+            llmService.generateReflection("Reflect honestly"),
+          ).rejects.toThrow(/REFLECTION_NO_RESPONSE/);
+        }
+      },
+    );
+  });
+
+  describe("analyzeImage", () => {
+    it("should return a genuine vision processor description", async () => {
+      jest.spyOn(multiModalProcessor, "analyzeImage").mockResolvedValue({
+        description: "A red cube on a white surface.",
+      });
+
+      await expect(llmService.analyzeImage("full-image-fixture")).resolves.toBe(
+        "A red cube on a white surface.",
+      );
+      expect(multiModalProcessor.analyzeImage).toHaveBeenCalledWith(
+        "full-image-fixture",
+      );
+      expect((global.fetch as any).calls).toHaveLength(0);
+    });
+
+    it("should reject vision processor failures without sending image data to a text LLM", async () => {
+      jest
+        .spyOn(multiModalProcessor, "analyzeImage")
+        .mockRejectedValue(
+          new Error("Anthropic API key required for image analysis"),
+        );
+      llmService.setConfig({ apiKey: "text-only-test-key" });
+
+      await expect(
+        llmService.analyzeImage("full-image-fixture"),
+      ).rejects.toThrow(/Anthropic API key required for image analysis/);
+      expect((global.fetch as any).calls).toHaveLength(0);
+    });
+
+    it("should reject an empty vision description", async () => {
+      jest.spyOn(multiModalProcessor, "analyzeImage").mockResolvedValue({
+        description: "   ",
+      });
+
+      await expect(
+        llmService.analyzeImage("full-image-fixture"),
+      ).rejects.toThrow(/VISION_NO_RESPONSE/);
+    });
   });
 
   describe("generateResponseWithFunction", () => {
@@ -303,6 +467,43 @@ describe("LLMService", () => {
         initialRequestCount + 1,
       );
       expect(updatedCognitiveFunc?.usage.lastUsed).toBeGreaterThan(0);
+    });
+  });
+
+  describe("configured-provider parallel fallback", () => {
+    it("calls the real general-provider path after specialized processing fails", async () => {
+      llmService.setConfig({ apiKey: "general-test-key" });
+      llmService.setFunctionConfig(CognitiveFunctionType.COGNITIVE_CORE, {
+        apiKey: "specialized-test-key",
+      });
+      jest
+        .spyOn(llmService, "generateParallelResponses")
+        .mockRejectedValue(
+          new Error("Controlled specialized-provider failure"),
+        );
+      const result =
+        await llmService.generateFullParallelResponse("Test request");
+      expect(result.insights.processingMethod).toBe("fallback_single_function");
+      expect(result.integratedResponse).toBe("Mocked response");
+      expect((global.fetch as any).calls).toHaveLength(1);
+      expect((global.fetch as any).calls[0][1].headers.Authorization).toBe(
+        "Bearer general-test-key",
+      );
+    });
+
+    it("still rejects if specialized failure has no configured general provider", async () => {
+      llmService.setFunctionConfig(CognitiveFunctionType.COGNITIVE_CORE, {
+        apiKey: "specialized-test-key",
+      });
+      jest
+        .spyOn(llmService, "generateParallelResponses")
+        .mockRejectedValue(
+          new Error("Controlled specialized-provider failure"),
+        );
+      await expect(
+        llmService.generateFullParallelResponse("Test request"),
+      ).rejects.toThrow(/MODEL_NOT_CONFIGURED/);
+      expect((global.fetch as any).calls).toHaveLength(0);
     });
   });
 

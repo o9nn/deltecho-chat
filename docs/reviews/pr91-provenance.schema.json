@@ -1,0 +1,221 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/avatar-provenance-manifest-v1.json",
+  "title": "Avatar provenance manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "bundle_id",
+    "status",
+    "policy",
+    "assets",
+    "third_party_components",
+    "approved_input_attestation"
+  ],
+  "properties": {
+    "schema_version": { "const": "avatar-provenance-v1" },
+    "bundle_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{2,127}$"
+    },
+    "status": {
+      "enum": [
+        "unverified",
+        "authoring_only_approved_input",
+        "authoring_complete_pending_export_review",
+        "runtime_approved",
+        "revoked",
+        "expired",
+        "legacy_unresolved"
+      ]
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "no_network_paid_generation_default",
+        "prohibited_relabeling"
+      ],
+      "properties": {
+        "version": { "type": "string", "minLength": 1 },
+        "no_network_paid_generation_default": { "const": true },
+        "prohibited_relabeling": { "const": true }
+      }
+    },
+    "assets": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/asset" }
+    },
+    "third_party_components": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/component" }
+    },
+    "approved_input_attestation": {
+      "type": ["object", "null"],
+      "properties": {
+        "attestation_id": { "type": "string", "minLength": 1 },
+        "asset_sha256": { "$ref": "#/$defs/sha256" },
+        "reviewed_at": { "type": "string", "format": "date-time" },
+        "review_record_ref": { "type": "string", "minLength": 1 },
+        "review_record_sha256": { "$ref": "#/$defs/sha256" },
+        "approved_uses": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "enum": [
+              "extract",
+              "derive",
+              "rig",
+              "export",
+              "redistribute",
+              "runtime"
+            ]
+          }
+        }
+      },
+      "required": [
+        "attestation_id",
+        "asset_sha256",
+        "reviewed_at",
+        "review_record_ref",
+        "review_record_sha256",
+        "approved_uses"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "rights": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "rights_holder",
+        "license_or_permission_ref",
+        "record_sha256",
+        "allowed_acts"
+      ],
+      "properties": {
+        "status": { "enum": ["unverified", "verified", "revoked", "expired"] },
+        "rights_holder": { "type": ["string", "null"] },
+        "license_or_permission_ref": { "type": ["string", "null"] },
+        "record_sha256": {
+          "anyOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }]
+        },
+        "allowed_acts": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "extract",
+              "derive",
+              "rig",
+              "export",
+              "redistribute",
+              "runtime"
+            ]
+          }
+        },
+        "attribution": { "type": ["string", "null"] }
+      }
+    },
+    "asset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "asset_id",
+        "role",
+        "path",
+        "sha256",
+        "origin_class",
+        "rights"
+      ],
+      "properties": {
+        "asset_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{2,127}$"
+        },
+        "role": {
+          "enum": [
+            "source_art",
+            "layer",
+            "psd",
+            "cmo3",
+            "model3",
+            "moc3",
+            "texture",
+            "motion",
+            "expression",
+            "physics",
+            "archive"
+          ]
+        },
+        "path": { "type": "string", "minLength": 1 },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "origin_class": {
+          "enum": [
+            "independently_created",
+            "licensed_derivative",
+            "third_party_sample_unmodified",
+            "unknown"
+          ]
+        },
+        "rights": { "$ref": "#/$defs/rights" }
+      }
+    },
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "version",
+        "source",
+        "license_or_terms_ref",
+        "redistribution_reviewed"
+      ],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 },
+        "source": { "type": "string", "minLength": 1 },
+        "license_or_terms_ref": { "type": "string", "minLength": 1 },
+        "redistribution_reviewed": { "type": "boolean" }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "runtime_approved" } } },
+      "then": {
+        "properties": {
+          "approved_input_attestation": { "type": "object" },
+          "assets": {
+            "items": {
+              "properties": {
+                "rights": {
+                  "properties": {
+                    "status": { "const": "verified" },
+                    "rights_holder": { "type": "string", "minLength": 1 },
+                    "license_or_permission_ref": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "record_sha256": { "$ref": "#/$defs/sha256" }
+                  },
+                  "required": [
+                    "status",
+                    "rights_holder",
+                    "license_or_permission_ref",
+                    "record_sha256"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

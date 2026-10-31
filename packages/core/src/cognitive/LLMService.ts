@@ -330,6 +330,19 @@ export class LLMService {
   }
 
   /**
+   * Preserve provider diagnostics rather than fabricating a model response.
+   * Normalizes non-Error rejections so callers always receive an Error.
+   */
+  private rethrowFailure(operation: string, error: unknown): never {
+    if (error instanceof Error) {
+      throw error;
+    }
+
+    const detail = typeof error === "string" ? error : String(error);
+    throw new Error(`${operation}: ${detail}`);
+  }
+
+  /**
    * Call the LLM API with the given messages
    */
   private async callLLMAPI(
@@ -536,7 +549,7 @@ export class LLMService {
       return result.content;
     } catch (error) {
       log.error("Error generating response:", error);
-      throw error;
+      return this.rethrowFailure("LLM_RESPONSE_FAILED", error);
     }
   }
 
@@ -841,6 +854,19 @@ export class LLMService {
             UnifiedCognitiveFunction.RELEVANCE_CORE,
           ],
         );
+        if (result.responses.size === 0) {
+          throw new Error(
+            "REFLECTION_PROVIDER_FAILURE: All configured Unified LLM providers failed to produce a response",
+          );
+        }
+        if (
+          typeof result.integratedResponse !== "string" ||
+          result.integratedResponse.trim().length === 0
+        ) {
+          throw new Error(
+            "REFLECTION_NO_RESPONSE: Unified LLM service returned no reflection content",
+          );
+        }
         return result.integratedResponse;
       }
 
@@ -857,7 +883,9 @@ export class LLMService {
         );
         if (!generalFunction || !generalFunction.config.apiKey) {
           log.warn("No API key provided for reflection");
-          return "Reflection failed: LLM service not properly configured";
+          throw new Error(
+            "MODEL_NOT_CONFIGURED: Reflection requires a configured LLM service",
+          );
         }
         // Use legacy general function path
         return this.generateResponseWithFunction(
@@ -892,7 +920,7 @@ export class LLMService {
       return cognitive || affective!;
     } catch (error) {
       log.error("Error generating reflection:", error);
-      throw error;
+      return this.rethrowFailure("REFLECTION_FAILED", error);
     }
   }
 
@@ -1016,32 +1044,18 @@ export class LLMService {
 
       // Delegate to the production MultiModalProcessor (Anthropic Claude vision)
       const result = await multiModalProcessor.analyzeImage(_imageData);
+      if (
+        typeof result.description !== "string" ||
+        result.description.trim().length === 0
+      ) {
+        throw new Error(
+          "VISION_NO_RESPONSE: Vision provider returned no image description",
+        );
+      }
       return result.description;
     } catch (error) {
-      // If MultiModalProcessor fails (e.g., no API key), try legacy path
-      log.warn(
-        "MultiModalProcessor image analysis failed, trying legacy path:",
-        error,
-      );
-
-      const generalFunction = this.cognitiveFunctions.get(
-        CognitiveFunctionType.GENERAL,
-      );
-
-      if (!generalFunction || !generalFunction.config.apiKey) {
-        log.warn("No API key provided for LLM service");
-        return "Image analysis failed: LLM service not properly configured";
-      }
-
-      // Use text-based description request via the configured LLM
-      const descriptionPrompt = `Analyze the following image data and describe what you observe. Image data reference: ${_imageData.slice(
-        0,
-        100,
-      )}...`;
-      return this.generateResponseWithFunction(
-        CognitiveFunctionType.GENERAL,
-        descriptionPrompt,
-      );
+      log.error("Vision image analysis failed:", error);
+      return this.rethrowFailure("VISION_ANALYSIS_FAILED", error);
     }
   }
 }
