@@ -69,6 +69,14 @@ These are actual Linux Electron observations using a reported `WebKit WebGL` bac
 
 GitHub PR checks are a separate gate and must be reported from the new PR's actual run after push; local success does not predeclare CI success. No merge or Cloudflare implementation/deployment change is authorized by this record.
 
+### CI follow-up: AIRI socket allocation
+
+PR #101's initial CI22 run passed workspace builds, checks and unit tests, then failed the real daemon-reader broker test with `EADDRINUSE`. That test assumed the adjacent `port + 1` was available; the shared setup also reserved and released a port before the real listener bound it. No scientific or neural failure was implicated by this log.
+
+The broker now accepts `port: 0` to bind directly to an OS-assigned `127.0.0.1` port, and uses the actual assigned port for its exact Host/Origin checks. The fixed omitted-port default remains 8765. All independent test instances use this direct binding rather than adjacent-port guesses or reserve/release. An explicitly occupied port still fails instead of silently changing address. New regressions cover malformed ports and explicit collisions; capability, model digest and actual request-ID-matched read-only daemon assertions remain unchanged.
+
+After this repair, broker typecheck and all 7 Node tests passed, followed by 20 additional passing runs of the same 7 real-socket tests. Repository-wide `pnpm check` passed again. Independent review found no concrete network/authority regression. The complete workspace and browser results above remain from the initial validated source; the repaired PR's complete CI run must be reported separately, including any skipped or pending checks. No deployment workflow was edited or manually dispatched.
+
 ## Source and verification references
 
 - Repository and foundation: <https://github.com/o9nn/deltecho-chat>, <https://github.com/EchoCog/deltechor>.

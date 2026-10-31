@@ -44,6 +44,7 @@ export interface BrokerOptions {
   modelArchive: string;
   stageUrl: string;
   modelId?: string;
+  /** Zero requests an OS-assigned loopback port; omitted keeps the fixed default. */
   port?: number;
   /** Test-only injection; production reads the existing read-only DTE daemon pipe. */
   readVisual?: () => Promise<unknown | null>;
@@ -147,8 +148,8 @@ export async function createBroker(options: BrokerOptions): Promise<{
   modelSha256: string;
   close: () => Promise<void>;
 }> {
-  const port = options.port ?? 8765;
-  if (!Number.isInteger(port) || port < 1 || port > 65535)
+  let port = options.port ?? 8765;
+  if (!Number.isInteger(port) || port < 0 || port > 65535)
     throw new Error("Invalid loopback port.");
   const configuredModelId = options.modelId ?? "miara";
   if (!MODEL.test(configuredModelId))
@@ -161,7 +162,7 @@ export async function createBroker(options: BrokerOptions): Promise<{
   const now = options.now ?? Date.now;
   const readVisual =
     options.readVisual ?? (() => readDteScientificVisualState());
-  const origin = `http://${HOST}:${port}`;
+  let origin = `http://${HOST}:${port}`;
   const html = readFileSync(new URL("./index.html", import.meta.url), "utf8");
   const client = readFileSync(new URL("./client.js", import.meta.url));
   let active: {
@@ -306,6 +307,12 @@ export async function createBroker(options: BrokerOptions): Promise<{
     server.listen(port, HOST, resolveListen);
   });
   const address = server.address();
+  // Bind first, then use that exact assigned port for every Host/Origin check.
+  // Reserving and releasing a port before listen leaves a collision race.
+  if (typeof address === "object" && address) {
+    port = address.port;
+    origin = `http://${HOST}:${port}`;
+  }
   const url =
     typeof address === "object" && address
       ? `http://${HOST}:${address.port}`
