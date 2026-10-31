@@ -1,10 +1,19 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { dirname, relative, resolve } from "node:path";
 import { createRequire } from "node:module";
+import { tmpdir } from "node:os";
 import vm from "node:vm";
 import { test } from "node:test";
+import { copyLive2dCore } from "./copy-live2d-core.mjs";
 
 const root = resolve(import.meta.dirname, "..");
 const vendorRoot = resolve(root, "third_party/purism-core");
@@ -21,27 +30,32 @@ const EXPECTED = Object.freeze({
   files: Object.freeze({
     "1.1.0/LICENSE": {
       bytes: 1103,
-      sha256: "0c420f717a04a7bbc4cd3c652c83e77d0d7883a14b363d60af94ff6cdf3b7768",
+      sha256:
+        "0c420f717a04a7bbc4cd3c652c83e77d0d7883a14b363d60af94ff6cdf3b7768",
       license: "MIT",
     },
     "1.1.0/core-v5.js": {
       bytes: 256528,
-      sha256: "3eec0b1e6cd20bab0773744228aac21f4c882dbef708c28379ba6315a11b15f4",
+      sha256:
+        "3eec0b1e6cd20bab0773744228aac21f4c882dbef708c28379ba6315a11b15f4",
       license: "MIT",
     },
     "1.1.0/core-v6.js": {
       bytes: 257887,
-      sha256: "48ce3fcad8e420c4870d4c7895bafa490527dec21901f965b3ac158554f5de79",
+      sha256:
+        "48ce3fcad8e420c4870d4c7895bafa490527dec21901f965b3ac158554f5de79",
       license: "MIT",
     },
     "testdata/LICENSE_TESTDATA": {
       bytes: 184,
-      sha256: "02aac1527d5a54df5ee373fd77899ff44fcdc05629c2fdc1ea35a28aa9ac8da1",
+      sha256:
+        "02aac1527d5a54df5ee373fd77899ff44fcdc05629c2fdc1ea35a28aa9ac8da1",
       license: "CC0 (upstream assertion)",
     },
     "testdata/fixture.moc3": {
       bytes: 849664,
-      sha256: "edd79490147c4920d16dc7c80dffe3fc998db0e599c9024c884fd9d4e1041f9b",
+      sha256:
+        "edd79490147c4920d16dc7c80dffe3fc998db0e599c9024c884fd9d4e1041f9b",
       license: "CC0 (upstream assertion)",
     },
   }),
@@ -83,8 +97,8 @@ function fixtureArrayBuffer() {
   );
 }
 
-function createRuntime(coreFile) {
-  const corePath = resolve(coreRoot, coreFile);
+function createRuntime(coreFile, sourcePath) {
+  const corePath = sourcePath ?? resolve(coreRoot, coreFile);
   const quietConsole = Object.freeze({
     debug() {},
     error() {},
@@ -150,7 +164,10 @@ test("pinned Purism vendor provenance, filenames, and bytes are exact", () => {
       vendorRelativePath,
       `vendor path escaped: ${vendorRelativePath}`,
     );
-    assert.ok(existsSync(absolutePath), `missing pinned vendor file: ${vendorRelativePath}`);
+    assert.ok(
+      existsSync(absolutePath),
+      `missing pinned vendor file: ${vendorRelativePath}`,
+    );
     const bytes = readFileSync(absolutePath);
     const actual = {
       bytes: bytes.byteLength,
@@ -162,7 +179,11 @@ test("pinned Purism vendor provenance, filenames, and bytes are exact", () => {
       expected,
       `provenance entry for ${vendorRelativePath} differs from the fixed v1.1.0 pin`,
     );
-    assert.deepEqual(actual, expected, `vendored bytes changed: ${vendorRelativePath}`);
+    assert.deepEqual(
+      actual,
+      expected,
+      `vendored bytes changed: ${vendorRelativePath}`,
+    );
     observed[vendorRelativePath] = actual;
   }
 
@@ -282,7 +303,10 @@ test("adapter aliases the exact native render-order typed array, is idempotent, 
   assert.equal(result.lastError, 0);
   assert.equal(result.drawableCount, 29);
   assert.equal(result.renderOrderCount, 29);
-  assert.ok(result.finiteArrayCount > 0, "native numeric arrays were not inspected");
+  assert.ok(
+    result.finiteArrayCount > 0,
+    "native numeric arrays were not inspected",
+  );
   report.checks.adapter = { passed: true, ...result };
   writeReport();
 });
@@ -327,10 +351,20 @@ test("actual blink and mouth parameters alter evaluated fixture vertices", () =>
     })()`,
   );
   for (const parameter of result) {
-    assert.ok(parameter.changedScalars > 0, `${parameter.id} did not alter native evaluated vertices`);
-    assert.equal(parameter.lastError, 0, `${parameter.id} set a native evaluator error`);
+    assert.ok(
+      parameter.changedScalars > 0,
+      `${parameter.id} did not alter native evaluated vertices`,
+    );
+    assert.equal(
+      parameter.lastError,
+      0,
+      `${parameter.id} set a native evaluator error`,
+    );
   }
-  report.checks.geometry_evaluation = { passed: true, parameter_results: result };
+  report.checks.geometry_evaluation = {
+    passed: true,
+    parameter_results: result,
+  };
   writeReport();
 });
 
@@ -363,6 +397,50 @@ test("v6 evaluator is rejected by the v5-only compatibility adapter", () => {
   );
   report.checks.v6_rejection = { passed: true };
   writeReport();
+});
+
+test("exact product-packaged script bootstraps the native adapter and loads a genuine model", () => {
+  const destination = mkdtempSync(resolve(tmpdir(), "dte-packaged-purism-"));
+  try {
+    const metadata = copyLive2dCore({ destination, backend: "purism" });
+    const packagedPath = resolve(destination, "live2dcubismcore.min.js");
+    assert.equal(
+      digest(readFileSync(packagedPath)),
+      metadata.packagedCoreSha256,
+    );
+    const context = createRuntime("core-v5.js", packagedPath);
+    context.fixture = fixtureArrayBuffer();
+    const result = evaluate(
+      context,
+      `(() => {
+      if (Live2DCubismCore !== PurismCore) throw new Error("product bootstrap did not bind PurismCore");
+      const moc = Live2DCubismCore.Moc.fromArrayBuffer(fixture);
+      if (!moc) throw new Error("packaged runtime rejected the genuine fixture");
+      const model = Live2DCubismCore.Model.fromMoc(moc);
+      if (!model) throw new Error("packaged runtime could not initialize the genuine model");
+      try {
+        model.update();
+        return { alias: model.drawables.renderOrders === model.renderOrders,
+          drawableCount: model.drawables.count, lastError: model.getLastError(),
+          finiteVertices: model.drawables.vertexPositions.every(p => Array.from(p).every(Number.isFinite)) };
+      } finally { model.release(); moc._release(); }
+    })()`,
+    );
+    assert.deepEqual(fromRuntime(result), {
+      alias: true,
+      drawableCount: 29,
+      lastError: 0,
+      finiteVertices: true,
+    });
+    report.checks.product_packaged_bootstrap = {
+      passed: true,
+      packaged_sha256: metadata.packagedCoreSha256,
+      ...result,
+    };
+    writeReport();
+  } finally {
+    rmSync(destination, { recursive: true, force: true });
+  }
 });
 
 process.on("exit", writeReport);

@@ -8,7 +8,8 @@ The job runs:
 
 ```bash
 PURISM_CI_REPORT=artifacts/purism-live2d-report.json \
-  node --test --test-reporter=spec scripts/check-purism-models.test.mjs
+  node --test --test-reporter=spec \
+  scripts/check-live2d-core-selection.test.mjs scripts/check-purism-models.test.mjs
 ```
 
 The test reads `third_party/purism-core/1.1.0/provenance.json`, requires the exact fixed v1.1.0 file names and upstream source revision, and compares each vendored file's byte count and SHA-256 to both the provenance map and fixed review pins. Thus an altered core, altered fixture, altered provenance record, or a renamed/replaced sample fails the gate.
@@ -23,6 +24,8 @@ Against the actual embedded Purism v5 WebAssembly evaluator and the vendored CC0
 - eye-blink and mouth-open parameters change real evaluated vertex buffers;
 - invalid and materially truncated MOC3 inputs are rejected; and
 - the actual vendored v6 evaluator is rejected by the v5-only adapter.
+
+It also uses the product copy selector to build `live2dcubismcore.min.js` in a temporary directory, executes those exact packaged bytes, and initializes a genuine model through the bound `Live2DCubismCore` alias. This catches bootstrap/concatenation failures that separate vendor and adapter tests would miss.
 
 The test writes a compact JSON report from actual runtime observations (ABI, counts, finite-array scan count, and changed-vertex counts). CI uploads it even when the test fails.
 
