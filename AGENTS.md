@@ -59,6 +59,12 @@ These commands and env vars are the agent-facing ops surface for daemon composit
 - `integrateAutognosis` runs when the current report has not just been coupled and the derived kind or health rounded to one decimal differs from the last integrated report. Repeating the same report object and timestamp is a full skip (`already_coupled`); a later emission still couples even if `Date.now()` reused the millisecond.
 - This couple is independent of MemoryLever dream hygiene and of desktop `ProactiveMessaging`. Do not call the coupler from ProactiveLoop INTEGRATE.
 
+### Optional PurismCore runtime
+
+- `DELTECHO_CUBISM_CORE=purism pnpm build:electron` (or `build:browser`) selects pinned PurismCore v1.1.0 v5 plus the native render-order adapter in the normal core-script slot. This is a build-time choice; setting the variable only when launching an existing build does not switch its core. Unset it and rebuild to restore the original default.
+- `pnpm check:purism` loads actual vendored WASM and a QA-only CC0 model, checks evaluated blink/mouth vertices, verifies buffer identity and rejects invalid inputs/v6. `.github/workflows/purism-live2d.yml` runs on every push and PR without path filters, default cancellation or deployments. The fixture and v6 wrapper never enter application output.
+- Vendor MIT licensing is not approval of artwork, inherited Miara-derived rigs or a new DTE export. Purism evaluates MOC3; it does not author/export one. Keep PR91 approval drafts unverified until real rights and exact-byte export evidence exist. See `docs/avatars/PURISM_RUNTIME.md` and `docs/avatars/provenance/README.md`.
+
 ## Learned User Preferences
 
 - Keep `AutognosisAutogenesisCoupler` as a standalone helper; do not fold it into `ESNAutognosisReservoir` or `IdentityMesh`.
