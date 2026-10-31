@@ -15,6 +15,7 @@ import type { CubismModelInfo } from "./cubism-adapter";
 import type { PixiLive2DRenderer } from "./pixi-live2d-renderer";
 import type { DTEchoCognitiveMode } from "../dtecho-expression-driver";
 import { projectDTEchoCognitiveState } from "../dtecho-expression-driver";
+import { EmbodimentEvidenceWindow } from "../embodiment-evidence-window";
 import {
   applyPersonaVisualStyle,
   type AvatarPresentationStyle,
@@ -151,6 +152,8 @@ export interface EmbodimentDiagnostics {
   rmsError: number | null;
   /** Native Cubism snapshot, not rasterized pixels or a scientific truth score. */
   observationPhase?: "before-model-update";
+  /** Historical native-span errors; never a causal or scientific truth score. */
+  evidenceWindow?: ReturnType<EmbodimentEvidenceWindow["snapshot"]>;
   residuals?: Array<{
     parameterId: string;
     requested: number;
@@ -213,6 +216,8 @@ export class Live2DAvatarManager {
   private canvas: HTMLCanvasElement | null = null;
   private isLoaded = false;
   private isDisposed = false;
+  /** Invalidates every pending initialize continuation when ownership changes. */
+  private lifecycleGeneration = 0;
   private modelInfo: CubismModelInfo | null = null;
   private metabolicBridge: MetabolicAvatarBridge | null = null;
   private hasMetabolicEvidence = false;
@@ -221,6 +226,7 @@ export class Live2DAvatarManager {
   private lastAppliedCubism: Record<string, number> = {};
   private presentationLocked = false;
   private feedback = new SelfModelAvatarFeedback();
+  private readonly evidenceWindow = new EmbodimentEvidenceWindow();
   private diagnostics: EmbodimentDiagnostics = {
     status: "waiting",
     sampleCount: 0,
@@ -277,6 +283,7 @@ export class Live2DAvatarManager {
   ): Promise<Live2DAvatarController> {
     // Make repeated initialization idempotent for React remount/retry paths.
     this.dispose();
+    const generation = ++this.lifecycleGeneration;
     this.isDisposed = false;
     this.feedback = new SelfModelAvatarFeedback();
     this.diagnostics = {
@@ -289,72 +296,93 @@ export class Live2DAvatarManager {
       rmsError: null,
     };
 
-    // Create canvas
-    this.canvas = document.createElement("canvas");
-    this.canvas.width = props.width ?? 400;
-    this.canvas.height = props.height ?? 400;
-    this.canvas.style.width = "100%";
-    this.canvas.style.height = "100%";
+    // Keep all resources local until this invocation has completed every async
+    // step. A newer initialize()/dispose() invalidates this generation, but it
+    // must never cause an older continuation to clean or operate on the newer
+    // invocation's renderer, canvas, callbacks, or observation lifecycle.
+    const canvas = document.createElement("canvas");
+    canvas.width = props.width ?? 400;
+    canvas.height = props.height ?? 400;
+    canvas.style.width = "100%";
+    canvas.style.height = "100%";
 
     if (props.className) {
-      this.canvas.className = props.className;
+      canvas.className = props.className;
     }
 
-    container.appendChild(this.canvas);
+    container.appendChild(canvas);
 
-    // Dynamically import the renderer
-    const { PixiLive2DRenderer } = await import("./pixi-live2d-renderer");
-
-    if (this.isDisposed) {
-      if (this.canvas?.parentElement) {
-        this.canvas.parentElement.removeChild(this.canvas);
-      }
-      this.canvas = null;
-      return this.createController();
-    }
-
-    // Create and initialize the renderer
-    this.renderer = new PixiLive2DRenderer();
-
-    this.modelInfo = {
+    const modelInfo: CubismModelInfo = {
       modelPath: props.modelPath,
       name: "Avatar",
       scale: props.scale ?? 0.9,
     };
+    let renderer: PixiLive2DRenderer | null = null;
+    let localResourcesCleaned = false;
+    const isCurrent = (): boolean =>
+      generation === this.lifecycleGeneration && !this.isDisposed;
+    const cleanLocalResources = (): void => {
+      if (localResourcesCleaned) return;
+      localResourcesCleaned = true;
+      renderer?.dispose();
+      if (canvas.parentElement) {
+        canvas.parentElement.removeChild(canvas);
+      }
+    };
 
     try {
-      await this.renderer.initialize({
-        canvas: this.canvas,
-        model: this.modelInfo,
+      // Dynamically import the renderer.
+      const { PixiLive2DRenderer } = await import("./pixi-live2d-renderer");
+
+      if (!isCurrent()) {
+        cleanLocalResources();
+        return this.createController();
+      }
+
+      renderer = new PixiLive2DRenderer();
+      await renderer.initialize({
+        canvas,
+        model: modelInfo,
         pixelRatio: props.pixelRatio,
         debug: props.debug,
       });
 
-      if (this.isDisposed) {
-        this.renderer.dispose();
-        this.renderer = null;
+      if (!isCurrent()) {
+        cleanLocalResources();
         return this.createController();
       }
 
-      await this.renderer.loadModel(this.modelInfo);
+      await renderer.loadModel(modelInfo);
 
-      if (this.isDisposed) {
-        this.renderer.dispose();
-        this.renderer = null;
+      if (!isCurrent()) {
+        cleanLocalResources();
         return this.createController();
-      }
-
-      this.isLoaded = true;
-      this.startMetabolicProjection();
-      props.onLoad?.();
-
-      if (props.debug) {
-        console.log("[Live2DAvatarManager] Model loaded successfully");
       }
     } catch (error) {
       const err = error instanceof Error ? error : new Error(String(error));
+      cleanLocalResources();
+      // A stale failure is cancellation, not an error of the active avatar.
+      // In particular it must not call an old callback after a newer renderer
+      // has become current.
+      if (!isCurrent()) {
+        return this.createController();
+      }
       props.onError?.(err);
       throw err;
+    }
+
+    // Only the winning generation may publish resources and register the
+    // metabolic/parameter observers that use the manager's shared fields.
+    // (The post-load check above makes renderer non-null here.)
+    this.canvas = canvas;
+    this.renderer = renderer;
+    this.modelInfo = modelInfo;
+    this.isLoaded = true;
+    this.startMetabolicProjection();
+    props.onLoad?.();
+
+    if (props.debug) {
+      console.log("[Live2DAvatarManager] Model loaded successfully");
     }
 
     return this.createController();
@@ -425,6 +453,7 @@ export class Live2DAvatarManager {
       getLastExpressionExperience: () => this.lastExpressionExperience,
       getEmbodimentDiagnostics: () => ({
         ...this.diagnostics,
+        evidenceWindow: this.evidenceWindow.snapshot(),
         unavailableParameterIds: [...this.diagnostics.unavailableParameterIds],
         residuals: this.diagnostics.residuals?.map((residual) => ({
           ...residual,
@@ -464,6 +493,13 @@ export class Live2DAvatarManager {
     } else if (this.hasMetabolicEvidence) {
       this.metabolicBridge?.reset();
       this.hasMetabolicEvidence = false;
+    }
+    if (
+      this.presentationLocked ||
+      (this.lastCanonicalCoreSelf?.initialized === true &&
+        state.coreSelf?.initialized !== true)
+    ) {
+      this.evidenceWindow.reset();
     }
     this.lastCanonicalCoreSelf = state.coreSelf ? { ...state.coreSelf } : null;
     // Missing/revoked authority must clear a running cue, not merely prevent a
@@ -772,7 +808,10 @@ export class Live2DAvatarManager {
       ),
       residuals: [],
     };
-    if (supportedIds.length === 0) return;
+    if (supportedIds.length === 0) {
+      this.evidenceWindow.reset();
+      return;
+    }
 
     const intended = Object.fromEntries(
       supportedIds.map((id) => [id, expected[id]]),
@@ -785,6 +824,15 @@ export class Live2DAvatarManager {
     );
     this.lastExpressionExperience = this.feedback.sampleActualState(actual);
     if (this.lastExpressionExperience) {
+      // Read each genuine native range once. Unknown ranges cannot contribute
+      // zero-error observations or inflate normalized evidence coverage.
+      const observations = supportedIds.map((parameterId) => ({
+        parameterId,
+        requested: expected[parameterId],
+        observed: actual[parameterId],
+        range: this.renderer?.getParameterRange?.(parameterId) ?? null,
+      }));
+      this.evidenceWindow.record(observations);
       this.diagnostics = {
         ...this.diagnostics,
         status: "observed",
@@ -792,20 +840,23 @@ export class Live2DAvatarManager {
         lastSampleAt: this.lastExpressionExperience.actual.timestamp,
         rmsError: this.lastExpressionExperience.errorMagnitude,
         observationPhase: "before-model-update",
-        residuals: supportedIds.map((parameterId) => {
-          const delta = actual[parameterId] - expected[parameterId];
-          const range = this.renderer?.getParameterRange?.(parameterId);
-          return {
-            parameterId,
-            requested: expected[parameterId],
-            observed: actual[parameterId],
-            delta,
-            normalizedError: range
-              ? Math.abs(delta) / (range.max - range.min)
-              : null,
-          };
-        }),
+        residuals: observations.map(
+          ({ parameterId, requested, observed, range }) => {
+            const delta = observed - requested;
+            return {
+              parameterId,
+              requested,
+              observed,
+              delta,
+              normalizedError: range
+                ? Math.abs(delta) / (range.max - range.min)
+                : null,
+            };
+          },
+        ),
       };
+    } else {
+      this.evidenceWindow.reset();
     }
   }
 
@@ -830,8 +881,13 @@ export class Live2DAvatarManager {
    * Dispose of all resources
    */
   dispose(): void {
+    // Invalidate local resources owned by every pending initialize(). They will
+    // clean themselves at their next await boundary, without touching a later
+    // invocation's renderer or canvas.
+    this.lifecycleGeneration++;
     this.isDisposed = true;
     this.stopMetabolicProjection();
+    this.evidenceWindow.reset();
     this.lastProjectedCubism = {};
     this.lastAppliedCubism = {};
     this.presentationLocked = false;

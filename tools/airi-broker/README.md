@@ -31,6 +31,8 @@ The launcher runs in the foreground and prints a one-time localhost URL with a 2
 
 `GET /api/cue` polls the daemon only after a valid capability, exact Host/Origin, matching model digest, and stage-selected model ID. The 500 ms poll uses an expiring 2.8 s lease. The adapter allows only bounded eye/head/body axes; AIRI owns mouth, speech, motion, and expression. Model switch, hidden broker tab, popup close, daemon loss, failed proof, request error, or manual **Release and close** revokes the cue. Stop the foreground process with Ctrl+C. No always-on service or global setting is installed.
 
+For independent local instances, `createBroker({ port: 0, ... })` or `--port 0` asks the OS to assign a free port directly to the real loopback listener. Use the returned/printed URL, not port zero: capability, Host and Origin checks all use the actual assigned port. The omitted-port default remains 8765; an explicitly occupied port fails with `EADDRINUSE` rather than silently moving the service. Tests use this direct binding instead of reserving/releasing a port or assuming adjacent ports are free.
+
 ## Verification limits
 
 The source/IPC and Chromium fixture tests establish the transport, digest and revocation semantics. A real Miara ZIP separately rendered in the fork's Pixi/Cubism runtime with a short-lived synthetic gesture. **A live DeltEcho daemon → AIRI stage pairing is not certified** until both apps run on one authorized device with the generic ZIP imported and the active core-self proof present. The broker must remain fail-closed if those preconditions are absent. Actual GPU/FPS, long-session leaks, and future artist-authored DTE appearances require separate measurements and provenance review.

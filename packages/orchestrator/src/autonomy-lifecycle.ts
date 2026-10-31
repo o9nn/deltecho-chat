@@ -859,17 +859,6 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
     const baseCoherence = this.computeBaseCoherence();
     const scientificSignal = this.getScientificAutonomySignal();
 
-    if (!this.scientificGenius || scientificSignal.recentInsightCount === 0) {
-      return baseCoherence;
-    }
-
-    const scientificCoherence = this.clamp01(
-      scientificSignal.averageSignificance * 0.35 +
-        scientificSignal.averageNovelty * 0.2 +
-        this.clamp01(scientificSignal.averagePhi / 10) * 0.25 +
-        scientificSignal.hypothesisConfidence * 0.2,
-    );
-
     // Incorporate DAO consensus and ESN Autognosis
     const daoConsensus = this.entelechyIntegration?.getDaoConsensus() ?? 0.5;
     const esnAutognosis = this.entelechyIntegration?.getEsnAutognosis() ?? 0.5;
@@ -883,12 +872,21 @@ export class AutonomyLifecycleCoordinator extends EventEmitter {
     // Ensure blendedCoherence remains within [0, 1] after initial blending
     blendedCoherence = Math.max(0, Math.min(1, blendedCoherence));
 
-    // Blend with scientific signal
-    blendedCoherence = this.clamp01(
-      blendedCoherence * 0.86 +
-        scientificCoherence * 0.14 -
-        scientificSignal.freeEnergyPressure * 0.08,
-    );
+    if (this.scientificGenius && scientificSignal.recentInsightCount > 0) {
+      const scientificCoherence = this.clamp01(
+        scientificSignal.averageSignificance * 0.35 +
+          scientificSignal.averageNovelty * 0.2 +
+          this.clamp01(scientificSignal.averagePhi / 10) * 0.25 +
+          scientificSignal.hypothesisConfidence * 0.2,
+      );
+
+      // Blend with scientific signal when optional Scientific Genius feedback exists.
+      blendedCoherence = this.clamp01(
+        blendedCoherence * 0.86 +
+          scientificCoherence * 0.14 -
+          scientificSignal.freeEnergyPressure * 0.08,
+      );
+    }
 
     // Trigger deeper autognosis if resonance threshold is met
     if (esnAutognosis > this.config.autognosisResonanceThreshold) {

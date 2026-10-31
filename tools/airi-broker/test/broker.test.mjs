@@ -49,17 +49,16 @@ before(async () => {
   dir = await mkdtemp(join(tmpdir(), "dte-airi-broker-"));
   archive = join(dir, "model.zip");
   await writeFile(archive, randomBytes(64));
-  const reservation = createTcpServer();
-  await new Promise((ok) => reservation.listen(0, "127.0.0.1", ok));
-  port = reservation.address().port;
-  await new Promise((ok) => reservation.close(ok));
   broker = await createBroker({
     modelArchive: archive,
     stageUrl: "http://127.0.0.1:5173/",
-    port,
+    port: 0,
     capability,
     readVisual: async () => current,
   });
+  port = broker.server.address().port;
+  assert.ok(port > 0);
+  assert.equal(new URL(broker.url).port, String(port));
 });
 after(async () => {
   if (broker) await broker.close();
@@ -98,11 +97,32 @@ test("cannot bind a non-loopback stage and rejects fabricated proof", async () =
     createBroker({
       modelArchive: archive,
       stageUrl: "https://airi.moeru.ai/",
-      port: port + 1,
+      port: 0,
     }),
     /loopback/,
   );
   assert.equal(broker.server.address().address, "127.0.0.1");
+});
+
+test("rejects malformed ports and preserves explicit-port collision errors", async () => {
+  for (const invalidPort of [-1, 65536, 1.5, NaN]) {
+    await assert.rejects(
+      createBroker({
+        modelArchive: archive,
+        stageUrl: "http://127.0.0.1:5173/",
+        port: invalidPort,
+      }),
+      /Invalid loopback port/,
+    );
+  }
+  await assert.rejects(
+    createBroker({
+      modelArchive: archive,
+      stageUrl: "http://127.0.0.1:5173/",
+      port,
+    }),
+    { code: "EADDRINUSE" },
+  );
 });
 
 test("denies an unauthenticated, wrong-origin, or DNS-rebound browser", async () => {
@@ -111,6 +131,14 @@ test("denies an unauthenticated, wrong-origin, or DNS-rebound browser", async ()
     (
       await request("/api/config", {
         headers: { Origin: "https://attacker.invalid" },
+      })
+    ).status,
+    403,
+  );
+  assert.equal(
+    (
+      await request("/api/config", {
+        headers: { Origin: "http://127.0.0.1:0" },
       })
     ).status,
     403,
@@ -221,15 +249,16 @@ test("production reader only accepts a matched read-only daemon reply", async ()
   });
   await new Promise((ok) => pipe.listen(endpoint, ok));
   process.env.DEEP_TREE_ECHO_IPC_PATH = endpoint;
-  const otherPort = port + 1;
   let live;
   try {
     live = await createBroker({
       modelArchive: archive,
       stageUrl: "http://127.0.0.1:5173/",
-      port: otherPort,
+      port: 0,
       capability: "d".repeat(64),
     });
+    assert.notEqual(live.server.address().port, port);
+    assert.equal(live.server.address().address, "127.0.0.1");
     const url = `${live.url}/api/cue?modelId=miara&modelSha256=${live.modelSha256}`;
     const headers = { "X-DTE-Capability": "d".repeat(64) };
     const accepted = await fetch(url, { headers });
@@ -260,7 +289,7 @@ test("the built broker runs from a flat portable directory", async () => {
   const instance = await portableBroker({
     modelArchive: archive,
     stageUrl: "http://127.0.0.1:5173/",
-    port: port + 2,
+    port: 0,
     capability: "e".repeat(64),
   });
   try {

@@ -699,6 +699,15 @@ describe("Live2DAvatarManager", () => {
       expect(controller.getEmbodimentDiagnostics().residuals![0].observed).toBe(
         6,
       );
+      expect(diagnostic.evidenceWindow?.sampleCount).toBe(1);
+      expect(
+        diagnostic.evidenceWindow?.parameters[0].meanSignedError,
+      ).toBeCloseTo((6 - target) / 60);
+      diagnostic.evidenceWindow!.parameters[0].meanSignedError = 999;
+      expect(
+        controller.getEmbodimentDiagnostics().evidenceWindow?.parameters[0]
+          .meanSignedError,
+      ).not.toBe(999);
       renderer.getParameterRange.mockReturnValue(undefined);
       controller.updateCognitiveState({ mode: "Idle" });
       observe();
@@ -706,6 +715,66 @@ describe("Live2DAvatarManager", () => {
       expect(
         controller.getEmbodimentDiagnostics().residuals![0].normalizedError,
       ).toBeNull();
+      expect(controller.getEmbodimentDiagnostics().evidenceWindow?.status).toBe(
+        "waiting",
+      );
+    });
+
+    it("resets scientific evidence on authority loss, manual lock and disposal without resetting learned calibration", async () => {
+      const controller = await manager.initialize(mockContainer, {
+        modelPath: "/test/model.json",
+      });
+      const renderer = controller.getRenderer()! as unknown as {
+        getParameter: jest.Mock;
+        addParameterObserver: jest.Mock;
+      };
+      renderer.getParameter.mockImplementation((id: string) =>
+        id === "ParamAngleX" ? 6 : undefined,
+      );
+      const observe = renderer.addParameterObserver.mock.calls[0][0];
+      const state = {
+        mode: "Scientific Genius",
+        coreSelf: {
+          initialized: true,
+          ledgerHead: "a",
+          projectedStateDigest: "b",
+          acceptedEventCount: 1,
+          pendingProposalCount: 0,
+        },
+      };
+      const sample = () => {
+        controller.updateCognitiveState(state);
+        observe();
+        observe();
+      };
+      sample();
+      sample();
+      expect(
+        controller.getEmbodimentDiagnostics().evidenceWindow?.sampleCount,
+      ).toBe(2);
+      const learnedCount = controller.getEmbodimentDiagnostics().sampleCount;
+      controller.updateCognitiveState({ mode: "Idle" });
+      expect(
+        controller.getEmbodimentDiagnostics().evidenceWindow?.sampleCount,
+      ).toBe(0);
+      expect(controller.getEmbodimentDiagnostics().sampleCount).toBe(
+        learnedCount,
+      );
+      sample();
+      controller.updateCognitiveState(state, { presentationLocked: true });
+      expect(
+        controller.getEmbodimentDiagnostics().evidenceWindow?.sampleCount,
+      ).toBe(0);
+      observe();
+      observe();
+      expect(
+        controller.getEmbodimentDiagnostics().evidenceWindow?.sampleCount,
+      ).toBe(0);
+      sample();
+      manager.dispose();
+      expect(
+        controller.getEmbodimentDiagnostics().evidenceWindow?.sampleCount,
+      ).toBe(0);
     });
 
     it.each([
