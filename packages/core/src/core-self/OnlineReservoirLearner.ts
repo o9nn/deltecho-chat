@@ -363,10 +363,18 @@ export class OnlineReservoirLearner extends EventEmitter {
   }
 
   /**
-   * Get the readout weights (for inspection or export).
+   * Get output-major readout weights [outputDim x reservoirDim].
    */
   getWeights(): Float64Array {
     return new Float64Array(this.weights);
+  }
+
+  /** Get the configured weight dimensions without exposing mutable config. */
+  getDimensions(): { reservoirDim: number; outputDim: number } {
+    return {
+      reservoirDim: this.config.reservoirDim,
+      outputDim: this.config.outputDim,
+    };
   }
 
   /**

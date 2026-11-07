@@ -125,6 +125,21 @@ describe("CausalHypothesisForge", () => {
     expect(updated?.contradictingEvidence).toBeGreaterThan(0);
   });
 
+  it("rejects an intervention on a falsified hypothesis without rewriting evidence", () => {
+    const forge = new CausalHypothesisForge();
+    const hypothesis = forge.propose(baseHypothesis);
+    for (let index = 0; index < 2; index++) {
+      const trial = forge.designIntervention(hypothesis.id, intervention)!;
+      forge.recordOutcome(trial.id, { observedEffect: -0.8, reliability: 1 });
+    }
+    const before = forge.getHypothesis(hypothesis.id);
+    const trials = forge.getTrials();
+    expect(before?.status).toBe(CausalHypothesisStatus.FALSIFIED);
+    expect(forge.designIntervention(hypothesis.id, intervention)).toBeNull();
+    expect(forge.getHypothesis(hypothesis.id)).toEqual(before);
+    expect(forge.getTrials()).toEqual(trials);
+  });
+
   it("weights low-reliability observations less strongly", () => {
     const reliable = new CausalHypothesisForge({ minimumEvidence: 1 });
     const weak = new CausalHypothesisForge({ minimumEvidence: 1 });
@@ -308,5 +323,16 @@ describe("CausalHypothesisForge", () => {
     expect(forge.getState().hypotheses).toBe(0);
     expect(forge.getState().activeTrials).toBe(0);
     expect(forge.getVisualState().epistemicSurprise).toBe(0);
+  });
+
+  it("increments the reset epoch while preserving historical ID reuse semantics", () => {
+    const forge = new CausalHypothesisForge();
+    expect(forge.getGeneration()).toBe(0);
+    const original = forge.propose(baseHypothesis);
+    forge.reset();
+    expect(forge.getGeneration()).toBe(1);
+    expect(forge.propose(baseHypothesis).id).toBe(original.id);
+    forge.reset();
+    expect(forge.getGeneration()).toBe(2);
   });
 });

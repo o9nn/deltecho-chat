@@ -17,6 +17,10 @@ import type { DTEchoCognitiveMode } from "../dtecho-expression-driver";
 import { projectDTEchoCognitiveState } from "../dtecho-expression-driver";
 import { EmbodimentEvidenceWindow } from "../embodiment-evidence-window";
 import {
+  EmbodimentObservationClock,
+  type EmbodimentObservationTiming,
+} from "../embodiment-observation-clock";
+import {
   applyPersonaVisualStyle,
   type AvatarPresentationStyle,
 } from "../persona-visual-style";
@@ -154,6 +158,8 @@ export interface EmbodimentDiagnostics {
   observationPhase?: "before-model-update";
   /** Historical native-span errors; never a causal or scientific truth score. */
   evidenceWindow?: ReturnType<EmbodimentEvidenceWindow["snapshot"]>;
+  /** Latest sampled pair's actual write/read timing, not rendering latency. */
+  observationClock?: EmbodimentObservationTiming | null;
   residuals?: Array<{
     parameterId: string;
     requested: number;
@@ -227,6 +233,7 @@ export class Live2DAvatarManager {
   private presentationLocked = false;
   private feedback = new SelfModelAvatarFeedback();
   private readonly evidenceWindow = new EmbodimentEvidenceWindow();
+  private readonly observationClock = new EmbodimentObservationClock();
   private diagnostics: EmbodimentDiagnostics = {
     status: "waiting",
     sampleCount: 0,
@@ -259,6 +266,8 @@ export class Live2DAvatarManager {
     this.metabolicBridge?.step();
   };
   private readonly onSelfModelFrame = (): void => {
+    if (!this.renderer || !this.isLoaded) return;
+    this.observationClock.markNativeUpdate();
     if (this.selfModelSampleDelayFrames <= 0) return;
     this.selfModelSampleDelayFrames--;
     if (this.selfModelSampleDelayFrames === 0) {
@@ -394,28 +403,28 @@ export class Live2DAvatarManager {
   private createController(): Live2DAvatarController {
     return {
       setExpression: (expression, intensity = 0.7) => {
-        this.selfModelSampleDelayFrames = 0;
+        this.cancelObservationTiming();
         this.renderer?.setExpression(expression, intensity);
       },
       setNamedExpression: (name) => {
-        this.selfModelSampleDelayFrames = 0;
+        this.cancelObservationTiming();
         return this.renderer?.setNamedExpression?.(name) ?? false;
       },
       playMotion: (motion) => {
-        this.selfModelSampleDelayFrames = 0;
+        this.cancelObservationTiming();
         this.renderer?.playMotion(motion);
       },
       updateLipSync: (audioLevel) => {
         // The React mount initializes silence after the cognitive projection.
         // Nonzero externally driven speech must not become a cognitive sample.
-        if (audioLevel !== 0) this.selfModelSampleDelayFrames = 0;
+        if (audioLevel !== 0) this.cancelObservationTiming();
         this.renderer?.updateLipSync(audioLevel);
       },
       updateCognitiveState: (state, options) => {
         this.updateCognitiveState(state, options);
       },
       triggerBlink: () => {
-        this.selfModelSampleDelayFrames = 0;
+        this.cancelObservationTiming();
         const renderer = this.renderer as
           | (PixiLive2DRenderer & {
               triggerBlink?: (durationMs?: number) => void;
@@ -430,7 +439,7 @@ export class Live2DAvatarManager {
         setTimeout(() => renderer?.setBlinking?.(false), 150);
       },
       setParameter: (paramId, value) => {
-        this.selfModelSampleDelayFrames = 0;
+        this.cancelObservationTiming();
         this.renderer?.setParameter(paramId, value);
       },
       applyOutfit: (outfit) => {
@@ -454,6 +463,9 @@ export class Live2DAvatarManager {
       getEmbodimentDiagnostics: () => ({
         ...this.diagnostics,
         evidenceWindow: this.evidenceWindow.snapshot(),
+        observationClock: this.diagnostics.observationClock
+          ? { ...this.diagnostics.observationClock }
+          : null,
         unavailableParameterIds: [...this.diagnostics.unavailableParameterIds],
         residuals: this.diagnostics.residuals?.map((residual) => ({
           ...residual,
@@ -500,6 +512,7 @@ export class Live2DAvatarManager {
         state.coreSelf?.initialized !== true)
     ) {
       this.evidenceWindow.reset();
+      this.cancelObservationTiming();
     }
     this.lastCanonicalCoreSelf = state.coreSelf ? { ...state.coreSelf } : null;
     // Missing/revoked authority must clear a running cue, not merely prevent a
@@ -672,6 +685,7 @@ export class Live2DAvatarManager {
     // Capture the actual written target. Recomputing breathing/metabolism at
     // sampling time compares a new prediction against an older model frame.
     this.lastAppliedCubism = composed;
+    this.observationClock.markWrite();
   }
 
   private composeMetabolicCubism(
@@ -806,10 +820,12 @@ export class Live2DAvatarManager {
       unavailableParameterIds: this.observableProjectionIds.filter(
         (id) => !Object.prototype.hasOwnProperty.call(actual, id),
       ),
+      observationClock: null,
       residuals: [],
     };
     if (supportedIds.length === 0) {
       this.evidenceWindow.reset();
+      this.observationClock.reset();
       return;
     }
 
@@ -821,6 +837,7 @@ export class Live2DAvatarManager {
       intended,
       this.pendingCognitiveMode,
       this.lastCanonicalCoreSelf ?? undefined,
+      this.observationClock.getWrittenAt(),
     );
     this.lastExpressionExperience = this.feedback.sampleActualState(actual);
     if (this.lastExpressionExperience) {
@@ -840,6 +857,7 @@ export class Live2DAvatarManager {
         lastSampleAt: this.lastExpressionExperience.actual.timestamp,
         rmsError: this.lastExpressionExperience.errorMagnitude,
         observationPhase: "before-model-update",
+        observationClock: this.observationClock.observe(),
         residuals: observations.map(
           ({ parameterId, requested, observed, range }) => {
             const delta = observed - requested;
@@ -857,7 +875,14 @@ export class Live2DAvatarManager {
       };
     } else {
       this.evidenceWindow.reset();
+      this.observationClock.reset();
     }
+  }
+
+  private cancelObservationTiming(): void {
+    this.selfModelSampleDelayFrames = 0;
+    this.observationClock.reset();
+    this.diagnostics.observationClock = null;
   }
 
   /**
@@ -888,6 +913,7 @@ export class Live2DAvatarManager {
     this.isDisposed = true;
     this.stopMetabolicProjection();
     this.evidenceWindow.reset();
+    this.observationClock.reset();
     this.lastProjectedCubism = {};
     this.lastAppliedCubism = {};
     this.presentationLocked = false;

@@ -140,14 +140,22 @@ export class SelfModelAvatarFeedback extends EventEmitter {
    * Phase 1: Record the INTENDED expression projection.
    * Call this immediately after projectDTEchoCognitiveState produces
    * the target param deltas, before they are applied to the model.
+   * A native-boundary sampler may provide the retained target's actual write
+   * epoch. This timestamp is provenance, not a prediction horizon or latency.
    */
   public recordIntendedProjection(
     params: Record<string, number>,
     cognitiveMode: string,
     coreSelf?: CanonicalCoreSelfExpressionContext,
+    writtenAt?: number,
   ): void {
     this.pendingPrediction = {
-      timestamp: Date.now(),
+      timestamp:
+        typeof writtenAt === "number" &&
+        Number.isFinite(writtenAt) &&
+        writtenAt >= 0
+          ? writtenAt
+          : Date.now(),
       params: { ...params },
     };
     this.pendingMode = cognitiveMode;

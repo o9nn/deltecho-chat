@@ -477,8 +477,8 @@ export class CognitiveReadout {
   }
 
   /**
-   * Runtime mutator: inject online-learned weights from OnlineReservoirLearner.
-   * Enables the ReservoirFeedbackLoop to affect live cognition.
+   * Inject input-major weights [inputDim x outputDim], as used by batch train().
+   * OnlineReservoirLearner weights must use setOutputMajorWeights() instead.
    */
   setWeights(weights: Float64Array, outputDim: number, inputDim: number): void {
     if (weights.length !== inputDim * outputDim) return;
@@ -487,6 +487,55 @@ export class CognitiveReadout {
     this.outputDim = outputDim;
     this.bias = this.bias ?? new Float64Array(outputDim);
     this.trained = true;
+  }
+
+  /**
+   * Adapt learner weights [outputDim x inputDim] to the batch/readout layout.
+   * Reject incompatible dimensions or invalid values before any live mutation.
+   * Existing bias, output nonlinearity and reservoir dynamics are unchanged.
+   */
+  setOutputMajorWeights(
+    weights: Float64Array,
+    outputDim: number,
+    inputDim: number,
+  ): void {
+    if (
+      !Number.isSafeInteger(inputDim) ||
+      !Number.isSafeInteger(outputDim) ||
+      inputDim <= 0 ||
+      outputDim <= 0 ||
+      !Number.isSafeInteger(inputDim * outputDim)
+    ) {
+      throw new Error(
+        "Online readout dimensions must be positive safe integers",
+      );
+    }
+    if (
+      outputDim !== this.outputDim ||
+      (this.inputDim !== 0 && inputDim !== this.inputDim)
+    ) {
+      throw new Error(
+        `Online weight dimensions ${inputDim}x${outputDim} != readout ${this.inputDim}x${this.outputDim}`,
+      );
+    }
+    if (weights.length !== inputDim * outputDim) {
+      throw new Error(
+        `Online weight length ${weights.length} != expected ${
+          inputDim * outputDim
+        }`,
+      );
+    }
+    if (!weights.every(Number.isFinite)) {
+      throw new Error("Online weights must be finite");
+    }
+
+    const inputMajor = new Float64Array(weights.length);
+    for (let o = 0; o < outputDim; o++) {
+      for (let d = 0; d < inputDim; d++) {
+        inputMajor[d * outputDim + o] = weights[o * inputDim + d];
+      }
+    }
+    this.setWeights(inputMajor, outputDim, inputDim);
   }
 
   /**

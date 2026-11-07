@@ -34,7 +34,7 @@ export function ScientificEmbodimentLens({
     };
   }, [open, controller, expressionLocked]);
 
-  const observed = sample?.status === "observed";
+  const observed = !expressionLocked && sample?.status === "observed";
   const age =
     observed && sample.lastSampleAt !== null
       ? Math.max(0, Math.floor((Date.now() - sample.lastSampleAt) / 1000))
@@ -105,6 +105,30 @@ export function ScientificEmbodimentLens({
               </>
             )}
           </dl>
+          {observed && (
+            <section aria-label="Scientific observation clock">
+              <h4>Scientific observation clock</h4>
+              {sample.observationClock ? (
+                <dl>
+                  <dt>Latest target write → native parameter readback</dt>
+                  <dd>{sample.observationClock.elapsedMs.toFixed(2)} ms</dd>
+                  <dt>Native updates since latest write</dt>
+                  <dd>{sample.observationClock.nativeUpdatesSinceWrite}</dd>
+                  <dt>Target write sequence</dt>
+                  <dd>{sample.observationClock.writeSequence}</dd>
+                </dl>
+              ) : (
+                <p>
+                  Timing unavailable — no monotonic target-write provenance.
+                </p>
+              )}
+              <p>
+                Last observed pair only. Metabolic or resonance writes restart
+                target age. Native callbacks are not ticker ticks; this is not
+                render latency, motion settling time, or a causal experiment.
+              </p>
+            </section>
+          )}
           {residuals.length > 0 && (
             <section aria-label="Scientific residual atlas">
               <h4>Scientific residual atlas</h4>

@@ -8,6 +8,9 @@ import {
   ProprioceptiveEmbodiment,
   type EpistemicResonanceCascade,
   type PredictiveInsightCrystal,
+  type OnlineReservoirLearner,
+  type CognitiveReadout,
+  type EchoReservoir,
 } from "deep-tree-echo-core";
 import {
   CognitiveOrchestrator,
@@ -81,6 +84,25 @@ import {
 import { epistemicImmuneSystem } from "deep-tree-echo-core";
 
 const log = getLogger("deep-tree-echo-orchestrator/Orchestrator");
+
+/** Sync actual RLS weights only when their dimensions match live cognition. */
+export function syncOnlineReservoirReadout(
+  learner: OnlineReservoirLearner,
+  readout: CognitiveReadout,
+  reservoir: EchoReservoir,
+): boolean {
+  if (learner.getStats().totalUpdates <= 10) return false;
+
+  const { reservoirDim, outputDim } = learner.getDimensions();
+  const liveReservoirDim = reservoir.getConfig().units;
+  if (reservoirDim !== liveReservoirDim) {
+    throw new Error(
+      `Online learner reservoir dim ${reservoirDim} != live reservoir ${liveReservoirDim}`,
+    );
+  }
+  readout.setOutputMajorWeights(learner.getWeights(), outputDim, reservoirDim);
+  return true;
+}
 
 /**
  * Cognitive tier processing mode
@@ -672,14 +694,17 @@ export class Orchestrator {
           // Periodically sync online-learned weights to the CognitiveReadout
           if (this.reservoirFeedback && this.coreSelfEngine) {
             const readout = this.coreSelfEngine.getAAR()?.getReadout();
-            if (readout) {
+            const liveReservoir = this.coreSelfEngine.getReservoir();
+            if (readout && liveReservoir) {
               this.reservoirFeedback.on("batch_update", () => {
                 const learner = this.reservoirFeedback!.getLearner();
-                const weights = learner.getWeights();
-                const stats = learner.getStats();
-                // Only sync if learner has meaningful updates
-                if (stats.totalUpdates > 10) {
-                  readout.setWeights(weights, 64, 256);
+                try {
+                  syncOnlineReservoirReadout(learner, readout, liveReservoir);
+                } catch (error) {
+                  log.warn(
+                    "Online readout sync rejected (readout unchanged):",
+                    error,
+                  );
                 }
               });
               log.info(

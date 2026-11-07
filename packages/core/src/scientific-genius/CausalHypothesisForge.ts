@@ -174,6 +174,7 @@ export class CausalHypothesisForge extends EventEmitter {
   private hypothesisSequence = 0;
   private trialSequence = 0;
   private recentSurprises: number[] = [];
+  private generation = 0;
 
   constructor(config?: Partial<CausalHypothesisForgeConfig>) {
     super();
@@ -248,7 +249,11 @@ export class CausalHypothesisForge extends EventEmitter {
     design: InterventionDesign,
   ): CounterfactualTrial | null {
     const hypothesis = this.hypotheses.get(hypothesisId);
-    if (!hypothesis || hypothesis.status === CausalHypothesisStatus.RATIFIED) {
+    if (
+      !hypothesis ||
+      hypothesis.status === CausalHypothesisStatus.RATIFIED ||
+      hypothesis.status === CausalHypothesisStatus.FALSIFIED
+    ) {
       return null;
     }
 
@@ -498,7 +503,13 @@ export class CausalHypothesisForge extends EventEmitter {
     };
   }
 
+  /** Reset epoch: IDs and even identical proposals may be reused after reset. */
+  getGeneration(): number {
+    return this.generation;
+  }
+
   reset(): void {
+    this.generation++;
     this.hypotheses.clear();
     this.trials.clear();
     this.votes.clear();
