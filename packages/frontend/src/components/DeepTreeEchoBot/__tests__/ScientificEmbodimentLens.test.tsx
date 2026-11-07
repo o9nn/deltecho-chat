@@ -200,4 +200,106 @@ describe("ScientificEmbodimentLens", () => {
     ).toBeInTheDocument();
     expect(screen.getByText(/variability unavailable/)).toBeInTheDocument();
   });
+  it("displays the latest sampled write/read timing without a render-latency claim", () => {
+    const controller = {
+      getEmbodimentDiagnostics: () => ({
+        ...sample,
+        observationClock: {
+          writeSequence: 9,
+          nativeUpdateAtWrite: 14,
+          nativeUpdateAtReadback: 15,
+          nativeUpdatesSinceWrite: 1,
+          writtenAtMonotonicMs: 100,
+          readAtMonotonicMs: 125,
+          elapsedMs: 25,
+          writtenAt: 1000,
+        },
+      }),
+    } as unknown as Live2DAvatarController;
+    const view = render(
+      <ScientificEmbodimentLens
+        controller={controller}
+        visual={{}}
+        daemonConnected={false}
+        expressionLocked={false}
+      />,
+    );
+    openLens();
+    expect(
+      screen.getByRole("region", { name: "Scientific observation clock" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("25.00 ms")).toBeInTheDocument();
+    expect(screen.getByText(/not render latency/)).toBeInTheDocument();
+    view.rerender(
+      <ScientificEmbodimentLens
+        controller={controller}
+        visual={{}}
+        daemonConnected={false}
+        expressionLocked={true}
+      />,
+    );
+    expect(
+      screen.queryByRole("region", { name: "Scientific observation clock" }),
+    ).not.toBeInTheDocument();
+  });
+  it("abstains from timing without actual monotonic write provenance", () => {
+    const controller = {
+      getEmbodimentDiagnostics: () => sample,
+    } as unknown as Live2DAvatarController;
+    render(
+      <ScientificEmbodimentLens
+        controller={controller}
+        visual={{}}
+        daemonConnected={false}
+        expressionLocked={false}
+      />,
+    );
+    openLens();
+    expect(screen.getByText(/Timing unavailable/)).toBeInTheDocument();
+    expect(screen.queryByText("0.00 ms")).not.toBeInTheDocument();
+  });
+  it("does not poll while hidden or after the lens closes", () => {
+    const original = Object.getOwnPropertyDescriptor(
+      document,
+      "visibilityState",
+    );
+    const read = jest.fn(() => sample);
+    const controller = {
+      getEmbodimentDiagnostics: read,
+    } as unknown as Live2DAvatarController;
+    try {
+      Object.defineProperty(document, "visibilityState", {
+        configurable: true,
+        value: "hidden",
+      });
+      render(
+        <ScientificEmbodimentLens
+          controller={controller}
+          visual={{}}
+          daemonConnected={false}
+          expressionLocked={false}
+        />,
+      );
+      openLens();
+      act(() => jest.advanceTimersByTime(3000));
+      expect(read).not.toHaveBeenCalled();
+      Object.defineProperty(document, "visibilityState", {
+        configurable: true,
+        value: "visible",
+      });
+      act(() => document.dispatchEvent(new Event("visibilitychange")));
+      expect(read).toHaveBeenCalledTimes(1);
+      const details = screen.getByTestId(
+        "scientific-embodiment-lens",
+      ) as HTMLDetailsElement;
+      details.open = false;
+      fireEvent(details, new Event("toggle"));
+      act(() => jest.advanceTimersByTime(3000));
+      expect(read).toHaveBeenCalledTimes(1);
+    } finally {
+      if (original)
+        Object.defineProperty(document, "visibilityState", original);
+      else Reflect.deleteProperty(document, "visibilityState");
+    }
+  });
 });

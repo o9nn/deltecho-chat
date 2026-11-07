@@ -11,6 +11,8 @@ import {
 export interface ExperimentForge {
   getHypotheses(): CausalHypothesis[];
   getTrials(hypothesisId?: string): CounterfactualTrial[];
+  /** Optional reset epoch for forges that recycle hypothesis IDs. */
+  getGeneration?(): number;
   designIntervention(
     hypothesisId: string,
     design: InterventionDesign,
@@ -70,7 +72,38 @@ export type ExperimentScheduleRejectionReason =
   | "below_threshold"
   | "forge_rejected"
   | "governance_rejected"
-  | "governance_error";
+  | "governance_error"
+  | "stale_authorization"
+  | "hypothesis_changed"
+  | "hypothesis_ineligible";
+
+/** Method instrumentation only: not an outcome, vote, or fresh ESN observation. */
+export interface ExperimentPrecommitReceipt {
+  previewAt: number;
+  checkedAt: number;
+  hypothesisId: string;
+  generationBefore: number;
+  generationAfter: number;
+  forgeGenerationBefore: number | null;
+  forgeGenerationAfter: number | null;
+  activeTrialsBefore: number;
+  activeTrialsAtCheck: number;
+  maximumActiveTrials: number;
+  lastScheduledAt: number | null;
+  refractoryMs: number;
+  checks: {
+    generation: boolean;
+    hypothesisUnchanged: boolean;
+    candidateUnchanged: boolean;
+    eligible: boolean;
+    exclusive: boolean;
+    capacity: boolean;
+    refractory: boolean;
+  };
+  certificateId?: string;
+  approved: boolean;
+  trialId?: string;
+}
 
 export interface ExperimentScheduleDecision {
   scheduled: boolean;
@@ -80,6 +113,7 @@ export interface ExperimentScheduleDecision {
   candidate: ExperimentCandidate | null;
   trial: CounterfactualTrial | null;
   governanceDecision: ExperimentGovernanceDecision | null;
+  precommitReceipt?: ExperimentPrecommitReceipt;
 }
 
 interface ExperimentSchedulePreparation {
@@ -149,10 +183,13 @@ export class ActiveInferenceExperimentScheduler extends EventEmitter {
   private totalExpectedInformationGain = 0;
   private lastScheduledAt: number | null = null;
   private lastDecision: ExperimentScheduleDecision | null = null;
+  private generation = 0;
 
   constructor(
     private readonly forge: ExperimentForge,
     config: Partial<ActiveInferenceExperimentSchedulerConfig> = {},
+    /** Production commit clock; explicit context.now retains simulation semantics. */
+    private readonly clock: () => number = Date.now,
   ) {
     super();
     this.config = {
@@ -217,6 +254,7 @@ export class ActiveInferenceExperimentScheduler extends EventEmitter {
     context: AutognosticExperimentContext,
     authorizer: ExperimentGovernanceAuthorizer,
   ): Promise<ExperimentScheduleDecision> {
+    const simulationNow = context.now;
     const preparation = this.prepareSchedule(context);
     this.decisions++;
     if (preparation.rejectionReason || !preparation.candidate) {
@@ -228,13 +266,29 @@ export class ActiveInferenceExperimentScheduler extends EventEmitter {
       );
     }
 
+    const generation = this.generation;
+    const forgeGeneration = this.forge.getGeneration?.() ?? null;
+    const candidate = preparation.candidate;
+    const hypothesisBefore = this.hypothesisSnapshot(candidate.hypothesisId);
+    const candidateBefore = this.snapshot(candidate);
+    const activeTrialsBefore = this.forge
+      .getTrials()
+      .filter((trial) => trial.status === "designed").length;
+    // The authorizer cannot mutate the selected design or scheduler's snapshot.
+    const authorizedCandidate = this.copyCandidate(candidate);
     let governanceDecision: ExperimentGovernanceDecision;
     try {
-      governanceDecision = await authorizer.authorize(preparation.candidate);
+      const approval = await authorizer.authorize(authorizedCandidate);
+      governanceDecision = {
+        ...approval,
+        evidence: approval.evidence ? { ...approval.evidence } : undefined,
+      };
     } catch (error) {
       const reason = error instanceof Error ? error.message : String(error);
       return this.reject(
-        "governance_error",
+        generation === this.generation
+          ? "governance_error"
+          : "stale_authorization",
         preparation.timestamp,
         preparation.explorationTemperature,
         preparation.candidate,
@@ -242,20 +296,98 @@ export class ActiveInferenceExperimentScheduler extends EventEmitter {
           approved: false,
           reason,
         },
+        undefined,
+        generation === this.generation,
       );
     }
 
-    if (!governanceDecision.approved) {
+    // Synchronous precommit barrier: no await between these checks and design.
+    // Energy/ESN inputs remain preview evidence; no live-context provider exists.
+    const checkedAt = simulationNow ?? this.clock();
+    const hypothesis = this.forge
+      .getHypotheses()
+      .find((item) => item.id === candidate.hypothesisId);
+    const hypothesisAfter = hypothesis ? this.snapshot(hypothesis) : null;
+    const candidateAfter = this.snapshot(authorizedCandidate);
+    const activeTrials = this.forge
+      .getTrials()
+      .filter((trial) => trial.status === "designed");
+    const forgeGenerationAfter = this.forge.getGeneration?.() ?? null;
+    const receipt: ExperimentPrecommitReceipt = {
+      previewAt: preparation.timestamp,
+      checkedAt,
+      hypothesisId: candidate.hypothesisId,
+      generationBefore: generation,
+      generationAfter: this.generation,
+      forgeGenerationBefore: forgeGeneration,
+      forgeGenerationAfter,
+      activeTrialsBefore,
+      activeTrialsAtCheck: activeTrials.length,
+      maximumActiveTrials: this.config.maximumActiveTrials,
+      lastScheduledAt: this.lastScheduledAt,
+      refractoryMs: this.config.refractoryMs,
+      checks: {
+        generation:
+          generation === this.generation &&
+          forgeGeneration === forgeGenerationAfter,
+        hypothesisUnchanged:
+          hypothesisBefore !== null && hypothesisBefore === hypothesisAfter,
+        candidateUnchanged: candidateBefore === candidateAfter,
+        eligible:
+          !!hypothesis &&
+          hypothesis.status !== CausalHypothesisStatus.FALSIFIED &&
+          hypothesis.status !== CausalHypothesisStatus.RATIFIED,
+        exclusive: !activeTrials.some(
+          (trial) => trial.hypothesisId === candidate.hypothesisId,
+        ),
+        capacity: activeTrials.length < this.config.maximumActiveTrials,
+        refractory:
+          this.lastScheduledAt === null ||
+          checkedAt - this.lastScheduledAt >= this.config.refractoryMs,
+      },
+      certificateId: governanceDecision.certificateId,
+      approved: governanceDecision.approved,
+    };
+    const checks = receipt.checks;
+    const rejectionReason: ExperimentScheduleRejectionReason | null =
+      !checks.generation
+        ? "stale_authorization"
+        : !governanceDecision.approved
+          ? "governance_rejected"
+          : !checks.candidateUnchanged
+            ? "stale_authorization"
+            : !hypothesis
+              ? "hypothesis_changed"
+              : !checks.eligible
+                ? "hypothesis_ineligible"
+                : !checks.capacity
+                  ? "capacity"
+                  : !checks.refractory
+                    ? "refractory"
+                    : !checks.exclusive
+                      ? "hypothesis_ineligible"
+                      : !checks.hypothesisUnchanged
+                        ? "hypothesis_changed"
+                        : null;
+
+    if (rejectionReason) {
       return this.reject(
-        "governance_rejected",
-        preparation.timestamp,
+        rejectionReason,
+        checkedAt,
         preparation.explorationTemperature,
         preparation.candidate,
         governanceDecision,
+        receipt,
+        generation === this.generation,
       );
     }
 
-    return this.commitCandidate(preparation, governanceDecision);
+    return this.commitCandidate(
+      preparation,
+      governanceDecision,
+      checkedAt,
+      receipt,
+    );
   }
 
   private prepareSchedule(
@@ -315,6 +447,8 @@ export class ActiveInferenceExperimentScheduler extends EventEmitter {
   private commitCandidate(
     preparation: ExperimentSchedulePreparation,
     governanceDecision: ExperimentGovernanceDecision | null,
+    timestamp = preparation.timestamp,
+    precommitReceipt?: ExperimentPrecommitReceipt,
   ): ExperimentScheduleDecision {
     const candidate = preparation.candidate!;
     const trial = this.forge.designIntervention(
@@ -324,27 +458,31 @@ export class ActiveInferenceExperimentScheduler extends EventEmitter {
     if (!trial) {
       return this.reject(
         "forge_rejected",
-        preparation.timestamp,
+        timestamp,
         preparation.explorationTemperature,
         candidate,
         governanceDecision,
+        precommitReceipt,
       );
     }
 
     const decision: ExperimentScheduleDecision = {
       scheduled: true,
       reason: "scheduled",
-      timestamp: preparation.timestamp,
+      timestamp,
       explorationTemperature: preparation.explorationTemperature,
       candidate,
       trial,
       governanceDecision,
+      precommitReceipt: precommitReceipt
+        ? { ...precommitReceipt, trialId: trial.id }
+        : undefined,
     };
     this.scheduledExperiments++;
     this.totalExpectedInformationGain += candidate.expectedInformationGain;
-    this.lastScheduledAt = preparation.timestamp;
+    this.lastScheduledAt = timestamp;
     this.lastDecision = decision;
-    this.emit("experiment_scheduled", decision);
+    this.emit("experiment_scheduled", this.copyDecision(decision));
     return this.copyDecision(decision);
   }
 
@@ -365,6 +503,7 @@ export class ActiveInferenceExperimentScheduler extends EventEmitter {
   }
 
   reset(): void {
+    this.generation++;
     this.decisions = 0;
     this.scheduledExperiments = 0;
     this.rejectedExperiments = 0;
@@ -503,7 +642,7 @@ export class ActiveInferenceExperimentScheduler extends EventEmitter {
       energyLevel: this.clamp01(context.energyLevel),
       isEnergyCrisis: Boolean(context.isEnergyCrisis),
       riskTolerance: this.clamp01(context.riskTolerance ?? 0.72),
-      now: context.now ?? Date.now(),
+      now: context.now ?? this.clock(),
     };
   }
 
@@ -513,6 +652,8 @@ export class ActiveInferenceExperimentScheduler extends EventEmitter {
     explorationTemperature: number,
     candidate: ExperimentCandidate | null = null,
     governanceDecision: ExperimentGovernanceDecision | null = null,
+    precommitReceipt?: ExperimentPrecommitReceipt,
+    record = true,
   ): ExperimentScheduleDecision {
     const decision: ExperimentScheduleDecision = {
       scheduled: false,
@@ -522,11 +663,49 @@ export class ActiveInferenceExperimentScheduler extends EventEmitter {
       candidate,
       trial: null,
       governanceDecision,
+      precommitReceipt,
     };
-    this.rejectedExperiments++;
-    this.lastDecision = decision;
-    this.emit("experiment_deferred", decision);
+    // Old-generation completions return history only, not reset-era telemetry.
+    if (record) {
+      this.rejectedExperiments++;
+      this.lastDecision = decision;
+      this.emit("experiment_deferred", this.copyDecision(decision));
+    }
     return this.copyDecision(decision);
+  }
+
+  private snapshot(value: CausalHypothesis | ExperimentCandidate): string {
+    // Exact, detached canonical serialization, not a hash or authority token.
+    // Keep substantive prose private; receipts expose only equality checks.
+    const canonical = (item: unknown): unknown => {
+      if (Array.isArray(item)) return item.map(canonical);
+      if (item && typeof item === "object") {
+        return Object.fromEntries(
+          Object.entries(item)
+            .sort(([left], [right]) => left.localeCompare(right))
+            .map(([key, nested]) => [key, canonical(nested)]),
+        );
+      }
+      return item;
+    };
+    return JSON.stringify(canonical(value));
+  }
+
+  private hypothesisSnapshot(id: string): string | null {
+    const hypothesis = this.forge
+      .getHypotheses()
+      .find((item) => item.id === id);
+    return hypothesis ? this.snapshot(hypothesis) : null;
+  }
+
+  private copyCandidate(candidate: ExperimentCandidate): ExperimentCandidate {
+    return {
+      ...candidate,
+      design: {
+        ...candidate.design,
+        confoundControls: [...candidate.design.confoundControls],
+      },
+    };
   }
 
   private copyDecision(
@@ -534,14 +713,14 @@ export class ActiveInferenceExperimentScheduler extends EventEmitter {
   ): ExperimentScheduleDecision {
     return {
       ...decision,
-      candidate: decision.candidate
+      precommitReceipt: decision.precommitReceipt
         ? {
-            ...decision.candidate,
-            design: {
-              ...decision.candidate.design,
-              confoundControls: [...decision.candidate.design.confoundControls],
-            },
+            ...decision.precommitReceipt,
+            checks: { ...decision.precommitReceipt.checks },
           }
+        : undefined,
+      candidate: decision.candidate
+        ? this.copyCandidate(decision.candidate)
         : null,
       governanceDecision: decision.governanceDecision
         ? {
