@@ -22,7 +22,6 @@
 import { EventEmitter } from "events";
 import {
   OnlineReservoirLearner,
-  type LearnerState,
   type FeedbackSignal,
   EchoReservoir,
 } from "deep-tree-echo-core";
@@ -121,6 +120,7 @@ export class ReservoirFeedbackLoop extends EventEmitter {
   constructor(config: Partial<ReservoirFeedbackConfig> = {}) {
     super();
     this.config = { ...DEFAULT_CONFIG, ...config };
+    ReservoirFeedbackLoop.validateConfig(this.config);
 
     // Initialize the RLS learner
     this.learner = new OnlineReservoirLearner({
@@ -135,6 +135,30 @@ export class ReservoirFeedbackLoop extends EventEmitter {
       learningRateScale: 0.01,
       maxHistorySize: 1000,
     });
+  }
+
+  private static validateConfig(config: ReservoirFeedbackConfig): void {
+    if (
+      !Number.isSafeInteger(config.reservoirDim) ||
+      config.reservoirDim <= 0 ||
+      !Number.isSafeInteger(config.outputDim) ||
+      config.outputDim <= 0 ||
+      !Number.isFinite(config.forgettingFactor) ||
+      config.forgettingFactor < 0.9 ||
+      config.forgettingFactor > 1 ||
+      !Number.isFinite(config.batchIntervalMs) ||
+      config.batchIntervalMs <= 0 ||
+      !Number.isSafeInteger(config.maxBufferSize) ||
+      config.maxBufferSize <= 0 ||
+      !Number.isFinite(config.minRewardMagnitude) ||
+      config.minRewardMagnitude < 0 ||
+      !Number.isFinite(config.persistIntervalMs) ||
+      config.persistIntervalMs <= 0 ||
+      typeof config.enablePersistence !== "boolean" ||
+      typeof config.persistPath !== "string"
+    ) {
+      throw new Error("Invalid reservoir feedback configuration");
+    }
   }
 
   // ─── Lifecycle ───────────────────────────────────────────────────
@@ -206,6 +230,27 @@ export class ReservoirFeedbackLoop extends EventEmitter {
   submitFeedback(event: FeedbackEvent): void {
     if (!this.running) return;
 
+    // Reject invalid numeric evidence before buffering or success accounting.
+    const validVector = (values: Float64Array | undefined, dimension: number) =>
+      values === undefined ||
+      (values instanceof Float64Array &&
+        values.length === dimension &&
+        values.every(Number.isFinite));
+    if (
+      !Number.isFinite(event.reward) ||
+      !Number.isFinite(event.timestamp) ||
+      event.timestamp < 0 ||
+      !validVector(event.reservoirState, this.config.reservoirDim) ||
+      !validVector(event.targetOutput, this.config.outputDim)
+    ) {
+      const error = new Error(
+        "Feedback must contain finite, compatible numeric evidence",
+      );
+      log.warn(error.message);
+      this.emit("error", { error, event });
+      return;
+    }
+
     // Noise gate: skip tiny rewards
     if (Math.abs(event.reward) < this.config.minRewardMagnitude) return;
 
@@ -213,6 +258,14 @@ export class ReservoirFeedbackLoop extends EventEmitter {
     if (!event.reservoirState && this.reservoir) {
       const state = this.reservoir.getState();
       event.reservoirState = new Float64Array(state.combined);
+    }
+    if (!validVector(event.reservoirState, this.config.reservoirDim)) {
+      const error = new Error(
+        "Reservoir state must contain finite, compatible numeric evidence",
+      );
+      log.warn(error.message);
+      this.emit("error", { error, event });
+      return;
     }
 
     this.feedbackBuffer.push(event);
@@ -302,12 +355,9 @@ export class ReservoirFeedbackLoop extends EventEmitter {
     for (const event of events) {
       if (!event.reservoirState) continue;
 
-      // Construct target output from reward signal
-      // The target is a vector where each dimension reflects the reward
-      // weighted by the reservoir state's projection onto that dimension
-      const targetOutput = event.targetOutput ?? this.constructTarget(event);
-
       try {
+        // Keep generated-target failures inside the existing rejection path.
+        const targetOutput = event.targetOutput ?? this.constructTarget(event);
         const sourceMap: Record<string, FeedbackSignal["source"]> = {
           conversation: "user",
           salience: "self-evaluation",
@@ -393,9 +443,11 @@ export class ReservoirFeedbackLoop extends EventEmitter {
       const { writeFileSync, mkdirSync } = await import("fs");
       const { dirname } = await import("path");
 
-      mkdirSync(dirname(this.config.persistPath), { recursive: true });
-
-      const state = this.learner.serialize();
+      ReservoirFeedbackLoop.validateConfig(this.config);
+      const state = OnlineReservoirLearner.parseState(
+        this.learner.serialize(),
+        this.learner.getDimensions(),
+      );
       const serializable = {
         weights: Array.from(state.weights),
         pMatrix: Array.from(state.pMatrix),
@@ -407,6 +459,7 @@ export class ReservoirFeedbackLoop extends EventEmitter {
         savedAt: Date.now(),
       };
 
+      mkdirSync(dirname(this.config.persistPath), { recursive: true });
       writeFileSync(this.config.persistPath, JSON.stringify(serializable));
       this.emit("state_persisted", { path: this.config.persistPath });
     } catch (err) {
@@ -431,14 +484,28 @@ export class ReservoirFeedbackLoop extends EventEmitter {
 
       const data = JSON.parse(readFileSync(this.config.persistPath, "utf-8"));
 
-      const state: LearnerState = {
-        weights: new Float64Array(data.weights),
-        pMatrix: new Float64Array(data.pMatrix),
-        momentum: new Float64Array(data.momentum),
-        totalUpdates: data.totalUpdates,
-        cumulativeReward: data.cumulativeReward,
-        avgPredictionError: data.avgPredictionError,
-      };
+      if (
+        !data ||
+        typeof data !== "object" ||
+        !data.config ||
+        typeof data.config !== "object"
+      ) {
+        throw new Error("Invalid reservoir feedback checkpoint configuration");
+      }
+      ReservoirFeedbackLoop.validateConfig(data.config);
+      const dimensions = this.learner.getDimensions();
+      if (
+        data.config.reservoirDim !== dimensions.reservoirDim ||
+        data.config.outputDim !== dimensions.outputDim ||
+        !Number.isFinite(data.savedAt) ||
+        data.savedAt < 0
+      ) {
+        throw new Error(
+          "Invalid reservoir feedback checkpoint dimensions or timestamp",
+        );
+      }
+      // Validate raw entries (including null) before any Float64Array coercion.
+      const state = OnlineReservoirLearner.parseState(data, dimensions);
 
       this.learner.deserialize(state);
       log.info(

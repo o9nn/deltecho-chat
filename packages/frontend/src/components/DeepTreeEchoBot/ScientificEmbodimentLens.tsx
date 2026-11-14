@@ -105,6 +105,51 @@ export function ScientificEmbodimentLens({
               </>
             )}
           </dl>
+          <section aria-label="Native Cubism callback cadence">
+            <h4>Native Cubism callback cadence</h4>
+            {sample?.nativeCadence ? (
+              <>
+                <p>
+                  {sample.nativeCadence.nativeCallbackCount} native callbacks in
+                  this avatar lifetime.
+                </p>
+                {sample.nativeCadence.status === "observed" ? (
+                  <dl>
+                    <dt>Recent mean callback interval</dt>
+                    <dd>
+                      {sample.nativeCadence.meanIntervalMs?.toFixed(2)} ms
+                    </dd>
+                    <dt>Minimum / maximum interval</dt>
+                    <dd>
+                      {sample.nativeCadence.minIntervalMs?.toFixed(2)} /{" "}
+                      {sample.nativeCadence.maxIntervalMs?.toFixed(2)} ms
+                    </dd>
+                    <dt>Intervals in bounded window</dt>
+                    <dd>
+                      {sample.nativeCadence.intervalCount} /{" "}
+                      {sample.nativeCadence.capacity}
+                    </dd>
+                  </dl>
+                ) : (
+                  <p>
+                    {sample.nativeCadence.status === "unavailable"
+                      ? "Cadence unavailable — no valid monotonic clock."
+                      : "Waiting for consecutive visible native callbacks."}
+                  </p>
+                )}
+              </>
+            ) : (
+              <p>Waiting for native callback timing.</p>
+            )}
+            <p>
+              After physics, before Cubism mesh update. Visibility transitions
+              clear the interval window, not the historical callback count. This
+              runtime diagnostic is independent of target-pair evidence: native
+              callbacks are not display FPS, render latency, motion settling
+              time, parameter accuracy, or scientific truth. No learning or DAO
+              authority consumes it.
+            </p>
+          </section>
           {observed && (
             <section aria-label="Scientific observation clock">
               <h4>Scientific observation clock</h4>

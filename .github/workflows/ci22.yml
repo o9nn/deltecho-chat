@@ -14,7 +14,8 @@ concurrency:
 
 jobs:
   check-and-test:
-    runs-on: ubuntu-latest
+    # Playwright 1.57 has Chromium downloads for 24.04, not the new 26.04 latest.
+    runs-on: ubuntu-24.04
     timeout-minutes: 45
     strategy:
       matrix:

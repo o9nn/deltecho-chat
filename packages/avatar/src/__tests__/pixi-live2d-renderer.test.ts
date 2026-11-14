@@ -3,8 +3,11 @@
  *
  * Since the actual Live2D rendering requires a browser environment with
  * canvas support, these tests focus on the API contract and mock behavior.
+ * The timer fixtures mirror installed native API ordering, not actual Cubism
+ * motion/physics outputs, painted frames, performance, or OS visibility.
  */
 
+import { Application, Ticker, UPDATE_PRIORITY } from "pixi.js";
 import { Live2DModel } from "pixi-live2d-display-lipsyncpatch/cubism4";
 import {
   PixiLive2DRenderer,
@@ -24,50 +27,123 @@ jest.mock("@pixi/unsafe-eval", () => ({
 }));
 
 jest.mock("pixi.js", () => ({
+  UPDATE_PRIORITY: { NORMAL: 0, LOW: -25, UTILITY: -50 },
+  Ticker: { shared: { started: true } },
   Application: jest
     .fn()
-    .mockImplementation((options: { resolution?: number }) => {
-      const onceFns: Array<() => void> = [];
-      return {
-        stage: {
-          addChild: jest.fn(),
-        },
-        view: {
-          width: 400,
-          height: 400,
-          clientWidth: 400,
-          clientHeight: 400,
-        },
-        ticker: {
+    .mockImplementation(
+      (options: { resolution?: number; autoStart?: boolean }) => {
+        type Listener = {
+          callback: (delta: number) => void;
+          context: unknown;
+          priority: number;
+          once: boolean;
+        };
+        const listeners: Listener[] = [];
+        const trace: string[] = [];
+        const ticker = {
+          started: options.autoStart !== false,
+          speed: 1,
           maxFPS: 0,
-          addOnce: (cb: () => void) => {
-            onceFns.push(cb);
+          deltaMS: 0,
+          listeners,
+          trace,
+          start: jest.fn(() => {
+            ticker.started = true;
+          }),
+          stop: jest.fn(() => {
+            ticker.started = false;
+          }),
+          add: jest.fn((callback, context = null, priority = 0): unknown => {
+            listeners.push({ callback, context, priority, once: false });
+            return ticker;
+          }),
+          addOnce: jest.fn(
+            (callback, context = null, priority = 0): unknown => {
+              listeners.push({ callback, context, priority, once: true });
+              return ticker;
+            },
+          ),
+          remove: jest.fn((callback, context = null): unknown => {
+            for (let i = listeners.length - 1; i >= 0; i--) {
+              if (
+                listeners[i].callback === callback &&
+                listeners[i].context === context
+              )
+                listeners.splice(i, 1);
+            }
+            return ticker;
+          }),
+          dispatch: (dt = 20) => {
+            if (!ticker.started) return;
+            ticker.deltaMS = dt * ticker.speed;
+            const queued = [...listeners].sort(
+              (a, b) => b.priority - a.priority,
+            );
+            for (const listener of queued) {
+              if (!listeners.includes(listener)) continue;
+              listener.callback.call(
+                listener.context,
+                ticker.deltaMS / (1000 / 60),
+              );
+              if (listener.once)
+                ticker.remove(listener.callback, listener.context);
+            }
           },
-          flushOnce: () => {
-            const queued = onceFns.splice(0, onceFns.length);
-            for (const fn of queued) fn();
+          flushOnce: () => ticker.dispatch(),
+        };
+        const children: Array<{ _render?: (renderer: unknown) => void }> = [];
+        const app = {
+          stage: {
+            children,
+            addChild: jest.fn((child) => {
+              children.push(child);
+            }),
+            removeChildren: jest.fn(() => children.splice(0)),
           },
-        },
-        screen: { width: 400, height: 400 },
-        renderer: {
-          resize: jest.fn(),
-          width: 400,
-          height: 400,
-          resolution: options.resolution ?? 1,
-          extract: {
-            pixels: jest.fn(() => new Uint8Array(400 * 400 * 4)),
+          view: {
+            width: 400,
+            height: 400,
+            clientWidth: 400,
+            clientHeight: 400,
           },
-        },
-        destroy: jest.fn(),
-      };
-    }),
+          ticker,
+          screen: { width: 400, height: 400 },
+          renderer: {
+            resize: jest.fn(),
+            width: 400,
+            height: 400,
+            resolution: options.resolution ?? 1,
+            extract: {
+              pixels: jest.fn(() => {
+                trace.push("pixels");
+                return new Uint8Array(400 * 400 * 4);
+              }),
+            },
+          },
+          render: jest.fn(() => {
+            trace.push("render");
+            for (const child of children) child._render?.(app.renderer);
+            trace.push("rendered");
+          }),
+          destroy: jest.fn(() => {
+            ticker.stop();
+            listeners.splice(0);
+          }),
+        };
+        ticker.add(app.render, app, -25);
+        return app;
+      },
+    ),
 }));
 
 jest.mock("pixi-live2d-display-lipsyncpatch/cubism4", () => ({
   cubism4Ready: jest.fn().mockResolvedValue(undefined),
   Live2DModel: {
     registerTicker: jest.fn(),
-    from: jest.fn().mockImplementation(() => {
+    from: jest.fn().mockImplementation((_source, options) => {
+      const ticker = options.ticker;
+      const events = new Map<string, Set<() => void>>();
       const scale = {
         x: 1,
         y: 1,
@@ -76,16 +152,34 @@ jest.mock("pixi-live2d-display-lipsyncpatch/cubism4", () => ({
           this.y = y ?? x;
         },
       };
-      return Promise.resolve({
+      const model = {
         x: 0,
         y: 0,
         width: 800,
         height: 1600,
+        deltaTime: 0,
+        elapsedTime: 0,
         scale,
         anchor: { x: 0.5, y: 0.5, set: jest.fn() },
+        automator: {
+          ticker,
+          autoUpdate: options.autoUpdate,
+        },
         internalModel: {
-          on: jest.fn(),
-          off: jest.fn(),
+          on: jest.fn((event: string, listener: () => void) => {
+            if (!events.has(event)) events.set(event, new Set());
+            events.get(event)!.add(listener);
+          }),
+          off: jest.fn((event: string, listener: () => void) => {
+            events.get(event)?.delete(listener);
+          }),
+          update: jest.fn((_dt: number, _now: number) => {
+            ticker.trace.push("internal-update");
+            for (const listener of events.get("beforeModelUpdate") ?? [])
+              listener();
+            model.internalModel.coreModel.update();
+            model.internalModel.coreModel.loadParameters();
+          }),
           motionManager: {
             startMotion: jest.fn().mockResolvedValue(true),
             stopAllMotions: jest.fn(),
@@ -94,17 +188,60 @@ jest.mock("pixi-live2d-display-lipsyncpatch/cubism4", () => ({
             setParameterValueById: jest.fn(),
             getParameterValueById: jest.fn().mockReturnValue(0),
             setPartOpacityById: jest.fn(),
+            update: jest.fn(() => {
+              ticker.trace.push("core-update");
+            }),
+            loadParameters: jest.fn(),
           },
         },
+        update: jest.fn((dt: number) => {
+          ticker.trace.push("timer-update");
+          model.deltaTime += dt;
+          model.elapsedTime += dt;
+        }),
+        _render: jest.fn((_renderer) => {
+          if (model.deltaTime !== 0) {
+            model.internalModel.update(model.deltaTime, model.elapsedTime);
+            model.deltaTime = 0;
+          }
+          ticker.trace.push("native-draw");
+        }),
         expression: jest.fn(),
         motion: jest.fn().mockResolvedValue(true),
         speak: jest.fn(),
         stopSpeaking: jest.fn(),
-        destroy: jest.fn(),
-      });
+        destroy: jest.fn(() => {
+          model.automator.autoUpdate = false;
+          ticker.remove(onTickerUpdate);
+          events.clear();
+        }),
+      };
+      const onTickerUpdate = () => model.update(ticker.deltaMS);
+      if (options.autoUpdate) ticker.add(onTickerUpdate);
+      return Promise.resolve(model);
     }),
   },
 }));
+
+const mockNativeFrom = (Live2DModel.from as jest.Mock).getMockImplementation()!;
+type FixtureModel = Awaited<ReturnType<typeof mockNativeFrom>>;
+type FixtureTicker = {
+  started: boolean;
+  speed: number;
+  deltaMS: number;
+  start: jest.Mock;
+  stop: jest.Mock;
+  add: jest.Mock;
+  remove: jest.Mock;
+  dispatch: (dt?: number) => void;
+  flushOnce: () => void;
+  trace: string[];
+  listeners: Array<{
+    callback: () => void;
+    context: unknown;
+    priority: number;
+  }>;
+};
 
 describe("PixiLive2DRenderer", () => {
   let renderer: PixiLive2DRenderer;
@@ -129,6 +266,7 @@ describe("PixiLive2DRenderer", () => {
   afterEach(() => {
     renderer.dispose();
     jest.clearAllMocks();
+    jest.restoreAllMocks();
   });
 
   describe("initialization", () => {
@@ -255,6 +393,273 @@ describe("PixiLive2DRenderer", () => {
       await expect(renderer.initialize(config)).rejects.toThrow(
         "Canvas element not found",
       );
+    });
+  });
+
+  describe("native clock ownership (API-ordering mocks, not performance)", () => {
+    const configFor = (canvas: HTMLCanvasElement): CubismAdapterConfig => ({
+      canvas,
+      model: { modelPath: "/test/model.json", name: "Test Model", scale: 1 },
+    });
+    const tickerFor = (instance = renderer) =>
+      instance.getApplication()!.ticker as unknown as FixtureTicker;
+    const modelFor = () => renderer.getModel() as unknown as FixtureModel;
+    const visibility = (hidden: boolean) => {
+      jest.spyOn(document, "hidden", "get").mockReturnValue(hidden);
+      jest
+        .spyOn(document, "visibilityState", "get")
+        .mockReturnValue(hidden ? "hidden" : "visible");
+      document.dispatchEvent(new Event("visibilitychange"));
+    };
+    const queuedLayout = () =>
+      tickerFor().listeners.find(
+        ({ priority }) => priority === UPDATE_PRIORITY.UTILITY,
+      )!;
+    const addBounds = () => {
+      const bounds = jest.fn(() => {
+        tickerFor().trace.push("bounds");
+        return { x: 200, y: 400, width: 400, height: 800 };
+      });
+      Object.assign(modelFor().internalModel, {
+        getDrawableIDs: () => ["body"],
+        getDrawableBounds: bounds,
+      });
+      return bounds;
+    };
+
+    it("retains explicit private autoUpdate and forwards scaled ticker time in the model elapsed domain only", async () => {
+      visibility(false);
+      const config = configFor(mockCanvas);
+      await renderer.initialize(config);
+      await renderer.loadModel(config.model);
+      const ticker = tickerFor();
+      const model = modelFor();
+      expect(Application).toHaveBeenLastCalledWith(
+        expect.objectContaining({ autoStart: false, sharedTicker: false }),
+      );
+      expect(Live2DModel.registerTicker).not.toHaveBeenCalled();
+      expect(Live2DModel.from).toHaveBeenLastCalledWith(
+        expect.anything(),
+        expect.objectContaining({
+          ticker,
+          autoUpdate: true,
+          autoFocus: true,
+          autoHitTest: true,
+        }),
+      );
+      expect(model.automator.ticker).toBe(ticker);
+      expect(model.automator.ticker).not.toBe(Ticker.shared);
+      expect(model.automator.autoUpdate).toBe(true);
+      expect(model.update).not.toHaveBeenCalled();
+      expect(model.internalModel.coreModel.update).not.toHaveBeenCalled();
+      const captured: Array<[number, number]> = [];
+      const original = model.internalModel.update;
+      model.internalModel.update = jest.fn((dt: number, now: number) => {
+        captured.push([dt, now]);
+        original.call(model.internalModel, dt, now);
+      });
+      jest.spyOn(performance, "now").mockReturnValue(987654321);
+      renderer.setAnimationSpeed(0.5);
+      ticker.dispatch(20);
+      ticker.dispatch(20);
+      expect(model.update.mock.calls).toEqual([[10], [10]]);
+      expect(captured).toEqual([
+        [10, 10],
+        [10, 20],
+      ]);
+      expect(model.deltaTime).toBe(0);
+      expect(model.elapsedTime).toBe(20);
+      expect(model.internalModel.coreModel.update).toHaveBeenCalledTimes(2);
+      expect(
+        model.internalModel.coreModel.loadParameters,
+      ).toHaveBeenCalledTimes(2);
+      expect(ticker.trace.slice(0, 6)).toEqual([
+        "timer-update",
+        "render",
+        "internal-update",
+        "core-update",
+        "native-draw",
+        "rendered",
+      ]);
+      expect(
+        ticker.listeners.filter(
+          ({ priority }) => priority === UPDATE_PRIORITY.UTILITY,
+        ),
+      ).toHaveLength(0);
+    });
+
+    it("measures bounds after native render and reads only the following painted framebuffer", async () => {
+      visibility(false);
+      const config = configFor(mockCanvas);
+      await renderer.initialize(config);
+      await renderer.loadModel(config.model);
+      const ticker = tickerFor();
+      const model = modelFor();
+      const bounds = addBounds();
+      const extract = renderer.getApplication()!.renderer.extract
+        .pixels as jest.Mock;
+      expect(model.scale.x).toBeCloseTo(0.25);
+      expect(bounds).not.toHaveBeenCalled();
+      expect(ticker.add).toHaveBeenCalledWith(
+        expect.any(Function),
+        renderer,
+        UPDATE_PRIORITY.UTILITY,
+      );
+      ticker.dispatch();
+      expect(bounds).toHaveBeenCalledTimes(1);
+      expect(ticker.trace.indexOf("bounds")).toBeGreaterThan(
+        ticker.trace.indexOf("rendered"),
+      );
+      expect(model.scale.x).toBeCloseTo(400 / (800 * FIGURE_BOUNDS_PAD));
+      expect(extract).not.toHaveBeenCalled();
+      ticker.dispatch();
+      expect(extract.mock.calls).toEqual([[]]);
+      expect(ticker.trace.at(-1)).toBe("pixels");
+      expect(model.internalModel.coreModel.update).toHaveBeenCalledTimes(2);
+    });
+
+    it("waits for consumed native time rather than treating any ticker callback as a render", async () => {
+      visibility(false);
+      const config = configFor(mockCanvas);
+      await renderer.initialize(config);
+      await renderer.loadModel(config.model);
+      const layout = queuedLayout();
+      const bounds = addBounds();
+      layout.callback.call(layout.context);
+      modelFor().update(20);
+      layout.callback.call(layout.context);
+      expect(bounds).not.toHaveBeenCalled();
+      expect(modelFor().internalModel.coreModel.update).not.toHaveBeenCalled();
+      tickerFor().dispatch(20);
+      expect(bounds).toHaveBeenCalledTimes(1);
+      expect(modelFor().internalModel.coreModel.update).toHaveBeenCalledTimes(
+        1,
+      );
+    });
+
+    it("honors hidden-before-initialization and resumes queued layout without hidden native stepping", async () => {
+      visibility(true);
+      const config = configFor(mockCanvas);
+      await renderer.initialize(config);
+      const ticker = tickerFor();
+      expect(ticker.started).toBe(false);
+      expect(ticker.start).not.toHaveBeenCalled();
+      await renderer.loadModel(config.model);
+      const model = modelFor();
+      const bounds = addBounds();
+      const layout = queuedLayout();
+      ticker.dispatch(10000);
+      layout.callback.call(layout.context);
+      expect(ticker.started).toBe(false);
+      expect(model.elapsedTime).toBe(0);
+      expect(model.update).not.toHaveBeenCalled();
+      expect(bounds).not.toHaveBeenCalled();
+      visibility(false);
+      ticker.dispatch(20);
+      expect(model.elapsedTime).toBe(20);
+      expect(bounds).toHaveBeenCalledTimes(1);
+      ticker.dispatch(20);
+      expect(model.internalModel.coreModel.update).toHaveBeenCalledTimes(2);
+    });
+
+    it("pauses/resumes native ownership and leaves scheduled visible-fill idle while hidden", async () => {
+      visibility(false);
+      const config = configFor(mockCanvas);
+      await renderer.initialize(config);
+      await renderer.loadModel(config.model);
+      const ticker = tickerFor();
+      const model = modelFor();
+      const extract = renderer.getApplication()!.renderer.extract
+        .pixels as jest.Mock;
+      ticker.dispatch(20);
+      const fill = queuedLayout();
+      visibility(true);
+      ticker.dispatch(10000);
+      fill.callback.call(fill.context);
+      expect(model.elapsedTime).toBe(20);
+      expect(model.internalModel.coreModel.update).toHaveBeenCalledTimes(1);
+      expect(extract).not.toHaveBeenCalled();
+      expect(model.automator.autoUpdate).toBe(true);
+      visibility(false);
+      ticker.dispatch(20);
+      expect(ticker.started).toBe(true);
+      expect(model.elapsedTime).toBe(40);
+      expect(extract.mock.calls).toEqual([[]]);
+    });
+
+    it("cancels queued layout/native listeners and prevents visibility restart after unmount", async () => {
+      visibility(false);
+      const config = configFor(mockCanvas);
+      await renderer.initialize(config);
+      await renderer.loadModel(config.model);
+      const ticker = tickerFor();
+      const model = modelFor();
+      const app = renderer.getApplication()!;
+      const layout = queuedLayout();
+      renderer.dispose();
+      expect(ticker.remove).toHaveBeenCalledWith(layout.callback, renderer);
+      layout.callback.call(layout.context);
+      visibility(true);
+      visibility(false);
+      ticker.dispatch(20);
+      expect(ticker.started).toBe(false);
+      expect(model.automator.autoUpdate).toBe(false);
+      expect(model.update).not.toHaveBeenCalled();
+      expect(app.renderer.extract.pixels).not.toHaveBeenCalled();
+      expect(ticker.listeners).toHaveLength(0);
+    });
+
+    it("cancels the prior generation and retains stage/reload fit and custom expression/motion mix", async () => {
+      visibility(false);
+      const config = {
+        ...configFor(mockCanvas),
+        expressions: { happy: "custom-happy" },
+        motions: { wave: { group: "CustomWave", index: 3 } },
+      };
+      await renderer.initialize(config);
+      await renderer.loadModel({ ...config.model, offset: { x: 7, y: -3 } });
+      const ticker = tickerFor();
+      const previous = modelFor();
+      const stale = queuedLayout();
+      await renderer.loadModel({ ...config.model, offset: { x: 7, y: -3 } });
+      const model = modelFor();
+      stale.callback.call(stale.context);
+      expect(previous.destroy).toHaveBeenCalledTimes(1);
+      expect(previous.automator.autoUpdate).toBe(false);
+      expect(ticker.remove).toHaveBeenCalledWith(stale.callback, renderer);
+      expect(renderer.getApplication()!.stage.children).toEqual([model]);
+      renderer.setExpression("happy", 0.8);
+      renderer.playMotion("wave", 3);
+      expect(model.expression).toHaveBeenCalledWith("custom-happy");
+      expect(model.motion).toHaveBeenCalledWith("CustomWave", 3, 3);
+      ticker.dispatch();
+      expect(model.x).toBe(207);
+      expect(model.y).toBe(197);
+      expect(model.automator.autoUpdate).toBe(true);
+      expect(previous.update).not.toHaveBeenCalled();
+    });
+
+    it("adds no layout timer and leaves another avatar's private ticker running on disposal", async () => {
+      visibility(false);
+      const config = configFor(mockCanvas);
+      await renderer.initialize(config);
+      const other = new PixiLive2DRenderer();
+      try {
+        await other.initialize(config);
+        await other.loadModel(config.model);
+        const timer = jest.spyOn(window, "setTimeout");
+        await renderer.loadModel(config.model);
+        expect(timer).not.toHaveBeenCalled();
+        const otherTicker = tickerFor(other);
+        const otherModel = other.getModel() as unknown as FixtureModel;
+        expect(tickerFor()).not.toBe(otherTicker);
+        renderer.dispose();
+        expect(otherTicker.started).toBe(true);
+        otherTicker.dispatch();
+        expect(otherModel.elapsedTime).toBe(20);
+      } finally {
+        other.dispose();
+      }
     });
   });
 
@@ -694,23 +1099,10 @@ describe("PixiLive2DRenderer", () => {
 
     it("scales to drawable bounds so empty canvas padding does not shrink the figure", async () => {
       const cubism4 = await import("pixi-live2d-display-lipsyncpatch/cubism4");
-      (cubism4.Live2DModel.from as jest.Mock).mockImplementationOnce(() => {
-        const scale = {
-          x: 1,
-          y: 1,
-          set(x: number, y?: number) {
-            this.x = x;
-            this.y = y ?? x;
-          },
-        };
-        return Promise.resolve({
-          x: 0,
-          y: 0,
-          width: 800,
-          height: 1600,
-          scale,
-          anchor: { x: 0.5, y: 0.5, set: jest.fn() },
-          internalModel: {
+      (cubism4.Live2DModel.from as jest.Mock).mockImplementationOnce(
+        async (...args) => {
+          const model = await mockNativeFrom(...args);
+          Object.assign(model.internalModel, {
             width: 800,
             height: 1600,
             getDrawableIDs: () => ["body"],
@@ -720,22 +1112,10 @@ describe("PixiLive2DRenderer", () => {
               width: 400,
               height: 800,
             }),
-            motionManager: {
-              startMotion: jest.fn().mockResolvedValue(true),
-              stopAllMotions: jest.fn(),
-            },
-            coreModel: {
-              setParameterValueById: jest.fn(),
-              getParameterValueById: jest.fn().mockReturnValue(0),
-            },
-          },
-          expression: jest.fn(),
-          motion: jest.fn().mockResolvedValue(true),
-          speak: jest.fn(),
-          stopSpeaking: jest.fn(),
-          destroy: jest.fn(),
-        });
-      });
+          });
+          return model;
+        },
+      );
       const config: CubismAdapterConfig = {
         canvas: mockCanvas,
         model: {
@@ -746,6 +1126,10 @@ describe("PixiLive2DRenderer", () => {
       };
       await renderer.initialize(config);
       await renderer.loadModel(config.model);
+      expect(renderer.getModel()?.scale.x).toBeCloseTo(0.25);
+      (
+        renderer.getApplication()!.ticker as unknown as FixtureTicker
+      ).dispatch();
       // Padded tight figure in a 400x400 view at fill 1 → height-limited
       expect(renderer.getModel()?.scale.x).toBeCloseTo(
         400 / (800 * FIGURE_BOUNDS_PAD),
@@ -754,48 +1138,23 @@ describe("PixiLive2DRenderer", () => {
 
     it("ignores water and canvas-sized planes so the figure fills the view", async () => {
       const cubism4 = await import("pixi-live2d-display-lipsyncpatch/cubism4");
-      (cubism4.Live2DModel.from as jest.Mock).mockImplementationOnce(() => {
-        const scale = {
-          x: 1,
-          y: 1,
-          set(x: number, y?: number) {
-            this.x = x;
-            this.y = y ?? x;
-          },
-        };
-        const drawables = [
-          { id: "body", x: 200, y: 200, width: 400, height: 800 },
-          { id: "WaterSurface1", x: 0, y: 1000, width: 800, height: 600 },
-          { id: "ArtMeshBg", x: 0, y: 0, width: 800, height: 1600 },
-        ];
-        return Promise.resolve({
-          x: 0,
-          y: 0,
-          width: 800,
-          height: 1600,
-          scale,
-          anchor: { x: 0.5, y: 0.5, set: jest.fn() },
-          internalModel: {
+      (cubism4.Live2DModel.from as jest.Mock).mockImplementationOnce(
+        async (...args) => {
+          const model = await mockNativeFrom(...args);
+          const drawables = [
+            { id: "body", x: 200, y: 200, width: 400, height: 800 },
+            { id: "WaterSurface1", x: 0, y: 1000, width: 800, height: 600 },
+            { id: "ArtMeshBg", x: 0, y: 0, width: 800, height: 1600 },
+          ];
+          Object.assign(model.internalModel, {
             width: 800,
             height: 1600,
             getDrawableIDs: () => drawables.map((drawable) => drawable.id),
             getDrawableBounds: (index: number) => drawables[index],
-            motionManager: {
-              startMotion: jest.fn().mockResolvedValue(true),
-              stopAllMotions: jest.fn(),
-            },
-            coreModel: {
-              setParameterValueById: jest.fn(),
-              getParameterValueById: jest.fn().mockReturnValue(0),
-            },
-          },
-          expression: jest.fn(),
-          motion: jest.fn().mockResolvedValue(true),
-          speak: jest.fn(),
-          stopSpeaking: jest.fn(),
-          destroy: jest.fn(),
-        });
-      });
+          });
+          return model;
+        },
+      );
       const config: CubismAdapterConfig = {
         canvas: mockCanvas,
         model: {
@@ -806,6 +1165,9 @@ describe("PixiLive2DRenderer", () => {
       };
       await renderer.initialize(config);
       await renderer.loadModel(config.model);
+      (
+        renderer.getApplication()!.ticker as unknown as FixtureTicker
+      ).dispatch();
       expect(renderer.getNativeSize()).toEqual({
         width: 400 * FIGURE_BOUNDS_PAD,
         height: 800 * FIGURE_BOUNDS_PAD,

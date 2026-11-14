@@ -131,6 +131,7 @@ export class OnlineReservoirLearner extends EventEmitter {
   constructor(config: Partial<OnlineLearnerConfig> = {}) {
     super();
     this.config = { ...DEFAULT_CONFIG, ...config };
+    OnlineReservoirLearner.validateConfig(this.config);
 
     const { reservoirDim, outputDim, initialPDiag } = this.config;
 
@@ -148,6 +149,102 @@ export class OnlineReservoirLearner extends EventEmitter {
 
     // Initialize momentum buffer
     this.momentum = new Float64Array(outputDim * reservoirDim);
+  }
+
+  private static validateConfig(config: OnlineLearnerConfig): void {
+    const positiveInteger = (value: number) =>
+      Number.isSafeInteger(value) && value > 0;
+    if (
+      !positiveInteger(config.reservoirDim) ||
+      !positiveInteger(config.outputDim) ||
+      !positiveInteger(config.reservoirDim * config.outputDim) ||
+      !positiveInteger(config.reservoirDim * config.reservoirDim) ||
+      !Number.isFinite(config.forgettingFactor) ||
+      config.forgettingFactor < 0.9 ||
+      config.forgettingFactor > 1 ||
+      !Number.isFinite(config.initialPDiag) ||
+      config.initialPDiag <= 0 ||
+      !Number.isFinite(config.minUpdateMagnitude) ||
+      config.minUpdateMagnitude < 0 ||
+      !Number.isFinite(config.maxWeightMagnitude) ||
+      config.maxWeightMagnitude <= 0 ||
+      typeof config.enableMomentum !== "boolean" ||
+      !Number.isFinite(config.momentumCoeff) ||
+      config.momentumCoeff < 0 ||
+      config.momentumCoeff > 1 ||
+      !Number.isFinite(config.learningRateScale) ||
+      config.learningRateScale < 0 ||
+      !Number.isSafeInteger(config.maxHistorySize) ||
+      config.maxHistorySize < 0
+    ) {
+      throw new Error("Invalid online learner configuration");
+    }
+  }
+
+  /** Validate raw JSON numbers before coercion, then copy a complete candidate. */
+  static parseState(
+    state: unknown,
+    dimensions: { reservoirDim: number; outputDim: number },
+  ): LearnerState {
+    const { reservoirDim, outputDim } = dimensions;
+    if (
+      !Number.isSafeInteger(reservoirDim) ||
+      reservoirDim <= 0 ||
+      !Number.isSafeInteger(outputDim) ||
+      outputDim <= 0 ||
+      !Number.isSafeInteger(reservoirDim * outputDim) ||
+      !Number.isSafeInteger(reservoirDim * reservoirDim) ||
+      !state ||
+      typeof state !== "object"
+    ) {
+      throw new Error("Invalid online learner state dimensions");
+    }
+    const candidate = state as Record<string, unknown>;
+    const copyVector = (name: string, length: number): Float64Array => {
+      const values = candidate[name];
+      if (
+        !(values instanceof Float64Array || Array.isArray(values)) ||
+        values.length !== length
+      ) {
+        throw new Error(`Invalid online learner ${name} shape`);
+      }
+      // Indexed validation also rejects sparse arrays and JSON null entries.
+      for (let i = 0; i < length; i++) {
+        if (typeof values[i] !== "number" || !Number.isFinite(values[i])) {
+          throw new Error(`Online learner ${name} must contain finite numbers`);
+        }
+      }
+      return new Float64Array(values);
+    };
+    const weights = copyVector("weights", outputDim * reservoirDim);
+    const pMatrix = copyVector("pMatrix", reservoirDim * reservoirDim);
+    const momentum = copyVector("momentum", outputDim * reservoirDim);
+    if (
+      !Number.isFinite(weights.reduce((sum, value) => sum + value * value, 0))
+    ) {
+      throw new Error("Online learner weight norm must remain finite");
+    }
+    const { totalUpdates, cumulativeReward, avgPredictionError } = candidate;
+    if (
+      typeof totalUpdates !== "number" ||
+      !Number.isSafeInteger(totalUpdates) ||
+      totalUpdates < 0 ||
+      typeof cumulativeReward !== "number" ||
+      !Number.isFinite(cumulativeReward) ||
+      typeof avgPredictionError !== "number" ||
+      !Number.isFinite(avgPredictionError) ||
+      avgPredictionError < 0
+    ) {
+      throw new Error("Invalid online learner state statistics");
+    }
+    return {
+      weights,
+      pMatrix,
+      momentum,
+      totalUpdates,
+      cumulativeReward,
+      avgPredictionError,
+    };
   }
 
   /**
@@ -169,6 +266,16 @@ export class OnlineReservoirLearner extends EventEmitter {
     if (y.length !== outputDim) {
       throw new Error(`Target output dim ${y.length} != expected ${outputDim}`);
     }
+    if (
+      !x.every(Number.isFinite) ||
+      !y.every(Number.isFinite) ||
+      !Number.isFinite(feedback.reward) ||
+      !Number.isFinite(feedback.valence) ||
+      !Number.isFinite(feedback.timestamp) ||
+      feedback.timestamp < 0
+    ) {
+      throw new Error("Online feedback must contain finite numeric evidence");
+    }
 
     // Step 1: Compute P * x
     const Px = new Float64Array(reservoirDim);
@@ -186,6 +293,9 @@ export class OnlineReservoirLearner extends EventEmitter {
       xPx += x[i] * Px[i];
     }
     const denom = forgettingFactor + xPx;
+    if (!Number.isFinite(denom) || denom <= 0) {
+      throw new Error("RLS denominator must be finite and positive");
+    }
 
     // Step 3: Compute Kalman gain: K = Px / denom
     const K = new Float64Array(reservoirDim);
@@ -216,6 +326,10 @@ export class OnlineReservoirLearner extends EventEmitter {
     const effectiveLR = learningRateScale * rewardScale;
 
     // Step 6: Update weights: W += lr * K * e^T
+    // Stage all learned state: overflow must not partially commit an update.
+    const weights = new Float64Array(this.weights);
+    const momentum = new Float64Array(this.momentum);
+    const pMatrix = new Float64Array(this.pMatrix.length);
     let weightChangeMag = 0;
     for (let i = 0; i < outputDim; i++) {
       for (let j = 0; j < reservoirDim; j++) {
@@ -223,11 +337,10 @@ export class OnlineReservoirLearner extends EventEmitter {
 
         if (this.config.enableMomentum) {
           const idx = i * reservoirDim + j;
-          this.momentum[idx] =
-            this.config.momentumCoeff * this.momentum[idx] + delta;
-          this.weights[idx] += this.momentum[idx];
+          momentum[idx] = this.config.momentumCoeff * momentum[idx] + delta;
+          weights[idx] += momentum[idx];
         } else {
-          this.weights[i * reservoirDim + j] += delta;
+          weights[i * reservoirDim + j] += delta;
         }
 
         weightChangeMag += delta * delta;
@@ -236,28 +349,48 @@ export class OnlineReservoirLearner extends EventEmitter {
     weightChangeMag = Math.sqrt(weightChangeMag);
 
     // Step 7: Clamp weights for stability
-    this.clampWeights();
+    // Check before clamping: Infinity is not valid evidence at the clamp bound.
+    if (
+      !weights.every(Number.isFinite) ||
+      !momentum.every(Number.isFinite) ||
+      !Number.isFinite(errorMag) ||
+      !Number.isFinite(weightChangeMag) ||
+      !Number.isFinite(effectiveLR)
+    ) {
+      throw new Error("RLS update must remain finite");
+    }
+    this.clampWeights(weights);
+    if (
+      !Number.isFinite(weights.reduce((sum, value) => sum + value * value, 0))
+    ) {
+      throw new Error("RLS weight norm must remain finite");
+    }
 
     // Step 8: Update P matrix: P = (P - K x^T P) / λ
     // This is the most expensive step: O(reservoirDim^2)
     for (let i = 0; i < reservoirDim; i++) {
       for (let j = 0; j < reservoirDim; j++) {
-        this.pMatrix[i * reservoirDim + j] =
+        pMatrix[i * reservoirDim + j] =
           (this.pMatrix[i * reservoirDim + j] - K[i] * Px[j]) /
           forgettingFactor;
       }
     }
 
     // Update statistics
-    this.totalUpdates++;
-    this.cumulativeReward += feedback.reward;
-    this.predictionErrors.push(errorMag);
-    if (this.predictionErrors.length > 100) {
-      this.predictionErrors.shift();
+    const totalUpdates = this.totalUpdates + 1;
+    const cumulativeReward = this.cumulativeReward + feedback.reward;
+    const predictionErrors = [...this.predictionErrors, errorMag].slice(-100);
+    if (
+      !pMatrix.every(Number.isFinite) ||
+      !Number.isSafeInteger(totalUpdates) ||
+      !Number.isFinite(cumulativeReward) ||
+      !Number.isFinite(predictionErrors.reduce((a, b) => a + b, 0))
+    ) {
+      throw new Error("RLS state and statistics must remain finite");
     }
 
     const update: LearningUpdate = {
-      index: this.totalUpdates,
+      index: totalUpdates,
       weightChangeMagnitude: weightChangeMag,
       predictionError: errorMag,
       effectiveLearningRate: effectiveLR,
@@ -266,11 +399,19 @@ export class OnlineReservoirLearner extends EventEmitter {
     };
 
     // Store in history
-    this.updateHistory.push(update);
-    if (this.updateHistory.length > this.config.maxHistorySize) {
-      this.updateHistory.shift();
+    const updateHistory = [...this.updateHistory, update];
+    if (updateHistory.length > this.config.maxHistorySize) {
+      updateHistory.shift();
     }
 
+    // Commit only after every candidate array and statistic is validated.
+    this.weights = weights;
+    this.pMatrix = pMatrix;
+    this.momentum = momentum;
+    this.totalUpdates = totalUpdates;
+    this.cumulativeReward = cumulativeReward;
+    this.predictionErrors = predictionErrors;
+    this.updateHistory = updateHistory;
     this.emit("update", update);
 
     if (this.totalUpdates % 100 === 0) {
@@ -307,11 +448,11 @@ export class OnlineReservoirLearner extends EventEmitter {
   /**
    * Clamp weights to prevent instability.
    */
-  private clampWeights(): void {
+  private clampWeights(weights: Float64Array): void {
     const max = this.config.maxWeightMagnitude;
-    for (let i = 0; i < this.weights.length; i++) {
-      if (this.weights[i] > max) this.weights[i] = max;
-      if (this.weights[i] < -max) this.weights[i] = -max;
+    for (let i = 0; i < weights.length; i++) {
+      if (weights[i] > max) weights[i] = max;
+      if (weights[i] < -max) weights[i] = -max;
     }
   }
 
@@ -341,25 +482,35 @@ export class OnlineReservoirLearner extends EventEmitter {
    * Serialize the learner state for persistence.
    */
   serialize(): LearnerState {
-    return {
-      weights: new Float64Array(this.weights),
-      pMatrix: new Float64Array(this.pMatrix),
-      momentum: new Float64Array(this.momentum),
-      totalUpdates: this.totalUpdates,
-      cumulativeReward: this.cumulativeReward,
-      avgPredictionError: this.getAvgPredictionError(),
-    };
+    return OnlineReservoirLearner.parseState(
+      {
+        weights: this.weights,
+        pMatrix: this.pMatrix,
+        momentum: this.momentum,
+        totalUpdates: this.totalUpdates,
+        cumulativeReward: this.cumulativeReward,
+        avgPredictionError: this.getAvgPredictionError(),
+      },
+      this.config,
+    );
   }
 
   /**
    * Restore from serialized state.
    */
   deserialize(state: LearnerState): void {
-    this.weights = new Float64Array(state.weights);
-    this.pMatrix = new Float64Array(state.pMatrix);
-    this.momentum = new Float64Array(state.momentum);
-    this.totalUpdates = state.totalUpdates;
-    this.cumulativeReward = state.cumulativeReward;
+    OnlineReservoirLearner.validateConfig(this.config);
+    const candidate = OnlineReservoirLearner.parseState(state, this.config);
+    // The legacy checkpoint stores an average, not its original error history.
+    const predictionErrors =
+      candidate.totalUpdates > 0 ? [candidate.avgPredictionError] : [];
+    this.weights = candidate.weights;
+    this.pMatrix = candidate.pMatrix;
+    this.momentum = candidate.momentum;
+    this.totalUpdates = candidate.totalUpdates;
+    this.cumulativeReward = candidate.cumulativeReward;
+    this.predictionErrors = predictionErrors;
+    this.updateHistory = [];
   }
 
   /**
@@ -409,6 +560,9 @@ export class OnlineReservoirLearner extends EventEmitter {
    * Used by SelfModificationEngine ENACTION phase.
    */
   setForgettingFactor(factor: number): void {
+    if (!Number.isFinite(factor)) {
+      throw new Error("Forgetting factor must be finite");
+    }
     this.config.forgettingFactor = Math.max(0.9, Math.min(0.9999, factor));
   }
 
