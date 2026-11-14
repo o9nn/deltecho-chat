@@ -75,6 +75,12 @@ The first Playwright-attached minimize attempt reported the document visible des
 
 No screenshot or static test result is offered as Windows/hardware performance evidence. Character art, source/export rights and native rig assets were not changed; the existing DTE-styled rig is not a newly rights-approved original DTE model. Numeric-safe checkpoint admission is not crash/IO-atomic file replacement or a covariance PSD proof. Valid restore retains arrays and stored error summary, but does not reconstruct exact original moving-error history. Verification processes were stopped and the independent persistent local profile retained. Exact-head GitHub CI is checked after the authorized push; no merge or deployment is performed by this cycle.
 
+### CI runner-image repair
+
+Exact-head CI22 run `43638884780` on initial commit `8d70dd54204d02528dac63157a030f043f2e55fa` passed the builds, repository check, unit tests, AIRI broker and browser build, then failed **Install Playwright Browsers** with `ERROR: Playwright does not support chromium on ubuntu26.04-x64`. Its E2E step did not run; console warnings in the run summary were not the failure.
+
+The existing `ubuntu-latest` image had moved to Ubuntu 26.04. The installed lockfile's Playwright Core 1.57.0 registry includes real Chromium and headless-shell downloads for `ubuntu24.04-x64`. Pin only the non-deployment CI22 job to `ubuntu-24.04`, preserving Node 22, the frozen lockfile, all check/test/E2E steps and timeouts. No compatibility override, validation suppression, dependency replacement or Cloudflare workflow change is made. A new exact-head CI22 run validates this image repair. Product code and its native Electron validation are unchanged by the runner/documentation-only follow-up.
+
 ## References
 
 - [Review dependency PR #102](https://github.com/o9nn/deltecho-chat/pull/102)
