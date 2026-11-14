@@ -208,4 +208,79 @@ describe("Live2D native observation timing", () => {
     expect(controller.getEmbodimentDiagnostics().observationClock).toBeNull();
     expect(controller.getEmbodimentDiagnostics().sampleCount).toBe(count);
   });
+  it("counts only native callbacks independently of cognitive writes and manual/authority state", async () => {
+    const { controller, observe, metabolic } = await load();
+    expect(
+      controller.getEmbodimentDiagnostics().nativeCadence?.nativeCallbackCount,
+    ).toBe(0);
+    observe();
+    time = 140;
+    observe();
+    expect(controller.getEmbodimentDiagnostics().nativeCadence).toMatchObject({
+      nativeCallbackCount: 2,
+      meanIntervalMs: 140 - 100,
+    });
+    controller.updateCognitiveState({ mode: "Scientific Genius" });
+    metabolic(2);
+    expect(
+      controller.getEmbodimentDiagnostics().nativeCadence?.nativeCallbackCount,
+    ).toBe(2);
+    controller.updateCognitiveState({}, { presentationLocked: true });
+    time = 180;
+    observe();
+    expect(
+      controller.getEmbodimentDiagnostics().nativeCadence?.nativeCallbackCount,
+    ).toBe(3);
+    expect(controller.getEmbodimentDiagnostics().observationClock).toBeNull();
+    manager.dispose();
+    time = 220;
+    observe();
+    expect(
+      controller.getEmbodimentDiagnostics().nativeCadence?.nativeCallbackCount,
+    ).toBe(0);
+  });
+
+  it("clears cadence intervals on actual visibility events without counting a minimized gap", async () => {
+    const original = Object.getOwnPropertyDescriptor(
+      document,
+      "visibilityState",
+    );
+    try {
+      Object.defineProperty(document, "visibilityState", {
+        configurable: true,
+        value: "visible",
+      });
+      const { controller, observe } = await load();
+      observe();
+      time = 140;
+      observe();
+      Object.defineProperty(document, "visibilityState", {
+        configurable: true,
+        value: "hidden",
+      });
+      document.dispatchEvent(new Event("visibilitychange"));
+      time = 100_000;
+      expect(controller.getEmbodimentDiagnostics().nativeCadence).toMatchObject(
+        { visible: false, intervalCount: 0, nativeCallbackCount: 2 },
+      );
+      Object.defineProperty(document, "visibilityState", {
+        configurable: true,
+        value: "visible",
+      });
+      document.dispatchEvent(new Event("visibilitychange"));
+      observe();
+      expect(
+        controller.getEmbodimentDiagnostics().nativeCadence?.meanIntervalMs,
+      ).toBeNull();
+      time = 100_040;
+      observe();
+      expect(
+        controller.getEmbodimentDiagnostics().nativeCadence?.meanIntervalMs,
+      ).toBe(100_040 - 100_000);
+    } finally {
+      if (original)
+        Object.defineProperty(document, "visibilityState", original);
+      else Reflect.deleteProperty(document, "visibilityState");
+    }
+  });
 });

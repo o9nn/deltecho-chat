@@ -100,10 +100,16 @@ describe("orchestrator online learning boundary", () => {
   );
 
   it.each([new Float64Array(5), Float64Array.from([0, 0, 0, 0, 0, NaN])])(
-    "rejects malformed restored learner weights without partial readout mutation",
+    "rejects malformed imports before mutation and preserves valid readout sync",
     (weights) => {
       const learner = trainedLearner();
-      learner.deserialize({ ...learner.serialize(), weights });
+      const beforeLearner = learner.serialize();
+      const beforeHistory = learner.getUpdateHistory();
+      expect(() =>
+        learner.deserialize({ ...learner.serialize(), weights }),
+      ).toThrow();
+      expect(learner.serialize()).toEqual(beforeLearner);
+      expect(learner.getUpdateHistory()).toEqual(beforeHistory);
       const readout = new CognitiveReadout(2);
       const reservoir = new EchoReservoir({ units: 3 });
       readout.setWeights(
@@ -112,12 +118,12 @@ describe("orchestrator online learning boundary", () => {
         3,
       );
       const probe = Float64Array.from([0.4, -0.2, 0.6]);
-      const before = readout.run(probe);
-      const beforeLearner = learner.serialize();
-      expect(() =>
-        syncOnlineReservoirReadout(learner, readout, reservoir),
-      ).toThrow();
-      expect(readout.run(probe)).toEqual(before);
+      expect(syncOnlineReservoirReadout(learner, readout, reservoir)).toBe(
+        true,
+      );
+      learner.predict(probe).forEach((value, o) => {
+        expect(readout.run(probe).output[o]).toBeCloseTo(Math.tanh(value), 14);
+      });
       expect(readout.getDimensions()).toEqual({ inputDim: 3, outputDim: 2 });
       expect(learner.serialize()).toEqual(beforeLearner);
     },

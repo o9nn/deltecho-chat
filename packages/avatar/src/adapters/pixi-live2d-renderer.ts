@@ -52,6 +52,9 @@ import {
 interface Live2DModel {
   x: number;
   y: number;
+  /** Public native clock: _render consumes deltaTime using elapsedTime. */
+  deltaTime?: number;
+  elapsedTime?: number;
   width?: number;
   height?: number;
   scale: { x: number; y: number; set: (x: number, y?: number) => void };
@@ -219,6 +222,9 @@ export interface PixiLive2DConfig extends Omit<CubismAdapterConfig, "canvas"> {
 /** Serialize Cubism `from()` so two Pixi GL contexts cannot share one runtime. */
 let live2dFromLock: Promise<void> = Promise.resolve();
 
+// Pixi 7 UPDATE_PRIORITY.UTILITY (-50), after Application.render at LOW (-25).
+const POST_RENDER_LAYOUT_PRIORITY = -50;
+
 function cubismIdToString(id: unknown): string {
   if (typeof id === "string") return id;
   if (id && typeof id === "object") {
@@ -332,6 +338,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   private debug = false;
   private visibilityHandler: (() => void) | null = null;
   private blinkTickerCallback: ((deltaMS: number) => void) | null = null;
+  private postRenderLayoutCallbacks = new Set<() => void>();
   private frameListeners = new Set<(deltaTime: number) => void>();
   private viewCanvas: HTMLCanvasElement | null = null;
   private parameterObservers = new Set<() => void>();
@@ -420,7 +427,6 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     if (typeof live2d.cubism4Ready === "function") {
       await live2d.cubism4Ready();
     }
-    const { Live2DModel: Live2DModelClass } = live2d;
     const { Application } = pixi;
 
     // Get or create canvas element
@@ -453,6 +459,8 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       antialias: true,
       resolution,
       autoDensity: true,
+      autoStart: false,
+      sharedTicker: false,
       // Hint hybrid GPUs to choose the discrete adapter for smoother animation.
       // This is a performance optimization as per the Live2D performance skill.
       powerPreference: "high-performance",
@@ -484,8 +492,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       }
     }
 
-    // Pause the ticker when the tab is hidden to save battery/CPU.
-    // This is a performance optimization as per the Live2D performance skill.
+    // Configure the private ticker before starting it, including hidden-on-load.
     if (typeof document !== "undefined") {
       this.visibilityHandler = () => {
         const ticker = this.app?.ticker as
@@ -493,7 +500,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
           | undefined;
         if (!ticker) return;
         if (
-          document.visibilityState === "hidden" &&
+          (document.hidden || document.visibilityState === "hidden") &&
           typeof ticker.stop === "function"
         ) {
           this.dlog("Pausing Live2D ticker due to tab hidden");
@@ -504,13 +511,10 @@ export class PixiLive2DRenderer implements ICubismRenderer {
         }
       };
       document.addEventListener("visibilitychange", this.visibilityHandler);
+      this.visibilityHandler();
+    } else {
+      this.app.ticker.start();
     }
-
-    // Register the Live2D ticker for animation updates
-    // Note: Type cast needed due to pixi-live2d-display type definitions
-    Live2DModelClass.registerTicker(
-      this.app.ticker as unknown as typeof import("pixi.js").Ticker,
-    );
 
     // Apply custom expression/motion mappings
     if (config.expressions) {
@@ -572,6 +576,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       clearTimeout(this.blinkOpenTimer);
       this.blinkOpenTimer = null;
     }
+    this.cancelPostRenderLayout();
     this.detachParameterObservationHook();
     if (this.model) {
       this.model.destroy();
@@ -643,8 +648,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
       this.model.scale.set(1, 1);
       this.modelCanvasSize = null;
       this.refreshModelLayout(modelInfo.scale, modelInfo.offset);
-      this.scheduleNativeMetricsRefresh();
-      this.scheduleVisibleFillCorrection();
+      this.scheduleNativeMetricsRefresh(modelInfo.offset);
 
       // Start auto-blink (ticker-based for proper sync with PixiJS rAF loop)
       this.startAutoBlinkLoop();
@@ -1058,45 +1062,76 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     scale?: number,
     offset?: { x?: number; y?: number },
   ): void {
-    this.syncInternalModel();
     this.captureModelNativeMetrics();
     this.fitModelToView(scale, offset);
   }
 
   /**
-   * Vertices are empty until Cubism runs one update. Push that update now,
-   * then again on the next ticker tick once motions have sampled.
+   * The public model timer only accumulates on the native automator's NORMAL
+   * tick. _render consumes it at LOW, updating vertices in the elapsed clock.
+   * No layout code may advance either the public or internal model clock.
    */
-  private syncInternalModel(): void {
-    const update = this.model?.internalModel?.update;
-    if (typeof update !== "function") return;
-    try {
-      const now =
-        typeof performance !== "undefined" &&
-        typeof performance.now === "function"
-          ? performance.now()
-          : Date.now();
-      update.call(this.model?.internalModel, 16, now);
-    } catch {
-      /* model may not be ready for a manual update */
-    }
+  private hasNativeRendered(model: Live2DModel): boolean {
+    return (
+      model.deltaTime === 0 &&
+      typeof model.elapsedTime === "number" &&
+      Number.isFinite(model.elapsedTime) &&
+      model.elapsedTime > 0
+    );
   }
 
-  private scheduleNativeMetricsRefresh(): void {
-    const ticker = this.app?.ticker as
-      | { addOnce?: (cb: () => void) => void }
-      | undefined;
-    if (typeof ticker?.addOnce !== "function") return;
+  private schedulePostRenderLayout(measure: () => void): void {
+    const app = this.app;
+    const model = this.model;
+    if (!app || !model || typeof app.ticker.add !== "function") return;
     const generation = this.loadGeneration;
-    ticker.addOnce(() => {
+    const scheduledElapsedTime = model.elapsedTime ?? 0;
+    const run = () => {
+      if (!this.postRenderLayoutCallbacks.has(run)) return;
       if (
         generation !== this.loadGeneration ||
-        !this.model ||
+        this.app !== app ||
+        this.model !== model ||
         !this.initialized
       ) {
+        app.ticker.remove(run, this);
+        this.postRenderLayoutCallbacks.delete(run);
         return;
       }
-      this.refreshModelLayout();
+      if (
+        (typeof document !== "undefined" &&
+          (document.hidden || document.visibilityState === "hidden")) ||
+        app.ticker.started === false ||
+        !this.hasNativeRendered(model) ||
+        (model.elapsedTime ?? 0) <= scheduledElapsedTime
+      ) {
+        // Retain one bounded listener until a later native render. Re-adding an
+        // addOnce at the same priority can run again in the same Pixi dispatch.
+        return;
+      }
+      app.ticker.remove(run, this);
+      this.postRenderLayoutCallbacks.delete(run);
+      measure();
+    };
+    this.postRenderLayoutCallbacks.add(run);
+    app.ticker.add(run, this, POST_RENDER_LAYOUT_PRIORITY);
+  }
+
+  private cancelPostRenderLayout(): void {
+    for (const callback of this.postRenderLayoutCallbacks) {
+      this.app?.ticker.remove?.(callback, this);
+    }
+    this.postRenderLayoutCallbacks.clear();
+  }
+
+  private scheduleNativeMetricsRefresh(offset?: {
+    x?: number;
+    y?: number;
+  }): void {
+    this.schedulePostRenderLayout(() => {
+      this.refreshModelLayout(undefined, offset);
+      // Pixel fill must use the next frame painted with the finalized fit.
+      this.scheduleVisibleFillCorrection();
     });
   }
 
@@ -1128,6 +1163,10 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     if (!this.model) return { width: 0, height: 0 };
     const { width: canvasWidth, height: canvasHeight } =
       this.getModelCanvasSize();
+    if (!this.hasNativeRendered(this.model)) {
+      this.modelVisualCenterOffset = { x: 0, y: 0 };
+      return { width: canvasWidth, height: canvasHeight };
+    }
     const tight = this.measureDrawableBounds(canvasWidth, canvasHeight);
     if (tight && tight.width > 0 && tight.height > 0) {
       const padded = padFigureBounds(tight, FIGURE_BOUNDS_PAD);
@@ -1189,30 +1228,9 @@ export class PixiLive2DRenderer implements ICubismRenderer {
    * water / background meshes cannot keep the standing figure at half size.
    */
   private scheduleVisibleFillCorrection(): void {
-    const ticker = this.app?.ticker as
-      | { addOnce?: (cb: () => void) => void }
-      | undefined;
-    if (typeof ticker?.addOnce !== "function") return;
-    const generation = this.loadGeneration;
-    const run = () => {
-      if (
-        generation !== this.loadGeneration ||
-        !this.model ||
-        !this.initialized
-      ) {
-        return;
-      }
+    this.schedulePostRenderLayout(() => {
       this.correctScaleFromVisiblePixels();
-    };
-    if (typeof ticker?.addOnce === "function") {
-      ticker.addOnce(run);
-    }
-    if (
-      typeof window !== "undefined" &&
-      typeof window.setTimeout === "function"
-    ) {
-      window.setTimeout(run, 300);
-    }
+    });
   }
 
   private correctScaleFromVisiblePixels(): void {
@@ -1230,13 +1248,11 @@ export class PixiLive2DRenderer implements ICubismRenderer {
     if (typeof extract?.pixels !== "function") return;
     let pixels: ArrayLike<number>;
     try {
-      pixels = extract.pixels(this.model) ?? extract.pixels();
+      // No DisplayObject target: read the painted framebuffer, never generate
+      // an offscreen texture (which would call the native model's _render).
+      pixels = extract.pixels();
     } catch {
-      try {
-        pixels = extract.pixels();
-      } catch {
-        return;
-      }
+      return;
     }
     const pixelWidth = renderer.renderer?.width || 0;
     const pixelHeight = renderer.renderer?.height || 0;
@@ -1315,6 +1331,7 @@ export class PixiLive2DRenderer implements ICubismRenderer {
   dispose(): void {
     this.stopAutoBlinkLoop();
     this.loadGeneration += 1;
+    this.cancelPostRenderLayout();
     this.modelNativeSize = null;
     this.detachParameterObservationHook();
     this.parameterObservers.clear();

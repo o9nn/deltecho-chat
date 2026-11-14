@@ -17,6 +17,10 @@ import type { DTEchoCognitiveMode } from "../dtecho-expression-driver";
 import { projectDTEchoCognitiveState } from "../dtecho-expression-driver";
 import { EmbodimentEvidenceWindow } from "../embodiment-evidence-window";
 import {
+  NativeCubismCadence,
+  type NativeCubismCadenceSnapshot,
+} from "../native-cubism-cadence";
+import {
   EmbodimentObservationClock,
   type EmbodimentObservationTiming,
 } from "../embodiment-observation-clock";
@@ -160,6 +164,8 @@ export interface EmbodimentDiagnostics {
   evidenceWindow?: ReturnType<EmbodimentEvidenceWindow["snapshot"]>;
   /** Latest sampled pair's actual write/read timing, not rendering latency. */
   observationClock?: EmbodimentObservationTiming | null;
+  /** Runtime callback cadence, independent of cognition/parameter targets. */
+  nativeCadence?: NativeCubismCadenceSnapshot;
   residuals?: Array<{
     parameterId: string;
     requested: number;
@@ -234,6 +240,12 @@ export class Live2DAvatarManager {
   private feedback = new SelfModelAvatarFeedback();
   private readonly evidenceWindow = new EmbodimentEvidenceWindow();
   private readonly observationClock = new EmbodimentObservationClock();
+  private readonly nativeCadence = new NativeCubismCadence();
+  private readonly onCadenceVisibility = (): void => {
+    this.nativeCadence.setVisible(
+      typeof document === "undefined" || document.visibilityState !== "hidden",
+    );
+  };
   private diagnostics: EmbodimentDiagnostics = {
     status: "waiting",
     sampleCount: 0,
@@ -267,6 +279,7 @@ export class Live2DAvatarManager {
   };
   private readonly onSelfModelFrame = (): void => {
     if (!this.renderer || !this.isLoaded) return;
+    this.nativeCadence.markNativeCallback();
     this.observationClock.markNativeUpdate();
     if (this.selfModelSampleDelayFrames <= 0) return;
     this.selfModelSampleDelayFrames--;
@@ -463,6 +476,7 @@ export class Live2DAvatarManager {
       getEmbodimentDiagnostics: () => ({
         ...this.diagnostics,
         evidenceWindow: this.evidenceWindow.snapshot(),
+        nativeCadence: this.nativeCadence.snapshot(),
         observationClock: this.diagnostics.observationClock
           ? { ...this.diagnostics.observationClock }
           : null,
@@ -625,6 +639,9 @@ export class Live2DAvatarManager {
     this.metabolicBridge.on("deltas_updated", this.onMetabolicDeltas);
     this.metabolicFrameAccumulatorMs = 0;
     this.hasMetabolicEvidence = false;
+    this.onCadenceVisibility();
+    if (typeof document !== "undefined")
+      document.addEventListener("visibilitychange", this.onCadenceVisibility);
 
     const renderer = this.renderer as PixiLive2DRenderer & {
       addFrameListener?: (listener: (deltaTime: number) => void) => void;
@@ -644,6 +661,11 @@ export class Live2DAvatarManager {
     renderer?.removeFrameListener?.(this.onMetabolicFrame);
     renderer?.removeFrameListener?.(this.onResonanceFrame);
     renderer?.removeParameterObserver?.(this.onSelfModelFrame);
+    if (typeof document !== "undefined")
+      document.removeEventListener(
+        "visibilitychange",
+        this.onCadenceVisibility,
+      );
     this.metabolicFrameAccumulatorMs = 0;
     this.selfModelSampleDelayFrames = 0;
     if (this.metabolicBridge) {
@@ -914,6 +936,7 @@ export class Live2DAvatarManager {
     this.stopMetabolicProjection();
     this.evidenceWindow.reset();
     this.observationClock.reset();
+    this.nativeCadence.reset();
     this.lastProjectedCubism = {};
     this.lastAppliedCubism = {};
     this.presentationLocked = false;

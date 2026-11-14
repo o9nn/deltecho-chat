@@ -302,4 +302,75 @@ describe("ScientificEmbodimentLens", () => {
       else Reflect.deleteProperty(document, "visibilityState");
     }
   });
+  it("shows runtime cadence independently of target-pair evidence without calling it FPS or scientific truth", () => {
+    const controller = {
+      getEmbodimentDiagnostics: () => ({
+        ...sample,
+        status: "waiting",
+        observationClock: null,
+        nativeCadence: {
+          status: "observed",
+          visible: true,
+          nativeCallbackCount: 17,
+          capacity: 120,
+          intervalCount: 16,
+          meanIntervalMs: 25,
+          minIntervalMs: 20,
+          maxIntervalMs: 35,
+          lastCallbackAgeMs: 4,
+        },
+      }),
+    } as unknown as Live2DAvatarController;
+    render(
+      <ScientificEmbodimentLens
+        controller={controller}
+        visual={{}}
+        daemonConnected={false}
+        expressionLocked={false}
+      />,
+    );
+    openLens();
+    expect(
+      screen.getByRole("region", { name: "Native Cubism callback cadence" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("25.00 ms")).toBeInTheDocument();
+    expect(screen.getByText(/17 native callbacks/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/native callbacks are not display FPS/),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("region", { name: "Scientific observation clock" }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("does not label missing native cadence as a zero interval", () => {
+    const controller = {
+      getEmbodimentDiagnostics: () => ({
+        ...sample,
+        status: "waiting",
+        nativeCadence: {
+          status: "unavailable",
+          visible: true,
+          nativeCallbackCount: 1,
+          capacity: 120,
+          intervalCount: 0,
+          meanIntervalMs: null,
+          minIntervalMs: null,
+          maxIntervalMs: null,
+          lastCallbackAgeMs: null,
+        },
+      }),
+    } as unknown as Live2DAvatarController;
+    render(
+      <ScientificEmbodimentLens
+        controller={controller}
+        visual={{}}
+        daemonConnected={false}
+        expressionLocked={false}
+      />,
+    );
+    openLens();
+    expect(screen.getByText(/Cadence unavailable/)).toBeInTheDocument();
+    expect(screen.queryByText("0.00 ms")).not.toBeInTheDocument();
+  });
 });
